@@ -9,20 +9,22 @@ var vinylPaths = require('vinyl-paths');
 
 var sources = {
   html: './src/index.html',
+  img: './src/img/**/*',
   app: './src/js/app.jsx',
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
   lib: ['./node_modules/babel-core/browser-polyfill.js']
 };
 
 var destinations = {
-  html: './dist',
-  app: './dist/js',
+  root: './dist',
+  js: './dist/js',
+  img: './dist/img'
 };
 
 gulp.task('lib', function() {
   return gulp.src(sources.lib)
     .pipe(concat('lib.js'))
-    .pipe(gulp.dest(destinations.app));
+    .pipe(gulp.dest(destinations.js));
 });
 
 gulp.task('scripts', function() {
@@ -32,15 +34,20 @@ gulp.task('scripts', function() {
       debug: true
     }))
     .pipe(rename('app.js'))
-    .pipe(gulp.dest(destinations.app))
+    .pipe(gulp.dest(destinations.js))
     .pipe(browserSync.reload({stream: true}));
 });
 
 
 gulp.task('html', function() {
   return gulp.src(sources.html)
-    .pipe(gulp.dest(destinations.html))
+    .pipe(gulp.dest(destinations.root))
     .pipe(browserSync.reload({stream: true}));
+});
+
+gulp.task('img', function() {
+  return gulp.src(sources.img)
+    .pipe(gulp.dest(destinations.img));
 });
 
 
@@ -60,4 +67,4 @@ gulp.task('serve', function() {
   gulp.watch(sources.html, ['html']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['lib', 'scripts', 'html'], 'serve']));
+gulp.task('default', gulpsync.sync(['clean', ['img', 'lib', 'scripts', 'html'], 'serve']));
