@@ -1,0 +1,23 @@
+{
+  "name": "little-sister",
+  "version": "0.1.0",
+  "description": "Social app / linked data explorer built for SoLiD infrastracture",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jolocom/little-sister.git"
+  },
+  "keywords": [
+    "SoLiD",
+    "RDF",
+    "WebID"
+  ],
+  "author": "Justas Azna",
+  "bugs": {
+    "url": "https://github.com/jolocom/little-sister/issues"
+  },
+  "homepage": "https://github.com/jolocom/little-sister#readme"
+}
