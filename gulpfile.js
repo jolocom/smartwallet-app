@@ -1,6 +1,8 @@
 var browserify = require('gulp-browserify');
+var browserSync = require('browser-sync').create();
 var del = require('del');
 var gulp = require('gulp');
+var gulpsync = require('gulp-sync')(gulp);
 var rename = require('gulp-rename');
 var vinylPaths = require('vinyl-paths');
 
@@ -10,35 +12,44 @@ var sources = {
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
 };
 
-
 var destinations = {
   html: './dist',
   app: './dist/js',
 };
 
-gulp.task('html', function() {
-  gulp.src(sources.html)
-    .pipe(gulp.dest(destinations.html))
-});
-
 gulp.task('scripts', function() {
-  gulp.src(sources.app)
+  return gulp.src(sources.app)
     .pipe(browserify({
       transform: ['babelify'],
       debug: true
     }))
     .pipe(rename('app.js'))
     .pipe(gulp.dest(destinations.app))
+    .pipe(browserSync.reload({stream: true}));
+});
+
+
+gulp.task('html', function() {
+  return gulp.src(sources.html)
+    .pipe(gulp.dest(destinations.html))
+    .pipe(browserSync.reload({stream: true}));
 });
 
 
 gulp.task('clean', function () {
-  gulp.src('./dist/*').pipe(vinylPaths(del));
+  return gulp.src('./dist/*').pipe(vinylPaths(del));
 });
 
-gulp.task('watch', function() {
+gulp.task('serve', function() {
+  browserSync.init(
+    {
+      server: {
+        baseDir: './dist'
+      }
+    }
+  );
   gulp.watch(sources.js, ['scripts']);
   gulp.watch(sources.html, ['html']);
 });
 
-gulp.task('default', ['clean', 'watch', 'html', 'scripts']);
+gulp.task('default', gulpsync.sync(['clean', ['scripts', 'html'], 'serve']));
