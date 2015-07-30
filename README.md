@@ -9,7 +9,7 @@ Setup
 ## Installing dependencies
 
 ```bash
-npm install -g gulp
+npm install -g bower gulp
 npm install
 ```
 
