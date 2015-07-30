@@ -1,5 +1,6 @@
 var browserify = require('gulp-browserify');
 var browserSync = require('browser-sync').create();
+var concat = require('gulp-concat');
 var del = require('del');
 var gulp = require('gulp');
 var gulpsync = require('gulp-sync')(gulp);
@@ -10,12 +11,19 @@ var sources = {
   html: './src/index.html',
   app: './src/js/app.jsx',
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
+  lib: ['./node_modules/babel-core/browser-polyfill.js']
 };
 
 var destinations = {
   html: './dist',
   app: './dist/js',
 };
+
+gulp.task('lib', function() {
+  return gulp.src(sources.lib)
+    .pipe(concat('lib.js'))
+    .pipe(gulp.dest(destinations.app));
+});
 
 gulp.task('scripts', function() {
   return gulp.src(sources.app)
@@ -52,4 +60,4 @@ gulp.task('serve', function() {
   gulp.watch(sources.html, ['html']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['scripts', 'html'], 'serve']));
+gulp.task('default', gulpsync.sync(['clean', ['lib', 'scripts', 'html'], 'serve']));
