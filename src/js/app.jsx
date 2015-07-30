@@ -1,3 +1,4 @@
+import Graph from './react/graph.jsx'
 import Profile from './react/profile.jsx'
 import React from 'react'
 import Router from 'react-router'
@@ -8,7 +9,8 @@ let App = React.createClass({
     return (
       <div className="nav">
         <Link to="profile">Profile</Link>
-
+        <br/>
+        <Link to="graph">Graph</Link>
         <RouteHandler/>
       </div>
     );
@@ -18,6 +20,7 @@ let App = React.createClass({
 let routes =  (
   <Route name="app" path="/" handler={App}>
     <Route name="profile" handler={Profile}/>
+    <Route name="graph" handler={Graph}/>
   </Route>
 )
 
