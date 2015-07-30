@@ -1,0 +1,717 @@
+//Keep in mind: prototype -- Dan
+
+$width: 100%;
+$height: 100%;
+$joloblue: #009fe3;
+$jolodarkblue: darken($joloblue, 20%);
+$joloelectricblue: lighten($joloblue, 20%);
+$jologray: #838383;
+$ws: whitesmoke;
+$fs_body: 50%;
+$ff_default: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  //:border 1px solid black
+  // set these to 100% when deploying for mobile
+  width: $width;
+  height: $height;
+  font-family: $ff_default;
+  font-weight: 300;
+  font-size: $fs_body;
+  position: absolute;
+  overflow-x: hidden;
+}
+
+body.open-drawer {
+  overflow: hidden;
+}
+
+body.closed-drawer {
+  #plus_drawer {
+    display: none;
+  }
+}
+
+.button {
+  background-color: $joloblue;
+  width: $width / 3;
+  height: $width / 6;
+  font-size: 16px;
+  line-height: 40px;
+  text-align: center;
+  color: white;
+  height: 42px;
+}
+
+textarea {
+  font-size: 17px;
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid $ws;
+  margin-bottom: 10px;
+  font-family: $ff_default;
+  font-weight: 300;
+  max-width: 100%;
+  max-height: 72px;
+  line-height: 20px;
+  border-radius: 0;
+}
+
+.close {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  display: inline-block;
+  color: transparent;
+  font: normal normal normal 30px / 1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+  height: 55px;
+  top: -8px;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  &:after {
+    content: "\f057";
+    color: $jologray;
+    font-size: 34px;
+    position: absolute;
+    top: 21px;
+    right: 20px;
+    background: white;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    line-height: 25px;
+    display: inline-block;
+  }
+  &:before {
+    content: "Send a message";
+    color: rgb(131, 131, 131);
+    font-size: 17px;
+    position: absolute;
+    left: 20px;
+    top: 24px;
+  }
+}
+
+#page {
+  height: $height;
+  width: $width;
+}
+
+#graph-outer {
+  height: $height;
+  width: $width;
+}
+
+#page {
+  // set these to 100% when deploying for mobile
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 1em;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#plus_button {
+  position: absolute;
+  z-index: 1;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-image: url("../img/plusbutton.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#plus_drawer {
+  background-color: lightgrey;
+  position: absolute;
+  top: $height;
+  width: 100%;
+  height: 70%;
+  z-index: 1;
+  padding: 60px 20px 20px 20px;
+  box-sizing: border-box;
+  border-top: 1px solid $ws;
+  overflow-x: hidden;
+  overflow-y: auto;
+  .close {
+    &:after {
+      color: $jologray;
+    }
+    &:before {
+      content: "Add a new node";
+      color: rgb(131, 131, 131);
+      font-size: 17px;
+      position: absolute;
+      left: 20px;
+      top: 24px;
+    }
+  }
+  .fakeinput {
+    border: 1px solid black;
+    margin-bottom: $width / 18;
+  }
+  .button.direct {
+    float: left;
+    width: calc(50% - 5px);
+    &:before {
+      font: normal normal normal 30px / 1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transform: translate(0, 0);
+      content: "\f20e";
+      position: relative;
+      margin-right: 5px;
+    }
+  }
+  .button.inbox {
+    float: right;
+    width: calc(50% - 5px);
+    background-color: $jolodarkblue;
+    &:before {
+      font: normal normal normal 30px / 1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transform: translate(0, 0);
+      content: "\f01c";
+      position: relative;
+      margin-right: 5px;
+    }
+  }
+}
+
+#inbox {
+  position: absolute;
+  z-index: 1;
+  right: -100%;
+  top: 20px;
+  width: 100%;
+  height: 70px;
+  background-color: $joloblue;
+  .counter {
+    position: relative;
+    opacity: 0;
+    margin: 18px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: white;
+    &:before {
+      font: normal normal normal 30px / 1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transform: translate(0, 0);
+      content: "\f01c";
+      position: relative;
+      margin-right: 5px;
+      color: $jolodarkblue;
+      font-size: 22px;
+      top: 6px;
+      left: 8px;
+    }
+  }
+  .counter .number {
+    position: absolute;
+    right: 0px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-size: 1.8em;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+    top: -5px;
+    right: -5px;
+  }
+}
+
+#inbox_large {
+  display: none;
+  width: $width;
+  height: calc($height / 2);
+  position: absolute;
+  z-index: 1;
+  background-color: $joloblue;
+  overflow: scroll;
+  padding: 70px 0px 20px 0px;
+  .element {
+    float: left;
+    width: 100%;
+  }
+  .node {
+    display: inline-block;
+    box-sizing: border-box;
+    font-size: 3em;
+    color: white;
+    line-height: 40px;
+    text-align: center;
+    width: 40px;
+    padding: 0 10px 0 10px;
+    height: 40px;
+    &:before {
+      font: normal normal normal 30px / 1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transform: translate(0, 0);
+      content: "\f20e";
+      position: relative;
+      margin-right: 5px;
+    }
+  }
+  .title {
+    display: inline-block;
+    width: calc(100% - 40px);
+    color: white;
+    line-height: 40px;
+    font-size: 17px;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .title, .node {
+    float: left;
+  }
+  .close {
+    &:after {
+      color: $joloblue;
+      font-size: 34px;
+      position: absolute;
+      top: 21px;
+      right: 20px;
+      background: white;
+      border-radius: 50%;
+      height: 25px;
+      width: 25px;
+      line-height: 25px;
+      display: inline-block;
+    }
+    &:before {
+      content: "Your Inbox";
+      color: white;
+      font-size: 17px;
+      position: absolute;
+      left: 20px;
+      top: 24px;
+    }
+  }
+}
+
+$small-node-size: $width / 20;
+
+#chat {
+  padding-top: 70px;
+  padding-bottom: 30px;
+  display: block;
+  position: absolute;
+  z-index: 1;
+  top: $height;
+  width: $width;
+  height: 70%;
+  overflow: scroll;
+  background-color: lightgrey;
+  font-weight: 300;
+  .close {
+    &:after {
+      color: $jologray;
+    }
+    &:before {
+      content: "Send a message";
+    }
+  }
+  h1 {
+    font-size: 3em;
+    font-weight: inherit;
+    box-sizing: border-box;
+    padding: 0 20px 0 20px;
+  }
+  h2 {
+    font-weight: inherit;
+  }
+  .head p {
+    font-size: 0.8em;
+    padding: 0 22px 0 22px;
+    margin-bottom: 10px;
+  }
+  .node {
+    display: inline-block;
+    height: $small-node-size;
+    width: $small-node-size;
+    border-radius: $small-node-size;
+    //:margin-top $width / 20
+    //:margin-bottom $width / 20
+    background-color: $joloblue;
+  }
+  .head .node {
+    float: left;
+  }
+  .message {
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 20px 0 20px;
+    margin-top: 0px;
+    .node {
+      //what's up with this
+      margin-top: 16px;
+      float: right;
+    }
+    .content {
+      float: left;
+      display: inline-block;
+      background-color: #c2c1c1;
+      padding: 10px 10px 10px 40px;
+      width: 100%;
+      position: relative;
+      box-sizing: border-box;
+      &:before {
+        font: normal normal normal 30px / 1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transform: translate(0, 0);
+        content: "\f0e5";
+        position: absolute;
+        left: 13px;
+        top: calc(50% - 10px);
+        color: rgb(145, 145, 145);
+        font-size: 18px;
+      }
+      h2 {
+        font-size: 15px;
+      }
+      p {
+        font-size: 18px;
+        color: #454545;
+        position: relative;
+        left: -1px;
+      }
+    }
+    textarea.content {
+      background-color: white;
+      border: 1px solid $ws;
+      margin-bottom: 0px;
+      padding: 10px;
+      min-height: 85px;
+    }
+  }
+  .button {
+    float: left;
+    width: 100%;
+    text-transform: capitalize;
+    &:before {
+      font: normal normal normal 30px / 1 FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transform: translate(0, 0);
+      content: "\f0e5";
+      position: relative;
+      margin-right: 5px;
+    }
+  }
+}
+
+#graph {
+  //:z-index -1
+  background-color: white;
+  position: absolute;
+  width: $width;
+  height: $height;
+  overflow: hidden;
+  .node {
+    text {
+      fill: white;
+      font-size: 1.5em;
+    }
+  }
+  .extras {
+    text {
+      fill: white;
+    }
+    .preview-title {
+      font-size: 2.7em;
+    }
+    .preview-description {
+      font-size: 1.5em;
+    }
+  }
+}
+
+#chart {
+  float: left;
+  width: 100%;
+  height: 100%;
+}
+
+// detail view
+#detail_view {
+  display: none;
+  background-color: lightgrey;
+  position: absolute;
+  top: $height - $height / 20;
+  width: $width;
+  height: $height;
+  overflow: hidden;
+  z-index: 1;
+  #page {
+    display: none;
+  }
+  .handle {
+    height: $width / 10;
+    width: $width;
+    text-align: center;
+    color: white;
+    background-color: grey;
+  }
+  .description {
+    div.text {
+      display: inline;
+    }
+    div.more {
+      display: block;
+      float: right;
+      clear: both;
+    }
+    div.tag {
+      display: block;
+      margin-right: 10px;
+      clear: right;
+      float: left;
+      background-color: $joloblue;
+      &:before {
+        content: "tag | ";
+      }
+    }
+  }
+  .connections {
+    div.source {
+      float: left;
+    }
+    div.target {
+      float: right;
+      clear: right;
+    }
+  }
+}
+
+//Profile touch-up
+#chat_container {
+  position: absolute;
+  width: 100%;
+  overflow: auto;
+  height: 100%;
+  pointer-events: none;
+}
+
+#chat_container.visible {
+  pointer-events: all;
+}
+
+#graph-outer {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.status-bar {
+  position: fixed;
+  background-color: whitesmoke;
+  z-index: 1;
+  left: 0;
+  top: 20px;
+  width: 70px;
+  height: 70px;
+  background-color: $jolodarkblue;
+  padding: 15px;
+  box-sizing: border-box;
+  img {
+    max-width: 100%;
+    border-radius: 50%;
+    background-color: white;
+  }
+  span, a {
+    display: none;
+  }
+  .status-bar-profile-link {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    text-align: center;
+    box-sizing: border-box;
+    padding-bottom: 5px;
+    color: white;
+    text-decoration: none;
+  }
+}
+
+// Profile
+.profile, #signup {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  .profile-header {
+    padding: 50px 30px;
+    background: -webkit-linear-gradient(90deg, $joloblue 10%, $jolodarkblue 90%);
+    background: -moz-linear-gradient(90deg, $joloblue 10%, $jolodarkblue 90%);
+    background: -ms-linear-gradient(90deg, $joloblue 10%, $jolodarkblue 90%);
+    background: -o-linear-gradient(90deg, $joloblue 10%, $jolodarkblue 90%);
+    background: linear-gradient(90deg, $joloblue 10%, $jolodarkblue 90%);
+    text-align: center;
+    color: white;
+    h2 {
+      font-size: 5em;
+    }
+    h3 {
+      font-size: 3em;
+    }
+    img {
+      max-width: 50%;
+      background-color: white;
+      position: relative;
+      border-radius: 50%;
+      margin-top: 30px;
+      margin-bottom: -50%;
+    }
+  }
+}
+
+.profile-edit {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background-color: $jolodarkblue;
+  font-size: 3em;
+  color: white;
+  padding: 8px 20px;
+  width: calc(100% - 60px);
+  text-align: center;
+}
+
+.profile-basic-info {
+  padding-top: 35%;
+  text-align: center;
+  font-size: 1.8em;
+  h3 {
+    font-size: 3em;
+  }
+}
+
+.profile-publickey {
+  margin-top: 15px;
+  text-align: center;
+  word-wrap: break-word;
+  padding-bottom: 80px;
+  span {
+    font-size: 1em;
+  }
+  span {
+    &:nth-child(odd) {
+      margin-top: 5px;
+      font-size: 1.8em;
+      display: block;
+      font-weight: bold;
+    }
+  }
+}
+
+//Profile inputs
+.profile, #signup {
+  input {
+    background-color: $joloblue;
+    font-size: 1.3em;
+    line-height: 1.3em;
+    padding: 5px 10px;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 5px;
+    &::-webkit-input-placeholder {
+      color: $jolodarkblue;
+    }
+    &:-moz-placeholder {
+      color: $jolodarkblue;
+      opacity: 1;
+    }
+    &::-moz-placeholder {
+      color: $jolodarkblue;
+      opacity: 1;
+    }
+    &:-ms-input-placeholder {
+      color: $jolodarkblue;
+    }
+  }
+  &:last-child {
+    margin-bottom: 15px;
+  }
+}
+
+#signup {
+  font-size: 2em;
+  .signup-header {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    img {
+      max-width: 80px;
+    }
+  }
+  .signup-body {
+    padding: 30px;
+    max-width: 280px;
+    margin: 0 auto;
+    input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      background-color: $joloelectricblue;
+      font-size: 16px;
+      line-height: 28px;
+      text-align: center;
+      color: white;
+      height: 42px;
+      border-radius: 0;
+      margin-top: 20px;
+    }
+    input[name="Signup"] {
+      margin-top: 0;
+      background-color: $jolodarkblue;
+    }
+  }
+}

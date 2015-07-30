@@ -30,6 +30,7 @@
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.6.0",
     "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.4",
     "gulp-sync": "^0.1.4",
     "vinyl-paths": "^1.0.0"
   },

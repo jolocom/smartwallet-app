@@ -5,20 +5,23 @@ var del = require('del');
 var gulp = require('gulp');
 var gulpsync = require('gulp-sync')(gulp);
 var rename = require('gulp-rename');
+var sass = require('gulp-sass');
 var vinylPaths = require('vinyl-paths');
 
 var sources = {
+  app: './src/js/app.jsx',
   html: './src/index.html',
   img: './src/img/**/*',
-  app: './src/js/app.jsx',
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
-  lib: ['./node_modules/babel-core/browser-polyfill.js']
+  lib: ['./node_modules/babel-core/browser-polyfill.js'],
+  sass: './src/sass/**/*.scss'
 };
 
 var destinations = {
-  root: './dist',
+  css: './dist/css',
+  img: './dist/img',
   js: './dist/js',
-  img: './dist/img'
+  root: './dist',
 };
 
 gulp.task('lib', function() {
@@ -50,6 +53,12 @@ gulp.task('img', function() {
     .pipe(gulp.dest(destinations.img));
 });
 
+gulp.task('sass', function () {
+  return gulp.src(sources.sass)
+    .pipe(sass())
+    .pipe(gulp.dest(destinations.css))
+    .pipe(browserSync.reload({stream: true}));
+});
 
 gulp.task('clean', function () {
   return gulp.src('./dist/*').pipe(vinylPaths(del));
@@ -65,6 +74,7 @@ gulp.task('serve', function() {
   );
   gulp.watch(sources.js, ['scripts']);
   gulp.watch(sources.html, ['html']);
+  gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['img', 'lib', 'scripts', 'html'], 'serve']));
+gulp.task('default', gulpsync.sync(['clean', ['img', 'lib', 'sass', 'scripts', 'html'], 'serve']));
