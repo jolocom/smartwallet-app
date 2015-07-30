@@ -3,34 +3,42 @@ var del = require('del');
 var gulp = require('gulp');
 var rename = require('gulp-rename');
 var vinylPaths = require('vinyl-paths');
- 
 
-gulp.task('scripts', function() {
-    gulp.src('src/js/**/*.js')
-        .pipe(browserify({
-            transform: ['babelify'],
-            debug: true
-        }))
-        .pipe(gulp.dest('./dist/js'))
+var sources = {
+  html: './src/index.html',
+  app: './src/js/app.jsx',
+  js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
+};
+
+
+var destinations = {
+  html: './dist',
+  app: './dist/js',
+};
+
+gulp.task('html', function() {
+  gulp.src(sources.html)
+    .pipe(gulp.dest(destinations.html))
 });
 
-gulp.task('react', function() {
-    gulp.src('src/react/**/*.jsx')
-        .pipe(browserify({
-            transform: ['reactify'],
-            es6: true,
-            target: 'es5',
-            debug : true
-        }))
-        .pipe(rename({
-            extname: '.js'
-        }))
-        .pipe(gulp.dest('./dist/react'))
+gulp.task('scripts', function() {
+  gulp.src(sources.app)
+    .pipe(browserify({
+      transform: ['babelify'],
+      debug: true
+    }))
+    .pipe(rename('app.js'))
+    .pipe(gulp.dest(destinations.app))
 });
 
 
 gulp.task('clean', function () {
-    gulp.src('./dist/', {read: false}).pipe(vinylPaths(del));
+  gulp.src('./dist/*').pipe(vinylPaths(del));
 });
 
-gulp.task('default', ['clean', 'scripts', 'react']);
+gulp.task('watch', function() {
+  gulp.watch(sources.js, ['scripts']);
+  gulp.watch(sources.html, ['html']);
+});
+
+gulp.task('default', ['clean', 'watch', 'html', 'scripts']);

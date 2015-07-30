@@ -1,4 +1,4 @@
-var React = require('react')
+import React from 'react'
 
 class Hello extends React.Component {
 
@@ -6,3 +6,5 @@ class Hello extends React.Component {
     return <div>Hello, {this.props.name}!</div>
   }
 }
+
+export default Hello
