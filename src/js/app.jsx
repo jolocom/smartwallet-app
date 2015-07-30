@@ -1,5 +1,4 @@
-import Hello from './react/hello.jsx'
-import Other from './react/other.jsx'
+import Profile from './react/profile.jsx'
 import React from 'react'
 import Router from 'react-router'
 import { DefaultRoute, Link, Route, RouteHandler } from 'react-router'
@@ -8,9 +7,7 @@ let App = React.createClass({
   render() {
     return (
       <div className="nav">
-        <Link to="hello">Hello</Link>
-        <br/>
-        <Link to="other">Other</Link>
+        <Link to="profile">Profile</Link>
 
         <RouteHandler/>
       </div>
@@ -20,8 +17,7 @@ let App = React.createClass({
 
 let routes =  (
   <Route name="app" path="/" handler={App}>
-    <Route name="hello" handler={Hello}/>
-    <Route name="other" handler={Other}/>
+    <Route name="profile" handler={Profile}/>
   </Route>
 )
 
