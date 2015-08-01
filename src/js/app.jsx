@@ -1,4 +1,3 @@
-import Chat from './react/chat.jsx'
 import Graph from './react/graph.jsx'
 import Nav from './react/nav.jsx'
 import Profile from './react/profile.jsx'
@@ -22,7 +21,6 @@ let App = React.createClass({
 
 let routes =  (
   <Route name="app" path="/" handler={App}>
-    <Route name="chat" handler={Chat}/>
     <Route name="graph" handler={Graph}/>
     <Route name="profile" handler={Profile}/>
   </Route>

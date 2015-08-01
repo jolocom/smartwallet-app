@@ -13,7 +13,14 @@ var sources = {
   html: './src/index.html',
   img: './src/img/**/*',
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
-  lib: ['./node_modules/babel-core/browser-polyfill.js'],
+  lib: [
+    './node_modules/babel-core/browser-polyfill.js',
+    './bower_components/jquery/dist/jquery.js',
+    './bower_components/d3/d3.js'
+  ],
+  libCss: [
+    './bower_components/fontawesome/css/font-awesome.css'
+  ],
   sass: './src/sass/**/*.scss'
 };
 
@@ -28,6 +35,12 @@ gulp.task('lib', function() {
   return gulp.src(sources.lib)
     .pipe(concat('lib.js'))
     .pipe(gulp.dest(destinations.js));
+});
+
+gulp.task('lib-css', function() {
+  return gulp.src(sources.libCss)
+    .pipe(concat('lib.css'))
+    .pipe(gulp.dest(destinations.css));
 });
 
 gulp.task('scripts', function() {
@@ -77,4 +90,4 @@ gulp.task('serve', function() {
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['img', 'lib', 'sass', 'scripts', 'html'], 'serve']));
+gulp.task('default', gulpsync.sync(['clean', ['img', 'lib', 'lib-css', 'sass', 'scripts', 'html'], 'serve']));

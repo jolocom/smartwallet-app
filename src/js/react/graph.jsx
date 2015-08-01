@@ -19,10 +19,10 @@ class Graph extends React.Component {
               <textarea className="title" placeholder="Node title" rows="1" cols="50"/>
             </div>
             <div>
-              <textarea className="description" placeholder="Node title" rows="5" cols="50"/>
+              <textarea className="description" placeholder="Node description" rows="5" cols="50"/>
             </div>
             <div className="button direct">Connect Now</div>
-            <div className="button index">Put Into Inbox</div>
+            <div className="button inbox">Put Into Inbox</div>
           </div>
           <div id="inbox" draggable="true">
             <div className="counter">

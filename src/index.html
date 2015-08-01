@@ -11,7 +11,1014 @@
             rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/css/mobile.css" type="text/css"
           media="all" />
+    <link rel="stylesheet" href="/css/lib.css" type="text/css"
+          media="all" />
   </head>
   <body></body>
+  <script>
+// @Justas: look out for the @Justas tag :)
+// Hot spots in this file:
+// `addNode`
+
+// styling variables by philipp
+// these are copied for no good reason
+var width;
+var height;
+var small_node_size;
+var large_node_size;
+var blue_color;
+var gray_color;
+var node_transition_duration;
+
+// VisualRDF variables
+var preds;
+var types;
+var pastNodes;
+var nodes;
+var links;
+var literals;
+var linkedArrowhead;
+
+// D3.js
+var force;
+// the node being centered (target of 'connect' interactions)
+var the_perspective;
+
+// the node showing the large preview circle
+var the_preview;
+var nodeHistory;
+var newNodeURI;
+var w, h;
+var svg;
+
+//group links (so they don't overlap nodes)
+var link_group;
+
+
+//TODO: in scala we know the miscContainer, so there's no need to pass it
+//function prepareVars(miscCont) {
+function prepareVars() {
+    width                    = jolocom.style.width; //1080
+    height                   = jolocom.style.height; //1920;
+    small_node_size          = jolocom.style.small_node_size;
+    large_node_size          = jolocom.style.large_node_size;
+    blue_color               = jolocom.style.blue_color;
+    gray_color               = jolocom.style.gray_color;
+    node_transition_duration = jolocom.style.node_transition_duration;
+
+    // VisualRDF variables
+    preds=false;
+    types=true;
+    pastNodes = [];
+    nodes = [];
+    links = [];
+    literals = [];
+    linkedArrowhead = [];
+
+    // the node being centered (target of 'connect' interactions)
+    the_perspective = {
+      uri: "",
+      node: {},
+      dom: {}
+    }
+    // the node showing the large preview circle
+    the_preview = {
+      uri: "",
+      node: {}
+    }
+    nodeHistory = [];
+
+    w = document.getElementById("chart").offsetWidth;
+    h = document.getElementById("chart").offsetHeight;
+    svg = d3.select("#chart").append("svg:svg")
+      .attr("width", w)
+      .attr("height", h)
+      .attr("pointer-events", "all");
+
+    vis = svg
+      .append('svg:g')
+    //.call(d3.behavior.zoom().on("zoom", redraw))
+    //.append('svg:g');
+
+    //background rectangle
+    vis.append('svg:rect')
+      .attr('width', w)
+      .attr('height', h)
+      .attr('fill', 'white');
+
+    //background circle
+    vis.append( "svg:circle" )
+      .attr( "class", "plate" )
+      .attr( "cx", jolocom.style.width * 0.5 )
+      .attr( "cy", jolocom.style.height * 0.5)
+      .attr( "r", jolocom.style.width * 0.3 )
+      .style( "fill", jolocom.style.light_gray_color );
+
+    //group links (so they don't overlap nodes)
+    link_group = vis.append( "g" ).attr( "class", "link_group");
+}
+
+function redraw() {
+	vis.attr("transform",
+		       "translate(" + d3.event.translate + ")"
+		       + " scale(" + d3.event.scale + ")");
+}
+
+function mergeGraphs(newNodes, newLinks){
+  console.log( 'merging' );
+  var sIdx, tIdx;
+	for(i in newLinks){
+		sIdx = newLinks[i].source;
+		tIdx = newLinks[i].target;
+    // add if source does not exist
+		if(nodes.indexOf(newNodes[sIdx]) == -1){
+			nodes.push(newNodes[sIdx]);
+		}
+		newLinks[i].source = nodes.indexOf(newNodes[sIdx]);
+    // add if target does not exist
+		if(nodes.indexOf(newNodes[tIdx]) == -1){
+			nodes.push(newNodes[tIdx]);
+		}
+		newLinks[i].target = nodes.indexOf(newNodes[tIdx]);
+    //
+		links.push(newLinks[i]);
+	}
+  return { nodes: nodes, links: links, literals: literals };
+}
+
+function addFakeData( nodes ){
+  for( i in nodes ){
+    if(( nodes[i].title == "no title" )||( nodes[i].title == undefined )){
+      var foo = nodes[i].name.split("/");
+      nodes[i].title = foo.slice(-2).join("-"); //foo[ foo.length - 2 ] || "John Smith";
+    };
+    //if( i % 2 == 0 ){
+      //nodes[i].description = "Person";
+    //} else {
+      //nodes[i].description = "long text will have to be broken so that it fits nicely into the preview";
+    //}
+  }
+}
+
+function base(){
+  // `base` only needs to run once
+	force = self.force = d3.layout.force();
+	force
+    .nodes(nodes)
+	  .links(links)
+	  .gravity(0.2)
+	  .charge( jolocom.style.width * -14)
+	  .linkDistance( jolocom.style.width / 3 )
+	  .size([w, h])
+    .start();
+}
+
+var firstInit = true;
+
+function parseGraph( jsonText ){
+	json = JSON.parse(jsonText);
+	literals = json.literals;
+	return mergeGraphs(json.nodes, json.links);
+}
+
+function arrangeNodesInACircle( nodes ){
+  var angle = ( 2 * Math.PI )/ nodes.length;
+  var halfwidth = ( jolocom.style.width / 2 );
+  var halfheight = ( jolocom.style.height / 2 );
+  for( var i in nodes ){
+    if( nodes[i].x ){
+      // skip (old) nodes that already have a position
+      continue;
+    }
+    nodes[i].x = nodes[i].px =
+      Math.cos( angle * i ) * halfwidth + halfwidth;
+    nodes[i].y = nodes[i].py =
+      Math.sin( angle * i ) * halfwidth + halfheight;
+  }
+}
+
+function arrangeNodes(){
+  // arrange new nodes in a circle while retaining the previous position of old nodes
+  arrangeNodesInACircle( nodes );
+  var newNodes = {};
+  for( var i in nodes ){
+    newNodes[ nodes[i].uri ] = nodes[i];
+  }
+  for( var i in pastNodes ){
+    var uri = pastNodes[i].uri;
+    if( newNodes[ uri ] !== undefined ){
+      newNodes[ uri ].x = pastNodes[ i ].x;
+      newNodes[ uri ].y = pastNodes[ i ].y;
+      newNodes[ uri ].px = pastNodes[ i ].x;
+      newNodes[ uri ].py = pastNodes[ i ].y;
+    }
+  }
+}
+
+function animateNode( d, x, y ){
+  // http://stackoverflow.com/questions/19931383/animating-elements-in-d3-js
+  d3.select(d).transition().duration( 1000 )
+    .tween("x", function() {
+      var i = d3.interpolate(d.x, x);
+      return function(t) {
+        d.x = i(t);
+        d.px = i(t);
+      };
+    }).tween("y", function() {
+      var i = d3.interpolate(d.y, y);
+      return function(t) {
+        d.y = i(t);
+        d.py = i(t);
+      };
+    });
+}
+
+function init(jsonText){
+  // parse `jsonText` if defined, else just re-init graph (e.g. when `nodes` & `links` are modified somewhere else)
+  if( jsonText !== undefined ){
+    pastNodes = nodes; // remember for positions
+    nodes = []; links = []; literals = [];
+    parseGraph( jsonText );
+    arrangeNodes();
+    addFakeData( nodes );
+  } else {
+    //
+  }
+
+  if( firstInit ){
+    base();
+  }
+
+	force
+    .nodes(nodes)
+	  .links(links)
+    .start();
+
+  // --------------------------------------------------------------------------------
+  // links
+
+  // data binding
+  link_group.selectAll("g.link").remove(); // remove old links entirely
+	var link = link_group.selectAll("g.link")
+	  .data(links, function(d){
+      // this retains link-IDs over changing target/source direction
+      // NB: not really useful in our case
+      var first = stringMin( d.source.uri, d.target.uri );
+      var last = stringMax( d.source.uri, d.target.uri );
+      return first + last;
+    });
+
+  // only new links
+  var link_new = link.enter()
+    .append("svg:g").attr("class", "link")
+	  .call(force.drag);
+
+  console.log( "NEW LINKS", link_new[0].length );
+
+  // add line
+	link_new.append("svg:line")
+	  .attr("class", "link")
+    .attr("stroke-width", jolocom.style.width / 45 )
+	  .attr("stroke", jolocom.style.light_gray_color ) //TODO(philipp) reverse
+	  .attr("x1", function(d){return d.x1})
+	  .attr("y1", function(d){return d.y1})
+	  .attr("x2", function(d){return d.x1})
+	  .attr("y2", function(d){return d.y2});
+
+  // remove old links
+  var link_old = link.exit();
+  console.log( "OLD LINKS", link_old[0].length );
+  link_old.transition().duration(2000).style("opacity", 0 ).remove();
+
+  // --------------------------------------------------------------------------------
+  // nodes
+	var node = vis.selectAll("g.node")
+	  .data(nodes, function(d){ return d.uri; });
+
+  var node_new = node.enter().append("svg:g")
+	  .attr("class", "node")
+	  .attr("dx", "80px")
+	  .attr("dy", "80px")
+    .call( force.drag );
+
+  node_new.style( "opacity", 0 )
+    .transition()
+    .style( "opacity", 1 )
+
+  console.log( "NEW NODES", node_new[0].length );
+
+  // add circle
+	node_new.filter(function(d){return d.type == "uri"})
+	  .append("svg:circle")
+	  .attr("class", "node")
+	  .attr("r", small_node_size/2)
+	  .attr("x", "-8px")
+	  .attr("y", "-8px")
+	  .attr("width", small_node_size)
+	  .attr("height", small_node_size)
+	  .style("fill", gray_color)
+	  .style("stroke", "white")
+    .style( "stroke-width", 0 );
+
+  // add title text (visible when not in preview)
+	var wrappedTitles = node_new.filter(function(d){return d.type == "bnode" || d.type == "uri"})
+    .append("svg:text")
+	  .attr("class", "nodetext")
+    .style( "fill", "#ffffff" )
+    .attr("text-anchor", "middle" )
+	  .attr("dy", ".35em")
+	  .text(function(d) { return d.title })
+    .call( wrap, jolocom.style.small_node_size * 0.9, "", "" ); // returns only wrapped titles, so we can push them up later
+
+  // remove old nodes
+  var node_old = node.exit();
+  console.log( "OLD NODES", node_old[0].length );
+  node_old.transition()
+    .style("opacity", 0 )
+    .remove();
+
+  // NB(philipp): on init, the `fixed`-attribute of nodes is cleared
+  // and needs to be re-set. also, the asynchronous call to init can interrupt
+  // the animation, so it is also re-started.
+
+  { // init center perspective
+    the_perspective.node = nodes[0];
+    the_perspective.uri = nodes[0].uri;
+    the_perspective.node.fixed = true;
+    if( firstInit ){ // don't animate on very first init
+      the_perspective.node.px = jolocom.style.width / 2;
+      the_perspective.node.py = jolocom.style.height / 2;
+    } else {
+      animateNode( the_perspective.node,
+                   jolocom.style.width / 2,
+                   jolocom.style.height / 2 );
+    }
+    getCenterNode( node )
+      .select( "circle" )
+      .style("fill", jolocom.style.blue_color );
+  }
+
+  { // init history
+    if( nodeHistory.length > 0 ){
+      var lastStep = nodes.filter( function(d) {
+        return d.uri == nodeHistory[ nodeHistory.length - 1 ].uri; })[0];
+      lastStep.fixed = true;
+      animateNode( lastStep,
+                   jolocom.style.width / 2,
+                   jolocom.style.height * 4/5 );
+    }
+  }
+
+  { // init new node, if applicable
+    if( newNodeURI !== undefined ){
+      var newNode = node.filter( function(d){ return d.uri == newNodeURI; });
+      if( newNode.length > 0 ){
+        newNode
+          .interrupt()
+          .style( "opacity", 1 )
+          .select( "circle" )
+          .style( "fill", jolocom.style.hilight_color );
+        newNode
+          .transition().duration( 2000 )
+          .style( "fill", jolocom.style.gray_color );
+      };
+      newNodeURI = undefined;
+    };
+  }
+
+  { // init preview
+    disablePreview( node );
+    enablePreview( getCenterNode( node ) );
+  }
+
+  // --------------------------------------------------------------------------------
+  // animation
+	var ticks = 0;
+
+	force.on("tick", function(e) {
+	  ticks++;
+    // NOTE(philipp) uncomment this to 'freeze' graph while dragging
+	  //if( drag.active ){ return; }
+
+    // NOTE(philipp): keep going even after 300+ ticks. rock on!
+		// if (ticks > 300) {
+		// 	force.stop();
+		// 	force.charge(0)
+		// 	  .linkStrength(0)
+		// 	  .linkDistance(0)
+		// 	  .gravity(0);
+		// 	force.start();
+		// }
+
+		link.selectAll("line.link")
+      .attr("x1", function(d) { return d.source.x; })
+		  .attr("y1", function(d) { return d.source.y; })
+		  .attr("x2", function(d) { return d.target.x; })
+		  .attr("y2", function(d) { return d.target.y; });
+
+		node
+      .attr("transform", function(d){
+        // shift nodes _towards_ x center and _away_ from y center
+        // (so they sit nicely on top & below the center perspective)
+        var kx = 10 * e.alpha;
+        var ky = 4 * kx
+        d.x += (d.x < ( jolocom.style.width / 2 ))  ?( kx ):( -kx );
+        d.y += (d.y < ( jolocom.style.height / 2 )) ?( -ky ):( ky );
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+	});
+
+  // --------------------------------------------------------------------------------
+  // interaction
+  //NOTE(philipp): if necessary, use `mobilecheck` to assign different events for mobile and desktop clients
+  node.on( "click", null ); // NOTE(philipp): unbind old `openPreview` because it captured the  outdated `node` variable
+  node.on( "click", openPreview );
+
+  force.drag()
+    .on( "dragstart", dragStart )
+    .on( "drag", dragMove )
+    .on( "dragend", dragEnd );
+
+  force.start();
+
+  if( firstInit ){
+    firstInit = false;
+  }
+
+  // -----------------------------------------------------------------------------
+  // helper functions
+  function changeCenter( d, dom ){
+    // update center perspective
+    { // treat old center & update node history
+      var oldCenter = {
+        dom: getCenterNode( node ),
+        uri: the_perspective.uri,
+        node: the_perspective.node
+      };
+      //oldCenter.node.fixed = false;
+      oldCenter.dom
+        .select( "circle" )
+        .style( "fill", jolocom.style.light_blue_color );
+      animateNode( oldCenter.node,
+                   jolocom.style.width / 2,
+                   jolocom.style.height * 4/5 );
+      nodeHistory.push( oldCenter );
+      if( nodeHistory.length > 1 ){
+        var historic = nodeHistory[ nodeHistory.length - 2 ];
+        historic.node.fixed = false;
+        historic.dom
+          .select( "circle" )
+          .style( "fill", jolocom.style.gray_color );
+      }
+    }
+    { // assign & treat new center
+      the_perspective.node = d;
+      the_perspective.uri = d.uri;
+      the_perspective.dom = getCenterNode( node );
+      the_perspective.node.fixed = true;
+      animateNode( the_perspective.node,
+                   jolocom.style.width / 2,
+                   jolocom.style.height / 2 ); // move to center
+      the_perspective.dom
+        .select( "circle" )
+        .style("fill", jolocom.style.blue_color );
+    }
+
+    // Communicate graph state to react
+    $("#graph-url").val(d.uri).trigger("click");
+
+    force.start();
+  }
+
+  var taptimer = {
+    start: 0,
+    end: 0
+  };
+
+  // touchStart and touchEnd are logging tap-times
+  function tapStart( ){
+    taptimer.start = d3.event.sourceEvent.timeStamp;
+  };
+
+  function tapEnd(){
+    taptimer.end = d3.event.sourceEvent.timeStamp;
+    if(( taptimer.end - taptimer.start ) < 200 ){
+      return true;
+    };
+    return false;
+  };
+
+  function openPreview( d ){ // click == enable preview
+    if( d.uri == the_preview.uri ) return;
+    disablePreview( node );
+    the_preview.node = d;
+    the_preview.uri = d.uri;
+    enablePreview( d3.select( this ));
+  };
+
+  var drag = {
+    active: false,
+    starttime: 0,
+    endtime: 0,
+    onCenter: false,
+    startPos: {},
+    nowPos: {},
+    distance: function(){
+      return distance( drag.startPos.x,
+                       drag.startPos.y,
+                       drag.nowPos.x,
+                       drag.nowPos.y );
+    }
+  }
+
+  function dragStart( d ){
+    tapStart();
+    console.log( "dragStart" );
+    if(d3.event.sourceEvent.touches){
+      drag.active = true;
+      drag.startPos.x = drag.nowPos.x = d3.event.sourceEvent.touches[0].pageX;
+      drag.startPos.y = drag.nowPos.y = d3.event.sourceEvent.touches[0].pageY;
+      //drag.start = d3.event.sourceEvent.timeStamp;
+      if( d.uri == the_perspective.uri ){
+        drag.onCenter = true;
+        window.setTimeout( triggerLongTap, 800 );
+      } else {
+        drag.onCenter = false;
+      }
+      //force.stop();
+      //d3.event.preventDefault();
+    }
+  };
+
+  // unused
+  function triggerLongTap(){
+    console.log( "longtap triggered (by timeout)" );
+    if( !drag.active ) return; // drag event stopped before timeout expired
+    if( drag.distance() > 40 ){
+      inbox.open();
+    };
+  }
+
+  function dragMove( d ){ // TODO
+    console.log( "dragmove" );
+    if( d == the_perspective.node ){ // center node grabbed
+      drag.nowPos.x = d3.event.sourceEvent.touches[0].pageX;
+      drag.nowPos.y = d3.event.sourceEvent.touches[0].pageY;
+    } else {
+      //d.fixed = true;
+    }
+  };
+
+  function translateTo( d, n, x, y ){
+    d.x, d.px = x;
+    d.y, d.py = y;
+    d3.select( n ).attr( "transform", function(d){
+      return "translate(" + d.x + "," + d.y + ")";
+    });
+  };
+
+  function dragEnd( d ){
+    console.log( "dragEnd" );
+    drag.active = false;
+    if( tapEnd() || d3.event.defaultPrevented ){
+      // this is a click
+      return;
+    };
+    if( d == the_perspective.node ){
+      // reset node position
+      d.x, d.px = jolocom.style.width / 2;
+      d.y, d.py = jolocom.style.height / 2;
+      d3.select( this ).attr( "transform", function(d){
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+      // perspective node can be dragged into inbox (top of screen)
+      var y = d3.event.sourceEvent.changedTouches[0].pageY; // NOTE(philipp): d3.touches[0][1] won't work (because there are no _current_ touches)
+      if( drag.distance() < 40 ){
+        chat.show();
+      } else if( y < jolocom.style.height / 3 ){
+        inbox.add( d );
+      }
+    } else {
+      // surrounding nodes can be dragged into focus (center of screen)
+      if( distance( d.x,
+                    d.y,
+                    jolocom.style.width / 2,
+                    jolocom.style.height / 2 )
+          < jolocom.style.width * (3/8)){
+        changeCenter( d, d3.select( this ));
+        disablePreview( node );
+        the_preview.node = d;
+        the_preview.uri = d.uri;
+        enablePreview( d3.select( this ));
+      }
+    }
+    inbox.close();
+  };
+}
+
+function enrich( less, more ){
+  // add any missing keys of `more` to `less`
+  for( var k in more ){
+    if(( more.hasOwnProperty( k )) && ( less[ k ] == undefined )){
+      less[ k ] = more[ k ];
+    }
+  }
+}
+
+function addNode( node ){
+  // @Justas: this pushes fake node & connections into d3
+  // and is called by the 'plus'-button and the 'inbox' (see `./mobile-js/mobile.js`)
+  var fullNode = {
+    description: "A New Node",
+    fixed: false,
+    index: nodes.length,
+    name: undefined, //"https://test.jolocom.com/2013/groups/moms/card#g",
+    px: jolocom.style.width / 2, //undefined, //540,
+    py: jolocom.style.height * 3/4, //undefined, //960,
+    title: "NewNode",
+    type: "uri",
+    uri: "fakeURI" +( Math.random() * Math.pow( 2, 32 )), //"https://test.jolocom.com/2013/groups/moms/card#g",
+    weight: 5,
+    x: undefined, //539.9499633771337,
+    y: undefined, //960.2001464914653
+  };
+  if( node == undefined ){
+    node = fullNode
+  } else {
+    enrich( node, fullNode );
+  }
+  link = { source: node,
+           target: the_perspective.node };
+  // fakeURI works for the current session- we don't have the new URI anyway
+//  jolocom.start.createAndConnectNode(node.title, node.description, miscContainer, the_perspective.node.uri)
+  $('#node-connect').val(node.title + '|' + node.description + '|' + the_perspective.node.uri).trigger('click');
+
+//TODO: light up the new node as before
+  // go go go
+//  links.push( link );
+//  nodes.push( node );
+//  newNodeURI = node.uri; // remember the URI so we can light the node up on init
+//  init();
+}
+
+function getCenterNode( allNodes ){
+  return allNodes.filter( function(d){ return d.uri == the_perspective.uri; });
+}
+
+// http://bl.ocks.org/mbostock/7555321
+function wrap(text, width, separator, joiner) {
+  if( separator == undefined ){
+    separator = /\s+/;
+    joiner = " ";
+  }
+  var hasWrapped = [];
+  text.each(function() {
+    var text = d3.select(this),
+    words = text.text().split( separator ).reverse(),
+    word,
+    line = [],
+    lineNumber = 0,
+    lineHeight = 1.1, // ems
+    y = text.attr("y"),
+    dy = parseFloat(text.attr("dy")),
+    tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join( joiner ));
+      if (tspan.node().getComputedTextLength() > width) {
+        hasWrapped.push( this );
+        line.pop();
+        tspan.text(line.join( joiner ));
+        line = [word];
+        lineNumber++;
+        tspan = text
+          .append("tspan")
+          .attr("x", 0)
+          .attr("y", y)
+          .attr("dy", ((lineNumber==0)?(dy+"em"):(lineHeight+"em"))) //++lineNumber * lineHeight + dy + "em") NOTE(philipp): dy is relative to previous sibling (== lineheight for all but first line)
+          .text(word);
+      }
+    }
+  });
+  return hasWrapped;
+}
+
+function disablePreview( allNodes ){
+  // resets ALL nodes
+  allNodes.select("circle")
+    .transition().duration( node_transition_duration )
+    .attr("r", small_node_size / 2 )
+    .style( "stroke-width", 0 );
+  allNodes.select( ".nodetext" )
+    .transition().duration( node_transition_duration )
+    .style( "opacity", 1 )
+  allNodes.selectAll("g.extras")
+    .transition().duration( node_transition_duration )
+    .style("opacity", 0 )
+    .remove();
+}
+
+function enablePreview( node ){
+  node.moveToFront();
+  node
+    .select("circle") // only current circle
+    .transition().duration( node_transition_duration )
+    .attr("r", large_node_size / 2 )
+    .style({ "stroke": "white",
+             "stroke-width": jolocom.style.width / 100 });
+  node.select( ".nodetext" )
+    .transition().duration( node_transition_duration )
+    .style( "opacity", 0 )
+  var extras = node.append("svg:g")
+    .attr("class", "extras" )
+    .style("opacity", 0 );
+  extras
+    .append( "svg:text" )
+    .attr( "class", "preview-title" )
+    .attr( "text-anchor", "middle" )
+    .attr( "dy", -1.5 ) //(jolocom.style.large_node_size / - 6 )) //(jolocom.style.large_node_size / 18 ))
+    .text( function(d){ return d.title; })
+    .call( wrap, jolocom.style.large_node_size * 0.7, "", "" );
+  extras
+    .append("svg:text")
+    .attr("class", "preview-description")
+    .attr("text-anchor", "middle")
+    .attr("dy", 1 )
+    .text( function(d){ return d.description; })
+    .call( wrap, jolocom.style.large_node_size * 0.75 );
+  extras
+    .transition().duration( node_transition_duration )
+    .style( "opacity", 1 );
+  return node;
+}
+
+function stringLessThan( s1, s2 ){
+  if( s1 < s2 ) return true;
+  return false;
+}
+
+function stringMin( s1, s2 ){
+  if( stringLessThan( s1, s2 )) return s1;
+  return s2;
+}
+
+function stringMax( s1, s2 ){
+  if( stringLessThan( s1, s2 )) return s2;
+  return s1;
+}
+
+function distance( x1, y1, x2, y2 ){
+  return Math.sqrt( Math.pow(( x1 - x2 ), 2 ) +
+                    Math.pow(( y1 - y2 ), 2 ));
+}
+
+// ################ mobile.js ##########################
+// @Justas: look out for the @Justas tag :)
+// Hot spots:
+// plus.toInbox()
+// plus.directConnect()
+// inbox.add()
+// mobilejs.init()
+
+// This attaches some config values to the `jolocom` variable
+window.jolocom = {};
+window.jolocom.style = {
+  width: window.innerWidth,
+  height: window.innerHeight,
+  light_gray_color: "#efeeee",
+  gray_color: "#838383",
+  light_blue_color: "#99D7F7",
+  blue_color: "#009FE3",
+  hilight_color: "#9BD161",
+  node_transition_duration: 400
+}
+jolocom.style.small_node_size = jolocom.style.width / 4.7;
+jolocom.style.large_node_size = jolocom.style.width * .5;
+
+// plus button
+plus = {
+  drawer: false,
+  toggleDrawer: function(){
+    if( plus.drawer ){
+      document.getElementsByTagName('body')[0].className = 'closed-drawer';
+      d3.select("#plus_drawer")
+        .transition()
+        .style( "top", jolocom.style.height+"px" );
+      zoom.reset();
+    } else {
+      document.getElementsByTagName('body')[0].className = 'open-drawer';
+      d3.select("#plus_drawer")
+        .transition()
+        .style( "top", ( jolocom.style.height / 2 )+"px" );
+      zoom.to( 0.5,
+               jolocom.style.width / 2,
+               0 );
+    }
+    plus.drawer = !plus.drawer;
+  },
+  toInbox: function(){
+    // @Justas: this adds the (fake) node to the inbox
+    inbox.add({ title: $( "#plus_drawer .title" ).val(),
+                description: $( "#plus_drawer .description" ).val() });
+    plus.toggleDrawer();
+    inbox.spring();
+  },
+  directConnect: function(){
+    // @Justas: this adds the (fake) node to the d3.js graph
+    // (find `addNode` in `./VisualRDF-js/main.js`)
+    addNode({ title: $( "#plus_drawer .title" ).val(),
+              description: $( "#plus_drawer .description" ).val() });
+    plus.toggleDrawer();
+  }
+}
+
+// inbox
+inbox = {
+  isOpen: false,
+  count: 0,
+  nodes: [],
+  enlarge: function(){
+    $( "#inbox_large" ).css( "display", "block" );
+    zoom.to( 0.5,
+             jolocom.style.width / 2,
+             jolocom.style.height );
+  },
+  reduce: function(){
+    $( "#inbox_large" ).css( "display", "none" );
+    zoom.reset();
+  },
+  open: function(){
+    if( !inbox.isOpen ){
+      d3.select( "#inbox" )
+        .transition()
+        .style( "right", ( -jolocom.style.width / 2 )+"px");
+      inbox.isOpen = true;
+    }
+  },
+  close: function(){
+    if( inbox.isOpen ){
+      var size = (inbox.count==0)
+        ?(-jolocom.style.width)
+        :(-jolocom.style.width+(jolocom.style.width/5));
+      d3.select( "#inbox" )
+        .transition()
+        .style( "right", size+"px" );
+      inbox.isOpen = false;
+    }
+  },
+  spring: function(){
+    // a hack for opening it up a bit
+    inbox.isOpen = true;
+    inbox.close();
+  },
+  add: function( d ){
+    inbox.nodes.push( d );
+    inbox.count++;
+    // @Justas: this creates the DOM for the nodes in the inbox
+    $( "#inbox .counter .number" ).text( inbox.count ); // update counter
+    if( inbox.count == 1 ){ // fade in on first node
+      d3.select( "#inbox .counter" )
+        .transition()
+        .style( "opacity", 1 );
+    }
+    var div = "<div></div>";
+    var node = $( div ).addClass( "node" ).attr( "draggable", "true" );
+    node.__index__ = inbox.count - 1;
+    var title = $( div ).addClass( "title" ).text( d.title );
+    var element = $( div ).addClass( "element" ).append( node ).append( title );
+    $( "#inbox_large" ).prepend( element );
+    node.on( "click", function(){
+      addNode( inbox.nodes[ node.__index__ ] ); // `addNode` in `./visualRDF-js/main.js`
+      inbox.reduce();
+    });
+  }
+};
+var chatReloadInterval;
+// chat
+chat = {
+  afterLoad: function () {
+
+	  d3.select( "#chat" )
+		.transition()
+		.style( "top", ( jolocom.style.height / 3 )+ "px");
+	  zoom.to( 0.5,
+      jolocom.style.width / 2,
+      jolocom.style.height / -6 );
+      console.log('chat after load');
+      return false;
+  }
+}
+chat.show = function(){
+	// draw react component for chat by communicating the state to react
+	$("#chat-state").val("loaded").trigger("click");
+  $("#chat_container").addClass('visible')
+	console.log("Chat load");
+};
+
+chat.hide = function(){
+    d3.select( "#chat" )
+      .transition()
+      .style( "top", jolocom.style.height + "px");
+
+    zoom.reset();
+    $("#chat-state").val("unloaded").trigger("click");
+    $("#chat_container").removeClass('visible')
+    console.log("Chat unload");
+  };
+
+// graph zoom/scale
+zoom = {
+  to: function( scale, x, y ){
+    vis.transition()
+      .attr("transform", "scale( "+ scale + " ) translate(" + x + "," + y + ")");
+  },
+  reset: function(){
+    vis.transition()
+      .attr("transform", "scale( 1 ) translate( 0, 0 )" );
+  }
+}
+
+var mobilejs = {
+  // @Justas: main event handlers for everything not D3.js
+  init: function(){
+    // plus button
+    $( "#plus_button" ).on( "click", plus.toggleDrawer );
+    $( "#plus_drawer .close" ).on( "click", plus.toggleDrawer );
+    $( "#plus_drawer .button.direct" ).on( "click", plus.directConnect );
+    $( "#plus_drawer .button.inbox" ).on( "click", plus.toInbox );
+    // inbox
+    $( "#inbox" ).on( "click", inbox.enlarge );
+    $( "#inbox_large .close" ).on( "click", inbox.reduce );
+    // chat
+    $( "#chat .button").on( "click", chat.hide );
+    $( "#chat .close").on( "click", chat.hide );
+  }
+};
+
+// NOTE(philipp): unused
+toggleDetailView = (function(){
+  var on = false;
+  var toggle = function(){
+    if( on ){
+      document.getElementById("detail_view").style.top =
+        ((jolocom.style.height / 20)*19) + "px"; //"580px";
+        force.size([ jolocom.style.width,
+                     jolocom.style.height ]).resume();
+    } else {
+      document.getElementById("detail_view").style.top =
+        (jolocom.style.height / 2) + "px"; //"20px";
+        force.size([ jolocom.style.width,
+                     jolocom.style.height / 2 ]).resume();
+    }
+    on = !on;
+  };
+  return toggle;
+})()
+
+// http://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
+window.mobilecheck = function() {
+  var check = false;
+  (function(a,b){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
+  return check;
+}
+
+// NOTE(philipp): unused
+hashCode = function( s ){
+	var hash = 0;
+	if (s.length == 0) return hash;
+	for (i = 0; i < s.length; i++) {
+	  char = s.charCodeAt(i);
+	  hash = ((hash<<5)-hash)+char;
+	  hash = hash & hash; // Convert to 32bit integer
+	}
+	return hash;
+}
+
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function(){
+    this.parentNode.appendChild(this);
+  });
+};
+
+var testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/card#me","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#me","title":"no title","description":"no description"},{"name":"https://sister.jolocom.com/reederz/profile/card#key","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#key","title":"no title","description":"no description"}],"links":[{"source":"0","target":"1","name":" http://www.w3.org/ns/auth/cert#key","value":"10"}],"literals":{"https://sister.jolocom.com/reederz/profile/card":[{"p":"http://purl.org/dc/terms/title","o":"WebID profile of Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}],"https://sister.jolocom.com/reederz/profile/card#key":[{"p":"http://www.w3.org/ns/auth/cert#modulus","o":"a726cd1e3eddccb4c12ebd3d8581ac83bc2913dfb88cf9d939b5eedff88878e95b9bfa278dc4fbcd5dfe7d80ff866844b69af31f30a79822e32841f3e694d75feeaba92ed91b02be46fd3f86bb800d3be222c4cb480ffa05f87f67949f41324cacc4c34ee9d133d19eb61af71ab6d97048af91d357904b1cdec8333affe1f4098cdd6f6ca465bdbae56e0b006557396dc0abb7ed2c4f3a41dd76ef07cfeb8309e80804b0c288e6e847c0b446d112403d77c939c67b30cc99a96cd695c8dbc53a5afe42bf81c53214ace49c2ce6b5dc35a0c5301dca386d9735b6d7f39c5185a6811459446940ec7b5a5050fc22c6f99844a1b9580ff0972049e898d1e16a3373","l":"None","d":"http://www.w3.org/2001/XMLSchema#hexBinary"},{"p":"http://www.w3.org/ns/auth/cert#exponent","o":"65537","l":"None","d":"http://www.w3.org/2001/XMLSchema#int"}],"https://sister.jolocom.com/reederz/profile/card#me":[{"p":"http://xmlns.com/foaf/0.1/mbox","o":"mailto:justas.azna@gmail.com","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"},{"p":"http://xmlns.com/foaf/0.1/name","o":"Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}]}}';
+
+// for testing
+function goGraph() {
+  prepareVars();
+  init(testData);
+  mobilejs.init()
+}
+
+// for testing
+function goChat() {
+  //TODO
+  goGraph();
+  chat.afterLoad();
+
+}
+
+  </script>
+
+
   <script src="/js/app.js"></script>
 </html>
