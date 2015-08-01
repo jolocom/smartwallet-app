@@ -3,7 +3,7 @@ import React from 'react'
 class Nav extends React.Component {
   render() {
     return (
-      <div id="status-bar">
+      <div className="status-bar">
         { /* TODO picture*/ }
         <img className="status-bar-img" src="#"/>
         <span className="status-bar-text">You are logged in as </span>

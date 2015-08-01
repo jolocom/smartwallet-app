@@ -1,4 +1,5 @@
 import React from 'react'
+import Chat from './chat.jsx'
 
 class Graph extends React.Component {
 
@@ -7,7 +8,7 @@ class Graph extends React.Component {
       <div id="graph-outer">
         { /* TODO: structure, ids and class names suck*/ }
         <div id="wrapper">
-          <input id="graph-url" type="text"/>
+          <input id="graph-url" type="text" hidden="hidden"/>
           { /* TODO: probably don't need this hidden stuff anymore */ }
           <input id="chat-state" type="text" hidden="hidden"/>
 
@@ -36,7 +37,7 @@ class Graph extends React.Component {
           </div>
         </div>
         <div id="chat_container">
-          TODO: load chat here
+          <Chat/>
         </div>
       </div>
     )
