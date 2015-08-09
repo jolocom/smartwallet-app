@@ -19,6 +19,9 @@ var sources = {
     './bower_components/jquery/dist/jquery.js',
     './bower_components/d3/d3.js'
   ],
+  libFonts: [
+    './bower_components/fontawesome/fonts/**/*'
+  ],
   libCss: [
     './bower_components/fontawesome/css/font-awesome.css'
   ],
@@ -27,6 +30,7 @@ var sources = {
 
 var destinations = {
   css: './dist/css',
+  fonts: './dist/fonts',
   img: './dist/img',
   js: './dist/js',
   root: './dist',
@@ -42,6 +46,12 @@ gulp.task('lib-css', function() {
   return gulp.src(sources.libCss)
     .pipe(concat('lib.css'))
     .pipe(gulp.dest(destinations.css));
+});
+
+gulp.task('lib-fonts', function() {
+  return gulp.src(sources.libFonts)
+    .pipe(gulp.dest(destinations.fonts))
+    .pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('scripts', function() {
@@ -96,4 +106,4 @@ gulp.task('serve', function() {
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['img', 'data', 'lib', 'lib-css', 'sass', 'scripts', 'html'], 'serve']));
+gulp.task('default', gulpsync.sync(['clean', ['img', 'data', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'serve']));
