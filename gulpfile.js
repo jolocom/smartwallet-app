@@ -10,6 +10,7 @@ var vinylPaths = require('vinyl-paths');
 
 var sources = {
   app: './src/js/app.jsx',
+  data: './data/**/*',
   html: './src/index.html',
   img: './src/img/**/*',
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
@@ -61,6 +62,11 @@ gulp.task('html', function() {
     .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('data', function() {
+  return gulp.src(sources.data)
+    .pipe(gulp.dest(destinations.root));
+});
+
 gulp.task('img', function() {
   return gulp.src(sources.img)
     .pipe(gulp.dest(destinations.img));
@@ -90,4 +96,4 @@ gulp.task('serve', function() {
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['img', 'lib', 'lib-css', 'sass', 'scripts', 'html'], 'serve']));
+gulp.task('default', gulpsync.sync(['clean', ['img', 'data', 'lib', 'lib-css', 'sass', 'scripts', 'html'], 'serve']));

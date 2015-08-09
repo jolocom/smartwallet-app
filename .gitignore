@@ -1,3 +1,4 @@
-node_modules/
 bower_components/
+data/
 dist/
+node_modules/

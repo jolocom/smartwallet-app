@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "lodash": "^3.10.0",
+    "n3": "^0.4.3",
     "react": "^0.13.3",
     "react-router": "^0.13.3"
   }
