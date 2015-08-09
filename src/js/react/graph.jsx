@@ -1,34 +1,5 @@
 import React from 'react'
 import Chat from './chat.jsx'
-import WebAgent from '../lib/web-agent.js'
-import N3 from 'n3'
-
-let parser = N3.Parser()
-let N3Util = N3.Util
-let agent = new WebAgent()
-console.log(agent)
-let url = 'https://localhost:8443/reederz/profile/card#me'
-agent.get(url)
-  .then((result) => {
-    console.log('success')
-    console.log(result)
-    parser.parse(result.response, (err, triple, prefixes) => {
-      if (triple) {
-        console.log(triple)
-        console.log(N3Util.isLiteral(triple.object))
-      } else {
-        console.log(prefixes)
-      }
-      if (err) {
-        console.log('error')
-        console.log(err)
-      }
-    })
-  })
-  .catch((err) => {
-    console.log('error')
-    console.log(err)
-  })
 
 class Graph extends React.Component {
 
