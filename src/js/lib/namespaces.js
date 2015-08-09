@@ -13,3 +13,14 @@ export const CERT = {
   exponent: `${cert}exponent`,
   modulus: `${cert}modulus`
 }
+
+const dc = 'http://purl.org/dc/terms/'
+export const DC = {
+  title: `${dc}title`,
+  description: `${dc}description`
+}
+
+const rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+export const RDF = {
+  type:`${rdf}type`
+}

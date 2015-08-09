@@ -153,14 +153,15 @@ let Profile = React.createClass({
 
   componentDidMount: function() {
     console.log('profile component did mount')
-    let webid = 'https://localhost:8443/reederz/profile/card#me'
+
+    var webid = null
 
     // who am I? (check "User" header)
     agent.head(document.location.origin)
       .then((xhr) => {
         console.log('head')
         console.log(xhr)
-        let webid = xhr.getResponseHeader('User')
+        webid = xhr.getResponseHeader('User')
 
         // now get my profile document
         return agent.get(webid)
@@ -223,7 +224,6 @@ let Profile = React.createClass({
           <div className="profile-edit" onClick={this._onClickEditSave}>
             Save
           </div>
-          { /* TODO: 2 modes: presentation and editing */ }
           <div className="basic">
             <header className="profile-header">
               <h2>WebID</h2>
