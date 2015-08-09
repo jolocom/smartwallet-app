@@ -154,15 +154,26 @@ let Profile = React.createClass({
   componentDidMount: function() {
     console.log('profile component did mount')
     let webid = 'https://localhost:8443/reederz/profile/card#me'
-    agent.get(webid)
-      .then((result) => {
-        // Parse triples from text
+
+    // who am I? (check "User" header)
+    agent.options(document.location.origin)
+      .then((xhr) => {
+        console.log('options')
+        console.log(xhr)
+        let webid = xhr.getResponseHeader('User')
+
+        // now get my profile document
+        return agent.get(webid)
+      })
+      .then((xhr) => {
+        // parse profile document from text
         let triples = []
         let parser = N3.Parser()
-        parser.parse(result.response, (err, triple, prefixes) => {
+        parser.parse(xhr.response, (err, triple, prefixes) => {
           if (triple) {
             triples.push(triple)
           } else {
+            // render relevant information in UI
             this._profileDocumentLoaded(webid, triples, prefixes)
           }
         })

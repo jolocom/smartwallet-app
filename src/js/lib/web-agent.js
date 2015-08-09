@@ -58,6 +58,33 @@ class WebAgent {
       xhr.send(body)
     })
   }
+
+
+  // OPTIONS request (used for identifying WebID session)
+  //
+  // @param {string} url resource url
+  //
+  // @return {Promise} promise with resulting xhr
+  options(url) {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest()
+      xhr.withCredentials = true
+      xhr.open('OPTIONS', url, true)
+      xhr.onload = (event) => {
+        if ((event.target.status >= 200 && event.target.status < 300) || event.target.status == 304) {
+          resolve(event.target)
+        }
+        else {
+          reject(new Error(event.target.status))
+        }
+      }
+      xhr.onerror = (error) => {
+        reject(error)
+      }
+      xhr.send()
+    })
+  }
+
 }
 
 export default WebAgent
