@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react/addons'
 import url from 'url'
 import N3 from 'n3'
 import WebAgent from '../lib/web-agent.js'
 import {CERT, FOAF} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
+let agent = new WebAgent()
 
-class Profile extends React.Component {
-  constructor(props) {
-    super()
-    this.parser = N3.Parser()
-    this.agent = new WebAgent()
-    this.state = {
+let Profile = React.createClass({
+  mixins: [React.addons.LinkedStateMixin],
+
+  getInitialState: function () {
+    return {
       edit: false,
       name: "(name missing)",
       email: "(email missing)",
@@ -19,21 +19,23 @@ class Profile extends React.Component {
       rsaExponent: "(rsa exponent missing)",
       webid: "#",
       webidPresent: "(webid missing)",
-      imgUri: "/img/person-placeholder.png"
+      imgUri: "/img/person-placeholder.png",
+      fixedTriples: [],
+      prefixes: [],
     }
-  }
+  },
 
   // get object value without caring whether it's a literal or IRI
-  getValue(object) {
+  _getValue: function (object) {
     if (N3Util.isLiteral(object)) {
       return N3Util.getLiteralValue(object)
     } else {
       return object
     }
-  }
+  },
 
   // extract RSA public key from triples
-  _parseKey(keySubject, triples) {
+  _parseKey: function (keySubject, triples) {
     let relevant = triples.filter((t) => t.subject == keySubject)
     let exponents = relevant.filter((t) => t.predicate == CERT.exponent)
     let modulii = relevant.filter((t) => t.predicate == CERT.modulus)
@@ -43,55 +45,125 @@ class Profile extends React.Component {
       exponent: (exponents.length == 0 ? null : exponents[0].object),
       modulus: (modulii.length == 0 ? null : modulii[0].object)
     }
-  }
+  },
 
   // change state from triples
-  _profileDocumentLoaded(webid, triples) {
+  _profileDocumentLoaded: function (webid, triples, prefixes) {
+    // subject which represents our profile
+    let profile = url.parse(webid).hash
+
+    // everything's fixed but name and email
+    let fixedTriples = triples.filter((t) => !(t.subject == profile && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
+
     let state = {
-      edit: false,
+      edit: this.state.edit,
       name: "(name missing)",
       email: "(email missing)",
       rsaModulus: "(rsa modulus missing)",
       rsaExponent: "(rsa exponent missing)",
       webid: webid,
       webidPresent: webid,
-      imgUri: "/img/person-placeholder.png"
+      imgUri: "/img/person-placeholder.png",
+      fixedTriples: fixedTriples,
+      prefixes: prefixes,
     }
 
-    // subject which represents our profile
-    let profile = url.parse(webid).hash
 
-    for (var t of triples){
+    // triples which describe profile
+    let relevant = triples.filter((t) => t.subject == profile) 
+
+    for (var t of relevant){
       if (t.predicate == FOAF.name) {
         // name
-        state.name =  this.getValue(t.object)
+        state.name =  this._getValue(t.object)
       } else if (t.predicate == FOAF.mbox) {
         // email
-        state.email =  this.getValue(t.object)
+        state.email =  this._getValue(t.object)
       } else if (t.predicate == FOAF.img) {
         // image uri
-        state.imgUri =  this.getValue(t.object)
+        state.imgUri =  this._getValue(t.object)
       } else if (t.predicate == CERT.key) {
         let key = this._parseKey(t.object, triples)
-        if (key.modulus) {state.rsaModulus = this.getValue(key.modulus)}
-        if (key.exponent) {state.rsaExponent = this.getValue(key.exponent)}
+        if (key.modulus) {state.rsaModulus = this._getValue(key.modulus)}
+        if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
       }
     }
     this.setState(state)
-  }
+  },
 
-  componentDidMount() {
+  _saveProfile: function () {
+    // subject which represents our profile
+    let profile = url.parse(this.state.webid).hash
+
+    console.log('saving profile')
+    console.log(this.state)
+    let writer = N3.Writer({prefixes: this.state.prefixes})
+    for (var t of this.state.fixedTriples) {
+      writer.addTriple(t)
+    }
+
+    writer.addTriple({
+      subject: profile,
+      predicate: FOAF.name,
+      object: N3Util.createLiteral(this.state.name)
+    })
+    writer.addTriple({
+      subject: profile,
+      predicate: FOAF.mbox,
+      object: N3Util.createIRI(this.state.email)
+    })
+
+    writer.end((err, res) => {
+      if (res) {
+        console.log('here')
+        agent.put(this.state.webid, {'Content-Type': 'text/turtle'}, res)
+          .then((res) => {
+            console.log('success updated profile')
+            console.log(res)
+          })
+          .catch((err) => {
+            console.log('error while updating profile')
+            console.log(err)
+          })
+      }
+    })
+  },
+
+  // switch between edit and presentation modes
+  _onClickEditSave: function(e) {
+    if (this.state.edit) {
+      this._saveProfile()
+    }
+
+    this.setState((prevState, currentProps) => {
+      prevState.edit = !prevState.edit
+      return prevState
+    })
+  },
+
+  // if you press return key in input fields
+  _handleSubmit: function (e) {
+    e.preventDefault()
+    if (this.state.edit) {
+      this._saveProfile()
+    }
+    console.log('submit')
+  
+  },
+
+  componentDidMount: function() {
     console.log('profile component did mount')
     let webid = 'https://localhost:8443/reederz/profile/card#me'
-    this.agent.get(webid)
+    agent.get(webid)
       .then((result) => {
         // Parse triples from text
         let triples = []
-        this.parser.parse(result.response, (err, triple, prefixes) => {
+        let parser = N3.Parser()
+        parser.parse(result.response, (err, triple, prefixes) => {
           if (triple) {
             triples.push(triple)
           } else {
-            this._profileDocumentLoaded(webid, triples)
+            this._profileDocumentLoaded(webid, triples, prefixes)
           }
         })
       })
@@ -99,42 +171,73 @@ class Profile extends React.Component {
         console.log('error')
         console.log(err)
       })
-  }
+  },
 
-  render() {
-    let buttonText = this.state.edit ? "Save" : "Edit"
+  render: function() {
+    console.log(this.state)
+    if (!this.state.edit) {
+      // presentation mode
+      return (
+        <div className="profile">
+          <div className="profile-edit" onClick={this._onClickEditSave}>
+            Edit
+          </div>
+          <div className="basic">
+            <header className="profile-header">
+              <h2>WebID</h2>
+              <h3>Digital passport</h3>
+              <img src={this.state.imgUri}/>
+            </header>
+            <main className="profile-main">
+              <section className="profile-basic-info">
+                <h3 className="profile-name">{this.state.name}</h3>
+                <p className="profile-email">{this.state.email}</p>
+                <a className="profile-webid" href={this.state.webid}>{this.state.webidPresent}</a>
+              </section>
+              <section className="profile-publickey">
+                <span className="profile-modulus-label">RSA Modulus: </span>
+                <span className="profile-modulus">{this.state.rsaModulus}</span>
+                <span className="profile-exponent-label">RSA Exponent: </span>
+                <span className="profile-exponent">{this.state.rsaExponent}</span>
+              </section>
 
-    return (
-      <div className="profile">
-        <div className="profile-edit">
-          {buttonText}
+            </main>
+          </div>
         </div>
-        { /* TODO: 2 modes: presentation and editing */ }
-        <div className="basic">
-          <header className="profile-header">
-            <h2>WebID</h2>
-            <h3>Digital passport</h3>
-            <img src={this.state.imgUri}/>
-          </header>
-          <main className="profile-main">
-            <section className="profile-basic-info">
-              <h3 className="profile-name">{this.state.name}</h3>
-              <p className="profile-email">{this.state.email}</p>
-              <a className="profile-webid" href={this.state.webid}>{this.state.webidPresent}</a>
-            </section>
-            <section className="profile-publickey">
-              <span className="profile-modulus-label">RSA Modulus: </span>
-              <span className="profile-modulus">{this.state.rsaModulus}</span>
-              <span className="profile-exponent-label">RSA Exponent: </span>
-              <span className="profile-exponent">{this.state.rsaExponent}</span>
-            </section>
+      )
+    } else {
+      // edit mode
+      return (
+        <div className="profile">
+          <div className="profile-edit" onClick={this._onClickEditSave}>
+            Save
+          </div>
+          { /* TODO: 2 modes: presentation and editing */ }
+          <div className="basic">
+            <header className="profile-header">
+              <h2>WebID</h2>
+              <h3>Digital passport</h3>
+              <img src={this.state.imgUri}/>
+            </header>
+            <main className="profile-main">
+              <section className="profile-basic-info">
+                <form><input className="profile-name" type="text" placeholder="Enter name" onSubmit={this._handleSubmit} valueLink={this.linkState('name')} /></form>
+                <form><input className="profile-email" type="text" placeholder="Enter email" onSubmit={this._handleSubmit} valueLink={this.linkState('email')} /></form>
+                <a className="profile-webid" href={this.state.webid}>{this.state.webidPresent}</a>
+              </section>
+              <section className="profile-publickey">
+                <span className="profile-modulus-label">RSA Modulus: </span>
+                <span className="profile-modulus">{this.state.rsaModulus}</span>
+                <span className="profile-exponent-label">RSA Exponent: </span>
+                <span className="profile-exponent">{this.state.rsaExponent}</span>
+              </section>
 
-          </main>
+            </main>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
-}
-
+})
 
 export default Profile
