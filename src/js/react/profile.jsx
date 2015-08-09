@@ -156,9 +156,9 @@ let Profile = React.createClass({
     let webid = 'https://localhost:8443/reederz/profile/card#me'
 
     // who am I? (check "User" header)
-    agent.options(document.location.origin)
+    agent.head(document.location.origin)
       .then((xhr) => {
-        console.log('options')
+        console.log('head')
         console.log(xhr)
         let webid = xhr.getResponseHeader('User')
 
