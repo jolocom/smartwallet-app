@@ -15,9 +15,7 @@ var sources = {
   img: './src/img/**/*',
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
   lib: [
-    './node_modules/babel-core/browser-polyfill.js',
-    './bower_components/jquery/dist/jquery.js',
-    './bower_components/d3/d3.js'
+    './node_modules/babel-core/browser-polyfill.js'
   ],
   libFonts: [
     './bower_components/fontawesome/fonts/**/*'
