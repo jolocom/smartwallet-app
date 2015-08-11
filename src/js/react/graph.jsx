@@ -35,7 +35,238 @@ jolocom.style.large_node_size = jolocom.style.width * .5;
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
 
-class D3Graph {
+
+
+//console.log(d3g)
+
+let agent = new WebAgent()
+let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/card#me","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#me","title":"no title","description":"no description"},{"name":"https://sister.jolocom.com/reederz/profile/card#key","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#key","title":"no title","description":"no description"}],"links":[{"source":"0","target":"1","name":" http://www.w3.org/ns/auth/cert#key","value":"10"}],"literals":{"https://sister.jolocom.com/reederz/profile/card":[{"p":"http://purl.org/dc/terms/title","o":"WebID profile of Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}],"https://sister.jolocom.com/reederz/profile/card#key":[{"p":"http://www.w3.org/ns/auth/cert#modulus","o":"a726cd1e3eddccb4c12ebd3d8581ac83bc2913dfb88cf9d939b5eedff88878e95b9bfa278dc4fbcd5dfe7d80ff866844b69af31f30a79822e32841f3e694d75feeaba92ed91b02be46fd3f86bb800d3be222c4cb480ffa05f87f67949f41324cacc4c34ee9d133d19eb61af71ab6d97048af91d357904b1cdec8333affe1f4098cdd6f6ca465bdbae56e0b006557396dc0abb7ed2c4f3a41dd76ef07cfeb8309e80804b0c288e6e847c0b446d112403d77c939c67b30cc99a96cd695c8dbc53a5afe42bf81c53214ace49c2ce6b5dc35a0c5301dca386d9735b6d7f39c5185a6811459446940ec7b5a5050fc22c6f99844a1b9580ff0972049e898d1e16a3373","l":"None","d":"http://www.w3.org/2001/XMLSchema#hexBinary"},{"p":"http://www.w3.org/ns/auth/cert#exponent","o":"65537","l":"None","d":"http://www.w3.org/2001/XMLSchema#int"}],"https://sister.jolocom.com/reederz/profile/card#me":[{"p":"http://xmlns.com/foaf/0.1/mbox","o":"mailto:justas.azna@gmail.com","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"},{"p":"http://xmlns.com/foaf/0.1/name","o":"Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}]}}';
+
+
+class InboxD3 {
+  enlarge(){
+    $( "#inbox_large" ).css( "display", "block" );
+    self.zoom.to( 0.5,
+             jolocom.style.width / 2,
+             jolocom.style.height );
+  }
+  reduce(){
+    $( "#inbox_large" ).css( "display", "none" );
+    self.zoom.reset();
+  }
+  open(){
+    if( !inbox.isOpen ){
+      d3.select( "#inbox" )
+        .transition()
+        .style( "right", ( -jolocom.style.width / 2 )+"px");
+      self.inbox.isOpen = true;
+    }
+  }
+
+  close(){
+    if( self.inbox.isOpen ){
+      var size = (self.inbox.count==0)
+        ?(-jolocom.style.width)
+        :(-jolocom.style.width+(jolocom.style.width/5));
+      d3.select( "#inbox" )
+        .transition()
+        .style( "right", size+"px" );
+      self.inbox.isOpen = false;
+    }
+  }
+
+  spring(){
+    // a hack for opening it up a bit
+    self.inbox.isOpen = true;
+    self.inbox.close();
+  }
+
+  add(d){
+    self.inbox.nodes.push( d );
+    self.inbox.count++;
+    // @Justas: this creates the DOM for the nodes in the inbox
+    $( "#inbox .counter .number" ).text( inbox.count ); // update counter
+    if( self.inbox.count == 1 ){ // fade in on first node
+      d3.select( "#inbox .counter" )
+        .transition()
+        .style( "opacity", 1 );
+    }
+    var div = "<div></div>";
+    var node = $( div ).addClass( "node" ).attr( "draggable", "true" );
+    node.__index__ = inbox.count - 1;
+    var title = $( div ).addClass( "title" ).text( d.title );
+    var element = $( div ).addClass( "element" ).append( node ).append( title );
+    $( "#inbox_large" ).prepend( element );
+    node.on( "click", function(){
+      addNode( self.inbox.nodes[ node.__index__ ] ); // `addNode` in `./visualRDF-js/main.js`
+      self.inbox.reduce();
+    });
+  }
+
+}
+
+let Inbox = React.createClass({
+  render: function() {
+    //TODO
+    return (
+      <div id="inbox_container">
+        <div id="inbox" draggable="true" onClick={this.inboxEnlarge}>
+          <div className="counter">
+            <div className="number">1</div>
+          </div>
+        </div>
+        <div id="inbox_large" onClick={this.inboxReduce}>
+          <div className="close">x</div>
+        </div>
+      </div>
+    )
+  
+  },
+  getInitialState: function() {
+    return {
+      isOpen: false,
+      count: 0,
+      nodes: [],
+    }
+  },
+
+})
+
+class PlusDrawerD3 {
+  toggleDrawer() {
+    if( self.plus.drawer ){
+      document.getElementsByTagName('body')[0].className = 'closed-drawer';
+      d3.select("#plus_drawer")
+        .transition()
+        .style( "top", jolocom.style.height+"px" );
+      self.zoom.reset();
+    } else {
+      document.getElementsByTagName('body')[0].className = 'open-drawer';
+      d3.select("#plus_drawer")
+        .transition()
+        .style( "top", ( jolocom.style.height / 2 )+"px" );
+      self.zoom.to( 0.5,
+               jolocom.style.width / 2,
+               0 );
+    }
+    self.plus.drawer = !self.plus.drawer;
+  }
+  toInbox(){
+    // @Justas: this adds the (fake) node to the inbox
+    self.inbox.add({ title: $( "#plus_drawer .title" ).val(),
+                description: $( "#plus_drawer .description" ).val() });
+    self.plus.toggleDrawer();
+    self.inbox.spring();
+  }
+  directConnect(){
+    // @Justas: this adds the (fake) node to the d3.js graph
+    // (find `addNode` in `./VisualRDF-js/main.js`)
+    self.addNode({ title: $( "#plus_drawer .title" ).val(),
+              description: $( "#plus_drawer .description" ).val() });
+    self.plus.toggleDrawer();
+  }
+}
+
+let PlusDrawer = React.createClass({
+
+  getInitialState: function() {
+    return {
+      drawer: false //rename to "isOpen" or smth similar
+    }
+  },
+
+  render: function() {
+    return (
+      <div id="plus_drawer" onClick={this.toggleDrawer}>
+        <div className="close">x</div>
+        <div>
+          <textarea className="title" placeholder="Node title" rows="1" cols="50"/>
+        </div>
+        <div>
+          <textarea className="description" placeholder="Node description" rows="5" cols="50"/>
+        </div>
+        <div className="button direct" onClick={this.directConnect}>Connect Now</div>
+        <div className="button inbox" onClick={this.toInbox}>Put Into Inbox</div>
+      </div>
+    )
+  }
+})
+
+class ChatD3 {
+  afterLoad() {
+  
+    d3.select( "#chat" )
+  	.transition()
+  	.style( "top", ( jolocom.style.height / 3 )+ "px");
+    self.zoom.to( 0.5,
+      jolocom.style.width / 2,
+      jolocom.style.height / -6 );
+      console.log('chat after load');
+      return false;
+  }
+
+  show() {
+    // draw react component for chat by communicating the state to react
+    $("#chat-state").val("loaded").trigger("click");
+    $("#chat_container").addClass('visible')
+    console.log("Chat load");
+  }
+
+  hide(e) {
+    //TODO
+    d3.select( "#chat" )
+      .transition()
+      .style( "top", jolocom.style.height + "px");
+    
+    self.zoom.reset();
+    $("#chat-state").val("unloaded").trigger("click");
+    $("#chat_container").removeClass('visible')
+    console.log("Chat unload");
+  }
+}
+
+let Chat = React.createClass({
+  render: function() {
+    return (
+      <div id="chat">
+        { /* TODO: structure, ids and class names suck*/ }
+        <div className="close" onClick={this.hide}>x</div>
+        <div className="head">
+          <h1 className="title">TODO: chat topic goes here</h1>
+          <p className="origin">TODO: chat origin goes here</p>
+          <div className="message">
+            <div className="content">
+              <h2>TODO: author goes here</h2>
+              <p>TODO: content goes here</p>
+            </div>
+            <div className="node link"/>
+          </div>
+          <div className="message">
+            <div className="content">
+              <h2>TODO: author goes here</h2>
+              <p>TODO: content goes here</p>
+            </div>
+            <div className="node link"/>
+          </div>
+          <div className="message">
+            <div className="content">
+              <h2>TODO: author goes here</h2>
+              <p>TODO: content goes here</p>
+            </div>
+            <div className="node link"/>
+          </div>
+        </div>
+        <div className="message new">
+          <textarea className="content" value="TODO: Current message"/>
+          <div className="node link"/>
+          <div className="button" onClick={this.hide}>tell</div>
+        </div>
+      </div>
+    )
+  }
+})
+
+class GraphD3 {
 
   constructor(el, props, state) {
     // the node being centered (target of 'connect' interactions)
@@ -676,204 +907,6 @@ class D3Graph {
 }
 
 
-//console.log(d3g)
-
-let agent = new WebAgent()
-let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/card#me","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#me","title":"no title","description":"no description"},{"name":"https://sister.jolocom.com/reederz/profile/card#key","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#key","title":"no title","description":"no description"}],"links":[{"source":"0","target":"1","name":" http://www.w3.org/ns/auth/cert#key","value":"10"}],"literals":{"https://sister.jolocom.com/reederz/profile/card":[{"p":"http://purl.org/dc/terms/title","o":"WebID profile of Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}],"https://sister.jolocom.com/reederz/profile/card#key":[{"p":"http://www.w3.org/ns/auth/cert#modulus","o":"a726cd1e3eddccb4c12ebd3d8581ac83bc2913dfb88cf9d939b5eedff88878e95b9bfa278dc4fbcd5dfe7d80ff866844b69af31f30a79822e32841f3e694d75feeaba92ed91b02be46fd3f86bb800d3be222c4cb480ffa05f87f67949f41324cacc4c34ee9d133d19eb61af71ab6d97048af91d357904b1cdec8333affe1f4098cdd6f6ca465bdbae56e0b006557396dc0abb7ed2c4f3a41dd76ef07cfeb8309e80804b0c288e6e847c0b446d112403d77c939c67b30cc99a96cd695c8dbc53a5afe42bf81c53214ace49c2ce6b5dc35a0c5301dca386d9735b6d7f39c5185a6811459446940ec7b5a5050fc22c6f99844a1b9580ff0972049e898d1e16a3373","l":"None","d":"http://www.w3.org/2001/XMLSchema#hexBinary"},{"p":"http://www.w3.org/ns/auth/cert#exponent","o":"65537","l":"None","d":"http://www.w3.org/2001/XMLSchema#int"}],"https://sister.jolocom.com/reederz/profile/card#me":[{"p":"http://xmlns.com/foaf/0.1/mbox","o":"mailto:justas.azna@gmail.com","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"},{"p":"http://xmlns.com/foaf/0.1/name","o":"Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}]}}';
-
-/*
- 
-    // inbox
-*/
-
-let Inbox = React.createClass({
-  render: function() {
-    //TODO
-  
-  },
-  getInitialState: function() {
-    return {
-      isOpen: false,
-      count: 0,
-      nodes: [],
-    }
-  },
-  enlarge: function(){
-    $( "#inbox_large" ).css( "display", "block" );
-    self.zoom.to( 0.5,
-             jolocom.style.width / 2,
-             jolocom.style.height );
-  },
-  reduce: function(){
-    $( "#inbox_large" ).css( "display", "none" );
-    self.zoom.reset();
-  },
-  open: function(){
-    if( !inbox.isOpen ){
-      d3.select( "#inbox" )
-        .transition()
-        .style( "right", ( -jolocom.style.width / 2 )+"px");
-      self.inbox.isOpen = true;
-    }
-  },
-  close: function(){
-    if( self.inbox.isOpen ){
-      var size = (self.inbox.count==0)
-        ?(-jolocom.style.width)
-        :(-jolocom.style.width+(jolocom.style.width/5));
-      d3.select( "#inbox" )
-        .transition()
-        .style( "right", size+"px" );
-      self.inbox.isOpen = false;
-    }
-  },
-  spring: function(){
-    // a hack for opening it up a bit
-    self.inbox.isOpen = true;
-    self.inbox.close();
-  },
-  add: function( d ){
-    self.inbox.nodes.push( d );
-    self.inbox.count++;
-    // @Justas: this creates the DOM for the nodes in the inbox
-    $( "#inbox .counter .number" ).text( inbox.count ); // update counter
-    if( self.inbox.count == 1 ){ // fade in on first node
-      d3.select( "#inbox .counter" )
-        .transition()
-        .style( "opacity", 1 );
-    }
-    var div = "<div></div>";
-    var node = $( div ).addClass( "node" ).attr( "draggable", "true" );
-    node.__index__ = inbox.count - 1;
-    var title = $( div ).addClass( "title" ).text( d.title );
-    var element = $( div ).addClass( "element" ).append( node ).append( title );
-    $( "#inbox_large" ).prepend( element );
-    node.on( "click", function(){
-      addNode( self.inbox.nodes[ node.__index__ ] ); // `addNode` in `./visualRDF-js/main.js`
-      self.inbox.reduce();
-    });
-  }
-
-})
-
-let PlusDrawer = React.createClass({
-  toggleDrawer: function() {
-    if( self.plus.drawer ){
-      document.getElementsByTagName('body')[0].className = 'closed-drawer';
-      d3.select("#plus_drawer")
-        .transition()
-        .style( "top", jolocom.style.height+"px" );
-      self.zoom.reset();
-    } else {
-      document.getElementsByTagName('body')[0].className = 'open-drawer';
-      d3.select("#plus_drawer")
-        .transition()
-        .style( "top", ( jolocom.style.height / 2 )+"px" );
-      self.zoom.to( 0.5,
-               jolocom.style.width / 2,
-               0 );
-    }
-    self.plus.drawer = !self.plus.drawer;
-  },
-  toInbox: function(){
-    // @Justas: this adds the (fake) node to the inbox
-    self.inbox.add({ title: $( "#plus_drawer .title" ).val(),
-                description: $( "#plus_drawer .description" ).val() });
-    self.plus.toggleDrawer();
-    self.inbox.spring();
-  },
-  directConnect: function(){
-    // @Justas: this adds the (fake) node to the d3.js graph
-    // (find `addNode` in `./VisualRDF-js/main.js`)
-    self.addNode({ title: $( "#plus_drawer .title" ).val(),
-              description: $( "#plus_drawer .description" ).val() });
-    self.plus.toggleDrawer();
-  },
-
-  getInitialState: function() {
-    return {
-      drawer: false //rename to "isOpen" or smth similar
-    }
-  },
-
-  render: function() {
-    //TODO
-  
-  }
-
-})
-
-let Chat = React.createClass({
-  // componentDidMount?
-  afterLoad: function () {
-  
-    d3.select( "#chat" )
-  	.transition()
-  	.style( "top", ( jolocom.style.height / 3 )+ "px");
-    self.zoom.to( 0.5,
-      jolocom.style.width / 2,
-      jolocom.style.height / -6 );
-      console.log('chat after load');
-      return false;
-  },
-  show: function() {
-    // draw react component for chat by communicating the state to react
-    $("#chat-state").val("loaded").trigger("click");
-    $("#chat_container").addClass('visible')
-    console.log("Chat load");
-  },
-  hide: function(e) {
-    //TODO
-    d3.select( "#chat" )
-      .transition()
-      .style( "top", jolocom.style.height + "px");
-    
-    self.zoom.reset();
-    $("#chat-state").val("unloaded").trigger("click");
-    $("#chat_container").removeClass('visible')
-    console.log("Chat unload");
-  },
-  render: function() {
-    return (
-      <div id="chat">
-        { /* TODO: structure, ids and class names suck*/ }
-        <div className="close" onClick={this.hide}>x</div>
-        <div className="head">
-          <h1 className="title">TODO: chat topic goes here</h1>
-          <p className="origin">TODO: chat origin goes here</p>
-          <div className="message">
-            <div className="content">
-              <h2>TODO: author goes here</h2>
-              <p>TODO: content goes here</p>
-            </div>
-            <div className="node link"/>
-          </div>
-          <div className="message">
-            <div className="content">
-              <h2>TODO: author goes here</h2>
-              <p>TODO: content goes here</p>
-            </div>
-            <div className="node link"/>
-          </div>
-          <div className="message">
-            <div className="content">
-              <h2>TODO: author goes here</h2>
-              <p>TODO: content goes here</p>
-            </div>
-            <div className="node link"/>
-          </div>
-        </div>
-        <div className="message new">
-          <textarea className="content" value="TODO: Current message"/>
-          <div className="node link"/>
-          <div className="button" onClick={this.hide}>tell</div>
-        </div>
-      </div>
-    )
-  }
-})
-
-
 /*
  Graph state:
  - nodes, links, literals
@@ -920,7 +953,7 @@ let Graph = React.createClass({
 	  let res = this.mergeGraphs(json.nodes, json.links);
     this.arrangeNodes();
     let state = {
-      graph: new D3Graph(null, null, this.state),
+      graph: new GraphD3(null, null, this.state),
       pastNodes: [],
       nodes: res.nodes,
       links: res.links,
@@ -1073,25 +1106,11 @@ let Graph = React.createClass({
           <input id="chat-state" type="text" hidden="hidden"/>
 
           <div id="plus_button" onClick={this.toggleDrawer}/>
-          <div id="plus_drawer" onClick={this.toggleDrawer}>
-            <div className="close">x</div>
-            <div>
-              <textarea className="title" placeholder="Node title" rows="1" cols="50"/>
-            </div>
-            <div>
-              <textarea className="description" placeholder="Node description" rows="5" cols="50"/>
-            </div>
-            <div className="button direct" onClick={this.directConnect}>Connect Now</div>
-            <div className="button inbox" onClick={this.toInbox}>Put Into Inbox</div>
-          </div>
-          <div id="inbox" draggable="true" onClick={this.inboxEnlarge}>
-            <div className="counter">
-              <div className="number">1</div>
-            </div>
-          </div>
-          <div id="inbox_large" onClick={this.inboxReduce}>
-            <div className="close">x</div>
-          </div>
+
+          {this.state.plusDrawerOpen ? <PlusDrawer/> : ""}
+          {this.state.inboxOpen ? <Inbox/> : ""}
+
+
           <div id="graph">
             <div id="chart"/>
           </div>
