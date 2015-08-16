@@ -1,3 +1,5 @@
+// @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
+
 import React from 'react/addons'
 
 import url from 'url'
@@ -5,6 +7,7 @@ import d3 from 'd3'
 import N3 from 'n3'
 import D3Converter from '../lib/d3-converter.js'
 import WebAgent from '../lib/web-agent.js'
+import {STYLES} from './styles.js'
 
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
@@ -12,29 +15,7 @@ d3.selection.prototype.moveToFront = function() {
   })
 }
 
-// some style variables - should move them out of here
-let jolocom = {}
-jolocom.style = {
-  width: window.innerWidth,
-  height: window.innerHeight,
-  lightGrayColor: "#efeeee",
-  grayColor: "#838383",
-  lightBlueColor: "#99D7F7",
-  blueColor: "#009FE3",
-  highLightColor: "#9BD161",
-  nodeTransitionDuration: 400
-}
-jolocom.style.smallNodeSize = jolocom.style.width / 4.7
-jolocom.style.largeNodeSize = jolocom.style.width * .5
 
-//TODO: 
-// - get rid of jquery
-// @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
-
-
-
-
-//console.log(d3g)
 
 let agent = new WebAgent()
 let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/card#me","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#me","title":"no title","description":"no description"},{"name":"https://sister.jolocom.com/reederz/profile/card#key","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#key","title":"no title","description":"no description"}],"links":[{"source":"0","target":"1","name":" http://www.w3.org/ns/auth/cert#key","value":"10"}],"literals":{"https://sister.jolocom.com/reederz/profile/card":[{"p":"http://purl.org/dc/terms/title","o":"WebID profile of Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}],"https://sister.jolocom.com/reederz/profile/card#key":[{"p":"http://www.w3.org/ns/auth/cert#modulus","o":"a726cd1e3eddccb4c12ebd3d8581ac83bc2913dfb88cf9d939b5eedff88878e95b9bfa278dc4fbcd5dfe7d80ff866844b69af31f30a79822e32841f3e694d75feeaba92ed91b02be46fd3f86bb800d3be222c4cb480ffa05f87f67949f41324cacc4c34ee9d133d19eb61af71ab6d97048af91d357904b1cdec8333affe1f4098cdd6f6ca465bdbae56e0b006557396dc0abb7ed2c4f3a41dd76ef07cfeb8309e80804b0c288e6e847c0b446d112403d77c939c67b30cc99a96cd695c8dbc53a5afe42bf81c53214ace49c2ce6b5dc35a0c5301dca386d9735b6d7f39c5185a6811459446940ec7b5a5050fc22c6f99844a1b9580ff0972049e898d1e16a3373","l":"None","d":"http://www.w3.org/2001/XMLSchema#hexBinary"},{"p":"http://www.w3.org/ns/auth/cert#exponent","o":"65537","l":"None","d":"http://www.w3.org/2001/XMLSchema#int"}],"https://sister.jolocom.com/reederz/profile/card#me":[{"p":"http://xmlns.com/foaf/0.1/mbox","o":"mailto:justas.azna@gmail.com","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"},{"p":"http://xmlns.com/foaf/0.1/name","o":"Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}]}}'
@@ -44,11 +25,11 @@ class InboxD3 {
   enlarge(props){
     console.log(props)
     props.graph.zoomTo( 0.5,
-             jolocom.style.width / 2,
-             jolocom.style.height )
+             STYLES.width / 2,
+             STYLES.height )
     d3.select( "#inbox" )
       .transition()
-      .style( "right", ( -jolocom.style.width / 2 )+"px")
+      .style( "right", ( -STYLES.width / 2 )+"px")
   }
   reduce(props){
     props.graph.zoomReset()
@@ -56,10 +37,10 @@ class InboxD3 {
 
   close(){
     //let size = (self.inbox.count==0)
-      //?(-jolocom.style.width)
-      //:(-jolocom.style.width+(jolocom.style.width/5))
+      //?(-STYLES.width)
+      //:(-STYLES.width+(STYLES.width/5))
 
-    let size = -jolocom.style.width + (jolocom.style.width/5)
+    let size = -STYLES.width + (STYLES.width/5)
 
     d3.select( "#inbox" )
       .transition()
@@ -197,10 +178,10 @@ class PlusDrawerD3 {
     document.getElementsByTagName('body')[0].className = 'open-drawer'
     d3.select("#plus_drawer")
       .transition()
-      .style( "top", ( jolocom.style.height / 2 )+"px" )
+      .style( "top", ( STYLES.height / 2 )+"px" )
 
     this.props.graph.zoomTo( 0.5,
-             jolocom.style.width / 2,
+             STYLES.width / 2,
              0 )
   }
 
@@ -208,7 +189,7 @@ class PlusDrawerD3 {
     document.getElementsByTagName('body')[0].className = 'closed-drawer'
     d3.select("#plus_drawer")
       .transition()
-      .style( "top", jolocom.style.height+"px" )
+      .style( "top", STYLES.height+"px" )
     this.props.graph.zoomReset()
   }
 }
@@ -278,10 +259,10 @@ class ChatD3 {
   constructor(el, props) {
     d3.select( "#chat" )
   	.transition()
-  	.style( "top", ( jolocom.style.height / 3 )+ "px")
+  	.style( "top", ( STYLES.height / 3 )+ "px")
     props.graph.zoomTo( 0.5,
-      jolocom.style.width / 2,
-      jolocom.style.height / -6 )
+      STYLES.width / 2,
+      STYLES.height / -6 )
       console.log('chat after load')
       return false
   }
@@ -290,7 +271,7 @@ class ChatD3 {
   destroy(props) {
     d3.select( "#chat" )
       .transition()
-      .style( "top", jolocom.style.height + "px")
+      .style( "top", STYLES.height + "px")
     props.graph.zoomReset()
   }
 }
@@ -364,8 +345,8 @@ class GraphD3 {
     this.thePerspective = {
       uri: "",
       node: {
-        px: jolocom.style.width / 2,
-        py: jolocom.style.height / 2
+        px: STYLES.width / 2,
+        py: STYLES.height / 2
       },
       dom: {}
     }
@@ -376,7 +357,7 @@ class GraphD3 {
     this.showChat = showChat
 
       // the node showing the large preview circle
-    this.the_preview = {
+    this.thePreview = {
       uri: "",
       node: {}
     }
@@ -408,10 +389,10 @@ class GraphD3 {
     //background circle
     this.vis.append( "svg:circle" )
       .attr( "class", "plate" )
-      .attr( "cx", jolocom.style.width * 0.5 )
-      .attr( "cy", jolocom.style.height * 0.5)
-      .attr( "r", jolocom.style.width * 0.3 )
-      .style( "fill", jolocom.style.lightGrayColor )
+      .attr( "cx", STYLES.width * 0.5 )
+      .attr( "cy", STYLES.height * 0.5)
+      .attr( "r", STYLES.width * 0.3 )
+      .style( "fill", STYLES.lightGrayColor )
 
 
     // `base` only needs to run once
@@ -420,13 +401,13 @@ class GraphD3 {
       .nodes(state.nodes)
   	  .links(state.links)
   	  .gravity(0.2)
-  	  .charge( jolocom.style.width * -14)
-  	  .linkDistance( jolocom.style.width / 3 )
+  	  .charge( STYLES.width * -14)
+  	  .linkDistance( STYLES.width / 3 )
   	  .size([this.w, this.h])
       .start()
 
     //group links (so they don't overlap nodes)
-    this.link_group = this.vis.append( "g" ).attr( "class", "link_group")
+    this.linkGroup = this.vis.append( "g" ).attr( "class", "link_group")
   
   }
 
@@ -440,8 +421,8 @@ class GraphD3 {
     // links
   
     // data binding
-    this.link_group.selectAll("g.link").remove() // remove old links entirely
-  	let link = this.link_group.selectAll("g.link")
+    this.linkGroup.selectAll("g.link").remove() // remove old links entirely
+  	let link = this.linkGroup.selectAll("g.link")
   	  .data(state.links, (d) => {
         // this retains link-IDs over changing target/source direction
         // NB: not really useful in our case
@@ -451,71 +432,71 @@ class GraphD3 {
       })
   
     // only new links
-    let link_new = link.enter()
+    let linkNew = link.enter()
       .append("svg:g").attr("class", "link")
   	  .call(this.force.drag)
   
-    console.log( "NEW LINKS", link_new[0].length )
+    console.log( "NEW LINKS", linkNew[0].length )
   
     // add line
-  	link_new.append("svg:line")
+  	linkNew.append("svg:line")
   	  .attr("class", "link")
-      .attr("stroke-width", jolocom.style.width / 45 )
-  	  .attr("stroke", jolocom.style.lightGrayColor ) //TODO(philipp) reverse
+      .attr("stroke-width", STYLES.width / 45 )
+  	  .attr("stroke", STYLES.lightGrayColor ) //TODO(philipp) reverse
   	  .attr("x1", (d) => d.x1)
   	  .attr("y1", (d) => d.y1)
   	  .attr("x2", (d) => d.x1)
   	  .attr("y2", (d) => d.y2)
   
     // remove old links
-    let link_old = link.exit()
-    console.log( "OLD LINKS", link_old[0].length )
-    link_old.transition().duration(2000).style("opacity", 0 ).remove()
+    let linkOld = link.exit()
+    console.log( "OLD LINKS", linkOld[0].length )
+    linkOld.transition().duration(2000).style("opacity", 0 ).remove()
   
     // --------------------------------------------------------------------------------
     // nodes
   	let node = this.vis.selectAll("g.node")
   	  .data(state.nodes, (d) => d.uri)
   
-    let node_new = node.enter().append("svg:g")
+    let nodeNew = node.enter().append("svg:g")
   	  .attr("class", "node")
   	  .attr("dx", "80px")
   	  .attr("dy", "80px")
       .call( this.force.drag )
   
-    node_new.style( "opacity", 0 )
+    nodeNew.style( "opacity", 0 )
       .transition()
       .style( "opacity", 1 )
   
-    console.log( "NEW NODES", node_new[0].length )
+    console.log( "NEW NODES", nodeNew[0].length )
   
     // add circle
-  	node_new.filter((d) => d.type == "uri")
+  	nodeNew.filter((d) => d.type == "uri")
   	  .append("svg:circle")
   	  .attr("class", "node")
-  	  .attr("r", jolocom.style.smallNodeSize/2)
+  	  .attr("r", STYLES.smallNodeSize/2)
   	  .attr("x", "-8px")
   	  .attr("y", "-8px")
-  	  .attr("width", jolocom.style.smallNodeSize)
-  	  .attr("height", jolocom.style.smallNodeSize)
-  	  .style("fill", jolocom.style.grayColor)
+  	  .attr("width", STYLES.smallNodeSize)
+  	  .attr("height", STYLES.smallNodeSize)
+  	  .style("fill", STYLES.grayColor)
   	  .style("stroke", "white")
       .style( "stroke-width", 0 )
   
     // add title text (visible when not in preview)
-  	let wrappedTitles = node_new.filter((d) => d.type == "bnode" || d.type == "uri")
+  	let wrappedTitles = nodeNew.filter((d) => d.type == "bnode" || d.type == "uri")
       .append("svg:text")
   	  .attr("class", "nodetext")
       .style( "fill", "#ffffff" )
       .attr("text-anchor", "middle" )
   	  .attr("dy", ".35em")
   	  .text((d) => d.title)
-      .call( this.wrap, jolocom.style.smallNodeSize * 0.9, "", "" ) // returns only wrapped titles, so we can push them up later
+      .call( this.wrap, STYLES.smallNodeSize * 0.9, "", "" ) // returns only wrapped titles, so we can push them up later
   
     // remove old nodes
-    let node_old = node.exit()
-    console.log( "OLD NODES", node_old[0].length )
-    node_old.transition()
+    let nodeOld = node.exit()
+    console.log( "OLD NODES", nodeOld[0].length )
+    nodeOld.transition()
       .style("opacity", 0 )
       .remove()
   
@@ -532,12 +513,12 @@ class GraphD3 {
         
       } else {
         this.animateNode( this.thePerspective.node,
-                     jolocom.style.width / 2,
-                     jolocom.style.height / 2 )
+                     STYLES.width / 2,
+                     STYLES.height / 2 )
       }
       this.getCenterNode( node )
         .select( "circle" )
-        .style("fill", jolocom.style.blueColor )
+        .style("fill", STYLES.blueColor )
     }
   
     { // init history
@@ -546,8 +527,8 @@ class GraphD3 {
           return d.uri == this.nodeHistory[ this.nodeHistory.length - 1 ].uri })[0]
         lastStep.fixed = true
         this.animateNode( lastStep,
-                     jolocom.style.width / 2,
-                     jolocom.style.height * 4/5 )
+                     STYLES.width / 2,
+                     STYLES.height * 4/5 )
       }
     }
   
@@ -559,10 +540,10 @@ class GraphD3 {
             .interrupt()
             .style( "opacity", 1 )
             .select( "circle" )
-            .style( "fill", jolocom.style.highLightColor )
+            .style( "fill", STYLES.highLightColor )
           newNode
             .transition().duration( 2000 )
-            .style( "fill", jolocom.style.grayColor )
+            .style( "fill", STYLES.grayColor )
         }
         this.newNodeURI = undefined
       }
@@ -604,8 +585,8 @@ class GraphD3 {
           // (so they sit nicely on top & below the center perspective)
           let kx = 10 * e.alpha
           let ky = 4 * kx
-          d.x += (d.x < ( jolocom.style.width / 2 ))  ?( kx ):( -kx )
-          d.y += (d.y < ( jolocom.style.height / 2 )) ?( -ky ):( ky )
+          d.x += (d.x < ( STYLES.width / 2 ))  ?( kx ):( -kx )
+          d.y += (d.y < ( STYLES.height / 2 )) ?( -ky ):( ky )
           return "translate(" + d.x + "," + d.y + ")"
         })
   	})
@@ -633,10 +614,10 @@ class GraphD3 {
     }
   
     let openPreview = function (d){ // click == enable preview
-      if( d.uri == self.the_preview.uri ) return
+      if( d.uri == self.thePreview.uri ) return
       self.disablePreview( node )
-      self.the_preview.node = d
-      self.the_preview.uri = d.uri
+      self.thePreview.node = d
+      self.thePreview.uri = d.uri
       self.enablePreview( d3.select( this ))
     }
   
@@ -705,8 +686,8 @@ class GraphD3 {
       }
       if( d == self.thePerspective.node ){
         // reset node position
-        d.x, d.px = jolocom.style.width / 2
-        d.y, d.py = jolocom.style.height / 2
+        d.x, d.px = STYLES.width / 2
+        d.y, d.py = STYLES.height / 2
         d3.select( this ).attr( "transform", (d) => "translate(" + d.x + "," + d.y + ")")
         // perspective node can be dragged into inbox (top of screen)
         console.log(d3.event)
@@ -715,7 +696,7 @@ class GraphD3 {
         if( drag.distance() < 40 ){
           //TODO: change chat state to "showing"
           self.showChat()
-        } else if( y < jolocom.style.height / 3 ){
+        } else if( y < STYLES.height / 3 ){
 
           //TODO: should communicate back to react
           self.addNodeToInbox( d )
@@ -724,13 +705,13 @@ class GraphD3 {
         // surrounding nodes can be dragged into focus (center of screen)
         if( self.distance( d.x,
                       d.y,
-                      jolocom.style.width / 2,
-                      jolocom.style.height / 2 )
-            < jolocom.style.width * (3/8)){
+                      STYLES.width / 2,
+                      STYLES.height / 2 )
+            < STYLES.width * (3/8)){
           self.changeCenter( d, d3.select( this ), node)
           self.disablePreview( node )
-          self.the_preview.node = d
-          self.the_preview.uri = d.uri
+          self.thePreview.node = d
+          self.thePreview.uri = d.uri
           self.enablePreview( d3.select( this ))
         }
       }
@@ -805,17 +786,17 @@ class GraphD3 {
       //oldCenter.node.fixed = false
       oldCenter.dom
         .select( "circle" )
-        .style( "fill", jolocom.style.lightBlueColor )
+        .style( "fill", STYLES.lightBlueColor )
       this.animateNode( oldCenter.node,
-                   jolocom.style.width / 2,
-                   jolocom.style.height * 4/5 )
+                   STYLES.width / 2,
+                   STYLES.height * 4/5 )
       this.nodeHistory.push( oldCenter )
       if( this.nodeHistory.length > 1 ){
         let historic = this.nodeHistory[ this.nodeHistory.length - 2 ]
         historic.node.fixed = false
         historic.dom
           .select( "circle" )
-          .style( "fill", jolocom.style.grayColor )
+          .style( "fill", STYLES.grayColor )
       }
     }
     { // assign & treat new center
@@ -824,11 +805,11 @@ class GraphD3 {
       this.thePerspective.dom = this.getCenterNode( node )
       this.thePerspective.node.fixed = true
       this.animateNode( this.thePerspective.node,
-                   jolocom.style.width / 2,
-                   jolocom.style.height / 2 ) // move to center
+                   STYLES.width / 2,
+                   STYLES.height / 2 ) // move to center
       this.thePerspective.dom
         .select( "circle" )
-        .style("fill", jolocom.style.blueColor )
+        .style("fill", STYLES.blueColor )
     }
   
     this.force.start()
@@ -879,14 +860,14 @@ class GraphD3 {
   disablePreview( allNodes ){
     // resets ALL nodes
     allNodes.select("circle")
-      .transition().duration( jolocom.style.nodeTransitionDuration )
-      .attr("r", jolocom.style.smallNodeSize / 2 )
+      .transition().duration( STYLES.nodeTransitionDuration )
+      .attr("r", STYLES.smallNodeSize / 2 )
       .style( "stroke-width", 0 )
     allNodes.select( ".nodetext" )
-      .transition().duration( jolocom.style.nodeTransitionDuration )
+      .transition().duration( STYLES.nodeTransitionDuration )
       .style( "opacity", 1 )
     allNodes.selectAll("g.extras")
-      .transition().duration( jolocom.style.nodeTransitionDuration )
+      .transition().duration( STYLES.nodeTransitionDuration )
       .style("opacity", 0 )
       .remove()
   }
@@ -896,12 +877,12 @@ class GraphD3 {
 
     node
       .select("circle") // only current circle
-      .transition().duration( jolocom.style.nodeTransitionDuration )
-      .attr("r", jolocom.style.largeNodeSize / 2 )
+      .transition().duration( STYLES.nodeTransitionDuration )
+      .attr("r", STYLES.largeNodeSize / 2 )
       .style({ "stroke": "white",
-               "stroke-width": jolocom.style.width / 100 })
+               "stroke-width": STYLES.width / 100 })
     node.select( ".nodetext" )
-      .transition().duration( jolocom.style.nodeTransitionDuration )
+      .transition().duration( STYLES.nodeTransitionDuration )
       .style( "opacity", 0 )
     let extras = node.append("svg:g")
       .attr("class", "extras" )
@@ -910,18 +891,18 @@ class GraphD3 {
       .append( "svg:text" )
       .attr( "class", "preview-title" )
       .attr( "text-anchor", "middle" )
-      .attr( "dy", -1.5 ) //(jolocom.style.largeNodeSize / - 6 )) //(jolocom.style.largeNodeSize / 18 ))
+      .attr( "dy", -1.5 ) //(STYLES.largeNodeSize / - 6 )) //(STYLES.largeNodeSize / 18 ))
       .text( (d) => d.title)
-      .call( this.wrap, jolocom.style.largeNodeSize * 0.7, "", "" )
+      .call( this.wrap, STYLES.largeNodeSize * 0.7, "", "" )
     extras
       .append("svg:text")
       .attr("class", "preview-description")
       .attr("text-anchor", "middle")
       .attr("dy", 1 )
       .text( (d) => d.description)
-      .call( this.wrap, jolocom.style.largeNodeSize * 0.75 )
+      .call( this.wrap, STYLES.largeNodeSize * 0.75 )
     extras
-      .transition().duration( jolocom.style.nodeTransitionDuration )
+      .transition().duration( STYLES.nodeTransitionDuration )
       .style( "opacity", 1 )
     return node
   }
@@ -1105,8 +1086,8 @@ let Graph = React.createClass({
       fixed: false,
       index: this.state.nodes.length,
       name: undefined, //"https://test.jolocom.com/2013/groups/moms/card#g",
-      px: jolocom.style.width / 2, //undefined, //540,
-      py: jolocom.style.height * 3/4, //undefined, //960,
+      px: STYLES.width / 2, //undefined, //540,
+      py: STYLES.height * 3/4, //undefined, //960,
       title: "NewNode",
       type: "uri",
       uri: "fakeURI" +( Math.random() * Math.pow( 2, 32 )), //"https://test.jolocom.com/2013/groups/moms/card#g",
@@ -1208,8 +1189,8 @@ let Graph = React.createClass({
 
   arrangeNodesInACircle: function( nodes ) {
     let angle = ( 2 * Math.PI )/ nodes.length
-    let halfwidth = ( jolocom.style.width / 2 )
-    let halfheight = ( jolocom.style.height / 2 )
+    let halfwidth = ( STYLES.width / 2 )
+    let halfheight = ( STYLES.height / 2 )
     for( var i in nodes ){
       if( nodes[i].x ){
         // skip (old) nodes that already have a position
