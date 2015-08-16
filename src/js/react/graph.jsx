@@ -44,146 +44,224 @@ let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/ca
 
 
 class InboxD3 {
-  enlarge(){
-    $( "#inbox_large" ).css( "display", "block" );
-    self.zoom.to( 0.5,
+  enlarge(props){
+    console.log(props)
+    props.graph.zoomTo( 0.5,
              jolocom.style.width / 2,
              jolocom.style.height );
   }
-  reduce(){
-    $( "#inbox_large" ).css( "display", "none" );
-    self.zoom.reset();
+  reduce(props){
+    props.graph.zoomReset()
   }
   open(){
-    if( !inbox.isOpen ){
-      d3.select( "#inbox" )
-        .transition()
-        .style( "right", ( -jolocom.style.width / 2 )+"px");
-      self.inbox.isOpen = true;
-    }
+    d3.select( "#inbox" )
+      .transition()
+      .style( "right", ( -jolocom.style.width / 2 )+"px");
   }
 
   close(){
-    if( self.inbox.isOpen ){
-      var size = (self.inbox.count==0)
-        ?(-jolocom.style.width)
-        :(-jolocom.style.width+(jolocom.style.width/5));
-      d3.select( "#inbox" )
-        .transition()
-        .style( "right", size+"px" );
-      self.inbox.isOpen = false;
-    }
+    //var size = (self.inbox.count==0)
+      //?(-jolocom.style.width)
+      //:(-jolocom.style.width+(jolocom.style.width/5));
+
+    let size = -jolocom.style.width + (jolocom.style.width/5)
+
+    d3.select( "#inbox" )
+      .transition()
+      .style( "right", size+"px" );
   }
 
-  spring(){
-    // a hack for opening it up a bit
-    self.inbox.isOpen = true;
-    self.inbox.close();
-  }
-
-  add(d){
-    self.inbox.nodes.push( d );
-    self.inbox.count++;
-    // @Justas: this creates the DOM for the nodes in the inbox
-    $( "#inbox .counter .number" ).text( inbox.count ); // update counter
-    if( self.inbox.count == 1 ){ // fade in on first node
-      d3.select( "#inbox .counter" )
-        .transition()
-        .style( "opacity", 1 );
-    }
-    var div = "<div></div>";
-    var node = $( div ).addClass( "node" ).attr( "draggable", "true" );
-    node.__index__ = inbox.count - 1;
-    var title = $( div ).addClass( "title" ).text( d.title );
-    var element = $( div ).addClass( "element" ).append( node ).append( title );
-    $( "#inbox_large" ).prepend( element );
-    node.on( "click", function(){
-      addNode( self.inbox.nodes[ node.__index__ ] ); // `addNode` in `./visualRDF-js/main.js`
-      self.inbox.reduce();
-    });
+  fadeIn() {
+    console.log('fade in inbox')
+    d3.select( "#inbox .counter" )
+      .transition()
+      .style( "opacity", 1 );
   }
 
 }
 
 let Inbox = React.createClass({
+  getInitialState: function() {
+    return {
+      inboxD3: null, //TODO: should store this in initial props instead
+      open: false
+    }
+  },
+
+  componentDidMount: function() {
+    console.log('Inbox component did mount')
+    let state = {
+      inboxD3: new InboxD3(null, this.props, this.state),
+      open: this.state.open
+    }
+    this.setState(state)
+  },
+
+  componentDidUpdate: function(prevProps, prevState) {
+    console.log('Inbox component did update')
+    if( this.props.nodes.length == 1 ){ // fade in on first node
+      this.state.inboxD3.fadeIn()
+    }
+
+    //spring
+    if (this.props.nodes.length >= 1) {
+      console.log('spring inbox')
+      this.state.inboxD3.close()
+    }
+
+    // was closed- now open
+    if (!prevState.open && this.state.open) {
+      this.state.inboxD3.enlarge(this.props)
+    }
+
+    // was open - now closed
+    if (prevState.open && !this.state.open) {
+      this.state.inboxD3.reduce(this.props)
+    }
+  },
+
+  componentWillUnmount: function() {
+    console.log('Inbox component will unmount')
+  },
+
+  inboxEnlarge: function() {
+    let state = {
+      inboxD3: this.state.inboxD3,
+      open: true
+    }
+    this.setState(state)
+  },
+
+  inboxReduce: function() {
+    let state = {
+      inboxD3: this.state.inboxD3,
+      open: false
+    }
+    this.setState(state)
+  },
+
+  onNodeClick: function(nodeId) {
+    self = this
+    return function(e) {
+      console.log(`node ${nodeId} clicked`)
+      // FIXME: unreliable
+      let node = self.props.nodes[nodeId - 1]
+      self.props.addNode(node)
+    }
+  },
+
   render: function() {
-    //TODO
+    let onNodeClick = this.onNodeClick
     return (
       <div id="inbox_container">
         <div id="inbox" draggable="true" onClick={this.inboxEnlarge}>
           <div className="counter">
-            <div className="number">1</div>
+            <div className="number">{this.props.nodes.length}</div>
           </div>
         </div>
+
+        { this.state.open ?
         <div id="inbox_large" onClick={this.inboxReduce}>
+          {this.props.nodes.map(function(node) {
+            return (
+              <div className="element" key={node.id}>
+                <div className="node" onClick={onNodeClick(node.id)}></div>
+                <div className="title"></div>
+              </div>
+            )
+          })}
           <div className="close">x</div>
         </div>
+        :
+        ""
+        }
       </div>
     )
-  
-  },
-  getInitialState: function() {
-    return {
-      isOpen: false,
-      count: 0,
-      nodes: [],
-    }
   },
 
+  spring: function() {
+    // a hack for opening it up a bit
+    self.inbox.isOpen = true;
+    self.inbox.close();
+  },
 })
 
 class PlusDrawerD3 {
-  toggleDrawer() {
-    if( self.plus.drawer ){
-      document.getElementsByTagName('body')[0].className = 'closed-drawer';
-      d3.select("#plus_drawer")
-        .transition()
-        .style( "top", jolocom.style.height+"px" );
-      self.zoom.reset();
-    } else {
-      document.getElementsByTagName('body')[0].className = 'open-drawer';
-      d3.select("#plus_drawer")
-        .transition()
-        .style( "top", ( jolocom.style.height / 2 )+"px" );
-      self.zoom.to( 0.5,
-               jolocom.style.width / 2,
-               0 );
-    }
-    self.plus.drawer = !self.plus.drawer;
+  constructor(el, props, state) {
+    this.props = props
+
+    document.getElementsByTagName('body')[0].className = 'open-drawer';
+    d3.select("#plus_drawer")
+      .transition()
+      .style( "top", ( jolocom.style.height / 2 )+"px" );
+
+    this.props.graph.zoomTo( 0.5,
+             jolocom.style.width / 2,
+             0 );
   }
-  toInbox(){
-    // @Justas: this adds the (fake) node to the inbox
-    self.inbox.add({ title: $( "#plus_drawer .title" ).val(),
-                description: $( "#plus_drawer .description" ).val() });
-    self.plus.toggleDrawer();
-    self.inbox.spring();
-  }
-  directConnect(){
-    // @Justas: this adds the (fake) node to the d3.js graph
-    // (find `addNode` in `./VisualRDF-js/main.js`)
-    self.addNode({ title: $( "#plus_drawer .title" ).val(),
-              description: $( "#plus_drawer .description" ).val() });
-    self.plus.toggleDrawer();
+
+  destroy() {
+    document.getElementsByTagName('body')[0].className = 'closed-drawer';
+    d3.select("#plus_drawer")
+      .transition()
+      .style( "top", jolocom.style.height+"px" );
+    this.props.graph.zoomReset();
   }
 }
 
 let PlusDrawer = React.createClass({
+  mixins: [React.addons.LinkedStateMixin],
 
   getInitialState: function() {
     return {
-      drawer: false //rename to "isOpen" or smth similar
+      plusD3: null,
+      title: '',
+      description: ''
     }
+  },
+
+  componentDidMount: function() {
+    console.log('PlusDrawer component did mount')
+    let state = {
+      plusD3: new PlusDrawerD3(null, this.props, this.state),
+      title: this.state.title,
+      description: this.state.description
+    }
+    this.setState(state)
+  },
+
+  componentWillUnmount: function() {
+    console.log('PlusDrawer component will unmount')
+    this.state.plusD3.destroy()
+  },
+
+  toInbox: function() {
+
+    this.props.toggle();
+    this.props.addNodeToInbox({ 
+      title: this.state.title,
+      description: this.state.description 
+    });
+  },
+
+  directConnect: function() {
+    console.log(this.state)
+    this.props.addNode({ 
+      title: this.state.title,
+      description: this.state.description 
+    });
+    this.props.toggle();
   },
 
   render: function() {
     return (
-      <div id="plus_drawer" onClick={this.toggleDrawer}>
-        <div className="close">x</div>
+      <div id="plus_drawer">
+        <div className="close" onClick={this.props.toggle}>x</div>
         <div>
-          <textarea className="title" placeholder="Node title" rows="1" cols="50"/>
+          <textarea className="title" placeholder="Node title" rows="1" cols="50" valueLink={this.linkState('title')}/>
         </div>
         <div>
-          <textarea className="description" placeholder="Node description" rows="5" cols="50"/>
+          <textarea className="description" placeholder="Node description" rows="5" cols="50" valueLink={this.linkState('description')}/>
         </div>
         <div className="button direct" onClick={this.directConnect}>Connect Now</div>
         <div className="button inbox" onClick={this.toInbox}>Put Into Inbox</div>
@@ -268,7 +346,7 @@ let Chat = React.createClass({
 
 class GraphD3 {
 
-  constructor(el, props, state) {
+  constructor(el, props, state, closeInbox) {
     // the node being centered (target of 'connect' interactions)
     this.the_perspective = {
       uri: "",
@@ -278,6 +356,9 @@ class GraphD3 {
       },
       dom: {}
     }
+
+    // Call to change the state of Inbox component
+    this.closeInbox = closeInbox
 
       // the node showing the large preview circle
     this.the_preview = {
@@ -643,7 +724,7 @@ class GraphD3 {
       }
 
       //TODO: change inbox state to "closed"
-      self.inbox.close();
+      self.closeInbox()
     };
 
     // --------------------------------------------------------------------------------
@@ -740,51 +821,6 @@ class GraphD3 {
     //$("#graph-url").val(d.uri).trigger("click");
   
     this.force.start();
-  }
-
-  enrich( less, more ){
-    // add any missing keys of `more` to `less`
-    for( var k in more ){
-      if(( more.hasOwnProperty( k )) && ( less[ k ] == undefined )){
-        less[ k ] = more[ k ];
-      }
-    }
-  }
-
-  addNode( node ) {
-    // @Justas: this pushes fake node & connections into d3
-    // and is called by the 'plus'-button and the 'inbox' (see `./mobile-js/mobile.js`)
-    var fullNode = {
-      description: "A New Node",
-      fixed: false,
-      index: this.nodes.length,
-      name: undefined, //"https://test.jolocom.com/2013/groups/moms/card#g",
-      px: jolocom.style.width / 2, //undefined, //540,
-      py: jolocom.style.height * 3/4, //undefined, //960,
-      title: "NewNode",
-      type: "uri",
-      uri: "fakeURI" +( Math.random() * Math.pow( 2, 32 )), //"https://test.jolocom.com/2013/groups/moms/card#g",
-      weight: 5,
-      x: undefined, //539.9499633771337,
-      y: undefined, //960.2001464914653
-    };
-    if( node == undefined ){
-      node = fullNode
-    } else {
-      enrich( node, fullNode );
-    }
-    link = { source: node,
-             target: the_perspective.node };
-    // fakeURI works for the current session- we don't have the new URI anyway
-  //  jolocom.start.createAndConnectNode(node.title, node.description, miscContainer, the_perspective.node.uri)
-    $('#node-connect').val(node.title + '|' + node.description + '|' + the_perspective.node.uri).trigger('click');
-  
-  //TODO: light up the new node as before
-    // go go go
-  //  links.push( link );
-  //  nodes.push( node );
-  //  newNodeURI = node.uri; // remember the URI so we can light the node up on init
-  //  init();
   }
 
   getCenterNode( allNodes ) {
@@ -924,12 +960,21 @@ let Graph = React.createClass({
       graph: null,
       pastNodes: [],
       nodes: [],
+      inboxNodes: [],
       links: [],
       literals: [],
       chatOpen: false,
       plusDrawerOpen: false,
       inboxOpen: false
     }
+  },
+
+  closeInbox: function() {
+    console.log('closing inbox...')
+    //TODO
+
+
+    console.log('inbox closed.')
   },
   //_drawGraph: function(center, triples, prefixes) {
     //console.log('drawing graph')
@@ -953,9 +998,10 @@ let Graph = React.createClass({
 	  let res = this.mergeGraphs(json.nodes, json.links);
     this.arrangeNodes();
     let state = {
-      graph: new GraphD3(null, null, this.state),
+      graph: new GraphD3(null, null, this.state, this.closeInbox),
       pastNodes: [],
       nodes: res.nodes,
+      inboxNodes: this.state.inboxNodes,
       links: res.links,
       literals: res.literals,
       chatOpen: false,
@@ -1008,6 +1054,70 @@ let Graph = React.createClass({
     //TODO
     console.log('graph component will unmount')
     this.state.graph.destroy(null)
+  },
+
+  addNode: function(node) {
+    // @Justas: this pushes fake node & connections into d3
+    // and is called by the 'plus'-button and the 'inbox' (see `./mobile-js/mobile.js`)
+    var fullNode = {
+      description: "A New Node",
+      fixed: false,
+      index: this.state.nodes.length,
+      name: undefined, //"https://test.jolocom.com/2013/groups/moms/card#g",
+      px: jolocom.style.width / 2, //undefined, //540,
+      py: jolocom.style.height * 3/4, //undefined, //960,
+      title: "NewNode",
+      type: "uri",
+      uri: "fakeURI" +( Math.random() * Math.pow( 2, 32 )), //"https://test.jolocom.com/2013/groups/moms/card#g",
+      weight: 5,
+      x: undefined, //539.9499633771337,
+      y: undefined, //960.2001464914653
+    };
+    if( node == undefined ){
+      node = fullNode
+    } else {
+      this.enrich(node, fullNode);
+    }
+    let link = { source: node,
+             target: this.state.graph.the_perspective.node };
+  
+    //TODO: consider moving this directly under state
+    this.state.graph.newNodeURI = node.uri; // remember the URI so we can light the node up on init
+
+    this.state.links.push(link)
+    this.state.nodes.push(node)
+
+  //  init();
+    let state = {
+      graph: this.state.graph,
+      pastNodes: this.state.pastNodes,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: this.state.chatOpen,
+      plusDrawerOpen: this.state.plusDrawerOpen,
+      inboxOpen: this.state.inboxOpen
+    }
+
+    this.setState(state)
+    //TODO: connect node
+    //$('#node-connect').val(node.title + '|' + node.description + '|' + the_perspective.node.uri).trigger('click');
+  },
+
+  addNodeToInbox: function(d) {
+    // FIXME: not guaranteed to be unique
+    d.id = this.state.inboxNodes.length + 1
+    this.state.inboxNodes.push(d);
+  },
+
+  enrich: function ( less, more ){
+    // add any missing keys of `more` to `less`
+    for( var k in more ){
+      if(( more.hasOwnProperty( k )) && ( less[ k ] == undefined )){
+        less[ k ] = more[ k ];
+      }
+    }
   },
 
   mergeGraphs: function(newNodes, newLinks) {
@@ -1066,34 +1176,21 @@ let Graph = React.createClass({
     }
   },
 
-  toggleDrawer: function(e) {
-    //TODO
-    console.log('toggleDrawer')
-    d3g.plus.toggleDrawer()
-  },
+  togglePlusDrawer: function(e) {
+    console.log('togglePlusDrawer')
+    let state = {
+      graph: this.state.graph,
+      pastNodes: this.state.pastNodes,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: this.state.chatOpen,
+      plusDrawerOpen: !this.state.plusDrawerOpen,
+      inboxOpen: this.state.inboxOpen
+    }
 
-  directConnect: function(e) {
-    //TODO
-    console.log('directConnect')
-    d3g.plus.directConnect()
-  },
-
-  toInbox: function(e) {
-    //TODO
-    console.log('toInbox')
-    d3g.plus.toInbox()
-  },
-
-  inboxEnlarge: function(e) {
-    //TODO
-    console.log('inboxEnlarge')
-    d3g.inbox.enlarge()
-  },
-
-  inboxReduce: function(e) {
-    //TODO
-    console.log('inboxReduce')
-    d3g.inbox.reduce()
+    this.setState(state)
   },
 
   render: function() {
@@ -1105,10 +1202,11 @@ let Graph = React.createClass({
           { /* TODO: probably don't need this hidden stuff anymore */ }
           <input id="chat-state" type="text" hidden="hidden"/>
 
-          <div id="plus_button" onClick={this.toggleDrawer}/>
+          <div id="plus_button" onClick={this.togglePlusDrawer}/>
 
-          {this.state.plusDrawerOpen ? <PlusDrawer/> : ""}
-          {this.state.inboxOpen ? <Inbox/> : ""}
+          {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.addNodeToInbox}/> : ""}
+
+          <Inbox graph={this.state.graph} nodes={this.state.inboxNodes} addNode={this.addNode}/>
 
 
           <div id="graph">
