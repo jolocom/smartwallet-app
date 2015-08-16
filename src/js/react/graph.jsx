@@ -49,14 +49,12 @@ class InboxD3 {
     props.graph.zoomTo( 0.5,
              jolocom.style.width / 2,
              jolocom.style.height );
-  }
-  reduce(props){
-    props.graph.zoomReset()
-  }
-  open(){
     d3.select( "#inbox" )
       .transition()
       .style( "right", ( -jolocom.style.width / 2 )+"px");
+  }
+  reduce(props){
+    props.graph.zoomReset()
   }
 
   close(){
@@ -84,6 +82,7 @@ let Inbox = React.createClass({
   getInitialState: function() {
     return {
       inboxD3: null, //TODO: should store this in initial props instead
+      nodes: [],
       open: false
     }
   },
@@ -92,19 +91,31 @@ let Inbox = React.createClass({
     console.log('Inbox component did mount')
     let state = {
       inboxD3: new InboxD3(null, this.props, this.state),
+      nodes: this.state.nodes,
       open: this.state.open
+    }
+    this.setState(state)
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    console.log('Inbox component will receive props')
+    console.log(this.props)
+    console.log(nextProps)
+    let state = {
+      nodes: nextProps.nodes,
+      open: nextProps.open
     }
     this.setState(state)
   },
 
   componentDidUpdate: function(prevProps, prevState) {
     console.log('Inbox component did update')
-    if( this.props.nodes.length == 1 ){ // fade in on first node
+    if( this.state.nodes.length == 1 ){ // fade in on first node
       this.state.inboxD3.fadeIn()
     }
 
     //spring
-    if (this.props.nodes.length >= 1) {
+    if (this.state.nodes.length >= 1) {
       console.log('spring inbox')
       this.state.inboxD3.close()
     }
@@ -127,6 +138,7 @@ let Inbox = React.createClass({
   inboxEnlarge: function() {
     let state = {
       inboxD3: this.state.inboxD3,
+      nodes: this.state.nodes,
       open: true
     }
     this.setState(state)
@@ -135,6 +147,7 @@ let Inbox = React.createClass({
   inboxReduce: function() {
     let state = {
       inboxD3: this.state.inboxD3,
+      nodes: this.state.nodes,
       open: false
     }
     this.setState(state)
@@ -145,7 +158,7 @@ let Inbox = React.createClass({
     return function(e) {
       console.log(`node ${nodeId} clicked`)
       // FIXME: unreliable
-      let node = self.props.nodes[nodeId - 1]
+      let node = self.state.nodes[nodeId - 1]
       self.props.addNode(node)
     }
   },
@@ -156,13 +169,13 @@ let Inbox = React.createClass({
       <div id="inbox_container">
         <div id="inbox" draggable="true" onClick={this.inboxEnlarge}>
           <div className="counter">
-            <div className="number">{this.props.nodes.length}</div>
+            <div className="number">{this.state.nodes.length}</div>
           </div>
         </div>
 
         { this.state.open ?
         <div id="inbox_large" onClick={this.inboxReduce}>
-          {this.props.nodes.map(function(node) {
+          {this.state.nodes.map(function(node) {
             return (
               <div className="element" key={node.id}>
                 <div className="node" onClick={onNodeClick(node.id)}></div>
@@ -177,12 +190,6 @@ let Inbox = React.createClass({
         }
       </div>
     )
-  },
-
-  spring: function() {
-    // a hack for opening it up a bit
-    self.inbox.isOpen = true;
-    self.inbox.close();
   },
 })
 
@@ -271,73 +278,82 @@ let PlusDrawer = React.createClass({
 })
 
 class ChatD3 {
-  afterLoad() {
-  
+  constructor(el, props) {
     d3.select( "#chat" )
   	.transition()
   	.style( "top", ( jolocom.style.height / 3 )+ "px");
-    self.zoom.to( 0.5,
+    props.graph.zoomTo( 0.5,
       jolocom.style.width / 2,
       jolocom.style.height / -6 );
       console.log('chat after load');
       return false;
   }
 
-  show() {
-    // draw react component for chat by communicating the state to react
-    $("#chat-state").val("loaded").trigger("click");
-    $("#chat_container").addClass('visible')
-    console.log("Chat load");
-  }
 
-  hide(e) {
-    //TODO
+  destroy(props) {
     d3.select( "#chat" )
       .transition()
       .style( "top", jolocom.style.height + "px");
-    
-    self.zoom.reset();
-    $("#chat-state").val("unloaded").trigger("click");
-    $("#chat_container").removeClass('visible')
-    console.log("Chat unload");
+    props.graph.zoomReset();
   }
 }
 
 let Chat = React.createClass({
+  getInitialState: function() {
+    return {
+      chatD3: null,
+    }
+  },
+
+  componentDidMount: function() {
+    console.log('Chat component did mount')
+    let state = {
+      chatD3: new ChatD3(null, this.props),
+    }
+    this.setState(state)
+  },
+
+  componentWillUnmount: function() {
+    console.log('Chat component will unmount')
+    this.state.chatD3.destroy(this.props)
+  },
+
   render: function() {
     return (
-      <div id="chat">
-        { /* TODO: structure, ids and class names suck*/ }
-        <div className="close" onClick={this.hide}>x</div>
-        <div className="head">
-          <h1 className="title">TODO: chat topic goes here</h1>
-          <p className="origin">TODO: chat origin goes here</p>
-          <div className="message">
-            <div className="content">
-              <h2>TODO: author goes here</h2>
-              <p>TODO: content goes here</p>
+      <div id="chat_container">
+        <div id="chat">
+          { /* TODO: structure, ids and class names suck*/ }
+          <div className="close" onClick={this.props.hide}>x</div>
+          <div className="head">
+            <h1 className="title">TODO: chat topic goes here</h1>
+            <p className="origin">TODO: chat origin goes here</p>
+            <div className="message">
+              <div className="content">
+                <h2>TODO: author goes here</h2>
+                <p>TODO: content goes here</p>
+              </div>
+              <div className="node link"/>
             </div>
-            <div className="node link"/>
-          </div>
-          <div className="message">
-            <div className="content">
-              <h2>TODO: author goes here</h2>
-              <p>TODO: content goes here</p>
+            <div className="message">
+              <div className="content">
+                <h2>TODO: author goes here</h2>
+                <p>TODO: content goes here</p>
+              </div>
+              <div className="node link"/>
             </div>
-            <div className="node link"/>
-          </div>
-          <div className="message">
-            <div className="content">
-              <h2>TODO: author goes here</h2>
-              <p>TODO: content goes here</p>
+            <div className="message">
+              <div className="content">
+                <h2>TODO: author goes here</h2>
+                <p>TODO: content goes here</p>
+              </div>
+              <div className="node link"/>
             </div>
-            <div className="node link"/>
           </div>
-        </div>
-        <div className="message new">
-          <textarea className="content" value="TODO: Current message"/>
-          <div className="node link"/>
-          <div className="button" onClick={this.hide}>tell</div>
+          <div className="message new">
+            <textarea className="content" value="TODO: Current message"/>
+            <div className="node link"/>
+            <div className="button" onClick={this.hide}>tell</div>
+          </div>
         </div>
       </div>
     )
@@ -346,7 +362,7 @@ let Chat = React.createClass({
 
 class GraphD3 {
 
-  constructor(el, props, state, closeInbox) {
+  constructor(el, props, state, openInbox, addNodeToInbox, showChat) {
     // the node being centered (target of 'connect' interactions)
     this.the_perspective = {
       uri: "",
@@ -358,7 +374,9 @@ class GraphD3 {
     }
 
     // Call to change the state of Inbox component
-    this.closeInbox = closeInbox
+    this.openInbox = openInbox
+    this.addNodeToInbox = addNodeToInbox
+    this.showChat = showChat
 
       // the node showing the large preview circle
     this.the_preview = {
@@ -527,7 +545,7 @@ class GraphD3 {
   
     { // init history
       if( this.nodeHistory.length > 0 ){
-        var lastStep = state.nodes.filter( function(d) {
+        var lastStep = state.nodes.filter( (d) => {
           return d.uri == this.nodeHistory[ this.nodeHistory.length - 1 ].uri; })[0];
         lastStep.fixed = true;
         this.animateNode( lastStep,
@@ -666,7 +684,7 @@ class GraphD3 {
       console.log( "longtap triggered (by timeout)" );
       if( !drag.active ) return; // drag event stopped before timeout expired
       if( drag.distance() > 40 ){
-        inbox.open();
+        self.openInbox();
       };
     };
   
@@ -701,11 +719,11 @@ class GraphD3 {
         console.log(drag.distance())
         if( drag.distance() < 40 ){
           //TODO: change chat state to "showing"
-          chat.show();
+          self.showChat();
         } else if( y < jolocom.style.height / 3 ){
 
           //TODO: should communicate back to react
-          self.inbox.add( d );
+          self.addNodeToInbox( d );
         }
       } else {
         // surrounding nodes can be dragged into focus (center of screen)
@@ -714,7 +732,6 @@ class GraphD3 {
                       jolocom.style.width / 2,
                       jolocom.style.height / 2 )
             < jolocom.style.width * (3/8)){
-          console.log('changing center')
           self.changeCenter( d, d3.select( this ), node);
           self.disablePreview( node );
           self.the_preview.node = d;
@@ -723,8 +740,7 @@ class GraphD3 {
         }
       }
 
-      //TODO: change inbox state to "closed"
-      self.closeInbox()
+      //self.closeInbox()
     };
 
     // --------------------------------------------------------------------------------
@@ -762,6 +778,7 @@ class GraphD3 {
 
 
   animateNode( d, x, y ) {
+    console.log('animate node')
     // http://stackoverflow.com/questions/19931383/animating-elements-in-d3-js
     d3.select(d).transition().duration( 1000 )
       .tween("x", function() {
@@ -780,6 +797,7 @@ class GraphD3 {
   }
 
   changeCenter(d, dom, node){
+    console.log('change center')
     // update center perspective
     { // treat old center & update node history
       var oldCenter = {
@@ -787,6 +805,8 @@ class GraphD3 {
         uri: this.the_perspective.uri,
         node: this.the_perspective.node
       };
+      console.log('old center')
+      console.log(oldCenter)
       //oldCenter.node.fixed = false;
       oldCenter.dom
         .select( "circle" )
@@ -815,10 +835,6 @@ class GraphD3 {
         .select( "circle" )
         .style("fill", jolocom.style.blue_color );
     }
-  
-    // Communicate graph state to react
-    // TODO: rethink
-    //$("#graph-url").val(d.uri).trigger("click");
   
     this.force.start();
   }
@@ -964,17 +980,47 @@ let Graph = React.createClass({
       links: [],
       literals: [],
       chatOpen: false,
+      inboxOpen: false,
       plusDrawerOpen: false,
-      inboxOpen: false
     }
   },
 
   closeInbox: function() {
     console.log('closing inbox...')
-    //TODO
+    let state = {
+      graph: this.state.graph,
+      pastNodes: this.state.pastNodes,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: this.state.chatOpen,
+      inboxOpen: false,
+      plusDrawerOpen: this.state.plusDrawerOpen,
+    }
 
+    this.setState(state)
 
     console.log('inbox closed.')
+  },
+
+  openInbox: function() {
+    console.log('opening inbox...')
+    let state = {
+      graph: this.state.graph,
+      pastNodes: this.state.pastNodes,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: this.state.chatOpen,
+      inboxOpen: true,
+      plusDrawerOpen: this.state.plusDrawerOpen,
+    }
+
+    this.setState(state)
+
+    console.log('inbox opened.')
   },
   //_drawGraph: function(center, triples, prefixes) {
     //console.log('drawing graph')
@@ -998,15 +1044,15 @@ let Graph = React.createClass({
 	  let res = this.mergeGraphs(json.nodes, json.links);
     this.arrangeNodes();
     let state = {
-      graph: new GraphD3(null, null, this.state, this.closeInbox),
+      graph: new GraphD3(null, null, this.state, this.openInbox, this.addNodeToInbox, this.showChat),
       pastNodes: [],
       nodes: res.nodes,
       inboxNodes: this.state.inboxNodes,
       links: res.links,
       literals: res.literals,
       chatOpen: false,
+      inboxOpen: false,
       plusDrawerOpen: false,
-      inboxOpen: false
     }
 
     this.setState(state)
@@ -1087,7 +1133,6 @@ let Graph = React.createClass({
     this.state.links.push(link)
     this.state.nodes.push(node)
 
-  //  init();
     let state = {
       graph: this.state.graph,
       pastNodes: this.state.pastNodes,
@@ -1096,19 +1141,43 @@ let Graph = React.createClass({
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: this.state.chatOpen,
+      inboxOpen: this.state.inboxOpen,
       plusDrawerOpen: this.state.plusDrawerOpen,
-      inboxOpen: this.state.inboxOpen
     }
 
     this.setState(state)
-    //TODO: connect node
-    //$('#node-connect').val(node.title + '|' + node.description + '|' + the_perspective.node.uri).trigger('click');
+    //TODO: connect node in database
+  },
+
+  showChat: function() {
+    console.log('show chat')
+    let state = {
+      graph: this.state.graph,
+      pastNodes: this.state.pastNodes,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: true,
+      inboxOpen: this.state.inboxOpen,
+      plusDrawerOpen: this.state.plusDrawerOpen,
+    }
+    this.setState(state)
   },
 
   addNodeToInbox: function(d) {
+    console.log('addNodeToInbox')
+
     // FIXME: not guaranteed to be unique
+    if (this.state.inboxNodes.filter((n) => n.name && n.name == d.name).length != 0) {
+      console.log('Node is already in the inbox!')
+      return
+    }
     d.id = this.state.inboxNodes.length + 1
     this.state.inboxNodes.push(d);
+    console.log(d)
+    console.log(this.state.inboxNodes)
+    this.setState(this.state)
   },
 
   enrich: function ( less, more ){
@@ -1176,6 +1245,23 @@ let Graph = React.createClass({
     }
   },
 
+  hideChat: function(e) {
+    console.log('hideChat')
+    let state = {
+      graph: this.state.graph,
+      pastNodes: this.state.pastNodes,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: false,
+      inboxOpen: this.state.inboxOpen,
+      plusDrawerOpen: this.state.plusDrawerOpen,
+    }
+
+    this.setState(state)
+  },
+
   togglePlusDrawer: function(e) {
     console.log('togglePlusDrawer')
     let state = {
@@ -1186,8 +1272,8 @@ let Graph = React.createClass({
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: this.state.chatOpen,
+      inboxOpen: this.state.inboxOpen,
       plusDrawerOpen: !this.state.plusDrawerOpen,
-      inboxOpen: this.state.inboxOpen
     }
 
     this.setState(state)
@@ -1198,24 +1284,18 @@ let Graph = React.createClass({
       <div id="graph-outer">
         { /* TODO: structure, ids and class names suck*/ }
         <div id="wrapper">
-          <input id="graph-url" type="text" hidden="hidden"/>
-          { /* TODO: probably don't need this hidden stuff anymore */ }
-          <input id="chat-state" type="text" hidden="hidden"/>
-
           <div id="plus_button" onClick={this.togglePlusDrawer}/>
 
           {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.addNodeToInbox}/> : ""}
 
-          <Inbox graph={this.state.graph} nodes={this.state.inboxNodes} addNode={this.addNode}/>
+          <Inbox graph={this.state.graph} open={this.state.inboxOpen} nodes={this.state.inboxNodes} addNode={this.addNode}/>
 
 
           <div id="graph">
             <div id="chart"/>
           </div>
         </div>
-        <div id="chat_container">
-          { this.state.chatOpen ? <Chat/> : ""}
-        </div>
+        { this.state.chatOpen ? <Chat graph={this.state.graph} hide={this.hideChat}/> : ""}
       </div>
     )
   }
