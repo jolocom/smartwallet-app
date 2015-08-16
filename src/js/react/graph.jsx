@@ -17,18 +17,17 @@ let jolocom = {}
 jolocom.style = {
   width: window.innerWidth,
   height: window.innerHeight,
-  light_gray_color: "#efeeee",
-  gray_color: "#838383",
-  light_blue_color: "#99D7F7",
-  blue_color: "#009FE3",
-  hilight_color: "#9BD161",
-  node_transition_duration: 400
+  lightGrayColor: "#efeeee",
+  grayColor: "#838383",
+  lightBlueColor: "#99D7F7",
+  blueColor: "#009FE3",
+  highLightColor: "#9BD161",
+  nodeTransitionDuration: 400
 }
-jolocom.style.small_node_size = jolocom.style.width / 4.7
-jolocom.style.large_node_size = jolocom.style.width * .5
+jolocom.style.smallNodeSize = jolocom.style.width / 4.7
+jolocom.style.largeNodeSize = jolocom.style.width * .5
 
 //TODO: 
-// - underscore to camel case
 // - get rid of jquery
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
@@ -362,7 +361,7 @@ class GraphD3 {
 
   constructor(el, props, state, openInbox, addNodeToInbox, showChat) {
     // the node being centered (target of 'connect' interactions)
-    this.the_perspective = {
+    this.thePerspective = {
       uri: "",
       node: {
         px: jolocom.style.width / 2,
@@ -412,7 +411,7 @@ class GraphD3 {
       .attr( "cx", jolocom.style.width * 0.5 )
       .attr( "cy", jolocom.style.height * 0.5)
       .attr( "r", jolocom.style.width * 0.3 )
-      .style( "fill", jolocom.style.light_gray_color )
+      .style( "fill", jolocom.style.lightGrayColor )
 
 
     // `base` only needs to run once
@@ -462,7 +461,7 @@ class GraphD3 {
   	link_new.append("svg:line")
   	  .attr("class", "link")
       .attr("stroke-width", jolocom.style.width / 45 )
-  	  .attr("stroke", jolocom.style.light_gray_color ) //TODO(philipp) reverse
+  	  .attr("stroke", jolocom.style.lightGrayColor ) //TODO(philipp) reverse
   	  .attr("x1", (d) => d.x1)
   	  .attr("y1", (d) => d.y1)
   	  .attr("x2", (d) => d.x1)
@@ -494,12 +493,12 @@ class GraphD3 {
   	node_new.filter((d) => d.type == "uri")
   	  .append("svg:circle")
   	  .attr("class", "node")
-  	  .attr("r", jolocom.style.small_node_size/2)
+  	  .attr("r", jolocom.style.smallNodeSize/2)
   	  .attr("x", "-8px")
   	  .attr("y", "-8px")
-  	  .attr("width", jolocom.style.small_node_size)
-  	  .attr("height", jolocom.style.small_node_size)
-  	  .style("fill", jolocom.style.gray_color)
+  	  .attr("width", jolocom.style.smallNodeSize)
+  	  .attr("height", jolocom.style.smallNodeSize)
+  	  .style("fill", jolocom.style.grayColor)
   	  .style("stroke", "white")
       .style( "stroke-width", 0 )
   
@@ -511,7 +510,7 @@ class GraphD3 {
       .attr("text-anchor", "middle" )
   	  .attr("dy", ".35em")
   	  .text((d) => d.title)
-      .call( this.wrap, jolocom.style.small_node_size * 0.9, "", "" ) // returns only wrapped titles, so we can push them up later
+      .call( this.wrap, jolocom.style.smallNodeSize * 0.9, "", "" ) // returns only wrapped titles, so we can push them up later
   
     // remove old nodes
     let node_old = node.exit()
@@ -525,20 +524,20 @@ class GraphD3 {
     // the animation, so it is also re-started.
   
     { // init center perspective
-      this.the_perspective.node = state.nodes[0]
-      this.the_perspective.uri = state.nodes[0].uri
-      this.the_perspective.node.fixed = true
+      this.thePerspective.node = state.nodes[0]
+      this.thePerspective.uri = state.nodes[0].uri
+      this.thePerspective.node.fixed = true
       if( this.firstInit ){ // don't animate on very first init
         //gone
         
       } else {
-        this.animateNode( this.the_perspective.node,
+        this.animateNode( this.thePerspective.node,
                      jolocom.style.width / 2,
                      jolocom.style.height / 2 )
       }
       this.getCenterNode( node )
         .select( "circle" )
-        .style("fill", jolocom.style.blue_color )
+        .style("fill", jolocom.style.blueColor )
     }
   
     { // init history
@@ -560,10 +559,10 @@ class GraphD3 {
             .interrupt()
             .style( "opacity", 1 )
             .select( "circle" )
-            .style( "fill", jolocom.style.hilight_color )
+            .style( "fill", jolocom.style.highLightColor )
           newNode
             .transition().duration( 2000 )
-            .style( "fill", jolocom.style.gray_color )
+            .style( "fill", jolocom.style.grayColor )
         }
         this.newNodeURI = undefined
       }
@@ -667,7 +666,7 @@ class GraphD3 {
         drag.startPos.x = drag.nowPos.x = d3.event.sourceEvent.pageX
         drag.startPos.y = drag.nowPos.y = d3.event.sourceEvent.pageY
         //drag.start = d3.event.sourceEvent.timeStamp
-        if( d.uri == self.the_perspective.uri ){
+        if( d.uri == self.thePerspective.uri ){
           drag.onCenter = true
           window.setTimeout( triggerLongTap, 800 )
         } else {
@@ -688,7 +687,7 @@ class GraphD3 {
   
     let dragMove = function (d){ // TODO
       console.log( "dragmove" )
-      if( d == self.the_perspective.node ){ // center node grabbed
+      if( d == self.thePerspective.node ){ // center node grabbed
         drag.nowPos.x = d3.event.sourceEvent.pageX
         drag.nowPos.y = d3.event.sourceEvent.pageY
       } else {
@@ -704,7 +703,7 @@ class GraphD3 {
         // this is a click
         return
       }
-      if( d == self.the_perspective.node ){
+      if( d == self.thePerspective.node ){
         // reset node position
         d.x, d.px = jolocom.style.width / 2
         d.y, d.py = jolocom.style.height / 2
@@ -798,15 +797,15 @@ class GraphD3 {
     { // treat old center & update node history
       let oldCenter = {
         dom: this.getCenterNode( node ),
-        uri: this.the_perspective.uri,
-        node: this.the_perspective.node
+        uri: this.thePerspective.uri,
+        node: this.thePerspective.node
       }
       console.log('old center')
       console.log(oldCenter)
       //oldCenter.node.fixed = false
       oldCenter.dom
         .select( "circle" )
-        .style( "fill", jolocom.style.light_blue_color )
+        .style( "fill", jolocom.style.lightBlueColor )
       this.animateNode( oldCenter.node,
                    jolocom.style.width / 2,
                    jolocom.style.height * 4/5 )
@@ -816,27 +815,27 @@ class GraphD3 {
         historic.node.fixed = false
         historic.dom
           .select( "circle" )
-          .style( "fill", jolocom.style.gray_color )
+          .style( "fill", jolocom.style.grayColor )
       }
     }
     { // assign & treat new center
-      this.the_perspective.node = d
-      this.the_perspective.uri = d.uri
-      this.the_perspective.dom = this.getCenterNode( node )
-      this.the_perspective.node.fixed = true
-      this.animateNode( this.the_perspective.node,
+      this.thePerspective.node = d
+      this.thePerspective.uri = d.uri
+      this.thePerspective.dom = this.getCenterNode( node )
+      this.thePerspective.node.fixed = true
+      this.animateNode( this.thePerspective.node,
                    jolocom.style.width / 2,
                    jolocom.style.height / 2 ) // move to center
-      this.the_perspective.dom
+      this.thePerspective.dom
         .select( "circle" )
-        .style("fill", jolocom.style.blue_color )
+        .style("fill", jolocom.style.blueColor )
     }
   
     this.force.start()
   }
 
   getCenterNode( allNodes ) {
-    return allNodes.filter((d) => d.uri == this.the_perspective.uri)
+    return allNodes.filter((d) => d.uri == this.thePerspective.uri)
   }
 
   // http://bl.ocks.org/mbostock/7555321
@@ -880,14 +879,14 @@ class GraphD3 {
   disablePreview( allNodes ){
     // resets ALL nodes
     allNodes.select("circle")
-      .transition().duration( jolocom.style.node_transition_duration )
-      .attr("r", jolocom.style.small_node_size / 2 )
+      .transition().duration( jolocom.style.nodeTransitionDuration )
+      .attr("r", jolocom.style.smallNodeSize / 2 )
       .style( "stroke-width", 0 )
     allNodes.select( ".nodetext" )
-      .transition().duration( jolocom.style.node_transition_duration )
+      .transition().duration( jolocom.style.nodeTransitionDuration )
       .style( "opacity", 1 )
     allNodes.selectAll("g.extras")
-      .transition().duration( jolocom.style.node_transition_duration )
+      .transition().duration( jolocom.style.nodeTransitionDuration )
       .style("opacity", 0 )
       .remove()
   }
@@ -897,12 +896,12 @@ class GraphD3 {
 
     node
       .select("circle") // only current circle
-      .transition().duration( jolocom.style.node_transition_duration )
-      .attr("r", jolocom.style.large_node_size / 2 )
+      .transition().duration( jolocom.style.nodeTransitionDuration )
+      .attr("r", jolocom.style.largeNodeSize / 2 )
       .style({ "stroke": "white",
                "stroke-width": jolocom.style.width / 100 })
     node.select( ".nodetext" )
-      .transition().duration( jolocom.style.node_transition_duration )
+      .transition().duration( jolocom.style.nodeTransitionDuration )
       .style( "opacity", 0 )
     let extras = node.append("svg:g")
       .attr("class", "extras" )
@@ -911,18 +910,18 @@ class GraphD3 {
       .append( "svg:text" )
       .attr( "class", "preview-title" )
       .attr( "text-anchor", "middle" )
-      .attr( "dy", -1.5 ) //(jolocom.style.large_node_size / - 6 )) //(jolocom.style.large_node_size / 18 ))
+      .attr( "dy", -1.5 ) //(jolocom.style.largeNodeSize / - 6 )) //(jolocom.style.largeNodeSize / 18 ))
       .text( (d) => d.title)
-      .call( this.wrap, jolocom.style.large_node_size * 0.7, "", "" )
+      .call( this.wrap, jolocom.style.largeNodeSize * 0.7, "", "" )
     extras
       .append("svg:text")
       .attr("class", "preview-description")
       .attr("text-anchor", "middle")
       .attr("dy", 1 )
       .text( (d) => d.description)
-      .call( this.wrap, jolocom.style.large_node_size * 0.75 )
+      .call( this.wrap, jolocom.style.largeNodeSize * 0.75 )
     extras
-      .transition().duration( jolocom.style.node_transition_duration )
+      .transition().duration( jolocom.style.nodeTransitionDuration )
       .style( "opacity", 1 )
     return node
   }
@@ -1121,7 +1120,7 @@ let Graph = React.createClass({
       this.enrich(node, fullNode)
     }
     let link = { source: node,
-             target: this.state.graph.the_perspective.node }
+             target: this.state.graph.thePerspective.node }
   
     //TODO: consider moving this directly under state
     this.state.graph.newNodeURI = node.uri // remember the URI so we can light the node up on init
