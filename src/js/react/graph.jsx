@@ -2,12 +2,18 @@
 
 import React from 'react/addons'
 
-import url from 'url'
-import d3 from 'd3'
 import N3 from 'n3'
+import d3 from 'd3'
+import url from 'url'
+
 import D3Converter from '../lib/d3-converter.js'
 import WebAgent from '../lib/web-agent.js'
-import {STYLES} from './styles.js'
+
+import STYLES from './styles.js'
+
+import Chat from './chat.jsx'
+import Inbox from './inbox.jsx'
+import PlusDrawer from './plus-drawer.jsx'
 
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
@@ -16,327 +22,10 @@ d3.selection.prototype.moveToFront = function() {
 }
 
 
-
 let agent = new WebAgent()
 let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/card#me","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#me","title":"no title","description":"no description"},{"name":"https://sister.jolocom.com/reederz/profile/card#key","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#key","title":"no title","description":"no description"}],"links":[{"source":"0","target":"1","name":" http://www.w3.org/ns/auth/cert#key","value":"10"}],"literals":{"https://sister.jolocom.com/reederz/profile/card":[{"p":"http://purl.org/dc/terms/title","o":"WebID profile of Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}],"https://sister.jolocom.com/reederz/profile/card#key":[{"p":"http://www.w3.org/ns/auth/cert#modulus","o":"a726cd1e3eddccb4c12ebd3d8581ac83bc2913dfb88cf9d939b5eedff88878e95b9bfa278dc4fbcd5dfe7d80ff866844b69af31f30a79822e32841f3e694d75feeaba92ed91b02be46fd3f86bb800d3be222c4cb480ffa05f87f67949f41324cacc4c34ee9d133d19eb61af71ab6d97048af91d357904b1cdec8333affe1f4098cdd6f6ca465bdbae56e0b006557396dc0abb7ed2c4f3a41dd76ef07cfeb8309e80804b0c288e6e847c0b446d112403d77c939c67b30cc99a96cd695c8dbc53a5afe42bf81c53214ace49c2ce6b5dc35a0c5301dca386d9735b6d7f39c5185a6811459446940ec7b5a5050fc22c6f99844a1b9580ff0972049e898d1e16a3373","l":"None","d":"http://www.w3.org/2001/XMLSchema#hexBinary"},{"p":"http://www.w3.org/ns/auth/cert#exponent","o":"65537","l":"None","d":"http://www.w3.org/2001/XMLSchema#int"}],"https://sister.jolocom.com/reederz/profile/card#me":[{"p":"http://xmlns.com/foaf/0.1/mbox","o":"mailto:justas.azna@gmail.com","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"},{"p":"http://xmlns.com/foaf/0.1/name","o":"Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}]}}'
 
 
-class InboxD3 {
-  enlarge(props){
-    console.log(props)
-    props.graph.zoomTo( 0.5,
-             STYLES.width / 2,
-             STYLES.height )
-    d3.select( "#inbox" )
-      .transition()
-      .style( "right", ( -STYLES.width / 2 )+"px")
-  }
-  reduce(props){
-    props.graph.zoomReset()
-  }
-
-  close(){
-    //let size = (self.inbox.count==0)
-      //?(-STYLES.width)
-      //:(-STYLES.width+(STYLES.width/5))
-
-    let size = -STYLES.width + (STYLES.width/5)
-
-    d3.select( "#inbox" )
-      .transition()
-      .style( "right", size+"px" )
-  }
-
-  fadeIn() {
-    console.log('fade in inbox')
-    d3.select( "#inbox .counter" )
-      .transition()
-      .style( "opacity", 1 )
-  }
-
-}
-
-let Inbox = React.createClass({
-  getInitialState: function() {
-    return {
-      inboxD3: null, //TODO: should store this in initial props instead
-      nodes: [],
-      open: false
-    }
-  },
-
-  componentDidMount: function() {
-    console.log('Inbox component did mount')
-    let state = {
-      inboxD3: new InboxD3(null, this.props, this.state),
-      nodes: this.state.nodes,
-      open: this.state.open
-    }
-    this.setState(state)
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    console.log('Inbox component will receive props')
-    console.log(this.props)
-    console.log(nextProps)
-    let state = {
-      nodes: nextProps.nodes,
-      open: nextProps.open
-    }
-    this.setState(state)
-  },
-
-  componentDidUpdate: function(prevProps, prevState) {
-    console.log('Inbox component did update')
-    if( this.state.nodes.length == 1 ){ // fade in on first node
-      this.state.inboxD3.fadeIn()
-    }
-
-    //spring
-    if (this.state.nodes.length >= 1) {
-      console.log('spring inbox')
-      this.state.inboxD3.close()
-    }
-
-    // was closed- now open
-    if (!prevState.open && this.state.open) {
-      this.state.inboxD3.enlarge(this.props)
-    }
-
-    // was open - now closed
-    if (prevState.open && !this.state.open) {
-      this.state.inboxD3.reduce(this.props)
-    }
-  },
-
-  componentWillUnmount: function() {
-    console.log('Inbox component will unmount')
-  },
-
-  inboxEnlarge: function() {
-    let state = {
-      inboxD3: this.state.inboxD3,
-      nodes: this.state.nodes,
-      open: true
-    }
-    this.setState(state)
-  },
-
-  inboxReduce: function() {
-    let state = {
-      inboxD3: this.state.inboxD3,
-      nodes: this.state.nodes,
-      open: false
-    }
-    this.setState(state)
-  },
-
-  onNodeClick: function(nodeId) {
-    self = this
-    return function(e) {
-      console.log(`node ${nodeId} clicked`)
-      // FIXME: unreliable
-      let node = self.state.nodes[nodeId - 1]
-      self.props.addNode(node)
-    }
-  },
-
-  render: function() {
-    let onNodeClick = this.onNodeClick
-    return (
-      <div id="inbox_container">
-        <div id="inbox" draggable="true" onClick={this.inboxEnlarge}>
-          <div className="counter">
-            <div className="number">{this.state.nodes.length}</div>
-          </div>
-        </div>
-
-        { this.state.open ?
-        <div id="inbox_large" onClick={this.inboxReduce}>
-          {this.state.nodes.map(function(node) {
-            return (
-              <div className="element" key={node.id}>
-                <div className="node" onClick={onNodeClick(node.id)}></div>
-                <div className="title"></div>
-              </div>
-            )
-          })}
-          <div className="close">x</div>
-        </div>
-        :
-        ""
-        }
-      </div>
-    )
-  },
-})
-
-class PlusDrawerD3 {
-  constructor(el, props, state) {
-    this.props = props
-
-    document.getElementsByTagName('body')[0].className = 'open-drawer'
-    d3.select("#plus_drawer")
-      .transition()
-      .style( "top", ( STYLES.height / 2 )+"px" )
-
-    this.props.graph.zoomTo( 0.5,
-             STYLES.width / 2,
-             0 )
-  }
-
-  destroy() {
-    document.getElementsByTagName('body')[0].className = 'closed-drawer'
-    d3.select("#plus_drawer")
-      .transition()
-      .style( "top", STYLES.height+"px" )
-    this.props.graph.zoomReset()
-  }
-}
-
-let PlusDrawer = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
-
-  getInitialState: function() {
-    return {
-      plusD3: null,
-      title: '',
-      description: ''
-    }
-  },
-
-  componentDidMount: function() {
-    console.log('PlusDrawer component did mount')
-    let state = {
-      plusD3: new PlusDrawerD3(null, this.props, this.state),
-      title: this.state.title,
-      description: this.state.description
-    }
-    this.setState(state)
-  },
-
-  componentWillUnmount: function() {
-    console.log('PlusDrawer component will unmount')
-    this.state.plusD3.destroy()
-  },
-
-  toInbox: function() {
-
-    this.props.toggle()
-    this.props.addNodeToInbox({ 
-      title: this.state.title,
-      description: this.state.description 
-    })
-  },
-
-  directConnect: function() {
-    console.log(this.state)
-    this.props.addNode({ 
-      title: this.state.title,
-      description: this.state.description 
-    })
-    this.props.toggle()
-  },
-
-  render: function() {
-    return (
-      <div id="plus_drawer">
-        <div className="close" onClick={this.props.toggle}>x</div>
-        <div>
-          <textarea className="title" placeholder="Node title" rows="1" cols="50" valueLink={this.linkState('title')}/>
-        </div>
-        <div>
-          <textarea className="description" placeholder="Node description" rows="5" cols="50" valueLink={this.linkState('description')}/>
-        </div>
-        <div className="button direct" onClick={this.directConnect}>Connect Now</div>
-        <div className="button inbox" onClick={this.toInbox}>Put Into Inbox</div>
-      </div>
-    )
-  }
-})
-
-class ChatD3 {
-  constructor(el, props) {
-    d3.select( "#chat" )
-  	.transition()
-  	.style( "top", ( STYLES.height / 3 )+ "px")
-    props.graph.zoomTo( 0.5,
-      STYLES.width / 2,
-      STYLES.height / -6 )
-      console.log('chat after load')
-      return false
-  }
-
-
-  destroy(props) {
-    d3.select( "#chat" )
-      .transition()
-      .style( "top", STYLES.height + "px")
-    props.graph.zoomReset()
-  }
-}
-
-let Chat = React.createClass({
-  getInitialState: function() {
-    return {
-      chatD3: null,
-    }
-  },
-
-  componentDidMount: function() {
-    console.log('Chat component did mount')
-    let state = {
-      chatD3: new ChatD3(null, this.props),
-    }
-    this.setState(state)
-  },
-
-  componentWillUnmount: function() {
-    console.log('Chat component will unmount')
-    this.state.chatD3.destroy(this.props)
-  },
-
-  render: function() {
-    return (
-      <div id="chat_container">
-        <div id="chat">
-          { /* TODO: structure, ids and class names suck*/ }
-          <div className="close" onClick={this.props.hide}>x</div>
-          <div className="head">
-            <h1 className="title">TODO: chat topic goes here</h1>
-            <p className="origin">TODO: chat origin goes here</p>
-            <div className="message">
-              <div className="content">
-                <h2>TODO: author goes here</h2>
-                <p>TODO: content goes here</p>
-              </div>
-              <div className="node link"/>
-            </div>
-            <div className="message">
-              <div className="content">
-                <h2>TODO: author goes here</h2>
-                <p>TODO: content goes here</p>
-              </div>
-              <div className="node link"/>
-            </div>
-            <div className="message">
-              <div className="content">
-                <h2>TODO: author goes here</h2>
-                <p>TODO: content goes here</p>
-              </div>
-              <div className="node link"/>
-            </div>
-          </div>
-          <div className="message new">
-            <textarea className="content" value="TODO: Current message"/>
-            <div className="node link"/>
-            <div className="button" onClick={this.hide}>tell</div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-})
 
 class GraphD3 {
 
@@ -931,19 +620,8 @@ class GraphD3 {
     return Math.sqrt( Math.pow(( x1 - x2 ), 2 ) +
                       Math.pow(( y1 - y2 ), 2 ))
   }
-
 }
 
-
-/*
- Graph state:
- - nodes, links, literals
- - center
- - inbox (fake nodes)
- - chat open?
- - inbox open?
- - plus drawer open?
-*/
 
 let Graph = React.createClass({
 

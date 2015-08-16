@@ -1,4 +1,4 @@
-export const STYLES = {
+const STYLES = {
   width: window.innerWidth,
   height: window.innerHeight,
   lightGrayColor: "#efeeee",
@@ -10,3 +10,5 @@ export const STYLES = {
   smallNodeSize: window.innerWidth / 4.7,
   largeNodeSize: window.innerWidth * .5,
 }
+
+export default STYLES
