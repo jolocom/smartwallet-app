@@ -30,6 +30,27 @@ let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/ca
 class GraphD3 {
 
   constructor(el, props, state, openInbox, addNodeToInbox, showChat) {
+  
+    this.taptimer = {
+      start: 0,
+      end: 0
+    }
+  
+    this.drag = {
+      active: false,
+      starttime: 0,
+      endtime: 0,
+      onCenter: false,
+      startPos: {},
+      nowPos: {},
+      distance: () => {
+        return this.distance( this.drag.startPos.x,
+                         this.drag.startPos.y,
+                         this.drag.nowPos.x,
+                         this.drag.nowPos.y )
+      }
+    }
+
     // the node being centered (target of 'connect' interactions)
     this.thePerspective = {
       uri: "",
@@ -145,6 +166,7 @@ class GraphD3 {
   
     // --------------------------------------------------------------------------------
     // nodes
+
   	let node = svg.selectAll("g.node")
   	  .data(state.nodes, (d) => d.uri)
   
@@ -281,96 +303,101 @@ class GraphD3 {
         })
   	})
 
-    // -----------------------------------------------------------------------------
-    // helper functions
+    // interaction
+    //NOTE(philipp): if necessary, use `mobilecheck` to assign different events for mobile and desktop clients
+    node.on("click", null) // NOTE(philipp): unbind old `openPreview` because it captured the  outdated `node` variable
+    node.on("click", this.openPreview(state.nodes))
+
+    
+    this.force.drag()
+      .on("dragstart", this.forceDragStart())
+      .on("drag", this.forceDragMove())
+      .on("dragend", this.forceDragEnd(state.nodes))
+  
+    this.force.start()
+  }
+
+  destroy(el) {
+    //empty
+  }
+
+  // touchStart and touchEnd are logging tap-times
+  tapStart() {
     let self = this
-  
-    let taptimer = {
-      start: 0,
-      end: 0
+    return function () {
+      self.taptimer.start = d3.event.sourceEvent.timeStamp
     }
-  
-    // touchStart and touchEnd are logging tap-times
-    let tapStart = function() {
-      taptimer.start = d3.event.sourceEvent.timeStamp
-    }
-  
-    let tapEnd = function(){
-      taptimer.end = d3.event.sourceEvent.timeStamp
-      if(( taptimer.end - taptimer.start ) < 200 ){
+  }
+
+  tapEnd(){
+    let self = this
+    return function() {
+      self.taptimer.end = d3.event.sourceEvent.timeStamp
+      if(( self.taptimer.end - self.taptimer.start ) < 200 ){
         return true
       }
       return false
     }
-  
-    let openPreview = function (d){ // click == enable preview
-      if( d.uri == self.thePreview.uri ) return
-      self.disablePreview( node )
-      self.thePreview.node = d
-      self.thePreview.uri = d.uri
-      self.enablePreview( d3.select( this ))
-    }
-  
-    let drag = {
-      active: false,
-      starttime: 0,
-      endtime: 0,
-      onCenter: false,
-      startPos: {},
-      nowPos: {},
-      distance: () => {
-        console.log('hi there')
-        console.log(drag)
-        return self.distance( drag.startPos.x,
-                         drag.startPos.y,
-                         drag.nowPos.x,
-                         drag.nowPos.y )
+  }
+
+  triggerLongTap() {
+    let self = this
+    return function (){
+      console.log( "longtap triggered (by timeout)" )
+      if( !self.drag.active ) return // drag event stopped before timeout expired
+      if( self.drag.distance() > 40 ){
+        self.openInbox()
       }
     }
+  } 
   
-    let dragStart = function (d){
-      tapStart()
+  forceDragStart() {
+    let self = this
+    return function (d){
+      self.tapStart()()
       console.log( "dragStart" )
       console.log(d3.event)
       //if(d3.event.sourceEvent.touches){
-        drag.active = true
-        drag.startPos.x = drag.nowPos.x = d3.event.sourceEvent.pageX
-        drag.startPos.y = drag.nowPos.y = d3.event.sourceEvent.pageY
+        self.drag.active = true
+        self.drag.startPos.x = self.drag.nowPos.x = d3.event.sourceEvent.pageX
+        self.drag.startPos.y = self.drag.nowPos.y = d3.event.sourceEvent.pageY
         //drag.start = d3.event.sourceEvent.timeStamp
         if( d.uri == self.thePerspective.uri ){
-          drag.onCenter = true
-          window.setTimeout( triggerLongTap, 800 )
+          self.drag.onCenter = true
+          window.setTimeout( self.triggerLongTap(), 800 )
         } else {
-          drag.onCenter = false
+          self.drag.onCenter = false
         }
         //force.stop()
         //d3.event.preventDefault()
       //}
     }
-  
-    let triggerLongTap = function (){
-      console.log( "longtap triggered (by timeout)" )
-      if( !drag.active ) return // drag event stopped before timeout expired
-      if( drag.distance() > 40 ){
-        self.openInbox()
-      }
-    }
-  
-    let dragMove = function (d){ // TODO
+  }
+
+  forceDragMove() {
+    let self = this
+    return function (d){
       console.log( "dragmove" )
       if( d == self.thePerspective.node ){ // center node grabbed
-        drag.nowPos.x = d3.event.sourceEvent.pageX
-        drag.nowPos.y = d3.event.sourceEvent.pageY
+        self.drag.nowPos.x = d3.event.sourceEvent.pageX
+        self.drag.nowPos.y = d3.event.sourceEvent.pageY
       } else {
         //d.fixed = true
       }
     }
-  
-    let dragEnd = function (d){
+  } 
+
+  forceDragEnd(nodes) {
+    let self = this
+    let svg = d3.select('#chart').select('svg').select('g')
+  	let node = svg.selectAll("g.node")
+  	  .data(nodes, (d) => d.uri)
+
+    return function (d){
       console.log( "dragEnd" )
       console.log(d3.event)
-      drag.active = false
-      if( tapEnd() || d3.event.defaultPrevented ){
+      self.drag.active = false
+      if( self.tapEnd()() || d3.event.defaultPrevented ){
         // this is a click
         return
       }
@@ -382,8 +409,8 @@ class GraphD3 {
         // perspective node can be dragged into inbox (top of screen)
         console.log(d3.event)
         let y = d3.event.sourceEvent.pageY // NOTE(philipp): d3.touches[0][1] won't work (because there are no _current_ touches)
-        console.log(drag.distance())
-        if( drag.distance() < 40 ){
+        console.log(self.drag.distance())
+        if( self.drag.distance() < 40 ){
           //TODO: change chat state to "showing"
           self.showChat()
         } else if( y < STYLES.height / 3 ){
@@ -408,27 +435,24 @@ class GraphD3 {
 
       //self.closeInbox()
     }
-
-    // --------------------------------------------------------------------------------
-    // interaction
-    //NOTE(philipp): if necessary, use `mobilecheck` to assign different events for mobile and desktop clients
-    node.on( "click", null ) // NOTE(philipp): unbind old `openPreview` because it captured the  outdated `node` variable
-    node.on( "click", openPreview )
-
-    
+  } 
   
-    this.force.drag()
-      .on( "dragstart", dragStart )
-      .on( "drag", dragMove )
-      .on( "dragend", dragEnd )
-  
-    this.force.start()
-  
-  }
 
-  destroy(el) {
-    //empty
-  }
+
+  openPreview(nodes) {
+    let self = this
+    let svg = d3.select('#chart').select('svg').select('g')
+  	let node = svg.selectAll("g.node")
+  	  .data(nodes, (d) => d.uri)
+
+    return function(d){ // click == enable preview
+      if(d.uri == self.thePreview.uri) return
+      self.disablePreview(node)
+      self.thePreview.node = d
+      self.thePreview.uri = d.uri
+      self.enablePreview( d3.select( this ))
+    }
+  }   
 
 
   // graph zoom/scale
