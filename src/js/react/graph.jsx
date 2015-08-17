@@ -59,24 +59,21 @@ class GraphD3 {
     this.w = document.getElementById("chart").offsetWidth
     this.h = document.getElementById("chart").offsetHeight
 
-    this.svg = d3.select("#chart").append("svg:svg")
+    let svg = d3.select("#chart").append("svg:svg")
       .attr("width", this.w)
       .attr("height", this.h)
       .attr("pointer-events", "all")
-
-    this.vis = this.svg
       .append('svg:g')
-    //.call(d3.behavior.zoom().on("zoom", redraw))
-    //.append('svg:g')
+
       
     //background rectangle
-    this.vis.append('svg:rect')
+    svg.append('svg:rect')
       .attr('width', this.w)
       .attr('height', this.h)
       .attr('fill', 'white')
 
     //background circle
-    this.vis.append( "svg:circle" )
+    svg.append( "svg:circle" )
       .attr( "class", "plate" )
       .attr( "cx", STYLES.width * 0.5 )
       .attr( "cy", STYLES.height * 0.5)
@@ -95,12 +92,15 @@ class GraphD3 {
   	  .size([this.w, this.h])
       .start()
 
+
     //group links (so they don't overlap nodes)
-    this.linkGroup = this.vis.append( "g" ).attr( "class", "link_group")
-  
+    svg.append( "g" ).attr( "class", "link_group")
   }
 
   update(el, state) {
+    let svg = d3.select('#chart').select('svg').select('g')
+    console.log(svg)
+
   	this.force
       .nodes(state.nodes)
   	  .links(state.links)
@@ -110,8 +110,9 @@ class GraphD3 {
     // links
   
     // data binding
-    this.linkGroup.selectAll("g.link").remove() // remove old links entirely
-  	let link = this.linkGroup.selectAll("g.link")
+    let linkGroup = d3.select('#chart').select('svg').select('g.link_group')
+    linkGroup.selectAll("g.link").remove() // remove old links entirely
+  	let link = linkGroup.selectAll("g.link")
   	  .data(state.links, (d) => {
         // this retains link-IDs over changing target/source direction
         // NB: not really useful in our case
@@ -144,7 +145,7 @@ class GraphD3 {
   
     // --------------------------------------------------------------------------------
     // nodes
-  	let node = this.vis.selectAll("g.node")
+  	let node = svg.selectAll("g.node")
   	  .data(state.nodes, (d) => d.uri)
   
     let nodeNew = node.enter().append("svg:g")
@@ -432,12 +433,14 @@ class GraphD3 {
 
   // graph zoom/scale
   zoomTo(scale, x, y) {
-    this.vis.transition()
+    let svg = d3.select('#chart').select('svg').select('g')
+    svg.transition()
       .attr("transform", "scale( "+ scale + " ) translate(" + x + "," + y + ")")
   }
 
   zoomReset() {
-    this.vis.transition()
+    let svg = d3.select('#chart').select('svg').select('g')
+    svg.transition()
       .attr("transform", "scale( 1 ) translate( 0, 0 )" )
   }
 
@@ -886,15 +889,15 @@ let Graph = React.createClass({
     this.arrangeNodesInACircle( this.state.nodes )
     let newNodes = {}
     for( var i in this.state.nodes ){
-      newNodes[ this.state.nodes[i].uri ] = this.state.nodes[i]
+      newNodes[this.state.nodes[i].uri] = this.state.nodes[i]
     }
     for( var i in this.state.pastNodes ){
       let uri = this.state.pastNodes[i].uri
-      if( newNodes[ uri ] !== undefined ){
-        newNodes[ uri ].x = this.state.pastNodes[ i ].x
-        newNodes[ uri ].y = this.state.pastNodes[ i ].y
-        newNodes[ uri ].px = this.state.pastNodes[ i ].x
-        newNodes[ uri ].py = this.state.pastNodes[ i ].y
+      if( newNodes[uri] !== undefined ){
+        newNodes[uri].x = this.state.pastNodes[i].x
+        newNodes[uri].y = this.state.pastNodes[i].y
+        newNodes[uri].px = this.state.pastNodes[i].x
+        newNodes[uri].py = this.state.pastNodes[i].y
       }
     }
   },
