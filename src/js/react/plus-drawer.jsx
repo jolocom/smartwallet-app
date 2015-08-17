@@ -1,36 +1,10 @@
 import React from 'react/addons'
-import d3 from 'd3'
-import STYLES from './styles.js'
-
-class PlusDrawerD3 {
-  constructor(el, props, state) {
-    this.props = props
-
-    document.getElementsByTagName('body')[0].className = 'open-drawer'
-    d3.select("#plus_drawer")
-      .transition()
-      .style( "top", ( STYLES.height / 2 )+"px" )
-
-    this.props.graph.zoomTo( 0.5,
-             STYLES.width / 2,
-             0 )
-  }
-
-  destroy() {
-    document.getElementsByTagName('body')[0].className = 'closed-drawer'
-    d3.select("#plus_drawer")
-      .transition()
-      .style( "top", STYLES.height+"px" )
-    this.props.graph.zoomReset()
-  }
-}
 
 let PlusDrawer = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   getInitialState: function() {
     return {
-      plusD3: null,
       title: '',
       description: ''
     }
@@ -39,16 +13,10 @@ let PlusDrawer = React.createClass({
   componentDidMount: function() {
     console.log('PlusDrawer component did mount')
     let state = {
-      plusD3: new PlusDrawerD3(null, this.props, this.state),
       title: this.state.title,
       description: this.state.description
     }
     this.setState(state)
-  },
-
-  componentWillUnmount: function() {
-    console.log('PlusDrawer component will unmount')
-    this.state.plusD3.destroy()
   },
 
   toInbox: function() {

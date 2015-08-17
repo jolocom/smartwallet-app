@@ -12,7 +12,7 @@ import WebAgent from '../lib/web-agent.js'
 import STYLES from './styles.js'
 
 import Chat from './chat.jsx'
-import Inbox from './inbox.jsx'
+import {Inbox, InboxCounter} from './inbox.jsx'
 import PlusDrawer from './plus-drawer.jsx'
 
 d3.selection.prototype.moveToFront = function() {
@@ -249,13 +249,63 @@ class GraphD3 {
     }
   
     { // init preview
-      console.log('preview transition')
       this.disablePreview(node)
-      console.log('preview enabling')
-
       // find dom node to preview and enablePreview on it
       let toPreview = node.filter((d) => d.uri == state.previewNode.uri)
       this.enablePreview(toPreview)
+    }
+
+    //plus drawer opening (closing is handled in "beforeUpdate")
+    if (!prevState.plusDrawerOpen && state.plusDrawerOpen) {
+      document.getElementsByTagName('body')[0].className = 'open-drawer'
+      d3.select("#plus_drawer")
+        .transition()
+        .style( "top", ( STYLES.height / 2 )+"px" )
+
+      this.zoomTo( 0.5,
+               STYLES.width / 2,
+               0)
+    }
+
+    //chat opening (closing is handled in "beforeUpdate")
+    if (!prevState.chatOpen && state.chatOpen) {
+      d3.select( "#chat" )
+        .transition()
+        .style( "top", ( STYLES.height / 3 )+ "px")
+
+      this.zoomTo(0.5,
+        STYLES.width / 2,
+        STYLES.height / -6)
+    }
+
+    // First node added to inbox - animate InboxCounter
+    if (prevState.inboxCount == 0 && state.inboxCount == 1) {
+      d3.select("#inbox .counter")
+        .transition()
+        .style( "opacity", 1 )
+    }
+
+    // Spring inbox whenever a node is added/removed
+    if (prevState.inboxCount != state.inboxCount && state.inboxCount >= 1) {
+      //let size = (self.inbox.count==0)
+        //?(-STYLES.width)
+        //:(-STYLES.width+(STYLES.width/5))
+
+      let size = -STYLES.width + (STYLES.width/5)
+
+      d3.select("#inbox")
+        .transition()
+        .style( "right", size+"px" )
+    }
+
+    // inbox opening (closing is handled in "beforeUpdate")
+    if (!prevState.inboxOpen && state.inboxOpen) {
+      this.zoomTo(0.5,
+               STYLES.width / 2,
+               STYLES.height)
+      //d3.select("#inbox")
+        //.transition()
+        //.style( "right", (-STYLES.width / 2)+"px")
     }
 
   
@@ -309,6 +359,30 @@ class GraphD3 {
       .on("dragend", this.forceDragEnd(state.nodes, state.centerNode))
   
     this.force.start()
+  }
+
+  beforeUpdate(el, state, nextState) {
+    //plus drawer closing (opening is handled in "update")
+    if (state.plusDrawerOpen && !nextState.plusDrawerOpen) {
+      document.getElementsByTagName('body')[0].className = 'closed-drawer'
+      d3.select("#plus_drawer")
+        .transition()
+        .style( "top", STYLES.height+"px" )
+      this.zoomReset()
+    }
+
+    //chat closing (opening is handled in "update")
+    if (state.chatOpen && !nextState.chatOpen) {
+      d3.select( "#chat" )
+        .transition()
+        .style( "top", STYLES.height + "px")
+      this.zoomReset()
+    }
+
+    // inbox closing (opening is handled in "update")
+    if (state.inboxOpen && !nextState.inboxOpen) {
+      this.zoomReset()
+    }
   }
 
   destroy(el) {
@@ -608,7 +682,6 @@ class GraphD3 {
 
 
 let Graph = React.createClass({
-
   getInitialState: function() {
     return {
       graph: null,
@@ -616,6 +689,7 @@ let Graph = React.createClass({
       previewNode: null,
       nodes: [],
       inboxNodes: [],
+      inboxCount: 0,
       historyNodes: [],
       links: [],
       literals: [],
@@ -625,26 +699,6 @@ let Graph = React.createClass({
     }
   },
 
-  closeInbox: function() {
-    console.log('closing inbox...')
-    let state = {
-      graph: this.state.graph,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      historyNodes: this.state.historyNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: this.state.chatOpen,
-      inboxOpen: false,
-      plusDrawerOpen: this.state.plusDrawerOpen,
-    }
-
-    this.setState(state)
-
-    console.log('inbox closed.')
-  },
 
   //_drawGraph: function(center, triples, prefixes) {
     //console.log('drawing graph')
@@ -678,6 +732,7 @@ let Graph = React.createClass({
       }, //TODO: set this to center
       nodes: res.nodes,
       inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount,
       historyNodes: this.state.historyNodes,
       links: res.links,
       literals: res.literals,
@@ -721,8 +776,15 @@ let Graph = React.createClass({
       })
   },
 
+  componentWillUpdate: function(nextProps, nextState) {
+    console.log('graph component will update')
+    console.log(this.state)
+    console.log(nextState)
+
+    nextState.graph.beforeUpdate(null, this.state, nextState)
+  },
+
   componentDidUpdate: function(prevProps, prevState) {
-    //TODO
     console.log('graph component did update')
     console.log(prevState)
     console.log(this.state)
@@ -793,6 +855,7 @@ let Graph = React.createClass({
           previewNode: newPreview,
           nodes: this.state.nodes,
           inboxNodes: this.state.inboxNodes,
+          inboxCount: this.state.inboxCount,
           historyNodes: this.state.historyNodes,
           links: this.state.links,
           literals: this.state.literals,
@@ -818,6 +881,7 @@ let Graph = React.createClass({
         previewNode: this.state.previewNode,
         nodes: this.state.nodes,
         inboxNodes: this.state.inboxNodes,
+        inboxCount: this.state.inboxCount,
         historyNodes: this.state.historyNodes,
         links: this.state.links,
         literals: this.state.literals,
@@ -865,6 +929,7 @@ let Graph = React.createClass({
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount,
       historyNodes: this.state.historyNodes,
       newNodeURI: node.uri,  // will lit up on GraphD3 update
       links: this.state.links,
@@ -886,6 +951,7 @@ let Graph = React.createClass({
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount,
       historyNodes: this.state.historyNodes,
       links: this.state.links,
       literals: this.state.literals,
@@ -906,9 +972,23 @@ let Graph = React.createClass({
     }
     d.id = this.state.inboxNodes.length + 1
     this.state.inboxNodes.push(d)
+    let state = {
+      graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount + 1,
+      historyNodes: this.state.historyNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: this.state.chatOpen,
+      inboxOpen: this.state.inboxOpen,
+      plusDrawerOpen: this.state.plusDrawerOpen,
+    }
     console.log(d)
     console.log(this.state.inboxNodes)
-    this.setState(this.state)
+    this.setState(state)
   },
 
   enrich: function ( less, more ){
@@ -965,6 +1045,7 @@ let Graph = React.createClass({
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount,
       historyNodes: this.state.historyNodes,
       links: this.state.links,
       literals: this.state.literals,
@@ -984,12 +1065,53 @@ let Graph = React.createClass({
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount,
       historyNodes: this.state.historyNodes,
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: this.state.chatOpen,
       inboxOpen: this.state.inboxOpen,
       plusDrawerOpen: !this.state.plusDrawerOpen,
+    }
+
+    this.setState(state)
+  },
+
+  openInbox: function(e) {
+    console.log('openInbox')
+    let state = {
+      graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount,
+      historyNodes: this.state.historyNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: this.state.chatOpen,
+      inboxOpen: true,
+      plusDrawerOpen: this.state.plusDrawerOpen,
+    }
+
+    this.setState(state)
+  },
+
+  closeInbox: function(e) {
+    console.log('closeInbox')
+    let state = {
+      graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
+      nodes: this.state.nodes,
+      inboxNodes: this.state.inboxNodes,
+      inboxCount: this.state.inboxCount,
+      historyNodes: this.state.historyNodes,
+      links: this.state.links,
+      literals: this.state.literals,
+      chatOpen: this.state.chatOpen,
+      inboxOpen: false,
+      plusDrawerOpen: this.state.plusDrawerOpen,
     }
 
     this.setState(state)
@@ -1004,7 +1126,11 @@ let Graph = React.createClass({
 
           {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.addNodeToInbox}/> : ""}
 
-          <Inbox graph={this.state.graph} open={this.state.inboxOpen} nodes={this.state.inboxNodes} addNode={this.addNode}/>
+          <div id="inbox_container">
+            { this.state.inboxCount > 0 ? <InboxCounter onClick={this.openInbox} count={this.state.inboxCount}/> : ""}
+            
+            { this.state.inboxOpen ? <Inbox onClick={this.closeInbox} nodes={this.state.inboxNodes} addNode={this.addNode}/> : ""}
+          </div>
 
 
           <div id="graph">
