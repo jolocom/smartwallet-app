@@ -77,14 +77,10 @@ class GraphD3 {
     this.handleLongTap = handleLongTap
 
 
-
-    this.nodeHistory = []
-
-    this.newNodeURI = null
-
     // TODO: how many height/width vars do we have?
     this.w = document.getElementById("chart").offsetWidth
     this.h = document.getElementById("chart").offsetHeight
+
 
     let svg = d3.select("#chart").append("svg:svg")
       .attr("width", this.w)
@@ -223,12 +219,12 @@ class GraphD3 {
   
 
     // init center perspective
-    this.changeCenter(node, prevState.centerNode, state.centerNode)
+    this.changeCenter(node, prevState.centerNode, state.centerNode, state.historyNodes)
 
     { // init history
-      if( this.nodeHistory.length > 0 ){
+      if( state.historyNodes.length > 0 ){
         let lastStep = state.nodes.filter( (d) => {
-          return d.uri == this.nodeHistory[ this.nodeHistory.length - 1 ].uri })[0]
+          return d.uri == state.historyNodes[state.historyNodes.length - 1].uri })[0]
         lastStep.fixed = true
         this.animateNode( lastStep,
                      STYLES.width / 2,
@@ -237,8 +233,8 @@ class GraphD3 {
     }
   
     { // init new node, if applicable
-      if( this.newNodeURI !== undefined ){
-        let newNode = node.filter((d) => d.uri == this.newNodeURI)
+      if( state.newNodeURI !== undefined ){
+        let newNode = node.filter((d) => d.uri == state.newNodeURI)
         if( newNode.length > 0 ){
           newNode
             .interrupt()
@@ -249,7 +245,6 @@ class GraphD3 {
             .transition().duration( 2000 )
             .style( "fill", STYLES.grayColor )
         }
-        this.newNodeURI = undefined
       }
     }
   
@@ -460,7 +455,7 @@ class GraphD3 {
       })
   }
 
-  changeCenter(domNodes, oldCenter, newCenter){
+  changeCenter(domNodes, oldCenter, newCenter, historyNodes){
     newCenter.node.fixed = true
     if (!oldCenter) {
       //initialization- no transition needed
@@ -483,12 +478,11 @@ class GraphD3 {
       console.log('change center')
       // update center perspective
       { // treat old center & update node history
-        oldCenter.dom = this.getDomNode(domNodes, oldCenter),
+        let oldCenterDom = this.getDomNode(domNodes, oldCenter)
 
         console.log('old center')
         console.log(oldCenter)
-        //oldCenter.node.fixed = false
-        oldCenter.dom
+        oldCenterDom
           .select( "circle" )
           .style( "fill", STYLES.lightBlueColor )
 
@@ -496,24 +490,23 @@ class GraphD3 {
                      STYLES.width / 2,
                      STYLES.height * 4/5 )
 
-        //TODO: revisit
-        this.nodeHistory.push(oldCenter)
-        if(this.nodeHistory.length > 1){
-          let historic = this.nodeHistory[this.nodeHistory.length - 2]
+        if(historyNodes.length > 1){
+          let historic = historyNodes[historyNodes.length - 2]
           if (historic.node != newCenter.node)
             historic.node.fixed = false
 
-          historic.dom
+          let historicDom = this.getDomNode(domNodes, historic)
+          historicDom
             .select( "circle" )
             .style( "fill", STYLES.grayColor )
         }
       }
       {
-        newCenter.dom = this.getDomNode(domNodes, newCenter)
+        let newCenterDom = this.getDomNode(domNodes, newCenter)
         this.animateNode(newCenter.node,
                      STYLES.width / 2,
                      STYLES.height / 2) // move to center
-        newCenter.dom
+        newCenterDom
           .select( "circle" )
           .style("fill", STYLES.blueColor )
       }
@@ -621,9 +614,9 @@ let Graph = React.createClass({
       graph: null,
       centerNode: null,
       previewNode: null,
-      pastNodes: [],
       nodes: [],
       inboxNodes: [],
+      historyNodes: [],
       links: [],
       literals: [],
       chatOpen: false,
@@ -638,9 +631,9 @@ let Graph = React.createClass({
       graph: this.state.graph,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
-      pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      historyNodes: this.state.historyNodes,
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: this.state.chatOpen,
@@ -673,7 +666,6 @@ let Graph = React.createClass({
     //TODO: this stuff depends on side effects of mergeGraphs and arrangeNodes- rethink
     // TODO: this should happen on every state update
 	  let res = this.mergeGraphs(json.nodes, json.links)
-    this.arrangeNodes()
     let state = {
       graph: new GraphD3(null, null, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap),
       centerNode: {
@@ -684,15 +676,16 @@ let Graph = React.createClass({
         node: res.nodes[0],
         uri: res.nodes[0].uri,
       }, //TODO: set this to center
-      pastNodes: [],
       nodes: res.nodes,
       inboxNodes: this.state.inboxNodes,
+      historyNodes: this.state.historyNodes,
       links: res.links,
       literals: res.literals,
       chatOpen: false,
       inboxOpen: false,
       plusDrawerOpen: false,
     }
+    this.arrangeNodesInACircle(state.nodes)
 
     this.setState(state)
 
@@ -783,6 +776,13 @@ let Graph = React.createClass({
           uri: target.uri
         }
 
+        let old = this.state.nodes.filter((n) => n.uri == this.state.centerNode.uri)[0]
+        let oldCenter = {
+          node: old,
+          uri: old.uri
+        }
+        this.state.historyNodes.push(oldCenter)
+
         let newPreview = {
           node: target,
           uri: target.uri
@@ -791,9 +791,9 @@ let Graph = React.createClass({
           graph: this.state.graph,
           centerNode: newCenter,
           previewNode: newPreview,
-          pastNodes: this.state.pastNodes,
           nodes: this.state.nodes,
           inboxNodes: this.state.inboxNodes,
+          historyNodes: this.state.historyNodes,
           links: this.state.links,
           literals: this.state.literals,
           chatOpen: this.state.chatOpen,
@@ -816,9 +816,9 @@ let Graph = React.createClass({
         graph: this.state.graph,
         centerNode: this.state.centerNode,
         previewNode: this.state.previewNode,
-        pastNodes: this.state.pastNodes,
         nodes: this.state.nodes,
         inboxNodes: this.state.inboxNodes,
+        historyNodes: this.state.historyNodes,
         links: this.state.links,
         literals: this.state.literals,
         chatOpen: this.state.chatOpen,
@@ -856,9 +856,6 @@ let Graph = React.createClass({
     let link = { source: node,
              target: this.state.centerNode.node }
   
-    //TODO: consider moving this directly under state
-    this.state.graph.newNodeURI = node.uri // remember the URI so we can light the node up on init
-
     this.state.links.push(link)
     this.state.nodes.push(node)
 
@@ -866,9 +863,10 @@ let Graph = React.createClass({
       graph: this.state.graph,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
-      pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      historyNodes: this.state.historyNodes,
+      newNodeURI: node.uri,  // will lit up on GraphD3 update
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: this.state.chatOpen,
@@ -886,9 +884,9 @@ let Graph = React.createClass({
       graph: this.state.graph,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
-      pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      historyNodes: this.state.historyNodes,
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: true,
@@ -938,13 +936,12 @@ let Graph = React.createClass({
   			this.state.nodes.push(newNodes[tIdx])
   		}
   		newLinks[i].target = this.state.nodes.indexOf(newNodes[tIdx])
-      //
   		this.state.links.push(newLinks[i])
   	}
     return { nodes: this.state.nodes, links: this.state.links, literals: this.state.literals }
   },
 
-  arrangeNodesInACircle: function( nodes ) {
+  arrangeNodesInACircle: function(nodes) {
     let angle = ( 2 * Math.PI )/ nodes.length
     let halfwidth = ( STYLES.width / 2 )
     let halfheight = ( STYLES.height / 2 )
@@ -960,33 +957,15 @@ let Graph = React.createClass({
     }
   },
   
-  arrangeNodes: function(){
-    // arrange new nodes in a circle while retaining the previous position of old nodes
-    this.arrangeNodesInACircle( this.state.nodes )
-    let newNodes = {}
-    for( var i in this.state.nodes ){
-      newNodes[this.state.nodes[i].uri] = this.state.nodes[i]
-    }
-    for( var i in this.state.pastNodes ){
-      let uri = this.state.pastNodes[i].uri
-      if( newNodes[uri] !== undefined ){
-        newNodes[uri].x = this.state.pastNodes[i].x
-        newNodes[uri].y = this.state.pastNodes[i].y
-        newNodes[uri].px = this.state.pastNodes[i].x
-        newNodes[uri].py = this.state.pastNodes[i].y
-      }
-    }
-  },
-
   hideChat: function(e) {
     console.log('hideChat')
     let state = {
       graph: this.state.graph,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
-      pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      historyNodes: this.state.historyNodes,
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: false,
@@ -1003,9 +982,9 @@ let Graph = React.createClass({
       graph: this.state.graph,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
-      pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
+      historyNodes: this.state.historyNodes,
       links: this.state.links,
       literals: this.state.literals,
       chatOpen: this.state.chatOpen,
