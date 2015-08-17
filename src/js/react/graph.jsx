@@ -27,10 +27,31 @@ let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/ca
 
 
 
+class Util {
+  static stringLessThan(s1, s2){
+    if(s1 < s2) return true
+    return false
+  }
+  
+  static stringMin(s1, s2){
+    if(Util.stringLessThan(s1, s2)) return s1
+    return s2
+  }
+  
+  static stringMax(s1, s2){
+    if(Util.stringLessThan(s1, s2)) return s2
+    return s1
+  }
+  
+  static distance(x1, y1, x2, y2){
+    return Math.sqrt(Math.pow(( x1 - x2 ), 2 ) +
+                     Math.pow(( y1 - y2 ), 2 ))
+  }
+}
+
 class GraphD3 {
 
-  constructor(el, props, state, openInbox, addNodeToInbox, showChat) {
-  
+  constructor(el, props, state, handleNodeClick, handleDragEnd, handleLongTap) {
     this.taptimer = {
       start: 0,
       end: 0
@@ -44,33 +65,18 @@ class GraphD3 {
       startPos: {},
       nowPos: {},
       distance: () => {
-        return this.distance( this.drag.startPos.x,
+        return Util.distance( this.drag.startPos.x,
                          this.drag.startPos.y,
                          this.drag.nowPos.x,
                          this.drag.nowPos.y )
       }
     }
 
-    // the node being centered (target of 'connect' interactions)
-    this.thePerspective = {
-      uri: "",
-      node: {
-        px: STYLES.width / 2,
-        py: STYLES.height / 2
-      },
-      dom: {}
-    }
+    this.handleNodeClick = handleNodeClick
+    this.handleDragEnd = handleDragEnd
+    this.handleLongTap = handleLongTap
 
-    // Call to change the state of Inbox component
-    this.openInbox = openInbox
-    this.addNodeToInbox = addNodeToInbox
-    this.showChat = showChat
 
-      // the node showing the large preview circle
-    this.thePreview = {
-      uri: "",
-      node: {}
-    }
 
     this.nodeHistory = []
 
@@ -118,9 +124,8 @@ class GraphD3 {
     svg.append( "g" ).attr( "class", "link_group")
   }
 
-  update(el, state) {
+  update(el, prevState, state) {
     let svg = d3.select('#chart').select('svg').select('g')
-    console.log(svg)
 
   	this.force
       .nodes(state.nodes)
@@ -137,8 +142,8 @@ class GraphD3 {
   	  .data(state.links, (d) => {
         // this retains link-IDs over changing target/source direction
         // NB: not really useful in our case
-        let first = this.stringMin( d.source.uri, d.target.uri )
-        let last = this.stringMax( d.source.uri, d.target.uri )
+        let first = Util.stringMin(d.source.uri, d.target.uri)
+        let last = Util.stringMax(d.source.uri, d.target.uri)
         return first + last
       })
   
@@ -216,23 +221,10 @@ class GraphD3 {
     // and needs to be re-set. also, the asynchronous call to init can interrupt
     // the animation, so it is also re-started.
   
-    { // init center perspective
-      this.thePerspective.node = state.nodes[0]
-      this.thePerspective.uri = state.nodes[0].uri
-      this.thePerspective.node.fixed = true
-      if( this.firstInit ){ // don't animate on very first init
-        //gone
-        
-      } else {
-        this.animateNode( this.thePerspective.node,
-                     STYLES.width / 2,
-                     STYLES.height / 2 )
-      }
-      this.getCenterNode( node )
-        .select( "circle" )
-        .style("fill", STYLES.blueColor )
-    }
-  
+
+    // init center perspective
+    this.changeCenter(node, prevState.centerNode, state.centerNode)
+
     { // init history
       if( this.nodeHistory.length > 0 ){
         let lastStep = state.nodes.filter( (d) => {
@@ -262,9 +254,15 @@ class GraphD3 {
     }
   
     { // init preview
-      this.disablePreview( node )
-      this.enablePreview( this.getCenterNode( node ) )
+      console.log('preview transition')
+      this.disablePreview(node)
+      console.log('preview enabling')
+
+      // find dom node to preview and enablePreview on it
+      let toPreview = node.filter((d) => d.uri == state.previewNode.uri)
+      this.enablePreview(toPreview)
     }
+
   
     // --------------------------------------------------------------------------------
     // animation
@@ -306,13 +304,14 @@ class GraphD3 {
     // interaction
     //NOTE(philipp): if necessary, use `mobilecheck` to assign different events for mobile and desktop clients
     node.on("click", null) // NOTE(philipp): unbind old `openPreview` because it captured the  outdated `node` variable
-    node.on("click", this.openPreview(state.nodes))
 
-    
+    //node.on("click", this.openPreview(state.nodes))
+    node.on("click", this.nodeClick(state.nodes))
+
     this.force.drag()
-      .on("dragstart", this.forceDragStart())
-      .on("drag", this.forceDragMove())
-      .on("dragend", this.forceDragEnd(state.nodes))
+      .on("dragstart", this.forceDragStart(state.centerNode))
+      .on("drag", this.forceDragMove(state.centerNode))
+      .on("dragend", this.forceDragEnd(state.nodes, state.centerNode))
   
     this.force.start()
   }
@@ -345,13 +344,11 @@ class GraphD3 {
     return function (){
       console.log( "longtap triggered (by timeout)" )
       if( !self.drag.active ) return // drag event stopped before timeout expired
-      if( self.drag.distance() > 40 ){
-        self.openInbox()
-      }
+      self.handleLongTap(self.drag.distance())
     }
   } 
   
-  forceDragStart() {
+  forceDragStart(centerNode) {
     let self = this
     return function (d){
       self.tapStart()()
@@ -362,7 +359,7 @@ class GraphD3 {
         self.drag.startPos.x = self.drag.nowPos.x = d3.event.sourceEvent.pageX
         self.drag.startPos.y = self.drag.nowPos.y = d3.event.sourceEvent.pageY
         //drag.start = d3.event.sourceEvent.timeStamp
-        if( d.uri == self.thePerspective.uri ){
+        if( d.uri == centerNode.uri ){
           self.drag.onCenter = true
           window.setTimeout( self.triggerLongTap(), 800 )
         } else {
@@ -374,11 +371,11 @@ class GraphD3 {
     }
   }
 
-  forceDragMove() {
+  forceDragMove(centerNode) {
     let self = this
     return function (d){
       console.log( "dragmove" )
-      if( d == self.thePerspective.node ){ // center node grabbed
+      if( d == centerNode.node ){ // center node grabbed
         self.drag.nowPos.x = d3.event.sourceEvent.pageX
         self.drag.nowPos.y = d3.event.sourceEvent.pageY
       } else {
@@ -387,7 +384,7 @@ class GraphD3 {
     }
   } 
 
-  forceDragEnd(nodes) {
+  forceDragEnd(nodes, centerNode) {
     let self = this
     let svg = d3.select('#chart').select('svg').select('g')
   	let node = svg.selectAll("g.node")
@@ -401,56 +398,30 @@ class GraphD3 {
         // this is a click
         return
       }
-      if( d == self.thePerspective.node ){
+
+      let y = d3.event.sourceEvent.pageY // NOTE(philipp): d3.touches[0][1] won't work (because there are no _current_ touches)
+
+      self.handleDragEnd(d, self.drag.distance(), y)
+
+      if( d == centerNode.node ){
         // reset node position
         d.x, d.px = STYLES.width / 2
         d.y, d.py = STYLES.height / 2
         d3.select( this ).attr( "transform", (d) => "translate(" + d.x + "," + d.y + ")")
-        // perspective node can be dragged into inbox (top of screen)
-        console.log(d3.event)
-        let y = d3.event.sourceEvent.pageY // NOTE(philipp): d3.touches[0][1] won't work (because there are no _current_ touches)
-        console.log(self.drag.distance())
-        if( self.drag.distance() < 40 ){
-          //TODO: change chat state to "showing"
-          self.showChat()
-        } else if( y < STYLES.height / 3 ){
-
-          //TODO: should communicate back to react
-          self.addNodeToInbox( d )
-        }
-      } else {
-        // surrounding nodes can be dragged into focus (center of screen)
-        if( self.distance( d.x,
-                      d.y,
-                      STYLES.width / 2,
-                      STYLES.height / 2 )
-            < STYLES.width * (3/8)){
-          self.changeCenter( d, d3.select( this ), node)
-          self.disablePreview( node )
-          self.thePreview.node = d
-          self.thePreview.uri = d.uri
-          self.enablePreview( d3.select( this ))
-        }
       }
-
-      //self.closeInbox()
     }
   } 
   
 
 
-  openPreview(nodes) {
+  nodeClick(nodes) {
     let self = this
     let svg = d3.select('#chart').select('svg').select('g')
   	let node = svg.selectAll("g.node")
   	  .data(nodes, (d) => d.uri)
 
     return function(d){ // click == enable preview
-      if(d.uri == self.thePreview.uri) return
-      self.disablePreview(node)
-      self.thePreview.node = d
-      self.thePreview.uri = d.uri
-      self.enablePreview( d3.select( this ))
+      self.handleNodeClick(d)
     }
   }   
 
@@ -471,6 +442,7 @@ class GraphD3 {
 
   animateNode( d, x, y ) {
     console.log('animate node')
+    console.log(d)
     // http://stackoverflow.com/questions/19931383/animating-elements-in-d3-js
     d3.select(d).transition().duration( 1000 )
       .tween("x", () => {
@@ -488,51 +460,68 @@ class GraphD3 {
       })
   }
 
-  changeCenter(d, dom, node){
-    console.log('change center')
-    // update center perspective
-    { // treat old center & update node history
-      let oldCenter = {
-        dom: this.getCenterNode( node ),
-        uri: this.thePerspective.uri,
-        node: this.thePerspective.node
-      }
-      console.log('old center')
-      console.log(oldCenter)
-      //oldCenter.node.fixed = false
-      oldCenter.dom
-        .select( "circle" )
-        .style( "fill", STYLES.lightBlueColor )
-      this.animateNode( oldCenter.node,
+  changeCenter(domNodes, oldCenter, newCenter){
+    newCenter.node.fixed = true
+    if (!oldCenter) {
+      //initialization- no transition needed
+      this.animateNode(newCenter.node,
                    STYLES.width / 2,
-                   STYLES.height * 4/5 )
-      this.nodeHistory.push( oldCenter )
-      if( this.nodeHistory.length > 1 ){
-        let historic = this.nodeHistory[ this.nodeHistory.length - 2 ]
-        historic.node.fixed = false
-        historic.dom
-          .select( "circle" )
-          .style( "fill", STYLES.grayColor )
-      }
-    }
-    { // assign & treat new center
-      this.thePerspective.node = d
-      this.thePerspective.uri = d.uri
-      this.thePerspective.dom = this.getCenterNode( node )
-      this.thePerspective.node.fixed = true
-      this.animateNode( this.thePerspective.node,
-                   STYLES.width / 2,
-                   STYLES.height / 2 ) // move to center
-      this.thePerspective.dom
+                   STYLES.height / 2 )
+
+      this.getDomNode(domNodes, newCenter)
         .select( "circle" )
         .style("fill", STYLES.blueColor )
+      return
     }
-  
-    this.force.start()
+
+    if (oldCenter.node != newCenter.node) {
+      console.log('Change center from: ')
+      console.log(oldCenter)
+      console.log('to: ')
+      console.log(newCenter)
+
+      console.log('change center')
+      // update center perspective
+      { // treat old center & update node history
+        oldCenter.dom = this.getDomNode(domNodes, oldCenter),
+
+        console.log('old center')
+        console.log(oldCenter)
+        //oldCenter.node.fixed = false
+        oldCenter.dom
+          .select( "circle" )
+          .style( "fill", STYLES.lightBlueColor )
+
+        this.animateNode( oldCenter.node,
+                     STYLES.width / 2,
+                     STYLES.height * 4/5 )
+
+        //TODO: revisit
+        this.nodeHistory.push(oldCenter)
+        if(this.nodeHistory.length > 1){
+          let historic = this.nodeHistory[this.nodeHistory.length - 2]
+          if (historic.node != newCenter.node)
+            historic.node.fixed = false
+
+          historic.dom
+            .select( "circle" )
+            .style( "fill", STYLES.grayColor )
+        }
+      }
+      {
+        newCenter.dom = this.getDomNode(domNodes, newCenter)
+        this.animateNode(newCenter.node,
+                     STYLES.width / 2,
+                     STYLES.height / 2) // move to center
+        newCenter.dom
+          .select( "circle" )
+          .style("fill", STYLES.blueColor )
+      }
+    }
   }
 
-  getCenterNode( allNodes ) {
-    return allNodes.filter((d) => d.uri == this.thePerspective.uri)
+  getDomNode(allNodes, node) {
+    return allNodes.filter((d) => d.uri == node.uri)
   }
 
   // http://bl.ocks.org/mbostock/7555321
@@ -622,31 +611,6 @@ class GraphD3 {
       .style( "opacity", 1 )
     return node
   }
-
-  stringLessThan( s1, s2 ){
-    if( s1 < s2 ) return true
-    return false
-  }
-  
-  stringMin( s1, s2 ){
-    if( this.stringLessThan( s1, s2 )) return s1
-    return s2
-  }
-  
-  stringMax( s1, s2 ){
-    if( this.stringLessThan( s1, s2 )) return s2
-    return s1
-  }
-  
-  distance( x1, y1, x2, y2 ){
-    console.log('calculating distance')
-    console.log(x1)
-    console.log(y1)
-    console.log(x2)
-    console.log(y2)
-    return Math.sqrt( Math.pow(( x1 - x2 ), 2 ) +
-                      Math.pow(( y1 - y2 ), 2 ))
-  }
 }
 
 
@@ -655,6 +619,8 @@ let Graph = React.createClass({
   getInitialState: function() {
     return {
       graph: null,
+      centerNode: null,
+      previewNode: null,
       pastNodes: [],
       nodes: [],
       inboxNodes: [],
@@ -670,6 +636,8 @@ let Graph = React.createClass({
     console.log('closing inbox...')
     let state = {
       graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
       pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
@@ -685,24 +653,6 @@ let Graph = React.createClass({
     console.log('inbox closed.')
   },
 
-  openInbox: function() {
-    console.log('opening inbox...')
-    let state = {
-      graph: this.state.graph,
-      pastNodes: this.state.pastNodes,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: this.state.chatOpen,
-      inboxOpen: true,
-      plusDrawerOpen: this.state.plusDrawerOpen,
-    }
-
-    this.setState(state)
-
-    console.log('inbox opened.')
-  },
   //_drawGraph: function(center, triples, prefixes) {
     //console.log('drawing graph')
     //let d3graph = D3Converter.convertTriples(center, triples)
@@ -725,7 +675,15 @@ let Graph = React.createClass({
 	  let res = this.mergeGraphs(json.nodes, json.links)
     this.arrangeNodes()
     let state = {
-      graph: new GraphD3(null, null, this.state, this.openInbox, this.addNodeToInbox, this.showChat),
+      graph: new GraphD3(null, null, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap),
+      centerNode: {
+        node: res.nodes[0],
+        uri: res.nodes[0].uri,
+      },
+      previewNode: {
+        node: res.nodes[0],
+        uri: res.nodes[0].uri,
+      }, //TODO: set this to center
       pastNodes: [],
       nodes: res.nodes,
       inboxNodes: this.state.inboxNodes,
@@ -770,17 +728,107 @@ let Graph = React.createClass({
       })
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate: function(prevProps, prevState) {
     //TODO
     console.log('graph component did update')
-    this.state.graph.update(null, this.state)
-  
+    console.log(prevState)
+    console.log(this.state)
+
+    this.state.graph.update(null, prevState, this.state)
   },
 
   componentWillUnmount: function() {
     //TODO
     console.log('graph component will unmount')
     this.state.graph.destroy(null)
+  },
+
+  handleNodeClick: function(node) {
+    //TODO: change state- which will trigger D3 update
+    console.log('handle node click in react')
+    console.log(node)
+    if(node.uri == this.state.previewNode.uri) return
+    //self.disablePreview(node)
+    this.state.previewNode = {
+      node: node,
+      uri: node.uri
+    }
+    
+    this.setState(this.state)
+  },
+
+  handleDragEnd: function(node, distance, verticalOffset) {
+    console.log('handle drag end in react')
+    console.log(node)
+    console.log(distance)
+    console.log(verticalOffset)
+    if(node == this.state.centerNode.node){
+      if(distance < 40){
+        this.showChat()
+      } else if(verticalOffset < STYLES.height / 3 ) {
+        // perspective node can be dragged into inbox (top of screen)
+        this.addNodeToInbox(node)
+      }
+    } else {
+      // surrounding nodes can be dragged into focus (center of screen)
+      if( Util.distance(node.x,
+                    node.y,
+                    STYLES.width / 2,
+                    STYLES.height / 2 )
+          < STYLES.width * (3/8)){
+
+        let target = this.state.nodes.filter((n) => n.uri == node.uri)[0]
+        let newCenter = {
+          node: target,
+          uri: target.uri
+        }
+
+        let newPreview = {
+          node: target,
+          uri: target.uri
+        }
+        let state = {
+          graph: this.state.graph,
+          centerNode: newCenter,
+          previewNode: newPreview,
+          pastNodes: this.state.pastNodes,
+          nodes: this.state.nodes,
+          inboxNodes: this.state.inboxNodes,
+          links: this.state.links,
+          literals: this.state.literals,
+          chatOpen: this.state.chatOpen,
+          inboxOpen: this.state.inboxOpen,
+          plusDrawerOpen: this.state.plusDrawerOpen,
+        }
+        this.setState(state)
+      }
+    }
+
+    //self.closeInbox()
+  },
+
+  handleLongTap: function(distance) {
+    console.log('handle long tap in react')
+    console.log(distance)
+    if(distance > 40){
+      console.log('opening inbox...')
+      let state = {
+        graph: this.state.graph,
+        centerNode: this.state.centerNode,
+        previewNode: this.state.previewNode,
+        pastNodes: this.state.pastNodes,
+        nodes: this.state.nodes,
+        inboxNodes: this.state.inboxNodes,
+        links: this.state.links,
+        literals: this.state.literals,
+        chatOpen: this.state.chatOpen,
+        inboxOpen: true,
+        plusDrawerOpen: this.state.plusDrawerOpen,
+      }
+
+      this.setState(state)
+      console.log('inbox opened.')
+    }
   },
 
   addNode: function(node) {
@@ -806,7 +854,7 @@ let Graph = React.createClass({
       this.enrich(node, fullNode)
     }
     let link = { source: node,
-             target: this.state.graph.thePerspective.node }
+             target: this.state.centerNode.node }
   
     //TODO: consider moving this directly under state
     this.state.graph.newNodeURI = node.uri // remember the URI so we can light the node up on init
@@ -816,6 +864,8 @@ let Graph = React.createClass({
 
     let state = {
       graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
       pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
@@ -834,6 +884,8 @@ let Graph = React.createClass({
     console.log('show chat')
     let state = {
       graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
       pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
@@ -930,6 +982,8 @@ let Graph = React.createClass({
     console.log('hideChat')
     let state = {
       graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
       pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
@@ -947,6 +1001,8 @@ let Graph = React.createClass({
     console.log('togglePlusDrawer')
     let state = {
       graph: this.state.graph,
+      centerNode: this.state.centerNode,
+      previewNode: this.state.previewNode,
       pastNodes: this.state.pastNodes,
       nodes: this.state.nodes,
       inboxNodes: this.state.inboxNodes,
