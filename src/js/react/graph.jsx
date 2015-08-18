@@ -871,14 +871,24 @@ let Graph = React.createClass({
     }
     if(node == undefined){
       node = fullNode
+      node.newNode = true
     } else {
       this.enrich(node, fullNode)
+      node.newNode = false
     }
     let link = { source: node,
              target: this.state.centerNode.node }
   
+    let p = null
+    if (node.newNode) {
+      console.log('creating a new one')
+      p = GraphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri) 
+    } else {
+      console.log('connecting existing node')
+      p = GraphAgent.connectNode(this.state.centerNode.uri, node.uri)
+    }
 
-    GraphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri).then(() => {
+    p.then(() => {
       
         this.state.links.push(link)
         this.state.nodes.push(node)
