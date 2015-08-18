@@ -1,4 +1,5 @@
 import React from 'react/addons'
+import TimerMixin from 'react-timer-mixin'
 import N3 from 'n3'
 import WebAgent from '../lib/web-agent.js'
 import Util from '../lib/util.js'
@@ -7,6 +8,7 @@ import {DC, RDF, SIOC} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
 
+const CHAT_RELOAD_INTERVAL = 4000 // 4 seconds
 
 let Message = React.createClass({
   render: function() {
@@ -23,7 +25,7 @@ let Message = React.createClass({
 })
 
 let Chat = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [React.addons.LinkedStateMixin, TimerMixin],
 
   getInitialState: function() {
     return {
@@ -98,10 +100,24 @@ let Chat = React.createClass({
   },
 
   componentDidMount: function() {
-    //TODO: 
-    // - load messages
-    // - initialize ticker for reloading
 
+    // initialize interval for reloading
+    this.setInterval(() => {
+      console.log('tick...')
+      this._loadMessages(this.state.origin)
+        .then((messages) => {
+          let state = {
+            messages: messages,
+            currentMessage: this.state.currentMessage,
+            topic: this.state.topic,
+            origin: this.state.origin,
+            identity: this.state.identity
+          }
+          this.setState(state)
+        })
+    }, CHAT_RELOAD_INTERVAL)
+
+    // initial message loading
     this._loadMessages(this.state.origin)
       .then((messages) => {
         let state = {
