@@ -24,3 +24,9 @@ const rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 export const RDF = {
   type:`${rdf}type`
 }
+
+const sioc = 'http://rdfs.org/sioc/ns#'
+export const SIOC = {
+  containerOf:`${sioc}container_of`,
+  hasContainer: `${sioc}has_container`
+}

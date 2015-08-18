@@ -406,7 +406,6 @@ class GraphD3 {
   triggerLongTap() {
     let self = this
     return function (){
-      console.log("longtap triggered (by timeout)")
       if(!self.drag.active) return // drag event stopped before timeout expired
       self.handleLongTap(self.drag.distance())
     }
@@ -416,7 +415,6 @@ class GraphD3 {
     let self = this
     return function (d){
       self.tapStart()()
-      console.log("dragStart")
       console.log(d3.event)
       //if(d3.event.sourceEvent.touches){
         self.drag.active = true
@@ -438,7 +436,6 @@ class GraphD3 {
   forceDragMove(centerNode) {
     let self = this
     return function (d){
-      console.log("dragmove")
       if(d == centerNode.node){ // center node grabbed
         self.drag.nowPos.x = d3.event.sourceEvent.pageX
         self.drag.nowPos.y = d3.event.sourceEvent.pageY
@@ -456,7 +453,6 @@ class GraphD3 {
   	  .data(nodes, (d) => d.uri)
 
     return function (d){
-      console.log("dragEnd")
       console.log(d3.event)
       self.drag.active = false
       if(self.tapEnd()() || d3.event.defaultPrevented){
@@ -505,7 +501,6 @@ class GraphD3 {
 
 
   animateNode(d, x, y) {
-    console.log('animate node')
     console.log(d)
     // http://stackoverflow.com/questions/19931383/animating-elements-in-d3-js
     d3.select(d).transition().duration(1000)
@@ -539,18 +534,10 @@ class GraphD3 {
     }
 
     if (oldCenter.node != newCenter.node) {
-      console.log('Change center from: ')
-      console.log(oldCenter)
-      console.log('to: ')
-      console.log(newCenter)
-
-      console.log('change center')
       // update center perspective
       { // treat old center & update node history
         let oldCenterDom = this.getDomNode(domNodes, oldCenter)
 
-        console.log('old center')
-        console.log(oldCenter)
         oldCenterDom
           .select("circle")
           .style("fill", STYLES.lightBlueColor)
@@ -697,8 +684,6 @@ let Graph = React.createClass({
 
   // returns altered state
   _changeCenter: function(center, newData) {
-    console.log('drawing graph')
-
 	  let res = {
       nodes: this.state.nodes,
       links: this.state.links,
@@ -745,17 +730,14 @@ let Graph = React.createClass({
 
   //TODO: has to fetch uri and all the uri's objects, if they're not in the same doc
   centerAtURI: function(uri) {
-    console.log('should only crawl if the uri is external')
+    // should only crawl if the uri is external(?)
 
-    console.log('center at uri')
-    console.log(uri)
     if (this.state.centerNode) {
       let thisUrl = url.parse(uri)
       let prevUrl = url.parse(this.state.centerNode.uri)
 
       // Same document - no need to refetch
       if (`${thisUrl.host}${thisUrl.path}` == `${prevUrl.host}${prevUrl.path}`) {
-        console.log('in the same doc')
         let newState = this._changeCenter(uri)
         this.setState(newState)
         return
@@ -771,9 +753,6 @@ let Graph = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log('graph component did mount')
-    console.log(this.state)
-
     // Initialize d3 graph
     this.state.graph.create(null, this.props, this.state)
 
@@ -781,29 +760,18 @@ let Graph = React.createClass({
   },
 
   componentWillUpdate: function(nextProps, nextState) {
-    console.log('graph component will update')
-    console.log(this.state)
-    console.log(nextState)
-
     nextState.graph.beforeUpdate(null, this.state, nextState)
   },
 
   componentDidUpdate: function(prevProps, prevState) {
-    console.log('graph component did update')
-    console.log(prevState)
-    console.log(this.state)
-
     this.state.graph.update(null, prevState, this.state)
   },
 
   componentWillUnmount: function() {
-    console.log('graph component will unmount')
     this.state.graph.destroy(null)
   },
 
   handleNodeClick: function(node) {
-    console.log('handle node click in react')
-    console.log(node)
     if(node.uri == this.state.previewNode.uri) return
     this.state.previewNode = {
       node: node,
@@ -814,7 +782,6 @@ let Graph = React.createClass({
   },
 
   handleDragEnd: function(node, distance, verticalOffset) {
-    console.log('handle drag end in react')
     if(node == this.state.centerNode.node){
       if(distance < 40){
         this.showChat()
@@ -865,10 +832,7 @@ let Graph = React.createClass({
   },
 
   handleLongTap: function(distance) {
-    console.log('handle long tap in react')
-    console.log(distance)
     if(distance > 40){
-      console.log('opening inbox...')
       let state = {
         graph: this.state.graph,
         centerNode: this.state.centerNode,
@@ -885,7 +849,6 @@ let Graph = React.createClass({
       }
 
       this.setState(state)
-      console.log('inbox opened.')
     }
   },
 
@@ -914,32 +877,35 @@ let Graph = React.createClass({
     let link = { source: node,
              target: this.state.centerNode.node }
   
-    this.state.links.push(link)
-    this.state.nodes.push(node)
 
-    //TODO: connect node in database
+    GraphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri).then(() => {
+      
+        this.state.links.push(link)
+        this.state.nodes.push(node)
 
-    let state = {
-      graph: this.state.graph,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      inboxCount: this.state.inboxCount,
-      historyNodes: this.state.historyNodes,
-      newNodeURI: node.uri,  // will lit up on GraphD3 update
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: this.state.chatOpen,
-      inboxOpen: this.state.inboxOpen,
-      plusDrawerOpen: this.state.plusDrawerOpen,
-    }
+        //TODO: connect node in database
 
-    this.setState(state)
+        let state = {
+          graph: this.state.graph,
+          centerNode: this.state.centerNode,
+          previewNode: this.state.previewNode,
+          nodes: this.state.nodes,
+          inboxNodes: this.state.inboxNodes,
+          inboxCount: this.state.inboxCount,
+          historyNodes: this.state.historyNodes,
+          newNodeURI: node.uri,  // will lit up on GraphD3 update
+          links: this.state.links,
+          literals: this.state.literals,
+          chatOpen: this.state.chatOpen,
+          inboxOpen: this.state.inboxOpen,
+          plusDrawerOpen: this.state.plusDrawerOpen,
+        }
+
+        this.setState(state)
+      })
   },
 
   showChat: function() {
-    console.log('show chat')
     let state = {
       graph: this.state.graph,
       centerNode: this.state.centerNode,
@@ -958,7 +924,6 @@ let Graph = React.createClass({
   },
 
   addNodeToInbox: function(d) {
-    console.log('addNodeToInbox')
 
     // FIXME: not guaranteed to be unique
     if (this.state.inboxNodes.filter((n) => n.name && n.name == d.name).length != 0) {
@@ -981,8 +946,6 @@ let Graph = React.createClass({
       inboxOpen: this.state.inboxOpen,
       plusDrawerOpen: this.state.plusDrawerOpen,
     }
-    console.log(d)
-    console.log(this.state.inboxNodes)
     this.setState(state)
   },
 
@@ -1033,7 +996,6 @@ let Graph = React.createClass({
   },
   
   hideChat: function(e) {
-    console.log('hideChat')
     let state = {
       graph: this.state.graph,
       centerNode: this.state.centerNode,
@@ -1053,7 +1015,6 @@ let Graph = React.createClass({
   },
 
   togglePlusDrawer: function(e) {
-    console.log('togglePlusDrawer')
     let state = {
       graph: this.state.graph,
       centerNode: this.state.centerNode,
@@ -1073,7 +1034,6 @@ let Graph = React.createClass({
   },
 
   openInbox: function(e) {
-    console.log('openInbox')
     let state = {
       graph: this.state.graph,
       centerNode: this.state.centerNode,
@@ -1093,7 +1053,6 @@ let Graph = React.createClass({
   },
 
   closeInbox: function(e) {
-    console.log('closeInbox')
     let state = {
       graph: this.state.graph,
       centerNode: this.state.centerNode,

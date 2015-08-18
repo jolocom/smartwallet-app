@@ -4,6 +4,8 @@ import N3 from 'n3'
 import WebAgent from '../lib/web-agent.js'
 import {CERT, FOAF} from '../lib/namespaces.js'
 
+//TODO: rewrite with promisified reader and parser
+
 let N3Util = N3.Util
 
 let Profile = React.createClass({
@@ -93,7 +95,7 @@ let Profile = React.createClass({
     // subject which represents our profile
     console.log('saving profile')
     console.log(this.state)
-    let writer = N3.Writer({prefixes: this.state.prefixes})
+    let writer = N3.Writer({format: 'N-Triples', prefixes: this.state.prefixes})
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t)
     }
