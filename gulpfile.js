@@ -1,5 +1,4 @@
 var browserify = require('gulp-browserify');
-var browserSync = require('browser-sync').create();
 var concat = require('gulp-concat');
 var del = require('del');
 var gulp = require('gulp');
@@ -48,8 +47,7 @@ gulp.task('lib-css', function() {
 
 gulp.task('lib-fonts', function() {
   return gulp.src(sources.libFonts)
-    .pipe(gulp.dest(destinations.fonts))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(gulp.dest(destinations.fonts));
 });
 
 gulp.task('scripts', function() {
@@ -59,15 +57,13 @@ gulp.task('scripts', function() {
       debug: true
     }))
     .pipe(rename('app.js'))
-    .pipe(gulp.dest(destinations.js))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(gulp.dest(destinations.js));
 });
 
 
 gulp.task('html', function() {
   return gulp.src(sources.html)
-    .pipe(gulp.dest(destinations.root))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(gulp.dest(destinations.root));
 });
 
 gulp.task('data', function() {
@@ -83,25 +79,17 @@ gulp.task('img', function() {
 gulp.task('sass', function () {
   return gulp.src(sources.sass)
     .pipe(sass())
-    .pipe(gulp.dest(destinations.css))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(gulp.dest(destinations.css));
 });
 
 gulp.task('clean', function () {
   return gulp.src('./dist/*').pipe(vinylPaths(del));
 });
 
-gulp.task('serve', function() {
-  browserSync.init(
-    {
-      server: {
-        baseDir: './dist'
-      }
-    }
-  );
+gulp.task('watch', function() {
   gulp.watch(sources.js, ['scripts']);
   gulp.watch(sources.html, ['html']);
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['img', 'data', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'serve']));
+gulp.task('default', gulpsync.sync(['clean', ['img', 'data', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));
