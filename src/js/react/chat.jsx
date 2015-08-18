@@ -87,13 +87,14 @@ let Chat = React.createClass({
           msgs.push({
             id: subj,
             author: authors[0],
-            content: contents[0],
+            content: N3Util.getLiteralValue(contents[0]),
             reply: (replies != undefined && replies.length != 0) ? replies[0] : null,
             created: timestamps[0]
           })
         }
-
-        //TODO: sort by reply chain?
+        
+        // sort messages by timestamps
+        msgs.sort((a, b) => new Date(a.created) - new Date(b.created))
 
         return msgs
       })
