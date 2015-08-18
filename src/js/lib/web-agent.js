@@ -1,11 +1,12 @@
 // Server interaction logic
 class WebAgent {
+
   // GET a resource represented by url
   //
   // @param {string} url resource url
   //
   // @return {Promise} promise with resulting xhr
-  get(url, headers={'Accept': 'application/n-triples'}) {
+  static get(url, headers={'Accept': 'application/n-triples'}) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest()
       xhr.withCredentials = true
@@ -37,7 +38,7 @@ class WebAgent {
   // @param {string} body replacement object
   //
   // @return {Promise} promise with resulting xhr
-  put(url, headers, body) {
+  static put(url, headers, body) {
     return new Promise((resolve, reject) => {
       // TODO: implement
       let xhr = new XMLHttpRequest()
@@ -69,7 +70,7 @@ class WebAgent {
   // @param {string} url resource url
   //
   // @return {Promise} promise with resulting xhr
-  head(url) {
+  static head(url) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest()
       xhr.withCredentials = true

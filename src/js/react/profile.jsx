@@ -5,7 +5,6 @@ import WebAgent from '../lib/web-agent.js'
 import {CERT, FOAF} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
-let agent = new WebAgent()
 
 let Profile = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -50,10 +49,9 @@ let Profile = React.createClass({
   // change state from triples
   _profileDocumentLoaded: function (webid, triples, prefixes) {
     // subject which represents our profile
-    let profile = url.parse(webid).hash
 
     // everything's fixed but name and email
-    let fixedTriples = triples.filter((t) => !(t.subject == profile && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
+    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
 
     let state = {
       edit: this.state.edit,
@@ -70,7 +68,7 @@ let Profile = React.createClass({
 
 
     // triples which describe profile
-    let relevant = triples.filter((t) => t.subject == profile) 
+    let relevant = triples.filter((t) => t.subject == webid) 
 
     for (var t of relevant){
       if (t.predicate == FOAF.name) {
@@ -93,8 +91,6 @@ let Profile = React.createClass({
 
   _saveProfile: function () {
     // subject which represents our profile
-    let profile = url.parse(this.state.webid).hash
-
     console.log('saving profile')
     console.log(this.state)
     let writer = N3.Writer({prefixes: this.state.prefixes})
@@ -103,12 +99,12 @@ let Profile = React.createClass({
     }
 
     writer.addTriple({
-      subject: profile,
+      subject: this.state.webid,
       predicate: FOAF.name,
       object: N3Util.createLiteral(this.state.name)
     })
     writer.addTriple({
-      subject: profile,
+      subject: this.state.webid,
       predicate: FOAF.mbox,
       object: N3Util.createIRI(this.state.email)
     })
@@ -116,7 +112,7 @@ let Profile = React.createClass({
     writer.end((err, res) => {
       if (res) {
         console.log('here')
-        agent.put(this.state.webid, {'Content-Type': 'text/turtle'}, res)
+        WebAgent.put(this.state.webid, {'Content-Type': 'application/n-triples'}, res)
           .then((res) => {
             console.log('success updated profile')
             console.log(res)
@@ -157,14 +153,14 @@ let Profile = React.createClass({
     var webid = null
 
     // who am I? (check "User" header)
-    agent.head(document.location.origin)
+    WebAgent.head(document.location.origin)
       .then((xhr) => {
         console.log('head')
         console.log(xhr)
         webid = xhr.getResponseHeader('User')
 
         // now get my profile document
-        return agent.get(webid)
+        return WebAgent.get(webid)
       })
       .then((xhr) => {
         // parse profile document from text
@@ -173,7 +169,10 @@ let Profile = React.createClass({
         parser.parse(xhr.response, (err, triple, prefixes) => {
           if (triple) {
             triples.push(triple)
+            console.log('triple')
+            console.log(triple)
           } else {
+            console.log('prefixes')
             // render relevant information in UI
             this._profileDocumentLoaded(webid, triples, prefixes)
           }

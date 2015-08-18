@@ -22,8 +22,6 @@ d3.selection.prototype.moveToFront = function() {
 }
 
 
-let agent = new WebAgent()
-
 class Util {
   static stringLessThan(s1, s2){
     if(s1 < s2) return true
@@ -746,7 +744,7 @@ let Graph = React.createClass({
     let webid = null
 
     // who am I? (check "User" header)
-    agent.head(document.location.origin)
+    WebAgent.head(document.location.origin)
       .then((xhr) => {
         console.log('head')
         console.log(xhr)
@@ -776,7 +774,7 @@ let Graph = React.createClass({
       }
     }
 
-    return agent.get(uri)
+    return WebAgent.get(uri)
       .then((xhr) => {
         // parse profile document from text
         let triples = []
