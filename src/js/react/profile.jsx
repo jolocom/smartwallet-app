@@ -169,10 +169,7 @@ let Profile = React.createClass({
         parser.parse(xhr.response, (err, triple, prefixes) => {
           if (triple) {
             triples.push(triple)
-            console.log('triple')
-            console.log(triple)
           } else {
-            console.log('prefixes')
             // render relevant information in UI
             this._profileDocumentLoaded(webid, triples, prefixes)
           }
