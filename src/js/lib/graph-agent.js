@@ -3,6 +3,7 @@ import D3Converter from './d3-converter.js'
 import WebAgent from './web-agent.js'
 import {DC, SIOC} from './namespaces.js'
 import {Parser, Writer} from './rdf.js'
+import Util from './util.js'
 
 //TODO: this should eventually be replaced with user's workspace
 const DEST_CONTAINER = document.location.origin + "/misc/"
@@ -12,15 +13,6 @@ let N3Util = N3.Util
 
 // abstraction of WebAgent for graph purposes
 class GraphAgent {
-
-  // random slug generation
-  static slugify(from) {
-    // random 5 character string
-    let slug = Math.random().toString(36).substring(2, 8)
-    slug = from.split(' ')[0] + slug
-    return slug
-  }
-
   // Post a new node to a container
   //
   // @param {string} title title of the new node.
@@ -116,7 +108,9 @@ class GraphAgent {
   //
   // @return {Promise} promise with the result (TODO: what result)?
   static createAndConnectNode(title, description, dstUrl, dstContainer=DEST_CONTAINER) {
-    let slug = GraphAgent.slugify(title)
+    // TODO: should we have non-random slugs?
+
+    let slug = Util.randomString(5)
     let newNodeUrl = `${dstContainer}${slug}#${title.split(' ')[0].toLowerCase()}`
     console.log('create and connect node')
     return GraphAgent.createNode(title, description, newNodeUrl, slug)

@@ -5,6 +5,7 @@ import React from 'react/addons'
 import d3 from 'd3'
 import url from 'url'
 
+import Util from '../lib/util.js'
 import GraphAgent from '../lib/graph-agent.js'
 
 import STYLES from './styles.js'
@@ -18,28 +19,6 @@ d3.selection.prototype.moveToFront = function() {
   })
 }
 
-
-class Util {
-  static stringLessThan(s1, s2){
-    if(s1 < s2) return true
-    return false
-  }
-  
-  static stringMin(s1, s2){
-    if(Util.stringLessThan(s1, s2)) return s1
-    return s2
-  }
-  
-  static stringMax(s1, s2){
-    if(Util.stringLessThan(s1, s2)) return s2
-    return s1
-  }
-  
-  static distance(x1, y1, x2, y2){
-    return Math.sqrt(Math.pow((x1 - x2), 2) +
-                     Math.pow((y1 - y2), 2))
-  }
-}
 
 class GraphD3 {
 
@@ -667,6 +646,7 @@ let Graph = React.createClass({
   getInitialState: function() {
     return {
       graph: new GraphD3(null, null, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap),
+      identity: null,
       centerNode: null,
       previewNode: null,
       nodes: [],
@@ -697,6 +677,7 @@ let Graph = React.createClass({
 
     let state = {
       graph: this.state.graph,
+      identity: this.state.identity,
       centerNode: {
         node: cn,
         uri: cn.uri,
@@ -723,6 +704,7 @@ let Graph = React.createClass({
     // render relevant information in UI
     GraphAgent.fetchWebIdAndConvert().then((d3graph) => {
       let newState = this._changeCenter(d3graph.center, d3graph)
+      newState.identity = d3graph.center
       this.setState(newState)
     })
   },
@@ -794,24 +776,6 @@ let Graph = React.createClass({
 
         let targetUri = this.state.nodes.filter((n) => n.uri == node.uri)[0].uri
         this.centerAtURI(targetUri)
-        //state.historyNodes = this.state.historyNodes
-
-        // fetch new graph here
-        //let state = {
-          //graph: this.state.graph,
-          //centerNode: newCenter,
-          //previewNode: newPreview,
-          //nodes: this.state.nodes,
-          //inboxNodes: this.state.inboxNodes,
-          //inboxCount: this.state.inboxCount,
-          //historyNodes: this.state.historyNodes,
-          //links: this.state.links,
-          //literals: this.state.literals,
-          //chatOpen: this.state.chatOpen,
-          //inboxOpen: this.state.inboxOpen,
-          //plusDrawerOpen: this.state.plusDrawerOpen,
-        //}
-        //this.setState(state)
       }
     }
 
@@ -822,6 +786,7 @@ let Graph = React.createClass({
     if(distance > 40){
       let state = {
         graph: this.state.graph,
+        identity: this.state.identity,
         centerNode: this.state.centerNode,
         previewNode: this.state.previewNode,
         nodes: this.state.nodes,
@@ -880,6 +845,7 @@ let Graph = React.createClass({
 
         let state = {
           graph: this.state.graph,
+          identity: this.state.identity,
           centerNode: this.state.centerNode,
           previewNode: this.state.previewNode,
           nodes: this.state.nodes,
@@ -901,6 +867,7 @@ let Graph = React.createClass({
   showChat: function() {
     let state = {
       graph: this.state.graph,
+      identity: this.state.identity,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
@@ -927,6 +894,7 @@ let Graph = React.createClass({
     this.state.inboxNodes.push(d)
     let state = {
       graph: this.state.graph,
+      identity: this.state.identity,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
@@ -970,6 +938,7 @@ let Graph = React.createClass({
   hideChat: function(e) {
     let state = {
       graph: this.state.graph,
+      identity: this.state.identity,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
@@ -989,6 +958,7 @@ let Graph = React.createClass({
   togglePlusDrawer: function(e) {
     let state = {
       graph: this.state.graph,
+      identity: this.state.identity,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
@@ -1008,6 +978,7 @@ let Graph = React.createClass({
   openInbox: function(e) {
     let state = {
       graph: this.state.graph,
+      identity: this.state.identity,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
@@ -1027,6 +998,7 @@ let Graph = React.createClass({
   closeInbox: function(e) {
     let state = {
       graph: this.state.graph,
+      identity: this.state.identity,
       centerNode: this.state.centerNode,
       previewNode: this.state.previewNode,
       nodes: this.state.nodes,
@@ -1063,7 +1035,7 @@ let Graph = React.createClass({
             <div id="chart"/>
           </div>
         </div>
-        { this.state.chatOpen ? <Chat graph={this.state.graph} hide={this.hideChat}/> : ""}
+        { this.state.chatOpen ? <Chat identity={this.state.identity} topic={this.state.centerNode.uri} origin={this.state.centerNode.uri} graph={this.state.graph} hide={this.hideChat}/> : ""}
       </div>
    )
   }

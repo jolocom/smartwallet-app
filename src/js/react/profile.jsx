@@ -154,7 +154,6 @@ let Profile = React.createClass({
       })
       .then((xhr) => {
         // parse profile document from text
-        let triples = []
         let parser = new Parser()
         return parser.parse(xhr.response)
       })
