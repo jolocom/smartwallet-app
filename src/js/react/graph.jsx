@@ -684,14 +684,13 @@ let Graph = React.createClass({
 
   // returns altered state
   _changeCenter: function(center, newData) {
+    console.log('change center to: ')
+    console.log(center)
+    let dataSource = newData ? newData : this.state
 	  let res = {
-      nodes: this.state.nodes,
-      links: this.state.links,
-      literals: this.state.literals
-    }
-
-    if (newData) {
-      res = this.mergeGraphs(newData.nodes, newData.links, newData.literals)
+      nodes: dataSource.nodes,
+      links: dataSource.links,
+      literals: dataSource.literals
     }
 
     let cn = res.nodes.filter((n) => n.uri == center)[0]
@@ -730,19 +729,7 @@ let Graph = React.createClass({
 
   //TODO: has to fetch uri and all the uri's objects, if they're not in the same doc
   centerAtURI: function(uri) {
-    // should only crawl if the uri is external(?)
-
-    if (this.state.centerNode) {
-      let thisUrl = url.parse(uri)
-      let prevUrl = url.parse(this.state.centerNode.uri)
-
-      // Same document - no need to refetch
-      if (`${thisUrl.host}${thisUrl.path}` == `${prevUrl.host}${prevUrl.path}`) {
-        let newState = this._changeCenter(uri)
-        this.setState(newState)
-        return
-      }
-    }
+    //TODO: should only crawl if the uri is external(?)
 
     // render relevant information in UI
     GraphAgent.fetchAndConvert(uri)
@@ -869,13 +856,9 @@ let Graph = React.createClass({
       x: undefined, //539.9499633771337,
       y: undefined, //960.2001464914653
     }
-    if(node == undefined){
-      node = fullNode
-      node.newNode = true
-    } else {
-      this.enrich(node, fullNode)
-      node.newNode = false
-    }
+
+    this.enrich(node, fullNode)
+
     let link = { source: node,
              target: this.state.centerNode.node }
   
@@ -962,31 +945,10 @@ let Graph = React.createClass({
   enrich: function (less, more){
     // add any missing keys of `more` to `less`
     for(var k in more){
-      if((more.hasOwnProperty(k)) && (less[ k ] == undefined)){
-        less[ k ] = more[ k ]
+      if((more.hasOwnProperty(k)) && (less[k] == undefined)){
+        less[k] = more[k]
       }
     }
-  },
-
-  mergeGraphs: function(newNodes, newLinks, newLiterals) {
-    console.log('merging')
-    let sIdx, tIdx
-  	for(var i in newLinks){
-  		sIdx = newLinks[i].source
-  		tIdx = newLinks[i].target
-      // add if source does not exist
-  		if(this.state.nodes.indexOf(newNodes[sIdx]) == -1){
-  			this.state.nodes.push(newNodes[sIdx])
-  		}
-  		newLinks[i].source = this.state.nodes.indexOf(newNodes[sIdx])
-      // add if target does not exist
-  		if(this.state.nodes.indexOf(newNodes[tIdx]) == -1){
-  			this.state.nodes.push(newNodes[tIdx])
-  		}
-  		newLinks[i].target = this.state.nodes.indexOf(newNodes[tIdx])
-  		this.state.links.push(newLinks[i])
-  	}
-    return { nodes: this.state.nodes, links: this.state.links, literals: newLiterals }
   },
 
   arrangeNodesInACircle: function(nodes) {

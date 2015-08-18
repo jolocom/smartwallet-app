@@ -24,7 +24,8 @@ let PlusDrawer = React.createClass({
     this.props.toggle()
     this.props.addNodeToInbox({ 
       title: this.state.title,
-      description: this.state.description 
+      description: this.state.description,
+      newNode: true
     })
   },
 
@@ -32,7 +33,8 @@ let PlusDrawer = React.createClass({
     console.log(this.state)
     this.props.addNode({ 
       title: this.state.title,
-      description: this.state.description 
+      description: this.state.description,
+      newNode: true
     })
     this.props.toggle()
   },
