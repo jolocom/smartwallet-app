@@ -123,6 +123,7 @@ class D3Converter {
     }
 
     return {
+      center: center,
       nodes: nodes,
       links: links,
       literals: literals

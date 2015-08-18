@@ -2,15 +2,12 @@
 
 import React from 'react/addons'
 
-import N3 from 'n3'
 import d3 from 'd3'
 import url from 'url'
 
-import D3Converter from '../lib/d3-converter.js'
-import WebAgent from '../lib/web-agent.js'
+import GraphAgent from '../lib/graph-agent.js'
 
 import STYLES from './styles.js'
-
 import Chat from './chat.jsx'
 import {Inbox, InboxCounter} from './inbox.jsx'
 import PlusDrawer from './plus-drawer.jsx'
@@ -39,8 +36,8 @@ class Util {
   }
   
   static distance(x1, y1, x2, y2){
-    return Math.sqrt(Math.pow(( x1 - x2 ), 2 ) +
-                     Math.pow(( y1 - y2 ), 2 ))
+    return Math.sqrt(Math.pow((x1 - x2), 2) +
+                     Math.pow((y1 - y2), 2))
   }
 }
 
@@ -60,10 +57,10 @@ class GraphD3 {
       startPos: {},
       nowPos: {},
       distance: () => {
-        return Util.distance( this.drag.startPos.x,
+        return Util.distance(this.drag.startPos.x,
                          this.drag.startPos.y,
                          this.drag.nowPos.x,
-                         this.drag.nowPos.y )
+                         this.drag.nowPos.y)
       }
     }
 
@@ -73,7 +70,6 @@ class GraphD3 {
   }
 
   create(el, props, state) {
-    // TODO: how many height/width vars do we have?
     this.w = document.getElementById("chart").offsetWidth
     this.h = document.getElementById("chart").offsetHeight
 
@@ -92,12 +88,12 @@ class GraphD3 {
       .attr('fill', 'white')
 
     //background circle
-    svg.append( "svg:circle" )
-      .attr( "class", "plate" )
-      .attr( "cx", STYLES.width * 0.5 )
-      .attr( "cy", STYLES.height * 0.5)
-      .attr( "r", STYLES.width * 0.3 )
-      .style( "fill", STYLES.lightGrayColor )
+    svg.append("svg:circle")
+      .attr("class", "plate")
+      .attr("cx", STYLES.width * 0.5)
+      .attr("cy", STYLES.height * 0.5)
+      .attr("r", STYLES.width * 0.3)
+      .style("fill", STYLES.lightGrayColor)
 
 
     // `base` only needs to run once
@@ -106,14 +102,14 @@ class GraphD3 {
       .nodes(state.nodes)
   	  .links(state.links)
   	  .gravity(0.2)
-  	  .charge( STYLES.width * -14)
-  	  .linkDistance( STYLES.width / 3 )
+  	  .charge(STYLES.width * -14)
+  	  .linkDistance(STYLES.width / 3)
   	  .size([this.w, this.h])
       .start()
 
 
     //group links (so they don't overlap nodes)
-    svg.append( "g" ).attr( "class", "link_group")
+    svg.append("g").attr("class", "link_group")
   }
 
   // Invoked in "componentDidUpdate" of react graph
@@ -145,13 +141,13 @@ class GraphD3 {
       .append("svg:g").attr("class", "link")
   	  .call(this.force.drag)
   
-    console.log( "NEW LINKS", linkNew[0].length )
+    console.log("NEW LINKS", linkNew[0].length)
   
     // add line
   	linkNew.append("svg:line")
   	  .attr("class", "link")
-      .attr("stroke-width", STYLES.width / 45 )
-  	  .attr("stroke", STYLES.lightGrayColor ) //TODO(philipp) reverse
+      .attr("stroke-width", STYLES.width / 45)
+  	  .attr("stroke", STYLES.lightGrayColor)
   	  .attr("x1", (d) => d.x1)
   	  .attr("y1", (d) => d.y1)
   	  .attr("x2", (d) => d.x1)
@@ -159,8 +155,8 @@ class GraphD3 {
   
     // remove old links
     let linkOld = link.exit()
-    console.log( "OLD LINKS", linkOld[0].length )
-    linkOld.transition().duration(2000).style("opacity", 0 ).remove()
+    console.log("OLD LINKS", linkOld[0].length)
+    linkOld.transition().duration(2000).style("opacity", 0).remove()
   
     // --------------------------------------------------------------------------------
     // nodes
@@ -172,13 +168,13 @@ class GraphD3 {
   	  .attr("class", "node")
   	  .attr("dx", "80px")
   	  .attr("dy", "80px")
-      .call( this.force.drag )
+      .call(this.force.drag)
   
-    nodeNew.style( "opacity", 0 )
+    nodeNew.style("opacity", 0)
       .transition()
-      .style( "opacity", 1 )
+      .style("opacity", 1)
   
-    console.log( "NEW NODES", nodeNew[0].length )
+    console.log("NEW NODES", nodeNew[0].length)
   
     // add circle
   	nodeNew.filter((d) => d.type == "uri")
@@ -191,23 +187,23 @@ class GraphD3 {
   	  .attr("height", STYLES.smallNodeSize)
   	  .style("fill", STYLES.grayColor)
   	  .style("stroke", "white")
-      .style( "stroke-width", 0 )
+      .style("stroke-width", 0)
   
     // add title text (visible when not in preview)
   	let wrappedTitles = nodeNew.filter((d) => d.type == "bnode" || d.type == "uri")
       .append("svg:text")
   	  .attr("class", "nodetext")
-      .style( "fill", "#ffffff" )
-      .attr("text-anchor", "middle" )
+      .style("fill", "#ffffff")
+      .attr("text-anchor", "middle")
   	  .attr("dy", ".35em")
   	  .text((d) => d.title)
-      .call( this.wrap, STYLES.smallNodeSize * 0.9, "", "" ) // returns only wrapped titles, so we can push them up later
+      .call(this.wrap, STYLES.smallNodeSize * 0.9, "", "") // returns only wrapped titles, so we can push them up later
   
     // remove old nodes
     let nodeOld = node.exit()
-    console.log( "OLD NODES", nodeOld[0].length )
+    console.log("OLD NODES", nodeOld[0].length)
     nodeOld.transition()
-      .style("opacity", 0 )
+      .style("opacity", 0)
       .remove()
   
     // NB(philipp): on init, the `fixed`-attribute of nodes is cleared
@@ -219,28 +215,28 @@ class GraphD3 {
     this.changeCenter(node, prevState.centerNode, state.centerNode, state.historyNodes)
 
     { // init history
-      if( state.historyNodes.length > 0 ){
-        let lastStep = state.nodes.filter( (d) => {
+      if(state.historyNodes.length > 0){
+        let lastStep = state.nodes.filter((d) => {
           return d.uri == state.historyNodes[state.historyNodes.length - 1].uri })[0]
         lastStep.fixed = true
-        this.animateNode( lastStep,
+        this.animateNode(lastStep,
                      STYLES.width / 2,
-                     STYLES.height * 4/5 )
+                     STYLES.height * 4/5)
       }
     }
   
     { // init new node, if applicable
-      if( state.newNodeURI !== undefined ){
+      if(state.newNodeURI !== undefined){
         let newNode = node.filter((d) => d.uri == state.newNodeURI)
-        if( newNode.length > 0 ){
+        if(newNode.length > 0){
           newNode
             .interrupt()
-            .style( "opacity", 1 )
-            .select( "circle" )
-            .style( "fill", STYLES.highLightColor )
+            .style("opacity", 1)
+            .select("circle")
+            .style("fill", STYLES.highLightColor)
           newNode
-            .transition().duration( 2000 )
-            .style( "fill", STYLES.grayColor )
+            .transition().duration(2000)
+            .style("fill", STYLES.grayColor)
         }
       }
     }
@@ -257,18 +253,18 @@ class GraphD3 {
       document.getElementsByTagName('body')[0].className = 'open-drawer'
       d3.select("#plus_drawer")
         .transition()
-        .style( "top", ( STYLES.height / 2 )+"px" )
+        .style("top", (STYLES.height / 2)+"px")
 
-      this.zoomTo( 0.5,
+      this.zoomTo(0.5,
                STYLES.width / 2,
                0)
     }
 
     //chat opening (closing is handled in "beforeUpdate")
     if (!prevState.chatOpen && state.chatOpen) {
-      d3.select( "#chat" )
+      d3.select("#chat")
         .transition()
-        .style( "top", ( STYLES.height / 3 )+ "px")
+        .style("top", (STYLES.height / 3)+ "px")
 
       this.zoomTo(0.5,
         STYLES.width / 2,
@@ -279,7 +275,7 @@ class GraphD3 {
     if (prevState.inboxCount == 0 && state.inboxCount == 1) {
       d3.select("#inbox .counter")
         .transition()
-        .style( "opacity", 1 )
+        .style("opacity", 1)
     }
 
     // Spring inbox whenever a node is added/removed
@@ -292,7 +288,7 @@ class GraphD3 {
 
       d3.select("#inbox")
         .transition()
-        .style( "right", size+"px" )
+        .style("right", size+"px")
     }
 
     // inbox opening (closing is handled in "beforeUpdate")
@@ -302,7 +298,7 @@ class GraphD3 {
                STYLES.height)
       //d3.select("#inbox")
         //.transition()
-        //.style( "right", (-STYLES.width / 2)+"px")
+        //.style("right", (-STYLES.width / 2)+"px")
     }
 
   
@@ -313,7 +309,7 @@ class GraphD3 {
   	this.force.on("tick", (e) => {
   	  ticks++
       // NOTE(philipp) uncomment this to 'freeze' graph while dragging
-  	  //if( drag.active ){ return }
+  	  //if(drag.active){ return }
   
       // NOTE(philipp): keep going even after 300+ ticks. rock on!
   		// if (ticks > 300) {
@@ -326,10 +322,10 @@ class GraphD3 {
   		// }
   
   		link.selectAll("line.link")
-        .attr("x1", (d) => d.source.x )
-  		  .attr("y1", (d) => d.source.y )
-  		  .attr("x2", (d) => d.target.x )
-  		  .attr("y2", (d) => d.target.y )
+        .attr("x1", (d) => d.source.x)
+  		  .attr("y1", (d) => d.source.y)
+  		  .attr("x2", (d) => d.target.x)
+  		  .attr("y2", (d) => d.target.y)
   
   		node
         .attr("transform", (d) => {
@@ -337,8 +333,8 @@ class GraphD3 {
           // (so they sit nicely on top & below the center perspective)
           let kx = 10 * e.alpha
           let ky = 4 * kx
-          d.x += (d.x < ( STYLES.width / 2 ))  ?( kx ):( -kx )
-          d.y += (d.y < ( STYLES.height / 2 )) ?( -ky ):( ky )
+          d.x += (d.x < (STYLES.width / 2))  ?(kx):(-kx)
+          d.y += (d.y < (STYLES.height / 2)) ?(-ky):(ky)
           return "translate(" + d.x + "," + d.y + ")"
         })
   	})
@@ -365,15 +361,15 @@ class GraphD3 {
       document.getElementsByTagName('body')[0].className = 'closed-drawer'
       d3.select("#plus_drawer")
         .transition()
-        .style( "top", STYLES.height+"px" )
+        .style("top", STYLES.height+"px")
       this.zoomReset()
     }
 
     //chat closing (opening is handled in "update")
     if (state.chatOpen && !nextState.chatOpen) {
-      d3.select( "#chat" )
+      d3.select("#chat")
         .transition()
-        .style( "top", STYLES.height + "px")
+        .style("top", STYLES.height + "px")
       this.zoomReset()
     }
 
@@ -399,7 +395,7 @@ class GraphD3 {
     let self = this
     return function() {
       self.taptimer.end = d3.event.sourceEvent.timeStamp
-      if(( self.taptimer.end - self.taptimer.start ) < 200 ){
+      if((self.taptimer.end - self.taptimer.start) < 200){
         return true
       }
       return false
@@ -410,8 +406,8 @@ class GraphD3 {
   triggerLongTap() {
     let self = this
     return function (){
-      console.log( "longtap triggered (by timeout)" )
-      if( !self.drag.active ) return // drag event stopped before timeout expired
+      console.log("longtap triggered (by timeout)")
+      if(!self.drag.active) return // drag event stopped before timeout expired
       self.handleLongTap(self.drag.distance())
     }
   } 
@@ -420,16 +416,16 @@ class GraphD3 {
     let self = this
     return function (d){
       self.tapStart()()
-      console.log( "dragStart" )
+      console.log("dragStart")
       console.log(d3.event)
       //if(d3.event.sourceEvent.touches){
         self.drag.active = true
         self.drag.startPos.x = self.drag.nowPos.x = d3.event.sourceEvent.pageX
         self.drag.startPos.y = self.drag.nowPos.y = d3.event.sourceEvent.pageY
         //drag.start = d3.event.sourceEvent.timeStamp
-        if( d.uri == centerNode.uri ){
+        if(d.uri == centerNode.uri){
           self.drag.onCenter = true
-          window.setTimeout( self.triggerLongTap(), 800 )
+          window.setTimeout(self.triggerLongTap(), 800)
         } else {
           self.drag.onCenter = false
         }
@@ -442,8 +438,8 @@ class GraphD3 {
   forceDragMove(centerNode) {
     let self = this
     return function (d){
-      console.log( "dragmove" )
-      if( d == centerNode.node ){ // center node grabbed
+      console.log("dragmove")
+      if(d == centerNode.node){ // center node grabbed
         self.drag.nowPos.x = d3.event.sourceEvent.pageX
         self.drag.nowPos.y = d3.event.sourceEvent.pageY
       } else {
@@ -460,10 +456,10 @@ class GraphD3 {
   	  .data(nodes, (d) => d.uri)
 
     return function (d){
-      console.log( "dragEnd" )
+      console.log("dragEnd")
       console.log(d3.event)
       self.drag.active = false
-      if( self.tapEnd()() || d3.event.defaultPrevented ){
+      if(self.tapEnd()() || d3.event.defaultPrevented){
         // this is a click
         return
       }
@@ -472,11 +468,11 @@ class GraphD3 {
 
       self.handleDragEnd(d, self.drag.distance(), y)
 
-      if( d == centerNode.node ){
+      if(d == centerNode.node){
         // reset node position
         d.x, d.px = STYLES.width / 2
         d.y, d.py = STYLES.height / 2
-        d3.select( this ).attr( "transform", (d) => "translate(" + d.x + "," + d.y + ")")
+        d3.select(this).attr("transform", (d) => "translate(" + d.x + "," + d.y + ")")
       }
     }
   } 
@@ -498,21 +494,21 @@ class GraphD3 {
   zoomTo(scale, x, y) {
     let svg = d3.select('#chart').select('svg').select('g')
     svg.transition()
-      .attr("transform", "scale( "+ scale + " ) translate(" + x + "," + y + ")")
+      .attr("transform", "scale("+ scale + ") translate(" + x + "," + y + ")")
   }
 
   zoomReset() {
     let svg = d3.select('#chart').select('svg').select('g')
     svg.transition()
-      .attr("transform", "scale( 1 ) translate( 0, 0 )" )
+      .attr("transform", "scale(1) translate(0, 0)")
   }
 
 
-  animateNode( d, x, y ) {
+  animateNode(d, x, y) {
     console.log('animate node')
     console.log(d)
     // http://stackoverflow.com/questions/19931383/animating-elements-in-d3-js
-    d3.select(d).transition().duration( 1000 )
+    d3.select(d).transition().duration(1000)
       .tween("x", () => {
         let i = d3.interpolate(d.x, x)
         return function(t) {
@@ -534,11 +530,11 @@ class GraphD3 {
       //initialization- no transition needed
       this.animateNode(newCenter.node,
                    STYLES.width / 2,
-                   STYLES.height / 2 )
+                   STYLES.height / 2)
 
       this.getDomNode(domNodes, newCenter)
-        .select( "circle" )
-        .style("fill", STYLES.blueColor )
+        .select("circle")
+        .style("fill", STYLES.blueColor)
       return
     }
 
@@ -556,12 +552,12 @@ class GraphD3 {
         console.log('old center')
         console.log(oldCenter)
         oldCenterDom
-          .select( "circle" )
-          .style( "fill", STYLES.lightBlueColor )
+          .select("circle")
+          .style("fill", STYLES.lightBlueColor)
 
-        this.animateNode( oldCenter.node,
+        this.animateNode(oldCenter.node,
                      STYLES.width / 2,
-                     STYLES.height * 4/5 )
+                     STYLES.height * 4/5)
 
         if(historyNodes.length > 1){
           let historic = historyNodes[historyNodes.length - 2]
@@ -570,8 +566,8 @@ class GraphD3 {
 
           let historicDom = this.getDomNode(domNodes, historic)
           historicDom
-            .select( "circle" )
-            .style( "fill", STYLES.grayColor )
+            .select("circle")
+            .style("fill", STYLES.grayColor)
         }
       }
       {
@@ -580,8 +576,8 @@ class GraphD3 {
                      STYLES.width / 2,
                      STYLES.height / 2) // move to center
         newCenterDom
-          .select( "circle" )
-          .style("fill", STYLES.blueColor )
+          .select("circle")
+          .style("fill", STYLES.blueColor)
       }
     }
   }
@@ -592,14 +588,14 @@ class GraphD3 {
 
   // http://bl.ocks.org/mbostock/7555321
   wrap(text, width, separator, joiner) {
-    if( separator == undefined ){
+    if(separator == undefined){
       separator = /\s+/
       joiner = " "
     }
     let hasWrapped = []
     text.each(function() {
       let text = d3.select(this),
-      words = text.text().split( separator ).reverse(),
+      words = text.text().split(separator).reverse(),
       word,
       line = [],
       lineNumber = 0,
@@ -609,11 +605,11 @@ class GraphD3 {
       tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em")
       while (word = words.pop()) {
         line.push(word)
-        tspan.text(line.join( joiner ))
+        tspan.text(line.join(joiner))
         if (tspan.node().getComputedTextLength() > width) {
-          hasWrapped.push( this )
+          hasWrapped.push(this)
           line.pop()
-          tspan.text(line.join( joiner ))
+          tspan.text(line.join(joiner))
           line = [word]
           lineNumber++
           tspan = text
@@ -628,53 +624,53 @@ class GraphD3 {
     return hasWrapped
   }
 
-  disablePreview( allNodes ){
+  disablePreview(allNodes){
     // resets ALL nodes
     allNodes.select("circle")
-      .transition().duration( STYLES.nodeTransitionDuration )
-      .attr("r", STYLES.smallNodeSize / 2 )
-      .style( "stroke-width", 0 )
-    allNodes.select( ".nodetext" )
-      .transition().duration( STYLES.nodeTransitionDuration )
-      .style( "opacity", 1 )
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr("r", STYLES.smallNodeSize / 2)
+      .style("stroke-width", 0)
+    allNodes.select(".nodetext")
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .style("opacity", 1)
     allNodes.selectAll("g.extras")
-      .transition().duration( STYLES.nodeTransitionDuration )
-      .style("opacity", 0 )
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .style("opacity", 0)
       .remove()
   }
 
-  enablePreview( node ){
+  enablePreview(node){
     node.moveToFront()
 
     node
       .select("circle") // only current circle
-      .transition().duration( STYLES.nodeTransitionDuration )
-      .attr("r", STYLES.largeNodeSize / 2 )
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr("r", STYLES.largeNodeSize / 2)
       .style({ "stroke": "white",
                "stroke-width": STYLES.width / 100 })
-    node.select( ".nodetext" )
-      .transition().duration( STYLES.nodeTransitionDuration )
-      .style( "opacity", 0 )
+    node.select(".nodetext")
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .style("opacity", 0)
     let extras = node.append("svg:g")
-      .attr("class", "extras" )
-      .style("opacity", 0 )
+      .attr("class", "extras")
+      .style("opacity", 0)
     extras
-      .append( "svg:text" )
-      .attr( "class", "preview-title" )
-      .attr( "text-anchor", "middle" )
-      .attr( "dy", -1.5 ) //(STYLES.largeNodeSize / - 6 )) //(STYLES.largeNodeSize / 18 ))
-      .text( (d) => d.title)
-      .call( this.wrap, STYLES.largeNodeSize * 0.7, "", "" )
+      .append("svg:text")
+      .attr("class", "preview-title")
+      .attr("text-anchor", "middle")
+      .attr("dy", -1.5) //(STYLES.largeNodeSize / - 6)) //(STYLES.largeNodeSize / 18))
+      .text((d) => d.title)
+      .call(this.wrap, STYLES.largeNodeSize * 0.7, "", "")
     extras
       .append("svg:text")
       .attr("class", "preview-description")
       .attr("text-anchor", "middle")
-      .attr("dy", 1 )
-      .text( (d) => d.description)
-      .call( this.wrap, STYLES.largeNodeSize * 0.75 )
+      .attr("dy", 1)
+      .text((d) => d.description)
+      .call(this.wrap, STYLES.largeNodeSize * 0.75)
     extras
-      .transition().duration( STYLES.nodeTransitionDuration )
-      .style( "opacity", 1 )
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .style("opacity", 1)
     return node
   }
 }
@@ -703,7 +699,6 @@ let Graph = React.createClass({
   _changeCenter: function(center, newData) {
     console.log('drawing graph')
 
-    // TODO: this should happen on every state update
 	  let res = {
       nodes: this.state.nodes,
       links: this.state.links,
@@ -741,18 +736,11 @@ let Graph = React.createClass({
   },
 
   centerAtWebID: function() {
-    let webid = null
-
-    // who am I? (check "User" header)
-    WebAgent.head(document.location.origin)
-      .then((xhr) => {
-        console.log('head')
-        console.log(xhr)
-        webid = xhr.getResponseHeader('User')
-
-        // now get my profile document
-        return this.centerAtURI(webid)
-      })
+    // render relevant information in UI
+    GraphAgent.fetchWebIdAndConvert().then((d3graph) => {
+      let newState = this._changeCenter(d3graph.center, d3graph)
+      this.setState(newState)
+    })
   },
 
   //TODO: has to fetch uri and all the uri's objects, if they're not in the same doc
@@ -774,25 +762,11 @@ let Graph = React.createClass({
       }
     }
 
-    return WebAgent.get(uri)
-      .then((xhr) => {
-        // parse profile document from text
-        let triples = []
-        let parser = N3.Parser()
-        parser.parse(xhr.response, (err, triple, prefixes) => {
-          if (triple) {
-            triples.push(triple)
-          } else {
-            // render relevant information in UI
-            let d3graph = D3Converter.convertTriples(uri, triples)
-            let newState = this._changeCenter(uri, d3graph)
-            this.setState(newState)
-          }
-        })
-      })
-      .catch((err) => {
-        console.log('error')
-        console.log(err)
+    // render relevant information in UI
+    GraphAgent.fetchAndConvert(uri)
+      .then((d3graph) => {
+        let newState = this._changeCenter(uri, d3graph)
+        this.setState(newState)
       })
   },
 
@@ -823,17 +797,14 @@ let Graph = React.createClass({
   },
 
   componentWillUnmount: function() {
-    //TODO
     console.log('graph component will unmount')
     this.state.graph.destroy(null)
   },
 
   handleNodeClick: function(node) {
-    //TODO: change state- which will trigger D3 update
     console.log('handle node click in react')
     console.log(node)
     if(node.uri == this.state.previewNode.uri) return
-    //self.disablePreview(node)
     this.state.previewNode = {
       node: node,
       uri: node.uri
@@ -847,16 +818,16 @@ let Graph = React.createClass({
     if(node == this.state.centerNode.node){
       if(distance < 40){
         this.showChat()
-      } else if(verticalOffset < STYLES.height / 3 ) {
+      } else if(verticalOffset < STYLES.height / 3) {
         // perspective node can be dragged into inbox (top of screen)
         this.addNodeToInbox(node)
       }
     } else {
       // surrounding nodes can be dragged into focus (center of screen)
-      if( Util.distance(node.x,
+      if(Util.distance(node.x,
                     node.y,
                     STYLES.width / 2,
-                    STYLES.height / 2 )
+                    STYLES.height / 2)
           < STYLES.width * (3/8)){
 
 
@@ -930,12 +901,12 @@ let Graph = React.createClass({
       py: STYLES.height * 3/4, //undefined, //960,
       title: "NewNode",
       type: "uri",
-      uri: "fakeURI" +( Math.random() * Math.pow( 2, 32 )), //"https://test.jolocom.com/2013/groups/moms/card#g",
+      uri: "fakeURI" +(Math.random() * Math.pow(2, 32)), //"https://test.jolocom.com/2013/groups/moms/card#g",
       weight: 5,
       x: undefined, //539.9499633771337,
       y: undefined, //960.2001464914653
     }
-    if( node == undefined ){
+    if(node == undefined){
       node = fullNode
     } else {
       this.enrich(node, fullNode)
@@ -945,6 +916,8 @@ let Graph = React.createClass({
   
     this.state.links.push(link)
     this.state.nodes.push(node)
+
+    //TODO: connect node in database
 
     let state = {
       graph: this.state.graph,
@@ -963,7 +936,6 @@ let Graph = React.createClass({
     }
 
     this.setState(state)
-    //TODO: connect node in database
   },
 
   showChat: function() {
@@ -1014,17 +986,17 @@ let Graph = React.createClass({
     this.setState(state)
   },
 
-  enrich: function ( less, more ){
+  enrich: function (less, more){
     // add any missing keys of `more` to `less`
-    for( var k in more ){
-      if(( more.hasOwnProperty( k )) && ( less[ k ] == undefined )){
+    for(var k in more){
+      if((more.hasOwnProperty(k)) && (less[ k ] == undefined)){
         less[ k ] = more[ k ]
       }
     }
   },
 
   mergeGraphs: function(newNodes, newLinks, newLiterals) {
-    console.log( 'merging' )
+    console.log('merging')
     let sIdx, tIdx
   	for(var i in newLinks){
   		sIdx = newLinks[i].source
@@ -1045,18 +1017,18 @@ let Graph = React.createClass({
   },
 
   arrangeNodesInACircle: function(nodes) {
-    let angle = ( 2 * Math.PI )/ nodes.length
-    let halfwidth = ( STYLES.width / 2 )
-    let halfheight = ( STYLES.height / 2 )
-    for( var i in nodes ){
-      if( nodes[i].x ){
+    let angle = (2 * Math.PI)/ nodes.length
+    let halfwidth = (STYLES.width / 2)
+    let halfheight = (STYLES.height / 2)
+    for(var i in nodes){
+      if(nodes[i].x){
         // skip (old) nodes that already have a position
         continue
       }
       nodes[i].x = nodes[i].px =
-        Math.cos( angle * i ) * halfwidth + halfwidth
+        Math.cos(angle * i) * halfwidth + halfwidth
       nodes[i].y = nodes[i].py =
-        Math.sin( angle * i ) * halfwidth + halfheight
+        Math.sin(angle * i) * halfwidth + halfheight
     }
   },
   
@@ -1162,7 +1134,7 @@ let Graph = React.createClass({
         </div>
         { this.state.chatOpen ? <Chat graph={this.state.graph} hide={this.hideChat}/> : ""}
       </div>
-    )
+   )
   }
 })
 
