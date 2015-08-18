@@ -1,7 +1,7 @@
 import React from 'react'
 import WebAgent from '../lib/web-agent.js'
-import N3 from 'n3'
 import {FOAF} from '../lib/namespaces.js'
+import {Parser} from '../lib/rdf.js'
 
 let Nav = React.createClass({
   getInitialState: function() {
@@ -37,27 +37,22 @@ let Nav = React.createClass({
     // who am I? (check "User" header)
     WebAgent.head(document.location.origin)
       .then((xhr) => {
-        console.log('head')
-        console.log(xhr)
         webid = xhr.getResponseHeader('User')
-        console.log('webid')
-        console.log(webid)
-
         // now get my profile document
         return WebAgent.get(webid)
+
       })
       .then((xhr) => {
         // parse profile document from text
         let triples = []
-        let parser = N3.Parser()
-        parser.parse(xhr.response, (err, triple, prefixes) => {
-          if (triple) {
-            triples.push(triple)
-          } else {
-            // render relevant information in UI
-            this._profileDocumentLoaded(webid, triples, prefixes)
-          }
-        })
+        let parser = new Parser()
+        return parser.parse(xhr.response)
+
+      })
+      .then((res) => {
+        // render relevant information in UI
+        this._profileDocumentLoaded(webid, res.triples, res.prefixes)
+
       })
       .catch((err) => {
         console.log('error')

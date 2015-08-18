@@ -2,9 +2,8 @@ import React from 'react/addons'
 import url from 'url'
 import N3 from 'n3'
 import WebAgent from '../lib/web-agent.js'
+import {Parser, Writer} from '../lib/rdf.js'
 import {CERT, FOAF} from '../lib/namespaces.js'
-
-//TODO: rewrite with promisified reader and parser
 
 let N3Util = N3.Util
 
@@ -95,7 +94,7 @@ let Profile = React.createClass({
     // subject which represents our profile
     console.log('saving profile')
     console.log(this.state)
-    let writer = N3.Writer({format: 'N-Triples', prefixes: this.state.prefixes})
+    let writer = new Writer({format: 'N-Triples', prefixes: this.state.prefixes})
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t)
     }
@@ -111,19 +110,8 @@ let Profile = React.createClass({
       object: N3Util.createIRI(this.state.email)
     })
 
-    writer.end((err, res) => {
-      if (res) {
-        console.log('here')
-        WebAgent.put(this.state.webid, {'Content-Type': 'application/n-triples'}, res)
-          .then((res) => {
-            console.log('success updated profile')
-            console.log(res)
-          })
-          .catch((err) => {
-            console.log('error while updating profile')
-            console.log(err)
-          })
-      }
+    writer.end().then((res) => {
+      return WebAgent.put(this.state.webid, {'Content-Type': 'application/n-triples'}, res)
     })
   },
 
@@ -167,15 +155,12 @@ let Profile = React.createClass({
       .then((xhr) => {
         // parse profile document from text
         let triples = []
-        let parser = N3.Parser()
-        parser.parse(xhr.response, (err, triple, prefixes) => {
-          if (triple) {
-            triples.push(triple)
-          } else {
-            // render relevant information in UI
-            this._profileDocumentLoaded(webid, triples, prefixes)
-          }
-        })
+        let parser = new Parser()
+        return parser.parse(xhr.response)
+      })
+      .then((res) => {
+        // render relevant information in UI
+        this._profileDocumentLoaded(webid, res.triples, res.prefixes)
       })
       .catch((err) => {
         console.log('error')
