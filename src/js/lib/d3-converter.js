@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import url from 'url'
 import N3 from 'n3'
 import {CERT, FOAF, RDF} from '../lib/namespaces.js'
 
@@ -59,8 +58,7 @@ class D3Converter {
     console.log(literals)
 
     //triples which subject equal to center of the graph
-    let centerFragment = url.parse(center).hash
-    let allOutwards = targetTriples.filter((t) => t.subject == centerFragment && t.predicate != RDF.type)
+    let allOutwards = targetTriples.filter((t) => t.subject == center && t.predicate != RDF.type)
       .map((t) => {
         return {
           subject: D3Converter._getValue(t.subject),

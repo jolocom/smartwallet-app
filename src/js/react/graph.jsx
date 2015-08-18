@@ -23,9 +23,6 @@ d3.selection.prototype.moveToFront = function() {
 
 
 let agent = new WebAgent()
-let testData = '{"nodes":[{"name":"https://sister.jolocom.com/reederz/profile/card#me","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#me","title":"no title","description":"no description"},{"name":"https://sister.jolocom.com/reederz/profile/card#key","type":"uri","uri":"https://sister.jolocom.com/reederz/profile/card#key","title":"no title","description":"no description"}],"links":[{"source":"0","target":"1","name":" http://www.w3.org/ns/auth/cert#key","value":"10"}],"literals":{"https://sister.jolocom.com/reederz/profile/card":[{"p":"http://purl.org/dc/terms/title","o":"WebID profile of Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}],"https://sister.jolocom.com/reederz/profile/card#key":[{"p":"http://www.w3.org/ns/auth/cert#modulus","o":"a726cd1e3eddccb4c12ebd3d8581ac83bc2913dfb88cf9d939b5eedff88878e95b9bfa278dc4fbcd5dfe7d80ff866844b69af31f30a79822e32841f3e694d75feeaba92ed91b02be46fd3f86bb800d3be222c4cb480ffa05f87f67949f41324cacc4c34ee9d133d19eb61af71ab6d97048af91d357904b1cdec8333affe1f4098cdd6f6ca465bdbae56e0b006557396dc0abb7ed2c4f3a41dd76ef07cfeb8309e80804b0c288e6e847c0b446d112403d77c939c67b30cc99a96cd695c8dbc53a5afe42bf81c53214ace49c2ce6b5dc35a0c5301dca386d9735b6d7f39c5185a6811459446940ec7b5a5050fc22c6f99844a1b9580ff0972049e898d1e16a3373","l":"None","d":"http://www.w3.org/2001/XMLSchema#hexBinary"},{"p":"http://www.w3.org/ns/auth/cert#exponent","o":"65537","l":"None","d":"http://www.w3.org/2001/XMLSchema#int"}],"https://sister.jolocom.com/reederz/profile/card#me":[{"p":"http://xmlns.com/foaf/0.1/mbox","o":"mailto:justas.azna@gmail.com","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"},{"p":"http://xmlns.com/foaf/0.1/name","o":"Justas Azna","l":"None","d":"http://www.w3.org/2001/XMLSchema#string"}]}}'
-
-
 
 class Util {
   static stringLessThan(s1, s2){
@@ -75,8 +72,9 @@ class GraphD3 {
     this.handleNodeClick = handleNodeClick
     this.handleDragEnd = handleDragEnd
     this.handleLongTap = handleLongTap
+  }
 
-
+  create(el, props, state) {
     // TODO: how many height/width vars do we have?
     this.w = document.getElementById("chart").offsetWidth
     this.h = document.getElementById("chart").offsetHeight
@@ -120,6 +118,7 @@ class GraphD3 {
     svg.append( "g" ).attr( "class", "link_group")
   }
 
+  // Invoked in "componentDidUpdate" of react graph
   update(el, prevState, state) {
     let svg = d3.select('#chart').select('svg').select('g')
 
@@ -361,6 +360,7 @@ class GraphD3 {
     this.force.start()
   }
 
+  // Invoked in "componentWillUpdate" of react graph
   beforeUpdate(el, state, nextState) {
     //plus drawer closing (opening is handled in "update")
     if (state.plusDrawerOpen && !nextState.plusDrawerOpen) {
@@ -408,6 +408,7 @@ class GraphD3 {
     }
   }
 
+  // catch long tap and forward it to react
   triggerLongTap() {
     let self = this
     return function (){
@@ -453,6 +454,7 @@ class GraphD3 {
     }
   } 
 
+  // catch dragend event and forward it to react
   forceDragEnd(nodes, centerNode) {
     let self = this
     let svg = d3.select('#chart').select('svg').select('g')
@@ -480,9 +482,8 @@ class GraphD3 {
       }
     }
   } 
-  
 
-
+  // catch nodeClick event and forward it to react
   nodeClick(nodes) {
     let self = this
     let svg = d3.select('#chart').select('svg').select('g')
@@ -684,7 +685,7 @@ class GraphD3 {
 let Graph = React.createClass({
   getInitialState: function() {
     return {
-      graph: null,
+      graph: new GraphD3(null, null, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap),
       centerNode: null,
       previewNode: null,
       nodes: [],
@@ -700,51 +701,48 @@ let Graph = React.createClass({
   },
 
 
-  //_drawGraph: function(center, triples, prefixes) {
-    //console.log('drawing graph')
-    //let d3graph = D3Converter.convertTriples(center, triples)
-    //console.log('result')
-    //console.log(d3graph)
-  //},
-  componentDidMount: function() {
-    //d3g.prepareVars()
-    //d3g.init(testData)
-    console.log('graph component did mount')
-    console.log(this.state)
+  // returns altered state
+  _changeCenter: function(center, newData) {
+    console.log('drawing graph')
 
-    let jsonText = testData
-    console.log(jsonText)
-
-	  let json = JSON.parse(jsonText)
-
-    //TODO: this stuff depends on side effects of mergeGraphs and arrangeNodes- rethink
     // TODO: this should happen on every state update
-	  let res = this.mergeGraphs(json.nodes, json.links)
+	  let res = {
+      nodes: this.state.nodes,
+      links: this.state.links,
+      literals: this.state.literals
+    }
+
+    if (newData) {
+      res = this.mergeGraphs(newData.nodes, newData.links, newData.literals)
+    }
+
+    let cn = res.nodes.filter((n) => n.uri == center)[0]
+
     let state = {
-      graph: new GraphD3(null, null, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap),
+      graph: this.state.graph,
       centerNode: {
-        node: res.nodes[0],
-        uri: res.nodes[0].uri,
+        node: cn,
+        uri: cn.uri,
       },
       previewNode: {
-        node: res.nodes[0],
-        uri: res.nodes[0].uri,
-      }, //TODO: set this to center
+        node: cn,
+        uri: cn.uri,
+      },
       nodes: res.nodes,
       inboxNodes: this.state.inboxNodes,
       inboxCount: this.state.inboxCount,
       historyNodes: this.state.historyNodes,
       links: res.links,
       literals: res.literals,
-      chatOpen: false,
-      inboxOpen: false,
-      plusDrawerOpen: false,
+      chatOpen: this.state.chatOpen,
+      inboxOpen: this.state.inboxOpen,
+      plusDrawerOpen: this.state.plusDrawerOpen,
     }
     this.arrangeNodesInACircle(state.nodes)
+    return state
+  },
 
-    this.setState(state)
-
-    return
+  centerAtWebID: function() {
     let webid = null
 
     // who am I? (check "User" header)
@@ -755,8 +753,30 @@ let Graph = React.createClass({
         webid = xhr.getResponseHeader('User')
 
         // now get my profile document
-        return agent.get(webid)
+        return this.centerAtURI(webid)
       })
+  },
+
+  //TODO: has to fetch uri and all the uri's objects, if they're not in the same doc
+  centerAtURI: function(uri) {
+    console.log('should only crawl if the uri is external')
+
+    console.log('center at uri')
+    console.log(uri)
+    if (this.state.centerNode) {
+      let thisUrl = url.parse(uri)
+      let prevUrl = url.parse(this.state.centerNode.uri)
+
+      // Same document - no need to refetch
+      if (`${thisUrl.host}${thisUrl.path}` == `${prevUrl.host}${prevUrl.path}`) {
+        console.log('in the same doc')
+        let newState = this._changeCenter(uri)
+        this.setState(newState)
+        return
+      }
+    }
+
+    return agent.get(uri)
       .then((xhr) => {
         // parse profile document from text
         let triples = []
@@ -766,7 +786,9 @@ let Graph = React.createClass({
             triples.push(triple)
           } else {
             // render relevant information in UI
-            this._drawGraph(webid, triples, prefixes)
+            let d3graph = D3Converter.convertTriples(uri, triples)
+            let newState = this._changeCenter(uri, d3graph)
+            this.setState(newState)
           }
         })
       })
@@ -774,6 +796,16 @@ let Graph = React.createClass({
         console.log('error')
         console.log(err)
       })
+  },
+
+  componentDidMount: function() {
+    console.log('graph component did mount')
+    console.log(this.state)
+
+    // Initialize d3 graph
+    this.state.graph.create(null, this.props, this.state)
+
+    this.centerAtWebID()
   },
 
   componentWillUpdate: function(nextProps, nextState) {
@@ -814,9 +846,6 @@ let Graph = React.createClass({
 
   handleDragEnd: function(node, distance, verticalOffset) {
     console.log('handle drag end in react')
-    console.log(node)
-    console.log(distance)
-    console.log(verticalOffset)
     if(node == this.state.centerNode.node){
       if(distance < 40){
         this.showChat()
@@ -832,11 +861,6 @@ let Graph = React.createClass({
                     STYLES.height / 2 )
           < STYLES.width * (3/8)){
 
-        let target = this.state.nodes.filter((n) => n.uri == node.uri)[0]
-        let newCenter = {
-          node: target,
-          uri: target.uri
-        }
 
         let old = this.state.nodes.filter((n) => n.uri == this.state.centerNode.uri)[0]
         let oldCenter = {
@@ -845,25 +869,26 @@ let Graph = React.createClass({
         }
         this.state.historyNodes.push(oldCenter)
 
-        let newPreview = {
-          node: target,
-          uri: target.uri
-        }
-        let state = {
-          graph: this.state.graph,
-          centerNode: newCenter,
-          previewNode: newPreview,
-          nodes: this.state.nodes,
-          inboxNodes: this.state.inboxNodes,
-          inboxCount: this.state.inboxCount,
-          historyNodes: this.state.historyNodes,
-          links: this.state.links,
-          literals: this.state.literals,
-          chatOpen: this.state.chatOpen,
-          inboxOpen: this.state.inboxOpen,
-          plusDrawerOpen: this.state.plusDrawerOpen,
-        }
-        this.setState(state)
+        let targetUri = this.state.nodes.filter((n) => n.uri == node.uri)[0].uri
+        this.centerAtURI(targetUri)
+        //state.historyNodes = this.state.historyNodes
+
+        // fetch new graph here
+        //let state = {
+          //graph: this.state.graph,
+          //centerNode: newCenter,
+          //previewNode: newPreview,
+          //nodes: this.state.nodes,
+          //inboxNodes: this.state.inboxNodes,
+          //inboxCount: this.state.inboxCount,
+          //historyNodes: this.state.historyNodes,
+          //links: this.state.links,
+          //literals: this.state.literals,
+          //chatOpen: this.state.chatOpen,
+          //inboxOpen: this.state.inboxOpen,
+          //plusDrawerOpen: this.state.plusDrawerOpen,
+        //}
+        //this.setState(state)
       }
     }
 
@@ -1000,7 +1025,7 @@ let Graph = React.createClass({
     }
   },
 
-  mergeGraphs: function(newNodes, newLinks) {
+  mergeGraphs: function(newNodes, newLinks, newLiterals) {
     console.log( 'merging' )
     let sIdx, tIdx
   	for(var i in newLinks){
@@ -1018,7 +1043,7 @@ let Graph = React.createClass({
   		newLinks[i].target = this.state.nodes.indexOf(newNodes[tIdx])
   		this.state.links.push(newLinks[i])
   	}
-    return { nodes: this.state.nodes, links: this.state.links, literals: this.state.literals }
+    return { nodes: this.state.nodes, links: this.state.links, literals: newLiterals }
   },
 
   arrangeNodesInACircle: function(nodes) {

@@ -5,11 +5,15 @@ class WebAgent {
   // @param {string} url resource url
   //
   // @return {Promise} promise with resulting xhr
-  get(url) {
+  get(url, headers={'Accept': 'application/n-triples'}) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest()
       xhr.withCredentials = true
       xhr.open('GET', url, true)
+      for (var headerKey in headers) {
+        let headerValue = headers[headerKey]
+        xhr.setRequestHeader(headerKey, headerValue)
+      }
       xhr.onload = (event) => {
         if ((event.target.status >= 200 && event.target.status < 300) || event.target.status == 304) {
           resolve(event.target)
