@@ -1,6 +1,7 @@
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var del = require('del');
+var eslint = require('gulp-eslint');
 var gulp = require('gulp');
 var gulpsync = require('gulp-sync')(gulp);
 var rename = require('gulp-rename');
@@ -86,10 +87,17 @@ gulp.task('clean', function () {
   return gulp.src('./dist/*').pipe(vinylPaths(del));
 });
 
+gulp.task('lint', function () {
+    return gulp.src(sources.js)
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failOnError());
+});
+
 gulp.task('watch', function() {
-  gulp.watch(sources.js, ['scripts']);
+  gulp.watch(sources.js, ['lint', 'scripts']);
   gulp.watch(sources.html, ['html']);
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', ['img', 'data', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));
+gulp.task('default', gulpsync.sync(['clean', 'lint', ['img', 'data', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));
