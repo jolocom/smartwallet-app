@@ -13,7 +13,7 @@ export class Parser {
   }
 
   parse(text) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let triples = []
       this.parser.parse(text, (err, triple, prefixes) => {
         if (triple) {

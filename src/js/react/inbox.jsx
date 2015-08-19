@@ -3,13 +3,13 @@ import React from 'react/addons'
 export let InboxCounter = React.createClass({
   getInitialState: function() {
     return {
-      count: this.props.count ? this.props.count : 0,
+      count: this.props.count ? this.props.count : 0
     }
   },
   componentWillReceiveProps: function(nextProps) {
     console.log('InboxCounter component will receive props')
     let state = {
-      count: nextProps.count,
+      count: nextProps.count
     }
     this.setState(state)
   },
@@ -37,15 +37,15 @@ export let Inbox = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     console.log('Inbox component will receive props')
     let state = {
-      nodes: nextProps.nodes,
+      nodes: nextProps.nodes
     }
     this.setState(state)
   },
 
 
   onNodeClick: function(nodeId) {
-    self = this
-    return function(e) {
+    let self = this
+    return function() {
       console.log(`node ${nodeId} clicked`)
       // FIXME: unreliable
       let node = self.state.nodes[nodeId - 1]
@@ -68,5 +68,5 @@ export let Inbox = React.createClass({
           <div className="close">x</div>
         </div>
     )
-  },
+  }
 })

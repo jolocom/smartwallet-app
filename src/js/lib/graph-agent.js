@@ -6,7 +6,7 @@ import {Parser, Writer} from './rdf.js'
 import Util from './util.js'
 
 //TODO: this should eventually be replaced with user's workspace
-const DEST_CONTAINER = document.location.origin + "/misc/"
+const DEST_CONTAINER = document.location.origin + '/misc/'
 
 let N3Util = N3.Util
 
@@ -75,7 +75,7 @@ class GraphAgent {
       // now PUT the updated doc
       return WebAgent.put(srcUrl, {'Content-Type': 'application/n-triples'}, updatedDoc)
 
-    }).then((xhr) => {
+    }).then(() => {
       // fetch dst node
       return GraphAgent.fetchTriples(dstUrl)
 

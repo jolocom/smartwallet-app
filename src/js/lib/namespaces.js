@@ -4,7 +4,7 @@ const foaf  = 'http://xmlns.com/foaf/0.1/'
 export const FOAF = {
   img: `${foaf}img`,
   mbox: `${foaf}mbox`,
-  name: `${foaf}name`,
+  name: `${foaf}name`
 }
 
 const cert = 'http://www.w3.org/ns/auth/cert#'
@@ -18,7 +18,7 @@ const dc = 'http://purl.org/dc/terms/'
 export const DC = {
   created: `${dc}created`,
   description: `${dc}description`,
-  title: `${dc}title`,
+  title: `${dc}title`
 }
 
 const rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
@@ -33,5 +33,5 @@ export const SIOC = {
   content: `${sioc}content`,
   hasContainer: `${sioc}has_container`,
   hasCreator: `${sioc}has_creator`,
-  hasReply: `${sioc}has_reply`,
+  hasReply: `${sioc}has_reply`
 }

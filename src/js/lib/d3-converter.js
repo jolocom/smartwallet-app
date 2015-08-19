@@ -1,6 +1,5 @@
-import _ from 'lodash'
 import N3 from 'n3'
-import {CERT, FOAF, RDF} from '../lib/namespaces.js'
+import {FOAF, RDF} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
 
@@ -9,9 +8,9 @@ class D3Converter {
     if (N3Util.isBlank(entity)) {
       return 'bnode'
     } else if (N3Util.isIRI(entity)) {
-      return "uri"
+      return 'uri'
     } else {
-      return "literal"
+      return 'literal'
     }
   }
 
@@ -108,7 +107,7 @@ class D3Converter {
     }
 
     // make node connections
-    for (var out of allOutwards) {
+    for (out of allOutwards) {
       if (out.objectType != 'literal') {
         let key = `${out.subject} ${out.object}`
         let pr = (key in preds) ? preds[key] : ''

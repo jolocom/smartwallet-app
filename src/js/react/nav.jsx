@@ -9,7 +9,7 @@ let Nav = React.createClass({
       imgUri: '/img/person-placeholder.png'
     }
   },
-  _profileDocumentLoaded: function (webid, triples, prefixes) {
+  _profileDocumentLoaded: function (webid, triples) {
     let state = {
       imgUri: '/img/person-placeholder.png'
     }
@@ -50,7 +50,7 @@ let Nav = React.createClass({
       })
       .then((res) => {
         // render relevant information in UI
-        this._profileDocumentLoaded(webid, res.triples, res.prefixes)
+        this._profileDocumentLoaded(webid, res.triples)
 
       })
       .catch((err) => {

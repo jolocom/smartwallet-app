@@ -33,7 +33,7 @@ let Chat = React.createClass({
       currentMessage: '',
       topic: this.props.topic,
       origin: this.props.origin,
-      identity: this.props.identity,
+      identity: this.props.identity
     }
   },
 
@@ -162,11 +162,11 @@ let Chat = React.createClass({
         subject: msgUrl,
         predicate: DC.created,
         object: N3Util.createLiteral(new Date().toUTCString())
-      },
+      }
     ]
   },
 
-  onMessageSendClick: function(e) {
+  onMessageSendClick: function() {
     console.log('send msg')
     console.log(this.state.currentMessage)
     return WebAgent.get(this.state.origin)
@@ -184,7 +184,7 @@ let Chat = React.createClass({
         // add triples representing new message
         let newMsg = this.newMsgTriples (this.state.origin, this.state.identity, this.state.currentMessage)
         console.log(newMsg)
-        for (var t of newMsg) {
+        for (t of newMsg) {
           writer.addTriple(t)
         }
 
@@ -196,7 +196,7 @@ let Chat = React.createClass({
         console.log('now send...')
         return WebAgent.put(this.state.origin, {'Content-type': 'application/n-triples'}, res)
       })
-      .then((xhr) => {
+      .then(() => {
         // now load new messages
         return this._loadMessages(this.state.origin)
       })

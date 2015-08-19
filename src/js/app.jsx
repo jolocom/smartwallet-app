@@ -5,7 +5,7 @@ import Profile from './react/profile.jsx'
 import React from 'react'
 
 import Router from 'react-router'
-import { DefaultRoute, Link, Route, RouteHandler } from 'react-router'
+import { Route, RouteHandler } from 'react-router'
 
 
 let App = React.createClass({  
@@ -15,9 +15,9 @@ let App = React.createClass({
         <Nav/>
         <RouteHandler/>
       </div>
-    );
+    )
   }
-});
+})
 
 let routes =  (
   <Route name="app" path="/" handler={App}>

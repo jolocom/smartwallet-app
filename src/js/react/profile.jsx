@@ -1,5 +1,4 @@
 import React from 'react/addons'
-import url from 'url'
 import N3 from 'n3'
 import WebAgent from '../lib/web-agent.js'
 import {Parser, Writer} from '../lib/rdf.js'
@@ -13,15 +12,15 @@ let Profile = React.createClass({
   getInitialState: function () {
     return {
       edit: false,
-      name: "(name missing)",
-      email: "(email missing)",
-      rsaModulus: "(rsa modulus missing)",
-      rsaExponent: "(rsa exponent missing)",
-      webid: "#",
-      webidPresent: "(webid missing)",
-      imgUri: "/img/person-placeholder.png",
+      name: '(name missing)',
+      email: '(email missing)',
+      rsaModulus: '(rsa modulus missing)',
+      rsaExponent: '(rsa exponent missing)',
+      webid: '#',
+      webidPresent: '(webid missing)',
+      imgUri: '/img/person-placeholder.png',
       fixedTriples: [],
-      prefixes: [],
+      prefixes: []
     }
   },
 
@@ -56,15 +55,15 @@ let Profile = React.createClass({
 
     let state = {
       edit: this.state.edit,
-      name: "(name missing)",
-      email: "(email missing)",
-      rsaModulus: "(rsa modulus missing)",
-      rsaExponent: "(rsa exponent missing)",
+      name: '(name missing)',
+      email: '(email missing)',
+      rsaModulus: '(rsa modulus missing)',
+      rsaExponent: '(rsa exponent missing)',
       webid: webid,
       webidPresent: webid,
-      imgUri: "/img/person-placeholder.png",
+      imgUri: '/img/person-placeholder.png',
       fixedTriples: fixedTriples,
-      prefixes: prefixes,
+      prefixes: prefixes
     }
 
 
@@ -116,12 +115,12 @@ let Profile = React.createClass({
   },
 
   // switch between edit and presentation modes
-  _onClickEditSave: function(e) {
+  _onClickEditSave: function() {
     if (this.state.edit) {
       this._saveProfile()
     }
 
-    this.setState((prevState, currentProps) => {
+    this.setState((prevState) => {
       prevState.edit = !prevState.edit
       return prevState
     })
@@ -142,7 +141,7 @@ let Profile = React.createClass({
 
     var webid = null
 
-    // who am I? (check "User" header)
+    // who am I? (check 'User' header)
     WebAgent.head(document.location.origin)
       .then((xhr) => {
         console.log('head')
