@@ -532,7 +532,7 @@ class GraphD3 {
     let hasWrapped = []
     text.each(function() {
       let text = d3.select(this)
-      let words = text.text().split(separator).reverse()
+      let words = text.text().split(separator)
       let line = []
       let lineNumber = 0
       let lineHeight = 1.1 // ems
