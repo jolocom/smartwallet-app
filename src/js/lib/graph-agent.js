@@ -52,10 +52,6 @@ class GraphAgent {
   // @return {Promis promise containing the result (TODO: what result?)
   //
   static connectNode(srcUrl, dstUrl) {
-    console.log('connect node')
-    console.log(srcUrl)
-    console.log(dstUrl)
-
     // fetch src node
     return GraphAgent.fetchTriples(srcUrl).then((res) => {
       let writer = new Writer({format: 'N-Triples', prefixes: res.prefixes})
@@ -112,11 +108,8 @@ class GraphAgent {
 
     let slug = Util.randomString(5)
     let newNodeUrl = `${dstContainer}${slug}#${title.split(' ')[0].toLowerCase()}`
-    console.log('create and connect node')
     return GraphAgent.createNode(title, description, newNodeUrl, slug)
-      .then((res) => {
-        console.log('now connecting')
-        console.log(res)
+      .then(() => {
         return GraphAgent.connectNode(newNodeUrl, dstUrl)
       })
   }
@@ -149,6 +142,13 @@ class GraphAgent {
       })
   }
 
+  // given a pointed graph- we need to figure out the pointers for relevant adjacent graphs
+  static _adjacentGraphs(pointer, triples) {
+    let possibleLinks = [SIOC.containerOf, SIOC.hasContainer]
+    let currentDoc = Util.urlWithoutHash(pointer)
+    return triples.filter((t) => t.subject == pointer && possibleLinks.indexOf(t.predicate) >= 0 && N3Util.isIRI(t.object) && Util.urlWithoutHash(t.object) != currentDoc).map((t) => t.object)
+  }
+
 
   // Fetch rdf document and convert it to format which can be
   // rendered in d3 graph.
@@ -157,8 +157,20 @@ class GraphAgent {
   //
   // @return {Promise} promise containing d3 data
   static fetchAndConvert(uri) {
+    let centerTriples = null
+
+    // get triples from graph at uri
     return GraphAgent.fetchTriples(uri).then((res) => {
-      let d3graph = D3Converter.convertTriples(uri, res.triples)
+      centerTriples = res.triples
+
+      // fetch adjacent graphs
+      let adjacent = GraphAgent._adjacentGraphs(uri, centerTriples)
+      return Promise.all(adjacent.map((uri) => GraphAgent.fetchTriples(uri)))
+    }).then((results) => {
+
+      // concat triples and convert them to format which can be rendered in d3 graph
+      let triples = results.reduce((acc, current) => acc.concat(current.triples), centerTriples)
+      let d3graph = D3Converter.convertTriples(uri, triples)
       return d3graph
     })
   }
