@@ -1,5 +1,5 @@
 import N3 from 'n3'
-import {FOAF, RDF} from '../lib/namespaces.js'
+import {DC, FOAF, RDF} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
 
@@ -21,6 +21,49 @@ class D3Converter {
     } else {
       return entity
     }
+  }
+
+  static _getTitle(subject, triples) {
+    // get type of subject
+    // determine the type of title (foaf:name for people, dc:title for others, etc.)
+    // find the title
+
+    let type = null
+    for (var t of triples) {
+      if (t.subject == subject && t.predicate == RDF.type) {
+        type = t.object
+        break
+      }
+    }
+
+    let title = subject
+    if (type == FOAF.Person) {
+      for (t of triples) {
+        if (t.subject == subject && t.predicate == FOAF.name) {
+          title = D3Converter._getValue(t.object)
+        }
+      }
+
+    } else {
+      for (t of triples) {
+        if (t.subject == subject && t.predicate == DC.title) {
+          title = D3Converter._getValue(t.object)
+        }
+      }
+    }
+
+    return title
+  }
+
+  static _getDescription(subject, triples) {
+    let desc = ''
+    for (var t of triples) {
+      if (t.subject == subject && t.predicate == DC.description) {
+        desc = D3Converter._getValue(t.object)
+      }
+    }
+
+    return desc
   }
 
   //TODO: this is bullshit- should simplify
@@ -77,8 +120,6 @@ class D3Converter {
 
     let cnt = 0
 
-    // TODO: title and description
-
     // index nodes for connections
     for (var out of allOutwards) {
       if (!(out.subject in connections)) {
@@ -87,8 +128,8 @@ class D3Converter {
           name: out.subject,
           type: out.subjectType,
           uri: out.subject,
-          title: out.subject,
-          description: out.subject
+          title: D3Converter._getTitle(out.subject, triples),
+          description: D3Converter._getDescription(out.subject, triples)
         })
         cnt += 1
       }
@@ -99,8 +140,8 @@ class D3Converter {
           name: out.object,
           type: out.objectType,
           uri: out.object,
-          title: out.object,
-          description: out.object
+          title: D3Converter._getTitle(out.object, triples),
+          description: D3Converter._getDescription(out.object, triples)
         })
         cnt += 1
       }

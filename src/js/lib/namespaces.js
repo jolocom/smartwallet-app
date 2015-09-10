@@ -4,7 +4,8 @@ const foaf  = 'http://xmlns.com/foaf/0.1/'
 export const FOAF = {
   img: `${foaf}img`,
   mbox: `${foaf}mbox`,
-  name: `${foaf}name`
+  name: `${foaf}name`,
+  Person: `${foaf}Person`
 }
 
 const cert = 'http://www.w3.org/ns/auth/cert#'
