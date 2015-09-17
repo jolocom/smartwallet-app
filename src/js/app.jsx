@@ -1,6 +1,7 @@
 import Graph from './react/graph.jsx'
 import Nav from './react/nav.jsx'
 import Profile from './react/profile.jsx'
+import Test from './react/test.jsx'
 
 import React from 'react'
 
@@ -23,6 +24,7 @@ let routes =  (
   <Route name="app" path="/" handler={App}>
     <Route name="graph" handler={Graph}/>
     <Route name="profile" handler={Profile}/>
+    <Route name="test" handler={Test}/>
   </Route>
 )
 
