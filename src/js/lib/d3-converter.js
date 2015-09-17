@@ -1,5 +1,5 @@
 import N3 from 'n3'
-import {DC, FOAF, RDF} from '../lib/namespaces.js'
+import {DC, FOAF, RDF, SIOC} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
 
@@ -99,8 +99,11 @@ class D3Converter {
     console.log('literals')
     console.log(literals)
 
+    // These are the only links which we will follow in the graph
+    let validLinks = [SIOC.containerOf, SIOC.hasContainer]
+
     //triples which subject equal to center of the graph
-    let allOutwards = targetTriples.filter((t) => t.subject == center && t.predicate != RDF.type)
+    let allOutwards = targetTriples.filter((t) => t.subject == center && validLinks.indexOf(t.predicate) >= 0)
       .map((t) => {
         return {
           subject: D3Converter._getValue(t.subject),
@@ -119,6 +122,26 @@ class D3Converter {
     let connections = {}
 
     let cnt = 0
+
+    // take care of the center
+    let centerData = {
+      subject: center,
+      subjectType: 'uri',
+      uri: center,
+      title: D3Converter._getTitle(center, triples),
+      description: D3Converter._getDescription(center, triples)
+    }
+    if(!(centerData.subject in connections)) {
+      connections[centerData.subject] = cnt
+      nodes.push({
+        name: centerData.subject,
+        type: centerData.subjectType,
+        uri: centerData.uri,
+        title: centerData.title,
+        description: centerData.description
+      })
+      cnt += 1
+    }
 
     // index nodes for connections
     for (var out of allOutwards) {
