@@ -1,29 +1,22 @@
-import Graph from './react/graph.jsx'
-import Nav from './react/nav.jsx'
-import Profile from './react/profile.jsx'
-import Test from './react/test.jsx'
-
 import React from 'react'
+import Router, { Route, DefaultRoute } from 'react-router'
 
-import Router from 'react-router'
-import { Route, RouteHandler } from 'react-router'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
+import App from 'components/app.jsx'
+import Graph from 'components/graph.jsx'
+import Chat from 'components/chat.jsx'
+import Signup from 'components/signup.jsx'
+import Test from 'components/test.jsx'
 
-let App = React.createClass({  
-  render() {
-    return (
-      <div id="page">
-        <Nav/>
-        <RouteHandler/>
-      </div>
-    )
-  }
-})
+injectTapEventPlugin()
 
 let routes =  (
   <Route name="app" path="/" handler={App}>
+    <DefaultRoute handler={Graph} />
     <Route name="graph" handler={Graph}/>
-    <Route name="profile" handler={Profile}/>
+    <Route name="chat" handler={Chat}/>
+    <Route name="signup" handler={Signup}/>
     <Route name="test" handler={Test}/>
   </Route>
 )

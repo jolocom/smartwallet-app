@@ -37,10 +37,15 @@
   },
   "dependencies": {
     "d3": "^3.5.6",
+    "jquery": "^2.1.4",
     "lodash": "^3.10.0",
+    "material-ui": "^0.11.0",
     "n3": "^0.4.3",
     "react": "^0.13.3",
     "react-router": "^0.13.3",
-    "react-timer-mixin": "^0.13.2"
+    "react-style": "^0.5.5",
+    "react-tap-event-plugin": "^0.1.7",
+    "react-timer-mixin": "^0.13.2",
+    "reflux": "^0.2.12"
   }
 }
