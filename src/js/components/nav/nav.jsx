@@ -1,6 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
-import {LeftNav} from 'material-ui'
+import {LeftNav, MenuItem} from 'material-ui'
 
 import NavStore from 'stores/nav'
 
@@ -8,7 +8,8 @@ import Header from './header.jsx'
 
 let menuItems = [
   { route: 'graph', text: 'Graph' },
-  { route: 'chat', text: 'Chat' }
+  { route: 'chat', text: 'Chat' },
+  { type: MenuItem.Types.SUBHEADER, text: 'Favourites' }
 ]
 
 let Nav = React.createClass({

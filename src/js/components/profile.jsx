@@ -1,123 +1,18 @@
 import React from 'react/addons'
-import N3 from 'n3'
-import WebAgent from '../lib/web-agent.js'
-import {Parser, Writer} from '../lib/rdf.js'
-import {CERT, FOAF} from '../lib/namespaces.js'
+import Reflux from 'reflux'
 
-let N3Util = N3.Util
+import ProfileStore from 'stores/profile'
 
 let Profile = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
-
-  getInitialState: function () {
-    return {
-      edit: false,
-      name: '(name missing)',
-      email: '(email missing)',
-      rsaModulus: '(rsa modulus missing)',
-      rsaExponent: '(rsa exponent missing)',
-      webid: '#',
-      webidPresent: '(webid missing)',
-      imgUri: '/img/person-placeholder.png',
-      fixedTriples: [],
-      prefixes: []
-    }
-  },
-
-  // get object value without caring whether it's a literal or IRI
-  _getValue: function (object) {
-    if (N3Util.isLiteral(object)) {
-      return N3Util.getLiteralValue(object)
-    } else {
-      return object
-    }
-  },
-
-  // extract RSA public key from triples
-  _parseKey: function (keySubject, triples) {
-    let relevant = triples.filter((t) => t.subject == keySubject)
-    let exponents = relevant.filter((t) => t.predicate == CERT.exponent)
-    let modulii = relevant.filter((t) => t.predicate == CERT.modulus)
-
-    // pick out first encountered modulus and exponent
-    return {
-      exponent: (exponents.length == 0 ? null : exponents[0].object),
-      modulus: (modulii.length == 0 ? null : modulii[0].object)
-    }
-  },
-
-  // change state from triples
-  _profileDocumentLoaded: function (webid, triples, prefixes) {
-    // subject which represents our profile
-
-    // everything's fixed but name and email
-    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
-
-    let state = {
-      edit: this.state.edit,
-      name: '(name missing)',
-      email: '(email missing)',
-      rsaModulus: '(rsa modulus missing)',
-      rsaExponent: '(rsa exponent missing)',
-      webid: webid,
-      webidPresent: webid,
-      imgUri: '/img/person-placeholder.png',
-      fixedTriples: fixedTriples,
-      prefixes: prefixes
-    }
-
-
-    // triples which describe profile
-    let relevant = triples.filter((t) => t.subject == webid)
-
-    for (var t of relevant){
-      if (t.predicate == FOAF.name) {
-        // name
-        state.name =  this._getValue(t.object)
-      } else if (t.predicate == FOAF.mbox) {
-        // email
-        state.email =  this._getValue(t.object)
-      } else if (t.predicate == FOAF.img) {
-        // image uri
-        state.imgUri =  this._getValue(t.object)
-      } else if (t.predicate == CERT.key) {
-        let key = this._parseKey(t.object, triples)
-        if (key.modulus) {state.rsaModulus = this._getValue(key.modulus)}
-        if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
-      }
-    }
-    this.setState(state)
-  },
-
-  _saveProfile: function () {
-    // subject which represents our profile
-    console.log('saving profile')
-    console.log(this.state)
-    let writer = new Writer({format: 'N-Triples', prefixes: this.state.prefixes})
-    for (var t of this.state.fixedTriples) {
-      writer.addTriple(t)
-    }
-
-    writer.addTriple({
-      subject: this.state.webid,
-      predicate: FOAF.name,
-      object: N3Util.createLiteral(this.state.name)
-    })
-    writer.addTriple({
-      subject: this.state.webid,
-      predicate: FOAF.mbox,
-      object: N3Util.createIRI(this.state.email)
-    })
-
-    writer.end().then((res) => {
-      return WebAgent.put(this.state.webid, {'Content-Type': 'application/n-triples'}, res)
-    })
-  },
+  mixins: [
+    Reflux.connect(ProfileStore),
+    React.addons.LinkedStateMixin
+  ],
 
   // switch between edit and presentation modes
   _onClickEditSave: function() {
     if (this.state.edit) {
-      this._saveProfile()
+      ProfileStore.update(this.state)
     }
 
     this.setState((prevState) => {
@@ -130,40 +25,13 @@ let Profile = React.createClass({
   _handleSubmit: function (e) {
     e.preventDefault()
     if (this.state.edit) {
-      this._saveProfile()
+      ProfileStore.update(this.state)
     }
     console.log('submit')
-
   },
 
   componentDidMount: function() {
-    console.log('profile component did mount')
 
-    var webid = null
-
-    // who am I? (check 'User' header)
-    WebAgent.head(document.location.origin)
-      .then((xhr) => {
-        console.log('head')
-        console.log(xhr)
-        webid = xhr.getResponseHeader('User')
-
-        // now get my profile document
-        return WebAgent.get(webid)
-      })
-      .then((xhr) => {
-        // parse profile document from text
-        let parser = new Parser()
-        return parser.parse(xhr.response)
-      })
-      .then((res) => {
-        // render relevant information in UI
-        this._profileDocumentLoaded(webid, res.triples, res.prefixes)
-      })
-      .catch((err) => {
-        console.log('error')
-        console.log(err)
-      })
   },
 
   render: function() {

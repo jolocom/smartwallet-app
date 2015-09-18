@@ -22,7 +22,9 @@ let Signup = React.createClass({
   signup() {
     React.findDOMNode(this.refs.form).submit()
     // @TODO onload doesn't work somehow, calling manually
-    this._onSignup()
+    setTimeout(function() {
+      window.location.href = '/'
+    }, 500)
   },
   _onUsernameChange({target}) {
     this.setState({
