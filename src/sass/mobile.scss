@@ -7,8 +7,8 @@ $jolodarkblue: darken($joloblue, 20%);
 $joloelectricblue: lighten($joloblue, 20%);
 $jologray: #838383;
 $ws: whitesmoke;
-$fs_body: 50%;
-$ff_default: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+$fs_body: 13px;
+$ff_default: "Roboto", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 
 * {
   margin: 0px;
@@ -23,6 +23,7 @@ body {
   font-family: $ff_default;
   font-weight: 300;
   font-size: $fs_body;
+  line-height: 20px;
   position: absolute;
   overflow-x: hidden;
 }
@@ -35,6 +36,11 @@ body.closed-drawer {
   #plus_drawer {
     display: none;
   }
+}
+
+fieldset {
+  border: 0;
+  margin-bottom: 20px;
 }
 
 .button {
@@ -591,6 +597,7 @@ $small-node-size: $width / 20;
     color: white;
     h2 {
       font-size: 5em;
+      font-weight: 200;
     }
     h3 {
       font-size: 3em;
@@ -603,6 +610,15 @@ $small-node-size: $width / 20;
       margin-top: 30px;
       margin-bottom: -50%;
     }
+  }
+  .signup-header {
+    h2 {
+      font-size: 2em;
+      font-weight: 200;
+    }
+  }
+  .form-actions {
+    text-align: right;
   }
 }
 
