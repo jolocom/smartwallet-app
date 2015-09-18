@@ -21,4 +21,13 @@ bower install
 gulp
 ```
 
+git-flow
+--------
+We are using git-flow to manage our branching strategy. More details can be found in [this article](http://nvie.com/posts/a-successful-git-branching-model/). Also, you should install a plugin for your git command line: [nvie/gitflow](https://github.com/nvie/gitflow).
+
+Once you have installed the git flow plugin, you should initialize its branch mappings with this command:
+```bash
+git flow init -d
+```
+
 Copyright (C) 2015  JOLOCOM UG
