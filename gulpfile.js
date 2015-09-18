@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
 var del = require('del');
@@ -55,7 +57,11 @@ gulp.task('scripts', function() {
   return gulp.src(sources.app)
     .pipe(browserify({
       transform: ['babelify'],
-      debug: true
+      debug: true,
+      paths: [
+        './node_modules',
+        './src/js'
+      ]
     }))
     .pipe(rename('app.js'))
     .pipe(gulp.dest(destinations.js));

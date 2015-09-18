@@ -68,7 +68,7 @@ let Profile = React.createClass({
 
 
     // triples which describe profile
-    let relevant = triples.filter((t) => t.subject == webid) 
+    let relevant = triples.filter((t) => t.subject == webid)
 
     for (var t of relevant){
       if (t.predicate == FOAF.name) {
@@ -133,7 +133,7 @@ let Profile = React.createClass({
       this._saveProfile()
     }
     console.log('submit')
-  
+
   },
 
   componentDidMount: function() {

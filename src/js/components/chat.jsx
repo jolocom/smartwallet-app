@@ -1,4 +1,8 @@
 import React from 'react/addons'
+import {AppBar} from 'material-ui'
+
+import NavActions from 'actions/nav'
+
 import TimerMixin from 'react-timer-mixin'
 import N3 from 'n3'
 import WebAgent from '../lib/web-agent.js'
@@ -92,7 +96,7 @@ let Chat = React.createClass({
             created: timestamps[0]
           })
         }
-        
+
         // sort messages by timestamps
         msgs.sort((a, b) => new Date(a.created) - new Date(b.created))
 
@@ -137,33 +141,27 @@ let Chat = React.createClass({
     console.log('msg url')
     console.log(msgUrl)
 
-    return [
-      {// this is a message
-        subject: msgUrl,
-        predicate: RDF.type,
-        object: SIOC.Post
-      },
-      { // in relation to...
-        subject: subject,
-        predicate: SIOC.containerOf,
-        object: msgUrl
-      },
-      { // written by...
-        subject: msgUrl,
-        predicate: SIOC.hasCreator,
-        object: author
-      },
-      { // with content...
-        subject: msgUrl,
-        predicate: SIOC.content,
-        object: N3Util.createLiteral(content)
-      },
-      { // with timestamp...
-        subject: msgUrl,
-        predicate: DC.created,
-        object: N3Util.createLiteral(new Date().toUTCString())
-      }
-    ]
+    return [{// this is a message
+      subject: msgUrl,
+      predicate: RDF.type,
+      object: SIOC.Post
+    }, { // in relation to...
+      subject: subject,
+      predicate: SIOC.containerOf,
+      object: msgUrl
+    }, { // written by...
+      subject: msgUrl,
+      predicate: SIOC.hasCreator,
+      object: author
+    }, { // with content...
+      subject: msgUrl,
+      predicate: SIOC.content,
+      object: N3Util.createLiteral(content)
+    }, { // with timestamp...
+      subject: msgUrl,
+      predicate: DC.created,
+      object: N3Util.createLiteral(new Date().toUTCString())
+    }]
   },
 
   onMessageSendClick: function() {
@@ -212,9 +210,14 @@ let Chat = React.createClass({
       })
   },
 
+  _toggleNav() {
+    NavActions.toggle()
+  },
+
   render: function() {
     return (
       <div id="chat_container">
+        <AppBar title='Chat' onLeftIconButtonTouchTap={this._toggleNav} />
         <div id="chat">
           { /* TODO: structure, ids and class names suck*/ }
           <div className="close" onClick={this.props.hide}>x</div>

@@ -16,7 +16,7 @@ let Nav = React.createClass({
 
     let found = false
     // triples which describe profile
-    let relevant = triples.filter((t) => t.subject == webid) 
+    let relevant = triples.filter((t) => t.subject == webid)
 
     // get foaf:img
     for (var t of relevant){
@@ -24,7 +24,7 @@ let Nav = React.createClass({
         state.imgUri =  t.object
         found = true
         break
-      }    
+      }
     }
     if (found) {
       this.setState(state)
@@ -58,7 +58,7 @@ let Nav = React.createClass({
         console.log(err)
       })
   },
-  
+
   render: function() {
     return (
       <div className="status-bar">
