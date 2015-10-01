@@ -1,7 +1,8 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
 import React from 'react/addons'
-import {AppBar, IconButton, FontIcon} from 'material-ui'
+
+import {Layout, Header, Content, IconButton, Switch} from 'react-mdl'
 
 import Util from 'lib/util.js'
 import GraphAgent from 'lib/graph-agent.js'
@@ -388,36 +389,35 @@ let Graph = React.createClass({
 
   render() {
     return (
-      <div id="graph-outer">
+      <div id="graph">
+        <Layout fixedHeader={true}>
+          <Header title="Graph">
+            <Switch />
+            <IconButton name="search" />
+          </Header>
+            <Content>
+            { /* TODO: structure, ids and class names suck*/ }
+            <div id="wrapper">
+              <div id="plus_button" onClick={this.togglePlusDrawer}/>
 
-        <header>
-          <AppBar
-            title="Graph"
-            onLeftIconButtonTouchTap={this._toggleNav}
-            iconElementRight={<IconButton><FontIcon className="material-icons">search</FontIcon></IconButton>}
-          />
-        </header>
+              {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.addNodeToInbox}/> : ''}
 
-        { /* TODO: structure, ids and class names suck*/ }
-        <div id="wrapper">
-          <div id="plus_button" onClick={this.togglePlusDrawer}/>
+              <div id="inbox_container">
+                { this.state.inboxCount > 0 ? <InboxCounter onClick={this.openInbox} count={this.state.inboxCount}/> : ''}
 
-          {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.addNodeToInbox}/> : ''}
-
-          <div id="inbox_container">
-            { this.state.inboxCount > 0 ? <InboxCounter onClick={this.openInbox} count={this.state.inboxCount}/> : ''}
-
-            { this.state.inboxOpen ? <Inbox onClick={this.closeInbox} nodes={this.state.inboxNodes} addNode={this.addNode}/> : ''}
-          </div>
+                { this.state.inboxOpen ? <Inbox onClick={this.closeInbox} nodes={this.state.inboxNodes} addNode={this.addNode}/> : ''}
+              </div>
 
 
-          <div id="graph">
-            <div id="chart"/>
-          </div>
-        </div>
-        { this.state.chatOpen ? <Chat identity={this.state.identity} topic={this.state.centerNode.uri} origin={this.state.centerNode.uri} graph={this.state.graph} hide={this.hideChat}/> : ''}
+              <div id="graph">
+                <div id="chart"/>
+              </div>
+            </div>
+            { this.state.chatOpen ? <Chat identity={this.state.identity} topic={this.state.centerNode.uri} origin={this.state.centerNode.uri} graph={this.state.graph} hide={this.hideChat}/> : ''}
+          </Content>
+        </Layout>
       </div>
-   )
+    )
   }
 })
 
