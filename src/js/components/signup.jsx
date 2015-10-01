@@ -1,17 +1,27 @@
 import React from 'react/addons'
 import Reflux from 'reflux'
-import {TextField, RaisedButton} from 'material-ui'
+import {Textfield, Button} from 'react-mdl'
 import {Navigation} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
 
+function linkToState(target, property) {
+  return value => {
+    target.setState({
+      [property]: value
+    })
+  }
+}
+
 let Signup = React.createClass({
   mixins: [
     Navigation,
-    React.addons.LinkedStateMixin,
     Reflux.connect(AvailabilityStore)
   ],
+  contextTypes: {
+    muiTheme: React.PropTypes.object
+  },
   componentDidMount() {
     this.frame = React.findDOMNode(this.refs.frame)
     this.frame.addEventListener('load', this._onSignup, false)
@@ -26,33 +36,33 @@ let Signup = React.createClass({
       window.location.href = '/'
     }, 500)
   },
-  _onUsernameChange({target}) {
+  _onUsernameChange(value) {
     this.setState({
-      username: target.value
+      username: value
     })
-    Availability.check(target.value)
+    Availability.check(value)
   },
   _onSignup() {
+    console.log('frame loaded')
     this.transitionTo('/')
   },
   render() {
-    let availableText, disabled = true
+    let usernameClass, availableText, disabled = true
 
     if (this.state.available === false) {
       availableText = 'This username is already taken.'
+      usernameClass = 'is-invalid is-dirty'
     }
 
     disabled = this.state.available !== true || !this.state.action
 
     return (
-      <div id="signup">
-        <header className="signup-header">
-          <img src="/img/logo.png" />
-          <h2>
-            Signup for your WebID
-          </h2>
+      <div className="jlc-signup">
+        <header className="jlc-signup-header">
+          <img src="/img/logo.png" className="jlc-logo" />
+          <h2>Signup for Jolocom</h2>
         </header>
-        <main className="signup-body">
+        <main className="jlc-signup-content mdl-shadow--2dp">
           <form action={this.state.action} target="spkac" method="post" ref="form">
             <keygen id="certgen" name="spkac" hidden />
             <input name="username" type="hidden" value={this.state.username} />
@@ -60,16 +70,20 @@ let Signup = React.createClass({
             <input name="email" type="hidden" value={this.state.email} />
 
             <fieldset>
-              <TextField floatingLabelText="Username"
+              <Textfield label="Username"
                 onChange={this._onUsernameChange}
-                errorText={availableText} />
-              <TextField floatingLabelText="Name" valueLink={this.linkState('name')} />
-              <TextField floatingLabelText="Email" valueLink={this.linkState('email')} />
+                error={availableText}
+                className={usernameClass}
+                floatingLabel={true} />
+              <Textfield label="Name"
+                onChange={linkToState(this, 'name')}
+                floatingLabel={true} />
+              <Textfield label="Email"
+                onChange={linkToState(this, 'email')}
+                floatingLabel={true} />
             </fieldset>
 
-            <nav className="form-actions">
-              <RaisedButton label="Sign up" primary={true} onClick={this.signup} disabled={disabled}/>
-            </nav>
+            <Button primary={true} raised={true} onClick={this.signup} disabled={disabled}>Sign up</Button>
 
             <iframe ref="frame" name="spkac" hidden></iframe>
           </form>

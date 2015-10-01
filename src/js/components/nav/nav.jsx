@@ -1,16 +1,11 @@
 import React from 'react'
 import Reflux from 'reflux'
-import {LeftNav, MenuItem} from 'material-ui'
+import {Link} from 'react-router'
+import {Drawer, Navigation} from 'react-mdl'
 
 import NavStore from 'stores/nav'
 
 import Header from './header.jsx'
-
-let menuItems = [
-  { route: 'graph', text: 'Graph' },
-  { route: 'chat', text: 'Chat' },
-  { type: MenuItem.Types.SUBHEADER, text: 'Favourites' }
-]
 
 let Nav = React.createClass({
 
@@ -20,36 +15,21 @@ let Nav = React.createClass({
     router: React.PropTypes.func
   },
 
-  onToggle() {
-    this.toggle()
-  },
-
-  // Get the selected item in LeftMenu
-  _getSelectedIndex() {
-    let currentItem
-
-    for (let i = menuItems.length - 1; i >= 0; i--) {
-      currentItem = menuItems[i]
-      if (currentItem.route && this.context.router.isActive(currentItem.route)) {
-        return i
-      }
-    }
-  },
-
   _onLeftNavChange(e, key, payload) {
     this.context.router.transitionTo(payload.route)
   },
 
   render() {
+    // let items = this._getItemsWithIcon()
 
     return (
-      <LeftNav
-        ref="leftNav"
-        docked={false}
-        menuItems={menuItems}
-        selectedIndex={this._getSelectedIndex()}
-        onChange={this._onLeftNavChange}
-        header={<Header/>} />
+      <Drawer className="jlc-nav">
+        <Header/>
+        <Navigation>
+          <Link to="/graph" className="mdl-navigation__link" activeClassName="is-active"><i className="material-icons">share</i> Graph</Link>
+          <Link to="/chat" className="mdl-navigation__link" activeClassName="is-active"><i className="material-icons">chat</i> Chat</Link>
+        </Navigation>
+      </Drawer>
     )
   },
 
