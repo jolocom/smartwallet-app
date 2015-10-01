@@ -2,7 +2,7 @@
 
 import React from 'react/addons'
 
-import {Layout, Header, Content, IconButton, Switch} from 'react-mdl'
+import {Layout, Header, Content, IconButton} from 'react-mdl'
 
 import Util from 'lib/util.js'
 import GraphAgent from 'lib/graph-agent.js'
@@ -12,6 +12,8 @@ import STYLES from 'styles/app.js'
 import Chat from './chat.jsx'
 import {Inbox, InboxCounter} from './inbox.jsx'
 import PlusDrawer from './plus-drawer.jsx'
+
+import LeftNav from 'components/nav/nav.jsx'
 
 import NavActions from 'actions/nav'
 
@@ -392,10 +394,10 @@ let Graph = React.createClass({
       <div id="graph">
         <Layout fixedHeader={true}>
           <Header title="Graph">
-            <Switch />
-            <IconButton name="search" />
+            <IconButton name="search"></IconButton>
           </Header>
-            <Content>
+          <LeftNav/>
+          <Content>
             { /* TODO: structure, ids and class names suck*/ }
             <div id="wrapper">
               <div id="plus_button" onClick={this.togglePlusDrawer}/>
@@ -417,7 +419,7 @@ let Graph = React.createClass({
           </Content>
         </Layout>
       </div>
-    )
+   )
   }
 })
 
