@@ -1,41 +1,44 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
 import React from 'react/addons'
+import Reflux from 'reflux'
 
-import {Layout, Header, Content, IconButton} from 'react-mdl'
+import {Layout, Header, HeaderRow, HeaderTabs, Content, IconButton, Switch} from 'react-mdl'
 
 import Util from 'lib/util.js'
 import GraphAgent from 'lib/graph-agent.js'
 import GraphD3 from 'lib/graph'
 
 import STYLES from 'styles/app.js'
-import Chat from './chat.jsx'
-import {Inbox, InboxCounter} from './inbox.jsx'
+
 import PlusDrawer from './plus-drawer.jsx'
 
 import LeftNav from 'components/nav/nav.jsx'
+import Pinned from 'components/graph/pinned.jsx'
 
-import NavActions from 'actions/nav'
+import NodeActions from 'actions/node'
+import NodeStore from 'stores/node'
 
 let Graph = React.createClass({
+
+  mixins: [Reflux.connect(NodeStore, 'nodes')],
+
   getInitialState: function() {
     return {
       graph: new GraphD3(null, null, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap),
       identity: null,
       centerNode: null,
       previewNode: null,
-      nodes: [],
       inboxNodes: [],
       inboxCount: 0,
       historyNodes: [],
       links: [],
       literals: [],
-      chatOpen: false,
-      inboxOpen: false,
+      showPinned: false,
+      showSearch: false,
       plusDrawerOpen: false
     }
   },
-
 
   // returns altered state
   _changeCenter: function(center, newData) {
@@ -225,8 +228,6 @@ let Graph = React.createClass({
         newNodeURI: node.uri,  // will lit up on GraphD3 update
         links: this.state.links,
         literals: this.state.literals,
-        chatOpen: this.state.chatOpen,
-        inboxOpen: this.state.inboxOpen,
         plusDrawerOpen: this.state.plusDrawerOpen
       }
 
@@ -234,50 +235,8 @@ let Graph = React.createClass({
     })
   },
 
-  showChat: function() {
-    let state = {
-      graph: this.state.graph,
-      identity: this.state.identity,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      inboxCount: this.state.inboxCount,
-      historyNodes: this.state.historyNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: true,
-      inboxOpen: this.state.inboxOpen,
-      plusDrawerOpen: this.state.plusDrawerOpen
-    }
-    this.setState(state)
-  },
-
-  addNodeToInbox: function(d) {
-
-    // FIXME: not guaranteed to be unique
-    if (this.state.inboxNodes.filter((n) => n.name && n.name == d.name).length != 0) {
-      console.log('Node is already in the inbox!')
-      return
-    }
-    d.id = this.state.inboxNodes.length + 1
-    this.state.inboxNodes.push(d)
-    let state = {
-      graph: this.state.graph,
-      identity: this.state.identity,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      inboxCount: this.state.inboxCount + 1,
-      historyNodes: this.state.historyNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: this.state.chatOpen,
-      inboxOpen: this.state.inboxOpen,
-      plusDrawerOpen: this.state.plusDrawerOpen
-    }
-    this.setState(state)
+  pinNode: function(d) {
+    NodeActions.pin(d)
   },
 
   enrich: function (less, more){
@@ -305,123 +264,103 @@ let Graph = React.createClass({
     }
   },
 
-  hideChat: function() {
-    let state = {
-      graph: this.state.graph,
-      identity: this.state.identity,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      inboxCount: this.state.inboxCount,
-      historyNodes: this.state.historyNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: false,
-      inboxOpen: this.state.inboxOpen,
-      plusDrawerOpen: this.state.plusDrawerOpen
-    }
-
-    this.setState(state)
-  },
-
   togglePlusDrawer: function() {
-    let state = {
-      graph: this.state.graph,
-      identity: this.state.identity,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      inboxCount: this.state.inboxCount,
-      historyNodes: this.state.historyNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: this.state.chatOpen,
-      inboxOpen: this.state.inboxOpen,
+    this.setState({
       plusDrawerOpen: !this.state.plusDrawerOpen
-    }
-
-    this.setState(state)
+    })
   },
 
-  openInbox: function() {
-    let state = {
-      graph: this.state.graph,
-      identity: this.state.identity,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      inboxCount: this.state.inboxCount,
-      historyNodes: this.state.historyNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: this.state.chatOpen,
-      inboxOpen: true,
-      plusDrawerOpen: this.state.plusDrawerOpen
-    }
-
-    this.setState(state)
+  togglePinned() {
+    this.setState({
+      showPinned: !this.state.showPinned
+    })
   },
 
-  closeInbox: function() {
-    let state = {
-      graph: this.state.graph,
-      identity: this.state.identity,
-      centerNode: this.state.centerNode,
-      previewNode: this.state.previewNode,
-      nodes: this.state.nodes,
-      inboxNodes: this.state.inboxNodes,
-      inboxCount: this.state.inboxCount,
-      historyNodes: this.state.historyNodes,
-      links: this.state.links,
-      literals: this.state.literals,
-      chatOpen: this.state.chatOpen,
-      inboxOpen: false,
-      plusDrawerOpen: this.state.plusDrawerOpen
-    }
-
-    this.setState(state)
+  toggleSearch() {
+    this.setState({
+      showSeach: !this.state.showSearch
+    })
   },
 
-  _toggleNav() {
-    NavActions.toggle()
+  showSearch() {
+    this.setState({
+      showSearch: true
+    })
+  },
+
+  hideSearch() {
+    this.setState({
+      showSearch: false
+    })
+  },
+
+  resetSearch() {
   },
 
   render() {
+    let pinned
+    if (this.state.showPinned) {
+      pinned = <Pinned/>
+    }
+
+    let cls = ['jlc-graph']
+    if (this.state.showSearch) {
+      cls.push('jlc-search-active')
+    }
+
     return (
-      <div id="graph">
-        <Layout fixedHeader={true}>
-          <Header title="Graph">
-            <IconButton name="search"></IconButton>
+      <div className={cls.join(' ')}>
+        <Layout fixedHeader={true} fixedTabs={true}>
+          <Header>
+            <HeaderRow title="Graph">
+              <nav className="mdl-navigation">
+                <Switch id="pinned" className="jlc-pinned-switch" onChange={this.togglePinned}/>
+                <IconButton name="search" onClick={this.showSearch}/>
+              </nav>
+              <div className="jlc-search">
+                <IconButton name="arrow_back" className="jlc-search-hide-button" onClick={this.hideSearch}/>
+                  <div className="jlc-search-field mdl-textfield mdl-js-textfield">
+                    <input className="mdl-textfield__input" type="text" id="search-query" ref="search" autofocus />
+                    <label className="mdl-textfield__label" for="search-query">Search</label>
+                  </div>
+                <nav className="mdl-navigation">
+                  <IconButton name="close" onClick={this.resetSearch}/>
+                </nav>
+              </div>
+            </HeaderRow>
+            <HeaderTabs className="jlc-search-filters">
+              <a href="#search-where"><i className="material-icons">place</i></a>
+              <a href="#search-what"><i className="material-icons">label</i></a>
+              <a href="#search-who"><i className="material-icons">person</i></a>
+              <a href="#search-when"><i className="material-icons">schedule</i></a>
+            </HeaderTabs>
           </Header>
           <LeftNav/>
+          {pinned}
           <Content>
             { /* TODO: structure, ids and class names suck*/ }
             <div id="wrapper">
               <div id="plus_button" onClick={this.togglePlusDrawer}/>
 
-              {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.addNodeToInbox}/> : ''}
-
-              <div id="inbox_container">
-                { this.state.inboxCount > 0 ? <InboxCounter onClick={this.openInbox} count={this.state.inboxCount}/> : ''}
-
-                { this.state.inboxOpen ? <Inbox onClick={this.closeInbox} nodes={this.state.inboxNodes} addNode={this.addNode}/> : ''}
-              </div>
-
+              {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.pinNode}/> : ''}
 
               <div id="graph">
                 <div id="chart"/>
               </div>
             </div>
-            { this.state.chatOpen ? <Chat identity={this.state.identity} topic={this.state.centerNode.uri} origin={this.state.centerNode.uri} graph={this.state.graph} hide={this.hideChat}/> : ''}
+
           </Content>
         </Layout>
       </div>
    )
   }
 })
-
+//
+// <div id="inbox_container">
+//   { this.state.inboxCount > 0 ? <InboxCounter onClick={this.openInbox} count={this.state.inboxCount}/> : ''}
+//
+//   { this.state.inboxOpen ? <Inbox onClick={this.closeInbox} nodes={this.state.inboxNodes} addNode={this.addNode}/> : ''}
+// </div>
+//             { this.state.chatOpen ? <Chat identity={this.state.identity} topic={this.state.centerNode.uri} origin={this.state.centerNode.uri} graph={this.state.graph} hide={this.hideChat}/> : ''}
 
 export default Graph
