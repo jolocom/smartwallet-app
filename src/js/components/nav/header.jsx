@@ -1,7 +1,9 @@
 import React from 'react'
 import Reflux from 'reflux'
 
-import {Avatar, Card, CardHeader} from 'material-ui'
+import {IconButton} from 'react-mdl'
+
+import Avatar from 'components/avatar.jsx'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
@@ -15,14 +17,18 @@ let Header = React.createClass({
   },
   render() {
     let {profile} = this.state
-
+    let initials = profile.name[0]
     return (
-      <Card>
-        <CardHeader
-          title={profile.name}
-          subtitle={profile.email}
-          avatar={<Avatar>A</Avatar>}/>
-      </Card>
+      <header className="jlc-nav-header">
+        <Avatar src={profile.img}>{initials}</Avatar>
+        <div className="jlc-nav-profile">
+          <div className="jlc-nav-profile-details">
+            <span className="jlc-nav-profile-name">{profile.name}</span>
+            <span className="jlc-nav-profile-email">{profile.email}</span>
+          </div>
+          <IconButton name="mode_edit"/>
+        </div>
+      </header>
     )
   }
 })

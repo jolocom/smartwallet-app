@@ -20,10 +20,8 @@ var sources = {
     './node_modules/babel-core/browser-polyfill.js'
   ],
   libFonts: [
-    './bower_components/fontawesome/fonts/**/*'
   ],
   libCss: [
-    './bower_components/fontawesome/css/font-awesome.css'
   ],
   sass: './src/sass/**/*.scss'
 };
@@ -86,6 +84,7 @@ gulp.task('img', function() {
 gulp.task('sass', function () {
   return gulp.src(sources.sass)
     .pipe(sass())
+    .pipe(concat('jolocom.css'))
     .pipe(gulp.dest(destinations.css));
 });
 

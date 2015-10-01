@@ -1,18 +1,8 @@
-//Keep in mind: prototype -- Dan
-
-$width: 100%;
-$height: 100%;
-$joloblue: #009fe3;
-$jolodarkblue: darken($joloblue, 20%);
-$joloelectricblue: lighten($joloblue, 20%);
-$jologray: #838383;
-$ws: whitesmoke;
-$fs_body: 13px;
-$ff_default: "Roboto", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+@import 'variables';
 
 * {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -113,6 +103,10 @@ textarea {
 #page {
   height: $height;
   width: $width;
+}
+
+section.content {
+  height: 100%;
 }
 
 #graph-outer {
@@ -577,7 +571,7 @@ $small-node-size: $width / 20;
 }
 
 // Profile
-.profile, #signup {
+.profile {
   position: absolute;
   z-index: 2;
   top: 0;
@@ -610,15 +604,6 @@ $small-node-size: $width / 20;
       margin-top: 30px;
       margin-bottom: -50%;
     }
-  }
-  .signup-header {
-    h2 {
-      font-size: 2em;
-      font-weight: 200;
-    }
-  }
-  .form-actions {
-    text-align: right;
   }
 }
 
@@ -662,7 +647,7 @@ $small-node-size: $width / 20;
 }
 
 //Profile inputs
-.profile, #signup {
+.profile {
   input {
     background-color: $joloblue;
     font-size: 1.3em;
@@ -689,40 +674,5 @@ $small-node-size: $width / 20;
   }
   &:last-child {
     margin-bottom: 15px;
-  }
-}
-
-#signup {
-  font-size: 2em;
-  .signup-header {
-    text-align: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    img {
-      max-width: 80px;
-    }
-  }
-  .signup-body {
-    padding: 30px;
-    max-width: 280px;
-    margin: 0 auto;
-    input {
-      width: 100%;
-      box-sizing: border-box;
-    }
-    input[type="submit"] {
-      background-color: $joloelectricblue;
-      font-size: 16px;
-      line-height: 28px;
-      text-align: center;
-      color: white;
-      height: 42px;
-      border-radius: 0;
-      margin-top: 20px;
-    }
-    input[name="Signup"] {
-      margin-top: 0;
-      background-color: $jolodarkblue;
-    }
   }
 }
