@@ -2,6 +2,41 @@
 
 .jlc-graph {
 
+  &-content {
+    position: relative;
+  }
+
+  &-chart {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+
+  .mdl-menu__fab {
+    &-nav {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      flex-direction: column-reverse;
+      z-index: 4;
+    }
+    &-nav > .mdl-button {
+      margin-top: 5px;
+    }
+    &-item {
+      margin: 5px;
+      // display: none;
+    }
+    &.is-opened {
+      .mdl-menu__fab-item {
+        // display: block;
+      }
+    }
+  }
+
   .jlc-pinned-switch {
     margin-right: 24px;
 

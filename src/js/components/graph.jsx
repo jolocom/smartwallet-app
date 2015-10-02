@@ -15,6 +15,8 @@ import PlusDrawer from './plus-drawer.jsx'
 
 import LeftNav from 'components/nav/nav.jsx'
 import Pinned from 'components/graph/pinned.jsx'
+import FabMenu from 'components/fab-menu.jsx'
+import FabMenuItem from 'components/fab-menu-item.jsx'
 
 import NodeActions from 'actions/node'
 import NodeStore from 'stores/node'
@@ -25,7 +27,6 @@ let Graph = React.createClass({
 
   getInitialState: function() {
     return {
-      graph: new GraphD3(null, null, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap),
       identity: null,
       centerNode: null,
       previewNode: null,
@@ -99,19 +100,21 @@ let Graph = React.createClass({
       })
   },
 
-  componentDidMount: function() {
-    // Initialize d3 graph
-    this.state.graph.create(null, this.props, this.state)
+  getGraphEl() {
+    return React.findDOMNode(this.refs.graph)
+  },
 
+  componentDidMount: function() {
+    this.graph = new GraphD3(this.getGraphEl(), this.props, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap)
     this.centerAtWebID()
   },
 
   componentWillUpdate: function(nextProps, nextState) {
-    nextState.graph.beforeUpdate(null, this.state, nextState)
+    this.graph.beforeUpdate(this.state, nextState)
   },
 
   componentDidUpdate: function(prevProps, prevState) {
-    this.state.graph.update(null, prevState, this.state)
+    this.graph.update(prevState, this.state)
   },
 
   handleNodeClick: function(node) {
@@ -159,7 +162,6 @@ let Graph = React.createClass({
   handleLongTap: function(distance) {
     if(distance > 40){
       let state = {
-        graph: this.state.graph,
         identity: this.state.identity,
         centerNode: this.state.centerNode,
         previewNode: this.state.previewNode,
@@ -217,7 +219,6 @@ let Graph = React.createClass({
       //TODO: connect node in database
 
       let state = {
-        graph: this.state.graph,
         identity: this.state.identity,
         centerNode: this.state.centerNode,
         previewNode: this.state.previewNode,
@@ -337,18 +338,15 @@ let Graph = React.createClass({
           </Header>
           <LeftNav/>
           {pinned}
-          <Content>
-            { /* TODO: structure, ids and class names suck*/ }
-            <div id="wrapper">
-              <div id="plus_button" onClick={this.togglePlusDrawer}/>
+          <Content className="jlc-graph-content">
+            <FabMenu>
+              <FabMenuItem icon="comment" tooltip="Comment"/>
+              <FabMenuItem icon="insert_photo"/>
+              <FabMenuItem icon="attachment"/>
+              <FabMenuItem icon="person"/>
+            </FabMenu>
 
-              {this.state.plusDrawerOpen ? <PlusDrawer graph={this.state.graph} toggle={this.togglePlusDrawer} addNode={this.addNode} addNodeToInbox={this.pinNode}/> : ''}
-
-              <div id="graph">
-                <div id="chart"/>
-              </div>
-            </div>
-
+            <div className="jlc-graph-chart" ref="graph"></div>
           </Content>
         </Layout>
       </div>
