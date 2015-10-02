@@ -1,47 +1,57 @@
 import React from 'react/addons'
 
-export let InboxCounter = React.createClass({
-  getInitialState: function() {
-    return {
-      count: this.props.count ? this.props.count : 0
-    }
-  },
-  componentWillReceiveProps: function(nextProps) {
-    console.log('InboxCounter component will receive props')
-    let state = {
-      count: nextProps.count
-    }
-    this.setState(state)
-  },
-  render: function() {
-    //<div id="inbox" draggable="true" onClick={this.inboxEnlarge}>
-    return (
-      <div id="inbox" draggable="true" onClick={this.props.onClick}>
-        <div className="counter">
-          <div className="number">{this.state.count}</div>
-        </div>
-      </div>
-    )
-  
-  }
-})
+import Reflux from 'reflux'
 
-export let Inbox = React.createClass({
+import NodeActions from 'actions/node'
+import PinnedStore from 'stores/node'
+
+// export let InboxCounter = React.createClass({
+//   getInitialState: function() {
+//     return {
+//       count: this.props.count ? this.props.count : 0
+//     }
+//   },
+//   componentWillReceiveProps: function(nextProps) {
+//     console.log('InboxCounter component will receive props')
+//     let state = {
+//       count: nextProps.count
+//     }
+//     this.setState(state)
+//   },
+//   render: function() {
+//     //<div id="inbox" draggable="true" onClick={this.inboxEnlarge}>
+//     return (
+//       <div id="inbox" draggable="true" onClick={this.props.onClick}>
+//         <div className="counter">
+//           <div className="number">{this.state.count}</div>
+//         </div>
+//       </div>
+//     )
+//
+//   }
+// })
+
+let PinnedNodes = React.createClass({
+
+  mixins: [Reflux.connect(PinnedStore, 'nodes')],
+
   getInitialState: function() {
     return {
-      nodes: this.props.nodes ? this.props.nodes : [],
       open: false
     }
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    console.log('Inbox component will receive props')
-    let state = {
-      nodes: nextProps.nodes
-    }
-    this.setState(state)
+  open() {
+    this.setState({open: true})
   },
 
+  close() {
+    this.setState({open: false})
+  },
+
+  toggle() {
+    this.setState({open: !this.state.open})
+  },
 
   onNodeClick: function(nodeId) {
     let self = this
@@ -49,7 +59,7 @@ export let Inbox = React.createClass({
       console.log(`node ${nodeId} clicked`)
       // FIXME: unreliable
       let node = self.state.nodes[nodeId - 1]
-      self.props.addNode(node)
+      NodeActions.add(node)
     }
   },
 
@@ -70,3 +80,5 @@ export let Inbox = React.createClass({
     )
   }
 })
+
+export default PinnedNodes

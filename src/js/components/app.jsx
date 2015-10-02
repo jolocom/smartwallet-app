@@ -1,5 +1,4 @@
 import React from 'react'
-import { RouteHandler } from 'react-router'
 
 let App = React.createClass({
 
@@ -12,7 +11,7 @@ let App = React.createClass({
     return (
       <div id="page">
         <section className="content">
-          <RouteHandler />
+          {this.props.children}
         </section>
       </div>
     )

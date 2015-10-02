@@ -2,6 +2,8 @@
 
 import React from 'react/addons'
 import Reflux from 'reflux'
+import {History} from 'react-router'
+import classNames from 'classnames'
 
 import {Layout, Header, HeaderRow, HeaderTabs, Content, IconButton, Switch} from 'react-mdl'
 
@@ -11,10 +13,8 @@ import GraphD3 from 'lib/graph'
 
 import STYLES from 'styles/app.js'
 
-import PlusDrawer from './plus-drawer.jsx'
-
 import LeftNav from 'components/nav/nav.jsx'
-import Pinned from 'components/graph/pinned.jsx'
+import PinnedNodes from 'components/graph/pinned.jsx'
 import FabMenu from 'components/fab-menu.jsx'
 import FabMenuItem from 'components/fab-menu-item.jsx'
 
@@ -23,7 +23,10 @@ import NodeStore from 'stores/node'
 
 let Graph = React.createClass({
 
-  mixins: [Reflux.connect(NodeStore, 'nodes')],
+  mixins: [
+    Reflux.connect(NodeStore, 'nodes'),
+    History
+  ],
 
   getInitialState: function() {
     return {
@@ -117,23 +120,38 @@ let Graph = React.createClass({
     this.graph.update(prevState, this.state)
   },
 
-  handleNodeClick: function(node) {
-    if(node.uri == this.state.previewNode.uri) return
-    this.state.previewNode = {
-      node: node,
-      uri: node.uri
-    }
+  showNode(node) {
+    // @TODO user proper id
+    let uri = node.uri || 'current-node-id'
+    this.history.pushState(null, `/graph/${uri}`)
+  },
 
-    this.setState(this.state)
+  handleLongTap(distance) {
+    if (distance > 40) {
+      this.showNode(this.state.centerNode.node)
+    }
+  },
+
+  handleNodeClick(node) {
+    if (node == this.state.centerNode.node) {
+      // this.showNode(node)
+    } else if(node.uri !== this.state.previewNode.uri) {
+      this.setState({
+        previewNode: {
+          node: node,
+          uri: node.uri
+        }
+      })
+    }
   },
 
   handleDragEnd: function(node, distance, verticalOffset) {
-    if(node == this.state.centerNode.node){
-      if(distance < 40){
-        this.showChat()
-      } else if(verticalOffset < STYLES.height / 3) {
+    if (node == this.state.centerNode.node){
+      if (distance < 40){
+        this.showNode(node)
+      } else if (verticalOffset < STYLES.height / 3) {
         // perspective node can be dragged into inbox (top of screen)
-        this.addNodeToInbox(node)
+        NodeActions.pin(node)
       }
     } else {
       // surrounding nodes can be dragged into focus (center of screen)
@@ -157,27 +175,6 @@ let Graph = React.createClass({
     }
 
     //self.closeInbox()
-  },
-
-  handleLongTap: function(distance) {
-    if(distance > 40){
-      let state = {
-        identity: this.state.identity,
-        centerNode: this.state.centerNode,
-        previewNode: this.state.previewNode,
-        nodes: this.state.nodes,
-        inboxNodes: this.state.inboxNodes,
-        inboxCount: this.state.inboxCount,
-        historyNodes: this.state.historyNodes,
-        links: this.state.links,
-        literals: this.state.literals,
-        chatOpen: this.state.chatOpen,
-        inboxOpen: true,
-        plusDrawerOpen: this.state.plusDrawerOpen
-      }
-
-      this.setState(state)
-    }
   },
 
   addNode: function(node) {
@@ -301,16 +298,15 @@ let Graph = React.createClass({
   render() {
     let pinned
     if (this.state.showPinned) {
-      pinned = <Pinned/>
+      pinned = <PinnedNodes/>
     }
 
-    let cls = ['jlc-graph']
-    if (this.state.showSearch) {
-      cls.push('jlc-search-active')
-    }
+    let classes = classNames('jlc-graph', {
+      'jlc-search-active': this.state.showSearch
+    })
 
     return (
-      <div className={cls.join(' ')}>
+      <div className={classes}>
         <Layout fixedHeader={true} fixedTabs={true}>
           <Header>
             <HeaderRow title="Graph">
@@ -322,7 +318,7 @@ let Graph = React.createClass({
                 <IconButton name="arrow_back" className="jlc-search-hide-button" onClick={this.hideSearch}/>
                   <div className="jlc-search-field mdl-textfield mdl-js-textfield">
                     <input className="mdl-textfield__input" type="text" id="search-query" ref="search" autofocus />
-                    <label className="mdl-textfield__label" for="search-query">Search</label>
+                    <label className="mdl-textfield__label" for="search-query">Search...</label>
                   </div>
                 <nav className="mdl-navigation">
                   <IconButton name="close" onClick={this.resetSearch}/>
@@ -349,6 +345,7 @@ let Graph = React.createClass({
             <div className="jlc-graph-chart" ref="graph"></div>
           </Content>
         </Layout>
+        {this.props.children}
       </div>
    )
   }

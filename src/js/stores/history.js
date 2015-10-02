@@ -1,7 +1,7 @@
 import Reflux from 'reflux'
 import NodeActions from 'actions/node'
 
-let NodeStore = Reflux.createStore({
+let HistoryStore = Reflux.createStore({
   listenables: NodeActions,
   init() {
     this.nodes = []
@@ -10,13 +10,7 @@ let NodeStore = Reflux.createStore({
     return {
       nodes: []
     }
-  },
-  onAdd() {
-    console.log('add node')
-  },
-  onRemove() {
-    console.log('remove node')
   }
 })
 
-export default NodeStore
+export default HistoryStore

@@ -1,26 +1,28 @@
 import React from 'react'
-import Router, { Route, DefaultRoute } from 'react-router'
+// @TODO preferred way to handle history, can we do this with gold server?
+// import createBrowserHistory from 'history/lib/createBrowserHistory'
+import Router, { Route } from 'react-router'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import App from 'components/app.jsx'
 import Graph from 'components/graph.jsx'
+import Node from 'components/graph/node.jsx'
 import Chat from 'components/chat.jsx'
 import Signup from 'components/signup.jsx'
 import Test from 'components/test.jsx'
 
 injectTapEventPlugin()
 
-let routes =  (
-  <Route name="app" path="/" handler={App}>
-    <DefaultRoute handler={Graph} />
-    <Route name="graph" handler={Graph}/>
-    <Route name="chat" handler={Chat}/>
-    <Route name="signup" handler={Signup}/>
-    <Route name="test" handler={Test}/>
+let routes = (
+  <Route path="/" component={App}>
+    <Route path="graph" component={Graph}>
+      <Route path=":node" component={Node}/>
+    </Route>
+    <Route path="chat" component={Chat}/>
+    <Route path="signup" component={Signup}/>
+    <Route path="test" component={Test}/>
   </Route>
 )
 
-Router.run(routes, (Handler) => {
-  React.render(<Handler/>, document.body)
-})
+React.render(<Router>{routes}</Router>, document.body)

@@ -360,10 +360,9 @@ export default class GraphD3 {
 
   // catch long tap and forward it to react
   triggerLongTap() {
-    let self = this
-    return function (){
-      if(!self.drag.active) return // drag event stopped before timeout expired
-      self.handleLongTap(self.drag.distance())
+    return () => {
+      if(!this.drag.active) return // drag event stopped before timeout expired
+      this.handleLongTap(this.drag.distance())
     }
   }
 

@@ -68,7 +68,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    padding: 0 16px 0 72px;
+    padding: 0 16px 0 48px;
     z-index: 5;
     background: rgb(33,150,243); /* @TODO import mdl scss variables/colors */
     align-items: center;
@@ -80,13 +80,18 @@
     &-field {
       width: auto;
       flex: 1;
-
-      input {
-        border: 0;
+      padding: 0;
+      margin: 0 16px;
+      .mdl-textfield__input {
+        padding: 10px 0;
       }
 
-      label {
-        color: rgba(255,255,255,.4);
+      .mdl-textfield__label {
+        color: rgba(255,255,255,.5);
+        top: 8px;
+        &:after {
+          display: none;
+        }
       }
     }
 
