@@ -1,10 +1,12 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
 
-import {N3Util} from 'n3'
+import N3 from 'n3'
 import WebAgent from 'lib/web-agent.js'
 import {Parser, Writer} from 'lib/rdf.js'
 import {CERT, FOAF} from 'lib/namespaces.js'
+
+let N3Util = N3.Util
 
 let ProfileStore = Reflux.createStore({
   listenables: ProfileActions,
@@ -12,8 +14,8 @@ let ProfileStore = Reflux.createStore({
   getInitialState () {
     return {
       edit: false,
-      name: '(name missing)',
-      email: '(email missing)',
+      name: '',
+      email: '',
       rsaModulus: '(rsa modulus missing)',
       rsaExponent: '(rsa exponent missing)',
       webid: '#',
@@ -30,10 +32,8 @@ let ProfileStore = Reflux.createStore({
     // who am I? (check 'User' header)
     WebAgent.head(document.location.origin)
       .then((xhr) => {
-        console.log('head')
-        console.log(xhr)
         webid = xhr.getResponseHeader('User')
-        console.log('xhr header', webid)
+
         // now get my profile document
         return WebAgent.get(webid)
       })
@@ -55,14 +55,14 @@ let ProfileStore = Reflux.createStore({
   // change state from triples
   onLoadCompleted(webid, triples, prefixes) {
     // subject which represents our profile
-
+    console.log('loadcompleted', webid, triples, prefixes)
     // everything's fixed but name and email
     let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
 
     let state = {
       edit: this.edit,
-      name: '(name missing)',
-      email: '(email missing)',
+      name: '',
+      email: '',
       rsaModulus: '(rsa modulus missing)',
       rsaExponent: '(rsa exponent missing)',
       webid: webid,
@@ -81,7 +81,7 @@ let ProfileStore = Reflux.createStore({
         state.name =  this._getValue(t.object)
       } else if (t.predicate == FOAF.mbox) {
         // email
-        state.email =  this._getValue(t.object)
+        state.email =  this._getValue(t.object).replace('mailto:', '')
       } else if (t.predicate == FOAF.img) {
         // image uri
         state.imgUri =  this._getValue(t.object)
@@ -91,7 +91,7 @@ let ProfileStore = Reflux.createStore({
         if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
       }
     }
-    console.log(state)
+    console.log('state', state)
     this.trigger(state)
   },
 

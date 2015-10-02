@@ -1,5 +1,7 @@
 import React from 'react/addons'
-import {AppBar} from 'material-ui'
+import {Layout, Header, Content, IconButton} from 'react-mdl'
+
+import LeftNav from 'components/nav/nav.jsx'
 
 import NavActions from 'actions/nav'
 
@@ -216,28 +218,33 @@ let Chat = React.createClass({
 
   render: function() {
     return (
-      <div id="chat_container">
-        <AppBar title='Chat' onLeftIconButtonTouchTap={this._toggleNav} />
-        <div id="chat">
-          { /* TODO: structure, ids and class names suck*/ }
-          <div className="close" onClick={this.props.hide}>x</div>
-          <div className="head">
-            <h1 className="title">{this.props.topic}</h1>
-            <p className="origin">{this.props.origin}</p>
-          </div>
+      <div className="jlc-chat">
+        <Layout fixedHeader={true}>
+          <Header title="Chat">
+            <IconButton name="search"></IconButton>
+          </Header>
+          <LeftNav/>
+          <Content>
+            { /* TODO: structure, ids and class names suck*/ }
+            <div className="close" onClick={this.props.hide}>x</div>
+            <div className="head">
+              <h1 className="title">{this.props.topic}</h1>
+              <p className="origin">{this.props.origin}</p>
+            </div>
 
-          {this.state.messages.map(function(msg) {
-            return (
-              <Message key={msg.id} author={msg.author} content={msg.content}/>
-            )
-          })}
+            {this.state.messages.map(function(msg) {
+              return (
+                <Message key={msg.id} author={msg.author} content={msg.content}/>
+              )
+            })}
 
-          <div className="message new">
-            <textarea className="content" valueLink={this.linkState('currentMessage')}/>
-            <div className="node link"/>
-            <div className="button" onClick={this.onMessageSendClick}>tell</div>
-          </div>
-        </div>
+            <div className="message new">
+              <textarea className="content" valueLink={this.linkState('currentMessage')}/>
+              <div className="node link"/>
+              <div className="button" onClick={this.onMessageSendClick}>tell</div>
+            </div>
+          </Content>
+        </Layout>
       </div>
     )
   }
