@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Profile from 'components/profile.jsx'
+
 let App = React.createClass({
 
   contextTypes: {
@@ -13,6 +15,7 @@ let App = React.createClass({
         <section className="content">
           {this.props.children}
         </section>
+        <Profile/>
       </div>
     )
   }

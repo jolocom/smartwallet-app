@@ -222,6 +222,8 @@ let Chat = React.createClass({
         <Layout fixedHeader={true}>
           <Header title="Chat">
             <IconButton name="search"></IconButton>
+            <IconButton name="message"></IconButton>
+            <IconButton name="more_vert"></IconButton>
           </Header>
           <LeftNav/>
           <Content>

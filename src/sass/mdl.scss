@@ -1,0 +1,10 @@
+.mdl-layout__header {
+  .mdl-icon-toggle {
+    &__label {
+      color: rgba(255, 255, 255, 0.5)
+    }
+    &.is-checked .mdl-icon-toggle__label {
+      color: #ffffff;
+    }
+  }
+}

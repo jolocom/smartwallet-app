@@ -11,11 +11,15 @@ let N3Util = N3.Util
 let ProfileStore = Reflux.createStore({
   listenables: ProfileActions,
 
+  // init() {
+  //   this.show = false
+  // },
+
   getInitialState () {
     return {
-      edit: false,
-      name: '',
-      email: '',
+      show: false,
+      name: 'Jolocom',
+      email: 'contact@jolocom.com',
       rsaModulus: '(rsa modulus missing)',
       rsaExponent: '(rsa exponent missing)',
       webid: '#',
@@ -24,6 +28,23 @@ let ProfileStore = Reflux.createStore({
       fixedTriples: [],
       prefixes: []
     }
+  },
+
+  onShow() {
+    console.log('show profile')
+    this.show = true
+
+    this.trigger({
+      show: this.show
+    })
+  },
+
+  onHide() {
+    this.show = false
+
+    this.trigger({
+      show: this.show
+    })
   },
 
   onLoad() {
@@ -60,14 +81,8 @@ let ProfileStore = Reflux.createStore({
     let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
 
     let state = {
-      edit: this.edit,
-      name: '',
-      email: '',
-      rsaModulus: '(rsa modulus missing)',
-      rsaExponent: '(rsa exponent missing)',
       webid: webid,
       webidPresent: webid,
-      imgUri: '/img/person-placeholder.png',
       fixedTriples: fixedTriples,
       prefixes: prefixes
     }
@@ -92,7 +107,7 @@ let ProfileStore = Reflux.createStore({
       }
     }
     console.log('state', state)
-    this.trigger(state)
+    // this.trigger(state)
   },
 
   onUpdate: function (profile) {

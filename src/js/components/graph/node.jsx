@@ -2,7 +2,7 @@ import React from 'react'
 import {History} from 'react-router'
 import classNames from 'classnames'
 
-import {Layout, IconButton, Spacer, Content, Menu, MenuItem} from 'react-mdl'
+import {Layout, IconButton, IconToggle, Spacer, Content, Menu, MenuItem} from 'react-mdl'
 
 let Node = React.createClass({
   mixins: [History],
@@ -18,6 +18,7 @@ let Node = React.createClass({
   componentWillUnmount() {
     this.close()
   },
+
   open() {
     this.setState({open: true})
   },
@@ -29,6 +30,7 @@ let Node = React.createClass({
   toggle() {
     this.setState({open: !this.state.open})
   },
+  
   render() {
 
     let classes = classNames('jlc-node', 'jlc-dialog', 'jlc-dialog__fullscreen', {
@@ -43,7 +45,7 @@ let Node = React.createClass({
             <div className="mdl-layout__header-row">
               <Spacer></Spacer>
               <nav class="mdl-navigation">
-                <IconButton name="inbox"></IconButton>
+                <IconToggle name="inbox"></IconToggle>
                 <IconButton name="more_vert" id="node-more"></IconButton>
                 <Menu target="node-more" align="right">
                   <MenuItem>Delete</MenuItem>

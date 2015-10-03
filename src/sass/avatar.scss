@@ -1,0 +1,13 @@
+@import 'variables';
+
+$avatarSize: 32px;
+
+.jlc-avatar {
+  background-color: rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  text-align: center;
+  line-height: $avatarSize;
+  border-radius: $avatarSize;
+  width: $avatarSize;
+  height: $avatarSize;
+}

@@ -32,9 +32,9 @@ let Signup = React.createClass({
   signup() {
     React.findDOMNode(this.refs.form).submit()
     // @TODO onload doesn't work somehow, calling manually
-    setTimeout(function() {
-      window.location.href = '/'
-    }, 500)
+    // setTimeout(function() {
+    //   window.location.href = '/'
+    // }, 1000)
   },
   _onUsernameChange(value) {
     this.setState({
@@ -44,7 +44,7 @@ let Signup = React.createClass({
   },
   _onSignup() {
     console.log('frame loaded')
-    this.transitionTo('/')
+    // this.transitionTo('/')
   },
   render() {
     let usernameClass, availableText, disabled = true

@@ -1,7 +1,7 @@
 import React from 'react'
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
-import Router, { Route } from 'react-router'
+import Router, { Route, Redirect } from 'react-router'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
@@ -16,6 +16,7 @@ injectTapEventPlugin()
 
 let routes = (
   <Route path="/" component={App}>
+    <Redirect from="" to="/graph" />
     <Route path="graph" component={Graph}>
       <Route path=":node" component={Node}/>
     </Route>
