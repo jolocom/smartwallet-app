@@ -3,6 +3,7 @@ import ProfileActions from 'actions/profile'
 
 import N3 from 'n3'
 import WebAgent from 'lib/web-agent.js'
+import WebIDAgent from 'lib/webid-agent.js'
 import {Parser, Writer} from 'lib/rdf.js'
 import {CERT, FOAF} from 'lib/namespaces.js'
 
@@ -27,13 +28,12 @@ let ProfileStore = Reflux.createStore({
   },
 
   onLoad() {
-    var webid = null
-
-    // who am I? (check 'User' header)
-    WebAgent.head(document.location.origin)
-      .then((xhr) => {
-        webid = xhr.getResponseHeader('User')
-
+    let webid = null
+    WebIDAgent.getWebID()
+      .then((user) => {
+        console.log('got webid')
+        webid = user
+        console.log(webid)
         // now get my profile document
         return WebAgent.get(webid)
       })

@@ -1,6 +1,7 @@
 import N3 from 'n3'
 import D3Converter from './d3-converter.js'
 import WebAgent from './web-agent.js'
+import WebIDAgent from './webid-agent.js'
 import {DC, SIOC} from './namespaces.js'
 import {Parser, Writer} from './rdf.js'
 import Util from './util.js'
@@ -23,8 +24,6 @@ class GraphAgent {
   //
   // @return {Promise} promise with the result (TODO: what result)?
   static createNode(title, description, newNodeUrl, slug, dstContainer=DEST_CONTAINER) {
-    //TODO
-
     let writer = new Writer({format: 'N-Triples', prefixes: []})
     writer.addTriple({
       subject: newNodeUrl,
@@ -129,15 +128,13 @@ class GraphAgent {
   }
 
 
-
   // Fetch user profile document and convert it to format which can be
   // rendered in d3 graph.
   //
   // @return {Promise} promise containing d3 data
   static fetchWebIdAndConvert() {
-    return WebAgent.head(document.location.origin)
-      .then((xhr) => {
-        let webid = xhr.getResponseHeader('User')
+    return WebIDAgent.getWebID()
+      .then((webid) => {
         return GraphAgent.fetchAndConvert(webid)
       })
   }
