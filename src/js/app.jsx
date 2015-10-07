@@ -6,9 +6,10 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import App from 'components/app.jsx'
 import Graph from 'components/graph.jsx'
 import Chat from 'components/chat.jsx'
-//import Signup from 'components/signup.jsx'
-import SignupDev from 'components/signup-dev.jsx'
+import LoginDev from 'components/login-dev.jsx'
 import Test from 'components/test.jsx'
+//import SignupProd from 'components/signup.jsx'
+import Signup from 'components/signup-dev.jsx'
 
 injectTapEventPlugin()
 
@@ -17,7 +18,8 @@ let routes =  (
     <DefaultRoute handler={Graph} />
     <Route name="graph" handler={Graph}/>
     <Route name="chat" handler={Chat}/>
-    <Route name="signup" handler={SignupDev}/>
+    <Route name="signup" handler={Signup}/>
+    <Route name="login" handler={LoginDev}/>
     <Route name="test" handler={Test}/>
   </Route>
 )

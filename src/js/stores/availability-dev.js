@@ -29,14 +29,14 @@ let AvailabilityDevStore = Reflux.createStore({
 
   onFakeSignup(data) {
     WebIDAgent.fakeSignup(data.username, data.name, data.email)
-      .then(Availability.fakeSignup.completed)
+      .then(() => {
+        Availability.fakeSignup.completed(data.username)
+      })
       .catch(Availability.fakeSignup.failed)
-    console.log('on fake signup')
   },
-  onFakeSignupCompleted(res) {
-    //TODO: redirect to graph
-    console.log(res)
-  
+  onFakeSignupCompleted(username) {
+    localStorage.setItem('fake-user', username)
+    this.trigger({signedUp: username})
   },
   onFakeSignupFailed(err) {
     //TODO: trigger failure

@@ -31,15 +31,17 @@ let SignupDev = React.createClass({
     Availability.fakeSignup(signupData)
   },
 
+  componentDidUpdate() {
+    if (this.state.signedUp) {
+      this.transitionTo('/')
+    }
+  },
+
   _onUsernameChange(value) {
     this.setState({
       username: value
     })
     Availability.check(value)
-  },
-  _onSignup() {
-    console.log('frame loaded')
-    this.transitionTo('/')
   },
   render() {
     let usernameClass, availableText, disabled = true

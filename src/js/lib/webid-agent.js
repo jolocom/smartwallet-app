@@ -2,12 +2,12 @@ import WebAgent from './web-agent'
 import {Writer} from './rdf.js'
 import {DC, FOAF, RDF} from './namespaces.js'
 import N3 from 'n3'
+import {dev} from '../settings'
 
 let N3Util = N3.Util
 
 // WebID related functions
 class WebIDAgent {
-
 
   // Will check whether a resource exists on the origin server. 
   // If it does- we say that profile is taken.
@@ -18,6 +18,24 @@ class WebIDAgent {
       }).catch(() => {
         return true
       })
+  }
+
+  static _formatFakeWebID(username) {
+    return `${document.location.origin}/${username}/profile/card#me`
+  }
+
+  // get WebID depending on the mode
+  static getWebID() {
+    let getWebID = null
+    if (dev) {
+      getWebID = Promise.resolve(WebIDAgent._formatFakeWebID(localStorage.getItem('fake-user')))
+    } else {
+      getWebID = WebAgent.head(document.location.origin)
+        .then((xhr) => {
+          return xhr.getResponseHeader('User')
+        })
+    }
+    return getWebID
   }
 
   static fakeSignup(username, name, email) {

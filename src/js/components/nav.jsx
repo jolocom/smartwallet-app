@@ -1,5 +1,6 @@
 import React from 'react'
 import WebAgent from '../lib/web-agent.js'
+import WebIdAgent from '../lib/webid-agent.js'
 import {FOAF} from '../lib/namespaces.js'
 import {Parser} from '../lib/rdf.js'
 
@@ -34,13 +35,10 @@ let Nav = React.createClass({
     console.log('nav bar did mount')
     var webid = null
 
-    // who am I? (check "User" header)
-    WebAgent.head(document.location.origin)
-      .then((xhr) => {
-        webid = xhr.getResponseHeader('User')
-        // now get my profile document
+    WebIdAgent.getWebID()
+      .then((user) => {
+        webid = user
         return WebAgent.get(webid)
-
       })
       .then((xhr) => {
         // parse profile document from text
