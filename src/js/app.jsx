@@ -9,8 +9,10 @@ import App from 'components/app.jsx'
 import Graph from 'components/graph.jsx'
 import Node from 'components/graph/node.jsx'
 import Chat from 'components/chat.jsx'
-import Signup from 'components/signup.jsx'
+import LoginDev from 'components/login-dev.jsx'
 import Test from 'components/test.jsx'
+//import SignupProd from 'components/signup.jsx'
+import Signup from 'components/signup-dev.jsx'
 
 injectTapEventPlugin()
 
@@ -22,6 +24,7 @@ let routes = (
     </Route>
     <Route path="chat" component={Chat}/>
     <Route path="signup" component={Signup}/>
+    <Route name="login" handler={LoginDev}/>
     <Route path="test" component={Test}/>
   </Route>
 )
