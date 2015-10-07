@@ -30,7 +30,7 @@ let Node = React.createClass({
   toggle() {
     this.setState({open: !this.state.open})
   },
-  
+
   render() {
 
     let classes = classNames('jlc-node', 'jlc-dialog', 'jlc-dialog__fullscreen', {
@@ -44,7 +44,7 @@ let Node = React.createClass({
             <IconButton name="close" onClick={() => this.history.pushState(null, '/graph')} className="jlc-dialog__close-button"></IconButton>
             <div className="mdl-layout__header-row">
               <Spacer></Spacer>
-              <nav class="mdl-navigation">
+              <nav className="mdl-navigation">
                 <IconToggle name="inbox"></IconToggle>
                 <IconButton name="more_vert" id="node-more"></IconButton>
                 <Menu target="node-more" align="right">

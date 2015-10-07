@@ -122,7 +122,7 @@ let Graph = React.createClass({
 
   showNode(node) {
     // @TODO user proper id
-    let uri = node.uri || 'current-node-id'
+    let uri = encodeURIComponent(node.uri || 'current-node-id')
     this.history.pushState(null, `/graph/${uri}`)
   },
 

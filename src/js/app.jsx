@@ -24,7 +24,7 @@ let routes = (
     </Route>
     <Route path="chat" component={Chat}/>
     <Route path="signup" component={Signup}/>
-    <Route name="login" handler={LoginDev}/>
+    <Route name="login" component={LoginDev}/>
     <Route path="test" component={Test}/>
   </Route>
 )
