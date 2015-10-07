@@ -1,7 +1,7 @@
 import React from 'react/addons'
 import Reflux from 'reflux'
 import {Textfield, Button} from 'react-mdl'
-import {Navigation} from 'react-router'
+import {History} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
@@ -16,7 +16,7 @@ function linkToState(target, property) {
 
 let Signup = React.createClass({
   mixins: [
-    Navigation,
+    History,
     Reflux.connect(AvailabilityStore)
   ],
   contextTypes: {

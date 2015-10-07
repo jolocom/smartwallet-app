@@ -1,7 +1,7 @@
 import React from 'react/addons'
 import Reflux from 'reflux'
 import {Textfield, Button} from 'react-mdl'
-import {Navigation} from 'react-router'
+import {History} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityDevStore from 'stores/availability-dev'
@@ -16,7 +16,7 @@ function linkToState(target, property) {
 
 let SignupDev = React.createClass({
   mixins: [
-    Navigation,
+    History,
     Reflux.connect(AvailabilityDevStore)
   ],
   contextTypes: {
@@ -24,8 +24,8 @@ let SignupDev = React.createClass({
   },
   signup() {
     let signupData = {
-      username: this.state.username, 
-      name: this.state.name, 
+      username: this.state.username,
+      name: this.state.name,
       email: this.state.email
     }
     Availability.fakeSignup(signupData)
@@ -33,7 +33,7 @@ let SignupDev = React.createClass({
 
   componentDidUpdate() {
     if (this.state.signedUp) {
-      this.transitionTo('/')
+      this.history.pushState(null, '/graph')
     }
   },
 
