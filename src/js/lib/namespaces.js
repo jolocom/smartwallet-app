@@ -25,6 +25,11 @@ export const DC = {
   title: `${dc}title`
 }
 
+const ldp = 'http://www.w3.org/ns/ldp#'
+export const LDP = {
+  BasicContainer: `${ldp}BasicContainer`
+}
+
 const rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 export const RDF = {
   type:`${rdf}type`

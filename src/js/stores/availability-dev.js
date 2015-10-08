@@ -1,12 +1,14 @@
 import Reflux from 'reflux'
 import Availability from 'actions/availability'
-import WebIDAgent from '../lib/webid-agent'
+import WebIDAgent from '../lib/agents/webid'
+
+let wia = new WebIDAgent()
 
 let AvailabilityDevStore = Reflux.createStore({
   listenables: Availability,
 
   onCheck(username) {
-    WebIDAgent.isFakeIDAvailable(username)
+    wia.isFakeIDAvailable(username)
       .then((available) => {
         let data = {
           username: username,
@@ -28,7 +30,7 @@ let AvailabilityDevStore = Reflux.createStore({
   },
 
   onFakeSignup(data) {
-    WebIDAgent.fakeSignup(data.username, data.name, data.email)
+    wia.fakeSignup(data.username, data.name, data.email)
       .then(() => {
         Availability.fakeSignup.completed(data.username)
       })

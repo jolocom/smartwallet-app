@@ -7,12 +7,13 @@ import NavActions from 'actions/nav'
 
 import TimerMixin from 'react-timer-mixin'
 import N3 from 'n3'
-import WebAgent from '../lib/web-agent.js'
+import HTTPAgent from '../lib/agents/http.js'
 import Util from '../lib/util.js'
 import {Parser, Writer} from '../lib/rdf.js'
 import {DC, RDF, SIOC} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
+let http = new HTTPAgent()
 
 const CHAT_RELOAD_INTERVAL = 4000 // 4 seconds
 
@@ -43,15 +44,36 @@ let Chat = React.createClass({
     }
   },
 
-  // TODO: rewrite with lodash?
+  // TODO: should rewrite this terrible bullshit
   _loadMessages: function(origin) {
-    return WebAgent.get(origin)
+    let res = null
+
+    // fetch commen subject
+    return http.get(origin)
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response)
       })
-      .then((res) => {
-        console.log('chat parsed')
+      .then((tmp) => {
+        res = tmp
+        // see what it contains
+        let containerOf = res.triples.filter((t) => t.predicate == SIOC.containerOf).map((t) => t.object)
+        // .. and fetch the contained object docs
+        return Promise.all(containerOf.map((c) => http.get(Util.urlWithoutHash(c))))
+      })
+      .then((results) => {
+        // parse fetched docs
+        return Promise.all(results.map((xhr) => {
+          let parser = new Parser()
+          return parser.parse(xhr.response)
+        }))
+      })
+      .then((parsedResults) => {
+        // put parsed results together with chat subject data
+        res = parsedResults.reduce((acc, curr) => {
+          acc.triples = acc.triples.concat(curr.triples)
+          return acc
+        }, res)
 
         // group objects by subject and predicate
         let graphs = res.triples.reduce((acc, t) => {
@@ -66,14 +88,11 @@ let Chat = React.createClass({
           return acc
         }, {})
 
-        console.log(graphs)
-
         // origin graph contains the graphs with these subjects
         let contains = graphs[origin][SIOC.containerOf] != undefined ? graphs[origin][SIOC.containerOf] : []
 
         let msgs = []
         for (var subj of contains) {
-          console.log(subj)
           if (!graphs.hasOwnProperty(subj) || !graphs[subj].hasOwnProperty(RDF.type)) {
             // does not exist or type not set
             console.log('does not exist or type not set')
@@ -138,19 +157,19 @@ let Chat = React.createClass({
       })
   },
 
-  newMsgTriples: function(subject, author, content) {
-    let msgUrl = `${Util.urlWithoutHash(subject)}#${Util.randomString(5)}`
-    console.log('msg url')
-    console.log(msgUrl)
+  _commentContainerForIdentity: function(identity) {
+    let identityRoot = identity.match(/^(.*)\/profile\/card#me$/)[1]
+    let cont =  `${identityRoot}/little-sister/graph-comments/`
+    return cont
+  },
 
-    return [{// this is a message
+  newMsgTriples: function(subject, author, content, msgDocUrl) {
+    let msgUrl = `${msgDocUrl}#post`
+
+    let msgDocTriples = [{// this is a message
       subject: msgUrl,
       predicate: RDF.type,
       object: SIOC.Post
-    }, { // in relation to...
-      subject: subject,
-      predicate: SIOC.containerOf,
-      object: msgUrl
     }, { // written by...
       subject: msgUrl,
       predicate: SIOC.hasCreator,
@@ -164,37 +183,61 @@ let Chat = React.createClass({
       predicate: DC.created,
       object: N3Util.createLiteral(new Date().toUTCString())
     }]
+
+    let subjectDocTriples = [{ // this node is related to this comment
+      subject: subject,
+      predicate: SIOC.containerOf,
+      object: msgUrl
+    }, {
+      subject: msgUrl,
+      predicate: RDF.type,
+      object: SIOC.Post
+    }]
+
+    return {
+      message: msgDocTriples,
+      subject: subjectDocTriples
+    }
   },
 
   onMessageSendClick: function() {
-    console.log('send msg')
-    console.log(this.state.currentMessage)
-    return WebAgent.get(this.state.origin)
+    let msgContainer = this._commentContainerForIdentity(this.state.identity)
+    let msgSlug = Util.randomString(5)
+    let newMsgDocUrl = `${msgContainer}${msgSlug}`
+
+    return http.get(this.state.origin)
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response)
       })
       .then((res) => {
-        let writer = new Writer({format: 'N-Triples', prefixes: res.prefixes})
+        let msgWriter = new Writer({format: 'N-Triples'})
+        let subjectWriter = new Writer({format: 'N-Triples', prefixes: res.prefixes})
+
         // add old triples
         for (var t of res.triples) {
-          writer.addTriple(t)
+          subjectWriter.addTriple(t)
         }
 
         // add triples representing new message
-        let newMsg = this.newMsgTriples (this.state.origin, this.state.identity, this.state.currentMessage)
-        console.log(newMsg)
-        for (t of newMsg) {
-          writer.addTriple(t)
+        let newMsg = this.newMsgTriples (this.state.origin, this.state.identity, this.state.currentMessage, newMsgDocUrl)
+
+        for (t of newMsg.message) {
+          msgWriter.addTriple(t)
+        }
+        for (t of newMsg.subject) {
+          subjectWriter.addTriple(t)
         }
 
-        return writer.end()
+        return Promise.all([msgWriter.end(), subjectWriter.end()])
       })
-      .then((res) => {
-        console.log('resulting triples: ')
-        console.log(res)
-        console.log('now send...')
-        return WebAgent.put(this.state.origin, {'Content-type': 'application/n-triples'}, res)
+      .then((results) => {
+        let messageDoc = results[0]
+        let subjectDoc = results[1]
+
+        let createMsg = http.post(msgContainer, {'Slug': msgSlug, 'Accept': 'application/n-triples', 'Content-type': 'application/n-triples'}, messageDoc)
+        let updateSubject = http.put(this.state.origin, {'Content-type': 'application/n-triples'}, subjectDoc)
+        return Promise.all([createMsg, updateSubject])
       })
       .then(() => {
         // now load new messages

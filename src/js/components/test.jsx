@@ -1,7 +1,8 @@
 // This component is only meant for test purposes
 import React from 'react/addons'
-import WebAgent from '../lib/web-agent.js'
+import HTTPAgent from '../lib/agents/http.js'
 
+let http = new HTTPAgent()
 let Test = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
   getInitialState: function() {
@@ -12,7 +13,7 @@ let Test = React.createClass({
   },
   componentDidMount: function() {
     // who am I? (check 'User' header)
-    WebAgent.head(document.location.origin)
+    http.head(document.location.origin)
       .then((xhr) => {
         console.log('head')
         console.log(xhr)
