@@ -7,12 +7,13 @@ import NavActions from 'actions/nav'
 
 import TimerMixin from 'react-timer-mixin'
 import N3 from 'n3'
-import WebAgent from '../lib/web-agent.js'
+import HTTPAgent from '../lib/agents/http.js'
 import Util from '../lib/util.js'
 import {Parser, Writer} from '../lib/rdf.js'
 import {DC, RDF, SIOC} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
+let http = new HTTPAgent()
 
 const CHAT_RELOAD_INTERVAL = 4000 // 4 seconds
 
@@ -45,7 +46,7 @@ let Chat = React.createClass({
 
   // TODO: rewrite with lodash?
   _loadMessages: function(origin) {
-    return WebAgent.get(origin)
+    return http.get(origin)
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response)
@@ -169,7 +170,7 @@ let Chat = React.createClass({
   onMessageSendClick: function() {
     console.log('send msg')
     console.log(this.state.currentMessage)
-    return WebAgent.get(this.state.origin)
+    return http.get(this.state.origin)
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response)
@@ -194,7 +195,7 @@ let Chat = React.createClass({
         console.log('resulting triples: ')
         console.log(res)
         console.log('now send...')
-        return WebAgent.put(this.state.origin, {'Content-type': 'application/n-triples'}, res)
+        return http.put(this.state.origin, {'Content-type': 'application/n-triples'}, res)
       })
       .then(() => {
         // now load new messages

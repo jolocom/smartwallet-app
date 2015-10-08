@@ -1,8 +1,9 @@
 import React from 'react'
-import WebAgent from '../lib/web-agent.js'
-import WebIdAgent from '../lib/webid-agent.js'
+import WebIDAgent from '../lib/agents/webid.js'
 import {FOAF} from '../lib/namespaces.js'
 import {Parser} from '../lib/rdf.js'
+
+let wia = new WebIDAgent()
 
 let Nav = React.createClass({
   getInitialState: function() {
@@ -35,10 +36,10 @@ let Nav = React.createClass({
     console.log('nav bar did mount')
     var webid = null
 
-    WebIdAgent.getWebID()
+    wia.getWebID()
       .then((user) => {
         webid = user
-        return WebAgent.get(webid)
+        return wia.get(webid)
       })
       .then((xhr) => {
         // parse profile document from text

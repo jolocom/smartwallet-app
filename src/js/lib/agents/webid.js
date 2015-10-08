@@ -1,18 +1,18 @@
-import WebAgent from './web-agent'
-import {Writer} from './rdf.js'
-import {DC, FOAF, RDF} from './namespaces.js'
+import HTTPAgent from './http.js'
+import {Writer} from '../rdf.js'
+import {DC, FOAF, RDF} from '../namespaces.js'
 import N3 from 'n3'
-import {dev} from '../settings'
+import {dev} from '../../settings'
 
 let N3Util = N3.Util
 
 // WebID related functions
-class WebIDAgent {
+class WebIDAgent extends HTTPAgent {
 
   // Will check whether a resource exists on the origin server. 
   // If it does- we say that profile is taken.
-  static isFakeIDAvailable(username) {
-    return WebAgent.head(`${document.location.origin}/${username}`)
+  isFakeIDAvailable(username) {
+    return this.head(`${document.location.origin}/${username}`)
       .then(() => {
         return false
       }).catch(() => {
@@ -20,17 +20,17 @@ class WebIDAgent {
       })
   }
 
-  static _formatFakeWebID(username) {
+  _formatFakeWebID(username) {
     return `${document.location.origin}/${username}/profile/card#me`
   }
 
   // get WebID depending on the mode
-  static getWebID() {
+  getWebID() {
     let getWebID = null
     if (dev) {
-      getWebID = Promise.resolve(WebIDAgent._formatFakeWebID(localStorage.getItem('fake-user')))
+      getWebID = Promise.resolve(this._formatFakeWebID(localStorage.getItem('fake-user')))
     } else {
-      getWebID = WebAgent.head(document.location.origin)
+      getWebID = this.head(document.location.origin)
         .then((xhr) => {
           return xhr.getResponseHeader('User')
         })
@@ -38,7 +38,7 @@ class WebIDAgent {
     return getWebID
   }
 
-  static fakeSignup(username, name, email) {
+  fakeSignup(username, name, email) {
     // create container $username
     // create container $username/profile
     // create resource $username/profile/card
@@ -57,22 +57,22 @@ class WebIDAgent {
     console.log(name)
     console.log(email)
 
-    let p = WebAgent.put(userContainer, headers)
+    let p = this.put(userContainer, headers)
       .then(() => {
-        return WebAgent.put(userProfileContainer, headers)
+        return this.put(userProfileContainer, headers)
       })
       .then(() => {
-        return WebIDAgent._profileTriples(username, name, email)
+        return this._profileTriples(username, name, email)
       })
       .then((turtleText) => {
-        return WebAgent.put(profileDoc, {'Content-type': 'text/turtle'}, turtleText)
+        return this.put(profileDoc, {'Content-type': 'text/turtle'}, turtleText)
       })
 
     console.log('done.')
     return p
   }
 
-  static _profileTriples(username, name, email) {
+  _profileTriples(username, name, email) {
     if (!username) {
       return Promise.reject('Must provide a username!')
     }

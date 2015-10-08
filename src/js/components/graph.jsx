@@ -5,7 +5,7 @@ import React from 'react/addons'
 import {Layout, Header, Content, IconButton} from 'react-mdl'
 
 import Util from 'lib/util.js'
-import GraphAgent from 'lib/graph-agent.js'
+import GraphAgent from 'lib/agents/graph.js'
 import GraphD3 from 'lib/graph'
 
 import STYLES from 'styles/app.js'
@@ -16,6 +16,8 @@ import PlusDrawer from './plus-drawer.jsx'
 import LeftNav from 'components/nav/nav.jsx'
 
 import NavActions from 'actions/nav'
+
+let graphAgent = new GraphAgent()
 
 let Graph = React.createClass({
   getInitialState: function() {
@@ -77,7 +79,7 @@ let Graph = React.createClass({
 
   centerAtWebID: function() {
     // render relevant information in UI
-    GraphAgent.fetchWebIdAndConvert().then((d3graph) => {
+    graphAgent.fetchWebIdAndConvert().then((d3graph) => {
       let newState = this._changeCenter(d3graph.center, d3graph)
       newState.identity = d3graph.center
       this.setState(newState)
@@ -89,7 +91,7 @@ let Graph = React.createClass({
     //TODO: should only crawl if the uri is external(?)
 
     // render relevant information in UI
-    GraphAgent.fetchAndConvert(uri)
+    graphAgent.fetchAndConvert(uri)
       .then((d3graph) => {
         let newState = this._changeCenter(uri, d3graph)
         this.setState(newState)
@@ -201,10 +203,10 @@ let Graph = React.createClass({
     let p = null
     if (node.newNode) {
       console.log('creating a new one')
-      p = GraphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri)
+      p = graphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri)
     } else {
       console.log('connecting existing node')
-      p = GraphAgent.connectNode(this.state.centerNode.uri, node.uri)
+      p = graphAgent.connectNode(this.state.centerNode.uri, node.uri)
     }
 
     p.then(() => {

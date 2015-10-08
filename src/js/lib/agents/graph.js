@@ -1,10 +1,10 @@
 import N3 from 'n3'
-import D3Converter from './d3-converter.js'
-import WebAgent from './web-agent.js'
-import WebIDAgent from './webid-agent.js'
-import {DC, SIOC} from './namespaces.js'
-import {Parser, Writer} from './rdf.js'
-import Util from './util.js'
+import D3Converter from '../d3-converter.js'
+import HTTPAgent from './http.js'
+import WebIDAgent from './webid.js'
+import {DC, SIOC} from '../namespaces.js'
+import {Parser, Writer} from '../rdf.js'
+import Util from '../util.js'
 
 //TODO: this should eventually be replaced with user's workspace
 const DEST_CONTAINER = document.location.origin + '/misc/'
@@ -13,7 +13,7 @@ let N3Util = N3.Util
 
 
 // abstraction of WebAgent for graph purposes
-class GraphAgent {
+class GraphAgent extends HTTPAgent {
   // Post a new node to a container
   //
   // @param {string} title title of the new node.
@@ -23,7 +23,7 @@ class GraphAgent {
   // @param {string} dstContainer url indicating container to which the new node should be posted.
   //
   // @return {Promise} promise with the result (TODO: what result)?
-  static createNode(title, description, newNodeUrl, slug, dstContainer=DEST_CONTAINER) {
+  createNode(title, description, newNodeUrl, slug, dstContainer=DEST_CONTAINER) {
     let writer = new Writer({format: 'N-Triples', prefixes: []})
     writer.addTriple({
       subject: newNodeUrl,
@@ -37,7 +37,7 @@ class GraphAgent {
     })
 
     return writer.end().then((res) => {
-      return WebAgent.post(dstContainer, {'Slug': slug, 'Accept': 'application/n-triples', 'Content-type': 'application/n-triples'}, res)
+      return this.post(dstContainer, {'Slug': slug, 'Accept': 'application/n-triples', 'Content-type': 'application/n-triples'}, res)
     })
   }
 
@@ -50,9 +50,9 @@ class GraphAgent {
   //
   // @return {Promis promise containing the result (TODO: what result?)
   //
-  static connectNode(srcUrl, dstUrl) {
+  connectNode(srcUrl, dstUrl) {
     // fetch src node
-    return GraphAgent.fetchTriples(srcUrl).then((res) => {
+    return this.fetchTriples(srcUrl).then((res) => {
       let writer = new Writer({format: 'N-Triples', prefixes: res.prefixes})
       for (var t of res.triples) {
         writer.addTriple(t)
@@ -68,11 +68,11 @@ class GraphAgent {
 
     }).then((updatedDoc) => {
       // now PUT the updated doc
-      return WebAgent.put(srcUrl, {'Content-Type': 'application/n-triples'}, updatedDoc)
+      return this.put(srcUrl, {'Content-Type': 'application/n-triples'}, updatedDoc)
 
     }).then(() => {
       // fetch dst node
-      return GraphAgent.fetchTriples(dstUrl)
+      return this.fetchTriples(dstUrl)
 
     }).then((res) => {
       let writer = new Writer({format: 'N-Triples', prefixes: res.prefixes})
@@ -89,7 +89,7 @@ class GraphAgent {
 
     }).then((updatedDoc) => {
       // now PUT the updated doc
-      return WebAgent.put(dstUrl, {'Content-Type': 'application/n-triples'}, updatedDoc)
+      return this.put(dstUrl, {'Content-Type': 'application/n-triples'}, updatedDoc)
     })
   }
 
@@ -102,14 +102,14 @@ class GraphAgent {
   // @param {string} dstContainer url indicating container to which the new node should be posted.
   //
   // @return {Promise} promise with the result (TODO: what result)?
-  static createAndConnectNode(title, description, dstUrl, dstContainer=DEST_CONTAINER) {
+  createAndConnectNode(title, description, dstUrl, dstContainer=DEST_CONTAINER) {
     // TODO: should we have non-random slugs?
 
     let slug = Util.randomString(5)
     let newNodeUrl = `${dstContainer}${slug}#${title.split(' ')[0].toLowerCase()}`
-    return GraphAgent.createNode(title, description, newNodeUrl, slug)
+    return this.createNode(title, description, newNodeUrl, slug)
       .then(() => {
-        return GraphAgent.connectNode(newNodeUrl, dstUrl)
+        return this.connectNode(newNodeUrl, dstUrl)
       })
   }
 
@@ -119,8 +119,8 @@ class GraphAgent {
   // @param {string} uri document uri
   //
   // @return {Promise} promise containg object with triples and prefixes
-  static fetchTriples(uri) {
-    return WebAgent.get(uri)
+  fetchTriples(uri) {
+    return this.get(uri)
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response)
@@ -132,15 +132,16 @@ class GraphAgent {
   // rendered in d3 graph.
   //
   // @return {Promise} promise containing d3 data
-  static fetchWebIdAndConvert() {
-    return WebIDAgent.getWebID()
+  fetchWebIdAndConvert() {
+    let wia = new WebIDAgent()
+    return wia.getWebID()
       .then((webid) => {
-        return GraphAgent.fetchAndConvert(webid)
+        return this.fetchAndConvert(webid)
       })
   }
 
   // given a pointed graph- we need to figure out the pointers for relevant adjacent graphs
-  static _adjacentGraphs(pointer, triples) {
+  _adjacentGraphs(pointer, triples) {
     let possibleLinks = [SIOC.containerOf, SIOC.hasContainer]
     let currentDoc = Util.urlWithoutHash(pointer)
     return triples.filter((t) => t.subject == pointer && possibleLinks.indexOf(t.predicate) >= 0 && N3Util.isIRI(t.object) && Util.urlWithoutHash(t.object) != currentDoc).map((t) => t.object)
@@ -153,16 +154,16 @@ class GraphAgent {
   // @param {string} url document url
   //
   // @return {Promise} promise containing d3 data
-  static fetchAndConvert(uri) {
+  fetchAndConvert(uri) {
     let centerTriples = null
 
     // get triples from graph at uri
-    return GraphAgent.fetchTriples(uri).then((res) => {
+    return this.fetchTriples(uri).then((res) => {
       centerTriples = res.triples
 
       // fetch adjacent graphs
-      let adjacent = GraphAgent._adjacentGraphs(uri, centerTriples)
-      return Promise.all(adjacent.map((uri) => GraphAgent.fetchTriples(uri)))
+      let adjacent = this._adjacentGraphs(uri, centerTriples)
+      return Promise.all(adjacent.map((uri) => this.fetchTriples(uri)))
     }).then((results) => {
 
       // concat triples and convert them to format which can be rendered in d3 graph

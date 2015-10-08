@@ -2,12 +2,12 @@ import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
 
 import N3 from 'n3'
-import WebAgent from 'lib/web-agent.js'
-import WebIDAgent from 'lib/webid-agent.js'
+import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
 import {CERT, FOAF} from 'lib/namespaces.js'
 
 let N3Util = N3.Util
+let wia = new WebIDAgent()
 
 let ProfileStore = Reflux.createStore({
   listenables: ProfileActions,
@@ -29,13 +29,13 @@ let ProfileStore = Reflux.createStore({
 
   onLoad() {
     let webid = null
-    WebIDAgent.getWebID()
+    wia.getWebID()
       .then((user) => {
         console.log('got webid')
         webid = user
         console.log(webid)
         // now get my profile document
-        return WebAgent.get(webid)
+        return wia.get(webid)
       })
       .then((xhr) => {
         // parse profile document from text
@@ -116,7 +116,7 @@ let ProfileStore = Reflux.createStore({
     })
 
     writer.end().then((res) => {
-      return WebAgent.put(profile.webid, {'Content-Type': 'application/n-triples'}, res)
+      return wia.put(profile.webid, {'Content-Type': 'application/n-triples'}, res)
     })
   },
 
