@@ -1,4 +1,4 @@
-import HTTPAgent from './http.js'
+import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
 import {DC, FOAF, RDF} from '../namespaces.js'
 import N3 from 'n3'
@@ -7,7 +7,7 @@ import {dev} from '../../settings'
 let N3Util = N3.Util
 
 // WebID related functions
-class WebIDAgent extends HTTPAgent {
+class WebIDAgent extends LDPAgent {
 
   // Will check whether a resource exists on the origin server. 
   // If it does- we say that profile is taken.
@@ -47,19 +47,14 @@ class WebIDAgent extends HTTPAgent {
     let userProfileContainer = `${document.location.origin}/${username}/profile`
     let profileDoc = `${document.location.origin}/${username}/profile/card`
 
-    let headers = {
-      'Content-Type': 'text/turtle',
-      'Link': '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"'
-    }
-
     console.log('creating fake profile...')
     console.log(username)
     console.log(name)
     console.log(email)
 
-    let p = this.put(userContainer, headers)
+    let p = this.createBasicContainer(userContainer)
       .then(() => {
-        return this.put(userProfileContainer, headers)
+        return this.createBasicContainer(userProfileContainer)
       })
       .then(() => {
         return this._profileTriples(username, name, email)
