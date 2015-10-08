@@ -6,9 +6,6 @@ import {DC, SIOC} from '../namespaces.js'
 import {Parser, Writer} from '../rdf.js'
 import Util from '../util.js'
 
-//TODO: this should eventually be replaced with user's workspace
-const DEST_CONTAINER = document.location.origin + '/misc/'
-
 let N3Util = N3.Util
 
 
@@ -23,7 +20,7 @@ class GraphAgent extends HTTPAgent {
   // @param {string} dstContainer url indicating container to which the new node should be posted.
   //
   // @return {Promise} promise with the result (TODO: what result)?
-  createNode(title, description, newNodeUrl, slug, dstContainer=DEST_CONTAINER) {
+  createNode(title, description, newNodeUrl, slug, dstContainer) {
     let writer = new Writer({format: 'N-Triples', prefixes: []})
     writer.addTriple({
       subject: newNodeUrl,
@@ -99,18 +96,32 @@ class GraphAgent extends HTTPAgent {
   // @param {string} title title of the new node.
   // @param {string} description description of the new node.
   // @param {string} dstUrl which node should the newly created node be connected to?
-  // @param {string} dstContainer url indicating container to which the new node should be posted.
+  // @param {string} identity url indicating container to which the new node should be posted.
   //
   // @return {Promise} promise with the result (TODO: what result)?
-  createAndConnectNode(title, description, dstUrl, dstContainer=DEST_CONTAINER) {
-    // TODO: should we have non-random slugs?
-
+  createAndConnectNode(title, description, dstUrl, identity) {
+    console.log('createAndConnectNode')
+    console.log(title)
+    console.log(description)
+    console.log(dstUrl)
+    console.log(identity)
+    let nodeContainer = this._nodeContainerForIdentity(identity)
     let slug = Util.randomString(5)
-    let newNodeUrl = `${dstContainer}${slug}#${title.split(' ')[0].toLowerCase()}`
-    return this.createNode(title, description, newNodeUrl, slug)
+    let newNodeUrl = `${nodeContainer}${slug}#${title.split(' ')[0].toLowerCase()}`
+    return this.createNode(title, description, newNodeUrl, slug, nodeContainer)
       .then(() => {
         return this.connectNode(newNodeUrl, dstUrl)
       })
+  }
+
+  // given webid of structure https://example.com/{username}/profile/card#me
+  // return https://example.com/{username}/little-sister/graph-nodes
+  //
+  // NB: this won't if webid has different structure, but it's fine for now
+  _nodeContainerForIdentity(identity) {
+    let identityRoot = identity.match(/^(.*)\/profile\/card#me$/)[1]
+    let cont =  `${identityRoot}/little-sister/graph-nodes/`
+    return cont
   }
 
 

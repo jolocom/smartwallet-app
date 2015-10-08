@@ -203,7 +203,7 @@ let Graph = React.createClass({
     let p = null
     if (node.newNode) {
       console.log('creating a new one')
-      p = graphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri)
+      p = graphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri, this.state.identity)
     } else {
       console.log('connecting existing node')
       p = graphAgent.connectNode(this.state.centerNode.uri, node.uri)
