@@ -20,7 +20,7 @@ export default Reflux.createStore({
   },
   getStoredNodes() {
     try {
-      return JSON.decode(localStorage.getItem('jlc.pinned'))
+      return JSON.parse(localStorage.getItem('jlc.pinned')) || []
     } catch(e) {
       console.error(e)
       return []

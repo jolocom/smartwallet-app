@@ -47,7 +47,7 @@
     "n3": "^0.4.3",
     "react": "^0.13.3",
     "react-mdl": "^0.12.1",
-    "react-router": "^1.0.0-rc1",
+    "react-router": "1.0.0-rc1",
     "react-style": "^0.5.5",
     "react-tap-event-plugin": "^0.1.7",
     "react-timer-mixin": "^0.13.2",

@@ -2,15 +2,15 @@ const DEFAULT_ACCEPT = 'application/n-triples'
 const DEFAULT_CT = 'application/n-triples'
 
 // HTTP Requests
-class WebAgent {
+class HTTPAgent {
 
   // GET a resource represented by url
   //
   // @param {string} url resource url
   //
   // @return {Promise} promise with resulting xhr
-  static get(url, headers) {
-    return WebAgent._req(url, 'GET', null, headers)
+  get(url, headers) {
+    return this._req(url, 'GET', null, headers)
   }
 
 
@@ -21,8 +21,8 @@ class WebAgent {
   // @param {string} body replacement object
   //
   // @return {Promise} promise with resulting xhr
-  static put(url, headers, body) {
-    return WebAgent._req(url, 'PUT', body, headers)
+  put(url, headers, body) {
+    return this._req(url, 'PUT', body, headers)
   }
 
 
@@ -33,8 +33,8 @@ class WebAgent {
   // @param {string} body new resource
   //
   // @return {Promise} promise with resulting xhr
-  static post(url, headers, body) {
-    return WebAgent._req(url, 'POST', body, headers)
+  post(url, headers, body) {
+    return this._req(url, 'POST', body, headers)
   }
 
 
@@ -43,8 +43,8 @@ class WebAgent {
   // @param {string} url resource url
   //
   // @return {Promise} promise with resulting xhr
-  static head(url) {
-    return WebAgent._req(url, 'HEAD')
+  head(url) {
+    return this._req(url, 'HEAD')
   }
 
 
@@ -54,7 +54,7 @@ class WebAgent {
   // @param {string} method HTTP verb
   // @param {string} body optional request body
   // @param {object} headers request headers
-  static _req(url, method='GET', body=null, headers={'Accept': DEFAULT_ACCEPT, 'Content-type': DEFAULT_CT}) {
+  _req(url, method='GET', body=null, headers={'Accept': DEFAULT_ACCEPT, 'Content-type': DEFAULT_CT}) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest()
       xhr.withCredentials = true
@@ -83,4 +83,4 @@ class WebAgent {
   }
 }
 
-export default WebAgent
+export default HTTPAgent

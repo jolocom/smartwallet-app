@@ -41,7 +41,7 @@ let App = React.createClass({
   },
 
   getInitialState() {
-    return this.getComponent()
+    return this.getComponent() || {}
   },
 
   componentDidUpdate(prevProps) {
