@@ -1,16 +1,13 @@
 import React from 'react/addons'
-import {Layout, Header, Content, IconButton} from 'react-mdl'
-
-import LeftNav from 'components/nav/nav.jsx'
 
 import NavActions from 'actions/nav'
 
 import TimerMixin from 'react-timer-mixin'
 import N3 from 'n3'
-import WebAgent from '../lib/web-agent.js'
-import Util from '../lib/util.js'
-import {Parser, Writer} from '../lib/rdf.js'
-import {DC, RDF, SIOC} from '../lib/namespaces.js'
+import WebAgent from 'lib/web-agent.js'
+import Util from 'lib/util.js'
+import {Parser, Writer} from 'lib/rdf.js'
+import {DC, RDF, SIOC} from 'lib/namespaces.js'
 
 let N3Util = N3.Util
 
@@ -219,34 +216,24 @@ let Chat = React.createClass({
   render: function() {
     return (
       <div className="jlc-chat">
-        <Layout fixedHeader={true}>
-          <Header title="Chat">
-            <IconButton name="search"></IconButton>
-            <IconButton name="message"></IconButton>
-            <IconButton name="more_vert"></IconButton>
-          </Header>
-          <LeftNav/>
-          <Content>
-            { /* TODO: structure, ids and class names suck*/ }
-            <div className="close" onClick={this.props.hide}>x</div>
-            <div className="head">
-              <h1 className="title">{this.props.topic}</h1>
-              <p className="origin">{this.props.origin}</p>
-            </div>
+        { /* TODO: structure, ids and class names suck*/ }
+        <div className="close" onClick={this.props.hide}>x</div>
+        <div className="head">
+          <h1 className="title">{this.props.topic}</h1>
+          <p className="origin">{this.props.origin}</p>
+        </div>
 
-            {this.state.messages.map(function(msg) {
-              return (
-                <Message key={msg.id} author={msg.author} content={msg.content}/>
-              )
-            })}
+        {this.state.messages.map(function(msg) {
+          return (
+            <Message key={msg.id} author={msg.author} content={msg.content}/>
+          )
+        })}
 
-            <div className="message new">
-              <textarea className="content" valueLink={this.linkState('currentMessage')}/>
-              <div className="node link"/>
-              <div className="button" onClick={this.onMessageSendClick}>tell</div>
-            </div>
-          </Content>
-        </Layout>
+        <div className="message new">
+          <textarea className="content" valueLink={this.linkState('currentMessage')}/>
+          <div className="node link"/>
+          <div className="button" onClick={this.onMessageSendClick}>tell</div>
+        </div>
       </div>
     )
   }

@@ -3,7 +3,7 @@ import Reflux from 'reflux'
 
 import {IconButton} from 'react-mdl'
 
-import Avatar from 'components/avatar.jsx'
+import Avatar from 'components/common/avatar.jsx'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'

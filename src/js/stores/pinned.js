@@ -1,13 +1,15 @@
 import Reflux from 'reflux'
+import PinnedActions from 'actions/pinned'
 import NodeActions from 'actions/node'
 
-let PinnedStore = Reflux.createStore({
-  listenables: NodeActions,
+export default Reflux.createStore({
+  listenables: [PinnedActions, NodeActions],
   init() {
     this.nodes = this.getStoredNodes()
   },
   getInitialState() {
     return {
+      show: false,
       nodes: this.nodes
     }
   },
@@ -23,6 +25,13 @@ let PinnedStore = Reflux.createStore({
       console.error(e)
       return []
     }
+  },
+  onShow() {
+    console.log('show')
+    this.trigger({show: true})
+  },
+  onHide() {
+    this.trigger({show: false})
   },
   onPin(node) {
     // FIXME: not guaranteed to be unique
@@ -42,5 +51,3 @@ let PinnedStore = Reflux.createStore({
     })
   }
 })
-
-export default PinnedStore

@@ -5,18 +5,17 @@ import Reflux from 'reflux'
 import {History} from 'react-router'
 import classNames from 'classnames'
 
-import {Layout, Header, HeaderRow, HeaderTabs, Content, IconButton, Switch} from 'react-mdl'
-
 import Util from 'lib/util.js'
 import GraphAgent from 'lib/graph-agent.js'
 import GraphD3 from 'lib/graph'
 
 import STYLES from 'styles/app.js'
 
-import LeftNav from 'components/nav/nav.jsx'
 import PinnedNodes from 'components/graph/pinned.jsx'
-import FabMenu from 'components/fab-menu.jsx'
-import FabMenuItem from 'components/fab-menu-item.jsx'
+import FabMenu from 'components/common/fab-menu.jsx'
+import FabMenuItem from 'components/common/fab-menu-item.jsx'
+
+import Pinned from 'components/graph/pinned.jsx'
 
 import NodeActions from 'actions/node'
 import NodeStore from 'stores/node'
@@ -307,45 +306,17 @@ let Graph = React.createClass({
 
     return (
       <div className={classes}>
-        <Layout fixedHeader={true} fixedTabs={true}>
-          <Header>
-            <HeaderRow title="Graph">
-              <nav className="mdl-navigation">
-                <Switch id="pinned" className="jlc-pinned-switch" onChange={this.togglePinned}/>
-                <IconButton name="search" onClick={this.showSearch}/>
-              </nav>
-              <div className="jlc-search">
-                <IconButton name="arrow_back" className="jlc-search-hide-button" onClick={this.hideSearch}/>
-                  <div className="jlc-search-field mdl-textfield mdl-js-textfield">
-                    <input className="mdl-textfield__input" type="text" id="search-query" ref="search" autofocus />
-                    <label className="mdl-textfield__label" for="search-query">Search...</label>
-                  </div>
-                <nav className="mdl-navigation">
-                  <IconButton name="close" onClick={this.resetSearch}/>
-                </nav>
-              </div>
-            </HeaderRow>
-            <HeaderTabs className="jlc-search-filters">
-              <a href="#search-where"><i className="material-icons">place</i></a>
-              <a href="#search-what"><i className="material-icons">label</i></a>
-              <a href="#search-who"><i className="material-icons">person</i></a>
-              <a href="#search-when"><i className="material-icons">schedule</i></a>
-            </HeaderTabs>
-          </Header>
-          <LeftNav/>
-          {pinned}
-          <Content className="jlc-graph-content">
-            <FabMenu>
-              <FabMenuItem icon="comment" tooltip="Comment"/>
-              <FabMenuItem icon="insert_photo"/>
-              <FabMenuItem icon="attachment"/>
-              <FabMenuItem icon="person"/>
-            </FabMenu>
+        {pinned}
+        <FabMenu>
+          <FabMenuItem icon="comment" tooltip="Comment"/>
+          <FabMenuItem icon="insert_photo"/>
+          <FabMenuItem icon="attachment"/>
+          <FabMenuItem icon="person"/>
+        </FabMenu>
 
-            <div className="jlc-graph-chart" ref="graph"></div>
-          </Content>
-        </Layout>
-        {this.props.children}
+        <div className="jlc-graph-chart" ref="graph"></div>
+
+        <Pinned/>
       </div>
    )
   }
