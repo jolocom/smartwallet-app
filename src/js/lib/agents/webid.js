@@ -42,10 +42,16 @@ class WebIDAgent extends LDPAgent {
     // create container $username
     // create container $username/profile
     // create resource $username/profile/card
+    // create container $username/little-sister
+    // create container $username/little-sister/graph-comments
+    // create container $username/little-sister/graph-nodes
 
     let userContainer = `${document.location.origin}/${username}`
     let userProfileContainer = `${document.location.origin}/${username}/profile`
     let profileDoc = `${document.location.origin}/${username}/profile/card`
+    let appContainer = `${document.location.origin}/${username}/little-sister`
+    let commentsContainer = `${document.location.origin}/${username}/little-sister/graph-comments`
+    let nodesContainer = `${document.location.origin}/${username}/little-sister/graph-nodes`
 
     console.log('creating fake profile...')
     console.log(username)
@@ -54,7 +60,10 @@ class WebIDAgent extends LDPAgent {
 
     let p = this.createBasicContainer(userContainer)
       .then(() => {
-        return this.createBasicContainer(userProfileContainer)
+        return Promise.all([this.createBasicContainer(userProfileContainer), this.createBasicContainer(appContainer)])
+      })
+      .then(() => {
+        return Promise.all([this.createBasicContainer(commentsContainer), this.createBasicContainer(nodesContainer)])
       })
       .then(() => {
         return this._profileTriples(username, name, email)
