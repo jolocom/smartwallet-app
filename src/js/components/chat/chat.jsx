@@ -2,6 +2,9 @@ import React from 'react/addons'
 
 import NavActions from 'actions/nav'
 
+import FabMenu from 'components/common/fab-menu.jsx'
+import FabMenuItem from 'components/common/fab-menu-item.jsx'
+
 import TimerMixin from 'react-timer-mixin'
 import N3 from 'n3'
 import WebAgent from 'lib/web-agent.js'
@@ -229,11 +232,10 @@ let Chat = React.createClass({
           )
         })}
 
-        <div className="message new">
-          <textarea className="content" valueLink={this.linkState('currentMessage')}/>
-          <div className="node link"/>
-          <div className="button" onClick={this.onMessageSendClick}>tell</div>
-        </div>
+        <FabMenu>
+          <FabMenuItem icon="chat" label="Conversation"/>
+          <FabMenuItem icon="group_add" label="Group chat"/>
+        </FabMenu>
       </div>
     )
   }

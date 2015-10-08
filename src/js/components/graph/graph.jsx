@@ -11,7 +11,6 @@ import GraphD3 from 'lib/graph'
 
 import STYLES from 'styles/app.js'
 
-import PinnedNodes from 'components/graph/pinned.jsx'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 
@@ -295,23 +294,17 @@ let Graph = React.createClass({
   },
 
   render() {
-    let pinned
-    if (this.state.showPinned) {
-      pinned = <PinnedNodes/>
-    }
-
     let classes = classNames('jlc-graph', {
       'jlc-search-active': this.state.showSearch
     })
 
     return (
       <div className={classes}>
-        {pinned}
         <FabMenu>
-          <FabMenuItem icon="comment" tooltip="Comment"/>
-          <FabMenuItem icon="insert_photo"/>
-          <FabMenuItem icon="attachment"/>
-          <FabMenuItem icon="person"/>
+          <FabMenuItem icon="comment" label="Comment"/>
+          <FabMenuItem icon="insert_photo" label="Image"/>
+          <FabMenuItem icon="attachment" label="File"/>
+          <FabMenuItem icon="person" label="Contact"/>
         </FabMenu>
 
         <div className="jlc-graph-chart" ref="graph"></div>
