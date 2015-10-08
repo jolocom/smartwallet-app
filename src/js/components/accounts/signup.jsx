@@ -1,7 +1,7 @@
 import React from 'react/addons'
 import Reflux from 'reflux'
 import {Textfield, Button} from 'react-mdl'
-import {Navigation} from 'react-router'
+import {History} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
@@ -16,7 +16,7 @@ function linkToState(target, property) {
 
 let Signup = React.createClass({
   mixins: [
-    Navigation,
+    History,
     Reflux.connect(AvailabilityStore)
   ],
   contextTypes: {
@@ -32,9 +32,9 @@ let Signup = React.createClass({
   signup() {
     React.findDOMNode(this.refs.form).submit()
     // @TODO onload doesn't work somehow, calling manually
-    setTimeout(function() {
-      window.location.href = '/'
-    }, 500)
+    // setTimeout(function() {
+    //   window.location.href = '/'
+    // }, 1000)
   },
   _onUsernameChange(value) {
     this.setState({
@@ -44,7 +44,7 @@ let Signup = React.createClass({
   },
   _onSignup() {
     console.log('frame loaded')
-    this.transitionTo('/')
+    // this.transitionTo('/')
   },
   render() {
     let usernameClass, availableText, disabled = true

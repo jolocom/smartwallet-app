@@ -1,29 +1,37 @@
 import React from 'react'
-import Router, { Route, DefaultRoute } from 'react-router'
+// @TODO preferred way to handle history, can we do this with gold server?
+// import createBrowserHistory from 'history/lib/createBrowserHistory'
+import Router, { Route, Redirect } from 'react-router'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import App from 'components/app.jsx'
-import Graph from 'components/graph.jsx'
-import Chat from 'components/chat.jsx'
-import LoginDev from 'components/login-dev.jsx'
+import Graph from 'components/graph/graph.jsx'
+import Node from 'components/graph/node.jsx'
+import Chat from 'components/chat/chat.jsx'
+import Contacts from 'components/contacts/contacts.jsx'
+import Projects from 'components/projects/projects.jsx'
+
+import LoginDev from 'components/accounts/login-dev.jsx'
 import Test from 'components/test.jsx'
 //import SignupProd from 'components/signup.jsx'
-import Signup from 'components/signup-dev.jsx'
+import Signup from 'components/accounts/signup-dev.jsx'
 
 injectTapEventPlugin()
 
-let routes =  (
-  <Route name="app" path="/" handler={App}>
-    <DefaultRoute handler={Graph} />
-    <Route name="graph" handler={Graph}/>
-    <Route name="chat" handler={Chat}/>
-    <Route name="signup" handler={Signup}/>
-    <Route name="login" handler={LoginDev}/>
-    <Route name="test" handler={Test}/>
+let routes = (
+  <Route path="/" component={App}>
+    <Redirect from="/" to="/graph" />
+    <Route path="graph" component={Graph} title="Graph">
+      <Route path=":node" component={Node}/>
+    </Route>
+    <Route path="chat" component={Chat}/>
+    <Route path="contacts" component={Contacts}/>
+    <Route path="projects" component={Projects}/>
+    <Route path="signup" component={Signup}/>
+    <Route name="login" component={LoginDev}/>
+    <Route path="test" component={Test}/>
   </Route>
 )
 
-Router.run(routes, (Handler) => {
-  React.render(<Handler/>, document.body)
-})
+React.render(<Router>{routes}</Router>, document.body)

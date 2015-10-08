@@ -17,11 +17,13 @@ var sources = {
   img: './src/img/**/*',
   js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
   lib: [
-    './node_modules/babel-core/browser-polyfill.js'
+    './node_modules/babel-core/browser-polyfill.js',
+    './src/js/lib/material.js'
   ],
   libFonts: [
   ],
   libCss: [
+    './node_modules/react-mdl/extra/material.css'
   ],
   sass: './src/sass/**/*.scss'
 };

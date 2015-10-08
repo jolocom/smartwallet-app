@@ -1,7 +1,7 @@
 import Reflux from 'reflux'
 
 let NavActions = Reflux.createActions([
-  'toggle'
+  'toggle', 'show', 'hide'
 ])
 
 export default NavActions

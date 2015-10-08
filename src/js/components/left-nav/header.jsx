@@ -3,21 +3,30 @@ import Reflux from 'reflux'
 
 import {IconButton} from 'react-mdl'
 
-import Avatar from 'components/avatar.jsx'
+import Avatar from 'components/common/avatar.jsx'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
+import NavActions from 'actions/nav'
+
 let Header = React.createClass({
   mixins: [
-    Reflux.connect(ProfileStore, 'profile')
+    Reflux.connect(ProfileStore)
   ],
   componentWillMount() {
     ProfileActions.load()
   },
+  editProfile() {
+    ProfileActions.show()
+    NavActions.hide()
+  },
   render() {
-    let {profile} = this.state
-    let initials = profile.name[0]
+    let initials, profile = this.state
+
+    if (profile.name)
+      initials = profile.name[0]
+
     return (
       <header className="jlc-nav-header">
         <Avatar src={profile.img}>{initials}</Avatar>
@@ -26,7 +35,7 @@ let Header = React.createClass({
             <span className="jlc-nav-profile-name">{profile.name}</span>
             <span className="jlc-nav-profile-email">{profile.email}</span>
           </div>
-          <IconButton name="mode_edit"/>
+          <IconButton name="mode_edit" onClick={this.editProfile}/>
         </div>
       </header>
     )
