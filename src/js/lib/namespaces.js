@@ -37,10 +37,15 @@ export const RDF = {
 
 const sioc = 'http://rdfs.org/sioc/ns#'
 export const SIOC = {
+  Container: `${sioc}Container`,
   Post: `${sioc}Post`,
+  Space: `${sioc}Space`,
+  Thread: `${sioc}Thread`,
   containerOf:`${sioc}container_of`,
   content: `${sioc}content`,
   hasContainer: `${sioc}has_container`,
   hasCreator: `${sioc}has_creator`,
-  hasReply: `${sioc}has_reply`
+  hasReply: `${sioc}has_reply`,
+  hasSpace: `${sioc}has_space`,
+  spaceOf: `${sioc}space_of`
 }
