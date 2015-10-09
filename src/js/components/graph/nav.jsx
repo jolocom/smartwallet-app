@@ -3,16 +3,19 @@ import React from 'react/addons'
 import {IconButton} from 'react-mdl'
 
 import SearchActions from 'actions/search'
-import PinnedActions from 'actions/pinned'
 
-let GraphNav = React.createClass({
+export default React.createClass({
+
+  contextTypes: {
+    history: React.PropTypes.any
+  },
 
   showSearch() {
     SearchActions.show()
   },
 
   showPinned() {
-    PinnedActions.show()
+    this.context.history.pushState(null, `/graph/pinned`)
   },
 
   render: function() {
@@ -25,5 +28,3 @@ let GraphNav = React.createClass({
     )
   }
 })
-
-export default GraphNav

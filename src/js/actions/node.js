@@ -1,10 +1,9 @@
 import Reflux from 'reflux'
 
-let NodeActions = Reflux.createActions([
-  'add',
-  'remove',
-  'pin',
-  'unpin'
-])
-
-export default NodeActions
+export default Reflux.createActions({
+  'load': {asyncResult: true},
+  'add': {asyncResult: true},
+  'remove': {asyncResult: true},
+  'pin': {asyncResult: true},
+  'unpin': {asyncResult: true}
+})

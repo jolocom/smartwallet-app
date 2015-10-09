@@ -107,4 +107,4 @@ gulp.task('watch', function() {
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', 'lint', ['img', 'data', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));
+gulp.task('default', gulpsync.sync(['clean', 'lint', ['img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));

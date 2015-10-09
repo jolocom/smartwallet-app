@@ -1,4 +1,6 @@
 import React from 'react'
+import _ from 'lodash'
+import {History} from 'react-router'
 import {Layout, Header, HeaderRow, Content} from 'react-mdl'
 
 import LeftNav from 'components/left-nav/nav.jsx'
@@ -14,56 +16,48 @@ import ContactsNav from 'components/contacts/nav.jsx'
 
 import ProjectsNav from 'components/projects/nav.jsx'
 
-let components = {
-  '/graph': {
-    title: 'Graph',
-    nav: <GraphNav/>,
-    search: <GraphSearch/>
-  },
-  '/chat': {
-    title: 'Chat',
-    nav: <ChatNav/>
-  },
-  '/contacts': {
-    title: 'Contacts',
-    nav: <ContactsNav/>
-  },
-  '/projects': {
-    title: 'Projects',
-    nav: <ProjectsNav/>
-  }
-}
+export default React.createClass({
 
-let App = React.createClass({
-
-  contextTypes: {
-    router: React.PropTypes.func
-  },
-
-  getInitialState() {
-    return this.getComponent() || {}
-  },
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.location.pathname !== this.props.location.pathname)
-      this.setState(this.getComponent())
-  },
+  mixins: [History],
 
   getComponent() {
-    return components[this.props.location.pathname]
+    let components = {
+      '/graph': {
+        title: 'Graph',
+        nav: <GraphNav/>,
+        search: <GraphSearch/>
+      },
+      '/chat': {
+        title: 'Chat',
+        nav: <ChatNav/>
+      },
+      '/contacts': {
+        title: 'Contacts',
+        nav: <ContactsNav/>
+      },
+      '/projects': {
+        title: 'Projects',
+        nav: <ProjectsNav/>
+      }
+    }
+    return _.find(components, (component, path) => {
+      return this.props.location.pathname.match(path)
+    }) || {}
   },
 
   render() {
+    let component = this.getComponent()
+
     return (
       <div className="jlc-app">
         <Layout fixedHeader={true} fixedTabs={true}>
           <Header className="jlc-app-header">
-            <HeaderRow title={this.state.title}>
-              {this.state.nav}
+            <HeaderRow title={component.title}>
+              {component.nav}
             </HeaderRow>
             <AppNav/>
           </Header>
-          {this.state.search}
+          {component.search}
           <LeftNav/>
           <Content>
             {this.props.children}
@@ -75,5 +69,3 @@ let App = React.createClass({
   }
 
 })
-
-export default App

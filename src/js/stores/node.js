@@ -1,22 +1,17 @@
 import Reflux from 'reflux'
 import NodeActions from 'actions/node'
 
-let NodeStore = Reflux.createStore({
+export default Reflux.createStore({
   listenables: NodeActions,
-  init() {
-    this.nodes = []
-  },
   getInitialState() {
     return {
-      nodes: []
+      node: []
     }
   },
-  onAdd() {
-    console.log('add node')
+  onLoad(uri) {
+    console.log(uri)
   },
   onRemove() {
     console.log('remove node')
   }
 })
-
-export default NodeStore

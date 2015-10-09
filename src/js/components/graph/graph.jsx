@@ -2,7 +2,6 @@
 
 import React from 'react/addons'
 import Reflux from 'reflux'
-import {History} from 'react-router'
 import classNames from 'classnames'
 
 import Util from 'lib/util.js'
@@ -14,8 +13,6 @@ import STYLES from 'styles/app.js'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 
-import Pinned from 'components/graph/pinned.jsx'
-
 import NodeActions from 'actions/node'
 import NodeStore from 'stores/node'
 
@@ -24,9 +21,12 @@ let graphAgent = new GraphAgent()
 let Graph = React.createClass({
 
   mixins: [
-    Reflux.connect(NodeStore, 'nodes'),
-    History
+    Reflux.connect(NodeStore, 'nodes')
   ],
+
+  contextTypes: {
+    history: React.PropTypes.any
+  },
 
   getInitialState: function() {
     return {
@@ -123,7 +123,7 @@ let Graph = React.createClass({
   showNode(node) {
     // @TODO user proper id
     let uri = encodeURIComponent(node.uri || 'current-node-id')
-    this.history.pushState(null, `/graph/${uri}`)
+    this.context.history.pushState(null, `/graph/n/${uri}`)
   },
 
   handleLongTap(distance) {
@@ -262,43 +262,8 @@ let Graph = React.createClass({
     }
   },
 
-  togglePlusDrawer: function() {
-    this.setState({
-      plusDrawerOpen: !this.state.plusDrawerOpen
-    })
-  },
-
-  togglePinned() {
-    this.setState({
-      showPinned: !this.state.showPinned
-    })
-  },
-
-  toggleSearch() {
-    this.setState({
-      showSeach: !this.state.showSearch
-    })
-  },
-
-  showSearch() {
-    this.setState({
-      showSearch: true
-    })
-  },
-
-  hideSearch() {
-    this.setState({
-      showSearch: false
-    })
-  },
-
-  resetSearch() {
-  },
-
   render() {
-    let classes = classNames('jlc-graph', {
-      'jlc-search-active': this.state.showSearch
-    })
+    let classes = classNames('jlc-graph')
 
     return (
       <div className={classes}>
@@ -311,7 +276,7 @@ let Graph = React.createClass({
 
         <div className="jlc-graph-chart" ref="graph"></div>
 
-        <Pinned/>
+        {this.props.children}
       </div>
    )
   }

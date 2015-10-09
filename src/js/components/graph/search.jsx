@@ -39,7 +39,7 @@ let GraphSearch = React.createClass({
           <IconButton name="arrow_back" className="jlc-search__hide-button" onClick={SearchActions.hide}/>
           <div className="jlc-search-field mdl-textfield mdl-js-textfield">
             <input className="mdl-textfield__input" type="text" id="search-query" ref="search" onChange={this.onChange} value={this.state.query} />
-            <label className="mdl-textfield__label" for="search-query">Search...</label>
+            <label className="mdl-textfield__label" htmlFor="search-query">Search...</label>
           </div>
           <Spacer/>
           <nav className="mdl-navigation">

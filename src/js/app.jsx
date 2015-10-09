@@ -7,7 +7,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import App from 'components/app.jsx'
 import Graph from 'components/graph/graph.jsx'
-import Node from 'components/graph/node.jsx'
+import Pinned from 'components/graph/pinned.jsx'
+import Node from 'components/node/node.jsx'
 import Chat from 'components/chat/chat.jsx'
 import Contacts from 'components/contacts/contacts.jsx'
 import Projects from 'components/projects/projects.jsx'
@@ -23,7 +24,8 @@ let routes = (
   <Route path="/" component={App}>
     <Redirect from="/" to="/graph" />
     <Route path="graph" component={Graph} title="Graph">
-      <Route path=":node" component={Node}/>
+      <Route path="pinned" component={Pinned}/>
+      <Route path="n/:node" component={Node}/>
     </Route>
     <Route path="chat" component={Chat}/>
     <Route path="contacts" component={Contacts}/>
