@@ -28,6 +28,16 @@ let Graph = React.createClass({
     history: React.PropTypes.any
   },
 
+  childContextTypes: {
+    node: React.PropTypes.string
+  },
+
+  getChildContext: function() {
+    return {
+      node: this.props.params.node
+    }
+  },
+
   getInitialState: function() {
     return {
       identity: null,
@@ -117,13 +127,18 @@ let Graph = React.createClass({
   },
 
   componentDidUpdate: function(prevProps, prevState) {
+    let uri
+    if (!prevState.centerNode && this.state.centerNode) {
+      uri = encodeURIComponent(this.state.centerNode.uri)
+      this.context.history.replaceState(null, `/graph/${uri}`)
+    }
     this.graph.update(prevState, this.state)
   },
 
   showNode(node) {
     // @TODO user proper id
     let uri = encodeURIComponent(node.uri || 'current-node-id')
-    this.context.history.pushState(null, `/graph/n/${uri}`)
+    this.context.history.pushState(null, `/graph/${uri}/details`)
   },
 
   handleLongTap(distance) {
@@ -177,61 +192,61 @@ let Graph = React.createClass({
     //self.closeInbox()
   },
 
-  addNode: function(node) {
-    // @Justas: this pushes fake node & connections into d3
-    // and is called by the 'plus'-button and the 'inbox' (see `./mobile-js/mobile.js`)
-    let fullNode = {
-      description: 'A New Node',
-      fixed: false,
-      index: this.state.nodes.length,
-      name: undefined, //'https://test.jolocom.com/2013/groups/moms/card#g',
-      px: STYLES.width / 2, //undefined, //540,
-      py: STYLES.height * 3/4, //undefined, //960,
-      title: 'NewNode',
-      type: 'uri',
-      uri: 'fakeURI' +(Math.random() * Math.pow(2, 32)), //'https://test.jolocom.com/2013/groups/moms/card#g',
-      weight: 5,
-      x: undefined, //539.9499633771337,
-      y: undefined //960.2001464914653
-    }
-
-    this.enrich(node, fullNode)
-
-    let link = { source: node,
-             target: this.state.centerNode.node }
-
-    let p = null
-    if (node.newNode) {
-      console.log('creating a new one')
-      p = graphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri, this.state.identity)
-    } else {
-      console.log('connecting existing node')
-      p = graphAgent.connectNode(this.state.centerNode.uri, node.uri)
-    }
-
-    p.then(() => {
-      this.state.links.push(link)
-      this.state.nodes.push(node)
-
-      //TODO: connect node in database
-
-      let state = {
-        identity: this.state.identity,
-        centerNode: this.state.centerNode,
-        previewNode: this.state.previewNode,
-        nodes: this.state.nodes,
-        inboxNodes: this.state.inboxNodes,
-        inboxCount: this.state.inboxCount,
-        historyNodes: this.state.historyNodes,
-        newNodeURI: node.uri,  // will lit up on GraphD3 update
-        links: this.state.links,
-        literals: this.state.literals,
-        plusDrawerOpen: this.state.plusDrawerOpen
-      }
-
-      this.setState(state)
-    })
-  },
+  // addNode: function(node) {
+  //   // @Justas: this pushes fake node & connections into d3
+  //   // and is called by the 'plus'-button and the 'inbox' (see `./mobile-js/mobile.js`)
+  //   let fullNode = {
+  //     description: 'A New Node',
+  //     fixed: false,
+  //     index: this.state.nodes.length,
+  //     name: undefined, //'https://test.jolocom.com/2013/groups/moms/card#g',
+  //     px: STYLES.width / 2, //undefined, //540,
+  //     py: STYLES.height * 3/4, //undefined, //960,
+  //     title: 'NewNode',
+  //     type: 'uri',
+  //     uri: 'fakeURI' +(Math.random() * Math.pow(2, 32)), //'https://test.jolocom.com/2013/groups/moms/card#g',
+  //     weight: 5,
+  //     x: undefined, //539.9499633771337,
+  //     y: undefined //960.2001464914653
+  //   }
+  //
+  //   this.enrich(node, fullNode)
+  //
+  //   let link = { source: node,
+  //            target: this.state.centerNode.node }
+  //
+  //   let p = null
+  //   if (node.newNode) {
+  //     console.log('creating a new one')
+  //     p = graphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri, this.state.identity)
+  //   } else {
+  //     console.log('connecting existing node')
+  //     p = graphAgent.connectNode(this.state.centerNode.uri, node.uri)
+  //   }
+  //
+  //   p.then(() => {
+  //     this.state.links.push(link)
+  //     this.state.nodes.push(node)
+  //
+  //     //TODO: connect node in database
+  //
+  //     let state = {
+  //       identity: this.state.identity,
+  //       centerNode: this.state.centerNode,
+  //       previewNode: this.state.previewNode,
+  //       nodes: this.state.nodes,
+  //       inboxNodes: this.state.inboxNodes,
+  //       inboxCount: this.state.inboxCount,
+  //       historyNodes: this.state.historyNodes,
+  //       newNodeURI: node.uri,  // will lit up on GraphD3 update
+  //       links: this.state.links,
+  //       literals: this.state.literals,
+  //       plusDrawerOpen: this.state.plusDrawerOpen
+  //     }
+  //
+  //     this.setState(state)
+  //   })
+  // },
 
   pinNode: function(d) {
     NodeActions.pin(d)
@@ -262,16 +277,21 @@ let Graph = React.createClass({
     }
   },
 
+  addNode(type) {
+    let uri = encodeURIComponent(this.state.centerNode.uri)
+    this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
+  },
+
   render() {
     let classes = classNames('jlc-graph')
 
     return (
       <div className={classes}>
         <FabMenu>
-          <FabMenuItem icon="comment" label="Comment"/>
-          <FabMenuItem icon="insert_photo" label="Image"/>
-          <FabMenuItem icon="attachment" label="File"/>
-          <FabMenuItem icon="person" label="Contact"/>
+          <FabMenuItem icon="comment" label="Comment" onClick={() => {this.addNode('comment')}}/>
+          <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
+          <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>
+          <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
         </FabMenu>
 
         <div className="jlc-graph-chart" ref="graph"></div>

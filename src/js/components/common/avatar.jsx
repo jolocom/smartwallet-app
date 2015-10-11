@@ -1,13 +1,18 @@
 import React from 'react'
+import classNames from 'classnames'
 
 let Avatar = React.createClass({
   render() {
-    let style = {}
-    if (this.props.src) {
+    let classes, style, {src, className} = this.props
+
+    classes = classNames('jlc-avatar', className)
+
+    if (src) {
       style.backgroundImage = 'url(${this.props.src})'
     }
+
     return (
-      <div className="jlc-avatar" style={style}>{this.props.children}</div>
+      <div className={classes} style={style}>{this.props.children}</div>
     )
   }
 })

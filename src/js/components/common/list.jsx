@@ -36,14 +36,19 @@ export let ListGroup = React.createClass({
 
 export let ListItem = React.createClass({
   render() {
-    let {className, title, content} = this.props
+    let {className, title, content, leftIcon} = this.props
 
     let classes = classNames('jlc-list-item', className)
 
     return (
       <div className={classes}>
-        <div className="jlc-list-item-title">{title}</div>
-        <div className="jlc-list-item-content">{content}</div>
+        <div className="jlc-list-item-inner">
+          <div className="jlc-list-item-title">{title}</div>
+          <div className="jlc-list-item-content">{content}</div>
+        </div>
+        {leftIcon ?
+          React.cloneElement(leftIcon, {className: 'jlc-list-item-left-icon'})
+          : null}
       </div>
     )
   }

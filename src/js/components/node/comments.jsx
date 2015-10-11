@@ -8,6 +8,7 @@ import CommentsStore from 'stores/comments'
 import ProfileStore from 'stores/profile'
 
 import List, {ListItem} from 'components/common/list.jsx'
+import Avatar from 'components/common/avatar.jsx'
 
 import Compose from 'components/common/compose.jsx'
 
@@ -44,8 +45,9 @@ export default React.createClass({
       <div className="jlc-comments">
         <List className="jlc-comments-list">
           {this.state.comments.map(function({author, content}) {
+            let avatar = <Avatar src={author.imgUri}>{author[0]}</Avatar>
             return (
-              <ListItem title={author} content={content}/>
+              <ListItem title={author} content={content} leftIcon={avatar}/>
             )
           })}
         </List>

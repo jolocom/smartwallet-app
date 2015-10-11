@@ -1,4 +1,5 @@
 import React from 'react'
+import Reflux from 'reflux'
 import _ from 'lodash'
 import {History} from 'react-router'
 import {Layout, Header, HeaderRow, Content} from 'react-mdl'
@@ -16,9 +17,23 @@ import ContactsNav from 'components/contacts/nav.jsx'
 
 import ProjectsNav from 'components/projects/nav.jsx'
 
+import AvailabilityDevStore from 'stores/availability-dev'
+
 export default React.createClass({
 
-  mixins: [History],
+  mixins: [
+    History,
+    Reflux.connect(AvailabilityDevStore)
+  ],
+
+  // componentWillMount() {
+  //   let path = this.props.location.pathname
+  //   if (this.state.signedUp && path === '/signup') {
+  //     this.history.pushState(null, '/graph')
+  //   } else if (!this.state.signedUp && path !== 'signup') {
+  //     this.history.pushState(null, '/signup')
+  //   }
+  // },
 
   getComponent() {
     let components = {
@@ -50,20 +65,22 @@ export default React.createClass({
 
     return (
       <div className="jlc-app">
-        <Layout fixedHeader={true} fixedTabs={true}>
-          <Header className="jlc-app-header">
-            <HeaderRow title={component.title}>
-              {component.nav}
-            </HeaderRow>
-            <AppNav/>
-          </Header>
-          {component.search}
-          <LeftNav/>
-          <Content>
-            {this.props.children}
-          </Content>
-        </Layout>
-        <Profile/>
+        {this.state.signedUp ? (
+          <Layout fixedHeader={true} fixedTabs={true}>
+            <Header className="jlc-app-header">
+              <HeaderRow title={component.title}>
+                {component.nav}
+              </HeaderRow>
+              <AppNav/>
+            </Header>
+            {component.search}
+            <LeftNav/>
+            <Content>
+              {this.props.children}
+            </Content>
+            <Profile/>
+          </Layout>
+        ) : this.props.children}
       </div>
     )
   }

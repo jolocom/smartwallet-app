@@ -28,6 +28,12 @@ export default React.createClass({
     history: React.PropTypes.any
   },
 
+  getChildContext: function() {
+    return {
+      node: this.props.params.node
+    }
+  },
+
   componentDidMount() {
     NodeActions.load(this.props.params.node)
     this.open()
