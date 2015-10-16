@@ -3,9 +3,14 @@ import React from 'react/addons'
 import {IconButton} from 'react-mdl'
 
 import SearchActions from 'actions/search'
+
 import PinnedActions from 'actions/pinned'
 
-let GraphNav = React.createClass({
+export default React.createClass({
+
+  contextTypes: {
+    history: React.PropTypes.any
+  },
 
   showSearch() {
     SearchActions.show()
@@ -25,5 +30,3 @@ let GraphNav = React.createClass({
     )
   }
 })
-
-export default GraphNav

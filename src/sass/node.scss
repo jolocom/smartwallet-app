@@ -1,0 +1,24 @@
+@import 'variables';
+
+.jlc-node {
+  .mdl-layout__header {
+    position: absolute;
+  }
+  &-card {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+
+    .mdl-card__actions {
+      display: flex;
+    }
+  }
+
+  .jlc-compose-comment {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid $ws;
+  }
+}

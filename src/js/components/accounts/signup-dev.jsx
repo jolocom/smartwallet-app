@@ -1,7 +1,7 @@
 import React from 'react/addons'
 import Reflux from 'reflux'
 import {Textfield, Button} from 'react-mdl'
-import {History} from 'react-router'
+import {History, Lifecycle} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityDevStore from 'stores/availability-dev'
@@ -17,10 +17,19 @@ function linkToState(target, property) {
 let SignupDev = React.createClass({
   mixins: [
     History,
+    Lifecycle,
     Reflux.connect(AvailabilityDevStore)
   ],
   contextTypes: {
     muiTheme: React.PropTypes.object
+  },
+  componentWillMount() {
+    if (this.state.signedUp)
+      this.history.pushState(null, '/graph')
+  },
+  routerWillLeave() {
+    if (!this.state.signedUp)
+      return false
   },
   signup() {
     let signupData = {

@@ -9,26 +9,24 @@ import {CERT, FOAF} from 'lib/namespaces.js'
 let N3Util = N3.Util
 let wia = new WebIDAgent()
 
-let ProfileStore = Reflux.createStore({
+let profile = {
+  show: false,
+  name: '',
+  email: '',
+  rsaModulus: '(rsa modulus missing)',
+  rsaExponent: '(rsa exponent missing)',
+  webid: '#',
+  webidPresent: '(webid missing)',
+  imgUri: '/img/person-placeholder.png',
+  fixedTriples: [],
+  prefixes: []
+}
+
+export default Reflux.createStore({
   listenables: ProfileActions,
 
-  // init() {
-  //   this.show = false
-  // },
-
   getInitialState () {
-    return {
-      show: false,
-      name: 'Jolocom',
-      email: 'contact@jolocom.com',
-      rsaModulus: '(rsa modulus missing)',
-      rsaExponent: '(rsa exponent missing)',
-      webid: '#',
-      webidPresent: '(webid missing)',
-      imgUri: '/img/person-placeholder.png',
-      fixedTriples: [],
-      prefixes: []
-    }
+    return profile
   },
 
   onShow() {
@@ -106,8 +104,9 @@ let ProfileStore = Reflux.createStore({
         if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
       }
     }
-    console.log('state', state)
-    // this.trigger(state)
+
+    profile = state
+    this.trigger(state)
   },
 
   onUpdate: function (profile) {
@@ -157,5 +156,3 @@ let ProfileStore = Reflux.createStore({
     }
   }
 })
-
-export default ProfileStore
