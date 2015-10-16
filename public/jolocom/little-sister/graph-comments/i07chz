@@ -1,8 +1,0 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-
-<#post>
-    <http://purl.org/dc/terms/created> "Fri, 09 Oct 2015 16:01:36 GMT" ;
-    <http://rdfs.org/sioc/ns#content> "What's up" ;
-    <http://rdfs.org/sioc/ns#has_creator> <../../profile/card#me> ;
-    a <http://rdfs.org/sioc/ns#Post> .
-
