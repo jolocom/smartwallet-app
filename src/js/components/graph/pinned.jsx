@@ -38,6 +38,14 @@ export default React.createClass({
 
   mixins: [Reflux.connect(PinnedStore)],
 
+  contextTypes: {
+    history: React.PropTypes.any
+  },
+
+  close() {
+    PinnedActions.hide()
+  },
+
   onNodeClick: function(nodeId) {
     let self = this
     return function() {
@@ -57,7 +65,7 @@ export default React.createClass({
       <div className={classes}>
         <Layout fixedHeader={true}>
           <header className="mdl-layout__header mdl-color--grey-600 is-casting-shadow">
-            <IconButton name="arrow_back" onClick={PinnedActions.hide} className="jlc-dialog__close-button"></IconButton>
+            <IconButton name="arrow_back" onClick={this.close} className="jlc-dialog__close-button"></IconButton>
             <div className="mdl-layout__header-row">
               <span className="mdl-layout-title">Pinned nodes</span>
               <Spacer></Spacer>

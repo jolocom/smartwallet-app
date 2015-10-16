@@ -6,13 +6,7 @@ import {Layout, Content, IconButton, Spacer, Menu, MenuItem, Textfield} from 're
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-function linkToState(target, property) {
-  return value => {
-    target.setState({
-      [property]: value
-    })
-  }
-}
+import {linkToState} from 'lib/util'
 
 let Profile = React.createClass({
   mixins: [

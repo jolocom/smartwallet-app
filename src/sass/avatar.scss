@@ -4,10 +4,13 @@ $avatarSize: 32px;
 
 .jlc-avatar {
   background-color: rgba(0, 0, 0, 0.2);
-  font-weight: bold;
+  color: #ffffff;
+  font-weight: normal;
   text-align: center;
   line-height: $avatarSize;
   border-radius: $avatarSize;
   width: $avatarSize;
   height: $avatarSize;
+  text-transform: uppercase;
+  font-size: $avatarSize * 0.8;
 }

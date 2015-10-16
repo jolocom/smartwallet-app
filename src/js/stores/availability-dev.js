@@ -7,6 +7,12 @@ let wia = new WebIDAgent()
 let AvailabilityDevStore = Reflux.createStore({
   listenables: Availability,
 
+  getInitialState() {
+    return {
+      signedUp: localStorage.getItem('fake-user')
+    }
+  },
+
   onCheck(username) {
     wia.isFakeIDAvailable(username)
       .then((available) => {
@@ -43,7 +49,7 @@ let AvailabilityDevStore = Reflux.createStore({
   onFakeSignupFailed(err) {
     //TODO: trigger failure
     console.log(err)
-  
+
   }
 })
 

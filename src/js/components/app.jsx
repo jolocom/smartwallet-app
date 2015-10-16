@@ -1,4 +1,7 @@
 import React from 'react'
+import Reflux from 'reflux'
+import _ from 'lodash'
+import {History} from 'react-router'
 import {Layout, Header, HeaderRow, Content} from 'react-mdl'
 
 import LeftNav from 'components/left-nav/nav.jsx'
@@ -14,66 +17,72 @@ import ContactsNav from 'components/contacts/nav.jsx'
 
 import ProjectsNav from 'components/projects/nav.jsx'
 
-let components = {
-  '/graph': {
-    title: 'Graph',
-    nav: <GraphNav/>,
-    search: <GraphSearch/>
-  },
-  '/chat': {
-    title: 'Chat',
-    nav: <ChatNav/>
-  },
-  '/contacts': {
-    title: 'Contacts',
-    nav: <ContactsNav/>
-  },
-  '/projects': {
-    title: 'Projects',
-    nav: <ProjectsNav/>
-  }
-}
+import AvailabilityDevStore from 'stores/availability-dev'
 
-let App = React.createClass({
+export default React.createClass({
 
-  contextTypes: {
-    router: React.PropTypes.func
-  },
+  mixins: [
+    History,
+    Reflux.connect(AvailabilityDevStore)
+  ],
 
-  getInitialState() {
-    return this.getComponent() || {}
-  },
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.location.pathname !== this.props.location.pathname)
-      this.setState(this.getComponent())
-  },
+  // componentWillMount() {
+  //   let path = this.props.location.pathname
+  //   if (this.state.signedUp && path === '/signup') {
+  //     this.history.pushState(null, '/graph')
+  //   } else if (!this.state.signedUp && path !== 'signup') {
+  //     this.history.pushState(null, '/signup')
+  //   }
+  // },
 
   getComponent() {
-    return components[this.props.location.pathname]
+    let components = {
+      '/graph': {
+        title: 'Graph',
+        nav: <GraphNav/>,
+        search: <GraphSearch/>
+      },
+      '/chat': {
+        title: 'Chat',
+        nav: <ChatNav/>
+      },
+      '/contacts': {
+        title: 'Contacts',
+        nav: <ContactsNav/>
+      },
+      '/projects': {
+        title: 'Projects',
+        nav: <ProjectsNav/>
+      }
+    }
+    return _.find(components, (component, path) => {
+      return this.props.location.pathname.match(path)
+    }) || {}
   },
 
   render() {
+    let component = this.getComponent()
+
     return (
       <div className="jlc-app">
-        <Layout fixedHeader={true} fixedTabs={true}>
-          <Header className="jlc-app-header">
-            <HeaderRow title={this.state.title}>
-              {this.state.nav}
-            </HeaderRow>
-            <AppNav/>
-          </Header>
-          {this.state.search}
-          <LeftNav/>
-          <Content>
-            {this.props.children}
-          </Content>
-        </Layout>
-        <Profile/>
+        {this.state.signedUp ? (
+          <Layout fixedHeader={true} fixedTabs={true}>
+            <Header className="jlc-app-header">
+              <HeaderRow title={component.title}>
+                {component.nav}
+              </HeaderRow>
+              <AppNav/>
+            </Header>
+            {component.search}
+            <LeftNav/>
+            <Content>
+              {this.props.children}
+            </Content>
+            <Profile/>
+          </Layout>
+        ) : this.props.children}
       </div>
     )
   }
 
 })
-
-export default App

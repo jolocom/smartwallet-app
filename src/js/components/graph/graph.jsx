@@ -2,7 +2,6 @@
 
 import React from 'react/addons'
 import Reflux from 'reflux'
-import {History} from 'react-router'
 import classNames from 'classnames'
 
 import Util from 'lib/util.js'
@@ -14,19 +13,32 @@ import STYLES from 'styles/app.js'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 
-import Pinned from 'components/graph/pinned.jsx'
-
 import NodeActions from 'actions/node'
 import NodeStore from 'stores/node'
+
+import PinnedNodes from './pinned.jsx'
 
 let graphAgent = new GraphAgent()
 
 let Graph = React.createClass({
 
   mixins: [
-    Reflux.connect(NodeStore, 'nodes'),
-    History
+    Reflux.connect(NodeStore, 'nodes')
   ],
+
+  contextTypes: {
+    history: React.PropTypes.any
+  },
+
+  childContextTypes: {
+    node: React.PropTypes.string
+  },
+
+  getChildContext: function() {
+    return {
+      node: this.props.params.node
+    }
+  },
 
   getInitialState: function() {
     return {
@@ -78,6 +90,9 @@ let Graph = React.createClass({
       inboxOpen: this.state.inboxOpen,
       plusDrawerOpen: this.state.plusDrawerOpen
     }
+
+    //this.showNode(center)
+
     this.arrangeNodesInACircle(state.nodes)
     return state
   },
@@ -94,7 +109,6 @@ let Graph = React.createClass({
   //TODO: has to fetch uri and all the uri's objects, if they're not in the same doc
   centerAtURI: function(uri) {
     //TODO: should only crawl if the uri is external(?)
-
     // render relevant information in UI
     graphAgent.fetchAndConvert(uri)
       .then((d3graph) => {
@@ -109,7 +123,11 @@ let Graph = React.createClass({
 
   componentDidMount: function() {
     this.graph = new GraphD3(this.getGraphEl(), this.props, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap)
-    this.centerAtWebID()
+    if (this.props.params.node) {
+      this.centerAtURI(this.props.params.node)
+    } else {
+      this.centerAtWebID()
+    }
   },
 
   componentWillUpdate: function(nextProps, nextState) {
@@ -117,18 +135,35 @@ let Graph = React.createClass({
   },
 
   componentDidUpdate: function(prevProps, prevState) {
+    let uri
+    console.log('update', prevProps.params.node, this.props.params.node)
+    if (prevProps.params.node !== this.props.params.node) {
+      this.centerAtURI(this.props.params.node)
+      return
+    }
+
+    if (!prevState.centerNode && this.state.centerNode) {
+      uri = encodeURIComponent(this.state.centerNode.uri)
+      this.context.history.replaceState(null, `/graph/${uri}`)
+    }
     this.graph.update(prevState, this.state)
   },
 
-  showNode(node) {
+  showNode(uri) {
+    console.log('showNode', uri)
+    uri = encodeURIComponent(uri || 'current-node-id')
+    this.context.history.pushState(null, `/graph/${uri}`)
+  },
+
+  showNodeDetails(uri) {
     // @TODO user proper id
-    let uri = encodeURIComponent(node.uri || 'current-node-id')
-    this.history.pushState(null, `/graph/${uri}`)
+    uri = encodeURIComponent(uri || 'current-node-id')
+    this.context.history.pushState(null, `/graph/${uri}/details`)
   },
 
   handleLongTap(distance) {
     if (distance > 40) {
-      this.showNode(this.state.centerNode.node)
+      this.showNodeDetails(this.state.centerNode.node.uri)
     }
   },
 
@@ -148,7 +183,7 @@ let Graph = React.createClass({
   handleDragEnd: function(node, distance, verticalOffset) {
     if (node == this.state.centerNode.node){
       if (distance < 40){
-        this.showNode(node)
+        this.showNodeDetails(node.uri)
       } else if (verticalOffset < STYLES.height / 3) {
         // perspective node can be dragged into inbox (top of screen)
         NodeActions.pin(node)
@@ -170,68 +205,69 @@ let Graph = React.createClass({
         this.state.historyNodes.push(oldCenter)
 
         let targetUri = this.state.nodes.filter((n) => n.uri == node.uri)[0].uri
-        this.centerAtURI(targetUri)
+        // this.centerAtURI(targetUri)
+        this.showNode(targetUri)
       }
     }
 
     //self.closeInbox()
   },
 
-  addNode: function(node) {
-    // @Justas: this pushes fake node & connections into d3
-    // and is called by the 'plus'-button and the 'inbox' (see `./mobile-js/mobile.js`)
-    let fullNode = {
-      description: 'A New Node',
-      fixed: false,
-      index: this.state.nodes.length,
-      name: undefined, //'https://test.jolocom.com/2013/groups/moms/card#g',
-      px: STYLES.width / 2, //undefined, //540,
-      py: STYLES.height * 3/4, //undefined, //960,
-      title: 'NewNode',
-      type: 'uri',
-      uri: 'fakeURI' +(Math.random() * Math.pow(2, 32)), //'https://test.jolocom.com/2013/groups/moms/card#g',
-      weight: 5,
-      x: undefined, //539.9499633771337,
-      y: undefined //960.2001464914653
-    }
-
-    this.enrich(node, fullNode)
-
-    let link = { source: node,
-             target: this.state.centerNode.node }
-
-    let p = null
-    if (node.newNode) {
-      console.log('creating a new one')
-      p = graphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri, this.state.identity)
-    } else {
-      console.log('connecting existing node')
-      p = graphAgent.connectNode(this.state.centerNode.uri, node.uri)
-    }
-
-    p.then(() => {
-      this.state.links.push(link)
-      this.state.nodes.push(node)
-
-      //TODO: connect node in database
-
-      let state = {
-        identity: this.state.identity,
-        centerNode: this.state.centerNode,
-        previewNode: this.state.previewNode,
-        nodes: this.state.nodes,
-        inboxNodes: this.state.inboxNodes,
-        inboxCount: this.state.inboxCount,
-        historyNodes: this.state.historyNodes,
-        newNodeURI: node.uri,  // will lit up on GraphD3 update
-        links: this.state.links,
-        literals: this.state.literals,
-        plusDrawerOpen: this.state.plusDrawerOpen
-      }
-
-      this.setState(state)
-    })
-  },
+  // addNode: function(node) {
+  //   // @Justas: this pushes fake node & connections into d3
+  //   // and is called by the 'plus'-button and the 'inbox' (see `./mobile-js/mobile.js`)
+  //   let fullNode = {
+  //     description: 'A New Node',
+  //     fixed: false,
+  //     index: this.state.nodes.length,
+  //     name: undefined, //'https://test.jolocom.com/2013/groups/moms/card#g',
+  //     px: STYLES.width / 2, //undefined, //540,
+  //     py: STYLES.height * 3/4, //undefined, //960,
+  //     title: 'NewNode',
+  //     type: 'uri',
+  //     uri: 'fakeURI' +(Math.random() * Math.pow(2, 32)), //'https://test.jolocom.com/2013/groups/moms/card#g',
+  //     weight: 5,
+  //     x: undefined, //539.9499633771337,
+  //     y: undefined //960.2001464914653
+  //   }
+  //
+  //   this.enrich(node, fullNode)
+  //
+  //   let link = { source: node,
+  //            target: this.state.centerNode.node }
+  //
+  //   let p = null
+  //   if (node.newNode) {
+  //     console.log('creating a new one')
+  //     p = graphAgent.createAndConnectNode(node.title, node.description, this.state.centerNode.uri, this.state.identity)
+  //   } else {
+  //     console.log('connecting existing node')
+  //     p = graphAgent.connectNode(this.state.centerNode.uri, node.uri)
+  //   }
+  //
+  //   p.then(() => {
+  //     this.state.links.push(link)
+  //     this.state.nodes.push(node)
+  //
+  //     //TODO: connect node in database
+  //
+  //     let state = {
+  //       identity: this.state.identity,
+  //       centerNode: this.state.centerNode,
+  //       previewNode: this.state.previewNode,
+  //       nodes: this.state.nodes,
+  //       inboxNodes: this.state.inboxNodes,
+  //       inboxCount: this.state.inboxCount,
+  //       historyNodes: this.state.historyNodes,
+  //       newNodeURI: node.uri,  // will lit up on GraphD3 update
+  //       links: this.state.links,
+  //       literals: this.state.literals,
+  //       plusDrawerOpen: this.state.plusDrawerOpen
+  //     }
+  //
+  //     this.setState(state)
+  //   })
+  // },
 
   pinNode: function(d) {
     NodeActions.pin(d)
@@ -262,56 +298,28 @@ let Graph = React.createClass({
     }
   },
 
-  togglePlusDrawer: function() {
-    this.setState({
-      plusDrawerOpen: !this.state.plusDrawerOpen
-    })
-  },
-
-  togglePinned() {
-    this.setState({
-      showPinned: !this.state.showPinned
-    })
-  },
-
-  toggleSearch() {
-    this.setState({
-      showSeach: !this.state.showSearch
-    })
-  },
-
-  showSearch() {
-    this.setState({
-      showSearch: true
-    })
-  },
-
-  hideSearch() {
-    this.setState({
-      showSearch: false
-    })
-  },
-
-  resetSearch() {
+  addNode(type) {
+    let uri = encodeURIComponent(this.state.centerNode.uri)
+    this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
   render() {
-    let classes = classNames('jlc-graph', {
-      'jlc-search-active': this.state.showSearch
-    })
+    let classes = classNames('jlc-graph')
 
     return (
       <div className={classes}>
         <FabMenu>
-          <FabMenuItem icon="comment" label="Comment"/>
-          <FabMenuItem icon="insert_photo" label="Image"/>
-          <FabMenuItem icon="attachment" label="File"/>
-          <FabMenuItem icon="person" label="Contact"/>
+          <FabMenuItem icon="comment" label="Comment" onClick={() => {this.addNode('comment')}}/>
+          <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
+          <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>
+          <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
         </FabMenu>
 
         <div className="jlc-graph-chart" ref="graph"></div>
 
-        <Pinned/>
+        {this.props.children}
+
+        <PinnedNodes/>
       </div>
    )
   }

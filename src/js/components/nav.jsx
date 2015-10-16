@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router'
 
-let AppNav = React.createClass({
+export default React.createClass({
 
   render() {
     return (
@@ -15,5 +15,3 @@ let AppNav = React.createClass({
   }
 
 })
-
-export default AppNav

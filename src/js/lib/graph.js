@@ -45,8 +45,8 @@ export default class GraphD3 {
   }
 
   create(props, state) {
-    this.w = this.el.offsetWidth
-    this.h = this.el.offsetHeight
+    this.w = this.el.offsetWidth || 440
+    this.h = this.el.offsetHeight || 696
 
     let svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.w)
