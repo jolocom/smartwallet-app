@@ -16,6 +16,8 @@ import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import NodeActions from 'actions/node'
 import NodeStore from 'stores/node'
 
+import PinnedNodes from './pinned.jsx'
+
 let graphAgent = new GraphAgent()
 
 let Graph = React.createClass({
@@ -88,6 +90,9 @@ let Graph = React.createClass({
       inboxOpen: this.state.inboxOpen,
       plusDrawerOpen: this.state.plusDrawerOpen
     }
+
+    //this.showNode(center)
+
     this.arrangeNodesInACircle(state.nodes)
     return state
   },
@@ -104,7 +109,6 @@ let Graph = React.createClass({
   //TODO: has to fetch uri and all the uri's objects, if they're not in the same doc
   centerAtURI: function(uri) {
     //TODO: should only crawl if the uri is external(?)
-
     // render relevant information in UI
     graphAgent.fetchAndConvert(uri)
       .then((d3graph) => {
@@ -119,7 +123,11 @@ let Graph = React.createClass({
 
   componentDidMount: function() {
     this.graph = new GraphD3(this.getGraphEl(), this.props, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap)
-    this.centerAtWebID()
+    if (this.props.params.node) {
+      this.centerAtURI(this.props.params.node)
+    } else {
+      this.centerAtWebID()
+    }
   },
 
   componentWillUpdate: function(nextProps, nextState) {
@@ -128,6 +136,12 @@ let Graph = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     let uri
+    console.log('update', prevProps.params.node, this.props.params.node)
+    if (prevProps.params.node !== this.props.params.node) {
+      this.centerAtURI(this.props.params.node)
+      return
+    }
+
     if (!prevState.centerNode && this.state.centerNode) {
       uri = encodeURIComponent(this.state.centerNode.uri)
       this.context.history.replaceState(null, `/graph/${uri}`)
@@ -135,15 +149,21 @@ let Graph = React.createClass({
     this.graph.update(prevState, this.state)
   },
 
-  showNode(node) {
+  showNode(uri) {
+    console.log('showNode', uri)
+    uri = encodeURIComponent(uri || 'current-node-id')
+    this.context.history.pushState(null, `/graph/${uri}`)
+  },
+
+  showNodeDetails(uri) {
     // @TODO user proper id
-    let uri = encodeURIComponent(node.uri || 'current-node-id')
+    uri = encodeURIComponent(uri || 'current-node-id')
     this.context.history.pushState(null, `/graph/${uri}/details`)
   },
 
   handleLongTap(distance) {
     if (distance > 40) {
-      this.showNode(this.state.centerNode.node)
+      this.showNodeDetails(this.state.centerNode.node.uri)
     }
   },
 
@@ -163,7 +183,7 @@ let Graph = React.createClass({
   handleDragEnd: function(node, distance, verticalOffset) {
     if (node == this.state.centerNode.node){
       if (distance < 40){
-        this.showNode(node)
+        this.showNodeDetails(node.uri)
       } else if (verticalOffset < STYLES.height / 3) {
         // perspective node can be dragged into inbox (top of screen)
         NodeActions.pin(node)
@@ -185,7 +205,8 @@ let Graph = React.createClass({
         this.state.historyNodes.push(oldCenter)
 
         let targetUri = this.state.nodes.filter((n) => n.uri == node.uri)[0].uri
-        this.centerAtURI(targetUri)
+        // this.centerAtURI(targetUri)
+        this.showNode(targetUri)
       }
     }
 
@@ -297,6 +318,8 @@ let Graph = React.createClass({
         <div className="jlc-graph-chart" ref="graph"></div>
 
         {this.props.children}
+
+        <PinnedNodes/>
       </div>
    )
   }

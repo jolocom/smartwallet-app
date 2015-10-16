@@ -42,16 +42,8 @@ export default React.createClass({
     history: React.PropTypes.any
   },
 
-  componentDidMount() {
-    PinnedActions.show()
-  },
-
-  componentWillUnmount() {
-    PinnedActions.hide()
-  },
-
   close() {
-    this.context.history.goBack()
+    PinnedActions.hide()
   },
 
   onNodeClick: function(nodeId) {

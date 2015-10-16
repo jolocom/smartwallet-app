@@ -4,6 +4,8 @@ import {IconButton} from 'react-mdl'
 
 import SearchActions from 'actions/search'
 
+import PinnedActions from 'actions/pinned'
+
 export default React.createClass({
 
   contextTypes: {
@@ -15,7 +17,7 @@ export default React.createClass({
   },
 
   showPinned() {
-    this.context.history.pushState(null, `/graph/pinned`)
+    PinnedActions.show()
   },
 
   render: function() {
