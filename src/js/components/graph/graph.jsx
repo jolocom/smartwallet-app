@@ -136,13 +136,15 @@ let Graph = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     let uri
-    console.log('update', prevProps.params.node, this.props.params.node)
+
     if (prevProps.params.node !== this.props.params.node) {
       this.centerAtURI(this.props.params.node)
       return
     }
 
-    if (!prevState.centerNode && this.state.centerNode) {
+    let isIdentity = this.state.identity === this.state.centerNode.uri
+
+    if (!prevState.centerNode && this.state.centerNode && isIdentity) {
       uri = encodeURIComponent(this.state.centerNode.uri)
       this.context.history.replaceState(null, `/graph/${uri}`)
     }
@@ -150,7 +152,6 @@ let Graph = React.createClass({
   },
 
   showNode(uri) {
-    console.log('showNode', uri)
     uri = encodeURIComponent(uri || 'current-node-id')
     this.context.history.pushState(null, `/graph/${uri}`)
   },
