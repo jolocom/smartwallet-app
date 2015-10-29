@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
 // import {Link} from 'react-router'
 import {Drawer} from 'react-mdl'
@@ -19,7 +20,7 @@ let Nav = React.createClass({
 
   componentDidUpdate() {
     let action = this.state.show ? 'add' : 'remove'
-    React.findDOMNode(this.refs.drawer).classList[action]('is-visible')
+    ReactDOM.findDOMNode(this.refs.drawer).classList[action]('is-visible')
   },
 
   render() {

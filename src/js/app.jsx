@@ -1,15 +1,18 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
+
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
 import Router, { Route, Redirect } from 'react-router'
 
-import injectTapEventPlugin from 'react-tap-event-plugin'
+//import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import App from 'components/app.jsx'
 import Graph from 'components/graph/graph.jsx'
 import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
 import Chat from 'components/chat/chat.jsx'
+import NewChat from 'components/chat/new.jsx'
 import Contacts from 'components/contacts/contacts.jsx'
 import Projects from 'components/projects/projects.jsx'
 
@@ -21,7 +24,7 @@ import Signup from 'components/accounts/signup-dev.jsx'
 // chat to quiclky implement chat functionality- should be refactored
 import ChatTest from 'components/chat-test.jsx'
 
-injectTapEventPlugin()
+// injectTapEventPlugin()
 
 let routes = (
   <Route path="/" component={App}>
@@ -30,7 +33,9 @@ let routes = (
       <Route path="/graph/:node/add/:type" component={AddNode}/>
       <Route path="/graph/:node/details" component={Node}/>
     </Route>
-    <Route path="chat" component={Chat}/>
+    <Route path="chat" component={Chat}>
+      <Route path="new" component={NewChat}/>
+    </Route>
     <Route path="contacts" component={Contacts}/>
     <Route path="projects" component={Projects}/>
     <Route path="signup" component={Signup}/>
@@ -40,4 +45,4 @@ let routes = (
   </Route>
 )
 
-React.render(<Router>{routes}</Router>, document.body)
+ReactDOM.render(<Router>{routes}</Router>, document.getElementById('app'))

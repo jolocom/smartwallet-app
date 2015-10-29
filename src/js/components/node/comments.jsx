@@ -19,7 +19,6 @@ export default React.createClass({
   mixins: [
     Reflux.connect(CommentsStore),
     Reflux.connect(ProfileStore, 'profile'),
-    React.addons.LinkedStateMixin,
     TimerMixin
   ],
 

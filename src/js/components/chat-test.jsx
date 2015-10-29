@@ -1,8 +1,10 @@
 // This component is only meant for test purposes
-import React from 'react/addons'
+import React from 'react'
 import WebIDAgent from 'lib/agents/webid.js'
 import ChatAgent from 'lib/agents/chat.js'
 import {Button} from 'react-mdl'
+
+import {linkToState} from 'lib/util'
 
 /*
  - on reload it creates 4 identities
@@ -36,7 +38,6 @@ let testIdentities = [
 let wia = new WebIDAgent()
 let chatAgent = new ChatAgent()
 let ChatTest = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
   getInitialState: function() {
     return {
       conversationUrl: null,
@@ -73,7 +74,7 @@ let ChatTest = React.createClass({
           message: this.state.message,
           testDataPrepared: true
         })
-      
+
       })
   },
   onCreateConversationClick: function() {
@@ -111,7 +112,7 @@ let ChatTest = React.createClass({
       .then(() => {
         console.log('posted message')
       })
-  
+
   },
 
   onInboxLoadClick: function() {
@@ -175,11 +176,11 @@ let ChatTest = React.createClass({
         <br/>
         <span>Author</span>
         <br/>
-        <input type="text" valueLink={this.linkState('author')}></input>
+        <input type="text" onChange={linkToState(this, 'author')}></input>
         <br/>
         <span>Message</span>
         <br/>
-        <input type="text" valueLink={this.linkState('message')}></input>
+        <input type="text" onChange={linkToState(this, 'message')}></input>
         <br/>
 
         <Button onClick={this.onPostClick}>
@@ -187,7 +188,7 @@ let ChatTest = React.createClass({
         </Button>
 
         <br/>
-        <input type="text" valueLink={this.linkState('inboxId')}></input>
+        <input type="text" onChange={linkToState(this, 'inboxId')}></input>
         <br/>
         <Button onClick={this.onInboxLoadClick}>
           Load Inbox
@@ -202,7 +203,7 @@ let ChatTest = React.createClass({
         <br/>
 
         <br/>
-        <input type="text" valueLink={this.linkState('conversationToLoad')}></input>
+        <input type="text" onChange={linkToState(this, 'conversationToLoad')}></input>
         <br/>
         <span>Messages: </span>
         {this.state.messages.map(function(m, index) {

@@ -1,6 +1,6 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
-import React from 'react/addons'
+import React from 'react'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 

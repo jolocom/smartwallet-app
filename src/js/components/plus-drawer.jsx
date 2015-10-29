@@ -1,7 +1,8 @@
-import React from 'react/addons'
+import React from 'react'
+
+import {linkToState} from 'lib/util'
 
 let PlusDrawer = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
 
   getInitialState: function() {
     return {
@@ -22,7 +23,7 @@ let PlusDrawer = React.createClass({
   toInbox: function() {
 
     this.props.toggle()
-    this.props.addNodeToInbox({ 
+    this.props.addNodeToInbox({
       title: this.state.title,
       description: this.state.description,
       newNode: true
@@ -31,7 +32,7 @@ let PlusDrawer = React.createClass({
 
   directConnect: function() {
     console.log(this.state)
-    this.props.addNode({ 
+    this.props.addNode({
       title: this.state.title,
       description: this.state.description,
       newNode: true
@@ -44,10 +45,10 @@ let PlusDrawer = React.createClass({
       <div id="plus_drawer">
         <div className="close" onClick={this.props.toggle}>x</div>
         <div>
-          <textarea className="title" placeholder="Node title" rows="1" cols="50" valueLink={this.linkState('title')}/>
+          <textarea className="title" placeholder="Node title" rows="1" cols="50" onChange={linkToState(this, 'title')}/>
         </div>
         <div>
-          <textarea className="description" placeholder="Node description" rows="5" cols="50" valueLink={this.linkState('description')}/>
+          <textarea className="description" placeholder="Node description" rows="5" cols="50" onChange={linkToState(this, 'description')}/>
         </div>
         <div className="button direct" onClick={this.directConnect}>Connect Now</div>
         <div className="button inbox" onClick={this.toInbox}>Put Into Inbox</div>

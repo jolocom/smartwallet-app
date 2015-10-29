@@ -1,4 +1,4 @@
-import React from 'react/addons'
+import React from 'react'
 import Reflux from 'reflux'
 import {Textfield, Button} from 'react-mdl'
 import {History} from 'react-router'

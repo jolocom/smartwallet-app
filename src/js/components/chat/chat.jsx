@@ -1,9 +1,10 @@
-import React from 'react/addons'
-
-import NavActions from 'actions/nav'
+import React from 'react'
 
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
+
+import List, {ListItem} from 'components/common/list.jsx'
+import Avatar from 'components/common/avatar.jsx'
 
 import TimerMixin from 'react-timer-mixin'
 import N3 from 'n3'
@@ -15,24 +16,10 @@ import {DC, RDF, SIOC} from 'lib/namespaces.js'
 let N3Util = N3.Util
 let http = new HTTPAgent()
 
-const CHAT_RELOAD_INTERVAL = 4000 // 4 seconds
-
-let Message = React.createClass({
-  render: function() {
-    return (
-      <div className="message">
-        <div className="content">
-          <h2>{this.props.author}</h2>
-          <p>{this.props.content}</p>
-        </div>
-        <div className="node link"/>
-      </div>
-    )
-  }
-})
+// const CHAT_RELOAD_INTERVAL = 4000 // 4 seconds
 
 let Chat = React.createClass({
-  mixins: [React.addons.LinkedStateMixin, TimerMixin],
+  mixins: [TimerMixin],
 
   getInitialState: function() {
     return {
@@ -126,35 +113,35 @@ let Chat = React.createClass({
   },
 
   componentDidMount: function() {
-
-    // initialize interval for reloading
-    this.setInterval(() => {
-      console.log('tick...')
-      this._loadMessages(this.state.origin)
-        .then((messages) => {
-          let state = {
-            messages: messages,
-            currentMessage: this.state.currentMessage,
-            topic: this.state.topic,
-            origin: this.state.origin,
-            identity: this.state.identity
-          }
-          this.setState(state)
-        })
-    }, CHAT_RELOAD_INTERVAL)
-
-    // initial message loading
-    this._loadMessages(this.state.origin)
-      .then((messages) => {
-        let state = {
-          messages: messages,
-          currentMessage: this.state.currentMessage,
-          topic: this.state.topic,
-          origin: this.state.origin,
-          identity: this.state.identity
-        }
-        this.setState(state)
-      })
+    //
+    // // initialize interval for reloading
+    // this.setInterval(() => {
+    //   console.log('tick...')
+    //   this._loadMessages(this.state.origin)
+    //     .then((messages) => {
+    //       let state = {
+    //         messages: messages,
+    //         currentMessage: this.state.currentMessage,
+    //         topic: this.state.topic,
+    //         origin: this.state.origin,
+    //         identity: this.state.identity
+    //       }
+    //       this.setState(state)
+    //     })
+    // }, CHAT_RELOAD_INTERVAL)
+    //
+    // // initial message loading
+    // this._loadMessages(this.state.origin)
+    //   .then((messages) => {
+    //     let state = {
+    //       messages: messages,
+    //       currentMessage: this.state.currentMessage,
+    //       topic: this.state.topic,
+    //       origin: this.state.origin,
+    //       identity: this.state.identity
+    //     }
+    //     this.setState(state)
+    //   })
   },
 
   _commentContainerForIdentity: function(identity) {
@@ -255,30 +242,24 @@ let Chat = React.createClass({
       })
   },
 
-  _toggleNav() {
-    NavActions.toggle()
-  },
-
   render: function() {
     return (
       <div className="jlc-chat">
         { /* TODO: structure, ids and class names suck*/ }
-        <div className="close" onClick={this.props.hide}>x</div>
-        <div className="head">
-          <h1 className="title">{this.props.topic}</h1>
-          <p className="origin">{this.props.origin}</p>
-        </div>
-
-        {this.state.messages.map(function(msg) {
-          return (
-            <Message key={msg.id} author={msg.author} content={msg.content}/>
-          )
-        })}
-
+        <List className="jlc-chat-list">
+          {this.state.messages.map(({author, content}) => {
+            let avatar = <Avatar src={author.imgUri}>{author.name[0]}</Avatar>
+            return (
+              <ListItem title={author.name} content={content} leftIcon={avatar}/>
+            )
+          })}
+        </List>
         <FabMenu>
-          <FabMenuItem icon="chat" label="Conversation"/>
+          <FabMenuItem icon="chat" label="Conversation" href="#/chat/new"/>
           <FabMenuItem icon="group_add" label="Group chat"/>
         </FabMenu>
+
+        {this.props.children}
       </div>
     )
   }

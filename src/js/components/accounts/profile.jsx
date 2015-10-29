@@ -1,4 +1,4 @@
-import React from 'react/addons'
+import React from 'react'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 import {Layout, Content, IconButton, Spacer, Menu, MenuItem, Textfield} from 'react-mdl'
@@ -10,8 +10,7 @@ import {linkToState} from 'lib/util'
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.connect(ProfileStore),
-    React.addons.LinkedStateMixin
+    Reflux.connect(ProfileStore)
   ],
 
   update(e) {
