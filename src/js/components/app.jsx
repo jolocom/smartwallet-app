@@ -26,14 +26,14 @@ export default React.createClass({
     Reflux.connect(AvailabilityDevStore)
   ],
 
-  // componentWillMount() {
-  //   let path = this.props.location.pathname
-  //   if (this.state.signedUp && path === '/signup') {
-  //     this.history.pushState(null, '/graph')
-  //   } else if (!this.state.signedUp && path !== 'signup') {
-  //     this.history.pushState(null, '/signup')
-  //   }
-  // },
+  componentWillMount() {
+    let path = this.props.location.pathname
+    if (!this.state.signedUp && path !== 'signup') {
+      this.history.pushState(null, '/signup')
+    } else if (path === '/') {
+      this.history.pushState(null, '/graph')
+    }
+  },
 
   getComponent() {
     let components = {
@@ -73,7 +73,6 @@ export default React.createClass({
               </HeaderRow>
               <AppNav/>
             </Header>
-            {component.search}
             <LeftNav/>
             <Content>
               {this.props.children}
@@ -81,6 +80,7 @@ export default React.createClass({
             <Profile/>
           </Layout>
         ) : this.props.children}
+        {component.search}
       </div>
     )
   }

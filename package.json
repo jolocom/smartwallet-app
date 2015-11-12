@@ -44,6 +44,7 @@
     "jquery": "^2.1.4",
     "lodash": "^3.10.0",
     "material-ui": "^0.13.0",
+    "moment": "^2.10.6",
     "n3": "^0.4.3",
     "react": "^0.14.1",
     "react-addons-create-fragment": "^0.14.1",

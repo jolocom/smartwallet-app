@@ -6,13 +6,7 @@ import {History, Lifecycle} from 'react-router'
 import Availability from 'actions/availability'
 import AvailabilityDevStore from 'stores/availability-dev'
 
-function linkToState(target, property) {
-  return value => {
-    target.setState({
-      [property]: value
-    })
-  }
-}
+import {linkToState} from 'lib/util'
 
 let SignupDev = React.createClass({
   mixins: [

@@ -1,8 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import {linkToState} from 'lib/util'
-
 import {IconButton} from 'react-mdl'
 
 export default React.createClass({
@@ -17,6 +15,12 @@ export default React.createClass({
     this.props.onSubmit(this.state.content)
   },
 
+  onChange(e) {
+    this.setState({
+      content: e.target.value
+    })
+  },
+
   render() {
     let {className, placeholder, submitIcon} = this.props
 
@@ -28,7 +32,7 @@ export default React.createClass({
       <div className={classes}>
         <div className="jlc-compose-textarea">
           <pre><span>{this.state.content}</span><br/></pre>
-          <textarea placeholder={placeholder} onChange={linkToState(this, 'content')}></textarea>
+          <textarea placeholder={placeholder} onChange={this.onChange}></textarea>
           <IconButton name={submitIcon} className="jlc-compose-submit" colored={true} onClick={this.onSubmit}/>
         </div>
       </div>

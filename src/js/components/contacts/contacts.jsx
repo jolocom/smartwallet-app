@@ -4,10 +4,19 @@ import ContactsList from 'components/contacts/list.jsx'
 
 export default React.createClass({
 
+  contextTypes: {
+    history: React.PropTypes.any
+  },
+
+  showContact(username) {
+    this.context.history.pushState(null, `/contacts/${username}`)
+  },
+
   render() {
     return (
       <div className="jlc-contacts">
-        <ContactsList/>
+        <ContactsList onClick={this.showContact}/>
+        {this.props.children}
       </div>
     )
   }

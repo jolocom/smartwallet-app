@@ -1,6 +1,7 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 
@@ -118,7 +119,7 @@ let Graph = React.createClass({
   },
 
   getGraphEl() {
-    return React.findDOMNode(this.refs.graph)
+    return ReactDOM.findDOMNode(this.refs.graph)
   },
 
   componentDidMount: function() {

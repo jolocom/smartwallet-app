@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
 import {Textfield, Button} from 'react-mdl'
 import {History} from 'react-router'
@@ -23,14 +24,14 @@ let Signup = React.createClass({
     muiTheme: React.PropTypes.object
   },
   componentDidMount() {
-    this.frame = React.findDOMNode(this.refs.frame)
+    this.frame = ReactDOM.findDOMNode(this.refs.frame)
     this.frame.addEventListener('load', this._onSignup, false)
   },
   componentDidUnMount() {
     this.frame.removeEventListener('load', this._onSignup)
   },
   signup() {
-    React.findDOMNode(this.refs.form).submit()
+    ReactDOM.findDOMNode(this.refs.form).submit()
     // @TODO onload doesn't work somehow, calling manually
     // setTimeout(function() {
     //   window.location.href = '/'

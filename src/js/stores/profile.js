@@ -11,6 +11,7 @@ let wia = new WebIDAgent()
 
 let profile = {
   show: false,
+  username: '',
   name: '',
   email: '',
   rsaModulus: '(rsa modulus missing)',

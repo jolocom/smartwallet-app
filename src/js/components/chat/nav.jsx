@@ -7,8 +7,6 @@ let ChatNav = React.createClass({
     return (
       <nav className="mdl-navigation">
         <IconButton name="search"></IconButton>
-        <IconButton name="message"></IconButton>
-        <IconButton name="more_vert"></IconButton>
       </nav>
     )
   }

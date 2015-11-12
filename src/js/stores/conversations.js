@@ -4,7 +4,7 @@ import ConversationsActions from 'actions/conversations'
 
 let {load, create, remove} = ConversationsActions
 
-let conversations = []
+import {conversations} from 'lib/fixtures'
 
 export default Reflux.createStore({
   listenables: ConversationsActions,
@@ -17,13 +17,14 @@ export default Reflux.createStore({
   },
 
   onLoad() {
-    load.completed()
+    load.completed(_.clone(conversations))
   },
 
-  onLoadCompleted() {
+  onLoadCompleted(conversations) {
+    this.conversations = conversations
     this.trigger({
       loading: false,
-      conversations: conversations
+      conversations: this.conversations
     })
   },
 
@@ -32,9 +33,9 @@ export default Reflux.createStore({
   },
 
   onCreateCompleted(conversation) {
-    conversations.push(conversation)
+    this.conversations.push(conversation)
     this.trigger({
-      conversations: conversations
+      conversations: this.conversations
     })
   },
 
@@ -43,11 +44,11 @@ export default Reflux.createStore({
   },
 
   onRemoveCompleted(uri) {
-    conversations = _.reject(conversations, function(conversation) {
+    this.conversations = _.reject(this.conversations, function(conversation) {
       return conversation.uri === uri
     })
     this.trigger({
-      conversations: conversations
+      conversations: this.conversations
     })
   }
 

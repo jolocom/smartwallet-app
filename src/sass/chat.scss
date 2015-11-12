@@ -2,4 +2,79 @@
 
 .jlc-chat {
 
+  &-user {
+    .mdl-layout__content {
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+    }
+    .jlc-conversation {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+  }
+
+  .jlc-compose-textarea {
+  }
+
+  .jlc-conversation {
+    background: #f1f1f1;
+  }
+
+  .jlc-message {
+    padding: 0 20px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    &:first-child {
+      margin-top: 20px;
+    }
+    &-content {
+      border-radius: 6px;
+      padding: 6px 12px;
+      position: relative;
+      &:before {
+        content: ' ';
+        position: absolute;
+        top: -8px;
+        border: 8px solid transparent;
+      }
+    }
+    &-meta {
+      clear: both;
+      color: rgba(0, 0, 0, 0.3);
+      padding: 0 6px;
+      font-size: 12px;
+    }
+
+    &-from-contact {
+      .jlc-message-content {
+        float: left;
+        background: #ffffff;
+        border-top-left-radius: 0;
+        &:before {
+          left: -16px;
+          border-right-color: #ffffff;
+        }
+      }
+      .jlc-message-meta {
+        text-align: left;
+      }
+    }
+    &-from-me {
+      .jlc-message-content {
+        float: right;
+        background: rgba(0, 0, 0, 0.15);
+        border-top-right-radius: 0;
+        &:before {
+          right: -16px;
+          border-left-color: rgba(0, 0, 0, 0.15);
+        }
+      }
+      .jlc-message-meta {
+        text-align: right;
+      }
+    }
+  }
+
 }

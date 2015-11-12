@@ -12,10 +12,10 @@ export default React.createClass({
   render() {
     return (
       <List className="jlc-contacts-list">
-        {this.state.contacts.map(({name, email, imgUri}) => {
+        {this.state.contacts.map(({username, name, email, imgUri}) => {
           let avatar = <Avatar src={imgUri}>{name[0]}</Avatar>
           return (
-            <ListItem primaryText={name} secondaryText={email} leftAvatar={avatar}/>
+            <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onClick={() => {this.props.onClick(username)}}/>
           )
         })}
       </List>

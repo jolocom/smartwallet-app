@@ -1,6 +1,9 @@
 @import 'variables';
 
 .jlc-compose {
+
+  border-top: 1px solid #eee;
+
   &-textarea {
     display: flex;
     position: relative;
