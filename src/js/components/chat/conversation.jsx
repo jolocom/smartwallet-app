@@ -15,8 +15,6 @@ import Compose from 'components/common/compose.jsx'
 import ConversationActions from 'actions/conversation'
 import ConversationStore from 'stores/conversation'
 
-import ProfileStore from 'stores/profile'
-
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
@@ -24,12 +22,12 @@ export default React.createClass({
 
   mixins: [
     Reflux.connect(ConversationStore, 'conversation'),
-    Reflux.connect(ProfileStore, 'profile'),
     Reflux.connect(ContactStore, 'contact')
   ],
 
   contextTypes: {
-    history: React.PropTypes.any
+    history: React.PropTypes.any,
+    profile: React.PropTypes.any
   },
 
   getInitialState() {
@@ -39,13 +37,18 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    ConversationActions.load(this.props.params.username)
-    ContactActions.load(this.props.params.username)
+    ConversationActions.load(this.context.profile.username, this.props.params.id)
     this.open()
   },
 
   componentWillUnmount() {
     this.close()
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.conversation && this.state.conversation) {
+      ContactActions.load(this.state.conversation.username)
+    }
   },
 
   open() {
@@ -60,18 +63,12 @@ export default React.createClass({
     this.setState({open: !this.state.open})
   },
 
-  startChat(username) {
-    this.history.pushState(null, `chat/${username}`)
-  },
-
   addMessage(content) {
-    ConversationActions.addMessage({
-      author: {
-        id: this.state.profile.webid,
-        name: this.state.profile.name
-      },
-      content: content
-    })
+    ConversationActions.addMessage(
+      this.props.params.id,
+      this.context.profile.username,
+      content
+    )
   },
 
   render() {
@@ -80,9 +77,10 @@ export default React.createClass({
     })
 
     let {contact, conversation} = this.state
+    let {profile} = this.context
     let title = contact && contact.name
     let items = conversation.items || []
-    console.log(conversation)
+
     return (
       <div className={classes}>
         <Layout>
@@ -96,7 +94,7 @@ export default React.createClass({
           <Content>
             <div className="jlc-conversation">
               {items.map(function({author, content, date}, i) {
-                let from = (author.username === conversation.username) ? 'contact' : 'me'
+                let from = (author !== profile.webid) ? 'contact' : 'me'
                 let classes = classNames('jlc-message', `jlc-message-from-${from}`)
                 return (
                   <div className={classes} key={i}>

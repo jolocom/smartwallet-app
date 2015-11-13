@@ -1,4 +1,5 @@
 import React from 'react'
+import Reflux from 'reflux'
 import classNames from 'classnames'
 
 import {
@@ -12,7 +13,17 @@ import {
 
 import ContactsList from 'components/contacts/list.jsx'
 
+import ChatActions from 'actions/chat'
+import ChatStore from 'stores/chat'
+
+import ProfileStore from 'stores/profile'
+
 export default React.createClass({
+
+  mixins: [
+    Reflux.connect(ChatStore),
+    Reflux.connect(ProfileStore, 'profile')
+  ],
 
   contextTypes: {
     history: React.PropTypes.any
@@ -32,6 +43,13 @@ export default React.createClass({
     this.close()
   },
 
+  componentDidUpdate() {
+    console.log(this.state)
+    if (this.state.id) {
+      this.context.history.pushState(null, `/conversations/${this.state.id}`)
+    }
+  },
+
   open() {
     this.setState({open: true})
   },
@@ -45,7 +63,7 @@ export default React.createClass({
   },
 
   startChat(username) {
-    this.context.history.pushState(null, `chat/user/${username}`)
+    ChatActions.create(this.state.profile.username, username)
   },
 
   render() {

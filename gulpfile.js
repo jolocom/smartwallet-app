@@ -11,7 +11,7 @@ var sass = require('gulp-sass');
 var vinylPaths = require('vinyl-paths');
 
 var sources = {
-  app: './src/js/app.jsx',
+  app: './src/js/main.jsx',
   data: './data/**/*',
   html: './src/index.html',
   img: './src/img/**/*',

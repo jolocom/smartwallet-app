@@ -29,7 +29,10 @@ class ChatAgent extends LDPAgent {
       .then(() => {
         // update inbox indices
         console.log('successfully created conversation and linked it to participant inboxes')
-        return conversationDoc
+        return {
+          id: conversationId,
+          url: conversationDoc
+        }
       })
   }
 
@@ -115,7 +118,7 @@ class ChatAgent extends LDPAgent {
             }
           }
           return acc
-        
+
         }, {})
 
         let msgs = []
@@ -126,7 +129,7 @@ class ChatAgent extends LDPAgent {
 
         return msgs
       })
-  
+
   }
 
   getInboxConversations(webid) {

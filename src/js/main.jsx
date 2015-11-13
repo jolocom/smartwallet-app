@@ -13,7 +13,7 @@ import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
 import Chat from 'components/chat/chat.jsx'
 import ChatNew from 'components/chat/new.jsx'
-import ChatUser from 'components/chat/user.jsx'
+import Conversation from 'components/chat/conversation.jsx'
 import Contacts from 'components/contacts/contacts.jsx'
 import Contact from 'components/contacts/contact.jsx'
 import Projects from 'components/projects/projects.jsx'
@@ -59,7 +59,7 @@ let routes = (
     </Route>
     <Route path='chat' component={Chat}>
       <Route path='new' component={ChatNew}/>
-      <Route path='user/:username' component={ChatUser}/>
+      <Route path='/conversations/:id' component={Conversation}/>
     </Route>
     <Route path='contacts' component={Contacts}>
       <Route path=':username' component={Contact}/>

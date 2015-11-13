@@ -23,15 +23,16 @@ let Chat = React.createClass({
   ],
 
   contextTypes: {
-    history: React.PropTypes.any
+    history: React.PropTypes.any,
+    profile: React.PropTypes.any
   },
 
   componentDidMount() {
-    ConversationsActions.load()
+    ConversationsActions.load(this.context.profile.username)
   },
 
-  showConversation({username}) {
-    this.context.history.pushState(null, `/chat/user/${username}`)
+  showConversation({id}) {
+    this.context.history.pushState(null, `/conversations/${id}`)
   },
 
   render: function() {

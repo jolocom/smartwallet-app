@@ -1,10 +1,13 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
+import settings from 'settings'
+import ChatAgent from 'lib/agents/chat.js'
+
 import ConversationsActions from 'actions/conversations'
 
-let {load, create, remove} = ConversationsActions
+let {load} = ConversationsActions
 
-import {conversations} from 'lib/fixtures'
+let chatAgent = new ChatAgent()
 
 export default Reflux.createStore({
   listenables: ConversationsActions,
@@ -16,39 +19,33 @@ export default Reflux.createStore({
     }
   },
 
-  onLoad() {
-    load.completed(_.clone(conversations))
+  onLoad(username) {
+    return chatAgent.getInboxConversations(`${settings.endpoint}/${username}/profile/card#me`)
+      .then(function(conversations) {
+        // @TODO load author, first message
+        load.completed(_.map(conversations, function(conversation) {
+          let id = conversation.replace(/^.*\/chats\/([a-z]+)$/, '$1')
+          return {
+            id: id,
+            url: conversation,
+            username: '',
+            items: [{
+              author: {
+                name: id
+              },
+              date: new Date(),
+              content: conversation
+            }]
+          }
+        }))
+      })
   },
 
   onLoadCompleted(conversations) {
-    this.conversations = conversations
+    console.log(conversations)
     this.trigger({
       loading: false,
-      conversations: this.conversations
-    })
-  },
-
-  onCreate(conversation) {
-    create.completed(conversation)
-  },
-
-  onCreateCompleted(conversation) {
-    this.conversations.push(conversation)
-    this.trigger({
-      conversations: this.conversations
-    })
-  },
-
-  onRemove(uri) {
-    remove.completed(uri)
-  },
-
-  onRemoveCompleted(uri) {
-    this.conversations = _.reject(this.conversations, function(conversation) {
-      return conversation.uri === uri
-    })
-    this.trigger({
-      conversations: this.conversations
+      conversations: conversations
     })
   }
 

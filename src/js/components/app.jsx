@@ -19,14 +19,31 @@ import ProjectsNav from 'components/projects/nav.jsx'
 
 import AvailabilityDevStore from 'stores/availability-dev'
 
+import ProfileActions from 'actions/profile'
+import ProfileStore from 'stores/profile'
+
 export default React.createClass({
 
   mixins: [
     History,
-    Reflux.connect(AvailabilityDevStore)
+    Reflux.connect(AvailabilityDevStore),
+    Reflux.connect(ProfileStore, 'profile')
   ],
 
+  childContextTypes: {
+    profile: React.PropTypes.any
+  },
+
+  getChildContext: function () {
+    console.log('context', this.state.profile)
+    return {
+      profile: this.state.profile
+    }
+  },
+
   componentWillMount() {
+    ProfileActions.load()
+
     let path = this.props.location.pathname
     if (!this.state.signedUp && path !== 'signup') {
       this.history.pushState(null, '/signup')

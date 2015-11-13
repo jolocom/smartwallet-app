@@ -164,7 +164,7 @@ let ChatTest = React.createClass({
         })}
 
         <span>Enter comma separated participants:</span>
-        <input type="text" valueLink={this.linkState('participants')}></input>
+        <input type="text" onChange={linkToState(this, 'participants')}></input>
         <br/>
         <span>{testDataText}</span>
         <br/>
