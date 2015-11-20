@@ -31,7 +31,7 @@ export default React.createClass({
         zIndex: 6,
         opacity: this.state.show ? 1 : 0,
         transform: this.state.show ? 'translate(0, 0)' : 'translate(0, -100%)',
-        transition: 'opacity .3s, transform .3s'
+        transition: 'opacity .1s, transform .1s ease-in'
       },
       input: {
         tapHighlightColor: 'rgba(0,0,0,0)',
@@ -66,9 +66,13 @@ export default React.createClass({
     this.setState({show: false, query: null})
     let input = ReactDOM.findDOMNode(this.refs.input)
     input.value = ''
+
+    if (typeof this.props.onHide === 'function') {
+      this.props.onHide()
+    }
   },
 
-  onChange({target}) {
+  _handleChange({target}) {
     this.setState({query: target.value})
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(target.value)
@@ -83,7 +87,7 @@ export default React.createClass({
     return (
       <AppBar
         style={styles.bar}
-        title={<input placeholder="Search..." onChange={this.onChange} ref="input" style={styles.input}/>}
+        title={<input placeholder="Search..." onChange={this._handleChange} ref="input" style={styles.input}/>}
         iconElementLeft={
           <IconButton onClick={this.hide}>
             <FontIcon className="material-icons" color={iconColor}>arrow_back</FontIcon>

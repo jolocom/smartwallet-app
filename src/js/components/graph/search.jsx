@@ -29,6 +29,9 @@ let GraphSearch = React.createClass({
   onChange({target}) {
     SearchActions.query(target.value)
   },
+  show() {
+    this.setState({visible: true})
+  },
   render() {
     let classes = classNames('jlc-header', 'jlc-search', {
       'is-visible': this.state.visible

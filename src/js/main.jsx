@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
 import Router, { Route } from 'react-router'
 
-//import injectTapEventPlugin from 'react-tap-event-plugin'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import App from 'components/app.jsx'
 import Graph from 'components/graph/graph.jsx'
@@ -26,8 +26,8 @@ import Signup from 'components/accounts/signup-dev.jsx'
 // chat to quiclky implement chat functionality- should be refactored
 import ChatTest from 'components/chat-test.jsx'
 
-// injectTapEventPlugin()
-//
+injectTapEventPlugin()
+
 import moment from 'moment'
 
 moment.locale('en', {

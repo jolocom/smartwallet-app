@@ -305,12 +305,23 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
+  getStyles() {
+    let styles = {
+      menu: {
+        position: 'absolute',
+        bottom: '16px',
+        right: '16px'
+      }
+    }
+    return styles
+  },
+
   render() {
     let classes = classNames('jlc-graph')
-
+    let styles = this.getStyles()
     return (
       <div className={classes}>
-        <FabMenu>
+        <FabMenu style={styles.menu}>
           <FabMenuItem icon="comment" label="Comment" onClick={() => {this.addNode('comment')}}/>
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
           <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>

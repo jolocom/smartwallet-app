@@ -96,6 +96,17 @@ export default React.createClass({
 
   getStyles() {
     let styles = {
+      container: {
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 10,
+        opacity: this.state.open ? 1 : 0,
+        transform: this.state.open ? 'translate(0, 0)' : 'translate(0, 100%)',
+        transition: 'opacity .3s, transform .3s'
+      },
       content: {
         display: 'flex',
         flexDirection: 'column',
@@ -122,12 +133,12 @@ export default React.createClass({
     let items = conversation.items || []
 
     return (
-      <div className={classes}>
+      <div style={styles.container}>
         <Layout>
           <AppBar
           title={title}
           iconElementLeft={
-            <IconButton onClick={() => this.context.history.pushState(null, '/chat')} iconClassName="material-icons">close</IconButton>
+            <IconButton onClick={() => this.context.history.pushState(null, '/chat')} iconClassName="material-icons">arrow_back</IconButton>
           }
           />
         <Content style={styles.content}>

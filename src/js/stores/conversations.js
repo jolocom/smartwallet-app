@@ -19,11 +19,13 @@ export default Reflux.createStore({
     }
   },
 
-  onLoad(username) {
+  onLoad(username, query) {
+    let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
+
     return chatAgent.getInboxConversations(`${settings.endpoint}/${username}/profile/card#me`)
       .then(function(conversations) {
         // @TODO load author, first message
-        load.completed(_.map(conversations, function(conversation) {
+        load.completed(_.chain(conversations).map((conversation) => {
           let id = conversation.replace(/^.*\/chats\/([a-z]+)$/, '$1')
           return {
             id: id,
@@ -37,12 +39,13 @@ export default Reflux.createStore({
               content: conversation
             }]
           }
-        }))
+        }).filter((conversation) => {
+          return !regEx || conversation.id.match(regEx)
+        }).value())
       })
   },
 
   onLoadCompleted(conversations) {
-    console.log(conversations)
     this.trigger({
       loading: false,
       conversations: conversations

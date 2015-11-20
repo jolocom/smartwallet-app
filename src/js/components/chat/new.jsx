@@ -29,7 +29,7 @@ export default React.createClass({
   getInitialState() {
     return {
       open: false,
-      filterBy: ''
+      searchQuery: ''
     }
   },
 
@@ -68,7 +68,7 @@ export default React.createClass({
   },
 
   onSearch(query) {
-    this.setState({filterBy: query})
+    this.setState({searchQuery: query})
   },
 
   render() {
@@ -87,7 +87,7 @@ export default React.createClass({
           iconElementRight={<IconButton onClick={this.showSearch} iconClassName="material-icons">search</IconButton>} />
           <SearchBar ref="search" onChange={this.onSearch}/>
           <Content>
-            <ContactsList onClick={this.startChat} filterBy={this.state.filterBy}/>
+            <ContactsList onClick={this.startChat} searchQuery={this.state.searchQuery}/>
           </Content>
         </Layout>
       </div>

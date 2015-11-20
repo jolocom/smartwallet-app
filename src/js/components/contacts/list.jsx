@@ -15,13 +15,13 @@ export default React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if (this.props.filterBy !== prevProps.filterBy) {
+    if (this.props.searchQuery !== prevProps.searchQuery) {
       this.load()
     }
   },
 
   load() {
-    ContactsActions.load(this.props.filterBy)
+    ContactsActions.load(this.props.searchQuery)
   },
 
   render() {

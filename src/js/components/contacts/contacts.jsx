@@ -15,7 +15,7 @@ export default React.createClass({
   render() {
     return (
       <div className="jlc-contacts">
-        <ContactsList onClick={this.showContact}/>
+        <ContactsList onClick={this.showContact} searchQuery={this.props.searchQuery}/>
         {this.props.children}
       </div>
     )

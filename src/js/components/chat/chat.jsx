@@ -30,7 +30,17 @@ let Chat = React.createClass({
   },
 
   componentDidMount() {
-    ConversationsActions.load(this.context.profile.username)
+    this.loadConversations()
+  },
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.searchQuery && prevProps.searchQuery !== this.props.searchQuery) {
+      this.loadConversations()
+    }
+  },
+
+  loadConversations() {
+    ConversationsActions.load(this.context.profile.username, this.props.searchQuery)
   },
 
   showConversation({id}) {

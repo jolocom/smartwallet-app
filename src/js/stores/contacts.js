@@ -9,13 +9,13 @@ export default Reflux.createStore({
   getInitialState() {
     return []
   },
-  onLoad(filterBy) {
-    if (!filterBy || filterBy === '') {
+  onLoad(query) {
+    if (!query || query === '') {
       this.trigger(contacts)
       return
     }
 
-    let regEx = new RegExp(`.*${filterBy}.*`, 'i')
+    let regEx = new RegExp(`.*${query}.*`, 'i')
 
     let results = _.filter(contacts, (contact) => {
       return contact.name.match(regEx)
