@@ -1,14 +1,12 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 import moment from 'moment'
 
-import {
-  Layout,
-  IconButton,
-  Spacer,
-  Content
-} from 'react-mdl'
+import {AppBar, IconButton} from 'material-ui'
+
+import {Layout, Content} from 'components/layout'
 
 import Compose from 'components/common/compose.jsx'
 
@@ -32,22 +30,46 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      open: false
+      open: false,
+      atBottom: true
     }
   },
 
   componentDidMount() {
     ConversationActions.load(this.context.profile.username, this.props.params.id)
+    ConversationActions.subscribe(this.context.profile.username, this.props.params.id)
+
     this.open()
+
+    this.conversationsEl = ReactDOM.findDOMNode(this.refs.conversations)
+
+    this.conversationsEl.addEventListener('scroll', this.onScroll)
+
+    this.interval = setInterval(() => {
+      if (this.state.atBottom) {
+        this.conversationsEl.scrollTop = this.conversationsEl.scrollHeight
+      }
+    }, 100)
   },
 
   componentWillUnmount() {
     this.close()
+
+    this.conversationsEl.removeEventListener('scroll', this.onScroll)
   },
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.conversation && this.state.conversation) {
       ContactActions.load(this.state.conversation.username)
+    }
+  },
+
+  onScroll() {
+    let el = this.conversationsEl
+    if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
+      this.setState({atBottom: true})
+    } else {
+      this.setState({atBottom: false})
     }
   },
 
@@ -69,12 +91,30 @@ export default React.createClass({
       this.context.profile.username,
       content
     )
+    return true
+  },
+
+  getStyles() {
+    let styles = {
+      content: {
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'visible'
+      },
+      conversation: {
+        flex: 1,
+        overflowY: 'auto'
+      }
+    }
+    return styles
   },
 
   render() {
     let classes = classNames('jlc-chat-user', 'jlc-dialog', 'jlc-dialog__fullscreen', {
       'is-opened': this.state.open
     })
+
+    let styles = this.getStyles()
 
     let {contact, conversation} = this.state
     let {profile} = this.context
@@ -84,15 +124,14 @@ export default React.createClass({
     return (
       <div className={classes}>
         <Layout>
-          <header className="mdl-layout__header">
-            <IconButton name="close" onClick={() => this.context.history.pushState(null, '/chat')} className="jlc-dialog__close-button"></IconButton>
-            <div className="mdl-layout__header-row">
-              <span className="mdl-layout-title">{title}</span>
-              <Spacer></Spacer>
-            </div>
-          </header>
-          <Content>
-            <div className="jlc-conversation">
+          <AppBar
+          title={title}
+          iconElementLeft={
+            <IconButton onClick={() => this.context.history.pushState(null, '/chat')} iconClassName="material-icons">close</IconButton>
+          }
+          />
+        <Content style={styles.content}>
+            <div className="jlc-conversation" ref="conversations" style={styles.conversation}>
               {items.map(function({author, content, date}, i) {
                 let from = (author !== profile.webid) ? 'contact' : 'me'
                 let classes = classNames('jlc-message', `jlc-message-from-${from}`)

@@ -3,11 +3,26 @@ import Reflux from 'reflux'
 
 import {List, ListItem, Avatar} from 'material-ui'
 
+import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 
 export default React.createClass({
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
+
+  componentDidMount() {
+    this.load()
+  },
+
+  componentDidUpdate(prevProps) {
+    if (this.props.filterBy !== prevProps.filterBy) {
+      this.load()
+    }
+  },
+
+  load() {
+    ContactsActions.load(this.props.filterBy)
+  },
 
   render() {
     return (

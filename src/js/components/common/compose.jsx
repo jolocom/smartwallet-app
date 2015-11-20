@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 
 import {IconButton} from 'react-mdl'
@@ -12,7 +13,10 @@ export default React.createClass({
   },
 
   onSubmit() {
-    this.props.onSubmit(this.state.content)
+    if (this.props.onSubmit(this.state.content)) {
+      this.setState({content: ''})
+      ReactDOM.findDOMNode(this.refs.textarea).value = ''
+    }
   },
 
   onChange(e) {
@@ -32,7 +36,7 @@ export default React.createClass({
       <div className={classes}>
         <div className="jlc-compose-textarea">
           <pre><span>{this.state.content}</span><br/></pre>
-          <textarea placeholder={placeholder} onChange={this.onChange}></textarea>
+          <textarea placeholder={placeholder} onChange={this.onChange} ref="textarea"></textarea>
           <IconButton name={submitIcon} className="jlc-compose-submit" colored={true} onClick={this.onSubmit}/>
         </div>
       </div>

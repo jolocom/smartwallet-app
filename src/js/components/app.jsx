@@ -4,6 +4,10 @@ import _ from 'lodash'
 import {History} from 'react-router'
 import {Layout, Header, HeaderRow, Content} from 'react-mdl'
 
+import {Styles} from 'material-ui'
+
+import JolocomTheme from 'styles/jolocom-theme'
+
 import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
 
@@ -31,12 +35,13 @@ export default React.createClass({
   ],
 
   childContextTypes: {
+    muiTheme: React.PropTypes.object,
     profile: React.PropTypes.any
   },
 
   getChildContext: function () {
-    console.log('context', this.state.profile)
     return {
+      muiTheme: Styles.ThemeManager.getMuiTheme(JolocomTheme),
       profile: this.state.profile
     }
   },

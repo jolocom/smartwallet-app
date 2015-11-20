@@ -18,9 +18,12 @@ export default Reflux.createStore({
     }
   },
 
+  getUrl(username, id) {
+    return `${settings.endpoint}/${username}/little-sister/chats/${id}`
+  },
+
   onLoad(username, id) {
-    let url = `${settings.endpoint}/${username}/little-sister/chats/${id}`
-    chatAgent.getConversationMessages(url)
+    chatAgent.getConversationMessages(this.getUrl(username, id))
       .then(load.completed)
   },
 
@@ -33,8 +36,24 @@ export default Reflux.createStore({
     })
   },
 
+  onSubscribe(username, id) {
+    let url = this.getUrl(username, id)
+    chatAgent.getConversation(url)
+      .then((conversation) => {
+        this.socket = new WebSocket(conversation.updatesVia)
+        this.socket.onopen = function() {
+          this.send(`sub ${url}`)
+        }
+        this.socket.onmessage = function(msg) {
+          if (msg.data && msg.data.slice(0, 3) === 'pub') {
+            ConversationActions.load(username, id)
+          }
+        }
+      })
+  },
+
   onAddMessage(id, author, content) {
-    let conversation = `${settings.endpoint}/${author}/little-sister/chats/${id}`
+    let conversation = this.getUrl(author, id)
     author = `${settings.endpoint}/${author}/profile/card#me`
 
     return chatAgent.postMessage(conversation, author, content)

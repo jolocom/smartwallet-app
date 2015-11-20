@@ -132,6 +132,15 @@ class ChatAgent extends LDPAgent {
 
   }
 
+  getConversation(conversationUrl) {
+    return this.head(conversationUrl)
+      .then((xhr) => {
+        return {
+          updatesVia: xhr.getResponseHeader('updates-via')
+        }
+      })
+  }
+
   getInboxConversations(webid) {
     let inbox = `${this._webidRoot(webid)}/little-sister/inbox`
     return this.get(inbox)

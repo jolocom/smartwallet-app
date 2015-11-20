@@ -3,10 +3,12 @@ import Reflux from 'reflux'
 
 import moment from 'moment'
 
-import FabMenu from 'components/common/fab-menu.jsx'
-import FabMenuItem from 'components/common/fab-menu-item.jsx'
+// import FabMenu from 'components/common/fab-menu.jsx'
+// import FabMenuItem from 'components/common/fab-menu-item.jsx'
+//
 
-import {List, ListItem, Avatar, Styles} from 'material-ui'
+
+import {List, ListItem, Avatar, Styles, FloatingActionButton, FontIcon} from 'material-ui'
 
 let {Colors} = Styles
 
@@ -54,10 +56,12 @@ let Chat = React.createClass({
             )
           })}
         </List>
-        <FabMenu>
-          <FabMenuItem icon="chat" label="Conversation" href="#/chat/new"/>
-          <FabMenuItem icon="group_add" label="Group chat"/>
-        </FabMenu>
+
+        <FloatingActionButton linkButton={true}
+          href="#/chat/new"
+          style={styles.actionButton}>
+          <FontIcon className="material-icons">add</FontIcon>
+        </FloatingActionButton>
 
         {this.props.children}
       </div>
@@ -70,6 +74,11 @@ let styles = {
     color: Colors.grey500,
     fontSize: '12px',
     float: 'right'
+  },
+  actionButton: {
+    position: 'absolute',
+    right: '16px',
+    bottom: '16px'
   }
 }
 

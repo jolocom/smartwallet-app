@@ -2,14 +2,11 @@ import React from 'react'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 
-import {
-  Layout,
-  IconButton,
-  Spacer,
-  Content,
-  Menu,
-  MenuItem
-} from 'react-mdl'
+import {IconButton, AppBar} from 'material-ui'
+
+import {Layout, Content} from 'components/layout'
+
+import SearchBar from 'components/common/search-bar.jsx'
 
 import ContactsList from 'components/contacts/list.jsx'
 
@@ -31,7 +28,8 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      open: false
+      open: false,
+      filterBy: ''
     }
   },
 
@@ -44,7 +42,6 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    console.log(this.state)
     if (this.state.id) {
       this.context.history.pushState(null, `/conversations/${this.state.id}`)
     }
@@ -66,6 +63,14 @@ export default React.createClass({
     ChatActions.create(this.state.profile.username, username)
   },
 
+  showSearch() {
+    this.refs.search.show()
+  },
+
+  onSearch(query) {
+    this.setState({filterBy: query})
+  },
+
   render() {
     let classes = classNames('jlc-chat-new', 'jlc-dialog', 'jlc-dialog__fullscreen', {
       'is-opened': this.state.open
@@ -74,22 +79,15 @@ export default React.createClass({
     return (
       <div className={classes}>
         <Layout>
-          <header className="mdl-layout__header">
-            <IconButton name="close" onClick={() => this.context.history.pushState(null, '/chat')} className="jlc-dialog__close-button"></IconButton>
-            <div className="mdl-layout__header-row">
-              <span className="mdl-layout-title">Select contact</span>
-              <Spacer></Spacer>
-              <nav className="mdl-navigation">
-                <IconButton name="search" onClick={this.showSearch}/>
-                <IconButton name="more_vert" id="node-more"></IconButton>
-                <Menu target="node-more" align="right">
-                  <MenuItem>Invite a friend</MenuItem>
-                </Menu>
-              </nav>
-            </div>
-          </header>
+          <AppBar
+          title="Select contact"
+          iconElementLeft={
+            <IconButton onClick={() => this.context.history.pushState(null, '/chat')} iconClassName="material-icons">close</IconButton>
+          }
+          iconElementRight={<IconButton onClick={this.showSearch} iconClassName="material-icons">search</IconButton>} />
+          <SearchBar ref="search" onChange={this.onSearch}/>
           <Content>
-            <ContactsList onClick={this.startChat}/>
+            <ContactsList onClick={this.startChat} filterBy={this.state.filterBy}/>
           </Content>
         </Layout>
       </div>
