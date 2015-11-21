@@ -1,0 +1,7 @@
+<> <http://purl.org/dc/terms/title> "WebID profile of Christian Hildebrand";
+    a <http://xmlns.com/foaf/0.1/PersonalProfileDocument>;
+    <http://xmlns.com/foaf/0.1/maker> <#me>;
+    <http://xmlns.com/foaf/0.1/primaryTopic> <#me>.
+<#me> a <http://xmlns.com/foaf/0.1/Person>;
+    <http://xmlns.com/foaf/0.1/mbox> <christian@jolocom.com>;
+    <http://xmlns.com/foaf/0.1/name> "Christian Hildebrand".

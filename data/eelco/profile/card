@@ -1,0 +1,7 @@
+<> <http://purl.org/dc/terms/title> "WebID profile of Eelco Wiersma";
+    a <http://xmlns.com/foaf/0.1/PersonalProfileDocument>;
+    <http://xmlns.com/foaf/0.1/maker> <#me>;
+    <http://xmlns.com/foaf/0.1/primaryTopic> <#me>.
+<#me> a <http://xmlns.com/foaf/0.1/Person>;
+    <http://xmlns.com/foaf/0.1/mbox> <hi@eelcowiersma.nl>;
+    <http://xmlns.com/foaf/0.1/name> "Eelco Wiersma".
