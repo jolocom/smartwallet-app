@@ -97,8 +97,8 @@ gulp.task('clean', function () {
 gulp.task('lint', function () {
     return gulp.src(sources.js)
         .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failOnError());
+        .pipe(eslint.format());
+        //.pipe(eslint.failOnError());
 });
 
 gulp.task('watch', function() {
