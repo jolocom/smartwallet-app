@@ -69,7 +69,7 @@ class ChatAgent extends LDPAgent {
         }, { // with timestamp...
           subject: msgId,
           predicate: DC.created,
-          object: N3Util.createLiteral(new Date().toUTCString())
+          object: N3Util.createLiteral(new Date().getTime())
         }, { // contained by
           subject: msgId,
           predicate: SIOC.hasContainer,
@@ -116,7 +116,7 @@ class ChatAgent extends LDPAgent {
               acc[curr].content = N3Util.getLiteralValue(t.object)
             }
             if(t.predicate == DC.created) {
-              acc[curr].created = N3Util.getLiteralValue(t.object)
+              acc[curr].created = new Date(parseInt(N3Util.getLiteralValue(t.object)))
             }
             if(t.predicate == SIOC.hasCreator) {
               acc[curr].author = t.object
@@ -130,7 +130,7 @@ class ChatAgent extends LDPAgent {
         for (var p of posts) {
           msgs.push(groups[p])
         }
-        msgs.sort((a, b) => new Date(a.created) - new Date(b.created))
+        msgs.sort((a, b) => a.created - b.created)
 
         return msgs
       })
