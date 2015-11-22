@@ -8,6 +8,11 @@ let N3Util = N3.Util
 
 // Chat related functions
 class ChatAgent extends LDPAgent {
+
+  // @param {String} initiator itiator's webid url
+  // @param {Array.<String>} participants webids of participants (including the initiator)
+  //
+  // @return {Promise.<Object>} object containing conversation id and doc url
   createConversation(initiator, participants) {
     // POST conversation to initiators container
     // update inbox indices of all participants

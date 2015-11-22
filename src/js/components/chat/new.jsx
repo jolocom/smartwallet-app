@@ -60,7 +60,7 @@ export default React.createClass({
   },
 
   startChat(username) {
-    ChatActions.create(this.state.profile.username, username)
+    ChatActions.create(this.state.profile.username, this.state.profile.username, username)
   },
 
   showSearch() {
