@@ -3,6 +3,7 @@ import LDPAgent from './ldp'
 import Util from '../util'
 import {DC, FOAF, RDF, SIOC} from '../namespaces.js'
 import N3 from 'n3'
+import _ from 'lodash'
 
 let N3Util = N3.Util
 
@@ -17,13 +18,11 @@ class ChatAgent extends LDPAgent {
     // POST conversation to initiators container
     // update inbox indices of all participants
     //
-    console.log(participants)
     let conversationId = Util.randomString(5)
     let conversationDoc = `${this._webidRoot(initiator)}/little-sister/chats/${conversationId}`
     let hdrs = {'Content-type': 'text/turtle'}
-    return this._conversationTriples(initiator)
+    return this._conversationTriples(initiator, participants)
       .then((conversationDocContent) => {
-        console.log(conversationDocContent)
         return this.put(conversationDoc, hdrs, conversationDocContent)
       })
       .then(() => {
@@ -137,12 +136,77 @@ class ChatAgent extends LDPAgent {
 
   }
 
+  // Returns relevant conversation metadata (updatesVia, otherPerson, lastMessage)
+  //
+  // @param {String} conversationUrl conversation resource url
+  //
+  // @return {Object} conversation meta: udpatesVia, otherPerson, lastMessage
   getConversation(conversationUrl) {
-    return this.head(conversationUrl)
+    let result = {}
+    return this.get(conversationUrl)
       .then((xhr) => {
-        return {
-          updatesVia: xhr.getResponseHeader('updates-via')
+        result.updatesVia = xhr.getResponseHeader('updates-via')
+        let parser = new Parser()
+        return parser.parse(xhr.response)
+      })
+      .then((parsed) => {
+        return Promise.all([this._lastMessage(conversationUrl), this._otherPerson(parsed.triples, conversationUrl)])
+      })
+      .then((tmp) => {
+        let [lastMessage, otherPerson] = tmp
+        result.lastMessage = lastMessage
+        result.otherPerson = otherPerson
+        return result
+      })
+  }
+
+  _lastMessage(conversationUrl) {
+    return this.getConversationMessages(conversationUrl)
+      .then((messages) => {
+        if (messages.length == 0) {
+          return null
+        } else {
+          return messages[messages.length - 1]
         }
+      })
+  }
+
+  _otherPerson(triples, conversationUrl) {
+    //TODO
+    let aboutThread = _.filter(triples, (t) => t.subject == '#thread' || t.subject == `${conversationUrl}#thread`)
+    let owner = _.find(aboutThread, (t) => t.predicate == SIOC.hasOwner)
+    if (owner) {
+      owner = owner.object
+    }
+    let participants = _.map(_.filter(aboutThread, (t) => t.predicate == SIOC.hasSubscriber), (t) => t.object)
+
+    let otherPerson = _.find(participants, (p) => p != owner)
+    if (!otherPerson) {
+      return Promise.resolve(null)
+    }
+
+    let result = {}
+    return this.get(otherPerson)
+      .then((xhr) => {
+        let parser = new Parser()
+        return parser.parse(xhr.response)
+      })
+      .then((parsed) => {
+        let aboutPerson = _.filter(parsed.triples, (t) => t.subject == otherPerson || t.subject == '#me')
+
+        let name = _.find(aboutPerson, (t) => t.predicate == FOAF.name)
+        if (name) {
+          result.name = N3Util.getLiteralValue(name.object)
+        }
+
+        let img = _.find(aboutPerson, (t) => t.predicate == FOAF.img)
+        if (img) {
+          result.img = img.object
+        }
+        result.webid = otherPerson
+
+
+        return result
       })
   }
 
@@ -188,7 +252,7 @@ class ChatAgent extends LDPAgent {
     return webid.match(/^(.*)\/profile\/card#me$/)[1]
   }
 
-  _conversationTriples(initiator) {
+  _conversationTriples(initiator, participants) {
     let writer = new Writer()
 
     let triples = [
@@ -211,11 +275,25 @@ class ChatAgent extends LDPAgent {
           subject: '#thread',
           predicate: RDF.type,
           object: SIOC.Thread
+        },
+        {
+          subject: '#thread',
+          predicate: SIOC.hasOwner,
+          object: initiator
         }
     ]
 
     for (var t of triples) {
       writer.addTriple(t)
+    }
+
+    // Participant list
+    for (var p of participants) {
+      writer.addTriple({
+        subject: '#thread',
+        predicate: SIOC.hasSubscriber,
+        object: p
+      })
     }
 
     return writer.end()

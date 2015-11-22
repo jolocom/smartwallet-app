@@ -45,7 +45,9 @@ export const SIOC = {
   content: `${sioc}content`,
   hasContainer: `${sioc}has_container`,
   hasCreator: `${sioc}has_creator`,
+  hasOwner: `${sioc}has_owner`,
   hasReply: `${sioc}has_reply`,
   hasSpace: `${sioc}has_space`,
+  hasSubscriber: `${sioc}has_subscriber`,
   spaceOf: `${sioc}space_of`
 }
