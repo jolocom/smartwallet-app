@@ -30,7 +30,7 @@ export default React.createClass({
         {this.state.contacts.map(({username, name, email, imgUri}) => {
           let avatar = <Avatar src={imgUri}>{name[0]}</Avatar>
           return (
-            <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onClick={() => {this.props.onClick(username)}}/>
+            <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(username)}}/>
           )
         })}
       </List>

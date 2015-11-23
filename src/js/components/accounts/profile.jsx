@@ -1,7 +1,11 @@
 import React from 'react'
 import Reflux from 'reflux'
 import classNames from 'classnames'
-import {Layout, Content, IconButton, Spacer, Menu, MenuItem, Textfield} from 'react-mdl'
+
+import {Layout, Content} from 'components/layout'
+import {AppBar, IconButton, TextField, Styles} from 'material-ui'
+
+let {Colors} = Styles
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
@@ -26,28 +30,41 @@ let Profile = React.createClass({
     ProfileActions.hide()
   },
 
+  getStyles() {
+    let styles = {
+      bar: {
+        backgroundColor: Colors.grey500
+      },
+      content: {
+        textAlign: 'center'
+      },
+      input: {
+        width: '100%'
+      }
+    }
+    return styles
+  },
+
   render() {
-    let classes = classNames('jlc-profile', 'jlc-dialog', 'jlc-dialog__fullscreen', {
+    // @TODO move to inline styles
+    let classes = classNames('jlc-dialog', 'jlc-dialog__fullscreen', {
       'is-opened': this.state.show
     })
+
+    let styles = this.getStyles()
 
     // edit mode
     return (
       <div className={classes}>
         <Layout fixedHeader={true}>
-          <header className="mdl-layout__header mdl-color--grey-600 is-casting-shadow">
-            <IconButton name="arrow_back" onClick={this.hide} className="jlc-dialog__close-button"></IconButton>
-            <div className="mdl-layout__header-row">
-              <span className="mdl-layout-title">Edit profile</span>
-              <Spacer></Spacer>
-              <nav className="mdl-navigation">
-                <Menu target="node-more" align="right">
-                  <MenuItem>Delete</MenuItem>
-                </Menu>
-              </nav>
-            </div>
-          </header>
-          <Content>
+          <AppBar
+            title="Edit profile"
+            style={styles.bar}
+            iconElementLeft={
+              <IconButton onClick={this.hide} iconClassName="material-icons">arrow_back</IconButton>
+            }
+          />
+          <Content style={styles.content}>
             <header className="jlc-profile-header">
               <figure className="jlc-profile-picture">
                 <img src={this.state.imgUri}/>
@@ -55,12 +72,14 @@ let Profile = React.createClass({
             </header>
             <main className="jlc-profile-main">
               <section className="jlc-profile-basic-info">
-                <Textfield label="Name"
+                <TextField floatingLabelText="Name"
                   onChange={linkToState(this, 'name')}
-                  floatingLabel={true} />
-                <Textfield label="Email"
+                  value={this.state.name}
+                  style={styles.input} />
+                <TextField floatingLabelText="Email"
                   onChange={linkToState(this, 'email')}
-                  floatingLabel={true} />
+                  value={this.state.email}
+                  style={styles.input} />
               </section>
               <section className="jlc-profile-details">
                 <div className="jlc-profile-row">

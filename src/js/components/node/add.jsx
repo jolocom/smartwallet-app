@@ -1,7 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import {Layout, Content, Textfield, IconButton, Spacer} from 'react-mdl'
+import {AppBar, IconButton, TextField, Styles} from 'material-ui'
+import {Layout, Content} from 'components/layout'
+
+let {Colors} = Styles
 
 import NodeActions from 'actions/node'
 
@@ -43,33 +46,39 @@ export default React.createClass({
     })
   },
 
+  getStyles() {
+    return {
+      bar: {
+        backgroundColor: Colors.grey500
+      }
+    }
+  },
+
   render: function() {
     let classes = classNames('jlc-node-add', 'jlc-dialog' , 'jlc-dialog__fullscreen', {
       'is-opened': this.state.show
     })
 
+    let styles = this.getStyles()
+
     let type = this.props.params.type
+
+    let title = `Add ${type}`
 
     return (
       <div className={classes}>
-        <Layout fixedHeader={true}>
-          <header className="mdl-layout__header mdl-color--grey-600 is-casting-shadow">
-            <IconButton name="arrow_back" onClick={this.close} className="jlc-dialog__close-button"></IconButton>
-            <div className="mdl-layout__header-row">
-              <span className="mdl-layout-title">Add {type}</span>
-              <Spacer></Spacer>
-              <nav className="mdl-navigation">
-                <IconButton name="check" onClick={this.onSubmit}/>
-              </nav>
-            </div>
-          </header>
+        <Layout>
+          <AppBar
+            title={title}
+            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this.close}>arrow_back</IconButton>}
+            iconElementRight={<IconButton iconClassName="material-icons" onTouchTap={this.onSubmit}>check</IconButton>}
+            style={styles.bar}
+          />
           <Content>
-            <Textfield label="Title"
-              onChange={linkToState(this, 'title')}
-              floatingLabel={true} />
-            <Textfield label="Description"
-              onChange={linkToState(this, 'description')}
-              floatingLabel={true} />
+            <TextField floatingLabelText="Title"
+              onChange={linkToState(this, 'title')} />
+            <TextField floatingLabelText="Description"
+              onChange={linkToState(this, 'description')} />
           </Content>
         </Layout>
       </div>

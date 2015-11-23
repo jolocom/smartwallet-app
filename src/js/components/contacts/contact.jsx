@@ -2,12 +2,8 @@ import React from 'react'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 
-import {
-  Layout,
-  IconButton,
-  Spacer,
-  Content
-} from 'react-mdl'
+import {AppBar, IconButton} from 'material-ui'
+import {Layout, Content} from 'components/layout'
 
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
@@ -48,7 +44,7 @@ export default React.createClass({
   },
 
   startChat() {
-    this.context.history.pushState(null, `chat/user/${this.state.contact.username}`)
+    this.context.history.pushState(null, `chat/user/${this.state.username}`)
   },
 
   render() {
@@ -56,19 +52,19 @@ export default React.createClass({
       'is-opened': this.state.open
     })
 
-    let {contact} = this.state
+    let contact = this.state
 
     return (
       <div className={classes}>
         <Layout>
-          <header className="mdl-layout__header">
-            <IconButton name="close" onClick={() => this.context.history.pushState(null, '/contacts')} className="jlc-dialog__close-button"></IconButton>
-            <div className="mdl-layout__header-row">
-              <span className="mdl-layout-title">{contact.username}</span>
-              <Spacer></Spacer>
-              <IconButton name="message" onClick={this.startChat}></IconButton>
-            </div>
-          </header>
+          <AppBar
+            title={contact.name}
+            iconElementLeft={
+              <IconButton onClick={() => this.context.history.pushState(null, '/contacts')} iconClassName="material-icons">arrow_back</IconButton>
+            }
+            iconElementRight={<IconButton onTouchTap={this.startChat}>message</IconButton>}
+          />
+
           <Content>
 
           </Content>

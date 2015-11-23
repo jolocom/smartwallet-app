@@ -14,9 +14,7 @@ export default class GraphD3 {
 
   constructor(el, props, state, handleNodeClick, handleDragEnd, handleLongTap) {
     this.el = el
-    console.log('content', document.querySelector('.mdl-layout__content').offsetHeight)
-    console.log('graph', document.querySelector('.jlc-graph').offsetHeight)
-    console.log('chart', document.querySelector('.jlc-graph-chart').offsetHeight)
+
     this.taptimer = {
       start: 0,
       end: 0

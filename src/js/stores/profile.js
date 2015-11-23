@@ -1,4 +1,5 @@
 import Reflux from 'reflux'
+import _ from 'lodash'
 import ProfileActions from 'actions/profile'
 
 import N3 from 'n3'
@@ -32,19 +33,15 @@ export default Reflux.createStore({
 
   onShow() {
     console.log('show profile')
-    this.show = true
+    profile.show = true
 
-    this.trigger({
-      show: this.show
-    })
+    this.trigger(profile)
   },
 
   onHide() {
-    this.show = false
+    profile.show = false
 
-    this.trigger({
-      show: this.show
-    })
+    this.trigger(profile)
   },
 
   onLoad() {
@@ -107,33 +104,36 @@ export default Reflux.createStore({
       }
     }
 
-    profile = state
-    this.trigger(state)
+    profile = _.extend(profile, state)
+    this.trigger(profile)
   },
 
-  onUpdate: function (profile) {
+  onUpdate: function (params) {
     // subject which represents our profile
     console.log('saving profile')
-    console.log(profile)
-    let writer = new Writer({format: 'N-Triples', prefixes: profile.prefixes})
+    console.log(params)
+    let writer = new Writer({format: 'N-Triples', prefixes: params.prefixes})
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t)
     }
 
     writer.addTriple({
-      subject: profile.webid,
+      subject: params.webid,
       predicate: FOAF.name,
-      object: N3Util.createLiteral(profile.name)
+      object: N3Util.createLiteral(params.name)
     })
     writer.addTriple({
-      subject: profile.webid,
+      subject: params.webid,
       predicate: FOAF.mbox,
-      object: N3Util.createIRI(profile.email)
+      object: N3Util.createIRI(params.email)
     })
 
     writer.end().then((res) => {
-      return wia.put(profile.webid, {'Content-Type': 'application/n-triples'}, res)
+      return wia.put(params.webid, {'Content-Type': 'application/n-triples'}, res)
     })
+
+    profile = _.extend(profile, params)
+    this.trigger(profile)
   },
 
   // get object value without caring whether it's a literal or IRI

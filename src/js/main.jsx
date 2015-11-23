@@ -23,9 +23,6 @@ import Test from 'components/test.jsx'
 //import SignupProd from 'components/signup.jsx'
 import Signup from 'components/accounts/signup-dev.jsx'
 
-// chat to quiclky implement chat functionality- should be refactored
-import ChatTest from 'components/chat-test.jsx'
-
 injectTapEventPlugin()
 
 import moment from 'moment'
@@ -66,9 +63,8 @@ let routes = (
     </Route>
     <Route path='projects' component={Projects}/>
     <Route path='signup' component={Signup}/>
-    <Route name='login' component={LoginDev}/>
+    <Route path='login' component={LoginDev}/>
     <Route path='test' component={Test}/>
-    <Route path='chat-test' component={ChatTest}/>
   </Route>
 )
 

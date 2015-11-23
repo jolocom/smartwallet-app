@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
-import {Textfield, Button} from 'react-mdl'
+import {TextField, RaisedButton} from 'material-ui'
 import {History} from 'react-router'
 
 import Availability from 'actions/availability'
@@ -37,11 +37,11 @@ let Signup = React.createClass({
     //   window.location.href = '/'
     // }, 1000)
   },
-  _onUsernameChange(value) {
+  _onUsernameChange(e) {
     this.setState({
-      username: value
+      username: e.target.value
     })
-    Availability.check(value)
+    Availability.check(e.target.value)
   },
   _onSignup() {
     console.log('frame loaded')
@@ -71,20 +71,17 @@ let Signup = React.createClass({
             <input name="email" type="hidden" value={this.state.email} />
 
             <fieldset>
-              <Textfield label="Username"
+              <TextField floatingLabelText="Username"
                 onChange={this._onUsernameChange}
-                error={availableText}
-                className={usernameClass}
-                floatingLabel={true} />
-              <Textfield label="Name"
-                onChange={linkToState(this, 'name')}
-                floatingLabel={true} />
-              <Textfield label="Email"
-                onChange={linkToState(this, 'email')}
-                floatingLabel={true} />
+                errorText={availableText}
+                className={usernameClass} />
+              <TextField floatingLabelText="Name"
+                onChange={linkToState(this, 'name')} />
+              <TextField floatingLabelText="Email"
+                onChange={linkToState(this, 'email')} />
             </fieldset>
 
-            <Button primary={true} raised={true} onClick={this.signup} disabled={disabled}>Sign up</Button>
+            <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={{width: '100%'}}>Sign up</RaisedButton>
 
             <iframe ref="frame" name="spkac" hidden></iframe>
           </form>

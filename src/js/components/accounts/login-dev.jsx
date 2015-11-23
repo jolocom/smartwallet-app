@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button} from 'react-mdl'
+import {RaisedButton} from 'material-ui'
 import {Navigation} from 'react-router'
 
 import {linkToState} from 'lib/util'
@@ -27,7 +27,7 @@ let LoginDev = React.createClass({
       <div className="jlc-login">
         <input name="username" onChange={linkToState(this, 'username')} />
         <fieldset>
-          <Button primary={true} raised={true} onClick={this.login}>Login</Button>
+          <RaisedButton onTouchTap={this.login}>Login</RaisedButton>
         </fieldset>
       </div>
     )

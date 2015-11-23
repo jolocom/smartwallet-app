@@ -1,64 +1,135 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import classNames from 'classnames'
 import Reflux from 'reflux'
-import {IconButton, IconToggle, Spacer} from 'react-mdl'
+import ReactDOM from 'react-dom'
 
-// import mdlUpgrade from 'lib/mdlUpgrade.jsx'
+import {Paper, AppBar, IconButton, Styles, FontIcon} from 'material-ui'
+
+import {MapsPlace, ActionLabel, SocialPerson, ActionSchedule} from 'material-ui/lib/svg-icons'
+
+import IconToggle from 'components/common/icon-toggle.jsx'
+
+let {Colors} = Styles
 
 import SearchActions from 'actions/search'
 import SearchStore from 'stores/search'
 
-let GraphSearch = React.createClass({
+export default React.createClass({
   mixins: [Reflux.connect(SearchStore)],
-  componentDidUpdate(prevProps, {visible}) {
-    if (visible !== this.state.visible && this.state.visible)
-      this.focus()
+  getInitialState() {
+    return {
+      show: false
+    }
   },
-  focus() {
-    ReactDOM.findDOMNode(this.refs.search).focus()
+
+  contextTypes: {
+    muiTheme: React.PropTypes.object
   },
+
+  getStyles() {
+    const textFieldTheme = this.context.muiTheme.textField
+
+    let styles = {
+      container: {
+        backgroundColor: Colors.white,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        zIndex: 6,
+        opacity: this.state.show ? 1 : 0,
+        transform: this.state.show ? 'translate(0, 0)' : 'translate(0, -100%)',
+        transition: 'opacity .1s, transform .1s ease-in'
+      },
+      bar: {
+        backgroundColor: Colors.white
+      },
+      input: {
+        tapHighlightColor: 'rgba(0,0,0,0)',
+        padding: 0,
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        border: 'none',
+        outline: 'none',
+        backgroundColor: 'transparent',
+        color: textFieldTheme.textColor,
+        fontSize: '24px',
+        lineHeight: '64px'
+      },
+      filters: {
+        display: 'flex',
+        height: '48px',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'stretch'
+      },
+      item: {
+        flex: '1',
+        textAlign: 'center',
+        padding: '10px'
+      }
+    }
+
+    return styles
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.show && !prevState.show) {
+      let input = ReactDOM.findDOMNode(this.refs.input)
+      input.focus()
+    }
+  },
+
+  show() {
+    this.setState({show: true})
+  },
+
+  hide() {
+    this.setState({show: false, query: null})
+    let input = ReactDOM.findDOMNode(this.refs.input)
+    input.value = ''
+
+    if (typeof this.props.onHide === 'function') {
+      this.props.onHide()
+    }
+  },
+
+  _handleChange({target}) {
+    this.setState({query: target.value})
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange(target.value)
+    }
+  },
+
   toggleFilter(name) {
     SearchActions.toggleFilter(name)
-    this.focus()
   },
-  reset() {
-    SearchActions.reset()
-    this.focus()
-  },
-  onChange({target}) {
-    SearchActions.query(target.value)
-  },
-  show() {
-    this.setState({visible: true})
-  },
+
   render() {
-    let classes = classNames('jlc-header', 'jlc-search', {
-      'is-visible': this.state.visible
-    })
+    let styles = this.getStyles()
+
+    let iconColor = this.context.muiTheme.rawTheme.palette.primary1Color
 
     return (
-      <div className={classes}>
-        <div className="jlc-header-row">
-          <IconButton name="arrow_back" className="jlc-search__hide-button" onClick={SearchActions.hide}/>
-          <div className="jlc-search-field mdl-textfield mdl-js-textfield">
-            <input className="mdl-textfield__input" type="text" id="search-query" ref="search" onChange={this.onChange} value={this.state.query} />
-            <label className="mdl-textfield__label" htmlFor="search-query">Search...</label>
-          </div>
-          <Spacer/>
-          <nav className="mdl-navigation">
-            <IconButton name="close" onClick={this.reset} disabled={!this.state.query}/>
-          </nav>
-        </div>
-        <div className="jlc-search-filters" ripple={true}>
-          <IconToggle name="place" id="filter-where" checked={this.state.filters.where} onChange={() => {this.toggleFilter('where')}}/>
-          <IconToggle name="label" id="filter-what" checked={this.state.filters.what} onChange={() => {this.toggleFilter('what')}}/>
-          <IconToggle name="person" id="filter-who" checked={this.state.filters.who} onChange={() => {this.toggleFilter('who')}}/>
-          <IconToggle name="schedule" id="filter-when" checked={this.state.filters.when} onChange={() => {this.toggleFilter('when')}}/>
-        </div>
-      </div>
+      <Paper zDepth={1} style={styles.container}>
+        <AppBar
+          style={styles.bar}
+          zDepth={0}
+          title={<input placeholder="Search..." onChange={this._handleChange} ref="input" style={styles.input}/>}
+          iconElementLeft={
+            <IconButton onClick={this.hide}>
+              <FontIcon className="material-icons" color={iconColor}>arrow_back</FontIcon>
+            </IconButton>
+          }
+        />
+        <nav style={styles.filters}>
+          <IconToggle icon={<MapsPlace/>} style={styles.item} id="filter-where" checked={this.state.filters.where} onCheck={() => {this.toggleFilter('where')}}/>
+          <IconToggle icon={<ActionLabel/>} style={styles.item} id="filter-what" checked={this.state.filters.what} onCheck={() => {this.toggleFilter('what')}}/>
+          <IconToggle icon={<SocialPerson/>} style={styles.item} id="filter-who" checked={this.state.filters.who} onCheck={() => {this.toggleFilter('who')}}/>
+          <IconToggle icon={<ActionSchedule/>} style={styles.item} id="filter-when" checked={this.state.filters.when} onCheck={() => {this.toggleFilter('when')}}/>
+        </nav>
+      </Paper>
     )
   }
-})
 
-export default GraphSearch
+})
