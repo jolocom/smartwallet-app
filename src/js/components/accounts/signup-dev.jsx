@@ -1,6 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
-import {Textfield, Button} from 'react-mdl'
+import {TextField, RaisedButton} from 'material-ui'
 import {History, Lifecycle} from 'react-router'
 
 import Availability from 'actions/availability'
@@ -40,11 +40,11 @@ let SignupDev = React.createClass({
     }
   },
 
-  _onUsernameChange(value) {
+  _onUsernameChange(e) {
     this.setState({
-      username: value
+      username: e.target.value
     })
-    Availability.check(value)
+    Availability.check(e.target.value)
   },
   render() {
     let usernameClass, availableText, disabled = true
@@ -68,20 +68,17 @@ let SignupDev = React.createClass({
           <input name="email" type="hidden" value={this.state.email} />
 
           <fieldset>
-            <Textfield label="Username"
+            <TextField floatingLabelText="Username"
               onChange={this._onUsernameChange}
-              error={availableText}
-              className={usernameClass}
-              floatingLabel={true} />
-            <Textfield label="Name"
-              onChange={linkToState(this, 'name')}
-              floatingLabel={true} />
-            <Textfield label="Email"
-              onChange={linkToState(this, 'email')}
-              floatingLabel={true} />
+              errorText={availableText}
+              className={usernameClass} />
+            <TextField floatingLabelText="Name"
+              onChange={linkToState(this, 'name')} />
+            <TextField floatingLabelText="Email"
+              onChange={linkToState(this, 'email')} />
           </fieldset>
 
-          <Button primary={true} raised={true} onClick={this.signup} disabled={disabled}>Sign up</Button>
+          <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={{width: '100%'}}>Sign up</RaisedButton>
         </main>
       </div>
     )

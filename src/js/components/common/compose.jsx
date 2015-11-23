@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 
-import {IconButton} from 'react-mdl'
+import {IconButton} from 'material-ui'
 
 export default React.createClass({
 
@@ -25,10 +25,21 @@ export default React.createClass({
     })
   },
 
+  getStyles() {
+    return {
+      button: {
+        margin: '5px'
+      }
+    }
+  },
+
   render() {
     let {className, placeholder, submitIcon} = this.props
 
+    // @TODO move to inline styles
     let classes = classNames('jlc-compose', className)
+
+    let styles = this.getStyles()
 
     submitIcon = submitIcon || 'send'
 
@@ -37,7 +48,7 @@ export default React.createClass({
         <div className="jlc-compose-textarea">
           <pre><span>{this.state.content}</span><br/></pre>
           <textarea placeholder={placeholder} onChange={this.onChange} ref="textarea"></textarea>
-          <IconButton name={submitIcon} className="jlc-compose-submit" colored={true} onClick={this.onSubmit}/>
+          <IconButton iconClassName="material-icons" secondary={true} onTouchTap={this.onSubmit} style={styles.button}>{submitIcon}</IconButton>
         </div>
       </div>
     )

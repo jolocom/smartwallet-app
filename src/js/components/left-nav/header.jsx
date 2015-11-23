@@ -1,12 +1,10 @@
 import React from 'react'
 
-import {IconButton} from 'react-mdl'
+import {IconButton} from 'material-ui'
 
 import Avatar from 'components/common/avatar.jsx'
 
 import ProfileActions from 'actions/profile'
-
-import NavActions from 'actions/nav'
 
 let Header = React.createClass({
   contextTypes: {
@@ -14,7 +12,6 @@ let Header = React.createClass({
   },
   editProfile() {
     ProfileActions.show()
-    NavActions.hide()
   },
   render() {
     let initials, {profile} = this.context
@@ -30,7 +27,7 @@ let Header = React.createClass({
             <span className="jlc-nav-profile-name">{profile.name}</span>
             <span className="jlc-nav-profile-email">{profile.email}</span>
           </div>
-          <IconButton name="mode_edit" onClick={this.editProfile}/>
+          <IconButton iconClassName="material-icons" onTouchTap={this.editProfile}>mode_edit</IconButton>
         </div>
       </header>
     )

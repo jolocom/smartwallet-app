@@ -11,7 +11,7 @@ let {Colors} = Styles
 import JolocomTheme from 'styles/jolocom-theme'
 
 import SearchBar from 'components/common/search-bar.jsx'
-// import LeftNav from 'components/left-nav/nav.jsx'
+import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
 
 import AppNav from 'components/nav.jsx'
@@ -55,7 +55,7 @@ export default React.createClass({
     ProfileActions.load()
 
     let path = this.props.location.pathname
-    if (!this.state.signedUp && path !== 'signup') {
+    if (!this.state.signedUp && path !== 'signup' && path !== 'login') {
       this.history.pushState(null, '/signup')
     } else if (path === '/') {
       this.history.pushState(null, '/graph')
@@ -126,6 +126,10 @@ export default React.createClass({
     })
   },
 
+  toggleLeftNav() {
+    this.refs.leftNav.toggle()
+  },
+
   getStyles() {
     let styles = {
       header: {
@@ -155,10 +159,11 @@ export default React.createClass({
         {this.state.signedUp ? (
           <Layout>
             <Paper zDept={1} style={styles.header}>
-              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar}></AppBar>
+              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.toggleLeftNav}></AppBar>
               <AppNav activeTab={component.id} style={styles.nav}/>
               {search}
             </Paper>
+            <LeftNav ref="leftNav" />
             <Content>
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {

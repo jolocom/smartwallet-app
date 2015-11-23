@@ -3,15 +3,13 @@ import Reflux from 'reflux'
 import classNames from 'classnames'
 
 import {
-  Layout,
+  AppBar,
   IconButton,
-  IconToggle,
-  Spacer,
-  Content,
-  Menu,
-  MenuItem,
-  Card, CardTitle, CardText, CardActions
-} from 'react-mdl'
+  Checkbox,
+  Card, CardMedia, CardTitle, CardActions
+} from 'material-ui'
+
+import {Layout, Content, Spacer} from 'components/layout'
 
 import Comments from 'components/node/comments.jsx'
 
@@ -53,38 +51,48 @@ export default React.createClass({
     NodeActions.pin(this.props.params.node)
   },
 
+  getStyles() {
+    return {
+      bar: {
+        position: 'absolute',
+        backgroundColor: 'transparent'
+      },
+      media: {
+        color: '#fff',
+        height: '176px',
+        background: 'url(http://www.getmdl.io/assets/demos/welcome_card.jpg) center / cover'
+      },
+      actions: {
+        display: 'flex'
+      }
+    }
+  },
+
   render() {
     let classes = classNames('jlc-node', 'jlc-dialog', 'jlc-dialog__fullscreen', {
       'is-opened': this.state.open
     })
 
+    let styles = this.getStyles()
+
     return (
       <div className={classes}>
         <Layout>
-          <header className="mdl-layout__header mdl-layout__header--transparent">
-            <IconButton name="close" onClick={() => this.context.history.pushState(null, '/graph')} className="jlc-dialog__close-button"></IconButton>
-            <div className="mdl-layout__header-row">
-              <Spacer></Spacer>
-              <nav className="mdl-navigation">
-                <IconToggle name="inbox" id="node-toggle-pinned" onChange={this.togglePinned}></IconToggle>
-                <IconButton name="more_vert" id="node-more"></IconButton>
-                <Menu target="node-more" align="right">
-                  <MenuItem>Delete</MenuItem>
-                </Menu>
-              </nav>
-            </div>
-          </header>
+          <AppBar
+            iconElementLeft={<IconButton onTouchTap={() => this.context.history.pushState(null, '/graph')} iconClassName="material-icons">close</IconButton>}
+            iconElementRight={<Checkbox name="inbox" onChange={this.togglePinned}></Checkbox>}
+            style={styles.bar}
+            zDepth={0}
+          />
           <Content>
-            <Card className="jlc-node-card">
-              <CardTitle style={{color: '#fff', height: '176px', background: 'url(http://www.getmdl.io/assets/demos/welcome_card.jpg) center / cover'}}>Welcome</CardTitle>
-              <CardText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Mauris sagittis pellentesque lacus eleifend lacinia...
-              </CardText>
-              <CardActions border={true}>
+            <Card className="jlc-node-card" zDepth={0}>
+              <CardMedia overlay={
+                  <CardTitle>Welcome</CardTitle>
+              } style={styles.media}/>
+              <CardActions style={styles.actions}>
                 <Spacer/>
-                <IconButton name="comment" />
-                <IconButton name="share" />
+                <IconButton iconClassName="material-icons">comment</IconButton>
+                <IconButton iconClassName="material-icons">share</IconButton>
               </CardActions>
             </Card>
             <Comments node={this.props.params.node}/>

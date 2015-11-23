@@ -2,7 +2,11 @@ import React from 'react'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 
-import {Layout, Content, IconButton, Spacer} from 'react-mdl'
+import {AppBar, IconButton, Styles} from 'material-ui'
+
+let {Colors} = Styles
+
+import {Layout, Content} from 'components/layout'
 
 import NodeActions from 'actions/node'
 import PinnedActions from 'actions/pinned'
@@ -46,7 +50,7 @@ export default React.createClass({
     PinnedActions.hide()
   },
 
-  onNodeClick: function(nodeId) {
+  _handleNodeTap: function(nodeId) {
     let self = this
     return function() {
       console.log(`node ${nodeId} clicked`)
@@ -56,28 +60,32 @@ export default React.createClass({
     }
   },
 
+  getStyles() {
+    return {
+      bar: {
+        backgroundColor: Colors.grey500
+      }
+    }
+  },
+
   render: function() {
-    let onNodeClick = this.onNodeClick
     let classes = classNames('jlc-pinned', 'jlc-dialog' , 'jlc-dialog__fullscreen', {
       'is-opened': this.state.show
     })
+    let styles = this.getStyles()
     return (
       <div className={classes}>
-        <Layout fixedHeader={true}>
-          <header className="mdl-layout__header mdl-color--grey-600 is-casting-shadow">
-            <IconButton name="arrow_back" onClick={this.close} className="jlc-dialog__close-button"></IconButton>
-            <div className="mdl-layout__header-row">
-              <span className="mdl-layout-title">Pinned nodes</span>
-              <Spacer></Spacer>
-              <nav className="mdl-navigation">
-              </nav>
-            </div>
-          </header>
+        <Layout>
+          <AppBar
+            title="Pinned nodes"
+            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this.close}>arrow_back</IconButton>}
+            style={styles.bar}
+          />
           <Content>
             {this.state.nodes.map(function(node) {
               return (
                 <div className="element" key={node.id}>
-                  <div className="node" onClick={onNodeClick(node.id)}></div>
+                  <div className="node" onTouchTap={() => this._handleNodeTap(node.id)}></div>
                   <div className="title"></div>
                 </div>
               )
