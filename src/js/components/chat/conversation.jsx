@@ -127,9 +127,11 @@ export default React.createClass({
 
     let styles = this.getStyles()
 
-    let {contact, conversation} = this.state
+    let {conversation} = this.state
+    let {otherPerson} = conversation
+
     let {profile} = this.context
-    let title = contact && contact.name
+    let title = otherPerson && otherPerson.name
     let items = conversation.items || []
 
     return (
@@ -143,14 +145,14 @@ export default React.createClass({
           />
         <Content style={styles.content}>
             <div className="jlc-conversation" ref="conversations" style={styles.conversation}>
-              {items.map(function({author, content, date}, i) {
+              {items.map(function({author, content, created}, i) {
                 let from = (author !== profile.webid) ? 'contact' : 'me'
                 let classes = classNames('jlc-message', `jlc-message-from-${from}`)
                 return (
                   <div className={classes} key={i}>
                     <div className="jlc-message-content">{content}</div>
                     <div className="jlc-message-meta">
-                      <span className="jlc-message-date">{moment(date).fromNow()}</span>
+                      <span className="jlc-message-date">{moment(created).fromNow()}</span>
                     </div>
                   </div>
                 )

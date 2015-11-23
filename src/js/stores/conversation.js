@@ -1,4 +1,5 @@
 import Reflux from 'reflux'
+import _ from 'lodash'
 import settings from 'settings'
 import ChatAgent from 'lib/agents/chat.js'
 
@@ -23,17 +24,22 @@ export default Reflux.createStore({
   },
 
   onLoad(username, id) {
-    chatAgent.getConversationMessages(this.getUrl(username, id))
-      .then(load.completed)
+    let url = this.getUrl(username, id)
+    Promise.all([
+      chatAgent.getConversation(url),
+      chatAgent.getConversationMessages(url)
+    ]).then((result) => {
+      let [conversation, items] = result
+      load.completed(conversation, items)
+    })
   },
 
-  onLoadCompleted(items) {
-    console.log('items', items)
+  onLoadCompleted(conversation, items) {
     this.items = items
-    this.trigger({
+    this.trigger(_.extend({
       loading: false,
       items: items
-    })
+    }, conversation))
   },
 
   onSubscribe(username, id) {

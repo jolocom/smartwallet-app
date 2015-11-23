@@ -52,17 +52,19 @@ let Chat = React.createClass({
       <div className="jlc-chat">
         <List className="jlc-chat-list">
           {this.state.conversations.map((conversation) => {
-            let {username} = conversation
-            let {author, date, content} = conversation.items[0]
-            let avatar = <Avatar src={author.imgUri}>{author.name[0]}</Avatar>
-            date = moment(date).fromNow()
+            let {otherPerson} = conversation
+            let {created, content} = conversation.lastMessage
+            let avatar
+            if (otherPerson)
+              avatar = <Avatar src={otherPerson.img}>{otherPerson.name[0]}</Avatar>
+            let date = moment(created).fromNow()
             return (
-              <ListItem key={username} primaryText={
+              <ListItem key={conversation.id} primaryText={
                 <div>
-                  <span>{author.name}</span>
+                  <span>{otherPerson.name}</span>
                   <span style={styles.date}>{date}</span>
                 </div>
-              } secondaryText={content} leftAvatar={avatar} onClick={() => this.showConversation(conversation)}/>
+              } secondaryText={content} leftAvatar={avatar} onTouchTap={() => this.showConversation(conversation)}/>
             )
           })}
         </List>

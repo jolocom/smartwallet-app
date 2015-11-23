@@ -24,21 +24,12 @@ export default Reflux.createStore({
 
     return chatAgent.getInboxConversations(`${settings.endpoint}/${username}/profile/card#me`)
       .then(function(conversations) {
-        // @TODO load author, first message
+        let results = conversations.map((url) => chatAgent.getConversation(url))
+        return Promise.all(results)
+      })
+      .then(function(conversations) {
         load.completed(_.chain(conversations).map((conversation) => {
-          let id = conversation.replace(/^.*\/chats\/([a-z]+)$/, '$1')
-          return {
-            id: id,
-            url: conversation,
-            username: '',
-            items: [{
-              author: {
-                name: id
-              },
-              date: new Date(),
-              content: conversation
-            }]
-          }
+          return conversation
         }).filter((conversation) => {
           return !regEx || conversation.id.match(regEx)
         }).value())

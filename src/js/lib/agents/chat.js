@@ -136,13 +136,15 @@ class ChatAgent extends LDPAgent {
 
   }
 
-  // Returns relevant conversation metadata (updatesVia, otherPerson, lastMessage)
+  // Returns relevant conversation metadata (id, updatesVia, otherPerson, lastMessage)
   //
   // @param {String} conversationUrl conversation resource url
   //
-  // @return {Object} conversation meta: udpatesVia, otherPerson, lastMessage
+  // @return {Object} conversation meta: id, updatesVia, otherPerson, lastMessage
   getConversation(conversationUrl) {
-    let result = {}
+    let result = {
+      id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
+    }
     return this.get(conversationUrl)
       .then((xhr) => {
         result.updatesVia = xhr.getResponseHeader('updates-via')
@@ -179,7 +181,6 @@ class ChatAgent extends LDPAgent {
       owner = owner.object
     }
     let participants = _.map(_.filter(aboutThread, (t) => t.predicate == SIOC.hasSubscriber), (t) => t.object)
-
     let otherPerson = _.find(participants, (p) => p != owner)
     if (!otherPerson) {
       return Promise.resolve(null)
