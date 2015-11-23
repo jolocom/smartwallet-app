@@ -11,7 +11,7 @@ var sass = require('gulp-sass');
 var vinylPaths = require('vinyl-paths');
 
 var sources = {
-  app: './src/js/app.jsx',
+  app: './src/js/main.jsx',
   data: './data/**/*',
   html: './src/index.html',
   img: './src/img/**/*',
@@ -95,8 +95,8 @@ gulp.task('clean', function () {
 gulp.task('lint', function () {
     return gulp.src(sources.js)
         .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failOnError());
+        .pipe(eslint.format());
+        //.pipe(eslint.failOnError());
 });
 
 gulp.task('watch', function() {
@@ -105,4 +105,4 @@ gulp.task('watch', function() {
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', 'lint', ['img', 'data', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));
+gulp.task('default', gulpsync.sync(['clean', 'lint', ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));

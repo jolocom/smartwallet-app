@@ -1,41 +1,58 @@
 import Reflux from 'reflux'
+import _ from 'lodash'
 import ProfileActions from 'actions/profile'
 
 import N3 from 'n3'
-import WebAgent from 'lib/web-agent.js'
+import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
 import {CERT, FOAF} from 'lib/namespaces.js'
 
 let N3Util = N3.Util
+let wia = new WebIDAgent()
 
-let ProfileStore = Reflux.createStore({
+let profile = {
+  show: false,
+  username: localStorage.getItem('fake-user'),
+  name: '',
+  email: '',
+  rsaModulus: '(rsa modulus missing)',
+  rsaExponent: '(rsa exponent missing)',
+  webid: '#',
+  webidPresent: '(webid missing)',
+  imgUri: '/img/person-placeholder.png',
+  fixedTriples: [],
+  prefixes: []
+}
+
+export default Reflux.createStore({
   listenables: ProfileActions,
 
   getInitialState () {
-    return {
-      edit: false,
-      name: '',
-      email: '',
-      rsaModulus: '(rsa modulus missing)',
-      rsaExponent: '(rsa exponent missing)',
-      webid: '#',
-      webidPresent: '(webid missing)',
-      imgUri: '/img/person-placeholder.png',
-      fixedTriples: [],
-      prefixes: []
-    }
+    return profile
+  },
+
+  onShow() {
+    console.log('show profile')
+    profile.show = true
+
+    this.trigger(profile)
+  },
+
+  onHide() {
+    profile.show = false
+
+    this.trigger(profile)
   },
 
   onLoad() {
-    var webid = null
-
-    // who am I? (check 'User' header)
-    WebAgent.head(document.location.origin)
-      .then((xhr) => {
-        webid = xhr.getResponseHeader('User')
-
+    let webid = null
+    wia.getWebID()
+      .then((user) => {
+        console.log('got webid')
+        webid = user
+        console.log(webid)
         // now get my profile document
-        return WebAgent.get(webid)
+        return wia.get(webid)
       })
       .then((xhr) => {
         // parse profile document from text
@@ -60,16 +77,11 @@ let ProfileStore = Reflux.createStore({
     let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
 
     let state = {
-      edit: this.edit,
-      name: '',
-      email: '',
-      rsaModulus: '(rsa modulus missing)',
-      rsaExponent: '(rsa exponent missing)',
       webid: webid,
       webidPresent: webid,
-      imgUri: '/img/person-placeholder.png',
       fixedTriples: fixedTriples,
-      prefixes: prefixes
+      prefixes: prefixes,
+      username: localStorage.getItem('fake-user') // @TODO replace this with proper login system
     }
 
     // triples which describe profile
@@ -91,33 +103,37 @@ let ProfileStore = Reflux.createStore({
         if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
       }
     }
-    console.log('state', state)
-    this.trigger(state)
+
+    profile = _.extend(profile, state)
+    this.trigger(profile)
   },
 
-  onUpdate: function (profile) {
+  onUpdate: function (params) {
     // subject which represents our profile
     console.log('saving profile')
-    console.log(profile)
-    let writer = new Writer({format: 'N-Triples', prefixes: profile.prefixes})
+    console.log(params)
+    let writer = new Writer({format: 'N-Triples', prefixes: params.prefixes})
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t)
     }
 
     writer.addTriple({
-      subject: profile.webid,
+      subject: params.webid,
       predicate: FOAF.name,
-      object: N3Util.createLiteral(profile.name)
+      object: N3Util.createLiteral(params.name)
     })
     writer.addTriple({
-      subject: profile.webid,
+      subject: params.webid,
       predicate: FOAF.mbox,
-      object: N3Util.createIRI(profile.email)
+      object: N3Util.createIRI(params.email)
     })
 
     writer.end().then((res) => {
-      return WebAgent.put(profile.webid, {'Content-Type': 'application/n-triples'}, res)
+      return wia.put(params.webid, {'Content-Type': 'application/n-triples'}, res)
     })
+
+    profile = _.extend(profile, params)
+    this.trigger(profile)
   },
 
   // get object value without caring whether it's a literal or IRI
@@ -142,5 +158,3 @@ let ProfileStore = Reflux.createStore({
     }
   }
 })
-
-export default ProfileStore

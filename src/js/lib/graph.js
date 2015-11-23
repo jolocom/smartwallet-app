@@ -13,6 +13,8 @@ d3.selection.prototype.moveToFront = function() {
 export default class GraphD3 {
 
   constructor(el, props, state, handleNodeClick, handleDragEnd, handleLongTap) {
+    this.el = el
+
     this.taptimer = {
       start: 0,
       end: 0
@@ -36,14 +38,15 @@ export default class GraphD3 {
     this.handleNodeClick = handleNodeClick
     this.handleDragEnd = handleDragEnd
     this.handleLongTap = handleLongTap
+
+    this.create(props, state)
   }
 
-  create(el, props, state) {
-    this.w = document.getElementById('chart').offsetWidth
-    this.h = document.getElementById('chart').offsetHeight
+  create(props, state) {
+    this.w = this.el.offsetWidth || 440
+    this.h = this.el.offsetHeight || 696
 
-
-    let svg = d3.select('#chart').append('svg:svg')
+    let svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.w)
       .attr('height', this.h)
       .attr('pointer-events', 'all')
@@ -82,8 +85,8 @@ export default class GraphD3 {
   }
 
   // Invoked in 'componentDidUpdate' of react graph
-  update(el, prevState, state) {
-    let svg = d3.select('#chart').select('svg').select('g')
+  update(prevState, state) {
+    let svg = d3.select(this.el).select('svg').select('g')
 
     this.force
       .nodes(state.nodes)
@@ -94,7 +97,7 @@ export default class GraphD3 {
     // links
 
     // data binding
-    let linkGroup = d3.select('#chart').select('svg').select('g.link_group')
+    let linkGroup = d3.select(this.el).select('svg').select('g.link_group')
     linkGroup.selectAll('g.link').remove() // remove old links entirely
     let link = linkGroup.selectAll('g.link')
       .data(state.links, (d) => {
@@ -312,7 +315,7 @@ export default class GraphD3 {
   }
 
   // Invoked in 'componentWillUpdate' of react graph
-  beforeUpdate(el, state, nextState) {
+  beforeUpdate(state, nextState) {
     //plus drawer closing (opening is handled in 'update')
     if (state.plusDrawerOpen && !nextState.plusDrawerOpen) {
       document.getElementsByTagName('body')[0].className = 'closed-drawer'
@@ -357,10 +360,9 @@ export default class GraphD3 {
 
   // catch long tap and forward it to react
   triggerLongTap() {
-    let self = this
-    return function (){
-      if(!self.drag.active) return // drag event stopped before timeout expired
-      self.handleLongTap(self.drag.distance())
+    return () => {
+      if(!this.drag.active) return // drag event stopped before timeout expired
+      this.handleLongTap(this.drag.distance())
     }
   }
 
@@ -429,13 +431,13 @@ export default class GraphD3 {
 
   // graph zoom/scale
   zoomTo(scale, x, y) {
-    let svg = d3.select('#chart').select('svg').select('g')
+    let svg = d3.select(this.el).select('svg').select('g')
     svg.transition()
       .attr('transform', 'scale('+ scale + ') translate(' + x + ',' + y + ')')
   }
 
   zoomReset() {
-    let svg = d3.select('#chart').select('svg').select('g')
+    let svg = d3.select(this.el).select('svg').select('g')
     svg.transition()
       .attr('transform', 'scale(1) translate(0, 0)')
   }

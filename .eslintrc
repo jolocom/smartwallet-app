@@ -1,4 +1,16 @@
 {
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "parser": "babel-eslint",
+    "ecmaFeatures": {
+        "jsx": true,
+        "experimentalObjectRestSpread": true,
+        "modules": true
+    },
     "rules": {
         "indent": [
             2,
@@ -17,18 +29,10 @@
             2,
             "never"
         ],
-        "no-console": 0
-    },
-    "env": {
-        "es6": true,
-        "browser": true,
-        "node": true
-    },
-    "extends": "eslint:recommended",
-    "ecmaFeatures": {
-        "jsx": true,
-        "experimentalObjectRestSpread": true,
-        "modules": true
+        "no-console": 0,
+
+        "react/wrap-multilines": 2,
+        "react/jsx-uses-react": 2
     },
     "plugins": [
         "react"

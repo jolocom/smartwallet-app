@@ -1,9 +1,11 @@
 // This component is only meant for test purposes
-import React from 'react/addons'
-import WebAgent from '../lib/web-agent.js'
+import React from 'react'
+import HTTPAgent from '../lib/agents/http.js'
 
+import {linkToState} from 'lib/util'
+
+let http = new HTTPAgent()
 let Test = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
   getInitialState: function() {
     return {
       webid: '#',
@@ -12,7 +14,7 @@ let Test = React.createClass({
   },
   componentDidMount: function() {
     // who am I? (check 'User' header)
-    WebAgent.head(document.location.origin)
+    http.head(document.location.origin)
       .then((xhr) => {
         console.log('head')
         console.log(xhr)
@@ -31,7 +33,7 @@ let Test = React.createClass({
     return (
       <div className="profile">
         <h1>{this.state.webid}</h1>
-        <input type="text" valueLink={this.linkState('input')}></input>
+        <input type="text" onChange={linkToState(this, 'input')}></input>
         <div className="profile-edit" onClick={this.onButtonClick}>
           Do not click this under any circumstance
         </div>

@@ -1,0 +1,68 @@
+@import 'variables';
+
+.dialog-enter {
+  opacity: 0;
+}
+
+.dialog-enter.dialog-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.dialog-leave {
+  opacity: 1;
+}
+
+.dialog-leave.dialog-leave-active {
+  opacity: 0;
+  transition: opacity 300ms ease-in;
+}
+
+.jlc-dialog {
+  background: #ffffff;
+
+  &.is-opened {
+
+  }
+
+  &__close-button {
+    display: block;
+    position: absolute;
+    height: 48px;
+    width: 48px;
+    border: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    font-size: 26px;
+    line-height: 50px;
+    margin: 10px 12px;
+    top: 0;
+    left: 0;
+    color: rgb(255,255,255);
+    z-index: 4;
+  }
+
+  &__fullscreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    opacity: 0;
+    transform: translate(0, 100%);
+    transition: opacity .3s, transform .3s;
+    &.is-opened {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .jlc-dialog .jlc-dialog__close-button {
+    margin: 4px;
+  }
+}

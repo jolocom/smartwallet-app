@@ -1,76 +1,33 @@
 import React from 'react'
-import WebAgent from '../lib/web-agent.js'
-import {FOAF} from '../lib/namespaces.js'
-import {Parser} from '../lib/rdf.js'
+// import {Link} from 'react-router'
 
-let Nav = React.createClass({
-  getInitialState: function() {
-    return {
-      imgUri: '/img/person-placeholder.png'
-    }
-  },
-  _profileDocumentLoaded: function (webid, triples) {
-    let state = {
-      imgUri: '/img/person-placeholder.png'
-    }
+import {Tabs, Tab} from 'material-ui'
 
-    let found = false
-    // triples which describe profile
-    let relevant = triples.filter((t) => t.subject == webid)
+export default React.createClass({
 
-    // get foaf:img
-    for (var t of relevant){
-      if (t.predicate == FOAF.img) {
-        state.imgUri =  t.object
-        found = true
-        break
-      }
-    }
-    if (found) {
-      this.setState(state)
-    }
-  },
-  componentDidMount: function() {
-    console.log('nav bar did mount')
-    var webid = null
-
-    // who am I? (check "User" header)
-    WebAgent.head(document.location.origin)
-      .then((xhr) => {
-        webid = xhr.getResponseHeader('User')
-        // now get my profile document
-        return WebAgent.get(webid)
-
-      })
-      .then((xhr) => {
-        // parse profile document from text
-        let parser = new Parser()
-        return parser.parse(xhr.response)
-
-      })
-      .then((res) => {
-        // render relevant information in UI
-        this._profileDocumentLoaded(webid, res.triples)
-
-      })
-      .catch((err) => {
-        console.log('error')
-        console.log(err)
-      })
+  contextTypes: {
+    history: React.PropTypes.any
   },
 
-  render: function() {
+  _handleTabsChange(tab) {
+    this.context.history.pushState(null, `/${tab}`)
+  },
+
+  render() {    
     return (
-      <div className="status-bar">
-        <img className="status-bar-img" src={this.state.imgUri}/>
-        <span className="status-bar-text">You are logged in as </span>
-        <a className="status-bar-profile-link" href="/#/profile">foo</a>
-        <span className="status-bar-graph-text"> Here is your </span>
-        <a className="status-bar-graph-link" href="/#/graph">graph</a>
-      </div>
+      <Tabs valueLink={{value: this.props.activeTab, requestChange: this._handleTabsChange}} {...this.props}>
+        <Tab label="Graph" value="graph"/>
+        <Tab label="Chat" value="chat"/>
+        <Tab label="Contacts" value="contacts"/>
+      </Tabs>
     )
   }
+
 })
 
-
-export default Nav
+// <div className="mdl-layout__tab-bar mdl-js-ripple-effect is-casting-shadow">
+//   <Link to="/graph" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">share</i></Link>
+//   <Link to="/chat" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">chat</i></Link>
+//   <Link to="/contacts" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">contacts</i></Link>
+//   <Link to="/projects" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">folder</i></Link>
+// </div>

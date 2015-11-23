@@ -6,8 +6,13 @@
     justify-content: flex-end;
     flex-direction: column;
     padding: 16px;
+    .jlc-avatar {
+      margin-bottom: 8px;
+    }
     .jlc-nav-profile {
       display: flex;
+      align-items: center;
+      justify-content: center;
       &-details {
         display: flex;
         flex-direction: column;
@@ -18,8 +23,18 @@
       }
     }
   }
-  .mdl-navigation {
+  &-section {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 10px;
+  }
+  &-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.3);
+    padding: 8px 16px;
+  }
+  .mdl-navigation {
+    padding: 0;
     .mdl-navigation__link {
       display: flex;
       align-items: center;
