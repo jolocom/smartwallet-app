@@ -12,6 +12,7 @@ export default Reflux.createStore({
     }
   },
   onLoad(username) {
+    console.log(username, contacts)
     this.trigger(_.extend({
       loading: false
     }, _.findWhere(contacts, {username: username})))
