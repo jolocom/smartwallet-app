@@ -76,7 +76,7 @@ export default React.createClass({
             <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handlePinnedTap}>inbox</IconButton>
           </div>
         ),
-        search: <GraphSearch ref="search"/>
+        search: <GraphSearch ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
       }
     } else if (path.match('/chat')) {
       return {
