@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 import Reflux from 'reflux'
 import {IconButton, IconToggle, Spacer} from 'react-mdl'
@@ -15,7 +16,7 @@ let GraphSearch = React.createClass({
       this.focus()
   },
   focus() {
-    React.findDOMNode(this.refs.search).focus()
+    ReactDOM.findDOMNode(this.refs.search).focus()
   },
   toggleFilter(name) {
     SearchActions.toggleFilter(name)
@@ -28,13 +29,16 @@ let GraphSearch = React.createClass({
   onChange({target}) {
     SearchActions.query(target.value)
   },
+  show() {
+    this.setState({visible: true})
+  },
   render() {
     let classes = classNames('jlc-header', 'jlc-search', {
       'is-visible': this.state.visible
     })
 
     return (
-      <header className={classes}>
+      <div className={classes}>
         <div className="jlc-header-row">
           <IconButton name="arrow_back" className="jlc-search__hide-button" onClick={SearchActions.hide}/>
           <div className="jlc-search-field mdl-textfield mdl-js-textfield">
@@ -52,7 +56,7 @@ let GraphSearch = React.createClass({
           <IconToggle name="person" id="filter-who" checked={this.state.filters.who} onChange={() => {this.toggleFilter('who')}}/>
           <IconToggle name="schedule" id="filter-when" checked={this.state.filters.when} onChange={() => {this.toggleFilter('when')}}/>
         </div>
-      </header>
+      </div>
     )
   }
 })

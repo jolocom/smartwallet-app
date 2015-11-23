@@ -1,6 +1,7 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
-import React from 'react/addons'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 
@@ -118,7 +119,7 @@ let Graph = React.createClass({
   },
 
   getGraphEl() {
-    return React.findDOMNode(this.refs.graph)
+    return ReactDOM.findDOMNode(this.refs.graph)
   },
 
   componentDidMount: function() {
@@ -136,13 +137,15 @@ let Graph = React.createClass({
 
   componentDidUpdate: function(prevProps, prevState) {
     let uri
-    console.log('update', prevProps.params.node, this.props.params.node)
+
     if (prevProps.params.node !== this.props.params.node) {
       this.centerAtURI(this.props.params.node)
       return
     }
 
-    if (!prevState.centerNode && this.state.centerNode) {
+    let isIdentity = this.state.identity === this.state.centerNode.uri
+
+    if (!prevState.centerNode && this.state.centerNode && isIdentity) {
       uri = encodeURIComponent(this.state.centerNode.uri)
       this.context.history.replaceState(null, `/graph/${uri}`)
     }
@@ -150,7 +153,6 @@ let Graph = React.createClass({
   },
 
   showNode(uri) {
-    console.log('showNode', uri)
     uri = encodeURIComponent(uri || 'current-node-id')
     this.context.history.pushState(null, `/graph/${uri}`)
   },
@@ -303,12 +305,23 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
+  getStyles() {
+    let styles = {
+      menu: {
+        position: 'absolute',
+        bottom: '16px',
+        right: '16px'
+      }
+    }
+    return styles
+  },
+
   render() {
     let classes = classNames('jlc-graph')
-
+    let styles = this.getStyles()
     return (
       <div className={classes}>
-        <FabMenu>
+        <FabMenu style={styles.menu}>
           <FabMenuItem icon="comment" label="Comment" onClick={() => {this.addNode('comment')}}/>
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
           <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>

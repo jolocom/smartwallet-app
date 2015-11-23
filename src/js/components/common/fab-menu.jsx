@@ -1,7 +1,9 @@
 import React, {Children} from 'react'
 import classNames from 'classnames'
 
-import {FABButton, Icon, Tooltip} from 'react-mdl'
+import _ from 'lodash'
+
+import {FloatingActionButton, FontIcon} from 'material-ui'
 
 let FabMenu = React.createClass({
 
@@ -42,6 +44,28 @@ let FabMenu = React.createClass({
     }
   },
 
+  getStyles() {
+    let styles = {
+      container: {
+        position: 'fixed',
+        right: '0',
+        bottom: '0'
+      },
+      nav: {
+        display: 'flex',
+        flexDirection: 'column-reverse',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+        zIndex: 4
+      },
+      item: {
+        marginTop: '5px'
+      }
+    }
+    return styles
+  },
+
   render() {
     let {
       className,
@@ -52,6 +76,8 @@ let FabMenu = React.createClass({
       overlay,
       ...otherProps
     } = this.props
+
+    let styles = this.getStyles()
 
     let classes = classNames('mdl-menu__fab', {
       'is-opened': this.state.open
@@ -64,24 +90,27 @@ let FabMenu = React.createClass({
       let show = this.state.open ? 1 : 0
       return React.cloneElement(child, {
         className: classNames('mdl-menu__fab-item', child.props.className),
-        style: {
+        onClick: (...args) => {
+          this.setState({open: false})
+          if (typeof child.props.onClick === 'function')
+            child.props.onClick(...args)
+        },
+        style: _.extend({
           transition: `opacity ${duration}s, transform ${duration}s`,
           transitionDelay: `${delay}s`,
           willChange: 'opacity, transform',
           opacity: show,
           transform: `scale(${show})`
-        }
+        }, styles.item)
       })
     })
 
     return (
-      <div className={classes}>
-        <nav className="mdl-menu__fab-nav">
-          <FABButton accent={true} ripple={ripple} onClick={this.toggle}>
-            <Tooltip label="blaat">
-              <Icon name={icon}/>
-            </Tooltip>
-          </FABButton>
+      <div className={classes} style={styles.container}>
+        <nav className="mdl-menu__fab-nav" style={styles.nav}>
+          <FloatingActionButton onClick={this.toggle} style={styles.item}>
+            <FontIcon className="material-icons">{icon}</FontIcon>
+          </FloatingActionButton>
           {children}
         </nav>
         {overlay}

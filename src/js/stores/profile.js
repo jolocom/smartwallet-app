@@ -11,6 +11,7 @@ let wia = new WebIDAgent()
 
 let profile = {
   show: false,
+  username: localStorage.getItem('fake-user'),
   name: '',
   email: '',
   rsaModulus: '(rsa modulus missing)',
@@ -82,7 +83,8 @@ export default Reflux.createStore({
       webid: webid,
       webidPresent: webid,
       fixedTriples: fixedTriples,
-      prefixes: prefixes
+      prefixes: prefixes,
+      username: localStorage.getItem('fake-user') // @TODO replace this with proper login system
     }
 
     // triples which describe profile

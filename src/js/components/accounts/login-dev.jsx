@@ -1,12 +1,13 @@
-import React from 'react/addons'
+import React from 'react'
 import {Button} from 'react-mdl'
 import {Navigation} from 'react-router'
+
+import {linkToState} from 'lib/util'
 
 // login for development
 let LoginDev = React.createClass({
   mixins: [
-    Navigation,
-    React.addons.LinkedStateMixin
+    Navigation
   ],
   contextTypes: {
     muiTheme: React.PropTypes.object
@@ -24,7 +25,7 @@ let LoginDev = React.createClass({
   render() {
     return (
       <div className="jlc-login">
-        <input name="username" valueLink={this.linkState('username')} />
+        <input name="username" onChange={linkToState(this, 'username')} />
         <fieldset>
           <Button primary={true} raised={true} onClick={this.login}>Login</Button>
         </fieldset>

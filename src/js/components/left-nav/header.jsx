@@ -1,28 +1,23 @@
 import React from 'react'
-import Reflux from 'reflux'
 
 import {IconButton} from 'react-mdl'
 
 import Avatar from 'components/common/avatar.jsx'
 
 import ProfileActions from 'actions/profile'
-import ProfileStore from 'stores/profile'
 
 import NavActions from 'actions/nav'
 
 let Header = React.createClass({
-  mixins: [
-    Reflux.connect(ProfileStore)
-  ],
-  componentWillMount() {
-    ProfileActions.load()
+  contextTypes: {
+    profile: React.PropTypes.any
   },
   editProfile() {
     ProfileActions.show()
     NavActions.hide()
   },
   render() {
-    let initials, profile = this.state
+    let initials, {profile} = this.context
 
     if (profile.name)
       initials = profile.name[0]

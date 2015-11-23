@@ -1,11 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import {FABButton, Icon} from 'react-mdl'
+import {FloatingActionButton, FontIcon} from 'material-ui'
 
 let FabMenuItem = React.createClass({
   render() {
-    let {className, icon, ripple, label, ...otherProps} = this.props
+    let {className, icon, label, style, buttonStyle, iconStyle, ...otherProps} = this.props
 
     let classes = classNames('mdl-menu__fab-item', className)
 
@@ -14,11 +14,10 @@ let FabMenuItem = React.createClass({
     }
 
     return (
-      <div className={classes} {...otherProps}>
-        {label}
-        <FABButton mini={true} ripple={ripple} colored={true} className="mdl-menu__fab-item-button">
-          <Icon name={icon}/>
-        </FABButton>
+      <div className={classes} style={style}>
+        <FloatingActionButton mini={true} style={buttonStyle} zDept={1} {...otherProps}>
+          <FontIcon className="material-icons" style={iconStyle}>{icon}</FontIcon>
+        </FloatingActionButton>
       </div>
     )
   }

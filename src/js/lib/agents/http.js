@@ -13,6 +13,15 @@ class HTTPAgent {
     return this._req(url, 'GET', null, headers)
   }
 
+  // DELETE a resource represented by url
+  //
+  // @param {string} url resource url
+  //
+  // @return {Promise} promise with resulting xhr
+  delete(url, headers) {
+    return this._req(url, 'DELETE', null, headers)
+  }
+
 
   // PUT a resource represented by url
   //

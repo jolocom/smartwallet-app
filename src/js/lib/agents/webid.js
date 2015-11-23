@@ -1,18 +1,20 @@
 import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
-import {DC, FOAF, RDF} from '../namespaces.js'
+import {DC, FOAF, RDF, SIOC} from '../namespaces.js'
 import N3 from 'n3'
 import {dev} from '../../settings'
 
 let N3Util = N3.Util
 
+let origin = 'https://localhost:8443'
+
 // WebID related functions
 class WebIDAgent extends LDPAgent {
 
-  // Will check whether a resource exists on the origin server. 
+  // Will check whether a resource exists on the origin server.
   // If it does- we say that profile is taken.
   isFakeIDAvailable(username) {
-    return this.head(`${document.location.origin}/${username}`)
+    return this.head(`${origin}/${username}`)
       .then(() => {
         return false
       }).catch(() => {
@@ -21,7 +23,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   _formatFakeWebID(username) {
-    return `${document.location.origin}/${username}/profile/card#me`
+    return `${origin}/${username}/profile/card#me`
   }
 
   // get WebID depending on the mode
@@ -30,7 +32,7 @@ class WebIDAgent extends LDPAgent {
     if (dev) {
       getWebID = Promise.resolve(this._formatFakeWebID(localStorage.getItem('fake-user')))
     } else {
-      getWebID = this.head(document.location.origin)
+      getWebID = this.head(origin)
         .then((xhr) => {
           return xhr.getResponseHeader('User')
         })
@@ -44,14 +46,16 @@ class WebIDAgent extends LDPAgent {
     // create resource $username/profile/card
     // create container $username/little-sister
     // create container $username/little-sister/graph-comments
+    // create resource $username/little-sister/inbox
     // create container $username/little-sister/graph-nodes
 
-    let userContainer = `${document.location.origin}/${username}`
-    let userProfileContainer = `${document.location.origin}/${username}/profile`
-    let profileDoc = `${document.location.origin}/${username}/profile/card`
-    let appContainer = `${document.location.origin}/${username}/little-sister`
-    let commentsContainer = `${document.location.origin}/${username}/little-sister/graph-comments`
-    let nodesContainer = `${document.location.origin}/${username}/little-sister/graph-nodes`
+    let userContainer = `${origin}/${username}`
+    let userProfileContainer = `${origin}/${username}/profile`
+    let profileDoc = `${origin}/${username}/profile/card`
+    let appContainer = `${origin}/${username}/little-sister`
+    let inboxDoc = `${origin}/${username}/little-sister/inbox`
+    let commentsContainer = `${origin}/${username}/little-sister/graph-comments`
+    let nodesContainer = `${origin}/${username}/little-sister/graph-nodes`
 
     console.log('creating fake profile...')
     console.log(username)
@@ -66,14 +70,56 @@ class WebIDAgent extends LDPAgent {
         return Promise.all([this.createBasicContainer(commentsContainer), this.createBasicContainer(nodesContainer)])
       })
       .then(() => {
-        return this._profileTriples(username, name, email)
+        return Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
       })
-      .then((turtleText) => {
-        return this.put(profileDoc, {'Content-type': 'text/turtle'}, turtleText)
+      .then((results) => {
+        let profileText = results[0]
+        let inboxText = results[1]
+        let hdrs = {'Content-type': 'text/turtle'}
+        return Promise.all([this.put(profileDoc, hdrs, profileText), this.put(inboxDoc, hdrs, inboxText)])
       })
 
     console.log('done.')
     return p
+  }
+
+  _inboxTriples(username) {
+    if (!username) {
+      return Promise.reject('Must provide a username!')
+    }
+
+    let webid = `https://localhost:8443/${username}/profile/card#me`
+
+    let writer = new Writer()
+
+    let triples = [
+        {
+          subject: '',
+          predicate: DC.title,
+          object: N3Util.createLiteral(`Inbox of ${username}`)
+        },
+        {
+          subject: '',
+          predicate: FOAF.maker,
+          object: webid
+        },
+        {
+          subject: '',
+          predicate: FOAF.primaryTopic,
+          object: '#inbox'
+        },
+        {
+          subject: '#inbox',
+          predicate: RDF.type,
+          object: SIOC.Space
+        }
+    ]
+
+    for (var t of triples) {
+      writer.addTriple(t)
+    }
+
+    return writer.end()
   }
 
   _profileTriples(username, name, email) {
