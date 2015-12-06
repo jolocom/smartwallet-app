@@ -2,6 +2,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Radium from 'radium'
 import Reflux from 'reflux'
 import classNames from 'classnames'
 
@@ -345,4 +346,4 @@ let Graph = React.createClass({
 // </div>
 //             { this.state.chatOpen ? <Chat identity={this.state.identity} topic={this.state.centerNode.uri} origin={this.state.centerNode.uri} graph={this.state.graph} hide={this.hideChat}/> : ''}
 
-export default Graph
+export default Radium(Graph)

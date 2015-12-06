@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import Radium from 'radium'
 import classNames from 'classnames'
 
 import {
@@ -17,7 +18,7 @@ import NodeActions from 'actions/node'
 
 import NodeStore from 'stores/node'
 
-export default React.createClass({
+let Node = React.createClass({
   mixins: [
     Reflux.connect(NodeStore)
   ],
@@ -102,3 +103,5 @@ export default React.createClass({
     )
   }
 })
+
+export default Radium(Node)

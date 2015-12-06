@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Radium from 'radium'
 
 import {AppBar, IconButton, Styles, FontIcon} from 'material-ui'
 
 let {Colors} = Styles
 
-export default React.createClass({
+let SearchBar = React.createClass({
 
   getInitialState() {
     return {
@@ -98,3 +99,5 @@ export default React.createClass({
   }
 
 })
+
+export default Radium(SearchBar)

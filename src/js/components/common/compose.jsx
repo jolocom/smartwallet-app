@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Radium from 'radium'
 import classNames from 'classnames'
 
 import {IconButton} from 'material-ui'
 
-export default React.createClass({
+let Compose = React.createClass({
 
   getInitialState() {
     return {
@@ -54,3 +55,5 @@ export default React.createClass({
     )
   }
 })
+
+export default Radium(Compose)

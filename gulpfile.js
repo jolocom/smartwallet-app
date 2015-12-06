@@ -9,6 +9,7 @@ var gulpsync = require('gulp-sync')(gulp);
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var vinylPaths = require('vinyl-paths');
+var autoprefixer = require('gulp-autoprefixer');
 
 var sources = {
   app: './src/js/main.jsx',
@@ -85,6 +86,7 @@ gulp.task('sass', function () {
   return gulp.src(sources.sass)
     .pipe(sass())
     .pipe(concat('jolocom.css'))
+    .pipe(autoprefixer())
     .pipe(gulp.dest(destinations.css));
 });
 

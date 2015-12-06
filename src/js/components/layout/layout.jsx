@@ -1,10 +1,11 @@
 import React from 'react'
+import Radium from 'radium'
 
 import {Styles} from 'material-ui'
 
 let {Colors} = Styles
 
-export default React.createClass({
+let Layout = React.createClass({
 
   getStyles() {
     return {
@@ -24,3 +25,5 @@ export default React.createClass({
   }
 
 })
+
+export default Radium(Layout)

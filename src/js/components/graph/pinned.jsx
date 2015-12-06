@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import Radium from 'radium'
 import classNames from 'classnames'
 
 import {AppBar, IconButton, Styles} from 'material-ui'
@@ -38,7 +39,7 @@ import PinnedStore from 'stores/pinned'
 //   }
 // })
 
-export default React.createClass({
+let PinnedNodes = React.createClass({
 
   mixins: [Reflux.connect(PinnedStore)],
 
@@ -96,3 +97,5 @@ export default React.createClass({
     )
   }
 })
+
+export default Radium(PinnedNodes)

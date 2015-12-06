@@ -1,7 +1,8 @@
 import React from 'react'
+import Radium from 'radium'
 import _ from 'lodash'
 
-export default React.createClass({
+let Content = React.createClass({
 
   getStyles() {
     return {
@@ -27,3 +28,5 @@ export default React.createClass({
   }
 
 })
+
+export default Radium(Content)

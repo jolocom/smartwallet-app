@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import Radium from 'radium'
 import {History} from 'react-router'
 
 import {Layout, Content} from 'components/layout'
@@ -24,7 +25,7 @@ import PinnedActions from 'actions/pinned'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-export default React.createClass({
+let App = React.createClass({
 
   mixins: [
     History,
@@ -179,3 +180,5 @@ export default React.createClass({
   }
 
 })
+
+export default Radium(App)

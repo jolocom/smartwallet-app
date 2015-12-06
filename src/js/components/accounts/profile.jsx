@@ -1,6 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import classNames from 'classnames'
+import Radium from 'radium'
 
 import {Layout, Content} from 'components/layout'
 import {AppBar, IconButton, TextField, Styles} from 'material-ui'
@@ -103,4 +104,4 @@ let Profile = React.createClass({
   }
 })
 
-export default Profile
+export default Radium(Profile)

@@ -1,4 +1,5 @@
 import React from 'react'
+import Radium from 'radium'
 import classNames from 'classnames'
 
 import {AppBar, IconButton, TextField, Styles} from 'material-ui'
@@ -10,7 +11,7 @@ import NodeActions from 'actions/node'
 
 import {linkToState} from 'lib/util'
 
-export default React.createClass({
+let NodeAdd = React.createClass({
 
   contextTypes: {
     history: React.PropTypes.any,
@@ -41,9 +42,9 @@ export default React.createClass({
     NodeActions.add(this.props.params.node, 'https://localhost:8443/eelco/profile/card#me', {
       title: this.state.title,
       description: this.state.description
-    }).then(() => {
-      this.close()
     })
+    // TODO listen to store update
+    this.close()
   },
 
   getStyles() {
@@ -85,3 +86,5 @@ export default React.createClass({
     )
   }
 })
+
+export default Radium(NodeAdd)

@@ -1,6 +1,7 @@
 import React from 'react'
+import Radium from 'radium'
 
-export default React.createClass({
+let Spacer = React.createClass({
 
   getStyles() {
     return {
@@ -17,3 +18,5 @@ export default React.createClass({
   }
 
 })
+
+export default Radium(Spacer)

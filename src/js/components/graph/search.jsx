@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import Radium from 'radium'
 import ReactDOM from 'react-dom'
 
 import {Paper, AppBar, IconButton, Styles, FontIcon} from 'material-ui'
@@ -13,7 +14,7 @@ let {Colors} = Styles
 import SearchActions from 'actions/search'
 import SearchStore from 'stores/search'
 
-export default React.createClass({
+let Search = React.createClass({
   mixins: [Reflux.connect(SearchStore)],
   getInitialState() {
     return {
@@ -133,3 +134,5 @@ export default React.createClass({
   }
 
 })
+
+export default Radium(Search)

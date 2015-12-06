@@ -7,7 +7,7 @@ let JolocomTheme = {
   spacing: Spacing,
   contentFontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: Colors.lightBlue500,
+    primary1Color: '#009fe3',
     primary2Color: Colors.lightBlue700,
     primary3Color: Colors.lightBlue200,
     accent1Color: Colors.pinkA200,

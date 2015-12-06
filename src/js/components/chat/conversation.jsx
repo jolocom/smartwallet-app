@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
+import Radium from 'radium'
 import classNames from 'classnames'
 import moment from 'moment'
 
@@ -16,7 +17,7 @@ import ConversationStore from 'stores/conversation'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
-export default React.createClass({
+let Conversation = React.createClass({
 
   mixins: [
     Reflux.connect(ConversationStore, 'conversation'),
@@ -165,3 +166,5 @@ export default React.createClass({
     )
   }
 })
+
+export default Radium(Conversation)

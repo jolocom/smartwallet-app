@@ -34,9 +34,9 @@ class Util {
   }
 
   static linkToState(target, property) {
-    return value => {
+    return (e) => {
       target.setState({
-        [property]: value
+        [property]: e.target.value
       })
     }
   }

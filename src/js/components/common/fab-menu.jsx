@@ -1,4 +1,5 @@
 import React, {Children} from 'react'
+import Radium from 'radium'
 import classNames from 'classnames'
 
 import _ from 'lodash'
@@ -120,4 +121,4 @@ let FabMenu = React.createClass({
 
 })
 
-export default FabMenu
+export default Radium(FabMenu)
