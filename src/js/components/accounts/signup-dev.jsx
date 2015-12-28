@@ -1,7 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import {TextField, RaisedButton} from 'material-ui'
-import {History, Lifecycle} from 'react-router'
+import {History, Lifecycle, Link} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityDevStore from 'stores/availability-dev'
@@ -80,6 +80,7 @@ let SignupDev = React.createClass({
 
           <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={{width: '100%'}}>Sign up</RaisedButton>
         </main>
+        <p>Already have an account? <Link to="login">login instead</Link>.</p>
       </div>
     )
   }

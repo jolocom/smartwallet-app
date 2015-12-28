@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom'
 
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
-import Router, { Route } from 'react-router'
+import Router, { Route, IndexRoute } from 'react-router'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import App from 'components/app.jsx'
+import Index from 'components/index.jsx'
 import Graph from 'components/graph/graph.jsx'
 import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
@@ -18,7 +19,7 @@ import Contacts from 'components/contacts/contacts.jsx'
 import Contact from 'components/contacts/contact.jsx'
 import Projects from 'components/projects/projects.jsx'
 
-import LoginDev from 'components/accounts/login-dev.jsx'
+import Login from 'components/accounts/login-dev.jsx'
 import Test from 'components/test.jsx'
 //import SignupProd from 'components/signup.jsx'
 import Signup from 'components/accounts/signup-dev.jsx'
@@ -50,6 +51,7 @@ moment.locale('en', {
 
 let routes = (
   <Route path='/' component={App}>
+    <IndexRoute component={Index}/>
     <Route path='graph(/:node)' component={Graph} title='Graph'>
       <Route path='/graph/:node/add/:type' component={AddNode}/>
       <Route path='/graph/:node/details' component={Node}/>
@@ -63,7 +65,7 @@ let routes = (
     </Route>
     <Route path='projects' component={Projects}/>
     <Route path='signup' component={Signup}/>
-    <Route path='login' component={LoginDev}/>
+    <Route path='login' component={Login}/>
     <Route path='test' component={Test}/>
   </Route>
 )

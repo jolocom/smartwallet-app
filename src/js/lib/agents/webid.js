@@ -6,7 +6,7 @@ import {dev} from '../../settings'
 
 let N3Util = N3.Util
 
-let origin = 'https://localhost:8443'
+import {endpoint} from 'settings'
 
 // WebID related functions
 class WebIDAgent extends LDPAgent {
@@ -14,7 +14,7 @@ class WebIDAgent extends LDPAgent {
   // Will check whether a resource exists on the origin server.
   // If it does- we say that profile is taken.
   isFakeIDAvailable(username) {
-    return this.head(`${origin}/${username}`)
+    return this.head(`${endpoint}/${username}`)
       .then(() => {
         return false
       }).catch(() => {
@@ -23,7 +23,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   _formatFakeWebID(username) {
-    return `${origin}/${username}/profile/card#me`
+    return `${endpoint}/${username}/profile/card#me`
   }
 
   // get WebID depending on the mode
@@ -32,7 +32,7 @@ class WebIDAgent extends LDPAgent {
     if (dev) {
       getWebID = Promise.resolve(this._formatFakeWebID(localStorage.getItem('fake-user')))
     } else {
-      getWebID = this.head(origin)
+      getWebID = this.head(endpoint)
         .then((xhr) => {
           return xhr.getResponseHeader('User')
         })
@@ -49,13 +49,13 @@ class WebIDAgent extends LDPAgent {
     // create resource $username/little-sister/inbox
     // create container $username/little-sister/graph-nodes
 
-    let userContainer = `${origin}/${username}`
-    let userProfileContainer = `${origin}/${username}/profile`
-    let profileDoc = `${origin}/${username}/profile/card`
-    let appContainer = `${origin}/${username}/little-sister`
-    let inboxDoc = `${origin}/${username}/little-sister/inbox`
-    let commentsContainer = `${origin}/${username}/little-sister/graph-comments`
-    let nodesContainer = `${origin}/${username}/little-sister/graph-nodes`
+    let userContainer = `${endpoint}/${username}`
+    let userProfileContainer = `${endpoint}/${username}/profile`
+    let profileDoc = `${endpoint}/${username}/profile/card`
+    let appContainer = `${endpoint}/${username}/little-sister`
+    let inboxDoc = `${endpoint}/${username}/little-sister/inbox`
+    let commentsContainer = `${endpoint}/${username}/little-sister/graph-comments`
+    let nodesContainer = `${endpoint}/${username}/little-sister/graph-nodes`
 
     console.log('creating fake profile...')
     console.log(username)
@@ -88,7 +88,7 @@ class WebIDAgent extends LDPAgent {
       return Promise.reject('Must provide a username!')
     }
 
-    let webid = `https://localhost:8443/${username}/profile/card#me`
+    let webid = `${endpoint}/${username}/profile/card#me`
 
     let writer = new Writer()
 

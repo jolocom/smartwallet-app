@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import classNames from 'classnames'
+import {endpoint} from 'settings'
 
 import {AppBar, IconButton, TextField, Styles} from 'material-ui'
 import {Layout, Content} from 'components/layout'
@@ -39,7 +40,7 @@ let NodeAdd = React.createClass({
   },
 
   onSubmit() {
-    NodeActions.add(this.props.params.node, 'https://localhost:8443/eelco/profile/card#me', {
+    NodeActions.add(this.props.params.node, `${endpoint}/eelco/profile/card#me`, {
       title: this.state.title,
       description: this.state.description
     })

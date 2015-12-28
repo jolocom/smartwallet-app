@@ -1,13 +1,16 @@
 import React from 'react'
 
 export default React.createClass({
-
   contextTypes: {
     history: React.PropTypes.any
   },
 
   componentWillMount() {
-    this.history.pushState(null, '/signup')
+    if (localStorage.getItem('fake-user')) {
+      this.context.history.pushState(null, '/graph')
+    } else {
+      this.context.history.pushState(null, '/signup')
+    }
   },
 
   render: function() {

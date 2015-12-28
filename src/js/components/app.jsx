@@ -53,14 +53,17 @@ let App = React.createClass({
   },
 
   componentWillMount() {
-    ProfileActions.load()
-
     let path = this.props.location.pathname
-    if (!this.state.signedUp && path !== 'signup' && path !== 'login') {
+
+    if (!this.state.signedUp && path !== '/signup' && path !== '/login') {
       this.history.pushState(null, '/signup')
     } else if (path === '/') {
       this.history.pushState(null, '/graph')
     }
+  },
+
+  componentDidMount() {
+    ProfileActions.load()
   },
 
   getComponent() {
