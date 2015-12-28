@@ -21,10 +21,7 @@ let SignupDev = React.createClass({
     if (this.state.signedUp)
       this.history.pushState(null, '/graph')
   },
-  routerWillLeave() {
-    if (!this.state.signedUp)
-      return false
-  },
+
   signup() {
     let signupData = {
       username: this.state.username,
