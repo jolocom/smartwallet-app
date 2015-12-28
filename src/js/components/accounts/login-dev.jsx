@@ -43,7 +43,7 @@ let LoginDev = React.createClass({
             <RaisedButton primary={true} onTouchTap={this.login}>Login</RaisedButton>
           </fieldset>
         </main>
-        <p>Don't have an account yet? <Link to="signup">Sign up</Link>.</p>
+        <p>Don't have an account yet? <Link to="/signup">Sign up</Link>.</p>
       </div>
     )
   }
