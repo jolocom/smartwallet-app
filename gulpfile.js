@@ -10,6 +10,7 @@ var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var vinylPaths = require('vinyl-paths');
 var autoprefixer = require('gulp-autoprefixer');
+var argv = require('yargs').argv;
 
 var sources = {
   app: './src/js/main.jsx',
@@ -24,7 +25,8 @@ var sources = {
   ],
   libCss: [
   ],
-  sass: './src/sass/**/*.scss'
+  sass: './src/sass/**/*.scss',
+  config: './config'
 };
 
 var destinations = {
@@ -33,7 +35,18 @@ var destinations = {
   img: './dist/img',
   js: './dist/js',
   root: './dist',
+  build: './build'
 };
+
+var env = (!!argv.env
+  ? argv.env
+    : process.env.NODE_ENV || 'development');
+
+gulp.task('config', function() {
+  return gulp.src(sources.config + '/' + env + '.js')
+    .pipe(rename('settings.js'))
+    .pipe(gulp.dest(destinations.build));
+});
 
 gulp.task('lib', function() {
   return gulp.src(sources.lib)
@@ -52,6 +65,11 @@ gulp.task('lib-fonts', function() {
     .pipe(gulp.dest(destinations.fonts));
 });
 
+gulp.task('src', function() {
+  return gulp.src(sources.js)
+    .pipe(gulp.dest(destinations.build));
+});
+
 gulp.task('scripts', function() {
   return gulp.src(sources.app)
     .pipe(browserify({
@@ -59,7 +77,7 @@ gulp.task('scripts', function() {
       debug: true,
       paths: [
         './node_modules',
-        './src/js'
+        './build'
       ]
     }))
     .pipe(rename('app.js'))
@@ -94,6 +112,10 @@ gulp.task('clean', function () {
   return gulp.src('./dist/*').pipe(vinylPaths(del));
 });
 
+gulp.task('clean-build', function () {
+  return gulp.src('./build/*').pipe(vinylPaths(del));
+});
+
 gulp.task('lint', function () {
     return gulp.src(sources.js)
         .pipe(eslint())
@@ -102,9 +124,9 @@ gulp.task('lint', function () {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(sources.js, ['lint', 'scripts']);
+  gulp.watch(sources.js, gulpsync.sync(['clean-build', 'lint', ['config', 'src'], ['scripts']]));
   gulp.watch(sources.html, ['html']);
   gulp.watch(sources.sass, ['sass']);
 });
 
-gulp.task('default', gulpsync.sync(['clean', 'lint', ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));
+gulp.task('default', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'watch']));
