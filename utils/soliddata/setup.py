@@ -7,5 +7,5 @@ setup(name='soliddata',
       author_email='root@reederz.com',
       packages=['soliddata'],
       scripts=['bin/soliddata'],
-      install_requires=['rdflib'],
+      install_requires=['rdflib', 'jsonschema'],
       )
