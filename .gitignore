@@ -3,6 +3,7 @@ dist/
 node_modules/
 public/
 build/
+ldpc-*
 
 # Python
 venv/

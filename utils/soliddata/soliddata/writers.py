@@ -6,6 +6,9 @@ import shutil
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import Namespace, FOAF, DCTERMS, RDF
 
+
+SIOC = Namespace('http://rdfs.org/sioc/ns#')
+
 class Person:
     def __init__(self, **kwargs):
         self.friend_webids = []
@@ -39,10 +42,56 @@ class SolidDataWriter:
         '''
 
         def profile_doc_content():
-            return 'profile'
+            graph = Graph()
+
+            # WebID document URI
+            doc_uri = URIRef('')
+
+            # WebID URI
+            webid_uri = URIRef('#me')
+
+            graph.add((doc_uri, DCTERMS.title,
+                       Literal('WebID profile of {}'.format(person.name))))
+
+            # About doc
+            graph.add((doc_uri, RDF.type, FOAF.PersonalProfileDocument))
+            graph.add((doc_uri, FOAF.maker, webid_uri))
+            graph.add((doc_uri, FOAF.primaryTopic, webid_uri))
+
+            # About person
+            graph.add((webid_uri, RDF.type, FOAF.Person))
+            graph.add((webid_uri, FOAF.name, Literal(person.name)))
+            graph.add((webid_uri, DCTERMS.description,
+                       Literal(person.description)))
+
+            for f in person.friend_webids:
+                graph.add((webid_uri, FOAF.knows, URIRef(f)))
+
+            return graph.serialize(format='turtle')
 
         def inbox_doc_content():
-            return 'inbox'
+            graph = Graph()
+
+            # inbox document URI
+            doc_uri = URIRef('')
+
+            # inbox URI
+            inbox_uri = URIRef('#inbox')
+
+            # WebID URI
+            webid_uri = URIRef(person.webid)
+
+            # About doc
+            graph.add((doc_uri, DCTERMS.title,
+                       Literal('Inbox of {}'.format(person.name))))
+
+            graph.add((doc_uri, FOAF.maker, webid_uri))
+            graph.add((doc_uri, FOAF.primaryTopic, inbox_uri))
+
+            # About inbox
+            graph.add((inbox_uri, RDF.type, SIOC.Space))
+
+            return graph.serialize(format='turtle')
 
         print('writing person {}'.format(person.webid))
         # Assume that base container already exists
