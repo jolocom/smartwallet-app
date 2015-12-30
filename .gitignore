@@ -3,3 +3,8 @@ dist/
 node_modules/
 public/
 build/
+
+# Python
+venv/
+*.pyc
+.ropeproject/
