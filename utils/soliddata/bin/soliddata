@@ -1,0 +1,14 @@
+#!/usr/bin/env python2
+
+import argparse
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='Generate test data for little-sister app')
+
+    parser.add_argument('--blueprint', dest='blueprint')
+    parser.add_argument('--output-dir', dest='output_dir', default='.')
+    args = parser.parse_args()
+
+    print(args.blueprint)
+    print(args.output_dir)
