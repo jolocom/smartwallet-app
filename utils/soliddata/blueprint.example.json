@@ -1,0 +1,25 @@
+{
+    "servers": [
+        {
+            "name": "gold",
+            "location": "https://gold.jolocom.com",
+            "people": [
+                {
+                    "id": "christian",
+                    "name": "Christian",
+                    "description": "Music and Tech is really not that different at all",
+                    "friends": [
+                        "joachim"
+                    ]
+                },
+                {
+                    "id": "joachim",
+                    "name": "Joachim",
+                    "description": "Networking and Business specialist from Berlin",
+                    "friends": [
+                    ]
+                }
+            ]
+        }
+    ]
+}
