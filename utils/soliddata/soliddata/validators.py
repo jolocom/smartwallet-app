@@ -63,6 +63,9 @@ def validate_blueprint(blueprint):
         raise ValidationError('people ids are not unique')
 
     for p in people_flattened:
+        if len(p['friends']) != len(set(p['friends'])):
+            raise ValidationError('friends ids are not unique')
+
         for f in p['friends']:
             if f == p['id']:
                 err = 'cannot have self referencial friend connection'
