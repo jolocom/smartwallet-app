@@ -9,10 +9,12 @@ from rdflib.namespace import Namespace, FOAF, DCTERMS, RDF
 
 SIOC = Namespace('http://rdfs.org/sioc/ns#')
 
+
 class Person:
     def __init__(self, **kwargs):
         self.friend_webids = []
         self.__dict__.update(kwargs)
+
 
 class SolidDataWriter:
     def __init__(self, blueprint, output_dir):
@@ -24,7 +26,8 @@ class SolidDataWriter:
 
     def _write_server_container(self, server_dict):
         print('writing server {}'.format(server_dict['location']))
-        container_dir = '{}/ldpc-{}'.format(self.output_dir, server_dict['name'])
+        container_dir = '{}/ldpc-{}'.format(self.output_dir,
+                                            server_dict['name'])
         if os.path.exists(container_dir):
             shutil.rmtree(container_dir)
         os.makedirs(container_dir)
@@ -120,7 +123,6 @@ class SolidDataWriter:
         with open(webid_doc, 'w') as f:
             f.write(profile_doc_content())
 
-
     def write_containers(self):
         '''Generates LDP containers and resources from self.blueprint'''
 
@@ -137,6 +139,9 @@ class SolidDataWriter:
             p.webid = self._webid_url(p.server_location, p.id)
             for fid in p.friends:
                 f = people_dict[fid]
-                p.friend_webids.append(self._webid_url(f.server_location,
-                                                            f.id))
+                p.friend_webids.append(self._webid_url(f.server_location, f.id))
+                # Backlinks
+                if p.id not in f.friends:
+                    f.friend_webids.append(self._webid_url(p.server_location,
+                                                           p.id))
             self._write_person_container(p)
