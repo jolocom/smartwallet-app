@@ -1,4 +1,0 @@
-<> <http://purl.org/dc/terms/title> "Inbox of christian";
-    <http://xmlns.com/foaf/0.1/maker> <https://localhost:8443/christian/profile/card#me>;
-    <http://xmlns.com/foaf/0.1/primaryTopic> <#inbox>.
-<#inbox> a <http://rdfs.org/sioc/ns#Space>.
