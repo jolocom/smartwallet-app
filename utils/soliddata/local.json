@@ -1,0 +1,35 @@
+{
+    "servers": [
+        {
+            "name": "gold",
+            "location": "https://localhost:8443",
+            "people": [
+                {
+                    "id": "christian",
+                    "name": "Christian",
+                    "description": "Music and Tech is really not that different at all",
+                    "friends": [
+                        "joachim",
+                        "justas"
+                    ]
+                },
+                {
+                    "id": "joachim",
+                    "name": "Joachim",
+                    "description": "Networking and Business specialist from Berlin",
+                    "friends": [
+                        "justas"
+                    ]
+                },
+                {
+                    "id": "justas",
+                    "name": "Justas",
+                    "description": "Web Developer",
+                    "friends": [
+                        "joachim"
+                    ]
+                }
+            ]
+        }
+    ]
+}
