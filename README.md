@@ -16,10 +16,24 @@ npm install
 bower install
 ```
 
-## Running
+## Install python tools for test data generation
+```
+python utils/soliddata/setup.py develop
+```
+
+## Generate test data for single test server (https://localhost:8443)
+```
+soliddata --blueprint utils/soliddata/local.json --output-dir data --flatten
+```
+
+## Building
 ```bash
 gulp
 ```
+
+## Addtional
+You have to have a SoLiD server serving `dist/` directory (built by `gulp` in the previous step)
+
 
 git-flow
 --------
