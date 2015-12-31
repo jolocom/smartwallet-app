@@ -4,6 +4,7 @@ node_modules/
 public/
 build/
 ldpc-*
+data/
 
 # Python
 venv/
