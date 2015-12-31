@@ -17,17 +17,23 @@ class Person:
 
 
 class SolidDataWriter:
-    def __init__(self, blueprint, output_dir):
+    def __init__(self, blueprint, output_dir, flatten=False):
         self.blueprint = blueprint
         self.output_dir = output_dir
+        self.flatten = flatten
 
     def _webid_url(self, server_location, person_id):
         return '{}/{}/profile/card#me'.format(server_location, person_id)
 
+    def _container_base(self, server_name):
+        if not self.flatten:
+            return '{}/ldpc-{}'.format(self.output_dir, server_name)
+        else:
+            return self.output_dir
+
     def _write_server_container(self, server_dict):
         print('writing server {}'.format(server_dict['location']))
-        container_dir = '{}/ldpc-{}'.format(self.output_dir,
-                                            server_dict['name'])
+        container_dir = self._container_base(server_dict['name'])
         if os.path.exists(container_dir):
             shutil.rmtree(container_dir)
         os.makedirs(container_dir)
@@ -98,7 +104,7 @@ class SolidDataWriter:
 
         print('writing person {}'.format(person.webid))
         # Assume that base container already exists
-        base_c = '{}/ldpc-{}'.format(self.output_dir, person.server_name)
+        base_c = self._container_base(person.server_name)
 
         person_c = '{}/{}'.format(base_c, person.id)
         os.makedirs(person_c)
