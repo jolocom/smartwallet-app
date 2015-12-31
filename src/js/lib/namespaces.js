@@ -3,6 +3,7 @@
 const foaf  = 'http://xmlns.com/foaf/0.1/'
 export const FOAF = {
   img: `${foaf}img`,
+  knows: `${foaf}knows`,
   mbox: `${foaf}mbox`,
   maker: `${foaf}maker`,
   name: `${foaf}name`,

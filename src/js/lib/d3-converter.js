@@ -100,7 +100,7 @@ class D3Converter {
     console.log(literals)
 
     // These are the only links which we will follow in the graph
-    let validLinks = [SIOC.containerOf, SIOC.hasContainer]
+    let validLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows]
 
     //triples which subject equal to center of the graph
     let allOutwards = targetTriples.filter((t) => t.subject == center && validLinks.indexOf(t.predicate) >= 0)
