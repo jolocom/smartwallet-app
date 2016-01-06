@@ -27,6 +27,10 @@ class Util {
     return Math.random().toString(36).substring(2, length + 3)
   }
 
+  static webidRoot(webid) {
+    return webid.match(/^(.*)\/profile\/card#me$/)[1]
+  }
+
   static urlWithoutHash(target) {
     let obj = url.parse(target)
     obj.hash = null

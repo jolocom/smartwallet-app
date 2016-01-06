@@ -19,7 +19,7 @@ class ChatAgent extends LDPAgent {
     // update inbox indices of all participants
     //
     let conversationId = Util.randomString(5)
-    let conversationDoc = `${this._webidRoot(initiator)}/little-sister/chats/${conversationId}`
+    let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
     let hdrs = {'Content-type': 'text/turtle'}
     return this._conversationTriples(initiator, participants)
       .then((conversationDocContent) => {
@@ -212,7 +212,7 @@ class ChatAgent extends LDPAgent {
   }
 
   getInboxConversations(webid) {
-    let inbox = `${this._webidRoot(webid)}/little-sister/inbox`
+    let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
     return this.get(inbox)
       .then((xhr) => {
         let parser = new Parser()
@@ -224,7 +224,7 @@ class ChatAgent extends LDPAgent {
   }
 
   _linkConversation(conversationUrl, webid) {
-    let inbox = `${this._webidRoot(webid)}/little-sister/inbox`
+    let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
     return this.get(inbox)
       .then((xhr) => {
         let parser = new Parser()
@@ -249,9 +249,6 @@ class ChatAgent extends LDPAgent {
       })
   }
 
-  _webidRoot(webid) {
-    return webid.match(/^(.*)\/profile\/card#me$/)[1]
-  }
 
   _conversationTriples(initiator, participants) {
     let writer = new Writer()

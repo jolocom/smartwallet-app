@@ -8,6 +8,7 @@ export const FOAF = {
   maker: `${foaf}maker`,
   name: `${foaf}name`,
   primaryTopic: `${foaf}primaryTopic`,
+  Document: `${foaf}Document`,
   Person: `${foaf}Person`,
   PersonalProfileDocument: `${foaf}PersonalProfileDocument`
 }
@@ -51,4 +52,11 @@ export const SIOC = {
   hasSpace: `${sioc}has_space`,
   hasSubscriber: `${sioc}has_subscriber`,
   spaceOf: `${sioc}space_of`
+}
+
+const ssn = 'http://purl.oclc.org/NET/ssnx/ssn#'
+export const SSN = {
+  hasValue: `${ssn}hasValue`,
+  observes: `${ssn}observes`,
+  Sensor: `${ssn}Sensor`
 }
