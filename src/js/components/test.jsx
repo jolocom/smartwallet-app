@@ -9,6 +9,11 @@ import N3 from 'n3'
 let N3Util = N3.Util
 let webidAgent = new WebIDAgent()
 let socket = null
+
+/*
+ See $REPO_ROOT/kickoff for instructions
+*/
+
 let Test = React.createClass({
   getInitialState() {
     return {
@@ -43,20 +48,26 @@ let Test = React.createClass({
   },
 
   componentDidMount() {
-    console.log('test component did mount')
+
+    // first derive sensor url from webid
     webidAgent.getWebID()
       .then((webid) => {
         let webidRoot = Util.webidRoot(webid)
         let sensorUrl = `${webidRoot}/little-sister/sensor`
         this.setState({
           webid: webid,
-          sensorUrl: sensorUrl
+          sensorUrl: sensorUrl,
+          measurement: 'n/a',
+          measurementDesc: 'n/a'
         })
+
+        // then get the sensor url
         return webidAgent.get(sensorUrl)
       })
       .then((xhr) => {
-        let wsUrl = xhr.getResponseHeader('Updates-Via')
 
+        // subscribe to live updates of sensor resource
+        let wsUrl = xhr.getResponseHeader('Updates-Via')
         socket = new WebSocket(wsUrl)
         let self = this
         socket.onopen = function() {
@@ -72,7 +83,6 @@ let Test = React.createClass({
                 return self.parseSensorRDF(xhr.response)
               })
               .then((parsed) => {
-                console.log('parsed', parsed)
                 self.setState({
                   webid: self.state.webid,
                   sensorUrl: self.state.sensorUrl,
@@ -83,10 +93,10 @@ let Test = React.createClass({
           }
         }
 
+        // initial load of sensor data
         return this.parseSensorRDF(xhr.response)
       })
       .then((parsed) => {
-        console.log('parsed', parsed)
         this.setState({
           webid: this.state.webid,
           sensorUrl: this.state.sensorUrl,
