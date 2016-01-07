@@ -194,6 +194,12 @@ export default class GraphD3 {
     nodeOld.transition()
       .style('opacity', 0)
       .remove()
+      .call(function(nodes) {
+        nodes.each(function(d) {
+          if (d.subscription)
+            sensorAgent.unsubscribe(d.subscription)
+        })
+      })
 
     // NB(philipp): on init, the `fixed`-attribute of nodes is cleared
     // and needs to be re-set. also, the asynchronous call to init can interrupt
@@ -340,7 +346,6 @@ export default class GraphD3 {
       data.subscription = subscriptionId
       sensor.data(data)
     })
-
   }
 
   getSensorColor(temp) {
