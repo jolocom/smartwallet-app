@@ -63,6 +63,7 @@ let Graph = React.createClass({
     console.log('change center to: ')
     console.log(center)
     let dataSource = newData ? newData : this.state
+
     let res = {
       nodes: dataSource.nodes,
       links: dataSource.links,
@@ -327,6 +328,7 @@ let Graph = React.createClass({
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
           <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>
           <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
+          <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.addNode('sensor')}}/>
         </FabMenu>
 
         <div className="jlc-graph-chart" ref="graph"></div>

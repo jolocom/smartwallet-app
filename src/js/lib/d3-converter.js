@@ -1,5 +1,5 @@
 import N3 from 'n3'
-import {DC, FOAF, RDF, SIOC} from '../lib/namespaces.js'
+import {DC, FOAF, RDF, SIOC, SSN} from '../lib/namespaces.js'
 
 let N3Util = N3.Util
 
@@ -43,7 +43,12 @@ class D3Converter {
           title = D3Converter._getValue(t.object)
         }
       }
-
+    } else if (type === SSN.Sensor)  {
+      for (t of triples) {
+        if (t.subject == subject && t.predicate == SSN.hasValue) {
+          title = D3Converter._getValue(t.object)
+        }
+      }
     } else {
       for (t of triples) {
         if (t.subject == subject && t.predicate == DC.title) {
@@ -64,6 +69,25 @@ class D3Converter {
     }
 
     return desc
+  }
+
+  static _getNodeType(subject, triples) {
+    let type = null
+    for (var t of triples) {
+      if (t.subject == subject && t.predicate == RDF.type) {
+        type = t.object
+        break
+      }
+    }
+
+    let nodeType = 'node'
+    if (type === FOAF.Person) {
+      nodeType = 'contact'
+    } else if (type === SSN.Sensor) {
+      nodeType = 'sensor'
+    }
+
+    return nodeType
   }
 
   //TODO: this is bullshit- should simplify
@@ -129,7 +153,8 @@ class D3Converter {
       subjectType: 'uri',
       uri: center,
       title: D3Converter._getTitle(center, triples),
-      description: D3Converter._getDescription(center, triples)
+      description: D3Converter._getDescription(center, triples),
+      nodeType: D3Converter._getNodeType(center, triples)
     }
     if(!(centerData.subject in connections)) {
       connections[centerData.subject] = cnt
@@ -138,7 +163,8 @@ class D3Converter {
         type: centerData.subjectType,
         uri: centerData.uri,
         title: centerData.title,
-        description: centerData.description
+        description: centerData.description,
+        nodeType: centerData.nodeType
       })
       cnt += 1
     }
@@ -152,7 +178,8 @@ class D3Converter {
           type: out.subjectType,
           uri: out.subject,
           title: D3Converter._getTitle(out.subject, triples),
-          description: D3Converter._getDescription(out.subject, triples)
+          description: D3Converter._getDescription(out.subject, triples),
+          nodeType: D3Converter._getNodeType(out.subject, triples)
         })
         cnt += 1
       }
@@ -164,7 +191,8 @@ class D3Converter {
           type: out.objectType,
           uri: out.object,
           title: D3Converter._getTitle(out.object, triples),
-          description: D3Converter._getDescription(out.object, triples)
+          description: D3Converter._getDescription(out.object, triples),
+          nodeType: D3Converter._getNodeType(out.object, triples)
         })
         cnt += 1
       }

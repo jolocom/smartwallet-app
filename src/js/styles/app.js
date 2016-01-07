@@ -8,7 +8,12 @@ const STYLES = {
   highLightColor: '#9BD161',
   nodeTransitionDuration: 400,
   smallNodeSize: window.innerWidth / 4.7,
-  largeNodeSize: window.innerWidth * .5
+  largeNodeSize: window.innerWidth * .5,
+  tempCold: '#5E35B1',
+  tempCool: '#039BE5',
+  tempNormal: '#43A047',
+  tempWarm: '#FDD835',
+  tempHot: '#E53935'
 }
 
 export default STYLES

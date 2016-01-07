@@ -2,7 +2,11 @@ import d3 from 'd3'
 
 import Util from './util.js'
 
+import SensorAgent from './agents/sensor'
+
 import STYLES from 'styles/app'
+
+let sensorAgent = new SensorAgent()
 
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
@@ -86,6 +90,7 @@ export default class GraphD3 {
 
   // Invoked in 'componentDidUpdate' of react graph
   update(prevState, state) {
+    let self = this
     let svg = d3.select(this.el).select('svg').select('g')
 
     this.force
@@ -157,7 +162,12 @@ export default class GraphD3 {
       .attr('y', '-8px')
       .attr('width', STYLES.smallNodeSize)
       .attr('height', STYLES.smallNodeSize)
-      .style('fill', STYLES.grayColor)
+      .style('fill', (d) => {
+        if (d.nodeType === 'sensor') {
+          return this.getSensorColor(d.title)
+        }
+        return STYLES.grayColor
+      })
       .style('stroke', 'white')
       .style('stroke-width', 0)
 
@@ -170,6 +180,13 @@ export default class GraphD3 {
       .attr('dy', '.35em')
       .text((d) => d.title)
       .call(this.wrap, STYLES.smallNodeSize * 0.9, '', '') // returns only wrapped titles, so we can push them up later
+
+    nodeNew.filter((d) => d.nodeType == 'sensor')
+      .call(function(nodes) {
+        nodes.each(function(d) {
+          self.subscribeToUpdates(this, d)
+        })
+      })
 
     // remove old nodes
     let nodeOld = node.exit()
@@ -312,6 +329,33 @@ export default class GraphD3 {
       .on('dragend', this.forceDragEnd(state.nodes, state.centerNode))
 
     this.force.start()
+  }
+
+  subscribeToUpdates(node, data) {
+    let sensor = d3.select(node)
+    sensorAgent.subscribe(data.uri, ({value}) => {
+      sensor.select('text').text(value)
+      sensor.select('circle').style('fill', () => this.getSensorColor(value))
+    }).then((subscriptionId) => {
+      data.subscription = subscriptionId
+      sensor.data(data)
+    })
+
+  }
+
+  getSensorColor(temp) {
+    temp = parseInt(temp)
+    if (temp < 15) {
+      return STYLES.tempCold
+    } else if (temp >= 15 && temp < 20) {
+      return STYLES.tempCool
+    } else if (temp >= 20 && temp < 25) {
+      return STYLES.tempNormal
+    } else if (temp >= 25 && temp < 30) {
+      return STYLES.tempWarm
+    } else {
+      return STYLES.tempHot
+    }
   }
 
   // Invoked in 'componentWillUpdate' of react graph

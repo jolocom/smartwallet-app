@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import _ from 'lodash'
 import classNames from 'classnames'
 import {endpoint} from 'settings'
 
@@ -10,7 +11,21 @@ let {Colors} = Styles
 
 import NodeActions from 'actions/node'
 
-import {linkToState} from 'lib/util'
+let types = {
+  sensor: {
+    uri: {
+      label: 'URL'
+    }
+  },
+  default: {
+    title: {
+      label: 'Title'
+    },
+    description: {
+      label: 'Description'
+    }
+  }
+}
 
 let NodeAdd = React.createClass({
 
@@ -40,10 +55,8 @@ let NodeAdd = React.createClass({
   },
 
   onSubmit() {
-    NodeActions.add(this.props.params.node, `${endpoint}/eelco/profile/card#me`, {
-      title: this.state.title,
-      description: this.state.description
-    })
+    let values = _.pick(this.state, _.keys(types[this.props.params.type] || types.default))
+    NodeActions.add(this.props.params.node, `${endpoint}/eelco/profile/card#me`, values)
     // TODO listen to store update
     this.close()
   },
@@ -52,6 +65,12 @@ let NodeAdd = React.createClass({
     return {
       bar: {
         backgroundColor: Colors.grey500
+      },
+      content: {
+        padding: '20px'
+      },
+      input: {
+
       }
     }
   },
@@ -67,6 +86,8 @@ let NodeAdd = React.createClass({
 
     let title = `Add ${type}`
 
+    let fields = types[type] || types.default
+
     return (
       <div className={classes}>
         <Layout>
@@ -76,11 +97,15 @@ let NodeAdd = React.createClass({
             iconElementRight={<IconButton iconClassName="material-icons" onTouchTap={this.onSubmit}>check</IconButton>}
             style={styles.bar}
           />
-          <Content>
-            <TextField floatingLabelText="Title"
-              onChange={linkToState(this, 'title')} />
-            <TextField floatingLabelText="Description"
-              onChange={linkToState(this, 'description')} />
+          <Content style={styles.content}>
+            {_.map(fields, (field, name) => {
+              return (
+                <TextField
+                  floatingLabelText={field.label}
+                  fullWidth={true}
+                  onChange={({target}) => { this.setState({[name]: target.value})}} />
+              )
+            })}
           </Content>
         </Layout>
       </div>
