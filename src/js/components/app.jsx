@@ -18,7 +18,7 @@ import Profile from 'components/accounts/profile.jsx'
 import AppNav from 'components/nav.jsx'
 import GraphSearch from 'components/graph/search.jsx'
 
-import AvailabilityDevStore from 'stores/availability-dev'
+import AccountStore from 'stores/account'
 
 import PinnedActions from 'actions/pinned'
 
@@ -29,19 +29,21 @@ let App = React.createClass({
 
   mixins: [
     History,
-    Reflux.connect(AvailabilityDevStore),
+    Reflux.connect(AccountStore),
     Reflux.connect(ProfileStore, 'profile')
   ],
 
   childContextTypes: {
     muiTheme: React.PropTypes.object,
-    profile: React.PropTypes.any
+    profile: React.PropTypes.any,
+    username: React.PropTypes.string
   },
 
   getChildContext: function () {
     return {
       muiTheme: Styles.ThemeManager.getMuiTheme(JolocomTheme),
-      profile: this.state.profile
+      profile: this.state.profile,
+      username: this.state.username
     }
   },
 
@@ -55,8 +57,8 @@ let App = React.createClass({
   componentWillMount() {
     let path = this.props.location.pathname
 
-    if (!this.state.signedUp && path !== '/signup' && path !== '/login') {
-      this.history.pushState(null, '/signup')
+    if (!this.state.username && path !== '/signup' && path !== '/login') {
+      this.history.pushState(null, '/login')
     } else if (path === '/') {
       this.history.pushState(null, '/graph')
     }
@@ -160,7 +162,7 @@ let App = React.createClass({
 
     return (
       <div className="jlc-app">
-        {this.state.signedUp ? (
+        {this.state.username ? (
           <Layout>
             <Paper zDept={1} style={styles.header}>
               <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.toggleLeftNav}></AppBar>

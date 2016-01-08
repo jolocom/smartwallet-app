@@ -9,7 +9,7 @@ export default React.createClass({
     if (localStorage.getItem('fake-user')) {
       this.context.history.pushState(null, '/graph')
     } else {
-      this.context.history.pushState(null, '/signup')
+      this.context.history.pushState(null, '/login')
     }
   },
 

@@ -6,19 +6,23 @@ import {History, Lifecycle, Link} from 'react-router'
 import Availability from 'actions/availability'
 import AvailabilityDevStore from 'stores/availability-dev'
 
+import Account from 'actions/account'
+import AccountStore from 'stores/account'
+
 import {linkToState} from 'lib/util'
 
 let SignupDev = React.createClass({
   mixins: [
     History,
     Lifecycle,
-    Reflux.connect(AvailabilityDevStore)
+    Reflux.connect(AvailabilityDevStore),
+    Reflux.connect(AccountStore, 'account')
   ],
   contextTypes: {
     muiTheme: React.PropTypes.object
   },
   componentWillMount() {
-    if (this.state.signedUp)
+    if (this.state.account && this.state.account.username)
       this.history.pushState(null, '/graph')
   },
   routerWillLeave() {
@@ -31,11 +35,11 @@ let SignupDev = React.createClass({
       name: this.state.name,
       email: this.state.email
     }
-    Availability.fakeSignup(signupData)
+    Account.signup(signupData)
   },
 
   componentDidUpdate() {
-    if (this.state.signedUp) {
+    if (this.state.account && this.state.account.username) {
       this.history.pushState(null, '/graph')
     }
   },
@@ -60,7 +64,6 @@ let SignupDev = React.createClass({
       <div className="jlc-signup">
         <header className="jlc-signup-header">
           <img src="/img/logo.png" className="jlc-logo" />
-          <h2>Signup for Jolocom</h2>
         </header>
         <main className="jlc-signup-content mdl-shadow--2dp">
           <input name="username" type="hidden" value={this.state.username} />

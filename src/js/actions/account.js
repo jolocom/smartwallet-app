@@ -1,7 +1,8 @@
 import Reflux from 'reflux'
 
 let Actions = Reflux.createActions({
-  check: {asyncResult: true}
+  login: {asyncResult: true},
+  signup: {asyncResult: true}
 })
 
 export default Actions

@@ -2,6 +2,9 @@ import React from 'react'
 import {RaisedButton, TextField} from 'material-ui'
 import {History, Link} from 'react-router'
 
+import Account from 'actions/account'
+import AccountStore from 'stores/account'
+
 // login for development
 let LoginDev = React.createClass({
   mixins: [
@@ -17,12 +20,12 @@ let LoginDev = React.createClass({
     }
   },
   componentWillMount() {
-    if (localStorage.getItem('fake-user')) {
+    if (AccountStore.loggedIn()) {
       this.history.pushState(null, '/')
     }
   },
   login() {
-    localStorage.setItem('fake-user', this.state.username)
+    Account.login(this.state.username)
     this.history.pushState(null, '/')
   },
   _handleUsernameChange(e) {
@@ -35,13 +38,12 @@ let LoginDev = React.createClass({
       <div className="jlc-login">
         <header className="jlc-login-header">
           <img src="/img/logo.png" className="jlc-logo" />
-          <h2>Jolocom Login</h2>
         </header>
         <main className="jlc-login-content mdl-shadow--2dp">
-          <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
           <fieldset>
-            <RaisedButton primary={true} onTouchTap={this.login}>Login</RaisedButton>
+            <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
           </fieldset>
+          <RaisedButton secondary={true} onTouchTap={this.login} style={{width: '100%'}}>Login</RaisedButton>
         </main>
         <p>Don't have an account yet? <Link to="/signup">Sign up</Link>.</p>
       </div>

@@ -4,12 +4,12 @@
   text-align: center;
   background: #f1f1f1;
   height: 100%;
+  overflow-y: auto;
   &-header {
     padding: 40px;
     .jlc-logo {
       width: 80px;
       height: 80px;
-      margin-bottom: 20px;
     }
     h2 {
       font-weight: 200;
@@ -18,10 +18,11 @@
   }
   &-content {
     width: 300px;
+    max-width: 90%;
     padding: 20px;
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
     background: #ffffff;
-
+    box-sizing: border-box;
     .mdl-button {
       width: 100%
     }
