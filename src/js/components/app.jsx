@@ -55,6 +55,19 @@ let App = React.createClass({
   },
 
   componentWillMount() {
+    this.checkLogin()
+  },
+
+  componentDidMount() {
+    ProfileActions.load()
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.username !== this.state.username)
+      this.checkLogin()
+  },
+
+  checkLogin() {
     let path = this.props.location.pathname
 
     if (!this.state.username && path !== '/signup' && path !== '/login') {
@@ -62,10 +75,6 @@ let App = React.createClass({
     } else if (path === '/') {
       this.history.pushState(null, '/graph')
     }
-  },
-
-  componentDidMount() {
-    ProfileActions.load()
   },
 
   getComponent() {

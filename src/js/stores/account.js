@@ -35,6 +35,11 @@ let AccountStore = Reflux.createStore({
     this.trigger({username: username})
   },
 
+  onLogout() {
+    localStorage.removeItem('fake-user')
+    this.trigger({username: null})
+  },
+
   loggedIn() {
     return localStorage.getItem('fake-user')
   }
