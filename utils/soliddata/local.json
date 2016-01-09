@@ -8,6 +8,7 @@
                     "id": "christian",
                     "name": "Christian",
                     "description": "Music and Tech is really not that different at all",
+                    "sensor": true,
                     "friends": [
                         "joachim",
                         "justas"
@@ -17,6 +18,7 @@
                     "id": "joachim",
                     "name": "Joachim",
                     "description": "Networking and Business specialist from Berlin",
+                    "sensor": true,
                     "friends": [
                         "justas"
                     ]
@@ -25,6 +27,7 @@
                     "id": "justas",
                     "name": "Justas",
                     "description": "Web Developer",
+                    "sensor": true,
                     "friends": [
                         "joachim"
                     ]

@@ -9,6 +9,9 @@ from rdflib.namespace import Namespace, FOAF, DCTERMS, RDF
 
 SIOC = Namespace('http://rdfs.org/sioc/ns#')
 
+# Semantic Sensor Network ontology
+SSN = Namespace('http://purl.oclc.org/NET/ssnx/ssn#')
+
 
 class Person:
     def __init__(self, **kwargs):
@@ -45,12 +48,13 @@ class SolidDataWriter:
                 ├── little-sister
                 │   ├── graph-comments
                 │   ├── graph-nodes
-                │   └── inbox
+                │   ├── inbox
+                │   └── sensor (optional)
                 └── profile
                     └── card
         '''
 
-        def profile_doc_content():
+        def profile_doc_content(has_sensor=False):
             graph = Graph()
 
             # WebID document URI
@@ -73,10 +77,46 @@ class SolidDataWriter:
             graph.add((webid_uri, DCTERMS.description,
                        Literal(person.description)))
 
+            if has_sensor:
+                sensor_url = '{}/{}/little-sister/sensor#sensor'.format(
+                    person.server_location,
+                    person.id
+                )
+
+                graph.add((webid_uri, SIOC.container_of, URIRef(sensor_url)))
+
             for f in person.friend_webids:
                 graph.add((webid_uri, FOAF.knows, URIRef(f)))
 
             return graph.serialize(format='turtle')
+
+        def sensor_doc_content():
+            # Initialize RDF graph
+            payload = Graph()
+
+            # Bind the required namespaces
+            payload.bind('ssn', SSN)
+            payload.bind('dc', DCTERMS)
+            payload.bind('foaf', FOAF)
+
+            # The document graph URI
+            doc = URIRef('')
+
+            # Sensor graph URI
+            sensor = URIRef('#sensor')
+
+            # Describe document graph and connect it to sensor graph
+            payload.add((doc, RDF.type, FOAF.Document))
+            payload.add((doc, DCTERMS.title, Literal('Sensor document')))
+            payload.add((doc, FOAF.primaryTopic, sensor))
+
+            # Describe sensor graph
+            payload.add((sensor, RDF.type, SSN.Sensor))
+            payload.add((sensor, SSN.observes, Literal('n/a')))
+            payload.add((sensor, SSN.hasValue, Literal('n/a')))
+
+            # Serialize the resulting graph
+            return payload.serialize(format='turtle')
 
         def inbox_doc_content():
             graph = Graph()
@@ -125,9 +165,15 @@ class SolidDataWriter:
         with open(inbox_doc, 'w') as f:
             f.write(inbox_doc_content())
 
+        has_sensor = 'sensor' in person.__dict__ and person.sensor
+        if has_sensor:
+            sensor_doc = '{}/sensor'.format(app_c)
+            with open(sensor_doc, 'w') as f:
+                f.write(sensor_doc_content())
+
         webid_doc = '{}/card'.format(profile_c)
         with open(webid_doc, 'w') as f:
-            f.write(profile_doc_content())
+            f.write(profile_doc_content(has_sensor))
 
     def write_containers(self):
         '''Generates LDP containers and resources from self.blueprint'''

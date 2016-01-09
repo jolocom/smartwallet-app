@@ -16,10 +16,12 @@ def validate_blueprint(blueprint):
 
     person_schema = {
         'type': 'object',
+        'additionalProperties': False,
         'properties': {
             'id': {'type': 'string'},
             'name': {'type': 'string'},
             'description': {'type': 'string'},
+            'sensor': {'type': 'boolean'},
             'friends': {
                 'type': 'array',
                 'items': {'type': 'string'}
@@ -33,6 +35,7 @@ def validate_blueprint(blueprint):
                 'type': 'array',
                 'items': {
                     'type': 'object',
+                    'additionalProperties': False,
                     'properties': {
                         'name': {'type': 'string'},
                         'location': {'type': 'string'},
