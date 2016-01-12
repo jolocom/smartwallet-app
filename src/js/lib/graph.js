@@ -350,13 +350,25 @@ export default class GraphD3 {
 
   getSensorColor(temp) {
     temp = parseInt(temp)
-    if (temp < 15) {
+    //if (temp < 15) {
+      //return STYLES.tempCold
+    //} else if (temp >= 15 && temp < 20) {
+      //return STYLES.tempCool
+    //} else if (temp >= 20 && temp < 25) {
+      //return STYLES.tempNormal
+    //} else if (temp >= 25 && temp < 30) {
+      //return STYLES.tempWarm
+    //} else {
+      //return STYLES.tempHot
+    //}
+
+    if (temp < 100) {
       return STYLES.tempCold
-    } else if (temp >= 15 && temp < 20) {
+    } else if (temp >= 100 && temp < 200) {
       return STYLES.tempCool
-    } else if (temp >= 20 && temp < 25) {
+    } else if (temp >= 200 && temp < 300) {
       return STYLES.tempNormal
-    } else if (temp >= 25 && temp < 30) {
+    } else if (temp >= 300 && temp < 400) {
       return STYLES.tempWarm
     } else {
       return STYLES.tempHot
