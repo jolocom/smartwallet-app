@@ -21,7 +21,10 @@ def validate_blueprint(blueprint):
             'id': {'type': 'string'},
             'name': {'type': 'string'},
             'description': {'type': 'string'},
-            'sensor': {'type': 'boolean'},
+            'sensors': {
+                'type': 'array',
+                'items': {'type': 'string'}
+            },
             'friends': {
                 'type': 'array',
                 'items': {'type': 'string'}

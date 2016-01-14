@@ -46,15 +46,15 @@ class SolidDataWriter:
         Person container looks like this (inbox and card are rdf docs):
             └── justas
                 ├── little-sister
-                │   ├── graph-comments
-                │   ├── graph-nodes
+                │   ├── graph-comments/
+                │   ├── graph-nodes/
                 │   ├── inbox
-                │   └── sensor (optional)
+                │   └── sensors/
                 └── profile
                     └── card
         '''
 
-        def profile_doc_content(has_sensor=False):
+        def profile_doc_content():
             graph = Graph()
 
             # WebID document URI
@@ -77,10 +77,11 @@ class SolidDataWriter:
             graph.add((webid_uri, DCTERMS.description,
                        Literal(person.description)))
 
-            if has_sensor:
-                sensor_url = '{}/{}/little-sister/sensor#sensor'.format(
+            for s in person.sensors:
+                sensor_url = '{}/{}/little-sister/sensors/{}#sensor'.format(
                     person.server_location,
-                    person.id
+                    person.id,
+                    s
                 )
 
                 graph.add((webid_uri, SIOC.container_of, URIRef(sensor_url)))
@@ -165,15 +166,16 @@ class SolidDataWriter:
         with open(inbox_doc, 'w') as f:
             f.write(inbox_doc_content())
 
-        has_sensor = 'sensor' in person.__dict__ and person.sensor
-        if has_sensor:
-            sensor_doc = '{}/sensor'.format(app_c)
+        sensor_c = '{}/sensors'.format(app_c)
+        os.makedirs(sensor_c)
+        for s in person.sensors:
+            sensor_doc = '{}/{}'.format(sensor_c, s)
             with open(sensor_doc, 'w') as f:
                 f.write(sensor_doc_content())
 
         webid_doc = '{}/card'.format(profile_c)
         with open(webid_doc, 'w') as f:
-            f.write(profile_doc_content(has_sensor))
+            f.write(profile_doc_content())
 
     def write_containers(self):
         '''Generates LDP containers and resources from self.blueprint'''
