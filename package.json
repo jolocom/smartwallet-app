@@ -62,5 +62,8 @@
     "react-tap-event-plugin": "^0.2.1",
     "react-timer-mixin": "^0.13.3",
     "reflux": "^0.3.0"
-  }
+  },
+  "engines": {
+    "node": "^0.12"
+  } 
 }
