@@ -18,7 +18,7 @@ bower install
 
 ## Install python tools for test data generation
 ```
-python utils/soliddata/setup.py develop
+cd utils/soliddata; python setup.py develop
 ```
 
 ## Generate test data for single test server (https://localhost:8443)
