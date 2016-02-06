@@ -31,8 +31,14 @@ soliddata --blueprint utils/soliddata/local.json --output-dir data --flatten
 gulp
 ```
 
-## Addtional
-You have to have a SoLiD server serving `dist/` directory (built by `gulp` in the previous step)
+## Webroot
+You have to setup your SoLiD server to point to `dist/` directory (built by `gulp` in the previous step)
+
+
+Documentation
+-------------
+
+Additional documentation can be found at our [wiki](https://github.com/jolocom/little-sister/wiki).
 
 
 git-flow
