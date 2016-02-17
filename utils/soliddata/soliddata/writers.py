@@ -265,6 +265,8 @@ class SolidDataWriter:
                         l.linked_resources.append(self._resource_url(thing.server_location,
                                                                      thing.id))
 
+
+        for thing in lookup_dict.itervalues():
             if thing.person:
                 self._write_person_container(thing)
             else:
