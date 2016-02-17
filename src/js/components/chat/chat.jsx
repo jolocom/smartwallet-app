@@ -1,12 +1,8 @@
 import React from 'react'
+import Radium from 'radium'
 import Reflux from 'reflux'
 
 import moment from 'moment'
-
-// import FabMenu from 'components/common/fab-menu.jsx'
-// import FabMenuItem from 'components/common/fab-menu-item.jsx'
-//
-
 
 import {List, ListItem, Avatar, Styles, FloatingActionButton, FontIcon} from 'material-ui'
 
@@ -49,8 +45,8 @@ let Chat = React.createClass({
 
   render: function() {
     return (
-      <div className="jlc-chat">
-        <List className="jlc-chat-list">
+      <div style={styles.container}>
+        <List>
           {this.state.conversations.map((conversation) => {
             let {otherPerson} = conversation
             let {created, content} = conversation.lastMessage
@@ -82,6 +78,10 @@ let Chat = React.createClass({
 })
 
 let styles = {
+  container: {
+    flex: 1,
+    overflowY: 'auto'
+  },
   date: {
     color: Colors.grey500,
     fontSize: '12px',
@@ -94,4 +94,4 @@ let styles = {
   }
 }
 
-export default Chat
+export default Radium(Chat)

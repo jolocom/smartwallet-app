@@ -1,5 +1,7 @@
 export default {}
 
+export let bankUri = 'https://localhost:8443'
+
 export let contacts = [{
   username: 'eelco',
   name: 'Eelco Wiersma',

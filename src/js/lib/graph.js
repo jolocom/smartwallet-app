@@ -8,6 +8,8 @@ import STYLES from 'styles/app'
 
 let sensorAgent = new SensorAgent()
 
+const LONG_PRESS_TIMEOUT = 500
+
 d3.selection.prototype.moveToFront = function() {
   return this.each(function(){
     this.parentNode.appendChild(this)
@@ -16,7 +18,7 @@ d3.selection.prototype.moveToFront = function() {
 
 export default class GraphD3 {
 
-  constructor(el, props, state, handleNodeClick, handleDragEnd, handleLongTap) {
+  constructor(el, props, state, handleNodeClick = () => {}, handleLongPress = () => {}, handleDragEnd = () => {}) {
     this.el = el
 
     this.taptimer = {
@@ -41,36 +43,37 @@ export default class GraphD3 {
 
     this.handleNodeClick = handleNodeClick
     this.handleDragEnd = handleDragEnd
-    this.handleLongTap = handleLongTap
+    this.handleLongPress = handleLongPress
 
     this.create(props, state)
+
+    this.onResize = this.onResize.bind(this)
+    this.onNodeClick = this.onNodeClick.bind(this)
+    this.onNodeLongPress = this.onNodeLongPress.bind(this)
   }
 
   create(props, state) {
-    this.w = this.el.offsetWidth || 440
-    this.h = this.el.offsetHeight || 696
+    this.width = this.el.offsetWidth || 440
+    this.height = this.el.offsetHeight || 696
 
-    let svg = d3.select(this.el).append('svg:svg')
-      .attr('width', this.w)
-      .attr('height', this.h)
+    this.svg = d3.select(this.el).append('svg:svg')
+      .attr('width', this.width)
+      .attr('height', this.height)
       .attr('pointer-events', 'all')
       .append('svg:g')
 
-
     //background rectangle
-    svg.append('svg:rect')
-      .attr('width', this.w)
-      .attr('height', this.h)
+    this.svg.append('svg:rect')
+      .attr('width', this.width)
+      .attr('height', this.height)
       .attr('fill', 'white')
 
     //background circle
-    svg.append('svg:circle')
-      .attr('class', 'plate')
-      .attr('cx', STYLES.width * 0.5)
-      .attr('cy', STYLES.height * 0.5)
-      .attr('r', STYLES.width * 0.3)
+    this.svg.append('svg:circle')
+      .attr('cx', this.width * 0.5)
+      .attr('cy', this.height * 0.5)
+      .attr('r', this.width / 6)
       .style('fill', STYLES.lightGrayColor)
-
 
     // `base` only needs to run once
     this.force = d3.layout.force()
@@ -78,14 +81,25 @@ export default class GraphD3 {
       .nodes(state.nodes)
       .links(state.links)
       .gravity(0.2)
-      .charge(STYLES.width * -14)
-      .linkDistance(STYLES.width / 3)
-      .size([this.w, this.h])
+      .charge(this.width * -14)
+      .linkDistance(this.width / 6)
+      .size([this.width, this.height])
       .start()
 
-
     //group links (so they don't overlap nodes)
-    svg.append('g').attr('class', 'link_group')
+    this.svg.append('g').attr('class', 'link_group')
+  }
+
+  setSize() {
+    this.width = this.el.offsetWidth
+    this.height = this.el.offsetHeight
+
+    this.svg.attr('width', this.width).attr('height', this.height)
+    this.force.size([this.width, this.height]).resume()
+  }
+
+  onResize() {
+    this.setSize()
   }
 
   // Invoked in 'componentDidUpdate' of react graph
@@ -116,14 +130,14 @@ export default class GraphD3 {
     // only new links
     let linkNew = link.enter()
       .append('svg:g').attr('class', 'link')
-      .call(this.force.drag)
+      // .call(this.force.drag)
 
     console.log('NEW LINKS', linkNew[0].length)
 
     // add line
     linkNew.append('svg:line')
       .attr('class', 'link')
-      .attr('stroke-width', STYLES.width / 45)
+      .attr('stroke-width', this.width / 80)
       .attr('stroke', STYLES.lightGrayColor)
       .attr('x1', (d) => d.x1)
       .attr('y1', (d) => d.y1)
@@ -145,7 +159,7 @@ export default class GraphD3 {
       .attr('class', 'node')
       .attr('dx', '80px')
       .attr('dy', '80px')
-      .call(this.force.drag)
+      // .call(this.force.drag)
 
     nodeNew.style('opacity', 0)
       .transition()
@@ -215,8 +229,8 @@ export default class GraphD3 {
           return d.uri == state.historyNodes[state.historyNodes.length - 1].uri })[0]
         lastStep.fixed = true
         this.animateNode(lastStep,
-                     STYLES.width / 2,
-                     STYLES.height * 4/5)
+                     this.width / 2,
+                     this.height * 4/5)
       }
     }
 
@@ -248,10 +262,10 @@ export default class GraphD3 {
       document.getElementsByTagName('body')[0].className = 'open-drawer'
       d3.select('#plus_drawer')
         .transition()
-        .style('top', (STYLES.height / 2)+'px')
+        .style('top', (this.height / 2)+'px')
 
       this.zoomTo(0.5,
-               STYLES.width / 2,
+               this.width / 2,
                0)
     }
 
@@ -259,11 +273,11 @@ export default class GraphD3 {
     if (!prevState.chatOpen && state.chatOpen) {
       d3.select('#chat')
         .transition()
-        .style('top', (STYLES.height / 3)+ 'px')
+        .style('top', (this.height / 3)+ 'px')
 
       this.zoomTo(0.5,
-        STYLES.width / 2,
-        STYLES.height / -6)
+        this.width / 2,
+        this.height / -6)
     }
 
     // First node added to inbox - animate InboxCounter
@@ -276,10 +290,10 @@ export default class GraphD3 {
     // Spring inbox whenever a node is added/removed
     if (prevState.inboxCount != state.inboxCount && state.inboxCount >= 1) {
       //let size = (self.inbox.count==0)
-        //?(-STYLES.width)
-        //:(-STYLES.width+(STYLES.width/5))
+        //?(-this.width)
+        //:(-this.width+(this.width/5))
 
-      let size = -STYLES.width + (STYLES.width/5)
+      let size = -this.width + (this.width/5)
 
       d3.select('#inbox')
         .transition()
@@ -289,11 +303,11 @@ export default class GraphD3 {
     // inbox opening (closing is handled in 'beforeUpdate')
     if (!prevState.inboxOpen && state.inboxOpen) {
       this.zoomTo(0.5,
-               STYLES.width / 2,
-               STYLES.height)
+               this.width / 2,
+               this.height)
       //d3.select('#inbox')
         //.transition()
-        //.style('right', (-STYLES.width / 2)+'px')
+        //.style('right', (-this.width / 2)+'px')
     }
 
 
@@ -316,8 +330,8 @@ export default class GraphD3 {
           // (so they sit nicely on top & below the center perspective)
           let kx = 10 * e.alpha
           let ky = 4 * kx
-          d.x += (d.x < (STYLES.width / 2))  ?(kx):(-kx)
-          d.y += (d.y < (STYLES.height / 2)) ?(-ky):(ky)
+          d.x += (d.x < (this.width / 2))  ?(kx):(-kx)
+          d.y += (d.y < (this.height / 2)) ?(-ky):(ky)
           return 'translate(' + d.x + ',' + d.y + ')'
         })
     })
@@ -327,12 +341,26 @@ export default class GraphD3 {
     node.on('click', null) // NOTE(philipp): unbind old `openPreview` because it captured the  outdated `node` variable
 
     //node.on('click', this.openPreview(state.nodes))
-    node.on('click', this.nodeClick())
+    node.on('click', this.onNodeClick)
 
-    this.force.drag()
-      .on('dragstart', this.forceDragStart(state.centerNode))
-      .on('drag', this.forceDragMove(state.centerNode))
-      .on('dragend', this.forceDragEnd(state.nodes, state.centerNode))
+    let pressTimer
+
+    node.on('mouseup', () => {
+      clearTimeout(pressTimer)
+      return false
+    })
+
+    node.on('mousedown', (d) => {
+      pressTimer = window.setTimeout(() => {
+        this.onNodeLongPress(d)
+      }, LONG_PRESS_TIMEOUT)
+      return false
+    })
+
+    // this.force.drag()
+    //   .on('dragstart', this.forceDragStart(state.centerNode))
+    //   .on('drag', this.forceDragMove(state.centerNode))
+    //   .on('dragend', this.forceDragEnd(state.nodes, state.centerNode))
 
     this.force.start()
   }
@@ -382,7 +410,7 @@ export default class GraphD3 {
       document.getElementsByTagName('body')[0].className = 'closed-drawer'
       d3.select('#plus_drawer')
         .transition()
-        .style('top', STYLES.height+'px')
+        .style('top', this.height+'px')
       this.zoomReset()
     }
 
@@ -390,7 +418,7 @@ export default class GraphD3 {
     if (state.chatOpen && !nextState.chatOpen) {
       d3.select('#chat')
         .transition()
-        .style('top', STYLES.height + 'px')
+        .style('top', this.height + 'px')
       this.zoomReset()
     }
 
@@ -419,27 +447,18 @@ export default class GraphD3 {
     }
   }
 
-  // catch long tap and forward it to react
-  triggerLongTap() {
-    return () => {
-      if(!this.drag.active) return // drag event stopped before timeout expired
-      this.handleLongTap(this.drag.distance())
-    }
-  }
-
   forceDragStart(centerNode) {
-    let self = this
-    return function (d){
-      self.tapStart()()
+    return (d) => {
+      this.tapStart()()
       console.log(d3.event)
-      self.drag.active = true
-      self.drag.startPos.x = self.drag.nowPos.x = d3.event.sourceEvent.pageX
-      self.drag.startPos.y = self.drag.nowPos.y = d3.event.sourceEvent.pageY
+      this.drag.active = true
+      this.drag.startPos.x = this.drag.nowPos.x = d3.event.sourceEvent.pageX
+      this.drag.startPos.y = this.drag.nowPos.y = d3.event.sourceEvent.pageY
       if(d.uri == centerNode.uri) {
-        self.drag.onCenter = true
-        window.setTimeout(self.triggerLongTap(), 800)
+        this.drag.onCenter = true
+        window.setTimeout(this.onNodeLongPress, LONG_PRESS_TIMEOUT)
       } else {
-        self.drag.onCenter = false
+        this.drag.onCenter = false
       }
     }
   }
@@ -474,21 +493,21 @@ export default class GraphD3 {
 
       if(d == centerNode.node){
         // reset node position
-        d.x, d.px = STYLES.width / 2
-        d.y, d.py = STYLES.height / 2
+        d.x, d.px = this.width / 2
+        d.y, d.py = this.height / 2
         d3.select(this).attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
       }
     }
   }
 
   // catch nodeClick event and forward it to react
-  nodeClick() {
-    let self = this
-    return function(d){ // click == enable preview
-      self.handleNodeClick(d)
-    }
+  onNodeClick(d) {
+    this.handleNodeClick(d)
   }
 
+  onNodeLongPress(d) {
+    this.handleLongPress(d)
+  }
 
   // graph zoom/scale
   zoomTo(scale, x, y) {
@@ -528,8 +547,8 @@ export default class GraphD3 {
     if (!oldCenter) {
       //initialization- no transition needed
       this.animateNode(newCenter.node,
-                   STYLES.width / 2,
-                   STYLES.height / 2)
+                   this.width / 2,
+                   this.height / 2)
 
       this.getDomNode(domNodes, newCenter)
         .select('circle')
@@ -547,8 +566,8 @@ export default class GraphD3 {
           .style('fill', STYLES.lightBlueColor)
 
         this.animateNode(oldCenter.node,
-                     STYLES.width / 2,
-                     STYLES.height * 4/5)
+                     this.width / 2,
+                     this.height * 4/5)
 
         if(historyNodes.length > 1){
           let historic = historyNodes[historyNodes.length - 2]
@@ -564,8 +583,8 @@ export default class GraphD3 {
       {
         let newCenterDom = this.getDomNode(domNodes, newCenter)
         this.animateNode(newCenter.node,
-                     STYLES.width / 2,
-                     STYLES.height / 2) // move to center
+                     this.width / 2,
+                     this.height / 2) // move to center
         newCenterDom
           .select('circle')
           .style('fill', STYLES.blueColor)
@@ -638,7 +657,7 @@ export default class GraphD3 {
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', STYLES.largeNodeSize / 2)
       .style({ 'stroke': 'white',
-               'stroke-width': STYLES.width / 100 })
+               'stroke-width': this.width / 100 })
     node.select('.nodetext')
       .transition().duration(STYLES.nodeTransitionDuration)
       .style('opacity', 0)

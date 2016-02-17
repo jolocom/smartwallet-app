@@ -4,7 +4,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Radium from 'radium'
 import Reflux from 'reflux'
-import classNames from 'classnames'
 
 import Util from 'lib/util.js'
 import GraphAgent from 'lib/agents/graph.js'
@@ -33,12 +32,13 @@ let Graph = React.createClass({
   },
 
   childContextTypes: {
-    node: React.PropTypes.string
+    node: React.PropTypes.object
   },
 
   getChildContext: function() {
+    let centerNode = this.state.centerNode
     return {
-      node: this.props.params.node
+      node: centerNode && centerNode.node
     }
   },
 
@@ -125,7 +125,7 @@ let Graph = React.createClass({
   },
 
   componentDidMount: function() {
-    this.graph = new GraphD3(this.getGraphEl(), this.props, this.state, this.handleNodeClick, this.handleDragEnd, this.handleLongTap)
+    this.graph = new GraphD3(this.getGraphEl(), this.props, this.state, this.handleNodeClick, this.handleLongTap, this.handleDragEnd)
     if (this.props.params.node) {
       this.centerAtURI(this.props.params.node)
     } else {
@@ -145,12 +145,14 @@ let Graph = React.createClass({
       return
     }
 
-    let isIdentity = this.state.identity === this.state.centerNode.uri
+    let isIdentity = this.state.centerNode &&
+      this.state.identity === this.state.centerNode.uri
 
     if (!prevState.centerNode && this.state.centerNode && isIdentity) {
       uri = encodeURIComponent(this.state.centerNode.uri)
       this.context.history.replaceState(null, `/graph/${uri}`)
     }
+
     this.graph.update(prevState, this.state)
   },
 
@@ -165,15 +167,13 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/details`)
   },
 
-  handleLongTap(distance) {
-    if (distance > 40) {
-      this.showNodeDetails(this.state.centerNode.node.uri)
-    }
+  handleLongTap(node) {
+    // this.showNodeDetails(node.uri)
   },
 
   handleNodeClick(node) {
-    if (node == this.state.centerNode.node) {
-      // this.showNode(node)
+    if (node === this.state.centerNode.node || node === this.state.previewNode.node) {
+      this.showNodeDetails(node.uri)
     } else if(node.uri !== this.state.previewNode.uri) {
       this.setState({
         previewNode: {
@@ -309,6 +309,14 @@ let Graph = React.createClass({
 
   getStyles() {
     let styles = {
+      container: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      },
+      chart: {
+        flex: 1
+      },
       menu: {
         position: 'absolute',
         bottom: '16px',
@@ -319,10 +327,9 @@ let Graph = React.createClass({
   },
 
   render() {
-    let classes = classNames('jlc-graph')
     let styles = this.getStyles()
     return (
-      <div className={classes}>
+      <div style={styles.container}>
         <FabMenu style={styles.menu}>
           <FabMenuItem icon="comment" label="Comment" onClick={() => {this.addNode('comment')}}/>
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
@@ -331,7 +338,7 @@ let Graph = React.createClass({
           <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.addNode('sensor')}}/>
         </FabMenu>
 
-        <div className="jlc-graph-chart" ref="graph"></div>
+        <div style={styles.chart} ref="graph"></div>
 
         {this.props.children}
 

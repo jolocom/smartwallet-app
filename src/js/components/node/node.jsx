@@ -2,17 +2,18 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import classNames from 'classnames'
+import ProfileNode from 'components/node/profile.jsx'
+import AddressNode from 'components/node/address.jsx'
+import BankNode from 'components/node/bank.jsx'
+import BankAccountNode from 'components/node/bankaccount.jsx'
 
 import {
   AppBar,
   IconButton,
-  Checkbox,
-  Card, CardMedia, CardTitle, CardActions
+  Checkbox
 } from 'material-ui'
 
-import {Layout, Content, Spacer} from 'components/layout'
-
-import Comments from 'components/node/comments.jsx'
+import {Layout, Content} from 'components/layout'
 
 import NodeActions from 'actions/node'
 
@@ -20,15 +21,15 @@ import NodeStore from 'stores/node'
 
 let Node = React.createClass({
   mixins: [
-    Reflux.connect(NodeStore)
+    Reflux.connect(NodeStore, 'node')
   ],
 
   contextTypes: {
-    history: React.PropTypes.any
+    history: React.PropTypes.any,
+    node: React.PropTypes.object
   },
 
   componentDidMount() {
-    NodeActions.load(this.props.params.node)
     this.open()
   },
 
@@ -52,20 +53,35 @@ let Node = React.createClass({
     NodeActions.pin(this.props.params.node)
   },
 
+  _handleClose() {
+    this.context.history.goBack()
+    this.close()
+  },
+
   getStyles() {
     return {
       bar: {
         position: 'absolute',
         backgroundColor: 'transparent'
-      },
-      media: {
-        color: '#fff',
-        height: '176px',
-        background: 'url(http://www.getmdl.io/assets/demos/welcome_card.jpg) center / cover'
-      },
-      actions: {
-        display: 'flex'
       }
+    }
+  },
+
+  getNodeContent() {
+    let {node} = this.context
+
+    if (!node) return null
+
+    if (node.nodeType === 'contact') {
+      return <ProfileNode node={node}/>
+    }
+    switch(node.description) {
+    case 'Address':
+      return <AddressNode node={node}/>
+    case 'CBA':
+      return <BankNode node={node}/>
+    case 'BankAccount':
+      return <BankAccountNode node={node}/>
     }
   },
 
@@ -76,27 +92,19 @@ let Node = React.createClass({
 
     let styles = this.getStyles()
 
+    let content = this.getNodeContent()
+
     return (
       <div className={classes}>
         <Layout>
           <AppBar
-            iconElementLeft={<IconButton onTouchTap={() => this.context.history.pushState(null, '/graph')} iconClassName="material-icons">close</IconButton>}
+            iconElementLeft={<IconButton onTouchTap={this._handleClose} iconClassName="material-icons">close</IconButton>}
             iconElementRight={<Checkbox name="inbox" onChange={this.togglePinned}></Checkbox>}
             style={styles.bar}
             zDepth={0}
           />
           <Content>
-            <Card className="jlc-node-card" zDepth={0}>
-              <CardMedia overlay={
-                  <CardTitle>Welcome</CardTitle>
-              } style={styles.media}/>
-              <CardActions style={styles.actions}>
-                <Spacer/>
-                <IconButton iconClassName="material-icons">comment</IconButton>
-                <IconButton iconClassName="material-icons">share</IconButton>
-              </CardActions>
-            </Card>
-            <Comments node={this.props.params.node}/>
+            {content}
           </Content>
         </Layout>
       </div>
