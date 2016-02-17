@@ -29,6 +29,24 @@ def validate_blueprint(blueprint):
                 'type': 'array',
                 'items': {'type': 'string'}
             },
+            'links': {
+                'type': 'array',
+                'items': {'type': 'string'}
+            },
+        }
+    }
+    resource_schema = {
+        'type': 'object',
+        'additionalProperties': False,
+        'properties': {
+            'id': {'type': 'string'},
+            'name': {'type': 'string'},
+            'description': {'type': 'string'},
+            'type': {'type': 'string'},
+            'links': {
+                'type': 'array',
+                'items': {'type': 'string'}
+            },
         }
     }
     schema = {
@@ -45,6 +63,10 @@ def validate_blueprint(blueprint):
                         'people': {
                             'type': 'array',
                             'items': person_schema
+                        },
+                        'resources': {
+                            'type': 'array',
+                            'items': resource_schema
                         }
                     }
                 }
@@ -61,7 +83,7 @@ def validate_blueprint(blueprint):
 
     # Check if all the people ids are unique
     people_flattened = reduce(lambda acc_ids, server: acc_ids +
-                              server['people'],
+                              server['people'] if 'people' in server else [],
                               blueprint['servers'], [])
 
     people_ids = map(lambda p: p['id'], people_flattened)
@@ -78,3 +100,13 @@ def validate_blueprint(blueprint):
                 raise ValidationError(err)
             if f not in people_ids:
                 raise ValidationError('{} does not exist'.format(f))
+
+    # Check if all the resource ids are unique
+    resources_flattened = reduce(lambda acc_ids, server: acc_ids +
+                                 server['resources']
+                                 if 'resources' in server else [],
+                                 blueprint['servers'], [])
+
+    resource_ids = map(lambda p: p['id'], resources_flattened)
+    if len(resource_ids) != len(set(resource_ids)):
+        raise ValidationError('resource ids are not unique')

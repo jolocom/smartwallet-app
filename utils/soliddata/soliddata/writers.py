@@ -15,7 +15,16 @@ SSN = Namespace('http://purl.oclc.org/NET/ssnx/ssn#')
 
 class Person:
     def __init__(self, **kwargs):
+        self.person = True
         self.friend_webids = []
+        self.linked_resources = []
+        self.__dict__.update(kwargs)
+
+
+class Resource:
+    def __init__(self, **kwargs):
+        self.person = False
+        self.linked_resources = []
         self.__dict__.update(kwargs)
 
 
@@ -27,6 +36,9 @@ class SolidDataWriter:
 
     def _webid_url(self, server_location, person_id):
         return '{}/{}/profile/card#me'.format(server_location, person_id)
+
+    def _resource_url(self, server_location, id_):
+        return '{}/{}#this'.format(server_location, id_)
 
     def _container_base(self, server_name):
         if not self.flatten:
@@ -89,6 +101,9 @@ class SolidDataWriter:
             for f in person.friend_webids:
                 graph.add((webid_uri, FOAF.knows, URIRef(f)))
 
+            for l in person.linked_resources:
+                graph.add((webid_uri, SIOC.container_of, URIRef(l)))
+
             return graph.serialize(format='turtle')
 
         def sensor_doc_content():
@@ -129,7 +144,7 @@ class SolidDataWriter:
             inbox_uri = URIRef('#inbox')
 
             # WebID URI
-            webid_uri = URIRef(person.webid)
+            webid_uri = URIRef(person.url)
 
             # About doc
             graph.add((doc_uri, DCTERMS.title,
@@ -143,7 +158,7 @@ class SolidDataWriter:
 
             return graph.serialize(format='turtle')
 
-        print('writing person {}'.format(person.webid))
+        print('writing person {}'.format(person.url))
         # Assume that base container already exists
         base_c = self._container_base(person.server_name)
 
@@ -177,25 +192,77 @@ class SolidDataWriter:
         with open(webid_doc, 'w') as f:
             f.write(profile_doc_content())
 
+    def _write_resource(self, r):
+        def content():
+            # Initialize RDF graph
+            payload = Graph()
+
+            # Bind the required namespaces
+            payload.bind('ssn', SSN)
+            payload.bind('dc', DCTERMS)
+            payload.bind('foaf', FOAF)
+
+            doc = URIRef('')
+            this = URIRef('#this')
+
+            # Add triples
+            payload.add((doc, RDF.type, FOAF.Document))
+            payload.add((doc, FOAF.primaryTopic, this))
+            payload.add((this, RDF.type, URIRef(r.type)))
+            payload.add((this, DCTERMS.title, Literal(r.name)))
+            payload.add((this, DCTERMS.description, Literal(r.description)))
+
+            for l in r.linked_resources:
+                payload.add((this, SIOC.container_of, URIRef(l)))
+
+
+            # Serialize the resulting graph
+            return payload.serialize(format='turtle')
+
+        base_c = self._container_base(r.server_name)
+        resource_doc = '{}/{}'.format(base_c, r.id)
+        with open(resource_doc, 'w') as f:
+            f.write(content())
+
     def write_containers(self):
         '''Generates LDP containers and resources from self.blueprint'''
 
-        people_dict = {}
+        lookup_dict = {}
         for s in self.blueprint['servers']:
             for p_dict in s['people']:
                 p_obj = Person(**p_dict)
                 p_obj.server_location = s['location']
                 p_obj.server_name = s['name']
-                people_dict[p_dict['id']] = p_obj
+                lookup_dict[p_dict['id']] = p_obj
+            for r in s['resources']:
+                r_obj = Resource(**r)
+                r_obj.server_location = s['location']
+                r_obj.server_name = s['name']
+                lookup_dict[r['id']] = r_obj
             self._write_server_container(s)
 
-        for p in people_dict.itervalues():
-            p.webid = self._webid_url(p.server_location, p.id)
-            for fid in p.friends:
-                f = people_dict[fid]
-                p.friend_webids.append(self._webid_url(f.server_location, f.id))
-                # Backlinks
-                if p.id not in f.friends:
-                    f.friend_webids.append(self._webid_url(p.server_location,
-                                                           p.id))
-            self._write_person_container(p)
+
+        for thing in lookup_dict.itervalues():
+            thing.url = self._webid_url(thing.server_location, thing.id)
+            if thing.person:
+                for fid in thing.friends:
+                    f = lookup_dict[fid]
+                    thing.friend_webids.append(self._webid_url(f.server_location, f.id))
+                    # Backlinks
+                    if thing.id not in f.friends:
+                       f.friend_webids.append(self._webid_url(thing.server_location,
+                                                               thing.id))
+
+            if 'links' in thing.__dict__:
+                for lid in thing.links:
+                    l = lookup_dict[lid]
+                    thing.linked_resources.append(self._resource_url(l.server_location, l.id))
+                    # Backlinks
+                    if thing.id not in l.links:
+                        l.linked_resources.append(self._resource_url(thing.server_location,
+                                                                     thing.id))
+
+            if thing.person:
+                self._write_person_container(thing)
+            else:
+                self._write_resource(thing)
