@@ -35,7 +35,7 @@ let BankNode = React.createClass({
 
   _handleAccept() {
     let values = {
-      title: '06123456',
+      title: '06' + (Math.floor(Math.random()*900000) + 100000),
       description: 'BankAccount'
     }
     let uri = encodeURIComponent(this.context.profile.webid)
