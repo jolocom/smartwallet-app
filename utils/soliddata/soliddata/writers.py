@@ -37,8 +37,11 @@ class SolidDataWriter:
     def _webid_url(self, server_location, person_id):
         return '{}/{}/profile/card#me'.format(server_location, person_id)
 
-    def _resource_url(self, server_location, id_):
-        return '{}/{}#this'.format(server_location, id_)
+    def _resource_url(self, server_location, id_, person=False):
+        if not person:
+            return '{}/{}#this'.format(server_location, id_)
+        else:
+            return self._webid_url(server_location, id_)
 
     def _container_base(self, server_name):
         if not self.flatten:
@@ -259,11 +262,11 @@ class SolidDataWriter:
             if 'links' in thing.__dict__:
                 for lid in thing.links:
                     l = lookup_dict[lid]
-                    thing.linked_resources.append(self._resource_url(l.server_location, l.id))
+                    thing.linked_resources.append(self._resource_url(l.server_location, l.id, l.person))
                     # Backlinks
                     if thing.id not in l.links:
                         l.linked_resources.append(self._resource_url(thing.server_location,
-                                                                     thing.id))
+                                                                     thing.id, thing.person))
 
 
         for thing in lookup_dict.itervalues():
