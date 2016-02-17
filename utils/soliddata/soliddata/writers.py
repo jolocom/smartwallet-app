@@ -234,11 +234,14 @@ class SolidDataWriter:
                 p_obj.server_location = s['location']
                 p_obj.server_name = s['name']
                 lookup_dict[p_dict['id']] = p_obj
-            for r in s['resources']:
-                r_obj = Resource(**r)
-                r_obj.server_location = s['location']
-                r_obj.server_name = s['name']
-                lookup_dict[r['id']] = r_obj
+
+            if 'resources' in s:
+                for r in s['resources']:
+                    r_obj = Resource(**r)
+                    r_obj.server_location = s['location']
+                    r_obj.server_name = s['name']
+                    lookup_dict[r['id']] = r_obj
+
             self._write_server_container(s)
 
 
