@@ -1,0 +1,76 @@
+{
+    "servers": [
+        {
+            "name": "local",
+            "location": "https://gold.jolocom.com",
+            "people": [
+                {
+                    "id": "joachim",
+                    "name": "Joachim",
+                    "sensors": [],
+                    "description": "Joachim",
+                    "friends": [
+                    ],
+                    "links": [
+                        "address",
+                        "telekom",
+                        "bank"
+                    ]
+                }
+            ],
+            "resources": [
+                {
+                    "id": "telekom",
+                    "name": "Telekom",
+                    "description": "Telekom",
+                    "links": [
+                    ],
+                    "type": "https://schema.org/Corporation"
+                },
+                {
+                    "id": "address",
+                    "name": "Address",
+                    "description": "Address",
+                    "links": [
+                    ],
+                    "type": "https://schema.org/PostalAddress"
+                },
+                {
+                    "id": "bank",
+                    "name": "#bank",
+                    "description": "#bank",
+                    "links": [
+                        "cba",
+                        "credit-suisse",
+                        "hsbc"
+                    ],
+                    "type": "http://jolocom.com/terms/SearchTerm"
+                },
+                {
+                    "id": "cba",
+                    "name": "CBA",
+                    "description": "CBA",
+                    "links": [
+                    ],
+                    "type": "https://schema.org/BankOrCreditUnion"
+                },
+                {
+                    "id": "credit-suisse",
+                    "name": "Credit Suisse",
+                    "description": "Credit Suisse",
+                    "links": [
+                    ],
+                    "type": "https://schema.org/BankOrCreditUnion"
+                },
+                {
+                    "id": "hsbc",
+                    "name": "HSBC",
+                    "description": "HSBC",
+                    "links": [
+                    ],
+                    "type": "https://schema.org/BankOrCreditUnion"
+                }
+            ]
+        }
+    ]
+}
