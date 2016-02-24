@@ -37,6 +37,7 @@
     "gulp-sass": "^2.0.4",
     "gulp-sync": "^0.1.4",
     "node-sass": "^3.4.2",
+    "gulp-uglify": "^1.5.3",
     "vinyl-paths": "^1.0.0",
     "yargs": "^3.31.0"
   },
