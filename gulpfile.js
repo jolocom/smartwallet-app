@@ -9,6 +9,7 @@ var gulpsync = require('gulp-sync')(gulp);
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var vinylPaths = require('vinyl-paths');
+var uglify = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
 var argv = require('yargs').argv;
 
@@ -80,6 +81,7 @@ gulp.task('scripts', function() {
         './build'
       ]
     }))
+    .pipe(uglify())
     .pipe(rename('app.js'))
     .pipe(gulp.dest(destinations.js));
 });
