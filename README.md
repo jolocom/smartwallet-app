@@ -31,6 +31,10 @@ soliddata --blueprint utils/soliddata/local.json --output-dir data --flatten
 gulp
 ```
 
+##Build-Prod
+`bash gulp build-prod`has a similar effect to just using `bash gulp`, except it runs some additional, non vital operations (for example asset minimization) that make the final `app.js` file more optimized. </br>Running `gulp-prod` takes more time, and can therefore cause the development feedback cycle to take longer, as a result of that it shouldn't really be used during development.
+
+
 ## Webroot
 You have to setup your SoLiD server to point to `dist/` directory (built by `gulp` in the previous step)
 
