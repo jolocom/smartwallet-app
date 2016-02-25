@@ -138,5 +138,5 @@ gulp.task('watch', function() {
 
 
 gulp.task('build', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html']]))
-gulp.task('prod-build', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'uglify']))
+gulp.task('build-prod', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'uglify']))
 gulp.task('default', gulpsync.sync(['build', 'watch']));
