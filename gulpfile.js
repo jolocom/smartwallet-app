@@ -81,7 +81,6 @@ gulp.task('scripts', function() {
         './build'
       ]
     }))
-    .pipe(uglify())
     .pipe(rename('app.js'))
     .pipe(gulp.dest(destinations.js));
 });
@@ -123,6 +122,12 @@ gulp.task('lint', function () {
         .pipe(eslint())
         .pipe(eslint.format());
         //.pipe(eslint.failOnError());
+});
+
+gulp.task('build-prod', function() {
+  return gulp.src(destinations.js + '/app.js')
+    .pipe(uglify())
+    .pipe(gulp.dest(destinations.js));
 });
 
 gulp.task('watch', function() {
