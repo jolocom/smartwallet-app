@@ -124,7 +124,7 @@ gulp.task('lint', function () {
         //.pipe(eslint.failOnError());
 });
 
-gulp.task('build-prod', function() {
+gulp.task('uglify', function() {
   return gulp.src(destinations.js + '/app.js')
     .pipe(uglify())
     .pipe(gulp.dest(destinations.js));
@@ -138,4 +138,5 @@ gulp.task('watch', function() {
 
 
 gulp.task('build', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html']]))
+gulp.task('prod-build', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'uglify']))
 gulp.task('default', gulpsync.sync(['build', 'watch']));
