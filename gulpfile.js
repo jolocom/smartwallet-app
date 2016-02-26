@@ -9,6 +9,7 @@ var gulpsync = require('gulp-sync')(gulp);
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var vinylPaths = require('vinyl-paths');
+var uglify = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
 var argv = require('yargs').argv;
 
@@ -123,6 +124,12 @@ gulp.task('lint', function () {
         //.pipe(eslint.failOnError());
 });
 
+gulp.task('uglify', function() {
+  return gulp.src(destinations.js + '/app.js')
+    .pipe(uglify())
+    .pipe(gulp.dest(destinations.js));
+});
+
 gulp.task('watch', function() {
   gulp.watch(sources.js, gulpsync.sync(['clean-build', 'lint', ['config', 'src'], ['scripts']]));
   gulp.watch(sources.html, ['html']);
@@ -131,4 +138,5 @@ gulp.task('watch', function() {
 
 
 gulp.task('build', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html']]))
+gulp.task('build-prod', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'uglify']))
 gulp.task('default', gulpsync.sync(['build', 'watch']));
