@@ -20,11 +20,13 @@ bower install
 ```
 cd utils/soliddata; python setup.py develop
 ```
+These tools should be installed using python2. Running the `setup.py` using python3 will cause errors in further steps. Please see the next step for extra information.
 
 ## Generate test data for single test server (https://localhost:8443)
 ```
 soliddata --blueprint utils/soliddata/local.json --output-dir data --flatten
 ```
+In case this command throws the `object of type 'map' has no len()` error, reinstall the _python tools for test data generation_ using python2 rather than python3. The error is caused by the _rdflib_ library not supporting python3.
 
 ## Building
 ```bash
