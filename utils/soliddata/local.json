@@ -9,7 +9,6 @@
                     "name": "Christian",
                     "description": "Music and Tech is really not that different at all",
                     "sensors": [
-                        "sensor"
                     ],
                     "friends": [
                         "joachim",
@@ -21,8 +20,6 @@
                     "name": "Joachim",
                     "description": "Networking and Business specialist from Berlin",
                     "sensors": [
-                        "sensor",
-                        "sensor-trento"
                     ],
                     "friends": [
                         "justas"
@@ -33,7 +30,6 @@
                     "name": "Justas",
                     "description": "Web Developer",
                     "sensors": [
-                        "sensor"
                     ],
                     "friends": [
                         "joachim"
