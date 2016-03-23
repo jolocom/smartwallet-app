@@ -1,7 +1,7 @@
 little-sister
 =============
 
-[![](https://img.shields.io/badge/project-Solid-7C4DFF.svg?style=flat-square)](https://github.com/solid/solid) [![Dependency Status](https://david-dm.org/jolocom/little-sister/develop.svg)](https://david-dm.org/jolocom/little-sister/develop) [![Stories in Backlog](https://badge.waffle.io/jolocom/little-sister.svg?label=backlog&title=Backlog)](http://waffle.io/jolocom/little-sister)
+[![](https://img.shields.io/badge/project-Solid-7C4DFF.svg?style=flat-square)](https://github.com/solid/solid) [![Dependency Status](https://david-dm.org/jolocom/little-sister/develop.svg)](https://david-dm.org/jolocom/little-sister/develop) [![Stories in Progress](https://badge.waffle.io/jolocom/little-sister.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/jolocom/little-sister)
 
 little-sister - Social app / linked data explorer built for [SoLiD](https://github.com/linkeddata/SoLiD) servers like [rww-play](https://github.com/read-write-web/rww-play) or [gold](https://github.com/linkeddata/gold)
 
