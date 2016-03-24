@@ -1,8 +1,8 @@
 import N3 from 'n3'
+import rdf from '/home/fuchs/Documents/work/rdf_refractor/little-sister/node_modules/rdflib/dist/rdflib-node.js'
 
 // N3.parser- promise version
 export class Parser {
-
   // @see https://github.com/RubenVerborgh/N3.js#parsing
   constructor(params) {
     if (params) {
@@ -13,15 +13,22 @@ export class Parser {
   }
 
   parse(text) {
-    return new Promise((resolve) => {
-      let triples = []
-      this.parser.parse(text, (err, triple, prefixes) => {
-        if (triple) {
-          triples.push(triple)
-        } else {
-          resolve({prefixes: prefixes, triples: triples})
+    return new Promise((resolve) =>{
+      let uri = 'https://localhost:8443'
+      let payload = []
+      rdf.parse(text, rdf.graph(), uri, 'text/turtle', (err, triples) => {
+        for (let i in triples.statements) {
+          let one = {
+            object: triples.statements[i].object.uri,
+            predicate: triples.statements[i].predicate.uri,
+            subject: triples.statements[i].subject.uri
+          }
+          if (!one.object)
+            one.object = triples.statements[i].object.value
+          payload.push(one)
         }
       })
+      resolve({ prefixes: {}, triples: payload})
     })
   }
 }
