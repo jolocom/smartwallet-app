@@ -1,5 +1,5 @@
 import N3 from 'n3'
-import rdf from '/home/fuchs/Documents/work/rdf_refractor/little-sister/node_modules/rdflib/dist/rdflib-node.js'
+import rdf from 'rdflib'
 
 // N3.parser- promise version
 export class Parser {
