@@ -1,16 +1,6 @@
-import N3 from 'n3'
 import rdf from 'rdflib'
 
-// N3.parser- promise version
 export class Parser {
-  // @see https://github.com/RubenVerborgh/N3.js#parsing
-  constructor(params) {
-    if (params) {
-      this.parser = N3.Parser(params)
-    } else {
-      this.parser = N3.Parser()
-    }
-  }
 
   parse(text) {
     return new Promise((resolve) =>{
@@ -34,30 +24,18 @@ export class Parser {
 }
 
 
-// N3.writer - promise version
 export class Writer {
 
-  // @see https://github.com/RubenVerborgh/N3.js#writing
-  constructor(params) {
-    if (params) {
-      this.writer = N3.Writer(params)
-    } else {
-      this.writer = N3.Writer()
-    }
+  constructor(){
+    this.g = rdf.graph()      
   }
 
   addTriple(triple) {
-    this.writer.addTriple(triple)
-  }
+    rdf.serialize(undefined, triple, undefined,'text/turtle',(string) => this.g.add(string))}
 
   end() {
-    return new Promise((resolve, reject) => {
-      this.writer.end((err, res) => {
-        if (err)
-          reject(err)
-        else
-          resolve(res)
-      })
-    })
-  }
+    return new Promise((resolve,reject) => 
+       resolve(this.g))
+    }
 }
+
