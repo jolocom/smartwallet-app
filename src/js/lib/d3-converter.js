@@ -79,7 +79,6 @@ class D3Converter {
         thmb = D3Converter._getValue(t.object)
       }
     }
-    console.log(thmb, 'AAAAAAAAAAAAAAAAAAAAAAAAAAaa')
     return thmb
   }
 
@@ -136,7 +135,7 @@ class D3Converter {
     console.log(literals)
 
     // These are the only links which we will follow in the graph
-    let validLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows, FOAF.img]
+    let validLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows]
 
     //triples which subject equal to center of the graph
     let allOutwards = targetTriples.filter((t) => t.subject == center && validLinks.indexOf(t.predicate) >= 0)
@@ -178,8 +177,8 @@ class D3Converter {
         title: centerData.title,
         description: centerData.description,
         nodeType: centerData.nodeType,
-        //MOVED THIS LINE DOWN THE TO THE NEXT FOR LOOP, SHOULD FIX THE IMAGE PROBLEM.
-        //img: centerData.img
+        //SETS THE IMAGE FOR THE MIDDLE NODE
+        img: centerData.img
       })
       cnt += 1
     }
@@ -194,9 +193,7 @@ class D3Converter {
           uri: out.subject,
           title: D3Converter._getTitle(out.subject, triples),
           description: D3Converter._getDescription(out.subject, triples),
-          nodeType: D3Converter._getNodeType(out.subject, triples),
-          //TODO TAKE A BETTER LOOK AT THIS LINE
-          img: D3Converter._getImg(out.subject, triples)
+          nodeType: D3Converter._getNodeType(out.subject, triples)
         })
         cnt += 1
       }
@@ -210,13 +207,12 @@ class D3Converter {
           title: D3Converter._getTitle(out.object, triples),
           description: D3Converter._getDescription(out.object, triples),
           nodeType: D3Converter._getNodeType(out.object, triples),
-          //TODO TAKE A BETTER LOOK AT THIS LINE
-          img: D3Converter._getImg(out.subject, triples)
+          img: ''
         })
         cnt += 1
       }
     }
-
+//
     // make node connections
     for (out of allOutwards) {
       if (out.objectType != 'literal') {
@@ -231,7 +227,6 @@ class D3Converter {
         })
       }
     }
-    console.log('THIS IS THE LOG', center, nodes, links, literals, 'THIS IS THE LOG')
     return {
       center: center,
       nodes: nodes,

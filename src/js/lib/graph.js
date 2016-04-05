@@ -553,10 +553,8 @@ export default class GraphD3 {
       this.getDomNode(domNodes, newCenter)
         .select('circle')
         .style('fill', function(d, i){
-          if (d.img!='') {
-            return 'url(#avatar'+i+')'}
-          else {
-            return STYLES.blueColor }
+          if (d.img) { return 'url(#avatar'+i+')'}
+          else { return STYLES.blueColor }
         })
       return
     }
