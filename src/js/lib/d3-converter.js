@@ -79,6 +79,7 @@ class D3Converter {
         thmb = D3Converter._getValue(t.object)
       }
     }
+    console.log(thmb, 'AAAAAAAAAAAAAAAAAAAAAAAAAAaa')
     return thmb
   }
 
@@ -227,7 +228,7 @@ class D3Converter {
         })
       }
     }
-
+    console.log('THIS IS THE LOG', center, nodes, links, literals, 'THIS IS THE LOG')
     return {
       center: center,
       nodes: nodes,

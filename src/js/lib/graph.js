@@ -143,7 +143,7 @@ export default class GraphD3 {
 
     let defs = node.enter().append('svg:defs')
     defs.append('svg:pattern')
-      .attr('id',  'avatar')
+      .attr('id',  (d, i)=>'avatar'+i)
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', -STYLES.largeNodeSize / 2)
@@ -177,15 +177,16 @@ export default class GraphD3 {
       .attr('y', '-8px')
       .attr('width', STYLES.smallNodeSize)
       .attr('height', STYLES.smallNodeSize)
-      .style('fill', (d) => {
+      .style('fill', (d, i) => {
         if (d.img!='') {
-         return 'url(#avatar)'}
-         else {
-        if (d.nodeType === 'sensor') {
-          return this.getSensorColor(d.title)
+          return 'url(#avatar'+i+')'}
+        else {
+          if (d.nodeType === 'sensor') {
+            return this.getSensorColor(d.title)
+          }
+          return STYLES.grayColor
         }
-        return STYLES.grayColor
-      }})
+      })
       .style('stroke', 'white')
       .style('stroke-width', 0)
 
@@ -551,13 +552,12 @@ export default class GraphD3 {
 
       this.getDomNode(domNodes, newCenter)
         .select('circle')
-        .style('fill', function(d){
+        .style('fill', function(d, i){
           if (d.img!='') {
-          return 'url(#avatar)'}
+            return 'url(#avatar'+i+')'}
           else {
-          return STYLES.blueColor }
-        }
-     )
+            return STYLES.blueColor }
+        })
       return
     }
 
@@ -568,12 +568,12 @@ export default class GraphD3 {
 
         oldCenterDom
           .select('circle')
-          .style('fill', function(d){
-          if (d.img!='') {
-           return 'url(#avatar)'}
-           else {
-             return STYLES.lightBlueColor
-          }
+          .style('fill', function(d, i){
+            if (d.img!='') {
+              return 'url(#avatar'+i+')'}
+            else {
+              return STYLES.lightBlueColor
+            }
           })
 
         this.animateNode(oldCenter.node,
@@ -588,13 +588,13 @@ export default class GraphD3 {
           let historicDom = this.getDomNode(domNodes, historic)
           historicDom
             .select('circle')
-            .style('fill', function(d){
-            if (d.img!='') {
-             return 'url(#avatar)'}
-             else {
-               return STYLES.grayColor
-             }
-             })
+            .style('fill', function(d, i){
+              if (d.img!='') {
+                return 'url(#avatar'+i+')'}
+              else {
+                return STYLES.grayColor
+              }
+            })
         }
       }
       {
@@ -604,13 +604,13 @@ export default class GraphD3 {
                      STYLES.height / 2) // move to center
         newCenterDom
           .select('circle')
-          .style('fill', function(d){
-          if (d.img!='') {
-           return 'url(#avatar)'}
-           else {
-             return STYLES.blueColor)
-           }
-           })
+          .style('fill', function(d, i){
+            if (d.img!='') {
+              return 'url(#avatar'+i+')'}
+            else {
+              return STYLES.blueColor
+            }
+          })
       }
     }
   }
