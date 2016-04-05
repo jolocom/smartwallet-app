@@ -71,6 +71,17 @@ class D3Converter {
     return desc
   }
 
+  static _getImg(subject, triples) {
+    let thmb = ''
+    for (var t of triples) {
+      //TODO console.log(t.predicate)
+      if (t.subject == subject && t.predicate == FOAF.img) {
+        thmb = D3Converter._getValue(t.object)
+      }
+    }
+    return thmb
+  }
+
   static _getNodeType(subject, triples) {
     let type = null
     for (var t of triples) {
@@ -124,7 +135,7 @@ class D3Converter {
     console.log(literals)
 
     // These are the only links which we will follow in the graph
-    let validLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows]
+    let validLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows, FOAF.img]
 
     //triples which subject equal to center of the graph
     let allOutwards = targetTriples.filter((t) => t.subject == center && validLinks.indexOf(t.predicate) >= 0)
@@ -154,7 +165,8 @@ class D3Converter {
       uri: center,
       title: D3Converter._getTitle(center, triples),
       description: D3Converter._getDescription(center, triples),
-      nodeType: D3Converter._getNodeType(center, triples)
+      nodeType: D3Converter._getNodeType(center, triples),
+      img: D3Converter._getImg(center, triples)
     }
     if(!(centerData.subject in connections)) {
       connections[centerData.subject] = cnt
@@ -164,7 +176,8 @@ class D3Converter {
         uri: centerData.uri,
         title: centerData.title,
         description: centerData.description,
-        nodeType: centerData.nodeType
+        nodeType: centerData.nodeType,
+        img: centerData.img
       })
       cnt += 1
     }
@@ -179,7 +192,8 @@ class D3Converter {
           uri: out.subject,
           title: D3Converter._getTitle(out.subject, triples),
           description: D3Converter._getDescription(out.subject, triples),
-          nodeType: D3Converter._getNodeType(out.subject, triples)
+          nodeType: D3Converter._getNodeType(out.subject, triples),
+          img: D3Converter._getImg(out.subject, triples)
         })
         cnt += 1
       }
@@ -192,7 +206,8 @@ class D3Converter {
           uri: out.object,
           title: D3Converter._getTitle(out.object, triples),
           description: D3Converter._getDescription(out.object, triples),
-          nodeType: D3Converter._getNodeType(out.object, triples)
+          nodeType: D3Converter._getNodeType(out.object, triples),
+          img: D3Converter._getImg(out.subject, triples)
         })
         cnt += 1
       }
