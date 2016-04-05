@@ -178,7 +178,8 @@ class D3Converter {
         title: centerData.title,
         description: centerData.description,
         nodeType: centerData.nodeType,
-        img: centerData.img
+        //MOVED THIS LINE DOWN THE TO THE NEXT FOR LOOP, SHOULD FIX THE IMAGE PROBLEM.
+        //img: centerData.img
       })
       cnt += 1
     }
@@ -194,6 +195,7 @@ class D3Converter {
           title: D3Converter._getTitle(out.subject, triples),
           description: D3Converter._getDescription(out.subject, triples),
           nodeType: D3Converter._getNodeType(out.subject, triples),
+          //TODO TAKE A BETTER LOOK AT THIS LINE
           img: D3Converter._getImg(out.subject, triples)
         })
         cnt += 1
@@ -208,6 +210,7 @@ class D3Converter {
           title: D3Converter._getTitle(out.object, triples),
           description: D3Converter._getDescription(out.object, triples),
           nodeType: D3Converter._getNodeType(out.object, triples),
+          //TODO TAKE A BETTER LOOK AT THIS LINE
           img: D3Converter._getImg(out.subject, triples)
         })
         cnt += 1
