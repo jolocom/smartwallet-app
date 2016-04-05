@@ -200,6 +200,7 @@ class D3Converter {
 
       if (out.objectType != 'literal') {
         connections[out.object] = cnt
+        let path = out.object.substring(0 , out.object.indexOf('/profile'))
         nodes.push({
           name: out.object,
           type: out.objectType,
@@ -207,16 +208,18 @@ class D3Converter {
           title: D3Converter._getTitle(out.object, triples),
           description: D3Converter._getDescription(out.object, triples),
           nodeType: D3Converter._getNodeType(out.object, triples),
-          img: ''
+          img: path + '/image.jpg' 
         })
         cnt += 1
       }
+      console.log(nodes, 'CURWWWWWA')
     }
 //
     // make node connections
     for (out of allOutwards) {
       if (out.objectType != 'literal') {
         let key = `${out.subject} ${out.object}`
+        console.log(`${out.subject} ${out.object}`,'mention smth here')
         let pr = (key in preds) ? preds[key] : ''
         preds[key] = `${pr} ${out.predicate}`
         links.push({
