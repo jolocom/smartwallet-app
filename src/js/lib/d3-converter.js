@@ -74,7 +74,6 @@ class D3Converter {
   static _getImg(subject, triples) {
     let thmb = ''
     for (var t of triples) {
-      //TODO console.log(t.predicate)
       if (t.subject == subject && t.predicate == FOAF.img) {
         thmb = D3Converter._getValue(t.object)
       }
@@ -212,14 +211,12 @@ class D3Converter {
         })
         cnt += 1
       }
-      console.log(nodes, 'CURWWWWWA')
     }
 //
     // make node connections
     for (out of allOutwards) {
       if (out.objectType != 'literal') {
         let key = `${out.subject} ${out.object}`
-        console.log(`${out.subject} ${out.object}`,'mention smth here')
         let pr = (key in preds) ? preds[key] : ''
         preds[key] = `${pr} ${out.predicate}`
         links.push({
