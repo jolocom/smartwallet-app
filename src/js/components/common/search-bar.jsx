@@ -80,6 +80,12 @@ let SearchBar = React.createClass({
     }
   },
 
+  _handleKeyUp(e) {
+    if (e.keyCode == 13 && typeof this.props.onSubmit === 'function') {
+      this.props.onSubmit(e.target.value)
+    }
+  },
+
   render() {
     let styles = this.getStyles()
 
@@ -88,7 +94,7 @@ let SearchBar = React.createClass({
     return (
       <AppBar
         style={styles.bar}
-        title={<input placeholder="Search..." onChange={this._handleChange} ref="input" style={styles.input}/>}
+        title={<input placeholder="Search..." onChange={this._handleChange} onKeyUp={this._handleKeyUp} ref="input" style={styles.input}/>}
         iconElementLeft={
           <IconButton onClick={this.hide}>
             <FontIcon className="material-icons" color={iconColor}>arrow_back</FontIcon>

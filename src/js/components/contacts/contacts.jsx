@@ -1,8 +1,9 @@
 import React from 'react'
+import Radium from 'radium'
 
 import ContactsList from 'components/contacts/list.jsx'
 
-export default React.createClass({
+let Contacts = React.createClass({
 
   contextTypes: {
     history: React.PropTypes.any
@@ -14,7 +15,7 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="jlc-contacts">
+      <div style={styles.container}>
         <ContactsList onClick={this.showContact} searchQuery={this.props.searchQuery}/>
         {this.props.children}
       </div>
@@ -22,3 +23,12 @@ export default React.createClass({
   }
 
 })
+
+let styles = {
+  container: {
+    flex: 1,
+    overflowY: 'auto'
+  }
+}
+
+export default Radium(Contacts)
