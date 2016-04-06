@@ -1,7 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import classNames from 'classnames'
+
 import ProfileNode from 'components/node/profile.jsx'
 import AddressNode from 'components/node/address.jsx'
 
@@ -11,6 +11,7 @@ import {
   Checkbox
 } from 'material-ui'
 
+import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
 import NodeActions from 'actions/node'
@@ -28,23 +29,11 @@ let Node = React.createClass({
   },
 
   componentDidMount() {
-    this.open()
+    this.refs.dialog.show()
   },
 
   componentWillUnmount() {
-    this.close()
-  },
-
-  open() {
-    this.setState({open: true})
-  },
-
-  close() {
-    this.setState({open: false})
-  },
-
-  toggle() {
-    this.setState({open: !this.state.open})
+    this.refs.dialog.hide()
   },
 
   togglePinned() {
@@ -53,7 +42,7 @@ let Node = React.createClass({
 
   _handleClose() {
     this.context.history.goBack()
-    this.close()
+    this.refs.dialog.hide()
   },
 
   getStyles() {
@@ -80,16 +69,12 @@ let Node = React.createClass({
   },
 
   render() {
-    let classes = classNames('jlc-node', 'jlc-dialog', 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.open
-    })
-
     let styles = this.getStyles()
 
     let content = this.getNodeContent()
 
     return (
-      <div className={classes}>
+      <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <AppBar
             iconElementLeft={<IconButton onTouchTap={this._handleClose} iconClassName="material-icons">close</IconButton>}
@@ -101,7 +86,7 @@ let Node = React.createClass({
             {content}
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })

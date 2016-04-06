@@ -1,5 +1,4 @@
 import React from 'react'
-// import {Link} from 'react-router'
 
 import {Tabs, Tab} from 'material-ui'
 
@@ -13,7 +12,7 @@ export default React.createClass({
     this.context.history.pushState(null, `/${tab}`)
   },
 
-  render() {    
+  render() {
     return (
       <Tabs valueLink={{value: this.props.activeTab, requestChange: this._handleTabsChange}} {...this.props}>
         <Tab label="Graph" value="graph"/>
@@ -24,10 +23,3 @@ export default React.createClass({
   }
 
 })
-
-// <div className="mdl-layout__tab-bar mdl-js-ripple-effect is-casting-shadow">
-//   <Link to="/graph" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">share</i></Link>
-//   <Link to="/chat" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">chat</i></Link>
-//   <Link to="/contacts" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">contacts</i></Link>
-//   <Link to="/projects" activeClassName="is-active" className="mdl-layout__tab"><i className="material-icons">folder</i></Link>
-// </div>

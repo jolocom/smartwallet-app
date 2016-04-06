@@ -154,6 +154,11 @@ let App = React.createClass({
 
   getStyles() {
     let styles = {
+      container: {
+        width: '100%',
+        height: '100%',
+        position: 'relative'
+      },
       header: {
         zIndex: 5
       },
@@ -177,7 +182,7 @@ let App = React.createClass({
     let search = component.search || <SearchBar ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
 
     return (
-      <div className="jlc-app">
+      <div style={styles.container}>
         {this.state.username ? (
           <Layout>
             <Paper zDept={1} style={styles.header}>

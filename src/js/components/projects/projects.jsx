@@ -4,7 +4,7 @@ let Projects = React.createClass({
 
   render: function() {
     return (
-      <div className="jlc-projects">
+      <div>
 
       </div>
     )

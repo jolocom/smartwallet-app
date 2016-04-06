@@ -46,6 +46,9 @@ let ProfileNode = React.createClass({
       },
       actions: {
         display: 'flex'
+      },
+      comments: {
+        flex: 1
       }
     }
   },
@@ -67,7 +70,7 @@ let ProfileNode = React.createClass({
             <IconButton iconClassName="material-icons">share</IconButton>
           </CardActions>
         </Card>
-        <Comments node={this.props.node}/>
+        <Comments node={this.props.node} style={styles.comments}/>
       </div>
     )
   }
