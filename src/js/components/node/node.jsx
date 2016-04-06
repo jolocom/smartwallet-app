@@ -4,8 +4,6 @@ import Radium from 'radium'
 import classNames from 'classnames'
 import ProfileNode from 'components/node/profile.jsx'
 import AddressNode from 'components/node/address.jsx'
-import BankNode from 'components/node/bank.jsx'
-import BankAccountNode from 'components/node/bankaccount.jsx'
 
 import {
   AppBar,
@@ -76,8 +74,9 @@ let Node = React.createClass({
       return <ProfileNode node={node}/>
     }
     switch(node.description) {
-    case 'Address':
-      return <AddressNode node={node}/>
+      case 'Address':
+        return <AddressNode node={node}/>
+    }
   },
 
   render() {
