@@ -103,6 +103,7 @@ class D3Converter {
   //TODO: this is bullshit- should simplify
   static convertTriples(center, triples) {
     console.log('Converting triples to D3 graph data')
+    console.log(triples)
     let targetTriples = triples.map((t) => {
       // mailto links are not crawlable, so we convert them to literals for crawlable graph purposes
       if (t.predicate == FOAF.mbox) {
@@ -137,7 +138,7 @@ class D3Converter {
     let validLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows]
 
     //triples which subject equal to center of the graph
-    let allOutwards = targetTriples.filter((t) => t.subject == center && validLinks.indexOf(t.predicate) >= 0)
+    let allOutwards = targetTriples.filter((t) =>  (t.subject == center || t.preducate == FOAF.img ) && validLinks.indexOf(t.predicate) >= 0)
       .map((t) => {
         return {
           subject: D3Converter._getValue(t.subject),
@@ -199,7 +200,6 @@ class D3Converter {
 
       if (out.objectType != 'literal') {
         connections[out.object] = cnt
-        let path = out.object.substring(0 , out.object.indexOf('/profile'))
         nodes.push({
           name: out.object,
           type: out.objectType,
@@ -207,7 +207,7 @@ class D3Converter {
           title: D3Converter._getTitle(out.object, triples),
           description: D3Converter._getDescription(out.object, triples),
           nodeType: D3Converter._getNodeType(out.object, triples),
-          img: path + '/image.jpg' 
+          img: D3Converter._getImg(out.object, triples)
         })
         cnt += 1
       }

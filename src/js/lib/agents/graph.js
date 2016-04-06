@@ -2,7 +2,7 @@ import N3 from 'n3'
 import D3Converter from '../d3-converter.js'
 import HTTPAgent from './http.js'
 import WebIDAgent from './webid.js'
-import {DC, SIOC} from '../namespaces.js'
+import {DC, SIOC, FOAF} from '../namespaces.js'
 import {Parser, Writer} from '../rdf.js'
 import Util from '../util.js'
 
@@ -153,9 +153,9 @@ class GraphAgent extends HTTPAgent {
 
   // given a pointed graph- we need to figure out the pointers for relevant adjacent graphs
   _adjacentGraphs(pointer, triples) {
-    let possibleLinks = [SIOC.containerOf, SIOC.hasContainer]
+    let possibleLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows]
     let currentDoc = Util.urlWithoutHash(pointer)
-    return triples.filter((t) => t.subject == pointer && possibleLinks.indexOf(t.predicate) >= 0 && N3Util.isIRI(t.object) && Util.urlWithoutHash(t.object) != currentDoc).map((t) => t.object)
+    return triples.filter((t) => t.subject == pointer &&  possibleLinks.indexOf(t.predicate) >= 0 && N3Util.isIRI(t.object) && Util.urlWithoutHash(t.object) != currentDoc).map((t) => t.object)
   }
 
 
@@ -176,10 +176,13 @@ class GraphAgent extends HTTPAgent {
       let adjacent = this._adjacentGraphs(uri, centerTriples)
       return Promise.all(adjacent.map((uri) => this.fetchTriples(uri)))
     }).then((results) => {
-
       // concat triples and convert them to format which can be rendered in d3 graph
       let triples = results.reduce((acc, current) => acc.concat(current.triples), centerTriples)
+      console.log('triplestriplestriplestriplestriplestriplestriples')
+      console.log(triples)
       let d3graph = D3Converter.convertTriples(uri, triples)
+      console.log('graphgraphgraphgraphgraphgraphgraphgraphgraphgraph')
+      console.log(d3graph)
       return d3graph
     })
   }
