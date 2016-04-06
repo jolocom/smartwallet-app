@@ -1,3 +1,4 @@
+
 import rdf from 'rdflib'
 
 export class Parser {
@@ -27,15 +28,14 @@ export class Parser {
 export class Writer {
 
   constructor(){
-    this.g = rdf.graph()      
+    this.g = rdf.graph()
   }
 
   addTriple(triple) {
     rdf.serialize(undefined, triple, undefined,'text/turtle',(string) => this.g.add(string))}
 
   end() {
-    return new Promise((resolve,reject) => 
+    return new Promise((resolve) =>
        resolve(this.g))
-    }
+  }
 }
-

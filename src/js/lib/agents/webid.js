@@ -3,9 +3,10 @@ import {Writer} from '../rdf.js'
 import {DC, FOAF, RDF, SIOC} from '../namespaces.js'
 import N3 from 'n3'
 import {dev} from '../../settings'
+import Solid from 'solid-client'
 
 let N3Util = N3.Util
-
+let solid = Solid
 import {endpoint} from 'settings'
 
 // WebID related functions
@@ -32,52 +33,37 @@ class WebIDAgent extends LDPAgent {
     if (dev) {
       getWebID = Promise.resolve(this._formatFakeWebID(localStorage.getItem('fake-user')))
     } else {
-      getWebID = this.head(endpoint)
-        .then((xhr) => {
-          return xhr.getResponseHeader('User')
-        })
+      return getWebID = solid.currentUser()
     }
     return getWebID
   }
 
   fakeSignup(username, name, email) {
-    // create container $username
-    // create container $username/profile
-    // create resource $username/profile/card
-    // create container $username/little-sister
-    // create container $username/little-sister/graph-comments
-    // create resource $username/little-sister/inbox
-    // create container $username/little-sister/graph-nodes
-
-    let userContainer = `${endpoint}/${username}`
-    let userProfileContainer = `${endpoint}/${username}/profile`
-    let profileDoc = `${endpoint}/${username}/profile/card`
-    let appContainer = `${endpoint}/${username}/little-sister`
-    let inboxDoc = `${endpoint}/${username}/little-sister/inbox`
-    let commentsContainer = `${endpoint}/${username}/little-sister/graph-comments`
-    let nodesContainer = `${endpoint}/${username}/little-sister/graph-nodes`
 
     console.log('creating fake profile...')
     console.log(username)
     console.log(name)
     console.log(email)
 
-    let p = this.createBasicContainer(userContainer)
-      .then(() => {
-        return Promise.all([this.createBasicContainer(userProfileContainer), this.createBasicContainer(appContainer)])
-      })
-      .then(() => {
-        return Promise.all([this.createBasicContainer(commentsContainer), this.createBasicContainer(nodesContainer)])
-      })
-      .then(() => {
-        return Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
-      })
-      .then((results) => {
-        let profileText = results[0]
-        let inboxText = results[1]
-        let hdrs = {'Content-type': 'text/turtle'}
-        return Promise.all([this.put(profileDoc, hdrs, profileText), this.put(inboxDoc, hdrs, inboxText)])
-      })
+    let profileDoc = `${endpoint}/${username}/profile/card`
+    let inboxDoc = `${endpoint}/${username}/little-sister/inbox`
+
+    // TODO TODO LOOK A THESE TODO TODO THE PROBLEM IS WITH THE PARSER !!!
+    // this._profileTriples(username,name,email).then((result)=> {
+    // this._inboxTriples(username,name,email).then((result) => {
+
+    solid.web.put(`${endpoint}/${username}/little-sister/inbox`)
+    solid.web.put(`${endpoint}/${username}/profile/card`)
+    solid.web.put(`${endpoint}/${username}/little-sister/graph-comments/test`)
+    solid.web.put(`${endpoint}/${username}/little-sister/graph-nodes/test`)
+
+    //  Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
+    //   .then((results) => {
+    //     let profileText = results[0]
+    //     let inboxText = results[1]
+    //     let hdrs = {'Content-type': 'text/turtle'}
+    //     return Promise.all([this.put(profileDoc, hdrs, profileText), this.put(inboxDoc, hdrs, inboxText)])
+    //   })
 
     console.log('done.')
     return p
@@ -128,7 +114,9 @@ class WebIDAgent extends LDPAgent {
     }
 
     let writer = new Writer()
+
     let docTitle = null
+
     if (name) {
       docTitle = {
         subject: '',

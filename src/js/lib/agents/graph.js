@@ -4,9 +4,12 @@ import HTTPAgent from './http.js'
 import WebIDAgent from './webid.js'
 import {DC, SIOC} from '../namespaces.js'
 import {Parser, Writer} from '../rdf.js'
+import rdf from 'rdflib'
+import Solid from 'solid-client'
 import Util from '../util.js'
 
 let N3Util = N3.Util
+let solid = Solid
 
 
 // abstraction of WebAgent for graph purposes
