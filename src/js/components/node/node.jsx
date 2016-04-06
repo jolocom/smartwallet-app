@@ -78,11 +78,6 @@ let Node = React.createClass({
     switch(node.description) {
     case 'Address':
       return <AddressNode node={node}/>
-    case 'CBA':
-      return <BankNode node={node}/>
-    case 'BankAccount':
-      return <BankAccountNode node={node}/>
-    }
   },
 
   render() {
