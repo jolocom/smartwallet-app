@@ -1,7 +1,6 @@
 import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
 import rdf from 'rdflib'
-import N3 from 'n3'
 import {dev} from '../../settings'
 import Solid from 'solid-client'
 
@@ -10,7 +9,6 @@ let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 
-let N3Util = N3.Util
 let solid = Solid
 import {endpoint} from 'settings'
 
@@ -64,10 +62,10 @@ class WebIDAgent extends LDPAgent {
     let webid = `${endpoint}/${username}/profile/card#me`
     let writer = new Writer()
 
-    writer.addTriple('', DC('title'), N3Util.createLiteral(`Inbox of ${username}`))
-    writer.addTriple('', FOAF('maker'), webid)
-    writer.addTriple('', FOAF('primaryTopic'), '#ingox')
-    writer.addTriple('#inbox', RDF('type'), SIOC('Space'))
+    writer.addTriple(rdf.sym(''), DC('title'), `Inbox of ${username}`)
+    writer.addTriple(rdf.sym(''), FOAF('maker'), webid)
+    writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#inbox'))
+    writer.addTriple(rdf.sym('#inbox'), RDF('type'), SIOC('Space'))
 
     return writer.end()
   }
@@ -77,21 +75,16 @@ class WebIDAgent extends LDPAgent {
     if (!username) { return Promise.reject('Must provide a username!') }
     let writer = new Writer()
 
-    if (name)
-      writer.addTriple('',DC('title'), N3Util.createLiteral(`WebID profile of ${name}`))
-    else
-      writer.addTriple('', DC('title'), N3Util.createLiteral(`WebID profile of ${username}`))
+    if (name) writer.addTriple(rdf.sym(''),DC('title'), `WebID profile of ${name}`)
+    else writer.addTriple(rdf.sym(''), DC('title'), `WebID profile of ${username}`)
 
-    writer.addTriple('', RDF('type') ,FOAF('PersonalProfileDocument'))
-    writer.addTriple('', RDF('maker') ,'#me')
-    writer.addTriple('', FOAF('primaryTopic'), '#me')
+    writer.addTriple(rdf.sym(''), RDF('type') ,FOAF('PersonalProfileDocument'))
+    writer.addTriple(rdf.sym(''), RDF('maker') ,rdf.sym('#me'))
+    writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#me'))
 
-    writer.addTriple('#me', RDF('type'), FOAF('Person'))
-    if (email) writer.addTriple('#me', FOAF('mbox'), email)
-    writer.addTriple('#me', RDF('type'), FOAF('Person'))
-    writer.addTriple('#me', RDF('type'), FOAF('Person'))
-    if (name) writer.addTriple('#me', FOAF('name'), N3Util.createLiteral(name))
-
+    writer.addTriple(rdf.sym('#me'), RDF('type'), FOAF('Person'))
+    if (email) writer.addTriple(rdf.sym('#me'), FOAF('mbox'), email)
+    if (name) writer.addTriple(rdf.sym('#me'), FOAF('name'), name)
     return writer.end()
   }
 }
