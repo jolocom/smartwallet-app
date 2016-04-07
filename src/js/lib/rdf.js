@@ -24,18 +24,24 @@ export class Parser {
   }
 }
 
-
 export class Writer {
 
   constructor(){
     this.g = rdf.graph()
   }
 
-  addTriple(triple) {
-    rdf.serialize(undefined, triple, undefined,'text/turtle',(string) => this.g.add(string))}
+  addTriple(subj, pred, obj) {
+    this.g.add(subj,pred,obj)
+  }
 
   end() {
-    return new Promise((resolve) =>
-       resolve(this.g))
+    return new Promise((resolve, reject) => {
+      rdf.serialize(undefined, this.g, undefined, 'text/turtle', (err, str) => {
+        if (err)
+          reject(err)
+        else
+          resolve(str)
+      })
+    })
   }
 }
