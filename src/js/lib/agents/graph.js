@@ -102,9 +102,11 @@ class GraphAgent extends HTTPAgent {
         this.fetchTriples(URI.object)
         .then((triples) =>
         {
-          tempNode[URI.object] = triples.triples
+          tempNode['uri'] = URI.object
+          tempNode['triples'] = triples
           graphMap.push(tempNode)
           if (index == neighbours.length - 1) {
+            console.log('sending this on',graphMap)
             resolve(graphMap)
           }
         })
@@ -121,8 +123,11 @@ class GraphAgent extends HTTPAgent {
         this._getNeighbours(uri, res.triples).then((result) =>
         {
           let schema = {}
-          schema[uri] = res.triples
+          schema['center'] = {uri: uri,
+                              triples: res.triples
+                            }
           schema['adjacent'] = result
+          console.log(schema,'this is me now')
           resolve(schema)
         })
       })
@@ -140,8 +145,11 @@ class GraphAgent extends HTTPAgent {
           this._getNeighbours(uri, res.triples).then((result) =>
           {
             let schema = {}
-            schema[uri] = res.triples
+            schema['center'] = {uri: uri,
+                                triples: res.triples
+                              }
             schema['adjacent'] = result
+            console.log(schema,'this is me now')
             resolve(schema)
           })
         })

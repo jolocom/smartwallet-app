@@ -94,17 +94,14 @@ let Graph = React.createClass({
       plusDrawerOpen: this.state.plusDrawerOpen
     }
 
-    //this.showNode(center)
-
     this.arrangeNodesInACircle(state.nodes)
     return state
   },
 
   centerAtWebID: function() {
     graphAgent._getWebIdGraphScheme().then((d3graph) => {
-      console.log(d3graph)
-      let newState = this._changeCenter(d3graph.center, d3graph)
-      newState.identity = d3graph.center
+      let newState = this._changeCenter(d3graph.center.uri, d3graph.center.triples)
+      newState.identity = d3graph.center.uri
       this.setState(newState)
     })
   },

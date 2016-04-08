@@ -13,7 +13,6 @@ class D3Converter {
     }
   }
 
-
   static _getValue(entity) {
     if (N3Util.isLiteral(entity)) {
       return N3Util.getLiteralValue(entity)
@@ -69,7 +68,7 @@ class D3Converter {
 
     return desc
   }
-p
+
   static _getNodeType(subject, triples) {
     let type = null
     for (var t of triples) {
