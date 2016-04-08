@@ -19,7 +19,6 @@ import NodeStore from 'stores/node'
 
 import PinnedNodes from './pinned.jsx'
 
-import rdf from 'rdflib'
 let graphAgent = new GraphAgent()
 
 let Graph = React.createClass({
@@ -103,6 +102,7 @@ let Graph = React.createClass({
 
   centerAtWebID: function() {
     graphAgent._getWebIdGraphScheme().then((d3graph) => {
+      console.log(d3graph)
       let newState = this._changeCenter(d3graph.center, d3graph)
       newState.identity = d3graph.center
       this.setState(newState)

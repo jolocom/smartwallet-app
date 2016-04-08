@@ -1,15 +1,11 @@
 import N3 from 'n3'
-import D3Converter from '../d3-converter.js'
 import HTTPAgent from './http.js'
 import WebIDAgent from './webid.js'
 import {DC, FOAF, SIOC} from '../namespaces.js'
 import {Parser, Writer} from '../rdf.js'
-import rdf from 'rdflib'
-import Solid from 'solid-client'
 import Util from '../util.js'
 
 let N3Util = N3.Util
-let solid = Solid
 
 class GraphAgent extends HTTPAgent {
 // START OF NOT IMPLEMENTED ZONE
@@ -99,7 +95,7 @@ class GraphAgent extends HTTPAgent {
     let possibleLinks = [FOAF.knows]
     let neighbours = triples.filter((t) => t.subject == center && possibleLinks.indexOf(t.predicate) >= 0)
 
-    return new Promise ((resolve, reject) => {
+    return new Promise ((resolve) => {
       let graphMap = []
       neighbours.map((URI, index) => {
         let tempNode = {}
@@ -118,25 +114,24 @@ class GraphAgent extends HTTPAgent {
 // The duplication of code here has to go, I need to figure that out after I
 // improve my promise wizardy skills
   _getUriGraphScheme(uri) {
-    return new Promise((resolve, reject) =>
+    return new Promise((resolve) =>
     {
-        this.fetchTriples(uri).then((res) =>
+      this.fetchTriples(uri).then((res) =>
+      {
+        this._getNeighbours(uri, res.triples).then((result) =>
         {
-          this._getNeighbours(uri, res.triples).then((result) =>
-          {
-            let adjacentURIs = result
-            let schema = {}
-            schema[uri] = res.triples
-            schema['adjacent'] = result
-            resolve(schema)
-          })
+          let schema = {}
+          schema[uri] = res.triples
+          schema['adjacent'] = result
+          resolve(schema)
         })
       })
-    }
+    })
+  }
 
   _getWebIdGraphScheme() {
     let wia = new WebIDAgent()
-    return new Promise((resolve, reject) =>
+    return new Promise((resolve) =>
     {
       wia.getWebID().then((uri) =>
       {
@@ -144,7 +139,6 @@ class GraphAgent extends HTTPAgent {
         {
           this._getNeighbours(uri, res.triples).then((result) =>
           {
-            let adjacentURIs = result
             let schema = {}
             schema[uri] = res.triples
             schema['adjacent'] = result

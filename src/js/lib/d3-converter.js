@@ -1,12 +1,5 @@
 import N3 from 'n3'
 import {DC, FOAF, RDF, SIOC, SSN} from '../lib/namespaces.js'
-import Rdf from 'rdflib'
-
-let rdf = Rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-let foaf = Rdf.Namespace('http://xmlns.com/foaf/0.1/')
-let dc = Rdf.Namespace('http://purl.org/dc/terms/')
-let sioc = Rdf.Namespace('http://rdfs.org/sioc/ns#')
-
 let N3Util = N3.Util
 
 class D3Converter {
