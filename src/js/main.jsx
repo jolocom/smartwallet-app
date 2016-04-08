@@ -19,10 +19,8 @@ import Contacts from 'components/contacts/contacts.jsx'
 import Contact from 'components/contacts/contact.jsx'
 import Projects from 'components/projects/projects.jsx'
 
-import Login from 'components/accounts/login-dev.jsx'
-import Test from 'components/test.jsx'
-//import SignupProd from 'components/signup.jsx'
-import Signup from 'components/accounts/signup-dev.jsx'
+import Login from 'components/accounts/login.jsx'
+import Signup from 'components/accounts/signup.jsx'
 
 injectTapEventPlugin()
 
@@ -66,7 +64,6 @@ let routes = (
     <Route path='projects' component={Projects}/>
     <Route path='signup' component={Signup}/>
     <Route path='login' component={Login}/>
-    <Route path='test' component={Test}/>
   </Route>
 )
 

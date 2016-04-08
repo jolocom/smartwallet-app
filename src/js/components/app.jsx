@@ -2,6 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import {History} from 'react-router'
+import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
 
@@ -91,7 +92,7 @@ let App = React.createClass({
             <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handlePinnedTap}>inbox</IconButton>
           </div>
         ),
-        search: <GraphSearch ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
+        search: <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
       }
     } else if (path.match('/chat')) {
       return {
@@ -134,6 +135,12 @@ let App = React.createClass({
     this.setState({searchQuery: query})
   },
 
+  _handleSearchSubmit() {
+    let uri = `${bankUri}/${this.state.searchQuery}#this`
+    this.history.pushState(null, `/graph/${encodeURIComponent(uri)}`)
+    this.refs.search.hide()
+  },
+
   _handleSearchHide() {
     this.setState({
       searchActive: false,
@@ -147,6 +154,11 @@ let App = React.createClass({
 
   getStyles() {
     let styles = {
+      container: {
+        width: '100%',
+        height: '100%',
+        position: 'relative'
+      },
       header: {
         zIndex: 5
       },
@@ -170,7 +182,7 @@ let App = React.createClass({
     let search = component.search || <SearchBar ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
 
     return (
-      <div className="jlc-app">
+      <div style={styles.container}>
         {this.state.username ? (
           <Layout>
             <Paper zDept={1} style={styles.header}>

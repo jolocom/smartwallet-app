@@ -7,7 +7,8 @@ let Content = React.createClass({
   getStyles() {
     return {
       flex: 1,
-      overflowY: 'auto'
+      display: 'flex',
+      flexDirection: 'column'
     }
   },
 

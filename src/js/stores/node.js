@@ -11,7 +11,7 @@ export default Reflux.createStore({
   listenables: NodeActions,
   getInitialState() {
     return {
-      node: []
+      node: null
     }
   },
   onLoad(uri) {

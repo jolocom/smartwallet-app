@@ -1,4 +1,5 @@
 import React from 'react'
+import Radium from 'radium'
 import Reflux from 'reflux'
 
 import {List, ListItem, Avatar} from 'material-ui'
@@ -6,7 +7,7 @@ import {List, ListItem, Avatar} from 'material-ui'
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 
-export default React.createClass({
+let Contacts = React.createClass({
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
 
@@ -26,7 +27,7 @@ export default React.createClass({
 
   render() {
     return (
-      <List className="jlc-contacts-list">
+      <List>
         {this.state.contacts.map(({username, name, email, imgUri}) => {
           let avatar = <Avatar src={imgUri}>{name[0]}</Avatar>
           return (
@@ -38,3 +39,5 @@ export default React.createClass({
   }
 
 })
+
+export default Radium(Contacts)

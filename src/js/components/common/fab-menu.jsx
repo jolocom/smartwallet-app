@@ -1,6 +1,5 @@
 import React, {Children} from 'react'
 import Radium from 'radium'
-import classNames from 'classnames'
 
 import _ from 'lodash'
 
@@ -69,7 +68,6 @@ let FabMenu = React.createClass({
 
   render() {
     let {
-      className,
       ripple,
       icon,
       // closeIcon,
@@ -80,17 +78,12 @@ let FabMenu = React.createClass({
 
     let styles = this.getStyles()
 
-    let classes = classNames('mdl-menu__fab', {
-      'is-opened': this.state.open
-    }, className)
-
     let children = Children.map(this.props.children, (child, i) => {
       let duration = this.props.duration
       let delays = this.calculateTransitionDelays(i)
       let delay = this.state.open ? delays.disappear : delays.appear
       let show = this.state.open ? 1 : 0
       return React.cloneElement(child, {
-        className: classNames('mdl-menu__fab-item', child.props.className),
         onClick: (...args) => {
           this.setState({open: false})
           if (typeof child.props.onClick === 'function')
@@ -107,8 +100,8 @@ let FabMenu = React.createClass({
     })
 
     return (
-      <div className={classes} style={styles.container}>
-        <nav className="mdl-menu__fab-nav" style={styles.nav}>
+      <div style={styles.container}>
+        <nav style={styles.nav}>
           <FloatingActionButton onClick={this.toggle} style={styles.item}>
             <FontIcon className="material-icons">{icon}</FontIcon>
           </FloatingActionButton>

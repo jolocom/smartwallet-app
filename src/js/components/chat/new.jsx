@@ -1,12 +1,12 @@
 import React from 'react'
 import Reflux from 'reflux'
-import classNames from 'classnames'
 
 import {IconButton, AppBar} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
 import SearchBar from 'components/common/search-bar.jsx'
+import Dialog from 'components/common/dialog.jsx'
 
 import ContactsList from 'components/contacts/list.jsx'
 
@@ -34,29 +34,17 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    this.open()
+    this.refs.dialog.show()
   },
 
   componentWillUnmount() {
-    this.close()
+    this.refs.dialog.hide()
   },
 
   componentDidUpdate() {
     if (this.state.id) {
       this.context.history.pushState(null, `/conversations/${this.state.id}`)
     }
-  },
-
-  open() {
-    this.setState({open: true})
-  },
-
-  close() {
-    this.setState({open: false})
-  },
-
-  toggle() {
-    this.setState({open: !this.state.open})
   },
 
   startChat(username) {
@@ -72,12 +60,8 @@ export default React.createClass({
   },
 
   render() {
-    let classes = classNames('jlc-chat-new', 'jlc-dialog', 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.open
-    })
-
     return (
-      <div className={classes}>
+      <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <AppBar
           title="Select contact"
@@ -90,7 +74,7 @@ export default React.createClass({
             <ContactsList onClick={this.startChat} searchQuery={this.state.searchQuery}/>
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })

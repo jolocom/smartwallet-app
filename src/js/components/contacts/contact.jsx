@@ -1,8 +1,8 @@
 import React from 'react'
 import Reflux from 'reflux'
-import classNames from 'classnames'
 
 import {AppBar, IconButton} from 'material-ui'
+import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
 import ContactActions from 'actions/contact'
@@ -16,12 +16,6 @@ export default React.createClass({
     history: React.PropTypes.any
   },
 
-  getInitialState() {
-    return {
-      open: false
-    }
-  },
-
   componentDidMount() {
     ContactActions.load(this.props.params.username)
     this.open()
@@ -32,15 +26,15 @@ export default React.createClass({
   },
 
   open() {
-    this.setState({open: true})
+    this.refs.dialog.show()
   },
 
   close() {
-    this.setState({open: false})
+    this.refs.dialog.hide()
   },
 
   toggle() {
-    this.setState({open: !this.state.open})
+    this.refs.dialog.toggle()
   },
 
   startChat() {
@@ -48,14 +42,10 @@ export default React.createClass({
   },
 
   render() {
-    let classes = classNames('jlc-chat-user', 'jlc-dialog', 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.open
-    })
-
     let contact = this.state
 
     return (
-      <div className={classes}>
+      <Dialog ref="dialog" fullscreen={true} visible={this.state.open}>
         <Layout>
           <AppBar
             title={contact.name}
@@ -69,7 +59,7 @@ export default React.createClass({
 
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })

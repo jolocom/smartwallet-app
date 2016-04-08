@@ -1,12 +1,12 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import classNames from 'classnames'
 
 import {AppBar, IconButton, Styles} from 'material-ui'
 
 let {Colors} = Styles
 
+import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
 import NodeActions from 'actions/node'
@@ -47,6 +47,16 @@ let PinnedNodes = React.createClass({
     history: React.PropTypes.any
   },
 
+  componentDidUpdate(props, state) {
+    if (state.show !== this.state.show) {
+      if (this.state.show) {
+        this.refs.dialog.show()
+      } else {
+        this.refs.dialog.hide()
+      }
+    }
+  },
+
   close() {
     PinnedActions.hide()
   },
@@ -70,12 +80,9 @@ let PinnedNodes = React.createClass({
   },
 
   render: function() {
-    let classes = classNames('jlc-pinned', 'jlc-dialog' , 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.show
-    })
     let styles = this.getStyles()
     return (
-      <div className={classes}>
+      <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <AppBar
             title="Pinned nodes"
@@ -93,7 +100,7 @@ let PinnedNodes = React.createClass({
             })}
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })
