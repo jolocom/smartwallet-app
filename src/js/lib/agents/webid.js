@@ -3,14 +3,13 @@ import {Writer} from '../rdf.js'
 import rdf from 'rdflib'
 import {dev} from '../../settings'
 import Solid from 'solid-client'
+import {endpoint} from 'settings'
 
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
-
 let solid = Solid
-import {endpoint} from 'settings'
 
 // WebID related functions
 class WebIDAgent extends LDPAgent {

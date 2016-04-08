@@ -2,7 +2,7 @@ import N3 from 'n3'
 import D3Converter from '../d3-converter.js'
 import HTTPAgent from './http.js'
 import WebIDAgent from './webid.js'
-import {DC, SIOC} from '../namespaces.js'
+import {DC, FOAF, SIOC} from '../namespaces.js'
 import {Parser, Writer} from '../rdf.js'
 import rdf from 'rdflib'
 import Solid from 'solid-client'
@@ -11,18 +11,8 @@ import Util from '../util.js'
 let N3Util = N3.Util
 let solid = Solid
 
-
-// abstraction of WebAgent for graph purposes
 class GraphAgent extends HTTPAgent {
-  // Post a new node to a container
-  //
-  // @param {string} title title of the new node.
-  // @param {string} description description of the new node.
-  // @param {string} newNodeUrl url for the new node
-  // @param {string} slug slug for the new node
-  // @param {string} dstContainer url indicating container to which the new node should be posted.
-  //
-  // @return {Promise} promise with the result (TODO: what result)?
+// START OF NOT IMPLEMENTED ZONE
   createNode(title, description, newNodeUrl, slug, dstContainer) {
     let writer = new Writer({format: 'N-Triples', prefixes: []})
     writer.addTriple({
@@ -40,25 +30,13 @@ class GraphAgent extends HTTPAgent {
       return this.post(dstContainer, {'Slug': slug, 'Accept': 'application/n-triples', 'Content-type': 'application/n-triples'}, res)
     })
   }
-
-
-  // Make a link between to nodes denoted by src and dst urls
-  //
-  // // TODO: do we need the distinction between src and dst? The links are bidirectional anyway.
-  // @param {string} srcUrl source node
-  // @param {string} dstUrl destination node
-  //
-  // @return {Promis promise containing the result (TODO: what result?)
-  //
   connectNode(srcUrl, dstUrl) {
-    // fetch src node
     return this.fetchTriples(srcUrl).then((res) => {
       let writer = new Writer({format: 'N-Triples', prefixes: res.prefixes})
       for (var t of res.triples) {
         writer.addTriple(t)
       }
 
-      // add connection triple to source node
       writer.addTriple({
         subject: srcUrl,
         predicate: SIOC.hasContainer,
@@ -67,11 +45,9 @@ class GraphAgent extends HTTPAgent {
       return writer.end()
 
     }).then((updatedDoc) => {
-      // now PUT the updated doc
       return this.put(srcUrl, {'Content-Type': 'application/n-triples'}, updatedDoc)
 
     }).then(() => {
-      // fetch dst node
       return this.fetchTriples(dstUrl)
 
     }).then((res) => {
@@ -79,7 +55,6 @@ class GraphAgent extends HTTPAgent {
       for (var t of res.triples) {
         writer.addTriple(t)
       }
-      // add connection triple to destination node
       writer.addTriple({
         subject: dstUrl,
         predicate: SIOC.containerOf,
@@ -88,20 +63,9 @@ class GraphAgent extends HTTPAgent {
       return writer.end()
 
     }).then((updatedDoc) => {
-      // now PUT the updated doc
       return this.put(dstUrl, {'Content-Type': 'application/n-triples'}, updatedDoc)
     })
   }
-
-
-  // Combination of createNode and connectNode
-  //
-  // @param {string} title title of the new node.
-  // @param {string} description description of the new node.
-  // @param {string} dstUrl which node should the newly created node be connected to?
-  // @param {string} identity url indicating container to which the new node should be posted.
-  //
-  // @return {Promise} promise with the result (TODO: what result)?
   createAndConnectNode(title, description, dstUrl, identity) {
     console.log('createAndConnectNode')
     console.log(title)
@@ -116,23 +80,13 @@ class GraphAgent extends HTTPAgent {
         return this.connectNode(newNodeUrl, dstUrl)
       })
   }
-
-  // given webid of structure https://example.com/{username}/profile/card#me
-  // return https://example.com/{username}/little-sister/graph-nodes
-  //
-  // NB: this won't if webid has different structure, but it's fine for now
   _nodeContainerForIdentity(identity) {
     let identityRoot = identity.match(/^(.*)\/profile\/card#me$/)[1]
     let cont =  `${identityRoot}/little-sister/graph-nodes/`
     return cont
   }
+  // END OF NOT IMPLEMENTED ZONE
 
-
-  // Fetch triples which represent RDF document
-  //
-  // @param {string} uri document uri
-  //
-  // @return {Promise} promise containg object with triples and prefixes
   fetchTriples(uri) {
     return this.get(uri)
       .then((xhr) => {
@@ -141,51 +95,64 @@ class GraphAgent extends HTTPAgent {
       })
   }
 
+  _getNeighbours(center, triples) {
+    let possibleLinks = [FOAF.knows]
+    let neighbours = triples.filter((t) => t.subject == center && possibleLinks.indexOf(t.predicate) >= 0)
 
-  // Fetch user profile document and convert it to format which can be
-  // rendered in d3 graph.
-  //
-  // @return {Promise} promise containing d3 data
-  fetchWebIdAndConvert() {
-    let wia = new WebIDAgent()
-    return wia.getWebID()
-      .then((webid) => {
-        return this.fetchAndConvert(webid)
+    return new Promise ((resolve, reject) => {
+      let graphMap = []
+      neighbours.map((URI, index) => {
+        let tempNode = {}
+        this.fetchTriples(URI.object)
+        .then((triples) =>
+        {
+          tempNode[URI.object] = triples.triples
+          graphMap.push(tempNode)
+          if (index == neighbours.length - 1) {
+            resolve(graphMap)
+          }
+        })
       })
+    })
   }
+// The duplication of code here has to go, I need to figure that out after I
+// improve my promise wizardy skills
+  _getUriGraphScheme(uri) {
+    return new Promise((resolve, reject) =>
+    {
+        this.fetchTriples(uri).then((res) =>
+        {
+          this._getNeighbours(uri, res.triples).then((result) =>
+          {
+            let adjacentURIs = result
+            let schema = {}
+            schema[uri] = res.triples
+            schema['adjacent'] = result
+            resolve(schema)
+          })
+        })
+      })
+    }
 
-  // given a pointed graph- we need to figure out the pointers for relevant adjacent graphs
-  _adjacentGraphs(pointer, triples) {
-    let possibleLinks = [SIOC.containerOf, SIOC.hasContainer]
-    let currentDoc = Util.urlWithoutHash(pointer)
-    return triples.filter((t) => t.subject == pointer && possibleLinks.indexOf(t.predicate) >= 0 && N3Util.isIRI(t.object) && Util.urlWithoutHash(t.object) != currentDoc).map((t) => t.object)
-  }
-
-
-  // Fetch rdf document and convert it to format which can be
-  // rendered in d3 graph.
-  //
-  // @param {string} url document url
-  //
-  // @return {Promise} promise containing d3 data
-  fetchAndConvert(uri) {
-    let centerTriples = null
-
-    // get triples from graph at uri
-    return this.fetchTriples(uri).then((res) => {
-      centerTriples = res.triples
-
-      // fetch adjacent graphs
-      let adjacent = this._adjacentGraphs(uri, centerTriples)
-      return Promise.all(adjacent.map((uri) => this.fetchTriples(uri)))
-    }).then((results) => {
-
-      // concat triples and convert them to format which can be rendered in d3 graph
-      let triples = results.reduce((acc, current) => acc.concat(current.triples), centerTriples)
-      let d3graph = D3Converter.convertTriples(uri, triples)
-      return d3graph
+  _getWebIdGraphScheme() {
+    let wia = new WebIDAgent()
+    return new Promise((resolve, reject) =>
+    {
+      wia.getWebID().then((uri) =>
+      {
+        this.fetchTriples(uri).then((res) =>
+        {
+          this._getNeighbours(uri, res.triples).then((result) =>
+          {
+            let adjacentURIs = result
+            let schema = {}
+            schema[uri] = res.triples
+            schema['adjacent'] = result
+            resolve(schema)
+          })
+        })
+      })
     })
   }
 }
-
 export default GraphAgent

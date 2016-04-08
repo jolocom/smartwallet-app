@@ -7,7 +7,7 @@ export class Parser {
     return new Promise((resolve) =>{
       let uri = 'https://localhost:8443'
       let payload = []
-      rdf.parse(text, rdf.graph(), uri, 'text/turtle', (err, triples) => {
+      rdf.parse(text, rdf.graph(), uri, 'text/turtle', (err, triples, prefixes) => {
         for (let i in triples.statements) {
           let one = {
             object: triples.statements[i].object.uri,

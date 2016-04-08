@@ -76,7 +76,7 @@ class D3Converter {
 
     return desc
   }
-
+p
   static _getNodeType(subject, triples) {
     let type = null
     for (var t of triples) {

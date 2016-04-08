@@ -20,6 +20,7 @@ import NodeStore from 'stores/node'
 
 import PinnedNodes from './pinned.jsx'
 
+import rdf from 'rdflib'
 let graphAgent = new GraphAgent()
 
 let Graph = React.createClass({
@@ -101,8 +102,7 @@ let Graph = React.createClass({
   },
 
   centerAtWebID: function() {
-    // render relevant information in UI
-    graphAgent.fetchWebIdAndConvert().then((d3graph) => {
+    graphAgent._getWebIdGraphScheme().then((d3graph) => {
       let newState = this._changeCenter(d3graph.center, d3graph)
       newState.identity = d3graph.center
       this.setState(newState)
@@ -113,12 +113,13 @@ let Graph = React.createClass({
   centerAtURI: function(uri) {
     //TODO: should only crawl if the uri is external(?)
     // render relevant information in UI
-    graphAgent.fetchAndConvert(uri)
+    graphAgent._getUriGraphScheme(uri)
       .then((d3graph) => {
         let newState = this._changeCenter(uri, d3graph)
         this.setState(newState)
       })
   },
+
 
   getGraphEl() {
     return ReactDOM.findDOMNode(this.refs.graph)
