@@ -103,7 +103,7 @@ class GraphAgent extends HTTPAgent {
         .then((triples) =>
         {
           tempNode['uri'] = URI.object
-          tempNode['triples'] = triples
+          tempNode['triples'] = triples.triples
           graphMap.push(tempNode)
           if (index == neighbours.length - 1) {
             console.log('sending this on',graphMap)
@@ -122,12 +122,12 @@ class GraphAgent extends HTTPAgent {
       {
         this._getNeighbours(uri, res.triples).then((result) =>
         {
+          console.log('I was called')
           let schema = {}
           schema['center'] = {uri: uri,
                               triples: res.triples
                             }
           schema['adjacent'] = result
-          console.log(schema,'this is me now')
           resolve(schema)
         })
       })
