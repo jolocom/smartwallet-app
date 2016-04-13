@@ -45,6 +45,19 @@ export default class GraphD3 {
 
   drawGraph(){
     let centerWork = [this.state.center]
+
+    let connections = this.svg.selectAll('connections')
+      .data(this.state.neighbours)
+      .enter()
+      .append('line')
+      .attr('x1', (d) => {return d.triples.x})
+      .attr('y1', (d) => {return d.triples.y})
+      .attr('x2', this.width / 2)
+      .attr('y2', this.height / 2)
+        .style('stroke-width', this.width / 60)
+        .style('stroke', STYLES.lightGrayColor)
+        .style('fill', 'none')
+
     let center = this.svg.selectAll('center_node')
       .data(centerWork)
       .enter()
@@ -58,6 +71,7 @@ export default class GraphD3 {
       .style('fill', STYLES.grayColor)
       .style('stroke','white')
       .style('stroke-width', 0)
+
     let neighbours = this.svg.selectAll('neighbour_node')
       .data(this.state.neighbours)
       .enter()
@@ -71,6 +85,7 @@ export default class GraphD3 {
       .style('fill', STYLES.grayColor)
       .style('stroke','white')
       .style('stroke-width', 0)
+
   }
 
   setSize() {
