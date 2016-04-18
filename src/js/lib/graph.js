@@ -47,7 +47,8 @@ export default class GraphD3 {
       .on('drag', this.dragMove)
 
     let centerWork = [this.state.center]
-    let connections = this.svg.selectAll('connections')
+
+    this.svg.selectAll('connections')
       .data(this.state.neighbours)
       .enter()
       .append('line')
@@ -60,7 +61,7 @@ export default class GraphD3 {
         .style('stroke', STYLES.lightGrayColor)
         .style('fill', 'none')
 
-    let center = this.svg.selectAll('center_node')
+    this.svg.selectAll('center_node')
       .data(centerWork)
       .enter()
       .append('circle')
@@ -74,7 +75,7 @@ export default class GraphD3 {
       .style('stroke','white')
       .style('stroke-width', 0)
 
-    let neighbours = this.svg.selectAll('neighbour_node')
+    this.svg.selectAll('neighbour_node')
       .data(this.state.neighbours)
       .enter()
       .append('circle')
@@ -88,8 +89,6 @@ export default class GraphD3 {
       .style('stroke','white')
       .style('stroke-width', 0)
       .call(drag)
-
-
   }
 
   onResize() {

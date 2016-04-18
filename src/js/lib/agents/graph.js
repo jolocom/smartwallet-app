@@ -1,14 +1,10 @@
-import N3 from 'n3'
 import HTTPAgent from './http.js'
 import WebIDAgent from './webid.js'
-import {DC, FOAF, SIOC} from '../namespaces.js'
-import {Parser, Writer} from '../rdf.js'
-import Util from '../util.js'
-
-let N3Util = N3.Util
+import {FOAF} from '../namespaces.js'
+import {Parser} from '../rdf.js'
 
 class GraphAgent extends HTTPAgent {
-  
+
 //TODO maybe rewrite with solid?
   fetchTriples(uri) {
     return this.get(uri)

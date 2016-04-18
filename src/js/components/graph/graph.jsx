@@ -5,18 +5,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Radium from 'radium'
-import Reflux from 'reflux'
-import Util from 'lib/util.js'
 import GraphAgent from 'lib/agents/graph.js'
 import GraphD3 from 'lib/graph'
-import STYLES from 'styles/app.js'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
-import graphStore from 'stores/graphstore'
 import PinnedNodes from './pinned.jsx'
-let graphAgent = new GraphAgent()
 import D3Converter from '../../lib/d3-converter'
 
+let graphAgent = new GraphAgent()
 let convertor = new D3Converter()
 
 let Graph = React.createClass({
