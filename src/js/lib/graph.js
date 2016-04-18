@@ -9,13 +9,10 @@ import STYLES from 'styles/app'
 
 export default class GraphD3 {
 
-  constructor(el, state){
+  constructor(el, state, handleClick){
     this.el = el
-    this.state = state
-    this.createBackground()
-  }
-
-  createBackground(){
+    this.handleNodeClick = handleClick
+    this.onNodeClick = this.onNodeClick.bind(this)
 
     this.width = STYLES.width
     this.height = STYLES.height
@@ -30,26 +27,23 @@ export default class GraphD3 {
       .attr('height', this.height)
       .attr('fill', 'white')
 
-    console.log(this.height)
-
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
       .attr('r', this.width / 6)
       .style('fill', STYLES.lightGrayColor)
 
-    this.drawGraph()
+    this.drawGraph(state)
   }
 
-  drawGraph(){
+  drawGraph(state){
     // Takes care of node dragging.
     let drag = d3.behavior.drag()
       .on('drag', this.dragMove)
 
-    let centerWork = [this.state.center]
-
+    // Draw the lines first, this way they are in the background
     this.svg.selectAll('connections')
-      .data(this.state.neighbours)
+      .data(state.neighbours)
       .enter()
       .append('line')
       .attr('id', (d) => {return d.triples.name})
@@ -61,7 +55,10 @@ export default class GraphD3 {
         .style('stroke', STYLES.lightGrayColor)
         .style('fill', 'none')
 
-    this.svg.selectAll('center_node')
+    // Wraps the center object in an array so that d3 can work with it
+    let centerWork = [state.center]
+    // Draw the center node node
+    let center = this.svg.selectAll('center_node')
       .data(centerWork)
       .enter()
       .append('circle')
@@ -75,8 +72,13 @@ export default class GraphD3 {
       .style('stroke','white')
       .style('stroke-width', 0)
 
+    center.on('click', (d) => {
+      this.onNodeClick(d)
+    })
+
+    // Drawing the neighbour nodes.
     this.svg.selectAll('neighbour_node')
-      .data(this.state.neighbours)
+      .data(state.neighbours)
       .enter()
       .append('circle')
       .attr('class', 'node')
@@ -91,6 +93,14 @@ export default class GraphD3 {
       .call(drag)
   }
 
+  update(newState){
+    this.drawGraph(newState)
+  }
+
+  onNodeClick(d){
+    this.handleNodeClick(d)
+  }
+
   onResize() {
     this.setSize()
   }
@@ -98,7 +108,6 @@ export default class GraphD3 {
   setSize() {
     this.width = this.el.offsetWidth
     this.height = this.el.offsetHeight
-
     this.svg.attr('width', this.width).attr('height', this.height)
   }
 

@@ -18,9 +18,9 @@ let convertor = new D3Converter()
 let Graph = React.createClass({
   getInitialState: function() {
     return {
-      identity: null,
       center: null,
       neighbours: null,
+      highlighted: null,
       showSearch: false,
       plusDrawerOpen: false
     }
@@ -31,6 +31,8 @@ let Graph = React.createClass({
   },
 
   componentDidMount: function() {
+    console.log(this.state)
+    console.log(this.props)
     graphAgent._getWebIdGraphScheme()
     .then((result) => {
       result.center.triples = convertor.convertToD3(result.center)
@@ -42,8 +44,15 @@ let Graph = React.createClass({
         neighbours: result.adjacent
       }
       this.setState(newState)
-      this.graph = new GraphD3(this.getGraphEl(), this.state)
+      this.graph = new GraphD3(this.getGraphEl(), this.state, this.handleNodeClick)
     })
+  },
+
+  handleNodeClick(node){
+  },
+
+  componentWillUpdate(){
+
   },
 
   getStyles() {
