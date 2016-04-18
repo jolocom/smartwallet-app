@@ -63,7 +63,8 @@
     "react-style": "^0.5.5",
     "react-tap-event-plugin": "^0.2.1",
     "react-timer-mixin": "^0.13.3",
-    "reflux": "^0.3.0"
+    "reflux": "^0.3.0",
+    "solid-client": "^0.14.1"
   },
   "engines": {
     "node": "^0.12"
