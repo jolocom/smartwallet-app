@@ -66,5 +66,4 @@ let routes = (
     <Route path='login' component={Login}/>
   </Route>
 )
-
 ReactDOM.render(<Router>{routes}</Router>, document.getElementById('app'))

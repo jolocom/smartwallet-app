@@ -1,3 +1,6 @@
+// THIS FILE TAKES CARE OF CONVERTING TEXT TO RDF AND WRITING RDF TRIPLES TO TURTLE
+// The parser takes text and converts it to turtle, returning an array of triples.
+// The writer takes triples and writes them to a turtle file. Serializes it basically.
 
 import rdf from 'rdflib'
 

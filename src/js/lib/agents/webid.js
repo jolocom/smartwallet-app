@@ -41,6 +41,10 @@ class WebIDAgent extends LDPAgent {
   }
 
 // Creates the user folders and writes the data to the card / inbox files
+
+// TODO rework the container creation a bit according to the specs described in here
+// https://github.com/solid/solid-spec/blob/master/api-rest.md
+
   fakeSignup(username, name, email) {
 
     solid.web.put(`${endpoint}/${username}/little-sister/graph-comments/`)

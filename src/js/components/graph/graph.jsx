@@ -1,66 +1,33 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
+// This file renders the whole graph component. Takes care of all the nuances. It is also stateless,
+// Figuring out now how to make it maintain some changes through refreshes.
 
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Radium from 'radium'
 import Reflux from 'reflux'
-
 import Util from 'lib/util.js'
 import GraphAgent from 'lib/agents/graph.js'
 import GraphD3 from 'lib/graph'
-
 import STYLES from 'styles/app.js'
-
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
-
-import NodeActions from 'actions/node'
-import NodeStore from 'stores/node'
-
+import graphStore from 'stores/graphstore'
 import PinnedNodes from './pinned.jsx'
-
 let graphAgent = new GraphAgent()
 import D3Converter from '../../lib/d3-converter'
+
 let convertor = new D3Converter()
+
 let Graph = React.createClass({
-
-
-  mixins: [
-    Reflux.connect(NodeStore, 'nodes')
-  ],
-
-  contextTypes: {
-    history: React.PropTypes.any
-  },
-
-  childContextTypes: {
-    node: React.PropTypes.object
-  },
-
-  getChildContext: function() {
-    let centerNode = this.state.centerNode
-    return {
-      node: centerNode && centerNode.node
-    }
-  },
-
   getInitialState: function() {
     return {
+      identity: null,
       center: null,
       neighbours: null,
       showSearch: false,
       plusDrawerOpen: false
     }
-  },
-
-  // returns altered state
-  _changeCenter: function(center, newData) {
-  },
-
-  centerAtWebID: function() {
-  },
-
-  centerAtURI: function(uri) {
   },
 
   getGraphEl() {
@@ -81,24 +48,6 @@ let Graph = React.createClass({
       this.setState(newState)
       this.graph = new GraphD3(this.getGraphEl(), this.state)
     })
-  },
-
-  componentWillUpdate: function(nextProps, nextState) {
-  },
-
-  componentDidUpdate: function(prevProps, prevState) {
-  },
-
-  showNode(uri) {
-  },
-
-  showNodeDetails(uri) {
-  },
-
-  handleLongTap(node) {
-  },
-
-  handleNodeClick(node) {
   },
 
   getStyles() {

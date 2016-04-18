@@ -5,7 +5,6 @@ import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-
 import {Paper, AppBar, IconButton, IconMenu, MenuItem, Styles} from 'material-ui'
 
 let {Colors} = Styles
