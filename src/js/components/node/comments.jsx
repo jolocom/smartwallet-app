@@ -17,7 +17,7 @@ const CHAT_RELOAD_INTERVAL = 4000 // 4 seconds
 
 let Comments = React.createClass({
   mixins: [
-    Reflux.connect(CommentsStore),
+    Reflux.connect(CommentsStore, 'comments'),
     Reflux.connect(ProfileStore, 'profile'),
     TimerMixin
   ],
@@ -63,7 +63,7 @@ let Comments = React.createClass({
     return (
       <div style={[styles.container, style]}>
         <List style={styles.list}>
-          {this.state.comments.map(function({author, content}) {
+          {this.state.comments.items.map(function({author, content}) {
             let avatar = <Avatar src={author.imgUri}>{author[0]}</Avatar>
             return (
               <ListItem primaryText={author} secondaryText={content} leftAvatar={avatar}/>

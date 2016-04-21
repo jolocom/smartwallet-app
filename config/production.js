@@ -1,5 +1,5 @@
 // @TODO replace values by env settings using gulp
-export default {
+module.exports = {
   endpoint: 'https://gold.jolocom.com',
   accountStatusEndpoint: 'https://gold.jolocom.com/,system/accountStatus',
   dev: false

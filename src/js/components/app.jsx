@@ -5,9 +5,9 @@ import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-import {Paper, AppBar, IconButton, IconMenu, MenuItem, Styles} from 'material-ui'
+import {Paper, AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
 
-let {Colors} = Styles
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import JolocomTheme from 'styles/jolocom-theme'
 
@@ -29,7 +29,7 @@ let App = React.createClass({
 
   mixins: [
     History,
-    Reflux.connect(AccountStore),
+    Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile')
   ],
 
@@ -40,10 +40,11 @@ let App = React.createClass({
   },
 
   getChildContext: function () {
+    let {account, profile} = this.state
     return {
-      muiTheme: Styles.ThemeManager.getMuiTheme(JolocomTheme),
-      profile: this.state.profile,
-      username: this.state.username
+      muiTheme: getMuiTheme(JolocomTheme),
+      profile: profile,
+      username: account && account.username
     }
   },
 
@@ -63,14 +64,14 @@ let App = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.username !== this.state.username)
+    if (prevState.account.username !== this.state.account.username)
       this.checkLogin()
   },
 
   checkLogin() {
     let path = this.props.location.pathname
 
-    if (!this.state.username && path !== '/signup' && path !== '/login') {
+    if (!this.state.account.username && path !== '/signup' && path !== '/login') {
       this.history.pushState(null, '/login')
     } else if (path === '/') {
       this.history.pushState(null, '/graph')
@@ -149,8 +150,8 @@ let App = React.createClass({
     })
   },
 
-  toggleLeftNav() {
-    this.refs.leftNav.toggle()
+  showDrawer() {
+    this.refs.leftNav.show()
   },
 
   getStyles() {
@@ -170,7 +171,7 @@ let App = React.createClass({
         display: this.state.searchActive ? 'none' : 'block'
       },
       icon: {
-        color: Colors.white
+        color: '#ffffff'
       }
     }
     return styles
@@ -183,10 +184,10 @@ let App = React.createClass({
 
     return (
       <div style={styles.container}>
-        {this.state.username ? (
+        {this.state.account.username ? (
           <Layout>
             <Paper zDept={1} style={styles.header}>
-              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.toggleLeftNav}></AppBar>
+              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
               <AppNav activeTab={component.id} style={styles.nav}/>
               {search}
             </Paper>

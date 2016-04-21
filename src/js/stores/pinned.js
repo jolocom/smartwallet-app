@@ -10,7 +10,7 @@ export default Reflux.createStore({
   getInitialState() {
     return {
       show: false,
-      nodes: this.nodes
+      nodes: this.nodes || []
     }
   },
   storeNodes() {
@@ -27,11 +27,10 @@ export default Reflux.createStore({
     }
   },
   onShow() {
-    console.log('show')
-    this.trigger({show: true})
+    this.trigger({show: true, nodes: this.nodes})
   },
   onHide() {
-    this.trigger({show: false})
+    this.trigger({show: false, nodes: this.nodes})
   },
   onPin(node) {
     // FIXME: not guaranteed to be unique

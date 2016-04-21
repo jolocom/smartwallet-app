@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import Radium from 'radium'
 
 import {IconButton} from 'material-ui'

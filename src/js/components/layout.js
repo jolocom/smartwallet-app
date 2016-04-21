@@ -1,5 +1,5 @@
-module.exports = {
-  Layout: require('./layout/layout.jsx'),
-  Content: require('./layout/content.jsx'),
-  Spacer: require('./layout/spacer.jsx')
-}
+import Layout from './layout/layout.jsx'
+import Content from './layout/content.jsx'
+import Spacer from './layout/spacer.jsx'
+
+export {Layout, Content, Spacer}

@@ -10,13 +10,13 @@ import AvailabilityStore from 'stores/availability'
 import Account from 'actions/account'
 import AccountStore from 'stores/account'
 
-import {linkToState} from 'lib/util'
+import Util from 'lib/util'
 
 let Signup = React.createClass({
   mixins: [
     History,
     Lifecycle,
-    Reflux.connect(AvailabilityStore),
+    Reflux.connect(AvailabilityStore, 'available'),
     Reflux.connect(AccountStore, 'account')
   ],
   contextTypes: {
@@ -78,9 +78,9 @@ let Signup = React.createClass({
               errorText={availableText}
               className={usernameClass} />
             <TextField floatingLabelText="Name"
-              onChange={linkToState(this, 'name')} />
+              onChange={Util.linkToState(this, 'name')} />
             <TextField floatingLabelText="Email"
-              onChange={linkToState(this, 'email')} />
+              onChange={Util.linkToState(this, 'email')} />
           </fieldset>
 
           <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={styles.button}>Sign up</RaisedButton>

@@ -3,7 +3,7 @@
 // Figuring out now how to make it maintain some changes through refreshes.
 import Reflux from 'reflux'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import Radium from 'radium'
 import GraphAgent from 'lib/agents/graph.js'
 import GraphD3 from 'lib/graph'

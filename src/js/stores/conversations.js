@@ -15,7 +15,7 @@ export default Reflux.createStore({
   getInitialState() {
     return {
       loading: true,
-      conversations: []
+      items: []
     }
   },
 
@@ -39,7 +39,7 @@ export default Reflux.createStore({
   onLoadCompleted(conversations) {
     this.trigger({
       loading: false,
-      conversations: conversations
+      items: conversations
     })
   }
 

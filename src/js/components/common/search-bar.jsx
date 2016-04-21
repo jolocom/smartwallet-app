@@ -1,10 +1,8 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import Radium from 'radium'
 
-import {AppBar, IconButton, Styles, FontIcon} from 'material-ui'
-
-let {Colors} = Styles
+import {AppBar, IconButton, FontIcon} from 'material-ui'
 
 let SearchBar = React.createClass({
 
@@ -24,7 +22,7 @@ let SearchBar = React.createClass({
 
     let styles = {
       bar: {
-        backgroundColor: Colors.white,
+        backgroundColor: '#ffffff',
         position: 'absolute',
         top: 0,
         left: 0,

@@ -7,6 +7,10 @@ let wia = new WebIDAgent()
 let AvailabilityStore = Reflux.createStore({
   listenables: Availability,
 
+  getInitialState() {
+    return false
+  },
+  
   // onCheck(username) {
   //   let payload = {
   //     method: 'accountStatus',
@@ -25,11 +29,7 @@ let AvailabilityStore = Reflux.createStore({
   onCheck(username) {
     wia.isFakeIDAvailable(username)
       .then((available) => {
-        let data = {
-          username: username,
-          available: available
-        }
-        Availability.check.completed(data)
+        Availability.check.completed(available)
       })
   },
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import {LeftNav} from 'material-ui'
+import {Drawer} from 'material-ui'
 
 // import Favourites from './favourites.jsx'
 
@@ -11,13 +11,15 @@ let Nav = React.createClass({
     router: React.PropTypes.func
   },
 
-  toggle() {
-    this.refs.leftNav.toggle()
+  show() {
+    this.refs.drawer.open()
   },
 
   render() {
     return (
-      <LeftNav ref="leftNav" header={<Header/>} docked={false}/>
+      <Drawer ref="drawer" docked={false}>
+        <Header/>
+      </Drawer>
     )
   }
 

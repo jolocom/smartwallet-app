@@ -4,18 +4,18 @@ import Radium from 'radium'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
-import {AppBar, IconButton, TextField, Styles} from 'material-ui'
+import {AppBar, IconButton, TextField} from 'material-ui'
 
-let {Colors} = Styles
+import {grey500} from 'material-ui/styles/colors'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-import {linkToState} from 'lib/util'
+import Util from 'lib/util'
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.connect(ProfileStore)
+    Reflux.connect(ProfileStore, 'profile')
   ],
 
   componentDidUpdate(props, state) {
@@ -30,7 +30,7 @@ let Profile = React.createClass({
 
   update(e) {
     e.preventDefault()
-    ProfileActions.update(this.state)
+    ProfileActions.update(this.state.profile)
   },
 
   show() {
@@ -44,7 +44,7 @@ let Profile = React.createClass({
   getStyles() {
     let styles = {
       bar: {
-        backgroundColor: Colors.grey500
+        backgroundColor: grey500
       },
       content: {
         textAlign: 'center'
@@ -79,11 +79,11 @@ let Profile = React.createClass({
             <main>
               <section>
                 <TextField floatingLabelText="Name"
-                  onChange={linkToState(this, 'name')}
+                  onChange={Util.linkToState(this, 'name')}
                   value={this.state.name}
                   style={styles.input} />
                 <TextField floatingLabelText="Email"
-                  onChange={linkToState(this, 'email')}
+                  onChange={Util.linkToState(this, 'email')}
                   value={this.state.email}
                   style={styles.input} />
               </section>
