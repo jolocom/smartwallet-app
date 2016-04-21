@@ -46,9 +46,9 @@ export default class GraphD3 {
       .data(state.neighbours)
       .enter()
       .append('line')
-      .attr('id', (d) => {return d.triples.name})
-      .attr('x1', (d) => {return d.triples.x})
-      .attr('y1', (d) => {return d.triples.y})
+      .attr('id', (d) => {return d.name})
+      .attr('x1', (d) => {return d.x})
+      .attr('y1', (d) => {return d.y})
       .attr('x2', this.width / 2)
       .attr('y2', this.height / 2)
         .style('stroke-width', this.width / 60)
@@ -82,8 +82,8 @@ export default class GraphD3 {
       .enter()
       .append('circle')
       .attr('class', 'node')
-      .attr('cx', (d) => { return d.triples.x })
-      .attr('cy', (d) => { return d.triples.y })
+      .attr('cx', (d) => { return d.x })
+      .attr('cy', (d) => { return d.y })
       .attr('r', STYLES.smallNodeSize / 2)
       .attr('width', STYLES.smallNodeSize)
       .attr('height', STYLES.smallNodeSize)
@@ -115,7 +115,7 @@ export default class GraphD3 {
   dragMove(d){
     d3.select(this).attr('cx', d3.event.x)
     d3.select(this).attr('cy', d3.event.y)
-    d3.select('#'+d.triples.name).attr('x1', d3.event.x)
-    d3.select('#'+d.triples.name).attr('y1', d3.event.y)
+    d3.select('#'+d.name).attr('x1', d3.event.x)
+    d3.select('#'+d.name).attr('y1', d3.event.y)
   }
 }

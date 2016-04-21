@@ -5,21 +5,17 @@
 import rdf from 'rdflib'
 
 export class Parser {
-
   parse(text) {
     return new Promise((resolve) =>{
-      let uri = 'https://localhost:8443'
       let payload = []
-      rdf.parse(text, rdf.graph(), uri, 'text/turtle', (err, triples) => {
+      rdf.parse(text, rdf.graph(), 'https://ogog.og', 'text/turtle', (err, triples) => {
         for (let i in triples.statements) {
-          let one = {
-            object: triples.statements[i].object.uri,
-            predicate: triples.statements[i].predicate.uri,
-            subject: triples.statements[i].subject.uri
-          }
-          if (!one.object)
-            one.object = triples.statements[i].object.value
-          payload.push(one)
+          let statement = triples.statements[i]
+          payload.push({
+            object: statement.object.uri ? statement.object.uri : statement.object.value,
+            predicate: statement.predicate.uri,
+            subject: statement.subject.uri
+          })
         }
       })
       resolve({ prefixes: {}, triples: payload})
@@ -28,7 +24,6 @@ export class Parser {
 }
 
 export class Writer {
-
   constructor(){
     this.g = rdf.graph()
   }
@@ -38,13 +33,6 @@ export class Writer {
   }
 
   end() {
-    return new Promise((resolve, reject) => {
-      rdf.serialize(undefined, this.g, undefined, 'text/turtle', (err, str) => {
-        if (err)
-          reject(err)
-        else
-          resolve(str)
-      })
-    })
+    return rdf.serialize(undefined, this.g, undefined, 'text/turtle')
   }
 }

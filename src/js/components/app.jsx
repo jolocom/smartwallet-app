@@ -192,7 +192,6 @@ let App = React.createClass({
             </Paper>
             <LeftNav ref="leftNav" />
             <Content>
-              {console.log(React.Children)}
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {
                   searchQuery: this.state.searchQuery

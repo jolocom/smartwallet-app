@@ -1,7 +1,7 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 // This file renders the whole graph component. Takes care of all the nuances. It is also stateless,
 // Figuring out now how to make it maintain some changes through refreshes.
-
+import Reflux from 'reflux'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Radium from 'radium'
@@ -11,12 +11,18 @@ import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import PinnedNodes from './pinned.jsx'
 import D3Converter from '../../lib/d3-converter'
-
+import GraphStore from '../../stores/graph-store'
+import graphActions from '../../actions/graph-actions'
+import solid from 'solid-client'
 let graphAgent = new GraphAgent()
 let convertor = new D3Converter()
 
 let Graph = React.createClass({
+
+  mixins : [Reflux.listenTo(GraphStore, 'onChange')],
+
   getInitialState: function() {
+    graphActions.getInitialGraphState()
     return {
       center: null,
       neighbours: null,
@@ -26,32 +32,26 @@ let Graph = React.createClass({
     }
   },
 
-  getGraphEl() {
-    return ReactDOM.findDOMNode(this.refs.graph)
+  componentWillMount: function() {
   },
 
   componentDidMount: function() {
-    console.log(this.state)
-    console.log(this.props)
-    graphAgent._getWebIdGraphScheme()
-    .then((result) => {
-      result.center.triples = convertor.convertToD3(result.center)
-      for (var i = 0; i < result.adjacent.length; i++) {
-        result.adjacent[i].triples = convertor.convertToD3(result.adjacent[i], i, result.adjacent.length)
-      }
-      let newState = {
-        center: result.center.triples,
-        neighbours: result.adjacent
-      }
-      this.setState(newState)
-      this.graph = new GraphD3(this.getGraphEl(), this.state, this.handleNodeClick)
-    })
   },
 
   handleNodeClick(node){
   },
 
-  componentWillUpdate(){
+  componentWillUpdate(nextProp, nextState){
+    if (nextState.center && nextState.neighbours)
+      this.graph = new GraphD3(this.getGraphEl(), nextState, this.handleNodeClick)
+  },
+
+  onChange: function(state) {
+    this.setState(state)
+  },
+
+  getGraphEl() {
+      return ReactDOM.findDOMNode(this.refs.graph)
 
   },
 
