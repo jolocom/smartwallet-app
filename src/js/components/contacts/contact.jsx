@@ -10,7 +10,7 @@ import ContactStore from 'stores/contact'
 
 export default React.createClass({
 
-  mixins: [Reflux.connect(ContactStore)],
+  mixins: [Reflux.connect(ContactStore, 'contact')],
 
   contextTypes: {
     history: React.PropTypes.any
@@ -38,11 +38,11 @@ export default React.createClass({
   },
 
   startChat() {
-    this.context.history.pushState(null, `chat/user/${this.state.username}`)
+    this.context.history.pushState(null, `chat/user/${this.state.contact.username}`)
   },
 
   render() {
-    let contact = this.state
+    let {contact} = this.state
 
     return (
       <Dialog ref="dialog" fullscreen={true} visible={this.state.open}>

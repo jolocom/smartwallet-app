@@ -1,7 +1,7 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import Radium from 'radium'
 import Reflux from 'reflux'
 

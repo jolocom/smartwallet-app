@@ -11,7 +11,7 @@ export default React.createClass({
 
     return (
       <div style={style}>
-        <Checkbox checkedIcon={icon} unCheckedIcon={icon} {...checkboxProps}/>
+        <Checkbox checkedIcon={icon} uncheckedIcon={icon} {...checkboxProps}/>
       </div>
     )
   }

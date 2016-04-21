@@ -48,8 +48,8 @@ let FabMenu = React.createClass({
     let styles = {
       container: {
         position: 'fixed',
-        right: '0',
-        bottom: '0'
+        right: 0,
+        bottom: 0
       },
       nav: {
         display: 'flex',
@@ -89,6 +89,7 @@ let FabMenu = React.createClass({
           if (typeof child.props.onClick === 'function')
             child.props.onClick(...args)
         },
+        secondary: true,
         style: _.extend({
           transition: `opacity ${duration}s, transform ${duration}s`,
           transitionDelay: `${delay}s`,
@@ -102,7 +103,7 @@ let FabMenu = React.createClass({
     return (
       <div style={styles.container}>
         <nav style={styles.nav}>
-          <FloatingActionButton onClick={this.toggle} style={styles.item}>
+          <FloatingActionButton onClick={this.toggle} style={styles.item} secondary={true}>
             <FontIcon className="material-icons">{icon}</FontIcon>
           </FloatingActionButton>
           {children}

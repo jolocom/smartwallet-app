@@ -17,7 +17,7 @@ export default React.createClass({
       <Tabs valueLink={{value: this.props.activeTab, requestChange: this._handleTabsChange}} {...this.props}>
         <Tab label="Graph" value="graph"/>
         <Tab label="Chat" value="chat"/>
-        <Tab label="Contacts" value="contacts"/>
+        <Tab label="Contact" value="contacts"/>
       </Tabs>
     )
   }

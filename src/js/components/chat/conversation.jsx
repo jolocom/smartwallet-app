@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'

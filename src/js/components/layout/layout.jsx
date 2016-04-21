@@ -1,18 +1,18 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {Styles} from 'material-ui'
-
-let {Colors} = Styles
-
 let Layout = React.createClass({
+
+  contextTypes: {
+    muiTheme: React.PropTypes.object.isRequired
+  },
 
   getStyles() {
     return {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
-      background: Colors.white
+      background: '#fff'
     }
   },
 

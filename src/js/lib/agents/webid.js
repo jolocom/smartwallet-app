@@ -2,7 +2,7 @@ import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
 import {DC, FOAF, RDF, SIOC} from '../namespaces.js'
 import N3 from 'n3'
-import {dev} from '../../settings'
+import {dev} from 'settings'
 
 let N3Util = N3.Util
 

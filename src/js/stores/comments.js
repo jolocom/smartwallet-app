@@ -22,7 +22,7 @@ export default Reflux.createStore({
   getInitialState() {
     return {
       loading: true,
-      comments: []
+      items: []
     }
   },
 
@@ -157,7 +157,7 @@ export default Reflux.createStore({
 
   onLoadCompleted(comments) {
     this.trigger({
-      comments: comments
+      items: comments
     })
   },
 
@@ -211,7 +211,7 @@ export default Reflux.createStore({
   onCreateCompleted(comments) {
     // comments.push(comment)
     this.trigger({
-      comments: comments
+      items: comments
     })
   },
 
@@ -224,7 +224,7 @@ export default Reflux.createStore({
       return comment.uri === uri
     })
     this.trigger({
-      comments: comments
+      items: comments
     })
   }
 

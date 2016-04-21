@@ -18,7 +18,7 @@ import ProfileStore from 'stores/profile'
 export default React.createClass({
 
   mixins: [
-    Reflux.connect(ChatStore),
+    Reflux.connect(ChatStore, 'conversation'),
     Reflux.connect(ProfileStore, 'profile')
   ],
 
@@ -42,8 +42,8 @@ export default React.createClass({
   },
 
   componentDidUpdate() {
-    if (this.state.id) {
-      this.context.history.pushState(null, `/conversations/${this.state.id}`)
+    if (this.state.conversation && this.state.conversation.id) {
+      this.context.history.pushState(null, `/conversations/${this.state.conversation.id}`)
     }
   },
 

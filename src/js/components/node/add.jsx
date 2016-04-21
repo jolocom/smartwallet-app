@@ -3,11 +3,11 @@ import Radium from 'radium'
 import _ from 'lodash'
 import {endpoint} from 'settings'
 
-import {AppBar, IconButton, TextField, Styles} from 'material-ui'
+import {AppBar, IconButton, TextField} from 'material-ui'
+import {grey500} from 'material-ui/styles/colors'
+
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
-
-let {Colors} = Styles
 
 import NodeActions from 'actions/node'
 
@@ -49,7 +49,7 @@ let NodeAdd = React.createClass({
   getStyles() {
     return {
       bar: {
-        backgroundColor: Colors.grey500
+        backgroundColor: grey500
       },
       content: {
         padding: '20px'
