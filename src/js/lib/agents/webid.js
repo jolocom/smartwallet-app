@@ -1,8 +1,7 @@
 import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
-<<<<<<< HEAD
 import rdf from 'rdflib'
-import {dev} from '../../settings'
+import {dev} from 'settings'
 import Solid from 'solid-client'
 import {endpoint} from 'settings'
 

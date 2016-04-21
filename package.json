@@ -57,7 +57,6 @@
     "n3": "^0.4.3",
     "radium": "^0.15.3",
     "rdflib": "^0.5.0",
-    "solid-client": "^0.14.1",
     "react": "^15.0.0",
     "react-addons-create-fragment": "^15.0.0",
     "react-addons-transition-group": "^15.0.0",
@@ -65,7 +64,8 @@
     "react-router": "^1.0.0",
     "react-tap-event-plugin": "^1.0.0",
     "react-timer-mixin": "^0.13.3",
-    "reflux": "^0.4.1"
+    "reflux": "^0.4.1",
+    "solid-client": "^0.14.2"
   },
   "engines": {
     "node": "^0.12"
