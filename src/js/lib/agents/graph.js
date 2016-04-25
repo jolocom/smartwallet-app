@@ -31,11 +31,16 @@ class GraphAgent extends HTTPAgent {
 
     return new Promise ((resolve) => {
       let graphMap = []
+
+      // If there are no adjacent nodes to draw, we return an empty array.
+      if (neighbours.length == 0) resolve(graphMap)
+
+      // If there are adjacent nodes to draw, we parse them and return an array of their triples
       neighbours.map((URI, index) => {
         this.fetchTriplesAtUri(URI.object).then((triples) =>{
           graphMap.push(triples.triples)
-          // This checks if the whole array has been parsed, and only After
-          // that resolves.
+           graphMap[index].uri = URI.object
+          // This checks if the whole array has been parsed, and only after that resolves.
           if (index == neighbours.length - 1) {
             resolve(graphMap)
           }
@@ -53,6 +58,7 @@ class GraphAgent extends HTTPAgent {
       this.fetchTriplesAtUri(uri).then((centerNode) => {
         this.getNeighbours(uri, centerNode.triples).then((neibTriples) => {
           let nodes = [centerNode.triples]
+          nodes[0].uri = uri
           // Flattening now results in the final structure of
           // [array[x], array[x], array[x]...]
           neibTriples.forEach(element => {

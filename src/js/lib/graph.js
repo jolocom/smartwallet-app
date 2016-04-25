@@ -10,6 +10,7 @@ import STYLES from 'styles/app'
 export default class GraphD3 {
 
   constructor(el, state, handleClick){
+    console.log(state, 'this is what I use to draw')
     this.el = el
     this.handleNodeClick = handleClick
     this.onNodeClick = this.onNodeClick.bind(this)
@@ -62,7 +63,7 @@ export default class GraphD3 {
       .data(centerWork)
       .enter()
       .append('circle')
-      .attr('class', 'node')
+      .attr('class', 'center')
       .attr('cx', this.width / 2)
       .attr('cy', this.height / 2)
       .attr('r', STYLES.largeNodeSize/2)
@@ -75,7 +76,6 @@ export default class GraphD3 {
     center.on('click', (d) => {
       this.onNodeClick(d)
     })
-
     // Drawing the neighbour nodes.
     this.svg.selectAll('neighbour_node')
       .data(state.neighbours)

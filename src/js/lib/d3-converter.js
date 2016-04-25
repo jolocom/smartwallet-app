@@ -14,9 +14,10 @@ class D3Converter {
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
-
     this.i = i + 1
     this.n = n
+
+    let uri = node.uri
 
     let props = {
       uri: null,
@@ -46,10 +47,21 @@ class D3Converter {
 
     // Updating the attributes of the node object. The resulting object will have
     // all of it's props filled in, and will be ready to be rendered by D3
-    props.uri = g.statementsMatching(undefined, DC('description').uri, undefined)[0].subject.value
-    props.name = g.statementsMatching(undefined, FOAF('name').uri, undefined)[0].object.value
-    props.description = g.statementsMatching(undefined, DC('description').uri, undefined)[0].object.value
-    props.type = g.statementsMatching(undefined, RDF('type').uri, undefined)[0].object.value
+    // Note, if a triple is not present, it will be set to null.
+    props.uri = uri
+
+    let name = g.statementsMatching(uri, FOAF('name').uri, undefined)
+    if (name.length > 0) props.name = name[0].object.value
+    else props.name = null
+
+    let description = g.statementsMatching(uri, DC('description').uri, undefined)
+    if (description.length > 0) props.description = description[0].object.value
+    else props.description = null
+
+    let type = g.statementsMatching(uri, RDF('type').uri, undefined)
+    if (type.length > 0) props.type = type[0].object.value
+    else props.type = null
+
     return props
   }
 }

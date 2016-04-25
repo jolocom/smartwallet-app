@@ -24,7 +24,6 @@ export default Reflux.createStore({
   },
 
   onUpdateState: function(updated){
-    console.log(updated, 'this is me')
     this.state = updated
     this.trigger(this.state)
   },
@@ -42,6 +41,7 @@ export default Reflux.createStore({
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(triples[i], i, triples.length - 1)
       }
+      console.log(triples, 'final destination')
       graphActions.getInitialGraphState.completed(triples)
     })
   },
