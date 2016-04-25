@@ -8,7 +8,7 @@ export class Parser {
   parse(text) {
     return new Promise((resolve) =>{
       let payload = []
-      rdf.parse(text, rdf.graph(), 'https://ogog.og', 'text/turtle', (err, triples) => {
+      rdf.parse(text, rdf.graph(), 'http://ogog.og', 'text/turtle', (err, triples) => {
         for (let i in triples.statements) {
           let statement = triples.statements[i]
           payload.push({
