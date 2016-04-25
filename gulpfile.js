@@ -13,9 +13,20 @@ var concat = require('gulp-concat');
 // The development server (the recommended option for development)
 gulp.task('default', ['webpack-dev-server']);
 
+gulp.task('html', function() {
+  return gulp.src('./src/index.html')
+    .pipe(gulp.dest('./dist/'));
+});
+
 gulp.task('img', function() {
   return gulp.src('./src/img/**.*')
     .pipe(gulp.dest('./dist/img'));
+});
+
+//This task takes care of moving the test dummy data into dist.
+gulp.task('data', function(){
+  return gulp.src('./data/**/*')
+    .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('sass', function () {
@@ -30,7 +41,7 @@ gulp.task('sass', function () {
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
 //               can serve an old app on refresh
-gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'sass'], function() {
+gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'sass', 'data'], function() {
 	gulp.watch(['src/**/*'], ['webpack:build-dev']);
 });
 
