@@ -4,5 +4,7 @@ export default Reflux.createActions({
   'getInitialGraphState' : {asyncResult: true},
   'fetchGraph' : {children: ['completed', 'failed']},
   'fetchGraphAtWebID' : {asyncResult: true},
-  'fetchTriples' : {asyncResult: true}
+  'fetchTriples' : {asyncResult: true},
+  'getState': {asyncResult: false},
+  'updateState': {asyncResult: false}
 })

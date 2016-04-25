@@ -6,17 +6,34 @@ import d3Convertor from '../lib/d3-converter'
 export default Reflux.createStore({
 
   listenables: [graphActions],
-  graphNodes : {
-    center: null,
-    neighbours: null,
-    highlighted: null,
-    showSearch: false,
-    plusDrawerOpen: false
-  },
 
   init: function(){
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
+    this.state = {
+      //These state keys describe the graph
+      center:null,
+      neighbours: null,
+      loaded: false,
+      highlighted: null,
+      //These describe the ui
+      showPinned: false,
+      showSearch: false,
+      plusDrawerOpen: false
+    }
+  },
+
+  onUpdateState: function(updated){
+    console.log(updated, 'this is me')
+    this.state = updated
+    this.trigger(this.state)
+  },
+
+  onGetState: function(){
+    this.trigger(this.state)
+  },
+
+  getInitialState: function() {
   },
 
   onGetInitialGraphState: function() {
@@ -30,10 +47,9 @@ export default Reflux.createStore({
   },
 
   onGetInitialGraphStateCompleted: function(result) {
-    this.graphNodes.center = result[0]
-    this.graphNodes.neighbours = result.slice(1, result.length)
-    
-    this.trigger(this.graphNodes)
+    this.state.center = result[0]
+    this.state.neighbours = result.slice(1, result.length)
+    this.state.loaded = true
+    this.trigger(this.state)
   }
-
 })

@@ -19,16 +19,34 @@ let convertor = new D3Converter()
 
 let Graph = React.createClass({
 
-  mixins : [Reflux.listenTo(GraphStore, 'onChange')],
+  mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
 
   getInitialState: function() {
-    graphActions.getInitialGraphState()
+    // Ask for the state from the store
+    graphActions.getState()
+    // This gets replaced almost instantly with the sotre's state
     return {
-      center: null,
+      //These state keys describe the graph
+      center:null,
       neighbours: null,
+      loaded: false,
       highlighted: null,
+      //These describe the ui
+      showPinned: false,
       showSearch: false,
       plusDrawerOpen: false
+    }
+  },
+
+  onStateUpdate: function(data) {
+    this.setState(data)
+    // We check if the graph info has already been pulled from the RDF file
+    // This way we only fetch data from the server when needed.
+    if (!this.state.loaded) {
+      graphActions.getInitialGraphState()
+    } else{
+      // If the data was already pulled, we draw a graph with it.
+      this.graph = new GraphD3(this.getGraphEl(), this.state , this.handleNodeClick)
     }
   },
 
@@ -36,23 +54,25 @@ let Graph = React.createClass({
   },
 
   componentDidMount: function() {
+    // Make sure we refresh our state every time we mount the component, this
+    // then fires the drawing function from onStateUpdate
+    graphActions.getState()
   },
 
   handleNodeClick(node){
   },
 
   componentWillUpdate(nextProp, nextState){
-    if (nextState.center && nextState.neighbours)
-      this.graph = new GraphD3(this.getGraphEl(), nextState, this.handleNodeClick)
   },
 
-  onChange: function(state) {
-    this.setState(state)
+  componentWillUnmount: function(){
+    // Commiting all the changes that the user did to the graph to the store's state
+    // Not yet implemented, waiting for Eric's graph to start working on this.
+    graphActions.updateState(this.state)
   },
 
   getGraphEl() {
       return ReactDOM.findDOMNode(this.refs.graph)
-
   },
 
   getStyles() {
