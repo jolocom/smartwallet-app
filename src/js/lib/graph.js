@@ -1,77 +1,79 @@
+// THIS FILE TAKES CARE OF DRAWING THE D3 GRAPH
+// It is passed a state from the graph.jsx file, and then it draws
+// the graph according to that state. The element itself is stateless.
+// Currently I have issues with doing persistent changes here, for instance
+// a moved node will not save upon refresh.
+
 import d3 from 'd3'
-
-import Util from './util.js'
-
-import SensorAgent from './agents/sensor'
-
 import STYLES from 'styles/app'
-
-let sensorAgent = new SensorAgent()
-
-d3.selection.prototype.moveToFront = function() {
-  return this.each(function(){
-    this.parentNode.appendChild(this)
-  })
-}
 
 export default class GraphD3 {
 
-  constructor(el, props, state, handleNodeClick, handleDragEnd, handleLongTap) {
+  constructor(el, state, handleClick){
+    console.log(state, 'this is what I use to draw')
     this.el = el
+    this.handleNodeClick = handleClick
+    this.onNodeClick = this.onNodeClick.bind(this)
 
-    this.taptimer = {
-      start: 0,
-      end: 0
-    }
+    this.width = STYLES.width
+    this.height = STYLES.height
 
-    this.drag = {
-      active: false,
-      starttime: 0,
-      endtime: 0,
-      onCenter: false,
-      startPos: {},
-      nowPos: {},
-      distance: () => {
-        return Util.distance(this.drag.startPos.x,
-                         this.drag.startPos.y,
-                         this.drag.nowPos.x,
-                         this.drag.nowPos.y)
-      }
-    }
-
-    this.handleNodeClick = handleNodeClick
-    this.handleDragEnd = handleDragEnd
-    this.handleLongTap = handleLongTap
-
-    this.create(props, state)
-  }
-
-  create(props, state) {
-    this.w = this.el.offsetWidth || 440
-    this.h = this.el.offsetHeight || 696
-
-    let svg = d3.select(this.el).append('svg:svg')
-      .attr('width', this.w)
-      .attr('height', this.h)
-      .attr('pointer-events', 'all')
+    this.svg = d3.select(this.el).append('svg:svg')
+      .attr('width', this.width)
+      .attr('height', this.height)
       .append('svg:g')
 
-
-    //background rectangle
-    svg.append('svg:rect')
-      .attr('width', this.w)
-      .attr('height', this.h)
+    this.svg.append('svg:rect')
+      .attr('width', this.width)
+      .attr('height', this.height)
       .attr('fill', 'white')
 
-    //background circle
-    svg.append('svg:circle')
-      .attr('class', 'plate')
-      .attr('cx', STYLES.width * 0.5)
-      .attr('cy', STYLES.height * 0.5)
-      .attr('r', STYLES.width * 0.3)
+    this.svg.append('svg:circle')
+      .attr('cx', this.width * 0.5)
+      .attr('cy', this.height * 0.5)
+      .attr('r', this.width / 6)
       .style('fill', STYLES.lightGrayColor)
 
+    this.drawGraph(state)
+  }
 
+  drawGraph(state){
+    // Takes care of node dragging.
+    let drag = d3.behavior.drag()
+      .on('drag', this.dragMove)
+
+    // Draw the lines first, this way they are in the background
+    this.svg.selectAll('connections')
+      .data(state.neighbours)
+      .enter()
+      .append('line')
+      .attr('id', (d) => {return d.name})
+      .attr('x1', (d) => {return d.x})
+      .attr('y1', (d) => {return d.y})
+      .attr('x2', this.width / 2)
+      .attr('y2', this.height / 2)
+        .style('stroke-width', this.width / 60)
+        .style('stroke', STYLES.lightGrayColor)
+        .style('fill', 'none')
+
+    // Wraps the center object in an array so that d3 can work with it
+    let centerWork = [state.center]
+    // Draw the center node node
+    let center = this.svg.selectAll('center_node')
+      .data(centerWork)
+      .enter()
+      .append('circle')
+      .attr('class', 'center')
+      .attr('cx', this.width / 2)
+      .attr('cy', this.height / 2)
+      .attr('r', STYLES.largeNodeSize/2)
+      .attr('width', STYLES.largeNodeSize)
+      .attr('height', STYLES.largeNodeSize)
+      .style('fill', STYLES.grayColor)
+      .style('stroke','white')
+      .style('stroke-width', 0)
+
+<<<<<<< HEAD
     // `base` only needs to run once
     this.force = d3.layout.force()
     this.force
@@ -171,12 +173,23 @@ export default class GraphD3 {
     // add circle
     nodeNew.filter((d) => d.type == 'uri')
       .append('svg:circle')
+=======
+    center.on('click', (d) => {
+      this.onNodeClick(d)
+    })
+    // Drawing the neighbour nodes.
+    this.svg.selectAll('neighbour_node')
+      .data(state.neighbours)
+      .enter()
+      .append('circle')
+>>>>>>> feature/#71-rewriting-rdf-functionality
       .attr('class', 'node')
-      .attr('r', STYLES.smallNodeSize/2)
-      .attr('x', '-8px')
-      .attr('y', '-8px')
+      .attr('cx', (d) => { return d.x })
+      .attr('cy', (d) => { return d.y })
+      .attr('r', STYLES.smallNodeSize / 2)
       .attr('width', STYLES.smallNodeSize)
       .attr('height', STYLES.smallNodeSize)
+<<<<<<< HEAD
       .style('fill', (d, i) => {
         if (d.img!='') {
           return 'url(#avatar'+i+')'}
@@ -188,360 +201,33 @@ export default class GraphD3 {
         }
       })
       .style('stroke', 'white')
+=======
+      .style('fill', STYLES.grayColor)
+      .style('stroke','white')
+>>>>>>> feature/#71-rewriting-rdf-functionality
       .style('stroke-width', 0)
-
-    // add title text (visible when not in preview)
-    nodeNew.filter((d) => d.type == 'bnode' || d.type == 'uri')
-      .append('svg:text')
-      .attr('class', 'nodetext')
-      .style('fill', '#ffffff')
-      .attr('text-anchor', 'middle')
-      .attr('dy', '.35em')
-      .text((d) => d.title)
-      .call(this.wrap, STYLES.smallNodeSize * 0.9, '', '') // returns only wrapped titles, so we can push them up later
-
-    nodeNew.filter((d) => d.nodeType == 'sensor')
-      .call(function(nodes) {
-        nodes.each(function(d) {
-          self.subscribeToUpdates(this, d)
-        })
-      })
-
-    // remove old nodes
-    let nodeOld = node.exit()
-    console.log('OLD NODES', nodeOld[0].length)
-    nodeOld.transition()
-      .style('opacity', 0)
-      .remove()
-      .call(function(nodes) {
-        nodes.each(function(d) {
-          if (d.subscription)
-            sensorAgent.unsubscribe(d.subscription)
-        })
-      })
-
-    // NB(philipp): on init, the `fixed`-attribute of nodes is cleared
-    // and needs to be re-set. also, the asynchronous call to init can interrupt
-    // the animation, so it is also re-started.
-
-
-    // init center perspective
-    this.changeCenter(node, prevState.centerNode, state.centerNode, state.historyNodes)
-
-    { // init history
-      if(state.historyNodes.length > 0){
-        let lastStep = state.nodes.filter((d) => {
-          return d.uri == state.historyNodes[state.historyNodes.length - 1].uri })[0]
-        lastStep.fixed = true
-        this.animateNode(lastStep,
-                     STYLES.width / 2,
-                     STYLES.height * 4/5)
-      }
-    }
-
-    { // init new node, if applicable
-      if(state.newNodeURI !== undefined){
-        let newNode = node.filter((d) => d.uri == state.newNodeURI)
-        if(newNode.length > 0){
-          newNode
-            .interrupt()
-            .style('opacity', 1)
-            .select('circle')
-            .style('fill', STYLES.highLightColor)
-          newNode
-            .transition().duration(2000)
-            .style('fill', STYLES.grayColor)
-        }
-      }
-    }
-
-    { // init preview
-      this.disablePreview(node)
-      // find dom node to preview and enablePreview on it
-      let toPreview = node.filter((d) => d.uri == state.previewNode.uri)
-      this.enablePreview(toPreview)
-    }
-
-    //plus drawer opening (closing is handled in 'beforeUpdate')
-    if (!prevState.plusDrawerOpen && state.plusDrawerOpen) {
-      document.getElementsByTagName('body')[0].className = 'open-drawer'
-      d3.select('#plus_drawer')
-        .transition()
-        .style('top', (STYLES.height / 2)+'px')
-
-      this.zoomTo(0.5,
-               STYLES.width / 2,
-               0)
-    }
-
-    //chat opening (closing is handled in 'beforeUpdate')
-    if (!prevState.chatOpen && state.chatOpen) {
-      d3.select('#chat')
-        .transition()
-        .style('top', (STYLES.height / 3)+ 'px')
-
-      this.zoomTo(0.5,
-        STYLES.width / 2,
-        STYLES.height / -6)
-    }
-
-    // First node added to inbox - animate InboxCounter
-    if (prevState.inboxCount == 0 && state.inboxCount == 1) {
-      d3.select('#inbox .counter')
-        .transition()
-        .style('opacity', 1)
-    }
-
-    // Spring inbox whenever a node is added/removed
-    if (prevState.inboxCount != state.inboxCount && state.inboxCount >= 1) {
-      //let size = (self.inbox.count==0)
-        //?(-STYLES.width)
-        //:(-STYLES.width+(STYLES.width/5))
-
-      let size = -STYLES.width + (STYLES.width/5)
-
-      d3.select('#inbox')
-        .transition()
-        .style('right', size+'px')
-    }
-
-    // inbox opening (closing is handled in 'beforeUpdate')
-    if (!prevState.inboxOpen && state.inboxOpen) {
-      this.zoomTo(0.5,
-               STYLES.width / 2,
-               STYLES.height)
-      //d3.select('#inbox')
-        //.transition()
-        //.style('right', (-STYLES.width / 2)+'px')
-    }
-
-
-    // --------------------------------------------------------------------------------
-    // animation
-    let ticks = 0
-
-    this.force.on('tick', (e) => {
-      ticks++
-
-      link.selectAll('line.link')
-        .attr('x1', (d) => d.source.x)
-        .attr('y1', (d) => d.source.y)
-        .attr('x2', (d) => d.target.x)
-        .attr('y2', (d) => d.target.y)
-
-      node
-        .attr('transform', (d) => {
-          // shift nodes _towards_ x center and _away_ from y center
-          // (so they sit nicely on top & below the center perspective)
-          let kx = 10 * e.alpha
-          let ky = 4 * kx
-          d.x += (d.x < (STYLES.width / 2))  ?(kx):(-kx)
-          d.y += (d.y < (STYLES.height / 2)) ?(-ky):(ky)
-          return 'translate(' + d.x + ',' + d.y + ')'
-        })
-    })
-
-    // interaction
-    //NOTE(philipp): if necessary, use `mobilecheck` to assign different events for mobile and desktop clients
-    node.on('click', null) // NOTE(philipp): unbind old `openPreview` because it captured the  outdated `node` variable
-
-    //node.on('click', this.openPreview(state.nodes))
-    node.on('click', this.nodeClick())
-
-    this.force.drag()
-      .on('dragstart', this.forceDragStart(state.centerNode))
-      .on('drag', this.forceDragMove(state.centerNode))
-      .on('dragend', this.forceDragEnd(state.nodes, state.centerNode))
-
-    this.force.start()
+      .call(drag)
   }
 
-  subscribeToUpdates(node, data) {
-    let sensor = d3.select(node)
-    sensorAgent.subscribe(data.uri, ({value}) => {
-      sensor.select('text').text(value)
-      sensor.select('circle').style('fill', () => this.getSensorColor(value))
-    }).then((subscriptionId) => {
-      data.subscription = subscriptionId
-      sensor.data(data)
-    })
+  update(newState){
+    this.drawGraph(newState)
   }
 
-  getSensorColor(temp) {
-    temp = parseInt(temp)
-    //if (temp < 15) {
-      //return STYLES.tempCold
-    //} else if (temp >= 15 && temp < 20) {
-      //return STYLES.tempCool
-    //} else if (temp >= 20 && temp < 25) {
-      //return STYLES.tempNormal
-    //} else if (temp >= 25 && temp < 30) {
-      //return STYLES.tempWarm
-    //} else {
-      //return STYLES.tempHot
-    //}
-
-    if (temp < 100) {
-      return STYLES.tempCold
-    } else if (temp >= 100 && temp < 200) {
-      return STYLES.tempCool
-    } else if (temp >= 200 && temp < 300) {
-      return STYLES.tempNormal
-    } else if (temp >= 300 && temp < 400) {
-      return STYLES.tempWarm
-    } else {
-      return STYLES.tempHot
-    }
+  onNodeClick(d){
+    this.handleNodeClick(d)
   }
 
-  // Invoked in 'componentWillUpdate' of react graph
-  beforeUpdate(state, nextState) {
-    //plus drawer closing (opening is handled in 'update')
-    if (state.plusDrawerOpen && !nextState.plusDrawerOpen) {
-      document.getElementsByTagName('body')[0].className = 'closed-drawer'
-      d3.select('#plus_drawer')
-        .transition()
-        .style('top', STYLES.height+'px')
-      this.zoomReset()
-    }
-
-    //chat closing (opening is handled in 'update')
-    if (state.chatOpen && !nextState.chatOpen) {
-      d3.select('#chat')
-        .transition()
-        .style('top', STYLES.height + 'px')
-      this.zoomReset()
-    }
-
-    // inbox closing (opening is handled in 'update')
-    if (state.inboxOpen && !nextState.inboxOpen) {
-      this.zoomReset()
-    }
+  onResize() {
+    this.setSize()
   }
 
-  // touchStart and touchEnd are logging tap-times
-  tapStart() {
-    let self = this
-    return function () {
-      self.taptimer.start = d3.event.sourceEvent.timeStamp
-    }
+  setSize() {
+    this.width = this.el.offsetWidth
+    this.height = this.el.offsetHeight
+    this.svg.attr('width', this.width).attr('height', this.height)
   }
 
-  tapEnd(){
-    let self = this
-    return function() {
-      self.taptimer.end = d3.event.sourceEvent.timeStamp
-      if((self.taptimer.end - self.taptimer.start) < 200){
-        return true
-      }
-      return false
-    }
-  }
-
-  // catch long tap and forward it to react
-  triggerLongTap() {
-    return () => {
-      if(!this.drag.active) return // drag event stopped before timeout expired
-      this.handleLongTap(this.drag.distance())
-    }
-  }
-
-  forceDragStart(centerNode) {
-    let self = this
-    return function (d){
-      self.tapStart()()
-      console.log(d3.event)
-      self.drag.active = true
-      self.drag.startPos.x = self.drag.nowPos.x = d3.event.sourceEvent.pageX
-      self.drag.startPos.y = self.drag.nowPos.y = d3.event.sourceEvent.pageY
-      if(d.uri == centerNode.uri) {
-        self.drag.onCenter = true
-        window.setTimeout(self.triggerLongTap(), 800)
-      } else {
-        self.drag.onCenter = false
-      }
-    }
-  }
-
-  forceDragMove(centerNode) {
-    let self = this
-    return function (d){
-      if(d == centerNode.node){ // center node grabbed
-        self.drag.nowPos.x = d3.event.sourceEvent.pageX
-        self.drag.nowPos.y = d3.event.sourceEvent.pageY
-      } else {
-        //d.fixed = true
-      }
-    }
-  }
-
-  // catch dragend event and forward it to react
-  forceDragEnd(nodes, centerNode) {
-    let self = this
-
-    return function (d){
-      console.log(d3.event)
-      self.drag.active = false
-      if(self.tapEnd()() || d3.event.defaultPrevented){
-        // this is a click
-        return
-      }
-
-      let y = d3.event.sourceEvent.pageY // NOTE(philipp): d3.touches[0][1] won't work (because there are no _current_ touches)
-
-      self.handleDragEnd(d, self.drag.distance(), y)
-
-      if(d == centerNode.node){
-        // reset node position
-        d.x, d.px = STYLES.width / 2
-        d.y, d.py = STYLES.height / 2
-        d3.select(this).attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
-      }
-    }
-  }
-
-  // catch nodeClick event and forward it to react
-  nodeClick() {
-    let self = this
-    return function(d){ // click == enable preview
-      self.handleNodeClick(d)
-    }
-  }
-
-
-  // graph zoom/scale
-  zoomTo(scale, x, y) {
-    let svg = d3.select(this.el).select('svg').select('g')
-    svg.transition()
-      .attr('transform', 'scale('+ scale + ') translate(' + x + ',' + y + ')')
-  }
-
-  zoomReset() {
-    let svg = d3.select(this.el).select('svg').select('g')
-    svg.transition()
-      .attr('transform', 'scale(1) translate(0, 0)')
-  }
-
-
-  animateNode(d, x, y) {
-    console.log(d)
-    // http://stackoverflow.com/questions/19931383/animating-elements-in-d3-js
-    d3.select(d).transition().duration(1000)
-      .tween('x', () => {
-        let i = d3.interpolate(d.x, x)
-        return function(t) {
-          d.x = i(t)
-          d.px = i(t)
-        }
-      }).tween('y', () => {
-        let i = d3.interpolate(d.y, y)
-        return function(t) {
-          d.y = i(t)
-          d.py = i(t)
-        }
-      })
-  }
-
+<<<<<<< HEAD
   changeCenter(domNodes, oldCenter, newCenter, historyNodes){
     newCenter.node.fixed = true
     if (!oldCenter) {
@@ -703,5 +389,13 @@ export default class GraphD3 {
       .transition().duration(STYLES.nodeTransitionDuration)
       .style('opacity', 1)
     return node
+=======
+// Moves the node and the edge attached to it upon mouse drag
+  dragMove(d){
+    d3.select(this).attr('cx', d3.event.x)
+    d3.select(this).attr('cy', d3.event.y)
+    d3.select('#'+d.name).attr('x1', d3.event.x)
+    d3.select('#'+d.name).attr('y1', d3.event.y)
+>>>>>>> feature/#71-rewriting-rdf-functionality
   }
 }

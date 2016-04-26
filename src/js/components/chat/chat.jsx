@@ -1,16 +1,11 @@
 import React from 'react'
+import Radium from 'radium'
 import Reflux from 'reflux'
 
 import moment from 'moment'
 
-// import FabMenu from 'components/common/fab-menu.jsx'
-// import FabMenuItem from 'components/common/fab-menu-item.jsx'
-//
-
-
-import {List, ListItem, Avatar, Styles, FloatingActionButton, FontIcon} from 'material-ui'
-
-let {Colors} = Styles
+import {List, ListItem, Avatar, FloatingActionButton, FontIcon} from 'material-ui'
+import {grey500} from 'material-ui/styles/colors'
 
 import TimerMixin from 'react-timer-mixin'
 
@@ -20,7 +15,7 @@ import ConversationsStore from 'stores/conversations'
 let Chat = React.createClass({
 
   mixins: [
-    Reflux.connect(ConversationsStore),
+    Reflux.connect(ConversationsStore, 'conversations'),
     TimerMixin
   ],
 
@@ -49,9 +44,9 @@ let Chat = React.createClass({
 
   render: function() {
     return (
-      <div className="jlc-chat">
-        <List className="jlc-chat-list">
-          {this.state.conversations.map((conversation) => {
+      <div style={styles.container}>
+        <List>
+          {this.state.conversations.items.map((conversation) => {
             let {otherPerson} = conversation
             let {created, content} = conversation.lastMessage
             let avatar
@@ -82,8 +77,12 @@ let Chat = React.createClass({
 })
 
 let styles = {
+  container: {
+    flex: 1,
+    overflowY: 'auto'
+  },
   date: {
-    color: Colors.grey500,
+    color: grey500,
     fontSize: '12px',
     float: 'right'
   },
@@ -94,4 +93,4 @@ let styles = {
   }
 }
 
-export default Chat
+export default Radium(Chat)

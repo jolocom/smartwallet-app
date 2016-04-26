@@ -1,14 +1,14 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import classNames from 'classnames'
 import moment from 'moment'
 
 import {AppBar, IconButton} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
+import Dialog from 'components/common/dialog.jsx'
 import Compose from 'components/common/compose.jsx'
 
 import ConversationActions from 'actions/conversation'
@@ -40,7 +40,7 @@ let Conversation = React.createClass({
     ConversationActions.load(this.context.profile.username, this.props.params.id)
     ConversationActions.subscribe(this.context.profile.username, this.props.params.id)
 
-    this.open()
+    this.refs.dialog.show()
 
     this.conversationsEl = ReactDOM.findDOMNode(this.refs.conversations)
 
@@ -54,7 +54,7 @@ let Conversation = React.createClass({
   },
 
   componentWillUnmount() {
-    this.close()
+    this.refs.dialog.hide()
 
     this.conversationsEl.removeEventListener('scroll', this.onScroll)
   },
@@ -74,18 +74,6 @@ let Conversation = React.createClass({
     }
   },
 
-  open() {
-    this.setState({open: true})
-  },
-
-  close() {
-    this.setState({open: false})
-  },
-
-  toggle() {
-    this.setState({open: !this.state.open})
-  },
-
   addMessage(content) {
     ConversationActions.addMessage(
       this.props.params.id,
@@ -97,17 +85,6 @@ let Conversation = React.createClass({
 
   getStyles() {
     let styles = {
-      container: {
-        position: 'fixed',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0,
-        zIndex: 10,
-        opacity: this.state.open ? 1 : 0,
-        transform: this.state.open ? 'translate(0, 0)' : 'translate(0, 100%)',
-        transition: 'opacity .3s, transform .3s'
-      },
       content: {
         display: 'flex',
         flexDirection: 'column',
@@ -115,17 +92,50 @@ let Conversation = React.createClass({
       },
       conversation: {
         flex: 1,
-        overflowY: 'auto'
+        overflowY: 'auto',
+        backgroundColor: '#f1f1f1'
+      },
+      message: {
+        padding: '0 20px',
+        marginBottom: '10px',
+        overflow: 'hidden'
+      },
+      body: {
+        borderRadius: '6px',
+        padding: '6px 12px',
+        position: 'relative'
+      },
+      meta: {
+        clear: 'both',
+        color: 'rgba(0, 0, 0, 0.3)',
+        padding: '0 6px',
+        fontSize: '12px'
+      },
+      contact: {
+        body: {
+          float: 'left',
+          background: '#ffffff',
+          borderTopLeftRadius: 0
+        },
+        meta: {
+          textAlign: 'left'
+        }
+      },
+      me: {
+        body: {
+          float: 'right',
+          background: 'rgba(0, 0, 0, 0.15)',
+          borderTopRightRadius: 0
+        },
+        meta: {
+          textAlign: 'right'
+        }
       }
     }
     return styles
   },
 
   render() {
-    let classes = classNames('jlc-chat-user', 'jlc-dialog', 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.open
-    })
-
     let styles = this.getStyles()
 
     let {conversation} = this.state
@@ -136,7 +146,7 @@ let Conversation = React.createClass({
     let items = conversation.items || []
 
     return (
-      <div style={styles.container}>
+      <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <AppBar
           title={title}
@@ -145,24 +155,23 @@ let Conversation = React.createClass({
           }
           />
         <Content style={styles.content}>
-            <div className="jlc-conversation" ref="conversations" style={styles.conversation}>
+            <div ref="conversations" style={styles.conversation}>
               {items.map(function({author, content, created}, i) {
                 let from = (author !== profile.webid) ? 'contact' : 'me'
-                let classes = classNames('jlc-message', `jlc-message-from-${from}`)
                 return (
-                  <div className={classes} key={i}>
-                    <div className="jlc-message-content">{content}</div>
-                    <div className="jlc-message-meta">
-                      <span className="jlc-message-date">{moment(created).fromNow()}</span>
+                  <div style={[styles.message]} key={i}>
+                    <div style={[styles.body, styles[from].body]}>{content}</div>
+                    <div style={[styles.meta, styles[from].meta]}>
+                      <span style={styles.date}>{moment(created).fromNow()}</span>
                     </div>
                   </div>
                 )
               })}
             </div>
-            <Compose placeholder="Write a message..." onSubmit={this.addMessage} className="jlc-compose-message"/>
+            <Compose placeholder="Write a message..." onSubmit={this.addMessage}/>
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })

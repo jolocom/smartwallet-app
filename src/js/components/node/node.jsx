@@ -1,18 +1,18 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import classNames from 'classnames'
+
+import ProfileNode from 'components/node/profile.jsx'
+import AddressNode from 'components/node/address.jsx'
 
 import {
   AppBar,
   IconButton,
-  Checkbox,
-  Card, CardMedia, CardTitle, CardActions
+  Checkbox
 } from 'material-ui'
 
-import {Layout, Content, Spacer} from 'components/layout'
-
-import Comments from 'components/node/comments.jsx'
+import Dialog from 'components/common/dialog.jsx'
+import {Layout, Content} from 'components/layout'
 
 import NodeActions from 'actions/node'
 
@@ -20,36 +20,29 @@ import NodeStore from 'stores/node'
 
 let Node = React.createClass({
   mixins: [
-    Reflux.connect(NodeStore)
+    Reflux.connect(NodeStore, 'node')
   ],
 
   contextTypes: {
-    history: React.PropTypes.any
+    history: React.PropTypes.any,
+    node: React.PropTypes.object
   },
 
   componentDidMount() {
-    NodeActions.load(this.props.params.node)
-    this.open()
+    this.refs.dialog.show()
   },
 
   componentWillUnmount() {
-    this.close()
-  },
-
-  open() {
-    this.setState({open: true})
-  },
-
-  close() {
-    this.setState({open: false})
-  },
-
-  toggle() {
-    this.setState({open: !this.state.open})
+    this.refs.dialog.hide()
   },
 
   togglePinned() {
     NodeActions.pin(this.props.params.node)
+  },
+
+  _handleClose() {
+    this.context.history.goBack()
+    this.refs.dialog.hide()
   },
 
   getStyles() {
@@ -57,49 +50,43 @@ let Node = React.createClass({
       bar: {
         position: 'absolute',
         backgroundColor: 'transparent'
-      },
-      media: {
-        color: '#fff',
-        height: '176px',
-        background: 'url(http://www.getmdl.io/assets/demos/welcome_card.jpg) center / cover'
-      },
-      actions: {
-        display: 'flex'
       }
     }
   },
 
-  render() {
-    let classes = classNames('jlc-node', 'jlc-dialog', 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.open
-    })
+  getNodeContent() {
+    let {node} = this.context
 
+    if (!node) return null
+
+    if (node.nodeType === 'contact') {
+      return <ProfileNode node={node}/>
+    }
+    switch(node.description) {
+      case 'Address':
+        return <AddressNode node={node}/>
+    }
+  },
+
+  render() {
     let styles = this.getStyles()
 
+    let content = this.getNodeContent()
+
     return (
-      <div className={classes}>
+      <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <AppBar
-            iconElementLeft={<IconButton onTouchTap={() => this.context.history.pushState(null, '/graph')} iconClassName="material-icons">close</IconButton>}
+            iconElementLeft={<IconButton onTouchTap={this._handleClose} iconClassName="material-icons">close</IconButton>}
             iconElementRight={<Checkbox name="inbox" onChange={this.togglePinned}></Checkbox>}
             style={styles.bar}
             zDepth={0}
           />
           <Content>
-            <Card className="jlc-node-card" zDepth={0}>
-              <CardMedia overlay={
-                  <CardTitle>Welcome</CardTitle>
-              } style={styles.media}/>
-              <CardActions style={styles.actions}>
-                <Spacer/>
-                <IconButton iconClassName="material-icons">comment</IconButton>
-                <IconButton iconClassName="material-icons">share</IconButton>
-              </CardActions>
-            </Card>
-            <Comments node={this.props.params.node}/>
+            {content}
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })

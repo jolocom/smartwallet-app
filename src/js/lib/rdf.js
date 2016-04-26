@@ -1,56 +1,40 @@
-import N3 from 'n3'
+// THIS FILE TAKES CARE OF CONVERTING TEXT TO RDF AND WRITING RDF TRIPLES TO TURTLE
+// The parser takes text and converts it to turtle, returning an array of triples.
+// The writer takes triples and writes them to a turtle file. Serializes it basically.
 
-// N3.parser- promise version
+import rdf from 'rdflib'
+
 export class Parser {
-
-  // @see https://github.com/RubenVerborgh/N3.js#parsing
-  constructor(params) {
-    if (params) {
-      this.parser = N3.Parser(params)
-    } else {
-      this.parser = N3.Parser()
-    }
-  }
-
   parse(text) {
-    return new Promise((resolve) => {
-      let triples = []
-      this.parser.parse(text, (err, triple, prefixes) => {
-        if (triple) {
-          triples.push(triple)
-        } else {
-          resolve({prefixes: prefixes, triples: triples})
+    return new Promise((resolve) =>{
+      let payload = []
+      rdf.parse(text, rdf.graph(), 'http://ogog.og', 'text/turtle', (err, triples) => {
+        for (let i in triples.statements) {
+          let statement = triples.statements[i]
+          payload.push({
+            object: statement.object,
+            predicate: statement.predicate,
+            subject: statement.subject
+          })
         }
       })
+      resolve({ prefixes: {}, triples: payload})
     })
   }
 }
 
-
-// N3.writer - promise version
 export class Writer {
-
-  // @see https://github.com/RubenVerborgh/N3.js#writing
-  constructor(params) {
-    if (params) {
-      this.writer = N3.Writer(params)
-    } else {
-      this.writer = N3.Writer()
-    }
+  constructor(){
+    this.g = rdf.graph()
   }
 
-  addTriple(triple) {
-    this.writer.addTriple(triple)
+  addTriple(subj, pred, obj) {
+    console.log(subj, pred, obj, 'this probably throws an erro')
+    this.g.add(subj,pred,obj)
   }
 
   end() {
-    return new Promise((resolve, reject) => {
-      this.writer.end((err, res) => {
-        if (err)
-          reject(err)
-        else
-          resolve(res)
-      })
-    })
+    console.log(rdf.serialize(undefined, this.g, undefined, 'text/turtle'))
+    return rdf.serialize(undefined, this.g, undefined, 'text/turtle')
   }
 }

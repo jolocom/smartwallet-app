@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {linkToState} from 'lib/util'
+import Util from 'lib/util'
 
 let PlusDrawer = React.createClass({
 
@@ -45,10 +45,10 @@ let PlusDrawer = React.createClass({
       <div id="plus_drawer">
         <div className="close" onClick={this.props.toggle}>x</div>
         <div>
-          <textarea className="title" placeholder="Node title" rows="1" cols="50" onChange={linkToState(this, 'title')}/>
+          <textarea className="title" placeholder="Node title" rows="1" cols="50" onChange={Util.linkToState(this, 'title')}/>
         </div>
         <div>
-          <textarea className="description" placeholder="Node description" rows="5" cols="50" onChange={linkToState(this, 'description')}/>
+          <textarea className="description" placeholder="Node description" rows="5" cols="50" onChange={Util.linkToState(this, 'description')}/>
         </div>
         <div className="button direct" onClick={this.directConnect}>Connect Now</div>
         <div className="button inbox" onClick={this.toInbox}>Put Into Inbox</div>

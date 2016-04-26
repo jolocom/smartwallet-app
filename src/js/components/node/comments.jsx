@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import Radium from 'radium'
 
 import TimerMixin from 'react-timer-mixin'
 
@@ -7,24 +8,22 @@ import CommentsActions from 'actions/comments'
 import CommentsStore from 'stores/comments'
 import ProfileStore from 'stores/profile'
 
-import List, {ListItem} from 'components/common/list.jsx'
-import Avatar from 'components/common/avatar.jsx'
+import {List, ListItem, Avatar} from 'material-ui'
 
 import Compose from 'components/common/compose.jsx'
 
 // @TODO we should subscribe to the gold ws server here
 const CHAT_RELOAD_INTERVAL = 4000 // 4 seconds
 
-export default React.createClass({
+let Comments = React.createClass({
   mixins: [
-    Reflux.connect(CommentsStore),
+    Reflux.connect(CommentsStore, 'comments'),
     Reflux.connect(ProfileStore, 'profile'),
     TimerMixin
   ],
 
   componentDidMount: function() {
     this.setInterval(() => {
-      console.log('tick...')
       CommentsActions.load(this.props.node)
     }, CHAT_RELOAD_INTERVAL)
 
@@ -33,25 +32,48 @@ export default React.createClass({
 
   addComment: function(content) {
     CommentsActions.create({
-      subject: this.props.node,
+      subject: this.props.node.uri,
       author: this.state.profile.webid,
       content: content
     })
   },
 
+  getStyles() {
+    return {
+      container: {
+        display: 'flex',
+        flexDirection: 'column'
+      },
+      list: {
+        flex: 1
+      },
+      compose: {
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%'
+      }
+    }
+  },
+
   render: function() {
+    let {style} = this.props
+    let styles = this.getStyles()
+
     return (
-      <div className="jlc-comments">
-        <List className="jlc-comments-list">
-          {this.state.comments.map(function({author, content}) {
+      <div style={[styles.container, style]}>
+        <List style={styles.list}>
+          {this.state.comments.items.map(function({author, content}) {
             let avatar = <Avatar src={author.imgUri}>{author[0]}</Avatar>
             return (
-              <ListItem title={author} content={content} leftIcon={avatar}/>
+              <ListItem primaryText={author} secondaryText={content} leftAvatar={avatar}/>
             )
           })}
         </List>
-        <Compose placeholder="Write a comment..." onSubmit={this.addComment} className="jlc-compose-comment"/>
+        <Compose placeholder="Write a comment..." onSubmit={this.addComment} style={styles.compose}/>
       </div>
     )
   }
 })
+
+export default Radium(Comments)

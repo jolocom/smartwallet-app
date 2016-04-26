@@ -1,13 +1,13 @@
 import React from 'react'
 import Radium from 'radium'
 import _ from 'lodash'
-import classNames from 'classnames'
 import {endpoint} from 'settings'
 
-import {AppBar, IconButton, TextField, Styles} from 'material-ui'
-import {Layout, Content} from 'components/layout'
+import {AppBar, IconButton, TextField} from 'material-ui'
+import {grey500} from 'material-ui/styles/colors'
 
-let {Colors} = Styles
+import Dialog from 'components/common/dialog.jsx'
+import {Layout, Content} from 'components/layout'
 
 import NodeActions from 'actions/node'
 
@@ -34,37 +34,22 @@ let NodeAdd = React.createClass({
     node: React.PropTypes.string
   },
 
-  getInitialState() {
-    return {
-      show: false
-    }
-  },
-
   componentDidMount() {
-    this.show()
-  },
-
-  show() {
-    this.setState({
-      show: true
-    })
-  },
-
-  close() {
-    this.context.history.goBack()
+    this.refs.dialog.show()
   },
 
   onSubmit() {
     let values = _.pick(this.state, _.keys(types[this.props.params.type] || types.default))
     NodeActions.add(this.props.params.node, `${endpoint}/eelco/profile/card#me`, values)
     // TODO listen to store update
-    this.close()
+    this.refs.dialog.hide()
+    this.context.history.goBack()
   },
 
   getStyles() {
     return {
       bar: {
-        backgroundColor: Colors.grey500
+        backgroundColor: grey500
       },
       content: {
         padding: '20px'
@@ -76,10 +61,6 @@ let NodeAdd = React.createClass({
   },
 
   render: function() {
-    let classes = classNames('jlc-node-add', 'jlc-dialog' , 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.show
-    })
-
     let styles = this.getStyles()
 
     let type = this.props.params.type
@@ -89,7 +70,7 @@ let NodeAdd = React.createClass({
     let fields = types[type] || types.default
 
     return (
-      <div className={classes}>
+      <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <AppBar
             title={title}
@@ -108,7 +89,7 @@ let NodeAdd = React.createClass({
             })}
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })

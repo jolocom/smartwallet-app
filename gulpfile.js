@@ -1,142 +1,113 @@
 /*eslint-disable */
 
-var browserify = require('gulp-browserify');
-var concat = require('gulp-concat');
-var del = require('del');
-var eslint = require('gulp-eslint');
 var gulp = require('gulp');
-var gulpsync = require('gulp-sync')(gulp);
-var rename = require('gulp-rename');
+var gutil = require('gulp-util');
+var webpack = require('webpack');
+var WebpackDevServer = require('webpack-dev-server');
+var webpackConfig = require('./webpack.config.js');
+
 var sass = require('gulp-sass');
-var vinylPaths = require('vinyl-paths');
-var uglify = require('gulp-uglify');
 var autoprefixer = require('gulp-autoprefixer');
-var argv = require('yargs').argv;
+var concat = require('gulp-concat');
 
-var sources = {
-  app: './src/js/main.jsx',
-  data: './data/**/*',
-  html: './src/index.html',
-  img: './src/img/**/*',
-  js: ['./src/js/**/*.js', './src/js/**/*.jsx'],
-  lib: [
-    './node_modules/babel-core/browser-polyfill.js'
-  ],
-  libFonts: [
-  ],
-  libCss: [
-  ],
-  sass: './src/sass/**/*.scss',
-  config: './config'
-};
-
-var destinations = {
-  css: './dist/css',
-  fonts: './dist/fonts',
-  img: './dist/img',
-  js: './dist/js',
-  root: './dist',
-  build: './build'
-};
-
-var env = (!!argv.env
-  ? argv.env
-    : process.env.NODE_ENV || 'development');
-
-gulp.task('config', function() {
-  return gulp.src(sources.config + '/' + env + '.js')
-    .pipe(rename('settings.js'))
-    .pipe(gulp.dest(destinations.build));
-});
-
-gulp.task('lib', function() {
-  return gulp.src(sources.lib)
-    .pipe(concat('lib.js'))
-    .pipe(gulp.dest(destinations.js));
-});
-
-gulp.task('lib-css', function() {
-  return gulp.src(sources.libCss)
-    .pipe(concat('lib.css'))
-    .pipe(gulp.dest(destinations.css));
-});
-
-gulp.task('lib-fonts', function() {
-  return gulp.src(sources.libFonts)
-    .pipe(gulp.dest(destinations.fonts));
-});
-
-gulp.task('src', function() {
-  return gulp.src(sources.js)
-    .pipe(gulp.dest(destinations.build));
-});
-
-gulp.task('scripts', function() {
-  return gulp.src(sources.app)
-    .pipe(browserify({
-      transform: ['babelify'],
-      debug: true,
-      paths: [
-        './node_modules',
-        './build'
-      ]
-    }))
-    .pipe(rename('app.js'))
-    .pipe(gulp.dest(destinations.js));
-});
-
+// The development server (the recommended option for development)
+gulp.task('default', ['webpack-dev-server']);
 
 gulp.task('html', function() {
-  return gulp.src(sources.html)
-    .pipe(gulp.dest(destinations.root));
-});
-
-gulp.task('data', function() {
-  return gulp.src(sources.data)
-    .pipe(gulp.dest(destinations.root));
+  return gulp.src('./src/index.html')
+    .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('img', function() {
-  return gulp.src(sources.img)
-    .pipe(gulp.dest(destinations.img));
+  return gulp.src('./src/img/**.*')
+    .pipe(gulp.dest('./dist/img'));
+});
+
+//This task takes care of moving the test dummy data into dist.
+gulp.task('data', function(){
+  return gulp.src('./data/**/*')
+    .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('sass', function () {
-  return gulp.src(sources.sass)
+  return gulp.src('./src/sass/**/*.scss')
     .pipe(sass())
     .pipe(concat('jolocom.css'))
     .pipe(autoprefixer())
-    .pipe(gulp.dest(destinations.css));
+    .pipe(gulp.dest('./dist/css'));
 });
 
-gulp.task('clean', function () {
-  return gulp.src('./dist/*').pipe(vinylPaths(del));
+// Build and watch cycle (another option for development)
+// Advantage: No server required, can run app from filesystem
+// Disadvantage: Requests are not blocked until bundle is available,
+//               can serve an old app on refresh
+gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'sass', 'data'], function() {
+	gulp.watch(['src/**/*'], ['webpack:build-dev']);
 });
 
-gulp.task('clean-build', function () {
-  return gulp.src('./build/*').pipe(vinylPaths(del));
+// Production build
+gulp.task('build', ['webpack:build', 'html', 'img', 'sass']);
+
+gulp.task('webpack:build', function(callback) {
+	// modify some webpack config options
+	var myConfig = Object.create(webpackConfig);
+	myConfig.plugins = myConfig.plugins.concat(
+		new webpack.DefinePlugin({
+			'process.env': {
+				// This has effect on the react lib size
+				'NODE_ENV': JSON.stringify('production')
+			}
+		}),
+		new webpack.optimize.DedupePlugin(),
+		new webpack.optimize.UglifyJsPlugin()
+	);
+
+	// run webpack
+	webpack(myConfig, function(err, stats) {
+		if(err) throw new gutil.PluginError('webpack:build', err);
+		gutil.log('[webpack:build]', stats.toString({
+			colors: true
+		}));
+		callback();
+	});
 });
 
-gulp.task('lint', function () {
-    return gulp.src(sources.js)
-        .pipe(eslint())
-        .pipe(eslint.format());
-        //.pipe(eslint.failOnError());
+// modify some webpack config options
+var myDevConfig = Object.create(webpackConfig);
+myDevConfig.devtool = 'sourcemap';
+myDevConfig.debug = true;
+
+// create a single instance of the compiler to allow caching
+var devCompiler = webpack(myDevConfig);
+
+gulp.task('webpack:build-dev', function(callback) {
+	// run webpack
+	devCompiler.run(function(err, stats) {
+		if(err) throw new gutil.PluginError('webpack:build-dev', err);
+		gutil.log('[webpack:build-dev]', stats.toString({
+			colors: true
+		}));
+		callback();
+	});
 });
 
-gulp.task('uglify', function() {
-  return gulp.src(destinations.js + '/app.js')
-    .pipe(uglify())
-    .pipe(gulp.dest(destinations.js));
+gulp.task('webpack-dev-server', function(callback) {
+	// modify some webpack config options
+	var myConfig = Object.create(webpackConfig);
+	myConfig.devtool = 'eval';
+	myConfig.debug = true;
+
+	// Start a webpack-dev-server
+	new WebpackDevServer(webpack(myConfig), {
+		publicPath: '/' + myConfig.output.publicPath,
+    hot: true,
+    inline: true,
+    contentBase: 'dist',
+		stats: {
+			colors: true
+		}
+	}).listen(8080, 'localhost', function(err) {
+		if(err) throw new gutil.PluginError('webpack-dev-server', err);
+		gutil.log('[webpack-dev-server]', 'http://localhost:8080');
+	});
 });
-
-gulp.task('watch', function() {
-  gulp.watch(sources.js, gulpsync.sync(['clean-build', 'lint', ['config', 'src'], ['scripts']]));
-  gulp.watch(sources.html, ['html']);
-  gulp.watch(sources.sass, ['sass']);
-});
-
-
-gulp.task('build', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html']]))
-gulp.task('build-prod', gulpsync.sync(['clean', 'clean-build', 'lint', ['config', 'src'], ['data', 'img', 'lib', 'lib-css', 'lib-fonts', 'sass', 'scripts', 'html'], 'uglify']))
-gulp.task('default', gulpsync.sync(['build', 'watch']));

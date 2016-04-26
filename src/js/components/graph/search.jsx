@@ -1,21 +1,19 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 
-import {Paper, AppBar, IconButton, Styles, FontIcon} from 'material-ui'
+import {Paper, AppBar, IconButton, FontIcon} from 'material-ui'
 
-import {MapsPlace, ActionLabel, SocialPerson, ActionSchedule} from 'material-ui/lib/svg-icons'
+import {MapsPlace, ActionLabel, SocialPerson, ActionSchedule} from 'material-ui/svg-icons'
 
 import IconToggle from 'components/common/icon-toggle.jsx'
-
-let {Colors} = Styles
 
 import SearchActions from 'actions/search'
 import SearchStore from 'stores/search'
 
 let Search = React.createClass({
-  mixins: [Reflux.connect(SearchStore)],
+  mixins: [Reflux.connect(SearchStore, 'search')],
   getInitialState() {
     return {
       show: false
@@ -31,18 +29,18 @@ let Search = React.createClass({
 
     let styles = {
       container: {
-        backgroundColor: Colors.white,
+        backgroundColor: '#ffffff',
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
-        zIndex: 6,
+        zIndex: 1200,
         opacity: this.state.show ? 1 : 0,
         transform: this.state.show ? 'translate(0, 0)' : 'translate(0, -100%)',
         transition: 'opacity .1s, transform .1s ease-in'
       },
       bar: {
-        backgroundColor: Colors.white
+        backgroundColor: '#ffffff'
       },
       input: {
         tapHighlightColor: 'rgba(0,0,0,0)',
@@ -102,6 +100,12 @@ let Search = React.createClass({
     }
   },
 
+  _handleKeyUp(e) {
+    if (e.keyCode == 13 && typeof this.props.onSubmit === 'function') {
+      this.props.onSubmit(e.target.value)
+    }
+  },
+
   toggleFilter(name) {
     SearchActions.toggleFilter(name)
   },
@@ -116,18 +120,16 @@ let Search = React.createClass({
         <AppBar
           style={styles.bar}
           zDepth={0}
-          title={<input placeholder="Search..." onChange={this._handleChange} ref="input" style={styles.input}/>}
+          title={<input placeholder="Search..." onChange={this._handleChange} onKeyUp={this._handleKeyUp} ref="input" style={styles.input}/>}
           iconElementLeft={
-            <IconButton onClick={this.hide}>
-              <FontIcon className="material-icons" color={iconColor}>arrow_back</FontIcon>
-            </IconButton>
+            <IconButton iconClassName="material-icons" iconStyle={{color: iconColor}} onTouchTap={this.hide}>arrow_back</IconButton>
           }
         />
         <nav style={styles.filters}>
-          <IconToggle icon={<MapsPlace/>} style={styles.item} id="filter-where" checked={this.state.filters.where} onCheck={() => {this.toggleFilter('where')}}/>
-          <IconToggle icon={<ActionLabel/>} style={styles.item} id="filter-what" checked={this.state.filters.what} onCheck={() => {this.toggleFilter('what')}}/>
-          <IconToggle icon={<SocialPerson/>} style={styles.item} id="filter-who" checked={this.state.filters.who} onCheck={() => {this.toggleFilter('who')}}/>
-          <IconToggle icon={<ActionSchedule/>} style={styles.item} id="filter-when" checked={this.state.filters.when} onCheck={() => {this.toggleFilter('when')}}/>
+          <IconToggle icon={<MapsPlace/>} style={styles.item} id="filter-where" checked={this.state.search.filters.where} onCheck={() => {this.toggleFilter('where')}}/>
+          <IconToggle icon={<ActionLabel/>} style={styles.item} id="filter-what" checked={this.state.search.filters.what} onCheck={() => {this.toggleFilter('what')}}/>
+          <IconToggle icon={<SocialPerson/>} style={styles.item} id="filter-who" checked={this.state.search.filters.who} onCheck={() => {this.toggleFilter('who')}}/>
+          <IconToggle icon={<ActionSchedule/>} style={styles.item} id="filter-when" checked={this.state.search.filters.when} onCheck={() => {this.toggleFilter('when')}}/>
         </nav>
       </Paper>
     )

@@ -1,8 +1,7 @@
 import React from 'react'
+import Radium from 'radium'
 
-import {IconButton} from 'material-ui'
-
-import Avatar from 'components/common/avatar.jsx'
+import {IconButton, Avatar} from 'material-ui'
 
 import ProfileActions from 'actions/profile'
 import AccountActions from 'actions/account'
@@ -17,19 +16,46 @@ let Header = React.createClass({
   logout() {
     AccountActions.logout()
   },
+  getStyles() {
+    return {
+      header: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        flexDirection: 'column',
+        padding: '16px'
+      },
+      profile: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      profileDetails: {
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1
+      },
+      name: {
+        fontWeight: 'bold'
+      },
+      email: {
+
+      }
+    }
+  },
   render() {
     let initials, {profile} = this.context
+    let styles = this.getStyles()
 
     if (profile.name)
       initials = profile.name[0]
 
     return (
-      <header className="jlc-nav-header">
+      <header style={styles.header}>
         <Avatar src={profile.img}>{initials}</Avatar>
-        <div className="jlc-nav-profile">
-          <div className="jlc-nav-profile-details">
-            <span className="jlc-nav-profile-name">{profile.name}</span>
-            <span className="jlc-nav-profile-email">{profile.email}</span>
+        <div style={styles.profile}>
+          <div style={styles.profileDetails}>
+            <span style={styles.name}>{profile.name}</span>
+            <span style={styles.email}>{profile.email}</span>
           </div>
           <IconButton iconClassName="material-icons" onTouchTap={this.logout}>exit_to_app</IconButton>
           <IconButton iconClassName="material-icons" onTouchTap={this.editProfile}>mode_edit</IconButton>
@@ -39,4 +65,4 @@ let Header = React.createClass({
   }
 })
 
-export default Header
+export default Radium(Header)

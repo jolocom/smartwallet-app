@@ -2,12 +2,12 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import {History} from 'react-router'
+import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
+import {Paper, AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
 
-import {Paper, AppBar, IconButton, IconMenu, MenuItem, Styles} from 'material-ui'
-
-let {Colors} = Styles
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import JolocomTheme from 'styles/jolocom-theme'
 
@@ -29,7 +29,7 @@ let App = React.createClass({
 
   mixins: [
     History,
-    Reflux.connect(AccountStore),
+    Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile')
   ],
 
@@ -40,10 +40,11 @@ let App = React.createClass({
   },
 
   getChildContext: function () {
+    let {account, profile} = this.state
     return {
-      muiTheme: Styles.ThemeManager.getMuiTheme(JolocomTheme),
-      profile: this.state.profile,
-      username: this.state.username
+      muiTheme: getMuiTheme(JolocomTheme),
+      profile: profile,
+      username: account && account.username
     }
   },
 
@@ -63,14 +64,14 @@ let App = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.username !== this.state.username)
+    if (prevState.account.username !== this.state.account.username)
       this.checkLogin()
   },
 
   checkLogin() {
     let path = this.props.location.pathname
 
-    if (!this.state.username && path !== '/signup' && path !== '/login') {
+    if (!this.state.account.username && path !== '/signup' && path !== '/login') {
       this.history.pushState(null, '/login')
     } else if (path === '/') {
       this.history.pushState(null, '/graph')
@@ -91,8 +92,9 @@ let App = React.createClass({
             <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handlePinnedTap}>inbox</IconButton>
           </div>
         ),
-        search: <GraphSearch ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
+        search: <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
       }
+
     } else if (path.match('/chat')) {
       return {
         id: 'chat',
@@ -103,6 +105,7 @@ let App = React.createClass({
           </div>
         )
       }
+
     } else if (path.match('/contacts')) {
       return {
         id: 'contacts',
@@ -134,6 +137,12 @@ let App = React.createClass({
     this.setState({searchQuery: query})
   },
 
+  _handleSearchSubmit() {
+    let uri = `${bankUri}/${this.state.searchQuery}#this`
+    this.history.pushState(null, `/graph/${encodeURIComponent(uri)}`)
+    this.refs.search.hide()
+  },
+
   _handleSearchHide() {
     this.setState({
       searchActive: false,
@@ -141,12 +150,17 @@ let App = React.createClass({
     })
   },
 
-  toggleLeftNav() {
-    this.refs.leftNav.toggle()
+  showDrawer() {
+    this.refs.leftNav.show()
   },
 
   getStyles() {
     let styles = {
+      container: {
+        width: '100%',
+        height: '100%',
+        position: 'relative'
+      },
       header: {
         zIndex: 5
       },
@@ -157,7 +171,7 @@ let App = React.createClass({
         display: this.state.searchActive ? 'none' : 'block'
       },
       icon: {
-        color: Colors.white
+        color: '#ffffff'
       }
     }
     return styles
@@ -166,15 +180,14 @@ let App = React.createClass({
   render() {
     let component = this.getComponent()
     let styles = this.getStyles()
-
     let search = component.search || <SearchBar ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
 
     return (
-      <div className="jlc-app">
-        {this.state.username ? (
+      <div style={styles.container}>
+        {this.state.account.username ? (
           <Layout>
             <Paper zDept={1} style={styles.header}>
-              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.toggleLeftNav}></AppBar>
+              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
               <AppNav activeTab={component.id} style={styles.nav}/>
               {search}
             </Paper>

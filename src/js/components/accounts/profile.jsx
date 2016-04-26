@@ -1,26 +1,36 @@
 import React from 'react'
 import Reflux from 'reflux'
-import classNames from 'classnames'
 import Radium from 'radium'
 
+import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
-import {AppBar, IconButton, TextField, Styles} from 'material-ui'
+import {AppBar, IconButton, TextField} from 'material-ui'
 
-let {Colors} = Styles
+import {grey500} from 'material-ui/styles/colors'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-import {linkToState} from 'lib/util'
+import Util from 'lib/util'
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.connect(ProfileStore)
+    Reflux.connect(ProfileStore, 'profile')
   ],
+
+  componentDidUpdate(props, state) {
+    if (state.show !== this.state.show) {
+      if (this.state.show) {
+        this.refs.dialog.show()
+      } else {
+        this.refs.dialog.hide()
+      }
+    }
+  },
 
   update(e) {
     e.preventDefault()
-    ProfileActions.update(this.state)
+    ProfileActions.update(this.state.profile)
   },
 
   show() {
@@ -34,7 +44,7 @@ let Profile = React.createClass({
   getStyles() {
     let styles = {
       bar: {
-        backgroundColor: Colors.grey500
+        backgroundColor: grey500
       },
       content: {
         textAlign: 'center'
@@ -47,16 +57,11 @@ let Profile = React.createClass({
   },
 
   render() {
-    // @TODO move to inline styles
-    let classes = classNames('jlc-dialog', 'jlc-dialog__fullscreen', {
-      'is-opened': this.state.show
-    })
-
     let styles = this.getStyles()
 
     // edit mode
     return (
-      <div className={classes}>
+      <Dialog ref="dialog" fullscreen={true}>
         <Layout fixedHeader={true}>
           <AppBar
             title="Edit profile"
@@ -66,40 +71,40 @@ let Profile = React.createClass({
             }
           />
           <Content style={styles.content}>
-            <header className="jlc-profile-header">
-              <figure className="jlc-profile-picture">
+            <header>
+              <figure>
                 <img src={this.state.imgUri}/>
               </figure>
             </header>
-            <main className="jlc-profile-main">
-              <section className="jlc-profile-basic-info">
+            <main>
+              <section>
                 <TextField floatingLabelText="Name"
-                  onChange={linkToState(this, 'name')}
+                  onChange={Util.linkToState(this, 'name')}
                   value={this.state.name}
                   style={styles.input} />
                 <TextField floatingLabelText="Email"
-                  onChange={linkToState(this, 'email')}
+                  onChange={Util.linkToState(this, 'email')}
                   value={this.state.email}
                   style={styles.input} />
               </section>
-              <section className="jlc-profile-details">
-                <div className="jlc-profile-row">
-                  <div className="jlc-profile-label">WebID</div>
-                  <div className="jlc-profile-value"><a className="jlc-profile-webid" href={this.state.webid}>{this.state.webidPresent}</a></div>
+              <section>
+                <div>
+                  <div>WebID</div>
+                  <div><a href={this.state.webid}>{this.state.webidPresent}</a></div>
                 </div>
-                <div className="jlc-profile-row">
-                  <div className="jlc-profile-label">RSA Modulus</div>
-                  <div className="jlc-profile-value">{this.state.rsaModulus}</div>
+                <div>
+                  <div>RSA Modulus</div>
+                  <div>{this.state.rsaModulus}</div>
                 </div>
-                <div className="jlc-profile-row">
-                  <div className="jlc-profile-label">RSA Exponent</div>
-                  <div className="jlc-profile-value">{this.state.rsaExponent}</div>
+                <div>
+                  <div>RSA Exponent</div>
+                  <div>{this.state.rsaExponent}</div>
                 </div>
               </section>
             </main>
           </Content>
         </Layout>
-      </div>
+      </Dialog>
     )
   }
 })

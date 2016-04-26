@@ -1,51 +1,55 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import Reflux from 'reflux'
-import {TextField, RaisedButton} from 'material-ui'
-import {History} from 'react-router'
+import Radium from 'radium'
+import {TextField, RaisedButton, Paper} from 'material-ui'
+import {History, Lifecycle, Link} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
 
-function linkToState(target, property) {
-  return value => {
-    target.setState({
-      [property]: value
-    })
-  }
-}
+import Account from 'actions/account'
+import AccountStore from 'stores/account'
+
+import Util from 'lib/util'
 
 let Signup = React.createClass({
   mixins: [
     History,
-    Reflux.connect(AvailabilityStore)
+    Lifecycle,
+    Reflux.connect(AvailabilityStore, 'available'),
+    Reflux.connect(AccountStore, 'account')
   ],
   contextTypes: {
     muiTheme: React.PropTypes.object
   },
-  componentDidMount() {
-    this.frame = ReactDOM.findDOMNode(this.refs.frame)
-    this.frame.addEventListener('load', this._onSignup, false)
+  componentWillMount() {
+    if (this.state.account && this.state.account.username)
+      this.history.pushState(null, '/graph')
   },
-  componentDidUnMount() {
-    this.frame.removeEventListener('load', this._onSignup)
+  routerWillLeave() {
+    // if (!this.state.signedUp)
+    //   return false
   },
   signup() {
-    ReactDOM.findDOMNode(this.refs.form).submit()
-    // @TODO onload doesn't work somehow, calling manually
-    // setTimeout(function() {
-    //   window.location.href = '/'
-    // }, 1000)
+    let signupData = {
+      username: this.state.username,
+      name: this.state.name,
+      email: this.state.email
+    }
+    Account.signup(signupData)
   },
+
+  componentDidUpdate() {
+    if (this.state.account && this.state.account.username) {
+      this.history.pushState(null, '/graph')
+    }
+  },
+
   _onUsernameChange(e) {
     this.setState({
       username: e.target.value
     })
     Availability.check(e.target.value)
-  },
-  _onSignup() {
-    console.log('frame loaded')
-    // this.transitionTo('/')
   },
   render() {
     let usernameClass, availableText, disabled = true
@@ -55,40 +59,67 @@ let Signup = React.createClass({
       usernameClass = 'is-invalid is-dirty'
     }
 
-    disabled = this.state.available !== true || !this.state.action
+    disabled = this.state.available !== true || !this.state.username
 
     return (
-      <div className="jlc-signup">
-        <header className="jlc-signup-header">
-          <img src="/img/logo.png" className="jlc-logo" />
-          <h2>Signup for Jolocom</h2>
+      <div style={styles.container}>
+        <header style={styles.header}>
+          <img src="/img/logo.png" style={styles.logo} />
+          <h2 style={styles.title}>Signup for Jolocom</h2>
         </header>
-        <main className="jlc-signup-content mdl-shadow--2dp">
-          <form action={this.state.action} target="spkac" method="post" ref="form">
-            <keygen id="certgen" name="spkac" hidden />
-            <input name="username" type="hidden" value={this.state.username} />
-            <input name="name" type="hidden" value={this.state.name} />
-            <input name="email" type="hidden" value={this.state.email} />
+        <Paper zDept={2} style={styles.content}>
+          <input name="username" type="hidden" value={this.state.username} />
+          <input name="name" type="hidden" value={this.state.name} />
+          <input name="email" type="hidden" value={this.state.email} />
 
-            <fieldset>
-              <TextField floatingLabelText="Username"
-                onChange={this._onUsernameChange}
-                errorText={availableText}
-                className={usernameClass} />
-              <TextField floatingLabelText="Name"
-                onChange={linkToState(this, 'name')} />
-              <TextField floatingLabelText="Email"
-                onChange={linkToState(this, 'email')} />
-            </fieldset>
+          <fieldset>
+            <TextField floatingLabelText="Username"
+              onChange={this._onUsernameChange}
+              errorText={availableText}
+              className={usernameClass} />
+            <TextField floatingLabelText="Name"
+              onChange={Util.linkToState(this, 'name')} />
+            <TextField floatingLabelText="Email"
+              onChange={Util.linkToState(this, 'email')} />
+          </fieldset>
 
-            <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={{width: '100%'}}>Sign up</RaisedButton>
-
-            <iframe ref="frame" name="spkac" hidden></iframe>
-          </form>
-        </main>
+          <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={styles.button}>Sign up</RaisedButton>
+        </Paper>
+        <p>Already have an account? <Link to="/login">login instead</Link>.</p>
       </div>
     )
   }
 })
 
-export default Signup
+let styles = {
+  container: {
+    textAlign: 'center',
+    background: '#f1f1f1',
+    height: '100%',
+    overflowY: 'auto'
+  },
+  header: {
+    padding: '40px'
+  },
+  logo: {
+    width: '80px',
+    height: '80px'
+  },
+  title: {
+    fontWeight: '200',
+    fontSize: '2.5em'
+  },
+  content: {
+    width: '300px',
+    maxWidth: '90%',
+    padding: '20px',
+    margin: '0 auto 20px auto',
+    background: '#ffffff',
+    boxSizing: 'border-box'
+  },
+  button: {
+    width: '100%'
+  }
+}
+
+export default Radium(Signup)
