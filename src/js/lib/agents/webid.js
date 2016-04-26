@@ -69,7 +69,6 @@ class WebIDAgent extends LDPAgent {
     writer.addTriple(rdf.sym(''), FOAF('maker'), webid)
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#inbox'))
     writer.addTriple(rdf.sym('#inbox'), RDF('type'), SIOC('Space'))
-
     return writer.end()
   }
 

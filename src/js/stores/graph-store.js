@@ -39,9 +39,7 @@ export default Reflux.createStore({
     this.gAgent.getGraphMapAtWebID().then((triples) => {
       triples[0] = this.convertor.convertToD3(triples[0])
       for (let i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3(triples[i], i, triples.length - 1)
-      }
-      console.log(triples, 'final destination')
+        triples[i] = this.convertor.convertToD3(triples[i], i, triples.length - 1)}
       graphActions.getInitialGraphState.completed(triples)
     })
   },

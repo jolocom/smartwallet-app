@@ -27,19 +27,18 @@ class GraphAgent extends HTTPAgent {
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
     let Links = [FOAF.knows]
-    let neighbours = triples.filter((t) => t.subject == center && Links.indexOf(t.predicate) >= 0)
+    let neighbours = triples.filter((t) => t.subject.uri == center && Links.indexOf(t.predicate.uri) >= 0)
 
     return new Promise ((resolve) => {
       let graphMap = []
-
       // If there are no adjacent nodes to draw, we return an empty array.
       if (neighbours.length == 0) resolve(graphMap)
 
       // If there are adjacent nodes to draw, we parse them and return an array of their triples
-      neighbours.map((URI, index) => {
-        this.fetchTriplesAtUri(URI.object).then((triples) =>{
+      neighbours.map((triple, index) => {
+        this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
           graphMap.push(triples.triples)
-           graphMap[index].uri = URI.object
+           graphMap[index].uri = triple.object.uri
           // This checks if the whole array has been parsed, and only after that resolves.
           if (index == neighbours.length - 1) {
             resolve(graphMap)
@@ -58,6 +57,7 @@ class GraphAgent extends HTTPAgent {
       this.fetchTriplesAtUri(uri).then((centerNode) => {
         this.getNeighbours(uri, centerNode.triples).then((neibTriples) => {
           let nodes = [centerNode.triples]
+          console.log(centerNode)
           nodes[0].uri = uri
           // Flattening now results in the final structure of
           // [array[x], array[x], array[x]...]

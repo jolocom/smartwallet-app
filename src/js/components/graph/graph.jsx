@@ -14,12 +14,60 @@ import D3Converter from '../../lib/d3-converter'
 import GraphStore from '../../stores/graph-store'
 import graphActions from '../../actions/graph-actions'
 import solid from 'solid-client'
+import rdf from 'rdflib'
+import {Writer} from '../../lib/rdf.js'
+
 let graphAgent = new GraphAgent()
 let convertor = new D3Converter()
-
 let Graph = React.createClass({
 
   mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
+
+  // Custom methods
+
+  getGraphEl: function() {
+      return ReactDOM.findDOMNode(this.refs.graph)
+  },
+
+  onStateUpdate: function(data) {
+    this.setState(data)
+    // We check if the graph info has already been pulled from the RDF file
+    // This way we only fetch data from the server when needed.
+    if (!this.state.loaded) {
+      graphActions.getInitialGraphState()
+    } else{
+      // If the data was already pulled, we draw a graph with it.
+      this.graph = new GraphD3(this.getGraphEl(), this.state , this.handleNodeClick)
+    }
+  },
+
+  addNode: function() {
+    let writer = new Writer()
+    let uri = this.state.center.uri
+    graphAgent.fetchTriplesAtUri(uri).then((result) => {
+      for (var i = 0; i < result.triples.length; i++) {
+        let triple = result.triples[i]
+        writer.addTriple(triple.object, triple.predicate, triple.subject)
+      }
+      writer.end()
+    })
+  },
+
+  handleNodeClick: function(node){
+  },
+
+  // Lifecycle methods below
+  componentWillMount: function() {
+  },
+
+  componentDidMount: function() {
+    // Make sure we refresh our state every time we mount the component, this
+    // then fires the drawing function from onStateUpdate
+    graphActions.getState()
+  },
+
+  componentWillUpdate: function(nextProp, nextState){
+  },
 
   getInitialState: function() {
     // Ask for the state from the store
@@ -38,44 +86,13 @@ let Graph = React.createClass({
     }
   },
 
-  onStateUpdate: function(data) {
-    this.setState(data)
-    // We check if the graph info has already been pulled from the RDF file
-    // This way we only fetch data from the server when needed.
-    if (!this.state.loaded) {
-      graphActions.getInitialGraphState()
-    } else{
-      // If the data was already pulled, we draw a graph with it.
-      this.graph = new GraphD3(this.getGraphEl(), this.state , this.handleNodeClick)
-    }
-  },
-
-  componentWillMount: function() {
-  },
-
-  componentDidMount: function() {
-    // Make sure we refresh our state every time we mount the component, this
-    // then fires the drawing function from onStateUpdate
-    graphActions.getState()
-  },
-
-  handleNodeClick(node){
-  },
-
-  componentWillUpdate(nextProp, nextState){
-  },
-
   componentWillUnmount: function(){
     // Commiting all the changes that the user did to the graph to the store's state
     // Not yet implemented, waiting for Eric's graph to start working on this.
     graphActions.updateState(this.state)
   },
 
-  getGraphEl() {
-      return ReactDOM.findDOMNode(this.refs.graph)
-  },
-
-  getStyles() {
+  getStyles: function() {
     let styles = {
       container: {
         flex: 1,
@@ -94,7 +111,7 @@ let Graph = React.createClass({
     return styles
   },
 
-  render() {
+  render: function() {
     let styles = this.getStyles()
     return (
       <div style={styles.container}>
