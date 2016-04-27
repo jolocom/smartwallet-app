@@ -29,6 +29,10 @@ let Graph = React.createClass({
       return ReactDOM.findDOMNode(this.refs.graph)
   },
 
+  onNodeChange: function(){
+
+  },
+
   onStateUpdate: function(data) {
     this.setState(data)
     // We check if the graph info has already been pulled from the RDF file
@@ -41,20 +45,20 @@ let Graph = React.createClass({
     }
   },
 
-  addNode: function() {
-    let writer = new Writer()
-    let uri = this.state.center.uri
-    graphAgent.fetchTriplesAtUri(uri).then((result) => {
-      for (var i = 0; i < result.triples.length; i++) {
-        let triple = result.triples[i]
-        writer.addTriple(triple.object, triple.predicate, triple.subject)
-      }
-      writer.end()
-    })
-  },
+  // addNode: function() {
+  //   let writer = new Writer()
+  //   let uri = this.state.center.uri
+  //   graphAgent.fetchTriplesAtUri(uri).then((result) => {
+  //     for (var i = 0; i < result.triples.length; i++) {
+  //       let triple = result.triples[i]
+  //       writer.addTriple(triple.object, triple.predicate, triple.subject)
+  //     }
+  //     writer.end()
+  //   })
+  // },
 
-  handleNodeClick: function(node){
-  },
+  // handleNodeClick: function(node){
+  // },
 
   // Lifecycle methods below
   componentWillMount: function() {
@@ -70,9 +74,6 @@ let Graph = React.createClass({
   },
 
   getInitialState: function() {
-    // Ask for the state from the store
-    graphActions.getState()
-    // This gets replaced almost instantly with the sotre's state
     return {
       //These state keys describe the graph
       center:null,

@@ -58,7 +58,6 @@ class GraphAgent extends HTTPAgent {
       this.fetchTriplesAtUri(uri).then((centerNode) => {
         this.getNeighbours(uri, centerNode.triples).then((neibTriples) => {
           let nodes = [centerNode.triples]
-          console.log(centerNode)
           nodes[0].uri = uri
           // Flattening now results in the final structure of
           // [array[x], array[x], array[x]...]

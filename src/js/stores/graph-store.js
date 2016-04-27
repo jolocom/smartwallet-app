@@ -19,8 +19,13 @@ export default Reflux.createStore({
       //These describe the ui
       showPinned: false,
       showSearch: false,
-      plusDrawerOpen: false
+      plusDrawerOpen: false,
+      highlighted: null
     }
+  },
+
+  onHighlight(e){
+    console.log(e)
   },
 
   onUpdateState: function(updated){

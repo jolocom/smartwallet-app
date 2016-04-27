@@ -6,28 +6,21 @@
 
 import d3 from 'd3'
 import STYLES from 'styles/app'
+import graphActions from '../actions/graph-actions'
 
 export default class GraphD3 {
 
-  constructor(el, state, handleClick){
-    this.el = el
-    this.handleNodeClick = handleClick
-    this.onNodeClick = this.onNodeClick.bind(this)
 
-
-    let links = []
-    let nodes = [state.center]
-
-    // Flatten the center and neighbour nodes we get from the state
-    for (var i = 0; i < state.neighbours.length; i++) {
-      nodes.push(state.neighbours[i])
-      links.push({'source': i + 1, 'target':0})
-    }
-
+  constructor(el, state){
     this.width = STYLES.width
     this.height = STYLES.height
 
-    this.svg = d3.select(this.el).append('svg:svg')
+    this.drawBackground(el)
+    this.drawNodes(el, state)
+  }
+
+  drawBackground(el) {
+    this.svg = d3.select(el).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
@@ -42,6 +35,17 @@ export default class GraphD3 {
       .attr('cy', this.height * 0.5)
       .attr('r', this.width / 6)
       .style('fill', STYLES.lightGrayColor)
+  }
+
+  drawNodes(el, state) {
+    let links = []
+    let nodes = [state.center]
+
+    // Flatten the center and neighbour nodes we get from the state
+    for (var i = 0; i < state.neighbours.length; i++) {
+      nodes.push(state.neighbours[i])
+      links.push({'source': i + 1, 'target':0})
+    }
 
     let force = d3.layout.force()
             .nodes(nodes)
@@ -108,6 +112,7 @@ export default class GraphD3 {
 
     node.on('click', function(){
 
+      graphActions.highlight(this)
 
       d3.selectAll('g .node').selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -133,6 +138,7 @@ export default class GraphD3 {
         if (d.type == 'center') return STYLES.largeNodeSize
         else return STYLES.smallNodeSize
       })
+
       .attr('height',function(d){
         if (d.type == 'center') return STYLES.largeNodeSize
         else return STYLES.smallNodeSize
@@ -151,7 +157,6 @@ export default class GraphD3 {
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
-
     })
 
     force.on('tick', function() {
@@ -196,16 +201,6 @@ export default class GraphD3 {
         return 'translate(' + d.x + ',' + d.y + ')'
       })
     })
-
-  }
-
-
-  update(newState){
-    this.drawGraph(newState)
-  }
-
-  onNodeClick(d){
-    this.handleNodeClick(d)
   }
 
   onResize() {
@@ -216,13 +211,5 @@ export default class GraphD3 {
     this.width = this.el.offsetWidth
     this.height = this.el.offsetHeight
     this.svg.attr('width', this.width).attr('height', this.height)
-  }
-
-// Moves the node and the edge attached to it upon mouse drag
-  dragMove(d){
-    d3.select(this).attr('cx', d3.event.x)
-    d3.select(this).attr('cy', d3.event.y)
-    d3.select('#'+d.triples.name).attr('x1', d3.event.x)
-    d3.select('#'+d.triples.name).attr('y1', d3.event.y)
   }
 }
