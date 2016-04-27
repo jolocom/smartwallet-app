@@ -43,26 +43,40 @@ let Chat = React.createClass({
   },
 
   render: function() {
+    let emptyView
+    let {items} = this.state.conversations
+
+    if (!items || !items.length) {
+      emptyView = <div style={styles.empty}>No conversations</div>
+    }
+
     return (
       <div style={styles.container}>
-        <List>
-          {this.state.conversations.items.map((conversation) => {
-            let {otherPerson} = conversation
-            let {created, content} = conversation.lastMessage
-            let avatar
-            if (otherPerson)
-              avatar = <Avatar src={otherPerson.img}>{otherPerson.name[0]}</Avatar>
-            let date = moment(created).fromNow()
-            return (
-              <ListItem key={conversation.id} primaryText={
-                <div>
-                  <span>{otherPerson.name}</span>
-                  <span style={styles.date}>{date}</span>
-                </div>
-              } secondaryText={content} leftAvatar={avatar} onTouchTap={() => this.showConversation(conversation)}/>
-            )
-          })}
-        </List>
+
+        {emptyView}
+
+        <div style={styles.content}>
+
+          <List>
+            {this.state.conversations.items.map((conversation) => {
+              let {otherPerson} = conversation
+              let {created, content} = conversation.lastMessage
+              let avatar
+              if (otherPerson)
+                avatar = <Avatar src={otherPerson.img}>{otherPerson.name[0]}</Avatar>
+              let date = moment(created).fromNow()
+              return (
+                <ListItem key={conversation.id} primaryText={
+                  <div>
+                    <span>{otherPerson.name}</span>
+                    <span style={styles.date}>{date}</span>
+                  </div>
+                } secondaryText={content} leftAvatar={avatar} onTouchTap={() => this.showConversation(conversation)}/>
+              )
+            })}
+          </List>
+
+        </div>
 
         <FloatingActionButton linkButton={true}
           href="#/chat/new"
@@ -79,7 +93,24 @@ let Chat = React.createClass({
 let styles = {
   container: {
     flex: 1,
-    overflowY: 'auto'
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative'
+  },
+  content: {
+    overflowY: 'auto',
+    flex: 1
+  },
+  empty: {
+    position: 'absolute',
+    fontWeight: 300,
+    color: grey500,
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent:'center',
+    fontSize: '18px'
   },
   date: {
     color: grey500,

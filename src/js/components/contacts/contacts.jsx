@@ -27,7 +27,8 @@ let Contacts = React.createClass({
 let styles = {
   container: {
     flex: 1,
-    overflowY: 'auto'
+    overflowY: 'auto',
+    position: 'relative'
   }
 }
 
