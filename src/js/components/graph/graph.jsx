@@ -335,7 +335,6 @@ let Graph = React.createClass({
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
           <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>
           <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
-          <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.addNode('sensor')}}/>
         </FabMenu>
 
         <div style={styles.chart} ref="graph"></div>
