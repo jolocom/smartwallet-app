@@ -52,11 +52,10 @@ let Signup = React.createClass({
     Availability.check(e.target.value)
   },
   render() {
-    let usernameClass, availableText, disabled = true
+    let availableText, disabled = true
 
     if (this.state.available === false) {
       availableText = 'This username is already taken.'
-      usernameClass = 'is-invalid is-dirty'
     }
 
     disabled = this.state.available !== true || !this.state.username
@@ -68,20 +67,15 @@ let Signup = React.createClass({
           <h2 style={styles.title}>Signup for Jolocom</h2>
         </header>
         <Paper zDept={2} style={styles.content}>
-          <input name="username" type="hidden" value={this.state.username} />
-          <input name="name" type="hidden" value={this.state.name} />
-          <input name="email" type="hidden" value={this.state.email} />
-
-          <fieldset>
+          <div>
             <TextField floatingLabelText="Username"
               onChange={this._onUsernameChange}
-              errorText={availableText}
-              className={usernameClass} />
+              errorText={availableText}/>
             <TextField floatingLabelText="Name"
               onChange={Util.linkToState(this, 'name')} />
             <TextField floatingLabelText="Email"
               onChange={Util.linkToState(this, 'email')} />
-          </fieldset>
+          </div>
 
           <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={styles.button}>Sign up</RaisedButton>
         </Paper>
@@ -107,7 +101,7 @@ let styles = {
   },
   title: {
     fontWeight: '200',
-    fontSize: '2.5em'
+    fontSize: '20px'
   },
   content: {
     width: '300px',

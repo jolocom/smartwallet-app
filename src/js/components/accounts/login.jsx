@@ -41,9 +41,9 @@ let Login = React.createClass({
           <img src="/img/logo.png" style={styles.logo} />
         </header>
         <Paper zDept={2} style={styles.content}>
-          <fieldset>
+          <div>
             <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
-          </fieldset>
+          </div>
           <RaisedButton secondary={true} onTouchTap={this.login} style={styles.button}>Login</RaisedButton>
         </Paper>
         <p>Don't have an account yet? <Link to="/signup">Sign up</Link>.</p>
