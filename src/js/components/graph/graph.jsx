@@ -57,9 +57,6 @@ let Graph = React.createClass({
   //   })
   // },
 
-  // handleNodeClick: function(node){
-  // },
-
   // Lifecycle methods below
   componentWillMount: function() {
   },

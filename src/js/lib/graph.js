@@ -10,7 +10,6 @@ import graphActions from '../actions/graph-actions'
 
 export default class GraphD3 {
 
-
   constructor(el, state){
     this.width = STYLES.width
     this.height = STYLES.height
@@ -111,57 +110,12 @@ export default class GraphD3 {
         .attr('stroke-width',2)
 
     node.on('click', function(){
-
       graphActions.highlight(this)
-
-      d3.selectAll('g .node').selectAll('circle')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('r', function(d){
-        if (d.type == 'center') return STYLES.largeNodeSize / 2
-        else return STYLES.smallNodeSize / 2
-      })
-
-      d3.selectAll('g .node').selectAll('pattern')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('x', function(d){
-        if (d.type == 'center') return -STYLES.largeNodeSize / 2
-        else return -STYLES.smallNodeSize / 2
-      })
-      .attr('y', function(d){
-        if (d.type == 'center') return -STYLES.largeNodeSize / 2
-        else return -STYLES.smallNodeSize / 2
-      })
-
-      d3.selectAll('g .node').selectAll('image')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('width', function(d){
-        if (d.type == 'center') return STYLES.largeNodeSize
-        else return STYLES.smallNodeSize
-      })
-
-      .attr('height',function(d){
-        if (d.type == 'center') return STYLES.largeNodeSize
-        else return STYLES.smallNodeSize
-      })
-
-      d3.select(this).select('circle')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('r', STYLES.largeNodeSize / 2)
-
-      d3.select(this).select('pattern')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('x', -STYLES.largeNodeSize / 2)
-      .attr('y', -STYLES.largeNodeSize / 2)
-
-      d3.select(this).select('image')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('width', STYLES.largeNodeSize)
-      .attr('height', STYLES.largeNodeSize)
     })
 
     force.on('tick', function() {
       link.attr('x1', function(d) {
-        if (d.source.type == 'center') {
+        if (d.source.rank == 'center') {
           return (STYLES.width / 2)
         }
         else {
@@ -169,7 +123,7 @@ export default class GraphD3 {
         }
       })
         .attr('y1', function(d) {
-          if (d.source.type == 'center') {
+          if (d.source.rank == 'center') {
             return (STYLES.height / 2)
           }
           else {
@@ -177,7 +131,7 @@ export default class GraphD3 {
           }
         })
         .attr('x2', function(d) {
-          if (d.target.type == 'center') {
+          if (d.target.rank == 'center') {
             return (STYLES.width / 2)
           }
           else {
@@ -185,7 +139,7 @@ export default class GraphD3 {
           }
         })
         .attr('y2', function(d) {
-          if (d.target.type == 'center') {
+          if (d.target.rank == 'center') {
             return (STYLES.height / 2)
           }
           else {
@@ -194,7 +148,7 @@ export default class GraphD3 {
         })
 
       node.attr('transform', function(d) {
-        if (d.type == 'center') {
+        if (d.rank == 'center') {
           d.x = STYLES.width / 2
           d.y = STYLES.height / 2
         }

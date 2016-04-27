@@ -2,6 +2,7 @@ import Reflux from 'reflux'
 import graphAgent from '../lib/agents/graph.js'
 import graphActions from '../actions/graph-actions'
 import d3Convertor from '../lib/d3-converter'
+import STYLES from '../styles/app'
 
 export default Reflux.createStore({
 
@@ -24,8 +25,52 @@ export default Reflux.createStore({
     }
   },
 
-  onHighlight(e){
-    console.log(e)
+  onHighlight(node){
+   console.log(this.state)
+   d3.selectAll('g .node').selectAll('circle')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('r', function(d){
+      if (d.rank == 'center') return STYLES.largeNodeSize / 2
+      else return STYLES.smallNodeSize / 2
+    })
+
+    d3.selectAll('g .node').selectAll('pattern')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('x', function(d){
+      if (d.rank == 'center') return -STYLES.largeNodeSize / 2
+      else return -STYLES.smallNodeSize / 2 })
+    .attr('y', function(d){
+      if (d.rank == 'center') return -STYLES.largeNodeSize / 2
+      else return -STYLES.smallNodeSize / 2
+    })
+
+    d3.selectAll('g .node').selectAll('image')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('width', function(d){
+      if (d.rank == 'center') return STYLES.largeNodeSize
+      else return STYLES.smallNodeSize
+    })
+    .attr('height',function(d){
+      if (d.rank == 'center') return STYLES.largeNodeSize
+      else return STYLES.smallNodeSize
+    })
+
+    d3.select(node).select('circle')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('r', STYLES.largeNodeSize / 2)
+
+    d3.select(node).select('pattern')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('x', -STYLES.largeNodeSize / 2)
+    .attr('y', -STYLES.largeNodeSize / 2)
+
+    d3.select(node).select('image')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('width', STYLES.largeNodeSize)
+    .attr('height', STYLES.largeNodeSize)
+    this.state.highlighted = d3.select(node)
+    
+    this.trigger(this.state)
   },
 
   onUpdateState: function(updated){
