@@ -89,7 +89,7 @@ let Graph = React.createClass({
   componentWillUnmount: function(){
     // Commiting all the changes that the user did to the graph to the store's state
     // Not yet implemented, waiting for Eric's graph to start working on this.
-    graphActions.updateState(this.state)
+    // graphActions.updateState(this.state)
   },
 
   getStyles: function() {

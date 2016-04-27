@@ -14,6 +14,16 @@ export default class GraphD3 {
     this.handleNodeClick = handleClick
     this.onNodeClick = this.onNodeClick.bind(this)
 
+
+    let links = []
+    let nodes = [state.center]
+
+    // Flatten the center and neighbour nodes we get from the state
+    for (var i = 0; i < state.neighbours.length; i++) {
+      nodes.push(state.neighbours[i])
+      links.push({'source': i + 1, 'target':0})
+    }
+
     this.width = STYLES.width
     this.height = STYLES.height
 
@@ -33,25 +43,6 @@ export default class GraphD3 {
       .attr('r', this.width / 6)
       .style('fill', STYLES.lightGrayColor)
 
-    let nodes = [
-            {'name':'Eric', 'type': 'center', 'img' : 'https://localhost:8443/christian/profile/christian.jpg', 'description' : 'WOOO',x:this.width * 0.5, y:this.height * 0.5},
-                              {'name':'Carla', 'type': 'adjacent', 'img' : 'https://localhost:8443/joachim/profile/joachim.jpg', 'description' : 'NOOO', x:this.width * 0.5, y:this.height * 0.5},
-            {'name':'Joachim', 'type': 'adjacent', 'img' : 'https://localhost:8443/james/profile/person.png', 'description' : 'FOOO', x:this.width * 0.5, y:this.height * 0.5},
-            {'name':'Eugeniu', 'type': 'adjacent', 'img' : 'https://localhost:8443/paul/image.jpg', 'description' : 'BOOO', x:this.width * 0.5, y:this.height * 0.5},
-            {'name':'Fred', 'type': 'adjacent', 'img' : 'https://localhost:8443/justas/profile/justas.jpg', 'description' : 'LOOO', x:this.width * 0.5, y:this.height * 0.5}
-    ]
-
-    console.log(nodes, 'nodes')
-
-    let links = [
-            {'source':1, 'target':0},
-            {'source':2, 'target':0},
-            {'source':3, 'target':0},
-            {'source':4, 'target':0}
-    ]
-
-    console.log(links, 'links')
-
     let force = d3.layout.force()
             .nodes(nodes)
             .links(links)
@@ -60,8 +51,6 @@ export default class GraphD3 {
             .gravity(0.2)
             .size([this.width, this.height])
             .start()
-
-    console.log(links, 'force')
 
     let link =  this.svg.selectAll('line')
             .data(links)
@@ -84,22 +73,22 @@ export default class GraphD3 {
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', function(d){
-        if (d.type == 'center') return -STYLES.largeNodeSize / 2
+        if (d.rank == 'center') return -STYLES.largeNodeSize / 2
         else return -STYLES.smallNodeSize / 2
       })
       .attr('y', function(d){
-        if (d.type == 'center') return -STYLES.largeNodeSize / 2
+        if (d.rank == 'center') return -STYLES.largeNodeSize / 2
         else return -STYLES.smallNodeSize / 2
       })
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', (d) => d.img)
       .attr('width', function(d){
-        if (d.type == 'center') return STYLES.largeNodeSize
+        if (d.rank == 'center') return STYLES.largeNodeSize
         else return STYLES.smallNodeSize
       })
       .attr('height',function(d){
-        if (d.type == 'center') return STYLES.largeNodeSize
+        if (d.rank == 'center') return STYLES.largeNodeSize
         else return STYLES.smallNodeSize
       })
       .attr('x', 0)
@@ -107,7 +96,7 @@ export default class GraphD3 {
 
     node.append('circle')
         .attr('r', function(d){
-          if (d.type == 'center') return STYLES.largeNodeSize / 2
+          if (d.rank == 'center') return STYLES.largeNodeSize / 2
           else return STYLES.smallNodeSize / 2
         })
         .style('fill', function(d){

@@ -25,6 +25,7 @@ class D3Converter {
       description:null,
       img:null,
       type:null,
+      rank: null,
       x: null,
       y: null
     }
@@ -50,17 +51,24 @@ class D3Converter {
     // Note, if a triple is not present, it will be set to null.
     props.uri = uri
 
-    let name = g.statementsMatching(uri, FOAF('name').uri, undefined)
-    if (name.length > 0) props.name = name[0].object.value
+    // If the resource is a URI, it's value is stored next to the 'uri' key in the object
+    // otherwise it's value is stored in the 'value' key of the object. We need to make
+    // sure we are assigning the value regardless of where it's stored
+    let name = g.statementsMatching(undefined, FOAF('name'), undefined)
+    if (name.length > 0) props.name = name[0].object.value ? name[0].object.value : name[0].object.uri
     else props.name = null
 
-    let description = g.statementsMatching(uri, DC('description').uri, undefined)
-    if (description.length > 0) props.description = description[0].object.value
+    let description = g.statementsMatching(undefined, DC('description'), undefined)
+    if (description.length > 0) props.description = description[0].object.value ? description[0].object.value : description[0].object.uri
     else props.description = null
 
-    let type = g.statementsMatching(uri, RDF('type').uri, undefined)
-    if (type.length > 0) props.type = type[0].object.value
+    let type = g.statementsMatching(undefined, RDF('type'), undefined)
+    if (type.length > 0) props.type = type[0].object.value ? type[0].object.value : type[0].object.uri
     else props.type = null
+
+  //This labels the nodes as center and adjacent, a bit hacky, but it works allright
+    if (i) props.rank = 'adjacent'
+    if (!i) props.rank = 'center'
 
     return props
   }
