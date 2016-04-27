@@ -6,8 +6,6 @@ var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
 
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
 var concat = require('gulp-concat');
 
 // The development server (the recommended option for development)
@@ -29,24 +27,16 @@ gulp.task('data', function(){
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('sass', function () {
-  return gulp.src('./src/sass/**/*.scss')
-    .pipe(sass())
-    .pipe(concat('jolocom.css'))
-    .pipe(autoprefixer())
-    .pipe(gulp.dest('./dist/css'));
-});
-
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
 //               can serve an old app on refresh
-gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'sass', 'data'], function() {
+gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'data'], function() {
 	gulp.watch(['src/**/*'], ['webpack:build-dev']);
 });
 
 // Production build
-gulp.task('build', ['webpack:build', 'html', 'img', 'sass']);
+gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
