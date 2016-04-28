@@ -16,6 +16,7 @@ import graphActions from '../../actions/graph-actions'
 import solid from 'solid-client'
 import rdf from 'rdflib'
 import {Writer} from '../../lib/rdf.js'
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 
 let graphAgent = new GraphAgent()
 let convertor = new D3Converter()
@@ -42,21 +43,11 @@ let Graph = React.createClass({
 
     } else{
       this.graph = new GraphD3(this.getGraphEl(), this.state)
-      this.graph.setUpForce()
-      this.graph.drawGraph()
     }
   },
 
   addNode: function() {
-    // let writer = new Writer()
-    // let uri = this.state.center.uri
-    // graphAgent.fetchTriplesAtUri(uri).then((result) => {
-    //   for (var i = 0; i < result.triples.length; i++) {
-    //     let triple = result.triples[i]
-    //     writer.addTriple(triple.object, triple.predicate, triple.subject)
-    //   }
-    //   writer.end()
-    // })
+    graphActions.addNode(this.state.center.uri)
   },
 
   handleNodeClick: function(node){
@@ -93,7 +84,6 @@ let Graph = React.createClass({
     if(this.graph) {
       this.graph.eraseGraph()
     }
-    console.log('we are here at', this.state)
   },
 
   getStyles: function() {

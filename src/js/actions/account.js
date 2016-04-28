@@ -2,7 +2,7 @@ import Reflux from 'reflux'
 
 let Actions = Reflux.createActions({
   login: {asyncResult: true},
-  logout: {},
+  logout: {asyncResult: false},
   signup: {asyncResult: true}
 })
 

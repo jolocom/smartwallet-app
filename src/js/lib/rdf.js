@@ -29,12 +29,10 @@ export class Writer {
   }
 
   addTriple(subj, pred, obj) {
-    console.log(subj, pred, obj, 'this probably throws an erro')
     this.g.add(subj,pred,obj)
   }
 
   end() {
-    console.log(rdf.serialize(undefined, this.g, undefined, 'text/turtle'))
     return rdf.serialize(undefined, this.g, undefined, 'text/turtle')
   }
 }

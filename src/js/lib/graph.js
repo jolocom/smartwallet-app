@@ -10,14 +10,6 @@ import graphActions from '../actions/graph-actions'
 
 export default class GraphD3 {
 
-
-
-
-
-
-
-
-
   constructor(el, state){
     this.el = el
     this.width = STYLES.width
@@ -31,13 +23,8 @@ export default class GraphD3 {
       this.dataNodes.push(state.neighbours[i])
       this.dataLinks.push({'source': i + 1, 'target':0})
     }
+    this.setUpForce()
   }
-
-
-
-
-
-
 
    setUpForce(){
     this.force = d3.layout.force()
@@ -48,10 +35,8 @@ export default class GraphD3 {
       .gravity(0.2)
       .size([this.width, this.height])
       .start()
+    this.drawGraph()
   }
-
-
-
 
   eraseGraph(){
     this.force.stop()
@@ -62,11 +47,6 @@ export default class GraphD3 {
     d3.selectAll('.node').remove()
     d3.selectAll('defs').remove()
   }
-
-
-
-
-
 
   drawGraph() {
     // Drawing the background
@@ -135,7 +115,43 @@ export default class GraphD3 {
       .attr('stroke-width',2)
 
     node.on('click', function(){
-      graphActions.highlight(this)
+     d3.selectAll('g .node').selectAll('circle')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('r', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
+      })
+
+      d3.selectAll('g .node').selectAll('pattern')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('x', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
+      })
+      .attr('y', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
+      })
+
+      d3.selectAll('g .node').selectAll('image')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('width', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+      })
+      .attr('height',(d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+      })
+
+      d3.select(this).select('circle')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('r', STYLES.largeNodeSize / 2)
+
+      d3.select(this).select('pattern')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('x', -STYLES.largeNodeSize / 2)
+      .attr('y', -STYLES.largeNodeSize / 2)
+
+      d3.select(this).select('image')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('width', STYLES.largeNodeSize)
+      .attr('height', STYLES.largeNodeSize)
     })
 
     this.force.on('tick', function() {
@@ -152,21 +168,12 @@ export default class GraphD3 {
         return 'translate(' + d.x + ',' + d.y + ')'
       })
     })
+
   }
-
-
-
-
-
-
-
 
   onResize() {
     this.setSize()
   }
-
-
-
 
   setSize() {
     this.width = this.el.offsetWidth
