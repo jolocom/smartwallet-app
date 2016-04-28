@@ -10,16 +10,67 @@ import graphActions from '../actions/graph-actions'
 
 export default class GraphD3 {
 
+
+
+
+
+
+
+
+
   constructor(el, state){
+    this.el = el
     this.width = STYLES.width
     this.height = STYLES.height
 
-    this.drawBackground(el)
-    this.drawNodes(el, state)
+    this.dataLinks = []
+    this.dataNodes = [state.center]
+
+    // Flatten the center and neighbour nodes we get from the state
+    for (var i = 0; i < state.neighbours.length; i++) {
+      this.dataNodes.push(state.neighbours[i])
+      this.dataLinks.push({'source': i + 1, 'target':0})
+    }
   }
 
-  drawBackground(el) {
-    this.svg = d3.select(el).append('svg:svg')
+
+
+
+
+
+
+  setUpForce(){
+    this.force = d3.layout.force()
+      .nodes(this.dataNodes)
+      .links(this.dataLinks)
+      .charge(-15000)
+      .friction(0.8)
+      .gravity(0.2)
+      .size([this.width, this.height])
+      .start()
+  }
+
+
+
+
+  eraseGraph(){
+    this.force.stop()
+    d3.selectAll('svg').remove()
+    d3.selectAll('rect').remove()
+    d3.selectAll('circle').remove()
+    d3.selectAll('line').remove()
+    d3.selectAll('.node').remove()
+    d3.selectAll('defs').remove()
+  }
+
+
+
+
+
+
+  drawGraph() {
+    // Drawing the background
+    this.svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
@@ -34,41 +85,21 @@ export default class GraphD3 {
       .attr('cy', this.height * 0.5)
       .attr('r', this.width / 6)
       .style('fill', STYLES.lightGrayColor)
-  }
-
-  drawNodes(el, state) {
-    let links = []
-    let nodes = [state.center]
-
-    // Flatten the center and neighbour nodes we get from the state
-    for (var i = 0; i < state.neighbours.length; i++) {
-      nodes.push(state.neighbours[i])
-      links.push({'source': i + 1, 'target':0})
-    }
-
-    let force = d3.layout.force()
-            .nodes(nodes)
-            .links(links)
-            .charge(-15000)
-            .friction(0.8)
-            .gravity(0.2)
-            .size([this.width, this.height])
-            .start()
 
     let link =  this.svg.selectAll('line')
-            .data(links)
-            .enter()
-            .append('line')
-            .attr('class','link')
-            .attr('stroke-width', STYLES.width / 45)
-            .attr('stroke', STYLES.lightGrayColor)
+      .data(this.dataLinks)
+      .enter()
+      .append('line')
+      .attr('class','link')
+      .attr('stroke-width', STYLES.width / 45)
+      .attr('stroke', STYLES.lightGrayColor)
 
     let node = this.svg.selectAll('.node')
-            .data(nodes)
-            .enter()
-            .append('g')
-            .attr('class','node')
-            .call(force.drag)
+      .data(this.dataNodes)
+      .enter()
+      .append('g')
+      .attr('class','node')
+      .call(this.force.drag)
 
     let defs = node.append('svg:defs')
     defs.append('svg:pattern')
@@ -113,7 +144,8 @@ export default class GraphD3 {
       graphActions.highlight(this)
     })
 
-    force.on('tick', function() {
+    this.force.on('tick', function() {
+      console.log('tick')
       link.attr('x1', function(d) {
         if (d.source.rank == 'center') {
           return (STYLES.width / 2)
@@ -157,9 +189,19 @@ export default class GraphD3 {
     })
   }
 
+
+
+
+
+
+
+
   onResize() {
     this.setSize()
   }
+
+
+
 
   setSize() {
     this.width = this.el.offsetWidth

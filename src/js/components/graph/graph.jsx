@@ -41,21 +41,26 @@ let Graph = React.createClass({
       graphActions.getInitialGraphState()
     } else{
       // If the data was already pulled, we draw a graph with it.
-      this.graph = new GraphD3(this.getGraphEl(), this.state , this.handleNodeClick)
+      this.graph = new GraphD3(this.getGraphEl(), this.state)
+      this.graph.setUpForce()
+      this.graph.drawGraph()
     }
   },
 
-  // addNode: function() {
-  //   let writer = new Writer()
-  //   let uri = this.state.center.uri
-  //   graphAgent.fetchTriplesAtUri(uri).then((result) => {
-  //     for (var i = 0; i < result.triples.length; i++) {
-  //       let triple = result.triples[i]
-  //       writer.addTriple(triple.object, triple.predicate, triple.subject)
-  //     }
-  //     writer.end()
-  //   })
-  // },
+  addNode: function() {
+    let writer = new Writer()
+    let uri = this.state.center.uri
+    graphAgent.fetchTriplesAtUri(uri).then((result) => {
+      for (var i = 0; i < result.triples.length; i++) {
+        let triple = result.triples[i]
+        writer.addTriple(triple.object, triple.predicate, triple.subject)
+      }
+      writer.end()
+    })
+  },
+
+  handleNodeClick: function(node){
+  },
 
   // Lifecycle methods below
   componentWillMount: function() {
@@ -85,9 +90,7 @@ let Graph = React.createClass({
   },
 
   componentWillUnmount: function(){
-    // Commiting all the changes that the user did to the graph to the store's state
-    // Not yet implemented, waiting for Eric's graph to start working on this.
-    // graphActions.updateState(this.state)
+    this.graph.eraseGraph()
   },
 
   getStyles: function() {
@@ -118,6 +121,7 @@ let Graph = React.createClass({
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
           <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>
           <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
+          <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.addNode('sensor')}}/>
         </FabMenu>
 
         <div style={styles.chart} ref="graph"></div>

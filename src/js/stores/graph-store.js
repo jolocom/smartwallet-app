@@ -26,7 +26,7 @@ export default Reflux.createStore({
   },
 
   onHighlight(node){
-   console.log(this.state)
+
    d3.selectAll('g .node').selectAll('circle')
     .transition().duration(STYLES.nodeTransitionDuration)
     .attr('r', function(d){
@@ -69,17 +69,16 @@ export default Reflux.createStore({
     .attr('width', STYLES.largeNodeSize)
     .attr('height', STYLES.largeNodeSize)
     this.state.highlighted = d3.select(node)
-    
-    this.trigger(this.state)
+
   },
 
   onUpdateState: function(updated){
     this.state = updated
-    this.trigger(this.state)
+    this.trigger( this.state)
   },
 
   onGetState: function(){
-    this.trigger(this.state)
+    this.trigger( this.state)
   },
 
   getInitialState: function() {
