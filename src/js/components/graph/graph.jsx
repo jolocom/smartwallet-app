@@ -34,13 +34,13 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data) {
+
     this.setState(data)
-    // We check if the graph info has already been pulled from the RDF file
-    // This way we only fetch data from the server when needed.
+
     if (!this.state.loaded) {
       graphActions.getInitialGraphState()
+
     } else{
-      // If the data was already pulled, we draw a graph with it.
       this.graph = new GraphD3(this.getGraphEl(), this.state)
       this.graph.setUpForce()
       this.graph.drawGraph()
@@ -48,15 +48,15 @@ let Graph = React.createClass({
   },
 
   addNode: function() {
-    let writer = new Writer()
-    let uri = this.state.center.uri
-    graphAgent.fetchTriplesAtUri(uri).then((result) => {
-      for (var i = 0; i < result.triples.length; i++) {
-        let triple = result.triples[i]
-        writer.addTriple(triple.object, triple.predicate, triple.subject)
-      }
-      writer.end()
-    })
+    // let writer = new Writer()
+    // let uri = this.state.center.uri
+    // graphAgent.fetchTriplesAtUri(uri).then((result) => {
+    //   for (var i = 0; i < result.triples.length; i++) {
+    //     let triple = result.triples[i]
+    //     writer.addTriple(triple.object, triple.predicate, triple.subject)
+    //   }
+    //   writer.end()
+    // })
   },
 
   handleNodeClick: function(node){
@@ -90,7 +90,10 @@ let Graph = React.createClass({
   },
 
   componentWillUnmount: function(){
-    this.graph.eraseGraph()
+    if(this.graph) {
+      this.graph.eraseGraph()
+    }
+    console.log('we are here at', this.state)
   },
 
   getStyles: function() {

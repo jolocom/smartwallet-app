@@ -39,7 +39,7 @@ export default class GraphD3 {
 
 
 
-  setUpForce(){
+   setUpForce(){
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
       .links(this.dataLinks)
@@ -98,6 +98,8 @@ export default class GraphD3 {
       .data(this.dataNodes)
       .enter()
       .append('g')
+      .attr('cx', 0)
+      .attr('cy', 0)
       .attr('class','node')
       .call(this.force.drag)
 
@@ -106,78 +108,41 @@ export default class GraphD3 {
       .attr('id',  (d)=> d.name)
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('x', function(d){
-        if (d.rank == 'center') return -STYLES.largeNodeSize / 2
-        else return -STYLES.smallNodeSize / 2
+      .attr('x', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
       })
-      .attr('y', function(d){
-        if (d.rank == 'center') return -STYLES.largeNodeSize / 2
-        else return -STYLES.smallNodeSize / 2
+      .attr('y', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
       })
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', (d) => d.img)
-      .attr('width', function(d){
-        if (d.rank == 'center') return STYLES.largeNodeSize
-        else return STYLES.smallNodeSize
+      .attr('width', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
       })
-      .attr('height',function(d){
-        if (d.rank == 'center') return STYLES.largeNodeSize
-        else return STYLES.smallNodeSize
+      .attr('height', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
       })
-      .attr('x', 0)
-      .attr('y', 0)
 
     node.append('circle')
-        .attr('r', function(d){
-          if (d.rank == 'center') return STYLES.largeNodeSize / 2
-          else return STYLES.smallNodeSize / 2
-        })
-        .style('fill', function(d){
-          if (d.img) {   return 'url(#'+d.name+')'}
-          else { return STYLES.blueColor }
-        })
-        .attr('stroke',STYLES.grayColor)
-        .attr('stroke-width',2)
+      .attr('r', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
+      })
+      .style('fill', (d) => {
+        return d.img ? 'url(#'+d.name+')' : STYLES.blueColor
+      })
+      .attr('stroke',STYLES.grayColor)
+      .attr('stroke-width',2)
 
     node.on('click', function(){
       graphActions.highlight(this)
     })
 
     this.force.on('tick', function() {
-      console.log('tick')
-      link.attr('x1', function(d) {
-        if (d.source.rank == 'center') {
-          return (STYLES.width / 2)
-        }
-        else {
-          return d.source.x
-        }
-      })
-        .attr('y1', function(d) {
-          if (d.source.rank == 'center') {
-            return (STYLES.height / 2)
-          }
-          else {
-            return d.source.y
-          }
-        })
-        .attr('x2', function(d) {
-          if (d.target.rank == 'center') {
-            return (STYLES.width / 2)
-          }
-          else {
-            return d.target.x
-          }
-        })
-        .attr('y2', function(d) {
-          if (d.target.rank == 'center') {
-            return (STYLES.height / 2)
-          }
-          else {
-            return d.target.y
-          }
-        })
+      link.attr('x1', (d) => { return d.source.x })
+        .attr('y1', (d) => { return d.source.y })
+        .attr('x2', (d) => { return d.target.x })
+        .attr('y2', (d) => { return d.target.y })
 
       node.attr('transform', function(d) {
         if (d.rank == 'center') {
