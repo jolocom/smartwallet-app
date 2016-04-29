@@ -30,7 +30,7 @@ export default class GraphD3 {
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
       .links(this.dataLinks)
-      .charge(-15000)
+      .charge(-12500)
       .friction(0.8)
       .gravity(0.2)
       .size([this.width, this.height])
@@ -78,8 +78,6 @@ export default class GraphD3 {
       .data(this.dataNodes)
       .enter()
       .append('g')
-      .attr('cx', 0)
-      .attr('cy', 0)
       .attr('class','node')
       .call(this.force.drag)
 
@@ -114,8 +112,89 @@ export default class GraphD3 {
       .attr('stroke',STYLES.grayColor)
       .attr('stroke-width',2)
 
-    node.on('click', function(){
-     d3.selectAll('g .node').selectAll('circle')
+    node.on('click', this.onClick)
+
+    this.force.on('tick', function() {
+      d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
+        .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
+        .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
+        .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
+
+      d3.selectAll('g .node').attr('transform', function(d) {
+        if (d.rank == 'center') {
+          d.x = STYLES.width / 2
+          d.y = STYLES.height / 2
+        }
+        return 'translate(' + d.x + ',' + d.y + ')'
+      })
+    })
+
+  setTimeout(() => {
+      this.addNode({name:'eugen', index: 3, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 3, target: 0})
+    }, 2000)
+
+  setTimeout(() => {
+      this.addNode({name:'eugen', index: 4, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 4, target: 0})
+    }, 4000)
+
+  setTimeout(() => {
+      this.addNode({name:'eugen', index: 5, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 5, target: 0})
+    }, 6000)
+
+  setTimeout(() => {
+      this.addNode({name:'eugen', index: 6, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 6, target: 0})
+    }, 8000)
+
+  setTimeout(() => {
+      this.addNode({name:'eugen', index: 7, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 7, target: 0})
+    }, 10000)
+
+  setTimeout(() => {
+      this.addNode({name:'eugen', index: 8, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 8, target: 0})
+    }, 12000)
+
+  }
+
+
+  addNode(node, link){
+    this.force.stop()
+
+    this.dataNodes.push(node)
+    if(link) this.dataLinks.push(link)
+
+    let link_update = this.svg.selectAll('.link')
+      .data(this.force.links(), (d) => {return d.source.index + '-' + d.target.index})
+
+    link_update.enter()
+      .insert('line', '.node')
+      .attr('class','link')
+      .attr('stroke-width', STYLES.width / 45)
+      .attr('stroke', STYLES.lightGrayColor)
+
+    let nodes_update = this.svg.selectAll('g .node')
+      .data(this.force.nodes(), (d) => {return d.index})
+
+    nodes_update.enter()
+      .append('g')
+      .call(this.force.drag)
+      .attr('class','node')
+        .append('circle')
+        .attr('r', (d) => {
+          return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
+        })
+        .style('fill', (d) => {
+          return d.img ? 'url(#'+d.name+')' : STYLES.blueColor
+        })
+        .attr('stroke',STYLES.grayColor)
+        .attr('stroke-width',2)
+
+    nodes_update.on('click', this.onClick)
+
+    this.force.start()
+  }
+
+  onClick() {
+    d3.selectAll('g .node').selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
         return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
@@ -152,46 +231,8 @@ export default class GraphD3 {
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
-    })
 
-
-    this.force.on('tick', function() {
-      link.attr('x1', (d) => { return d.source.x })
-        .attr('y1', (d) => { return d.source.y })
-        .attr('x2', (d) => { return d.target.x })
-        .attr('y2', (d) => { return d.target.y })
-
-      d3.selectAll('g .node').attr('transform', function(d) {
-        if (d.rank == 'center') {
-          d.x = STYLES.width / 2
-          d.y = STYLES.height / 2
-        }
-        return 'translate(' + d.x + ',' + d.y + ')'
-      })
-    })
-
-  setTimeout(() => {
-      this.force.stop()
-
-      this.dataNodes.push({name:'eugen', index: 3, x: 400, y: 371})
-      this.dataLinks.push({source: 3, target: 0})
-
-      let node_update = this.svg.selectAll('g .node')
-        .data(this.force.nodes(),function(d){return d.index})
-
-      node_update.enter()
-        .append('g')
-        .append('circle')
-        .attr('r', 50)
-        .style('fill', 'blue')
-        .attr('class', 'node')
-        .call(this.force.drag)
-
-      this.force.start()
-
-    }, 2000)
   }
-
   onResize() {
     this.setSize()
   }

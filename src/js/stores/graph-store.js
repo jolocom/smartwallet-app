@@ -43,7 +43,6 @@ export default Reflux.createStore({
       solid.web.put(uri, writer.end())
       this.gAgent.fetchTriplesAtUri(person).then((res)=>{
         console.log(this.convertor.convertToD3(res))
-        console.log('This is madness nwo')
       })
     })
   },
