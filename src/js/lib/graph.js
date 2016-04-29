@@ -154,13 +154,14 @@ export default class GraphD3 {
       .attr('height', STYLES.largeNodeSize)
     })
 
+
     this.force.on('tick', function() {
       link.attr('x1', (d) => { return d.source.x })
         .attr('y1', (d) => { return d.source.y })
         .attr('x2', (d) => { return d.target.x })
         .attr('y2', (d) => { return d.target.y })
 
-      node.attr('transform', function(d) {
+      d3.selectAll('g .node').attr('transform', function(d) {
         if (d.rank == 'center') {
           d.x = STYLES.width / 2
           d.y = STYLES.height / 2
@@ -169,6 +170,26 @@ export default class GraphD3 {
       })
     })
 
+  setTimeout(() => {
+      this.force.stop()
+
+      this.dataNodes.push({name:'eugen', index: 3, x: 400, y: 371})
+      this.dataLinks.push({source: 3, target: 0})
+
+      let node_update = this.svg.selectAll('g .node')
+        .data(this.force.nodes(),function(d){return d.index})
+
+      node_update.enter()
+        .append('g')
+        .append('circle')
+        .attr('r', 50)
+        .style('fill', 'blue')
+        .attr('class', 'node')
+        .call(this.force.drag)
+
+      this.force.start()
+
+    }, 2000)
   }
 
   onResize() {
