@@ -10,7 +10,7 @@ import STYLES from 'styles/app.js'
 // to D3 to draw a graph based on the data
 
 class D3Converter {
-  convertToD3(node, i, n) {
+  convertToD3(rank, node, i, n) {
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
@@ -18,6 +18,7 @@ class D3Converter {
     this.n = n
 
     let uri = node.uri
+    console.log(node, ' STEREO ')
 
     let props = {
       uri: null,
@@ -39,13 +40,19 @@ class D3Converter {
       g.add(node[i].subject, node[i].predicate, node[i].object)
     }
     // Calculating the coordinates of the nodes so we can put them in a circle
-    let angle = (2 * Math.PI) / this.n
-    let halfwidth = STYLES.width / 2
-    let halfheight = STYLES.height / 2
+    if (i && n) {
+      let angle = (2 * Math.PI) / this.n
+      let halfwidth = STYLES.width / 2
+      let halfheight = STYLES.height / 2
 
-    props.x = Math.sin(angle * this.i) * halfwidth + halfwidth
-    props.y =(Math.cos(angle * this.i) * halfwidth + halfheight)
-
+      props.x = Math.sin(angle * this.i) * halfwidth + halfwidth
+      props.y = Math.cos(angle * this.i) * halfwidth + halfheight
+    } else if (!i && !n && rank =='a') {
+      // This takes care of nodes that are added dynamically, the mid + 30 is
+      // the optimal position for spawning new nodes dynamically
+      props.x = STYLES.width / 2 + 60
+      props.y = STYLES.height / 2 + 60
+    }
     // Updating the attributes of the node object. The resulting object will have
     // all of it's props filled in, and will be ready to be rendered by D3
     // Note, if a triple is not present, it will be set to null.
@@ -66,9 +73,10 @@ class D3Converter {
     if (type.length > 0) props.type = type[0].object.value ? type[0].object.value : type[0].object.uri
     else props.type = null
 
-  //This labels the nodes as center and adjacent, a bit hacky, but it works allright
-    if (i) props.rank = 'adjacent'
-    if (!i) props.rank = 'center'
+    // We specify the rank of the node here. Center is the center node and Adjacent is a neighbour, smaller node
+    // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
+    if (rank == 'a') props.rank = 'adjacent'
+    if (rank == 'c') props.rank = 'center'
 
     return props
   }

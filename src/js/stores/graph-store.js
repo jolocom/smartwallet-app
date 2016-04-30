@@ -23,11 +23,18 @@ export default Reflux.createStore({
       center:null,
       neighbours: null,
       loaded: false,
+      newNode: null,
+      drawn: false,
       //These describe the ui
       showPinned: false,
       showSearch: false,
       plusDrawerOpen: false,
     }
+  },
+
+  onSetState: function(state){
+      this.state = state
+      this.trigger(this.state)
   },
 
   onAddNode: function(uri){
@@ -41,10 +48,16 @@ export default Reflux.createStore({
       person = 'https://localhost:8443/' + person + '/profile/card'
       writer.addTriple(rdf.sym('#me'), FOAF('knows'), rdf.sym(person))
       solid.web.put(uri, writer.end())
-      this.gAgent.fetchTriplesAtUri(person).then((res)=>{
-        console.log(this.convertor.convertToD3(res))
+      this.gAgent.fetchTriplesAtUri(person).then((triples)=>{
+        triples.triples.uri = person
+        graphActions.addNode.completed(this.convertor.convertToD3('a', triples.triples))
       })
     })
+  },
+
+  onAddNodeCompleted: function(node){
+    this.state.newNode = node
+    this.trigger(this.state)
   },
 
   onLogout(){
@@ -65,9 +78,9 @@ export default Reflux.createStore({
 
   onGetInitialGraphState: function() {
     this.gAgent.getGraphMapAtWebID().then((triples) => {
-      triples[0] = this.convertor.convertToD3(triples[0])
+      triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3(triples[i], i, triples.length - 1)}
+        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)}
       graphActions.getInitialGraphState.completed(triples)
     })
   },

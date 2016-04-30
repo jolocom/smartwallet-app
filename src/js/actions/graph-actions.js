@@ -1,9 +1,9 @@
 import Reflux from 'reflux'
 
 export default Reflux.createActions({
+  'setState' : {asyncResult: false},
   'getInitialGraphState' : {asyncResult: true},
-  // Should add node be async?
-  'addNode': {asyncResult: false},
+  'addNode': {asyncResult: true},
   'fetchGraph' : {children: ['completed', 'failed']},
   'fetchGraphAtWebID' : {asyncResult: true},
   'fetchTriples' : {asyncResult: true},

@@ -128,42 +128,15 @@ export default class GraphD3 {
         return 'translate(' + d.x + ',' + d.y + ')'
       })
     })
-
-  setTimeout(() => {
-      this.addNode({name:'eugen', index: 3, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 3, target: 0})
-    }, 2000)
-
-  setTimeout(() => {
-      this.addNode({name:'eugen', index: 4, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 4, target: 0})
-    }, 4000)
-
-  setTimeout(() => {
-      this.addNode({name:'eugen', index: 5, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 5, target: 0})
-    }, 6000)
-
-  setTimeout(() => {
-      this.addNode({name:'eugen', index: 6, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 6, target: 0})
-    }, 8000)
-
-  setTimeout(() => {
-      this.addNode({name:'eugen', index: 7, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 7, target: 0})
-    }, 10000)
-
-  setTimeout(() => {
-      this.addNode({name:'eugen', index: 8, x: STYLES.width / 2 + 30, y: STYLES.height / 2 + 20}, {source: 8, target: 0})
-    }, 12000)
-
   }
 
-
-  addNode(node, link){
+  addNode(node){
     this.force.stop()
-
     this.dataNodes.push(node)
-    if(link) this.dataLinks.push(link)
+    this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
 
     let link_update = this.svg.selectAll('.link')
-      .data(this.force.links(), (d) => {return d.source.index + '-' + d.target.index})
+      .data(this.force.links(), (d) => {return d.source.uri + '-' + d.target.uri})
 
     link_update.enter()
       .insert('line', '.node')
@@ -171,10 +144,10 @@ export default class GraphD3 {
       .attr('stroke-width', STYLES.width / 45)
       .attr('stroke', STYLES.lightGrayColor)
 
-    let nodes_update = this.svg.selectAll('g .node')
-      .data(this.force.nodes(), (d) => {return d.index})
+    let node_update = this.svg.selectAll('g .node')
+      .data(this.force.nodes(), (d) => {return d.uri})
 
-    nodes_update.enter()
+    node_update.enter()
       .append('g')
       .call(this.force.drag)
       .attr('class','node')
@@ -188,8 +161,8 @@ export default class GraphD3 {
         .attr('stroke',STYLES.grayColor)
         .attr('stroke-width',2)
 
-    nodes_update.on('click', this.onClick)
 
+    node_update.on('click', this.onClick)
     this.force.start()
   }
 
@@ -231,8 +204,9 @@ export default class GraphD3 {
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
-
   }
+
+
   onResize() {
     this.setSize()
   }

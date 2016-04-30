@@ -30,19 +30,20 @@ let Graph = React.createClass({
       return ReactDOM.findDOMNode(this.refs.graph)
   },
 
-  onNodeChange: function(){
-
-  },
-
   onStateUpdate: function(data) {
 
     this.setState(data)
 
     if (!this.state.loaded) {
       graphActions.getInitialGraphState()
-
-    } else{
+    }
+    if (this.state.loaded && !this.state.drawn){
       this.graph = new GraphD3(this.getGraphEl(), this.state)
+      this.state.drawn = true
+      graphActions.setState(this.state)
+    }
+    if (this.state.newNode) {
+      this.graph.addNode(this.state.newNode)
     }
   },
 
@@ -66,6 +67,9 @@ let Graph = React.createClass({
   componentWillUpdate: function(nextProp, nextState){
   },
 
+  componentDidUpdate: function() {
+  },
+
   getInitialState: function() {
     return {
       //These state keys describe the graph
@@ -73,6 +77,8 @@ let Graph = React.createClass({
       neighbours: null,
       loaded: false,
       highlighted: null,
+      newNode: null,
+      drawn: false,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -81,9 +87,8 @@ let Graph = React.createClass({
   },
 
   componentWillUnmount: function(){
-    if(this.graph) {
-      this.graph.eraseGraph()
-    }
+    this.state.drawn = false
+    graphActions.setState(this.state)
   },
 
   getStyles: function() {
