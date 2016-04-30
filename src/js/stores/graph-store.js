@@ -61,8 +61,6 @@ export default Reflux.createStore({
           // the triple file
           graphActions.addNode.completed(this.convertor.convertToD3('a', result.triples))
         })
-      } else {
-        console.log('The triple was not added, it already exists in the file')
       }
     })
   },
@@ -101,7 +99,6 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
-    console.log(this.state, ' this is what we are having here ')
     this.trigger(this.state)
   }
 })

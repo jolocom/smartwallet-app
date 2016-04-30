@@ -31,8 +31,13 @@ export class Writer {
   addTriple(subj, pred, obj) {
     // We don't want to write a triple that already exists into the rdf file.
     if (this.g.statementsMatching(subj, pred, obj).length > 0){
+      console.warn('Triple already present in the rdf file, Ignoring')
       return false
-    } else {
+    } else if (subj.uri == obj.uri) {
+      console.warn('You cannot link to yourself')
+      return false
+    }
+    else {
       this.g.add(subj,pred,obj)
       return true
     }
