@@ -48,7 +48,10 @@ let Graph = React.createClass({
   },
 
   addNode: function() {
-    graphActions.addNode(this.state.center.uri)
+    // This takes a triple describing the new node added!
+    // For now it will add a friend relationship to Justas. Reason is we do not have a proper input field yet
+    // And also because everyone would be happy to have a friend like Justas.
+    graphActions.addNode(rdf.sym(this.state.center.uri), FOAF('knows'), rdf.sym('https://localhost:8443/justas/profile/card#me'))
   },
 
   handleNodeClick: function(node){

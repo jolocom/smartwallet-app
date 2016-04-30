@@ -29,7 +29,13 @@ export class Writer {
   }
 
   addTriple(subj, pred, obj) {
-    this.g.add(subj,pred,obj)
+    // We don't want to write a triple that already exists into the rdf file.
+    if (this.g.statementsMatching(subj, pred, obj).length > 0){
+      return false
+    } else {
+      this.g.add(subj,pred,obj)
+      return true
+    }
   }
 
   end() {

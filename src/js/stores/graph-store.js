@@ -16,6 +16,7 @@ export default Reflux.createStore({
   init: function(){
 
     this.listenTo(accountActions.logout, this.onLogout)
+    this.writer = new Writer()
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
     this.state = {
@@ -37,21 +38,32 @@ export default Reflux.createStore({
       this.trigger(this.state)
   },
 
-  onAddNode: function(uri){
-    let writer = new Writer()
-    this.gAgent.fetchTriplesAtUri(uri).then((result) => {
-      for (var i = 0; i < result.triples.length; i++) {
-        let triple = result.triples[i]
-        writer.addTriple(triple.subject, triple.predicate, triple.object)
+  onAddNode: function(subject, predicate, object){
+    // First we fetch the triples at the webId/uri of the user adding the triple
+    this.gAgent.fetchTriplesAtUri(subject.uri).then((file) => {
+      for (var i = 0; i < file.triples.length; i++) {
+        let triple = file.triples[i]
+        this.writer.addTriple(triple.subject, triple.predicate, triple.object)
       }
-      let person = prompt('Introduce the name of the person')
-      person = 'https://localhost:8443/' + person + '/profile/card'
-      writer.addTriple(rdf.sym('#me'), FOAF('knows'), rdf.sym(person))
-      solid.web.put(uri, writer.end())
-      this.gAgent.fetchTriplesAtUri(person).then((triples)=>{
-        triples.triples.uri = person
-        graphActions.addNode.completed(this.convertor.convertToD3('a', triples.triples))
-      })
+      // Then we add the new triple to the object representing the current file
+      // This function also returns true if the operation is successfull and false if not
+      // Not the best type of error handling TODO improve later.
+      if (this.writer.addTriple(subject, predicate, object))
+      {
+        // Then we serialize the object to Turtle and PUT it's address.
+        solid.web.put(subject.uri, this.writer.end())
+
+        // This fetches the triples at the newly added file, it allows us to draw it
+        // the graph accurately
+        this.gAgent.fetchTriplesAtUri(object.uri).then((result)=>{
+          result.triples.uri = object.uri
+          // Now we tell d3 to draw a new adjacent node on the graph, with the info from
+          // the triple file
+          graphActions.addNode.completed(this.convertor.convertToD3('a', result.triples))
+        })
+      } else {
+        console.log('The triple was not added, it already exists in the file')
+      }
     })
   },
 
@@ -89,6 +101,7 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
+    console.log(this.state, ' this is what we are having here ')
     this.trigger(this.state)
   }
 })
