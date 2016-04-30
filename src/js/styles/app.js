@@ -16,4 +16,8 @@ const STYLES = {
   tempHot: '#E53935'
 }
 
+STYLES.largeNodeSize = STYLES.largeNodeSize > 150 ? 150 : STYLES.largeNodeSize
+STYLES.smallNodeSize = STYLES.smallNodeSize > 120 ? 120 : STYLES.smallNodeSize
+
+
 export default STYLES

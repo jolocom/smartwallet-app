@@ -92,6 +92,7 @@ let Graph = React.createClass({
   componentWillUnmount: function(){
     this.state.drawn = false
     graphActions.setState(this.state)
+    if (this.graph) this.graph.eraseGraph()
   },
 
   getStyles: function() {

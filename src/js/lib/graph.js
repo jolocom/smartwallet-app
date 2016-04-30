@@ -31,6 +31,7 @@ export default class GraphD3 {
       .nodes(this.dataNodes)
       .links(this.dataLinks)
       .charge(-12500)
+      .linkDistance(STYLES.largeNodeSize * 0.8)
       .friction(0.8)
       .gravity(0.2)
       .size([this.width, this.height])
@@ -40,16 +41,15 @@ export default class GraphD3 {
 
   eraseGraph(){
     this.force.stop()
-    d3.selectAll('svg').remove()
-    d3.selectAll('rect').remove()
-    d3.selectAll('circle').remove()
-    d3.selectAll('line').remove()
-    d3.selectAll('.node').remove()
-    d3.selectAll('defs').remove()
+    this.svg.select('*').remove()
   }
 
   drawGraph() {
+
     // Drawing the background
+    let centerSize = STYLES.largeNodeSize
+    let neighbSize = STYLES.smallNodeSize
+
     this.svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
@@ -63,7 +63,7 @@ export default class GraphD3 {
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
-      .attr('r', this.width / 6)
+      .attr('r', centerSize * 0.57)
       .style('fill', STYLES.lightGrayColor)
 
     let link =  this.svg.selectAll('line')
@@ -71,7 +71,8 @@ export default class GraphD3 {
       .enter()
       .append('line')
       .attr('class','link')
-      .attr('stroke-width', STYLES.width / 45)
+      .attr('stroke-width', (d) => {
+        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
       .attr('stroke', STYLES.lightGrayColor)
 
     let node = this.svg.selectAll('.node')
@@ -87,24 +88,24 @@ export default class GraphD3 {
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
+        return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
       })
       .attr('y', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
+        return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
       })
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', (d) => d.img)
       .attr('width', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+        return d.rank == 'center' ? centerSize : neighbSize
       })
       .attr('height', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+        return d.rank == 'center' ? centerSize : neighbSize
       })
 
     node.append('circle')
       .attr('r', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
+        return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
       })
       .style('fill', (d) => {
         return d.img ? 'url(#'+d.name+')' : STYLES.blueColor
@@ -131,6 +132,7 @@ export default class GraphD3 {
   }
 
   addNode(node){
+
     this.force.stop()
     this.dataNodes.push(node)
     this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
@@ -141,7 +143,8 @@ export default class GraphD3 {
     link_update.enter()
       .insert('line', '.node')
       .attr('class','link')
-      .attr('stroke-width', STYLES.width / 45)
+      .attr('stroke-width', (d) => {
+        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
       .attr('stroke', STYLES.lightGrayColor)
 
     let node_update = this.svg.selectAll('g .node')
