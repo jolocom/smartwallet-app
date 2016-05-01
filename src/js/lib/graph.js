@@ -113,7 +113,12 @@ export default class GraphD3 {
       .attr('stroke',STYLES.grayColor)
       .attr('stroke-width',2)
 
+    node.on('dblclick', (d) => {
+      console.log(d)
+    })
+
     node.on('click', this.onClick)
+    node.on('dblclick', this.onDblClick)
 
     this.force.on('tick', function() {
       d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
@@ -191,6 +196,10 @@ export default class GraphD3 {
   }
 
   onClick() {
+
+    // This makes sure that dragging does not cause a click to fire
+    if(d3.event.defaultPrevented) return
+
     d3.selectAll('g .node').selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
@@ -229,6 +238,10 @@ export default class GraphD3 {
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
   }
+
+    onDblClick(node) {
+      console.log(node)
+    }
 
 
   onResize() {
