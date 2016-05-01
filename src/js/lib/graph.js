@@ -84,14 +84,14 @@ export default class GraphD3 {
 
     let defs = node.append('svg:defs')
     defs.append('svg:pattern')
-      .attr('id',  (d)=> d.name)
+      .attr('id',  (d)=> d.uri)
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', (d) => {
-        return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
+        return d.rank == 'center' ? -centerSize / 2 : -neighbSize / 2
       })
       .attr('y', (d) => {
-        return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
+        return d.rank == 'center' ? -centerSize / 2 : -neighbSize / 2
       })
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
@@ -108,7 +108,7 @@ export default class GraphD3 {
         return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
       })
       .style('fill', (d) => {
-        return d.img ? 'url(#'+d.name+')' : STYLES.blueColor
+        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
       })
       .attr('stroke',STYLES.grayColor)
       .attr('stroke-width',2)
@@ -154,16 +154,37 @@ export default class GraphD3 {
       .append('g')
       .call(this.force.drag)
       .attr('class','node')
-        .append('circle')
+
+    node_update.append('svg:defs')
+      .append('svg:pattern')
+      .attr('id',  (d)=> d.uri)
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('x', (d) => {
+        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : - STYLES.smallNodeSize / 2
+      })
+      .attr('y', (d) => {
+        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : - STYLES.smallNodeSize / 2
+      })
+      .attr('patternUnits', 'userSpaceOnUse')
+      .append('svg:image')
+      .attr('xlink:href', (d) => d.img)
+      .attr('width', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+      })
+      .attr('height', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+      })
+
+      node_update.append('circle')
         .attr('r', (d) => {
           return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
         })
         .style('fill', (d) => {
-          return d.img ? 'url(#'+d.name+')' : STYLES.blueColor
+          return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
         })
         .attr('stroke',STYLES.grayColor)
         .attr('stroke-width',2)
-
 
     node_update.on('click', this.onClick)
     this.force.start()
@@ -179,10 +200,10 @@ export default class GraphD3 {
       d3.selectAll('g .node').selectAll('pattern')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('x', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
+        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
       })
       .attr('y', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
+        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
       })
 
       d3.selectAll('g .node').selectAll('image')

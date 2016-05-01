@@ -17,6 +17,7 @@ class GraphAgent extends HTTPAgent {
   fetchTriplesAtUri(uri) {
     return this.get(uri)
       .then((xhr) => {
+        console.log(xhr.status, ' status code of fetching triples from uri')
         let parser = new Parser()
         return parser.parse(xhr.response)
       })

@@ -18,7 +18,6 @@ class D3Converter {
     this.n = n
 
     let uri = node.uri
-    console.log(node, ' STEREO ')
 
     let props = {
       uri: null,
@@ -72,6 +71,10 @@ class D3Converter {
     let type = g.statementsMatching(undefined, RDF('type'), undefined)
     if (type.length > 0) props.type = type[0].object.value ? type[0].object.value : type[0].object.uri
     else props.type = null
+
+    let image = g.statementsMatching(undefined, FOAF('img'), undefined)
+    if (image.length > 0) props.img = image[0].object.value ? image[0].object.value : image[0].object.uri
+    else props.img = null
 
     // We specify the rank of the node here. Center is the center node and Adjacent is a neighbour, smaller node
     // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
