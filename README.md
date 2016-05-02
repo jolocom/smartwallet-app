@@ -15,13 +15,20 @@ npm install -g gulp
 npm install
 ```
 
-## Install python tools for test data generation
-```
-cd utils/soliddata; python setup.py develop
-```
-These tools should be installed using python2. Running the `setup.py` using python3 will cause errors in further steps. Please see the next step for extra information.
+## Generating base data
 
-## Generate test data for single test server (https://localhost:8443)
+For the application to be useful you need a minimum data setup (at least one node representing a user profile). Instead of having to write the RDF files manually you can generate them using a python script.
+
+### Install python tools
+
+Make sure you use python 2.x when installing soliddata, e.g.
+
+```
+cd utils/soliddata; python2.7 setup.py develop
+```
+Running the `setup.py` using python3 will cause errors in further steps. 
+
+### Generate testdata for single test server (https://localhost:8443)
 ```
 soliddata --blueprint utils/soliddata/local.json --output-dir data --flatten
 ```
