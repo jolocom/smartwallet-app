@@ -167,10 +167,24 @@ export default class GraphD3 {
     .attr('class', 'nodetext')
     .style('fill', '#e6e6e6')
     .attr('text-anchor', 'middle')
-    .attr('opacity', 0)
+    .attr('opacity',(d) => {
+      return d.img ? 0 : 1})
     .attr('dy', '.35em')
     .style('font-weight', 'bold')
     .text((d) => d.name)
+
+     node.append('svg:text')
+    .attr('class', 'nodedescription')
+    .style('fill', '#e6e6e6')
+    .attr('text-anchor', 'middle')
+    .attr('opacity', 0)
+    .attr('dy', 1)
+    .style('font-size', '80%')
+    .text(function (d) {
+      if(d.description.length>50) return (d.description.substring(0, 50)+'...')
+      else return d.description
+    })
+    .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
 
     node.on('click', this.onClick)
     node.on('dblclick', this.onDblClick)
@@ -255,7 +269,6 @@ export default class GraphD3 {
   onClick(node, force) {
     console.log(node)
     if(d3.event.defaultPrevented) {
-
       let node = null
       d3.select(this)
         .attr('x', (d) => {
@@ -294,9 +307,14 @@ export default class GraphD3 {
       })
       .style('filter', null)
 
-      d3.selectAll('g .node').selectAll('text')
-      //.transition().duration(STYLES.nodeTransitionDuration)
+      d3.selectAll('g .node').selectAll('.nodetext')
+      .attr('opacity', (d) => {
+        return d.img ? 0 : 1})
+      .attr('dy', '.35em')
+
+      d3.selectAll('g .node').selectAll('.nodedescription')
       .attr('opacity', 0)
+
 
       d3.select(this).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -316,7 +334,53 @@ export default class GraphD3 {
 
       d3.select(this).select('text')
       .attr('opacity', 0.9)
+      //TODO apply transition breaks the action
+      d3.select(this).select('.nodetext')
+      .attr('dy', -10.5)
+
+      d3.select(this).selectAll('text')
+      .transition().duration(STYLES.nodeTransitionDuration/2)
+      .attr('opacity', 1)
   }
+
+  // http://bl.ocks.org/mbostock/7555321
+  wrap(text, width, separator, joiner) {
+    if(separator == undefined){
+      separator = /\s+/
+      joiner = ' '
+    }
+    let hasWrapped = []
+    text.each(function() {
+      let text = d3.select(this)
+      let words = text.text().split(separator)
+      let line = []
+      let lineNumber = 0
+      let lineHeight = 1.1 // ems
+      let y = text.attr('y')
+      let dy = parseFloat(text.attr('dy'))
+      let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'em')
+
+      for (var word of words) {
+        line.push(word)
+        tspan.text(line.join(joiner))
+        if (tspan.node().getComputedTextLength() > width) {
+          hasWrapped.push(this)
+          line.pop()
+          tspan.text(line.join(joiner))
+          line = [word]
+          lineNumber++
+          tspan = text
+            .append('tspan')
+            .attr('x', 0)
+            .attr('y', y)
+            .attr('dy', ((lineNumber==0)?(dy+'em'):(lineHeight+'em'))) //++lineNumber * lineHeight + dy + 'em') NOTE(philipp): dy is relative to previous sibling (== lineheight for all but first line)
+            .text(word)
+        }
+      }
+    })
+    return hasWrapped
+  }
+
 
     onDblClick = function(node) {
       if (node.rank == 'center'){
