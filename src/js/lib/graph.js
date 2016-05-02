@@ -50,6 +50,7 @@ export default class GraphD3 {
     let centerSize = STYLES.largeNodeSize
     let neighbSize = STYLES.smallNodeSize
 
+
     this.svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
@@ -82,8 +83,8 @@ export default class GraphD3 {
       .attr('class','node')
       .call(this.force.drag)
 
-    let defs = node.append('svg:defs')
-    defs.append('svg:pattern')
+    let defsImages = node.append('svg:defs')
+    defsImages.append('svg:pattern')
       .attr('id',  (d)=> d.uri)
       .attr('width', '100%')
       .attr('height', '100%')
@@ -103,6 +104,30 @@ export default class GraphD3 {
         return d.rank == 'center' ? centerSize : neighbSize
       })
 
+      let defsFilter = this.svg.append('svg:defs')
+
+      let filter = defsFilter.append('filter')
+      .attr('id', 'darkblur')
+
+// SourceAlpha refers to opacity of graphic that this filter will be applied to
+// convolve that with a Gaussian with standard deviation 3 and store result
+// in blur
+    filter.append('feGaussianBlur')
+        .attr('stdDeviation', 1.5)
+
+    let componentTransfer = filter.append('feComponentTransfer')
+    componentTransfer.append('feFuncR')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
+
+    componentTransfer.append('feFuncG')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
+
+    componentTransfer.append('feFuncB')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
+
     node.append('circle')
       .attr('r', (d) => {
         return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
@@ -112,6 +137,15 @@ export default class GraphD3 {
       })
       .attr('stroke',STYLES.grayColor)
       .attr('stroke-width',2)
+
+    node.append('svg:text')
+    .attr('class', 'nodetext')
+    .style('fill', '#e6e6e6')
+    .attr('text-anchor', 'middle')
+    .attr('opacity', 0)
+    .attr('dy', '.35em')
+    .style('font-weight', 'bold')
+    .text((d) => d.name)
 
     node.on('dblclick', (d) => {
       console.log(d)
@@ -223,6 +257,11 @@ export default class GraphD3 {
       .attr('height',(d) => {
         return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
       })
+      .style('filter', null)
+
+      d3.selectAll('g .node').selectAll('text')
+      //.transition().duration(STYLES.nodeTransitionDuration)
+      .attr('opacity', 0)
 
       d3.select(this).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -233,10 +272,17 @@ export default class GraphD3 {
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
 
+
       d3.select(this).select('image')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
+      .style('filter', 'url(#darkblur)')
+
+      d3.select(this).select('text')
+      .attr('opacity', 0.9)
+
+
   }
 
     onDblClick(node) {
