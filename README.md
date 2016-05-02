@@ -40,6 +40,12 @@ gulp
 You have to setup your SoLiD server to point to `dist/` directory (built by `gulp` in the previous step)
 
 
+## Running
+You need to start your solid server (e.g. gold) listening on port :8443 before you can use the app, e.g.
+
+`docker run -p 127.0.0.1:8443:443 -v /home/myuser/projects/little-sister/dist:/data linkeddata/gold`
+
+
 Documentation
 -------------
 
