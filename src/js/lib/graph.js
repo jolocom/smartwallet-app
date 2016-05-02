@@ -14,9 +14,14 @@ export default class GraphD3 {
     this.el = el
     this.width = STYLES.width
     this.height = STYLES.height
-
+    this.dragged = false
+    // We also have the this.force, this.svg, this.dataLinks and this.dataNodes
+    // Being used in this file, they are declared later.
   }
 
+
+
+   // Starts the force simulation.
    setUpForce = function(){
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
@@ -29,18 +34,10 @@ export default class GraphD3 {
       .start()
   }.bind(this)
 
-  eraseGraph = function(){
-    this.force.stop()
-    this.svg.selectAll('*').remove()
-  }.bind(this)
 
+
+  // Creates the background svg and draws the gray circle
   drawBackground = function() {
-
-    // Drawing the background
-    let centerSize = STYLES.largeNodeSize
-    let neighbSize = STYLES.smallNodeSize
-
-
     this.svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
@@ -54,59 +51,73 @@ export default class GraphD3 {
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
-      .attr('r', centerSize * 0.57)
+      .attr('r', STYLES.largeNodeSize* 0.57)
       .style('fill', STYLES.lightGrayColor)
-
   }.bind(this)
 
-    drawNodes = function(state) {
-      this.dataLinks = []
-      this.dataNodes = [state.center]
 
-      // Flatten the center and neighbour nodes we get from the state
-      for (var i = 0; i < state.neighbours.length; i++) {
-        this.dataNodes.push(state.neighbours[i])
-        this.dataLinks.push({'source': i + 1, 'target':0})
-      }
 
-      this.setUpForce()
+  // Takes a state with the center: {} and neighbours [{},{}]
+  // structure and draws nodes and nodes.
+  drawNodes = function(state) {
+    this.dataLinks = []
+    this.dataNodes = [state.center]
 
-      let link =  this.svg.selectAll('line')
-        .data(this.dataLinks)
-        .enter()
-        .append('line')
-        .attr('class','link')
-        .attr('stroke-width', (d) => {
-          return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
-        .attr('stroke', STYLES.lightGrayColor)
+  // We define our own drag functions, allow for greater controll over the way
+  // it works
+    this.node_drag = d3.behavior.drag()
+      .on("dragstart", this.dragStart)
+      .on("drag", this.dragMove)
+      .on("dragend", this.dragEnd)
 
-      let node = this.svg.selectAll('.node')
-        .data(this.dataNodes)
-        .enter()
-        .append('g')
-        .attr('class','node')
-        .call(this.force.drag)
+    // Flatten the center and neighbour nodes we get from the state
+    for (var i = 0; i < state.neighbours.length; i++) {
+      this.dataNodes.push(state.neighbours[i])
+      this.dataLinks.push({'source': i + 1, 'target':0})
+    }
+    // Once we have dataLinks and dataNodes we can initialize the force layout
+    this.setUpForce()
 
+    // These make the following statements shorter
+    let largeNode = STYLES.largeNodeSize
+    let smallNode = STYLES.smallNodeSize
+
+    // We draw the lines for all the elements in the dataLinks array.
+    let link =  this.svg.selectAll('line')
+      .data(this.dataLinks)
+      .enter()
+      .append('line')
+      .attr('class','link')
+      .attr('stroke-width', (d) => {
+        // Capped at 13, found it to look the best
+        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
+      .attr('stroke', STYLES.lightGrayColor)
+
+    // We draw a node for each element in the dataNodes array
+    let node = this.svg.selectAll('.node')
+      .data(this.dataNodes)
+      .enter()
+      .append('g')
+      .attr('class','node')
+      .call(this.node_drag)
+
+      // We need to use patterns in order to apply images to nodes
       let defs = node.append('svg:defs')
       defs.append('svg:pattern')
         .attr('id',  (d)=> d.uri)
         .attr('width', '100%')
         .attr('height', '100%')
         .attr('x', (d) => {
-          return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
-        })
+          return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
         .attr('y', (d) => {
-          return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
-        })
+          return d.rank == 'center' ? -largeNode/ 2 : -smallNode / 2})
         .attr('patternUnits', 'userSpaceOnUse')
         .append('svg:image')
         .attr('xlink:href', (d) => d.img)
         .attr('width', (d) => {
-          return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-        })
+          return d.rank == 'center' ? largeNode: smallNode})
         .attr('height', (d) => {
-          return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-        })
+          return d.rank == 'center' ? largeNode: smallNode})
 
     let defsImages = node.append('svg:defs')
     defsImages.append('svg:pattern')
@@ -114,65 +125,64 @@ export default class GraphD3 {
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', (d) => {
-        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
       .attr('y', (d) => {
-        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', (d) => d.img)
       .attr('width', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-      })
+        return d.rank == 'center' ? largeNode : smallNode})
       .attr('height', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-      })
+        return d.rank == 'center' ? largeNode : smallNode})
 
-      let defsFilter = this.svg.append('svg:defs')
-
-      let filter = defsFilter.append('filter')
+      // These will be later used in the add node function, therefore they have
+      // to be reachable
+      this.defsFilter = this.svg.append('svg:defs')
+      this.filter = this.defsFilter.append('filter')
       .attr('id', 'darkblur')
 
-// SourceAlpha refers to opacity of graphic that this filter will be applied to
-// convolve that with a Gaussian with standard deviation 3 and store result
-// in blur
-    filter.append('feGaussianBlur')
+    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // convolve that with a Gaussian with standard deviation 3 and store result
+    // in blur
+    // This basically takes care of blurring
+    this.filter.append('feGaussianBlur')
         .attr('stdDeviation', 1.5)
 
-    let componentTransfer = filter.append('feComponentTransfer')
-    componentTransfer.append('feFuncR')
+    this.componentTransfer = this.filter.append('feComponentTransfer')
+    this.componentTransfer.append('feFuncR')
         .attr('type', 'linear')
         .attr('slope', 0.6)
 
-    componentTransfer.append('feFuncG')
+    this.componentTransfer.append('feFuncG')
         .attr('type', 'linear')
         .attr('slope', 0.6)
 
-    componentTransfer.append('feFuncB')
+    this.componentTransfer.append('feFuncB')
         .attr('type', 'linear')
         .attr('slope', 0.6)
 
     node.append('circle')
       .attr('r', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? largeNode / 2 : smallNode / 2 })
       .style('fill', (d) => {
-        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
-      })
+        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor })
       .attr('stroke',STYLES.grayColor)
       .attr('stroke-width',2)
 
+    // The name of the person, displays on the node
     node.append('svg:text')
-    .attr('class', 'nodetext')
-    .style('fill', '#e6e6e6')
-    .attr('text-anchor', 'middle')
-    .attr('opacity',(d) => {
-      return d.img ? 0 : 1})
-    .attr('dy', '.35em')
-    .style('font-weight', 'bold')
-    .text((d) => d.name)
+      .attr('class', 'nodetext')
+      .style('fill', '#e6e6e6')
+      .attr('text-anchor', 'middle')
+      .attr('opacity',(d) => {
+        return d.img ? 0 : 1})
+      .attr('dy', '.35em')
+      .style('font-weight', 'bold')
+      // In case the rdf card contains no name
+      .text((d) => {return d.name ? d.name : 'Anonymous'})
 
+     // The text description of a person
      node.append('svg:text')
     .attr('class', 'nodedescription')
     .style('fill', '#e6e6e6')
@@ -181,36 +191,93 @@ export default class GraphD3 {
     .attr('dy', 1)
     .style('font-size', '80%')
     .text(function (d) {
-      if(d.description.length>50) return (d.description.substring(0, 50)+'...')
-      else return d.description
+      // In case the person has no description available.
+      if (d.description) {
+        if(d.description.length>50) return (d.description.substring(0, 50)+'...')
+        else return d.description
+      }
     })
+    // This wraps the description nicely.
     .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
 
+    // Subscribe to the click listeners
     node.on('click', this.onClick)
     node.on('dblclick', this.onDblClick)
+    this.force.on('tick', this.tick)
+  }.bind(this)
 
-    this.force.on('tick', function() {
-      d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
-        .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
-        .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
-        .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
 
-      d3.selectAll('g .node').attr('transform', function(d) {
-        if (d.rank == 'center') {
-          d.x = STYLES.width / 2
-          d.y = STYLES.height / 2
-        }
-        return 'translate(' + d.x + ',' + d.y + ')'
-      })
+
+  // This function fires upon tick, around 30 times per second?
+  tick = function(){
+    // Update the link positions.
+    d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
+      .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
+      .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
+      .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
+    // Update the node positions. We use translate because we are working with
+    // a group of elements rather than just one.
+    d3.selectAll('g .node').attr('transform', function(d) {
+      if (d.rank == 'center') {
+        d.x = STYLES.width / 2
+        d.y = STYLES.height / 2
+      }
+      return 'translate(' + d.x + ',' + d.y + ')'
     })
   }.bind(this)
 
-  addNode= function(node){
-
+  // This function is bound. Therefore the this context is actually the
+  // one of the graph.js object. So we have acces to stuff like the force
+  dragStart = function(node) {
     this.force.stop()
+  }.bind(this)
+
+  dragMove = function(node, i) {
+    node.px += d3.event.dx
+    node.py += d3.event.dy
+    node.x += d3.event.dx
+    node.y += d3.event.dy
+    this.tick()
+  }.bind(this)
+
+  // There is the problem where a click event still fires, TODO fix that.
+  dragEnd = function(node, i) {
+    if (node.rank == 'center') {
+      // In here we would have the functionality that opens the node's card
+    } else if (node.rank =='adjacent') {
+      // We check if the node is dropped on top of the middle node, if yes
+      // We change the perspective
+      let w = STYLES.width
+      let h = STYLES.height
+      let size = STYLES.largeNodeSize
+      let x =  node.x > w / 2 - size / 2 && node.x < w / 2 + size / 2
+      let y =  node.y > h / 2 - size / 2 && node.y < h / 2 + size / 2
+
+      // If in the area we navigate to the node, otherwise we start the force
+      // layout back
+      if (x && y)  graphActions.navigateToNode(node)
+      else this.force.start()
+    }
+  }.bind(this)
+
+  // This basically pushes a node to the dataNodes and a link to the dataLinks
+  // Arrays. Then tells d3 to draw a node for each of those.
+  // There is an insane amount of code duplication, the code below is pretty much
+  // the same as the code that draws the nodes in the first place.
+  // TODO something has to be done here, otherwise there's too much redundant stuff.
+  addNode = function(node){
+
+    let largeNode = STYLES.largeNodeSize
+    let smallNode = STYLES.smallNodeSize
+    // We stop the simulation / force layout, so that we can introduce nodes
+    // without causing artifacts
+    this.force.stop()
+    // push the new node to the node array
     this.dataNodes.push(node)
+    // push the new link. Always points from the new node to the center.
     this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
 
+    // We add a svg line for every new link we added
     let link_update = this.svg.selectAll('.link')
       .data(this.force.links(), (d) => {return d.source.uri + '-' + d.target.uri})
 
@@ -221,13 +288,34 @@ export default class GraphD3 {
         return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
       .attr('stroke', STYLES.lightGrayColor)
 
+    // We add a group containing a circle, pattern, image and text for every new
+    // node pushed to the array
     let node_update = this.svg.selectAll('g .node')
       .data(this.force.nodes(), (d) => {return d.uri})
 
+    // Create the group, we append the extra stuff to this group
     node_update.enter()
       .append('g')
-      .call(this.force.drag)
       .attr('class','node')
+      .call(this.node_drag)
+
+    // Appending the pattern
+    node_update.append('svg:defs')
+      .append('svg:pattern')
+      .attr('id',  (d)=> d.uri)
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('x', (d) => {
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2 })
+      .attr('y', (d) => {
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2 })
+      .attr('patternUnits', 'userSpaceOnUse')
+      .append('svg:image')
+      .attr('xlink:href', (d) => d.img)
+      .attr('width', (d) => {
+        return d.rank == 'center' ? largeNode : smallNode })
+      .attr('height', (d) => {
+        return d.rank == 'center' ? largeNode : smallNode })
 
     node_update.append('svg:defs')
       .append('svg:pattern')
@@ -235,116 +323,148 @@ export default class GraphD3 {
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', (d) => {
-        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : - STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
       .attr('y', (d) => {
-        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : - STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', (d) => d.img)
       .attr('width', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-      })
+        return d.rank == 'center' ? largeNode : smallNode})
       .attr('height', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-      })
+        return d.rank == 'center' ? largeNode : smallNode})
 
-      node_update.append('circle')
-        .attr('r', (d) => {
-          return d.rank == 'center' ? STYLES.largeNodeSize/2 : STYLES.smallNodeSize/2
-        })
-        .style('fill', (d) => {
-          return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
-        })
-        .attr('stroke',STYLES.grayColor)
-        .attr('stroke-width',2)
+
+    node_update.append('circle')
+      .attr('r', (d) => {
+        return d.rank == 'center' ? largeNode / 2 : smallNode / 2 })
+      .style('fill', (d) => {
+        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor })
+      .attr('stroke',STYLES.grayColor)
+      .attr('stroke-width',2)
+
+    node_update.append('svg:text')
+      .attr('class', 'nodetext')
+      .style('fill', '#e6e6e6')
+      .attr('text-anchor', 'middle')
+      .attr('opacity',(d) => {
+        return d.img ? 0 : 1})
+      .attr('dy', '.35em')
+      .style('font-weight', 'bold')
+      // In case the rdf card contains no name
+      .text((d) => {return d.name ? d.name : 'Anonymous'})
+
+     // The text description of a person
+     node_update.append('svg:text')
+    .attr('class', 'nodedescription')
+    .style('fill', '#e6e6e6')
+    .attr('text-anchor', 'middle')
+    .attr('opacity', 0)
+    .attr('dy', 1)
+    .style('font-size', '80%')
+    .text(function (d) {
+      // In case the person has no description available.
+      if (d.description) {
+        if(d.description.length>50) return (d.description.substring(0, 50)+'...')
+        else return d.description
+      }
+    })
+    // This wraps the description nicely.
+    .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
 
     node_update.on('click', this.onClick)
     node_update.on('dblclick', this.onDblClick)
-
     this.force.start()
+
   }.bind(this)
 
-  onClick(node, force) {
-    console.log(node)
-    if(d3.event.defaultPrevented) {
-      let node = null
-      d3.select(this)
-        .attr('x', (d) => {
-          node = d
-        })
-      let x =  node.x > STYLES.width / 2 - STYLES.largeNodeSize / 2 && node.x < STYLES.width / 2 + STYLES.largeNodeSize / 2
-      let y =  node.y > STYLES.height / 2 - STYLES.largeNodeSize / 2 && node.y < STYLES.height / 2 + STYLES.largeNodeSize / 2
-      if (x && y) {
-        graphActions.navigateToNode(node)
-      }
+
+
+  // Enlarges and displays extra info about the clicked node, while setting
+  // all other highlighted nodes back to their normal size
+  onClick = function(node) {
+    // d3.event.defaultPrevented returns true if the click event was fired by
+    // a drag event. Prevents a click being registered upon drag release.
+    if (d3.event.defaultPrevented) {
       return
     }
 
+    let smallSize = STYLES.smallNodeSize
+    let largeSize = STYLES.largeNodeSize
+
+    // We set all the circles back to their normal sizes
     d3.selectAll('g .node').selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? largeSize / 2 : smallSize / 2 })
 
-      d3.selectAll('g .node').selectAll('pattern')
+    // Setting all the pattern sizes back to normal.
+    d3.selectAll('g .node').selectAll('pattern')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('x', (d) => {
-        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? -largeSize / 2 : -smallSize / 2 })
       .attr('y', (d) => {
-        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
-      })
+        return d.rank == 'center' ? -largeSize / 2 : -smallSize / 2 })
 
-      d3.selectAll('g .node').selectAll('image')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('width', (d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-      })
-      .attr('height',(d) => {
-        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
-      })
-      .style('filter', null)
+    // Setting all the image sizes back to normal
+    d3.selectAll('g .node').selectAll('image')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('width', (d) => {
+      return d.rank == 'center' ? largeSize : smallSize
+    })
+    .attr('height',(d) => {
+      return d.rank == 'center' ? largeSize : smallSize
+    })
+    .style('filter', null)
 
-      d3.selectAll('g .node').selectAll('.nodetext')
-      .attr('opacity', (d) => {
-        return d.img ? 0 : 1})
-      .attr('dy', '.35em')
-
-      d3.selectAll('g .node').selectAll('.nodedescription')
+    // We set the name of the node to invisible in case it has a profile picture
+    // In case the node has no picture, we display it's name.
+    d3.selectAll('g .node').selectAll('.nodetext')
+    .attr('opacity', (d) => {
+      return d.img ? 0 : 1})
+    .attr('dy', '.35em')
+    // We set the node description to be invisible
+    d3.selectAll('g .node').selectAll('.nodedescription')
       .attr('opacity', 0)
 
-
-      d3.select(this).select('circle')
+    // NODE signifies the node that we clicked on. We enlarge it
+    d3.select(this).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', STYLES.largeNodeSize / 2)
 
-      d3.select(this).select('pattern')
+    // We enlarge the pattern of the node we clicked on
+    d3.select(this).select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
 
-
-      d3.select(this).select('image')
+    // We enlarge the image of the node we clicked on
+    // We also blur it a bit and darken it, so that the text displays better
+    d3.select(this).select('image')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
       .style('filter', 'url(#darkblur)')
 
-      d3.select(this).select('text')
-      .attr('opacity', 0.9)
-      //TODO apply transition breaks the action
-      d3.select(this).select('.nodetext')
-      .attr('dy', -10.5)
+    // Tere is a slight bug when if you click on nodes really quickly, the text
+    // on some fails to dissapear, needs further investigation
 
-      d3.select(this).selectAll('text')
-      .transition().duration(STYLES.nodeTransitionDuration/2)
-      .attr('opacity', 1)
+    // We fade in the description
+    d3.select(this).selectAll('text')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('opacity', 0.9)
+
+    // We fade in the node name and make the text opaque
+    d3.select(this).select('.nodetext')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('dy', -10)
+    .attr('opacity', 1)
   }
 
+
+  // Wraps the description of the nodes around the node.
   // http://bl.ocks.org/mbostock/7555321
-  wrap(text, width, separator, joiner) {
+  wrap = function(text, width, separator, joiner) {
     if(separator == undefined){
       separator = /\s+/
       joiner = ' '
@@ -355,7 +475,7 @@ export default class GraphD3 {
       let words = text.text().split(separator)
       let line = []
       let lineNumber = 0
-      let lineHeight = 1.1 // ems
+      let lineHeight = 1 // ems
       let y = text.attr('y')
       let dy = parseFloat(text.attr('dy'))
       let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'em')
@@ -382,19 +502,29 @@ export default class GraphD3 {
   }
 
 
-    onDblClick = function(node) {
-      if (node.rank == 'center'){
-        console.log('card should open here')
-      } else {
-        graphActions.navigateToNode(node)
-      }
-    }.bind(this)
+
+  // Erases all the elements on the svg, but keeps the svg.
+  eraseGraph = function(){
+    this.force.stop()
+    this.svg.selectAll('*').remove()
+  }.bind(this)
 
 
+  // Alternative to dragging the node to the center. Does the same thing pretty much
+  onDblClick = function(node) {
+    if (node.rank == 'center'){
+    } else {
+      graphActions.navigateToNode(node)
+    }
+  }.bind(this)
+
+  // This is not implemented apparently.
   onResize = function() {
     this.setSize()
   }.bind(this)
 
+
+  // Not yet implemented.
   setSize = function() {
     this.width = this.el.offsetWidth
     this.height = this.el.offsetHeight
