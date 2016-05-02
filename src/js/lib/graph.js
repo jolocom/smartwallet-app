@@ -313,7 +313,11 @@ export default class GraphD3 {
   }
 
     onDblClick = function(node) {
-      graphActions.navigateToNode(node)
+      if (node.rank == 'center'){
+        console.log('card should open here')
+      } else {
+        graphActions.navigateToNode(node)
+      }
     }.bind(this)
 
 
