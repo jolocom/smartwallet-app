@@ -172,10 +172,6 @@ export default class GraphD3 {
     .style('font-weight', 'bold')
     .text((d) => d.name)
 
-    node.on('dblclick', (d) => {
-      console.log(d)
-    })
-
     node.on('click', this.onClick)
     node.on('dblclick', this.onDblClick)
 
@@ -256,10 +252,22 @@ export default class GraphD3 {
     this.force.start()
   }.bind(this)
 
-  onClick() {
+  onClick(node, force) {
+    console.log(node)
+    if(d3.event.defaultPrevented) {
 
-    // This makes sure that dragging does not cause a click to fire
-    if(d3.event.defaultPrevented) return
+      let node = null
+      d3.select(this)
+        .attr('x', (d) => {
+          node = d
+        })
+      let x =  node.x > STYLES.width / 2 - STYLES.largeNodeSize / 2 && node.x < STYLES.width / 2 + STYLES.largeNodeSize / 2
+      let y =  node.y > STYLES.height / 2 - STYLES.largeNodeSize / 2 && node.y < STYLES.height / 2 + STYLES.largeNodeSize / 2
+      if (x && y) {
+        graphActions.navigateToNode(node)
+      }
+      return
+    }
 
     d3.selectAll('g .node').selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -308,8 +316,6 @@ export default class GraphD3 {
 
       d3.select(this).select('text')
       .attr('opacity', 0.9)
-
-
   }
 
     onDblClick = function(node) {
