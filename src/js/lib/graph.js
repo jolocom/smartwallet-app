@@ -40,6 +40,7 @@ export default class GraphD3 {
     let centerSize = STYLES.largeNodeSize
     let neighbSize = STYLES.smallNodeSize
 
+
     this.svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
@@ -107,33 +108,91 @@ export default class GraphD3 {
           return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
         })
 
-      node.append('circle')
-        .attr('r', (d) => {
-          return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
-        })
-        .style('fill', (d) => {
-          return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
-        })
-        .attr('stroke',STYLES.grayColor)
-        .attr('stroke-width',2)
-
-      node.on('click', this.onClick)
-      node.on('dblclick', this.onDblClick)
-
-      this.force.on('tick', function() {
-        d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
-          .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
-          .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
-          .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
-
-        d3.selectAll('g .node').attr('transform', function(d) {
-          if (d.rank == 'center') {
-            d.x = STYLES.width / 2
-            d.y = STYLES.height / 2
-          }
-          return 'translate(' + d.x + ',' + d.y + ')'
-        })
+    let defsImages = node.append('svg:defs')
+    defsImages.append('svg:pattern')
+      .attr('id',  (d)=> d.uri)
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('x', (d) => {
+        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
       })
+      .attr('y', (d) => {
+        return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
+      })
+      .attr('patternUnits', 'userSpaceOnUse')
+      .append('svg:image')
+      .attr('xlink:href', (d) => d.img)
+      .attr('width', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+      })
+      .attr('height', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+      })
+
+      let defsFilter = this.svg.append('svg:defs')
+
+      let filter = defsFilter.append('filter')
+      .attr('id', 'darkblur')
+
+// SourceAlpha refers to opacity of graphic that this filter will be applied to
+// convolve that with a Gaussian with standard deviation 3 and store result
+// in blur
+    filter.append('feGaussianBlur')
+        .attr('stdDeviation', 1.5)
+
+    let componentTransfer = filter.append('feComponentTransfer')
+    componentTransfer.append('feFuncR')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
+
+    componentTransfer.append('feFuncG')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
+
+    componentTransfer.append('feFuncB')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
+
+    node.append('circle')
+      .attr('r', (d) => {
+        return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
+      })
+      .style('fill', (d) => {
+        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
+      })
+      .attr('stroke',STYLES.grayColor)
+      .attr('stroke-width',2)
+
+    node.append('svg:text')
+    .attr('class', 'nodetext')
+    .style('fill', '#e6e6e6')
+    .attr('text-anchor', 'middle')
+    .attr('opacity', 0)
+    .attr('dy', '.35em')
+    .style('font-weight', 'bold')
+    .text((d) => d.name)
+
+    node.on('dblclick', (d) => {
+      console.log(d)
+    })
+
+    node.on('click', this.onClick)
+    node.on('dblclick', this.onDblClick)
+
+    this.force.on('tick', function() {
+      d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
+        .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
+        .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
+        .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
+
+      d3.selectAll('g .node').attr('transform', function(d) {
+        if (d.rank == 'center') {
+          d.x = STYLES.width / 2
+          d.y = STYLES.height / 2
+        }
+        return 'translate(' + d.x + ',' + d.y + ')'
+      })
+    })
   }.bind(this)
 
   addNode= function(node){
@@ -193,7 +252,7 @@ export default class GraphD3 {
 
     node_update.on('click', this.onClick)
     node_update.on('dblclick', this.onDblClick)
-    
+
     this.force.start()
   }.bind(this)
 
@@ -225,6 +284,11 @@ export default class GraphD3 {
       .attr('height',(d) => {
         return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
       })
+      .style('filter', null)
+
+      d3.selectAll('g .node').selectAll('text')
+      //.transition().duration(STYLES.nodeTransitionDuration)
+      .attr('opacity', 0)
 
       d3.select(this).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -235,10 +299,17 @@ export default class GraphD3 {
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
 
+
       d3.select(this).select('image')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
+      .style('filter', 'url(#darkblur)')
+
+      d3.select(this).select('text')
+      .attr('opacity', 0.9)
+
+
   }
 
     onDblClick = function(node) {
