@@ -30,20 +30,28 @@ let Graph = React.createClass({
       return ReactDOM.findDOMNode(this.refs.graph)
   },
 
-  onStateUpdate: function(data) {
+  onStateUpdate: function(data, signal) {
 
     this.setState(data)
-
     if (!this.state.loaded) {
       graphActions.getInitialGraphState()
     }
     if (this.state.loaded && !this.state.drawn){
-      this.graph = new GraphD3(this.getGraphEl(), this.state)
+
+      this.graph = new GraphD3(this.getGraphEl())
+      this.graph.drawBackground()
+      this.graph.drawNodes(this.state)
+
       this.state.drawn = true
       graphActions.setState(this.state)
     }
     if (this.state.newNode) {
       this.graph.addNode(this.state.newNode)
+    }
+
+    if(signal == 'redraw'){
+      this.graph.eraseGraph()
+      this.graph.drawNodes(data)
     }
   },
 
@@ -77,10 +85,10 @@ let Graph = React.createClass({
   getInitialState: function() {
     return {
       //These state keys describe the graph
+      user: null,
       center:null,
       neighbours: null,
       loaded: false,
-      highlighted: null,
       newNode: null,
       drawn: false,
       //These describe the ui
@@ -91,6 +99,7 @@ let Graph = React.createClass({
   },
 
   componentWillUnmount: function(){
+    console.log(this.state)
     this.state.drawn = false
     graphActions.setState(this.state)
     if (this.graph) this.graph.eraseGraph()

@@ -21,6 +21,7 @@ export default Reflux.createStore({
     this.convertor = new d3Convertor()
     this.state = {
       //These state keys describe the graph
+      user: null,
       center:null,
       neighbours: null,
       loaded: false,
@@ -72,9 +73,14 @@ export default Reflux.createStore({
 
   onLogout(){
     this.state = {
+      // Graph related
+      user: null,
       center: null,
       neighbours: null,
       loaded: false,
+      newNode: null,
+      drawn: false,
+      // UI related
       showPinned:false,
       showSearch: false,
       plusDrawerOpen:false
@@ -99,6 +105,22 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
+    this.state.user = result[0].uri
     this.trigger(this.state)
+  },
+
+
+  onNavigateToNode: function(node){
+    this.state.neighbours = []
+
+    this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
+      triples[0] = this.convertor.convertToD3('c', triples[0])
+      this.state.center = triples[0]
+      for (var i = 1; i < triples.length; i++) {
+        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+        this.state.neighbours.push(triples[i])
+      }
+      this.trigger(this.state, 'redraw')
+    })
   }
 })

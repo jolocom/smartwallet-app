@@ -15,18 +15,9 @@ export default class GraphD3 {
     this.width = STYLES.width
     this.height = STYLES.height
 
-    this.dataLinks = []
-    this.dataNodes = [state.center]
-
-    // Flatten the center and neighbour nodes we get from the state
-    for (var i = 0; i < state.neighbours.length; i++) {
-      this.dataNodes.push(state.neighbours[i])
-      this.dataLinks.push({'source': i + 1, 'target':0})
-    }
-    this.setUpForce()
   }
 
-   setUpForce(){
+   setUpForce = function(){
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
       .links(this.dataLinks)
@@ -36,15 +27,14 @@ export default class GraphD3 {
       .gravity(0.2)
       .size([this.width, this.height])
       .start()
-    this.drawGraph()
-  }
+  }.bind(this)
 
-  eraseGraph(){
+  eraseGraph = function(){
     this.force.stop()
-    this.svg.select('*').remove()
-  }
+    this.svg.selectAll('*').remove()
+  }.bind(this)
 
-  drawGraph() {
+  drawBackground = function() {
 
     // Drawing the background
     let centerSize = STYLES.largeNodeSize
@@ -66,77 +56,87 @@ export default class GraphD3 {
       .attr('r', centerSize * 0.57)
       .style('fill', STYLES.lightGrayColor)
 
-    let link =  this.svg.selectAll('line')
-      .data(this.dataLinks)
-      .enter()
-      .append('line')
-      .attr('class','link')
-      .attr('stroke-width', (d) => {
-        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
-      .attr('stroke', STYLES.lightGrayColor)
+  }.bind(this)
 
-    let node = this.svg.selectAll('.node')
-      .data(this.dataNodes)
-      .enter()
-      .append('g')
-      .attr('class','node')
-      .call(this.force.drag)
+    drawNodes = function(state) {
+      this.dataLinks = []
+      this.dataNodes = [state.center]
 
-    let defs = node.append('svg:defs')
-    defs.append('svg:pattern')
-      .attr('id',  (d)=> d.uri)
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('x', (d) => {
-        return d.rank == 'center' ? -centerSize / 2 : -neighbSize / 2
+      // Flatten the center and neighbour nodes we get from the state
+      for (var i = 0; i < state.neighbours.length; i++) {
+        this.dataNodes.push(state.neighbours[i])
+        this.dataLinks.push({'source': i + 1, 'target':0})
+      }
+
+      this.setUpForce()
+
+      let link =  this.svg.selectAll('line')
+        .data(this.dataLinks)
+        .enter()
+        .append('line')
+        .attr('class','link')
+        .attr('stroke-width', (d) => {
+          return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
+        .attr('stroke', STYLES.lightGrayColor)
+
+      let node = this.svg.selectAll('.node')
+        .data(this.dataNodes)
+        .enter()
+        .append('g')
+        .attr('class','node')
+        .call(this.force.drag)
+
+      let defs = node.append('svg:defs')
+      defs.append('svg:pattern')
+        .attr('id',  (d)=> d.uri)
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('x', (d) => {
+          return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
+        })
+        .attr('y', (d) => {
+          return d.rank == 'center' ? -STYLES.largeNodeSize / 2 : -STYLES.smallNodeSize / 2
+        })
+        .attr('patternUnits', 'userSpaceOnUse')
+        .append('svg:image')
+        .attr('xlink:href', (d) => d.img)
+        .attr('width', (d) => {
+          return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+        })
+        .attr('height', (d) => {
+          return d.rank == 'center' ? STYLES.largeNodeSize : STYLES.smallNodeSize
+        })
+
+      node.append('circle')
+        .attr('r', (d) => {
+          return d.rank == 'center' ? STYLES.largeNodeSize / 2 : STYLES.smallNodeSize / 2
+        })
+        .style('fill', (d) => {
+          return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
+        })
+        .attr('stroke',STYLES.grayColor)
+        .attr('stroke-width',2)
+
+      node.on('click', this.onClick)
+      node.on('dblclick', this.onDblClick)
+
+      this.force.on('tick', function() {
+        d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
+          .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
+          .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
+          .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
+
+        d3.selectAll('g .node').attr('transform', function(d) {
+          if (d.rank == 'center') {
+            d.x = STYLES.width / 2
+            d.y = STYLES.height / 2
+          }
+          return 'translate(' + d.x + ',' + d.y + ')'
+        })
       })
-      .attr('y', (d) => {
-        return d.rank == 'center' ? -centerSize / 2 : -neighbSize / 2
-      })
-      .attr('patternUnits', 'userSpaceOnUse')
-      .append('svg:image')
-      .attr('xlink:href', (d) => d.img)
-      .attr('width', (d) => {
-        return d.rank == 'center' ? centerSize : neighbSize
-      })
-      .attr('height', (d) => {
-        return d.rank == 'center' ? centerSize : neighbSize
-      })
+  }.bind(this)
 
-    node.append('circle')
-      .attr('r', (d) => {
-        return d.rank == 'center' ? centerSize / 2 : neighbSize / 2
-      })
-      .style('fill', (d) => {
-        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor
-      })
-      .attr('stroke',STYLES.grayColor)
-      .attr('stroke-width',2)
-
-    node.on('dblclick', (d) => {
-      console.log(d)
-    })
-
-    node.on('click', this.onClick)
-    node.on('dblclick', this.onDblClick)
-
-    this.force.on('tick', function() {
-      d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
-        .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
-        .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
-        .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
-
-      d3.selectAll('g .node').attr('transform', function(d) {
-        if (d.rank == 'center') {
-          d.x = STYLES.width / 2
-          d.y = STYLES.height / 2
-        }
-        return 'translate(' + d.x + ',' + d.y + ')'
-      })
-    })
-  }
-
-  addNode(node){
+  addNode= function(node){
 
     this.force.stop()
     this.dataNodes.push(node)
@@ -192,8 +192,10 @@ export default class GraphD3 {
         .attr('stroke-width',2)
 
     node_update.on('click', this.onClick)
+    node_update.on('dblclick', this.onDblClick)
+    
     this.force.start()
-  }
+  }.bind(this)
 
   onClick() {
 
@@ -239,18 +241,18 @@ export default class GraphD3 {
       .attr('height', STYLES.largeNodeSize)
   }
 
-    onDblClick(node) {
-      console.log(node)
-    }
+    onDblClick = function(node) {
+      graphActions.navigateToNode(node)
+    }.bind(this)
 
 
-  onResize() {
+  onResize = function() {
     this.setSize()
-  }
+  }.bind(this)
 
-  setSize() {
+  setSize = function() {
     this.width = this.el.offsetWidth
     this.height = this.el.offsetHeight
     this.svg.attr('width', this.width).attr('height', this.height)
-  }
+  }.bind(this)
 }
