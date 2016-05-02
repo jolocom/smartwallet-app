@@ -331,11 +331,13 @@ export default class GraphD3 {
       .attr('height', STYLES.largeNodeSize)
       .style('filter', 'url(#darkblur)')
 
-      d3.select(this).selectAll('text')
-      .attr('opacity', 1)
-
+      //TODO apply transition breaks the action
       d3.select(this).select('.nodetext')
       .attr('dy', -10.5)
+
+      d3.select(this).selectAll('text')
+      .transition().duration(STYLES.nodeTransitionDuration/2)
+      .attr('opacity', 1)
   }
 
   // http://bl.ocks.org/mbostock/7555321
