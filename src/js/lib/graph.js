@@ -10,24 +10,43 @@ import graphActions from '../actions/graph-actions'
 
 export default class GraphD3 {
 
-  constructor(el, state){
+  constructor(el){
     this.el = el
     this.width = STYLES.width
     this.height = STYLES.height
-    this.dragged = false
-    // We also have the this.force, this.svg, this.dataLinks and this.dataNodes
-    // Being used in this file, they are declared later.
+
+  // We define our own drag functions, allow for greater controll over the way
+  // it works
+    this.node_drag = d3.behavior.drag()
+      .on("dragstart", this.dragStart)
+      .on("drag", this.dragMove)
+      .on("dragend", this.dragEnd)
+
+    // We also have the this.force and this.svg being used in this file,
+    // they are declared later.
   }
 
 
 
    // Starts the force simulation.
-   setUpForce = function(){
+   setUpForce = function(nodes){
+    // Upon set up force we also initialize the dataLinks and dataNodes
+    // variables.
+    this.dataNodes = [nodes.center]
+    this.dataLinks = []
+
+    // Flatten the center and neighbour nodes we get from the state
+    for (var i = 0; i < nodes.neighbours.length; i++) {
+      this.dataNodes.push(nodes.neighbours[i])
+      this.dataLinks.push({'source': i + 1, 'target':0})
+    }
+    // now the nodes are there, we can initialize
+    // Then we initialize the simulation, the force itself.
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
       .links(this.dataLinks)
       .charge(-12500)
-      .linkDistance(STYLES.largeNodeSize * 0.8)
+      .linkDistance(STYLES.largeNodeSize * 0.5)
       .friction(0.8)
       .gravity(0.2)
       .size([this.width, this.height])
@@ -57,36 +76,16 @@ export default class GraphD3 {
 
 
 
-  // Takes a state with the center: {} and neighbours [{},{}]
-  // structure and draws nodes and nodes.
-  drawNodes = function(state) {
-    this.dataLinks = []
-    this.dataNodes = [state.center]
-
-  // We define our own drag functions, allow for greater controll over the way
-  // it works
-    this.node_drag = d3.behavior.drag()
-      .on("dragstart", this.dragStart)
-      .on("drag", this.dragMove)
-      .on("dragend", this.dragEnd)
-
-    // Flatten the center and neighbour nodes we get from the state
-    for (var i = 0; i < state.neighbours.length; i++) {
-      this.dataNodes.push(state.neighbours[i])
-      this.dataLinks.push({'source': i + 1, 'target':0})
-    }
-    // Once we have dataLinks and dataNodes we can initialize the force layout
-    this.setUpForce()
-
+  drawNodes = function() {
     // These make the following statements shorter
     let largeNode = STYLES.largeNodeSize
     let smallNode = STYLES.smallNodeSize
 
     // We draw the lines for all the elements in the dataLinks array.
     let link =  this.svg.selectAll('line')
-      .data(this.dataLinks)
+      .data(this.dataLinks, (d) => {return d.source.uri + '-' + d.target.uri})
       .enter()
-      .append('line')
+      .insert('line', '.node')
       .attr('class','link')
       .attr('stroke-width', (d) => {
         // Capped at 13, found it to look the best
@@ -95,7 +94,7 @@ export default class GraphD3 {
 
     // We draw a node for each element in the dataNodes array
     let node = this.svg.selectAll('.node')
-      .data(this.dataNodes)
+      .data(this.dataNodes, (d) => {return d.uri})
       .enter()
       .append('g')
       .attr('class','node')
@@ -260,122 +259,17 @@ export default class GraphD3 {
     }
   }.bind(this)
 
+
+
   // This basically pushes a node to the dataNodes and a link to the dataLinks
   // Arrays. Then tells d3 to draw a node for each of those.
-  // There is an insane amount of code duplication, the code below is pretty much
-  // the same as the code that draws the nodes in the first place.
-  // TODO something has to be done here, otherwise there's too much redundant stuff.
   addNode = function(node){
-
-    let largeNode = STYLES.largeNodeSize
-    let smallNode = STYLES.smallNodeSize
-    // We stop the simulation / force layout, so that we can introduce nodes
-    // without causing artifacts
     this.force.stop()
-    // push the new node to the node array
+
     this.dataNodes.push(node)
-    // push the new link. Always points from the new node to the center.
     this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
-
-    // We add a svg line for every new link we added
-    let link_update = this.svg.selectAll('.link')
-      .data(this.force.links(), (d) => {return d.source.uri + '-' + d.target.uri})
-
-    link_update.enter()
-      .insert('line', '.node')
-      .attr('class','link')
-      .attr('stroke-width', (d) => {
-        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
-      .attr('stroke', STYLES.lightGrayColor)
-
-    // We add a group containing a circle, pattern, image and text for every new
-    // node pushed to the array
-    let node_update = this.svg.selectAll('g .node')
-      .data(this.force.nodes(), (d) => {return d.uri})
-
-    // Create the group, we append the extra stuff to this group
-    node_update.enter()
-      .append('g')
-      .attr('class','node')
-      .call(this.node_drag)
-
-    // Appending the pattern
-    node_update.append('svg:defs')
-      .append('svg:pattern')
-      .attr('id',  (d)=> d.uri)
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('x', (d) => {
-        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2 })
-      .attr('y', (d) => {
-        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2 })
-      .attr('patternUnits', 'userSpaceOnUse')
-      .append('svg:image')
-      .attr('xlink:href', (d) => d.img)
-      .attr('width', (d) => {
-        return d.rank == 'center' ? largeNode : smallNode })
-      .attr('height', (d) => {
-        return d.rank == 'center' ? largeNode : smallNode })
-
-    node_update.append('svg:defs')
-      .append('svg:pattern')
-      .attr('id',  (d)=> d.uri)
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('x', (d) => {
-        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
-      .attr('y', (d) => {
-        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
-      .attr('patternUnits', 'userSpaceOnUse')
-      .append('svg:image')
-      .attr('xlink:href', (d) => d.img)
-      .attr('width', (d) => {
-        return d.rank == 'center' ? largeNode : smallNode})
-      .attr('height', (d) => {
-        return d.rank == 'center' ? largeNode : smallNode})
-
-
-    node_update.append('circle')
-      .attr('r', (d) => {
-        return d.rank == 'center' ? largeNode / 2 : smallNode / 2 })
-      .style('fill', (d) => {
-        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor })
-      .attr('stroke',STYLES.grayColor)
-      .attr('stroke-width',2)
-
-    node_update.append('svg:text')
-      .attr('class', 'nodetext')
-      .style('fill', '#e6e6e6')
-      .attr('text-anchor', 'middle')
-      .attr('opacity',(d) => {
-        return d.img ? 0 : 1})
-      .attr('dy', '.35em')
-      .style('font-weight', 'bold')
-      // In case the rdf card contains no name
-      .text((d) => {return d.name ? d.name : 'Anonymous'})
-
-     // The text description of a person
-     node_update.append('svg:text')
-    .attr('class', 'nodedescription')
-    .style('fill', '#e6e6e6')
-    .attr('text-anchor', 'middle')
-    .attr('opacity', 0)
-    .attr('dy', 1)
-    .style('font-size', '80%')
-    .text(function (d) {
-      // In case the person has no description available.
-      if (d.description) {
-        if(d.description.length>50) return (d.description.substring(0, 50)+'...')
-        else return d.description
-      }
-    })
-    // This wraps the description nicely.
-    .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
-
-    node_update.on('click', this.onClick)
-    node_update.on('dblclick', this.onDblClick)
+    this.drawNodes()
     this.force.start()
-
   }.bind(this)
 
 

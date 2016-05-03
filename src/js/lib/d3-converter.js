@@ -44,8 +44,8 @@ class D3Converter {
       let halfwidth = STYLES.width / 2
       let halfheight = STYLES.height / 2
 
-      props.x = Math.sin(angle * this.i) * halfwidth + halfwidth
-      props.y = Math.cos(angle * this.i) * halfwidth + halfheight
+      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth 
+      props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfheight
     } else if (!i && !n && rank =='a') {
       // This takes care of nodes that are added dynamically, the mid + 30 is
       // the optimal position for spawning new nodes dynamically

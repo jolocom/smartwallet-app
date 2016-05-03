@@ -29,29 +29,31 @@ let Graph = React.createClass({
   getGraphEl: function() {
       return ReactDOM.findDOMNode(this.refs.graph)
   },
-
   onStateUpdate: function(data, signal) {
-
     this.setState(data)
     if (!this.state.loaded) {
       graphActions.getInitialGraphState()
     }
     if (this.state.loaded && !this.state.drawn){
-
       this.graph = new GraphD3(this.getGraphEl())
+      this.graph.setUpForce(this.state)
       this.graph.drawBackground()
-      this.graph.drawNodes(this.state)
-
+      this.graph.drawNodes()
       this.state.drawn = true
+      // Update the state of the parent, not sure if this is good practice or not
       graphActions.setState(this.state)
     }
     if (this.state.newNode) {
       this.graph.addNode(this.state.newNode)
+      this.state.newNode = null
+      // We update the state of the store to be in line with the state of the child
+      graphActions.setState(this.state)
     }
 
     if(signal == 'redraw'){
       this.graph.eraseGraph()
-      this.graph.drawNodes(data)
+      this.graph.setUpForce(this.state)
+      this.graph.drawNodes()
     }
   },
 
