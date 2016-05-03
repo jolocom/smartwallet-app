@@ -1,543 +1,354 @@
+// THIS FILE TAKES CARE OF DRAWING THE D3 GRAPH
+// It is passed a state from the graph.jsx file, and then it draws
+// the graph according to that state. The element itself is stateless.
+// Currently I have issues with doing persistent changes here, for instance
+// a moved node will not save upon refresh.
+
 import d3 from 'd3'
-
-import Util from './util.js'
-
 import STYLES from 'styles/app'
-
-const LONG_PRESS_TIMEOUT = 500
-
-d3.selection.prototype.moveToFront = function() {
-  return this.each(function(){
-    this.parentNode.appendChild(this)
-  })
-}
+import graphActions from '../actions/graph-actions'
 
 export default class GraphD3 {
 
-  constructor(el, props, state, handleNodeClick = () => {}, handleLongPress = () => {}, handleDragEnd = () => {}) {
+  constructor(el){
     this.el = el
+    this.width = STYLES.width
+    this.height = STYLES.height
 
-    this.taptimer = {
-      start: 0,
-      end: 0
-    }
 
-    this.drag = {
-      active: false,
-      starttime: 0,
-      endtime: 0,
-      onCenter: false,
-      startPos: {},
-      nowPos: {},
-      distance: () => {
-        return Util.distance(this.drag.startPos.x,
-                         this.drag.startPos.y,
-                         this.drag.nowPos.x,
-                         this.drag.nowPos.y)
-      }
-    }
-
-    this.handleNodeClick = handleNodeClick
-    this.handleDragEnd = handleDragEnd
-    this.handleLongPress = handleLongPress
-
-    this.create(props, state)
-
-    this.onResize = this.onResize.bind(this)
-    this.onNodeClick = this.onNodeClick.bind(this)
-    this.onNodeLongPress = this.onNodeLongPress.bind(this)
+    // We also have the this.force and this.svg being used in this file,
+    // they are declared later.
   }
 
-  create(props, state) {
-    this.width = this.el.offsetWidth || 440
-    this.height = this.el.offsetHeight || 696
 
+
+   // Starts the force simulation.
+   setUpForce = function(nodes){
+    // Upon set up force we also initialize the dataLinks and dataNodes
+    // variables.
+    this.heighlighted = nodes.heighlighted
+    this.dataNodes = [nodes.center]
+    this.dataLinks = []
+
+    // Flatten the center and neighbour nodes we get from the state
+    for (var i = 0; i < nodes.neighbours.length; i++) {
+      this.dataNodes.push(nodes.neighbours[i])
+      this.dataLinks.push({'source': i + 1, 'target':0})
+    }
+    // now the nodes are there, we can initialize
+    // Then we initialize the simulation, the force itself.
+    this.force = d3.layout.force()
+      .nodes(this.dataNodes)
+      .links(this.dataLinks)
+      .charge(-12500)
+      .linkDistance(STYLES.largeNodeSize * 0.5)
+      .friction(0.8)
+      .gravity(0.2)
+      .size([this.width, this.height])
+      .start()
+
+    // We define our own drag functions, allow for greater controll over the way
+    // it works
+    this.node_drag = this.force.drag()
+      .on("dragend", this.dragEnd)
+
+  }.bind(this)
+
+
+
+  // Creates the background svg and draws the gray circle
+  drawBackground = function() {
     this.svg = d3.select(this.el).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
-      .attr('pointer-events', 'all')
       .append('svg:g')
 
-    //background rectangle
     this.svg.append('svg:rect')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'white')
 
-    //background circle
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
-      .attr('r', this.width / 6)
+      .attr('r', STYLES.largeNodeSize* 0.57)
       .style('fill', STYLES.lightGrayColor)
+  }.bind(this)
 
-    // `base` only needs to run once
-    this.force = d3.layout.force()
-    this.force
-      .nodes(state.nodes)
-      .links(state.links)
-      .gravity(0.2)
-      .charge(this.width * -14)
-      .linkDistance(this.width / 6)
-      .size([this.width, this.height])
-      .start()
 
-    //group links (so they don't overlap nodes)
-    this.svg.append('g').attr('class', 'link_group')
-  }
 
-  setSize() {
-    this.width = this.el.offsetWidth
-    this.height = this.el.offsetHeight
+  drawNodes = function() {
+    // These make the following statements shorter
+    let largeNode = STYLES.largeNodeSize
+    let smallNode = STYLES.smallNodeSize
 
-    this.svg.attr('width', this.width).attr('height', this.height)
-    this.force.size([this.width, this.height]).resume()
-  }
-
-  onResize() {
-    this.setSize()
-  }
-
-  // Invoked in 'componentDidUpdate' of react graph
-  update(prevState, state) {
-    let self = this
-    let svg = d3.select(this.el).select('svg').select('g')
-
-    this.force
-      .nodes(state.nodes)
-      .links(state.links)
-      .start()
-
-    // --------------------------------------------------------------------------------
-    // links
-
-    // data binding
-    let linkGroup = d3.select(this.el).select('svg').select('g.link_group')
-    linkGroup.selectAll('g.link').remove() // remove old links entirely
-    let link = linkGroup.selectAll('g.link')
-      .data(state.links, (d) => {
-        // this retains link-IDs over changing target/source direction
-        // NB: not really useful in our case
-        let first = Util.stringMin(d.source.uri, d.target.uri)
-        let last = Util.stringMax(d.source.uri, d.target.uri)
-        return first + last
-      })
-
-    // only new links
-    let linkNew = link.enter()
-      .append('svg:g').attr('class', 'link')
-      // .call(this.force.drag)
-
-    console.log('NEW LINKS', linkNew[0].length)
-
-    // add line
-    linkNew.append('svg:line')
-      .attr('class', 'link')
-      .attr('stroke-width', this.width / 80)
+    // We draw the lines for all the elements in the dataLinks array.
+    let link =  this.svg.selectAll('line')
+      .data(this.dataLinks, (d) => {return d.source.uri + '-' + d.target.uri})
+      .enter()
+      .insert('line', '.node')
+      .attr('class','link')
+      .attr('stroke-width', (d) => {
+        // Capped at 13, found it to look the best
+        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
       .attr('stroke', STYLES.lightGrayColor)
-      .attr('x1', (d) => d.x1)
-      .attr('y1', (d) => d.y1)
-      .attr('x2', (d) => d.x1)
-      .attr('y2', (d) => d.y2)
 
-    // remove old links
-    let linkOld = link.exit()
-    console.log('OLD LINKS', linkOld[0].length)
-    linkOld.transition().duration(2000).style('opacity', 0).remove()
+    // We draw a node for each element in the dataNodes array
+    let node = this.svg.selectAll('.node')
+      .data(this.dataNodes, (d) => {return d.uri})
+      .enter()
+      .append('g')
+      .attr('class','node')
+      .call(this.node_drag)
 
-    // --------------------------------------------------------------------------------
-    // nodes
+      // We need to use patterns in order to apply images to nodes
+      let defs = node.append('svg:defs')
+      defs.append('svg:pattern')
+        .attr('id',  (d)=> d.uri)
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('x', (d) => {
+          return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
+        .attr('y', (d) => {
+          return d.rank == 'center' ? -largeNode/ 2 : -smallNode / 2})
+        .attr('patternUnits', 'userSpaceOnUse')
+        .append('svg:image')
+        .attr('xlink:href', (d) => d.img)
+        .attr('width', (d) => {
+          return d.rank == 'center' ? largeNode: smallNode})
+        .attr('height', (d) => {
+          return d.rank == 'center' ? largeNode: smallNode})
 
-    let node = svg.selectAll('g.node')
-      .data(state.nodes, (d) => d.uri)
+    let defsImages = node.append('svg:defs')
+    defsImages.append('svg:pattern')
+      .attr('id',  (d)=> d.uri)
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('x', (d) => {
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
+      .attr('y', (d) => {
+        return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
+      .attr('patternUnits', 'userSpaceOnUse')
+      .append('svg:image')
+      .attr('xlink:href', (d) => d.img)
+      .attr('width', (d) => {
+        return d.rank == 'center' ? largeNode : smallNode})
+      .attr('height', (d) => {
+        return d.rank == 'center' ? largeNode : smallNode})
 
-    let nodeNew = node.enter().append('svg:g')
-      .attr('class', 'node')
-      .attr('dx', '80px')
-      .attr('dy', '80px')
-      // .call(this.force.drag)
+      // These will be later used in the add node function, therefore they have
+      // to be reachable
+      this.defsFilter = this.svg.append('svg:defs')
+      this.filter = this.defsFilter.append('filter')
+      .attr('id', 'darkblur')
 
-    nodeNew.style('opacity', 0)
-      .transition()
-      .style('opacity', 1)
+    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // convolve that with a Gaussian with standard deviation 3 and store result
+    // in blur
+    // This basically takes care of blurring
+    this.filter.append('feGaussianBlur')
+        .attr('stdDeviation', 1.5)
 
-    console.log('NEW NODES', nodeNew[0].length)
+    this.componentTransfer = this.filter.append('feComponentTransfer')
+    this.componentTransfer.append('feFuncR')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
 
-    // add circle
-    nodeNew.filter((d) => d.type == 'uri')
-      .append('svg:circle')
-      .attr('class', 'node')
-      .attr('r', STYLES.smallNodeSize/2)
-      .attr('x', '-8px')
-      .attr('y', '-8px')
-      .attr('width', STYLES.smallNodeSize)
-      .attr('height', STYLES.smallNodeSize)
-      .style('fill', STYLES.grayColor)
-      .style('stroke', 'white')
-      .style('stroke-width', 0)
+    this.componentTransfer.append('feFuncG')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
 
-    // add title text (visible when not in preview)
-    nodeNew.filter((d) => d.type == 'bnode' || d.type == 'uri')
-      .append('svg:text')
+    this.componentTransfer.append('feFuncB')
+        .attr('type', 'linear')
+        .attr('slope', 0.6)
+
+    node.append('circle')
+      .attr('r', (d) => {
+        return d.rank == 'center' ? largeNode / 2 : smallNode / 2 })
+      .style('fill', (d) => {
+        return d.img ? 'url(#'+d.uri+')' : STYLES.blueColor })
+      .attr('stroke',STYLES.grayColor)
+      .attr('stroke-width',2)
+
+    // The name of the person, displays on the node
+    node.append('svg:text')
       .attr('class', 'nodetext')
-      .style('fill', '#ffffff')
+      .style('fill', '#e6e6e6')
       .attr('text-anchor', 'middle')
+      .attr('opacity',(d) => {
+        return d.img ? 0 : 1})
       .attr('dy', '.35em')
-      .text((d) => d.title)
-      .call(this.wrap, STYLES.smallNodeSize * 0.9, '', '') // returns only wrapped titles, so we can push them up later
+      .style('font-weight', 'bold')
+      // In case the rdf card contains no name
+      .text((d) => {return d.name ? d.name : 'Anonymous'})
 
-    // remove old nodes
-    let nodeOld = node.exit()
-    console.log('OLD NODES', nodeOld[0].length)
-    nodeOld.transition()
-      .style('opacity', 0)
-      .remove()
-
-    // NB(philipp): on init, the `fixed`-attribute of nodes is cleared
-    // and needs to be re-set. also, the asynchronous call to init can interrupt
-    // the animation, so it is also re-started.
-
-
-    // init center perspective
-    this.changeCenter(node, prevState.centerNode, state.centerNode, state.historyNodes)
-
-    { // init history
-      if(state.historyNodes.length > 0){
-        let lastStep = state.nodes.filter((d) => {
-          return d.uri == state.historyNodes[state.historyNodes.length - 1].uri })[0]
-        lastStep.fixed = true
-        this.animateNode(lastStep,
-                     this.width / 2,
-                     this.height * 4/5)
+     // The text description of a person
+     node.append('svg:text')
+    .attr('class', 'nodedescription')
+    .style('fill', '#e6e6e6')
+    .attr('text-anchor', 'middle')
+    .attr('opacity', 0)
+    .attr('dy', 0)
+    .style('font-size', '80%')
+    .text(function (d) {
+      // In case the person has no description available.
+      if (d.description) {
+        if(d.description.length>50) return (d.description.substring(0, 50)+'...')
+        else return d.description
       }
-    }
+    })
+    // This wraps the description nicely.
+    .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
 
-    { // init new node, if applicable
-      if(state.newNodeURI !== undefined){
-        let newNode = node.filter((d) => d.uri == state.newNodeURI)
-        if(newNode.length > 0){
-          newNode
-            .interrupt()
-            .style('opacity', 1)
-            .select('circle')
-            .style('fill', STYLES.highLightColor)
-          newNode
-            .transition().duration(2000)
-            .style('fill', STYLES.grayColor)
-        }
+    // Subscribe to the click listeners
+    node.on('click', this.onClick)
+    node.on('dblclick', this.onDblClick)
+    this.force.on('tick', this.tick)
+  }.bind(this)
+
+
+
+  // This function fires upon tick, around 30 times per second?
+  tick = function(){
+    // Update the link positions.
+    d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
+      .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
+      .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
+      .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
+    // Update the node positions. We use translate because we are working with
+    // a group of elements rather than just one.
+    d3.selectAll('g .node').attr('transform', function(d) {
+      if (d.rank == 'center') {
+        d.x = STYLES.width / 2
+        d.y = STYLES.height / 2
       }
-    }
-
-    { // init preview
-      this.disablePreview(node)
-      // find dom node to preview and enablePreview on it
-      let toPreview = node.filter((d) => d.uri == state.previewNode.uri)
-      this.enablePreview(toPreview)
-    }
-
-    //plus drawer opening (closing is handled in 'beforeUpdate')
-    if (!prevState.plusDrawerOpen && state.plusDrawerOpen) {
-      document.getElementsByTagName('body')[0].className = 'open-drawer'
-      d3.select('#plus_drawer')
-        .transition()
-        .style('top', (this.height / 2)+'px')
-
-      this.zoomTo(0.5,
-               this.width / 2,
-               0)
-    }
-
-    //chat opening (closing is handled in 'beforeUpdate')
-    if (!prevState.chatOpen && state.chatOpen) {
-      d3.select('#chat')
-        .transition()
-        .style('top', (this.height / 3)+ 'px')
-
-      this.zoomTo(0.5,
-        this.width / 2,
-        this.height / -6)
-    }
-
-    // First node added to inbox - animate InboxCounter
-    if (prevState.inboxCount == 0 && state.inboxCount == 1) {
-      d3.select('#inbox .counter')
-        .transition()
-        .style('opacity', 1)
-    }
-
-    // Spring inbox whenever a node is added/removed
-    if (prevState.inboxCount != state.inboxCount && state.inboxCount >= 1) {
-      //let size = (self.inbox.count==0)
-        //?(-this.width)
-        //:(-this.width+(this.width/5))
-
-      let size = -this.width + (this.width/5)
-
-      d3.select('#inbox')
-        .transition()
-        .style('right', size+'px')
-    }
-
-    // inbox opening (closing is handled in 'beforeUpdate')
-    if (!prevState.inboxOpen && state.inboxOpen) {
-      this.zoomTo(0.5,
-               this.width / 2,
-               this.height)
-      //d3.select('#inbox')
-        //.transition()
-        //.style('right', (-this.width / 2)+'px')
-    }
-
-
-    // --------------------------------------------------------------------------------
-    // animation
-    let ticks = 0
-
-    this.force.on('tick', (e) => {
-      ticks++
-
-      link.selectAll('line.link')
-        .attr('x1', (d) => d.source.x)
-        .attr('y1', (d) => d.source.y)
-        .attr('x2', (d) => d.target.x)
-        .attr('y2', (d) => d.target.y)
-
-      node
-        .attr('transform', (d) => {
-          // shift nodes _towards_ x center and _away_ from y center
-          // (so they sit nicely on top & below the center perspective)
-          let kx = 10 * e.alpha
-          let ky = 4 * kx
-          d.x += (d.x < (this.width / 2))  ?(kx):(-kx)
-          d.y += (d.y < (this.height / 2)) ?(-ky):(ky)
-          return 'translate(' + d.x + ',' + d.y + ')'
-        })
+      return 'translate(' + d.x + ',' + d.y + ')'
     })
+  }.bind(this)
 
-    // interaction
-    //NOTE(philipp): if necessary, use `mobilecheck` to assign different events for mobile and desktop clients
-    node.on('click', null) // NOTE(philipp): unbind old `openPreview` because it captured the  outdated `node` variable
+  // We check if the node is dropped in the center, if yes we navigate to it.
+  // We also prevent the node from bouncing away in case it's dropped to the middle
 
-    //node.on('click', this.openPreview(state.nodes))
-    node.on('click', this.onNodeClick)
+  dragEnd = function(node, i) {
+    this.force.stop()
+    if (node.rank == 'center') {
+      // In here we would have the functionality that opens the node's card
+    } else if (node.rank =='adjacent') {
+      // We check if the node is dropped on top of the middle node, if yes
+      // We change the perspective
+      let w = STYLES.width
+      let h = STYLES.height
+      let size = STYLES.largeNodeSize
+      let x =  node.x > w / 2 - size / 2 && node.x < w / 2 + size / 2
+      let y =  node.y > h / 2 - size / 2 && node.y < h / 2 + size / 2
 
-    let pressTimer
+      // If in the area we navigate to the node, otherwise we start the force
+      // layout back
+      if (x && y)  graphActions.navigateToNode(node)
+      else this.force.start()
+    }
+  }.bind(this)
 
-    node.on('mouseup', () => {
-      clearTimeout(pressTimer)
-      return false
-    })
 
-    node.on('mousedown', (d) => {
-      pressTimer = window.setTimeout(() => {
-        this.onNodeLongPress(d)
-      }, LONG_PRESS_TIMEOUT)
-      return false
-    })
 
-    // this.force.drag()
-    //   .on('dragstart', this.forceDragStart(state.centerNode))
-    //   .on('drag', this.forceDragMove(state.centerNode))
-    //   .on('dragend', this.forceDragEnd(state.nodes, state.centerNode))
+  // This basically pushes a node to the dataNodes and a link to the dataLinks
+  // Arrays. Then tells d3 to draw a node for each of those.
+  addNode = function(node){
+    this.force.stop()
 
+    this.dataNodes.push(node)
+    this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
+    this.drawNodes()
     this.force.start()
-  }
-
-  // Invoked in 'componentWillUpdate' of react graph
-  beforeUpdate(state, nextState) {
-    //plus drawer closing (opening is handled in 'update')
-    if (state.plusDrawerOpen && !nextState.plusDrawerOpen) {
-      document.getElementsByTagName('body')[0].className = 'closed-drawer'
-      d3.select('#plus_drawer')
-        .transition()
-        .style('top', this.height+'px')
-      this.zoomReset()
-    }
-
-    //chat closing (opening is handled in 'update')
-    if (state.chatOpen && !nextState.chatOpen) {
-      d3.select('#chat')
-        .transition()
-        .style('top', this.height + 'px')
-      this.zoomReset()
-    }
-
-    // inbox closing (opening is handled in 'update')
-    if (state.inboxOpen && !nextState.inboxOpen) {
-      this.zoomReset()
-    }
-  }
-
-  // touchStart and touchEnd are logging tap-times
-  tapStart() {
-    let self = this
-    return function () {
-      self.taptimer.start = d3.event.sourceEvent.timeStamp
-    }
-  }
-
-  tapEnd(){
-    let self = this
-    return function() {
-      self.taptimer.end = d3.event.sourceEvent.timeStamp
-      if((self.taptimer.end - self.taptimer.start) < 200){
-        return true
-      }
-      return false
-    }
-  }
-
-  forceDragStart(centerNode) {
-    return (d) => {
-      this.tapStart()()
-      console.log(d3.event)
-      this.drag.active = true
-      this.drag.startPos.x = this.drag.nowPos.x = d3.event.sourceEvent.pageX
-      this.drag.startPos.y = this.drag.nowPos.y = d3.event.sourceEvent.pageY
-      if(d.uri == centerNode.uri) {
-        this.drag.onCenter = true
-        window.setTimeout(this.onNodeLongPress, LONG_PRESS_TIMEOUT)
-      } else {
-        this.drag.onCenter = false
-      }
-    }
-  }
-
-  forceDragMove(centerNode) {
-    let self = this
-    return function (d){
-      if(d == centerNode.node){ // center node grabbed
-        self.drag.nowPos.x = d3.event.sourceEvent.pageX
-        self.drag.nowPos.y = d3.event.sourceEvent.pageY
-      } else {
-        //d.fixed = true
-      }
-    }
-  }
-
-  // catch dragend event and forward it to react
-  forceDragEnd(nodes, centerNode) {
-    let self = this
-
-    return function (d){
-      console.log(d3.event)
-      self.drag.active = false
-      if(self.tapEnd()() || d3.event.defaultPrevented){
-        // this is a click
-        return
-      }
-
-      let y = d3.event.sourceEvent.pageY // NOTE(philipp): d3.touches[0][1] won't work (because there are no _current_ touches)
-
-      self.handleDragEnd(d, self.drag.distance(), y)
-
-      if(d == centerNode.node){
-        // reset node position
-        d.x, d.px = this.width / 2
-        d.y, d.py = this.height / 2
-        d3.select(this).attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
-      }
-    }
-  }
-
-  // catch nodeClick event and forward it to react
-  onNodeClick(d) {
-    this.handleNodeClick(d)
-  }
-
-  onNodeLongPress(d) {
-    this.handleLongPress(d)
-  }
-
-  // graph zoom/scale
-  zoomTo(scale, x, y) {
-    let svg = d3.select(this.el).select('svg').select('g')
-    svg.transition()
-      .attr('transform', 'scale('+ scale + ') translate(' + x + ',' + y + ')')
-  }
-
-  zoomReset() {
-    let svg = d3.select(this.el).select('svg').select('g')
-    svg.transition()
-      .attr('transform', 'scale(1) translate(0, 0)')
-  }
+  }.bind(this)
 
 
-  animateNode(d, x, y) {
-    console.log(d)
-    // http://stackoverflow.com/questions/19931383/animating-elements-in-d3-js
-    d3.select(d).transition().duration(1000)
-      .tween('x', () => {
-        let i = d3.interpolate(d.x, x)
-        return function(t) {
-          d.x = i(t)
-          d.px = i(t)
-        }
-      }).tween('y', () => {
-        let i = d3.interpolate(d.y, y)
-        return function(t) {
-          d.y = i(t)
-          d.py = i(t)
-        }
-      })
-  }
 
-  changeCenter(domNodes, oldCenter, newCenter, historyNodes){
-    newCenter.node.fixed = true
-    if (!oldCenter) {
-      //initialization- no transition needed
-      this.animateNode(newCenter.node,
-                   this.width / 2,
-                   this.height / 2)
-
-      this.getDomNode(domNodes, newCenter)
-        .select('circle')
-        .style('fill', STYLES.blueColor)
+  // Enlarges and displays extra info about the clicked node, while setting
+  // all other highlighted nodes back to their normal size
+  onClick = function(node) {
+    // d3.event.defaultPrevented returns true if the click event was fired by
+    // a drag event. Prevents a click being registered upon drag release.
+    if (d3.event.defaultPrevented) {
       return
     }
 
-    if (oldCenter.node != newCenter.node) {
-      // update center perspective
-      { // treat old center & update node history
-        let oldCenterDom = this.getDomNode(domNodes, oldCenter)
+    let smallSize = STYLES.smallNodeSize
+    let largeSize = STYLES.largeNodeSize
 
-        oldCenterDom
-          .select('circle')
-          .style('fill', STYLES.lightBlueColor)
+    // We set all the circles back to their normal sizes
+    d3.selectAll('g .node').selectAll('circle')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('r', (d) => {
+        return d.rank == 'center' ? largeSize / 2 : smallSize / 2 })
 
-        this.animateNode(oldCenter.node,
-                     this.width / 2,
-                     this.height * 4/5)
+    // Setting all the pattern sizes back to normal.
+    d3.selectAll('g .node').selectAll('pattern')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('x', (d) => {
+        return d.rank == 'center' ? -largeSize / 2 : -smallSize / 2 })
+      .attr('y', (d) => {
+        return d.rank == 'center' ? -largeSize / 2 : -smallSize / 2 })
 
-        if(historyNodes.length > 1){
-          let historic = historyNodes[historyNodes.length - 2]
-          if (historic.node != newCenter.node)
-            historic.node.fixed = false
+    // Setting all the image sizes back to normal
+    d3.selectAll('g .node').selectAll('image')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('width', (d) => {
+      return d.rank == 'center' ? largeSize : smallSize
+    })
+    .attr('height',(d) => {
+      return d.rank == 'center' ? largeSize : smallSize
+    })
+    .style('filter', null)
 
-          let historicDom = this.getDomNode(domNodes, historic)
-          historicDom
-            .select('circle')
-            .style('fill', STYLES.grayColor)
-        }
-      }
-      {
-        let newCenterDom = this.getDomNode(domNodes, newCenter)
-        this.animateNode(newCenter.node,
-                     this.width / 2,
-                     this.height / 2) // move to center
-        newCenterDom
-          .select('circle')
-          .style('fill', STYLES.blueColor)
-      }
-    }
+    // We set the name of the node to invisible in case it has a profile picture
+    // In case the node has no picture, we display it's name.
+    d3.selectAll('g .node').selectAll('.nodetext')
+    .attr('opacity', (d) => {
+      return d.img ? 0 : 1})
+    .attr('dy', '.35em')
+    // We set the node description to be invisible
+    d3.selectAll('g .node').selectAll('.nodedescription')
+      .attr('opacity', 0)
+
+    // NODE signifies the node that we clicked on. We enlarge it
+    d3.select(this).select('circle')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('r', STYLES.largeNodeSize / 2)
+
+    // We enlarge the pattern of the node we clicked on
+    d3.select(this).select('pattern')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('x', -STYLES.largeNodeSize / 2)
+      .attr('y', -STYLES.largeNodeSize / 2)
+
+    // We enlarge the image of the node we clicked on
+    // We also blur it a bit and darken it, so that the text displays better
+    d3.select(this).select('image')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('width', STYLES.largeNodeSize)
+      .attr('height', STYLES.largeNodeSize)
+      .style('filter', 'url(#darkblur)')
+
+    // Tere is a slight bug when if you click on nodes really quickly, the text
+    // on some fails to dissapear, needs further investigation
+
+    // We fade in the description
+    d3.select(this).selectAll('text')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('opacity', 0.9)
+
+    // We fade in the node name and make the text opaque
+    d3.select(this).select('.nodetext')
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('dy', -20)
+    .attr('opacity', 1)
   }
 
-  getDomNode(allNodes, node) {
-    return allNodes.filter((d) => d.uri == node.uri)
-  }
 
+  // Wraps the description of the nodes around the node.
   // http://bl.ocks.org/mbostock/7555321
-  wrap(text, width, separator, joiner) {
+  wrap = function(text, width, separator, joiner) {
     if(separator == undefined){
       separator = /\s+/
       joiner = ' '
@@ -548,7 +359,7 @@ export default class GraphD3 {
       let words = text.text().split(separator)
       let line = []
       let lineNumber = 0
-      let lineHeight = 1.1 // ems
+      let lineHeight = 1 // ems
       let y = text.attr('y')
       let dy = parseFloat(text.attr('dy'))
       let tspan = text.text(null).append('tspan').attr('x', 0).attr('y', y).attr('dy', dy + 'em')
@@ -574,53 +385,33 @@ export default class GraphD3 {
     return hasWrapped
   }
 
-  disablePreview(allNodes){
-    // resets ALL nodes
-    allNodes.select('circle')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('r', STYLES.smallNodeSize / 2)
-      .style('stroke-width', 0)
-    allNodes.select('.nodetext')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .style('opacity', 1)
-    allNodes.selectAll('g.extras')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .style('opacity', 0)
-      .remove()
-  }
 
-  enablePreview(node){
-    node.moveToFront()
 
-    node
-      .select('circle') // only current circle
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('r', STYLES.largeNodeSize / 2)
-      .style({ 'stroke': 'white',
-               'stroke-width': this.width / 100 })
-    node.select('.nodetext')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .style('opacity', 0)
-    let extras = node.append('svg:g')
-      .attr('class', 'extras')
-      .style('opacity', 0)
-    extras
-      .append('svg:text')
-      .attr('class', 'preview-title')
-      .attr('text-anchor', 'middle')
-      .attr('dy', -1.5) //(STYLES.largeNodeSize / - 6)) //(STYLES.largeNodeSize / 18))
-      .text((d) => d.title)
-      .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
-    extras
-      .append('svg:text')
-      .attr('class', 'preview-description')
-      .attr('text-anchor', 'middle')
-      .attr('dy', 1)
-      .text((d) => d.description)
-      .call(this.wrap, STYLES.largeNodeSize * 0.75)
-    extras
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .style('opacity', 1)
-    return node
-  }
+  // Erases all the elements on the svg, but keeps the svg.
+  eraseGraph = function(){
+    this.force.stop()
+    this.svg.selectAll('*').remove()
+  }.bind(this)
+
+
+  // Alternative to dragging the node to the center. Does the same thing pretty much
+  onDblClick = function(node) {
+    if (node.rank == 'center'){
+    } else {
+      graphActions.navigateToNode(node)
+    }
+  }.bind(this)
+
+  // This is not implemented apparently.
+  onResize = function() {
+    this.setSize()
+  }.bind(this)
+
+
+  // Not yet implemented.
+  setSize = function() {
+    this.width = this.el.offsetWidth
+    this.height = this.el.offsetHeight
+    this.svg.attr('width', this.width).attr('height', this.height)
+  }.bind(this)
 }

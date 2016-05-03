@@ -1,56 +1,49 @@
-import N3 from 'n3'
+// THIS FILE TAKES CARE OF CONVERTING TEXT TO RDF AND WRITING RDF TRIPLES TO TURTLE
+// The parser takes text and converts it to turtle, returning an array of triples.
+// The writer takes triples and writes them to a turtle file. Serializes it basically.
 
-// N3.parser- promise version
+import rdf from 'rdflib'
+
 export class Parser {
-
-  // @see https://github.com/RubenVerborgh/N3.js#parsing
-  constructor(params) {
-    if (params) {
-      this.parser = N3.Parser(params)
-    } else {
-      this.parser = N3.Parser()
-    }
-  }
-
   parse(text) {
-    return new Promise((resolve) => {
-      let triples = []
-      this.parser.parse(text, (err, triple, prefixes) => {
-        if (triple) {
-          triples.push(triple)
-        } else {
-          resolve({prefixes: prefixes, triples: triples})
+    return new Promise((resolve) =>{
+      let payload = []
+      rdf.parse(text, rdf.graph(), 'http://ogog.og', 'text/turtle', (err, triples) => {
+        for (let i in triples.statements) {
+          let statement = triples.statements[i]
+          payload.push({
+            object: statement.object,
+            predicate: statement.predicate,
+            subject: statement.subject
+          })
         }
       })
+      resolve({ prefixes: {}, triples: payload})
     })
   }
 }
 
-
-// N3.writer - promise version
 export class Writer {
+  constructor(){
+    this.g = rdf.graph()
+  }
 
-  // @see https://github.com/RubenVerborgh/N3.js#writing
-  constructor(params) {
-    if (params) {
-      this.writer = N3.Writer(params)
-    } else {
-      this.writer = N3.Writer()
+  addTriple(subj, pred, obj) {
+    // We don't want to write a triple that already exists into the rdf file.
+    if (this.g.statementsMatching(subj, pred, obj).length > 0){
+      console.warn('Triple already present in the rdf file, Ignoring')
+      return false
+    } else if (subj.uri == obj.uri) {
+      console.warn('You cannot link to yourself')
+      return false
+    }
+    else {
+      this.g.add(subj,pred,obj)
+      return true
     }
   }
 
-  addTriple(triple) {
-    this.writer.addTriple(triple)
-  }
-
   end() {
-    return new Promise((resolve, reject) => {
-      this.writer.end((err, res) => {
-        if (err)
-          reject(err)
-        else
-          resolve(res)
-      })
-    })
+    return rdf.serialize(undefined, this.g, undefined, 'text/turtle')
   }
 }

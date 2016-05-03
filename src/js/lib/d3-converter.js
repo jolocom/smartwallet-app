@@ -1,224 +1,87 @@
-import N3 from 'n3'
-import {DC, FOAF, RDF, SIOC, SSN} from '../lib/namespaces.js'
+import rdf from 'rdflib'
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+let DC = rdf.Namespace('http://purl.org/dc/terms/')
+let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+import STYLES from 'styles/app.js'
 
-let N3Util = N3.Util
+// D3 Converter takes a node (a node in this context is an array of triples that
+// describe an rdf document) and then, based on that returns an array where the
+// triples are represented in a different format. This array can then be fed
+// to D3 to draw a graph based on the data
 
 class D3Converter {
-  static _getType(entity) {
-    if (N3Util.isBlank(entity)) {
-      return 'bnode'
-    } else if (N3Util.isIRI(entity)) {
-      return 'uri'
-    } else {
-      return 'literal'
-    }
-  }
+  convertToD3(rank, node, i, n) {
+    // We need to know the index of the node and the total amount of nodes
+    // in order to be able to calculate their initial position, so that they are
+    // possitioned in a circle
+    this.i = i + 1
+    this.n = n
 
+    let uri = node.uri
 
-  static _getValue(entity) {
-    if (N3Util.isLiteral(entity)) {
-      return N3Util.getLiteralValue(entity)
-    } else {
-      return entity
-    }
-  }
-
-  static _getTitle(subject, triples) {
-    // get type of subject
-    // determine the type of title (foaf:name for people, dc:title for others, etc.)
-    // find the title
-
-    let type = null
-    for (var t of triples) {
-      if (t.subject == subject && t.predicate == RDF.type) {
-        type = t.object
-        break
-      }
+    let props = {
+      uri: null,
+      name:null,
+      description:null,
+      img:null,
+      type:null,
+      rank: null,
+      x: null,
+      y: null
     }
 
-    let title = subject
-    if (type == FOAF.Person) {
-      for (t of triples) {
-        if (t.subject == subject && t.predicate == FOAF.name) {
-          title = D3Converter._getValue(t.object)
-        }
-      }
-    } else if (type === SSN.Sensor)  {
-      for (t of triples) {
-        if (t.subject == subject && t.predicate == SSN.hasValue) {
-          title = D3Converter._getValue(t.object)
-        }
-      }
-    } else {
-      for (t of triples) {
-        if (t.subject == subject && t.predicate == DC.title) {
-          title = D3Converter._getValue(t.object)
-        }
-      }
+    // We create a rdf.graph() object, and populate it with the triples, this
+    // allows us to then parse them using the rdflib's function
+    // rdf.graph().statementsMatching()
+
+    let g = rdf.graph()
+    for (let i = 0; i < node.length; i++) {
+      g.add(node[i].subject, node[i].predicate, node[i].object)
     }
+    // Calculating the coordinates of the nodes so we can put them in a circle
+    if (i && n) {
+      let angle = (2 * Math.PI) / this.n
+      let halfwidth = STYLES.width / 2
+      let halfheight = STYLES.height / 2
 
-    return title
-  }
-
-  static _getDescription(subject, triples) {
-    let desc = ''
-    for (var t of triples) {
-      if (t.subject == subject && t.predicate == DC.description) {
-        desc = D3Converter._getValue(t.object)
-      }
+      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth 
+      props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfheight
+    } else if (!i && !n && rank =='a') {
+      // This takes care of nodes that are added dynamically, the mid + 30 is
+      // the optimal position for spawning new nodes dynamically
+      props.x = STYLES.width / 2 + 60
+      props.y = STYLES.height / 2 + 60
     }
+    // Updating the attributes of the node object. The resulting object will have
+    // all of it's props filled in, and will be ready to be rendered by D3
+    // Note, if a triple is not present, it will be set to null.
+    props.uri = uri
 
-    return desc
-  }
+    // If the resource is a URI, it's value is stored next to the 'uri' key in the object
+    // otherwise it's value is stored in the 'value' key of the object. We need to make
+    // sure we are assigning the value regardless of where it's stored
+    let name = g.statementsMatching(undefined, FOAF('name'), undefined)
+    if (name.length > 0) props.name = name[0].object.value ? name[0].object.value : name[0].object.uri
+    else props.name = null
 
-  static _getNodeType(subject, triples) {
-    let type = null
-    for (var t of triples) {
-      if (t.subject == subject && t.predicate == RDF.type) {
-        type = t.object
-        break
-      }
-    }
+    let description = g.statementsMatching(undefined, DC('description'), undefined)
+    if (description.length > 0) props.description = description[0].object.value ? description[0].object.value : description[0].object.uri
+    else props.description = null
 
-    let nodeType = 'node'
-    if (type === FOAF.Person) {
-      nodeType = 'contact'
-    } else if (type === SSN.Sensor) {
-      nodeType = 'sensor'
-    }
+    let type = g.statementsMatching(undefined, RDF('type'), undefined)
+    if (type.length > 0) props.type = type[0].object.value ? type[0].object.value : type[0].object.uri
+    else props.type = null
 
-    return nodeType
-  }
+    let image = g.statementsMatching(undefined, FOAF('img'), undefined)
+    if (image.length > 0) props.img = image[0].object.value ? image[0].object.value : image[0].object.uri
+    else props.img = null
 
-  //TODO: this is bullshit- should simplify
-  static convertTriples(center, triples) {
-    console.log('Converting triples to D3 graph data')
-    let targetTriples = triples.map((t) => {
-      // mailto links are not crawlable, so we convert them to literals for crawlable graph purposes
-      if (t.predicate == FOAF.mbox) {
-        t.object = N3Util.createLiteral(t.object)
-        return t
-      }
-      return t
-    })
+    // We specify the rank of the node here. Center is the center node and Adjacent is a neighbour, smaller node
+    // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
+    if (rank == 'a') props.rank = 'adjacent'
+    if (rank == 'c') props.rank = 'center'
 
-    //extract and convert literals to appropriate format
-    //TODO: would probably be more efficient with lodash
-    //TODO: we used to deal with absolute-only URIs. Does it affect anything?
-    let literals = targetTriples.filter((t) => N3Util.isLiteral(t.object))
-      .reduce((acc, t) => {
-        let converted = {
-          p: t.predicate,
-          o: N3Util.getLiteralValue(t.object),
-          l: N3Util.getLiteralLanguage(t.object),
-          d: N3Util.getLiteralType(t.object)
-        }
-        if(!(t.subject in acc)) {
-          acc[t.subject] = []
-        }
-        acc[t.subject].push(converted)
-        return acc
-      }, {})
-
-    console.log('literals')
-    console.log(literals)
-
-    // These are the only links which we will follow in the graph
-    let validLinks = [SIOC.containerOf, SIOC.hasContainer, FOAF.knows]
-
-    //triples which subject equal to center of the graph
-    let allOutwards = targetTriples.filter((t) => t.subject == center && validLinks.indexOf(t.predicate) >= 0)
-      .map((t) => {
-        return {
-          subject: D3Converter._getValue(t.subject),
-          subjectType: D3Converter._getType(t.subject),
-          predicate: D3Converter._getValue(t.predicate),
-          object: D3Converter._getValue(t.object),
-          objectType: D3Converter._getType(t.object)
-        }
-      })
-    console.log('all outwards')
-    console.log(allOutwards)
-
-    let nodes = []
-    let links = []
-    let preds = {}
-    let connections = {}
-
-    let cnt = 0
-
-    // take care of the center
-    let centerData = {
-      subject: center,
-      subjectType: 'uri',
-      uri: center,
-      title: D3Converter._getTitle(center, triples),
-      description: D3Converter._getDescription(center, triples),
-      nodeType: D3Converter._getNodeType(center, triples)
-    }
-    if(!(centerData.subject in connections)) {
-      connections[centerData.subject] = cnt
-      nodes.push({
-        name: centerData.subject,
-        type: centerData.subjectType,
-        uri: centerData.uri,
-        title: centerData.title,
-        description: centerData.description,
-        nodeType: centerData.nodeType
-      })
-      cnt += 1
-    }
-
-    // index nodes for connections
-    for (var out of allOutwards) {
-      if (!(out.subject in connections)) {
-        connections[out.subject] = cnt
-        nodes.push({
-          name: out.subject,
-          type: out.subjectType,
-          uri: out.subject,
-          title: D3Converter._getTitle(out.subject, triples),
-          description: D3Converter._getDescription(out.subject, triples),
-          nodeType: D3Converter._getNodeType(out.subject, triples)
-        })
-        cnt += 1
-      }
-
-      if (out.objectType != 'literal') {
-        connections[out.object] = cnt
-        nodes.push({
-          name: out.object,
-          type: out.objectType,
-          uri: out.object,
-          title: D3Converter._getTitle(out.object, triples),
-          description: D3Converter._getDescription(out.object, triples),
-          nodeType: D3Converter._getNodeType(out.object, triples)
-        })
-        cnt += 1
-      }
-    }
-
-    // make node connections
-    for (out of allOutwards) {
-      if (out.objectType != 'literal') {
-        let key = `${out.subject} ${out.object}`
-        let pr = (key in preds) ? preds[key] : ''
-        preds[key] = `${pr} ${out.predicate}`
-        links.push({
-          source: (out.subject in connections) ? connections[out.subject] : -1,
-          target: (out.object in connections) ? connections[out.object] : -1,
-          name: preds[key],
-          value: 10
-        })
-      }
-    }
-
-    return {
-      center: center,
-      nodes: nodes,
-      links: links,
-      literals: literals
-    }
+    return props
   }
 }
 
