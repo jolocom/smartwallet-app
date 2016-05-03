@@ -187,7 +187,7 @@ export default class GraphD3 {
     .style('fill', '#e6e6e6')
     .attr('text-anchor', 'middle')
     .attr('opacity', 0)
-    .attr('dy', 1)
+    .attr('dy', 0)
     .style('font-size', '80%')
     .text(function (d) {
       // In case the person has no description available.
@@ -351,7 +351,7 @@ export default class GraphD3 {
     // We fade in the node name and make the text opaque
     d3.select(this).select('.nodetext')
     .transition().duration(STYLES.nodeTransitionDuration)
-    .attr('dy', -10)
+    .attr('dy', -20)
     .attr('opacity', 1)
   }
 
