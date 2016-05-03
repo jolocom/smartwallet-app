@@ -15,12 +15,6 @@ export default class GraphD3 {
     this.width = STYLES.width
     this.height = STYLES.height
 
-  // We define our own drag functions, allow for greater controll over the way
-  // it works
-    this.node_drag = d3.behavior.drag()
-      .on("dragstart", this.dragStart)
-      .on("drag", this.dragMove)
-      .on("dragend", this.dragEnd)
 
     // We also have the this.force and this.svg being used in this file,
     // they are declared later.
@@ -51,6 +45,12 @@ export default class GraphD3 {
       .gravity(0.2)
       .size([this.width, this.height])
       .start()
+
+    // We define our own drag functions, allow for greater controll over the way
+    // it works
+    this.node_drag = this.force.drag()
+      .on("dragend", this.dragEnd)
+
   }.bind(this)
 
 
@@ -225,22 +225,11 @@ export default class GraphD3 {
     })
   }.bind(this)
 
-  // This function is bound. Therefore the this context is actually the
-  // one of the graph.js object. So we have acces to stuff like the force
-  dragStart = function(node) {
-    this.force.stop()
-  }.bind(this)
+  // We check if the node is dropped in the center, if yes we navigate to it.
+  // We also prevent the node from bouncing away in case it's dropped to the middle
 
-  dragMove = function(node, i) {
-    node.px += d3.event.dx
-    node.py += d3.event.dy
-    node.x += d3.event.dx
-    node.y += d3.event.dy
-    this.tick()
-  }.bind(this)
-
-  // There is the problem where a click event still fires, TODO fix that.
   dragEnd = function(node, i) {
+    this.force.stop()
     if (node.rank == 'center') {
       // In here we would have the functionality that opens the node's card
     } else if (node.rank =='adjacent') {
