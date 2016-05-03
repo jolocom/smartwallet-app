@@ -36,14 +36,15 @@ In case this command throws the `object of type 'map' has no len()` error, reins
 
 ## Building
 ```bash
-gulp
+gulp build-dev
 ```
+**Warning:** calling "gulp" is dangerous, as it will start the webpack-dev-server which will overshadow ports 8080,8443 that the Gold server users
 
-##Build-Prod
+###Build-Prod
 `bash gulp build`has a similar effect to just using `bash gulp`, except it runs some additional, non vital operations (for example asset minimization) that make the final `app.js` file more optimized. </br>Running `gulp-prod` takes more time, and can therefore cause the development feedback cycle to take longer, as a result of that it shouldn't really be used during development.
 
 
-## Webroot
+### Webroot
 You have to setup your SoLiD server to point to `dist/` directory (built by `gulp` in the previous step)
 
 
