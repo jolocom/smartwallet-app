@@ -262,8 +262,6 @@ export default class GraphD3 {
     this.force.start()
   }.bind(this)
 
-
-
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
   onClick = function(node) {
@@ -272,6 +270,7 @@ export default class GraphD3 {
     if (d3.event.defaultPrevented) {
       return
     }
+
 
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
@@ -311,6 +310,8 @@ export default class GraphD3 {
     d3.selectAll('g .node').selectAll('.nodedescription')
       .attr('opacity', 0)
 
+
+    if(!this.highlighted){
     // NODE signifies the node that we clicked on. We enlarge it
     d3.select(this).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -332,7 +333,6 @@ export default class GraphD3 {
 
     // Tere is a slight bug when if you click on nodes really quickly, the text
     // on some fails to dissapear, needs further investigation
-
     // We fade in the description
     d3.select(this).selectAll('text')
     .transition().duration(STYLES.nodeTransitionDuration)
@@ -344,7 +344,16 @@ export default class GraphD3 {
     .attr('dy', -20)
     .attr('opacity', 1)
 
-    graphActions.highlight(this)
+    graphActions.highlight(node)
+    }
+
+    if (this.highlighted){
+      this.highlighted = false
+    }
+    else {
+      this.highlighted = true
+    }
+
   }
 
 

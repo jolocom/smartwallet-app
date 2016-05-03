@@ -28,6 +28,7 @@ export default Reflux.createStore({
       newNode: null,
       drawn: false,
       highlighted: null,
+      linkSubject: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -82,6 +83,7 @@ export default Reflux.createStore({
       newNode: null,
       drawn: false,
       highlighted: null,
+      linkSubject: null,
       // UI related
       showPinned:false,
       showSearch: false,
@@ -91,11 +93,9 @@ export default Reflux.createStore({
   },
 
   onHighlight: function(node) {
-    let info = null
-    // Don't judge me
-    d3.select(node).attr('x', (d) => { info = d })
-    this.state.highlighted = info.uri
 
+    this.state.highlighted = node.uri
+    console.log(node.uri)
     this.trigger(this.state)
   },
 

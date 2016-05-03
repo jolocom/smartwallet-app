@@ -103,8 +103,8 @@ let Graph = React.createClass({
   },
 
   componentWillUnmount: function(){
-    console.log(this.state)
     this.state.drawn = false
+    this.state.highlighted = null
     graphActions.setState(this.state)
     if (this.graph) this.graph.eraseGraph()
   },
