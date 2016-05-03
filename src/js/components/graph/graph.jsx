@@ -29,6 +29,7 @@ let Graph = React.createClass({
   getGraphEl: function() {
       return ReactDOM.findDOMNode(this.refs.graph)
   },
+
   onStateUpdate: function(data, signal) {
     this.setState(data)
     if (!this.state.loaded) {
@@ -93,6 +94,7 @@ let Graph = React.createClass({
       loaded: false,
       newNode: null,
       drawn: false,
+      highlighted: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,

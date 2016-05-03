@@ -26,6 +26,7 @@ export default class GraphD3 {
    setUpForce = function(nodes){
     // Upon set up force we also initialize the dataLinks and dataNodes
     // variables.
+    this.heighlighted = nodes.heighlighted
     this.dataNodes = [nodes.center]
     this.dataLinks = []
 
@@ -342,6 +343,8 @@ export default class GraphD3 {
     .transition().duration(STYLES.nodeTransitionDuration)
     .attr('dy', -20)
     .attr('opacity', 1)
+
+    graphActions.highlight(this)
   }
 
 

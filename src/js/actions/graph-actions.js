@@ -9,4 +9,5 @@ export default Reflux.createActions({
   'fetchGraphAtWebID' : {asyncResult: true},
   'fetchTriples' : {asyncResult: true},
   'getState': {asyncResult: false},
+  'highlight' : {asyncResult : false}
 })
