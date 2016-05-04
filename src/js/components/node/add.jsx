@@ -1,29 +1,22 @@
 import React from 'react'
 import Radium from 'radium'
-import _ from 'lodash'
-import {endpoint} from 'settings'
 
-import {AppBar, IconButton, TextField} from 'material-ui'
+import {AppBar, IconButton} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
-import NodeActions from 'actions/node'
+import NodeAddDefault from './add-default.jsx'
+import NodeAddImage from './add-image.jsx'
 
 let types = {
-  sensor: {
-    uri: {
-      label: 'URL'
-    }
-  },
   default: {
-    title: {
-      label: 'Title'
-    },
-    description: {
-      label: 'Description'
-    }
+    component: NodeAddDefault
+  },
+  image: {
+    title: 'Upload image',
+    component: NodeAddImage
   }
 }
 
@@ -31,17 +24,14 @@ let NodeAdd = React.createClass({
 
   contextTypes: {
     history: React.PropTypes.any,
-    node: React.PropTypes.string
+    node: React.PropTypes.any
   },
 
   componentDidMount() {
     this.refs.dialog.show()
   },
 
-  onSubmit() {
-    let values = _.pick(this.state, _.keys(types[this.props.params.type] || types.default))
-    NodeActions.add(this.props.params.node, `${endpoint}/eelco/profile/card#me`, values)
-    // TODO listen to store update
+  close() {
     this.refs.dialog.hide()
     this.context.history.goBack()
   },
@@ -53,44 +43,50 @@ let NodeAdd = React.createClass({
       },
       content: {
         padding: '20px'
-      },
-      input: {
-
       }
     }
   },
 
+  getTypeConfig(type) {
+    return types[type] || types.default
+  },
+
   render: function() {
     let styles = this.getStyles()
+    let {node, type} = this.props.params
+    let config = this.getTypeConfig(type)
+    let title = config.title || `Add ${type}`
 
-    let type = this.props.params.type
-
-    let title = `Add ${type}`
-
-    let fields = types[type] || types.default
+    let Component = config.component
 
     return (
       <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <AppBar
             title={title}
-            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this.close}>arrow_back</IconButton>}
-            iconElementRight={<IconButton iconClassName="material-icons" onTouchTap={this.onSubmit}>check</IconButton>}
+            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this._handleClose}>arrow_back</IconButton>}
+            iconElementRight={<IconButton iconClassName="material-icons" onTouchTap={this._handleSubmit}>check</IconButton>}
             style={styles.bar}
           />
           <Content style={styles.content}>
-            {_.map(fields, (field, name) => {
-              return (
-                <TextField
-                  floatingLabelText={field.label}
-                  fullWidth={true}
-                  onChange={({target}) => { this.setState({[name]: target.value})}} />
-              )
-            })}
+            <Component ref="form" node={node} onSuccess={this._handleSuccess}/>
           </Content>
         </Layout>
       </Dialog>
     )
+  },
+
+  _handleSubmit() {
+    this.refs.form.submit()
+  },
+
+  _handleSuccess() {
+    this.close()
+  },
+
+  _handleClose() {
+    this.refs.dialog.hide()
+    this.context.history.goBack()
   }
 })
 

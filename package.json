@@ -47,6 +47,7 @@
     "yargs": "^3.31.0"
   },
   "dependencies": {
+    "attr-accept": "^1.0.3",
     "d3": "^3.5.6",
     "history": "^1.11.1",
     "jquery": "^2.1.4",

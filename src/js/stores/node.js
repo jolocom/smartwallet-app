@@ -22,6 +22,9 @@ export default Reflux.createStore({
     let p
     if (!node.uri) {
       console.log('creating a new one')
+
+      // @TODO if node.file, upload file (solid supports form/multi-part)
+
       p = graphAgent.createAndConnectNode(node.title, node.description, origin, identity)
     } else {
       console.log('connecting existing node')
