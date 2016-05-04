@@ -1,53 +1,19 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix pro: <https://localhost:8443/1/profile/>.
-@prefix terms: <http://purl.org/dc/terms/>.
-@prefix c: <https://localhost:8443/1/profile/card#>.
-@prefix n0: <http://xmlns.com/foaf/0.1/>.
-@prefix c0: <https://localhost:8443/justas/profile/card#>.
-@prefix c1: <https://localhost:8443/2/profile/card#>.
-@prefix pr: <https://localhost:8443/2/profile/>.
-@prefix c2: <https://localhost:8443/joachim/profile/card#>.
-@prefix c3: <https://localhost:8443/3/profile/card#>.
-@prefix c4: <https://localhost:8443/4/profile/card#>.
-@prefix c5: <https://localhost:8443/5/profile/card#>.
-@prefix c6: <https://localhost:8443/6/profile/card#>.
-@prefix c7: <https://localhost:8443/7/profile/card#>.
-@prefix c8: <https://localhost:8443/christian/profile/card#>.
-@prefix prof: <https://localhost:8443/joachim/profile/>.
+@prefix ns1: <http://xmlns.com/foaf/0.1/> .
+@prefix ns2: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-pro:card
-    terms:title
-       "WebID profile of 1";
-    rdf:maker
-       c:me;
-    a    n0:PersonalProfileDocument;
-    n0:primaryTopic
-       c:me.
-   c:me a n0:Person; n0:knows c0:me; n0:mbox "1"; n0:name "1" .
-   c1:me a n0:Person; n0:knows c:me; n0:mbox "2"; n0:name "2" .
-pr:card
-    terms:title
-       "WebID profile of 2";
-    rdf:maker
-       c1:me;
-    a    n0:PersonalProfileDocument;
-    n0:primaryTopic
-       c1:me.
-c2:me
-    terms:description
-       "Networking and Business specialist from Berlin";
-    a    n0:Person;
-    n0:img
-       <https://localhost:8443/joachim/profile/img.jpg>;
-    n0:knows
-       c:me, c1:me, c3:me, c4:me, c5:me, c6:me, c7:me, c8:me, c0:me;
-    n0:name
-       "Joachim".
-prof:card
-    terms:title
-       "WebID profile of Joachim";
-    a    n0:PersonalProfileDocument;
-    n0:maker
-       c2:me;
-    n0:primaryTopic
-       c2:me.
+<> a ns1:PersonalProfileDocument ;
+    ns2:title "WebID profile of Joachim" ;
+    ns1:maker <#me> ;
+    ns1:primaryTopic <#me> .
+
+<#me> a ns1:Person ;
+    ns1:img <https://localhost:8443/joachim/profile/img.jpg>;
+    ns2:description "Network and Business specialist from berlin" ;
+    ns1:knows <https://localhost:8443/christian/profile/card#me>,
+        <https://localhost:8443/justas/profile/card#me> ;
+    ns1:name "Joachim" .
+

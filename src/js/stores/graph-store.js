@@ -16,7 +16,6 @@ export default Reflux.createStore({
   init: function(){
 
     this.listenTo(accountActions.logout, this.onLogout)
-    this.writer = new Writer()
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
     this.state = {
@@ -67,21 +66,21 @@ export default Reflux.createStore({
 
   // This writes a new triple into the rdf file
   onWriteTriple: function(subject, predicate, object, purpose){
-
+    let writer = new Writer()
     // First we fetch the triples at the webId/uri of the user adding the triple
     this.gAgent.fetchTriplesAtUri(subject.uri).then((file) => {
       for (var i = 0; i < file.triples.length; i++) {
         let triple = file.triples[i]
-        this.writer.addTriple(triple.subject, triple.predicate, triple.object)
+        writer.addTriple(triple.subject, triple.predicate, triple.object)
       }
       // Then we add the new triple to the object representing the current file
       // This function also returns true if the operation is successfull and false if not
       // Not the best type of error handling TODO improve later.
-      if (this.writer.addTriple(subject, predicate, object))
+      if (writer.addTriple(subject, predicate, object))
       {
         // Then we serialize the object to Turtle and PUT it's address.
-        console.log('iwe are puttin ', this.writer.end(), ' at adress ', subject.uri)
-        solid.web.put(subject.uri, this.writer.end())
+        console.log('iwe are puttin ', writer.end(), ' at adress ', subject.uri)
+        solid.web.put(subject.uri, writer.end())
         // A way to decide how to proceed, fix this later TODO
         if(purpose == 'displayInGraph') {
           graphActions.drawNewNode(subject, predicate, object)
