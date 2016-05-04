@@ -26,7 +26,7 @@ export default class GraphD3 {
    setUpForce = function(nodes){
     // Upon set up force we also initialize the dataLinks and dataNodes
     // variables.
-    this.heighlighted = nodes.heighlighted
+    this.highlighted = nodes.highlighted
     this.dataNodes = [nodes.center]
     this.dataLinks = []
 
@@ -40,8 +40,8 @@ export default class GraphD3 {
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
       .links(this.dataLinks)
-      .charge(-12500)
-      .linkDistance(STYLES.largeNodeSize * 0.5)
+      .charge(-5000)
+      .linkDistance(STYLES.largeNodeSize * 1.5)
       .friction(0.8)
       .gravity(0.2)
       .size([this.width, this.height])
@@ -224,6 +224,7 @@ export default class GraphD3 {
       }
       return 'translate(' + d.x + ',' + d.y + ')'
     })
+    if(this.force.alpha() < 0.035) this.force.alpha(0.001)
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
@@ -262,6 +263,7 @@ export default class GraphD3 {
     this.force.start()
   }.bind(this)
 
+
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
   onClick = function(node) {
@@ -271,15 +273,19 @@ export default class GraphD3 {
       return
     }
 
+    graphActions.highlight(null)
 
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
+
+    node.wasHighlighted = node.highlighted
 
     // We set all the circles back to their normal sizes
     d3.selectAll('g .node').selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
-        return d.rank == 'center' ? largeSize / 2 : smallSize / 2 })
+      d.highlighted = false
+      return d.rank == 'center' ? largeSize / 2 : smallSize / 2 })
 
     // Setting all the pattern sizes back to normal.
     d3.selectAll('g .node').selectAll('pattern')
@@ -311,7 +317,7 @@ export default class GraphD3 {
       .attr('opacity', 0)
 
 
-    if(!this.highlighted){
+    if(!node.wasHighlighted){
     // NODE signifies the node that we clicked on. We enlarge it
     d3.select(this).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -344,15 +350,17 @@ export default class GraphD3 {
     .attr('dy', -20)
     .attr('opacity', 1)
 
-    graphActions.highlight(node)
+    graphActions.highlight(this)
     }
 
-    if (this.highlighted){
-      this.highlighted = false
+    if (node.wasHighlighted){
+      node.highlighted = false
     }
     else {
-      this.highlighted = true
+      node.highlighted = true
     }
+
+
 
   }
 

@@ -93,9 +93,8 @@ export default Reflux.createStore({
   },
 
   onHighlight: function(node) {
-
-    this.state.highlighted = node.uri
-    console.log(node.uri)
+    if(!node) this.state.highlighted = null
+    else this.state.highlighted = node.uri
     this.trigger(this.state)
   },
 
