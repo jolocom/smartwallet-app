@@ -272,14 +272,11 @@ export default class GraphD3 {
     if (d3.event.defaultPrevented) {
       return
     }
-
     graphActions.highlight(null)
-
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
     node.wasHighlighted = node.highlighted
-
     // We set all the circles back to their normal sizes
     d3.selectAll('g .node').selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -350,18 +347,14 @@ export default class GraphD3 {
     .attr('dy', -20)
     .attr('opacity', 1)
 
-    graphActions.highlight(this)
+    graphActions.highlight(node)
     }
-
     if (node.wasHighlighted){
       node.highlighted = false
     }
     else {
       node.highlighted = true
     }
-
-
-
   }
 
 

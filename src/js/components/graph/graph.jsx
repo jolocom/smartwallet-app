@@ -31,23 +31,29 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data, signal) {
+
     this.setState(data)
+
     if (!this.state.loaded) {
       graphActions.getInitialGraphState()
     }
+
     if (this.state.loaded && !this.state.drawn){
       this.graph = new GraphD3(this.getGraphEl())
       this.graph.setUpForce(this.state)
       this.graph.drawBackground()
       this.graph.drawNodes()
-      this.state.drawn = true
+
       // Update the state of the parent, not sure if this is good practice or not
+      this.state.drawn = true
       graphActions.setState(this.state)
     }
+
     if (this.state.newNode) {
       this.graph.addNode(this.state.newNode)
-      this.state.newNode = null
+
       // We update the state of the store to be in line with the state of the child
+      this.state.newNode = null
       graphActions.setState(this.state)
     }
 
@@ -55,6 +61,8 @@ let Graph = React.createClass({
       this.graph.eraseGraph()
       this.graph.setUpForce(this.state)
       this.graph.drawNodes()
+    } else if ( signal == 'highlight') {
+      this.state.highlighted = data.highlighted
     }
   },
 
@@ -85,23 +93,6 @@ let Graph = React.createClass({
   componentDidUpdate: function() {
   },
 
-  getInitialState: function() {
-    return {
-      //These state keys describe the graph
-      user: null,
-      center:null,
-      neighbours: null,
-      loaded: false,
-      newNode: null,
-      drawn: false,
-      highlighted: null,
-      //These describe the ui
-      showPinned: false,
-      showSearch: false,
-      plusDrawerOpen: false
-    }
-  },
-
   componentWillUnmount: function(){
     this.state.drawn = false
     this.state.highlighted = null
@@ -129,6 +120,7 @@ let Graph = React.createClass({
   },
 
   render: function() {
+    console.log('hey')
     let styles = this.getStyles()
     return (
       <div style={styles.container}>
