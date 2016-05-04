@@ -15,7 +15,7 @@ pro:card
     a    n0:PersonalProfileDocument;
     n0:primaryTopic
        c:me.
-   c:me a n0:Person; n0:knows c0:me; n0:mbox "1"; n0:name "1" .
+
    c1:me a n0:Person; n0:knows c:me; n0:mbox "2"; n0:name "2" .
 pr:card
     terms:title

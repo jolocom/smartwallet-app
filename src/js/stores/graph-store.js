@@ -48,6 +48,8 @@ export default Reflux.createStore({
     else this.state.linkSubject = this.state.center.uri
     console.log('we chose the subject to be', this.state.linkSubject)
     this.trigger(this.state)
+    
+    graphActions.linkTriple()
   },
 
   onChooseObject: function() {
@@ -56,7 +58,6 @@ export default Reflux.createStore({
     else this.state.linkObject = this.state.center.uri
     this.trigger(this.state)
     console.log('we chose the object to be', this.state.linkObject)
-    graphActions.linkTriple()
   },
 
   onLinkTriple: function(){
@@ -79,7 +80,8 @@ export default Reflux.createStore({
       if (writer.addTriple(subject, predicate, object))
       {
         // Then we serialize the object to Turtle and PUT it's address.
-        console.log('iwe are puttin ', writer.end(), ' at adress ', subject.uri)
+
+        console.log(writer.end()) // DEBUG TODO
         solid.web.put(subject.uri, writer.end())
         // A way to decide how to proceed, fix this later TODO
         if(purpose == 'displayInGraph') {
