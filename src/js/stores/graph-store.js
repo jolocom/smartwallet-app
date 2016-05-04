@@ -26,9 +26,11 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      newLink: null,
       drawn: false,
       highlighted: null,
       linkSubject: null,
+      linkObject: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -41,7 +43,29 @@ export default Reflux.createStore({
       this.trigger(this.state)
   },
 
-  onAddNode: function(subject, predicate, object){
+  onChooseSubject: function() {
+    // We choose the subject of the new link
+    if (this.state.highlighted) this.state.linkSubject = this.state.highlighted
+    else this.state.linkSubject = this.state.center.uri
+    this.trigger(this.state)
+  },
+
+  onChooseObject: function() {
+    // We choose the object of the new link
+    if (this.state.highlighted) this.state.linkObject = this.state.highlighted
+    else this.state.linkObject = this.state.center.uri
+    this.trigger(this.state)
+    graphActions.linkTriple()
+  },
+
+  onLinkTriple: function(){
+    console.log('yeah')
+    this.state.newLink = rdf.sym(this.state.linkSubject) + FOAF('knows') + rdf.sym(this.state.linkObject)
+    graphActions.writeTriple(rdf.sym(this.state.linkSubject) + FOAF('knows') + rdf.sym(this.state.linkObject))
+  },
+
+  // This writes a new triple into the rdf file
+  onWriteTriple: function(subject, predicate, object, purpose){
     // First we fetch the triples at the webId/uri of the user adding the triple
     this.gAgent.fetchTriplesAtUri(subject.uri).then((file) => {
       for (var i = 0; i < file.triples.length; i++) {
@@ -51,26 +75,31 @@ export default Reflux.createStore({
       // Then we add the new triple to the object representing the current file
       // This function also returns true if the operation is successfull and false if not
       // Not the best type of error handling TODO improve later.
+      console.log('test')
       if (this.writer.addTriple(subject, predicate, object))
       {
         // Then we serialize the object to Turtle and PUT it's address.
         solid.web.put(subject.uri, this.writer.end())
 
-        // This fetches the triples at the newly added file, it allows us to draw it
-        // the graph accurately
-        this.gAgent.fetchTriplesAtUri(object.uri).then((result)=>{
-          result.triples.uri = object.uri
-          // Now we tell d3 to draw a new adjacent node on the graph, with the info from
-          // the triple file
-          graphActions.addNode.completed(this.convertor.convertToD3('a', result.triples))
-        })
+        // A way to decide how to proceed, fix this later TODO
+        if(purpose == 'displayInGraph') {
+          graphActions.drawNewNode(subject, predicate, object)
+        }
       }
     })
   },
 
-  onAddNodeCompleted: function(node){
-    this.state.newNode = node
-    this.trigger(this.state)
+  // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
+  drawNewNode: function(subject, predicate, object){
+    // This fetches the triples at the newly added file, it allows us to draw it
+    // the graph accurately
+    this.gAgent.fetchTriplesAtUri(object.uri).then((result)=>{
+      result.triples.uri = object.uri
+      // Now we tell d3 to draw a new adjacent node on the graph, with the info from
+      // the triple file
+      this.state.newNode = this.convertor.convertToD3('a', result.triples)
+      this.trigger(this.state)
+    })
   },
 
   onLogout(){
@@ -81,6 +110,7 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      newLink: null,
       drawn: false,
       highlighted: null,
       linkSubject: null,
@@ -122,7 +152,6 @@ export default Reflux.createStore({
 
   onNavigateToNode: function(node){
     this.state.neighbours = []
-
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       this.state.center = triples[0]

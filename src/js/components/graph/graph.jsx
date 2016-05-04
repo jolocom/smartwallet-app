@@ -30,6 +30,7 @@ let Graph = React.createClass({
       return ReactDOM.findDOMNode(this.refs.graph)
   },
 
+
   onStateUpdate: function(data, signal) {
 
     this.setState(data)
@@ -63,7 +64,16 @@ let Graph = React.createClass({
       this.graph.drawNodes()
     } else if ( signal == 'highlight') {
       this.state.highlighted = data.highlighted
+    } else if (signal == 'link') {
     }
+  },
+
+  linkSubject: function() {
+    graphActions.chooseSubject()
+  },
+
+  linkObject: function() {
+    graphActions.chooseObject()
   },
 
   addNode: function() {
@@ -71,10 +81,7 @@ let Graph = React.createClass({
     // For now it will add a friend relationship to Justas. Reason is we do not have a proper input field yet
     // And also because everyone would be happy to have a friend like Justas.
     let target = prompt()
-    graphActions.addNode(rdf.sym(this.state.center.uri), FOAF('knows'), rdf.sym(target))
-  },
-
-  handleNodeClick: function(node){
+    graphActions.writeTriple(rdf.sym(this.state.center.uri), FOAF('knows'), rdf.sym(target), 'displayInGraph')
   },
 
   // Lifecycle methods below
@@ -120,16 +127,15 @@ let Graph = React.createClass({
   },
 
   render: function() {
-    console.log('hey')
     let styles = this.getStyles()
     return (
       <div style={styles.container}>
         <FabMenu style={styles.menu}>
           <FabMenuItem icon="comment" label="Comment" onClick={() => {this.addNode('comment')}}/>
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
-          <FabMenuItem icon="attachment" label="File" onClick={() => {this.addNode('file')}}/>
           <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
-          <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.addNode('sensor')}}/>
+          <FabMenuItem icon="attachment" label="File" onClick={() => {this.linkObject()}}/>
+          <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.linkSubject()}}/>
         </FabMenu>
 
         <div style={styles.chart} ref="graph"></div>

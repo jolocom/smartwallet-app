@@ -1,0 +1,16 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix c: <https://localhost:8443/6/profile/card#>.
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+@prefix c0: <https://localhost:8443/joachim/profile/card#>.
+@prefix pro: <https://localhost:8443/6/profile/>.
+@prefix terms: <http://purl.org/dc/terms/>.
+
+   c:me a n0:Person; n0:knows c0:me; n0:mbox "6"; n0:name "6" .
+pro:card
+    terms:title
+       "WebID profile of 6";
+    rdf:maker
+       c:me;
+    a    n0:PersonalProfileDocument;
+    n0:primaryTopic
+       c:me.

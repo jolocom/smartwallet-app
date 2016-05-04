@@ -1,0 +1,13 @@
+@prefix ns1: <http://xmlns.com/foaf/0.1/> .
+@prefix ns2: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<> ns2:title "Inbox of Christian" ;
+    ns1:maker <https://localhost:8443/christian/profile/card#me> ;
+    ns1:primaryTopic <#inbox> .
+
+<#inbox> a <http://rdfs.org/sioc/ns#Space> .
+

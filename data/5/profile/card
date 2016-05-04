@@ -1,0 +1,13 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix terms: <http://purl.org/dc/terms/>.
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+<>
+    terms:title
+       "WebID profile of 5";
+    rdf:maker
+       <#me>;
+    a    n0:PersonalProfileDocument;
+    n0:primaryTopic
+       <#me>.
+   <#me> a n0:Person; n0:mbox "5"; n0:name "5" .

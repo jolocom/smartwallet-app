@@ -198,7 +198,7 @@ export default class GraphD3 {
       }
     })
     // This wraps the description nicely.
-    .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
+    .call(this.wrap, STYLES.largeNodeSize * 0.7, ' ', ' ')
 
     // Subscribe to the click listeners
     node.on('click', this.onClick)
