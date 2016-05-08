@@ -32,17 +32,22 @@ class GraphAgent extends HTTPAgent {
     let neighbours = triples.filter((t) => t.subject.uri == center && Links.indexOf(t.predicate.uri) >= 0)
 
     return new Promise ((resolve) => {
+
       let graphMap = []
       // If there are no adjacent nodes to draw, we return an empty array.
-      if (neighbours.length == 0) resolve(graphMap)
+      if (neighbours.length == 0){
+        resolve(graphMap)
+        console.log('No neighbours found')
+      }
 
       // If there are adjacent nodes to draw, we parse them and return an array of their triples
       neighbours.map((triple, index) => {
         this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
+
           graphMap.push(triples.triples)
-           graphMap[index].uri = triple.object.uri
+          graphMap[graphMap.length - 1].uri = triple.object.uri
           // This checks if the whole array has been parsed, and only after that resolves.
-          if (index == neighbours.length - 1) {
+          if (graphMap.length == neighbours.length) {
             resolve(graphMap)
           }
         })

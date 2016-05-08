@@ -48,7 +48,7 @@ export default Reflux.createStore({
     else this.state.linkSubject = this.state.center.uri
     console.log('we chose the subject to be', this.state.linkSubject)
     this.trigger(this.state)
-    
+
     graphActions.linkTriple()
   },
 
