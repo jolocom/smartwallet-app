@@ -65,6 +65,10 @@ class WebIDAgent extends LDPAgent {
     let webid = `${endpoint}/${username}/profile/card#me`
     let writer = new Writer()
 
+    // Please take a look at
+    // https://github.com/solid/solid-spec/blob/master/solid-webid-profiles.md#profile-representation-formats
+    // For extra info on the structure of a valid webId Profile
+
     writer.addTriple(rdf.sym(''), DC('title'), `Inbox of ${username}`)
     writer.addTriple(rdf.sym(''), FOAF('maker'), webid)
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#inbox'))
