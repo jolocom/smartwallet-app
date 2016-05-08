@@ -81,10 +81,9 @@ export default Reflux.createStore({
       {
         // Then we serialize the object to Turtle and PUT it's address.
 
-        console.log(writer.end()) // DEBUG TODO
         solid.web.put(subject.uri, writer.end())
         // A way to decide how to proceed, fix this later TODO
-        if(purpose == 'displayInGraph') {
+        if(subject.uri == this.state.center.uri) {
           graphActions.drawNewNode(subject, predicate, object)
         }
       }
@@ -93,7 +92,6 @@ export default Reflux.createStore({
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
   drawNewNode: function(subject, predicate, object){
-    console.log(subject, predicate, object)
     // This fetches the triples at the newly added file, it allows us to draw it
     // the graph accurately
     this.gAgent.fetchTriplesAtUri(object.uri).then((result)=>{

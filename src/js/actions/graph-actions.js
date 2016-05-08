@@ -12,6 +12,7 @@ export default Reflux.createActions({
   // Should next be async?
   'chooseSubject': { asyncResult: false},
   'chooseObject': { asyncResult: false},
+  
   'linkTriple': {asyncResult:false},
   'writeTriple':{asyncResult: false},
   'drawNewNode': {asyncResult: false}
