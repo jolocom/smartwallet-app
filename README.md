@@ -15,13 +15,20 @@ npm install -g gulp
 npm install
 ```
 
-## Install python tools for test data generation
-```
-cd utils/soliddata; python setup.py develop
-```
-These tools should be installed using python2. Running the `setup.py` using python3 will cause errors in further steps. Please see the next step for extra information.
+## Generating base data
 
-## Generate test data for single test server (https://localhost:8443)
+For the application to be useful you need a minimum data setup (at least one node representing a user profile). Instead of having to write the RDF files manually you can generate them using a python script.
+
+### Install python tools
+
+Make sure you use python 2.x when installing soliddata, e.g.
+
+```
+cd utils/soliddata; python2.7 setup.py develop
+```
+Running the `setup.py` using python3 will cause errors in further steps. 
+
+### Generate testdata for single test server (https://localhost:8443)
 ```
 soliddata --blueprint utils/soliddata/local.json --output-dir data --flatten
 ```
@@ -29,15 +36,22 @@ In case this command throws the `object of type 'map' has no len()` error, reins
 
 ## Building
 ```bash
-gulp
+gulp build-dev
 ```
+**Warning:** calling "gulp" is dangerous, as it will start the webpack-dev-server which will overshadow ports 8080,8443 that the Gold server users
 
-##Build-Prod
+###Build-Prod
 `bash gulp build`has a similar effect to just using `bash gulp`, except it runs some additional, non vital operations (for example asset minimization) that make the final `app.js` file more optimized. </br>Running `gulp-prod` takes more time, and can therefore cause the development feedback cycle to take longer, as a result of that it shouldn't really be used during development.
 
 
-## Webroot
+### Webroot
 You have to setup your SoLiD server to point to `dist/` directory (built by `gulp` in the previous step)
+
+
+## Running
+You need to start your solid server (e.g. gold) listening on port :8443 before you can use the app, e.g.
+
+`docker run -p 127.0.0.1:8443:443 -v /home/myuser/projects/little-sister/dist:/data linkeddata/gold`
 
 
 Documentation

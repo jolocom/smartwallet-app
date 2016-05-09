@@ -32,7 +32,6 @@ export default Reflux.createStore({
   },
 
   onShow() {
-    console.log('show profile')
     profile.show = true
 
     this.trigger(profile)
@@ -48,16 +47,14 @@ export default Reflux.createStore({
     let webid = null
     wia.getWebID()
       .then((user) => {
-        console.log('got webid')
         webid = user
-        console.log(webid)
         // now get my profile document
         return wia.get(webid)
       })
       .then((xhr) => {
         // parse profile document from text
         let parser = new Parser()
-        return parser.parse(xhr.response)
+        parser.parse(xhr.response)
       })
       .then((res) => {
         ProfileActions.load.completed(webid, res.triples, res.prefixes)
@@ -72,7 +69,6 @@ export default Reflux.createStore({
   // change state from triples
   onLoadCompleted(webid, triples, prefixes) {
     // subject which represents our profile
-    console.log('loadcompleted', webid, triples, prefixes)
     // everything's fixed but name and email
     let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
 
@@ -110,8 +106,6 @@ export default Reflux.createStore({
 
   onUpdate: function (params) {
     // subject which represents our profile
-    console.log('saving profile')
-    console.log(params)
     let writer = new Writer({format: 'N-Triples', prefixes: params.prefixes})
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t)

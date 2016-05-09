@@ -26,6 +26,11 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: 'js'
   },
+
+  externals:[{
+    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'  
+  }], 
+
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],
@@ -40,6 +45,10 @@ module.exports = {
       {
         test: /\.html$/,
         loader: 'file?name=[name].[ext]'
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
       }
     ]
   }
