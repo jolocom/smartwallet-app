@@ -65,6 +65,22 @@ export default Reflux.createStore({
     graphActions.writeTriple(rdf.sym(this.state.linkSubject), FOAF('knows'), rdf.sym(this.state.linkObject), ' ')
   },
 
+  createAndConnectNode(title, description, image) {
+    // This returns the localhost:8443/name/ this adress is used for now as the container, can be changed later
+    let destination = this.state.user.substring(0, this.state.user.length-15)
+    // Creating a rdf document.
+    // We are passing the current user / creator, the destination where the resource will be put,
+    // The title, description and image, these will be put in the according rdf attribute fields.
+    this.gAgent.createNode(this.state.user,destination, title, description, image).then((res) => {
+      // Once that's done, we add a "User made RDF FILE" triple to the author's rdf File
+      // writeTriple will aslo make the d3 add the node dynamically to the graph, now that is not
+      // fully supported, and the added node will dissapear upon refresh and have a name of anonymous because
+      // it has no name field but a title one
+      // TODO, this is a easy addaptation to implement, I will do it in the close future.
+      graphActions.writeTriple(rdf.sym(this.state.user), FOAF('made'), rdf.sym(res.url))
+    })
+  },
+
   // This writes a new triple into the rdf file
   onWriteTriple: function(subject, predicate, object, purpose){
     let writer = new Writer()
@@ -88,7 +104,6 @@ export default Reflux.createStore({
         {
           // Then we serialize the object to Turtle and PUT it's address.
           solid.web.put(subject.uri, writer.end())
-          // A way to decide how to proceed, fix this later TODO
           if(subject.uri == this.state.center.uri) {
             graphActions.drawNewNode(subject, predicate, object)
           }

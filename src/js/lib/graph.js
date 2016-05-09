@@ -206,8 +206,6 @@ export default class GraphD3 {
     this.force.on('tick', this.tick)
   }.bind(this)
 
-
-
   // This function fires upon tick, around 30 times per second?
   tick = function(){
     // Update the link positions.

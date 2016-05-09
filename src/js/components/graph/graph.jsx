@@ -78,6 +78,11 @@ let Graph = React.createClass({
     graphActions.chooseObject()
   },
 
+  testAdd(){
+    // let destination = this.state.center
+    graphActions.createAndConnectNode('test', 'description')
+  },
+
   addNode: function() {
     // This takes a triple describing the new node added!
     // For now it will add a friend relationship to Justas. Reason is we do not have a proper input field yet
@@ -135,7 +140,7 @@ let Graph = React.createClass({
       <div style={styles.container}>
         <FabMenu style={styles.menu}>
           <FabMenuItem icon="comment" label="Comment" onClick={() => {this.addNode('comment')}}/>
-          <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
+          <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.testAdd()}}/>
           <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
           <FabMenuItem icon="attachment" label="File" onClick={() => {this.linkSubject()}}/>
           <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.linkObject()}}/>
