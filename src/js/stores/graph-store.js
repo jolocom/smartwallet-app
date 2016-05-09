@@ -74,18 +74,26 @@ export default Reflux.createStore({
         let triple = file.triples[i]
         writer.addTriple(triple.subject, triple.predicate, triple.object)
       }
-      // Then we add the new triple to the object representing the current file
-      // This function also returns true if the operation is successfull and false if not
-      // Not the best type of error handling TODO improve later.
-      if (writer.addTriple(subject, predicate, object))
-      {
-        // Then we serialize the object to Turtle and PUT it's address.
 
-        solid.web.put(subject.uri, writer.end())
-        // A way to decide how to proceed, fix this later TODO
-        if(subject.uri == this.state.center.uri) {
-          graphActions.drawNewNode(subject, predicate, object)
+      // writer.g.statementsMatching(undefined, FOAF('maker'), undefined)
+      let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)[0].object.uri
+      // We check if the rdf file we are writing to actually belongs to the person
+      // writing.
+      if (this.state.user == author) {
+        // Then we add the new triple to the object representing the current file
+        // This function also returns true if the operation is successfull and false if not
+        // Not the best type of error handling TODO improve later.
+        if (writer.addTriple(subject, predicate, object))
+        {
+          // Then we serialize the object to Turtle and PUT it's address.
+          solid.web.put(subject.uri, writer.end())
+          // A way to decide how to proceed, fix this later TODO
+          if(subject.uri == this.state.center.uri) {
+            graphActions.drawNewNode(subject, predicate, object)
+          }
         }
+      } else {
+        console.warn('You are not the owner of this node')
       }
     })
   },

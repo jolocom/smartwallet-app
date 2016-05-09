@@ -68,10 +68,12 @@ let Graph = React.createClass({
     }
   },
 
+  // When we finish linking, we select the subjet of the triple.
   linkSubject: function() {
     graphActions.chooseSubject()
   },
 
+  //When we start the linking, we first select the Object of the triple
   linkObject: function() {
     graphActions.chooseObject()
   },
@@ -126,6 +128,7 @@ let Graph = React.createClass({
     return styles
   },
 
+  // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render: function() {
     let styles = this.getStyles()
     return (
