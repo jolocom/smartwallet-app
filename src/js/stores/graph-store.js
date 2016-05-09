@@ -75,10 +75,11 @@ export default Reflux.createStore({
         writer.addTriple(triple.subject, triple.predicate, triple.object)
       }
 
-      // writer.g.statementsMatching(undefined, FOAF('maker'), undefined)
-      let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)[0].object.uri
+
       // We check if the rdf file we are writing to actually belongs to the person
       // writing.
+      // Later we will need to implement public node support somehow
+      let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)[0].object.uri
       if (this.state.user == author) {
         // Then we add the new triple to the object representing the current file
         // This function also returns true if the operation is successfull and false if not

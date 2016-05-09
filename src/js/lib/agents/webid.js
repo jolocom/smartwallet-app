@@ -85,7 +85,7 @@ class WebIDAgent extends LDPAgent {
     else writer.addTriple(rdf.sym(''), DC('title'), `WebID profile of ${username}`)
 
     writer.addTriple(rdf.sym(''), RDF('type') ,FOAF('PersonalProfileDocument'))
-    writer.addTriple(rdf.sym(''), RDF('maker') ,rdf.sym('#me'))
+    writer.addTriple(rdf.sym(''), FOAF('maker') ,rdf.sym('#me'))
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#me'))
 
     writer.addTriple(rdf.sym('#me'), RDF('type'), FOAF('Person'))
