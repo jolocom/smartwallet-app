@@ -355,6 +355,11 @@ export default class GraphD3 {
     }
   }
 
+  updateHistory(history) {
+    // We have the history available here as an array, we can use it to do whatever
+    // we want. Up to Eric at this point.
+    console.log(history)
+  }
 
   // Wraps the description of the nodes around the node.
   // http://bl.ocks.org/mbostock/7555321

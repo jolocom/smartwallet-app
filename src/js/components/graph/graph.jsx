@@ -52,7 +52,6 @@ let Graph = React.createClass({
 
     if (this.state.newNode) {
       this.graph.addNode(this.state.newNode)
-
       // We update the state of the store to be in line with the state of the child
       this.state.newNode = null
       graphActions.setState(this.state)
@@ -62,6 +61,7 @@ let Graph = React.createClass({
       this.graph.eraseGraph()
       this.graph.setUpForce(this.state)
       this.graph.drawNodes()
+      this.graph.updateHistory(this.state.navHistory)
     } else if ( signal == 'highlight') {
       this.state.highlighted = data.highlighted
     } else if (signal == 'link') {

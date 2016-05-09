@@ -30,11 +30,34 @@ export default Reflux.createStore({
       highlighted: null,
       linkSubject: null,
       linkObject: null,
+      // Keeps track of all the nodes we navigated to.
+      navHistory: [],
       //These describe the ui
       showPinned: false,
       showSearch: false,
       plusDrawerOpen: false,
     }
+  },
+
+  onLogout(){
+    this.state = {
+      // Graph related
+      user: null,
+      center: null,
+      neighbours: null,
+      loaded: false,
+      newNode: null,
+      newLink: null,
+      drawn: false,
+      highlighted: null,
+      linkSubject: null,
+      navHistory: [],
+      // UI related
+      showPinned:false,
+      showSearch: false,
+      plusDrawerOpen:false
+    }
+    this.trigger(this.state)
   },
 
   onSetState: function(state){
@@ -127,26 +150,6 @@ export default Reflux.createStore({
     })
   },
 
-  onLogout(){
-    this.state = {
-      // Graph related
-      user: null,
-      center: null,
-      neighbours: null,
-      loaded: false,
-      newNode: null,
-      newLink: null,
-      drawn: false,
-      highlighted: null,
-      linkSubject: null,
-      // UI related
-      showPinned:false,
-      showSearch: false,
-      plusDrawerOpen:false
-    }
-    this.trigger(this.state)
-  },
-
   onHighlight: function(node) {
     if(!node) this.state.highlighted = null
     else this.state.highlighted = node.uri
@@ -179,12 +182,15 @@ export default Reflux.createStore({
     this.state.neighbours = []
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
+      // Before updating the this.state.center, we push the old center node
+      // to the node history
+      this.state.navHistory.push(this.state.center)
+
       this.state.center = triples[0]
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-      // Resetting the highlighted node. Highlight is not persistent through navigation
       this.state.highlighted = null
       this.trigger(this.state, 'redraw')
     })
