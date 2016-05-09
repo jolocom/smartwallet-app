@@ -21,7 +21,6 @@ export default class GraphD3 {
   }
 
 
-
    // Starts the force simulation.
    setUpForce = function(nodes){
     // Upon set up force we also initialize the dataLinks and dataNodes
@@ -82,18 +81,32 @@ export default class GraphD3 {
     let largeNode = STYLES.largeNodeSize
     let smallNode = STYLES.smallNodeSize
 
+
+    let defsFull = this.svg.append('svg:defs')
+    defsFull.append('svg:pattern')
+    .attr('id',  'full')
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('x', (STYLES.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
+    .attr('y', -(STYLES.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
+    .attr('patternUnits', 'userSpaceOnUse')
+    .append('svg:image')
+    .attr('xlink:href', 'img/full.png' )
+    .attr('width', STYLES.fullScreenButton)
+    .attr('height', STYLES.fullScreenButton)
+
     // We draw the lines for all the elements in the dataLinks array.
     let link =  this.svg.selectAll('line')
-      .data(this.dataLinks, (d) => {return d.source.uri + '-' + d.target.uri})
-      .enter()
-      .insert('line', '.node')
-      .attr('class','link')
-      .attr('stroke-width', (d) => {
-        // Capped at 13, found it to look the best
-        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
+    .data(this.dataLinks, (d) => {return d.source.uri + '-' + d.target.uri})
+    .enter()
+    .insert('line', '.node')
+    .attr('class','link')
+    .attr('stroke-width', (d) => {
+      // Capped at 13, found it to look the best
+      return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
       .attr('stroke', STYLES.lightGrayColor)
 
-    // We draw a node for each element in the dataNodes array
+      // We draw a node for each element in the dataNodes array
     let node = this.svg.selectAll('.node')
       .data(this.dataNodes, (d) => {return d.uri})
       .enter()
@@ -102,26 +115,11 @@ export default class GraphD3 {
       .call(this.node_drag)
 
       // We need to use patterns in order to apply images to nodes
-      let defs = node.append('svg:defs')
-      defs.append('svg:pattern')
-        .attr('id',  (d)=> d.uri)
-        .attr('width', '100%')
-        .attr('height', '100%')
-        .attr('x', (d) => {
-          return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
-        .attr('y', (d) => {
-          return d.rank == 'center' ? -largeNode/ 2 : -smallNode / 2})
-        .attr('patternUnits', 'userSpaceOnUse')
-        .append('svg:image')
-        .attr('xlink:href', (d) => d.img)
-        .attr('width', (d) => {
-          return d.rank == 'center' ? largeNode: smallNode})
-        .attr('height', (d) => {
-          return d.rank == 'center' ? largeNode: smallNode})
 
     let defsImages = node.append('svg:defs')
     defsImages.append('svg:pattern')
       .attr('id',  (d)=> d.uri)
+      .attr('class', 'image')
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', (d) => {
@@ -163,6 +161,7 @@ export default class GraphD3 {
         .attr('slope', 0.6)
 
     node.append('circle')
+      .attr('class', 'nodecircle')
       .attr('r', (d) => {
         return d.rank == 'center' ? largeNode / 2 : smallNode / 2 })
       .style('fill', (d) => {
@@ -200,9 +199,22 @@ export default class GraphD3 {
     // This wraps the description nicely.
     .call(this.wrap, STYLES.largeNodeSize * 0.7, ' ', ' ')
 
+    let full = node.append('circle')
+     .attr('class', 'nodefullscreen')
+     .attr('r', 0 )
+     .style('fill', 'url(#full)')
+     .attr('stroke',STYLES.grayColor)
+     .attr('stroke-width',1)
+     .attr('cy', -STYLES.largeNodeSize / 2.5)
+     .attr('cx', STYLES.largeNodeSize / 2.5)
+
+
     // Subscribe to the click listeners
     node.on('click', this.onClick)
     node.on('dblclick', this.onDblClick)
+
+    full.on('click', this.onClickFull)
+
     this.force.on('tick', this.tick)
   }.bind(this)
 
@@ -266,7 +278,14 @@ export default class GraphD3 {
 
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
+  onClickFull = function(node) {
+    console.log('you are now in full screen')
+    //stops propagation to node click handler
+    d3.event.stopPropagation()
+  }
+
   onClick = function(node) {
+    console.log('you clicked the node')
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (d3.event.defaultPrevented) {
@@ -278,7 +297,7 @@ export default class GraphD3 {
 
     node.wasHighlighted = node.highlighted
     // We set all the circles back to their normal sizes
-    d3.selectAll('g .node').selectAll('circle')
+    d3.selectAll('g .node').selectAll('.nodecircle')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
       d.highlighted = false
@@ -313,6 +332,8 @@ export default class GraphD3 {
     d3.selectAll('g .node').selectAll('.nodedescription')
       .attr('opacity', 0)
 
+    d3.selectAll('g .node').selectAll('.nodefullscreen')
+      .attr('r', 0 )
 
     if(!node.wasHighlighted){
     // NODE signifies the node that we clicked on. We enlarge it
@@ -325,6 +346,10 @@ export default class GraphD3 {
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
+
+    d3.select(this).select('.nodefullscreen')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('r', STYLES.fullScreenButton/2 )
 
     // We enlarge the image of the node we clicked on
     // We also blur it a bit and darken it, so that the text displays better
