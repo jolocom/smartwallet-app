@@ -1,9 +1,10 @@
 import Reflux from 'reflux'
 import NodeActions from 'actions/node'
+import solid from 'solid-client'
 
 import GraphAgent from 'lib/agents/graph.js'
 
-let {add} = NodeActions
+let {add, upload} = NodeActions
 
 let graphAgent = new GraphAgent()
 
@@ -38,7 +39,18 @@ export default Reflux.createStore({
       completed: true
     })
   },
+  onUpload(origin, identity, node) {
+    let uri = this._nodeContainerForIdentity(identity)
+    solid.web.put(`${uri}${node.file.name}`, node.file, node.file.type).then(upload.completed)
+  },
+  onUploadCompleted(result) {
+  },
   onRemove() {
     console.log('remove node')
+  },
+  _nodeContainerForIdentity(identity) {
+    let identityRoot = identity.match(/^(.*)\/profile\/card#me$/)[1]
+    let cont =  `${identityRoot}/little-sister/files/`
+    return cont
   }
 })

@@ -42,7 +42,7 @@ let NodeAddImage = React.createClass({
 
   submit() {
     let values = _.pick(this.state, 'file', 'title', 'description')
-    NodeActions.add(this.props.node, `${endpoint}/eelco/profile/card#me`, values)
+    NodeActions.upload(this.props.node, `${endpoint}/eelco/profile/card#me`, values)
   },
 
   render: function() {

@@ -1,6 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import {FOAF} from 'lib/namespaces'
 
 import ProfileNode from 'components/node/profile.jsx'
 import AddressNode from 'components/node/address.jsx'
@@ -59,7 +60,7 @@ let Node = React.createClass({
 
     if (!node) return null
 
-    if (node.nodeType === 'contact') {
+    if (node.type === FOAF.PersonalProfileDocument) {
       return <ProfileNode node={node}/>
     }
     switch(node.description) {

@@ -1,5 +1,4 @@
 import Reflux from 'reflux'
-import _ from 'lodash'
 import ProfileActions from 'actions/profile'
 
 import N3 from 'n3'
@@ -19,7 +18,7 @@ let profile = {
   rsaExponent: '(rsa exponent missing)',
   webid: '#',
   webidPresent: '(webid missing)',
-  imgUri: '/img/person-placeholder.png',
+  imgUri: null,
   fixedTriples: [],
   prefixes: []
 }
@@ -34,13 +33,13 @@ export default Reflux.createStore({
   onShow() {
     profile.show = true
 
-    this.trigger(profile)
+    this.trigger(Object.assign({}, profile))
   },
 
   onHide() {
     profile.show = false
 
-    this.trigger(profile)
+    this.trigger(Object.assign({}, profile))
   },
 
   onLoad() {
@@ -54,7 +53,7 @@ export default Reflux.createStore({
       .then((xhr) => {
         // parse profile document from text
         let parser = new Parser()
-        parser.parse(xhr.response)
+        return parser.parse(xhr.response)
       })
       .then((res) => {
         ProfileActions.load.completed(webid, res.triples, res.prefixes)
@@ -100,8 +99,8 @@ export default Reflux.createStore({
       }
     }
 
-    profile = _.extend(profile, state)
-    this.trigger(profile)
+    profile = Object.assign(profile, state)
+    this.trigger(Object.assign({}, profile))
   },
 
   onUpdate: function (params) {
@@ -126,8 +125,8 @@ export default Reflux.createStore({
       return wia.put(params.webid, {'Content-Type': 'application/n-triples'}, res)
     })
 
-    profile = _.extend(profile, params)
-    this.trigger(profile)
+    profile = Object.assign(profile, params)
+    this.trigger(Object.assign({}, profile))
   },
 
   // get object value without caring whether it's a literal or IRI
