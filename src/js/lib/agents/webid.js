@@ -1,12 +1,15 @@
 import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
-import {DC, FOAF, RDF, SIOC} from '../namespaces.js'
-import N3 from 'n3'
+import rdf from 'rdflib'
 import {dev} from 'settings'
-
-let N3Util = N3.Util
-
+import Solid from 'solid-client'
 import {endpoint} from 'settings'
+
+let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+let DC = rdf.Namespace('http://purl.org/dc/terms/')
+let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
+let solid = Solid
 
 // WebID related functions
 class WebIDAgent extends LDPAgent {
@@ -32,168 +35,58 @@ class WebIDAgent extends LDPAgent {
     if (dev) {
       getWebID = Promise.resolve(this._formatFakeWebID(localStorage.getItem('fake-user')))
     } else {
-      getWebID = this.head(endpoint)
-        .then((xhr) => {
-          return xhr.getResponseHeader('User')
-        })
+      return getWebID = solid.currentUser()
     }
     return getWebID
   }
 
+// Creates the user folders and writes the data to the card / inbox files
+
+// TODO rework the container creation a bit according to the specs described in here
+// http://github.com/solid/solid-spec/blob/master/api-rest.md
+
   fakeSignup(username, name, email) {
-    // create container $username
-    // create container $username/profile
-    // create resource $username/profile/card
-    // create container $username/little-sister
-    // create container $username/little-sister/graph-comments
-    // create resource $username/little-sister/inbox
-    // create container $username/little-sister/graph-nodes
 
-    let userContainer = `${endpoint}/${username}`
-    let userProfileContainer = `${endpoint}/${username}/profile`
-    let profileDoc = `${endpoint}/${username}/profile/card`
-    let appContainer = `${endpoint}/${username}/little-sister`
-    let inboxDoc = `${endpoint}/${username}/little-sister/inbox`
-    let commentsContainer = `${endpoint}/${username}/little-sister/graph-comments`
-    let nodesContainer = `${endpoint}/${username}/little-sister/graph-nodes`
+    solid.web.put(`${endpoint}/${username}/little-sister/graph-comments/`)
+    solid.web.put(`${endpoint}/${username}/little-sister/graph-nodes/`)
 
-    console.log('creating fake profile...')
-    console.log(username)
-    console.log(name)
-    console.log(email)
-
-    let p = this.createBasicContainer(userContainer)
-      .then(() => {
-        return Promise.all([this.createBasicContainer(userProfileContainer), this.createBasicContainer(appContainer)])
+    let p = Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
+      .then((result)  => {
+        solid.web.put(`${endpoint}/${username}/profile/card`, result[0])
+        solid.web.put(`${endpoint}/${username}/little-sister/inbox`, result[1])
       })
-      .then(() => {
-        return Promise.all([this.createBasicContainer(commentsContainer), this.createBasicContainer(nodesContainer)])
-      })
-      .then(() => {
-        return Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
-      })
-      .then((results) => {
-        let profileText = results[0]
-        let inboxText = results[1]
-        let hdrs = {'Content-type': 'text/turtle'}
-        return Promise.all([this.put(profileDoc, hdrs, profileText), this.put(inboxDoc, hdrs, inboxText)])
-      })
-
-    console.log('done.')
     return p
   }
 
+// Converts the input from the forms to RDF data to put into the inbox card
   _inboxTriples(username) {
-    if (!username) {
-      return Promise.reject('Must provide a username!')
-    }
+    if (!username) { return Promise.reject('Must provide a username!')}
 
     let webid = `${endpoint}/${username}/profile/card#me`
-
     let writer = new Writer()
 
-    let triples = [
-        {
-          subject: '',
-          predicate: DC.title,
-          object: N3Util.createLiteral(`Inbox of ${username}`)
-        },
-        {
-          subject: '',
-          predicate: FOAF.maker,
-          object: webid
-        },
-        {
-          subject: '',
-          predicate: FOAF.primaryTopic,
-          object: '#inbox'
-        },
-        {
-          subject: '#inbox',
-          predicate: RDF.type,
-          object: SIOC.Space
-        }
-    ]
-
-    for (var t of triples) {
-      writer.addTriple(t)
-    }
-
+    writer.addTriple(rdf.sym(''), DC('title'), `Inbox of ${username}`)
+    writer.addTriple(rdf.sym(''), FOAF('maker'), webid)
+    writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#inbox'))
+    writer.addTriple(rdf.sym('#inbox'), RDF('type'), SIOC('Space'))
     return writer.end()
   }
 
+// Converts the input from the forms to RDF data to put into the "card" card
   _profileTriples(username, name, email) {
-    if (!username) {
-      return Promise.reject('Must provide a username!')
-    }
-
+    if (!username) { return Promise.reject('Must provide a username!') }
     let writer = new Writer()
-    let docTitle = null
-    if (name) {
-      docTitle = {
-        subject: '',
-        predicate: DC.title,
-        object: N3Util.createLiteral(`WebID profile of ${name}`)
-      }
-    } else {
-      docTitle = {
-        subject: '',
-        predicate: DC.title,
-        object: N3Util.createLiteral(`WebID profile of ${username}`)
-      }
-    }
 
-    // about profile doc
-    let aboutProfileDoc = [
-      docTitle,
-        {
-          subject: '',
-          predicate: RDF.type,
-          object: FOAF.PersonalProfileDocument
-        },
-        {
-          subject: '',
-          predicate: FOAF.maker,
-          object: '#me'
-        },
-        {
-          subject: '',
-          predicate: FOAF.primaryTopic,
-          object: '#me'
-        }
-    ]
-    for (var t of aboutProfileDoc) {
-      writer.addTriple(t)
-    }
+    if (name) writer.addTriple(rdf.sym(''),DC('title'), `WebID profile of ${name}`)
+    else writer.addTriple(rdf.sym(''), DC('title'), `WebID profile of ${username}`)
 
-    let aboutPerson = [
-        {
-          subject: '#me',
-          predicate: RDF.type,
-          object: FOAF.Person
-        }
-    ]
+    writer.addTriple(rdf.sym(''), RDF('type') ,FOAF('PersonalProfileDocument'))
+    writer.addTriple(rdf.sym(''), RDF('maker') ,rdf.sym('#me'))
+    writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#me'))
 
-    if (email) {
-      aboutPerson.push({
-        subject: '#me',
-        predicate: FOAF.mbox,
-        object: email
-      })
-    }
-
-    if (name) {
-      aboutPerson.push({
-        subject: '#me',
-        predicate: FOAF.name,
-        object: N3Util.createLiteral(name)
-      })
-    }
-
-    for (t of aboutPerson) {
-      writer.addTriple(t)
-    }
-
+    writer.addTriple(rdf.sym('#me'), RDF('type'), FOAF('Person'))
+    if (email) writer.addTriple(rdf.sym('#me'), FOAF('mbox'), email)
+    if (name) writer.addTriple(rdf.sym('#me'), FOAF('name'), name)
     return writer.end()
   }
 }

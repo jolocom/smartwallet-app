@@ -5,7 +5,6 @@ import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-
 import {Paper, AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -95,6 +94,7 @@ let App = React.createClass({
         ),
         search: <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
       }
+
     } else if (path.match('/chat')) {
       return {
         id: 'chat',
@@ -105,6 +105,7 @@ let App = React.createClass({
           </div>
         )
       }
+
     } else if (path.match('/contacts')) {
       return {
         id: 'contacts',
@@ -179,7 +180,6 @@ let App = React.createClass({
   render() {
     let component = this.getComponent()
     let styles = this.getStyles()
-
     let search = component.search || <SearchBar ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
 
     return (
