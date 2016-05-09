@@ -10,7 +10,7 @@ module.exports = {
     './src/index.html'
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js', '.jsx', '.json'],
     root: path.resolve(__dirname) + '/src/js',
     alias: {
       actions: 'actions',
@@ -26,6 +26,9 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: 'js'
   },
+  externals:[{
+    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
+  }],
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],
