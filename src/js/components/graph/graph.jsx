@@ -34,7 +34,6 @@ let Graph = React.createClass({
   onStateUpdate: function(data, signal) {
 
     this.setState(data)
-
     if (!this.state.loaded) {
       graphActions.getInitialGraphState()
     }

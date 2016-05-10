@@ -18,6 +18,7 @@ export default Reflux.createStore({
     this.listenTo(accountActions.logout, this.onLogout)
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
+    console.warn('We are set')
     this.state = {
       //These state keys describe the graph
       user: null,
@@ -157,6 +158,7 @@ export default Reflux.createStore({
   },
 
   onGetState: function(){
+    console.log(this.state, 'this is what we have from onGetState')
     this.trigger( this.state)
   },
 
@@ -174,6 +176,7 @@ export default Reflux.createStore({
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
     this.state.user = result[0].uri
+    console.log('this is the state we are getting now', this.state)
     this.trigger(this.state)
   },
 
