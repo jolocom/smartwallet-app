@@ -53,7 +53,7 @@ export default Reflux.createStore({
       .then((xhr) => {
         // parse profile document from text
         let parser = new Parser()
-        return parser.parse(xhr.response)
+        parser.parse(xhr.response)
       })
       .then((res) => {
         ProfileActions.load.completed(webid, res.triples, res.prefixes)

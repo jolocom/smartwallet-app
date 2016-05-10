@@ -3,7 +3,6 @@ import graphAgent from '../lib/agents/graph.js'
 import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import d3Convertor from '../lib/d3-converter'
-import STYLES from '../styles/app'
 import {Writer} from '../lib/rdf'
 import rdf from 'rdflib'
 import solid from 'solid-client'
@@ -16,9 +15,10 @@ export default Reflux.createStore({
   init: function(){
 
     this.listenTo(accountActions.logout, this.onLogout)
-    this.writer = new Writer()
+
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
+
     this.state = {
       //These state keys describe the graph
       user: null,
@@ -26,50 +26,18 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      newLink: null,
       drawn: false,
       highlighted: null,
+      linkSubject: null,
+      linkObject: null,
+      // Keeps track of all the nodes we navigated to.
+      navHistory: [],
       //These describe the ui
       showPinned: false,
       showSearch: false,
-      plusDrawerOpen: false,
+      plusDrawerOpen: false
     }
-  },
-
-  onSetState: function(state){
-      this.state = state
-      this.trigger(this.state)
-  },
-
-  onAddNode: function(subject, predicate, object){
-    // First we fetch the triples at the webId/uri of the user adding the triple
-    this.gAgent.fetchTriplesAtUri(subject.uri).then((file) => {
-      for (var i = 0; i < file.triples.length; i++) {
-        let triple = file.triples[i]
-        this.writer.addTriple(triple.subject, triple.predicate, triple.object)
-      }
-      // Then we add the new triple to the object representing the current file
-      // This function also returns true if the operation is successfull and false if not
-      // Not the best type of error handling TODO improve later.
-      if (this.writer.addTriple(subject, predicate, object))
-      {
-        // Then we serialize the object to Turtle and PUT it's address.
-        solid.web.put(subject.uri, this.writer.end())
-
-        // This fetches the triples at the newly added file, it allows us to draw it
-        // the graph accurately
-        this.gAgent.fetchTriplesAtUri(object.uri).then((result)=>{
-          result.triples.uri = object.uri
-          // Now we tell d3 to draw a new adjacent node on the graph, with the info from
-          // the triple file
-          graphActions.addNode.completed(this.convertor.convertToD3('a', result.triples))
-        })
-      }
-    })
-  },
-
-  onAddNodeCompleted: function(node){
-    this.state.newNode = node
-    this.trigger(this.state)
   },
 
   onLogout(){
@@ -80,8 +48,11 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      newLink: null,
       drawn: false,
       highlighted: null,
+      linkSubject: null,
+      navHistory: [],
       // UI related
       showPinned:false,
       showSearch: false,
@@ -90,16 +61,104 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  onHighlight: function(node) {
-    let info = null
-    // Don't judge me
-    d3.select(node).attr('x', (d) => { info = d })
-    this.state.highlighted = info.uri
-
+  onSetState: function(state){
+    this.state = state
     this.trigger(this.state)
   },
 
+  onChooseSubject: function() {
+    // We choose the subject of the new link
+    if (this.state.highlighted) this.state.linkSubject = this.state.highlighted
+    else this.state.linkSubject = this.state.center.uri
+    console.log('we chose the subject to be', this.state.linkSubject)
+    this.trigger(this.state)
+
+    graphActions.linkTriple()
+  },
+
+  onChooseObject: function() {
+    // We choose the object of the new link
+    if (this.state.highlighted) this.state.linkObject = this.state.highlighted
+    else this.state.linkObject = this.state.center.uri
+    this.trigger(this.state)
+    console.log('we chose the object to be', this.state.linkObject)
+  },
+
+  onLinkTriple: function(){
+    // this.state.newLink = rdf.sym(this.state.linkSubject) + FOAF('knows') + rdf.sym(this.state.linkObject)
+    graphActions.writeTriple(rdf.sym(this.state.linkSubject), FOAF('knows'), rdf.sym(this.state.linkObject), ' ')
+  },
+
+  createAndConnectNode(title, description, image) {
+    // This returns the localhost:8443/name/ this adress is used for now as the container, can be changed later
+    let destination = this.state.user.substring(0, this.state.user.length-15)
+    // Creating a rdf document.
+    // We are passing the current user / creator, the destination where the resource will be put,
+    // The title, description and image, these will be put in the according rdf attribute fields.
+    this.gAgent.createNode(this.state.user,destination, title, description, image).then((res) => {
+      // Once that's done, we add a "User made RDF FILE" triple to the author's rdf File
+      // writeTriple will aslo make the d3 add the node dynamically to the graph, now that is not
+      // fully supported, and the added node will dissapear upon refresh and have a name of anonymous because
+      // it has no name field but a title one
+      // TODO, this is a easy addaptation to implement, I will do it in the close future.
+      graphActions.writeTriple(rdf.sym(this.state.user), FOAF('made'), rdf.sym(res.url))
+    })
+  },
+
+  // This writes a new triple into the rdf file
+  onWriteTriple: function(subject, predicate, object) {
+    let writer = new Writer()
+    // First we fetch the triples at the webId/uri of the user adding the triple
+    this.gAgent.fetchTriplesAtUri(subject.uri).then((file) => {
+      for (var i = 0; i < file.triples.length; i++) {
+        let triple = file.triples[i]
+        writer.addTriple(triple.subject, triple.predicate, triple.object)
+      }
+
+      // We check if the rdf file we are writing to actually belongs to the person
+      // writing.
+      // Later we will need to implement public node support somehow
+      let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)[0].object.uri
+      if (this.state.user == author) {
+        // Then we add the new triple to the object representing the current file
+        // This function also returns true if the operation is successfull and false if not
+        // Not the best type of error handling TODO improve later.
+        if (writer.addTriple(subject, predicate, object))
+        {
+          // Then we serialize the object to Turtle and PUT it's address.
+          solid.web.put(subject.uri, writer.end())
+          if(subject.uri == this.state.center.uri) {
+            graphActions.drawNewNode(subject, predicate, object)
+          }
+        }
+      } else {
+        console.warn('You are not the owner of this node')
+      }
+    })
+  },
+
+  // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
+  drawNewNode: function(subject, predicate, object){
+    // This fetches the triples at the newly added file, it allows us to draw it
+    // the graph accurately
+    this.gAgent.fetchTriplesAtUri(object.uri).then((result)=>{
+      result.triples.uri = object.uri
+      // Now we tell d3 to draw a new adjacent node on the graph, with the info from
+      // the triple file
+      this.state.newNode = this.convertor.convertToD3('a', result.triples)
+      this.trigger(this.state)
+    })
+  },
+
+  onHighlight: function(node) {
+    if(!node) this.state.highlighted = null
+    else this.state.highlighted = node.uri
+    this.trigger(this.state, 'highlight')
+  },
+
   onGetState: function(){
+    console.log(this.state, 'this is what we have from onGetState')
+
     this.trigger( this.state)
   },
 
@@ -117,6 +176,7 @@ export default Reflux.createStore({
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
     this.state.user = result[0].uri
+
     this.trigger(this.state)
   },
 
@@ -126,11 +186,18 @@ export default Reflux.createStore({
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
+      // Before updating the this.state.center, we push the old center node
+      // to the node history
+      this.state.navHistory.push(this.state.center)
+
       this.state.center = triples[0]
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
+
+      this.state.highlighted = null
+
       this.trigger(this.state, 'redraw')
     })
   }

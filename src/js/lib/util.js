@@ -24,7 +24,8 @@ let Util = {
 
   // for short randomStrings
   randomString(length) {
-    return Math.random().toString(36).substring(2, length + 3)
+    // Hope this is trully random, will need to do some extra research.
+    return Date.now().toString(36).substring(2, length + 3)
   },
 
   webidRoot(webid) {
