@@ -111,9 +111,8 @@ class GraphAgent extends HTTPAgent {
 
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
-    let Links = [FOAF('knows').uri]
+    let Links = [FOAF('knows').uri, FOAF('made').uri, FOAF('maker').uri]
     let neighbours = triples.filter((t) => t.subject.uri == center && Links.indexOf(t.predicate.uri) >= 0)
-
 
     return new Promise ((resolve) => {
       let graphMap = []
