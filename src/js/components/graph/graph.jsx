@@ -23,12 +23,14 @@ let Graph = React.createClass({
   },
 
   childContextTypes: {
-    node: React.PropTypes.object
+    node: React.PropTypes.object,
+    user: React.PropTypes.string
   },
 
   getChildContext: function() {
     return {
-      node: this.state.center
+      node: this.state.center,
+      user: this.state.user
     }
   },
 
@@ -37,7 +39,6 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data, signal) {
-
     this.setState(data)
     if (!this.state.loaded) {
       graphActions.getInitialGraphState()
@@ -85,7 +86,7 @@ let Graph = React.createClass({
 
   testAdd(){
     // let destination = this.state.center
-    graphActions.createAndConnectNode('test', 'description')
+    graphActions.createAndConnectNode(this.state.user, 'test', 'description')
   },
 
   addNode: function(type) {
@@ -141,10 +142,9 @@ let Graph = React.createClass({
     return (
       <div style={styles.container}>
         <FabMenu style={styles.menu}>
+          <FabMenuItem icon="radio_button_unchecked" label="Node" onClick={() => {this.addNode('node')}}/>
           <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
-          <FabMenuItem icon="person" label="Contact" onClick={() => {this.addNode('person')}}/>
-          <FabMenuItem icon="attachment" label="File" onClick={() => {this.linkSubject()}}/>
-          <FabMenuItem icon="wb_sunny" label="Sensor" onClick={() => {this.linkObject()}}/>
+          <FabMenuItem icon="insert_link" label="Link" onClick={() => {this.linkSubject()}}/>
         </FabMenu>
 
         <div style={styles.chart} ref="graph"></div>

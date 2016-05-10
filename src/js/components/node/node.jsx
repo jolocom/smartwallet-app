@@ -60,7 +60,7 @@ let Node = React.createClass({
 
     if (!node) return null
 
-    if (node.type === FOAF.PersonalProfileDocument) {
+    if (node.type === FOAF('PersonalProfileDocument')) {
       return <ProfileNode node={node}/>
     }
     switch(node.description) {

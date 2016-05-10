@@ -69,7 +69,7 @@ export default Reflux.createStore({
   onLoadCompleted(webid, triples, prefixes) {
     // subject which represents our profile
     // everything's fixed but name and email
-    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
+    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF('name') || t.predicate == FOAF('mbox'))))
 
     let state = {
       webid: webid,
@@ -83,13 +83,13 @@ export default Reflux.createStore({
     let relevant = triples.filter((t) => t.subject == webid)
 
     for (var t of relevant){
-      if (t.predicate == FOAF.name) {
+      if (t.predicate == FOAF('name')) {
         // name
         state.name =  this._getValue(t.object)
-      } else if (t.predicate == FOAF.mbox) {
+      } else if (t.predicate == FOAF('mbox')) {
         // email
         state.email =  this._getValue(t.object).replace('mailto:', '')
-      } else if (t.predicate == FOAF.img) {
+      } else if (t.predicate == FOAF('img')) {
         // image uri
         state.imgUri =  this._getValue(t.object)
       } else if (t.predicate == CERT.key) {
@@ -112,12 +112,12 @@ export default Reflux.createStore({
 
     writer.addTriple({
       subject: params.webid,
-      predicate: FOAF.name,
+      predicate: FOAF('name'),
       object: N3Util.createLiteral(params.name)
     })
     writer.addTriple({
       subject: params.webid,
-      predicate: FOAF.mbox,
+      predicate: FOAF('name'),
       object: N3Util.createIRI(params.email)
     })
 

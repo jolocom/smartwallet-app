@@ -3,9 +3,7 @@ import graphAgent from '../lib/agents/graph.js'
 import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import d3Convertor from '../lib/d3-converter'
-import {Writer} from '../lib/rdf'
 import rdf from 'rdflib'
-import solid from 'solid-client'
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 
 export default Reflux.createStore({
@@ -86,7 +84,7 @@ export default Reflux.createStore({
 
   onLinkTriple: function(){
     // this.state.newLink = rdf.sym(this.state.linkSubject) + FOAF('knows') + rdf.sym(this.state.linkObject)
-    graphActions.writeTriple(rdf.sym(this.state.linkSubject), FOAF('knows'), rdf.sym(this.state.linkObject), ' ')
+    graphActions.writeTriple(this.state.linkSubject, FOAF('knows'), this.state.linkObject, ' ')
   },
 
   createAndConnectNode(title, description, image) {
@@ -95,45 +93,24 @@ export default Reflux.createStore({
     // Creating a rdf document.
     // We are passing the current user / creator, the destination where the resource will be put,
     // The title, description and image, these will be put in the according rdf attribute fields.
-    this.gAgent.createNode(this.state.user,destination, title, description, image).then((res) => {
+    this.gAgent.createNode(this.state.user, destination, title, description, image).then((res) => {
       // Once that's done, we add a "User made RDF FILE" triple to the author's rdf File
       // writeTriple will aslo make the d3 add the node dynamically to the graph, now that is not
       // fully supported, and the added node will dissapear upon refresh and have a name of anonymous because
       // it has no name field but a title one
       // TODO, this is a easy addaptation to implement, I will do it in the close future.
-      graphActions.writeTriple(rdf.sym(this.state.user), FOAF('made'), rdf.sym(res.url))
+      graphActions.writeTriple(this.state.user, FOAF('made'), res.url)
     })
   },
-
+  // @TODO move this away from the store and use gAgent directly in createAndConnect?
   // This writes a new triple into the rdf file
   onWriteTriple: function(subject, predicate, object) {
-    let writer = new Writer()
-    // First we fetch the triples at the webId/uri of the user adding the triple
-    this.gAgent.fetchTriplesAtUri(subject.uri).then((file) => {
-      for (var i = 0; i < file.triples.length; i++) {
-        let triple = file.triples[i]
-        writer.addTriple(triple.subject, triple.predicate, triple.object)
+    this.gAgent.writeTriple(this.state.user, subject, predicate, object).then(() => {
+      if(subject.uri === this.state.center.uri) {
+        graphActions.drawNewNode(subject, predicate, object)
       }
-
-      // We check if the rdf file we are writing to actually belongs to the person
-      // writing.
-      // Later we will need to implement public node support somehow
-      let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)[0].object.uri
-      if (this.state.user == author) {
-        // Then we add the new triple to the object representing the current file
-        // This function also returns true if the operation is successfull and false if not
-        // Not the best type of error handling TODO improve later.
-        if (writer.addTriple(subject, predicate, object))
-        {
-          // Then we serialize the object to Turtle and PUT it's address.
-          solid.web.put(subject.uri, writer.end())
-          if(subject.uri == this.state.center.uri) {
-            graphActions.drawNewNode(subject, predicate, object)
-          }
-        }
-      } else {
-        console.warn('You are not the owner of this node')
-      }
+    }).catch((err) => {
+      console.warn(err)
     })
   },
 

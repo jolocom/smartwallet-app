@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {AppBar, IconButton} from 'material-ui'
+import {AppBar, IconButton, FlatButton} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
 import Dialog from 'components/common/dialog.jsx'
@@ -39,10 +39,7 @@ let NodeAdd = React.createClass({
   getStyles() {
     return {
       bar: {
-        backgroundColor: grey500
-      },
-      content: {
-        padding: '20px'
+        // backgroundColor: grey500
       }
     }
   },
@@ -55,7 +52,7 @@ let NodeAdd = React.createClass({
     let styles = this.getStyles()
     let {node, type} = this.props.params
     let config = this.getTypeConfig(type)
-    let title = config.title || `Add ${type}`
+    let title = config.title || `New ${type}`
 
     let Component = config.component
 
@@ -64,8 +61,8 @@ let NodeAdd = React.createClass({
         <Layout>
           <AppBar
             title={title}
-            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this._handleClose}>arrow_back</IconButton>}
-            iconElementRight={<IconButton iconClassName="material-icons" onTouchTap={this._handleSubmit}>check</IconButton>}
+            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this._handleClose}>close</IconButton>}
+            iconElementRight={<FlatButton label="Create" onTouchTap={this._handleSubmit}/>}
             style={styles.bar}
           />
           <Content style={styles.content}>
