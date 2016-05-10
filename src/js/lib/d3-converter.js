@@ -44,7 +44,7 @@ class D3Converter {
       let halfwidth = STYLES.width / 2
       let halfheight = STYLES.height / 2
 
-      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth 
+      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth
       props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfheight
     } else if (!i && !n && rank =='a') {
       // This takes care of nodes that are added dynamically, the mid + 30 is
@@ -80,7 +80,7 @@ class D3Converter {
     // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
     if (rank == 'a') props.rank = 'adjacent'
     if (rank == 'c') props.rank = 'center'
-
+    console.log(props)
     return props
   }
 }

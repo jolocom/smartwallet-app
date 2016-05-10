@@ -107,7 +107,7 @@ export default Reflux.createStore({
   onWriteTriple: function(subject, predicate, object) {
     this.gAgent.writeTriple(this.state.user, subject, predicate, object).then(() => {
       if(subject.uri === this.state.center.uri) {
-        graphActions.drawNewNode(subject, predicate, object)
+        graphActions.drawNewNode(object.uri)
       }
     }).catch((err) => {
       console.warn(err)
@@ -115,11 +115,11 @@ export default Reflux.createStore({
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
-  drawNewNode: function(subject, predicate, object){
+  drawNewNode: function(object){
     // This fetches the triples at the newly added file, it allows us to draw it
     // the graph accurately
-    this.gAgent.fetchTriplesAtUri(object.uri).then((result)=>{
-      result.triples.uri = object.uri
+    this.gAgent.fetchTriplesAtUri(object).then((result)=>{
+      result.triples.uri = object
       // Now we tell d3 to draw a new adjacent node on the graph, with the info from
       // the triple file
       this.state.newNode = this.convertor.convertToD3('a', result.triples)

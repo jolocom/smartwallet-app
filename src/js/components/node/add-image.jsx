@@ -3,7 +3,6 @@ import Radium from 'radium'
 import accepts from 'attr-accept'
 import _ from 'lodash'
 
-import {endpoint} from 'settings'
 import NodeActions from 'actions/node'
 
 import {TextField, RaisedButton} from 'material-ui'
@@ -42,7 +41,7 @@ let NodeAddImage = React.createClass({
 
   submit() {
     let values = _.pick(this.state, 'file', 'title', 'description')
-    NodeActions.upload(this.props.node, `${endpoint}/eelco/profile/card#me`, values)
+    NodeActions.create(this.props.node, values.title, values.description, values.file)
   },
 
   render: function() {

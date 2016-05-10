@@ -5,6 +5,7 @@ import {Parser} from '../rdf.js'
 import {Writer} from '../rdf.js'
 import solid from 'solid-client'
 import Util from '../util.js'
+import GraphActions from '../../actions/graph-actions'
 
 import rdf from 'rdflib'
 
@@ -38,7 +39,6 @@ class GraphAgent extends HTTPAgent {
     return new Promise((resolve, reject) => {
       if (image instanceof File) {
         this.storeFile(currentUser, dstContainer, image).then((result) => {
-          console.log(result.url)
           resolve(result.url)
         }).catch((err) => {
           reject(err)
@@ -50,14 +50,19 @@ class GraphAgent extends HTTPAgent {
       if (image) {
         writer.addTriple(rdf.sym(uri), FOAF('img'), image)
       }
-      return solid.web.put(uri, writer.end())
+      this.writeTriple(currentUser, currentUser, FOAF('made'), rdf.sym(uri)).then(() => {
+        GraphActions.drawNewNode(uri)
+        return solid.web.put(uri, writer.end())
+      })
     })
   }
 
   storeFile(currentUser, dstContainer, file) {
     let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
     return solid.web.put(uri, file, file.type)
+
   }
+
 
   writeTriple(user, subject, predicate, object) {
     let writer = new Writer()
