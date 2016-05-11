@@ -34,7 +34,7 @@ moment.locale('en', {
 
 let rootEl = document.getElementById('app')
 
-ReactDOM.render(<AppContainer component={Routes}/>, rootEl)
+ReactDOM.render(<AppContainer><Routes/></AppContainer>, rootEl)
 
 if (module.hot) {
   module.hot.accept('./routes.jsx', () => {
