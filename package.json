@@ -4,6 +4,7 @@
   "description": "Social app / linked data explorer built for SoLiD infrastracture",
   "main": "index.js",
   "scripts": {
+    "start": "node server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -48,13 +49,17 @@
   },
   "dependencies": {
     "d3": "^3.5.6",
+    "express": "^4.13.4",
     "history": "^1.11.1",
+    "http-proxy": "^1.13.2",
     "jquery": "^2.1.4",
     "json-loader": "^0.5.4",
     "lodash": "^3.10.0",
     "material-ui": "^0.15.0-beta.1",
     "moment": "^2.10.6",
     "n3": "^0.4.3",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "radium": "^0.15.3",
     "rdflib": "^0.6.1",
     "react": "^15.0.0",
