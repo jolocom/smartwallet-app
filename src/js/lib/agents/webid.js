@@ -65,6 +65,9 @@ class WebIDAgent extends LDPAgent {
     let webid = `${endpoint}/${username}/profile/card#me`
     let writer = new Writer()
 
+    // Please take a look at
+    // https://github.com/solid/solid-spec/blob/master/solid-webid-profiles.md#profile-representation-formats
+    // For extra info on the structure of a valid webId Profile
     writer.addTriple(rdf.sym(''), DC('title'), `Inbox of ${username}`)
     writer.addTriple(rdf.sym(''), FOAF('maker'), webid)
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#inbox'))
@@ -81,7 +84,7 @@ class WebIDAgent extends LDPAgent {
     else writer.addTriple(rdf.sym(''), DC('title'), `WebID profile of ${username}`)
 
     writer.addTriple(rdf.sym(''), RDF('type') ,FOAF('PersonalProfileDocument'))
-    writer.addTriple(rdf.sym(''), RDF('maker') ,rdf.sym('#me'))
+    writer.addTriple(rdf.sym(''), FOAF('maker') ,rdf.sym('#me'))
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#me'))
 
     writer.addTriple(rdf.sym('#me'), RDF('type'), FOAF('Person'))

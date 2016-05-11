@@ -1,14 +1,14 @@
 import Reflux from 'reflux'
-import graphAgent from '../lib/agents/graph.js'
-import graphActions from '../actions/graph-actions'
-import accountActions from '../actions/account'
-import d3Convertor from '../lib/d3-converter'
+import graphAgent from 'lib/agents/graph.js'
+import previewActions from 'actions/preview-actions'
+import accountActions from 'actions/account'
+import d3Convertor from 'lib/d3-converter'
 import rdf from 'rdflib'
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 
 export default Reflux.createStore({
 
-  listenables: [graphActions],
+  listenables: [previewActions],
 
   init: function(){
 
@@ -71,7 +71,7 @@ export default Reflux.createStore({
     console.log('we chose the subject to be', this.state.linkSubject)
     this.trigger(this.state)
 
-    graphActions.linkTriple()
+    previewActions.linkTriple()
   },
 
   onChooseObject: function() {
@@ -84,7 +84,7 @@ export default Reflux.createStore({
 
   onLinkTriple: function(){
     // this.state.newLink = rdf.sym(this.state.linkSubject) + FOAF('knows') + rdf.sym(this.state.linkObject)
-    graphActions.writeTriple(this.state.linkSubject, FOAF('knows'), this.state.linkObject, ' ')
+    previewActions.writeTriple(this.state.linkSubject, FOAF('knows'), this.state.linkObject, ' ')
   },
 
   createAndConnectNode(title, description, image) {
@@ -99,7 +99,7 @@ export default Reflux.createStore({
       // fully supported, and the added node will dissapear upon refresh and have a name of anonymous because
       // it has no name field but a title one
       // TODO, this is a easy addaptation to implement, I will do it in the close future.
-      graphActions.writeTriple(this.state.user, FOAF('made'), res.url)
+      previewActions.writeTriple(this.state.user, FOAF('made'), res.url)
     })
   },
   // @TODO move this away from the store and use gAgent directly in createAndConnect?
@@ -107,7 +107,7 @@ export default Reflux.createStore({
   onWriteTriple: function(subject, predicate, object) {
     this.gAgent.writeTriple(this.state.user, subject, predicate, object).then(() => {
       if(subject.uri === this.state.center.uri) {
-        graphActions.drawNewNode(object.uri)
+        previewActions.drawNewNode(object.uri)
       }
     }).catch((err) => {
       console.warn(err)
@@ -144,7 +144,7 @@ export default Reflux.createStore({
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)}
-      graphActions.getInitialGraphState.completed(triples)
+      previewActions.getInitialGraphState.completed(triples)
     })
   },
 

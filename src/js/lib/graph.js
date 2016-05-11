@@ -7,26 +7,48 @@
 import d3 from 'd3'
 import STYLES from 'styles/app'
 import graphActions from '../actions/graph-actions'
+import {EventEmitter} from 'events'
 
-export default class GraphD3 {
+export default class GraphD3 extends EventEmitter {
 
-  constructor(el){
+  constructor(el) {
+    super()
+
     this.el = el
-    this.width = STYLES.width
-    this.height = STYLES.height
 
-
-    // We also have the this.force and this.svg being used in this file,
-    // they are declared later.
+    this.rendered = false
   }
 
+  render(nodes) {
+    if (this.rendered) {
+      this.eraseGraph()
+    }
 
+    this.calcDimensions()
+
+    this.setUpForce(nodes)
+
+    this.drawBackground()
+    this.drawNodes()
+
+    this.rendered = true
+  }
+
+  calcDimensions() {
+    this.width = this.el.offsetWidth || STYLES.width
+    this.height = this.el.offsetHeight || STYLES.height
+
+    let ratio = this.width * this.height
+
+    this.smallNodeSize = ratio / 2400
+    this.largeNodeSize = ratio / 1800
+  }
 
    // Starts the force simulation.
-   setUpForce = function(nodes){
+  setUpForce = function(nodes){
     // Upon set up force we also initialize the dataLinks and dataNodes
     // variables.
-    this.heighlighted = nodes.heighlighted
+    this.highlighted = nodes.highlighted
     this.dataNodes = [nodes.center]
     this.dataLinks = []
 
@@ -40,8 +62,8 @@ export default class GraphD3 {
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
       .links(this.dataLinks)
-      .charge(-12500)
-      .linkDistance(STYLES.largeNodeSize * 0.5)
+      .charge(-5000)
+      .linkDistance(this.largeNodeSize * 1.5)
       .friction(0.8)
       .gravity(0.2)
       .size([this.width, this.height])
@@ -50,7 +72,7 @@ export default class GraphD3 {
     // We define our own drag functions, allow for greater controll over the way
     // it works
     this.node_drag = this.force.drag()
-      .on("dragend", this.dragEnd)
+      .on('dragend', this.dragEnd)
 
   }.bind(this)
 
@@ -63,37 +85,47 @@ export default class GraphD3 {
       .attr('height', this.height)
       .append('svg:g')
 
-    this.svg.append('svg:rect')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .attr('fill', 'white')
-
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
-      .attr('r', STYLES.largeNodeSize* 0.57)
+      .attr('r', this.largeNodeSize* 0.57)
       .style('fill', STYLES.lightGrayColor)
   }.bind(this)
 
 
 
   drawNodes = function() {
+    let self = this
     // These make the following statements shorter
-    let largeNode = STYLES.largeNodeSize
-    let smallNode = STYLES.smallNodeSize
+    let largeNode = this.largeNodeSize
+    let smallNode = this.smallNodeSize
+
+
+    let defsFull = this.svg.append('svg:defs')
+    defsFull.append('svg:pattern')
+      .attr('id',  'full')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('x', (this.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
+      .attr('y', -(this.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
+      .attr('patternUnits', 'userSpaceOnUse')
+      .append('svg:image')
+      .attr('xlink:href', 'img/full.png' )
+      .attr('width', STYLES.fullScreenButton)
+      .attr('height', STYLES.fullScreenButton)
 
     // We draw the lines for all the elements in the dataLinks array.
-    let link =  this.svg.selectAll('line')
-      .data(this.dataLinks, (d) => {return d.source.uri + '-' + d.target.uri})
-      .enter()
-      .insert('line', '.node')
-      .attr('class','link')
-      .attr('stroke-width', (d) => {
-        // Capped at 13, found it to look the best
-        return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
-      .attr('stroke', STYLES.lightGrayColor)
+    // let link =  this.svg.selectAll('line')
+    //   .data(this.dataLinks, (d) => {return d.source.uri + '-' + d.target.uri})
+    //   .enter()
+    //   .insert('line', '.node')
+    //   .attr('class','link')
+    //   .attr('stroke-width', (d) => {
+    //     // Capped at 13, found it to look the best
+    //     return this.width / 45 > 13 ? 13 : this.width / 45})
+    //     .attr('stroke', STYLES.lightGrayColor)
 
-    // We draw a node for each element in the dataNodes array
+      // We draw a node for each element in the dataNodes array
     let node = this.svg.selectAll('.node')
       .data(this.dataNodes, (d) => {return d.uri})
       .enter()
@@ -102,26 +134,11 @@ export default class GraphD3 {
       .call(this.node_drag)
 
       // We need to use patterns in order to apply images to nodes
-      let defs = node.append('svg:defs')
-      defs.append('svg:pattern')
-        .attr('id',  (d)=> d.uri)
-        .attr('width', '100%')
-        .attr('height', '100%')
-        .attr('x', (d) => {
-          return d.rank == 'center' ? -largeNode / 2 : -smallNode / 2})
-        .attr('y', (d) => {
-          return d.rank == 'center' ? -largeNode/ 2 : -smallNode / 2})
-        .attr('patternUnits', 'userSpaceOnUse')
-        .append('svg:image')
-        .attr('xlink:href', (d) => d.img)
-        .attr('width', (d) => {
-          return d.rank == 'center' ? largeNode: smallNode})
-        .attr('height', (d) => {
-          return d.rank == 'center' ? largeNode: smallNode})
 
     let defsImages = node.append('svg:defs')
     defsImages.append('svg:pattern')
       .attr('id',  (d)=> d.uri)
+      .attr('class', 'image')
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('x', (d) => {
@@ -136,10 +153,10 @@ export default class GraphD3 {
       .attr('height', (d) => {
         return d.rank == 'center' ? largeNode : smallNode})
 
-      // These will be later used in the add node function, therefore they have
-      // to be reachable
-      this.defsFilter = this.svg.append('svg:defs')
-      this.filter = this.defsFilter.append('filter')
+    // These will be later used in the add node function, therefore they have
+    // to be reachable
+    this.defsFilter = this.svg.append('svg:defs')
+    this.filter = this.defsFilter.append('filter')
       .attr('id', 'darkblur')
 
     // SourceAlpha refers to opacity of graphic that this filter will be applied to
@@ -147,7 +164,7 @@ export default class GraphD3 {
     // in blur
     // This basically takes care of blurring
     this.filter.append('feGaussianBlur')
-        .attr('stdDeviation', 1.5)
+      .attr('stdDeviation', 1.5)
 
     this.componentTransfer = this.filter.append('feComponentTransfer')
     this.componentTransfer.append('feFuncR')
@@ -163,6 +180,7 @@ export default class GraphD3 {
         .attr('slope', 0.6)
 
     node.append('circle')
+      .attr('class', 'nodecircle')
       .attr('r', (d) => {
         return d.rank == 'center' ? largeNode / 2 : smallNode / 2 })
       .style('fill', (d) => {
@@ -183,62 +201,81 @@ export default class GraphD3 {
       .text((d) => {return d.name ? d.name : 'Anonymous'})
 
      // The text description of a person
-     node.append('svg:text')
-    .attr('class', 'nodedescription')
-    .style('fill', '#e6e6e6')
-    .attr('text-anchor', 'middle')
-    .attr('opacity', 0)
-    .attr('dy', 0)
-    .style('font-size', '80%')
-    .text(function (d) {
-      // In case the person has no description available.
-      if (d.description) {
-        if(d.description.length>50) return (d.description.substring(0, 50)+'...')
-        else return d.description
-      }
-    })
-    // This wraps the description nicely.
-    .call(this.wrap, STYLES.largeNodeSize * 0.7, '', '')
+    node.append('svg:text')
+      .attr('class', 'nodedescription')
+      .style('fill', '#e6e6e6')
+      .attr('text-anchor', 'middle')
+      .attr('opacity', 0)
+      .attr('dy', 0)
+      .style('font-size', '80%')
+      .text(function (d) {
+        // In case the person has no description available.
+        if (d.description) {
+          if(d.description.length>50) return (d.description.substring(0, 50)+'...')
+          else return d.description
+        }
+      })
+      // This wraps the description nicely.
+      .call(this.wrap, this.largeNodeSize * 0.7, ' ', ' ')
+
+    let full = node.append('circle')
+     .attr('class', 'nodefullscreen')
+     .attr('r', 0 )
+     .style('fill', 'url(#full)')
+     .attr('stroke',STYLES.grayColor)
+     .attr('stroke-width',1)
+     .attr('cy', -this.largeNodeSize / 2.5)
+     .attr('cx', this.largeNodeSize / 2.5)
+
 
     // Subscribe to the click listeners
-    node.on('click', this.onClick)
+
+    // encapsulate the handler, so we have access to the graph instance
+    node.on('click', function(data) {
+      self.onClick(this, data)
+
+
+    })
+
     node.on('dblclick', this.onDblClick)
+
+    full.on('click', this.onClickFull)
+
     this.force.on('tick', this.tick)
   }.bind(this)
-
-
 
   // This function fires upon tick, around 30 times per second?
   tick = function(){
     // Update the link positions.
-    d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
-      .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
-      .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
-      .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
+    d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? this.width/2 : d.source.x})
+      .attr('y1', (d) => {return d.source.rank =='center' ? this.height/2 : d.source.y})
+      .attr('x2', (d) => {return d.target.rank =='center' ? this.width/2 : d.target.x})
+      .attr('y2', (d) => {return d.target.rank =='center' ? this.height/2 : d.target.y})
     // Update the node positions. We use translate because we are working with
     // a group of elements rather than just one.
-    d3.selectAll('g .node').attr('transform', function(d) {
+    d3.selectAll('g .node').attr('transform', (d) => {
       if (d.rank == 'center') {
-        d.x = STYLES.width / 2
-        d.y = STYLES.height / 2
+        d.x = this.width / 2
+        d.y = this.height / 2
       }
       return 'translate(' + d.x + ',' + d.y + ')'
     })
+    if(this.force.alpha() < 0.035) this.force.alpha(0.001)
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
   // We also prevent the node from bouncing away in case it's dropped to the middle
 
-  dragEnd = function(node, i) {
+  dragEnd = function(node) {
     this.force.stop()
     if (node.rank == 'center') {
       // In here we would have the functionality that opens the node's card
     } else if (node.rank =='adjacent') {
       // We check if the node is dropped on top of the middle node, if yes
       // We change the perspective
-      let w = STYLES.width
-      let h = STYLES.height
-      let size = STYLES.largeNodeSize
+      let w = this.width
+      let h = this.height
+      let size = this.largeNodeSize
       let x =  node.x > w / 2 - size / 2 && node.x < w / 2 + size / 2
       let y =  node.y > h / 2 - size / 2 && node.y < h / 2 + size / 2
 
@@ -263,24 +300,33 @@ export default class GraphD3 {
   }.bind(this)
 
 
-
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
-  onClick = function(node) {
+  onClickFull = function() {
+    console.log('you are now in full screen')
+    //stops propagation to node click handler
+    d3.event.stopPropagation()
+  }
+
+  onClick = function(node, data) {
+    console.log('you clicked the node')
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (d3.event.defaultPrevented) {
       return
     }
+    graphActions.highlight(null)
+    let smallSize = this.smallNodeSize
+    let largeSize = this.largeNodeSize
 
-    let smallSize = STYLES.smallNodeSize
-    let largeSize = STYLES.largeNodeSize
-
+    data.wasHighlighted = data.highlighted
     // We set all the circles back to their normal sizes
-    d3.selectAll('g .node').selectAll('circle')
+    d3.selectAll('g .node').selectAll('.nodecircle')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
-        return d.rank == 'center' ? largeSize / 2 : smallSize / 2 })
+        d.highlighted = false
+        return d.rank == 'center' ? largeSize / 2 : smallSize / 2
+      })
 
     // Setting all the pattern sizes back to normal.
     d3.selectAll('g .node').selectAll('pattern')
@@ -311,40 +357,64 @@ export default class GraphD3 {
     d3.selectAll('g .node').selectAll('.nodedescription')
       .attr('opacity', 0)
 
-    // NODE signifies the node that we clicked on. We enlarge it
-    d3.select(this).select('circle')
+    d3.selectAll('g .node').selectAll('.nodefullscreen')
+      .attr('r', 0 )
+
+    if (!data.wasHighlighted) {
+      // NODE signifies the node that we clicked on. We enlarge it
+      d3.select(node).select('circle')
+        .transition().duration(STYLES.nodeTransitionDuration)
+        .attr('r', this.largeNodeSize / 2)
+
+      // We enlarge the pattern of the node we clicked on
+      d3.select(node).select('pattern')
+        .transition().duration(STYLES.nodeTransitionDuration)
+        .attr('x', -this.largeNodeSize / 2)
+        .attr('y', -this.largeNodeSize / 2)
+
+      d3.select(node).select('.nodefullscreen')
+        .transition().duration(STYLES.nodeTransitionDuration)
+        .attr('r', STYLES.fullScreenButton/2 )
+
+      // We enlarge the image of the node we clicked on
+      // We also blur it a bit and darken it, so that the text displays better
+      d3.select(node).select('image')
+        .transition().duration(STYLES.nodeTransitionDuration)
+        .attr('width', this.largeNodeSize)
+        .attr('height', this.largeNodeSize)
+        .style('filter', 'url(#darkblur)')
+
+      // Tere is a slight bug when if you click on nodes really quickly, the text
+      // on some fails to dissapear, needs further investigation
+      // We fade in the description
+      d3.select(node).selectAll('text')
       .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('r', STYLES.largeNodeSize / 2)
+      .attr('opacity', 0.9)
 
-    // We enlarge the pattern of the node we clicked on
-    d3.select(this).select('pattern')
+      // We fade in the node name and make the text opaque
+      d3.select(node).select('.nodetext')
       .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('x', -STYLES.largeNodeSize / 2)
-      .attr('y', -STYLES.largeNodeSize / 2)
+      .attr('dy', -20)
+      .attr('opacity', 1)
 
-    // We enlarge the image of the node we clicked on
-    // We also blur it a bit and darken it, so that the text displays better
-    d3.select(this).select('image')
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('width', STYLES.largeNodeSize)
-      .attr('height', STYLES.largeNodeSize)
-      .style('filter', 'url(#darkblur)')
+      graphActions.highlight(node)
+    }
 
-    // Tere is a slight bug when if you click on nodes really quickly, the text
-    // on some fails to dissapear, needs further investigation
+    if (data.wasHighlighted) {
+      data.highlighted = false
+      this.emit('deselect', data)
+    }
+    else {
+      data.highlighted = true
+      this.emit('select', data)
+    }
+  }.bind(this)
 
-    // We fade in the description
-    d3.select(this).selectAll('text')
-    .transition().duration(STYLES.nodeTransitionDuration)
-    .attr('opacity', 0.9)
-
-    // We fade in the node name and make the text opaque
-    d3.select(this).select('.nodetext')
-    .transition().duration(STYLES.nodeTransitionDuration)
-    .attr('dy', -20)
-    .attr('opacity', 1)
+  updateHistory(history) {
+    // We have the history available here as an array, we can use it to do whatever
+    // we want. Up to Eric at this point.
+    console.log(history)
   }
-
 
   // Wraps the description of the nodes around the node.
   // http://bl.ocks.org/mbostock/7555321
@@ -396,7 +466,8 @@ export default class GraphD3 {
 
   // Alternative to dragging the node to the center. Does the same thing pretty much
   onDblClick = function(node) {
-    if (node.rank == 'center'){
+    if (node.rank == 'center') {
+      return
     } else {
       graphActions.navigateToNode(node)
     }

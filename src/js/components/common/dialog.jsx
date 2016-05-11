@@ -20,7 +20,7 @@ let Dialog = React.createClass({
         height: '100%',
         top: 0,
         left: 0,
-        zIndex: 10,
+        zIndex: 1400,
         opacity: 0,
         transform: 'translate(0, 100%)',
         transition: 'opacity .3s, transform .3s'
@@ -41,7 +41,7 @@ let Dialog = React.createClass({
   },
 
   toggle() {
-    this.setState({visible: !this.state.open})
+    this.setState({visible: !this.state.visible})
   },
 
   render() {

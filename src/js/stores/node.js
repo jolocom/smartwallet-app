@@ -1,41 +1,41 @@
 import Reflux from 'reflux'
-import NodeActions from 'actions/node'
-
+import nodeActions from 'actions/node'
+import {FOAF} from 'lib/namespaces.js'
 import GraphAgent from 'lib/agents/graph.js'
 
-let {add} = NodeActions
-
-let graphAgent = new GraphAgent()
+let {create} = nodeActions
 
 export default Reflux.createStore({
-  listenables: NodeActions,
-  getInitialState() {
-    return {
-      node: null
-    }
-  },
-  onLoad(uri) {
-    console.log(uri)
-  },
-  onAdd(origin, identity, node) {
-    console.log('onAdd', arguments)
-    let p
-    if (!node.uri) {
-      console.log('creating a new one')
-      p = graphAgent.createAndConnectNode(node.title, node.description, origin, identity)
-    } else {
-      console.log('connecting existing node')
-      p = graphAgent.connectNode(origin, node.uri)
-    }
+  listenables: nodeActions,
 
-    return p.then(add.completed)
+  init() {
+    this.gAgent = new GraphAgent()
   },
-  onAddCompleted() {
-    this.trigger({
-      completed: true
+
+  getInitialState() {
+    return null
+  },
+
+  create(user, title, description, image) {
+    // This returns the localhost:8443/name/ this adress is used for now as the container, can be changed later
+    // Creating a rdf document.
+    // We are passing the current user / creator, the destination where the resource will be put,
+    // The title, description and image, these will be put in the according rdf attribute fields.
+    // Image will be uploaded first if it's a 'File' instance
+    // let destination = user.substring
+    let destination = user.substring(0, user.indexOf('profile'))
+    this.gAgent.createNode(user, destination, title, description, image).then((res) => {
+      this.gAgent.writeTriple(user, user, FOAF('made'), res.url).then(() => {
+        create.completed(res.url)
+      })
     })
   },
-  onRemove() {
-    console.log('remove node')
+
+  onCreateCompleted(node) {
+    this.trigger(node)
+  },
+
+  link(user, start, end) {
+
   }
 })
