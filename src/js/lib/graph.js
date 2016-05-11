@@ -12,9 +12,8 @@ export default class GraphD3 {
 
   constructor(el){
     this.el = el
-    this.width = STYLES.width
-    this.height = STYLES.height
-
+    this.width = el.offsetWidth || STYLES.width
+    this.height = el.offsetHeight || STYLES.height
 
     // We also have the this.force and this.svg being used in this file,
     // they are declared later.
@@ -103,7 +102,7 @@ export default class GraphD3 {
     //   .attr('class','link')
     //   .attr('stroke-width', (d) => {
     //     // Capped at 13, found it to look the best
-    //     return STYLES.width / 45 > 13 ? 13 : STYLES.width / 45})
+    //     return this.width / 45 > 13 ? 13 : this.width / 45})
     //     .attr('stroke', STYLES.lightGrayColor)
 
       // We draw a node for each element in the dataNodes array
@@ -221,16 +220,16 @@ export default class GraphD3 {
   // This function fires upon tick, around 30 times per second?
   tick = function(){
     // Update the link positions.
-    d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? STYLES.width/2 : d.source.x})
-      .attr('y1', (d) => {return d.source.rank =='center' ? STYLES.height/2 : d.source.y})
-      .attr('x2', (d) => {return d.target.rank =='center' ? STYLES.width/2 : d.target.x})
-      .attr('y2', (d) => {return d.target.rank =='center' ? STYLES.height/2 : d.target.y})
+    d3.selectAll('.link').attr('x1', (d) => {return d.source.rank =='center' ? this.width/2 : d.source.x})
+      .attr('y1', (d) => {return d.source.rank =='center' ? this.height/2 : d.source.y})
+      .attr('x2', (d) => {return d.target.rank =='center' ? this.width/2 : d.target.x})
+      .attr('y2', (d) => {return d.target.rank =='center' ? this.height/2 : d.target.y})
     // Update the node positions. We use translate because we are working with
     // a group of elements rather than just one.
-    d3.selectAll('g .node').attr('transform', function(d) {
+    d3.selectAll('g .node').attr('transform', (d) => {
       if (d.rank == 'center') {
-        d.x = STYLES.width / 2
-        d.y = STYLES.height / 2
+        d.x = this.width / 2
+        d.y = this.height / 2
       }
       return 'translate(' + d.x + ',' + d.y + ')'
     })
@@ -247,8 +246,8 @@ export default class GraphD3 {
     } else if (node.rank =='adjacent') {
       // We check if the node is dropped on top of the middle node, if yes
       // We change the perspective
-      let w = STYLES.width
-      let h = STYLES.height
+      let w = this.width
+      let h = this.height
       let size = STYLES.largeNodeSize
       let x =  node.x > w / 2 - size / 2 && node.x < w / 2 + size / 2
       let y =  node.y > h / 2 - size / 2 && node.y < h / 2 + size / 2
