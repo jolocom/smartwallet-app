@@ -10,21 +10,18 @@ let Graph = React.createClass({
 
   mixins : [Reflux.listenTo(previewStore, 'onStateUpdate')],
 
-  getGraphEl: function() {
+  getGraphEl() {
     return ReactDOM.findDOMNode(this.refs.graph)
   },
 
-  onStateUpdate: function(data, signal) {
+  onStateUpdate(data, signal) {
     this.setState(data)
     if (!this.state.loaded) {
       previewActions.getInitialGraphState()
     }
 
     if (this.state.loaded && !this.state.drawn){
-      this.graph = new GraphD3(this.getGraphEl())
-      this.graph.setUpForce(this.state)
-      this.graph.drawBackground()
-      this.graph.drawNodes()
+      this.graph.render(this.state)
 
       // Update the state of the parent, not sure if this is good practice or not
       this.state.drawn = true
@@ -38,10 +35,8 @@ let Graph = React.createClass({
       previewActions.setState(this.state)
     }
 
-    if(signal == 'redraw'){
-      this.graph.eraseGraph()
-      this.graph.setUpForce(this.state)
-      this.graph.drawNodes()
+    if(signal == 'redraw') {
+      this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     } else if ( signal == 'highlight') {
       this.state.highlighted = data.highlighted
@@ -50,21 +45,29 @@ let Graph = React.createClass({
     }
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     // Make sure we refresh our state every time we mount the component, this
     // then fires the drawing function from onStateUpdate
+    this.graph = new GraphD3(this.getGraphEl())
+
+    this.graph.addListener('select', this._handleSelectNode)
+
     previewActions.getState()
   },
 
-  componentWillUnmount: function(){
+  componentWillUnmount(){
     this.state.drawn = false
     this.state.highlighted = null
 
     previewActions.setState(this.state)
-    if (this.graph) this.graph.eraseGraph()
+
+    if (this.graph) {
+      this.graph.eraseGraph()
+      this.graph.removeAllListeners()
+    }
   },
 
-  getStyles: function() {
+  getStyles() {
     let styles = {
       chart: {
         flex: 1
@@ -74,11 +77,15 @@ let Graph = React.createClass({
   },
 
   // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
-  render: function() {
+  render() {
     let styles = this.getStyles()
     return (
       <div style={styles.chart} ref="graph"></div>
     )
+  },
+
+  _handleSelectNode(node) {
+    this.props.onSelect && this.props.onSelect(node)
   }
 })
 export default Radium(Graph)

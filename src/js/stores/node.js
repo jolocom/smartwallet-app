@@ -33,5 +33,9 @@ export default Reflux.createStore({
 
   onCreateCompleted(node) {
     this.trigger(node)
+  },
+
+  link(user, start, end) {
+
   }
 })

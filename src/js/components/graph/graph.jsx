@@ -45,10 +45,7 @@ let Graph = React.createClass({
     }
 
     if (this.state.loaded && !this.state.drawn){
-      this.graph = new GraphD3(this.getGraphEl())
-      this.graph.setUpForce(this.state)
-      this.graph.drawBackground()
-      this.graph.drawNodes()
+      this.graph.render(this.state)
 
       // Update the state of the parent, not sure if this is good practice or not
       this.state.drawn = true
@@ -63,9 +60,7 @@ let Graph = React.createClass({
     }
 
     if(signal == 'redraw'){
-      this.graph.eraseGraph()
-      this.graph.setUpForce(this.state)
-      this.graph.drawNodes()
+      this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     } else if ( signal == 'highlight') {
       this.state.highlighted = data.highlighted
@@ -95,8 +90,8 @@ let Graph = React.createClass({
   },
 
   componentDidMount: function() {
-    // Make sure we refresh our state every time we mount the component, this
-    // then fires the drawing function from onStateUpdate
+    this.graph = new GraphD3(this.getGraphEl())
+
     graphActions.getState()
   },
 

@@ -7,24 +7,42 @@
 import d3 from 'd3'
 import STYLES from 'styles/app'
 import graphActions from '../actions/graph-actions'
+import {EventEmitter} from 'events'
 
-export default class GraphD3 {
+export default class GraphD3 extends EventEmitter {
 
   constructor(el) {
+    super()
+
     this.el = el
 
-    this.width = el.offsetWidth || STYLES.width
-    this.height = el.offsetHeight || STYLES.height
+    this.rendered = false
+  }
+
+  render(nodes) {
+    if (this.rendered) {
+      this.eraseGraph()
+    }
+
+    this.calcDimensions()
+
+    this.setUpForce(nodes)
+
+    this.drawBackground()
+    this.drawNodes()
+
+    this.rendered = true
+  }
+
+  calcDimensions() {
+    this.width = this.el.offsetWidth || STYLES.width
+    this.height = this.el.offsetHeight || STYLES.height
 
     let ratio = this.width * this.height
 
     this.smallNodeSize = ratio / 2400
     this.largeNodeSize = ratio / 1800
-
-    // We also have the this.force and this.svg being used in this file,
-    // they are declared later.
   }
-
 
    // Starts the force simulation.
   setUpForce = function(nodes){
@@ -77,6 +95,7 @@ export default class GraphD3 {
 
 
   drawNodes = function() {
+    let self = this
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
     let smallNode = this.smallNodeSize
@@ -210,7 +229,14 @@ export default class GraphD3 {
 
 
     // Subscribe to the click listeners
-    node.on('click', this.onClick)
+
+    // encapsulate the handler, so we have access to the graph instance
+    node.on('click', function(data) {
+      self.onClick(this, data)
+
+
+    })
+
     node.on('dblclick', this.onDblClick)
 
     full.on('click', this.onClickFull)
@@ -282,7 +308,7 @@ export default class GraphD3 {
     d3.event.stopPropagation()
   }
 
-  onClick = function(node) {
+  onClick = function(node, data) {
     console.log('you clicked the node')
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
@@ -293,7 +319,7 @@ export default class GraphD3 {
     let smallSize = this.smallNodeSize
     let largeSize = this.largeNodeSize
 
-    node.wasHighlighted = node.highlighted
+    data.wasHighlighted = data.highlighted
     // We set all the circles back to their normal sizes
     d3.selectAll('g .node').selectAll('.nodecircle')
       .transition().duration(STYLES.nodeTransitionDuration)
@@ -334,25 +360,25 @@ export default class GraphD3 {
     d3.selectAll('g .node').selectAll('.nodefullscreen')
       .attr('r', 0 )
 
-    if (!node.wasHighlighted) {
+    if (!data.wasHighlighted) {
       // NODE signifies the node that we clicked on. We enlarge it
-      d3.select(this).select('circle')
+      d3.select(node).select('circle')
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('r', this.largeNodeSize / 2)
 
       // We enlarge the pattern of the node we clicked on
-      d3.select(this).select('pattern')
+      d3.select(node).select('pattern')
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('x', -this.largeNodeSize / 2)
         .attr('y', -this.largeNodeSize / 2)
 
-      d3.select(this).select('.nodefullscreen')
+      d3.select(node).select('.nodefullscreen')
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.fullScreenButton/2 )
 
       // We enlarge the image of the node we clicked on
       // We also blur it a bit and darken it, so that the text displays better
-      d3.select(this).select('image')
+      d3.select(node).select('image')
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('width', this.largeNodeSize)
         .attr('height', this.largeNodeSize)
@@ -361,25 +387,28 @@ export default class GraphD3 {
       // Tere is a slight bug when if you click on nodes really quickly, the text
       // on some fails to dissapear, needs further investigation
       // We fade in the description
-      d3.select(this).selectAll('text')
+      d3.select(node).selectAll('text')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('opacity', 0.9)
 
       // We fade in the node name and make the text opaque
-      d3.select(this).select('.nodetext')
+      d3.select(node).select('.nodetext')
       .transition().duration(STYLES.nodeTransitionDuration)
       .attr('dy', -20)
       .attr('opacity', 1)
 
       graphActions.highlight(node)
     }
-    if (node.wasHighlighted) {
-      node.highlighted = false
+
+    if (data.wasHighlighted) {
+      data.highlighted = false
+      this.emit('deselect', data)
     }
     else {
-      node.highlighted = true
+      data.highlighted = true
+      this.emit('select', data)
     }
-  }
+  }.bind(this)
 
   updateHistory(history) {
     // We have the history available here as an array, we can use it to do whatever

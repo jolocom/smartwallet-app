@@ -9,7 +9,7 @@ import nodeStore from 'stores/node'
 
 import GraphPreview from './graph-preview.jsx'
 
-let NodeAddDefault = React.createClass({
+let NodeAddLink = React.createClass({
   mixins: [
     Reflux.connect(nodeStore, 'node')
   ],
@@ -20,6 +20,7 @@ let NodeAddDefault = React.createClass({
   },
   getInitialState() {
     return {
+      targetSelection: null,
       start: null,
       end: this.props.node,
       type: 'knows'
@@ -30,20 +31,19 @@ let NodeAddDefault = React.createClass({
       this.props.onSuccess && this.props.onSuccess(this.state.node)
     }
   },
+  // @TODO this validation is bullshit ofcourse :)
   validates() {
-    let {title} = this.state
-    return title && title.trim()
+    let {start, end, type} = this.state
+    return start && end && type
   },
   submit() {
+    //@TODO show error
     if (!this.validates()) return false
 
-    let {title, description, image} = this.state
-    nodeActions.create(this.context.user, title, description, image)
+    let {start, end, type} = this.state
+    nodeActions.link(this.context.user, start, end, type)
   },
   getStyles() {
-    console.log(this.context.muiTheme)
-    let {palette, textField} = this.context.muiTheme
-    let {start, end} = this.state
     let styles = {
       container: {
         flex: 1,
@@ -77,11 +77,11 @@ let NodeAddDefault = React.createClass({
     return (
       <div style={styles.container}>
         <div style={styles.graph}>
-          <GraphPreview/>
+          <GraphPreview onSelect={this._handleNodeSelect}/>
         </div>
         <Paper style={styles.form} rounded={false}>
           <div style={styles.row}>
-            <NodeTarget selected={start} label="Start" onSelectTarget={this._handleSelectStartTarget}/>
+            <NodeTarget selection={start} label="Start" onSelectTarget={this._handleSelectStartTarget}/>
             <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="knows" primaryText="Knows" />
               <MenuItem value="recommends" primaryText="Recommends" />
@@ -101,8 +101,19 @@ let NodeAddDefault = React.createClass({
     })
   },
 
+  _handleNodeSelect(node) {
+    if (this.state.targetSelection) {
+      this.setState({
+        [this.state.targetSelection]: node.uri,
+        targetSelect: null
+      })
+    }
+  },
+
   _handleSelectStartTarget(active) {
-    console.log('start target selection', active)
+    this.setState({
+      targetSelection: active && 'start' || null
+    })
   }
 
 })
@@ -153,7 +164,7 @@ let NodeTarget = React.createClass({
   render() {
     let styles = this.getStyles()
     return (
-      <div style={styles.target} onTouchTap={this._handleTouchTap}>
+      <div style={styles.target} onClick={this._handleTouchTap}>
         <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_fixed</FontIcon>
         <div style={styles.inner}>
           <div style={styles.label}>{this.props.label}</div>
@@ -163,11 +174,12 @@ let NodeTarget = React.createClass({
     )
   },
   _handleTouchTap() {
+    let active = !this.state.active
     this.setState({
-      active: !this.state.active
+      active: active
     })
-    this.props.onSelectTarget && this.props.onSelectTarget(this.state.active)
+    this.props.onSelectTarget && this.props.onSelectTarget(active)
   }
 })
 
-export default Radium(NodeAddDefault)
+export default Radium(NodeAddLink)
