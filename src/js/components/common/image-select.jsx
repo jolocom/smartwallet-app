@@ -21,7 +21,7 @@ let ImageSelect = React.createClass({
           style={styles.file}
           multiple={false}
           onChange={this._handleSelectFile} />
-        <IconButton iconClassName="material-icons" onTouchTap={() => this.open()}>photo_camera</IconButton>
+        <IconButton iconClassName="material-icons" onClick={() => this.open()}>photo_camera</IconButton>
       </div>
     )
   },

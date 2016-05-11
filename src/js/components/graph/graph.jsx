@@ -90,17 +90,8 @@ let Graph = React.createClass({
   },
 
   addNode: function(type) {
-    // This takes a triple describing the new node added!
-    // For now it will add a friend relationship to Justas. Reason is we do not have a proper input field yet
-    // And also because everyone would be happy to have a friend like Justas.
-    let target, uri = this.state.center.uri
-    if (type === 'link') {
-      target = prompt()
-      graphActions.writeTriple(rdf.sym(uri), FOAF('knows'), rdf.sym(target), 'displayInGraph')
-    } else {
-      uri = encodeURIComponent(uri)
-      this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
-    }
+    let uri = encodeURIComponent(this.state.center.uri)
+    this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
   componentDidMount: function() {
@@ -143,8 +134,7 @@ let Graph = React.createClass({
       <div style={styles.container}>
         <FabMenu style={styles.menu}>
           <FabMenuItem icon="radio_button_unchecked" label="Node" onClick={() => {this.addNode('node')}}/>
-          <FabMenuItem icon="insert_photo" label="Image" onClick={() => {this.addNode('image')}}/>
-          <FabMenuItem icon="insert_link" label="Link" onClick={() => {this.linkSubject()}}/>
+          <FabMenuItem icon="insert_link" label="Link" onClick={() => {this.addNode('link')}}/>
         </FabMenu>
 
         <div style={styles.chart} ref="graph"></div>

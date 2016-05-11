@@ -7,6 +7,7 @@ import {TextField, Paper, SelectField, MenuItem} from 'material-ui'
 import nodeActions from 'actions/node'
 import nodeStore from 'stores/node'
 
+import GraphPreview from './graph-preview.jsx'
 import ImageSelect from 'components/common/image-select.jsx'
 
 let NodeAddDefault = React.createClass({
@@ -23,7 +24,6 @@ let NodeAddDefault = React.createClass({
     }
   },
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevState.node, this.state.node)
     if (!prevState.node && this.state.node) {
       this.props.onSuccess && this.props.onSuccess(this.state.node)
     }
@@ -49,7 +49,7 @@ let NodeAddDefault = React.createClass({
     return (
       <div style={styles.container}>
         <div style={styles.graph}>
-          {preview}
+          <GraphPreview/>
         </div>
         <Paper style={styles.form} rounded={false}>
           <div style={styles.row}>
@@ -99,7 +99,9 @@ let styles = {
   },
   graph: {
     background: 'rgba(0,0,0,0.1)',
-    flex: 1
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column'
   },
   preview: {
     width: '100%'

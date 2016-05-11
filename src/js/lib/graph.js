@@ -10,10 +10,16 @@ import graphActions from '../actions/graph-actions'
 
 export default class GraphD3 {
 
-  constructor(el){
+  constructor(el) {
     this.el = el
+
     this.width = el.offsetWidth || STYLES.width
     this.height = el.offsetHeight || STYLES.height
+
+    let ratio = this.width * this.height
+
+    this.smallNodeSize = ratio / 2400
+    this.largeNodeSize = ratio / 1800
 
     // We also have the this.force and this.svg being used in this file,
     // they are declared later.
@@ -39,7 +45,7 @@ export default class GraphD3 {
       .nodes(this.dataNodes)
       .links(this.dataLinks)
       .charge(-5000)
-      .linkDistance(STYLES.largeNodeSize * 1.5)
+      .linkDistance(this.largeNodeSize * 1.5)
       .friction(0.8)
       .gravity(0.2)
       .size([this.width, this.height])
@@ -61,15 +67,10 @@ export default class GraphD3 {
       .attr('height', this.height)
       .append('svg:g')
 
-    this.svg.append('svg:rect')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .attr('fill', 'white')
-
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
-      .attr('r', STYLES.largeNodeSize* 0.57)
+      .attr('r', this.largeNodeSize* 0.57)
       .style('fill', STYLES.lightGrayColor)
   }.bind(this)
 
@@ -77,8 +78,8 @@ export default class GraphD3 {
 
   drawNodes = function() {
     // These make the following statements shorter
-    let largeNode = STYLES.largeNodeSize
-    let smallNode = STYLES.smallNodeSize
+    let largeNode = this.largeNodeSize
+    let smallNode = this.smallNodeSize
 
 
     let defsFull = this.svg.append('svg:defs')
@@ -86,8 +87,8 @@ export default class GraphD3 {
       .attr('id',  'full')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('x', (STYLES.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
-      .attr('y', -(STYLES.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
+      .attr('x', (this.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
+      .attr('y', -(this.largeNodeSize/2.5)-STYLES.fullScreenButton/2)
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', 'img/full.png' )
@@ -196,7 +197,7 @@ export default class GraphD3 {
         }
       })
       // This wraps the description nicely.
-      .call(this.wrap, STYLES.largeNodeSize * 0.7, ' ', ' ')
+      .call(this.wrap, this.largeNodeSize * 0.7, ' ', ' ')
 
     let full = node.append('circle')
      .attr('class', 'nodefullscreen')
@@ -204,8 +205,8 @@ export default class GraphD3 {
      .style('fill', 'url(#full)')
      .attr('stroke',STYLES.grayColor)
      .attr('stroke-width',1)
-     .attr('cy', -STYLES.largeNodeSize / 2.5)
-     .attr('cx', STYLES.largeNodeSize / 2.5)
+     .attr('cy', -this.largeNodeSize / 2.5)
+     .attr('cx', this.largeNodeSize / 2.5)
 
 
     // Subscribe to the click listeners
@@ -248,7 +249,7 @@ export default class GraphD3 {
       // We change the perspective
       let w = this.width
       let h = this.height
-      let size = STYLES.largeNodeSize
+      let size = this.largeNodeSize
       let x =  node.x > w / 2 - size / 2 && node.x < w / 2 + size / 2
       let y =  node.y > h / 2 - size / 2 && node.y < h / 2 + size / 2
 
@@ -289,8 +290,8 @@ export default class GraphD3 {
       return
     }
     graphActions.highlight(null)
-    let smallSize = STYLES.smallNodeSize
-    let largeSize = STYLES.largeNodeSize
+    let smallSize = this.smallNodeSize
+    let largeSize = this.largeNodeSize
 
     node.wasHighlighted = node.highlighted
     // We set all the circles back to their normal sizes
@@ -337,13 +338,13 @@ export default class GraphD3 {
       // NODE signifies the node that we clicked on. We enlarge it
       d3.select(this).select('circle')
         .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('r', STYLES.largeNodeSize / 2)
+        .attr('r', this.largeNodeSize / 2)
 
       // We enlarge the pattern of the node we clicked on
       d3.select(this).select('pattern')
         .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('x', -STYLES.largeNodeSize / 2)
-        .attr('y', -STYLES.largeNodeSize / 2)
+        .attr('x', -this.largeNodeSize / 2)
+        .attr('y', -this.largeNodeSize / 2)
 
       d3.select(this).select('.nodefullscreen')
         .transition().duration(STYLES.nodeTransitionDuration)
@@ -353,8 +354,8 @@ export default class GraphD3 {
       // We also blur it a bit and darken it, so that the text displays better
       d3.select(this).select('image')
         .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('width', STYLES.largeNodeSize)
-        .attr('height', STYLES.largeNodeSize)
+        .attr('width', this.largeNodeSize)
+        .attr('height', this.largeNodeSize)
         .style('filter', 'url(#darkblur)')
 
       // Tere is a slight bug when if you click on nodes really quickly, the text

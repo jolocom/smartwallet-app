@@ -2,17 +2,20 @@ import React from 'react'
 import Radium from 'radium'
 
 import {AppBar, IconButton, FlatButton} from 'material-ui'
-import {grey500} from 'material-ui/styles/colors'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
 import NodeAddDefault from './add-default.jsx'
+import NodeAddLink from './add-link.jsx'
 import NodeAddImage from './add-image.jsx'
 
 let types = {
   default: {
     component: NodeAddDefault
+  },
+  link: {
+    component: NodeAddLink
   },
   image: {
     title: 'Upload image',
@@ -39,7 +42,6 @@ let NodeAdd = React.createClass({
   getStyles() {
     return {
       bar: {
-        // backgroundColor: grey500
       }
     }
   },
