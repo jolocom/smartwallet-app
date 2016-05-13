@@ -15,7 +15,5 @@ export default Reflux.createActions({
   'createAndConnectNode' : {asyncResult: true},
   'linkTriple': {asyncResult:false},
   'writeTriple':{asyncResult: false},
-  'drawNewNode': {asyncResult: false},
-  'eraseGraph' :{asyncResult: false},
-  'drawGraph' : {asyncResult: false}
+  'drawNewNode': {asyncResult: false}
 })

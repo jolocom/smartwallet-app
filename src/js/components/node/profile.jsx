@@ -3,13 +3,12 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 
 import {
+  AppBar,
   IconButton,
-  Card, CardMedia, CardTitle, CardActions
+  FloatingActionButton,
+  FontIcon,
+  List, ListItem, Divider
 } from 'material-ui'
-
-import {Spacer} from 'components/layout'
-
-import Comments from 'components/node/comments.jsx'
 
 import ProfileActions from 'actions/profile'
 
@@ -32,23 +31,28 @@ let ProfileNode = React.createClass({
     let background = 'http://www.getmdl.io/assets/demos/welcome_card.jpg'
 
     if (this.imgUri) {
-      background = this.imageUri
+      background = this.imgUri
     }
 
     return {
       container: {
-        flex: 1
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
       },
-      media: {
+      header: {
         color: '#fff',
         height: '176px',
         background: `url(${background}) center / cover`
       },
-      actions: {
-        display: 'flex'
+      title: {
+        position: 'absolute',
+        bottom: 0
       },
-      comments: {
-        flex: 1
+      action: {
+        position: 'absolute',
+        bottom: '-20px',
+        right: '20px'
       }
     }
   },
@@ -60,17 +64,37 @@ let ProfileNode = React.createClass({
 
     return (
       <div style={styles.container}>
-        <Card zDepth={0}>
-          <CardMedia overlay={
-              <CardTitle>{name}</CardTitle>
-          } style={styles.media}/>
-          <CardActions style={styles.actions}>
-            <Spacer/>
-            <IconButton iconClassName="material-icons">comment</IconButton>
-            <IconButton iconClassName="material-icons">share</IconButton>
-          </CardActions>
-        </Card>
-        <Comments node={this.props.node} style={styles.comments}/>
+        <AppBar
+          style={styles.header}
+          titleStyle={styles.title}
+          title={<span>{name || 'No name set'}</span>}
+          iconElementLeft={<IconButton iconClassName="material-icons">close</IconButton>}
+          iconElementRight={<IconButton iconClassName="material-icons">more_vert</IconButton>}
+        >
+          <FloatingActionButton mini={true} secondary={true} style={styles.action}>
+            <FontIcon className="material-icons">bookmark</FontIcon>
+          </FloatingActionButton>
+        </AppBar>
+
+        <List style={styles.list}>
+          <ListItem
+            leftIcon={<FontIcon className="material-icons">info</FontIcon>}
+            primaryText="Description"
+          />
+          <Divider inset={true} />
+          <ListItem
+            leftIcon={<FontIcon className="material-icons">call</FontIcon>}
+            primaryText="(650) 555 - 1234"
+            secondaryText="Mobile"
+          />
+          <Divider inset={true} />
+          <ListItem
+            leftIcon={<FontIcon className="material-icons">email</FontIcon>}
+            primaryText="aliconnors@example.com"
+            secondaryText="Personal"
+          />
+        </List>
+
       </div>
     )
   }

@@ -1,10 +1,11 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import accepts from 'attr-accept'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
-import {AppBar, IconButton, TextField} from 'material-ui'
+import {AppBar, IconButton, TextField, Card, CardMedia, CardActions, FlatButton} from 'material-ui'
 
 import {grey500} from 'material-ui/styles/colors'
 
@@ -15,8 +16,12 @@ import Util from 'lib/util'
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.connect(ProfileStore, 'profile')
+    Reflux.listenTo(ProfileStore, 'onProfileChange')
   ],
+
+  onProfileChange: function(state) {
+    this.setState(state)
+  },
 
   componentDidUpdate(props, state) {
     if (state.show !== this.state.show) {
@@ -26,11 +31,6 @@ let Profile = React.createClass({
         this.refs.dialog.hide()
       }
     }
-  },
-
-  update(e) {
-    e.preventDefault()
-    ProfileActions.update(this.state.profile)
   },
 
   show() {
@@ -47,7 +47,13 @@ let Profile = React.createClass({
         backgroundColor: grey500
       },
       content: {
-        textAlign: 'center'
+        overflowY: 'auto'
+      },
+      main: {
+        padding: '16px'
+      },
+      file: {
+        display: 'none'
       },
       input: {
         width: '100%'
@@ -57,7 +63,15 @@ let Profile = React.createClass({
   },
 
   render() {
-    let styles = this.getStyles()
+    let img, styles = this.getStyles()
+
+    let {file, imgUri} = this.state
+
+    if (file) {
+      img = URL.createObjectURL(file)
+    } else if (imgUri) {
+      img = imgUri
+    }
 
     // edit mode
     return (
@@ -69,14 +83,30 @@ let Profile = React.createClass({
             iconElementLeft={
               <IconButton onClick={this.hide} iconClassName="material-icons">arrow_back</IconButton>
             }
+            iconElementRight={
+              <IconButton onClick={this._handleUpdate} iconClassName="material-icons">check</IconButton>
+            }
           />
           <Content style={styles.content}>
-            <header>
-              <figure>
-                <img src={this.state.imgUri}/>
-              </figure>
-            </header>
-            <main>
+            <Card zDept={0} rounded={false}>
+              <CardMedia style={{height: '176px', background: `url(${img || '/img/person-placeholder.png'}) center / cover`}}>
+              </CardMedia>
+              <CardActions>
+                {img ?
+                  <FlatButton label="Remove" onClick={this._handleRemove} />
+                  :
+                  <FlatButton label="Select or take picture" onClick={this._handleSelect}/>
+                }
+              </CardActions>
+            </Card>
+            <input
+              ref={el => this.fileInputEl = el}
+              type="file"
+              name="file"
+              style={styles.file}
+              multiple={false}
+              onChange={this._handleSelectFile} />
+            <main style={styles.main}>
               <section>
                 <TextField floatingLabelText="Name"
                   onChange={Util.linkToState(this, 'name')}
@@ -87,26 +117,51 @@ let Profile = React.createClass({
                   value={this.state.email}
                   style={styles.input} />
               </section>
-              <section>
-                <div>
-                  <div>WebID</div>
-                  <div><a href={this.state.webid}>{this.state.webidPresent}</a></div>
-                </div>
-                <div>
-                  <div>RSA Modulus</div>
-                  <div>{this.state.rsaModulus}</div>
-                </div>
-                <div>
-                  <div>RSA Exponent</div>
-                  <div>{this.state.rsaExponent}</div>
-                </div>
-              </section>
             </main>
           </Content>
         </Layout>
       </Dialog>
     )
+  },
+
+  _handleUpdate() {
+    ProfileActions.update(this.state.profile)
+  },
+
+  _handleSelect() {
+    this.fileInputEl.value = null
+    this.fileInputEl.click()
+  },
+
+  _handleRemove() {
+    this.fileInputEl.value = null
+
+    if (this.state.file) {
+      this.setState({
+        file: null
+      })
+    } else {
+      this.setState({
+        imgUri: null
+      })
+    }
+  },
+
+  _handleSelectFile({target}) {
+    let file = target.files[0]
+
+    if (!accepts(file, 'image/*')) {
+      this.setState({
+        error: 'Invalid file type'
+      })
+    } else {
+      this.setState({
+        error: null,
+        file: file
+      })
+    }
   }
+
 })
 
 export default Radium(Profile)

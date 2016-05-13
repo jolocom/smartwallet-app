@@ -195,12 +195,12 @@ class ChatAgent extends LDPAgent {
       .then((parsed) => {
         let aboutPerson = _.filter(parsed.triples, (t) => t.subject == otherPerson || t.subject == '#me')
 
-        let name = _.find(aboutPerson, (t) => t.predicate == FOAF.name)
+        let name = _.find(aboutPerson, (t) => t.predicate == FOAF('name'))
         if (name) {
           result.name = N3Util.getLiteralValue(name.object)
         }
 
-        let img = _.find(aboutPerson, (t) => t.predicate == FOAF.img)
+        let img = _.find(aboutPerson, (t) => t.predicate == FOAF('img'))
         if (img) {
           result.img = img.object
         }
@@ -261,12 +261,12 @@ class ChatAgent extends LDPAgent {
         },
         {
           subject: '',
-          predicate: FOAF.maker,
+          predicate: FOAF('maker'),
           object: initiator
         },
         {
           subject: '',
-          predicate: FOAF.primaryTopic,
+          predicate: FOAF('primaryTopic'),
           object: '#thread'
         },
         {
