@@ -1,4 +1,5 @@
 @prefix ns1: <http://purl.org/dc/terms/> .
+@prefix ns1: <http://purl.org/dc/terms/> .
 @prefix ns2: <http://xmlns.com/foaf/0.1/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -14,6 +15,6 @@
     ns1:description "Web Developer" ;
     ns2:img <https://localhost:8443/justas/profile/img.jpg>;
     ns2:knows <https://localhost:8443/christian/profile/card#me>,
+        <https://localhost:8443/speakers/MyriamBouré/profile/card#me> ,
         <https://localhost:8443/joachim/profile/card#me> ;
     ns2:name "Justas" .
-
