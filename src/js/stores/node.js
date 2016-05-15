@@ -18,10 +18,10 @@ export default Reflux.createStore({
     return null
   },
 
-  create(user, title, description, image, type) {
+  create(username, user, title, description, image, type) {
     // We need to check if the currently logged in user can write to the rdfs
     // he is trying to link.
-    this.wia.getWebID().then((webId) => {
+    this.wia.getWebID(username).then((webId) => {
       // Now we have the currently logged in user, next step we need to check
       // if the Maker field of the file he is trying to write to links to him,
       this.gAgent.createNode(webId, user, title, description, image, type)
@@ -32,8 +32,8 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
-  link(start, end, type) {
-    this.wia.getWebID().then((webId) => {
+  link(username, start, end, type) {
+    this.wia.getWebID(username).then((webId) => {
       this.gAgent.writeAccess(webId, end).then((verdict) => {
         let predicate = null
         if(type == 'generic') predicate = SCHEMA('isRelatedTo')

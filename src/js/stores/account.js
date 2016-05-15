@@ -44,7 +44,7 @@ let AccountStore = Reflux.createStore({
   onSignupFailed(err) {
     //TODO: trigger failure
     console.log(err)
-    this.trigger({error: err.reason})
+    this.trigger({username: null, error: err.reason})
   },
 
   onLogin(username, password) {

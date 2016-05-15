@@ -16,6 +16,7 @@ let NodeAddLink = React.createClass({
   contextTypes: {
     node: React.PropTypes.object,
     user: React.PropTypes.string,
+    username: React.PropTypes.string,
     muiTheme: React.PropTypes.object
   },
   getInitialState() {
@@ -42,8 +43,7 @@ let NodeAddLink = React.createClass({
     let {start, end, type} = this.state
     // We just pass the start node [object], end node [subject], and the type
     // The user is the WEBID
-    console.log(start,end)
-    nodeActions.link(start, end, type)
+    nodeActions.link(this.context.username, start, end, type)
   },
   getStyles() {
     let styles = {

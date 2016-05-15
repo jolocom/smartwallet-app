@@ -17,7 +17,8 @@ let NodeAddDefault = React.createClass({
   ],
   contextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.string
+    user: React.PropTypes.string,
+    username: React.PropTypes.string
   },
   getInitialState() {
     return {
@@ -46,7 +47,7 @@ let NodeAddDefault = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, image} = this.state
-    nodeActions.create(this.user, title, description, image, this.state.type)
+    nodeActions.create(this.context.username, this.user, title, description, image, this.state.type)
   },
   render: function() {
     let {image} = this.state
