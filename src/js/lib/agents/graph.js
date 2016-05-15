@@ -140,7 +140,11 @@ class GraphAgent extends HTTPAgent {
     // We will only follow and parse the links that end up in the neighbours array.
     let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
                  SCHEMA('isRelatedTo').uri, FOAF('maker').uri]
+
+    console.log(triples)
+    console.log(Links)
     let neighbours = triples.filter((t) => t.subject.uri == center && Links.indexOf(t.predicate.uri) >= 0)
+    console.log(neighbours)
 
     return new Promise ((resolve) => {
       let graphMap = []
@@ -151,6 +155,7 @@ class GraphAgent extends HTTPAgent {
       }
       // If there are adjacent nodes to draw, we parse them and return an array of their triples
       let i = 0
+      console.log(neighbours)
       neighbours.map((triple) => {
         this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
           // Terrible error handling, please don't judge me, it's Saturday night.
@@ -161,6 +166,8 @@ class GraphAgent extends HTTPAgent {
             graphMap.push(triples.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
             // This checks if the whole array has been parsed, and only after that resolves.
+
+            // I'm not proud of this.
             if (graphMap.length == neighbours.length - i) {
               resolve(graphMap)
             }

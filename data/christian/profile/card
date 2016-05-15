@@ -14,6 +14,7 @@
     ns1:img <https://localhost:8443/christian/profile/img.jpg>;
     ns2:description "Music and Tech is really not that different at all" ;
     ns1:knows <https://localhost:8443/joachim/profile/card#me>,
-        <https://localhost:8443/justas/profile/card#me> ;
+        <https://localhost:8443/justas/profile/card#me> ,
+        <https://localhost:8443/OuiShare/profile/card#me> ;
     ns1:name "Christian" .
 
