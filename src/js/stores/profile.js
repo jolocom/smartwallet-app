@@ -1,5 +1,4 @@
 import Reflux from 'reflux'
-import _ from 'lodash'
 import ProfileActions from 'actions/profile'
 
 import N3 from 'n3'
@@ -19,7 +18,7 @@ let profile = {
   rsaExponent: '(rsa exponent missing)',
   webid: '#',
   webidPresent: '(webid missing)',
-  imgUri: '/img/person-placeholder.png',
+  imgUri: null,
   fixedTriples: [],
   prefixes: []
 }
@@ -34,13 +33,13 @@ export default Reflux.createStore({
   onShow() {
     profile.show = true
 
-    this.trigger(profile)
+    this.trigger(Object.assign({}, profile))
   },
 
   onHide() {
     profile.show = false
 
-    this.trigger(profile)
+    this.trigger(Object.assign({}, profile))
   },
 
   onLoad() {
@@ -70,7 +69,7 @@ export default Reflux.createStore({
   onLoadCompleted(webid, triples, prefixes) {
     // subject which represents our profile
     // everything's fixed but name and email
-    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF.name || t.predicate == FOAF.mbox)))
+    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF('name') || t.predicate == FOAF('mbox'))))
 
     let state = {
       webid: webid,
@@ -84,13 +83,13 @@ export default Reflux.createStore({
     let relevant = triples.filter((t) => t.subject == webid)
 
     for (var t of relevant){
-      if (t.predicate == FOAF.name) {
+      if (t.predicate == FOAF('name')) {
         // name
         state.name =  this._getValue(t.object)
-      } else if (t.predicate == FOAF.mbox) {
+      } else if (t.predicate == FOAF('mbox')) {
         // email
         state.email =  this._getValue(t.object).replace('mailto:', '')
-      } else if (t.predicate == FOAF.img) {
+      } else if (t.predicate == FOAF('img')) {
         // image uri
         state.imgUri =  this._getValue(t.object)
       } else if (t.predicate == CERT.key) {
@@ -100,8 +99,8 @@ export default Reflux.createStore({
       }
     }
 
-    profile = _.extend(profile, state)
-    this.trigger(profile)
+    profile = Object.assign(profile, state)
+    this.trigger(Object.assign({}, profile))
   },
 
   onUpdate: function (params) {
@@ -113,12 +112,12 @@ export default Reflux.createStore({
 
     writer.addTriple({
       subject: params.webid,
-      predicate: FOAF.name,
+      predicate: FOAF('name'),
       object: N3Util.createLiteral(params.name)
     })
     writer.addTriple({
       subject: params.webid,
-      predicate: FOAF.mbox,
+      predicate: FOAF('name'),
       object: N3Util.createIRI(params.email)
     })
 
@@ -126,8 +125,8 @@ export default Reflux.createStore({
       return wia.put(params.webid, {'Content-Type': 'application/n-triples'}, res)
     })
 
-    profile = _.extend(profile, params)
-    this.trigger(profile)
+    profile = Object.assign(profile, params)
+    this.trigger(Object.assign({}, profile))
   },
 
   // get object value without caring whether it's a literal or IRI

@@ -1,0 +1,18 @@
+@prefix ns1: <http://xmlns.com/foaf/0.1/> .
+@prefix ns2: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<> a ns1:PersonalProfileDocument ;
+    ns2:title "WebID profile of Joachim" ;
+    ns1:maker <#me> ;
+    ns1:primaryTopic <#me> .
+
+<#me> a ns1:Person ;
+    ns2:description "Networking and Business specialist from Berlin" ;
+    ns1:knows <https://localhost:8443/christian/profile/card#me>,
+        <https://localhost:8443/justas/profile/card#me> ;
+    ns1:name "Joachim" .
+

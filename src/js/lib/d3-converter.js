@@ -22,6 +22,7 @@ class D3Converter {
     let props = {
       uri: null,
       name:null,
+      title:null,
       description:null,
       img:null,
       type:null,
@@ -42,15 +43,15 @@ class D3Converter {
     if (i && n) {
       let angle = (2 * Math.PI) / this.n
       let halfwidth = STYLES.width / 2
-      let halfheight = STYLES.height / 2
+      let halfheight = STYLES.graphCanvasHeight / 2
 
-      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth 
+      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth
       props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfheight
     } else if (!i && !n && rank =='a') {
       // This takes care of nodes that are added dynamically, the mid + 30 is
       // the optimal position for spawning new nodes dynamically
       props.x = STYLES.width / 2 + 60
-      props.y = STYLES.height / 2 + 60
+      props.y = STYLES.graphCanvasHeight / 2 + 60
     }
     // Updating the attributes of the node object. The resulting object will have
     // all of it's props filled in, and will be ready to be rendered by D3
@@ -63,6 +64,10 @@ class D3Converter {
     let name = g.statementsMatching(undefined, FOAF('name'), undefined)
     if (name.length > 0) props.name = name[0].object.value ? name[0].object.value : name[0].object.uri
     else props.name = null
+
+    let title = g.statementsMatching(undefined, DC('title'), undefined)
+    if (title.length > 0) props.title = title[0].object.value ? title[0].object.value : title[0].object.uri
+    else props.img = null
 
     let description = g.statementsMatching(undefined, DC('description'), undefined)
     if (description.length > 0) props.description = description[0].object.value ? description[0].object.value : description[0].object.uri
@@ -80,7 +85,6 @@ class D3Converter {
     // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
     if (rank == 'a') props.rank = 'adjacent'
     if (rank == 'c') props.rank = 'center'
-
     return props
   }
 }

@@ -1,15 +1,18 @@
 import Reflux from 'reflux'
 import graphAgent from '../lib/agents/graph.js'
-import graphActions from '../actions/graph-actions'
+import previewActions from '../actions/preview-actions'
 import accountActions from '../actions/account'
+import graphStore from './graph-store'
 import d3Convertor from '../lib/d3-converter'
+
+import rdf from 'rdflib'
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 
 export default Reflux.createStore({
 
-  listenables: [graphActions],
+  listenables: [previewActions],
 
   init: function(){
-
     this.listenTo(accountActions.logout, this.onLogout)
 
     this.gAgent = new graphAgent()
@@ -56,16 +59,11 @@ export default Reflux.createStore({
     }
   },
 
-  onEraseGraph: function() {
-    this.trigger(null, 'erase')
-  },
-
-  onDrawGraph: function() {
-    this.trigger(null, 'redraw')
-  },
-
   onSetState: function(key, value, flag){
+      // No need to trigger here, since this is always called after the state
+      // of the child component has been changed.
     this.state[key] = value
+
     if (flag) this.trigger(this.state)
   },
 
@@ -76,7 +74,7 @@ export default Reflux.createStore({
     console.log('we chose the subject to be', this.state.linkSubject)
     this.trigger(this.state)
 
-    graphActions.linkTriple()
+    previewActions.linkTriple()
   },
 
   onChooseObject: function() {
@@ -85,6 +83,11 @@ export default Reflux.createStore({
     else this.state.linkObject = this.state.center.uri
     this.trigger(this.state)
     console.log('we chose the object to be', this.state.linkObject)
+  },
+
+  onLinkTriple: function(){
+    // this.state.newLink = rdf.sym(this.state.linkSubject) + FOAF('knows') + rdf.sym(this.state.linkObject)
+    previewActions.writeTriple(this.state.linkSubject, FOAF('knows'), this.state.linkObject, ' ')
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
@@ -110,24 +113,6 @@ export default Reflux.createStore({
     this.trigger( this.state)
   },
 
-  onGetInitialGraphState: function() {
-    this.gAgent.getGraphMapAtWebID().then((triples) => {
-      triples[0] = this.convertor.convertToD3('c', triples[0])
-      for (let i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)}
-      graphActions.getInitialGraphState.completed(triples)
-    })
-  },
-
-  onGetInitialGraphStateCompleted: function(result) {
-    this.state.center = result[0]
-    this.state.neighbours = result.slice(1, result.length)
-    this.state.loaded = true
-    this.state.user = result[0].uri
-    this.trigger(this.state)
-  },
-
-
   onNavigateToNode: function(node){
     this.state.neighbours = []
 
@@ -138,7 +123,6 @@ export default Reflux.createStore({
 
       this.state.navHistory.push(this.state.center)
       this.state.center = triples[0]
-
       if(this.state.navHistory.length > 1) {
         if (this.state.center.name == this.state.navHistory[this.state.navHistory.length - 2].name) {
           this.state.navHistory.pop()
@@ -152,6 +136,7 @@ export default Reflux.createStore({
       }
 
       this.state.highlighted = null
+      console.log('number 2')
       this.trigger(this.state, 'redraw')
     })
   }
