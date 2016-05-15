@@ -12,19 +12,10 @@ import {
 
 import ProfileActions from 'actions/profile'
 
-import ProfileStore from 'stores/profile'
-
 let ProfileNode = React.createClass({
-  mixins: [
-    Reflux.connect(ProfileStore, 'profile')
-  ],
-
   contextTypes: {
-    history: React.PropTypes.any
-  },
-
-  componentDidMount() {
-    ProfileActions.load()
+    history: React.PropTypes.any,
+    profile: React.PropTypes.object
   },
 
   getStyles() {
@@ -60,7 +51,7 @@ let ProfileNode = React.createClass({
   render() {
     let styles = this.getStyles()
 
-    let {name} = this.state.profile
+    let {name} = this.context.profile
 
     return (
       <div style={styles.container}>

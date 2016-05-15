@@ -1,10 +1,15 @@
 /* eslint-disable */
 
 var express = require('express');
+var cookieParser = require('cookie-parser')
+var session = require('express-session');
+var bodyParser = require('body-parser');
 var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var httpProxy = require('http-proxy');
+var mongoose = require('mongoose');
+var passportLocalMongoose = require('passport-local-mongoose');
 
 var proxy = httpProxy.createProxyServer({
   changeOrigin: true,
@@ -16,23 +21,77 @@ var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
 var publicPath = path.resolve(__dirname, 'dist');
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    done(null, {username: username, password: password});
-  }
-));
+mongoose.connect('mongodb://localhost/jolocom');
 
+var UserSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+  email: String
+});
+
+UserSchema.plugin(passportLocalMongoose);
+
+var User = mongoose.model('User', UserSchema);
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(cookieParser());
+app.use(session({
+  secret: 'jolocom',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static(publicPath));
 
-app.get('/login', function(req, res, next) {
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated())
+    return next();
+
+  res.json({});
+}
+
+app.get('/user', isLoggedIn, function(req, res, next) {
+  res.json(req.user);
+});
+
+app.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
     if (err) { return next(err); }
-    if (!user) { return res.redirect('/login'); }
+    if (!user) { return res.sendStatus(403); }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
-      return res.json({username: user.username});
+      return res.json({
+        success: true,
+        username: user.username
+      });
     });
   })(req, res, next);
+});
+
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.json({success: true})
+});
+
+app.post('/register', function(req, res) {
+  User.register(new User({username: req.body.username, email: req.body.email}), req.body.password, function(err, user) {
+    if (err) {
+      return res.json({
+        success: false,
+        error: err.message
+      });
+    }
+
+    passport.authenticate('local')(req, res, function () {
+      res.json({success: true, username: user.username});
+    });
+  });
 });
 
 // We only want to run the workflow when not in production
@@ -46,21 +105,21 @@ if (!isProduction) {
 
   // Any requests to localhost:3000/build is proxied
   // to webpack-dev-server
-  app.all('/dist/*', function (req, res) {
+  app.all('/js/*', function (req, res) {
     proxy.web(req, res, {
       target: 'http://localhost:8080'
     });
   });
 
-  app.all('/data/*', function (req, res) {
-    req.url = req.url.replace('/data', '')
-    proxy.web(req, res, {
-      target: 'https://localhost:8443',
-      prependPath: false
-    });
-  });
-
 }
+
+app.all('/data/*', function (req, res) {
+  req.url = req.url.replace('/data', '')
+  proxy.web(req, res, {
+    target: 'https://localhost:8443',
+    prependPath: false
+  });
+});
 
 // It is important to catch any errors from the proxy or the
 // server will crash. An example of this is connecting to the

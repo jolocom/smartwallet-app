@@ -34,6 +34,7 @@ let Signup = React.createClass({
     let signupData = {
       username: this.state.username,
       name: this.state.name,
+      password: this.state.password,
       email: this.state.email
     }
     Account.signup(signupData)
@@ -71,6 +72,8 @@ let Signup = React.createClass({
             <TextField floatingLabelText="Username"
               onChange={this._onUsernameChange}
               errorText={availableText}/>
+            <TextField floatingLabelText="Password" type="password"
+              onChange={Util.linkToState(this, 'password')} />
             <TextField floatingLabelText="Name"
               onChange={Util.linkToState(this, 'name')} />
             <TextField floatingLabelText="Email"

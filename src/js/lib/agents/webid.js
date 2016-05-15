@@ -30,10 +30,10 @@ class WebIDAgent extends LDPAgent {
   }
 
   // get WebID depending on the mode
-  getWebID() {
+  getWebID(username) {
     let getWebID = null
     if (dev) {
-      getWebID = Promise.resolve(this._formatFakeWebID(localStorage.getItem('fake-user')))
+      getWebID = Promise.resolve(this._formatFakeWebID(username))
     } else {
       return getWebID = solid.currentUser()
     }

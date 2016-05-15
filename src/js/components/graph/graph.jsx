@@ -17,7 +17,8 @@ let Graph = React.createClass({
   mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
 
   contextTypes: {
-    history: React.PropTypes.object
+    history: React.PropTypes.object,
+    username: React.PropTypes.string
   },
 
   childContextTypes: {
@@ -39,8 +40,8 @@ let Graph = React.createClass({
   onStateUpdate: function(data, signal) {
     if (data) this.setState(data)
 
-    if (!this.state.loaded) {
-      graphActions.getInitialGraphState()
+    if (!this.state.loaded && this.context.username) {
+      graphActions.getInitialGraphState(this.context.username)
     }
 
     if (this.state.loaded && !this.state.drawn){

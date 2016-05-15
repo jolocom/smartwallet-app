@@ -4,7 +4,6 @@ import {RaisedButton, TextField, Paper} from 'material-ui'
 import {History, Link} from 'react-router'
 
 import Account from 'actions/account'
-import AccountStore from 'stores/account'
 
 // login for development
 let Login = React.createClass({
@@ -12,7 +11,8 @@ let Login = React.createClass({
     History
   ],
   contextTypes: {
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    username: React.PropTypes.string
   },
 
   getInitialState() {
@@ -21,17 +21,26 @@ let Login = React.createClass({
     }
   },
   componentWillMount() {
-    if (AccountStore.loggedIn()) {
-      this.history.pushState(null, '/')
+    if (this.context.username) {
+      // this.history.pushState(null, '/')
+    }
+  },
+  componentDidUpdate() {
+    if (this.context.username) {
+      // this.history.pushState(null, '/')
     }
   },
   login() {
-    Account.login(this.state.username)
-    this.history.pushState(null, '/')
+    Account.login(this.state.username, this.state.password)
   },
   _handleUsernameChange(e) {
     this.setState({
       username: e.target.value
+    })
+  },
+  _handlePasswordChange(e) {
+    this.setState({
+      password: e.target.value
     })
   },
   render() {
@@ -43,6 +52,9 @@ let Login = React.createClass({
         <Paper zDept={2} style={styles.content}>
           <div>
             <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
+          </div>
+          <div>
+            <TextField floatingLabelText="Password" onChange={this._handlePasswordChange} type="password" />
           </div>
           <RaisedButton secondary={true} onTouchTap={this.login} style={styles.button}>Login</RaisedButton>
         </Paper>

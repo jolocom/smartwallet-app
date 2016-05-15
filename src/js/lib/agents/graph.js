@@ -102,7 +102,7 @@ class GraphAgent extends HTTPAgent {
 
 
   writeTriple(subject, predicate, object) {
-    
+
     let writer = new Writer()
     subject = rdf.sym(subject)
     // First we fetch the triples at the webId/uri of the user adding the triple
@@ -185,9 +185,9 @@ class GraphAgent extends HTTPAgent {
   }
 
 //Calls the above function, but passes the current webId as the URI.
-  getGraphMapAtWebID() {
+  getGraphMapAtWebID(username) {
     let wia = new WebIDAgent()
-    return wia.getWebID().then((webId) => this.getGraphMapAtUri(webId))
+    return wia.getWebID(username).then((webId) => this.getGraphMapAtUri(webId))
   }
 }
 

@@ -2,11 +2,12 @@ import React from 'react'
 
 export default React.createClass({
   contextTypes: {
-    history: React.PropTypes.any
+    history: React.PropTypes.any,
+    username: React.PropTypes.string
   },
 
   componentWillMount() {
-    if (localStorage.getItem('fake-user')) {
+    if (this.context.username) {
       this.context.history.pushState(null, '/graph')
     } else {
       this.context.history.pushState(null, '/login')

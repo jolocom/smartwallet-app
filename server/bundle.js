@@ -32,11 +32,12 @@ module.exports = function () {
     // We need to tell Webpack to serve our bundled application
     // from the build path. When proxying:
     // http://localhost:3000/dist -> http://localhost:8080/dist
-    publicPath: '/dist/',
+    publicPath: '/js',
 
     // Configure hot replacement
     hot: true,
-
+    inline: true,
+    contentBase: 'dist',
     // The rest is terminal configurations
     quiet: false,
     noInfo: true,
