@@ -10,17 +10,7 @@ let N3Util = N3.Util
 let wia = new WebIDAgent()
 
 let profile = {
-  show: false,
-  username: null,
-  name: '',
-  email: '',
-  rsaModulus: '(rsa modulus missing)',
-  rsaExponent: '(rsa exponent missing)',
-  webid: '#',
-  webidPresent: '(webid missing)',
-  imgUri: null,
-  fixedTriples: [],
-  prefixes: []
+  show: false
 }
 
 export default Reflux.createStore({
@@ -46,6 +36,7 @@ export default Reflux.createStore({
     let webid = null
     wia.getWebID(username)
       .then((user) => {
+        console.log('webid', user)
         webid = user
         // now get my profile document
         return wia.get(webid)
@@ -53,7 +44,7 @@ export default Reflux.createStore({
       .then((xhr) => {
         // parse profile document from text
         let parser = new Parser()
-        parser.parse(xhr.response)
+        return parser.parse(xhr.response)
       })
       .then((res) => {
         ProfileActions.load.completed(webid, res.triples, res.prefixes)
@@ -69,7 +60,7 @@ export default Reflux.createStore({
   onLoadCompleted(webid, triples, prefixes) {
     // subject which represents our profile
     // everything's fixed but name and email
-    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF('name') || t.predicate == FOAF('mbox'))))
+    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF('name').uri || t.predicate == FOAF('mbox').uri)))
 
     let state = {
       webid: webid,
@@ -79,16 +70,19 @@ export default Reflux.createStore({
     }
 
     // triples which describe profile
-    let relevant = triples.filter((t) => t.subject == webid)
+    let relevant = triples.filter((t) => {
+      return t.subject.uri == webid
+    })
 
     for (var t of relevant){
-      if (t.predicate == FOAF('name')) {
+      console.log('test', t.predicate, FOAF('name').uri)
+      if (t.predicate.uri == FOAF('name').uri) {
         // name
-        state.name =  this._getValue(t.object)
-      } else if (t.predicate == FOAF('mbox')) {
+        state.name = this._getValue(t.object)
+      } else if (t.predicate.uri == FOAF('mbox').uri) {
         // email
-        state.email =  this._getValue(t.object).replace('mailto:', '')
-      } else if (t.predicate == FOAF('img')) {
+        state.email = this._getValue(t.object).replace('mailto:', '')
+      } else if (t.predicate.uri == FOAF('img').uri) {
         // image uri
         state.imgUri =  this._getValue(t.object)
       } else if (t.predicate == CERT.key) {
@@ -99,6 +93,7 @@ export default Reflux.createStore({
     }
 
     profile = Object.assign(profile, state)
+    console.log(profile)
     this.trigger(Object.assign({}, profile))
   },
 

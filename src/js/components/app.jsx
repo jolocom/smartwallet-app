@@ -66,7 +66,9 @@ let App = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.account.username !== this.state.account.username) {
+    let {username} = this.state.account
+
+    if (prevState.account.username !== username) {
       this.checkLogin()
     }
   },
@@ -79,12 +81,15 @@ let App = React.createClass({
     if (username === undefined) {
       return
     }
-    console.log(path)
+
     if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
       this.history.pushState(null, '/login')
     } else if (username && (path === '/signup' || path === '/login')) {
-      ProfileActions.load(username)
       this.history.pushState(null, '/graph')
+    }
+
+    if (username) {
+      ProfileActions.load(username)
     }
   },
 

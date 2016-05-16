@@ -23,6 +23,18 @@ let Index = React.createClass({
         flexDirection: 'column',
         backgroundColor: muiTheme.jolocom.gray4
       },
+      logo: {
+        fontSize: '18px',
+        fontWeight: '400',
+        textAlign: 'center',
+        marginTop: '24px',
+        textTransform: 'uppercase'
+      },
+      logoImg: {
+        width: '32px',
+        height: '32px',
+        verticalAlign: 'middle'
+      },
       intro: {
         flex: 1,
         textAlign: 'center'
@@ -42,7 +54,7 @@ let Index = React.createClass({
       },
       title: {
         color: muiTheme.jolocom.gray1,
-        fontSize: '32px',
+        fontSize: '28px',
         fontWeight: '300'
       },
       actions: {
@@ -65,9 +77,13 @@ let Index = React.createClass({
     return (
       <div style={styles.container}>
 
-        <div style={styles.logo}></div>
+        <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
 
         <Carousel style={styles.intro} indicator={IndicatorDots}>
+          <div style={styles.slide}>
+            <h3 style={styles.title}>Own your data</h3>
+            <div style={styles.content}><img src="/img/slide-data.png" style={styles.img}/></div>
+          </div>
           <div style={styles.slide}>
             <h3 style={styles.title}>Create your personal digital identity</h3>
             <div style={styles.content}><img src="/img/slide-identity.png" style={styles.img}/></div>
