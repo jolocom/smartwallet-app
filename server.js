@@ -2,7 +2,7 @@
 
 var express = require('express');
 var cookieParser = require('cookie-parser')
-var session = require('express-session');
+var cookieSession = require('cookie-session')
 var bodyParser = require('body-parser');
 var path = require('path');
 var passport = require('passport');
@@ -18,7 +18,7 @@ var proxy = httpProxy.createProxyServer({
 var app = express();
 
 var isProduction = process.env.NODE_ENV === 'production';
-var port = isProduction ? process.env.PORT : 3000;
+var port = process.env.PORT || 3000;
 var publicPath = path.resolve(__dirname, 'dist');
 
 mongoose.connect('mongodb://localhost/jolocom');
@@ -38,10 +38,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(cookieParser());
-app.use(session({
-  secret: 'jolocom',
-  resave: true,
-  saveUninitialized: true
+app.use(cookieSession({
+  name: 'session',
+  keys: ['jolocom1', 'jolocom2']
 }));
 app.use(passport.initialize());
 app.use(passport.session());
