@@ -2,7 +2,6 @@ import Reflux from 'reflux'
 import graphAgent from '../lib/agents/graph.js'
 import previewActions from '../actions/preview-actions'
 import accountActions from '../actions/account'
-import graphStore from './graph-store'
 import d3Convertor from '../lib/d3-converter'
 
 import rdf from 'rdflib'

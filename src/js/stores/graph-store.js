@@ -110,8 +110,8 @@ export default Reflux.createStore({
     this.trigger( this.state)
   },
 
-  onGetInitialGraphState: function() {
-    this.gAgent.getGraphMapAtWebID().then((triples) => {
+  onGetInitialGraphState: function(username) {
+    this.gAgent.getGraphMapAtWebID(username).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)}
@@ -129,6 +129,7 @@ export default Reflux.createStore({
 
 
   onNavigateToNode: function(node){
+    console.log(node)
     this.state.neighbours = []
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
@@ -140,11 +141,22 @@ export default Reflux.createStore({
       this.state.center = triples[0]
 
       if(this.state.navHistory.length > 1) {
-        if (this.state.center.name == this.state.navHistory[this.state.navHistory.length - 2].name) {
+        if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2].uri) {
           this.state.navHistory.pop()
           this.state.navHistory.pop()
         }
+        else if(this.state.navHistory.length > 1) {
+          for (var j = 0; j < this.state.navHistory.length-1; j++) {
+            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) {
+              for (var k = 0; k < j+2; k++) {
+                console.log('pop')
+                this.state.navHistory.pop()
+              }
+            }
+          }
+        }
       }
+
 
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)

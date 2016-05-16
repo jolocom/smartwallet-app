@@ -77,7 +77,7 @@ export default class GraphD3 extends EventEmitter {
       .nodes(this.dataNodes)
       .links(this.dataLinks)
       .charge(-2000)
-      .linkDistance(STYLES.largeNodeSize * 1.5)
+      .linkDistance((d)=> (d.rank == 'history' && d.histLevel>0) ? STYLES.smallNodeSize * 1.5 : STYLES.largeNodeSize * 1.5)
       .friction(0.8)
       .gravity(0.2)
       .size([this.width, this.height])
@@ -120,7 +120,7 @@ export default class GraphD3 extends EventEmitter {
 
     // We draw the lines for all the elements in the dataLinks array.
     let link =  this.svg.selectAll('line')
-    .data(this.dataLinks, (d) => {return d.source.uri + '-' + d.target.uri})
+    .data(this.dataLinks, (d, i) => {return d.source.uri + i + '-' + d.target.uri + i})
     .enter()
     .insert('line', '.node')
     .attr('class','link')
@@ -131,7 +131,7 @@ export default class GraphD3 extends EventEmitter {
 
       // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
-      .data(this.dataNodes, (d) => {return d.uri})
+      .data(this.dataNodes, (d, i) => {return (d.uri + i)})
       .enter()
       .append('g')
       .attr('class','node')
@@ -182,17 +182,22 @@ export default class GraphD3 extends EventEmitter {
     this.node.append('circle')
       .attr('class', 'nodecircle')
       .attr('r', (d) => {
-        return d.rank == 'center' ? largeNode / 2 : smallNode / 2 })
+        if(d.rank == 'center')
+          return largeNode / 2
+        else if (d.rank == 'history') {
+          return smallNode / 3
+        }
+        else return smallNode / 2 })
       .style('fill', (d) => {
-        if(d.img) return 'url(#'+d.uri+')'
+        if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
         else{
           if( d.rank  == 'history'){
-            return STYLES.lightGrayColor
+            return STYLES.grayColor
           }
           else return STYLES.blueColor
         }
       })
-      .attr('opacity', (d) => (d.rank == 'history' && d.img) ? 0.5 : 1)
+
 
     // The name of the person, displays on the node
     this.node.append('svg:text')
@@ -200,19 +205,36 @@ export default class GraphD3 extends EventEmitter {
       .style('fill', '#e6e6e6')
       .attr('text-anchor', 'middle')
       .attr('opacity',(d) => {
-        return d.img ? 0 : 1})
+        if (d.img && d.rank!='history') return 0
+        else return 1
+      })
       .attr('dy', '.35em')
+      .attr('font-size', (d) => d.rank == 'history' ? '65%' : '100%')
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
+
         if(d.name)
         {
           // Perhaps use something else instead of ... , takes 3 character spaces
-          if(d.name.length> 10) return d.name.substring(0, 12)+ '...'
+          // TODO THINK OF THIS!
+          if(d.name.indexOf>0){
+            let name = d.name.substring(0, d.name.indexOf(' '))
+
+            if(name.length > 10) {
+              return name.substring(0, 10)+ '...'
+            }
+            else return name
+          }
+          else if(d.name.length > 10)
+          {
+            return d.name.substring(0, 10)+ '...'
+          }
           else return d.name
         }
+
         else if (d.title) {
-          if(d.title.length> 10) return d.title.substring(0, 12)+ '...'
+          if(d.title.length> 10) return d.title.substring(0, 10)+ '...'
           else return d.title
         } else return 'Anonymous'
       })
@@ -266,7 +288,10 @@ export default class GraphD3 extends EventEmitter {
       }
       else if (d.rank=='history'){
         d.x += (center.x-d.x)*k
-        d.y += (center.y-d.y+STYLES.largeNodeSize)*k
+        if(d.histLevel==0){
+          d.y += (center.y-d.y+STYLES.largeNodeSize*(d.histLevel+1))*k
+        }
+        else d.y += (center.y-d.y+STYLES.smallNodeSize*(d.histLevel+1))*k
       }
     })
 
@@ -329,9 +354,12 @@ export default class GraphD3 extends EventEmitter {
   onClick = function(node, data) {
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
+    if(data.rank == 'history') return
     if (d3.event.defaultPrevented) {
       return
     }
+
+
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
@@ -439,43 +467,29 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   updateHistory(history) {
-    let changed = false
-    if(history.length > 0) {
-      for (var i = 0; i < this.dataNodes.length; i++) {
-        if (this.dataNodes[i].uri == history[history.length-1].uri) {
-          this.dataNodes[i].rank = 'history'
-          changed = true
-        }
-      }
-    }
 
-    if(changed){
-      d3.selectAll('g .node').selectAll('.nodecircle')
-      .style('fill', (d) => {
-        if(d.img) return 'url(#'+d.uri+')'
+    if(history.length>0){
+      this.force.stop()
+      for (var i = 0; i < history.length; i++) {
+        history[history.length-1-i].rank = 'history'
+        history[history.length-1-i].histLevel = i
+        if (i == 0) {
+
+          this.dataNodes.push(history[history.length-1-i])
+          this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
+        }
         else{
-          if( d.rank  == 'history'){
-            return STYLES.lightGrayColor
-          }
-          else return STYLES.blueColor
+          this.dataNodes.push(history[history.length-1-i])
+          this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
         }
-      })
-    }
-    else{
-      if(history.length>0){
-        history[history.length-1].rank = 'history'
-        this.force.stop()
-        this.dataNodes.push(history[history.length-1])
-        this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
-        this.drawNodes()
-        this.force.start()
+
       }
+
+
+      this.drawNodes()
+      this.force.start()
     }
 
-    d3.selectAll('g .node').selectAll('.nodecircle')
-    .attr('opacity',(d) => {
-      return (d.rank == 'history' && d.img) ? 0.5 : 1
-    })
   }
 
   // Wraps the description of the nodes around the node.

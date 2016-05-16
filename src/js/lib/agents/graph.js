@@ -139,7 +139,7 @@ class GraphAgent extends HTTPAgent {
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
     let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
-                 SCHEMA('isRelatedTo').uri, FOAF('maker').uri]
+                 SCHEMA('isRelatedTo').uri]
 
     console.log(triples)
     console.log(Links)
