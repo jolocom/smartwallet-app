@@ -105,9 +105,9 @@ let AccountStore = Reflux.createStore({
     }).then((response) => {
       return response.json()
     }).then((data) => {
-      this.username = data.username
+      this.username = data.username || null
       this.trigger({
-        username: data.username
+        username: this.username
       })
     }).catch(() => {
       this.username = null
