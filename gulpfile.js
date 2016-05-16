@@ -5,6 +5,7 @@ var gutil = require('gulp-util');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
+var webpackConfigProd = require('./webpack.config.production.js');
 
 var concat = require('gulp-concat');
 
@@ -40,7 +41,7 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
-	var myConfig = Object.create(webpackConfig);
+	var myConfig = Object.create(webpackConfigProd);
 	myConfig.plugins = myConfig.plugins.concat(
 		new webpack.DefinePlugin({
 			'process.env': {
