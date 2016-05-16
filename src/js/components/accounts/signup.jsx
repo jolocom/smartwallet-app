@@ -1,8 +1,8 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import {TextField, RaisedButton, Paper} from 'material-ui'
-import {History, Lifecycle, Link} from 'react-router'
+import {TextField, RaisedButton} from 'material-ui'
+import {History, Link} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
@@ -15,7 +15,6 @@ import Util from 'lib/util'
 let Signup = React.createClass({
   mixins: [
     History,
-    Lifecycle,
     Reflux.connect(AvailabilityStore, 'available'),
     Reflux.connect(AccountStore, 'account')
   ],
@@ -25,10 +24,6 @@ let Signup = React.createClass({
   componentWillMount() {
     if (this.state.account && this.state.account.username)
       this.history.pushState(null, '/graph')
-  },
-  routerWillLeave() {
-    // if (!this.state.signedUp)
-    //   return false
   },
   signup() {
     let signupData = {
@@ -52,9 +47,62 @@ let Signup = React.createClass({
     })
     Availability.check(e.target.value)
   },
-  render() {
-    let availableText, disabled = true
 
+  getStyles() {
+    let {muiTheme} = this.context
+    let styles = {
+      container: {
+        textAlign: 'center',
+        background: '#f1f1f1',
+        height: '100%',
+        overflowY: 'auto'
+      },
+      header: {
+        padding: '40px'
+      },
+      logo: {
+        fontSize: '18px',
+        fontWeight: '400',
+        textAlign: 'center',
+        marginTop: '24px',
+        textTransform: 'uppercase'
+      },
+      logoImg: {
+        width: '32px',
+        height: '32px',
+        verticalAlign: 'middle'
+      },
+      title: {
+        fontWeight: '200',
+        fontSize: '20px'
+      },
+      content: {
+        width: '300px',
+        maxWidth: '90%',
+        padding: '20px',
+        margin: '0 auto 20px auto',
+        boxSizing: 'border-box'
+      },
+      button: {
+        width: '100%'
+      },
+      help: {
+        color: muiTheme.jolocom.gray1
+      },
+      link: {
+        color: muiTheme.palette.accent1Color,
+        fontWeight: 'bold'
+      }
+    }
+
+    return styles
+  },
+
+  render() {
+    let styles = this.getStyles()
+
+    let availableText, disabled = true
+    console.log(this.state.available)
     if (this.state.available === false) {
       availableText = 'This username is already taken.'
     }
@@ -63,12 +111,9 @@ let Signup = React.createClass({
 
     return (
       <div style={styles.container}>
-        <header style={styles.header}>
-          <img src="/img/logo.png" style={styles.logo} />
-          <h2 style={styles.title}>Signup for Jolocom</h2>
-        </header>
-        <Paper zDept={2} style={styles.content}>
-          <div>
+        <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
+        <div style={styles.content}>
+          <div style={{marginBottom: '20px'}}>
             <TextField floatingLabelText="Username"
               onChange={this._onUsernameChange}
               errorText={availableText}/>
@@ -80,43 +125,13 @@ let Signup = React.createClass({
               onChange={Util.linkToState(this, 'email')} />
           </div>
 
-          <RaisedButton primary={true} onTouchTap={this.signup} disabled={disabled} style={styles.button}>Sign up</RaisedButton>
-        </Paper>
-        <p>Already have an account? <Link to="/login">login instead</Link>.</p>
+          <RaisedButton secondary={true} onTouchTap={this.signup} disabled={disabled} style={styles.button} label="Sign up"/>
+        </div>
+
+        <p style={styles.help}>Already have an account? <Link to="/login" style={styles.link}>login instead</Link>.</p>
       </div>
     )
   }
 })
-
-let styles = {
-  container: {
-    textAlign: 'center',
-    background: '#f1f1f1',
-    height: '100%',
-    overflowY: 'auto'
-  },
-  header: {
-    padding: '40px'
-  },
-  logo: {
-    width: '80px',
-    height: '80px'
-  },
-  title: {
-    fontWeight: '200',
-    fontSize: '20px'
-  },
-  content: {
-    width: '300px',
-    maxWidth: '90%',
-    padding: '20px',
-    margin: '0 auto 20px auto',
-    background: '#ffffff',
-    boxSizing: 'border-box'
-  },
-  button: {
-    width: '100%'
-  }
-}
 
 export default Radium(Signup)

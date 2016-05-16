@@ -84,7 +84,7 @@ let App = React.createClass({
 
     if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
       this.history.pushState(null, '/login')
-    } else if (username && (path === '/signup' || path === '/login')) {
+    } else if (username && (path === '/signup' || path === '/login' || path === '/')) {
       this.history.pushState(null, '/graph')
     }
 
