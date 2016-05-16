@@ -128,6 +128,10 @@ class GraphAgent extends HTTPAgent {
     return this.get(uri)
       .then((xhr) => {
         let parser = new Parser()
+        console.log('Sending get request to ', uri)
+        console.log('Receiving response: ', xhr.response)
+        console.log('========================================================')
+
         return parser.parse(xhr.response)
         // Look at line 155 for clarifications if you dare.
       }).catch(()=>{return {triples:[]}})
@@ -141,11 +145,8 @@ class GraphAgent extends HTTPAgent {
     let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
                  SCHEMA('isRelatedTo').uri]
 
-    console.log(triples)
-    console.log(Links)
     let neighbours = triples.filter((t) => t.subject.uri == center && Links.indexOf(t.predicate.uri) >= 0)
-    console.log(neighbours)
-
+    
     return new Promise ((resolve) => {
       let graphMap = []
       // If there are no adjacent nodes to draw, we return an empty array.
@@ -155,12 +156,10 @@ class GraphAgent extends HTTPAgent {
       }
       // If there are adjacent nodes to draw, we parse them and return an array of their triples
       let i = 0
-      console.log(neighbours)
       neighbours.map((triple) => {
         this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
           // Terrible error handling, please don't judge me, it's Saturday night.
           if (triples.triples.length == 0) {
-            console.log('broken one')
             i += 1
           } else {
             graphMap.push(triples.triples)
