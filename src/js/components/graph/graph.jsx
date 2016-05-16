@@ -12,6 +12,8 @@ import PinnedNodes from './pinned.jsx'
 import GraphStore from '../../stores/graph-store'
 import graphActions from '../../actions/graph-actions'
 
+import Node from '../node/node.jsx'
+
 let Graph = React.createClass({
 
   mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
@@ -28,7 +30,7 @@ let Graph = React.createClass({
 
   getChildContext: function() {
     return {
-      node: this.state.center,
+      node: this.state.activeNode,
       user: this.state.user
     }
   },
@@ -91,8 +93,8 @@ let Graph = React.createClass({
   },
 
   componentDidMount: function() {
-
     this.graph = new GraphD3(this.getGraphEl(), 'full')
+    this.graph.on('view-node', this._handleViewNode)
     graphActions.getState()
   },
 
@@ -130,6 +132,13 @@ let Graph = React.createClass({
   // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render: function() {
     let styles = this.getStyles()
+
+    let nodeDetails
+
+    if (this.state.activeNode) {
+      nodeDetails = <Node node={this.state.activeNode}/>
+    }
+
     return (
       <div style={styles.container}>
         <FabMenu style={styles.menu}>
@@ -141,9 +150,15 @@ let Graph = React.createClass({
 
         {this.props.children}
 
+        {nodeDetails}
+
         <PinnedNodes/>
       </div>
-   )
+    )
+  },
+
+  _handleViewNode(node) {
+    graphActions.viewNode(node)
   }
 })
 export default Radium(Graph)

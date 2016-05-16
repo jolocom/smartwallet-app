@@ -17,7 +17,7 @@ export default Reflux.createStore({
   getInitialState() {
     return null
   },
-
+  
   create(username, user, title, description, image, type) {
     // We need to check if the currently logged in user can write to the rdfs
     // he is trying to link.
