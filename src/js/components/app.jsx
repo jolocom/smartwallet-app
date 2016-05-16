@@ -14,6 +14,7 @@ import JolocomTheme from 'styles/jolocom-theme'
 import SearchBar from 'components/common/search-bar.jsx'
 import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
+import Tour from 'components/tour.jsx'
 
 import AppNav from 'components/nav.jsx'
 import GraphSearch from 'components/graph/search.jsx'
@@ -78,8 +79,8 @@ let App = React.createClass({
     if (username === undefined) {
       return
     }
-
-    if (!username && path !== '/signup' && path !== '/login') {
+    console.log(path)
+    if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
       this.history.pushState(null, '/login')
     } else if (username && (path === '/signup' || path === '/login')) {
       ProfileActions.load(username)
@@ -208,6 +209,7 @@ let App = React.createClass({
               })}
             </Content>
             <Profile/>
+            <Tour/>
           </Layout>
         ) : this.props.children}
       </div>
