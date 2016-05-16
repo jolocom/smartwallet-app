@@ -8,7 +8,6 @@ import Radium from 'radium'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
-import PinnedNodes from './pinned.jsx'
 import GraphStore from '../../stores/graph-store'
 import graphActions from '../../actions/graph-actions'
 
@@ -151,8 +150,6 @@ let Graph = React.createClass({
         {this.props.children}
 
         {nodeDetails}
-
-        <PinnedNodes/>
       </div>
     )
   },
