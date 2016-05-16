@@ -8,7 +8,7 @@ import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
 import rdf from 'rdflib'
-let SCHEMA = rdf.Namespace('https://schema.org/')
+let SCHEMA = rdf.Namespace('http://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
@@ -127,10 +127,10 @@ class GraphAgent extends HTTPAgent {
   fetchTriplesAtUri(uri) {
     return this.get(uri)
       .then((xhr) => {
-        console.log(xhr.status, ' status code of fetching triples from uri')
         let parser = new Parser()
         return parser.parse(xhr.response)
-      })
+        // Look at line 155 for clarifications if you dare.
+      }).catch(()=>{return {triples:[]}})
   }
 
 // This function gets passed a center uri and it's triples, and then finds all possible
@@ -138,10 +138,14 @@ class GraphAgent extends HTTPAgent {
 
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
-    let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri, FOAF('maker').uri]
+    let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
+                 SCHEMA('isRelatedTo').uri, FOAF('maker').uri]
+
+    console.log(triples)
     console.log(Links)
     let neighbours = triples.filter((t) => t.subject.uri == center && Links.indexOf(t.predicate.uri) >= 0)
     console.log(neighbours)
+
     return new Promise ((resolve) => {
       let graphMap = []
       // If there are no adjacent nodes to draw, we return an empty array.
@@ -150,13 +154,23 @@ class GraphAgent extends HTTPAgent {
         console.warn('No neighbours found')
       }
       // If there are adjacent nodes to draw, we parse them and return an array of their triples
+      let i = 0
+      console.log(neighbours)
       neighbours.map((triple) => {
         this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
-          graphMap.push(triples.triples)
-          graphMap[graphMap.length - 1].uri = triple.object.uri
-          // This checks if the whole array has been parsed, and only after that resolves.
-          if (graphMap.length == neighbours.length) {
-            resolve(graphMap)
+          // Terrible error handling, please don't judge me, it's Saturday night.
+          if (triples.triples.length == 0) {
+            console.log('broken one')
+            i += 1
+          } else {
+            graphMap.push(triples.triples)
+            graphMap[graphMap.length - 1].uri = triple.object.uri
+            // This checks if the whole array has been parsed, and only after that resolves.
+
+            // I'm not proud of this.
+            if (graphMap.length == neighbours.length - i) {
+              resolve(graphMap)
+            }
           }
         })
       })

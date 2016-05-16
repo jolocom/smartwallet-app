@@ -204,10 +204,17 @@ export default class GraphD3 extends EventEmitter {
       .attr('dy', '.35em')
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
-      .text((d) => {if(d.name) return d.name
+      .text((d) => {
+        if(d.name)
+        {
+          // Perhaps use something else instead of ... , takes 3 character spaces
+          if(d.name.length> 10) return d.name.substring(0, 12)+ '...'
+          else return d.name
+        }
         else if (d.title) {
-          return d.title
-        }else return 'Anonymous'
+          if(d.title.length> 10) return d.title.substring(0, 12)+ '...'
+          else return d.title
+        } else return 'Anonymous'
       })
 
      // The text description of a person
