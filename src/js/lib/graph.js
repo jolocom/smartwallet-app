@@ -41,7 +41,6 @@ export default class GraphD3 extends EventEmitter {
     this.setUpForce(nodes)
     this.drawBackground()
     this.drawNodes()
-
     this.rendered = true
   }
 

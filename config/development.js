@@ -1,6 +1,6 @@
 // @TODO replace values by env settings using gulp
 module.exports = {
-  endpoint: 'https://localhost:8443',
-  accountStatusEndpoint: 'https://localhost:8443/,system/accountStatus',
+  endpoint: 'https://ouishare-schedule.jolocom.com/',
+  accountStatusEndpoint: 'https://ouishare-schedule.jolocom.com/,system/accountStatus',
   dev: true
 }

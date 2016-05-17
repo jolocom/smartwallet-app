@@ -173,13 +173,13 @@ class GraphAgent extends HTTPAgent {
           } else {
             graphMap.push(triples.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
+
             // This checks if the whole array has been parsed, and only after that resolves.
             // I'm not proud of this.
-            if (graphMap.length == neighbours.length) {
-              console.log('Loading done,', i,'rdf files were skipped.')
-              console.log(graphMap)
-              resolve(graphMap)
-            }
+          }
+          if (graphMap.length == neighbours.length) {
+            console.log('Loading done,', i,'rdf files were / was skipped.')
+            resolve(graphMap)
           }
         })
       })
