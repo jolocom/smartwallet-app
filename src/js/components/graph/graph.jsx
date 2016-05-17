@@ -8,9 +8,10 @@ import Radium from 'radium'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
-import PinnedNodes from './pinned.jsx'
 import GraphStore from '../../stores/graph-store'
 import graphActions from '../../actions/graph-actions'
+
+import Node from '../node/node.jsx'
 
 let Graph = React.createClass({
 
@@ -90,8 +91,8 @@ let Graph = React.createClass({
   },
 
   componentDidMount: function() {
-
     this.graph = new GraphD3(this.getGraphEl(), 'full')
+    this.graph.on('view-node', this._handleViewNode)
     graphActions.getState()
   },
 
@@ -129,6 +130,13 @@ let Graph = React.createClass({
   // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render: function() {
     let styles = this.getStyles()
+
+    let nodeDetails
+
+    if (this.state.activeNode) {
+      nodeDetails = <Node node={this.state.activeNode}/>
+    }
+
     return (
       <div style={styles.container}>
         <FabMenu style={styles.menu}>
@@ -140,9 +148,13 @@ let Graph = React.createClass({
 
         {this.props.children}
 
-        <PinnedNodes/>
+        {nodeDetails}
       </div>
-   )
+    )
+  },
+
+  _handleViewNode(node) {
+    graphActions.viewNode(node)
   }
 })
 export default Radium(Graph)

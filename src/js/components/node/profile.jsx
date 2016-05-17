@@ -10,28 +10,36 @@ import {
   List, ListItem, Divider
 } from 'material-ui'
 
-import ProfileActions from 'actions/profile'
-
-import ProfileStore from 'stores/profile'
+import PinnedActions from 'actions/pinned'
+import PinnedStore from 'stores/pinned'
 
 let ProfileNode = React.createClass({
+
   mixins: [
-    Reflux.connect(ProfileStore, 'profile')
+    Reflux.listenTo(PinnedStore, 'onUpdatePinned')
   ],
 
   contextTypes: {
-    history: React.PropTypes.any
+    history: React.PropTypes.any,
+    profile: React.PropTypes.object,
+    muiTheme: React.PropTypes.object
   },
 
-  componentDidMount() {
-    ProfileActions.load()
+  componentWillMount() {
+    this.onUpdatePinned()
+  },
+
+  onUpdatePinned() {
+    this.setState({pinned: PinnedStore.isPinned(this.props.node.uri)})
   },
 
   getStyles() {
-    let background = 'http://www.getmdl.io/assets/demos/welcome_card.jpg'
+    let {muiTheme} = this.context
+    let {img} = this.props.node
+    let background
 
-    if (this.imgUri) {
-      background = this.imgUri
+    if (img) {
+      background = img
     }
 
     return {
@@ -43,16 +51,20 @@ let ProfileNode = React.createClass({
       header: {
         color: '#fff',
         height: '176px',
-        background: `url(${background}) center / cover`
+        background: `${muiTheme.jolocom.gray1} url(${background}) center / cover`
       },
       title: {
         position: 'absolute',
-        bottom: 0
+        bottom: 0,
+        left: 0,
+        padding: '0 24px'
       },
       action: {
         position: 'absolute',
         bottom: '-20px',
-        right: '20px'
+        right: '20px',
+        backgroundColor: this.state.pinned ? muiTheme.palette.accent1Color :
+          muiTheme.jolocom.gray4
       }
     }
   },
@@ -60,43 +72,51 @@ let ProfileNode = React.createClass({
   render() {
     let styles = this.getStyles()
 
-    let {name} = this.state.profile
+    let {name, title, description, email} = this.props.node
 
     return (
       <div style={styles.container}>
         <AppBar
           style={styles.header}
           titleStyle={styles.title}
-          title={<span>{name || 'No name set'}</span>}
-          iconElementLeft={<IconButton iconClassName="material-icons">close</IconButton>}
+          title={<span>{name || title || 'No name set'}</span>}
+          iconElementLeft={<IconButton iconClassName="material-icons" onClick={this._handleClose}>close</IconButton>}
           iconElementRight={<IconButton iconClassName="material-icons">more_vert</IconButton>}
         >
-          <FloatingActionButton mini={true} secondary={true} style={styles.action}>
+          <FloatingActionButton mini={true} backgroundColor={styles.action.backgroundColor} style={styles.action} onClick={this._handleBookmarkClick}>
             <FontIcon className="material-icons">bookmark</FontIcon>
           </FloatingActionButton>
         </AppBar>
 
         <List style={styles.list}>
-          <ListItem
-            leftIcon={<FontIcon className="material-icons">info</FontIcon>}
-            primaryText="Description"
-          />
-          <Divider inset={true} />
-          <ListItem
-            leftIcon={<FontIcon className="material-icons">call</FontIcon>}
-            primaryText="(650) 555 - 1234"
-            secondaryText="Mobile"
-          />
-          <Divider inset={true} />
-          <ListItem
-            leftIcon={<FontIcon className="material-icons">email</FontIcon>}
-            primaryText="aliconnors@example.com"
-            secondaryText="Personal"
-          />
+          {description && (
+            <div>
+              <ListItem
+                leftIcon={<FontIcon className="material-icons">info</FontIcon>}
+                primaryText={description}
+              />
+              <Divider inset={true} />
+            </div>
+          )}
+          {email && (
+            <ListItem
+              leftIcon={<FontIcon className="material-icons">email</FontIcon>}
+              primaryText={email}
+              secondaryText="Personal"
+            />
+          )}
         </List>
 
       </div>
     )
+  },
+
+  _handleClose() {
+    this.props.onClose()
+  },
+
+  _handleBookmarkClick() {
+    PinnedActions.pin(this.props.node.uri)
   }
 })
 

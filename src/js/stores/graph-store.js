@@ -32,7 +32,8 @@ export default Reflux.createStore({
       //These describe the ui
       showPinned: false,
       showSearch: false,
-      plusDrawerOpen: false
+      plusDrawerOpen: false,
+      activeNode: null
     }
   },
 
@@ -162,5 +163,10 @@ export default Reflux.createStore({
       this.state.highlighted = null
       this.trigger(this.state, 'redraw')
     })
+  },
+
+  onViewNode(node) {
+    this.state.activeNode = node
+    this.trigger(this.state)
   }
 })
