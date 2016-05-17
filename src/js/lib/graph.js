@@ -334,7 +334,7 @@ export default class GraphD3 extends EventEmitter {
   // This function fires upon tick, around 30 times per second?
   tick = function(e){
     let center = {y:(this.height / 2), x: this.width /2}
-    let k = 10 * e.alpha
+    let k = 2.5 * e.alpha
     let radius = STYLES.largeNodeSize
     d3.selectAll('g .node').attr('d', function(d){
       if(d.rank=='center'){
