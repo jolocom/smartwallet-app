@@ -26,6 +26,13 @@ let JolocomTheme = {
     nodeColor: '#939f9a',
     backgroundColor: fade('#939f9a', 0.3),
     connectionColor: fade('#939f9a', 0.15)
+  },
+  jolocom: {
+    gray1: '#939f9a',
+    gray2: '#bfc6c3',
+    gray3: '#dfe2e1',
+    gray4: '#eff1f0',
+    gray5: '#f6f7f7'
   }
 }
 

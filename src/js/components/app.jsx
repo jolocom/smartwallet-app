@@ -3,7 +3,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
-
+import Tour from 'components/tour.jsx'
 import {Layout, Content} from 'components/layout'
 import {Paper, AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
 
@@ -70,10 +70,10 @@ let App = React.createClass({
 
   checkLogin() {
     let path = this.props.location.pathname
-
-    if (!this.state.account.username && path !== '/signup' && path !== '/login') {
+    let {username} = this.state.account
+    if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
       this.history.pushState(null, '/login')
-    } else if (path === '/') {
+    } else if (username && (path === '/signup' || path === '/login' || path === '/')) {
       this.history.pushState(null, '/graph')
     }
   },
@@ -199,6 +199,7 @@ let App = React.createClass({
               })}
             </Content>
             <Profile/>
+            <Tour/>
           </Layout>
         ) : this.props.children}
       </div>
