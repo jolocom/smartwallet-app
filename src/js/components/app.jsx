@@ -18,6 +18,7 @@ import Profile from 'components/accounts/profile.jsx'
 import AppNav from 'components/nav.jsx'
 import GraphSearch from 'components/graph/search.jsx'
 
+import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
 
 import PinnedActions from 'actions/pinned'
@@ -60,21 +61,34 @@ let App = React.createClass({
   },
 
   componentDidMount() {
-    ProfileActions.load()
+    AccountActions.checkSession()
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.account.username !== this.state.account.username)
+    let {username} = this.state.account
+
+    if (prevState.account.username !== username) {
       this.checkLogin()
+    }
   },
 
   checkLogin() {
     let path = this.props.location.pathname
+    let {username} = this.state.account
 
-    if (!this.state.account.username && path !== '/signup' && path !== '/login') {
+    // session is still loading, so return for now
+    if (username === undefined) {
+      return
+    }
+
+    if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
       this.history.pushState(null, '/login')
-    } else if (path === '/') {
+    } else if (username && (path === '/signup' || path === '/login' || path === '/')) {
       this.history.pushState(null, '/graph')
+    }
+
+    if (username) {
+      ProfileActions.load(username)
     }
   },
 
