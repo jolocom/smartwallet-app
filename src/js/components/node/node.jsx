@@ -4,20 +4,12 @@ import Radium from 'radium'
 import {FOAF} from 'lib/namespaces'
 
 import ProfileNode from 'components/node/profile.jsx'
-import AddressNode from 'components/node/address.jsx'
-
-import {
-  AppBar,
-  IconButton,
-  Checkbox
-} from 'material-ui'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
-import NodeActions from 'actions/node'
-
 import NodeStore from 'stores/node'
+import graphActions from 'actions/graph-actions'
 
 let Node = React.createClass({
   mixins: [
@@ -37,13 +29,9 @@ let Node = React.createClass({
     this.refs.dialog.hide()
   },
 
-  togglePinned() {
-    NodeActions.pin(this.props.params.node)
-  },
-
   _handleClose() {
-    this.context.history.goBack()
     this.refs.dialog.hide()
+    graphActions.viewNode(null)
   },
 
   getStyles() {
@@ -55,34 +43,27 @@ let Node = React.createClass({
     }
   },
 
-  getNodeContent() {
-    let {node} = this.context
-
-    if (!node) return null
-
-    if (node.type === FOAF('PersonalProfileDocument')) {
-      return <ProfileNode node={node}/>
-    }
-    switch(node.description) {
-      case 'Address':
-        return <AddressNode node={node}/>
+  getNodeContent(type) {
+    switch (type) {
+      case FOAF('PersonalProfileDocument').uri:
+      case FOAF('Person').uri:
+      default:
+        return ProfileNode
     }
   },
 
   render() {
-    let styles = this.getStyles()
+    let {node} = this.props
 
-    let content = this.getNodeContent()
+    let content, Component = this.getNodeContent(node.type)
+
+    if (Component) {
+      content = <Component node={node} onClose={this._handleClose} />
+    }
 
     return (
       <Dialog ref="dialog" fullscreen={true}>
         <Layout>
-          <AppBar
-            iconElementLeft={<IconButton onTouchTap={this._handleClose} iconClassName="material-icons">close</IconButton>}
-            iconElementRight={<Checkbox name="inbox" onChange={this.togglePinned}></Checkbox>}
-            style={styles.bar}
-            zDepth={0}
-          />
           <Content>
             {content}
           </Content>

@@ -70,7 +70,6 @@ export default Reflux.createStore({
     // We choose the subject of the new link
     if (this.state.highlighted) this.state.linkSubject = this.state.highlighted
     else this.state.linkSubject = this.state.center.uri
-    console.log('we chose the subject to be', this.state.linkSubject)
     this.trigger(this.state)
 
     previewActions.linkTriple()
@@ -81,7 +80,6 @@ export default Reflux.createStore({
     if (this.state.highlighted) this.state.linkObject = this.state.highlighted
     else this.state.linkObject = this.state.center.uri
     this.trigger(this.state)
-    console.log('we chose the object to be', this.state.linkObject)
   },
 
   onLinkTriple: function(){

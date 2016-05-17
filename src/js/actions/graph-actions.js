@@ -17,5 +17,6 @@ export default Reflux.createActions({
   'writeTriple':{asyncResult: false},
   'drawNewNode': {asyncResult: false},
   'eraseGraph' :{asyncResult: false},
-  'drawGraph' : {asyncResult: false}
+  'drawGraph' : {asyncResult: false},
+  'viewNode': {}
 })

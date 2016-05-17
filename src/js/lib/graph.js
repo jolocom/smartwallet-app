@@ -271,7 +271,11 @@ export default class GraphD3 extends EventEmitter {
       self.onClick(this,data)
     })
     this.node.on('dblclick', this.onDblClick)
-    full.on('click', this.onClickFull)
+
+    full.on('click', function(data) {
+      self.onClickFull(this, data)
+    })
+    
     this.force.on('tick', this.tick)
 
   }.bind(this)
@@ -346,9 +350,11 @@ export default class GraphD3 extends EventEmitter {
 
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
-  onClickFull = function() {
+  onClickFull = function(node, data) {
     //stops propagation to node click handler
     d3.event.stopPropagation()
+
+    this.emit('view-node', data)
   }
 
   onClick = function(node, data) {

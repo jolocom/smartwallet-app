@@ -8,9 +8,9 @@ let AvailabilityStore = Reflux.createStore({
   listenables: Availability,
 
   getInitialState() {
-    return false
+    return null
   },
-  
+
   // onCheck(username) {
   //   let payload = {
   //     method: 'accountStatus',
