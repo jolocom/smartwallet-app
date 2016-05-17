@@ -257,10 +257,11 @@ export default class GraphD3 extends EventEmitter {
         {
           // Perhaps use something else instead of ... , takes 3 character spaces
           // TODO THINK OF THIS!
-          if(d.name.indexOf>0){
+          if(d.name.indexOf(' ')>0){
             let name = d.name.substring(0, d.name.indexOf(' '))
 
             if(name.length > 10) {
+
               return name.substring(0, 10)
             }
             else return name
@@ -273,14 +274,14 @@ export default class GraphD3 extends EventEmitter {
         }
 
         else if (d.title) {
-          if(d.title.length> 10) return d.title.substring(0, 10)
+          if(d.title.length> 10) return d.title.substring(0, 10) + '...'
           else return d.title
         } else {
           if(d.uri.search('profile')>0){
             let x = d.uri.search('profile')
             let name = d.uri.substring(0, x-1)
             name = name.substring(name.lastIndexOf('/')+1, name.length)
-            if(name.length>10) return name.substring(0, 10)
+            if(name.length>10) return name.substring(0, 10)+'...'
             else return name
           }
           else return 'Not Found'
@@ -347,24 +348,6 @@ export default class GraphD3 extends EventEmitter {
         }
         else d.y += (center.y-d.y+STYLES.smallNodeSize*(d.histLevel+1))*k
       }
-      // else{
-      //   if(Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))<radius*1){
-      //     d.x-= (center.x-d.x)*k
-      //     d.y-= (center.y-d.y)*k
-      //   }
-      //   // else if (Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))>radius*1.5 && Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))<radius*2){
-      //   //   d.x+= (center.x-d.x)*k
-      //   //   d.y+= (center.y-d.y)*k
-      //   // }
-      //   // else if (Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x)>radius*2) && Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))<radius*2.5){
-      //   //   d.x-= (center.x-d.x)*k
-      //   //   d.y-= (center.y-d.y)*k
-      //   // }
-      //   // else if (Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))>radius*3 ){
-      //   //   d.x+= (center.x-d.x)*k
-      //   //   d.y+= (center.y-d.y)*k
-      //   // }
-      // }
     })
 
     // Update the link positions.
