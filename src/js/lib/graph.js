@@ -114,9 +114,10 @@ export default class GraphD3 extends EventEmitter {
     .attr('y', -(STYLES.largeNodeSize/STYLES.fullScreenButtonPosition)-STYLES.fullScreenButton/2)
     .attr('patternUnits', 'userSpaceOnUse')
     .append('svg:image')
-    .attr('xlink:href', 'img/full.png' )
+    .attr('xlink:href', 'img/full.jpg' )
     .attr('width', STYLES.fullScreenButton)
     .attr('height', STYLES.fullScreenButton)
+
 
     // We draw the lines for all the elements in the dataLinks array.
     let link =  this.svg.selectAll('line')
@@ -179,6 +180,35 @@ export default class GraphD3 extends EventEmitter {
         .attr('type', 'linear')
         .attr('slope', 0.6)
 
+    let defsShadow = this.svg.append('svg:defs')
+
+    let filterShadow = defsShadow.append('filter')
+      .attr('id', 'drop-shadow')
+
+
+    filterShadow.append('feGaussianBlur')
+      .attr('in', 'SourceAlpha')
+      .attr('stdDeviation', 1.5)
+      .attr('result', 'blur')
+
+// translate output of Gaussian blur to the right and downwards with 2px
+// store result in offsetBlur
+    filterShadow.append('feOffset')
+      .attr('in', 'blur')
+      .attr('dx', -1.5)
+      .attr('dy', 1.5)
+      .attr('result', 'offsetBlur')
+
+// overlay original SourceGraphic over translated blurred opacity by using
+// feMerge filter. Order of specifying inputs is important!
+    let feMerge = filterShadow.append('feMerge')
+
+    feMerge.append('feMergeNode')
+        .attr('in', 'offsetBlur')
+    feMerge.append('feMergeNode')
+        .attr('in', 'SourceGraphic')
+
+
     this.node.append('circle')
       .attr('class', 'nodecircle')
       .attr('r', (d) => {
@@ -209,7 +239,7 @@ export default class GraphD3 extends EventEmitter {
         else return 1
       })
       .attr('dy', '.35em')
-      .attr('font-size', (d) => d.rank == 'history' ? '65%' : '100%')
+      .attr('font-size', (d) => d.rank == 'history' ? STYLES.largeNodeSize/12 : STYLES.largeNodeSize/8)
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
@@ -222,19 +252,19 @@ export default class GraphD3 extends EventEmitter {
             let name = d.name.substring(0, d.name.indexOf(' '))
 
             if(name.length > 10) {
-              return name.substring(0, 10)+ '...'
+              return name.substring(0, 10)+ '..'
             }
             else return name
           }
           else if(d.name.length > 10)
           {
-            return d.name.substring(0, 10)+ '...'
+            return d.name.substring(0, 10)+ '..'
           }
           else return d.name
         }
 
         else if (d.title) {
-          if(d.title.length> 10) return d.title.substring(0, 10)+ '...'
+          if(d.title.length> 10) return d.title.substring(0, 10)+ '..'
           else return d.title
         } else return 'Anonymous'
       })
@@ -261,10 +291,9 @@ export default class GraphD3 extends EventEmitter {
      .attr('class', 'nodefullscreen')
      .attr('r', 0 )
      .style('fill', 'url(#full)')
-     .attr('stroke',STYLES.grayColor)
-     .attr('stroke-width',1)
      .attr('cy', -STYLES.largeNodeSize / STYLES.fullScreenButtonPosition)
      .attr('cx', STYLES.largeNodeSize / STYLES.fullScreenButtonPosition)
+     .style('filter', 'url(#drop-shadow)')
 
     // Subscribe to the click listeners
     this.node.on('click', function(data){
@@ -275,7 +304,7 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function(data) {
       self.onClickFull(this, data)
     })
-    
+
     this.force.on('tick', this.tick)
 
   }.bind(this)
