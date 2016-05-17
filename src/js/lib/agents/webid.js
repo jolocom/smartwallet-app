@@ -4,11 +4,13 @@ import rdf from 'rdflib'
 import {dev} from 'settings'
 import Solid from 'solid-client'
 import {endpoint} from 'settings'
+import graphAgent from './graph.js'
 
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
+let SCHEMA = rdf.Namespace('https://schema.org/')
 let solid = Solid
 
 // WebID related functions
@@ -46,12 +48,18 @@ class WebIDAgent extends LDPAgent {
 // http://github.com/solid/solid-spec/blob/master/api-rest.md
 
   fakeSignup(username, name, email) {
+    let gAgent = new graphAgent()
 
     solid.web.put(`${endpoint}/${username}/little-sister/graph-comments/`)
     solid.web.put(`${endpoint}/${username}/little-sister/graph-nodes/`)
 
     let p = Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
       .then((result)  => {
+
+	let atendees = 'https://ouishare-schedule.jolocom.com/atendeesNode/profile/card#me'
+	let uri = `${endpoint}/${username}/profile/card#me`
+
+	gAgent.writeTriple(atendees, SCHEMA('isRelatedTo'), rdf.sym(uri))
         solid.web.put(`${endpoint}/${username}/profile/card`, result[0])
         solid.web.put(`${endpoint}/${username}/little-sister/inbox`, result[1])
       })
@@ -86,6 +94,7 @@ class WebIDAgent extends LDPAgent {
     writer.addTriple(rdf.sym(''), RDF('type') ,FOAF('PersonalProfileDocument'))
     writer.addTriple(rdf.sym(''), FOAF('maker') ,rdf.sym('#me'))
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#me'))
+    writer.addTriple(rdf.sym('#me'), SCHEMA('isRelatedTo'), rdf.sym('https://ouishare-schedule.jolocom.com/OuiShare/profile/card#me'))
 
     writer.addTriple(rdf.sym('#me'), RDF('type'), FOAF('Person'))
     if (email) writer.addTriple(rdf.sym('#me'), FOAF('mbox'), email)

@@ -8,7 +8,7 @@ import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
 import rdf from 'rdflib'
-let SCHEMA = rdf.Namespace('http://schema.org/')
+let SCHEMA = rdf.Namespace('https://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
@@ -128,13 +128,15 @@ class GraphAgent extends HTTPAgent {
     return this.get(uri)
       .then((xhr) => {
         let parser = new Parser()
-        console.log('Sending get request to ', uri)
-        console.log('Receiving response: ', xhr.response)
-        console.log('========================================================')
 
+        console.log('we are fetching from', uri)
+        console.log('we are resolving to ', xhr.response)
         return parser.parse(xhr.response)
         // Look at line 155 for clarifications if you dare.
-      }).catch(()=>{return {triples:[]}})
+      }).catch(()=>{
+		console.log('The uri ', uri, ' could not be resolved. Skipping')
+                return {triples:[]}
+		})
   }
 
 // This function gets passed a center uri and it's triples, and then finds all possible
@@ -143,10 +145,9 @@ class GraphAgent extends HTTPAgent {
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
     let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
-                 SCHEMA('isRelatedTo').uri]
+                 SCHEMA('isRelatedTo').uri,'http://schema.org/performer', 'http://schema.org/isRelatedTo','http://schema.org/performerIn']
 
-    let neighbours = triples.filter((t) => t.subject.uri == center && Links.indexOf(t.predicate.uri) >= 0)
-    
+    let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
     return new Promise ((resolve) => {
       let graphMap = []
       // If there are no adjacent nodes to draw, we return an empty array.
@@ -168,6 +169,7 @@ class GraphAgent extends HTTPAgent {
 
             // I'm not proud of this.
             if (graphMap.length == neighbours.length - i) {
+	      console.log('Loading done, ', i,' rdf files were skipped.')
               resolve(graphMap)
             }
           }
