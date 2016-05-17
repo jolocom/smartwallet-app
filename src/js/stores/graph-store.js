@@ -73,7 +73,6 @@ export default Reflux.createStore({
     // We choose the subject of the new link
     if (this.state.highlighted) this.state.linkSubject = this.state.highlighted
     else this.state.linkSubject = this.state.center.uri
-    console.log('we chose the subject to be', this.state.linkSubject)
     this.trigger(this.state)
 
     graphActions.linkTriple()
@@ -84,7 +83,6 @@ export default Reflux.createStore({
     if (this.state.highlighted) this.state.linkObject = this.state.highlighted
     else this.state.linkObject = this.state.center.uri
     this.trigger(this.state)
-    console.log('we chose the object to be', this.state.linkObject)
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
@@ -129,7 +127,6 @@ export default Reflux.createStore({
 
 
   onNavigateToNode: function(node){
-    console.log(node)
     this.state.neighbours = []
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
@@ -149,7 +146,6 @@ export default Reflux.createStore({
           for (var j = 0; j < this.state.navHistory.length-1; j++) {
             if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) {
               for (var k = 0; k < j+2; k++) {
-                console.log('pop')
                 this.state.navHistory.pop()
               }
             }

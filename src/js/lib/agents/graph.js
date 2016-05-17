@@ -80,7 +80,7 @@ class GraphAgent extends HTTPAgent {
   // Takes the current web ID and the link to the file we want to write to and
   // returns a bool saying wheather or not you are allowed to write to that uri.
   writeAccess(webId, node_uri) {
-
+    console.log(node_uri, ' This is the rdf file we are trying to write to. ')
     let writer = new Writer()
     return new Promise((resolve) => {
       this.fetchTriplesAtUri(node_uri).then((file) =>{
@@ -88,8 +88,17 @@ class GraphAgent extends HTTPAgent {
           let triple = file.triples[i]
           writer.addTriple(triple.subject, triple.predicate, triple.object)
         }
-        let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)[0].object.uri
-        if (author == webId) {
+        console.log(writer.g)
+
+        // Checking if the file we are trying to write to is an event. If yes then we
+        // Allow access.
+        let eve = writer.g.statementsMatching(undefined, RDF('type'), rdf.sym('http://schema.org/Event'))
+        // We only check for the author if the rdf file has the author entry in it in the first place.
+        let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)
+        if (author.length > 0) author = author[0].object.uri
+
+        if (author == webId || eve.length > 0) {
+          console.log(eve)
           console.log('Write access granted')
           resolve(true)
         } else {
@@ -128,15 +137,12 @@ class GraphAgent extends HTTPAgent {
     return this.get(uri)
       .then((xhr) => {
         let parser = new Parser()
-
-        console.log('we are fetching from', uri)
-        console.log('we are resolving to ', xhr.response)
         return parser.parse(xhr.response)
         // Look at line 155 for clarifications if you dare.
       }).catch(()=>{
-		console.log('The uri ', uri, ' could not be resolved. Skipping')
-                return {triples:[]}
-		})
+        console.log('The uri', uri, 'could not be resolved. Skipping')
+        return {triples:[]}
+      })
   }
 
 // This function gets passed a center uri and it's triples, and then finds all possible
@@ -169,7 +175,7 @@ class GraphAgent extends HTTPAgent {
 
             // I'm not proud of this.
             if (graphMap.length == neighbours.length - i) {
-	      console.log('Loading done, ', i,' rdf files were skipped.')
+              console.log('Loading done,', i,'rdf files were skipped.')
               resolve(graphMap)
             }
           }
