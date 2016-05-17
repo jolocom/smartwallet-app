@@ -275,7 +275,7 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function(data) {
       self.onClickFull(this, data)
     })
-    
+
     this.force.on('tick', this.tick)
 
   }.bind(this)
@@ -315,7 +315,7 @@ export default class GraphD3 extends EventEmitter {
 
   dragEnd = function(node) {
     this.force.stop()
-    if (node.rank == 'center') {
+    if (node.rank == 'center' || node.rank == 'unavailable') {
       this.force.start()
       // In here we would have the functionality that opens the node's card
     } else if (node.rank =='adjacent' || node.rank =='history' ) {

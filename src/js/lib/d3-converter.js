@@ -11,6 +11,17 @@ import STYLES from 'styles/app.js'
 
 class D3Converter {
   convertToD3(rank, node, i, n) {
+    // This functionality will have to find a new home after the demo.
+    // Makes sure the files that 404ed stil show, but as darker nodes.
+    if(node.unav){
+      return {
+        uri : node.uri,
+        rank: 'unavailable',
+        x: STYLES.width / 2 + 40,
+        y: STYLES.height / 2 + 40
+      }
+    }
+
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
@@ -43,7 +54,7 @@ class D3Converter {
     if (i && n) {
       let angle = (2 * Math.PI) / this.n
       let halfwidth = STYLES.width / 2
-      let halfheight = STYLES.graphCanvasHeight / 2
+      let halfheight = STYLES.height / 2
 
       props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth
       props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfheight
@@ -51,7 +62,7 @@ class D3Converter {
       // This takes care of nodes that are added dynamically, the mid + 30 is
       // the optimal position for spawning new nodes dynamically
       props.x = STYLES.width / 2 + 60
-      props.y = STYLES.graphCanvasHeight / 2 + 60
+      props.y = STYLES.height / 2 + 60
     }
     // Updating the attributes of the node object. The resulting object will have
     // all of it's props filled in, and will be ready to be rendered by D3
@@ -85,6 +96,7 @@ class D3Converter {
     // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
     if (rank == 'a') props.rank = 'adjacent'
     if (rank == 'c') props.rank = 'center'
+
     return props
   }
 }
