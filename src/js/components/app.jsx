@@ -3,7 +3,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
-import Tour from 'components/tour.jsx'
+
 import {Layout, Content} from 'components/layout'
 import {Paper, AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
 
@@ -14,6 +14,7 @@ import JolocomTheme from 'styles/jolocom-theme'
 import SearchBar from 'components/common/search-bar.jsx'
 import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
+import Tour from 'components/tour.jsx'
 
 import AppNav from 'components/nav.jsx'
 import GraphSearch from 'components/graph/search.jsx'
@@ -75,6 +76,11 @@ let App = React.createClass({
   checkLogin() {
     let path = this.props.location.pathname
     let {username} = this.state.account
+
+    // session is still loading, so return for now
+    if (username === undefined) {
+      return
+    }
 
     if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
       this.history.pushState(null, '/login')

@@ -154,7 +154,6 @@ export default Reflux.createStore({
         }
       }
 
-
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])

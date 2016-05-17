@@ -141,7 +141,8 @@ class GraphAgent extends HTTPAgent {
         // Look at line 155 for clarifications if you dare.
       }).catch(()=>{
         console.log('The uri', uri, 'could not be resolved. Skipping')
-        return {triples:[]}
+        // We return this in order to later be able to display it grayed out.
+        return {uri: uri, unav : true, triples:[]}
       })
   }
 
@@ -168,14 +169,15 @@ class GraphAgent extends HTTPAgent {
           // Terrible error handling, please don't judge me, it's Saturday night.
           if (triples.triples.length == 0) {
             i += 1
+            graphMap.push(triples)
           } else {
             graphMap.push(triples.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
             // This checks if the whole array has been parsed, and only after that resolves.
-
             // I'm not proud of this.
-            if (graphMap.length == neighbours.length - i) {
+            if (graphMap.length == neighbours.length) {
               console.log('Loading done,', i,'rdf files were skipped.')
+              console.log(graphMap)
               resolve(graphMap)
             }
           }
