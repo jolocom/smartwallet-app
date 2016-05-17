@@ -55,11 +55,10 @@ class WebIDAgent extends LDPAgent {
 
     let p = Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
       .then((result)  => {
+        let atendees = 'https://ouishare-schedule.jolocom.com/atendeesNode/profile/card#me'
+        let uri = `${endpoint}/${username}/profile/card#me`
 
-	let atendees = 'https://ouishare-schedule.jolocom.com/atendeesNode/profile/card#me'
-	let uri = `${endpoint}/${username}/profile/card#me`
-
-	gAgent.writeTriple(atendees, SCHEMA('isRelatedTo'), rdf.sym(uri))
+        gAgent.writeTriple(atendees, SCHEMA('isRelatedTo'), rdf.sym(uri))
         solid.web.put(`${endpoint}/${username}/profile/card`, result[0])
         solid.web.put(`${endpoint}/${username}/little-sister/inbox`, result[1])
       })
