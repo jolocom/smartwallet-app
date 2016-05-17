@@ -224,6 +224,7 @@ export default class GraphD3 extends EventEmitter {
           if( d.rank  == 'history'){
             return STYLES.grayColor
           }
+          if( d.rank == 'unavailable') return STYLES.grayColor
           else return STYLES.blueColor
         }
       })
@@ -266,7 +267,19 @@ export default class GraphD3 extends EventEmitter {
         else if (d.title) {
           if(d.title.length> 10) return d.title.substring(0, 10)+ '..'
           else return d.title
-        } else return 'Anonymous'
+        } else {
+          if(d.uri.search('profile')>0){
+            let x = d.uri.search('profile')
+            let name = d.uri.substring(0, x-1)
+            name = name.substring(name.lastIndexOf('/')+1, name.length)
+            if(name.length>10) return name.substring(0, 10)+ '..'
+            else return name
+          }
+          else return 'Not Found'
+        }
+
+
+
       })
 
      // The text description of a person
