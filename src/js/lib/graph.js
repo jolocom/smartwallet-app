@@ -172,13 +172,13 @@ export default class GraphD3 extends EventEmitter {
     this.componentTransfer = this.filter.append('feComponentTransfer')
     this.componentTransfer.append('feFuncR')
         .attr('type', 'linear')
-        .attr('slope', 0.6)
+        .attr('slope', 0.3)
     this.componentTransfer.append('feFuncG')
         .attr('type', 'linear')
-        .attr('slope', 0.6)
+        .attr('slope', 0.3)
     this.componentTransfer.append('feFuncB')
         .attr('type', 'linear')
-        .attr('slope', 0.6)
+        .attr('slope', 0.3)
 
     let defsShadow = this.svg.append('svg:defs')
 
@@ -233,7 +233,7 @@ export default class GraphD3 extends EventEmitter {
     // The name of the person, displays on the node
     this.node.append('svg:text')
       .attr('class', 'nodetext')
-      .style('fill', '#e6e6e6')
+      .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
       .attr('opacity',(d) => {
         if (d.img && d.rank!='history') return 0
@@ -253,26 +253,26 @@ export default class GraphD3 extends EventEmitter {
             let name = d.name.substring(0, d.name.indexOf(' '))
 
             if(name.length > 10) {
-              return name.substring(0, 10)+ '..'
+              return name.substring(0, 10)
             }
             else return name
           }
           else if(d.name.length > 10)
           {
-            return d.name.substring(0, 10)+ '..'
+            return d.name.substring(0, 10)
           }
           else return d.name
         }
 
         else if (d.title) {
-          if(d.title.length> 10) return d.title.substring(0, 10)+ '..'
+          if(d.title.length> 10) return d.title.substring(0, 10)
           else return d.title
         } else {
           if(d.uri.search('profile')>0){
             let x = d.uri.search('profile')
             let name = d.uri.substring(0, x-1)
             name = name.substring(name.lastIndexOf('/')+1, name.length)
-            if(name.length>10) return name.substring(0, 10)+ '..'
+            if(name.length>10) return name.substring(0, 10)
             else return name
           }
           else return 'Not Found'
@@ -285,10 +285,10 @@ export default class GraphD3 extends EventEmitter {
      // The text description of a person
     this.node.append('svg:text')
     .attr('class', 'nodedescription')
-    .style('fill', '#e6e6e6')
+    .style('fill', '#F0F7F5')
     .attr('text-anchor', 'middle')
     .attr('opacity', 0)
-    .attr('dy', 0)
+    .attr('dy', '0.5em')
     .style('font-size', '80%')
     .text(function (d) {
       // In case the person has no description available.
@@ -407,7 +407,7 @@ export default class GraphD3 extends EventEmitter {
       return
     }
 
-
+    this.emit('select', data)
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
@@ -464,7 +464,6 @@ export default class GraphD3 extends EventEmitter {
     if(data.wasHighlighted)
     {
       data.highlighted = false
-      this.emit('deselect', data)
       if (this.mode == 'full') graphActions.highlight(null)
       else if (this.mode == 'preview') previewActions.highlight(null)
     }
@@ -503,11 +502,11 @@ export default class GraphD3 extends EventEmitter {
       // We fade in the node name and make the text opaque
       d3.select(node).select('.nodetext')
       .transition('highlight').duration(STYLES.nodeTransitionDuration)
-      .attr('dy', (d) => d.description ? '-1.25em' : '.35em')
+      .attr('dy', (d) => d.description ? '-.5em' : '.35em')
       .attr('opacity', 1)
 
       data.highlighted = true
-      this.emit('select', data)
+
       if (this.mode == 'full') graphActions.highlight(node)
       else if (this.mode == 'preview') previewActions.highlight(node)
     }

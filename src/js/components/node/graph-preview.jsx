@@ -21,6 +21,7 @@ let Graph = React.createClass({
     if (this.state.loaded && !this.state.drawn){
       this.graph.render(this.state)
       this.graph.render(this.state)
+      this.graph.updateHistory(this.state.navHistory)
       previewActions.setState('drawn', true)
     }
 
