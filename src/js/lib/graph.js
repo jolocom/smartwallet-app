@@ -76,10 +76,18 @@ export default class GraphD3 extends EventEmitter {
     this.force = d3.layout.force()
       .nodes(this.dataNodes)
       .links(this.dataLinks)
-      .charge(-2000)
-      .linkDistance((d)=> (d.rank == 'history' && d.histLevel>0) ? STYLES.smallNodeSize * 1.5 : STYLES.largeNodeSize * 1.5)
-      .friction(0.8)
-      .gravity(0.2)
+      .charge(-1000)
+      .chargeDistance(STYLES.largeNodeSize*2)
+      .linkDistance((d, i)=> {
+
+        if(d.rank == 'history' && d.histLevel>0) return STYLES.smallNodeSize * 1.25
+        else if(d.rank == 'history' || i<12) return STYLES.largeNodeSize * 1.25
+        else if (i>38) {
+          return STYLES.largeNodeSize * 2.5
+        }
+        else return STYLES.largeNodeSize * 2
+
+      })
       .size([this.width, this.height])
       .start()
     // We define our own drag functions, allow for greater controll over the way
@@ -325,8 +333,8 @@ export default class GraphD3 extends EventEmitter {
   // This function fires upon tick, around 30 times per second?
   tick = function(e){
     let center = {y:(this.height / 2), x: this.width /2}
-    let k = 2 * e.alpha
-
+    let k = 10 * e.alpha
+    let radius = STYLES.largeNodeSize
     d3.selectAll('g .node').attr('d', function(d){
       if(d.rank=='center'){
         d.x=center.x
@@ -339,6 +347,24 @@ export default class GraphD3 extends EventEmitter {
         }
         else d.y += (center.y-d.y+STYLES.smallNodeSize*(d.histLevel+1))*k
       }
+      // else{
+      //   if(Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))<radius*1){
+      //     d.x-= (center.x-d.x)*k
+      //     d.y-= (center.y-d.y)*k
+      //   }
+      //   // else if (Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))>radius*1.5 && Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))<radius*2){
+      //   //   d.x+= (center.x-d.x)*k
+      //   //   d.y+= (center.y-d.y)*k
+      //   // }
+      //   // else if (Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x)>radius*2) && Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))<radius*2.5){
+      //   //   d.x-= (center.x-d.x)*k
+      //   //   d.y-= (center.y-d.y)*k
+      //   // }
+      //   // else if (Math.abs((d.y-center.y)*(d.y-center.y)+(d.x-center.x)*(d.x-center.x))>radius*3 ){
+      //   //   d.x+= (center.x-d.x)*k
+      //   //   d.y+= (center.y-d.y)*k
+      //   // }
+      // }
     })
 
     // Update the link positions.
