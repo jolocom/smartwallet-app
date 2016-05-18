@@ -49,7 +49,7 @@ class WebIDAgent extends LDPAgent {
 
   fakeSignup(username, name, email) {
     let gAgent = new graphAgent()
-
+    username = username.replace(" ", "")
     solid.web.put(`${endpoint}/${username}/little-sister/graph-comments/`)
     solid.web.put(`${endpoint}/${username}/little-sister/graph-nodes/`)
 
