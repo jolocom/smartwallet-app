@@ -27,7 +27,7 @@ let Signup = React.createClass({
   },
   signup() {
     let signupData = {
-      username: this.state.username,
+      username: this.state.username.replace(' ', ''),
       name: this.state.name,
       email: this.state.email
     }
