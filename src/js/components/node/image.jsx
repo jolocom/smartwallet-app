@@ -13,7 +13,7 @@ import {
 import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
 
-let ProfileNode = React.createClass({
+let ImageNode = React.createClass({
 
   mixins: [
     Reflux.listenTo(PinnedStore, 'onUpdatePinned')
@@ -50,7 +50,7 @@ let ProfileNode = React.createClass({
       },
       header: {
         color: '#fff',
-        height: '176px',
+        height: '100%',
         background: `${muiTheme.jolocom.gray1} url(${background}) center / cover`
       },
       title: {
@@ -71,7 +71,7 @@ let ProfileNode = React.createClass({
 
   render() {
     let styles = this.getStyles()
-
+    console.log('this is an image node')
     let {name, title, description, email} = this.props.node
 
     return (
@@ -88,7 +88,7 @@ let ProfileNode = React.createClass({
           </FloatingActionButton>
         </AppBar>
 
-      
+
 
       </div>
     )
@@ -103,4 +103,4 @@ let ProfileNode = React.createClass({
   }
 })
 
-export default Radium(ProfileNode)
+export default Radium(ImageNode)

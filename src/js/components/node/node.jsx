@@ -4,6 +4,7 @@ import Radium from 'radium'
 import {FOAF} from 'lib/namespaces'
 
 import ProfileNode from 'components/node/profile.jsx'
+import ImageNode from 'components/node/image.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -44,9 +45,14 @@ let Node = React.createClass({
   },
 
   getNodeContent(type) {
+    console.log(type)
     switch (type) {
       case FOAF('PersonalProfileDocument').uri:
+        return ProfileNode
+      case FOAF('Image').uri:
+        return ImageNode
       case FOAF('Person').uri:
+        return ProfileNode
       default:
         return ProfileNode
     }
