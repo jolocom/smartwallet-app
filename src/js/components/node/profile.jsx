@@ -1,6 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import d3 from 'd3'
 
 import {
   AppBar,
@@ -71,24 +72,42 @@ let ProfileNode = React.createClass({
 
   render() {
     let styles = this.getStyles()
-
+    this.full = false
     let {name, title, description, email} = this.props.node
 
     return (
       <div style={styles.container}>
         <AppBar
+          id = 'AppBar'
           style={styles.header}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
           iconElementLeft={<IconButton iconClassName="material-icons" onClick={this._handleClose}>close</IconButton>}
-          iconElementRight={<IconButton iconClassName="material-icons">more_vert</IconButton>}
+          iconElementRight={<IconButton iconClassName="material-icons" onClick={this._handleFull}>crop_original</IconButton>}
         >
           <FloatingActionButton mini={true} backgroundColor={styles.action.backgroundColor} style={styles.action} onClick={this._handleBookmarkClick}>
             <FontIcon className="material-icons">bookmark</FontIcon>
           </FloatingActionButton>
         </AppBar>
 
-      
+        <List style={styles.list}>
+          {description && (
+            <div>
+              <ListItem
+                leftIcon={<FontIcon className="material-icons">info</FontIcon>}
+                primaryText={description}
+              />
+              <Divider inset={true} />
+            </div>
+          )}
+          {email && (
+            <ListItem
+              leftIcon={<FontIcon className="material-icons">email</FontIcon>}
+              primaryText={email}
+              secondaryText="Personal"
+            />
+          )}
+        </List>
 
       </div>
     )
@@ -96,6 +115,20 @@ let ProfileNode = React.createClass({
 
   _handleClose() {
     this.props.onClose()
+  },
+
+  _handleFull() {
+
+    if (this.full){
+      d3.select('#AppBar').style('height', '176px')
+      d3.select('#AppBar').style('height', '176px')
+      this.full = false
+    }
+    else {
+      d3.select('#AppBar').style('height', '100%')
+      this.full = true
+    }
+
   },
 
   _handleBookmarkClick() {
