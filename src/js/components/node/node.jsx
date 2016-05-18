@@ -48,9 +48,11 @@ let Node = React.createClass({
     console.log(type)
     switch (type) {
       case FOAF('PersonalProfileDocument').uri:
+        return ProfileNode
       case FOAF('Image').uri:
         return ImageNode
       case FOAF('Person').uri:
+        return ProfileNode
       default:
         return ProfileNode
     }
