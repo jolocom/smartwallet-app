@@ -85,9 +85,7 @@ let ProfileNode = React.createClass({
           iconElementLeft={<IconButton iconClassName="material-icons" onClick={this._handleClose}>close</IconButton>}
           iconElementRight={<IconButton iconClassName="material-icons" onClick={this._handleFull}>crop_original</IconButton>}
         >
-          <FloatingActionButton mini={true} backgroundColor={styles.action.backgroundColor} style={styles.action} onClick={this._handleBookmarkClick}>
-            <FontIcon className="material-icons">bookmark</FontIcon>
-          </FloatingActionButton>
+
         </AppBar>
 
         <List style={styles.list}>
@@ -125,7 +123,7 @@ let ProfileNode = React.createClass({
       this.full = false
     }
     else {
-      d3.select('#AppBar').style('height', '100%')
+      d3.select('#AppBar').style('height', '90vh')
       this.full = true
     }
 
