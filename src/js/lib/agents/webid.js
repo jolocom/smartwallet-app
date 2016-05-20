@@ -49,13 +49,11 @@ class WebIDAgent extends LDPAgent {
 
   fakeSignup(username, name, email) {
     let gAgent = new graphAgent()
-
     solid.web.put(`${endpoint}/${username}/little-sister/graph-comments/`)
     solid.web.put(`${endpoint}/${username}/little-sister/graph-nodes/`)
 
     let p = Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
       .then((result)  => {
-        let atendees = 'https://ouishare-schedule.jolocom.com/atendeesNode/profile/card#me'
         let uri = `${endpoint}/${username}/profile/card#me`
 
         gAgent.writeTriple(atendees, SCHEMA('isRelatedTo'), rdf.sym(uri))
@@ -93,7 +91,6 @@ class WebIDAgent extends LDPAgent {
     writer.addTriple(rdf.sym(''), RDF('type') ,FOAF('PersonalProfileDocument'))
     writer.addTriple(rdf.sym(''), FOAF('maker') ,rdf.sym('#me'))
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#me'))
-    writer.addTriple(rdf.sym('#me'), SCHEMA('isRelatedTo'), rdf.sym('https://ouishare-schedule.jolocom.com/OuiShare/profile/card#me'))
 
     writer.addTriple(rdf.sym('#me'), RDF('type'), FOAF('Person'))
     if (email) writer.addTriple(rdf.sym('#me'), FOAF('mbox'), email)
