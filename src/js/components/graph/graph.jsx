@@ -81,6 +81,7 @@ let Graph = React.createClass({
     // this.graph.on is the same as this.graph.addListener()
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelect)
+    this.graph.on('view-node', this._handleViewNode)
     this.graph.on('deselect', this._handleDeselect)
 
     // TODO Is this the right place for this?

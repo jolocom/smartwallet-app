@@ -89,7 +89,7 @@ let App = React.createClass({
     }
 
     if (username) {
-      ProfileActions.load(username)
+      ProfileActions.load()
     }
   },
 

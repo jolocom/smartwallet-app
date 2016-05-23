@@ -1,12 +1,13 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
 
-import N3 from 'n3'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
-import {CERT, FOAF} from 'lib/namespaces.js'
+import rdf from 'rdflib'
 
-let N3Util = N3.Util
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
+
 let wia = new WebIDAgent()
 
 let profile = {
@@ -53,7 +54,7 @@ export default Reflux.createStore({
       .then((xhr) => {
         // parse profile document from text
         let parser = new Parser()
-        parser.parse(xhr.response)
+        return parser.parse(xhr.response)
       })
       .then((res) => {
         ProfileActions.load.completed(webid, res.triples, res.prefixes)
@@ -69,9 +70,11 @@ export default Reflux.createStore({
   onLoadCompleted(webid, triples, prefixes) {
     // subject which represents our profile
     // everything's fixed but name and email
-    let fixedTriples = triples.filter((t) => !(t.subject == webid && (t.predicate == FOAF('name') || t.predicate == FOAF('mbox'))))
+    let fixedTriples = triples.filter((t) => {
+      return !(t.subject.uri == webid && (t.predicate.uri == FOAF('name').uri || t.predicate.uri == FOAF('mbox').uri))
+    })
 
-    let state = {
+    this.state = {
       webid: webid,
       webidPresent: webid,
       fixedTriples: fixedTriples,
@@ -80,62 +83,41 @@ export default Reflux.createStore({
     }
 
     // triples which describe profile
-    let relevant = triples.filter((t) => t.subject == webid)
-
+    let relevant = triples.filter((t) => t.subject.uri == webid)
     for (var t of relevant){
-      if (t.predicate == FOAF('name')) {
-        // name
-        state.name =  this._getValue(t.object)
-      } else if (t.predicate == FOAF('mbox')) {
-        // email
-        state.email =  this._getValue(t.object).replace('mailto:', '')
-      } else if (t.predicate == FOAF('img')) {
-        // image uri
-        state.imgUri =  this._getValue(t.object)
-      } else if (t.predicate == CERT.key) {
-        let key = this._parseKey(t.object, triples)
-        if (key.modulus) {state.rsaModulus = this._getValue(key.modulus)}
-        if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
+      console.log(t.predicate, t.object)
+      if (t.predicate.uri == FOAF('name').uri) {
+        this.state.name = t.object.value
+      } else if (t.predicate.uri == FOAF('img').uri) {
+        this.state.imgUri =  t.object.uri
+      } else if (t.predicate.uri == FOAF('mbox').uri){
+        this.state.email = t.object.value
       }
     }
+      // else if (t.predicate.uri == CERT.key.uri) {
+      //   let key = this._parseKey(t.object, triples)
+      //   if (key.modulus) {state.rsaModulus = this._getValue(key.modulus)}
+      //   if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
+      // }
 
-    profile = Object.assign(profile, state)
+    profile = Object.assign(profile, this.state)
     this.trigger(Object.assign({}, profile))
   },
 
   onUpdate: function (params) {
-    // subject which represents our profile
-    let writer = new Writer({format: 'N-Triples', prefixes: params.prefixes})
+    // subject which represents our profilei
+    let writer = new Writer()
     for (var t of this.state.fixedTriples) {
-      writer.addTriple(t)
+      writer.addTriple(t.subject, t.predicate, t.object)
     }
 
-    writer.addTriple({
-      subject: params.webid,
-      predicate: FOAF('name'),
-      object: N3Util.createLiteral(params.name)
-    })
-    writer.addTriple({
-      subject: params.webid,
-      predicate: FOAF('name'),
-      object: N3Util.createIRI(params.email)
-    })
+    writer.addTriple(rdf.sym('#me'), FOAF('name'), params.name)
+    writer.addTriple(rdf.sym('#me'), FOAF('mbox'), params.email)
 
-    writer.end().then((res) => {
-      return wia.put(params.webid, {'Content-Type': 'application/n-triples'}, res)
-    })
+    wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end())
 
     profile = Object.assign(profile, params)
     this.trigger(Object.assign({}, profile))
-  },
-
-  // get object value without caring whether it's a literal or IRI
-  _getValue (object) {
-    if (N3Util.isLiteral(object)) {
-      return N3Util.getLiteralValue(object)
-    } else {
-      return object
-    }
   },
 
   // extract RSA public key from triples

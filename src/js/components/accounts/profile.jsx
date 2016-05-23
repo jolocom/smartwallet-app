@@ -125,7 +125,7 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    ProfileActions.update(this.state.profile)
+    ProfileActions.update(this.state)
   },
 
   _handleSelect() {

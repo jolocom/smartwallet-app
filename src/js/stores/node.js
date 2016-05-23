@@ -17,8 +17,6 @@ export default Reflux.createStore({
   },
 
   create(user, node, title, description, image, type) {
-    console.log('creating one on')
-    console.log(user, node)
     this.gAgent.createNode(user, node, title, description, image, type)
   },
 
@@ -32,11 +30,8 @@ export default Reflux.createStore({
       if(type == 'generic') predicate = SCHEMA('isRelatedTo')
       if(type =='knows') predicate = FOAF('knows')
       if(verdict)
-        {
-        this.gAgent.writeTriple(end, predicate, rdf.sym(start)).then((res) =>{
-          console.log('done', res)
-        })
-      }
+        // Needs some error handling perhaps.
+        this.gAgent.writeTriple(end, predicate, rdf.sym(start))
     })
   }
 })

@@ -377,8 +377,8 @@ export default class GraphD3 extends EventEmitter {
   // all other highlighted nodes back to their normal size
   onClickFull = function(node, data) {
     //stops propagation to node click handler
-    d3.event.stopPropagation()
     this.emit('view-node', data)
+    d3.event.stopPropagation()
   }
 
   onClick = function(node, data) {

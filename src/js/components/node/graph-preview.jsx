@@ -56,6 +56,7 @@ let Graph = React.createClass({
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelect)
     this.graph.on('deselect', this._handleDeselect)
+    this.graph.on('view-node', this._handleViewNode)
     previewActions.getState()
   },
 
@@ -90,15 +91,16 @@ let Graph = React.createClass({
   },
 
   _handleSelect(node){
-    console.log('=============================================================')
-    console.log(node)
-    console.log('=============================================================')
     this.props.onSelect && this.props.onSelect(node)
     previewActions.highlight(node)
   },
 
   _handleDeselect(){
     previewActions.highlight(null)
+  },
+
+  _handleViewNode(node) {
+    graphActions.viewNode(node)
   },
 
   getStyles() {
