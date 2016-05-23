@@ -44,9 +44,11 @@ let NodeAddDefault = React.createClass({
     return title && title.trim()
   },
   submit() {
+    // TODO
+    // We need a common place to store the webId.
     if (!this.validates()) return false
     let {title, description, image} = this.state
-    nodeActions.create(this.user, title, description, image, this.state.type)
+    nodeActions.create(this.context.user, this.user, title, description, image, this.state.type)
   },
   render: function() {
     let {image} = this.state

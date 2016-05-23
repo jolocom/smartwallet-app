@@ -40,9 +40,7 @@ let NodeAddLink = React.createClass({
     //@TODO show error
     if (!this.validates()) return false
     let {start, end, type} = this.state
-    // We just pass the start node [object], end node [subject], and the type
-    // The user is the WEBID
-    nodeActions.link(start, end, type)
+    nodeActions.link(this.context.user, start, end, type)
   },
   getStyles() {
     let styles = {

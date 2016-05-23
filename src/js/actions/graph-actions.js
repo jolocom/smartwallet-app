@@ -12,7 +12,6 @@ export default Reflux.createActions({
   // Should next be async?
   'chooseSubject': { asyncResult: false},
   'chooseObject': { asyncResult: false},
-  'createAndConnectNode' : {asyncResult: true},
   'linkTriple': {asyncResult:false},
   'writeTriple':{asyncResult: false},
   'drawNewNode': {asyncResult: false},
@@ -20,3 +19,9 @@ export default Reflux.createActions({
   'drawGraph' : {asyncResult: false},
   'viewNode': {}
 })
+
+// Here we need graph related functionality, such as
+// Draw Graph
+// Update Graph
+// Erase Graph
+// Erase Elements

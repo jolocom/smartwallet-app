@@ -4,7 +4,6 @@ import rdf from 'rdflib'
 import {dev} from 'settings'
 import Solid from 'solid-client'
 import {endpoint} from 'settings'
-import graphAgent from './graph.js'
 
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')

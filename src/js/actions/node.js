@@ -8,3 +8,17 @@ export default Reflux.createActions({
   'pin': {asyncResult: true},
   'unpin': {asyncResult: true}
 })
+
+// We need functionality related to one node here.
+
+// Create node.
+// Delete node.
+// Edit node.
+// Link node?
+  //     |
+  //     +--> select subject
+  //     |
+  //     +--> select object
+  //     |
+  //     +--> select predicate
+// Fullscreen it.

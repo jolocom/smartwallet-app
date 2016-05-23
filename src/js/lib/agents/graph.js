@@ -17,7 +17,6 @@ let DC = rdf.Namespace('http://purl.org/dc/terms/')
 // it, and creating a "map" of the currently displayed graph.
 
 class GraphAgent extends HTTPAgent {
-
   // We create a rdf file at the distContainer containing a title and description passed to it
   createNode(currentUser, currentNode, title, description, image, type) {
     let writer = new Writer()
@@ -80,7 +79,6 @@ class GraphAgent extends HTTPAgent {
   // Takes the current web ID and the link to the file we want to write to and
   // returns a bool saying wheather or not you are allowed to write to that uri.
   writeAccess(webId, node_uri) {
-    console.log(node_uri, ' This is the rdf file we are trying to write to. ')
     let writer = new Writer()
     return new Promise((resolve) => {
       this.fetchTriplesAtUri(node_uri).then((file) =>{
@@ -88,17 +86,10 @@ class GraphAgent extends HTTPAgent {
           let triple = file.triples[i]
           writer.addTriple(triple.subject, triple.predicate, triple.object)
         }
-        console.log(writer.g)
-
-        // Checking if the file we are trying to write to is an event. If yes then we
-        // Allow access.
-        let eve = writer.g.statementsMatching(undefined, RDF('type'), rdf.sym('http://schema.org/Event'))
         // We only check for the author if the rdf file has the author entry in it in the first place.
         let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)
         if (author.length > 0) author = author[0].object.uri
-
-        if (author == webId || eve.length > 0) {
-          console.log(eve)
+        if (author == webId) {
           console.log('Write access granted')
           resolve(true)
         } else {
@@ -111,7 +102,6 @@ class GraphAgent extends HTTPAgent {
 
 
   writeTriple(subject, predicate, object) {
-
     let writer = new Writer()
     subject = rdf.sym(subject)
     // First we fetch the triples at the webId/uri of the user adding the triple
