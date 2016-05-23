@@ -17,6 +17,8 @@ export default Reflux.createStore({
   },
 
   create(user, node, title, description, image, type) {
+    console.log('creating one on')
+    console.log(user, node)
     this.gAgent.createNode(user, node, title, description, image, type)
   },
 

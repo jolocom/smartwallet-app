@@ -70,16 +70,6 @@ let Graph = React.createClass({
     }
   },
 
-  // When we finish linking, we select the subjet of the triple.
-  linkSubject: function() {
-    graphActions.chooseSubject()
-  },
-
-  //When we start the linking, we first select the Object of the triple
-  linkObject: function() {
-    graphActions.chooseObject()
-  },
-
   addNode: function(type) {
     let uri = encodeURIComponent(this.state.center.uri)
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)

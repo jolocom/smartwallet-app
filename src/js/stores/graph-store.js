@@ -22,12 +22,8 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
-      newLink: null,
       drawn: false,
       highlighted: null,
-      linkSubject: null,
-      linkObject: null,
-      // Keeps track of all the nodes we navigated to.
       navHistory: [],
       //These describe the ui
       showPinned: false,
@@ -45,18 +41,19 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
-      newLink: null,
       drawn: false,
       highlighted: null,
-      linkSubject: null,
       navHistory: [],
       // UI related
       showPinned:false,
       showSearch: false,
-      plusDrawerOpen:false
+      plusDrawerOpen:false,
+      activeNode: null
     }
   },
 
+  // These two are needed in order to transition between the preview graph and
+  // The actual graph.
   onEraseGraph: function() {
     this.trigger(null, 'erase')
   },
@@ -68,22 +65,6 @@ export default Reflux.createStore({
   onSetState: function(key, value, flag){
     this.state[key] = value
     if (flag) this.trigger(this.state)
-  },
-
-  onChooseSubject: function() {
-    // We choose the subject of the new link
-    if (this.state.highlighted) this.state.linkSubject = this.state.highlighted
-    else this.state.linkSubject = this.state.center.uri
-    this.trigger(this.state)
-
-    graphActions.linkTriple()
-  },
-
-  onChooseObject: function() {
-    // We choose the object of the new link
-    if (this.state.highlighted) this.state.linkObject = this.state.highlighted
-    else this.state.linkObject = this.state.center.uri
-    this.trigger(this.state)
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph

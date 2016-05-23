@@ -2,26 +2,15 @@ import Reflux from 'reflux'
 
 export default Reflux.createActions({
   'setState' : {asyncResult: false},
-  'navigateToNode' : {asyncResult: true},
-  'getInitialGraphState' : {asyncResult: true},
-  'fetchGraph' : {children: ['completed', 'failed']},
-  'fetchGraphAtWebID' : {asyncResult: true},
-  'fetchTriples' : {asyncResult: true},
   'getState': {asyncResult: false},
-  'highlight' : {asyncResult : false},
-  // Should next be async?
-  'chooseSubject': { asyncResult: false},
-  'chooseObject': { asyncResult: false},
-  'linkTriple': {asyncResult:false},
-  'writeTriple':{asyncResult: false},
-  'drawNewNode': {asyncResult: false},
-  'eraseGraph' :{asyncResult: false},
+  // Birth
+  'getInitialGraphState' : {asyncResult: true},
   'drawGraph' : {asyncResult: false},
-  'viewNode': {}
+  // Life
+  'drawNewNode': {asyncResult: false},
+  'navigateToNode' : {asyncResult: true},
+  'highlight' : {asyncResult : false},
+  'viewNode': {},
+  // Death.
+  'eraseGraph' :{asyncResult: false}
 })
-
-// Here we need graph related functionality, such as
-// Draw Graph
-// Update Graph
-// Erase Graph
-// Erase Elements

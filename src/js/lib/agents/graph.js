@@ -24,6 +24,9 @@ class GraphAgent extends HTTPAgent {
     let draw = true
     this.writeAccess(currentUser, currentNode).then((res) => {
       if (res == false) {
+        // If we have no write access at the node we are trying to connect to
+        // we just connect to the user's main node instead.
+        currentNode = currentUser
         draw = false
       }
       let dstContainer = currentUser.substring(0, currentUser.indexOf('profile'))

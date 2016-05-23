@@ -11,7 +11,6 @@ export default Reflux.createActions({
 
 // We need functionality related to one node here.
 
-// Create node.
 // Delete node.
 // Edit node.
 // Link node?
