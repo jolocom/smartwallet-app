@@ -45,11 +45,6 @@ export default class GraphD3 extends EventEmitter {
     this.width = this.el.offsetWidth || STYLES.width
     this.height = this.el.offsetHeight || STYLES.height
 
-    // Not sure if this is helpfull
-    // let ratio = this.width * this.height
-    // this.smallNodeSize = ratio / 2400
-    // this.largeNodeSize = ratio / 1800
-
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
   }
@@ -124,7 +119,7 @@ export default class GraphD3 extends EventEmitter {
 
 
     // We draw the lines for all the elements in the dataLinks array.
-    let link =  this.svg.selectAll('line')
+    let link = this.svg.selectAll('line')
     .data(this.dataLinks, (d, i) => {return d.source.uri + i + '-' + d.target.uri + i})
     .enter()
     .insert('line', '.node')
@@ -134,7 +129,7 @@ export default class GraphD3 extends EventEmitter {
       return this.width / 45 > 13 ? 13 : this.width / 45})
       .attr('stroke', STYLES.lightGrayColor)
 
-      // We draw a node for each element in the dataNodes array
+    // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
       .data(this.dataNodes, (d, i) => {return (d.uri + i)})
       .enter()
@@ -189,7 +184,6 @@ export default class GraphD3 extends EventEmitter {
     let filterShadow = defsShadow.append('filter')
       .attr('id', 'drop-shadow')
 
-
     filterShadow.append('feGaussianBlur')
       .attr('in', 'SourceAlpha')
       .attr('stdDeviation', 1.5)
@@ -212,7 +206,6 @@ export default class GraphD3 extends EventEmitter {
     feMerge.append('feMergeNode')
         .attr('in', 'SourceGraphic')
 
-
     this.node.append('circle')
       .attr('class', 'nodecircle')
       .attr('r', (d) => {
@@ -233,7 +226,6 @@ export default class GraphD3 extends EventEmitter {
         }
       })
 
-
     // The name of the person, displays on the node
     this.node.append('svg:text')
       .attr('class', 'nodetext')
@@ -248,24 +240,18 @@ export default class GraphD3 extends EventEmitter {
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
-
         if(d.name)
         {
-          // Perhaps use something else instead of ... , takes 3 character spaces
-          // TODO THINK OF THIS!
+          // ATM we only display the first name, this way it fits on the screen.
+          // This is needlessly complicated. Think about a fix.
           if(d.name.indexOf(' ')>0){
             let name = d.name.substring(0, d.name.indexOf(' '))
-
-            if(name.length > 10) {
-
+            if(name.length > 10)
               return name.substring(0, 10)
-            }
             else return name
           }
           else if(d.name.length > 10)
-          {
             return d.name.substring(0, 10)
-          }
           else return d.name
         }
 
@@ -282,9 +268,6 @@ export default class GraphD3 extends EventEmitter {
           }
           else return 'Not Found'
         }
-
-
-
       })
 
      // The text description of a person
@@ -324,14 +307,12 @@ export default class GraphD3 extends EventEmitter {
     })
 
     this.force.on('tick', this.tick)
-
   }.bind(this)
 
   // This function fires upon tick, around 30 times per second?
   tick = function(e){
     let center = {y:(this.height / 2), x: this.width /2}
     let k = 2.5 * e.alpha
-    let radius = STYLES.largeNodeSize
     d3.selectAll('g .node').attr('d', function(d){
       if(d.rank=='center'){
         d.x=center.x
@@ -359,7 +340,6 @@ export default class GraphD3 extends EventEmitter {
 
   // We check if the node is dropped in the center, if yes we navigate to it.
   // We also prevent the node from bouncing away in case it's dropped to the middle
-
   dragEnd = function(node) {
     this.force.stop()
     if (node.rank == 'center' || node.rank == 'unavailable') {
@@ -387,7 +367,6 @@ export default class GraphD3 extends EventEmitter {
   // Arrays. Then tells d3 to draw a node for each of those.
   addNode = function(node){
     this.force.stop()
-
     this.dataNodes.push(node)
     this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
     this.drawNodes()
@@ -399,7 +378,6 @@ export default class GraphD3 extends EventEmitter {
   onClickFull = function(node, data) {
     //stops propagation to node click handler
     d3.event.stopPropagation()
-
     this.emit('view-node', data)
   }
 
@@ -468,7 +446,7 @@ export default class GraphD3 extends EventEmitter {
     if(data.wasHighlighted)
     {
       data.highlighted = false
-      this.emit('deselected')
+      this.emit('deselect')
     }
     else{
     // NODE signifies the node that we clicked on. We enlarge it
@@ -507,15 +485,11 @@ export default class GraphD3 extends EventEmitter {
       .transition('highlight').duration(STYLES.nodeTransitionDuration)
       .attr('dy', (d) => d.description ? '-.5em' : '.35em')
       .attr('opacity', 1)
-
       data.highlighted = true
-      this.emit('select', node)
     }
-
   }.bind(this)
 
   updateHistory(history) {
-
     if(history.length>0){
       this.force.stop()
       for (var i = 0; i < history.length; i++) {
@@ -530,10 +504,7 @@ export default class GraphD3 extends EventEmitter {
           this.dataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
         }
-
       }
-
-
       this.drawNodes()
       this.force.start()
     }
@@ -585,7 +556,6 @@ export default class GraphD3 extends EventEmitter {
     this.svg.selectAll('*').remove()
   }.bind(this)
 
-
   // Alternative to dragging the node to the center. Does the same thing pretty much
   onDblClick = function(node) {
     if (node.rank != 'center'){
@@ -597,7 +567,6 @@ export default class GraphD3 extends EventEmitter {
   onResize = function() {
     this.setSize()
   }.bind(this)
-
 
   // Not yet implemented.
   setSize = function() {

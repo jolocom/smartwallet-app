@@ -90,6 +90,9 @@ let Graph = React.createClass({
   },
 
   _handleSelect(node){
+    console.log('=============================================================')
+    console.log(node)
+    console.log('=============================================================')
     this.props.onSelect && this.props.onSelect(node)
     previewActions.highlight(node)
   },
@@ -97,7 +100,6 @@ let Graph = React.createClass({
   _handleDeselect(){
     previewActions.highlight(null)
   },
-
 
   getStyles() {
     let styles = {

@@ -107,6 +107,7 @@ let NodeAddLink = React.createClass({
       this.setState({
         [this.state.targetSelection]: node.uri,
         targetSelect: null
+
       })
     }
   },
@@ -115,9 +116,7 @@ let NodeAddLink = React.createClass({
   },
 
   _handleSelectStartTarget(active) {
-    this.setState({
-      targetSelection: active && 'start' || null
-    })
+    this.setState({targetSelection: active && 'start' || null})
   }
 
 })
