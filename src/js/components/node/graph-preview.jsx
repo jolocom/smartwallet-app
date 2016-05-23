@@ -50,7 +50,12 @@ let Graph = React.createClass({
     // Make sure we refresh our state every time we mount the component, this
     // then fires the drawing function from onStateUpdate
     this.graph = new GraphD3(this.getGraphEl(), 'preview')
-    this.graph.addListener('select', this._handleSelectNode)
+
+
+    // this.graph.on is the same as this.graph.addListener()
+    this.graph.on('center-changed', this._handleCenterChange)
+    this.graph.on('select', this._handleSelect)
+    this.graph.on('deselect', this._handleDeselect)
     previewActions.getState()
   },
 
@@ -80,6 +85,20 @@ let Graph = React.createClass({
     }
   },
 
+  _handleCenterChange(node){
+    previewActions.navigateToNode(node)
+  },
+
+  _handleSelect(node){
+    this.props.onSelect && this.props.onSelect(node)
+    previewActions.highlight(node)
+  },
+
+  _handleDeselect(){
+    previewActions.highlight(null)
+  },
+
+
   getStyles() {
     let styles = {
       chart: {
@@ -95,10 +114,6 @@ let Graph = React.createClass({
     return (
       <div style={styles.chart} ref="graph"></div>
     )
-  },
-
-  _handleSelectNode(node) {
-    this.props.onSelect && this.props.onSelect(node)
   }
 })
 export default Radium(Graph)

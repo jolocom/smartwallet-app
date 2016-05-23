@@ -5,8 +5,6 @@
 // a moved node will not save upon refresh.
 import d3 from 'd3'
 import STYLES from 'styles/app'
-import graphActions from '../actions/graph-actions'
-import previewActions from '../actions/preview-actions'
 import {EventEmitter} from 'events'
 
 export default class GraphD3 extends EventEmitter {
@@ -380,8 +378,7 @@ export default class GraphD3 extends EventEmitter {
       // If in the area we navigate to the node, otherwise we start the force
       // layout back
       if (x && y)  {
-        if (this.mode == 'full') graphActions.navigateToNode(node)
-        else if (this.mode == 'preview') previewActions.navigateToNode(node)
+        this.emit('center-changed', node)
       }
       else this.force.start()
     }
@@ -472,8 +469,7 @@ export default class GraphD3 extends EventEmitter {
     if(data.wasHighlighted)
     {
       data.highlighted = false
-      if (this.mode == 'full') graphActions.highlight(null)
-      else if (this.mode == 'preview') previewActions.highlight(null)
+      this.emit('deselected')
     }
     else{
     // NODE signifies the node that we clicked on. We enlarge it
@@ -514,9 +510,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', 1)
 
       data.highlighted = true
-
-      if (this.mode == 'full') graphActions.highlight(node)
-      else if (this.mode == 'preview') previewActions.highlight(node)
+      this.emit('select', node)
     }
 
   }.bind(this)
@@ -596,8 +590,7 @@ export default class GraphD3 extends EventEmitter {
   // Alternative to dragging the node to the center. Does the same thing pretty much
   onDblClick = function(node) {
     if (node.rank != 'center'){
-      if (this.mode =='full') graphActions.navigateToNode(node)
-      else if (this.mode =='preview') previewActions.navigateToNode(node)
+      this.emit('center-changed', node)
     }
   }.bind(this)
 

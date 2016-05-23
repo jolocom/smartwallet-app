@@ -80,32 +80,44 @@ let Graph = React.createClass({
     graphActions.chooseObject()
   },
 
-  testAdd(){
-    // let destination = this.state.center
-    graphActions.createAndConnectNode(this.state.user, 'test', 'description')
-  },
-
   addNode: function(type) {
     let uri = encodeURIComponent(this.state.center.uri)
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
   componentDidMount: function() {
+    // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'full')
-    this.graph.on('view-node', this._handleViewNode)
+    // this.graph.on is the same as this.graph.addListener()
+    this.graph.on('center-changed', this._handleCenterChange)
+    this.graph.on('select', this._handleSelect)
+    this.graph.on('deselect', this._handleDeselect)
+
+    // TODO Is this the right place for this?
     graphActions.getState()
   },
 
-  componentWillUpdate: function(){
-  },
-
-  componentDidUpdate: function() {
-  },
-
   componentWillUnmount: function(){
+    // TODO Do I need these here?
     graphActions.setState('drawn', false)
     graphActions.setState('highlighted', null)
-    if (this.graph) this.graph.eraseGraph()
+
+    if (this.graph) {
+      this.graph.eraseGraph()
+      this.graph.removeAllListeners()
+    }
+  },
+
+  _handleCenterChange(node){
+    graphActions.navigateToNode(node)
+  },
+
+  _handleSelect(node){
+    graphActions.highlight(node)
+  },
+
+  _handleDeselect(){
+    graphActions.highlight(null)
   },
 
   getStyles: function() {
