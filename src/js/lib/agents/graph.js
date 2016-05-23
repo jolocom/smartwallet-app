@@ -48,7 +48,7 @@ class GraphAgent extends HTTPAgent {
 
       return new Promise((resolve, reject) => {
         if (image instanceof File) {
-          this.storeFile(currentUser, dstContainer, image).then((result) => {
+          this.storeFile(dstContainer, image).then((result) => {
             resolve(result.url)
           }).catch((err) => {
             reject(err)
@@ -74,9 +74,22 @@ class GraphAgent extends HTTPAgent {
     })
   }
 
-  storeFile(currentUser, dstContainer, file) {
-    let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-    return solid.web.put(uri, file, file.type)
+  storeFile(dstContainer, file) {
+    // if no destination / path is passed, we create one based on the current
+    // webid.
+    if (!dstContainer){
+      let wia = new WebIDAgent()
+      return wia.getWebID().then((webId) => {
+        dstContainer = webId.substring(0, webId.indexOf('profile'))
+        let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+
+        return solid.web.put(uri, file, file.type)
+      })
+    } else
+    {
+      let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      return solid.web.put(uri, file, file.type)
+    }
   }
 
   // Takes the current web ID and the link to the file we want to write to and

@@ -6,7 +6,6 @@ import d3 from 'd3'
 import {
   AppBar,
   IconButton,
-  FloatingActionButton,
   FontIcon,
   List, ListItem, Divider
 } from 'material-ui'

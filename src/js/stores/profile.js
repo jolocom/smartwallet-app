@@ -1,5 +1,6 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
+import GraphActions from 'actions/graph-actions'
 
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
@@ -71,7 +72,9 @@ export default Reflux.createStore({
     // subject which represents our profile
     // everything's fixed but name and email
     let fixedTriples = triples.filter((t) => {
-      return !(t.subject.uri == webid && (t.predicate.uri == FOAF('name').uri || t.predicate.uri == FOAF('mbox').uri))
+      return !(t.subject.uri == webid &&
+        (t.predicate.uri == FOAF('name').uri || t.predicate.uri == FOAF('mbox').uri
+        || t.predicate.uri == FOAF('img').uri))
     })
 
     this.state = {
@@ -85,7 +88,6 @@ export default Reflux.createStore({
     // triples which describe profile
     let relevant = triples.filter((t) => t.subject.uri == webid)
     for (var t of relevant){
-      console.log(t.predicate, t.object)
       if (t.predicate.uri == FOAF('name').uri) {
         this.state.name = t.object.value
       } else if (t.predicate.uri == FOAF('img').uri) {
@@ -94,6 +96,7 @@ export default Reflux.createStore({
         this.state.email = t.object.value
       }
     }
+      // Not used atm
       // else if (t.predicate.uri == CERT.key.uri) {
       //   let key = this._parseKey(t.object, triples)
       //   if (key.modulus) {state.rsaModulus = this._getValue(key.modulus)}
@@ -110,12 +113,12 @@ export default Reflux.createStore({
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t.subject, t.predicate, t.object)
     }
-
     writer.addTriple(rdf.sym('#me'), FOAF('name'), params.name)
     writer.addTriple(rdf.sym('#me'), FOAF('mbox'), params.email)
+    if (params.imgUri)
+      writer.addTriple(rdf.sym('#me'), FOAF('img'), params.imgUri)
 
     wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end())
-
     profile = Object.assign(profile, params)
     this.trigger(Object.assign({}, profile))
   },

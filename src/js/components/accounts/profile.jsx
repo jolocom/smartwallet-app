@@ -13,6 +13,7 @@ import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
 import Util from 'lib/util'
+import GraphAgent from '../../lib/agents/graph.js'
 
 let Profile = React.createClass({
   mixins: [
@@ -138,6 +139,7 @@ let Profile = React.createClass({
 
     if (this.state.file) {
       this.setState({
+        imgUri: null,
         file: null
       })
     } else {
@@ -148,8 +150,8 @@ let Profile = React.createClass({
   },
 
   _handleSelectFile({target}) {
+    let gAgent = new GraphAgent()
     let file = target.files[0]
-
     if (!accepts(file, 'image/*')) {
       this.setState({
         error: 'Invalid file type'
@@ -158,6 +160,9 @@ let Profile = React.createClass({
       this.setState({
         error: null,
         file: file
+      })
+      gAgent.storeFile(null, file).then((res) => {
+        this.setState({imgUri: res.url})
       })
     }
   }
