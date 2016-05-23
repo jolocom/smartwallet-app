@@ -9,11 +9,10 @@ import {EventEmitter} from 'events'
 
 export default class GraphD3 extends EventEmitter {
 
-  constructor(el, flag) {
+  constructor(el) {
     super()
     this.el = el
     this.rendered = false
-    this.mode = flag
 
     // A bit of code duplication here.
     this.width = this.el.offsetWidth || STYLES.width
