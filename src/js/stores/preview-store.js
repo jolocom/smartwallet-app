@@ -21,7 +21,6 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
-      drawn: false,
       // Keeps track of all the nodes we navigated to.
       navHistory: [],
       //These describe the ui
@@ -40,7 +39,6 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
-      drawn: false,
       navHistory: [],
       // UI related
       showPinned:false,

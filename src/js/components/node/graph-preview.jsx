@@ -17,7 +17,7 @@ let Graph = React.createClass({
   },
 
   onStateUpdate(data, signal) {
-    if (data) this.setState(data)
+    this.setState(data)
     if (this.state.neighbours){
       this.graph.render(this.state)
       this.graph.render(this.state)
@@ -44,9 +44,10 @@ let Graph = React.createClass({
     // then fires the drawing function from onStateUpdate
     this.graph = new GraphD3(this.getGraphEl())
 
-    // this.graph.on is the same as this.graph.addListener()
+    this.graph.on('select', this._handleSelectNode)
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('view-node', this._handleViewNode)
+
     previewActions.getState()
   },
 
@@ -74,14 +75,6 @@ let Graph = React.createClass({
     }
   },
 
-  _handleCenterChange(node){
-    previewActions.navigateToNode(node)
-  },
-
-  _handleViewNode(node) {
-    previewActions.viewNode(node)
-  },
-
   getStyles() {
     let styles = {
       chart: {
@@ -97,6 +90,19 @@ let Graph = React.createClass({
     return (
       <div style={styles.chart} ref="graph"></div>
     )
+  },
+
+  // TODO NOT WORKING
+  _handleViewNode(node) {
+    previewActions.viewNode(node)
+  },
+
+  _handleCenterChange(node){
+    previewActions.navigateToNode(node)
+  },
+
+  _handleSelectNode(node) {
+    this.props.onSelect && this.props.onSelect(node)
   }
 })
 export default Radium(Graph)

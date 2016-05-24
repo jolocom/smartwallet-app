@@ -48,7 +48,6 @@ let Graph = React.createClass({
       // We update the state of the store to be in line with the state of the child
       graphActions.setState('newNode', null, true)
     }
-
     if(signal == 'redraw'){
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
