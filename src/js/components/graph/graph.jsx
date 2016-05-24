@@ -41,6 +41,7 @@ let Graph = React.createClass({
     if (data) this.setState(data)
     if (this.state.neighbours){
       this.graph.render(this.state)
+      this.graph.updateHistory(this.state.navHistory)
     }
 
     if (this.state.newNode) {

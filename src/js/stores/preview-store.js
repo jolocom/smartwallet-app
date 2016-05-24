@@ -69,10 +69,6 @@ export default Reflux.createStore({
     })
   },
 
-  onGetState: function(){
-    this.trigger( this.state)
-  },
-
   onNavigateToNode: function(node){
     this.state.neighbours = []
 
@@ -98,6 +94,7 @@ export default Reflux.createStore({
     })
   },
 
+  // NOT WORKING ATM.
   onViewNode(node) {
     this.state.activeNode = node
     this.trigger(this.state)

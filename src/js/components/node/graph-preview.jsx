@@ -38,6 +38,8 @@ let Graph = React.createClass({
   componentDidMount() {
     this.notSync = true
     this.listenTo(GraphStore, this.onSync)
+
+    // We get the state and erase the 'parent graph'
     graphActions.getState()
     graphActions.eraseGraph()
     // Make sure we refresh our state every time we mount the component, this
@@ -47,10 +49,7 @@ let Graph = React.createClass({
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('view-node', this._handleViewNode)
-
-    previewActions.getState()
   },
-
 
   onSync(state, signal){
     if(!signal && this.notSync){
