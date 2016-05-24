@@ -23,7 +23,6 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
-      drawn: false,
       navHistory: [],
       //These describe the ui
       showPinned: false,
@@ -42,7 +41,6 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
-      drawn: false,
       navHistory: [],
       // UI related
       showPinned:false,

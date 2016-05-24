@@ -6,6 +6,7 @@ export default Reflux.createActions({
   // Birth
   'getInitialGraphState' : {asyncResult: true},
   // Life
+  'viewNode':{},
   'navigateToNode' : {asyncResult: true},
   'highlight' : {asyncResult : false},
   'drawNewNode': {asyncResult: false}

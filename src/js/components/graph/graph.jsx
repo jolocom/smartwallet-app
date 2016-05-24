@@ -38,11 +38,9 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data, signal) {
-    console.log('we trigger here')
     if (data) this.setState(data)
     if (this.state.neighbours){
       this.graph.render(this.state)
-      graphActions.setState('drawn', true)
     }
 
     if (this.state.newNode) {
@@ -55,7 +53,6 @@ let Graph = React.createClass({
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }  else if ( signal == 'erase') {
-      graphActions.setState('drawn', false)
       this.graph.eraseGraph()
     }
   },
@@ -65,23 +62,16 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
-  componentWillMount: function(){
-    console.log('yo yo yo')
-  },
-  
   componentDidMount: function() {
     // Instantiating the graph object.
-    this.graph = new GraphD3(this.getGraphEl(), 'full')
+    this.graph = new GraphD3(this.getGraphEl())
     // this.graph.on is the same as this.graph.addListener()
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('view-node', this._handleViewNode)
-
     graphActions.getState()
   },
 
   componentWillUnmount: function(){
-    // TODO Do I need these here?
-    graphActions.setState('drawn', false)
     if (this.graph) {
       this.graph.eraseGraph()
       this.graph.removeAllListeners()

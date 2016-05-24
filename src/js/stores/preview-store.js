@@ -22,7 +22,6 @@ export default Reflux.createStore({
       loaded: false,
       newNode: null,
       drawn: false,
-      highlighted: null,
       // Keeps track of all the nodes we navigated to.
       navHistory: [],
       //These describe the ui
@@ -42,7 +41,6 @@ export default Reflux.createStore({
       loaded: false,
       newNode: null,
       drawn: false,
-      highlighted: null,
       navHistory: [],
       // UI related
       showPinned:false,
@@ -68,14 +66,9 @@ export default Reflux.createStore({
       // Now we tell d3 to draw a new adjacent node on the graph, with the info from
       // the triple file
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
+      this.state.neighbours.push(this.state.newNode)
       this.trigger(this.state)
     })
-  },
-
-  onHighlight: function(node) {
-    if(!node) this.state.highlighted = null
-    else this.state.highlighted = node.uri
-    this.trigger(this.state, 'highlight')
   },
 
   onGetState: function(){
@@ -103,9 +96,12 @@ export default Reflux.createStore({
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-
-      this.state.highlighted = null
       this.trigger(this.state, 'redraw')
     })
+  },
+
+  onViewNode(node) {
+    this.state.activeNode = node
+    this.trigger(this.state)
   }
 })
