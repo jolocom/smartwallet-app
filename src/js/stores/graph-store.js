@@ -14,6 +14,7 @@ export default Reflux.createStore({
 
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
+    this.loaded = false
 
     this.state = {
       //These state keys describe the graph
@@ -23,7 +24,6 @@ export default Reflux.createStore({
       loaded: false,
       newNode: null,
       drawn: false,
-      highlighted: null,
       navHistory: [],
       //These describe the ui
       showPinned: false,
@@ -34,6 +34,7 @@ export default Reflux.createStore({
   },
 
   onLogout(){
+    this.loaded = false
     this.state = {
       // Graph related
       user: null,
@@ -42,7 +43,6 @@ export default Reflux.createStore({
       loaded: false,
       newNode: null,
       drawn: false,
-      highlighted: null,
       navHistory: [],
       // UI related
       showPinned:false,
@@ -74,24 +74,23 @@ export default Reflux.createStore({
     this.gAgent.fetchTriplesAtUri(object).then((result)=>{
       result.triples.uri = object
       // Now we tell d3 to draw a new adjacent node on the graph, with the info from
-      // the triple file
+      // the triiple file
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
+      this.state.neighbours.push(this.state.newNode)
       this.trigger(this.state)
     })
   },
 
-  onHighlight: function(node) {
-    if(!node) this.state.highlighted = null
-    else this.state.highlighted = node.uri
-    this.trigger(this.state, 'highlight')
-  },
-
   onGetState: function(){
     this.trigger( this.state)
+    if (!this.loaded) {
+      this.loaded = true
+      this.onGetInitialGraphState()
+    }
   },
 
-  onGetInitialGraphState: function(username) {
-    this.gAgent.getGraphMapAtWebID(username).then((triples) => {
+  onGetInitialGraphState: function() {
+    this.gAgent.getGraphMapAtWebID().then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)}
@@ -139,8 +138,6 @@ export default Reflux.createStore({
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-
-      this.state.highlighted = null
       this.trigger(this.state, 'redraw')
     })
   },

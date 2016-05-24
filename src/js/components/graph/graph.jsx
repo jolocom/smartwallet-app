@@ -38,34 +38,24 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data, signal) {
+    console.log('we trigger here')
     if (data) this.setState(data)
-
-    if (!this.state.loaded) {
-      graphActions.getInitialGraphState()
-    }
-
-    if (this.state.loaded && !this.state.drawn){
+    if (this.state.neighbours){
       this.graph.render(this.state)
       graphActions.setState('drawn', true)
     }
 
     if (this.state.newNode) {
       this.graph.addNode(this.state.newNode)
-      this.state.neighbours.push(this.state.newNode)
-      graphActions.setState('neighbours', this.state.neighbours)
       // We update the state of the store to be in line with the state of the child
-      this.state.newNode = null
-      graphActions.setState('newNode', null)
+      graphActions.setState('newNode', null, true)
     }
 
     if(signal == 'redraw'){
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
-    } else if ( signal == 'highlight') {
-      this.state.highlighted = data.highlighted
-    } else if ( signal == 'erase') {
+    }  else if ( signal == 'erase') {
       graphActions.setState('drawn', false)
-      graphActions.setState('highlighted', null)
       this.graph.eraseGraph()
     }
   },
@@ -75,24 +65,23 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
+  componentWillMount: function(){
+    console.log('yo yo yo')
+  },
+  
   componentDidMount: function() {
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'full')
     // this.graph.on is the same as this.graph.addListener()
     this.graph.on('center-changed', this._handleCenterChange)
-    this.graph.on('select', this._handleSelect)
     this.graph.on('view-node', this._handleViewNode)
-    this.graph.on('deselect', this._handleDeselect)
 
-    // TODO Is this the right place for this?
     graphActions.getState()
   },
 
   componentWillUnmount: function(){
     // TODO Do I need these here?
     graphActions.setState('drawn', false)
-    graphActions.setState('highlighted', null)
-
     if (this.graph) {
       this.graph.eraseGraph()
       this.graph.removeAllListeners()
@@ -101,14 +90,6 @@ let Graph = React.createClass({
 
   _handleCenterChange(node){
     graphActions.navigateToNode(node)
-  },
-
-  _handleSelect(node){
-    graphActions.highlight(node)
-  },
-
-  _handleDeselect(){
-    graphActions.highlight(null)
   },
 
   getStyles: function() {

@@ -53,7 +53,6 @@ export default class GraphD3 extends EventEmitter {
   setUpForce = function(nodes){
   // Upon set up force we also initialize the dataLinks and dataNodes
   // variables.
-    this.highlighted = nodes.highlighted
     this.dataNodes = [nodes.center]
     this.dataLinks = []
 
