@@ -40,11 +40,7 @@ class GraphAgent extends HTTPAgent {
       }
 
       if(type == 'default') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Document'))
-      if(type == 'person') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Person'))
-      if(type == 'company') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Organization'))
       if(type == 'image') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Image'))
-      // Schema represents this better, perhaps use schema for everything eventually TODO
-      if(type == 'event') writer.addTriple(rdf.sym(uri), RDF('type') , SCHEMA('Event'))
 
       return new Promise((resolve, reject) => {
         if (image instanceof File) {

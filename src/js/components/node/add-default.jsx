@@ -72,10 +72,7 @@ let NodeAddDefault = React.createClass({
               onChange={({target}) => {this.setState({['title']: target.value})}} />
             <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="default" primaryText="Plain text" />
-              <MenuItem value="person" primaryText="Person" />
-              <MenuItem value="company" primaryText="Company" />
               <MenuItem value="image" primaryText="Image" />
-              <MenuItem value="event" primaryText="Event" />
             </SelectField>
           </div>
           <div style={styles.row}>
