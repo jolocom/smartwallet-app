@@ -1,6 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import includes from 'lodash/includes'
 import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
 
@@ -25,6 +26,8 @@ import PinnedActions from 'actions/pinned'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
+
+const publicRoutes =  ['/', '/login', '/signup']
 
 let App = React.createClass({
 
@@ -68,8 +71,11 @@ let App = React.createClass({
     }
   },
 
+  isPublicRoute(path) {
+    return includes(publicRoutes, path || this.props.location.pathname)
+  },
+
   checkLogin() {
-    let path = this.props.location.pathname
     let {username} = this.state.account
 
     // session is still loading, so return for now
@@ -77,9 +83,9 @@ let App = React.createClass({
       return
     }
 
-    if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
+    if (!username && !this.isPublicRoute()) {
       this.history.pushState(null, '/login')
-    } else if (username && (path === '/signup' || path === '/login' || path === '/')) {
+    } else if (username && this.isPublicRoute()) {
       this.history.pushState(null, '/graph')
     }
 
@@ -193,7 +199,7 @@ let App = React.createClass({
 
     return (
       <div style={styles.container}>
-        {this.state.account.username ? (
+        {this.isPublicRoute() ? this.props.children : (
           <Layout>
             <Paper zDept={1} style={styles.header}>
               <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
@@ -211,7 +217,7 @@ let App = React.createClass({
             <Profile/>
             <Tour/>
           </Layout>
-        ) : this.props.children}
+        )}
       </div>
     )
   }
