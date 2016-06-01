@@ -19,7 +19,6 @@ import Tour from 'components/tour.jsx'
 import AppNav from 'components/nav.jsx'
 import GraphSearch from 'components/graph/search.jsx'
 
-import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
 
 import PinnedActions from 'actions/pinned'
@@ -59,10 +58,6 @@ let App = React.createClass({
 
   componentWillMount() {
     this.checkLogin()
-  },
-
-  componentDidMount() {
-    AccountActions.checkSession()
   },
 
   componentDidUpdate(prevProps, prevState) {
