@@ -139,7 +139,7 @@ class GraphAgent extends HTTPAgent {
     return this.get(uri)
       .then((xhr) => {
         let parser = new Parser()
-        return parser.parse(xhr.response)
+        return parser.parse(xhr.response, xhr.responseURL)
         // Look at line 155 for clarifications if you dare.
       }).catch(()=>{
         console.log('The uri', uri, 'could not be resolved. Skipping')
