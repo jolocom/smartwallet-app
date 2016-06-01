@@ -46,7 +46,7 @@ let App = React.createClass({
   getChildContext: function () {
     let {account, profile} = this.state
     return {
-      muiTheme: getMuiTheme(JolocomTheme),
+      muiTheme: this.theme,
       profile: profile,
       username: account && account.username
     }
@@ -60,6 +60,7 @@ let App = React.createClass({
   },
 
   componentWillMount() {
+    this.theme = getMuiTheme(JolocomTheme)
     this.checkLogin()
   },
 
@@ -186,7 +187,7 @@ let App = React.createClass({
         display: this.state.searchActive ? 'none' : 'block'
       },
       icon: {
-        color: '#ffffff'
+        color: this.theme.appBar.textColor
       }
     }
     return styles
@@ -202,8 +203,7 @@ let App = React.createClass({
         {this.isPublicRoute() ? this.props.children : (
           <Layout>
             <Paper zDept={1} style={styles.header}>
-              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
-              <AppNav activeTab={component.id} style={styles.nav}/>
+              <AppBar title={component.title} iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
               {search}
             </Paper>
             <LeftNav ref="leftNav" />
