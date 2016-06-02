@@ -105,6 +105,11 @@ class D3Converter {
     if (rank == 'a') props.rank = 'adjacent'
     if (rank == 'c') props.rank = 'center'
 
+    if(!props.name && !props.familyName)
+      if(props.fullName){
+        props.name = props.fullName.substring(0, props.fullName.indexOf(' '))
+        props.familyName = props.fullName.substring(props.name.length,props.fullName.length -1)
+      }
     return props
   }
 }

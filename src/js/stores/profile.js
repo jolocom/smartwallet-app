@@ -85,25 +85,28 @@ export default Reflux.createStore({
     // triples which describe profile
     let relevant = triples.filter((t) => {
       return t.subject.uri == webid})
+
     for (var t of relevant){
       // We concat the name and family name.
       if (t.predicate.uri == FOAF('givenName').uri) {
         this.state.name = t.object.value
       } else if (t.predicate.uri == FOAF('familyName').uri) {
         this.state.familyName =  t.object.value
+      } else if (t.predicate.uri == FOAF('name').uri) {
+        this.state.fullName = t.object.value
       } else if (t.predicate.uri == FOAF('img').uri) {
         this.state.imgUri =  t.object.uri
       } else if (t.predicate.uri == FOAF('mbox').uri){
-        this.state.email = t.object.uri.substring(t.object.uri.indexOf(':')+1, t.object.uri.length-1)
+        this.state.email = t.object.uri.substring(t.object.uri.indexOf(':')+1, t.object.uri.length)
       }
     }
-      // Not used atm
-      // Needed for the WEBID-TLS protocol.
-      // else if (t.predicate.uri == CERT.key.uri) {
-      //   let key = this._parseKey(t.object, triples)
-      //   if (key.modulus) {state.rsaModulus = this._getValue(key.modulus)}
-      //   if (key.exponent) {state.rsaExponent = this._getValue(key.exponent)}
-      // }
+
+
+    if(!this.state.name && !this.state.familyName)
+      if (this.state.fullName){
+        this.state.name = this.state.fullName.substring(0, this.state.fullName.indexOf(' '))
+        this.state.familyName = this.state.fullName.substring(this.state.name.length,this.state.fullName.length)
+      }
 
     profile = Object.assign(profile, this.state)
     this.trigger(Object.assign({}, profile))
