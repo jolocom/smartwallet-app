@@ -72,7 +72,6 @@ let ProfileNode = React.createClass({
   render() {
     let styles = this.getStyles()
     this.full = false
-    console.log(this.props.node)
     let {name, familyName, title, description, email} = this.props.node
     if(name && familyName) name = name + ' ' + familyName
 

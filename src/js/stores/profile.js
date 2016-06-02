@@ -122,7 +122,6 @@ export default Reflux.createStore({
       writer.addTriple(rdf.sym('#me'), FOAF('mbox'), rdf.sym('mailto:'+params.email))
     if (params.imgUri)
       writer.addTriple(rdf.sym('#me'), FOAF('img'), params.imgUri)
-    console.log(params.imgUri)
 
     wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end())
     profile = Object.assign(profile, params)
