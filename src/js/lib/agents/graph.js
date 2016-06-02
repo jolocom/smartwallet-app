@@ -124,7 +124,9 @@ class GraphAgent extends HTTPAgent {
           let triple = file.triples[i]
           writer.addTriple(triple.subject, triple.predicate, triple.object)
         }
-        writer.addTriple(subject, predicate, object)
+        if(writer.addTriple(subject, predicate, object)){
+          GraphActions.drawNewNode(object.uri)
+        }
         // Then we serialize the object to Turtle and PUT it's address.
         solid.web.put(subject.uri, writer.end()).then(resolve)
       })
