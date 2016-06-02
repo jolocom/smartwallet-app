@@ -1,6 +1,5 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
-import GraphActions from 'actions/graph-actions'
 
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
@@ -55,9 +54,10 @@ export default Reflux.createStore({
       .then((xhr) => {
         // parse profile document from text
         let parser = new Parser()
-        return parser.parse(xhr.response)
+        return parser.parse(xhr.response, xhr.responseURL)
       })
       .then((res) => {
+        console.log('eaaeeaa')
         ProfileActions.load.completed(webid, res.triples, res.prefixes)
       })
       .catch(ProfileActions.load.failed)
@@ -73,7 +73,7 @@ export default Reflux.createStore({
     // everything's fixed but name and email
     let fixedTriples = triples.filter((t) => {
       return !(t.subject.uri == webid &&
-        (t.predicate.uri == FOAF('name').uri || t.predicate.uri == FOAF('mbox').uri
+        (t.predicate.uri == FOAF('familyName').uri || FOAF('givenName') || t.predicate.uri == FOAF('mbox').uri
         || t.predicate.uri == FOAF('img').uri))
     })
 
@@ -86,10 +86,17 @@ export default Reflux.createStore({
     }
 
     // triples which describe profile
-    let relevant = triples.filter((t) => t.subject.uri == webid)
+    let relevant = triples.filter((t) => {
+      console.log(t.subject.uri, t.predicate.uri, t.object.uri)
+      t.subject.uri == webid})
+    console.log(relevant)
     for (var t of relevant){
-      if (t.predicate.uri == FOAF('name').uri) {
+      console.log(t.predicate.uri)
+      // We concat the name and family name.
+      if (t.predicate.uri == FOAF('givenName').uri) {
         this.state.name = t.object.value
+      } else if (t.predicate.uri == FOAF('familyName').uri) {
+        this.state.name = this.state.name + ' ' + t.object.value
       } else if (t.predicate.uri == FOAF('img').uri) {
         this.state.imgUri =  t.object.uri
       } else if (t.predicate.uri == FOAF('mbox').uri){
@@ -113,7 +120,7 @@ export default Reflux.createStore({
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t.subject, t.predicate, t.object)
     }
-    writer.addTriple(rdf.sym('#me'), FOAF('name'), params.name)
+    writer.addTriple(rdf.sym('#me'), FOAF('givenName'), params.name)
     writer.addTriple(rdf.sym('#me'), FOAF('mbox'), params.email)
     if (params.imgUri)
       writer.addTriple(rdf.sym('#me'), FOAF('img'), params.imgUri)

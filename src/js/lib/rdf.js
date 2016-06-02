@@ -9,8 +9,8 @@ export class Parser {
   parse(text, url) {
     return new Promise((resolve) =>{
       let payload = []
-      if (url) url = url.substring(0, url.lastIndexOf('/'))
-      console.log(url)
+      // Keep an eye on this TODO
+      // if (url) url = url.substring(0, url.indexOf('box.me/')+7)
       rdf.parse(text, rdf.graph(), url, 'text/turtle', (err, triples) => {
         for (let i in triples.statements) {
           let statement = triples.statements[i]
