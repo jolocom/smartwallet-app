@@ -109,9 +109,13 @@ let Profile = React.createClass({
               onChange={this._handleSelectFile} />
             <main style={styles.main}>
               <section>
-                <TextField floatingLabelText="Name"
+                <TextField floatingLabelText="First Name"
                   onChange={Util.linkToState(this, 'name')}
                   value={this.state.name}
+                  style={styles.input} />
+                <TextField floatingLabelText="Second Name"
+                  onChange={Util.linkToState(this, 'familyName')}
+                  value={this.state.familyName}
                   style={styles.input} />
                 <TextField floatingLabelText="Email"
                   onChange={Util.linkToState(this, 'email')}

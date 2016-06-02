@@ -239,34 +239,11 @@ export default class GraphD3 extends EventEmitter {
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
-        if(d.name)
-        {
-          // ATM we only display the first name, this way it fits on the screen.
-          // This is needlessly complicated. Think about a fix.
-          if(d.name.indexOf(' ')>0){
-            let name = d.name.substring(0, d.name.indexOf(' '))
-            if(name.length > 10)
-              return name.substring(0, 10)
-            else return name
-          }
-          else if(d.name.length > 10)
-            return d.name.substring(0, 10)
-          else return d.name
-        }
-
+        if(d.name) return d.name
         else if (d.title) {
           if(d.title.length> 10) return d.title.substring(0, 10) + '...'
           else return d.title
-        } else {
-          if(d.uri.search('profile')>0){
-            let x = d.uri.search('profile')
-            let name = d.uri.substring(0, x-1)
-            name = name.substring(name.lastIndexOf('/')+1, name.length)
-            if(name.length>10) return name.substring(0, 10)+'...'
-            else return name
-          }
-          else return 'Not Found'
-        }
+        } else return 'Not Found'
       })
 
      // The text description of a person

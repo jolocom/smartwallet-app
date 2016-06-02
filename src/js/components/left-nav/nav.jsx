@@ -14,7 +14,6 @@ let Nav = React.createClass({
   show() {
     this.refs.drawer.open()
   },
-
   render() {
     return (
       <Drawer ref="drawer" docked={false}>

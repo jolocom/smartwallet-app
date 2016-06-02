@@ -72,9 +72,13 @@ class D3Converter {
     // If the resource is a URI, it's value is stored next to the 'uri' key in the object
     // otherwise it's value is stored in the 'value' key of the object. We need to make
     // sure we are assigning the value regardless of where it's stored
-    let name = g.statementsMatching(undefined, FOAF('name'), undefined)
+    let name = g.statementsMatching(undefined, FOAF('givenName'), undefined)
     if (name.length > 0) props.name = name[0].object.value ? name[0].object.value : name[0].object.uri
     else props.name = null
+
+    let familyName = g.statementsMatching(undefined, FOAF('familyName'), undefined)
+    if (familyName.length > 0) props.familyName = familyName[0].object.value ? familyName[0].object.value : familyName[0].object.uri
+    else props.familyName = null
 
     let title = g.statementsMatching(undefined, DC('title'), undefined)
     if (title.length > 0) props.title = title[0].object.value ? title[0].object.value : title[0].object.uri

@@ -57,7 +57,6 @@ export default Reflux.createStore({
         return parser.parse(xhr.response, xhr.responseURL)
       })
       .then((res) => {
-        console.log('eaaeeaa')
         ProfileActions.load.completed(webid, res.triples, res.prefixes)
       })
       .catch(ProfileActions.load.failed)
@@ -72,9 +71,7 @@ export default Reflux.createStore({
     // subject which represents our profile
     // everything's fixed but name and email
     let fixedTriples = triples.filter((t) => {
-      return !(t.subject.uri == webid &&
-        (t.predicate.uri == FOAF('familyName').uri || FOAF('givenName') || t.predicate.uri == FOAF('mbox').uri
-        || t.predicate.uri == FOAF('img').uri))
+      return !(t.predicate.uri == FOAF('familyName').uri || t.predicate.uri == FOAF('givenName').uri || t.predicate.uri == FOAF('mbox').uri || t.predicate.uri == FOAF('img').uri)
     })
 
     this.state = {
@@ -87,23 +84,21 @@ export default Reflux.createStore({
 
     // triples which describe profile
     let relevant = triples.filter((t) => {
-      console.log(t.subject.uri, t.predicate.uri, t.object.uri)
-      t.subject.uri == webid})
-    console.log(relevant)
+      return t.subject.uri == webid})
     for (var t of relevant){
-      console.log(t.predicate.uri)
       // We concat the name and family name.
       if (t.predicate.uri == FOAF('givenName').uri) {
         this.state.name = t.object.value
       } else if (t.predicate.uri == FOAF('familyName').uri) {
-        this.state.name = this.state.name + ' ' + t.object.value
+        this.state.familyName =  t.object.value
       } else if (t.predicate.uri == FOAF('img').uri) {
         this.state.imgUri =  t.object.uri
       } else if (t.predicate.uri == FOAF('mbox').uri){
-        this.state.email = t.object.value
+        this.state.email = t.object.uri.substring(t.object.uri.indexOf(':')+1, t.object.uri.length-1)
       }
     }
       // Not used atm
+      // Needed for the WEBID-TLS protocol.
       // else if (t.predicate.uri == CERT.key.uri) {
       //   let key = this._parseKey(t.object, triples)
       //   if (key.modulus) {state.rsaModulus = this._getValue(key.modulus)}
@@ -121,9 +116,13 @@ export default Reflux.createStore({
       writer.addTriple(t.subject, t.predicate, t.object)
     }
     writer.addTriple(rdf.sym('#me'), FOAF('givenName'), params.name)
-    writer.addTriple(rdf.sym('#me'), FOAF('mbox'), params.email)
+    writer.addTriple(rdf.sym('#me'), FOAF('familyName'), params.familyName)
+    if (params.email)
+    // This seems to be a standard, did not find justification for this syntax, will keep looking.
+      writer.addTriple(rdf.sym('#me'), FOAF('mbox'), rdf.sym('mailto:'+params.email))
     if (params.imgUri)
       writer.addTriple(rdf.sym('#me'), FOAF('img'), params.imgUri)
+    console.log(params.imgUri)
 
     wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end())
     profile = Object.assign(profile, params)
