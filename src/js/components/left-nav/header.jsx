@@ -4,17 +4,14 @@ import Radium from 'radium'
 import {IconButton, Avatar} from 'material-ui'
 
 import ProfileActions from 'actions/profile'
-import AccountActions from 'actions/account'
 
 let Header = React.createClass({
   contextTypes: {
-    profile: React.PropTypes.any
+    profile: React.PropTypes.any,
+    muiTheme: React.PropTypes.object
   },
   editProfile() {
     ProfileActions.show()
-  },
-  logout() {
-    AccountActions.logout()
   },
   getStyles() {
     return {
@@ -22,7 +19,9 @@ let Header = React.createClass({
         display: 'flex',
         justifyContent: 'flex-end',
         flexDirection: 'column',
-        padding: '16px'
+        padding: '16px',
+        backgroundColor: this.context.muiTheme.jolocom.gray4,
+        borderBottom: `1px solid ${this.context.muiTheme.palette.borderColor}`
       },
       profile: {
         display: 'flex',
@@ -38,7 +37,7 @@ let Header = React.createClass({
         fontWeight: 'bold'
       },
       email: {
-
+        fontSize: '12px'
       }
     }
   },
@@ -56,7 +55,6 @@ let Header = React.createClass({
             <span style={styles.name}>{profile.name}</span>
             <span style={styles.email}>{profile.email}</span>
           </div>
-          <IconButton iconClassName="material-icons" onTouchTap={this.logout}>exit_to_app</IconButton>
           <IconButton iconClassName="material-icons" onTouchTap={this.editProfile}>mode_edit</IconButton>
         </div>
       </header>

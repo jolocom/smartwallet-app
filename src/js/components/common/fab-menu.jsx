@@ -95,7 +95,7 @@ let FabMenu = React.createClass({
           transitionDelay: `${delay}s`,
           willChange: 'opacity, transform',
           opacity: show,
-          transform: `scale(${show})`
+          transform: `scale(${show}) translate3d(0,0,0)`
         }, styles.item)
       })
     })

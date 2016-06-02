@@ -1,7 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import {TextField, RaisedButton} from 'material-ui'
+import {RaisedButton} from 'material-ui'
 import {History, Link} from 'react-router'
 
 import Availability from 'actions/availability'
@@ -9,8 +9,6 @@ import AvailabilityStore from 'stores/availability'
 
 import Account from 'actions/account'
 import AccountStore from 'stores/account'
-
-import Util from 'lib/util'
 
 let Signup = React.createClass({
   mixins: [
@@ -21,17 +19,16 @@ let Signup = React.createClass({
   contextTypes: {
     muiTheme: React.PropTypes.object
   },
+
+  getInitialState() {
+    return {
+      disabledSubmit: true
+    }
+  },
+
   componentWillMount() {
     if (this.state.account && this.state.account.username)
       this.history.pushState(null, '/graph')
-  },
-  signup() {
-    let signupData = {
-      username: this.state.username,
-      name: this.state.name,
-      email: this.state.email
-    }
-    Account.signup(signupData)
   },
 
   componentDidUpdate() {
@@ -97,32 +94,17 @@ let Signup = React.createClass({
     return styles
   },
 
+  handleClick() {
+    Account.signup()
+  },
+
   render() {
     let styles = this.getStyles()
-
-    let availableText, disabled = true
-    console.log(this.state.available)
-    if (this.state.available === false) {
-      availableText = 'This username is already taken.'
-    }
-
-    disabled = this.state.available !== true || !this.state.username
-
     return (
       <div style={styles.container}>
         <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
         <div style={styles.content}>
-          <div style={{marginBottom: '20px'}}>
-            <TextField floatingLabelText="Username"
-              onChange={this._onUsernameChange}
-              errorText={availableText}/>
-            <TextField floatingLabelText="Name"
-              onChange={Util.linkToState(this, 'name')} />
-            <TextField floatingLabelText="Email"
-              onChange={Util.linkToState(this, 'email')} />
-          </div>
-
-          <RaisedButton secondary={true} onTouchTap={this.signup} disabled={disabled} style={styles.button} label="Sign up"/>
+            <RaisedButton type="submit" onTouchTap={this.handleClick} secondary={true}  style={styles.button} label="Sign up"/>
         </div>
 
         <p style={styles.help}>Already have an account? <Link to="/login" style={styles.link}>login instead</Link>.</p>

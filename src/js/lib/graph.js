@@ -7,6 +7,13 @@ import d3 from 'd3'
 import STYLES from 'styles/app'
 import {EventEmitter} from 'events'
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import JolocomTheme from 'styles/jolocom-theme'
+
+const theme = getMuiTheme(JolocomTheme)
+
+console.log(theme)
+
 export default class GraphD3 extends EventEmitter {
 
   constructor(el) {
@@ -219,9 +226,13 @@ export default class GraphD3 extends EventEmitter {
         else{
           if( d.rank  == 'history'){
             return STYLES.grayColor
+          } else if( d.rank == 'unavailable') {
+            return STYLES.grayColor
+          } else if (d.rank === 'center') {
+            return theme.graph.centerNodeColor
+          } else {
+            return theme.graph.nodeColor
           }
-          if( d.rank == 'unavailable') return STYLES.grayColor
-          else return STYLES.blueColor
         }
       })
 
