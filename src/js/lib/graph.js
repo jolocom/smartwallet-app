@@ -251,6 +251,7 @@ export default class GraphD3 extends EventEmitter {
       // In case the rdf card contains no name
       .text((d) => {
         if(d.name) return d.name
+        else if (d.fullName) return d.fullName
         else if (d.title) {
           if(d.title.length> 10) return d.title.substring(0, 10) + '...'
           else return d.title

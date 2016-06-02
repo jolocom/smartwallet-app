@@ -80,6 +80,10 @@ class D3Converter {
     if (familyName.length > 0) props.familyName = familyName[0].object.value ? familyName[0].object.value : familyName[0].object.uri
     else props.familyName = null
 
+    let fullName = g.statementsMatching(undefined, FOAF('name'), undefined)
+    if (fullName.length > 0) props.fullName = fullName[0].object.value ? fullName[0].object.value : fullName[0].object.uri
+    else props.fullName = null
+
     let title = g.statementsMatching(undefined, DC('title'), undefined)
     if (title.length > 0) props.title = title[0].object.value ? title[0].object.value : title[0].object.uri
     else props.img = null
