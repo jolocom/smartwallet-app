@@ -19,6 +19,7 @@ let DC = rdf.Namespace('http://purl.org/dc/terms/')
 class GraphAgent extends HTTPAgent {
   // We create a rdf file at the distContainer containing a title and description passed to it
   createNode(currentUser, currentNode, title, description, image, type) {
+    solid.login().then((r)=>{console.log(r)})
     let writer = new Writer()
     // The randomly generated uri of the new rdf file
     let draw = true

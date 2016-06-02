@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
 import WebIDAgent from '../lib/agents/webid'
+import solid from 'solid-client'
 
 let wia = new WebIDAgent()
 
@@ -30,9 +31,10 @@ let AccountStore = Reflux.createStore({
 
   },
 
-  onLogin(username) {
-    localStorage.setItem('fake-user', username)
-    this.trigger({username: username})
+  onLogin() {
+    solid.login().then((webId) => {
+      this.trigger({username: webId})
+    })
   },
 
   onLogout() {

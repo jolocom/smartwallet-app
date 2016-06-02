@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton, TextField} from 'material-ui'
+import {RaisedButton} from 'material-ui'
 import {History, Link} from 'react-router'
 
 import Account from 'actions/account'
@@ -31,7 +31,7 @@ let Login = React.createClass({
     }
   },
   login() {
-    Account.login(this.state.username)
+    Account.login()
   },
   _handleUsernameChange(e) {
     this.setState({
@@ -95,11 +95,8 @@ let Login = React.createClass({
 
         <div style={styles.content}>
           <div style={{marginBottom: '20px'}}>
-            <div>
-              <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
-            </div>
           </div>
-          <RaisedButton secondary={true} onTouchTap={this.login} style={styles.button} label="Login"/>
+          <RaisedButton secondary={true} onTouchTap={this.login} style={styles.button} label="Login With Certificate"/>
         </div>
 
         <p style={styles.help}>Don't have an account yet? <Link to="/signup" style={styles.link}>Sign up</Link>.</p>
