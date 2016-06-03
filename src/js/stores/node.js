@@ -27,11 +27,14 @@ export default Reflux.createStore({
   link(webId, start, end, type) {
     this.gAgent.writeAccess(webId, end).then((verdict) => {
       let predicate = null
+      // Both are is related to for now, since we don't have any extra behaviour based
+      // On the link type, no need to complicate for now.
       if(type == 'generic') predicate = SCHEMA('isRelatedTo')
-      if(type =='knows') predicate = FOAF('knows')
+      if(type =='knows') predicate = SCHEMA('isRelatedTo')
       if(verdict)
         // Needs some error handling perhaps.
-        this.gAgent.writeTriple(end, predicate, rdf.sym(start))
+        // We pass the true flag here to say that we will draw.
+        this.gAgent.writeTriple(end, predicate, rdf.sym(start), true)
     })
   }
 })

@@ -34,7 +34,6 @@ class GraphAgent extends HTTPAgent {
       let uri = dstContainer + Util.randomString(5)
 
       writer.addTriple(rdf.sym(uri), DC('title'), title)
-      writer.addTriple(rdf.sym(uri), SCHEMA('isRelatedTo'), rdf.sym(currentNode))
       writer.addTriple(rdf.sym(uri), FOAF('maker'), rdf.sym(currentUser))
       if (description) {
         writer.addTriple(rdf.sym(uri), DC('description'), description)
@@ -62,9 +61,9 @@ class GraphAgent extends HTTPAgent {
         // him to the resource that he uploaded
         this.writeTriple(currentNode, SCHEMA('isRelatedTo'), rdf.sym(uri)).then(()=> {
           this.writeTriple(currentUser, FOAF('made'), rdf.sym(uri)).then(() => {
-            if (draw)
-              GraphActions.drawNewNode(uri)
-            return solid.web.put(uri, writer.end())
+            solid.web.put(uri, writer.end()).then(()=>{
+              if (draw) GraphActions.drawNewNode(uri)
+            })
           })
         })
       })
@@ -114,7 +113,7 @@ class GraphAgent extends HTTPAgent {
   }
 
 
-  writeTriple(subject, predicate, object) {
+  writeTriple(subject, predicate, object, draw) {
     let writer = new Writer()
     subject = rdf.sym(subject)
     // First we fetch the triples at the webId/uri of the user adding the triple
@@ -124,10 +123,11 @@ class GraphAgent extends HTTPAgent {
           let triple = file.triples[i]
           writer.addTriple(triple.subject, triple.predicate, triple.object)
         }
-        if(writer.addTriple(subject, predicate, object)){
-          GraphActions.drawNewNode(object.uri)
+        if(writer.addTriple(subject,predicate,object)){
+          if(draw && predicate.uri == SCHEMA('isRelatedTo').uri){
+            GraphActions.drawNewNode(object.uri)
+          }
         }
-        // Then we serialize the object to Turtle and PUT it's address.
         solid.web.put(subject.uri, writer.end()).then(resolve)
       })
     })
@@ -156,8 +156,8 @@ class GraphAgent extends HTTPAgent {
 
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
-    let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
-                 SCHEMA('isRelatedTo').uri,'http://schema.org/performer', 'http://schema.org/isRelatedTo','http://schema.org/performerIn']
+    let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri,
+    'http://schema.org/performer', 'http://schema.org/isRelatedTo']
 
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
     return new Promise ((resolve) => {
