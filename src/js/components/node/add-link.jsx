@@ -22,39 +22,36 @@ let NodeAddLink = React.createClass({
   getInitialState() {
     let centerNode = d3.selectAll('.node').filter(function(d) { return d.rank == 'center'})
     let name = centerNode[0][0].__data__.name
-
-    if(name==null){
-      name = centerNode[0][0].__data__.title
-    }
+    if(name==null) name = centerNode[0][0].__data__.title
+    if(name==null) name = this.props.node
 
     return {
-      targetSelection: null,
+      targetSelection: 'end',
       start: null,
-      startName: null,
-      end: this.props.node,
-      endName: name,
+      startUri: null,
+      end: name,
+      endUri: this.props.node,
       type: 'knows'
     }
   },
   componentDidUpdate(prevProps, prevState) {
+    console.log(this.state)
     if (!prevState.node && this.state.node) {
       this.props.onSuccess && this.props.onSuccess(this.state.node)
     }
   },
   // @TODO this validation is bullshit ofcourse :)
   validates() {
-    let {start, end, type} = this.state
-    return start && end && type
+    let {startUri, endUri, type} = this.state
+    return startUri && endUri && type
   },
   submit() {
     //@TODO show error
     if (!this.validates()) return false
-    let {start, end, type} = this.state
-  
+    let {startUri, endUri, type} = this.state
     // We just pass the start node [object], end node [subject], and the type
     // The user is the WEBID
-    console.log(start,end)
-    nodeActions.link(start, end, type)
+    nodeActions.link(startUri, endUri, type)
   },
   getStyles() {
     let styles = {
@@ -85,8 +82,7 @@ let NodeAddLink = React.createClass({
   },
   render: function() {
     let styles = this.getStyles()
-    let {start, end} = this.state
-
+    let {start, end , targetSelection} = this.state
     return (
       <div style={styles.container}>
         <div style={styles.graph}>
@@ -94,14 +90,14 @@ let NodeAddLink = React.createClass({
         </div>
         <Paper style={styles.form} rounded={false}>
           <div style={styles.row}>
-            <NodeTarget selection={start} onSelectTarget={this._handleSelectStartTarget}/>
+            <NodeTarget selection={start} field={'start'} targetSelection={targetSelection} onSelectTarget={this._handleSelectStartTarget}/>
             <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="generic" primaryText="Generic" />
               <MenuItem value="knows" primaryText="Knows" />
             </SelectField>
           </div>
           <div style={styles.row}>
-            <NodeTarget selection={end} onSelectTarget={this._handleSelectEndTarget}/>
+            <NodeTarget selection={end} field={'end'} targetSelection={targetSelection} onSelectTarget={this._handleSelectEndTarget}/>
           </div>
         </Paper>
       </div>
@@ -127,6 +123,7 @@ let NodeAddLink = React.createClass({
     if (this.state.targetSelection) {
       this.setState({
         [this.state.targetSelection]: name,
+        [this.state.targetSelection+'Uri']:node.uri,
         targetSelect: null
       })
     }
@@ -137,10 +134,8 @@ let NodeAddLink = React.createClass({
   },
 
   _handleSelectStartTarget(active) {
-    console.log('stateBefore=',this.state.targetSelection)
     this.setState({
       targetSelection: active && 'start' || null })
-    console.log('stateAfter=',this.state.targetSelection)
   }
 
 })
@@ -156,9 +151,14 @@ let NodeTarget = React.createClass({
     }
   },
   componentDidUpdate(prevProps) {
-    if (prevProps.selection!=this.props.selection ) {
+    if (prevProps!=this.props ) {
+      let active = false
+      if(this.props.field == this.props.targetSelection){
+        active = true
+      }
       this.setState({
-        selected : this.props.selection
+        selected : this.props.selection,
+        active : active
       })
     }
   },
@@ -215,9 +215,6 @@ let NodeTarget = React.createClass({
   },
   _handleTouchTap() {
     let active = !this.state.active
-    this.setState({
-      active: active
-    })
     this.props.onSelectTarget && this.props.onSelectTarget(active)
   }
 })
