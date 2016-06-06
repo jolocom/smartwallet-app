@@ -71,6 +71,9 @@ class GraphAgent extends HTTPAgent {
   }
 
   storeFile(dstContainer, file) {
+    // This will write the ACL file that we will put onto the server together
+    // With the uploaded image.
+    let acl_writer = new Writer()
     // if no destination / path is passed, we create one based on the current
     // webid.
     if (!dstContainer){
@@ -79,7 +82,30 @@ class GraphAgent extends HTTPAgent {
         dstContainer = webId.substring(0, webId.indexOf('profile'))
         let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
 
-        return solid.web.put(uri, file, file.type)
+        // WRITING THE ACL FILE
+        let acl_uri = uri+ ',acl'
+        console.log(acl_uri)
+        let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+        acl_writer.addTriple(rdf.sym('#policy0'), RDF('type'), ACL('Authorization'))
+        acl_writer.addTriple(rdf.sym('#policy0'), ACL('accessTo'), rdf.sym(uri))
+        acl_writer.addTriple(rdf.sym('#policy0'), ACL('accessTo'), rdf.sym(''))
+        acl_writer.addTriple(rdf.sym('#policy0'), RDF('agent'), rdf.sym(webId))
+        acl_writer.addTriple(rdf.sym('#policy0'), RDF('mode'), ACL('Control'))
+        acl_writer.addTriple(rdf.sym('#policy0'), RDF('mode'), ACL('Read'))
+        acl_writer.addTriple(rdf.sym('#policy0'), RDF('mode'), ACL('Write'))
+
+        acl_writer.addTriple(rdf.sym('#policy1'), RDF('type'), ACL('Authorization'))
+        acl_writer.addTriple(rdf.sym('#policy1'), ACL('accessTo'), rdf.sym(uri))
+        acl_writer.addTriple(rdf.sym('#policy1'), RDF('agent'), FOAF('Agent'))
+        acl_writer.addTriple(rdf.sym('#policy1'), RDF('mode'), ACL('Read'))
+        // END OF ACL FILE WRITE
+
+        console.log('we are here now')
+        return solid.web.put(uri, file, file.type).then((res)=>{
+          console.log('worked')
+          console.log(res)
+          solid.web.put(acl_uri, acl_writer.end())
+        })
       })
     } else
     {

@@ -85,6 +85,7 @@ let Profile = React.createClass({
               <IconButton onClick={this.hide} iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={
+              //TODO Introduce closing the card on this click.
               <IconButton onClick={this._handleUpdate} iconClassName="material-icons">check</IconButton>
             }
           />
