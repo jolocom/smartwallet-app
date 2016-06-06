@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
+import d3 from 'd3'
 
 import {FontIcon, Paper, SelectField, MenuItem} from 'material-ui'
 
@@ -19,10 +20,19 @@ let NodeAddLink = React.createClass({
     muiTheme: React.PropTypes.object
   },
   getInitialState() {
+    let centerNode = d3.selectAll('.node').filter(function(d) { return d.rank == 'center'})
+    let name = centerNode[0][0].__data__.name
+
+    if(name==null){
+      name = centerNode[0][0].__data__.title
+    }
+
     return {
       targetSelection: null,
       start: null,
+      startName: null,
       end: this.props.node,
+      endName: name,
       type: 'knows'
     }
   },
@@ -40,7 +50,11 @@ let NodeAddLink = React.createClass({
     //@TODO show error
     if (!this.validates()) return false
     let {start, end, type} = this.state
-    nodeActions.link(this.context.user, start, end, type)
+  
+    // We just pass the start node [object], end node [subject], and the type
+    // The user is the WEBID
+    console.log(start,end)
+    nodeActions.link(start, end, type)
   },
   getStyles() {
     let styles = {
@@ -80,14 +94,14 @@ let NodeAddLink = React.createClass({
         </div>
         <Paper style={styles.form} rounded={false}>
           <div style={styles.row}>
-            <NodeTarget selection={start} label="Start" onSelectTarget={this._handleSelectStartTarget}/>
+            <NodeTarget selection={start} onSelectTarget={this._handleSelectStartTarget}/>
             <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="generic" primaryText="Generic" />
               <MenuItem value="knows" primaryText="Knows" />
             </SelectField>
           </div>
           <div style={styles.row}>
-            <NodeTarget selection={end} label="End" onSelectTarget={this._handleSelectEndTarget}/>
+            <NodeTarget selection={end} onSelectTarget={this._handleSelectEndTarget}/>
           </div>
         </Paper>
       </div>
@@ -101,20 +115,32 @@ let NodeAddLink = React.createClass({
   },
 
   _handleNodeSelect(node) {
+    let name
+    if (node.name){
+      name = node.name
+    }
+    else if (node.title) {
+      name = node.title
+    }
+    else name=node.uri
+
     if (this.state.targetSelection) {
       this.setState({
-        [this.state.targetSelection]: node.uri,
+        [this.state.targetSelection]: name,
         targetSelect: null
-
       })
     }
   },
+
   _handleSelectEndTarget(active) {
     this.setState({targetSelection: active && 'end' || null})
   },
 
   _handleSelectStartTarget(active) {
-    this.setState({targetSelection: active && 'start' || null})
+    console.log('stateBefore=',this.state.targetSelection)
+    this.setState({
+      targetSelection: active && 'start' || null })
+    console.log('stateAfter=',this.state.targetSelection)
   }
 
 })
@@ -125,7 +151,15 @@ let NodeTarget = React.createClass({
   },
   getInitialState() {
     return {
+      selected: this.props.selection,
       active: false
+    }
+  },
+  componentDidUpdate(prevProps) {
+    if (prevProps.selection!=this.props.selection ) {
+      this.setState({
+        selected : this.props.selection
+      })
     }
   },
   getStyles() {
@@ -162,6 +196,11 @@ let NodeTarget = React.createClass({
       }
     }
   },
+  handleChange: function(event) {
+
+    this.setState({selected: event.target.value.substr(0, 140)})
+
+  },
   render() {
     let styles = this.getStyles()
     return (
@@ -169,7 +208,7 @@ let NodeTarget = React.createClass({
         <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_fixed</FontIcon>
         <div style={styles.inner}>
           <div style={styles.label}>{this.props.label}</div>
-          <div style={styles.value}>{this.props.selection || 'Select node'}</div>
+          <div style={styles.value}><input type="value" value={this.state.selected || 'Select node'} onChange={this.handleChange}/></div>
         </div>
       </div>
     )
