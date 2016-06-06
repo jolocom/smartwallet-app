@@ -167,6 +167,7 @@ let Profile = React.createClass({
         file: file
       })
       gAgent.storeFile(null, file).then((res) => {
+        console.log(res)
         this.setState({imgUri: res.url})
       })
     }

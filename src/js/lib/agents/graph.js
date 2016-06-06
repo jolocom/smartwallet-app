@@ -100,11 +100,8 @@ class GraphAgent extends HTTPAgent {
         acl_writer.addTriple(rdf.sym('#policy1'), RDF('mode'), ACL('Read'))
         // END OF ACL FILE WRITE
 
-        console.log('we are here now')
-        return solid.web.put(uri, file, file.type).then((res)=>{
-          console.log('worked')
-          console.log(res)
-          solid.web.put(acl_uri, acl_writer.end())
+        solid.web.put(acl_uri, acl_writer.end()).then(() =>{
+          return solid.web.put(uri, file, file.type)
         })
       })
     } else
