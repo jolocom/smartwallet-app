@@ -131,6 +131,7 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
+    console.log('Update triggered, with ',this.state)
     ProfileActions.update(this.state)
   },
 
@@ -168,7 +169,11 @@ let Profile = React.createClass({
       })
       gAgent.storeFile(null, file).then((res) => {
         console.log(res)
+        console.log(res.url)
         this.setState({imgUri: res.url})
+        console.log(this.state)
+      }).catch((e)=>{
+        console.log(e)
       })
     }
   }

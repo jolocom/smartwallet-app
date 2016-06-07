@@ -61,8 +61,31 @@ class GraphAgent extends HTTPAgent {
         // him to the resource that he uploaded
         this.writeTriple(currentNode, SCHEMA('isRelatedTo'), rdf.sym(uri)).then(()=> {
           this.writeTriple(currentUser, FOAF('made'), rdf.sym(uri)).then(() => {
-            solid.web.put(uri, writer.end()).then(()=>{
-              if (draw) GraphActions.drawNewNode(uri)
+
+            // I KNOW THIS IS NOT AN ELEGANT SOLUTION, WILL IMPROVE THIS AS SOON AS POSSIBLE
+            // TODO TODO TODO
+            let acl_writer = new Writer()
+            let acl_uri = uri+',acl'
+            let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+            acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
+            acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
+            acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
+            acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(currentUser))
+            acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
+            acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
+            acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+
+            acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
+            acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
+            acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
+            acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
+            // END OF ACL FILE WRITE
+
+            solid.web.put(acl_uri, acl_writer.end()).then((result)=>{
+              console.log(result)
+              solid.web.put(uri, writer.end()).then(()=>{
+                if (draw) GraphActions.drawNewNode(uri)
+              })
             })
           })
         })
@@ -83,31 +106,55 @@ class GraphAgent extends HTTPAgent {
         let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
 
         // WRITING THE ACL FILE
-        let acl_uri = uri+ ',acl'
-        console.log(acl_uri)
+        let acl_uri = uri+',acl'
         let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-        acl_writer.addTriple(rdf.sym('#policy0'), RDF('type'), ACL('Authorization'))
-        acl_writer.addTriple(rdf.sym('#policy0'), ACL('accessTo'), rdf.sym(uri))
-        acl_writer.addTriple(rdf.sym('#policy0'), ACL('accessTo'), rdf.sym(''))
-        acl_writer.addTriple(rdf.sym('#policy0'), RDF('agent'), rdf.sym(webId))
-        acl_writer.addTriple(rdf.sym('#policy0'), RDF('mode'), ACL('Control'))
-        acl_writer.addTriple(rdf.sym('#policy0'), RDF('mode'), ACL('Read'))
-        acl_writer.addTriple(rdf.sym('#policy0'), RDF('mode'), ACL('Write'))
+        acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webId))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
 
-        acl_writer.addTriple(rdf.sym('#policy1'), RDF('type'), ACL('Authorization'))
-        acl_writer.addTriple(rdf.sym('#policy1'), ACL('accessTo'), rdf.sym(uri))
-        acl_writer.addTriple(rdf.sym('#policy1'), RDF('agent'), FOAF('Agent'))
-        acl_writer.addTriple(rdf.sym('#policy1'), RDF('mode'), ACL('Read'))
+        acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
+        acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
+        acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
+        acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
         // END OF ACL FILE WRITE
 
-        solid.web.put(acl_uri, acl_writer.end()).then(() =>{
+        return solid.web.put(acl_uri, acl_writer.end()).then(()=>{
+          console.log(acl_writer.end())
           return solid.web.put(uri, file, file.type)
         })
       })
+
     } else
     {
       let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-      return solid.web.put(uri, file, file.type)
+      let wia = new WebIDAgent()
+      return wia.getWebID().then((webId) => {
+        // WRITING THE ACL FILE
+        let acl_uri = uri+',acl'
+        let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+        acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webId))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
+        acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+
+        acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
+        acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
+        acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
+        acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
+        // END OF ACL FILE WRITE
+
+        return solid.web.put(acl_uri, acl_writer.end()).then(()=>{
+          console.log(acl_writer.end())
+          return solid.web.put(uri, file, file.type)
+        })
+      })
     }
   }
 

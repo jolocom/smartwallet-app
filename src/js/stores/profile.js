@@ -115,6 +115,7 @@ export default Reflux.createStore({
   onUpdate: function (params) {
     // subject which represents our profilei
     let writer = new Writer()
+    console.log(params)
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t.subject, t.predicate, t.object)
     }
