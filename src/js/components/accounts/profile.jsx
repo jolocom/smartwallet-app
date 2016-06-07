@@ -32,7 +32,6 @@ let Profile = React.createClass({
   },
   componentDidMount(){
     this.state.loading = false
-    this.clicked = false
   },
 
   componentDidUpdate(props, state) {
@@ -84,9 +83,6 @@ let Profile = React.createClass({
     } else if (imgUri) {
       img = imgUri
     }
-    console.log('rendering bro')
-    console.log(this.state.loading)
-    console.log('rendering bro')
     // edit mode
     return (
       <Dialog ref="dialog" fullscreen={true}>
@@ -145,10 +141,10 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if(!this.state.loading && !this.clicked){
-      this.clicked = true
+    if(!this.state.loading){
       ProfileActions.update(this.state)
       ProfileActions.hide()
+      this.state.loading = false
     } else{
       console.log('loading')
     }
