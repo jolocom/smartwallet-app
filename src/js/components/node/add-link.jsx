@@ -7,18 +7,25 @@ import {FontIcon, Paper, SelectField, MenuItem} from 'material-ui'
 
 import nodeActions from 'actions/node'
 import nodeStore from 'stores/node'
+import previewStore from 'stores/preview-store'
 
 import GraphPreview from './graph-preview.jsx'
 
 let NodeAddLink = React.createClass({
   mixins: [
-    Reflux.connect(nodeStore, 'node')
+    Reflux.connect(nodeStore, 'node'),
+    Reflux.listenTo(previewStore, 'onStoreChange')
   ],
   contextTypes: {
     node: React.PropTypes.object,
     user: React.PropTypes.string,
     muiTheme: React.PropTypes.object
   },
+
+  onStoreChange(input){
+    this.state.currentCenter = input.center.uri
+  },
+
   getInitialState() {
     let centerNode = d3.selectAll('.node').filter(function(d) { return d.rank == 'center'})
     let name = centerNode[0][0].__data__.name
@@ -31,7 +38,8 @@ let NodeAddLink = React.createClass({
       startUri: null,
       end: name,
       endUri: this.props.node,
-      type: 'knows'
+      type: 'knows',
+      currentCenter: null
     }
   },
   componentDidUpdate(prevProps, prevState) {
@@ -51,8 +59,12 @@ let NodeAddLink = React.createClass({
     let {startUri, endUri, type} = this.state
     // We just pass the start node [object], end node [subject], and the type
     // The user is the WEBID
-    console.log('start:', startUri, 'end:', endUri, 'type:', type)
-    nodeActions.link(this.context.user, endUri, startUri, type)
+    let flag = false
+
+    if(this.state.currentCenter == startUri){
+      flag = true
+    }
+    nodeActions.link(this.context.user, endUri, startUri, type, flag)
   },
   getStyles() {
     let styles = {

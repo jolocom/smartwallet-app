@@ -24,7 +24,7 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
-  link(webId, start, end, type) {
+  link(webId, start, end, type, flag) {
     this.gAgent.writeAccess(webId, end).then((verdict) => {
       let predicate = null
       // Both are is related to for now, since we don't have any extra behaviour based
@@ -34,7 +34,7 @@ export default Reflux.createStore({
       if(verdict)
         // Needs some error handling perhaps.
         // We pass the true flag here to say that we will draw.
-        this.gAgent.writeTriple(end, predicate, rdf.sym(start), true)
+        this.gAgent.writeTriple(end, predicate, rdf.sym(start), flag)
     })
   }
 })
