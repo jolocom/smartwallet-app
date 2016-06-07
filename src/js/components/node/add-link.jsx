@@ -260,7 +260,7 @@ let NodeTarget = React.createClass({
         <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_fixed</FontIcon>
         <div style={styles.inner}>
           <div style={styles.label}>{this.props.label}</div>
-          <div style={styles.value}><input type="value" value={this.state.selected || 'Select node'} onChange={this.props.onChangeEnd}/></div>
+          <div style={styles.value}><input type="value" value={this.state.selected} placeholder="Select node" onChange={this.props.onChangeEnd}/></div>
         </div>
       </div>
     )
