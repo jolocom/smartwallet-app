@@ -31,7 +31,7 @@ let Profile = React.createClass({
     if(state.center) this.state.currentNode = state.center.uri
   },
   componentDidMount(){
-    this.loading = false
+    this.state.loading = false
     this.clicked = false
   },
 
@@ -84,7 +84,9 @@ let Profile = React.createClass({
     } else if (imgUri) {
       img = imgUri
     }
-
+    console.log('rendering bro')
+    console.log(this.state.loading)
+    console.log('rendering bro')
     // edit mode
     return (
       <Dialog ref="dialog" fullscreen={true}>
@@ -96,8 +98,9 @@ let Profile = React.createClass({
               <IconButton onClick={this.hide} iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={
-              //TODO Introduce closing the card on this click.
-              <IconButton onClick={this._handleUpdate} iconClassName="material-icons">check</IconButton>
+              !this.state.loading ? <IconButton onClick={this._handleUpdate} iconClassName="material-icons">check</IconButton>
+              :
+              <IconButton  iconClassName="material-icons">hourglass_empty</IconButton>
             }
           />
           <Content style={styles.content}>
@@ -142,7 +145,7 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if(!this.loading && !this.clicked){
+    if(!this.state.loading && !this.clicked){
       this.clicked = true
       ProfileActions.update(this.state)
       ProfileActions.hide()
@@ -172,7 +175,7 @@ let Profile = React.createClass({
   },
 
   _handleSelectFile({target}) {
-    this.loading = true
+    this.state.loading = true
 
     let gAgent = new GraphAgent()
     let file = target.files[0]
@@ -180,7 +183,7 @@ let Profile = React.createClass({
       this.setState({
         error: 'Invalid file type'
       })
-      this.loading = false
+      this.state.loading = false
     } else {
       this.setState({
         error: null,
@@ -188,8 +191,7 @@ let Profile = React.createClass({
       })
       gAgent.storeFile(null, file).then((res) => {
         this.setState({imgUri: res.url})
-        this.loading = false
-        console.log('done')
+        this.setState({loading: false})
       }).catch((e)=>{
         console.log(e)
       })
