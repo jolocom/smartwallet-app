@@ -51,7 +51,8 @@ let NodeAddLink = React.createClass({
     let {startUri, endUri, type} = this.state
     // We just pass the start node [object], end node [subject], and the type
     // The user is the WEBID
-    nodeActions.link(startUri, endUri, type)
+    console.log('start:', startUri, 'end:', endUri, 'type:', type)
+    nodeActions.link(this.context.user, endUri, startUri, type)
   },
   getStyles() {
     let styles = {
@@ -90,20 +91,34 @@ let NodeAddLink = React.createClass({
         </div>
         <Paper style={styles.form} rounded={false}>
           <div style={styles.row}>
-            <NodeTarget selection={start} field={'start'} targetSelection={targetSelection} onSelectTarget={this._handleSelectStartTarget}/>
+            <NodeTarget selection={start} field={'start'} targetSelection={targetSelection} onChangeEnd={this.handleChangeStart} onSelectTarget={this._handleSelectStartTarget}/>
             <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="generic" primaryText="Generic" />
               <MenuItem value="knows" primaryText="Knows" />
             </SelectField>
           </div>
           <div style={styles.row}>
-            <NodeTarget selection={end} field={'end'} targetSelection={targetSelection} onSelectTarget={this._handleSelectEndTarget}/>
+            <NodeTarget selection={end} field={'end'} targetSelection={targetSelection} onChangeEnd={this.handleChangeEnd} onSelectTarget={this._handleSelectEndTarget}/>
           </div>
         </Paper>
       </div>
     )
   },
 
+  handleChangeEnd: function(event) {
+
+    this.setState({endUri: event.target.value.substr(0, 140),
+                  end : event.target.value.substr(0, 140)
+    })
+
+  },
+  handleChangeStart: function(event) {
+
+    this.setState({startUri: event.target.value.substr(0, 140),
+                  start : event.target.value.substr(0, 140)
+    })
+
+  },
   _handleTypeChange(event, index, value) {
     this.setState({
       type: value
@@ -196,11 +211,7 @@ let NodeTarget = React.createClass({
       }
     }
   },
-  handleChange: function(event) {
 
-    this.setState({selected: event.target.value.substr(0, 140)})
-
-  },
   render() {
     let styles = this.getStyles()
     return (
@@ -208,7 +219,7 @@ let NodeTarget = React.createClass({
         <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_fixed</FontIcon>
         <div style={styles.inner}>
           <div style={styles.label}>{this.props.label}</div>
-          <div style={styles.value}><input type="value" value={this.state.selected || 'Select node'} onChange={this.handleChange}/></div>
+          <div style={styles.value}><input type="value" value={this.state.selected || 'Select node'} onChange={this.props.onChangeEnd}/></div>
         </div>
       </div>
     )
