@@ -43,7 +43,6 @@ let NodeAddLink = React.createClass({
     }
   },
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.state)
     if (!prevState.node && this.state.node) {
       this.props.onSuccess && this.props.onSuccess(this.state.node)
     }
@@ -67,11 +66,20 @@ let NodeAddLink = React.createClass({
     nodeActions.link(this.context.user, endUri, startUri, type, flag)
   },
   getStyles() {
+    let {palette} = this.context.muiTheme
+    let color = palette.accent1Color
     let styles = {
       container: {
         flex: 1,
         display: 'flex',
         flexDirection: 'column'
+      },
+      containerTable: {
+        display: 'flex'
+      },
+      leftIcon: {
+        width: '35px'
+
       },
       graph: {
         background: 'rgba(0,0,0,0.1)',
@@ -79,12 +87,20 @@ let NodeAddLink = React.createClass({
         display: 'flex',
         flexDirection: 'column'
       },
+      icon: {
+        color: color,
+        margin: '40px 5px',
+        width: '20px'
+      },
       form: {
         backgroundColor: '#ffffff',
         padding: '16px'
       },
       row: {
         display: 'flex'
+      },
+      inner: {
+        flex: 5
       },
       select: {
         width: 'auto',
@@ -101,35 +117,51 @@ let NodeAddLink = React.createClass({
         <div style={styles.graph}>
           <GraphPreview onSelect={this._handleNodeSelect}/>
         </div>
-        <Paper style={styles.form} rounded={false}>
-          <div style={styles.row}>
-            <NodeTarget selection={start} field={'start'} targetSelection={targetSelection} onChangeEnd={this.handleChangeStart} onSelectTarget={this._handleSelectStartTarget}/>
-            <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
-              <MenuItem value="generic" primaryText="Generic" />
-              <MenuItem value="knows" primaryText="Knows" />
-            </SelectField>
+        <div style={styles.containerTable}>
+          <div style={styles.leftIcon} onClick={this._handleSelectSwap}>
+            <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>swap_vert</FontIcon>
           </div>
-          <div style={styles.row}>
-            <NodeTarget selection={end} field={'end'} targetSelection={targetSelection} onChangeEnd={this.handleChangeEnd} onSelectTarget={this._handleSelectEndTarget}/>
+          <div style={styles.inner}>
+            <Paper style={styles.form} rounded={false}>
+              <div style={styles.row}>
+                <NodeTarget selection={start} field={'start'} targetSelection={targetSelection} onChangeEnd={this.handleChangeStart} onSelectTarget={this._handleSelectStartTarget}/>
+                <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
+                  <MenuItem value="generic" primaryText="Generic" />
+                  <MenuItem value="knows" primaryText="Knows" />
+                </SelectField>
+              </div>
+              <div style={styles.row}>
+                <NodeTarget selection={end} field={'end'} targetSelection={targetSelection} onChangeEnd={this.handleChangeEnd} onSelectTarget={this._handleSelectEndTarget}/>
+              </div>
+            </Paper>
           </div>
-        </Paper>
+        </div>
       </div>
     )
   },
 
   handleChangeEnd: function(event) {
 
-    this.setState({endUri: event.target.value.substr(0, 140),
-                  end : event.target.value.substr(0, 140)
+    this.setState({endUri: event.target.value,
+                  end : event.target.value
     })
 
   },
   handleChangeStart: function(event) {
 
-    this.setState({startUri: event.target.value.substr(0, 140),
-                  start : event.target.value.substr(0, 140)
+    this.setState({startUri: event.target.value,
+                  start : event.target.value
     })
 
+  },
+  _handleSelectSwap: function() {
+
+    this.setState({
+      start:this.state.end,
+      startUri:this.state.endUri,
+      end:this.state.start,
+      endUri:this.state.startUri
+    })
   },
   _handleTypeChange(event, index, value) {
     this.setState({
@@ -209,7 +241,7 @@ let NodeTarget = React.createClass({
       },
       icon: {
         color: color,
-        margin: '4px 8px 0 0'
+        margin: '0px 8px 0 0'
       },
       inner: {
         flex: 1
