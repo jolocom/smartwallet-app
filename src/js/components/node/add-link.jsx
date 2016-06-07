@@ -227,12 +227,9 @@ let NodeTarget = React.createClass({
     let color
 
     if (this.state.active) {
-      color = palette.accent1Color
-    } else if (this.props.selection) {
       color = palette.primary1Color
-    } else {
-      color = textField.hintText
-    }
+    } else color = textField.hintText
+
 
     return {
       target: {
@@ -263,7 +260,7 @@ let NodeTarget = React.createClass({
         <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_fixed</FontIcon>
         <div style={styles.inner}>
           <div style={styles.label}>{this.props.label}</div>
-          <div style={styles.value}><input type="value" value={this.state.selected || 'Select node'} onChange={this.props.onChangeEnd}/></div>
+          <div style={styles.value}><input type="value" value={this.state.selected} placeholder="Select node" onChange={this.props.onChangeEnd}/></div>
         </div>
       </div>
     )

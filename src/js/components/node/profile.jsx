@@ -48,16 +48,20 @@ let ProfileNode = React.createClass({
         display: 'flex',
         flexDirection: 'column'
       },
-      header: {
-        color: '#fff',
+      headers: {
+        color: '#ffffff',
         height: '176px',
         background: `${muiTheme.jolocom.gray1} url(${background}) center / cover`
       },
       title: {
         position: 'absolute',
         bottom: 0,
+        color:'#fff',
         left: 0,
         padding: '0 24px'
+      },
+      white:{
+        color: '#fff'
       },
       action: {
         position: 'absolute',
@@ -79,11 +83,11 @@ let ProfileNode = React.createClass({
       <div style={styles.container}>
         <AppBar
           id = 'AppBar'
-          style={styles.header}
+          style={styles.headers}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
-          iconElementLeft={<IconButton iconClassName="material-icons" onClick={this._handleClose}>close</IconButton>}
-          iconElementRight={<IconButton iconClassName="material-icons" onClick={this._handleFull}>crop_original</IconButton>}
+          iconElementLeft={<IconButton style={styles.white} iconClassName="material-icons" onClick={this._handleClose}>close</IconButton>}
+          iconElementRight={<IconButton iconClassName="material-icons"  style={styles.white} onClick={this._handleFull}>crop_original</IconButton>}
         >
         </AppBar>
         <List style={styles.list}>
