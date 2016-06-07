@@ -57,7 +57,8 @@ let ProfileNode = React.createClass({
         position: 'absolute',
         bottom: 0,
         left: 0,
-        padding: '0 24px'
+        padding: '0 24px',
+        color: '#ffffff'
       },
       action: {
         position: 'absolute',
@@ -65,6 +66,9 @@ let ProfileNode = React.createClass({
         right: '20px',
         backgroundColor: this.state.pinned ? muiTheme.palette.accent1Color :
           muiTheme.jolocom.gray4
+      },
+      icon: {
+        color: '#ffffff'
       }
     }
   },
@@ -81,8 +85,8 @@ let ProfileNode = React.createClass({
           style={styles.header}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
-          iconElementLeft={<IconButton iconClassName="material-icons" onClick={this._handleClose}>close</IconButton>}
-          iconElementRight={<IconButton iconClassName="material-icons" onClick={this._handleFull}>crop_original</IconButton>}
+          iconElementLeft={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleClose}>close</IconButton>}
+          iconElementRight={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleFull}>crop_original</IconButton>}
         >
 
         </AppBar>
