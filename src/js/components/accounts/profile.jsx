@@ -12,6 +12,8 @@ import {grey500} from 'material-ui/styles/colors'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
+import GraphActions from 'actions/graph-actions'
+
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
 
@@ -64,6 +66,7 @@ let Profile = React.createClass({
   },
 
   render() {
+    console.log(this.state)
     let img, styles = this.getStyles()
 
     let {file, imgUri} = this.state
@@ -131,8 +134,9 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    console.log('Update triggered, with ',this.state)
     ProfileActions.update(this.state)
+    ProfileActions.hide()
+    GraphActions.drawGraph()
   },
 
   _handleSelect() {
@@ -168,10 +172,7 @@ let Profile = React.createClass({
         file: file
       })
       gAgent.storeFile(null, file).then((res) => {
-        console.log(res)
-        console.log(res.url)
         this.setState({imgUri: res.url})
-        console.log(this.state)
       }).catch((e)=>{
         console.log(e)
       })

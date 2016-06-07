@@ -34,6 +34,7 @@ export default Reflux.createStore({
   onShow() {
     profile.show = true
 
+    console.log('triggered with ', profile)
     this.trigger(Object.assign({}, profile))
   },
 
@@ -95,7 +96,7 @@ export default Reflux.createStore({
       } else if (t.predicate.uri == FOAF('name').uri) {
         this.state.fullName = t.object.value
       } else if (t.predicate.uri == FOAF('img').uri) {
-        this.state.imgUri =  t.object.uri
+        this.state.imgUri =  t.object.value
       } else if (t.predicate.uri == FOAF('mbox').uri){
         this.state.email = t.object.uri.substring(t.object.uri.indexOf(':')+1, t.object.uri.length)
       }

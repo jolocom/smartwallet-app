@@ -2,7 +2,6 @@ import Reflux from 'reflux'
 import nodeActions from 'actions/node'
 import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let SCHEMA = rdf.Namespace('https://schema.org/')
 
 export default Reflux.createStore({
