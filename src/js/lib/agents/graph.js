@@ -82,7 +82,6 @@ class GraphAgent extends HTTPAgent {
             // END OF ACL FILE WRITE
 
             solid.web.put(acl_uri, acl_writer.end()).then((result)=>{
-              console.log(result)
               solid.web.put(uri, writer.end()).then(()=>{
                 if (draw) GraphActions.drawNewNode(uri)
               })
@@ -123,7 +122,6 @@ class GraphAgent extends HTTPAgent {
         // END OF ACL FILE WRITE
 
         return solid.web.put(acl_uri, acl_writer.end()).then(()=>{
-          console.log(acl_writer.end())
           return solid.web.put(uri, file, file.type)
         })
       })
@@ -151,7 +149,6 @@ class GraphAgent extends HTTPAgent {
         // END OF ACL FILE WRITE
 
         return solid.web.put(acl_uri, acl_writer.end()).then(()=>{
-          console.log(acl_writer.end())
           return solid.web.put(uri, file, file.type)
         })
       })

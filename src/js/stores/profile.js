@@ -4,6 +4,7 @@ import ProfileActions from 'actions/profile'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
 import rdf from 'rdflib'
+import GraphActions from 'actions/graph-actions'
 
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
@@ -33,8 +34,6 @@ export default Reflux.createStore({
 
   onShow() {
     profile.show = true
-
-    console.log('triggered with ', profile)
     this.trigger(Object.assign({}, profile))
   },
 
@@ -116,7 +115,6 @@ export default Reflux.createStore({
   onUpdate: function (params) {
     // subject which represents our profilei
     let writer = new Writer()
-    console.log(params)
     for (var t of this.state.fixedTriples) {
       writer.addTriple(t.subject, t.predicate, t.object)
     }
@@ -128,7 +126,10 @@ export default Reflux.createStore({
     if (params.imgUri)
       writer.addTriple(rdf.sym('#me'), FOAF('img'), params.imgUri)
 
-    wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end())
+    wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end()).then(()=>{
+      if(params.currentNode) GraphActions.navigateToNode({uri: params.currentNode})
+    })
+
     profile = Object.assign(profile, params)
     this.trigger(Object.assign({}, profile))
   },

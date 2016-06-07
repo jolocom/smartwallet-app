@@ -9,21 +9,30 @@ import {AppBar, IconButton, TextField, Card, CardMedia, CardActions, FlatButton}
 
 import {grey500} from 'material-ui/styles/colors'
 
+import GraphStore from 'stores/graph-store'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-import GraphActions from 'actions/graph-actions'
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange')
+    Reflux.listenTo(ProfileStore, 'onProfileChange'),
+    Reflux.listenTo(GraphStore, 'onGraphChange')
   ],
 
   onProfileChange: function(state) {
     this.setState(state)
+  },
+
+  onGraphChange: function(state) {
+    if(state.center) this.state.currentNode = state.center.uri
+  },
+  componentDidMount(){
+    this.loading = false
+    this.clicked = false
   },
 
   componentDidUpdate(props, state) {
@@ -66,7 +75,6 @@ let Profile = React.createClass({
   },
 
   render() {
-    console.log(this.state)
     let img, styles = this.getStyles()
 
     let {file, imgUri} = this.state
@@ -134,9 +142,13 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    ProfileActions.update(this.state)
-    ProfileActions.hide()
-    GraphActions.drawGraph()
+    if(!this.loading && !this.clicked){
+      this.clicked = true
+      ProfileActions.update(this.state)
+      ProfileActions.hide()
+    } else{
+      console.log('loading')
+    }
   },
 
   _handleSelect() {
@@ -160,12 +172,15 @@ let Profile = React.createClass({
   },
 
   _handleSelectFile({target}) {
+    this.loading = true
+
     let gAgent = new GraphAgent()
     let file = target.files[0]
     if (!accepts(file, 'image/*')) {
       this.setState({
         error: 'Invalid file type'
       })
+      this.loading = false
     } else {
       this.setState({
         error: null,
@@ -173,6 +188,8 @@ let Profile = React.createClass({
       })
       gAgent.storeFile(null, file).then((res) => {
         this.setState({imgUri: res.url})
+        this.loading = false
+        console.log('done')
       }).catch((e)=>{
         console.log(e)
       })
