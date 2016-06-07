@@ -227,12 +227,9 @@ let NodeTarget = React.createClass({
     let color
 
     if (this.state.active) {
-      color = palette.accent1Color
-    } else if (this.props.selection) {
       color = palette.primary1Color
-    } else {
-      color = textField.hintText
-    }
+    } else color = textField.hintText
+
 
     return {
       target: {
