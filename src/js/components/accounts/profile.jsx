@@ -28,7 +28,7 @@ let Profile = React.createClass({
   },
 
   onGraphChange: function(state) {
-    if(state.center) this.state.currentNode = state.center.uri
+    if(state && state.center) this.state.currentNode = state.center.uri
   },
   componentDidMount(){
     this.state.loading = false
