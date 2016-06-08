@@ -163,23 +163,16 @@ class GraphAgent extends HTTPAgent {
       })
     })
   }
-
-  // I tried rewriting this so that it uses solid.web.get(uri) to fetch the rdf file
-  // instead of using XHR, the problem is that solid.web.get(uri) "optimizes" the resource
-  // before returning it, for instance some common uris would be written as
-  // ../../joachim/card#me. This obviously makes them unparsable, at least for now.
-
+  
   fetchTriplesAtUri(uri) {
-    return this.get(uri)
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response, xhr.responseURL)
-        // Look at line 155 for clarifications if you dare.
-      }).catch(()=>{
-        console.log('The uri', uri, 'could not be resolved. Skipping')
-        // We return this in order to later be able to display it grayed out.
-        return {uri: uri, unav : true, triples:[]}
-      })
+    return solid.web.get(uri).then((res)=>{
+      let parser = new Parser()
+      return parser.parse(res.xhr.response, res.url)
+    }).catch(()=>{
+      console.log('The uri', uri, 'could not be resolved. Skipping')
+      // We return this in order to later be able to display it grayed out.
+      return {uri: uri, unav : true, triples:[]}
+    })
   }
 
 // This function gets passed a center uri and it's triples, and then finds all possible

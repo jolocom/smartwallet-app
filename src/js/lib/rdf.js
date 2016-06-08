@@ -2,7 +2,6 @@
 // The parser takes text and converts it to turtle, returning an array of triples.
 // The parser also requires a base uri parameter to resolve relative URIs correctly.
 // The writer takes triples and writes them to a turtle file. Serializes it basically.
-
 import rdf from 'rdflib'
 
 export class Parser {
