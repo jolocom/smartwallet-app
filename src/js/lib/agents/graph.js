@@ -61,9 +61,9 @@ class GraphAgent extends HTTPAgent {
         // him to the resource that he uploaded
         this.writeTriple(currentNode, SCHEMA('isRelatedTo'), rdf.sym(uri)).then(()=> {
           this.writeTriple(currentUser, FOAF('made'), rdf.sym(uri)).then(() => {
-            solid.web.put(uri, writer.end()).then(()=>{
-              if (draw) GraphActions.drawNewNode(uri)
-              this.putACL(uri, currentUser).then(()=>{
+            this.putACL(uri, currentUser).then(()=>{
+              solid.web.put(uri, writer.end()).then(()=>{
+                if (draw) GraphActions.drawNewNode(uri)
               })
             })
           })
@@ -75,22 +75,18 @@ class GraphAgent extends HTTPAgent {
   storeFile(dstContainer, file) {
     // if no destination / path is passed, we create one based on the current
     // webid.
-    return new Promise((resolve) => {
-      let uri = null
-      let wia = new WebIDAgent()
-      wia.getWebID().then((webID) => {
-        if (!dstContainer)
-        {
-          // Perhaps the profile part has to go. It breaks with non standard uri.
-          dstContainer = webID.substring(0, webID.indexOf('profile'))
-          uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-        }
-        else uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-        solid.web.put(uri, file, file.type).then((res)=>{
-          this.putACL(uri, webID)
-          resolve(res)
-        })
-      })
+    let uri = null
+    let wia = new WebIDAgent()
+    return wia.getWebID().then((webID) => {
+      if (!dstContainer)
+      {
+        // Perhaps the profile part has to go. It breaks with non standard uri.
+        dstContainer = webID.substring(0, webID.indexOf('profile'))
+        uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      }
+      else uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      this.putACL(uri, webID)
+      return solid.web.put(uri, file, file.type)
     })
   }
 
@@ -99,8 +95,8 @@ class GraphAgent extends HTTPAgent {
     let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     // TODO, perhaps introduce more potential setups.
     // Current one is creator can do read write control. Everyone else has read acc.
-    return solid.web.head(uri).then((header) => {
-      let acl_uri = header.linkHeaders.acl[0] ? header.linkHeaders.acl[0]
+    return solid.web.options(uri).then((res) => {
+      let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
         : acl_uri = uri+'.acl'
 
       acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
@@ -163,7 +159,7 @@ class GraphAgent extends HTTPAgent {
       })
     })
   }
-  
+
   fetchTriplesAtUri(uri) {
     return solid.web.get(uri).then((res)=>{
       let parser = new Parser()
