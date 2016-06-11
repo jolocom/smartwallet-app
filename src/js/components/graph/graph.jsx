@@ -10,6 +10,7 @@ import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from '../../stores/graph-store'
 import graphActions from '../../actions/graph-actions'
+import nodeActions from 'actions/node'
 
 import Node from '../node/node.jsx'
 
@@ -101,7 +102,6 @@ let Graph = React.createClass({
     return styles
   },
 
-  // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render: function() {
     let styles = this.getStyles()
 
@@ -128,6 +128,7 @@ let Graph = React.createClass({
   },
 
   _handleViewNode(node) {
+    // nodeActions.remove(node)
     graphActions.viewNode(node)
   }
 })

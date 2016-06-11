@@ -160,6 +160,12 @@ class GraphAgent extends HTTPAgent {
     })
   }
 
+  // This function tries to find a triple in an rdf file, delete it and then
+  // Put the file back.
+  deleteTriple(subject, predicate, object){
+    console.log('called')
+  }
+
   fetchTriplesAtUri(uri) {
     return solid.web.get(uri).then((res)=>{
       let parser = new Parser()
@@ -226,6 +232,7 @@ class GraphAgent extends HTTPAgent {
           neibTriples.forEach(element => {
             nodes.push(element)
           })
+          console.log(nodes)
           resolve(nodes)
         })
       })

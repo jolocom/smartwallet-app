@@ -23,6 +23,10 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
+  onRemove(subject,predicate,object){
+    this.gAgent.deleteTriple(subject,predicate,object)
+  },
+
   link(webId, start, end, type, flag) {
     this.gAgent.writeAccess(webId, end).then((verdict) => {
       let predicate = null
