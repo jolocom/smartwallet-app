@@ -11,8 +11,6 @@ import STYLES from 'styles/app.js'
 
 class D3Converter {
   convertToD3(rank, node, i, n) {
-    // This functionality will have to find a new home after the demo.
-    // Makes sure the files that 404ed stil show, but as darker nodes.
     if(node.unav){
       return {
         uri : node.uri,
@@ -21,7 +19,6 @@ class D3Converter {
         y: STYLES.height / 2 + 40
       }
     }
-
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
@@ -29,10 +26,12 @@ class D3Converter {
     this.n = n
 
     let uri = node.uri
+    let connection = node.connection ? node.connection : null
 
     let props = {
-      uri: null,
+      uri: uri,
       name:null,
+      connection: connection,
       title:null,
       description:null,
       img:null,
@@ -45,7 +44,6 @@ class D3Converter {
     // We create a rdf.graph() object, and populate it with the triples, this
     // allows us to then parse them using the rdflib's function
     // rdf.graph().statementsMatching()
-
     let g = rdf.graph()
     for (let i = 0; i < node.length; i++) {
       g.add(node[i].subject, node[i].predicate, node[i].object)
@@ -67,7 +65,6 @@ class D3Converter {
     // Updating the attributes of the node object. The resulting object will have
     // all of it's props filled in, and will be ready to be rendered by D3
     // Note, if a triple is not present, it will be set to null.
-    props.uri = uri
 
     // If the resource is a URI, it's value is stored next to the 'uri' key in the object
     // otherwise it's value is stored in the 'value' key of the object. We need to make

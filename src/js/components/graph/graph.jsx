@@ -8,9 +8,8 @@ import Radium from 'radium'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
-import GraphStore from '../../stores/graph-store'
-import graphActions from '../../actions/graph-actions'
-import nodeActions from 'actions/node'
+import GraphStore from 'stores/graph-store'
+import graphActions from 'actions/graph-actions'
 
 import Node from '../node/node.jsx'
 
@@ -108,7 +107,7 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
-      nodeDetails = <Node node={this.state.activeNode}/>
+      nodeDetails = <Node node={this.state.activeNode} center={this.state.center}/>
     }
 
     return (
@@ -128,7 +127,6 @@ let Graph = React.createClass({
   },
 
   _handleViewNode(node) {
-    // nodeActions.remove(node)
     graphActions.viewNode(node)
   }
 })

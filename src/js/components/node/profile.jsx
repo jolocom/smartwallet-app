@@ -2,6 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import d3 from 'd3'
+import nodeActions from 'actions/node'
 
 import {
   AppBar,
@@ -118,7 +119,8 @@ let ProfileNode = React.createClass({
   },
 
   _handleFull() {
-
+    console.log(this.props)
+    nodeActions.remove(this.props.center.uri, this.props.node.connection, this.props.node.uri)
     if (this.full){
       d3.select('#AppBar').style('height', '176px')
       d3.select('#AppBar').style('height', '176px')

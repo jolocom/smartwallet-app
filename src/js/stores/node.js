@@ -23,7 +23,7 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
-  onRemove(subject,predicate,object){
+  onRemove(subject, predicate, object){
     this.gAgent.deleteTriple(subject,predicate,object)
   },
 

@@ -163,7 +163,19 @@ class GraphAgent extends HTTPAgent {
   // This function tries to find a triple in an rdf file, delete it and then
   // Put the file back.
   deleteTriple(subject, predicate, object){
-    console.log('called')
+    let writer = new Writer()
+    this.fetchTriplesAtUri(subject).then((res)=>{
+      res.triples.map((t)=>{
+        // Litterals are stored in the value key, and uris are stored in the
+        // uri field. We have to account for that.
+        let trip_object = t.object.uri ? t.object.uri : t.object.value
+        if (t.predicate.uri == predicate && trip_object == object)
+          console.log(t.subject, t.predicate, t.object, ' skipped')
+        else
+          writer.addTriple(t.subject,t.predicate,t.object)
+      })
+      solid.web.put(subject, writer.end())
+    })
   }
 
   fetchTriplesAtUri(uri) {
@@ -182,8 +194,7 @@ class GraphAgent extends HTTPAgent {
 
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
-    let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri,
-    'http://schema.org/performer', 'http://schema.org/isRelatedTo']
+    let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri, 'http://schema.org/isRelatedTo']
 
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
     return new Promise ((resolve) => {
@@ -197,16 +208,13 @@ class GraphAgent extends HTTPAgent {
       let i = 0
       neighbours.map((triple) => {
         this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
-          // Terrible error handling, please don't judge me, it's Saturday night.
           if (triples.triples.length == 0) {
             i += 1
             graphMap.push(triples)
           } else {
+            triples.triples.connection = triple.predicate.uri
             graphMap.push(triples.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
-
-            // This checks if the whole array has been parsed, and only after that resolves.
-            // I'm not proud of this.
           }
           if (graphMap.length == neighbours.length) {
             console.log('Loading done,', i,'rdf files were / was skipped.')
