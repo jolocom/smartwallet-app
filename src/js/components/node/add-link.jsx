@@ -34,7 +34,7 @@ let NodeAddLink = React.createClass({
     return {
       targetSelection: 'end',
       start: 'Me',
-      startUri: this.context.user,
+      startUri: this.context.user.uri,
       end: name,
       endUri: this.props.node,
       type: 'knows',
