@@ -12,59 +12,53 @@ let SCHEMA = rdf.Namespace('https://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
+let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
 
 class GraphAgent extends HTTPAgent {
   // We create a rdf file at the distContainer containing a title and description passed to it
-  createNode(currentUser, currentNode, title, description, image, type) {
-    solid.login().then((r)=>{console.log(r)})
+  createNode(user, node, title, description, image, type) {
     let writer = new Writer()
-    // The randomly generated uri of the new rdf file
-    let draw = true
-    this.writeAccess(currentUser, currentNode).then((res) => {
-      if (res == false) {
-        // If we have no write access at the node we are trying to connect to
-        // we just connect to the user's main node instead.
-        currentNode = currentUser
-        draw = false
+
+    let dstContainer = node.storage
+    let new_node = dstContainer + Util.randomString(5)
+
+    writer.addTriple(rdf.sym(new_node), DC('title'), title)
+    writer.addTriple(rdf.sym(new_node), FOAF('maker'), rdf.sym(node.uri))
+    if (description) {
+      writer.addTriple(rdf.sym(new_node), DC('description'), description)
+    }
+    if(type == 'default') writer.addTriple(rdf.sym(new_node), RDF('type') , FOAF('Document'))
+    if(type == 'image') writer.addTriple(rdf.sym(new_node), RDF('type') , FOAF('Image'))
+
+    if(node.storage) writer.addTriple(rdf.sym(new_node), NIC('storage'), node.storage)
+    else if (user.storage) writer.addTriple(rdf.sym(new_node), NIC('storage'), user.storage)
+
+    return new Promise((resolve, reject) => {
+      if (image instanceof File) {
+        this.storeFile(dstContainer, image).then((result) => {
+          resolve(result.url)
+        }).catch((err) => {
+          reject(err)
+        })
+      } else {
+        resolve(image)
       }
-      let dstContainer = currentUser.substring(0, currentUser.indexOf('profile'))
-      let uri = dstContainer + Util.randomString(5)
-
-      writer.addTriple(rdf.sym(uri), DC('title'), title)
-      writer.addTriple(rdf.sym(uri), FOAF('maker'), rdf.sym(currentUser))
-      if (description) {
-        writer.addTriple(rdf.sym(uri), DC('description'), description)
+    }).then((image) => {
+      // If the image is there, we add it to the rdf file.
+      if (image) {
+        writer.addTriple(rdf.sym(new_node), FOAF('img'), image)
       }
-
-      if(type == 'default') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Document'))
-      if(type == 'image') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Image'))
-
-      return new Promise((resolve, reject) => {
-        if (image instanceof File) {
-          this.storeFile(dstContainer, image).then((result) => {
-            resolve(result.url)
-          }).catch((err) => {
-            reject(err)
-          })
-        } else {
-          resolve(image)
-        }
-      }).then((image) => {
-        // If the image is there, we add it to the rdf file.
-        if (image) {
-          writer.addTriple(rdf.sym(uri), FOAF('img'), image)
-        }
-        // Here we add the triple to the user's rdf file, this triple connects
-        // him to the resource that he uploaded
-        this.writeTriple(currentNode, SCHEMA('isRelatedTo'), rdf.sym(uri)).then(()=> {
-          this.writeTriple(currentUser, FOAF('made'), rdf.sym(uri)).then(() => {
-            this.putACL(uri, currentUser).then(()=>{
-              solid.web.put(uri, writer.end()).then(()=>{
-                if (draw) GraphActions.drawNewNode(uri)
-              })
+      // Here we add the triple to the user's rdf file, this triple connects
+      // him to the resource that he uploaded
+      this.writeTriple(node.uri, SCHEMA('isRelatedTo'), rdf.sym(new_node)).then(()=> {
+        // Should this one be here? Implications of having this triple?
+        this.writeTriple(user.uri, FOAF('made'), rdf.sym(new_node)).then(() => {
+          this.putACL(new_node, user.uri).then(()=>{
+            solid.web.put(new_node, writer.end()).then(()=>{
+              GraphActions.drawNewNode(new_node)
             })
           })
         })
@@ -77,6 +71,7 @@ class GraphAgent extends HTTPAgent {
     // webid.
     let uri = null
     let wia = new WebIDAgent()
+    
     return wia.getWebID().then((webID) => {
       if (!dstContainer)
       {
@@ -89,7 +84,8 @@ class GraphAgent extends HTTPAgent {
       return solid.web.put(uri, file, file.type)
     })
   }
-
+  // PUT ACL and WRITE TRIPLE should be called after making sure that the user
+  // has write access
   putACL(uri, webID){
     let acl_writer = new Writer()
     let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
@@ -111,38 +107,19 @@ class GraphAgent extends HTTPAgent {
       acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
-      return solid.web.put(acl_uri, acl_writer.end())
-    })
-  }
-
-  // Takes the current web ID and the link to the file we want to write to and
-  // returns a bool saying wheather or not you are allowed to write to that uri.
-  writeAccess(webId, node_uri) {
-    let writer = new Writer()
-    return new Promise((resolve) => {
-      this.fetchTriplesAtUri(node_uri).then((file) =>{
-        for (var i = 0; i < file.triples.length; i++) {
-          let triple = file.triples[i]
-          writer.addTriple(triple.subject, triple.predicate, triple.object)
-        }
-        // We only check for the author if the rdf file has the author entry in it in the first place.
-        let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)
-        if (author.length > 0) author = author[0].object.uri
-        if (author == webId) {
-          console.log('Write access granted')
-          resolve(true)
-        } else {
-          console.log('No write access')
-          resolve(false)
-        }
+      return solid.web.put(acl_uri, acl_writer.end()).catch((e)=>{
+        console.log(e, ' occured while trying to put the acl file.')
       })
     })
   }
 
-
   writeTriple(subject, predicate, object, draw) {
     let writer = new Writer()
-    subject = rdf.sym(subject)
+
+    // Is this ok when working with blank nodes?
+    if (!subject.uri) subject = rdf.sym(subject)
+    if (!predicate.uri) predicate = rdf.sym(predicate)
+
     // First we fetch the triples at the webId/uri of the user adding the triple
     return new Promise((resolve) => {
       this.fetchTriplesAtUri(subject.uri).then((file) => {
@@ -151,11 +128,14 @@ class GraphAgent extends HTTPAgent {
           writer.addTriple(triple.subject, triple.predicate, triple.object)
         }
         if(writer.addTriple(subject,predicate,object)){
-          if(draw && predicate.uri == SCHEMA('isRelatedTo').uri){
+          if(draw && (predicate.uri == SCHEMA('isRelatedTo').uri || predicate.uri == FOAF('knows').uri)){
+            console.log('Hey,called')
             GraphActions.drawNewNode(object.uri)
           }
         }
-        solid.web.put(subject.uri, writer.end()).then(resolve)
+        solid.web.put(subject.uri, writer.end()).then(resolve).catch((e)=>{
+          console.log(e, 'in the writeTriple Function.')
+        })
       })
     })
   }
@@ -240,7 +220,6 @@ class GraphAgent extends HTTPAgent {
           neibTriples.forEach(element => {
             nodes.push(element)
           })
-          console.log(nodes)
           resolve(nodes)
         })
       })

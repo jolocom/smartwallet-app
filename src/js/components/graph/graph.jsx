@@ -23,7 +23,7 @@ let Graph = React.createClass({
 
   childContextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.string
+    user: React.PropTypes.object
   },
 
   getChildContext: function() {

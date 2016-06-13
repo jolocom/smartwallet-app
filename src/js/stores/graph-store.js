@@ -100,7 +100,7 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
-    this.state.user = result[0].uri
+    this.state.user = result[0]
     this.trigger(this.state)
   },
 

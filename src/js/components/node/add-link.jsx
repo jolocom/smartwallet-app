@@ -18,7 +18,7 @@ let NodeAddLink = React.createClass({
   ],
   contextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.string,
+    user: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   },
 
@@ -56,14 +56,15 @@ let NodeAddLink = React.createClass({
     //@TODO show error
     if (!this.validates()) return false
     let {startUri, endUri, type} = this.state
+
     // We just pass the start node [object], end node [subject], and the type
     // The user is the WEBID
-    let flag = false
 
+    let flag = false
     if(this.state.currentCenter == startUri){
       flag = true
     }
-    nodeActions.link(this.context.user, endUri, startUri, type, flag)
+    nodeActions.link(startUri, type, endUri,flag)
   },
   getStyles() {
     let {palette} = this.context.muiTheme

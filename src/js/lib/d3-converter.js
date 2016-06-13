@@ -2,6 +2,8 @@ import rdf from 'rdflib'
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+
 import STYLES from 'styles/app.js'
 
 // D3 Converter takes a node (a node in this context is an array of triples that
@@ -37,6 +39,7 @@ class D3Converter {
       img:null,
       type:null,
       rank: null,
+      storage: null,
       x: null,
       y: null
     }
@@ -97,6 +100,11 @@ class D3Converter {
     if (image.length > 0) props.img = image[0].object.value ? image[0].object.value : image[0].object.uri
     else props.img = null
 
+
+    // Storage is used when adding files. Better to do it here then to send extra requests upon upload.
+    let storage = g.statementsMatching(undefined, NIC('storage'), undefined)
+    if (storage.length > 0) props.storage = storage[0].object.value ? storage[0].object.value : storage[0].object.uri
+    else props.storage = uri.substring(0, uri.indexOf('profile'))
     // We specify the rank of the node here. Center is the center node and Adjacent is a neighbour, smaller node
     // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
     if (rank == 'a') props.rank = 'adjacent'
