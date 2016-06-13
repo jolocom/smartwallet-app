@@ -58,11 +58,21 @@ class GraphAgent extends HTTPAgent {
         this.writeTriple(user.uri, FOAF('made'), rdf.sym(new_node)).then(() => {
           this.putACL(new_node, user.uri).then(()=>{
             solid.web.put(new_node, writer.end()).then(()=>{
-              GraphActions.drawNewNode(new_node)
+              GraphActions.drawNewNode(new_node, SCHEMA('isRelatedTo').uri)
             })
           })
         })
       })
+    })
+  }
+  
+  // Should we remove the ACL file associated with it as well? 
+  // PRO : we won't need the ACL file anymore CON : it can be a parent ACL file, that would
+  // result in other children loosing the ACL as well.
+  deleteFile(uri){
+    return solid.web.del(uri).catch((e) =>{
+      console.log('Error',e, 'in deleteFile')
+        console.log(new_node, 'totototo')
     })
   }
 
@@ -130,7 +140,7 @@ class GraphAgent extends HTTPAgent {
         if(writer.addTriple(subject,predicate,object)){
           if(draw && (predicate.uri == SCHEMA('isRelatedTo').uri || predicate.uri == FOAF('knows').uri)){
             console.log('Hey,called')
-            GraphActions.drawNewNode(object.uri)
+            GraphActions.drawNewNode(object.uri, predicate.uri)
           }
         }
         solid.web.put(subject.uri, writer.end()).then(resolve).catch((e)=>{
@@ -143,6 +153,7 @@ class GraphAgent extends HTTPAgent {
   // This function tries to find a triple in an rdf file, delete it and then
   // Put the file back.
   deleteTriple(subject, predicate, object){
+    console.log('called as well')
     let writer = new Writer()
     this.fetchTriplesAtUri(subject).then((res)=>{
       res.triples.map((t)=>{
@@ -154,6 +165,7 @@ class GraphAgent extends HTTPAgent {
         else
           writer.addTriple(t.subject,t.predicate,t.object)
       })
+      console.log('putting,',writer.end())
       solid.web.put(subject, writer.end())
     })
   }
