@@ -72,7 +72,6 @@ class GraphAgent extends HTTPAgent {
   deleteFile(uri){
     return solid.web.del(uri).catch((e) =>{
       console.log('Error',e, 'in deleteFile')
-        console.log(new_node, 'totototo')
     })
   }
 
@@ -153,9 +152,8 @@ class GraphAgent extends HTTPAgent {
   // This function tries to find a triple in an rdf file, delete it and then
   // Put the file back.
   deleteTriple(subject, predicate, object){
-    console.log('called as well')
     let writer = new Writer()
-    this.fetchTriplesAtUri(subject).then((res)=>{
+    return this.fetchTriplesAtUri(subject).then((res)=>{
       res.triples.map((t)=>{
         // Litterals are stored in the value key, and uris are stored in the
         // uri field. We have to account for that.
@@ -165,8 +163,7 @@ class GraphAgent extends HTTPAgent {
         else
           writer.addTriple(t.subject,t.predicate,t.object)
       })
-      console.log('putting,',writer.end())
-      solid.web.put(subject, writer.end())
+      return solid.web.put(subject, writer.end())
     })
   }
 

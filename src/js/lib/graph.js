@@ -375,12 +375,11 @@ export default class GraphD3 extends EventEmitter {
   // all other highlighted nodes back to their normal size
   onClickFull = function(node, data) {
     //stops propagation to node click handler
-    this.emit('view-node', data)
+    this.emit('view-node', data, node)
     d3.event.stopPropagation()
   }
 
   onClick = function(node, data) {
-    console.log(node)
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if(data.rank == 'history') return
@@ -388,7 +387,7 @@ export default class GraphD3 extends EventEmitter {
       return
     }
 
-    this.emit('select', data)
+    this.emit('select', node)
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
@@ -575,11 +574,13 @@ export default class GraphD3 extends EventEmitter {
 
   // Alternative to dragging the node to the center. Does the same thing pretty much
   onDblClick = function(node, data) {
-    console.log('poping node', node)
-    if(data.rank == 'history') return
+    if (node.rank != 'center'){
+      this.emit('center-changed', node)
+    }
+  }.bind(this)
 
+  deleteNode = function(node){
     d3.select(node).select('.nodefullscreen').remove()
-
     d3.select(node).select('pattern')
       .transition('pattern').duration(STYLES.nodeTransitionDuration/2)
       .attr('x', -STYLES.largeNodeSize / 2)
@@ -621,27 +622,10 @@ export default class GraphD3 extends EventEmitter {
         console.log('dataNodes before:',this.dataNodes)
         this.dataNodes.splice(nIndex, 1)
         console.log('dataNodes after:',this.dataNodes)
-        // console.log('dataLinks before:',this.dataLinks)
-        // this.dataLinks.splice(lIndex, 1)
-        // console.log('dataLinks after:',this.dataLinks)
         this.drawNodes()
         this.force.start()
       })
-
-    //   var l = svg.selectAll(".link")
-    //   .data(links, function(d) {return d.source + "," + d.target});
-    // var n = svg.selectAll(".node")
-    //   .data(nodes, function(d) {return d.key});
-    // enterLinks(l);
-    // exitLinks(l);
-    // enterNodes(n);
-    // exitNodes(n);
-
-
-    // if (node.rank != 'center'){
-    //   this.emit('center-changed', node)
-    // }
-  }.bind(this)
+  }
 
   // This is not implemented apparently.
   onResize = function() {

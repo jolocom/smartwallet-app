@@ -67,6 +67,7 @@ let Graph = React.createClass({
     this.graph = new GraphD3(this.getGraphEl())
     // this.graph.on is the same as this.graph.addListener()
     this.graph.on('center-changed', this._handleCenterChange)
+    this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
     graphActions.getState()
   },
@@ -76,6 +77,10 @@ let Graph = React.createClass({
       this.graph.eraseGraph()
       this.graph.removeAllListeners()
     }
+  },
+
+  _handleSelectNode(node){
+    graphActions.setState('selected', node)
   },
 
   _handleCenterChange(node){
@@ -107,7 +112,7 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
-      nodeDetails = <Node node={this.state.activeNode} center={this.state.center}/>
+      nodeDetails = <Node node={this.state.activeNode} center={this.state.center} svg={this.state.selected}/>
     }
 
     return (

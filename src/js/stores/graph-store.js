@@ -4,17 +4,16 @@ import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import d3Convertor from '../lib/d3-converter'
 
-export default Reflux.createStore({
-
-  listenables: [graphActions],
-
-  init: function(){
+  export default Reflux.createStore({
+    listenables: [graphActions],
+    init: function(){
 
     this.listenTo(accountActions.logout, this.onLogout)
 
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
     this.loaded = false
+
 
     this.state = {
       //These state keys describe the graph
@@ -24,6 +23,7 @@ export default Reflux.createStore({
       loaded: false,
       newNode: null,
       navHistory: [],
+      selected: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -42,6 +42,7 @@ export default Reflux.createStore({
       loaded: false,
       newNode: null,
       navHistory: [],
+      selected: null,
       // UI related
       showPinned:false,
       showSearch: false,
@@ -63,6 +64,10 @@ export default Reflux.createStore({
   onSetState: function(key, value, flag){
     this.state[key] = value
     if (flag) this.trigger(this.state)
+  },
+
+  deleteNode: function(node){
+    console.log(node)
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph

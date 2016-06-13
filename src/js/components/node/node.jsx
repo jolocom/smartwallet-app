@@ -43,7 +43,6 @@ let Node = React.createClass({
   },
 
   getNodeContent(type) {
-    console.log(type)
     switch (type) {
       case FOAF('PersonalProfileDocument').uri:
 
@@ -59,11 +58,12 @@ let Node = React.createClass({
   render() {
     let {node} = this.props
     let {center} = this.props
+    let {svg} = this.props
 
     let content, Component = this.getNodeContent(node.type)
 
     if (Component) {
-      content = <Component node={node} center={center} onClose={this._handleClose} />
+      content = <Component node={node} center={center} svg={svg} onClose={this._handleClose} />
     }
 
     return (

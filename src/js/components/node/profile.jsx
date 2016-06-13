@@ -123,8 +123,9 @@ let ProfileNode = React.createClass({
   },
 
   _handleFull() {
-    console.log(this.props)
-    nodeActions.remove(this.props.center.uri, this.props.node.connection, this.props.node.uri)
+    // Temp position.
+    nodeActions.remove(this.props.center.uri, this.props.node.connection, this.props.node.uri, this.props.svg)
+
     if (this.full){
       d3.select('#AppBar').style('height', '176px')
       d3.select('#AppBar').style('height', '176px')

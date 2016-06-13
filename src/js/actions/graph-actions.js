@@ -8,9 +8,10 @@ export default Reflux.createActions({
   'drawGraph' : {asyncResult: false},
   // Life
   'drawNewNode': {asyncResult: false},
+  'deleteNode': {asyncResult: false},
   'navigateToNode' : {asyncResult: true},
   'highlight' : {asyncResult : false},
-  'viewNode': {},
+  'viewNode': {asyncResult : false},
   // Death.
   'eraseGraph' :{asyncResult: false}
 })

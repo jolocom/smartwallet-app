@@ -1,8 +1,10 @@
 import Reflux from 'reflux'
 import nodeActions from 'actions/node'
+import graphActions from 'actions/graph-actions'
 import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
 let SCHEMA = rdf.Namespace('https://schema.org/')
+
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 
 export default Reflux.createStore({
@@ -25,10 +27,12 @@ export default Reflux.createStore({
   },
 
   // On Remove will remove the node itself (RDF file), a function onDisconnect will be introduced later.
-  onRemove(subject, predicate, object){
+  onRemove(subject, predicate, object, svgNode){
     // First remove the file, then the triple from the rdf file.
     this.gAgent.deleteFile(object).then(()=>{
-      this.gAgent.deleteTriple(subject,predicate,object)
+      this.gAgent.deleteTriple(subject,predicate,object).then(()=>{
+        graphActions.deleteNode(svgNode) 
+      })
     })
   },
 
