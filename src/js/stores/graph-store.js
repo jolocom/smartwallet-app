@@ -66,13 +66,14 @@ export default Reflux.createStore({
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
-  drawNewNode: function(object){
+  drawNewNode: function(object, predicate){
     // This fetches the triples at the newly added file, it allows us to draw it
     // the graph accurately
     this.gAgent.fetchTriplesAtUri(object).then((result)=>{
       result.triples.uri = object
       // Now we tell d3 to draw a new adjacent node on the graph, with the info from
       // the triiple file
+      result.triples.connection = predicate
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
       this.state.neighbours.push(this.state.newNode)
       this.trigger(this.state)

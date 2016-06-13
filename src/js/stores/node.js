@@ -24,8 +24,12 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
+  // On Remove will remove the node itself (RDF file), a function onDisconnect will be introduced later.
   onRemove(subject, predicate, object){
-    this.gAgent.deleteTriple(subject,predicate,object)
+    // First remove the file, then the triple from the rdf file.
+    this.gAgent.deleteFile(object).then(()=>{
+      this.gAgent.deleteTriple(subject,predicate,object)
+    })
   },
 
   link(start, type, end, flag) {
