@@ -192,7 +192,7 @@ export default class GraphD3 extends EventEmitter {
 
     filterShadow.append('feGaussianBlur')
       .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 1.5)
+      .attr('stdDeviation', 1)
       .attr('result', 'blur')
 
 // translate output of Gaussian blur to the right and downwards with 2px
@@ -389,6 +389,20 @@ export default class GraphD3 extends EventEmitter {
         return d.rank == 'center' ? largeSize / 2 : smallSize / 2
       })
       .attr('opacity', (d) => (d.rank == 'history' && d.img) ? 0.5 : 1)
+      .style('fill', (d) => {
+        if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
+        else{
+          if( d.rank  == 'history'){
+            return STYLES.grayColor
+          } else if( d.rank == 'unavailable') {
+            return STYLES.grayColor
+          } else if (d.rank === 'center') {
+            return theme.graph.centerNodeColor
+          } else {
+            return theme.graph.nodeColor
+          }
+        }
+      })
 
     // Setting all the pattern sizes back to normal.
     d3.selectAll('g .node').filter(function(d) { return d.highlighted }).selectAll('pattern')
@@ -442,6 +456,10 @@ export default class GraphD3 extends EventEmitter {
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
+        .style('fill', (d) => {
+          if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
+          else return theme.graph.centerNodeColor
+        })
 
       // We enlarge the pattern of the node we clicked on
       d3.select(node).select('pattern')

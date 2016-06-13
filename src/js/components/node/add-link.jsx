@@ -2,8 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
 import d3 from 'd3'
-
-import {FontIcon, Paper, SelectField, MenuItem} from 'material-ui'
+import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 
 import nodeActions from 'actions/node'
 import nodeStore from 'stores/node'
@@ -34,8 +33,8 @@ let NodeAddLink = React.createClass({
 
     return {
       targetSelection: 'end',
-      start: null,
-      startUri: null,
+      start: 'Me',
+      startUri: this.context.user,
       end: name,
       endUri: this.props.node,
       type: 'knows',
@@ -66,6 +65,7 @@ let NodeAddLink = React.createClass({
     }
     nodeActions.link(startUri, type, endUri,flag)
   },
+
   getStyles() {
     let {palette} = this.context.muiTheme
     let color = palette.accent1Color
@@ -82,6 +82,12 @@ let NodeAddLink = React.createClass({
         width: '35px'
 
       },
+      columnLeft: {
+        width: '35px'
+      },
+      columnRight : {
+        width: '100%'
+      },
       graph: {
         background: 'rgba(0,0,0,0.1)',
         flex: 1,
@@ -90,12 +96,15 @@ let NodeAddLink = React.createClass({
       },
       icon: {
         color: color,
-        margin: '40px 5px',
+        margin: '32px 10px',
         width: '20px'
       },
       form: {
         backgroundColor: '#ffffff',
-        padding: '16px'
+        padding: '16px',
+        display: 'flex',
+        width: '100%'
+
       },
       row: {
         display: 'flex'
@@ -119,23 +128,25 @@ let NodeAddLink = React.createClass({
           <GraphPreview onSelect={this._handleNodeSelect}/>
         </div>
         <div style={styles.containerTable}>
-          <div style={styles.leftIcon} onClick={this._handleSelectSwap}>
-            <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>swap_vert</FontIcon>
-          </div>
-          <div style={styles.inner}>
             <Paper style={styles.form} rounded={false}>
-              <div style={styles.row}>
-                <NodeTarget selection={start} field={'start'} targetSelection={targetSelection} onChangeEnd={this.handleChangeStart} onSelectTarget={this._handleSelectStartTarget}/>
-                <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
-                  <MenuItem value="generic" primaryText="Generic" />
-                  <MenuItem value="knows" primaryText="Knows" />
-                </SelectField>
+              <div style={styles.columnLeft}>
+                <div style={styles.leftIcon} onClick={this._handleSelectSwap}>
+                  <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>swap_vert</FontIcon>
+                </div>
               </div>
-              <div style={styles.row}>
-                <NodeTarget selection={end} field={'end'} targetSelection={targetSelection} onChangeEnd={this.handleChangeEnd} onSelectTarget={this._handleSelectEndTarget}/>
+              <div style={styles.columnRight}>
+                <div style={styles.row}>
+                  <NodeTarget selection={start} field={'start'} targetSelection={targetSelection} onChangeEnd={this.handleChangeStart} onSelectTarget={this._handleSelectStartTarget}/>
+                  <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
+                    <MenuItem value="generic" primaryText="Generic" />
+                    <MenuItem value="knows" primaryText="Knows" />
+                  </SelectField>
+                </div>
+                <div style={styles.row}>
+                  <NodeTarget selection={end} field={'end'} targetSelection={targetSelection} onChangeEnd={this.handleChangeEnd} onSelectTarget={this._handleSelectEndTarget}/>
+                </div>
               </div>
             </Paper>
-          </div>
         </div>
       </div>
     )
@@ -184,7 +195,7 @@ let NodeAddLink = React.createClass({
       this.setState({
         [this.state.targetSelection]: name,
         [this.state.targetSelection+'Uri']:node.uri,
-        targetSelect: null
+        targetSelection: null
       })
     }
   },
@@ -239,7 +250,7 @@ let NodeTarget = React.createClass({
       },
       icon: {
         color: color,
-        margin: '0px 8px 0 0'
+        margin: '8px 8px 0 0'
       },
       inner: {
         flex: 1
@@ -261,7 +272,7 @@ let NodeTarget = React.createClass({
         <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_fixed</FontIcon>
         <div style={styles.inner}>
           <div style={styles.label}>{this.props.label}</div>
-          <div style={styles.value}><input type="value" value={this.state.selected} placeholder="Select node" onChange={this.props.onChangeEnd}/></div>
+          <div style={styles.value}><TextField type="value" value={this.state.selected} placeholder="Select node" onChange={this.props.onChangeEnd}/></div>
         </div>
       </div>
     )
