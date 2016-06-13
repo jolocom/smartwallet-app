@@ -126,26 +126,34 @@ export default class GraphD3 extends EventEmitter {
 
     // We draw the lines for all the elements in the dataLinks array.
     let link = this.svg.selectAll('line')
-    .data(this.dataLinks, (d, i) => {return d.source.uri + i + '-' + d.target.uri + i})
+    .data(this.dataLinks, (d) => {return d.source.uri + d.source.connection +'-' + d.target.connection + d.target.uri })
     .enter()
     .insert('line', '.node')
     .attr('class','link')
     .attr('stroke-width', () => {
       // Capped at 13, found it to look the best
       return this.width / 45 > 13 ? 13 : this.width / 45})
-      .attr('stroke', STYLES.lightGrayColor)
+    .attr('stroke', STYLES.lightGrayColor)
 
     // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
-      .data(this.dataNodes, (d, i) => {return (d.uri + i)})
+      .data(this.dataNodes, (d) => {return (d.connection + d.uri )})
       .enter()
       .append('g')
       .attr('class','node')
       .call(this.node_drag)
 
+    this.svg.selectAll('.node')
+    .data(this.dataNodes, (d) => {return (d.connection + d.uri )})
+    .exit().remove()
+
+    this.svg.selectAll('line')
+    .data(this.dataLinks, (d) => {return d.source.uri+  d.source.connection +'-' + d.target.connection + d.target.uri })
+    .exit().remove()
+
     let defsImages = this.node.append('svg:defs')
     defsImages.append('svg:pattern')
-      .attr('id',  (d)=> d.uri)
+      .attr('id',  (d)=> d.uri + d.connection)
       .attr('class', 'image')
       .attr('width', '100%')
       .attr('height', '100%')
@@ -222,7 +230,7 @@ export default class GraphD3 extends EventEmitter {
         }
         else return smallNode / 2 })
       .style('fill', (d) => {
-        if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
+        if(d.img && d.rank!='history') return 'url(#'+d.uri+ d.connection +')'
         else{
           if( d.rank  == 'history'){
             return STYLES.grayColor
@@ -288,7 +296,9 @@ export default class GraphD3 extends EventEmitter {
     this.node.on('click', function(data){
       self.onClick(this,data)
     })
-    this.node.on('dblclick', this.onDblClick)
+    this.node.on('dblclick', function(data) {
+      self.onDblClick(this, data)
+    })
 
     full.on('click', function(data) {
       self.onClickFull(this, data)
@@ -370,6 +380,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   onClick = function(node, data) {
+    console.log(node)
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if(data.rank == 'history') return
@@ -390,7 +401,7 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('opacity', (d) => (d.rank == 'history' && d.img) ? 0.5 : 1)
       .style('fill', (d) => {
-        if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
+        if(d.img && d.rank!='history') return 'url(#'+d.uri+d.connection+')'
         else{
           if( d.rank  == 'history'){
             return STYLES.grayColor
@@ -457,7 +468,7 @@ export default class GraphD3 extends EventEmitter {
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
         .style('fill', (d) => {
-          if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
+          if(d.img && d.rank!='history') return 'url(#'+d.uri+d.connection+')'
           else return theme.graph.centerNodeColor
         })
 
@@ -563,10 +574,73 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   // Alternative to dragging the node to the center. Does the same thing pretty much
-  onDblClick = function(node) {
-    if (node.rank != 'center'){
-      this.emit('center-changed', node)
-    }
+  onDblClick = function(node, data) {
+    console.log('poping node', node)
+    if(data.rank == 'history') return
+
+    d3.select(node).select('.nodefullscreen').remove()
+
+    d3.select(node).select('pattern')
+      .transition('pattern').duration(STYLES.nodeTransitionDuration/2)
+      .attr('x', -STYLES.largeNodeSize / 2)
+      .attr('y', -STYLES.largeNodeSize / 2)
+
+    d3.select(node).select('image')
+      .transition('image').duration(STYLES.nodeTransitionDuration/2)
+      .attr('width', STYLES.largeNodeSize)
+      .attr('height', STYLES.largeNodeSize)
+      .style('filter', 'url(#darkblur)')
+
+    d3.selectAll('line').filter(function (d) { return d.source.uri == data.uri })
+      .transition('pop').duration(STYLES.nodeTransitionDuration/2)
+      .attr('opacity', 0)
+
+    d3.select(node).select('circle')
+      .transition('pop').duration(STYLES.nodeTransitionDuration/2)
+      .attr('r', STYLES.largeNodeSize / 2)
+      .attr('opacity', 0)
+      .each('end',  ()=>{
+
+        let nIndex = -1
+        let lIndex = -1
+
+        for (var i = 0; i < this.dataNodes.length; i++) {
+          if(this.dataNodes[i].index == data.index){
+            nIndex = i
+          }
+        }
+
+        for (i = 0; i < this.dataLinks.length; i++) {
+          if(this.dataLinks[i].source.index == data.index) lIndex = i
+        }
+        console.log('nIndex = ', nIndex)
+        console.log('lIndex = ', lIndex)
+
+
+        this.force.stop()
+        console.log('dataNodes before:',this.dataNodes)
+        this.dataNodes.splice(nIndex, 1)
+        console.log('dataNodes after:',this.dataNodes)
+        // console.log('dataLinks before:',this.dataLinks)
+        // this.dataLinks.splice(lIndex, 1)
+        // console.log('dataLinks after:',this.dataLinks)
+        this.drawNodes()
+        this.force.start()
+      })
+
+    //   var l = svg.selectAll(".link")
+    //   .data(links, function(d) {return d.source + "," + d.target});
+    // var n = svg.selectAll(".node")
+    //   .data(nodes, function(d) {return d.key});
+    // enterLinks(l);
+    // exitLinks(l);
+    // enterNodes(n);
+    // exitNodes(n);
+
+
+    // if (node.rank != 'center'){
+    //   this.emit('center-changed', node)
+    // }
   }.bind(this)
 
   // This is not implemented apparently.
