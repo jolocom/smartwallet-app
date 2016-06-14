@@ -609,25 +609,16 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', 0)
       .each('end',  ()=>{
 
-      let nIndex = -1
       let lIndex = -1
-
-      for (var i = 0; i < this.dataNodes.length; i++) {
-        if(this.dataNodes[i].index == data.index){
-          nIndex = i
-        }
-      }
 
       for (i = 0; i < this.dataLinks.length; i++) {
         if(this.dataLinks[i].source.index == data.index) lIndex = i
       }
-      console.log('nIndex = ', nIndex)
-      console.log('lIndex = ', lIndex)
 
 
       this.force.stop()
       console.log('dataNodes before:',this.dataNodes)
-      this.dataNodes.splice(nIndex, 1)
+      this.dataNodes = state.neighbours
       console.log('dataNodes after:',this.dataNodes)
       this.drawNodes()
       this.force.start()

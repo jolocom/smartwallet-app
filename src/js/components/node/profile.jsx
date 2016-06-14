@@ -148,10 +148,9 @@ let ProfileNode = React.createClass({
   },
 
   _handleDelete() {
-    // Temp position.
-    console.log('IT IS HAPPENING')
     this.props.onClose()
-    nodeActions.remove(this.props.center.uri, this.props.node.connection, this.props.node.uri, this.props.svg)
+    nodeActions.remove(this.props.center.uri, this.props.node.connection,
+      this.props.node.uri, this.props.svg, this.props.node)
 
   },
   _handleBookmarkClick() {

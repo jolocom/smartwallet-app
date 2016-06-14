@@ -63,11 +63,14 @@ import d3Convertor from '../lib/d3-converter'
 
   onSetState: function(key, value, flag){
     this.state[key] = value
-    console.log(this.state)
     if (flag) this.trigger(this.state)
   },
-
-  deleteNode: function(node){
+ 
+  deleteNode: function(svgNode, node){
+    for (let i = 0; i < this.state.neighbours.length; i++){
+      if (this.state.neighbours[i].index == node.index)
+        this.state.neighbours.splice(i, 1)
+    }
     this.trigger(this.state, 'nodeRemove')  
   },
 
