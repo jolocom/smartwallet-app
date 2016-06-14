@@ -57,10 +57,6 @@ import d3Convertor from '../lib/d3-converter'
     this.trigger(null, 'erase')
   },
 
-  onDrawGraph: function() {
-    this.trigger(null, 'redraw')
-  },
-
   onSetState: function(key, value, flag){
     this.state[key] = value
     if (flag) this.trigger(this.state)
@@ -89,8 +85,8 @@ import d3Convertor from '../lib/d3-converter'
     })
   },
 
-  onGetState: function(){
-    this.trigger( this.state)
+  onGetState: function(source){
+    this.trigger(this.state, source)
     if (!this.loaded) {
       this.loaded = true
       this.onGetInitialGraphState()
@@ -114,6 +110,20 @@ import d3Convertor from '../lib/d3-converter'
     this.trigger(this.state)
   },
 
+  drawAtUri: function(uri, number){
+    this.state.neighbours = []
+    this.gAgent.getGraphMapAtUri(uri).then((triples) => {
+      triples[0] = this.convertor.convertToD3('c', triples[0])
+      this.state.center = triples[0]
+      for (let i = 1; i < triples.length; i++) {
+        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+        this.state.neighbours.push(triples[i])
+      }
+      for (let i = 0; i < number; i++)
+        this.state.navHistory.pop()
+      this.trigger(this.state)
+    })
+  },
 
   onNavigateToNode: function(node){
     this.state.neighbours = []
@@ -131,22 +141,19 @@ import d3Convertor from '../lib/d3-converter'
           this.state.navHistory.pop()
           this.state.navHistory.pop()
         }
-        else if(this.state.navHistory.length > 1) {
-          for (var j = 0; j < this.state.navHistory.length-1; j++) {
-            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) {
-              for (var k = 0; k < j+2; k++) {
+        // Removed the brackets, one liners.
+        else if(this.state.navHistory.length > 1)
+          for (var j = 0; j < this.state.navHistory.length-1; j++) 
+            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) 
+              for (var k = 0; k < j+2; k++) 
                 this.state.navHistory.pop()
-              }
-            }
-          }
-        }
       }
 
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-      this.trigger(this.state, 'redraw')
+      this.trigger(this.state)
     })
   },
 

@@ -127,7 +127,7 @@ export default Reflux.createStore({
       writer.addTriple(rdf.sym('#me'), FOAF('img'), params.imgUri)
 
     wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end()).then(()=>{
-      if(params.currentNode) GraphActions.navigateToNode({uri: params.currentNode})
+      if(params.currentNode) GraphActions.drawAtUri(params.currentNode, 0)
     })
 
     profile = Object.assign(profile, params)

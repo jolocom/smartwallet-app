@@ -56,14 +56,15 @@ let Node = React.createClass({
   },
 
   render() {
+    console.log(this.props)
     let {node} = this.props
     let {center} = this.props
     let {svg} = this.props
-
+    let {state} = this.props
     let content, Component = this.getNodeContent(node.type)
 
     if (Component) {
-      content = <Component node={node} center={center} svg={svg} onClose={this._handleClose} />
+      content = <Component node={node} center={center} svg={svg} state={state} onClose={this._handleClose} />
     }
 
     return (

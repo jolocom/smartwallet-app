@@ -19,17 +19,20 @@ let Graph = React.createClass({
   onStateUpdate(data, signal) {
     this.setState(data)
     if (this.state.neighbours){
+      console.log(1)
       this.graph.render(this.state)
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }
 
     if (this.state.newNode) {
+      console.log(2)
       this.graph.addNode(this.state.newNode)
       previewActions.setState('newNode', null, true)
     }
 
     if(signal == 'redraw') {
+      console.log(3)
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }
@@ -40,7 +43,7 @@ let Graph = React.createClass({
     this.listenTo(GraphStore, this.onSync)
 
     // We get the state and erase the 'parent graph'
-    graphActions.getState()
+    graphActions.getState('preview')
     graphActions.eraseGraph()
     // Make sure we refresh our state every time we mount the component, this
     // then fires the drawing function from onStateUpdate
@@ -52,7 +55,7 @@ let Graph = React.createClass({
   },
 
   onSync(state, signal){
-    if(!signal && this.notSync){
+    if(signal=='preview' && this.notSync){
       previewActions.setState('center', state.center)
       previewActions.setState('loaded', true)
       previewActions.setState('navHistory', state.navHistory)
@@ -66,8 +69,6 @@ let Graph = React.createClass({
     graphActions.setState('center', this.state.center)
     graphActions.setState('navHistory', this.state.navHistory)
     graphActions.setState('neighbours', this.state.neighbours, true)
-
-    graphActions.drawGraph()
     if (this.graph) {
       this.graph.eraseGraph()
       this.graph.removeAllListeners()

@@ -149,8 +149,8 @@ let ProfileNode = React.createClass({
 
   _handleDelete() {
     this.props.onClose()
-    nodeActions.remove(this.props.center.uri, this.props.node.connection,
-      this.props.node.uri, this.props.svg, this.props.node)
+    console.log(this.props)
+    nodeActions.remove(this.props)
 
   },
   _handleBookmarkClick() {

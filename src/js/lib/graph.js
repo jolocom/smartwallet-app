@@ -43,7 +43,6 @@ export default class GraphD3 extends EventEmitter {
     this.calcDimensions()
     this.setUpForce(nodes)
     this.drawBackground()
-    this.drawNodes()
     this.rendered = true
   }
 
@@ -121,7 +120,6 @@ export default class GraphD3 extends EventEmitter {
     .attr('xlink:href', 'img/full.jpg' )
     .attr('width', STYLES.fullScreenButton)
     .attr('height', STYLES.fullScreenButton)
-
 
     // We draw the lines for all the elements in the dataLinks array.
     let link = this.svg.selectAll('line')
@@ -399,7 +397,6 @@ export default class GraphD3 extends EventEmitter {
       })
       .each('start',  (d)=>{
         if (!d.img){
-          console.log('noImage', d)
           d3.selectAll('g .node').filter(function(d) { return d.highlighted && d.index != data.index}).select('.nodecircle')
           .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
           .style('fill', (d) => {
@@ -510,14 +507,15 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
-  updateHistory(history) {
+  updateHistory = function(history) {
     if(history.length>0){
       this.force.stop()
       for (var i = 0; i < history.length; i++) {
+        history[history.length-1-i].connection = 'hist'
         history[history.length-1-i].rank = 'history'
         history[history.length-1-i].histLevel = i
-        if (i == 0) {
 
+        if (i == 0) {
           this.dataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
         }
@@ -526,11 +524,10 @@ export default class GraphD3 extends EventEmitter {
           this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
         }
       }
-      this.drawNodes()
       this.force.start()
     }
-
-  }
+    this.drawNodes()
+  }.bind(this)
 
   // Wraps the description of the nodes around the node.
   // http://bl.ocks.org/mbostock/7555321
@@ -606,8 +603,6 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('line').filter(function (d) { return d.source.index == d3.select(node)[0][0].__data__.index })
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('opacity', 0)
-
-    console.log(d3.selectAll('.node').filter(function(d) { return d.index == index}).select('circle'))
 
     d3.selectAll('.node').filter(function(d) { return d.index == index}).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration/3)
