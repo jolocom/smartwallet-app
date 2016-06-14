@@ -63,11 +63,12 @@ import d3Convertor from '../lib/d3-converter'
 
   onSetState: function(key, value, flag){
     this.state[key] = value
+    console.log(this.state)
     if (flag) this.trigger(this.state)
   },
 
   deleteNode: function(node){
-    console.log(node)
+    this.trigger(this.state, 'nodeRemove')  
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph

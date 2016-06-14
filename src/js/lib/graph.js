@@ -303,7 +303,7 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function(data) {
       self.onClickFull(this, data)
     })
-
+    console.log('we redrew!')
     this.force.on('tick', this.tick)
   }.bind(this)
 
@@ -579,7 +579,14 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
-  deleteNode = function(node){
+  deleteNode = function(state){
+    // We don't pop it from the parent neighbours array, that should not cause problems. But 
+    // Keep an eye on this, in case of potential bugs.
+    let node = state.selected 
+    let data = d3.select(node)[0]
+    console.log(node) 
+    console.log(data)
+
     d3.select(node).select('.nodefullscreen').remove()
     d3.select(node).select('pattern')
       .transition('pattern').duration(STYLES.nodeTransitionDuration/2)
@@ -602,29 +609,29 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', 0)
       .each('end',  ()=>{
 
-        let nIndex = -1
-        let lIndex = -1
+      let nIndex = -1
+      let lIndex = -1
 
-        for (var i = 0; i < this.dataNodes.length; i++) {
-          if(this.dataNodes[i].index == data.index){
-            nIndex = i
-          }
+      for (var i = 0; i < this.dataNodes.length; i++) {
+        if(this.dataNodes[i].index == data.index){
+          nIndex = i
         }
+      }
 
-        for (i = 0; i < this.dataLinks.length; i++) {
-          if(this.dataLinks[i].source.index == data.index) lIndex = i
-        }
-        console.log('nIndex = ', nIndex)
-        console.log('lIndex = ', lIndex)
+      for (i = 0; i < this.dataLinks.length; i++) {
+        if(this.dataLinks[i].source.index == data.index) lIndex = i
+      }
+      console.log('nIndex = ', nIndex)
+      console.log('lIndex = ', lIndex)
 
 
-        this.force.stop()
-        console.log('dataNodes before:',this.dataNodes)
-        this.dataNodes.splice(nIndex, 1)
-        console.log('dataNodes after:',this.dataNodes)
-        this.drawNodes()
-        this.force.start()
-      })
+      this.force.stop()
+      console.log('dataNodes before:',this.dataNodes)
+      this.dataNodes.splice(nIndex, 1)
+      console.log('dataNodes after:',this.dataNodes)
+      this.drawNodes()
+      this.force.start()
+    })
   }
 
   // This is not implemented apparently.

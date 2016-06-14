@@ -44,6 +44,11 @@ let Graph = React.createClass({
       this.graph.updateHistory(this.state.navHistory)
     }
 
+    if (signal == 'nodeRemove'){
+      console.log('removing')
+      this.graph.deleteNode(data)
+    }
+
     if (this.state.newNode) {
       this.graph.addNode(this.state.newNode)
       // We update the state of the store to be in line with the state of the child
@@ -107,6 +112,7 @@ let Graph = React.createClass({
   },
 
   render: function() {
+    console.log('rendering!')
     let styles = this.getStyles()
 
     let nodeDetails
