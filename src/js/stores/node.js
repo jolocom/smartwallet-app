@@ -28,14 +28,21 @@ export default Reflux.createStore({
 
   // On Remove will remove the node itself (RDF file), a function onDisconnect will be introduced later.
   onRemove(subject, predicate, object, svgNode, node){
-    // First remove the file, then the triple from the rdf file.
-    this.gAgent.deleteFile(object).then(()=>{
-      this.gAgent.deleteTriple(subject,predicate,object).then(()=>{
-        graphActions.deleteNode(svgNode, node) 
+    if(node.rank != 'center'){
+      this.gAgent.deleteFile(object).then(()=>{
+        this.gAgent.deleteTriple(subject,predicate,object).then(()=>{
+          graphActions.deleteNode(svgNode, node) 
+        })
+      }).catch((e)=>{
+      console.log('error', e, 'occured while deleting')
       })
-    }).catch((e)=>{
-    console.log('error', e, 'occured while deleting')
-    })
+    } else {
+      this.gAgent.deleteFile(object).then(()=>{
+        graphActions.deleteNode(svgNode, node) 
+      }).catch((e)=>{
+        console.log('error', e, 'occured while deleting')
+      })
+    }
   },
 
   link(start, type, end, flag) {
