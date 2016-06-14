@@ -385,6 +385,7 @@ export default class GraphD3 extends EventEmitter {
       return
     }
 
+
     this.emit('select', data, node)
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
@@ -396,10 +397,10 @@ export default class GraphD3 extends EventEmitter {
       .attr('r', (d) => {
         return d.rank == 'center' ? largeSize / 2 : smallSize / 2
       })
-      .attr('opacity', (d) => (d.rank == 'history' && d.img) ? 0.5 : 1)
       .each('start',  (d)=>{
-        if (!d.img || d.rank=='history'){
-          d3.selectAll('g .node').filter(function(d) { return d.highlighted }).selectAll('.nodecircle')
+        if (!d.img){
+          console.log('noImage', d)
+          d3.selectAll('g .node').filter(function(d) { return d.highlighted && d.index != data.index}).select('.nodecircle')
           .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
           .style('fill', (d) => {
             if( d.rank  == 'history'){
@@ -468,7 +469,7 @@ export default class GraphD3 extends EventEmitter {
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
         .each('start',  (d)=>{
-          if (!d.img && d.rank != 'history'){
+          if (!d.img ){
             d3.select(node).select('circle')
             .transition('highlight').duration(STYLES.nodeTransitionDuration)
             .style('fill',  theme.graph.centerNodeColor)
@@ -586,8 +587,10 @@ export default class GraphD3 extends EventEmitter {
   deleteNode = function(state){
     // We don't pop it from the parent neighbours array, that should not cause problems. But
     // Keep an eye on this, in case of potential bugs.
+
     let node = state.selected
     let index = d3.select(node)[0][0].__data__.index
+
 
     d3.selectAll('.node').filter(function(d) { return d.index == index}).select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration/3)
@@ -614,11 +617,10 @@ export default class GraphD3 extends EventEmitter {
         let nIndex = -1
         let lIndex = -1
 
-        for (var i = 0; i < this.dataNodes.length; i++) 
+        for (let i = 0; i < this.dataNodes.length; i++) 
           if(this.dataNodes[i].index == index) nIndex = i
         
-
-        for (i = 0; i < this.dataLinks.length; i++) 
+        for (let i = 0; i < this.dataLinks.length; i++) 
           if(this.dataLinks[i].source.index == index) lIndex = i
 
         this.force.stop()

@@ -42,7 +42,7 @@ let Graph = React.createClass({
     if (signal == 'nodeRemove'){
       this.graph.deleteNode(data)
     } else {
-      if (data) this.setState(data) 
+      if (data) this.setState(data)
 
       if (this.state.neighbours){
         this.graph.render(this.state)
@@ -84,6 +84,7 @@ let Graph = React.createClass({
       this.graph.removeAllListeners()
     }
   },
+
 
   _handleSelectNode(node, svg){
     graphActions.setState('selected', svg)

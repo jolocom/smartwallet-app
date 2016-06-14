@@ -100,8 +100,8 @@ let Graph = React.createClass({
     previewActions.navigateToNode(node)
   },
 
-  _handleSelectNode(node) {
-    this.props.onSelect && this.props.onSelect(node)
+  _handleSelectNode(data) {
+    this.props.onSelect && this.props.onSelect(data)
   }
 })
 export default Radium(Graph)
