@@ -7,6 +7,8 @@ import nodeActions from 'actions/node'
 import {
   AppBar,
   IconButton,
+  IconMenu,
+  MenuItem,
   FontIcon,
   List, ListItem, Divider
 } from 'material-ui'
@@ -57,7 +59,6 @@ let ProfileNode = React.createClass({
       title: {
         position: 'absolute',
         bottom: 0,
-        color:'#fff',
         left: 0,
         padding: '0 24px',
         color: '#ffffff'
@@ -91,8 +92,18 @@ let ProfileNode = React.createClass({
           style={styles.headers}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
-          iconElementLeft={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleClose}>close</IconButton>}
-          iconElementRight={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleFull}>crop_original</IconButton>}
+          iconElementLeft={<IconMenu
+          iconButtonElement={<IconButton iconClassName="material-icons" iconStyle={styles.icon}>more_vert</IconButton>}
+            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          >
+            <MenuItem primaryText="Edit" />
+            <MenuItem primaryText="Full Screen" />
+            <MenuItem primaryText="Delete" onTouchTap={this._handleDelete}/>
+            <MenuItem primaryText="Disconect" />
+
+          </IconMenu>}
+          iconElementRight={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleClose}>close</IconButton>}
         >
         </AppBar>
         <List style={styles.list}>
@@ -124,8 +135,6 @@ let ProfileNode = React.createClass({
 
   _handleFull() {
     // Temp position.
-    nodeActions.remove(this.props.center.uri, this.props.node.connection, this.props.node.uri, this.props.svg)
-
     if (this.full){
       d3.select('#AppBar').style('height', '176px')
       d3.select('#AppBar').style('height', '176px')
@@ -138,6 +147,13 @@ let ProfileNode = React.createClass({
 
   },
 
+  _handleDelete() {
+    // Temp position.
+    console.log('IT IS HAPPENING')
+    this.props.onClose()
+    nodeActions.remove(this.props.center.uri, this.props.node.connection, this.props.node.uri, this.props.svg)
+
+  },
   _handleBookmarkClick() {
     PinnedActions.pin(this.props.node.uri)
   }
