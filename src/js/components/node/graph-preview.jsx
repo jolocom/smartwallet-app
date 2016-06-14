@@ -100,7 +100,7 @@ let Graph = React.createClass({
     previewActions.navigateToNode(node)
   },
 
-  _handleSelectNode(node, data) {
+  _handleSelectNode(data) {
     this.props.onSelect && this.props.onSelect(data)
   }
 })
