@@ -399,18 +399,21 @@ export default class GraphD3 extends EventEmitter {
         return d.rank == 'center' ? largeSize / 2 : smallSize / 2
       })
       .attr('opacity', (d) => (d.rank == 'history' && d.img) ? 0.5 : 1)
-      .style('fill', (d) => {
-        if(d.img && d.rank!='history') return 'url(#'+d.uri+d.connection+')'
-        else{
-          if( d.rank  == 'history'){
-            return STYLES.grayColor
-          } else if( d.rank == 'unavailable') {
-            return STYLES.grayColor
-          } else if (d.rank === 'center') {
-            return theme.graph.centerNodeColor
-          } else {
-            return theme.graph.nodeColor
-          }
+      .each('start',  (d)=>{
+        if (!d.img || d.rank=='history'){
+          d3.selectAll('g .node').filter(function(d) { return d.highlighted }).selectAll('.nodecircle')
+          .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
+          .style('fill', (d) => {
+            if( d.rank  == 'history'){
+              return STYLES.grayColor
+            } else if( d.rank == 'unavailable') {
+              return STYLES.grayColor
+            } else if (d.rank === 'center') {
+              return theme.graph.centerNodeColor
+            } else {
+              return theme.graph.nodeColor
+            }
+          })
         }
       })
 
@@ -463,12 +466,15 @@ export default class GraphD3 extends EventEmitter {
     else{
     // NODE signifies the node that we clicked on. We enlarge it
       d3.select(node).select('circle')
-        .transition('highlight').duration(STYLES.nodeTransitionDuration)
+        .transition('grow').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
-        .style('fill', (d) => {
-          if(d.img && d.rank!='history') return 'url(#'+d.uri+d.connection+')'
-          else return theme.graph.centerNodeColor
+        .each('start',  (d)=>{
+          if (!d.img && d.rank != 'history'){
+            d3.select(node).select('circle')
+            .transition('highlight').duration(STYLES.nodeTransitionDuration)
+            .style('fill',  theme.graph.centerNodeColor)
+          }
         })
 
       // We enlarge the pattern of the node we clicked on
@@ -580,33 +586,35 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   deleteNode = function(state){
-    // We don't pop it from the parent neighbours array, that should not cause problems. But 
+    // We don't pop it from the parent neighbours array, that should not cause problems. But
     // Keep an eye on this, in case of potential bugs.
-    let node = state.selected 
-    let data = d3.select(node)[0]
-    console.log(node) 
+    console.log('STATE:', state)
+
+    let node = state.selected
+    let data = d3.select(node)[0][0].__data__.index
+    console.log(node)
     console.log(data)
 
-    d3.select(node).select('.nodefullscreen').remove()
-    d3.select(node).select('pattern')
-      .transition('pattern').duration(STYLES.nodeTransitionDuration/2)
+    d3.selectAll('.node').filter(function(d) { return d.index == data}).select('pattern')
+      .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
 
-    d3.select(node).select('image')
-      .transition('image').duration(STYLES.nodeTransitionDuration/2)
+    d3.selectAll('.node').filter(function(d) { return d.index == data}).select('image')
+      .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
       .style('filter', 'url(#darkblur)')
 
-    d3.selectAll('line').filter(function (d) { return d.source.uri == data.uri })
-      .transition('pop').duration(STYLES.nodeTransitionDuration/2)
+    d3.selectAll('line').filter(function (d) { return d.source.index == d3.select(node)[0][0].__data__.index })
+      .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('opacity', 0)
 
-    d3.select(node).select('circle')
-      .transition('pop').duration(STYLES.nodeTransitionDuration/2)
-      .attr('r', STYLES.largeNodeSize / 2)
-      .attr('opacity', 0)
+    console.log(d3.selectAll('.node').filter(function(d) { return d.index == data}).select('circle'))
+
+    d3.selectAll('.node').filter(function(d) { return d.index == data}).select('circle')
+      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .attr('r', STYLES.largeNodeSize/2.2)
       .each('end',  ()=>{
 
       let lIndex = -1
