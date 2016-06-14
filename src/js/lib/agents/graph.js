@@ -70,9 +70,7 @@ class GraphAgent extends HTTPAgent {
   // PRO : we won't need the ACL file anymore CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
   deleteFile(uri){
-    return solid.web.del(uri).catch((e) =>{
-      console.log('Error',e, 'in deleteFile')
-    })
+    return solid.web.del(uri)
   }
 
   storeFile(dstContainer, file) {

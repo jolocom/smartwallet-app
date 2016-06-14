@@ -33,6 +33,8 @@ export default Reflux.createStore({
       this.gAgent.deleteTriple(subject,predicate,object).then(()=>{
         graphActions.deleteNode(svgNode, node) 
       })
+    }).catch((e)=>{
+    console.log('error', e, 'occured while deleting')
     })
   },
 

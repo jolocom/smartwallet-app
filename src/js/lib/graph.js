@@ -614,15 +614,17 @@ export default class GraphD3 extends EventEmitter {
         let nIndex = -1
         let lIndex = -1
 
-        for (var i = 0; i < this.dataNodes.length; i++) {
+        for (var i = 0; i < this.dataNodes.length; i++) 
           if(this.dataNodes[i].index == index) nIndex = i
-        }
+        
 
-        for (i = 0; i < this.dataLinks.length; i++) {
+        for (i = 0; i < this.dataLinks.length; i++) 
           if(this.dataLinks[i].source.index == index) lIndex = i
-        }
+
         this.force.stop()
         this.dataNodes.splice(nIndex, 1)
+        this.dataLinks.splice(lIndex, 1)
+
         this.drawNodes()
         this.force.start()
       })
