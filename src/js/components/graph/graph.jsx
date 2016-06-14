@@ -84,7 +84,8 @@ let Graph = React.createClass({
     }
   },
 
-  _handleSelectNode(node){
+  _handleSelectNode(node, data){
+    console.log('NODE graph.jsx', node, data)
     graphActions.setState('selected', node)
   },
 

@@ -65,13 +65,13 @@ import d3Convertor from '../lib/d3-converter'
     this.state[key] = value
     if (flag) this.trigger(this.state)
   },
- 
+
   deleteNode: function(svgNode, node){
-    for (let i = 0; i < this.state.neighbours.length; i++){
-      if (this.state.neighbours[i].index == node.index)
-        this.state.neighbours.splice(i, 1)
-    }
-    this.trigger(this.state, 'nodeRemove')  
+    // for (let i = 0; i < this.state.neighbours.length; i++){
+    //   if (this.state.neighbours[i].index == node.index)
+    //     //this.state.neighbours.splice(i, 1)
+    // }
+    this.trigger(this.state, 'nodeRemove')
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
