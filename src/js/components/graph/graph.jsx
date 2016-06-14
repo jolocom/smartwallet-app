@@ -38,15 +38,16 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data, signal) {
-    if (data) this.setState(data)
-    if (this.state.neighbours){
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
-    }
-
+    // Temp. make it more elegant later.
     if (signal == 'nodeRemove'){
-      console.log('removing')
       this.graph.deleteNode(data)
+    } else {
+      if (data) this.setState(data) 
+
+      if (this.state.neighbours){
+        this.graph.render(this.state)
+        this.graph.updateHistory(this.state.navHistory)
+      }
     }
 
     if (this.state.newNode) {
@@ -84,8 +85,8 @@ let Graph = React.createClass({
     }
   },
 
-  _handleSelectNode(node){
-    graphActions.setState('selected', node)
+  _handleSelectNode(node, svg){
+    graphActions.setState('selected', svg)
   },
 
   _handleCenterChange(node){
@@ -112,7 +113,6 @@ let Graph = React.createClass({
   },
 
   render: function() {
-    console.log('rendering!')
     let styles = this.getStyles()
 
     let nodeDetails

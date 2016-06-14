@@ -12,7 +12,6 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 const theme = getMuiTheme(JolocomTheme)
 
-console.log(theme)
 
 export default class GraphD3 extends EventEmitter {
 
@@ -137,18 +136,18 @@ export default class GraphD3 extends EventEmitter {
 
     // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
-      .data(this.dataNodes, (d) => {return (d.connection + d.uri )})
+      .data(this.dataNodes, (d) => {return (d.uri + d.connection)})
       .enter()
       .append('g')
       .attr('class','node')
       .call(this.node_drag)
 
     this.svg.selectAll('.node')
-    .data(this.dataNodes, (d) => {return (d.connection + d.uri )})
+    .data(this.dataNodes, (d) => {return (d.uri + d.connection )})
     .exit().remove()
 
     this.svg.selectAll('line')
-    .data(this.dataLinks, (d) => {return d.source.uri+  d.source.connection +'-' + d.target.connection + d.target.uri })
+    .data(this.dataLinks, (d) => {return d.source.uri+d.source.connection +'-' + d.target.uri + d.target.connection})
     .exit().remove()
 
     let defsImages = this.node.append('svg:defs')
@@ -303,7 +302,6 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function(data) {
       self.onClickFull(this, data)
     })
-    console.log('we redrew!')
     this.force.on('tick', this.tick)
   }.bind(this)
 
@@ -387,7 +385,7 @@ export default class GraphD3 extends EventEmitter {
       return
     }
 
-    this.emit('select', node)
+    this.emit('select', data, node)
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
@@ -588,19 +586,15 @@ export default class GraphD3 extends EventEmitter {
   deleteNode = function(state){
     // We don't pop it from the parent neighbours array, that should not cause problems. But
     // Keep an eye on this, in case of potential bugs.
-    console.log('STATE:', state)
-
     let node = state.selected
-    let data = d3.select(node)[0][0].__data__.index
-    console.log(node)
-    console.log(data)
+    let index = d3.select(node)[0][0].__data__.index
 
-    d3.selectAll('.node').filter(function(d) { return d.index == data}).select('pattern')
+    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
 
-    d3.selectAll('.node').filter(function(d) { return d.index == data}).select('image')
+    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('image')
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
@@ -610,27 +604,28 @@ export default class GraphD3 extends EventEmitter {
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('opacity', 0)
 
-    console.log(d3.selectAll('.node').filter(function(d) { return d.index == data}).select('circle'))
+    console.log(d3.selectAll('.node').filter(function(d) { return d.index == index}).select('circle'))
 
-    d3.selectAll('.node').filter(function(d) { return d.index == data}).select('circle')
+    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('r', STYLES.largeNodeSize/2.2)
       .each('end',  ()=>{
 
-      let lIndex = -1
+        let nIndex = -1
+        let lIndex = -1
 
-      for (i = 0; i < this.dataLinks.length; i++) {
-        if(this.dataLinks[i].source.index == data.index) lIndex = i
-      }
+        for (var i = 0; i < this.dataNodes.length; i++) {
+          if(this.dataNodes[i].index == index) nIndex = i
+        }
 
-
-      this.force.stop()
-      console.log('dataNodes before:',this.dataNodes)
-      this.dataNodes = state.neighbours
-      console.log('dataNodes after:',this.dataNodes)
-      this.drawNodes()
-      this.force.start()
-    })
+        for (i = 0; i < this.dataLinks.length; i++) {
+          if(this.dataLinks[i].source.index == index) lIndex = i
+        }
+        this.force.stop()
+        this.dataNodes.splice(nIndex, 1)
+        this.drawNodes()
+        this.force.start()
+      })
   }
 
   // This is not implemented apparently.
