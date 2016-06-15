@@ -33,6 +33,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'white')
+
   }
 
   render = function(nodes) {
@@ -61,11 +62,15 @@ export default class GraphD3 extends EventEmitter {
     this.dataNodes = [nodes.center]
     this.dataLinks = []
 
+
   // Flatten the center and neighbour nodes we get from the state
     for (var i = 0; i < nodes.neighbours.length; i++) {
       this.dataNodes.push(nodes.neighbours[i])
       this.dataLinks.push({'source': i + 1, 'target':0})
     }
+
+
+
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
     this.force = d3.layout.force()
@@ -301,6 +306,12 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function(data) {
       self.onClickFull(this, data)
     })
+
+    d3.select(window)
+      .on('wheel', function(e) {
+        self.onScroll(e)
+      })
+
     this.force.on('tick', this.tick)
   }.bind(this)
 
@@ -370,6 +381,10 @@ export default class GraphD3 extends EventEmitter {
 
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
+  onScroll = function(e) {
+    console.log('HEY', e )
+  }
+
   onClickFull = function(node, data) {
     //stops propagation to node click handler
     this.emit('view-node', data, node)
@@ -577,8 +592,8 @@ export default class GraphD3 extends EventEmitter {
 
   // Alternative to dragging the node to the center. Does the same thing pretty much
   onDblClick = function(node, data) {
-    if (node.rank != 'center'){
-      this.emit('center-changed', node)
+    if (data.rank != 'center'){
+      this.emit('center-changed', data)
     }
   }.bind(this)
 

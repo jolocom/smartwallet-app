@@ -13,14 +13,7 @@ import STYLES from 'styles/app.js'
 
 class D3Converter {
   convertToD3(rank, node, i, n) {
-    if(node.unav){
-      return {
-        uri : node.uri,
-        rank: 'unavailable',
-        x: STYLES.width / 2 + 40,
-        y: STYLES.height / 2 + 40
-      }
-    }
+    
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
@@ -42,6 +35,7 @@ class D3Converter {
       storage: null,
       x: null,
       y: null
+
     }
 
     // We create a rdf.graph() object, and populate it with the triples, this
@@ -57,14 +51,20 @@ class D3Converter {
       let halfwidth = STYLES.width / 2
       let halfheight = STYLES.height / 2
 
-      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfwidth
-      props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize * 0.5 + halfheight
+
+      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize *0.7 + halfwidth
+      props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize *0.7 + halfheight
+
     } else if (!i && !n && rank =='a') {
       // This takes care of nodes that are added dynamically, the mid + 30 is
       // the optimal position for spawning new nodes dynamically
       props.x = STYLES.width / 2 + 60
       props.y = STYLES.height / 2 + 60
+
     }
+
+    if(node.unav) return props
+
     // Updating the attributes of the node object. The resulting object will have
     // all of it's props filled in, and will be ready to be rendered by D3
     // Note, if a triple is not present, it will be set to null.
