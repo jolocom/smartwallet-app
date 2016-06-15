@@ -5,11 +5,11 @@ export default Reflux.createActions({
   'getState': {asyncResult: false},
   // Birth
   'getInitialGraphState' : {asyncResult: true},
-  'drawGraph' : {asyncResult: false},
   // Life
   'drawNewNode': {asyncResult: false},
   'deleteNode': {asyncResult: false},
   'navigateToNode' : {asyncResult: true},
+  'drawAtUri' : {asyncResult: false},
   'highlight' : {asyncResult : false},
   'viewNode': {asyncResult : false},
   // Death.

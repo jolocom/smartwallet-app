@@ -26,7 +26,6 @@ export default Reflux.createStore({
       //These describe the ui
       showPinned: false,
       showSearch: false,
-      plusDrawerOpen: false,
       activeNode: null
     }
   },
@@ -43,7 +42,6 @@ export default Reflux.createStore({
       // UI related
       showPinned:false,
       showSearch: false,
-      plusDrawerOpen:false,
       activeNode: null
     }
   },
@@ -53,20 +51,6 @@ export default Reflux.createStore({
       // of the child component has been changed.
     this.state[key] = value
     if (flag) this.trigger(this.state)
-  },
-
-  // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
-  drawNewNode: function(object){
-    // This fetches the triples at the newly added file, it allows us to draw it
-    // the graph accurately
-    this.gAgent.fetchTriplesAtUri(object).then((result)=>{
-      result.triples.uri = object
-      // Now we tell d3 to draw a new adjacent node on the graph, with the info from
-      // the triple file
-      this.state.newNode = this.convertor.convertToD3('a', result.triples)
-      this.state.neighbours.push(this.state.newNode)
-      this.trigger(this.state)
-    })
   },
 
   onNavigateToNode: function(node){
@@ -79,18 +63,25 @@ export default Reflux.createStore({
 
       this.state.navHistory.push(this.state.center)
       this.state.center = triples[0]
+
       if(this.state.navHistory.length > 1) {
-        if (this.state.center.name == this.state.navHistory[this.state.navHistory.length - 2].name) {
+        if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2].uri) {
           this.state.navHistory.pop()
           this.state.navHistory.pop()
         }
+        // Removed the brackets, one liners.
+        else if(this.state.navHistory.length > 1)
+          for (var j = 0; j < this.state.navHistory.length-1; j++) 
+            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) 
+              for (var k = 0; k < j+2; k++) 
+                this.state.navHistory.pop()
       }
 
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-      this.trigger(this.state, 'redraw')
+      this.trigger(this.state)
     })
   },
 

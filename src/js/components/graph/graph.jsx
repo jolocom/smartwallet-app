@@ -39,12 +39,16 @@ let Graph = React.createClass({
 
   onStateUpdate: function(data, signal) {
     // Temp. make it more elegant later.
-    if (signal == 'nodeRemove'){
+    if (signal == 'nodeRemove')
+    {
       this.graph.deleteNode(data)
-    } else {
+    } 
+    else if (signal == 'preview'){
+    }
+    else
+    {
       if (data) this.setState(data)
-
-      if (this.state.neighbours){
+      if (data && data.neighbours){
         this.graph.render(this.state)
         this.graph.updateHistory(this.state.navHistory)
       }
@@ -55,10 +59,7 @@ let Graph = React.createClass({
       // We update the state of the store to be in line with the state of the child
       graphActions.setState('newNode', null, true)
     }
-    if(signal == 'redraw'){
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
-    }  else if ( signal == 'erase') {
+    if ( signal == 'erase') {
       this.graph.eraseGraph()
     }
   },
@@ -119,7 +120,7 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
-      nodeDetails = <Node node={this.state.activeNode} center={this.state.center} svg={this.state.selected}/>
+      nodeDetails = <Node node={this.state.activeNode} center={this.state.center} svg={this.state.selected} state={this.state}/>
     }
 
     return (
