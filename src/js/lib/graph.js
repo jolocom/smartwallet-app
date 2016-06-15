@@ -122,10 +122,9 @@ export default class GraphD3 extends EventEmitter {
     .attr('width', STYLES.fullScreenButton)
     .attr('height', STYLES.fullScreenButton)
 
-
-    // We draw the lines for all the elements in the dataLinks array.
+        // We draw the lines for all the elements in the dataLinks array.
     let link = this.svg.selectAll('line')
-    .data(this.dataLinks, (d) => {return d.source.uri + d.source.connection +'-' + d.target.connection + d.target.uri })
+    .data(this.dataLinks)
     .enter()
     .insert('line', '.node')
     .attr('class','link')
@@ -147,7 +146,7 @@ export default class GraphD3 extends EventEmitter {
     .exit().remove()
 
     this.svg.selectAll('line')
-    .data(this.dataLinks, (d) => {return d.source.uri+d.source.connection +'-' + d.target.uri + d.target.connection})
+    .data(this.dataLinks)
     .exit().remove()
 
     let defsImages = this.node.append('svg:defs')
@@ -397,24 +396,22 @@ export default class GraphD3 extends EventEmitter {
       .attr('r', (d) => {
         return d.rank == 'center' ? largeSize / 2 : smallSize / 2
       })
-      .each('start',  (d)=>{
-        if (!d.img){
-          console.log('noImage', d)
-          d3.selectAll('g .node').filter(function(d) { return d.highlighted && d.index != data.index}).select('.nodecircle')
-          .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
-          .style('fill', (d) => {
-            if( d.rank  == 'history'){
-              return STYLES.grayColor
-            } else if( d.rank == 'unavailable') {
-              return STYLES.grayColor
-            } else if (d.rank === 'center') {
-              return theme.graph.centerNodeColor
-            } else {
-              return theme.graph.nodeColor
-            }
-          })
-        }
-      })
+
+    d3.selectAll('g .node').filter(function(d) { return d.highlighted && !d.img}).select('.nodecircle')
+    .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
+    .style('fill', (d) => {
+      if( d.rank  == 'history'){
+        return STYLES.grayColor
+      } else if( d.rank == 'unavailable') {
+        return STYLES.grayColor
+      } else if (d.rank === 'center') {
+        return theme.graph.centerNodeColor
+      } else {
+        return theme.graph.nodeColor
+      }
+    })
+
+
 
     // Setting all the pattern sizes back to normal.
     d3.selectAll('g .node').filter(function(d) { return d.highlighted }).selectAll('pattern')
@@ -515,6 +512,7 @@ export default class GraphD3 extends EventEmitter {
       this.force.stop()
       for (var i = 0; i < history.length; i++) {
         history[history.length-1-i].rank = 'history'
+        history[history.length-1-i].connection = 'hist'
         history[history.length-1-i].histLevel = i
         if (i == 0) {
 
@@ -617,15 +615,15 @@ export default class GraphD3 extends EventEmitter {
         let nIndex = -1
         let lIndex = -1
 
-        for (let i = 0; i < this.dataNodes.length; i++) 
+        for (let i = 0; i < this.dataNodes.length; i++)
           if(this.dataNodes[i].index == index) nIndex = i
-        
-        for (let i = 0; i < this.dataLinks.length; i++) 
+
+        for (let i = 0; i < this.dataLinks.length; i++)
           if(this.dataLinks[i].source.index == index) lIndex = i
 
         this.force.stop()
         this.dataNodes.splice(nIndex, 1)
-        this.dataLinks.splice(lIndex, 1)
+        //this.dataLinks.splice(lIndex, 1)
 
         this.drawNodes()
         this.force.start()
