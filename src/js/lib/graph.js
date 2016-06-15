@@ -70,7 +70,6 @@ export default class GraphD3 extends EventEmitter {
     }
 
 
-
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
     this.force = d3.layout.force()
