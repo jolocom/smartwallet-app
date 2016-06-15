@@ -2,8 +2,6 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
-import Formsy from 'formsy-react'
-import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {History, Link} from 'react-router'
 
 import Availability from 'actions/availability'
@@ -21,12 +19,6 @@ let Signup = React.createClass({
   contextTypes: {
     muiTheme: React.PropTypes.object
   },
-  errorMessages: {
-    alphaNumeric: 'Please only use letters and numbers',
-    email: 'Please provide a valid email',
-    name: 'Please enter a valid name',
-    unavailable: 'This username is already taken'
-  },
 
   getInitialState() {
     return {
@@ -37,15 +29,6 @@ let Signup = React.createClass({
   componentWillMount() {
     if (this.state.account && this.state.account.username)
       this.history.pushState(null, '/graph')
-  },
-
-  signup() {
-    let signupData = {
-      username: this.state.username,
-      name: this.state.name,
-      email: this.state.email
-    }
-    Account.signup(signupData)
   },
 
   componentDidUpdate() {
@@ -111,12 +94,8 @@ let Signup = React.createClass({
     return styles
   },
 
-  enableSubmit() {
-    this.setState({disabledSubmit: false})
-  },
-
-  disableSubmit() {
-    this.setState({disabledSubmit: true})
+  handleClick() {
+    Account.signup()
   },
 
   render() {
@@ -125,33 +104,7 @@ let Signup = React.createClass({
       <div style={styles.container}>
         <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
         <div style={styles.content}>
-          <Formsy.Form
-            onValid={this.enableSubmit}
-            onInvalid={this.disableSubmit}
-            onValidSubmit={this.signup}
-            >
-            <div style={{marginBottom: '20px'}}>
-              <FormsyText name="username"
-                floatingLabelText="Username"
-                required
-                validations="isAlphanumeric"
-                validationError={this.errorMessages.alphaNumeric}
-                onChange={this._onUsernameChange}
-                />
-              <FormsyText name="name"
-                floatingLabelText="Name"
-                validations="isWords"
-                validationError={this.errorMessages.name}
-                required />
-              <FormsyText name="email"
-                floatingLabelText="Email"
-                validations="isEmail"
-                validationError={this.errorMessages.email}
-                required />
-            </div>
-
-            <RaisedButton type="submit" secondary={true} disabled={this.state.disabledSubmit} style={styles.button} label="Sign up"/>
-          </Formsy.Form>
+            <RaisedButton type="submit" onTouchTap={this.handleClick} secondary={true}  style={styles.button} label="Sign up"/>
         </div>
 
         <p style={styles.help}>Already have an account? <Link to="/login" style={styles.link}>login instead</Link>.</p>

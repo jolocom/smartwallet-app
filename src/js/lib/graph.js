@@ -12,7 +12,6 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 const theme = getMuiTheme(JolocomTheme)
 
-console.log(theme)
 
 export default class GraphD3 extends EventEmitter {
 
@@ -34,6 +33,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'white')
+
   }
 
   render = function(nodes) {
@@ -44,7 +44,6 @@ export default class GraphD3 extends EventEmitter {
     this.calcDimensions()
     this.setUpForce(nodes)
     this.drawBackground()
-    this.drawNodes()
     this.rendered = true
   }
 
@@ -63,11 +62,15 @@ export default class GraphD3 extends EventEmitter {
     this.dataNodes = [nodes.center]
     this.dataLinks = []
 
+
   // Flatten the center and neighbour nodes we get from the state
     for (var i = 0; i < nodes.neighbours.length; i++) {
       this.dataNodes.push(nodes.neighbours[i])
       this.dataLinks.push({'source': i + 1, 'target':0})
     }
+
+
+
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
     this.force = d3.layout.force()
@@ -104,6 +107,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the nodes
   drawNodes = function() {
+    console.log('drawing')
     let self = this
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
@@ -123,29 +127,37 @@ export default class GraphD3 extends EventEmitter {
     .attr('width', STYLES.fullScreenButton)
     .attr('height', STYLES.fullScreenButton)
 
+        // We draw the lines for all the elements in the dataLinks array.
 
-    // We draw the lines for all the elements in the dataLinks array.
     let link = this.svg.selectAll('line')
-    .data(this.dataLinks, (d, i) => {return d.source.uri + i + '-' + d.target.uri + i})
+    .data(this.dataLinks)
     .enter()
     .insert('line', '.node')
     .attr('class','link')
     .attr('stroke-width', () => {
       // Capped at 13, found it to look the best
       return this.width / 45 > 13 ? 13 : this.width / 45})
-      .attr('stroke', STYLES.lightGrayColor)
+    .attr('stroke', STYLES.lightGrayColor)
 
     // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
-      .data(this.dataNodes, (d, i) => {return (d.uri + i)})
+      .data(this.dataNodes, (d) => {return (d.uri + d.connection)})
       .enter()
       .append('g')
       .attr('class','node')
       .call(this.node_drag)
 
+    this.svg.selectAll('.node')
+    .data(this.dataNodes, (d) => {return (d.uri + d.connection )})
+    .exit().remove()
+
+    this.svg.selectAll('line')
+    .data(this.dataLinks)
+    .exit().remove()
+
     let defsImages = this.node.append('svg:defs')
     defsImages.append('svg:pattern')
-      .attr('id',  (d)=> d.uri)
+      .attr('id',  (d)=> d.uri + d.connection)
       .attr('class', 'image')
       .attr('width', '100%')
       .attr('height', '100%')
@@ -222,7 +234,7 @@ export default class GraphD3 extends EventEmitter {
         }
         else return smallNode / 2 })
       .style('fill', (d) => {
-        if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
+        if(d.img && d.rank!='history') return 'url(#'+d.uri+ d.connection +')'
         else{
           if( d.rank  == 'history'){
             return STYLES.grayColor
@@ -250,34 +262,12 @@ export default class GraphD3 extends EventEmitter {
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
-        if(d.name)
-        {
-          // ATM we only display the first name, this way it fits on the screen.
-          // This is needlessly complicated. Think about a fix.
-          if(d.name.indexOf(' ')>0){
-            let name = d.name.substring(0, d.name.indexOf(' '))
-            if(name.length > 10)
-              return name.substring(0, 10)
-            else return name
-          }
-          else if(d.name.length > 10)
-            return d.name.substring(0, 10)
-          else return d.name
-        }
-
+        if(d.name) return d.name
+        else if (d.fullName) return d.fullName
         else if (d.title) {
-          if(d.title.length> 10) return d.title.substring(0, 10) + '...'
+          if(d.title.length > 7) return d.title.substring(0, 7) + '...'
           else return d.title
-        } else {
-          if(d.uri.search('profile')>0){
-            let x = d.uri.search('profile')
-            let name = d.uri.substring(0, x-1)
-            name = name.substring(name.lastIndexOf('/')+1, name.length)
-            if(name.length>10) return name.substring(0, 10)+'...'
-            else return name
-          }
-          else return 'Not Found'
-        }
+        } else return 'Not Found'
       })
 
      // The text description of a person
@@ -310,11 +300,18 @@ export default class GraphD3 extends EventEmitter {
     this.node.on('click', function(data){
       self.onClick(this,data)
     })
-    this.node.on('dblclick', this.onDblClick)
+    this.node.on('dblclick', function(data) {
+      self.onDblClick(this, data)
+    })
 
     full.on('click', function(data) {
       self.onClickFull(this, data)
     })
+
+    d3.select(window)
+      .on('wheel', function(e) {
+        self.onScroll(e)
+      })
 
     this.force.on('tick', this.tick)
   }.bind(this)
@@ -385,9 +382,13 @@ export default class GraphD3 extends EventEmitter {
 
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
+  onScroll = function(e) {
+    console.log('HEY', e )
+  }
+
   onClickFull = function(node, data) {
     //stops propagation to node click handler
-    this.emit('view-node', data)
+    this.emit('view-node', data, node)
     d3.event.stopPropagation()
   }
 
@@ -399,7 +400,8 @@ export default class GraphD3 extends EventEmitter {
       return
     }
 
-    this.emit('select', data)
+
+    this.emit('select', data, node)
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
@@ -410,21 +412,22 @@ export default class GraphD3 extends EventEmitter {
       .attr('r', (d) => {
         return d.rank == 'center' ? largeSize / 2 : smallSize / 2
       })
-      .attr('opacity', (d) => (d.rank == 'history' && d.img) ? 0.5 : 1)
-      .style('fill', (d) => {
-        if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
-        else{
-          if( d.rank  == 'history'){
-            return STYLES.grayColor
-          } else if( d.rank == 'unavailable') {
-            return STYLES.grayColor
-          } else if (d.rank === 'center') {
-            return theme.graph.centerNodeColor
-          } else {
-            return theme.graph.nodeColor
-          }
-        }
-      })
+    d3.selectAll('g .node').filter(function(d) { return d.highlighted && !d.img}).select('.nodecircle')
+    .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
+    .style('fill', (d) => {
+      if( d.rank  == 'history'){
+        return STYLES.grayColor
+      } else if( d.rank == 'unavailable') {
+        return STYLES.grayColor
+      } else if (d.rank === 'center') {
+        return theme.graph.centerNodeColor
+      } else {
+        return theme.graph.nodeColor
+      }
+    })
+
+
+
 
     // Setting all the pattern sizes back to normal.
     d3.selectAll('g .node').filter(function(d) { return d.highlighted }).selectAll('pattern')
@@ -475,12 +478,15 @@ export default class GraphD3 extends EventEmitter {
     else{
     // NODE signifies the node that we clicked on. We enlarge it
       d3.select(node).select('circle')
-        .transition('highlight').duration(STYLES.nodeTransitionDuration)
+        .transition('grow').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
-        .style('fill', (d) => {
-          if(d.img && d.rank!='history') return 'url(#'+d.uri+')'
-          else return theme.graph.centerNodeColor
+        .each('start',  (d)=>{
+          if (!d.img ){
+            d3.select(node).select('circle')
+            .transition('highlight').duration(STYLES.nodeTransitionDuration)
+            .style('fill',  theme.graph.centerNodeColor)
+          }
         })
 
       // We enlarge the pattern of the node we clicked on
@@ -517,14 +523,16 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
-  updateHistory(history) {
+  updateHistory = function(history) {
     if(history.length>0){
       this.force.stop()
       for (var i = 0; i < history.length; i++) {
+        history[history.length-1-i].connection = 'hist'
         history[history.length-1-i].rank = 'history'
+        history[history.length-1-i].connection = 'hist'
         history[history.length-1-i].histLevel = i
-        if (i == 0) {
 
+        if (i == 0) {
           this.dataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
         }
@@ -533,11 +541,10 @@ export default class GraphD3 extends EventEmitter {
           this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
         }
       }
-      this.drawNodes()
       this.force.start()
     }
-
-  }
+    this.drawNodes()
+  }.bind(this)
 
   // Wraps the description of the nodes around the node.
   // http://bl.ocks.org/mbostock/7555321
@@ -585,11 +592,63 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   // Alternative to dragging the node to the center. Does the same thing pretty much
-  onDblClick = function(node) {
-    if (node.rank != 'center'){
-      this.emit('center-changed', node)
+  onDblClick = function(node, data) {
+    if (data.rank != 'center'){
+      this.emit('center-changed', data)
     }
   }.bind(this)
+
+  deleteNode = function(node){
+    let res = null
+    if (node.connection == null){
+      res = d3.selectAll('.node').filter(function(d) {
+        return d.uri == node.uri
+      })
+    } else {
+      res = d3.selectAll('.node').filter(function(d) {
+        return d.uri == node.uri && d.connection == node.connection 
+      })
+    }
+    let index = res[0][0].__data__.index
+    console.log(index)
+
+    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('pattern')
+      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .attr('x', -STYLES.largeNodeSize / 2)
+      .attr('y', -STYLES.largeNodeSize / 2)
+
+    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('image')
+      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .attr('width', STYLES.largeNodeSize)
+      .attr('height', STYLES.largeNodeSize)
+      .style('filter', 'url(#darkblur)')
+
+    d3.selectAll('line').filter(function (d) { return d.source.index == res[0][0].__data__.index })
+      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .attr('opacity', 0)
+
+    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('circle')
+      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .attr('r', STYLES.largeNodeSize/2.2)
+      .each('end',  ()=>{
+
+        let nIndex = -1
+        let lIndex = -1
+
+        for (let i = 0; i < this.dataNodes.length; i++)
+          if(this.dataNodes[i].index == index) nIndex = i
+
+        for (let i = 0; i < this.dataLinks.length; i++)
+          if(this.dataLinks[i].source.index == index) lIndex = i
+
+        this.force.stop()
+        this.dataNodes.splice(nIndex, 1)
+        //this.dataLinks.splice(lIndex, 1)
+
+        this.drawNodes()
+        this.force.start()
+      })
+  }
 
   // This is not implemented apparently.
   onResize = function() {

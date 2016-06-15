@@ -2,10 +2,14 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import d3 from 'd3'
+import nodeActions from 'actions/node'
+import graphActions from 'stores/graph-store'
 
 import {
   AppBar,
   IconButton,
+  IconMenu,
+  MenuItem,
   FontIcon,
   List, ListItem, Divider
 } from 'material-ui'
@@ -30,12 +34,12 @@ let ProfileNode = React.createClass({
   },
 
   onUpdatePinned() {
-    this.setState({pinned: PinnedStore.isPinned(this.props.node.uri)})
+    this.setState({pinned: PinnedStore.isPinned(this.props.state.activeNode.uri)})
   },
 
   getStyles() {
     let {muiTheme} = this.context
-    let {img} = this.props.node
+    let {img} = this.props.state.activeNode
     let background
 
     if (img) {
@@ -48,8 +52,8 @@ let ProfileNode = React.createClass({
         display: 'flex',
         flexDirection: 'column'
       },
-      header: {
-        color: '#fff',
+      headers: {
+        color: '#ffffff',
         height: '176px',
         background: `${muiTheme.jolocom.gray1} url(${background}) center / cover`
       },
@@ -59,6 +63,9 @@ let ProfileNode = React.createClass({
         left: 0,
         padding: '0 24px',
         color: '#ffffff'
+      },
+      white:{
+        color: '#fff'
       },
       action: {
         position: 'absolute',
@@ -76,21 +83,30 @@ let ProfileNode = React.createClass({
   render() {
     let styles = this.getStyles()
     this.full = false
-    let {name, title, description, email} = this.props.node
+    let {name, familyName, title, description, email} = this.props.state.activeNode
+    if(name && familyName) name = name + ' ' + familyName
 
     return (
       <div style={styles.container}>
         <AppBar
           id = 'AppBar'
-          style={styles.header}
+          style={styles.headers}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
-          iconElementLeft={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleClose}>close</IconButton>}
-          iconElementRight={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleFull}>crop_original</IconButton>}
+          iconElementLeft={<IconMenu
+          iconButtonElement={<IconButton iconClassName="material-icons" iconStyle={styles.icon}>more_vert</IconButton>}
+            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          >
+            <MenuItem primaryText="Edit" />
+            <MenuItem primaryText="Full Screen" onTouchTap={this._handleFull} />
+            <MenuItem primaryText="Delete" onTouchTap={this._handleDelete}/>
+            <MenuItem primaryText="Disconect" onTouchTap={this._handleDissconect}/>
+
+          </IconMenu>}
+          iconElementRight={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleClose}>close</IconButton>}
         >
-
         </AppBar>
-
         <List style={styles.list}>
           {description && (
             <div>
@@ -118,8 +134,8 @@ let ProfileNode = React.createClass({
     this.props.onClose()
   },
 
-  _handleFull() {
 
+  _handleFull() {
     if (this.full){
       d3.select('#AppBar').style('height', '176px')
       d3.select('#AppBar').style('height', '176px')
@@ -132,8 +148,30 @@ let ProfileNode = React.createClass({
 
   },
 
+  _handleDissconect(){
+    this.props.onClose() 
+      if (this.props.state.activeNode.rank != 'center')
+        nodeActions.dissconnectNode(this.props.state.activeNode, this.props.state.center)
+  },
+
+  _handleDelete() {
+    this.props.onClose()
+    let node = this.props.state.activeNode
+    let center = this.props.state.center
+    let navHis = this.props.state.navHistory
+
+    if (node.rank == 'center'){
+     let prev = navHis[navHis.length - 1]
+     graphActions.drawAtUri(prev.uri, 1)
+     setTimeout(()=>{
+       nodeActions.remove(node, prev)
+     }, 500)
+    }
+    else nodeActions.remove(node, center)
+  },
+
   _handleBookmarkClick() {
-    PinnedActions.pin(this.props.node.uri)
+    PinnedActions.pin(this.props.state.ActiveNode.uri)
   }
 })
 

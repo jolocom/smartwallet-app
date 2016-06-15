@@ -40,9 +40,6 @@ let Nav = React.createClass({
             <ListItem primaryText='Graph'
               value='graph'
               leftIcon={<FontIcon className='material-icons'>cloud</FontIcon>}/>
-            <ListItem primaryText="Contacts"
-              value='contacts'
-              leftIcon={<FontIcon className="material-icons">contacts</FontIcon>}/>
            </SelectableList>
            <Divider/>
            <List>

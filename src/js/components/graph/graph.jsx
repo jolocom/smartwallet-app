@@ -8,8 +8,8 @@ import Radium from 'radium'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
-import GraphStore from '../../stores/graph-store'
-import graphActions from '../../actions/graph-actions'
+import GraphStore from 'stores/graph-store'
+import graphActions from 'actions/graph-actions'
 
 import Node from '../node/node.jsx'
 
@@ -23,7 +23,7 @@ let Graph = React.createClass({
 
   childContextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.string
+    user: React.PropTypes.object
   },
 
   getChildContext: function() {
@@ -38,10 +38,24 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data, signal) {
-    if (data) this.setState(data)
-    if (this.state.neighbours){
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
+    // Temp. make it more elegant later.
+    if (signal == 'nodeRemove')
+    {
+      this.graph.deleteNode(data.toBeDeleted)
+      this.state.toBeDeleted = null
+      graphActions.setState('toBeDeleted', null, false)
+      // Important to avoid a re-render here(.
+    } 
+    else if (signal == 'preview'){
+    }
+    else
+    {
+      if (data) this.setState(data)
+      if(data) console.log('SET')
+      if (data && data.neighbours){
+        this.graph.render(this.state)
+        this.graph.updateHistory(this.state.navHistory)
+      }
     }
 
     if (this.state.newNode) {
@@ -49,10 +63,7 @@ let Graph = React.createClass({
       // We update the state of the store to be in line with the state of the child
       graphActions.setState('newNode', null, true)
     }
-    if(signal == 'redraw'){
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
-    }  else if ( signal == 'erase') {
+    if ( signal == 'erase') {
       this.graph.eraseGraph()
     }
   },
@@ -67,6 +78,7 @@ let Graph = React.createClass({
     this.graph = new GraphD3(this.getGraphEl())
     // this.graph.on is the same as this.graph.addListener()
     this.graph.on('center-changed', this._handleCenterChange)
+    this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
     graphActions.getState()
   },
@@ -76,6 +88,11 @@ let Graph = React.createClass({
       this.graph.eraseGraph()
       this.graph.removeAllListeners()
     }
+  },
+
+
+  _handleSelectNode(node, svg){
+    graphActions.setState('selected', svg)
   },
 
   _handleCenterChange(node){
@@ -101,14 +118,13 @@ let Graph = React.createClass({
     return styles
   },
 
-  // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render: function() {
     let styles = this.getStyles()
 
     let nodeDetails
 
     if (this.state.activeNode) {
-      nodeDetails = <Node node={this.state.activeNode}/>
+      nodeDetails = <Node  state={this.state}/>
     }
 
     return (

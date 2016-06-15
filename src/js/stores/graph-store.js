@@ -4,17 +4,16 @@ import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import d3Convertor from '../lib/d3-converter'
 
-export default Reflux.createStore({
-
-  listenables: [graphActions],
-
-  init: function(){
+  export default Reflux.createStore({
+    listenables: [graphActions],
+    init: function(){
 
     this.listenTo(accountActions.logout, this.onLogout)
 
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
     this.loaded = false
+
 
     this.state = {
       //These state keys describe the graph
@@ -23,7 +22,9 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      toBeDeleted:null,
       navHistory: [],
+      selected: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -41,7 +42,9 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      toBeDeleted: null,
       navHistory: [],
+      selected: null,
       // UI related
       showPinned:false,
       showSearch: false,
@@ -56,31 +59,52 @@ export default Reflux.createStore({
     this.trigger(null, 'erase')
   },
 
-  onDrawGraph: function() {
-    this.trigger(null, 'redraw')
-  },
-
   onSetState: function(key, value, flag){
     this.state[key] = value
     if (flag) this.trigger(this.state)
   },
 
+  deleteNode: function(node){
+    console.log('deleting, ', node)
+
+    if (node.index == 0) {
+      for (let i = 0; i < this.state.neighbours.length; i++){
+        if (this.state.neighbours[i].uri == node.uri){
+          this.state.neighbours.splice(i, 1)
+        }
+      }
+    } else {
+      for (let i = 0; i < this.state.neighbours.length; i++){
+       if (this.state.neighbours[i].index == node.index){
+         this.state.neighbours.splice(i, 1)
+       }
+      }
+    }
+    this.state.toBeDeleted = node
+    this.trigger(this.state, 'nodeRemove')
+  },
+
+  dissconnectNode: function(){
+    // Animation / removing from the neighb array will go here.    
+  },
+
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
-  drawNewNode: function(object){
+  drawNewNode: function(object, predicate){
     // This fetches the triples at the newly added file, it allows us to draw it
     // the graph accurately
     this.gAgent.fetchTriplesAtUri(object).then((result)=>{
       result.triples.uri = object
       // Now we tell d3 to draw a new adjacent node on the graph, with the info from
       // the triiple file
+      result.triples.connection = predicate
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
       this.state.neighbours.push(this.state.newNode)
       this.trigger(this.state)
     })
   },
 
-  onGetState: function(){
-    this.trigger( this.state)
+  onGetState: function(source){
+    this.trigger(this.state, source)
     if (!this.loaded) {
       this.loaded = true
       this.onGetInitialGraphState()
@@ -100,10 +124,24 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
-    this.state.user = result[0].uri
+    this.state.user = result[0]
     this.trigger(this.state)
   },
 
+  drawAtUri: function(uri, number){
+    this.state.neighbours = []
+    this.gAgent.getGraphMapAtUri(uri).then((triples) => {
+      triples[0] = this.convertor.convertToD3('c', triples[0])
+      this.state.center = triples[0]
+      for (let i = 1; i < triples.length; i++) {
+        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+        this.state.neighbours.push(triples[i])
+      }
+      for (let i = 0; i < number; i++)
+        this.state.navHistory.pop()
+      this.trigger(this.state)
+    })
+  },
 
   onNavigateToNode: function(node){
     this.state.neighbours = []
@@ -121,22 +159,19 @@ export default Reflux.createStore({
           this.state.navHistory.pop()
           this.state.navHistory.pop()
         }
-        else if(this.state.navHistory.length > 1) {
-          for (var j = 0; j < this.state.navHistory.length-1; j++) {
-            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) {
-              for (var k = 0; k < j+2; k++) {
+        // Removed the brackets, one liners.
+        else if(this.state.navHistory.length > 1)
+          for (var j = 0; j < this.state.navHistory.length-1; j++) 
+            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) 
+              for (var k = 0; k < j+2; k++) 
                 this.state.navHistory.pop()
-              }
-            }
-          }
-        }
       }
 
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-      this.trigger(this.state, 'redraw')
+      this.trigger(this.state)
     })
   },
 

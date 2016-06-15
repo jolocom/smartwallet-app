@@ -1,14 +1,16 @@
 // THIS FILE TAKES CARE OF CONVERTING TEXT TO RDF AND WRITING RDF TRIPLES TO TURTLE
 // The parser takes text and converts it to turtle, returning an array of triples.
+// The parser also requires a base uri parameter to resolve relative URIs correctly.
 // The writer takes triples and writes them to a turtle file. Serializes it basically.
-
 import rdf from 'rdflib'
 
 export class Parser {
-  parse(text) {
+  parse(text, url) {
     return new Promise((resolve) =>{
       let payload = []
-      rdf.parse(text, rdf.graph(), 'http://ogog.og', 'text/turtle', (err, triples) => {
+      // Keep an eye on this TODO
+      // if (url) url = url.substring(0, url.indexOf('box.me/')+7)
+      rdf.parse(text, rdf.graph(), url, 'text/turtle', (err, triples) => {
         for (let i in triples.statements) {
           let statement = triples.statements[i]
           payload.push({

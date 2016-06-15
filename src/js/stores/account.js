@@ -1,8 +1,6 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
-import WebIDAgent from '../lib/agents/webid'
-
-let wia = new WebIDAgent()
+import solid from 'solid-client'
 
 let AccountStore = Reflux.createStore({
   listenables: Account,
@@ -13,26 +11,15 @@ let AccountStore = Reflux.createStore({
     }
   },
 
-  onSignup(data) {
-    wia.fakeSignup(data.username, data.name, data.email)
-      .then(() => {
-        Account.signup.completed(data.username)
-      })
-      .catch(Account.signup.failed)
-  },
-  onSignupCompleted(username) {
-    localStorage.setItem('fake-user', username)
-    this.trigger({username: username})
-  },
-  onSignupFailed(err) {
-    //TODO: trigger failure
-    console.log(err)
-
+  onSignup() {
+    solid.signup()
   },
 
-  onLogin(username) {
-    localStorage.setItem('fake-user', username)
-    this.trigger({username: username})
+  onLogin() {
+    solid.login().then((webId) => {
+      console.log('webId!', webId)
+      this.trigger({username: webId})
+    })
   },
 
   onLogout() {

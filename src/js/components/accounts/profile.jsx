@@ -9,19 +9,29 @@ import {AppBar, IconButton, TextField, Card, CardMedia, CardActions, FlatButton}
 
 import {grey500} from 'material-ui/styles/colors'
 
+import GraphStore from 'stores/graph-store'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
+
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange')
+    Reflux.listenTo(ProfileStore, 'onProfileChange'),
+    Reflux.listenTo(GraphStore, 'onGraphChange')
   ],
 
   onProfileChange: function(state) {
     this.setState(state)
+  },
+
+  onGraphChange: function(state) {
+    if(state && state.center) this.state.currentNode = state.center.uri
+  },
+  componentDidMount(){
+    this.state.loading = false
   },
 
   componentDidUpdate(props, state) {
@@ -73,7 +83,6 @@ let Profile = React.createClass({
     } else if (imgUri) {
       img = imgUri
     }
-
     // edit mode
     return (
       <Dialog ref="dialog" fullscreen={true}>
@@ -85,7 +94,9 @@ let Profile = React.createClass({
               <IconButton onClick={this.hide} iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={
-              <IconButton onClick={this._handleUpdate} iconClassName="material-icons">check</IconButton>
+              !this.state.loading ? <IconButton onClick={this._handleUpdate} iconClassName="material-icons">check</IconButton>
+              :
+              <IconButton  iconClassName="material-icons">hourglass_empty</IconButton>
             }
           />
           <Content style={styles.content}>
@@ -109,9 +120,13 @@ let Profile = React.createClass({
               onChange={this._handleSelectFile} />
             <main style={styles.main}>
               <section>
-                <TextField floatingLabelText="Name"
+                <TextField floatingLabelText="First Name"
                   onChange={Util.linkToState(this, 'name')}
                   value={this.state.name}
+                  style={styles.input} />
+                <TextField floatingLabelText="Second Name"
+                  onChange={Util.linkToState(this, 'familyName')}
+                  value={this.state.familyName}
                   style={styles.input} />
                 <TextField floatingLabelText="Email"
                   onChange={Util.linkToState(this, 'email')}
@@ -126,7 +141,13 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    ProfileActions.update(this.state)
+    if(!this.state.loading){
+      ProfileActions.update(this.state)
+      ProfileActions.hide()
+      this.state.loading = false
+    } else{
+      console.log('loading')
+    }
   },
 
   _handleSelect() {
@@ -150,12 +171,15 @@ let Profile = React.createClass({
   },
 
   _handleSelectFile({target}) {
+    this.state.loading = true
+
     let gAgent = new GraphAgent()
     let file = target.files[0]
     if (!accepts(file, 'image/*')) {
       this.setState({
         error: 'Invalid file type'
       })
+      this.state.loading = false
     } else {
       this.setState({
         error: null,
@@ -163,6 +187,9 @@ let Profile = React.createClass({
       })
       gAgent.storeFile(null, file).then((res) => {
         this.setState({imgUri: res.url})
+        this.setState({loading: false})
+      }).catch((e)=>{
+        console.log(e)
       })
     }
   }

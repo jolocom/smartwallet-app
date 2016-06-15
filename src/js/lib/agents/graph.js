@@ -12,110 +12,121 @@ let SCHEMA = rdf.Namespace('https://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
+let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
 
 class GraphAgent extends HTTPAgent {
   // We create a rdf file at the distContainer containing a title and description passed to it
-  createNode(currentUser, currentNode, title, description, image, type) {
+  createNode(user, node, title, description, image, type) {
     let writer = new Writer()
-    // The randomly generated uri of the new rdf file
-    let draw = true
-    this.writeAccess(currentUser, currentNode).then((res) => {
-      if (res == false) {
-        // If we have no write access at the node we are trying to connect to
-        // we just connect to the user's main node instead.
-        currentNode = currentUser
-        draw = false
+
+    let dstContainer = node.storage
+    let new_node = dstContainer + Util.randomString(5)
+
+    writer.addTriple(rdf.sym(new_node), DC('title'), title)
+    writer.addTriple(rdf.sym(new_node), FOAF('maker'), rdf.sym(node.uri))
+    if (description) {
+      writer.addTriple(rdf.sym(new_node), DC('description'), description)
+    }
+    if(type == 'default') writer.addTriple(rdf.sym(new_node), RDF('type') , FOAF('Document'))
+    if(type == 'image') writer.addTriple(rdf.sym(new_node), RDF('type') , FOAF('Image'))
+
+    if(node.storage) writer.addTriple(rdf.sym(new_node), NIC('storage'), node.storage)
+    else if (user.storage) writer.addTriple(rdf.sym(new_node), NIC('storage'), user.storage)
+
+    return new Promise((resolve, reject) => {
+      if (image instanceof File) {
+        this.storeFile(dstContainer, image).then((result) => {
+          resolve(result.url)
+        }).catch((err) => {
+          reject(err)
+        })
+      } else {
+        resolve(image)
       }
-      let dstContainer = currentUser.substring(0, currentUser.indexOf('profile'))
-      let uri = dstContainer + Util.randomString(5)
-
-      writer.addTriple(rdf.sym(uri), DC('title'), title)
-      writer.addTriple(rdf.sym(uri), SCHEMA('isRelatedTo'), rdf.sym(currentNode))
-      writer.addTriple(rdf.sym(uri), FOAF('maker'), rdf.sym(currentUser))
-      if (description) {
-        writer.addTriple(rdf.sym(uri), DC('description'), description)
+    }).then((image) => {
+      // If the image is there, we add it to the rdf file.
+      if (image) {
+        writer.addTriple(rdf.sym(new_node), FOAF('img'), image)
       }
-
-      if(type == 'default') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Document'))
-      if(type == 'image') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Image'))
-
-      return new Promise((resolve, reject) => {
-        if (image instanceof File) {
-          this.storeFile(dstContainer, image).then((result) => {
-            resolve(result.url)
-          }).catch((err) => {
-            reject(err)
-          })
-        } else {
-          resolve(image)
-        }
-      }).then((image) => {
-        // If the image is there, we add it to the rdf file.
-        if (image) {
-          writer.addTriple(rdf.sym(uri), FOAF('img'), image)
-        }
-        // Here we add the triple to the user's rdf file, this triple connects
-        // him to the resource that he uploaded
-        this.writeTriple(currentNode, SCHEMA('isRelatedTo'), rdf.sym(uri)).then(()=> {
-          this.writeTriple(currentUser, FOAF('made'), rdf.sym(uri)).then(() => {
-            if (draw)
-              GraphActions.drawNewNode(uri)
-            return solid.web.put(uri, writer.end())
+      // Here we add the triple to the user's rdf file, this triple connects
+      // him to the resource that he uploaded
+      this.writeTriple(node.uri, SCHEMA('isRelatedTo'), rdf.sym(new_node)).then(()=> {
+        // Should this one be here? Implications of having this triple?
+        this.writeTriple(user.uri, FOAF('made'), rdf.sym(new_node)).then(() => {
+          this.putACL(new_node, user.uri).then(()=>{
+            solid.web.put(new_node, writer.end()).then(()=>{
+              GraphActions.drawNewNode(new_node, SCHEMA('isRelatedTo').uri)
+            })
           })
         })
       })
     })
   }
+  
+  // Should we remove the ACL file associated with it as well? 
+  // PRO : we won't need the ACL file anymore CON : it can be a parent ACL file, that would
+  // result in other children loosing the ACL as well.
+  deleteFile(uri){
+    return solid.web.del(uri)
+  }
 
   storeFile(dstContainer, file) {
     // if no destination / path is passed, we create one based on the current
     // webid.
-    if (!dstContainer){
-      let wia = new WebIDAgent()
-      return wia.getWebID().then((webId) => {
-        dstContainer = webId.substring(0, webId.indexOf('profile'))
-        let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-
-        return solid.web.put(uri, file, file.type)
-      })
-    } else
-    {
-      let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+    let uri = null
+    let wia = new WebIDAgent()
+    
+    return wia.getWebID().then((webID) => {
+      if (!dstContainer)
+      {
+        // Perhaps the profile part has to go. It breaks with non standard uri.
+        dstContainer = webID.substring(0, webID.indexOf('profile'))
+        uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      }
+      else uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      this.putACL(uri, webID)
       return solid.web.put(uri, file, file.type)
-    }
+    })
   }
+  // PUT ACL and WRITE TRIPLE should be called after making sure that the user
+  // has write access
+  putACL(uri, webID){
+    let acl_writer = new Writer()
+    let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+    // TODO, perhaps introduce more potential setups.
+    // Current one is creator can do read write control. Everyone else has read acc.
+    return solid.web.options(uri).then((res) => {
+      let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
+        : acl_uri = uri+'.acl'
 
-  // Takes the current web ID and the link to the file we want to write to and
-  // returns a bool saying wheather or not you are allowed to write to that uri.
-  writeAccess(webId, node_uri) {
-    let writer = new Writer()
-    return new Promise((resolve) => {
-      this.fetchTriplesAtUri(node_uri).then((file) =>{
-        for (var i = 0; i < file.triples.length; i++) {
-          let triple = file.triples[i]
-          writer.addTriple(triple.subject, triple.predicate, triple.object)
-        }
-        // We only check for the author if the rdf file has the author entry in it in the first place.
-        let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)
-        if (author.length > 0) author = author[0].object.uri
-        if (author == webId) {
-          console.log('Write access granted')
-          resolve(true)
-        } else {
-          console.log('No write access')
-          resolve(false)
-        }
+      acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
+      acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
+      acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
+      acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webID))
+      acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
+      acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
+      acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+
+      acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
+      acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
+      acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
+      acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
+      return solid.web.put(acl_uri, acl_writer.end()).catch((e)=>{
+        console.log(e, ' occured while trying to put the acl file.')
       })
     })
   }
 
-
-  writeTriple(subject, predicate, object) {
+  writeTriple(subject, predicate, object, draw) {
     let writer = new Writer()
-    subject = rdf.sym(subject)
+
+    // Is this ok when working with blank nodes?
+    if (!subject.uri) subject = rdf.sym(subject)
+    if (!predicate.uri) predicate = rdf.sym(predicate)
+
     // First we fetch the triples at the webId/uri of the user adding the triple
     return new Promise((resolve) => {
       this.fetchTriplesAtUri(subject.uri).then((file) => {
@@ -123,29 +134,53 @@ class GraphAgent extends HTTPAgent {
           let triple = file.triples[i]
           writer.addTriple(triple.subject, triple.predicate, triple.object)
         }
-        writer.addTriple(subject, predicate, object)
-        // Then we serialize the object to Turtle and PUT it's address.
-        solid.web.put(subject.uri, writer.end()).then(resolve)
+        if(writer.addTriple(subject,predicate,object)){
+          if(draw && (predicate.uri == SCHEMA('isRelatedTo').uri || predicate.uri == FOAF('knows').uri)){
+            GraphActions.drawNewNode(object.uri, predicate.uri)
+          }
+        }
+        solid.web.put(subject.uri, writer.end()).then(resolve).catch((e)=>{
+          console.log(e, 'in the writeTriple Function.')
+        })
       })
     })
   }
 
-  // I tried rewriting this so that it uses solid.web.get(uri) to fetch the rdf file
-  // instead of using XHR, the problem is that solid.web.get(uri) "optimizes" the resource
-  // before returning it, for instance some common uris would be written as
-  // ../../joachim/card#me. This obviously makes them unparsable, at least for now.
+  // This function tries to find a triple in an rdf file, delete it and then
+  // Put the file back.
+  deleteTriple(subject, predicate, object){
+    let writer = new Writer()
+    return this.fetchTriplesAtUri(subject).then((res)=>{
+      res.triples.map((t)=>{
+        // Litterals are stored in the value key, and uris are stored in the
+        // uri field. We have to account for that.
+        let trip_object = t.object.uri ? t.object.uri : t.object.value
+        if (predicate && object)
+        {
+          if (t.predicate.uri == predicate && trip_object == object)
+            console.log(t.subject, t.predicate, t.object, ' removed')
+          else 
+            writer.addTriple(t.subject,t.predicate,t.object)
+        } else if (object && !predicate){
+          console.log(object, trip_object)
+          if(object == trip_object){
+          }
+          else writer.addTriple(t.subject,t.predicate,t.object)
+        }
+      })
+      return solid.web.put(subject, writer.end())
+    })
+  }
 
   fetchTriplesAtUri(uri) {
-    return this.get(uri)
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response)
-        // Look at line 155 for clarifications if you dare.
-      }).catch(()=>{
-        console.log('The uri', uri, 'could not be resolved. Skipping')
-        // We return this in order to later be able to display it grayed out.
-        return {uri: uri, unav : true, triples:[]}
-      })
+    return solid.web.get(uri).then((res)=>{
+      let parser = new Parser()
+      return parser.parse(res.xhr.response, res.url)
+    }).catch(()=>{
+      console.log('The uri', uri, 'could not be resolved. Skipping')
+      // We return this in order to later be able to display it grayed out.
+      return {uri: uri, unav : true, triples:[]}
+    })
   }
 
 // This function gets passed a center uri and it's triples, and then finds all possible
@@ -153,8 +188,7 @@ class GraphAgent extends HTTPAgent {
 
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
-    let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
-                 SCHEMA('isRelatedTo').uri,'http://schema.org/performer', 'http://schema.org/isRelatedTo','http://schema.org/performerIn']
+    let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri, 'http://schema.org/isRelatedTo']
 
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
     return new Promise ((resolve) => {
@@ -168,16 +202,13 @@ class GraphAgent extends HTTPAgent {
       let i = 0
       neighbours.map((triple) => {
         this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
-          // Terrible error handling, please don't judge me, it's Saturday night.
           if (triples.triples.length == 0) {
             i += 1
             graphMap.push(triples)
           } else {
+            triples.triples.connection = triple.predicate.uri
             graphMap.push(triples.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
-
-            // This checks if the whole array has been parsed, and only after that resolves.
-            // I'm not proud of this.
           }
           if (graphMap.length == neighbours.length) {
             console.log('Loading done,', i,'rdf files were / was skipped.')

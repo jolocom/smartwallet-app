@@ -31,7 +31,7 @@ gulp.task('data', function(){
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
-//               can serve an old app on refresh
+// can serve an old app on refresh
 gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'data'], function() {
 	gulp.watch(['src/**/*'], ['webpack:build-dev']);
 });

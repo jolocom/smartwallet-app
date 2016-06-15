@@ -19,5 +19,4 @@ export default Reflux.createStore({
   onCreateCompleted(conversation) {
     this.trigger(conversation)
   }
-
 })

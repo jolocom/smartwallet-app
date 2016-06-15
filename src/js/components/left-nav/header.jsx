@@ -44,7 +44,6 @@ let Header = React.createClass({
   render() {
     let initials, {profile} = this.context
     let styles = this.getStyles()
-
     if (profile.name)
       initials = profile.name[0]
 
