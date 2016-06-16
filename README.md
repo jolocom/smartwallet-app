@@ -12,7 +12,18 @@ Setup
 
 ```bash
 npm install -g gulp
+npm install -g solid-server
 npm install
+```
+
+Try to run `solid`, if it fails make sure the `node` package version >= v6.0.0
+
+## Install ssl certificates for solid-server
+
+For local testing you will also need to generate a ssl-cert and ssl-key, you should be able to do that buy running:
+```
+openssl genrsa 2048 > ./localhost.key
+openssl req -new -x509 -nodes -sha256 -days 3650 -key ./localhost.key -subj '/CN=*.localhost' > ./localhost.cert
 ```
 
 ## Generating base data
@@ -43,16 +54,35 @@ gulp build-dev
 ###Build-Prod
 `bash gulp build`has a similar effect to just using `bash gulp`, except it runs some additional, non vital operations (for example asset minimization) that make the final `app.js` file more optimized. </br>Running `gulp-prod` takes more time, and can therefore cause the development feedback cycle to take longer, as a result of that it shouldn't really be used during development.
 
+## Running 
 
-### Webroot
-You have to setup your SoLiD server to point to `dist/` directory (built by `gulp` in the previous step)
+After the app was build you can start the solid-server in the followings ways:
 
+### With explicit parameters from command line
 
-## Running
-You need to start your solid server (e.g. gold) listening on port :8443 before you can use the app, e.g.
+```
+solid start --port 8443 --ssl-cert ./localhost.cert --ssl-key ./localhost.key --root /path/to/little-sister/dist -v
+```
 
-`docker run -p 127.0.0.1:8443:443 -v /home/myuser/projects/little-sister/dist:/data linkeddata/gold`
+### With config file
 
+Run `solid init` to generate config file or use the following template for `config.json`:
+
+```
+{
+  "root": "/path/to/little-sister/dist",
+  "port": "8443",
+  "webid": false,
+  "sslKey": "./localhost.key",
+  "sslCert": "./localhost.cert",
+  "idp": false,
+  "fileBrowser": "https://linkeddata.github.io/warp/#/list/",
+  "dataBrowser": false,
+  "strictOrigin": false
+}
+```
+
+For local development/testing environment do not use `webid` and `idp` for now.
 
 Documentation
 -------------
