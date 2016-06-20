@@ -13,7 +13,6 @@ import STYLES from 'styles/app.js'
 
 class D3Converter {
   convertToD3(rank, node, i, n) {
-    
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
@@ -24,6 +23,7 @@ class D3Converter {
     let connection = node.connection ? node.connection : null
 
     let props = {
+      has_blanks: false,
       uri: uri,
       name:null,
       connection: connection,
@@ -43,8 +43,24 @@ class D3Converter {
     // rdf.graph().statementsMatching()
     let g = rdf.graph()
     for (let i = 0; i < node.length; i++) {
+
       g.add(node[i].subject, node[i].predicate, node[i].object)
+
+      let triple = node[i]
+      if (triple.subject.id >= 0) {
+
+        if(!props.blanks) props.blanks = []
+        props.has_blanks = true
+         
+        if (!props.blanks[triple.subject.value]){
+          props.blanks[triple.subject.value] = []
+        }
+
+        props.blanks[triple.subject.value].push(triple)
+      }
     }
+    
+   
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
       let angle = (2 * Math.PI) / this.n
@@ -65,6 +81,7 @@ class D3Converter {
       props.rank = 'unavailable'
       return props
     }
+
     // Updating the attributes of the node object. The resulting object will have
     // all of it's props filled in, and will be ready to be rendered by D3
     // Note, if a triple is not present, it will be set to null.

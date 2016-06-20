@@ -20,6 +20,7 @@ export class Parser {
           })
         }
       })
+      // Remove prefixes eventually, don't think it's being used for now.
       resolve({ prefixes: {}, triples: payload})
     })
   }
