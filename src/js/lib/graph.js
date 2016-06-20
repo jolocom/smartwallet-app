@@ -394,13 +394,13 @@ export default class GraphD3 extends EventEmitter {
   onClick = function(node, data) {
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
+    this.emit('select', data, node)
+
     if(data.rank == 'history') return
     if (d3.event.defaultPrevented) {
       return
     }
 
-
-    this.emit('select', data, node)
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
