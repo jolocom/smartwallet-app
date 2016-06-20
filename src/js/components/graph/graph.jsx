@@ -41,28 +41,29 @@ let Graph = React.createClass({
     // Temp. make it more elegant later.
     if (signal == 'nodeRemove')
     {
-      this.graph.deleteNode(data.toBeDeleted)
-      this.state.toBeDeleted = null
-      graphActions.setState('toBeDeleted', null, false)
-      // Important to avoid a re-render here(.
+      this.graph.deleteNode(data.activeNode)
+      this.state.activeNode = null
+      // Important to avoid a re-render here.
+      graphActions.setState('activeNode', null, false)
     } 
     else if (signal == 'preview'){
+      // Doesn't concern this component, used by preview.jsx
     }
-    else
-    {
-      if (data) this.setState(data)
-      if(data) console.log('SET')
+    else if (data){
+      if (this.state.newNode) {
+        this.graph.addNode(this.state.newNode)
+        // We update the state of the store to be in line with the state of the child
+        this.state.newNode = null
+        graphActions.setState('newNode', null, true)
+      } else this.setState(data)
+
       if (data && data.neighbours){
         this.graph.render(this.state)
         this.graph.updateHistory(this.state.navHistory)
       }
+
     }
 
-    if (this.state.newNode) {
-      this.graph.addNode(this.state.newNode)
-      // We update the state of the store to be in line with the state of the child
-      graphActions.setState('newNode', null, true)
-    }
     if ( signal == 'erase') {
       this.graph.eraseGraph()
     }
@@ -76,10 +77,11 @@ let Graph = React.createClass({
   componentDidMount: function() {
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl())
-    // this.graph.on is the same as this.graph.addListener()
+    // Adding the listeners. 
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
+    // Fetching the state from the store.
     graphActions.getState()
   },
 

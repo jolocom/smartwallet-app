@@ -4,16 +4,14 @@ import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import d3Convertor from '../lib/d3-converter'
 
-  export default Reflux.createStore({
-    listenables: [graphActions],
-    init: function(){
+export default Reflux.createStore({
+  listenables: [graphActions],
 
+  init: function(){
     this.listenTo(accountActions.logout, this.onLogout)
-
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
     this.loaded = false
-
 
     this.state = {
       //These state keys describe the graph
@@ -22,7 +20,6 @@ import d3Convertor from '../lib/d3-converter'
       neighbours: null,
       loaded: false,
       newNode: null,
-      toBeDeleted:null,
       navHistory: [],
       selected: null,
       //These describe the ui
@@ -42,7 +39,6 @@ import d3Convertor from '../lib/d3-converter'
       neighbours: null,
       loaded: false,
       newNode: null,
-      toBeDeleted: null,
       navHistory: [],
       selected: null,
       // UI related
@@ -65,22 +61,14 @@ import d3Convertor from '../lib/d3-converter'
   },
 
   deleteNode: function(node){
-    console.log('deleting, ', node)
-
-    if (node.index == 0) {
-      for (let i = 0; i < this.state.neighbours.length; i++){
-        if (this.state.neighbours[i].uri == node.uri){
-          this.state.neighbours.splice(i, 1)
-        }
-      }
-    } else {
-      for (let i = 0; i < this.state.neighbours.length; i++){
-       if (this.state.neighbours[i].index == node.index){
-         this.state.neighbours.splice(i, 1)
-       }
-      }
+    let nodeId = node.index > 0 ? node.index : node.uri
+    for (let i = 0; i < this.state.neighbours.length; i++){
+     let sourceId = node.index > 0 ? this.state.neighbours[i].index 
+       : this.state.neighbours[i].uri
+     if (sourceId == nodeId)
+       this.state.neighbours.splice(i, 1)
     }
-    this.state.toBeDeleted = node
+    this.state.activeNode = node
     this.trigger(this.state, 'nodeRemove')
   },
 
@@ -93,6 +81,7 @@ import d3Convertor from '../lib/d3-converter'
     // This fetches the triples at the newly added file, it allows us to draw it
     // the graph accurately
     this.gAgent.fetchTriplesAtUri(object).then((result)=>{
+      // Adding the extra value to the object, the URI, it's usefull later.
       result.triples.uri = object
       // Now we tell d3 to draw a new adjacent node on the graph, with the info from
       // the triiple file
@@ -103,6 +92,8 @@ import d3Convertor from '../lib/d3-converter'
     })
   },
 
+  // Is called by both graph.jsx and preview.jsx, we differentiate the caller
+  // this way making sure that we update the right component.
   onGetState: function(source){
     this.trigger(this.state, source)
     if (!this.loaded) {

@@ -19,20 +19,17 @@ let Graph = React.createClass({
   onStateUpdate(data, signal) {
     this.setState(data)
     if (this.state.neighbours){
-      console.log(1)
       this.graph.render(this.state)
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }
 
     if (this.state.newNode) {
-      console.log(2)
       this.graph.addNode(this.state.newNode)
       previewActions.setState('newNode', null, true)
     }
 
     if(signal == 'redraw') {
-      console.log(3)
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }

@@ -155,19 +155,15 @@ class GraphAgent extends HTTPAgent {
         // Litterals are stored in the value key, and uris are stored in the
         // uri field. We have to account for that.
         let trip_object = t.object.uri ? t.object.uri : t.object.value
-        if (predicate && object)
-        {
-          if (t.predicate.uri == predicate && trip_object == object)
-            console.log(t.subject, t.predicate, t.object, ' removed')
-          else 
+        if (predicate && object){
+          if (t.predicate.uri != predicate && trip_object != object)
             writer.addTriple(t.subject,t.predicate,t.object)
         } else if (object && !predicate){
-          console.log(object, trip_object)
-          if(object == trip_object){
-          }
-          else writer.addTriple(t.subject,t.predicate,t.object)
+          if(object != trip_object)
+            writer.addTriple(t.subject,t.predicate,t.object)
         }
       })
+      // We are catching / handling errors upstream.
       return solid.web.put(subject, writer.end())
     })
   }

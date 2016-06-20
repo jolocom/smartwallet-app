@@ -145,9 +145,7 @@ let Profile = React.createClass({
       ProfileActions.update(this.state)
       ProfileActions.hide()
       this.state.loading = false
-    } else{
-      console.log('loading')
-    }
+    } 
   },
 
   _handleSelect() {

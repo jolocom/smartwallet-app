@@ -107,7 +107,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the nodes
   drawNodes = function() {
-    console.log('drawing')
+    console.log('We are drawing the nodes.')
     let self = this
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
@@ -383,7 +383,6 @@ export default class GraphD3 extends EventEmitter {
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
   onScroll = function(e) {
-    console.log('HEY', e )
   }
 
   onClickFull = function(node, data) {
@@ -610,7 +609,6 @@ export default class GraphD3 extends EventEmitter {
       })
     }
     let index = res[0][0].__data__.index
-    console.log(index)
 
     d3.selectAll('.node').filter(function(d) { return d.index == index}).select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration/3)

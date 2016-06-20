@@ -15,7 +15,6 @@ moment.locale('en', {
   relativeTime : {
     future: 'in %s',
     past: function (number/*, withoutSuffix, key, isFuture*/) {
-      // console.log(number, withoutSuffix, key, isFuture)
       return number
     },
     s: 'just now',
