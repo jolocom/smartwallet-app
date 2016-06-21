@@ -110,6 +110,7 @@ class GraphAgent extends HTTPAgent {
       acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
+      console.log(acl_writer.end())
       return solid.web.post(acl_uri, acl_writer.end()).catch((e)=>{
         console.log(e, ' occured while trying to post the acl file.')
       })

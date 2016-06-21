@@ -64,7 +64,15 @@ export default class GraphD3 extends EventEmitter {
 
 
   // Flatten the center and neighbour nodes we get from the state
-    for (var i = 0; i < nodes.neighbours.length; i++) {
+    let i = 0 
+    if (nodes.center.has_blanks){
+      for (i = 0; i < nodes.center.blanks.length; i++) {
+        this.dataNodes.push(nodes.center.blanks[i])
+        this.dataLinks.push({'source': i + 1, 'target':0})
+      }
+    }
+
+    for (i; i < nodes.neighbours.length; i++) {
       this.dataNodes.push(nodes.neighbours[i])
       this.dataLinks.push({'source': i + 1, 'target':0})
     }
@@ -81,7 +89,9 @@ export default class GraphD3 extends EventEmitter {
       .linkDistance((d, i)=> {
 
         if(d.rank == 'history' && d.histLevel>0) return STYLES.smallNodeSize * 1.25
+        // Magic numbers, magic numbers everywhere
         else if(d.rank == 'history' || i<12) return STYLES.largeNodeSize * 1.25
+        // Why 38? 
         else if (i>38) {
           return STYLES.largeNodeSize * 2.5
         }
@@ -93,7 +103,8 @@ export default class GraphD3 extends EventEmitter {
     // We define our own drag functions, allow for greater controll over the way
     // it works
     this.node_drag = this.force.drag()
-      .on('dragend', this.dragEnd)
+          .on('dragend', this.dragEnd)
+
   }.bind(this)
 
   // Draws the dark gray circle behind the main node.
@@ -107,7 +118,6 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the nodes
   drawNodes = function() {
-    console.log('We are drawing the nodes.')
     let self = this
     // These make the following statements shorter
     let largeNode = this.largeNodeSize

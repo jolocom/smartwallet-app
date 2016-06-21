@@ -49,17 +49,34 @@ class D3Converter {
       let triple = node[i]
       if (triple.subject.id >= 0) {
 
-        if(!props.blanks) props.blanks = []
         props.has_blanks = true
+        if(!props.blanks) props.blanks = []
          
-        if (!props.blanks[triple.subject.value]){
+        if (!props.blanks[triple.subject.value])
           props.blanks[triple.subject.value] = []
-        }
 
         props.blanks[triple.subject.value].push(triple)
       }
+    // Make the following statements shorter
+      let pred = triple.predicate.uri
+      let obj = triple.object
+
+      // Updating the attributes of the node object. The resulting object will have
+      // all of it's props filled in, and will be ready to be rendered by D3
+      // Note, if a triple is not present, it will be set to null.
+      // If the resource is a URI, it's value is stored next to the 'uri' key in the object
+      // otherwise it's value is stored in the 'value' key of the object. We need to make
+      // sure we are assigning the value regardless of where it's stored
+      if (pred === FOAF('givenName').uri) props.name = obj.value ? obj.value : obj.uri
+      if (pred === FOAF('familyName').uri) props.familyName = obj.value ? obj.value : obj.uri
+      if (pred === FOAF('name').uri) props.fullName = obj.value ? obj.value : obj.uri
+      if (pred === DC('title').uri) props.title = obj.value ? obj.value : obj.uri
+      if (pred === DC('description').uri) props.description = obj.value ? obj.value : obj.uri
+      if (pred === RDF('type').uri) props.type = obj.value ? obj.value : obj.uri
+      if (pred === FOAF('img').uri) props.img = obj.value ? obj.value : obj.uri
+      // Storage is used when adding files. Better to do it here then to send extra requests upon upload.
+      if (pred === NIC('storage').uri) props.storage = obj.value ? obj.value : obj.uri
     }
-    
    
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
@@ -81,48 +98,7 @@ class D3Converter {
       props.rank = 'unavailable'
       return props
     }
-
-    // Updating the attributes of the node object. The resulting object will have
-    // all of it's props filled in, and will be ready to be rendered by D3
-    // Note, if a triple is not present, it will be set to null.
-
-    // If the resource is a URI, it's value is stored next to the 'uri' key in the object
-    // otherwise it's value is stored in the 'value' key of the object. We need to make
-    // sure we are assigning the value regardless of where it's stored
-    let name = g.statementsMatching(undefined, FOAF('givenName'), undefined)
-    if (name.length > 0) props.name = name[0].object.value ? name[0].object.value : name[0].object.uri
-    else props.name = null
-
-    let familyName = g.statementsMatching(undefined, FOAF('familyName'), undefined)
-    if (familyName.length > 0) props.familyName = familyName[0].object.value ? familyName[0].object.value : familyName[0].object.uri
-    else props.familyName = null
-
-    let fullName = g.statementsMatching(undefined, FOAF('name'), undefined)
-    if (fullName.length > 0) props.fullName = fullName[0].object.value ? fullName[0].object.value : fullName[0].object.uri
-    else props.fullName = null
-
-    let title = g.statementsMatching(undefined, DC('title'), undefined)
-    if (title.length > 0) props.title = title[0].object.value ? title[0].object.value : title[0].object.uri
-    else props.img = null
-
-    let description = g.statementsMatching(undefined, DC('description'), undefined)
-    if (description.length > 0) props.description = description[0].object.value ? description[0].object.value : description[0].object.uri
-    else props.description = null
-
-    let type = g.statementsMatching(undefined, RDF('type'), undefined)
-    if (type.length > 0) props.type = type[0].object.value ? type[0].object.value : type[0].object.uri
-    else props.type = null
-
-    let image = g.statementsMatching(undefined, FOAF('img'), undefined)
-    if (image.length > 0) props.img = image[0].object.value ? image[0].object.value : image[0].object.uri
-    else props.img = null
-
-
-    // Storage is used when adding files. Better to do it here then to send extra requests upon upload.
-    let storage = g.statementsMatching(undefined, NIC('storage'), undefined)
-    if (storage.length > 0) props.storage = storage[0].object.value ? storage[0].object.value : storage[0].object.uri
-    else if (uri) props.storage = uri.substring(0, uri.indexOf('profile'))
-
+    
     // We specify the rank of the node here. Center is the center node and Adjacent is a neighbour, smaller node
     // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
     if (rank == 'a') props.rank = 'adjacent'
