@@ -71,7 +71,7 @@
     "react-tap-event-plugin": "^1.0.0",
     "react-timer-mixin": "^0.13.3",
     "reflux": "^0.4.1",
-    "solid-client": "^0.14.2"
+    "solid-client": "^0.19.0"
   },
   "engines": {
     "node": "^0.12"

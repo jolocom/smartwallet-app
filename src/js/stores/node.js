@@ -26,19 +26,28 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
-  // On Remove will remove the node itself (RDF file), a function onDisconnect will be introduced later.
+  // On Remove will remove the node itself (RDF file) and disconnects it from the center node.
   onRemove(node, centerNode){
-    this.gAgent.deleteFile(node.uri).then(()=>{
-      this.gAgent.deleteTriple(centerNode.uri, node.connection, node.uri).then(()=>{
+    let subject = rdf.sym(centerNode.uri)
+    let predicate = rdf.sym(node.connection)
+    let object = rdf.sym(node.uri)
+
+    // Deleting the file itself.
+    this.gAgent.deleteFile(object.uri).then(()=>{
+      // Deleting the connection to the file. 
+      this.gAgent.deleteTriple(subject, predicate, object).then(()=>{
+        // Animating the grapy
         graphActions.deleteNode(node) 
+      // Basic error handling
       }).catch((e)=>{console.log('Error', e ,'while removing connection')})
-    }).catch((e)=> {
-      console.log('error', e, 'occured while deleting')
-    })
+    }).catch((e)=>{console.log('error', e, 'occured while deleting')})
   },
 
   onDissconnectNode(node, centerNode){
-    this.gAgent.deleteTriple(centerNode.uri, node.connection, node.uri)
+    let subject = rdf.sym(centerNode.uri)
+    let predicate = rdf.sym(node.connection)
+    let object = rdf.sym(node.uri)
+    this.gAgent.deleteTriple(subject, predicate, object)
   },
 
   link(start, type, end, flag) {

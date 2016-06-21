@@ -28,7 +28,10 @@ let Profile = React.createClass({
   },
 
   onGraphChange: function(state) {
-    if(state && state.center) this.state.currentNode = state.center.uri
+    if(state && state.center){
+      this.state.storage = state.center.storage
+      this.state.currentNode = state.center.uri
+    }
   },
   componentDidMount(){
     this.state.loading = false
@@ -183,7 +186,8 @@ let Profile = React.createClass({
         error: null,
         file: file
       })
-      gAgent.storeFile(null, file).then((res) => {
+
+      gAgent.storeFile(this.state.storage, file).then((res) => {
         this.setState({imgUri: res.url})
         this.setState({loading: false})
       }).catch((e)=>{
