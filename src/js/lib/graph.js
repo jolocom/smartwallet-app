@@ -60,21 +60,28 @@ export default class GraphD3 extends EventEmitter {
   // Upon set up force we also initialize the dataLinks and dataNodes
   // variables.
     this.dataNodes = [nodes.center]
+    this.currentDataNodes = [nodes.center]
     this.dataLinks = []
-
-
+    this.currentDataLinks = []
+    this.index=0
+    this.numberOfNodes = 8
+    this.numberOfAdjcent = 0
   // Flatten the center and neighbour nodes we get from the state
-    for (var i = 0; i < nodes.neighbours.length; i++) {
+    for (let i = 0; i < nodes.neighbours.length; i++) {
       this.dataNodes.push(nodes.neighbours[i])
       this.dataLinks.push({'source': i + 1, 'target':0})
+      this.numberOfAdjcent++
     }
+
+
+    this.sortNodes()
 
 
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
     this.force = d3.layout.force()
-      .nodes(this.dataNodes)
-      .links(this.dataLinks)
+      .nodes(this.currentDataNodes)
+      .links(this.currentDataLinks)
       .charge(-1000)
       .chargeDistance(STYLES.largeNodeSize*2)
       .linkDistance((d, i)=> {
@@ -102,15 +109,32 @@ export default class GraphD3 extends EventEmitter {
       .attr('cy', this.height * 0.5)
       .attr('r', this.largeNodeSize* 0.57)
       .style('fill', STYLES.lightGrayColor)
+
+    this.arch = this.numberOfNodes/this.numberOfAdjcent
+
+    this.archAngle =  360/this.numberOfAdjcent
+
+    this.arc = d3.svg.arc()
+        .innerRadius(this.largeNodeSize* 0.5)
+        .outerRadius(this.largeNodeSize* 0.57)
+        .startAngle(0+this.index*this.archAngle)
+        .endAngle(2 * Math.PI * this.arch+ this.index*this.archAngle)
+
+    this.svg.append('path')
+        .attr('class', 'dial')
+        .attr('d', this.arc)
+        .attr('fill', STYLES.grayColor)
+        .attr('transform', 'translate(' + this.width*0.5 + ',' + this.height*0.5 + ')')
+
   }.bind(this)
 
   // Draws the nodes
   drawNodes = function() {
+    console.log('drawing!!!')
     let self = this
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
     let smallNode = this.smallNodeSize
-
 
     let defsFull = this.svg.append('svg:defs')
     defsFull.append('svg:pattern')
@@ -128,7 +152,7 @@ export default class GraphD3 extends EventEmitter {
         // We draw the lines for all the elements in the dataLinks array.
 
     let link = this.svg.selectAll('line')
-    .data(this.dataLinks)
+    .data(this.currentDataLinks)
     .enter()
     .insert('line', '.node')
     .attr('class','link')
@@ -139,18 +163,18 @@ export default class GraphD3 extends EventEmitter {
 
     // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
-      .data(this.dataNodes, (d) => {return (d.uri + d.connection)})
+      .data(this.currentDataNodes, (d) => {return (d.uri + d.connection)})
       .enter()
       .append('g')
       .attr('class','node')
       .call(this.node_drag)
 
     this.svg.selectAll('.node')
-    .data(this.dataNodes, (d) => {return (d.uri + d.connection )})
+    .data(this.currentDataNodes, (d) => {return (d.uri + d.connection )})
     .exit().remove()
 
     this.svg.selectAll('line')
-    .data(this.dataLinks)
+    .data(this.currentDataLinks)
     .exit().remove()
 
     let defsImages = this.node.append('svg:defs')
@@ -317,7 +341,7 @@ export default class GraphD3 extends EventEmitter {
   // This function fires upon tick, around 30 times per second?
   tick = function(e){
     let center = {y:(this.height / 2), x: this.width /2}
-    let k = 2.5 * e.alpha
+    let k = .5 * e.alpha
     d3.selectAll('g .node').attr('d', function(d){
       if(d.rank=='center'){
         d.x=center.x
@@ -332,6 +356,21 @@ export default class GraphD3 extends EventEmitter {
       }
     })
 
+    if(this.numberOfAdjcent>this.numberOfNodes){
+
+      let num = 0
+
+      d3.selectAll('.node').attr('d', function(d){
+        if(d.rank == 'adjacent'){
+          let angle= (2 * Math.PI) / 8
+          let x = Math.sin(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + center.x
+          let y = Math.cos(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + center.y
+          d.x+=(x-d.x)*k
+          d.y+=(y-d.y)*k
+          num++
+        }
+      })
+    }
     // Update the link positions.
     d3.selectAll('.link')
       .attr('x1', (d) =>  d.source.x )
@@ -380,8 +419,59 @@ export default class GraphD3 extends EventEmitter {
 
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
-  onScroll = function(e) {
-    console.log('HEY', e )
+  onScroll = function() {
+
+    this.force.stop()
+    this.index++
+    this.index = this.index % this.numberOfAdjcent
+    this.sortNodes()
+    this.force.nodes(this.currentDataNodes)
+    this.force.links(this.currentDataLinks)
+    this.drawNodes()
+    this.force.start()
+
+
+  }.bind(this)
+
+  sortNodes = function (){
+
+    if(this.numberOfAdjcent<=this.numberOfNodes){
+      this.currentDataNodes = this.dataNodes
+      this.currentDataLinks = this.dataLinks
+      return
+    }
+
+    d3.select('.dial').attr('transform', 'translate(' + this.width*0.5 + ',' + this.height*0.5 + ') rotate('+this.archAngle*this.index+')')
+
+    this.currentDataNodes=[]
+    this.currentDataLinks = []
+    this.currentDataNodes[0]=this.dataNodes[0]
+    let nodeCount = 0
+    let first = true
+
+
+    for (var i = this.index+1; i != this.index; i = (i+1)%this.dataNodes.length) {
+
+      if(this.dataNodes[i].rank == 'adjacent' && nodeCount<this.numberOfNodes){
+        this.currentDataNodes.push(this.dataNodes[i])
+        this.currentDataLinks.push({'source': nodeCount + 1, 'target':0})
+        nodeCount++
+      }
+      if(this.dataNodes[i].rank == 'history'){
+        this.currentDataNodes.push(this.dataNodes[i])
+        if(first) {
+          first = true
+          this.currentDataLinks.push({'source': nodeCount + 1, 'target':0})
+          nodeCount++
+        }
+        else{
+          this.currentDataLinks.push({'source': nodeCount + 1, 'target':nodeCount})
+          nodeCount++
+        }
+      }
+
+
+    }
   }
 
   onClickFull = function(node, data) {
@@ -627,10 +717,10 @@ export default class GraphD3 extends EventEmitter {
         let nIndex = -1
         let lIndex = -1
 
-        for (let i = 0; i < this.dataNodes.length; i++)
+        for (let i = 0; i < this.currentDataNodes.length; i++)
           if(this.dataNodes[i].index == index) nIndex = i
 
-        for (let i = 0; i < this.dataLinks.length; i++)
+        for (let i = 0; i < this.currentDataLinks.length; i++)
           if(this.dataLinks[i].source.index == index) lIndex = i
 
         this.force.stop()

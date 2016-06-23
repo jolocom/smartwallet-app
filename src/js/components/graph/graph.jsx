@@ -42,7 +42,7 @@ let Graph = React.createClass({
     if (signal == 'nodeRemove')
     {
       this.graph.deleteNode(data)
-    } 
+    }
     else if (signal == 'preview'){
     }
     else
@@ -57,7 +57,8 @@ let Graph = React.createClass({
     if (this.state.newNode) {
       this.graph.addNode(this.state.newNode)
       // We update the state of the store to be in line with the state of the child
-      graphActions.setState('newNode', null, true)
+      this.state.newNode = null
+      graphActions.setState('newNode', null, false)
     }
     if ( signal == 'erase') {
       this.graph.eraseGraph()

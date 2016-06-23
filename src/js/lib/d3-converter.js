@@ -13,7 +13,7 @@ import STYLES from 'styles/app.js'
 
 class D3Converter {
   convertToD3(rank, node, i, n) {
-    
+
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
@@ -47,13 +47,21 @@ class D3Converter {
     }
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
-      let angle = (2 * Math.PI) / this.n
+      let angle = 0
+
+      if(this.n<8){
+        angle = (2 * Math.PI) / this.n
+      }
+      else {
+        angle= (2 * Math.PI) / 8
+      }
+
       let halfwidth = STYLES.width / 2
       let halfheight = STYLES.height / 2
 
 
-      props.x = Math.sin(angle * this.i) * STYLES.largeNodeSize *0.7 + halfwidth
-      props.y = Math.cos(angle * this.i) * STYLES.largeNodeSize *0.7 + halfheight
+      props.x = Math.sin(angle * (this.i%8)) * STYLES.largeNodeSize * 0.5 + halfwidth
+      props.y = Math.cos(angle * (this.i%8)) * STYLES.largeNodeSize * 0.5 + halfheight
 
     } else if (!i && !n && rank =='a') {
       // This takes care of nodes that are added dynamically, the mid + 30 is
