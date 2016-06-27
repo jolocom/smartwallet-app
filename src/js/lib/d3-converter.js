@@ -31,7 +31,7 @@ class D3Converter {
       description:null,
       img:null,
       type:null,
-      rank: null,
+      rank: 'adjacent',
       storage: null,
       x: null,
       y: null

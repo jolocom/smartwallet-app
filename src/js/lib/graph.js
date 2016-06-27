@@ -74,8 +74,22 @@ export default class GraphD3 extends EventEmitter {
     }
 
 
-    this.sortNodes()
+    this.center = {y:(this.height / 2), x: this.width /2}
 
+    if(this.numberOfNodes<this.numberOfAdjcent){
+      this.nodePositions = []
+
+      let num = 0, angle= (2 * Math.PI) / 8
+
+      for (let i = 0; i < this.numberOfAdjcent; i++) {
+        let pos = { x: Math.sin(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + this.center.x,
+                    y: Math.cos(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + this.center.y}
+        this.nodePositions.push(pos)
+        num++
+      }
+
+    }
+    this.sortNodes()
 
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
@@ -100,7 +114,29 @@ export default class GraphD3 extends EventEmitter {
     // it works
     this.node_drag = this.force.drag()
       .on('dragend', this.dragEnd)
+
+    this.back_drag = d3.behavior.drag()
+      .on('drag', this.backDrag)
+
+    this.svg.call(this.back_drag)
+
   }.bind(this)
+
+  backDrag = function(){
+
+    // this.force.stop()
+    // this.index += Math.floor(d3.event.dy*0.1)
+    // if(this.index>this.numberOfAdjcent-1) this.index = this.numberOfAdjcent-1
+    // if(this.index<0) this.index = 0
+    // this.sortNodes()
+    // this.force.nodes(this.currentDataNodes)
+    // this.force.links(this.currentDataLinks)
+    // this.drawNodes()
+    // this.force.start()
+
+
+  }.bind(this)
+
 
   // Draws the dark gray circle behind the main node.
   drawBackground = function() {
@@ -110,21 +146,42 @@ export default class GraphD3 extends EventEmitter {
       .attr('r', this.largeNodeSize* 0.57)
       .style('fill', STYLES.lightGrayColor)
 
-    this.arch = this.numberOfNodes/this.numberOfAdjcent
+    if(this.numberOfNodes < this.numberOfAdjcent){
 
-    this.archAngle =  360/this.numberOfAdjcent
+      //draw dotted line to indicate there are more nodes
 
-    this.arc = d3.svg.arc()
-        .innerRadius(this.largeNodeSize* 0.5)
-        .outerRadius(this.largeNodeSize* 0.57)
-        .startAngle(0+this.index*this.archAngle)
-        .endAngle(2 * Math.PI * this.arch+ this.index*this.archAngle)
+      for (var i = 0; i < 12; i++) {
+        this.svg.append('svg:circle')
+          .attr('cx', this.width * 0.5)
+          .attr('cy', (this.height * 0.5) - (i*10) - (this.largeNodeSize*0.8))
+          .attr('r', this.largeNodeSize* 0.02)
+          .style('fill', STYLES.lightGrayColor)
+      }
+      this.svg.append('svg:circle')
+        .attr('cx', this.width * 0.5)
+        .attr('cy', this.height * 0.5)
+        .attr('r', this.largeNodeSize* 0.57)
+        .style('fill', STYLES.lightGrayColor)
 
-    this.svg.append('path')
+
+      this.arch = this.numberOfNodes/this.numberOfAdjcent
+
+      this.archAngle =  360/this.numberOfAdjcent
+
+      this.arc = d3.svg.arc()
+          .innerRadius(this.largeNodeSize* 0.5)
+          .outerRadius(this.largeNodeSize* 0.57)
+          .startAngle(0)
+
+
+      this.dial = this.svg.append('path')
         .attr('class', 'dial')
+        .datum({endAngle: 2*Math.PI*this.arch})
+        .style('fill', STYLES.grayColor)
         .attr('d', this.arc)
-        .attr('fill', STYLES.grayColor)
         .attr('transform', 'translate(' + this.width*0.5 + ',' + this.height*0.5 + ')')
+
+    }
 
   }.bind(this)
 
@@ -154,7 +211,7 @@ export default class GraphD3 extends EventEmitter {
     let link = this.svg.selectAll('line')
     .data(this.currentDataLinks)
     .enter()
-    .insert('line', '.node')
+    .insert('line', '.dial')
     .attr('class','link')
     .attr('stroke-width', () => {
       // Capped at 13, found it to look the best
@@ -331,7 +388,7 @@ export default class GraphD3 extends EventEmitter {
     })
 
     d3.select(window)
-      .on('wheel', function(e) {
+      .on('wheel.zoom', function(e) {
         self.onScroll(e)
       })
 
@@ -341,7 +398,7 @@ export default class GraphD3 extends EventEmitter {
   // This function fires upon tick, around 30 times per second?
   tick = function(e){
     let center = {y:(this.height / 2), x: this.width /2}
-    let k = .5 * e.alpha
+    let k = 1 * e.alpha
     d3.selectAll('g .node').attr('d', function(d){
       if(d.rank=='center'){
         d.x=center.x
@@ -350,9 +407,9 @@ export default class GraphD3 extends EventEmitter {
       else if (d.rank=='history'){
         d.x += (center.x-d.x)*k
         if(d.histLevel==0){
-          d.y += (center.y-d.y+STYLES.largeNodeSize*(d.histLevel+1))*k
+          d.y += (center.y-d.y+STYLES.largeNodeSize*2)*k
         }
-        else d.y += (center.y-d.y+STYLES.smallNodeSize*(d.histLevel+1))*k
+        else d.y += (center.y-d.y+STYLES.largeNodeSize*2+(STYLES.smallNodeSize/3)*(d.histLevel+1))*k
       }
     })
 
@@ -360,13 +417,10 @@ export default class GraphD3 extends EventEmitter {
 
       let num = 0
 
-      d3.selectAll('.node').attr('d', function(d){
+      d3.selectAll('.node').attr('d',(d) => {
         if(d.rank == 'adjacent'){
-          let angle= (2 * Math.PI) / 8
-          let x = Math.sin(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + center.x
-          let y = Math.cos(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + center.y
-          d.x+=(x-d.x)*k
-          d.y+=(y-d.y)*k
+          d.x+=(this.nodePositions[num].x-d.x)*k
+          d.y+=(this.nodePositions[num].y-d.y)*k
           num++
         }
       })
@@ -423,7 +477,7 @@ export default class GraphD3 extends EventEmitter {
 
     this.force.stop()
     this.index++
-    this.index = this.index % this.numberOfAdjcent
+    this.index = this.index % (this.numberOfAdjcent)
     this.sortNodes()
     this.force.nodes(this.currentDataNodes)
     this.force.links(this.currentDataLinks)
@@ -442,6 +496,12 @@ export default class GraphD3 extends EventEmitter {
     }
 
     d3.select('.dial').attr('transform', 'translate(' + this.width*0.5 + ',' + this.height*0.5 + ') rotate('+this.archAngle*this.index+')')
+    // d3.select('.dial').transition()
+    //   .duration(100)
+    //   .call(this.arcTween, 2*Math.PI*(this.index+1)/this.numberOfAdjcent)
+
+
+    console.log('index', this.index)
 
     this.currentDataNodes=[]
     this.currentDataLinks = []
@@ -449,30 +509,60 @@ export default class GraphD3 extends EventEmitter {
     let nodeCount = 0
     let first = true
 
-
-    for (var i = this.index+1; i != this.index; i = (i+1)%this.dataNodes.length) {
+    for (let i = this.index+1; i != this.index; i = (i+1)%this.dataNodes.length) {
 
       if(this.dataNodes[i].rank == 'adjacent' && nodeCount<this.numberOfNodes){
         this.currentDataNodes.push(this.dataNodes[i])
-        this.currentDataLinks.push({'source': nodeCount + 1, 'target':0})
+        this.currentDataLinks.push({'source': this.currentDataNodes.length - 1, 'target':0})
         nodeCount++
       }
+
+    }
+    for (var i = 0; i < this.dataNodes.length; i++) {
       if(this.dataNodes[i].rank == 'history'){
         this.currentDataNodes.push(this.dataNodes[i])
         if(first) {
-          first = true
-          this.currentDataLinks.push({'source': nodeCount + 1, 'target':0})
-          nodeCount++
+          this.currentDataLinks.push({'source': this.currentDataNodes.length - 1, 'target':0})
+          first = false
         }
         else{
-          this.currentDataLinks.push({'source': nodeCount + 1, 'target':nodeCount})
-          nodeCount++
+          this.currentDataLinks.push({'source': this.currentDataNodes.length - 1, 'target':this.currentDataNodes.length - 2})
         }
       }
-
-
     }
-  }
+    let num = 0
+
+    d3.selectAll('.node').attr('d',(d) => {
+      if(d.rank == 'adjacent'){
+        d.x=this.nodePositions[num].x
+        d.y=this.nodePositions[num].y
+        d.px=this.nodePositions[num].x
+        d.py=this.nodePositions[num].y
+        num++
+      }
+    })
+
+  }.bind(this)
+
+  arcTween = function (transition, newAngle) {
+    let arc = d3.svg.arc()
+        .innerRadius(this.largeNodeSize* 0.5)
+        .outerRadius(this.largeNodeSize* 0.57)
+        .startAngle(0)
+
+    transition.attrTween('d', function(d) {
+
+      var interpolate = d3.interpolate(d.endAngle, newAngle)
+
+      return function(t) {
+
+        d.endAngle = interpolate(t)
+
+        return arc(d)
+      }
+    })
+  }.bind(this)
+
 
   onClickFull = function(node, data) {
     //stops propagation to node click handler
@@ -481,6 +571,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   onClick = function(node, data) {
+
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if(data.rank == 'history') return
@@ -622,11 +713,15 @@ export default class GraphD3 extends EventEmitter {
 
         if (i == 0) {
           this.dataNodes.push(history[history.length-1-i])
+          this.currentDataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
+          this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: 0})
         }
         else{
           this.dataNodes.push(history[history.length-1-i])
+          this.currentDataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
+          this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: 0})
         }
       }
       this.force.start()
@@ -726,7 +821,7 @@ export default class GraphD3 extends EventEmitter {
         this.force.stop()
         this.dataNodes.splice(nIndex, 1)
         //this.dataLinks.splice(lIndex, 1)
-
+        this.sortNodes()
         this.drawNodes()
         this.force.start()
       })
