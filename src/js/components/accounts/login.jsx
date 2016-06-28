@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton} from 'material-ui'
+import {RaisedButton, TextField} from 'material-ui'
 import {History, Link} from 'react-router'
 
 import Account from 'actions/account'
@@ -17,7 +17,8 @@ let Login = React.createClass({
 
   getInitialState() {
     return {
-      username: ''
+      username: '',
+      password: ''
     }
   },
   componentWillMount() {
@@ -30,14 +31,23 @@ let Login = React.createClass({
       // this.history.pushState(null, '/')
     }
   },
+
   login() {
-    Account.login()
+    Account.login(this.state.username, this.state.password)
   },
+
   _handleUsernameChange(e) {
     this.setState({
       username: e.target.value
     })
   },
+
+  _handlePasswordChange(e) {
+    this.setState({
+      password: e.target.value
+    })
+  },
+
   getStyles() {
     let {muiTheme} = this.context
     let styles = {
@@ -92,13 +102,15 @@ let Login = React.createClass({
     return (
       <div style={styles.container}>
         <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
-
         <div style={styles.content}>
           <div style={{marginBottom: '20px'}}>
+            <div>
+              <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
+              <TextField floatingLabelText="Password" onChange={this._handlePasswordChange} />
+            </div>
           </div>
-          <RaisedButton secondary={true} onTouchTap={this.login} style={styles.button} label="Login With Certificate"/>
+          <RaisedButton secondary={true} onTouchTap={this.login} style={styles.button} label="Login"/>
         </div>
-
         <p style={styles.help}>Don't have an account yet? <Link to="/signup" style={styles.link}>Sign up</Link>.</p>
       </div>
     )

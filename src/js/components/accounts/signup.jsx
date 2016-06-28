@@ -1,6 +1,8 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import Formsy from 'formsy-react'
+import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
 import {History, Link} from 'react-router'
 
@@ -20,6 +22,13 @@ let Signup = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
+  errorMessages: {
+    alphaNumeric: 'Please only use letters and numbers',
+    email: 'Please provide a valid email',
+    name: 'Please enter a valid name',
+    unavailable: 'This username is already taken'
+  },
+
   getInitialState() {
     return {
       disabledSubmit: true
@@ -31,10 +40,29 @@ let Signup = React.createClass({
       this.history.pushState(null, '/graph')
   },
 
+  signup() {
+    let signupData = {
+      username: this.state.username,
+      name: this.state.name,
+      email: this.state.email ,
+			password: this.state.password
+    } 
+
+    Account.signup(signupData)
+  },
+
   componentDidUpdate() {
     if (this.state.account && this.state.account.username) {
       this.history.pushState(null, '/graph')
     }
+  },
+
+  enableSubmit() {
+    this.setState({disabledSubmit: false})
+  },
+
+  disableSubmit() {
+      this.setState({disabledSubmit: true})
   },
 
   _onUsernameChange(e) {
@@ -42,6 +70,24 @@ let Signup = React.createClass({
       username: e.target.value
     })
     Availability.check(e.target.value)
+  },
+
+  _onNameChange(e) {
+    this.setState({
+      name: e.target.value
+    })
+  },
+
+  _onEmailChange(e) {
+    this.setState({
+      email: e.target.value
+    })
+  },
+
+  _onPasswordChange(e) {
+    this.setState({
+      password: e.target.value
+    })
   },
 
   getStyles() {
@@ -98,19 +144,51 @@ let Signup = React.createClass({
     Account.signup()
   },
 
-  render() {
-    let styles = this.getStyles()
-    return (
-      <div style={styles.container}>
-        <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
-        <div style={styles.content}>
-            <RaisedButton type="submit" onTouchTap={this.handleClick} secondary={true}  style={styles.button} label="Sign up"/>
-        </div>
+	render() {
+	let styles = this.getStyles()
+	return (
+		<div style={styles.container}>
+			<div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
+			<div style={styles.content}>
+				<Formsy.Form
+					onValid={this.enableSubmit}
+					onInvalid={this.disableSubmit}
+					onValidSubmit={this.signup}
+					>
+					<div style={{marginBottom: '20px'}}>
+						<FormsyText name="username"
+							floatingLabelText="Username"
+							required
+							validations="isAlphanumeric"
+							validationError={this.errorMessages.alphaNumeric}
+							onChange={this._onUsernameChange}
+							/>
+						<FormsyText name="password"
+							floatingLabelText="Password"
+							onChange={this._onPasswordChange}
+							required />
+						<FormsyText name="name"
+							floatingLabelText="Name"
+							validations="isWords"
+							validationError={this.errorMessages.name}
+							onChange={this._onNameChange}
+							required />
+						<FormsyText name="email"
+							floatingLabelText="Email"
+							validations="isEmail"
+							validationError={this.errorMessages.email}
+							onChange={this._onEmailChange}
+							required />
+					</div>
 
-        <p style={styles.help}>Already have an account? <Link to="/login" style={styles.link}>login instead</Link>.</p>
-      </div>
-    )
-  }
+					<RaisedButton type="submit" secondary={true} disabled={this.state.disabledSubmit} style={styles.button} label="Sign up"/>
+				</Formsy.Form>
+			</div>
+
+			<p style={styles.help}>Already have an account? <Link to="/login" style={styles.link}>login instead</Link>.</p>
+		</div>
+	)
+}
 })
 
 export default Radium(Signup)
