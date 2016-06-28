@@ -6,6 +6,7 @@ import {Writer} from '../rdf.js'
 import solid from 'solid-client'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
+import $ from 'jquery'
 
 import rdf from 'rdflib'
 let SCHEMA = rdf.Namespace('https://schema.org/')
@@ -21,7 +22,6 @@ class GraphAgent extends HTTPAgent {
   //
   // We create a rdf file at the distContainer containing a title and description passed to it
   createNode(user, node, title, description, image, type) {
-
     let writer = new Writer()
 
     let dstContainer = node.storage

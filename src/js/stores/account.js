@@ -1,6 +1,6 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
-import solid from 'solid-client'
+import $ from 'jquery'
 
 let AccountStore = Reflux.createStore({
   listenables: Account,
@@ -11,15 +11,23 @@ let AccountStore = Reflux.createStore({
     }
   },
 
-  onSignup() {
-    solid.signup()
+  onSignup(data) {
+	  console.log('registering with the data: ', data)	
   },
 
-  onLogin() {
-    solid.login().then((webId) => {
-      console.log('webId!', webId)
-      this.trigger({username: webId})
-    })
+  onLogin(username, password) {
+    $.ajax({ 
+      type: "POST", 
+      url: "https://proxy.webid.jolocom.com/login", 
+      xhrFields: { 
+        withCredentials: true 
+      },  
+      data: {username: username, password: password}, 
+      success: function(res, txt, head) { 
+        console.log('success!') 
+        console.log(head.getAllResponseHeaders()) 
+      } 
+    }) 
   },
 
   onLogout() {
