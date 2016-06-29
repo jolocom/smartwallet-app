@@ -12,6 +12,15 @@ let AccountStore = Reflux.createStore({
   },
 
   onSignup(data) {
+    $.ajax({
+      type: "POST", 
+      url: "https://proxy.webid.jolocom.com/register", 
+      data: {username: data.username , password: data.password}, 
+      success: function(res, txt, head) { 
+        console.log('success!') 
+        console.log(head.getAllResponseHeaders()) 
+      } 
+    })
 	  console.log('registering with the data: ', data)	
   },
 
