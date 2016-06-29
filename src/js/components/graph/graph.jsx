@@ -42,7 +42,7 @@ let Graph = React.createClass({
   getGraphEl: function() {
     return ReactDOM.findDOMNode(this.refs.graph)
   },
-  onAccountUpdate: function(data){
+  onProfileUpdate: function(data){
     console.log('Triggered From Here!')
     console.log(data) 
   },
@@ -86,6 +86,7 @@ let Graph = React.createClass({
 
   componentDidMount: function() {
     // Instantiating the graph object.
+    this.listenTo(AccountStore, this.onProfileChange)
     this.graph = new GraphD3(this.getGraphEl())
 
     // Adding the listeners. 

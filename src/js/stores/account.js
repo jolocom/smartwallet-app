@@ -1,6 +1,5 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
-import AccountS from 'stores/account'
 import $ from 'jquery'
 
 let AccountStore = Reflux.createStore({
@@ -35,13 +34,13 @@ let AccountStore = Reflux.createStore({
       // Res_body is the response body, 2 more arguments are passed to the success callback,
       // but they are not of any use now.
       success: (res_body) => { 
-        console.log(res_body)
+        console.log(this)
+        console.log('triggering')
         this.trigger({username: res_body.webid})
       } 
     }) 
   },
 
-  // For the next 2 methods appropriate ajax methods will be needed.
   onLogout() {
     localStorage.removeItem('fake-user')
     this.trigger({username: null})
