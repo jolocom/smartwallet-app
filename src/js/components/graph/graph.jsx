@@ -42,9 +42,9 @@ let Graph = React.createClass({
   getGraphEl: function() {
     return ReactDOM.findDOMNode(this.refs.graph)
   },
-  onProfileUpdate: function(data){
-    console.log('Triggered From Here!')
-    console.log(data) 
+
+  onAccountUpdate: function(data){
+    console.log('HEY')
   },
 
   onStateUpdate: function(data, signal) {
@@ -84,9 +84,10 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
+  
+  // This is the first thing that fires when the user logs in.
   componentDidMount: function() {
-    // Instantiating the graph object.
-    this.listenTo(AccountStore, this.onProfileChange)
+    // We create a basic grap, draws the background, and that's about it.
     this.graph = new GraphD3(this.getGraphEl())
 
     // Adding the listeners. 
@@ -95,6 +96,8 @@ let Graph = React.createClass({
     this.graph.on('view-node', this._handleViewNode)
 
     // Fetching the state from the store.
+    // This includes the center node, the neighbours, and everything
+    // used to render the graph
     graphActions.getState()
   },
 

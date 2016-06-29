@@ -2,13 +2,21 @@ import Reflux from 'reflux'
 import Account from 'actions/account'
 import $ from 'jquery'
 
-let AccountStore = Reflux.createStore({
+export default Reflux.createStore({
   listenables: Account,
 
   getInitialState() {
     return {
       username: null
     }
+  },
+
+  init: function(){
+    console.log('inniting')
+    this.state = {
+      username: null
+    }
+    
   },
 
   onSignup(data) {
@@ -30,15 +38,17 @@ let AccountStore = Reflux.createStore({
       url: "https://proxy.webid.jolocom.com/login", 
       xhrFields: {withCredentials: true},  
       data: {username: username, password: password}, 
-      
       // Res_body is the response body, 2 more arguments are passed to the success callback,
       // but they are not of any use now.
-      success: (res_body) => { 
-        console.log(this)
-        console.log('triggering')
-        this.trigger({username: res_body.webid})
+      success: function(res_body) { 
+        Account.login.completed(res_body.webid)
       } 
     }) 
+  },
+
+  // Triggers when the login is done.
+  onLoginCompleted(webid){
+    this.trigger({username: webid})
   },
 
   onLogout() {
@@ -52,4 +62,3 @@ let AccountStore = Reflux.createStore({
   }
 })
 
-export default AccountStore

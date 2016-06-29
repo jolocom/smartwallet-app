@@ -67,15 +67,18 @@ class D3Converter {
       // If the resource is a URI, it's value is stored next to the 'uri' key in the object
       // otherwise it's value is stored in the 'value' key of the object. We need to make
       // sure we are assigning the value regardless of where it's stored
-      if (pred === FOAF('givenName').uri) props.name = obj.value ? obj.value : obj.uri
-      if (pred === FOAF('familyName').uri) props.familyName = obj.value ? obj.value : obj.uri
-      if (pred === FOAF('name').uri) props.fullName = obj.value ? obj.value : obj.uri
-      if (pred === DC('title').uri) props.title = obj.value ? obj.value : obj.uri
-      if (pred === DC('description').uri) props.description = obj.value ? obj.value : obj.uri
-      if (pred === RDF('type').uri) props.type = obj.value ? obj.value : obj.uri
-      if (pred === FOAF('img').uri) props.img = obj.value ? obj.value : obj.uri
-      // Storage is used when adding files. Better to do it here then to send extra requests upon upload.
-      if (pred === NIC('storage').uri) props.storage = obj.value ? obj.value : obj.uri
+
+      if (triple.subject.uri == uri){
+        if (pred === FOAF('givenName').uri) props.name = obj.value ? obj.value : obj.uri
+        if (pred === FOAF('familyName').uri) props.familyName = obj.value ? obj.value : obj.uri
+        if (pred === FOAF('name').uri) props.fullName = obj.value ? obj.value : obj.uri
+        if (pred === DC('title').uri) props.title = obj.value ? obj.value : obj.uri
+        if (pred === DC('description').uri) props.description = obj.value ? obj.value : obj.uri
+        if (pred === RDF('type').uri) props.type = obj.value ? obj.value : obj.uri
+        if (pred === FOAF('img').uri) props.img = obj.value ? obj.value : obj.uri
+        // Storage is used when adding files. Better to do it here then to send extra requests upon upload.
+        if (pred === NIC('storage').uri) props.storage = obj.value ? obj.value : obj.uri
+      }
     }
    
     // Calculating the coordinates of the nodes so we can put them in a circle

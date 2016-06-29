@@ -75,7 +75,6 @@ class GraphAgent extends HTTPAgent {
   // Puts a file to the adress and attaches a ACL file to it.
   // dstContainer is the destination, and the file is the file itself.
   storeFile(dstContainer, file) {
-    console.log(dstContainer)
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
 
@@ -110,7 +109,6 @@ class GraphAgent extends HTTPAgent {
       acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
-      console.log(acl_writer.end())
       return solid.web.post(acl_uri, acl_writer.end()).catch((e)=>{
         console.log(e, ' occured while trying to post the acl file.')
       })
@@ -132,15 +130,26 @@ class GraphAgent extends HTTPAgent {
     return solid.web.patch(subject.uri, oldTrip, null)
   }
 
+  // Perhaps do a promise free version of this.
   fetchTriplesAtUri(uri) {
-    return solid.web.get(uri).then((res)=>{
-      let parser = new Parser()
-      return parser.parse(res.xhr.response, res.url)
-    }).catch(()=>{
-      console.log('The uri', uri, 'could not be resolved. Skipping')
-      // We return this in order to later be able to display it grayed out.
-      return {uri: uri, unav : true, connection:null,  triples:[]}
-    })
+    // This is new, replaced with an ajax call, might raise bugs.
+    let parser = new Parser()
+    return new Promise((resolve) => {
+      $.ajax({ 
+        type: 'GET', 
+        url: 'https://proxy.webid.jolocom.com/proxy?url=' + uri, 
+        xhrFields: {withCredentials: true},  
+        // Take a better look at these callbacks.
+        success: function(res_body) { 
+          resolve(parser.parse(res_body ,uri))
+        }, 
+        error: function(){
+          console.log('The uri', uri, 'could not be resolved. Skipping')
+          // We return this in order to later be able to display it grayed out.
+          resolve({uri: uri, unav : true, connection:null,  triples:[]})
+        }
+      })
+    }) 
   }
 
   // This function gets passed a center uri and it's triples, and then finds all possible
@@ -148,14 +157,12 @@ class GraphAgent extends HTTPAgent {
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
     let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri, 'http://schema.org/isRelatedTo']
-
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
     return new Promise ((resolve) => {
       let graphMap = []
       // If there are no adjacent nodes to draw, we return an empty array.
-      if (neighbours.length == 0)
+      if (neighbours.length === 0)
         resolve(graphMap)
-          
       // If there are adjacent nodes to draw, we parse them and return an array of their triples
       let i = 0
       neighbours.map((triple) => {

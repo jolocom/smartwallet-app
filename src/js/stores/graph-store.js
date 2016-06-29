@@ -9,6 +9,7 @@ export default Reflux.createStore({
 
   init: function(){
     this.listenTo(accountActions.logout, this.onLogout)
+    this.listenTo(accountActions.login.completed, this.onLogin)
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
     this.loaded = false
@@ -49,6 +50,9 @@ export default Reflux.createStore({
       plusDrawerOpen:false,
       activeNode: null
     }
+  },
+  onLogin(user){
+    this.state.webId = user
   },
 
   // These two are needed in order to transition between the preview graph and
@@ -105,7 +109,7 @@ export default Reflux.createStore({
   },
 
   onGetInitialGraphState: function() {
-    this.gAgent.getGraphMapAtWebID().then((triples) => {
+    this.gAgent.getGraphMapAtUri(this.state.webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)}
