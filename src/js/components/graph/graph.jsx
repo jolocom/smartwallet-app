@@ -9,13 +9,15 @@ import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
+import AccountStore from 'stores/account'
 import graphActions from 'actions/graph-actions'
 
 import Node from '../node/node.jsx'
 
 let Graph = React.createClass({
 
-  mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
+  mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate'),
+            Reflux.listenTo(AccountStore, 'onAccountUpdate')],
 
   contextTypes: {
     history: React.PropTypes.object
@@ -33,8 +35,16 @@ let Graph = React.createClass({
     }
   },
 
+  UserPorfUpdate: function(){
+    console.log('Something has been triggered')
+  },
+
   getGraphEl: function() {
     return ReactDOM.findDOMNode(this.refs.graph)
+  },
+  onAccountUpdate: function(data){
+    console.log('Triggered From Here!')
+    console.log(data) 
   },
 
   onStateUpdate: function(data, signal) {
@@ -77,10 +87,12 @@ let Graph = React.createClass({
   componentDidMount: function() {
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl())
+
     // Adding the listeners. 
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
+
     // Fetching the state from the store.
     graphActions.getState()
   },

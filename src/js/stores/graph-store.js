@@ -15,6 +15,7 @@ export default Reflux.createStore({
 
     this.state = {
       //These state keys describe the graph
+      webId: null,
       user: null,
       center:null,
       neighbours: null,
@@ -34,6 +35,7 @@ export default Reflux.createStore({
     this.loaded = false
     this.state = {
       // Graph related
+      webId: null,
       user: null,
       center: null,
       neighbours: null,
