@@ -28,13 +28,14 @@ let AccountStore = Reflux.createStore({
     $.ajax({ 
       type: "POST", 
       url: "https://proxy.webid.jolocom.com/login", 
-      xhrFields: { 
-        withCredentials: true 
-      },  
+      xhrFields: {withCredentials: true},  
       data: {username: username, password: password}, 
-      success: function(res, txt, head) { 
-        console.log('success!') 
-        console.log(head.getAllResponseHeaders()) 
+      
+      // Res_body is the response body, 2 more arguments are passed to the success callback,
+      // but they are not of any use now.
+      success: function(res_body) { 
+        console.log(res_body)
+        this.trigger({username: res_body.webid})
       } 
     }) 
   },
