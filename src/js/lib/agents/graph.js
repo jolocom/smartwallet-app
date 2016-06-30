@@ -17,9 +17,8 @@ let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
-
 class GraphAgent extends HTTPAgent {
-  //
+
   // We create a rdf file at the distContainer containing a title and description passed to it
   createNode(user, node, title, description, image, type) {
     let writer = new Writer()
@@ -39,24 +38,28 @@ class GraphAgent extends HTTPAgent {
 
     // Handling the picture upload
     return new Promise((resolve, reject) => {
+      // Is there a case where this does not resolve to true?
+      // Check if image is a file
       if (image instanceof File) {
+        // If yes we upload it
         this.storeFile(dstContainer, image).then((result) => {
+          // and return the uri
           resolve(result.url)
         }).catch((err) => {
+          // We catch a error and reject
           reject(err)
         })
+        // If not an instance of file, just resolve the image [whatever it is?]
       } else resolve(image)
     }).then((image) => {
-      // If the image is there, we add it to the rdf file.
-      if (image) writer.addTriple(rdf.sym(new_node), FOAF('img'), image)
-      
       // Here we add the triple to the user's rdf file, this triple connects
       // him to the resource that he uploaded
+      writer.addTriple(rdf.sym(new_node), FOAF('img'), image)
       this.writeTriple(rdf.sym(node.uri), SCHEMA('isRelatedTo'), rdf.sym(new_node)).then(()=> {
         // Should this one be here? Implications of having this triple?
         this.writeTriple(rdf.sym(user.uri), FOAF('made'), rdf.sym(new_node)).then(() => {
           this.postACL(new_node, user.uri).then(()=>{
-            solid.web.post(new_node, writer.end()).then(()=>{
+            solid.web.post('https://proxy.webid.jolocom.de/proxy&url='+new_node, writer.end()).then(()=>{
               GraphActions.drawNewNode(new_node, SCHEMA('isRelatedTo').uri)
             })
           })
@@ -69,7 +72,7 @@ class GraphAgent extends HTTPAgent {
   // PRO : we won't need the ACL file anymore CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
   deleteFile(uri){
-    return solid.web.del(uri)
+    return solid.web.del('https://proxy.webid.jolocom.de/proxy&url='+uri)
   }
   
   // Puts a file to the adress and attaches a ACL file to it.
@@ -81,7 +84,7 @@ class GraphAgent extends HTTPAgent {
       let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
       this.postACL(uri, webID)
 
-      return solid.web.put(uri, file, file.type)
+      return solid.web.put('https://proxy.webid.jolocom.de/proxy&url='+uri, file, file.type)
     })
   }
 
@@ -93,7 +96,7 @@ class GraphAgent extends HTTPAgent {
     let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     // TODO, perhaps introduce more potential setups.
     // Current one is creator can do read write control. Everyone else has read acc.
-    return solid.web.options(uri).then((res) => {
+    return solid.web.options('https://proxy.webid.jolocom.de/proxy&url='+uri).then((res) => {
       let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
         : acl_uri = uri+'.acl'
 
@@ -109,7 +112,7 @@ class GraphAgent extends HTTPAgent {
       acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
-      return solid.web.post(acl_uri, acl_writer.end()).catch((e)=>{
+      return solid.web.post('https://proxy.webid.jolocom.de/proxy&url='+acl_uri, acl_writer.end()).catch((e)=>{
         console.log(e, ' occured while trying to post the acl file.')
       })
     })
@@ -121,13 +124,13 @@ class GraphAgent extends HTTPAgent {
    if(draw && (predicate.uri == SCHEMA('isRelatedTo').uri || predicate.uri == FOAF('knows').uri))
      GraphActions.drawNewNode(object.uri, predicate.uri)
 
-   return solid.web.patch(subject.uri,null, newTrip)
+   return solid.web.patch('https://proxy.webid.jolocom.de/proxy&url='+subject.uri,null, newTrip)
   }
 
   // Replaced the put request with a patch request, it's faster, and there's no risk of wiping the whole file.
   deleteTriple(subject, predicate, object){
     let oldTrip = [rdf.st(subject, predicate, object).toNT()]
-    return solid.web.patch(subject.uri, oldTrip, null)
+    return solid.web.patch('https://proxy.webid.jolocom.de/proxy&url='+subject.uri, oldTrip, null)
   }
 
   // Perhaps do a promise free version of this.
@@ -137,7 +140,7 @@ class GraphAgent extends HTTPAgent {
     return new Promise((resolve) => {
       $.ajax({ 
         type: 'GET', 
-        url: 'https://proxy.webid.jolocom.com/proxy?url=' + uri, 
+        url: 'https://proxy.webid.jolocom.de/proxy?url=' + uri, 
         xhrFields: {withCredentials: true},  
         // Take a better look at these callbacks.
         success: function(res_body) { 

@@ -22,7 +22,7 @@ export default Reflux.createStore({
   onSignup(data) {
     $.ajax({
       type: "POST", 
-      url: "https://proxy.webid.jolocom.com/register", 
+      url: "https://proxy.webid.jolocom.de/register", 
       data: {username: data.username , password: data.password}, 
       success: function(res, txt, head) { 
         console.log('success!') 
@@ -35,7 +35,7 @@ export default Reflux.createStore({
   onLogin(username, password) {
     $.ajax({ 
       type: "POST", 
-      url: "https://proxy.webid.jolocom.com/login", 
+      url: "https://proxy.webid.jolocom.de/login", 
       xhrFields: {withCredentials: true},  
       data: {username: username, password: password}, 
       // Res_body is the response body, 2 more arguments are passed to the success callback,
