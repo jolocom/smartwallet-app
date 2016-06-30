@@ -48,6 +48,7 @@ export default Reflux.createStore({
 
   // Triggers when the login is done.
   onLoginCompleted(webid){
+    localStorage.setItem('webId', webid)
     this.trigger({username: webid})
   },
 
