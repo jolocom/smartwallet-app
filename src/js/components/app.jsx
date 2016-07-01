@@ -105,6 +105,7 @@ let App = React.createClass({
         nav: (
           <div>
             <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
+            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleChatTap}>chat</IconButton>
           </div>
         ),
         search: <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
@@ -163,6 +164,10 @@ let App = React.createClass({
       searchActive: false,
       searchQuery: null
     })
+  },
+
+  _handleChatTap() {
+    this.history.pushState(null, '/chat')
   },
 
   showDrawer() {

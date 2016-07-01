@@ -30,17 +30,20 @@ export class Writer {
     this.g = rdf.graph()
   }
 
-  addTriple(subj, pred, obj) {
+  addTriple(...args) {
+    // Allow to pass a single object
+    let {subject, predicate, object} = args.length === 1 ? args[0] : args
+
     // We don't want to write a triple that already exists into the rdf file.
-    if (this.g.statementsMatching(subj, pred, obj).length > 0){
+    if (this.g.statementsMatching(subject, predicate, object).length > 0){
       console.warn('Triple already present in the rdf file, Ignoring')
       return false
-    } else if (subj.uri == obj.uri) {
+    } else if (subject === object) {
       console.warn('You cannot link to yourself')
       return false
     }
     else {
-      this.g.add(subj,pred,obj)
+      this.g.add(subject, predicate, object)
       return true
     }
   }
