@@ -96,16 +96,13 @@ export default class GraphD3 extends EventEmitter {
     this.force = d3.layout.force()
       .nodes(this.currentDataNodes)
       .links(this.currentDataLinks)
-      .charge(-1000)
+      .charge(-100)
       .chargeDistance(STYLES.largeNodeSize*2)
-      .linkDistance((d, i)=> {
+      .linkDistance((d)=> {
 
-        if(d.rank == 'history' && d.histLevel>0) return STYLES.smallNodeSize * 1.25
-        else if(d.rank == 'history' || i<12) return STYLES.largeNodeSize * 1.25
-        else if (i>38) {
-          return STYLES.largeNodeSize * 2.5
-        }
-        else return STYLES.largeNodeSize * 2
+        if(d.rank == 'history' && d.histLevel>=0) return STYLES.largeNodeSize*4
+        else if(d.rank == 'history') return STYLES.smallNodeSize
+        else return STYLES.largeNodeSize * 1.2
 
       })
       .size([this.width, this.height])
@@ -114,26 +111,56 @@ export default class GraphD3 extends EventEmitter {
     // it works
     this.node_drag = this.force.drag()
       .on('dragend', this.dragEnd)
+      .on('drag', function(){ d3.event.sourceEvent.stopPropagation() })
+      .on('dragstart', function(){ d3.event.sourceEvent.stopPropagation() })
+
+    this.yOrigin = 0
 
     this.back_drag = d3.behavior.drag()
       .on('drag', this.backDrag)
+      .on('dragstart', this.backDragStart)
 
     this.svg.call(this.back_drag)
 
   }.bind(this)
 
+  backDragStart = function(){
+    this.yOrigin = d3.mouse(d3.select('rect').node())[1]
+
+  }.bind(this)
+
+
   backDrag = function(){
-
-    // this.force.stop()
-    // this.index += Math.floor(d3.event.dy*0.1)
-    // if(this.index>this.numberOfAdjcent-1) this.index = this.numberOfAdjcent-1
-    // if(this.index<0) this.index = 0
-    // this.sortNodes()
-    // this.force.nodes(this.currentDataNodes)
-    // this.force.links(this.currentDataLinks)
-    // this.drawNodes()
-    // this.force.start()
-
+    console.log('isdraging!')
+    if(this.yOrigin<0){
+      this.yOrigin = d3.event.y
+      console.log('SET', d3.event.y)
+    }
+    d3.event.sourceEvent.stopPropagation()
+    if(this.yOrigin-d3.event.y<-10){
+      if(this.index<this.numberOfAdjcent-this.numberOfNodes){
+        this.force.stop()
+        this.index ++
+        this.sortNodes()
+        this.force.nodes(this.currentDataNodes)
+        this.force.links(this.currentDataLinks)
+        this.drawNodes()
+        this.force.start()
+        this.yOrigin = d3.event.y
+      }
+    }
+    if(this.yOrigin-d3.event.y>10){
+      if(this.index>0){
+        this.force.stop()
+        this.index --
+        this.sortNodes()
+        this.force.nodes(this.currentDataNodes)
+        this.force.links(this.currentDataLinks)
+        this.drawNodes()
+        this.force.start()
+        this.yOrigin = d3.event.y
+      }
+    }
 
   }.bind(this)
 
@@ -415,13 +442,13 @@ export default class GraphD3 extends EventEmitter {
 
     if(this.numberOfAdjcent>this.numberOfNodes){
 
-      let num = 0
+
 
       d3.selectAll('.node').attr('d',(d) => {
         if(d.rank == 'adjacent'){
-          d.x+=(this.nodePositions[num].x-d.x)*k
-          d.y+=(this.nodePositions[num].y-d.y)*k
-          num++
+          d.x+=(this.nodePositions[d.position].x-d.x)*k
+          d.y+=(this.nodePositions[d.position].y-d.y)*k
+
         }
       })
     }
@@ -513,6 +540,11 @@ export default class GraphD3 extends EventEmitter {
 
       if(this.dataNodes[i].rank == 'adjacent' && nodeCount<this.numberOfNodes){
         this.currentDataNodes.push(this.dataNodes[i])
+        this.currentDataNodes[this.currentDataNodes.length-1].position = nodeCount
+        this.currentDataNodes[this.currentDataNodes.length-1].x =this.nodePositions[nodeCount].x
+        this.currentDataNodes[this.currentDataNodes.length-1].y =this.nodePositions[nodeCount].y
+        this.currentDataNodes[this.currentDataNodes.length-1].px =this.nodePositions[nodeCount].x
+        this.currentDataNodes[this.currentDataNodes.length-1].py =this.nodePositions[nodeCount].y
         this.currentDataLinks.push({'source': this.currentDataNodes.length - 1, 'target':0})
         nodeCount++
       }
@@ -530,17 +562,9 @@ export default class GraphD3 extends EventEmitter {
         }
       }
     }
-    let num = 0
 
-    d3.selectAll('.node').attr('d',(d) => {
-      if(d.rank == 'adjacent'){
-        d.x=this.nodePositions[num].x
-        d.y=this.nodePositions[num].y
-        d.px=this.nodePositions[num].x
-        d.py=this.nodePositions[num].y
-        num++
-      }
-    })
+
+
 
   }.bind(this)
 
@@ -571,7 +595,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   onClick = function(node, data) {
-
+    d3.event.stopPropagation()
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if(data.rank == 'history') return
@@ -721,7 +745,7 @@ export default class GraphD3 extends EventEmitter {
           this.dataNodes.push(history[history.length-1-i])
           this.currentDataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
-          this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: 0})
+          this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: this.dataNodes.length - 2})
         }
       }
       this.force.start()
