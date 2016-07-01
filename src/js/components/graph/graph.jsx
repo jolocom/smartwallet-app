@@ -16,8 +16,7 @@ import Node from '../node/node.jsx'
 
 let Graph = React.createClass({
 
-  mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate'),
-            Reflux.listenTo(AccountStore, 'onAccountUpdate')],
+  mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
 
   contextTypes: {
     history: React.PropTypes.object
@@ -35,16 +34,8 @@ let Graph = React.createClass({
     }
   },
 
-  UserPorfUpdate: function(){
-    console.log('Something has been triggered')
-  },
-
   getGraphEl: function() {
     return ReactDOM.findDOMNode(this.refs.graph)
-  },
-
-  onAccountUpdate: function(data){
-    console.log('HEY')
   },
 
   onStateUpdate: function(data, signal) {
@@ -142,7 +133,7 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
-      nodeDetails = <Node  state={this.state}/>
+      nodeDetails = <Node state={this.state}/>
     }
 
     return (

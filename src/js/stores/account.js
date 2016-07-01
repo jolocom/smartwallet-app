@@ -49,7 +49,7 @@ export default Reflux.createStore({
   // Triggers when the login is done.
   onLoginCompleted(webid){
     localStorage.setItem('webId', webid)
-    this.trigger({username: webid})
+    this.trigger({username: 'https://proxy.webid.jolocom.de/proxy?url='+webid})
   },
 
   onLogout() {

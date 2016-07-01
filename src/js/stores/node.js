@@ -32,11 +32,9 @@ export default Reflux.createStore({
     let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
 
-    // Deleting the file itself.
     this.gAgent.deleteFile(object.uri).then(()=>{
       // Deleting the connection to the file. 
       this.gAgent.deleteTriple(subject, predicate, object).then(()=>{
-        // Animating the grapy
         graphActions.deleteNode(node) 
       // Basic error handling
       }).catch((e)=>{console.log('Error', e ,'while removing connection')})

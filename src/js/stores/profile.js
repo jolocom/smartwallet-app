@@ -1,5 +1,6 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
+import $ from 'jquery'
 
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
@@ -45,21 +46,29 @@ export default Reflux.createStore({
 
   onLoad() {
     let webid = null
-    wia.getWebID()
-      .then((user) => {
-        webid = user
-        // now get my profile document
-        return wia.get(webid)
-      })
-      .then((xhr) => {
-        // parse profile document from text
+    wia.getWebID().then((user) => {
+      webid = user
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          type:'GET',
+          xhrFields: {withCredentials: true},  
+          url: 'https://proxy.webid.jolocom.de/proxy?url=' + user,
+          success: function(res) {
+            resolve(res)
+          },
+          error: function(e){
+            reject(e)
+          }
+        })
+      }).then((res) => {
         let parser = new Parser()
-        return parser.parse(xhr.response, xhr.responseURL)
+        return parser.parse(res, user)
       })
       .then((res) => {
         ProfileActions.load.completed(webid, res.triples, res.prefixes)
       })
       .catch(ProfileActions.load.failed)
+    })
   },
 
   onLoadFailed(err) {
@@ -84,7 +93,10 @@ export default Reflux.createStore({
 
     // triples which describe profile
     let relevant = triples.filter((t) => {
-      return t.subject.uri == webid})
+      console.log(t.subject.uri, ' || ', webid)
+      return t.subject.uri == webid
+    })
+    console.log(relevant)
 
     for (var t of relevant){
       // We concat the name and family name.
@@ -107,10 +119,14 @@ export default Reflux.createStore({
         this.state.name = this.state.fullName.substring(0, this.state.fullName.indexOf(' '))
         this.state.familyName = this.state.fullName.substring(this.state.name.length,this.state.fullName.length)
       }
-
     profile = Object.assign(profile, this.state)
+    console.log('=============')
+    console.log(profile)
+    console.log('=============')
     this.trigger(Object.assign({}, profile))
   },
+
+
 
   onUpdate: function (params) {
     // subject which represents our profilei

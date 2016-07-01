@@ -11,6 +11,7 @@ export class Parser {
       // Keep an eye on this TODO
       // if (url) url = url.substring(0, url.indexOf('box.me/')+7)
       rdf.parse(text, rdf.graph(), url, 'text/turtle', (err, triples) => {
+        // Unwanted props from the prototype?
         for (let i in triples.statements) {
           let statement = triples.statements[i]
           payload.push({

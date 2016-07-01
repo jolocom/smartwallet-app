@@ -163,9 +163,12 @@ let ProfileNode = React.createClass({
     if (node.rank == 'center'){
      let prev = navHis[navHis.length - 1]
      graphActions.drawAtUri(prev.uri, 1)
+     // Causes conflict with big latency. Change.
+     // TODO
+     // This doesn't work atm, getting 409
      setTimeout(()=>{
        nodeActions.remove(node, prev)
-     }, 500)
+     }, 1500)
     }
     else nodeActions.remove(node, center)
   },
