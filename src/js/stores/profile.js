@@ -4,6 +4,7 @@ import $ from 'jquery'
 
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser, Writer} from 'lib/rdf.js'
+import {proxy} from 'settings'
 import rdf from 'rdflib'
 import GraphActions from 'actions/graph-actions'
 
@@ -49,11 +50,13 @@ export default Reflux.createStore({
     wia.getWebID().then((user) => {
       webid = user
       return new Promise((resolve, reject) => {
+        console.log('I fire!')
         $.ajax({
           type:'GET',
           xhrFields: {withCredentials: true},  
-          url: 'https://proxy.webid.jolocom.de/proxy?url=' + user,
+          url: `${proxy}` + user,
           success: function(res) {
+            console.log('I RESOLVE')
             resolve(res)
           },
           error: function(e){

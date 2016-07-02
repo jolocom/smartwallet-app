@@ -6,24 +6,18 @@ import rdf from 'rdflib'
 
 export class Parser {
   parse(text, url) {
-    return new Promise((resolve) =>{
-      let payload = []
-      // Keep an eye on this TODO
-      // if (url) url = url.substring(0, url.indexOf('box.me/')+7)
-      rdf.parse(text, rdf.graph(), url, 'text/turtle', (err, triples) => {
-        // Unwanted props from the prototype?
-        for (let i in triples.statements) {
-          let statement = triples.statements[i]
-          payload.push({
-            object: statement.object,
-            predicate: statement.predicate,
-            subject: statement.subject
-          })
-        }
-      })
-      // Remove prefixes eventually, don't think it's being used for now.
-      resolve({ prefixes: {}, triples: payload})
+    let payload = []
+    rdf.parse(text, rdf.graph(), url, 'text/turtle', (err, triples) => {
+      for (let i in triples.statements) {
+        let statement = triples.statements[i]
+        payload.push({
+          object: statement.object,
+          predicate: statement.predicate,
+          subject: statement.subject
+        })
+      }
     })
+    return ({ prefixes: {}, triples: payload})
   }
 }
 
