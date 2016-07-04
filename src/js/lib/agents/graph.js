@@ -92,7 +92,6 @@ class GraphAgent {
   storeFile(dstContainer, file) {
     // For some reason this comes up as corrupted.
     // Doesn't work no idea why TODO fix later.
-    let fd = new FormData()
     let wia = new WebIDAgent()
     fd.append('image',file)
 
@@ -102,7 +101,10 @@ class GraphAgent {
         return fetch(uri,{
           method: 'PUT', 
           credentials: 'include',
-          body: fd
+          headers: {
+            'Content-Type':'image' 
+          },
+          body: file
         }).then(()=>{
           return uri
         }).catch(()=>{
