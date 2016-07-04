@@ -47,30 +47,19 @@ export default Reflux.createStore({
 
   onLoad() {
     let webid = null
+    let parser = new Parser()
     wia.getWebID().then((user) => {
       webid = user
-      return new Promise((resolve, reject) => {
-        console.log('I fire!')
-        $.ajax({
-          type:'GET',
-          xhrFields: {withCredentials: true},  
-          url: `${proxy}` + user,
-          success: function(res) {
-            console.log('I RESOLVE')
-            resolve(res)
-          },
-          error: function(e){
-            reject(e)
-          }
-        })
+      return fetch(`${proxy}` + user,{
+        method: 'GET', 
+        credentials: 'include',
       }).then((res) => {
-        let parser = new Parser()
-        return parser.parse(res, user)
-      })
-      .then((res) => {
-        ProfileActions.load.completed(webid, res.triples, res.prefixes)
-      })
-      .catch(ProfileActions.load.failed)
+        return res.text() 
+      }).then((text)=>{
+        return parser.parse(text,user)        
+      }).then((answer)=>{
+        ProfileActions.load.completed(webid, answer.triples, answer.prefixes)
+      }).catch(ProfileActions.load.failed)
     })
   },
 
@@ -96,10 +85,8 @@ export default Reflux.createStore({
 
     // triples which describe profile
     let relevant = triples.filter((t) => {
-      console.log(t.subject.uri, ' || ', webid)
       return t.subject.uri == webid
     })
-    console.log(relevant)
 
     for (var t of relevant){
       // We concat the name and family name.
@@ -123,14 +110,12 @@ export default Reflux.createStore({
         this.state.familyName = this.state.fullName.substring(this.state.name.length,this.state.fullName.length)
       }
     profile = Object.assign(profile, this.state)
-    console.log('=============')
-    console.log(profile)
-    console.log('=============')
     this.trigger(Object.assign({}, profile))
   },
 
 
 
+  // Perhaps use patch?
   onUpdate: function (params) {
     // subject which represents our profilei
     let writer = new Writer()
@@ -144,8 +129,15 @@ export default Reflux.createStore({
       writer.addTriple(rdf.sym('#me'), FOAF('mbox'), rdf.sym('mailto:'+params.email))
     if (params.imgUri)
       writer.addTriple(rdf.sym('#me'), FOAF('img'), params.imgUri)
-
-    wia.put(params.webid, {'Content-Type': 'application/n-triples'}, writer.end()).then(()=>{
+    
+    fetch(`${proxy}`+params.webid, {
+      method: 'PUT',
+      body: writer.end(),
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/n-triples'
+      }
+    }).then(()=>{
       if(params.currentNode) GraphActions.drawAtUri(params.currentNode, 0)
     })
 

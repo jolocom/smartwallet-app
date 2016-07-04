@@ -6,7 +6,6 @@ import {Writer} from '../rdf.js'
 import solid from 'solid-client'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
-import $ from 'jquery'
 
 import rdf from 'rdflib'
 let SCHEMA = rdf.Namespace('https://schema.org/')
@@ -46,13 +45,14 @@ class GraphAgent {
       // Check if the image is there and it is a file.
       if (image instanceof File) {
         this.storeFile(dstContainer, image).then((result) => {
-          resolve(result.url)
+          resolve(result)
         }).catch((err) => {
           reject(err)
         })
         // This will resolve to undefined / null
       } else resolve(image)
     }).then((image) => {
+      console.log(image, 'this is the uri right here')
       if (image)
         writer.addTriple(newNodeUri, FOAF('img'), image)
       // The predicate here will have to change dynamically as well, based on the chosen predicate.
@@ -61,19 +61,17 @@ class GraphAgent {
           // We use this in the LINK header.
           let aclUri = '<'+uri+'>;'
 
-          $.ajax({
-            type: 'PUT',
-            // This could be a bnode, and then we have no uri. Edge case, but still
-            url: `${proxy}` + newNodeUri.uri,
-            // Tell the browser to supply the cookie
-            xhrFields: {withCredentials: true},  
-            data: writer.end(),
-            contentType: 'text/turtle',
-            Link: '<http://www.w3.org/ns/ldp#Resource>; rel="type", '+aclUri+' rel="acl"',
-          }).done(() => {
-            // We trigger the animation to draw the new node.
+          fetch(`${proxy}` + newNodeUri.uri,{
+            method: 'PUT', 
+            credentials: 'include',
+            body: writer.end(),
+            headers: {
+              'Content-Type':'text/turtle',
+              'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", '+aclUri+' rel="acl"'
+            }
+          }).then(()=>{
             GraphActions.drawNewNode(newNodeUri.uri, SCHEMA('isRelatedTo').uri)
-          }).fail((error) => {
+          }).catch((error)=>{
             console.log('Error,',error,'occured when putting the rdf file.') 
           })
         })
@@ -85,19 +83,32 @@ class GraphAgent {
   // PRO : we won't need the ACL file anymore CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
   deleteFile(uri){
-    return solid.web.del(uri)
+    return fetch(`${proxy}` + uri, {
+      method: 'DELETE',
+      credentials: 'include'
+    })
   }
   
-  // Puts a file to the adress and attaches a ACL file to it.
-  // dstContainer is the destination, and the file is the file itself.
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!! BROKEN TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   storeFile(dstContainer, file) {
+    // For some reason this comes up as corrupted.
+    // Doesn't work no idea why TODO fix later.
+    let fd = new FormData()
     let wia = new WebIDAgent()
+    fd.append('image',file)
+
     return wia.getWebID().then((webID) => {
       let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-      this.putACL(uri, webID)
-      return 'test.com'
-      //return solid.web.put('https://proxy.webid.jolocom.de/proxy/&url='+uri, file, file.type)
+      return this.putACL(uri, webID).then(()=>{
+        return fetch(uri,{
+          method: 'PUT', 
+          credentials: 'include',
+          body: fd
+        }).then(()=>{
+          return uri
+        }).catch(()=>{
+          return undefined
+        })
+      })
     })
   }
 
@@ -132,20 +143,15 @@ class GraphAgent {
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
 
-      return $.ajax({
-        type: 'PUT',
-        // This could be a bnode, and then we have no uri. Edge case, but still
-        // Abstract the proxy value into a config value
-        url: `${proxy}`+acl_uri,
-        // Tell the browser to supply the cookie
-        xhrFields: {withCredentials: true},  
-        data: acl_writer.end(),
-        contentType: 'text/turtle'
-      }).done(() => {
-        return acl_uri  
-      }).fail((e) => {
-        console.log('Error ', e, 'found!')
-      })
+      return fetch(`${proxy}` + acl_uri,{
+        method: 'PUT', 
+        credentials: 'include',
+        body: acl_writer.end,
+        headers: {
+          'Content-Type':'text/turtle' 
+        }
+      }).then(()=>{return acl_uri})
+      .catch((e)=>{console.log('error',e,'occured while putting the acl file')})
     })
   }
 
@@ -156,50 +162,42 @@ class GraphAgent {
     if(draw && (predicate.uri === SCHEMA('isRelatedTo').uri || predicate.uri === FOAF('knows').uri))
       GraphActions.drawNewNode(object.uri, predicate.uri)
 
-    return $.ajax({
-      type: 'PATCH', 
-      data: 'INSERT DATA {'+ newTrip[0] +'} ;',
-      xhrFields: {withCredentials: true},  
-      contentType: 'application/sparql-update',
-      url: `${proxy}`+subject.uri,
-    }).done((body) => {
-      return body
-    }).fail((e)=>{
-      console.log(e, 'occured while writing the connection') 
+    return fetch(`${proxy}` + subject.uri,{
+      method: 'PATCH', 
+      credentials: 'include',
+      body: 'INSERT DATA { ' + newTrip[0] + ' } ;',
+      headers: {
+        'Content-Type':'application/sparql-update' 
+      }
     })
   }
 
   // Replaced the put request with a patch request, it's faster, and there's no risk of wiping the whole file.
   deleteTriple(subject, predicate, object){
     let oldTrip = [rdf.st(subject, predicate, object).toNT()]
-    return $.ajax({
-      type: 'PATCH',
-      // This could be a bnode, and then we have no uri. Edge case, but still
-      url: `${proxy}` + subject.uri,
-      // Tell the browser to supply the cookie
-      xhrFields: {withCredentials: true},  
-      data: 'DELETE DATA { ' + oldTrip[0] + ' } ;',
-      contentType: 'application/sparql-update',
-    }).done((body)=>{
-      return body 
-    }).fail((error)=>{
-      console.log(error, 'occured while removing the triple') 
+    return fetch(`${proxy}` + subject.uri,{
+      method: 'PATCH', 
+      credentials: 'include',
+      body: 'DELETE DATA { ' + oldTrip[0] + ' } ;',
+      headers: {
+        'Content-Type':'application/sparql-update' 
+      }
     })
   }
 
+  
+  // How readable is this?
   fetchTriplesAtUri(uri) {
     let parser = new Parser()
-    return new Promise((resolve) => {
-      $.ajax({ 
-        type: 'GET', 
-        url: `${proxy}` + uri, 
-        xhrFields: {withCredentials: true},  
-      }).done((res)=>{
-        resolve(parser.parse(res,uri))
-      }).fail(()=>{
-        console.log('The uri', uri, 'could not be resolved. Skipping')
-        resolve({uri: uri, unav : true, connection:null,  triples:[]})
-      })
+    return fetch(`${proxy}` + uri, {
+      credentials: 'include' 
+    }).then((ans) => {
+      if (ans.ok){
+        return ans.text().then((res)=>{
+          return parser.parse(res, uri) 
+        })
+        // This is later used for displaying broken nodes.
+      } else return {uri: uri, unav : true, connection:null,  triples:[]} 
     })
   }
 
@@ -207,10 +205,6 @@ class GraphAgent {
   // links that we choose to display. After that it parses those links for their RDF data.
   getNeighbours(center, triples) {
     // We will only follow and parse the links that end up in the neighbours array.
-    console.log('URGENT')
-    console.log(center)
-    console.log(triples)
-    console.log('URGENT')
     let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri, 'http://schema.org/isRelatedTo']
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
     return new Promise ((resolve) => {

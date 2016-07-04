@@ -12,7 +12,6 @@ export default Reflux.createStore({
   },
 
   init: function(){
-    console.log('inniting')
     this.state = {
       username: null
     }
@@ -20,30 +19,30 @@ export default Reflux.createStore({
   },
 
   onSignup(data) {
-    $.ajax({
-      type: "POST", 
-      url: "https://proxy.webid.jolocom.de/register", 
-      data: {username: data.username , password: data.password}, 
-      success: function(res, txt, head) { 
-        console.log('success!') 
-        console.log(head.getAllResponseHeaders()) 
-      } 
+    fetch('https://proxy.webid.jolocom.de/register', {
+      method: 'POST',
+      // Add the urlencoding here?
+      body: {username: data.username , password: data.password},
+    }).then((res)=>{
+      res.json().then((js)=>{
+        Account.login.completed(js.webid)
+      })
     })
-	  console.log('registering with the data: ', data)	
   },
 
   onLogin(username, password) {
-    $.ajax({ 
-      type: "POST", 
-      url: "https://proxy.webid.jolocom.de/login", 
-      xhrFields: {withCredentials: true},  
-      data: {username: username, password: password}, 
-      // Res_body is the response body, 2 more arguments are passed to the success callback,
-      // but they are not of any use now.
-      success: function(res_body) { 
-        Account.login.completed(res_body.webid)
-      } 
-    }) 
+    fetch('https://proxy.webid.jolocom.de/login', {
+      method: 'POST',
+      body: 'username='+username+'&password='+password, 
+      credentials: 'include',
+      headers: {
+        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
+      }
+    }).then((res)=>{
+      res.json().then((js)=>{
+        Account.login.completed(js.webid)
+      })
+    })
   },
 
   // Triggers when the login is done.
