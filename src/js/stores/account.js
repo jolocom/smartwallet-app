@@ -21,8 +21,10 @@ export default Reflux.createStore({
   onSignup(data) {
     fetch('https://proxy.webid.jolocom.de/register', {
       method: 'POST',
-      // Add the urlencoding here?
-      body: {username: data.username , password: data.password},
+      body: 'username='+data.username+'&password='+data.password, 
+      headers: {
+        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
+      }
     }).then((res)=>{
       res.json().then((js)=>{
         Account.login.completed(js.webid)

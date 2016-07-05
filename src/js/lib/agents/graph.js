@@ -90,13 +90,10 @@ class GraphAgent {
   }
   
   storeFile(dstContainer, file) {
-    // For some reason this comes up as corrupted.
-    // Doesn't work no idea why TODO fix later.
     let wia = new WebIDAgent()
-    fd.append('image',file)
 
     return wia.getWebID().then((webID) => {
-      let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      let uri = `${proxy}${dstContainer}files/${Util.randomString(5)}-${file.name}`
       return this.putACL(uri, webID).then(()=>{
         return fetch(uri,{
           method: 'PUT', 
