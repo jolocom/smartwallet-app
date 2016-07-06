@@ -4,7 +4,7 @@ var path = require('path')
 module.exports = {
   entry: [
     'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
+    'webpack-dev-server/client?https://localhost:8080',
     'webpack/hot/only-dev-server',
     './src/js/main.jsx',
     './src/index.html'
