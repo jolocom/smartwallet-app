@@ -11,18 +11,18 @@ module.exports = {
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
-    root: path.resolve(__dirname) + '/src/js',
+    root: path.join(__dirname, 'src', 'js'),
     alias: {
       actions: 'actions',
       components: 'components',
       stores: 'stores',
       lib: 'lib',
       styles: 'styles',
-      settings: path.resolve(__dirname) + '/config/development.js'
+      settings: path.join(__dirname, 'config', 'development.js')
     }
   },
   output: {
-    path: path.resolve(__dirname) + '/dist/js',
+    path: path.join(__dirname, 'dist', 'js'),
     filename: 'bundle.js',
     publicPath: 'js'
   },
@@ -37,7 +37,7 @@ module.exports = {
       {
         test:   /\.jsx?/,
         loader: 'babel',
-        include: path.resolve(__dirname) + '/src/js',
+        include: path.join(__dirname, 'src', 'js'),
         exclude: 'node_modules'
       },
       {

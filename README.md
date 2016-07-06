@@ -18,6 +18,8 @@ npm install
 
 Try to run `solid`, if it fails make sure the `node` package version >= v6.0.0
 
+If you're on Windows and getting the error `Missing VCBuild` during the installation of solid-server, you need to install the [VC++ Build Tools](http://landinghub.visualstudio.com/visual-cpp-build-tools): select both Windows 8.1 and Windows 10 SDKs, and, if you're on Windows 7, also select the .NET Framework. Then, run `npm config set msvs_version 2015 --global` and/or modify the PATH so that msbuild or vcbuild is accessible from the CLI. Install solid-server globally again; ignore potential errors and try running "solid".
+
 ## Install ssl certificates for solid-server
 
 For local testing you will also need to generate a ssl-cert and ssl-key, you should be able to do that buy running:
@@ -49,6 +51,8 @@ In case this command throws the `object of type 'map' has no len()` error, reins
 ```bash
 gulp build-dev
 ```
+If you are getting the error `Module parse failed: main.jsx Line 1: Unexpected token`, switch to node version 4.x to run `gulp build-dev` ([nvm](https://github.com/creationix/nvm) might come in handy).
+
 **Warning:** calling "gulp" is dangerous, as it will start the webpack-dev-server which will overshadow ports 8080,8443 that the Gold server users
 
 ###Build-Prod
