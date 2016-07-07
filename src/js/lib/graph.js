@@ -57,6 +57,7 @@ export default class GraphD3 extends EventEmitter {
 
    // Starts the force simulation.
   setUpForce = function(nodes){
+
   // Upon set up force we also initialize the dataLinks and dataNodes
   // variables.
     this.dataNodes = [nodes.center]
@@ -190,9 +191,6 @@ export default class GraphD3 extends EventEmitter {
     this.filter = this.defsFilter.append('filter')
       .attr('id', 'darkblur')
 
-    // SourceAlpha refers to opacity of graphic that this filter will be applied to
-    // convolve that with a Gaussian with standard deviation 3 and store result
-    // in blur
     // This basically takes care of blurring
     this.filter.append('feGaussianBlur')
         .attr('stdDeviation', 1.5)

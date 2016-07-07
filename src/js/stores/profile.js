@@ -113,8 +113,6 @@ export default Reflux.createStore({
     this.trigger(Object.assign({}, profile))
   },
 
-
-
   // Perhaps use patch?
   onUpdate: function (params) {
     // subject which represents our profilei

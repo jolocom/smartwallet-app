@@ -60,7 +60,6 @@ class GraphAgent {
         this.putACL(newNodeUri.uri, currentUser.uri).then((uri)=>{
           // We use this in the LINK header.
           let aclUri = '<'+uri+'>;'
-
           fetch(`${proxy}` + newNodeUri.uri,{
             method: 'PUT', 
             credentials: 'include',
@@ -90,12 +89,15 @@ class GraphAgent {
   }
   
   storeFile(dstContainer, file) {
+    console.log('We are storing the file', file, 'in the destination', dstContainer)
     let wia = new WebIDAgent()
-
     return wia.getWebID().then((webID) => {
-      let uri = `${proxy}${dstContainer}files/${Util.randomString(5)}-${file.name}`
+
+      let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      let proxiedUri = `${proxy}`+uri
+
       return this.putACL(uri, webID).then(()=>{
-        return fetch(uri,{
+        return fetch(proxiedUri,{
           method: 'PUT', 
           credentials: 'include',
           headers: {
@@ -117,8 +119,6 @@ class GraphAgent {
   putACL(uri, webID){
     let acl_writer = new Writer()
     let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-    // TODO, perhaps introduce more potential setups.
-    // Current one is creator can do read write control. Everyone else has read acc.
 
     return solid.web.options(uri).then((res) => {
       let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
@@ -127,6 +127,7 @@ class GraphAgent {
       if (acl_uri.indexOf('http://') < 0 || acl_uri.indexOf('https://') < 0)
         acl_uri = uri.substring(0, uri.lastIndexOf('/') + 1) + acl_uri
 
+      console.log(acl_uri)
       // At the moment we create only one type of ACL file. Owner has full controll,
       // everyone else has read access. This will change in the future.
       acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
@@ -185,7 +186,7 @@ class GraphAgent {
   }
 
   
-  // How readable is this?
+  // This takes a standard URI, it proxies the request itself. 
   fetchTriplesAtUri(uri) {
     let parser = new Parser()
     return fetch(`${proxy}` + uri, {

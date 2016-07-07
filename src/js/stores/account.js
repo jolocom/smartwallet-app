@@ -27,6 +27,7 @@ export default Reflux.createStore({
       }
     }).then((res)=>{
       res.json().then((js)=>{
+        console.log('The user', js.webid, 'was registered. We will attempt to log ')
         Account.login.completed(js.webid)
       })
     })
@@ -53,9 +54,15 @@ export default Reflux.createStore({
     this.trigger({username: 'https://proxy.webid.jolocom.de/proxy?url='+webid})
   },
 
-  onLogout() {
-    localStorage.removeItem('fake-user')
-    this.trigger({username: null})
+  onLogout(){
+    fetch('https://proxy.webid.jolocom.de/logout', {
+      method: 'POST',
+      credentials: 'include',
+      // Not sure if the headers are necessary.
+      headers: {
+        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
+      }
+    })
   },
 
   loggedIn() {

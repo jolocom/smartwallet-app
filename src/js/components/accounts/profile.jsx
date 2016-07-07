@@ -145,6 +145,7 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if(!this.state.loading){
+      console.log(this.state)
       ProfileActions.update(this.state)
       ProfileActions.hide()
       this.state.loading = false
@@ -188,7 +189,7 @@ let Profile = React.createClass({
       })
 
       gAgent.storeFile(this.state.storage, file).then((res) => {
-        this.setState({imgUri: res.url})
+        this.setState({imgUri: res})
         this.setState({loading: false})
       }).catch((e)=>{
         console.log(e)

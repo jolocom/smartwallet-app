@@ -13,6 +13,7 @@ import STYLES from 'styles/app.js'
 
 class D3Converter {
   convertToD3(rank, node, i, n) {
+    console.log(node)
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
