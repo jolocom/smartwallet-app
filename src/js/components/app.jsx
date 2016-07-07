@@ -147,6 +147,10 @@ let App = React.createClass({
       },
       icon: {
         color: this.theme.appBar.textColor
+      },
+      filters: {
+        width: '100%',
+        height: '48px'
       }
     }
     return styles
@@ -161,7 +165,7 @@ let App = React.createClass({
       </div>
     )
     const search = <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
-    const filters = <GraphFilters/>
+    const filters = <GraphFilters style={styles.filters} showDefaults={true}/>
 
     return (
       <div style={styles.container}>

@@ -38,9 +38,7 @@ class Filters extends React.Component {
 
     const styles = {
       container: {
-        display: 'flex',
-        height: '48px',
-        width: '100%'
+        display: 'flex'
       },
       filters: {
         flex: 1,
@@ -91,7 +89,7 @@ class Filters extends React.Component {
     const styles = this.getStyles()
     const filter = filters[id]
     const checked = this.state.filters[id]
-    console.log(checked ? styles.iconActive.color : styles.icon.color)
+
     return (<IconToggle
       icon={<filter.icon/>}
       style={[styles.item, checked && styles.itemActive]}
@@ -103,15 +101,23 @@ class Filters extends React.Component {
   }
 
   render() {
-    let styles = this.getStyles()
+    const styles = this.getStyles()
+    const {style, showDefaults} = this.props
+    let defaultFilters
 
-    return (
-      <div style={styles.container}>
+    if (showDefaults) {
+      defaultFilters = (
         <nav style={styles.filters}>
           {this.getFilter('people')}
           {this.getFilter('locations')}
           {this.getFilter('events')}
         </nav>
+      )
+    }
+
+    return (
+      <div style={[styles.container, style]}>
+        {defaultFilters}
         <IconMenu
           iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
           anchorOrigin={{horizontal: 'right', vertical: 'top'}}
