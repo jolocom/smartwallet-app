@@ -790,33 +790,41 @@ export default class GraphD3 extends EventEmitter {
     // We don't pop it from the parent neighbours array, that should not cause problems. But
     // Keep an eye on this, in case of potential bugs.
 
-    let node = state.selected
-    let index = d3.select(node)[0][0].__data__.uri
+    let index = d3.select(state.selected)[0][0].__data__.uri
+    let nIndex = -1
 
+    for (let i = 0; i < this.dataNodes.length; i++){
+      if(this.dataNodes[i].uri == index && this.dataNodes[i].rank=='adjacent'){
+        nIndex = i
+        console.log('found deleting node at index:', nIndex)
+      }
+    }
+
+    if(nIndex>this.numberOfNodes){
+      this.index = nIndex-this.numberOfNodes
+      this.force.stop()
+      this.sortNodes()
+      this.force.nodes(this.currentDataNodes)
+      this.force.links(this.currentDataLinks)
+      this.drawNodes()
+      this.force.start()
+    }
 
     d3.selectAll('.node').filter(function(d) { return d.uri == index && d.rank=='adjacent'}).select('pattern')
-      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .transition().duration(STYLES.nodeTransitionDuration/3).delay(100)
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
 
     d3.selectAll('.node').filter(function(d) { return d.uri == index && d.rank=='adjacent'}).select('image')
-      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .transition().duration(STYLES.nodeTransitionDuration/3).delay(100)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
 
 
     d3.selectAll('.node').filter(function(d) { return d.uri == index && d.rank=='adjacent'}).select('circle')
-      .transition().duration(STYLES.nodeTransitionDuration/3)
+      .transition().duration(STYLES.nodeTransitionDuration/3).delay(100)
       .attr('r', STYLES.largeNodeSize/2.2)
       .each('end',  ()=>{
-
-        let nIndex = -1
-
-        for (let i = 0; i < this.dataNodes.length; i++){
-          console.table(this.dataNodes[i])
-          if(this.dataNodes[i].uri == index && this.dataNodes[i].rank=='adjacent') nIndex = i
-          console.log('found deleting node at index:', nIndex)
-        }
         this.force.stop()
         this.dataNodes.splice(nIndex, 1)
         this.numberOfAdjcent --
