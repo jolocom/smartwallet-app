@@ -6,18 +6,18 @@ import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-import {Paper, AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
+import {Paper, AppBar, IconButton} from 'material-ui'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import JolocomTheme from 'styles/jolocom-theme'
 
-import SearchBar from 'components/common/search-bar.jsx'
 import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
 import GraphSearch from 'components/graph/search.jsx'
+import GraphFilters from 'components/graph/filters.jsx'
 
 import AccountStore from 'stores/account'
 
@@ -94,52 +94,6 @@ let App = React.createClass({
     }
   },
 
-  getComponent() {
-    let path = this.props.location.pathname
-    let styles = this.getStyles()
-
-    if (path.match('/graph')) {
-      return {
-        id: 'graph',
-        title: 'Graph',
-        nav: (
-          <div>
-            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
-            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleChatTap}>chat</IconButton>
-          </div>
-        ),
-        search: <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
-      }
-
-    } else if (path.match('/chat')) {
-      return {
-        id: 'chat',
-        title: 'Chat',
-        nav: (
-          <div>
-            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
-          </div>
-        )
-      }
-
-    } else if (path.match('/contacts')) {
-      return {
-        id: 'contacts',
-        title: 'Contacts',
-        nav: (
-          <div>
-            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
-            <IconMenu iconButtonElement={<IconButton iconClassName="material-icons" iconStyle={styles.icon}>more_vert</IconButton>}>
-              <MenuItem primaryText="Invite a friend" index={0} />
-            </IconMenu>
-          </div>
-        )
-      }
-    }
-
-    return {}
-  },
-
   _handlePinnedTap() {
     PinnedActions.show()
   },
@@ -182,7 +136,8 @@ let App = React.createClass({
         position: 'relative'
       },
       header: {
-        zIndex: 5
+        zIndex: 5,
+        backgroundColor: this.theme.appBar.color
       },
       bar: {
         boxShadow: 'none'
@@ -198,16 +153,23 @@ let App = React.createClass({
   },
 
   render() {
-    let component = this.getComponent()
-    let styles = this.getStyles()
-    let search = component.search || <SearchBar ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
+    const styles = this.getStyles()
+    const nav = (
+      <div>
+        <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
+        <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleChatTap}>chat</IconButton>
+      </div>
+    )
+    const search = <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
+    const filters = <GraphFilters/>
 
     return (
       <div style={styles.container}>
         {this.isPublicRoute() ? this.props.children : (
           <Layout>
             <Paper zDept={1} style={styles.header}>
-              <AppBar title={component.title} iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
+              <AppBar title="Graph" iconElementRight={nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
+              {filters}
               {search}
             </Paper>
             <LeftNav ref="leftNav" />
