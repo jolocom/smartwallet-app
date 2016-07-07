@@ -1,18 +1,19 @@
 import React from 'react'
+import Radium from 'radium'
 
 import {Checkbox} from 'material-ui'
 
-export default React.createClass({
+export default Radium(React.createClass({
   contextTypes: {
     muiTheme: React.PropTypes.any
   },
   render() {
-    let {style, icon, ...checkboxProps} = this.props
+    let {style, checkboxStyle, icon, ...checkboxProps} = this.props
 
     return (
       <div style={style}>
-        <Checkbox checkedIcon={icon} uncheckedIcon={icon} {...checkboxProps}/>
+        <Checkbox checkedIcon={icon} uncheckedIcon={icon} style={checkboxStyle} {...checkboxProps} />
       </div>
     )
   }
-})
+}))

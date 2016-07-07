@@ -23,6 +23,14 @@ let JolocomTheme = {
     color: '#f0f0f0',
     textColor: '#4b132b'
   },
+  inkBar: {
+    backgroundColor: '#b3c90f'
+  },
+  tabs: {
+    backgroundColor: '#f0f0f0',
+    selectedTextColor: '#4b132b',
+    textColor: fade('#4b132b', 0.8)
+  },
   textField: {
     focusColor: lime700
   },
