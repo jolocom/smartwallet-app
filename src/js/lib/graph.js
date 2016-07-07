@@ -28,12 +28,6 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
-
-    this.svg.append('svg:rect')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .attr('fill', 'white')
-
   }
 
   render = function(nodes) {
@@ -82,8 +76,8 @@ export default class GraphD3 extends EventEmitter {
       let num = 0, angle= (2 * Math.PI) / 8
 
       for (let i = 0; i < this.numberOfAdjcent; i++) {
-        let pos = { x: Math.sin(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + this.center.x,
-                    y: Math.cos(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.2 + this.center.y}
+        let pos = { x: Math.sin(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.4 + this.center.x,
+                    y: Math.cos(angle*  (num+4.5) ) * STYLES.largeNodeSize * 1.4 + this.center.y}
         this.nodePositions.push(pos)
         num++
       }
@@ -100,9 +94,9 @@ export default class GraphD3 extends EventEmitter {
       .chargeDistance(STYLES.largeNodeSize*2)
       .linkDistance((d)=> {
 
-        if(d.rank == 'history' && d.histLevel>=0) return STYLES.largeNodeSize*4
-        else if(d.rank == 'history') return STYLES.smallNodeSize
-        else return STYLES.largeNodeSize * 1.2
+        if(d.source.rank == 'history' && d.source.histLevel>=0) return STYLES.largeNodeSize*2
+        else if(d.source.rank == 'history') return STYLES.smallNodeSize
+        else return STYLES.largeNodeSize * 1.4
 
       })
       .size([this.width, this.height])
@@ -120,7 +114,7 @@ export default class GraphD3 extends EventEmitter {
       .on('drag', this.backDrag)
       .on('dragstart', this.backDragStart)
 
-    this.svg.call(this.back_drag)
+
 
   }.bind(this)
 
@@ -167,6 +161,12 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the dark gray circle behind the main node.
   drawBackground = function() {
+    this.svg.append('svg:rect')
+      .attr('width', this.width)
+      .attr('height', this.height)
+      .attr('fill', 'white')
+
+
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
@@ -180,7 +180,7 @@ export default class GraphD3 extends EventEmitter {
       for (var i = 0; i < 12; i++) {
         this.svg.append('svg:circle')
           .attr('cx', this.width * 0.5)
-          .attr('cy', (this.height * 0.5) - (i*10) - (this.largeNodeSize*0.8))
+          .attr('cy', (this.height * 0.5) - (i*10) - (this.largeNodeSize*0.9))
           .attr('r', this.largeNodeSize* 0.02)
           .style('fill', STYLES.lightGrayColor)
       }
@@ -215,6 +215,9 @@ export default class GraphD3 extends EventEmitter {
   // Draws the nodes
   drawNodes = function() {
     console.log('drawing!!!')
+
+    this.svg.call(this.back_drag)
+
     let self = this
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
@@ -443,7 +446,6 @@ export default class GraphD3 extends EventEmitter {
     if(this.numberOfAdjcent>this.numberOfNodes){
 
 
-
       d3.selectAll('.node').attr('d',(d) => {
         if(d.rank == 'adjacent'){
           d.x+=(this.nodePositions[d.position].x-d.x)*k
@@ -494,7 +496,11 @@ export default class GraphD3 extends EventEmitter {
     this.force.stop()
     this.dataNodes.push(node)
     this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
-    this.drawNodes()
+    this.numberOfAdjcent++
+    // this.sortNodes()
+    // this.force.nodes(this.currentDataNodes)
+    // this.force.links(this.currentDataLinks)
+    // this.drawNodes()
     this.force.start()
   }.bind(this)
 
@@ -737,17 +743,22 @@ export default class GraphD3 extends EventEmitter {
 
         if (i == 0) {
           this.dataNodes.push(history[history.length-1-i])
-          this.currentDataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
-          this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: 0})
+          if(this.numberOfNodes<this.numberOfAdjcent){
+            this.currentDataNodes.push(history[history.length-1-i])
+            this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: 0})
+          }
         }
         else{
           this.dataNodes.push(history[history.length-1-i])
-          this.currentDataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
-          this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: this.dataNodes.length - 2})
+          if(this.numberOfNodes<this.numberOfAdjcent){
+            //this.currentDataNodes.push(history[history.length-1-i])
+            //this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: this.dataNodes.length - 2})
+          }
         }
       }
+
       this.force.start()
     }
     this.drawNodes()
@@ -822,11 +833,7 @@ export default class GraphD3 extends EventEmitter {
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
-      .style('filter', 'url(#darkblur)')
 
-    d3.selectAll('line').filter(function (d) { return d.source.index == d3.select(node)[0][0].__data__.index })
-      .transition().duration(STYLES.nodeTransitionDuration/3)
-      .attr('opacity', 0)
 
     d3.selectAll('.node').filter(function(d) { return d.index == index}).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration/3)
@@ -834,18 +841,17 @@ export default class GraphD3 extends EventEmitter {
       .each('end',  ()=>{
 
         let nIndex = -1
-        let lIndex = -1
 
         for (let i = 0; i < this.currentDataNodes.length; i++)
-          if(this.dataNodes[i].index == index) nIndex = i
-
-        for (let i = 0; i < this.currentDataLinks.length; i++)
-          if(this.dataLinks[i].source.index == index) lIndex = i
+          if(this.currentDataNodes[i].index == index) nIndex = i
 
         this.force.stop()
-        this.dataNodes.splice(nIndex, 1)
+        this.dataNodes.splice(nIndex+this.index, 1)
+        this.numberOfAdjcent --
         //this.dataLinks.splice(lIndex, 1)
         this.sortNodes()
+        this.force.nodes(this.currentDataNodes)
+        this.force.links(this.currentDataLinks)
         this.drawNodes()
         this.force.start()
       })
