@@ -1,0 +1,11 @@
+{
+  "root": "C:/Users/Eric/Desktop/little-sister/dist",
+  "port": "8443",
+  "webid": false,
+  "sslKey": "./localhost.key",
+  "sslCert": "./localhost.cert",
+  "idp": false,
+  "fileBrowser": "https://linkeddata.github.io/warp/#/list/",
+  "dataBrowser": false,
+  "strictOrigin": false
+}
