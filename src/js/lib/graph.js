@@ -67,6 +67,7 @@ export default class GraphD3 extends EventEmitter {
       this.numberOfAdjcent++
     }
 
+    //find center to arrange nodes
 
     this.center = {y:(this.height / 2), x: this.width /2}
 
@@ -120,16 +121,11 @@ export default class GraphD3 extends EventEmitter {
 
   backDragStart = function(){
     this.yOrigin = d3.mouse(d3.select('rect').node())[1]
-
-  }.bind(this)
+  }
 
 
   backDrag = function(){
-    console.log('isdraging!')
-    if(this.yOrigin<0){
-      this.yOrigin = d3.event.y
-      console.log('SET', d3.event.y)
-    }
+
     d3.event.sourceEvent.stopPropagation()
     if(this.yOrigin-d3.event.y<-10){
       if(this.index<this.numberOfAdjcent-this.numberOfNodes){
@@ -263,6 +259,8 @@ export default class GraphD3 extends EventEmitter {
     this.svg.selectAll('line')
     .data(this.currentDataLinks)
     .exit().remove()
+
+    //add avatars
 
     let defsImages = this.node.append('svg:defs')
     defsImages.append('svg:pattern')
@@ -417,10 +415,6 @@ export default class GraphD3 extends EventEmitter {
       self.onClickFull(this, data)
     })
 
-    d3.select(window)
-      .on('wheel.zoom', function(e) {
-        self.onScroll(e)
-      })
 
     this.force.on('tick', this.tick)
   }.bind(this)
@@ -497,28 +491,16 @@ export default class GraphD3 extends EventEmitter {
     this.dataNodes.push(node)
     this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
     this.numberOfAdjcent++
-    // this.sortNodes()
-    // this.force.nodes(this.currentDataNodes)
-    // this.force.links(this.currentDataLinks)
-    // this.drawNodes()
-    this.force.start()
-  }.bind(this)
-
-  // Enlarges and displays extra info about the clicked node, while setting
-  // all other highlighted nodes back to their normal size
-  onScroll = function() {
-
-    this.force.stop()
-    this.index++
-    this.index = this.index % (this.numberOfAdjcent)
     this.sortNodes()
     this.force.nodes(this.currentDataNodes)
     this.force.links(this.currentDataLinks)
     this.drawNodes()
     this.force.start()
-
-
   }.bind(this)
+
+  // Enlarges and displays extra info about the clicked node, while setting
+  // all other highlighted nodes back to their normal size
+
 
   sortNodes = function (){
 
@@ -532,9 +514,6 @@ export default class GraphD3 extends EventEmitter {
     // d3.select('.dial').transition()
     //   .duration(100)
     //   .call(this.arcTween, 2*Math.PI*(this.index+1)/this.numberOfAdjcent)
-
-
-    console.log('index', this.index)
 
     this.currentDataNodes=[]
     this.currentDataLinks = []
@@ -574,24 +553,24 @@ export default class GraphD3 extends EventEmitter {
 
   }.bind(this)
 
-  arcTween = function (transition, newAngle) {
-    let arc = d3.svg.arc()
-        .innerRadius(this.largeNodeSize* 0.5)
-        .outerRadius(this.largeNodeSize* 0.57)
-        .startAngle(0)
-
-    transition.attrTween('d', function(d) {
-
-      var interpolate = d3.interpolate(d.endAngle, newAngle)
-
-      return function(t) {
-
-        d.endAngle = interpolate(t)
-
-        return arc(d)
-      }
-    })
-  }.bind(this)
+  // arcTween = function (transition, newAngle) {
+  //   let arc = d3.svg.arc()
+  //       .innerRadius(this.largeNodeSize* 0.5)
+  //       .outerRadius(this.largeNodeSize* 0.57)
+  //       .startAngle(0)
+  //
+  //   transition.attrTween('d', function(d) {
+  //
+  //     var interpolate = d3.interpolate(d.endAngle, newAngle)
+  //
+  //     return function(t) {
+  //
+  //       d.endAngle = interpolate(t)
+  //
+  //       return arc(d)
+  //     }
+  //   })
+  // }.bind(this)
 
 
   onClickFull = function(node, data) {
@@ -604,13 +583,14 @@ export default class GraphD3 extends EventEmitter {
     d3.event.stopPropagation()
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
+    this.emit('select', data, node)
+
     if(data.rank == 'history') return
     if (d3.event.defaultPrevented) {
       return
     }
 
 
-    this.emit('select', data, node)
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
@@ -636,11 +616,9 @@ export default class GraphD3 extends EventEmitter {
     })
 
 
-
-
     // Setting all the pattern sizes back to normal.
     d3.selectAll('g .node').filter(function(d) { return d.highlighted }).selectAll('pattern')
-      .transition('patern').duration(STYLES.nodeTransitionDuration)
+      .transition('pattern').duration(STYLES.nodeTransitionDuration)
       .attr('x', (d) => {
         return d.rank == 'center' ? -largeSize / 2 : -smallSize / 2 })
       .attr('y', (d) => {
@@ -744,21 +722,16 @@ export default class GraphD3 extends EventEmitter {
         if (i == 0) {
           this.dataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
-          if(this.numberOfNodes<this.numberOfAdjcent){
-            this.currentDataNodes.push(history[history.length-1-i])
-            this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: 0})
-          }
         }
         else{
           this.dataNodes.push(history[history.length-1-i])
           this.dataLinks.push({source: this.dataNodes.length - 1, target: this.dataNodes.length - 2})
-          if(this.numberOfNodes<this.numberOfAdjcent){
-            //this.currentDataNodes.push(history[history.length-1-i])
-            //this.currentDataLinks.push({source: this.currentDataNodes.length - 1, target: this.dataNodes.length - 2})
-          }
         }
       }
-
+      this.sortNodes()
+      this.force.nodes(this.currentDataNodes)
+      this.force.links(this.currentDataLinks)
+      this.drawNodes()
       this.force.start()
     }
     this.drawNodes()
