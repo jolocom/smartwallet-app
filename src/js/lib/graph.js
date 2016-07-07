@@ -486,11 +486,8 @@ export default class GraphD3 extends EventEmitter {
 
   // This basically pushes a node to the dataNodes and a link to the dataLinks
   // Arrays. Then tells d3 to draw a node for each of those.
-  addNode = function(node){
+  addNode = function(){
     this.force.stop()
-    this.dataNodes.push(node)
-    this.dataLinks.push({source: this.dataNodes.length - 1, target: 0})
-    this.numberOfAdjcent++
     this.sortNodes()
     this.force.nodes(this.currentDataNodes)
     this.force.links(this.currentDataLinks)
@@ -794,34 +791,35 @@ export default class GraphD3 extends EventEmitter {
     // Keep an eye on this, in case of potential bugs.
 
     let node = state.selected
-    let index = d3.select(node)[0][0].__data__.index
+    let index = d3.select(node)[0][0].__data__.uri
 
 
-    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('pattern')
+    d3.selectAll('.node').filter(function(d) { return d.uri == index && d.rank=='adjacent'}).select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('x', -STYLES.largeNodeSize / 2)
       .attr('y', -STYLES.largeNodeSize / 2)
 
-    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('image')
+    d3.selectAll('.node').filter(function(d) { return d.uri == index && d.rank=='adjacent'}).select('image')
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
 
 
-    d3.selectAll('.node').filter(function(d) { return d.index == index}).select('circle')
+    d3.selectAll('.node').filter(function(d) { return d.uri == index && d.rank=='adjacent'}).select('circle')
       .transition().duration(STYLES.nodeTransitionDuration/3)
       .attr('r', STYLES.largeNodeSize/2.2)
       .each('end',  ()=>{
 
         let nIndex = -1
 
-        for (let i = 0; i < this.currentDataNodes.length; i++)
-          if(this.currentDataNodes[i].index == index) nIndex = i
-
+        for (let i = 0; i < this.dataNodes.length; i++){
+          console.table(this.dataNodes[i])
+          if(this.dataNodes[i].uri == index && this.dataNodes[i].rank=='adjacent') nIndex = i
+          console.log('found deleting node at index:', nIndex)
+        }
         this.force.stop()
-        this.dataNodes.splice(nIndex+this.index, 1)
+        this.dataNodes.splice(nIndex, 1)
         this.numberOfAdjcent --
-        //this.dataLinks.splice(lIndex, 1)
         this.sortNodes()
         this.force.nodes(this.currentDataNodes)
         this.force.links(this.currentDataLinks)
