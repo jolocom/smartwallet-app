@@ -15,20 +15,6 @@ const theme = getMuiTheme(JolocomTheme)
 console.log('Touch Rotate 2');
 
 var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
-
-	var getOffset = function (el) {
-		var _x = 0;
-		var _y = 0;
-		while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
-			_x += el.offsetLeft - el.scrollLeft;
-			_y += el.offsetTop - el.scrollTop;
-			el = el.offsetParent;
-		}
-		return {
-			x: _y,
-			y: _x
-		};
-	}
 	
 	var lastRadianAbs;
 	
@@ -47,24 +33,29 @@ var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
 		return Math.PI/2 - rad_starting_right;	
 	}
 	
-	touchElement.addEventListener('touchstart', function (e) {
-		var currentY = e.touches ? e.touches[0].pageY : e.pageY;
-		var currentX = e.touches ? e.touches[0].pageX : e.pageX;
-		var {x: centerX, y: centerY} = getCenterCoordinates();
-		lastRadianAbs = getRadian(currentX,currentY,centerX,centerY);
-		event.preventDefault();
+	// @todo mousedown does not work
+	['touchstart','mousedown'].forEach(function(eventName) {
+		touchElement.addEventListener(eventName, function (e) {
+			var currentY = e.touches ? e.touches[0].pageY : e.pageY;
+			var currentX = e.touches ? e.touches[0].pageX : e.pageX;
+			var {x: centerX, y: centerY} = getCenterCoordinates();
+			lastRadianAbs = getRadian(currentX,currentY,centerX,centerY);
+			event.preventDefault();
+		});
 	});
-
-	touchElement.addEventListener('touchmove', function (e) {
-		var currentY = e.touches ? e.touches[0].pageY : e.pageY;
-		var currentX = e.touches ? e.touches[0].pageX : e.pageX;
-		var {x: centerX, y: centerY} = getCenterCoordinates();
-		var touchMoveRadianAbs = getRadian(currentX,currentY,centerX,centerY);
-		var touchMoveRadianDiff = touchMoveRadianAbs-lastRadianAbs;
-		lastRadianAbs = touchMoveRadianAbs;
-		callbackTouchMove(touchMoveRadianDiff);
+	
+	['touchmove','mousemove'].forEach(function(eventName) {
+		touchElement.addEventListener(eventName, function (e) { // @todo add mouseclick event
+			var currentY = e.touches ? e.touches[0].pageY : e.pageY;
+			var currentX = e.touches ? e.touches[0].pageX : e.pageX;
+			var {x: centerX, y: centerY} = getCenterCoordinates();
+			var touchMoveRadianAbs = getRadian(currentX,currentY,centerX,centerY);
+			console.log('touchmoveradianabs',touchMoveRadianAbs)
+			var touchMoveRadianDiff = touchMoveRadianAbs-lastRadianAbs;
+			lastRadianAbs = touchMoveRadianAbs;
+			callbackTouchMove(touchMoveRadianDiff);
+		});
 	});
-
 }
 
 export default class GraphD3 extends EventEmitter {
@@ -102,11 +93,14 @@ export default class GraphD3 extends EventEmitter {
 		var touchMoveRadian = 0;
 		
 		return function(touchMoveRadianDiff) { // closure isn't functional #todo
-			touchMoveRadian+=touchMoveRadianDiff;
+			touchMoveRadian+=touchMoveRadianDiff; // @todo remise à zéro et quand on fait un tour
 			console.log('touchmoveradian', touchMoveRadian);
+			// @TODO not use an absolute counter but a relative one (otherwise going to -7 needs +8 instead of a +1 to scroll forward) @TODO
 			var newIndex = Math.floor(touchMoveRadian/(Math.PI/8)); // (@todo max nodes constant)
 			
 			console.warn('newIndex (before checkss)',newIndex);
+			// if (Math.abs(newIndex-thisInstance.index) > thisInstance.MAX_VISIBLE_NUMBER_OF_NODES/2)
+			// 	newIndex = thisInstance.index; // short hack for the fact that radian goes from 4.x to -1.x @todo
 			if (newIndex>thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)
 				newIndex = thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES;
 			else if (newIndex <=0)
