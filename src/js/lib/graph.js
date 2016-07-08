@@ -12,11 +12,66 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 const theme = getMuiTheme(JolocomTheme)
 
+console.log('Touch Rotate 2');
+
+var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
+
+	var getOffset = function (el) {
+		var _x = 0;
+		var _y = 0;
+		while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+			_x += el.offsetLeft - el.scrollLeft;
+			_y += el.offsetTop - el.scrollTop;
+			el = el.offsetParent;
+		}
+		return {
+			x: _y,
+			y: _x
+		};
+	}
+	
+	var lastRadianAbs;
+	
+	function getCenterCoordinates() {		
+		return {
+			x: boxElement.offsetLeft + boxElement.offsetWidth/2,
+			y: boxElement.offsetTop + boxElement.offsetHeight/2
+		}	
+	}
+	
+	// mix between functions that have a clue of the context and stateless function ; fix this. one more closure?
+	function getRadian(currentX,currentY,centerX,centerY) {
+		var opp = centerY-currentY;
+		var adj = currentX-centerX;
+		var rad_starting_right = Math.atan2(opp,adj);
+		return Math.PI/2 - rad_starting_right;	
+	}
+	
+	touchElement.addEventListener('touchstart', function (e) {
+		var currentY = e.touches ? e.touches[0].pageY : e.pageY;
+		var currentX = e.touches ? e.touches[0].pageX : e.pageX;
+		var {x: centerX, y: centerY} = getCenterCoordinates();
+		lastRadianAbs = getRadian(currentX,currentY,centerX,centerY);
+		event.preventDefault();
+	});
+
+	touchElement.addEventListener('touchmove', function (e) {
+		var currentY = e.touches ? e.touches[0].pageY : e.pageY;
+		var currentX = e.touches ? e.touches[0].pageX : e.pageX;
+		var {x: centerX, y: centerY} = getCenterCoordinates();
+		var touchMoveRadianAbs = getRadian(currentX,currentY,centerX,centerY);
+		var touchMoveRadianDiff = touchMoveRadianAbs-lastRadianAbs;
+		lastRadianAbs = touchMoveRadianAbs;
+		callbackTouchMove(touchMoveRadianDiff);
+	});
+
+}
 
 export default class GraphD3 extends EventEmitter {
 
   constructor(el) {
     super()
+    this.MAX_VISIBLE_NUMBER_OF_NODES = 8
     this.el = el
     this.rendered = false
 
@@ -25,6 +80,7 @@ export default class GraphD3 extends EventEmitter {
     this.height = this.el.offsetHeight || STYLES.height
 
     this.svg = d3.select(this.el).append('svg:svg')
+	  .attr('id','graph')
       .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
@@ -39,6 +95,48 @@ export default class GraphD3 extends EventEmitter {
     this.setUpForce(nodes)
     this.drawBackground()
     this.rendered = true
+	
+	var thisInstance = this; 
+	
+	var touchRotateMoveCallback = (function() { // au générateur passer le nombre de steps par exemple
+		var touchMoveRadian = 0;
+		
+		return function(touchMoveRadianDiff) { // closure isn't functional #todo
+			touchMoveRadian+=touchMoveRadianDiff;
+			console.log('touchmoveradian', touchMoveRadian);
+			var newIndex = Math.floor(touchMoveRadian/(Math.PI/8)); // (@todo max nodes constant)
+			
+			console.warn('newIndex (before checkss)',newIndex);
+			if (newIndex>thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)
+				newIndex = thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES;
+			else if (newIndex <=0)
+				newIndex = 0;
+			console.warn('newIndex (after checks)',newIndex);
+			
+			if (newIndex != thisInstance.index)
+			{
+				// sort nodes etc
+//				document.querySelector("#app > div > div > div:nth-child(1) > div:nth-child(1) > button").style.transform = "rotate(" + touchMoveRadian + "rad)";
+				
+				console.warn('new index !');
+				
+				thisInstance.index = newIndex;
+				
+				thisInstance.force.stop()
+				thisInstance.sortNodes()
+				thisInstance.force.nodes(thisInstance.currentDataNodes)
+				thisInstance.force.links(thisInstance.currentDataLinks)
+				thisInstance.drawNodes()
+				thisInstance.force.start()
+
+			}
+			
+			console.info('Transform to abs : ',touchMoveRadian)
+		}
+	})(); 
+	  
+	new TouchRotate (this.svg.node(), d3.select('svg#graph').node().parentNode, touchRotateMoveCallback) 
+
   }
 
   calcDimensions = function() {
@@ -58,7 +156,6 @@ export default class GraphD3 extends EventEmitter {
     this.dataLinks = []
     this.currentDataLinks = []
     this.index=0
-    this.numberOfNodes = 8
     this.numberOfAdjcent = 0
   // Flatten the center and neighbour nodes we get from the state
     for (let i = 0; i < nodes.neighbours.length; i++) {
@@ -71,7 +168,7 @@ export default class GraphD3 extends EventEmitter {
 
     this.center = {y:(this.height / 2), x: this.width /2}
 
-    if(this.numberOfNodes<this.numberOfAdjcent){
+    if(this.MAX_VISIBLE_NUMBER_OF_NODES<this.numberOfAdjcent){
       this.nodePositions = []
 
       let num = 0, angle= (2 * Math.PI) / 8
@@ -111,15 +208,15 @@ export default class GraphD3 extends EventEmitter {
 
     this.yOrigin = 0
 
-    this.back_drag = d3.behavior.drag()
+    /*this.back_drag = d3.behavior.drag()
       .on('drag', this.backDrag)
-      .on('dragstart', this.backDragStart)
+      .on('dragstart', this.backDragStart)*/
 
 
 
   }.bind(this)
 
-  backDragStart = function(){
+  /*backDragStart = function(){
     this.yOrigin = d3.mouse(d3.select('rect').node())[1]
   }
 
@@ -128,7 +225,7 @@ export default class GraphD3 extends EventEmitter {
 
     d3.event.sourceEvent.stopPropagation()
     if(this.yOrigin-d3.event.y<-10){
-      if(this.index<this.numberOfAdjcent-this.numberOfNodes){
+      if(this.index<this.numberOfAdjcent-this.MAX_VISIBLE_NUMBER_OF_NODES){
         this.force.stop()
         this.index ++
         this.sortNodes()
@@ -152,7 +249,7 @@ export default class GraphD3 extends EventEmitter {
       }
     }
 
-  }.bind(this)
+  }.bind(this)*/
 
 
   // Draws the dark gray circle behind the main node.
@@ -169,7 +266,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('r', this.largeNodeSize* 0.57)
       .style('fill', STYLES.lightGrayColor)
 
-    if(this.numberOfNodes < this.numberOfAdjcent){
+    if(this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfAdjcent){
 
       //draw dotted line to indicate there are more nodes
 
@@ -187,7 +284,7 @@ export default class GraphD3 extends EventEmitter {
         .style('fill', STYLES.lightGrayColor)
 
 
-      this.arch = this.numberOfNodes/this.numberOfAdjcent
+      this.arch = this.MAX_VISIBLE_NUMBER_OF_NODES/this.numberOfAdjcent
 
       this.archAngle =  360/this.numberOfAdjcent
 
@@ -212,7 +309,7 @@ export default class GraphD3 extends EventEmitter {
   drawNodes = function() {
     console.log('drawing!!!')
 
-    this.svg.call(this.back_drag)
+    // this.svg.call(this.back_drag)
 
     let self = this
     // These make the following statements shorter
@@ -437,7 +534,7 @@ export default class GraphD3 extends EventEmitter {
       }
     })
 
-    if(this.numberOfAdjcent>this.numberOfNodes){
+    if(this.numberOfAdjcent>this.MAX_VISIBLE_NUMBER_OF_NODES){
 
 
       d3.selectAll('.node').attr('d',(d) => {
@@ -501,7 +598,7 @@ export default class GraphD3 extends EventEmitter {
 
   sortNodes = function (){
 
-    if(this.numberOfAdjcent<=this.numberOfNodes){
+    if(this.numberOfAdjcent<=this.MAX_VISIBLE_NUMBER_OF_NODES){
       this.currentDataNodes = this.dataNodes
       this.currentDataLinks = this.dataLinks
       return
@@ -520,7 +617,7 @@ export default class GraphD3 extends EventEmitter {
 
     for (let i = this.index+1; i != this.index; i = (i+1)%this.dataNodes.length) {
 
-      if(this.dataNodes[i].rank == 'adjacent' && nodeCount<this.numberOfNodes){
+      if(this.dataNodes[i].rank == 'adjacent' && nodeCount<this.MAX_VISIBLE_NUMBER_OF_NODES){
         this.currentDataNodes.push(this.dataNodes[i])
         this.currentDataNodes[this.currentDataNodes.length-1].position = nodeCount
         this.currentDataNodes[this.currentDataNodes.length-1].x =this.nodePositions[nodeCount].x
@@ -800,8 +897,8 @@ export default class GraphD3 extends EventEmitter {
       }
     }
 
-    if(nIndex>this.numberOfNodes){
-      this.index = nIndex-this.numberOfNodes
+    if(nIndex>this.MAX_VISIBLE_NUMBER_OF_NODES){
+      this.index = nIndex-this.MAX_VISIBLE_NUMBER_OF_NODES
       this.force.stop()
       this.sortNodes()
       this.force.nodes(this.currentDataNodes)
@@ -825,6 +922,7 @@ export default class GraphD3 extends EventEmitter {
       .transition().duration(STYLES.nodeTransitionDuration/3).delay(100)
       .attr('r', STYLES.largeNodeSize/2.2)
       .each('end',  ()=>{
+		console.warn('this is the end')
         this.force.stop()
         this.dataNodes.splice(nIndex, 1)
         this.numberOfAdjcent --
