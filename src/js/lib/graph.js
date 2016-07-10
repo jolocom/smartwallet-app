@@ -175,6 +175,7 @@ export default class GraphD3 extends EventEmitter {
 
       for (var i = 0; i < 12; i++) {
         this.svg.append('svg:circle')
+          .attr('class', 'dots')
           .attr('cx', this.width * 0.5)
           .attr('cy', (this.height * 0.5) - (i*10) - (this.largeNodeSize*0.9))
           .attr('r', this.largeNodeSize* 0.02)
@@ -550,24 +551,24 @@ export default class GraphD3 extends EventEmitter {
 
   }.bind(this)
 
-  // arcTween = function (transition, newAngle) {
-  //   let arc = d3.svg.arc()
-  //       .innerRadius(this.largeNodeSize* 0.5)
-  //       .outerRadius(this.largeNodeSize* 0.57)
-  //       .startAngle(0)
-  //
-  //   transition.attrTween('d', function(d) {
-  //
-  //     var interpolate = d3.interpolate(d.endAngle, newAngle)
-  //
-  //     return function(t) {
-  //
-  //       d.endAngle = interpolate(t)
-  //
-  //       return arc(d)
-  //     }
-  //   })
-  // }.bind(this)
+  arcTween = function (transition, newAngle) {
+    let arc = d3.svg.arc()
+        .innerRadius(this.largeNodeSize* 0.5)
+        .outerRadius(this.largeNodeSize* 0.57)
+        .startAngle(0)
+
+    transition.attrTween('d', function(d) {
+
+      var interpolate = d3.interpolate(d.endAngle, newAngle)
+
+      return function(t) {
+
+        d.endAngle = interpolate(t)
+
+        return arc(d)
+      }
+    })
+  }.bind(this)
 
 
   onClickFull = function(node, data) {
@@ -792,11 +793,18 @@ export default class GraphD3 extends EventEmitter {
 
     let index = d3.select(state.selected)[0][0].__data__.uri
     let nIndex = -1
+    let lIndex = -1
 
     for (let i = 0; i < this.dataNodes.length; i++){
       if(this.dataNodes[i].uri == index && this.dataNodes[i].rank=='adjacent'){
         nIndex = i
         console.log('found deleting node at index:', nIndex)
+      }
+    }
+
+    for (var i = 0; i < this.dataLinks.length; i++) {
+      if(this.dataLinks[i].source.uri == index && this.dataLinks[i].source.rank == 'adjacent'){
+        lIndex = i
       }
     }
 
@@ -827,7 +835,35 @@ export default class GraphD3 extends EventEmitter {
       .each('end',  ()=>{
         this.force.stop()
         this.dataNodes.splice(nIndex, 1)
+        this.dataLinks.splice(lIndex, 1)
         this.numberOfAdjcent --
+        d3.select('.dial').transition()
+         .duration(100)
+         .call(this.arcTween, 2*Math.PI*(this.numberOfNodes/this.numberOfAdjcent))
+        if(this.numberOfNodes>=this.numberOfAdjcent){
+          d3.select('.dial').remove()
+          d3.selectAll('.dots').remove()
+        }
+        // this.arch = this.numberOfNodes/this.numberOfAdjcent
+        // this.dial = this.svg.append('path')
+        //   .datum({endAngle: 2*Math.PI*this.arch})
+        //
+
+        // this.archAngle =  360/this.numberOfAdjcent
+        //
+        // this.arc = d3.svg.arc()
+        //     .innerRadius(this.largeNodeSize* 0.5)
+        //     .outerRadius(this.largeNodeSize* 0.57)
+        //     .startAngle(0)
+        //
+        //
+        // this.dial = this.svg.append('path')
+        //   .attr('class', 'dial')
+        //   .datum({endAngle: 2*Math.PI*this.arch})
+        //   .style('fill', STYLES.grayColor)
+        //   .attr('d', this.arc)
+        //   .attr('transform', 'translate(' + this.width*0.5 + ',' + this.height*0.5 + ')')
+
         this.sortNodes()
         this.force.nodes(this.currentDataNodes)
         this.force.links(this.currentDataLinks)

@@ -63,10 +63,10 @@ import d3Convertor from '../lib/d3-converter'
   },
 
   deleteNode: function(svgNode, node){
-    // for (let i = 0; i < this.state.neighbours.length; i++){
-    //   if (this.state.neighbours[i].index == node.index)
-    //     //this.state.neighbours.splice(i, 1)
-    // }
+    for (let i = 0; i < this.state.neighbours.length; i++){
+      if (this.state.neighbours[i].uri == node.uri)
+        this.state.neighbours.splice(i, 1)
+    }
     this.trigger(this.state, 'nodeRemove')
   },
 
@@ -143,9 +143,9 @@ import d3Convertor from '../lib/d3-converter'
         }
         // Removed the brackets, one liners.
         else if(this.state.navHistory.length > 1)
-          for (var j = 0; j < this.state.navHistory.length-1; j++) 
-            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) 
-              for (var k = 0; k < j+2; k++) 
+          for (var j = 0; j < this.state.navHistory.length-1; j++)
+            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri)
+              for (var k = 0; k < j+2; k++)
                 this.state.navHistory.pop()
       }
 
