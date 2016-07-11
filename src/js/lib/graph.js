@@ -331,6 +331,10 @@ export default class GraphD3 extends EventEmitter {
       .style('fill', STYLES.lightGrayColor)
 
     if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfAdjcent) {
+      
+  
+      d3.select(this.svg.node().parentNode).append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
+
 
       //draw dotted line to indicate there are more nodes
 
@@ -388,17 +392,19 @@ export default class GraphD3 extends EventEmitter {
       .attr('id', 'full')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('x', (STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) - STYLES.fullScreenButton
-
-/ 2)
-      .attr('y', -(STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) -
-
-STYLES.fullScreenButton / 2)
+      .attr('x', (STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) - STYLES.fullScreenButton / 2)
+      .attr('y', -(STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) - STYLES.fullScreenButton / 2)
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', 'img/full.jpg')
       .attr('width', STYLES.fullScreenButton)
       .attr('height', STYLES.fullScreenButton)
+    
+    let defFadeToWhite = defsFull.append('svg:linearGradient').attr("id","fade-to-white").attr("x1",0).attr("x2",1).attr("y1",0).attr("y2",0);
+    
+    defFadeToWhite.append("svg:stop").attr("offset","0%").attr("stop-color","white").attr("stop-opacity", 0);
+    defFadeToWhite.append("svg:stop").attr("offset","75%").attr("stop-color","white");
+ 
 
     // We draw the lines for all the elements in the dataLinks array.
 
