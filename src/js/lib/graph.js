@@ -15,6 +15,8 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 const theme = getMuiTheme(JolocomTheme)
 
+// @todo touchrotate center of graph-container, but when creating a new node, not the center
+
 /**
  * @param DOMElement touchElement The element whose center we use for the rotation, and on which
 
@@ -96,15 +98,14 @@ export default class GraphD3 extends EventEmitter {
   constructor(el) {
     super()
     this.MAX_VISIBLE_NUMBER_OF_NODES = 8
-    this.el = el
+    this.graphContainer = el // @todo use for touchrotate (graph-container)
     this.rendered = false
 
     // A bit of code duplication here.
-    this.width = this.el.offsetWidth || STYLES.width
-    this.height = this.el.offsetHeight || STYLES.height
+    this.width = this.graphContainer.offsetWidth || STYLES.width
+    this.height = this.graphContainer.offsetHeight || STYLES.height
 
-    this.svg = d3.select(this.el).append('svg:svg')
-      .attr('id', 'graph')
+    this.svg = d3.select(this.graphContainer).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
@@ -170,13 +171,13 @@ export default class GraphD3 extends EventEmitter {
     }
 
     var touchRotateCallbacks = TouchRotateCallbacks()
-    new TouchRotate(document.querySelector('#graph-container'), touchRotateCallbacks)
+    new TouchRotate(this.graphContainer, touchRotateCallbacks)
 
   }
 
   calcDimensions = function () {
-    this.width = this.el.offsetWidth || STYLES.width
-    this.height = this.el.offsetHeight || STYLES.height
+    this.width = this.graphContainer.offsetWidth || STYLES.width
+    this.height = this.graphContainer.offsetHeight || STYLES.height
 
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
@@ -1126,8 +1127,8 @@ STYLES.largeNodeSize / 8)
 
   // Not yet implemented.
   setSize = function () {
-    this.width = this.el.offsetWidth
-    this.height = this.el.offsetHeight
+    this.width = this.graphContainer.offsetWidth
+    this.height = this.graphContainer.offsetHeight
     this.svg.attr('width', this.width).attr('height', this.height)
   }.bind(this)
 }
