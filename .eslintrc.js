@@ -18,6 +18,7 @@ module.exports = {
     "rules": {
         "eqeqeq": "error",
         "curly": "error",
+        "no-console": "warn",
         "max-len": [
           "error"
         ],
