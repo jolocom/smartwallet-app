@@ -18,7 +18,8 @@ let Graph = React.createClass({
   mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
 
   contextTypes: {
-    history: React.PropTypes.object
+    history: React.PropTypes.object,
+    searchActive: React.PropTypes.boolean
   },
 
   childContextTypes: {
@@ -45,7 +46,7 @@ let Graph = React.createClass({
       this.state.activeNode = null
       // Important to avoid a re-render here.
       graphActions.setState('activeNode', null, false)
-    } 
+    }
     else if (signal == 'preview'){
       // Doesn't concern this component, used by preview.jsx
     }
@@ -77,7 +78,7 @@ let Graph = React.createClass({
   componentDidMount: function() {
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl())
-    // Adding the listeners. 
+    // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
@@ -129,12 +130,20 @@ let Graph = React.createClass({
       nodeDetails = <Node  state={this.state}/>
     }
 
-    return (
-      <div style={styles.container}>
+    let fab
+
+    if (!this.context.searchActive) {
+      fab = (
         <FabMenu style={styles.menu}>
           <FabMenuItem icon="radio_button_unchecked" label="Node" onClick={() => {this.addNode('node')}}/>
           <FabMenuItem icon="insert_link" label="Link" onClick={() => {this.addNode('link')}}/>
         </FabMenu>
+      )
+    }
+
+    return (
+      <div style={styles.container}>
+        {fab}
 
         <div style={styles.chart} ref="graph"></div>
 

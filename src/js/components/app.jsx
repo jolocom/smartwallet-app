@@ -39,15 +39,17 @@ let App = React.createClass({
   childContextTypes: {
     muiTheme: React.PropTypes.object,
     profile: React.PropTypes.any,
-    username: React.PropTypes.string
+    username: React.PropTypes.string,
+    searchActive: React.PropTypes.boolean
   },
 
   getChildContext: function () {
-    let {account, profile} = this.state
+    let {account, profile, searchActive} = this.state
     return {
       muiTheme: this.theme,
       profile: profile,
-      username: account && account.username
+      username: account && account.username,
+      searchActive
     }
   },
 
