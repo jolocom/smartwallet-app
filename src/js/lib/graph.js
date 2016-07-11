@@ -12,20 +12,22 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 const theme = getMuiTheme(JolocomTheme)
 
-console.log('Touch Rotate 2');
-
-var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
+/*
+	TouchRotate
+	@param touchElement DOM element; musn't be an svg element
+	@param callbackTouchMove A function to call each time the mouse moves and a rotation occurs
+*/
+var TouchRotate = function (touchElement, callbackTouchMove) {
 	
-	var lastRadianAbs;
-	
-	function getCenterCoordinates() {		
+	// Does not work with SVG, hence touchElement mustn't be an SVG
+	function getElementCenterCoordinates(el) {		
 		return {
-			x: boxElement.offsetLeft + boxElement.offsetWidth/2,
-			y: boxElement.offsetTop + boxElement.offsetHeight/2
+			centerX: el.offsetLeft + el.offsetWidth/2,
+			centerY: el.offsetTop + el.offsetHeight/2
 		}	
 	}
 	
-	// mix between functions that have a clue of the context and stateless function ; fix this. one more closure?
+	// Get radian starting from standard CSS transform axis (vertical top axis: ((0,0),(0,1)))
 	function getRadian(currentX,currentY,centerX,centerY) {
 		var opp = centerY-currentY;
 		var adj = currentX-centerX;
@@ -33,24 +35,28 @@ var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
 		return Math.PI/2 - rad_starting_right;	
 	}
 	
-	// @todo mousedown does not work
+	var lastRadianAbs; // this.x
+	
+	// Handle mobile and desktop mouse events for rotation
 	['touchstart','mousedown'].forEach(function(eventName) {
 		touchElement.addEventListener(eventName, function (e) {
 			var currentY = e.touches ? e.touches[0].pageY : e.pageY;
 			var currentX = e.touches ? e.touches[0].pageX : e.pageX;
-			var {x: centerX, y: centerY} = getCenterCoordinates();
+			var {centerX, centerY} = getElementCenterCoordinates(touchElement);
+			console.log('touchstart touchElementcentercoordites', getElementCenterCoordinates(touchElement))
+			console.log('touchstart currentX/Y', currentX, currentY)
 			lastRadianAbs = getRadian(currentX,currentY,centerX,centerY);
 			event.preventDefault();
 		});
 	});
-	
 	['touchmove','mousedownmove'].forEach(function(eventName) {
-		touchElement.addEventListener(eventName, function (e) { // @todo add mouseclick event
-			console.log('mousedownmove e', e)
+		touchElement.addEventListener(eventName, function (e) {
 			var currentY = e.touches ? e.touches[0].pageY : e.detail.pageY;
 			var currentX = e.touches ? e.touches[0].pageX : e.detail.pageX;
-			var {x: centerX, y: centerY} = getCenterCoordinates();
+			var {centerX, centerY} = getElementCenterCoordinates(touchElement);
 			var touchMoveRadianAbs = getRadian(currentX,currentY,centerX,centerY);
+			console.log('touchstart touchElementcentercoordites', getElementCenterCoordinates(touchElement))
+			console.log('touchstart currentX/Y', currentX, currentY)
 			console.log('touchmoveradianabs',touchMoveRadianAbs)
 			var touchMoveRadianDiff = touchMoveRadianAbs-lastRadianAbs;
 			lastRadianAbs = touchMoveRadianAbs;
@@ -58,16 +64,11 @@ var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
 		});
 	});
 	
+	// Create custom "mousedownmove" event
 	var mousedown = false;
-	touchElement.addEventListener('mousedown', function() {
-		mousedown = true;
-	});
-	
-	touchElement.addEventListener('mouseup', function() {
-		mousedown = false;
-	});
-	
-	touchElement.addEventListener('mousemove', function(e) {
+	touchElement.addEventListener('mousedown', () => { mousedown = true; })
+	touchElement.addEventListener('mouseup', () => { mousedown = false; })
+	touchElement.addEventListener('mousemove', (e) => {
 		if (mousedown)
 		{
 			function triggerEvent(el, eventName, options) {
@@ -116,7 +117,7 @@ export default class GraphD3 extends EventEmitter {
 	
 	var thisInstance = this; 
 	
-	var touchRotateMoveCallback = (function() { // au générateur passer le nombre de steps par exemple
+	var touchRotateMoveCallback = (function() { // pass amount of steps to the factory function?
 		var touchMoveRadian = 0;
 		
 		return function(touchMoveRadianDiff) { // closure isn't functional #todo
@@ -157,8 +158,9 @@ export default class GraphD3 extends EventEmitter {
 		}
 	})(); 
 	  
-	new TouchRotate (this.svg.node(), d3.select('svg#graph').node().parentNode, touchRotateMoveCallback) 
+	new TouchRotate (document.querySelector('#graph-container'), touchRotateMoveCallback) 
 
+	
   }
 
   calcDimensions = function() {
@@ -173,7 +175,7 @@ export default class GraphD3 extends EventEmitter {
   setUpForce = function(nodes){
   // Upon set up force we also initialize the dataLinks and dataNodes
   // variables.
-    this.dataNodes = [nodes.center]
+    this.dataNodes = [nodes.center] 
     this.currentDataNodes = [nodes.center]
     this.dataLinks = []
     this.currentDataLinks = []

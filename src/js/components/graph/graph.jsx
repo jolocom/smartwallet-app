@@ -131,7 +131,7 @@ let Graph = React.createClass({
           <FabMenuItem icon="insert_link" label="Link" onClick={() => {this.addNode('link')}}/>
         </FabMenu>
 
-        <div style={styles.chart} ref="graph"></div>
+        <div style={styles.chart} ref="graph" id="graph-container"></div>
 
         {this.props.children}
 
