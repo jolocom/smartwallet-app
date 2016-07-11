@@ -41,8 +41,8 @@ var TouchRotate = function (touchElement, callbacks) {
   // Handle mobile and desktop mouse events for rotation
   ['touchstart', 'mousedown', 'touchmove', 'mousedownmove'].forEach(function (eventName) {
     touchElement.addEventListener(eventName, function (e) {
-      var currentY = e.touches ? e.touches[0].pageY : e.pageY
-      var currentX = e.touches ? e.touches[0].pageX : e.pageX
+      var currentX = e.touches ? e.touches[0].pageX : (e.pageX ? e.pageX : e.detail.pageX)
+      var currentY = e.touches ? e.touches[0].pageY : (e.pageY ? e.pageY : e.detail.pageY)
       var {centerX, centerY} = getElementCenterCoordinates(touchElement)
       var currentRadian = getRadian(currentX, currentY, centerX, centerY)
       callbacks['move'](currentRadian)
@@ -51,6 +51,7 @@ var TouchRotate = function (touchElement, callbacks) {
   }); // do not remove the semi-colon
 
   ['touchend', 'mouseup'].forEach(function (eventName) {
+    console.log('up')
     touchElement.addEventListener(eventName, function () {
       if (typeof callbacks.end !== 'undefined')
         callbacks['end']()
@@ -60,13 +61,16 @@ var TouchRotate = function (touchElement, callbacks) {
   // Create custom "mousedownmove" event
   var mousedown = false
   touchElement.addEventListener('mousedown', () => {
+    console.log('mousedown')
     mousedown = true
   })
   touchElement.addEventListener('mouseup', () => {
+    console.log('mouseup')
     mousedown = false
   })
   touchElement.addEventListener('mousemove', (e) => {
     if (mousedown) {
+      console.log('mousemove mousedown')
       function triggerEvent(el, eventName, options) {
         var event
         if (window.CustomEvent) {
