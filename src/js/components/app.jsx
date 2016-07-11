@@ -40,7 +40,7 @@ let App = React.createClass({
     muiTheme: React.PropTypes.object,
     profile: React.PropTypes.any,
     username: React.PropTypes.string,
-    searchActive: React.PropTypes.boolean
+    searchActive: React.PropTypes.bool
   },
 
   getChildContext: function () {

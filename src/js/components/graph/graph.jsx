@@ -19,7 +19,7 @@ let Graph = React.createClass({
 
   contextTypes: {
     history: React.PropTypes.object,
-    searchActive: React.PropTypes.boolean
+    searchActive: React.PropTypes.bool
   },
 
   childContextTypes: {
