@@ -17,7 +17,7 @@ const theme = getMuiTheme(JolocomTheme)
 	@param touchElement DOM element; musn't be an svg element
 	@param callbackTouchMove A function to call each time the mouse moves and a rotation occurs
 */
-var TouchRotate = function (touchElement, callbackTouchMove) {
+var TouchRotate = function (touchElement, callbackTouchMove, callbackTouchEnd) {
 	
 	// Does not work with SVG, hence touchElement mustn't be an SVG
 	function getElementCenterCoordinates(el) {		
@@ -35,32 +35,21 @@ var TouchRotate = function (touchElement, callbackTouchMove) {
 		return Math.PI/2 - rad_starting_right;	
 	}
 	
-	var lastRadianAbs; // this.x
-	
 	// Handle mobile and desktop mouse events for rotation
-	['touchstart','mousedown'].forEach(function(eventName) {
+	['touchstart','mousedown','touchmove','mousedownmove'].forEach(function(eventName) {
 		touchElement.addEventListener(eventName, function (e) {
 			var currentY = e.touches ? e.touches[0].pageY : e.pageY;
 			var currentX = e.touches ? e.touches[0].pageX : e.pageX;
 			var {centerX, centerY} = getElementCenterCoordinates(touchElement);
-			console.log('touchstart touchElementcentercoordites', getElementCenterCoordinates(touchElement))
-			console.log('touchstart currentX/Y', currentX, currentY)
-			lastRadianAbs = getRadian(currentX,currentY,centerX,centerY);
+			var currentRadian = getRadian(currentX,currentY,centerX,centerY);
+			callbackTouchMove(currentRadian);
 			event.preventDefault();
 		});
 	});
-	['touchmove','mousedownmove'].forEach(function(eventName) {
+	['touchend','mouseup'].forEach(function(eventName) {
 		touchElement.addEventListener(eventName, function (e) {
-			var currentY = e.touches ? e.touches[0].pageY : e.detail.pageY;
-			var currentX = e.touches ? e.touches[0].pageX : e.detail.pageX;
-			var {centerX, centerY} = getElementCenterCoordinates(touchElement);
-			var touchMoveRadianAbs = getRadian(currentX,currentY,centerX,centerY);
-			console.log('touchstart touchElementcentercoordites', getElementCenterCoordinates(touchElement))
-			console.log('touchstart currentX/Y', currentX, currentY)
-			console.log('touchmoveradianabs',touchMoveRadianAbs)
-			var touchMoveRadianDiff = touchMoveRadianAbs-lastRadianAbs;
-			lastRadianAbs = touchMoveRadianAbs;
-			callbackTouchMove(touchMoveRadianDiff);
+			if (typeof callbackTouchEnd !== 'undefined')
+				callbackTouchEnd();
 		});
 	});
 	
@@ -116,50 +105,62 @@ export default class GraphD3 extends EventEmitter {
     this.rendered = true
 	
 	var thisInstance = this; 
-	
-	var touchRotateMoveCallback = (function() { // pass amount of steps to the factory function?
-		var touchMoveRadian = 0;
-		
-		return function(touchMoveRadianDiff) { // closure isn't functional #todo
-			console.log('touchmoveradiandiff', touchMoveRadianDiff);
-			touchMoveRadian+=touchMoveRadianDiff; // @todo remise à zéro et quand on fait un tour
-			console.log('touchmoveradian', touchMoveRadian);
-			// @TODO not use an absolute counter but a relative one (otherwise going to -7 needs +8 instead of a +1 to scroll forward) @TODO
-			var newIndex = Math.floor(touchMoveRadian/(Math.PI/8)); // (@todo max nodes constant)
-			
-			console.warn('newIndex (before checkss)',newIndex);
-			// if (Math.abs(newIndex-thisInstance.index) > thisInstance.MAX_VISIBLE_NUMBER_OF_NODES/2)
-			// 	newIndex = thisInstance.index; // short hack for the fact that radian goes from 4.x to -1.x @todo
-			if (newIndex>thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)
-				newIndex = thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES;
-			else if (newIndex <=0)
-				newIndex = 0;
-			console.warn('newIndex (after checks)',newIndex);
-			
-			if (newIndex != thisInstance.index)
-			{
-				// sort nodes etc
-//				document.querySelector("#app > div > div > div:nth-child(1) > div:nth-child(1) > button").style.transform = "rotate(" + touchMoveRadian + "rad)";
-				
-				console.warn('new index !');
-				
-				thisInstance.index = newIndex;
-				
-				thisInstance.force.stop()
-				thisInstance.sortNodes()
-				thisInstance.force.nodes(thisInstance.currentDataNodes)
-				thisInstance.force.links(thisInstance.currentDataLinks)
-				thisInstance.drawNodes()
-				thisInstance.force.start()
-
-			}
-			
-			console.info('Transform to abs : ',touchMoveRadian)
-		}
-	})(); 
 	  
-	new TouchRotate (document.querySelector('#graph-container'), touchRotateMoveCallback) 
-
+	var touchRotateCallbacks = function() {
+		var lastNotchRadian = false;
+		
+		return {
+			move: function(touchMoveRadian) { // closure isn't functional #todo
+				
+				console.log('touchMoveRadian', touchMoveRadian)
+				console.log('lastNotchRadian', lastNotchRadian)
+				console.log('touchMoveRadian-lastNotchRadian',touchMoveRadian-lastNotchRadian)
+				console.log('touchMoveRadian-lastNotchRadian %',(touchMoveRadian-lastNotchRadian)%Math.PI)
+				
+				if (lastNotchRadian === false)
+					lastNotchRadian = touchMoveRadian;
+				else if ((touchMoveRadian-lastNotchRadian)%Math.PI > Math.PI/thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)  // @todo constant / not stateless
+				{
+					lastNotchRadian = touchMoveRadian;
+					console.log('notch +');
+					if (thisInstance.index<thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)
+					{
+						console.warn('new index +');
+						thisInstance.index++;
+						thisInstance.force.stop()
+						thisInstance.sortNodes()
+						thisInstance.force.nodes(thisInstance.currentDataNodes)
+						thisInstance.force.links(thisInstance.currentDataLinks)
+						thisInstance.drawNodes()
+						thisInstance.force.start()
+					}
+				}
+				else if ((touchMoveRadian-lastNotchRadian)%Math.PI < -Math.PI/thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)  // @todo constant / not stateless
+				{
+					lastNotchRadian = touchMoveRadian;
+					console.log('notch -');
+					if (thisInstance.index>0)
+					{
+						console.warn('new index -');
+						thisInstance.index--;
+						thisInstance.force.stop()
+						thisInstance.sortNodes()
+						thisInstance.force.nodes(thisInstance.currentDataNodes)
+						thisInstance.force.links(thisInstance.currentDataLinks)
+						thisInstance.drawNodes()
+						thisInstance.force.start()
+					}
+				}
+			},
+			end: function(){
+				console.log('touch end');
+				lastNotchRadian = false;
+			}
+		}
+	};
+	  
+	var touchRotateCallbacks = touchRotateCallbacks();
+	new TouchRotate (document.querySelector('#graph-container'), touchRotateCallbacks.move, touchRotateCallbacks.end); // @todo callbacks in the second argument
 	
   }
 
