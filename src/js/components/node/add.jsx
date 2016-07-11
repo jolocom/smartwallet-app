@@ -25,9 +25,14 @@ let types = {
 
 let NodeAdd = React.createClass({
 
+  propTypes: {
+    params: React.PropTypes.object
+  },
+
   contextTypes: {
     history: React.PropTypes.any,
-    node: React.PropTypes.any
+    node: React.PropTypes.any,
+    muiTheme: React.PropTypes.object
   },
 
   componentDidMount() {
@@ -40,8 +45,17 @@ let NodeAdd = React.createClass({
   },
 
   getStyles() {
+    const {muiTheme: {palette}} = this.context
     return {
       bar: {
+        backgroundColor: palette.accent1Color,
+        color: '#ffffff'
+      },
+      title: {
+        color: '#ffffff'
+      },
+      icon: {
+        color: '#ffffff'
       }
     }
   },
@@ -63,8 +77,20 @@ let NodeAdd = React.createClass({
         <Layout>
           <AppBar
             title={title}
-            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this._handleClose}>close</IconButton>}
-            iconElementRight={<FlatButton label="Create" onTouchTap={this._handleSubmit}/>}
+            titleStyle={styles.title}
+            iconElementLeft={
+              <IconButton
+                iconStyle={styles.icon}
+                iconClassName="material-icons"
+                onTouchTap={this._handleClose}>close
+              </IconButton>
+            }
+            iconElementRight={
+              <FlatButton
+                style={styles.icon}
+                label="Create"
+                onTouchTap={this._handleSubmit}/>
+            }
             style={styles.bar}
           />
           <Content style={styles.content}>
