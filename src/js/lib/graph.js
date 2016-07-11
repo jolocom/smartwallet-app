@@ -44,10 +44,11 @@ var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
 		});
 	});
 	
-	['touchmove','mousemove'].forEach(function(eventName) {
+	['touchmove','mousedownmove'].forEach(function(eventName) {
 		touchElement.addEventListener(eventName, function (e) { // @todo add mouseclick event
-			var currentY = e.touches ? e.touches[0].pageY : e.pageY;
-			var currentX = e.touches ? e.touches[0].pageX : e.pageX;
+			console.log('mousedownmove e', e)
+			var currentY = e.touches ? e.touches[0].pageY : e.detail.pageY;
+			var currentX = e.touches ? e.touches[0].pageX : e.detail.pageX;
 			var {x: centerX, y: centerY} = getCenterCoordinates();
 			var touchMoveRadianAbs = getRadian(currentX,currentY,centerX,centerY);
 			console.log('touchmoveradianabs',touchMoveRadianAbs)
@@ -55,6 +56,32 @@ var TouchRotate = function (touchElement, boxElement, callbackTouchMove) {
 			lastRadianAbs = touchMoveRadianAbs;
 			callbackTouchMove(touchMoveRadianDiff);
 		});
+	});
+	
+	var mousedown = false;
+	touchElement.addEventListener('mousedown', function() {
+		mousedown = true;
+	});
+	
+	touchElement.addEventListener('mouseup', function() {
+		mousedown = false;
+	});
+	
+	touchElement.addEventListener('mousemove', function(e) {
+		if (mousedown)
+		{
+			function triggerEvent(el, eventName, options) {
+			  var event;
+			  if (window.CustomEvent) {
+				event = new CustomEvent(eventName, options);
+			  } else {
+				event = document.createEvent('CustomEvent');
+				event.initCustomEvent(eventName, true, true, options);
+			  }
+			  el.dispatchEvent(event);
+			}
+			triggerEvent(touchElement,'mousedownmove',{detail: {pageX: e.pageX, pageY: e.pageY}})
+		}
 	});
 }
 
@@ -93,6 +120,7 @@ export default class GraphD3 extends EventEmitter {
 		var touchMoveRadian = 0;
 		
 		return function(touchMoveRadianDiff) { // closure isn't functional #todo
+			console.log('touchmoveradiandiff', touchMoveRadianDiff);
 			touchMoveRadian+=touchMoveRadianDiff; // @todo remise à zéro et quand on fait un tour
 			console.log('touchmoveradian', touchMoveRadian);
 			// @TODO not use an absolute counter but a relative one (otherwise going to -7 needs +8 instead of a +1 to scroll forward) @TODO
