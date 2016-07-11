@@ -4,7 +4,7 @@ export default Reflux.createActions({
   'create': {asyncResult: true},
   'link': {asyncResult: true},
   'remove': {asyncResult: true},
-  'dissconnectNode': {asyncResult: false}
+  'disconnect': {asyncResult: false}
 
   // Not implemented yet.
   // 'load': {asyncResult: true},
