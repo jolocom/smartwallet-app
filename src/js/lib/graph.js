@@ -46,7 +46,7 @@ var TouchRotate = function (touchElement, callbacks) {
       var {centerX, centerY} = getElementCenterCoordinates(touchElement)
       var currentRadian = getRadian(currentX, currentY, centerX, centerY)
       callbacks['move'](currentRadian)
-      event.preventDefault()
+      e.preventDefault()
     })
   }); // do not remove the semi-colon
 
