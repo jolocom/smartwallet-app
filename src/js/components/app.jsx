@@ -19,6 +19,7 @@ import Tour from 'components/tour.jsx'
 import GraphSearch from 'components/graph/search.jsx'
 import GraphFilters from 'components/graph/filters.jsx'
 
+import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
 
 import PinnedActions from 'actions/pinned'
@@ -35,6 +36,11 @@ let App = React.createClass({
     Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile')
   ],
+
+  propTypes: {
+    location: React.PropTypes.object,
+    children: React.PropTypes.node
+  },
 
   childContextTypes: {
     muiTheme: React.PropTypes.object,
@@ -62,7 +68,8 @@ let App = React.createClass({
 
   componentWillMount() {
     this.theme = getMuiTheme(JolocomTheme)
-    this.checkLogin()
+
+    AccountActions.login()
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -78,10 +85,10 @@ let App = React.createClass({
   },
 
   checkLogin() {
-    let {username} = this.state.account
+    let {username, loggingIn} = this.state.account
 
     // session is still loading, so return for now
-    if (username === undefined) {
+    if (username === undefined || loggingIn) {
       return
     }
 
@@ -162,11 +169,24 @@ let App = React.createClass({
     const styles = this.getStyles()
     const nav = (
       <div>
-        <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
-        <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleChatTap}>chat</IconButton>
+        <IconButton
+          iconClassName="material-icons"
+          iconStyle={styles.icon}
+          onTouchTap={this._handleSearchTap}>search</IconButton>
+        <IconButton
+          iconClassName="material-icons"
+          iconStyle={styles.icon}
+          onTouchTap={this._handleChatTap}>chat</IconButton>
       </div>
     )
-    const search = <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
+    const search = (
+      <GraphSearch
+        ref="search"
+        onChange={this._handleSearchChange}
+        onSubmit={this._handleSearchSubmit}
+        onHide={this._handleSearchHide}/>
+    )
+
     const filters = <GraphFilters style={styles.filters} showDefaults={true}/>
 
     return (
@@ -174,7 +194,11 @@ let App = React.createClass({
         {this.isPublicRoute() ? this.props.children : (
           <Layout>
             <Paper zDept={1} style={styles.header}>
-              <AppBar title="Graph" iconElementRight={nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
+              <AppBar
+                title="Graph"
+                iconElementRight={nav}
+                style={styles.bar}
+                onLeftIconButtonTouchTap={this.showDrawer}/>
               {filters}
               {search}
             </Paper>
