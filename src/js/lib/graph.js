@@ -16,10 +16,12 @@ import JolocomTheme from 'styles/jolocom-theme'
 const theme = getMuiTheme(JolocomTheme)
 
 /**
- * @param touchElement DOM element; musn't be an svg element
- * @param callbackTouchMove A function to call each time the mouse moves and a rotation occurs
+ * @param DOMElement touchElement The element whose center we use for the rotation, and on which 
+
+the touch events occur; musn't be an svg element
+ * @param function callbacks {move: function, end (optional): function}
  */
-var TouchRotate = function (touchElement, callbackTouchMove, callbackTouchEnd) {
+var TouchRotate = function (touchElement, callbacks) {
 
   // Does not work with SVG, hence touchElement mustn't be an SVG
   function getElementCenterCoordinates(el) {
@@ -36,24 +38,22 @@ var TouchRotate = function (touchElement, callbackTouchMove, callbackTouchEnd) {
     var rad_starting_right = Math.atan2(opp, adj)
     return Math.PI / 2 - rad_starting_right
   }
-
   // Handle mobile and desktop mouse events for rotation
   ['touchstart', 'mousedown', 'touchmove', 'mousedownmove'].forEach(function (eventName) {
     touchElement.addEventListener(eventName, function (e) {
       var currentY = e.touches ? e.touches[0].pageY : e.pageY
       var currentX = e.touches ? e.touches[0].pageX : e.pageX
-      var {
-        centerX, centerY
-      } = getElementCenterCoordinates(touchElement)
+      var {centerX, centerY} = getElementCenterCoordinates(touchElement)
       var currentRadian = getRadian(currentX, currentY, centerX, centerY)
-      callbackTouchMove(currentRadian)
+      callbacks['move'](currentRadian)
       event.preventDefault()
     })
-  })
+  }); // do not remove the semi-colon
+  
   ['touchend', 'mouseup'].forEach(function (eventName) {
     touchElement.addEventListener(eventName, function () {
-      if (typeof callbackTouchEnd !== 'undefined')
-        callbackTouchEnd()
+      if (typeof callbacks.end !== 'undefined')
+        callbacks['end']()
     })
   })
 
@@ -138,7 +138,7 @@ export default class GraphD3 extends EventEmitter {
             lastNotchRadian = touchMoveRadian
             if (thisInstance.index < thisInstance.numberOfAdjcent - thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) {
               thisInstance.index++
-              thisInstance.force.stop()
+              thisInstance.force.stop() // @TODO DRY
               thisInstance.sortNodes()
               thisInstance.force.nodes(thisInstance.currentDataNodes)
               thisInstance.force.links(thisInstance.currentDataLinks)
@@ -150,7 +150,7 @@ export default class GraphD3 extends EventEmitter {
             lastNotchRadian = touchMoveRadian
             if (thisInstance.index > 0) {
               thisInstance.index--
-              thisInstance.force.stop()
+              thisInstance.force.stop() // @TODO DRY
               thisInstance.sortNodes()
               thisInstance.force.nodes(thisInstance.currentDataNodes)
               thisInstance.force.links(thisInstance.currentDataLinks)
@@ -166,7 +166,7 @@ export default class GraphD3 extends EventEmitter {
     }
 
     var touchRotateCallbacks = TouchRotateCallbacks()
-    new TouchRotate(document.querySelector('#graph-container'), touchRotateCallbacks.move, touchRotateCallbacks.end) // @todo callbacks in the second argument
+    new TouchRotate(document.querySelector('#graph-container'), touchRotateCallbacks)
 
   }
 
@@ -369,8 +369,12 @@ export default class GraphD3 extends EventEmitter {
       .attr('id', 'full')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('x', (STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) - STYLES.fullScreenButton / 2)
-      .attr('y', -(STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) - STYLES.fullScreenButton / 2)
+      .attr('x', (STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) - STYLES.fullScreenButton 
+
+/ 2)
+      .attr('y', -(STYLES.largeNodeSize / STYLES.fullScreenButtonPosition) - 
+
+STYLES.fullScreenButton / 2)
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', 'img/full.jpg')
@@ -519,7 +523,9 @@ export default class GraphD3 extends EventEmitter {
         else return 1
       })
       .attr('dy', '.35em')
-      .attr('font-size', (d) => d.rank == 'history' ? STYLES.largeNodeSize / 12 : STYLES.largeNodeSize / 8)
+      .attr('font-size', (d) => d.rank == 'history' ? STYLES.largeNodeSize / 12 : 
+
+STYLES.largeNodeSize / 8)
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
@@ -588,7 +594,9 @@ export default class GraphD3 extends EventEmitter {
         d.x += (center.x - d.x) * k
         if (d.histLevel == 0) {
           d.y += (center.y - d.y + STYLES.largeNodeSize * 2) * k
-        } else d.y += (center.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize / 3) * (d.histLevel + 1)) * k
+        } else d.y += (center.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize / 3) * 
+
+(d.histLevel + 1)) * k
       }
     })
 
@@ -661,7 +669,9 @@ export default class GraphD3 extends EventEmitter {
       return
     }
 
-    d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.index + ')')
+    d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 
+
++ ') rotate(' + this.archAngle * this.index + ')')
       // d3.select('.dial').transition()
       //   .duration(100)
       //   .call(this.arcTween, 2*Math.PI*(this.index+1)/this.numberOfAdjcent)
@@ -679,8 +689,12 @@ export default class GraphD3 extends EventEmitter {
         this.currentDataNodes[this.currentDataNodes.length - 1].position = nodeCount
         this.currentDataNodes[this.currentDataNodes.length - 1].x = this.nodePositions[nodeCount].x
         this.currentDataNodes[this.currentDataNodes.length - 1].y = this.nodePositions[nodeCount].y
-        this.currentDataNodes[this.currentDataNodes.length - 1].px = this.nodePositions[nodeCount].x
-        this.currentDataNodes[this.currentDataNodes.length - 1].py = this.nodePositions[nodeCount].y
+        this.currentDataNodes[this.currentDataNodes.length - 1].px = this.nodePositions
+
+[nodeCount].x
+        this.currentDataNodes[this.currentDataNodes.length - 1].py = this.nodePositions
+
+[nodeCount].y
         this.currentDataLinks.push({
           'source': this.currentDataNodes.length - 1,
           'target': 0
