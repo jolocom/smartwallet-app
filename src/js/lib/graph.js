@@ -18,9 +18,7 @@ const theme = getMuiTheme(JolocomTheme)
 // @todo touchrotate center of graph-container, but when creating a new node, not the center
 
 /**
- * @param DOMElement touchElement The element whose center we use for the rotation, and on which
-
-the touch events occur; musn't be an svg element
+ * @param DOMElement touchElement The element whose center we use for the rotation, and on which the touch events occur; musn't be an svg element
  * @param function callbacks {move: function, end (optional): function}
  */
 var TouchRotate = function (touchElement, callbacks) {
@@ -48,7 +46,7 @@ var TouchRotate = function (touchElement, callbacks) {
       var {centerX, centerY} = getElementCenterCoordinates(touchElement)
       var currentRadian = getRadian(currentX, currentY, centerX, centerY)
       callbacks['move'](currentRadian)
-      event.preventDefault()
+      e.preventDefault()
     })
   }); // do not remove the semi-colon
 
