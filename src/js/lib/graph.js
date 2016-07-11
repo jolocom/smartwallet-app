@@ -60,6 +60,10 @@ export default class GraphD3 extends EventEmitter {
     this.index=0
     this.numberOfNodes = 8
     this.numberOfAdjcent = 0
+    this.newNeighbours = nodes.neighbours
+    console.table(this.newNeighbours, ['name', 'title'])
+    this.newNeighbours.sort(this.compare)
+    console.table(this.newNeighbours, ['name', 'title'])
   // Flatten the center and neighbour nodes we get from the state
     for (let i = 0; i < nodes.neighbours.length; i++) {
       this.dataNodes.push(nodes.neighbours[i])
@@ -235,7 +239,7 @@ export default class GraphD3 extends EventEmitter {
 
         // We draw the lines for all the elements in the dataLinks array.
 
-    let link = this.svg.selectAll('line')
+    this.link = this.svg.selectAll('line')
     .data(this.currentDataLinks)
     .enter()
     .insert('line', '.dial')
@@ -871,6 +875,39 @@ export default class GraphD3 extends EventEmitter {
         this.force.start()
       })
   }
+
+  compare = function(a,b) {
+    let a2, b2
+
+    if(a.name){
+      a2=a.name
+    }else if (a.title) {
+      a2=a.title
+    }
+    else{
+      a2='zzzzzz'
+    }
+
+    if(b.name){
+      b2=b.name
+    }else if (b.title) {
+      b2=b.title
+    }
+    else{
+      b2='zzzzzz'
+    }
+
+    a2.toLowerCase()
+    b2.toLowerCase()
+    console.log('a', a2, 'b', b2)
+
+
+    if (a2 > b2) return 1
+    if (a2 < b2) return -1
+    return 0
+
+  }
+
 
   // This is not implemented apparently.
   onResize = function() {
