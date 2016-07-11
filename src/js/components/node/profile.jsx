@@ -10,8 +10,11 @@ import {
   IconMenu,
   MenuItem,
   FontIcon,
+  Tabs, Tab,
   List, ListItem, Divider
 } from 'material-ui'
+
+import {Content} from '../layout'
 
 import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
@@ -21,6 +24,11 @@ let ProfileNode = React.createClass({
   mixins: [
     Reflux.listenTo(PinnedStore, 'onUpdatePinned')
   ],
+
+  propTypes: {
+    state: React.PropTypes.object, /* @TODO fix this */
+    onClose: React.PropTypes.func
+  },
 
   contextTypes: {
     history: React.PropTypes.any,
@@ -33,11 +41,14 @@ let ProfileNode = React.createClass({
   },
 
   onUpdatePinned() {
-    this.setState({pinned: PinnedStore.isPinned(this.props.state.activeNode.uri)})
+    this.setState({
+      pinned: PinnedStore.isPinned(this.props.state.activeNode.uri)
+    })
   },
 
   getStyles() {
     let {muiTheme} = this.context
+    let {gray1} = muiTheme.jolocom
     let {img} = this.props.state.activeNode
     let background
 
@@ -54,7 +65,8 @@ let ProfileNode = React.createClass({
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '176px',
-        background: `${muiTheme.jolocom.gray1} url(${background}) center / cover`
+        background: `${gray1} url(${background}) center / cover`,
+        boxShadow: 'none'
       },
       title: {
         position: 'absolute',
@@ -75,14 +87,29 @@ let ProfileNode = React.createClass({
       },
       icon: {
         color: '#ffffff'
+      },
+      content: {
+
+      },
+      tabs: {
+        backgroundColor: '#ffffff'
       }
     }
   },
 
   render() {
     let styles = this.getStyles()
-    let {name, familyName, title, description, email} = this.props.state.activeNode
-    if(name && familyName) name = name + ' ' + familyName
+    let {
+      name,
+      familyName,
+      title,
+      description,
+      email
+    } = this.props.state.activeNode
+
+    if (name && familyName) {
+      name = name + ' ' + familyName
+    }
 
     let fullscreenLabel
     if (this.state.fullscreen) {
@@ -98,39 +125,85 @@ let ProfileNode = React.createClass({
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
           iconElementLeft={<IconMenu
-          iconButtonElement={<IconButton iconClassName="material-icons" iconStyle={styles.icon}>more_vert</IconButton>}
+          iconButtonElement={
+            <IconButton
+              iconClassName="material-icons"
+              iconStyle={styles.icon}>
+                more_vert
+            </IconButton>
+          }
             anchorOrigin={{horizontal: 'left', vertical: 'top'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
           >
-            <MenuItem primaryText="Edit" />
-            <MenuItem primaryText={fullscreenLabel} onTouchTap={this._handleFull} />
-            <MenuItem primaryText="Copy URL" onTouchTap={this._handleCopyURL}/>
-            <MenuItem primaryText="Delete" onTouchTap={this._handleDelete}/>
-            <MenuItem primaryText="Disconnect" onTouchTap={this._handleDisconnect}/>
+            <MenuItem
+              primaryText="Edit" />
+            <MenuItem
+              primaryText={fullscreenLabel}
+              onTouchTap={this._handleFull} />
+            <MenuItem
+              primaryText="Copy URL"
+              onTouchTap={this._handleCopyURL}/>
+            <MenuItem
+              primaryText="Delete"
+              onTouchTap={this._handleDelete}/>
+            <MenuItem
+              primaryText="Disconnect"
+              onTouchTap={this._handleDisconnect}/>
 
           </IconMenu>}
-          iconElementRight={<IconButton iconClassName="material-icons" iconStyle={styles.icon} onClick={this._handleClose}>close</IconButton>}
+          iconElementRight={
+            <IconButton
+              iconClassName="material-icons"
+              iconStyle={styles.icon}
+              onClick={this._handleClose}>
+                close
+            </IconButton>
+          }
         >
         </AppBar>
-        <List style={styles.list}>
-          {description && (
-            <div>
-              <ListItem
-                leftIcon={<FontIcon className="material-icons">info</FontIcon>}
-                primaryText={description}
-              />
-              <Divider inset={true} />
-            </div>
-          )}
-          {email && (
-            <ListItem
-              leftIcon={<FontIcon className="material-icons">email</FontIcon>}
-              primaryText={email}
-              secondaryText="Personal"
+        <Content style={styles.content}>
+          <Tabs
+            onChange={() => {}}
+            value={null}
+            inkBarStyle={{display: 'none'}}
+            tabItemContainerStyle={styles.tabs}>
+            <Tab
+              icon={<FontIcon className="material-icons">chat</FontIcon>}
+              label="MESSAGE"
+              onTouchTab={this._handleStartConversation()}
             />
-          )}
-        </List>
-
+            <Tab
+              icon={
+                <FontIcon className="material-icons">bookmark_border</FontIcon>
+              }
+              label="BOOKMARK"
+            />
+            <Tab
+              icon={<FontIcon className="material-icons">link</FontIcon>}
+              label="CONNECT"
+            />
+          </Tabs>
+          <List style={styles.list}>
+            {description && (
+              <div>
+                <ListItem
+                  leftIcon={
+                    <FontIcon className="material-icons">info</FontIcon>
+                  }
+                  primaryText={description}
+                />
+                <Divider inset={true} />
+              </div>
+            )}
+            {email && (
+              <ListItem
+                leftIcon={<FontIcon className="material-icons">email</FontIcon>}
+                primaryText={email}
+                secondaryText="Personal"
+              />
+            )}
+          </List>
+        </Content>
       </div>
     )
   },
@@ -145,8 +218,12 @@ let ProfileNode = React.createClass({
 
   _handleDisconnect(){
     this.props.onClose()
-    if (this.props.state.activeNode.rank !== 'center')
-      nodeActions.disconnect(this.props.state.activeNode, this.props.state.center)
+    if (this.props.state.activeNode.rank !== 'center') {
+      nodeActions.disconnect(
+        this.props.state.activeNode,
+        this.props.state.center
+      )
+    }
   },
 
   _handleDelete() {
@@ -162,7 +239,9 @@ let ProfileNode = React.createClass({
         nodeActions.remove(node, prev)
       }, 500)
     }
-    else nodeActions.remove(node, center)
+    else {
+      nodeActions.remove(node, center)
+    }
   },
 
   _handleBookmarkClick() {
@@ -171,6 +250,10 @@ let ProfileNode = React.createClass({
 
   _handleCopyURL() {
 
+  },
+
+  _handleStartConversation() {
+    
   }
 })
 
