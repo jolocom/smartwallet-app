@@ -27,6 +27,7 @@ let ProfileNode = React.createClass({
 
   propTypes: {
     state: React.PropTypes.object, /* @TODO fix this */
+    node: React.PropTypes.object,
     onClose: React.PropTypes.func
   },
 
@@ -41,15 +42,19 @@ let ProfileNode = React.createClass({
   },
 
   onUpdatePinned() {
-    this.setState({
-      pinned: PinnedStore.isPinned(this.props.state.activeNode.uri)
-    })
+    const node = this.getNode()
+
+    if (node) {
+      this.setState({
+        pinned: PinnedStore.isPinned(node.uri)
+      })
+    }
   },
 
   getStyles() {
     let {muiTheme} = this.context
     let {gray1} = muiTheme.jolocom
-    let {img} = this.props.state.activeNode
+    let {img} = this.getNode()
     let background
 
     if (img) {
@@ -97,6 +102,14 @@ let ProfileNode = React.createClass({
     }
   },
 
+  getNode() {
+    if (this.props.state) {
+      return this.props.state.activeNode // TODO temp fix
+    } else {
+      return this.props.node
+    }
+  },
+
   render() {
     let styles = this.getStyles()
     let {
@@ -105,7 +118,7 @@ let ProfileNode = React.createClass({
       title,
       description,
       email
-    } = this.props.state.activeNode
+    } = this.getNode()
 
     if (name && familyName) {
       name = name + ' ' + familyName
@@ -124,17 +137,16 @@ let ProfileNode = React.createClass({
           style={styles.headers}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
-          iconElementLeft={<IconMenu
-          iconButtonElement={
-            <IconButton
-              iconClassName="material-icons"
-              iconStyle={styles.icon}>
-                more_vert
-            </IconButton>
-          }
-            anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          >
+          iconElementRight={
+              <IconMenu iconButtonElement={
+              <IconButton
+                iconClassName="material-icons"
+                iconStyle={styles.icon}>
+                  more_vert
+              </IconButton>
+            }
+              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}>
             <MenuItem
               primaryText="Edit" />
             <MenuItem
@@ -151,12 +163,12 @@ let ProfileNode = React.createClass({
               onTouchTap={this._handleDisconnect}/>
 
           </IconMenu>}
-          iconElementRight={
+          iconElementLeft={
             <IconButton
               iconClassName="material-icons"
               iconStyle={styles.icon}
               onClick={this._handleClose}>
-                close
+                arrow_back
             </IconButton>
           }
         >
@@ -170,7 +182,7 @@ let ProfileNode = React.createClass({
             <Tab
               icon={<FontIcon className="material-icons">chat</FontIcon>}
               label="MESSAGE"
-              onTouchTab={this._handleStartConversation()}
+              onActive={() => this._handleStartChat()}
             />
             <Tab
               icon={
@@ -218,7 +230,9 @@ let ProfileNode = React.createClass({
 
   _handleDisconnect(){
     this.props.onClose()
-    if (this.props.state.activeNode.rank !== 'center') {
+    const {rank} = this.getNode()
+
+    if (rank !== 'center') {
       nodeActions.disconnect(
         this.props.state.activeNode,
         this.props.state.center
@@ -228,7 +242,7 @@ let ProfileNode = React.createClass({
 
   _handleDelete() {
     this.props.onClose()
-    let node = this.props.state.activeNode
+    let node = this.getNode()
     let center = this.props.state.center
     let navHis = this.props.state.navHistory
 
@@ -245,15 +259,19 @@ let ProfileNode = React.createClass({
   },
 
   _handleBookmarkClick() {
-    PinnedActions.pin(this.props.state.ActiveNode.uri)
+    const {uri} = this.getNode()
+    if (uri) {
+      PinnedActions.pin(uri)
+    }
   },
 
   _handleCopyURL() {
 
   },
 
-  _handleStartConversation() {
-    
+  _handleStartChat() {
+    const {history} = this.context
+    history.pushState(null, `/conversations/${this.props.node.username}`)
   }
 })
 
