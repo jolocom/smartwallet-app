@@ -46,7 +46,7 @@ var TouchRotate = function (touchElement, callbacks) {
       var {centerX, centerY} = getElementCenterCoordinates(touchElement)
       var currentRadian = getRadian(currentX, currentY, centerX, centerY)
       callbacks['move'](currentRadian)
-      e.preventDefault()
+      event.preventDefault()
     })
   }); // do not remove the semi-colon
 
@@ -192,10 +192,11 @@ export default class GraphD3 extends EventEmitter {
     this.currentDataLinks = []
     this.index = 0
     this.numberOfAdjcent = 0
-    this.newNeighbours = nodes.neighbours
-    console.table(this.newNeighbours, ['name', 'title'])
-    this.newNeighbours.sort(this.compare)
-    console.table(this.newNeighbours, ['name', 'title'])
+    // console.table(this.newNeighbours, ['name', 'title'])
+    console.table(nodes.neighbours, ['name', 'title'])
+    nodes.neighbours.sort(this.compare)
+    console.table(nodes.neighbours, ['name', 'title'])
+    // this.newNeighbours = nodes.neighbours
   // Flatten the center and neighbour nodes we get from the state
 
     for (let i = 0; i < nodes.neighbours.length; i++) {
@@ -1107,8 +1108,8 @@ STYLES.largeNodeSize / 8)
       b2='zzzzzz'
     }
 
-    a2.toLowerCase()
-    b2.toLowerCase()
+    a2 = a2.toLowerCase()
+    b2 = b2.toLowerCase()
     console.log('a', a2, 'b', b2)
 
 
