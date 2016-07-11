@@ -22,6 +22,8 @@ If you're on Windows and getting the error `Missing VCBuild` during the installa
 
 ## Install ssl certificates for solid-server
 
+Default dev certificate is available in `etc` as `localhost.key` and `localhost.cert`.
+
 For local testing you will also need to generate a ssl-cert and ssl-key, you should be able to do that buy running:
 ```
 openssl genrsa 2048 > ./localhost.key
@@ -39,7 +41,7 @@ Make sure you use python 2.x when installing soliddata, e.g.
 ```
 cd utils/soliddata; python2.7 setup.py develop
 ```
-Running the `setup.py` using python3 will cause errors in further steps. 
+Running the `setup.py` using python3 will cause errors in further steps.
 
 ### Generate testdata for single test server (https://localhost:8443)
 ```
@@ -48,23 +50,41 @@ soliddata --blueprint utils/soliddata/local.json --output-dir data --flatten
 In case this command throws the `object of type 'map' has no len()` error, reinstall the _python tools for test data generation_ using python2 rather than python3. The error is caused by the _rdflib_ library not supporting python3.
 
 ## Building
+
+### With hot module reload support
+
+```bash
+gulp
+```
+This will run the webpack-dev-server on https://localhost:8080 and will reload only the modules you update instead of rebuilding the entire bundle on every change.
+
+### Without hot module reloading
+
 ```bash
 gulp build-dev
 ```
+Rebuilding will be much slower this way, because the entire bundle will be rebuild on each change.
+
 If you are getting the error `Module parse failed: main.jsx Line 1: Unexpected token`, switch to node version 4.x to run `gulp build-dev` ([nvm](https://github.com/creationix/nvm) might come in handy).
 
-**Warning:** calling "gulp" is dangerous, as it will start the webpack-dev-server which will overshadow ports 8080,8443 that the Gold server users
+**Warning:** calling "gulp" is dangerous, as it will start the webpack-dev-server which will overshadow ports 8080,8443 that the Gold server uses
 
 ###Build-Prod
 `bash gulp build`has a similar effect to just using `bash gulp`, except it runs some additional, non vital operations (for example asset minimization) that make the final `app.js` file more optimized. </br>Running `gulp-prod` takes more time, and can therefore cause the development feedback cycle to take longer, as a result of that it shouldn't really be used during development.
 
-## Running 
+## Running
 
 After the app was build you can start the solid-server in the followings ways:
 
+### Run with default configuration
+
+```bash
+npm run solid
+```
+
 ### With explicit parameters from command line
 
-```
+```bash
 solid start --port 8443 --ssl-cert ./localhost.cert --ssl-key ./localhost.key --root /path/to/little-sister/dist -v
 ```
 
@@ -72,7 +92,7 @@ solid start --port 8443 --ssl-cert ./localhost.cert --ssl-key ./localhost.key --
 
 Run `solid init` to generate config file or use the following template for `config.json`:
 
-```
+```json
 {
   "root": "/path/to/little-sister/dist",
   "port": "8443",
@@ -88,14 +108,31 @@ Run `solid init` to generate config file or use the following template for `conf
 
 For local development/testing environment do not use `webid` and `idp` for now.
 
-Documentation
--------------
+## Tests
+
+### Running tests locally
+
+```bash
+npm test
+```
+
+### Writing tests
+
+Frameworks used for testing: `Mocha`, `Chai`, `Sinon` and `Enzyme`, test are run in `Karma`
+
+1. Write .test.js files directly next to the parts (or in a /test sub folder) of the application that you write the test for.
+
+2. Write your unit and component tests in those files.
+
+3. Run `$ npm test`
+
+## Documentation
 
 Additional documentation can be found at our [wiki](https://github.com/jolocom/little-sister/wiki).
 
 
-git-flow
---------
+## git-flow
+
 We are using git-flow to manage our branching strategy. More details can be found in [this article](http://nvie.com/posts/a-successful-git-branching-model/). Also, you should install a plugin for your git command line: [nvie/gitflow](https://github.com/nvie/gitflow).
 
 Once you have installed the git flow plugin, you should initialize its branch mappings with this command:
@@ -103,4 +140,4 @@ Once you have installed the git flow plugin, you should initialize its branch ma
 git flow init -d
 ```
 
-Copyright (C) 2015  JOLOCOM UG
+Copyright (C) 2015-2016  JOLOCOM UG
