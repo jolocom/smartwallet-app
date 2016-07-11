@@ -17,6 +17,10 @@ let Graph = React.createClass({
 
   mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
 
+  propTypes: {
+    children: React.PropTypes.node
+  },
+
   contextTypes: {
     history: React.PropTypes.object,
     searchActive: React.PropTypes.bool
@@ -40,23 +44,25 @@ let Graph = React.createClass({
 
   onStateUpdate: function(data, signal) {
     // Temp. make it more elegant later.
-    if (signal == 'nodeRemove')
+    if (signal === 'nodeRemove')
     {
       this.graph.deleteNode(data.activeNode)
-      this.state.activeNode = null
+      this.setState({activeNode: null})
       // Important to avoid a re-render here.
       graphActions.setState('activeNode', null, false)
     }
-    else if (signal == 'preview'){
+    else if (signal === 'preview'){
       // Doesn't concern this component, used by preview.jsx
     }
     else if (data){
       if (this.state.newNode) {
         this.graph.addNode(this.state.newNode)
         // We update the state of the store to be in line with the state of the child
-        this.state.newNode = null
+        this.setState({newNode: null})
         graphActions.setState('newNode', null, true)
-      } else this.setState(data)
+      } else {
+        this.setState(data)
+      }
 
       if (data && data.neighbours){
         this.graph.render(this.state)
@@ -65,7 +71,7 @@ let Graph = React.createClass({
 
     }
 
-    if ( signal == 'erase') {
+    if (signal === 'erase') {
       this.graph.eraseGraph()
     }
   },
@@ -127,7 +133,8 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
-      nodeDetails = <Node  state={this.state}/>
+      // @TODO fix this, this is SUPER dirty ;)
+      nodeDetails = <Node state={this.state}/>
     }
 
     let fab
