@@ -87,7 +87,6 @@ let Graph = React.createClass({
     }
   },
 
-
   _handleSelectNode(node, svg){
     graphActions.setState('selected', svg)
   },
