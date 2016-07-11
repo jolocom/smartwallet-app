@@ -15,8 +15,6 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 const theme = getMuiTheme(JolocomTheme)
 
-// @todo touchrotate center of graph-container, but when creating a new node, not the center
-
 /**
  * @param DOMElement touchElement The element whose center we use for the rotation, and on which the touch events occur; musn't be an svg element
  * @param function callbacks {move: function, end (optional): function}
@@ -115,6 +113,7 @@ export default class GraphD3 extends EventEmitter {
     }
 
     this.calcDimensions()
+    this.orderNodes(nodes);
     this.setUpForce(nodes)
     this.drawBackground()
     this.rendered = true
@@ -180,6 +179,21 @@ export default class GraphD3 extends EventEmitter {
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
   }
+  
+  orderNodes= function (nodes) {
+    console.table(nodes.neighbours, ['name', 'title'])
+    
+    nodes.neighbours.sort(function(a,b) {
+      if ((a.name || a.title || 'zzzzzz').toLowerCase() > (b.name || b.title || 'zzzzzz').toLowerCase())
+        return 1;
+      else if ((a.name || a.title || 'zzzzzz').toLowerCase() < (b.name || b.title || 'zzzzzz').toLowerCase())
+        return -1;
+      else
+        return 0;
+    });
+    
+    console.table(nodes.neighbours, ['name', 'title'])
+  }
 
   // Starts the force simulation.
   setUpForce = function (nodes) {
@@ -191,11 +205,6 @@ export default class GraphD3 extends EventEmitter {
     this.currentDataLinks = []
     this.index = 0
     this.numberOfAdjcent = 0
-    // console.table(this.newNeighbours, ['name', 'title'])
-    console.table(nodes.neighbours, ['name', 'title'])
-    nodes.neighbours.sort(this.compare)
-    console.table(nodes.neighbours, ['name', 'title'])
-    // this.newNeighbours = nodes.neighbours
   // Flatten the center and neighbour nodes we get from the state
 
     for (let i = 0; i < nodes.neighbours.length; i++) {
@@ -1085,39 +1094,6 @@ STYLES.largeNodeSize / 8)
         this.force.start()
       })
   }
-
-  compare = function(a,b) {
-    let a2, b2
-
-    if(a.name){
-      a2=a.name
-    }else if (a.title) {
-      a2=a.title
-    }
-    else{
-      a2='zzzzzz'
-    }
-
-    if(b.name){
-      b2=b.name
-    }else if (b.title) {
-      b2=b.title
-    }
-    else{
-      b2='zzzzzz'
-    }
-
-    a2 = a2.toLowerCase()
-    b2 = b2.toLowerCase()
-    console.log('a', a2, 'b', b2)
-
-
-    if (a2 > b2) return 1
-    if (a2 < b2) return -1
-    return 0
-
-  }
-
 
   // This is not implemented apparently.
   onResize = function () {
