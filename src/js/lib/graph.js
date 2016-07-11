@@ -112,20 +112,20 @@ export default class GraphD3 extends EventEmitter {
 		return {
 			move: function(touchMoveRadian) { // closure isn't functional #todo
 				
-				console.log('touchMoveRadian', touchMoveRadian)
-				console.log('lastNotchRadian', lastNotchRadian)
-				console.log('touchMoveRadian-lastNotchRadian',touchMoveRadian-lastNotchRadian)
-				console.log('touchMoveRadian-lastNotchRadian %',(touchMoveRadian-lastNotchRadian)%Math.PI)
+				// Quick fix because touchMoveRadian abruptly switches from (+3/2 * PI) to (-1/2 * PI)
+				var radianDiff = touchMoveRadian-lastNotchRadian;
+				if (radianDiff < -Math.PI)
+					radianDiff = touchMoveRadian + Math.PI*2 - lastNotchRadian
+				else if (radianDiff > Math.PI)
+					radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI*2)
 				
 				if (lastNotchRadian === false)
 					lastNotchRadian = touchMoveRadian;
-				else if ((touchMoveRadian-lastNotchRadian)%Math.PI > Math.PI/thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)  // @todo constant / not stateless
+				else if (radianDiff > Math.PI/thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)  // @todo constant / not stateless
 				{
 					lastNotchRadian = touchMoveRadian;
-					console.log('notch +');
 					if (thisInstance.index<thisInstance.numberOfAdjcent-thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)
 					{
-						console.warn('new index +');
 						thisInstance.index++;
 						thisInstance.force.stop()
 						thisInstance.sortNodes()
@@ -135,13 +135,11 @@ export default class GraphD3 extends EventEmitter {
 						thisInstance.force.start()
 					}
 				}
-				else if ((touchMoveRadian-lastNotchRadian)%Math.PI < -Math.PI/thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)  // @todo constant / not stateless
+				else if (radianDiff < -Math.PI/thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)  // @todo constant / not stateless
 				{
 					lastNotchRadian = touchMoveRadian;
-					console.log('notch -');
 					if (thisInstance.index>0)
 					{
-						console.warn('new index -');
 						thisInstance.index--;
 						thisInstance.force.stop()
 						thisInstance.sortNodes()
@@ -153,7 +151,6 @@ export default class GraphD3 extends EventEmitter {
 				}
 			},
 			end: function(){
-				console.log('touch end');
 				lastNotchRadian = false;
 			}
 		}
