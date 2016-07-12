@@ -113,7 +113,7 @@ export default class GraphD3 extends EventEmitter {
     }
 
     this.calcDimensions()
-    this.orderNodes(nodes);
+    this.orderNodes(nodes)
     this.setUpForce(nodes)
     this.drawBackground()
     this.rendered = true
@@ -185,12 +185,12 @@ export default class GraphD3 extends EventEmitter {
     
     nodes.neighbours.sort(function(a,b) {
       if ((a.name || a.title || 'zzzzzz').toLowerCase() > (b.name || b.title || 'zzzzzz').toLowerCase())
-        return 1;
+        return 1
       else if ((a.name || a.title || 'zzzzzz').toLowerCase() < (b.name || b.title || 'zzzzzz').toLowerCase())
-        return -1;
+        return -1
       else
-        return 0;
-    });
+        return 0
+    })
     
     console.table(nodes.neighbours, ['name', 'title'])
   }
@@ -332,8 +332,8 @@ export default class GraphD3 extends EventEmitter {
 
     if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfAdjcent) {
       
-  
-      d3.select(this.svg.node().parentNode).append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
+      // Gradient
+      // d3.select(this.svg.node().parentNode).append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
 
 
       //draw dotted line to indicate there are more nodes
@@ -400,10 +400,10 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', STYLES.fullScreenButton)
       .attr('height', STYLES.fullScreenButton)
     
-    let defFadeToWhite = defsFull.append('svg:linearGradient').attr("id","fade-to-white").attr("x1",0).attr("x2",1).attr("y1",0).attr("y2",0);
+    let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
     
-    defFadeToWhite.append("svg:stop").attr("offset","0%").attr("stop-color","white").attr("stop-opacity", 0);
-    defFadeToWhite.append("svg:stop").attr("offset","75%").attr("stop-color","white");
+    defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
+    defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
  
 
     // We draw the lines for all the elements in the dataLinks array.
@@ -524,7 +524,10 @@ export default class GraphD3 extends EventEmitter {
           return smallNode / 3
         } else return smallNode / 2
       })
-      .style('fill', (d) => {
+      .attr('fill','#6a6a6a')
+      .transition()
+      .duration(750)
+      .attr('fill',(d) => {
         if (d.img && d.rank != 'history') return 'url(#' + d.uri + d.connection + ')'
         else {
           if (d.rank == 'history') {
@@ -538,6 +541,8 @@ export default class GraphD3 extends EventEmitter {
           }
         }
       })
+      
+
 
     // The name of the person, displays on the node
     this.node.append('svg:text')
