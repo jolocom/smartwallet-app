@@ -69,7 +69,7 @@ var TouchRotate = function (touchElement, callbacks) {
   touchElement.addEventListener('mousemove', (e) => {
     if (mousedown) {
       console.log('mousemove mousedown')
-      function triggerEvent(el, eventName, options) {
+      var triggerEvent = function(el, eventName, options) {
         var event
         if (window.CustomEvent) {
           event = new CustomEvent(eventName, options)
