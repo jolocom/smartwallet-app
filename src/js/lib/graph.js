@@ -251,7 +251,7 @@ export default class GraphD3 extends EventEmitter {
       .chargeDistance(STYLES.largeNodeSize * 2)
       .linkDistance((d) => {
 
-        if (d.source.rank == 'history' && d.source.histLevel >= 0) return STYLES.largeNodeSize * 2
+        if (d.source.rank == 'history' && d.source.histLevel <= 0) return STYLES.largeNodeSize * 2
         else if (d.source.rank == 'history') return STYLES.smallNodeSize
         else return STYLES.largeNodeSize * 1.4
 
@@ -609,9 +609,7 @@ STYLES.largeNodeSize / 8)
         d.x += (center.x - d.x) * k
         if (d.histLevel == 0) {
           d.y += (center.y - d.y + STYLES.largeNodeSize * 2) * k
-        } else d.y += (center.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize / 3) *
-
-(d.histLevel + 1)) * k
+        } else d.y += (center.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize*0.8) *(d.histLevel)) * k
       }
     })
 
