@@ -111,6 +111,59 @@ export default class GraphD3 extends EventEmitter {
     if (this.rendered) {
       this.eraseGraph()
     }
+    else // first render
+    {
+        var TouchRotateCallbacks = function () {
+        var lastNotchRadian = false
+
+        return {
+          move: function (touchMoveRadian) { // closure isn't functional #todo
+
+            // Quick fix because touchMoveRadian abruptly switches from (+3/2 * PI) to (-1/2 * PI)
+            var radianDiff = touchMoveRadian - lastNotchRadian
+            if (radianDiff < -Math.PI)
+              radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
+            else if (radianDiff > Math.PI)
+              radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
+
+            if (lastNotchRadian === false)
+              lastNotchRadian = touchMoveRadian
+            else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
+            {
+              lastNotchRadian = touchMoveRadian
+              if (thisInstance.index < thisInstance.numberOfAdjcent - thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) {
+                thisInstance.index++
+                thisInstance.force.stop() // @TODO DRY
+                thisInstance.sortNodes()
+                thisInstance.force.nodes(thisInstance.currentDataNodes)
+                thisInstance.force.links(thisInstance.currentDataLinks)
+                thisInstance.drawNodes()
+                thisInstance.force.start()
+              }
+            } else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
+            {
+              lastNotchRadian = touchMoveRadian
+              if (thisInstance.index > 0) {
+                thisInstance.index--
+                thisInstance.force.stop() // @TODO DRY
+                thisInstance.sortNodes()
+                thisInstance.force.nodes(thisInstance.currentDataNodes)
+                thisInstance.force.links(thisInstance.currentDataLinks)
+                thisInstance.drawNodes()
+                thisInstance.force.start()
+              }
+            }
+          },
+          end: function () {
+            lastNotchRadian = false
+          }
+        }
+      }
+
+      var touchRotateCallbacks = TouchRotateCallbacks()
+      new TouchRotate(this.graphContainer, touchRotateCallbacks)
+
+    }
 
     this.calcDimensions()
     this.orderNodes(nodes)
@@ -120,55 +173,7 @@ export default class GraphD3 extends EventEmitter {
 
     var thisInstance = this
 
-    var TouchRotateCallbacks = function () {
-      var lastNotchRadian = false
-
-      return {
-        move: function (touchMoveRadian) { // closure isn't functional #todo
-
-          // Quick fix because touchMoveRadian abruptly switches from (+3/2 * PI) to (-1/2 * PI)
-          var radianDiff = touchMoveRadian - lastNotchRadian
-          if (radianDiff < -Math.PI)
-            radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
-          else if (radianDiff > Math.PI)
-            radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
-
-          if (lastNotchRadian === false)
-            lastNotchRadian = touchMoveRadian
-          else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
-          {
-            lastNotchRadian = touchMoveRadian
-            if (thisInstance.index < thisInstance.numberOfAdjcent - thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) {
-              thisInstance.index++
-              thisInstance.force.stop() // @TODO DRY
-              thisInstance.sortNodes()
-              thisInstance.force.nodes(thisInstance.currentDataNodes)
-              thisInstance.force.links(thisInstance.currentDataLinks)
-              thisInstance.drawNodes()
-              thisInstance.force.start()
-            }
-          } else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
-          {
-            lastNotchRadian = touchMoveRadian
-            if (thisInstance.index > 0) {
-              thisInstance.index--
-              thisInstance.force.stop() // @TODO DRY
-              thisInstance.sortNodes()
-              thisInstance.force.nodes(thisInstance.currentDataNodes)
-              thisInstance.force.links(thisInstance.currentDataLinks)
-              thisInstance.drawNodes()
-              thisInstance.force.start()
-            }
-          }
-        },
-        end: function () {
-          lastNotchRadian = false
-        }
-      }
-    }
-
-    var touchRotateCallbacks = TouchRotateCallbacks()
-    new TouchRotate(this.graphContainer, touchRotateCallbacks)
+    
 
   }
 
