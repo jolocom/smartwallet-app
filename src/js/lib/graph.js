@@ -327,7 +327,7 @@ export default class GraphD3 extends EventEmitter {
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
-      .attr('r', this.largeNodeSize * 0.57)
+      .attr('r', this.largeNodeSize * 0.57 * 1.1)
       .style('fill', STYLES.lightGrayColor)
 
     if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfAdjcent) {
