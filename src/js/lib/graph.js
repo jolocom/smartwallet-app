@@ -191,7 +191,11 @@ export default class GraphD3 extends EventEmitter {
       else
         return 0
     })
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> f4dccc49f04c3377a5f0f4a969ea63b257ad59c7
     console.table(nodes.neighbours, ['name', 'title'])
   }
 
@@ -285,12 +289,18 @@ export default class GraphD3 extends EventEmitter {
     this.svg.append('svg:circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
-      .attr('r', this.largeNodeSize * 0.57)
+      .attr('r', this.largeNodeSize * 0.57 * 1.1)
       .style('fill', STYLES.lightGrayColor)
 
     if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfAdjcent) {
+<<<<<<< HEAD
 
 
+=======
+      
+      // Gradient
+      // d3.select(this.svg.node().parentNode).append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
+>>>>>>> f4dccc49f04c3377a5f0f4a969ea63b257ad59c7
 
 
       //draw dotted line to indicate there are more nodes
@@ -383,8 +393,17 @@ export default class GraphD3 extends EventEmitter {
       .attr('xlink:href', 'img/full.jpg')
       .attr('width', STYLES.fullScreenButton)
       .attr('height', STYLES.fullScreenButton)
+<<<<<<< HEAD
 
 
+=======
+    
+    let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
+    
+    defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
+    defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
+ 
+>>>>>>> f4dccc49f04c3377a5f0f4a969ea63b257ad59c7
 
     // We draw the lines for all the elements in the dataLinks array.
 
@@ -504,7 +523,10 @@ export default class GraphD3 extends EventEmitter {
           return smallNode / 3
         } else return smallNode / 2
       })
-      .style('fill', (d) => {
+      .attr('fill','#6a6a6a')
+      .transition()
+      .duration(750)
+      .attr('fill',(d) => {
         if (d.img && d.rank != 'history') return 'url(#' + d.uri + d.connection + ')'
         else {
           if (d.rank == 'history') {
@@ -518,6 +540,8 @@ export default class GraphD3 extends EventEmitter {
           }
         }
       })
+      
+
 
     // The name of the person, displays on the node
     this.node.append('svg:text')
