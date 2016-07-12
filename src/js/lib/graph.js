@@ -128,7 +128,7 @@ export default class GraphD3 extends EventEmitter {
 
             if (lastNotchRadian === false)
               lastNotchRadian = touchMoveRadian
-            else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
+            else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
             {
               lastNotchRadian = touchMoveRadian
               if (thisInstance.index < thisInstance.numberOfAdjcent - thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) {
@@ -140,7 +140,7 @@ export default class GraphD3 extends EventEmitter {
                 thisInstance.drawNodes()
                 thisInstance.force.start()
               }
-            } else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
+            } else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
             {
               lastNotchRadian = touchMoveRadian
               if (thisInstance.index > 0) {
@@ -192,7 +192,7 @@ export default class GraphD3 extends EventEmitter {
       else
         return 0
     })
-    
+
     console.table(nodes.neighbours, ['name', 'title'])
   }
 
@@ -383,12 +383,12 @@ export default class GraphD3 extends EventEmitter {
       .attr('xlink:href', 'img/full.jpg')
       .attr('width', STYLES.fullScreenButton)
       .attr('height', STYLES.fullScreenButton)
-    
+
     // let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
-    //    
+    //
     // defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
     // defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
- 
+
 
     // We draw the lines for all the elements in the dataLinks array.
 
@@ -525,7 +525,7 @@ export default class GraphD3 extends EventEmitter {
           }
         }
       })
-      
+
 
 
     // The name of the person, displays on the node
