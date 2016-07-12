@@ -113,7 +113,7 @@ export default class GraphD3 extends EventEmitter {
     }
     else // first render
     {
-        var TouchRotateCallbacks = function () {
+      var TouchRotateCallbacks = function () {
         var lastNotchRadian = false
 
         return {
@@ -162,7 +162,6 @@ export default class GraphD3 extends EventEmitter {
 
       var touchRotateCallbacks = TouchRotateCallbacks()
       new TouchRotate(this.graphContainer, touchRotateCallbacks)
-
     }
 
     this.calcDimensions()
@@ -172,9 +171,6 @@ export default class GraphD3 extends EventEmitter {
     this.rendered = true
 
     var thisInstance = this
-
-    
-
   }
 
   calcDimensions = function () {
@@ -184,10 +180,10 @@ export default class GraphD3 extends EventEmitter {
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
   }
-  
+
   orderNodes= function (nodes) {
     console.table(nodes.neighbours, ['name', 'title'])
-    
+
     nodes.neighbours.sort(function(a,b) {
       if ((a.name || a.title || 'zzzzzz').toLowerCase() > (b.name || b.title || 'zzzzzz').toLowerCase())
         return 1
@@ -231,16 +227,16 @@ export default class GraphD3 extends EventEmitter {
     if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfAdjcent) {
       this.nodePositions = []
 
-      let num = 0,
-          angle = (2 * Math.PI) / 8
+      let angle = (2 * Math.PI) / 8, num = 0
 
       for (let i = 0; i < this.numberOfAdjcent; i++) {
         let pos = {
-          x: Math.sin(angle * (num + 4.5)) * STYLES.largeNodeSize * 1.4 + this.center.x,
-          y: Math.cos(angle * (num + 4.5)) * STYLES.largeNodeSize * 1.4 + this.center.y
+          x: Math.sin(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.center.x,
+          y: Math.cos(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.center.y
         }
         this.nodePositions.push(pos)
-        num++
+        num --
+
       }
 
     }
@@ -274,51 +270,9 @@ export default class GraphD3 extends EventEmitter {
       })
 
 
-
-    /*
-    this.yOrigin = 0
-    this.back_drag = d3.behavior.drag()
-      .on('drag', this.backDrag)
-      .on('dragstart', this.backDragStart)*/
-
-
-
   }.bind(this)
 
-  /*backDragStart = function(){
-    this.yOrigin = d3.mouse(d3.select('rect').node())[1]
-  }
 
-
-  backDrag = function(){
-
-    d3.event.sourceEvent.stopPropagation()
-    if(this.yOrigin-d3.event.y<-10){
-      if(this.index<this.numberOfAdjcent-this.MAX_VISIBLE_NUMBER_OF_NODES){
-        this.force.stop()
-        this.index ++
-        this.sortNodes()
-        this.force.nodes(this.currentDataNodes)
-        this.force.links(this.currentDataLinks)
-        this.drawNodes()
-        this.force.start()
-        this.yOrigin = d3.event.y
-      }
-    }
-    if(this.yOrigin-d3.event.y>10){
-      if(this.index>0){
-        this.force.stop()
-        this.index --
-        this.sortNodes()
-        this.force.nodes(this.currentDataNodes)
-        this.force.links(this.currentDataLinks)
-        this.drawNodes()
-        this.force.start()
-        this.yOrigin = d3.event.y
-      }
-    }
-
-  }.bind(this)*/
 
 
   // Draws the dark gray circle behind the main node.
@@ -336,10 +290,8 @@ export default class GraphD3 extends EventEmitter {
       .style('fill', STYLES.lightGrayColor)
 
     if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfAdjcent) {
-      
       // Gradient
       // d3.select(this.svg.node().parentNode).append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
-
 
       //draw dotted line to indicate there are more nodes
 
@@ -377,9 +329,36 @@ export default class GraphD3 extends EventEmitter {
         .attr('d', this.arc)
         .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ')')
 
+      this.indicator()
+
     }
 
   }.bind(this)
+
+
+  indicator = function(){
+
+
+    let angle = Math.PI/14
+
+    for (let i = 0; i < 8; i++) {
+      this.svg.append('svg:circle')
+      .attr('class', 'indicator')
+      .attr('cx', Math.sin(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.center.x)
+      .attr('cy', Math.cos(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.center.y)
+      .attr('r', this.largeNodeSize * 0.3)
+      .style('fill', STYLES.grayColor)
+      .attr('opacity', 0)
+      .transition().duration(STYLES.nodeTransitionDuration*0.3).delay(100*i)
+      .attr('opacity', 1)
+      .transition().duration(STYLES.nodeTransitionDuration*0.8)
+      .attr('opacity', 0)
+    }
+
+
+  }
+
+
 
   // Draws the nodes
   drawNodes = function () {
@@ -405,10 +384,10 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', STYLES.fullScreenButton)
       .attr('height', STYLES.fullScreenButton)
     
-    let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
-    
-    defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
-    defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
+    // let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
+    //    
+    // defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
+    // defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
  
 
     // We draw the lines for all the elements in the dataLinks array.
