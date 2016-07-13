@@ -3,6 +3,7 @@ import Reflux from 'reflux'
 export default Reflux.createActions({
   'setState' : {asyncResult: false},
   'getState': {asyncResult: false},
+  'changeRotationIndex': {asyncResult: false},
   // Birth
   'getInitialGraphState' : {asyncResult: true},
   // Life

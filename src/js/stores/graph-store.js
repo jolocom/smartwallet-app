@@ -24,6 +24,7 @@ import d3Convertor from '../lib/d3-converter'
       newNode: null,
       navHistory: [],
       selected: null,
+      rotationIndex: 0,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -60,6 +61,11 @@ import d3Convertor from '../lib/d3-converter'
   onSetState: function(key, value, flag){
     this.state[key] = value
     if (flag) this.trigger(this.state)
+  },
+    
+  onChangeRotationIndex: function(rotationIndex, flag){
+    this.state['rotationIndex'] = rotationIndex
+    if (flag) this.trigger(this.state,'changeRotationIndex')
   },
 
   deleteNode: function(svgNode, node){

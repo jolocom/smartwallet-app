@@ -49,7 +49,6 @@ var TouchRotate = function (touchElement, callbacks) {
   }); // do not remove the semi-colon
 
   ['touchend', 'mouseup'].forEach(function (eventName) {
-    console.log('up')
     touchElement.addEventListener(eventName, function () {
       if (typeof callbacks.end !== 'undefined')
         callbacks['end']()
@@ -59,16 +58,13 @@ var TouchRotate = function (touchElement, callbacks) {
   // Create custom "mousedownmove" event
   var mousedown = false
   touchElement.addEventListener('mousedown', () => {
-    console.log('mousedown')
     mousedown = true
   })
   touchElement.addEventListener('mouseup', () => {
-    console.log('mouseup')
     mousedown = false
   })
   touchElement.addEventListener('mousemove', (e) => {
     if (mousedown) {
-      console.log('mousemove mousedown')
       var triggerEvent = function(el, eventName, options) {
         var event
         if (window.CustomEvent) {
@@ -96,6 +92,7 @@ export default class GraphD3 extends EventEmitter {
     this.MAX_VISIBLE_NUMBER_OF_NODES = 8
     this.graphContainer = el // @todo use for touchrotate (graph-container)
     this.rendered = false
+    this.index = 0
 
     // A bit of code duplication here.
     this.width = this.graphContainer.offsetWidth || STYLES.width
@@ -108,11 +105,13 @@ export default class GraphD3 extends EventEmitter {
   }
 
   render = function (nodes) {
-    if (this.rendered) {
+    if (this.rendered)
+    {
       this.eraseGraph()
     }
     else // first render
     {
+      var thisInstance = this
       var TouchRotateCallbacks = function () {
         var lastNotchRadian = false
 
@@ -133,24 +132,16 @@ export default class GraphD3 extends EventEmitter {
               lastNotchRadian = touchMoveRadian
               if (thisInstance.index < thisInstance.numberOfAdjcent - thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) {
                 thisInstance.index++
-                thisInstance.force.stop() // @TODO DRY
-                thisInstance.sortNodes()
-                thisInstance.force.nodes(thisInstance.currentDataNodes)
-                thisInstance.force.links(thisInstance.currentDataLinks)
-                thisInstance.drawNodes()
-                thisInstance.force.start()
+                thisInstance.emit('change-rotation-index', thisInstance.index)
+                thisInstance.updateAfterRotationIndex()
               }
             } else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) // @todo constant / not stateless
             {
               lastNotchRadian = touchMoveRadian
               if (thisInstance.index > 0) {
                 thisInstance.index--
-                thisInstance.force.stop() // @TODO DRY
-                thisInstance.sortNodes()
-                thisInstance.force.nodes(thisInstance.currentDataNodes)
-                thisInstance.force.links(thisInstance.currentDataLinks)
-                thisInstance.drawNodes()
-                thisInstance.force.start()
+                thisInstance.emit('change-rotation-index', thisInstance.index)
+                thisInstance.updateAfterRotationIndex()
               }
             }
           },
@@ -170,8 +161,8 @@ export default class GraphD3 extends EventEmitter {
     this.drawBackground()
     this.rendered = true
 
-    var thisInstance = this
-  }
+    this.updateAfterRotationIndex()
+  }.bind(this)
 
   calcDimensions = function () {
     this.width = this.graphContainer.offsetWidth || STYLES.width
@@ -182,7 +173,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   orderNodes= function (nodes) {
-    console.table(nodes.neighbours, ['name', 'title'])
+    // console.table(nodes.neighbours, ['name', 'title'])
 
     nodes.neighbours.sort(function(a,b) {
       if ((a.name || a.title || 'zzzzzz').toLowerCase() > (b.name || b.title || 'zzzzzz').toLowerCase())
@@ -193,7 +184,7 @@ export default class GraphD3 extends EventEmitter {
         return 0
     })
 
-    console.table(nodes.neighbours, ['name', 'title'])
+    // console.table(nodes.neighbours, ['name', 'title'])
   }
 
   // Starts the force simulation.
@@ -204,7 +195,6 @@ export default class GraphD3 extends EventEmitter {
     this.currentDataNodes = [nodes.center]
     this.dataLinks = []
     this.currentDataLinks = []
-    this.index = 0
     this.numberOfAdjcent = 0
   // Flatten the center and neighbour nodes we get from the state
 
@@ -278,6 +268,7 @@ export default class GraphD3 extends EventEmitter {
   // Draws the dark gray circle behind the main node.
   drawBackground = function () {
     this.svg.append('svg:rect')
+      .attr('class','background')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'white')
@@ -362,7 +353,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the nodes
   drawNodes = function () {
-    console.log('drawing!!!')
+    console.log('drawing the nodes!')
 
     // this.svg.call(this.back_drag)
 
@@ -396,7 +387,7 @@ export default class GraphD3 extends EventEmitter {
     this.link = this.svg.selectAll('line')
     .data(this.currentDataLinks)
     .enter()
-    .insert('line', '.dial')
+    .insert('line', '.background + *')
     .attr('class','link')
     .attr('stroke-width', () => {
       // Capped at 13, found it to look the best
@@ -538,9 +529,7 @@ export default class GraphD3 extends EventEmitter {
         else return 1
       })
       .attr('dy', '.35em')
-      .attr('font-size', (d) => d.rank == 'history' ? STYLES.largeNodeSize / 12 :
-
-STYLES.largeNodeSize / 8)
+      .attr('font-size', (d) => d.rank == 'history' ? STYLES.largeNodeSize / 12 : STYLES.largeNodeSize / 8)
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
@@ -684,9 +673,7 @@ STYLES.largeNodeSize / 8)
       return
     }
 
-    d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5
-
-+ ') rotate(' + this.archAngle * this.index + ')')
+    d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.index + ')')
       // d3.select('.dial').transition()
       //   .duration(100)
       //   .call(this.arcTween, 2*Math.PI*(this.index+1)/this.numberOfAdjcent)
@@ -704,12 +691,8 @@ STYLES.largeNodeSize / 8)
         this.currentDataNodes[this.currentDataNodes.length - 1].position = nodeCount
         this.currentDataNodes[this.currentDataNodes.length - 1].x = this.nodePositions[nodeCount].x
         this.currentDataNodes[this.currentDataNodes.length - 1].y = this.nodePositions[nodeCount].y
-        this.currentDataNodes[this.currentDataNodes.length - 1].px = this.nodePositions
-
-[nodeCount].x
-        this.currentDataNodes[this.currentDataNodes.length - 1].py = this.nodePositions
-
-[nodeCount].y
+        this.currentDataNodes[this.currentDataNodes.length - 1].px = this.nodePositions[nodeCount].x
+        this.currentDataNodes[this.currentDataNodes.length - 1].py = this.nodePositions[nodeCount].y
         this.currentDataLinks.push({
           'source': this.currentDataNodes.length - 1,
           'target': 0
@@ -928,7 +911,7 @@ STYLES.largeNodeSize / 8)
   }.bind(this)
 
   updateHistory = function (history) {
-    if (history.length > 0) {
+    if (typeof history !== 'undefined' && history.length > 0) {
       this.force.stop()
       for (var i = 0; i < history.length; i++) {
         history[history.length - 1 - i].connection = 'hist'
@@ -1068,7 +1051,6 @@ STYLES.largeNodeSize / 8)
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
       .attr('r', STYLES.largeNodeSize / 2.2)
       .each('end', () => {
-        console.warn('this is the end')
         this.force.stop()
         this.dataNodes.splice(nIndex, 1)
         this.dataLinks.splice(lIndex, 1)
@@ -1090,6 +1072,26 @@ STYLES.largeNodeSize / 8)
       })
   }
 
+  updateAfterRotationIndex = function() {
+    if (this.force)
+    {
+      console.warn('update after rot - go go go // index :', this.index)
+      this.force.stop()
+      this.sortNodes()
+      this.force.nodes(this.currentDataNodes)
+      this.force.links(this.currentDataLinks)
+      this.drawNodes()
+      this.force.start()
+    }
+    else
+      console.warn('update after rot - force is not defined')
+  }.bind(this)
+  
+  setRotationIndex = function (rotationIndex) {
+    this.index = rotationIndex // @todo only execute updateAfterRot if index changed
+    this.updateAfterRotationIndex()
+  }.bind(this)
+  
   // This is not implemented apparently.
   onResize = function () {
     this.setSize()

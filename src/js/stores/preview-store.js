@@ -21,6 +21,7 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      rotationIndex: 0,
       // Keeps track of all the nodes we navigated to.
       navHistory: [],
       //These describe the ui
@@ -51,6 +52,11 @@ export default Reflux.createStore({
       // of the child component has been changed.
     this.state[key] = value
     if (flag) this.trigger(this.state)
+  },
+  
+  onChangeRotationIndex: function(rotationIndex, flag){
+    this.state['rotationIndex'] = rotationIndex
+    if (flag) this.trigger(this.state,'changeRotationIndex')
   },
 
   onNavigateToNode: function(node){

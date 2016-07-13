@@ -77,6 +77,7 @@ let Graph = React.createClass({
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
+    this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     graphActions.getState()
   },
 
@@ -89,6 +90,10 @@ let Graph = React.createClass({
 
   _handleSelectNode(node, svg){
     graphActions.setState('selected', svg)
+  },
+  
+  _handleChangeRotationIndex(rotationIndex){
+    graphActions.changeRotationIndex(rotationIndex,false)
   },
 
   _handleCenterChange(node){
@@ -117,6 +122,11 @@ let Graph = React.createClass({
   render: function() {
     let styles = this.getStyles()
 
+    if (this.graph)
+    {
+      this.graph.setRotationIndex(this.state.rotationIndex) 
+    }
+    
     let nodeDetails
 
     if (this.state.activeNode) {
