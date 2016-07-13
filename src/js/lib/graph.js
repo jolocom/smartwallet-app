@@ -338,15 +338,14 @@ export default class GraphD3 extends EventEmitter {
 
   indicator = function(){
 
-
     let angle = Math.PI/14
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       this.svg.append('svg:circle')
       .attr('class', 'indicator')
       .attr('cx', Math.sin(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.center.x)
       .attr('cy', Math.cos(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.center.y)
-      .attr('r', this.largeNodeSize * 0.3)
+      .attr('r', this.largeNodeSize * 0.25)
       .style('fill', STYLES.grayColor)
       .attr('opacity', 0)
       .transition().duration(STYLES.nodeTransitionDuration*0.3).delay(100*i)
@@ -354,8 +353,6 @@ export default class GraphD3 extends EventEmitter {
       .transition().duration(STYLES.nodeTransitionDuration*0.8)
       .attr('opacity', 0)
     }
-
-
   }
 
 
@@ -364,7 +361,6 @@ export default class GraphD3 extends EventEmitter {
   drawNodes = function () {
     console.log('drawing!!!')
 
-    // this.svg.call(this.back_drag)
 
     let self = this
       // These make the following statements shorter
@@ -400,7 +396,7 @@ export default class GraphD3 extends EventEmitter {
     .attr('class','link')
     .attr('stroke-width', () => {
       // Capped at 13, found it to look the best
-      return this.width / 45 > 13 ? 13 : this.width / 45})
+      return this.width / 50 > 10 ? 10 : this.width / 50})
     .attr('stroke', STYLES.lightGrayColor)
 
 
@@ -498,6 +494,22 @@ export default class GraphD3 extends EventEmitter {
       .attr('in', 'offsetBlur')
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic')
+
+      //TODO make the image nodes have a backgorund first and then fill up as image loads
+
+    this.node.append('circle')
+      .attr('class', 'nodeback')
+      .attr('r', (d) => {
+        if (d.rank == 'center')
+          return largeNode / 2
+        else if (d.rank == 'history') {
+          return smallNode / 3
+        } else return smallNode / 2
+      })
+      .attr('fill','#6a6a6a')
+      .transition()
+      .duration(750)
+      .attr('fill', theme.graph.nodeColor)
 
     this.node.append('circle')
       .attr('class', 'nodecircle')
@@ -682,9 +694,7 @@ STYLES.largeNodeSize / 8)
       return
     }
 
-    d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5
-
-+ ') rotate(' + this.archAngle * this.index + ')')
+    d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5+ ') rotate(' + this.archAngle * this.index + ')')
       // d3.select('.dial').transition()
       //   .duration(100)
       //   .call(this.arcTween, 2*Math.PI*(this.index+1)/this.numberOfAdjcent)
@@ -702,12 +712,8 @@ STYLES.largeNodeSize / 8)
         this.currentDataNodes[this.currentDataNodes.length - 1].position = nodeCount
         this.currentDataNodes[this.currentDataNodes.length - 1].x = this.nodePositions[nodeCount].x
         this.currentDataNodes[this.currentDataNodes.length - 1].y = this.nodePositions[nodeCount].y
-        this.currentDataNodes[this.currentDataNodes.length - 1].px = this.nodePositions
-
-[nodeCount].x
-        this.currentDataNodes[this.currentDataNodes.length - 1].py = this.nodePositions
-
-[nodeCount].y
+        this.currentDataNodes[this.currentDataNodes.length - 1].px = this.nodePositions[nodeCount].x
+        this.currentDataNodes[this.currentDataNodes.length - 1].py = this.nodePositions[nodeCount].y
         this.currentDataLinks.push({
           'source': this.currentDataNodes.length - 1,
           'target': 0
@@ -879,13 +885,13 @@ STYLES.largeNodeSize / 8)
       this.emit('deselect')
     } else {
       // NODE signifies the node that we clicked on. We enlarge it
-      d3.select(node).select('circle')
+      d3.select(node).select('.nodecircle')
         .transition('grow').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
         .each('start', (d) => {
           if (!d.img) {
-            d3.select(node).select('circle')
+            d3.select(node).select('.nodecircle')
               .transition('highlight').duration(STYLES.nodeTransitionDuration)
               .style('fill', theme.graph.centerNodeColor)
           }
