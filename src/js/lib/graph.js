@@ -350,7 +350,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the nodes
   drawNodes = function () {
-    console.log('drawing the nodes!')
+    console.log('drawing the nodes!',this.currentDataNodes)
 
 
     let self = this
@@ -921,22 +921,36 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   updateHistory = function (history) {
+    
     if (typeof history !== 'undefined' && history.length > 0) {
+      
       this.force.stop()
-      for (var i = 0; i < history.length; i++) {
-        history[history.length - 1 - i].connection = 'hist'
-        history[history.length - 1 - i].rank = 'history'
-        history[history.length - 1 - i].connection = 'hist'
-        history[history.length - 1 - i].histLevel = i
+      for (var j = history.length-1, rank=0;
+           j >= 0;
+           j--, rank++) {
+        
+        let already_exists = false
+        for (let dataNode of this.dataNodes) 
+        {
+          if (dataNode['uri'] === history[j]['uri'])   
+          {
+            already_exists = true; 
+          }
+        }
+        if (already_exists) continue
+        
+        history[j].connection = 'hist'
+        history[j].rank = 'history'
+        history[j].histLevel = rank
 
-        if (i == 0) {
-          this.dataNodes.push(history[history.length - 1 - i])
+        if (rank == 0) {
+          this.dataNodes.push(history[j])
           this.dataLinks.push({
             source: this.dataNodes.length - 1,
             target: 0
           })
         } else {
-          this.dataNodes.push(history[history.length - 1 - i])
+          this.dataNodes.push(history[j])
           this.dataLinks.push({
             source: this.dataNodes.length - 1,
             target: this.dataNodes.length - 2
