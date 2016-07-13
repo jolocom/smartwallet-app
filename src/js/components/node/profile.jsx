@@ -98,7 +98,7 @@ let ProfileNode = React.createClass({
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
           >
             <MenuItem primaryText="Edit" />
-            <MenuItem primaryText="Full Screen" />
+            <MenuItem primaryText="Full Screen" onTouchTap={this._handleFull}/>
             <MenuItem primaryText="Delete" onTouchTap={this._handleDelete}/>
             <MenuItem primaryText="Disconect" />
 
