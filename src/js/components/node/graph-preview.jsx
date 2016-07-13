@@ -17,21 +17,32 @@ let Graph = React.createClass({
   },
 
   onStateUpdate(data, signal) {
+    
     this.setState(data)
     if (this.state.neighbours){
-      this.graph.render(this.state)
-      this.graph.render(this.state)
+      console.log(1)
+      
+      if (signal !== 'changeRotationIndex')
+        this.graph.render(this.state)
+        
+      // this.graph.render(this.state) // @TODO why twice?
       this.graph.updateHistory(this.state.navHistory)
     }
 
     if (this.state.newNode) {
+      console.log(2)
       this.graph.addNode(this.state.newNode)
       previewActions.setState('newNode', null, true)
     }
 
     if(signal == 'redraw') {
+      console.log(3)
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
+    }
+    
+    if (signal == 'navigateToNode') {
+      this.graph.setRotationIndex(this.state.rotationIndex)
     }
   },
 
@@ -42,6 +53,7 @@ let Graph = React.createClass({
     // We get the state and erase the 'parent graph'
     graphActions.getState('preview')
     graphActions.eraseGraph()
+    
     // Make sure we refresh our state every time we mount the component, this
     // then fires the drawing function from onStateUpdate
     this.graph = new GraphD3(this.getGraphEl())
@@ -49,6 +61,7 @@ let Graph = React.createClass({
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('view-node', this._handleViewNode)
+    this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
   },
 
   onSync(state, signal){
@@ -58,6 +71,8 @@ let Graph = React.createClass({
       previewActions.setState('navHistory', state.navHistory)
       previewActions.setState('neighbours', state.neighbours)
       previewActions.setState('user', state.user, true)
+      previewActions.changeRotationIndex(state.rotationIndex, true)
+      this.graph.setRotationIndex(state.rotationIndex) 
       this.notSync = false
     }
   },
@@ -66,6 +81,7 @@ let Graph = React.createClass({
     graphActions.setState('center', this.state.center)
     graphActions.setState('navHistory', this.state.navHistory)
     graphActions.setState('neighbours', this.state.neighbours, true)
+    graphActions.changeRotationIndex(this.state.rotationIndex, true)
     if (this.graph) {
       this.graph.eraseGraph()
       this.graph.removeAllListeners()
@@ -84,11 +100,17 @@ let Graph = React.createClass({
   // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render() {
     let styles = this.getStyles()
+    
     return (
       <div style={styles.chart} ref="graph"></div>
     )
   },
 
+  
+  _handleChangeRotationIndex(rotationIndex){
+    previewActions.changeRotationIndex(rotationIndex,true)
+  },
+  
   // TODO NOT WORKING
   _handleViewNode(node) {
     previewActions.viewNode(node)

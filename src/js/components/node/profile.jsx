@@ -1,8 +1,8 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import nodeActions from 'actions/node'
 import graphActions from 'stores/graph-store'
+import nodeActions from 'actions/node'
 
 import {
   AppBar,
@@ -134,6 +134,7 @@ let ProfileNode = React.createClass({
     return (
       <div style={styles.container}>
         <AppBar
+          id = 'AppBar'
           style={styles.headers}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}

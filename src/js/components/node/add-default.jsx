@@ -30,6 +30,11 @@ let NodeAddDefault = React.createClass({
     this.listenTo(previewStore, this.getUser)
   },
 
+  onTrigger(state){
+    console.log('he')
+    console.log(state)
+  },
+
   getUser(state){
     // We need to know the uri of the currently centered node, this way we
     // deduce the Access Controll. Taking it from the graph preview.
