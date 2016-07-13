@@ -934,7 +934,7 @@ export default class GraphD3 extends EventEmitter {
         {
           if (dataNode['uri'] === history[j]['uri'])   
           {
-            already_exists = true; 
+            already_exists = true 
           }
         }
         if (already_exists) continue
@@ -1099,7 +1099,7 @@ export default class GraphD3 extends EventEmitter {
   updateAfterRotationIndex = function() {
     if (this.force)
     {
-      console.warn('update after rot - go go go // index :', this.index)
+      console.error('update after rot - go go go // index :', this.index)
       this.force.stop()
       this.sortNodes()
       this.force.nodes(this.currentDataNodes)
@@ -1108,7 +1108,7 @@ export default class GraphD3 extends EventEmitter {
       this.force.start()
     }
     else
-      console.warn('update after rot - force is not defined')
+      console.error('update after rot - force is not defined')
   }.bind(this)
   
   setRotationIndex = function (rotationIndex) {

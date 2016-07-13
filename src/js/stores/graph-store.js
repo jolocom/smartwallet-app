@@ -4,9 +4,9 @@ import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import d3Convertor from '../lib/d3-converter'
 
-  export default Reflux.createStore({
-    listenables: [graphActions],
-    init: function(){
+export default Reflux.createStore({
+  listenables: [graphActions],
+  init: function () {
 
     this.listenTo(accountActions.logout, this.onLogout)
 
@@ -18,7 +18,7 @@ import d3Convertor from '../lib/d3-converter'
     this.state = {
       //These state keys describe the graph
       user: null,
-      center:null,
+      center: null,
       neighbours: null,
       loaded: false,
       newNode: null,
@@ -33,7 +33,7 @@ import d3Convertor from '../lib/d3-converter'
     }
   },
 
-  onLogout(){
+  onLogout() {
     this.loaded = false
     this.state = {
       // Graph related
@@ -45,31 +45,31 @@ import d3Convertor from '../lib/d3-converter'
       navHistory: [],
       selected: null,
       // UI related
-      showPinned:false,
+      showPinned: false,
       showSearch: false,
-      plusDrawerOpen:false,
+      plusDrawerOpen: false,
       activeNode: null
     }
   },
 
   // These two are needed in order to transition between the preview graph and
   // The actual graph.
-  onEraseGraph: function() {
+  onEraseGraph: function () {
     this.trigger(null, 'erase')
   },
 
-  onSetState: function(key, value, flag){
+  onSetState: function (key, value, flag) {
     this.state[key] = value
     if (flag) this.trigger(this.state)
   },
-    
-  onChangeRotationIndex: function(rotationIndex, flag){
+
+  onChangeRotationIndex: function (rotationIndex, flag) {
     this.state['rotationIndex'] = rotationIndex
-    if (flag) this.trigger(this.state,'changeRotationIndex')
+    if (flag) this.trigger(this.state, 'changeRotationIndex')
   },
 
-  deleteNode: function(svgNode, node){
-    for (let i = 0; i < this.state.neighbours.length; i++){
+  deleteNode: function (svgNode, node) {
+    for (let i = 0; i < this.state.neighbours.length; i++) {
       if (this.state.neighbours[i].uri == node.uri)
         this.state.neighbours.splice(i, 1)
     }
@@ -77,13 +77,13 @@ import d3Convertor from '../lib/d3-converter'
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
-  drawNewNode: function(object, predicate){
+  drawNewNode: function (object, predicate) {
     // This fetches the triples at the newly added file, it allows us to draw it
     // the graph accurately
-    this.gAgent.fetchTriplesAtUri(object).then((result)=>{
+    this.gAgent.fetchTriplesAtUri(object).then((result) => {
       result.triples.uri = object
-      // Now we tell d3 to draw a new adjacent node on the graph, with the info from
-      // the triiple file
+        // Now we tell d3 to draw a new adjacent node on the graph, with the info from
+        // the triiple file
       result.triples.connection = predicate
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
       this.state.neighbours.push(this.state.newNode)
@@ -91,7 +91,7 @@ import d3Convertor from '../lib/d3-converter'
     })
   },
 
-  onGetState: function(source){
+  onGetState: function (source) {
     this.trigger(this.state, source)
     if (!this.loaded) {
       this.loaded = true
@@ -99,16 +99,17 @@ import d3Convertor from '../lib/d3-converter'
     }
   },
 
-  onGetInitialGraphState: function() {
+  onGetInitialGraphState: function () {
     this.gAgent.getGraphMapAtWebID().then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)}
+        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+      }
       graphActions.getInitialGraphState.completed(triples)
     })
   },
 
-  onGetInitialGraphStateCompleted: function(result) {
+  onGetInitialGraphStateCompleted: function (result) {
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
@@ -116,7 +117,7 @@ import d3Convertor from '../lib/d3-converter'
     this.trigger(this.state)
   },
 
-  drawAtUri: function(uri, number){
+  drawAtUri: function (uri, number) {
     this.state.neighbours = []
     this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
@@ -131,27 +132,28 @@ import d3Convertor from '../lib/d3-converter'
     })
   },
 
-  onNavigateToNode: function(node){
+  onNavigateToNode: function (node) {
     this.state.neighbours = []
+    this.state.rotationIndex = 0
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
-      // Before updating the this.state.center, we push the old center node
-      // to the node history
+        // Before updating the this.state.center, we push the old center node
+        // to the node history
 
       this.state.navHistory.push(this.state.center)
       this.state.center = triples[0]
 
-      if(this.state.navHistory.length > 1) {
+      if (this.state.navHistory.length > 1) {
         if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2].uri) {
           this.state.navHistory.pop()
           this.state.navHistory.pop()
         }
         // Removed the brackets, one liners.
-        else if(this.state.navHistory.length > 1)
-          for (var j = 0; j < this.state.navHistory.length-1; j++)
+        else if (this.state.navHistory.length > 1)
+          for (var j = 0; j < this.state.navHistory.length - 1; j++)
             if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri)
-              for (var k = 0; k < j+2; k++)
+              for (var k = 0; k < j + 2; k++)
                 this.state.navHistory.pop()
       }
 

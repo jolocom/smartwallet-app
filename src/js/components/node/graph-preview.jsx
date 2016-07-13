@@ -17,6 +17,7 @@ let Graph = React.createClass({
   },
 
   onStateUpdate(data, signal) {
+    
     this.setState(data)
     if (this.state.neighbours){
       console.log(1)
@@ -38,6 +39,10 @@ let Graph = React.createClass({
       console.log(3)
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
+    }
+    
+    if (signal == 'navigateToNode') {
+      this.graph.setRotationIndex(this.state.rotationIndex)
     }
   },
 
