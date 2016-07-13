@@ -921,24 +921,24 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   updateHistory = function (history) {
-    
+
     if (typeof history !== 'undefined' && history.length > 0) {
-      
+
       this.force.stop()
       for (var j = history.length-1, rank=0;
            j >= 0;
            j--, rank++) {
-        
+
         let already_exists = false
-        for (let dataNode of this.dataNodes) 
+        for (let dataNode of this.dataNodes)
         {
-          if (dataNode['uri'] === history[j]['uri'])   
+          if (dataNode['uri'] === history[j]['uri'] && dataNode['rank']=== 'history')
           {
-            already_exists = true; 
+            already_exists = true
           }
         }
         if (already_exists) continue
-        
+
         history[j].connection = 'hist'
         history[j].rank = 'history'
         history[j].histLevel = rank
@@ -1110,12 +1110,12 @@ export default class GraphD3 extends EventEmitter {
     else
       console.warn('update after rot - force is not defined')
   }.bind(this)
-  
+
   setRotationIndex = function (rotationIndex) {
     this.index = rotationIndex // @todo only execute updateAfterRot if index changed
     this.updateAfterRotationIndex()
   }.bind(this)
-  
+
   // This is not implemented apparently.
   onResize = function () {
     this.setSize()
