@@ -46,7 +46,8 @@ export default class GraphD3 extends EventEmitter {
         move: function (touchMoveRadian) { // closure isn't functional #todo
 
           // Normalization of touchMoveRadian
-          // Quick fix because touchMoveRadian abruptly switches from (+3/2 * PI) to (-1/2 * PI)
+          //   Quick fix because touchMoveRadian abruptly switches from (+3/2 * PI) to (-1/2 * PI)
+          //   This doesn't pose any problem when using touchMoveRadian as an absolute value, but if we are comparing the new touchMoveRadian to the previous one, then it is problematic
           var radianDiff = touchMoveRadian - lastNotchRadian
           if (radianDiff < -Math.PI)
             radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
@@ -87,23 +88,47 @@ export default class GraphD3 extends EventEmitter {
   // @TODO why do we need this (d3 should reflect nodes&links automatically) / when exactly is it called?
   // called when changing from/to preview and changing nodes
   render = function (state) { // nodes
-    console.warn(state);
-    console.warn("RENDEEEEEEEEEEEEEEER")
+    console.warn("RENDEEEEEEEEEEEEEEER", state)
+    this.state = state;
     
     if (this.rendered)
       this.eraseGraph() // erase everything, including background
     
     this.refreshDimensions() // ?
-    this.orderNodes(state) // if render is the changeNodes function, then this makes sense.
+    this.orderNodes() // if render is the changeNodes function, then this makes sense.
+    
+    
+    // Upon set up force we also initialize the dataLinks and dataNodes
+    // variables.
+    
+    // Update dataNodes
+    this.dataNodes = [state.center]
+    this.visibleDataNodes = [state.center] // @TODO you can safely remove this
+    this.dataLinks = []
+    this.visibleDataLinks = [] // @TODO safely removable
+    this.numberOfNeighbours = 0
+
+    // Flatten the center and neighbour nodes we get from the state
+    for (let i = 0; i < state.neighbours.length; i++) {
+      this.dataNodes.push(state.neighbours[i])
+      this.dataLinks.push({
+        'source': i + 1,
+        'target': 0
+      })
+      this.numberOfNeighbours++
+    }
+    
+    
+    this.setUpVisibleNodes() // @todo duplicate
     this.setUpForce(state) // <- creates force and starts it. why does it need to be done several times?
     this.drawBackground() // @TODO should be removed
     this.rendered = true
 
     this.updateAfterRotationIndex()
     /*this.force.stop()
-      this.sortNodes()
-      this.force.nodes(this.currentDataNodes)
-      this.force.links(this.currentDataLinks)
+      this.setUpVisibleNodes()
+      this.force.nodes(this.visibleDataNodes)
+      this.force.links(this.visibleDataLinks)
       this.drawNodes()
       this.force.start()*/
   }.bind(this)
@@ -111,12 +136,14 @@ export default class GraphD3 extends EventEmitter {
   refreshDimensions = function () {
     this.width = this.graphContainer.offsetWidth || STYLES.width
     this.height = this.graphContainer.offsetHeight || STYLES.height
+    this.centerCoordinates = {
+      y: (this.height / 2),
+      x: this.width / 2
+    }
   }
 
-  orderNodes= function (nodes) {
-    // console.table(nodes.neighbours, ['name', 'title'])
-
-    nodes.neighbours.sort(function(a,b) {
+  orderNodes= function () {
+    this.state.neighbours.sort(function(a,b) {
       if ((a.name || a.title || 'zzzzzz').toLowerCase() > (b.name || b.title || 'zzzzzz').toLowerCase())
         return 1
       else if ((a.name || a.title || 'zzzzzz').toLowerCase() < (b.name || b.title || 'zzzzzz').toLowerCase())
@@ -129,67 +156,39 @@ export default class GraphD3 extends EventEmitter {
   }
 
   // Starts the force simulation.
-  setUpForce = function (nodes) {
-    // Upon set up force we also initialize the dataLinks and dataNodes
-    // variables.
-    this.dataNodes = [nodes.center]
-    this.currentDataNodes = [nodes.center]
-    this.dataLinks = []
-    this.currentDataLinks = []
-    this.numberOfNeighbours = 0
-  // Flatten the center and neighbour nodes we get from the state
-
-    for (let i = 0; i < nodes.neighbours.length; i++) {
-      this.dataNodes.push(nodes.neighbours[i])
-      this.dataLinks.push({
-        'source': i + 1,
-        'target': 0
-      })
-      this.numberOfNeighbours++
-    }
-
-    //find center to arrange nodes
-
-    this.center = {
-      y: (this.height / 2),
-      x: this.width / 2
-    }
-
-    if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfNeighbours) {
+  setUpForce = function (state) {
+    
+    // Position nodes manually if we're using scrolling
+    if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
       this.nodePositions = []
 
       let angle = (2 * Math.PI) / 8, num = 0
 
       for (let i = 0; i < this.numberOfNeighbours; i++) {
         let pos = {
-          x: Math.sin(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.center.x,
-          y: Math.cos(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.center.y
+          x: Math.sin(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y
         }
         this.nodePositions.push(pos)
         num --
-
       }
-
     }
-    this.sortNodes()
 
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
     this.force = d3.layout.force()
-      .nodes(this.currentDataNodes)
-      .links(this.currentDataLinks)
+      .nodes(this.visibleDataNodes) // @TODO compile nodes object with object assign on-the-fly
+      .links(this.visibleDataLinks)
       .charge(-100)
       .chargeDistance(STYLES.largeNodeSize * 2)
       .linkDistance((d) => {
-
         if (d.source.rank == 'history' && d.source.histLevel <= 0) return STYLES.largeNodeSize * 2
         else if (d.source.rank == 'history') return STYLES.smallNodeSize
         else return STYLES.largeNodeSize * 1.4
-
       })
       .size([this.width, this.height])
       .start()
-      // We define our own drag functions, allow for greater controll over the way
+      // We define our own drag functions, allow for greater control over the way
       // it works
     this.node_drag = this.force.drag()
       .on('dragend', this.dragEnd)
@@ -276,8 +275,8 @@ export default class GraphD3 extends EventEmitter {
     for (let i = 0; i < 10; i++) {
       this.svg.append('svg:circle')
       .attr('class', 'indicator')
-      .attr('cx', Math.sin(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.center.x)
-      .attr('cy', Math.cos(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.center.y)
+      .attr('cx', Math.sin(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.centerCoordinates.x)
+      .attr('cy', Math.cos(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.centerCoordinates.y)
       .attr('r', this.largeNodeSize * 0.25)
       .style('fill', STYLES.grayColor)
       .attr('opacity', 0)
@@ -292,7 +291,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the nodes
   drawNodes = function () {
-    console.log('drawing the nodes!',this.currentDataNodes)
+    console.log('drawing the nodes!',this.visibleDataNodes)
 
 
     let self = this
@@ -323,7 +322,7 @@ export default class GraphD3 extends EventEmitter {
 
 
     this.link = this.svg.selectAll('line')
-    .data(this.currentDataLinks)
+    .data(this.visibleDataLinks)
     .enter()
     .insert('line', '.background + *')
     .attr('class','link')
@@ -335,7 +334,7 @@ export default class GraphD3 extends EventEmitter {
 
     // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
-      .data(this.currentDataNodes, (d) => {
+      .data(this.visibleDataNodes, (d) => {
         return (d.uri + d.connection)
       })
       .enter()
@@ -344,13 +343,13 @@ export default class GraphD3 extends EventEmitter {
       .call(this.node_drag)
 
     this.svg.selectAll('.node')
-      .data(this.currentDataNodes, (d) => {
+      .data(this.visibleDataNodes, (d) => {
         return (d.uri + d.connection)
       })
       .exit().remove()
 
     this.svg.selectAll('line')
-      .data(this.currentDataLinks)
+      .data(this.visibleDataLinks)
       .exit().remove()
 
     //add avatars
@@ -606,9 +605,9 @@ export default class GraphD3 extends EventEmitter {
   // Arrays. Then tells d3 to draw a node for each of those.
   addNode = function () {
     this.force.stop()
-    this.sortNodes()
-    this.force.nodes(this.currentDataNodes)
-    this.force.links(this.currentDataLinks)
+    this.setUpVisibleNodes()
+    this.force.nodes(this.visibleDataNodes)
+    this.force.links(this.visibleDataLinks)
     this.drawNodes()
     this.force.start()
   }.bind(this)
@@ -617,62 +616,64 @@ export default class GraphD3 extends EventEmitter {
   // all other highlighted nodes back to their normal size
 
 
-  sortNodes = function () {
+  setUpVisibleNodes = function () {
 
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NUMBER_OF_NODES) {
-      this.currentDataNodes = this.dataNodes
-      this.currentDataLinks = this.dataLinks
+      this.visibleDataNodes = this.dataNodes
+      this.visibleDataLinks = this.dataLinks
       return
     }
 
     d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.rotationIndex + ')')
-      // d3.select('.dial').transition()
-      //   .duration(100)
-      //   .call(this.arcTween, 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
+    // d3.select('.dial').transition()
+    //   .duration(100)
+    //   .call(this.arcTween, 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
 
-    this.currentDataNodes = []
-    this.currentDataLinks = []
-    this.currentDataNodes[0] = this.dataNodes[0]
+    this.visibleDataNodes = []
+    this.visibleDataNodes[0] = this.dataNodes[0] // @TODO not intuitive
+    this.visibleDataLinks = []
+    
     let nodeCount = 0
     let first = true
 
+    // Hydrate visibleDataNodes based on rotationIndex
+    // @TODO iterate through this.neighbours rather; have this.neighbourNodes, this.center, this.historyNodes and not have this.dataNodes (where 0 = xx)
     for (let i = this.rotationIndex + 1; i != this.rotationIndex; i = (i + 1) % this.dataNodes.length) {
 
       if (this.dataNodes[i].rank == 'neighbour' && nodeCount < this.MAX_VISIBLE_NUMBER_OF_NODES) {
-        this.currentDataNodes.push(this.dataNodes[i])
-        this.currentDataNodes[this.currentDataNodes.length - 1].position = nodeCount
-        this.currentDataNodes[this.currentDataNodes.length - 1].x = this.nodePositions[nodeCount].x
-        this.currentDataNodes[this.currentDataNodes.length - 1].y = this.nodePositions[nodeCount].y
-        this.currentDataNodes[this.currentDataNodes.length - 1].px = this.nodePositions[nodeCount].x
-        this.currentDataNodes[this.currentDataNodes.length - 1].py = this.nodePositions[nodeCount].y
-        this.currentDataLinks.push({
-          'source': this.currentDataNodes.length - 1,
+        this.visibleDataNodes.push(this.dataNodes[i])
+        this.visibleDataNodes[this.visibleDataNodes.length - 1].position = nodeCount
+        this.visibleDataNodes[this.visibleDataNodes.length - 1].x = this.nodePositions[nodeCount].x
+        this.visibleDataNodes[this.visibleDataNodes.length - 1].y = this.nodePositions[nodeCount].y
+        this.visibleDataNodes[this.visibleDataNodes.length - 1].px = this.nodePositions[nodeCount].x
+        this.visibleDataNodes[this.visibleDataNodes.length - 1].py = this.nodePositions[nodeCount].y
+        this.visibleDataLinks.push({
+          'source': this.visibleDataNodes.length - 1,
           'target': 0
         })
         nodeCount++
       }
 
     }
+    
+    // Add history nodes to visibleDataNodes
     for (var i = 0; i < this.dataNodes.length; i++) {
       if (this.dataNodes[i].rank == 'history') {
-        this.currentDataNodes.push(this.dataNodes[i])
+        this.visibleDataNodes.push(this.dataNodes[i])
         if (first) {
-          this.currentDataLinks.push({
-            'source': this.currentDataNodes.length - 1,
+          this.visibleDataLinks.push({
+            'source': this.visibleDataNodes.length - 1,
             'target': 0
           })
           first = false
         } else {
-          this.currentDataLinks.push({
-            'source': this.currentDataNodes.length - 1,
-            'target': this.currentDataNodes.length - 2
+          this.visibleDataLinks.push({
+            'source': this.visibleDataNodes.length - 1,
+            'target': this.visibleDataNodes.length - 2
           })
         }
       }
     }
-
-
-
 
   }.bind(this)
 
@@ -899,9 +900,9 @@ export default class GraphD3 extends EventEmitter {
           })
         }
       }
-      this.sortNodes()
-      this.force.nodes(this.currentDataNodes)
-      this.force.links(this.currentDataLinks)
+      this.setUpVisibleNodes()
+      this.force.nodes(this.visibleDataNodes)
+      this.force.links(this.visibleDataLinks)
       this.drawNodes()
       this.force.start()
     }
@@ -986,9 +987,9 @@ export default class GraphD3 extends EventEmitter {
     if (nIndex > this.MAX_VISIBLE_NUMBER_OF_NODES) {
       this.rotationIndex = nIndex - this.MAX_VISIBLE_NUMBER_OF_NODES
       this.force.stop()
-      this.sortNodes()
-      this.force.nodes(this.currentDataNodes)
-      this.force.links(this.currentDataLinks)
+      this.setUpVisibleNodes()
+      this.force.nodes(this.visibleDataNodes)
+      this.force.links(this.visibleDataLinks)
       this.drawNodes()
       this.force.start()
     }
@@ -1030,9 +1031,9 @@ export default class GraphD3 extends EventEmitter {
         }
 
 
-        this.sortNodes()
-        this.force.nodes(this.currentDataNodes)
-        this.force.links(this.currentDataLinks)
+        this.setUpVisibleNodes()
+        this.force.nodes(this.visibleDataNodes)
+        this.force.links(this.visibleDataLinks)
         this.drawNodes()
         this.force.start()
       })
@@ -1043,9 +1044,9 @@ export default class GraphD3 extends EventEmitter {
     {
       console.log('update after rot - go go go // index :', this.rotationIndex)
       this.force.stop()
-      this.sortNodes()
-      this.force.nodes(this.currentDataNodes)
-      this.force.links(this.currentDataLinks)
+      this.setUpVisibleNodes()
+      this.force.nodes(this.visibleDataNodes)
+      this.force.links(this.visibleDataLinks)
       this.drawNodes()
       this.force.start()
     }
