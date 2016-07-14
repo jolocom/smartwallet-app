@@ -32,7 +32,6 @@ let Graph = React.createClass({
 
     if (this.state.newNode) {
       console.log(2)
-      this.graph.addNode(this.state.newNode)
       previewActions.setState('newNode', null, true)
     }
 

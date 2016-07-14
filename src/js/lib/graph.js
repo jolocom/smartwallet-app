@@ -97,10 +97,6 @@ export default class GraphD3 extends EventEmitter {
     this.refreshDimensions() // ?
     this.orderNodes() // if render is the changeNodes function, then this makes sense.
     
-    
-    // Upon set up force we also initialize the dataLinks and dataNodes
-    // variables.
-    
     // Update dataNodes
     this.dataNodes = [state.center]
     this.visibleDataNodes = [state.center] // @TODO you can safely remove this
@@ -121,16 +117,9 @@ export default class GraphD3 extends EventEmitter {
     
     this.setUpVisibleNodes() // @todo duplicate
     this.setUpForce(state) // <- creates force and starts it. why does it need to be done several times?
-    this.drawBackground() // @TODO should be removed
+    this.drawBackground() // refresh the background in case we need to draw more things because scrolling is now enabled
     this.rendered = true
-
-    this.updateAfterRotationIndex()
-    /*this.force.stop()
-      this.setUpVisibleNodes()
-      this.force.nodes(this.visibleDataNodes)
-      this.force.links(this.visibleDataLinks)
-      this.drawNodes()
-      this.force.start()*/
+    this.drawNodes()
   }.bind(this)
 
   refreshDimensions = function () {
@@ -172,8 +161,9 @@ export default class GraphD3 extends EventEmitter {
       })
       .size([this.width, this.height])
       .start()
-      // We define our own drag functions, allow for greater control over the way
-      // it works
+    
+    // We define our own drag functions, allow for greater control over the way
+    // it works
     this.node_drag = this.force.drag()
       .on('dragend', this.dragEnd)
       .on('drag', function () {
@@ -186,10 +176,7 @@ export default class GraphD3 extends EventEmitter {
 
   }.bind(this)
 
-
-
-
-  // Draws the dark gray circle behind the main node.
+  // Draws the scrolling scrollingIndicators and scrolling circle.
   drawBackground = function () {
     this.svg.append('svg:rect') // used for the positioning of the lines; see if we need it
       .attr('class','background')
@@ -204,13 +191,12 @@ export default class GraphD3 extends EventEmitter {
       .attr('r', this.largeNodeSize * 0.57 * 1.1)
       .style('fill', STYLES.lightGrayColor)
 
-    if (this.MAX_VISIBLE_NUMBER_OF_NODES < this.numberOfNeighbours) {
+    if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
       
       // Gradient
       // d3.select(this.svg.node().parentNode).append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
 
-      //draw dotted line to indicate there are more nodes
-
+      // Draw dotted line to indicate there are more nodes
       for (var i = 0; i < 12; i++) {
         this.svg.append('svg:circle')
           .attr('class', 'dots')
@@ -219,12 +205,12 @@ export default class GraphD3 extends EventEmitter {
           .attr('r', this.largeNodeSize * 0.02)
           .style('fill', STYLES.lightGrayColor)
       }
-      this.svg.append('svg:circle')
+      
+      /*this.svg.append('svg:circle')
         .attr('cx', this.width * 0.5)
         .attr('cy', this.height * 0.5)
         .attr('r', this.largeNodeSize * 0.57)
-        .style('fill', STYLES.lightGrayColor)
-
+        .style('fill', STYLES.lightGrayColor)*/
 
       this.arch = this.MAX_VISIBLE_NUMBER_OF_NODES / this.numberOfNeighbours
 
@@ -245,20 +231,18 @@ export default class GraphD3 extends EventEmitter {
         .attr('d', this.arc)
         .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ')')
 
-      this.indicator()
+      this.drawScrollingIndicator()
 
     }
 
   }.bind(this)
 
-
-  indicator = function(){
-
+  drawScrollingIndicator = function(){
     let angle = Math.PI/14
 
     for (let i = 0; i < 10; i++) {
       this.svg.append('svg:circle')
-      .attr('class', 'indicator')
+      .attr('class', 'scrolling-indicator')
       .attr('cx', Math.sin(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.centerCoordinates.x)
       .attr('cy', Math.cos(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.centerCoordinates.y)
       .attr('r', this.largeNodeSize * 0.25)
@@ -270,8 +254,6 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', 0)
     }
   }
-
-
 
   // Draws the nodes
   // @TODO WHAAAAAAAT
@@ -542,16 +524,14 @@ export default class GraphD3 extends EventEmitter {
     })
 
     if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
-
-
       d3.selectAll('.node').attr('d', (d) => {
         if (d.rank == 'neighbour') {
           d.x += (this.nodePositions[d.position].x - d.x) * k
           d.y += (this.nodePositions[d.position].y - d.y) * k
-
         }
       })
     }
+    
     // Update the link positions.
     d3.selectAll('.link')
       .attr('x1', (d) => d.source.x)
@@ -566,36 +546,23 @@ export default class GraphD3 extends EventEmitter {
   // We check if the node is dropped in the center, if yes we navigate to it.
   // We also prevent the node from bouncing away in case it's dropped to the middle
   dragEnd = function (node) {
-    this.force.stop()
     if (node.rank == 'center' || node.rank == 'unavailable') {
       this.force.start()
         // In here we would have the functionality that opens the node's card
     } else if (node.rank == 'neighbour' || node.rank == 'history') {
-      // We check if the node is dropped on top of the middle node, if yes
-      // We change the perspective
+      // We check if the node is dropped on top of the center node
       let w = this.width
       let h = this.height
       let size = STYLES.largeNodeSize
       let x = node.x > w / 2 - size / 2 && node.x < w / 2 + size / 2
       let y = node.y > h / 2 - size / 2 && node.y < h / 2 + size / 2
 
-      // If in the area we navigate to the node, otherwise we start the force
-      // layout back
+      // If yes, we change the perspective
       if (x && y) {
+        this.force.stop()
         this.emit('center-changed', node)
-      } else this.force.start()
+      }
     }
-  }.bind(this)
-
-  // This basically pushes a node to the dataNodes and a link to the dataLinks
-  // Arrays. Then tells d3 to draw a node for each of those.
-  addNode = function () {
-    this.force.stop()
-    this.setUpVisibleNodes()
-    this.force.nodes(this.visibleDataNodes)
-    this.force.links(this.visibleDataLinks)
-    this.drawNodes()
-    this.force.start()
   }.bind(this)
 
   // Enlarges and displays extra info about the clicked node, while setting
@@ -706,22 +673,19 @@ export default class GraphD3 extends EventEmitter {
 
   onClick = function (node, data) {
     d3.event.stopPropagation()
-      // d3.event.defaultPrevented returns true if the click event was fired by
-      // a drag event. Prevents a click being registered upon drag release.
-    this.emit('select', data, node)
-
-    if (data.rank == 'history') return
-    if (d3.event.defaultPrevented) {
-      return
-    }
-
+    
+    // d3.event.defaultPrevented returns true if the click event was fired by
+    // a drag event. Prevents a click being registered upon drag release.
+    if (data.rank == 'history' || d3.event.defaultPrevented) return
 
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
     data.wasHighlighted = data.highlighted
 
-    // We set all the circles back to their normal sizes
+    // @TODO this could be done using d3js and modifying ".selected" from the nodes (.update()), no?
+    
+    // Reset size of all circles
     d3.selectAll('g .node')
       .filter(function (d) {
         return d.highlighted
@@ -732,6 +696,7 @@ export default class GraphD3 extends EventEmitter {
         return d.rank == 'center' ? largeSize / 2 : smallSize / 2
       })
 
+    // Reset colour of all circles
     d3.selectAll('g .node').filter(function (d) {
       return d.highlighted && !d.img
     })
@@ -749,8 +714,7 @@ export default class GraphD3 extends EventEmitter {
         }
       })
 
-
-    // Setting all the pattern sizes back to normal.
+    // Reset sizes of all patterns
     d3.selectAll('g .node').filter(function (d) {
       return d.highlighted
     })
@@ -763,7 +727,7 @@ export default class GraphD3 extends EventEmitter {
         return d.rank == 'center' ? -largeSize / 2 : -smallSize / 2
       })
 
-    // Setting all the image sizes back to normal
+    // Reset sizes of all images
     d3.selectAll('g .node')
       .filter(function (d) {
         return d.highlighted
@@ -779,7 +743,7 @@ export default class GraphD3 extends EventEmitter {
       .style('filter', null)
 
     // We set the name of the node to invisible in case it has a profile picture
-    // In case the node has no picture, we display it's name.
+    // In case the node has no picture, we display its name.
     d3.selectAll('g .node')
       .filter(function (d) {
         return d.highlighted
@@ -791,8 +755,7 @@ export default class GraphD3 extends EventEmitter {
         return d.img ? 0 : 1
       })
 
-
-    // We set the node description to be invisible
+    // Hide the descriptions of all nodes
     d3.selectAll('g .node')
       .filter(function (d) {
         return d.highlighted
@@ -801,7 +764,7 @@ export default class GraphD3 extends EventEmitter {
       .transition('description').duration(STYLES.nodeTransitionDuration)
       .attr('opacity', 0)
 
-    //We make the fullscreen button smaller
+    // Make the fullscreen button of all nodes smaller
     d3.selectAll('g .node')
       .filter(function (d) {
         return d.highlighted
@@ -810,6 +773,7 @@ export default class GraphD3 extends EventEmitter {
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('r', 0)
 
+    // Un-highlight all nodes
     d3.selectAll('g .node')
       .attr('d', (d) => d.highlighted = false)
 
@@ -817,7 +781,10 @@ export default class GraphD3 extends EventEmitter {
       data.highlighted = false
       this.emit('deselect')
     } else {
-      // NODE signifies the node that we clicked on. We enlarge it
+      // NODE signifies the node that we clicked on. We enlarge it.
+      this.emit('select', data, node)
+      
+      // Enlarge the node
       d3.select(node).select('.nodecircle')
         .transition('grow').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
@@ -830,17 +797,18 @@ export default class GraphD3 extends EventEmitter {
           }
         })
 
-      // We enlarge the pattern of the node we clicked on
+      // Enlarge the pattern of the node we clicked on
       d3.select(node).select('pattern')
         .transition('pattern').duration(STYLES.nodeTransitionDuration)
         .attr('x', -STYLES.largeNodeSize / 2)
         .attr('y', -STYLES.largeNodeSize / 2)
 
+      // Enlarge full screen button
       d3.select(node).select('.nodefullscreen')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.fullScreenButton / 2)
 
-      // We enlarge the image of the node we clicked on
+      // Enlarge the image of the node we clicked on
       // We also blur it a bit and darken it, so that the text displays better
       d3.select(node).select('image')
         .transition('image').duration(STYLES.nodeTransitionDuration)
@@ -848,14 +816,15 @@ export default class GraphD3 extends EventEmitter {
         .attr('height', STYLES.largeNodeSize)
         .style('filter', 'url(#darkblur)')
 
-      // Tere is a slight bug when if you click on nodes really quickly, the text
-      // on some fails to dissapear, needs further investigation
-      // We fade in the description
+      // There is a slight bug when if you click on nodes really quickly, the text
+      // on some fails to disappear; needs further investigation
+      
+      // Fade in the description
       d3.select(node).selectAll('text')
         .transition('description').duration(STYLES.nodeTransitionDuration)
         .attr('opacity', 0.9)
 
-      // We fade in the node name and make the text opaque
+      // Fade in the node name and make the text opaque
       d3.select(node).select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('dy', (d) => d.description ? '-.5em' : '.35em')
@@ -963,6 +932,7 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   deleteNode = function (state) {
+    console.warn('graph.js deletenode')
     // We don't pop it from the parent neighbours array, that should not cause problems. But
     // Keep an eye on this, in case of potential bugs.
 
