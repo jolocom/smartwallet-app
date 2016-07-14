@@ -99,7 +99,7 @@ export default class GraphD3 extends EventEmitter {
     this.height = this.graphContainer.offsetHeight || STYLES.height
 
     this.svg = d3.select(this.graphContainer).append('svg:svg')
-      .attr('width', this.width) 
+      .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
   }
@@ -1020,7 +1020,7 @@ export default class GraphD3 extends EventEmitter {
   deleteNode = function (state) {
     // We don't pop it from the parent neighbours array, that should not cause problems. But
     // Keep an eye on this, in case of potential bugs.
-
+    console.log(state)
     let index = d3.select(state.selected)[0][0].__data__.uri
     let nIndex = -1
     let lIndex = -1

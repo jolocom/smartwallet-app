@@ -46,7 +46,7 @@ let Graph = React.createClass({
     // Temp. make it more elegant later.
     if (signal === 'nodeRemove')
     {
-      this.graph.deleteNode(data.activeNode)
+      this.graph.deleteNode(data)
       this.setState({activeNode: null})
       // Important to avoid a re-render here.
       graphActions.setState('activeNode', null, false)
@@ -99,7 +99,7 @@ let Graph = React.createClass({
   _handleSelectNode(node, svg){
     graphActions.setState('selected', svg)
   },
-  
+
   _handleChangeRotationIndex(rotationIndex){
     graphActions.changeRotationIndex(rotationIndex,false)
   },
@@ -132,9 +132,9 @@ let Graph = React.createClass({
 
     if (this.graph)
     {
-      this.graph.setRotationIndex(this.state.rotationIndex) 
+      this.graph.setRotationIndex(this.state.rotationIndex)
     }
-    
+
     let nodeDetails
 
     if (this.state.activeNode) {

@@ -6,7 +6,7 @@ import d3Convertor from '../lib/d3-converter'
 
 export default Reflux.createStore({
   listenables: [graphActions],
-  
+
   init: function(){
     this.listenTo(accountActions.logout, this.onLogout)
     this.gAgent = new graphAgent()
@@ -66,21 +66,21 @@ export default Reflux.createStore({
     this.state['rotationIndex'] = rotationIndex
     if (flag) this.trigger(this.state, 'changeRotationIndex')
   },
-    
+
   deleteNode: function(node){
     let nodeId = node.index > 0 ? node.index : node.uri
     for (let i = 0; i < this.state.neighbours.length; i++){
-     let sourceId = node.index > 0 ? this.state.neighbours[i].index 
+     let sourceId = node.index > 0 ? this.state.neighbours[i].index
        : this.state.neighbours[i].uri
      if (sourceId == nodeId)
        this.state.neighbours.splice(i, 1)
     }
     this.state.activeNode = node
-    this.trigger(this.state, 'nodeRemove')
+    this.trigger(node, 'nodeRemove')
   },
 
   dissconnectNode: function(){
-    // Animation / removing from the neighb array will go here.    
+    // Animation / removing from the neighb array will go here.
   },
 
   deleteNode: function (svgNode, node) {
