@@ -7,6 +7,7 @@ import previewStore from 'stores/preview-store'
 import previewActions from 'actions/preview-actions'
 import graphActions from 'actions/graph-actions'
 import GraphStore from '../../stores/graph-store'
+import JolocomTheme from 'styles/jolocom-theme'
 
 let Graph = React.createClass({
 
@@ -31,7 +32,6 @@ let Graph = React.createClass({
 
     if (this.state.newNode) {
       console.log(2)
-      this.graph.addNode(this.state.newNode)
       previewActions.setState('newNode', null, true)
     }
 
@@ -91,7 +91,8 @@ let Graph = React.createClass({
   getStyles() {
     let styles = {
       chart: {
-        flex: 1
+        flex: 1,
+        background: JolocomTheme.jolocom.gray2
       }
     }
     return styles

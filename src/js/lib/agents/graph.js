@@ -199,7 +199,13 @@ class GraphAgent {
         // This is later used for displaying broken nodes.
       } else return {uri: uri, unav : true, connection:null,  triples:[]} 
     })
-  }
+	} 
+
+  // Replaced the put request with a patch request, it's faster, and there's no risk of wiping the whole file.
+  deleteTriple(subject, predicate, object){
+    let oldTrip = [rdf.st(subject, predicate, object).toNT()]
+    return solid.web.patch(subject.uri, oldTrip, null)
+	}
 
   // This function gets passed a center uri and it's triples, and then finds all possible
   // links that we choose to display. After that it parses those links for their RDF data.

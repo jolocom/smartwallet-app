@@ -39,20 +39,20 @@ export default Reflux.createStore({
       // Basic error handling
       }).catch((e)=>{console.log('Error', e ,'while removing connection')})
     }).catch((e)=>{console.log('error', e, 'occured while deleting')})
-  },
+	}, 
 
-  onDissconnectNode(node, centerNode){
+
+  onDisconnectNode(node, centerNode){
     let subject = rdf.sym(centerNode.uri)
     let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
     this.gAgent.deleteTriple(subject, predicate, object)
-  },
+	},
 
   link(start, type, end, flag) {
     let predicate = null
     if(type === 'generic') predicate = SCHEMA('isRelatedTo')
     if(type ==='knows') predicate = FOAF('knows')
-    
     this.gAgent.writeTriple(rdf.sym(start), predicate, rdf.sym(end), flag)
   }
 })

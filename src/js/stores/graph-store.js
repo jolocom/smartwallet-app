@@ -6,7 +6,7 @@ import d3Convertor from '../lib/d3-converter'
 
 export default Reflux.createStore({
   listenables: [graphActions],
-  
+
   init: function(){
     this.listenTo(accountActions.logout, this.onLogout)
     this.listenTo(accountActions.login.completed, this.onLogin)
@@ -72,11 +72,12 @@ export default Reflux.createStore({
     this.state['rotationIndex'] = rotationIndex
     if (flag) this.trigger(this.state, 'changeRotationIndex')
   },
-    
+
   deleteNode: function(node){
+    console.log('THIS ONE')
     let nodeId = node.index > 0 ? node.index : node.uri
     for (let i = 0; i < this.state.neighbours.length; i++){
-     let sourceId = node.index > 0 ? this.state.neighbours[i].index 
+     let sourceId = node.index > 0 ? this.state.neighbours[i].index
        : this.state.neighbours[i].uri
      if (sourceId == nodeId)
        this.state.neighbours.splice(i, 1)
@@ -86,16 +87,10 @@ export default Reflux.createStore({
   },
 
   dissconnectNode: function(){
-    // Animation / removing from the neighb array will go here.    
+    // Animation / removing from the neighb array will go here.
   },
 
-  deleteNode: function (svgNode, node) {
-    for (let i = 0; i < this.state.neighbours.length; i++) {
-      if (this.state.neighbours[i].uri == node.uri)
-        this.state.neighbours.splice(i, 1)
-    }
-    this.trigger(this.state, 'nodeRemove')
-  },
+
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
   drawNewNode: function(object, predicate){
@@ -106,7 +101,7 @@ export default Reflux.createStore({
       result.triples.uri = object
         // Now we tell d3 to draw a new adjacent node on the graph, with the info from
         // the triiple file
-      result.triples.connection = predicate
+      console.log('We are drawing using', predicate)
       result.triples.connection = predicate
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
       this.state.neighbours.push(this.state.newNode)
@@ -170,7 +165,7 @@ export default Reflux.createStore({
       this.state.center = triples[0]
 
       if (this.state.navHistory.length > 1) {
-        if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2].uri) {
+        if (this.state.center.uri === this.state.navHistory[this.state.navHistory.length - 2].uri) {
           this.state.navHistory.pop()
           this.state.navHistory.pop()
         }
