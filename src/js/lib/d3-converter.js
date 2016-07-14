@@ -31,7 +31,7 @@ class D3Converter {
       description:null,
       img:null,
       type:null,
-      rank: 'adjacent',
+      rank: 'neighbour',
       storage: null,
       storage: null,
       x: null,
@@ -119,7 +119,7 @@ class D3Converter {
 
     // We specify the rank of the node here. Center is the center node and Adjacent is a neighbour, smaller node
     // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
-    if (rank == 'a') props.rank = 'adjacent'
+    if (rank == 'a') props.rank = 'neighbour'
     if (rank == 'c') props.rank = 'center'
 
     if(!props.name && !props.familyName)
