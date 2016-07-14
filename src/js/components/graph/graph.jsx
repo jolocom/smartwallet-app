@@ -63,7 +63,7 @@ let Graph = React.createClass({
     }
 
     if (this.state.newNode) {
-      this.graph.addNode(this.state.newNode)
+      // this.graph.addNode(this.state.newNode)
       // We update the state of the store to be in line with the state of the child
       this.state.newNode = null
       graphActions.setState('newNode', null, false)

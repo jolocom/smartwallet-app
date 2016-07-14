@@ -68,6 +68,7 @@ export default Reflux.createStore({
   },
 
   deleteNode: function(node){
+    console.log('THIS ONE')
     let nodeId = node.index > 0 ? node.index : node.uri
     for (let i = 0; i < this.state.neighbours.length; i++){
      let sourceId = node.index > 0 ? this.state.neighbours[i].index
@@ -76,20 +77,14 @@ export default Reflux.createStore({
        this.state.neighbours.splice(i, 1)
     }
     this.state.activeNode = node
-    this.trigger(node, 'nodeRemove')
+    this.trigger(this.state, 'nodeRemove')
   },
 
   dissconnectNode: function(){
     // Animation / removing from the neighb array will go here.
   },
 
-  deleteNode: function (svgNode, node) {
-    for (let i = 0; i < this.state.neighbours.length; i++) {
-      if (this.state.neighbours[i].uri == node.uri)
-        this.state.neighbours.splice(i, 1)
-    }
-    this.trigger(this.state, 'nodeRemove')
-  },
+
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
   drawNewNode: function(object, predicate){
