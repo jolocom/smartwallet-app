@@ -258,8 +258,6 @@ export default class GraphD3 extends EventEmitter {
   // Draws the nodes
   // @TODO WHAAAAAAAT
   drawNodes = function () {
-    console.log('drawing the nodes!',this.visibleDataNodes)
-
     let self = this
     
     // These make the following statements shorter
@@ -935,7 +933,6 @@ export default class GraphD3 extends EventEmitter {
     console.warn('graph.js deletenode')
     // We don't pop it from the parent neighbours array, that should not cause problems. But
     // Keep an eye on this, in case of potential bugs.
-    console.log(state)
     let index = d3.select(state.selected)[0][0].__data__.uri
     let nIndex = -1
     let lIndex = -1
@@ -1013,7 +1010,6 @@ export default class GraphD3 extends EventEmitter {
   updateAfterRotationIndex = function() {
     if (this.force)
     {
-      console.log('update after rot - go go go // index :', this.rotationIndex)
       this.force.stop()
       this.setUpVisibleNodes()
       this.force.nodes(this.visibleDataNodes)
@@ -1021,8 +1017,6 @@ export default class GraphD3 extends EventEmitter {
       this.drawNodes()
       this.force.start()
     }
-    else
-      console.log('update after rot - force is not defined')
   }.bind(this)
 
   setRotationIndex = function (rotationIndex) {

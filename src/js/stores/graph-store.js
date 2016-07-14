@@ -95,7 +95,7 @@ export default Reflux.createStore({
       result.triples.uri = object
         // Now we tell d3 to draw a new adjacent node on the graph, with the info from
         // the triiple file
-      result.triples.connection = predicate
+      console.log('We are drawing using', predicate)
       result.triples.connection = predicate
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
       this.state.neighbours.push(this.state.newNode)
@@ -159,7 +159,7 @@ export default Reflux.createStore({
       this.state.center = triples[0]
 
       if (this.state.navHistory.length > 1) {
-        if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2].uri) {
+        if (this.state.center.uri === this.state.navHistory[this.state.navHistory.length - 2].uri) {
           this.state.navHistory.pop()
           this.state.navHistory.pop()
         }
