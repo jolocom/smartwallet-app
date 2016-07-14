@@ -157,22 +157,6 @@ export default class GraphD3 extends EventEmitter {
 
   // Starts the force simulation.
   setUpForce = function (state) {
-    
-    // Position nodes manually if we're using scrolling
-    if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
-      this.nodePositions = []
-
-      let angle = (2 * Math.PI) / 8, num = 0
-
-      for (let i = 0; i < this.numberOfNeighbours; i++) {
-        let pos = {
-          x: Math.sin(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
-          y: Math.cos(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y
-        }
-        this.nodePositions.push(pos)
-        num --
-      }
-    }
 
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
@@ -290,15 +274,17 @@ export default class GraphD3 extends EventEmitter {
 
 
   // Draws the nodes
+  // @TODO WHAAAAAAAT
   drawNodes = function () {
     console.log('drawing the nodes!',this.visibleDataNodes)
 
-
     let self = this
-      // These make the following statements shorter
+    
+    // These make the following statements shorter
     let largeNode = this.largeNodeSize
     let smallNode = this.smallNodeSize
 
+    // "View node info" button
     let defsFull = this.svg.append('svg:defs')
     defsFull.append('svg:pattern')
       .attr('id', 'full')
@@ -312,15 +298,13 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', STYLES.fullScreenButton)
       .attr('height', STYLES.fullScreenButton)
 
-    // let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
-    //
-    // defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
-    // defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
+    // Fade to white
+    //   let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
+    //   defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
+    //   defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
 
-
+    // LINK ENTER
     // We draw the lines for all the elements in the dataLinks array.
-
-
     this.link = this.svg.selectAll('line')
     .data(this.visibleDataLinks)
     .enter()
@@ -331,7 +315,7 @@ export default class GraphD3 extends EventEmitter {
       return this.width / 50 > 10 ? 10 : this.width / 50})
     .attr('stroke', STYLES.lightGrayColor)
 
-
+    // NODE ENTER
     // We draw a node for each element in the dataNodes array
     this.node = this.svg.selectAll('.node')
       .data(this.visibleDataNodes, (d) => {
@@ -342,14 +326,16 @@ export default class GraphD3 extends EventEmitter {
       .attr('class', 'node')
       .call(this.node_drag)
 
+    // NODES DATA + EXIT (!? @TODO)
     this.svg.selectAll('.node')
       .data(this.visibleDataNodes, (d) => {
         return (d.uri + d.connection)
-      })
+      }) /* @TODO DRY */
       .exit().remove()
 
+    // LINKS DATA + EXIT (!? @TODO)
     this.svg.selectAll('line')
-      .data(this.visibleDataLinks)
+      .data(this.visibleDataLinks) /* @TODO DRY */
       .exit().remove()
 
     //add avatars
@@ -618,26 +604,42 @@ export default class GraphD3 extends EventEmitter {
 
   setUpVisibleNodes = function () {
 
+    // No scrolling
+    
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NUMBER_OF_NODES) {
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
       return
     }
+    
+    // Yes scrolling (more than 8 visible nodes)
 
     d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.rotationIndex + ')')
-    // d3.select('.dial').transition()
+    
+    // Smooth radial scrolling animation
+    //  d3.select('.dial').transition()
     //   .duration(100)
     //   .call(this.arcTween, 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
-
+    
+    // Position nodes manually
+    this.nodePositions = []
+    let angle = (2 * Math.PI) / 8, num = 0
+    for (let i = 0; i < this.numberOfNeighbours; i++) { // @TODO should modify .x inside the node
+      let pos = {
+        x: Math.sin(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+        y: Math.cos(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y
+      }
+      this.nodePositions.push(pos)
+      num --
+    }
+    
+    // Hydrate visibleDataNodes based on rotationIndex
+    // @TODO iterate through this.neighbours rather; have this.neighbourNodes, this.center, this.historyNodes and not have this.dataNodes (where 0 = xx)
     this.visibleDataNodes = []
     this.visibleDataNodes[0] = this.dataNodes[0] // @TODO not intuitive
     this.visibleDataLinks = []
-    
     let nodeCount = 0
     let first = true
-
-    // Hydrate visibleDataNodes based on rotationIndex
-    // @TODO iterate through this.neighbours rather; have this.neighbourNodes, this.center, this.historyNodes and not have this.dataNodes (where 0 = xx)
     for (let i = this.rotationIndex + 1; i != this.rotationIndex; i = (i + 1) % this.dataNodes.length) {
 
       if (this.dataNodes[i].rank == 'neighbour' && nodeCount < this.MAX_VISIBLE_NUMBER_OF_NODES) {
@@ -695,7 +697,6 @@ export default class GraphD3 extends EventEmitter {
       }
     })
   }.bind(this)
-
 
   onClickFull = function (node, data) {
     //stops propagation to node click handler

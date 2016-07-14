@@ -31,14 +31,19 @@ export class Writer {
   }
 
   addTriple(...args) {
+    let subject, predicate, object 
     // Allow to pass a single object
-    let {subject, predicate, object} = args.length === 1 ? args[0] : args
+    if (args.length === 1) {
+      ({subject, predicate, object} = args[0])
+    } else {
+      ([subject, predicate, object] = args)
+    }
 
     // We don't want to write a triple that already exists into the rdf file.
     if (this.g.statementsMatching(subject, predicate, object).length > 0){
       console.warn('Triple already present in the rdf file, Ignoring')
       return false
-    } else if (subject === object) {
+    } else if (subject.uri === object.uri) {
       console.warn('You cannot link to yourself')
       return false
     }
