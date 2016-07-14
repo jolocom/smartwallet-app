@@ -1,6 +1,6 @@
 import Reflux from 'reflux'
 import ContactActions from 'actions/contact'
-import _ from 'lodash'
+import find from 'lodash/find'
 
 import {contacts} from 'lib/fixtures'
 
@@ -12,8 +12,8 @@ export default Reflux.createStore({
     }
   },
   onLoad(username) {
-    this.trigger(_.extend({
+    this.trigger(Object.assign({
       loading: false
-    }, _.findWhere(contacts, {username: username})))
+    }, find(contacts, {username: username})))
   }
 })

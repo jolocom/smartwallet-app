@@ -5,10 +5,13 @@ import $ from 'jquery'
 export default Reflux.createStore({
   listenables: Account,
 
+  state: {
+    loggingIn: false,
+    username: localStorage.getItem('fake-user')
+  },
+
   getInitialState() {
-    return {
-      username: null
-    }
+    return this.state
   },
 
   init: function(){

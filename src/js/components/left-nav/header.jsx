@@ -49,7 +49,7 @@ let Header = React.createClass({
 
     return (
       <header style={styles.header}>
-        <Avatar src={profile.img}>{initials}</Avatar>
+        <Avatar src={profile.imgUri}>{initials}</Avatar>
         <div style={styles.profile}>
           <div style={styles.profileDetails}>
             <span style={styles.name}>{profile.name}</span>

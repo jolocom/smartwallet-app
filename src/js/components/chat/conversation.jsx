@@ -101,7 +101,10 @@ let Conversation = React.createClass({
         overflow: 'hidden'
       },
       body: {
-        borderRadius: '6px',
+        borderTopLeftRadius: '6px',
+        borderTopRightRadius: '6px',
+        borderBottomLeftRadius: '6px',
+        borderBottomRightRadius: '6px',
         padding: '6px 12px',
         position: 'relative'
       },

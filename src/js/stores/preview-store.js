@@ -21,6 +21,7 @@ export default Reflux.createStore({
       neighbours: null,
       loaded: false,
       newNode: null,
+      rotationIndex: 0,
       // Keeps track of all the nodes we navigated to.
       navHistory: [],
       //These describe the ui
@@ -52,10 +53,15 @@ export default Reflux.createStore({
     this.state[key] = value
     if (flag) this.trigger(this.state)
   },
+  
+  onChangeRotationIndex: function(rotationIndex, flag){
+    this.state['rotationIndex'] = rotationIndex
+    if (flag) this.trigger(this.state,'changeRotationIndex')
+  },
 
   onNavigateToNode: function(node){
     this.state.neighbours = []
-
+    this.state.rotationIndex = 0
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       // Before updating the this.state.center, we push the old center node
@@ -81,7 +87,7 @@ export default Reflux.createStore({
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-      this.trigger(this.state)
+      this.trigger(this.state,'navigateToNode')
     })
   },
 
