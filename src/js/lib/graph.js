@@ -121,7 +121,7 @@ export default class GraphD3 extends EventEmitter {
     this.setUpForce(state) // <- creates force and starts it. why does it need to be done several times?
     this.drawBackground() // refresh the background in case we need to draw more things because scrolling is now enabled
     this.rendered = true
-    this.drawNodes()
+    this.d3update()
   }.bind(this)
 
   refreshDimensions = function () {
@@ -262,9 +262,8 @@ export default class GraphD3 extends EventEmitter {
     }
   }
 
-  // Draws the nodes
-  // @TODO WHAAAAAAAT
-  drawNodes = function () {
+  // d3 "update" routine
+  d3update = function () {
     let self = this
     
     // These make the following statements shorter
@@ -272,6 +271,7 @@ export default class GraphD3 extends EventEmitter {
     let smallNode = this.smallNodeSize
 
     // "View node info" button
+    // @TODO should be in render and not inside the update pattern
     let defsFull = this.svg.append('svg:defs')
     defsFull.append('svg:pattern')
       .attr('id', 'full')
@@ -290,44 +290,48 @@ export default class GraphD3 extends EventEmitter {
     //   defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
     //   defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
 
-    // LINK ENTER
+    // LINKS DATA JOIN
+    this.link = this.svg.selectAll('line').data(this.visibleDataLinks);
+
+    // LINKS ENTER
     // We draw the lines for all the elements in the dataLinks array.
-    this.link = this.svg.selectAll('line')
-    .data(this.visibleDataLinks)
-    .enter()
-    .insert('line', '.background + *')
-    .attr('class','link')
-    .attr('stroke-width', () => {
-      // Capped at 13, found it to look the best
-      return this.width / 50 > 10 ? 10 : this.width / 50})
-    .attr('stroke', STYLES.lightGrayColor)
-
-    // NODE ENTER
-    // We draw a node for each element in the dataNodes array
-    this.node = this.svg.selectAll('.node')
-      .data(this.visibleDataNodes, (d) => {
-        return (d.uri + d.connection)
-      })
+    this.link
       .enter()
-      .append('g')
-      .attr('class', 'node')
-      .call(this.node_drag)
+        .insert('line', '.background + *')
+        .attr('class','link')
+        .attr('stroke-width', () => {
+          // Capped at 13, found it to look the best
+          return this.width / 50 > 10 ? 10 : this.width / 50})
+        .attr('stroke', STYLES.lightGrayColor) // this.link should be the enter stuff neh?
 
-    // NODES DATA + EXIT (!? @TODO)
-    this.svg.selectAll('.node')
-      .data(this.visibleDataNodes, (d) => {
+    // LINKS EXIT
+    this.link
+      .exit()
+        .remove()
+    
+    
+    // NODES DATA JOIN
+    this.node = this.svg.selectAll('.node').data(this.visibleDataNodes, (d) => {
         return (d.uri + d.connection)
-      }) /* @TODO DRY */
-      .exit().remove()
+    })
+    
+    // NODES ENTER
+    // We draw a node for each element in the dataNodes array
+    let nodeEnter = this.node
+      .enter()
+        .append('g')
+        .attr('class', 'node')
+        .call(this.node_drag)
+    
+    // NODES EXIT
+    this.node
+      .exit()
+        .remove()
 
-    // LINKS DATA + EXIT (!? @TODO)
-    this.svg.selectAll('line')
-      .data(this.visibleDataLinks) /* @TODO DRY */
-      .exit().remove()
+    // add avatars
+    // @todo review following code / integrate better
 
-    //add avatars
-
-    let defsImages = this.node.append('svg:defs')
+    let defsImages = nodeEnter.append('svg:defs')
     defsImages.append('svg:pattern')
       .attr('id', (d) => d.uri + d.connection)
       .attr('class', 'image')
@@ -402,7 +406,7 @@ export default class GraphD3 extends EventEmitter {
 
       //TODO make the image nodes have a backgorund first and then fill up as image loads
 
-    this.node.append('circle')
+    nodeEnter.append('circle')
       .attr('class', 'nodeback')
       .attr('r', (d) => {
         if (d.rank == 'center')
@@ -416,7 +420,7 @@ export default class GraphD3 extends EventEmitter {
       .duration(750)
       .attr('fill', theme.graph.nodeColor)
 
-    this.node.append('circle')
+    nodeEnter.append('circle')
       .attr('class', 'nodecircle')
       .attr('r', (d) => {
         if (d.rank == 'center')
@@ -446,7 +450,7 @@ export default class GraphD3 extends EventEmitter {
 
 
     // The name of the person, displays on the node
-    this.node.append('svg:text')
+    nodeEnter.append('svg:text')
       .attr('class', 'nodetext')
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
@@ -468,7 +472,7 @@ export default class GraphD3 extends EventEmitter {
       })
 
     // The text description of a person
-    this.node.append('svg:text')
+    nodeEnter.append('svg:text')
       .attr('class', 'nodedescription')
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
@@ -485,7 +489,7 @@ export default class GraphD3 extends EventEmitter {
       // This wraps the description nicely.
       .call(this.wrap, STYLES.largeNodeSize * 0.75, ' ', ' ')
 
-    let full = this.node.append('circle')
+    let full = nodeEnter.append('circle')
       .attr('class', 'nodefullscreen')
       .attr('r', 0)
       .style('fill', 'url(#full)')
@@ -878,10 +882,10 @@ export default class GraphD3 extends EventEmitter {
       this.setUpVisibleNodes()
       this.force.nodes(this.visibleDataNodes)
       this.force.links(this.visibleDataLinks)
-      this.drawNodes()
+      this.d3update()
       this.force.start()
     }
-    this.drawNodes()
+    this.d3update()
   }.bind(this)
 
   // Wraps the description of the nodes around the node.
@@ -981,12 +985,12 @@ export default class GraphD3 extends EventEmitter {
   updateAfterRotationIndex = function() {
     if (this.force)
     {
-      // this.force.stop()
+      this.force.stop()
       this.setUpVisibleNodes()
-      // this.force.nodes(this.visibleDataNodes)
-      // this.force.links(this.visibleDataLinks)
-      // this.drawNodes()
-      // this.force.start()
+      this.force.nodes(this.visibleDataNodes)
+      this.force.links(this.visibleDataLinks)
+      this.d3update()
+      this.force.start()
     }
   }.bind(this)
 
