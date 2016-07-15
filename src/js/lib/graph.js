@@ -89,14 +89,15 @@ export default class GraphD3 extends EventEmitter {
     new TouchRotate(this.graphContainer, getTouchRotateCallbacks())
   }
 
-  // @TODO why do we need this (d3 should reflect nodes&links automatically) / when exactly is it called?
-  // called when changing from/to preview and changing nodes
+  // Function to be called when the state changes
   render = function (state) { // nodes
-    console.warn("RENDEEEEEEEEEEEEEEER", state)
+    console.warn("REINDEER", state)
     this.state = state;
     
     if (this.rendered)
       this.eraseGraph() // erase everything, including background
+    
+    this.rendered = true
     
     this.refreshDimensions() // ?
     this.orderNodes() // if render is the changeNodes function, then this makes sense.
@@ -118,11 +119,10 @@ export default class GraphD3 extends EventEmitter {
       this.numberOfNeighbours++
     }
     
-    
-    this.setUpVisibleNodes() // @todo duplicate
-    this.setUpForce(state) // <- creates force and starts it. why does it need to be done several times?
-    this.drawBackground() // refresh the background in case we need to draw more things because scrolling is now enabled
-    this.rendered = true
+    // Start up everything
+    this.setUpVisibleNodes()
+    this.setUpForce() // <- creates force and starts it. why does it need to be done several times?
+    this.drawBackground() // refresh the background in case we need to draw more things because for instance scrolling is now enabled
     this.d3update()
   }.bind(this)
 
@@ -149,7 +149,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   // Starts the force simulation.
-  setUpForce = function (state) {
+  setUpForce = function () {
 
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
@@ -168,7 +168,7 @@ export default class GraphD3 extends EventEmitter {
     
     // We define our own drag functions, allow for greater control over the way
     // it works
-    this.node_drag = this.force.drag()
+    this.nodeDrag = this.force.drag()
       .on('dragend', this.dragEnd)
       .on('drag', function () {
         d3.event.sourceEvent.stopPropagation()
@@ -177,13 +177,11 @@ export default class GraphD3 extends EventEmitter {
         d3.event.sourceEvent.stopPropagation()
       })
 
-
   }.bind(this)
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
   drawBackground = function () {
     
-    console.warn('drawBackground!')
     this.svg.selectAll('.dial, .dots, .background, .center-circle').remove();
     
     /*this.svg.select('g.background-layer').append('svg:rect') // used for the positioning of the lines; see if we need it
@@ -215,15 +213,6 @@ export default class GraphD3 extends EventEmitter {
           .attr('r', this.largeNodeSize * 0.02)
           .style('fill', STYLES.lightGrayColor)
       }
-      
-      /*this.svg.select('g.background-layer').append('svg:circle')
-        .attr('cx', this.width * 0.5)
-        .attr('cy', this.height * 0.5)
-        .attr('r', this.largeNodeSize * 0.57)
-        .style('fill', STYLES.lightGrayColor)*/
-
-      
-
 
       this.dial = this.svg.select('g.background-layer').append('path')
         .attr('class', 'dial')
@@ -339,7 +328,7 @@ export default class GraphD3 extends EventEmitter {
       .enter()
         .append('g')
         .attr('class', 'node')
-        .call(this.node_drag)
+        .call(this.nodeDrag)
     
     // NODES EXIT
     this.node
@@ -422,7 +411,7 @@ export default class GraphD3 extends EventEmitter {
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic')
 
-      //TODO make the image nodes have a backgorund first and then fill up as image loads
+    // TODO make the image nodes have a backgorund first and then fill up as image loads
 
     nodeEnter.append('circle')
       .attr('class', 'nodeback')
@@ -533,20 +522,18 @@ export default class GraphD3 extends EventEmitter {
 
   // This function fires upon tick, around 30 times per second?
   tick = function (e) {
-    let center = {
-      y: (this.height / 2),
-      x: this.width / 2
-    }
+    this.refreshDimensions()
+    
     let k = 1 * e.alpha
-    d3.selectAll('g .node').attr('d', function (d) {
+    d3.selectAll('g .node').attr('d', (d) => { // @TODO overwriting the force coordinates, maybe not good
       if (d.rank == 'center') {
-        d.x = center.x
-        d.y = center.y
+        d.x = this.centerCoordinates.x
+        d.y = this.centerCoordinates.y
       } else if (d.rank == 'history') {
-        d.x += (center.x - d.x) * k
+        d.x += (this.centerCoordinates.x - d.x) * k
         if (d.histLevel == 0) {
-          d.y += (center.y - d.y + STYLES.largeNodeSize * 2) * k
-        } else d.y += (center.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize*0.8) *(d.histLevel)) * k
+          d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2) * k
+        } else d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize*0.8) *(d.histLevel)) * k
       }
     })
 
@@ -559,7 +546,7 @@ export default class GraphD3 extends EventEmitter {
       })
     }
     
-    // Update the link positions.
+    // Update the link positions. @TODO shouldn't be needed? Call d3update() ?
     d3.selectAll('.link')
       .attr('x1', (d) => d.source.x)
       .attr('y1', (d) => d.source.y)
@@ -944,7 +931,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   // Erases all the elements on the svg, but keeps the svg.
-  // .background-layer must be the first element of this.svg, and its first eleent must be .background-layer-links
+  // .background-layer must be the first element of this.svg, and its first element must be .background-layer-links
   eraseGraph = function () {
     if (this.force) this.force.stop()
     this.svg.selectAll('.background-layer .background-layer-links *, .background-layer ~ *').remove()
@@ -1003,6 +990,7 @@ export default class GraphD3 extends EventEmitter {
     this.updateDial();
     if (this.force)
     {
+      // @TODO do we realy need to do all of the following?
       this.force.stop()
       this.setUpVisibleNodes()
       this.force.nodes(this.visibleDataNodes)
