@@ -145,7 +145,7 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if(!this.state.loading){
-      console.log(this.state)
+      console.log('We are updating with', this.state) 
       ProfileActions.update(this.state)
       ProfileActions.hide()
       this.state.loading = false
