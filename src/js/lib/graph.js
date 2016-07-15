@@ -1,3 +1,5 @@
+'use strict'
+
 // THIS FILE TAKES CARE OF DRAWING THE D3 GRAPH
 // It is passed a state from the graph.jsx file, and then it draws
 // the graph according to that state. The element itself is stateless.
@@ -934,13 +936,15 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
-  // Function called after deleting a node; render() is not called then, so that we can do a smooth animation.
-  deleteNode = function (state) {
+  // Function called after deleting a node; render() is not called after, so that we can do a smooth animation.
+  deleteNodeAndRender = function (state) {
+    
+    let deletedNodeUri = d3.select(state.selected).datum().uri
     
     // Deletion animations
     
     d3.selectAll('.node').filter(function (d) {
-      return d.uri == index && d.rank == 'neighbour'
+      return d.uri == deletedNodeUri && d.rank == 'neighbour'
     })
       .select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
@@ -948,7 +952,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('y', -STYLES.largeNodeSize / 2)
 
     d3.selectAll('.node').filter(function (d) {
-      return d.uri == index && d.rank == 'neighbour'
+      return d.uri == deletedNodeUri && d.rank == 'neighbour'
     })
       .select('image')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
@@ -956,11 +960,11 @@ export default class GraphD3 extends EventEmitter {
       .attr('height', STYLES.largeNodeSize)
 
     d3.selectAll('.node').filter(function (d) {
-      return d.uri == index && d.rank == 'neighbour'
+      return d.uri == deletedNodeUri && d.rank == 'neighbour'
     })
-      .select('circle')
+      .selectAll('circle')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
-      .attr('r', STYLES.largeNodeSize / 2.2)
+      .attr('r', 0) // STYLES.largeNodeSize / 2.2
       .each('end', () => {
       
         // Once the animation is ended, we re-render everything
@@ -977,15 +981,16 @@ export default class GraphD3 extends EventEmitter {
   updateAfterRotationIndex = function() {
     if (this.force)
     {
-      this.force.stop()
+      // this.force.stop()
       this.setUpVisibleNodes()
-      this.force.nodes(this.visibleDataNodes)
-      this.force.links(this.visibleDataLinks)
-      this.drawNodes()
-      this.force.start()
+      // this.force.nodes(this.visibleDataNodes)
+      // this.force.links(this.visibleDataLinks)
+      // this.drawNodes()
+      // this.force.start()
     }
   }.bind(this)
 
+  // Called from graph.jsx
   setRotationIndex = function (rotationIndex) {
     this.rotationIndex = rotationIndex // @todo only execute updateAfterRot if index changed
     this.updateAfterRotationIndex()
