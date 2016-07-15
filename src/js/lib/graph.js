@@ -178,6 +178,10 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
   drawBackground = function () {
+    
+    console.warn('drawBackground!')
+    this.svg.selectAll('.dial, .dots, .background, .center-circle').remove();
+    
     this.svg.append('svg:rect') // used for the positioning of the lines; see if we need it
       .attr('class','background')
       .attr('width', this.width)
@@ -186,6 +190,7 @@ export default class GraphD3 extends EventEmitter {
 
     // Center cicle
     this.svg.append('svg:circle')
+      .attr('class','center-circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
       .attr('r', this.largeNodeSize * 0.57 * 1.1)
@@ -929,39 +934,11 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
+  // Function called after deleting a node; render() is not called then, so that we can do a smooth animation.
   deleteNode = function (state) {
-    console.warn('graph.js deletenode')
-    // We don't pop it from the parent neighbours array, that should not cause problems. But
-    // Keep an eye on this, in case of potential bugs.
-    let index = d3.select(state.selected)[0][0].__data__.uri
-    let nIndex = -1
-    let lIndex = -1
-
-    for (let i = 0; i < this.dataNodes.length; i++) {
-      if (this.dataNodes[i].uri == index && this.dataNodes[i].rank == 'neighbour') {
-        nIndex = i
-        console.log('found deleting node at index:', nIndex)
-      }
-    }
-
-
-    for (var i = 0; i < this.dataLinks.length; i++) {
-      if(this.dataLinks[i].source.uri == index && this.dataLinks[i].source.rank == 'neighbour'){
-        lIndex = i
-      }
-    }
-
-
-    if (nIndex > this.MAX_VISIBLE_NUMBER_OF_NODES) {
-      this.rotationIndex = nIndex - this.MAX_VISIBLE_NUMBER_OF_NODES
-      this.force.stop()
-      this.setUpVisibleNodes()
-      this.force.nodes(this.visibleDataNodes)
-      this.force.links(this.visibleDataLinks)
-      this.drawNodes()
-      this.force.start()
-    }
-
+    
+    // Deletion animations
+    
     d3.selectAll('.node').filter(function (d) {
       return d.uri == index && d.rank == 'neighbour'
     })
@@ -978,7 +955,6 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', STYLES.largeNodeSize)
       .attr('height', STYLES.largeNodeSize)
 
-
     d3.selectAll('.node').filter(function (d) {
       return d.uri == index && d.rank == 'neighbour'
     })
@@ -986,24 +962,15 @@ export default class GraphD3 extends EventEmitter {
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
       .attr('r', STYLES.largeNodeSize / 2.2)
       .each('end', () => {
-        this.force.stop()
-        this.dataNodes.splice(nIndex, 1)
-        this.dataLinks.splice(lIndex, 1)
-        this.numberOfNeighbours --
-        d3.select('.dial').transition()
-         .duration(100)
-         .call(this.arcTween, 2*Math.PI*(this.numberOfNodes/this.numberOfNeighbours))
-        if(this.numberOfNodes>=this.numberOfNeighbours){
-          d3.select('.dial').remove()
-          d3.selectAll('.dots').remove()
-        }
-
-
-        this.setUpVisibleNodes()
-        this.force.nodes(this.visibleDataNodes)
-        this.force.links(this.visibleDataLinks)
-        this.drawNodes()
-        this.force.start()
+      
+        // Once the animation is ended, we re-render everything
+        // It updates the visibility of the radial scrollbar and updates this.dataNodes etc
+        this.render(state);
+      
+        // Smooth radial scrolling
+        // d3.select('.dial').transition()
+        //  .duration(100)
+        //  .call(this.arcTween, 2*Math.PI*(this.numberOfNodes/this.numberOfNeighbours))
       })
   }
 
