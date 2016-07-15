@@ -47,7 +47,7 @@ let Graph = React.createClass({
     // Temp. make it more elegant later.
     if (signal === 'nodeRemove')
     {
-      this.graph.deleteNode(data)
+      this.graph.deleteNodeAndRender(data)
       this.setState({activeNode: null})
       // Important to avoid a re-render here.
       graphActions.setState('activeNode', null, false)
