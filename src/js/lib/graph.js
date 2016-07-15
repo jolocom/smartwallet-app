@@ -39,6 +39,8 @@ export default class GraphD3 extends EventEmitter {
       .attr('height', this.height)
       .append('svg:g')
     
+    this.svg.append('svg:g').attr('class','background-layer').append('svg:g').attr('class','background-layer-links')
+    
     // TouchRotate setup
     var thisInstance = this
     var getTouchRotateCallbacks = function () {
@@ -184,14 +186,15 @@ export default class GraphD3 extends EventEmitter {
     console.warn('drawBackground!')
     this.svg.selectAll('.dial, .dots, .background, .center-circle').remove();
     
-    this.svg.append('svg:rect') // used for the positioning of the lines; see if we need it
+    /*this.svg.select('g.background-layer').append('svg:rect') // used for the positioning of the lines; see if we need it
       .attr('class','background')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'transparent')
-
+    */
+    
     // Center cicle
-    this.svg.append('svg:circle')
+    this.svg.select('g.background-layer').append('svg:circle')
       .attr('class','center-circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
@@ -201,11 +204,11 @@ export default class GraphD3 extends EventEmitter {
     if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
       
       // Gradient
-      // d3.select(this.svg.node().parentNode).append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
+      // d3.select(this.svg.node().parentNode).select('g.background-layer').append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
 
       // Draw dotted line to indicate there are more nodes
       for (var i = 0; i < 12; i++) {
-        this.svg.append('svg:circle')
+        this.svg.select('g.background-layer').append('svg:circle')
           .attr('class', 'dots')
           .attr('cx', this.width * 0.5)
           .attr('cy', (this.height * 0.5) - (i * 10) - (this.largeNodeSize * 0.9))
@@ -213,42 +216,57 @@ export default class GraphD3 extends EventEmitter {
           .style('fill', STYLES.lightGrayColor)
       }
       
-      /*this.svg.append('svg:circle')
+      /*this.svg.select('g.background-layer').append('svg:circle')
         .attr('cx', this.width * 0.5)
         .attr('cy', this.height * 0.5)
         .attr('r', this.largeNodeSize * 0.57)
         .style('fill', STYLES.lightGrayColor)*/
 
-      this.arch = this.MAX_VISIBLE_NUMBER_OF_NODES / this.numberOfNeighbours
-
-      this.archAngle = 360 / this.numberOfNeighbours
-
-      this.arc = d3.svg.arc()
-        .innerRadius(this.largeNodeSize * 0.5)
-        .outerRadius(this.largeNodeSize * 0.57)
-        .startAngle(0)
+      
 
 
-      this.dial = this.svg.append('path')
+      this.dial = this.svg.select('g.background-layer').append('path')
         .attr('class', 'dial')
-        .datum({
-          endAngle: 2 * Math.PI * this.arch
-        })
-        .style('fill', STYLES.grayColor)
-        .attr('d', this.arc)
-        .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ')')
-
+      
+      this.updateDial()
+      
       this.drawScrollingIndicator()
 
     }
 
   }.bind(this)
+  
+  updateDial = function() {
+    
+    // Don't do anything if we haven't received the state yet; when we receive the state,
+    // render() will be called, and updateDial() is called inside render()
+    if (typeof this.numberOfNeighbours == 'undefined') return;
+    
+    this.arch = this.MAX_VISIBLE_NUMBER_OF_NODES / this.numberOfNeighbours
+
+    this.archAngle = 360 / this.numberOfNeighbours
+
+    this.arc = d3.svg.arc()
+      .innerRadius(this.largeNodeSize * 0.5)
+      .outerRadius(this.largeNodeSize * 0.57)
+      .startAngle(0)
+    
+    this.svg.select('.dial')
+      .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.rotationIndex + ')')
+      .datum({
+          endAngle: 2 * Math.PI * this.arch
+        })
+      .style('fill', STYLES.grayColor)
+      .attr('d', this.arc)
+  }
 
   drawScrollingIndicator = function(){
     let angle = Math.PI/14
+    
+    this.svg.selectAll('.scrolling-indicator').remove();
 
     for (let i = 0; i < 10; i++) {
-      this.svg.append('svg:circle')
+      this.svg.select('.background-layer').append('svg:circle')
       .attr('class', 'scrolling-indicator')
       .attr('cx', Math.sin(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.centerCoordinates.x)
       .attr('cy', Math.cos(angle * (i + 5.5)) * STYLES.largeNodeSize * 2.5 + this.centerCoordinates.y)
@@ -291,13 +309,13 @@ export default class GraphD3 extends EventEmitter {
     //   defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
 
     // LINKS DATA JOIN
-    this.link = this.svg.selectAll('line').data(this.visibleDataLinks);
+    this.link = this.svg.select('.background-layer .background-layer-links').selectAll('line').data(this.visibleDataLinks);
 
     // LINKS ENTER
     // We draw the lines for all the elements in the dataLinks array.
     this.link
       .enter()
-        .insert('line', '.background + *')
+        .append('line')
         .attr('class','link')
         .attr('stroke-width', () => {
           // Capped at 13, found it to look the best
@@ -589,8 +607,6 @@ export default class GraphD3 extends EventEmitter {
     }
     
     // Yes scrolling (more than 8 visible nodes)
-
-    d3.select('.dial').attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.rotationIndex + ')')
     
     // Smooth radial scrolling animation
     //  d3.select('.dial').transition()
@@ -928,9 +944,10 @@ export default class GraphD3 extends EventEmitter {
   }
 
   // Erases all the elements on the svg, but keeps the svg.
+  // .background-layer must be the first element of this.svg, and its first eleent must be .background-layer-links
   eraseGraph = function () {
     if (this.force) this.force.stop()
-    this.svg.selectAll('*').remove()
+    this.svg.selectAll('.background-layer .background-layer-links *, .background-layer ~ *').remove()
   }.bind(this)
 
   // Alternative to dragging the node to the center. Does the same thing pretty much
@@ -983,6 +1000,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   updateAfterRotationIndex = function() {
+    this.updateDial();
     if (this.force)
     {
       this.force.stop()
