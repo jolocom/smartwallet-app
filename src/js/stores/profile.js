@@ -106,7 +106,7 @@ export default Reflux.createStore({
         this.state.imgUri = t.object.uri
       } else if (t.predicate.uri === FOAF('mbox').uri) {
         this.state.email = t.object.uri.substring(
-          t.object.uri.indexOf(':')+1, t.object.uri.length
+          t.object.uri.indexOf(':')+3, t.object.uri.length
         )
       }
     }
@@ -114,8 +114,8 @@ export default Reflux.createStore({
     let {fullName, name, familyName} = this.state
     if (!name && !familyName) {
       if (fullName){
-        name = fullName.substring(0, fullName.indexOf(' '))
-        familyName = fullName.substring(name.length, fullName.length)
+        this.state.name = fullName.substring(0, fullName.indexOf(' '))
+        this.state.familyName = fullName.substring(this.state.name.length, fullName.length)
       }
       profile = Object.assign(profile, this.state)
       this.trigger(Object.assign({}, profile))

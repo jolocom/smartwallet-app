@@ -90,7 +90,6 @@ export default class GraphD3 extends EventEmitter {
   // @TODO why do we need this (d3 should reflect nodes&links automatically) / when exactly is it called?
   // called when changing from/to preview and changing nodes
   render = function (state) { // nodes
-    console.warn("RENDEEEEEEEEEEEEEEER", state)
     this.state = state;
     
     if (this.rendered)
