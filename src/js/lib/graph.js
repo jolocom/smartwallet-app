@@ -22,15 +22,15 @@ export default class GraphD3 extends EventEmitter {
 
   constructor(el) {
     super()
-    
+
     this.MAX_VISIBLE_NUMBER_OF_NODES = 8
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
-    
+
     this.graphContainer = el
-    
+
     this.refreshDimensions();
-    
+
     this.rendered = false
     this.rotationIndex = 0
 
@@ -38,9 +38,9 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
-    
+
     this.svg.append('svg:g').attr('class','background-layer').append('svg:g').attr('class','background-layer-links')
-    
+
     // TouchRotate setup
     var thisInstance = this
     var getTouchRotateCallbacks = function () {
@@ -93,15 +93,15 @@ export default class GraphD3 extends EventEmitter {
   render = function (state) { // nodes
     console.warn("REINDEER", state)
     this.state = state;
-    
+
     if (this.rendered)
       this.eraseGraph() // erase everything, including background
-    
+
     this.rendered = true
-    
+
     this.refreshDimensions() // ?
     this.orderNodes() // if render is the changeNodes function, then this makes sense.
-    
+
     // Update dataNodes
     this.dataNodes = [state.center]
     this.visibleDataNodes = [state.center] // @TODO you can safely remove this
@@ -118,7 +118,7 @@ export default class GraphD3 extends EventEmitter {
       })
       this.numberOfNeighbours++
     }
-    
+
     // Start up everything
     this.setUpVisibleNodes()
     this.setUpForce() // <- creates force and starts it. why does it need to be done several times?
@@ -145,7 +145,6 @@ export default class GraphD3 extends EventEmitter {
         return 0
     })
 
-    // console.table(nodes.neighbours, ['name', 'title'])
   }
 
   // Starts the force simulation.
@@ -165,7 +164,7 @@ export default class GraphD3 extends EventEmitter {
       })
       .size([this.width, this.height])
       .start()
-    
+
     // We define our own drag functions, allow for greater control over the way
     // it works
     this.nodeDrag = this.force.drag()
@@ -181,16 +180,16 @@ export default class GraphD3 extends EventEmitter {
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
   drawBackground = function () {
-    
+
     this.svg.selectAll('.dial, .dots, .background, .center-circle').remove();
-    
+
     /*this.svg.select('g.background-layer').append('svg:rect') // used for the positioning of the lines; see if we need it
       .attr('class','background')
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', 'transparent')
     */
-    
+
     // Center cicle
     this.svg.select('g.background-layer').append('svg:circle')
       .attr('class','center-circle')
@@ -200,7 +199,7 @@ export default class GraphD3 extends EventEmitter {
       .style('fill', STYLES.lightGrayColor)
 
     if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
-      
+
       // Gradient
       // d3.select(this.svg.node().parentNode).select('g.background-layer').append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
 
@@ -216,21 +215,21 @@ export default class GraphD3 extends EventEmitter {
 
       this.dial = this.svg.select('g.background-layer').append('path')
         .attr('class', 'dial')
-      
+
       this.updateDial()
-      
+
       this.drawScrollingIndicator()
 
     }
 
   }.bind(this)
-  
+
   updateDial = function() {
-    
+
     // Don't do anything if we haven't received the state yet; when we receive the state,
     // render() will be called, and updateDial() is called inside render()
     if (typeof this.numberOfNeighbours == 'undefined') return;
-    
+
     this.arch = this.MAX_VISIBLE_NUMBER_OF_NODES / this.numberOfNeighbours
 
     this.archAngle = 360 / this.numberOfNeighbours
@@ -239,7 +238,7 @@ export default class GraphD3 extends EventEmitter {
       .innerRadius(this.largeNodeSize * 0.5)
       .outerRadius(this.largeNodeSize * 0.57)
       .startAngle(0)
-    
+
     this.svg.select('.dial')
       .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.rotationIndex + ')')
       .datum({
@@ -251,7 +250,7 @@ export default class GraphD3 extends EventEmitter {
 
   drawScrollingIndicator = function(){
     let angle = Math.PI/14
-    
+
     this.svg.selectAll('.scrolling-indicator').remove();
 
     for (let i = 0; i < 10; i++) {
@@ -272,7 +271,7 @@ export default class GraphD3 extends EventEmitter {
   // d3 "update" routine
   d3update = function () {
     let self = this
-    
+
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
     let smallNode = this.smallNodeSize
@@ -315,13 +314,13 @@ export default class GraphD3 extends EventEmitter {
     this.link
       .exit()
         .remove()
-    
-    
+
+
     // NODES DATA JOIN
     this.node = this.svg.selectAll('.node').data(this.visibleDataNodes, (d) => {
         return (d.uri + d.connection)
     })
-    
+
     // NODES ENTER
     // We draw a node for each element in the dataNodes array
     let nodeEnter = this.node
@@ -329,7 +328,7 @@ export default class GraphD3 extends EventEmitter {
         .append('g')
         .attr('class', 'node')
         .call(this.nodeDrag)
-    
+
     // NODES EXIT
     this.node
       .exit()
@@ -411,7 +410,6 @@ export default class GraphD3 extends EventEmitter {
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic')
 
-    // TODO make the image nodes have a backgorund first and then fill up as image loads
 
     nodeEnter.append('circle')
       .attr('class', 'nodeback')
@@ -523,7 +521,7 @@ export default class GraphD3 extends EventEmitter {
   // This function fires upon tick, around 30 times per second?
   tick = function (e) {
     this.refreshDimensions()
-    
+
     let k = 1 * e.alpha
     d3.selectAll('g .node').attr('d', (d) => { // @TODO overwriting the force coordinates, maybe not good
       if (d.rank == 'center') {
@@ -545,7 +543,7 @@ export default class GraphD3 extends EventEmitter {
         }
       })
     }
-    
+
     // Update the link positions. @TODO shouldn't be needed? Call d3update() ?
     d3.selectAll('.link')
       .attr('x1', (d) => d.source.x)
@@ -586,23 +584,23 @@ export default class GraphD3 extends EventEmitter {
   setUpVisibleNodes = function () {
 
     // No scrolling
-    
+
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NUMBER_OF_NODES) {
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
       return
     }
-    
+
     // Yes scrolling (more than 8 visible nodes)
-    
+
     // Smooth radial scrolling animation
     //  d3.select('.dial').transition()
     //   .duration(100)
     //   .call(this.arcTween, 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
-    
+
     // Position nodes manually
     this.nodePositions = []
-    let angle = (2 * Math.PI) / 8, num = 0
+    let angle = (2 * Math.PI) / this.MAX_VISIBLE_NUMBER_OF_NODES, num = 0
     for (let i = 0; i < this.numberOfNeighbours; i++) { // @TODO should modify .x inside the node
       let pos = {
         x: Math.sin(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
@@ -611,7 +609,7 @@ export default class GraphD3 extends EventEmitter {
       this.nodePositions.push(pos)
       num --
     }
-    
+
     // Hydrate visibleDataNodes based on rotationIndex
     // @TODO iterate through this.neighbours rather; have this.neighbourNodes, this.center, this.historyNodes and not have this.dataNodes (where 0 = xx)
     this.visibleDataNodes = []
@@ -636,7 +634,7 @@ export default class GraphD3 extends EventEmitter {
       }
 
     }
-    
+
     // Add history nodes to visibleDataNodes
     for (var i = 0; i < this.dataNodes.length; i++) {
       if (this.dataNodes[i].rank == 'history') {
@@ -685,7 +683,7 @@ export default class GraphD3 extends EventEmitter {
 
   onClick = function (node, data) {
     d3.event.stopPropagation()
-    
+
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank == 'history' || d3.event.defaultPrevented) return
@@ -696,7 +694,7 @@ export default class GraphD3 extends EventEmitter {
     data.wasHighlighted = data.highlighted
 
     // @TODO this could be done using d3js and modifying ".selected" from the nodes (.update()), no?
-    
+
     // Reset size of all circles
     d3.selectAll('g .node')
       .filter(function (d) {
@@ -795,7 +793,7 @@ export default class GraphD3 extends EventEmitter {
     } else {
       // NODE signifies the node that we clicked on. We enlarge it.
       this.emit('select', data, node)
-      
+
       // Enlarge the node
       d3.select(node).select('.nodecircle')
         .transition('grow').duration(STYLES.nodeTransitionDuration)
@@ -830,7 +828,7 @@ export default class GraphD3 extends EventEmitter {
 
       // There is a slight bug when if you click on nodes really quickly, the text
       // on some fails to disappear; needs further investigation
-      
+
       // Fade in the description
       d3.select(node).selectAll('text')
         .transition('description').duration(STYLES.nodeTransitionDuration)
@@ -946,11 +944,11 @@ export default class GraphD3 extends EventEmitter {
 
   // Function called after deleting a node; render() is not called after, so that we can do a smooth animation.
   deleteNodeAndRender = function (state) {
-    
+
     let deletedNodeUri = d3.select(state.selected).datum().uri
-    
+
     // Deletion animations
-    
+
     d3.selectAll('.node').filter(function (d) {
       return d.uri == deletedNodeUri && d.rank == 'neighbour'
     })
@@ -974,11 +972,11 @@ export default class GraphD3 extends EventEmitter {
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
       .attr('r', 0) // STYLES.largeNodeSize / 2.2
       .each('end', () => {
-      
+
         // Once the animation is ended, we re-render everything
         // It updates the visibility of the radial scrollbar and updates this.dataNodes etc
         this.render(state);
-      
+
         // Smooth radial scrolling
         // d3.select('.dial').transition()
         //  .duration(100)
