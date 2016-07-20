@@ -6,7 +6,7 @@ const STYLES = {
   lightBlueColor: '#99D7F7',
   blueColor: '#009FE3',
   highLightColor: '#D2C844',
-  nodeTransitionDuration: 400,
+  nodeTransitionDuration: 900,
   smallNodeSize: window.innerWidth / 4.7,
   largeNodeSize: window.innerWidth / 3.5,
   graphCanvasHeight: window.innerHeight - 118,
