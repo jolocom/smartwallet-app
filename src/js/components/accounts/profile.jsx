@@ -38,12 +38,13 @@ let Profile = React.createClass({
   },
 
   componentDidUpdate(props, state) {
+    if (!this.state.show)
+      this.refs.dialog.hide()
+
     if (state.show !== this.state.show) {
       if (this.state.show) {
         this.refs.dialog.show()
-      } else {
-        this.refs.dialog.hide()
-      }
+      } 
     }
   },
 
@@ -124,8 +125,8 @@ let Profile = React.createClass({
             <main style={styles.main}>
               <section>
                 <TextField floatingLabelText="First Name"
-                  onChange={Util.linkToState(this, 'name')}
-                  value={this.state.name}
+                  onChange={Util.linkToState(this, 'givenName')}
+                  value={this.state.givenName}
                   style={styles.input} />
                 <TextField floatingLabelText="Second Name"
                   onChange={Util.linkToState(this, 'familyName')}
@@ -145,10 +146,9 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if(!this.state.loading){
-      console.log('We are updating with', this.state) 
-      ProfileActions.update(this.state)
-      ProfileActions.hide()
       this.state.loading = false
+      this.state.show = false
+      ProfileActions.update(this.state)
     } else{
       console.log('loading')
     }
