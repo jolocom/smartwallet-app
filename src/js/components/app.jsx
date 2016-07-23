@@ -69,7 +69,8 @@ let App = React.createClass({
   componentWillMount() {
     this.theme = getMuiTheme(JolocomTheme)
 
-    AccountActions.login()
+    //This is not needed when using the proxy.
+    //AccountActions.login()
   },
 
   componentDidUpdate(prevProps, prevState) {

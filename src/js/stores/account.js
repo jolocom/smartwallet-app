@@ -1,6 +1,6 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
-import $ from 'jquery'
+import {proxy} from 'settings'
 
 export default Reflux.createStore({
   listenables: Account,
@@ -22,7 +22,7 @@ export default Reflux.createStore({
   },
 
   onSignup(data) {
-    fetch('https://proxy.webid.jolocom.de/register', {
+    fetch(`${proxy}/register`, {
       method: 'POST',
       body: 'username='+data.username+'&password='+data.password, 
       headers: {
@@ -37,7 +37,7 @@ export default Reflux.createStore({
   },
 
   onLogin(username, password) {
-    fetch('https://proxy.webid.jolocom.de/login', {
+    fetch(`${proxy}/login`, {
       method: 'POST',
       body: 'username='+username+'&password='+password, 
       credentials: 'include',
@@ -58,7 +58,7 @@ export default Reflux.createStore({
   },
 
   onLogout(){
-    fetch('https://proxy.webid.jolocom.de/logout', {
+    fetch(`${proxy}/logout`, {
       method: 'POST',
       credentials: 'include',
       // Not sure if the headers are necessary.

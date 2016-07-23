@@ -121,7 +121,7 @@ let ProfileNode = React.createClass({
     } = this.getNode()
 
     if (name && familyName) {
-      name = name + ' ' + familyName
+      name = `${name} ${familyName}`
     }
 
     let fullscreenLabel

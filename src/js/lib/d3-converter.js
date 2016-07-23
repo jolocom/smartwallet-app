@@ -4,6 +4,7 @@ let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 
+import {proxy} from 'settings'
 import STYLES from 'styles/app.js'
 
 // D3 Converter takes a node (a node in this context is an array of triples that
@@ -13,6 +14,7 @@ import STYLES from 'styles/app.js'
 
 class D3Converter {
   convertToD3(rank, node, i, n) {
+    console.log(proxy)
     // We need to know the index of the node and the total amount of nodes
     // in order to be able to calculate their initial position, so that they are
     // possitioned in a circle
@@ -32,7 +34,6 @@ class D3Converter {
       img:null,
       type:null,
       rank: 'neighbour',
-      storage: null,
       storage: null,
       x: null,
       y: null
@@ -69,7 +70,7 @@ class D3Converter {
       // otherwise it's value is stored in the 'value' key of the object. We need to make
       // sure we are assigning the value regardless of where it's stored
 
-      if (triple.subject.uri == uri){
+      if (triple.subject.uri === uri){
         if (pred === FOAF('givenName').uri) props.name = obj.value ? obj.value : obj.uri
         if (pred === FOAF('familyName').uri) props.familyName = obj.value ? obj.value : obj.uri
         if (pred === FOAF('name').uri) props.fullName = obj.value ? obj.value : obj.uri
@@ -82,6 +83,7 @@ class D3Converter {
       }
     }
    
+    if(props.img) props.img = `${proxy}/proxy?url=${props.img}`
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
       let angle = 0

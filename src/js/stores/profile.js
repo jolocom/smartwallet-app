@@ -49,7 +49,7 @@ export default Reflux.createStore({
     let parser = new Parser()
     wia.getWebID().then((user) => {
       webid = user
-      return fetch(`${proxy}` + user,{
+      return fetch(`${proxy}/proxy?url=${user}`,{
         method: 'GET', 
         credentials: 'include',
       }).then((res) => {
@@ -145,7 +145,7 @@ export default Reflux.createStore({
     if (params.imgUri) 
       writer.addTriple(rdf.sym(params.webid), FOAF('img'), params.imgUri)
   
-    fetch(`${proxy}`+params.webid, {
+    fetch(`${proxy}/proxy?url=${params.webid}`, {
       method: 'PUT',
       body: writer.end(),
       credentials: 'include',

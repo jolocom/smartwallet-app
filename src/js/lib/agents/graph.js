@@ -1,5 +1,6 @@
 import WebIDAgent from './webid.js'
 import {proxy} from 'settings'
+import $ from 'jquery'
 
 import {Parser} from '../rdf.js'
 import {Writer} from '../rdf.js'
@@ -23,6 +24,7 @@ class GraphAgent {
 
   // We create a rdf file at the distContainer containing a title and description passed to it
   createNode(currentUser, centerNode, title, description, image, nodeType) {
+
     let writer = new Writer()
     let dstContainer = centerNode.storage ? centerNode.storage : currentUser.storage
     let newNodeUri = rdf.sym(dstContainer + Util.randomString(5))
@@ -59,8 +61,8 @@ class GraphAgent {
       this.writeTriple(rdf.sym(centerNode.uri), SCHEMA('isRelatedTo'), newNodeUri).then(()=> {
         this.putACL(newNodeUri.uri, currentUser.uri).then((uri)=>{
           // We use this in the LINK header.
-          let aclUri = '<'+uri+'>;'
-          fetch(`${proxy}` + newNodeUri.uri,{
+          let aclUri = `<${uri}>`;
+          fetch(`${proxy}/proxy?url=${newNodeUri.uri}`,{
             method: 'PUT', 
             credentials: 'include',
             body: writer.end(),
@@ -82,7 +84,7 @@ class GraphAgent {
   // PRO : we won't need the ACL file anymore CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
   deleteFile(uri){
-    return fetch(`${proxy}` + uri, {
+    return fetch(`${proxy}/proxy?url=${uri}`, {
       method: 'DELETE',
       credentials: 'include'
     })
@@ -92,12 +94,9 @@ class GraphAgent {
     console.log('We are storing the file', file, 'in the destination', dstContainer)
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
-
       let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-      let proxiedUri = `${proxy}`+uri
-
       return this.putACL(uri, webID).then(()=>{
-        return fetch(proxiedUri,{
+        return fetch(`${proxy}/proxy?url=${uri}`,{
           method: 'PUT', 
           credentials: 'include',
           headers: {
@@ -119,40 +118,42 @@ class GraphAgent {
   putACL(uri, webID){
     let acl_writer = new Writer()
     let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+		let acl_uri = `${uri}.acl`
 
-    return solid.web.options(uri).then((res) => {
-      let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
-        : acl_uri = uri+'.acl'
+	  /* PROXY currently doesn't return the link header TODO
+    return solid.web.options(`${proxy}/proxy?url=${uri}`).then((res) => {
+		let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
+			: acl_uri = uri+'.acl'
 
-      if (acl_uri.indexOf('http://') < 0 || acl_uri.indexOf('https://') < 0)
-        acl_uri = uri.substring(0, uri.lastIndexOf('/') + 1) + acl_uri
+		if (acl_uri.indexOf('http://') < 0 || acl_uri.indexOf('https://') < 0)
+			acl_uri = uri.substring(0, uri.lastIndexOf('/') + 1) + acl_uri
+		*/
 
-      console.log(acl_uri)
-      // At the moment we create only one type of ACL file. Owner has full controll,
-      // everyone else has read access. This will change in the future.
-      acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
-      acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
-      acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
-      acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webID))
-      acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
-      acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
-      acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+		// At the moment we create only one type of ACL file. Owner has full controll,
+		// everyone else has read access. This will change in the future.
+		acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
+		acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
+		acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
+		acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webID))
+		acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
+		acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
+		acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
 
-      acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
-      acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
-      acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
-      acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
+		acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
+		acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
+		acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
+		acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
 
-      return fetch(`${proxy}` + acl_uri,{
-        method: 'PUT', 
-        credentials: 'include',
-        body: acl_writer.end,
-        headers: {
-          'Content-Type':'text/turtle' 
-        }
-      }).then(()=>{return acl_uri})
-      .catch((e)=>{console.log('error',e,'occured while putting the acl file')})
-    })
+		return fetch(`${proxy}/proxy?url=${acl_uri}`,{
+			method: 'PUT', 
+			credentials: 'include',
+			body: acl_writer.end,
+			headers: {
+				'Content-Type':'text/turtle' 
+			}
+		}).then(()=>{return acl_uri})
+		.catch((e)=>{console.log('error',e,'occured while putting the acl file')})
+	//})
   }
 
   writeTriple(subject, predicate, object, draw) {
@@ -162,7 +163,7 @@ class GraphAgent {
     if(draw && (predicate.uri === SCHEMA('isRelatedTo').uri || predicate.uri === FOAF('knows').uri))
       GraphActions.drawNewNode(object.uri, predicate.uri)
 
-    return fetch(`${proxy}` + subject.uri,{
+    return fetch(`${proxy}/proxy?url=${subject.uri}`,{
       method: 'PATCH', 
       credentials: 'include',
       body: 'INSERT DATA { ' + newTrip[0] + ' } ;',
@@ -174,8 +175,9 @@ class GraphAgent {
 
   // Replaced the put request with a patch request, it's faster, and there's no risk of wiping the whole file.
   deleteTriple(subject, predicate, object){
+
     let oldTrip = [rdf.st(subject, predicate, object).toNT()]
-    return fetch(`${proxy}` + subject.uri,{
+    return fetch(`${proxy}/proxy?url=${subject.uri}`,{
       method: 'PATCH', 
       credentials: 'include',
       body: 'DELETE DATA { ' + oldTrip[0] + ' } ;',
@@ -189,10 +191,11 @@ class GraphAgent {
   // This takes a standard URI, it proxies the request itself. 
   fetchTriplesAtUri(uri) {
     let parser = new Parser()
-    return fetch(`${proxy}` + uri, {
+    return fetch(`${proxy}/proxy?url=${uri}`, {
       credentials: 'include' 
     }).then((ans) => {
       if (ans.ok){
+				console.log(ans.headers.get('Content-Type'))
         return ans.text().then((res)=>{
           return parser.parse(res, uri) 
         })
@@ -200,12 +203,6 @@ class GraphAgent {
       } else return {uri: uri, unav : true, connection:null,  triples:[]} 
     })
 	} 
-
-  // Replaced the put request with a patch request, it's faster, and there's no risk of wiping the whole file.
-  deleteTriple(subject, predicate, object){
-    let oldTrip = [rdf.st(subject, predicate, object).toNT()]
-    return solid.web.patch(subject.uri, oldTrip, null)
-	}
 
   // This function gets passed a center uri and it's triples, and then finds all possible
   // links that we choose to display. After that it parses those links for their RDF data.
@@ -235,7 +232,7 @@ class GraphAgent {
             graphMap.push(result.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
           }
-          if (graphMap.length == neighbours.length) {
+          if (graphMap.length === neighbours.length) {
             console.log('Loading done,', i,'rdf files were / was skipped.')
             resolve(graphMap)
           }
