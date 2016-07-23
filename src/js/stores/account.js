@@ -30,7 +30,6 @@ export default Reflux.createStore({
       }
     }).then((res)=>{
       res.json().then((js)=>{
-        console.log('The user', js.webid, 'was registered. We will attempt to log ')
         Account.login.completed(js.webid)
       })
     })
@@ -66,6 +65,13 @@ export default Reflux.createStore({
         'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
       }
     })
+
+    this.state = {
+      loggingIn: false,
+      username: null
+    }
+		localStorage.removeItem('fake-user')
+		this.trigger(this.state)
   },
 
   loggedIn() {

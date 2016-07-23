@@ -28,7 +28,6 @@ let Nav = React.createClass({
   },
 
   logout() {
-    console.log('Attempting to log out the user.')
     AccountActions.logout()
   },
 
