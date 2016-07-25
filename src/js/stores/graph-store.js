@@ -74,7 +74,6 @@ export default Reflux.createStore({
   },
 
   deleteNode: function(node){
-    console.log('THIS ONE')
     let nodeId = node.index > 0 ? node.index : node.uri
     for (let i = 0; i < this.state.neighbours.length; i++){
      let sourceId = node.index > 0 ? this.state.neighbours[i].index

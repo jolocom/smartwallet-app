@@ -23,6 +23,7 @@ let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 class GraphAgent {
 
   // We create a rdf file at the distContainer containing a title and description passed to it
+  // TODO break this down.
   createNode(currentUser, centerNode, title, description, image, nodeType) {
 
     let writer = new Writer()
@@ -70,8 +71,9 @@ class GraphAgent {
               'Content-Type':'text/turtle',
               'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", '+aclUri+' rel="acl"'
             }
-          }).then(()=>{
-            GraphActions.drawNewNode(newNodeUri.uri, SCHEMA('isRelatedTo').uri)
+          }).then((answer)=>{
+            if (answer.ok)
+              GraphActions.drawNewNode(newNodeUri.uri, SCHEMA('isRelatedTo').uri)
           }).catch((error)=>{
             console.log('Error,',error,'occured when putting the rdf file.') 
           })
@@ -156,26 +158,68 @@ class GraphAgent {
 	//})
   }
 
+  /**
+   * @summary Checks if a triple is present in the RDF file at the uri.
+   * @param {string} uri - uri of the rdf file. 
+   * @param {object} subject - triple subject.
+   * @param {object} predicate - triple predicate.
+   * @param {object} object - triple object.
+   * @returns {boolean} - True if present, False if not.
+   */
+
+  isTriplePresent(uri, subject, predicate, object){
+    let writer = new Writer()
+    return this.fetchTriplesAtUri(uri).then((res)=>{
+      for(let t of res.triples)
+        writer.addTriple(t.subject, t.predicate, t.object)
+      if (writer.g.statementsMatching(subject, predicate, object).length > 0)
+        return true
+      else 
+        return false
+    })
+  }
+
+  /**
+   * @summary Adds a new triple to an rdf file.
+   * @params {object} subject - triple subject, also the uri of the file.
+   * @params {object} predicate - triple predicate.
+   * @params {object} object - triple object.
+   * @params {boolean} draw - do we play the node add animation.
+   * @return {function} fetch request - .then contains the response. 
+   */ 
+
   writeTriple(subject, predicate, object, draw) {
-
-    let newTrip = [rdf.st(subject, predicate, object).toNT()]
-    // We probably need more predicates here
-    if(draw && (predicate.uri === SCHEMA('isRelatedTo').uri || predicate.uri === FOAF('knows').uri))
-      GraphActions.drawNewNode(object.uri, predicate.uri)
-
-    return fetch(`${proxy}/proxy?url=${subject.uri}`,{
-      method: 'PATCH', 
-      credentials: 'include',
-      body: 'INSERT DATA { ' + newTrip[0] + ' } ;',
-      headers: {
-        'Content-Type':'application/sparql-update' 
+    let validPredicate = (predicate.uri === SCHEMA('isRelatedTo').uri ||
+                          predicate.uri === FOAF('knows').uri)
+    return this.isTriplePresent(subject.uri, subject, predicate, object).then((verdict)=>{
+      if (!verdict){
+        let newTrip = [rdf.st(subject, predicate, object).toNT()]
+        return fetch(`${proxy}/proxy?url=${subject.uri}`,{
+          method: 'PATCH', 
+          credentials: 'include',
+          body: 'INSERT DATA { ' + newTrip[0] + ' } ;',
+          headers: {
+            'Content-Type':'application/sparql-update' 
+          }
+        }).then((result) => {
+          if (result.ok && draw && validPredicate)
+            GraphActions.drawNewNode(object.uri, predicate.uri)
+        })
+      } else {
+        console.warn('Triple already present in the rdf file.') 
       }
     })
   }
 
-  // Replaced the put request with a patch request, it's faster, and there's no risk of wiping the whole file.
+  /**
+   * @summary Deletes a triple from an rdf file.
+   * @params {object} subject - triple subject, also the uri of the file.
+   * @params {object} predicate - triple predicate.
+   * @params {object} object - triple object.
+   * @return {function} fetch request - .then contains the response. 
+   */ 
+  
   deleteTriple(subject, predicate, object){
-
     let oldTrip = [rdf.st(subject, predicate, object).toNT()]
     return fetch(`${proxy}/proxy?url=${subject.uri}`,{
       method: 'PATCH', 

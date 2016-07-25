@@ -103,9 +103,7 @@ export default class GraphD3 extends EventEmitter {
 
     // Update dataNodes
     this.dataNodes = [state.center]
-    this.visibleDataNodes = [state.center] // @TODO you can safely remove this
     this.dataLinks = []
-    this.visibleDataLinks = [] // @TODO safely removable
     this.numberOfNeighbours = 0
 
     // Flatten the center and neighbour nodes we get from the state
