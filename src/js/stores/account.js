@@ -22,38 +22,40 @@ export default Reflux.createStore({
   },
 
   onSignup(data) {
+    let user = encodeURIComponent(data.username)
+    let pass = encodeURIComponent(data.password)
+
     fetch(`${proxy}/register`, {
       method: 'POST',
-      body: JSON.stringify({
-        'username' : data.username,
-        'password': data.password 
-      }),
+      body: `username=${user}&password=${pass}`,
       headers: {
         'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
       }
     }).then((res)=>{
       res.json().then((js)=>{
-        Account.login.completed(js.webid)
+        Account.login(user, pass)
       })
     })
   },
 
   onLogin(username, password) {
-    fetch(`${proxy}/login`, {
-      method: 'POST',
-      body: JSON.stringify({
-        'username' : username,
-        'password': password 
-      }),
-      credentials: 'include',
-      headers: {
-        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
-      }
-    }).then((res)=>{
-      res.json().then((js)=>{
-        Account.login.completed(js.webid)
+    if (username && password) {
+      let user = encodeURIComponent(username)
+      let pass = encodeURIComponent(password)
+  
+      fetch(`${proxy}/login`, {
+        method: 'POST',
+        body: `username=${user}&password=${pass}`,
+        credentials: 'include',
+        headers: {
+          'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
+        }
+      }).then((res)=>{
+        res.json().then((js)=>{
+          Account.login.completed(js.webid)
+        })
       })
-    })
+    }
   },
 
   // Triggers when the login is done.

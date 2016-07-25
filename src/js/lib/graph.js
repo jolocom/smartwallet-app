@@ -467,12 +467,14 @@ export default class GraphD3 extends EventEmitter {
       .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
+	if (d.rank === 'unavailable')
+	  return 'Not Found'
         if (d.name) return d.name
         else if (d.fullName) return d.fullName
         else if (d.title) {
           if (d.title.length > 7) return d.title.substring(0, 7) + '...'
           else return d.title
-        } else return 'Not Found'
+        } else return 'No Name'
       })
 
     // The text description of a person

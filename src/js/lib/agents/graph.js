@@ -147,7 +147,7 @@ class GraphAgent {
 		return fetch(`${proxy}/proxy?url=${acl_uri}`,{
 			method: 'PUT', 
 			credentials: 'include',
-			body: acl_writer.end,
+			body: acl_writer.end(),
 			headers: {
 				'Content-Type':'text/turtle' 
 			}
