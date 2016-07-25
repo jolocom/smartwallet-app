@@ -21,6 +21,8 @@ const theme = getMuiTheme(JolocomTheme)
 export default class GraphD3 extends EventEmitter {
 
   constructor(el) {
+    console.log('New GraphD3 instance.')
+    
     super()
 
     this.MAX_VISIBLE_NUMBER_OF_NODES = 8
