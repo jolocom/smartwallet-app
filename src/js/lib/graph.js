@@ -239,8 +239,10 @@ export default class GraphD3 extends EventEmitter {
       .outerRadius(this.largeNodeSize * 0.57)
       .startAngle(0)
 
+    let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NUMBER_OF_NODES
+    
     this.svg.select('.dial')
-      .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + (this.archAngle * this.rotationIndex) + ')')
+      .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + (this.archAngle * (maxRotationIndex - this.rotationIndex)) + ')') // remove "maxRotationIndex -" to reverse the direction
       .datum({
           endAngle: 2 * Math.PI * this.arch
         })
