@@ -158,7 +158,6 @@ let Signup = React.createClass({
 					<div style={{marginBottom: '20px'}}>
 						<FormsyText name="username"
 							floatingLabelText="Username"
-							required
 							validations="isAlphanumeric"
 							validationError={this.errorMessages.alphaNumeric}
 							onChange={this._onUsernameChange}
@@ -166,19 +165,19 @@ let Signup = React.createClass({
 						<FormsyText name="password"
 							floatingLabelText="Password"
 							onChange={this._onPasswordChange}
-							required />
+							/>
 						<FormsyText name="name"
 							floatingLabelText="Name"
 							validations="isWords"
 							validationError={this.errorMessages.name}
 							onChange={this._onNameChange}
-							required />
+							/>
 						<FormsyText name="email"
 							floatingLabelText="Email"
 							validations="isEmail"
 							validationError={this.errorMessages.email}
 							onChange={this._onEmailChange}
-							required />
+							/>
 					</div>
 
 					<RaisedButton type="submit" secondary={true} disabled={this.state.disabledSubmit} style={styles.button} label="Sign up"/>
