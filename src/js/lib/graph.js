@@ -241,11 +241,11 @@ export default class GraphD3 extends EventEmitter {
       .startAngle(0)
     
     this.svg.select('.dial')
-      .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.rotationIndex + ')')
+      .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + (this.archAngle * this.rotationIndex) + ')')
       .datum({
           endAngle: 2 * Math.PI * this.arch
         })
-      .style('fill', STYLES.grayColor)
+      .style('fill', theme.graph.dialColor)
       .attr('d', this.arc)
   }
 
@@ -413,6 +413,7 @@ export default class GraphD3 extends EventEmitter {
 
     // TODO make the image nodes have a backgorund first and then fill up as image loads
 
+    // Used as a background circle for image nodes
     nodeEnter.append('circle')
       .attr('class', 'nodeback')
       .attr('r', (d) => {
@@ -422,10 +423,10 @@ export default class GraphD3 extends EventEmitter {
           return smallNode / 3
         } else return smallNode / 2
       })
-      .attr('fill','#6a6a6a')
+      .attr('fill','#000BB')
       .transition()
       .duration(750)
-      .attr('fill', theme.graph.nodeColor)
+      .attr('fill', theme.graph.imageNodeColor)
 
     nodeEnter.append('circle')
       .attr('class', 'nodecircle')
@@ -436,7 +437,7 @@ export default class GraphD3 extends EventEmitter {
           return smallNode / 3
         } else return smallNode / 2
       })
-      .attr('fill','#6a6a6a')
+      .attr('fill',theme.graph.transitionStartNodeColor)
       .transition()
       .duration(750)
       .attr('fill',(d) => {
@@ -449,7 +450,7 @@ export default class GraphD3 extends EventEmitter {
           } else if (d.rank === 'center') {
             return theme.graph.centerNodeColor
           } else {
-            return theme.graph.nodeColor
+            return theme.graph.textNodeColor
           }
         }
       })
@@ -722,7 +723,7 @@ export default class GraphD3 extends EventEmitter {
         } else if (d.rank === 'center') {
           return theme.graph.centerNodeColor
         } else {
-          return theme.graph.nodeColor
+          return theme.graph.textNodeColor
         }
       })
 
