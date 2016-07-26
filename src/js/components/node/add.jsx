@@ -42,6 +42,13 @@ let NodeAdd = React.createClass({
   getStyles() {
     return {
       bar: {
+          backgroundColor: '#b3c90f'
+      },
+      icon: {
+          color: 'white'
+      },
+      title: {
+          color: 'white'
       }
     }
   },
@@ -63,8 +70,9 @@ let NodeAdd = React.createClass({
         <Layout>
           <AppBar
             title={title}
-            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this._handleClose}>close</IconButton>}
-            iconElementRight={<FlatButton label="Create" onTouchTap={this._handleSubmit}/>}
+            titleStyle={styles.title}
+            iconElementLeft={<IconButton iconStyle={styles.icon} iconClassName="material-icons" onTouchTap={this._handleClose}>close</IconButton>}
+            iconElementRight={<FlatButton style={styles.icon} label="Create" onTouchTap={this._handleSubmit}/>}
             style={styles.bar}
           />
           <Content style={styles.content}>
