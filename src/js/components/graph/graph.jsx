@@ -80,7 +80,7 @@ let Graph = React.createClass({
 
   componentDidMount: function() {
     // Instantiating the graph object.
-    this.graph = new GraphD3(this.getGraphEl())
+    this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)
