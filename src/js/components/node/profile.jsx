@@ -243,7 +243,7 @@ let ProfileNode = React.createClass({
 
     if (node.rank == 'center'){
      let prev = navHis[navHis.length - 1]
-     graphActions.drawAtUri(prev.uri).then(()=>{
+     graphActions.drawAtUri(prev.uri, 1).then(()=>{
        nodeActions.remove(node, prev)
      })
     }

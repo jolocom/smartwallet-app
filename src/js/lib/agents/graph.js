@@ -158,16 +158,16 @@ class GraphAgent {
   }
 
   /**
-   * @summary Checks if a triple is present in the RDF file at the uri.
+   * @summary Find the triple in the RDF file at the uri.
    * @param {string} uri - uri of the rdf file. 
-   * @param {object} subject - triple subject.
-   * @param {object} predicate - triple predicate.
-   * @param {object} object - triple object.
-   * @returns {array} - All triples matching the description.
+   * @param {object} subject - triple subject, undefined for wildcard.
+   * @param {object} predicate - triple predicate, undefined for wildcard.
+   * @param {object} object - triple object, undefined for wildcard.
+   * @returns {array | objects} - All triples matching the description.
    * @returns {integer} - 0 if nothing was found.
    */
 
-  isTriplePresent(uri, subject, predicate, object){
+  findTriple(uri, subject, predicate, object){
     let writer = new Writer()
     return this.fetchTriplesAtUri(uri).then((res)=>{
       for(let t of res.triples)
@@ -192,13 +192,13 @@ class GraphAgent {
   writeTriple(subject, predicate, object, draw){
     let validPredicate = (predicate.uri === SCHEMA('isRelatedTo').uri ||
                           predicate.uri === FOAF('knows').uri)
-    return this.isTriplePresent(subject.uri, subject, predicate, object).then((res)=>{
+    return this.findTriple(subject.uri, subject, predicate, object).then((res)=>{
       if (res === 0){
-        let newTrip = [rdf.st(subject, predicate, object).toNT()]
+        let newTrip = rdf.st(subject, predicate, object).toNT()
         return fetch(`${proxy}/proxy?url=${subject.uri}`,{
           method: 'PATCH', 
           credentials: 'include',
-          body: 'INSERT DATA { ' + newTrip[0] + ' } ;',
+          body: 'INSERT DATA { ' + newTrip + ' } ;',
           headers: {
             'Content-Type':'application/sparql-update' 
           }
@@ -214,39 +214,34 @@ class GraphAgent {
 
   /**
    * @summary Deletes a triple from an rdf file.
-   * @params {object} ...args - a object containing the whole triple.
-   * @params {object} subject - triple subject, also the uri of the file.
-   * @params {object} predicate - triple predicate.
-   * @params {object} object - triple object.
-   * @return {function} fetch request - .then contains the response. 
+   *
+   * @param {string} uri -  the file we are removing from
+   * @param {object} subject - subject of the triple we are deleting
+   * @param {object} predicate - predicate of the triple we are deleting
+   * @param {object} object - object of the triple we are deleting
+   * Or
+   * @param {object}  - {uri: uri, triples: [{subj,pred,obj}, {subj,pred,obj}..]}
+   * @return {promise} fetch request - .then contains the response. 
    */ 
   
+  // uri,subj,pred,obj
+  // {uri:uri, triples:[]}
   deleteTriple(...args){
     let subject, predicate, object
     let triples = []
-    let uri
-    let query
-    console.log('Called with ', args)
+    let uri, query
     
+    // Check if we received only one object with multiple triples in there.
     if (args.length === 1){
-      if (!args[0].triples) {
-        ({uri, subject, predicate, object} = args[0])
-        let oldTrip = [rdf.st(subject, predicate, object).toNT()]
-        query =  'DELETE DATA { ' + oldTrip[0] + ' } ;'
-      } else { 
-        ({uri} = args[0])
-        for (let t of args[0].triples){
-          let statement =  `${t.subject.toNT()} ${t.predicate.toNT()} ${t.object.toNT()}`
-          triples.push(statement)
-        }
-        query = ('DELETE DATA {' + triples.join(';') + '. };')
-      }
+      ({uri} = args[0])
+      triples = args[0].triples
     } else {
       ([uri, subject, predicate, object] = args)
-      let oldTrip = [rdf.st(subject, predicate, object).toNT()]
-      query =  'DELETE DATA { ' + oldTrip[0] + ' } ;'
+      triples = [{subject, predicate, object}]
     }
 
+    let statement = triples.map(t => rdf.st(t.subject, t.predicate, t.object).toNT()).join(' ')
+    query = ('DELETE DATA { ' + statement + ' } ;')
     return fetch(`${proxy}/proxy?url=${uri}`,{
       method: 'PATCH', 
       credentials: 'include',

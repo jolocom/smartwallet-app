@@ -36,30 +36,23 @@ export default Reflux.createStore({
   onRemove(node, centerNode){
 
     let subject = rdf.sym(centerNode.uri)
-    let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
 
     this.gAgent.deleteFile(object.uri).then((response)=>{
       return new Promise((resolve, reject) => {
         if (response.ok){
-          if (node.connection){
-            resolve({uri: centerNode.uri, subject, predicate, object})
-          } else {
-            let triples = []
-            this.gAgent.isTriplePresent(subject.uri, subject, undefined, object).then((result)=>{
-              for (let t of result) {
-                triples.push({
-                  subject: t.subject,
-                  predicate: t.predicate,
-                  object: t.object   
-                })
-              } 
-              resolve({uri: centerNode.uri, triples})
-            }) 
-          }
-        } else {
-          reject('Could not delete file') 
-        }
+          let triples = []
+          this.gAgent.findTriple(subject.uri, subject, undefined, object).then((result)=>{
+            for (let t of result) {
+              triples.push({
+                subject: t.subject,
+                predicate: t.predicate,
+                object: t.object   
+              })
+            } 
+            resolve({uri: centerNode.uri, triples})
+          }) 
+        } else reject('Could not delete file') 
       }).then((query)=>{
         this.gAgent.deleteTriple(query).then((result)=>{
           if (result.ok){
@@ -81,7 +74,7 @@ export default Reflux.createStore({
     let subject = rdf.sym(centerNode.uri)
     let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
-    this.gAgent.deleteTriple(subject, predicate, object)
+    this.gAgent.deleteTriple(subject.uri, subject, predicate, object)
 	},
 
   /**

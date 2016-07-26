@@ -75,10 +75,10 @@ export default Reflux.createStore({
 
   deleteNode: function(node){
     let nodeId = node.index > 0 ? node.index : node.uri
-    for (let i = 0; i < this.state.neighbours.length; i++){
+    for (let i = this.state.neighbours.length -1 ; i >= 0; i--){
      let sourceId = node.index > 0 ? this.state.neighbours[i].index
        : this.state.neighbours[i].uri
-     if (sourceId == nodeId)
+     if (sourceId === nodeId)
        this.state.neighbours.splice(i, 1)
     }
     this.state.activeNode = node

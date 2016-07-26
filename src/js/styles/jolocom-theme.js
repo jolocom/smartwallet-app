@@ -36,7 +36,10 @@ let JolocomTheme = {
   },
   graph: {
     centerNodeColor: '#b3c90f',
-    nodeColor: '#9ba0aa',
+    transitionStartNodeColor: '#6a6a6a',
+    textNodeColor: '#9a9fa9',
+    imageNodeColor: '#afb3bb',
+    dialColor: '#d1d1d1',
     backgroundColor: fade('#939f9a', 0.3),
     connectionColor: fade('#939f9a', 0.15)
   },

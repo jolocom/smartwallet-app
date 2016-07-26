@@ -82,8 +82,8 @@ let Graph = React.createClass({
   
   // This is the first thing that fires when the user logs in.
   componentDidMount: function() {
-    // We create a basic grap, draws the background, and that's about it.
-    this.graph = new GraphD3(this.getGraphEl())
+    // Instantiating the graph object.
+    this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)

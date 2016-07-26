@@ -20,18 +20,17 @@ const theme = getMuiTheme(JolocomTheme)
 
 export default class GraphD3 extends EventEmitter {
 
-  constructor(el) {
-    console.log('New GraphD3 instance.')
-    
+  constructor(el, mode) {
     super()
 
+    this.mode = mode
     this.MAX_VISIBLE_NUMBER_OF_NODES = 8
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
 
     this.graphContainer = el
 
-    this.refreshDimensions();
+    this.refreshDimensions()
 
     this.rendered = false
     this.rotationIndex = 0
@@ -41,7 +40,10 @@ export default class GraphD3 extends EventEmitter {
       .attr('height', this.height)
       .append('svg:g')
 
-    this.svg.append('svg:g').attr('class','background-layer').append('svg:g').attr('class','background-layer-links')
+    this.svg.append('svg:g')
+      .attr('class','background-layer')
+      .append('svg:g')
+      .attr('class','background-layer-links')
 
     // TouchRotate setup
     var thisInstance = this
@@ -52,13 +54,18 @@ export default class GraphD3 extends EventEmitter {
         move: function (touchMoveRadian) { // closure isn't functional #todo
 
           // Normalization of touchMoveRadian
-          //   Quick fix because touchMoveRadian abruptly switches from (+3/2 * PI) to (-1/2 * PI)
-          //   This doesn't pose any problem when using touchMoveRadian as an absolute value, but if we are comparing the new touchMoveRadian to the previous one, then it is problematic
+          //   Quick fix because touchMoveRadian abruptly switches from
+          // (+3/2 * PI) to (-1/2 * PI)
+          //   This doesn't pose any problem when using touchMoveRadian
+          // as an absolute value, but if we are comparing the new
+          // touchMoveRadian to the previous one, then it is problematic
           var radianDiff = touchMoveRadian - lastNotchRadian
-          if (radianDiff < -Math.PI)
+          if (radianDiff < -Math.PI){
             radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
-          else if (radianDiff > Math.PI)
+          }
+          else if (radianDiff > Math.PI){
             radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
+          }
 
           if (lastNotchRadian === false) // first drag
           {
@@ -238,12 +245,14 @@ export default class GraphD3 extends EventEmitter {
       .outerRadius(this.largeNodeSize * 0.57)
       .startAngle(0)
 
+    let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NUMBER_OF_NODES
+
     this.svg.select('.dial')
-      .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + this.archAngle * this.rotationIndex + ')')
+      .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + (this.archAngle * (maxRotationIndex - this.rotationIndex)) + ')') // remove "maxRotationIndex -" to reverse the direction
       .datum({
           endAngle: 2 * Math.PI * this.arch
         })
-      .style('fill', STYLES.grayColor)
+      .style('fill', theme.graph.dialColor)
       .attr('d', this.arc)
   }
 
@@ -410,6 +419,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('in', 'SourceGraphic')
 
 
+    // Used as a background circle for image nodes
     nodeEnter.append('circle')
       .attr('class', 'nodeback')
       .attr('r', (d) => {
@@ -419,10 +429,10 @@ export default class GraphD3 extends EventEmitter {
           return smallNode / 3
         } else return smallNode / 2
       })
-      .attr('fill','#6a6a6a')
+      .attr('fill','#000BB')
       .transition()
       .duration(750)
-      .attr('fill', theme.graph.nodeColor)
+      .attr('fill', theme.graph.imageNodeColor)
 
     nodeEnter.append('circle')
       .attr('class', 'nodecircle')
@@ -433,7 +443,7 @@ export default class GraphD3 extends EventEmitter {
           return smallNode / 3
         } else return smallNode / 2
       })
-      .attr('fill','#6a6a6a')
+      .attr('fill',theme.graph.transitionStartNodeColor)
       .transition()
       .duration(750)
       .attr('fill',(d) => {
@@ -446,7 +456,7 @@ export default class GraphD3 extends EventEmitter {
           } else if (d.rank === 'center') {
             return theme.graph.centerNodeColor
           } else {
-            return theme.graph.nodeColor
+            return theme.graph.textNodeColor
           }
         }
       })
@@ -528,7 +538,7 @@ export default class GraphD3 extends EventEmitter {
       if (d.rank == 'center') {
         d.x = this.centerCoordinates.x
         d.y = this.centerCoordinates.y
-      } else if (d.rank == 'history') {
+      } else if (d.rank === 'history') {
         d.x += (this.centerCoordinates.x - d.x) * k
         if (d.histLevel == 0) {
           d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2) * k
@@ -601,6 +611,7 @@ export default class GraphD3 extends EventEmitter {
 
     // Position nodes manually
     this.nodePositions = []
+
     let angle = (2 * Math.PI) / this.MAX_VISIBLE_NUMBER_OF_NODES, num = 0
     for (let i = 0; i < this.numberOfNeighbours; i++) { // @TODO should modify .x inside the node
       let pos = {
@@ -685,6 +696,8 @@ export default class GraphD3 extends EventEmitter {
   onClick = function (node, data) {
     d3.event.stopPropagation()
 
+    this.emit('select', data, node)
+
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank == 'history' || d3.event.defaultPrevented) return
@@ -721,7 +734,7 @@ export default class GraphD3 extends EventEmitter {
         } else if (d.rank === 'center') {
           return theme.graph.centerNodeColor
         } else {
-          return theme.graph.nodeColor
+          return theme.graph.textNodeColor
         }
       })
 
@@ -793,7 +806,7 @@ export default class GraphD3 extends EventEmitter {
       this.emit('deselect')
     } else {
       // NODE signifies the node that we clicked on. We enlarge it.
-      this.emit('select', data, node)
+
 
       // Enlarge the node
       d3.select(node).select('.nodecircle')
@@ -814,11 +827,12 @@ export default class GraphD3 extends EventEmitter {
         .attr('x', -STYLES.largeNodeSize / 2)
         .attr('y', -STYLES.largeNodeSize / 2)
 
+      if (this.mode !== 'preview'){
       // Enlarge full screen button
       d3.select(node).select('.nodefullscreen')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.fullScreenButton / 2)
-
+      }
       // Enlarge the image of the node we clicked on
       // We also blur it a bit and darken it, so that the text displays better
       d3.select(node).select('image')
@@ -955,28 +969,52 @@ export default class GraphD3 extends EventEmitter {
     })
       .select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
-      .attr('x', -STYLES.largeNodeSize / 2)
-      .attr('y', -STYLES.largeNodeSize / 2)
+      .attr('x', STYLES.largeNodeSize*0.8 )
+      .attr('y', STYLES.largeNodeSize*0.8 )
 
     d3.selectAll('.node').filter(function (d) {
       return d.uri == deletedNodeUri && d.rank == 'neighbour'
     })
       .select('image')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
-      .attr('width', STYLES.largeNodeSize)
-      .attr('height', STYLES.largeNodeSize)
+      .attr('width', STYLES.largeNodeSize*0.8)
+      .attr('height', STYLES.largeNodeSize*0.8)
 
     d3.selectAll('.node').filter(function (d) {
       return d.uri == deletedNodeUri && d.rank == 'neighbour'
     })
-      .selectAll('circle')
+      .select('circle')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
-      .attr('r', 0) // STYLES.largeNodeSize / 2.2
+      .attr('r', STYLES.largeNodeSize/2.2) // STYLES.largeNodeSize / 2.2
       .each('end', () => {
+
+        for (var i = 1; i < this.dataNodes.length; i++) {
+          if (this.dataNodes[i].uri == deletedNodeUri && this.dataNodes[i].rank == 'neighbour'){
+            console.log('FOUND YOU!')
+            this.dataNodes.splice(i, 1)
+          }
+        }
+
+        for (var i = 0; i < this.dataLinks.length; i++) {
+          if (this.dataLinks[i].source.uri == deletedNodeUri && this.dataLinks[i].source.rank == 'neighbour'){
+            console.log('FOUND YOU! link')
+            this.dataLinks.splice(i, 1)
+          }
+        }
+
+        this.numberOfNeighbours--
+        this.force.stop()
+        this.setUpVisibleNodes()
+        this.force.nodes(this.visibleDataNodes)
+        this.force.links(this.visibleDataLinks)
+        this.d3update()
+        this.force.start()
+
 
         // Once the animation is ended, we re-render everything
         // It updates the visibility of the radial scrollbar and updates this.dataNodes etc
-        this.render(state);
+
+        // this.render(state)
 
         // Smooth radial scrolling
         // d3.select('.dial').transition()
@@ -986,7 +1024,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   updateAfterRotationIndex = function() {
-    this.updateDial();
+    this.updateDial()
     if (this.force)
     {
       // @TODO do we realy need to do all of the following?
