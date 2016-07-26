@@ -427,6 +427,9 @@ export default class GraphD3 extends EventEmitter {
     nodeEnter.append('circle')
       .attr('class', 'nodeback')
       .attr('r', (d) => {
+        if (d.rank == 'elipsis'){
+          return smallNode*0.3
+        }
         if (d.rank == 'center')
           return largeNode / 2
         else if (d.rank == 'history') {
@@ -441,9 +444,12 @@ export default class GraphD3 extends EventEmitter {
     nodeEnter.append('circle')
       .attr('class', 'nodecircle')
       .attr('r', (d) => {
-        if (d.rank == 'center')
+        if (d.rank === 'elipsis'){
+          return smallNode*0.3
+        }
+        if (d.rank === 'center')
           return largeNode / 2
-        else if (d.rank == 'history') {
+        else if (d.rank === 'history') {
           return smallNode / 3
         } else return smallNode / 2
       })
@@ -550,7 +556,7 @@ export default class GraphD3 extends EventEmitter {
 
     if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
       d3.selectAll('.node').attr('d', (d) => {
-        if (d.rank == 'neighbour') {
+        if (d.rank === 'neighbour' || d.rank === 'elipsis') {
           d.x += (this.nodePositions[d.position].x - d.x) * k
           d.y += (this.nodePositions[d.position].y - d.y) * k
         }
@@ -609,21 +615,50 @@ export default class GraphD3 extends EventEmitter {
     // Smooth radial scrolling animation
     //  d3.select('.dial').transition()
     //   .duration(100)
-    //   .call(this.arcTween, 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
+    //   .call(this.arcTween,
+    // 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
 
     // Position nodes manually
     this.nodePositions = []
 
-    let angle = (2 * Math.PI) / this.MAX_VISIBLE_NUMBER_OF_NODES, num = 0
-    for (let i = 0; i < this.numberOfNeighbours; i++) { // @TODO should modify .x inside the node
-      let pos = {
-        x: Math.sin(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
-        y: Math.cos(angle * (num + 3.5)) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y
+
+    let space = (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES) > 4 ? 4 : (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES),
+      extraspacefront = (space - this.rotationIndex) > 2 ? 2 : (space - this.rotationIndex),
+      extraspaceback = this.rotationIndex > 2 ? 2 : this.rotationIndex,
+      totalspace = extraspaceback + extraspacefront,
+      angle = (2 * Math.PI) / (this.MAX_VISIBLE_NUMBER_OF_NODES + totalspace/2),
+      num = 0
+
+      console.log('ROTATION INDEX:',this.rotationIndex, 'spaceback:', extraspaceback)
+
+    for (let i = 0, back = extraspaceback, front= extraspacefront, numberOfNeighbours = this.MAX_VISIBLE_NUMBER_OF_NODES; i < (this.numberOfNeighbours + totalspace); i++) {
+      if(back>0){
+        let pos = {
+          x: Math.sin((angle/extraspaceback) * (num )) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos((angle/extraspaceback) * (num )) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y
+        }
+        back--
       }
-      this.nodePositions.push(pos)
+      else if (numberOfNeighbours>0){
+        let pos = {
+          x: Math.sin(angle * (num )) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos(angle * (num )) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y
+        }
+        this.nodePositions.push(pos)
+        numberOfNeighbours --
+      }
+      else if (front>0) {
+        let pos = {
+          x: Math.sin((angle/extraspacefront) * (num )) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos((angle/extraspacefront) * (num )) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y
+        }
+        this.nodePositions.push(pos)
+        front --
+      }
       num --
     }
 
+    console.table(this.nodePositions)
     // Hydrate visibleDataNodes based on rotationIndex
     // @TODO iterate through this.neighbours rather; have this.neighbourNodes, this.center, this.historyNodes and not have this.dataNodes (where 0 = xx)
     this.visibleDataNodes = []
@@ -635,20 +670,45 @@ export default class GraphD3 extends EventEmitter {
 
       if (this.dataNodes[i].rank == 'neighbour' && nodeCount < this.MAX_VISIBLE_NUMBER_OF_NODES) {
         this.visibleDataNodes.push(this.dataNodes[i])
-        this.visibleDataNodes[this.visibleDataNodes.length - 1].position = nodeCount
-        this.visibleDataNodes[this.visibleDataNodes.length - 1].x = this.nodePositions[nodeCount].x
-        this.visibleDataNodes[this.visibleDataNodes.length - 1].y = this.nodePositions[nodeCount].y
-        this.visibleDataNodes[this.visibleDataNodes.length - 1].px = this.nodePositions[nodeCount].x
-        this.visibleDataNodes[this.visibleDataNodes.length - 1].py = this.nodePositions[nodeCount].y
-        this.visibleDataLinks.push({
-          'source': this.visibleDataNodes.length - 1,
-          'target': 0
-        })
+        this.visibleDataNodes[this.visibleDataNodes.length - 1].position = nodeCount+extraspaceback
+        // this.visibleDataNodes[this.visibleDataNodes.length - 1].x = this.nodePositions[nodeCount+extraspaceback].x
+        // this.visibleDataNodes[this.visibleDataNodes.length - 1].y = this.nodePositions[nodeCount+extraspaceback].y
+        // this.visibleDataNodes[this.visibleDataNodes.length - 1].px = this.nodePositions[nodeCount+extraspaceback].x
+        // this.visibleDataNodes[this.visibleDataNodes.length - 1].py = this.nodePositions[nodeCount+extraspaceback].y
         nodeCount++
       }
+    }
+
+    for (var i = 0; i < extraspaceback; i++) {
+      let elipsis = {
+        rank: 'elipsis',
+        elipsisdepth: i,
+        position: i,
+        uri: i + 'elipsis',
+        connection: 'good'
+
+      }
+      this.visibleDataNodes.splice( 1, 0, elipsis)
+    }
+
+    for (var i = 0; i < extraspacefront; i++) {
+      let elipsis = {
+        rank: 'elipsis',
+        elipsisdepth: i,
+        position: this.visibleDataNodes.length-1,
+        uri: this.visibleDataNodes.length-1 + 'elipsis',
+        connection: 'good'
+      }
+      this.visibleDataNodes.push(elipsis)
 
     }
 
+    for (var i = 1; i < this.visibleDataNodes.length; i++) {
+      this.visibleDataLinks.push({
+        'source': i,
+        'target': 0
+      })
+    }
     // Add history nodes to visibleDataNodes
     for (var i = 0; i < this.dataNodes.length; i++) {
       if (this.dataNodes[i].rank == 'history') {
