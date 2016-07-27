@@ -103,7 +103,9 @@ export default class GraphD3 extends EventEmitter {
     if (this.rendered){
       this.eraseGraph() // erase everything, including background
     }
-
+    
+    console.log('R LOOK ZHOS THERESSSS4')
+    
     this.rendered = true
 
     this.refreshDimensions() // ?
@@ -547,7 +549,6 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function (data) {
       self.onClickFull(this, data)
     })
-
     this.resetAll()
 
     this.force.on('tick', this.tick)
@@ -1083,9 +1084,7 @@ export default class GraphD3 extends EventEmitter {
   // and its first element must be .background-layer-links
   eraseGraph = function () {
     if (this.force) {this.force.stop()}
-    this.svg.selectAll('.background-layer-links *').remove()
-    this.svg.selectAll('.background-layer').remove()
-    this.svg.selectAll('.background-layer ~ *').remove()
+    this.svg.selectAll('.background-layer .background-layer-links *, .background-layer ~ *').remove()
   }.bind(this)
 
   // Alternative to dragging the node to the center.
