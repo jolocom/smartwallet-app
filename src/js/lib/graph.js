@@ -321,6 +321,9 @@ export default class GraphD3 extends EventEmitter {
           // Capped at 13, found it to look the best
           return this.width / 50 > 10 ? 10 : this.width / 50})
         .attr('stroke', STYLES.lightGrayColor) // this.link should be the enter stuff neh?
+        .attr('opacity', (d)=> {
+          d.source.elipsisdepth>=0 ? 0 : 1
+        })
 
     // LINKS EXIT
     this.link
@@ -463,7 +466,7 @@ export default class GraphD3 extends EventEmitter {
 
     nodeEnter.append('circle')
       .attr('class', 'nodecircle')
-      .attr('r', 0)
+      .attr('r', STYLES.smallNodeSize/5 )
       .attr('fill', (d) => {
         if (d.elipsisdepth>=0){
           return theme.graph.textNodeColor
@@ -471,24 +474,7 @@ export default class GraphD3 extends EventEmitter {
           return theme.graph.transitionStartNodeColor
         }
       })
-      .transition()
-      .duration(750)
-      .attr('fill',(d) => {
-        if (d.img && d.rank != 'history') return 'url(#' + d.uri + d.connection + ')'
-        else {
-          if (d.elipsisdepth>=0){
-            return theme.graph.textNodeColor
-          } else if (d.rank == 'history') {
-            return STYLES.grayColor
-          } else if (d.rank == 'unavailable') {
-            return STYLES.grayColor
-          } else if (d.rank === 'center') {
-            return theme.graph.centerNodeColor
-          } else {
-            return theme.graph.textNodeColor
-          }
-        }
-      })
+
 
     // The name of the person, displays on the node
     nodeEnter.append('svg:text')
@@ -641,7 +627,7 @@ export default class GraphD3 extends EventEmitter {
 
     this.nodePositions = []
 
-    let space = (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES) > 4 ? 4 : (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES),
+    let
       extraSpaceFront = (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES - this.rotationIndex) > 2 ? 2 : (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES - this.rotationIndex),
       extraSpaceBack = this.rotationIndex > 2 ? 2 : this.rotationIndex,
       totalspace = 0,
@@ -757,16 +743,17 @@ export default class GraphD3 extends EventEmitter {
 
     console.table(this.visibleDataNodes)
 
-
+    first = true
     // Add history nodes to visibleDataNodes
     for (var i = 0; i < this.dataNodes.length; i++) {
       if (this.dataNodes[i].rank == 'history') {
         this.visibleDataNodes.push(this.dataNodes[i])
-        if (i == 0) {
+        if (first) {
           this.visibleDataLinks.push({
             'source': this.visibleDataNodes.length - 1,
             'target': 0
           })
+          first = false
         } else {
           this.visibleDataLinks.push({
             'source': this.visibleDataNodes.length - 1,
@@ -808,6 +795,12 @@ export default class GraphD3 extends EventEmitter {
   resetAll = function () {
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
+
+    d3.selectAll('.link')
+      .attr('opacity', (d)=> {
+        console.log('CUTTING LINKS')
+        d.source.elipsisdepth>=0 ? 0 : 1
+      })
     // Reset size of all circles
     d3.selectAll('g .node')
       .selectAll('.nodecircle')
@@ -829,19 +822,28 @@ export default class GraphD3 extends EventEmitter {
           return STYLES.smallNodeSize / 2
         }
       })
+
+
     // Reset colour of all circles
     d3.selectAll('g .node')
       .select('.nodecircle')
       .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
-      .style('fill', (d) => {
-        if (d.rank == 'history') {
-          return STYLES.grayColor
-        } else if (d.rank == 'unavailable') {
-          return STYLES.grayColor
-        } else if (d.rank === 'center') {
-          return theme.graph.centerNodeColor
-        } else {
-          return theme.graph.textNodeColor
+      .attr('fill',(d) => {
+        if (d.img && d.rank != 'history') return 'url(#' + d.uri + d.connection + ')'
+        else {
+          if (d.elipsisdepth === 0){
+            return theme.graph.elipsis1
+          } else if (d.elipsisdepth == 1) {
+            return theme.graph.elipsis2
+          }else if (d.rank == 'history') {
+            return STYLES.grayColor
+          } else if (d.rank == 'unavailable') {
+            return STYLES.grayColor
+          } else if (d.rank === 'center') {
+            return theme.graph.centerNodeColor
+          } else {
+            return theme.graph.textNodeColor
+          }
         }
       })
 
