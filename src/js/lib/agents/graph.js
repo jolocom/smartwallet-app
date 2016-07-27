@@ -263,7 +263,6 @@ class GraphAgent {
       credentials: 'include' 
     }).then((ans) => {
       if (ans.ok){
-				console.log(ans.headers.get('Content-Type'))
         return ans.text().then((res)=>{
           return parser.parse(res, uri) 
         })

@@ -77,7 +77,6 @@ export default Reflux.createStore({
         profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
       }
     }
-    console.log(profile.email)
 
     let {fullName, givenName, familyName} = profile
     if (!givenName && !familyName) {

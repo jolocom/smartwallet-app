@@ -104,8 +104,6 @@ export default class GraphD3 extends EventEmitter {
       this.eraseGraph() // erase everything, including background
     }
     
-    console.log('R LOOK ZHOS THERESSSS4')
-    
     this.rendered = true
 
     this.refreshDimensions() // ?

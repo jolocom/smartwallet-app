@@ -56,7 +56,6 @@ let Node = React.createClass({
   },
 
   render() {
-    console.log(this.props)
     let {node} = this.props
     let {center} = this.props
     let {svg} = this.props

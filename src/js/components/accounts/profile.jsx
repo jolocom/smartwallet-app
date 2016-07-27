@@ -38,8 +38,6 @@ let Profile = React.createClass({
   },
 
   componentDidUpdate(props, state) {
-    console.log('current state '+this.state.show)
-    console.log('previous state '+state.show)
     if (state.show !== this.state.show) {
       if (this.state.show) {
         this.refs.dialog.show()
@@ -148,7 +146,6 @@ let Profile = React.createClass({
       this.hide()
       ProfileActions.update(Object.assign({},this.state, {show:false}))
     } else{
-      console.log('loading')
     }
   },
 

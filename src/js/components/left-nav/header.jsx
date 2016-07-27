@@ -48,10 +48,9 @@ let Header = React.createClass({
     let styles = this.getStyles()
     if (name)
       initials = name[0]
-
     return (
       <header style={styles.header}>
-        <Avatar src={profile.imgUri}>{initials}</Avatar>
+        <Avatar>{initials}</Avatar>
         <div style={styles.profile}>
           <div style={styles.profileDetails}>
             <span style={styles.name}>{name}</span>

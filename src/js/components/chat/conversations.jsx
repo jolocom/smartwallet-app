@@ -60,6 +60,7 @@ let Chat = React.createClass({
           <List>
             {this.state.conversations.items.map((conversation) => {
               let {otherPerson} = conversation
+              console.log(otherPerson, 'otherPersons')
               let {created, content} = conversation.lastMessage
               let avatar
               if (otherPerson)
