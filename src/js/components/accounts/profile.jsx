@@ -38,12 +38,13 @@ let Profile = React.createClass({
   },
 
   componentDidUpdate(props, state) {
-    if (!this.state.show)
-      this.refs.dialog.hide()
-
+    console.log('current state '+this.state.show)
+    console.log('previous state '+state.show)
     if (state.show !== this.state.show) {
       if (this.state.show) {
         this.refs.dialog.show()
+      } else {
+       this.refs.dialog.hide()
       } 
     }
   },
@@ -79,7 +80,6 @@ let Profile = React.createClass({
 
   render() {
     let img, styles = this.getStyles()
-
     let {file, imgUri} = this.state
 
     if (file) {
@@ -87,7 +87,6 @@ let Profile = React.createClass({
     } else if (imgUri) {
       img = imgUri
     }
-    // edit mode
     return (
       <Dialog ref="dialog" fullscreen={true}>
         <Layout fixedHeader={true}>
@@ -146,9 +145,8 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if(!this.state.loading){
-      this.state.loading = false
-      this.state.show = false
-      ProfileActions.update(this.state)
+      this.hide()
+      ProfileActions.update(Object.assign({},this.state, {show:false}))
     } else{
       console.log('loading')
     }

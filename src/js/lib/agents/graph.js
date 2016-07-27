@@ -240,8 +240,11 @@ class GraphAgent {
       triples = [{subject, predicate, object}]
     }
 
-    let statement = triples.map(t => rdf.st(t.subject, t.predicate, t.object).toNT()).join(' ')
-    query = ('DELETE DATA { ' + statement + ' } ;')
+    let statement = triples.map(t => {
+      return rdf.st(t.subject, t.predicate, t.object).toNT()
+    }).join(' ')
+
+    query = 'DELETE DATA { ' + statement + ' } ;'
     return fetch(`${proxy}/proxy?url=${uri}`,{
       method: 'PATCH', 
       credentials: 'include',
@@ -278,8 +281,10 @@ class GraphAgent {
     return new Promise ((resolve) => {
       let graphMap = []
       // If there are no adjacent nodes to draw, we return an empty array.
-      if (neighbours.length === 0)
+      if (neighbours.length === 0){
         resolve(graphMap)
+        return
+      }
       // If there are adjacent nodes to draw, we parse them and return an array of their triples
       let i = 0
       neighbours.map((triple) => {
