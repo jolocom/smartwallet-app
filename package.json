@@ -4,7 +4,14 @@
   "description": "Social app / linked data explorer built for SoLiD infrastracture",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "solid": "solid start --port 8443 --ssl-cert ./etc/localhost.cert --ssl-key ./etc/localhost.key --root ./dist -v",
+    "test": "cross-env NODE_ENV=test karma start karma.conf.js --single-run",
+    "test:watch": "npm run test -- --auto-watch --no-single-run",
+    "test:phantomjs": "npm run test -- --browsers PhantomJS",
+    "test:chrome": "npm run test -- --browsers Chrome",
+    "test:firefox": "npm run test -- --browsers Firefox",
+    "test:safari": "npm run test -- --browsers Safari",
+    "test:ie": "npm run test -- --browsers IE"
   },
   "repository": {
     "type": "git",
