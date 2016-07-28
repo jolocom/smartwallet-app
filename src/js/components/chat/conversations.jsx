@@ -79,6 +79,7 @@ let Chat = React.createClass({
         </div>
 
         <FloatingActionButton linkButton={true}
+          secondary={true}
           href="#/chat/new"
           style={styles.actionButton}>
           <FontIcon className="material-icons">add</FontIcon>

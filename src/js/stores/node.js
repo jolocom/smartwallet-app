@@ -28,24 +28,31 @@ export default Reflux.createStore({
 
   // On Remove will remove the node itself (RDF file), a function onDisconnect will be introduced later.
   onRemove(node, centerNode){
-    this.gAgent.deleteFile(node.uri).then(()=>{
-      this.gAgent.deleteTriple(centerNode.uri, node.connection, node.uri).then(()=>{
-        graphActions.deleteNode(node) 
-      }).catch((e)=>{console.log('Error', e ,'while removing connection')})
-    }).catch((e)=> {
-      console.log('error', e, 'occured while deleting')
-    })
-  },
+    let subject = rdf.sym(centerNode.uri)
+    let predicate = rdf.sym(node.connection)
+    let object = rdf.sym(node.uri)
 
-  onDissconnectNode(node, centerNode){
-    this.gAgent.deleteTriple(centerNode.uri, node.connection, node.uri)
-  },
+    this.gAgent.deleteFile(object.uri).then(()=>{
+      // Deleting the connection to the file. 
+      this.gAgent.deleteTriple(subject, predicate, object).then(()=>{
+        graphActions.deleteNode(node) 
+      // Basic error handling
+      }).catch((e)=>{console.log('Error', e ,'while removing connection')})
+    }).catch((e)=>{console.log('error', e, 'occured while deleting')})
+	}, 
+
+
+  onDisconnectNode(node, centerNode){
+    let subject = rdf.sym(centerNode.uri)
+    let predicate = rdf.sym(node.connection)
+    let object = rdf.sym(node.uri)
+    this.gAgent.deleteTriple(subject, predicate, object)
+	},
 
   link(start, type, end, flag) {
     let predicate = null
     if(type === 'generic') predicate = SCHEMA('isRelatedTo')
     if(type ==='knows') predicate = FOAF('knows')
-
-    this.gAgent.writeTriple(start, predicate, rdf.sym(end), flag)
+    this.gAgent.writeTriple(rdf.sym(start), predicate, rdf.sym(end), flag)
   }
 })

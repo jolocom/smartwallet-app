@@ -83,8 +83,8 @@ let NodeAddLink = React.createClass({
         display: 'flex'
       },
       leftIcon: {
-        width: '35px'
-
+        width: '35px',
+        cursor: 'pointer'
       },
       columnLeft: {
         width: '35px'
@@ -171,13 +171,12 @@ let NodeAddLink = React.createClass({
     })
 
   },
-  _handleSelectSwap: function() {
-
+  _handleSelectSwap: function() {    
     this.setState({
       start:this.state.end,
       startUri:this.state.endUri,
-      end:this.state.start,
-      endUri:this.state.startUri
+      end:this.state.start || '',
+      endUri:this.state.startUri || ''
     })
   },
   _handleTypeChange(event, index, value) {

@@ -32,28 +32,31 @@ class WebIDAgent extends LDPAgent {
   // get WebID depending on the mode
   getWebID() {
     let getWebID = null
-    if (dev) {
-      getWebID = Promise.resolve(this._formatFakeWebID(localStorage.getItem('fake-user')))
+    if (dev && localStorage.getItem('fake-user')) {
+      getWebID = Promise.resolve(
+        this._formatFakeWebID(localStorage.getItem('fake-user'))
+      )
     } else {
       return getWebID = solid.currentUser()
     }
     return getWebID
   }
 
-// Creates the user folders and writes the data to the card / inbox files
+  // Creates the user folders and writes the data to the card / inbox files
 
-// TODO rework the container creation a bit according to the specs described in here
-// http://github.com/solid/solid-spec/blob/master/api-rest.md
+  // TODO rework the container creation a bit according to the specs described
+  //in here http://github.com/solid/solid-spec/blob/master/api-rest.md
 
   fakeSignup(username, name, email) {
     solid.web.put(`${endpoint}/${username}/little-sister/graph-comments/`)
     solid.web.put(`${endpoint}/${username}/little-sister/graph-nodes/`)
 
-    let p = Promise.all([this._profileTriples(username, name, email), this._inboxTriples(username)])
-      .then((result)  => {
-        solid.web.put(`${endpoint}/${username}/profile/card`, result[0])
-        solid.web.put(`${endpoint}/${username}/little-sister/inbox`, result[1])
-      })
+    let p = Promise.all([
+      this._profileTriples(username, name, email), this._inboxTriples(username)
+    ]).then((result)  => {
+      solid.web.put(`${endpoint}/${username}/profile/card`, result[0])
+      solid.web.put(`${endpoint}/${username}/little-sister/inbox`, result[1])
+    })
     return p
   }
 
@@ -79,16 +82,23 @@ class WebIDAgent extends LDPAgent {
     if (!username) { return Promise.reject('Must provide a username!') }
     let writer = new Writer()
 
-    if (name) writer.addTriple(rdf.sym(''),DC('title'), `WebID profile of ${name}`)
-    else writer.addTriple(rdf.sym(''), DC('title'), `WebID profile of ${username}`)
+    if (name) {
+      writer.addTriple(rdf.sym(''),DC('title'), `WebID profile of ${name}`)
+    } else {
+      writer.addTriple(rdf.sym(''), DC('title'), `WebID profile of ${username}`)
+    }
 
     writer.addTriple(rdf.sym(''), RDF('type') ,FOAF('PersonalProfileDocument'))
     writer.addTriple(rdf.sym(''), FOAF('maker') ,rdf.sym('#me'))
     writer.addTriple(rdf.sym(''), FOAF('primaryTopic'), rdf.sym('#me'))
 
     writer.addTriple(rdf.sym('#me'), RDF('type'), FOAF('Person'))
-    if (email) writer.addTriple(rdf.sym('#me'), FOAF('mbox'), email)
-    if (name) writer.addTriple(rdf.sym('#me'), FOAF('name'), name)
+    if (email) {
+      writer.addTriple(rdf.sym('#me'), FOAF('mbox'), email)
+    }
+    if (name) {
+      writer.addTriple(rdf.sym('#me'), FOAF('name'), name)
+    }
     return writer.end()
   }
 }
