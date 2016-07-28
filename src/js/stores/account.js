@@ -5,10 +5,13 @@ import solid from 'solid-client'
 let AccountStore = Reflux.createStore({
   listenables: Account,
 
+  state: {
+    loggingIn: false,
+    username: localStorage.getItem('fake-user')
+  },
+
   getInitialState() {
-    return {
-      username: localStorage.getItem('fake-user')
-    }
+    return this.state
   },
 
   onSignup() {
@@ -16,15 +19,34 @@ let AccountStore = Reflux.createStore({
   },
 
   onLogin() {
-    solid.login().then((webId) => {
-      console.log('webId!', webId)
-      this.trigger({username: webId})
-    })
+    this.state = {
+      loggingIn: true,
+      username: null
+    }
+
+    this.trigger(this.state)
+
+    solid.login().then(Account.login.completed)
+  },
+
+  onLoginCompleted(webId) {
+    this.state = {
+      loggingIn: false,
+      username: webId
+    }
+
+    this.trigger(this.state)
   },
 
   onLogout() {
     localStorage.removeItem('fake-user')
-    this.trigger({username: null})
+
+    this.state = {
+      loggingIn: false,
+      username: null
+    }
+
+    this.trigger(this.state)
   },
 
   loggedIn() {
