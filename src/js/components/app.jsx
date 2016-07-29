@@ -187,7 +187,7 @@ let App = React.createClass({
         onHide={this._handleSearchHide} />
     )
 
-    const filters = <GraphFilters style={styles.filters} />
+    const filters = <GraphFilters style={styles.filters} showDefaults />
 
     return (
       <div style={styles.container}>
