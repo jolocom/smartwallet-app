@@ -100,7 +100,7 @@ let Profile = React.createClass({
             }
           />
           <Content style={styles.content}>
-            <Card zDept={0} rounded={false}>
+            <Card rounded={false}>
               <CardMedia style={{height: '176px', background: `url(${img || '/img/person-placeholder.png'}) center / cover`}}>
               </CardMedia>
               <CardActions>

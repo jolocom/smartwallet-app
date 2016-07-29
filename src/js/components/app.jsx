@@ -27,7 +27,7 @@ import PinnedActions from 'actions/pinned'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-const publicRoutes =  ['/', '/login', '/signup']
+const publicRoutes = ['/', '/login', '/signup']
 
 let App = React.createClass({
 
@@ -184,21 +184,21 @@ let App = React.createClass({
         ref="search"
         onChange={this._handleSearchChange}
         onSubmit={this._handleSearchSubmit}
-        onHide={this._handleSearchHide}/>
+        onHide={this._handleSearchHide} />
     )
 
-    const filters = <GraphFilters style={styles.filters} showDefaults={true}/>
+    const filters = <GraphFilters style={styles.filters} />
 
     return (
       <div style={styles.container}>
         {this.isPublicRoute() ? this.props.children : (
           <Layout>
-            <Paper zDept={1} style={styles.header}>
+            <Paper style={styles.header}>
               <AppBar
                 title="Graph"
                 iconElementRight={nav}
                 style={styles.bar}
-                onLeftIconButtonTouchTap={this.showDrawer}/>
+                onLeftIconButtonTouchTap={this.showDrawer} />
               {filters}
               {search}
             </Paper>
@@ -210,8 +210,8 @@ let App = React.createClass({
                 })
               })}
             </Content>
-            <Profile/>
-            <Tour/>
+            <Profile />
+            <Tour />
           </Layout>
         )}
       </div>
