@@ -3,7 +3,7 @@ module.exports = {
         "browser": true,
         "es6": true
     },
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "extends": ["standard", "standard-jsx", "plugin:react/recommended"],
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
@@ -41,6 +41,9 @@ module.exports = {
         "semi": [
             "error",
             "never"
+        ],
+        "space-before-function-paren": [
+          "off"
         ],
         "react/wrap-multilines": "error",
         "react/jsx-uses-react": "error"

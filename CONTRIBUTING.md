@@ -8,7 +8,7 @@ inspired by http://nvie.com/posts/a-successful-git-branching-model/
 - General development takes place on `develop` branch.
 - Features are branched off and merged back by the developer
 - Naming convention `feature/#{issue-id}-{name-of-feature}`
-- Merging back to `develop` may occur in form of a pull request requiring a code review. 
+- Merging back to `develop` may occur in form of a pull request requiring a code review.
 - Pull request is mandatory for external developers
 - at all times the tests on `develop` branch should pass. The developer that brakes the tests is responsible to resolve as soon as possible
 
@@ -31,12 +31,24 @@ inspired by http://nvie.com/posts/a-successful-git-branching-model/
 
 ## Conventions
 
-- http://eslint.org/
+### Coding standards
+
+- We use standardsjs (http://standardjs.com/) with a couple of exceptions:
+  - Space after ES6 method names is not required `noSpaceRequired() {}`
+
+- Use ESlint for checking syntax consistency automatically.
+  - Preferably setup your editor to run ESlint on file save.
+  - Use a git pre-commit hook
+    1. Rename `.git/hooks/pre-commit.sample` to `pre-commit`
+    2. Replace contents by https://github.com/jolocom/little-sister/wiki/ESLint-pre-commit-hook
+
+### Documentation  
 - https://en.wikipedia.org/wiki/JSDoc
-- Commit messages: 
+
+### Commit messages
   - title is short and references github issue #
   - description is as descriptive as necessary so there is nothing unexpected introduced in commit
-- Issue description
+### Issue description
   - when and in which environment did the issue occur
   - what was the expected behaviour
   - what was the actual behaviour
