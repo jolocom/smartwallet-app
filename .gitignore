@@ -5,6 +5,9 @@ public/
 build/
 ldpc-*
 data/
+config.json
+localhost.cert
+localhost.key
 
 # Python
 venv/

@@ -73,7 +73,7 @@ let NodeAdd = React.createClass({
     let Component = config.component
 
     return (
-      <Dialog ref="dialog" fullscreen={true}>
+      <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
             title={title}
@@ -89,12 +89,13 @@ let NodeAdd = React.createClass({
               <FlatButton
                 style={styles.icon}
                 label="Create"
-                onTouchTap={this._handleSubmit}/>
+                onTouchTap={this._handleSubmit}
+              />
             }
             style={styles.bar}
           />
           <Content style={styles.content}>
-            <Component ref="form" node={node} onSuccess={this._handleSuccess}/>
+            <Component ref="form" node={node} onSuccess={this._handleSuccess} />
           </Content>
         </Layout>
       </Dialog>

@@ -46,32 +46,29 @@ let Graph = React.createClass({
     // Temp. make it more elegant later.
     if (signal === 'nodeRemove')
     {
-      this.graph.deleteNode(data.activeNode)
+      this.graph.deleteNodeAndRender(data)
       this.setState({activeNode: null})
       // Important to avoid a re-render here.
       graphActions.setState('activeNode', null, false)
     }
-    else if (signal === 'preview'){
-      // Doesn't concern this component, used by preview.jsx
+    else if (signal == 'preview'){
     }
-    else if (data){
-      if (this.state.newNode) {
-        this.graph.addNode(this.state.newNode)
-        // We update the state of the store to be in line with the state of the child
-        this.setState({newNode: null})
-        graphActions.setState('newNode', null, true)
-      } else {
-        this.setState(data)
-      }
-
+    else
+    {
+      if (data) this.setState(data)
       if (data && data.neighbours){
         this.graph.render(this.state)
         this.graph.updateHistory(this.state.navHistory)
       }
-
     }
 
-    if (signal === 'erase') {
+    if (this.state.newNode) {
+      // this.graph.addNode(this.state.newNode)
+      // We update the state of the store to be in line with the state of the child
+      this.state.newNode = null
+      graphActions.setState('newNode', null, false)
+    }
+    if ( signal == 'erase') {
       this.graph.eraseGraph()
     }
   },
@@ -83,12 +80,12 @@ let Graph = React.createClass({
 
   componentDidMount: function() {
     // Instantiating the graph object.
-    this.graph = new GraphD3(this.getGraphEl())
+    this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
-    // Fetching the state from the store.
+    this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     graphActions.getState()
   },
 
@@ -99,9 +96,12 @@ let Graph = React.createClass({
     }
   },
 
-
   _handleSelectNode(node, svg){
     graphActions.setState('selected', svg)
+  },
+
+  _handleChangeRotationIndex(rotationIndex){
+    graphActions.changeRotationIndex(rotationIndex,false)
   },
 
   _handleCenterChange(node){
@@ -130,11 +130,15 @@ let Graph = React.createClass({
   render: function() {
     let styles = this.getStyles()
 
+    if (this.graph)
+    {
+      this.graph.setRotationIndex(this.state.rotationIndex)
+    }
+
     let nodeDetails
 
     if (this.state.activeNode) {
-      // @TODO fix this, this is SUPER dirty ;)
-      nodeDetails = <Node state={this.state}/>
+      nodeDetails = <Node node={this.state.activeNode} center={this.state.center} svg={this.state.selected} state={this.state}/>
     }
 
     let fab

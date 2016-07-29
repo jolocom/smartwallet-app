@@ -1,0 +1,1 @@
+solid start --port 8443 --ssl-cert ./localhost.cert --ssl-key ./localhost.key --root ./dist -v

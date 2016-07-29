@@ -53,9 +53,9 @@ class GraphAgent extends HTTPAgent {
       }
       // Here we add the triple to the user's rdf file, this triple connects
       // him to the resource that he uploaded
-      this.writeTriple(node.uri, SCHEMA('isRelatedTo'), rdf.sym(new_node)).then(()=> {
+      this.writeTriple(rdf.sym(node.uri), SCHEMA('isRelatedTo'), rdf.sym(new_node)).then(()=> {
         // Should this one be here? Implications of having this triple?
-        this.writeTriple(user.uri, FOAF('made'), rdf.sym(new_node)).then(() => {
+        this.writeTriple(rdf.sym(user.uri), FOAF('made'), rdf.sym(new_node)).then(() => {
           this.putACL(new_node, user.uri).then(()=>{
             solid.web.put(new_node, writer.end()).then(()=>{
               GraphActions.drawNewNode(new_node, SCHEMA('isRelatedTo').uri)
@@ -121,51 +121,11 @@ class GraphAgent extends HTTPAgent {
   }
 
   writeTriple(subject, predicate, object, draw) {
-    let writer = new Writer()
-
-    // Is this ok when working with blank nodes?
-    if (!subject.uri) subject = rdf.sym(subject)
-    if (!predicate.uri) predicate = rdf.sym(predicate)
-
-    // First we fetch the triples at the webId/uri of the user adding the triple
-    return new Promise((resolve) => {
-      this.fetchTriplesAtUri(subject.uri).then((file) => {
-        for (var i = 0; i < file.triples.length; i++) {
-          let triple = file.triples[i]
-          writer.addTriple(triple.subject, triple.predicate, triple.object)
-        }
-        if(writer.addTriple(subject,predicate,object)){
-          if(draw && (predicate.uri == SCHEMA('isRelatedTo').uri || predicate.uri == FOAF('knows').uri)){
-            GraphActions.drawNewNode(object.uri, predicate.uri)
-          }
-        }
-        solid.web.put(subject.uri, writer.end()).then(resolve).catch((e)=>{
-          console.log(e, 'in the writeTriple Function.')
-        })
-      })
-    })
-  }
-
-  // This function tries to find a triple in an rdf file, delete it and then
-  // Put the file back.
-  deleteTriple(subject, predicate, object){
-    let writer = new Writer()
-    return this.fetchTriplesAtUri(subject).then((res)=>{
-      res.triples.map((t)=>{
-        // Litterals are stored in the value key, and uris are stored in the
-        // uri field. We have to account for that.
-        let trip_object = t.object.uri ? t.object.uri : t.object.value
-        if (predicate && object){
-          if (t.predicate.uri != predicate && trip_object != object)
-            writer.addTriple(t.subject,t.predicate,t.object)
-        } else if (object && !predicate){
-          if(object != trip_object)
-            writer.addTriple(t.subject,t.predicate,t.object)
-        }
-      })
-      // We are catching / handling errors upstream.
-      return solid.web.put(subject, writer.end())
-    })
+    let newTrip = [rdf.st(subject, predicate, object).toNT()]
+    // We probably need more predicates here
+    if(draw && (predicate.uri === SCHEMA('isRelatedTo').uri || predicate.uri === FOAF('knows').uri))
+      GraphActions.drawNewNode(object.uri, predicate.uri)
+    return solid.web.patch(subject.uri,null, newTrip)
   }
 
   fetchTriplesAtUri(uri) {
@@ -175,9 +135,15 @@ class GraphAgent extends HTTPAgent {
     }).catch(()=>{
       console.log('The uri', uri, 'could not be resolved. Skipping')
       // We return this in order to later be able to display it grayed out.
-      return {uri: uri, unav : true, triples:[]}
+      return {uri: uri, unav : true, connection:null,  triples:[]}
     })
-  }
+	} 
+
+  // Replaced the put request with a patch request, it's faster, and there's no risk of wiping the whole file.
+  deleteTriple(subject, predicate, object){
+    let oldTrip = [rdf.st(subject, predicate, object).toNT()]
+    return solid.web.patch(subject.uri, oldTrip, null)
+	}
 
 // This function gets passed a center uri and it's triples, and then finds all possible
 // links that we choose to display. After that it parses those links for their RDF data.
@@ -200,6 +166,7 @@ class GraphAgent extends HTTPAgent {
         this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
           if (triples.triples.length == 0) {
             i += 1
+            triples.connection = triple.predicate.uri
             graphMap.push(triples)
           } else {
             triples.triples.connection = triple.predicate.uri

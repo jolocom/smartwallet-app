@@ -1,8 +1,8 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import nodeActions from 'actions/node'
 import graphActions from 'stores/graph-store'
+import nodeActions from 'actions/node'
 
 import {
   AppBar,
@@ -134,6 +134,7 @@ let ProfileNode = React.createClass({
     return (
       <div style={styles.container}>
         <AppBar
+          id = 'AppBar'
           style={styles.headers}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
@@ -228,34 +229,27 @@ let ProfileNode = React.createClass({
     this.setState({fullscreen: !this.state.fullscreen})
   },
 
-  _handleDisconnect(){
-    this.props.onClose()
-    const {rank} = this.getNode()
+ _handleDisconnect(){
+    this.props.onClose() 
+    if (this.props.state.activeNode.rank != 'center')
+    	nodeActions.disconnectNode(this.props.state.activeNode, this.props.state.center)
+	},
 
-    if (rank !== 'center') {
-      nodeActions.disconnect(
-        this.props.state.activeNode,
-        this.props.state.center
-      )
-    }
-  },
-
-  _handleDelete() {
+ _handleDelete() {
     this.props.onClose()
-    let node = this.getNode()
+    let node = this.props.state.activeNode
     let center = this.props.state.center
     let navHis = this.props.state.navHistory
 
-    if (node.rank === 'center'){
-      let prev = navHis[navHis.length - 1]
-      graphActions.drawAtUri(prev.uri, 1)
-      setTimeout(()=>{
-        nodeActions.remove(node, prev)
-      }, 500)
+    if (node.rank == 'center'){
+     let prev = navHis[navHis.length - 1]
+     graphActions.drawAtUri(prev.uri, 1)
+     setTimeout(()=>{
+       console.log('firing!')
+       nodeActions.remove(node, prev)
+     }, 1500)
     }
-    else {
-      nodeActions.remove(node, center)
-    }
+    else nodeActions.remove(node, center)
   },
 
   _handleBookmarkClick() {
