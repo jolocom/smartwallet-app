@@ -39,7 +39,9 @@ export default Reflux.createStore({
   },
 
   onLogin(username, password) {
-    if (username && password) {
+    if (localStorage.getItem('webId')){
+      Account.login.completed(localStorage.getItem('webId')) 
+    } else if (username && password) {
       let user = encodeURIComponent(username)
       let pass = encodeURIComponent(password)
   

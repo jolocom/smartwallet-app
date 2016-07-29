@@ -2,7 +2,16 @@ import React from 'react'
 
 import {FloatingActionButton, FontIcon} from 'material-ui'
 
-let FabMenuItem = React.createClass({
+class FabMenuItem extends React.Component {
+
+  static propTypes = {
+    icon: React.PropTypes.string,
+    label: React.PropTypes.string,
+    style: React.PropTypes.object,
+    buttonStyle: React.PropTypes.object,
+    iconStyle: React.PropTypes.object
+  }
+
   render() {
     let {icon, label, style, buttonStyle, iconStyle, ...otherProps} = this.props
 
@@ -12,12 +21,14 @@ let FabMenuItem = React.createClass({
 
     return (
       <div style={style}>
-        <FloatingActionButton mini={true} style={buttonStyle} zDept={1} {...otherProps}>
-          <FontIcon className="material-icons" style={iconStyle}>{icon}</FontIcon>
+        <FloatingActionButton mini style={buttonStyle} {...otherProps}>
+          <FontIcon className="material-icons" style={iconStyle}>
+            {icon}
+          </FontIcon>
         </FloatingActionButton>
       </div>
     )
   }
-})
+}
 
 export default FabMenuItem

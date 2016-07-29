@@ -12,12 +12,19 @@ class Chat extends React.Component {
     history: React.PropTypes.any
   }
 
+  static propTypes = {
+    children: React.PropTypes.node,
+    location: React.PropTypes.object
+  }
+
   constructor(props) {
     super(props)
 
     this.state = {
       activeTab: this.getActiveTab(props.location.pathname)
     }
+
+    this._handleBackTouchTap = this._handleBackTouchTap.bind(this)
   }
 
   getActiveTab(path) {
@@ -38,9 +45,11 @@ class Chat extends React.Component {
     this.refs.dialog.hide()
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.location.pathname !== prevProps.location.pathname) {
-      this.setState({activeTab: this.getActiveTab(this.props.location.pathname)})
+  componentWillUpdate(newProps) {
+    if (this.props.location.pathname !== newProps.location.pathname) {
+      this.setState({
+        activeTab: this.getActiveTab(newProps.location.pathname)
+      })
     }
   }
 
@@ -50,22 +59,40 @@ class Chat extends React.Component {
   }
 
   render() {
-    const backIcon = <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={() => this.close()}>arrow_back</IconButton>
-    const searchIcon = <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={() => {}}>search</IconButton>
+    const backIcon = (
+      <IconButton
+        iconClassName="material-icons"
+        iconStyle={styles.icon}
+        onTouchTap={this._handleBackTouchTap}
+      >
+        arrow_back
+      </IconButton>
+    )
+
+    const searchIcon = (
+      <IconButton
+        iconClassName="material-icons"
+        iconStyle={styles.icon}
+      >
+        search
+      </IconButton>
+    )
 
     return (
-      <Dialog ref="dialog" fullscreen={true}>
+      <Dialog ref="dialog" fullscreen>
         <Layout>
-          <Paper zDept={1}>
+          <Paper>
             <AppBar
               title="Chat"
-              zDept={0}
               style={styles.bar}
               iconElementLeft={backIcon}
-              iconElementRight={searchIcon}/>
-            <Tabs valueLink={{value: this.state.activeTab, requestChange: (tab) => this._handleTabsChange(tab)}}>
-              <Tab label="Conversations" value="chat"/>
-              <Tab label="Contacts" value="contacts"/>
+              iconElementRight={searchIcon} />
+            <Tabs valueLink={{
+              value: this.state.activeTab,
+              requestChange: (tab) => this._handleTabsChange(tab)
+            }}>
+              <Tab label="Conversations" value="chat" />
+              <Tab label="Contacts" value="contacts" />
             </Tabs>
           </Paper>
           <Content>
@@ -79,7 +106,7 @@ class Chat extends React.Component {
   _handleTabsChange(tab) {
     this.setState({activeTab: tab})
 
-    switch(tab) {
+    switch (tab) {
       case 'chat':
         this.context.history.pushState(null, '/chat')
         break
@@ -87,6 +114,10 @@ class Chat extends React.Component {
         this.context.history.pushState(null, '/contacts')
         break
     }
+  }
+
+  _handleBackTouchTap() {
+    this.close()
   }
 }
 

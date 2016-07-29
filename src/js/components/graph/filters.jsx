@@ -29,6 +29,11 @@ class Filters extends React.Component {
     filters: {}
   }
 
+  static propTypes = {
+    style: React.PropTypes.object,
+    showDefaults: React.PropTypes.bool
+  }
+
   static contextTypes = {
     muiTheme: React.PropTypes.object
   }
@@ -91,12 +96,12 @@ class Filters extends React.Component {
     const checked = this.state.filters[id]
 
     return (<IconToggle
-      icon={<filter.icon/>}
+      icon={<filter.icon />}
       style={[styles.item, checked && styles.itemActive]}
       id={id}
       checked={checked}
-      iconStyle={checked ? styles.iconActive :  styles.icon}
-      onCheck={() => {this.toggleFilter(id)}}/>
+      iconStyle={checked ? styles.iconActive : styles.icon}
+      onCheck={() => {this.toggleFilter(id)}} />
     )
   }
 
@@ -123,10 +128,10 @@ class Filters extends React.Component {
           anchorOrigin={{horizontal: 'right', vertical: 'top'}}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
         >
-          <MenuItem primaryText="Show only" disabled={true} />
-          <MenuItem primaryText="People" leftIcon={<PersonIcon/>} />
-          <MenuItem primaryText="Locations" leftIcon={<LocationIcon/>} />
-          <MenuItem primaryText="Events" leftIcon={<EventIcon/>} />
+          <MenuItem primaryText="Show only" disabled />
+          <MenuItem primaryText="People" leftIcon={<PersonIcon />} />
+          <MenuItem primaryText="Locations" leftIcon={<LocationIcon />} />
+          <MenuItem primaryText="Events" leftIcon={<EventIcon />} />
         </IconMenu>
       </div>
     )

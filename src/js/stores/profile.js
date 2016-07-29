@@ -1,5 +1,6 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
+import accountActions from '../actions/account'
 import GraphActions from 'actions/graph-actions'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser} from 'lib/rdf.js'
@@ -23,6 +24,10 @@ let profile = {
 
 export default Reflux.createStore({
   listenables: ProfileActions,
+
+  init() {
+    this.listenTo(accountActions.logout, this.onLogout)
+  },
 
   getInitialState () {
     return profile
@@ -60,8 +65,8 @@ export default Reflux.createStore({
 
   // change state from triples
   onLoadCompleted(webid, triples) {
+    console.log(profile)
     let relevant = triples.filter((t) => t.subject.uri === webid)
-
     profile.webid = webid
     for (var t of relevant) {
       let obj = t.object.uri ? t.object.uri : t.object.value
@@ -86,8 +91,19 @@ export default Reflux.createStore({
             givenName.length + 1, fullName.length)
       }
     }
-
     this.trigger(Object.assign({}, profile))
+  },
+
+  onLogout(){
+    profile = {
+      show: false,
+      fullName: '',
+      givenName: '',
+      familyName: '',
+      email: '',
+      webid: '#',
+      imgUri: null,
+    }
   },
 
   /* @summary Updates the rdf profile based on input

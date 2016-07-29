@@ -14,7 +14,6 @@ import {
 import GraphFilters from 'components/graph/filters.jsx'
 import SearchResults from './search-results.jsx'
 
-import SearchActions from 'actions/search'
 import SearchStore from 'stores/search'
 
 let Search = React.createClass({
@@ -25,6 +24,12 @@ let Search = React.createClass({
       show: false,
       reach: 'me'
     }
+  },
+
+  propTypes: {
+    onHide: React.PropTypes.func,
+    onChange: React.PropTypes.func,
+    onSubmit: React.PropTypes.func
   },
 
   contextTypes: {
@@ -122,28 +127,49 @@ let Search = React.createClass({
     let results
 
     if (this.state.query) {
-      results = <SearchResults style={styles.results} query={this.state.query}/>
+      results = (
+        <SearchResults
+          style={styles.results}
+          query={this.state.query}
+        />
+    )
     }
 
     return (
       <div style={styles.container}>
-        <Paper zDepth={1} style={styles.searchBar}>
+        <Paper style={styles.searchBar}>
           <AppBar
             style={styles.bar}
             zDepth={0}
-            title={<input placeholder="Search..." onChange={this._handleChange} onKeyUp={this._handleKeyUp} ref="input" style={styles.input}/>}
+            title={
+              <input
+                placeholder="Search..."
+                onChange={this._handleChange}
+                onKeyUp={this._handleKeyUp}
+                ref="input"
+                style={styles.input} />
+            }
             iconElementLeft={
-              <IconButton iconClassName="material-icons" iconStyle={{color: iconColor}} onTouchTap={this.hide}>arrow_back</IconButton>
+              <IconButton
+                iconClassName="material-icons"
+                iconStyle={{color: iconColor}}
+                onTouchTap={this.hide}>
+                  arrow_back
+              </IconButton>
             }
           />
           <nav style={styles.reach}>
             <p style={styles.reachLabel}>Search in</p>
-            <SelectField value={this.state.reach} onChange={this._handleReachChange} style={styles.select}>
+            <SelectField
+              value={this.state.reach}
+              onChange={this._handleReachChange}
+              style={styles.select}
+            >
               <MenuItem value="me" primaryText="Me" />
               <MenuItem value="node" primaryText="Current node" />
               <MenuItem value="all" primaryText="Biggest reach" />
             </SelectField>
-            <GraphFilters/>
+            <GraphFilters />
           </nav>
         </Paper>
 
@@ -161,7 +187,7 @@ let Search = React.createClass({
   },
 
   _handleKeyUp(e) {
-    if (e.keyCode == 13 && typeof this.props.onSubmit === 'function') {
+    if (e.keyCode === 13 && typeof this.props.onSubmit === 'function') {
       this.props.onSubmit(e.target.value)
     }
   },

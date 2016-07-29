@@ -106,7 +106,7 @@ let Login = React.createClass({
           <div style={{marginBottom: '20px'}}>
             <div>
               <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
-              <TextField floatingLabelText="Password" onChange={this._handlePasswordChange} />
+              <TextField floatingLabelText="Password" type="password" onChange={this._handlePasswordChange} />
             </div>
           </div>
           <RaisedButton secondary={true} onTouchTap={this.login} style={styles.button} label="Login"/>

@@ -163,6 +163,7 @@ let Signup = React.createClass({
 							onChange={this._onUsernameChange}
 							/>
 						<FormsyText name="password"
+              type="password"
 							floatingLabelText="Password"
 							onChange={this._onPasswordChange}
 							/>

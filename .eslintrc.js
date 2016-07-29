@@ -3,7 +3,7 @@ module.exports = {
         "browser": true,
         "es6": true
     },
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "extends": ["standard", "standard-jsx", "standard-react"],
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
@@ -26,10 +26,6 @@ module.exports = {
           "error",
           {"before": true, "after": true}
         ],
-        "indent": [
-            "error",
-            2
-        ],
         "linebreak-style": [
             "error",
             "unix"
@@ -42,7 +38,8 @@ module.exports = {
             "error",
             "never"
         ],
-        "react/wrap-multilines": "error",
-        "react/jsx-uses-react": "error"
+        "space-before-function-paren": [
+          "off"
+        ]
     }
 };

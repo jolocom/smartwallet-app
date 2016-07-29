@@ -716,6 +716,7 @@ export default class GraphD3 extends EventEmitter {
     let nodeCount = 0 - extraSpaceBack - extraSpaceFront
 
     for ( var i = this.rotationIndex + 1 - extraSpaceBack, pos = 0, end = 0; i !== this.rotationIndex - extraSpaceBack; i = (i + 1) % this.dataNodes.length) {
+      let test = this.rotationIndex
 
       if (this.dataNodes[i].rank === 'neighbour' ) {
         if ( nodeCount < this.MAX_VISIBLE_NUMBER_OF_NODES ){
@@ -1183,7 +1184,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Called from graph.jsx
   setRotationIndex = function (rotationIndex) {
-    this.rotationIndex = rotationIndex
+    this.rotationIndex = rotationIndex || 0
     // @todo only execute updateAfterRot if index changed
     this.updateAfterRotationIndex()
   }.bind(this)
