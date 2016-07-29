@@ -1,7 +1,7 @@
 import WebIDAgent from './webid.js'
-import {proxy} from 'settings'
 import {Parser} from '../rdf.js'
 import {Writer} from '../rdf.js'
+import {USER} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
@@ -67,7 +67,7 @@ class GraphAgent {
         this.putACL(newNodeUri.uri, currentUser.uri).then((uri)=>{
           // We use this in the LINK header.
           let aclUri = `<${uri}>`
-          fetch(`${proxy}/proxy?url=${newNodeUri.uri}`,{
+          fetch(Util.uriToProxied(newNodeUri.uri),{
             method: 'PUT', 
             credentials: 'include',
             body: writer.end(),
@@ -94,7 +94,7 @@ class GraphAgent {
   // CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
   deleteFile(uri){
-    return fetch(`${proxy}/proxy?url=${uri}`, {
+    return fetch(Util.uriToProxied(uri),{
       method: 'DELETE',
       credentials: 'include'
     })
@@ -105,7 +105,7 @@ class GraphAgent {
     return wia.getWebID().then((webID) => {
       let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
       return this.putACL(uri, webID).then(()=>{
-        return fetch(`${proxy}/proxy?url=${uri}`,{
+        return fetch(Util.uriToProxied(uri),{
           method: 'PUT', 
           credentials: 'include',
           headers: {
@@ -153,7 +153,7 @@ class GraphAgent {
     acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
     acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
 
-    return fetch(`${proxy}/proxy?url=${acl_uri}`,{
+    return fetch(Util.uriToProxied(acl_uri),{
       method: 'PUT', 
       credentials: 'include',
       body: acl_writer.end(),
@@ -172,20 +172,40 @@ class GraphAgent {
    * @param {object} predicate - triple predicate, undefined for wildcard.
    * @param {object} object - triple object, undefined for wildcard.
    * @returns {array | objects} - All triples matching the description.
-   * @returns {integer} - 0 if nothing was found.
    */
 
-  findTriple(uri, subject, predicate, object){
+  findTriples(uri, subject, predicate, object){
     let writer = new Writer()
     return this.fetchTriplesAtUri(uri).then((res)=>{
       for (let t of res.triples) {
         writer.addTriple(t.subject, t.predicate, t.object)
       }
-      if (writer.g.statementsMatching(subject, predicate, object).length > 0) {
-        return writer.g.statementsMatching(subject, predicate, object)
-      }
-      else {
-        return 0
+      return writer.g.statementsMatching(subject, predicate, object) 
+    })
+  }
+
+  /* @summary Finds the objects related to the supplied characteristic.
+   * @param {string} uri - The uri of the file to check
+   * @param {string} value - The field name we are interested in
+   * @return {array | objects} - All objects (in the rdf sense) associated
+   * with the value 
+   */
+
+  findObjectsByTerm(uri, value){
+    return new Promise ((resolve, reject) => {
+      if (!value || !uri) {
+        reject()
+      } else if (!USER[value]){
+        reject()
+      } else {
+        let user =rdf.sym(uri + '#me')
+        let result = []
+        this.findTriples(uri, user, USER[value], undefined).then((res)=>{
+          for (let triple of res) {
+            result.push(triple.object)
+          }
+          resolve(result)
+        })
       }
     })
   }
@@ -202,11 +222,12 @@ class GraphAgent {
   writeTriple(subject, predicate, object, draw){
     let validPredicate = (predicate.uri === SCHEMA('isRelatedTo').uri ||
                           predicate.uri === FOAF('knows').uri)
-    return this.findTriple(subject.uri, subject, predicate, object)
+    return this.findTriples(subject.uri, subject, predicate, object)
     .then((res)=>{
       if (res === 0){
         let newTrip = rdf.st(subject, predicate, object).toNT()
-        return fetch(`${proxy}/proxy?url=${subject.uri}`,{
+
+        return fetch(Util.uriToProxied(subject.uri),{
           method: 'PATCH', 
           credentials: 'include',
           body: 'INSERT DATA { ' + newTrip + ' } ;',
@@ -257,7 +278,7 @@ class GraphAgent {
     }).join(' ')
 
     query = 'DELETE DATA { ' + statement + ' } ;'
-    return fetch(`${proxy}/proxy?url=${uri}`,{
+    return fetch(Util.uriToProxied(uri),{
       method: 'PATCH', 
       credentials: 'include',
       body: query,
@@ -271,7 +292,7 @@ class GraphAgent {
   // This takes a standard URI, it proxies the request itself. 
   fetchTriplesAtUri(uri) {
     let parser = new Parser()
-    return fetch(`${proxy}/proxy?url=${uri}`, {
+    return fetch(Util.uriToProxied(uri),{
       credentials: 'include' 
     }).then((ans) => {
       if (ans.ok){

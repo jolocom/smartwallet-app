@@ -42,7 +42,7 @@ export default Reflux.createStore({
       return new Promise((resolve, reject) => {
         if (response.ok){
           let triples = []
-          this.gAgent.findTriple(subject.uri, subject, undefined, object).then((result)=>{
+          this.gAgent.findTriples(subject.uri, subject, undefined, object).then((result)=>{
             for (let t of result) {
               triples.push({
                 subject: t.subject,

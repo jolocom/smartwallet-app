@@ -3,8 +3,6 @@ let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
-
-import {proxy} from 'settings'
 import STYLES from 'styles/app.js'
 
 // D3 Converter takes a node (a node in this context is an array of triples that
@@ -51,10 +49,13 @@ class D3Converter {
       if (triple.subject.id >= 0) {
 
         props.has_blanks = true
-        if(!props.blanks) props.blanks = []
+        if (!props.blanks) {
+          props.blanks = []
+        }
          
-        if (!props.blanks[triple.subject.value])
+        if (!props.blanks[triple.subject.value]){
           props.blanks[triple.subject.value] = []
+        }
 
         props.blanks[triple.subject.value].push(triple)
       }
@@ -62,32 +63,50 @@ class D3Converter {
       let pred = triple.predicate.uri
       let obj = triple.object
 
-      // Updating the attributes of the node object. The resulting object will have
-      // all of it's props filled in, and will be ready to be rendered by D3
+      // Updating the attributes of the node object. 
+      // The resulting object will have all of it's props filled in, and will
+      // be ready to be rendered by D3
       // Note, if a triple is not present, it will be set to null.
-      // If the resource is a URI, it's value is stored next to the 'uri' key in the object
-      // otherwise it's value is stored in the 'value' key of the object. We need to make
-      // sure we are assigning the value regardless of where it's stored
+      // If the resource is a URI, it's value is stored next to the
+      // 'uri' key in the object otherwise it's value is stored in the 'value'
+      // key of the object. We need to make sure we are assigning the value
+      // regardless of where it's stored
 
       if (triple.subject.uri === uri){
-        if (pred === FOAF('givenName').uri) props.name = obj.value ? obj.value : obj.uri
-        if (pred === FOAF('familyName').uri) props.familyName = obj.value ? obj.value : obj.uri
-        if (pred === FOAF('name').uri) props.fullName = obj.value ? obj.value : obj.uri
-        if (pred === DC('title').uri) props.title = obj.value ? obj.value : obj.uri
-        if (pred === DC('description').uri) props.description = obj.value ? obj.value : obj.uri
-        if (pred === RDF('type').uri) props.type = obj.value ? obj.value : obj.uri
-        if (pred === FOAF('img').uri) props.img = obj.value ? obj.value : obj.uri
-        // Storage is used when adding files. Better to do it here then to send extra requests upon upload.
-        if (pred === NIC('storage').uri) props.storage = obj.value ? obj.value : obj.uri
+        if (pred === FOAF('givenName').uri) {
+          props.name = obj.value ? obj.value : obj.uri
+        }
+        if (pred === FOAF('familyName').uri) {
+          props.familyName = obj.value ? obj.value : obj.uri
+        }
+        if (pred === FOAF('name').uri) {
+          props.fullName = obj.value ? obj.value : obj.uri
+        }
+        if (pred === DC('title').uri) {
+          props.title = obj.value ? obj.value : obj.uri
+        }
+        if (pred === DC('description').uri) {
+          props.description = obj.value ? obj.value : obj.uri
+        }
+        if (pred === RDF('type').uri) {
+          props.type = obj.value ? obj.value : obj.uri
+        }
+        if (pred === FOAF('img').uri) {
+          props.img = obj.value ? obj.value : obj.uri
+        }
+        // Storage is used when adding files. Better to do it here then to send
+        // extra requests upon upload.
+        if (pred === NIC('storage').uri) {
+          props.storage = obj.value ? obj.value : obj.uri
+        }
       }
     }
    
-    if(props.img) props.img = `${proxy}/proxy?url=${props.img}`
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
       let angle = 0
 
-      if(this.n<8){
+      if (this.n<8){
         angle = (2 * Math.PI) / this.n
       }
       else {
@@ -97,11 +116,11 @@ class D3Converter {
       let halfwidth = STYLES.width / 2
       let halfheight = STYLES.height / 2
 
+      let largeNode = STYLES.largeNodeSize
+      props.x = Math.sin(angle * (this.i%8)) * largeNode * 0.5 + halfwidth
+      props.y = Math.cos(angle * (this.i%8)) * largeNode * 0.5 + halfheight
 
-      props.x = Math.sin(angle * (this.i%8)) * STYLES.largeNodeSize * 0.5 + halfwidth
-      props.y = Math.cos(angle * (this.i%8)) * STYLES.largeNodeSize * 0.5 + halfheight
-
-    } else if (!i && !n && rank =='a') {
+    } else if (!i && !n && rank ==='a') {
       // This takes care of nodes that are added dynamically, the mid + 30 is
       // the optimal position for spawning new nodes dynamically
       props.x = STYLES.width / 2 + 60
@@ -109,21 +128,29 @@ class D3Converter {
 
     }
 
-    if(node.unav) {
+    if (node.unav) {
       props.rank = 'unavailable'
       return props
     }
     
-    // We specify the rank of the node here. Center is the center node and Adjacent is a neighbour, smaller node
-    // This data is not absolute, it obviously depends on the viewport. Used for visualization purposes.
-    if (rank == 'a') props.rank = 'neighbour'
-    if (rank == 'c') props.rank = 'center'
+    // We specify the rank of the node here. Center is the center node 
+    // and Adjacent is a neighbour, smaller node. This data is not absolute,
+    // it obviously depends on the viewport. Used for visualization purposes.
+    if (rank === 'a') {
+      props.rank = 'neighbour'
+    }
 
-    if(!props.name && !props.familyName)
-      if(props.fullName){
-        props.name = props.fullName.substring(0, props.fullName.indexOf(' '))
-        props.familyName = props.fullName.substring(props.name.length,props.fullName.length -1)
+    if (rank === 'c') { 
+      props.rank = 'center'
+    }
+
+    if (!props.name && !props.familyName) {
+      if (props.fullName){
+        let fName = props.fullName
+        props.name = fName.substring(0, fName.indexOf(' '))
+        props.familyName = fName.substring(props.name.length, fName.length -1)
       }
+    }
     return props
   }
 }

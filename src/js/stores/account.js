@@ -7,7 +7,7 @@ export default Reflux.createStore({
 
   state: {
     loggingIn: false,
-    username: localStorage.getItem('fake-user')
+    username: localStorage.getItem('webId')
   },
 
   getInitialState() {
@@ -32,7 +32,7 @@ export default Reflux.createStore({
         'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
       }
     }).then((res)=>{
-      res.json().then((js)=>{
+      res.json().then(()=>{
         Account.login(user, pass)
       })
     })
@@ -59,9 +59,11 @@ export default Reflux.createStore({
   },
 
   // Triggers when the login is done.
+  // TODO support certificate login as well.
   onLoginCompleted(webid){
+    localStorage.setItem('auth-mode', 'proxy')
     localStorage.setItem('webId', webid)
-    this.trigger({username: 'https://proxy.webid.jolocom.de/proxy?url='+webid})
+    this.trigger({username: `${proxy}webid`})
   },
 
   onLogout(){
@@ -78,13 +80,14 @@ export default Reflux.createStore({
       loggingIn: false,
       username: null
     }
-		localStorage.removeItem('fake-user')
-		this.trigger(this.state)
+    localStorage.removeItem('webId')
+    localStorage.removeItem('auth-mode')
+    this.trigger(this.state)
   },
 
   loggedIn() {
     // How would this work now?
-    return localStorage.getItem('fake-user')
+    return localStorage.getItem('webId')
   }
 })
 

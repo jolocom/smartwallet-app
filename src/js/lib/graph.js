@@ -12,6 +12,7 @@ import {EventEmitter} from 'events'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 import TouchRotate from './touchRotate'
+import Utils from 'lib/util'
 
 const theme = getMuiTheme(JolocomTheme)
 
@@ -366,7 +367,7 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
-      .attr('xlink:href', (d) => d.img)
+      .attr('xlink:href', (d) => Utils.uriToProxied(d.img))
       .attr('width', (d) => {
         return d.rank === 'center' ? largeNode : smallNode
       })
