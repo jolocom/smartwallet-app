@@ -23,6 +23,8 @@ class Chat extends React.Component {
     this.state = {
       activeTab: this.getActiveTab(props.location.pathname)
     }
+
+    this._handleBackTouchTap = this._handleBackTouchTap.bind(this)
   }
 
   getActiveTab(path) {
@@ -59,10 +61,11 @@ class Chat extends React.Component {
   render() {
     const backIcon = (
       <IconButton
-        conClassName="material-icons"
+        iconClassName="material-icons"
         iconStyle={styles.icon}
-        onTouchTap={() => this.close()}>
-          arrow_back
+        onTouchTap={this._handleBackTouchTap}
+      >
+        arrow_back
       </IconButton>
     )
 
@@ -70,8 +73,8 @@ class Chat extends React.Component {
       <IconButton
         iconClassName="material-icons"
         iconStyle={styles.icon}
-        onTouchTap={() => {}}>
-          search
+      >
+        search
       </IconButton>
     )
 
@@ -81,7 +84,6 @@ class Chat extends React.Component {
           <Paper>
             <AppBar
               title="Chat"
-              zDept={0}
               style={styles.bar}
               iconElementLeft={backIcon}
               iconElementRight={searchIcon} />
@@ -112,6 +114,10 @@ class Chat extends React.Component {
         this.context.history.pushState(null, '/contacts')
         break
     }
+  }
+
+  _handleBackTouchTap() {
+    this.close()
   }
 }
 

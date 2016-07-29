@@ -4,7 +4,13 @@ import Reflux from 'reflux'
 
 import moment from 'moment'
 
-import {List, ListItem, Avatar, FloatingActionButton, FontIcon} from 'material-ui'
+import {
+  List,
+  ListItem,
+  Avatar,
+  FloatingActionButton,
+  FontIcon
+} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
 import TimerMixin from 'react-timer-mixin'
@@ -12,12 +18,18 @@ import TimerMixin from 'react-timer-mixin'
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 
-let Chat = React.createClass({
+let Conversations = React.createClass({
 
   mixins: [
     Reflux.connect(ConversationsStore, 'conversations'),
     TimerMixin
   ],
+
+  propTypes: {
+    children: React.PropTypes.node,
+    searchQuery: React.PropTypes.string,
+    profile: React.PropTypes.object
+  },
 
   contextTypes: {
     history: React.PropTypes.any,
@@ -29,13 +41,16 @@ let Chat = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if (prevProps.searchQuery && prevProps.searchQuery !== this.props.searchQuery) {
+    if (prevProps.searchQuery &&
+      prevProps.searchQuery !== this.props.searchQuery) {
       this.loadConversations()
     }
   },
 
   loadConversations() {
-    ConversationsActions.load(this.context.profile.username, this.props.searchQuery)
+    ConversationsActions.load(
+      this.context.profile.username, this.props.searchQuery
+    )
   },
 
   showConversation({id}) {
@@ -59,27 +74,16 @@ let Chat = React.createClass({
 
           <List>
             {this.state.conversations.items.map((conversation) => {
-              let {otherPerson} = conversation
-              let {created, content} = conversation.lastMessage
-              let avatar
-              if (otherPerson)
-                avatar = <Avatar src={otherPerson.img}>{otherPerson.name[0]}</Avatar>
-              let date = moment(created).fromNow()
-              return (
-                <ListItem key={conversation.id} primaryText={
-                  <div>
-                    <span>{otherPerson.name}</span>
-                    <span style={styles.date}>{date}</span>
-                  </div>
-                } secondaryText={content} leftAvatar={avatar} onTouchTap={() => this.showConversation(conversation)}/>
-              )
+              return <ConversationsListItem
+                conversation={conversation}
+                onTouchTap={this.showConversation} />
             })}
           </List>
 
         </div>
 
-        <FloatingActionButton linkButton={true}
-          secondary={true}
+        <FloatingActionButton
+          secondary
           href="#/chat/new"
           style={styles.actionButton}>
           <FontIcon className="material-icons">add</FontIcon>
@@ -88,6 +92,47 @@ let Chat = React.createClass({
         {this.props.children}
       </div>
     )
+  }
+})
+
+let ConversationsListItem = React.createClass({
+
+  propTypes: {
+    conversation: React.PropTypes.object.isRequired,
+    onTouchTap: React.PropTypes.func.isRequired
+  },
+
+  render() {
+    let {conversation} = this.props
+    let {otherPerson} = conversation
+    let {created, content} = conversation.lastMessage
+    let avatar
+    if (otherPerson) {
+      avatar = (
+        <Avatar src={otherPerson.img}>
+          {otherPerson.name[0]}
+        </Avatar>
+      )
+    }
+    let date = moment(created).fromNow()
+    return (
+      <ListItem
+        key={conversation.id}
+        primaryText={
+          <div>
+            <span>{otherPerson.name}</span>
+            <span style={styles.date}>{date}</span>
+          </div>
+        }
+        secondaryText={content}
+        leftAvatar={avatar}
+        onTouchTap={this._handleListItemTouchTap}
+      />
+    )
+  },
+
+  _handleListItemTouchTap() {
+    this.props.onTouchTap(this.props.conversation.id)
   }
 })
 
@@ -110,7 +155,7 @@ let styles = {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     fontSize: '18px'
   },
   date: {
@@ -125,4 +170,4 @@ let styles = {
   }
 }
 
-export default Radium(Chat)
+export default Radium(Conversations)
