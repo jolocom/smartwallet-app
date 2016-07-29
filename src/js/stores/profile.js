@@ -82,7 +82,8 @@ export default Reflux.createStore({
     if (!givenName && !familyName) {
       if (fullName) {
         profile.givenName = fullName.substring(0, fullName.indexOf(' '))
-        profile.familyName = fullName.substring(givenName.length + 1, fullName.length)
+        profile.familyName = fullName.substring(
+            givenName.length + 1, fullName.length)
       }
     }
 
@@ -132,21 +133,25 @@ export default Reflux.createStore({
     }
 
     insertStatement = insertTriples.map((t)=>{
-      if (t.predicate.uri === FOAF('mbox').uri)
+      if (t.predicate.uri === FOAF('mbox').uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
+      }
       return rdf.st(t.subject, t.predicate, t.object).toNT() 
     }).join(' ')
 
     deleteStatement = deleteTriples.map((t)=>{
-      if (t.predicate.uri === FOAF('mbox').uri)
+      if (t.predicate.uri === FOAF('mbox').uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
+      }
       return rdf.st(t.subject, t.predicate, t.object).toNT() 
     }).join(' ')
 
-    if (deleteStatement)
+    if (deleteStatement) {
       deleteStatement = `DELETE DATA { ${deleteStatement} }`
-    if (insertStatement)
+    }
+    if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
+    }
      
     return new Promise((res, rej) => {
       if (!deleteStatement && !insertStatement) {
@@ -161,7 +166,9 @@ export default Reflux.createStore({
           }
         }).then((result) => {
           // TODO Works weird if your node is note centered
-          if(params.currentNode) GraphActions.drawAtUri(params.currentNode, 0)
+          if (params.currentNode) {
+            GraphActions.drawAtUri(params.currentNode, 0)
+          }
           this.trigger(Object.assign(profile, newData))
           res(result) 
         }).catch((e) => {
