@@ -144,8 +144,9 @@ export default Reflux.createStore({
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-      for (let i = 0; i < number; i++)
+      for (let i = 0; i < number; i++) {
         this.state.navHistory.pop()
+      }
       this.trigger(this.state)
     })
   },

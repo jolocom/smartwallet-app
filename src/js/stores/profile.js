@@ -2,6 +2,7 @@ import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
 import accountActions from '../actions/account'
 import GraphActions from 'actions/graph-actions'
+import GraphStore from 'stores/graph-store'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser} from 'lib/rdf.js'
 import {proxy} from 'settings'
@@ -27,6 +28,15 @@ export default Reflux.createStore({
 
   init() {
     this.listenTo(accountActions.logout, this.onLogout)
+    this.listenTo(GraphStore, this.graphUpdate)
+  },
+
+  graphUpdate(data) {
+    if (data && data.center) {
+      profile.storage = data.center.storage 
+      profile.currentNode = data.center.uri
+      this.trigger(Object.assign({}, profile))
+    }
   },
 
   getInitialState () {
@@ -65,7 +75,6 @@ export default Reflux.createStore({
 
   // change state from triples
   onLoadCompleted(webid, triples) {
-    console.log(profile)
     let relevant = triples.filter((t) => t.subject.uri === webid)
     profile.webid = webid
     for (var t of relevant) {
@@ -111,7 +120,6 @@ export default Reflux.createStore({
    */
 
   onUpdate: function (params) {
-
     let newData = Object.assign({}, params)
     let oldData = Object.assign({}, profile)
 
@@ -181,10 +189,14 @@ export default Reflux.createStore({
             'Content-Type':'application/sparql-update' 
           }
         }).then((result) => {
-          // TODO Works weird if your node is note centered
+
+          /* This is supposed to refresh the graph. Does not
+           * work well enough. Find a better way to do it.
+           */
           if (params.currentNode) {
             GraphActions.drawAtUri(params.currentNode, 0)
           }
+          profile.currentNode = params.currentNode 
           this.trigger(Object.assign(profile, newData))
           res(result) 
         }).catch((e) => {

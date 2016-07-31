@@ -51,7 +51,6 @@ let App = React.createClass({
 
   getChildContext: function () {
     let {account, profile, searchActive} = this.state
-    console.log(profile)
     return {
       muiTheme: this.theme,
       profile: profile,

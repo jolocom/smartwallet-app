@@ -89,6 +89,11 @@ export default Reflux.createStore({
     let predicate = null
     if(type === 'generic') predicate = SCHEMA('isRelatedTo')
     if(type ==='knows') predicate = FOAF('knows')
-    this.gAgent.writeTriple(rdf.sym(start), predicate, rdf.sym(end), flag)
+    let payload = {
+      subject: rdf.sym(start),
+      predicate,
+      object: rdf.sym(end)
+    }
+    this.gAgent.writeTriples(start, [payload], flag)
   }
 })

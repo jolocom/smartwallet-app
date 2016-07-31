@@ -27,21 +27,12 @@ import GraphAgent from '../../lib/agents/graph.js'
 let Profile = React.createClass({
   mixins: [
     Reflux.listenTo(ProfileStore, 'onProfileChange'),
-    Reflux.listenTo(GraphStore, 'onGraphChange')
   ],
 
   onProfileChange: function(state) {
     this.setState(state)
   },
 
-  onGraphChange: function(state) {
-    if (state && state.center) {
-      this.setState({
-        storage: state.center.storage, 
-        currentNode: state.center.uri 
-      })
-    }
-  },
   componentDidMount(){
     this.loading = false
   },

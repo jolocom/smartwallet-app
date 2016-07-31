@@ -62,7 +62,13 @@ class GraphAgent {
       }
       // The predicate here will have to change dynamically as well,
       // based on the chosen predicate.
-      this.writeTriple(center, SCHEMA('isRelatedTo'), newNodeUri)
+      let payload = {
+        subject: center,
+        predicate: SCHEMA('isRelatedTo'),
+        object: newNodeUri
+      }
+
+      this.writeTriples(center.uri,[payload], false)
       .then(()=> {
         this.putACL(newNodeUri.uri, currentUser.uri).then((uri)=>{
           // We use this in the LINK header.
@@ -212,38 +218,65 @@ class GraphAgent {
 
   /**
    * @summary Adds a new triple to an rdf file.
-   * @params {object} subject - triple subject, also the uri of the file.
-   * @params {object} predicate - triple predicate.
-   * @params {object} object - triple object.
-   * @params {boolean} draw - do we play the node add animation.
+   * @params {object} uri - The uri of the file to add the triples to.
+   * @params {array | object} triples - array of objets describing triples.
+   * @params {boolean} draw - play the animation or not.
    * @return {function} fetch request - .then contains the response. 
    */ 
 
-  writeTriple(subject, predicate, object, draw){
-    let validPredicate = (predicate.uri === SCHEMA('isRelatedTo').uri ||
-                          predicate.uri === FOAF('knows').uri)
-    return this.findTriples(subject.uri, subject, predicate, object)
-    .then((res)=>{
-      if (res === 0){
-        let newTrip = rdf.st(subject, predicate, object).toNT()
+  writeTriples(uri, triples, draw){
+    let validPredicate = false
 
-        return fetch(Util.uriToProxied(subject.uri),{
-          method: 'PATCH', 
-          credentials: 'include',
-          body: 'INSERT DATA { ' + newTrip + ' } ;',
-          headers: {
-            'Content-Type':'application/sparql-update' 
+    if (triples.length === 1) {  
+      let pred = triples[0].predicate.uri
+      validPredicate = (pred === SCHEMA('isRelatedTo').uri ||
+                        pred === FOAF('knows').uri)
+    } 
+
+    let statements = []
+    return new Promise ((resolve, reject) => {    
+      for (let i = 0; i < triples.length; i++) {
+        let t = triples[i]
+        this.findTriples(t.subject.uri, t.subject, t.predicate, t.object)
+        .then((res)=>{
+          if (res.length === 0){
+            statements.push({
+              subject: t.subject,
+              predicate: t.predicate,
+              object: t.object
+            })
+          } else {
+            // Think about this
+            return reject('A triple is already present in the file!') 
           }
-        }).then((result) => {
-          if (result.ok && draw && validPredicate) {
-            GraphActions.drawNewNode(object.uri, predicate.uri)
+          if (i === triples.length - 1) {
+            return resolve()
           }
         })
-      } else {
-        console.warn('Triple already present in the rdf file.') 
       }
+    }).then(()=>{
+      statements = statements.map(st => {
+        return rdf.st(st.subject, st.predicate, st.object).toNT()
+      }).join(' ')
+
+      return fetch(Util.uriToProxied(uri),{
+        method: 'PATCH', 
+        credentials: 'include',
+        body: `INSERT DATA { ${statements } } ;`, 
+        headers: {
+          'Content-Type':'application/sparql-update' 
+        }
+      }).then((res)=>{
+        // At the moment the animation fires when we only add one triple.
+        if (res.ok && draw && validPredicate) {
+          let obj = triples[0].object.uri
+          let pred = triples[0].predicate.uri
+          GraphActions.drawNewNode(obj, pred)
+        }
+      })
     })
   }
+
 
   /**
    * @summary Deletes a triple from an rdf file.

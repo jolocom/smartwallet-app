@@ -1,6 +1,9 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
 import {proxy} from 'settings'
+import graphAgent from 'lib/agents/graph'
+import rdf from 'rdflib'
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 
 export default Reflux.createStore({
   listenables: Account,
@@ -22,8 +25,12 @@ export default Reflux.createStore({
   },
 
   onSignup(data) {
+    localStorage.setItem('auth-mode', 'proxy')
+
     let user = encodeURIComponent(data.username)
     let pass = encodeURIComponent(data.password)
+    let name = data.name
+    let email = data.email
 
     fetch(`${proxy}/register`, {
       method: 'POST',
@@ -32,13 +39,27 @@ export default Reflux.createStore({
         'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' 
       }
     }).then((res)=>{
-      res.json().then(()=>{
-        Account.login(user, pass)
+      res.json().then((js)=>{
+        if (name || email) {
+          let payload = {name, email}
+          Account.login(user, pass, payload)
+        } else {
+          Account.login(user, pass)
+        }
       })
     })
   },
 
-  onLogin(username, password) {
+
+  /* @summary logs a user in. In case there's a updatePayload, first 
+   * applies the update and then logs the user.
+   * @param {string} username 
+   * @param {string} password
+   * @param {object} updatePayload - contains the name / email of a newly
+   * created user. Only used when registering a new user.
+  */
+
+  onLogin(username, password, updatePayload) {
     if (localStorage.getItem('webId')){
       Account.login.completed(localStorage.getItem('webId')) 
     } else if (username && password) {
@@ -54,14 +75,47 @@ export default Reflux.createStore({
         }
       }).then((res)=>{
         res.json().then((js)=>{
+          if (updatePayload) {
+            Account.setNameEmail(js.webid, updatePayload.name, updatePayload.email) 
+          } else {
           Account.login.completed(js.webid)
+          }
         })
       })
     }
   },
 
-  // Triggers when the login is done.
-  // TODO support certificate login as well.
+  /* @summary in case the user specified a name / email when registering,
+   * we update his already created profile with the data he introduced.
+   * @param {string} name - the name we update the profile with.
+   * @param {string} email - the email we update the profile with.
+   */
+   
+  onSetNameEmail(webid, name, email){
+    let gAgent = new graphAgent()
+    let triples = []
+    if (name) {
+      triples.push({
+        subject: rdf.sym(webid),
+        predicate: FOAF('givenName'),
+        object: name
+      }) 
+    }
+
+    if (email) {
+      triples.push({
+        subject: rdf.sym(webid),
+        predicate: FOAF('mbox'),
+        // Keep an eye on this.
+        object: rdf.sym(`mailto:${email}`)
+      }) 
+    }
+
+    gAgent.writeTriples(webid, triples, false).then(()=>{
+      Account.login.completed(webid)
+    })
+  },
+
   onLoginCompleted(webid){
     localStorage.setItem('auth-mode', 'proxy')
     localStorage.setItem('webId', webid)

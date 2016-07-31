@@ -43,7 +43,7 @@ let Header = React.createClass({
   },
   render() {
     let initials, {profile} = this.context
-    let name = profile.fullName ? profile.fullName : profile.givenName
+    let name = profile.givenName ? profile.givenName : profile.fullName
 
     let styles = this.getStyles()
     if (name)
