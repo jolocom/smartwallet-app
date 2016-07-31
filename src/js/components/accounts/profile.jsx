@@ -86,10 +86,10 @@ let Profile = React.createClass({
     if (file) {
       img = URL.createObjectURL(file)
     } else if (imgUri) {
-      img = imgUri
+      img = Util.uriToProxied(imgUri)
     }
-    let bgImg = Util.uriToProxied(img) || '/img/person-placeholder.png'
-
+		console.log('rerender!')
+    let bgImg = img || '/img/person-placeholder.png'
     return (
       <Dialog ref="dialog" fullscreen={true}>
         <Layout fixedHeader={true}>
@@ -102,9 +102,12 @@ let Profile = React.createClass({
                 iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={
-              <IconButton 
-              onClick={this._handleUpdate} 
-              iconClassName="material-icons">check</IconButton>
+							!this.state.loading ? 
+								<IconButton 
+								onClick={this._handleUpdate} 
+								iconClassName="material-icons">check</IconButton>
+							:
+ 								<IconButton  iconClassName="material-icons">hourglass_empty</IconButton>
             }
           />
           <Content style={styles.content}>
@@ -153,8 +156,10 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    this.hide()
-    ProfileActions.update(Object.assign({},this.state, {show:false}))
+    if (!this.loading) {
+      this.hide()
+      ProfileActions.update(Object.assign({},this.state, {show:false}))
+    }
   },
 
   _handleSelect() {
@@ -178,7 +183,6 @@ let Profile = React.createClass({
   },
 
   _handleSelectFile({target}) {
-    this.loading = true
 
     let gAgent = new GraphAgent()
     let file = target.files[0]
@@ -188,11 +192,17 @@ let Profile = React.createClass({
       })
     } else {
       this.setState({
+				loading: true
+			})
+      this.setState({
         error: null,
         file: file
       })
 
       gAgent.storeFile(this.state.storage, file).then((res) => {
+				this.setState({
+					loading: false
+				})
         this.setState({imgUri: res})
       }).catch((e)=>{
         console.log(e)
