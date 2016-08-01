@@ -1,11 +1,19 @@
 import React, {Children} from 'react'
 import Radium from 'radium'
 
-import _ from 'lodash'
-
 import {FloatingActionButton, FontIcon} from 'material-ui'
 
 let FabMenu = React.createClass({
+
+  propTypes: {
+    children: React.PropTypes.node,
+    duration: React.PropTypes.number,
+    icon: React.PropTypes.string,
+    closeIcon: React.PropTypes.string,
+    overlay: React.PropTypes.number,
+    onClick: React.PropTypes.func,
+    onTouchTap: React.PropTypes.func
+  },
 
   getDefaultProps() {
     return {
@@ -68,12 +76,10 @@ let FabMenu = React.createClass({
 
   render() {
     let {
-      ripple,
       icon,
-      // closeIcon,
-      // zIndex,
-      overlay,
-      ...otherProps
+      closeIcon,
+      duration,
+      overlay
     } = this.props
 
     let styles = this.getStyles()
@@ -86,11 +92,12 @@ let FabMenu = React.createClass({
       return React.cloneElement(child, {
         onClick: (...args) => {
           this.setState({open: false})
-          if (typeof child.props.onClick === 'function')
+          if (typeof child.props.onClick === 'function') {
             child.props.onClick(...args)
+          }
         },
         secondary: true,
-        style: _.extend({
+        style: Object.assign({}, {
           transition: `opacity ${duration}s, transform ${duration}s`,
           transitionDelay: `${delay}s`,
           willChange: 'opacity, transform',
@@ -100,11 +107,23 @@ let FabMenu = React.createClass({
       })
     })
 
+    let rotate = this.state.open && closeIcon ? 90 : 0
+
     return (
       <div style={styles.container}>
         <nav style={styles.nav}>
-          <FloatingActionButton onClick={this.toggle} style={styles.item} secondary={true}>
-            <FontIcon className="material-icons">{icon}</FontIcon>
+          <FloatingActionButton
+            onTouchTap={this.toggle}
+            style={styles.item}
+            iconStyle={{
+              transition: `transform ${duration}s`,
+              transform: `rotate(${rotate}deg)`
+            }}
+            secondary
+          >
+            <FontIcon className="material-icons">
+              {this.state.open ? (closeIcon || icon) : icon}
+            </FontIcon>
           </FloatingActionButton>
           {children}
         </nav>
