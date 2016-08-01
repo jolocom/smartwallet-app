@@ -1,6 +1,6 @@
 /**
  * If you need to override default Material-UI styles, check the link below
- * for the corresponding componenent style you want to change and add the
+ * for the corresponding component style you want to change and add the
  * updated styles to `JolocomTheme`
  * https://git.io/v6vXz
  */
