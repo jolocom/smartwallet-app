@@ -67,9 +67,9 @@ let Signup = React.createClass({
 
   _onUsernameChange(e) {
     this.setState({
-      username: e.target.value
+      username: e.target.value.toLowerCase()
     })
-    Availability.check(e.target.value)
+    //Availability.check(e.target.value.toLowerCase())
   },
 
   _onNameChange(e) {
@@ -145,6 +145,7 @@ let Signup = React.createClass({
   },
 
 	render() {
+  console.log(this.state)
 	let styles = this.getStyles()
 	return (
 		<div style={styles.container}>
