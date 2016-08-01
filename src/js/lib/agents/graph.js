@@ -1,9 +1,7 @@
-import HTTPAgent from './http.js'
 import WebIDAgent from './webid.js'
-
 import {Parser} from '../rdf.js'
 import {Writer} from '../rdf.js'
-import solid from 'solid-client'
+import {USER} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
@@ -12,172 +10,368 @@ let SCHEMA = rdf.Namespace('https://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
+let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
 
-class GraphAgent extends HTTPAgent {
+class GraphAgent {
 
-  // We create a rdf file at the distContainer containing a title and description passed to it
-  createNode(currentUser, currentNode, title, description, image, type) {
+  // We create a rdf file at the distContainer containing a title and 
+  // description passed to it
+  // TODO break this down.
+  createNode(currentUser, centerNode, title, description, image, nodeType) {
+    let center = rdf.sym(centerNode.uri)
     let writer = new Writer()
-    // The randomly generated uri of the new rdf file
-    let draw = true
-    this.writeAccess(currentUser, currentNode).then((res) => {
-      if (res == false) {
-        draw = false
+    let dstContainer = centerNode.storage  ?
+      centerNode.storage : currentUser.storage
+    let newNodeUri = rdf.sym(dstContainer + Util.randomString(5))
+
+    // The boilerplate.
+    writer.addTriple(newNodeUri, DC('title'), title)
+    writer.addTriple(newNodeUri, NIC('storage'), dstContainer)
+    writer.addTriple(newNodeUri, FOAF('maker'), center)
+
+    // Populating the file with the appropriate triples.
+    if (description) { 
+      writer.addTriple(newNodeUri, DC('description'), description)
+    }
+    if (nodeType === 'default') {
+      writer.addTriple(newNodeUri, RDF('type') , FOAF('Document'))
+    }
+    if (nodeType === 'image') {
+      writer.addTriple(newNodeUri, RDF('type') , FOAF('Image'))
+    }
+
+    // Handling the picture upload
+    return new Promise((resolve, reject) => {
+      // Check if the image is there and it is a file.
+      if (image instanceof File) {
+        this.storeFile(dstContainer, image).then((result) => {
+          resolve(result)
+        }).catch((err) => {
+          reject(err)
+        })
+        // This will resolve to undefined / null
+      } else {
+        resolve(image)
       }
-      let dstContainer = currentUser.substring(0, currentUser.indexOf('profile'))
-      let uri = dstContainer + Util.randomString(5)
-
-      writer.addTriple(rdf.sym(uri), DC('title'), title)
-      writer.addTriple(rdf.sym(uri), SCHEMA('isRelatedTo'), rdf.sym(currentNode))
-      writer.addTriple(rdf.sym(uri), FOAF('maker'), rdf.sym(currentUser))
-      if (description) {
-        writer.addTriple(rdf.sym(uri), DC('description'), description)
+    }).then((image) => {
+      if (image) {
+        writer.addTriple(newNodeUri, FOAF('img'), image)
+      }
+      // The predicate here will have to change dynamically as well,
+      // based on the chosen predicate.
+      let payload = {
+        subject: center,
+        predicate: SCHEMA('isRelatedTo'),
+        object: newNodeUri
       }
 
-      if(type == 'default') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Document'))
-      if(type == 'person') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Person'))
-      if(type == 'company') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Organization'))
-      if(type == 'image') writer.addTriple(rdf.sym(uri), RDF('type') , FOAF('Image'))
-      // Schema represents this better, perhaps use schema for everything eventually TODO
-      if(type == 'event') writer.addTriple(rdf.sym(uri), RDF('type') , SCHEMA('Event'))
-
-      return new Promise((resolve, reject) => {
-        if (image instanceof File) {
-          this.storeFile(currentUser, dstContainer, image).then((result) => {
-            resolve(result.url)
-          }).catch((err) => {
-            reject(err)
-          })
-        } else {
-          resolve(image)
-        }
-      }).then((image) => {
-        // If the image is there, we add it to the rdf file.
-        if (image) {
-          writer.addTriple(rdf.sym(uri), FOAF('img'), image)
-        }
-        // Here we add the triple to the user's rdf file, this triple connects
-        // him to the resource that he uploaded
-        this.writeTriple(currentNode, SCHEMA('isRelatedTo'), rdf.sym(uri)).then(()=> {
-          this.writeTriple(currentUser, FOAF('made'), rdf.sym(uri)).then(() => {
-            if (draw)
-              GraphActions.drawNewNode(uri)
-            return solid.web.put(uri, writer.end())
+      this.writeTriples(center.uri,[payload], false)
+      .then(()=> {
+        this.putACL(newNodeUri.uri, currentUser.uri).then((uri)=>{
+          // We use this in the LINK header.
+          let aclUri = `<${uri}>`
+          fetch(Util.uriToProxied(newNodeUri.uri),{
+            method: 'PUT', 
+            credentials: 'include',
+            body: writer.end(),
+            headers: {
+              'Content-Type':'text/turtle',
+              'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", '+
+                aclUri + ' rel="acl"'
+            }
+          }).then((answer)=>{
+            if (answer.ok) {
+              GraphActions.drawNewNode(
+                  newNodeUri.uri, SCHEMA('isRelatedTo').uri)
+            }
+          }).catch((error)=>{
+            console.warn('Error,',error,'occured when putting the rdf file.') 
           })
         })
       })
     })
   }
-
-  storeFile(currentUser, dstContainer, file) {
-    let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-    return solid.web.put(uri, file, file.type)
+  
+  // Should we remove the ACL file associated with it as well? 
+  // PRO : we won't need the ACL file anymore 
+  // CON : it can be a parent ACL file, that would
+  // result in other children loosing the ACL as well.
+  deleteFile(uri){
+    return fetch(Util.uriToProxied(uri),{
+      method: 'DELETE',
+      credentials: 'include'
+    })
+  }
+  
+  storeFile(dstContainer, file) {
+    let wia = new WebIDAgent()
+    return wia.getWebID().then((webID) => {
+      let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      return this.putACL(uri, webID).then(()=>{
+        return fetch(Util.uriToProxied(uri),{
+          method: 'PUT', 
+          credentials: 'include',
+          headers: {
+            'Content-Type':'image' 
+          },
+          body: file
+        }).then(()=>{
+          return uri
+        }).catch(()=>{
+          return undefined
+        })
+      })
+    })
   }
 
-  // Takes the current web ID and the link to the file we want to write to and
-  // returns a bool saying wheather or not you are allowed to write to that uri.
-  writeAccess(webId, node_uri) {
-    console.log(node_uri, ' This is the rdf file we are trying to write to. ')
+  // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
+  // PUT ACL and WRITE TRIPLE should be called after making sure that the user
+  // has write access
+  putACL(uri, webID){
+    let acl_writer = new Writer()
+    let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+    let acl_uri = `${uri}.acl`
+
+    /* PROXY currently doesn't return the link header TODO
+    return solid.web.options(`${proxy}/proxy?url=${uri}`).then((res) => {
+    let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
+      : acl_uri = uri+'.acl'
+
+    if (acl_uri.indexOf('http://') < 0 || acl_uri.indexOf('https://') < 0)
+      acl_uri = uri.substring(0, uri.lastIndexOf('/') + 1) + acl_uri
+    */
+
+    // We create only one type of ACL file. Owner has full controll,
+    // everyone else has read access. This will change in the future.
+    acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
+    acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
+    acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
+    acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webID))
+    acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
+    acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
+    acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+
+    acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
+    acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
+    acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
+    acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
+
+    return fetch(Util.uriToProxied(acl_uri),{
+      method: 'PUT', 
+      credentials: 'include',
+      body: acl_writer.end(),
+      headers: {
+        'Content-Type':'text/turtle' 
+      }
+    }).then(()=>{return acl_uri})
+    .catch((e)=>{console.log('error',e,'occured while putting the acl file')})
+	//})
+  }
+
+  /**
+   * @summary Find the triple in the RDF file at the uri.
+   * @param {string} uri - uri of the rdf file. 
+   * @param {object} subject - triple subject, undefined for wildcard.
+   * @param {object} predicate - triple predicate, undefined for wildcard.
+   * @param {object} object - triple object, undefined for wildcard.
+   * @returns {array | objects} - All triples matching the description.
+   */
+
+  findTriples(uri, subject, predicate, object){
     let writer = new Writer()
-    return new Promise((resolve) => {
-      this.fetchTriplesAtUri(node_uri).then((file) =>{
-        for (var i = 0; i < file.triples.length; i++) {
-          let triple = file.triples[i]
-          writer.addTriple(triple.subject, triple.predicate, triple.object)
+    return this.fetchTriplesAtUri(uri).then((res)=>{
+      for (let t of res.triples) {
+        writer.addTriple(t.subject, t.predicate, t.object)
+      }
+      return writer.g.statementsMatching(subject, predicate, object) 
+    })
+  }
+
+  /* @summary Finds the objects related to the supplied characteristic.
+   * @param {string} uri - The uri of the file to check
+   * @param {string} value - The field name we are interested in
+   * @return {array | objects} - All objects (in the rdf sense) associated
+   * with the value 
+   */
+
+  findObjectsByTerm(uri, value){
+    return new Promise ((resolve, reject) => {
+      if (!value || !uri) {
+        reject()
+      } else if (!USER[value]){
+        reject()
+      } else {
+        let user =rdf.sym(uri + '#me')
+        let result = []
+        this.findTriples(uri, user, USER[value], undefined).then((res)=>{
+          for (let triple of res) {
+            result.push(triple.object)
+          }
+          resolve(result)
+        })
+      }
+    })
+  }
+
+  /**
+   * @summary Adds a new triple to an rdf file.
+   * @params {object} uri - The uri of the file to add the triples to.
+   * @params {array | object} triples - array of objets describing triples.
+   * @params {boolean} draw - play the animation or not.
+   * @return {function} fetch request - .then contains the response. 
+   */ 
+
+  writeTriples(uri, triples, draw){
+    let validPredicate = false
+
+    if (triples.length === 1) {  
+      let pred = triples[0].predicate.uri
+      validPredicate = (pred === SCHEMA('isRelatedTo').uri ||
+                        pred === FOAF('knows').uri)
+    } 
+
+    let statements = []
+    return new Promise ((resolve, reject) => {    
+      for (let i = 0; i < triples.length; i++) {
+        let t = triples[i]
+        this.findTriples(t.subject.uri, t.subject, t.predicate, t.object)
+        .then((res)=>{
+          if (res.length === 0){
+            statements.push({
+              subject: t.subject,
+              predicate: t.predicate,
+              object: t.object
+            })
+          } else {
+            // Think about this
+            return reject('A triple is already present in the file!') 
+          }
+          if (i === triples.length - 1) {
+            return resolve()
+          }
+        })
+      }
+    }).then(()=>{
+      statements = statements.map(st => {
+        return rdf.st(st.subject, st.predicate, st.object).toNT()
+      }).join(' ')
+
+      return fetch(Util.uriToProxied(uri),{
+        method: 'PATCH', 
+        credentials: 'include',
+        body: `INSERT DATA { ${statements } } ;`, 
+        headers: {
+          'Content-Type':'application/sparql-update' 
         }
-        console.log(writer.g)
-
-        // Checking if the file we are trying to write to is an event. If yes then we
-        // Allow access.
-        let eve = writer.g.statementsMatching(undefined, RDF('type'), rdf.sym('http://schema.org/Event'))
-        // We only check for the author if the rdf file has the author entry in it in the first place.
-        let author = writer.g.statementsMatching(undefined, FOAF('maker'), undefined)
-        if (author.length > 0) author = author[0].object.uri
-
-        if (author == webId || eve.length > 0) {
-          console.log(eve)
-          console.log('Write access granted')
-          resolve(true)
-        } else {
-          console.log('No write access')
-          resolve(false)
+      }).then((res)=>{
+        // At the moment the animation fires when we only add one triple.
+        if (res.ok && draw && validPredicate) {
+          let obj = triples[0].object.uri
+          let pred = triples[0].predicate.uri
+          GraphActions.drawNewNode(obj, pred)
         }
       })
     })
   }
 
 
-  writeTriple(subject, predicate, object) {
+  /**
+   * @summary Deletes a triple from an rdf file.
+   *
+   * @param {string} uri -  the file we are removing from
+   * @param {object} subject - subject of the triple we are deleting
+   * @param {object} predicate - predicate of the triple we are deleting
+   * @param {object} object - object of the triple we are deleting
+   * Or
+   * @param {object} {uri: uri, triples: [{subj,pred,obj}, {subj,pred,obj}..]}
+   * @return {promise} fetch request - .then contains the response. 
+   */ 
+  
+  // uri,subj,pred,obj
+  // {uri:uri, triples:[]}
+  deleteTriple(...args){
+    let subject, predicate, object
+    let triples = []
+    let uri, query
+    
+    // Check if we received only one object with multiple triples in there.
+    if (args.length === 1){
+      ({uri} = args[0])
+      triples = args[0].triples
+    } else {
+      ([uri, subject, predicate, object] = args)
+      triples = [{subject, predicate, object}]
+    }
 
-    let writer = new Writer()
-    subject = rdf.sym(subject)
-    // First we fetch the triples at the webId/uri of the user adding the triple
-    return new Promise((resolve) => {
-      this.fetchTriplesAtUri(subject.uri).then((file) => {
-        for (var i = 0; i < file.triples.length; i++) {
-          let triple = file.triples[i]
-          writer.addTriple(triple.subject, triple.predicate, triple.object)
-        }
-        writer.addTriple(subject, predicate, object)
-        // Then we serialize the object to Turtle and PUT it's address.
-        solid.web.put(subject.uri, writer.end()).then(resolve)
-      })
+    let statement = triples.map(t => {
+      return rdf.st(t.subject, t.predicate, t.object).toNT()
+    }).join(' ')
+
+    query = 'DELETE DATA { ' + statement + ' } ;'
+    return fetch(Util.uriToProxied(uri),{
+      method: 'PATCH', 
+      credentials: 'include',
+      body: query,
+      headers: {
+        'Content-Type':'application/sparql-update' 
+      }
     })
   }
 
-  // I tried rewriting this so that it uses solid.web.get(uri) to fetch the rdf file
-  // instead of using XHR, the problem is that solid.web.get(uri) "optimizes" the resource
-  // before returning it, for instance some common uris would be written as
-  // ../../joachim/card#me. This obviously makes them unparsable, at least for now.
-
+  
+  // This takes a standard URI, it proxies the request itself. 
   fetchTriplesAtUri(uri) {
-    return this.get(uri)
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response)
-        // Look at line 155 for clarifications if you dare.
-      }).catch(()=>{
-        console.log('The uri', uri, 'could not be resolved. Skipping')
-        // We return this in order to later be able to display it grayed out.
-        return {uri: uri, unav : true, triples:[]}
-      })
+    let parser = new Parser()
+    return fetch(Util.uriToProxied(uri),{
+      credentials: 'include' 
+    }).then((ans) => {
+      if (ans.ok){
+        return ans.text().then((res)=>{
+          return parser.parse(res, uri) 
+        })
+        // This is later used for displaying broken nodes.
+      } else {
+        return {uri: uri, unav : true, connection:null,  triples:[]} 
+      }
+    })
   }
 
-// This function gets passed a center uri and it's triples, and then finds all possible
-// links that we choose to display. After that it parses those links for their RDF data.
-
+  // This function gets passed a center uri and it's triples, 
+  // and then finds all possible links that we choose to display.
+  // After that it parses those links for their RDF data.
   getNeighbours(center, triples) {
-    // We will only follow and parse the links that end up in the neighbours array.
-    let Links = [SCHEMA('performerIn').uri,SCHEMA('performer').uri,FOAF('knows').uri,
-                 SCHEMA('isRelatedTo').uri,'http://schema.org/performer', 'http://schema.org/isRelatedTo','http://schema.org/performerIn']
-
+    // We will only follow and parse these links
+    let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri]
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
     return new Promise ((resolve) => {
       let graphMap = []
       // If there are no adjacent nodes to draw, we return an empty array.
-      if (neighbours.length == 0){
+      if (neighbours.length === 0){
         resolve(graphMap)
-        console.warn('No neighbours found')
+        return
       }
-      // If there are adjacent nodes to draw, we parse them and return an array of their triples
+      // If there are adjacent nodes to draw, 
+      // we parse them and return an array of their triples
       let i = 0
       neighbours.map((triple) => {
-        this.fetchTriplesAtUri(triple.object.uri).then((triples) =>{
-          // Terrible error handling, please don't judge me, it's Saturday night.
-          if (triples.triples.length == 0) {
+        this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
+          // This is a node that coulnt't be retrieved, either 404, 401 etc. 
+          if (result.unav ) {
+            // We are setting the connection field of the node, we need it 
+            // in order to be able to dissconnect it from our center node later.
+            result.connection = triple.predicate.uri
+            graphMap.push(result)
             i += 1
-            graphMap.push(triples)
           } else {
-            graphMap.push(triples.triples)
+            // This is a valid node.
+            result.triples.connection = triple.predicate.uri
+            graphMap.push(result.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
-
-            // This checks if the whole array has been parsed, and only after that resolves.
-            // I'm not proud of this.
           }
-          if (graphMap.length == neighbours.length) {
+          if (graphMap.length === neighbours.length) {
             console.log('Loading done,', i,'rdf files were / was skipped.')
             resolve(graphMap)
           }

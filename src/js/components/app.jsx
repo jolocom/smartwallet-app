@@ -1,23 +1,23 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import includes from 'lodash/includes'
 import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-import {Paper, AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
+import {Paper, AppBar, IconButton} from 'material-ui'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import JolocomTheme from 'styles/jolocom-theme'
 
-import SearchBar from 'components/common/search-bar.jsx'
 import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
-import AppNav from 'components/nav.jsx'
 import GraphSearch from 'components/graph/search.jsx'
+import GraphFilters from 'components/graph/filters.jsx'
 
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
@@ -27,6 +27,8 @@ import PinnedActions from 'actions/pinned'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
+const publicRoutes = ['/', '/login', '/signup']
+
 let App = React.createClass({
 
   mixins: [
@@ -35,18 +37,25 @@ let App = React.createClass({
     Reflux.connect(ProfileStore, 'profile')
   ],
 
+  propTypes: {
+    location: React.PropTypes.object,
+    children: React.PropTypes.node
+  },
+
   childContextTypes: {
     muiTheme: React.PropTypes.object,
     profile: React.PropTypes.any,
-    username: React.PropTypes.string
+    username: React.PropTypes.string,
+    searchActive: React.PropTypes.bool
   },
 
   getChildContext: function () {
-    let {account, profile} = this.state
+    let {account, profile, searchActive} = this.state
     return {
-      muiTheme: getMuiTheme(JolocomTheme),
+      muiTheme: this.theme,
       profile: profile,
-      username: account && account.username
+      username: account && account.username,
+      searchActive
     }
   },
 
@@ -58,11 +67,8 @@ let App = React.createClass({
   },
 
   componentWillMount() {
-    this.checkLogin()
-  },
-
-  componentDidMount() {
-    AccountActions.checkSession()
+    this.theme = getMuiTheme(JolocomTheme)
+    AccountActions.login()
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -73,69 +79,27 @@ let App = React.createClass({
     }
   },
 
+  isPublicRoute(path) {
+    return includes(publicRoutes, path || this.props.location.pathname)
+  },
+
   checkLogin() {
-    let path = this.props.location.pathname
-    let {username} = this.state.account
+    let {username, loggingIn} = this.state.account
 
     // session is still loading, so return for now
-    if (username === undefined) {
+    if (username === undefined || loggingIn) {
       return
     }
 
-    if (!username && path !== '/signup' && path !== '/login' && path !== '/') {
+    if (!username && !this.isPublicRoute()) {
       this.history.pushState(null, '/login')
-    } else if (username && (path === '/signup' || path === '/login' || path === '/')) {
+    } else if (username && this.isPublicRoute()) {
       this.history.pushState(null, '/graph')
     }
 
     if (username) {
-      ProfileActions.load(username)
+      ProfileActions.load()
     }
-  },
-
-  getComponent() {
-    let path = this.props.location.pathname
-    let styles = this.getStyles()
-
-    if (path.match('/graph')) {
-      return {
-        id: 'graph',
-        title: 'Graph',
-        nav: (
-          <div>
-            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
-          </div>
-        ),
-        search: <GraphSearch ref="search" onChange={this._handleSearchChange} onSubmit={this._handleSearchSubmit} onHide={this._handleSearchHide}/>
-      }
-
-    } else if (path.match('/chat')) {
-      return {
-        id: 'chat',
-        title: 'Chat',
-        nav: (
-          <div>
-            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
-          </div>
-        )
-      }
-
-    } else if (path.match('/contacts')) {
-      return {
-        id: 'contacts',
-        title: 'Contacts',
-        nav: (
-          <div>
-            <IconButton iconClassName="material-icons" iconStyle={styles.icon} onTouchTap={this._handleSearchTap}>search</IconButton>
-            <IconMenu iconButtonElement={<IconButton iconClassName="material-icons" iconStyle={styles.icon}>more_vert</IconButton>}>
-              <MenuItem primaryText="Invite a friend" index={0} />
-            </IconMenu>
-          </div>
-        )
-      }
-    }
-
-    return {}
   },
 
   _handlePinnedTap() {
@@ -164,6 +128,10 @@ let App = React.createClass({
     })
   },
 
+  _handleChatTap() {
+    this.history.pushState(null, '/chat')
+  },
+
   showDrawer() {
     this.refs.leftNav.show()
   },
@@ -176,7 +144,8 @@ let App = React.createClass({
         position: 'relative'
       },
       header: {
-        zIndex: 5
+        zIndex: 5,
+        backgroundColor: this.theme.appBar.color
       },
       bar: {
         boxShadow: 'none'
@@ -185,24 +154,51 @@ let App = React.createClass({
         display: this.state.searchActive ? 'none' : 'block'
       },
       icon: {
-        color: '#ffffff'
+        color: this.theme.appBar.textColor
+      },
+      filters: {
+        width: '100%',
+        height: '48px'
       }
     }
     return styles
   },
 
   render() {
-    let component = this.getComponent()
-    let styles = this.getStyles()
-    let search = component.search || <SearchBar ref="search" onChange={this._handleSearchChange} onHide={this._handleSearchHide}/>
+    const styles = this.getStyles()
+    const nav = (
+      <div>
+        <IconButton
+          iconClassName="material-icons"
+          iconStyle={styles.icon}
+          onTouchTap={this._handleSearchTap}>search</IconButton>
+        <IconButton
+          iconClassName="material-icons"
+          iconStyle={styles.icon}
+          onTouchTap={this._handleChatTap}>chat</IconButton>
+      </div>
+    )
+    const search = (
+      <GraphSearch
+        ref="search"
+        onChange={this._handleSearchChange}
+        onSubmit={this._handleSearchSubmit}
+        onHide={this._handleSearchHide} />
+    )
+
+    const filters = <GraphFilters style={styles.filters} showDefaults />
 
     return (
       <div style={styles.container}>
-        {this.state.account.username ? (
+        {this.isPublicRoute() ? this.props.children : (
           <Layout>
-            <Paper zDept={1} style={styles.header}>
-              <AppBar title="Jolocom" iconElementRight={component.nav} style={styles.bar} onLeftIconButtonTouchTap={this.showDrawer}></AppBar>
-              <AppNav activeTab={component.id} style={styles.nav}/>
+            <Paper style={styles.header}>
+              <AppBar
+                title="Graph"
+                iconElementRight={nav}
+                style={styles.bar}
+                onLeftIconButtonTouchTap={this.showDrawer} />
+              {filters}
               {search}
             </Paper>
             <LeftNav ref="leftNav" />
@@ -213,10 +209,10 @@ let App = React.createClass({
                 })
               })}
             </Content>
-            <Profile/>
-            <Tour/>
+            <Profile />
+            <Tour />
           </Layout>
-        ) : this.props.children}
+        )}
       </div>
     )
   }

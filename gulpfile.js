@@ -31,7 +31,7 @@ gulp.task('data', function(){
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
-//               can serve an old app on refresh
+// can serve an old app on refresh
 gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'data'], function() {
 	gulp.watch(['src/**/*'], ['webpack:build-dev']);
 });
@@ -83,7 +83,7 @@ gulp.task('webpack:build-dev', function(callback) {
 	});
 });
 
-gulp.task('webpack-dev-server', function(callback) {
+gulp.task('webpack-dev-server', function (callback) {
 	// modify some webpack config options
 	var myConfig = Object.create(webpackConfig);
 	myConfig.devtool = 'eval';
@@ -91,15 +91,16 @@ gulp.task('webpack-dev-server', function(callback) {
 
 	// Start a webpack-dev-server
 	new WebpackDevServer(webpack(myConfig), {
+		https: true,
 		publicPath: '/' + myConfig.output.publicPath,
-    hot: true,
-    inline: true,
-    contentBase: 'dist',
+		hot: true,
+		inline: true,
+		contentBase: 'dist',
 		stats: {
 			colors: true
 		}
-	}).listen(8080, 'localhost', function(err) {
-		if(err) throw new gutil.PluginError('webpack-dev-server', err);
-		gutil.log('[webpack-dev-server]', 'http://localhost:8080');
+	}).listen(8080, 'localhost', function (err) {
+		if (err) throw new gutil.PluginError('webpack-dev-server', err);
+		gutil.log('[webpack-dev-server]', 'https://localhost:8080');
 	});
 });

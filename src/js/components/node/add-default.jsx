@@ -13,11 +13,13 @@ import ImageSelect from 'components/common/image-select.jsx'
 
 let NodeAddDefault = React.createClass({
   mixins: [
-    Reflux.connect(nodeStore, 'node')
+    Reflux.connect(nodeStore, 'node'),
+    Reflux.connect(previewStore, 'graphState')
   ],
+
   contextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.string
+    user: React.PropTypes.object
   },
   getInitialState() {
     return {
@@ -26,6 +28,9 @@ let NodeAddDefault = React.createClass({
   },
   componentDidMount() {
     this.listenTo(previewStore, this.getUser)
+  },
+
+  onTrigger(state){
   },
 
   getUser(state){
@@ -46,8 +51,15 @@ let NodeAddDefault = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, image} = this.state
-    nodeActions.create(this.user, title, description, image, this.state.type)
+    if(this.state.graphState.user && this.state.graphState.center){
+      let currentUser = this.state.graphState.user
+      let centerNode = this.state.graphState.center
+      nodeActions.create(currentUser, centerNode, title, description, image, this.state.type)
+    } else {
+      console.log('Did not work, logged in user or center node not detected correctly.')
+    }
   },
+
   render: function() {
     let {image} = this.state
     let preview
@@ -70,10 +82,7 @@ let NodeAddDefault = React.createClass({
               onChange={({target}) => {this.setState({['title']: target.value})}} />
             <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="default" primaryText="Plain text" />
-              <MenuItem value="person" primaryText="Person" />
-              <MenuItem value="company" primaryText="Company" />
               <MenuItem value="image" primaryText="Image" />
-              <MenuItem value="event" primaryText="Event" />
             </SelectField>
           </div>
           <div style={styles.row}>

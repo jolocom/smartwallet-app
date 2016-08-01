@@ -1,16 +1,21 @@
 import React from 'react'
 import Reflux from 'reflux'
 
-import {AppBar, IconButton} from 'material-ui'
 import Dialog from 'components/common/dialog.jsx'
-import {Layout, Content} from 'components/layout'
+import {Layout} from 'components/layout'
 
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
+import Profile from '../node/profile'
+
 export default React.createClass({
 
   mixins: [Reflux.connect(ContactStore, 'contact')],
+
+  propTypes: {
+    params: React.PropTypes.object
+  },
 
   contextTypes: {
     history: React.PropTypes.any
@@ -31,14 +36,11 @@ export default React.createClass({
 
   close() {
     this.refs.dialog.hide()
+    this.context.history.pushState(null, '/contacts')
   },
 
   toggle() {
     this.refs.dialog.toggle()
-  },
-
-  startChat() {
-    this.context.history.pushState(null, `chat/user/${this.state.contact.username}`)
   },
 
   render() {
@@ -47,17 +49,7 @@ export default React.createClass({
     return (
       <Dialog ref="dialog" fullscreen={true} visible={this.state.open}>
         <Layout>
-          <AppBar
-            title={contact.name}
-            iconElementLeft={
-              <IconButton onClick={() => this.context.history.pushState(null, '/contacts')} iconClassName="material-icons">arrow_back</IconButton>
-            }
-            iconElementRight={<IconButton onTouchTap={this.startChat}>message</IconButton>}
-          />
-
-          <Content>
-
-          </Content>
+          <Profile node={contact} onClose={() => this.close()} />
         </Layout>
       </Dialog>
     )

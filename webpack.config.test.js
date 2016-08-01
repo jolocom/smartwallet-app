@@ -1,38 +1,38 @@
-var webpack = require('webpack')
 var path = require('path')
 
 module.exports = {
+  devtool: 'inline-source-map',
+  debug: true,
+  test: true,
   entry: [
-    'whatwg-fetch',
     './src/js/main.jsx'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
-    root: path.resolve(__dirname) + '/src/js',
+    root: path.join(__dirname, 'src', 'js'),
     alias: {
       actions: 'actions',
       components: 'components',
       stores: 'stores',
       lib: 'lib',
       styles: 'styles',
-      settings: path.resolve(__dirname) + '/config/production.js'
+      settings: path.join(__dirname, 'config', 'test.js')
     }
   },
   output: {
-    path: path.resolve(__dirname) + '/dist/js',
+    path: path.join(__dirname, 'dist', 'js'),
     filename: 'bundle.js',
     publicPath: 'js/'
   },
-  externals:[{
-    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
-  }],
-  plugins: [],
   module: {
+    noParse: [
+      /node_modules\/sinon/
+    ],
     loaders: [
       {
         test:   /\.jsx?/,
         loader: 'babel',
-        include: path.resolve(__dirname) + '/src/js',
+        include: [path.join(__dirname, 'src', 'js'), path.join(__dirname, 'test')],
         exclude: 'node_modules'
       },
       {
@@ -40,5 +40,11 @@ module.exports = {
         loader: 'json-loader'
       }
     ]
-  }
+  },
+  externals: [{
+    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}',
+    'react/lib/ReactContext': 'window',
+    'react/lib/ExecutionEnvironment': true,
+    'react/addons': true
+  }]
 }

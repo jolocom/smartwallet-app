@@ -14,7 +14,7 @@ let NodeAddImage = React.createClass({
   },
 
   componentDidMount() {
-    this.open()
+    this.open
   },
 
   componentDidUpdate(prevProps, prevState) {

@@ -5,9 +5,17 @@ public/
 build/
 ldpc-*
 data/
+config.json
+localhost.cert
+localhost.key
+
+autodeploy.js
+pull_and_deploy.sh
 
 # Python
 venv/
 *.pyc
 .ropeproject/
 *.egg-info
+localhost.*
+config.json

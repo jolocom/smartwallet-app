@@ -25,9 +25,14 @@ let types = {
 
 let NodeAdd = React.createClass({
 
+  propTypes: {
+    params: React.PropTypes.object
+  },
+
   contextTypes: {
     history: React.PropTypes.any,
-    node: React.PropTypes.any
+    node: React.PropTypes.any,
+    muiTheme: React.PropTypes.object
   },
 
   componentDidMount() {
@@ -40,8 +45,17 @@ let NodeAdd = React.createClass({
   },
 
   getStyles() {
+    const {muiTheme: {actionAppBar}} = this.context
     return {
       bar: {
+        backgroundColor: actionAppBar.color,
+        color: actionAppBar.textColor
+      },
+      title: {
+        color: actionAppBar.textColor
+      },
+      icon: {
+        color: actionAppBar.textColor
       }
     }
   },
@@ -59,16 +73,29 @@ let NodeAdd = React.createClass({
     let Component = config.component
 
     return (
-      <Dialog ref="dialog" fullscreen={true}>
+      <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
             title={title}
-            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this._handleClose}>close</IconButton>}
-            iconElementRight={<FlatButton label="Create" onTouchTap={this._handleSubmit}/>}
+            titleStyle={styles.title}
+            iconElementLeft={
+              <IconButton
+                iconStyle={styles.icon}
+                iconClassName="material-icons"
+                onTouchTap={this._handleClose}>close
+              </IconButton>
+            }
+            iconElementRight={
+              <FlatButton
+                style={styles.icon}
+                label="Create"
+                onTouchTap={this._handleSubmit}
+              />
+            }
             style={styles.bar}
           />
           <Content style={styles.content}>
-            <Component ref="form" node={node} onSuccess={this._handleSuccess}/>
+            <Component ref="form" node={node} onSuccess={this._handleSuccess} />
           </Content>
         </Layout>
       </Dialog>

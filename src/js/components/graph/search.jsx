@@ -3,21 +3,33 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import ReactDOM from 'react/lib/ReactDOM'
 
-import {Paper, AppBar, IconButton, FontIcon} from 'material-ui'
+import {
+  Paper,
+  AppBar,
+  IconButton,
+  SelectField,
+  MenuItem
+} from 'material-ui'
 
-import {MapsPlace, ActionLabel, SocialPerson, ActionSchedule} from 'material-ui/svg-icons'
+import GraphFilters from 'components/graph/filters.jsx'
+import SearchResults from './search-results.jsx'
 
-import IconToggle from 'components/common/icon-toggle.jsx'
-
-import SearchActions from 'actions/search'
 import SearchStore from 'stores/search'
 
 let Search = React.createClass({
   mixins: [Reflux.connect(SearchStore, 'search')],
+
   getInitialState() {
     return {
-      show: false
+      show: false,
+      reach: 'me'
     }
+  },
+
+  propTypes: {
+    onHide: React.PropTypes.func,
+    onChange: React.PropTypes.func,
+    onSubmit: React.PropTypes.func
   },
 
   contextTypes: {
@@ -29,15 +41,17 @@ let Search = React.createClass({
 
     let styles = {
       container: {
-        backgroundColor: '#ffffff',
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
+        maxHeight: '100%',
         zIndex: 1200,
         opacity: this.state.show ? 1 : 0,
         transform: this.state.show ? 'translate(0, 0)' : 'translate(0, -100%)',
-        transition: 'opacity .1s, transform .1s ease-in'
+        transition: 'opacity .1s, transform .1s ease-in',
+        display: 'flex',
+        flexDirection: 'column'
       },
       bar: {
         backgroundColor: '#ffffff'
@@ -55,17 +69,29 @@ let Search = React.createClass({
         fontSize: '24px',
         lineHeight: '64px'
       },
-      filters: {
+      reach: {
         display: 'flex',
         height: '48px',
-        width: '100%',
+        padding: '0 16px',
         justifyContent: 'space-between',
-        alignItems: 'stretch'
+        alignItems: 'center'
+      },
+      reachLabel: {
+        marginRight: '16px'
+      },
+      select: {
+        width: 'auto',
+        flex: 1
       },
       item: {
         flex: '1',
         textAlign: 'center',
         padding: '10px'
+      },
+      results: {
+        flex: 1,
+        overflowY: 'auto',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)'
       }
     }
 
@@ -93,6 +119,66 @@ let Search = React.createClass({
     }
   },
 
+  render() {
+    let styles = this.getStyles()
+
+    let iconColor = this.context.muiTheme.rawTheme.palette.primary1Color
+
+    let results
+
+    if (this.state.query) {
+      results = (
+        <SearchResults
+          style={styles.results}
+          query={this.state.query}
+        />
+    )
+    }
+
+    return (
+      <div style={styles.container}>
+        <Paper style={styles.searchBar}>
+          <AppBar
+            style={styles.bar}
+            zDepth={0}
+            title={
+              <input
+                placeholder="Search..."
+                onChange={this._handleChange}
+                onKeyUp={this._handleKeyUp}
+                ref="input"
+                style={styles.input} />
+            }
+            iconElementLeft={
+              <IconButton
+                iconClassName="material-icons"
+                iconStyle={{color: iconColor}}
+                onTouchTap={this.hide}>
+                  arrow_back
+              </IconButton>
+            }
+          />
+          <nav style={styles.reach}>
+            <p style={styles.reachLabel}>Search in</p>
+            <SelectField
+              value={this.state.reach}
+              onChange={this._handleReachChange}
+              style={styles.select}
+            >
+              <MenuItem value="me" primaryText="Me" />
+              <MenuItem value="node" primaryText="Current node" />
+              <MenuItem value="all" primaryText="Biggest reach" />
+            </SelectField>
+            <GraphFilters />
+          </nav>
+        </Paper>
+
+        {results}
+
+      </div>
+    )
+  },
+
   _handleChange({target}) {
     this.setState({query: target.value})
     if (typeof this.props.onChange === 'function') {
@@ -101,38 +187,13 @@ let Search = React.createClass({
   },
 
   _handleKeyUp(e) {
-    if (e.keyCode == 13 && typeof this.props.onSubmit === 'function') {
+    if (e.keyCode === 13 && typeof this.props.onSubmit === 'function') {
       this.props.onSubmit(e.target.value)
     }
   },
 
-  toggleFilter(name) {
-    SearchActions.toggleFilter(name)
-  },
-
-  render() {
-    let styles = this.getStyles()
-
-    let iconColor = this.context.muiTheme.rawTheme.palette.primary1Color
-
-    return (
-      <Paper zDepth={1} style={styles.container}>
-        <AppBar
-          style={styles.bar}
-          zDepth={0}
-          title={<input placeholder="Search..." onChange={this._handleChange} onKeyUp={this._handleKeyUp} ref="input" style={styles.input}/>}
-          iconElementLeft={
-            <IconButton iconClassName="material-icons" iconStyle={{color: iconColor}} onTouchTap={this.hide}>arrow_back</IconButton>
-          }
-        />
-        <nav style={styles.filters}>
-          <IconToggle icon={<MapsPlace/>} style={styles.item} id="filter-where" checked={this.state.search.filters.where} onCheck={() => {this.toggleFilter('where')}}/>
-          <IconToggle icon={<ActionLabel/>} style={styles.item} id="filter-what" checked={this.state.search.filters.what} onCheck={() => {this.toggleFilter('what')}}/>
-          <IconToggle icon={<SocialPerson/>} style={styles.item} id="filter-who" checked={this.state.search.filters.who} onCheck={() => {this.toggleFilter('who')}}/>
-          <IconToggle icon={<ActionSchedule/>} style={styles.item} id="filter-when" checked={this.state.search.filters.when} onCheck={() => {this.toggleFilter('when')}}/>
-        </nav>
-      </Paper>
-    )
+  _handleReachChange(e, index, value) {
+    this.setState({reach: value})
   }
 
 })

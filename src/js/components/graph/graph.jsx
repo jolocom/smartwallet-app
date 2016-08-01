@@ -8,8 +8,9 @@ import Radium from 'radium'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
-import GraphStore from '../../stores/graph-store'
-import graphActions from '../../actions/graph-actions'
+import GraphStore from 'stores/graph-store'
+import AccountStore from 'stores/account'
+import graphActions from 'actions/graph-actions'
 
 import Node from '../node/node.jsx'
 
@@ -17,13 +18,18 @@ let Graph = React.createClass({
 
   mixins : [Reflux.listenTo(GraphStore, 'onStateUpdate')],
 
+  propTypes: {
+    children: React.PropTypes.node
+  },
+
   contextTypes: {
-    history: React.PropTypes.object
+    history: React.PropTypes.object,
+    searchActive: React.PropTypes.bool
   },
 
   childContextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.string
+    user: React.PropTypes.object
   },
 
   getChildContext: function() {
@@ -38,51 +44,34 @@ let Graph = React.createClass({
   },
 
   onStateUpdate: function(data, signal) {
-    if (data) this.setState(data)
-
-    if (!this.state.loaded) {
-      graphActions.getInitialGraphState()
+    // Temp. make it more elegant later.
+    if (signal === 'nodeRemove')
+    {
+      this.graph.deleteNodeAndRender(data)
+      this.setState({activeNode: null})
+      // Important to avoid a re-render here.
+      graphActions.setState('activeNode', null, false)
     }
-
-    if (this.state.loaded && !this.state.drawn){
-      this.graph.render(this.state)
-      graphActions.setState('drawn', true)
+    else if (signal == 'preview'){
+    }
+    else
+    {
+      if (data) this.setState(data)
+      if (data && data.neighbours){
+        this.graph.render(this.state)
+        this.graph.updateHistory(this.state.navHistory)
+      }
     }
 
     if (this.state.newNode) {
-      this.graph.addNode(this.state.newNode)
-      this.state.neighbours.push(this.state.newNode)
-      graphActions.setState('neighbours', this.state.neighbours)
+      // this.graph.addNode(this.state.newNode)
       // We update the state of the store to be in line with the state of the child
       this.state.newNode = null
-      graphActions.setState('newNode', null)
+      graphActions.setState('newNode', null, false)
     }
-
-    if(signal == 'redraw'){
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
-    } else if ( signal == 'highlight') {
-      this.state.highlighted = data.highlighted
-    } else if ( signal == 'erase') {
-      graphActions.setState('drawn', false)
-      graphActions.setState('highlighted', null)
+    if ( signal == 'erase') {
       this.graph.eraseGraph()
     }
-  },
-
-  // When we finish linking, we select the subjet of the triple.
-  linkSubject: function() {
-    graphActions.chooseSubject()
-  },
-
-  //When we start the linking, we first select the Object of the triple
-  linkObject: function() {
-    graphActions.chooseObject()
-  },
-
-  testAdd(){
-    // let destination = this.state.center
-    graphActions.createAndConnectNode(this.state.user, 'test', 'description')
   },
 
   addNode: function(type) {
@@ -90,22 +79,36 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
+  
+  // This is the first thing that fires when the user logs in.
   componentDidMount: function() {
-    this.graph = new GraphD3(this.getGraphEl(), 'full')
+    // Instantiating the graph object.
+    this.graph = new GraphD3(this.getGraphEl(), 'main')
+    // Adding the listeners.
+    this.graph.on('center-changed', this._handleCenterChange)
+    this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
+    this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     graphActions.getState()
   },
 
-  componentWillUpdate: function(){
-  },
-
-  componentDidUpdate: function() {
-  },
-
   componentWillUnmount: function(){
-    graphActions.setState('drawn', false)
-    graphActions.setState('highlighted', null)
-    if (this.graph) this.graph.eraseGraph()
+    if (this.graph) {
+      this.graph.eraseGraph()
+      this.graph.removeAllListeners()
+    }
+  },
+
+  _handleSelectNode(node, svg){
+    graphActions.setState('selected', svg)
+  },
+
+  _handleChangeRotationIndex(rotationIndex){
+    graphActions.changeRotationIndex(rotationIndex,false)
+  },
+
+  _handleCenterChange(node){
+    graphActions.navigateToNode(node)
   },
 
   getStyles: function() {
@@ -127,22 +130,34 @@ let Graph = React.createClass({
     return styles
   },
 
-  // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render: function() {
     let styles = this.getStyles()
+
+    if (this.graph)
+    {
+      this.graph.setRotationIndex(this.state.rotationIndex)
+    }
 
     let nodeDetails
 
     if (this.state.activeNode) {
-      nodeDetails = <Node node={this.state.activeNode}/>
+      nodeDetails = <Node node={this.state.activeNode} center={this.state.center} svg={this.state.selected} state={this.state}/>
     }
 
-    return (
-      <div style={styles.container}>
+    let fab
+
+    if (!this.context.searchActive) {
+      fab = (
         <FabMenu style={styles.menu}>
           <FabMenuItem icon="radio_button_unchecked" label="Node" onClick={() => {this.addNode('node')}}/>
           <FabMenuItem icon="insert_link" label="Link" onClick={() => {this.addNode('link')}}/>
         </FabMenu>
+      )
+    }
+
+    return (
+      <div style={styles.container}>
+        {fab}
 
         <div style={styles.chart} ref="graph"></div>
 

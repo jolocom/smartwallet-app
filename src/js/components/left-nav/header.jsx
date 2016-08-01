@@ -4,17 +4,14 @@ import Radium from 'radium'
 import {IconButton, Avatar} from 'material-ui'
 
 import ProfileActions from 'actions/profile'
-import AccountActions from 'actions/account'
 
 let Header = React.createClass({
   contextTypes: {
-    profile: React.PropTypes.any
+    profile: React.PropTypes.any,
+    muiTheme: React.PropTypes.object
   },
   editProfile() {
     ProfileActions.show()
-  },
-  logout() {
-    AccountActions.logout()
   },
   getStyles() {
     return {
@@ -22,7 +19,9 @@ let Header = React.createClass({
         display: 'flex',
         justifyContent: 'flex-end',
         flexDirection: 'column',
-        padding: '16px'
+        padding: '16px',
+        backgroundColor: this.context.muiTheme.jolocom.gray4,
+        borderBottom: `1px solid ${this.context.muiTheme.palette.borderColor}`
       },
       profile: {
         display: 'flex',
@@ -38,26 +37,25 @@ let Header = React.createClass({
         fontWeight: 'bold'
       },
       email: {
-
+        fontSize: '12px'
       }
     }
   },
   render() {
     let initials, {profile} = this.context
+    let name = profile.givenName ? profile.givenName : profile.fullName
+
     let styles = this.getStyles()
-
-    if (profile.name)
-      initials = profile.name[0]
-
+    if (name)
+      initials = name[0]
     return (
       <header style={styles.header}>
-        <Avatar src={profile.img}>{initials}</Avatar>
+        <Avatar>{initials}</Avatar>
         <div style={styles.profile}>
           <div style={styles.profileDetails}>
-            <span style={styles.name}>{profile.name}</span>
+            <span style={styles.name}>{name}</span>
             <span style={styles.email}>{profile.email}</span>
           </div>
-          <IconButton iconClassName="material-icons" onTouchTap={this.logout}>exit_to_app</IconButton>
           <IconButton iconClassName="material-icons" onTouchTap={this.editProfile}>mode_edit</IconButton>
         </div>
       </header>

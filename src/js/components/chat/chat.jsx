@@ -1,126 +1,129 @@
 import React from 'react'
 import Radium from 'radium'
-import Reflux from 'reflux'
 
-import moment from 'moment'
+import {AppBar, Tabs, Tab, Paper, IconButton} from 'material-ui'
 
-import {List, ListItem, Avatar, FloatingActionButton, FontIcon} from 'material-ui'
-import {grey500} from 'material-ui/styles/colors'
+import Dialog from 'components/common/dialog.jsx'
+import {Layout, Content} from 'components/layout'
 
-import TimerMixin from 'react-timer-mixin'
+class Chat extends React.Component {
 
-import ConversationsActions from 'actions/conversations'
-import ConversationsStore from 'stores/conversations'
+  static contextTypes = {
+    history: React.PropTypes.any
+  }
 
-let Chat = React.createClass({
+  static propTypes = {
+    children: React.PropTypes.node,
+    location: React.PropTypes.object
+  }
 
-  mixins: [
-    Reflux.connect(ConversationsStore, 'conversations'),
-    TimerMixin
-  ],
+  constructor(props) {
+    super(props)
 
-  contextTypes: {
-    history: React.PropTypes.any,
-    profile: React.PropTypes.any
-  },
+    this.state = {
+      activeTab: this.getActiveTab(props.location.pathname)
+    }
+
+    this._handleBackTouchTap = this._handleBackTouchTap.bind(this)
+  }
+
+  getActiveTab(path) {
+    let activeTab = 'chat'
+
+    if (path === '/contacts') {
+      activeTab = 'contacts'
+    }
+
+    return activeTab
+  }
 
   componentDidMount() {
-    this.loadConversations()
-  },
+    this.refs.dialog.show()
+  }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.searchQuery && prevProps.searchQuery !== this.props.searchQuery) {
-      this.loadConversations()
+  componentWillUnmount() {
+    this.refs.dialog.hide()
+  }
+
+  componentWillUpdate(newProps) {
+    if (this.props.location.pathname !== newProps.location.pathname) {
+      this.setState({
+        activeTab: this.getActiveTab(newProps.location.pathname)
+      })
     }
-  },
+  }
 
-  loadConversations() {
-    ConversationsActions.load(this.context.profile.username, this.props.searchQuery)
-  },
+  close() {
+    this.refs.dialog.hide()
+    this.context.history.pushState(null, '/graph')
+  }
 
-  showConversation({id}) {
-    this.context.history.pushState(null, `/conversations/${id}`)
-  },
+  render() {
+    const backIcon = (
+      <IconButton
+        iconClassName="material-icons"
+        iconStyle={styles.icon}
+        onTouchTap={this._handleBackTouchTap}
+      >
+        arrow_back
+      </IconButton>
+    )
 
-  render: function() {
-    let emptyView
-    let {items} = this.state.conversations
-
-    if (!items || !items.length) {
-      emptyView = <div style={styles.empty}>No conversations</div>
-    }
+    const searchIcon = (
+      <IconButton
+        iconClassName="material-icons"
+        iconStyle={styles.icon}
+      >
+        search
+      </IconButton>
+    )
 
     return (
-      <div style={styles.container}>
-
-        {emptyView}
-
-        <div style={styles.content}>
-
-          <List>
-            {this.state.conversations.items.map((conversation) => {
-              let {otherPerson} = conversation
-              let {created, content} = conversation.lastMessage
-              let avatar
-              if (otherPerson)
-                avatar = <Avatar src={otherPerson.img}>{otherPerson.name[0]}</Avatar>
-              let date = moment(created).fromNow()
-              return (
-                <ListItem key={conversation.id} primaryText={
-                  <div>
-                    <span>{otherPerson.name}</span>
-                    <span style={styles.date}>{date}</span>
-                  </div>
-                } secondaryText={content} leftAvatar={avatar} onTouchTap={() => this.showConversation(conversation)}/>
-              )
-            })}
-          </List>
-
-        </div>
-
-        <FloatingActionButton linkButton={true}
-          href="#/chat/new"
-          style={styles.actionButton}>
-          <FontIcon className="material-icons">add</FontIcon>
-        </FloatingActionButton>
-
-        {this.props.children}
-      </div>
+      <Dialog ref="dialog" fullscreen>
+        <Layout>
+          <Paper>
+            <AppBar
+              title="Chat"
+              style={styles.bar}
+              iconElementLeft={backIcon}
+              iconElementRight={searchIcon} />
+            <Tabs valueLink={{
+              value: this.state.activeTab,
+              requestChange: (tab) => this._handleTabsChange(tab)
+            }}>
+              <Tab label="Conversations" value="chat" />
+              <Tab label="Contacts" value="contacts" />
+            </Tabs>
+          </Paper>
+          <Content>
+            {this.props.children}
+          </Content>
+        </Layout>
+      </Dialog>
     )
   }
-})
+
+  _handleTabsChange(tab) {
+    this.setState({activeTab: tab})
+
+    switch (tab) {
+      case 'chat':
+        this.context.history.pushState(null, '/chat')
+        break
+      case 'contacts':
+        this.context.history.pushState(null, '/contacts')
+        break
+    }
+  }
+
+  _handleBackTouchTap() {
+    this.close()
+  }
+}
 
 let styles = {
-  container: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative'
-  },
-  content: {
-    overflowY: 'auto',
-    flex: 1
-  },
-  empty: {
-    position: 'absolute',
-    fontWeight: 300,
-    color: grey500,
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent:'center',
-    fontSize: '18px'
-  },
-  date: {
-    color: grey500,
-    fontSize: '12px',
-    float: 'right'
-  },
-  actionButton: {
-    position: 'absolute',
-    right: '16px',
-    bottom: '16px'
+  bar: {
+    boxShadow: 'none'
   }
 }
 
