@@ -3,6 +3,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import graphActions from 'stores/graph-store'
 import nodeActions from 'actions/node'
+import Utils from 'lib/util'
 
 import {
   AppBar,
@@ -58,7 +59,7 @@ let ProfileNode = React.createClass({
     let background
 
     if (img) {
-      background = img
+      background = Utils.uriToProxied(img)
     }
 
     return {
@@ -121,7 +122,7 @@ let ProfileNode = React.createClass({
     } = this.getNode()
 
     if (name && familyName) {
-      name = name + ' ' + familyName
+      name = `${name} ${familyName}`
     }
 
     let fullscreenLabel
@@ -243,11 +244,9 @@ let ProfileNode = React.createClass({
 
     if (node.rank == 'center'){
      let prev = navHis[navHis.length - 1]
-     graphActions.drawAtUri(prev.uri, 1)
-     setTimeout(()=>{
-       console.log('firing!')
+     graphActions.drawAtUri(prev.uri, 1).then(()=>{
        nodeActions.remove(node, prev)
-     }, 1500)
+     })
     }
     else nodeActions.remove(node, center)
   },

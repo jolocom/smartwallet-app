@@ -9,6 +9,7 @@ export default Reflux.createStore({
 
   init: function(){
     this.listenTo(accountActions.logout, this.onLogout)
+    this.listenTo(accountActions.login.completed, this.onLogin)
     this.gAgent = new graphAgent()
     this.convertor = new d3Convertor()
     this.loaded = false
@@ -16,6 +17,7 @@ export default Reflux.createStore({
 
     this.state = {
       //These state keys describe the graph
+      webId: null,
       user: null,
       center: null,
       neighbours: null,
@@ -36,6 +38,7 @@ export default Reflux.createStore({
     this.loaded = false
     this.state = {
       // Graph related
+      webId: null,
       user: null,
       center: null,
       neighbours: null,
@@ -49,6 +52,9 @@ export default Reflux.createStore({
       plusDrawerOpen: false,
       activeNode: null
     }
+  },
+  onLogin(user){
+    this.state.webId = user
   },
 
   // These two are needed in order to transition between the preview graph and
@@ -68,12 +74,11 @@ export default Reflux.createStore({
   },
 
   deleteNode: function(node){
-    console.log('THIS ONE')
     let nodeId = node.index > 0 ? node.index : node.uri
-    for (let i = 0; i < this.state.neighbours.length; i++){
+    for (let i = this.state.neighbours.length -1 ; i >= 0; i--){
      let sourceId = node.index > 0 ? this.state.neighbours[i].index
        : this.state.neighbours[i].uri
-     if (sourceId == nodeId)
+     if (sourceId === nodeId)
        this.state.neighbours.splice(i, 1)
     }
     this.state.activeNode = node
@@ -95,7 +100,6 @@ export default Reflux.createStore({
       result.triples.uri = object
         // Now we tell d3 to draw a new adjacent node on the graph, with the info from
         // the triiple file
-      console.log('We are drawing using', predicate)
       result.triples.connection = predicate
       this.state.newNode = this.convertor.convertToD3('a', result.triples)
       this.state.neighbours.push(this.state.newNode)
@@ -133,15 +137,16 @@ export default Reflux.createStore({
 
   drawAtUri: function (uri, number) {
     this.state.neighbours = []
-    this.gAgent.getGraphMapAtUri(uri).then((triples) => {
+    return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       this.state.center = triples[0]
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
         this.state.neighbours.push(triples[i])
       }
-      for (let i = 0; i < number; i++)
+      for (let i = 0; i < number; i++) {
         this.state.navHistory.pop()
+      }
       this.trigger(this.state)
     })
   },

@@ -1,19 +1,26 @@
 import url from 'url'
+import {proxy} from 'settings'
 
 // Misc utility functions
 let Util = {
   stringLessThan(s1, s2){
-    if(s1 < s2) return true
+    if (s1 < s2){
+      return true
+    } 
     return false
   },
 
   stringMin(s1, s2){
-    if(Util.stringLessThan(s1, s2)) return s1
+    if (Util.stringLessThan(s1, s2)) { 
+      return s1
+    }
     return s2
   },
 
   stringMax(s1, s2){
-    if(Util.stringLessThan(s1, s2)) return s2
+    if (Util.stringLessThan(s1, s2)) {
+      return s2
+    }
     return s1
   },
 
@@ -44,6 +51,23 @@ let Util = {
         [property]: e.target.value
       })
     }
+  },
+
+  /*
+   * @summary Proxies a uri or not depending on the mode.
+   * @param {string} uri - The uri to be proxied.
+   * @return {string} uri - proxied / not proxied uri depending on mode. 
+   */  
+
+  uriToProxied(uri){
+    if (!uri) {
+      return 
+    }
+    let mode = localStorage.getItem('auth-mode')
+    if (mode === 'cert') {
+      return uri
+    } 
+    return `${proxy}/proxy?url=${uri}` 
   }
 }
 

@@ -31,8 +31,6 @@ let NodeAddDefault = React.createClass({
   },
 
   onTrigger(state){
-    console.log('he')
-    console.log(state)
   },
 
   getUser(state){

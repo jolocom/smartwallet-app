@@ -68,7 +68,6 @@ let App = React.createClass({
 
   componentWillMount() {
     this.theme = getMuiTheme(JolocomTheme)
-
     AccountActions.login()
   },
 

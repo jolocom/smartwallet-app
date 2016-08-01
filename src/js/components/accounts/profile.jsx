@@ -5,7 +5,15 @@ import accepts from 'attr-accept'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
-import {AppBar, IconButton, TextField, Card, CardMedia, CardActions, FlatButton} from 'material-ui'
+import {
+  AppBar, 
+  IconButton,
+  TextField,
+  Card,
+  CardMedia,
+  CardActions,
+  FlatButton
+} from 'material-ui'
 
 import {grey500} from 'material-ui/styles/colors'
 
@@ -13,25 +21,20 @@ import GraphStore from 'stores/graph-store'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
 
 let Profile = React.createClass({
   mixins: [
     Reflux.listenTo(ProfileStore, 'onProfileChange'),
-    Reflux.listenTo(GraphStore, 'onGraphChange')
   ],
 
   onProfileChange: function(state) {
     this.setState(state)
   },
 
-  onGraphChange: function(state) {
-    if(state && state.center) this.state.currentNode = state.center.uri
-  },
   componentDidMount(){
-    this.state.loading = false
+    this.loading = false
   },
 
   componentDidUpdate(props, state) {
@@ -40,7 +43,7 @@ let Profile = React.createClass({
         this.refs.dialog.show()
       } else {
         this.refs.dialog.hide()
-      }
+      } 
     }
   },
 
@@ -54,6 +57,9 @@ let Profile = React.createClass({
 
   getStyles() {
     let styles = {
+      image: {
+        height: '176px'
+      },
       bar: {
         backgroundColor: grey500
       },
@@ -75,15 +81,15 @@ let Profile = React.createClass({
 
   render() {
     let img, styles = this.getStyles()
-
     let {file, imgUri} = this.state
 
     if (file) {
       img = URL.createObjectURL(file)
     } else if (imgUri) {
-      img = imgUri
+      img = Util.uriToProxied(imgUri)
     }
-    // edit mode
+		console.log('rerender!')
+    let bgImg = img || '/img/person-placeholder.png'
     return (
       <Dialog ref="dialog" fullscreen={true}>
         <Layout fixedHeader={true}>
@@ -91,23 +97,32 @@ let Profile = React.createClass({
             title="Edit profile"
             style={styles.bar}
             iconElementLeft={
-              <IconButton onClick={this.hide} iconClassName="material-icons">arrow_back</IconButton>
+              <IconButton 
+                onClick={this.hide} 
+                iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={
-              !this.state.loading ? <IconButton onClick={this._handleUpdate} iconClassName="material-icons">check</IconButton>
-              :
-              <IconButton  iconClassName="material-icons">hourglass_empty</IconButton>
+							!this.state.loading ? 
+								<IconButton 
+								onClick={this._handleUpdate} 
+								iconClassName="material-icons">check</IconButton>
+							:
+ 								<IconButton  iconClassName="material-icons">hourglass_empty</IconButton>
             }
           />
           <Content style={styles.content}>
-            <Card rounded={false}>
-              <CardMedia style={{height: '176px', background: `url(${img || '/img/person-placeholder.png'}) center / cover`}}>
-              </CardMedia>
+            <Card zDept={0} rounded={false}>
+              <CardMedia 
+                style={Object.assign({}, 
+                  styles.image,
+                  {background: `url(${bgImg}) center / cover`}
+                )} />
               <CardActions>
                 {img ?
                   <FlatButton label="Remove" onClick={this._handleRemove} />
                   :
-                  <FlatButton label="Select or take picture" onClick={this._handleSelect}/>
+                  <FlatButton label="Select or take picture" 
+                  onClick={this._handleSelect}/>
                 }
               </CardActions>
             </Card>
@@ -121,8 +136,8 @@ let Profile = React.createClass({
             <main style={styles.main}>
               <section>
                 <TextField floatingLabelText="First Name"
-                  onChange={Util.linkToState(this, 'name')}
-                  value={this.state.name}
+                  onChange={Util.linkToState(this, 'givenName')}
+                  value={this.state.givenName}
                   style={styles.input} />
                 <TextField floatingLabelText="Second Name"
                   onChange={Util.linkToState(this, 'familyName')}
@@ -141,12 +156,9 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if(!this.state.loading){
-      ProfileActions.update(this.state)
-      ProfileActions.hide()
-      this.state.loading = false
-    } else{
-      console.log('loading')
+    if (!this.loading) {
+      this.hide()
+      ProfileActions.update(Object.assign({},this.state, {show:false}))
     }
   },
 
@@ -171,7 +183,6 @@ let Profile = React.createClass({
   },
 
   _handleSelectFile({target}) {
-    this.state.loading = true
 
     let gAgent = new GraphAgent()
     let file = target.files[0]
@@ -179,15 +190,20 @@ let Profile = React.createClass({
       this.setState({
         error: 'Invalid file type'
       })
-      this.state.loading = false
     } else {
+      this.setState({
+				loading: true
+			})
       this.setState({
         error: null,
         file: file
       })
-      gAgent.storeFile(null, file).then((res) => {
-        this.setState({imgUri: res.url})
-        this.setState({loading: false})
+
+      gAgent.storeFile(this.state.storage, file).then((res) => {
+				this.setState({
+					loading: false
+				})
+        this.setState({imgUri: res})
       }).catch((e)=>{
         console.log(e)
       })

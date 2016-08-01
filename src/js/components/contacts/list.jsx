@@ -28,7 +28,6 @@ let Contacts = React.createClass({
 
   render() {
     let emptyView
-
     if (!this.state.contacts || !this.state.contacts.length) {
       emptyView = <div style={styles.empty}>No contacts</div>
     }
