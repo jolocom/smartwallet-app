@@ -1,6 +1,8 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
+import accountActions from '../actions/account'
 import GraphActions from 'actions/graph-actions'
+import GraphStore from 'stores/graph-store'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser} from 'lib/rdf.js'
 import {proxy} from 'settings'
@@ -23,6 +25,19 @@ let profile = {
 
 export default Reflux.createStore({
   listenables: ProfileActions,
+
+  init() {
+    this.listenTo(accountActions.logout, this.onLogout)
+    this.listenTo(GraphStore, this.graphUpdate)
+  },
+
+  graphUpdate(data) {
+    if (data && data.center) {
+      profile.storage = data.center.storage 
+      profile.currentNode = data.center.uri
+      this.trigger(Object.assign({}, profile))
+    }
+  },
 
   getInitialState () {
     return profile
@@ -61,7 +76,6 @@ export default Reflux.createStore({
   // change state from triples
   onLoadCompleted(webid, triples) {
     let relevant = triples.filter((t) => t.subject.uri === webid)
-
     profile.webid = webid
     for (var t of relevant) {
       let obj = t.object.uri ? t.object.uri : t.object.value
@@ -82,11 +96,23 @@ export default Reflux.createStore({
     if (!givenName && !familyName) {
       if (fullName) {
         profile.givenName = fullName.substring(0, fullName.indexOf(' '))
-        profile.familyName = fullName.substring(givenName.length + 1, fullName.length)
+        profile.familyName = fullName.substring(
+            givenName.length + 1, fullName.length)
       }
     }
-
     this.trigger(Object.assign({}, profile))
+  },
+
+  onLogout(){
+    profile = {
+      show: false,
+      fullName: '',
+      givenName: '',
+      familyName: '',
+      email: '',
+      webid: '#',
+      imgUri: null,
+    }
   },
 
   /* @summary Updates the rdf profile based on input
@@ -94,7 +120,6 @@ export default Reflux.createStore({
    */
 
   onUpdate: function (params) {
-
     let newData = Object.assign({}, params)
     let oldData = Object.assign({}, profile)
 
@@ -132,21 +157,25 @@ export default Reflux.createStore({
     }
 
     insertStatement = insertTriples.map((t)=>{
-      if (t.predicate.uri === FOAF('mbox').uri)
+      if (t.predicate.uri === FOAF('mbox').uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
+      }
       return rdf.st(t.subject, t.predicate, t.object).toNT() 
     }).join(' ')
 
     deleteStatement = deleteTriples.map((t)=>{
-      if (t.predicate.uri === FOAF('mbox').uri)
+      if (t.predicate.uri === FOAF('mbox').uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
+      }
       return rdf.st(t.subject, t.predicate, t.object).toNT() 
     }).join(' ')
 
-    if (deleteStatement)
+    if (deleteStatement) {
       deleteStatement = `DELETE DATA { ${deleteStatement} }`
-    if (insertStatement)
+    }
+    if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
+    }
      
     return new Promise((res, rej) => {
       if (!deleteStatement && !insertStatement) {
@@ -160,8 +189,14 @@ export default Reflux.createStore({
             'Content-Type':'application/sparql-update' 
           }
         }).then((result) => {
-          // TODO Works weird if your node is note centered
-          if(params.currentNode) GraphActions.drawAtUri(params.currentNode, 0)
+
+          /* This is supposed to refresh the graph. Does not
+           * work well enough. Find a better way to do it.
+           */
+          if (params.currentNode) {
+            GraphActions.drawAtUri(params.currentNode, 0)
+          }
+          profile.currentNode = params.currentNode 
           this.trigger(Object.assign(profile, newData))
           res(result) 
         }).catch((e) => {

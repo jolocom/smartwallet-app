@@ -3,6 +3,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import graphActions from 'stores/graph-store'
 import nodeActions from 'actions/node'
+import Utils from 'lib/util'
 
 import {
   AppBar,
@@ -58,7 +59,7 @@ let ProfileNode = React.createClass({
     let background
 
     if (img) {
-      background = img
+      background = Utils.uriToProxied(img)
     }
 
     return {

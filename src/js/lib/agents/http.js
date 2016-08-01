@@ -57,12 +57,14 @@ class HTTPAgent {
   }
 
 
-  // helper method for making XMLHttpRequests
-  //
-  // @param {string} url resource url
-  // @param {string} method HTTP verb
-  // @param {string} body optional request body
-  // @param {object} headers request headers
+  /* helper method for making XMLHttpRequests
+   *
+   * @param {string} url resource url
+   * @param {string} method HTTP verb
+   * @param {string} body optional request body
+   * @param {object} headers request headers
+   */ 
+
   _req(url, method='GET', body=null, headers={'Accept': DEFAULT_ACCEPT, 'Content-type': DEFAULT_CT}) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest()

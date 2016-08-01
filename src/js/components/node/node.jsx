@@ -1,7 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import {FOAF} from 'lib/namespaces'
 
 import ProfileNode from 'components/node/profile.jsx'
 import Dialog from 'components/common/dialog.jsx'
@@ -9,7 +8,9 @@ import {Layout, Content} from 'components/layout'
 
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
+import rdf from 'rdflib'
 
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let Node = React.createClass({
   mixins: [
     Reflux.connect(NodeStore, 'node')
