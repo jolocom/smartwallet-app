@@ -49,7 +49,7 @@ let NodeAdd = React.createClass({
     return {
       bar: {
         backgroundColor: actionAppBar.color,
-        color: actionAppBar.textCoor
+        color: actionAppBar.textColor
       },
       title: {
         color: actionAppBar.textColor
