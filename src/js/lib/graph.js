@@ -21,11 +21,10 @@ const theme = getMuiTheme(JolocomTheme)
 export default class GraphD3 extends EventEmitter {
 
   constructor(el, mode) {
-
     super()
 
     this.mode = mode
-    this.MAX_VISIBLE_NUMBER_OF_NODES = 8
+    this.MAX_VISIBLE_NODES = 8
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
 
@@ -42,9 +41,9 @@ export default class GraphD3 extends EventEmitter {
       .append('svg:g')
 
     this.svg.append('svg:g')
-      .attr('class','background-layer')
+      .attr('class', 'background-layer')
       .append('svg:g')
-      .attr('class','background-layer-links')
+      .attr('class', 'background-layer-links')
 
     // TouchRotate setup
     var thisInstance = this
@@ -52,8 +51,8 @@ export default class GraphD3 extends EventEmitter {
       var lastNotchRadian = false
 
       return {
-        move: function (touchMoveRadian) { // closure isn't functional #todo
-
+        move: function (touchMoveRadian) {
+          // closure isn't functional #todo
           // Normalization of touchMoveRadian
           //   Quick fix because touchMoveRadian abruptly switches from
           // (+3/2 * PI) to (-1/2 * PI)
@@ -61,33 +60,29 @@ export default class GraphD3 extends EventEmitter {
           // as an absolute value, but if we are comparing the new
           // touchMoveRadian to the previous one, then it is problematic
           var radianDiff = touchMoveRadian - lastNotchRadian
-          if (radianDiff < -Math.PI){
+          if (radianDiff < -Math.PI) {
             radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
-          }
-          else if (radianDiff > Math.PI){
+          } else if (radianDiff > Math.PI) {
             radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
           }
-
-          if (lastNotchRadian === false) // first drag
-          {
+          // first drag
+          if (lastNotchRadian === false) {
             lastNotchRadian = touchMoveRadian
-          }
-          else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)
-          // @todo constant / not stateless
-          {
+          } else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NODES) {
             lastNotchRadian = touchMoveRadian
-            if (thisInstance.rotationIndex < thisInstance.numberOfNeighbours - thisInstance.MAX_VISIBLE_NUMBER_OF_NODES) {
+            if (thisInstance.rotationIndex < thisInstance.numberOfNeighbours - thisInstance.MAX_VISIBLE_NODES) {
               thisInstance.rotationIndex++
-              thisInstance.emit('change-rotation-index', thisInstance.rotationIndex)
+              thisInstance.emit('change-rotation-index',
+              thisInstance.rotationIndex)
               thisInstance.updateAfterRotationIndex('up')
             }
-          } else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NUMBER_OF_NODES)
-          // @todo constant / not stateless
-          {
+          } else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NODES) {
+            // @todo constant / not stateless
             lastNotchRadian = touchMoveRadian
             if (thisInstance.rotationIndex > 0) {
               thisInstance.rotationIndex--
-              thisInstance.emit('change-rotation-index', thisInstance.rotationIndex)
+              thisInstance.emit('change-rotation-index',
+              thisInstance.rotationIndex)
               thisInstance.updateAfterRotationIndex('down')
             }
           }
@@ -105,14 +100,15 @@ export default class GraphD3 extends EventEmitter {
   render = function (state) { // nodes
     this.state = state
 
-    if (this.rendered){
+    if (this.rendered) {
       this.eraseGraph() // erase everything, including background
     }
 
     this.rendered = true
 
     this.refreshDimensions() // ?
-    this.orderNodes() // if render is the changeNodes function, then this makes sense.
+    this.orderNodes()
+    // if render is the changeNodes function, then this makes sense.
 
     // Update dataNodes
     this.dataNodes = [state.center]
@@ -133,8 +129,12 @@ export default class GraphD3 extends EventEmitter {
 
     // Start up everything
     this.setUpVisibleNodes()
-    this.setUpForce() // <- creates force and starts it. why does it need to be done several times?
-    this.drawBackground() // refresh the background in case we need to draw more things because for instance scrolling is now enabled
+    this.setUpForce()
+    // <- creates force and starts it. why does it
+    // need to be done several times?
+    this.drawBackground()
+    // refresh the background in case we need to draw
+    // more things because for instance scrolling is now enabled
     this.d3update()
   }.bind(this)
 
@@ -148,36 +148,35 @@ export default class GraphD3 extends EventEmitter {
   }
 
   orderNodes= function () {
-    this.state.neighbours.sort(function(a,b) {
-      if ((a.name || a.title || 'zzzzzz').toLowerCase() > (b.name || b.title || 'zzzzzz').toLowerCase()){
+    this.state.neighbours.sort(function(a, b) {
+      if ((a.name || a.title || 'zzzzzz').toLowerCase() > (b.name || b.title || 'zzzzzz').toLowerCase()) {
         return 1
-      }
-      else if ((a.name || a.title || 'zzzzzz').toLowerCase() < (b.name || b.title || 'zzzzzz').toLowerCase()){
+      } else if ((a.name || a.title || 'zzzzzz').toLowerCase() < (b.name || b.title || 'zzzzzz').toLowerCase()) {
         return -1
-      }
-      else {
+      } else {
         return 0
       }
     })
-
   }
 
   // Starts the force simulation.
   setUpForce = function () {
-
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
+    // @TODO compile nodes object with object assign on-the-fly
     this.force = d3.layout.force()
-      .nodes(this.visibleDataNodes) // @TODO compile nodes object with object assign on-the-fly
+      .nodes(this.visibleDataNodes)
       .links(this.visibleDataLinks)
       .charge(-100)
       .chargeDistance(STYLES.largeNodeSize * 2)
       .linkDistance((d) => {
-        if (d.source.rank === 'history' && d.source.histLevel <= 0){
+        if (d.source.rank === 'history' && d.source.histLevel <= 0) {
           return STYLES.largeNodeSize * 2
+        } else if (d.source.rank === 'history') {
+          return STYLES.smallNodeSize
+        } else {
+          return STYLES.largeNodeSize * 1.4
         }
-        else if (d.source.rank === 'history') {return STYLES.smallNodeSize}
-        else {return STYLES.largeNodeSize * 1.4}
       })
       .size([this.width, this.height])
       .start()
@@ -192,15 +191,13 @@ export default class GraphD3 extends EventEmitter {
       .on('dragstart', function () {
         d3.event.sourceEvent.stopPropagation()
       })
-
   }.bind(this)
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
   drawBackground = function () {
-
     this.svg.selectAll('.dial, .dots, .background, .center-circle').remove()
-
-    /*this.svg.select('g.background-layer').append('svg:rect') // used for the positioning of the lines; see if we need it
+    /* this.svg.select('g.background-layer').append('svg:rect')
+    `` used for the positioning of the lines; see if we need it
       .attr('class','background')
       .attr('width', this.width)
       .attr('height', this.height)
@@ -209,23 +206,20 @@ export default class GraphD3 extends EventEmitter {
 
     // Center cicle
     this.svg.select('g.background-layer').append('svg:circle')
-      .attr('class','center-circle')
+      .attr('class', 'center-circle')
       .attr('cx', this.width * 0.5)
       .attr('cy', this.height * 0.5)
       .attr('r', this.largeNodeSize * 0.57 * 1.1)
       .style('fill', STYLES.lightGrayColor)
 
-    if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
-
-      // Gradient
-      // d3.select(this.svg.node().parentNode).select('g.background-layer').append('svg:rect').attr("x",this.width * 0.5 - 125 - this.largeNodeSize * 0.02).attr("y",(this.height * 0.5) - (11 * 10) - (this.largeNodeSize * 0.9)).attr("rx",15).attr("ry",15).attr("width", 125).attr("height", 120).attr("fill","url(#fade-to-white)");
-
+    if (this.numberOfNeighbours > this.MAX_VISIBLE_NODES) {
       // Draw dotted line to indicate there are more nodes
       // for (var i = 0; i < 12; i++) {
       //   this.svg.select('g.background-layer').append('svg:circle')
       //     .attr('class', 'dots')
       //     .attr('cx', this.width * 0.5)
-      //     .attr('cy', (this.height * 0.5) - (i * 10) - (this.largeNodeSize * 0.9))
+      //     .attr('cy', (this.height * 0.5) -
+      // (i * 10) - (this.largeNodeSize * 0.9))
       //     .attr('r', this.largeNodeSize * 0.02)
       //     .style('fill', STYLES.lightGrayColor)
       // }
@@ -236,18 +230,18 @@ export default class GraphD3 extends EventEmitter {
       this.updateDial()
 
       this.drawScrollingIndicator()
-
     }
-
   }.bind(this)
 
   updateDial = function() {
-
-    // Don't do anything if we haven't received the state yet; when we receive the state,
+    // Don't do anything if we haven't received the state yet;
+    // when we receive the state,
     // render() will be called, and updateDial() is called inside render()
-    if (typeof this.numberOfNeighbours === 'undefined') {return}
+    if (typeof this.numberOfNeighbours === 'undefined') {
+      return
+    }
 
-    this.arch = this.MAX_VISIBLE_NUMBER_OF_NODES / this.numberOfNeighbours
+    this.arch = this.MAX_VISIBLE_NODES / this.numberOfNeighbours
 
     this.archAngle = 360 / this.numberOfNeighbours
 
@@ -256,7 +250,7 @@ export default class GraphD3 extends EventEmitter {
       .outerRadius(this.largeNodeSize * 0.57)
       .startAngle(0)
 
-    let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NUMBER_OF_NODES
+    let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NODES
 
     this.svg.select('.dial')
       .attr('transform', 'translate(' + this.width * 0.5 + ',' + this.height * 0.5 + ') rotate(' + (this.archAngle * (maxRotationIndex - this.rotationIndex)) + ')') // remove "maxRotationIndex -" to reverse the direction
@@ -267,8 +261,8 @@ export default class GraphD3 extends EventEmitter {
       .attr('d', this.arc)
   }
 
-  drawScrollingIndicator = function(){
-    let angle = Math.PI/14
+  drawScrollingIndicator = function() {
+    let angle = Math.PI / 14
 
     this.svg.selectAll('.scrolling-indicator').remove()
 
@@ -280,9 +274,9 @@ export default class GraphD3 extends EventEmitter {
       .attr('r', this.largeNodeSize * 0.25)
       .style('fill', STYLES.grayColor)
       .attr('opacity', 0)
-      .transition().duration(STYLES.nodeTransitionDuration*0.3).delay(100*i)
+      .transition().duration(STYLES.nodeTransitionDuration * 0.3).delay(100 * i)
       .attr('opacity', 1)
-      .transition().duration(STYLES.nodeTransitionDuration*0.8)
+      .transition().duration(STYLES.nodeTransitionDuration * 0.8)
       .attr('opacity', 0)
     }
   }
@@ -310,33 +304,31 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', STYLES.fullScreenButton)
       .attr('height', STYLES.fullScreenButton)
 
-    // Fade to white
-    //   let defFadeToWhite = defsFull.append('svg:linearGradient').attr('id','fade-to-white').attr('x1',0).attr('x2',1).attr('y1',0).attr('y2',0)
-    //   defFadeToWhite.append('svg:stop').attr('offset','0%').attr('stop-color','white').attr('stop-opacity', 0)
-    //   defFadeToWhite.append('svg:stop').attr('offset','75%').attr('stop-color','white')
-
     // LINKS DATA JOIN
-    this.link = this.svg.select('.background-layer .background-layer-links').selectAll('line').data(this.visibleDataLinks)
+    this.link = this.svg.select('.background-layer .background-layer-links')
+      .selectAll('line')
+      .data(this.visibleDataLinks)
 
     // LINKS ENTER
     // We draw the lines for all the elements in the dataLinks array.
+    // this.link should be the enter stuff neh?
     this.link
       .enter()
         .append('line')
-        .attr('class','link')
+        .attr('class', 'link')
         .attr('stroke-width', () => {
           // Capped at 13, found it to look the best
-          return this.width / 50 > 10 ? 10 : this.width / 50})
-        .attr('stroke', STYLES.lightGrayColor) // this.link should be the enter stuff neh?
-        .attr('opacity', (d)=> {
-          d.source.elipsisdepth>=0 ? 0 : 1
+          return this.width / 50 > 10 ? 10 : this.width / 50
+        })
+        .attr('stroke', STYLES.lightGrayColor)
+        .attr('opacity', (d) => {
+          d.source.elipsisdepth >= 0 ? 0 : 1
         })
 
     // LINKS EXIT
     this.link
       .exit()
         .remove()
-
 
     // NODES DATA JOIN
     this.node = this.svg.selectAll('.node').data(this.visibleDataNodes, (d) => {
@@ -388,7 +380,8 @@ export default class GraphD3 extends EventEmitter {
     this.filter = this.defsFilter.append('filter')
       .attr('id', 'darkblur')
 
-    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // SourceAlpha refers to opacity of graphic
+    // that this filter will be applied to
     // convolve that with a Gaussian with standard deviation 3 and store result
     // in blur
     // This basically takes care of blurring
@@ -432,7 +425,6 @@ export default class GraphD3 extends EventEmitter {
     feMerge.append('feMergeNode')
       .attr('in', 'SourceGraphic')
 
-
     // Used as a background circle for image nodes
     // nodeEnter.append('circle')
     //   .attr('class', 'nodeback')
@@ -473,15 +465,14 @@ export default class GraphD3 extends EventEmitter {
 
     nodeEnter.append('circle')
       .attr('class', 'nodecircle')
-      .attr('r', STYLES.smallNodeSize/5 )
+      .attr('r', STYLES.smallNodeSize / 5)
       .attr('fill', (d) => {
-        if (d.elipsisdepth>=0){
+        if (d.elipsisdepth >= 0) {
           return theme.graph.textNodeColor
         } else {
           return theme.graph.transitionStartNodeColor
         }
       })
-
 
     // The name of the person, displays on the node
     nodeEnter.append('svg:text')
@@ -489,8 +480,11 @@ export default class GraphD3 extends EventEmitter {
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
       .attr('opacity', (d) => {
-        if (d.img && d.rank !== 'history') {return 0}
-        else {return 1}
+        if (d.img && d.rank !== 'history') {
+          return 0
+        } else {
+          return 1
+        }
       })
       .attr('dy', '.35em')
       .attr('font-size', (d) => d.rank === 'history' ? STYLES.largeNodeSize / 12 : STYLES.largeNodeSize / 8)
@@ -499,22 +493,19 @@ export default class GraphD3 extends EventEmitter {
       .text((d) => {
         if (d.name) {
           return d.name
-        }
-        else if (d.fullName){
+        } else if (d.fullName) {
           return d.fullName
-        }
-        else if (d.title) {
-          if (d.title.length > 7){
+        } else if (d.title) {
+          if (d.title.length > 7) {
             return d.title.substring(0, 7) + '...'
-          }
-          else {
+          } else {
             return d.title
           }
         } else {
           return 'Not Found'
         }
       })
-      .attr('opacity', (d) => d.elipsisdepth>=0 ? 0 : 1 )
+      .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
 
     // The text description of a person
     nodeEnter.append('svg:text')
@@ -527,8 +518,11 @@ export default class GraphD3 extends EventEmitter {
       .text(function (d) {
         // In case the person has no description available.
         if (d.description) {
-          if (d.description.length > 45){ return (d.description.substring(0, 45) + '...') }
-          else {return d.description}
+          if (d.description.length > 45) {
+            return (d.description.substring(0, 45) + '...')
+          } else {
+            return d.description
+          }
         }
       })
       // This wraps the description nicely.
@@ -562,9 +556,9 @@ export default class GraphD3 extends EventEmitter {
   // This function fires upon tick, around 30 times per second?
   tick = function (e) {
     this.refreshDimensions()
-
+    // @TODO overwriting the force coordinates, maybe not good
     let k = 1 * e.alpha
-    d3.selectAll('g .node').attr('d', (d) => { // @TODO overwriting the force coordinates, maybe not good
+    d3.selectAll('g .node').attr('d', (d) => {
       if (d.rank === 'center') {
         d.x = this.centerCoordinates.x
         d.y = this.centerCoordinates.y
@@ -572,13 +566,15 @@ export default class GraphD3 extends EventEmitter {
         d.x += (this.centerCoordinates.x - d.x) * k
         if (d.histLevel === 0) {
           d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2) * k
-        } else {d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize*0.8) *(d.histLevel)) * k}
+        } else {
+          d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize * 0.8) * (d.histLevel)) * k
+        }
       }
     })
 
-    if (this.numberOfNeighbours > this.MAX_VISIBLE_NUMBER_OF_NODES) {
+    if (this.numberOfNeighbours > this.MAX_VISIBLE_NODES) {
       d3.selectAll('.node').attr('d', (d) => {
-        if (d.rank === 'neighbour' || d.elipsisdepth>=0) {
+        if (d.rank === 'neighbour' || d.elipsisdepth >= 0) {
           d.x += (this.nodePositions[d.position].x - d.x) * k
           d.y += (this.nodePositions[d.position].y - d.y) * k
         }
@@ -593,11 +589,13 @@ export default class GraphD3 extends EventEmitter {
       .attr('y2', (d) => d.target.y)
       // Update the node positions. We use translate because we are working with
       // a group of elements rather than just one.
-    d3.selectAll('g .node').attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
+    d3.selectAll('g .node')
+      .attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
-  // We also prevent the node from bouncing away in case it's dropped to the middle
+  // We also prevent the node from bouncing away
+  // in case it's dropped to the middle
   dragEnd = function (node) {
     if (node.rank === 'center' || node.rank === 'unavailable') {
       this.force.start()
@@ -621,12 +619,10 @@ export default class GraphD3 extends EventEmitter {
   // Enlarges and displays extra info about the clicked node, while setting
   // all other highlighted nodes back to their normal size
 
-
   setUpVisibleNodes = function () {
-
     // No scrolling
 
-    if (this.numberOfNeighbours <= this.MAX_VISIBLE_NUMBER_OF_NODES) {
+    if (this.numberOfNeighbours <= this.MAX_VISIBLE_NODES) {
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
       return
@@ -644,102 +640,95 @@ export default class GraphD3 extends EventEmitter {
 
     this.nodePositions = []
 
-    let
-      extraSpaceFront = (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES - this.rotationIndex) > 2 ? 2 : (this.numberOfNeighbours-this.MAX_VISIBLE_NUMBER_OF_NODES - this.rotationIndex),
-      extraSpaceBack = this.rotationIndex > 2 ? 2 : this.rotationIndex,
-      totalspace = 0,
-      num = 0.5
+    let extraSpaceFront = (this.numberOfNeighbours - this.MAX_VISIBLE_NODES - this.rotationIndex) > 2 ? 2 : (this.numberOfNeighbours - this.MAX_VISIBLE_NODES - this.rotationIndex)
+    let extraSpaceBack = this.rotationIndex > 2 ? 2 : this.rotationIndex
+    let totalspace = 0
+    let num = 0.5
 
-    if (extraSpaceFront>0) {
-      totalspace ++
+    if (extraSpaceFront > 0) {
+      totalspace++
     }
-    if (extraSpaceBack>0) {
-      totalspace ++
+    if (extraSpaceBack > 0) {
+      totalspace++
     }
 
-    let angle = (2 * Math.PI) / (this.MAX_VISIBLE_NUMBER_OF_NODES + totalspace),
-      first = true
+    let angle = (2 * Math.PI) / (this.MAX_VISIBLE_NODES + totalspace)
+    let first = true
 
-    for (var i = 0, back = extraSpaceBack, front= extraSpaceFront, numberOfNeighbours = this.MAX_VISIBLE_NUMBER_OF_NODES; i < (this.numberOfNeighbours + totalspace); i++) {
-      if (back>0) {
-        if (back > 1 ){
+    for (var i = 0, back = extraSpaceBack, front = extraSpaceFront, numberOfNeighbours = this.MAX_VISIBLE_NODES; i < (this.numberOfNeighbours + totalspace); i++) {
+      if (back > 0) {
+        if (back > 1) {
           num = 0.15
         } else {
-          if (i === 0){
+          if (i === 0) {
             num = 0.5
           }
         }
 
         let pos = {
-          x: Math.sin((Math.PI)-(angle)*num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
-          y: Math.cos((Math.PI)-(angle)*num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y,
+          x: Math.sin((Math.PI) - (angle) * num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos((Math.PI) - (angle) * num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y,
           p: 'back'
         }
         this.nodePositions.push(pos)
         back--
         num = num + 0.45
-      }
-      else if (numberOfNeighbours>0){
-        if ( i > 0 && first === true){
+      } else if (numberOfNeighbours > 0) {
+        if (i > 0 && first === true) {
           num = 1.5
           first = false
         }
         let pos = {
-          x: Math.sin((Math.PI)-(angle)*num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
-          y: Math.cos((Math.PI)-(angle)*num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y,
+          x: Math.sin((Math.PI) - (angle) * num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos((Math.PI) - (angle) * num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y,
           p: 'neighbours'
         }
         this.nodePositions.push(pos)
-        if (numberOfNeighbours>1){
-          num ++
+        if (numberOfNeighbours > 1) {
+          num++
         }
-        numberOfNeighbours --
-      }
-      else if (front>0) {
-        if (front>1){
+        numberOfNeighbours--
+      } else if (front > 0) {
+        if (front > 1) {
           num = num + 0.90
-        }
-        else if ( i-extraSpaceBack === this.MAX_VISIBLE_NUMBER_OF_NODES ) {
-          num ++
+        } else if (i - extraSpaceBack === this.MAX_VISIBLE_NODES) {
+          num++
         }
         let pos = {
-          x: Math.sin((Math.PI)-(angle)*num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
-          y: Math.cos((Math.PI)-(angle)*num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y,
+          x: Math.sin((Math.PI) - (angle) * num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos((Math.PI) - (angle) * num) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y,
           p: 'front'
         }
         this.nodePositions.push(pos)
-        front --
+        front--
         num = num + 0.45
       }
-
     }
 
     // Hydrate visibleDataNodes based on rotationIndex
-    // @TODO iterate through this.neighbours rather; have this.neighbourNodes, this.center, this.historyNodes and not have this.dataNodes (where 0 = xx)
+    // @TODO iterate through this.neighbours rather;
+    // have this.neighbourNodes, this.center, this.historyNodes
+    // and not have this.dataNodes (where 0 = xx)
     this.visibleDataNodes = []
     this.visibleDataNodes[0] = this.dataNodes[0] // @TODO not intuitive
     this.visibleDataLinks = []
     let nodeCount = 0 - extraSpaceBack - extraSpaceFront
 
-    for ( var i = this.rotationIndex + 1 - extraSpaceBack, pos = 0, end = 0; i !== this.rotationIndex - extraSpaceBack; i = (i + 1) % this.dataNodes.length) {
-
-      if (this.dataNodes[i].rank === 'neighbour' ) {
-        if ( nodeCount < this.MAX_VISIBLE_NUMBER_OF_NODES ){
+    for (var i = this.rotationIndex + 1 - extraSpaceBack, pos = 0, end = 0; i !== this.rotationIndex - extraSpaceBack; i = (i + 1) % this.dataNodes.length) {
+      if (this.dataNodes[i].rank === 'neighbour') {
+        if (nodeCount < this.MAX_VISIBLE_NODES) {
           this.visibleDataNodes.push(this.dataNodes[i])
           let last = this.visibleDataNodes.length - 1
           this.visibleDataNodes[last].position = pos
           this.visibleDataNodes[last].elipsisdepth = -1
-
-          if (extraSpaceBack>pos){
-            let x = 1-pos
-            if (extraSpaceBack === 1){
-              x=0
+          if (extraSpaceBack > pos) {
+            let x = 1 - pos
+            if (extraSpaceBack === 1) {
+              x = 0
             }
             this.visibleDataNodes[last].elipsisdepth = x
-
           }
-          if ( pos > this.MAX_VISIBLE_NUMBER_OF_NODES + extraSpaceBack - 1){
-
+          if (pos > this.MAX_VISIBLE_NODES + extraSpaceBack - 1) {
             this.visibleDataNodes[last].elipsisdepth = end
             end++
           }
@@ -749,14 +738,12 @@ export default class GraphD3 extends EventEmitter {
       }
     }
 
-
     for (i = 1; i < this.visibleDataNodes.length; i++) {
       this.visibleDataLinks.push({
         'source': i,
         'target': 0
       })
     }
-
 
     first = true
     // Add history nodes to visibleDataNodes
@@ -779,21 +766,18 @@ export default class GraphD3 extends EventEmitter {
     }
 
     this.resetAll()
-
   }.bind(this)
 
   arcTween = function (transition, newAngle) {
     let arc = d3.svg.arc()
-        .innerRadius(this.largeNodeSize* 0.5)
-        .outerRadius(this.largeNodeSize* 0.57)
-        .startAngle(0)
+      .innerRadius(this.largeNodeSize * 0.5)
+      .outerRadius(this.largeNodeSize * 0.57)
+      .startAngle(0)
 
     transition.attrTween('d', function(d) {
-
       var interpolate = d3.interpolate(d.endAngle, newAngle)
 
       return function(t) {
-
         d.endAngle = interpolate(t)
 
         return arc(d)
@@ -802,7 +786,7 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   onClickFull = function (node, data) {
-    //stops propagation to node click handler
+    // stops propagation to node click handler
     this.emit('view-node', data, node)
     d3.event.stopPropagation()
   }
@@ -812,42 +796,39 @@ export default class GraphD3 extends EventEmitter {
     let largeSize = STYLES.largeNodeSize
 
     d3.selectAll('line')
-      .attr('opacity', (d)=> {
-        return d.source.elipsisdepth>=0 ? 0 : 1
+      .attr('opacity', (d) => {
+        return d.source.elipsisdepth >= 0 ? 0 : 1
       })
     // Reset size of all circles
     d3.selectAll('g .node')
       .selectAll('.nodecircle')
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
-        if (d.elipsisdepth>=0){
-          if (d.elipsisdepth === 0){
+        if (d.elipsisdepth >= 0) {
+          if (d.elipsisdepth === 0) {
             return STYLES.smallNodeSize * 0.35
           } else {
             return STYLES.smallNodeSize * 0.15
           }
         }
-        if (d.rank === 'center'){
+        if (d.rank === 'center') {
           return STYLES.largeNodeSize / 2
-        }
-        else if (d.rank === 'history') {
+        } else if (d.rank === 'history') {
           return STYLES.smallNodeSize / 3
         } else {
           return STYLES.smallNodeSize / 2
         }
       })
 
-
     // Reset colour of all circles
     d3.selectAll('g .node')
       .select('.nodecircle')
       .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
-      .style('fill',(d) => {
+      .style('fill', (d) => {
         if (d.img && d.rank !== 'history') {
           return 'url(#' + d.uri + d.connection + ')'
-        }
-        else {
-          if (d.elipsisdepth === 0){
+        } else {
+          if (d.elipsisdepth === 0) {
             return theme.graph.elipsis1
           } else if (d.elipsisdepth === 1) {
             return theme.graph.elipsis2
@@ -893,9 +874,8 @@ export default class GraphD3 extends EventEmitter {
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('dy', '.35em')
       .attr('opacity', (d) => {
-        return (d.img || d.elipsisdepth>=0) ? 0 : 1
+        return ((d.img || d.elipsisdepth >= 0) && d.rank !== 'history') ? 0 : 1
       })
-
 
     // Hide the descriptions of all nodes
     d3.selectAll('g .node')
@@ -911,9 +891,10 @@ export default class GraphD3 extends EventEmitter {
 
     // Un-highlight all nodes
     d3.selectAll('g .node')
-      .attr('d', (d) => d.highlighted = false)
+      .attr('d', function(d) {
+        d.highlighted = false
+      })
   }
-
 
   onClick = function (node, data) {
     d3.event.stopPropagation()
@@ -922,9 +903,9 @@ export default class GraphD3 extends EventEmitter {
 
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
-    if (data.rank === 'history') {return}
-    if (d3.event.defaultPrevented) {return}
-    if (data.elipsisdepth>=0) {return}
+    if (data.rank === 'history' ||
+        d3.event.defaultPrevented ||
+        data.elipsisdepth >= 0) { return }
     data.wasHighlighted = data.highlighted
 
     // @TODO this could be done using d3js and
@@ -937,7 +918,6 @@ export default class GraphD3 extends EventEmitter {
       this.emit('deselect')
     } else {
       // NODE signifies the node that we clicked on. We enlarge it.
-
 
       // Enlarge the node
       d3.select(node).select('.nodecircle')
@@ -958,7 +938,7 @@ export default class GraphD3 extends EventEmitter {
         .attr('x', -STYLES.largeNodeSize / 2)
         .attr('y', -STYLES.largeNodeSize / 2)
 
-      if (this.mode !== 'preview'){
+      if (this.mode !== 'preview') {
       // Enlarge full screen button
         d3.select(node).select('.nodefullscreen')
           .transition('highlight').duration(STYLES.nodeTransitionDuration)
@@ -991,25 +971,20 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   updateHistory = function (history) {
-
     if (typeof history !== 'undefined' && history.length > 0) {
-
       this.force.stop()
-      for (var j = history.length-1, rank=0;
+      for (var j = history.length - 1, rank = 0;
            j >= 0;
            j--, rank++) {
-
-        let already_exists = false
-        for (let dataNode of this.dataNodes)
-        {
-          if (dataNode['uri'] === history[j]['uri'])
-          {
-            if (dataNode['rank']=== 'history'){
-              already_exists = true
+        let alreadyExists = false
+        for (let dataNode of this.dataNodes) {
+          if (dataNode['uri'] === history[j]['uri']) {
+            if (dataNode['rank'] === 'history') {
+              alreadyExists = true
             }
           }
         }
-        if (already_exists) { continue }
+        if (alreadyExists) { continue }
 
         history[j].connection = 'hist'
         history[j].rank = 'history'
@@ -1073,10 +1048,11 @@ export default class GraphD3 extends EventEmitter {
             .append('tspan')
             .attr('x', 0)
             .attr('y', y)
-            .attr('dy',((lineNumber === 0) ? (dy + 'em'):(lineHeight + 'em')))
-            //++lineNumber * lineHeight + dy + 'em')
-            //NOTE(philipp): dy is relative to previous
-            //sibling (== lineheight for all but first line)
+            .attr('dy',
+            ((lineNumber === 0) ? (dy + 'em') : (lineHeight + 'em')))
+            // ++lineNumber * lineHeight + dy + 'em')
+            // NOTE(philipp): dy is relative to previous
+            // sibling (== lineheight for all but first line)
             .text(word)
         }
       }
@@ -1088,10 +1064,8 @@ export default class GraphD3 extends EventEmitter {
   // .background-layer must be the first element of this.svg,
   // and its first element must be .background-layer-links
   eraseGraph = function () {
-    if (this.force) {this.force.stop()}
-    this.svg.selectAll('.background-layer-links *,').remove()
-    this.svg.selectAll('.background-layer').remove()
-    this.svg.selectAll('.background-layer ~ *').remove()
+    if (this.force) { this.force.stop() }
+    this.svg.selectAll('.background-layer-links *, .background-layer .background-layer ~ *').remove()
   }.bind(this)
 
   // Alternative to dragging the node to the center.
@@ -1103,9 +1077,8 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   // Function called after deleting a node; render()
-  //is not called after, so that we can do a smooth animation.
+  // is not called after, so that we can do a smooth animation.
   deleteNodeAndRender = function (state) {
-
     let deletedNodeUri = d3.select(state.selected).datum().uri
 
     // Deletion animations
@@ -1115,36 +1088,35 @@ export default class GraphD3 extends EventEmitter {
     })
       .select('pattern')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
-      .attr('x', STYLES.largeNodeSize*0.8 )
-      .attr('y', STYLES.largeNodeSize*0.8 )
+      .attr('x', STYLES.largeNodeSize * 0.8)
+      .attr('y', STYLES.largeNodeSize * 0.8)
 
     d3.selectAll('.node').filter(function (d) {
       return d.uri === deletedNodeUri && d.rank === 'neighbour'
     })
       .select('image')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
-      .attr('width', STYLES.largeNodeSize*0.8)
-      .attr('height', STYLES.largeNodeSize*0.8)
+      .attr('width', STYLES.largeNodeSize * 0.8)
+      .attr('height', STYLES.largeNodeSize * 0.8)
 
     d3.selectAll('.node').filter(function (d) {
       return d.uri === deletedNodeUri && d.rank === 'neighbour'
     })
       .select('circle')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
-      .attr('r', STYLES.largeNodeSize/2.2) // STYLES.largeNodeSize / 2.2
+      .attr('r', STYLES.largeNodeSize / 2.2)
       .each('end', () => {
-
         for (var i = 1; i < this.dataNodes.length; i++) {
-          if (this.dataNodes[i].uri === deletedNodeUri){
-            if (this.dataNodes[i].rank === 'neighbour'){
+          if (this.dataNodes[i].uri === deletedNodeUri) {
+            if (this.dataNodes[i].rank === 'neighbour') {
               this.dataNodes.splice(i, 1)
             }
           }
         }
 
-        for ( i = 0; i < this.dataLinks.length; i++) {
-          if (this.dataLinks[i].source.uri === deletedNodeUri){
-            if (this.dataLinks[i].source.rank === 'neighbour'){
+        for (i = 0; i < this.dataLinks.length; i++) {
+          if (this.dataLinks[i].source.uri === deletedNodeUri) {
+            if (this.dataLinks[i].source.rank === 'neighbour') {
               this.dataLinks.splice(i, 1)
             }
           }
@@ -1157,7 +1129,6 @@ export default class GraphD3 extends EventEmitter {
         this.force.links(this.visibleDataLinks)
         this.d3update()
         this.force.start()
-
 
         // Once the animation is ended, we re-render everything
         // It updates the visibility of the radial
@@ -1175,8 +1146,7 @@ export default class GraphD3 extends EventEmitter {
 
   updateAfterRotationIndex = function() {
     this.updateDial()
-    if (this.force)
-    {
+    if (this.force) {
       // @TODO do we realy need to do all of the following?
 
       this.setUpVisibleNodes()
