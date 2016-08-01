@@ -58,7 +58,6 @@ let AddressNode = React.createClass({
     let {address, city, zipcode} = this.state
 
     let subtitle = `${zipcode} ${city}`
-
     let avatar = <Avatar icon={<Verified/>} backgroundColor="transparent"/>
 
     return (

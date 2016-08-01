@@ -3,6 +3,7 @@ var path = require('path')
 
 module.exports = {
   entry: [
+    'whatwg-fetch',
     './src/js/main.jsx'
   ],
   resolve: {

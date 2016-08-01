@@ -12,7 +12,6 @@ let PlusDrawer = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log('PlusDrawer component did mount')
     let state = {
       title: this.state.title,
       description: this.state.description
@@ -31,7 +30,6 @@ let PlusDrawer = React.createClass({
   },
 
   directConnect: function() {
-    console.log(this.state)
     this.props.addNode({
       title: this.state.title,
       description: this.state.description,
