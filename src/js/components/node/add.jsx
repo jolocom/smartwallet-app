@@ -45,17 +45,17 @@ let NodeAdd = React.createClass({
   },
 
   getStyles() {
-    const {muiTheme: {palette}} = this.context
+    const {muiTheme: {actionAppBar}} = this.context
     return {
       bar: {
-        backgroundColor: palette.primary1Color,
-        color: '#ffffff'
+        backgroundColor: actionAppBar.color,
+        color: actionAppBar.textCoor
       },
       title: {
-        color: '#ffffff'
+        color: actionAppBar.textColor
       },
       icon: {
-        color: '#ffffff'
+        color: actionAppBar.textColor
       }
     }
   },

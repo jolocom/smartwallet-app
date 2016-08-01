@@ -39,7 +39,7 @@ class Filters extends React.Component {
   }
 
   getStyles() {
-    const theme = this.context.muiTheme
+    const {filters} = this.context.muiTheme
 
     const styles = {
       container: {
@@ -54,24 +54,24 @@ class Filters extends React.Component {
       item: {
         textAlign: 'center',
         padding: '2px 18px',
-        backgroundColor: 'rgba(0, 0, 0, 0.12)',
+        backgroundColor: filters.itemColor,
         marginLeft: '8px',
         borderRadius: '28px'
       },
       itemActive: {
-        backgroundColor: theme.palette.primary1Color
+        backgroundColor: filters.activeItemColor
       },
       icon: {
         marginRight: 0,
         left: '50%',
         marginLeft: '-12px',
-        fill: 'rgba(0, 0, 0, 0.24)'
+        fill: filters.iconColor
       },
       iconActive: {
         marginRight: 0,
         left: '50%',
         marginLeft: '-12px',
-        fill: '#ffffff'
+        fill: filters.activeIconColor
       }
     }
 
@@ -94,14 +94,16 @@ class Filters extends React.Component {
     const styles = this.getStyles()
     const filter = filters[id]
     const checked = this.state.filters[id]
-
+    const toggle = () => {
+      this.toggleFilter(id)
+    }
     return (<IconToggle
       icon={<filter.icon />}
       style={[styles.item, checked && styles.itemActive]}
       id={id}
       checked={checked}
       iconStyle={checked ? styles.iconActive : styles.icon}
-      onCheck={() => {this.toggleFilter(id)}} />
+      onCheck={toggle} />
     )
   }
 
