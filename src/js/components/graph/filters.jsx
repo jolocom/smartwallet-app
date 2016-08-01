@@ -123,7 +123,7 @@ class Filters extends React.Component {
     }
 
     return (
-      <div style={[styles.container, style]}>
+      <div style={Object.assign({}, styles.container, style)}>
         {defaultFilters}
         <IconMenu
           iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
