@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDom from 'react-dom'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
@@ -33,6 +34,10 @@ let Signup = React.createClass({
     return {
       disabledSubmit: true
     }
+  },
+  
+  componentDidMount() {
+    ReactDom.findDOMNode(this.refs.username).querySelector('input').style.textTransform = 'lowercase';
   },
 
   componentWillMount() {
@@ -145,7 +150,6 @@ let Signup = React.createClass({
   },
 
 	render() {
-  console.log(this.state)
 	let styles = this.getStyles()
 	return (
 		<div style={styles.container}>
@@ -157,7 +161,7 @@ let Signup = React.createClass({
 					onValidSubmit={this.signup}
 					>
 					<div style={{marginBottom: '20px'}}>
-						<FormsyText name="username"
+						<FormsyText name="username" ref="username"
 							floatingLabelText="Username"
 							validations="isAlphanumeric"
 							validationError={this.errorMessages.alphaNumeric}

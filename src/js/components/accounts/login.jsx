@@ -44,7 +44,7 @@ let Login = React.createClass({
 
   _handlePasswordChange(e) {
     this.setState({
-      password: e.target.value.toLowerCase()
+      password: e.target.value
     })
   },
 
