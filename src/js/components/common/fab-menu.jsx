@@ -107,17 +107,18 @@ let FabMenu = React.createClass({
       })
     })
 
-    let rotate = this.state.open && closeIcon ? 270 : 0
+    let rotate = this.state.open && closeIcon ? 90 : 0
 
     return (
       <div style={styles.container}>
         <nav style={styles.nav}>
           <FloatingActionButton
             onTouchTap={this.toggle}
-            style={Object.assign({}, {
+            style={styles.item}
+            iconStyle={{
               transition: `transform ${duration}s`,
               transform: `rotate(${rotate}deg)`
-            }, styles.item)}
+            }}
             secondary
           >
             <FontIcon className="material-icons">
