@@ -21,22 +21,16 @@ let Graph = React.createClass({
 
     this.setState(data)
     if (this.state.neighbours){
-      console.log(1)
-
       if (signal !== 'changeRotationIndex')
         this.graph.render(this.state)
-
-      // this.graph.render(this.state) // @TODO why twice?
       this.graph.updateHistory(this.state.navHistory)
     }
 
     if (this.state.newNode) {
-      console.log(2)
       previewActions.setState('newNode', null, true)
     }
 
     if(signal == 'redraw') {
-      console.log(3)
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }

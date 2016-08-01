@@ -9,6 +9,7 @@ import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
+import AccountStore from 'stores/account'
 import graphActions from 'actions/graph-actions'
 
 import Node from '../node/node.jsx'
@@ -78,6 +79,8 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
+  
+  // This is the first thing that fires when the user logs in.
   componentDidMount: function() {
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')

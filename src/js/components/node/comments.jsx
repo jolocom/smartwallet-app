@@ -59,7 +59,6 @@ let Comments = React.createClass({
   render: function() {
     let {style} = this.props
     let styles = this.getStyles()
-
     return (
       <div style={[styles.container, style]}>
         <List style={styles.list}>

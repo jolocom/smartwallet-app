@@ -9,7 +9,8 @@ let SelectableList = MakeSelectable(List)
 let Nav = React.createClass({
 
   contextTypes: {
-    history: React.PropTypes.object
+    history: React.PropTypes.object,
+    profile: React.PropTypes.any
   },
 
   getInitialState() {

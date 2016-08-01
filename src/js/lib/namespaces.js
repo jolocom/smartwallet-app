@@ -1,55 +1,34 @@
 // local rdf namespace mappings
-
-import rdflib from 'rdflib'
-
-export const FOAF = rdflib.Namespace('http://xmlns.com/foaf/0.1/')
-
-export const DC = rdflib.Namespace('http://purl.org/dc/terms/')
-
-export const SIOC = rdflib.Namespace('http://rdfs.org/sioc/ns#')
-
-export const RDF = rdflib.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-
+import rdf from 'rdflib'
 const cert = 'http://www.w3.org/ns/auth/cert#'
+
+let SCHEMA = rdf.Namespace('https://schema.org/')
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
+let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+
+export const USER = {
+  givenName: FOAF('givenName'), 
+  familyName: FOAF('familyName'), 
+  fullName: FOAF('name'),
+  image: FOAF('img'),
+  email: FOAF('mbox'),
+  inbox: TERMS('inbox'),
+  storage: NIC('storage'),
+  knows: FOAF('knows'),
+  isRelatedTo: SCHEMA('isRelatedTo')
+}
+
 export const CERT = {
   exponent: `${cert}exponent`,
   key: `${cert}key`,
   modulus: `${cert}modulus`
 }
 
-// const dc = 'http://purl.org/dc/terms/'
-// export const DC = {
-//   created: `${dc}created`,
-//   description: `${dc}description`,
-//   title: `${dc}title`
-// }
-
 const ldp = 'http://www.w3.org/ns/ldp#'
 export const LDP = {
   BasicContainer: `${ldp}BasicContainer`
 }
-
-// const rdf = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-// export const RDF = {
-//   type:`${rdf}type`
-// }
-
-// const sioc = 'http://rdfs.org/sioc/ns#'
-// export const SIOC = {
-//   Container: `${sioc}Container`,
-//   Post: `${sioc}Post`,
-//   Space: `${sioc}Space`,
-//   Thread: `${sioc}Thread`,
-//   containerOf:`${sioc}container_of`,
-//   content: `${sioc}content`,
-//   hasContainer: `${sioc}has_container`,
-//   hasCreator: `${sioc}has_creator`,
-//   hasOwner: `${sioc}has_owner`,
-//   hasReply: `${sioc}has_reply`,
-//   hasSpace: `${sioc}has_space`,
-//   hasSubscriber: `${sioc}has_subscriber`,
-//   spaceOf: `${sioc}space_of`
-// }
 
 const ssn = 'http://purl.oclc.org/NET/ssnx/ssn#'
 export const SSN = {

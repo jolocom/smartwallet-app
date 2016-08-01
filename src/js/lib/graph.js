@@ -7,14 +7,12 @@
 // a moved node will not save upon refresh.
 import d3 from 'd3'
 import STYLES from 'styles/app'
-import {
-  EventEmitter
-}
-from 'events'
+import {EventEmitter} from 'events'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 import TouchRotate from './touchRotate'
+import Utils from 'lib/util'
 
 const theme = getMuiTheme(JolocomTheme)
 
@@ -99,7 +97,6 @@ export default class GraphD3 extends EventEmitter {
   // Function to be called when the state changes
   render = function (state) { // nodes
     this.state = state
-
     if (this.rendered) {
       this.eraseGraph() // erase everything, including background
     }
@@ -112,9 +109,7 @@ export default class GraphD3 extends EventEmitter {
 
     // Update dataNodes
     this.dataNodes = [state.center]
-    this.visibleDataNodes = [state.center] // @TODO you can safely remove this
     this.dataLinks = []
-    this.visibleDataLinks = [] // @TODO safely removable
     this.numberOfNeighbours = 0
 
     // Flatten the center and neighbour nodes we get from the state
@@ -365,7 +360,7 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
-      .attr('xlink:href', (d) => d.img)
+      .attr('xlink:href', (d) => Utils.uriToProxied(d.img))
       .attr('width', (d) => {
         return d.rank === 'center' ? largeNode : smallNode
       })
@@ -384,6 +379,7 @@ export default class GraphD3 extends EventEmitter {
     // that this filter will be applied to
     // convolve that with a Gaussian with standard deviation 3 and store result
     // in blur
+
     // This basically takes care of blurring
     this.filter.append('feGaussianBlur')
       .attr('stdDeviation', 1.5)
@@ -547,7 +543,6 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function (data) {
       self.onClickFull(this, data)
     })
-
     this.resetAll()
 
     this.force.on('tick', this.tick)
@@ -1064,8 +1059,8 @@ export default class GraphD3 extends EventEmitter {
   // .background-layer must be the first element of this.svg,
   // and its first element must be .background-layer-links
   eraseGraph = function () {
-    if (this.force) { this.force.stop() }
-    this.svg.selectAll('.background-layer-links *, .background-layer .background-layer ~ *').remove()
+    if (this.force) {this.force.stop()}
+    this.svg.selectAll('.background-layer .background-layer-links *, .background-layer ~ *').remove()
   }.bind(this)
 
   // Alternative to dragging the node to the center.
@@ -1161,7 +1156,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Called from graph.jsx
   setRotationIndex = function (rotationIndex) {
-    this.rotationIndex = rotationIndex
+    this.rotationIndex = rotationIndex || 0
     // @todo only execute updateAfterRot if index changed
     this.updateAfterRotationIndex()
   }.bind(this)

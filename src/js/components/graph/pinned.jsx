@@ -64,7 +64,6 @@ let PinnedNodes = React.createClass({
   _handleNodeTap: function(nodeId) {
     let self = this
     return function() {
-      console.log(`node ${nodeId} clicked`)
       // FIXME: unreliable
       let node = self.state.nodes[nodeId - 1]
       NodeActions.add(node)
