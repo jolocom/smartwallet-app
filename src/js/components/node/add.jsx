@@ -48,7 +48,7 @@ let NodeAdd = React.createClass({
     const {muiTheme: {palette}} = this.context
     return {
       bar: {
-        backgroundColor: palette.accent1Color,
+        backgroundColor: palette.primary1Color,
         color: '#ffffff'
       },
       title: {
