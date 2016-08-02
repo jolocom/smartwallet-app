@@ -13,6 +13,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 import TouchRotate from './touchRotate'
 import Utils from 'lib/util'
+import particles from './particles'
 
 const theme = getMuiTheme(JolocomTheme)
 
@@ -23,6 +24,7 @@ export default class GraphD3 extends EventEmitter {
 
     this.mode = mode
     this.MAX_VISIBLE_NODES = 8
+    this.HOF_URI = 'https://hof.webid.jolocom.de/profile/card#me'
     this.smallNodeSize = STYLES.smallNodeSize
     this.largeNodeSize = STYLES.largeNodeSize
 
@@ -47,6 +49,7 @@ export default class GraphD3 extends EventEmitter {
     var thisInstance = this
     var getTouchRotateCallbacks = function () {
       var lastNotchRadian = false
+      var amountOfTurns = 0;
 
       return {
         move: function (touchMoveRadian) {
@@ -58,16 +61,19 @@ export default class GraphD3 extends EventEmitter {
           // as an absolute value, but if we are comparing the new
           // touchMoveRadian to the previous one, then it is problematic
           var radianDiff = touchMoveRadian - lastNotchRadian
+          
           if (radianDiff < -Math.PI) {
             radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
           } else if (radianDiff > Math.PI) {
             radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
           }
+          
           // first drag
           if (lastNotchRadian === false) {
             lastNotchRadian = touchMoveRadian
           } else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NODES) {
             lastNotchRadian = touchMoveRadian
+            amountOfTurns++
             if (thisInstance.rotationIndex < thisInstance.numberOfNeighbours - thisInstance.MAX_VISIBLE_NODES) {
               thisInstance.rotationIndex++
               thisInstance.emit('change-rotation-index',
@@ -77,6 +83,7 @@ export default class GraphD3 extends EventEmitter {
           } else if (radianDiff > Math.PI / thisInstance.MAX_VISIBLE_NODES) {
             // @todo constant / not stateless
             lastNotchRadian = touchMoveRadian
+            amountOfTurns--
             if (thisInstance.rotationIndex > 0) {
               thisInstance.rotationIndex--
               thisInstance.emit('change-rotation-index',
@@ -84,8 +91,18 @@ export default class GraphD3 extends EventEmitter {
               thisInstance.updateAfterRotationIndex('down')
             }
           }
+          
+          if (amountOfTurns > thisInstance.MAX_VISIBLE_NODES*7 || amountOfTurns < -thisInstance.MAX_VISIBLE_NODES*7)
+          {
+            if (thisInstance.dataNodes[0].uri != thisInstance.HOF_URI)
+            {
+              thisInstance.emit('center-changed', {uri: thisInstance.HOF_URI})
+              amountOfTurns = 0
+            }
+          }
         },
         end: function () {
+          amountOfTurns = 0
           lastNotchRadian = false
         }
       }
@@ -111,6 +128,11 @@ export default class GraphD3 extends EventEmitter {
     this.dataNodes = [state.center]
     this.dataLinks = []
     this.numberOfNeighbours = 0
+    
+    if (state.center.uri == this.HOF_URI && this.mode != 'preview')
+        particles.party(this.graphContainer)
+    else
+        particles.unparty(this.graphContainer)
 
     // Flatten the center and neighbour nodes we get from the state
     for (let i = 0; i < state.neighbours.length; i++) {
