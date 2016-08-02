@@ -166,9 +166,10 @@ let Graph = React.createClass({
 
     return (
       <div style={styles.container}>
-        {fab}
 
         <div style={styles.chart} ref="graph"></div>
+        
+        {fab}
 
         {this.props.children}
 
