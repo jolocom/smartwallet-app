@@ -60,8 +60,20 @@ export default Reflux.createStore({
   */
 
   onLogin(username, password, updatePayload) {
+    
     if (localStorage.getItem('webId')){
-      Account.login.completed(localStorage.getItem('webId')) 
+      
+      // Check if the cookie is still valid
+      fetch(`${proxy}/proxy?url=${localStorage.getItem('webId')}`, {
+        method: 'GET',
+        credentials: 'include'
+      }).then((res)=>{
+        Account.login.completed(localStorage.getItem('webId'))
+      }).catch(() => {
+        localStorage.removeItem('webId');
+        // @TODO redirect to home if tried to access graph directly by URL
+      })
+      
     } else if (username && password) {
       let user = encodeURIComponent(username)
       let pass = encodeURIComponent(password)
