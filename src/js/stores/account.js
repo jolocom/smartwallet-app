@@ -71,6 +71,7 @@ export default Reflux.createStore({
         Account.login.completed(localStorage.getItem('webId'))
       }).catch(() => {
         localStorage.removeItem('webId');
+        localStorage.removeItem('auth-mode');
         // @TODO redirect to home if tried to access graph directly by URL
       })
       
