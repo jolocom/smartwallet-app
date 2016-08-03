@@ -67,7 +67,9 @@ export default Reflux.createStore({
       fetch(`${proxy}/proxy?url=${localStorage.getItem('webId')}`, {
         method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
         credentials: 'include',
-        body: '{}'
+        headers: {
+          'Content-Type':'application/sparql-update' 
+        }
       }).then((res)=>{
         Account.login.completed(localStorage.getItem('webId'))
       }).catch(() => {
