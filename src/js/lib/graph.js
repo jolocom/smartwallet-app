@@ -38,6 +38,7 @@ export default class GraphD3 extends EventEmitter {
     this.svg = d3.select(this.graphContainer).append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
+      .style('display', 'block')
       .append('svg:g')
 
     this.svg.append('svg:g')
