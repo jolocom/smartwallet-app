@@ -18,6 +18,7 @@ import Tour from 'components/tour.jsx'
 
 import GraphSearch from 'components/graph/search.jsx'
 import GraphFilters from 'components/graph/filters.jsx'
+import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
@@ -62,7 +63,8 @@ let App = React.createClass({
   getInitialState() {
     return {
       searchActive: false,
-      searchQuery: null
+      searchQuery: null,
+      showIndicator: false
     }
   },
 
@@ -121,6 +123,10 @@ let App = React.createClass({
     this.refs.search.hide()
   },
 
+  _handleInfoTap() {
+    this.setState({showIndicator: true})
+  },
+
   _handleSearchHide() {
     this.setState({
       searchActive: false,
@@ -176,6 +182,10 @@ let App = React.createClass({
           iconClassName="material-icons"
           iconStyle={styles.icon}
           onTouchTap={this._handleChatTap}>chat</IconButton>
+        <IconButton
+          iconClassName="material-icons"
+          iconStyle={styles.icon}
+          onTouchTap={this._handleInfoTap}>info</IconButton>
       </div>
     )
     const search = (
@@ -190,6 +200,7 @@ let App = React.createClass({
 
     return (
       <div style={styles.container}>
+        {this.state.showIndicator ? <IndicatorOverlay/> : null }
         {this.isPublicRoute() ? this.props.children : (
           <Layout>
             <Paper style={styles.header}>
