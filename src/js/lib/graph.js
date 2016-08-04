@@ -30,16 +30,19 @@ export default class GraphD3 extends EventEmitter {
 
     this.graphContainer = el
 
-    this.refreshDimensions()
 
     this.rendered = false
     this.rotationIndex = 0
 
     this.svg = d3.select(this.graphContainer).append('svg:svg')
-      .attr('width', this.width)
-      .attr('height', this.height)
       .style('display', 'block')
       // .append('svg:g')
+    
+    this.refreshDimensions()
+    
+    this.svg
+      .attr('width', this.width)
+      .attr('height', this.height)
 
     this.svg.append('svg:g')
       .attr('class', 'background-layer')
@@ -167,7 +170,7 @@ export default class GraphD3 extends EventEmitter {
     this.width = this.graphContainer.offsetWidth || STYLES.width
     this.height = this.graphContainer.offsetHeight || STYLES.height
     this.centerCoordinates = {
-      y: (this.height / 2),
+      y: this.height / 2,
       x: this.width / 2
     }
   }
@@ -1194,7 +1197,6 @@ export default class GraphD3 extends EventEmitter {
     // Debounce
     clearTimeout(this.onResizeTimeoutId || -1);
     this.onResizeTimeoutId = setTimeout(function() {
-      console.log('BAM')
       this.refreshDimensions();
       this.svg.attr('width', this.width).attr('height', this.height)
       this.drawBackground()
