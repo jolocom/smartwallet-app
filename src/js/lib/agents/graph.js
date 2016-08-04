@@ -328,14 +328,11 @@ class GraphAgent {
     return fetch(Util.uriToProxied(uri),{
       credentials: 'include' 
     }).then((ans) => {
-      if (ans.ok){
-        return ans.text().then((res)=>{
-          return parser.parse(res, uri) 
-        })
-        // This is later used for displaying broken nodes.
-      } else {
-        return {uri: uri, unav : true, connection:null,  triples:[]} 
-      }
+      return ans.text().then((res)=>{
+        return parser.parse(res, uri) 
+      })
+    }).catch(()=>{
+      return {uri: uri, unav : true, connection:null,  triples:[]} 
     })
   }
 
