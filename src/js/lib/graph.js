@@ -579,7 +579,6 @@ export default class GraphD3 extends EventEmitter {
 
   // This function fires upon tick, around 30 times per second?
   tick = function (e) {
-    this.refreshDimensions()
     // @TODO overwriting the force coordinates, maybe not good
     let k = 1 * e.alpha
     d3.selectAll('svg .node').attr('d', (d) => {
@@ -1190,11 +1189,16 @@ export default class GraphD3 extends EventEmitter {
     this.updateAfterRotationIndex()
   }.bind(this)
 
-  // @TODO debounce
+
   onResize = function () {
-    this.refreshDimensions();
-    this.svg.attr('width', this.width).attr('height', this.height)
-    this.drawBackground()
-    this.updateAfterRotationIndex()
+    // Debounce
+    clearTimeout(this.onResizeTimeoutId || -1);
+    this.onResizeTimeoutId = setTimeout(function() {
+      console.log('BAM')
+      this.refreshDimensions();
+      this.svg.attr('width', this.width).attr('height', this.height)
+      this.drawBackground()
+      this.updateAfterRotationIndex()
+    }.bind(this),25)
   }.bind(this)
 }
