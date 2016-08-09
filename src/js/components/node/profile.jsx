@@ -265,6 +265,7 @@ let ProfileNode = React.createClass({
   },
 
   _handlePostCopyURL() {
+    // @TODO implement snackbars/toasts
     alert('The URL was copied to the clipboard.')
   },
 
