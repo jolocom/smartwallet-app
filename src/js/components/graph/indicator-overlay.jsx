@@ -16,8 +16,8 @@ let IndicatorOverlay = React.createClass({
     return {
       // CSS for the overlay
       overlayContainer: {
-        position: 'absolute',
-        zIndex: 1500,
+        position: 'fixed',
+        zIndex: 1300,
         width: '100vw',
         height: '100vh',
         backgroundColor: '#000',
