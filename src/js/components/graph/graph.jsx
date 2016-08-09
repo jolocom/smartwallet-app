@@ -10,8 +10,8 @@ import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
-import AccountStore from 'stores/account'
 import graphActions from 'actions/graph-actions'
+import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 
 import Node from '../node/node.jsx'
 
@@ -78,7 +78,6 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
-
   // This is the first thing that fires when the user logs in.
   componentDidMount: function() {
     // Instantiating the graph object.
@@ -111,7 +110,9 @@ let Graph = React.createClass({
     graphActions.navigateToNode(node)
   },
 
+  // max visible nodes reached, show indicator overlay
   _handleScrollingDrawn() {
+    // refers to show() method of IndicatorOverlay component
     this.refs.scrollIndicator.show()
   },
 
@@ -171,7 +172,7 @@ let Graph = React.createClass({
 
     return (
       <div style={styles.container}>
-        <IndicatorOverlay ref="scrollIndicator"/>
+        <IndicatorOverlay ref="scrollIndicator" />
         <div style={styles.chart} ref="graph"></div>
 
         {fab}
