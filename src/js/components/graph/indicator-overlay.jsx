@@ -73,11 +73,19 @@ let IndicatorOverlay = React.createClass({
     }
 
     return (
-      <div style={style} onTouchTap={this.hide}>
+      <div style={style} onTouchTap={this._handleClick}>
         <img style={styles.indicatorImg} src="
           /img/scroll_indicator_overlay2.png" />
       </div>
     )
+  },
+
+  _handleClick(e) {
+    // Prevents the onClick event from triggering on the nodes
+    e.preventDefault()
+    e.stopPropagation()
+
+    this.hide()
   }
 
 })
