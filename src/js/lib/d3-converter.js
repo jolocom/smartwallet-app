@@ -1,8 +1,5 @@
 import rdf from 'rdflib'
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
-let DC = rdf.Namespace('http://purl.org/dc/terms/')
-let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+import {PRED} from './namespaces.js'
 import STYLES from 'styles/app.js'
 
 // D3 Converter takes a node (a node in this context is an array of triples that
@@ -73,30 +70,30 @@ class D3Converter {
       // regardless of where it's stored
 
       if (triple.subject.uri === uri){
-        if (pred === FOAF('givenName').uri) {
+        if (pred === PRED.givenName.uri) {
           props.name = obj.value ? obj.value : obj.uri
         }
-        if (pred === FOAF('familyName').uri) {
+        if (pred === PRED.familyName.uri) {
           props.familyName = obj.value ? obj.value : obj.uri
         }
-        if (pred === FOAF('name').uri) {
+        if (pred === PRED.fullName.uri) {
           props.fullName = obj.value ? obj.value : obj.uri
         }
-        if (pred === DC('title').uri) {
+        if (pred === PRED.title.uri) {
           props.title = obj.value ? obj.value : obj.uri
         }
-        if (pred === DC('description').uri) {
+        if (pred === PRED.description.uri) {
           props.description = obj.value ? obj.value : obj.uri
         }
-        if (pred === RDF('type').uri) {
+        if (pred === PRED.type.uri) {
           props.type = obj.value ? obj.value : obj.uri
         }
-        if (pred === FOAF('img').uri) {
+        if (pred === PRED.image.uri) {
           props.img = obj.value ? obj.value : obj.uri
         }
         // Storage is used when adding files. Better to do it here then to send
         // extra requests upon upload.
-        if (pred === NIC('storage').uri) {
+        if (pred === PRED.storage.uri) {
           props.storage = obj.value ? obj.value : obj.uri
         }
       }

@@ -1,7 +1,7 @@
 import {Parser, Writer} from '../rdf'
 import LDPAgent from './ldp'
 import Util from '../util'
-import {DC, FOAF, RDF, SIOC} from '../namespaces.js'
+import {PRED} from '../namespaces.js'
 import N3 from 'n3'
 import _ from 'lodash'
 
@@ -49,27 +49,27 @@ class ChatAgent extends LDPAgent {
       .then((result) => {
         let triples = [{// this is a message
           subject: msgId,
-          predicate: RDF('type'),
-          object: SIOC('Post')
+          predicate: PRED.type,
+          object: PRED.post
         }, { // written by...
           subject: msgId,
-          predicate: SIOC('hasCreator'),
+          predicate: PRED.hasCreator,
           object: author
         }, { // with content...
           subject: msgId,
-          predicate: SIOC('content'),
+          predicate: PRED.content,
           object: N3Util.createLiteral(content)
         }, { // with timestamp...
           subject: msgId,
-          predicate: DC('created'),
+          predicate: PRED.created,
           object: N3Util.createLiteral(new Date().getTime())
         }, { // contained by
           subject: msgId,
-          predicate: SIOC('hasContainer'),
+          predicate: PRED.hasContainer,
           object: conversationId
         }, {
           subject: conversationId,
-          predicate: SIOC('containerOf'),
+          predicate: PRED.containerOf,
           object: msgId
         }]
 
@@ -97,8 +97,8 @@ class ChatAgent extends LDPAgent {
       })
       .then((result) => {
         let posts = result.triples.filter((t) => {
-          return t.predicate.uri === RDF('type').uri &&
-            t.object.uri === SIOC('Post').uri
+          return t.predicate.uri === PRED.type.uri &&
+            t.object.uri === PRED.post.uri
         }).map((t) => t.subject)
         let groups = posts.reduce((acc, curr) => {
           if (!(curr in acc)) {
@@ -108,15 +108,15 @@ class ChatAgent extends LDPAgent {
             if (t.subject != curr) {
               continue
             }
-            if (t.predicate.uri == SIOC('content').uri) {
+            if (t.predicate.uri == PRED.content.uri) {
               acc[curr].content = N3Util.getLiteralValue(t.object)
             }
-            if (t.predicate.uri == DC('created').uri) {
+            if (t.predicate.uri == PRED.created.uri) {
               acc[curr].created = new Date(
                 parseInt(N3Util.getLiteralValue(t.object))
               )
             }
-            if (t.predicate.uri == SIOC('hasCreator').uri) {
+            if (t.predicate.uri == PRED.hasCreator.uri) {
               acc[curr].author = t.object.value
             }
           }
@@ -180,13 +180,13 @@ class ChatAgent extends LDPAgent {
       return t.subject == '#thread' || t.subject == `${conversationUrl}#thread`
     })
     let owner = _.find(aboutThread, (t) => {
-      return t.predicate.uri == SIOC('hasOwner').uri
+      return t.predicate.uri == PRED.hasOwner.uri
     })
     if (owner) {
       owner = owner.object
     }
     let participants = _.map(_.filter(aboutThread, (t) => {
-      return t.predicate.uri == SIOC('hasSubscriber').uri
+      return t.predicate.uri == PRED.hasSubscriber.uri
     }), (t) => t.object)
     let otherPerson = _.find(participants, (p) => p !== owner)
 
@@ -208,7 +208,7 @@ class ChatAgent extends LDPAgent {
         })
 
         let name = _.find(aboutPerson, (t) => {
-          return t.predicate.uri == FOAF('name').uri
+          return t.predicate.uri == PRED.fullName.uri
         })
 
         if (name) {
@@ -216,7 +216,7 @@ class ChatAgent extends LDPAgent {
         }
 
         let img = _.find(aboutPerson, (t) => {
-          return t.predicate.uri == FOAF('img').uri
+          return t.predicate.uri == PRED.image.uri
         })
 
         if (img) {
@@ -238,7 +238,7 @@ class ChatAgent extends LDPAgent {
       })
       .then((result) => {
         return result.triples.filter((t) => {
-          return t.predicate.uri === SIOC('spaceOf').uri
+          return t.predicate.uri === PRED.spaceOf.uri
         }).map((t) => t.object.value)
       })
   }
@@ -254,7 +254,7 @@ class ChatAgent extends LDPAgent {
         let writer = new Writer({prefixes: result.prefixes})
         let link = {
           subject: '#inbox',
-          predicate: SIOC('spaceOf'),
+          predicate: PRED.spaceOf,
           object: conversationUrl
         }
         result.triples.push(link)
@@ -276,27 +276,27 @@ class ChatAgent extends LDPAgent {
     let triples = [
         {
           subject: '',
-          predicate: DC('title'),
+          predicate: PRED.title,
           object: N3Util.createLiteral(`Conversation created by ${initiator}`)
         },
         {
           subject: '',
-          predicate: FOAF('maker'),
+          predicate: PRED.maker,
           object: initiator
         },
         {
           subject: '',
-          predicate: FOAF('primaryTopic'),
+          predicate: PRED.primaryTopic,
           object: '#thread'
         },
         {
           subject: '#thread',
-          predicate: RDF('type'),
-          object: SIOC('Thread')
+          predicate: PRED.type,
+          object: PRED.thread
         },
         {
           subject: '#thread',
-          predicate: SIOC('hasOwner'),
+          predicate: PRED.hasOwner,
           object: initiator
         }
     ]
@@ -309,7 +309,7 @@ class ChatAgent extends LDPAgent {
     for (var p of participants) {
       writer.addTriple({
         subject: '#thread',
-        predicate: SIOC('hasSubscriber'),
+        predicate: PRED.hasSubscriber,
         object: p
       })
     }
