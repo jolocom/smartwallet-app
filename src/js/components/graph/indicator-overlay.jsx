@@ -74,8 +74,7 @@ let IndicatorOverlay = React.createClass({
 
     return (
       <div style={style} onTouchTap={this._handleClick}>
-        <img style={styles.indicatorImg} src="
-          /img/scroll_indicator_overlay2.png" />
+        <img style={styles.indicatorImg} src="/img/indicator-overlay.png" />
       </div>
     )
   },
