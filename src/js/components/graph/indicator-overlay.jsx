@@ -5,42 +5,67 @@ import {IconMenu, MenuItem, IconButton} from 'material-ui'
 
 let IndicatorOverlay = React.createClass({
 
-  getInitialState: function() {
-    return { isHidden: true };
+  getInitialState() {
+    return {
+      visible: false
+    }
   },
 
-  getStyles: function(){
-    let styles = {
+  getStyles() {
+    return {
       overlayContainer: {
           position: 'absolute',
           zIndex: 1500,
           width: '100vw',
           height: '100vh',
           backgroundColor: '#000',
-          opacity: '0.7'
+          opacity: '0.7',
+          textAlign: 'center',
+          display: 'block',
+          transition: 'display 1s',
+          marginTop: '-112px'
+      },
+      overlayContainerHidden: {
+          display: 'none'
       },
       indicatorImg: {
-        color: 'yellow'
+        position: 'relative',
+        top: '80vh'
       }
     }
-
-    return styles
   },
 
-  _handleClose: function() {
-    this.setState({isHidden: false});
+  hide() {
+    this.setState({visible: false})
   },
 
-  render: function() {
+  show() {
+    if (!localStorage.getItem('indicator-overlay-drawn')) {
+      this.setState({visible: true})
+      localStorage.setItem('indicator-overlay-drawn', true)
+    }
+  },
+
+  toggle() {
+    if (this.state.visible) {
+      this.hide()
+    } else {
+      this.show()
+    }
+  },
+
+  render() {
     let styles = this.getStyles()
 
+    let style = styles.overlayContainer
+
+    if (!this.state.visible) {
+      style = Object.assign({}, style, styles.overlayContainerHidden)
+    }
+
     return (
-      <div>
-      { !this.state.isHidden ? null : (
-        <div style={styles.overlayContainer} onTouchTap={this._handleClose}>
-          <h1 style={styles.indicatorImg}>HELOOOOOOO</h1>
-        </div>
-      )}
+      <div style={style} onTouchTap={this.hide}>
+        <img style={styles.indicatorImg} src="/img/scroll_indicator_overlay2.png"/>
       </div>
     );
   }

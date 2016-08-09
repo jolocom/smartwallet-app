@@ -78,7 +78,7 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
-  
+
   // This is the first thing that fires when the user logs in.
   componentDidMount: function() {
     // Instantiating the graph object.
@@ -88,6 +88,7 @@ let Graph = React.createClass({
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
+    this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     graphActions.getState()
   },
 
@@ -108,6 +109,10 @@ let Graph = React.createClass({
 
   _handleCenterChange(node) {
     graphActions.navigateToNode(node)
+  },
+
+  _handleScrollingDrawn() {
+    this.refs.scrollIndicator.show()
   },
 
   getStyles: function() {
@@ -166,9 +171,9 @@ let Graph = React.createClass({
 
     return (
       <div style={styles.container}>
-
+        <IndicatorOverlay ref="scrollIndicator"/>
         <div style={styles.chart} ref="graph"></div>
-        
+
         {fab}
 
         {this.props.children}
