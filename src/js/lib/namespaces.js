@@ -6,6 +6,9 @@ let SCHEMA = rdf.Namespace('https://schema.org/')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
 let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
+
+export {SCHEMA, FOAF, TERMS, NIC, SIOC}
 
 export const USER = {
   givenName: FOAF('givenName'), 
