@@ -292,7 +292,7 @@ class ChatAgent extends LDPAgent {
         {
           subject: '#thread',
           predicate: PRED.type,
-          object: PRED.thread
+          object: PRED.Thread
         },
         {
           subject: '#thread',

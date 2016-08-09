@@ -28,7 +28,6 @@ export const PRED = {
   maker: FOAF('maker'),
   primaryTopic: FOAF('primaryTopic'),
   hasOwner: SIOC('hasOwner'),
-  thread: SIOC('Thread'),
   hasSubscriber: SIOC('hasSubscriber'),
   spaceOf: SIOC('spaceOf'),
   post: SIOC('Post'),
@@ -36,7 +35,14 @@ export const PRED = {
   content: SIOC('content'),
   created: DC('created'),
   hasContainer: SIOC('hasContainer'),
-  containerOf: SIOC('containerOf')
+  containerOf: SIOC('containerOf'),
+  
+  isRelatedTo: SCHEMA('isRelatedTo'),
+  Document: FOAF('Document'),
+  Image: FOAF('Image'),
+  Agent: FOAF('Agent'),
+  Thread: SIOC('Thread'),
+  
 }
 
 export const CERT = {
