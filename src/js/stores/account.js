@@ -3,7 +3,7 @@ import Account from 'actions/account'
 import {proxy} from 'settings'
 import graphAgent from 'lib/agents/graph'
 import rdf from 'rdflib'
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+import {PRED} from 'lib/namespaces'
 
 export default Reflux.createStore({
   listenables: Account,
@@ -113,7 +113,7 @@ export default Reflux.createStore({
     if (name) {
       triples.push({
         subject: rdf.sym(webid),
-        predicate: FOAF('givenName'),
+        predicate: PRED.givenName,
         object: name
       }) 
     }
@@ -121,7 +121,7 @@ export default Reflux.createStore({
     if (email) {
       triples.push({
         subject: rdf.sym(webid),
-        predicate: FOAF('mbox'),
+        predicate: PRED.email,
         // Keep an eye on this.
         object: rdf.sym(`mailto:${email}`)
       }) 
