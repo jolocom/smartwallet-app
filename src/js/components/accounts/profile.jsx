@@ -144,7 +144,6 @@ let Profile = React.createClass({
               onChange={this._handleSelectFile} />
             <main style={styles.main}>
               <section>
-                // Table for profile information form
                 <table style={styles.formTable}>
                   <tr>
                     <td style={styles.iconCell}><ActionDescription /></td>
