@@ -3,6 +3,7 @@ import ProfileActions from 'actions/profile'
 import accountActions from '../actions/account'
 import GraphActions from 'actions/graph-actions'
 import GraphStore from 'stores/graph-store'
+import GraphAgent from 'lib/agents/graph.js'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser} from 'lib/rdf.js'
 import {proxy} from 'settings'
@@ -30,6 +31,7 @@ export default Reflux.createStore({
   init() {
     this.listenTo(accountActions.logout, this.onLogout)
     this.listenTo(GraphStore, this.graphUpdate)
+    this.gAgent = new GraphAgent()
   },
 
   graphUpdate(data) {
@@ -177,9 +179,9 @@ export default Reflux.createStore({
     if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
-
+    
     return new Promise((res, rej) => {
-      if (!deleteStatement && !insertStatement) {
+      if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
       } else {
         fetch(`${proxy}/proxy?url=${oldData.webid}`,{
@@ -190,6 +192,9 @@ export default Reflux.createStore({
             'Content-Type':'application/sparql-update'
           }
         }).then((result) => {
+          return this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', 'Bitcoin Public Key', undefined, 'default')
+          // res(result)
+        }).then((result) => {
 
           /* This is supposed to refresh the graph. Does not
            * work well enough. Find a better way to do it.
@@ -199,7 +204,8 @@ export default Reflux.createStore({
           }
           profile.currentNode = params.currentNode
           this.trigger(Object.assign(profile, newData))
-          res(result)
+          // res(result)
+          res()
         }).catch((e) => {
           rej(e)
         })
