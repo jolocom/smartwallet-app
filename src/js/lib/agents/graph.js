@@ -1,16 +1,11 @@
 import WebIDAgent from './webid.js'
 import {Parser} from '../rdf.js'
 import {Writer} from '../rdf.js'
-import {USER} from 'lib/namespaces'
+import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
 import rdf from 'rdflib'
-let SCHEMA = rdf.Namespace('https://schema.org/')
-let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
-let DC = rdf.Namespace('http://purl.org/dc/terms/')
-let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
@@ -28,19 +23,19 @@ class GraphAgent {
     let newNodeUri = rdf.sym(dstContainer + Util.randomString(5))
 
     // The boilerplate.
-    writer.addTriple(newNodeUri, DC('title'), title)
-    writer.addTriple(newNodeUri, NIC('storage'), dstContainer)
-    writer.addTriple(newNodeUri, FOAF('maker'), center)
+    writer.addTriple(newNodeUri, PRED.title, title)
+    writer.addTriple(newNodeUri, PRED.storage, dstContainer)
+    writer.addTriple(newNodeUri, PRED.maker, center)
 
     // Populating the file with the appropriate triples.
     if (description) { 
-      writer.addTriple(newNodeUri, DC('description'), description)
+      writer.addTriple(newNodeUri, PRED.description, description)
     }
     if (nodeType === 'default') {
-      writer.addTriple(newNodeUri, RDF('type') , FOAF('Document'))
+      writer.addTriple(newNodeUri, PRED.type , FOAF('Document'))
     }
     if (nodeType === 'image') {
-      writer.addTriple(newNodeUri, RDF('type') , FOAF('Image'))
+      writer.addTriple(newNodeUri, PRED.type , FOAF('Image'))
     }
 
     // Handling the picture upload
