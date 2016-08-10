@@ -9,6 +9,7 @@ let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
+let CC = rdf.Namespace('https://cc.rww.io/vocab#')
 
 export const PRED = {
   givenName: FOAF('givenName'), 
@@ -43,6 +44,7 @@ export const PRED = {
   Agent: FOAF('Agent'),
   Thread: SIOC('Thread'),
   
+  bitcoin: CC('bitcoin')
 }
 
 export const CERT = {

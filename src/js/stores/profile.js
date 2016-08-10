@@ -6,6 +6,7 @@ import GraphStore from 'stores/graph-store'
 import GraphAgent from 'lib/agents/graph.js'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser} from 'lib/rdf.js'
+import {PRED} from 'lib/namespaces'
 import {proxy} from 'settings'
 import rdf from 'rdflib'
 
@@ -92,8 +93,12 @@ export default Reflux.createStore({
         profile.imgUri = obj
       } else if (t.predicate.uri === FOAF('mbox').uri) {
         profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
+      } else if (t.predicate.uri === PRED.bitcoin.uri) {
+        profile.bitcoinAddressNode = obj
       }
     }
+    
+    console.log('cc:bitcoin => ', profile.bitcoinAddressNode)
 
     let {fullName, givenName, familyName} = profile
     if (!givenName && !familyName) {
