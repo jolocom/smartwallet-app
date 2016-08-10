@@ -19,8 +19,9 @@ let profile = {
   givenName: '',
   familyName: '',
   email: '',
+  bitcoinAddress: '',
   webid: '#',
-  imgUri: null,
+  imgUri: null
 }
 
 export default Reflux.createStore({
@@ -33,7 +34,7 @@ export default Reflux.createStore({
 
   graphUpdate(data) {
     if (data && data.center) {
-      profile.storage = data.center.storage 
+      profile.storage = data.center.storage
       profile.currentNode = data.center.uri
       this.trigger(Object.assign({}, profile))
     }
@@ -57,12 +58,12 @@ export default Reflux.createStore({
     let parser = new Parser()
     wia.getWebID().then((user) => {
       return fetch(`${proxy}/proxy?url=${user}`,{
-        method: 'GET', 
+        method: 'GET',
         credentials: 'include',
       }).then((res) => {
-        return res.text() 
+        return res.text()
       }).then((text)=>{
-        return parser.parse(text,user)        
+        return parser.parse(text,user)
       }).then((answer)=>{
         ProfileActions.load.completed(user, answer.triples)
       }).catch(ProfileActions.load.failed)
@@ -82,7 +83,7 @@ export default Reflux.createStore({
       if (t.predicate.uri === FOAF('givenName').uri) {
         profile.givenName = obj
       } else if (t.predicate.uri === FOAF('familyName').uri) {
-        profile.familyName = obj 
+        profile.familyName = obj
       } else if (t.predicate.uri === FOAF('name').uri) {
         profile.fullName = obj
       } else if (t.predicate.uri === FOAF('img').uri) {
@@ -123,16 +124,16 @@ export default Reflux.createStore({
     let newData = Object.assign({}, params)
     let oldData = Object.assign({}, profile)
 
-    let insertTriples = [] 
-    let deleteTriples = [] 
+    let insertTriples = []
+    let deleteTriples = []
     let insertStatement = ''
     let deleteStatement = ''
 
     let predicateMap = {
-      familyName: FOAF('familyName'), 
-      givenName: FOAF('givenName'), 
-      imgUri: FOAF('img'), 
-      email: FOAF('mbox') 
+      familyName: FOAF('familyName'),
+      givenName: FOAF('givenName'),
+      imgUri: FOAF('img'),
+      email: FOAF('mbox')
     }
 
     for (let pred in predicateMap) {
@@ -143,7 +144,7 @@ export default Reflux.createStore({
             subject: rdf.sym(oldData.webid),
             predicate: predicateMap[pred],
             object: newData[pred]
-          })      
+          })
         }
         if (!newData[pred] || oldData[pred]){
           // delete
@@ -151,8 +152,8 @@ export default Reflux.createStore({
             subject: rdf.sym(oldData.webid),
             predicate: predicateMap[pred],
             object: oldData[pred]
-          })      
-        } 
+          })
+        }
       }
     }
 
@@ -160,14 +161,14 @@ export default Reflux.createStore({
       if (t.predicate.uri === FOAF('mbox').uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
       }
-      return rdf.st(t.subject, t.predicate, t.object).toNT() 
+      return rdf.st(t.subject, t.predicate, t.object).toNT()
     }).join(' ')
 
     deleteStatement = deleteTriples.map((t)=>{
       if (t.predicate.uri === FOAF('mbox').uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
       }
-      return rdf.st(t.subject, t.predicate, t.object).toNT() 
+      return rdf.st(t.subject, t.predicate, t.object).toNT()
     }).join(' ')
 
     if (deleteStatement) {
@@ -176,17 +177,17 @@ export default Reflux.createStore({
     if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
-     
+
     return new Promise((res, rej) => {
       if (!deleteStatement && !insertStatement) {
         this.trigger(Object.assign(profile, newData))
       } else {
         fetch(`${proxy}/proxy?url=${oldData.webid}`,{
-          method: 'PATCH', 
+          method: 'PATCH',
           credentials: 'include',
           body:`${deleteStatement} ${insertStatement} ;` ,
           headers: {
-            'Content-Type':'application/sparql-update' 
+            'Content-Type':'application/sparql-update'
           }
         }).then((result) => {
 
@@ -196,17 +197,17 @@ export default Reflux.createStore({
           if (params.currentNode) {
             GraphActions.drawAtUri(params.currentNode, 0)
           }
-          profile.currentNode = params.currentNode 
+          profile.currentNode = params.currentNode
           this.trigger(Object.assign(profile, newData))
-          res(result) 
+          res(result)
         }).catch((e) => {
-          rej(e) 
+          rej(e)
         })
       }
     })
 
   },
-  
+
 
   // extract RSA public key from triples
   _parseKey (keySubject, triples) {

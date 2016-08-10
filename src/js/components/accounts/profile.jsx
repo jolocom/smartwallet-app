@@ -176,6 +176,8 @@ let Profile = React.createClass({
                     <td style={styles.iconCell}><EditorAttachMoney /></td>
                     <td>
                       <TextField floatingLabelText="Bitcoin Address"
+                        onChange={Util.linkToState(this, 'bitcoinAddress')}
+                        value={this.state.bitcoinAddress}
                         style={styles.input} />
                     </td>
                   </tr>
