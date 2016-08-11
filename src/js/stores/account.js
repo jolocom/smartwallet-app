@@ -1,6 +1,6 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
-import {proxy} from 'settings'
+import {proxy} from '../../../config/development'
 import graphAgent from 'lib/agents/graph'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
@@ -135,7 +135,8 @@ export default Reflux.createStore({
   onLoginCompleted(webid){
     localStorage.setItem('auth-mode', 'proxy')
     localStorage.setItem('webId', webid)
-    this.trigger({username: `${proxy}webid`})
+
+    this.trigger({username: webid})
   },
 
   onLogout(){
