@@ -97,7 +97,7 @@ let Profile = React.createClass({
     } else if (imgUri) {
       img = Util.uriToProxied(imgUri)
     }
-		console.log('rerender!')
+    
     let bgImg = img || '/img/person-placeholder.png'
     return (
       <Dialog ref="dialog" fullscreen={true}>

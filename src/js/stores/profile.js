@@ -22,6 +22,7 @@ let profile = {
   familyName: '',
   email: '',
   bitcoinAddress: '',
+  bitcoinAddressNodeUri: '',
   webid: '#',
   imgUri: null
 }
@@ -94,11 +95,14 @@ export default Reflux.createStore({
       } else if (t.predicate.uri === FOAF('mbox').uri) {
         profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
       } else if (t.predicate.uri === PRED.bitcoin.uri) {
-        profile.bitcoinAddressNode = obj
+        profile.bitcoinAddressNodeUri = obj;
+        this.gAgent.findObjectsByTerm(obj,PRED.description).then((res) => {
+          profile.bitcoinAddress = res.length ? res[0].value : '';
+          console.log('cc:bitcoin => ', profile.bitcoinAddress)
+        })
       }
     }
     
-    console.log('cc:bitcoin => ', profile.bitcoinAddressNode)
 
     let {fullName, givenName, familyName} = profile
     if (!givenName && !familyName) {
@@ -185,6 +189,68 @@ export default Reflux.createStore({
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
     
+    console.log('old btc = ',profile.bitcoinAddress.trim())
+    console.log('new btc = ',params.bitcoinAddress.trim())
+    
+    let updateBtcFetch = []
+    
+    if (params.bitcoinAddress.trim() != profile.bitcoinAddress.trim())
+    {
+      console.log('BTC IS DIFF')
+    
+      if (!params.bitcoinAddress.trim())
+      {
+        // IF NEW VALUE IS NO VALUE
+        
+        // Delete node
+        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${params.bitcoinAddressNodeUri}`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
+        // Delete link
+        let btcDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.isRelatedTo, rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' ';
+        
+        // Delete btc link
+        btcDeleteStatement += rdf.st(rdf.sym(oldData.webid), PRED.bitcoin, rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' }';
+        
+        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+          method: 'PATCH',
+          credentials: 'include',
+          body: btcDeleteStatement,
+          headers: {
+            'Content-Type':'application/sparql-update'
+          }
+        }))
+        
+        // @TODO DELETE ACL
+      }
+      else if (!profile.bitcoinAddress.trim())
+      { 
+        // IF OLD VALUE IS NO VALUE
+        console.log('BTC CREATE')
+        // create node
+        // create cc:btc link
+      }
+      else
+      {
+        // UPDATE
+        console.log('BTC UPDATE')
+        // ELSE
+        let btcDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(params.bitcoinAddressNodeUri), PRED.description, profile.bitcoinAddress).toNT() + ' }';
+        let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(params.bitcoinAddressNodeUri), PRED.description, params.bitcoinAddress).toNT() + ' }';      
+        
+        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${params.bitcoinAddressNodeUri}`,{
+          method: 'PATCH',
+          credentials: 'include',
+          body:`${btcDeleteStatement} ${btcInsertStatement} ;` ,
+          headers: {
+            'Content-Type':'application/sparql-update'
+          }
+        }))
+      }
+    }
+    
     return new Promise((res, rej) => {
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
@@ -197,8 +263,11 @@ export default Reflux.createStore({
             'Content-Type':'application/sparql-update'
           }
         }).then((result) => {
-          return this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', 'Bitcoin Public Key', undefined, 'default')
+          // return this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', 'Bitcoin Public Key', undefined, 'default')
           // res(result)
+          if (updateBtcFetch.length)
+            return Promise.all(updateBtcFetch)
+          return true;
         }).then((result) => {
 
           /* This is supposed to refresh the graph. Does not

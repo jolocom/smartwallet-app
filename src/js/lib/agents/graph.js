@@ -193,16 +193,14 @@ class GraphAgent {
    * with the value 
    */
 
-  findObjectsByTerm(uri, value){
+  findObjectsByTerm(uri, pred){
     return new Promise ((resolve, reject) => {
-      if (!value || !uri) {
-        reject()
-      } else if (!USER[value]){
-        reject()
+      if (!uri) {
+        reject('No uri')
       } else {
-        let user =rdf.sym(uri + '#me')
+        let user =rdf.sym(uri) //  + '#me'
         let result = []
-        this.findTriples(uri, user, USER[value], undefined).then((res)=>{
+        this.findTriples(uri, user, pred, undefined).then((res)=>{
           for (let triple of res) {
             result.push(triple.object)
           }
