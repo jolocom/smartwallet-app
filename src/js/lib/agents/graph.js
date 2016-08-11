@@ -16,6 +16,7 @@ class GraphAgent {
   // We create a rdf file at the distContainer containing a title and 
   // description passed to it
   // TODO break this down.
+  // @return Promises which resolves with the new node URI
   createNode(currentUser, centerNode, title, description, image, nodeType) {
     let center = rdf.sym(centerNode.uri)
     let writer = new Writer()
@@ -64,12 +65,12 @@ class GraphAgent {
         object: newNodeUri
       }
 
-      this.writeTriples(center.uri,[payload], false)
+      return this.writeTriples(center.uri,[payload], false)
       .then(()=> {
-        this.putACL(newNodeUri.uri, currentUser.uri).then((uri)=>{
+        return this.putACL(newNodeUri.uri, currentUser.uri) }).then((uri)=>{
           // We use this in the LINK header.
           let aclUri = `<${uri}>`
-          fetch(Util.uriToProxied(newNodeUri.uri),{
+          return fetch(Util.uriToProxied(newNodeUri.uri),{
             method: 'PUT', 
             credentials: 'include',
             body: writer.end(),
@@ -83,10 +84,11 @@ class GraphAgent {
               GraphActions.drawNewNode(
                   newNodeUri.uri, PRED.isRelatedTo.uri)
             }
+            return newNodeUri;
           }).catch((error)=>{
             console.warn('Error,',error,'occured when putting the rdf file.') 
           })
-        })
+        
       })
     })
   }

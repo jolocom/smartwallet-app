@@ -234,8 +234,28 @@ export default Reflux.createStore({
       { 
         // IF OLD VALUE IS NO VALUE
         console.log('BTC CREATE')
-        // create node
-        // create cc:btc link
+        
+        updateBtcFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', params.bitcoinAddress, undefined, 'default').then(function(bitcoinNode){
+        
+          // Insert link (already node in create node)
+          /*let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.isRelatedTo, rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' ';*/
+
+          // Insert btc link
+          let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.bitcoin, bitcoinNode).toNT() + ' }';
+          
+          // @TODO update the state with new bitcoinuri?
+
+          updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+            method: 'PATCH',
+            credentials: 'include',
+            body: btcInsertStatement,
+            headers: {
+              'Content-Type':'application/sparql-update'
+            }
+          }))
+          
+        }))        
+        
       }
       else
       {
@@ -268,7 +288,6 @@ export default Reflux.createStore({
             'Content-Type':'application/sparql-update'
           }
         }).then((result) => {
-          // return this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', 'Bitcoin Public Key', undefined, 'default')
           // res(result)
           if (updateBtcFetch.length)
             return Promise.all(updateBtcFetch)
