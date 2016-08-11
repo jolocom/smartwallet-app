@@ -208,6 +208,12 @@ export default Reflux.createStore({
           credentials: 'include'
         }))
         
+        // Delete node ACL
+        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${params.bitcoinAddressNodeUri}.acl`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
         // Delete link
         let btcDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.isRelatedTo, rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' ';
         
@@ -223,7 +229,6 @@ export default Reflux.createStore({
           }
         }))
         
-        // @TODO DELETE ACL
       }
       else if (!profile.bitcoinAddress.trim())
       { 
