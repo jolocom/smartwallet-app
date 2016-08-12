@@ -79,6 +79,11 @@ let Profile = React.createClass({
       input: {
         width: '100%'
       },
+      passportContainer: {
+        paddingTop: '28px',
+        boxSizing: 'border-box',
+        minHeight: '72px'
+      },
       passportPreview: {
         width: '40px'
       },
@@ -88,7 +93,8 @@ let Profile = React.createClass({
       iconCell: {
         verticalAlign: 'bottom',
         textAlign: 'right',
-        paddingRight: '10px'
+        paddingRight: '10px',
+        paddingBottom: '7px'
       }
     }
     return styles
@@ -188,6 +194,7 @@ let Profile = React.createClass({
                   <tr>
                     <td style={styles.iconCell}><ActionFingerprint /></td>
                     <td>
+                      <div style={styles.passportContainer}>
                       {this.state.passportImgUri ?
                         <img src={this.state.passportImgUri} style={styles.passportPreview} />
                         :
@@ -203,6 +210,7 @@ let Profile = React.createClass({
                         :
                         <span></span>
                       }
+                      </div>
                     </td>
                   </tr>
                   <tr>
