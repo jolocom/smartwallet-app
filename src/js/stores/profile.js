@@ -23,6 +23,8 @@ let profile = {
   email: '',
   bitcoinAddress: '',
   bitcoinAddressNodeUri: '',
+  passportImgUri: '',
+  passportImgNodeUri: '',
   webid: '#',
   imgUri: null
 }
@@ -99,6 +101,12 @@ export default Reflux.createStore({
         this.gAgent.findObjectsByTerm(obj,PRED.description).then((res) => {
           profile.bitcoinAddress = res.length ? res[0].value : '';
         })
+      } else if (t.predicate.uri === PRED.passport.uri) {
+        profile.passportImgNodeUri = obj;
+        this.gAgent.findObjectsByTerm(obj,PRED.image).then((res) => {
+          profile.passportImgUri = res.length ? res[0].value : '';
+          console.log('HYDRATE',profile.passportImgNodeUri,profile.passportImgUri)
+        })
       }
     }
     
@@ -123,6 +131,8 @@ export default Reflux.createStore({
       email: '',
       webid: '#',
       imgUri: null,
+      passportImgUri: null,
+      passportImgNodeUri: null
     }
   },
 
@@ -145,6 +155,9 @@ export default Reflux.createStore({
       imgUri: FOAF('img'),
       email: FOAF('mbox')
     }
+    
+    console.log('old',oldData)
+    console.log('new',newData)
 
     for (let pred in predicateMap) {
       if (newData[pred] !== oldData[pred]){
@@ -187,6 +200,8 @@ export default Reflux.createStore({
     if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
+    
+    // ############## BITCOIN
     
     let updateBtcFetch = []
     
@@ -239,14 +254,14 @@ export default Reflux.createStore({
           // Insert btc link
           let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.bitcoin, bitcoinNode).toNT() + ' }';
 
-          updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+          return fetch(`${proxy}/proxy?url=${oldData.webid}`,{ // @TODO @LEGACY @FIXME @PROXY
             method: 'PATCH',
             credentials: 'include',
             body: btcInsertStatement,
             headers: {
               'Content-Type':'application/sparql-update'
             }
-          }))
+          })
           
         }))        
         
@@ -268,6 +283,78 @@ export default Reflux.createStore({
       }
     }
     
+    
+    // ############## PASSPORT
+    
+    let updatePassportFetch = [];
+    
+    if (oldData.passportImgUri.trim()) // if there is a passport node
+    {
+      if (!newData.passportImgUri.trim()) // if new uri is empty
+      {
+        console.log('REMOVE EVERYTHING')    
+      }
+      else if (oldData.passportImgUri.trim() != newData.passportImgUri.trim()) // if the uri has changed
+      {
+        console.log('UPDATE PASSPORT NODE')
+        
+        // UPDATE
+        let passportDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, oldData.passportImgUri).toNT() + ' }';
+        let passportInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, newData.passportImgUri).toNT() + ' }';      
+        
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${newData.passportImgNodeUri}`,{
+          method: 'PATCH',
+          credentials: 'include',
+          body:`${passportDeleteStatement} ${passportInsertStatement} ;` ,
+          headers: {
+            'Content-Type':'application/sparql-update'
+          }
+        }))
+        
+        // Delete previous image
+        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
+        // Delete previous image ACL
+        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}.acl`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
+      }
+    }
+    else // if there's no passport node
+    {
+      if (newData.passportImgUri.trim()) // if there is a new uri
+      {
+        console.log('create passport node and blah')
+        
+        // Create node and create link
+        updatePassportFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Passport', undefined, newData.passportImgUri, 'default').then(function(passportNode){
+          
+          newData.passportImgNodeUri = passportNode.uri
+          console.log('setting newdata passporti mage node uri', newData.passportImgNodeUri)
+
+          // Insert passport link
+          let passportInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.passport, passportNode).toNT() + ' }';
+
+          return fetch(`${proxy}/proxy?url=${oldData.webid}`,{ // @TODO @LEGACY @FIXME @PROXY
+            method: 'PATCH',
+            credentials: 'include',
+            body: passportInsertStatement,
+            headers: {
+              'Content-Type':'application/sparql-update'
+            }
+          })
+          
+        }))        
+      }
+    }
+    
+    
+    
     return new Promise((res, rej) => {
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
@@ -280,10 +367,7 @@ export default Reflux.createStore({
             'Content-Type':'application/sparql-update'
           }
         }).then((result) => {
-          // res(result)
-          if (updateBtcFetch.length)
-            return Promise.all(updateBtcFetch)
-          return true;
+          return Promise.all(updateBtcFetch.concat(updatePassportFetch))
         }).then((result) => {
 
           /* This is supposed to refresh the graph. Does not

@@ -19,6 +19,7 @@ import {grey500} from 'material-ui/styles/colors'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import EditorAttachMoney from 'material-ui/svg-icons/editor/attach-money'
+import ActionFingerprint from 'material-ui/svg-icons/action/fingerprint'
 
 import GraphStore from 'stores/graph-store'
 import ProfileActions from 'actions/profile'
@@ -82,7 +83,9 @@ let Profile = React.createClass({
         width: '100%'
       },
       iconCell: {
-        verticalAlign: 'bottom'
+        verticalAlign: 'bottom',
+        textAlign: 'right',
+        paddingRight: '10px'
       }
     }
     return styles
@@ -142,6 +145,13 @@ let Profile = React.createClass({
               style={styles.file}
               multiple={false}
               onChange={this._handleSelectFile} />
+            <input
+              ref={el => this.passportFileInputEl = el}
+              type="file"
+              name="passportfile"
+              style={styles.file}
+              multiple={false}
+              onChange={this._handleSelectPassportFile} />
             <main style={styles.main}>
               <section>
                 <table style={styles.formTable}>
@@ -173,21 +183,23 @@ let Profile = React.createClass({
                     </td>
                   </tr>
                   <tr>
+                    <td style={styles.iconCell}><ActionFingerprint /></td>
+                    <td>
+                      <TextField floatingLabelText="Passport"
+                                 onChange={Util.linkToState(this, 'passport')}
+                                 value={this.state.passport}
+                                 style={styles.childImg} />
+                      <FlatButton label="Upload passport"
+                  onClick={this._handleSelectPassport}/>
+                    </td>
+                  </tr>
+                  <tr>
                     <td style={styles.iconCell}><EditorAttachMoney /></td>
                     <td>
                       <TextField floatingLabelText="Bitcoin Address"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
                         value={this.state.bitcoinAddress}
                         style={styles.input} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={styles.iconCell}> </td>
-                    <td>
-                      <TextField floatingLabelText="Passport"
-                                 onChange={Util.linkToState(this, 'passport')}
-                                 value={this.state.passport}
-                                 style={styles.childImg} />
                     </td>
                   </tr>
                 </table>
@@ -209,6 +221,11 @@ let Profile = React.createClass({
   _handleSelect() {
     this.fileInputEl.value = null
     this.fileInputEl.click()
+  },
+  
+  _handleSelectPassport() {
+    this.passportFileInputEl.value = null
+    this.passportFileInputEl.click()
   },
 
   _handleRemove() {
@@ -248,6 +265,34 @@ let Profile = React.createClass({
 					loading: false
 				})
         this.setState({imgUri: res})
+      }).catch((e)=>{
+        console.log(e)
+      })
+    }
+  },
+
+  _handleSelectPassportFile({target}) {
+
+    let gAgent = new GraphAgent()
+    let file = target.files[0]
+    if (!accepts(file, 'image/*')) {
+      this.setState({
+        error: 'Invalid file type'
+      })
+    } else {
+      this.setState({
+				loading: true
+			})
+      this.setState({
+        error: null,
+        passportFile: file
+      })
+
+      gAgent.storeFile(this.state.storage, file).then((res) => {
+				this.setState({
+					loading: false
+				})
+        this.setState({passportImgUri: res})
       }).catch((e)=>{
         console.log(e)
       })
