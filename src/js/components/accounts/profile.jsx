@@ -79,6 +79,9 @@ let Profile = React.createClass({
       input: {
         width: '100%'
       },
+      passportPreview: {
+        width: '40px'
+      },
       formTable: {
         width: '100%'
       },
@@ -185,12 +188,21 @@ let Profile = React.createClass({
                   <tr>
                     <td style={styles.iconCell}><ActionFingerprint /></td>
                     <td>
-                      <TextField floatingLabelText="Passport"
-                                 onChange={Util.linkToState(this, 'passport')}
-                                 value={this.state.passport}
-                                 style={styles.childImg} />
+                      {this.state.passportImgUri ?
+                        <img src={this.state.passportImgUri} style={styles.passportPreview} />
+                        :
+                        <span></span>
+                      }
+                      
                       <FlatButton label="Upload passport"
                   onClick={this._handleSelectPassport}/>
+                     
+                      {this.state.passportImgUri ?
+                        <FlatButton label="Remove passport"
+                  onClick={this._handleRemovePassport}/>
+                        :
+                        <span></span>
+                      }
                     </td>
                   </tr>
                   <tr>
@@ -241,6 +253,15 @@ let Profile = React.createClass({
         imgUri: null
       })
     }
+  },
+  
+  _handleRemovePassport() {
+    this.passportFileInputEl.value = null
+
+    this.setState({
+      passportImgUri: '',
+      passportImgNodeUri: '',
+    })
   },
 
   _handleSelectFile({target}) {

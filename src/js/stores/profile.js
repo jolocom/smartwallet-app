@@ -105,7 +105,6 @@ export default Reflux.createStore({
         profile.passportImgNodeUri = obj;
         this.gAgent.findObjectsByTerm(obj,PRED.image).then((res) => {
           profile.passportImgUri = res.length ? res[0].value : '';
-          console.log('HYDRATE',profile.passportImgNodeUri,profile.passportImgUri)
         })
       }
     }
@@ -155,9 +154,6 @@ export default Reflux.createStore({
       imgUri: FOAF('img'),
       email: FOAF('mbox')
     }
-    
-    console.log('old',oldData)
-    console.log('new',newData)
 
     for (let pred in predicateMap) {
       if (newData[pred] !== oldData[pred]){
@@ -292,13 +288,54 @@ export default Reflux.createStore({
     {
       if (!newData.passportImgUri.trim()) // if new uri is empty
       {
-        console.log('REMOVE EVERYTHING')    
+        // REMOVE EVERYTHING
+        
+        // Delete node
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgNodeUri}`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
+        // Delete node ACL
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgNodeUri}.acl`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
+        // Delete image
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
+        // Delete image ACL
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}.acl`,{
+          method: 'DELETE',
+          credentials: 'include'
+        }))
+        
+        // Delete link
+        let passportDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.isRelatedTo, rdf.sym(profile.passportImgNodeUri)).toNT() + ' ';
+        
+        // Delete passport link
+        passportDeleteStatement += rdf.st(rdf.sym(oldData.webid), PRED.passport, rdf.sym(profile.passportImgNodeUri)).toNT() + ' }'
+        
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+          method: 'PATCH',
+          credentials: 'include',
+          body: passportDeleteStatement,
+          headers: {
+            'Content-Type':'application/sparql-update'
+          }
+        }))
+        
+        
+        
       }
       else if (oldData.passportImgUri.trim() != newData.passportImgUri.trim()) // if the uri has changed
-      {
-        console.log('UPDATE PASSPORT NODE')
-        
+      {        
         // UPDATE
+        
         let passportDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, oldData.passportImgUri).toNT() + ' }';    
         
         updatePassportFetch.push(fetch(`${proxy}/proxy?url=${newData.passportImgNodeUri}`,{
@@ -322,13 +359,13 @@ export default Reflux.createStore({
         }))
         
         // Delete previous image
-        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}`,{
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}`,{
           method: 'DELETE',
           credentials: 'include'
         }))
         
         // Delete previous image ACL
-        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}.acl`,{
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}.acl`,{
           method: 'DELETE',
           credentials: 'include'
         }))
@@ -339,13 +376,12 @@ export default Reflux.createStore({
     {
       if (newData.passportImgUri.trim()) // if there is a new uri
       {
-        console.log('create passport node and blah')
+        // CREATE PASSPORT
         
         // Create node and create link
         updatePassportFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Passport', undefined, newData.passportImgUri, 'default', true).then(function(passportNode){
           
           newData.passportImgNodeUri = passportNode.uri
-          console.log('setting newdata passporti mage node uri', newData.passportImgNodeUri)
 
           // Insert passport link
           let passportInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.passport, passportNode).toNT() + ' }';
