@@ -98,7 +98,6 @@ export default Reflux.createStore({
         profile.bitcoinAddressNodeUri = obj;
         this.gAgent.findObjectsByTerm(obj,PRED.description).then((res) => {
           profile.bitcoinAddress = res.length ? res[0].value : '';
-          console.log('cc:bitcoin => ', profile.bitcoinAddress)
         })
       }
     }
@@ -189,18 +188,15 @@ export default Reflux.createStore({
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
     
-    console.log('old btc = ',profile.bitcoinAddress.trim())
-    console.log('new btc = ',params.bitcoinAddress.trim())
-    
     let updateBtcFetch = []
     
     if (params.bitcoinAddress.trim() != profile.bitcoinAddress.trim())
     {
-      console.log('BTC IS DIFF')
     
       if (!params.bitcoinAddress.trim())
       {
         // IF NEW VALUE IS NO VALUE
+        // DELETE
         
         // Delete node
         updateBtcFetch.push(fetch(`${proxy}/proxy?url=${params.bitcoinAddressNodeUri}`,{
@@ -233,15 +229,31 @@ export default Reflux.createStore({
       else if (!profile.bitcoinAddress.trim())
       { 
         // IF OLD VALUE IS NO VALUE
-        console.log('BTC CREATE')
-        // create node
-        // create cc:btc link
+        // CREATE
+        
+        // Create node and create link
+        updateBtcFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', params.bitcoinAddress, undefined, 'default').then(function(bitcoinNode){
+          
+          newData.bitcoinAddressNodeUri = bitcoinNode.uri
+
+          // Insert btc link
+          let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.bitcoin, bitcoinNode).toNT() + ' }';
+
+          updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+            method: 'PATCH',
+            credentials: 'include',
+            body: btcInsertStatement,
+            headers: {
+              'Content-Type':'application/sparql-update'
+            }
+          }))
+          
+        }))        
+        
       }
-      else
+      else 
       {
         // UPDATE
-        console.log('BTC UPDATE')
-        // ELSE
         let btcDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(params.bitcoinAddressNodeUri), PRED.description, profile.bitcoinAddress).toNT() + ' }';
         let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(params.bitcoinAddressNodeUri), PRED.description, params.bitcoinAddress).toNT() + ' }';      
         
@@ -268,7 +280,6 @@ export default Reflux.createStore({
             'Content-Type':'application/sparql-update'
           }
         }).then((result) => {
-          // return this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', 'Bitcoin Public Key', undefined, 'default')
           // res(result)
           if (updateBtcFetch.length)
             return Promise.all(updateBtcFetch)
