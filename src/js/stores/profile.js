@@ -235,15 +235,13 @@ export default Reflux.createStore({
         // IF OLD VALUE IS NO VALUE
         console.log('BTC CREATE')
         
+        // Create node and create link
         updateBtcFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Bitcoin Address', params.bitcoinAddress, undefined, 'default').then(function(bitcoinNode){
-        
-          // Insert link (already node in create node)
-          /*let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.isRelatedTo, rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' ';*/
+          
+          newData.bitcoinAddressNodeUri = bitcoinNode.uri
 
           // Insert btc link
           let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.bitcoin, bitcoinNode).toNT() + ' }';
-          
-          // @TODO update the state with new bitcoinuri?
 
           updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
             method: 'PATCH',
