@@ -181,6 +181,15 @@ let Profile = React.createClass({
                         style={styles.input} />
                     </td>
                   </tr>
+                  <tr>
+                    <td style={styles.iconCell}> </td>
+                    <td>
+                      <TextField floatingLabelText="Passport"
+                                 onChange={Util.linkToState(this, 'passport')}
+                                 value={this.state.passport}
+                                 style={styles.childImg} />
+                    </td>
+                  </tr>
                 </table>
               </section>
             </main>
