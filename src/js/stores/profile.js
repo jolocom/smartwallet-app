@@ -7,7 +7,7 @@ import GraphAgent from 'lib/agents/graph.js'
 import WebIDAgent from 'lib/agents/webid.js'
 import {Parser} from 'lib/rdf.js'
 import {PRED} from 'lib/namespaces'
-import {proxy} from 'settings'
+import Util from 'lib/util.js'
 import rdf from 'rdflib'
 
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
@@ -63,7 +63,7 @@ export default Reflux.createStore({
   onLoad() {
     let parser = new Parser()
     wia.getWebID().then((user) => {
-      return fetch(`${proxy}/proxy?url=${user}`,{
+      return fetch(Util.uriToProxied(user),{
         method: 'GET',
         credentials: 'include',
       }).then((res) => {
@@ -210,13 +210,13 @@ export default Reflux.createStore({
         // DELETE
         
         // Delete node
-        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${params.bitcoinAddressNodeUri}`,{
+        updateBtcFetch.push(fetch(Util.uriToProxied(params.bitcoinAddressNodeUri),{
           method: 'DELETE',
           credentials: 'include'
         }))
         
         // Delete node ACL
-        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${params.bitcoinAddressNodeUri}.acl`,{
+        updateBtcFetch.push(fetch(Util.uriToProxied(params.bitcoinAddressNodeUri + '.acl'),{
           method: 'DELETE',
           credentials: 'include'
         }))
@@ -227,7 +227,7 @@ export default Reflux.createStore({
         // Delete btc link
         btcDeleteStatement += rdf.st(rdf.sym(oldData.webid), PRED.bitcoin, rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' }';
         
-        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+        updateBtcFetch.push(fetch(Util.uriToProxied(oldData.webid),{
           method: 'PATCH',
           credentials: 'include',
           body: btcDeleteStatement,
@@ -250,7 +250,7 @@ export default Reflux.createStore({
           // Insert btc link
           let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.bitcoin, bitcoinNode).toNT() + ' }';
 
-          return fetch(`${proxy}/proxy?url=${oldData.webid}`,{ // @TODO @LEGACY @FIXME @PROXY
+          return fetch(Util.uriToProxied(oldData.webid),{
             method: 'PATCH',
             credentials: 'include',
             body: btcInsertStatement,
@@ -268,7 +268,7 @@ export default Reflux.createStore({
         let btcDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(params.bitcoinAddressNodeUri), PRED.description, profile.bitcoinAddress).toNT() + ' }';
         let btcInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(params.bitcoinAddressNodeUri), PRED.description, params.bitcoinAddress).toNT() + ' }';      
         
-        updateBtcFetch.push(fetch(`${proxy}/proxy?url=${params.bitcoinAddressNodeUri}`,{
+        updateBtcFetch.push(fetch(Util.uriToProxied(params.bitcoinAddressNodeUri),{
           method: 'PATCH',
           credentials: 'include',
           body:`${btcDeleteStatement} ${btcInsertStatement} ;` ,
@@ -291,25 +291,25 @@ export default Reflux.createStore({
         // REMOVE EVERYTHING
         
         // Delete node
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgNodeUri}`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(oldData.passportImgNodeUri),{
           method: 'DELETE',
           credentials: 'include'
         }))
         
         // Delete node ACL
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgNodeUri}.acl`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(oldData.passportImgNodeUri + '.acl'),{
           method: 'DELETE',
           credentials: 'include'
         }))
         
         // Delete image
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(oldData.passportImgUri),{
           method: 'DELETE',
           credentials: 'include'
         }))
         
         // Delete image ACL
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}.acl`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(oldData.passportImgUri) + '.acl',{
           method: 'DELETE',
           credentials: 'include'
         }))
@@ -320,7 +320,7 @@ export default Reflux.createStore({
         // Delete passport link
         passportDeleteStatement += rdf.st(rdf.sym(oldData.webid), PRED.passport, rdf.sym(profile.passportImgNodeUri)).toNT() + ' }'
         
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(oldData.webid),{
           method: 'PATCH',
           credentials: 'include',
           body: passportDeleteStatement,
@@ -338,7 +338,7 @@ export default Reflux.createStore({
         
         let passportDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, oldData.passportImgUri).toNT() + ' }';    
         
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${newData.passportImgNodeUri}`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(newData.passportImgNodeUri),{
           method: 'PATCH',
           credentials: 'include',
           body:`${passportDeleteStatement};` ,
@@ -349,7 +349,7 @@ export default Reflux.createStore({
         
         let passportInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, newData.passportImgUri).toNT() + ' }';  
         
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${newData.passportImgNodeUri}`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(newData.passportImgNodeUri),{
           method: 'PATCH',
           credentials: 'include',
           body:`${passportInsertStatement};` ,
@@ -359,13 +359,13 @@ export default Reflux.createStore({
         }))
         
         // Delete previous image
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(oldData.passportImgUri),{
           method: 'DELETE',
           credentials: 'include'
         }))
         
         // Delete previous image ACL
-        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${oldData.passportImgUri}.acl`,{
+        updatePassportFetch.push(fetch(Util.uriToProxied(oldData.passportImgUri + '.acl'),{
           method: 'DELETE',
           credentials: 'include'
         }))
@@ -386,7 +386,7 @@ export default Reflux.createStore({
           // Insert passport link
           let passportInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(oldData.webid), PRED.passport, passportNode).toNT() + ' }';
 
-          return fetch(`${proxy}/proxy?url=${oldData.webid}`,{ // @TODO @LEGACY @FIXME @PROXY
+          return fetch(Util.uriToProxied(oldData.webid),{
             method: 'PATCH',
             credentials: 'include',
             body: passportInsertStatement,
@@ -405,7 +405,7 @@ export default Reflux.createStore({
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
       } else {
-        fetch(`${proxy}/proxy?url=${oldData.webid}`,{
+        fetch(Util.uriToProxied(oldData.webid),{
           method: 'PATCH',
           credentials: 'include',
           body:`${deleteStatement} ${insertStatement} ;` ,
