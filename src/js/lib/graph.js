@@ -5,7 +5,7 @@
 // the graph according to that state. The element itself is stateless.
 // Currently I have issues with doing persistent changes here, for instance
 // a moved node will not save upon refresh.
-import d3 from 'd3'
+import * as d3 from 'd3'
 import STYLES from 'styles/app'
 import {EventEmitter} from 'events'
 
@@ -182,12 +182,12 @@ export default class GraphD3 extends EventEmitter {
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
     // @TODO compile nodes object with object assign on-the-fly
-    this.force = d3.layout.force()
-      .nodes(this.visibleDataNodes)
-      .links(this.visibleDataLinks)
-      .charge(-100)
-      .chargeDistance(STYLES.largeNodeSize * 2)
-      .linkDistance((d) => {
+    this.force = d3.forceSimulation(this.visibleDataNodes)
+      .force("link",d3.forceLink(this.visibleDataLinks))
+      .force("charge", d3.forceManyBody())
+  //    .charge(-100)
+    //  .chargeDistance(STYLES.largeNodeSize * 2)
+/*      .linkDistance((d) => {
         if (d.source.rank === 'history' && d.source.histLevel <= 0) {
           return STYLES.largeNodeSize * 2
         } else if (d.source.rank === 'history') {
@@ -195,20 +195,21 @@ export default class GraphD3 extends EventEmitter {
         } else {
           return STYLES.largeNodeSize * 1.4
         }
-      })
-      .size([this.width, this.height])
-      .start()
+      })*/
+    //  .size([this.width, this.height])
+    //  .start()
 
     // We define our own drag functions, allow for greater control over the way
     // it works
-    this.nodeDrag = this.force.drag()
+   /* this.nodeDrag = this.force.drag()
       .on('dragend', this.dragEnd)
       .on('drag', function () {
         d3.event.sourceEvent.stopPropagation()
       })
       .on('dragstart', function () {
         d3.event.sourceEvent.stopPropagation()
-      })
+      }) d3v4 @TODO */
+    this.nodeDrag = function(){};
   }.bind(this)
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
@@ -263,7 +264,7 @@ export default class GraphD3 extends EventEmitter {
 
     this.archAngle = 360 / this.numberOfNeighbours
 
-    this.arc = d3.svg.arc()
+    this.arc = d3.arc()
       .innerRadius(this.largeNodeSize * 0.5)
       .outerRadius(this.largeNodeSize * 0.57)
       .startAngle(0)
@@ -575,7 +576,7 @@ export default class GraphD3 extends EventEmitter {
   tick = function (e) {
     this.refreshDimensions()
     // @TODO overwriting the force coordinates, maybe not good
-    let k = 1 * e.alpha
+    let k = 1 // * e.alpha d3v4
     d3.selectAll('g .node').attr('d', (d) => {
       if (d.rank === 'center') {
         d.x = this.centerCoordinates.x
@@ -787,7 +788,7 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   arcTween = function (transition, newAngle) {
-    let arc = d3.svg.arc()
+    let arc = d3.arc()
       .innerRadius(this.largeNodeSize * 0.5)
       .outerRadius(this.largeNodeSize * 0.57)
       .startAngle(0)
@@ -842,9 +843,12 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('g .node')
       .select('.nodecircle')
       .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
-      .style('fill', (d) => {
+      .attr('fill', (d) => {
         if (d.img && d.rank !== 'history') {
-          return 'url(#' + d.uri + d.connection + ')'
+          let wamalalala = 'url(#' + (d.uri + '' + d.connection) + ')'
+          console.log(d.uri,'//',d.connection,'//',d.uri+d.connection)
+          console.log(wamalalala)
+          return wamalalala
         } else {
           if (d.elipsisdepth === 0) {
             return theme.graph.elipsis1
@@ -1170,9 +1174,9 @@ export default class GraphD3 extends EventEmitter {
       this.setUpVisibleNodes()
       this.force.stop()
       this.force.nodes(this.visibleDataNodes)
-      this.force.links(this.visibleDataLinks)
+      // this.force.links(this.visibleDataLinks)
       this.d3update()
-      this.force.start()
+      // this.force.start()
       this.resetAll()
     }
   }.bind(this)

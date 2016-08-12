@@ -332,7 +332,7 @@ export default Reflux.createStore({
         console.log('create passport node and blah')
         
         // Create node and create link
-        updatePassportFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Passport', undefined, newData.passportImgUri, 'default').then(function(passportNode){
+        updatePassportFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Passport', undefined, newData.passportImgUri, 'default', true).then(function(passportNode){
           
           newData.passportImgNodeUri = passportNode.uri
           console.log('setting newdata passporti mage node uri', newData.passportImgNodeUri)

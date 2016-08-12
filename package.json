@@ -77,7 +77,9 @@
   },
   "dependencies": {
     "attr-accept": "^1.0.3",
-    "d3": "^3.5.6",
+    "d3": "^4",
+    "d3-force": "^1.0.2",
+    "d3-shape": "^1.0.2",
     "events": "^1.1.0",
     "formsy-material-ui": "^0.4.3",
     "formsy-react": "^0.18.0",
