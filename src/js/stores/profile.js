@@ -23,6 +23,8 @@ let profile = {
   email: '',
   bitcoinAddress: '',
   bitcoinAddressNodeUri: '',
+  passport: '',
+  passportNodeUri: '',
   webid: '#',
   imgUri: null
 }
