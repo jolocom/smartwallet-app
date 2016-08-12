@@ -299,13 +299,23 @@ export default Reflux.createStore({
         console.log('UPDATE PASSPORT NODE')
         
         // UPDATE
-        let passportDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, oldData.passportImgUri).toNT() + ' }';
-        let passportInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, newData.passportImgUri).toNT() + ' }';      
+        let passportDeleteStatement = 'DELETE DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, oldData.passportImgUri).toNT() + ' }';    
         
         updatePassportFetch.push(fetch(`${proxy}/proxy?url=${newData.passportImgNodeUri}`,{
           method: 'PATCH',
           credentials: 'include',
-          body:`${passportDeleteStatement} ${passportInsertStatement} ;` ,
+          body:`${passportDeleteStatement};` ,
+          headers: {
+            'Content-Type':'application/sparql-update'
+          }
+        }))
+        
+        let passportInsertStatement = 'INSERT DATA { ' + rdf.st(rdf.sym(newData.passportImgNodeUri), PRED.image, newData.passportImgUri).toNT() + ' }';  
+        
+        updatePassportFetch.push(fetch(`${proxy}/proxy?url=${newData.passportImgNodeUri}`,{
+          method: 'PATCH',
+          credentials: 'include',
+          body:`${passportInsertStatement};` ,
           headers: {
             'Content-Type':'application/sparql-update'
           }
@@ -332,7 +342,7 @@ export default Reflux.createStore({
         console.log('create passport node and blah')
         
         // Create node and create link
-        updatePassportFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Passport', undefined, newData.passportImgUri, 'default').then(function(passportNode){
+        updatePassportFetch.push(this.gAgent.createNode(GraphStore.state.user, GraphStore.state.center, 'Passport', undefined, newData.passportImgUri, 'default', true).then(function(passportNode){
           
           newData.passportImgNodeUri = passportNode.uri
           console.log('setting newdata passporti mage node uri', newData.passportImgNodeUri)
