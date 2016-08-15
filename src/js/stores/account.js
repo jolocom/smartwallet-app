@@ -9,22 +9,10 @@ export default Reflux.createStore({
   listenables: Account,
 
   state: {
-    loggingIn: false
+    loggingIn: true
   },
 
   getInitialState() {
-    const username = localStorage.getItem('jolocom.username')
-
-    if (username) {
-      this.state.username = username
-    }
-
-    const webId = localStorage.getItem('jolocom.webId')
-
-    if (webId) {
-      this.state.webId = webId
-    }
-
     return this.state
   },
 
@@ -92,9 +80,12 @@ export default Reflux.createStore({
   */
 
   onLogin(username, password, updatePayload) {
-    if (localStorage.getItem('webId')) {
+    const webId = localStorage.getItem('jolocom.webId')
+    if (webId) {
+      this.trigger({loggingIn: true})
+
       // Check if the cookie is still valid
-      fetch(`${proxy}/proxy?url=${localStorage.getItem('jolocom.webId')}`, {
+      fetch(`${proxy}/proxy?url=${webId}`, {
         // using PATCH until HEAD is supported server-side; GET is too costly
         method: 'PATCH',
         credentials: 'include',
@@ -102,11 +93,14 @@ export default Reflux.createStore({
           'Content-Type': 'application/sparql-update'
         }
       }).then((res) => {
-        Account.login.completed(username, localStorage.getItem('webId'))
+        const username = localStorage.getItem('jolocom.username')
+        Account.login.completed(username, webId)
       }).catch(() => {
         Account.logout()
       })
     } else if (username && password) {
+      this.trigger({loggingIn: true})
+
       let user = encodeURIComponent(username)
       let pass = encodeURIComponent(password)
 
@@ -130,6 +124,8 @@ export default Reflux.createStore({
           }
         })
       })
+    } else {
+      this.trigger({loggingIn: false})
     }
   },
 

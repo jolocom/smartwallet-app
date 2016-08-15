@@ -45,6 +45,7 @@ let App = React.createClass({
   childContextTypes: {
     muiTheme: React.PropTypes.object,
     profile: React.PropTypes.any,
+    account: React.PropTypes.object,
     username: React.PropTypes.string,
     searchActive: React.PropTypes.bool
   },
@@ -53,8 +54,9 @@ let App = React.createClass({
     let {account, profile, searchActive} = this.state
     return {
       muiTheme: this.theme,
-      profile: profile,
-      username: account && account.username,
+      profile,
+      account,
+      username: account && account.username, // backward compat
       searchActive
     }
   },
@@ -167,6 +169,13 @@ let App = React.createClass({
 
   render() {
     const styles = this.getStyles()
+
+    // @TODO render login screen when logging in, also makes sures child
+    // components don't get rendered before any user data is available
+    if (this.state.account.loggingIn && !this.isPublicRoute()) {
+      return <div />
+    }
+
     const nav = (
       <div>
         <IconButton

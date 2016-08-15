@@ -33,7 +33,7 @@ let Conversations = React.createClass({
 
   contextTypes: {
     history: React.PropTypes.any,
-    profile: React.PropTypes.any
+    account: React.PropTypes.any
   },
 
   componentDidMount() {
@@ -49,7 +49,7 @@ let Conversations = React.createClass({
 
   loadConversations() {
     ConversationsActions.load(
-      this.context.profile.username, this.props.searchQuery
+      this.context.account.webId, this.props.searchQuery
     )
   },
 
