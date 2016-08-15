@@ -1,7 +1,7 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
-import settings from 'settings'
-import ChatAgent from 'lib/agents/chat.js'
+import Util from 'lib/util'
+import ChatAgent from 'lib/agents/chat'
 
 let chatAgent = new ChatAgent()
 
@@ -20,7 +20,9 @@ export default Reflux.createStore({
   },
 
   getUrl(username, id) {
-    return `${settings.endpoint}/${username}/little-sister/chats/${id}`
+    console.log("geturl username ", username)
+
+    return `${Util.uriToProxied(username)}/little-sister/chats/${id}`
   },
 
   onLoad(username, id) {
