@@ -2,15 +2,14 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 
-import ProfileNode from 'components/node/profile.jsx'
+// import ProfileNode from 'components/node/profile.jsx'
+import NodeTypes from 'lib/node-types'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
-import rdf from 'rdflib'
 
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let Node = React.createClass({
   mixins: [
     Reflux.connect(NodeStore, 'node')
@@ -44,6 +43,9 @@ let Node = React.createClass({
   },
 
   getNodeContent(type) {
+    return NodeTypes.componentFor(type)
+
+    return config.component
     switch (type) {
       case FOAF('PersonalProfileDocument').uri:
 
@@ -61,7 +63,7 @@ let Node = React.createClass({
     let {center} = this.props
     let {svg} = this.props
     let {state} = this.props
-    let content, Component = this.getNodeContent(node.type)
+    let content, Component = NodeTypes.componentFor(node.type)
 
     if (Component) {
       content = <Component node={node} center={center} svg={svg} state={state} onClose={this._handleClose} />

@@ -4,7 +4,7 @@ import Radium from 'radium'
 import graphActions from 'stores/graph-store'
 import nodeActions from 'actions/node'
 import Utils from 'lib/util'
-import CopyToClipboard from 'react-copy-to-clipboard';
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 import {
   AppBar,
@@ -16,7 +16,7 @@ import {
   List, ListItem, Divider
 } from 'material-ui'
 
-import {Content} from '../layout'
+import {Content} from 'components/layout'
 
 import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
@@ -82,14 +82,14 @@ let ProfileNode = React.createClass({
         padding: '0 24px',
         color: '#ffffff'
       },
-      white:{
+      white: {
         color: '#fff'
       },
       action: {
         position: 'absolute',
         bottom: '-20px',
         right: '20px',
-        backgroundColor: this.state.pinned ? muiTheme.palette.accent1Color :
+        backgroundColor: this.state.pinned && muiTheme.palette.accent1Color ||
           muiTheme.jolocom.gray4
       },
       icon: {
@@ -136,41 +136,41 @@ let ProfileNode = React.createClass({
     return (
       <div style={styles.container}>
         <AppBar
-          id = 'AppBar'
           style={styles.headers}
           titleStyle={styles.title}
           title={<span>{name || title || 'No name set'}</span>}
           iconElementRight={
-              <IconMenu iconButtonElement={
-              <IconButton
-                iconClassName="material-icons"
-                iconStyle={styles.icon}>
-                  more_vert
-              </IconButton>
-            }
+            <IconMenu
+              iconButtonElement={
+                <IconButton
+                  iconClassName="material-icons"
+                  iconStyle={styles.icon}>
+                    more_vert
+                </IconButton>
+              }
               anchorOrigin={{horizontal: 'left', vertical: 'top'}}
               targetOrigin={{horizontal: 'left', vertical: 'top'}}>
-            <MenuItem
-              primaryText="Edit" />
-            <MenuItem
-              primaryText={fullscreenLabel}
-              onTouchTap={this._handleFull} />
-              
-            <CopyToClipboard
-              text={this.props.state.center.uri} 
-              onCopy={this._handlePostCopyURL}>
-                <MenuItem
-                  primaryText="Copy URL" />
-            </CopyToClipboard>
-            
-            <MenuItem
-              primaryText="Delete"
-              onTouchTap={this._handleDelete}/>
-            <MenuItem
-              primaryText="Disconnect"
-              onTouchTap={this._handleDisconnect}/>
+              <MenuItem
+                primaryText="Edit" />
+              <MenuItem
+                primaryText={fullscreenLabel}
+                onTouchTap={this._handleFull} />
 
-          </IconMenu>}
+              <CopyToClipboard
+                text={this.props.state.center.uri}
+                onCopy={this._handlePostCopyURL}
+              >
+                <MenuItem primaryText="Copy URL" />
+              </CopyToClipboard>
+
+              <MenuItem
+                primaryText="Delete"
+                onTouchTap={this._handleDelete} />
+              <MenuItem
+                primaryText="Disconnect"
+                onTouchTap={this._handleDisconnect} />
+            </IconMenu>
+          }
           iconElementLeft={
             <IconButton
               iconClassName="material-icons"
@@ -179,18 +179,16 @@ let ProfileNode = React.createClass({
                 arrow_back
             </IconButton>
           }
-        >
-        </AppBar>
+        />
         <Content style={styles.content}>
           <Tabs
-            onChange={() => {}}
             value={null}
             inkBarStyle={{display: 'none'}}
             tabItemContainerStyle={styles.tabs}>
             <Tab
               icon={<FontIcon className="material-icons">chat</FontIcon>}
               label="MESSAGE"
-              onActive={() => this._handleStartChat()}
+              onActive={this._handleStartChat}
             />
             <Tab
               icon={
@@ -212,7 +210,7 @@ let ProfileNode = React.createClass({
                   }
                   primaryText={description}
                 />
-                <Divider inset={true} />
+                <Divider inset />
               </div>
             )}
             {email && (
@@ -236,25 +234,29 @@ let ProfileNode = React.createClass({
     this.setState({fullscreen: !this.state.fullscreen})
   },
 
- _handleDisconnect(){
-    this.props.onClose() 
-    if (this.props.state.activeNode.rank != 'center')
-    	nodeActions.disconnectNode(this.props.state.activeNode, this.props.state.center)
-	},
+  _handleDisconnect() {
+    this.props.onClose()
+    if (this.props.state.activeNode.rank !== 'center') {
+      nodeActions.disconnectNode(
+        this.props.state.activeNode, this.props.state.center
+      )
+    }
+  },
 
- _handleDelete() {
+  _handleDelete() {
     this.props.onClose()
     let node = this.props.state.activeNode
     let center = this.props.state.center
     let navHis = this.props.state.navHistory
 
-    if (node.rank == 'center'){
-     let prev = navHis[navHis.length - 1]
-     graphActions.drawAtUri(prev.uri, 1).then(()=>{
-       nodeActions.remove(node, prev)
-     })
+    if (node.rank === 'center') {
+      let prev = navHis[navHis.length - 1]
+      graphActions.drawAtUri(prev.uri, 1).then(() => {
+        nodeActions.remove(node, prev)
+      })
+    } else {
+      nodeActions.remove(node, center)
     }
-    else nodeActions.remove(node, center)
   },
 
   _handleBookmarkClick() {
