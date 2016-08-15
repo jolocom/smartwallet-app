@@ -1,6 +1,6 @@
 import Reflux from 'reflux'
-import settings from 'settings'
-import ChatAgent from 'lib/agents/chat.js'
+import Util from 'lib/util'
+import ChatAgent from 'lib/agents/chat'
 
 import ChatActions from 'actions/chat'
 let {create} = ChatActions
@@ -11,7 +11,7 @@ export default Reflux.createStore({
   listenables: ChatActions,
 
   onCreate(initiator, ...participants) {
-    let profileUrl = (username) => `${settings.endpoint}/${username}/profile/card#me`
+    let profileUrl = (username) => Util.uriToProxied(username)
     chatAgent.createConversation(profileUrl(initiator), participants.map(profileUrl))
       .then(create.completed)
   },
