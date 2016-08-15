@@ -347,18 +347,14 @@ class GraphAgent {
     // We will only follow and parse these links
     let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri]
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
-    return new Promise ((resolve) => {
-      let graphMap = []
-      // If there are no adjacent nodes to draw, we return an empty array.
-      if (neighbours.length === 0){
-        resolve(graphMap)
-        return
-      }
-      // If there are adjacent nodes to draw, 
-      // we parse them and return an array of their triples
-      let neighbourErrors = 0, neighbourResponsesCount = 0
-      neighbours.forEach((triple) => {
-        this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
+      
+    // If there are adjacent nodes to draw, 
+    // we parse them and return an array of their triples
+    let neighbourErrors = 0
+    let graphMap = []
+
+    return Promise.all(neighbours.map((triple) => {
+        return this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
           // This is a node that coulnt't be retrieved, either 404, 401 etc. 
           if (result.unav ) {
             // We are setting the connection field of the node, we need it 
@@ -382,14 +378,10 @@ class GraphAgent {
             graphMap[graphMap.length - 1].uri = triple.object.uri
           }
           
-          neighbourResponsesCount++
-          
-          if (neighbourResponsesCount === neighbours.length-1) {
-            console.log('Loading done,', neighbourErrors, 'rdf files were / was skipped.')
-            resolve(graphMap)
-          }
         })
-      })
+      })).then(() => {
+        console.log('Loading done,', neighbourErrors, 'rdf files were / was skipped.')
+        return graphMap
     })
   }
 
