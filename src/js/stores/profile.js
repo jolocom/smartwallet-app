@@ -396,7 +396,6 @@ export default Reflux.createStore({
         }))        
       }
     }
-    
     return new Promise((res, rej) => {
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
@@ -420,7 +419,6 @@ export default Reflux.createStore({
           }
           profile.currentNode = params.currentNode
           this.trigger(Object.assign(profile, newData))
-          // res(result)
           res()
         }).catch((e) => {
           rej(e)

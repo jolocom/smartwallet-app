@@ -81,8 +81,10 @@ class GraphAgent {
             }
           }).then((answer)=>{
             if (answer.ok) {
-              GraphActions.drawNewNode(
-                  newNodeUri.uri, PRED.isRelatedTo.uri)
+              // Removed for the passport feature; better to handle this separately
+              // and with the whole state being reloaded?
+              // GraphActions.drawNewNode(
+              //    newNodeUri.uri, PRED.isRelatedTo.uri)
             }
             return newNodeUri;
           }).catch((error)=>{
