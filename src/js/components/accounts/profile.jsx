@@ -18,7 +18,6 @@ import {
 import {grey500} from 'material-ui/styles/colors'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-import EditorAttachMoney from 'material-ui/svg-icons/editor/attach-money'
 
 import GraphStore from 'stores/graph-store'
 import ProfileActions from 'actions/profile'
@@ -78,11 +77,42 @@ let Profile = React.createClass({
       input: {
         width: '100%'
       },
+      passportContainer: {
+        paddingTop: '28px',
+        boxSizing: 'border-box',
+        minHeight: '72px'
+      },
+      passportIcon: {
+        width: '30px'
+      },
+      passportPreview: {
+        width: '40px',
+        marginRight: '10px'
+      },
+      uploadPassportButton: {
+        margin: '0 10px 0 0',
+        verticalAlign: 'top'
+      },
+      removePassportButton: {
+        verticalAlign: 'top'
+      },
+      bitcoinIcon: {
+        width: '30px'
+      },
       formTable: {
         width: '100%'
       },
       iconCell: {
-        verticalAlign: 'bottom'
+        verticalAlign: 'bottom',
+        textAlign: 'right',
+        paddingRight: '10px',
+        paddingBottom: '7px'
+      },
+      iconCellPassport: {
+        paddingRight: '7px'
+      },
+      iconCellBitcoinAddress: {
+        paddingRight: '7px'
       }
     }
     return styles
@@ -142,6 +172,13 @@ let Profile = React.createClass({
               style={styles.file}
               multiple={false}
               onChange={this._handleSelectFile} />
+            <input
+              ref={el => this.passportFileInputEl = el}
+              type="file"
+              name="passportfile"
+              style={styles.file}
+              multiple={false}
+              onChange={this._handleSelectPassportFile} />
             <main style={styles.main}>
               <section>
                 <table style={styles.formTable}>
@@ -173,7 +210,29 @@ let Profile = React.createClass({
                     </td>
                   </tr>
                   <tr>
-                    <td style={styles.iconCell}><EditorAttachMoney /></td>
+                    <td style={Object.assign({}, styles.iconCell,styles.iconCellPassport)}><img src="img/ic_passport_24px.svg" style={styles.passportIcon} /></td>
+                    <td>
+                      <div style={styles.passportContainer}>
+                      {this.state.passportImgUri ?
+                        <img src={this.state.passportImgUri} style={styles.passportPreview} />
+                        :
+                        <span></span>
+                      }
+                      
+                      <FlatButton label="Upload passport"
+                  onClick={this._handleSelectPassport} style={styles.uploadPassportButton}/>
+                     
+                      {this.state.passportImgUri ?
+                        <FlatButton label="Remove passport"
+                  onClick={this._handleRemovePassport} style={styles.removePassportButton}/>
+                        :
+                        <span></span>
+                      }
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={Object.assign({}, styles.iconCell,styles.iconCellBitcoinAddress)}><img src="img/ic_bitcoin_24px.svg" style={styles.bitcoinIcon} /></td>
                     <td>
                       <TextField floatingLabelText="Bitcoin Address"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
@@ -201,6 +260,11 @@ let Profile = React.createClass({
     this.fileInputEl.value = null
     this.fileInputEl.click()
   },
+  
+  _handleSelectPassport() {
+    this.passportFileInputEl.value = null
+    this.passportFileInputEl.click()
+  },
 
   _handleRemove() {
     this.fileInputEl.value = null
@@ -215,6 +279,15 @@ let Profile = React.createClass({
         imgUri: null
       })
     }
+  },
+  
+  _handleRemovePassport() {
+    this.passportFileInputEl.value = null
+
+    this.setState({
+      passportImgUri: '',
+      passportImgNodeUri: '',
+    })
   },
 
   _handleSelectFile({target}) {
@@ -239,6 +312,34 @@ let Profile = React.createClass({
 					loading: false
 				})
         this.setState({imgUri: res})
+      }).catch((e)=>{
+        console.log(e)
+      })
+    }
+  },
+
+  _handleSelectPassportFile({target}) {
+
+    let gAgent = new GraphAgent()
+    let file = target.files[0]
+    if (!accepts(file, 'image/*')) {
+      this.setState({
+        error: 'Invalid file type'
+      })
+    } else {
+      this.setState({
+				loading: true
+			})
+      this.setState({
+        error: null,
+        passportFile: file
+      })
+
+      gAgent.storeFile(this.state.storage, file).then((res) => {
+				this.setState({
+					loading: false
+				})
+        this.setState({passportImgUri: res})
       }).catch((e)=>{
         console.log(e)
       })

@@ -4,6 +4,7 @@ import Radium from 'radium'
 import graphActions from 'stores/graph-store'
 import nodeActions from 'actions/node'
 import Utils from 'lib/util'
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import {
   AppBar,
@@ -154,9 +155,14 @@ let ProfileNode = React.createClass({
             <MenuItem
               primaryText={fullscreenLabel}
               onTouchTap={this._handleFull} />
-            <MenuItem
-              primaryText="Copy URL"
-              onTouchTap={this._handleCopyURL}/>
+              
+            <CopyToClipboard
+              text={this.props.state.center.uri} 
+              onCopy={this._handlePostCopyURL}>
+                <MenuItem
+                  primaryText="Copy URL" />
+            </CopyToClipboard>
+            
             <MenuItem
               primaryText="Delete"
               onTouchTap={this._handleDelete}/>
@@ -258,8 +264,9 @@ let ProfileNode = React.createClass({
     }
   },
 
-  _handleCopyURL() {
-
+  _handlePostCopyURL() {
+    // @TODO implement snackbars/toasts
+    alert('The URL was copied to the clipboard.')
   },
 
   _handleStartChat() {

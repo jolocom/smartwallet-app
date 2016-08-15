@@ -507,7 +507,6 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('dy', '.35em')
       .attr('font-size', (d) => d.rank === 'history' ? STYLES.largeNodeSize / 12 : STYLES.largeNodeSize / 8)
-      .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
         if (d.name) {
@@ -841,7 +840,7 @@ export default class GraphD3 extends EventEmitter {
     // Reset colour of all circles
     d3.selectAll('g .node')
       .select('.nodecircle')
-      .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
+      // .transition('resetcolor').duration(STYLES.nodeTransitionDuration) // Tries to interpret the url(#) as a colour @TODO
       .style('fill', (d) => {
         if (d.img && d.rank !== 'history') {
           return 'url(#' + d.uri + d.connection + ')'
