@@ -329,8 +329,6 @@ export default Reflux.createStore({
           }
         }))
         
-        
-        
       }
       else if (oldData.passportImgUri.trim() != newData.passportImgUri.trim()) // if the uri has changed
       {        
@@ -398,9 +396,6 @@ export default Reflux.createStore({
         }))        
       }
     }
-    
-    
-    
     return new Promise((res, rej) => {
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
@@ -424,7 +419,6 @@ export default Reflux.createStore({
           }
           profile.currentNode = params.currentNode
           this.trigger(Object.assign(profile, newData))
-          // res(result)
           res()
         }).catch((e) => {
           rej(e)
