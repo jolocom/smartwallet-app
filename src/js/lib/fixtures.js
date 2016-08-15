@@ -22,6 +22,10 @@ export let contacts = [{
   username: 'anna',
   name: 'Anna Blume',
   email: 'anna@jolocom.com'
+}, {
+  username: 'd',
+  name: 'Dean Cooksey',
+  email: 'dean.g.cooksey@gmail.com'
 }]
 
 export let conversations = [{
