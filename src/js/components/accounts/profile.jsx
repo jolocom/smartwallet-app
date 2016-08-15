@@ -18,8 +18,6 @@ import {
 import {grey500} from 'material-ui/styles/colors'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-import EditorAttachMoney from 'material-ui/svg-icons/editor/attach-money'
-import ActionFingerprint from 'material-ui/svg-icons/action/fingerprint'
 
 import GraphStore from 'stores/graph-store'
 import ProfileActions from 'actions/profile'
@@ -84,8 +82,22 @@ let Profile = React.createClass({
         boxSizing: 'border-box',
         minHeight: '72px'
       },
+      passportIcon: {
+        width: '30px'
+      },
       passportPreview: {
-        width: '40px'
+        width: '40px',
+        marginRight: '10px'
+      },
+      uploadPassportButton: {
+        margin: '0 10px 0 0',
+        verticalAlign: 'top'
+      },
+      removePassportButton: {
+        verticalAlign: 'top'
+      },
+      bitcoinIcon: {
+        width: '30px'
       },
       formTable: {
         width: '100%'
@@ -95,6 +107,12 @@ let Profile = React.createClass({
         textAlign: 'right',
         paddingRight: '10px',
         paddingBottom: '7px'
+      },
+      iconCellPassport: {
+        paddingRight: '7px'
+      },
+      iconCellBitcoinAddress: {
+        paddingRight: '7px'
       }
     }
     return styles
@@ -192,7 +210,7 @@ let Profile = React.createClass({
                     </td>
                   </tr>
                   <tr>
-                    <td style={styles.iconCell}><ActionFingerprint /></td>
+                    <td style={Object.assign({}, styles.iconCell,styles.iconCellPassport)}><img src="img/ic_passport_24px.svg" style={styles.passportIcon} /></td>
                     <td>
                       <div style={styles.passportContainer}>
                       {this.state.passportImgUri ?
@@ -202,11 +220,11 @@ let Profile = React.createClass({
                       }
                       
                       <FlatButton label="Upload passport"
-                  onClick={this._handleSelectPassport}/>
+                  onClick={this._handleSelectPassport} style={styles.uploadPassportButton}/>
                      
                       {this.state.passportImgUri ?
                         <FlatButton label="Remove passport"
-                  onClick={this._handleRemovePassport}/>
+                  onClick={this._handleRemovePassport} style={styles.removePassportButton}/>
                         :
                         <span></span>
                       }
@@ -214,7 +232,7 @@ let Profile = React.createClass({
                     </td>
                   </tr>
                   <tr>
-                    <td style={styles.iconCell}><EditorAttachMoney /></td>
+                    <td style={Object.assign({}, styles.iconCell,styles.iconCellBitcoinAddress)}><img src="img/ic_bitcoin_24px.svg" style={styles.bitcoinIcon} /></td>
                     <td>
                       <TextField floatingLabelText="Bitcoin Address"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
