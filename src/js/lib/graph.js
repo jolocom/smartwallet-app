@@ -507,7 +507,6 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('dy', '.35em')
       .attr('font-size', (d) => d.rank === 'history' ? STYLES.largeNodeSize / 12 : STYLES.largeNodeSize / 8)
-      .style('font-weight', 'bold')
       // In case the rdf card contains no name
       .text((d) => {
         if (d.name) {
