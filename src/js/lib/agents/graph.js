@@ -328,11 +328,15 @@ class GraphAgent {
     return fetch(Util.uriToProxied(uri),{
       credentials: 'include' 
     }).then((ans) => {
+      if (!ans.ok)
+        throw new Error(ans.status) // Call the catch if response error
+        
       return ans.text().then((res)=>{
         return parser.parse(res, uri) 
       })
-    }).catch(()=>{
-      return {uri: uri, unav : true, connection:null,  triples:[]} 
+    }).catch((err)=>{ // Catch is automatically called on network errors only
+      let statusCode = err.message
+      return {uri: uri, unav : true, connection:null,  triples:[], statusCode: parseInt(statusCode)} 
     })
   }
 
@@ -352,24 +356,36 @@ class GraphAgent {
       }
       // If there are adjacent nodes to draw, 
       // we parse them and return an array of their triples
-      let i = 0
-      neighbours.map((triple) => {
+      let neighbourErrors = 0, neighbourResponsesCount = 0
+      neighbours.forEach((triple) => {
         this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
           // This is a node that coulnt't be retrieved, either 404, 401 etc. 
           if (result.unav ) {
             // We are setting the connection field of the node, we need it 
             // in order to be able to dissconnect it from our center node later.
-            result.connection = triple.predicate.uri
-            graphMap.push(result)
-            i += 1
+            
+            neighbourErrors += 1
+            
+            // if forbidden access to node, do not show it
+            // (we assume the center node isn't ours then)
+            // @TODO find better way to know if we have rights to center node
+            if (result.statusCode !== 403)
+            {             
+              result.connection = triple.predicate.uri
+              graphMap.push(result)
+            }
+            
           } else {
             // This is a valid node.
             result.triples.connection = triple.predicate.uri
             graphMap.push(result.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
           }
-          if (graphMap.length === neighbours.length) {
-            console.log('Loading done,', i,'rdf files were / was skipped.')
+          
+          neighbourResponsesCount++
+          
+          if (neighbourResponsesCount === neighbours.length-1) {
+            console.log('Loading done,', neighbourErrors, 'rdf files were / was skipped.')
             resolve(graphMap)
           }
         })

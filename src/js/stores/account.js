@@ -71,6 +71,8 @@ export default Reflux.createStore({
           'Content-Type':'application/sparql-update' 
         }
       }).then((res)=>{
+        if (!res.ok)
+          throw new Error(res.statusText)
         Account.login.completed(localStorage.getItem('webId'))
       }).catch(() => {
         localStorage.removeItem('webId');
