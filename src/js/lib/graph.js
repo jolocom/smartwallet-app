@@ -840,7 +840,7 @@ export default class GraphD3 extends EventEmitter {
     // Reset colour of all circles
     d3.selectAll('g .node')
       .select('.nodecircle')
-      .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
+      // .transition('resetcolor').duration(STYLES.nodeTransitionDuration) // Tries to interpret the url(#) as a colour @TODO
       .style('fill', (d) => {
         if (d.img && d.rank !== 'history') {
           return 'url(#' + d.uri + d.connection + ')'
