@@ -74,7 +74,8 @@ let App = React.createClass({
   componentDidUpdate(prevProps, prevState) {
     let {username} = this.state.account
 
-    if (prevState.account.username !== username) {
+    if (prevState.account.username === undefined ||
+      prevState.account.username !== username) {
       this.checkLogin()
     }
   },
@@ -87,7 +88,7 @@ let App = React.createClass({
     let {username, loggingIn} = this.state.account
 
     // session is still loading, so return for now
-    if (username === undefined || loggingIn) {
+    if (username === undefined && loggingIn) {
       return
     }
 
