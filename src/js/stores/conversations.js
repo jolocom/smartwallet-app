@@ -1,7 +1,7 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
-import settings from 'settings'
-import ChatAgent from 'lib/agents/chat.js'
+import Util from 'lib/util'
+import ChatAgent from 'lib/agents/chat'
 
 import ConversationsActions from 'actions/conversations'
 
@@ -22,7 +22,7 @@ export default Reflux.createStore({
   onLoad(username, query) {
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
 
-    return chatAgent.getInboxConversations(`${settings.endpoint}/${username}/profile/card#me`)
+    return chatAgent.getInboxConversations(Util.uriToProxied(username))
       .then(function(conversations) {
         let results = conversations.map((url) => chatAgent.getConversation(url))
         return Promise.all(results)
