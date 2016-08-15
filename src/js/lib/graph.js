@@ -30,21 +30,27 @@ export default class GraphD3 extends EventEmitter {
 
     this.graphContainer = el
 
-    this.refreshDimensions()
 
     this.rendered = false
     this.rotationIndex = 0
 
     this.svg = d3.select(this.graphContainer).append('svg:svg')
+      .style('display', 'block')
+      // .append('svg:g')
+    
+    this.refreshDimensions()
+    
+    this.svg
       .attr('width', this.width)
       .attr('height', this.height)
-      .style('display', 'block')
-      .append('svg:g')
 
     this.svg.append('svg:g')
       .attr('class', 'background-layer')
       .append('svg:g')
       .attr('class', 'background-layer-links')
+    
+    window.removeEventListener('resize',this.onResize)
+    window.addEventListener('resize',this.onResize)
 
     // TouchRotate setup
     var thisInstance = this
@@ -151,6 +157,10 @@ export default class GraphD3 extends EventEmitter {
     // <- creates force and starts it. why does it
     // need to be done several times?
     this.drawBackground()
+    
+    if (this.numberOfNeighbours > this.MAX_VISIBLE_NODES) { 
+      this.drawScrollingIndicator()
+    }
     // refresh the background in case we need to draw
     // more things because for instance scrolling is now enabled
     this.d3update()
@@ -160,7 +170,7 @@ export default class GraphD3 extends EventEmitter {
     this.width = this.graphContainer.offsetWidth || STYLES.width
     this.height = this.graphContainer.offsetHeight || STYLES.height
     this.centerCoordinates = {
-      y: (this.height / 2),
+      y: this.height / 2,
       x: this.width / 2
     }
   }
@@ -247,7 +257,6 @@ export default class GraphD3 extends EventEmitter {
 
       this.updateDial()
 
-      this.drawScrollingIndicator()
     }
   }.bind(this)
 
@@ -572,10 +581,9 @@ export default class GraphD3 extends EventEmitter {
 
   // This function fires upon tick, around 30 times per second?
   tick = function (e) {
-    this.refreshDimensions()
     // @TODO overwriting the force coordinates, maybe not good
     let k = 1 * e.alpha
-    d3.selectAll('g .node').attr('d', (d) => {
+    d3.selectAll('svg .node').attr('d', (d) => {
       if (d.rank === 'center') {
         d.x = this.centerCoordinates.x
         d.y = this.centerCoordinates.y
@@ -606,7 +614,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('y2', (d) => d.target.y)
       // Update the node positions. We use translate because we are working with
       // a group of elements rather than just one.
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
   }.bind(this)
 
@@ -817,7 +825,7 @@ export default class GraphD3 extends EventEmitter {
         return d.source.elipsisdepth >= 0 ? 0 : 1
       })
     // Reset size of all circles
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .selectAll('.nodecircle')
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('r', (d) => {
@@ -838,7 +846,7 @@ export default class GraphD3 extends EventEmitter {
       })
 
     // Reset colour of all circles
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .select('.nodecircle')
       // .transition('resetcolor').duration(STYLES.nodeTransitionDuration) // Tries to interpret the url(#) as a colour @TODO
       .style('fill', (d) => {
@@ -862,7 +870,7 @@ export default class GraphD3 extends EventEmitter {
       })
 
     // Reset sizes of all patterns
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .selectAll('pattern')
       .transition('pattern').duration(STYLES.nodeTransitionDuration)
       .attr('x', (d) => {
@@ -873,7 +881,7 @@ export default class GraphD3 extends EventEmitter {
       })
 
     // Reset sizes of all images
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .selectAll('image')
       .transition('image').duration(STYLES.nodeTransitionDuration)
       .attr('width', (d) => {
@@ -886,7 +894,7 @@ export default class GraphD3 extends EventEmitter {
 
     // We set the name of the node to invisible in case it has a profile picture
     // In case the node has no picture, we display its name.
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .selectAll('.nodetext')
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('dy', '.35em')
@@ -895,19 +903,19 @@ export default class GraphD3 extends EventEmitter {
       })
 
     // Hide the descriptions of all nodes
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .selectAll('.nodedescription')
       .transition('description').duration(STYLES.nodeTransitionDuration)
       .attr('opacity', 0)
 
     // Make the fullscreen button of all nodes smaller
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .selectAll('.nodefullscreen')
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('r', 0)
 
     // Un-highlight all nodes
-    d3.selectAll('g .node')
+    d3.selectAll('svg .node')
       .attr('d', function(d) {
         d.highlighted = false
       })
@@ -1183,15 +1191,15 @@ export default class GraphD3 extends EventEmitter {
     this.updateAfterRotationIndex()
   }.bind(this)
 
-  // This is not implemented apparently.
-  onResize = function () {
-    this.setSize()
-  }.bind(this)
 
-  // Not yet implemented.
-  setSize = function () {
-    this.width = this.graphContainer.offsetWidth
-    this.height = this.graphContainer.offsetHeight
-    this.svg.attr('width', this.width).attr('height', this.height)
+  onResize = function () {
+    // Debounce
+    clearTimeout(this.onResizeTimeoutId || -1);
+    this.onResizeTimeoutId = setTimeout(function() {
+      this.refreshDimensions();
+      this.svg.attr('width', this.width).attr('height', this.height)
+      this.drawBackground()
+      this.updateAfterRotationIndex()
+    }.bind(this),25)
   }.bind(this)
 }
