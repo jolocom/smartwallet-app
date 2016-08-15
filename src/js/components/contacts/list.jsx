@@ -36,10 +36,10 @@ let Contacts = React.createClass({
       <div>
         {emptyView}
         <List>
-          {this.state.contacts.map(({username, name, email, imgUri}) => {
+          {this.state.contacts.map(({username, webid, name, email, imgUri}) => {
             let avatar = <Avatar src={imgUri}>{name[0]}</Avatar>
             return (
-              <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(username)}}/>
+              <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(webid)}}/>
             )
           })}
         </List>

@@ -244,6 +244,7 @@ class ChatAgent extends LDPAgent {
   }
 
   _linkConversation(conversationUrl, webid) {
+    console.log('link', conversationUrl, webid)
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
     return this.get(inbox)
       .then((xhr) => {
@@ -251,6 +252,7 @@ class ChatAgent extends LDPAgent {
         return parser.parse(xhr.response)
       })
       .then((result) => {
+        console.log(result)
         let writer = new Writer({prefixes: result.prefixes})
         let link = {
           subject: '#inbox',
@@ -264,6 +266,7 @@ class ChatAgent extends LDPAgent {
         return writer.end()
       })
       .then((updatedInbox) => {
+        console.log(updatedInbox)
         let hdrs = {'Content-type': 'text/turtle'}
         return this.put(inbox, hdrs, updatedInbox)
       })
