@@ -972,6 +972,18 @@ export default class GraphD3 extends EventEmitter {
           }
         })
 
+      d3.select(node).select('.nodecircleback')
+        .transition('grow').duration(STYLES.nodeTransitionDuration)
+        .attr('r', STYLES.largeNodeSize / 2)
+        .attr('opacity', 1)
+        .each('start', (d) => {
+          if (!d.img) {
+            d3.select(node).select('.nodecircle')
+              .transition('highlight').duration(STYLES.nodeTransitionDuration)
+              .style('fill', theme.graph.centerNodeColor)
+          }
+        })
+
       // Enlarge the pattern of the node we clicked on
       d3.select(node).select('pattern')
         .transition('pattern').duration(STYLES.nodeTransitionDuration)
