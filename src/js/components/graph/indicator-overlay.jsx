@@ -46,9 +46,9 @@ let IndicatorOverlay = React.createClass({
 
   // displays overlay, only when not already previously shown
   show() {
-    if (!localStorage.getItem('indicator-overlay-drawn')) {
+    if (!localStorage.getItem('littlesister.onboarding.scrolling-indicator')) {
       this.setState({visible: true})
-      localStorage.setItem('indicator-overlay-drawn', true)
+      localStorage.setItem('littlesister.onboarding.scrolling-indicator', true)
     }
   },
 
