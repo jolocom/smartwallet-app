@@ -68,13 +68,13 @@ export default class GraphD3 extends EventEmitter {
           // as an absolute value, but if we are comparing the new
           // touchMoveRadian to the previous one, then it is problematic
           var radianDiff = touchMoveRadian - lastNotchRadian
-          
+
           if (radianDiff < -Math.PI) {
             radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
           } else if (radianDiff > Math.PI) {
             radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
           }
-          
+
           // first drag
           if (lastNotchRadian === false) {
             lastNotchRadian = touchMoveRadian
@@ -98,7 +98,7 @@ export default class GraphD3 extends EventEmitter {
               thisInstance.updateAfterRotationIndex('down')
             }
           }
-          
+
           if (amountOfTurns > thisInstance.MAX_VISIBLE_NODES*7 || amountOfTurns < -thisInstance.MAX_VISIBLE_NODES*7)
           {
             if (thisInstance.dataNodes[0].uri != thisInstance.HOF_URI)
@@ -135,7 +135,7 @@ export default class GraphD3 extends EventEmitter {
     this.dataNodes = [state.center]
     this.dataLinks = []
     this.numberOfNeighbours = 0
-    
+
     if (state.center.uri == this.HOF_URI && this.mode != 'preview')
         particles.party(this.graphContainer)
     else
@@ -257,6 +257,9 @@ export default class GraphD3 extends EventEmitter {
 
       this.updateDial()
 
+      // Emit event that indicatorOverlay should be drawn.
+      // Listened to on graph.jsx
+      this.emit('scrolling-drawn')
     }
   }.bind(this)
 
