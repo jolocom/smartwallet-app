@@ -124,7 +124,8 @@ let Graph = React.createClass({
         flexDirection: 'column'
       },
       chart: {
-        flex: 1
+        flex: 1,
+        overflow: 'hidden'
       },
       menu: {
         position: 'absolute',

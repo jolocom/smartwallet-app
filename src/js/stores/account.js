@@ -42,9 +42,9 @@ export default Reflux.createStore({
       res.json().then((js)=>{
         if (name || email) {
           let payload = {name, email}
-          Account.login(user, pass, payload)
+          Account.login(data.username, data.password, payload)
         } else {
-          Account.login(user, pass)
+          Account.login(data.username, data.password)
         }
       })
     })
@@ -71,6 +71,8 @@ export default Reflux.createStore({
           'Content-Type':'application/sparql-update' 
         }
       }).then((res)=>{
+        if (!res.ok)
+          throw new Error(res.statusText)
         Account.login.completed(localStorage.getItem('webId'))
       }).catch(() => {
         localStorage.removeItem('webId');
