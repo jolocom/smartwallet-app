@@ -61,8 +61,11 @@ export default Reflux.createStore({
   },
 
   onAddMessage(id, author, content) {
+
+    console.log("onAddMessage() - author = "+author)
+
     let conversation = this.getUrl(author, id)
-    author = `${settings.endpoint}/${author}/profile/card#me`
+    author = Util.uriToProxied(author)
 
     return chatAgent.postMessage(conversation, author, content)
       .then(() => {

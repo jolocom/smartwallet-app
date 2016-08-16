@@ -37,8 +37,8 @@ let Conversation = React.createClass({
   },
 
   componentDidMount() {
-    ConversationActions.load(this.context.profile.username, this.props.params.id)
-    ConversationActions.subscribe(this.context.profile.username, this.props.params.id)
+    ConversationActions.load(this.context.profile.webid, this.props.params.id)
+    ConversationActions.subscribe(this.context.profile.webid, this.props.params.id)
 
     this.refs.dialog.show()
 
@@ -77,7 +77,7 @@ let Conversation = React.createClass({
   addMessage(content) {
     ConversationActions.addMessage(
       this.props.params.id,
-      this.context.profile.username,
+      this.context.profile.webid,
       content
     )
     return true
