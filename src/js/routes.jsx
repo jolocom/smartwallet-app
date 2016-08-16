@@ -27,9 +27,10 @@ const routes = (
       <Route path='/graph/:node/details' component={Node}/>
 
       <Route path='/chat' component={Chat}>
-        <IndexRoute component={Conversations}/>
+        <Route path='/conversations' component={Conversations}>
+          <Route path='/conversations/:id' component={Conversation}/>
+        </Route>
         <Route path='new' component={ChatNew}/>
-        <Route path='/conversations/:id' component={Conversation}/>
         <Route path='/contacts' component={Contacts}>
           <Route path=':username' component={Contact}/>
         </Route>

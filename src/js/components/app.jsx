@@ -132,7 +132,7 @@ let App = React.createClass({
   },
 
   _handleChatTap() {
-    this.history.pushState(null, '/chat')
+    this.history.pushState(null, '/conversations')
   },
 
   showDrawer() {

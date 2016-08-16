@@ -108,7 +108,7 @@ class Chat extends React.Component {
 
     switch (tab) {
       case 'chat':
-        this.context.history.pushState(null, '/chat')
+        this.context.history.pushState(null, '/conversations')
         break
       case 'contacts':
         this.context.history.pushState(null, '/contacts')

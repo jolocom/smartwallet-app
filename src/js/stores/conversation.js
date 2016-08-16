@@ -23,9 +23,7 @@ export default Reflux.createStore({
 
   getUrl(webId, id) {
     const conversation = ConversationsStore.getConversation(id)
-    console.log(conversation)
-    const rootUrl = Util.webidRoot(webId)
-    return `${rootUrl}/little-sister/chats/${id}`
+    return conversation.uri
   },
 
   onLoad(username, id) {

@@ -91,7 +91,7 @@ let Conversation = React.createClass({
   },
 
   back() {
-    this.context.history.pushState(null, '/chat')
+    this.context.history.pushState(null, '/conversations')
   },
 
   getStyles() {

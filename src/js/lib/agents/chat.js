@@ -197,6 +197,7 @@ class ChatAgent extends LDPAgent {
       })
       .then((tmp) => {
         let [lastMessage, otherPerson] = tmp
+        result.uri = conversationUrl
         result.lastMessage = lastMessage
         result.otherPerson = otherPerson
         return result
