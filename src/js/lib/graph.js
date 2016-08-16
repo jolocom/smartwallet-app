@@ -466,7 +466,7 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('dy', '.35em')
       .attr('font-size', (d) => {
-        d.rank === 'history' ? largeNode / 12 : largeNode / 8
+        return d.rank === 'history' ? largeNode / 12 : largeNode / 8
       })
       // In case the rdf card contains no name
       .text((d) => {
