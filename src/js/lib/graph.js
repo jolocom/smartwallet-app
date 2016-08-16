@@ -120,6 +120,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Function to be called when the state changes
   render = function (state) { // nodes
+    console.log('GRAPH.JS RENDER', state)
     this.state = state
     if (this.rendered) {
       this.eraseGraph() // erase everything, including background
@@ -521,7 +522,9 @@ export default class GraphD3 extends EventEmitter {
       .attr('font-size', (d) => d.rank === 'history' ? STYLES.largeNodeSize / 12 : STYLES.largeNodeSize / 8)
       // In case the rdf card contains no name
       .text((d) => {
-        if (d.name) {
+        if (d.unavailable) {
+          return 'Not found'
+        } else if (d.name) {
           return d.name
         } else if (d.fullName) {
           return d.fullName
@@ -532,7 +535,7 @@ export default class GraphD3 extends EventEmitter {
             return d.title
           }
         } else {
-          return 'Not Found'
+          return 'Unnamed'       
         }
       })
       .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
@@ -625,7 +628,7 @@ export default class GraphD3 extends EventEmitter {
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
   dragEnd = function (node) {
-    if (node.rank === 'center' || node.rank === 'unavailable') {
+    if (node.rank === 'center' || node.unavailable) {
       this.force.start()
         // In here we would have the functionality that opens the node's card
     } else if (node.rank === 'neighbour' || node.rank === 'history') {
@@ -860,9 +863,9 @@ export default class GraphD3 extends EventEmitter {
             return theme.graph.elipsis1
           } else if (d.elipsisdepth === 1) {
             return theme.graph.elipsis2
+          } else if (d.unavailable) {
+            return STYLES.unavailableNodeColor
           } else if (d.rank === 'history') {
-            return STYLES.grayColor
-          } else if (d.rank === 'unavailable') {
             return STYLES.grayColor
           } else if (d.rank === 'center') {
             return theme.graph.centerNodeColor

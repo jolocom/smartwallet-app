@@ -357,7 +357,7 @@ class GraphAgent {
     return Promise.all(neighbours.map((triple) => {
         return this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
           // This is a node that coulnt't be retrieved, either 404, 401 etc. 
-          if (result.unav ) {
+          if (result.unav) {
             // We are setting the connection field of the node, we need it 
             // in order to be able to dissconnect it from our center node later.
             
@@ -382,6 +382,7 @@ class GraphAgent {
         })
       })).then(() => {
         console.log('Loading done,', neighbourErrors, 'rdf files were / was skipped.')
+        console.log('graphMap',graphMap)
         return graphMap
     })
   }
