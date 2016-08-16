@@ -28,6 +28,11 @@ export let contacts = [{
   webid: 'https://d.webid.jolocom.de/profile/card#me',
   name: 'Dean Cooksey',
   email: 'dean.g.cooksey@gmail.com'
+}, {
+  username: 'acl8',
+  webid: 'https://acl8.webid.jolocom.de/profile/card#me',
+  name: 'ACL',
+  email: 'test@jolocom.com'
 }]
 
 export let conversations = [{

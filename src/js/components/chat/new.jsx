@@ -43,12 +43,16 @@ export default React.createClass({
 
   componentDidUpdate() {
     if (this.state.conversation && this.state.conversation.id) {
-      this.context.history.pushState(null, `/conversations/${this.state.conversation.id}`)
+      this.context.history.pushState(null,
+        `/conversations/${this.state.conversation.id}`
+      )
     }
   },
 
-  startChat(username) {
-    ChatActions.create(this.state.profile.webid, this.state.profile.webid, username)
+  startChat(webId) {
+    ChatActions.create(
+      this.state.profile.webid, this.state.profile.webid, webId
+    )
   },
 
   showSearch() {
@@ -59,19 +63,38 @@ export default React.createClass({
     this.setState({searchQuery: query})
   },
 
+  back() {
+    this.context.history.pushState(null, '/chat')
+  },
+
   render() {
     return (
-      <Dialog ref="dialog" fullscreen={true}>
+      <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
-          title="Select contact"
-          iconElementLeft={
-            <IconButton onClick={() => this.context.history.pushState(null, '/chat')} iconClassName="material-icons">close</IconButton>
-          }
-          iconElementRight={<IconButton onClick={this.showSearch} iconClassName="material-icons">search</IconButton>} />
-          <SearchBar ref="search" onChange={this.onSearch}/>
+            title="Select contact"
+            iconElementLeft={
+              <IconButton
+                onClick={this.back}
+                iconClassName="material-icons"
+              >
+                close
+              </IconButton>
+            }
+            iconElementRight={
+              <IconButton
+                onClick={this.showSearch}
+                iconClassName="material-icons"
+              >
+                search
+              </IconButton>}
+            />
+          <SearchBar ref="search" onChange={this.onSearch} />
           <Content>
-            <ContactsList onClick={this.startChat} searchQuery={this.state.searchQuery}/>
+            <ContactsList
+              onClick={this.startChat}
+              searchQuery={this.state.searchQuery}
+            />
           </Content>
         </Layout>
       </Dialog>

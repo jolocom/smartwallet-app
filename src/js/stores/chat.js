@@ -1,5 +1,4 @@
 import Reflux from 'reflux'
-import Util from 'lib/util'
 import ChatAgent from 'lib/agents/chat'
 
 import ChatActions from 'actions/chat'
@@ -11,8 +10,7 @@ export default Reflux.createStore({
   listenables: ChatActions,
 
   onCreate(initiator, ...participants) {
-    let profileUrl = (username) => Util.uriToProxied(username)
-    chatAgent.createConversation(profileUrl(initiator), participants.map(profileUrl))
+    chatAgent.createConversation(initiator, participants)
       .then(create.completed)
   },
 

@@ -19,10 +19,10 @@ export default Reflux.createStore({
     }
   },
 
-  onLoad(username, query) {
+  onLoad(webId, query) {
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
 
-    return chatAgent.getInboxConversations(Util.uriToProxied(username))
+    return chatAgent.getInboxConversations(Util.uriToProxied(webId))
       .then(function(conversations) {
         let results = conversations.map((url) => chatAgent.getConversation(url))
         return Promise.all(results)

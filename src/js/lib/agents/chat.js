@@ -1,9 +1,11 @@
 import {Parser, Writer} from '../rdf'
 import LDPAgent from './ldp'
 import Util from '../util'
-import {PRED} from '../namespaces.js'
+import {PRED, FOAF, RDF, SIOC} from '../namespaces.js'
 import N3 from 'n3'
 import _ from 'lodash'
+import rdf from 'rdflib'
+import solid from 'solid-client'
 
 let N3Util = N3.Util
 
@@ -244,64 +246,50 @@ class ChatAgent extends LDPAgent {
   }
 
   _linkConversation(conversationUrl, webid) {
-    console.log('link', conversationUrl, webid)
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
-    return this.get(inbox)
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response)
-      })
-      .then((result) => {
-        console.log(result)
-        let writer = new Writer({prefixes: result.prefixes})
-        let link = {
-          subject: '#inbox',
-          predicate: PRED.spaceOf,
-          object: conversationUrl
-        }
-        result.triples.push(link)
-        for (var t of result.triples) {
-          writer.addTriple(t)
-        }
-        return writer.end()
-      })
-      .then((updatedInbox) => {
-        console.log(updatedInbox)
-        let hdrs = {'Content-type': 'text/turtle'}
-        return this.put(inbox, hdrs, updatedInbox)
-      })
-  }
 
+    var graph = rdf.graph()
+
+    graph.add('#inbox', PRED.spaceOf, rdf.sym(conversationUrl))
+
+    var toAdd = []
+    graph.statementsMatching('#inbox', undefined, undefined)
+      .forEach(function (st) {
+        toAdd.push(st.toNT())
+      })
+
+    return solid.web.patch(inbox, null, toAdd)
+  }
 
   _conversationTriples(initiator, participants) {
     let writer = new Writer()
 
     let triples = [
-        {
-          subject: '',
-          predicate: PRED.title,
-          object: N3Util.createLiteral(`Conversation created by ${initiator}`)
-        },
-        {
-          subject: '',
-          predicate: PRED.maker,
-          object: initiator
-        },
-        {
-          subject: '',
-          predicate: PRED.primaryTopic,
-          object: '#thread'
-        },
-        {
-          subject: '#thread',
-          predicate: PRED.type,
-          object: PRED.Thread
-        },
-        {
-          subject: '#thread',
-          predicate: PRED.hasOwner,
-          object: initiator
-        }
+      {
+        subject: '',
+        predicate: PRED.title,
+        object: N3Util.createLiteral(`Conversation created by ${initiator}`)
+      },
+      {
+        subject: '',
+        predicate: PRED.maker,
+        object: initiator
+      },
+      {
+        subject: '',
+        predicate: PRED.primaryTopic,
+        object: '#thread'
+      },
+      {
+        subject: '#thread',
+        predicate: PRED.type,
+        object: PRED.Thread
+      },
+      {
+        subject: '#thread',
+        predicate: PRED.hasOwner,
+        object: initiator
+      }
     ]
 
     for (var t of triples) {

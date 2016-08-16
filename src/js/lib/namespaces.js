@@ -12,8 +12,8 @@ let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 
 export const PRED = {
-  givenName: FOAF('givenName'), 
-  familyName: FOAF('familyName'), 
+  givenName: FOAF('givenName'),
+  familyName: FOAF('familyName'),
   fullName: FOAF('name'),
   image: FOAF('img'),
   email: FOAF('mbox'),
@@ -21,29 +21,29 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
-  
+
   title: DC('title'),
   description: DC('description'),
   type: RDF('type'),
-  
+
   maker: FOAF('maker'),
   primaryTopic: FOAF('primaryTopic'),
   hasOwner: SIOC('hasOwner'),
   hasSubscriber: SIOC('hasSubscriber'),
   spaceOf: SIOC('spaceOf'),
+  space: SIOC('space'),
   post: SIOC('Post'),
   hasCreator: SIOC('hasCreator'),
   content: SIOC('content'),
   created: DC('created'),
   hasContainer: SIOC('hasContainer'),
   containerOf: SIOC('containerOf'),
-  
-  isRelatedTo: SCHEMA('isRelatedTo'),
+
   Document: FOAF('Document'),
   Image: FOAF('Image'),
   Agent: FOAF('Agent'),
-  Thread: SIOC('Thread'),
-  
+  Thread: SIOC('Thread')
+
 }
 
 export const CERT = {

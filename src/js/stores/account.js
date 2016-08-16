@@ -2,6 +2,7 @@ import Reflux from 'reflux'
 import Account from 'actions/account'
 import {proxy} from 'settings'
 import GraphAgent from 'lib/agents/graph'
+import WebIdAgent from 'lib/agents/webid'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
@@ -30,7 +31,8 @@ export default Reflux.createStore({
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
-    }).then((res) => {
+    })
+    .then((res) => {
       res.json().then((js) => {
         if (name || email) {
           let payload = {name, email}
@@ -114,10 +116,13 @@ export default Reflux.createStore({
       }).then((res) => {
         res.json().then((js) => {
           if (updatePayload) {
-            Account.setNameEmail(
+            this.onSetNameEmail(
               js.webid, updatePayload.name, updatePayload.email
             ).then(() => {
               Account.login.completed(username, js.webid)
+            }).then(() => {
+              const webIdAgent = new WebIdAgent()
+              webIdAgent.initInbox(js.webid)
             })
           } else {
             Account.login.completed(username, js.webid)
