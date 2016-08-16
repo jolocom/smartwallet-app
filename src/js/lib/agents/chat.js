@@ -30,6 +30,9 @@ class ChatAgent extends LDPAgent {
       }))
     })
     .then(() => {
+      this._writeConversationAcl(conversationDoc, initiator, participants)
+    })
+    .then(() => {
       // update inbox indices
       console.log('successfully created conversation and linked it to participant inboxes')
       return {
@@ -39,11 +42,46 @@ class ChatAgent extends LDPAgent {
     })
   }
 
+  _writeConversationAcl(uri, initiator, participants = []) {
+    let writer = new Writer()
+    let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+    let aclUri = `${uri}.acl`
+
+    writer.addTriple(rdf.sym('#owner'), PRED.type, ACL('Authorization'))
+    writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
+    writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(aclUri))
+    writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(initiator))
+    writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
+    writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
+    writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+
+    participants.forEach((participant) => {
+      writer.addTriple(rdf.sym('#participant'), PRED.type, ACL('Authorization'))
+      writer.addTriple(rdf.sym('#participant'), ACL('accessTo'), rdf.sym(uri))
+      writer.addTriple(rdf.sym('#participant'), ACL('agent'), rdf.sym(participant))
+      writer.addTriple(rdf.sym('#participant'), ACL('mode'), ACL('Read'))
+      writer.addTriple(rdf.sym('#participant'), ACL('mode'), ACL('Write'))
+    })
+
+    return fetch(Util.uriToProxied(aclUri), {
+      method: 'PUT',
+      credentials: 'include',
+      body: writer.end(),
+      headers: {
+        'Content-Type': 'text/turtle'
+      }
+    }).then(() => {
+      return aclUri
+    }).catch((e) => {
+      console.error(e, 'occured while putting the acl file')
+    })
+  }
+
   postMessage(conversationUrl, author, content) {
     //TODO: implement
     let msgId = `#${Util.randomString(5)}`
     let conversationId = `${conversationUrl}#thread`
-    return this.get(conversationUrl)
+    return this.get(Util.uriToProxied(conversationUrl))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, conversationId)
@@ -86,7 +124,7 @@ class ChatAgent extends LDPAgent {
       })
       .then((result) => {
         let hdrs = {'Content-type': 'text/turtle'}
-        return this.put(conversationUrl, hdrs, result)
+        return this.put(Util.uriToProxied(conversationUrl), hdrs, result)
       })
   }
 
@@ -250,14 +288,14 @@ class ChatAgent extends LDPAgent {
 
     var graph = rdf.graph()
 
-    graph.add('#inbox', PRED.spaceOf, rdf.sym(conversationUrl))
+    graph.add('#inbox', PRED.spaceOf, rdf.lit(conversationUrl))
 
     var toAdd = []
     graph.statementsMatching('#inbox', undefined, undefined)
       .forEach(function (st) {
         toAdd.push(st.toNT())
       })
-
+    console.log(toAdd)
     return solid.web.patch(inbox, null, toAdd)
   }
 

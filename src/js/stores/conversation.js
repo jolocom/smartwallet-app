@@ -7,6 +7,8 @@ let chatAgent = new ChatAgent()
 
 import ConversationActions from 'actions/conversation'
 
+import ConversationsStore from 'stores/conversations'
+
 let {load, addMessage} = ConversationActions
 
 export default Reflux.createStore({
@@ -20,6 +22,8 @@ export default Reflux.createStore({
   },
 
   getUrl(webId, id) {
+    const conversation = ConversationsStore.getConversation(id)
+    console.log(conversation)
     const rootUrl = Util.webidRoot(webId)
     return `${rootUrl}/little-sister/chats/${id}`
   },
@@ -63,7 +67,6 @@ export default Reflux.createStore({
     console.log("onAddMessage() - author = "+author)
 
     let conversation = this.getUrl(author, id)
-    author = Util.uriToProxied(author)
 
     return chatAgent.postMessage(conversation, author, content)
       .then(() => {

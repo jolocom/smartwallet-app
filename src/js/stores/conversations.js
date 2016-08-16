@@ -12,10 +12,20 @@ let chatAgent = new ChatAgent()
 export default Reflux.createStore({
   listenables: ConversationsActions,
 
+  items: [],
+
   getInitialState() {
     return {
       loading: true,
-      items: []
+      items: this.items
+    }
+  },
+
+  getConversation(id) {
+    for (let conversation of this.items) {
+      if (conversation.id === id) {
+        return conversation
+      }
     }
   },
 
@@ -24,7 +34,6 @@ export default Reflux.createStore({
 
     return chatAgent.getInboxConversations(Util.uriToProxied(webId))
       .then(function(conversations) {
-        console.log(conversations)
         let results = conversations.map((url) => chatAgent.getConversation(url))
         return Promise.all(results)
       })
@@ -38,9 +47,11 @@ export default Reflux.createStore({
   },
 
   onLoadCompleted(conversations) {
+    this.items = conversations
+
     this.trigger({
       loading: false,
-      items: conversations
+      items: this.items
     })
   }
 
