@@ -214,7 +214,7 @@ let Profile = React.createClass({
                     <td>
                       <div style={styles.passportContainer}>
                       {this.state.passportImgUri ?
-                        <img src={this.state.passportImgUri} style={styles.passportPreview} />
+                        <img src={Util.uriToProxied(this.state.passportImgUri)} style={styles.passportPreview} />
                         :
                         <span></span>
                       }
