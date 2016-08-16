@@ -576,6 +576,9 @@ export default class GraphD3 extends EventEmitter {
     this.node.on('dblclick', function (data) {
       self.onDblClick(this, data)
     })
+    this.svg.on('click', function (data) {
+      self.deselectAll();
+    })
 
     full.on('click', function (data) {
       self.onClickFull(this, data)
@@ -926,6 +929,13 @@ export default class GraphD3 extends EventEmitter {
         d.highlighted = false
       })
   }
+  
+  deselectAll = function() {
+    var self = this
+    d3.selectAll('svg .node').each(function(d) {
+      if (d.highlighted) self.onClick(this, d)
+    })
+  }.bind(this)
 
   onClick = function (node, data) {
     d3.event.stopPropagation()
