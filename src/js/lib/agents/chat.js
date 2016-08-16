@@ -24,7 +24,7 @@ class ChatAgent extends LDPAgent {
     let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
     let hdrs = {'Content-type': 'text/turtle'}
     let conversationDocContent = this._conversationTriples(initiator, participants)
-    return this.put(conversationDoc, hdrs, conversationDocContent).then(() => {
+    return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
       return Promise.all(participants.map((p) => {
         this._linkConversation(conversationDoc, p)
       }))

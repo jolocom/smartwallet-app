@@ -4,7 +4,7 @@ export let bankUri = 'http://localhost:8443'
 
 export let contacts = [{
   username: 'eelco',
-  webid: 'https://eelco.webid.jolocom.de/profile/card#me',
+  webId: 'https://eelco.webid.jolocom.de/profile/card#me',
   name: 'Eelco Wiersma',
   email: 'hi@eelcowiersma.nl'
 }, {
@@ -25,12 +25,12 @@ export let contacts = [{
   email: 'anna@jolocom.com'
 }, {
   username: 'd',
-  webid: 'https://d.webid.jolocom.de/profile/card#me',
+  webId: 'https://d.webid.jolocom.de/profile/card#me',
   name: 'Dean Cooksey',
   email: 'dean.g.cooksey@gmail.com'
 }, {
   username: 'acl8',
-  webid: 'https://acl8.webid.jolocom.de/profile/card#me',
+  webId: 'https://acl8.webid.jolocom.de/profile/card#me',
   name: 'ACL',
   email: 'test@jolocom.com'
 }]
