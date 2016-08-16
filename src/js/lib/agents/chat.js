@@ -202,6 +202,9 @@ class ChatAgent extends LDPAgent {
         result.otherPerson = otherPerson
         return result
       })
+      .catch(() => {
+        console.error('Failed to load conversation', conversationUrl)
+      })
   }
 
   _lastMessage(conversationUrl) {

@@ -34,14 +34,17 @@ export default Reflux.createStore({
 
     return chatAgent.getInboxConversations(Util.uriToProxied(webId))
       .then(function(conversations) {
-        let results = conversations.map((url) => chatAgent.getConversation(url))
+        let results = conversations.map((url) => {
+          return chatAgent.getConversation(url)
+        })
+
         return Promise.all(results)
       })
       .then(function(conversations) {
         load.completed(_.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {
-          return !regEx || conversation.id.match(regEx)
+          return conversation && (!regEx || conversation.id.match(regEx))
         }).value())
       })
   },

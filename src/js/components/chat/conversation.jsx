@@ -176,7 +176,6 @@ let Conversation = React.createClass({
           <Content style={styles.content}>
             <div ref="items" style={styles.conversation}>
               {items.map(function({author, content, created}, i) {
-                console.log('author', author, account.webId)
                 let from = (author !== account.webId) ? 'contact' : 'me'
                 return (
                   <div style={[styles.message]} key={i}>
