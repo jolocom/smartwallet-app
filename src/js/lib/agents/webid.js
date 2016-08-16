@@ -1,7 +1,5 @@
 import LDPAgent from './ldp.js'
 import {endpoint} from 'settings'
-import solid from 'solid-client'
-import acl from 'solid-permissions'
 import Util from '../util'
 import {Writer} from '../rdf'
 import {PRED} from '../namespaces.js'
@@ -102,25 +100,6 @@ class WebIDAgent extends LDPAgent {
     }).catch((e) => {
       console.error(e, 'occured while putting the acl file')
     })
-  }
-
-  _setInboxPermissions(uri, webId) {
-    let ps = new PermissionSet(uri)
-    ps.addPermission(webId, [solid.acl.READ, solid.acl.WRITE, solid.acl.CONTROL])
-      .addPermission(solid.acl.EVERYONE, solid.acl.APPEND)
-      .save()
-
-    // return acl.setPermissions(uri)
-    //   .then(function (permissionSet) {
-    //     return permissionSet
-    //
-    //   })
-    //   .then(function (response) {
-    //     console.log('Permissions saved successfully')
-    //   })
-    //   .catch(function (err) {
-    //     console.log('Error saving permissions')
-    //   })
   }
 
 }
