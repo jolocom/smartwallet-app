@@ -95,6 +95,7 @@ export default Reflux.createStore({
           'Content-Type': 'application/sparql-update'
         }
       }).then((res) => {
+        res.json().then((json) => {console.log(json)})
         const username = localStorage.getItem('jolocom.username')
         Account.login.completed(username, webId)
       }).catch(() => {
@@ -115,6 +116,7 @@ export default Reflux.createStore({
         }
       }).then((res) => {
         res.json().then((js) => {
+          console.log(js)
           if (updatePayload) {
             this.onSetNameEmail(
               js.webid, updatePayload.name, updatePayload.email

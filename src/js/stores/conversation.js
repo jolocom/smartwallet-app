@@ -19,10 +19,9 @@ export default Reflux.createStore({
     }
   },
 
-  getUrl(username, id) {
-    console.log("geturl username ", username)
-
-    return `${Util.uriToProxied(username)}/little-sister/chats/${id}`
+  getUrl(webId, id) {
+    const rootUrl = Util.webidRoot(webId)
+    return `${rootUrl}/little-sister/chats/${id}`
   },
 
   onLoad(username, id) {
@@ -61,7 +60,6 @@ export default Reflux.createStore({
   },
 
   onAddMessage(id, author, content) {
-
     console.log("onAddMessage() - author = "+author)
 
     let conversation = this.getUrl(author, id)

@@ -29,9 +29,9 @@ export let contacts = [{
   name: 'Dean Cooksey',
   email: 'dean.g.cooksey@gmail.com'
 }, {
-  username: 'acl8',
-  webId: 'https://acl8.webid.jolocom.de/profile/card#me',
-  name: 'ACL',
+  username: 'acl100',
+  webId: 'https://acl100.webid.jolocom.de/profile/card#me',
+  name: 'ACL100',
   email: 'test@jolocom.com'
 }]
 

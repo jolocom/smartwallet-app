@@ -104,13 +104,17 @@ let ConversationsListItem = React.createClass({
 
   render() {
     let {conversation} = this.props
-    let {otherPerson} = conversation
-    let {created, content} = conversation.lastMessage
+    let {otherPerson, lastMessage} = conversation
+
+    lastMessage = lastMessage || {}
+
+    let {created, content} = lastMessage
+
     let avatar
     if (otherPerson) {
       avatar = (
         <Avatar src={otherPerson.img}>
-          {otherPerson.name[0]}
+          {otherPerson.name && otherPerson.name[0]}
         </Avatar>
       )
     }
@@ -132,7 +136,7 @@ let ConversationsListItem = React.createClass({
   },
 
   _handleListItemTouchTap() {
-    this.props.onTouchTap(this.props.conversation.id)
+    this.props.onTouchTap(this.props.conversation)
   }
 })
 

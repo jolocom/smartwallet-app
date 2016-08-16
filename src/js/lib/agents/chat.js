@@ -92,7 +92,7 @@ class ChatAgent extends LDPAgent {
 
   // FIXME: should find a better way to read data \Justas
   getConversationMessages(conversationUrl) {
-    return this.get(conversationUrl)
+    return this.get(Util.uriToProxied(conversationUrl))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, conversationUrl)
@@ -145,7 +145,7 @@ class ChatAgent extends LDPAgent {
     let result = {
       id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
     }
-    return this.get(conversationUrl)
+    return this.get(Util.uriToProxied(conversationUrl))
       .then((xhr) => {
         result.updatesVia = xhr.getResponseHeader('updates-via')
         let parser = new Parser()
@@ -199,7 +199,7 @@ class ChatAgent extends LDPAgent {
     let webid = otherPerson.value
 
     let result = {}
-    return this.get(webid)
+    return this.get(Util.uriToProxied(webid))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, webid)
@@ -241,7 +241,7 @@ class ChatAgent extends LDPAgent {
       .then((result) => {
         return result.triples.filter((t) => {
           return t.predicate.uri === PRED.spaceOf.uri
-        }).map((t) => t.object.value)
+        }).map((t) => t.object.value || t.object.uri)
       })
   }
 
