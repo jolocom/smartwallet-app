@@ -57,11 +57,7 @@ let ProfileNode = React.createClass({
     let {muiTheme} = this.context
     let {gray1} = muiTheme.jolocom
     let {img} = this.getNode()
-    let background
-
-    if (img) {
-      background = Utils.uriToProxied(img)
-    }
+    let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     return {
       container: {
@@ -72,7 +68,7 @@ let ProfileNode = React.createClass({
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '176px',
-        background: `${gray1} url(${background}) center / cover`,
+        background: `${gray1} ${backgroundImg} center / cover`,
         boxShadow: 'none'
       },
       title: {
