@@ -106,6 +106,11 @@ let ConversationsListItem = React.createClass({
     let {conversation} = this.props
     let {otherPerson, lastMessage} = conversation
 
+
+    console.log("OTHER PERSON ",otherPerson)
+
+
+
     lastMessage = lastMessage || {}
 
     let {created, content} = lastMessage

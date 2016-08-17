@@ -9,6 +9,8 @@ import ConversationActions from 'actions/conversation'
 
 import ConversationsStore from 'stores/conversations'
 
+import AccountStore from 'stores/account'
+
 let {load, addMessage} = ConversationActions
 
 export default Reflux.createStore({
@@ -29,7 +31,7 @@ export default Reflux.createStore({
   onLoad(username, id) {
     let url = this.getUrl(username, id)
     Promise.all([
-      chatAgent.getConversation(url),
+      chatAgent.getConversation(url, AccountStore.state.webId),
       chatAgent.getConversationMessages(url)
     ]).then((result) => {
       let [conversation, items] = result
@@ -77,6 +79,9 @@ export default Reflux.createStore({
   },
 
   onAddMessageCompleted(item) {
+
+    console.log(this.items)
+
     this.items.push(item)
     this.trigger({
       items: this.items

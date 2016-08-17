@@ -3,9 +3,9 @@ export default {}
 export let bankUri = 'http://localhost:8443'
 
 export let contacts = [{
-  username: 'eelco',
-  webId: 'https://eelco.webid.jolocom.de/profile/card#me',
-  name: 'Eelco Wiersma',
+  username: 'eelcoacl',
+  webId: 'https://eelcoacl.webid.jolocom.de/profile/card#me',
+  name: 'Eelco ACL',
   email: 'hi@eelcowiersma.nl'
 }, {
   username: 'joachim',
@@ -33,6 +33,16 @@ export let contacts = [{
   webId: 'https://acl100.webid.jolocom.de/profile/card#me',
   name: 'ACL100',
   email: 'test@jolocom.com'
+}, {
+  username: 'axel',
+  webId: 'https://axel.webid.jolocom.de/profile/card#me',
+  name: 'Axel',
+  email: "axel@whatever.com"
+}, {
+  username: 'dtest',
+  webId: 'https://dtest.webid.jolocom.de/profile/card#me',
+  name: 'dtest',
+  email: "dtest@whatever.com"
 }]
 
 export let conversations = [{

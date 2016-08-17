@@ -179,7 +179,8 @@ class ChatAgent extends LDPAgent {
   // @param {String} conversationUrl conversation resource url
   //
   // @return {Object} conversation meta: id, updatesVia, otherPerson, lastMessage
-  getConversation(conversationUrl) {
+  getConversation(conversationUrl, myUri) {
+    console.trace()
     let result = {
       id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
     }
@@ -192,7 +193,7 @@ class ChatAgent extends LDPAgent {
       .then((parsed) => {
         return Promise.all([
           this._lastMessage(conversationUrl),
-          this._otherPerson(parsed.triples, conversationUrl)
+          this._otherPerson(parsed.triples, conversationUrl, myUri)
         ])
       })
       .then((tmp) => {
@@ -218,25 +219,31 @@ class ChatAgent extends LDPAgent {
       })
   }
 
-  _otherPerson(triples, conversationUrl) {
+  _otherPerson(triples, conversationUrl, myUri) {
     //TODO
     let aboutThread = _.filter(triples, (t) => {
       return t.subject == '#thread' || t.subject == `${conversationUrl}#thread`
     })
-    let owner = _.find(aboutThread, (t) => {
-      return t.predicate.uri == PRED.hasOwner.uri
-    })
-    if (owner) {
-      owner = owner.object
-    }
+
+    // let owner = _.find(aboutThread, (t) => {
+    //   return t.predicate.uri == PRED.hasOwner.uri
+    // })
+    // if (owner) {
+    //   owner = owner.object
+    // }
+
+    // return Promise.resolve({webid: owner.value, name: owner.value})
+
     let participants = _.map(_.filter(aboutThread, (t) => {
-      return t.predicate.uri == PRED.hasSubscriber.uri
+         return t.predicate.uri == PRED.hasSubscriber.uri
     }), (t) => t.object)
-    let otherPerson = _.find(participants, (p) => p !== owner)
+    let otherPerson = _.find(participants, (p) => p.value !== myUri)
 
     if (!otherPerson) {
       return Promise.resolve(null)
     }
+
+    console.log("pqrticipqnts", participants, "otherperson", otherPerson)
 
     let webid = otherPerson.value
 
@@ -251,12 +258,12 @@ class ChatAgent extends LDPAgent {
           return t.subject == webid || t.subject == '#me'
         })
 
-        let name = _.find(aboutPerson, (t) => {
-          return t.predicate.uri == PRED.fullName.uri
+        let name = _.find(parsed.triples, (t) => {
+          return t.predicate.uri == PRED.givenName.uri
         })
 
         if (name) {
-          result.name = N3Util.getLiteralValue(name.object)
+          result.name = name.object.value
         }
 
         let img = _.find(aboutPerson, (t) => {
@@ -268,7 +275,7 @@ class ChatAgent extends LDPAgent {
         }
 
         result.webid = otherPerson
-
+        console.log("RESULT", result)
         return result
       })
   }
@@ -300,7 +307,18 @@ class ChatAgent extends LDPAgent {
         toAdd.push(st.toNT())
       })
     console.log(toAdd)
-    return solid.web.patch(inbox, null, toAdd)
+
+   //return solid.web.patch(inbox, null, toAdd)
+
+    return fetch(inbox,{
+      method: 'PATCH',
+      credentials: 'include',
+      body: `INSERT DATA { ${toAdd.join(" ")} } ;`,
+      headers: {
+        'Content-Type':'application/sparql-update'
+      }
+    })
+
   }
 
   _conversationTriples(initiator, participants) {
