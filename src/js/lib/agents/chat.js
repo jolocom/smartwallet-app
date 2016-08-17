@@ -1,7 +1,7 @@
 import {Parser, Writer} from '../rdf'
 import LDPAgent from './ldp'
 import Util from '../util'
-import {PRED, FOAF, RDF, SIOC} from '../namespaces.js'
+import {PRED} from '../namespaces.js'
 import N3 from 'n3'
 import _ from 'lodash'
 import rdf from 'rdflib'

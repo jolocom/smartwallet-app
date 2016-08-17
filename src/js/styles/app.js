@@ -2,6 +2,7 @@ const STYLES = {
   width: window.innerWidth,
   height: window.innerHeight,
   lightGrayColor: '#efeeee',
+  unavailableNodeColor: '#D4D4D4',
   grayColor: '#838383',
   lightBlueColor: '#99D7F7',
   blueColor: '#009FE3',

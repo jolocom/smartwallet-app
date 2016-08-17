@@ -6,13 +6,15 @@ let SCHEMA = rdf.Namespace('https://schema.org/')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
 let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
-
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
+let CC = rdf.Namespace('https://cc.rww.io/vocab#')
+let PURL = rdf.Namespace('http://purl.org/iot/vocab/m3-lite#')
+
 
 export const PRED = {
-  givenName: FOAF('givenName'),
+  givenName: FOAF('givenName'), 
   familyName: FOAF('familyName'),
   fullName: FOAF('name'),
   image: FOAF('img'),
@@ -21,7 +23,7 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
-
+  
   title: DC('title'),
   description: DC('description'),
   type: RDF('type'),
@@ -38,12 +40,15 @@ export const PRED = {
   created: DC('created'),
   hasContainer: SIOC('hasContainer'),
   containerOf: SIOC('containerOf'),
-
+  
+  isRelatedTo: SCHEMA('isRelatedTo'),
   Document: FOAF('Document'),
   Image: FOAF('Image'),
   Agent: FOAF('Agent'),
-  Thread: SIOC('Thread')
-
+  Thread: SIOC('Thread'),
+  
+  bitcoin: CC('bitcoin'),
+  passport: PURL('Passport')
 }
 
 export const CERT = {

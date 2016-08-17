@@ -35,10 +35,10 @@ let NodeAddLink = React.createClass({
 
     return {
       targetSelection: 'start',
-      start: null,
-      startUri: null,
-      end: name,
-      endUri: this.props.node,
+      start: name,
+      startUri: this.props.node,
+      end: null,
+      endUri: null,
       type: 'knows',
       currentCenter: null
     }

@@ -4,6 +4,7 @@ import Radium from 'radium'
 import graphActions from 'stores/graph-store'
 import nodeActions from 'actions/node'
 import Utils from 'lib/util'
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import {
   AppBar,
@@ -56,11 +57,7 @@ let ProfileNode = React.createClass({
     let {muiTheme} = this.context
     let {gray1} = muiTheme.jolocom
     let {img} = this.getNode()
-    let background
-
-    if (img) {
-      background = Utils.uriToProxied(img)
-    }
+    let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     return {
       container: {
@@ -71,7 +68,7 @@ let ProfileNode = React.createClass({
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '176px',
-        background: `${gray1} url(${background}) center / cover`,
+        background: `${gray1} ${backgroundImg} center / cover`,
         boxShadow: 'none'
       },
       title: {
@@ -154,9 +151,14 @@ let ProfileNode = React.createClass({
             <MenuItem
               primaryText={fullscreenLabel}
               onTouchTap={this._handleFull} />
-            <MenuItem
-              primaryText="Copy URL"
-              onTouchTap={this._handleCopyURL}/>
+              
+            <CopyToClipboard
+              text={this.props.state.center.uri} 
+              onCopy={this._handlePostCopyURL}>
+                <MenuItem
+                  primaryText="Copy URL" />
+            </CopyToClipboard>
+            
             <MenuItem
               primaryText="Delete"
               onTouchTap={this._handleDelete}/>
@@ -241,8 +243,10 @@ let ProfileNode = React.createClass({
     let node = this.props.state.activeNode
     let center = this.props.state.center
     let navHis = this.props.state.navHistory
-
-    if (node.rank == 'center'){
+    
+    if (graphActions.state.webId == node.uri)
+      alert('You cannot remove your own node.') // @TODO toast/snackbar
+    else if (node.rank == 'center'){
      let prev = navHis[navHis.length - 1]
      graphActions.drawAtUri(prev.uri, 1).then(()=>{
        nodeActions.remove(node, prev)
@@ -258,8 +262,9 @@ let ProfileNode = React.createClass({
     }
   },
 
-  _handleCopyURL() {
-
+  _handlePostCopyURL() {
+    // @TODO implement snackbars/toasts
+    alert('The URL was copied to the clipboard.')
   },
 
   _handleStartChat() {

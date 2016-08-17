@@ -10,8 +10,8 @@ import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
-import AccountStore from 'stores/account'
 import graphActions from 'actions/graph-actions'
+import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 
 import Node from '../node/node.jsx'
 
@@ -78,7 +78,6 @@ let Graph = React.createClass({
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
-  
   // This is the first thing that fires when the user logs in.
   componentDidMount: function() {
     // Instantiating the graph object.
@@ -88,6 +87,7 @@ let Graph = React.createClass({
     this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
+    this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     graphActions.getState()
   },
 
@@ -110,6 +110,12 @@ let Graph = React.createClass({
     graphActions.navigateToNode(node)
   },
 
+  // max visible nodes reached, show indicator overlay
+  _handleScrollingDrawn() {
+    // refers to show() method of IndicatorOverlay component
+    this.refs.scrollIndicator.show()
+  },
+
   getStyles: function() {
     let styles = {
       container: {
@@ -118,7 +124,8 @@ let Graph = React.createClass({
         flexDirection: 'column'
       },
       chart: {
-        flex: 1
+        flex: 1,
+        overflow: 'hidden'
       },
       menu: {
         position: 'absolute',
@@ -166,9 +173,9 @@ let Graph = React.createClass({
 
     return (
       <div style={styles.container}>
-
+        <IndicatorOverlay ref="scrollIndicator" />
         <div style={styles.chart} ref="graph"></div>
-        
+
         {fab}
 
         {this.props.children}

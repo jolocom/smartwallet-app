@@ -94,10 +94,10 @@ export default Reflux.createStore({
         headers: {
           'Content-Type': 'application/sparql-update'
         }
-      }).then((res) => {
-        res.json().then((json) => {console.log(json)})
-        const username = localStorage.getItem('jolocom.username')
-        Account.login.completed(username, webId)
+      }).then((res)=>{
+        if (!res.ok)
+          throw new Error(res.statusText)
+        Account.login.completed(localStorage.getItem('webId'))
       }).catch(() => {
         Account.logout()
       })

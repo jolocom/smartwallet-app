@@ -64,7 +64,8 @@ let App = React.createClass({
   getInitialState() {
     return {
       searchActive: false,
-      searchQuery: null
+      searchQuery: null,
+      showIndicator: false
     }
   },
 
