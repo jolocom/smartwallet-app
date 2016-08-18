@@ -11,6 +11,7 @@ import {Layout, Content} from 'components/layout'
 
 
 import NodeStore from 'stores/node'
+import GenericFullScreen from '../generic-fullscreen'
 
 import {
   AppBar,
@@ -32,14 +33,6 @@ let ProfileNode = React.createClass({
     Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
     Reflux.connect(NodeStore, 'node')
   ],
-  
-    componentDidMount() {
-    this.refs.dialog.show()
-  },
-
-  componentWillUnmount() {
-    this.refs.dialog.hide()
-  },
 
   propTypes: {
     state: React.PropTypes.object, /* @TODO fix this */
@@ -74,11 +67,6 @@ let ProfileNode = React.createClass({
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     return {
-      container: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column'
-      },
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '176px',
@@ -144,101 +132,95 @@ let ProfileNode = React.createClass({
     }
 
     return (
-      <Dialog ref="dialog" fullscreen={true}>
-        <Layout>
-          <Content>
-      <div style={styles.container}>
-        <AppBar
-          style={styles.headers}
-          titleStyle={styles.title}
-          title={<span>{name || title || 'No name set'}</span>}
-          iconElementRight={
-            <IconMenu
-              iconButtonElement={
-                <IconButton
-                  iconClassName="material-icons"
-                  iconStyle={styles.icon}>
-                    more_vert
-                </IconButton>
-              }
-              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-              targetOrigin={{horizontal: 'left', vertical: 'top'}}>
-              <MenuItem
-                primaryText="Edit" />
-              <MenuItem
-                primaryText={fullscreenLabel}
-                onTouchTap={this._handleFull} />
+      <GenericFullScreen>
+          <AppBar
+            style={styles.headers}
+            titleStyle={styles.title}
+            title={<span>{name || title || 'No name set'}</span>}
+            iconElementRight={
+              <IconMenu
+                iconButtonElement={
+                  <IconButton
+                    iconClassName="material-icons"
+                    iconStyle={styles.icon}>
+                      more_vert
+                  </IconButton>
+                }
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}>
+                <MenuItem
+                  primaryText="Edit" />
+                <MenuItem
+                  primaryText={fullscreenLabel}
+                  onTouchTap={this._handleFull} />
 
-              <CopyToClipboard
-                text={this.props.state.center.uri}
-                onCopy={this._handlePostCopyURL}
-              >
-                <MenuItem primaryText="Copy URL" />
-              </CopyToClipboard>
+                <CopyToClipboard
+                  text={this.props.state.center.uri}
+                  onCopy={this._handlePostCopyURL}
+                >
+                  <MenuItem primaryText="Copy URL" />
+                </CopyToClipboard>
 
-              <MenuItem
-                primaryText="Delete"
-                onTouchTap={this._handleDelete} />
-              <MenuItem
-                primaryText="Disconnect"
-                onTouchTap={this._handleDisconnect} />
-            </IconMenu>
-          }
-          iconElementLeft={
-            <IconButton
-              iconClassName="material-icons"
-              iconStyle={styles.icon}
-              onClick={this._handleClose}>
-                arrow_back
-            </IconButton>
-          }
-        />
-        <Content style={styles.content}>
-          <Tabs
-            value={null}
-            inkBarStyle={{display: 'none'}}
-            tabItemContainerStyle={styles.tabs}>
-            <Tab
-              icon={<FontIcon className="material-icons">chat</FontIcon>}
-              label="MESSAGE"
-              onActive={this._handleStartChat}
-            />
-            <Tab
-              icon={
-                <FontIcon className="material-icons">bookmark_border</FontIcon>
-              }
-              label="BOOKMARK"
-            />
-            <Tab
-              icon={<FontIcon className="material-icons">link</FontIcon>}
-              label="CONNECT"
-            />
-          </Tabs>
-          <List style={styles.list}>
-            {description && (
-              <div>
-                <ListItem
-                  leftIcon={
-                    <FontIcon className="material-icons">info</FontIcon>
-                  }
-                  primaryText={description}
-                />
-                <Divider inset />
-              </div>
-            )}
-            {email && (
-              <ListItem
-                leftIcon={<FontIcon className="material-icons">email</FontIcon>}
-                primaryText={email}
-                secondaryText="Personal"
+                <MenuItem
+                  primaryText="Delete"
+                  onTouchTap={this._handleDelete} />
+                <MenuItem
+                  primaryText="Disconnect"
+                  onTouchTap={this._handleDisconnect} />
+              </IconMenu>
+            }
+            iconElementLeft={
+              <IconButton
+                iconClassName="material-icons"
+                iconStyle={styles.icon}
+                onClick={this._handleClose}>
+                  arrow_back
+              </IconButton>
+            }
+          />
+          <Content style={styles.content}>
+            <Tabs
+              value={null}
+              inkBarStyle={{display: 'none'}}
+              tabItemContainerStyle={styles.tabs}>
+              <Tab
+                icon={<FontIcon className="material-icons">chat</FontIcon>}
+                label="MESSAGE"
+                onActive={this._handleStartChat}
               />
-            )}
-          </List>
-        </Content>
-      </div>
-</Content>
-        </Layout>
-      </Dialog>
+              <Tab
+                icon={
+                  <FontIcon className="material-icons">bookmark_border</FontIcon>
+                }
+                label="BOOKMARK"
+              />
+              <Tab
+                icon={<FontIcon className="material-icons">link</FontIcon>}
+                label="CONNECT"
+              />
+            </Tabs>
+            <List style={styles.list}>
+              {description && (
+                <div>
+                  <ListItem
+                    leftIcon={
+                      <FontIcon className="material-icons">info</FontIcon>
+                    }
+                    primaryText={description}
+                  />
+                  <Divider inset />
+                </div>
+              )}
+              {email && (
+                <ListItem
+                  leftIcon={<FontIcon className="material-icons">email</FontIcon>}
+                  primaryText={email}
+                  secondaryText="Personal"
+                />
+              )}
+            </List>
+          </Content>
+      </GenericFullScreen>
     )
   },
 

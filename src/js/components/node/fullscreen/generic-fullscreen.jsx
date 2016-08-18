@@ -27,37 +27,36 @@ let Node = React.createClass({
   componentWillUnmount() {
     this.refs.dialog.hide()
   },
+  
+  getStyles() {
+    return {
+      container: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }
+    }
+  },
 
   _handleClose() {
     this.refs.dialog.hide()
     graphActions.viewNode(null)
   },
-
-  getStyles() {
-    return {
-      bar: {
-        position: 'absolute',
-        backgroundColor: 'transparent'
-      }
-    }
-  },
   
   render() {
-    let {node} = this.props
-    let {center} = this.props
-    let {svg} = this.props
-    let {state} = this.props
-    let content, Component = NodeTypes.componentFor(node.type) // @TODO get it from context/props?
-
-    if (Component) {
-      content = <Component node={node} center={center} svg={svg} state={state} onClose={this._handleClose} />
-    }
+    
+    let styles = this.getStyles()
     
     return (
       <Dialog ref="dialog" fullscreen={true}>
         <Layout>
           <Content>
-            {content}
+          
+            <div style={styles.container}>
+           GENERIC FULL SCREEN VIEW START CUSTOM CONTENT
+           {this.props.children}
+           GENERIC FULL SCREEN VIEW END CUSTOM CONTENT
+            </div>
           </Content>
         </Layout>
       </Dialog>
