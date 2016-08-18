@@ -1,14 +1,25 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import Utils from 'lib/util'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 // import ProfileNode from 'components/node/profile.jsx'
-import NodeTypes from 'lib/node-types/index'
+// import NodeTypes from 'lib/node-types/index'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
+
+import {
+  AppBar,
+  IconButton,
+  IconMenu,
+  MenuItem,
+  FontIcon,
+  List, ListItem, Divider
+} from 'material-ui'
 
 let GenericFullScreen = React.createClass({
   mixins: [
@@ -17,7 +28,8 @@ let GenericFullScreen = React.createClass({
 
   contextTypes: {
     history: React.PropTypes.any,
-    node: React.PropTypes.object
+    node: React.PropTypes.object,
+    muiTheme: React.PropTypes.object
   },
 
   componentDidMount() {
@@ -29,11 +41,29 @@ let GenericFullScreen = React.createClass({
   },
 
   getStyles() {
+    let {muiTheme} = this.context
+    let {gray1} = muiTheme.jolocom
+    let {img} = this.getNode()
+    let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
+
     return {
       container: {
         flex: 1,
         display: 'flex',
         flexDirection: 'column'
+      },
+      headers: {
+        color: '#ffffff',
+        height: this.state.fullscreen ? '90vh' : '176px',
+        background: `${gray1} ${backgroundImg} center / cover`,
+        boxShadow: 'none'
+      },
+      title: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        padding: '0 24px',
+        color: '#ffffff'
       }
     }
   },
@@ -43,16 +73,84 @@ let GenericFullScreen = React.createClass({
     graphActions.viewNode(null)
   },
 
+  getNode() {
+    if (this.props.state) {
+      return this.props.state.activeNode // TODO temp fix
+    } else {
+      return this.props.node
+    }
+  },
+
   render() {
     let styles = this.getStyles()
+
+    let {
+      name,
+      familyName,
+      title,
+      description,
+      email
+    } = this.getNode()
+
+    if (name && familyName) {
+      name = `${name} ${familyName}`
+    }
+
+    let fullscreenLabel
+    if (this.state.fullscreen) {
+      fullscreenLabel = 'Exit Full Screen'
+    } else {
+      fullscreenLabel = 'Toggle Full Screen'
+    }
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
           <Content>
             <div style={styles.container}>
-              GENERIC FULL SCREEN VIEW START CUSTOM CONTENT
-              {this.props.children}
-              GENERIC FULL SCREEN VIEW END CUSTOM CONTENT!
+              <AppBar
+                style={styles.headers}
+                titleStyle={styles.title}
+                title={<span>{name || title || 'No name set'}</span>}
+                iconElementRight={
+                  <IconMenu
+                    iconButtonElement={
+                      <IconButton
+                        iconClassName="material-icons"
+                        iconStyle={styles.icon}>
+                          more_vert
+                      </IconButton>
+                    }
+                    anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                    targetOrigin={{horizontal: 'left', vertical: 'top'}}>
+                    <MenuItem
+                      primaryText="Edit" />
+                    <MenuItem
+                      primaryText={fullscreenLabel}
+                      onTouchTap={this._handleFull} />
+                    <CopyToClipboard
+                      text={this.props.state.center.uri}
+                      onCopy={this._handlePostCopyURL}>
+                      <MenuItem primaryText="Copy URL" />
+                    </CopyToClipboard>
+                    <MenuItem
+                      primaryText="Delete"
+                      onTouchTap={this._handleDelete} />
+                    <MenuItem
+                      primaryText="Disconnect"
+                      onTouchTap={this._handleDisconnect} />
+                  </IconMenu>
+                }
+                iconElementLeft={
+                  <IconButton
+                    iconClassName="material-icons"
+                    iconStyle={styles.icon}
+                    onClick={this._handleClose}>
+                      arrow_back
+                  </IconButton>
+                  }
+                />
+                {this.props.children}
             </div>
           </Content>
         </Layout>

@@ -5,10 +5,18 @@ import graphActions from 'stores/graph-store'
 import nodeActions from 'actions/node'
 import Utils from 'lib/util'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 
-import Dialog from 'components/common/dialog.jsx'
-import {Layout, Content} from 'components/layout'
-
+import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
+import ActionDelete from 'material-ui/svg-icons/action/delete'
+import AlertError from 'material-ui/svg-icons/alert/error'
+import CommunicationChat from 'material-ui/svg-icons/communication/chat'
+import CommunicationImportContacts from
+  'material-ui/svg-icons/communication/import-contacts'
+import ContentCopy from 'material-ui/svg-icons/content/content-copy'
+import ContentLink from 'material-ui/svg-icons/content/link'
+import ContentSave from 'material-ui/svg-icons/content/save'
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 
 import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
@@ -19,10 +27,10 @@ import {
   IconMenu,
   MenuItem,
   FontIcon,
-  Tabs, Tab,
   List, ListItem, Divider
 } from 'material-ui'
 
+import {Content} from 'components/layout'
 
 import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
@@ -60,26 +68,19 @@ let ProfileNode = React.createClass({
     }
   },
 
+  // TODO: this needs to pull this state/node-type from outside
+  getInitialState() {
+    return {
+      nodeType: 'person'
+    }
+  },
+
   getStyles() {
     let {muiTheme} = this.context
-    let {gray1} = muiTheme.jolocom
-    let {img} = this.getNode()
-    let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
+
 
     return {
-      headers: {
-        color: '#ffffff',
-        height: this.state.fullscreen ? '90vh' : '176px',
-        background: `${gray1} ${backgroundImg} center / cover`,
-        boxShadow: 'none'
-      },
-      title: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        padding: '0 24px',
-        color: '#ffffff'
-      },
+
       white: {
         color: '#fff'
       },
@@ -93,13 +94,129 @@ let ProfileNode = React.createClass({
       icon: {
         color: '#ffffff'
       },
-      content: {
-
-      },
       tabs: {
         backgroundColor: '#ffffff'
+      },
+      floatingButtons: {
+        position: 'absolute',
+        right: '10px',
+        marginTop: '-28px',
+        zIndex: 1500
+      },
+      fabBtn: {
+        margin: '0px 10px'
+      },
+      fabIcon: {
+        fill: '#9a3460'
       }
     }
+  },
+
+  // TODO: rename functions, arrange
+  chatFn () {
+    alert('woohoo chat!')
+  },
+
+  bookmarkFn() {
+    alert('woohoo bookmark!')
+  },
+
+  connectFn() {
+    alert('woohoo connect!')
+  },
+
+  copyFn() {
+    alert('woohoo copy!')
+  },
+
+  deleteFn() {
+    alert('woohoo delete!')
+  },
+
+  saveFn() {
+    alert('woohoo save!')
+  },
+
+  readFn() {
+    alert('woohoo read!')
+  },
+
+  editFn() {
+    alert('woohoo edit!')
+  },
+
+  // TODO: discuss proper structure of this data, and whether local or external
+  getInteractions() {
+    return {
+      person: {
+        actions: {
+          p1: 'chat',
+          p2: 'bookmark',
+          p3: 'connect',
+          other: ['hug', 'slap', 'help']
+        },
+        functions: [
+          this.chatFn,
+          this.bookmarkFn,
+          this.connectFn
+        ]
+      },
+      image: {
+        actions: {
+          p1: 'copy',
+          p2: 'delete',
+          p3: 'save',
+          other: ['report', 'bookmark', 'edit']
+        },
+        functions: [
+          this.copyFn,
+          this.deleteFn,
+          this.saveFn
+        ]
+      },
+      text: {
+        actions: {
+          p1: 'read',
+          p2: 'copy',
+          p3: 'edit',
+          other: ['translate']
+        },
+        functions: [
+          this.readFn,
+          this.copyFn,
+          this.editFn
+        ]
+      }
+    }
+  },
+
+  handleStringToInteractionIcon(iconString) {
+    switch (iconString) {
+      case 'chat':
+        return (<CommunicationChat />)
+      case 'bookmark':
+        return (<ActionBookmark />)
+      case 'connect':
+        return (<ContentLink />)
+      case 'copy':
+        return (<ContentCopy />)
+      case 'delete':
+        return (<ActionDelete />)
+      case 'save':
+        return (<ContentSave />)
+      case 'read':
+        return (<CommunicationImportContacts />)
+      case 'edit':
+        return (<EditorModeEdit />)
+      default:
+        return (<AlertError />)
+    }
+  },
+  // TODO: helper functions as _fn? naming conventions
+  handleInteractionIcon(num) {
+    let ix = this.getInteractions()
+    let ixIcon = ix[this.state.nodeType].actions[num]
+    return (this.handleStringToInteractionIcon(ixIcon))
   },
 
   getNode() {
@@ -112,6 +229,7 @@ let ProfileNode = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    let ix = this.getInteractions()
     let {
       name,
       familyName,
@@ -133,93 +251,50 @@ let ProfileNode = React.createClass({
 
     return (
       <GenericFullScreen>
-          <AppBar
-            style={styles.headers}
-            titleStyle={styles.title}
-            title={<span>{name || title || 'No name set'}</span>}
-            iconElementRight={
-              <IconMenu
-                iconButtonElement={
-                  <IconButton
-                    iconClassName="material-icons"
-                    iconStyle={styles.icon}>
-                      more_vert
-                  </IconButton>
-                }
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}>
-                <MenuItem
-                  primaryText="Edit" />
-                <MenuItem
-                  primaryText={fullscreenLabel}
-                  onTouchTap={this._handleFull} />
-
-                <CopyToClipboard
-                  text={this.props.state.center.uri}
-                  onCopy={this._handlePostCopyURL}
-                >
-                  <MenuItem primaryText="Copy URL" />
-                </CopyToClipboard>
-
-                <MenuItem
-                  primaryText="Delete"
-                  onTouchTap={this._handleDelete} />
-                <MenuItem
-                  primaryText="Disconnect"
-                  onTouchTap={this._handleDisconnect} />
-              </IconMenu>
-            }
-            iconElementLeft={
-              <IconButton
-                iconClassName="material-icons"
-                iconStyle={styles.icon}
-                onClick={this._handleClose}>
-                  arrow_back
-              </IconButton>
-            }
-          />
-          <Content style={styles.content}>
-            <Tabs
-              value={null}
-              inkBarStyle={{display: 'none'}}
-              tabItemContainerStyle={styles.tabs}>
-              <Tab
-                icon={<FontIcon className="material-icons">chat</FontIcon>}
-                label="MESSAGE"
-                onActive={this._handleStartChat}
-              />
-              <Tab
-                icon={
-                  <FontIcon className="material-icons">bookmark_border</FontIcon>
-                }
-                label="BOOKMARK"
-              />
-              <Tab
-                icon={<FontIcon className="material-icons">link</FontIcon>}
-                label="CONNECT"
-              />
-            </Tabs>
-            <List style={styles.list}>
-              {description && (
-                <div>
-                  <ListItem
-                    leftIcon={
-                      <FontIcon className="material-icons">info</FontIcon>
-                    }
-                    primaryText={description}
-                  />
-                  <Divider inset />
-                </div>
-              )}
-              {email && (
+        <Content>
+          <div style={styles.floatingButtons}>
+            <FloatingActionButton
+              backgroundColor={'#fff'}
+              style={styles.fabBtn}
+              iconStyle={styles.fabIcon}
+              onTouchTap={ix[this.state.nodeType].functions[2]}>
+              {this.handleInteractionIcon('p3')}
+            </FloatingActionButton>
+            <FloatingActionButton
+              backgroundColor={'#fff'}
+              style={styles.fabBtn}
+              iconStyle={styles.fabIcon}
+              onTouchTap={ix[this.state.nodeType].functions[1]}>
+              {this.handleInteractionIcon('p2')}
+            </FloatingActionButton>
+            <FloatingActionButton
+              style={styles.fabBtn} secondary
+              onTouchTap={ix[this.state.nodeType].functions[0]}>
+              {this.handleInteractionIcon('p1')}
+            </FloatingActionButton>
+          </div>
+          <List style={styles.list}>
+            {description && (
+              <div>
                 <ListItem
-                  leftIcon={<FontIcon className="material-icons">email</FontIcon>}
-                  primaryText={email}
-                  secondaryText="Personal"
+                  leftIcon={
+                    <FontIcon className="material-icons">info</FontIcon>
+                  }
+                  primaryText={description}
                 />
-              )}
-            </List>
-          </Content>
+                <Divider inset />
+              </div>
+            )}
+            {email && (
+              <ListItem
+                leftIcon={
+                  <FontIcon className="material-icons">email</FontIcon>}
+                primaryText={email}
+                secondaryText="Personal"
+              />
+            )}
+          </List>
+        </Content>
       </GenericFullScreen>
     )
   },
@@ -244,16 +319,16 @@ let ProfileNode = React.createClass({
   _handleDelete() {
     this.props.onClose()
     let node = this.props.state.activeNode
-    let center = this.props.state.center
+    // let center = this.props.state.center
     let navHis = this.props.state.navHistory
-    
-    if (graphActions.state.webId == node.uri)
+
+    if (graphActions.state.webId === node.uri) {
       alert('You cannot remove your own node.') // @TODO toast/snackbar
-    else if (node.rank == 'center'){
-     let prev = navHis[navHis.length - 1]
-     graphActions.drawAtUri(prev.uri, 1).then(()=>{
-       nodeActions.remove(node, prev)
-     })
+    } else if (node.rank === 'center') {
+      let prev = navHis[navHis.length - 1]
+      graphActions.drawAtUri(prev.uri, 1).then(() => {
+        nodeActions.remove(node, prev)
+      })
     }
   },
 
@@ -276,3 +351,46 @@ let ProfileNode = React.createClass({
 })
 
 export default Radium(ProfileNode)
+
+// <AppBar
+//   style={styles.headers}
+//   titleStyle={styles.title}
+//   title={<span>{name || title || 'No name set'}</span>}
+//   iconElementRight={
+//     <IconMenu
+//       iconButtonElement={
+//         <IconButton
+//           iconClassName="material-icons"
+//           iconStyle={styles.icon}>
+//             more_vert
+//         </IconButton>
+//       }
+//       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+//       targetOrigin={{horizontal: 'left', vertical: 'top'}}>
+//       <MenuItem
+//         primaryText="Edit" />
+//       <MenuItem
+//         primaryText={fullscreenLabel}
+//         onTouchTap={this._handleFull} />
+//       <CopyToClipboard
+//         text={this.props.state.center.uri}
+//         onCopy={this._handlePostCopyURL}>
+//         <MenuItem primaryText="Copy URL" />
+//       </CopyToClipboard>
+//       <MenuItem
+//         primaryText="Delete"
+//         onTouchTap={this._handleDelete} />
+//       <MenuItem
+//         primaryText="Disconnect"
+//         onTouchTap={this._handleDisconnect} />
+//     </IconMenu>
+//   }
+//   iconElementLeft={
+//     <IconButton
+//       iconClassName="material-icons"
+//       iconStyle={styles.icon}
+//       onClick={this._handleClose}>
+//         arrow_back
+//     </IconButton>
+//     }
+//   />
