@@ -7,7 +7,6 @@ import Router, { Route, IndexRoute } from 'react-router'
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
 import Graph from 'components/graph/graph.jsx'
-import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
 import Chat from 'components/chat/chat.jsx'
 import Conversations from 'components/chat/conversations.jsx'
@@ -24,7 +23,6 @@ const routes = (
     <IndexRoute component={Index}/>
     <Route path='graph(/:node)' component={Graph} title='Graph'>
       <Route path='/graph/:node/add/:type' component={AddNode}/>
-      <Route path='/graph/:node/details' component={Node}/>
 
       <Route path='/chat' component={Chat}>
         <IndexRoute component={Conversations}/>
