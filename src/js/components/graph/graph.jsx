@@ -13,7 +13,8 @@ import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 
-import Node from '../node/node.jsx'
+import Node from '../node/types/profile.jsx'
+import NodeTypes from 'lib/node-types/index'
 
 let Graph = React.createClass({
 
@@ -146,8 +147,10 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
+      let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
+      
       nodeDetails = (
-        <Node
+        <NodeFullScreenComponent
           node={this.state.activeNode}
           center={this.state.center}
           svg={this.state.selected}

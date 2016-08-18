@@ -10,8 +10,6 @@ import {Layout, Content} from 'components/layout'
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
 
-import {PRED} from 'lib/namespaces'
-
 let Node = React.createClass({
   mixins: [
     Reflux.connect(NodeStore, 'node')
@@ -49,7 +47,7 @@ let Node = React.createClass({
     let {center} = this.props
     let {svg} = this.props
     let {state} = this.props
-    let content, Component = NodeTypes.componentFor(node.type)
+    let content, Component = NodeTypes.componentFor(node.type) // @TODO get it from context/props?
 
     if (Component) {
       content = <Component node={node} center={center} svg={svg} state={state} onClose={this._handleClose} />

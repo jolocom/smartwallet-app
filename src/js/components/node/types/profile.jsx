@@ -6,6 +6,12 @@ import nodeActions from 'actions/node'
 import Utils from 'lib/util'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
+import Dialog from 'components/common/dialog.jsx'
+import {Layout, Content} from 'components/layout'
+
+
+import NodeStore from 'stores/node'
+
 import {
   AppBar,
   IconButton,
@@ -16,7 +22,6 @@ import {
   List, ListItem, Divider
 } from 'material-ui'
 
-import {Content} from 'components/layout'
 
 import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
@@ -24,8 +29,17 @@ import PinnedStore from 'stores/pinned'
 let ProfileNode = React.createClass({
 
   mixins: [
-    Reflux.listenTo(PinnedStore, 'onUpdatePinned')
+    Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
+    Reflux.connect(NodeStore, 'node')
   ],
+  
+    componentDidMount() {
+    this.refs.dialog.show()
+  },
+
+  componentWillUnmount() {
+    this.refs.dialog.hide()
+  },
 
   propTypes: {
     state: React.PropTypes.object, /* @TODO fix this */
@@ -130,6 +144,9 @@ let ProfileNode = React.createClass({
     }
 
     return (
+      <Dialog ref="dialog" fullscreen={true}>
+        <Layout>
+          <Content>
       <div style={styles.container}>
         <AppBar
           style={styles.headers}
@@ -219,6 +236,9 @@ let ProfileNode = React.createClass({
           </List>
         </Content>
       </div>
+</Content>
+        </Layout>
+      </Dialog>
     )
   },
 
