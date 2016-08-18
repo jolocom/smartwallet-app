@@ -3,12 +3,14 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 
 // import ProfileNode from 'components/node/profile.jsx'
-import NodeTypes from 'lib/node-types'
+import NodeTypes from 'lib/node-types/index'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
+
+import {PRED} from 'lib/namespaces'
 
 let Node = React.createClass({
   mixins: [
@@ -41,23 +43,7 @@ let Node = React.createClass({
       }
     }
   },
-
-  getNodeContent(type) {
-    return NodeTypes.componentFor(type)
-
-    return config.component
-    switch (type) {
-      case FOAF('PersonalProfileDocument').uri:
-
-      case FOAF('Image').uri:
-
-      case FOAF('Person').uri:
-
-      default:
-        return ProfileNode
-    }
-  },
-
+  
   render() {
     let {node} = this.props
     let {center} = this.props
@@ -68,7 +54,7 @@ let Node = React.createClass({
     if (Component) {
       content = <Component node={node} center={center} svg={svg} state={state} onClose={this._handleClose} />
     }
-
+    
     return (
       <Dialog ref="dialog" fullscreen={true}>
         <Layout>

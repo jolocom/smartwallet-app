@@ -43,6 +43,7 @@ export const PRED = {
   Document: FOAF('Document'),
   Image: FOAF('Image'),
   Agent: FOAF('Agent'),
+  Person: FOAF('Person'),
   Thread: SIOC('Thread'),
   
   bitcoin: CC('bitcoin'),

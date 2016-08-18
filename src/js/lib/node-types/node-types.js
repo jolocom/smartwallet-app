@@ -1,3 +1,5 @@
+'use strict'
+
 // import {PropTypes} from 'react'
 
 let _types = {}
@@ -63,6 +65,9 @@ export default {
     if (_types[type] !== undefined) {
       throw new Error(`Node type ${type} as already been registered`)
     }
+  
+    if (typeof type == 'object' && 'uri' in type)
+      type=type.uri
 
     // validate config
 
@@ -87,8 +92,10 @@ export default {
    *
    */
   componentFor(type) {
+    if (typeof type == 'object' && 'uri' in type)
+      type=type.uri
+      
     let config
-    console.log(type, this.get(type))
     if ((config = this.get(type))) {
       return config.component
     }
