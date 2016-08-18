@@ -2,21 +2,46 @@
 import rdf from 'rdflib'
 const cert = 'http://www.w3.org/ns/auth/cert#'
 
-export const SCHEMA = rdf.Namespace('https://schema.org/')
-export const FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
-export const TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
-export const NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+let SCHEMA = rdf.Namespace('https://schema.org/')
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
+let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+let DC = rdf.Namespace('http://purl.org/dc/terms/')
+let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 
-export const USER = {
-  givenName: FOAF('givenName'),
-  familyName: FOAF('familyName'),
+export const PRED = {
+  givenName: FOAF('givenName'), 
+  familyName: FOAF('familyName'), 
   fullName: FOAF('name'),
   image: FOAF('img'),
   email: FOAF('mbox'),
   inbox: TERMS('inbox'),
   storage: NIC('storage'),
   knows: FOAF('knows'),
-  isRelatedTo: SCHEMA('isRelatedTo')
+  isRelatedTo: SCHEMA('isRelatedTo'),
+  
+  title: DC('title'),
+  description: DC('description'),
+  type: RDF('type'),
+  
+  maker: FOAF('maker'),
+  primaryTopic: FOAF('primaryTopic'),
+  hasOwner: SIOC('hasOwner'),
+  hasSubscriber: SIOC('hasSubscriber'),
+  spaceOf: SIOC('spaceOf'),
+  post: SIOC('Post'),
+  hasCreator: SIOC('hasCreator'),
+  content: SIOC('content'),
+  created: DC('created'),
+  hasContainer: SIOC('hasContainer'),
+  containerOf: SIOC('containerOf'),
+  
+  Document: FOAF('Document'),
+  Image: FOAF('Image'),
+  Agent: FOAF('Agent'),
+  Thread: SIOC('Thread'),
+  
 }
 
 export const CERT = {
@@ -36,3 +61,94 @@ export const SSN = {
   observes: `${ssn}observes`,
   Sensor: `${ssn}Sensor`
 }
+
+
+
+/*
+
+in the other files:
+
+
+import {PRED, NODE_TYPES} from 'namespaces.js'
+
+NODE_TYPES[PRED.PERSON].nodeColor etc
+
+
+
+default?
+NodeTypes[PRED.Person] ? NodeTypes[PRED.Person].nodeColor : STYLES.defaultNodeColor
+
+
+STYLES.js?
+
+mix of logic (component names, validation, form) and interface (colors)
+
+
+
+*/ 
+
+
+export const NODE_TYPES = {
+  
+  
+  
+  
+}
+
+
+//
+//
+//
+//
+//
+//
+//NodeTypes.register(FOAF('Person'), {
+//  /**
+//   * Node color in the graph
+//   */
+//  nodeColor: '#829abe',
+//
+//  /**
+//   * Node color in the graph
+//   */
+//  textColor: '#ffffff',
+//
+//  /**
+//   * Optional, icon used in the graph 
+//   */
+//  icon: 'person',
+//
+//  /**
+//   * Optional, value to render, can be a text value or image 
+//   */
+//  titleField: 'name'
+//
+//  /**
+//   *  Full screen react component
+//   */
+//  component: Person,
+//
+//  /**
+//   * Schema can be used to create the node creation form, validate values
+//   * Available validators:
+//   * https://github.com/christianalfoni/formsy-react/blob/master/API.md#validators
+//   */
+//  schema: {
+//    name: {
+//      predicate: FOAF('name'),
+//      label: 'Name',
+//      validations: 'isWords' /* optional, Formsy validation rule */
+//    },
+//    description: {
+//      predicate: DC('description'),
+//      label: 'Description'
+//    },
+//    image: {
+//      
+//    }
+//  },
+//
+//  access: ['public', 'private'],
+//
+//  defaultAccess: ['public']
+//})

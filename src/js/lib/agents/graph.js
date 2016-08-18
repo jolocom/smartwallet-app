@@ -6,11 +6,7 @@ import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
 import rdf from 'rdflib'
-let SCHEMA = rdf.Namespace('https://schema.org/')
-let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
-let DC = rdf.Namespace('http://purl.org/dc/terms/')
-let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+import {PRED} from '../namespaces.js'
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
@@ -28,19 +24,19 @@ class GraphAgent {
     let newNodeUri = rdf.sym(dstContainer + Util.randomString(5))
 
     // The boilerplate.
-    writer.addTriple(newNodeUri, DC('title'), title)
-    writer.addTriple(newNodeUri, NIC('storage'), dstContainer)
-    writer.addTriple(newNodeUri, FOAF('maker'), center)
+    writer.addTriple(newNodeUri, PRED.title, title)
+    writer.addTriple(newNodeUri, PRED.storage, dstContainer)
+    writer.addTriple(newNodeUri, PRED.maker, center)
 
     // Populating the file with the appropriate triples.
     if (description) { 
-      writer.addTriple(newNodeUri, DC('description'), description)
+      writer.addTriple(newNodeUri, PRED.description, description)
     }
     if (nodeType === 'default') {
-      writer.addTriple(newNodeUri, RDF('type') , FOAF('Document'))
+      writer.addTriple(newNodeUri, PRED.type , PRED.Document)
     }
     if (nodeType === 'image') {
-      writer.addTriple(newNodeUri, RDF('type') , FOAF('Image'))
+      writer.addTriple(newNodeUri, PRED.type , PRED.Image)
     }
 
     // Handling the picture upload
@@ -58,13 +54,13 @@ class GraphAgent {
       }
     }).then((image) => {
       if (image) {
-        writer.addTriple(newNodeUri, FOAF('img'), image)
+        writer.addTriple(newNodeUri, PRED.image, image)
       }
       // The predicate here will have to change dynamically as well,
       // based on the chosen predicate.
       let payload = {
         subject: center,
-        predicate: SCHEMA('isRelatedTo'),
+        predicate: PRED.isRelatedTo,
         object: newNodeUri
       }
 
@@ -85,7 +81,7 @@ class GraphAgent {
           }).then((answer)=>{
             if (answer.ok) {
               GraphActions.drawNewNode(
-                  newNodeUri.uri, SCHEMA('isRelatedTo').uri)
+                  newNodeUri.uri, PRED.isRelatedTo.uri)
             }
           }).catch((error)=>{
             console.warn('Error,',error,'occured when putting the rdf file.') 
@@ -146,7 +142,7 @@ class GraphAgent {
 
     // We create only one type of ACL file. Owner has full controll,
     // everyone else has read access. This will change in the future.
-    acl_writer.addTriple(rdf.sym('#owner'), RDF('type'), ACL('Authorization'))
+    acl_writer.addTriple(rdf.sym('#owner'), PRED.type, ACL('Authorization'))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webID))
@@ -154,9 +150,9 @@ class GraphAgent {
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
 
-    acl_writer.addTriple(rdf.sym('#readall'), RDF('type'), ACL('Authorization'))
+    acl_writer.addTriple(rdf.sym('#readall'), PRED.type, ACL('Authorization'))
     acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
-    acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), FOAF('Agent'))
+    acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), PRED.Agent)
     acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
 
     return fetch(Util.uriToProxied(acl_uri),{
@@ -229,8 +225,8 @@ class GraphAgent {
 
     if (triples.length === 1) {  
       let pred = triples[0].predicate.uri
-      validPredicate = (pred === SCHEMA('isRelatedTo').uri ||
-                        pred === FOAF('knows').uri)
+      validPredicate = (pred === PRED.isRelatedTo.uri ||
+                        pred === PRED.knows.uri)
     } 
 
     let statements = []
@@ -345,7 +341,7 @@ class GraphAgent {
   // After that it parses those links for their RDF data.
   getNeighbours(center, triples) {
     // We will only follow and parse these links
-    let Links = [FOAF('knows').uri, SCHEMA('isRelatedTo').uri]
+    let Links = [PRED.knows.uri, PRED.isRelatedTo.uri]
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
       
     // If there are adjacent nodes to draw, 
