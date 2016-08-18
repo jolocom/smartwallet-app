@@ -7,7 +7,7 @@ import {Layout} from 'components/layout'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
-import Profile from '../node/types/profile'
+import Profile from '../node/fullscreen/types/profile'
 
 export default React.createClass({
 
