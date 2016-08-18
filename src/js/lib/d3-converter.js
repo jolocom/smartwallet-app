@@ -126,7 +126,7 @@ class D3Converter {
     }
 
     if (node.unav) {
-      props.rank = 'unavailable'
+      props.unavailable = true
       return props
     }
     

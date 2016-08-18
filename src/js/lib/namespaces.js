@@ -9,6 +9,8 @@ let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
+let CC = rdf.Namespace('https://cc.rww.io/vocab#')
+let PURL = rdf.Namespace('http://purl.org/iot/vocab/m3-lite#')
 
 export const PRED = {
   givenName: FOAF('givenName'), 
@@ -37,11 +39,14 @@ export const PRED = {
   hasContainer: SIOC('hasContainer'),
   containerOf: SIOC('containerOf'),
   
+  isRelatedTo: SCHEMA('isRelatedTo'),
   Document: FOAF('Document'),
   Image: FOAF('Image'),
   Agent: FOAF('Agent'),
   Thread: SIOC('Thread'),
   
+  bitcoin: CC('bitcoin'),
+  passport: PURL('Passport')
 }
 
 export const CERT = {

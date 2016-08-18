@@ -72,8 +72,10 @@ export default Reflux.createStore({
     let subject = rdf.sym(centerNode.uri)
     let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
-    this.gAgent.deleteTriple(subject.uri, subject, predicate, object)
-	},
+    this.gAgent.deleteTriple(subject.uri, subject, predicate, object).then(function(){
+      graphActions.drawAtUri(centerNode.uri, 0)
+    })
+  },
 
   /**
    * @summary Links a node to another node.

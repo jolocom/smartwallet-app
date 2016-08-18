@@ -7,6 +7,9 @@ import NodeActions from 'actions/node'
 
 import {TextField, RaisedButton} from 'material-ui'
 
+import {PRED} from 'lib/namespaces'
+import graphAgent from 'lib/agents/graph.js'
+
 let NodeAddImage = React.createClass({
 
   childContextTypes: {
@@ -40,8 +43,16 @@ let NodeAddImage = React.createClass({
   },
 
   submit() {
-    let values = _.pick(this.state, 'file', 'title', 'description')
-    NodeActions.create(this.props.node, values.title, values.description, values.file)
+    //    let values = _.pick(this.state, 'file', 'title', 'description')
+    //    NodeActions.create(this.props.node, values.title, values.description, values.file)
+    
+    alert('WIP') // This component is seemingly not used yet, even when creating an "Image"
+    
+    // (user, node, title, description, image, type) 
+    // Probably need to pass the user as first additional parameter
+    this.gAgent.createNode(this.props.node, values.title, values.description, values.file).then((uri) => {
+        graphActions.drawNewNode(uri.uri, PRED.isRelatedTo.uri)
+      })
   },
 
   render: function() {

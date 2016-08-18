@@ -57,11 +57,7 @@ let ProfileNode = React.createClass({
     let {muiTheme} = this.context
     let {gray1} = muiTheme.jolocom
     let {img} = this.getNode()
-    let background
-
-    if (img) {
-      background = Utils.uriToProxied(img)
-    }
+    let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     return {
       container: {
@@ -72,7 +68,7 @@ let ProfileNode = React.createClass({
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '176px',
-        background: `${gray1} url(${background}) center / cover`,
+        background: `${gray1} ${backgroundImg} center / cover`,
         boxShadow: 'none'
       },
       title: {
@@ -248,14 +244,14 @@ let ProfileNode = React.createClass({
     let node = this.props.state.activeNode
     let center = this.props.state.center
     let navHis = this.props.state.navHistory
-
-    if (node.rank === 'center') {
-      let prev = navHis[navHis.length - 1]
-      graphActions.drawAtUri(prev.uri, 1).then(() => {
-        nodeActions.remove(node, prev)
-      })
-    } else {
-      nodeActions.remove(node, center)
+    
+    if (graphActions.state.webId == node.uri)
+      alert('You cannot remove your own node.') // @TODO toast/snackbar
+    else if (node.rank == 'center'){
+     let prev = navHis[navHis.length - 1]
+     graphActions.drawAtUri(prev.uri, 1).then(()=>{
+       nodeActions.remove(node, prev)
+     })
     }
   },
 
