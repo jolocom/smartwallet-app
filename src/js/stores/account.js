@@ -97,7 +97,7 @@ export default Reflux.createStore({
       }).then((res)=>{
         if (!res.ok)
           throw new Error(res.statusText)
-        Account.login.completed(localStorage.getItem('webId'))
+        Account.login.completed(localStorage.getItem('jolocom.webId'), localStorage.getItem('jolocom.webId'))
       }).catch(() => {
         Account.logout()
       })
@@ -116,7 +116,6 @@ export default Reflux.createStore({
         }
       }).then((res) => {
         res.json().then((js) => {
-          console.log(js)
           if (updatePayload) {
             this.onSetNameEmail(
               js.webid, updatePayload.name, updatePayload.email
