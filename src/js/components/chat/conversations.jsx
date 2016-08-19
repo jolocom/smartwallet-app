@@ -108,14 +108,15 @@ let ConversationsListItem = React.createClass({
     let {otherPerson, lastMessage} = conversation
 
 
-    console.log("OTHER PERSON ",otherPerson)
-
 
 
     lastMessage = lastMessage || {}
 
     let {created, content} = lastMessage
 
+    if(otherPerson == null)
+      otherPerson = false
+    
     let avatar
     if (otherPerson) {
       avatar = (
