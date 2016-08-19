@@ -29,6 +29,18 @@ let GenericFullScreen = React.createClass({
     Reflux.connect(NodeStore, 'node')
   ],
 
+  propTypes: {
+    state: React.PropTypes.object,
+    node: React.PropTypes.object,
+    onClose: React.PropTypes.func,
+    backgroundImg: React.PropTypes.any,
+    menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
+    copyToClipboardText: React.PropTypes.any,
+    title: React.PropTypes.string,
+    fabItems: React.PropTypes.arrayOf(React.PropTypes.string),
+    children: React.PropTypes.any
+  },
+
   contextTypes: {
     history: React.PropTypes.any,
     node: React.PropTypes.object,
@@ -265,29 +277,29 @@ let GenericFullScreen = React.createClass({
                       arrow_back
                   </IconButton>
                   }
-                />
-                  <div style={styles.floatingButtons}>
-                    <FloatingActionButton
-                      backgroundColor={'#fff'}
-                      style={styles.fabBtn}
-                      iconStyle={styles.fabIcon}
-                      onTouchTap={this.getAction(this.props.fabItems[0]).handler}>
-                      {this.getAction(this.props.fabItems[0]).icon}
-                    </FloatingActionButton>
-                    <FloatingActionButton
-                      backgroundColor={'#fff'}
-                      style={styles.fabBtn}
-                      iconStyle={styles.fabIcon}
-                      onTouchTap={this.getAction(this.props.fabItems[1]).handler}>
-                      {this.getAction(this.props.fabItems[1]).icon}
-                    </FloatingActionButton>
-                    <FloatingActionButton
-                      style={styles.fabBtn} secondary
-                      onTouchTap={this.getAction(this.props.fabItems[2]).handler}>
-                      {this.getAction(this.props.fabItems[2]).icon}
-                    </FloatingActionButton>
-                  </div>
-                  {this.props.children}
+              />
+              <div style={styles.floatingButtons}>
+                <FloatingActionButton
+                  backgroundColor={'#fff'}
+                  style={styles.fabBtn}
+                  iconStyle={styles.fabIcon}
+                  onTouchTap={this.getAction(this.props.fabItems[0]).handler}>
+                  {this.getAction(this.props.fabItems[0]).icon}
+                </FloatingActionButton>
+                <FloatingActionButton
+                  backgroundColor={'#fff'}
+                  style={styles.fabBtn}
+                  iconStyle={styles.fabIcon}
+                  onTouchTap={this.getAction(this.props.fabItems[1]).handler}>
+                  {this.getAction(this.props.fabItems[1]).icon}
+                </FloatingActionButton>
+                <FloatingActionButton
+                  style={styles.fabBtn} secondary
+                  onTouchTap={this.getAction(this.props.fabItems[2]).handler}>
+                  {this.getAction(this.props.fabItems[2]).icon}
+                </FloatingActionButton>
+              </div>
+              {this.props.children}
             </div>
           </Content>
         </Layout>
