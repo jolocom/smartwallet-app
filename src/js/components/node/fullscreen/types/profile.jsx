@@ -9,9 +9,6 @@ import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
 
 import {
-  AppBar,
-  IconButton,
-  IconMenu,
   MenuItem,
   FontIcon,
   List, ListItem, Divider

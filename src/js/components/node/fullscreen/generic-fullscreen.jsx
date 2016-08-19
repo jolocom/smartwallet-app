@@ -48,7 +48,6 @@ let GenericFullScreen = React.createClass({
   
   componentWillMount() {
     this.props.menuItems.unshift('fullscreen')
-    console.log('cwm',this.props.menuItems)
   },
 
   componentDidMount() {
