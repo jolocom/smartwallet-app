@@ -43,7 +43,8 @@ let GenericFullScreen = React.createClass({
   getStyles() {
     let {muiTheme} = this.context
     let {gray1} = muiTheme.jolocom
-    let {img} = this.getNode()
+    // let {img} = this.getNode()
+    let img = false
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     return {
@@ -84,17 +85,15 @@ let GenericFullScreen = React.createClass({
   render() {
     let styles = this.getStyles()
 
-    let {
+    /*let {
       name,
       familyName,
       title,
       description,
       email
-    } = this.getNode()
-
-    if (name && familyName) {
-      name = `${name} ${familyName}`
-    }
+    } = this.getNode()*/
+    
+    let name = 'default name', familyName = 'default familyname', description = 'default description', email = 'default email';
 
     let fullscreenLabel
     if (this.state.fullscreen) {
@@ -111,7 +110,7 @@ let GenericFullScreen = React.createClass({
               <AppBar
                 style={styles.headers}
                 titleStyle={styles.title}
-                title={<span>{name || title || 'No name set'}</span>}
+                title={<span>{this.props.title || 'No title'}</span>}
                 iconElementRight={
                   <IconMenu
                     iconButtonElement={
@@ -129,7 +128,7 @@ let GenericFullScreen = React.createClass({
                       primaryText={fullscreenLabel}
                       onTouchTap={this._handleFull} />
                     <CopyToClipboard
-                      text={this.props.state.center.uri}
+                      text={this.props.copyToClipboardText}
                       onCopy={this._handlePostCopyURL}>
                       <MenuItem primaryText="Copy URL" />
                     </CopyToClipboard>

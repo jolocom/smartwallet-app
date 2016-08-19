@@ -235,22 +235,16 @@ let ProfileNode = React.createClass({
       familyName,
       title,
       description,
-      email
+      email,
+      uri
     } = this.getNode()
-
+    
     if (name && familyName) {
       name = `${name} ${familyName}`
     }
 
-    let fullscreenLabel
-    if (this.state.fullscreen) {
-      fullscreenLabel = 'Exit Full Screen'
-    } else {
-      fullscreenLabel = 'Toggle Full Screen'
-    }
-
     return (
-      <GenericFullScreen>
+      <GenericFullScreen title={name} copyToClipboardText={uri}>
         <Content>
           <div style={styles.floatingButtons}>
             <FloatingActionButton
@@ -337,11 +331,6 @@ let ProfileNode = React.createClass({
     if (uri) {
       PinnedActions.pin(uri)
     }
-  },
-
-  _handlePostCopyURL() {
-    // @TODO implement snackbars/toasts
-    alert('The URL was copied to the clipboard.')
   },
 
   _handleStartChat() {
