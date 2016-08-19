@@ -45,6 +45,11 @@ let GenericFullScreen = React.createClass({
     node: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   },
+  
+  componentWillMount() {
+    this.props.menuItems.unshift('fullscreen')
+    console.log('cwm',this.props.menuItems)
+  },
 
   componentDidMount() {
     this.refs.dialog.show()
@@ -149,6 +154,7 @@ let GenericFullScreen = React.createClass({
   
   // menuItem (optional?)
   getAction(iconString) {
+    
     switch (iconString) {
       case 'chat':
         return {icon: (<CommunicationChat />), handler: this.chatFn, title: 'Chat'}
@@ -162,6 +168,8 @@ let GenericFullScreen = React.createClass({
         return {handler: this._handleDisconnect, title: 'Disconnect'}
       case 'edit':
         return {icon: (<EditorModeEdit />), title: 'Edit'}
+      case 'fullscreen':
+        return {handler: this._handleFull, title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'}
       case 'copyUrl': // @TODO not optimal
         return {menuItem: (
                   <CopyToClipboard
@@ -201,12 +209,12 @@ let GenericFullScreen = React.createClass({
   render() {
     let styles = this.getStyles()
 
-    let fullscreenLabel
+    /*let fullscreenLabel
     if (this.state.fullscreen) {
       fullscreenLabel = 'Exit Full Screen'
     } else {
       fullscreenLabel = 'Toggle Full Screen'
-    }
+    }*/
     
     // @TODO bind handlers to preset actions here
     // in: {name: 'disconnect'}
@@ -218,6 +226,9 @@ let GenericFullScreen = React.createClass({
     
     // @TODO externalize fab handlers + component etc
     
+    // Always add the fullscreen menu item
+    
+    console.log('render',this.props.menuItems)
     
     return (
       <Dialog ref="dialog" fullscreen>
