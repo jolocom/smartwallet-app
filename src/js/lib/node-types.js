@@ -10,5 +10,8 @@ import Text from 'components/node/fullscreen/types/text'
 NodeTypes.register(PRED.Document, {
   component: Text
 })
+NodeTypes.register(PRED.Image, {
+  component: Text
+})
 
 export default NodeTypes

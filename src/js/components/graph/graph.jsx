@@ -147,6 +147,8 @@ let Graph = React.createClass({
 
     if (this.state.activeNode) {
       let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
+    
+      console.log(this.state.activeNode.type,'NodeFullScreenComponent =',NodeFullScreenComponent)
       
       nodeDetails = (
         <NodeFullScreenComponent
