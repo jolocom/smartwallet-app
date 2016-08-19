@@ -2,6 +2,7 @@ import Reflux from 'reflux'
 import graphAgent from '../lib/agents/graph.js'
 import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
+import Utils from 'lib/util'
 import d3Convertor from '../lib/d3-converter'
 
 export default Reflux.createStore({
@@ -186,6 +187,42 @@ export default Reflux.createStore({
 
   onViewNode(node) {
     this.state.activeNode = node
-    this.trigger(this.state)
+    console.log('onviewnode, once')
+    console.log('activenode : ', this.state)
+
+    // @TODO do empty PATCH request and see if we have rights for center node and other node
+
+    // Check if the cookie is still valid
+    let updateNode = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
+      method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
+      credentials: 'include',
+      headers: {
+        'Content-Type':'application/sparql-update' 
+      }
+    }).then((res)=>{
+      if (!res.ok)
+        throw new Error(res.statusText)
+      this.state.activeNode.isOwnedByUser = true
+    }).catch(() => {
+      this.state.activeNode.isOwnedByUser = false
+    }).then(() => {  console.log('WOLOLO NUMBER 1', this.state.activeNode)});
+
+    let updateCenterNode = fetch(`${Utils.uriToProxied(this.state.center.uri)}`, {
+      method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
+      credentials: 'include',
+      headers: {
+        'Content-Type':'application/sparql-update' 
+      }
+    }).then((res)=>{
+      if (!res.ok)
+        throw new Error(res.statusText)
+      this.state.center.isOwnedByUser = true
+    }).catch(() => {
+      this.state.center.isOwnedByUser = false
+    }).then(() => {  console.log('MANGO NUMBER FIVE', this.state.center)})
+
+    Promise.all([updateNode,updateCenterNode]).then(() => {
+          this.trigger(this.state)
+    })
   }
 })

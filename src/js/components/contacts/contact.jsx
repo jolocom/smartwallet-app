@@ -7,7 +7,7 @@ import {Layout} from 'components/layout'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
-import Profile from '../node/profile'
+import Profile from '../node/fullscreen/types/profile'
 
 export default React.createClass({
 
@@ -47,9 +47,9 @@ export default React.createClass({
     let {contact} = this.state
 
     return (
-      <Dialog ref="dialog" fullscreen={true} visible={this.state.open}>
+      <Dialog ref="dialog" fullscreen visible={this.state.open}>
         <Layout>
-          <Profile node={contact} onClose={() => this.close()} />
+          <Profile node={contact} onClose={this.close} />
         </Layout>
       </Dialog>
     )
