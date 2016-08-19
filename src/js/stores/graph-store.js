@@ -186,6 +186,13 @@ export default Reflux.createStore({
   },
 
   onViewNode(node) {
+    
+    if (!node)
+    {
+      console.log('Ignoring onViewNode because node is null.')
+      return
+    }  
+    
     this.state.activeNode = node
     console.log('onviewnode, once')
     console.log('activenode : ', this.state)

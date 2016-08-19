@@ -231,6 +231,8 @@ let GenericFullScreen = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    
+    setTimeout(function(){this.refs.dialog.show()}.bind(this),5); // @TODO @FIXME
 
     /* let fullscreenLabel
     if (this.state.fullscreen) {
