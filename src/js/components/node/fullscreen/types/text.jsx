@@ -82,7 +82,13 @@ let TextNode = React.createClass({
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     
     let fabItems = ['chat','bookmark','connect']
-    let menuItems = ['edit','delete','disconnect','copyUrl']
+    
+    let menuItems = []
+    if (this.getNode().isOwnedByUser)
+      menuItems.push('edit','delete')
+    if (this.props.state.center.isOwnedByUser)
+      menuItems.push('disconnect')
+    menuItems.push('copyUrl')
     
     return (
       <GenericFullScreen

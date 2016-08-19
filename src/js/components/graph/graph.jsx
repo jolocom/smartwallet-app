@@ -146,10 +146,9 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
-      let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
-    
-      console.log(this.state.activeNode.type,'NodeFullScreenComponent =',NodeFullScreenComponent)
       
+      let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
+
       nodeDetails = (
         <NodeFullScreenComponent
           node={this.state.activeNode}

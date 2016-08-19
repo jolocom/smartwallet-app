@@ -87,9 +87,13 @@ let ProfileNode = React.createClass({
     
     let fabItems = ['chat','bookmark','connect']
     // let menuItems = ['hug','slap','help']
-    let menuItems = ['edit','delete','disconnect','copyUrl']
-    description = 'ok'
-    email = 'oaoa'
+    
+    let menuItems = []
+    if (this.getNode().isOwnedByUser)
+      menuItems.push('edit','delete')
+    if (this.props.state.center.isOwnedByUser)
+      menuItems.push('disconnect')
+    menuItems.push('copyUrl')
     
     return (
       <GenericFullScreen
