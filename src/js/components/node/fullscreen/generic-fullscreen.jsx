@@ -2,9 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-
-// import ProfileNode from 'components/node/profile.jsx'
-// import NodeTypes from 'lib/node-types/index'
+import nodeActions from 'actions/node'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
@@ -91,16 +89,15 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleDisconnect() {
-    this.props.onClose()
     if (this.props.state.activeNode.rank !== 'center') {
       nodeActions.disconnectNode(
         this.props.state.activeNode, this.props.state.center
       )
     }
+    this._handleClose()
   },
 
   _handleDelete() {
-    this.props.onClose()
     let node = this.props.state.activeNode
     // let center = this.props.state.center
     let navHis = this.props.state.navHistory
@@ -113,6 +110,7 @@ let GenericFullScreen = React.createClass({
         nodeActions.remove(node, prev)
       })
     }
+    this._handleClose()
   },
 
   getNode() {

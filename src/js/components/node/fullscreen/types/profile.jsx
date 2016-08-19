@@ -2,7 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import graphActions from 'stores/graph-store'
-import nodeActions from 'actions/node'
+
 import Utils from 'lib/util'
 
 import NodeStore from 'stores/node'
@@ -56,22 +56,6 @@ let ProfileNode = React.createClass({
     let {muiTheme} = this.context
 
     return {
-      white: {
-        color: '#fff'
-      },
-      action: {
-        position: 'absolute',
-        bottom: '-20px',
-        right: '20px',
-        backgroundColor: this.state.pinned && muiTheme.palette.accent1Color ||
-          muiTheme.jolocom.gray4
-      },
-      icon: {
-        color: '#ffffff'
-      },
-      tabs: {
-        backgroundColor: '#ffffff'
-      }
     }
   },
   
@@ -113,7 +97,9 @@ let ProfileNode = React.createClass({
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
         fabItems={fabItems}
-        menuItems={menuItems}>
+        menuItems={menuItems}
+        state={this.props.state}
+         >
           <List style={styles.list}>
             {description && (
               <div>
