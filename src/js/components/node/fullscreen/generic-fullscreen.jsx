@@ -96,6 +96,31 @@ let GenericFullScreen = React.createClass({
     this.refs.dialog.hide()
     graphActions.viewNode(null)
   },
+  
+  _handleDisconnect() {
+    this.props.onClose()
+    if (this.props.state.activeNode.rank !== 'center') {
+      nodeActions.disconnectNode(
+        this.props.state.activeNode, this.props.state.center
+      )
+    }
+  },
+
+  _handleDelete() {
+    this.props.onClose()
+    let node = this.props.state.activeNode
+    // let center = this.props.state.center
+    let navHis = this.props.state.navHistory
+
+    if (graphActions.state.webId === node.uri) {
+      alert('You cannot remove your own node.') // @TODO toast/snackbar
+    } else if (node.rank === 'center') {
+      let prev = navHis[navHis.length - 1]
+      graphActions.drawAtUri(prev.uri, 1).then(() => {
+        nodeActions.remove(node, prev)
+      })
+    }
+  },
 
   getNode() {
     if (this.props.state) {
@@ -116,20 +141,38 @@ let GenericFullScreen = React.createClass({
   connectFn() {
     alert('woohoo connect!')
   },
-
   
-  getFabInfo(iconString) {
+  
+  _handleFull() {
+    this.setState({fullscreen: !this.state.fullscreen})
+  },
+  
+  // menuItem (optional?)
+  getAction(iconString) {
     switch (iconString) {
       case 'chat':
-        return {component: (<CommunicationChat />), handler: this.chatFn}
+        return {icon: (<CommunicationChat />), handler: this.chatFn, title: 'Chat'}
       case 'bookmark':
-        return {component: (<ActionBookmark />), handler: this.bookmarkFn}
+        return {icon: (<ActionBookmark />), handler: this.bookmarkFn, title: 'Bookmark'}
       case 'connect':
-        return {component: (<ContentLink />), handler: this.connectFn}
-      /*case 'copy':
-        return (<ContentCopy />)
+        return {icon: (<ContentLink />), handler: this.connectFn, title: 'Connect'}
       case 'delete':
-        return (<ActionDelete />)
+        return {handler: this._handleDelete, title: 'Delete'}
+      case 'disconnect':
+        return {handler: this._handleDisconnect, title: 'Disconnect'}
+      case 'edit':
+        return {icon: (<EditorModeEdit />), title: 'Edit'}
+      case 'copyUrl': // @TODO not optimal
+        return {menuItem: (
+                  <CopyToClipboard
+                      text={this.props.copyToClipboardText}
+                      onCopy={this._handlePostCopyURL}>
+                      <MenuItem primaryText="Copy URL" />
+                  </CopyToClipboard>)
+               }
+        
+      /* case 'copy':
+        return (<ContentCopy />)
       case 'save':
         return (<ContentSave />)
       case 'read':
@@ -137,25 +180,26 @@ let GenericFullScreen = React.createClass({
       case 'edit':
         return (<EditorModeEdit />)*/
       default:
-        console.error('No fab info found for', iconString)
-        return (<AlertError />)
+        console.error('No action info found for', iconString)
+        return {}
+        // return (<AlertError />)
     }
   },
-  
-  
+
+  _handleBookmarkClick() {
+    const {uri} = this.getNode()
+    if (uri) {
+      PinnedActions.pin(uri)
+    }
+  },
+
+  _handleStartChat() {
+    const {history} = this.context
+    history.pushState(null, `/conversations/${this.props.node.username}`)
+  },
 
   render() {
     let styles = this.getStyles()
-
-    /*let {
-      name,
-      familyName,
-      title,
-      description,
-      email
-    } = this.getNode()*/
-    
-    let name = 'default name', familyName = 'default familyname', description = 'default description', email = 'default email';
 
     let fullscreenLabel
     if (this.state.fullscreen) {
@@ -169,9 +213,11 @@ let GenericFullScreen = React.createClass({
     // out: {name: 'disconnect', component: <Disconnect>, handler: disconnecthandler} (overwritable)
     // map ((e) return object.assign({}, default, e))
 
+    // @TODO pass fab 0-3 and set which one is primary (flag?), or reverse? ['primary','other button', 'other button']
     // @TODO foreach fab print dom
     
     // @TODO externalize fab handlers + component etc
+    
     
     return (
       <Dialog ref="dialog" fullscreen>
@@ -193,22 +239,18 @@ let GenericFullScreen = React.createClass({
                     }
                     anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                     targetOrigin={{horizontal: 'left', vertical: 'top'}}>
-                    <MenuItem
-                      primaryText="Edit" />
-                    <MenuItem
-                      primaryText={fullscreenLabel}
-                      onTouchTap={this._handleFull} />
-                    <CopyToClipboard
-                      text={this.props.copyToClipboardText}
-                      onCopy={this._handlePostCopyURL}>
-                      <MenuItem primaryText="Copy URL" />
-                    </CopyToClipboard>
-                    <MenuItem
-                      primaryText="Delete"
-                      onTouchTap={this._handleDelete} />
-                    <MenuItem
-                      primaryText="Disconnect"
-                      onTouchTap={this._handleDisconnect} />
+                    
+                    {this.props.menuItems.map(function(menuItem) {
+                      let menuItemInfo = this.getAction(menuItem)
+                      if ('menuItem' in menuItemInfo) return menuItemInfo.menuItem
+                      return (
+                        <MenuItem
+                          primaryText={menuItemInfo.title}
+                          onTouchTap={menuItemInfo.handler} />
+                      )
+                    }.bind(this))}
+                    
+                    
                   </IconMenu>
                 }
                 iconElementLeft={
@@ -226,20 +268,20 @@ let GenericFullScreen = React.createClass({
                       backgroundColor={'#fff'}
                       style={styles.fabBtn}
                       iconStyle={styles.fabIcon}
-                      onTouchTap={this.getFabInfo(this.props.fabItems[0]).handler}>
-                      {this.getFabInfo(this.props.fabItems[0]).component}
+                      onTouchTap={this.getAction(this.props.fabItems[0]).handler}>
+                      {this.getAction(this.props.fabItems[0]).icon}
                     </FloatingActionButton>
                     <FloatingActionButton
                       backgroundColor={'#fff'}
                       style={styles.fabBtn}
                       iconStyle={styles.fabIcon}
-                      onTouchTap={this.getFabInfo(this.props.fabItems[1]).handler}>
-                      {this.getFabInfo(this.props.fabItems[1]).component}
+                      onTouchTap={this.getAction(this.props.fabItems[1]).handler}>
+                      {this.getAction(this.props.fabItems[1]).icon}
                     </FloatingActionButton>
                     <FloatingActionButton
                       style={styles.fabBtn} secondary
-                      onTouchTap={this.getFabInfo(this.props.fabItems[2]).handler}>
-                      {this.getFabInfo(this.props.fabItems[2]).component}
+                      onTouchTap={this.getAction(this.props.fabItems[2]).handler}>
+                      {this.getAction(this.props.fabItems[2]).icon}
                     </FloatingActionButton>
                   </div>
                   {this.props.children}
@@ -253,3 +295,22 @@ let GenericFullScreen = React.createClass({
 })
 
 export default Radium(GenericFullScreen)
+
+/*
+<MenuItem
+                      primaryText="Edit" />
+                    <MenuItem
+                      primaryText={fullscreenLabel}
+                      onTouchTap={this._handleFull} />
+                    <CopyToClipboard
+                      text={this.props.copyToClipboardText}
+                      onCopy={this._handlePostCopyURL}>
+                      <MenuItem primaryText="Copy URL" />
+                    </CopyToClipboard>
+                    <MenuItem
+                      primaryText="Delete"
+                      onTouchTap={this._handleDelete} />
+                    <MenuItem
+                      primaryText="Disconnect"
+                      onTouchTap={this._handleDisconnect} />
+                      */
