@@ -13,7 +13,7 @@ import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 
-import NodeTypes from 'lib/node-types/index'
+import NodeTypes from 'lib/node-types'
 
 let Graph = React.createClass({
 
