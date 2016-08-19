@@ -90,9 +90,7 @@ let ProfileNode = React.createClass({
     
     let menuItems = []
     if (this.getNode().isOwnedByUser)
-      menuItems.push('edit','delete')
-    if (this.props.state.center.isOwnedByUser)
-      menuItems.push('disconnect')
+      menuItems.push('edit')
     menuItems.push('copyUrl')
     
     return (

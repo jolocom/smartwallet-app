@@ -77,8 +77,6 @@ let TextNode = React.createClass({
       img
     } = this.getNode()
     
-    console.log(this.getNode(),"alter")
-    
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     
     let fabItems = ['chat','bookmark','connect']

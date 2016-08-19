@@ -5,6 +5,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
+import ProfileActions from 'actions/profile'
 
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
@@ -153,20 +154,20 @@ let GenericFullScreen = React.createClass({
   getAction(iconString) {
     switch (iconString) {
       case 'chat':
-        return {icon: (<CommunicationChat />),
-          handler: this.chatFn, title: 'Chat'}
+        return {title: 'Chat', icon: (<CommunicationChat />),
+          handler: this.chatFn}
       case 'bookmark':
-        return {icon: (<ActionBookmark />),
-          handler: this.bookmarkFn, title: 'Bookmark'}
+        return {title: 'Bookmark', icon: (<ActionBookmark />),
+          handler: this.bookmarkFn}
       case 'connect':
-        return {icon: (<ContentLink />),
-          handler: this.connectFn, title: 'Connect'}
+        return {title: 'Connect', icon: (<ContentLink />),
+          handler: this.connectFn}
       case 'delete':
-        return {handler: this._handleDelete, title: 'Delete'}
+        return {title: 'Delete', handler: this._handleDelete}
       case 'disconnect':
-        return {handler: this._handleDisconnect, title: 'Disconnect'}
+        return {title: 'Disconnect', handler: this._handleDisconnect}
       case 'edit':
-        return {icon: (<EditorModeEdit />), title: 'Edit'}
+        return {title: 'Edit', handler: this._handleEdit, icon: (<EditorModeEdit />)}
       case 'fullscreen':
         return {handler: this._handleFull,
           title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'}
@@ -201,6 +202,10 @@ let GenericFullScreen = React.createClass({
     }
   },
 
+  _handleEdit() {
+    ProfileActions.show();
+  },
+  
   _handleStartChat() {
     const {history} = this.context
     history.pushState(null, `/conversations/${this.props.node.username}`)
