@@ -1,7 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import Utils from 'lib/util'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 // import ProfileNode from 'components/node/profile.jsx'
@@ -12,27 +11,17 @@ import {Layout, Content} from 'components/layout'
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
 
-
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-
 import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
-import ActionDelete from 'material-ui/svg-icons/action/delete'
-import AlertError from 'material-ui/svg-icons/alert/error'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
-import CommunicationImportContacts from
-  'material-ui/svg-icons/communication/import-contacts'
-import ContentCopy from 'material-ui/svg-icons/content/content-copy'
 import ContentLink from 'material-ui/svg-icons/content/link'
-import ContentSave from 'material-ui/svg-icons/content/save'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 
 import {
   AppBar,
   IconButton,
   IconMenu,
-  MenuItem,
-  FontIcon,
-  List, ListItem, Divider
+  MenuItem
 } from 'material-ui'
 
 let GenericFullScreen = React.createClass({
@@ -45,10 +34,10 @@ let GenericFullScreen = React.createClass({
     node: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   },
-  
+
   componentWillMount() {
     this.props.menuItems.unshift('fullscreen')
-    console.log('cwm',this.props.menuItems)
+    // console.log('cwm',this.props.menuItems)
   },
 
   componentDidMount() {
@@ -62,7 +51,7 @@ let GenericFullScreen = React.createClass({
   getStyles() {
     let {muiTheme} = this.context
     let {gray1} = muiTheme.jolocom
-   
+
     return {
       container: {
         flex: 1,
@@ -101,7 +90,7 @@ let GenericFullScreen = React.createClass({
     this.refs.dialog.hide()
     graphActions.viewNode(null)
   },
-  
+
   _handleDisconnect() {
     this.props.onClose()
     if (this.props.state.activeNode.rank !== 'center') {
@@ -134,7 +123,7 @@ let GenericFullScreen = React.createClass({
       return this.props.node
     }
   },
-  
+
   chatFn () {
     alert('woohoo chat!')
   },
@@ -146,22 +135,23 @@ let GenericFullScreen = React.createClass({
   connectFn() {
     alert('woohoo connect!')
   },
-  
-  
+
   _handleFull() {
     this.setState({fullscreen: !this.state.fullscreen})
   },
-  
+
   // menuItem (optional?)
   getAction(iconString) {
-    
     switch (iconString) {
       case 'chat':
-        return {icon: (<CommunicationChat />), handler: this.chatFn, title: 'Chat'}
+        return {icon: (<CommunicationChat />),
+          handler: this.chatFn, title: 'Chat'}
       case 'bookmark':
-        return {icon: (<ActionBookmark />), handler: this.bookmarkFn, title: 'Bookmark'}
+        return {icon: (<ActionBookmark />),
+          handler: this.bookmarkFn, title: 'Bookmark'}
       case 'connect':
-        return {icon: (<ContentLink />), handler: this.connectFn, title: 'Connect'}
+        return {icon: (<ContentLink />),
+          handler: this.connectFn, title: 'Connect'}
       case 'delete':
         return {handler: this._handleDelete, title: 'Delete'}
       case 'disconnect':
@@ -169,16 +159,17 @@ let GenericFullScreen = React.createClass({
       case 'edit':
         return {icon: (<EditorModeEdit />), title: 'Edit'}
       case 'fullscreen':
-        return {handler: this._handleFull, title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'}
+        return {handler: this._handleFull,
+          title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'}
       case 'copyUrl': // @TODO not optimal
-        return {menuItem: (
-                  <CopyToClipboard
-                      text={this.props.copyToClipboardText}
-                      onCopy={this._handlePostCopyURL}>
-                      <MenuItem primaryText="Copy URL" />
-                  </CopyToClipboard>)
-               }
-        
+        return {
+          menuItem: (
+            <CopyToClipboard
+              text={this.props.copyToClipboardText}
+              onCopy={this._handlePostCopyURL}>
+              <MenuItem primaryText="Copy URL" />
+            </CopyToClipboard>)
+        }
       /* case 'copy':
         return (<ContentCopy />)
       case 'save':
@@ -209,27 +200,29 @@ let GenericFullScreen = React.createClass({
   render() {
     let styles = this.getStyles()
 
-    /*let fullscreenLabel
+    /* let fullscreenLabel
     if (this.state.fullscreen) {
       fullscreenLabel = 'Exit Full Screen'
     } else {
       fullscreenLabel = 'Toggle Full Screen'
     }*/
-    
+
     // @TODO bind handlers to preset actions here
     // in: {name: 'disconnect'}
-    // out: {name: 'disconnect', component: <Disconnect>, handler: disconnecthandler} (overwritable)
+    // out: {name: 'disconnect',
+    //    component: <Disconnect>, handler: disconnecthandler} (overwritable)
     // map ((e) return object.assign({}, default, e))
 
-    // @TODO pass fab 0-3 and set which one is primary (flag?), or reverse? ['primary','other button', 'other button']
+    // @TODO pass fab 0-3 and set which one is primary (flag?),
+    //    or reverse? ['primary','other button', 'other button']
     // @TODO foreach fab print dom
-    
+
     // @TODO externalize fab handlers + component etc
-    
+
     // Always add the fullscreen menu item
-    
-    console.log('render',this.props.menuItems)
-    
+
+    // console.log('render',this.props.menuItems)
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -250,18 +243,18 @@ let GenericFullScreen = React.createClass({
                     }
                     anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                     targetOrigin={{horizontal: 'left', vertical: 'top'}}>
-                    
+
                     {this.props.menuItems.map(function(menuItem) {
                       let menuItemInfo = this.getAction(menuItem)
-                      if ('menuItem' in menuItemInfo) return menuItemInfo.menuItem
+                      if ('menuItem' in menuItemInfo) {
+                        return menuItemInfo.menuItem
+                      }
                       return (
                         <MenuItem
                           primaryText={menuItemInfo.title}
                           onTouchTap={menuItemInfo.handler} />
                       )
                     }.bind(this))}
-                    
-                    
                   </IconMenu>
                 }
                 iconElementLeft={
@@ -273,7 +266,6 @@ let GenericFullScreen = React.createClass({
                   </IconButton>
                   }
                 />
-                <Content>
                   <div style={styles.floatingButtons}>
                     <FloatingActionButton
                       backgroundColor={'#fff'}
@@ -296,7 +288,6 @@ let GenericFullScreen = React.createClass({
                     </FloatingActionButton>
                   </div>
                   {this.props.children}
-              </Content>
             </div>
           </Content>
         </Layout>
