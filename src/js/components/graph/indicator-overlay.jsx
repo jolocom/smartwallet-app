@@ -20,8 +20,10 @@ let IndicatorOverlay = React.createClass({
         zIndex: 1300,
         width: '100vw',
         height: '100vh',
-        backgroundColor: '#000',
-        opacity: '0.7',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        backgroundImage: 'url(/img/indicator-overlay.png)',
+        backgroundPosition: 'center bottom',
+        backgroundRepeat: 'no-repeat',
         textAlign: 'center',
         display: 'block',
         transition: 'display 1s',
@@ -30,11 +32,6 @@ let IndicatorOverlay = React.createClass({
       // CSS for hidden overlay
       overlayContainerHidden: {
         display: 'none'
-      },
-      // white text/arrow illustration within overlay
-      indicatorImg: {
-        position: 'relative',
-        top: '80vh'
       }
     }
   },
@@ -74,7 +71,6 @@ let IndicatorOverlay = React.createClass({
 
     return (
       <div style={style} onTouchTap={this._handleClick}>
-        <img style={styles.indicatorImg} src="/img/indicator-overlay.png" />
       </div>
     )
   },
