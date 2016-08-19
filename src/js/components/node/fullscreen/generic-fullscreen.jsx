@@ -43,10 +43,7 @@ let GenericFullScreen = React.createClass({
   getStyles() {
     let {muiTheme} = this.context
     let {gray1} = muiTheme.jolocom
-    // let {img} = this.getNode()
-    let img = false
-    let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-
+   
     return {
       container: {
         flex: 1,
@@ -56,7 +53,7 @@ let GenericFullScreen = React.createClass({
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '176px',
-        background: `${gray1} ${backgroundImg} center / cover`,
+        background: `${gray1} ${this.props.backgroundImg} center / cover`,
         boxShadow: 'none'
       },
       title: {

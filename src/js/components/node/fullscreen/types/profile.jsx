@@ -236,15 +236,18 @@ let ProfileNode = React.createClass({
       title,
       description,
       email,
-      uri
+      uri,
+      img
     } = this.getNode()
     
     if (name && familyName) {
       name = `${name} ${familyName}`
     }
+    
+    let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     return (
-      <GenericFullScreen title={name} copyToClipboardText={uri}>
+      <GenericFullScreen title={name} copyToClipboardText={uri} backgroundImg={backgroundImg}>
         <Content>
           <div style={styles.floatingButtons}>
             <FloatingActionButton
