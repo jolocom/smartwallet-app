@@ -114,14 +114,29 @@ let ConversationsListItem = React.createClass({
 
     let {created, content} = lastMessage
 
+    //If otherPerson var is null, then set it to false. So it wont be used when listing conversations
+    //to avoid errors
+
     if(otherPerson == null)
       otherPerson = false
-    
+
+    //If otherPerson var is set and its name is not set or only containing white spaces
+    //set name to Unnamed
+
+    let nameInitial
+
+    if(otherPerson && (!otherPerson.name || !otherPerson.name.trim())){
+      otherPerson.name = "Unnamed"
+      nameInitial = '?'
+    } else if (otherPerson) {
+      nameInitial = otherPerson.name[0].toUpperCase()
+    }
+
     let avatar
     if (otherPerson) {
       avatar = (
         <Avatar src={otherPerson.img}>
-          {otherPerson.name && otherPerson.name[0]}
+          {otherPerson.name && nameInitial}
         </Avatar>
       )
     }

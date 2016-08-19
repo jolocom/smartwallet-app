@@ -37,7 +37,20 @@ let Contacts = React.createClass({
         {emptyView}
         <List>
           {this.state.contacts.map(({username, webId, name, email, imgUri}) => {
-            let avatar = <Avatar src={imgUri}>{name[0].toUpperCase()}</Avatar>
+
+            //Check if name is set then set the first character as the name initial
+            //otherwise, check if name is empty or whitespaces then set it to Unnamed and let its initial be ?
+
+            let nameInitial
+
+            if(name){
+              nameInitial = name[0].toUpperCase()
+            } else if (!name || name.trim()){
+              name = "Unnamed"
+              nameInitial = '?'
+            }
+
+            let avatar = <Avatar src={imgUri}>{nameInitial}</Avatar>
             return (
               <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(webId)}}/>
             )
