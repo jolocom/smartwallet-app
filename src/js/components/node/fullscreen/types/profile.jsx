@@ -5,18 +5,6 @@ import graphActions from 'stores/graph-store'
 import nodeActions from 'actions/node'
 import Utils from 'lib/util'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
-
-import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
-import ActionDelete from 'material-ui/svg-icons/action/delete'
-import AlertError from 'material-ui/svg-icons/alert/error'
-import CommunicationChat from 'material-ui/svg-icons/communication/chat'
-import CommunicationImportContacts from
-  'material-ui/svg-icons/communication/import-contacts'
-import ContentCopy from 'material-ui/svg-icons/content/content-copy'
-import ContentLink from 'material-ui/svg-icons/content/link'
-import ContentSave from 'material-ui/svg-icons/content/save'
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 
 import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
@@ -96,35 +84,11 @@ let ProfileNode = React.createClass({
       },
       tabs: {
         backgroundColor: '#ffffff'
-      },
-      floatingButtons: {
-        position: 'absolute',
-        right: '10px',
-        marginTop: '-28px',
-        zIndex: 1500
-      },
-      fabBtn: {
-        margin: '0px 10px'
-      },
-      fabIcon: {
-        fill: '#9a3460'
       }
     }
   },
 
   // TODO: rename functions, arrange
-  chatFn () {
-    alert('woohoo chat!')
-  },
-
-  bookmarkFn() {
-    alert('woohoo bookmark!')
-  },
-
-  connectFn() {
-    alert('woohoo connect!')
-  },
-
   copyFn() {
     alert('woohoo copy!')
   },
@@ -146,7 +110,7 @@ let ProfileNode = React.createClass({
   },
 
   // TODO: discuss proper structure of this data, and whether local or external
-  getInteractions() {
+  /*getInteractions() {
     return {
       person: {
         actions: {
@@ -156,9 +120,6 @@ let ProfileNode = React.createClass({
           other: ['hug', 'slap', 'help']
         },
         functions: [
-          this.chatFn,
-          this.bookmarkFn,
-          this.connectFn
         ]
       },
       image: {
@@ -190,34 +151,13 @@ let ProfileNode = React.createClass({
     }
   },
 
-  handleStringToInteractionIcon(iconString) {
-    switch (iconString) {
-      case 'chat':
-        return (<CommunicationChat />)
-      case 'bookmark':
-        return (<ActionBookmark />)
-      case 'connect':
-        return (<ContentLink />)
-      case 'copy':
-        return (<ContentCopy />)
-      case 'delete':
-        return (<ActionDelete />)
-      case 'save':
-        return (<ContentSave />)
-      case 'read':
-        return (<CommunicationImportContacts />)
-      case 'edit':
-        return (<EditorModeEdit />)
-      default:
-        return (<AlertError />)
-    }
-  },
+  
   // TODO: helper functions as _fn? naming conventions
   handleInteractionIcon(num) {
     let ix = this.getInteractions()
     let ixIcon = ix[this.state.nodeType].actions[num]
     return (this.handleStringToInteractionIcon(ixIcon))
-  },
+  },*/
 
   getNode() {
     if (this.props.state) {
@@ -229,7 +169,7 @@ let ProfileNode = React.createClass({
 
   render() {
     let styles = this.getStyles()
-    let ix = this.getInteractions()
+    // let ix = this.getInteractions()
     let {
       name,
       familyName,
@@ -245,31 +185,19 @@ let ProfileNode = React.createClass({
     }
     
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
+    
+    
+  
+    let fabItems = ['chat','bookmark','connect']
+    let menuItems = ['hug','slap','help']
 
     return (
-      <GenericFullScreen title={name} copyToClipboardText={uri} backgroundImg={backgroundImg}>
-        <Content>
-          <div style={styles.floatingButtons}>
-            <FloatingActionButton
-              backgroundColor={'#fff'}
-              style={styles.fabBtn}
-              iconStyle={styles.fabIcon}
-              onTouchTap={ix[this.state.nodeType].functions[2]}>
-              {this.handleInteractionIcon('p3')}
-            </FloatingActionButton>
-            <FloatingActionButton
-              backgroundColor={'#fff'}
-              style={styles.fabBtn}
-              iconStyle={styles.fabIcon}
-              onTouchTap={ix[this.state.nodeType].functions[1]}>
-              {this.handleInteractionIcon('p2')}
-            </FloatingActionButton>
-            <FloatingActionButton
-              style={styles.fabBtn} secondary
-              onTouchTap={ix[this.state.nodeType].functions[0]}>
-              {this.handleInteractionIcon('p1')}
-            </FloatingActionButton>
-          </div>
+      <GenericFullScreen
+        title={name}
+        copyToClipboardText={uri}
+        backgroundImg={backgroundImg}
+        fabItems={fabItems}
+        menuItems={menuItems}>
           <List style={styles.list}>
             {description && (
               <div>
@@ -291,7 +219,6 @@ let ProfileNode = React.createClass({
               />
             )}
           </List>
-        </Content>
       </GenericFullScreen>
     )
   },

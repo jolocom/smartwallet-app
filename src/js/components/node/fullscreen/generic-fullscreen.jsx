@@ -12,6 +12,20 @@ import {Layout, Content} from 'components/layout'
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
 
+
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+
+import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
+import ActionDelete from 'material-ui/svg-icons/action/delete'
+import AlertError from 'material-ui/svg-icons/alert/error'
+import CommunicationChat from 'material-ui/svg-icons/communication/chat'
+import CommunicationImportContacts from
+  'material-ui/svg-icons/communication/import-contacts'
+import ContentCopy from 'material-ui/svg-icons/content/content-copy'
+import ContentLink from 'material-ui/svg-icons/content/link'
+import ContentSave from 'material-ui/svg-icons/content/save'
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+
 import {
   AppBar,
   IconButton,
@@ -62,6 +76,18 @@ let GenericFullScreen = React.createClass({
         left: 0,
         padding: '0 24px',
         color: '#ffffff'
+      },
+      floatingButtons: {
+        position: 'absolute',
+        right: '10px',
+        marginTop: '-28px',
+        zIndex: 1500
+      },
+      fabBtn: {
+        margin: '0px 10px'
+      },
+      fabIcon: {
+        fill: '#9a3460'
       }
     }
   },
@@ -78,6 +104,45 @@ let GenericFullScreen = React.createClass({
       return this.props.node
     }
   },
+  
+  chatFn () {
+    alert('woohoo chat!')
+  },
+
+  bookmarkFn() {
+    alert('woohoo bookmark!')
+  },
+
+  connectFn() {
+    alert('woohoo connect!')
+  },
+
+  
+  getFabInfo(iconString) {
+    switch (iconString) {
+      case 'chat':
+        return {component: (<CommunicationChat />), handler: this.chatFn}
+      case 'bookmark':
+        return {component: (<ActionBookmark />), handler: this.bookmarkFn}
+      case 'connect':
+        return {component: (<ContentLink />), handler: this.connectFn}
+      /*case 'copy':
+        return (<ContentCopy />)
+      case 'delete':
+        return (<ActionDelete />)
+      case 'save':
+        return (<ContentSave />)
+      case 'read':
+        return (<CommunicationImportContacts />)
+      case 'edit':
+        return (<EditorModeEdit />)*/
+      default:
+        console.error('No fab info found for', iconString)
+        return (<AlertError />)
+    }
+  },
+  
+  
 
   render() {
     let styles = this.getStyles()
@@ -98,7 +163,16 @@ let GenericFullScreen = React.createClass({
     } else {
       fullscreenLabel = 'Toggle Full Screen'
     }
+    
+    // @TODO bind handlers to preset actions here
+    // in: {name: 'disconnect'}
+    // out: {name: 'disconnect', component: <Disconnect>, handler: disconnecthandler} (overwritable)
+    // map ((e) return object.assign({}, default, e))
 
+    // @TODO foreach fab print dom
+    
+    // @TODO externalize fab handlers + component etc
+    
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -146,7 +220,30 @@ let GenericFullScreen = React.createClass({
                   </IconButton>
                   }
                 />
-                {this.props.children}
+                <Content>
+                  <div style={styles.floatingButtons}>
+                    <FloatingActionButton
+                      backgroundColor={'#fff'}
+                      style={styles.fabBtn}
+                      iconStyle={styles.fabIcon}
+                      onTouchTap={this.getFabInfo(this.props.fabItems[0]).handler}>
+                      {this.getFabInfo(this.props.fabItems[0]).component}
+                    </FloatingActionButton>
+                    <FloatingActionButton
+                      backgroundColor={'#fff'}
+                      style={styles.fabBtn}
+                      iconStyle={styles.fabIcon}
+                      onTouchTap={this.getFabInfo(this.props.fabItems[1]).handler}>
+                      {this.getFabInfo(this.props.fabItems[1]).component}
+                    </FloatingActionButton>
+                    <FloatingActionButton
+                      style={styles.fabBtn} secondary
+                      onTouchTap={this.getFabInfo(this.props.fabItems[2]).handler}>
+                      {this.getFabInfo(this.props.fabItems[2]).component}
+                    </FloatingActionButton>
+                  </div>
+                  {this.props.children}
+              </Content>
             </div>
           </Content>
         </Layout>
