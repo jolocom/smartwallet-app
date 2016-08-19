@@ -15,6 +15,7 @@ import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import ContentLink from 'material-ui/svg-icons/content/link'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+import ShareIcon from 'material-ui/svg-icons/content/reply'
 
 import {
   AppBar,
@@ -165,7 +166,7 @@ let GenericFullScreen = React.createClass({
       case 'delete':
         return {title: 'Delete', handler: this._handleDelete}
       case 'disconnect':
-        return {title: 'Disconnect', handler: this._handleDisconnect}
+        return {title: 'Disconnect', icon: (<ContentLink />), handler: this._handleDisconnect}
       case 'edit':
         return {title: 'Edit', handler: this._handleEdit, icon: (<EditorModeEdit />)}
       case 'fullscreen':
@@ -173,13 +174,25 @@ let GenericFullScreen = React.createClass({
           title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'}
       case 'copyUrl': // @TODO not optimal
         return {
+          icon: (<ShareIcon />),
           menuItem: (
             <CopyToClipboard
               text={this.props.copyToClipboardText}
               onCopy={this._handlePostCopyURL}>
               <MenuItem primaryText="Copy URL" />
+            </CopyToClipboard>),
+          fabItem: (
+            <CopyToClipboard
+              text={this.props.copyToClipboardText}
+              onCopy={this._handlePostCopyURL}>
+                <FloatingActionButton
+                  style={this.getStyles().fabBtn}
+                  secondary>
+                  <ShareIcon />
+              </FloatingActionButton>
             </CopyToClipboard>)
         }
+        
       /* case 'copy':
         return (<ContentCopy />)
       case 'save':
@@ -200,6 +213,11 @@ let GenericFullScreen = React.createClass({
     if (uri) {
       PinnedActions.pin(uri)
     }
+  },
+  
+  _handlePostCopyURL() {
+    alert('The URL of the node has been copied to your clipboard.')
+    // @todo snackbar/toast
   },
 
   _handleEdit() {
@@ -281,25 +299,25 @@ let GenericFullScreen = React.createClass({
                   }
               />
               <div style={styles.floatingButtons}>
-                <FloatingActionButton
-                  backgroundColor={'#fff'}
-                  style={styles.fabBtn}
-                  iconStyle={styles.fabIcon}
-                  onTouchTap={this.getAction(this.props.fabItems[0]).handler}>
-                  {this.getAction(this.props.fabItems[0]).icon}
-                </FloatingActionButton>
-                <FloatingActionButton
-                  backgroundColor={'#fff'}
-                  style={styles.fabBtn}
-                  iconStyle={styles.fabIcon}
-                  onTouchTap={this.getAction(this.props.fabItems[1]).handler}>
-                  {this.getAction(this.props.fabItems[1]).icon}
-                </FloatingActionButton>
-                <FloatingActionButton
-                  style={styles.fabBtn} secondary
-                  onTouchTap={this.getAction(this.props.fabItems[2]).handler}>
-                  {this.getAction(this.props.fabItems[2]).icon}
-                </FloatingActionButton>
+               
+                  {this.props.fabItems.map(function(fabItem, i) {
+                      let fabItemInfo = this.getAction(fabItem)
+                      if ('fabItem' in fabItemInfo) {
+                        return fabItemInfo.fabItem
+                      }
+                  
+                      let lastItem = i == this.props.fabItems.length-1;
+                      return (
+                        <FloatingActionButton
+                          backgroundColor={!lastItem ? '#fff' : 'inherit'}
+                          style={styles.fabBtn}
+                          secondary={lastItem}
+                          iconStyle={!lastItem ? styles.fabIcon : {}}
+                          onTouchTap={this.getAction(fabItem).handler}>
+                          {this.getAction(fabItem).icon}
+                        </FloatingActionButton>
+                      )
+                    }.bind(this))}
               </div>
               {this.props.children}
             </div>
@@ -311,22 +329,3 @@ let GenericFullScreen = React.createClass({
 })
 
 export default Radium(GenericFullScreen)
-
-/*
-<MenuItem
-                      primaryText="Edit" />
-                    <MenuItem
-                      primaryText={fullscreenLabel}
-                      onTouchTap={this._handleFull} />
-                    <CopyToClipboard
-                      text={this.props.copyToClipboardText}
-                      onCopy={this._handlePostCopyURL}>
-                      <MenuItem primaryText="Copy URL" />
-                    </CopyToClipboard>
-                    <MenuItem
-                      primaryText="Delete"
-                      onTouchTap={this._handleDelete} />
-                    <MenuItem
-                      primaryText="Disconnect"
-                      onTouchTap={this._handleDisconnect} />
-                      */

@@ -85,12 +85,16 @@ let ProfileNode = React.createClass({
     
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     
-    let fabItems = ['chat','bookmark','connect']
-    // let menuItems = ['hug','slap','help']
+
+    let fabItems = []
+    if (!this.getNode().isOwnedByUser) {
+      fabItems.push('bookmark','disconnect')
+    }
     
     let menuItems = []
-    if (this.getNode().isOwnedByUser)
+    if (this.getNode().isOwnedByUser) {
       menuItems.push('edit')
+    }
     menuItems.push('copyUrl')
     
     return (
