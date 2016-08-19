@@ -27,7 +27,8 @@ let IndicatorOverlay = React.createClass({
         textAlign: 'center',
         display: 'block',
         transition: 'display 1s',
-        marginTop: '-112px'
+        marginTop: '-112px',
+        pointerEvents: 'none'
       },
       // CSS for hidden overlay
       overlayContainerHidden: {
@@ -69,17 +70,14 @@ let IndicatorOverlay = React.createClass({
       style = Object.assign({}, style, styles.overlayContainerHidden)
     }
 
+    // onTouchTap={this._handleClick}
     return (
-      <div style={style} onTouchTap={this._handleClick}>
+      <div style={style}>
       </div>
     )
   },
 
   _handleClick(e) {
-    // Prevents the onClick event from triggering on the nodes
-    e.preventDefault()
-    e.stopPropagation()
-
     this.hide()
   }
 

@@ -88,6 +88,7 @@ let Graph = React.createClass({
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
+    this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
     graphActions.getState()
   },
 

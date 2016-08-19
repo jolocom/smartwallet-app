@@ -78,6 +78,7 @@ export default class GraphD3 extends EventEmitter {
           // first drag
           if (lastNotchRadian === false) {
             lastNotchRadian = touchMoveRadian
+            thisInstance.emit('start-scrolling')
           } else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NODES) {
             lastNotchRadian = touchMoveRadian
             amountOfTurns++
