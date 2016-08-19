@@ -5,7 +5,6 @@ import {PRED} from '../namespaces.js'
 import N3 from 'n3'
 import _ from 'lodash'
 import rdf from 'rdflib'
-import solid from 'solid-client'
 
 let N3Util = N3.Util
 
