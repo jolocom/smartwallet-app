@@ -45,6 +45,7 @@ export const PRED = {
   Document: FOAF('Document'),
   Image: FOAF('Image'),
   Agent: FOAF('Agent'),
+  Person: FOAF('Person'),
   Thread: SIOC('Thread'),
   
   bitcoin: CC('bitcoin'),
@@ -68,3 +69,94 @@ export const SSN = {
   observes: `${ssn}observes`,
   Sensor: `${ssn}Sensor`
 }
+
+
+
+/*
+
+in the other files:
+
+
+import {PRED, NODE_TYPES} from 'namespaces.js'
+
+NODE_TYPES[PRED.PERSON].nodeColor etc
+
+
+
+default?
+NodeTypes[PRED.Person] ? NodeTypes[PRED.Person].nodeColor : STYLES.defaultNodeColor
+
+
+STYLES.js?
+
+mix of logic (component names, validation, form) and interface (colors)
+
+
+
+*/ 
+
+
+export const NODE_TYPES = {
+  
+  
+  
+  
+}
+
+
+//
+//
+//
+//
+//
+//
+//NodeTypes.register(FOAF('Person'), {
+//  /**
+//   * Node color in the graph
+//   */
+//  nodeColor: '#829abe',
+//
+//  /**
+//   * Node color in the graph
+//   */
+//  textColor: '#ffffff',
+//
+//  /**
+//   * Optional, icon used in the graph 
+//   */
+//  icon: 'person',
+//
+//  /**
+//   * Optional, value to render, can be a text value or image 
+//   */
+//  titleField: 'name'
+//
+//  /**
+//   *  Full screen react component
+//   */
+//  component: Person,
+//
+//  /**
+//   * Schema can be used to create the node creation form, validate values
+//   * Available validators:
+//   * https://github.com/christianalfoni/formsy-react/blob/master/API.md#validators
+//   */
+//  schema: {
+//    name: {
+//      predicate: FOAF('name'),
+//      label: 'Name',
+//      validations: 'isWords' /* optional, Formsy validation rule */
+//    },
+//    description: {
+//      predicate: DC('description'),
+//      label: 'Description'
+//    },
+//    image: {
+//      
+//    }
+//  },
+//
+//  access: ['public', 'private'],
+//
+//  defaultAccess: ['public']
+//})

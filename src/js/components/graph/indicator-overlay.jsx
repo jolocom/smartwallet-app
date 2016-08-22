@@ -20,21 +20,19 @@ let IndicatorOverlay = React.createClass({
         zIndex: 1300,
         width: '100vw',
         height: '100vh',
-        backgroundColor: '#000',
-        opacity: '0.7',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        backgroundImage: 'url(/img/indicator-overlay.png)',
+        backgroundPosition: 'center bottom',
+        backgroundRepeat: 'no-repeat',
         textAlign: 'center',
         display: 'block',
         transition: 'display 1s',
-        marginTop: '-112px'
+        marginTop: '-112px',
+        pointerEvents: 'none'
       },
       // CSS for hidden overlay
       overlayContainerHidden: {
         display: 'none'
-      },
-      // white text/arrow illustration within overlay
-      indicatorImg: {
-        position: 'relative',
-        top: '80vh'
       }
     }
   },
@@ -72,18 +70,14 @@ let IndicatorOverlay = React.createClass({
       style = Object.assign({}, style, styles.overlayContainerHidden)
     }
 
+    // onTouchTap={this._handleClick}
     return (
-      <div style={style} onTouchTap={this._handleClick}>
-        <img style={styles.indicatorImg} src="/img/indicator-overlay.png" />
+      <div style={style}>
       </div>
     )
   },
 
   _handleClick(e) {
-    // Prevents the onClick event from triggering on the nodes
-    e.preventDefault()
-    e.stopPropagation()
-
     this.hide()
   }
 

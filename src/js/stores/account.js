@@ -94,10 +94,14 @@ export default Reflux.createStore({
         headers: {
           'Content-Type': 'application/sparql-update'
         }
-      }).then((res)=>{
-        if (!res.ok)
+      }).then((res) => {
+        if (!res.ok) {
           throw new Error(res.statusText)
-        Account.login.completed(localStorage.getItem('jolocom.webId'), localStorage.getItem('jolocom.webId'))
+        }
+        Account.login.completed(
+          localStorage.getItem('jolocom.username'),
+          localStorage.getItem('jolocom.webId')
+        )
       }).catch(() => {
         Account.logout()
       })

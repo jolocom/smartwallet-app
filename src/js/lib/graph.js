@@ -11,7 +11,7 @@ import {EventEmitter} from 'events'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
-import TouchRotate from './touchRotate'
+import TouchRotate from 'lib/lib/touch-rotate'
 import Utils from 'lib/util'
 import particles from './particles'
 
@@ -78,6 +78,7 @@ export default class GraphD3 extends EventEmitter {
           // first drag
           if (lastNotchRadian === false) {
             lastNotchRadian = touchMoveRadian
+            thisInstance.emit('start-scrolling')
           } else if (radianDiff < -Math.PI / thisInstance.MAX_VISIBLE_NODES) {
             lastNotchRadian = touchMoveRadian
             amountOfTurns++
