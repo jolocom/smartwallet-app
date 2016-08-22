@@ -37,9 +37,9 @@ export default class GraphD3 extends EventEmitter {
     this.svg = d3.select(this.graphContainer).append('svg:svg')
       .style('display', 'block')
       // .append('svg:g')
-    
+
     this.refreshDimensions()
-    
+
     this.svg
       .attr('width', this.width)
       .attr('height', this.height)
@@ -48,7 +48,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('class', 'background-layer')
       .append('svg:g')
       .attr('class', 'background-layer-links')
-    
+
     window.removeEventListener('resize',this.onResize)
     window.addEventListener('resize',this.onResize)
 
@@ -159,8 +159,8 @@ export default class GraphD3 extends EventEmitter {
     // <- creates force and starts it. why does it
     // need to be done several times?
     this.drawBackground()
-    
-    if (this.numberOfNeighbours > this.MAX_VISIBLE_NODES) { 
+
+    if (this.numberOfNeighbours > this.MAX_VISIBLE_NODES) {
       this.drawScrollingIndicator()
     }
     // refresh the background in case we need to draw
@@ -536,7 +536,7 @@ export default class GraphD3 extends EventEmitter {
             return d.title
           }
         } else {
-          return 'Unnamed'       
+          return 'Unnamed'
         }
       })
       .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
@@ -552,10 +552,20 @@ export default class GraphD3 extends EventEmitter {
       .text(function (d) {
         // In case the person has no description available.
         if (d.description) {
-          if (d.description.length > 45) {
-            return (d.description.substring(0, 45) + '...')
+          if (!d.description.includes(' ')) {
+            // if the description does not contain words i.e f94hcnfsadfs9
+            if (d.description.length > 12) {
+              return (d.description.substring(0, 12) + '...')
+            } else {
+              return d.description
+            }
           } else {
-            return d.description
+            // if description contains words with spaces i.e Bitcoin Key Address
+            if (d.description.length > 45) {
+              return (d.description.substring(0, 45) + '...')
+            } else {
+              return d.description
+            }
           }
         }
       })
@@ -930,7 +940,7 @@ export default class GraphD3 extends EventEmitter {
         d.highlighted = false
       })
   }
-  
+
   deselectAll = function() {
     var self = this
     d3.selectAll('svg .node').each(function(d) {
