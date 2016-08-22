@@ -84,6 +84,7 @@ let GenericFullScreen = React.createClass({
       },
       floatingButtons: {
         position: 'absolute',
+        top: '176px',
         right: '10px',
         marginTop: '-28px',
         zIndex: 1500
@@ -192,7 +193,7 @@ let GenericFullScreen = React.createClass({
               </FloatingActionButton>
             </CopyToClipboard>)
         }
-        
+
       /* case 'copy':
         return (<ContentCopy />)
       case 'save':
@@ -214,7 +215,7 @@ let GenericFullScreen = React.createClass({
       PinnedActions.pin(uri)
     }
   },
-  
+
   _handlePostCopyURL() {
     alert('The URL of the node has been copied to your clipboard.')
     // @todo snackbar/toast
@@ -223,7 +224,7 @@ let GenericFullScreen = React.createClass({
   _handleEdit() {
     ProfileActions.show();
   },
-  
+
   _handleStartChat() {
     const {history} = this.context
     history.pushState(null, `/conversations/${this.props.node.username}`)
@@ -231,7 +232,7 @@ let GenericFullScreen = React.createClass({
 
   render() {
     let styles = this.getStyles()
-    
+
     setTimeout(function(){this.refs.dialog.show()}.bind(this),5); // @TODO @FIXME
 
     /* let fullscreenLabel
@@ -301,13 +302,13 @@ let GenericFullScreen = React.createClass({
                   }
               />
               <div style={styles.floatingButtons}>
-               
+
                   {this.props.fabItems.map(function(fabItem, i) {
                       let fabItemInfo = this.getAction(fabItem)
                       if ('fabItem' in fabItemInfo) {
                         return fabItemInfo.fabItem
                       }
-                  
+
                       let lastItem = i == this.props.fabItems.length-1;
                       return (
                         <FloatingActionButton
