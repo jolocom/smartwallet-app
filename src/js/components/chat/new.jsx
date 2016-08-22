@@ -5,7 +5,6 @@ import {IconButton, AppBar} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
-import SearchBar from 'components/common/search-bar.jsx'
 import Dialog from 'components/common/dialog.jsx'
 
 import ContactsList from 'components/contacts/list.jsx'
@@ -22,6 +21,10 @@ export default React.createClass({
     Reflux.connect(ProfileStore, 'profile')
   ],
 
+  propTypes: {
+    params: React.PropTypes.object
+  },
+
   contextTypes: {
     history: React.PropTypes.any
   },
@@ -35,6 +38,14 @@ export default React.createClass({
 
   componentDidMount() {
     this.refs.dialog.show()
+  },
+
+  componentWillMount() {
+    if (this.props.params.webId) {
+      this.startChat(this.props.params.webId)
+    } else {
+      // @TODO load contact list
+    }
   },
 
   componentWillUnmount() {
@@ -68,11 +79,28 @@ export default React.createClass({
   },
 
   render() {
+    const {webId} = this.props.params
+
+    let title = 'Select contact'
+
+    let content
+
+    if (!webId) {
+      content = (
+        <ContactsList
+          onClick={this.startChat}
+          searchQuery={this.state.searchQuery}
+        />
+      )
+    } else {
+      // @TODO show loading screen
+    }
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
-            title="Select contact"
+            title={title}
             iconElementLeft={
               <IconButton
                 onClick={this.back}
@@ -89,12 +117,8 @@ export default React.createClass({
                 search
               </IconButton>}
             />
-          <SearchBar ref="search" onChange={this.onSearch} />
           <Content>
-            <ContactsList
-              onClick={this.startChat}
-              searchQuery={this.state.searchQuery}
-            />
+            {content}
           </Content>
         </Layout>
       </Dialog>

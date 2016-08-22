@@ -13,8 +13,6 @@ import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 
-import NodeTypes from 'lib/node-types'
-
 let Graph = React.createClass({
 
   mixins: [Reflux.listenTo(GraphStore, 'onStateUpdate')],
@@ -33,18 +31,18 @@ let Graph = React.createClass({
     user: React.PropTypes.object
   },
 
-  getChildContext: function() {
+  getChildContext() {
     return {
       node: this.state.center,
       user: this.state.user
     }
   },
 
-  getGraphEl: function() {
+  getGraphEl() {
     return ReactDOM.findDOMNode(this.refs.graph)
   },
 
-  onStateUpdate: function(data, signal) {
+  onStateUpdate(data, signal) {
     // Temp. make it more elegant later.
     if (signal === 'nodeRemove') {
       this.graph.deleteNodeAndRender(data)
@@ -73,13 +71,13 @@ let Graph = React.createClass({
     }
   },
 
-  addNode: function(type) {
+  addNode(type) {
     let uri = encodeURIComponent(this.state.center.uri)
     this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
   },
 
   // This is the first thing that fires when the user logs in.
-  componentDidMount: function() {
+  componentDidMount() {
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
@@ -92,10 +90,20 @@ let Graph = React.createClass({
     graphActions.getState()
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     if (this.graph) {
       this.graph.eraseGraph()
       this.graph.removeAllListeners()
+    }
+  },
+
+  componentWillUpdate(props, state) {
+    const {activeNode} = this.state
+    let uri
+
+    if (state.activeNode && activeNode !== state.activeNode) {
+      uri = encodeURIComponent(state.activeNode.uri)
+      this.context.history.pushState(null, `/graph/${uri}/view`)
     }
   },
 
@@ -144,22 +152,6 @@ let Graph = React.createClass({
       this.graph.setRotationIndex(this.state.rotationIndex)
     }
 
-    let nodeDetails
-
-    if (this.state.activeNode) {
-      
-      let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
-
-      nodeDetails = (
-        <NodeFullScreenComponent
-          node={this.state.activeNode}
-          center={this.state.center}
-          svg={this.state.selected}
-          state={this.state}
-        />
-      )
-    }
-
     let fab
 
     if (!this.context.searchActive) {
@@ -175,6 +167,14 @@ let Graph = React.createClass({
       )
     }
 
+    let children = React.Children.map(this.props.children, (el) => {
+      return React.cloneElement(el, {
+        node: this.state.activeNode,
+        center: this.state.center,
+        navHistory: this.state.navHistory
+      })
+    })
+
     return (
       <div style={styles.container}>
         <IndicatorOverlay ref="scrollIndicator" />
@@ -182,9 +182,7 @@ let Graph = React.createClass({
 
         {fab}
 
-        {this.props.children}
-
-        {nodeDetails}
+        {children}
       </div>
     )
   },

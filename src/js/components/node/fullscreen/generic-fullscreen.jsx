@@ -30,8 +30,9 @@ let GenericFullScreen = React.createClass({
   ],
 
   propTypes: {
-    state: React.PropTypes.object,
     node: React.PropTypes.object,
+    center: React.PropTypes.object,
+    navHistory: React.PropTypes.object,
     onClose: React.PropTypes.func,
     backgroundImg: React.PropTypes.any,
     menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
@@ -44,7 +45,8 @@ let GenericFullScreen = React.createClass({
   contextTypes: {
     history: React.PropTypes.any,
     node: React.PropTypes.object,
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    account: React.PropTypes.object
   },
 
   componentWillMount() {
@@ -100,26 +102,24 @@ let GenericFullScreen = React.createClass({
 
   _handleClose() {
     graphActions.setState('activeNode', null, true)
+    this.context.history.pushState(null, '/graph')
   },
 
   _handleDisconnect() {
-    if (this.props.state.activeNode.rank !== 'center') {
+    if (this.props.node.rank !== 'center') {
       nodeActions.disconnectNode(
-        this.props.state.activeNode, this.props.state.center
+        this.props.node, this.props.center
       )
     }
     this._handleClose()
   },
 
   _handleDelete() {
-    let node = this.props.state.activeNode
-    // let center = this.props.state.center
-    let navHis = this.props.state.navHistory
-
+    let {node, navHistory} = this.props
     if (graphActions.state.webId === node.uri) {
       alert('You cannot remove your own node.') // @TODO toast/snackbar
     } else if (node.rank === 'center') {
-      let prev = navHis[navHis.length - 1]
+      let prev = navHistory[navHistory.length - 1]
       graphActions.drawAtUri(prev.uri, 1).then(() => {
         nodeActions.remove(node, prev)
       })
@@ -128,15 +128,7 @@ let GenericFullScreen = React.createClass({
   },
 
   getNode() {
-    if (this.props.state) {
-      return this.props.state.activeNode // TODO temp fix
-    } else {
-      return this.props.node
-    }
-  },
-
-  chatFn () {
-    alert('woohoo chat!')
+    return this.props.node
   },
 
   bookmarkFn() {
@@ -155,40 +147,60 @@ let GenericFullScreen = React.createClass({
   getAction(iconString) {
     switch (iconString) {
       case 'chat':
-        return {title: 'Chat', icon: (<CommunicationChat />),
-          handler: this.chatFn}
+        return {
+          title: 'Chat',
+          icon: <CommunicationChat />,
+          handler: this._handleStartChat}
       case 'bookmark':
-        return {title: 'Bookmark', icon: (<ActionBookmark />),
+        return {
+          title: 'Bookmark',
+          icon: <ActionBookmark />,
           handler: this.bookmarkFn}
       case 'connect':
-        return {title: 'Connect', icon: (<ContentLink />),
+        return {
+          title: 'Connect',
+          icon: <ContentLink />,
           handler: this.connectFn}
       case 'delete':
         return {title: 'Delete', handler: this._handleDelete}
       case 'disconnect':
-        return {title: 'Disconnect', icon: (<ContentLink />), handler: this._handleDisconnect}
+        return {
+          title:
+          'Disconnect',
+          icon: <ContentLink />,
+          handler: this._handleDisconnect
+        }
       case 'edit':
-        return {title: 'Edit', handler: this._handleEdit, icon: (<EditorModeEdit />)}
+        return {
+          title: 'Edit',
+          handler: this._handleEdit,
+          icon: <EditorModeEdit />
+        }
       case 'fullscreen':
-        return {handler: this._handleFull,
-          title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'}
+        return {
+          handler: this._handleFull,
+          title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'
+        }
       case 'copyUrl': // @TODO not optimal
         return {
-          icon: (<ShareIcon />),
+          icon: <ShareIcon />,
           menuItem: (
             <CopyToClipboard
               text={this.props.copyToClipboardText}
-              onCopy={this._handlePostCopyURL}>
+              onCopy={this._handlePostCopyURL}
+            >
               <MenuItem primaryText="Copy URL" />
             </CopyToClipboard>),
           fabItem: (
             <CopyToClipboard
               text={this.props.copyToClipboardText}
-              onCopy={this._handlePostCopyURL}>
-                <FloatingActionButton
-                  style={this.getStyles().fabBtn}
-                  secondary>
-                  <ShareIcon />
+              onCopy={this._handlePostCopyURL}
+            >
+              <FloatingActionButton
+                style={this.getStyles().fabBtn}
+                secondary
+              >
+                <ShareIcon />
               </FloatingActionButton>
             </CopyToClipboard>)
         }
@@ -211,7 +223,8 @@ let GenericFullScreen = React.createClass({
   _handleBookmarkClick() {
     const {uri} = this.getNode()
     if (uri) {
-      PinnedActions.pin(uri)
+      // @TODO fix bookmarking
+      // PinnedActions.pin(uri)
     }
   },
 
@@ -221,17 +234,19 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleEdit() {
-    ProfileActions.show();
+    ProfileActions.show()
   },
 
   _handleStartChat() {
     const {history} = this.context
-    history.pushState(null, `/conversations/${this.props.node.username}`)
+    const {node} = this.props
+    history.pushState(null, `/chat/new/${encodeURIComponent(node.uri)}`)
+    graphActions.setState('activeNode', null, true)
   },
 
   render() {
     let styles = this.getStyles()
-    
+
     // @TODO bind handlers to preset actions here
     // in: {name: 'disconnect'}
     // out: {name: 'disconnect',
@@ -266,7 +281,7 @@ let GenericFullScreen = React.createClass({
                     anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                     targetOrigin={{horizontal: 'left', vertical: 'top'}}>
 
-                    {this.props.menuItems.map(function(menuItem) {
+                    {this.props.menuItems.map((menuItem) => {
                       let menuItemInfo = this.getAction(menuItem)
                       if ('menuItem' in menuItemInfo) {
                         return menuItemInfo.menuItem
@@ -276,7 +291,7 @@ let GenericFullScreen = React.createClass({
                           primaryText={menuItemInfo.title}
                           onTouchTap={menuItemInfo.handler} />
                       )
-                    }.bind(this))}
+                    })}
                   </IconMenu>
                 }
                 iconElementLeft={
@@ -289,25 +304,24 @@ let GenericFullScreen = React.createClass({
                   }
               />
               <div style={styles.floatingButtons}>
+                  {this.props.fabItems.map((fabItem, i) => {
+                    let fabItemInfo = this.getAction(fabItem)
+                    if ('fabItem' in fabItemInfo) {
+                      return fabItemInfo.fabItem
+                    }
 
-                  {this.props.fabItems.map(function(fabItem, i) {
-                      let fabItemInfo = this.getAction(fabItem)
-                      if ('fabItem' in fabItemInfo) {
-                        return fabItemInfo.fabItem
-                      }
-
-                      let lastItem = i == this.props.fabItems.length-1;
-                      return (
-                        <FloatingActionButton
-                          backgroundColor={!lastItem ? '#fff' : 'inherit'}
-                          style={styles.fabBtn}
-                          secondary={lastItem}
-                          iconStyle={!lastItem ? styles.fabIcon : {}}
-                          onTouchTap={this.getAction(fabItem).handler}>
-                          {this.getAction(fabItem).icon}
-                        </FloatingActionButton>
-                      )
-                    }.bind(this))}
+                    let lastItem = i === this.props.fabItems.length - 1
+                    return (
+                      <FloatingActionButton
+                        backgroundColor={!lastItem ? '#fff' : 'inherit'}
+                        style={styles.fabBtn}
+                        secondary={lastItem}
+                        iconStyle={!lastItem ? styles.fabIcon : {}}
+                        onTouchTap={this.getAction(fabItem).handler}>
+                        {this.getAction(fabItem).icon}
+                      </FloatingActionButton>
+                    )
+                  })}
               </div>
               {this.props.children}
             </div>
