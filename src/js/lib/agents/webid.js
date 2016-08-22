@@ -83,10 +83,10 @@ class WebIDAgent extends LDPAgent {
     writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Read'))
     writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Write'))
 
-    writer.addTriple(rdflib.sym('#readall'), PRED.type, ACL('Authorization'))
-    writer.addTriple(rdflib.sym('#readall'), ACL('accessTo'), rdflib.sym(uri))
-    writer.addTriple(rdflib.sym('#readall'), ACL('agentClass'), PRED.Agent)
-    writer.addTriple(rdflib.sym('#readall'), ACL('mode'), ACL('Append'))
+    writer.addTriple(rdflib.sym('#append'), PRED.type, ACL('Authorization'))
+    writer.addTriple(rdflib.sym('#append'), ACL('accessTo'), rdflib.sym(uri))
+    writer.addTriple(rdflib.sym('#append'), ACL('agentClass'), PRED.Agent)
+    writer.addTriple(rdflib.sym('#append'), ACL('mode'), ACL('Append'))
 
     return fetch(Util.uriToProxied(aclUri), {
       method: 'PUT',
