@@ -194,8 +194,6 @@ export default Reflux.createStore({
     }  
     
     this.state.activeNode = node
-    console.log('onviewnode, once')
-    console.log('activenode : ', this.state)
 
     // @TODO do empty PATCH request and see if we have rights for center node and other node
 
@@ -212,7 +210,7 @@ export default Reflux.createStore({
       this.state.activeNode.isOwnedByUser = true
     }).catch(() => {
       this.state.activeNode.isOwnedByUser = false
-    }).then(() => {  console.log('WOLOLO NUMBER 1', this.state.activeNode)});
+    })
 
     let updateCenterNode = fetch(`${Utils.uriToProxied(this.state.center.uri)}`, {
       method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
@@ -226,7 +224,7 @@ export default Reflux.createStore({
       this.state.center.isOwnedByUser = true
     }).catch(() => {
       this.state.center.isOwnedByUser = false
-    }).then(() => {  console.log('MANGO NUMBER FIVE', this.state.center)})
+    })
 
     Promise.all([updateNode,updateCenterNode]).then(() => {
           this.trigger(this.state)

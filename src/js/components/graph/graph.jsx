@@ -147,17 +147,20 @@ let Graph = React.createClass({
     let nodeDetails
 
     if (this.state.activeNode) {
-      
       let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
 
-      nodeDetails = (
-        <NodeFullScreenComponent
-          node={this.state.activeNode}
-          center={this.state.center}
-          svg={this.state.selected}
-          state={this.state}
-        />
-      )
+      if (NodeFullScreenComponent)
+      {
+        nodeDetails = (
+          <NodeFullScreenComponent
+            node={this.state.activeNode}
+            center={this.state.center}
+            svg={this.state.selected}
+            state={this.state}
+          />
+        )
+      }
+      
     }
 
     let fab
