@@ -99,8 +99,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleClose() {
-    this.refs.dialog.hide()
-    graphActions.viewNode(null)
+    graphActions.setState('activeNode', null, true)
   },
 
   _handleDisconnect() {
@@ -232,16 +231,7 @@ let GenericFullScreen = React.createClass({
 
   render() {
     let styles = this.getStyles()
-
-    setTimeout(function(){this.refs.dialog.show()}.bind(this),5); // @TODO @FIXME
-
-    /* let fullscreenLabel
-    if (this.state.fullscreen) {
-      fullscreenLabel = 'Exit Full Screen'
-    } else {
-      fullscreenLabel = 'Toggle Full Screen'
-    }*/
-
+    
     // @TODO bind handlers to preset actions here
     // in: {name: 'disconnect'}
     // out: {name: 'disconnect',
@@ -250,13 +240,10 @@ let GenericFullScreen = React.createClass({
 
     // @TODO pass fab 0-3 and set which one is primary (flag?),
     //    or reverse? ['primary','other button', 'other button']
-    // @TODO foreach fab print dom
 
     // @TODO externalize fab handlers + component etc
 
     // Always add the fullscreen menu item
-
-    // console.log('render',this.props.menuItems)
 
     return (
       <Dialog ref="dialog" fullscreen>
