@@ -1,15 +1,11 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
-import Util from 'lib/util'
 import ChatAgent from 'lib/agents/chat'
 
 let chatAgent = new ChatAgent()
 
 import ConversationActions from 'actions/conversation'
-
 import ConversationsStore from 'stores/conversations'
-
-import AccountStore from 'stores/account'
 
 let {load, addMessage} = ConversationActions
 
@@ -28,10 +24,10 @@ export default Reflux.createStore({
     return conversation.uri
   },
 
-  onLoad(username, id) {
-    let url = this.getUrl(username, id)
+  onLoad(webId, id) {
+    let url = this.getUrl(webId, id)
     Promise.all([
-      chatAgent.getConversation(url, AccountStore.state.webId),
+      chatAgent.getConversation(url, webId),
       chatAgent.getConversationMessages(url)
     ]).then((result) => {
       let [conversation, items] = result
