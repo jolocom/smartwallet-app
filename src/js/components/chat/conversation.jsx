@@ -117,7 +117,8 @@ let Conversation = React.createClass({
         borderBottomLeftRadius: '6px',
         borderBottomRightRadius: '6px',
         padding: '6px 12px',
-        position: 'relative'
+        position: 'relative',
+        whiteSpace: 'pre'
       },
       meta: {
         clear: 'both',
