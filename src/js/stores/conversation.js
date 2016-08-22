@@ -64,8 +64,6 @@ export default Reflux.createStore({
   },
 
   onAddMessage(id, author, content) {
-    console.log("onAddMessage() - author = "+author)
-
     let conversation = this.getUrl(author, id)
 
     return chatAgent.postMessage(conversation, author, content)
@@ -79,10 +77,12 @@ export default Reflux.createStore({
   },
 
   onAddMessageCompleted(item) {
+    if (this.items) {
+      this.items.push(item)
+    } else {
+      this.items = [item]
+    }
 
-    console.log(this.items)
-
-    this.items.push(item)
     this.trigger({
       items: this.items
     })
