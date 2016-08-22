@@ -839,24 +839,29 @@ export default class GraphD3 extends EventEmitter {
       .select('.nodecircleback')
       .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
       .style('fill', (d) => {
-        if (d.elipsisdepth === 0) {
-          return theme.graph.elipsis1
-        } else if (d.elipsisdepth === 1) {
-          return theme.graph.elipsis2
-        } else if (d.rank === 'history') {
-          return STYLES.grayColor
-        } else if (d.rank === 'unavailable') {
-          return STYLES.grayColor
-        } else if (d.rank === 'center') {
-          return theme.graph.centerNodeColor
+        if (d.img && d.rank !== 'history' && !(d.elipsisdepth >= 0)) {
+          return theme.graph.whiteBackground
         } else {
-          return theme.graph.textNodeColor
+          if (d.elipsisdepth === 0) {
+            return theme.graph.elipsis1
+          } else if (d.elipsisdepth === 1) {
+            return theme.graph.elipsis2
+          } else if (d.rank === 'history') {
+            return STYLES.grayColor
+          } else if (d.rank === 'unavailable') {
+            return STYLES.grayColor
+          } else if (d.rank === 'center') {
+            return theme.graph.centerNodeColor
+          } else {
+            return theme.graph.textNodeColor
+          }
         }
       })
     // Reset colour of all circles
+    // Tries to interpret the url(#) as a colour @TODO
     d3.selectAll('g .node')
       .select('.nodecircle')
-      // .transition('resetcolor').duration(STYLES.nodeTransitionDuration) // Tries to interpret the url(#) as a colour @TODO
+      .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
       .style('fill', (d) => {
         if (d.img && d.rank !== 'history' && !(d.elipsisdepth >= 0)) {
           return 'url(#' + d.uri + d.connection + ')'
