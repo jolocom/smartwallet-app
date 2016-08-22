@@ -83,7 +83,7 @@ let Conversation = React.createClass({
 
   addMessage(content) {
     ConversationActions.addMessage(
-      this.props.params.id,
+      this.state.conversation.uri,
       this.context.account.webId,
       content
     )

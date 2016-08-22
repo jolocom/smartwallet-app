@@ -75,6 +75,7 @@ let Conversations = React.createClass({
           <List>
             {this.state.conversations.items.map((conversation) => {
               return <ConversationsListItem
+                key={conversation.id}
                 conversation={conversation}
                 onTouchTap={this.showConversation} />
             })}
@@ -86,7 +87,7 @@ let Conversations = React.createClass({
           secondary
           href="#/chat/new"
           style={styles.actionButton}
-          linkButton={true}>
+        >
           <FontIcon className="material-icons">add</FontIcon>
         </FloatingActionButton>
 

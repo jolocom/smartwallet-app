@@ -29,7 +29,24 @@ export default Reflux.createStore({
     }
   },
 
-  onLoad(webId, query) {
+  getUri(webId, id) {
+    return new Promise((resolve, reject) => {
+      let conversation = this.getConversation(id)
+      if (conversation) {
+        resolve(conversation.uri)
+      } else {
+        this._getConversations(webId, id).then((conversations) => {
+          if (conversations[0]) {
+            resolve(conversations[0].uri)
+          } else {
+            reject()
+          }
+        })
+      }
+    })
+  },
+
+  _getConversations(webId, query) {
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
 
     return chatAgent.getInboxConversations(Util.uriToProxied(webId))
@@ -41,12 +58,16 @@ export default Reflux.createStore({
         return Promise.all(results)
       })
       .then(function(conversations) {
-        load.completed(_.chain(conversations).map((conversation) => {
+        return _.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {
           return conversation && (!regEx || conversation.id.match(regEx))
-        }).value())
+        }).value()
       })
+  },
+
+  onLoad(webId, query) {
+    this._getConversations(webId, query).then(load.completed)
   },
 
   onLoadCompleted(conversations) {
