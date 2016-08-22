@@ -526,9 +526,17 @@ export default class GraphD3 extends EventEmitter {
         if (d.unavailable) {
           return 'Not found'
         } else if (d.name) {
-          return d.name
+          if (d.name.length > 7) {
+            return d.name.substring(0, 7) + '...'
+          } else {
+            return d.name
+          }
         } else if (d.fullName) {
-          return d.fullName
+          if (d.fullName.length > 7) {
+            return d.fullName.substring(0, 7) + '...'
+          } else {
+            return d.fullName
+          }
         } else if (d.title) {
           if (d.title.length > 7) {
             return d.title.substring(0, 7) + '...'
