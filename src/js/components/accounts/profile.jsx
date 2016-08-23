@@ -349,6 +349,9 @@ let Profile = React.createClass({
       target.value = target.value.replace(
         target.value[target.value.length - 1], '')
     }
+    if (target.value.length % 4 === 0) {
+      target.value[target.value.length] = ' '
+    }
   },
 
   _handleSelectPassportFile({target}) {
