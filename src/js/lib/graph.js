@@ -383,7 +383,7 @@ export default class GraphD3 extends EventEmitter {
     // add avatars
     // @todo review following code / integrate better
 
-    let defsImages = nodeEnter.append('svg:defs')
+    let defsImages = nodeEnter.filter((d) => d.type !== 'passport').append('svg:defs')
     defsImages.append('svg:pattern')
       .attr('id', (d) => d.uri + d.connection)
       .attr('class', 'image')
@@ -558,6 +558,10 @@ export default class GraphD3 extends EventEmitter {
       .attr('dy', '0.5em')
       .style('font-size', '80%')
       .text(function (d) {
+        if (d.type == 'bitcoin') {
+          return ''
+        }
+      
         // In case the person has no description available.
         if (d.description) {
           if (!d.description.includes(' ')) {
@@ -878,7 +882,7 @@ export default class GraphD3 extends EventEmitter {
       .select('.nodecircle')
       // .transition('resetcolor').duration(STYLES.nodeTransitionDuration) // Tries to interpret the url(#) as a colour @TODO
       .style('fill', (d) => {
-        if (d.img && d.rank !== 'history') {
+        if (d.img && d.rank !== 'history' && d.type !== 'passport') {
           return 'url(#' + d.uri + d.connection + ')'
         } else {
           if (d.elipsisdepth === 0) {
@@ -927,7 +931,11 @@ export default class GraphD3 extends EventEmitter {
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('dy', '.35em')
       .attr('opacity', (d) => {
-        return ((d.img || d.elipsisdepth >= 0) && d.rank !== 'history') ? 0 : 1
+        return ((d.img || d.elipsisdepth >= 0)
+                && d.rank !== 'history'
+                && d.type !== 'passport')
+                ? 0
+                : 1
       })
 
     // Hide the descriptions of all nodes
@@ -1027,7 +1035,9 @@ export default class GraphD3 extends EventEmitter {
       // Fade in the node name and make the text opaque
       d3.select(node).select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
-        .attr('dy', (d) => d.description ? '-.5em' : '.35em')
+        .attr('dy', (d) => d.description && d.type !== 'bitcoin'
+                            ? '-.5em'
+                            : '.35em')
         .attr('opacity', 1)
       data.highlighted = true
     }
