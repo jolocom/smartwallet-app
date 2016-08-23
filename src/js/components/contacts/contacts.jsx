@@ -27,7 +27,7 @@ let Contacts = React.createClass({
         {this.props.children}
       </div>
     )
-  }  
+  }
 })
 
 let styles = {
