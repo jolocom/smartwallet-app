@@ -107,27 +107,25 @@ let ConversationsListItem = React.createClass({
   render() {
     let {conversation} = this.props
     let {otherPerson, lastMessage} = conversation
-
-
-
-
     lastMessage = lastMessage || {}
 
     let {created, content} = lastMessage
 
-    //If otherPerson var is null, then set it to false. So it wont be used when listing conversations
-    //to avoid errors
+    // If otherPerson var is null, then set it to false.
+    // So it wont be used when listing conversations
+    // to avoid errors
 
-    if(otherPerson == null)
+    if (otherPerson == null) {
       otherPerson = false
+    }
 
-    //If otherPerson var is set and its name is not set or only containing white spaces
-    //set name to Unnamed
+    // If otherPerson var is set and its name is
+    // not set or only containing white spaces set name to Unnamed
 
     let nameInitial
 
-    if(otherPerson && (!otherPerson.name || !otherPerson.name.trim())){
-      otherPerson.name = "Unnamed"
+    if (otherPerson && (!otherPerson.name || !otherPerson.name.trim())) {
+      otherPerson.name = 'Unnamed'
       nameInitial = '?'
     } else if (otherPerson) {
       nameInitial = otherPerson.name[0].toUpperCase()
