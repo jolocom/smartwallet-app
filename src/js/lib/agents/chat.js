@@ -16,6 +16,8 @@ class ChatAgent extends LDPAgent {
   //
   // @return {Promise.<Object>} object containing conversation id and doc url
   createConversation(initiator, participants) {
+    
+    console.log('createConversation called with initiator', initiator,' and participants', participants)
     // POST conversation to initiators container
     // update inbox indices of all participants
     //
@@ -23,18 +25,24 @@ class ChatAgent extends LDPAgent {
     let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
     let hdrs = {'Content-type': 'text/turtle'}
     let conversationDocContent = this._conversationTriples(initiator, participants)
-      localStorage.setItem('conversationId', conversationId)
+    
+    console.log('createConversation calling this.put', Util.uriToProxied(conversationDoc), hdrs, conversationDocContent)
+    
     return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
-      return Promise.all(participants.map((p) => {
+      console.log('this put has been completed')
+      return Promise.all(participants.map((p) =>
         this._linkConversation(conversationDoc, p)
-      }))
+      ))
     })
     .then(() => {
-      this._writeConversationAcl(conversationDoc, initiator, participants)
+      console.log('linkconversations have been completed')
+      return this._writeConversationAcl(conversationDoc, initiator, participants)
     })
     .then(() => {
+      console.log('writeConversationAcl has been completed')
       // update inbox indices
       console.log('successfully created conversation and linked it to participant inboxes')
+      
       return {
         id: conversationId,
         url: conversationDoc
@@ -310,7 +318,7 @@ class ChatAgent extends LDPAgent {
 
    //return solid.web.patch(inbox, null, toAdd)
 
-    return fetch(inbox,{
+    return fetch(Util.uriToProxied(inbox),{
       method: 'PATCH',
       credentials: 'include',
       body: `INSERT DATA { ${toAdd.join(" ")} } ;`,

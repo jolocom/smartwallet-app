@@ -13,11 +13,10 @@ let Contacts = React.createClass({
   },
 
   createChat(webId) {
+    console.log('createChat called with argument',webId)
+    console.log("three params",AccountStore,AccountStore.state.webId,webId)
     ChatActions.create(
         AccountStore.state.webId, AccountStore.state.webId, webId
-    )
-    this.context.history.pushState(null,
-        `/conversations/${localStorage.getItem('conversationId')}`
     )
   },
   render() {
