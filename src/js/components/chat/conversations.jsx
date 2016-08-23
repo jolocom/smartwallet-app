@@ -60,9 +60,16 @@ let Conversations = React.createClass({
   render: function() {
     let emptyView
     let {items} = this.state.conversations
-
+    
+   
     if (!items || !items.length) {
       emptyView = <div style={styles.empty}>No conversations</div>
+    }
+    else
+    {
+      this.state.conversations.items.sort(
+        (item_a,item_b) => item_a.lastMessage.created.getTime() < item_b.lastMessage.created.getTime()
+      ) 
     }
 
     return (
@@ -125,7 +132,7 @@ let ConversationsListItem = React.createClass({
     let nameInitial
 
     if (otherPerson && (!otherPerson.name || !otherPerson.name.trim())) {
-      otherPerson.name = 'Unnamed'
+      // otherPerson.name = 'Unnamed'
       nameInitial = '?'
     } else if (otherPerson) {
       nameInitial = otherPerson.name[0].toUpperCase()
@@ -145,7 +152,7 @@ let ConversationsListItem = React.createClass({
         key={conversation.id}
         primaryText={
           <div>
-            <span>{otherPerson.name}</span>
+            <span>{otherPerson.name || 'Unnamed'}</span>
             <span style={styles.date}>{date}</span>
           </div>
         }

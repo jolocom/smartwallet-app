@@ -19,6 +19,7 @@ export default Reflux.createStore({
     console.log('create completed with conversation', conversation)
     this.trigger(conversation)
     
+    // @TODO @FIXME
     window.location.href='#/conversations/' + conversation.id
     /*window.history.pushState(
         null, 
