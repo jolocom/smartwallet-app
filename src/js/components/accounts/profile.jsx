@@ -18,6 +18,7 @@ import {
 import {grey500} from 'material-ui/styles/colors'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 
 import ProfileActions from 'actions/profile'
@@ -251,6 +252,15 @@ let Profile = React.createClass({
                       <TextField floatingLabelText="Bitcoin Address"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
                         value={this.state.bitcoinAddress}
+                        style={styles.input} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={styles.iconCell}>
+                      <ActionCreditCard />
+                    </td>
+                    <td>
+                      <TextField floatingLabelText="Add credit card"
                         style={styles.input} />
                     </td>
                   </tr>
