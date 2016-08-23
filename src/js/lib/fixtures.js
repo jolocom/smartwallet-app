@@ -3,46 +3,50 @@ export default {}
 export let bankUri = 'http://localhost:8443'
 
 export let contacts = [{
-  username: 'eelcoacl',
-  webId: 'https://eelcoacl.webid.jolocom.de/profile/card#me',
-  name: 'Eelco ACL',
-  email: 'hi@eelcowiersma.nl'
-}, {
   username: 'joachim',
-  name: 'Joachim Lohkamp',
-  email: 'joachim@jolocom.com'
-}, {
-  username: 'justas',
-  name: 'Justas Azna',
-  email: 'justas@jolocom.com'
+  webId: 'https://joachim.webid.jolocom.de/profile/card#me',
+  name: 'Joachim',
+  email: 'joachim'
 }, {
   username: 'christian',
-  name: 'Christian Hildebrand',
+  webId: 'https://christian.webid.jolocom.de/profile/card#me',
+  name: 'Christian',
   email: 'christian@jolocom.com'
 }, {
   username: 'anna',
-  name: 'Anna Blume',
+  webId: 'https://anna.webid.jolocom.de/profile/card#me',
+  name: 'Anna',
   email: 'anna@jolocom.com'
-}, {
-  username: 'd',
-  webId: 'https://d.webid.jolocom.de/profile/card#me',
-  name: 'Dean Cooksey',
-  email: 'dean.g.cooksey@gmail.com'
-}, {
-  username: 'acl100',
-  webId: 'https://acl100.webid.jolocom.de/profile/card#me',
-  name: 'ACL100',
-  email: 'test@jolocom.com'
 }, {
   username: 'axel',
   webId: 'https://axel.webid.jolocom.de/profile/card#me',
   name: 'Axel',
-  email: "axel@whatever.com"
+  email: 'axel@notsure.??'
 }, {
-  username: 'dtest',
-  webId: 'https://dtest.webid.jolocom.de/profile/card#me',
-  name: 'dtest',
-  email: "dtest@whatever.com"
+  username: 'dean',
+  webId: 'https://dean.webid.jolocom.de/profile/card#me',
+  name: 'Dean',
+  email: 'dean@notsure.??'
+}, {
+  username: 'eugeniu',
+  webId: 'https://eugeniu.webid.jolocom.de/profile/card#me',
+  name: 'Eugeniu',
+  email: 'eugeniu@notsure.??'
+}, {
+  username: 'ericismyname',
+  webId: 'https://ericismyname.webid.jolocom.de/profile/card#me',
+  name: 'Eric',
+  email: 'eric@notsure.??'
+}, {
+  username: 'markus',
+  webId: 'https://markus.webid.jolocom.de/profile/card#me',
+  name: 'Markus',
+  email: 'markus@notsure.??'
+}, {
+  username: 'isabel',
+  webId: 'https://isabel.webid.jolocom.de/profile/card#me',
+  name: 'Isabel',
+  email: 'isabel@notsure.??'
 }]
 
 export let conversations = [{
