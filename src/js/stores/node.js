@@ -1,3 +1,4 @@
+import profileActions from 'actions/profile'
 import Reflux from 'reflux'
 import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
@@ -28,7 +29,7 @@ export default Reflux.createStore({
    * @summary Deletes a rdf file and it's connection to the center node
    * and plays the delete animation
    * @param {object} node - the node to be deleted.
-   * @param {object} centerNode - we dissconnect from this node.
+   * @param {object} centerNode - we disconnect from this node.
    */
 
   onRemove(node, centerNode){
@@ -54,12 +55,13 @@ export default Reflux.createStore({
       }).then((query)=>{
         this.gAgent.deleteTriple(query).then((result)=>{
           if (result.ok){
+            profileActions.load() // Reload profile info (bitcoin, passport)
             graphActions.deleteNode(node) 
           }
         })
       })
     })
-	}, 
+  }, 
 
   /**
    * @summary Disconnects a node from another node.
