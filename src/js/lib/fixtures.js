@@ -48,27 +48,3 @@ export let contacts = [{
   name: 'Isabel',
   email: 'isabel@notsure.??'
 }]
-
-export let conversations = [{
-  type: 'user',
-  username: 'justas',
-  items: [{
-    author: {
-      username: 'justas',
-      name: 'Justas Azna'
-    },
-    content: 'This is completely fucked up!',
-    date: new Date()
-  }]
-}, {
-  type: 'user',
-  username: 'joachim',
-  items: [{
-    author: {
-      username: 'joachim',
-      name: 'Joachim Lohkamp'
-    },
-    content: 'How are you?',
-    date: new Date()
-  }]
-}]
