@@ -21,7 +21,8 @@ let Compose = React.createClass({
       if (e.shiftKey){
         return true
       } else {
-        this.onSubmit()
+        setTimeout(this.onSubmit.bind(this),5)
+        return false
       }
     }
   },
@@ -30,6 +31,7 @@ let Compose = React.createClass({
     if (this.props.onKeyUp) {
       this.props.onKeyUp(e)
     }
+    return false
   },
 
   onSubmit() {
@@ -40,6 +42,7 @@ let Compose = React.createClass({
   },
 
   onChange(e) {
+    console.log('onchange', e.target.value,e.hellox)
     this.setState({
       content: e.target.value
     })
