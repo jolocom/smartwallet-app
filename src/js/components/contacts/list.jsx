@@ -31,7 +31,13 @@ let Contacts = React.createClass({
     if (!this.state.contacts || !this.state.contacts.length) {
       emptyView = <div style={styles.empty}>No contacts</div>
     }
-
+    
+    console.table(this.state.contacts)
+    this.state.contacts.sort((a,b) => {
+      return a.username.toLowerCase() > b.username.toLowerCase()
+    })
+    console.table(this.state.contacts)
+    
     return (
       <div>
         {emptyView}
