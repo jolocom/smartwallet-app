@@ -113,17 +113,20 @@ let GenericFullScreen = React.createClass({
 
   _handleDelete() {
     let node = this.props.state.activeNode
-    // let center = this.props.state.center
+    let center = this.props.state.center
     let navHis = this.props.state.navHistory
 
-    if (graphActions.state.webId === node.uri) {
-      alert('You cannot remove your own node.') // @TODO toast/snackbar
-    } else if (node.rank === 'center') {
+    if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
       graphActions.drawAtUri(prev.uri, 1).then(() => {
         nodeActions.remove(node, prev)
       })
     }
+    else
+    {
+      nodeActions.remove(node, center)
+    }
+    
     this._handleClose()
   },
 
