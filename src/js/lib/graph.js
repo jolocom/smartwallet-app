@@ -957,6 +957,7 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   onClick = function (node, data) {
+    
     d3.event.stopPropagation()
 
     this.emit('select', data, node)
@@ -968,6 +969,8 @@ export default class GraphD3 extends EventEmitter {
         data.elipsisdepth >= 0) { return }
     data.wasHighlighted = data.highlighted
 
+    node.parentNode.appendChild(node)
+    
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
 
