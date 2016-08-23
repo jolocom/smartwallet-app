@@ -68,7 +68,20 @@ let Conversations = React.createClass({
     else
     {
       this.state.conversations.items.sort(
-        (item_a,item_b) => item_a.lastMessage.created.getTime() < item_b.lastMessage.created.getTime()
+        (item_a,item_b) => {
+          if (!item_a.lastMessage) {
+            if (!item_b.lastMessage) {
+              return 0    
+            }
+            else {
+              return -1
+            }
+          }
+          else if (!item_b.lastMessage) {
+              return 1
+          }
+          return item_a.lastMessage.created.getTime() < item_b.lastMessage.created.getTime()
+        }
       ) 
     }
 
