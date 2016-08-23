@@ -22,6 +22,13 @@ export default Reflux.createStore({
   },
 
   onLoad(webId, id) {
+    this.state = {
+      loading: true,
+      items: []
+    }
+
+    this.trigger(this.state)
+
     ConversationsStore.getUri(webId, id).then((url) => {
       return Promise.all([
         chatAgent.getConversation(url, webId),
