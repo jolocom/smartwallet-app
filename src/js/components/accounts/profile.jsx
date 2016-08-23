@@ -260,7 +260,9 @@ let Profile = React.createClass({
                       <ActionCreditCard />
                     </td>
                     <td>
+                      {/* TODO: form validation, only accept numbers etc */}
                       <TextField floatingLabelText="Add credit card"
+                        onChange={this._handleCreditCardValidation}
                         style={styles.input} />
                     </td>
                   </tr>
@@ -337,6 +339,15 @@ let Profile = React.createClass({
       }).catch((e) => {
         // console.log(e)
       })
+    }
+  },
+
+  // user can only enter numerical values
+  _handleCreditCardValidation({target}) {
+    let digits = '0123456789'
+    if (!digits.includes(target.value[target.value.length - 1])) {
+      target.value = target.value.replace(
+        target.value[target.value.length - 1], '')
     }
   },
 
