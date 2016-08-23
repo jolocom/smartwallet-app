@@ -37,16 +37,16 @@ let Contacts = React.createClass({
         {emptyView}
         <List>
           {this.state.contacts.map(({username, webId, name, email, imgUri}) => {
-
-            //Check if name is set then set the first character as the name initial
-            //otherwise, check if name is empty or whitespaces then set it to Unnamed and let its initial be ?
+            // Check if name is set then set the first character as the name
+            // initial otherwise, check if name is empty or whitespaces then
+            // set it to Unnamed and let its initial be ?
 
             let nameInitial
 
-            if(name){
+            if (name) {
               nameInitial = name[0].toUpperCase()
-            } else if (!name || name.trim()){
-              name = "Unnamed"
+            } else if (!name || name.trim()) {
+              name = 'Unnamed'
               nameInitial = '?'
             }
 
@@ -71,7 +71,7 @@ let styles = {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     fontSize: '18px'
   }
 }
