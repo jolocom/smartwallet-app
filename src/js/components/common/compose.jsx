@@ -42,7 +42,6 @@ let Compose = React.createClass({
   },
 
   onChange(e) {
-    console.log('onchange', e.target.value,e.hellox)
     this.setState({
       content: e.target.value
     })

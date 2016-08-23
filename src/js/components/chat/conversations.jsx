@@ -93,6 +93,7 @@ let Conversations = React.createClass({
         <FloatingActionButton
           secondary
           href="#/chat/new"
+          linkButton={true}
           style={styles.actionButton}
         >
           <FontIcon className="material-icons">add</FontIcon>
@@ -137,15 +138,19 @@ let ConversationsListItem = React.createClass({
     } else if (otherPerson) {
       nameInitial = otherPerson.name[0].toUpperCase()
     }
-
-    let avatar
-    if (otherPerson) {
-      avatar = (
-        <Avatar src={otherPerson.img}>
-          {otherPerson.name && nameInitial}
-        </Avatar>
-      )
+    else
+    {
+      nameInitial = '?'
     }
+    
+    let avatar
+    
+    avatar = (
+        <Avatar src={otherPerson && otherPerson.img}>
+          {nameInitial}
+        </Avatar>
+    )
+    
     let date = moment(created).fromNow()
     return (
       <ListItem
