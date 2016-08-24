@@ -156,7 +156,6 @@ export default class GraphD3 extends EventEmitter {
     // <- creates force and starts it. why does it
     // need to be done several times?
     this.drawBackground()
-
     // refresh the background in case we need to draw
     // more things because for instance scrolling is now enabled
     this.d3update()
@@ -364,7 +363,9 @@ export default class GraphD3 extends EventEmitter {
     // add avatars
     // @todo review following code / integrate better
 
-    let defsImages = nodeEnter.append('svg:defs')
+    let defsImages = nodeEnter.filter((d) => d.type !== 'passport')
+      .append('svg:defs')
+
     defsImages.append('svg:pattern')
       .attr('id', (d) => d.uri + d.connection)
       .attr('class', 'image')
@@ -419,16 +420,29 @@ export default class GraphD3 extends EventEmitter {
 
     filterShadow.append('feGaussianBlur')
       .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 1)
+      .attr('stdDeviation', 0.8)
       .attr('result', 'blur')
 
     // translate output of Gaussian blur to the right and downwards with 2px
     // store result in offsetBlur
     filterShadow.append('feOffset')
       .attr('in', 'blur')
-      .attr('dx', -1.5)
-      .attr('dy', 1.5)
+      .attr('dx', 0)
+      .attr('dy', 0.5)
       .attr('result', 'offsetBlur')
+
+    // controls the color/opacity of drop shadow
+    filterShadow.append('feFlood')
+        .attr('in', 'offsetBlur')
+        .attr('flood-color', '#2c2c2c')
+        .attr('flood-opacity', '0.6')
+        .attr('result', 'offsetColor')
+
+    filterShadow.append('feComposite')
+        .attr('in', 'offsetColor')
+        .attr('in2', 'offsetBlur')
+        .attr('operator', 'in')
+        .attr('result', 'offsetBlur')
 
     // overlay original SourceGraphic over translated blurred opacity by using
     // feMerge filter. Order of specifying inputs is important!
@@ -484,9 +498,17 @@ export default class GraphD3 extends EventEmitter {
         if (d.unavailable) {
           return 'Not found'
         } else if (d.name) {
-          return d.name
+          if (d.name.length > 7) {
+            return d.name.substring(0, 7) + '...'
+          } else {
+            return d.name
+          }
         } else if (d.fullName) {
-          return d.fullName
+          if (d.fullName.length > 7) {
+            return d.fullName.substring(0, 7) + '...'
+          } else {
+            return d.fullName
+          }
         } else if (d.title) {
           if (d.title.length > 7) {
             return d.title.substring(0, 7) + '...'
@@ -508,12 +530,26 @@ export default class GraphD3 extends EventEmitter {
       .attr('dy', '0.5em')
       .style('font-size', '80%')
       .text(function (d) {
+        if (d.type === 'bitcoin') {
+          return ''
+        }
+
         // In case the person has no description available.
         if (d.description) {
-          if (d.description.length > 45) {
-            return (d.description.substring(0, 45) + '...')
+          if (!d.description.includes(' ')) {
+            // if the description does not contain words i.e f94hcnfsadfs9
+            if (d.description.length > 12) {
+              return (d.description.substring(0, 12) + '...')
+            } else {
+              return d.description
+            }
           } else {
-            return d.description
+            // if description contains words with spaces i.e Bitcoin Key Address
+            if (d.description.length > 45) {
+              return (d.description.substring(0, 45) + '...')
+            } else {
+              return d.description
+            }
           }
         }
       })
@@ -876,7 +912,8 @@ export default class GraphD3 extends EventEmitter {
       .select('.nodecircle')
       .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
       .style('fill', (d) => {
-        if (d.img && d.rank !== 'history' && !(d.elipsisdepth >= 0)) {
+        if (d.img && d.rank !== 'history' &&
+        d.type !== 'passport' && !(d.elipsisdepth >= 0)) {
           return 'url(#' + d.uri + d.connection + ')'
         } else {
           if (d.elipsisdepth === 0) {
@@ -932,7 +969,10 @@ export default class GraphD3 extends EventEmitter {
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('dy', '.35em')
       .attr('opacity', (d) => {
-        return ((d.img || d.elipsisdepth >= 0) && d.rank !== 'history') ? 0 : 1
+        return ((d.img || d.elipsisdepth >= 0) &&
+                d.rank !== 'history' && d.type !== 'passport')
+                ? 0
+                : 1
       })
 
     // Hide the descriptions of all nodes
@@ -972,6 +1012,8 @@ export default class GraphD3 extends EventEmitter {
         d3.event.defaultPrevented ||
         data.elipsisdepth >= 0) { return }
     data.wasHighlighted = data.highlighted
+
+    node.parentNode.appendChild(node)
 
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
@@ -1041,7 +1083,9 @@ export default class GraphD3 extends EventEmitter {
       // Fade in the node name and make the text opaque
       d3.select(node).select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
-        .attr('dy', (d) => d.description ? '-.5em' : '.35em')
+        .attr('dy', (d) => d.description && d.type !== 'bitcoin'
+                            ? '-.5em'
+                            : '.35em')
         .attr('opacity', 1)
       data.highlighted = true
     }

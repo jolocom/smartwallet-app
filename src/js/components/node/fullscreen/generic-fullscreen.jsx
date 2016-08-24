@@ -84,7 +84,7 @@ let GenericFullScreen = React.createClass({
       },
       floatingButtons: {
         position: 'absolute',
-        top: '176px',
+        top: this.state.fullscreen ? '90vh' : '176px',
         right: '10px',
         marginTop: '-28px',
         zIndex: 1500
@@ -113,17 +113,20 @@ let GenericFullScreen = React.createClass({
 
   _handleDelete() {
     let node = this.props.state.activeNode
-    // let center = this.props.state.center
+    let center = this.props.state.center
     let navHis = this.props.state.navHistory
 
-    if (graphActions.state.webId === node.uri) {
-      alert('You cannot remove your own node.') // @TODO toast/snackbar
-    } else if (node.rank === 'center') {
+    if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
       graphActions.drawAtUri(prev.uri, 1).then(() => {
         nodeActions.remove(node, prev)
       })
     }
+    else
+    {
+      nodeActions.remove(node, center)
+    }
+    
     this._handleClose()
   },
 
@@ -231,7 +234,7 @@ let GenericFullScreen = React.createClass({
 
   render() {
     let styles = this.getStyles()
-    
+
     // @TODO bind handlers to preset actions here
     // in: {name: 'disconnect'}
     // out: {name: 'disconnect',
