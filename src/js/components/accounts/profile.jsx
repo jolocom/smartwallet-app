@@ -260,7 +260,7 @@ let Profile = React.createClass({
                       <ActionCreditCard />
                     </td>
                     <td>
-                      {/* TODO: form validation, only accept numbers etc */}
+                      {/* TODO: back-end implementation */}
                       <TextField floatingLabelText="Add credit card"
                         onChange={this._handleCreditCardValidation}
                         style={styles.input} />
