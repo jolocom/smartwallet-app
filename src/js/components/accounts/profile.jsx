@@ -18,10 +18,8 @@ import {
 import {grey500} from 'material-ui/styles/colors'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-import EditorAttachMoney from 'material-ui/svg-icons/editor/attach-money'
-import ActionFingerprint from 'material-ui/svg-icons/action/fingerprint'
+import LinearProgress from 'material-ui/LinearProgress'
 
-import GraphStore from 'stores/graph-store'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
@@ -30,14 +28,14 @@ import GraphAgent from '../../lib/agents/graph.js'
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange'),
+    Reflux.listenTo(ProfileStore, 'onProfileChange')
   ],
 
   onProfileChange: function(state) {
     this.setState(state)
   },
 
-  componentDidMount(){
+  componentDidMount() {
     this.loading = false
   },
 
@@ -79,20 +77,52 @@ let Profile = React.createClass({
       input: {
         width: '100%'
       },
+      passportContainer: {
+        paddingTop: '28px',
+        boxSizing: 'border-box',
+        minHeight: '72px'
+      },
+      passportIcon: {
+        width: '30px'
+      },
+      passportPreview: {
+        width: '40px',
+        marginRight: '10px'
+      },
+      uploadPassportButton: {
+        margin: '0 10px 0 0',
+        verticalAlign: 'top'
+      },
+      removePassportButton: {
+        verticalAlign: 'top'
+      },
+      bitcoinIcon: {
+        width: '30px'
+      },
       formTable: {
         width: '100%'
       },
       iconCell: {
         verticalAlign: 'bottom',
         textAlign: 'right',
-        paddingRight: '10px'
+        paddingRight: '10px',
+        paddingBottom: '7px'
+      },
+      iconCellPassport: {
+        paddingRight: '7px'
+      },
+      iconCellBitcoinAddress: {
+        paddingRight: '7px'
+      },
+      progBar: {
       }
     }
     return styles
   },
 
   render() {
-    let img, styles = this.getStyles()
+    let img
+    let styles = this.getStyles()
     let {file, imgUri} = this.state
 
     if (file) {
@@ -100,11 +130,11 @@ let Profile = React.createClass({
     } else if (imgUri) {
       img = Util.uriToProxied(imgUri)
     }
-    
+
     let bgImg = img || '/img/person-placeholder.png'
     return (
-      <Dialog ref="dialog" fullscreen={true}>
-        <Layout fixedHeader={true}>
+      <Dialog ref="dialog" fullscreen>
+        <Layout fixedHeader>
           <AppBar
             title="Edit profile"
             style={styles.bar}
@@ -113,13 +143,13 @@ let Profile = React.createClass({
                 onClick={this.hide}
                 iconClassName="material-icons">arrow_back</IconButton>
             }
-            iconElementRight={
-							!this.state.loading ?
-								<IconButton
-								onClick={this._handleUpdate}
-								iconClassName="material-icons">check</IconButton>
-							:
- 								<IconButton  iconClassName="material-icons">hourglass_empty</IconButton>
+            iconElementRight={!this.state.loading
+              ? <IconButton
+                onClick={this._handleUpdate}
+                iconClassName="material-icons">check</IconButton>
+              : <IconButton iconClassName="material-icons">
+                  hourglass_empty
+              </IconButton>
             }
           />
           <Content style={styles.content}>
@@ -130,12 +160,10 @@ let Profile = React.createClass({
                   {background: `url(${bgImg}) center / cover`}
                 )} />
               <CardActions>
-                {img ?
-                  <FlatButton label="Remove" onClick={this._handleRemove} />
-                  :
-                  <FlatButton label="Select or take picture"
-                  onClick={this._handleSelect}/>
-                }
+                {img
+                  ? <FlatButton label="Remove" onClick={this._handleRemove} />
+                  : <FlatButton label="Select or take picture"
+                    onClick={this._handleSelect} />}
               </CardActions>
             </Card>
             <input
@@ -183,18 +211,42 @@ let Profile = React.createClass({
                     </td>
                   </tr>
                   <tr>
-                    <td style={styles.iconCell}><ActionFingerprint /></td>
+                    <td style={Object.assign({},
+                      styles.iconCell, styles.iconCellPassport)}>
+                      <img src="img/ic_passport_24px.svg"
+                        style={styles.passportIcon} />
+                    </td>
                     <td>
-                      <TextField floatingLabelText="Passport"
-                                 onChange={Util.linkToState(this, 'passport')}
-                                 value={this.state.passport}
-                                 style={styles.childImg} />
-                      <FlatButton label="Upload passport"
-                  onClick={this._handleSelectPassport}/>
+                      <div style={styles.passportContainer}>
+                      {this.state.passportImgUri
+                        ? <div>
+                          <img
+                            src={this.state.passportImgUri}
+                            style={styles.passportPreview} />
+                          <FlatButton
+                            label="Remove passport"
+                            onClick={this._handleRemovePassport}
+                            style={styles.removePassportButton} />
+                        </div>
+                      : <div>
+                      {this.state.loading
+                        ? <LinearProgress
+                          mode="indeterminate"
+                          style="progBar" />
+                        : <FlatButton
+                          label="Upload passport"
+                          onClick={this._handleSelectPassport}
+                          style={styles.uploadPassportButton} />}
+                      </div>}
+                      </div>
                     </td>
                   </tr>
                   <tr>
-                    <td style={styles.iconCell}><EditorAttachMoney /></td>
+                    <td style={Object.assign({},
+                      styles.iconCell, styles.iconCellBitcoinAddress)}>
+                      <img src="img/ic_bitcoin_24px.svg"
+                        style={styles.bitcoinIcon} />
+                    </td>
                     <td>
                       <TextField floatingLabelText="Bitcoin Address"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
@@ -214,7 +266,7 @@ let Profile = React.createClass({
   _handleUpdate() {
     if (!this.loading) {
       this.hide()
-      ProfileActions.update(Object.assign({},this.state, {show:false}))
+      ProfileActions.update(Object.assign({}, this.state, { show: false }))
     }
   },
 
@@ -222,7 +274,7 @@ let Profile = React.createClass({
     this.fileInputEl.value = null
     this.fileInputEl.click()
   },
-  
+
   _handleSelectPassport() {
     this.passportFileInputEl.value = null
     this.passportFileInputEl.click()
@@ -243,8 +295,15 @@ let Profile = React.createClass({
     }
   },
 
-  _handleSelectFile({target}) {
+  _handleRemovePassport() {
+    this.passportFileInputEl.value = null
 
+    this.setState({
+      passportImgUri: ''
+    })
+  },
+
+  _handleSelectFile({target}) {
     let gAgent = new GraphAgent()
     let file = target.files[0]
     if (!accepts(file, 'image/*')) {
@@ -253,26 +312,25 @@ let Profile = React.createClass({
       })
     } else {
       this.setState({
-				loading: true
-			})
+        loading: true
+      })
       this.setState({
         error: null,
         file: file
       })
 
       gAgent.storeFile(this.state.storage, file).then((res) => {
-				this.setState({
-					loading: false
-				})
+        this.setState({
+          loading: false
+        })
         this.setState({imgUri: res})
-      }).catch((e)=>{
-        console.log(e)
+      }).catch((e) => {
+        // console.log(e)
       })
     }
   },
 
   _handleSelectPassportFile({target}) {
-
     let gAgent = new GraphAgent()
     let file = target.files[0]
     if (!accepts(file, 'image/*')) {
@@ -281,20 +339,20 @@ let Profile = React.createClass({
       })
     } else {
       this.setState({
-				loading: true
-			})
+        loading: true
+      })
       this.setState({
         error: null,
         passportFile: file
       })
 
       gAgent.storeFile(this.state.storage, file).then((res) => {
-				this.setState({
-					loading: false
-				})
+        this.setState({
+          loading: false
+        })
         this.setState({passportImgUri: res})
-      }).catch((e)=>{
-        console.log(e)
+      }).catch((e) => {
+        // console.log(e)
       })
     }
   }

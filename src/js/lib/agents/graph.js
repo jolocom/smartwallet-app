@@ -44,7 +44,7 @@ class GraphAgent {
     return new Promise((resolve, reject) => {
       // Check if the image is there and it is a file.
       if (image instanceof File) {
-        this.storeFile(dstContainer, image).then((result) => {
+        this.storeFile(dstContainer, image, confidential).then((result) => {
           resolve(result)
         }).catch((err) => {
           reject(err)
@@ -81,8 +81,10 @@ class GraphAgent {
             }
           }).then((answer)=>{
             if (answer.ok) {
-              GraphActions.drawNewNode(
-                  newNodeUri.uri, PRED.isRelatedTo.uri)
+              // Removed for the passport feature; better to handle this separately
+              // and with the whole state being reloaded?
+              // GraphActions.drawNewNode(
+              //    newNodeUri.uri, PRED.isRelatedTo.uri)
             }
             return newNodeUri;
           }).catch((error)=>{
@@ -104,11 +106,11 @@ class GraphAgent {
     })
   }
   
-  storeFile(dstContainer, file) {
+  storeFile(dstContainer, file, confidential = false) {
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
       let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-      return this.putACL(uri, webID).then(()=>{
+      return this.putACL(uri, webID, confidential).then(()=>{
         return fetch(Util.uriToProxied(uri),{
           method: 'PUT', 
           credentials: 'include',
@@ -151,15 +153,15 @@ class GraphAgent {
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
-
-    if (confidential)
+    
+    if (!confidential)
     {
       acl_writer.addTriple(rdf.sym('#readall'), PRED.type, ACL('Authorization'))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), PRED.Agent)
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
     }
-      
+    
     return fetch(Util.uriToProxied(acl_uri),{
       method: 'PUT', 
       credentials: 'include',
@@ -327,11 +329,15 @@ class GraphAgent {
     return fetch(Util.uriToProxied(uri),{
       credentials: 'include' 
     }).then((ans) => {
+      if (!ans.ok)
+        throw new Error(ans.status) // Call the catch if response error
+        
       return ans.text().then((res)=>{
         return parser.parse(res, uri) 
       })
-    }).catch(()=>{
-      return {uri: uri, unav : true, connection:null,  triples:[]} 
+    }).catch((err)=>{ // Catch is automatically called on network errors only
+      let statusCode = err.message
+      return {uri: uri, unav : true, connection:null,  triples:[], statusCode: parseInt(statusCode)} 
     })
   }
 
@@ -342,37 +348,42 @@ class GraphAgent {
     // We will only follow and parse these links
     let Links = [PRED.knows.uri, PRED.isRelatedTo.uri]
     let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
-    return new Promise ((resolve) => {
-      let graphMap = []
-      // If there are no adjacent nodes to draw, we return an empty array.
-      if (neighbours.length === 0){
-        resolve(graphMap)
-        return
-      }
-      // If there are adjacent nodes to draw, 
-      // we parse them and return an array of their triples
-      let i = 0
-      neighbours.map((triple) => {
-        this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
+      
+    // If there are adjacent nodes to draw, 
+    // we parse them and return an array of their triples
+    let neighbourErrors = 0
+    let graphMap = []
+
+    return Promise.all(neighbours.map((triple) => {
+        return this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
           // This is a node that coulnt't be retrieved, either 404, 401 etc. 
-          if (result.unav ) {
+          if (result.unav) {
             // We are setting the connection field of the node, we need it 
             // in order to be able to dissconnect it from our center node later.
-            result.connection = triple.predicate.uri
-            graphMap.push(result)
-            i += 1
+            
+            neighbourErrors += 1
+            
+            // if forbidden access to node, do not show it
+            // (we assume the center node isn't ours then)
+            // @TODO find better way to know if we have rights to center node
+            if (result.statusCode !== 403)
+            {             
+              result.connection = triple.predicate.uri
+              graphMap.push(result)
+            }
+            
           } else {
             // This is a valid node.
             result.triples.connection = triple.predicate.uri
             graphMap.push(result.triples)
             graphMap[graphMap.length - 1].uri = triple.object.uri
           }
-          if (graphMap.length === neighbours.length) {
-            console.log('Loading done,', i,'rdf files were / was skipped.')
-            resolve(graphMap)
-          }
+          
         })
-      })
+      })).then(() => {
+        console.log('Loading done,', neighbourErrors, 'rdf files were / was skipped.')
+        console.log('graphMap',graphMap)
+        return graphMap
     })
   }
 

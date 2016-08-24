@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Generates inbox and inbox.acl files for existing users 
+# which do not have inbox or inbox.acl files.
+# These files are now automatically created when signing
+# up to Little Sister.
+
+# Run this script inside the /root/dist folder; make sure that
+# the inbox.tpl and inbox.acl.tpl files are in /root/dist also
+
+for d in */ ; do
+    echo "DIRECTORY: $d"
+    
+    # Make little-sister directory if doesn't exist
+    mkdir -p ./${d}little-sister/
+    
+    # # RDF # #
+    
+    # Replace template with current directory name
+	rdf_template=$(cat ./inbox.tpl)
+	rdf_result="${rdf_template//__DIRECTORY__/$d}"
+    
+    if [ ! -e ./${d}little-sister/inbox ] ; then
+      echo "Writing inbox for $d"
+      
+      # Write to result
+      echo "$rdf_result" > ./${d}little-sister/inbox
+    
+      echo "The inbox file was generated using the bash script." > ./${d}little-sister/inbox.nfo
+    fi
+    
+    # # ACL # #
+    
+    # Replace template with current directory name
+	acl_template=$(cat ./inbox.acl.tpl)
+	acl_result="${acl_template//__DIRECTORY__/$d}"
+    
+    if [ ! -e ./${d}little-sister/inbox.acl ] ; then
+      echo "Writing inbox.acl for $d"
+      
+      # Write to result
+      echo "$acl_result" > ./${d}little-sister/inbox.acl
+    
+      echo "The inbox ACL file was generated using the bash script." > ./${d}little-sister/inbox.acl.nfo
+    fi
+done
