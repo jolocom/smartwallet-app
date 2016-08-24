@@ -47,4 +47,9 @@ export let contacts = [{
   webId: 'https://isabel.webid.jolocom.de/profile/card#me',
   name: 'Isabel',
   email: 'isabel@notsure.??'
+}, {
+  username: 'lovius',
+  webId: 'https://lovius.webid.jolocom.de/profile/card#me',
+  name: 'Carla',
+  email: 'carla@notsure.??'
 }]
