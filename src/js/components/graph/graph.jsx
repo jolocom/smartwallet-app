@@ -11,6 +11,7 @@ import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
+import Radium from 'radium'
 
 let Graph = React.createClass({
 
