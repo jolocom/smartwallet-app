@@ -11,7 +11,7 @@ import {EventEmitter} from 'events'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
-import TouchRotate from './touchRotate'
+import TouchRotate from 'lib/lib/touch-rotate'
 import Utils from 'lib/util'
 import particles from './particles'
 
@@ -75,6 +75,7 @@ export default class GraphD3 extends EventEmitter {
           } else if (radianDiff > Math.PI) {
             radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
           }
+
           // first drag
           if (lastNotchRadian === false) {
             lastNotchRadian = touchMoveRadian
@@ -253,6 +254,10 @@ export default class GraphD3 extends EventEmitter {
         .attr('class', 'dial')
 
       this.updateDial()
+
+      // Emit event that indicatorOverlay should be drawn.
+      // Listened to on graph.jsx
+      this.emit('scrolling-drawn')
     }
   }.bind(this)
 
@@ -476,7 +481,9 @@ export default class GraphD3 extends EventEmitter {
       })
       // In case the rdf card contains no name
       .text((d) => {
-        if (d.name) {
+        if (d.unavailable) {
+          return 'Not found'
+        } else if (d.name) {
           return d.name
         } else if (d.fullName) {
           return d.fullName
@@ -487,7 +494,7 @@ export default class GraphD3 extends EventEmitter {
             return d.title
           }
         } else {
-          return 'Not Found'
+          return 'Unnamed'
         }
       })
       .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
@@ -527,6 +534,9 @@ export default class GraphD3 extends EventEmitter {
     })
     this.node.on('dblclick', function (data) {
       self.onDblClick(this, data)
+    })
+    this.svg.on('click', function (data) {
+      self.deselectAll()
     })
 
     full.on('click', function (data) {
@@ -584,7 +594,7 @@ export default class GraphD3 extends EventEmitter {
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
   dragEnd = function (node) {
-    if (node.rank === 'center' || node.rank === 'unavailable') {
+    if (node.rank === 'center' || node.unavailable) {
       this.force.start()
         // In here we would have the functionality that opens the node's card
     } else if (node.rank === 'neighbour' || node.rank === 'history') {
@@ -873,9 +883,9 @@ export default class GraphD3 extends EventEmitter {
             return theme.graph.elipsis1
           } else if (d.elipsisdepth === 1) {
             return theme.graph.elipsis2
+          } else if (d.unavailable) {
+            return STYLES.unavailableNodeColor
           } else if (d.rank === 'history') {
-            return STYLES.grayColor
-          } else if (d.rank === 'unavailable') {
             return STYLES.grayColor
           } else if (d.rank === 'center') {
             return theme.graph.centerNodeColor
@@ -943,6 +953,13 @@ export default class GraphD3 extends EventEmitter {
         d.highlighted = false
       })
   }
+
+  deselectAll = function() {
+    var self = this
+    d3.selectAll('svg .node').each(function(d) {
+      if (d.highlighted) self.onClick(this, d)
+    })
+  }.bind(this)
 
   onClick = function (node, data) {
     d3.event.stopPropagation()

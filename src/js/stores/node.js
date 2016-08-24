@@ -3,9 +3,7 @@ import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
 import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
-let SCHEMA = rdf.Namespace('https://schema.org/')
-
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+import {PRED} from 'lib/namespaces'
 
 export default Reflux.createStore({
   listenables: nodeActions,
@@ -74,8 +72,10 @@ export default Reflux.createStore({
     let subject = rdf.sym(centerNode.uri)
     let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
-    this.gAgent.deleteTriple(subject.uri, subject, predicate, object)
-	},
+    this.gAgent.deleteTriple(subject.uri, subject, predicate, object).then(function(){
+      graphActions.drawAtUri(centerNode.uri, 0)
+    })
+  },
 
   /**
    * @summary Links a node to another node.
@@ -87,8 +87,8 @@ export default Reflux.createStore({
 
   link(start, type, end, flag) {
     let predicate = null
-    if(type === 'generic') predicate = SCHEMA('isRelatedTo')
-    if(type ==='knows') predicate = FOAF('knows')
+    if(type === 'generic') predicate = PRED.isRelatedTo
+    if(type ==='knows') predicate = PRED.knows
     let payload = {
       subject: rdf.sym(start),
       predicate,
