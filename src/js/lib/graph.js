@@ -30,7 +30,6 @@ export default class GraphD3 extends EventEmitter {
 
     this.graphContainer = el
 
-
     this.rendered = false
     this.rotationIndex = 0
 
@@ -49,8 +48,8 @@ export default class GraphD3 extends EventEmitter {
       .append('svg:g')
       .attr('class', 'background-layer-links')
 
-    window.removeEventListener('resize',this.onResize)
-    window.addEventListener('resize',this.onResize)
+    window.removeEventListener('resize', this.onResize)
+    window.addEventListener('resize', this.onResize)
 
     // TouchRotate setup
     var thisInstance = this
@@ -845,22 +844,18 @@ export default class GraphD3 extends EventEmitter {
       .select('.nodecircleback')
       .transition('resetcolor').duration(STYLES.nodeTransitionDuration)
       .style('fill', (d) => {
-        if (d.img && d.rank !== 'history' && !(d.elipsisdepth >= 0)) {
-          return theme.graph.whiteBackground
+        if (d.elipsisdepth === 0) {
+          return theme.graph.elipsis1
+        } else if (d.elipsisdepth === 1) {
+          return theme.graph.elipsis2
+        } else if (d.rank === 'history') {
+          return STYLES.grayColor
+        } else if (d.rank === 'unavailable') {
+          return STYLES.grayColor
+        } else if (d.rank === 'center') {
+          return theme.graph.centerNodeColor
         } else {
-          if (d.elipsisdepth === 0) {
-            return theme.graph.elipsis1
-          } else if (d.elipsisdepth === 1) {
-            return theme.graph.elipsis2
-          } else if (d.rank === 'history') {
-            return STYLES.grayColor
-          } else if (d.rank === 'unavailable') {
-            return STYLES.grayColor
-          } else if (d.rank === 'center') {
-            return theme.graph.centerNodeColor
-          } else {
-            return theme.graph.textNodeColor
-          }
+          return theme.graph.textNodeColor
         }
       })
     // Reset colour of all circles
@@ -895,7 +890,7 @@ export default class GraphD3 extends EventEmitter {
       .filter(function(d) {
         return d.img
       })
-      .attr('opacity', 0.9)
+      .attr('opacity', 0.85)
 
     // Reset sizes of all patterns
     d3.selectAll('svg .node')
@@ -1131,7 +1126,11 @@ export default class GraphD3 extends EventEmitter {
   eraseGraph = function () {
     if (this.force) { this.force.stop() }
     this.svg
-    .selectAll('.background-layer .background-layer-links *, .background-layer ~ *')
+    .selectAll('.background-layer .background-layer-links *')
+    .remove()
+
+    this.svg
+    .selectAll('.background-layer ~ *')
     .remove()
   }.bind(this)
 
@@ -1233,15 +1232,14 @@ export default class GraphD3 extends EventEmitter {
     this.updateAfterRotationIndex()
   }.bind(this)
 
-
   onResize = function () {
     // Debounce
-    clearTimeout(this.onResizeTimeoutId || -1);
+    clearTimeout(this.onResizeTimeoutId || -1)
     this.onResizeTimeoutId = setTimeout(function() {
-      this.refreshDimensions();
+      this.refreshDimensions()
       this.svg.attr('width', this.width).attr('height', this.height)
       this.drawBackground()
       this.updateAfterRotationIndex()
-    }.bind(this),25)
+    }.bind(this), 25)
   }.bind(this)
 }
