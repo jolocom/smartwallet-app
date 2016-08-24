@@ -12,6 +12,7 @@ import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 import Radium from 'radium'
+import NodeTypes from 'lib/node-types'
 
 let Graph = React.createClass({
 
