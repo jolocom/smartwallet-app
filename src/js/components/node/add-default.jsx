@@ -58,9 +58,11 @@ let NodeAddDefault = React.createClass({
     if(this.state.graphState.user && this.state.graphState.center){
       let currentUser = this.state.graphState.user
       let centerNode = this.state.graphState.center
+      let isConfidential = (this.state.type == 'confidential')
+      if (isConfidential) this.state.type = 'default'
       
       // @TODO Previously called nodeActions.create; except it cannot have a return value
-      this.gAgent.createNode(currentUser, centerNode, title, description, image, this.state.type).then((uri) => {
+      this.gAgent.createNode(currentUser, centerNode, title, description, image, this.state.type, isConfidential).then((uri) => {
         graphActions.drawNewNode(uri.uri, PRED.isRelatedTo.uri)
       })
     } else {
@@ -91,6 +93,7 @@ let NodeAddDefault = React.createClass({
             <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="default" primaryText="Plain text" />
               <MenuItem value="image" primaryText="Image" />
+              <MenuItem value="confidential" primaryText="Confidential" />
             </SelectField>
           </div>
           <div style={styles.row}>
@@ -143,7 +146,7 @@ let styles = {
     flex: 1
   },
   select: {
-    width: 'auto',
+    width: '170px',
     marginLeft: '16px'
   }
 }

@@ -1,9 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
-import Radium from 'radium'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
-import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 import ProfileActions from 'actions/profile'
 
@@ -11,11 +8,6 @@ import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
-import CommunicationChat from 'material-ui/svg-icons/communication/chat'
-import ContentLink from 'material-ui/svg-icons/content/link'
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import ShareIcon from 'material-ui/svg-icons/content/reply'
 
 import {
   AppBar,
@@ -86,7 +78,7 @@ let GenericFullScreen = React.createClass({
       },
       floatingButtons: {
         position: 'absolute',
-        top: '176px',
+        top: this.state.fullscreen ? '90vh' : '176px',
         right: '10px',
         marginTop: '-28px',
         zIndex: 1500
@@ -115,15 +107,21 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleDelete() {
-    let {node, navHistory} = this.props
-    if (graphActions.state.webId === node.uri) {
-      alert('You cannot remove your own node.') // @TODO toast/snackbar
-    } else if (node.rank === 'center') {
-      let prev = navHistory[navHistory.length - 1]
+    let node = this.props.state.activeNode
+    let center = this.props.state.center
+    let navHis = this.props.state.navHistory
+
+    if (node.rank === 'center') {
+      let prev = navHis[navHis.length - 1]
       graphActions.drawAtUri(prev.uri, 1).then(() => {
         nodeActions.remove(node, prev)
       })
     }
+    else
+    {
+      nodeActions.remove(node, center)
+    }
+    
     this._handleClose()
   },
 

@@ -15,7 +15,9 @@ let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
 
 let wia = new WebIDAgent()
 
-let profile = {
+let profile = {}
+
+let defaultProfile = {
   show: false,
   fullName: '',
   givenName: '',
@@ -82,6 +84,9 @@ export default Reflux.createStore({
 
   // change state from triples
   onLoadCompleted(webid, triples) {
+    
+    profile = Object.assign({}, defaultProfile)
+    
     let relevant = triples.filter((t) => t.subject.uri === webid)
     profile.webid = webid
     for (var t of relevant) {

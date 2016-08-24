@@ -5,7 +5,6 @@
 import Reflux from 'reflux'
 import React from 'react'
 import ReactDOM from 'react/lib/ReactDOM'
-import Radium from 'radium'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
@@ -150,6 +149,24 @@ let Graph = React.createClass({
 
     if (this.graph) {
       this.graph.setRotationIndex(this.state.rotationIndex)
+    }
+
+    let nodeDetails
+
+    if (this.state.activeNode) {
+      let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
+
+      if (NodeFullScreenComponent)
+      {
+        nodeDetails = (
+          <NodeFullScreenComponent
+            node={this.state.activeNode}
+            center={this.state.center}
+            svg={this.state.selected}
+            state={this.state}
+          />
+        )
+      }
     }
 
     let fab
