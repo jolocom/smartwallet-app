@@ -1,5 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
+import Dialog from 'components/common/dialog'
+import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
 import ProfileActions from 'actions/profile'
@@ -8,6 +10,11 @@ import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
+import CommunicationChat from 'material-ui/svg-icons/communication/chat'
+import ContentLink from 'material-ui/svg-icons/content/link'
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+import ShareIcon from 'material-ui/svg-icons/content/reply'
 
 import {
   AppBar,
