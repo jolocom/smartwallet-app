@@ -48,7 +48,8 @@ let JolocomTheme = {
     focusColor: lime700
   },
   graph: {
-    centerNodeColor: '#b3c90f',
+    centerNodeColor: '#8fa319',
+    enlargedNodeColor: '#b3c90f',
     transitionStartNodeColor: '#6a6a6a',
     textNodeColor: '#9a9fa9',
     imageNodeColor: '#afb3bb',

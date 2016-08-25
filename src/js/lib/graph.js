@@ -988,6 +988,10 @@ export default class GraphD3 extends EventEmitter {
     if (data.rank === 'history' ||
         d3.event.defaultPrevented ||
         data.elipsisdepth >= 0) { return }
+     if (data.rank === 'center') {
+
+     }
+
     data.wasHighlighted = data.highlighted
 
     node.parentNode.appendChild(node)
@@ -1012,7 +1016,7 @@ export default class GraphD3 extends EventEmitter {
           if (!d.img) {
             d3.select(node).select('.nodecircle')
               .transition('highlight').duration(STYLES.nodeTransitionDuration)
-              .style('fill', theme.graph.centerNodeColor)
+              .style('fill', theme.graph.enlargedNodeColor)
           }
         })
 
