@@ -882,7 +882,8 @@ export default class GraphD3 extends EventEmitter {
           }
         }
         if (d.rank === 'center') {
-          return STYLES.largeNodeSize / 2
+          return ((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2
+          // return STYLES.largeNodeSize / 2
         } else if (d.rank === 'history') {
           return STYLES.smallNodeSize / 3
         } else {
