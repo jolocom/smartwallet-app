@@ -483,7 +483,7 @@ export default class GraphD3 extends EventEmitter {
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
       .attr('opacity', (d) => {
-        if (d.img && d.rank !== 'history') {
+        if (d.img && d.rank !== 'history' && d.type !== 'passport') {
           return 0
         } else {
           return 1
@@ -969,8 +969,8 @@ export default class GraphD3 extends EventEmitter {
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('dy', '.35em')
       .attr('opacity', (d) => {
-        return ((d.img || d.elipsisdepth >= 0) &&
-                d.rank !== 'history' && d.type !== 'passport')
+        return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
+                d.rank !== 'history')
                 ? 0
                 : 1
       })
