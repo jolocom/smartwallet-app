@@ -57,7 +57,8 @@ let JolocomTheme = {
     elipsis1: '#c9d1de',
     elipsis2: '#dbe0e9',
     backgroundColor: fade('#939f9a', 0.3),
-    connectionColor: fade('#939f9a', 0.15)
+    connectionColor: fade('#939f9a', 0.15),
+    whiteBackground: '#f2f2f3'
   },
   // Graph filters
   filters: {
