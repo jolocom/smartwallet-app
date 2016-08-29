@@ -278,8 +278,16 @@ export default class GraphD3 extends EventEmitter {
     this.archAngle = 360 / this.numberOfNeighbours
 
     this.arc = d3.svg.arc()
-      .innerRadius(this.largeNodeSize * 0.5)
-      .outerRadius(this.largeNodeSize * 0.57)
+      // shrunk size
+       .innerRadius(this.largeNodeSize * 0.5)
+       .outerRadius(this.largeNodeSize * 0)
+       .startAngle(0)
+
+
+    this.arcEnlarged = d3.svg.arc()
+      // enlarged size
+      .innerRadius(this.largeNodeSize * 0.57)
+      .outerRadius(this.largeNodeSize * 0)
       .startAngle(0)
 
     let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NODES
@@ -865,10 +873,16 @@ export default class GraphD3 extends EventEmitter {
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
+    // Reset radius of dial to match shrunken center node size
+    this.svg.select('.dial')
+      .transition('reset').duration(STYLES.nodeTransitionDuration)
+      .attr('d', this.arc)
+
     d3.selectAll('line')
       .attr('opacity', (d) => {
         return d.source.elipsisdepth >= 0 ? 0 : 1
       })
+
     // Reset size of all circles
     d3.selectAll('svg .node')
       .selectAll('.nodecircle')
@@ -1006,8 +1020,14 @@ export default class GraphD3 extends EventEmitter {
       data.highlighted = false
       this.emit('deselect')
     } else {
-      // NODE signifies the node that we clicked on. We enlarge it.
+      if (data.rank === 'center') {
+        // Enlarge the dial to match center node size
+        this.svg.select('.dial')
+          .transition('reset').duration(STYLES.nodeTransitionDuration)
+          .attr('d', this.arcEnlarged)
+      }
 
+      // NODE signifies the node that we clicked on. We enlarge it.
       // Enlarge the node
       d3.select(node).select('.nodecircle')
         .transition('grow').duration(STYLES.nodeTransitionDuration)
