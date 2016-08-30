@@ -372,12 +372,18 @@ export default class GraphD3 extends EventEmitter {
       .enter()
         .append('g')
         .attr('class', 'node')
+        .attr('transform', (d) => {
+          let x = this.centerCoordinates.x
+          let y = this.centerCoordinates.y - this.largeNodeSize * 1.5
+          return 'translate(' + x + ',' + y + ')'
+        })
         .call(this.nodeDrag)
 
     // NODES EXIT
     this.node
       .exit()
-        .remove()
+      .remove()
+      .merge(this.node)
 
     // add avatars
     // @todo review following code / integrate better
@@ -841,6 +847,7 @@ export default class GraphD3 extends EventEmitter {
   }
   resetPos = function () {
     d3.selectAll('.node')
+      .transition('pos').duration(STYLES.nodeTransitionDuration / 4)
       .attr('transform', (d) => {
         let x
         let y
@@ -1014,7 +1021,7 @@ export default class GraphD3 extends EventEmitter {
         .transition('grow').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
-        .each((d) => {
+        .each('start', (d) => {
           if (!d.img) {
             d3.select(node).select('.nodecircle')
               .transition('highlight').duration(STYLES.nodeTransitionDuration)
@@ -1238,7 +1245,7 @@ export default class GraphD3 extends EventEmitter {
 
   updateAfterRotationIndex = function() {
     this.updateDial()
-    if (this.force) {
+    if (this.visibleDataNodes) {
       // @TODO do we realy need to do all of the following?
 
       this.setUpVisibleNodes()
