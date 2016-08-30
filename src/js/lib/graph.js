@@ -30,7 +30,6 @@ export default class GraphD3 extends EventEmitter {
 
     this.graphContainer = el
 
-
     this.rendered = false
     this.rotationIndex = 0
 
@@ -49,15 +48,14 @@ export default class GraphD3 extends EventEmitter {
       .append('svg:g')
       .attr('class', 'background-layer-links')
 
-    window.removeEventListener('resize',this.onResize)
-    window.addEventListener('resize',this.onResize)
+    window.removeEventListener('resize', this.onResize)
+    window.addEventListener('resize', this.onResize)
 
     // TouchRotate setup
     var thisInstance = this
     var getTouchRotateCallbacks = function () {
       var lastNotchRadian = false
-      var amountOfTurns = 0;
-
+      var amountOfTurns = 0
       return {
         move: function (touchMoveRadian) {
           // closure isn't functional #todo
@@ -194,9 +192,9 @@ export default class GraphD3 extends EventEmitter {
     // now the nodes are there, we can initialize
     // Then we initialize the simulation, the force itself.
     // @TODO compile nodes object with object assign on-the-fly
-    this.force = d3.forceSimulation(this.visibleDataNodes)
-      .force("link",d3.forceLink(this.visibleDataLinks))
-      .force("charge", d3.forceManyBody())
+    // this.force = d3.forceSimulation(this.visibleDataNodes)
+    //   .force("link",d3.forceLink(this.visibleDataLinks))
+    //   .force("charge", d3.forceManyBody())
   //    .charge(-100)
     //  .chargeDistance(STYLES.largeNodeSize * 2)
 /*      .linkDistance((d) => {
@@ -221,7 +219,7 @@ export default class GraphD3 extends EventEmitter {
       .on('dragstart', function () {
         d3.event.sourceEvent.stopPropagation()
       }) d3v4 @TODO */
-    this.nodeDrag = function(){};
+    this.nodeDrag = function(){}
   }.bind(this)
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
@@ -614,54 +612,15 @@ export default class GraphD3 extends EventEmitter {
       self.onDblClick(this, data)
     })
     this.svg.on('click', function (data) {
-      self.deselectAll();
+      self.deselectAll()
     })
 
     full.on('click', function (data) {
       self.onClickFull(this, data)
     })
     this.resetAll()
-
-    this.force.on('tick', this.tick)
-  }.bind(this)
-
-  // This function fires upon tick, around 30 times per second?
-  tick = function (e) {
-    // @TODO overwriting the force coordinates, maybe not good
-    let k = 1 // * e.alpha d3v4
-    d3.selectAll('svg .node').attr('d', (d) => {
-      if (d.rank === 'center') {
-        d.x = this.centerCoordinates.x
-        d.y = this.centerCoordinates.y
-      } else if (d.rank === 'history') {
-        d.x += (this.centerCoordinates.x - d.x) * k
-        if (d.histLevel === 0) {
-          d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2) * k
-        } else {
-          d.y += (this.centerCoordinates.y - d.y + STYLES.largeNodeSize * 2 + (STYLES.smallNodeSize * 0.8) * (d.histLevel)) * k
-        }
-      }
-    })
-
-    if (this.numberOfNeighbours > this.MAX_VISIBLE_NODES) {
-      d3.selectAll('.node').attr('d', (d) => {
-        if (d.rank === 'neighbour' || d.elipsisdepth >= 0) {
-          d.x += (this.nodePositions[d.position].x - d.x) * k
-          d.y += (this.nodePositions[d.position].y - d.y) * k
-        }
-      })
-    }
-
-    // Update the link positions. @TODO shouldn't be needed? Call d3update() ?
-    d3.selectAll('.link')
-      .attr('x1', (d) => d.source.x)
-      .attr('y1', (d) => d.source.y)
-      .attr('x2', (d) => d.target.x)
-      .attr('y2', (d) => d.target.y)
-      // Update the node positions. We use translate because we are working with
-      // a group of elements rather than just one.
-    d3.selectAll('svg .node')
-      .attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')')
+    this.resetPos()
+    // this.force.on('tick', this.tick)
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
@@ -669,7 +628,7 @@ export default class GraphD3 extends EventEmitter {
   // in case it's dropped to the middle
   dragEnd = function (node) {
     if (node.rank === 'center' || node.unavailable) {
-      this.force.start()
+      // this.force.start()
         // In here we would have the functionality that opens the node's card
     } else if (node.rank === 'neighbour' || node.rank === 'history') {
       // We check if the node is dropped on top of the center node
@@ -681,7 +640,7 @@ export default class GraphD3 extends EventEmitter {
 
       // If yes, we change the perspective
       if (x && y) {
-        this.force.stop()
+        // this.force.stop()
         this.emit('center-changed', node)
       }
     }
@@ -692,10 +651,30 @@ export default class GraphD3 extends EventEmitter {
 
   setUpVisibleNodes = function () {
     // No scrolling
+    this.nodePositions = []
 
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NODES) {
+      for (let i = 0, num = 0; i < this.dataNodes.length; i++) {
+        if (this.dataNodes[i].rank === 'neighbour') {
+          this.dataNodes[i].position = num
+          num++
+        }
+      }
+
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
+
+      let angle = (Math.PI * 2) / this.numberOfNeighbours
+
+      for (let i = 0; i < this.dataNodes.length; i++) {
+        let pos = {
+          x: Math.sin((Math.PI) - (angle) * i) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.x,
+          y: Math.cos((Math.PI) - (angle) * i) * STYLES.largeNodeSize * 1.4 + this.centerCoordinates.y,
+          p: 'neighbours'
+        }
+
+        this.nodePositions.push(pos)
+      }
       return
     }
 
@@ -709,7 +688,6 @@ export default class GraphD3 extends EventEmitter {
 
     // Position nodes manually
 
-    this.nodePositions = []
 
     let extraSpaceFront = (this.numberOfNeighbours - this.MAX_VISIBLE_NODES - this.rotationIndex) > 2 ? 2 : (this.numberOfNeighbours - this.MAX_VISIBLE_NODES - this.rotationIndex)
     let extraSpaceBack = this.rotationIndex > 2 ? 2 : this.rotationIndex
@@ -860,6 +838,30 @@ export default class GraphD3 extends EventEmitter {
     // stops propagation to node click handler
     this.emit('view-node', data, node)
     d3.event.stopPropagation()
+  }
+  resetPos = function () {
+    d3.selectAll('.node')
+      .attr('transform', (d) => {
+        let x
+        let y
+        if (d.rank === 'center') {
+          x = this.centerCoordinates.x
+          y = this.centerCoordinates.y
+        } else if (d.rank === 'neighbour') {
+          x = this.nodePositions[d.position].x
+          y = this.nodePositions[d.position].y
+        } else if (d.rank === 'history') {
+          x = this.centerCoordinates.x
+          y = this.centerCoordinates.y + this.largeNodeSize * 2.1 + d.histLevel * this.smallNodeSize
+        }
+        return 'translate(' + x + ',' + y + ')'
+      })
+
+      // d3.selectAll('.link')
+      //   .attr('x1', (d) => d.source.x)
+      //   .attr('y1', (d) => d.source.y)
+      //   .attr('x2', (d) => d.target.x)
+      //   .attr('y2', (d) => d.target.y)
   }
 
   resetAll = function () {
@@ -1012,7 +1014,7 @@ export default class GraphD3 extends EventEmitter {
         .transition('grow').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
-        .each('start', (d) => {
+        .each((d) => {
           if (!d.img) {
             d3.select(node).select('.nodecircle')
               .transition('highlight').duration(STYLES.nodeTransitionDuration)
@@ -1062,7 +1064,7 @@ export default class GraphD3 extends EventEmitter {
 
   updateHistory = function (history) {
     if (typeof history !== 'undefined' && history.length > 0) {
-      this.force.stop()
+      // this.force.stop()
       for (var j = history.length - 1, rank = 0;
            j >= 0;
            j--, rank++) {
@@ -1095,10 +1097,10 @@ export default class GraphD3 extends EventEmitter {
         }
       }
       this.setUpVisibleNodes()
-      this.force.nodes(this.visibleDataNodes)
-      this.force.links(this.visibleDataLinks)
+      // this.force.nodes(this.visibleDataNodes)
+      // this.force.links(this.visibleDataLinks)
       this.d3update()
-      this.force.start()
+      // this.force.start()
     }
     this.d3update()
   }.bind(this)
@@ -1213,12 +1215,12 @@ export default class GraphD3 extends EventEmitter {
         }
 
         this.numberOfNeighbours--
-        this.force.stop()
+        // this.force.stop()
         this.setUpVisibleNodes()
-        this.force.nodes(this.visibleDataNodes)
-        this.force.links(this.visibleDataLinks)
+        // this.force.nodes(this.visibleDataNodes)
+        // this.force.links(this.visibleDataLinks)
         this.d3update()
-        this.force.start()
+        // this.force.start()
 
         // Once the animation is ended, we re-render everything
         // It updates the visibility of the radial
@@ -1240,8 +1242,8 @@ export default class GraphD3 extends EventEmitter {
       // @TODO do we realy need to do all of the following?
 
       this.setUpVisibleNodes()
-      this.force.stop()
-      this.force.nodes(this.visibleDataNodes)
+      // this.force.stop()
+      // this.force.nodes(this.visibleDataNodes)
       // this.force.links(this.visibleDataLinks)
       this.d3update()
       // this.force.start()
