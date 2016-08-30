@@ -465,7 +465,9 @@ export default class GraphD3 extends EventEmitter {
       return d.img
     })
       .attr('class', 'nodecircleback')
-      .attr('r', STYLES.smallNodeSize / 5)
+      .attr('r', '100')
+      //.attr('r', (((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2))
+      // .attr('r', STYLES.smallNodeSize / 5)
       .attr('fill', (d) => {
         if (d.elipsisdepth >= 0) {
           return theme.graph.textNodeColor
@@ -870,7 +872,8 @@ export default class GraphD3 extends EventEmitter {
           }
         }
         if (d.rank === 'center') {
-          return STYLES.largeNodeSize / 2
+          return ((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2
+          // return STYLES.largeNodeSize / 2
         } else if (d.rank === 'history') {
           return STYLES.smallNodeSize / 3
         } else {
