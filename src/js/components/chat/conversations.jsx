@@ -97,7 +97,9 @@ let Conversations = React.createClass({
               return <ConversationsListItem
                 key={conversation.id}
                 conversation={conversation}
-                onTouchTap={this.showConversation} />
+                onTouchTap={this.showConversation}
+
+              />
             })}
           </List>
 
@@ -142,7 +144,6 @@ let ConversationsListItem = React.createClass({
 
     // If otherPerson var is set and its name is
     // not set or only containing white spaces set name to Unnamed
-
     let nameInitial
 
     if (otherPerson && (!otherPerson.name || !otherPerson.name.trim())) {
@@ -159,8 +160,7 @@ let ConversationsListItem = React.createClass({
     let avatar
     
     avatar = (
-        <Avatar src={otherPerson && otherPerson.img}>
-          {nameInitial}
+        <Avatar src={otherPerson.img}>
         </Avatar>
     )
     
