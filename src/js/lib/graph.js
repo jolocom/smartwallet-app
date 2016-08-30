@@ -439,16 +439,29 @@ export default class GraphD3 extends EventEmitter {
 
     filterShadow.append('feGaussianBlur')
       .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 1)
+      .attr('stdDeviation', 0.8)
       .attr('result', 'blur')
 
     // translate output of Gaussian blur to the right and downwards with 2px
     // store result in offsetBlur
     filterShadow.append('feOffset')
       .attr('in', 'blur')
-      .attr('dx', -1.5)
-      .attr('dy', 1.5)
+      .attr('dx', 0)
+      .attr('dy', 0.5)
       .attr('result', 'offsetBlur')
+
+    // controls the color/opacity of drop shadow
+    filterShadow.append('feFlood')
+        .attr('in', 'offsetBlur')
+        .attr('flood-color', '#2c2c2c')
+        .attr('flood-opacity', '0.6')
+        .attr('result', 'offsetColor')
+
+    filterShadow.append('feComposite')
+        .attr('in', 'offsetColor')
+        .attr('in2', 'offsetBlur')
+        .attr('operator', 'in')
+        .attr('result', 'offsetBlur')
 
     // overlay original SourceGraphic over translated blurred opacity by using
     // feMerge filter. Order of specifying inputs is important!
@@ -562,7 +575,7 @@ export default class GraphD3 extends EventEmitter {
         if (d.type == 'bitcoin') {
           return ''
         }
-      
+
         // In case the person has no description available.
         if (d.description) {
           if (!d.description.includes(' ')) {
@@ -969,7 +982,7 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   onClick = function (node, data) {
-    
+
     d3.event.stopPropagation()
 
     this.emit('select', data, node)
@@ -982,7 +995,7 @@ export default class GraphD3 extends EventEmitter {
     data.wasHighlighted = data.highlighted
 
     node.parentNode.appendChild(node)
-    
+
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
 
