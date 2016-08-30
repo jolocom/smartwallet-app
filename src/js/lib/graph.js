@@ -145,8 +145,8 @@ export default class GraphD3 extends EventEmitter {
     for (let i = 0; i < state.neighbours.length; i++) {
       this.dataNodes.push(state.neighbours[i])
       this.dataLinks.push({
-        'source': i + 1,
-        'target': 0
+        'source': this.dataNodes[this.dataNodes.length - 1],
+        'target': this.dataNodes[0]
       })
       this.numberOfNeighbours++
     }
@@ -219,7 +219,7 @@ export default class GraphD3 extends EventEmitter {
       .on('dragstart', function () {
         d3.event.sourceEvent.stopPropagation()
       }) d3v4 @TODO */
-    this.nodeDrag = function(){}
+    // this.nodeDrag = function(){}
   }.bind(this)
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
@@ -338,7 +338,9 @@ export default class GraphD3 extends EventEmitter {
     // LINKS DATA JOIN
     this.link = this.svg.select('.background-layer .background-layer-links')
       .selectAll('line')
-      .data(this.visibleDataLinks)
+      .data(this.visibleDataLinks, (d) => {
+        return (d.source.uri + d.source.connection)
+      })
 
     // LINKS ENTER
     // We draw the lines for all the elements in the dataLinks array.
@@ -355,12 +357,17 @@ export default class GraphD3 extends EventEmitter {
         .attr('opacity', (d) => {
           d.source.elipsisdepth >= 0 ? 0 : 1
         })
+        .attr('x1', this.centerCoordinates.x)
+        .attr('y1', this.centerCoordinates.y)
+        .attr('x2', this.centerCoordinates.x)
+        .attr('y2', this.centerCoordinates.y)
 
     // LINKS EXIT
     this.link
       .exit()
         .remove()
 
+    this.link.merge(this.link)
     // NODES DATA JOIN
     this.node = this.svg.selectAll('.node').data(this.visibleDataNodes, (d) => {
       return (d.uri + d.connection)
@@ -377,7 +384,6 @@ export default class GraphD3 extends EventEmitter {
           let y = this.centerCoordinates.y - this.largeNodeSize * 1.5
           return 'translate(' + x + ',' + y + ')'
         })
-        .call(this.nodeDrag)
 
     // NODES EXIT
     this.node
@@ -477,42 +483,10 @@ export default class GraphD3 extends EventEmitter {
       .attr('in', 'SourceGraphic')
 
     // Used as a background circle for image nodes
-    // nodeEnter.append('circle')
-    //   .attr('class', 'nodeback')
-    //   .attr('r', (d) => {
-    //     if (d.rank === 'elipsis'){
-    //       return smallNode*0.5
-    //     }
-    //     if (d.rank === 'center')
-    //       return largeNode / 2
-    //     else if (d.rank === 'history') {
-    //       return smallNode / 3
-    //     } else return smallNode / 2
-    //   })
-    //   .attr('fill', (d) => {
-    //     if (d.rank == 'elipsis'){
-    //       return theme.graph.textNodeColor
-    //     } else {
-    //       return theme.graph.transitionStartNodeColor
-    //     }
-    //   })
-    //   .transition()
-    //   .duration(750)
-    //   .attr('fill', theme.graph.imageNodeColor)
-    //   .attr('r', (d) => {
-    //     if (d.rank == 'elipsis'){
-    //       if(d.elipsisdepth == 0){
-    //         return smallNode * 0.35
-    //       }else {
-    //         return smallNode * 0.15
-    //       }
-    //     }
-    //     if (d.rank === 'center')
-    //       return largeNode / 2
-    //     else if (d.rank === 'history') {
-    //       return smallNode / 3
-    //     } else return smallNode / 2
-    //   })
+    nodeEnter.append('circle')
+      .attr('class', 'nodeback')
+      .attr('r', STYLES.smallNodeSize / 5)
+      .attr('fill', theme.graph.imageNodeColor)
 
     nodeEnter.append('circle')
       .attr('class', 'nodecircle')
@@ -795,8 +769,8 @@ export default class GraphD3 extends EventEmitter {
 
     for (i = 1; i < this.visibleDataNodes.length; i++) {
       this.visibleDataLinks.push({
-        'source': i,
-        'target': 0
+        'source': this.visibleDataNodes[i],
+        'target': this.visibleDataNodes[0]
       })
     }
 
@@ -807,14 +781,14 @@ export default class GraphD3 extends EventEmitter {
         this.visibleDataNodes.push(this.dataNodes[i])
         if (first) {
           this.visibleDataLinks.push({
-            'source': this.visibleDataNodes.length - 1,
-            'target': 0
+            'source': this.dataNodes[i],
+            'target': this.dataNodes[0]
           })
           first = false
         } else {
           this.visibleDataLinks.push({
-            'source': this.visibleDataNodes.length - 1,
-            'target': this.visibleDataNodes.length - 2
+            'source': this.dataNodes[i],
+            'target': this.dataNodes[0]
           })
         }
       }
@@ -863,12 +837,31 @@ export default class GraphD3 extends EventEmitter {
         }
         return 'translate(' + x + ',' + y + ')'
       })
-
-      // d3.selectAll('.link')
-      //   .attr('x1', (d) => d.source.x)
-      //   .attr('y1', (d) => d.source.y)
-      //   .attr('x2', (d) => d.target.x)
-      //   .attr('y2', (d) => d.target.y)
+    //
+    d3.selectAll('.link')
+      .transition().duration(STYLES.nodeTransitionDuration / 4)
+      .attr('x1', this.centerCoordinates.x)
+      .attr('y1', (d) => {
+        if (d.target.rank === 'center') {
+          return this.centerCoordinates.y
+        } else if (d.target.rank === 'history') {
+          return this.centerCoordinates.y + this.largeNodeSize * 2.1 + (d.histLevel - 1) * this.smallNodeSize
+        }
+      })
+      .attr('x2', (d) => {
+        if (d.source.rank === 'neighbour') {
+          return this.nodePositions[d.source.position].x
+        } else {
+          return this.centerCoordinates.x
+        }
+      })
+      .attr('y2', (d) => {
+        if (d.source.rank === 'neighbour') {
+          return this.nodePositions[d.source.position].y
+        } else {
+          return this.centerCoordinates.y + this.largeNodeSize * 2.1 + d.source.histLevel * this.smallNodeSize
+        }
+      })
   }
 
   resetAll = function () {
@@ -879,6 +872,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', (d) => {
         return d.source.elipsisdepth >= 0 ? 0 : 1
       })
+
     // Reset size of all circles
     d3.selectAll('svg .node')
       .selectAll('.nodecircle')
@@ -900,30 +894,50 @@ export default class GraphD3 extends EventEmitter {
         }
       })
 
+    // reset size of background
+
+    d3.selectAll('svg .node')
+      .selectAll('.nodeback')
+      .transition('reset').duration(STYLES.nodeTransitionDuration)
+      .attr('r', (d) => {
+        if (d.elipsisdepth >= 0) {
+          if (d.elipsisdepth === 0) {
+            return STYLES.smallNodeSize * 0.35
+          } else {
+            return STYLES.smallNodeSize * 0.15
+          }
+        }
+        if (d.rank === 'center') {
+          return STYLES.largeNodeSize / 2
+        } else if (d.rank === 'history') {
+          return STYLES.smallNodeSize / 3
+        } else {
+          return STYLES.smallNodeSize / 2
+        }
+      })
+
     // Reset colour of all circles
+    // Tries to interpret the url(#) as a colour @TODO
     d3.selectAll('svg .node')
       .select('.nodecircle')
-      // .transition('resetcolor').duration(STYLES.nodeTransitionDuration) // Tries to interpret the url(#) as a colour @TODO
-      .attr('fill', (d) => {
-        if (d.img && d.rank !== 'history' && d.type !== 'passport') {
-          let wamalalala = 'url(#' + (d.uri + '' + d.connection) + ')'
-          console.log(d.uri,'//',d.connection,'//',d.uri+d.connection)
-          console.log(wamalalala)
-          return wamalalala
+      // .transition('resetcolors').duration(STYLES.nodeTransitionDuration)
+      .style('fill', (d) => {
+        if (d.rank === 'history') {
+          return STYLES.grayColor
+        } else if (d.type === 'passport') {
+          return theme.graph.textNodeColor
+        } else if (d.elipsisdepth === 0) {
+          return theme.graph.elipsis1
+        } else if (d.elipsisdepth === 1) {
+          return theme.graph.elipsis2
+        } else if (d.unavailable) {
+          return STYLES.unavailableNodeColor
+        } else if (d.img) {
+          return 'url(#' + d.uri + d.connection + ')'
+        } else if (d.rank === 'center') {
+          return theme.graph.centerNodeColor
         } else {
-          if (d.elipsisdepth === 0) {
-            return theme.graph.elipsis1
-          } else if (d.elipsisdepth === 1) {
-            return theme.graph.elipsis2
-          } else if (d.unavailable) {
-            return STYLES.unavailableNodeColor
-          } else if (d.rank === 'history') {
-            return STYLES.grayColor
-          } else if (d.rank === 'center') {
-            return theme.graph.centerNodeColor
-          } else {
-            return theme.graph.textNodeColor
-          }
+          return theme.graph.textNodeColor
         }
       })
 
@@ -1021,7 +1035,7 @@ export default class GraphD3 extends EventEmitter {
         .transition('grow').duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
         .attr('opacity', 1)
-        .each('start', (d) => {
+        .each((d) => {
           if (!d.img) {
             d3.select(node).select('.nodecircle')
               .transition('highlight').duration(STYLES.nodeTransitionDuration)
@@ -1204,7 +1218,7 @@ export default class GraphD3 extends EventEmitter {
       .select('circle')
       .transition().duration(STYLES.nodeTransitionDuration / 3).delay(100)
       .attr('r', STYLES.largeNodeSize / 2.2)
-      .each('end', () => {
+      .each(() => {
         for (var i = 1; i < this.dataNodes.length; i++) {
           if (this.dataNodes[i].uri === deletedNodeUri) {
             if (this.dataNodes[i].rank === 'neighbour') {
