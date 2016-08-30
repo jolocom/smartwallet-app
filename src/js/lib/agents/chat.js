@@ -263,7 +263,7 @@ class ChatAgent extends LDPAgent {
       })
       .then((parsed) => {
         let aboutPerson = _.filter(parsed.triples, (t) => {
-          return t.subject == webid || t.subject == '#me'
+          return t.subject.uri == webid || t.subject.uri == '#me'
         })
 
         let name = _.find(parsed.triples, (t) => {
@@ -277,7 +277,6 @@ class ChatAgent extends LDPAgent {
         let img = _.find(aboutPerson, (t) => {
           return t.predicate.uri == PRED.image.uri
         })
-
         if (img) {
           result.img = img.object.value
         }
