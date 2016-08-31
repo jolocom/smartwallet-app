@@ -36,7 +36,8 @@ let Util = {
   },
 
   webidRoot(webid) {
-    return webid.match(/^(.*)\/profile\/card#me$/)[1]
+    let matches = webid.match(/^(.*)\/profile\/card#me$/)
+    return matches && matches[1]
   },
 
   urlWithoutHash(target) {

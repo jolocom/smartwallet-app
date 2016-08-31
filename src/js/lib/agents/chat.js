@@ -277,7 +277,7 @@ class ChatAgent extends LDPAgent {
 
   getInboxConversations(webid) {
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
-    return this.get(inbox)
+    return this.get(Util.uriToProxied(inbox))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, inbox)
