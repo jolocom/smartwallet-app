@@ -8,6 +8,8 @@ import {grey500} from 'material-ui/styles/colors'
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 
+import Utils from 'lib/util'
+
 let Contacts = React.createClass({
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
@@ -65,7 +67,11 @@ let Contacts = React.createClass({
               nameInitial = '?'
             }
 
-            let avatar = <Avatar src={imgUri}>{nameInitial}</Avatar>
+            let avatar
+            if (imgUri)
+              avatar = <Avatar src={Utils.uriToProxied(imgUri)}></Avatar>
+                else
+              avatar = <Avatar>{nameInitial}</Avatar>
             return (
               <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(webId)}}/>
             )

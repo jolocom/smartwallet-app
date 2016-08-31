@@ -34,6 +34,7 @@ export default Reflux.createStore({
         console.log('nodes', nodes)
 
         console.table(contacts)
+        
 
         let contacts = nodes.filter((node) =>
           node.triples.some((triple) => {
@@ -46,16 +47,17 @@ export default Reflux.createStore({
         let formattedContacts = contacts.map((contact) => {
 
           let nameTriples = contact.triples.filter((triple) => triple.predicate.uri == PRED.givenName.uri)
-          let usernameTriples = contact.triples.filter((triple) => false)
           let emailTriples = contact.triples.filter((triple) => triple.predicate.uri == PRED.email.uri)
-
+          let avatarTriples = contact.triples.filter((triple) => triple.predicate.uri == PRED.image.uri)
+          
           console.log('this contact', contact)
 
           return {
-            name: nameTriples && nameTriples[0].object.value || String(Math.random()),
-            username: usernameTriples && usernameTriples[0] || String(Math.random()),
+            name: nameTriples && nameTriples[0].object.value,
+            username: nameTriples && nameTriples[0].object.value,
             webId: contact.uri || '???',
-            email: emailTriples && emailTriples[0].object.value || String(Math.random())
+            email: emailTriples && emailTriples[0].object.value,
+            imgUri: avatarTriples && avatarTriples[0] && avatarTriples[0].object.value
           }
         });
 

@@ -159,11 +159,10 @@ let ConversationsListItem = React.createClass({
     }
     
     let avatar
-    
-    avatar = (
-        <Avatar src={Utils.uriToProxied(otherPerson.img)}>
-        </Avatar>
-    )
+    if (otherPerson.img)
+      avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}></Avatar>
+        else
+      avatar = <Avatar>{nameInitial}</Avatar>
     
     let date = moment(created).fromNow()
     return (
