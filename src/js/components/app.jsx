@@ -45,6 +45,7 @@ let App = React.createClass({
   childContextTypes: {
     muiTheme: React.PropTypes.object,
     profile: React.PropTypes.any,
+    account: React.PropTypes.object,
     username: React.PropTypes.string,
     searchActive: React.PropTypes.bool
   },
@@ -53,8 +54,9 @@ let App = React.createClass({
     let {account, profile, searchActive} = this.state
     return {
       muiTheme: this.theme,
-      profile: profile,
-      username: account && account.username,
+      profile,
+      account,
+      username: account && account.username, // backward compat
       searchActive
     }
   },
@@ -75,7 +77,8 @@ let App = React.createClass({
   componentDidUpdate(prevProps, prevState) {
     let {username} = this.state.account
 
-    if (prevState.account.username !== username) {
+    if (prevState.account.username === undefined ||
+      prevState.account.username !== username) {
       this.checkLogin()
     }
   },
@@ -88,7 +91,7 @@ let App = React.createClass({
     let {username, loggingIn} = this.state.account
 
     // session is still loading, so return for now
-    if (username === undefined || loggingIn) {
+    if (username === undefined && loggingIn) {
       return
     }
 
@@ -130,7 +133,7 @@ let App = React.createClass({
   },
 
   _handleChatTap() {
-    this.history.pushState(null, '/chat')
+    this.history.pushState(null, '/conversations')
   },
 
   showDrawer() {
@@ -167,6 +170,13 @@ let App = React.createClass({
 
   render() {
     const styles = this.getStyles()
+
+    // @TODO render login screen when logging in, also makes sures child
+    // components don't get rendered before any user data is available
+    if (this.state.account.loggingIn && !this.isPublicRoute()) {
+      return <div />
+    }
+
     const nav = (
       <div>
         <IconButton

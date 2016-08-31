@@ -17,6 +17,7 @@ import TimerMixin from 'react-timer-mixin'
 
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
+import Utils from 'lib/util'
 
 let Conversations = React.createClass({
 
@@ -33,7 +34,7 @@ let Conversations = React.createClass({
 
   contextTypes: {
     history: React.PropTypes.any,
-    profile: React.PropTypes.any
+    account: React.PropTypes.any
   },
 
   componentDidMount() {
@@ -49,7 +50,7 @@ let Conversations = React.createClass({
 
   loadConversations() {
     ConversationsActions.load(
-      this.context.profile.username, this.props.searchQuery
+      this.context.account.webId, this.props.searchQuery
     )
   },
 
@@ -60,9 +61,29 @@ let Conversations = React.createClass({
   render: function() {
     let emptyView
     let {items} = this.state.conversations
-
+    
+   
     if (!items || !items.length) {
       emptyView = <div style={styles.empty}>No conversations</div>
+    }
+    else
+    {
+      this.state.conversations.items.sort(
+        (item_a,item_b) => {
+          if (!item_a.lastMessage) {
+            if (!item_b.lastMessage) {
+              return 0    
+            }
+            else {
+              return -1
+            }
+          }
+          else if (!item_b.lastMessage) {
+              return 1
+          }
+          return item_a.lastMessage.created.getTime() < item_b.lastMessage.created.getTime()
+        }
+      ) 
     }
 
     return (
@@ -75,8 +96,11 @@ let Conversations = React.createClass({
           <List>
             {this.state.conversations.items.map((conversation) => {
               return <ConversationsListItem
+                key={conversation.id}
                 conversation={conversation}
-                onTouchTap={this.showConversation} />
+                onTouchTap={this.showConversation}
+
+              />
             })}
           </List>
 
@@ -85,7 +109,9 @@ let Conversations = React.createClass({
         <FloatingActionButton
           secondary
           href="#/chat/new"
-          style={styles.actionButton}>
+          linkButton={true}
+          style={styles.actionButton}
+        >
           <FontIcon className="material-icons">add</FontIcon>
         </FloatingActionButton>
 
@@ -104,23 +130,47 @@ let ConversationsListItem = React.createClass({
 
   render() {
     let {conversation} = this.props
-    let {otherPerson} = conversation
-    let {created, content} = conversation.lastMessage
-    let avatar
-    if (otherPerson) {
-      avatar = (
-        <Avatar src={otherPerson.img}>
-          {otherPerson.name[0]}
-        </Avatar>
-      )
+    let {otherPerson, lastMessage} = conversation
+    lastMessage = lastMessage || {}
+
+    let {created, content} = lastMessage
+
+    // If otherPerson var is null, then set it to false.
+    // So it wont be used when listing conversations
+    // to avoid errors
+
+    if (otherPerson == null) {
+      otherPerson = false
     }
+
+    // If otherPerson var is set and its name is
+    // not set or only containing white spaces set name to Unnamed
+    let nameInitial
+
+    if (otherPerson && (!otherPerson.name || !otherPerson.name.trim())) {
+      // otherPerson.name = 'Unnamed'
+      nameInitial = '?'
+    } else if (otherPerson) {
+      nameInitial = otherPerson.name[0].toUpperCase()
+    }
+    else
+    {
+      nameInitial = '?'
+    }
+    
+    let avatar
+    if (otherPerson.img)
+      avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}></Avatar>
+        else
+      avatar = <Avatar>{nameInitial}</Avatar>
+    
     let date = moment(created).fromNow()
     return (
       <ListItem
         key={conversation.id}
         primaryText={
           <div>
-            <span>{otherPerson.name}</span>
+            <span>{otherPerson.name || 'Unnamed'}</span>
             <span style={styles.date}>{date}</span>
           </div>
         }
@@ -132,7 +182,7 @@ let ConversationsListItem = React.createClass({
   },
 
   _handleListItemTouchTap() {
-    this.props.onTouchTap(this.props.conversation.id)
+    this.props.onTouchTap(this.props.conversation)
   }
 })
 

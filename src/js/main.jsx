@@ -12,7 +12,7 @@ injectTapEventPlugin()
 import moment from 'moment'
 
 moment.locale('en', {
-  relativeTime : {
+  relativeTime: {
     future: 'in %s',
     past: function (number/*, withoutSuffix, key, isFuture*/) {
       return number
@@ -20,20 +20,20 @@ moment.locale('en', {
     s: 'just now',
     m: '1m',
     mm: '%dm',
-    h:  '1h',
+    h: '1h',
     hh: '%dh',
-    d:  '1d',
+    d: '1d',
     dd: '%ddays',
-    M:  '1m',
+    M: '1m',
     MM: '%dm',
-    y:  '1y',
+    y: '1y',
     yy: '%dy'
   }
 })
 
 let rootEl = document.getElementById('app')
 
-ReactDOM.render(<AppContainer><Routes/></AppContainer>, rootEl)
+ReactDOM.render(<AppContainer><Routes /></AppContainer>, rootEl)
 
 if (module.hot) {
   module.hot.accept('./routes.jsx', () => {

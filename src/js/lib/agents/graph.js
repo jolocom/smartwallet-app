@@ -1,12 +1,11 @@
 import WebIDAgent from './webid.js'
 import {Parser} from '../rdf.js'
 import {Writer} from '../rdf.js'
-import {USER} from 'lib/namespaces'
+import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
 import rdf from 'rdflib'
-import {PRED} from '../namespaces.js'
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
@@ -153,7 +152,7 @@ class GraphAgent {
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
-    
+
     if (!confidential)
     {
       acl_writer.addTriple(rdf.sym('#readall'), PRED.type, ACL('Authorization'))
@@ -161,7 +160,7 @@ class GraphAgent {
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), PRED.Agent)
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
     }
-    
+
     return fetch(Util.uriToProxied(acl_uri),{
       method: 'PUT', 
       credentials: 'include',
