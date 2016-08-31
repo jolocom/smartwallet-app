@@ -16,12 +16,7 @@ export default Reflux.createStore({
 
   onCreateCompleted(conversation) {
     this.trigger(conversation)
-    
-    // @TODO @FIXME
-    window.location.href='#/conversations/' + conversation.id
-    /*window.history.pushState(
-        null, 
-        '/conversations/conversationId' + conversation.id
-      )*/
+
+    // window.location.href='#/conversations/' + conversation.id
   }
 })

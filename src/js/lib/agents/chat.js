@@ -26,19 +26,14 @@ class ChatAgent extends LDPAgent {
     let conversationDocContent = this._conversationTriples(initiator, participants)
     
     return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
-      console.log('this put has been completed')
       return Promise.all(participants.map((p) =>
         this._linkConversation(conversationDoc, p)
       ))
     })
     .then(() => {
-      console.log('linkconversations have been completed')
       return this._writeConversationAcl(conversationDoc, initiator, participants)
     })
     .then(() => {
-      console.log('writeConversationAcl has been completed')
-      // update inbox indices
-      console.log('successfully created conversation and linked it to participant inboxes')
       
       return {
         id: conversationId,
@@ -185,7 +180,6 @@ class ChatAgent extends LDPAgent {
   //
   // @return {Object} conversation meta: id, updatesVia, otherPerson, lastMessage
   getConversation(conversationUrl, myUri) {
-    console.trace()
     let result = {
       id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
     }
@@ -248,8 +242,6 @@ class ChatAgent extends LDPAgent {
       return Promise.resolve(null)
     }
 
-    console.log("pqrticipqnts", participants, "otherperson", otherPerson)
-
     let webid = otherPerson.value
 
     let result = {}
@@ -279,7 +271,6 @@ class ChatAgent extends LDPAgent {
         }
 
         result.webid = otherPerson
-        console.log("RESULT", result)
         return result
       })
   }
@@ -310,7 +301,6 @@ class ChatAgent extends LDPAgent {
       .forEach(function (st) {
         toAdd.push(st.toNT())
       })
-    console.log(toAdd)
 
    //return solid.web.patch(inbox, null, toAdd)
 

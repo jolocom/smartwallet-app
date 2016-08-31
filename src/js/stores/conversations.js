@@ -60,7 +60,7 @@ export default Reflux.createStore({
         return _.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {
-          return conversation && (!regEx || conversation.id.match(regEx))
+          return conversation && (!regEx || conversation.id.match(regEx)) && conversation.lastMessage
         }).value()
       })
   },
