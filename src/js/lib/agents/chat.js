@@ -5,6 +5,7 @@ import {PRED} from '../namespaces.js'
 import N3 from 'n3'
 import _ from 'lodash'
 import rdf from 'rdflib'
+import debug from 'debug'
 
 let N3Util = N3.Util
 
@@ -238,6 +239,8 @@ class ChatAgent extends LDPAgent {
     }), (t) => t.object)
     let otherPerson = _.find(participants, (p) => p.value !== myUri)
 
+    console.log('otherPerson',otherPerson,'!== myUri',myUri)
+    
     if (!otherPerson) {
       return Promise.resolve(null)
     }
@@ -277,12 +280,14 @@ class ChatAgent extends LDPAgent {
 
   getInboxConversations(webid) {
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
+    debug('chat-agent')('Getting inbox conversations for webid',inbox)
     return this.get(Util.uriToProxied(inbox))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, inbox)
       })
       .then((result) => {
+        debug('chat-agent')('Received inbox conversations',result)
         return result.triples.filter((t) => {
           return t.predicate.uri === PRED.spaceOf.uri
         }).map((t) => t.object.value || t.object.uri)
