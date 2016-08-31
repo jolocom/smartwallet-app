@@ -23,7 +23,6 @@ export default Reflux.createStore({
         this.gAgent = new GraphAgent()
       }
 
-      // @TOD PRED.knows, too
       this.gAgent.findObjectsByTerm(AccountStore.state.webId, PRED.knows).then((res) => {
         console.log('res', res);
 
