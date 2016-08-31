@@ -1,4 +1,4 @@
-const DEFAULT_ACCEPT = 'application/n-triples'
+const DEFAULT_ACCEPT = '*/*'
 const DEFAULT_CT = 'application/n-triples'
 
 // HTTP Requests

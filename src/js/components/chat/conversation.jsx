@@ -139,7 +139,7 @@ let Conversation = React.createClass({
       me: {
         body: {
           float: 'right',
-          background: 'rgba(0, 0, 0, 0.15)',
+          background: '#B5CA11',
           borderTopRightRadius: 0
         },
         meta: {
