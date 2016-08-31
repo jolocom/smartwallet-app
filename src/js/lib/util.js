@@ -66,8 +66,8 @@ let Util = {
     let mode = localStorage.getItem('jolocom.auth-mode')
     if (mode === 'cert') {
       return uri
-    }
-    return `${proxy}/proxy?url=${uri}`
+    } 
+    return `${proxy}/proxy?url=${encodeURIComponent(encodeURI(uri))}`
   }
 }
 
