@@ -32,8 +32,9 @@ let Login = React.createClass({
     }
   },
 
-  login() {
+  login(e) {
     Account.login(this.state.username, this.state.password)
+    e.preventDefault()
   },
 
   _handleUsernameChange(e) {
