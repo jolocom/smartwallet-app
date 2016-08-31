@@ -121,7 +121,6 @@ export default class GraphD3 extends EventEmitter {
 
   // Function to be called when the state changes
   render = function (state) { // nodes
-    console.log('GRAPH.JS RENDER', state)
     this.state = state
     if (this.rendered) {
       this.eraseGraph() // erase everything, including background

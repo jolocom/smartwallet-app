@@ -17,7 +17,6 @@ class ChatAgent extends LDPAgent {
   // @return {Promise.<Object>} object containing conversation id and doc url
   createConversation(initiator, participants) {
     
-    console.log('createConversation called with initiator', initiator,' and participants', participants)
     // POST conversation to initiators container
     // update inbox indices of all participants
     //
@@ -25,8 +24,6 @@ class ChatAgent extends LDPAgent {
     let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
     let hdrs = {'Content-type': 'text/turtle'}
     let conversationDocContent = this._conversationTriples(initiator, participants)
-    
-    console.log('createConversation calling this.put', Util.uriToProxied(conversationDoc), hdrs, conversationDocContent)
     
     return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
       console.log('this put has been completed')
