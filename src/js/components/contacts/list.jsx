@@ -28,21 +28,30 @@ let Contacts = React.createClass({
 
   render() {
     let emptyView
-    if (!this.state.contacts || !this.state.contacts.length) {
-      emptyView = <div style={styles.empty}>No contacts</div>
-    }
     
-    console.table(this.state.contacts)
-    this.state.contacts.sort((a,b) => {
+    let state = this.state
+    console.log('state : ',state)
+    
+    if (!state.contacts || !state.contacts.length) {
+      emptyView = <div style={styles.empty}>No contacts</div>
+        console.log('empty contacts')
+        state.contacts = []
+    }
+    else
+    {
+    console.table(state.contacts)
+    console.log(state.contacts.length)
+    state.contacts.sort((a,b) => {
       return a.username.toLowerCase() > b.username.toLowerCase()
     })
-    console.table(this.state.contacts)
+    console.table(state.contacts)
+    }
     
     return (
       <div>
         {emptyView}
         <List>
-          {this.state.contacts.map(({username, webId, name, email, imgUri}) => {
+          {state.contacts.map(({username, webId, name, email, imgUri}) => {
             // Check if name is set then set the first character as the name
             // initial otherwise, check if name is empty or whitespaces then
             // set it to Unnamed and let its initial be ?
