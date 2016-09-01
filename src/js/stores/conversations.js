@@ -5,7 +5,8 @@ import ChatAgent from 'lib/agents/chat'
 
 import ConversationsActions from 'actions/conversations'
 
-import debug from 'debug'
+import Debug from 'lib/debug'
+let debug = Debug('stores:conversations')
 
 let {load} = ConversationsActions
 
@@ -34,11 +35,13 @@ export default Reflux.createStore({
   getUri(webId, id) {
     return new Promise((resolve, reject) => {
       let conversation = this.getConversation(id)
-      if (conversation) {
+      if (conversation) {      
+        console.log('conversations.uri',conversations.uri)
         resolve(conversation.uri)
       } else {
         this._getConversations(webId, id).then((conversations) => {
           if (conversations[0]) {
+            console.log('conversations[0].uri',conversations[0].uri)
             resolve(conversations[0].uri)
           } else {
             reject()
@@ -52,7 +55,7 @@ export default Reflux.createStore({
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
     return chatAgent.getInboxConversations(webId)
       .then(function(conversations) {
-        debug('chat')('Received conversations',conversations)
+        debug('Received conversations',conversations)
         let results = conversations.map((url) => {
           return chatAgent.getConversation(url, webId)
         })
@@ -60,7 +63,7 @@ export default Reflux.createStore({
         return Promise.all(results)
       })
       .then(function(conversations) {
-        debug('chat')('Received conversations 2',conversations)
+        debug('Received conversations 2',conversations)
         return _.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {
@@ -70,6 +73,7 @@ export default Reflux.createStore({
   },
 
   onLoad(webId, query) {
+    debug('onLoad with webId',webId)
     this._getConversations(webId, query).then(load.completed)
   },
 
