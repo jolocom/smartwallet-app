@@ -4,7 +4,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton} from 'material-ui'
+import {AppBar, IconButton, Avatar} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
@@ -17,11 +17,14 @@ import ConversationStore from 'stores/conversation'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
+import ProfileStore from 'stores/profile'
+
 let Conversation = React.createClass({
 
   mixins: [
     Reflux.connect(ConversationStore, 'conversation'),
-    Reflux.connect(ContactStore, 'contact')
+    Reflux.connect(ContactStore, 'contact'),
+    Reflux.connect(ProfileStore, 'profile')
   ],
 
   contextTypes: {
@@ -118,7 +121,7 @@ let Conversation = React.createClass({
         borderBottomRightRadius: '6px',
         padding: '6px 12px',
         position: 'relative',
-        whiteSpace: 'pre'
+        whiteSpace: 'normal'
       },
       meta: {
         clear: 'both',
@@ -140,6 +143,27 @@ let Conversation = React.createClass({
         body: {
           float: 'right',
           background: '#B5CA11',
+          borderTopRightRadius: 0,
+          whiteSpace: 'normal'
+        },
+        meta: {
+          textAlign: 'right'
+        }
+      },
+      otherPersonAvatar: {
+        body: {
+          float: 'left',
+          background: '#F1F1F1',
+          borderTopRightRadius: 0
+        },
+        meta: {
+          textAlign: 'left'
+        }
+      },
+      userAvatar: {
+        body: {
+          float: 'right',
+          background: '#F1F1F1',
           borderTopRightRadius: 0
         },
         meta: {
@@ -160,6 +184,19 @@ let Conversation = React.createClass({
     let title = otherPerson && otherPerson.name
     let items = conversation.items || []
 
+    console.log(this.state.profile.imgUri)
+
+    var userAvatar = (
+      <Avatar src={this.state.profile.imgUri}>
+      </Avatar>
+    )
+
+    if(otherPerson) {
+      var otherPersonAvatar = (
+        <Avatar src={otherPerson.img}>
+        </Avatar>
+      )
+    }
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -177,9 +214,13 @@ let Conversation = React.createClass({
           <Content style={styles.content}>
             <div ref="items" style={styles.conversation}>
               {items.map(function({author, content, created}, i) {
-                let from = (author !== account.webId) ? 'contact' : 'me'
+                let from = (author !== account.webId) ? 'otherPersonAvatar' : 'userAvatar'
                 return (
                   <div style={[styles.message]} key={i}>
+                    <div style={[styles.body, styles[from].body]}>
+                      {from=='otherPersonAvatar'&&otherPersonAvatar}
+                      {from=='userAvatar'&&userAvatar}
+                    </div>
                     <div style={[styles.body, styles[from].body]}>
                       {content}
                     </div>
