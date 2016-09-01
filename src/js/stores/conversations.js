@@ -26,7 +26,6 @@ export default Reflux.createStore({
   },
 
   getConversation(id) {
-    debug('Iterating over the items in search for id',id,this.items)
     for (let conversation of this.items) {
       if (conversation.id === id) {
         return conversation
@@ -86,7 +85,6 @@ export default Reflux.createStore({
     
     return chatAgent.getConversation(conversation.url, AccountStore.state.webId)
       .then((conversationItem)=>{
-        console.log(conversationItem)
         debug('Triggering the state with the new conversation item ; new state should be', {loading: false, items: this.items.concat(conversationItem)})
         this.items = this.items.concat(conversationItem)
         this.trigger({loading: false, items: this.items}) })

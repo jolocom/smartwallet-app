@@ -41,6 +41,7 @@ let Conversations = React.createClass({
   },
 
   componentDidMount() {
+    debug('componentDidMount')
     this.loadConversations()
   },
 
@@ -52,6 +53,9 @@ let Conversations = React.createClass({
   },
 
   loadConversations() {
+    debug('Loading conversations')
+    // @TODO Component mounts again after choosing a contact (+)
+    // This triggers .load unnecessarily
     ConversationsActions.load(
       this.context.account.webId, this.props.searchQuery
     )

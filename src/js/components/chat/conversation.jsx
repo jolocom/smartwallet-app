@@ -96,6 +96,7 @@ let Conversation = React.createClass({
       this.context.account.webId,
       content
     )
+    // @TODO update the state of all convos with the new lastMessage
     return true
   },
 
@@ -193,8 +194,6 @@ let Conversation = React.createClass({
     let {account} = this.context
     let title = otherPerson && otherPerson.name
     let items = conversation.items || []
-
-    console.log(this.state.profile.imgUri)
 
     var userAvatar = (
       <Avatar src={this.state.profile.imgUri}>
