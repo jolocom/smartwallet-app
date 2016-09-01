@@ -68,7 +68,7 @@ let Util = {
     if (mode === 'cert') {
       return uri
     } 
-    return `${proxy}/proxy?url=${encodeURIComponent(encodeURI(uri))}`
+    return `${proxy}/proxy?url=${uri}`
   }
 }
 

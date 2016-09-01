@@ -6,6 +6,9 @@ import N3 from 'n3'
 import _ from 'lodash'
 import rdf from 'rdflib'
 
+import Debug from 'lib/debug'
+let debug = Debug('agents:chat')
+
 let N3Util = N3.Util
 
 // Chat related functions
@@ -237,7 +240,7 @@ class ChatAgent extends LDPAgent {
          return t.predicate.uri == PRED.hasSubscriber.uri
     }), (t) => t.object)
     let otherPerson = _.find(participants, (p) => p.value !== myUri)
-
+    
     if (!otherPerson) {
       return Promise.resolve(null)
     }
@@ -277,12 +280,14 @@ class ChatAgent extends LDPAgent {
 
   getInboxConversations(webid) {
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
+    debug('Getting inbox conversations for webid',inbox)
     return this.get(Util.uriToProxied(inbox))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, inbox)
       })
       .then((result) => {
+        debug('Received inbox conversations',result)
         return result.triples.filter((t) => {
           return t.predicate.uri === PRED.spaceOf.uri
         }).map((t) => t.object.value || t.object.uri)

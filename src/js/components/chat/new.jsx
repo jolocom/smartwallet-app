@@ -14,6 +14,9 @@ import ChatStore from 'stores/chat'
 
 import ProfileStore from 'stores/profile'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:new')
+
 export default React.createClass({
 
   mixins: [
@@ -42,6 +45,7 @@ export default React.createClass({
 
   componentWillMount() {
     if (this.props.params.webId) {
+      debug('componentWillMount; starting chat with props',this.props.params)
       this.startChat(this.props.params.webId)
     } else {
       // @TODO load contact list
@@ -54,6 +58,7 @@ export default React.createClass({
 
   componentDidUpdate() {
     if (this.state.conversation && this.state.conversation.id) {
+      debug('componentDidUpdate; redirection to conversation URL, with state',this.state)
       this.context.history.pushState(null,
         `/conversations/${this.state.conversation.id}`
       )
@@ -61,6 +66,7 @@ export default React.createClass({
   },
 
   startChat(webId) {
+    debug('Starting chat with',webId)
     ChatActions.create(
       this.state.profile.webid, this.state.profile.webid, webId
     )
