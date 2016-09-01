@@ -116,10 +116,10 @@ let Conversation = React.createClass({
         overflow: 'hidden'
       },
       body: {
-        borderTopLeftRadius: '6px',
-        borderTopRightRadius: '6px',
-        borderBottomLeftRadius: '6px',
-        borderBottomRightRadius: '6px',
+        borderTopLeftRadius: '10px',
+        borderTopRightRadius: '10px',
+        borderBottomLeftRadius: '10px',
+        borderBottomRightRadius: '10px',
         padding: '6px 12px',
         position: 'relative',
         whiteSpace: 'normal'
@@ -134,7 +134,7 @@ let Conversation = React.createClass({
         body: {
           float: 'left',
           background: '#ffffff',
-          borderTopLeftRadius: 0
+          whiteSpace:'normal'
         },
         meta: {
           textAlign: 'left'
@@ -144,7 +144,6 @@ let Conversation = React.createClass({
         body: {
           float: 'right',
           background: '#B5CA11',
-          borderTopRightRadius: 0,
           whiteSpace: 'normal'
         },
         meta: {
@@ -155,7 +154,9 @@ let Conversation = React.createClass({
         body: {
           float: 'left',
           background: '#F1F1F1',
-          borderTopRightRadius: 0
+          padding: 0,
+          borderTopRightRadius: 0,
+          marginRight: '6px'
         },
         meta: {
           textAlign: 'left'
@@ -165,7 +166,9 @@ let Conversation = React.createClass({
         body: {
           float: 'right',
           background: '#F1F1F1',
-          borderTopRightRadius: 0
+          padding: 0,
+          borderTopRightRadius: 0,
+          marginLeft: '6px',
         },
         meta: {
           textAlign: 'right'
@@ -215,12 +218,13 @@ let Conversation = React.createClass({
           <Content style={styles.content}>
             <div ref="items" style={styles.conversation}>
               {items.map(function({author, content, created}, i) {
-                let from = (author !== account.webId) ? 'otherPersonAvatar' : 'userAvatar'
+                let avatar = (author !== account.webId) ? 'otherPersonAvatar' : 'userAvatar'
+                let from = (author !== account.webId) ? 'contact' : 'me'
                 return (
                   <div style={[styles.message]} key={i}>
-                    <div style={[styles.body, styles[from].body]}>
-                      {from=='otherPersonAvatar'&&otherPersonAvatar}
-                      {from=='userAvatar'&&userAvatar}
+                    <div style={[styles.body, styles[avatar].body]}>
+                      {avatar=='otherPersonAvatar'&&otherPersonAvatar}
+                      {avatar=='userAvatar'&&userAvatar}
                     </div>
                     <div style={[styles.body, styles[from].body]}>
                       {content}
