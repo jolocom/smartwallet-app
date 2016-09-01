@@ -153,7 +153,6 @@ export default class GraphD3 extends EventEmitter {
 
     // Start up everything
     this.setUpVisibleNodes()
-    this.setUpForce()
     // <- creates force and starts it. why does it
     // need to be done several times?
     this.drawBackground()
@@ -186,41 +185,6 @@ export default class GraphD3 extends EventEmitter {
       }
     })
   }
-
-  // Starts the force simulation.
-  setUpForce = function () {
-    // now the nodes are there, we can initialize
-    // Then we initialize the simulation, the force itself.
-    // @TODO compile nodes object with object assign on-the-fly
-    // this.force = d3.forceSimulation(this.visibleDataNodes)
-    //   .force("link",d3.forceLink(this.visibleDataLinks))
-    //   .force("charge", d3.forceManyBody())
-  //    .charge(-100)
-    //  .chargeDistance(STYLES.largeNodeSize * 2)
-/*      .linkDistance((d) => {
-        if (d.source.rank === 'history' && d.source.histLevel <= 0) {
-          return STYLES.largeNodeSize * 2
-        } else if (d.source.rank === 'history') {
-          return STYLES.smallNodeSize
-        } else {
-          return STYLES.largeNodeSize * 1.4
-        }
-      })*/
-    //  .size([this.width, this.height])
-    //  .start()
-
-    // We define our own drag functions, allow for greater control over the way
-    // it works
-   /* this.nodeDrag = this.force.drag()
-      .on('dragend', this.dragEnd)
-      .on('drag', function () {
-        d3.event.sourceEvent.stopPropagation()
-      })
-      .on('dragstart', function () {
-        d3.event.sourceEvent.stopPropagation()
-      }) d3v4 @TODO */
-    // this.nodeDrag = function(){}
-  }.bind(this)
 
   // Draws the scrolling scrollingIndicators and scrolling circle.
   drawBackground = function () {
@@ -600,7 +564,6 @@ export default class GraphD3 extends EventEmitter {
     })
     this.resetAll()
     this.resetPos()
-    // this.force.on('tick', this.tick)
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
@@ -608,7 +571,6 @@ export default class GraphD3 extends EventEmitter {
   // in case it's dropped to the middle
   dragEnd = function (node) {
     if (node.rank === 'center' || node.unavailable) {
-      // this.force.start()
         // In here we would have the functionality that opens the node's card
     } else if (node.rank === 'neighbour' || node.rank === 'history') {
       // We check if the node is dropped on top of the center node
@@ -620,7 +582,6 @@ export default class GraphD3 extends EventEmitter {
 
       // If yes, we change the perspective
       if (x && y) {
-        // this.force.stop()
         this.emit('center-changed', node)
       }
     }
@@ -1085,7 +1046,6 @@ export default class GraphD3 extends EventEmitter {
 
   updateHistory = function (history) {
     if (typeof history !== 'undefined' && history.length > 0) {
-      // this.force.stop()
       for (var j = history.length - 1, rank = 0;
            j >= 0;
            j--, rank++) {
@@ -1118,10 +1078,7 @@ export default class GraphD3 extends EventEmitter {
         }
       }
       this.setUpVisibleNodes()
-      // this.force.nodes(this.visibleDataNodes)
-      // this.force.links(this.visibleDataLinks)
       this.d3update()
-      // this.force.start()
     }
     this.d3update()
   }.bind(this)
@@ -1177,7 +1134,6 @@ export default class GraphD3 extends EventEmitter {
   // .background-layer must be the first element of this.svg,
   // and its first element must be .background-layer-links
   eraseGraph = function () {
-    if (this.force) {this.force.stop()}
     this.svg.selectAll('.background-layer .background-layer-links *, .background-layer ~ *').remove()
   }.bind(this)
 
@@ -1236,12 +1192,8 @@ export default class GraphD3 extends EventEmitter {
         }
 
         this.numberOfNeighbours--
-        // this.force.stop()
         this.setUpVisibleNodes()
-        // this.force.nodes(this.visibleDataNodes)
-        // this.force.links(this.visibleDataLinks)
         this.d3update()
-        // this.force.start()
 
         // Once the animation is ended, we re-render everything
         // It updates the visibility of the radial
@@ -1263,11 +1215,7 @@ export default class GraphD3 extends EventEmitter {
       // @TODO do we realy need to do all of the following?
 
       this.setUpVisibleNodes()
-      // this.force.stop()
-      // this.force.nodes(this.visibleDataNodes)
-      // this.force.links(this.visibleDataLinks)
       this.d3update()
-      // this.force.start()
       this.resetAll()
     }
   }.bind(this)
@@ -1278,7 +1226,6 @@ export default class GraphD3 extends EventEmitter {
     // @todo only execute updateAfterRot if index changed
     this.updateAfterRotationIndex()
   }.bind(this)
-
 
   onResize = function () {
     // Debounce
