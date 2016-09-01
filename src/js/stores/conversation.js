@@ -35,7 +35,7 @@ export default Reflux.createStore({
     this.trigger(this.state)
 
     ConversationsStore.getUri(webId, id).then((url) => {
-      debug('Got conversation URI',ur)
+      debug('Got conversation URI',url)
       return Promise.all([
         chatAgent.getConversation(url, webId),
         chatAgent.getConversationMessages(url)
@@ -43,6 +43,8 @@ export default Reflux.createStore({
         let [conversation, items] = result
         load.completed(conversation, items)
       })
+    }).catch((err) => {
+      console.error('Couldn\'t get conversation URI',err)
     })
   },
 

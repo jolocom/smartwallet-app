@@ -1,11 +1,23 @@
 import WebIDAgent from './webid.js'
-import {Parser} from '../rdf.js'
-import {Writer} from '../rdf.js'
-import {PRED} from 'lib/namespaces'
+import {
+  Parser
+}
+from '../rdf.js'
+import {
+  Writer
+}
+from '../rdf.js'
+import {
+  PRED
+}
+from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
 import rdf from 'rdflib'
+
+import Debug from 'lib/debug'
+let debug = Debug('agents:graph')
 
 // Graph agent is responsible for fetching rdf data from the server, parsing
 // it, and creating a "map" of the currently displayed graph.
@@ -19,7 +31,7 @@ class GraphAgent {
   createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
     let center = rdf.sym(centerNode.uri)
     let writer = new Writer()
-    let dstContainer = centerNode.storage  ?
+    let dstContainer = centerNode.storage ?
       centerNode.storage : currentUser.storage
     let newNodeUri = rdf.sym(dstContainer + Util.randomString(5))
 
@@ -29,14 +41,14 @@ class GraphAgent {
     writer.addTriple(newNodeUri, PRED.maker, center)
 
     // Populating the file with the appropriate triples.
-    if (description) { 
+    if (description) {
       writer.addTriple(newNodeUri, PRED.description, description)
     }
     if (nodeType === 'default') {
-      writer.addTriple(newNodeUri, PRED.type , PRED.Document)
+      writer.addTriple(newNodeUri, PRED.type, PRED.Document)
     }
     if (nodeType === 'image') {
-      writer.addTriple(newNodeUri, PRED.type , PRED.Image)
+      writer.addTriple(newNodeUri, PRED.type, PRED.Image)
     }
 
     // Handling the picture upload
@@ -44,11 +56,11 @@ class GraphAgent {
       // Check if the image is there and it is a file.
       if (image instanceof File) {
         this.storeFile(dstContainer, image, confidential).then((result) => {
-          resolve(result)
-        }).catch((err) => {
-          reject(err)
-        })
-        // This will resolve to undefined / null
+            resolve(result)
+          }).catch((err) => {
+            reject(err)
+          })
+          // This will resolve to undefined / null
       } else {
         resolve(image)
       }
@@ -64,21 +76,22 @@ class GraphAgent {
         object: newNodeUri
       }
 
-      return this.writeTriples(center.uri,[payload], false)
-      .then(()=> {
-        return this.putACL(newNodeUri.uri, currentUser.uri, confidential) }).then((uri)=>{
+      return this.writeTriples(center.uri, [payload], false)
+        .then(() => {
+          return this.putACL(newNodeUri.uri, currentUser.uri, confidential)
+        }).then((uri) => {
           // We use this in the LINK header.
           let aclUri = `<${uri}>`
-          return fetch(Util.uriToProxied(newNodeUri.uri),{
-            method: 'PUT', 
+          return fetch(Util.uriToProxied(newNodeUri.uri), {
+            method: 'PUT',
             credentials: 'include',
             body: writer.end(),
             headers: {
-              'Content-Type':'text/turtle',
-              'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", '+
+              'Content-Type': 'text/turtle',
+              'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
                 aclUri + ' rel="acl"'
             }
-          }).then((answer)=>{
+          }).then((answer) => {
             if (answer.ok) {
               // Removed for the passport feature; better to handle this separately
               // and with the whole state being reloaded?
@@ -86,40 +99,40 @@ class GraphAgent {
               //    newNodeUri.uri, PRED.isRelatedTo.uri)
             }
             return newNodeUri;
-          }).catch((error)=>{
-            console.warn('Error,',error,'occured when putting the rdf file.') 
+          }).catch((error) => {
+            console.warn('Error,', error, 'occured when putting the rdf file.')
           })
-        
-      })
+
+        })
     })
   }
-  
+
   // Should we remove the ACL file associated with it as well? 
   // PRO : we won't need the ACL file anymore 
   // CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
-  deleteFile(uri){
-    return fetch(Util.uriToProxied(uri),{
+  deleteFile(uri) {
+    return fetch(Util.uriToProxied(uri), {
       method: 'DELETE',
       credentials: 'include'
     })
   }
-  
+
   storeFile(dstContainer, file, confidential = false) {
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
       let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-      return this.putACL(uri, webID, confidential).then(()=>{
-        return fetch(Util.uriToProxied(uri),{
-          method: 'PUT', 
+      return this.putACL(uri, webID, confidential).then(() => {
+        return fetch(Util.uriToProxied(uri), {
+          method: 'PUT',
           credentials: 'include',
           headers: {
-            'Content-Type':'image' 
+            'Content-Type': 'image'
           },
           body: file
-        }).then(()=>{
+        }).then(() => {
           return uri
-        }).catch(()=>{
+        }).catch(() => {
           return undefined
         })
       })
@@ -129,7 +142,7 @@ class GraphAgent {
   // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
   // PUT ACL and WRITE TRIPLE should be called after making sure that the user
   // has write access
-  putACL(uri, webID, confidential = false){
+  putACL(uri, webID, confidential = false) {
     let acl_writer = new Writer()
     let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     let acl_uri = `${uri}.acl`
@@ -153,24 +166,27 @@ class GraphAgent {
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
     acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
 
-    if (!confidential)
-    {
+    if (!confidential) {
       acl_writer.addTriple(rdf.sym('#readall'), PRED.type, ACL('Authorization'))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
       acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), PRED.Agent)
       acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
     }
 
-    return fetch(Util.uriToProxied(acl_uri),{
-      method: 'PUT', 
-      credentials: 'include',
-      body: acl_writer.end(),
-      headers: {
-        'Content-Type':'text/turtle' 
-      }
-    }).then(()=>{return acl_uri})
-    .catch((e)=>{console.log('error',e,'occured while putting the acl file')})
-	//})
+    return fetch(Util.uriToProxied(acl_uri), {
+        method: 'PUT',
+        credentials: 'include',
+        body: acl_writer.end(),
+        headers: {
+          'Content-Type': 'text/turtle'
+        }
+      }).then(() => {
+        return acl_uri
+      })
+      .catch((e) => {
+        console.log('error', e, 'occured while putting the acl file')
+      })
+      //})
   }
 
   /**
@@ -182,13 +198,13 @@ class GraphAgent {
    * @returns {array | objects} - All triples matching the description.
    */
 
-  findTriples(uri, subject, predicate, object){
+  findTriples(uri, subject, predicate, object) {
     let writer = new Writer()
-    return this.fetchTriplesAtUri(uri).then((res)=>{
+    return this.fetchTriplesAtUri(uri).then((res) => {
       for (let t of res.triples) {
         writer.addTriple(t.subject, t.predicate, t.object)
       }
-      return writer.g.statementsMatching(subject, predicate, object) 
+      return writer.g.statementsMatching(subject, predicate, object)
     })
   }
 
@@ -199,14 +215,14 @@ class GraphAgent {
    * with the value 
    */
 
-  findObjectsByTerm(uri, pred){
-    return new Promise ((resolve, reject) => {
+  findObjectsByTerm(uri, pred) {
+    return new Promise((resolve, reject) => {
       if (!uri) {
         reject('No uri')
       } else {
-        let user =rdf.sym(uri) //  + '#me'
+        let user = rdf.sym(uri) //  + '#me'
         let result = []
-        this.findTriples(uri, user, pred, undefined).then((res)=>{
+        this.findTriples(uri, user, pred, undefined).then((res) => {
           for (let triple of res) {
             result.push(triple.object)
           }
@@ -222,51 +238,51 @@ class GraphAgent {
    * @params {array | object} triples - array of objets describing triples.
    * @params {boolean} draw - play the animation or not.
    * @return {function} fetch request - .then contains the response. 
-   */ 
+   */
 
-  writeTriples(uri, triples, draw){
+  writeTriples(uri, triples, draw) {
     let validPredicate = false
 
-    if (triples.length === 1) {  
+    if (triples.length === 1) {
       let pred = triples[0].predicate.uri
       validPredicate = (pred === PRED.isRelatedTo.uri ||
-                        pred === PRED.knows.uri)
-    } 
+        pred === PRED.knows.uri)
+    }
 
     let statements = []
-    return new Promise ((resolve, reject) => {    
+    return new Promise((resolve, reject) => {
       for (let i = 0; i < triples.length; i++) {
         let t = triples[i]
         this.findTriples(t.subject.uri, t.subject, t.predicate, t.object)
-        .then((res)=>{
-          if (res.length === 0){
-            statements.push({
-              subject: t.subject,
-              predicate: t.predicate,
-              object: t.object
-            })
-          } else {
-            // Think about this
-            return reject('A triple is already present in the file!') 
-          }
-          if (i === triples.length - 1) {
-            return resolve()
-          }
-        })
+          .then((res) => {
+            if (res.length === 0) {
+              statements.push({
+                subject: t.subject,
+                predicate: t.predicate,
+                object: t.object
+              })
+            } else {
+              // Think about this
+              return reject('A triple is already present in the file!')
+            }
+            if (i === triples.length - 1) {
+              return resolve()
+            }
+          })
       }
-    }).then(()=>{
+    }).then(() => {
       statements = statements.map(st => {
         return rdf.st(st.subject, st.predicate, st.object).toNT()
       }).join(' ')
 
-      return fetch(Util.uriToProxied(uri),{
-        method: 'PATCH', 
+      return fetch(Util.uriToProxied(uri), {
+        method: 'PATCH',
         credentials: 'include',
-        body: `INSERT DATA { ${statements } } ;`, 
+        body: `INSERT DATA { ${statements } } ;`,
         headers: {
-          'Content-Type':'application/sparql-update' 
+          'Content-Type': 'application/sparql-update'
         }
-      }).then((res)=>{
+      }).then((res) => {
         // At the moment the animation fires when we only add one triple.
         if (res.ok && draw && validPredicate) {
           let obj = triples[0].object.uri
@@ -288,22 +304,26 @@ class GraphAgent {
    * Or
    * @param {object} {uri: uri, triples: [{subj,pred,obj}, {subj,pred,obj}..]}
    * @return {promise} fetch request - .then contains the response. 
-   */ 
-  
+   */
+
   // uri,subj,pred,obj
   // {uri:uri, triples:[]}
-  deleteTriple(...args){
+  deleteTriple(...args) {
     let subject, predicate, object
     let triples = []
     let uri, query
-    
+
     // Check if we received only one object with multiple triples in there.
-    if (args.length === 1){
-      ({uri} = args[0])
+    if (args.length === 1) {
+      ({
+        uri
+      } = args[0])
       triples = args[0].triples
     } else {
       ([uri, subject, predicate, object] = args)
-      triples = [{subject, predicate, object}]
+      triples = [{
+        subject, predicate, object
+      }]
     }
 
     let statement = triples.map(t => {
@@ -311,32 +331,38 @@ class GraphAgent {
     }).join(' ')
 
     query = 'DELETE DATA { ' + statement + ' } ;'
-    return fetch(Util.uriToProxied(uri),{
-      method: 'PATCH', 
+    return fetch(Util.uriToProxied(uri), {
+      method: 'PATCH',
       credentials: 'include',
       body: query,
       headers: {
-        'Content-Type':'application/sparql-update' 
+        'Content-Type': 'application/sparql-update'
       }
     })
   }
 
-  
+
   // This takes a standard URI, it proxies the request itself. 
   fetchTriplesAtUri(uri) {
     let parser = new Parser()
-    return fetch(Util.uriToProxied(uri),{
-      credentials: 'include' 
+    return fetch(Util.uriToProxied(uri), {
+      credentials: 'include'
     }).then((ans) => {
       if (!ans.ok)
         throw new Error(ans.status) // Call the catch if response error
-        
-      return ans.text().then((res)=>{
-        return parser.parse(res, uri) 
+
+      return ans.text().then((res) => {
+        return parser.parse(res, uri)
       })
-    }).catch((err)=>{ // Catch is automatically called on network errors only
+    }).catch((err) => { // Catch is automatically called on network errors only
       let statusCode = err.message
-      return {uri: uri, unav : true, connection:null,  triples:[], statusCode: parseInt(statusCode)} 
+      return {
+        uri: uri,
+        unav: true,
+        connection: null,
+        triples: [],
+        statusCode: parseInt(statusCode)
+      }
     })
   }
 
@@ -346,49 +372,49 @@ class GraphAgent {
   getNeighbours(center, triples) {
     // We will only follow and parse these links
     let Links = [PRED.knows.uri, PRED.isRelatedTo.uri]
-    let neighbours = triples.filter((t) =>  Links.indexOf(t.predicate.uri) >= 0)
-      
+    let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
+
     // If there are adjacent nodes to draw, 
     // we parse them and return an array of their triples
-    let neighbourErrors = 0
+    let neighbourErrors = []
     let graphMap = []
 
     return Promise.all(neighbours.map((triple) => {
-        return this.fetchTriplesAtUri(triple.object.uri).then((result) =>{
-          // This is a node that coulnt't be retrieved, either 404, 401 etc. 
-          if (result.unav) {
-            // We are setting the connection field of the node, we need it 
-            // in order to be able to dissconnect it from our center node later.
-            
-            neighbourErrors += 1
-            
-            // if forbidden access to node, do not show it
-            // (we assume the center node isn't ours then)
-            // @TODO find better way to know if we have rights to center node
-            if (result.statusCode !== 403)
-            {             
-              result.connection = triple.predicate.uri
-              graphMap.push(result)
-            }
-            
-          } else {
-            // This is a valid node.
-            result.triples.connection = triple.predicate.uri
-            graphMap.push(result.triples)
-            graphMap[graphMap.length - 1].uri = triple.object.uri
+      return this.fetchTriplesAtUri(triple.object.uri).then((result) => {
+        // This is a node that coulnt't be retrieved, either 404, 401 etc. 
+        if (result.unav) {
+          // We are setting the connection field of the node, we need it 
+          // in order to be able to dissconnect it from our center node later.
+
+          neighbourErrors.push(triple.object.uri)
+
+          // if forbidden access to node, do not show it
+          // (we assume the center node isn't ours then)
+          // @TODO find better way to know if we have rights to center node
+          if (result.statusCode !== 403) {
+            result.connection = triple.predicate.uri
+            graphMap.push(result)
           }
-          
-        })
-      })).then(() => {
-        console.log('Loading done,', neighbourErrors, 'rdf files were / was skipped.')
-        console.log('graphMap',graphMap)
-        return graphMap
+
+        } else {
+          // This is a valid node.
+          result.triples.connection = triple.predicate.uri
+          graphMap.push(result.triples)
+          graphMap[graphMap.length - 1].uri = triple.object.uri
+        }
+
+      }).catch((err) => {
+        neighbourErrors.push(triple.object.uri)
+      })
+    })).then(() => {
+      debug('Loading done,', neighbourErrors.length, 'rdf files were / was skipped : ', neighbourErrors)
+      return graphMap
     })
   }
 
-//Both getGraphMapAtUri and getGraphMapAtWebID return an array of nodes, each
-//node being represented as an array of triples that define it. The result
-//is pretty much a "map" of the currently displayed graph.
+  //Both getGraphMapAtUri and getGraphMapAtWebID return an array of nodes, each
+  //node being represented as an array of triples that define it. The result
+  //is pretty much a "map" of the currently displayed graph.
 
   getGraphMapAtUri(uri) {
     return new Promise((resolve) => {
@@ -396,8 +422,8 @@ class GraphAgent {
         this.getNeighbours(uri, centerNode.triples).then((neibTriples) => {
           let nodes = [centerNode.triples]
           nodes[0].uri = uri
-          // Flattening now results in the final structure of
-          // [array[x], array[x], array[x]...]
+            // Flattening now results in the final structure of
+            // [array[x], array[x], array[x]...]
           neibTriples.forEach(element => {
             nodes.push(element)
           })
@@ -407,7 +433,7 @@ class GraphAgent {
     })
   }
 
-//Calls the above function, but passes the current webId as the URI.
+  //Calls the above function, but passes the current webId as the URI.
   getGraphMapAtWebID() {
     let wia = new WebIDAgent()
     return wia.getWebID().then((webId) => this.getGraphMapAtUri(webId))

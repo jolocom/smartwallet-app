@@ -32,7 +32,6 @@ let Contacts = React.createClass({
     let emptyView
     
     let state = this.state
-    console.log('state : ',state)
     
     if (!state.contacts || !state.contacts.length) {
       emptyView = <div style={styles.empty}>No contacts</div>

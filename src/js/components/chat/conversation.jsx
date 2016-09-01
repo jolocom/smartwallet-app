@@ -17,6 +17,9 @@ import ConversationStore from 'stores/conversation'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:conversation')
+
 let Conversation = React.createClass({
 
   mixins: [
@@ -43,6 +46,8 @@ let Conversation = React.createClass({
   componentDidMount() {
     const {webId} = this.context.account
     const {id} = this.props.params
+    
+    debug('componentDidMount; loading conversation with props', this.props)
 
     ConversationActions.load(webId, id)
     ConversationActions.subscribe(webId, id)
@@ -68,6 +73,7 @@ let Conversation = React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.conversation && this.state.conversation) {
+      debug('componentDidUpdate; loading conversation', this.state.conversation)
       ContactActions.load(this.state.conversation.username)
     }
   },

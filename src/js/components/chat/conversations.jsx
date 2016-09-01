@@ -19,6 +19,9 @@ import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 import Utils from 'lib/util'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:conversations')
+
 let Conversations = React.createClass({
 
   mixins: [
@@ -55,6 +58,7 @@ let Conversations = React.createClass({
   },
 
   showConversation({id}) {
+    debug('Navigating to conversation URL')
     this.context.history.pushState(null, `/conversations/${id}`)
   },
 
