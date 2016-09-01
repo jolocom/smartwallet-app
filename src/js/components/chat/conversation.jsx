@@ -20,6 +20,8 @@ import ContactStore from 'stores/contact'
 import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
+
+import Util from 'lib/util'
 let debug = Debug('components:conversation')
 
 let Conversation = React.createClass({
@@ -196,13 +198,13 @@ let Conversation = React.createClass({
     let items = conversation.items || []
 
     var userAvatar = (
-      <Avatar src={this.state.profile.imgUri}>
+      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}>
       </Avatar>
     )
 
     if(otherPerson) {
       var otherPersonAvatar = (
-        <Avatar src={otherPerson.img}>
+        <Avatar src={Util.uriToProxied(otherPerson.img)}>
         </Avatar>
       )
     }
