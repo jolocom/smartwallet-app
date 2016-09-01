@@ -36,7 +36,8 @@ let Util = {
   },
 
   webidRoot(webid) {
-    return webid.match(/^(.*)\/profile\/card#me$/)[1]
+    let matches = webid.match(/^(.*)\/profile\/card#me$/)
+    return matches && matches[1]
   },
 
   urlWithoutHash(target) {
@@ -66,7 +67,7 @@ let Util = {
     let mode = localStorage.getItem('jolocom.auth-mode')
     if (mode === 'cert') {
       return uri
-    }
+    } 
     return `${proxy}/proxy?url=${uri}`
   }
 }

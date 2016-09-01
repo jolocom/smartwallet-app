@@ -5,6 +5,8 @@ import ChatAgent from 'lib/agents/chat'
 
 import ConversationsActions from 'actions/conversations'
 
+import debug from 'debug'
+
 let {load} = ConversationsActions
 
 let chatAgent = new ChatAgent()
@@ -48,23 +50,21 @@ export default Reflux.createStore({
 
   _getConversations(webId, query) {
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
-
-    console.trace('_GET CONVERSATIONS')
-    return chatAgent.getInboxConversations(Util.uriToProxied(webId))
+    return chatAgent.getInboxConversations(webId)
       .then(function(conversations) {
-      console.log('RECEIVED INBOX CONVERSATIONS')
+        debug('chat')('Received conversations',conversations)
         let results = conversations.map((url) => {
-          console.log('GET CONVERSATION ' + url)
           return chatAgent.getConversation(url, webId)
         })
 
         return Promise.all(results)
       })
       .then(function(conversations) {
+        debug('chat')('Received conversations 2',conversations)
         return _.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {
-          return conversation && (!regEx || conversation.id.match(regEx))
+          return conversation && (!regEx || conversation.id.match(regEx)) && conversation.lastMessage
         }).value()
       })
   },

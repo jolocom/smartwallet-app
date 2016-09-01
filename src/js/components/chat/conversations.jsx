@@ -17,6 +17,7 @@ import TimerMixin from 'react-timer-mixin'
 
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
+import Utils from 'lib/util'
 
 let Conversations = React.createClass({
 
@@ -158,11 +159,10 @@ let ConversationsListItem = React.createClass({
     }
     
     let avatar
-    
-    avatar = (
-        <Avatar src={otherPerson.img}>
-        </Avatar>
-    )
+    if (otherPerson.img)
+      avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}></Avatar>
+        else
+      avatar = <Avatar>{nameInitial}</Avatar>
     
     let date = moment(created).fromNow()
     return (

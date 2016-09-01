@@ -107,6 +107,7 @@ let Conversation = React.createClass({
       conversation: {
         flex: 1,
         overflowY: 'auto',
+        paddingTop: '25px',
         backgroundColor: '#f1f1f1'
       },
       message: {

@@ -5,6 +5,7 @@ import {PRED} from '../namespaces.js'
 import N3 from 'n3'
 import _ from 'lodash'
 import rdf from 'rdflib'
+import debug from 'debug'
 
 let N3Util = N3.Util
 
@@ -17,7 +18,6 @@ class ChatAgent extends LDPAgent {
   // @return {Promise.<Object>} object containing conversation id and doc url
   createConversation(initiator, participants) {
     
-    console.log('createConversation called with initiator', initiator,' and participants', participants)
     // POST conversation to initiators container
     // update inbox indices of all participants
     //
@@ -26,22 +26,15 @@ class ChatAgent extends LDPAgent {
     let hdrs = {'Content-type': 'text/turtle'}
     let conversationDocContent = this._conversationTriples(initiator, participants)
     
-    console.log('createConversation calling this.put', Util.uriToProxied(conversationDoc), hdrs, conversationDocContent)
-    
     return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
-      console.log('this put has been completed')
       return Promise.all(participants.map((p) =>
         this._linkConversation(conversationDoc, p)
       ))
     })
     .then(() => {
-      console.log('linkconversations have been completed')
       return this._writeConversationAcl(conversationDoc, initiator, participants)
     })
     .then(() => {
-      console.log('writeConversationAcl has been completed')
-      // update inbox indices
-      console.log('successfully created conversation and linked it to participant inboxes')
       
       return {
         id: conversationId,
@@ -188,7 +181,6 @@ class ChatAgent extends LDPAgent {
   //
   // @return {Object} conversation meta: id, updatesVia, otherPerson, lastMessage
   getConversation(conversationUrl, myUri) {
-    console.trace()
     let result = {
       id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
     }
@@ -247,11 +239,11 @@ class ChatAgent extends LDPAgent {
     }), (t) => t.object)
     let otherPerson = _.find(participants, (p) => p.value !== myUri)
 
+    console.log('otherPerson',otherPerson,'!== myUri',myUri)
+    
     if (!otherPerson) {
       return Promise.resolve(null)
     }
-
-    console.log("pqrticipqnts", participants, "otherperson", otherPerson)
 
     let webid = otherPerson.value
 
@@ -282,19 +274,20 @@ class ChatAgent extends LDPAgent {
         }
 
         result.webid = otherPerson
-        console.log("RESULT", result)
         return result
       })
   }
 
   getInboxConversations(webid) {
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
-    return this.get(inbox)
+    debug('chat-agent')('Getting inbox conversations for webid',inbox)
+    return this.get(Util.uriToProxied(inbox))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, inbox)
       })
       .then((result) => {
+        debug('chat-agent')('Received inbox conversations',result)
         return result.triples.filter((t) => {
           return t.predicate.uri === PRED.spaceOf.uri
         }).map((t) => t.object.value || t.object.uri)
@@ -313,7 +306,6 @@ class ChatAgent extends LDPAgent {
       .forEach(function (st) {
         toAdd.push(st.toNT())
       })
-    console.log(toAdd)
 
    //return solid.web.patch(inbox, null, toAdd)
 
