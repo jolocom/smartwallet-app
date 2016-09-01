@@ -1,7 +1,7 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
-import settings from 'settings'
-import ChatAgent from 'lib/agents/chat.js'
+import Util from 'lib/util'
+import ChatAgent from 'lib/agents/chat'
 
 import ConversationsActions from 'actions/conversations'
 
@@ -12,34 +12,69 @@ let chatAgent = new ChatAgent()
 export default Reflux.createStore({
   listenables: ConversationsActions,
 
+  items: [],
+
   getInitialState() {
     return {
       loading: true,
-      items: []
+      items: this.items
     }
   },
 
-  onLoad(username, query) {
-    let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
+  getConversation(id) {
+    for (let conversation of this.items) {
+      if (conversation.id === id) {
+        return conversation
+      }
+    }
+  },
 
-    return chatAgent.getInboxConversations(`${settings.endpoint}/${username}/profile/card#me`)
+  getUri(webId, id) {
+    return new Promise((resolve, reject) => {
+      let conversation = this.getConversation(id)
+      if (conversation) {
+        resolve(conversation.uri)
+      } else {
+        this._getConversations(webId, id).then((conversations) => {
+          if (conversations[0]) {
+            resolve(conversations[0].uri)
+          } else {
+            reject()
+          }
+        })
+      }
+    })
+  },
+
+  _getConversations(webId, query) {
+    let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
+    return chatAgent.getInboxConversations(webId)
       .then(function(conversations) {
-        let results = conversations.map((url) => chatAgent.getConversation(url))
+        let results = conversations.map((url) => {
+          return chatAgent.getConversation(url, Util.uriToProxied(webId))
+        })
+
         return Promise.all(results)
       })
       .then(function(conversations) {
-        load.completed(_.chain(conversations).map((conversation) => {
+        return _.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {
-          return !regEx || conversation.id.match(regEx)
-        }).value())
+          return conversation && (!regEx || conversation.id.match(regEx)) && conversation.lastMessage
+        }).value()
       })
   },
 
+  onLoad(webId, query) {
+    this._getConversations(webId, query).then(load.completed)
+  },
+
   onLoadCompleted(conversations) {
+    this.items = conversations
+
     this.trigger({
       loading: false,
-      items: conversations
+      items: this.items
     })
   }
 
