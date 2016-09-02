@@ -153,24 +153,6 @@ let Graph = React.createClass({
       this.graph.setRotationIndex(this.state.rotationIndex)
     }
 
-    let nodeDetails
-
-    if (this.state.activeNode) {
-      let NodeFullScreenComponent = NodeTypes.componentFor(this.state.activeNode.type)
-
-      if (NodeFullScreenComponent)
-      {
-        nodeDetails = (
-          <NodeFullScreenComponent
-            node={this.state.activeNode}
-            center={this.state.center}
-            svg={this.state.selected}
-            state={this.state}
-          />
-        )
-      }
-    }
-
     let fab
 
     if (!this.context.searchActive) {
@@ -190,7 +172,8 @@ let Graph = React.createClass({
       return React.cloneElement(el, {
         node: this.state.activeNode,
         center: this.state.center,
-        navHistory: this.state.navHistory
+        navHistory: this.state.navHistory,
+        state: this.state
       })
     })
 

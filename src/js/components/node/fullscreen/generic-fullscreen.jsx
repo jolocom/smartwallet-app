@@ -107,7 +107,7 @@ let GenericFullScreen = React.createClass({
   _handleDisconnect() {
     if (this.props.node.rank !== 'center') {
       nodeActions.disconnectNode(
-        this.props.node, this.props.center
+        this.props.node, this.props.state.center
       )
     }
     this._handleClose()
