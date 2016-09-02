@@ -15,6 +15,9 @@ import TouchRotate from 'lib/lib/touch-rotate'
 import Utils from 'lib/util'
 import particles from './particles'
 
+import Debug from 'lib/debug'
+let debug = Debug('d3graph')
+
 const theme = getMuiTheme(JolocomTheme)
 
 export default class GraphD3 extends EventEmitter {
@@ -124,6 +127,8 @@ export default class GraphD3 extends EventEmitter {
     if (this.rendered) {
       this.eraseGraph() // erase everything, including background
     }
+    
+    debug('Rendering with state',state)
 
     this.rendered = true
 
