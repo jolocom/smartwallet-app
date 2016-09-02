@@ -4,7 +4,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton} from 'material-ui'
+import {AppBar, IconButton, Avatar} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
@@ -17,16 +17,28 @@ import ConversationStore from 'stores/conversation'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
+import ProfileStore from 'stores/profile'
+
+import Debug from 'lib/debug'
+
+import Util from 'lib/util'
+let debug = Debug('components:conversation')
+
 let Conversation = React.createClass({
 
   mixins: [
     Reflux.connect(ConversationStore, 'conversation'),
-    Reflux.connect(ContactStore, 'contact')
+    Reflux.connect(ContactStore, 'contact'),
+    Reflux.connect(ProfileStore, 'profile')
   ],
 
   contextTypes: {
     history: React.PropTypes.any,
-    profile: React.PropTypes.any
+    account: React.PropTypes.any
+  },
+
+  propTypes: {
+    params: React.PropTypes.object
   },
 
   getInitialState() {
@@ -37,18 +49,23 @@ let Conversation = React.createClass({
   },
 
   componentDidMount() {
-    ConversationActions.load(this.context.profile.username, this.props.params.id)
-    ConversationActions.subscribe(this.context.profile.username, this.props.params.id)
+    const {webId} = this.context.account
+    const {id} = this.props.params
+    
+    debug('componentDidMount; loading conversation with props', this.props)
+
+    ConversationActions.load(webId, id)
+    ConversationActions.subscribe(webId, id)
 
     this.refs.dialog.show()
 
-    this.conversationsEl = ReactDOM.findDOMNode(this.refs.conversations)
+    this.itemsEl = ReactDOM.findDOMNode(this.refs.items)
 
-    this.conversationsEl.addEventListener('scroll', this.onScroll)
+    this.itemsEl.addEventListener('scroll', this.onScroll)
 
     this.interval = setInterval(() => {
       if (this.state.atBottom) {
-        this.conversationsEl.scrollTop = this.conversationsEl.scrollHeight
+        this.itemsEl.scrollTop = this.itemsEl.scrollHeight
       }
     }, 100)
   },
@@ -56,17 +73,18 @@ let Conversation = React.createClass({
   componentWillUnmount() {
     this.refs.dialog.hide()
 
-    this.conversationsEl.removeEventListener('scroll', this.onScroll)
+    this.itemsEl.removeEventListener('scroll', this.onScroll)
   },
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.conversation && this.state.conversation) {
+      debug('componentDidUpdate; loading conversation', this.state.conversation)
       ContactActions.load(this.state.conversation.username)
     }
   },
 
   onScroll() {
-    let el = this.conversationsEl
+    let el = this.itemsEl
     if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
       this.setState({atBottom: true})
     } else {
@@ -76,11 +94,16 @@ let Conversation = React.createClass({
 
   addMessage(content) {
     ConversationActions.addMessage(
-      this.props.params.id,
-      this.context.profile.username,
+      this.state.conversation.uri,
+      this.context.account.webId,
       content
     )
+    // @TODO update the state of all convos with the new lastMessage
     return true
+  },
+
+  back() {
+    this.context.history.pushState(null, '/conversations')
   },
 
   getStyles() {
@@ -93,6 +116,7 @@ let Conversation = React.createClass({
       conversation: {
         flex: 1,
         overflowY: 'auto',
+        paddingTop: '25px',
         backgroundColor: '#f1f1f1'
       },
       message: {
@@ -101,12 +125,13 @@ let Conversation = React.createClass({
         overflow: 'hidden'
       },
       body: {
-        borderTopLeftRadius: '6px',
-        borderTopRightRadius: '6px',
-        borderBottomLeftRadius: '6px',
-        borderBottomRightRadius: '6px',
+        borderTopLeftRadius: '10px',
+        borderTopRightRadius: '10px',
+        borderBottomLeftRadius: '10px',
+        borderBottomRightRadius: '10px',
         padding: '6px 12px',
-        position: 'relative'
+        position: 'relative',
+        whiteSpace: 'normal'
       },
       meta: {
         clear: 'both',
@@ -118,7 +143,7 @@ let Conversation = React.createClass({
         body: {
           float: 'left',
           background: '#ffffff',
-          borderTopLeftRadius: 0
+          whiteSpace:'normal'
         },
         meta: {
           textAlign: 'left'
@@ -127,8 +152,32 @@ let Conversation = React.createClass({
       me: {
         body: {
           float: 'right',
-          background: 'rgba(0, 0, 0, 0.15)',
-          borderTopRightRadius: 0
+          background: '#B5CA11',
+          whiteSpace: 'normal'
+        },
+        meta: {
+          textAlign: 'right'
+        }
+      },
+      otherPersonAvatar: {
+        body: {
+          float: 'left',
+          background: '#F1F1F1',
+          padding: 0,
+          borderTopRightRadius: 0,
+          marginRight: '6px'
+        },
+        meta: {
+          textAlign: 'left'
+        }
+      },
+      userAvatar: {
+        body: {
+          float: 'right',
+          background: '#F1F1F1',
+          padding: 0,
+          borderTopRightRadius: 0,
+          marginLeft: '6px',
         },
         meta: {
           textAlign: 'right'
@@ -144,34 +193,62 @@ let Conversation = React.createClass({
     let {conversation} = this.state
     let {otherPerson} = conversation
 
-    let {profile} = this.context
+    let {account} = this.context
     let title = otherPerson && otherPerson.name
     let items = conversation.items || []
 
+    var userAvatar = (
+      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}>
+      </Avatar>
+    )
+
+    if(otherPerson) {
+      var otherPersonAvatar = (
+        <Avatar src={Util.uriToProxied(otherPerson.img)}>
+        </Avatar>
+      )
+    }
     return (
-      <Dialog ref="dialog" fullscreen={true}>
+      <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
-          title={title}
-          iconElementLeft={
-            <IconButton onClick={() => this.context.history.pushState(null, '/chat')} iconClassName="material-icons">arrow_back</IconButton>
-          }
+            title={title}
+            iconElementLeft={
+              <IconButton
+                onClick={this.back}
+                iconClassName="material-icons"
+              >
+                arrow_back
+              </IconButton>
+            }
           />
-        <Content style={styles.content}>
-            <div ref="conversations" style={styles.conversation}>
+          <Content style={styles.content}>
+            <div ref="items" style={styles.conversation}>
               {items.map(function({author, content, created}, i) {
-                let from = (author !== profile.webid) ? 'contact' : 'me'
+                let avatar = (author !== account.webId) ? 'otherPersonAvatar' : 'userAvatar'
+                let from = (author !== account.webId) ? 'contact' : 'me'
                 return (
                   <div style={[styles.message]} key={i}>
-                    <div style={[styles.body, styles[from].body]}>{content}</div>
+                    <div style={[styles.body, styles[avatar].body]}>
+                      {avatar=='otherPersonAvatar'&&otherPersonAvatar}
+                      {avatar=='userAvatar'&&userAvatar}
+                    </div>
+                    <div style={[styles.body, styles[from].body]}>
+                      {content}
+                    </div>
                     <div style={[styles.meta, styles[from].meta]}>
-                      <span style={styles.date}>{moment(created).fromNow()}</span>
+                      <span style={styles.date}>
+                        {moment(created).fromNow()}
+                      </span>
                     </div>
                   </div>
                 )
               })}
             </div>
-            <Compose placeholder="Write a message..." onSubmit={this.addMessage}/>
+            <Compose
+              placeholder="Write a message..."
+              onSubmit={this.addMessage}
+            />
           </Content>
         </Layout>
       </Dialog>

@@ -12,6 +12,28 @@ let Compose = React.createClass({
     }
   },
 
+  onKeyDown(e) {
+    if (this.props.onKeyDown) {
+      return this.props.onKeyDown(e)
+    }
+
+    if (e.keyCode === 13){
+      if (e.shiftKey){
+        return true
+      } else {
+        setTimeout(this.onSubmit.bind(this),5)
+        return false
+      }
+    }
+  },
+
+  onKeyUp(e) {
+    if (this.props.onKeyUp) {
+      this.props.onKeyUp(e)
+    }
+    return false
+  },
+
   onSubmit() {
     if (this.props.onSubmit(this.state.content)) {
       this.setState({content: ''})
@@ -60,7 +82,9 @@ let Compose = React.createClass({
         visibility: 'hidden'
       },
       button: {
-        margin: '5px'
+        margin: '5px',
+        right: '0px',
+        position: 'fixed'
       }
     }
   },
@@ -76,7 +100,7 @@ let Compose = React.createClass({
       <div style={[styles.container, style]}>
         <div style={styles.textareaWrapper}>
           <pre style={styles.pre}><span style={styles.span}>{this.state.content}</span><br/></pre>
-          <textarea placeholder={placeholder} onChange={this.onChange} ref="textarea" style={[styles.textarea, styles.pre]}></textarea>
+          <textarea placeholder={placeholder} onChange={this.onChange} onKeyDown={this.onKeyDown} ref="textarea" style={[styles.textarea, styles.pre]}></textarea>
           <IconButton iconClassName="material-icons" secondary={true} onTouchTap={this.onSubmit} style={styles.button}>{submitIcon}</IconButton>
         </div>
       </div>

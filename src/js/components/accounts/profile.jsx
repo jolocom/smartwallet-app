@@ -37,7 +37,8 @@ let Profile = React.createClass({
   },
 
   componentDidMount() {
-    this.loading = false
+    this.loadingPassportPhoto = false
+    this.loadingDisplayPhoto = false
   },
 
   componentDidUpdate(props, state) {
@@ -144,7 +145,8 @@ let Profile = React.createClass({
                 onClick={this.hide}
                 iconClassName="material-icons">arrow_back</IconButton>
             }
-            iconElementRight={!this.state.loading
+            iconElementRight={!this.state.loadingPassportPhoto ||
+              !this.state.loadingDisplayPhoto
               ? <IconButton
                 onClick={this._handleUpdate}
                 iconClassName="material-icons">check</IconButton>
@@ -161,10 +163,18 @@ let Profile = React.createClass({
                   {background: `url(${bgImg}) center / cover`}
                 )} />
               <CardActions>
-                {img
-                  ? <FlatButton label="Remove" onClick={this._handleRemove} />
-                  : <FlatButton label="Select or take picture"
-                    onClick={this._handleSelect} />}
+                {this.state.loadingDisplayPhoto
+                  ? <LinearProgress
+                    mode="indeterminate"
+                    style="progBar" />
+                  : img
+                      ? <FlatButton
+                        label="Remove"
+                        onClick={this._handleRemove} />
+                      : <FlatButton
+                        label="Select or take picture"
+                        onClick={this._handleSelect} />}
+
               </CardActions>
             </Card>
             <input
@@ -222,7 +232,7 @@ let Profile = React.createClass({
                       {this.state.passportImgUri
                         ? <div>
                           <img
-                            src={this.state.passportImgUri}
+                            src={Util.uriToProxied(this.state.passportImgUri)}
                             style={styles.passportPreview} />
                           <FlatButton
                             label="Remove passport"
@@ -230,7 +240,7 @@ let Profile = React.createClass({
                             style={styles.removePassportButton} />
                         </div>
                       : <div>
-                      {this.state.loading
+                      {this.state.loadingPassportPhoto
                         ? <LinearProgress
                           mode="indeterminate"
                           style="progBar" />
@@ -276,7 +286,7 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if (!this.loading) {
+    if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
       this.hide()
       ProfileActions.update(Object.assign({}, this.state, { show: false }))
     }
@@ -324,7 +334,7 @@ let Profile = React.createClass({
       })
     } else {
       this.setState({
-        loading: true
+        loadingDisplayPhoto: true
       })
       this.setState({
         error: null,
@@ -333,7 +343,7 @@ let Profile = React.createClass({
 
       gAgent.storeFile(this.state.storage, file).then((res) => {
         this.setState({
-          loading: false
+          loadingDisplayPhoto: false
         })
         this.setState({imgUri: res})
       }).catch((e) => {
@@ -366,7 +376,7 @@ let Profile = React.createClass({
       })
     } else {
       this.setState({
-        loading: true
+        loadingPassportPhoto: true
       })
       this.setState({
         error: null,
@@ -375,7 +385,7 @@ let Profile = React.createClass({
 
       gAgent.storeFile(this.state.storage, file).then((res) => {
         this.setState({
-          loading: false
+          loadingPassportPhoto: false
         })
         this.setState({passportImgUri: res})
       }).catch((e) => {

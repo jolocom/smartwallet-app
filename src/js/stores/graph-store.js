@@ -54,8 +54,9 @@ export default Reflux.createStore({
       activeNode: null
     }
   },
-  onLogin(user){
-    this.state.webId = user
+
+  onLogin(username, webId) {
+    this.state.webId = webId
   },
 
   // These two are needed in order to transition between the preview graph and
@@ -64,7 +65,7 @@ export default Reflux.createStore({
     this.trigger(null, 'erase')
   },
 
-  onSetState: function(key, value, flag){
+  onSetState: function(key, value, flag) {
     this.state[key] = value
     if (flag) this.trigger(this.state)
   },
@@ -186,13 +187,13 @@ export default Reflux.createStore({
   },
 
   onViewNode(node) {
-    
+
     if (!node)
     {
       console.log('Ignoring onViewNode because node is null.')
       return
-    }  
-    
+    }
+
     this.state.activeNode = node
 
     // @TODO do empty PATCH request and see if we have rights for center node and other node
@@ -202,7 +203,7 @@ export default Reflux.createStore({
       method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
       credentials: 'include',
       headers: {
-        'Content-Type':'application/sparql-update' 
+        'Content-Type':'application/sparql-update'
       }
     }).then((res)=>{
       if (!res.ok)
@@ -216,7 +217,7 @@ export default Reflux.createStore({
       method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
       credentials: 'include',
       headers: {
-        'Content-Type':'application/sparql-update' 
+        'Content-Type':'application/sparql-update'
       }
     }).then((res)=>{
       if (!res.ok)

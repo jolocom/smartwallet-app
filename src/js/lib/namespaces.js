@@ -12,9 +12,10 @@ let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 let CC = rdf.Namespace('https://cc.rww.io/vocab#')
 let PURL = rdf.Namespace('http://purl.org/iot/vocab/m3-lite#')
 
+
 export const PRED = {
   givenName: FOAF('givenName'), 
-  familyName: FOAF('familyName'), 
+  familyName: FOAF('familyName'),
   fullName: FOAF('name'),
   image: FOAF('img'),
   email: FOAF('mbox'),
@@ -26,12 +27,13 @@ export const PRED = {
   title: DC('title'),
   description: DC('description'),
   type: RDF('type'),
-  
+
   maker: FOAF('maker'),
   primaryTopic: FOAF('primaryTopic'),
   hasOwner: SIOC('hasOwner'),
   hasSubscriber: SIOC('hasSubscriber'),
   spaceOf: SIOC('spaceOf'),
+  space: SIOC('space'),
   post: SIOC('Post'),
   hasCreator: SIOC('hasCreator'),
   content: SIOC('content'),

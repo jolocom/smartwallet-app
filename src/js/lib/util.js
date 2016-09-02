@@ -3,28 +3,28 @@ import {proxy} from 'settings'
 
 // Misc utility functions
 let Util = {
-  stringLessThan(s1, s2){
-    if (s1 < s2){
+  stringLessThan(s1, s2) {
+    if (s1 < s2) {
       return true
-    } 
+    }
     return false
   },
 
-  stringMin(s1, s2){
-    if (Util.stringLessThan(s1, s2)) { 
+  stringMin(s1, s2) {
+    if (Util.stringLessThan(s1, s2)) {
       return s1
     }
     return s2
   },
 
-  stringMax(s1, s2){
+  stringMax(s1, s2) {
     if (Util.stringLessThan(s1, s2)) {
       return s2
     }
     return s1
   },
 
-  distance(x1, y1, x2, y2){
+  distance(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow((x1 - x2), 2) +
                      Math.pow((y1 - y2), 2))
   },
@@ -36,7 +36,8 @@ let Util = {
   },
 
   webidRoot(webid) {
-    return webid.match(/^(.*)\/profile\/card#me$/)[1]
+    let matches = webid.match(/^(.*)\/profile\/card#me$/)
+    return matches && matches[1]
   },
 
   urlWithoutHash(target) {
@@ -56,18 +57,18 @@ let Util = {
   /*
    * @summary Proxies a uri or not depending on the mode.
    * @param {string} uri - The uri to be proxied.
-   * @return {string} uri - proxied / not proxied uri depending on mode. 
-   */  
+   * @return {string} uri - proxied / not proxied uri depending on mode.
+   */
 
-  uriToProxied(uri){
+  uriToProxied(uri) {
     if (!uri) {
-      return 
+      return
     }
-    let mode = localStorage.getItem('auth-mode')
+    let mode = localStorage.getItem('jolocom.auth-mode')
     if (mode === 'cert') {
       return uri
     } 
-    return `${proxy}/proxy?url=${uri}` 
+    return `${proxy}/proxy?url=${uri}`
   }
 }
 

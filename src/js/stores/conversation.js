@@ -1,68 +1,80 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
-import settings from 'settings'
-import ChatAgent from 'lib/agents/chat.js'
+import ChatAgent from 'lib/agents/chat'
+
+import Debug from 'lib/debug'
+let debug = Debug('stores:conversation')
 
 let chatAgent = new ChatAgent()
 
 import ConversationActions from 'actions/conversation'
+import ConversationsStore from 'stores/conversations'
 
 let {load, addMessage} = ConversationActions
 
 export default Reflux.createStore({
   listenables: ConversationActions,
 
+  state: {
+    loading: true,
+    items: []
+  },
+
   getInitialState() {
-    return {
+    return this.state
+  },
+
+  onLoad(webId, id) {
+    this.state = {
       loading: true,
       items: []
     }
-  },
 
-  getUrl(username, id) {
-    return `${settings.endpoint}/${username}/little-sister/chats/${id}`
-  },
+    debug('onLoad with webId',webId,'and id',id)
+    
+    this.trigger(this.state)
 
-  onLoad(username, id) {
-    let url = this.getUrl(username, id)
-    Promise.all([
-      chatAgent.getConversation(url),
-      chatAgent.getConversationMessages(url)
-    ]).then((result) => {
-      let [conversation, items] = result
-      load.completed(conversation, items)
+    ConversationsStore.getUri(webId, id).then((url) => {
+      debug('Got conversation URI',url)
+      return Promise.all([
+        chatAgent.getConversation(url, webId),
+        chatAgent.getConversationMessages(url)
+      ]).then((result) => {
+        let [conversation, items] = result
+        load.completed(conversation, items)
+      })
+    }).catch((err) => {
+      console.error('Couldn\'t get conversation URI',err)
     })
   },
 
   onLoadCompleted(conversation, items) {
-    this.items = items
-    this.trigger(_.extend({
+    this.state = _.extend({
       loading: false,
       items: items
-    }, conversation))
+    }, conversation)
+
+    this.trigger(this.state)
   },
 
-  onSubscribe(username, id) {
-    let url = this.getUrl(username, id)
-    chatAgent.getConversation(url)
-      .then((conversation) => {
+  onSubscribe(webId, id) {
+    ConversationsStore.getUri(webId, id).then((url) => {
+      return chatAgent.getConversation(url).then((conversation) => {
         this.socket = new WebSocket(conversation.updatesVia)
         this.socket.onopen = function() {
           this.send(`sub ${url}`)
         }
         this.socket.onmessage = function(msg) {
           if (msg.data && msg.data.slice(0, 3) === 'pub') {
-            ConversationActions.load(username, id)
+            ConversationActions.load(webId, id)
           }
         }
       })
+    })
   },
 
-  onAddMessage(id, author, content) {
-    let conversation = this.getUrl(author, id)
-    author = `${settings.endpoint}/${author}/profile/card#me`
-
-    return chatAgent.postMessage(conversation, author, content)
+  onAddMessage(uri, author, content) {
+    return chatAgent.postMessage(uri, author, content)
       .then(() => {
         addMessage.completed({
           type: 'message',
@@ -73,10 +85,13 @@ export default Reflux.createStore({
   },
 
   onAddMessageCompleted(item) {
-    this.items.push(item)
-    this.trigger({
-      items: this.items
-    })
+    if (this.state.items) {
+      this.state.items.push(item)
+    } else {
+      this.state.items = [item]
+    }
+
+    this.trigger(this.state)
   }
 
 })
