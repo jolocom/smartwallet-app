@@ -15,19 +15,16 @@ let N3Util = N3.Util
 class ChatAgent extends LDPAgent {
 
   // @param {String} initiator itiator's webid url
-  // @param {Array.<String>} participants webids of participants (including the initiator)
+  // @param {Array.<String>} participants webids (including the initiator)
   //
   // @return {Promise.<Object>} object containing conversation id and doc url
   createConversation(initiator, participants) {
-    
     // POST conversation to initiators container
     // update inbox indices of all participants
-    //
     let conversationId = Util.randomString(5)
     let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
     let hdrs = {'Content-type': 'text/turtle'}
     let conversationDocContent = this._conversationTriples(initiator, participants)
-    
     return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
       return Promise.all(participants.map((p) =>
         this._linkConversation(conversationDoc, p)
@@ -37,7 +34,6 @@ class ChatAgent extends LDPAgent {
       return this._writeConversationAcl(conversationDoc, initiator, participants)
     })
     .then(() => {
-      
       return {
         id: conversationId,
         url: conversationDoc
@@ -81,7 +77,7 @@ class ChatAgent extends LDPAgent {
   }
 
   postMessage(conversationUrl, author, content) {
-    //TODO: implement
+    // TODO: implement
     let msgId = `#${Util.randomString(5)}`
     let conversationId = `${conversationUrl}#thread`
     return this.get(Util.uriToProxied(conversationUrl))
@@ -177,11 +173,13 @@ class ChatAgent extends LDPAgent {
 
   }
 
-  // Returns relevant conversation metadata (id, updatesVia, otherPerson, lastMessage)
+  // Returns relevant conversation metadata
+  // (id, updatesVia, otherPerson, lastMessage)
   //
   // @param {String} conversationUrl conversation resource url
   //
-  // @return {Object} conversation meta: id, updatesVia, otherPerson, lastMessage
+  // @return {Object} conversation meta:
+  // id, updatesVia, otherPerson, lastMessage
   getConversation(conversationUrl, myUri) {
     let result = {
       id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
@@ -222,7 +220,7 @@ class ChatAgent extends LDPAgent {
   }
 
   _otherPerson(triples, conversationUrl, myUri) {
-    //TODO
+    // TODO
     let aboutThread = _.filter(triples, (t) => {
       return t.subject == '#thread' || t.subject == `${conversationUrl}#thread`
     })
@@ -240,7 +238,6 @@ class ChatAgent extends LDPAgent {
          return t.predicate.uri == PRED.hasSubscriber.uri
     }), (t) => t.object)
     let otherPerson = _.find(participants, (p) => p.value !== myUri)
-    
     if (!otherPerson) {
       return Promise.resolve(null)
     }
@@ -307,14 +304,14 @@ class ChatAgent extends LDPAgent {
         toAdd.push(st.toNT())
       })
 
-   //return solid.web.patch(inbox, null, toAdd)
+   // return solid.web.patch(inbox, null, toAdd)
 
     return fetch(Util.uriToProxied(inbox),{
       method: 'PATCH',
       credentials: 'include',
-      body: `INSERT DATA { ${toAdd.join(" ")} } ;`,
+      body: `INSERT DATA { ${toAdd.join(' ')} } ;`,
       headers: {
-        'Content-Type':'application/sparql-update'
+        'Content-Type': 'application/sparql-update'
       }
     })
 
