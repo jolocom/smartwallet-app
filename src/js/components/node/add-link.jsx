@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
-import d3 from 'd3'
+import * as d3 from 'd3'
 import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 
 import nodeActions from 'actions/node'
@@ -171,7 +171,7 @@ let NodeAddLink = React.createClass({
     })
 
   },
-  _handleSelectSwap: function() {    
+  _handleSelectSwap: function() {
     this.setState({
       start:this.state.end,
       startUri:this.state.endUri,
