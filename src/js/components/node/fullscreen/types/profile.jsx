@@ -131,27 +131,3 @@ let ProfileNode = React.createClass({
 })
 
 export default Radium(ProfileNode)
-
-/*
-
-  // TODO: rename functions, arrange
-  copyFn() {
-    alert('woohoo copy!')
-  },
-
-  deleteFn() {
-    alert('woohoo delete!')
-  },
-
-  saveFn() {
-    alert('woohoo save!')
-  },
-
-  readFn() {
-    alert('woohoo read!')
-  },
-
-  editFn() {
-    alert('woohoo edit!')
-  },
-*/

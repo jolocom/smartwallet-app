@@ -231,7 +231,7 @@ let Profile = React.createClass({
                       {this.state.passportImgUri
                         ? <div>
                           <img
-                            src={this.state.passportImgUri}
+                            src={Util.uriToProxied(this.state.passportImgUri)}
                             style={styles.passportPreview} />
                           <FlatButton
                             label="Remove passport"
