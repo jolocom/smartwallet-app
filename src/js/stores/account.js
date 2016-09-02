@@ -6,6 +6,8 @@ import WebIdAgent from 'lib/agents/webid'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
+import ConversationsActions from 'actions/conversations'
+
 export default Reflux.createStore({
   listenables: Account,
 
@@ -149,6 +151,10 @@ export default Reflux.createStore({
       username: username,
       webId: webId
     }
+    
+    // Load conversations for joining an existing one
+    // when clicking on "chat" FAB on sbody's profile
+    ConversationsActions.load(webId)
 
     this.trigger(this.state)
   },

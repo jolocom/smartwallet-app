@@ -5,6 +5,7 @@ import {PRED} from '../namespaces.js'
 import N3 from 'n3'
 import _ from 'lodash'
 import rdf from 'rdflib'
+import ConversationsStore from 'stores/conversations'
 
 import Debug from 'lib/debug'
 let debug = Debug('agents:chat')
@@ -19,26 +20,47 @@ class ChatAgent extends LDPAgent {
   //
   // @return {Promise.<Object>} object containing conversation id and doc url
   createConversation(initiator, participants) {
-    // POST conversation to initiators container
-    // update inbox indices of all participants
-    let conversationId = Util.randomString(5)
-    let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
-    let hdrs = {'Content-type': 'text/turtle'}
-    let conversationDocContent = this._conversationTriples(initiator, participants)
-    return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
-      return Promise.all(participants.map((p) =>
-        this._linkConversation(conversationDoc, p)
-      ))
-    })
-    .then(() => {
-      return this._writeConversationAcl(conversationDoc, initiator, participants)
-    })
-    .then(() => {
-      return {
-        id: conversationId,
-        url: conversationDoc
-      }
-    })
+    let existingConversation = ConversationsStore.getConversationByWebId(participants[1])
+    if (existingConversation)
+    {
+      debug('Found an existing conversation with',participants[1])      
+      return new Promise((resolve,reject) => {
+        resolve({
+          conversation: {
+            id: existingConversation.id,
+            url: existingConversation.uri 
+          },
+          isNew: false
+        })
+      })
+    }
+    else
+    {
+      debug('Haven\'t found an existing conversation with',participants[1])      
+      // POST conversation to initiators container
+      // update inbox indices of all participants
+      let conversationId = Util.randomString(5)
+      let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
+      let hdrs = {'Content-type': 'text/turtle'}
+      let conversationDocContent = this._conversationTriples(initiator, participants)
+      return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
+        return Promise.all(participants.map((p) =>
+          this._linkConversation(conversationDoc, p)
+        ))
+      })
+      .then(() => {
+        return this._writeConversationAcl(conversationDoc, initiator, participants)
+      })
+      .then(() => {
+        return {
+          conversation: {
+            id: conversationId,
+            url: conversationDoc
+          },
+          isNew: true
+        }
+      })
+    }
   }
 
   _writeConversationAcl(uri, initiator, participants = []) {

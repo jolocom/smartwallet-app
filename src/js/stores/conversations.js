@@ -24,6 +24,14 @@ export default Reflux.createStore({
       items: this.items
     }
   },
+  
+  getConversationByWebId(webId) {
+    for (let conversation of this.items) {
+      if (conversation.otherPerson.webid.value === webId) {
+        return conversation
+      }
+    }
+  },
 
   getConversation(id) {
     for (let conversation of this.items) {
@@ -60,7 +68,7 @@ export default Reflux.createStore({
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
     return chatAgent.getInboxConversations(webId)
       .then(function(conversations) {
-        debug('Received conversations',conversations)
+        debug('Received URLs of conversations',conversations)
         let results = conversations.map((url) => {
           return chatAgent.getConversation(url, webId)
         })
@@ -68,7 +76,7 @@ export default Reflux.createStore({
         return Promise.all(results)
       })
       .then(function(conversations) {
-        debug('Received conversations 2',conversations)
+        debug('Received conversations',conversations)
         return _.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {

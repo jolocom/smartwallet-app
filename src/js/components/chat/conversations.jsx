@@ -42,7 +42,7 @@ let Conversations = React.createClass({
 
   componentDidMount() {
     debug('componentDidMount')
-    this.loadConversations()
+    this.loadConversations() // @TODO Redundant? did on login
   },
 
   componentDidUpdate(prevProps) {
