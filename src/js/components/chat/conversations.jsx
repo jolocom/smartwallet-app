@@ -69,29 +69,24 @@ let Conversations = React.createClass({
   render: function() {
     let emptyView
     let {items} = this.state.conversations
-    
-   
     if (!items || !items.length) {
       emptyView = <div style={styles.empty}>No conversations</div>
-    }
-    else
-    {
+    } else {
       this.state.conversations.items.sort(
-        (item_a,item_b) => {
-          if (!item_a.lastMessage) {
-            if (!item_b.lastMessage) {
-              return 0    
-            }
-            else {
+        (itemA, itemB) => {
+          if (!itemA.lastMessage) {
+            if (!itemB.lastMessage) {
+              return 0
+            } else {
               return -1
             }
+          } else if (!itemB.lastMessage) {
+            return 1
           }
-          else if (!item_b.lastMessage) {
-              return 1
-          }
-          return item_a.lastMessage.created.getTime() < item_b.lastMessage.created.getTime()
+          return itemA.lastMessage.created.getTime() <
+            itemB.lastMessage.created.getTime()
         }
-      ) 
+      )
     }
 
     return (
@@ -114,14 +109,14 @@ let Conversations = React.createClass({
 
         </div>
 
-        <FloatingActionButton
-          secondary
-          href="#/chat/new"
-          linkButton={true}
-          style={styles.actionButton}
-        >
-          <FontIcon className="material-icons">add</FontIcon>
-        </FloatingActionButton>
+        {/* <FloatingActionButton */}
+          {/* secondary */}
+          {/* href="#/chat/new" */}
+          {/* linkButton={true} */}
+          {/* style={styles.actionButton} */}
+        {/* > */}
+          {/* <FontIcon className="material-icons">add</FontIcon> */}
+        {/* </FloatingActionButton> */}
 
         {this.props.children}
       </div>
@@ -160,18 +155,15 @@ let ConversationsListItem = React.createClass({
       nameInitial = '?'
     } else if (otherPerson) {
       nameInitial = otherPerson.name[0].toUpperCase()
-    }
-    else
-    {
+    } else {
       nameInitial = '?'
     }
-    
     let avatar
-    if (otherPerson.img)
+    if (otherPerson.img) {
       avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}></Avatar>
-        else
+    } else {
       avatar = <Avatar>{nameInitial}</Avatar>
-    
+    }
     let date = moment(created).fromNow()
     return (
       <ListItem

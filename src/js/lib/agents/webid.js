@@ -46,7 +46,8 @@ class WebIDAgent extends LDPAgent {
     let writer = new Writer()
 
     // Please take a look at
-    // https://github.com/solid/solid-spec/blob/master/solid-webid-profiles.md#profile-representation-formats
+    // https://github.com/solid/solid-spec/blob/
+    // master/solid-webid-profiles.md#profile-representation-formats
     // For extra info on the structure of a valid webId Profile
     // writer.addTriple(rdflib.sym(''), DC('title'), `Inbox of ${username}`)
     writer.addTriple({
