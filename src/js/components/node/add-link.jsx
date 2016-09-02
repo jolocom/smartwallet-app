@@ -26,13 +26,17 @@ let NodeAddLink = React.createClass({
   },
 
   getInitialState() {
-    let centerNode = d3.selectAll('.node').filter(function(d) { return d.rank == 'center'})
+
     let name = this.props.node
-    if(centerNode[0][0].__data__.name){
-      name = centerNode[0][0].__data__.name
-      if(name==null) name = centerNode[0][0].__data__.title }
-
-
+    
+    d3.selectAll('.node')
+      .filter(function(d) { return d.rank == 'center'})
+      .each(function(d){
+        if(d.name) {
+        name = d.name || d.title
+        }
+    })
+    
     return {
       targetSelection: 'start',
       start: name,
