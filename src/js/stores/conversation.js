@@ -2,6 +2,9 @@ import Reflux from 'reflux'
 import _ from 'lodash'
 import ChatAgent from 'lib/agents/chat'
 
+import Debug from 'lib/debug'
+let debug = Debug('stores:conversation')
+
 let chatAgent = new ChatAgent()
 
 import ConversationActions from 'actions/conversation'
@@ -27,9 +30,12 @@ export default Reflux.createStore({
       items: []
     }
 
+    debug('onLoad with webId',webId,'and id',id)
+    
     this.trigger(this.state)
 
     ConversationsStore.getUri(webId, id).then((url) => {
+      debug('Got conversation URI',url)
       return Promise.all([
         chatAgent.getConversation(url, webId),
         chatAgent.getConversationMessages(url)
@@ -37,6 +43,8 @@ export default Reflux.createStore({
         let [conversation, items] = result
         load.completed(conversation, items)
       })
+    }).catch((err) => {
+      console.error('Couldn\'t get conversation URI',err)
     })
   },
 

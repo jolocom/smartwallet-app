@@ -96,6 +96,7 @@ let TextNode = React.createClass({
         fabItems={fabItems}
         menuItems={menuItems}
         state={this.props.state}
+        node={this.props.node}
          >
           <List style={styles.list}>
             {description && (

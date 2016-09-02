@@ -19,6 +19,9 @@ import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 import Utils from 'lib/util'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:conversations')
+
 let Conversations = React.createClass({
 
   mixins: [
@@ -38,6 +41,7 @@ let Conversations = React.createClass({
   },
 
   componentDidMount() {
+    debug('componentDidMount')
     this.loadConversations()
   },
 
@@ -49,12 +53,16 @@ let Conversations = React.createClass({
   },
 
   loadConversations() {
+    debug('Loading conversations')
+    // @TODO Component mounts again after choosing a contact (+)
+    // This triggers .load unnecessarily
     ConversationsActions.load(
       this.context.account.webId, this.props.searchQuery
     )
   },
 
   showConversation({id}) {
+    debug('Navigating to conversation URL')
     this.context.history.pushState(null, `/conversations/${id}`)
   },
 

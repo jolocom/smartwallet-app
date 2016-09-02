@@ -42,11 +42,11 @@ export default Reflux.createStore({
           
 
           return {
-            name: nameTriples && nameTriples[0].object.value,
-            username: nameTriples && nameTriples[0].object.value,
+            name: nameTriples.length && nameTriples[0].object.value,
+            username: nameTriples.length && nameTriples[0].object.value,
             webId: contact.uri || '????',
-            email: emailTriples && emailTriples[0].object.value,
-            imgUri: avatarTriples && avatarTriples[0] && avatarTriples[0].object.value
+            email: emailTriples.length && emailTriples[0].object.value,
+            imgUri: avatarTriples.length && avatarTriples[0] && avatarTriples[0].object.value
           }
         });
         

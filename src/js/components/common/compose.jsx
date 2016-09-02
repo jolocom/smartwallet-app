@@ -82,7 +82,9 @@ let Compose = React.createClass({
         visibility: 'hidden'
       },
       button: {
-        margin: '5px'
+        margin: '5px',
+        right: '0px',
+        position: 'fixed'
       }
     }
   },
