@@ -15,9 +15,8 @@ let debug = Debug('components:contacts')
 let Contacts = React.createClass({
 
   mixins: [
-    Reflux.connect(ChatStore, 'conversation'),
+    Reflux.connect(ChatStore, 'conversation')
   ],
-  
   contextTypes: {
     history: React.PropTypes.any
   },
@@ -27,20 +26,20 @@ let Contacts = React.createClass({
         AccountStore.state.webId, AccountStore.state.webId, webId
     )
   },
-  
   componentDidUpdate() {
     if (this.state.conversation && this.state.conversation.id) {
-      debug('componentDidUpdate; redirection to conversation URL, with state',this.state)
+      debug('componentDidUpdate; ' +
+        'redirection to conversation URL, with state', this.state)
       this.context.history.pushState(null,
         `/conversations/${this.state.conversation.id}`
       )
     }
   },
-  
   render() {
     return (
       <div style={styles.container}>
-        <ContactsList onClick={this.createChat} searchQuery={this.props.searchQuery} />
+        <ContactsList onClick={this.createChat}
+          searchQuery={this.props.searchQuery} />
         {this.props.children}
       </div>
     )
