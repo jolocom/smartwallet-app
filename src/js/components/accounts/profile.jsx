@@ -18,6 +18,7 @@ import {
 import {grey500} from 'material-ui/styles/colors'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 
 import ProfileActions from 'actions/profile'
@@ -264,6 +265,17 @@ let Profile = React.createClass({
                         style={styles.input} />
                     </td>
                   </tr>
+                  <tr>
+                    <td style={styles.iconCell}>
+                      <ActionCreditCard />
+                    </td>
+                    <td>
+                      {/* TODO: back-end implementation */}
+                      <TextField floatingLabelText="Add credit card"
+                        onChange={this._handleCreditCardValidation}
+                        style={styles.input} />
+                    </td>
+                  </tr>
                 </table>
               </section>
             </main>
@@ -337,6 +349,21 @@ let Profile = React.createClass({
       }).catch((e) => {
         // console.log(e)
       })
+    }
+  },
+
+  // User can only enter non-space, numerical values and splits card number
+  // into 4's for better readability
+  _handleCreditCardValidation({target}) {
+    let val = target.value.replace(/[^0-9]/gi, '').replace(/\s+/g, '')
+    let digitGroups = val.match(/\d{4,16}/g)
+    let dGroup = digitGroups && digitGroups[0] || ''
+    let parts = []
+    for (let i = 0, len = dGroup.length; i < len; i += 4) {
+      parts.push(dGroup.substring(i, i + 4))
+    }
+    if (parts.length) {
+      target.value = parts.join(' ')
     }
   },
 
