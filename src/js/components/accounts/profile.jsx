@@ -145,7 +145,7 @@ let Profile = React.createClass({
                 onClick={this.hide}
                 iconClassName="material-icons">arrow_back</IconButton>
             }
-            iconElementRight={!this.state.loadingPassportPhoto ||
+            iconElementRight={!this.state.loadingPassportPhoto &&
               !this.state.loadingDisplayPhoto
               ? <IconButton
                 onClick={this._handleUpdate}
