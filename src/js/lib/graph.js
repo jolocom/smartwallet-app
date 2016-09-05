@@ -213,7 +213,8 @@ export default class GraphD3 extends EventEmitter {
       .on('drag', function () {
         d3.event.sourceEvent.stopPropagation()
       })
-      .on('dragstart', function () {
+      .on('dragstart', function () {        
+        this.parentNode.appendChild(this)
         d3.event.sourceEvent.stopPropagation()
       })
   }.bind(this)
