@@ -127,7 +127,7 @@ export default class GraphD3 extends EventEmitter {
     if (this.rendered) {
       this.eraseGraph() // erase everything, including background
     }
-    
+
     debug('Rendering with state',state)
 
     this.rendered = true
@@ -544,12 +544,30 @@ export default class GraphD3 extends EventEmitter {
 
     // Subscribe to the click listeners
     this.node.on('click', function (data) {
+      if ((d3.event.timeStamp - this.last) < 1000) {
+        d3.event.stopPropagation()
+        return
+      }
+      console.log('click')
       self.onClick(this, data)
     })
     this.node.on('dblclick', function (data) {
       self.onDblClick(this, data)
     })
+
+    this.node.on('touchstart', function(data) {
+      if ((d3.event.timeStamp - this.last) < 500) {
+        self.onDblClick(this, data)
+      } else {
+        this.last = d3.event.timeStamp
+        console.log('touch')
+        self.onClick(this, data)
+        d3.event.stopPropagation()
+      }
+    })
+
     this.svg.on('click', function (data) {
+      console.log('svg Click')
       self.deselectAll()
     })
 
@@ -990,11 +1008,13 @@ export default class GraphD3 extends EventEmitter {
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank === 'history' ||
         d3.event.defaultPrevented ||
-        data.elipsisdepth >= 0) { return }
+        data.elipsisdepth >= 0) {
+      return
+    }
     data.wasHighlighted = data.highlighted
 
     node.parentNode.appendChild(node)
-
+    console.error('onclick')
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
 
