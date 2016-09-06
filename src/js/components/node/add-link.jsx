@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
-import d3 from 'd3'
+import * as d3 from 'd3'
 import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 
 import nodeActions from 'actions/node'
@@ -26,13 +26,17 @@ let NodeAddLink = React.createClass({
   },
 
   getInitialState() {
-    let centerNode = d3.selectAll('.node').filter(function(d) { return d.rank == 'center'})
+
     let name = this.props.node
-    if(centerNode[0][0].__data__.name){
-      name = centerNode[0][0].__data__.name
-      if(name==null) name = centerNode[0][0].__data__.title }
-
-
+    
+    d3.selectAll('.node')
+      .filter(function(d) { return d.rank == 'center'})
+      .each(function(d){
+        if(d.name) {
+        name = d.name || d.title
+        }
+    })
+    
     return {
       targetSelection: 'start',
       start: name,
@@ -171,7 +175,7 @@ let NodeAddLink = React.createClass({
     })
 
   },
-  _handleSelectSwap: function() {    
+  _handleSelectSwap: function() {
     this.setState({
       start:this.state.end,
       startUri:this.state.endUri,

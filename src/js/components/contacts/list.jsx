@@ -8,6 +8,8 @@ import {grey500} from 'material-ui/styles/colors'
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 
+import Utils from 'lib/util'
+
 let Contacts = React.createClass({
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
@@ -28,18 +30,45 @@ let Contacts = React.createClass({
 
   render() {
     let emptyView
-    if (!this.state.contacts || !this.state.contacts.length) {
+    
+    let state = this.state
+    
+    if (!state.contacts || !state.contacts.length) {
       emptyView = <div style={styles.empty}>No contacts</div>
+      state.contacts = []
     }
-
+    else
+    {
+      state.contacts.sort((a,b) => {
+        return a.username.toLowerCase() > b.username.toLowerCase()
+      })
+    }
+    
     return (
       <div>
         {emptyView}
         <List>
-          {this.state.contacts.map(({username, name, email, imgUri}) => {
-            let avatar = <Avatar src={imgUri}>{name[0]}</Avatar>
+          {state.contacts.map(({username, webId, name, email, imgUri}) => {
+            // Check if name is set then set the first character as the name
+            // initial otherwise, check if name is empty or whitespaces then
+            // set it to Unnamed and let its initial be ?
+
+            let nameInitial
+
+            if (name) {
+              nameInitial = name[0].toUpperCase()
+            } else if (!name || name.trim()) {
+              name = 'Unnamed'
+              nameInitial = '?'
+            }
+
+            let avatar
+            if (imgUri)
+              avatar = <Avatar src={Utils.uriToProxied(imgUri)}></Avatar>
+                else
+              avatar = <Avatar>{nameInitial}</Avatar>
             return (
-              <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(username)}}/>
+              <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(webId)}}/>
             )
           })}
         </List>
@@ -58,7 +87,7 @@ let styles = {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     fontSize: '18px'
   }
 }
