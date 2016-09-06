@@ -111,7 +111,7 @@ let Conversation = React.createClass({
       content: {
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'visible'
+        overflowY: 'visible',
       },
       conversation: {
         flex: 1,
@@ -122,7 +122,7 @@ let Conversation = React.createClass({
       message: {
         padding: '0 20px',
         marginBottom: '10px',
-        overflow: 'hidden'
+        overflow: 'hidden',
       },
       body: {
         borderTopLeftRadius: '10px',
@@ -131,7 +131,7 @@ let Conversation = React.createClass({
         borderBottomRightRadius: '10px',
         padding: '6px 12px',
         position: 'relative',
-        whiteSpace: 'normal'
+        whiteSpace: 'normal',
       },
       meta: {
         clear: 'both',
@@ -143,7 +143,9 @@ let Conversation = React.createClass({
         body: {
           float: 'left',
           background: '#ffffff',
-          whiteSpace:'normal'
+          whiteSpace: 'normal',
+          wordWrap: 'break-word',
+          maxWidth: '85%'
         },
         meta: {
           textAlign: 'left'
@@ -153,7 +155,9 @@ let Conversation = React.createClass({
         body: {
           float: 'right',
           background: '#B5CA11',
-          whiteSpace: 'normal'
+          whiteSpace: 'normal',
+          wordWrap: 'break-word',
+          maxWidth: '85%'
         },
         meta: {
           textAlign: 'right'
