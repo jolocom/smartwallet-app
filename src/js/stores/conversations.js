@@ -1,6 +1,5 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
-import Util from 'lib/util'
 import ChatAgent from 'lib/agents/chat'
 
 import ConversationsActions from 'actions/conversations'
@@ -24,7 +23,6 @@ export default Reflux.createStore({
       items: this.items
     }
   },
-  
   getConversationByWebId(webId) {
     for (let conversation of this.items) {
       if (conversation.otherPerson.webid.value === webId) {
@@ -45,15 +43,16 @@ export default Reflux.createStore({
     debug('Getting URI for conversation with id ', id)
     return new Promise((resolve, reject) => {
       let conversation = this.getConversation(id)
-      if (conversation) {      
+      if (conversation) {
         debug('Found conversation in the items.')
         resolve(conversation.uri)
       } else {
-        debug('Couldn\'t find conversation in the items; retrieving all conversations.')
+        debug('Couldn\'t find conversation in the items;' +
+          'retrieving all conversations.')
         this._getConversations(webId, id).then((conversations) => {
-          debug('getUri received conversations',conversations)
+          debug('getUri received conversations', conversations)
           if (conversations[0]) {
-            console.log('conversations[0].uri',conversations[0].uri)
+            console.log('conversations[0].uri', conversations[0].uri)
             resolve(conversations[0].uri)
           } else {
             console.error('rejecting')
@@ -68,7 +67,7 @@ export default Reflux.createStore({
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
     return chatAgent.getInboxConversations(webId)
       .then(function(conversations) {
-        debug('Received URLs of conversations',conversations)
+        debug('Received URLs of conversations', conversations)
         let results = conversations.map((url) => {
           return chatAgent.getConversation(url, webId)
         })
@@ -76,7 +75,7 @@ export default Reflux.createStore({
         return Promise.all(results)
       })
       .then(function(conversations) {
-        debug('Received conversations',conversations)
+        debug('Received conversations', conversations)
         return _.chain(conversations).map((conversation) => {
           return conversation
         }).filter((conversation) => {
@@ -87,20 +86,23 @@ export default Reflux.createStore({
         }).value()
       })
   },
-  
   onNew(conversation) {
-    debug('Adding new conversation to list of conversations',conversation,this.items,AccountStore.state.webId)
-    
+    debug('Adding new conversation to list of conversations',
+      conversation, this.items, AccountStore.state.webId)
     return chatAgent.getConversation(conversation.url, AccountStore.state.webId)
-      .then((conversationItem)=>{
-        debug('Triggering the state with the new conversation item ; new state should be', {loading: false, items: this.items.concat(conversationItem)})
+      .then((conversationItem) => {
+        debug('Triggering the state with the new conversation item ;' +
+          'new state should be',
+          {loading: false, items: this.items.concat(conversationItem)})
         this.items = this.items.concat(conversationItem)
-        this.trigger({loading: false, items: this.items}) })
-      .then(()=> conversation)
+        this.trigger({
+          loading: false, items: this.items})
+      })
+      .then(() => conversation)
   },
 
   onLoad(webId, query) {
-    debug('onLoad with webId',webId)
+    debug('onLoad with webId', webId)
     this._getConversations(webId, query).then(load.completed)
   },
 
