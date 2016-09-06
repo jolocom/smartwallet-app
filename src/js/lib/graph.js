@@ -243,14 +243,14 @@ export default class GraphD3 extends EventEmitter {
 
     this.archAngle = 360 / this.numberOfNeighbours
 
-    this.arc = d3.svg.arc()
+    this.arc = d3.arc()
       // shrunk size
        .innerRadius(this.largeNodeSize * 0.5)
        .outerRadius(this.largeNodeSize * 0)
        .startAngle(0)
 
 
-    this.arcEnlarged = d3.svg.arc()
+    this.arcEnlarged = d3.arc()
       // enlarged size
       .innerRadius(this.largeNodeSize * 0.57)
       .outerRadius(this.largeNodeSize * 0)
