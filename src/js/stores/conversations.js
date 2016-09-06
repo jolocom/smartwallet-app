@@ -10,8 +10,6 @@ let debug = Debug('stores:conversations')
 
 let {load} = ConversationsActions
 
-let chatAgent = new ChatAgent()
-
 export default Reflux.createStore({
   listenables: ConversationsActions,
 
@@ -65,6 +63,7 @@ export default Reflux.createStore({
 
   _getConversations(webId, query) {
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
+    let chatAgent = new ChatAgent()
     return chatAgent.getInboxConversations(webId)
       .then(function(conversations) {
         debug('Received URLs of conversations', conversations)
@@ -89,6 +88,7 @@ export default Reflux.createStore({
   onNew(conversation) {
     debug('Adding new conversation to list of conversations',
       conversation, this.items, AccountStore.state.webId)
+    let chatAgent = new ChatAgent()
     return chatAgent.getConversation(conversation.url, AccountStore.state.webId)
       .then((conversationItem) => {
         debug('Triggering the state with the new conversation item ;' +
