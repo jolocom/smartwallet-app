@@ -59,7 +59,7 @@ export default Reflux.createStore({
   onSubscribe(webId, id) {
     ConversationsStore.getUri(webId, id).then((url) =>
       chatAgent.getConversation(url).then((conversation) => {
-        fetch(webId, {
+        fetch(url, {
           method: 'HEAD',
           credentials: 'include'
         }).then(() => {
