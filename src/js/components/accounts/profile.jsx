@@ -364,6 +364,8 @@ let Profile = React.createClass({
     }
     if (parts.length) {
       target.value = parts.join(' ')
+    } else {
+      target.value = target.value.replace(/[^0-9]/gi, '').replace(/\s+/g, '')
     }
   },
 
