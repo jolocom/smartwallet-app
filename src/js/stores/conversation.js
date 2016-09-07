@@ -57,19 +57,24 @@ export default Reflux.createStore({
   },
 
   onSubscribe(webId, id) {
-    ConversationsStore.getUri(webId, id).then((url) => {
-      return chatAgent.getConversation(url).then((conversation) => {
-        this.socket = new WebSocket(conversation.updatesVia)
-        this.socket.onopen = function() {
-          this.send(`sub ${url}`)
-        }
-        this.socket.onmessage = function(msg) {
-          if (msg.data && msg.data.slice(0, 3) === 'pub') {
-            ConversationActions.load(webId, id)
+    ConversationsStore.getUri(webId, id).then((url) =>
+      chatAgent.getConversation(url).then((conversation) => {
+        fetch(webId, {
+          method: 'HEAD',
+          credentials: 'include'
+        }).then(() => {
+          this.socket = new WebSocket(conversation.updatesVia)
+          this.socket.onopen = function () {
+            this.send(`sub ${url}`)
           }
-        }
+          this.socket.onmessage = function (msg) {
+            if (msg.data && msg.data.slice(0, 3) === 'pub') {
+              ConversationActions.load(webId, id)
+            }
+          }
+        })
       })
-    })
+    )
   },
 
   onAddMessage(uri, author, content) {
