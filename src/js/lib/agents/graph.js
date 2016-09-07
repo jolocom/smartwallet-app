@@ -1,16 +1,9 @@
 import WebIDAgent from './webid.js'
-import {
-  Parser
-}
+import {Parser}
 from '../rdf.js'
-import {
-  Writer
-}
+import {Writer}
 from '../rdf.js'
-import {
-  PRED
-}
-from 'lib/namespaces'
+import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
 
@@ -24,88 +17,74 @@ let debug = Debug('agents:graph')
 
 class GraphAgent {
 
-  // We create a rdf file at the distContainer containing a title and 
-  // description passed to it
-  // TODO break this down.
-  // @return Promises which resolves with the new node URI
   createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
-    let center = rdf.sym(centerNode.uri)
+    
+    // Declaring 
     let writer = new Writer()
+    let center = rdf.sym(centerNode.uri)
     let dstContainer = centerNode.storage ?
       centerNode.storage : currentUser.storage
     let newNodeUri = rdf.sym(dstContainer + Util.randomString(5))
+    let imgUri
 
-    // The boilerplate.
-    writer.addTriple(newNodeUri, PRED.title, title)
-    writer.addTriple(newNodeUri, PRED.storage, dstContainer)
-    writer.addTriple(newNodeUri, PRED.maker, center)
+		// Creating the acl for the node
+    return this.createACL(newNodeUri.uri, currentUser.uri, confidential)
+    .then((aclUri) => {
+      writer.addTriple(newNodeUri, PRED.title, title)
+      writer.addTriple(newNodeUri, PRED.storage, dstContainer)
+      writer.addTriple(newNodeUri, PRED.maker, center)
 
-    // Populating the file with the appropriate triples.
-    if (description) {
-      writer.addTriple(newNodeUri, PRED.description, description)
-    }
-    if (nodeType === 'default') {
-      writer.addTriple(newNodeUri, PRED.type, PRED.Document)
-    }
-    if (nodeType === 'image') {
-      writer.addTriple(newNodeUri, PRED.type, PRED.Image)
-    }
+      if (description) {
+        writer.addTriple(newNodeUri, PRED.description, description)
+      }
+      if (nodeType === 'default') {
+        writer.addTriple(newNodeUri, PRED.type, PRED.Document)
+      }
+      if (nodeType === 'image') {
+        writer.addTriple(newNodeUri, PRED.type, PRED.Image)
+      }
 
-    // Handling the picture upload
-    return new Promise((resolve, reject) => {
-      // Check if the image is there and it is a file.
       if (image instanceof File) {
-        this.storeFile(dstContainer, image, confidential).then((result) => {
-            resolve(result)
-          }).catch((err) => {
-            reject(err)
-          })
-          // This will resolve to undefined / null
-      } else {
-        resolve(image)
+        imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+        writer.addTriple(newNodeUri, PRED.image, imgUri) 
       }
-    }).then((image) => {
-      if (image) {
-        writer.addTriple(newNodeUri, PRED.image, image)
-      }
-      // The predicate here will have to change dynamically as well,
-      // based on the chosen predicate.
+
+      return fetch(Util.uriToProxied(newNodeUri.uri), {
+        method: 'PUT',
+        credentials: 'include',
+        body: writer.end(),
+        headers: {
+          'Content-Type': 'text/turtle',
+          'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
+            aclUri + ' rel="acl"'
+        }
+      }).then((answer) => {
+        if (answer.ok) {
+          return
+        } else {
+          console.warn('Error,', error, 'occured when putting the rdf file.')
+        }
+      }).catch((error) => {
+        console.warn('Error,', error, 'occured when putting the rdf file.')
+      })
+    }).then(()=> {
       let payload = {
         subject: center,
         predicate: PRED.isRelatedTo,
         object: newNodeUri
       }
-
       return this.writeTriples(center.uri, [payload], false)
-        .then(() => {
-          return this.putACL(newNodeUri.uri, currentUser.uri, confidential)
-        }).then((uri) => {
-          // We use this in the LINK header.
-          let aclUri = `<${uri}>`
-          return fetch(Util.uriToProxied(newNodeUri.uri), {
-            method: 'PUT',
-            credentials: 'include',
-            body: writer.end(),
-            headers: {
-              'Content-Type': 'text/turtle',
-              'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
-                aclUri + ' rel="acl"'
-            }
-          }).then((answer) => {
-            if (answer.ok) {
-              // Removed for the passport feature; better to handle this separately
-              // and with the whole state being reloaded?
-              // GraphActions.drawNewNode(
-              //    newNodeUri.uri, PRED.isRelatedTo.uri)
-            }
-            return newNodeUri;
-          }).catch((error) => {
-            console.warn('Error,', error, 'occured when putting the rdf file.')
-          })
+		}).then(()=>{
+			if (imgUri) {
+				return this.storeImage(imgUri, null, image, confidential).then(()=>{
+					return newNodeUri.uri
+				})
+			} else {
+				return newNodeUri.uri
+			}
+		})
+  } 
 
-        })
-    })
-  }
 
   // Should we remove the ACL file associated with it as well? 
   // PRO : we won't need the ACL file anymore 
@@ -118,11 +97,17 @@ class GraphAgent {
     })
   }
 
-  storeFile(dstContainer, file, confidential = false) {
+  storeImage(finUri, dstContainer, file, confidential = false) {
+		let uri
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
-      let uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-      return this.putACL(uri, webID, confidential).then(() => {
+			if (!finUri) {
+        uri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+			} else {
+				uri = finUri
+			}
+			console.log('all good!', uri)
+      return this.createACL(uri, webID, confidential).then(() => {
         return fetch(Util.uriToProxied(uri), {
           method: 'PUT',
           credentials: 'include',
@@ -131,21 +116,15 @@ class GraphAgent {
           },
           body: file
         }).then(() => {
-          return uri
+					console.log('FUCK YEAH')
+					return uri
         }).catch(() => {
-          return undefined
+      		console.log('error', e, 'occured while putting the image file')
         })
       })
     })
   }
 
-  // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
-  // PUT ACL and WRITE TRIPLE should be called after making sure that the user
-  // has write access
-  putACL(uri, webID, confidential = false) {
-    let acl_writer = new Writer()
-    let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-    let acl_uri = `${uri}.acl`
 
     /* PROXY currently doesn't return the link header TODO
     return solid.web.options(`${proxy}/proxy?url=${uri}`).then((res) => {
@@ -158,35 +137,47 @@ class GraphAgent {
 
     // We create only one type of ACL file. Owner has full controll,
     // everyone else has read access. This will change in the future.
-    acl_writer.addTriple(rdf.sym('#owner'), PRED.type, ACL('Authorization'))
-    acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(uri))
-    acl_writer.addTriple(rdf.sym('#owner'), ACL('accessTo'), rdf.sym(acl_uri))
-    acl_writer.addTriple(rdf.sym('#owner'), ACL('agent'), rdf.sym(webID))
-    acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Control'))
-    acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Read'))
-    acl_writer.addTriple(rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+  // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
+  // PUT ACL and WRITE TRIPLE should be called after making sure that the user
+  // has write access
+
+  createACL(uri, webID, confidential = false) {
+    
+    let acl_writer = new Writer()
+    let acl_uri = `${uri}.acl`
+    let owner = rdf.sym('#owner')
+
+    acl_writer.addTriple(owner, PRED.type, PRED.auth)
+    acl_writer.addTriple(owner, PRED.access, rdf.sym(uri))
+    acl_writer.addTriple(owner, PRED.access, rdf.sym(acl_uri))
+    acl_writer.addTriple(owner, PRED.agent, rdf.sym(webID))
+
+    acl_writer.addTriple(owner, PRED.mode, PRED.control)
+    acl_writer.addTriple(owner, PRED.mode, PRED.read)
+    acl_writer.addTriple(owner, PRED.mode, PRED.write)
 
     if (!confidential) {
-      acl_writer.addTriple(rdf.sym('#readall'), PRED.type, ACL('Authorization'))
-      acl_writer.addTriple(rdf.sym('#readall'), ACL('accessTo'), rdf.sym(uri))
-      acl_writer.addTriple(rdf.sym('#readall'), ACL('agentClass'), PRED.Agent)
-      acl_writer.addTriple(rdf.sym('#readall'), ACL('mode'), ACL('Read'))
+      let all = rdf.sym('#readall')
+
+      acl_writer.addTriple(all, PRED.type, PRED.auth)
+      acl_writer.addTriple(all, PRED.access, rdf.sym(uri))
+      acl_writer.addTriple(all, PRED.agentClass, PRED.Agent)
+      acl_writer.addTriple(all, PRED.mode, PRED.read)
     }
 
     return fetch(Util.uriToProxied(acl_uri), {
-        method: 'PUT',
-        credentials: 'include',
-        body: acl_writer.end(),
-        headers: {
-          'Content-Type': 'text/turtle'
-        }
-      }).then(() => {
-        return acl_uri
-      })
-      .catch((e) => {
-        console.log('error', e, 'occured while putting the acl file')
-      })
-      //})
+      method: 'PUT',
+      credentials: 'include',
+      body: acl_writer.end(),
+      headers: {
+        'Content-Type': 'text/turtle'
+      }
+    }).then(() => {
+      return acl_uri
+    })
+    .catch((e) => {
+      console.log('error', e, 'occured while putting the acl file')
+    })
   }
 
   /**
