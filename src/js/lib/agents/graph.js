@@ -102,11 +102,10 @@ class GraphAgent {
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
 			if (!finUri) {
-        uri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+        uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
 			} else {
 				uri = finUri
 			}
-			console.log('all good!', uri)
       return this.createACL(uri, webID, confidential).then(() => {
         return fetch(Util.uriToProxied(uri), {
           method: 'PUT',
@@ -116,7 +115,6 @@ class GraphAgent {
           },
           body: file
         }).then(() => {
-					console.log('FUCK YEAH')
 					return uri
         }).catch(() => {
       		console.log('error', e, 'occured while putting the image file')
@@ -142,7 +140,6 @@ class GraphAgent {
   // has write access
 
   createACL(uri, webID, confidential = false) {
-    
     let acl_writer = new Writer()
     let acl_uri = `${uri}.acl`
     let owner = rdf.sym('#owner')
