@@ -51,7 +51,6 @@ let Conversation = React.createClass({
   componentDidMount() {
     const {webId} = this.context.account
     const {id} = this.props.params
-    
     debug('componentDidMount; loading conversation with props', this.props)
 
     ConversationActions.load(webId, id)
@@ -111,7 +110,7 @@ let Conversation = React.createClass({
       content: {
         display: 'flex',
         flexDirection: 'column',
-        overflowY: 'visible',
+        overflowY: 'visible'
       },
       conversation: {
         flex: 1,
@@ -122,7 +121,7 @@ let Conversation = React.createClass({
       message: {
         padding: '0 20px',
         marginBottom: '10px',
-        overflow: 'hidden',
+        overflow: 'hidden'
       },
       body: {
         borderTopLeftRadius: '10px',
@@ -131,7 +130,7 @@ let Conversation = React.createClass({
         borderBottomRightRadius: '10px',
         padding: '6px 12px',
         position: 'relative',
-        whiteSpace: 'normal',
+        whiteSpace: 'normal'
       },
       meta: {
         clear: 'both',
@@ -181,7 +180,7 @@ let Conversation = React.createClass({
           background: '#F1F1F1',
           padding: 0,
           borderTopRightRadius: 0,
-          marginLeft: '6px',
+          marginLeft: '6px'
         },
         meta: {
           textAlign: 'right'
@@ -202,14 +201,12 @@ let Conversation = React.createClass({
     let items = conversation.items || []
 
     var userAvatar = (
-      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}>
-      </Avatar>
+      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)} />
     )
 
-    if(otherPerson) {
+    if (otherPerson) {
       var otherPersonAvatar = (
-        <Avatar src={Util.uriToProxied(otherPerson.img)}>
-        </Avatar>
+        <Avatar src={Util.uriToProxied(otherPerson.img)} />
       )
     }
     return (
@@ -229,13 +226,15 @@ let Conversation = React.createClass({
           <Content style={styles.content}>
             <div ref="items" style={styles.conversation}>
               {items.map(function({author, content, created}, i) {
-                let avatar = (author !== account.webId) ? 'otherPersonAvatar' : 'userAvatar'
-                let from = (author !== account.webId) ? 'contact' : 'me'
+                let avatar = (author !== account.webId)
+                  ? 'otherPersonAvatar' : 'userAvatar'
+                let from = (author !== account.webId)
+                  ? 'contact' : 'me'
                 return (
                   <div style={[styles.message]} key={i}>
                     <div style={[styles.body, styles[avatar].body]}>
-                      {avatar=='otherPersonAvatar'&&otherPersonAvatar}
-                      {avatar=='userAvatar'&&userAvatar}
+                      {avatar === 'otherPersonAvatar' && otherPersonAvatar}
+                      {avatar === 'userAvatar' && userAvatar}
                     </div>
                     <div style={[styles.body, styles[from].body]}>
                       {content}
