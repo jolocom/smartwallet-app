@@ -381,13 +381,13 @@ export default Reflux.createStore({
         updatePassportFetch.push(this.gAgent.createNode(
           GraphStore.state.user, GraphStore.state.center, 'Passport',
           undefined, newData.passportImgUri, 'default', true).then(
-            function(passportNode) {
-              newData.passportImgNodeUri = passportNode.uri
+            function(passportNodeUri) {
+              newData.passportImgNodeUri = passportNodeUri
 
           // Insert passport link
               let passportInsertStatement = 'INSERT DATA { ' +
                 rdf.st(rdf.sym(oldData.webid),
-                  PRED.passport, rdf.sym(passportNode)).toNT() + ' }'
+                  PRED.passport, rdf.sym(passportNodeUri)).toNT() + ' }'
 
               return fetch(Util.uriToProxied(oldData.webid), {
                 method: 'PATCH',
