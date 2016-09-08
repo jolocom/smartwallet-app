@@ -320,7 +320,6 @@ export default Reflux.createStore({
         passportDeleteStatement += rdf.st(rdf.sym(oldData.webid),
             PRED.passport,
             rdf.sym(profile.passportImgNodeUri)).toNT() + ' }'
-        console.log(passportDeleteStatement)
         updatePassportFetch.push(fetch(
           Util.uriToProxied(oldData.webid), {
             method: 'PATCH',
@@ -388,7 +387,7 @@ export default Reflux.createStore({
           // Insert passport link
               let passportInsertStatement = 'INSERT DATA { ' +
                 rdf.st(rdf.sym(oldData.webid),
-                  PRED.passport, passportNode).toNT() + ' }'
+                  PRED.passport, rdf.sym(passportNode)).toNT() + ' }'
 
               return fetch(Util.uriToProxied(oldData.webid), {
                 method: 'PATCH',

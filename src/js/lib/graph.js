@@ -548,7 +548,6 @@ export default class GraphD3 extends EventEmitter {
         d3.event.stopPropagation()
         return
       }
-      console.log('click')
       self.onClick(this, data)
     })
     this.node.on('dblclick', function (data) {
@@ -560,14 +559,12 @@ export default class GraphD3 extends EventEmitter {
         self.onDblClick(this, data)
       } else {
         this.last = d3.event.timeStamp
-        console.log('touch')
         self.onClick(this, data)
         d3.event.stopPropagation()
       }
     })
 
     this.svg.on('click', function (data) {
-      console.log('svg Click')
       self.deselectAll()
     })
 
@@ -846,7 +843,6 @@ export default class GraphD3 extends EventEmitter {
         if (d.source.rank === 'neighbour') {
           return this.nodePositions[d.source.position].y
         } else {
-          console.log(d.source.histLevel)
           return this.centerCoordinates.y + this.largeNodeSize * 2.1 + d.source.histLevel * this.smallNodeSize
         }
       })
@@ -1014,7 +1010,6 @@ export default class GraphD3 extends EventEmitter {
     data.wasHighlighted = data.highlighted
 
     node.parentNode.appendChild(node)
-    console.error('onclick')
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
 
