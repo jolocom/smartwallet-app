@@ -16,11 +16,9 @@ export default Reflux.createStore({
   listenables: ConversationsActions,
 
   items: [],
-  
-  init: function(){
+  init: function() {
     this.listenTo(accountActions.logout, this.onLogout)
   },
-  
   onLogout() {
     this.items = []
   },
@@ -117,7 +115,7 @@ export default Reflux.createStore({
   },
 
   onLoadCompleted(conversations) {
-    debug('onLoadCompleted with conversations',conversations)
+    debug('onLoadCompleted with conversations', conversations)
     this.items = conversations
 
     this.trigger({
