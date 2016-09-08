@@ -198,6 +198,7 @@ export default Reflux.createStore({
     if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
+
     // ############## BITCOIN
     let updateBtcFetch = []
     if (params.bitcoinAddress.trim() !== profile.bitcoinAddress.trim()) {
@@ -319,6 +320,7 @@ export default Reflux.createStore({
         passportDeleteStatement += rdf.st(rdf.sym(oldData.webid),
             PRED.passport,
             rdf.sym(profile.passportImgNodeUri)).toNT() + ' }'
+        console.log(passportDeleteStatement)
         updatePassportFetch.push(fetch(
           Util.uriToProxied(oldData.webid), {
             method: 'PATCH',

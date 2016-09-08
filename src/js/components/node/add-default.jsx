@@ -63,7 +63,6 @@ let NodeAddDefault = React.createClass({
       
       // @TODO Previously called nodeActions.create; except it cannot have a return value
       this.gAgent.createNode(currentUser, centerNode, title, description, image, this.state.type, isConfidential).then((uri) => {
-        console.log(uri)
         graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
       })
     } else {

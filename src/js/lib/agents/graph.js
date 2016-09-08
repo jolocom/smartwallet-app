@@ -17,38 +17,69 @@ let debug = Debug('agents:graph')
 
 class GraphAgent {
 
+  /**
+   * @summary Creates a basic / generic node.
+   * @param {string} uri - The uri of the current node
+   * @param {object} writer - A object it adds the triples to
+   * @param {string} title - The Name / Title of the node
+   * @param {string} description - The Description of a node
+   * @param {string} nodeType - The type of the node
+   * @return {object} node - The inicial writer with added triples
+   */
+
+  baseNode(uri, writer, title, description, nodeType){
+
+    if (title) {
+    writer.addTriple(uri, PRED.title, title)
+    }
+    if (description) {
+      writer.addTriple(uri, PRED.description, description)
+    }
+    if (nodeType === 'default') {
+      writer.addTriple(uri, PRED.type, PRED.Document)
+    } else if (nodeType === 'image') {
+      writer.addTriple(uri, PRED.type, PRED.Image)
+    }
+    return writer
+  }
+
+  /**
+   * @summary Adds the image triples and uploads an image
+   * @param {string} uri - The uri of the current node
+   * @param {string} dstContainer - The uri of the folder where the image goes
+   * @param {object} writer - A object it adds the triples to
+   * @param {blob} image - The image itself
+   * @param {bool} confidential - If the img is to be confidential
+   */
+
+  addImage(uri,dstContainer, writer, image, confidential) {
+    if (image instanceof File){
+      let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+      writer.addTriple(uri, PRED.image, imgUri)
+	    return this.storeFile(imgUri, null, image, confidential)
+    } 
+    writer.addTriple(uri, PRED.image, image)
+    return 
+  }
+
   createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
-    
-    // Declaring 
+
     let writer = new Writer()
-    let center = rdf.sym(centerNode.uri)
-    let dstContainer = centerNode.storage ?
-      centerNode.storage : currentUser.storage
-    let newNodeUri = rdf.sym(dstContainer + Util.randomString(5))
-    let imgUri
-
-		// Creating the acl for the node
+    let newNodeUri = rdf.sym(currentUser.storage + Util.randomString(5))
+    let aclUri
     return this.createACL(newNodeUri.uri, currentUser.uri, confidential)
-    .then((aclUri) => {
-      writer.addTriple(newNodeUri, PRED.title, title)
-      writer.addTriple(newNodeUri, PRED.storage, dstContainer)
-      writer.addTriple(newNodeUri, PRED.maker, center)
+    .then((uri) => {
+      aclUri = uri
+      // Boilerplate triples.
+      writer.addTriple(newNodeUri, PRED.storage, currentUser.storage)
+      writer.addTriple(newNodeUri, PRED.maker, rdf.sym(centerNode.uri))
 
-      if (description) {
-        writer.addTriple(newNodeUri, PRED.description, description)
+      this.baseNode(newNodeUri, writer, title, description, nodeType)
+      if (image) {
+        return this.addImage(newNodeUri,currentUser.storage,writer,image,confidential)
       }
-      if (nodeType === 'default') {
-        writer.addTriple(newNodeUri, PRED.type, PRED.Document)
-      }
-      if (nodeType === 'image') {
-        writer.addTriple(newNodeUri, PRED.type, PRED.Image)
-      }
-
-      if (image instanceof File) {
-        imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
-        writer.addTriple(newNodeUri, PRED.image, imgUri) 
-      }
-
+    }).then(() => {
+      // Putting the RDF file for the node.
       return fetch(Util.uriToProxied(newNodeUri.uri), {
         method: 'PUT',
         credentials: 'include',
@@ -58,30 +89,24 @@ class GraphAgent {
           'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
             aclUri + ' rel="acl"'
         }
-      }).then((answer) => {
-        if (answer.ok) {
-          return
-        } else {
-          console.warn('Error,', error, 'occured when putting the rdf file.')
+      }).then((response) => {
+        if (response.ok) {
+          return 
         }
+        console.warn('An error occured when putting the rdf file.')
       }).catch((error) => {
         console.warn('Error,', error, 'occured when putting the rdf file.')
       })
+      // Connecting the node to the one that created it
     }).then(()=> {
       let payload = {
-        subject: center,
+        subject: rdf.sym(centerNode.uri),
         predicate: PRED.isRelatedTo,
         object: newNodeUri
       }
-      return this.writeTriples(center.uri, [payload], false)
+      return this.writeTriples(centerNode.uri, [payload], false)
 		}).then(()=>{
-			if (imgUri) {
-				return this.storeImage(imgUri, null, image, confidential).then(()=>{
-					return newNodeUri.uri
-				})
-			} else {
-				return newNodeUri.uri
-			}
+		  return newNodeUri.uri
 		})
   } 
 
@@ -97,7 +122,7 @@ class GraphAgent {
     })
   }
 
-  storeImage(finUri, dstContainer, file, confidential = false) {
+  storeFile(finUri, dstContainer, file, confidential = false) {
 		let uri
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
