@@ -5,6 +5,8 @@ import ChatAgent from 'lib/agents/chat'
 import ConversationsActions from 'actions/conversations'
 import AccountStore from 'stores/account'
 
+import accountActions from '../actions/account'
+
 import Debug from 'lib/debug'
 let debug = Debug('stores:conversations')
 
@@ -14,6 +16,12 @@ export default Reflux.createStore({
   listenables: ConversationsActions,
 
   items: [],
+  init: function() {
+    this.listenTo(accountActions.logout, this.onLogout)
+  },
+  onLogout() {
+    this.items = []
+  },
 
   getInitialState() {
     return {
@@ -107,6 +115,7 @@ export default Reflux.createStore({
   },
 
   onLoadCompleted(conversations) {
+    debug('onLoadCompleted with conversations', conversations)
     this.items = conversations
 
     this.trigger({

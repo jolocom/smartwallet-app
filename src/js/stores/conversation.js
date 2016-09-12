@@ -59,6 +59,10 @@ export default Reflux.createStore({
   onSubscribe(webId, id) {
     ConversationsStore.getUri(webId, id).then((url) =>
       chatAgent.getConversation(url).then((conversation) => {
+        // Chrome cancels WS connections when the server asks for a client cert
+        // We first query the host so that the user is asked for a client cert
+        // Chrome will then remember the choice during the WS connection and
+        // will thus not cancel it
         fetch(url, {
           method: 'HEAD',
           credentials: 'include'
