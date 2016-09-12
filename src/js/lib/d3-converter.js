@@ -30,7 +30,8 @@ class D3Converter {
       rank: 'neighbour',
       storage: null,
       x: null,
-      y: null
+      y: null,
+      confidential: node.confidential
 
     }
 
