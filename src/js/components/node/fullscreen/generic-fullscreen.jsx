@@ -16,6 +16,9 @@ import ContentLink from 'material-ui/svg-icons/content/link'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:generic-fullscreen')
+
 import {
   AppBar,
   IconButton,
@@ -248,6 +251,36 @@ let GenericFullScreen = React.createClass({
     history.pushState(null, `/chat/new/${encodeURIComponent(node.uri)}`)
     graphActions.setState('activeNode', null, true)
   },
+  
+  getLuminanceForImageUrl(url) {
+    return new Promise((rej,res) => {
+    
+      let canvas = document.createElement('canvas'),
+          context = canvas.getContext('2d');
+
+      let img = new Image()
+      img.crossOrigin = "Anonymous";
+
+      img.onload = (() => {
+        context.drawImage(img, 0, 0)
+        let imgData = context.getImageData(0, 0, img.width, 150);
+
+        let rgbs = imgData.data.reduce((acc,val,i) => {
+          if (i%4 == 3) return acc;
+          if (i%4 == 0) return acc.push([val]) && acc;
+          return acc[acc.length-1].push(val) && acc;
+        }, [])
+        
+        let lums = rgbs.map(([r,g,b]) => (r+r+b+g+g+g)/6)
+        let lumsum = lums.reduce((acc,val) => (acc+val), 0)
+        let lum = lumsum/lums.length
+        res(lum)
+
+
+       })
+      img.src = url
+    })
+  },
 
   render() {
     let styles = this.getStyles()
@@ -264,7 +297,18 @@ let GenericFullScreen = React.createClass({
     // @TODO externalize fab handlers + component etc
 
     // Always add the fullscreen menu item
-
+    
+    // Luminance
+    if (this.props.backgroundImg)
+    {
+      var actualBackgroundImg = /^url\(['"]?(.+)['"]?\)$/.exec(this.props.backgroundImg)[1]
+      console.log('actual',actualBackgroundImg)
+      var bgLuminanceP = this.getLuminanceForImageUrl(actualBackgroundImg)
+      bgLuminanceP.then((lum) => {
+        debug('Background image has luminance of',bgLuminance)
+        // store for image?
+      })
+    }
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
