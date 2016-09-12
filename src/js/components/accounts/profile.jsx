@@ -40,7 +40,11 @@ let Profile = React.createClass({
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
-    let test = new AclAgent('https://owe.webid.jolocom.de/profile/card')
+
+    let test = new AclAgent('https://owe.webid.jolocom.de/profile/card.acl')
+    test.fetchInfo().then(()=>{
+      test.allow('her.com', 'read')
+    })
   },
 
   componentDidUpdate(props, state) {
