@@ -18,7 +18,7 @@ let debug = Debug('agents:graph')
 class GraphAgent {
 
   /**
-   * @summary Creates a basic / generic node.
+   * @summary Populate a object wtih basic / generic node triples.
    * @param {string} uri - The uri of the current node
    * @param {object} writer - A object it adds the triples to
    * @param {string} title - The Name / Title of the node
@@ -44,7 +44,7 @@ class GraphAgent {
   }
 
   /**
-   * @summary Adds the image triples and uploads an image
+   * @summary Adds the image triples to an existing ndoe and uploads an image
    * @param {string} uri - The uri of the current node
    * @param {string} dstContainer - The uri of the folder where the image goes
    * @param {object} writer - A object it adds the triples to
@@ -62,6 +62,18 @@ class GraphAgent {
     return 
   }
 
+  /**
+   * @summary Curates the creation of a new node, delegates to other functions.
+   * @param {string} currentUser - Current webID, used for creating acl 
+   *                 and connecting to the onwer.
+   * @param {object} centerNode - The uri of the folder where the image goes
+   * @param {string} title - The title of the node
+   * @param {string} description - The description of the node
+   * @param {blob} image - The image if there's one
+   * @param {string} nodeType - The type [image / text] of the node
+   * @param {bool} confidential - If the img is to be confidential
+   */
+  
   createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
 
     let writer = new Writer()
@@ -70,7 +82,6 @@ class GraphAgent {
     return this.createACL(newNodeUri.uri, currentUser.uri, confidential)
     .then((uri) => {
       aclUri = uri
-      // Boilerplate triples.
       writer.addTriple(newNodeUri, PRED.storage, currentUser.storage)
       writer.addTriple(newNodeUri, PRED.maker, rdf.sym(centerNode.uri))
 
