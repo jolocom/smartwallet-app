@@ -1,11 +1,3 @@
-
-/*
- * Fetch triples at uri
- * check if it's an acl file
- * if not try to recover and discover the acl file
- * go on
- */
-
 import rdf from 'rdflib'
 import GraphAgent from 'lib/agents/graph.js'
 import Util from 'lib/util'
@@ -15,10 +7,8 @@ import {Writer} from '../rdf.js'
 class AclAgent {
   // TODO Check here if the user can modify the acl and throw error if not.
   constructor(uri){
-
-    this.uri = uri
-    // TODO, fetch and parse the link header
     this.aclUri = `${this.uri}.acl`
+    this.uri = uri
     this.g = rdf.graph()
     this.gAgent = new GraphAgent()
     this.Writer = new Writer()
@@ -30,21 +20,54 @@ class AclAgent {
     }
   }
 
+  /**
+   * @summary Hydrates the object. Decided to not put in constructor,
+   *          so that there's no async behaviour there. Also tries to
+   *          deduce the URI to the acl file corresponding to the file.
+   * @return undefined, we want the side effect
+   */
+
   fetchInfo() {
-    return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result)=>{
-      let {triples} = result
-      for (let triple in triples) {
-        let {subject, predicate, object} = triples[triple]
-        this.Writer.addTriple(subject,predicate,object)
+    // First we deduct the uri of the related acl file.
+    // If this fails, we stick with the initial value, that's
+    // just uri + .acl
+    return fetch(Util.uriToProxied(this.uri), {
+      credentials: 'include'
+    }).then((ans) => {
+      let linkHeader = ans.headers.get('Link')
+      if (linkHeader) {
+        let aclHeader = linkHeader.split(',').find((part)=>{
+          return part.indexOf('rel="acl"') > 0
+        })
+        if (aclHeader) {
+          aclHeader = aclHeader.split(';')[0].replace(/<|>/g, '')
+          // The Uri of the acl deduced succesfully
+          this.aclUri = this.uri.substring(0, this.uri.lastIndexOf('/')+1)
+                        + aclHeader
+        } 
       }
     }).then(()=>{
-      if(this.Writer.g.statementsMatching(undefined, PRED.type, PRED.auth).length === 0)
-      {
-        // TODO have recovery here
-        throw new Error('Link is not an ACL file')
-      }
-    }) 
+      return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result)=>{
+        let {triples} = result
+        for (let triple in triples) {
+          let {subject, predicate, object} = triples[triple]
+          this.Writer.addTriple(subject,predicate,object)
+        }
+      }).then(()=>{
+        if(this.Writer.g.statementsMatching(undefined, PRED.type, PRED.auth).length === 0)
+        {
+          throw new Error('Link is not an ACL file')
+        }
+      }) 
+    })
   }
+
+  /**
+   * @summary Gives the specified user the specified permissions.
+   * @param {string} user - the webid of the user.
+   * @param {string} mode - permission to do what? [read, write, control]
+   * @return undefined, we want the side effect
+   */
 
   allow(user, mode){
     let policyName
@@ -73,7 +96,7 @@ class AclAgent {
         this.Writer.addTriple(policyName, PRED.mode, mode) 
       }
     // Else this user is not mentioned in the acl file at all so we create a new
-    // policy
+    // polic
     } else {
       policyName = rdf.sym(`${this.aclUri}#${Util.randomString(5)}`)
       this.Writer.addTriple(policyName, PRED.type, PRED.auth)
@@ -83,7 +106,10 @@ class AclAgent {
     }
   }
 
-
+  /**
+   * @sumarry Serializes the new acl file and puts it to the server.
+   * @return {promise} - the server response. 
+   */
   commit() {
     return fetch(Util.uriToProxied(this.aclUri), {
       method: 'PUT',
@@ -92,6 +118,12 @@ class AclAgent {
       headers: {
         'Content-Type': 'text/turtle',
       }
+    }).then((res)=>{
+      if (!res.ok){
+        throw new Error('Error while putting the file', res)  
+      } 
+    }).catch((e)=>{
+      throw new Error(e)  
     }) 
   }
 
