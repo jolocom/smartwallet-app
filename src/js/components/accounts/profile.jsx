@@ -41,9 +41,10 @@ let Profile = React.createClass({
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
 
-    let test = new AclAgent('https://owe.webid.jolocom.de/profile/card.acl')
+    let test = new AclAgent('https://owe.webid.jolocom.de/profile/card')
     test.fetchInfo().then(()=>{
-      test.allow('her.com', 'read')
+      test.allow('https://owx.webid.jolocom.de/profile/card#me', 'write')
+      test.commit()
     })
   },
 

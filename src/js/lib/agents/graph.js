@@ -1,8 +1,6 @@
 import WebIDAgent from './webid.js'
-import {Parser}
-from '../rdf.js'
-import {Writer}
-from '../rdf.js'
+import {Parser} from '../rdf.js'
+import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
