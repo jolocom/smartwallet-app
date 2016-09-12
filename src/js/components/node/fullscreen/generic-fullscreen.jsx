@@ -253,7 +253,10 @@ let GenericFullScreen = React.createClass({
   },
   
   getLuminanceForImageUrl(url) {
-    return new Promise((rej,res) => {
+    return new Promise((res,rej) => {
+      
+     
+      let loadCanvas = (umg) => {
     
       let canvas = document.createElement('canvas'),
           context = canvas.getContext('2d');
@@ -278,7 +281,20 @@ let GenericFullScreen = React.createClass({
 
 
        })
-      img.src = url
+      img.src = umg
+      
+      }
+      
+      fetch(url, {
+        credentials: 'include',
+      }).then(function(response) {
+        return response.blob();
+       })
+      .then(function(imageBlob) {
+       loadCanvas(URL.createObjectURL(imageBlob));
+      });
+      
+      
     })
   },
 
