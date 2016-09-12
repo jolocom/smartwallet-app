@@ -10,6 +10,9 @@ import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 import rdf from 'rdflib'
 
+import Debug from 'lib/debug'
+let debug = Debug('stores:profile')
+
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
 
@@ -144,6 +147,8 @@ export default Reflux.createStore({
   onUpdate: function (params) {
     let newData = Object.assign({}, params)
     let oldData = Object.assign({}, profile)
+    
+    debug('Updating profile with old data ',oldData,' and new data', newData)
 
     let insertTriples = []
     let deleteTriples = []

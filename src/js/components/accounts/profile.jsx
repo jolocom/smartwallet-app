@@ -321,8 +321,7 @@ let Profile = React.createClass({
     this.passportFileInputEl.value = null
 
     this.setState({
-      passportImgUri: '',
-      passportImgNodeUri: ''
+      passportImgUri: ''
     })
   },
 
