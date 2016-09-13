@@ -43,7 +43,8 @@ let Profile = React.createClass({
 
     let aA = new AclAgent('https://owe.webid.jolocom.de/profile/card')
     aA.fetchInfo().then((res) => {
-      aA.removeAllow('*', 'write')
+      aA.removeAllow('*', 'read')
+      //aA.allow('*', 'read')
       aA.commit()
     })
   },

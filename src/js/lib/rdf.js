@@ -27,10 +27,8 @@ export class Writer {
     this.g = rdf.graph()
   }
 
-  removeTriple(index){
-    if (index && index >= 0) {
-      this.g.statements.splice(index, 1) 
-    }
+  find(sub, pred, obj){
+    return this.g.statementsMatching(sub, pred, obj)
   }
 
   addTriple(...args) {

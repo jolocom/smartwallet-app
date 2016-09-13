@@ -106,7 +106,6 @@ class AclAgent {
    */
   
   removeAllow(user, mode) {
-    console.log(this.Writer.g)
     let policyName
     let identifier = PRED.agent
     if (mode !== 'read' && mode !== 'write' && mode !== 'control') {
@@ -128,21 +127,30 @@ class AclAgent {
       let trip = this.Writer.g.statementsMatching(policyName, PRED.mode, mode )
       // If true, the triple exists, therefore we can delete it.
       if (trip.length > 0) {
-        let i
-        let trips = this.Writer.g.statements
-        trips.find((el, index) => {
-          let {subject, predicate, object} = trip[0]
-          if (subject.uri === el.subject.uri && 
-              object.uri === el.object.uri &&
-              predicate.uri === el.predicate.uri) {
-            i = index
-            return
-          }
-        }) 
-        this.Writer.removeTriple(i)
-      } 
-      return  
-    } 
+        let {subject, predicate, object} = trip[0]
+        this.Writer.g.remove({subject,predicate,object})
+      } else {
+        return
+      }
+    }
+
+    // Now we check if the policy itself needs to be deleted
+    let relevant = this.Writer.find(policyName, PRED.mode, undefined)
+
+    if (relevant.length > 0) {
+      return 
+    } else {
+      let x = this.Writer.find(policyName, undefined, undefined)
+      console.log(x[0])
+      console.log(x[1])
+      console.log(x[2])
+      this.Writer.g.remove(x)
+      console.log('========')
+      console.log('========')
+      console.log(this.Writer.find(policyName, undefined, undefined))
+      console.log('========')
+      console.log('========')
+    }
   }
 
   /**
