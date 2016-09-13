@@ -102,6 +102,7 @@ let Conversation = React.createClass({
   },
 
   back() {
+    ConversationStore.cleanState()
     this.context.history.pushState(null, '/conversations')
   },
 

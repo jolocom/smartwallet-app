@@ -23,15 +23,14 @@ export default Reflux.createStore({
   getInitialState() {
     return this.state
   },
+  cleanState() {
+    this.state.loading = true
+    this.state.items = []
+    this.state.otherPerson = {}
+  },
 
   onLoad(webId, id) {
-    this.state = {
-      loading: true,
-      items: []
-    }
-
     debug('onLoad with webId', webId, 'and id', id)
-    this.trigger(this.state)
 
     ConversationsStore.getUri(webId, id).then((url) => {
       debug('Got conversation URI', url)
