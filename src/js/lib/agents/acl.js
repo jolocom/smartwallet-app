@@ -5,6 +5,7 @@ import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
 
 class AclAgent {
+  // TODO Add wildcard support.
   // TODO Check here if the user can modify the acl and throw error if not.
   constructor(uri){
     this.aclUri = `${this.uri}.acl`
@@ -28,25 +29,8 @@ class AclAgent {
    */
 
   fetchInfo() {
-    // First we deduct the uri of the related acl file.
-    // If this fails, we stick with the initial value, that's
-    // just uri + .acl
-    return fetch(Util.uriToProxied(this.uri), {
-      credentials: 'include'
-    }).then((ans) => {
-      let linkHeader = ans.headers.get('Link')
-      if (linkHeader) {
-        let aclHeader = linkHeader.split(',').find((part)=>{
-          return part.indexOf('rel="acl"') > 0
-        })
-        if (aclHeader) {
-          aclHeader = aclHeader.split(';')[0].replace(/<|>/g, '')
-          // The Uri of the acl deduced succesfully
-          this.aclUri = this.uri.substring(0, this.uri.lastIndexOf('/')+1)
-                        + aclHeader
-        } 
-      }
-    }).then(()=>{
+    return Util.getAclUri(this.uri).then((aclUri)=>{
+      this.aclUri = aclUri
       return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result)=>{
         let {triples} = result
         for (let triple in triples) {
@@ -64,25 +48,29 @@ class AclAgent {
 
   /**
    * @summary Gives the specified user the specified permissions.
-   * @param {string} user - the webid of the user.
+   * @param {string} user - the webid of the user, in case it's a * [wildcard],
+   *                        then everyone is granted the specified access.
    * @param {string} mode - permission to do what? [read, write, control]
    * @return undefined, we want the side effect
    */
 
   allow(user, mode){
     let policyName
-
+    let identifier = PRED.agent
     if (mode !== 'read' && mode !== 'write') {
       throw new Error('Invalid mode supplied!')
     }
-
+    if (user === '*') {
+      user = PRED.Agent 
+      identifier = PRED.agentClass
+    }
     if (typeof user === 'string') {
       user = rdf.sym(user) 
     }
     
-    // Check if the triple is already present.
     mode = this.predMap[mode]
-    let existing = this.Writer.g.statementsMatching(undefined, PRED.agent, user)
+    // Check if the triple is already present.
+    let existing = this.Writer.g.statementsMatching(undefined, identifier, user)
 
     if (existing.length > 0){
       policyName = existing[0].subject 
@@ -102,7 +90,7 @@ class AclAgent {
       this.Writer.addTriple(policyName, PRED.type, PRED.auth)
       this.Writer.addTriple(policyName, PRED.access, rdf.sym(this.uri))
       this.Writer.addTriple(policyName, PRED.mode, mode)
-      this.Writer.addTriple(policyName, PRED.agent, user)
+      this.Writer.addTriple(policyName, identifier, user)
     }
   }
 

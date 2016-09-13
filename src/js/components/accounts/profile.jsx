@@ -26,7 +26,6 @@ import ProfileStore from 'stores/profile'
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
-import AclAgent from 'lib/agents/acl.js'
 
 let Profile = React.createClass({
   mixins: [
