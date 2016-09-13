@@ -56,6 +56,18 @@ let GenericFullScreen = React.createClass({
   },
 
   componentDidMount() {
+    // Luminance
+    if (this.props.backgroundImg)
+    {
+      var actualBackgroundImg = /^url\(['"]?(.+)['"]?\)$/.exec(this.props.backgroundImg)[1]
+      console.log('actual',actualBackgroundImg)
+      var bgLuminanceP = this.getLuminanceForImageUrl(actualBackgroundImg)
+      bgLuminanceP.then((lum) => {
+        debug('Background image has luminance of',lum)
+        this.setState({luminance: lum})    
+      })
+    }
+    
     this.refs.dialog.show()
   },
 
@@ -253,48 +265,49 @@ let GenericFullScreen = React.createClass({
   },
   
   getLuminanceForImageUrl(url) {
-    return new Promise((res,rej) => {
-      
-     
-      let loadCanvas = (umg) => {
-    
-      let canvas = document.createElement('canvas'),
-          context = canvas.getContext('2d');
+    return new Promise((res, rej) => {
 
-      let img = new Image()
-      img.crossOrigin = "Anonymous";
-
-      img.onload = (() => {
-        context.drawImage(img, 0, 0)
-        let imgData = context.getImageData(0, 0, img.width, 150);
-
-        let rgbs = imgData.data.reduce((acc,val,i) => {
-          if (i%4 == 3) return acc;
-          if (i%4 == 0) return acc.push([val]) && acc;
-          return acc[acc.length-1].push(val) && acc;
-        }, [])
-        
-        let lums = rgbs.map(([r,g,b]) => (r+r+b+g+g+g)/6)
-        let lumsum = lums.reduce((acc,val) => (acc+val), 0)
-        let lum = lumsum/lums.length
-        res(lum)
-
-
-       })
-      img.src = umg
-      
-      }
-      
       fetch(url, {
-        credentials: 'include',
-      }).then(function(response) {
-        return response.blob();
-       })
-      .then(function(imageBlob) {
-       loadCanvas(URL.createObjectURL(imageBlob));
-      });
-      
-      
+          credentials: 'include',
+        }).then(function (response) {
+          return response.blob();
+        })
+        .then(function (imageBlob) {
+
+          let imgDataUrl = URL.createObjectURL(imageBlob)
+
+          let canvas = document.createElement('canvas'),
+              context = canvas.getContext('2d');
+
+          let img = new Image()
+          img.crossOrigin = "Anonymous";
+
+          img.onload = (() => {
+            context.drawImage(img, 0, 0)
+            let imgData = context.getImageData(0, 0, img.width, 75);
+
+            let rgbs = imgData.data.reduce((acc, val, i) => {
+              if (i % 4 == 3) return acc;
+              if (i % 4 == 0) return acc.push([val]) && acc;
+              return acc[acc.length - 1].push(val) && acc;
+            }, [])
+            
+            /*let rgbs = (function chunksOf(n,ls) {
+              if (!ls.length)
+                return []
+              
+              return [ls.slice(0,3)].concat(chunksOf(n,ls.slice(3)))
+            })(3,imgData.data) stack overflow*/
+
+            let lums = rgbs.map(([r, g, b]) => (r + r + b + g + g + g) / 6)
+            let lumsSum = lums.reduce((acc, val) => (acc + val))
+            let lumsMean = lumsSum / lums.length
+            res(lumsMean)
+          })
+          
+          img.src = imgDataUrl
+        });
+
     })
   },
 
@@ -314,17 +327,8 @@ let GenericFullScreen = React.createClass({
 
     // Always add the fullscreen menu item
     
-    // Luminance
-    if (this.props.backgroundImg)
-    {
-      var actualBackgroundImg = /^url\(['"]?(.+)['"]?\)$/.exec(this.props.backgroundImg)[1]
-      console.log('actual',actualBackgroundImg)
-      var bgLuminanceP = this.getLuminanceForImageUrl(actualBackgroundImg)
-      bgLuminanceP.then((lum) => {
-        debug('Background image has luminance of',bgLuminance)
-        // store for image?
-      })
-    }
+    // this.state.luminance
+    
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
