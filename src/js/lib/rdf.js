@@ -22,8 +22,15 @@ export class Parser {
 }
 
 export class Writer {
+
   constructor(){
     this.g = rdf.graph()
+  }
+
+  removeTriple(index){
+    if (index && index >= 0) {
+      this.g.statements.splice(index, 1) 
+    }
   }
 
   addTriple(...args) {

@@ -64,7 +64,12 @@ let Util = {
   getAclUri(uri){
     return fetch(Util.uriToProxied(uri), {
       credentials: 'include'
+    }).catch((e)=>{
+      throw new Error(e) 
     }).then((ans) => {
+      if (!ans.ok) {
+        throw new Error('Error while accessing the file.') 
+      }
       let linkHeader = ans.headers.get('Link')
       if (linkHeader) {
         let aclHeader = linkHeader.split(',').find((part)=>{

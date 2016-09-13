@@ -31,18 +31,21 @@ class AclAgent {
   fetchInfo() {
     return Util.getAclUri(this.uri).then((aclUri)=>{
       this.aclUri = aclUri
+    }).catch((e) => {
+      throw new Error(e)
+    }).then(() => {
       return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result)=>{
         let {triples} = result
         for (let triple in triples) {
           let {subject, predicate, object} = triples[triple]
           this.Writer.addTriple(subject,predicate,object)
         }
-      }).then(()=>{
-        if(this.Writer.g.statementsMatching(undefined, PRED.type, PRED.auth).length === 0)
-        {
+        if(this.Writer.g.statementsMatching(undefined, PRED.type, PRED.auth).length === 0){
           throw new Error('Link is not an ACL file')
         }
-      }) 
+      })
+    }).catch((e) => {
+      throw new Error(e) 
     })
   }
 
@@ -57,7 +60,7 @@ class AclAgent {
   allow(user, mode){
     let policyName
     let identifier = PRED.agent
-    if (mode !== 'read' && mode !== 'write') {
+    if (mode !== 'read' && mode !== 'write' && mode !== 'control') {
       throw new Error('Invalid mode supplied!')
     }
     if (user === '*') {
@@ -95,7 +98,56 @@ class AclAgent {
   }
 
   /**
+   * @summary Takes from the specified user the specified permissions.
+   * @param {string} user - the webid of the user, in case it's a * [wildcard],
+   *                        then everyone loses the specified access.
+   * @param {string} mode - permission to do what? [read, write, control]
+   * @return undefined, we want the side effect
+   */
+  
+  removeAllow(user, mode) {
+    console.log(this.Writer.g)
+    let policyName
+    let identifier = PRED.agent
+    if (mode !== 'read' && mode !== 'write' && mode !== 'control') {
+      throw new Error('Invalid mode supplied!')
+    }
+    if (user === '*') {
+      user = PRED.Agent 
+      identifier = PRED.agentClass
+    }
+    if (typeof user === 'string') {
+      user = rdf.sym(user) 
+    }
+    
+    mode = this.predMap[mode]
+    // Check if the triple is present.
+    let existing = this.Writer.g.statementsMatching(undefined, identifier, user)
+    if (existing.length > 0){
+      policyName = existing[0].subject 
+      let trip = this.Writer.g.statementsMatching(policyName, PRED.mode, mode )
+      // If true, the triple exists, therefore we can delete it.
+      if (trip.length > 0) {
+        let i
+        let trips = this.Writer.g.statements
+        trips.find((el, index) => {
+          let {subject, predicate, object} = trip[0]
+          if (subject.uri === el.subject.uri && 
+              object.uri === el.object.uri &&
+              predicate.uri === el.predicate.uri) {
+            i = index
+            return
+          }
+        }) 
+        this.Writer.removeTriple(i)
+      } 
+      return  
+    } 
+  }
+
+  /**
    * @sumarry Serializes the new acl file and puts it to the server.
+   *          Must be called at the end.
    * @return {promise} - the server response. 
    */
   commit() {
@@ -115,10 +167,7 @@ class AclAgent {
     }) 
   }
 
-  removeAllow(){
-  
-  }
-  
+
   allowedPermissions(){
   
   } 
