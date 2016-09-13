@@ -33,7 +33,7 @@ let Conversation = React.createClass({
   ],
 
   contextTypes: {
-    history: React.PropTypes.any,
+    router: React.PropTypes.any,
     account: React.PropTypes.any
   },
 
@@ -102,7 +102,7 @@ let Conversation = React.createClass({
   },
 
   back() {
-    this.context.history.pushState(null, '/conversations')
+    this.context.router.push('/conversations')
   },
 
   getStyles() {

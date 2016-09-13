@@ -23,7 +23,7 @@ let Graph = React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.object,
+    router: React.PropTypes.object,
     searchActive: React.PropTypes.bool
   },
 
@@ -74,7 +74,7 @@ let Graph = React.createClass({
 
   addNode(type) {
     let uri = encodeURIComponent(this.state.center.uri)
-    this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
+    this.context.router.push(`/graph/${uri}/add/${type}`)
   },
 
   // This is the first thing that fires when the user logs in.
@@ -104,7 +104,7 @@ let Graph = React.createClass({
 
     if (state.activeNode && activeNode !== state.activeNode) {
       uri = encodeURIComponent(state.activeNode.uri)
-      this.context.history.pushState(null, `/graph/${uri}/view`)
+      this.context.router.push(`/graph/${uri}/view`)
     }
   },
 

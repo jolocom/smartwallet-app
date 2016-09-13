@@ -2,7 +2,6 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import includes from 'lodash/includes'
-import {History} from 'react-router'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
@@ -32,7 +31,6 @@ const publicRoutes = ['/', '/login', '/signup']
 let App = React.createClass({
 
   mixins: [
-    History,
     Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile')
   ],
@@ -42,12 +40,18 @@ let App = React.createClass({
     children: React.PropTypes.node
   },
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
+
   childContextTypes: {
     muiTheme: React.PropTypes.object,
     profile: React.PropTypes.any,
     account: React.PropTypes.object,
     username: React.PropTypes.string,
-    searchActive: React.PropTypes.bool
+    searchActive: React.PropTypes.bool,
+    location: React.PropTypes.object,
+    route: React.PropTypes.object
   },
 
   getChildContext: function () {
@@ -57,7 +61,9 @@ let App = React.createClass({
       profile,
       account,
       username: account && account.username, // backward compat
-      searchActive
+      searchActive,
+      location: this.props.location,
+      route: this.props.route
     }
   },
 
@@ -96,9 +102,9 @@ let App = React.createClass({
     }
 
     if (!username && !this.isPublicRoute()) {
-      this.history.pushState(null, '/login')
+      this.context.router.push('/login')
     } else if (username && this.isPublicRoute()) {
-      this.history.pushState(null, '/graph')
+      this.context.router.push('/graph')
     }
 
     if (username) {
@@ -121,7 +127,7 @@ let App = React.createClass({
 
   _handleSearchSubmit() {
     let uri = `${bankUri}/${this.state.searchQuery}#this`
-    this.history.pushState(null, `/graph/${encodeURIComponent(uri)}`)
+    this.context.router.push(`/graph/${encodeURIComponent(uri)}`)
     this.refs.search.hide()
   },
 
@@ -133,7 +139,7 @@ let App = React.createClass({
   },
 
   _handleChatTap() {
-    this.history.pushState(null, '/conversations')
+    this.context.router.push('/conversations')
   },
 
   showDrawer() {
