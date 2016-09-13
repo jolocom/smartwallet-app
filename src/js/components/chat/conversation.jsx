@@ -103,6 +103,7 @@ let Conversation = React.createClass({
 
   back() {
     this.context.router.push('/conversations')
+    ConversationStore.cleanState()
   },
 
   getStyles() {

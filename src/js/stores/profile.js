@@ -10,6 +10,9 @@ import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 import rdf from 'rdflib'
 
+import Debug from 'lib/debug'
+let debug = Debug('stores:profile')
+
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
 
@@ -144,6 +147,8 @@ export default Reflux.createStore({
   onUpdate: function (params) {
     let newData = Object.assign({}, params)
     let oldData = Object.assign({}, profile)
+    
+    debug('Updating profile with old data ',oldData,' and new data', newData)
 
     let insertTriples = []
     let deleteTriples = []
@@ -198,6 +203,7 @@ export default Reflux.createStore({
     if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
+
     // ############## BITCOIN
     let updateBtcFetch = []
     if (params.bitcoinAddress.trim() !== profile.bitcoinAddress.trim()) {
@@ -380,13 +386,13 @@ export default Reflux.createStore({
         updatePassportFetch.push(this.gAgent.createNode(
           GraphStore.state.user, GraphStore.state.center, 'Passport',
           undefined, newData.passportImgUri, 'default', true).then(
-            function(passportNode) {
-              newData.passportImgNodeUri = passportNode.uri
+            function(passportNodeUri) {
+              newData.passportImgNodeUri = passportNodeUri
 
           // Insert passport link
               let passportInsertStatement = 'INSERT DATA { ' +
                 rdf.st(rdf.sym(oldData.webid),
-                  PRED.passport, passportNode).toNT() + ' }'
+                  PRED.passport, rdf.sym(passportNodeUri)).toNT() + ' }'
 
               return fetch(Util.uriToProxied(oldData.webid), {
                 method: 'PATCH',

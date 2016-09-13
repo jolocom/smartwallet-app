@@ -360,7 +360,7 @@ let Profile = React.createClass({
         file: file
       })
 
-      gAgent.storeFile(this.state.storage, file).then((res) => {
+      gAgent.storeFile(null, this.state.storage, file).then((res) => {
         this.setState({
           loadingDisplayPhoto: false
         })
@@ -404,7 +404,7 @@ let Profile = React.createClass({
         passportFile: file
       })
 
-      gAgent.storeFile(this.state.storage, file).then((res) => {
+      gAgent.storeFile(null, this.state.storage, file, true).then((res) => {
         this.setState({
           loadingPassportPhoto: false
         })
