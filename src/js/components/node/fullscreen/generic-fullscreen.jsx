@@ -327,7 +327,8 @@ let GenericFullScreen = React.createClass({
 
     // Always add the fullscreen menu item
     
-    // this.state.luminance
+    if (this.state.luminance && this.state.luminance < 40)
+      styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
     
     return (
       <Dialog ref="dialog" fullscreen>
