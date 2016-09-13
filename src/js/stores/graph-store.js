@@ -111,22 +111,18 @@ export default Reflux.createStore({
 
   // Is called by both graph.jsx and preview.jsx, we differentiate the caller
   // this way making sure that we update the right component.
-  onGetState: function(source){
+  onGetState: function(source) {
     this.trigger(this.state, source)
-    if (!this.loaded) {
-      this.loaded = true
-      this.onGetInitialGraphState()
-    }
   },
 
-  onGetInitialGraphState: function () {
-    this.gAgent.getGraphMapAtWebID().then((triples) => {
+  onGetInitialGraphState: function (webId) {
+    this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
       }
       graphActions.getInitialGraphState.completed(triples)
-    })
+    }).catch(graphActions.getInitialGraphState.failed)
   },
 
   onGetInitialGraphStateCompleted: function (result) {

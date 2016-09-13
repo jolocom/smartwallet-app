@@ -497,9 +497,8 @@ class GraphAgent {
   }
 
   //Calls the above function, but passes the current webId as the URI.
-  getGraphMapAtWebID() {
-    let wia = new WebIDAgent()
-    return wia.getWebID().then((webId) => this.getGraphMapAtUri(webId))
+  getGraphMapAtWebID(webId) {
+    return this.getGraphMapAtUri(webId)
   }
 }
 
