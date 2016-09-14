@@ -405,7 +405,6 @@ class GraphAgent {
 
     return Promise.all(neighbours.map((triple) => {
       return this.fetchTriplesAtUri(triple.object.uri).then((result) => {
-        console.log('fetchtriplesaturi returns',result)
         // This is a node that coulnt't be retrieved, either 404, 401 etc. 
         if (result.unav) {
           // We are setting the connection field of the node, we need it 
@@ -474,13 +473,9 @@ class GraphAgent {
             return ans.text().then((res) => {
               let para = parser.parse(res, node.uri + '.acl')
 
-              console.log('ACL : ', node.uri + '.acl')
-              console.rdftable(para.triples)
-
               node.confidential = para.triples.every(
                 (triple) => triple.subject.uri == aclUri + '#owner')
               
-              console.log('confidential ?',node.confidential)
               return node
             })
 
