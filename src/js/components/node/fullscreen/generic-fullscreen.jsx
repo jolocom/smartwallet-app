@@ -275,20 +275,24 @@ let GenericFullScreen = React.createClass({
         }).then(function (response) {
           return response.blob();
         })
-        .then(function (imageBlob) {
+        .then((imageBlob) => {
           let imgDataUrl = URL.createObjectURL(imageBlob)
-
-          let canvas = document.createElement('canvas'),
-              context = canvas.getContext('2d');
 
           let img = new Image()
           img.crossOrigin = "Anonymous";
 
           img.onload = (() => {
+            
+            let canvas = document.createElement('canvas')
+            canvas.width = img.width
+            canvas.height = img.height
+            
+            let context = canvas.getContext('2d');
+            
             context.drawImage(img, 0, 0)
             
             // Get top 75 pixels
-            let imgData = context.getImageData(0, 0, img.width, 75);
+            let imgData = context.getImageData(0, 0, img.width, img.height);
 
             // Group by pixels
             // [a] -> [[a,a,a]]
@@ -298,6 +302,8 @@ let GenericFullScreen = React.createClass({
               if (i % 4 == 0) return acc.push([val]), acc;
               return acc[acc.length - 1].push(val), acc;
             }, [])
+            
+            console.log(rgbs)
             
             let lums = rgbs.map(([r, g, b]) => (r+r+b+g+g+g)/6)
             let lumsSum = lums.reduce((acc, val) => (acc + val), 0)
