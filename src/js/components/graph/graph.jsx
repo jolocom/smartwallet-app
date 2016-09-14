@@ -23,8 +23,9 @@ let Graph = React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.object,
-    searchActive: React.PropTypes.bool
+    router: React.PropTypes.object,
+    searchActive: React.PropTypes.bool,
+    account: React.PropTypes.object
   },
 
   childContextTypes: {
@@ -74,11 +75,13 @@ let Graph = React.createClass({
 
   addNode(type) {
     let uri = encodeURIComponent(this.state.center.uri)
-    this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
+    this.context.router.push(`/graph/${uri}/add/${type}`)
   },
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
+    const {account} = this.context
+
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
@@ -88,7 +91,11 @@ let Graph = React.createClass({
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
-    graphActions.getState()
+
+    if (account.webId) {
+      // Load graph when user is logged in
+      graphActions.getInitialGraphState(account.webId)
+    }
   },
 
   componentWillUnmount() {
@@ -98,13 +105,18 @@ let Graph = React.createClass({
     }
   },
 
-  componentWillUpdate(props, state) {
+  componentWillUpdate(props, state, context) {
     const {activeNode} = this.state
     let uri
 
     if (state.activeNode && activeNode !== state.activeNode) {
       uri = encodeURIComponent(state.activeNode.uri)
-      this.context.history.pushState(null, `/graph/${uri}/view`)
+      this.context.router.push(`/graph/${uri}/view`)
+    }
+
+    const {account: {webId}} = this.context
+    if (webId && webId !== context.account.webId) {
+      graphActions.getInitialGraphState(context.account.webId)
     }
   },
 

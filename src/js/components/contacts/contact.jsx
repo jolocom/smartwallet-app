@@ -18,7 +18,7 @@ export default React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.any
+    router: React.PropTypes.any
   },
 
   componentDidMount() {
@@ -36,7 +36,7 @@ export default React.createClass({
 
   close() {
     this.refs.dialog.hide()
-    this.context.history.pushState(null, '/contacts')
+    this.context.router.push('/contacts')
   },
 
   toggle() {

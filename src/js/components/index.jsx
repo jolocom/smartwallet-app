@@ -6,7 +6,7 @@ import IndicatorDots from 'components/common/indicator-dots.jsx'
 
 let Index = React.createClass({
   contextTypes: {
-    history: React.PropTypes.any,
+    router: React.PropTypes.object,
     username: React.PropTypes.string,
     muiTheme: React.PropTypes.object
   },
@@ -108,11 +108,11 @@ let Index = React.createClass({
   },
 
   _handleSignup() {
-    this.context.history.pushState(null, '/signup')
+    this.context.router.push('/signup')
   },
 
   _handleLogin() {
-    this.context.history.pushState(null, '/login')
+    this.context.router.push('/login')
   }
 
 })

@@ -9,7 +9,7 @@ let SelectableList = MakeSelectable(List)
 let Nav = React.createClass({
 
   contextTypes: {
-    history: React.PropTypes.object,
+    router: React.PropTypes.object,
     profile: React.PropTypes.any
   },
 
@@ -24,7 +24,7 @@ let Nav = React.createClass({
   },
 
   goto(url) {
-    this.context.history.pushState(null, url)
+    this.context.router.push(url)
     this.refs.drawer.close()
   },
 

@@ -18,7 +18,7 @@ let Contacts = React.createClass({
     Reflux.connect(ChatStore, 'conversation')
   ],
   contextTypes: {
-    history: React.PropTypes.any
+    router: React.PropTypes.any
   },
 
   createChat(webId) {
@@ -30,7 +30,7 @@ let Contacts = React.createClass({
     if (this.state.conversation && this.state.conversation.id) {
       debug('componentDidUpdate; ' +
         'redirection to conversation URL, with state', this.state)
-      this.context.history.pushState(null,
+      this.context.router.push(
         `/conversations/${this.state.conversation.id}`
       )
     }
