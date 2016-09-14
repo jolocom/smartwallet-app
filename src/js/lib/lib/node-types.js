@@ -87,7 +87,7 @@ export default {
     }
 
     for (let nodeType in _types) {
-      if (nodeType.predicate === type) {
+      if (nodeType === type.predicate) {
         return nodeType
       }
     }
@@ -101,7 +101,7 @@ export default {
       type=type.uri
       
     let config
-    if ((config = this.get(type))) {
+    if (type && (config = this.get(type))) {
       return config.component
     }
     else

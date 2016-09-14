@@ -61,12 +61,6 @@ let Conversation = React.createClass({
     this.itemsEl = ReactDOM.findDOMNode(this.refs.items)
 
     this.itemsEl.addEventListener('scroll', this.onScroll)
-
-    this.interval = setInterval(() => {
-      if (this.state.atBottom) {
-        this.itemsEl.scrollTop = this.itemsEl.scrollHeight
-      }
-    }, 100)
   },
 
   componentWillUnmount() {
@@ -76,19 +70,24 @@ let Conversation = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('componnent updated')
+
     if (!prevState.conversation && this.state.conversation) {
       debug('componentDidUpdate; loading conversation', this.state.conversation)
       ContactActions.load(this.state.conversation.username)
     }
+    if (this.state.atBottom) {
+      this.itemsEl.scrollTop = this.itemsEl.scrollHeight
+    }
   },
 
   onScroll() {
-    let el = this.itemsEl
-    if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
-      this.setState({atBottom: true})
-    } else {
-      this.setState({atBottom: false})
-    }
+    // let el = this.itemsEl
+    // if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
+    //   this.setState({atBottom: true})
+    // } else {
+    //   this.setState({atBottom: false})
+    // }
   },
 
   addMessage(content) {
