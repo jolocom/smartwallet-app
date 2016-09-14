@@ -26,7 +26,6 @@ import ProfileStore from 'stores/profile'
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
-import AclAgent from 'lib/agents/acl.js'
 
 let Profile = React.createClass({
   mixins: [
@@ -40,13 +39,6 @@ let Profile = React.createClass({
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
-
-    let aA = new AclAgent('https://owe.webid.jolocom.de/profile/card')
-    aA.fetchInfo().then((res) => {
-      aA.removeAllow('*', 'read')
-      //aA.allow('*', 'read')
-      aA.commit()
-    })
   },
 
   componentDidUpdate(props, state) {

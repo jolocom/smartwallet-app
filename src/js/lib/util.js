@@ -63,9 +63,8 @@ let Util = {
 
   getAclUri(uri){
     return fetch(Util.uriToProxied(uri), {
+      method: 'HEAD',
       credentials: 'include'
-    }).catch((e)=>{
-      throw new Error(e) 
     }).then((ans) => {
       if (!ans.ok) {
         throw new Error('Error while accessing the file.') 

@@ -5,7 +5,6 @@ import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
 
 class AclAgent {
-  // TODO Add wildcard support.
   // TODO Check here if the user can modify the acl and throw error if not.
   constructor(uri){
     this.aclUri = `${this.uri}.acl`
@@ -45,7 +44,7 @@ class AclAgent {
         }
       })
     }).catch((e) => {
-      throw new Error(e) 
+      console.error(e, 'at fetchInfo')
     })
   }
 
@@ -133,23 +132,16 @@ class AclAgent {
         return
       }
     }
-
+    
     // Now we check if the policy itself needs to be deleted
     let relevant = this.Writer.find(policyName, PRED.mode, undefined)
 
     if (relevant.length > 0) {
       return 
     } else {
-      let x = this.Writer.find(policyName, undefined, undefined)
-      console.log(x[0])
-      console.log(x[1])
-      console.log(x[2])
-      this.Writer.g.remove(x)
-      console.log('========')
-      console.log('========')
-      console.log(this.Writer.find(policyName, undefined, undefined))
-      console.log('========')
-      console.log('========')
+      // .slice() to duplicate the array, so we don't work with a reference
+      let zombies = this.Writer.find(policyName, undefined, undefined).slice()
+      this.Writer.g.remove(zombies)
     }
   }
 
@@ -171,7 +163,7 @@ class AclAgent {
         throw new Error('Error while putting the file', res)  
       } 
     }).catch((e)=>{
-      throw new Error(e)  
+      console.error(e)
     }) 
   }
 
