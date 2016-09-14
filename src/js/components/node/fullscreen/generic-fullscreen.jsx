@@ -56,15 +56,18 @@ let GenericFullScreen = React.createClass({
   },
 
   componentDidMount() {
+    
     // Luminance
     if (this.props.backgroundImg)
     {
-      var actualBackgroundImg = /^url\(['"]?(.+)['"]?\)$/.exec(this.props.backgroundImg)[1]
-      console.log('actual',actualBackgroundImg)
-      var bgLuminanceP = this.getLuminanceForImageUrl(actualBackgroundImg)
+      let backgroundImgUrl = /^url\(['"]?(.+)['"]?\)$/
+                             .exec(this.props.backgroundImg)[1]
+      let bgLuminanceP = this.getLuminanceForImageUrl(backgroundImgUrl)
       bgLuminanceP.then((lum) => {
         debug('Background image has luminance of',lum)
-        this.setState({luminance: lum})    
+        this.setState({luminance: lum})
+      }).catch((e) => {
+        console.error('Couldn\'t compute luminance',e)
       })
     }
     
@@ -273,7 +276,6 @@ let GenericFullScreen = React.createClass({
           return response.blob();
         })
         .then(function (imageBlob) {
-
           let imgDataUrl = URL.createObjectURL(imageBlob)
 
           let canvas = document.createElement('canvas'),
@@ -284,23 +286,21 @@ let GenericFullScreen = React.createClass({
 
           img.onload = (() => {
             context.drawImage(img, 0, 0)
+            
+            // Get top 75 pixels
             let imgData = context.getImageData(0, 0, img.width, 75);
 
+            // Group by pixels
+            // [a] -> [[a,a,a]]
+            // [r/g/b] -> [[r,g,b]]
             let rgbs = imgData.data.reduce((acc, val, i) => {
-              if (i % 4 == 3) return acc;
-              if (i % 4 == 0) return acc.push([val]) && acc;
-              return acc[acc.length - 1].push(val) && acc;
+              if (i % 4 == 3) return acc; // Ignore alpha
+              if (i % 4 == 0) return acc.push([val]), acc;
+              return acc[acc.length - 1].push(val), acc;
             }, [])
             
-            /*let rgbs = (function chunksOf(n,ls) {
-              if (!ls.length)
-                return []
-              
-              return [ls.slice(0,3)].concat(chunksOf(n,ls.slice(3)))
-            })(3,imgData.data) stack overflow*/
-
-            let lums = rgbs.map(([r, g, b]) => (r + r + b + g + g + g) / 6)
-            let lumsSum = lums.reduce((acc, val) => (acc + val))
+            let lums = rgbs.map(([r, g, b]) => (r+r+b+g+g+g)/6)
+            let lumsSum = lums.reduce((acc, val) => (acc + val), 0)
             let lumsMean = lumsSum / lums.length
             res(lumsMean)
           })
