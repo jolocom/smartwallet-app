@@ -1,11 +1,13 @@
 import rdf from 'rdflib'
 import GraphAgent from 'lib/agents/graph.js'
+import _ from 'lodash'
 import Util from 'lib/util'
 import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
 
 class AclAgent {
   // TODO Check here if the user can modify the acl and throw error if not.
+  // TODO Add support for multiple policies regarding a user per file.
   constructor(uri){
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
@@ -146,6 +148,48 @@ class AclAgent {
   }
 
   /**
+   * @summary Tells if a user is allowed to do a certain thing on a file.
+   * @return {bool} - Allowed / Not allowed.
+   */
+  isAllowed(user, mode){
+    if (!this.predMap[mode]) {
+      console.error('Invalid mode supplied!')
+      return false
+    } 
+    return _.includes(this.allowedPermissions(user), mode)
+  }
+
+  /**
+   * @summary Returns a list of permissions a user.
+   * @return {array} - permissions [read,write,control]
+   */
+  allowedPermissions(user){
+    let policyName
+    let identifier = PRED.agent
+    let permissions = []
+
+    if (user === '*') {
+      user = PRED.Agent 
+      identifier = PRED.agentClass
+    }
+
+    if(typeof user === 'string'){
+      user = rdf.sym(user) 
+    }
+
+    let existing = this.Writer.find(undefined, identifier, user)
+    if (existing.length > 0) {
+      policyName = existing[0].subject
+      
+      let triples = this.Writer.find(policyName, PRED.mode, undefined)   
+      for (let el of triples) {
+        permissions.push(_.findKey(this.predMap, el.object))
+      }
+    }
+    return permissions
+  }
+
+  /**
    * @sumarry Serializes the new acl file and puts it to the server.
    *          Must be called at the end.
    * @return {promise} - the server response. 
@@ -165,15 +209,6 @@ class AclAgent {
     }).catch((e)=>{
       console.error(e)
     }) 
-  }
-
-
-  allowedPermissions(){
-  
-  } 
-
-  isAllowed(){
-  
   }
 }
 
