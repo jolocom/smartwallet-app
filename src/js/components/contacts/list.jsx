@@ -63,12 +63,15 @@ let Contacts = React.createClass({
             }
 
             let avatar
-            if (imgUri)
-              avatar = <Avatar src={Utils.uriToProxied(imgUri)}></Avatar>
-                else
+            if (imgUri) {
+              avatar = <Avatar src={Utils.uriToProxied(imgUri)}
+                style={{backgroundSize: 'cover'}} />
+            } else {
               avatar = <Avatar>{nameInitial}</Avatar>
+            }
             return (
-              <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(webId)}}/>
+              <ListItem key={username} primaryText={name} secondaryText={email}
+                leftAvatar={avatar} onTouchTap={() => { this.props.onClick(webId) }} />
             )
           })}
         </List>

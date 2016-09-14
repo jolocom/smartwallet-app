@@ -160,7 +160,8 @@ let ConversationsListItem = React.createClass({
     }
     let avatar
     if (otherPerson.img) {
-      avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}></Avatar>
+      avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}
+        style={{backgroundSize: 'cover'}} />
     } else {
       avatar = <Avatar>{nameInitial}</Avatar>
     }

@@ -59,14 +59,10 @@ let Conversation = React.createClass({
     this.refs.dialog.show()
 
     this.itemsEl = ReactDOM.findDOMNode(this.refs.items)
-
-    this.itemsEl.addEventListener('scroll', this.onScroll)
   },
 
   componentWillUnmount() {
     this.refs.dialog.hide()
-
-    this.itemsEl.removeEventListener('scroll', this.onScroll)
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,15 +75,6 @@ let Conversation = React.createClass({
     if (this.state.atBottom) {
       this.itemsEl.scrollTop = this.itemsEl.scrollHeight
     }
-  },
-
-  onScroll() {
-    // let el = this.itemsEl
-    // if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
-    //   this.setState({atBottom: true})
-    // } else {
-    //   this.setState({atBottom: false})
-    // }
   },
 
   addMessage(content) {
@@ -201,12 +188,14 @@ let Conversation = React.createClass({
     let items = conversation.items || []
 
     var userAvatar = (
-      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)} />
+      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}
+        style={{backgroundSize: 'cover'}} />
     )
 
     if (otherPerson) {
       var otherPersonAvatar = (
-        <Avatar src={Util.uriToProxied(otherPerson.img)} />
+        <Avatar src={Util.uriToProxied(otherPerson.img)}
+          style={{backgroundSize: 'cover'}} />
       )
     }
     return (
