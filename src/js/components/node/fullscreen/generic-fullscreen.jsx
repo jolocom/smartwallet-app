@@ -58,10 +58,14 @@ let GenericFullScreen = React.createClass({
   componentDidMount() {
     
     // Luminance
-    if (this.props.backgroundImg)
+    let backgroundImgMatches
+    if (this.props.backgroundImg &&
+        this.props.backgroundImg !== 'none' &&
+        (backgroundImgMatches = /^url\(['"]?(.+)['"]?\)$/
+                               .exec(this.props.backgroundImg))
+       )
     {
-      let backgroundImgUrl = /^url\(['"]?(.+)['"]?\)$/
-                             .exec(this.props.backgroundImg)[1]
+      let backgroundImgUrl = backgroundImgMatches[1]
       let bgLuminanceP = this.getLuminanceForImageUrl(backgroundImgUrl)
       bgLuminanceP.then((lum) => {
         debug('Background image has luminance of',lum)
@@ -283,16 +287,18 @@ let GenericFullScreen = React.createClass({
 
           img.onload = (() => {
             
-            let canvas = document.createElement('canvas')
-            canvas.width = img.width
-            canvas.height = img.height
+            let canvas = document.createElement('CANVAS')
+            canvas.setAttribute('width',img.width)
+            canvas.setAttribute('height',img.height)
+            canvas.width = canvas.style.width = img.width
+            canvas.height = canvas.style.height = img.height
             
             let context = canvas.getContext('2d');
             
             context.drawImage(img, 0, 0)
             
             // Get top 75 pixels
-            let imgData = context.getImageData(0, 0, img.width, img.height);
+            let imgData = context.getImageData(0, 0, img.width, 75);
 
             // Group by pixels
             // [a] -> [[a,a,a]]
@@ -303,11 +309,11 @@ let GenericFullScreen = React.createClass({
               return acc[acc.length - 1].push(val), acc;
             }, [])
             
-            console.log(rgbs)
             
             let lums = rgbs.map(([r, g, b]) => (r+r+b+g+g+g)/6)
             let lumsSum = lums.reduce((acc, val) => (acc + val), 0)
             let lumsMean = lumsSum / lums.length
+            
             res(lumsMean)
           })
           
