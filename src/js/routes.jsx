@@ -2,7 +2,7 @@ import React from 'react'
 
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
-import Router, { Route, IndexRoute } from 'react-router'
+import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
@@ -20,7 +20,7 @@ import Login from 'components/accounts/login.jsx'
 import Signup from 'components/accounts/signup.jsx'
 
 const routes = (
-  <Route path="/" component={App}>
+  <Route path="/" component={App} >
     <IndexRoute component={Index} />
     <Route path="graph(/:node)" component={Graph} title="Graph">
       <Route path="/graph/:node/view" component={Node} />
@@ -42,5 +42,5 @@ const routes = (
 )
 
 export default () => {
-  return (<Router>{routes}</Router>)
+  return (<Router history={hashHistory}>{routes}</Router>)
 }

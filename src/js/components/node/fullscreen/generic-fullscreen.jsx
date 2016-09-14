@@ -42,7 +42,7 @@ let GenericFullScreen = React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.any,
+    router: React.PropTypes.any,
     node: React.PropTypes.object,
     muiTheme: React.PropTypes.object,
     account: React.PropTypes.object
@@ -101,7 +101,7 @@ let GenericFullScreen = React.createClass({
 
   _handleClose() {
     graphActions.setState('activeNode', null, true)
-    this.context.history.pushState(null, '/graph')
+    this.context.router.push('/graph')
   },
 
   _handleDisconnect() {
@@ -243,9 +243,9 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleStartChat() {
-    const {history} = this.context
+    const {router} = this.context
     const {node} = this.props
-    history.pushState(null, `/chat/new/${encodeURIComponent(node.uri)}`)
+    router.push(`/chat/new/${encodeURIComponent(node.uri)}`)
     graphActions.setState('activeNode', null, true)
   },
 

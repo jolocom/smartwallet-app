@@ -29,7 +29,7 @@ export default React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.any
+    router: React.PropTypes.any
   },
 
   getInitialState() {
@@ -60,7 +60,7 @@ export default React.createClass({
     if (this.state.conversation && this.state.conversation.id) {
       debug('componentDidUpdate;' +
         'redirection to conversation URL, with state', this.state)
-      this.context.history.pushState(null,
+      this.context.router.push(
         `/conversations/${this.state.conversation.id}`
       )
     }
@@ -82,7 +82,7 @@ export default React.createClass({
   },
 
   back() {
-    this.context.history.pushState(null, '/chat')
+    this.context.router.push('/chat')
   },
 
   render() {

@@ -9,7 +9,7 @@ import {Layout, Content} from 'components/layout'
 class Chat extends React.Component {
 
   static contextTypes = {
-    history: React.PropTypes.any
+    router: React.PropTypes.any
   }
 
   static propTypes = {
@@ -55,7 +55,7 @@ class Chat extends React.Component {
 
   close() {
     this.refs.dialog.hide()
-    this.context.history.pushState(null, '/graph')
+    this.context.router.push('/graph')
   }
 
   render() {
@@ -108,10 +108,10 @@ class Chat extends React.Component {
 
     switch (tab) {
       case 'chat':
-        this.context.history.pushState(null, '/conversations')
+        this.context.router.push('/conversations')
         break
       case 'contacts':
-        this.context.history.pushState(null, '/contacts')
+        this.context.router.push('/contacts')
         break
     }
   }

@@ -36,7 +36,7 @@ let Conversations = React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.any,
+    router: React.PropTypes.any,
     account: React.PropTypes.any
   },
 
@@ -63,7 +63,7 @@ let Conversations = React.createClass({
 
   showConversation({id}) {
     debug('Navigating to conversation URL')
-    this.context.history.pushState(null, `/conversations/${id}`)
+    this.context.router.push(`/conversations/${id}`)
   },
 
   render: function() {

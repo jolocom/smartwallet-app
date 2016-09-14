@@ -5,7 +5,7 @@ import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
-import {History, Link} from 'react-router'
+import {Link} from 'react-router'
 
 import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
@@ -15,12 +15,12 @@ import AccountStore from 'stores/account'
 
 let Signup = React.createClass({
   mixins: [
-    History,
     Reflux.connect(AvailabilityStore, 'available'),
     Reflux.connect(AccountStore, 'account')
   ],
   contextTypes: {
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    router: React.PropTypes.object
   },
 
   errorMessages: {
@@ -42,7 +42,7 @@ let Signup = React.createClass({
 
   componentWillMount() {
     if (this.state.account && this.state.account.username)
-      this.history.pushState(null, '/graph')
+      this.context.router.push('/graph')
   },
 
   signup() {
@@ -58,7 +58,7 @@ let Signup = React.createClass({
 
   componentDidUpdate() {
     if (this.state.account && this.state.account.username) {
-      this.history.pushState(null, '/graph')
+      this.context.router.push('/graph')
     }
   },
 

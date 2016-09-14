@@ -1,18 +1,17 @@
 import React from 'react'
 import Radium from 'radium'
 import {RaisedButton, TextField} from 'material-ui'
-import {History, Link} from 'react-router'
+import {Link} from 'react-router'
 
 import Account from 'actions/account'
 
 // login for development
 let Login = React.createClass({
-  mixins: [
-    History
-  ],
+
   contextTypes: {
     muiTheme: React.PropTypes.object,
-    username: React.PropTypes.string
+    username: React.PropTypes.string,
+    router: React.PropTypes.object
   },
 
   getInitialState() {
@@ -23,12 +22,12 @@ let Login = React.createClass({
   },
   componentWillMount() {
     if (this.context.username) {
-      // this.history.pushState(null, '/')
+      // this.history.router.push('/')
     }
   },
   componentDidUpdate() {
     if (this.context.username) {
-      // this.history.pushState(null, '/')
+      // this.history.router.push('/')
     }
   },
 

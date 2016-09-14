@@ -5,11 +5,11 @@ import {Tabs, Tab} from 'material-ui'
 export default React.createClass({
 
   contextTypes: {
-    history: React.PropTypes.any
+    router: React.PropTypes.object
   },
 
   _handleTabsChange(tab) {
-    this.context.history.pushState(null, `/${tab}`)
+    this.context.router.push(`/${tab}`)
   },
 
   render() {

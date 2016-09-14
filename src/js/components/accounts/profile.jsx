@@ -78,7 +78,7 @@ let Profile = React.createClass({
         overflowY: 'auto'
       },
       main: {
-        padding: '16px'
+        padding: '8px 0'
       },
       file: {
         display: 'none'
@@ -92,7 +92,7 @@ let Profile = React.createClass({
         minHeight: '72px'
       },
       passportIcon: {
-        width: '30px'
+        width: '24px'
       },
       passportPreview: {
         width: '40px',
@@ -106,22 +106,30 @@ let Profile = React.createClass({
         verticalAlign: 'top'
       },
       bitcoinIcon: {
-        width: '30px'
+        width: '24px'
       },
-      formTable: {
-        width: '100%'
+      form: {
       },
-      iconCell: {
-        verticalAlign: 'bottom',
+      formRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center'
+      },
+      label: {
+        display: 'inline-block',
         textAlign: 'right',
-        paddingRight: '10px',
-        paddingBottom: '7px'
+        paddingLeft: '16px',
+        paddingRight: '32px'
       },
-      iconCellPassport: {
-        paddingRight: '7px'
+      field: {
+        flex: 1,
+        marginRight: '16px'
       },
-      iconCellBitcoinAddress: {
-        paddingRight: '7px'
+      labelPassport: {
+
+      },
+      labelBitcoinAddress: {
+
       },
       progBar: {
       }
@@ -163,7 +171,7 @@ let Profile = React.createClass({
             }
           />
           <Content style={styles.content}>
-            <Card zDept={0} rounded={false}>
+            <Card rounded={false}>
               <CardMedia
                 style={Object.assign({},
                   styles.image,
@@ -200,41 +208,47 @@ let Profile = React.createClass({
               onChange={this._handleSelectPassportFile} />
             <main style={styles.main}>
               <section>
-                <table style={styles.formTable}>
-                  <tr>
-                    <td style={styles.iconCell}><ActionDescription /></td>
-                    <td>
-                      <TextField floatingLabelText="First Name"
+                <div style={styles.form}>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}><ActionDescription /></div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="First Name"
+                        name="givenName"
                         onChange={Util.linkToState(this, 'givenName')}
                         value={this.state.givenName}
                         style={styles.input} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={styles.iconCell}><ActionDescription /></td>
-                    <td>
-                      <TextField floatingLabelText="Second Name"
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}><ActionDescription /></div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Second Name"
+                        name="familyName"
                         onChange={Util.linkToState(this, 'familyName')}
                         value={this.state.familyName}
                         style={styles.input} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={styles.iconCell}><CommunicationEmail /></td>
-                    <td>
-                      <TextField floatingLabelText="Email"
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}><CommunicationEmail /></div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Email"
+                        name="email"
                         onChange={Util.linkToState(this, 'email')}
                         value={this.state.email}
                         style={styles.input} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={Object.assign({},
-                      styles.iconCell, styles.iconCellPassport)}>
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={Object.assign({},
+                      styles.label, styles.labelPassport)}>
                       <img src="img/ic_passport_24px.svg"
                         style={styles.passportIcon} />
-                    </td>
-                    <td>
+                    </div>
+                    <div style={styles.field}>
                       <div style={styles.passportContainer}>
                       {this.state.passportImgUri
                         ? <div>
@@ -257,33 +271,38 @@ let Profile = React.createClass({
                           style={styles.uploadPassportButton} />}
                       </div>}
                       </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={Object.assign({},
-                      styles.iconCell, styles.iconCellBitcoinAddress)}>
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={Object.assign({},
+                      styles.label, styles.labelBitcoinAddress)}>
                       <img src="img/ic_bitcoin_24px.svg"
                         style={styles.bitcoinIcon} />
-                    </td>
-                    <td>
-                      <TextField floatingLabelText="Bitcoin Address"
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Bitcoin Address"
+                        name="bitcoinAddress"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
                         value={this.state.bitcoinAddress}
                         style={styles.input} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={styles.iconCell}>
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
                       <ActionCreditCard />
-                    </td>
-                    <td>
+                    </div>
+                    <div style={styles.field}>
                       {/* TODO: back-end implementation */}
-                      <TextField floatingLabelText="Add credit card"
+                      <TextField
+                        placeholder="Add credit card"
+                        name="creditcard"
                         onChange={this._handleCreditCardValidation}
-                        style={styles.input} />
-                    </td>
-                  </tr>
-                </table>
+                        style={styles.input}
+                        value={this.state.creditCard} />
+                    </div>
+                  </div>
+                </div>
               </section>
             </main>
           </Content>

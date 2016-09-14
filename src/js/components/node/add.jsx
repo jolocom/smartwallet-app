@@ -30,7 +30,7 @@ let NodeAdd = React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.any,
+    router: React.PropTypes.any,
     node: React.PropTypes.any,
     muiTheme: React.PropTypes.object
   },
@@ -41,7 +41,7 @@ let NodeAdd = React.createClass({
 
   close() {
     this.refs.dialog.hide()
-    this.context.history.goBack()
+    this.context.router.goBack()
   },
 
   getStyles() {
@@ -113,7 +113,7 @@ let NodeAdd = React.createClass({
 
   _handleClose() {
     this.refs.dialog.hide()
-    this.context.history.goBack()
+    this.context.router.goBack()
   }
 })
 
