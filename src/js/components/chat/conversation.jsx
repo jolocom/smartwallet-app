@@ -20,9 +20,9 @@ import ContactStore from 'stores/contact'
 import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
+let debug = Debug('components:conversation')
 
 import Util from 'lib/util'
-let debug = Debug('components:conversation')
 
 let Conversation = React.createClass({
 

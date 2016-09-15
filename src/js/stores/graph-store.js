@@ -152,7 +152,8 @@ export default Reflux.createStore({
     })
   },
 
-  onNavigateToNode: function (node) {
+  onNavigateToNode: function (node, defaultHistoryNode) {
+    
     this.state.neighbours = []
     this.state.rotationIndex = 0
 
@@ -161,7 +162,9 @@ export default Reflux.createStore({
         // Before updating the this.state.center, we push the old center node
         // to the node history
 
-      this.state.navHistory.push(this.state.center)
+      if (this.state.center || defaultHistoryNode.uri !== node.uri)
+        this.state.navHistory.push(this.state.center || defaultHistoryNode)
+      
       this.state.center = triples[0]
 
       if (this.state.navHistory.length > 1) {
