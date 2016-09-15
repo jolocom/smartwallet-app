@@ -110,7 +110,11 @@ let Graph = React.createClass({
   },
   
   componentDidUpdate(prevProps) {
-    if (prevProps.params.node !== this.props.params.node) {
+    // We do not want to center the graph on the person we're viewing the
+    // full-screen profile of. Hence we're checking if the route matches
+    // /graph/[uri]/view (3 route components) and if so, not navigating.
+    if (prevProps.params.node !== this.props.params.node &&
+        this.props.routes.length < 3) {
       this.props.params.node = this.props.params.node || this.context.account.webId
       debug('Navigating to node', this.props.params.node)
       graphActions.navigateToNode({uri: this.props.params.node},
