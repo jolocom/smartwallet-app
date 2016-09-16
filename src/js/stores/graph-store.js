@@ -30,6 +30,7 @@ export default Reflux.createStore({
       navHistory: [],
       selected: null,
       rotationIndex: 0,
+      previousRenderedNodeUri: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -50,6 +51,7 @@ export default Reflux.createStore({
       newNode: null,
       navHistory: [],
       selected: null,
+      previousRenderedNodeUri: null,
       // UI related
       showPinned: false,
       showSearch: false,
@@ -159,11 +161,20 @@ export default Reflux.createStore({
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
-        // Before updating the this.state.center, we push the old center node
-        // to the node history
+      
+      // Before updating the this.state.center, we push the old center node
+      // to the node history
 
-      if (this.state.center || defaultHistoryNode.uri !== node.uri)
+      // We check if we're not navigating to the same node (e.g. went to the
+      // full-screen view and then back), in which case we don't want to add
+      // the node to the history
+      if ((!this.state.previousRenderedNodeUri ||
+          this.state.previousRenderedNodeUri !== node.uri)
+          &&
+          (this.state.center || defaultHistoryNode.uri !== node.uri))
         this.state.navHistory.push(this.state.center || defaultHistoryNode)
+        
+      this.state.previousRenderedNodeUri = node.uri
       
       this.state.center = triples[0]
 
