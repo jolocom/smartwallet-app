@@ -66,7 +66,6 @@ let Conversation = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('componnent updated')
 
     if (!prevState.conversation && this.state.conversation) {
       debug('componentDidUpdate; loading conversation', this.state.conversation)
