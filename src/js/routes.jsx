@@ -18,6 +18,8 @@ import Contact from 'components/contacts/contact.jsx'
 
 import Login from 'components/accounts/login.jsx'
 import Signup from 'components/accounts/signup.jsx'
+import ForgotPassword from 'components/accounts/forgot-password'
+import ChangePassword from 'components/accounts/change-password'
 
 const routes = (
   <Route path="/" component={App} >
@@ -36,6 +38,8 @@ const routes = (
         </Route>
       </Route>
     </Route>
+    <Route path="forgot-password" component={ForgotPassword} />
+    <Route path="change-password" component={ChangePassword} />
     <Route path="signup" component={Signup} />
     <Route path="login" component={Login} />
   </Route>

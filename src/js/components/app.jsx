@@ -26,7 +26,7 @@ import PinnedActions from 'actions/pinned'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-const publicRoutes = ['/', '/login', '/signup']
+const publicRoutes = ['/', '/login', '/signup', '/forgot-password', 'change-password']
 
 let App = React.createClass({
 
