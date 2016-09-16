@@ -62,7 +62,7 @@ let Util = {
   isSafari() {
     return /Safari/.test(navigator.userAgent) &&
            /Apple Computer/.test(navigator.vendor);
-  }
+  },
 
   /*
    * @summary Proxies a uri or not depending on the mode.
