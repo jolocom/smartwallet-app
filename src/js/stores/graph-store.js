@@ -137,8 +137,8 @@ export default Reflux.createStore({
   },
 
   drawAtUri: function (uri, number) {
-    this.state.neighbours = []
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
+      this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
       this.state.center = triples[0]
       for (let i = 1; i < triples.length; i++) {
