@@ -41,7 +41,7 @@ class AclAgent {
           let {subject, predicate, object} = triples[triple]
           this.Writer.addTriple(subject,predicate,object)
         }
-        if(this.Writer.g.statementsMatching(undefined, PRED.type, PRED.auth).length === 0){
+        if(this.Writer.find(undefined, PRED.type, PRED.auth).length === 0){
           throw new Error('Link is not an ACL file')
         }
       })
@@ -59,42 +59,39 @@ class AclAgent {
    */
 
   allow(user, mode){
-    let policyName
-    let identifier = PRED.agent
-    if (mode !== 'read' && mode !== 'write' && mode !== 'control') {
+    let wildcard = user === '*'
+    let identifier = wildcard ? PRED.agentClass : PRED.agent
+
+    user = wildcard ? PRED.Agent : user
+
+    if (!this.predMap[mode]){
       throw new Error('Invalid mode supplied!')
     }
-    if (user === '*') {
-      user = PRED.Agent 
-      identifier = PRED.agentClass
-    }
+
     if (typeof user === 'string') {
       user = rdf.sym(user) 
     }
-    
-    mode = this.predMap[mode]
-    // Check if the triple is already present.
-    let existing = this.Writer.g.statementsMatching(undefined, identifier, user)
 
-    if (existing.length > 0){
-      policyName = existing[0].subject 
-
-      let trip = this.Writer.g.statementsMatching(policyName, PRED.mode, mode )
-      // If true, the triple already exists.
-      if (trip.length > 0) {
-        return  
-      // Else, the policy is present but the triple not, so we add the triple.
-      } else {
-        this.Writer.addTriple(policyName, PRED.mode, mode) 
-      }
-    // Else this user is not mentioned in the acl file at all so we create a new
-    // polic
+    // If user already has the permission.
+    if (_.includes(this.allowedPermissions(user, true), mode)){
+      return
     } else {
-      policyName = rdf.sym(`${this.aclUri}#${Util.randomString(5)}`)
-      this.Writer.addTriple(policyName, PRED.type, PRED.auth)
-      this.Writer.addTriple(policyName, PRED.access, rdf.sym(this.uri))
-      this.Writer.addTriple(policyName, PRED.mode, mode)
-      this.Writer.addTriple(policyName, identifier, user)
+      mode = this.predMap[mode]
+
+      let alt = this.Writer.find(undefined, identifier, user)
+      if (alt.length > 0) {
+        // A policy regarding the user already exists, we will
+        // add the rule in there.
+        let policyName = alt[0].subject
+        this.Writer.addTriple(policyName, PRED.mode, mode)
+      } else {
+        // A policy has to be constructed
+        let policyName = rdf.sym(`${this.aclUri}#${Util.randomString(5)}`)
+        this.Writer.addTriple(policyName, PRED.type, PRED.auth)
+        this.Writer.addTriple(policyName, PRED.access, rdf.sym(this.uri))
+        this.Writer.addTriple(policyName, PRED.mode, mode)
+        this.Writer.addTriple(policyName, identifier, user)
+      }
     }
   }
 
@@ -108,42 +105,53 @@ class AclAgent {
   
   removeAllow(user, mode) {
     let policyName
-    let identifier = PRED.agent
-    if (mode !== 'read' && mode !== 'write' && mode !== 'control') {
+    let wildcard = user === '*'
+    let identifier = wildcard ? PRED.agentClass : PRED.agent
+
+    user = wildcard ? PRED.Agent : user
+
+    if (!this.predMap[mode]){
       throw new Error('Invalid mode supplied!')
     }
-    if (user === '*') {
-      user = PRED.Agent 
-      identifier = PRED.agentClass
-    }
+
     if (typeof user === 'string') {
       user = rdf.sym(user) 
     }
-    
-    mode = this.predMap[mode]
-    // Check if the triple is present.
-    let existing = this.Writer.g.statementsMatching(undefined, identifier, user)
-    if (existing.length > 0){
-      policyName = existing[0].subject 
-      let trip = this.Writer.g.statementsMatching(policyName, PRED.mode, mode )
-      // If true, the triple exists, therefore we can delete it.
-      if (trip.length > 0) {
-        let {subject, predicate, object} = trip[0]
-        this.Writer.g.remove({subject,predicate,object})
-      } else {
-        return
-      }
-    }
-    
-    // Now we check if the policy itself needs to be deleted
-    let relevant = this.Writer.find(policyName, PRED.mode, undefined)
 
-    if (relevant.length > 0) {
-      return 
-    } else {
-      // .slice() to duplicate the array, so we don't work with a reference
-      let zombies = this.Writer.find(policyName, undefined, undefined).slice()
-      this.Writer.g.remove(zombies)
+    // Check if the triple is present.
+    if (!_.includes(this.allowedPermissions(user, true), mode)) {
+      return
+    } 
+
+    // Finding the correct triple.
+    mode = this.predMap[mode]
+    
+    // Get the existing policies
+    let policies = []
+    let existing = this.Writer.find(undefined, identifier, user)
+    if (existing.length > 0){
+      existing.forEach((el)=>{
+        policies.push(el.subject) 
+      }) 
+
+      policies.forEach((policy)=>{
+        let trip = this.Writer.find(policy, PRED.mode, mode) 
+        if (trip.length > 0) {
+          let {subject, predicate, object} = trip[0]
+          this.Writer.g.remove({subject,predicate,object})
+          
+          // Here we check if the policy itself should be deleted next.
+          let zomb = this.Writer.find(policy, PRED.mode, undefined)
+          if (zomb.length > 0) {
+            // If not, then we return.
+            return 
+          } else {
+            // Otherwise we delete the policy triples as well.
+            let zombies = this.Writer.find(policy).slice()  
+            this.Writer.g.remove(zombies)
+          }
+        }
+      })
     }
   }
 
@@ -156,38 +164,59 @@ class AclAgent {
       console.error('Invalid mode supplied!')
       return false
     } 
-    return _.includes(this.allowedPermissions(user), mode)
+    if (_.includes(this.allowedPermissions(user), mode)){
+      return true 
+    }
   }
+
 
   /**
    * @summary Returns a list of permissions a user.
+   * @param {string} user - the user webid
+   * @param {bool} strict - if true, we only return modes speciffically given
+   *                        to this user. If false, we retrurn the wildcarded
+   *                        modes as well.
    * @return {array} - permissions [read,write,control]
    */
-  allowedPermissions(user){
-    let policyName
-    let identifier = PRED.agent
+  allowedPermissions(user, strict = false){
+    let wildcard = user === '*'
+    user = wildcard ? PRED.Agent : user
+    let identifier = wildcard ? PRED.agentClass : PRED.agent
+    
     let permissions = []
-
-    if (user === '*') {
-      user = PRED.Agent 
-      identifier = PRED.agentClass
-    }
+    let policies = []
 
     if(typeof user === 'string'){
       user = rdf.sym(user) 
     }
-
     let existing = this.Writer.find(undefined, identifier, user)
     if (existing.length > 0) {
-      policyName = existing[0].subject
-      
-      let triples = this.Writer.find(policyName, PRED.mode, undefined)   
-      for (let el of triples) {
-        permissions.push(_.findKey(this.predMap, el.object))
-      }
+      existing.forEach((statement) => {
+        policies.push(statement.subject)
+      })
+      policies.forEach((policy) => {
+        let triples = this.Writer.find(policy, PRED.mode, undefined)
+        for (let el of triples) {
+          if (!_.includes(permissions, _.findKey(this.predMap, el.object))) {
+            permissions.push(_.findKey(this.predMap, el.object))
+          }
+        }
+      })
+    }
+    
+    // We append the open permissions as well, since they apply to all users.
+    // But only if strict is set to false.
+    if (!wildcard && !strict){
+      let general = this.allowedPermissions('*')
+      general.forEach((el) => {
+        if (!_.includes(permissions, el)){
+          permissions.push(el)
+        }
+      })
     }
     return permissions
   }
+
 
   /**
    * @sumarry Serializes the new acl file and puts it to the server.
