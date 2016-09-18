@@ -20,9 +20,9 @@ import ContactStore from 'stores/contact'
 import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
+let debug = Debug('components:conversation')
 
 import Util from 'lib/util'
-let debug = Debug('components:conversation')
 
 let Conversation = React.createClass({
 
@@ -66,7 +66,6 @@ let Conversation = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('componnent updated')
 
     if (!prevState.conversation && this.state.conversation) {
       debug('componentDidUpdate; loading conversation', this.state.conversation)
@@ -95,15 +94,26 @@ let Conversation = React.createClass({
   getStyles() {
     let styles = {
       content: {
-        display: 'flex',
-        flexDirection: 'column',
-        overflowY: 'visible'
+        overflowY: 'visible',
+        position: 'relative'
       },
       conversation: {
         flex: 1,
         overflowY: 'auto',
         paddingTop: '25px',
-        backgroundColor: '#f1f1f1'
+        backgroundColor: '#f1f1f1',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: '75px'
+      },
+      compose: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: '75px'
       },
       message: {
         padding: '0 20px',
@@ -117,7 +127,7 @@ let Conversation = React.createClass({
         borderBottomRightRadius: '10px',
         padding: '6px 12px',
         position: 'relative',
-        whiteSpace: 'normal'
+        whiteSpace: 'pre'
       },
       meta: {
         clear: 'both',
@@ -238,6 +248,7 @@ let Conversation = React.createClass({
               })}
             </div>
             <Compose
+              style={styles.compose}
               placeholder="Write a message..."
               onSubmit={this.addMessage}
             />

@@ -16,6 +16,9 @@ import ContentLink from 'material-ui/svg-icons/content/link'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:generic-fullscreen')
+
 import {
   AppBar,
   IconButton,
@@ -53,6 +56,25 @@ let GenericFullScreen = React.createClass({
   },
 
   componentDidMount() {
+    
+    // Luminance
+    let backgroundImgMatches
+    if (this.props.backgroundImg &&
+        this.props.backgroundImg !== 'none' &&
+        (backgroundImgMatches = /^url\(['"]?(.+)['"]?\)$/
+                               .exec(this.props.backgroundImg))
+       )
+    {
+      let backgroundImgUrl = backgroundImgMatches[1]
+      let bgLuminanceP = this.getLuminanceForImageUrl(backgroundImgUrl)
+      bgLuminanceP.then((lum) => {
+        debug('Background image has luminance of',lum)
+        this.setState({luminance: lum})
+      }).catch((e) => {
+        console.error('Couldn\'t compute luminance',e)
+      })
+    }
+    
     this.refs.dialog.show()
   },
 
@@ -100,8 +122,8 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleClose() {
-    graphActions.setState('activeNode', null, true)
-    this.context.router.push('/graph')
+    // graphActions.setState('activeNode', null, true)
+    this.context.router.push('/graph/' + encodeURIComponent(this.props.state.center.uri))
   },
 
   _handleDisconnect() {
@@ -248,6 +270,58 @@ let GenericFullScreen = React.createClass({
     router.push(`/chat/new/${encodeURIComponent(node.uri)}`)
     graphActions.setState('activeNode', null, true)
   },
+  
+  getLuminanceForImageUrl(url) {
+    return new Promise((res, rej) => {
+
+      fetch(url, {
+          credentials: 'include',
+        }).then(function (response) {
+          return response.blob();
+        })
+        .then((imageBlob) => {
+          let imgDataUrl = URL.createObjectURL(imageBlob)
+
+          let img = new Image()
+          img.crossOrigin = "Anonymous";
+
+          img.onload = (() => {
+            
+            let canvas = document.createElement('CANVAS')
+            canvas.setAttribute('width',img.width)
+            canvas.setAttribute('height',img.height)
+            canvas.width = canvas.style.width = img.width
+            canvas.height = canvas.style.height = img.height
+            
+            let context = canvas.getContext('2d');
+            
+            context.drawImage(img, 0, 0)
+            
+            // Get top 75 pixels
+            let imgData = context.getImageData(0, 0, img.width, 75);
+
+            // Group by pixels
+            // [a] -> [[a,a,a]]
+            // [r/g/b] -> [[r,g,b]]
+            let rgbs = imgData.data.reduce((acc, val, i) => {
+              if (i % 4 == 3) return acc; // Ignore alpha
+              if (i % 4 == 0) return acc.push([val]), acc;
+              return acc[acc.length - 1].push(val), acc;
+            }, [])
+            
+            
+            let lums = rgbs.map(([r, g, b]) => (r+r+b+g+g+g)/6)
+            let lumsSum = lums.reduce((acc, val) => (acc + val), 0)
+            let lumsMean = lumsSum / lums.length
+            
+            res(lumsMean)
+          })
+          
+          img.src = imgDataUrl
+        });
+
+    })
+  },
 
   render() {
     let styles = this.getStyles()
@@ -264,7 +338,10 @@ let GenericFullScreen = React.createClass({
     // @TODO externalize fab handlers + component etc
 
     // Always add the fullscreen menu item
-
+    
+    if (this.state.luminance && this.state.luminance < 40)
+      styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
+    
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>

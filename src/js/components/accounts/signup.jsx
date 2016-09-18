@@ -13,6 +13,8 @@ import AvailabilityStore from 'stores/availability'
 import Account from 'actions/account'
 import AccountStore from 'stores/account'
 
+import Utils from 'lib/util'
+
 let Signup = React.createClass({
   mixins: [
     Reflux.connect(AvailabilityStore, 'available'),
@@ -130,6 +132,11 @@ let Signup = React.createClass({
         margin: '0 auto 20px auto',
         boxSizing: 'border-box'
       },
+      safariCookieWarning: {
+        fontWeight: 'bold',
+        padding: '0 20px',
+        marginBottom: '1em'
+      },
       button: {
         width: '100%'
       },
@@ -189,7 +196,13 @@ let Signup = React.createClass({
 					<RaisedButton type="submit" secondary={true} disabled={this.state.disabledSubmit} style={styles.button} label="Sign up"/>
 				</Formsy.Form>
 			</div>
-
+			
+			{
+            Utils.isSafari()
+			? <p style={styles.safariCookieWarning}>In order for the application to work with Safari, please go to the privacy settings of your browser and choose "Allow cookies for all websites".</p>
+            : ''
+            }
+            
 			<p style={styles.help}>Already have an account? <Link to="/login" style={styles.link}>login instead</Link>.</p>
 		</div>
 	)

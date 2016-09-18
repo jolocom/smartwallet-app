@@ -53,8 +53,7 @@ let Compose = React.createClass({
         borderTop: '1px solid #eee'
       },
       textareaWrapper: {
-        display: 'flex',
-        position: 'relative'
+        display: 'flex'
       },
       textarea: {
         position: 'absolute',

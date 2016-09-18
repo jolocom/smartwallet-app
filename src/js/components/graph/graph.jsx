@@ -14,6 +14,9 @@ import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 import Radium from 'radium'
 import NodeTypes from 'lib/node-types'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:graph')
+
 let Graph = React.createClass({
 
   mixins: [Reflux.listenTo(GraphStore, 'onStateUpdate')],
@@ -92,9 +95,30 @@ let Graph = React.createClass({
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
 
-    if (account.webId) {
+    
+    if (this.props.params.node) {
+      debug('Navigating to node', this.props.params.node)
+      graphActions.navigateToNode({uri: this.props.params.node},
+                                  {uri: this.context.account.webId})
+    }
+    else if (account.webId) {
+      debug('Navigating to default node', account.webId)
       // Load graph when user is logged in
       graphActions.getInitialGraphState(account.webId)
+    }
+    
+  },
+  
+  componentDidUpdate(prevProps) {
+    // We do not want to center the graph on the person we're viewing the
+    // full-screen profile of. Hence we're checking if the route matches
+    // /graph/[uri]/view (3 route components) and if so, not navigating.
+    if (prevProps.params.node !== this.props.params.node &&
+        this.props.routes.length < 3) {
+      this.props.params.node = this.props.params.node || this.context.account.webId
+      debug('Navigating to node', this.props.params.node)
+      graphActions.navigateToNode({uri: this.props.params.node},
+                                  {uri: this.context.account.webId})
     }
   },
 
@@ -129,7 +153,10 @@ let Graph = React.createClass({
   },
 
   _handleCenterChange(node) {
-    graphActions.navigateToNode(node)
+    if (node.uri == this.context.account.webId)
+      this.context.router.push(`/graph/`)
+    else
+      this.context.router.push(`/graph/${encodeURIComponent(node.uri)}/`)
   },
 
   // max visible nodes reached, show indicator overlay

@@ -30,6 +30,7 @@ export default Reflux.createStore({
       navHistory: [],
       selected: null,
       rotationIndex: 0,
+      previousRenderedNodeUri: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -50,6 +51,7 @@ export default Reflux.createStore({
       newNode: null,
       navHistory: [],
       selected: null,
+      previousRenderedNodeUri: null,
       // UI related
       showPinned: false,
       showSearch: false,
@@ -137,8 +139,8 @@ export default Reflux.createStore({
   },
 
   drawAtUri: function (uri, number) {
-    this.state.neighbours = []
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
+      this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
       this.state.center = triples[0]
       for (let i = 1; i < triples.length; i++) {
@@ -152,16 +154,28 @@ export default Reflux.createStore({
     })
   },
 
-  onNavigateToNode: function (node) {
+  onNavigateToNode: function (node, defaultHistoryNode) {
+    
     this.state.neighbours = []
     this.state.rotationIndex = 0
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
-        // Before updating the this.state.center, we push the old center node
-        // to the node history
+      
+      // Before updating the this.state.center, we push the old center node
+      // to the node history
 
-      this.state.navHistory.push(this.state.center)
+      // We check if we're not navigating to the same node (e.g. went to the
+      // full-screen view and then back), in which case we don't want to add
+      // the node to the history
+      if ((!this.state.previousRenderedNodeUri ||
+          this.state.previousRenderedNodeUri !== node.uri)
+          &&
+          (this.state.center || defaultHistoryNode.uri !== node.uri))
+        this.state.navHistory.push(this.state.center || defaultHistoryNode)
+        
+      this.state.previousRenderedNodeUri = node.uri
+      
       this.state.center = triples[0]
 
       if (this.state.navHistory.length > 1) {
