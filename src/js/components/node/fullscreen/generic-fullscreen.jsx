@@ -131,6 +131,8 @@ let GenericFullScreen = React.createClass({
       nodeActions.disconnectNode(
         this.props.node, this.props.state.center
       )
+    } else {
+      console.warn('Can not dissconnect when node is centered.') 
     }
     this._handleClose()
   },
@@ -142,12 +144,9 @@ let GenericFullScreen = React.createClass({
 
     if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
-      graphActions.drawAtUri(prev.uri, 1).then(() => {
-        nodeActions.remove(node, prev)
-      })
-    }
-    else
-    {
+      graphActions.drawAtUri(prev.uri, 1)
+      nodeActions.remove(node, prev)
+    } else {
       nodeActions.remove(node, center)
     }
     

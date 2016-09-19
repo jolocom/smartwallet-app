@@ -339,9 +339,7 @@ class GraphAgent {
 
     // Check if we received only one object with multiple triples in there.
     if (args.length === 1) {
-      ({
-        uri
-      } = args[0])
+      ({uri} = args[0])
       triples = args[0].triples
     } else {
       ([uri, subject, predicate, object] = args)
