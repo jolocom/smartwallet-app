@@ -128,11 +128,11 @@ let GenericFullScreen = React.createClass({
 
   _handleDisconnect() {
     if (this.props.node.rank !== 'center') {
-      nodeActions.disconnectNode(
-        this.props.node, this.props.state.center
-      )
+      nodeActions.disconnectNode(this.props.node, this.props.state.center)
     } else {
-      console.warn('Can not dissconnect when node is centered.') 
+      let navHis = this.props.state.navHistory
+      graphActions.drawAtUri(navHis[navHis.length-1].uri, 1)
+      nodeActions.disconnectNode(this.props.node, navHis[navHis.length-1])
     }
     this._handleClose()
   },
