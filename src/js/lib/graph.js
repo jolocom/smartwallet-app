@@ -845,7 +845,11 @@ export default class GraphD3 extends EventEmitter {
       })
   }
 
-  resetAll = function () {
+  resetAll = function (speed) {
+    if (!speed) {
+      speed = STYLES.nodeTransitionDuration
+    }
+
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
@@ -857,7 +861,7 @@ export default class GraphD3 extends EventEmitter {
     // Reset size of all circles
     d3.selectAll('svg .node')
       .selectAll('.nodecircle')
-      .transition('grow').duration(STYLES.nodeTransitionDuration)
+      .transition('grow').duration(speed)
       .attr('r', (d) => {
         if (d.elipsisdepth >= 0) {
           if (d.elipsisdepth === 0) {
@@ -879,7 +883,7 @@ export default class GraphD3 extends EventEmitter {
 
     d3.selectAll('svg .node')
       .selectAll('.nodeback')
-      .transition('reset').duration(STYLES.nodeTransitionDuration)
+      .transition('reset').duration(speed)
       .attr('r', (d) => {
         if (d.elipsisdepth >= 0) {
           if (d.elipsisdepth === 0) {
@@ -934,7 +938,7 @@ export default class GraphD3 extends EventEmitter {
     // Reset sizes of all patterns
     d3.selectAll('svg .node')
       .selectAll('pattern')
-      .transition('pattern').duration(STYLES.nodeTransitionDuration)
+      .transition('pattern').duration(speed)
       .attr('x', (d) => {
         return d.rank === 'center' ? -largeSize / 2 : -smallSize / 2
       })
@@ -958,7 +962,7 @@ export default class GraphD3 extends EventEmitter {
     // In case the node has no picture, we display its name.
     d3.selectAll('svg .node')
       .selectAll('.nodetext')
-      .transition('reset').duration(STYLES.nodeTransitionDuration)
+      .transition('reset').duration(speed)
       .attr('dy', '.35em')
       .attr('opacity', (d) => {
         return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
@@ -970,153 +974,13 @@ export default class GraphD3 extends EventEmitter {
     // Hide the descriptions of all nodes
     d3.selectAll('svg .node')
       .selectAll('.nodedescription')
-      .transition('description').duration(STYLES.nodeTransitionDuration)
+      .transition('description').duration(speed)
       .attr('opacity', 0)
 
     // Make the fullscreen button of all nodes smaller
     d3.selectAll('svg .node')
       .selectAll('.nodefullscreen')
-      .transition('reset').duration(STYLES.nodeTransitionDuration)
-      .attr('r', 0)
-
-    // Un-highlight all nodes
-    d3.selectAll('svg .node')
-      .attr('d', function(d) {
-        d.highlighted = false
-      })
-  }
-
-  resetAllFast = function () {
-    let smallSize = STYLES.smallNodeSize
-    let largeSize = STYLES.largeNodeSize
-
-    d3.selectAll('line')
-      .attr('opacity', (d) => {
-        return d.source.elipsisdepth >= 0 ? 0 : 1
-      })
-
-    // Reset size of all circles
-    d3.selectAll('svg .node')
-      .selectAll('.nodecircle')
-      .transition('grow').duration(10)
-      .attr('r', (d) => {
-        if (d.elipsisdepth >= 0) {
-          if (d.elipsisdepth === 0) {
-            return STYLES.smallNodeSize * 0.27
-          } else {
-            return STYLES.smallNodeSize * 0.15
-          }
-        }
-        if (d.rank === 'center') {
-          return STYLES.largeNodeSize / 2
-        } else if (d.rank === 'history') {
-          return STYLES.smallNodeSize / 3
-        } else {
-          return STYLES.smallNodeSize / 2
-        }
-      })
-
-    // reset size of background
-
-    d3.selectAll('svg .node')
-      .selectAll('.nodeback')
-      .transition('reset').duration(10)
-      .attr('r', (d) => {
-        if (d.elipsisdepth >= 0) {
-          if (d.elipsisdepth === 0) {
-            return STYLES.smallNodeSize * 0.27
-          } else {
-            return STYLES.smallNodeSize * 0.15
-          }
-        }
-        if (d.rank === 'center') {
-          return STYLES.largeNodeSize / 2
-        } else if (d.rank === 'history') {
-          return STYLES.smallNodeSize / 3
-        } else {
-          return STYLES.smallNodeSize / 2
-        }
-      })
-    .attr('opacity', (d) => d.elipsisdepth === 0 ||
-                            d.elipsisdepth === 1 ? 0 : 1)
-
-    // Reset colour of all circles
-    d3.selectAll('svg .node')
-      .select('.nodecircle')
-      .style('fill', (d) => {
-        if (d.rank === 'history') {
-          return STYLES.grayColor
-        } else if (d.type === 'passport') {
-          return theme.graph.textNodeColor
-        } else if (d.elipsisdepth === 0 ||
-                   d.elipsisdepth === 1) {
-          return theme.graph.textNodeColor
-        } else if (d.unavailable) {
-          return STYLES.unavailableNodeColor
-        } else if (d.img) {
-          return 'url(#' + d.uri + d.connection + ')'
-        } else if (d.rank === 'center') {
-          return theme.graph.centerNodeColor
-        } else {
-          return theme.graph.textNodeColor
-        }
-      })
-    .attr('opacity', (d) => {
-      if (d.elipsisdepth === 0) {
-        return 0.60
-      } else if (d.elipsisdepth === 1) {
-        return 0.25
-      } else {
-        return 1
-      }
-    })
-
-    // Reset sizes of all patterns
-    d3.selectAll('svg .node')
-      .selectAll('pattern')
-      .transition('pattern').duration(10)
-      .attr('x', (d) => {
-        return d.rank === 'center' ? -largeSize / 2 : -smallSize / 2
-      })
-      .attr('y', (d) => {
-        return d.rank === 'center' ? -largeSize / 2 : -smallSize / 2
-      })
-
-    // Reset sizes of all images
-    d3.selectAll('svg .node')
-      .selectAll('image')
-      .transition('image').duration(10)
-      .attr('width', (d) => {
-        return d.rank === 'center' ? largeSize : smallSize
-      })
-      .attr('height', (d) => {
-        return d.rank === 'center' ? largeSize : smallSize
-      })
-      .style('filter', null)
-
-    // We set the name of the node to invisible in case it has a profile picture
-    // In case the node has no picture, we display its name.
-    d3.selectAll('svg .node')
-      .selectAll('.nodetext')
-      .transition('reset').duration(10)
-      .attr('dy', '.35em')
-      .attr('opacity', (d) => {
-        return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
-                d.rank !== 'history')
-                ? 0
-                : 1
-      })
-
-    // Hide the descriptions of all nodes
-    d3.selectAll('svg .node')
-      .selectAll('.nodedescription')
-      .transition('description').duration(10)
-      .attr('opacity', 0)
-
-    // Make the fullscreen button of all nodes smaller
-    d3.selectAll('svg .node')
-      .selectAll('.nodefullscreen')
-      .transition('reset').duration(10)
+      .transition('reset').duration(speed)
       .attr('r', 0)
 
     // Un-highlight all nodes
@@ -1450,7 +1314,7 @@ export default class GraphD3 extends EventEmitter {
 
       this.setUpVisibleNodes()
       this.d3update()
-      this.resetAllFast()
+      this.resetAll(10)
     }
   }.bind(this)
 
@@ -1480,7 +1344,7 @@ export default class GraphD3 extends EventEmitter {
     if (MAX_VISIBLE >= this.numberOfNeighbours) {
       return
     } else {
-      if (d3.event.deltaY > 30) {
+      if (d3.event.deltaY > 40) {
         if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
           this.rotationIndex++
           this.emit('change-rotation-index',
@@ -1488,7 +1352,7 @@ export default class GraphD3 extends EventEmitter {
           this.updateAfterRotationIndex('up')
         }
       }
-      if (d3.event.deltaY < 30) {
+      if (d3.event.deltaY < 40) {
         if (rotationIndex > 0) {
           this.rotationIndex--
           this.emit('change-rotation-index',
