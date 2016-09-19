@@ -245,8 +245,16 @@ export default class GraphD3 extends EventEmitter {
     this.archAngle = 360 / this.numberOfNeighbours
 
     this.arc = d3.arc()
-      .innerRadius(this.largeNodeSize * 0.5)
-      .outerRadius(this.largeNodeSize * 0.57)
+      // shrunk size
+       .innerRadius(this.largeNodeSize * 0.5)
+       .outerRadius(this.largeNodeSize * 0)
+       .startAngle(0)
+
+
+    this.arcEnlarged = d3.arc()
+      // enlarged size
+      .innerRadius(this.largeNodeSize * 0.57)
+      .outerRadius(this.largeNodeSize * 0)
       .startAngle(0)
 
     let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NODES
@@ -853,6 +861,11 @@ export default class GraphD3 extends EventEmitter {
     let smallSize = STYLES.smallNodeSize
     let largeSize = STYLES.largeNodeSize
 
+    // Reset radius of dial to match shrunken center node size
+    this.svg.select('.dial')
+      .transition('reset').duration(STYLES.nodeTransitionDuration)
+      .attr('d', this.arc)
+
     d3.selectAll('line')
       .attr('opacity', (d) => {
         return d.source.elipsisdepth >= 0 ? 0 : 1
@@ -871,7 +884,8 @@ export default class GraphD3 extends EventEmitter {
           }
         }
         if (d.rank === 'center') {
-          return STYLES.largeNodeSize / 2
+          return ((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2
+          // return STYLES.largeNodeSize / 2
         } else if (d.rank === 'history') {
           return STYLES.smallNodeSize / 3
         } else {
@@ -880,7 +894,6 @@ export default class GraphD3 extends EventEmitter {
       })
 
     // reset size of background
-
     d3.selectAll('svg .node')
       .selectAll('.nodeback')
       .transition('reset').duration(speed)
@@ -893,7 +906,8 @@ export default class GraphD3 extends EventEmitter {
           }
         }
         if (d.rank === 'center') {
-          return STYLES.largeNodeSize / 2
+          return ((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2
+          // return STYLES.largeNodeSize / 2
         } else if (d.rank === 'history') {
           return STYLES.smallNodeSize / 3
         } else {
@@ -1025,8 +1039,14 @@ export default class GraphD3 extends EventEmitter {
       data.highlighted = false
       this.emit('deselect')
     } else {
-      // NODE signifies the node that we clicked on. We enlarge it.
+      if (data.rank === 'center') {
+        // Enlarge the dial to match center node size
+        this.svg.select('.dial')
+          .transition('reset').duration(STYLES.nodeTransitionDuration)
+          .attr('d', this.arcEnlarged)
+      }
 
+      // NODE signifies the node that we clicked on. We enlarge it.
       // Enlarge the node
       d3.select(node).selectAll('circle')
         .transition('grow').duration(STYLES.nodeTransitionDuration)
@@ -1035,7 +1055,7 @@ export default class GraphD3 extends EventEmitter {
           if (!d.img) {
             d3.select(node).select('.nodecircle')
               .transition('highlight').duration(STYLES.nodeTransitionDuration)
-              .style('fill', theme.graph.centerNodeColor)
+              .style('fill', theme.graph.enlargedNodeColor)
           }
         })
 
