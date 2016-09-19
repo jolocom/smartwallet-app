@@ -19,9 +19,15 @@ class WebIDAgent extends LDPAgent {
   }
 
   // Gets the webId of the currently loged in user from local storage,
-  // maybe this will need to change, doesn't need to be a promise anymore.
   getWebID() {
-    return Promise.resolve(localStorage.getItem('jolocom.webId'))
+    return new Promise((resolve, reject) => {
+      const webId = localStorage.getItem('jolocom.webId')
+      if (!webId) {
+        reject(new Error('Not logged in'))
+      } else {
+        resolve(webId)
+      }
+    })
   }
 
   initInbox(webId) {

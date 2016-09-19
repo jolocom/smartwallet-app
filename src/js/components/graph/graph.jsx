@@ -14,6 +14,9 @@ import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 import Radium from 'radium'
 import NodeTypes from 'lib/node-types'
 
+import Debug from 'lib/debug'
+let debug = Debug('components:graph')
+
 let Graph = React.createClass({
 
   mixins: [Reflux.listenTo(GraphStore, 'onStateUpdate')],
@@ -23,8 +26,9 @@ let Graph = React.createClass({
   },
 
   contextTypes: {
-    history: React.PropTypes.object,
-    searchActive: React.PropTypes.bool
+    router: React.PropTypes.object,
+    searchActive: React.PropTypes.bool,
+    account: React.PropTypes.object
   },
 
   childContextTypes: {
@@ -74,11 +78,13 @@ let Graph = React.createClass({
 
   addNode(type) {
     let uri = encodeURIComponent(this.state.center.uri)
-    this.context.history.pushState(null, `/graph/${uri}/add/${type}`)
+    this.context.router.push(`/graph/${uri}/add/${type}`)
   },
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
+    const {account} = this.context
+
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
@@ -88,7 +94,32 @@ let Graph = React.createClass({
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
-    graphActions.getState()
+
+    
+    if (this.props.params.node) {
+      debug('Navigating to node', this.props.params.node)
+      graphActions.navigateToNode({uri: this.props.params.node},
+                                  {uri: this.context.account.webId})
+    }
+    else if (account.webId) {
+      debug('Navigating to default node', account.webId)
+      // Load graph when user is logged in
+      graphActions.getInitialGraphState(account.webId)
+    }
+    
+  },
+  
+  componentDidUpdate(prevProps) {
+    // We do not want to center the graph on the person we're viewing the
+    // full-screen profile of. Hence we're checking if the route matches
+    // /graph/[uri]/view (3 route components) and if so, not navigating.
+    if (prevProps.params.node !== this.props.params.node &&
+        this.props.routes.length < 3) {
+      this.props.params.node = this.props.params.node || this.context.account.webId
+      debug('Navigating to node', this.props.params.node)
+      graphActions.navigateToNode({uri: this.props.params.node},
+                                  {uri: this.context.account.webId})
+    }
   },
 
   componentWillUnmount() {
@@ -98,13 +129,18 @@ let Graph = React.createClass({
     }
   },
 
-  componentWillUpdate(props, state) {
+  componentWillUpdate(props, state, context) {
     const {activeNode} = this.state
     let uri
 
     if (state.activeNode && activeNode !== state.activeNode) {
       uri = encodeURIComponent(state.activeNode.uri)
-      this.context.history.pushState(null, `/graph/${uri}/view`)
+      this.context.router.push(`/graph/${uri}/view`)
+    }
+
+    const {account: {webId}} = this.context
+    if (webId && webId !== context.account.webId) {
+      graphActions.getInitialGraphState(context.account.webId)
     }
   },
 
@@ -117,7 +153,10 @@ let Graph = React.createClass({
   },
 
   _handleCenterChange(node) {
-    graphActions.navigateToNode(node)
+    if (node.uri == this.context.account.webId)
+      this.context.router.push(`/graph/`)
+    else
+      this.context.router.push(`/graph/${encodeURIComponent(node.uri)}/`)
   },
 
   // max visible nodes reached, show indicator overlay

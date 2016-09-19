@@ -10,6 +10,8 @@ let chatAgent = new ChatAgent()
 import ConversationActions from 'actions/conversation'
 import ConversationsStore from 'stores/conversations'
 
+import Utils from 'lib/util'
+
 let {load, addMessage} = ConversationActions
 
 export default Reflux.createStore({
@@ -23,15 +25,14 @@ export default Reflux.createStore({
   getInitialState() {
     return this.state
   },
+  cleanState() {
+    this.state.loading = true
+    this.state.items = []
+    this.state.otherPerson = {}
+  },
 
   onLoad(webId, id) {
-    this.state = {
-      loading: true,
-      items: []
-    }
-
     debug('onLoad with webId', webId, 'and id', id)
-    this.trigger(this.state)
 
     ConversationsStore.getUri(webId, id).then((url) => {
       debug('Got conversation URI', url)
@@ -57,19 +58,34 @@ export default Reflux.createStore({
   },
 
   onSubscribe(webId, id) {
-    ConversationsStore.getUri(webId, id).then((url) => {
-      return chatAgent.getConversation(url).then((conversation) => {
-        this.socket = new WebSocket(conversation.updatesVia)
-        this.socket.onopen = function() {
-          this.send(`sub ${url}`)
-        }
-        this.socket.onmessage = function(msg) {
-          if (msg.data && msg.data.slice(0, 3) === 'pub') {
-            ConversationActions.load(webId, id)
+    ConversationsStore.getUri(webId, id).then((url) =>
+      chatAgent.getConversation(url).then((conversation) => {
+        // Chrome cancels WS connections when the server asks for a client cert
+        // We first query the host so that the user is asked for a client cert
+        // Chrome will then remember the choice during the WS connection and
+        // will thus not cancel it
+        new Promise((res,rej) => {
+          if (Utils.isChrome())
+            fetch(url, {
+              method: 'HEAD',
+              credentials: 'include'
+            }).then(res)
+          else
+            res()
+        })
+        .then(() => {
+          this.socket = new WebSocket(conversation.updatesVia)
+          this.socket.onopen = function () {
+            this.send(`sub ${url}`)
           }
-        }
+          this.socket.onmessage = function (msg) {
+            if (msg.data && msg.data.slice(0, 3) === 'pub') {
+              ConversationActions.load(webId, id)
+            }
+          }
+        })
       })
-    })
+    )
   },
 
   onAddMessage(uri, author, content) {

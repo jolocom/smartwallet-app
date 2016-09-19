@@ -4,6 +4,7 @@ import Reflux from 'reflux'
 
 import {List, ListItem, Avatar} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
+import theme from 'styles/jolocom-theme'
 
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
@@ -33,6 +34,8 @@ let Contacts = React.createClass({
     
     let state = this.state
     
+    console.log(styles,styles.headingInitial)
+    
     if (!state.contacts || !state.contacts.length) {
       emptyView = <div style={styles.empty}>No contacts</div>
       state.contacts = []
@@ -44,6 +47,9 @@ let Contacts = React.createClass({
       })
     }
     
+    let lastNameInitial = ''
+    let i = -1
+    
     return (
       <div>
         {emptyView}
@@ -54,6 +60,7 @@ let Contacts = React.createClass({
             // set it to Unnamed and let its initial be ?
 
             let nameInitial
+            i++
 
             if (name) {
               nameInitial = name[0].toUpperCase()
@@ -63,12 +70,30 @@ let Contacts = React.createClass({
             }
 
             let avatar
-            if (imgUri)
-              avatar = <Avatar src={Utils.uriToProxied(imgUri)}></Avatar>
-                else
+            if (imgUri) {
+              avatar = <Avatar src={Utils.uriToProxied(imgUri)}
+                style={{backgroundSize: 'cover'}} />
+            } else {
               avatar = <Avatar>{nameInitial}</Avatar>
+            }
+            
+            let displayInitial = false
+            if (nameInitial !== lastNameInitial)
+            { 
+              lastNameInitial = nameInitial
+              displayInitial = true
+            }
+              
             return (
-              <ListItem key={username} primaryText={name} secondaryText={email} leftAvatar={avatar} onTouchTap={() => {this.props.onClick(webId)}}/>
+              <div>
+                { displayInitial && i ? <div style={styles.separator}></div> : '' }
+                <div style={styles.listItemContainer}>
+                  { displayInitial ? <div style={styles.headingInitial}>{nameInitial}</div> : '' }
+                  <ListItem key={username} primaryText={name} secondaryText={email}
+                    rightAvatar={avatar} onTouchTap={() => { this.props.onClick(webId) }}
+                    />
+                </div>
+              </div>
             )
           })}
         </List>
@@ -89,6 +114,26 @@ let styles = {
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '18px'
+  },
+  separator: {
+    height: '1px',
+    background: 'gainsboro',
+    margin: '10px 0 10px 75px'
+  },
+  listItemContainer: {
+    position: 'relative',
+    paddingLeft: '60px',
+  },
+  listItemHeading: {
+    borderTop: '1px solid gray'
+  },
+  headingInitial: {
+    color: theme.palette.primary1Color,
+    fontWeight: 'bold',
+    fontSize: '20px',
+    position: 'absolute',
+    top: '15px',
+    left: '20px'
   }
 }
 

@@ -7,6 +7,7 @@ import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 import nodeActions from 'actions/node'
 import nodeStore from 'stores/node'
 import previewStore from 'stores/preview-store'
+import Util from 'lib/util'
 
 import GraphPreview from './graph-preview.jsx'
 
@@ -60,16 +61,27 @@ let NodeAddLink = React.createClass({
   submit() {
     //@TODO show error
     if (!this.validates()) return false
+    
     let {startUri, endUri, type} = this.state
-
-    // We just pass the start node [object], end node [subject], and the type
-    // The user is the WEBID
-
-    let flag = false
-    if(this.state.currentCenter == startUri){
-      flag = true
-    }
-    nodeActions.link(startUri, type, endUri,flag)
+    
+    Promise.all([
+      fetch(Util.uriToProxied(startUri),{method: 'HEAD', credentials: 'include'})
+        .then((res) => {if (!res.ok) throw new Error(res.statusText) }),
+      fetch(Util.uriToProxied(endUri),{method: 'HEAD', credentials: 'include'})
+        .then((res) => {if (!res.ok) throw new Error(res.statusText) })
+    ]).then(() => {
+  
+      // We just pass the start node [object], end node [subject], and the type
+      // The user is the WEBID
+  
+      let flag = false
+      if(this.state.currentCenter == startUri){
+        flag = true
+      }
+      nodeActions.link(startUri, type, endUri,flag)
+    }).catch((e) => {
+      console.error('Link preflight error',e)
+    })
   },
 
   getStyles() {

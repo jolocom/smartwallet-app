@@ -2,19 +2,20 @@
 import rdf from 'rdflib'
 const cert = 'http://www.w3.org/ns/auth/cert#'
 
-let SCHEMA = rdf.Namespace('https://schema.org/')
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
-let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
-let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+let CC = rdf.Namespace('https://cc.rww.io/vocab#')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
+let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
+let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
+let PURL = rdf.Namespace('http://purl.org/iot/vocab/m3-lite#')
+let SCHEMA = rdf.Namespace('https://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
-let CC = rdf.Namespace('https://cc.rww.io/vocab#')
-let PURL = rdf.Namespace('http://purl.org/iot/vocab/m3-lite#')
+let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
 
 
 export const PRED = {
-  givenName: FOAF('givenName'), 
+  givenName: FOAF('givenName'),
   familyName: FOAF('familyName'),
   fullName: FOAF('name'),
   image: FOAF('img'),
@@ -23,11 +24,11 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
-  
+  // --
   title: DC('title'),
   description: DC('description'),
   type: RDF('type'),
-
+  // --
   maker: FOAF('maker'),
   primaryTopic: FOAF('primaryTopic'),
   hasOwner: SIOC('hasOwner'),
@@ -40,16 +41,24 @@ export const PRED = {
   created: DC('created'),
   hasContainer: SIOC('hasContainer'),
   containerOf: SIOC('containerOf'),
-  
-  isRelatedTo: SCHEMA('isRelatedTo'),
+  // --
   Document: FOAF('Document'),
   Image: FOAF('Image'),
   Agent: FOAF('Agent'),
   Person: FOAF('Person'),
   Thread: SIOC('Thread'),
-  
+  // --
   bitcoin: CC('bitcoin'),
-  passport: PURL('Passport')
+  passport: PURL('Passport'),
+  // ACL RELATED
+  auth: ACL('Authorization'),
+  access: ACL('accessTo'),
+  agent: ACL('agent'),
+  agentClass: ACL('agentClass'),
+  mode: ACL('mode'),
+  control: ACL('Control'),
+  read: ACL('Read'),
+  write: ACL('Write')
 }
 
 export const CERT = {
@@ -97,13 +106,7 @@ mix of logic (component names, validation, form) and interface (colors)
 
 
 export const NODE_TYPES = {
-  
-  
-  
-  
 }
-
-
 //
 //
 //
@@ -127,7 +130,7 @@ export const NODE_TYPES = {
 //  icon: 'person',
 //
 //  /**
-//   * Optional, value to render, can be a text value or image 
+//   * Optional, value to render, can be a text value or image
 //   */
 //  titleField: 'name'
 //
@@ -152,11 +155,10 @@ export const NODE_TYPES = {
 //      label: 'Description'
 //    },
 //    image: {
-//      
 //    }
 //  },
 //
 //  access: ['public', 'private'],
 //
 //  defaultAccess: ['public']
-//})
+// })

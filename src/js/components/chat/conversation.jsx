@@ -20,9 +20,9 @@ import ContactStore from 'stores/contact'
 import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
+let debug = Debug('components:conversation')
 
 import Util from 'lib/util'
-let debug = Debug('components:conversation')
 
 let Conversation = React.createClass({
 
@@ -33,7 +33,7 @@ let Conversation = React.createClass({
   ],
 
   contextTypes: {
-    history: React.PropTypes.any,
+    router: React.PropTypes.any,
     account: React.PropTypes.any
   },
 
@@ -51,7 +51,6 @@ let Conversation = React.createClass({
   componentDidMount() {
     const {webId} = this.context.account
     const {id} = this.props.params
-    
     debug('componentDidMount; loading conversation with props', this.props)
 
     ConversationActions.load(webId, id)
@@ -60,35 +59,20 @@ let Conversation = React.createClass({
     this.refs.dialog.show()
 
     this.itemsEl = ReactDOM.findDOMNode(this.refs.items)
-
-    this.itemsEl.addEventListener('scroll', this.onScroll)
-
-    this.interval = setInterval(() => {
-      if (this.state.atBottom) {
-        this.itemsEl.scrollTop = this.itemsEl.scrollHeight
-      }
-    }, 100)
   },
 
   componentWillUnmount() {
     this.refs.dialog.hide()
-
-    this.itemsEl.removeEventListener('scroll', this.onScroll)
   },
 
   componentDidUpdate(prevProps, prevState) {
+
     if (!prevState.conversation && this.state.conversation) {
       debug('componentDidUpdate; loading conversation', this.state.conversation)
       ContactActions.load(this.state.conversation.username)
     }
-  },
-
-  onScroll() {
-    let el = this.itemsEl
-    if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
-      this.setState({atBottom: true})
-    } else {
-      this.setState({atBottom: false})
+    if (this.state.atBottom) {
+      this.itemsEl.scrollTop = this.itemsEl.scrollHeight
     }
   },
 
@@ -103,26 +87,38 @@ let Conversation = React.createClass({
   },
 
   back() {
-    this.context.history.pushState(null, '/conversations')
+    this.context.router.push('/conversations')
+    ConversationStore.cleanState()
   },
 
   getStyles() {
     let styles = {
       content: {
-        display: 'flex',
-        flexDirection: 'column',
         overflowY: 'visible',
+        position: 'relative'
       },
       conversation: {
         flex: 1,
         overflowY: 'auto',
         paddingTop: '25px',
-        backgroundColor: '#f1f1f1'
+        backgroundColor: '#f1f1f1',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: '75px'
+      },
+      compose: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: '75px'
       },
       message: {
         padding: '0 20px',
         marginBottom: '10px',
-        overflow: 'hidden',
+        overflow: 'hidden'
       },
       body: {
         borderTopLeftRadius: '10px',
@@ -131,7 +127,7 @@ let Conversation = React.createClass({
         borderBottomRightRadius: '10px',
         padding: '6px 12px',
         position: 'relative',
-        whiteSpace: 'normal',
+        whiteSpace: 'pre'
       },
       meta: {
         clear: 'both',
@@ -181,7 +177,7 @@ let Conversation = React.createClass({
           background: '#F1F1F1',
           padding: 0,
           borderTopRightRadius: 0,
-          marginLeft: '6px',
+          marginLeft: '6px'
         },
         meta: {
           textAlign: 'right'
@@ -202,14 +198,14 @@ let Conversation = React.createClass({
     let items = conversation.items || []
 
     var userAvatar = (
-      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}>
-      </Avatar>
+      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}
+        style={{backgroundSize: 'cover'}} />
     )
 
-    if(otherPerson) {
+    if (otherPerson) {
       var otherPersonAvatar = (
-        <Avatar src={Util.uriToProxied(otherPerson.img)}>
-        </Avatar>
+        <Avatar src={Util.uriToProxied(otherPerson.img)}
+          style={{backgroundSize: 'cover'}} />
       )
     }
     return (
@@ -229,13 +225,15 @@ let Conversation = React.createClass({
           <Content style={styles.content}>
             <div ref="items" style={styles.conversation}>
               {items.map(function({author, content, created}, i) {
-                let avatar = (author !== account.webId) ? 'otherPersonAvatar' : 'userAvatar'
-                let from = (author !== account.webId) ? 'contact' : 'me'
+                let avatar = (author !== account.webId)
+                  ? 'otherPersonAvatar' : 'userAvatar'
+                let from = (author !== account.webId)
+                  ? 'contact' : 'me'
                 return (
                   <div style={[styles.message]} key={i}>
                     <div style={[styles.body, styles[avatar].body]}>
-                      {avatar=='otherPersonAvatar'&&otherPersonAvatar}
-                      {avatar=='userAvatar'&&userAvatar}
+                      {avatar === 'otherPersonAvatar' && otherPersonAvatar}
+                      {avatar === 'userAvatar' && userAvatar}
                     </div>
                     <div style={[styles.body, styles[from].body]}>
                       {content}
@@ -250,6 +248,7 @@ let Conversation = React.createClass({
               })}
             </div>
             <Compose
+              style={styles.compose}
               placeholder="Write a message..."
               onSubmit={this.addMessage}
             />
