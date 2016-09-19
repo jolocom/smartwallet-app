@@ -201,16 +201,14 @@ export default Reflux.createStore({
 
   onViewNode(node) {
 
-    if (!node)
-    {
+    if (!node) {
       console.log('Ignoring onViewNode because node is null.')
       return
     }
 
     this.state.activeNode = node
     
-    if (typeof node == 'string')
-    {
+    if (typeof node == 'string') {
       debug('Fetching information and user permisions about the node...')
       var activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node).then((result) => {
         result.triples.uri = node
@@ -218,43 +216,34 @@ export default Reflux.createStore({
       })
       this.state.activeNode = {uri: node}
     }
-    else
-    {
+    else {
       debug('Fetching user permissions about the node...')
       var activeNodeInfoP = Promise.resolve()
     }
 
     // Check if the cookie is still valid
     let activeNodePermissionsP = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
-      method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
-      credentials: 'include',
-      headers: {
-        'Content-Type':'application/sparql-update'
-      }
+      method: 'HEAD',
+      credentials: 'include'
     }).then((res)=>{
-      if (!res.ok)
+      if (!res.ok) {
         throw new Error(res.statusText)
+      }
       this.state.activeNode.isOwnedByUser = true
     }).catch(() => {
       this.state.activeNode.isOwnedByUser = false
     })
 
-    if (!this.state.center)
-    {
-      if (!this.state.center)
-        this.state.center = {}
+    if (!this.state.center) {
+      this.state.center = {}
       this.state.center.isOwnedByUser = false
       var updateCenterNode = Promise.resolve()
     }
-    else
-    {
+    else {
       var centerNodePermissionsP =fetch(
         `${Utils.uriToProxied(this.state.center.uri)}`,
-        { method: 'PATCH',
-          credentials: 'include',
-          headers: {
-            'Content-Type':'application/sparql-update'
-          }
+        { method: 'HEAD',
+          credentials: 'include'
         }
       )
       .then((res)=>{
