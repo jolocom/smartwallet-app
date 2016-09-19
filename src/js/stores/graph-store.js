@@ -156,10 +156,10 @@ export default Reflux.createStore({
 
   onNavigateToNode: function (node, defaultHistoryNode) {
     
-    this.state.neighbours = []
     this.state.rotationIndex = 0
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
+      this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
       
       // Before updating the this.state.center, we push the old center node
