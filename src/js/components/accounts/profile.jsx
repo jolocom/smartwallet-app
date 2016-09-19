@@ -374,7 +374,7 @@ let Profile = React.createClass({
   // User can only enter non-space, numerical values and splits card number
   // into 4's for better readability
   _handleCreditCardValidation({target}) {
-    let val = target.value.replace(/[^0-9]/gi, '').replace(/\s+/g, '')
+    let val = target.value.replace(/[^0-9]|\s/g, '')
     let digitGroups = val.match(/\d{4,16}/g)
     let dGroup = digitGroups && digitGroups[0] || ''
     let parts = []
@@ -384,7 +384,7 @@ let Profile = React.createClass({
     if (parts.length) {
       target.value = parts.join(' ')
     } else {
-      target.value = target.value.replace(/[^0-9]/gi, '').replace(/\s+/g, '')
+      target.value = target.value.replace(/[^0-9]|\s/g, '')
     }
   },
 
