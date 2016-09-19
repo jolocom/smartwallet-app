@@ -211,8 +211,8 @@ export default Reflux.createStore({
     
     if (typeof node == 'string')
     {
-      debug('Fetching information about the node...')
-      var preRequest = this.gAgent.fetchTriplesAtUri(node).then((result) => {
+      debug('Fetching information and user permisions about the node...')
+      var activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node).then((result) => {
         result.triples.uri = node
         this.state.activeNode = node = this.convertor.convertToD3('a', result.triples)
       })
@@ -220,14 +220,12 @@ export default Reflux.createStore({
     }
     else
     {
-      debug('Fetching additional information about the node...')
-      var preRequest = Promise.resolve()
+      debug('Fetching user permissions about the node...')
+      var activeNodeInfoP = Promise.resolve()
     }
 
-    // @TODO do empty PATCH request and see if we have rights for center node and other node
-
     // Check if the cookie is still valid
-    let updateNode = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
+    let activeNodePermissionsP = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
       method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
       credentials: 'include',
       headers: {
@@ -250,13 +248,16 @@ export default Reflux.createStore({
     }
     else
     {
-      var updateCenterNode = fetch(`${Utils.uriToProxied(this.state.center.uri)}`, {
-        method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
-        credentials: 'include',
-        headers: {
-          'Content-Type':'application/sparql-update'
+      var centerNodePermissinsP =fetch(
+        `${Utils.uriToProxied(this.state.center.uri)}`,
+        { method: 'PATCH',
+          credentials: 'include',
+          headers: {
+            'Content-Type':'application/sparql-update'
+          }
         }
-      }).then((res)=>{
+      )
+      .then((res)=>{
         if (!res.ok)
           throw new Error(res.statusText)
         this.state.center.isOwnedByUser = true
@@ -265,8 +266,10 @@ export default Reflux.createStore({
       })
     }
     
-    preRequest.then(Promise.all([updateNode,updateCenterNode])).then(() => {
-      this.trigger(this.state)
-    })
+    activeNodeInfoP
+      .then(() => Promise.all([activeNodePermissionsP,centerNodePermissinsP]))
+      .then(() => {
+        this.trigger(this.state)
+      })
   }
 })
