@@ -248,7 +248,7 @@ export default Reflux.createStore({
     }
     else
     {
-      var centerNodePermissinsP =fetch(
+      var centerNodePermissionsP =fetch(
         `${Utils.uriToProxied(this.state.center.uri)}`,
         { method: 'PATCH',
           credentials: 'include',
@@ -267,7 +267,7 @@ export default Reflux.createStore({
     }
     
     activeNodeInfoP
-      .then(() => Promise.all([activeNodePermissionsP,centerNodePermissinsP]))
+      .then(() => Promise.all([activeNodePermissionsP,centerNodePermissionsP]))
       .then(() => {
         this.trigger(this.state)
       })
