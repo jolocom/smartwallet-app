@@ -1,8 +1,6 @@
 import WebIDAgent from './webid.js'
-import {Parser}
-from '../rdf.js'
-import {Writer}
-from '../rdf.js'
+import {Parser} from '../rdf.js'
+import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
@@ -158,19 +156,9 @@ class GraphAgent {
       })
     })
   }
-
-
-    /* PROXY currently doesn't return the link header TODO
-    return solid.web.options(`${proxy}/proxy?url=${uri}`).then((res) => {
-    let acl_uri = res.linkHeaders.acl[0] ? res.linkHeaders.acl[0]
-      : acl_uri = uri+'.acl'
-
-    if (acl_uri.indexOf('http://') < 0 || acl_uri.indexOf('https://') < 0)
-      acl_uri = uri.substring(0, uri.lastIndexOf('/') + 1) + acl_uri
-    */
-
-    // We create only one type of ACL file. Owner has full controll,
-    // everyone else has read access. This will change in the future.
+  
+  // We create only one type of ACL file. Owner has full controll,
+  // everyone else has read access. This will change in the future.
   // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
   // PUT ACL and WRITE TRIPLE should be called after making sure that the user
   // has write access
@@ -219,7 +207,7 @@ class GraphAgent {
    * @param {object} subject - triple subject, undefined for wildcard.
    * @param {object} predicate - triple predicate, undefined for wildcard.
    * @param {object} object - triple object, undefined for wildcard.
-   * @returns {array | objects} - All triples matching the description.
+   * @return {array | objects} - All triples matching the description.
    */
 
   findTriples(uri, subject, predicate, object) {

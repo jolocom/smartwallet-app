@@ -22,8 +22,13 @@ export class Parser {
 }
 
 export class Writer {
+
   constructor(){
     this.g = rdf.graph()
+  }
+
+  find(sub, pred, obj){
+    return this.g.statementsMatching(sub, pred, obj)
   }
 
   addTriple(...args) {
