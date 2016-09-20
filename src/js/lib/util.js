@@ -53,15 +53,15 @@ let Util = {
       })
     }
   },
-  
+
   isChrome() {
     return /Chrome/.test(navigator.userAgent) &&
            /Google Inc/.test(navigator.vendor)
   },
-  
+
   isSafari() {
     return /Safari/.test(navigator.userAgent) &&
-           /Apple Computer/.test(navigator.vendor);
+      /Apple Computer/.test(navigator.vendor)
   },
 
   /*
@@ -71,26 +71,26 @@ let Util = {
    *                           it defaults to uri + .acl
    */
 
-  getAclUri(uri){
+  getAclUri(uri) {
     return fetch(Util.uriToProxied(uri), {
       method: 'HEAD',
       credentials: 'include'
     }).then((ans) => {
       if (!ans.ok) {
-        throw new Error('Error while accessing the file.') 
+        throw new Error('Error while accessing the file.')
       }
       let linkHeader = ans.headers.get('Link')
       if (linkHeader) {
-        let aclHeader = linkHeader.split(',').find((part)=>{
+        let aclHeader = linkHeader.split(',').find((part) => {
           return part.indexOf('rel="acl"') > 0
         })
         if (aclHeader) {
           aclHeader = aclHeader.split(';')[0].replace(/<|>/g, '')
           // The Uri of the acl deduced succesfully
-          return uri.substring(0, uri.lastIndexOf('/')+1) + aclHeader
-        } 
+          return uri.substring(0, uri.lastIndexOf('/') + 1) + aclHeader
+        }
       } else {
-        return uri+'.acl'
+        return uri + '.acl'
       }
     })
   },
@@ -108,7 +108,7 @@ let Util = {
     let mode = localStorage.getItem('jolocom.auth-mode')
     if (mode === 'cert') {
       return uri
-    } 
+    }
     return `${proxy}/proxy?url=${uri}`
   }
 }
