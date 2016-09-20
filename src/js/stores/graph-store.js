@@ -223,8 +223,11 @@ export default Reflux.createStore({
 
     // Check if the cookie is still valid
     let activeNodePermissionsP = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
-      method: 'HEAD',
-      credentials: 'include'
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {		
+         'Content-Type':'application/sparql-update'		
+      }
     }).then((res)=>{
       if (!res.ok) {
         throw new Error(res.statusText)
@@ -242,8 +245,11 @@ export default Reflux.createStore({
     else {
       var centerNodePermissionsP =fetch(
         `${Utils.uriToProxied(this.state.center.uri)}`,
-        { method: 'HEAD',
-          credentials: 'include'
+        { method: 'PATCH',
+          credentials: 'include',
+          headers: {		
+            'Content-Type':'application/sparql-update'		
+          }
         }
       )
       .then((res)=>{
