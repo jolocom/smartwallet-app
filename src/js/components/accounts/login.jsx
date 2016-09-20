@@ -92,6 +92,12 @@ let Login = React.createClass({
       link: {
         color: muiTheme.palette.accent1Color,
         fontWeight: 'bold'
+      },
+      forgotPassword: {
+        float: 'right',
+        padding: '10px',
+        color: '#7B8288',
+        fontSize: '0.75em'
       }
     }
 
@@ -113,6 +119,9 @@ let Login = React.createClass({
                 floatingLabelText="Password"
                 type="password"
                 onChange={this._handlePasswordChange} />
+              <Link
+                to="/forgot-password"
+                style={styles.forgotPassword}>Forgot password?</Link>
             </div>
           </div>
           <RaisedButton
