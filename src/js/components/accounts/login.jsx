@@ -12,7 +12,7 @@ let Login = React.createClass({
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
-    username: React.PropTypes.string,
+    account: React.PropTypes.object,
     router: React.PropTypes.object
   },
 
@@ -22,14 +22,11 @@ let Login = React.createClass({
       password: ''
     }
   },
+
   componentWillMount() {
-    if (this.context.username) {
-      // this.history.router.push('/')
-    }
-  },
-  componentDidUpdate() {
-    if (this.context.username) {
-      // this.history.router.push('/')
+    const {account} = this.context
+    if (account && account.webId) {
+      this.context.router.push('/graph')
     }
   },
 
