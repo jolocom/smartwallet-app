@@ -13,6 +13,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import ContentLink from 'material-ui/svg-icons/content/link'
+import ContentUnlink from 'material-ui/svg-icons/communication/call-split'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
 
@@ -134,6 +135,21 @@ let GenericFullScreen = React.createClass({
     }
     this._handleClose()
   },
+  
+  
+  _handleConnect() {
+    if (this.props.node.rank !== 'center') {
+      nodeActions.link(
+        this.context.account.webId,
+        'generic',
+        this.props.node.uri
+      )
+    }
+    else
+      console.error('Trying to connect to center node; does not make sense.')
+      
+    this._handleClose()
+  },
 
   _handleDelete() {
     let node = this.props.state.activeNode
@@ -162,10 +178,6 @@ let GenericFullScreen = React.createClass({
     alert('woohoo bookmark!')
   },
 
-  connectFn() {
-    alert('woohoo connect!')
-  },
-
   _handleFull() {
     this.setState({fullscreen: !this.state.fullscreen})
   },
@@ -183,18 +195,20 @@ let GenericFullScreen = React.createClass({
           title: 'Bookmark',
           icon: <ActionBookmark />,
           handler: this.bookmarkFn}
-      case 'connect':
-        return {
-          title: 'Connect',
-          icon: <ContentLink />,
-          handler: this.connectFn}
       case 'delete':
         return {title: 'Delete', handler: this._handleDelete}
+      case 'connect':
+        return {
+          title:
+          'Connect',
+          icon: <ContentLink />,
+          handler: this._handleConnect
+        }
       case 'disconnect':
         return {
           title:
           'Disconnect',
-          icon: <ContentLink />,
+          icon: <ContentUnlink/>,
           handler: this._handleDisconnect
         }
       case 'edit':
