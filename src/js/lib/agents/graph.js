@@ -50,11 +50,11 @@ class GraphAgent {
    */
 
   addImage(uri, dstContainer, writer, image, confidential) {
-    let uriFriendly = image.name.replace(/[^a-zA-Z0-9-_]/g, '')
     if (image instanceof File) {
+      let uriFriendly = image.name.replace(/[^a-zA-Z0-9-_]/g, '')
       let imgUri = `${dstContainer}files/${Util.randomString(5)}-${uriFriendly}`
       writer.addTriple(uri, PRED.image, imgUri)
-	    return this.storeFile(imgUri, null, image, confidential)
+      return this.storeFile(imgUri, null, image, confidential)
     }
     writer.addTriple(uri, PRED.image, image)
     return
@@ -73,9 +73,6 @@ class GraphAgent {
    */
 
   createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
-
-    console.log(image, 'UUURAAAA')
-
     let writer = new Writer()
     let newNodeUri = rdf.sym(currentUser.storage + Util.randomString(5))
     let aclUri
