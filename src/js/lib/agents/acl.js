@@ -32,8 +32,6 @@ class AclAgent {
   fetchInfo() {
     return Util.getAclUri(this.uri).then((aclUri)=>{
       this.aclUri = aclUri
-    }).catch((e) => {
-      throw new Error(e)
     }).then(() => {
       return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result)=>{
         let {triples} = result
