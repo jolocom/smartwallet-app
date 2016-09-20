@@ -31,10 +31,10 @@ done
 printf "\nJavascript validation completed!\n"
 
 if ! $PASS; then
-  printf "\033[41mCOMMIT FAILED:\033[0m Your commit contains files that should pass ESLint but do not. Please fix the ESLint errors and try again.\n"
+  printf "\033[41mLINTING FAILED:\033[0m Your PR contains files that should pass ESLint but do not. Please fix the ESLint errors and try again.\n"
   exit 1
 else
-  printf "\033[42mCOMMIT SUCCEEDED\033[0m\n"
+  printf "\033[42mLINTING SUCCEEDED\033[0m\n"
 fi
 
 exit $?
