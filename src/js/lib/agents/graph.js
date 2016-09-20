@@ -25,10 +25,9 @@ class GraphAgent {
    * @return {object} node - The inicial writer with added triples
    */
 
-  baseNode(uri, writer, title, description, nodeType){
-
+  baseNode(uri, writer, title, description, nodeType) {
     if (title) {
-    writer.addTriple(uri, PRED.title, title)
+      writer.addTriple(uri, PRED.title, title)
     }
     if (description) {
       writer.addTriple(uri, PRED.description, description)
@@ -50,19 +49,20 @@ class GraphAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
-  addImage(uri,dstContainer, writer, image, confidential) {
-    if (image instanceof File){
-      let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+  addImage(uri, dstContainer, writer, image, confidential) {
+    let uriFriendly = image.name.replace(/[^a-zA-Z0-9-_]/g, '')
+    if (image instanceof File) {
+      let imgUri = `${dstContainer}files/${Util.randomString(5)}-${uriFriendly}`
       writer.addTriple(uri, PRED.image, imgUri)
-	    return this.storeFile(imgUri, null, image, confidential)
-    } 
+      return this.storeFile(imgUri, null, image, confidential)
+    }
     writer.addTriple(uri, PRED.image, image)
-    return 
+    return
   }
 
   /**
    * @summary Curates the creation of a new node, delegates to other functions.
-   * @param {string} currentUser - Current webID, used for creating acl 
+   * @param {string} currentUser - Current webID, used for creating acl
    *                 and connecting to the onwer.
    * @param {object} centerNode - The uri of the folder where the image goes
    * @param {string} title - The title of the node
@@ -71,8 +71,10 @@ class GraphAgent {
    * @param {string} nodeType - The type [image / text] of the node
    * @param {bool} confidential - If the img is to be confidential
    */
-  
+
   createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
+
+    console.log(image, 'UUURAAAA')
 
     let writer = new Writer()
     let newNodeUri = rdf.sym(currentUser.storage + Util.randomString(5))
@@ -85,7 +87,7 @@ class GraphAgent {
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (image) {
-        return this.addImage(newNodeUri,currentUser.storage,writer,image,confidential)
+        return this.addImage(newNodeUri, currentUser.storage, writer, image, confidential)
       }
     }).then(() => {
       // Putting the RDF file for the node.
@@ -100,28 +102,27 @@ class GraphAgent {
         }
       }).then((response) => {
         if (response.ok) {
-          return 
+          return
         }
         console.warn('An error occured when putting the rdf file.')
       }).catch((error) => {
         console.warn('Error,', error, 'occured when putting the rdf file.')
       })
       // Connecting the node to the one that created it
-    }).then(()=> {
+    }).then(() => {
       let payload = {
         subject: rdf.sym(centerNode.uri),
         predicate: PRED.isRelatedTo,
         object: newNodeUri
       }
       return this.writeTriples(centerNode.uri, [payload], false)
-		}).then(()=>{
-		  return newNodeUri.uri
-		})
-  } 
+    }).then(() => {
+      return newNodeUri.uri
+    })
+  }
 
-
-  // Should we remove the ACL file associated with it as well? 
-  // PRO : we won't need the ACL file anymore 
+  // Should we remove the ACL file associated with it as well?
+  // PRO : we won't need the ACL file anymore
   // CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
   deleteFile(uri) {
@@ -132,14 +133,15 @@ class GraphAgent {
   }
 
   storeFile(finUri, dstContainer, file, confidential = false) {
-		let uri
+    let uri
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
-			if (!finUri) {
-        uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-			} else {
-				uri = finUri
-			}
+      if (!finUri) {
+        let uriFriendly = file.name.replace(/[^a-zA-Z0-9-_]/g, '')
+        uri = `${dstContainer}files/${Util.randomString(5)}-${uriFriendly}`
+      } else {
+        uri = finUri
+      }
       return this.createACL(uri, webID, confidential).then(() => {
         return fetch(Util.uriToProxied(uri), {
           method: 'PUT',
@@ -149,14 +151,14 @@ class GraphAgent {
           },
           body: file
         }).then(() => {
-					return uri
-        }).catch(() => {
-      		console.log('error', e, 'occured while putting the image file')
+          return uri
+        }).catch((e) => {
+          console.log('error', e, 'occured while putting the image file')
         })
       })
     })
   }
-  
+
   // We create only one type of ACL file. Owner has full controll,
   // everyone else has read access. This will change in the future.
   // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
