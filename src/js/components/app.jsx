@@ -6,6 +6,8 @@ import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
 import {Paper, AppBar, IconButton} from 'material-ui'
+import Badge from 'material-ui/Badge'
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
@@ -169,6 +171,17 @@ let App = React.createClass({
       filters: {
         width: '100%',
         height: '48px'
+      },
+      menuIcon: {
+        marginTop: '-20px',
+        cursor: 'pointer'
+      },
+      hamburgerBadge: {
+        top: 10,
+        right: 20,
+        width: 15,
+        height: 15,
+        display: 'none'
       }
     }
     return styles
@@ -214,6 +227,16 @@ let App = React.createClass({
                 title="Graph"
                 iconElementRight={nav}
                 style={styles.bar}
+                iconElementLeft={
+                  <Badge
+                    badgeContent={''}
+                    secondary
+                    badgeStyle={styles.hamburgerBadge}>
+                    <NavigationMenu
+                      onTouchTap={this.showDrawer}
+                      style={styles.menuIcon} />
+                  </Badge>
+                }
                 onLeftIconButtonTouchTap={this.showDrawer} />
               {filters}
               {search}
