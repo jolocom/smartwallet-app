@@ -265,8 +265,7 @@ export default Reflux.createStore({
               }
             })
           }))
-      }
-      else {
+      } else {
         // UPDATE
         let btcDeleteStatement = 'DELETE DATA { ' +
           rdf.st(rdf.sym(params.bitcoinAddressNodeUri),
@@ -405,6 +404,7 @@ export default Reflux.createStore({
             }))
       }
     }
+
     return new Promise((resolve, reject) => {
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
