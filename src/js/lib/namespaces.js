@@ -13,7 +13,6 @@ let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
 
-
 export const PRED = {
   givenName: FOAF('givenName'),
   familyName: FOAF('familyName'),
@@ -24,6 +23,7 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
+
   // --
   title: DC('title'),
   description: DC('description'),
@@ -102,10 +102,11 @@ mix of logic (component names, validation, form) and interface (colors)
 
 
 
-*/ 
+*/
 
 
 export const NODE_TYPES = {
+
 }
 //
 //
@@ -125,7 +126,7 @@ export const NODE_TYPES = {
 //  textColor: '#ffffff',
 //
 //  /**
-//   * Optional, icon used in the graph 
+//   * Optional, icon used in the graph
 //   */
 //  icon: 'person',
 //
@@ -155,6 +156,7 @@ export const NODE_TYPES = {
 //      label: 'Description'
 //    },
 //    image: {
+//
 //    }
 //  },
 //

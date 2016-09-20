@@ -32,6 +32,12 @@ let Profile = React.createClass({
     Reflux.listenTo(ProfileStore, 'onProfileChange')
   ],
 
+  getInitialState() {
+    return {
+      bitcoinErrorText: ''
+    }
+  },
+
   onProfileChange: function(state) {
     this.setState(state)
   },
@@ -39,6 +45,7 @@ let Profile = React.createClass({
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
+    this.bitcoinErrorText = '9'
   },
 
   componentDidUpdate(props, state) {
@@ -277,8 +284,13 @@ let Profile = React.createClass({
                         placeholder="Bitcoin Address"
                         name="bitcoinAddress"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
+                        errorText={this.state.bitcoinErrorText}
+                        onBlur={this._handleBitcoinValidation}
+                        onKeyDown={this._handleBitcoinKeyDown}
                         value={this.state.bitcoinAddress}
-                        style={styles.input} />
+                        style={styles.input}
+                        multiLine
+                        rowsMax={2} />
                     </div>
                   </div>
                   <div style={styles.formRow}>
@@ -311,6 +323,26 @@ let Profile = React.createClass({
     }
   },
 
+  // Front-end validation for bitcoin address - used as reference:
+  // https://en.bitcoin.it/wiki/Address
+  _handleBitcoinValidation({target}) {
+    if ((target.value.length < 26 || target.value.length > 35) ||
+      (!(target.value[0] === '1' || target.value[0] === '3')) ||
+      (!target.value.match(/^[0-9A-Z]+$/i))) {
+      this.setState({
+        bitcoinErrorText: 'Please enter a valid bitcoin address'
+      })
+    } else {
+      this.setState({
+        bitcoinErrorText: ''
+      })
+    }
+  },
+
+  _handleBitcoinKeyDown(e) {
+    if (e.keyCode == 13) e.preventDefault();
+  },
+  
   _handleSelect() {
     this.fileInputEl.value = null
     this.fileInputEl.click()
