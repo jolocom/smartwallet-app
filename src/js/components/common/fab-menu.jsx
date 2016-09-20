@@ -57,7 +57,8 @@ let FabMenu = React.createClass({
       container: {
         position: 'fixed',
         right: 0,
-        bottom: 0
+        bottom: 0,
+        pointerEvents: 'none'
       },
       nav: {
         display: 'flex',
@@ -68,7 +69,8 @@ let FabMenu = React.createClass({
         zIndex: 4
       },
       item: {
-        marginTop: '5px'
+        marginTop: '5px',
+        pointerEvents: 'all'
       }
     }
     return styles
