@@ -19,6 +19,8 @@ fi
 
 for FILE in $CHANGED_FILES
 do
+  printf "Running $ESLINT $FILE in ($PWD)\n"
+  
   "$ESLINT" "$FILE"
 
   if [[ "$?" == 0 ]]; then
