@@ -5,6 +5,7 @@ import graphActions from 'actions/graph-actions'
 import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
+import {Writer} from '../lib/rdf.js'
 
 export default Reflux.createStore({
   listenables: nodeActions,
@@ -74,9 +75,38 @@ export default Reflux.createStore({
     let subject = rdf.sym(centerNode.uri)
     let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
-    this.gAgent.deleteTriple(subject.uri, subject, predicate, object).then(function(){
-      graphActions.drawAtUri(centerNode.uri, 0)
-    })
+    
+    // All of this is logic for the case when the node we're dissconnecting
+    // was the centered.
+    if (!node.connection) {
+      let writer = new Writer()
+      this.gAgent.fetchTriplesAtUri(centerNode.uri).then((res) => {
+        res.triples.forEach((trip) => {
+          writer.addTriple(trip)
+        })
+        
+        //TODO Replace with find after the pull request goes throughs.
+        let fin = writer.g.statementsMatching(subject, undefined, object)
+        let payload = {
+          uri: centerNode.uri,
+          triples: [] 
+        } 
+        fin.forEach((trip) => {
+          payload.triples.push({
+              subject: trip.subject,
+              predicate: trip.predicate,
+              object:trip.object
+          }) 
+        })
+        this.gAgent.deleteTriple(payload).then(()=>{
+          graphActions.drawAtUri(centerNode.uri, 0)
+        })
+      }) 
+    } else {
+      this.gAgent.deleteTriple(subject.uri, subject, predicate, object).then(function(){
+        graphActions.drawAtUri(centerNode.uri, 0)
+      })
+    }
   },
 
   /**
