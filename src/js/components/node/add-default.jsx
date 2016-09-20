@@ -59,8 +59,8 @@ let NodeAddDefault = React.createClass({
       let centerNode = this.state.graphState.center
       let isConfidential = (this.state.type === 'confidential')
       if (isConfidential) this.state.type = 'default'
-      // @TODO Previously called nodeActions.create
-      // except it cannot have a return value
+
+      // @TODO Previously called nodeActions.create; except it cannot have a return value
       this.gAgent.createNode(currentUser, centerNode, title, description, image, this.state.type, isConfidential).then((uri) => {
         graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
       })

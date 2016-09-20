@@ -53,7 +53,7 @@ class GraphAgent {
       let uriFriendly = image.name.replace(/[^a-zA-Z0-9-_]/g, '')
       let imgUri = `${dstContainer}files/${Util.randomString(5)}-${uriFriendly}`
       writer.addTriple(uri, PRED.image, imgUri)
-      return this.storeFile(imgUri, null, image, confidential)
+	    return this.storeFile(imgUri, null, image, confidential)
     }
     writer.addTriple(uri, PRED.image, image)
     return
