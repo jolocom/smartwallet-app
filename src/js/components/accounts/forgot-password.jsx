@@ -4,7 +4,8 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
-import {RaisedButton} from 'material-ui'
+import {RaisedButton, IconButton} from 'material-ui'
+
 import {Link} from 'react-router'
 
 import Account from 'actions/account'
@@ -31,6 +32,10 @@ let ForgotPassword = React.createClass({
 
   disableSubmit() {
     this.setState({disabledSubmit: true})
+  },
+
+  goBack() {
+    this.context.router.push('/')
   },
 
 
@@ -67,16 +72,19 @@ let ForgotPassword = React.createClass({
         maxWidth: '90%',
         padding: '20px',
         margin: '0 auto 20px auto',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        float: 'left'
       },
       backButton: {
-        textAlign: 'left'
+        float: 'left',
+        width: '50px',
+        paddingTop: '8px'
       },
       content: {
         width: '300px',
         maxWidth: '90%',
         padding: '20px',
-        margin: '0 auto 20px auto',
+        margin: '0 auto 0px auto',
         boxSizing: 'border-box'
       },
       button: {
@@ -100,7 +108,6 @@ let ForgotPassword = React.createClass({
 
     return (
     <div style={styles.container}>
-      <div style={styles.title}>Forgot password</div>
       <div style={styles.content}>
         <Formsy.Form
           onValid={this.enableSubmit}
@@ -108,6 +115,15 @@ let ForgotPassword = React.createClass({
           onValidSubmit={this.forgotPassword}
         >
           <div style={{marginBottom: '20px'}}>
+            <div>
+              <div style={styles.backButton}>
+                <IconButton
+                  onClick={this.goBack}
+                  iconClassName="material-icons">
+                  arrow_back</IconButton>
+              </div>
+              <div style={styles.title}>Forgot password</div>
+            </div>
             <FormsyText name="email"
                         floatingLabelText="Email"
                         validations="isEmail"

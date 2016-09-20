@@ -4,7 +4,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
-import {RaisedButton} from 'material-ui'
+import {RaisedButton, IconButton} from 'material-ui'
 import {Link} from 'react-router'
 
 import Account from 'actions/account'
@@ -66,11 +66,15 @@ let ChangePassword = React.createClass({
         width: '300px',
         maxWidth: '90%',
         padding: '20px',
-        margin: '0 auto 20px auto',
-        boxSizing: 'border-box'
+        paddingLeft: '0px',
+        margin: '0 auto 0px auto',
+        boxSizing: 'border-box',
+        float: 'left'
       },
       backButton: {
-        textAlign: 'left'
+        float: 'left',
+        width: '50px',
+        paddingTop: '8px'
       },
       content: {
         width: '300px',
@@ -100,9 +104,6 @@ let ChangePassword = React.createClass({
 
     return (
       <div style={styles.container}>
-        <div>
-          <div style={styles.title}>Set new password</div>
-         </div>
         <div style={styles.content}>
           <Formsy.Form
             onValid={this.enableSubmit}
@@ -110,6 +111,9 @@ let ChangePassword = React.createClass({
             onValidSubmit={this.forgotPassword}
           >
             <div style={{marginBottom: '20px'}}>
+              <div style={{width: '400px'}}>
+                <div style={styles.title}>Change password</div>
+              </div>
               <FormsyText name="password"
                           type="password"
                           floatingLabelText="New password"
