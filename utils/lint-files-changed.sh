@@ -1,9 +1,10 @@
 #!/bin/bash
 
 CHANGED_FILES=$(git diff develop --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
-ESLINT="$(git rev-parse --show-toplevel)/node_modules/eslint/bin/eslint.js"
+ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint"
 
 if [[ "$CHANGED_FILES" = "" ]]; then
+  printf "\033[42mNO JS FILES CHANGED\033[0m\n"
   exit 0
 fi
 
