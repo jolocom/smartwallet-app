@@ -1,9 +1,7 @@
 #!/bin/sh
 
 CHANGED_FILES=$(git diff develop --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
-ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint"
-
-printf "$ESLINT"
+ESLINT="$(git rev-parse --show-toplevel)/node_modules/eslint/bin/eslint.js"
 
 if [[ "$CHANGED_FILES" = "" ]]; then
   exit 0
