@@ -24,8 +24,7 @@ class GraphAgent {
    * @param {string} nodeType - The type of the node
    * @return {object} node - The inicial writer with added triples
    */
-
-  baseNode(uri, writer, title, description, nodeType) {
+  baseNode(uri, writer, title, description, nodeType){
     if (title) {
       writer.addTriple(uri, PRED.title, title)
     }
