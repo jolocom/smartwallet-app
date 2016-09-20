@@ -510,6 +510,7 @@ export default class GraphD3 extends EventEmitter {
         .attr('xlink:href', 'img/lock-01.png')
         .style('display', (d) => {
           if (d.confidential) {
+            // Don't display on elipsis nodes @TODO
             return 'inline'
           } else {
             return 'none'
