@@ -101,17 +101,28 @@ let Login = React.createClass({
     let styles = this.getStyles()
     return (
       <div style={styles.container}>
-        <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
+        <div style={styles.logo}>
+          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom</div>
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
             <div>
-              <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
-              <TextField floatingLabelText="Password" type="password" onChange={this._handlePasswordChange} />
+              <TextField
+                floatingLabelText="Username"
+                onChange={this._handleUsernameChange} />
+              <TextField
+                floatingLabelText="Password"
+                type="password"
+                onChange={this._handlePasswordChange} />
             </div>
           </div>
-          <RaisedButton type="submit" secondary={true} style={styles.button} label="Login"/>
+          <RaisedButton
+            type="submit"
+            secondary={true}
+            style={styles.button}
+            label="Login" />
         </form>
-        <p style={styles.help}>Don't have an account yet? <Link to="/signup" style={styles.link}>Sign up</Link>.</p>
+        <p style={styles.help}>Don't have an account yet?
+          <Link to="/signup" style={styles.link}>Sign up</Link>.</p>
       </div>
     )
   }
