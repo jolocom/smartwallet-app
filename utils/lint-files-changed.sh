@@ -21,7 +21,7 @@ for FILE in $CHANGED_FILES
 do
   "$ESLINT" "$FILE"
 
-  if [ "$?" == 0 ]; then
+  if [ "$?" = 0 ]; then
     printf "\t\033[32mESLint Passed: $FILE\033[0m"
   else
     printf "\t\033[41mESLint Failed: $FILE\033[0m"
