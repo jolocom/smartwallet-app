@@ -1,9 +1,9 @@
 #!/bin/sh
 
 CHANGED_FILES=$(git diff develop --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
-ESLINT="$(git rev-parse --show-toplevel)/node_modules/eslint/bin/eslint.js"
+ESLINT="$(git rev-parse --show-toplevel)/node_modules/.bin/eslint"
 
-if [[ "$CHANGED_FILES" = "" ]]; then
+if [ "$CHANGED_FILES" = "" ]; then
   exit 0
 fi
 
@@ -11,7 +11,7 @@ PASS=true
 
 printf "\nValidating Javascript:\n"
 
-if [[ ! -x "$ESLINT" ]]; then
+if [ ! -x "$ESLINT" ]; then
   printf "\t\033[41mPlease install ESlint\033[0m (npm i --save --save-exact --dev eslint)"
   exit 1
 fi
@@ -19,11 +19,9 @@ fi
 
 for FILE in $CHANGED_FILES
 do
-  printf "Running $ESLINT $FILE in ($PWD)\n"
-  
   "$ESLINT" "$FILE"
 
-  if [[ "$?" == 0 ]]; then
+  if [ "$?" == 0 ]; then
     printf "\t\033[32mESLint Passed: $FILE\033[0m"
   else
     printf "\t\033[41mESLint Failed: $FILE\033[0m"
