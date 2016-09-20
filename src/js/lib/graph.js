@@ -505,6 +505,11 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
 
+    nodeEnter.append('image')
+        .attr('xlink:href', 'img/lock-01.png')
+        .attr('x', -60)
+        .attr('y', -60)
+
     // The text description of a person
     nodeEnter.append('svg:text')
       .attr('class', 'nodedescription')
