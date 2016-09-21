@@ -505,8 +505,11 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
 
+    // Add class hasNodeIcon
     // Adds a Confidential Icon for confidential nodes
-    nodeEnter.append('image')
+    nodeEnter.filter((d) => d.confidential)
+      .classed('hasNodeIcon',true)
+      .append('image')
         .attr('class', 'nodeIcon')
         .attr('xlink:href', (d) => {
           if (d.confidential) {
@@ -514,14 +517,6 @@ export default class GraphD3 extends EventEmitter {
             return 'img/lock-01.png'
           } else {
             return ''
-          }
-        })
-        .style('visibility', (d) => {
-          if (d.confidential) {
-            // Don't display on elipsis nodes @TODO
-            return 'visible'
-          } else {
-            return 'hidden'
           }
         })
         // Not completely aligned for center nodes
@@ -533,10 +528,10 @@ export default class GraphD3 extends EventEmitter {
           }
         })
         .attr('y', (d) => {
-          if (d.rank === 'center') {
-            return -75
+          if (false && d.rank === 'center') {
+            return -55
           } else {
-            return -60
+            return -50 // not taken into account?
           }
         })
 
@@ -546,7 +541,11 @@ export default class GraphD3 extends EventEmitter {
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
       .attr('opacity', 0)
-      .attr('dy', '0.5em')
+      .attr('dy', function (d) {
+        return d3.select(this.parentNode).classed('hasNodeIcon')
+          ? '1.95em'
+          : '0.95em'
+      })
       .style('font-size', '80%')
       .text(function (d) {
         if (d.type === 'bitcoin') {
@@ -1015,7 +1014,13 @@ export default class GraphD3 extends EventEmitter {
         return d.rank === 'center' ? largeSize : smallSize
       })
       .transition('reset').duration(STYLES.nodeTransitionDuration)
-      .attr('y', (d) => -60)
+      .attr('y', (d) => {
+          if (d.rank === 'center') {
+            return -55
+          } else {
+            return -50
+          }
+      })
       .style('filter', null)
 
     // Hide confidential icon on elipsis nodes
@@ -1032,14 +1037,17 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('svg .node')
       .selectAll('.nodetext')
       .transition('reset').duration(speed)
-      .attr('dy', '.35em')
+      .attr('dy', function (d) {
+        return d3.select(this.parentNode).classed('hasNodeIcon')
+          ? (d.rank == 'center' ? '0.95em' : '.75em')
+          : '.35em' })
       .attr('opacity', (d) => {
         return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
                 d.rank !== 'history')
                 ? 0
                 : 1
       })
-
+    
     // Hide the descriptions of all nodes
     d3.selectAll('svg .node')
       .selectAll('.nodedescription')
@@ -1146,9 +1154,17 @@ export default class GraphD3 extends EventEmitter {
       // Fade in the node name and make the text opaque
       d3.select(node).select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
-        .attr('dy', (d) => d.description && d.type !== 'bitcoin'
-                            ? '-.5em'
-                            : '.35em')
+        .attr('dy', function (d) {
+          if (d.description && d.type !== 'bitcoin') {
+            if (d3.select(this.parentNode).classed('hasNodeIcon'))
+              return '.4em'
+            return '-.15em'
+          }
+          else {
+            if (d3.select(this.parentNode).classed('hasNodeIcon'))
+              return (d.rank == 'center' ? '0.95em' : '.75em')
+            return '.35em'
+          }})
         .attr('opacity', 1)
       
       // Move the icon up if description
@@ -1156,7 +1172,7 @@ export default class GraphD3 extends EventEmitter {
         .filter((d) => d.description)
         .select('.nodeIcon')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
-        .attr('y', (d) => -80)
+        .attr('y', (d) => d.rank == 'center' ? -70 : -60)
       data.highlighted = true
     }
   }.bind(this)
