@@ -1001,7 +1001,7 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('svg .node')
       .selectAll('image')
       .attr('opacity', (d) => {
-        if (d.confidential) {
+        if (d.confidential && d.rank !== 'center') {
           return d.elipsisdepth === -1 ? 1 : 0
         }
       })
