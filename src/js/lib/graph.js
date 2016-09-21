@@ -505,13 +505,47 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
 
+    // Add class hasNodeIcon
+    // Adds a Confidential Icon for confidential nodes
+    nodeEnter.filter((d) => d.confidential)
+      .classed('hasNodeIcon',true)
+      .append('image')
+        .attr('class', 'nodeIcon')
+        .attr('xlink:href', (d) => {
+          if (d.confidential) {
+            // Don't display on elipsis nodes @TODO
+            return 'img/lock-01.png'
+          } else {
+            return ''
+          }
+        })
+        // Not completely aligned for center nodes
+        .attr('x', (d) => {
+          if (d.rank === 'center') {
+            return -75
+          } else {
+            return -60
+          }
+        })
+        .attr('y', (d) => {
+          if (false && d.rank === 'center') {
+            return -55
+          } else {
+            return -50 // not taken into account?
+          }
+        })
+
     // The text description of a person
     nodeEnter.append('svg:text')
       .attr('class', 'nodedescription')
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
       .attr('opacity', 0)
-      .attr('dy', '0.5em')
+      .attr('dy', function (d) {
+        return d3.select(this.parentNode).classed('hasNodeIcon')
+          ? '1.95em'
+          : '0.95em'
+      })
       .style('font-size', '80%')
       .text(function (d) {
         if (d.type === 'bitcoin') {
@@ -970,19 +1004,50 @@ export default class GraphD3 extends EventEmitter {
       })
       .style('filter', null)
 
+    // Reset sizes of all confidential icons without unnecessary animation
+    d3.selectAll('svg .node')
+      .selectAll('.nodeIcon')
+      .attr('width', (d) => {
+        return d.rank === 'center' ? largeSize : smallSize
+      })
+      .attr('height', (d) => {
+        return d.rank === 'center' ? largeSize : smallSize
+      })
+      .transition('reset').duration(STYLES.nodeTransitionDuration)
+      .attr('y', (d) => {
+          if (d.rank === 'center') {
+            return -55
+          } else {
+            return -50
+          }
+      })
+      .style('filter', null)
+
+    // Hide confidential icon on elipsis nodes
+    d3.selectAll('svg .node')
+      .selectAll('image')
+      .attr('opacity', (d) => {
+        if (d.confidential && d.rank !== 'center') {
+          return d.elipsisdepth === -1 ? 1 : 0
+        }
+      })
+
     // We set the name of the node to invisible in case it has a profile picture
     // In case the node has no picture, we display its name.
     d3.selectAll('svg .node')
       .selectAll('.nodetext')
       .transition('reset').duration(speed)
-      .attr('dy', '.35em')
+      .attr('dy', function (d) {
+        return d3.select(this.parentNode).classed('hasNodeIcon')
+          ? (d.rank == 'center' ? '0.95em' : '.75em')
+          : '.35em' })
       .attr('opacity', (d) => {
         return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
                 d.rank !== 'history')
                 ? 0
                 : 1
       })
-
+    
     // Hide the descriptions of all nodes
     d3.selectAll('svg .node')
       .selectAll('.nodedescription')
@@ -1089,10 +1154,25 @@ export default class GraphD3 extends EventEmitter {
       // Fade in the node name and make the text opaque
       d3.select(node).select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
-        .attr('dy', (d) => d.description && d.type !== 'bitcoin'
-                            ? '-.5em'
-                            : '.35em')
+        .attr('dy', function (d) {
+          if (d.description && d.type !== 'bitcoin') {
+            if (d3.select(this.parentNode).classed('hasNodeIcon'))
+              return '.4em'
+            return '-.15em'
+          }
+          else {
+            if (d3.select(this.parentNode).classed('hasNodeIcon'))
+              return (d.rank == 'center' ? '0.95em' : '.75em')
+            return '.35em'
+          }})
         .attr('opacity', 1)
+      
+      // Move the icon up if description
+      d3.select(node)
+        .filter((d) => d.description)
+        .select('.nodeIcon')
+        .transition('highlight').duration(STYLES.nodeTransitionDuration)
+        .attr('y', (d) => d.rank == 'center' ? -70 : -60)
       data.highlighted = true
     }
   }.bind(this)
