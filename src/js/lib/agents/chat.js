@@ -161,8 +161,8 @@ class ChatAgent extends LDPAgent {
       })
       .then((result) => {
         let posts = result.triples.filter((t) => {
-          return t.predicate.uri === PRED.type.uri &&
-            t.object.uri === PRED.post.uri
+          return t.predicate.uri == PRED.type.uri &&
+            t.object.uri == PRED.post.uri
         }).map((t) => t.subject)
         let groups = posts.reduce((acc, curr) => {
           if (!(curr in acc)) {
@@ -172,15 +172,15 @@ class ChatAgent extends LDPAgent {
             if (t.subject !== curr) {
               continue
             }
-            if (t.predicate.uri === PRED.content.uri) {
+            if (t.predicate.uri == PRED.content.uri) {
               acc[curr].content = N3Util.getLiteralValue(t.object)
             }
-            if (t.predicate.uri === PRED.created.uri) {
+            if (t.predicate.uri == PRED.created.uri) {
               acc[curr].created = new Date(
                 parseInt(N3Util.getLiteralValue(t.object))
               )
             }
-            if (t.predicate.uri === PRED.hasCreator.uri) {
+            if (t.predicate.uri == PRED.hasCreator.uri) {
               acc[curr].author = t.object.value
             }
           }
@@ -234,7 +234,7 @@ class ChatAgent extends LDPAgent {
   _lastMessage(conversationUrl) {
     return this.getConversationMessages(conversationUrl)
       .then((messages) => {
-        if (messages.length === 0) {
+        if (messages.length == 0) {
           return null
         } else {
           return messages[messages.length - 1]
@@ -245,7 +245,9 @@ class ChatAgent extends LDPAgent {
   _otherPerson(triples, conversationUrl, myUri) {
     // TODO
     let aboutThread = _.filter(triples, (t) => {
-      return t.subject === '#thread' || t.subject ===
+      // Using == because t.subject is an object
+      // that has a .toString method
+      return t.subject == '#thread' || t.subject ==
         `${conversationUrl}#thread`
     })
 
