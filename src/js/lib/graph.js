@@ -997,6 +997,15 @@ export default class GraphD3 extends EventEmitter {
       })
       .style('filter', null)
 
+    // Hide confidential icon on elipsis nodes
+    d3.selectAll('svg .node')
+      .selectAll('image')
+      .attr('opacity', (d) => {
+        if (d.confidential) {
+          return d.elipsisdepth === -1 ? 1 : 0
+        }
+      })
+
     // We set the name of the node to invisible in case it has a profile picture
     // In case the node has no picture, we display its name.
     d3.selectAll('svg .node')
