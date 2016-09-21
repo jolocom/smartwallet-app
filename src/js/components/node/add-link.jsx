@@ -11,6 +11,8 @@ import Util from 'lib/util'
 
 import GraphPreview from './graph-preview.jsx'
 
+import SnackbarActions from 'actions/snackbar'
+
 let NodeAddLink = React.createClass({
   mixins: [
     Reflux.connect(nodeStore, 'node'),
@@ -80,6 +82,8 @@ let NodeAddLink = React.createClass({
       }
       nodeActions.link(startUri, type, endUri,flag)
     }).catch((e) => {
+      SnackbarActions.showMessage('The nodes you are trying to link together ' +
+                                  'aren\'t accessible.')
       console.error('Link preflight error',e)
     })
   },

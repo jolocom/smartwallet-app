@@ -17,6 +17,8 @@ import ContentUnlink from 'material-ui/svg-icons/communication/call-split'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
 
+import SnackbarActions from 'actions/snackbar'
+
 import Debug from 'lib/debug'
 let debug = Debug('components:generic-fullscreen')
 
@@ -132,22 +134,20 @@ let GenericFullScreen = React.createClass({
       nodeActions.disconnectNode(
         this.props.node, this.props.state.center
       )
+      // @TODO Wait until it's actually disconnected
+      SnackbarActions.showMessage('The node has been successfully disconnected.')
     }
     this._handleClose()
   },
   
   
   _handleConnect() {
-    if (this.props.node.rank !== 'center') {
-      nodeActions.link(
-        this.context.account.webId,
-        'generic',
-        this.props.node.uri
-      )
-    }
-    else
-      console.error('Trying to connect to center node; does not make sense.')
-      
+    nodeActions.link(
+      this.context.account.webId,
+      'generic',
+      this.props.node.uri
+    )
+    SnackbarActions.showMessage('You are now connected to the node.')
     this._handleClose()
   },
 
@@ -270,8 +270,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handlePostCopyURL() {
-    alert('The URL of the node has been copied to your clipboard.')
-    // @todo snackbar/toast
+    SnackbarActions.showMessage('The URL of the node has been copied to your clipboard.')
   },
 
   _handleEdit() {
