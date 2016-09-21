@@ -507,6 +507,7 @@ export default class GraphD3 extends EventEmitter {
 
     // Adds a Confidential Icon for confidential nodes
     nodeEnter.append('image')
+        .attr('class', 'confidNode')
         .attr('xlink:href', 'img/lock-01.png')
         .style('display', (d) => {
           if (d.confidential) {
@@ -989,6 +990,17 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('svg .node')
       .selectAll('image')
       .transition('image').duration(STYLES.nodeTransitionDuration)
+      .attr('width', (d) => {
+        return d.rank === 'center' ? largeSize : smallSize
+      })
+      .attr('height', (d) => {
+        return d.rank === 'center' ? largeSize : smallSize
+      })
+      .style('filter', null)
+
+    // Reset sizes of all confidential icons without unnecessary animation
+    d3.selectAll('svg .node')
+      .selectAll('.confidNode')
       .attr('width', (d) => {
         return d.rank === 'center' ? largeSize : smallSize
       })
