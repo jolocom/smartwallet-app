@@ -429,7 +429,6 @@ class GraphAgent {
 
   getGraphMapAtUri(uri) {
     debug('getGraphMapAtUri',uri)
-    let parser = new Parser()
 
     // centerNode is {prefixes: [...], triples: [...]}
     let getPartialGraphMap = ((centerNode) =>
@@ -441,43 +440,49 @@ class GraphAgent {
           })
     )
 
-    let hydrateNodesConfidentiality = ((nodes) =>
-      Promise.all(
-        nodes
-        .map((node) => {
-          if (node.unav || /\/card(?:#me)?$/.test(node.uri))
-            return Promise.resolve(node)
-
-          // @TODO Get ACL URL by parsing LINK header of RDF file HTTP Response
-          let aclUri = node.uri + '.acl'
-
-          return fetch(Util.uriToProxied(aclUri), {
-            credentials: 'include'
-          }).then((ans) => {
-            if (!ans.ok)
-              throw new Error(ans.status) // Call the catch if response error
-
-            return ans.text().then((res) => {
-              let para = parser.parse(res, node.uri + '.acl')
-
-              node.confidential = para.triples.every(
-                (triple) => triple.subject.uri == aclUri + '#owner')
-
-              return node
-            })
-
-          }).catch((e) => {
-            console.error('Couldn\'t fetch ACL ' + node.uri + '.acl', e)
-            return node
-          })
-        })
-    ))
-
     return this.fetchTriplesAtUri(uri)
       .then(getPartialGraphMap)
-      .then(hydrateNodesConfidentiality)
+      .then(this.hydrateNodesConfidentiality)
   }
+  
+  hydrateNodesConfidentiality(nodes) {
+    let parser = new Parser()
+    
+    return Promise.all(
+      nodes
+      .map((node) => {
+        if (node.unav || /\/card(?:#me)?$/.test(node.uri))
+          return Promise.resolve(node)
 
+        // @TODO Get ACL URL by parsing LINK header of RDF file HTTP Response
+        let aclUri = node.uri + '.acl'
+
+        return fetch(Util.uriToProxied(aclUri), {
+          credentials: 'include'
+        }).then((ans) => {
+          if (!ans.ok)
+            throw new Error(ans.status) // Call the catch if response error
+
+          return ans.text().then((res) => {
+            let para = parser.parse(res, node.uri + '.acl')
+
+            node.confidential = para.triples.every(
+              (triple) => triple.subject.uri == aclUri + '#owner')
+
+            return node
+          })
+
+        }).catch((e) => {
+          console.error('Couldn\'t fetch ACL ' + node.uri + '.acl', e)
+          return node
+        })
+      }))
+  }
+    
+  hydrateNodeConfidentiality = function(node) {
+    return this.hydrateNodesConfidentiality([node]).then(([newNode,...rest]) => newNode)
+  }.bind(this)
+  
   //Calls the above function, but passes the current webId as the URI.
   getGraphMapAtWebID(webId) {
     return this.getGraphMapAtUri(webId)
