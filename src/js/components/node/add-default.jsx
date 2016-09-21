@@ -4,7 +4,6 @@ import Reflux from 'reflux'
 
 import {TextField, Paper, SelectField, MenuItem} from 'material-ui'
 
-import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
 import nodeStore from 'stores/node'
 import previewStore from 'stores/preview-store'
@@ -12,7 +11,7 @@ import previewStore from 'stores/preview-store'
 import {PRED} from 'lib/namespaces'
 import GraphPreview from './graph-preview.jsx'
 import ImageSelect from 'components/common/image-select.jsx'
-import graphAgent from 'lib/agents/graph.js'
+import GraphAgent from 'lib/agents/graph.js'
 
 let NodeAddDefault = React.createClass({
   mixins: [
@@ -30,17 +29,17 @@ let NodeAddDefault = React.createClass({
     }
   },
   componentDidMount() {
-    this.gAgent = new graphAgent()
+    this.gAgent = new GraphAgent()
     this.listenTo(previewStore, this.getUser)
   },
 
-  onTrigger(state){
+  onTrigger(state) {
   },
 
-  getUser(state){
+  getUser(state) {
     // We need to know the uri of the currently centered node, this way we
     // deduce the Access Controll. Taking it from the graph preview.
-    if(state.center) this.user = state.center.uri
+    if (state.center) this.user = state.center.uri
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -55,10 +54,10 @@ let NodeAddDefault = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, image} = this.state
-    if(this.state.graphState.user && this.state.graphState.center){
+    if (this.state.graphState.user && this.state.graphState.center) {
       let currentUser = this.state.graphState.user
       let centerNode = this.state.graphState.center
-      let isConfidential = (this.state.type == 'confidential')
+      let isConfidential = (this.state.type === 'confidential')
       if (isConfidential) this.state.type = 'default'
 
       // @TODO Previously called nodeActions.create; except it cannot have a return value
