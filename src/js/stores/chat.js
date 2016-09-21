@@ -18,12 +18,15 @@ export default Reflux.createStore({
     chatAgent.createConversation(initiator, participants)
       .then(({conversation, isNew}) => {
         if (isNew) {
-          ConversationsActions.new(conversation);
+          ConversationsActions.new(conversation)
         }
-        return conversation;
+        return conversation
       })
-      .then((conversation) => { setTimeout(() => create.completed(conversation), 1000) })
-    // setTimeout because we need to wait for the trigger update of the items by .new
+      .then((conversation) => {
+        setTimeout(() => create.completed(conversation), 1000)
+      })
+    // setTimeout because we need to wait for
+    // the trigger update of the items by .new
   },
 
   onCreateCompleted(conversation) {
