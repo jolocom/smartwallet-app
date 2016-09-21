@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDom from 'react-dom'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
@@ -7,7 +6,7 @@ import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
 import {Link} from 'react-router'
 
-import Availability from 'actions/availability'
+// import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
 
 import Account from 'actions/account'
@@ -20,8 +19,10 @@ let Signup = React.createClass({
     Reflux.connect(AvailabilityStore, 'available'),
     Reflux.connect(AccountStore, 'account')
   ],
+
   contextTypes: {
     muiTheme: React.PropTypes.object,
+    account: React.PropTypes.object,
     router: React.PropTypes.object
   },
 
@@ -37,23 +38,21 @@ let Signup = React.createClass({
       disabledSubmit: true
     }
   },
-  
-  componentDidMount() {
-    ReactDom.findDOMNode(this.refs.username).querySelector('input').style.textTransform = 'lowercase';
-  },
 
   componentWillMount() {
-    if (this.state.account && this.state.account.username)
+    const {account} = this.context
+    if (account && account.webId) {
       this.context.router.push('/graph')
+    }
   },
 
   signup() {
     let signupData = {
       username: this.state.username,
       name: this.state.name,
-      email: this.state.email ,
-			password: this.state.password
-    } 
+      email: this.state.email,
+      password: this.state.password
+    }
 
     Account.signup(signupData)
   },
@@ -69,14 +68,14 @@ let Signup = React.createClass({
   },
 
   disableSubmit() {
-      this.setState({disabledSubmit: true})
+    this.setState({disabledSubmit: true})
   },
 
   _onUsernameChange(e) {
     this.setState({
       username: e.target.value.toLowerCase()
     })
-    //Availability.check(e.target.value.toLowerCase())
+    // Availability.check(e.target.value.toLowerCase())
   },
 
   _onNameChange(e) {
@@ -156,57 +155,82 @@ let Signup = React.createClass({
     Account.signup()
   },
 
-	render() {
-	let styles = this.getStyles()
-	return (
-		<div style={styles.container}>
-			<div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
-			<div style={styles.content}>
-				<Formsy.Form
-					onValid={this.enableSubmit}
-					onInvalid={this.disableSubmit}
-					onValidSubmit={this.signup}
-					>
-					<div style={{marginBottom: '20px'}}>
-						<FormsyText name="username" ref="username"
-							floatingLabelText="Username"
-							validations="isAlphanumeric"
-							validationError={this.errorMessages.alphaNumeric}
-							onChange={this._onUsernameChange}
-							/>
-						<FormsyText name="password"
-              type="password"
-							floatingLabelText="Password"
-							onChange={this._onPasswordChange}
-							/>
-						<FormsyText name="name"
-							floatingLabelText="Name"
-							validations="isWords"
-							validationError={this.errorMessages.name}
-							onChange={this._onNameChange}
-							/>
-						<FormsyText name="email"
-							floatingLabelText="Email"
-							validations="isEmail"
-							validationError={this.errorMessages.email}
-							onChange={this._onEmailChange}
-							/>
-					</div>
+  render() {
+    let styles = this.getStyles()
 
-					<RaisedButton type="submit" secondary={true} disabled={this.state.disabledSubmit} style={styles.button} label="Sign up"/>
-				</Formsy.Form>
-			</div>
-			
-			{
-            Utils.isSafari()
-			? <p style={styles.safariCookieWarning}>In order for the application to work with Safari, please go to the privacy settings of your browser and choose "Allow cookies for all websites".</p>
-            : ''
-            }
-            
-			<p style={styles.help}>Already have an account? <Link to="/login" style={styles.link}>login instead</Link>.</p>
-		</div>
-	)
-}
+    let cookieWarning
+
+    if (Utils.isSafari()) {
+      cookieWarning = (
+        <p style={styles.safariCookieWarning}>
+          {`In order for the application to work with Safari,
+            please go to the privacy settings of your browser
+            and choose "Allow cookies for all websites".
+          `}
+        </p>
+      )
+    }
+
+    return (
+      <div style={styles.container}>
+        <div style={styles.logo}>
+          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
+        </div>
+        <div style={styles.content}>
+          <Formsy.Form
+            onValid={this.enableSubmit}
+            onInvalid={this.disableSubmit}
+            onValidSubmit={this.signup}
+            >
+            <div style={{marginBottom: '20px'}}>
+              <FormsyText
+                name="username"
+                floatingLabelText="Username"
+                validations="isAlphanumeric"
+                validationError={this.errorMessages.alphaNumeric}
+                inputStyle={{textTransform: 'lowercase'}}
+                onChange={this._onUsernameChange}
+                />
+              <FormsyText
+                name="password"
+                type="password"
+                floatingLabelText="Password"
+                onChange={this._onPasswordChange}
+                />
+              <FormsyText
+                name="name"
+                floatingLabelText="Name"
+                validations="isWords"
+                validationError={this.errorMessages.name}
+                onChange={this._onNameChange}
+                />
+              <FormsyText
+                name="email"
+                floatingLabelText="Email"
+                validations="isEmail"
+                validationError={this.errorMessages.email}
+                onChange={this._onEmailChange}
+                />
+            </div>
+
+            <RaisedButton
+              type="submit"
+              secondary
+              disabled={this.state.disabledSubmit}
+              style={styles.button} label="Sign up"
+            />
+          </Formsy.Form>
+        </div>
+
+        {cookieWarning}
+
+        <p style={styles.help}>
+          Already have an account?
+          <Link to="/login" style={styles.link}>login instead</Link>.
+        </p>
+      </div>
+    )
+  }
 })
 
 export default Radium(Signup)
