@@ -507,14 +507,21 @@ export default class GraphD3 extends EventEmitter {
 
     // Adds a Confidential Icon for confidential nodes
     nodeEnter.append('image')
-        .attr('class', 'confidNode')
-        .attr('xlink:href', 'img/lock-01.png')
-        .style('display', (d) => {
+        .attr('class', 'nodeIcon')
+        .attr('xlink:href', (d) => {
           if (d.confidential) {
             // Don't display on elipsis nodes @TODO
-            return 'inline'
+            return 'img/lock-01.png'
           } else {
-            return 'none'
+            return ''
+          }
+        })
+        .style('visibility', (d) => {
+          if (d.confidential) {
+            // Don't display on elipsis nodes @TODO
+            return 'visible'
+          } else {
+            return 'hidden'
           }
         })
         // Not completely aligned for center nodes
@@ -1000,7 +1007,7 @@ export default class GraphD3 extends EventEmitter {
 
     // Reset sizes of all confidential icons without unnecessary animation
     d3.selectAll('svg .node')
-      .selectAll('.confidNode')
+      .selectAll('.nodeIcon')
       .attr('width', (d) => {
         return d.rank === 'center' ? largeSize : smallSize
       })
