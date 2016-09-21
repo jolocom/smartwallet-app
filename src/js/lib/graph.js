@@ -1014,6 +1014,8 @@ export default class GraphD3 extends EventEmitter {
       .attr('height', (d) => {
         return d.rank === 'center' ? largeSize : smallSize
       })
+      .transition('reset').duration(STYLES.nodeTransitionDuration)
+      .attr('y', (d) => -60)
       .style('filter', null)
 
     // Hide confidential icon on elipsis nodes
@@ -1148,6 +1150,13 @@ export default class GraphD3 extends EventEmitter {
                             ? '-.5em'
                             : '.35em')
         .attr('opacity', 1)
+      
+      // Move the icon up if description
+      d3.select(node)
+        .filter((d) => d.description)
+        .select('.nodeIcon')
+        .transition('highlight').duration(STYLES.nodeTransitionDuration)
+        .attr('y', (d) => -80)
       data.highlighted = true
     }
   }.bind(this)
