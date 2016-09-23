@@ -39,6 +39,15 @@
   <body>
     <div id="app"></div>
     <script src="https://solid.github.io/releases/rdflib.js/rdflib-0.7.0.min.js"></script>
+    <script>
+    var realFetch = fetch;
+    var fetch = function () {
+      [url,argz] = arguments
+      var caller_line = (new Error).stack.split("\n")[4]
+      console.log(url, argz, caller_line)
+      return realFetch.call(this,arguments)
+    };
+    </script>
     <script src="js/bundle.js"></script>
   </body>
 </html>
