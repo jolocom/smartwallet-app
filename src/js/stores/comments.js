@@ -28,7 +28,7 @@ export default Reflux.createStore({
 
   _commentContainerForIdentity: function(identity) {
     let identityRoot = identity.match(/^(.*)\/profile\/card#me$/)[1]
-    let cont =  `${identityRoot}/little-sister/graph-comments/`
+    let cont = `${identityRoot}/little-sister/graph-comments/`
     return cont
   },
 
@@ -82,9 +82,12 @@ export default Reflux.createStore({
       .then((tmp) => {
         res = tmp
         // see what it contains
-        let containerOf = res.triples.filter((t) => t.predicate == SIOC.containerOf).map((t) => t.object)
+        let containerOf = res.triples.filter((t) =>
+          t.predicate == SIOC.containerOf).map((t) =>
+          t.object)
         // .. and fetch the contained object docs
-        return Promise.all(containerOf.map((c) => http.get(Util.urlWithoutHash(c))))
+        return Promise.all(containerOf.map((c) =>
+          http.get(Util.urlWithoutHash(c))))
       })
       .then((results) => {
         // parse fetched docs
@@ -114,11 +117,13 @@ export default Reflux.createStore({
         }, {})
 
         // origin graph contains the graphs with these subjects
-        let contains = graphs[origin][SIOC.containerOf] != undefined ? graphs[origin][SIOC.containerOf] : []
+        let contains = graphs[origin][SIOC.containerOf] !=
+          undefined ? graphs[origin][SIOC.containerOf] : []
 
         let msgs = []
         for (var subj of contains) {
-          if (!graphs.hasOwnProperty(subj) || !graphs[subj].hasOwnProperty(RDF.type)) {
+          if (!graphs.hasOwnProperty(subj) ||
+            !graphs[subj].hasOwnProperty(RDF.type)) {
             // does not exist or type not set
             console.log('does not exist or type not set')
             continue
@@ -138,7 +143,8 @@ export default Reflux.createStore({
             id: subj,
             author: authors[0],
             content: N3Util.getLiteralValue(contents[0]),
-            reply: (replies != undefined && replies.length != 0) ? replies[0] : null,
+            reply: (replies != undefined && replies.length != 0)
+              ? replies[0] : null,
             created: timestamps[0]
           })
         }
@@ -173,7 +179,10 @@ export default Reflux.createStore({
       })
       .then((res) => {
         let msgWriter = new Writer({format: 'N-Triples'})
-        let subjectWriter = new Writer({format: 'N-Triples', prefixes: res.prefixes})
+        let subjectWriter = new Writer({
+          format: 'N-Triples',
+          prefixes: res.prefixes
+        })
 
         // add old triples
         for (var t of res.triples) {
@@ -181,7 +190,7 @@ export default Reflux.createStore({
         }
 
         // add triples representing new message
-        let newMsg = this.newMsgTriples (subject, author, content, newMsgDocUrl)
+        let newMsg = this.newMsgTriples(subject, author, content, newMsgDocUrl)
 
         for (t of newMsg.message) {
           msgWriter.addTriple(t)
@@ -196,8 +205,14 @@ export default Reflux.createStore({
         let messageDoc = results[0]
         let subjectDoc = results[1]
 
-        let createMsg = http.post(msgContainer, {'Slug': msgSlug, 'Accept': 'application/n-triples', 'Content-type': 'application/n-triples'}, messageDoc)
-        let updateSubject = http.put(subject, {'Content-type': 'application/n-triples'}, subjectDoc)
+        let createMsg = http.post(msgContainer, {
+          'Slug': msgSlug,
+          'Accept': 'application/n-triples',
+          'Content-type': 'application/n-triples'
+        }, messageDoc)
+        let updateSubject = http.put(subject, {
+          'Content-type': 'application/n-triples'
+        }, subjectDoc)
         return Promise.all([createMsg, updateSubject])
       })
       .then(() => {
@@ -205,7 +220,6 @@ export default Reflux.createStore({
         return this._loadMessages(subject)
       })
       .then(create.completed)
-
   },
 
   onCreateCompleted(comments) {
