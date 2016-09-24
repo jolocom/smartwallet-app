@@ -340,7 +340,7 @@ export default class GraphD3 extends EventEmitter {
         .attr('class', 'node')
         .attr('transform', (d) => {
           let x = this.centerCoordinates.x
-          let y = this.centerCoordinates.y - this.largeNodeSize * 1.5
+          let y = this.centerCoordinates.y
           return 'translate(' + x + ',' + y + ')'
         })
 
@@ -612,8 +612,6 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function (data) {
       self.onClickFull(this, data)
     })
-    this.resetAll()
-    this.resetPos()
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
@@ -817,8 +815,6 @@ export default class GraphD3 extends EventEmitter {
         }
       }
     }
-
-    this.resetAll()
   }.bind(this)
 
   arcTween = function (transition, newAngle) {
@@ -879,7 +875,6 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('y2', (d) => {
         if ((d.source.rank !== 'neighbour') && isNaN(d.source.histLevel)) {
-          console.log(d.source)
           return this.centerCoordinates.y
         }
         if (d.source.rank === 'neighbour') {
@@ -891,6 +886,8 @@ export default class GraphD3 extends EventEmitter {
   }
 
   resetAll = function (speed) {
+    console.error('resetAll')
+
     if (!speed) {
       speed = STYLES.nodeTransitionDuration
     }
@@ -1079,7 +1076,7 @@ export default class GraphD3 extends EventEmitter {
 
   onClick = function (node, data) {
     d3.event.stopPropagation()
-
+    console.log('click')
     this.emit('select', data, node)
 
     // d3.event.defaultPrevented returns true if the click event was fired by
@@ -1219,6 +1216,8 @@ export default class GraphD3 extends EventEmitter {
       this.d3update()
     }
     this.d3update()
+    this.resetAll()
+    this.resetPos()
   }.bind(this)
 
   // Wraps the description of the nodes around the node.
@@ -1285,8 +1284,9 @@ export default class GraphD3 extends EventEmitter {
   // Alternative to dragging the node to the center.
   // Does the same thing pretty much
   onDblClick = function (node, data) {
+    console.log('dblclick')
     d3.event.stopPropagation()
-
+    this.dataLinks = []
     if (data.rank !== 'center') {
       let x = this.centerCoordinates.x
       let y = this.centerCoordinates.y
@@ -1294,11 +1294,10 @@ export default class GraphD3 extends EventEmitter {
       d3.select('.dial')
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('opacity', 0)
-        .transition().duration(STYLES.nodeTransitionDuration)
-        .remove()
 
       d3.selectAll('.link')
-        .attr('opacity', 0)
+        .transition().duration(STYLES.nodeTransitionDuration)
+        .attr('stroke', '#FFFFFF')
 
       d3.select(node)
         .attr('d', function(d) {
@@ -1395,6 +1394,8 @@ export default class GraphD3 extends EventEmitter {
         this.numberOfNeighbours--
         this.setUpVisibleNodes()
         this.d3update()
+        this.resetAll()
+        this.resetPos()
 
         // Once the animation is ended, we re-render everything
         // It updates the visibility of the radial
@@ -1417,15 +1418,20 @@ export default class GraphD3 extends EventEmitter {
 
       this.setUpVisibleNodes()
       this.d3update()
+      this.resetPos()
       this.resetAll(10)
     }
   }.bind(this)
 
   // Called from graph.jsx
   setRotationIndex = function (rotationIndex) {
+    console.log('rotationIndex', this.rotationIndex, 'incoming rotationIndex', rotationIndex)
+    let prevRotationIndex = this.rotationIndex
     this.rotationIndex = rotationIndex || 0
     // @todo only execute updateAfterRot if index changed
-    this.updateAfterRotationIndex()
+    if (prevRotationIndex !== this.rotationIndex) {
+      this.updateAfterRotationIndex()
+    }
   }.bind(this)
 
   onResize = function () {
