@@ -11,6 +11,13 @@ let Index = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
+  componentWillMount() {
+    const {account} = this.context
+    if (account && account.webId) {
+      this.context.router.push('/graph')
+    }
+  },
+
   getStyles() {
     let {muiTheme} = this.context
 
@@ -77,30 +84,49 @@ let Index = React.createClass({
     return (
       <div style={styles.container}>
 
-        <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
+        <div style={styles.logo}>
+          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
+        </div>
 
         <Carousel style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <h3 style={styles.title}>Own your data</h3>
-            <div style={styles.content}><img src="/img/slide-data.png" style={styles.img}/></div>
+            <div style={styles.content}>
+              <img src="/img/slide-data.png" style={styles.img} />
+            </div>
           </div>
           <div style={styles.slide}>
             <h3 style={styles.title}>Create your personal digital identity</h3>
-            <div style={styles.content}><img src="/img/slide-identity.png" style={styles.img}/></div>
+            <div style={styles.content}>
+              <img src="/img/slide-identity.png" style={styles.img} />
+            </div>
           </div>
           <div style={styles.slide}>
             <h3 style={styles.title}>Own your data</h3>
-            <div style={styles.content}><img src="/img/slide-share.png" style={styles.img}/></div>
+            <div style={styles.content}>
+              <img src="/img/slide-share.png" style={styles.img} />
+            </div>
           </div>
           <div style={styles.slide}>
             <h3 style={styles.title}>Visualize your data</h3>
-            <div style={styles.content}><img src="/img/slide-visualize.png" style={styles.img}/></div>
+            <div style={styles.content}>
+              <img src="/img/slide-visualize.png" style={styles.img} />
+            </div>
           </div>
         </Carousel>
 
         <div style={styles.actions}>
-          <RaisedButton secondary={true} label="Sign up" style={styles.signup} onClick={this._handleSignup}/>
-          <RaisedButton label="Log in" style={styles.login} onClick={this._handleLogin}/>
+          <RaisedButton
+            secondary
+            label="Sign up"
+            style={styles.signup}
+            onClick={this._handleSignup}
+          />
+          <RaisedButton
+            label="Log in"
+            style={styles.login}
+            onClick={this._handleLogin}
+          />
         </div>
 
       </div>

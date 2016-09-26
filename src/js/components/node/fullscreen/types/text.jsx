@@ -84,8 +84,13 @@ let TextNode = React.createClass({
     let menuItems = []
     if (this.getNode().isOwnedByUser)
       menuItems.push('delete')
-    if (this.props.state.center.isOwnedByUser)
+    if (this.props.state.center.isOwnedByUser &&
+        this.getNode().rank &&
+        this.getNode().rank == 'neighbour')
       menuItems.push('disconnect')
+    else
+      menuItems.push('connect')
+        
     
     return (
       <GenericFullScreen

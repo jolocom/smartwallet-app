@@ -20,36 +20,38 @@ class ChatAgent extends LDPAgent {
   //
   // @return {Promise.<Object>} object containing conversation id and doc url
   createConversation(initiator, participants) {
-    let existingConversation = ConversationsStore.getConversationByWebId(participants[1])
-    if (existingConversation)
-    {
-      debug('Found an existing conversation with',participants[1])      
-      return new Promise((resolve,reject) => {
+    let existingConversation =
+      ConversationsStore.getConversationByWebId(participants[1])
+    if (existingConversation) {
+      debug('Found an existing conversation with', participants[1])
+      return new Promise((resolve, reject) => {
         resolve({
           conversation: {
             id: existingConversation.id,
-            url: existingConversation.uri 
+            url: existingConversation.uri
           },
           isNew: false
         })
       })
-    }
-    else
-    {
-      debug('Haven\'t found an existing conversation with',participants[1])      
+    } else {
+      debug('Haven\'t found an existing conversation with', participants[1])
       // POST conversation to initiators container
       // update inbox indices of all participants
       let conversationId = Util.randomString(5)
-      let conversationDoc = `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
+      let conversationDoc =
+        `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
       let hdrs = {'Content-type': 'text/turtle'}
-      let conversationDocContent = this._conversationTriples(initiator, participants)
-      return this.put(Util.uriToProxied(conversationDoc), hdrs, conversationDocContent).then(() => {
-        return Promise.all(participants.map((p) =>
-          this._linkConversation(conversationDoc, p)
+      let conversationDocContent =
+        this._conversationTriples(initiator, participants)
+      return this.put(Util.uriToProxied(conversationDoc),
+        hdrs, conversationDocContent).then(() => {
+          return Promise.all(participants.map((p) =>
+            this._linkConversation(conversationDoc, p)
         ))
-      })
+        })
       .then(() => {
-        return this._writeConversationAcl(conversationDoc, initiator, participants)
+        return this._writeConversationAcl(conversationDoc,
+          initiator, participants)
       })
       .then(() => {
         return {
@@ -79,7 +81,8 @@ class ChatAgent extends LDPAgent {
     participants.forEach((participant) => {
       writer.addTriple(rdf.sym('#participant'), PRED.type, ACL('Authorization'))
       writer.addTriple(rdf.sym('#participant'), ACL('accessTo'), rdf.sym(uri))
-      writer.addTriple(rdf.sym('#participant'), ACL('agent'), rdf.sym(participant))
+      writer.addTriple(rdf.sym('#participant'),
+        ACL('agent'), rdf.sym(participant))
       writer.addTriple(rdf.sym('#participant'), ACL('mode'), ACL('Read'))
       writer.addTriple(rdf.sym('#participant'), ACL('mode'), ACL('Write'))
     })
@@ -158,15 +161,15 @@ class ChatAgent extends LDPAgent {
       })
       .then((result) => {
         let posts = result.triples.filter((t) => {
-          return t.predicate.uri === PRED.type.uri &&
-            t.object.uri === PRED.post.uri
+          return t.predicate.uri == PRED.type.uri &&
+            t.object.uri == PRED.post.uri
         }).map((t) => t.subject)
         let groups = posts.reduce((acc, curr) => {
           if (!(curr in acc)) {
             acc[curr] = {}
           }
           for (var t of result.triples) {
-            if (t.subject != curr) {
+            if (t.subject !== curr) {
               continue
             }
             if (t.predicate.uri == PRED.content.uri) {
@@ -192,9 +195,7 @@ class ChatAgent extends LDPAgent {
 
         return msgs
       })
-
   }
-
   // Returns relevant conversation metadata
   // (id, updatesVia, otherPerson, lastMessage)
   //
@@ -244,7 +245,10 @@ class ChatAgent extends LDPAgent {
   _otherPerson(triples, conversationUrl, myUri) {
     // TODO
     let aboutThread = _.filter(triples, (t) => {
-      return t.subject == '#thread' || t.subject == `${conversationUrl}#thread`
+      // Using == because t.subject is an object
+      // that has a .toString method
+      return t.subject == '#thread' || t.subject ==
+        `${conversationUrl}#thread`
     })
 
     // let owner = _.find(aboutThread, (t) => {
@@ -257,7 +261,7 @@ class ChatAgent extends LDPAgent {
     // return Promise.resolve({webid: owner.value, name: owner.value})
 
     let participants = _.map(_.filter(aboutThread, (t) => {
-         return t.predicate.uri == PRED.hasSubscriber.uri
+      return t.predicate.uri === PRED.hasSubscriber.uri
     }), (t) => t.object)
     let otherPerson = _.find(participants, (p) => p.value !== myUri)
     if (!otherPerson) {
@@ -274,11 +278,11 @@ class ChatAgent extends LDPAgent {
       })
       .then((parsed) => {
         let aboutPerson = _.filter(parsed.triples, (t) => {
-          return t.subject.uri == webid || t.subject.uri == '#me'
+          return t.subject.uri === webid || t.subject.uri === '#me'
         })
 
         let name = _.find(parsed.triples, (t) => {
-          return t.predicate.uri == PRED.givenName.uri
+          return t.predicate.uri === PRED.givenName.uri
         })
 
         if (name) {
@@ -286,7 +290,7 @@ class ChatAgent extends LDPAgent {
         }
 
         let img = _.find(aboutPerson, (t) => {
-          return t.predicate.uri == PRED.image.uri
+          return t.predicate.uri === PRED.image.uri
         })
         if (img) {
           result.img = img.object.value
@@ -299,14 +303,14 @@ class ChatAgent extends LDPAgent {
 
   getInboxConversations(webid) {
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
-    debug('Getting inbox conversations for webid',inbox)
+    debug('Getting inbox conversations for webid', inbox)
     return this.get(Util.uriToProxied(inbox))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, inbox)
       })
       .then((result) => {
-        debug('Received inbox conversations',result)
+        debug('Received inbox conversations', result)
         return result.triples.filter((t) => {
           return t.predicate.uri === PRED.spaceOf.uri
         }).map((t) => t.object.value || t.object.uri)
@@ -328,7 +332,7 @@ class ChatAgent extends LDPAgent {
 
    // return solid.web.patch(inbox, null, toAdd)
 
-    return fetch(Util.uriToProxied(inbox),{
+    return fetch(Util.uriToProxied(inbox), {
       method: 'PATCH',
       credentials: 'include',
       body: `INSERT DATA { ${toAdd.join(' ')} } ;`,
@@ -336,7 +340,6 @@ class ChatAgent extends LDPAgent {
         'Content-Type': 'application/sparql-update'
       }
     })
-
   }
 
   _conversationTriples(initiator, participants) {

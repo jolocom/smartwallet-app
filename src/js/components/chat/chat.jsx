@@ -95,7 +95,7 @@ class Chat extends React.Component {
               <Tab label="Contacts" value="contacts" />
             </Tabs>
           </Paper>
-          <Content>
+          <Content style={styles.conversationsContainer}>
             {this.props.children}
           </Content>
         </Layout>
@@ -124,6 +124,9 @@ class Chat extends React.Component {
 let styles = {
   bar: {
     boxShadow: 'none'
+  },
+  conversationsContainer: {
+    overflowY: 'auto'
   }
 }
 

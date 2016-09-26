@@ -86,7 +86,14 @@ let ProfileNode = React.createClass({
 
     let fabItems = []
     if (!isMe) {
-      fabItems.push('chat', 'bookmark', 'disconnect')
+      fabItems.push('chat', 'bookmark')
+       if (this.props.state.center.isOwnedByUser &&
+          this.getNode().rank &&
+          this.getNode().rank == 'neighbour')
+        fabItems.push('disconnect')
+      else
+        fabItems.push('connect')
+
     }
 
     let menuItems = []

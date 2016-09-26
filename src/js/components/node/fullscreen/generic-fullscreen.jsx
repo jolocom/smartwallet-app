@@ -13,8 +13,11 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import ContentLink from 'material-ui/svg-icons/content/link'
+import ContentUnlink from 'material-ui/svg-icons/communication/call-split'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
+
+import SnackbarActions from 'actions/snackbar'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:generic-fullscreen')
@@ -122,7 +125,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleClose() {
-    graphActions.setState('activeNode', null, true)
+    // graphActions.setState('activeNode', null, true)
     this.context.router.push('/graph/' + encodeURIComponent(this.props.state.center.uri))
   },
 
@@ -131,7 +134,20 @@ let GenericFullScreen = React.createClass({
       nodeActions.disconnectNode(
         this.props.node, this.props.state.center
       )
+      // @TODO Wait until it's actually disconnected
+      SnackbarActions.showMessage('The node has been successfully disconnected.')
     }
+    this._handleClose()
+  },
+  
+  
+  _handleConnect() {
+    nodeActions.link(
+      this.context.account.webId,
+      'generic',
+      this.props.node.uri
+    )
+    SnackbarActions.showMessage('You are now connected to the node.')
     this._handleClose()
   },
 
@@ -162,10 +178,6 @@ let GenericFullScreen = React.createClass({
     alert('woohoo bookmark!')
   },
 
-  connectFn() {
-    alert('woohoo connect!')
-  },
-
   _handleFull() {
     this.setState({fullscreen: !this.state.fullscreen})
   },
@@ -183,18 +195,20 @@ let GenericFullScreen = React.createClass({
           title: 'Bookmark',
           icon: <ActionBookmark />,
           handler: this.bookmarkFn}
-      case 'connect':
-        return {
-          title: 'Connect',
-          icon: <ContentLink />,
-          handler: this.connectFn}
       case 'delete':
         return {title: 'Delete', handler: this._handleDelete}
+      case 'connect':
+        return {
+          title:
+          'Connect',
+          icon: <ContentLink />,
+          handler: this._handleConnect
+        }
       case 'disconnect':
         return {
           title:
           'Disconnect',
-          icon: <ContentLink />,
+          icon: <ContentUnlink/>,
           handler: this._handleDisconnect
         }
       case 'edit':
@@ -256,8 +270,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handlePostCopyURL() {
-    alert('The URL of the node has been copied to your clipboard.')
-    // @todo snackbar/toast
+    SnackbarActions.showMessage('The URL of the node has been copied to your clipboard.')
   },
 
   _handleEdit() {

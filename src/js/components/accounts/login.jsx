@@ -5,12 +5,14 @@ import {Link} from 'react-router'
 
 import Account from 'actions/account'
 
+import Utils from 'lib/util'
+
 // login for development
 let Login = React.createClass({
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
-    username: React.PropTypes.string,
+    account: React.PropTypes.object,
     router: React.PropTypes.object
   },
 
@@ -20,14 +22,11 @@ let Login = React.createClass({
       password: ''
     }
   },
+
   componentWillMount() {
-    if (this.context.username) {
-      // this.history.router.push('/')
-    }
-  },
-  componentDidUpdate() {
-    if (this.context.username) {
-      // this.history.router.push('/')
+    const {account} = this.context
+    if (account && account.webId) {
+      this.context.router.push('/graph')
     }
   },
 
@@ -83,6 +82,11 @@ let Login = React.createClass({
         margin: '0 auto 20px auto',
         boxSizing: 'border-box'
       },
+      safariCookieWarning: {
+        fontWeight: 'bold',
+        padding: '0 20px',
+        marginBottom: '1em'
+      },
       button: {
         width: '100%'
       },
@@ -130,8 +134,18 @@ let Login = React.createClass({
             style={styles.button}
             label="Login" />
         </form>
+        {
+        Utils.isSafari()
+          ? <p style={styles.safariCookieWarning}>In order for the
+          application to work with Safari,
+          please go to the privacy settings of your browser
+          and choose "Allow cookies for all websites".
+          </p>
+        : ''
+        }
         <p style={styles.help}>Don't have an account yet?
-          <Link to="/signup" style={styles.link}>Sign up</Link>.</p>
+          <Link to="/signup" style={styles.link}>Sign up</Link>.
+        </p>
       </div>
     )
   }

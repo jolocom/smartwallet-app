@@ -10,6 +10,8 @@ let chatAgent = new ChatAgent()
 import ConversationActions from 'actions/conversation'
 import ConversationsStore from 'stores/conversations'
 
+import Utils from 'lib/util'
+
 let {load, addMessage} = ConversationActions
 
 export default Reflux.createStore({
@@ -62,10 +64,16 @@ export default Reflux.createStore({
         // We first query the host so that the user is asked for a client cert
         // Chrome will then remember the choice during the WS connection and
         // will thus not cancel it
-        fetch(url, {
-          method: 'HEAD',
-          credentials: 'include'
-        }).then(() => {
+        new Promise((res,rej) => {
+          if (Utils.isChrome())
+            fetch(url, {
+              method: 'HEAD',
+              credentials: 'include'
+            }).then(res)
+          else
+            res()
+        })
+        .then(() => {
           this.socket = new WebSocket(conversation.updatesVia)
           this.socket.onopen = function () {
             this.send(`sub ${url}`)

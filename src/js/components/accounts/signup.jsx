@@ -1,23 +1,28 @@
 import React from 'react'
-import ReactDom from 'react-dom'
 import Reflux from 'reflux'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
 import {Link} from 'react-router'
+
+// import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
 
 import Account from 'actions/account'
 import AccountStore from 'stores/account'
+
+import Utils from 'lib/util'
 
 let Signup = React.createClass({
   mixins: [
     Reflux.connect(AvailabilityStore, 'available'),
     Reflux.connect(AccountStore, 'account')
   ],
+
   contextTypes: {
     muiTheme: React.PropTypes.object,
+    account: React.PropTypes.object,
     router: React.PropTypes.object
   },
 
@@ -33,13 +38,10 @@ let Signup = React.createClass({
       disabledSubmit: true
     }
   },
-  componentDidMount() {
-    ReactDom.findDOMNode(this.refs.username)
-      .querySelector('input').style.textTransform = 'lowercase'
-  },
 
   componentWillMount() {
-    if (this.state.account && this.state.account.username) {
+    const {account} = this.context
+    if (account && account.webId) {
       this.context.router.push('/graph')
     }
   },
@@ -73,6 +75,7 @@ let Signup = React.createClass({
     this.setState({
       username: e.target.value.toLowerCase()
     })
+    // Availability.check(e.target.value.toLowerCase())
   },
 
   _onNameChange(e) {
@@ -128,6 +131,11 @@ let Signup = React.createClass({
         margin: '0 auto 20px auto',
         boxSizing: 'border-box'
       },
+      safariCookieWarning: {
+        fontWeight: 'bold',
+        padding: '0 20px',
+        marginBottom: '1em'
+      },
       button: {
         width: '100%'
       },
@@ -149,10 +157,24 @@ let Signup = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    let cookieWarning
+
+    if (Utils.isSafari()) {
+      cookieWarning = (
+        <p style={styles.safariCookieWarning}>
+          {`In order for the application to work with Safari,
+            please go to the privacy settings of your browser
+            and choose "Allow cookies for all websites".
+          `}
+        </p>
+      )
+    }
+
     return (
       <div style={styles.container}>
         <div style={styles.logo}>
-          <img src="/img/logo.png" style={styles.logoImg} />Jolocom</div>
+          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
+        </div>
         <div style={styles.content}>
           <Formsy.Form
             onValid={this.enableSubmit}
@@ -160,42 +182,53 @@ let Signup = React.createClass({
             onValidSubmit={this.signup}
             >
             <div style={{marginBottom: '20px'}}>
-              <FormsyText name="username" ref="username"
+              <FormsyText
+                name="username"
                 floatingLabelText="Username"
                 validations="isAlphanumeric"
                 validationError={this.errorMessages.alphaNumeric}
+                inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._onUsernameChange}
                 />
-              <FormsyText name="password"
+              <FormsyText
+                name="password"
                 type="password"
                 floatingLabelText="Password"
                 onChange={this._onPasswordChange}
                 />
-              <FormsyText name="name"
+              <FormsyText
+                name="name"
                 floatingLabelText="Name"
                 validations="isWords"
                 validationError={this.errorMessages.name}
                 onChange={this._onNameChange}
                 />
-              <FormsyText name="email"
+              <FormsyText
+                name="email"
                 floatingLabelText="Email"
                 validations="isEmail"
                 validationError={this.errorMessages.email}
                 onChange={this._onEmailChange}
                 />
             </div>
+
             <RaisedButton
               type="submit"
-              secondary={true}
+              secondary
               disabled={this.state.disabledSubmit}
-              style={styles.button}
-              label="Sign up" />
+              style={styles.button} label="Sign up"
+            />
           </Formsy.Form>
         </div>
-        <p style={styles.help}>Already have an account?
-          <Link to="/login" style={styles.link}>login instead</Link>.</p>
+
+        {cookieWarning}
+
+        <p style={styles.help}>
+          Already have an account?
+          <Link to="/login" style={styles.link}>login instead</Link>.
+        </p>
       </div>
-	)
+    )
   }
 })
 

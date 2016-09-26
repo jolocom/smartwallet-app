@@ -5,7 +5,9 @@ import includes from 'lodash/includes'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-import {Paper, AppBar, IconButton} from 'material-ui'
+import {Paper, AppBar, IconButton, Snackbar} from 'material-ui'
+import Badge from 'material-ui/Badge'
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
@@ -26,13 +28,22 @@ import PinnedActions from 'actions/pinned'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
-const publicRoutes = ['/', '/login', '/signup', '/forgot-password', '/change-password']
+import SnackbarStore from 'stores/snackbar'
+
+const publicRoutes = [
+  '/',
+  '/login',
+  '/signup',
+  '/forgot-password',
+  '/change-password'
+]
 
 let App = React.createClass({
 
   mixins: [
     Reflux.connect(AccountStore, 'account'),
-    Reflux.connect(ProfileStore, 'profile')
+    Reflux.connect(ProfileStore, 'profile'),
+    Reflux.connect(SnackbarStore, 'snackbar')
   ],
 
   propTypes: {
@@ -169,6 +180,17 @@ let App = React.createClass({
       filters: {
         width: '100%',
         height: '48px'
+      },
+      menuIcon: {
+        marginTop: '-20px',
+        cursor: 'pointer'
+      },
+      hamburgerBadge: {
+        top: 10,
+        right: 20,
+        width: 15,
+        height: 15,
+        display: 'none'
       }
     }
     return styles
@@ -214,6 +236,16 @@ let App = React.createClass({
                 title="Graph"
                 iconElementRight={nav}
                 style={styles.bar}
+                iconElementLeft={
+                  <Badge
+                    badgeContent={''}
+                    secondary
+                    badgeStyle={styles.hamburgerBadge}>
+                    <NavigationMenu
+                      onTouchTap={this.showDrawer}
+                      style={styles.menuIcon} />
+                  </Badge>
+                }
                 onLeftIconButtonTouchTap={this.showDrawer} />
               {filters}
               {search}
@@ -228,6 +260,10 @@ let App = React.createClass({
             </Content>
             <Profile />
             <Tour />
+            <Snackbar
+              open={this.state.snackbar.open}
+              message={this.state.snackbar.message}
+            />
           </Layout>
         )}
       </div>

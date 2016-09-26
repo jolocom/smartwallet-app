@@ -30,6 +30,7 @@ export default Reflux.createStore({
       navHistory: [],
       selected: null,
       rotationIndex: 0,
+      previousRenderedNodeUri: null,
       //These describe the ui
       showPinned: false,
       showSearch: false,
@@ -50,6 +51,7 @@ export default Reflux.createStore({
       newNode: null,
       navHistory: [],
       selected: null,
+      previousRenderedNodeUri: null,
       // UI related
       showPinned: false,
       showSearch: false,
@@ -97,7 +99,7 @@ export default Reflux.createStore({
 
 
   // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
-  drawNewNode: function(object, predicate){
+  onDrawNewNode: function(object, predicate){
     // This fetches the triples at the newly added file, it allows us to draw it
     // the graph accurately
     this.gAgent.fetchTriplesAtUri(object).then((result) => {
@@ -106,7 +108,9 @@ export default Reflux.createStore({
         // Now we tell d3 to draw a new adjacent node on the graph, with the info from
         // the triiple file
       result.triples.connection = predicate
-      this.state.newNode = this.convertor.convertToD3('a', result.triples)
+      return result.triples
+    }).then(this.gAgent.hydrateNodeConfidentiality).then((triples) => {
+      this.state.newNode = this.convertor.convertToD3('a', triples)
       this.state.neighbours.push(this.state.newNode)
       this.trigger(this.state)
     })
@@ -137,8 +141,8 @@ export default Reflux.createStore({
   },
 
   drawAtUri: function (uri, number) {
-    this.state.neighbours = []
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
+      this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
       this.state.center = triples[0]
       for (let i = 1; i < triples.length; i++) {
@@ -154,16 +158,25 @@ export default Reflux.createStore({
 
   onNavigateToNode: function (node, defaultHistoryNode) {
     
-    this.state.neighbours = []
     this.state.rotationIndex = 0
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
+      this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
-        // Before updating the this.state.center, we push the old center node
-        // to the node history
+      
+      // Before updating the this.state.center, we push the old center node
+      // to the node history
 
-      if (this.state.center || defaultHistoryNode.uri !== node.uri)
+      // We check if we're not navigating to the same node (e.g. went to the
+      // full-screen view and then back), in which case we don't want to add
+      // the node to the history
+      if ((!this.state.previousRenderedNodeUri ||
+          this.state.previousRenderedNodeUri !== node.uri)
+          &&
+          (this.state.center || defaultHistoryNode.uri !== node.uri))
         this.state.navHistory.push(this.state.center || defaultHistoryNode)
+        
+      this.state.previousRenderedNodeUri = node.uri
       
       this.state.center = triples[0]
 
@@ -190,62 +203,58 @@ export default Reflux.createStore({
 
   onViewNode(node) {
 
-    if (!node)
-    {
+    if (!node) {
       console.log('Ignoring onViewNode because node is null.')
       return
     }
 
     this.state.activeNode = node
     
-    if (typeof node == 'string')
-    {
-      debug('Fetching information about the node...')
-      var preRequest = this.gAgent.fetchTriplesAtUri(node).then((result) => {
+    if (typeof node == 'string') {
+      debug('Fetching information and user permisions about the node...')
+      var activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node).then((result) => {
         result.triples.uri = node
         this.state.activeNode = node = this.convertor.convertToD3('a', result.triples)
       })
       this.state.activeNode = {uri: node}
     }
-    else
-    {
-      debug('Fetching additional information about the node...')
-      var preRequest = Promise.resolve()
+    else {
+      debug('Fetching user permissions about the node...')
+      var activeNodeInfoP = Promise.resolve()
     }
 
-    // @TODO do empty PATCH request and see if we have rights for center node and other node
-
     // Check if the cookie is still valid
-    let updateNode = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
-      method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
+    let activeNodePermissionsP = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
+      method: 'PATCH',
       credentials: 'include',
-      headers: {
-        'Content-Type':'application/sparql-update'
+      headers: {		
+         'Content-Type':'application/sparql-update'		
       }
     }).then((res)=>{
-      if (!res.ok)
+      if (!res.ok) {
         throw new Error(res.statusText)
+      }
       this.state.activeNode.isOwnedByUser = true
     }).catch(() => {
       this.state.activeNode.isOwnedByUser = false
     })
 
-    if (!this.state.center)
-    {
-      if (!this.state.center)
-        this.state.center = {}
+    if (!this.state.center) {
+      this.state.center = {}
       this.state.center.isOwnedByUser = false
       var updateCenterNode = Promise.resolve()
     }
-    else
-    {
-      var updateCenterNode = fetch(`${Utils.uriToProxied(this.state.center.uri)}`, {
-        method: 'PATCH', // using PATCH until HEAD is supported server-side; GET is too costly
-        credentials: 'include',
-        headers: {
-          'Content-Type':'application/sparql-update'
+    else {
+      var centerNodePermissionsP =fetch(
+        `${Utils.uriToProxied(this.state.center.uri)}`,
+        { method: 'PATCH',
+          credentials: 'include',
+          headers: {		
+            'Content-Type':'application/sparql-update'		
+          }
         }
-      }).then((res)=>{
+      )
+      .then((res)=>{
         if (!res.ok)
           throw new Error(res.statusText)
         this.state.center.isOwnedByUser = true
@@ -254,8 +263,10 @@ export default Reflux.createStore({
       })
     }
     
-    preRequest.then(Promise.all([updateNode,updateCenterNode])).then(() => {
-      this.trigger(this.state)
-    })
+    activeNodeInfoP
+      .then(() => Promise.all([activeNodePermissionsP,centerNodePermissionsP]))
+      .then(() => {
+        this.trigger(this.state)
+      })
   }
 })
