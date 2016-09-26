@@ -90,6 +90,18 @@ let Nav = React.createClass({
         position: 'absolute',
         top: '0',
         left: '20px'
+      },
+      avatarCropper: {
+        display: 'inline-block',
+        width: '24px',
+        height: '24px',
+        overflow: 'hidden',
+        borderRadius: '50%',
+        marginLeft: '30px'
+      },
+      avatarCropperImg: {
+        width: 'auto',
+        height: '100%'
       }
     }
   },
@@ -170,9 +182,14 @@ let Nav = React.createClass({
               style={styles.menuItem}
               leftIcon={
                 this.state.profile.imgUri
-                ? <Avatar
-                  style={styles.menuItemIcon}
-                  src={Util.uriToProxied(this.state.profile.imgUri)} />
+                ? <div style={styles.avatarCropper}>
+                  <img
+                    style={styles.avatarCropperImg}
+                    src={Util.uriToProxied(this.state.profile.imgUri)} />
+                </div>
+                  // <Avatar
+                  // style={styles.menuItemIcon}
+                  // src={Util.uriToProxied(this.state.profile.imgUri)} />
                 : <FontIcon
                   style={styles.menuItemIcon}
                   className="material-icons">
