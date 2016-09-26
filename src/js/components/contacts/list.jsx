@@ -31,11 +31,11 @@ let Contacts = React.createClass({
 
   render() {
     let emptyView
-    
+
     let state = this.state
-    
+
     console.log(styles,styles.headingInitial)
-    
+
     if (!state.contacts || !state.contacts.length) {
       emptyView = <div style={styles.empty}>No contacts</div>
       state.contacts = []
@@ -46,10 +46,10 @@ let Contacts = React.createClass({
         return a.username.toLowerCase() > b.username.toLowerCase()
       })
     }
-    
+
     let lastNameInitial = ''
     let i = -1
-    
+
     return (
       <div>
         {emptyView}
@@ -71,19 +71,25 @@ let Contacts = React.createClass({
 
             let avatar
             if (imgUri) {
-              avatar = <Avatar src={Utils.uriToProxied(imgUri)}
-                style={{backgroundSize: 'cover'}} />
+              avatar =
+                // <Avatar src={Utils.uriToProxied(imgUri)}
+                //   style={{backgroundSize: 'cover'}} />
+                <div style={styles.avatarCropper}>
+                  <img
+                    style={styles.avatarCropperImg}
+                    src={Utils.uriToProxied(imgUri)} />
+                </div>
             } else {
               avatar = <Avatar>{nameInitial}</Avatar>
             }
-            
+
             let displayInitial = false
             if (nameInitial !== lastNameInitial)
-            { 
+            {
               lastNameInitial = nameInitial
               displayInitial = true
             }
-              
+
             return (
               <div>
                 { displayInitial && i ? <div style={styles.separator}></div> : '' }
@@ -134,6 +140,17 @@ let styles = {
     position: 'absolute',
     top: '15px',
     left: '20px'
+  },
+  avatarCropper: {
+    display: 'inline-block',
+    width: '40px',
+    height: '40px',
+    overflow: 'hidden',
+    borderRadius: '50%'
+  },
+  avatarCropperImg: {
+    width: 'auto',
+    height: '100%'
   }
 }
 
