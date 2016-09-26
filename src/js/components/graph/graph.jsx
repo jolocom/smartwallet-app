@@ -142,7 +142,7 @@ let Graph = React.createClass({
 
     const {account: {webId}} = this.context
     if (webId && webId !== context.account.webId) {
-      graphActions.getInitialGraphState(context.account.webId)
+      graphActions.getInitialGraphState(this.context.account.webId)
     }
   },
 
