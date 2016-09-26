@@ -131,18 +131,18 @@ let Graph = React.createClass({
     }
   },
 
-  componentWillUpdate(props, state, context) {
-    const {activeNode} = this.state
+  componentWillUpdate(newProps, newState, newContext) {
     let uri
 
-    if (state.activeNode && activeNode !== state.activeNode) {
-      uri = encodeURIComponent(state.activeNode.uri)
+    if (newState.activeNode &&
+        newState.activeNode !== this.state.activeNode) {
+      uri = encodeURIComponent(newState.activeNode.uri)
       this.context.router.push(`/graph/${uri}/view`)
     }
-
-    const {account: {webId}} = this.context
-    if (webId && webId !== context.account.webId) {
-      graphActions.getInitialGraphState(this.context.account.webId)
+    
+    if (newContext.account.webId &&
+        newContext.account.webId !== this.context.account.webId) {
+      graphActions.getInitialGraphState(newContext.account.webId)
     }
   },
 
