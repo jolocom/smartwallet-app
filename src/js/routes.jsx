@@ -38,7 +38,7 @@ const routes = (
       <Route path="/graph/:node/add/:type" component={AddNode} />
     </Route>
     <Route path="forgot-password" component={ForgotPassword} />
-    <Route path="change-password" component={ChangePassword} />
+    <Route path="change-password/:username/:token" component={ChangePassword} />
     <Route path="signup" component={Signup} />
     <Route path="login" component={Login} />
   </Route>

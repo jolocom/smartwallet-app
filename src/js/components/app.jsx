@@ -35,7 +35,7 @@ const publicRoutes = [
   '/login',
   '/signup',
   '/forgot-password',
-  '/change-password'
+  '/change-password/:username/:token'
 ]
 
 let App = React.createClass({
@@ -101,6 +101,14 @@ let App = React.createClass({
   },
 
   isPublicRoute(path) {
+    if (path === undefined) {
+      for (let route in publicRoutes) {
+        if (this.props.location.pathname.indexOf(publicRoutes[route]) === 0) {
+          return true
+        }
+      }
+      return false
+    }
     return includes(publicRoutes, path || this.props.location.pathname)
   },
 
