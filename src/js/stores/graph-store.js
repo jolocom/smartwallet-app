@@ -123,6 +123,7 @@ export default Reflux.createStore({
   },
 
   onGetInitialGraphState: function (webId) {
+    this.state.previousRenderedNodeUri = webId
     this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
@@ -141,6 +142,7 @@ export default Reflux.createStore({
   },
 
   drawAtUri: function (uri, number) {
+    this.state.previousRenderedNodeUri = uri
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
@@ -166,15 +168,20 @@ export default Reflux.createStore({
       
       // Before updating the this.state.center, we push the old center node
       // to the node history
+      
+      let historyCandidate
+      if (this.state.center && this.state.center.uri)
+        historyCandidate = this.state.center
+      else
+        historyCandidate = defaultHistoryNode
 
       // We check if we're not navigating to the same node (e.g. went to the
       // full-screen view and then back), in which case we don't want to add
       // the node to the history
-      if ((!this.state.previousRenderedNodeUri ||
-          this.state.previousRenderedNodeUri !== node.uri)
-          &&
-          (this.state.center || defaultHistoryNode.uri !== node.uri))
-        this.state.navHistory.push(this.state.center || defaultHistoryNode)
+      if (!this.state.previousRenderedNodeUri ||
+          this.state.previousRenderedNodeUri !== node.uri) {
+        this.state.navHistory.push(historyCandidate)
+      }
         
       this.state.previousRenderedNodeUri = node.uri
       

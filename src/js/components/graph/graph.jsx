@@ -95,7 +95,6 @@ let Graph = React.createClass({
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
 
-    
     if (this.props.params.node) {
       debug('Navigating to node', this.props.params.node)
       graphActions.navigateToNode({uri: this.props.params.node},
@@ -110,7 +109,8 @@ let Graph = React.createClass({
     
   },
   
-  componentDidUpdate(prevProps) {
+  // @TODO combine with componentWillUpdate ?
+  componentDidUpdate(prevProps) {    
     // We do not want to center the graph on the person we're viewing the
     // full-screen profile of.
     
@@ -124,6 +124,7 @@ let Graph = React.createClass({
     if (!fullscreenView && (nodeChanged || viewChanged)) {
       this.props.params.node = this.props.params.node || this.context.account.webId
       debug('Navigating to node', this.props.params.node)
+      
       graphActions.navigateToNode({uri: this.props.params.node},
                                   {uri: this.context.account.webId,
                                    name: this.context.account.username})
@@ -145,9 +146,8 @@ let Graph = React.createClass({
       uri = encodeURIComponent(newState.activeNode.uri)
       this.context.router.push(`/graph/${uri}/view`)
     }
-    
-    if (newContext.account.webId &&
-        newContext.account.webId !== this.context.account.webId) {
+    else if (newContext.account.webId &&
+             newContext.account.webId !== this.context.account.webId) {
       graphActions.getInitialGraphState(newContext.account.webId)
     }
   },
