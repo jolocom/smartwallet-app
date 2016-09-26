@@ -160,8 +160,14 @@ let ConversationsListItem = React.createClass({
     }
     let avatar
     if (otherPerson.img) {
-      avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}
-        style={{backgroundSize: 'cover'}} />
+      // avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}
+      //   style={{backgroundSize: 'cover'}} />
+      avatar =
+        <div style={styles.avatarCropper}>
+          <img
+            style={styles.avatarCropperImg}
+            src={Utils.uriToProxied(otherPerson.img)} />
+        </div>
     } else {
       avatar = <Avatar>{nameInitial}</Avatar>
     }
@@ -218,6 +224,17 @@ let styles = {
     position: 'absolute',
     right: '16px',
     bottom: '16px'
+  },
+  avatarCropper: {
+    display: 'inline-block',
+    width: '40px',
+    height: '40px',
+    overflow: 'hidden',
+    borderRadius: '50%'
+  },
+  avatarCropperImg: {
+    width: 'auto',
+    height: '100%'
   }
 }
 
