@@ -68,11 +68,14 @@ let Conversations = React.createClass({
 
   render: function() {
     let emptyView
+    
     let {items} = this.state.conversations
+    items = items.filter(conv => conv.lastMessage !== null)
+    
     if (!items || !items.length) {
       emptyView = <div style={styles.empty}>No conversations</div>
     } else {
-      this.state.conversations.items.sort(
+      items.sort(
         (itemA, itemB) => {
           if (!itemA.lastMessage) {
             if (!itemB.lastMessage) {
@@ -97,7 +100,7 @@ let Conversations = React.createClass({
         <div style={styles.content}>
 
           <List>
-            {this.state.conversations.items.map((conversation) => {
+            {items.map((conversation) => {
               return <ConversationsListItem
                 key={conversation.id}
                 conversation={conversation}

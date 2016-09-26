@@ -22,19 +22,18 @@ import Signup from 'components/accounts/signup.jsx'
 const routes = (
   <Route path="/" component={App} >
     <IndexRoute component={Index} />
+    <Route path="/chat" component={Chat}>
+      <Route path="/conversations" component={Conversations}>
+        <Route path="/conversations/:id" component={Conversation} />
+      </Route>
+      <Route path="new(/:webId)" component={ChatNew} />
+      <Route path="/contacts" component={Contacts}>
+        <Route path=":username" component={Contact} />
+      </Route>
+    </Route>
     <Route path="graph(/:node)" component={Graph} title="Graph">
       <Route path="/graph/:node/view" component={Node} />
       <Route path="/graph/:node/add/:type" component={AddNode} />
-
-      <Route path="/chat" component={Chat}>
-        <Route path="/conversations" component={Conversations}>
-          <Route path="/conversations/:id" component={Conversation} />
-        </Route>
-        <Route path="new(/:webId)" component={ChatNew} />
-        <Route path="/contacts" component={Contacts}>
-          <Route path=":username" component={Contact} />
-        </Route>
-      </Route>
     </Route>
     <Route path="signup" component={Signup} />
     <Route path="login" component={Login} />

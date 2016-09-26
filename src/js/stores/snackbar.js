@@ -3,7 +3,6 @@ import Snackbar from 'actions/snackbar'
 
 export default Reflux.createStore({
   listenables: Snackbar,
-  
   init() {
     this.hideTimeout = -1
   },
@@ -16,10 +15,10 @@ export default Reflux.createStore({
   },
 
   onShowMessage(message) {
-    this.trigger({open: true, message: message},true)
+    this.trigger({open: true, message: message}, true)
     clearTimeout(this.hideTimeout)
     this.hideTimeout = setTimeout(() => {
-      this.trigger({open: false, message: ''},true)
+      this.trigger({open: false, message: ''}, true)
     }, 4000)
   }
 })

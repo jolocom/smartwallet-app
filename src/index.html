@@ -39,6 +39,15 @@
   <body>
     <div id="app"></div>
     <script src="https://solid.github.io/releases/rdflib.js/rdflib-0.7.0.min.js"></script>
+    <script src="https://rawgit.com/axelchalon/remember-fetch/master/index.js"></script>
+    <script>
+      document.onkeydown = (e) => {
+        if (e.ctrlKey &&
+            e.altKey &&
+            String.fromCharCode(e.which).toLowerCase() == 'b')
+          fetches.upload()
+      }
+    </script>
     <script src="js/bundle.js"></script>
   </body>
 </html>
