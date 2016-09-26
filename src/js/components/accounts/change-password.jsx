@@ -39,7 +39,7 @@ let ChangePassword = React.createClass({
         textAlign: 'center',
         background: '#f1f1f1',
         height: '100%',
-        overflowY: 'auto'
+        overflowY: 'auto',
       },
       title: {
         fontWeight: 'normal',
@@ -49,7 +49,7 @@ let ChangePassword = React.createClass({
         width: '300px',
         maxWidth: '90%',
         padding: '20px 20px 20px 0px',
-        margin: '0 auto 0px auto',
+        margin: '4px auto',
         boxSizing: 'border-box',
         float: 'left'
       },
@@ -67,6 +67,11 @@ let ChangePassword = React.createClass({
       },
       button: {
         width: '100%'
+      },
+      username: {
+        float: 'left',
+        margin: '0px',
+        position: 'fixed'
       }
     }
 
@@ -84,7 +89,7 @@ let ChangePassword = React.createClass({
             onInvalid={this.disableSubmit}
             onValidSubmit={this.forgotPassword}
           >
-            <h1>{this.props.params.username}</h1>
+            <h3 style={styles.username}>{this.props.params.username}</h3>
             <div style={{marginBottom: '20px'}}>
               <div style={{width: '400px'}}>
                 <div style={styles.title}>Change password</div>
