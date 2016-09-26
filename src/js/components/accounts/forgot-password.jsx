@@ -99,7 +99,7 @@ let ForgotPassword = React.createClass({
               />
             </div>
 
-            <RaisedButton type="submit" secondary={true}
+            <RaisedButton type="submit" secondary
               disabled={this.state.disabledSubmit}
               style={styles.button}
               label="REQUEST PASSWORD" />

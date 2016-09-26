@@ -11,6 +11,10 @@ let ChangePassword = React.createClass({
     router: React.PropTypes.object
   },
 
+  propTypes: {
+    params: React.PropTypes.string.isRequired
+  },
+
   errorMessage: {
     email: 'Please provide a valid email'
   },
@@ -90,7 +94,7 @@ let ChangePassword = React.createClass({
                 type="password"
                 floatingLabelText="New password"
               />
-                <FormsyText
+              <FormsyText
                 name="password"
                 type="password"
                 floatingLabelText="Repeat password"
@@ -98,7 +102,7 @@ let ChangePassword = React.createClass({
               />
             </div>
             <RaisedButton
-              type="submit" secondary={true}
+              type="submit" secondary
               disabled={this.state.disabledSubmit}
               style={styles.button}
               label="LOG IN"
