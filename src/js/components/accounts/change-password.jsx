@@ -44,8 +44,7 @@ let ChangePassword = React.createClass({
         textAlign: 'left',
         width: '300px',
         maxWidth: '90%',
-        padding: '20px',
-        paddingLeft: '0px',
+        padding: '20px 20px 20px 0px',
         margin: '0 auto 0px auto',
         boxSizing: 'border-box',
         float: 'left'
@@ -81,6 +80,7 @@ let ChangePassword = React.createClass({
             onInvalid={this.disableSubmit}
             onValidSubmit={this.forgotPassword}
           >
+            <h1>{this.props.params.username}</h1>
             <div style={{marginBottom: '20px'}}>
               <div style={{width: '400px'}}>
                 <div style={styles.title}>Change password</div>
@@ -90,7 +90,7 @@ let ChangePassword = React.createClass({
                 type="password"
                 floatingLabelText="New password"
               />
-              <FormsyText
+                <FormsyText
                 name="password"
                 type="password"
                 floatingLabelText="Repeat password"

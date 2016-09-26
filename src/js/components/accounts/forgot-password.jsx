@@ -52,8 +52,7 @@ let ForgotPassword = React.createClass({
         textAlign: 'left',
         width: '300px',
         maxWidth: '90%',
-        padding: '20px',
-        paddingLeft: '0px',
+        padding: '20px 20px 20px 0px',
         margin: '0 auto 20px auto',
         boxSizing: 'border-box',
         float: 'left'
