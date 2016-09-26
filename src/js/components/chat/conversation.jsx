@@ -182,6 +182,17 @@ let Conversation = React.createClass({
         meta: {
           textAlign: 'right'
         }
+      },
+      avatarCropper: {
+        display: 'inline-block',
+        width: '40px',
+        height: '40px',
+        overflow: 'hidden',
+        borderRadius: '50%'
+      },
+      avatarCropperImg: {
+        width: 'auto',
+        height: '100%'
       }
     }
     return styles
@@ -198,14 +209,24 @@ let Conversation = React.createClass({
     let items = conversation.items || []
 
     var userAvatar = (
-      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}
-        style={{backgroundSize: 'cover'}} />
+      // <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}
+      //   style={{backgroundSize: 'cover'}} />
+      <div style={styles.avatarCropper}>
+        <img
+          style={styles.avatarCropperImg}
+          src={Util.uriToProxied(this.state.profile.imgUri)} />
+      </div>
     )
 
     if (otherPerson) {
       var otherPersonAvatar = (
-        <Avatar src={Util.uriToProxied(otherPerson.img)}
-          style={{backgroundSize: 'cover'}} />
+        // <Avatar src={Util.uriToProxied(otherPerson.img)}
+        //   style={{backgroundSize: 'cover'}} />
+        <div style={styles.avatarCropper}>
+          <img
+            style={styles.avatarCropperImg}
+            src={Util.uriToProxied(otherPerson.img)} />
+        </div>
       )
     }
     return (
