@@ -96,6 +96,12 @@ let Login = React.createClass({
       link: {
         color: muiTheme.palette.accent1Color,
         fontWeight: 'bold'
+      },
+      forgotPassword: {
+        float: 'right',
+        padding: '10px',
+        color: '#7B8288',
+        fontSize: '0.75em'
       }
     }
 
@@ -105,24 +111,41 @@ let Login = React.createClass({
     let styles = this.getStyles()
     return (
       <div style={styles.container}>
-        <div style={styles.logo}><img src="/img/logo.png" style={styles.logoImg}/> Jolocom</div>
+        <div style={styles.logo}>
+          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom</div>
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
             <div>
-              <TextField floatingLabelText="Username" onChange={this._handleUsernameChange} />
-              <TextField floatingLabelText="Password" type="password" onChange={this._handlePasswordChange} />
+              <TextField
+                floatingLabelText="Username"
+                onChange={this._handleUsernameChange} />
+              <TextField
+                floatingLabelText="Password"
+                type="password"
+                onChange={this._handlePasswordChange} />
+              <Link
+                to="/forgot-password"
+                style={styles.forgotPassword}>Forgot password?</Link>
             </div>
           </div>
-          <RaisedButton type="submit" secondary={true} style={styles.button} label="Login"/>
+          <RaisedButton
+            type="submit"
+            secondary
+            style={styles.button}
+            label="Login" />
         </form>
-        
         {
         Utils.isSafari()
-        ? <p style={styles.safariCookieWarning}>In order for the application to work with Safari, please go to the privacy settings of your browser and choose "Allow cookies for all websites".</p>
+          ? <p style={styles.safariCookieWarning}>In order for the
+          application to work with Safari,
+          please go to the privacy settings of your browser
+          and choose "Allow cookies for all websites".
+          </p>
         : ''
         }
-        
-        <p style={styles.help}>Don't have an account yet? <Link to="/signup" style={styles.link}>Sign up</Link>.</p>
+        <p style={styles.help}>Don't have an account yet?
+          <Link to="/signup" style={styles.link}>Sign up</Link>.
+        </p>
       </div>
     )
   }

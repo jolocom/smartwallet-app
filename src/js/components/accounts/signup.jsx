@@ -157,7 +157,6 @@ let Signup = React.createClass({
 
   render() {
     let styles = this.getStyles()
-
     let cookieWarning
 
     if (Utils.isSafari()) {
