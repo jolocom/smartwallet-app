@@ -39,7 +39,7 @@ let ChangePassword = React.createClass({
         textAlign: 'center',
         background: '#f1f1f1',
         height: '100%',
-        overflowY: 'auto',
+        overflowY: 'auto'
       },
       title: {
         fontWeight: 'normal',

@@ -130,7 +130,7 @@ let Login = React.createClass({
           </div>
           <RaisedButton
             type="submit"
-            secondary={true}
+            secondary
             style={styles.button}
             label="Login" />
         </form>

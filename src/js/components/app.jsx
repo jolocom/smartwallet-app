@@ -48,7 +48,8 @@ let App = React.createClass({
 
   propTypes: {
     location: React.PropTypes.object,
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    route: React.PropTypes.string
   },
 
   contextTypes: {
