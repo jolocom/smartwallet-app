@@ -36,7 +36,7 @@ const publicRoutes = [
   '/login',
   '/signup',
   '/forgot-password',
-  '/change-password/:username/:token'
+  '/change-password'
 ]
 
 let App = React.createClass({
