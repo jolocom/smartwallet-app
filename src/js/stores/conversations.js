@@ -59,10 +59,8 @@ export default Reflux.createStore({
         this._getConversations(webId, id).then((conversations) => {
           debug('getUri received conversations', conversations)
           if (conversations[0]) {
-            console.log('conversations[0].uri', conversations[0].uri)
             resolve(conversations[0].uri)
           } else {
-            console.error('rejecting')
             reject()
           }
         })

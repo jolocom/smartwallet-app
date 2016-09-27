@@ -7,23 +7,19 @@ import {
 } from 'lib/namespaces'
 import GraphAgent from 'lib/agents/graph'
 
-import {contacts} from 'lib/fixtures'
-
 export default Reflux.createStore({
   listenables: ContactsActions,
+
+  items: [],
+
   getInitialState() {
     return {
       loading: true,
       items: []
     }
   },
-  onLoad(query) {
 
-    this.trigger({
-      loading: false,
-      items: contacts
-    })
-    return
+  onLoad(query) {
     if (!query || query === '') {
       if (!this.gAgent) {
         this.gAgent = new GraphAgent()
@@ -63,15 +59,18 @@ export default Reflux.createStore({
               avatarTriples[0].object.value
             }
           })
+
+          this.items = formattedContacts
+
           this.trigger({
             loading: false,
-            items: formattedContacts
-          }); return
+            items: this.items
+          })
         })
     } else {
       let regEx = new RegExp(`.*${query}.*`, 'i')
 
-      let results = _.filter(contacts, (contact) => {
+      let results = _.filter(this.items, (contact) => {
         return contact.name.match(regEx)
       })
 
