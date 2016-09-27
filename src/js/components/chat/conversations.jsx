@@ -62,9 +62,7 @@ let Conversations = React.createClass({
     this.context.router.push(`/conversations/${id}`)
   },
 
-  renderItems() {
-    let {items} = this.state.conversations
-
+  renderItems(items) {
     // maybe do this in the store already?
     items.sort(
       (itemA, itemB) => {
@@ -107,7 +105,7 @@ let Conversations = React.createClass({
     } else if (!items || !items.length) {
       content = <div style={styles.empty}>No conversations</div>
     } else {
-      content = this.renderItems()
+      content = this.renderItems(items)
     }
 
     return (
