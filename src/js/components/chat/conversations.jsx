@@ -7,9 +7,9 @@ import moment from 'moment'
 import {
   List,
   ListItem,
-  Avatar,
-  FloatingActionButton,
-  FontIcon
+  Avatar
+  // FloatingActionButton,
+  // FontIcon
 } from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
@@ -19,8 +19,7 @@ import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 import Utils from 'lib/util'
 
-import Debug from 'lib/debug'
-let debug = Debug('components:conversations')
+import Loading from 'components/common/loading.jsx'
 
 let Conversations = React.createClass({
 
@@ -41,7 +40,6 @@ let Conversations = React.createClass({
   },
 
   componentDidMount() {
-    debug('componentDidMount')
     this.loadConversations() // @TODO Redundant? did on login
   },
 
@@ -53,7 +51,6 @@ let Conversations = React.createClass({
   },
 
   loadConversations() {
-    debug('Loading conversations')
     // @TODO Component mounts again after choosing a contact (+)
     // This triggers .load unnecessarily
     ConversationsActions.load(
@@ -62,54 +59,62 @@ let Conversations = React.createClass({
   },
 
   showConversation({id}) {
-    debug('Navigating to conversation URL')
     this.context.router.push(`/conversations/${id}`)
   },
 
-  render: function() {
-    let emptyView
-    
+  renderItems() {
     let {items} = this.state.conversations
-    items = items.filter(conv => conv.lastMessage !== null)
-    
-    if (!items || !items.length) {
-      emptyView = <div style={styles.empty}>No conversations</div>
-    } else {
-      items.sort(
-        (itemA, itemB) => {
-          if (!itemA.lastMessage) {
-            if (!itemB.lastMessage) {
-              return 0
-            } else {
-              return -1
-            }
-          } else if (!itemB.lastMessage) {
-            return 1
+
+    // maybe do this in the store already?
+    items.sort(
+      (itemA, itemB) => {
+        if (!itemA.lastMessage) {
+          if (!itemB.lastMessage) {
+            return 0
+          } else {
+            return -1
           }
-          return itemA.lastMessage.created.getTime() <
-            itemB.lastMessage.created.getTime()
+        } else if (!itemB.lastMessage) {
+          return 1
         }
-      )
+        return itemA.lastMessage.created.getTime() <
+          itemB.lastMessage.created.getTime()
+      }
+    )
+
+    return (
+      <List>
+        {items.map((conversation) => {
+          return <ConversationsListItem
+            key={conversation.id}
+            conversation={conversation}
+            onTouchTap={this.showConversation}
+
+          />
+        })}
+      </List>
+    )
+  },
+
+  render: function() {
+    let content
+
+    let {loading, items} = this.state.conversations
+    items = items.filter(conv => conv.lastMessage !== null)
+
+    if (loading) {
+      content = <Loading style={styles.loading} />
+    } else if (!items || !items.length) {
+      content = <div style={styles.empty}>No conversations</div>
+    } else {
+      content = this.renderItems()
     }
 
     return (
       <div style={styles.container}>
 
-        {emptyView}
-
         <div style={styles.content}>
-
-          <List>
-            {items.map((conversation) => {
-              return <ConversationsListItem
-                key={conversation.id}
-                conversation={conversation}
-                onTouchTap={this.showConversation}
-
-              />
-            })}
-          </List>
-
+          {content}
         </div>
 
         {/* <FloatingActionButton */}
@@ -137,9 +142,7 @@ let ConversationsListItem = React.createClass({
   render() {
     let {conversation} = this.props
     let {otherPerson, lastMessage} = conversation
-    lastMessage = lastMessage || {}
-
-    let {created, content} = lastMessage
+    let {created, content} = lastMessage || {}
 
     // If otherPerson var is null, then set it to false.
     // So it wont be used when listing conversations
@@ -200,6 +203,9 @@ let styles = {
   content: {
     overflowY: 'auto',
     flex: 1
+  },
+  loading: {
+    position: 'absolute'
   },
   empty: {
     position: 'absolute',

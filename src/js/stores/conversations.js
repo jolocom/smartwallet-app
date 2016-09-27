@@ -112,7 +112,7 @@ export default Reflux.createStore({
 
   onLoad(webId, query) {
     debug('onLoad with webId', webId)
-    this._getConversations(webId, query).then(load.completed)
+    this._getConversations(webId, query).then(load.completed).catch(load.failed)
   },
 
   onLoadCompleted(conversations) {
@@ -122,6 +122,12 @@ export default Reflux.createStore({
     this.trigger({
       loading: false,
       items: this.items
+    })
+  },
+
+  onLoadFailed() {
+    this.trigger({
+      loading: false
     })
   }
 

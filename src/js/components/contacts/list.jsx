@@ -2,16 +2,23 @@ import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
 
-import {List, ListItem, Avatar} from 'material-ui'
+import {List, ListItem, Divider, Subheader, Avatar} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 import theme from 'styles/jolocom-theme'
+
+import Loading from 'components/common/loading.jsx'
 
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 
 import Utils from 'lib/util'
 
-let Contacts = React.createClass({
+let ContactsList = React.createClass({
+
+  propTypes: {
+    searchQuery: React.PropTypes.string,
+    onClick: React.PropTypes.func
+  },
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
 
@@ -29,74 +36,84 @@ let Contacts = React.createClass({
     ContactsActions.load(this.props.searchQuery)
   },
 
-  render() {
-    let emptyView
-    
-    let state = this.state
-    
-    console.log(styles,styles.headingInitial)
-    
-    if (!state.contacts || !state.contacts.length) {
-      emptyView = <div style={styles.empty}>No contacts</div>
-      state.contacts = []
-    }
-    else
-    {
-      state.contacts.sort((a,b) => {
-        return a.username.toLowerCase() > b.username.toLowerCase()
-      })
-    }
-    
+  renderItems() {
+    let {items} = this.state.contacts
+
+    items.sort((a, b) => {
+      return a.username.toLowerCase() > b.username.toLowerCase()
+    })
+
     let lastNameInitial = ''
-    let i = -1
-    
+    let result = []
+
+    items.forEach(({username, webId, name, email, imgUri}, i) => {
+      // Check if name is set then set the first character as the name
+      // initial otherwise, check if name is empty or whitespaces then
+      // set it to Unnamed and let its initial be ?
+      let nameInitial
+      if (name) {
+        nameInitial = name[0].toUpperCase()
+      } else if (!name || name.trim()) {
+        name = 'Unnamed'
+        nameInitial = '?'
+      }
+
+      let avatar
+      if (imgUri) {
+        avatar = <Avatar src={Utils.uriToProxied(imgUri)}
+          style={{backgroundSize: 'cover'}} />
+      } else {
+        avatar = <Avatar>{nameInitial}</Avatar>
+      }
+
+      if (nameInitial !== lastNameInitial) {
+        lastNameInitial = nameInitial
+        if (i > 0) {
+          result.push(<Divider inset key={`divider_${i}`} />)
+        }
+        result.push(
+          <Subheader
+            key={`header_${i}`}
+            style={styles.header}
+          >
+            {nameInitial}
+          </Subheader>)
+      }
+
+      let handleClick = () => {
+        this.props.onClick(webId)
+      }
+
+      result.push(
+        <ListItem
+          key={username}
+          primaryText={name}
+          secondaryText={email}
+          rightAvatar={avatar}
+          insetChildren
+          onTouchTap={handleClick}
+        />
+      )
+    })
+
+    return result
+  },
+
+  render() {
+    let content
+    let {loading, items} = this.state.contacts
+
+    if (loading) {
+      content = <Loading style={styles.loading} />
+    } else if (!items || !items.length) {
+      content = <div style={styles.empty}>No contacts</div>
+    } else {
+      content = <List>{this.renderItems()}</List>
+    }
+
     return (
       <div>
-        {emptyView}
-        <List>
-          {state.contacts.map(({username, webId, name, email, imgUri}) => {
-            // Check if name is set then set the first character as the name
-            // initial otherwise, check if name is empty or whitespaces then
-            // set it to Unnamed and let its initial be ?
-
-            let nameInitial
-            i++
-
-            if (name) {
-              nameInitial = name[0].toUpperCase()
-            } else if (!name || name.trim()) {
-              name = 'Unnamed'
-              nameInitial = '?'
-            }
-
-            let avatar
-            if (imgUri) {
-              avatar = <Avatar src={Utils.uriToProxied(imgUri)}
-                style={{backgroundSize: 'cover'}} />
-            } else {
-              avatar = <Avatar>{nameInitial}</Avatar>
-            }
-            
-            let displayInitial = false
-            if (nameInitial !== lastNameInitial)
-            { 
-              lastNameInitial = nameInitial
-              displayInitial = true
-            }
-              
-            return (
-              <div>
-                { displayInitial && i ? <div style={styles.separator}></div> : '' }
-                <div style={styles.listItemContainer}>
-                  { displayInitial ? <div style={styles.headingInitial}>{nameInitial}</div> : '' }
-                  <ListItem key={username} primaryText={name} secondaryText={email}
-                    rightAvatar={avatar} onTouchTap={() => { this.props.onClick(webId) }}
-                    />
-                </div>
-              </div>
-            )
-          })}
-        </List>
+        {content}
       </div>
     )
   }
@@ -104,6 +121,9 @@ let Contacts = React.createClass({
 })
 
 let styles = {
+  loading: {
+    position: 'absolute'
+  },
   empty: {
     position: 'absolute',
     fontWeight: 300,
@@ -115,26 +135,15 @@ let styles = {
     justifyContent: 'center',
     fontSize: '18px'
   },
-  separator: {
-    height: '1px',
-    background: 'gainsboro',
-    margin: '10px 0 10px 75px'
-  },
   listItemContainer: {
     position: 'relative',
-    paddingLeft: '60px',
+    paddingLeft: '60px'
   },
-  listItemHeading: {
-    borderTop: '1px solid gray'
-  },
-  headingInitial: {
-    color: theme.palette.primary1Color,
-    fontWeight: 'bold',
-    fontSize: '20px',
+  header: {
     position: 'absolute',
-    top: '15px',
-    left: '20px'
+    paddingTop: '5px',
+    color: theme.palette.primary1Color
   }
 }
 
-export default Radium(Contacts)
+export default Radium(ContactsList)
