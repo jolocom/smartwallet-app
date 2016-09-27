@@ -341,6 +341,13 @@ export default class GraphD3 extends EventEmitter {
         .attr('transform', (d) => {
           let x = this.centerCoordinates.x
           let y = this.centerCoordinates.y
+          if (d.rank !== 'center') {
+            if (d.rank === 'history') {
+              y += largeNode * 2
+            } else {
+              y -= largeNode * 1.5
+            }
+          }
           return 'translate(' + x + ',' + y + ')'
         })
 
@@ -886,8 +893,6 @@ export default class GraphD3 extends EventEmitter {
   }
 
   resetAll = function (speed) {
-    console.error('resetAll')
-
     if (!speed) {
       speed = STYLES.nodeTransitionDuration
     }
@@ -1076,7 +1081,6 @@ export default class GraphD3 extends EventEmitter {
 
   onClick = function (node, data) {
     d3.event.stopPropagation()
-    console.log('click')
     this.emit('select', data, node)
 
     // d3.event.defaultPrevented returns true if the click event was fired by
@@ -1284,10 +1288,10 @@ export default class GraphD3 extends EventEmitter {
   // Alternative to dragging the node to the center.
   // Does the same thing pretty much
   onDblClick = function (node, data) {
-    console.log('dblclick')
     d3.event.stopPropagation()
-    this.dataLinks = []
+
     if (data.rank !== 'center') {
+      this.isPulsing = true
       let x = this.centerCoordinates.x
       let y = this.centerCoordinates.y
 
@@ -1297,7 +1301,8 @@ export default class GraphD3 extends EventEmitter {
 
       d3.selectAll('.link')
         .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('stroke', '#FFFFFF')
+        .attr('opacity', 0)
+        .transition().remove()
 
       d3.select(node)
         .attr('d', function(d) {
@@ -1321,9 +1326,8 @@ export default class GraphD3 extends EventEmitter {
       this.resetAll()
 
       this.emit('center-changed', data)
+      this.pulseCenter()
     }
-    this.isPulsing = true
-    this.pulseCenter()
   }.bind(this)
 
   pulseCenter = function () {
@@ -1414,8 +1418,6 @@ export default class GraphD3 extends EventEmitter {
   updateAfterRotationIndex = function() {
     this.updateDial()
     if (this.visibleDataNodes) {
-      // @TODO do we realy need to do all of the following?
-
       this.setUpVisibleNodes()
       this.d3update()
       this.resetPos()
@@ -1425,11 +1427,10 @@ export default class GraphD3 extends EventEmitter {
 
   // Called from graph.jsx
   setRotationIndex = function (rotationIndex) {
-    console.log('rotationIndex', this.rotationIndex, 'incoming rotationIndex', rotationIndex)
     let prevRotationIndex = this.rotationIndex
     this.rotationIndex = rotationIndex || 0
     // @todo only execute updateAfterRot if index changed
-    if (prevRotationIndex !== this.rotationIndex) {
+    if ((prevRotationIndex !== this.rotationIndex) && !this.isPulsing) {
       this.updateAfterRotationIndex()
     }
   }.bind(this)
