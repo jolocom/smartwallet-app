@@ -143,7 +143,7 @@ let Login = React.createClass({
           </p>
         : ''
         }
-        <p style={styles.help}>Don't have an account yet?
+        <p style={styles.help}>Don't have an account yet?&nbsp;
           <Link to="/signup" style={styles.link}>Sign up</Link>.
         </p>
       </div>

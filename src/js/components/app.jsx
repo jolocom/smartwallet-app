@@ -30,8 +30,9 @@ import ProfileStore from 'stores/profile'
 
 import SnackbarStore from 'stores/snackbar'
 
+// A pathname is considered public if either "/" or if it starts
+// with any of the following publicRoutes
 const publicRoutes = [
-  '/',
   '/login',
   '/signup',
   '/forgot-password',
@@ -101,16 +102,9 @@ let App = React.createClass({
     }
   },
 
-  isPublicRoute(path) {
-    if (path === undefined) {
-      for (let route in publicRoutes) {
-        if (this.props.location.pathname.indexOf(publicRoutes[route]) === 0) {
-          return true
-        }
-      }
-      return false
-    }
-    return includes(publicRoutes, path || this.props.location.pathname)
+  isPublicRoute(path = this.props.location.pathname) {
+    return path == '/' ||
+      publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
   },
 
   checkLogin() {
