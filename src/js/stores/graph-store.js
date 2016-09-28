@@ -80,6 +80,8 @@ export default Reflux.createStore({
     if (flag) this.trigger(this.state, 'changeRotationIndex')
   },
 
+  /*
+  -- We use onRefresh() and do a reloading of the graph for now
   deleteNode: function(node){
     let nodeId = node.index > 0 ? node.index : node.uri
     for (let i = this.state.neighbours.length -1 ; i >= 0; i--){
@@ -91,6 +93,7 @@ export default Reflux.createStore({
     this.state.activeNode = node
     this.trigger(this.state, 'nodeRemove')
   },
+  */
 
   dissconnectNode: function(){
     // Animation / removing from the neighb array will go here.
@@ -140,9 +143,15 @@ export default Reflux.createStore({
     this.state.user = result[0]
     this.trigger(this.state)
   },
+  
+  onRefresh: function() {
+    this.drawAtUri(this.state.center.uri)
+  },
 
   drawAtUri: function (uri, number) {
+    debug('Drawing at URI',uri)
     this.state.previousRenderedNodeUri = uri
+    this.trigger(Object.assign({},this.state,{neighbours: []}))
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
@@ -159,9 +168,7 @@ export default Reflux.createStore({
   },
 
   onNavigateToNode: function (node, defaultHistoryNode) {
-    
     this.state.rotationIndex = 0
-
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
