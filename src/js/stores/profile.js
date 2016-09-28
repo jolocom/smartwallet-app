@@ -147,8 +147,8 @@ export default Reflux.createStore({
   onUpdate: function (params) {
     let newData = Object.assign({}, params)
     let oldData = Object.assign({}, profile)
-    
-    debug('Updating profile with old data ',oldData,' and new data', newData)
+    debug('Updating profile with old data ',
+      oldData, ' and new data', newData)
 
     let insertTriples = []
     let deleteTriples = []
@@ -239,8 +239,7 @@ export default Reflux.createStore({
             'Content-Type': 'application/sparql-update'
           }
         }))
-      }
-      else if (!profile.bitcoinAddress.trim()) {
+      } else if (!profile.bitcoinAddress.trim()) {
         // IF OLD VALUE IS NO VALUE
         // CREATE
         // Create node and create link
@@ -333,9 +332,7 @@ export default Reflux.createStore({
               'Content-Type': 'application/sparql-update'
             }
           }))
-      }
-      // if the uri has changed
-      else if (oldData.passportImgUri.trim() !==
+      } else if (oldData.passportImgUri.trim() !== // if the uri has changed
         newData.passportImgUri.trim()) {
         // UPDATE
         let passportDeleteStatement = 'DELETE DATA { ' +
@@ -375,9 +372,7 @@ export default Reflux.createStore({
             credentials: 'include'
           }))
       }
-    }
-    // if there's no passport node
-    else {
+    } else { // if there's no passport node
       // if there is a new uri
       if (newData.passportImgUri.trim()) {
         // CREATE PASSPORT
