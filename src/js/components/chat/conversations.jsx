@@ -17,6 +17,7 @@ import TimerMixin from 'react-timer-mixin'
 
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
+import UserAvatar from 'components/common/user-avatar.jsx'
 import Utils from 'lib/util'
 
 import Debug from 'lib/debug'
@@ -68,10 +69,10 @@ let Conversations = React.createClass({
 
   render: function() {
     let emptyView
-    
+
     let {items} = this.state.conversations
     items = items.filter(conv => conv.lastMessage !== null)
-    
+
     if (!items || !items.length) {
       emptyView = <div style={styles.empty}>No conversations</div>
     } else {
@@ -163,14 +164,12 @@ let ConversationsListItem = React.createClass({
     }
     let avatar
     if (otherPerson.img) {
-      // avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}
-      //   style={{backgroundSize: 'cover'}} />
-      avatar =
-        <div style={styles.avatarCropper}>
-          <img
-            style={styles.avatarCropperImg}
-            src={Utils.uriToProxied(otherPerson.img)} />
-        </div>
+      avatar = <UserAvatar name={'Fred'} imgUrl={otherPerson.img} />
+      // avatar = <Avatar
+      //   style={{
+      //     backgroundSize: 'cover',
+      //     backgroundImage: `url(${Utils.uriToProxied(otherPerson.img)})`
+      //   }} />
     } else {
       avatar = <Avatar>{nameInitial}</Avatar>
     }
@@ -227,17 +226,6 @@ let styles = {
     position: 'absolute',
     right: '16px',
     bottom: '16px'
-  },
-  avatarCropper: {
-    display: 'inline-block',
-    width: '40px',
-    height: '40px',
-    overflow: 'hidden',
-    borderRadius: '50%'
-  },
-  avatarCropperImg: {
-    width: 'auto',
-    height: '100%'
   }
 }
 
