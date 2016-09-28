@@ -11,6 +11,7 @@ import {Layout, Content} from 'components/layout'
 import Dialog from 'components/common/dialog.jsx'
 import Compose from 'components/common/compose.jsx'
 import UserAvatar from 'components/common/user-avatar.jsx'
+import Loading from 'components/common/loading.jsx'
 
 import ConversationActions from 'actions/conversation'
 import ConversationStore from 'stores/conversation'
@@ -75,11 +76,13 @@ let Conversation = React.createClass({
   },
 
   addMessage(content) {
-    ConversationActions.addMessage(
-      this.state.conversation.uri,
-      this.context.account.webId,
-      content
-    )
+    if (content.trim() && content.length !== 0) {
+      ConversationActions.addMessage(
+        this.state.conversation.uri,
+        this.context.account.webId,
+        content
+      )
+    }
     // @TODO update the state of all convos with the new lastMessage
     return true
   },
@@ -185,15 +188,12 @@ let Conversation = React.createClass({
     return styles
   },
 
-  render() {
+  renderItems() {
     let styles = this.getStyles()
-
-    let {conversation} = this.state
-    let {otherPerson} = conversation
-
+    let {otherPerson} = this.state.conversation
     let {account} = this.context
-    let title = otherPerson && otherPerson.name
-    let items = conversation.items || []
+
+    let items = this.state.conversation.items || []
 
     var userAvatar = (
       <UserAvatar
@@ -208,6 +208,43 @@ let Conversation = React.createClass({
           imgUrl={otherPerson.img} />
       )
     }
+
+    return items.map(function({author, content, created}, i) {
+      let avatar = (author !== account.webId)
+        ? 'otherPersonAvatar' : 'userAvatar'
+      let from = (author !== account.webId)
+        ? 'contact' : 'me'
+      return (
+        <div style={[styles.message]} key={i}>
+          <div style={[styles.body, styles[avatar].body]}>
+            {avatar === 'otherPersonAvatar' && otherPersonAvatar}
+            {avatar === 'userAvatar' && userAvatar}
+          </div>
+          <div style={[styles.body, styles[from].body]}>
+            {content}
+          </div>
+          <div style={[styles.meta, styles[from].meta]}>
+            <span style={styles.date}>
+              {moment(created).fromNow()}
+            </span>
+          </div>
+        </div>
+      )
+    })
+  },
+
+  render() {
+    let content
+    let styles = this.getStyles()
+    let {loading, otherPerson} = this.state.conversation
+    let title = otherPerson && otherPerson.name
+
+    if (loading) {
+      content = <Loading style={styles.loading} />
+    } else {
+      content = this.renderItems()
+    }
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -223,28 +260,7 @@ let Conversation = React.createClass({
           />
           <Content style={styles.content}>
             <div ref="items" style={styles.conversation}>
-              {items.map(function({author, content, created}, i) {
-                let avatar = (author !== account.webId)
-                  ? 'otherPersonAvatar' : 'userAvatar'
-                let from = (author !== account.webId)
-                  ? 'contact' : 'me'
-                return (
-                  <div style={[styles.message]} key={i}>
-                    <div style={[styles.body, styles[avatar].body]}>
-                      {avatar === 'otherPersonAvatar' && otherPersonAvatar}
-                      {avatar === 'userAvatar' && userAvatar}
-                    </div>
-                    <div style={[styles.body, styles[from].body]}>
-                      {content}
-                    </div>
-                    <div style={[styles.meta, styles[from].meta]}>
-                      <span style={styles.date}>
-                        {moment(created).fromNow()}
-                      </span>
-                    </div>
-                  </div>
-                )
-              })}
+              {content}
             </div>
             <Compose
               style={styles.compose}

@@ -25,11 +25,11 @@ export default Reflux.createStore({
     let user = encodeURIComponent(data.username)
     let pass = encodeURIComponent(data.password)
     let name = data.name
-    let email = data.email
+    let email = encodeURIComponent(data.email)
 
     fetch(`${proxy}/register`, {
       method: 'POST',
-      body: `username=${user}&password=${pass}`,
+      body: `username=${user}&password=${pass}&email=${email}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
