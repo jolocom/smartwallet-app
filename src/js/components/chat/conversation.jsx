@@ -77,11 +77,13 @@ let Conversation = React.createClass({
   },
 
   addMessage(content) {
-    ConversationActions.addMessage(
-      this.state.conversation.uri,
-      this.context.account.webId,
-      content
-    )
+    if (content.trim() && content.length !== 0) {
+      ConversationActions.addMessage(
+        this.state.conversation.uri,
+        this.context.account.webId,
+        content
+      )
+    }
     // @TODO update the state of all convos with the new lastMessage
     return true
   },
