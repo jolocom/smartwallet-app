@@ -3,6 +3,7 @@ import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
+import {proxy} from 'settings'
 
 let ChangePassword = React.createClass({
 
@@ -32,7 +33,17 @@ let ChangePassword = React.createClass({
   },
 
   changePassword() {
+    /*let user = encodeURIComponent(data.username)
+    
+    fetch(`${proxy}/resetpassword`, {
+      method: 'POST',
+      body: `username=${user}&password=${pass}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    })*/
   },
+  
   getStyles() {
     let styles = {
       container: {
