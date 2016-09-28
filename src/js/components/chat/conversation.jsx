@@ -4,7 +4,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton, Avatar} from 'material-ui'
+import {AppBar, IconButton} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
@@ -22,8 +22,6 @@ import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:conversation')
-
-import Util from 'lib/util'
 
 let Conversation = React.createClass({
 
@@ -67,7 +65,6 @@ let Conversation = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-
     if (!prevState.conversation && this.state.conversation) {
       debug('componentDidUpdate; loading conversation', this.state.conversation)
       ContactActions.load(this.state.conversation.username)
@@ -219,8 +216,7 @@ let Conversation = React.createClass({
             iconElementLeft={
               <IconButton
                 onClick={this.back}
-                iconClassName="material-icons"
-              >
+                iconClassName="material-icons">
                 arrow_back
               </IconButton>
             }

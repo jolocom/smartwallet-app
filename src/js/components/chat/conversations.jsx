@@ -7,9 +7,7 @@ import moment from 'moment'
 import {
   List,
   ListItem,
-  Avatar,
-  FloatingActionButton,
-  FontIcon
+  Avatar
 } from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
@@ -18,7 +16,6 @@ import TimerMixin from 'react-timer-mixin'
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 import UserAvatar from 'components/common/user-avatar.jsx'
-import Utils from 'lib/util'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:conversations')
@@ -106,7 +103,6 @@ let Conversations = React.createClass({
                 key={conversation.id}
                 conversation={conversation}
                 onTouchTap={this.showConversation}
-
               />
             })}
           </List>

@@ -10,8 +10,6 @@ import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 import UserAvatar from 'components/common/user-avatar.jsx'
 
-import Utils from 'lib/util'
-
 let Contacts = React.createClass({
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
@@ -35,15 +33,11 @@ let Contacts = React.createClass({
 
     let state = this.state
 
-    console.log(styles,styles.headingInitial)
-
     if (!state.contacts || !state.contacts.length) {
       emptyView = <div style={styles.empty}>No contacts</div>
       state.contacts = []
-    }
-    else
-    {
-      state.contacts.sort((a,b) => {
+    } else {
+      state.contacts.sort((a, b) => {
         return a.username.toLowerCase() > b.username.toLowerCase()
       })
     }
@@ -73,20 +67,26 @@ let Contacts = React.createClass({
             let avatar = <UserAvatar name={name} imgUrl={imgUri} />
 
             let displayInitial = false
-            if (nameInitial !== lastNameInitial)
-            {
+            if (nameInitial !== lastNameInitial) {
               lastNameInitial = nameInitial
               displayInitial = true
             }
 
             return (
               <div>
-                { displayInitial && i ? <div style={styles.separator}></div> : '' }
+                {displayInitial && i
+                  ? <div style={styles.separator}></div> : ''}
                 <div style={styles.listItemContainer}>
-                  { displayInitial ? <div style={styles.headingInitial}>{nameInitial}</div> : '' }
-                  <ListItem key={username} primaryText={name} secondaryText={email}
-                    rightAvatar={<Avatar>{avatar}</Avatar>} onTouchTap={() => { this.props.onClick(webId) }}
-                    />
+                  {displayInitial
+                    ? <div style={styles.headingInitial}>
+                      {nameInitial}
+                    </div> : ''}
+                  <ListItem
+                    key={username}
+                    primaryText={name}
+                    secondaryText={email}
+                    rightAvatar={<Avatar>{avatar}</Avatar>}
+                    onTouchTap={() => { this.props.onClick(webId) }} />
                 </div>
               </div>
             )
@@ -95,7 +95,6 @@ let Contacts = React.createClass({
       </div>
     )
   }
-
 })
 
 let styles = {

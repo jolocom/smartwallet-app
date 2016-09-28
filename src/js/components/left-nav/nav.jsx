@@ -18,7 +18,6 @@ import UserAvatar from 'components/common/user-avatar.jsx'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 import Badge from 'material-ui/Badge'
-import Util from 'lib/util'
 
 let SelectableList = MakeSelectable(List)
 
@@ -60,15 +59,15 @@ let Nav = React.createClass({
       },
       menuItem: {
         color: '#ffffff',
-        marginLeft: '-10px'
+        marginLeft: '10px'
       },
       menuItemIcon: {
-        marginLeft: '30px',
+        marginLeft: '10px',
         color: '#ffffff'
       },
       menuItemActive: {
         color: '#b3c90f',
-        marginLeft: '-10px'
+        marginLeft: '10px'
       },
       menuDivider: {
         backgroundColor: '#633c38',
@@ -91,7 +90,7 @@ let Nav = React.createClass({
         display: 'block',
         position: 'absolute',
         top: '0',
-        left: '20px'
+        left: '0px'
       }
     }
   },
@@ -117,7 +116,7 @@ let Nav = React.createClass({
     AccountActions.logout()
   },
 
-  drawerRequestChange(open,reason) {
+  drawerRequestChange(open, reason) {
     this.setState({drawerOpen: open})
   },
 
@@ -162,13 +161,14 @@ let Nav = React.createClass({
           <Divider style={styles.menuDivider} />
           <SelectableList
             value={this.state.selected}
-            onChange={this._handleNavChange}>
+            onChange={this._handleNavChange}
+            >
             <ListItem primaryText="Profile"
               onTouchTap={this.editProfile}
               style={styles.menuItem}
               leftAvatar={
                 <Avatar
-                  style={{marginLeft: '12px'}}>
+                  style={{marginLeft: '-10px'}}>
                   <UserAvatar
                     name={this.state.profile.givenName}
                     imgUrl={this.state.profile.imgUri} />
@@ -192,8 +192,8 @@ let Nav = React.createClass({
   },
 
   _handleNavChange(event, selected) {
-    /*this.setState({selected})
-    this.goto(`/${selected}`)*/
+    /* this.setState({selected})
+    this.goto(`/${selected}`) */
   }
 
 })
