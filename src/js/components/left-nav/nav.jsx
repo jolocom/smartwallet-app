@@ -9,9 +9,20 @@ import {
   FontIcon,
   Avatar
 } from 'material-ui'
+
+import {
+blue300,
+indigo900,
+orange200,
+deepOrange300,
+pink400,
+purple500,
+} from 'material-ui/styles/colors'
+
 import Header from './header.jsx'
 
 import AccountActions from 'actions/account'
+import UserAvatar from 'components/common/user-avatar.jsx'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
@@ -90,18 +101,6 @@ let Nav = React.createClass({
         position: 'absolute',
         top: '0',
         left: '20px'
-      },
-      avatarCropper: {
-        display: 'inline-block',
-        width: '24px',
-        height: '24px',
-        overflow: 'hidden',
-        borderRadius: '50%',
-        marginLeft: '30px'
-      },
-      avatarCropperImg: {
-        width: 'auto',
-        height: '100%'
       }
     }
   },
@@ -180,21 +179,15 @@ let Nav = React.createClass({
             <ListItem primaryText="Profile"
               onTouchTap={this.editProfile}
               style={styles.menuItem}
-              leftIcon={
-                this.state.profile.imgUri
-                ? <div style={styles.avatarCropper}>
-                  <img
-                    style={styles.avatarCropperImg}
-                    src={Util.uriToProxied(this.state.profile.imgUri)} />
-                </div>
-                  // <Avatar
-                  // style={styles.menuItemIcon}
-                  // src={Util.uriToProxied(this.state.profile.imgUri)} />
-                : <FontIcon
-                  style={styles.menuItemIcon}
-                  className="material-icons">
-                    account_circle
-                </FontIcon>}
+              leftAvatar={
+                <Avatar
+                  size={20}
+                  backgroundColor={blue300}
+                  style={{marginLeft: '20px', marginTop: '10px'}}>
+                  <UserAvatar
+                    name={this.state.profile.givenName}
+                    imgUrl={this.state.profile.imgUri} />
+                </Avatar>}
             />
           </SelectableList>
           <Divider style={styles.menuDivider} />

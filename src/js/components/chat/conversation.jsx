@@ -10,6 +10,7 @@ import {Layout, Content} from 'components/layout'
 
 import Dialog from 'components/common/dialog.jsx'
 import Compose from 'components/common/compose.jsx'
+import UserAvatar from 'components/common/user-avatar.jsx'
 
 import ConversationActions from 'actions/conversation'
 import ConversationStore from 'stores/conversation'
@@ -182,17 +183,6 @@ let Conversation = React.createClass({
         meta: {
           textAlign: 'right'
         }
-      },
-      avatarCropper: {
-        display: 'inline-block',
-        width: '40px',
-        height: '40px',
-        overflow: 'hidden',
-        borderRadius: '50%'
-      },
-      avatarCropperImg: {
-        width: 'auto',
-        height: '100%'
       }
     }
     return styles
@@ -209,24 +199,16 @@ let Conversation = React.createClass({
     let items = conversation.items || []
 
     var userAvatar = (
-      // <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}
-      //   style={{backgroundSize: 'cover'}} />
-      <div style={styles.avatarCropper}>
-        <img
-          style={styles.avatarCropperImg}
-          src={Util.uriToProxied(this.state.profile.imgUri)} />
-      </div>
+      <UserAvatar
+        name={this.state.profile.givenName}
+        imgUrl={this.state.profile.imgUri} />
     )
 
     if (otherPerson) {
       var otherPersonAvatar = (
-        // <Avatar src={Util.uriToProxied(otherPerson.img)}
-        //   style={{backgroundSize: 'cover'}} />
-        <div style={styles.avatarCropper}>
-          <img
-            style={styles.avatarCropperImg}
-            src={Util.uriToProxied(otherPerson.img)} />
-        </div>
+        <UserAvatar
+          name={otherPerson.name}
+          imgUrl={otherPerson.img} />
       )
     }
     return (

@@ -150,29 +150,8 @@ let ConversationsListItem = React.createClass({
       otherPerson = false
     }
 
-    // If otherPerson var is set and its name is
-    // not set or only containing white spaces set name to Unnamed
-    let nameInitial
+    let avatar = <UserAvatar name={otherPerson.name} imgUrl={otherPerson.img} />
 
-    if (otherPerson && (!otherPerson.name || !otherPerson.name.trim())) {
-      // otherPerson.name = 'Unnamed'
-      nameInitial = '?'
-    } else if (otherPerson) {
-      nameInitial = otherPerson.name[0].toUpperCase()
-    } else {
-      nameInitial = '?'
-    }
-    let avatar
-    if (otherPerson.img) {
-      avatar = <UserAvatar name={'Fred'} imgUrl={otherPerson.img} />
-      // avatar = <Avatar
-      //   style={{
-      //     backgroundSize: 'cover',
-      //     backgroundImage: `url(${Utils.uriToProxied(otherPerson.img)})`
-      //   }} />
-    } else {
-      avatar = <Avatar>{nameInitial}</Avatar>
-    }
     let date = moment(created).fromNow()
     return (
       <ListItem
@@ -184,7 +163,7 @@ let ConversationsListItem = React.createClass({
           </div>
         }
         secondaryText={content}
-        leftAvatar={avatar}
+        leftAvatar={<Avatar>{avatar}</Avatar>}
         onTouchTap={this._handleListItemTouchTap}
       />
     )

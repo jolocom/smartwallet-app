@@ -8,6 +8,7 @@ import theme from 'styles/jolocom-theme'
 
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
+import UserAvatar from 'components/common/user-avatar.jsx'
 
 import Utils from 'lib/util'
 
@@ -69,19 +70,7 @@ let Contacts = React.createClass({
               nameInitial = '?'
             }
 
-            let avatar
-            if (imgUri) {
-              avatar =
-                // <Avatar src={Utils.uriToProxied(imgUri)}
-                //   style={{backgroundSize: 'cover'}} />
-                <div style={styles.avatarCropper}>
-                  <img
-                    style={styles.avatarCropperImg}
-                    src={Utils.uriToProxied(imgUri)} />
-                </div>
-            } else {
-              avatar = <Avatar>{nameInitial}</Avatar>
-            }
+            let avatar = <UserAvatar name={name} imgUrl={imgUri} />
 
             let displayInitial = false
             if (nameInitial !== lastNameInitial)
@@ -96,7 +85,7 @@ let Contacts = React.createClass({
                 <div style={styles.listItemContainer}>
                   { displayInitial ? <div style={styles.headingInitial}>{nameInitial}</div> : '' }
                   <ListItem key={username} primaryText={name} secondaryText={email}
-                    rightAvatar={avatar} onTouchTap={() => { this.props.onClick(webId) }}
+                    rightAvatar={<Avatar>{avatar}</Avatar>} onTouchTap={() => { this.props.onClick(webId) }}
                     />
                 </div>
               </div>
@@ -140,17 +129,6 @@ let styles = {
     position: 'absolute',
     top: '15px',
     left: '20px'
-  },
-  avatarCropper: {
-    display: 'inline-block',
-    width: '40px',
-    height: '40px',
-    overflow: 'hidden',
-    borderRadius: '50%'
-  },
-  avatarCropperImg: {
-    width: 'auto',
-    height: '100%'
   }
 }
 

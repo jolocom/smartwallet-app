@@ -5,7 +5,7 @@ import {
   Avatar
 } from 'material-ui'
 
-import FontIcon from 'material-ui/FontIcon'
+import UserIcon from 'material-ui/svg-icons/action/face'
 
 import Utils from 'lib/util'
 
@@ -39,21 +39,15 @@ let UserAvatar = React.createClass({
             backgroundSize: 'cover',
             backgroundImage: `url(${Utils.uriToProxied(imgUrl)})`
           }} />
-    } else if (name) {
+    } else if (name && name.trim()) {
       let nameInitial = name[0].toUpperCase()
       avatar = <Avatar>{nameInitial}</Avatar>
     } else {
-      avatar = <Avatar
-        icon={<FontIcon className="muidocs-icon-action-account-circle" />} />
+      avatar = <Avatar icon={<UserIcon />} />
     }
 
     return (
       avatar
-      // <Avatar
-      //   style={{
-      //     backgroundSize: 'cover',
-      //     backgroundImage: `url(${Utils.uriToProxied(imgUrl)})`
-      //   }} />
     )
   }
 
