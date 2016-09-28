@@ -224,8 +224,8 @@ let Signup = React.createClass({
         {cookieWarning}
 
         <p style={styles.help}>
-          Already have an account?
-          <Link to="/login" style={styles.link}>login instead</Link>.
+          Already have an account?&nbsp;
+          <Link to="/login" style={styles.link}>Login instead</Link>.
         </p>
       </div>
     )

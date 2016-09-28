@@ -263,13 +263,14 @@ let App = React.createClass({
             </Content>
             <Profile />
             <Tour />
-            <Snackbar
-              open={this.state.snackbar.open}
-              message={this.state.snackbar.message}
-            />
           </Layout>
         )}
-      </div>
+      
+      <Snackbar
+        open={this.state.snackbar.open}
+        message={this.state.snackbar.message}
+      />
+    </div>
     )
   }
 
