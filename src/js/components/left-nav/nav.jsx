@@ -96,10 +96,6 @@ let Nav = React.createClass({
     }
   },
 
-  moveDrawer() {
-    // manually move the drawer to 80% ?
-  },
-
   show() {
     this.setState({drawerOpen: true})
   },

@@ -117,7 +117,7 @@ let styles = {
   },
   listItemContainer: {
     position: 'relative',
-    paddingLeft: '60px',
+    paddingLeft: '60px'
   },
   listItemHeading: {
     borderTop: '1px solid gray'

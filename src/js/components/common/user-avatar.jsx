@@ -12,18 +12,8 @@ import Utils from 'lib/util'
 let UserAvatar = React.createClass({
 
   propTypes: {
-    imgUrl: React.PropTypes.any,
+    imgUrl: React.PropTypes.any, // TODO change type to something more precise
     name: React.PropTypes.string
-  },
-
-  getInitialState() {
-    return {
-    }
-  },
-
-  getStyles() {
-    return {
-    }
   },
 
   render() {
@@ -33,6 +23,7 @@ let UserAvatar = React.createClass({
     let avatar
 
     if (imgUrl) {
+      // User has display image
       avatar =
         <Avatar
           style={{
@@ -40,9 +31,11 @@ let UserAvatar = React.createClass({
             backgroundImage: `url(${Utils.uriToProxied(imgUrl)})`
           }} />
     } else if (name && name.trim()) {
+      // User has no display image but has a non-empty name
       let nameInitial = name[0].toUpperCase()
       avatar = <Avatar>{nameInitial}</Avatar>
     } else {
+      // User has no image and no specified name
       avatar = <Avatar icon={<UserIcon />} />
     }
 
