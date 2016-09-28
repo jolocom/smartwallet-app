@@ -125,7 +125,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleClose() {
-    // graphActions.setState('activeNode', null, true)
+    graphActions.setState('activeNode', null, true)
     this.context.router.push('/graph/' + encodeURIComponent(this.props.state.center.uri))
   },
 
