@@ -10,15 +10,6 @@ import {
   Avatar
 } from 'material-ui'
 
-import {
-blue300,
-indigo900,
-orange200,
-deepOrange300,
-pink400,
-purple500,
-} from 'material-ui/styles/colors'
-
 import Header from './header.jsx'
 
 import AccountActions from 'actions/account'
@@ -181,9 +172,7 @@ let Nav = React.createClass({
               style={styles.menuItem}
               leftAvatar={
                 <Avatar
-                  size={20}
-                  backgroundColor={blue300}
-                  style={{marginLeft: '20px', marginTop: '10px'}}>
+                  style={{marginLeft: '12px'}}>
                   <UserAvatar
                     name={this.state.profile.givenName}
                     imgUrl={this.state.profile.imgUri} />
