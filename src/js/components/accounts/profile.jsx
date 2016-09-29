@@ -22,12 +22,16 @@ import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
+import JolocomTheme from 'styles/jolocom-theme'
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
+
+const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
@@ -232,7 +236,9 @@ let Profile = React.createClass({
               <section>
                 <div style={styles.form}>
                   <div style={styles.formRow}>
-                    <div style={styles.label}><ActionDescription /></div>
+                    <div style={styles.label}>
+                      <ActionDescription color={theme.jolocom.gray1} />
+                    </div>
                     <div style={styles.field}>
                       <TextField
                         placeholder="First Name"
@@ -243,7 +249,9 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <div style={styles.formRow}>
-                    <div style={styles.label}><ActionDescription /></div>
+                    <div style={styles.label}>
+                      <ActionDescription color={theme.jolocom.gray1} />
+                    </div>
                     <div style={styles.field}>
                       <TextField
                         placeholder="Second Name"
@@ -254,7 +262,9 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <div style={styles.formRow}>
-                    <div style={styles.label}><CommunicationEmail /></div>
+                    <div style={styles.label}>
+                      <CommunicationEmail color={theme.jolocom.gray1} />
+                    </div>
                     <div style={styles.field}>
                       <TextField
                         placeholder="Email"
@@ -317,7 +327,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <ActionCreditCard />
+                      <ActionCreditCard color={theme.jolocom.gray1} />
                     </div>
                     <div style={styles.field}>
                       {/* TODO: back-end implementation */}
