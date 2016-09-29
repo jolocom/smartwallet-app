@@ -197,8 +197,8 @@ let Nav = React.createClass({
   },
 
   _handleNavChange(event, selected) {
-    this.setState({selected})
-    this.goto(`/${selected}`)
+    /*this.setState({selected})
+    this.goto(`/${selected}`)*/
   }
 
 })

@@ -11,6 +11,7 @@ export default Reflux.createActions({
   'deleteNode': {asyncResult: false},
   'dissconnectNode': {asyncResult: false},
   'navigateToNode' : {asyncResult: true},
+  'refresh' : {asyncResult: false},
   'drawAtUri' : {asyncResult: false},
   'highlight' : {asyncResult : false},
   'viewNode': {asyncResult : false},

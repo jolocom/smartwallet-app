@@ -79,7 +79,7 @@ let TextNode = React.createClass({
     
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     
-    let fabItems = ['bookmark','edit','copyUrl']
+    let fabItems = ['bookmark',/* 'edit',*/ 'copyUrl']
     
     let menuItems = []
     if (this.getNode().isOwnedByUser)

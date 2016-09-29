@@ -95,12 +95,17 @@ let Graph = React.createClass({
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
 
-    
     if (this.props.params.node) {
-      debug('Navigating to node', this.props.params.node)
-      graphActions.navigateToNode({uri: this.props.params.node},
-                                  {uri: this.context.account.webId,
-                                   name: this.context.account.username})
+      if (this.props.params.node == account.webId) {
+        debug('Home node (componentDidMount): redirecting to /graph')
+        this.context.router.push(`/graph/`)
+      }
+      else {
+        debug('Navigating to node (componentDidMount)', this.props.params.node)
+        graphActions.navigateToNode({uri: this.props.params.node},
+                                    {uri: this.context.account.webId,
+                                     name: this.context.account.username})
+      }
     }
     else if (account.webId) {
       debug('Navigating to default node', account.webId)
@@ -110,17 +115,37 @@ let Graph = React.createClass({
     
   },
   
-  componentDidUpdate(prevProps) {
+  // @TODO combine with componentWillUpdate ?
+  componentDidUpdate(prevProps) {    
     // We do not want to center the graph on the person we're viewing the
-    // full-screen profile of. Hence we're checking if the route matches
-    // /graph/[uri]/view (3 route components) and if so, not navigating.
-    if (prevProps.params.node !== this.props.params.node &&
-        this.props.routes.length < 3) {
-      this.props.params.node = this.props.params.node || this.context.account.webId
-      debug('Navigating to node', this.props.params.node)
-      graphActions.navigateToNode({uri: this.props.params.node},
-                                  {uri: this.context.account.webId,
-                                   name: this.context.account.username})
+    // full-screen profile of.
+    
+    let fullscreenView = this.props.routes.length == 3 // /graph/[uri]/view
+    let viewChanged = prevProps.routes.length != this.props.routes.length
+    let nodeChanged = prevProps.params.node !== this.props.params.node // .uri?
+      
+    // In case we disconnected from the node in full-screen view, we want to
+    // navigate to the center node again (refresh) if viewChanged, even though
+    // the center node will inevitably be the same (nodeChanged == false)
+    if (!fullscreenView && (nodeChanged || viewChanged)) {
+      if (this.props.params.node &&
+          this.props.params.node == this.context.account.webId) {
+        debug('Home node (componentDidUpdate): redirecting to /graph')
+        this.context.router.push(`/graph/`)
+      }
+      else {
+        let nodeUri = this.props.params.node || this.context.account.webId
+        debug('Navigating to node (componentDidUpdate)', nodeUri)
+        
+        if (this.props.params.node) {
+          graphActions.navigateToNode({uri: nodeUri},
+                                      {uri: this.context.account.webId,
+                                       name: this.context.account.username})
+        }
+        else {
+          graphActions.navigateToNode({uri: nodeUri})
+        }
+      }
     }
   },
 
@@ -131,18 +156,17 @@ let Graph = React.createClass({
     }
   },
 
-  componentWillUpdate(props, state, context) {
-    const {activeNode} = this.state
+  componentWillUpdate(newProps, newState, newContext) {
     let uri
 
-    if (state.activeNode && activeNode !== state.activeNode) {
-      uri = encodeURIComponent(state.activeNode.uri)
+    if (newState.activeNode &&
+        newState.activeNode !== this.state.activeNode) {
+      uri = encodeURIComponent(newState.activeNode.uri)
       this.context.router.push(`/graph/${uri}/view`)
     }
-
-    const {account: {webId}} = this.context
-    if (webId && webId !== context.account.webId) {
-      graphActions.getInitialGraphState(context.account.webId)
+    else if (newContext.account.webId &&
+             newContext.account.webId !== this.context.account.webId) {
+      graphActions.getInitialGraphState(newContext.account.webId)
     }
   },
 
@@ -155,10 +179,7 @@ let Graph = React.createClass({
   },
 
   _handleCenterChange(node) {
-    if (node.uri == this.context.account.webId)
-      this.context.router.push(`/graph/`)
-    else
-      this.context.router.push(`/graph/${encodeURIComponent(node.uri)}/`)
+    this.context.router.push(`/graph/${encodeURIComponent(node.uri)}/`)
   },
 
   // max visible nodes reached, show indicator overlay

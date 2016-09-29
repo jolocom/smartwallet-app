@@ -80,6 +80,8 @@ export default Reflux.createStore({
     if (flag) this.trigger(this.state, 'changeRotationIndex')
   },
 
+  /*
+  -- We use onRefresh() and do a reloading of the graph for now
   deleteNode: function(node){
     let nodeId = node.index > 0 ? node.index : node.uri
     for (let i = this.state.neighbours.length -1 ; i >= 0; i--){
@@ -91,6 +93,7 @@ export default Reflux.createStore({
     this.state.activeNode = node
     this.trigger(this.state, 'nodeRemove')
   },
+  */
 
   dissconnectNode: function(){
     // Animation / removing from the neighb array will go here.
@@ -123,6 +126,7 @@ export default Reflux.createStore({
   },
 
   onGetInitialGraphState: function (webId) {
+    this.state.previousRenderedNodeUri = webId
     this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
@@ -139,8 +143,15 @@ export default Reflux.createStore({
     this.state.user = result[0]
     this.trigger(this.state)
   },
+  
+  onRefresh: function() {
+    this.drawAtUri(this.state.center.uri)
+  },
 
   drawAtUri: function (uri, number) {
+    debug('Drawing at URI',uri)
+    this.state.previousRenderedNodeUri = uri
+    this.trigger(Object.assign({},this.state,{neighbours: []}))
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
@@ -157,24 +168,27 @@ export default Reflux.createStore({
   },
 
   onNavigateToNode: function (node, defaultHistoryNode) {
-    
     this.state.rotationIndex = 0
-
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
       
       // Before updating the this.state.center, we push the old center node
       // to the node history
+      
+      let historyCandidate
+      if (this.state.center && this.state.center.uri)
+        historyCandidate = this.state.center
+      else
+        historyCandidate = defaultHistoryNode
 
       // We check if we're not navigating to the same node (e.g. went to the
       // full-screen view and then back), in which case we don't want to add
       // the node to the history
-      if ((!this.state.previousRenderedNodeUri ||
-          this.state.previousRenderedNodeUri !== node.uri)
-          &&
-          (this.state.center || defaultHistoryNode.uri !== node.uri))
-        this.state.navHistory.push(this.state.center || defaultHistoryNode)
+      if (!this.state.previousRenderedNodeUri ||
+          this.state.previousRenderedNodeUri !== node.uri) {
+        this.state.navHistory.push(historyCandidate)
+      }
         
       this.state.previousRenderedNodeUri = node.uri
       
