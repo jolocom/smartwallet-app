@@ -57,11 +57,11 @@ class Chat extends React.Component {
 
   close() {
     this.refs.dialog.hide()
-    try {
+    if (GraphStore.state.center == null) {
+      this.context.router.push('/graph')
+    } else {
       this.context.router.push('/graph/' +
         encodeURIComponent(GraphStore.state.center.uri))
-    } catch (error) {
-      this.context.router.push('/graph')
     }
   }
 
