@@ -1,3 +1,5 @@
+/*eslint-disable jsx-no-bind*/
+/* temporary fix, enable arrow functions for refs in eslint config */
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
