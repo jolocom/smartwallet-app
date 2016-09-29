@@ -71,7 +71,11 @@ let Index = React.createClass({
         padding: '24px'
       },
       signup: {
-        marginBottom: '12px'
+        marginBottom: '12px',
+        maxWidth: '272px'
+      },
+      login: {
+        maxWidth: '272px'
       }
     }
 
@@ -128,7 +132,6 @@ let Index = React.createClass({
             onClick={this._handleLogin}
           />
         </div>
-
       </div>
     )
   },
