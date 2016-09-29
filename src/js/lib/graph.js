@@ -250,7 +250,6 @@ export default class GraphD3 extends EventEmitter {
        .outerRadius(this.largeNodeSize * 0)
        .startAngle(0)
 
-
     this.arcEnlarged = d3.arc()
       // enlarged size
       .innerRadius(this.largeNodeSize * 0.57)
@@ -341,7 +340,14 @@ export default class GraphD3 extends EventEmitter {
         .attr('class', 'node')
         .attr('transform', (d) => {
           let x = this.centerCoordinates.x
-          let y = this.centerCoordinates.y - this.largeNodeSize * 1.5
+          let y = this.centerCoordinates.y
+          if (d.rank !== 'center') {
+            if (d.rank === 'history') {
+              y += largeNode * 2
+            } else {
+              y -= largeNode * 1.5
+            }
+          }
           return 'translate(' + x + ',' + y + ')'
         })
 
@@ -508,7 +514,7 @@ export default class GraphD3 extends EventEmitter {
     // Add class hasNodeIcon
     // Adds a Confidential Icon for confidential nodes
     nodeEnter.filter((d) => d.confidential)
-      .classed('hasNodeIcon',true)
+      .classed('hasNodeIcon', true)
       .append('image')
         .attr('class', 'nodeIcon')
         .attr('xlink:href', (d) => {
@@ -613,8 +619,6 @@ export default class GraphD3 extends EventEmitter {
     full.on('click', function (data) {
       self.onClickFull(this, data)
     })
-    this.resetAll()
-    this.resetPos()
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
@@ -818,8 +822,6 @@ export default class GraphD3 extends EventEmitter {
         }
       }
     }
-
-    this.resetAll()
   }.bind(this)
 
   arcTween = function (transition, newAngle) {
@@ -879,6 +881,9 @@ export default class GraphD3 extends EventEmitter {
         }
       })
       .attr('y2', (d) => {
+        if ((d.source.rank !== 'neighbour') && isNaN(d.source.histLevel)) {
+          return this.centerCoordinates.y
+        }
         if (d.source.rank === 'neighbour') {
           return this.nodePositions[d.source.position].y
         } else {
@@ -1015,11 +1020,11 @@ export default class GraphD3 extends EventEmitter {
       })
       .transition('reset').duration(STYLES.nodeTransitionDuration)
       .attr('y', (d) => {
-          if (d.rank === 'center') {
-            return -55
-          } else {
-            return -50
-          }
+        if (d.rank === 'center') {
+          return -55
+        } else {
+          return -50
+        }
       })
       .style('filter', null)
 
@@ -1039,7 +1044,7 @@ export default class GraphD3 extends EventEmitter {
       .transition('reset').duration(speed)
       .attr('dy', function (d) {
         return d3.select(this.parentNode).classed('hasNodeIcon')
-          ? (d.rank == 'center' ? '0.95em' : '.75em')
+          ? (d.rank === 'center' ? '0.95em' : '.75em')
           : '.35em' })
       .attr('opacity', (d) => {
         return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
@@ -1047,7 +1052,7 @@ export default class GraphD3 extends EventEmitter {
                 ? 0
                 : 1
       })
-    
+
     // Hide the descriptions of all nodes
     d3.selectAll('svg .node')
       .selectAll('.nodedescription')
@@ -1076,7 +1081,6 @@ export default class GraphD3 extends EventEmitter {
 
   onClick = function (node, data) {
     d3.event.stopPropagation()
-
     this.emit('select', data, node)
 
     // d3.event.defaultPrevented returns true if the click event was fired by
@@ -1156,23 +1160,25 @@ export default class GraphD3 extends EventEmitter {
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('dy', function (d) {
           if (d.description && d.type !== 'bitcoin') {
-            if (d3.select(this.parentNode).classed('hasNodeIcon'))
+            if (d3.select(this.parentNode).classed('hasNodeIcon')) {
               return '.4em'
+            }
             return '-.15em'
-          }
-          else {
-            if (d3.select(this.parentNode).classed('hasNodeIcon'))
-              return (d.rank == 'center' ? '0.95em' : '.75em')
+          } else {
+            if (d3.select(this.parentNode).classed('hasNodeIcon')) {
+              return (d.rank === 'center' ? '0.95em' : '.75em')
+            }
             return '.35em'
-          }})
+          }
+        })
         .attr('opacity', 1)
-      
+
       // Move the icon up if description
       d3.select(node)
         .filter((d) => d.description)
         .select('.nodeIcon')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
-        .attr('y', (d) => d.rank == 'center' ? -70 : -60)
+        .attr('y', (d) => d.rank === 'center' ? -70 : -60)
       data.highlighted = true
     }
   }.bind(this)
@@ -1214,6 +1220,8 @@ export default class GraphD3 extends EventEmitter {
       this.d3update()
     }
     this.d3update()
+    this.resetAll()
+    this.resetPos()
   }.bind(this)
 
   // Wraps the description of the nodes around the node.
@@ -1283,17 +1291,18 @@ export default class GraphD3 extends EventEmitter {
     d3.event.stopPropagation()
 
     if (data.rank !== 'center') {
+      this.isPulsing = true
       let x = this.centerCoordinates.x
       let y = this.centerCoordinates.y
-      let largeSize = STYLES.largeNodeSize
 
       d3.select('.dial')
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('opacity', 0)
 
       d3.selectAll('.link')
-        .transition().duration(STYLES.nodeTransitionDuration / 2)
+        .transition().duration(STYLES.nodeTransitionDuration)
         .attr('opacity', 0)
+        .transition().remove()
 
       d3.select(node)
         .attr('d', function(d) {
@@ -1317,9 +1326,8 @@ export default class GraphD3 extends EventEmitter {
       this.resetAll()
 
       this.emit('center-changed', data)
+      this.pulseCenter()
     }
-    this.isPulsing = true
-    this.pulseCenter()
   }.bind(this)
 
   pulseCenter = function () {
@@ -1390,6 +1398,8 @@ export default class GraphD3 extends EventEmitter {
         this.numberOfNeighbours--
         this.setUpVisibleNodes()
         this.d3update()
+        this.resetAll()
+        this.resetPos()
 
         // Once the animation is ended, we re-render everything
         // It updates the visibility of the radial
@@ -1408,19 +1418,21 @@ export default class GraphD3 extends EventEmitter {
   updateAfterRotationIndex = function() {
     this.updateDial()
     if (this.visibleDataNodes) {
-      // @TODO do we realy need to do all of the following?
-
       this.setUpVisibleNodes()
       this.d3update()
+      this.resetPos()
       this.resetAll(10)
     }
   }.bind(this)
 
   // Called from graph.jsx
   setRotationIndex = function (rotationIndex) {
+    let prevRotationIndex = this.rotationIndex
     this.rotationIndex = rotationIndex || 0
     // @todo only execute updateAfterRot if index changed
-    this.updateAfterRotationIndex()
+    if ((prevRotationIndex !== this.rotationIndex) && !this.isPulsing) {
+      this.updateAfterRotationIndex()
+    }
   }.bind(this)
 
   onResize = function () {
