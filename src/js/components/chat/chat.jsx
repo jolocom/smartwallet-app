@@ -35,6 +35,9 @@ class Chat extends React.Component {
     if (path === '/contacts') {
       activeTab = 'contacts'
     }
+    else if (path === '/groups') {
+      activeTab = 'groups'
+    }
 
     return activeTab
   }
@@ -100,6 +103,7 @@ class Chat extends React.Component {
             }}>
               <Tab label="Conversations" value="chat" />
               <Tab label="Contacts" value="contacts" />
+              <Tab label="Groups" value="groups" />
             </Tabs>
           </Paper>
           <Content style={styles.conversationsContainer}>
@@ -119,6 +123,9 @@ class Chat extends React.Component {
         break
       case 'contacts':
         this.context.router.push('/contacts')
+        break
+      case 'groups':
+        this.context.router.push('/groups')
         break
     }
   }
