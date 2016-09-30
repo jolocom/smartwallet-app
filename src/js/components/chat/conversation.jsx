@@ -197,16 +197,31 @@ let Conversation = React.createClass({
     let {account} = this.context
 
     let items = this.state.conversation.items || []
+    let otherPersonInitial = Util.nameInitial(otherPerson)
+    let userInitial = Util.nameInitial({
+      name: this.state.profile.givenName
+    })
 
-    var userAvatar = (
-      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}
-        style={{backgroundSize: 'cover'}} />
-    )
+    if (this.state.profile.imgUri) {
+      var userAvatar = (
+        <Avatar
+          src={Util.uriToProxied(this.state.profile.imgUri)}
+          style={{backgroundSize: 'cover'}} />
+      )
+    } else {
+      userAvatar = (
+        <Avatar>{userInitial}</Avatar>
+      )
+    }
 
-    if (otherPerson) {
+    if (otherPerson.img) {
       var otherPersonAvatar = (
         <Avatar src={Util.uriToProxied(otherPerson.img)}
           style={{backgroundSize: 'cover'}} />
+      )
+    } else {
+      otherPersonAvatar = (
+        <Avatar>{otherPersonInitial}</Avatar>
       )
     }
 
