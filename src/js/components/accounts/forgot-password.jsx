@@ -20,6 +20,14 @@ let ForgotPassword = React.createClass({
     })
   },
 
+  enableSubmit() {
+    this.setState({disabledSubmit: false})
+  },
+
+  disableSubmit() {
+    this.setState({disabledSubmit: true})
+  },
+
   forgotPassword() {
     let user = encodeURIComponent(this.state.username)
     
@@ -116,6 +124,12 @@ let ForgotPassword = React.createClass({
               </div>
               <FormsyText name="username"
                 floatingLabelText="Username"
+                autocorrect="off"
+                autocapitalize="none"
+                autocomplete="none" 
+                validations="isAlphanumeric"
+                validationError='Please only use letters and numbers'
+                inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._handleUsernameChange}
               />
             </div>
