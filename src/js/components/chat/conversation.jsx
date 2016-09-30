@@ -143,7 +143,8 @@ let Conversation = React.createClass({
           background: '#ffffff',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'left'
@@ -155,7 +156,8 @@ let Conversation = React.createClass({
           background: '#B5CA11',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'right'
