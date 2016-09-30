@@ -184,6 +184,9 @@ let Signup = React.createClass({
             <div style={{marginBottom: '20px'}}>
               <FormsyText
                 name="username"
+                autocorrect="off"
+                autocapitalize="none"
+                autocomplete="none" 
                 floatingLabelText="Username"
                 validations="isAlphanumeric"
                 validationError={this.errorMessages.alphaNumeric}
