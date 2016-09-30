@@ -1,5 +1,3 @@
-/*eslint-disable jsx-no-bind*/
-/* temporary fix, enable arrow functions for refs in eslint config */
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
@@ -219,14 +217,14 @@ let Profile = React.createClass({
               </CardActions>
             </Card>
             <input
-              ref={el => { this.fileInputEl = el }}
+              ref={this._setFileInputRef}
               type="file"
               name="file"
               style={styles.file}
               multiple={false}
               onChange={this._handleSelectFile} />
             <input
-              ref={el => { this.passportFileInputEl = el }}
+              ref={this._setPassportInputRef}
               type="file"
               name="passportfile"
               style={styles.file}
@@ -352,6 +350,14 @@ let Profile = React.createClass({
         </Layout>
       </Dialog>
     )
+  },
+  
+  _setFileInputRef(el) {
+    this.fileInputEl = el
+  },
+  
+  _setPassportInputRef(el) {
+     this.passwordInputEl = el
   },
 
   _handleUpdate() {
