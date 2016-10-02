@@ -3,6 +3,9 @@ import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
+import {proxy} from 'settings'
+
+import SnackbarActions from 'actions/snackbar'
 
 let ChangePassword = React.createClass({
 
@@ -19,10 +22,6 @@ let ChangePassword = React.createClass({
     email: 'Please provide a valid email'
   },
 
-  forgotPassword() {
-    alert('you sir, have forgot your password.')
-  },
-
   enableSubmit() {
     this.setState({disabledSubmit: false})
   },
@@ -30,9 +29,50 @@ let ChangePassword = React.createClass({
   disableSubmit() {
     this.setState({disabledSubmit: true})
   },
+  
+  _handlePasswordChange(e) {
+    this.setState({
+      newPassword: e.target.value.toLowerCase()
+    })
+  },
+  
+  _handlePassword2Change(e) {
+    this.setState({
+      newPassword2: e.target.value.toLowerCase()
+    })
+  },
 
   changePassword() {
+    
+    if (this.state.newPassword != this.state.newPassword2) {
+      SnackbarActions.showMessage('The two passwords do not match.')
+      return
+    }
+    
+    let user = encodeURIComponent(this.props.params.username)
+    let token = encodeURIComponent(this.props.params.token)
+    let newpassword = this.state.newPassword
+    
+    fetch(`${proxy}/resetpassword`, {
+      method: 'POST',
+      body: `username=${user}&code=${token}&password=${newpassword}`,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    }).then((res) => {
+      if (!res.ok) {
+          throw new Error(res.statusText)
+      }
+      
+      SnackbarActions.showMessage('Your password has been reset.')
+      this.context.router.push('/login')
+    }).catch((e) => {
+      SnackbarActions.showMessage('An error occured : ' + e)
+      console.error(e)
+    })
   },
+  
   getStyles() {
     let styles = {
       container: {
@@ -87,7 +127,7 @@ let ChangePassword = React.createClass({
           <Formsy.Form
             onValid={this.enableSubmit}
             onInvalid={this.disableSubmit}
-            onValidSubmit={this.forgotPassword}
+            onValidSubmit={this.changePassword}
           >
             <h3 style={styles.username}>{this.props.params.username}</h3>
             <div style={{marginBottom: '20px'}}>
@@ -98,20 +138,20 @@ let ChangePassword = React.createClass({
                 name="password"
                 type="password"
                 floatingLabelText="New password"
+                onChange={this._handlePasswordChange}
               />
               <FormsyText
                 name="password"
                 type="password"
                 floatingLabelText="Repeat password"
-                onChange={this._onPasswordChange}
+                onChange={this._handlePassword2Change}
               />
             </div>
             <RaisedButton
               type="submit" secondary
               disabled={this.state.disabledSubmit}
               style={styles.button}
-              label="LOG IN"
-              onClick={this.changePassword} />
+              label="CHANGE PASSWORD"/>
           </Formsy.Form>
         </div>
       </div>

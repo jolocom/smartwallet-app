@@ -184,6 +184,9 @@ let Signup = React.createClass({
             <div style={{marginBottom: '20px'}}>
               <FormsyText
                 name="username"
+                autocorrect="off"
+                autocapitalize="none"
+                autocomplete="none" 
                 floatingLabelText="Username"
                 validations="isAlphanumeric"
                 validationError={this.errorMessages.alphaNumeric}
@@ -224,8 +227,8 @@ let Signup = React.createClass({
         {cookieWarning}
 
         <p style={styles.help}>
-          Already have an account?
-          <Link to="/login" style={styles.link}>login instead</Link>.
+          Already have an account?&nbsp;
+          <Link to="/login" style={styles.link}>Login instead</Link>.
         </p>
       </div>
     )

@@ -149,19 +149,7 @@ let ConversationsListItem = React.createClass({
     if (otherPerson == null) {
       otherPerson = false
     }
-
-    // If otherPerson var is set and its name is
-    // not set or only containing white spaces set name to Unnamed
-    let nameInitial
-
-    if (otherPerson && (!otherPerson.name || !otherPerson.name.trim())) {
-      // otherPerson.name = 'Unnamed'
-      nameInitial = '?'
-    } else if (otherPerson) {
-      nameInitial = otherPerson.name[0].toUpperCase()
-    } else {
-      nameInitial = '?'
-    }
+    let nameInitial = Utils.nameInitial(otherPerson)
     let avatar
     if (otherPerson.img) {
       avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}

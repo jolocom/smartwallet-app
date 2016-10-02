@@ -3,6 +3,9 @@ import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton} from 'material-ui'
+import {proxy} from 'settings'
+
+import SnackbarActions from 'actions/snackbar'
 
 let ForgotPassword = React.createClass({
 
@@ -10,13 +13,41 @@ let ForgotPassword = React.createClass({
     muiTheme: React.PropTypes.object,
     router: React.PropTypes.object
   },
+  
+  _handleUsernameChange(e) {
+    this.setState({
+      username: e.target.value.toLowerCase()
+    })
+  },
 
-  errorMessage: {
-    email: 'Please provide a valid email'
+  enableSubmit() {
+    this.setState({disabledSubmit: false})
+  },
+
+  disableSubmit() {
+    this.setState({disabledSubmit: true})
   },
 
   forgotPassword() {
-    alert('you sir, have forgot your password.')
+    let user = encodeURIComponent(this.state.username)
+    
+    fetch(`${proxy}/forgotpassword`, {
+      method: 'POST',
+      body: `username=${user}`,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    }).then((res) => {
+      if (!res.ok) {
+          throw new Error(res.statusText)
+      }
+      
+      SnackbarActions.showMessage('An email was sent to you with further instructions.')
+    }).catch((e) => {
+      SnackbarActions.showMessage('An error occured : ' + e)
+      console.error(e)
+    })
   },
 
   enableSubmit() {
@@ -91,11 +122,15 @@ let ForgotPassword = React.createClass({
                 </div>
                 <div style={styles.title}>Forgot password</div>
               </div>
-              <FormsyText name="email"
-                floatingLabelText="Email"
-                validations="isEmail"
-                validationError={this.errorMessage.email}
-                onChange={this._onEmailChange}
+              <FormsyText name="username"
+                floatingLabelText="Username"
+                autocorrect="off"
+                autocapitalize="none"
+                autocomplete="none" 
+                validations="isAlphanumeric"
+                validationError='Please only use letters and numbers'
+                inputStyle={{textTransform: 'lowercase'}}
+                onChange={this._handleUsernameChange}
               />
             </div>
 

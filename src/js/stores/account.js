@@ -7,6 +7,7 @@ import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
 import ConversationsActions from 'actions/conversations'
+import SnackbarActions from 'actions/snackbar'
 
 export default Reflux.createStore({
   listenables: Account,
@@ -25,11 +26,11 @@ export default Reflux.createStore({
     let user = encodeURIComponent(data.username)
     let pass = encodeURIComponent(data.password)
     let name = data.name
-    let email = data.email
+    let email = encodeURIComponent(data.email)
 
     fetch(`${proxy}/register`, {
       method: 'POST',
-      body: `username=${user}&password=${pass}`,
+      body: `username=${user}&password=${pass}&email=${email}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
@@ -121,6 +122,11 @@ export default Reflux.createStore({
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
       }).then((res) => {
+        
+        if (!res.ok) {
+          throw new Error('Login authentication failed.')
+        }
+        
         res.json().then((js) => {
           if (updatePayload) {
             this.onSetNameEmail(
@@ -135,6 +141,8 @@ export default Reflux.createStore({
             Account.login.completed(username, js.webid)
           }
         })
+      }).catch((e) => {
+        SnackbarActions.showMessage('Login authentication failed.')
       })
     } else {
       this.trigger({loggingIn: false})
@@ -151,7 +159,6 @@ export default Reflux.createStore({
       username: username,
       webId: webId
     }
-    
     // Load conversations for joining an existing one
     // when clicking on "chat" FAB on sbody's profile
     ConversationsActions.load(webId)

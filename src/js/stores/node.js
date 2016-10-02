@@ -56,7 +56,7 @@ export default Reflux.createStore({
         this.gAgent.deleteTriple(query).then((result)=>{
           if (result.ok){
             profileActions.load() // Reload profile info (bitcoin, passport)
-            graphActions.deleteNode(node) 
+            graphActions.refresh()
           }
         })
       })
