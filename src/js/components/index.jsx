@@ -1,8 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
-import Carousel from 're-carousel'
-import IndicatorDots from 'components/common/indicator-dots.jsx'
+// import Carousel from 're-carousel'
+// import IndicatorDots from 'components/common/indicator-dots.jsx'
 
 let Index = React.createClass({
   contextTypes: {
