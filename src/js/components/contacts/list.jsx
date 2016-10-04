@@ -40,6 +40,12 @@ let ContactsList = React.createClass({
     let {items} = this.state.contacts
 
     items.sort((a, b) => {
+      if (!a.username) {
+        a.username = ' '
+      }
+      if (!b.username) {
+        b.username = ' '
+      }
       return a.username.toLowerCase() > b.username.toLowerCase()
     })
 
@@ -76,7 +82,7 @@ let ContactsList = React.createClass({
       result.push(
         <ListItem
           key={username}
-          primaryText={name}
+          primaryText={name || 'Unnamed'}
           secondaryText={email}
           rightAvatar={<Avatar>{avatar}</Avatar>}
           insetChildren
