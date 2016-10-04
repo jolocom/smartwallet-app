@@ -86,7 +86,7 @@ let Graph = React.createClass({
     let styles = {
       chart: {
         flex: 1,
-        background: JolocomTheme.jolocom.gray2
+        background: JolocomTheme.jolocom.gray3
       }
     }
     return styles
