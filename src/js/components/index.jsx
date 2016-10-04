@@ -70,14 +70,13 @@ let Index = React.createClass({
         alignItems: 'stretch',
         padding: '24px',
         maxWidth: '80%',
-        width: '272px',
+        width: '260px',
         margin: 'auto'
       },
       signup: {
         marginBottom: '12px'
       },
       login: {
-        maxWidth: '272px'
       }
     }
 
