@@ -57,7 +57,12 @@ class Chat extends React.Component {
 
   close() {
     this.refs.dialog.hide()
-    this.context.router.push('/graph/' + encodeURIComponent(GraphStore.state.center.uri))
+    if (GraphStore.state.center == null) {
+      this.context.router.push('/graph')
+    } else {
+      this.context.router.push('/graph/' +
+        encodeURIComponent(GraphStore.state.center.uri))
+    }
   }
 
   render() {
