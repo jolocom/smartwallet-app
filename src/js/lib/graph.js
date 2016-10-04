@@ -275,7 +275,7 @@ export default class GraphD3 extends EventEmitter {
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
     let smallNode = this.smallNodeSize
-    let fullPos = STYLES.fullScreenButtonPosition
+    /*let fullPos = STYLES.fullScreenButtonPosition
     let fullScreenRadius = STYLES.fullScreenButton / 2
     let fullOffx = (STYLES.largeNodeSize / fullPos) - fullScreenRadius
     let fullOffy = -(STYLES.largeNodeSize / fullPos) - fullScreenRadius
@@ -292,7 +292,7 @@ export default class GraphD3 extends EventEmitter {
       .append('svg:image')
       .attr('xlink:href', 'img/full.jpg')
       .attr('width', STYLES.fullScreenButton)
-      .attr('height', STYLES.fullScreenButton)
+      .attr('height', STYLES.fullScreenButton)*/
 
     // LINKS DATA JOIN
     this.link = this.svg.select('.background-layer .background-layer-links')
@@ -580,13 +580,13 @@ export default class GraphD3 extends EventEmitter {
       // This wraps the description nicely.
       .call(this.wrap, STYLES.largeNodeSize * 0.75, ' ', ' ')
 
-    let full = nodeEnter.append('circle')
+    /*let full = nodeEnter.append('circle')
       .attr('class', 'nodefullscreen')
       .attr('r', 0)
       .style('fill', 'url(#full)')
       .attr('cy', -STYLES.largeNodeSize / STYLES.fullScreenButtonPosition)
       .attr('cx', STYLES.largeNodeSize / STYLES.fullScreenButtonPosition)
-      .style('filter', 'url(#drop-shadow)')
+      .style('filter', 'url(#drop-shadow)')*/
 
     // Subscribe to the click listeners
     this.node.on('click', function (data) {
@@ -596,9 +596,9 @@ export default class GraphD3 extends EventEmitter {
       }
       self.onClick(this, data)
     })
-    this.node.on('dblclick', function (data) {
+    /*this.node.on('dblclick', function (data) {
       self.onDblClick(this, data)
-    })
+    })*/
 
     this.node.on('touchstart', function(data) {
       if ((d3.event.timeStamp - this.last) < 500) {
@@ -616,9 +616,9 @@ export default class GraphD3 extends EventEmitter {
 
     this.svg.on('wheel', self.onScroll)
 
-    full.on('click', function (data) {
+    /*full.on('click', function (data) {
       self.onClickFull(this, data)
-    })
+    })*/
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
@@ -1064,10 +1064,10 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', 0)
 
     // Make the fullscreen button of all nodes smaller
-    d3.selectAll('svg .node')
+    /*d3.selectAll('svg .node')
       .selectAll('.nodefullscreen')
       .transition('reset').duration(speed)
-      .attr('r', 0)
+      .attr('r', 0)*/
 
     // Un-highlight all nodes
     d3.selectAll('svg .node')
@@ -1138,9 +1138,9 @@ export default class GraphD3 extends EventEmitter {
 
       if (this.mode !== 'preview') {
       // Enlarge full screen button
-        d3.select(node).select('.nodefullscreen')
+        /*d3.select(node).select('.nodefullscreen')
           .transition('highlight').duration(STYLES.nodeTransitionDuration)
-          .attr('r', STYLES.fullScreenButton / 2)
+          .attr('r', STYLES.fullScreenButton / 2)*/
       }
       // Enlarge the image of the node we clicked on
       // We also blur it a bit and darken it, so that the text displays better
