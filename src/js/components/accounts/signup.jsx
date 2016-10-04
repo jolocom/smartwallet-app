@@ -33,6 +33,11 @@ let Signup = React.createClass({
     unavailable: 'This username is already taken'
   },
 
+  helperMessages: {
+    userName: 'This is your unique identifier',
+    givenName: 'This will be shown in your profile node'
+  },
+
   getInitialState() {
     return {
       disabledSubmit: true
@@ -145,6 +150,11 @@ let Signup = React.createClass({
       link: {
         color: muiTheme.palette.accent1Color,
         fontWeight: 'bold'
+      },
+      helperText: {
+        color: muiTheme.jolocom.gray2,
+        fontSize: '12px',
+        textAlign: 'left'
       }
     }
 
@@ -186,13 +196,19 @@ let Signup = React.createClass({
                 name="username"
                 autocorrect="off"
                 autocapitalize="none"
-                autocomplete="none" 
+                autocomplete="none"
                 floatingLabelText="Username"
                 validations="isAlphanumeric"
                 validationError={this.errorMessages.alphaNumeric}
                 inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._onUsernameChange}
+                errorText="This field is required."
                 />
+              <div>
+                <p style={styles.helperText}>
+                  {this.helperMessages.userName}
+                </p>
+              </div>
               <FormsyText
                 name="password"
                 type="password"
@@ -206,6 +222,11 @@ let Signup = React.createClass({
                 validationError={this.errorMessages.name}
                 onChange={this._onNameChange}
                 />
+              <div>
+                <p style={styles.helperText}>
+                  {this.helperMessages.givenName}
+                </p>
+              </div>
               <FormsyText
                 name="email"
                 floatingLabelText="Email"
