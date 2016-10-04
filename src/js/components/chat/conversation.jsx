@@ -143,7 +143,8 @@ let Conversation = React.createClass({
           background: '#ffffff',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'left'
@@ -155,7 +156,8 @@ let Conversation = React.createClass({
           background: '#B5CA11',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'right'
@@ -195,16 +197,31 @@ let Conversation = React.createClass({
     let {account} = this.context
 
     let items = this.state.conversation.items || []
+    let otherPersonInitial = Util.nameInitial(otherPerson)
+    let userInitial = Util.nameInitial({
+      name: this.state.profile.givenName
+    })
 
-    var userAvatar = (
-      <Avatar src={Util.uriToProxied(this.state.profile.imgUri)}
-        style={{backgroundSize: 'cover'}} />
-    )
+    if (this.state.profile.imgUri) {
+      var userAvatar = (
+        <Avatar
+          src={Util.uriToProxied(this.state.profile.imgUri)}
+          style={{backgroundSize: 'cover'}} />
+      )
+    } else {
+      userAvatar = (
+        <Avatar>{userInitial}</Avatar>
+      )
+    }
 
-    if (otherPerson) {
+    if (otherPerson.img) {
       var otherPersonAvatar = (
         <Avatar src={Util.uriToProxied(otherPerson.img)}
           style={{backgroundSize: 'cover'}} />
+      )
+    } else {
+      otherPersonAvatar = (
+        <Avatar>{otherPersonInitial}</Avatar>
       )
     }
 
