@@ -55,7 +55,7 @@ let GenericFullScreen = React.createClass({
   },
 
   componentWillMount() {
-    this.props.menuItems.unshift('fullscreen')
+    // this.props.menuItems.unshift('fullscreen')
   },
 
   componentDidMount() {
@@ -158,15 +158,17 @@ let GenericFullScreen = React.createClass({
 
     if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
-      graphActions.drawAtUri(prev.uri, 1)
+      // graphActions.drawAtUri(prev.uri, 1)
+      this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
       nodeActions.remove(node, prev) // will refresh the graph
     }
     else
     {
+      this.context.router.push(`/graph/${encodeURIComponent(center.uri)}`)
       nodeActions.remove(node, center)
     }
     
-    this._handleClose()
+    graphActions.setState('activeNode', null, true)
   },
 
   getNode() {
@@ -283,6 +285,11 @@ let GenericFullScreen = React.createClass({
     graphActions.setState('activeNode', null, true)
   },
   
+  _preventDefault(e) {
+    e.stopPropagation()
+    return false
+  },
+  
   getLuminanceForImageUrl(url) {
     return new Promise((res, rej) => {
 
@@ -360,6 +367,7 @@ let GenericFullScreen = React.createClass({
           <Content>
             <div style={styles.container}>
               <AppBar
+                onTouchTap={this._handleFull}
                 style={styles.headers}
                 titleStyle={styles.title}
                 title={<span>{this.props.title || 'No title'}</span>}
@@ -372,20 +380,21 @@ let GenericFullScreen = React.createClass({
                           more_vert
                       </IconButton>
                     }
+                    onTouchTap={this._preventDefault}
                     anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                     targetOrigin={{horizontal: 'left', vertical: 'top'}}>
 
-                    {this.props.menuItems.map((menuItem) => {
-                      let menuItemInfo = this.getAction(menuItem)
-                      if ('menuItem' in menuItemInfo) {
-                        return menuItemInfo.menuItem
-                      }
-                      return (
-                        <MenuItem
-                          primaryText={menuItemInfo.title}
-                          onTouchTap={menuItemInfo.handler} />
-                      )
-                    })}
+                      {this.props.menuItems.map((menuItem) => {
+                        let menuItemInfo = this.getAction(menuItem)
+                        if ('menuItem' in menuItemInfo) {
+                          return menuItemInfo.menuItem
+                        }
+                        return (
+                          <MenuItem
+                            primaryText={menuItemInfo.title}
+                            onTouchTap={menuItemInfo.handler} />
+                        )
+                      })}
                   </IconMenu>
                 }
                 iconElementLeft={

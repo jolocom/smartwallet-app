@@ -110,6 +110,25 @@ let Util = {
       return uri
     }
     return `${proxy}/proxy?url=${uri}`
+  },
+
+  /*
+   * @summary Returns the firstname initial of a user.
+   * E.g: Useful for the Avatar, when a user does not have an image.
+   * @param {object} person - to seek their initial
+   * @return {string} initial - inital of person
+   */
+  nameInitial(person) {
+    let initial
+    if (!person.name || !person.name.trim()) {
+      // otherPerson.name = 'Unnamed'
+      initial = '?'
+    } else if (person) {
+      initial = person.name[0].toUpperCase()
+    } else {
+      initial = '?'
+    }
+    return initial
   }
 }
 

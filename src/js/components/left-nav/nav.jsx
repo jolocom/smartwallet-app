@@ -12,6 +12,7 @@ import {
 import Header from './header.jsx'
 
 import AccountActions from 'actions/account'
+import GraphIcon from 'components/icons/graph-icon.jsx'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
@@ -119,7 +120,7 @@ let Nav = React.createClass({
     AccountActions.logout()
   },
 
-  drawerRequestChange(open,reason) {
+  drawerRequestChange(open, reason) {
     this.setState({drawerOpen: open})
   },
 
@@ -156,8 +157,7 @@ let Nav = React.createClass({
                   <FontIcon
                     style={styles.menuItemIcon}
                     className="material-icons" />}>
-                <img style={styles.graphIcon}
-                  src="/img/ic_littleSister_menu.png" />
+                <GraphIcon style={styles.graphIcon} />
               </ListItem>
             </Badge>
           </SelectableList>
@@ -197,8 +197,8 @@ let Nav = React.createClass({
   },
 
   _handleNavChange(event, selected) {
-    /*this.setState({selected})
-    this.goto(`/${selected}`)*/
+    /* this.setState({selected})
+    this.goto(`/${selected}`) */
   }
 
 })
