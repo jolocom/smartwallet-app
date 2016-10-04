@@ -40,7 +40,9 @@ let Signup = React.createClass({
 
   getInitialState() {
     return {
-      disabledSubmit: true
+      disabledSubmit: true,
+      showHelperTextUserName: false,
+      showHelperTextGivenName: false
     }
   },
 
@@ -98,6 +100,30 @@ let Signup = React.createClass({
   _onPasswordChange(e) {
     this.setState({
       password: e.target.value
+    })
+  },
+
+  _handleHelperTextUserNameFocus() {
+    this.setState({
+      showHelperTextUserName: true
+    })
+  },
+
+  _handleHelperTextGivenNameFocus() {
+    this.setState({
+      showHelperTextGivenName: true
+    })
+  },
+
+  _handleHelperTextUserNameBlur() {
+    this.setState({
+      showHelperTextUserName: false
+    })
+  },
+
+  _handleHelperTextGivenNameBlur() {
+    this.setState({
+      showHelperTextGivenName: false
     })
   },
 
@@ -202,11 +228,13 @@ let Signup = React.createClass({
                 validationError={this.errorMessages.alphaNumeric}
                 inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._onUsernameChange}
-                errorText="This field is required."
+                onFocus={this._handleHelperTextUserNameFocus}
+                onBlur={this._handleHelperTextUserNameBlur}
                 />
               <div>
                 <p style={styles.helperText}>
-                  {this.helperMessages.userName}
+                  {this.state.showHelperTextUserName
+                    ? this.helperMessages.userName : null}
                 </p>
               </div>
               <FormsyText
@@ -221,10 +249,13 @@ let Signup = React.createClass({
                 validations="isWords"
                 validationError={this.errorMessages.name}
                 onChange={this._onNameChange}
+                onFocus={this._handleHelperTextGivenNameFocus}
+                onBlur={this._handleHelperTextGivenNameBlur}
                 />
               <div>
                 <p style={styles.helperText}>
-                  {this.helperMessages.givenName}
+                {this.state.showHelperTextGivenName
+                  ? this.helperMessages.givenName : null}
                 </p>
               </div>
               <FormsyText
