@@ -151,8 +151,6 @@ class ChatAgent extends LDPAgent {
         return this.put(Util.uriToProxied(conversationUrl), hdrs, result)
       })
   }
-
-  // FIXME: should find a better way to read data \Justas
   getConversationMessages(conversationUrl) {
     return this.get(Util.uriToProxied(conversationUrl))
       .then((xhr) => {

@@ -142,7 +142,8 @@ let Conversation = React.createClass({
           background: '#ffffff',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'left'
@@ -154,7 +155,8 @@ let Conversation = React.createClass({
           background: '#B5CA11',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'right'
@@ -201,13 +203,11 @@ let Conversation = React.createClass({
         imgUrl={this.state.profile.imgUri} />
     )
 
-    if (otherPerson) {
-      var otherPersonAvatar = (
-        <UserAvatar
-          name={otherPerson.name}
-          imgUrl={otherPerson.img} />
-      )
-    }
+    var otherPersonAvatar = (
+      <UserAvatar
+        name={otherPerson.name}
+        imgUrl={otherPerson.img} />
+    )
 
     return items.map(function({author, content, created}, i) {
       let avatar = (author !== account.webId)

@@ -24,12 +24,12 @@ let UserAvatar = React.createClass({
 
     if (imgUrl) {
       // User has display image
-      avatar =
-        (<Avatar
+      avatar = (
+        <Avatar
           style={{
             backgroundSize: 'cover',
             backgroundImage: `url(${Utils.uriToProxied(imgUrl)})`
-          }} />
+          }} />)
     } else if (name && name.trim()) {
       // User has no display image but has a non-empty name
       let nameInitial = name[0].toUpperCase()
@@ -37,8 +37,7 @@ let UserAvatar = React.createClass({
     } else {
       // User has no image and no specified name
       avatar = <Avatar icon={<UserIcon />} />
-    })
-
+    }
     return avatar
   }
 

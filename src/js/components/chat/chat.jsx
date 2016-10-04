@@ -6,6 +6,8 @@ import {AppBar, Tabs, Tab, Paper, IconButton} from 'material-ui'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
+import GraphStore from 'stores/graph-store'
+
 class Chat extends React.Component {
 
   static contextTypes = {
@@ -55,7 +57,12 @@ class Chat extends React.Component {
 
   close() {
     this.refs.dialog.hide()
-    this.context.router.push('/graph')
+    if (GraphStore.state.center == null) {
+      this.context.router.push('/graph')
+    } else {
+      this.context.router.push('/graph/' +
+        encodeURIComponent(GraphStore.state.center.uri))
+    }
   }
 
   render() {

@@ -7,6 +7,7 @@ import {grey500} from 'material-ui/styles/colors'
 import theme from 'styles/jolocom-theme'
 
 import Loading from 'components/common/loading.jsx'
+import Utils from 'lib/util.js'
 
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
@@ -49,14 +50,9 @@ let ContactsList = React.createClass({
       // Check if name is set then set the first character as the name
       // initial otherwise, check if name is empty or whitespaces then
       // set it to Unnamed and let its initial be ?
-      let nameInitial
-      if (name) {
-        nameInitial = name[0].toUpperCase()
-      } else if (!name || name.trim()) {
-        name = 'Unnamed'
-        nameInitial = '?'
-      }
-
+      let nameInitial = Utils.nameInitial({
+        name: name
+      })
       let avatar = <UserAvatar name={name} imgUrl={imgUri} />
 
       if (nameInitial !== lastNameInitial) {

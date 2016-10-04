@@ -186,6 +186,8 @@ let App = React.createClass({
       },
       menuIcon: {
         marginTop: '-20px',
+        position: 'relative',
+        top: '-4px',
         cursor: 'pointer'
       },
       hamburgerBadge: {
@@ -208,27 +210,36 @@ let App = React.createClass({
       return <div />
     }
 
+    
+    // Deactivating search until we get it working
+    /*<IconButton
+      iconClassName="material-icons"
+      iconStyle={styles.icon}
+      onTouchTap={this._handleSearchTap}>search</IconButton>*/
     const nav = (
       <div>
-        <IconButton
-          iconClassName="material-icons"
-          iconStyle={styles.icon}
-          onTouchTap={this._handleSearchTap}>search</IconButton>
         <IconButton
           iconClassName="material-icons"
           iconStyle={styles.icon}
           onTouchTap={this._handleChatTap}>chat</IconButton>
       </div>
     )
-    const search = (
+    
+    // Deactivating search until we get it working
+    /*
+    (
       <GraphSearch
         ref="search"
         onChange={this._handleSearchChange}
         onSubmit={this._handleSearchSubmit}
         onHide={this._handleSearchHide} />
     )
+    */
+    const search = null
 
-    const filters = <GraphFilters style={styles.filters} showDefaults />
+    // Deactivating the filters until we get them working
+    // <GraphFilters style={styles.filters} showDefaults />
+    const filters = null
 
     return (
       <div style={styles.container}>
@@ -263,13 +274,14 @@ let App = React.createClass({
             </Content>
             <Profile />
             <Tour />
-            <Snackbar
-              open={this.state.snackbar.open}
-              message={this.state.snackbar.message}
-            />
           </Layout>
         )}
-      </div>
+      
+      <Snackbar
+        open={this.state.snackbar.open}
+        message={this.state.snackbar.message}
+      />
+    </div>
     )
   }
 
