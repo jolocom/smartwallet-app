@@ -351,13 +351,13 @@ let Profile = React.createClass({
       </Dialog>
     )
   },
-  
+
   _setFileInputRef(el) {
     this.fileInputEl = el
   },
-  
+
   _setPassportInputRef(el) {
-     this.passwordInputEl = el
+    this.passwordInputEl = el
   },
 
   _handleUpdate() {
