@@ -75,7 +75,8 @@ export default React.createClass({
     if (!this.state.conversations.hydrated)
     {
       ConversationsActions.load(this.state.profile.webid)
-      ConversationsActions.load.completed.listen(() => {
+      let unsub = ConversationsActions.load.completed.listen(() => {
+        unsub()
         ChatActions.create(
           this.state.profile.webid, this.state.profile.webid, webId
         )
