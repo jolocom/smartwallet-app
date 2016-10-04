@@ -19,16 +19,19 @@ export default Reflux.createStore({
   init: function() {
     this.listenTo(accountActions.logout, this.onLogout)
   },
-  onLogout() {
-    this.items = []
-  },
-
+  
   getInitialState() {
     return {
-      loading: true,
+      loading: false,
+      hydrated: !!this.items.length,
       items: this.items
     }
   },
+  
+  onLogout() {
+    this.items = []
+  },
+  
   getConversationByWebId(webId) {
     for (let conversation of this.items) {
       if (conversation.otherPerson &&
@@ -103,7 +106,7 @@ export default Reflux.createStore({
           {loading: false, items: this.items.concat(conversationItem)})
         this.items = this.items.concat(conversationItem)
         this.trigger({
-          loading: false, items: this.items})
+          loading: false, hydrated: true, items: this.items})
       })
       .then(() => conversation)
   },
@@ -119,12 +122,14 @@ export default Reflux.createStore({
 
     this.trigger({
       loading: false,
+      hydrated: true,
       items: this.items
     })
   },
 
   onLoadFailed() {
     this.trigger({
+      hydrated: false,
       loading: false
     })
   }

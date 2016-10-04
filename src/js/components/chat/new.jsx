@@ -11,6 +11,8 @@ import ContactsList from 'components/contacts/list.jsx'
 
 import ChatActions from 'actions/chat'
 import ChatStore from 'stores/chat'
+import ConversationsActions from 'actions/conversations'
+import ConversationsStore from 'stores/conversations'
 
 import ProfileStore from 'stores/profile'
 
@@ -21,6 +23,7 @@ export default React.createClass({
 
   mixins: [
     Reflux.connect(ChatStore, 'conversation'),
+    Reflux.connect(ConversationsStore, 'conversations'),
     Reflux.connect(ProfileStore, 'profile')
   ],
 
@@ -68,9 +71,21 @@ export default React.createClass({
 
   startChat(webId) {
     debug('Starting chat with', webId)
-    ChatActions.create(
-      this.state.profile.webid, this.state.profile.webid, webId
-    )
+    
+    if (!this.state.conversations.hydrated)
+    {
+      ConversationsActions.load(this.state.profile.webid)
+      ConversationsActions.load.completed.listen(() => {
+        ChatActions.create(
+          this.state.profile.webid, this.state.profile.webid, webId
+        )
+      })
+    }
+    else {
+      ChatActions.create(
+        this.state.profile.webid, this.state.profile.webid, webId
+      )
+    }
   },
 
   showSearch() {
