@@ -64,6 +64,13 @@ let Index = React.createClass({
         fontSize: '28px',
         fontWeight: '300'
       },
+      logoStartImg: {
+        padding: '24px',
+        maxWidth: '80%',
+        width: '320px',
+        margin: 'auto',
+        marginTop: '20vh'
+      },
       actions: {
         display: 'flex',
         flexDirection: 'column',
@@ -89,11 +96,11 @@ let Index = React.createClass({
     return (
       <div style={styles.container}>
 
-        <div style={styles.logo}>
+        {/** <div style={styles.logo}>
           <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
-        </div>
+        </div> **/}
 
-        <Carousel style={styles.intro} indicator={IndicatorDots}>
+        {/** <Carousel style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <h3 style={styles.title}>Own your data</h3>
             <div style={styles.content}>
@@ -118,7 +125,13 @@ let Index = React.createClass({
               <img src="/img/slide-visualize.png" style={styles.img} />
             </div>
           </div>
-        </Carousel>
+        </Carousel> **/}
+
+        <div style={styles.intro}>
+          <img
+            src="/img/logo_littlesister_start.svg"
+            style={styles.logoStartImg} />
+        </div>
 
         <div style={styles.actions}>
           <RaisedButton
