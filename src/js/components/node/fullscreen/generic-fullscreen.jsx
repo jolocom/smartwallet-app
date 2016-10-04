@@ -319,19 +319,17 @@ let GenericFullScreen = React.createClass({
             // Get top 75 pixels
             let imgData = context.getImageData(0, 0, img.width, 75);
 
-            // Group by pixels
-            // [a] -> [[a,a,a]]
-            // [r/g/b] -> [[r,g,b]]
-            let rgbs = imgData.data.reduce((acc, val, i) => {
-              if (i % 4 == 3) return acc; // Ignore alpha
-              if (i % 4 == 0) return acc.push([val]), acc;
-              return acc[acc.length - 1].push(val), acc;
-            }, [])
-            
-            
-            let lums = rgbs.map(([r, g, b]) => (r+r+b+g+g+g)/6)
-            let lumsSum = lums.reduce((acc, val) => (acc + val), 0)
-            let lumsMean = lumsSum / lums.length
+            let lumsSum = 0
+            let lumsLength = 0
+            for (var i=0; i<imgData.data.length; i+=4) {
+              let r = imgData.data[i],
+                  g = imgData.data[i+1],
+                  b = imgData.data[i+2],
+                  lum = (r+r+b+g+g+g)/6
+              lumsSum += lum
+              lumsLength++
+            }
+            let lumsMean = lumsSum / lumsLength
             
             res(lumsMean)
           })
