@@ -25,6 +25,8 @@ import LinearProgress from 'material-ui/LinearProgress'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
+import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
+import PassportIcon from 'components/icons/passport-icon.jsx'
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
@@ -215,14 +217,14 @@ let Profile = React.createClass({
               </CardActions>
             </Card>
             <input
-              ref={el => { this.fileInputEl = el }}
+              ref={this._setFileInputRef}
               type="file"
               name="file"
               style={styles.file}
               multiple={false}
               onChange={this._handleSelectFile} />
             <input
-              ref={el => { this.passportFileInputEl = el }}
+              ref={this._setPassportInputRef}
               type="file"
               name="passportfile"
               style={styles.file}
@@ -267,8 +269,7 @@ let Profile = React.createClass({
                   <div style={styles.formRow}>
                     <div style={Object.assign({},
                       styles.label, styles.labelPassport)}>
-                      <img src="img/ic_passport_24px.svg"
-                        style={styles.passportIcon} />
+                      <PassportIcon style={styles.passportIcon} />
                     </div>
                     <div style={styles.field}>
                       <div style={styles.passportContainer}>
@@ -298,8 +299,7 @@ let Profile = React.createClass({
                   <div style={styles.formRow}>
                     <div style={Object.assign({},
                       styles.label, styles.labelBitcoinAddress)}>
-                      <img src="img/ic_bitcoin_24px.svg"
-                        style={styles.bitcoinIcon} />
+                      <BitcoinIcon style={styles.bitcoinIcon} />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -352,6 +352,14 @@ let Profile = React.createClass({
     )
   },
 
+  _setFileInputRef(el) {
+    this.fileInputEl = el
+  },
+
+  _setPassportInputRef(el) {
+    this.passwordInputEl = el
+  },
+
   _handleUpdate() {
     if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
       this.hide()
@@ -378,6 +386,7 @@ let Profile = React.createClass({
   _handleBitcoinKeyDown(e) {
     if (e.keyCode === 13) e.preventDefault()
   },
+
   _handleSelect() {
     this.fileInputEl.value = null
     this.fileInputEl.click()
