@@ -16,6 +16,7 @@ import ContentLink from 'material-ui/svg-icons/content/link'
 import ContentUnlink from 'material-ui/svg-icons/communication/call-split'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
+import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 
 import SnackbarActions from 'actions/snackbar'
 
@@ -369,6 +370,9 @@ let GenericFullScreen = React.createClass({
         <Layout>
           <Content>
             <div style={styles.container}>
+              <div>
+                <BitcoinIcon />
+              </div>
               <AppBar
                 onTouchTap={this._handleFull}
                 style={styles.headers}
