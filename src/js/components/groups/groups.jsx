@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
 
-import ContactsList from 'components/contacts/list.jsx'
+import AvatarList from 'components/common/avatar-list.jsx'
 import ChatActions from 'actions/chat'
 
 import AccountStore from 'stores/account'
@@ -38,8 +38,10 @@ let Groups = React.createClass({
   render() {
     return (
       <div style={styles.container}>
-        <ContactsList onClick={this.createChat}
-          searchQuery={this.props.searchQuery} />
+        <AvatarList onClick={this.createChat}
+          searchQuery={this.props.searchQuery}
+          items={[{name: "hago"},{name: "tchao"}]}
+          />
         {this.props.children}
       </div>
     )
