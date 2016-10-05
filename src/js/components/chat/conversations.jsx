@@ -64,12 +64,9 @@ let Conversations = React.createClass({
 
   render: function() {
     let content
-
-    if (loading) {
-      content = <Loading style={styles.loading} />
-    }
     
     let {loading, items} = this.state.conversations
+    items = items || []
     items = items
       .filter(conv => conv.lastMessage !== null)
       .map(
@@ -86,19 +83,22 @@ let Conversations = React.createClass({
         (itemA, itemB) =>
           itemA.lastMessage.created.getTime() < itemB.lastMessage.created.getTime()
       )
-    
+    console.log(loading)
     return (
       <div style={styles.container}>
 
         <div style={styles.content}>
-          <AvatarList
-            items={items}
-            avatarLeft
-            noHeadings
-            noReordering
-            emptyMessage={'No conversations'}
-          />
-          {content}
+         {
+            loading
+            ? <Loading style={styles.loading} />
+            : <AvatarList
+                items={items}
+                avatarLeft
+                noHeadings
+                noReordering
+                emptyMessage={'No conversations'}
+              />
+          }
         </div>
 
         {this.props.children}
