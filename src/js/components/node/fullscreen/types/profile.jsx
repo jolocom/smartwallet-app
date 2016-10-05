@@ -107,6 +107,7 @@ let ProfileNode = React.createClass({
         title={name}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
+        headerColor={'#829abe'}
         fabItems={fabItems}
         menuItems={menuItems}
         {...this.props}

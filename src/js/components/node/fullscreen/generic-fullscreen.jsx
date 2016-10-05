@@ -41,6 +41,7 @@ let GenericFullScreen = React.createClass({
     navHistory: React.PropTypes.object,
     onClose: React.PropTypes.func,
     backgroundImg: React.PropTypes.any,
+    headerColor: React.PropTypes.any,
     menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
     copyToClipboardText: React.PropTypes.any,
     title: React.PropTypes.string,
@@ -99,7 +100,7 @@ let GenericFullScreen = React.createClass({
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '40vh',
-        background: `${gray1} ${this.props.backgroundImg} center / cover`,
+        background: `${this.props.headerColor} ${this.props.backgroundImg} center / cover`,
         boxShadow: 'inset 0px 0px 129px -12px rgba(0,0,0,0.5)'
       },
       title: {

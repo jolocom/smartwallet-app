@@ -98,6 +98,7 @@ let TextNode = React.createClass({
         description={description}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
+        headerColor={'#9a9fa8'}
         fabItems={fabItems}
         menuItems={menuItems}
         state={this.props.state}
