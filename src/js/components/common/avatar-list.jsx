@@ -75,9 +75,11 @@ let AvatarList = React.createClass({
     
     let styles = this.getStyles()
 
+    if (!this.props.noReordering) {
     items.sort((a, b) =>
                a.name.toLowerCase() > b.name.toLowerCase())
-
+    }
+      
     let lastNameInitial = ''
     
     let result = []

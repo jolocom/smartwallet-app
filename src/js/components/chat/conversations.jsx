@@ -85,7 +85,7 @@ let Conversations = React.createClass({
     let {loading, items} = this.state.conversations
     items = items.filter(conv => conv.lastMessage !== null)
     
-    items.sort(
+    /*items.sort(
       (itemA, itemB) => {
         if (!itemA.lastMessage) {
           if (!itemB.lastMessage) {
@@ -99,7 +99,7 @@ let Conversations = React.createClass({
         return itemA.lastMessage.created.getTime() <
           itemB.lastMessage.created.getTime()
       }
-    )
+    )*/
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -119,7 +119,12 @@ let Conversations = React.createClass({
                                onTouchTap: this.showConversation
                               })
     )
-                  
+    
+    items.sort(
+      (itemA, itemB) =>
+        itemA.lastMessage.created.getTime() < itemB.lastMessage.created.getTime()
+    )
+    
     return (
       <div style={styles.container}>
 
@@ -128,6 +133,7 @@ let Conversations = React.createClass({
             items={items}
             avatarLeft
             noHeadings
+            noReordering
             emptyMessage={'No conversations'}
           />
           {/*{content}*/}
