@@ -50,6 +50,7 @@ let Contacts = React.createClass({
         <AvatarList onClick={this.createChat}
           searchQuery={this.props.searchQuery}
           items={this.state.contacts.items}
+          emptyMessage={"No contacts"}
           />
         {this.props.children}
       </div>

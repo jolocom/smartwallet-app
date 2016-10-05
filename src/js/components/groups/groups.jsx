@@ -3,11 +3,9 @@ import Radium from 'radium'
 import Reflux from 'reflux'
 
 import AvatarList from 'components/common/avatar-list.jsx'
-import ChatActions from 'actions/chat'
 
-import AccountStore from 'stores/account'
-
-import ChatStore from 'stores/chat'
+import GroupsActions from 'actions/groups'
+import GroupsStore from 'stores/groups'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:groups')
@@ -15,7 +13,7 @@ let debug = Debug('components:groups')
 let Groups = React.createClass({
 
   mixins: [
-    Reflux.connect(ChatStore, 'conversation')
+    Reflux.connect(GroupsStore, 'groups')
   ],
   contextTypes: {
     router: React.PropTypes.any
@@ -26,6 +24,11 @@ let Groups = React.createClass({
         AccountStore.state.webId, AccountStore.state.webId, webId
     )
   },
+  
+  componentDidMount() {
+    GroupsActions.load(this.props.searchQuery)
+  },
+  
   componentDidUpdate() {
     if (this.state.conversation && this.state.conversation.id) {
       debug('componentDidUpdate; ' +
@@ -35,12 +38,14 @@ let Groups = React.createClass({
       )
     }
   },
+  
   render() {
     return (
       <div style={styles.container}>
         <AvatarList onClick={this.createChat}
           searchQuery={this.props.searchQuery}
-          items={[{name: "hago"},{name: "tchao"}]}
+          items={this.state.groups.items}
+          emptyMessage={"No groups"}
           />
         {this.props.children}
       </div>
