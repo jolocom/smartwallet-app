@@ -26,7 +26,8 @@ import {
   AppBar,
   IconButton,
   IconMenu,
-  MenuItem
+  MenuItem,
+  Divider
 } from 'material-ui'
 
 let GenericFullScreen = React.createClass({
@@ -59,7 +60,7 @@ let GenericFullScreen = React.createClass({
   },
 
   componentDidMount() {
-    
+
     // Luminance
     let backgroundImgMatches
     if (this.props.backgroundImg &&
@@ -77,7 +78,7 @@ let GenericFullScreen = React.createClass({
         console.error('Couldn\'t compute luminance',e)
       })
     }
-    
+
     this.refs.dialog.show()
   },
 
@@ -97,20 +98,23 @@ let GenericFullScreen = React.createClass({
       },
       headers: {
         color: '#ffffff',
-        height: this.state.fullscreen ? '90vh' : '176px',
+        height: this.state.fullscreen ? '90vh' : '40vh',
         background: `${gray1} ${this.props.backgroundImg} center / cover`,
-        boxShadow: 'none'
+        boxShadow: 'inset 0px 0px 129px -12px rgba(0,0,0,0.5)'
       },
       title: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
         padding: '0 24px',
-        color: '#ffffff'
+        color: '#4b132b',
+        marginTop: '30px',
+        fontWeight: '100'
+      },
+      titleDivider: {
+        marginLeft: '24px',
+        marginTop: '10px'
       },
       floatingButtons: {
         position: 'absolute',
-        top: this.state.fullscreen ? '90vh' : '176px',
+        top: this.state.fullscreen ? '90vh' : '40vh',
         right: '10px',
         marginTop: '-28px',
         zIndex: 1500
@@ -139,8 +143,8 @@ let GenericFullScreen = React.createClass({
     }
     this._handleClose()
   },
-  
-  
+
+
   _handleConnect() {
     nodeActions.link(
       this.context.account.webId,
@@ -167,7 +171,7 @@ let GenericFullScreen = React.createClass({
       this.context.router.push(`/graph/${encodeURIComponent(center.uri)}`)
       nodeActions.remove(node, center)
     }
-    
+
     graphActions.setState('activeNode', null, true)
   },
 
@@ -284,12 +288,12 @@ let GenericFullScreen = React.createClass({
     router.push(`/chat/new/${encodeURIComponent(node.uri)}`)
     graphActions.setState('activeNode', null, true)
   },
-  
+
   _preventDefault(e) {
     e.stopPropagation()
     return false
   },
-  
+
   getLuminanceForImageUrl(url) {
     return new Promise((res, rej) => {
 
@@ -305,17 +309,17 @@ let GenericFullScreen = React.createClass({
           img.crossOrigin = "Anonymous";
 
           img.onload = (() => {
-            
+
             let canvas = document.createElement('CANVAS')
             canvas.setAttribute('width',img.width)
             canvas.setAttribute('height',img.height)
             canvas.width = canvas.style.width = img.width
             canvas.height = canvas.style.height = img.height
-            
+
             let context = canvas.getContext('2d');
-            
+
             context.drawImage(img, 0, 0)
-            
+
             // Get top 75 pixels
             let imgData = context.getImageData(0, 0, img.width, 75);
 
@@ -330,10 +334,10 @@ let GenericFullScreen = React.createClass({
               lumsLength++
             }
             let lumsMean = lumsSum / lumsLength
-            
+
             res(lumsMean)
           })
-          
+
           img.src = imgDataUrl
         });
 
@@ -355,10 +359,10 @@ let GenericFullScreen = React.createClass({
     // @TODO externalize fab handlers + component etc
 
     // Always add the fullscreen menu item
-    
+
     if (this.state.luminance && this.state.luminance < 40)
       styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
-    
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -367,8 +371,6 @@ let GenericFullScreen = React.createClass({
               <AppBar
                 onTouchTap={this._handleFull}
                 style={styles.headers}
-                titleStyle={styles.title}
-                title={<span>{this.props.title || 'No title'}</span>}
                 iconElementRight={
                   <IconMenu
                     iconButtonElement={
@@ -424,6 +426,8 @@ let GenericFullScreen = React.createClass({
                     )
                   })}
               </div>
+              <h1 style={styles.title}>{this.props.title || 'No title'}</h1>
+              <Divider style={styles.titleDivider}/>
               {this.props.children}
             </div>
           </Content>

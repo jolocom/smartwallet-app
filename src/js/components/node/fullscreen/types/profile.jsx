@@ -116,7 +116,8 @@ let ProfileNode = React.createClass({
             <div>
               <ListItem
                 leftIcon={
-                  <FontIcon className="material-icons">info</FontIcon>
+                  <FontIcon color={'#9ba0aa'}
+                    className="material-icons">info</FontIcon>
                 }
                 primaryText={description}
               />
@@ -126,7 +127,8 @@ let ProfileNode = React.createClass({
           {email && (
             <ListItem
               leftIcon={
-                <FontIcon className="material-icons">email</FontIcon>}
+                <FontIcon color={'#9ba0aa'}
+                  className="material-icons">email</FontIcon>}
               primaryText={email}
               secondaryText="Personal"
             />
