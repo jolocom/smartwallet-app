@@ -11,6 +11,7 @@ import Loading from 'components/common/loading.jsx'
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 
+
 import Utils from 'lib/util'
 
 let AvatarList = React.createClass({
@@ -58,6 +59,11 @@ let AvatarList = React.createClass({
         fontSize: '20px',
         color: theme.palette.primary1Color
       },
+      rightText: {
+        color: grey500,
+        fontSize: '12px',
+        float: 'right'
+      },
       separator: {
         margin: '10px 0 10px 75px', // 72
         marginTop: '10px'
@@ -66,6 +72,8 @@ let AvatarList = React.createClass({
   },
 
   renderItems(items) {
+    
+    let styles = this.getStyles()
 
     items.sort((a, b) =>
                a.name.toLowerCase() > b.name.toLowerCase())
@@ -74,7 +82,7 @@ let AvatarList = React.createClass({
     
     let result = []
     
-    items.forEach(({username, webId, name, email, imgUri}, i) => {
+    items.forEach(({id, username, content, rightText, webId, name, email, secondaryText, imgUri}, i) => {
       
       // Avatar
       let avatar
@@ -85,7 +93,7 @@ let AvatarList = React.createClass({
       } else {
         avatar = <Avatar>{nameInitial}</Avatar>
       }
-
+      
       // Initial
       let nameInitial = Utils.nameInitial({name: name})
       
@@ -94,7 +102,7 @@ let AvatarList = React.createClass({
         lastNameInitial = nameInitial
         
         // Don't insert a divider before the first element
-        if (i > 0) {
+        if (i > 0 && !this.props.noHeadings) {
           result.push(<Divider
                         inset key={`divider_${i}`}
                         style={this.getStyles().separator} />)
@@ -113,13 +121,23 @@ let AvatarList = React.createClass({
       let handleClick = () => {
         this.props.onClick(webId)
       }
+      
+      let primaryText = name
+      if (rightText) {
+        primaryText = (
+          <div>
+            <span>{name}</span>
+            <span style={styles.rightText}>{rightText}</span>
+          </div> )
+      }
 
       result.push(
         <ListItem
-          key={email}
-          primaryText={name}
-          secondaryText={email}
-          rightAvatar={avatar}
+          key={id || email}
+          primaryText={primaryText}
+          secondaryText={secondaryText || email}
+          rightAvatar={!this.props.avatarLeft && avatar}
+          leftAvatar={this.props.avatarLeft && avatar}
           insetChildren
           onTouchTap={handleClick}
         />

@@ -15,6 +15,8 @@ import {grey500} from 'material-ui/styles/colors'
 
 import TimerMixin from 'react-timer-mixin'
 
+import AvatarList from 'components/common/avatar-list.jsx'
+
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 import Utils from 'lib/util'
@@ -107,12 +109,32 @@ let Conversations = React.createClass({
     } else {
       content = this.renderItems(items)
     }
-
+    
+    /*
+     <div>
+                                      <span>{item.otherPerson.name || 'Unnamed'}</span>
+                                      <span style={styles.date}>{item.date}</span>
+                                    </div>
+                                    */
+    items = items.map((item) =>
+                      Object.assign({},
+                                    item,
+                                    {name: item.otherPerson.name || 'Unnamed',
+                                     imgUri: item.otherPerson.img,
+                                     secondaryText: item.lastMessage.content,
+                                     rightText: moment(item.lastMessage.created).fromNow()}
+                                    ))
+                  
     return (
       <div style={styles.container}>
 
         <div style={styles.content}>
-          {content}
+          <AvatarList
+            items={items}
+            avatarLeft
+            noHeadings
+          />
+          {/*{content}*/}
         </div>
 
         {/* <FloatingActionButton */}
@@ -158,7 +180,11 @@ let ConversationsListItem = React.createClass({
       avatar = <Avatar>{nameInitial}</Avatar>
     }
     let date = moment(created).fromNow()
-    return (
+    
+    
+    
+    
+    /*return (
       <ListItem
         key={conversation.id}
         primaryText={
@@ -171,7 +197,7 @@ let ConversationsListItem = React.createClass({
         leftAvatar={avatar}
         onTouchTap={this._handleListItemTouchTap}
       />
-    )
+    )*/
   },
 
   _handleListItemTouchTap() {
@@ -203,11 +229,6 @@ let styles = {
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '18px'
-  },
-  date: {
-    color: grey500,
-    fontSize: '12px',
-    float: 'right'
   },
   actionButton: {
     position: 'absolute',
