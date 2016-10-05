@@ -132,12 +132,12 @@ let GenericFullScreen = React.createClass({
       headerIcon: {
         position: 'absolute',
         zIndex: 1500,
-        width: '200px',
+        width: '100px',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        marginTop: '30px'
+        marginTop: '15vh'
       }
     }
   },
