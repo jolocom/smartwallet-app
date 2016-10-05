@@ -135,7 +135,7 @@ let AvatarList = React.createClass({
         <ListItem
           key={id || email}
           primaryText={primaryText}
-          secondaryText={secondaryText || email}
+          secondaryText={secondaryText}
           rightAvatar={!this.props.avatarLeft && avatar}
           leftAvatar={this.props.avatarLeft && avatar}
           insetChildren

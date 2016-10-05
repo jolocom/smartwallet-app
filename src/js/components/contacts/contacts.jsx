@@ -45,11 +45,18 @@ let Contacts = React.createClass({
     }
   },
   render() {
+    
+    
+    let items = this.state.contacts.items.map(
+      (item) => Object.assign({},item,{secondaryText: item.email}))
+    
+    console.log(items)
+
     return (
       <div style={styles.container}>
         <AvatarList onClick={this.createChat}
           searchQuery={this.props.searchQuery}
-          items={this.state.contacts.items}
+          items={items}
           emptyMessage={"No contacts"}
           />
         {this.props.children}

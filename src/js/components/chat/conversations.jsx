@@ -133,6 +133,7 @@ let Conversations = React.createClass({
             items={items}
             avatarLeft
             noHeadings
+            emptyMessage={'No conversations'}
           />
           {/*{content}*/}
         </div>
