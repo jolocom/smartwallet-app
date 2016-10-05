@@ -17,7 +17,8 @@ let AvatarList = React.createClass({
 
   propTypes: {
     searchQuery: React.PropTypes.string,
-    onClick: React.PropTypes.func
+    onClick: React.PropTypes.func,
+    items: React.PropTypes.array,
   },
 
   componentDidUpdate(prevProps) {
@@ -58,7 +59,8 @@ let AvatarList = React.createClass({
         color: theme.palette.primary1Color
       },
       separator: {
-        margin: '10px 0 10px 75px' // 72
+        margin: '10px 0 10px 75px', // 72
+        marginTop: '10px'
       }
     }
   },

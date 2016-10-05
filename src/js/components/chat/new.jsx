@@ -7,8 +7,6 @@ import {Layout, Content} from 'components/layout'
 
 import Dialog from 'components/common/dialog.jsx'
 
-import ContactsList from 'components/contacts/list.jsx'
-
 import ChatActions from 'actions/chat'
 import ChatStore from 'stores/chat'
 import ConversationsActions from 'actions/conversations'
@@ -109,12 +107,12 @@ export default React.createClass({
     let content
 
     if (!webId) {
-      content = (
+      /*content = (
         <ContactsList
           onClick={this.startChat}
           searchQuery={this.state.searchQuery}
         />
-      )
+      )*/
     } else {
       // @TODO show loading screen
     }
