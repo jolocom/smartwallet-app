@@ -63,7 +63,7 @@ let Conversations = React.createClass({
   },
   
   getStyles() {
-    return styles = {
+    return {
       container: {
         flex: 1,
         display: 'flex',
