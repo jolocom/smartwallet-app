@@ -48,6 +48,9 @@ let AvatarList = React.createClass({
         fontSize: '18px'
       },
       listItem: {
+        paddingLeft: '15px'
+      },
+      listItemCheckboxes: {
         paddingLeft: '50px'
       },
       listItemContainer: {
@@ -118,11 +121,11 @@ let AvatarList = React.createClass({
       let nameInitial = Utils.nameInitial({name: name})
       
       // Grouping of initials
-      if (nameInitial !== lastNameInitial) {
+      if (nameInitial !== lastNameInitial && !this.props.noHeadings) {
         lastNameInitial = nameInitial
         
         // Don't insert a divider before the first element
-        if (i > 0 && !this.props.noHeadings) {
+        if (i > 0) {
           result.push(<Divider
                         inset key={`divider_${i}`}
                         style={this.getStyles().separator} />)
@@ -153,6 +156,8 @@ let AvatarList = React.createClass({
       
       let checkbox = <Checkbox style={styles.checkbox} />
 
+      let stylesF = Object.assign({},styles.listItem,this.props.checkboxes && styles.listItemCheckboxes)
+          
       result.push(
         <ListItem
           key={id || email}
@@ -162,7 +167,7 @@ let AvatarList = React.createClass({
           leftAvatar={(this.props.avatarLeft && avatar) || (this.props.checkboxes && checkbox)}
           insetChildren
           onTouchTap={handleClick}
-          style={styles.listItem}
+          style={stylesF}
         />
       )
     })

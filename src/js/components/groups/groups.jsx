@@ -61,6 +61,7 @@ let Groups = React.createClass({
           searchQuery={this.props.searchQuery}
           items={this.state.groups.items}
           emptyMessage={"No groups"}
+          checkboxes
           />
           
         {this.props.children}
