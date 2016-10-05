@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
 
-import {List, ListItem, Divider, Subheader, Avatar} from 'material-ui'
+import {List, ListItem, Divider, Subheader, Avatar, Checkbox} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 import theme from 'styles/jolocom-theme'
 
@@ -47,6 +47,9 @@ let AvatarList = React.createClass({
         justifyContent: 'center',
         fontSize: '18px'
       },
+      listItem: {
+        paddingLeft: '50px'
+      },
       listItemContainer: {
         position: 'relative',
         paddingLeft: '60px'
@@ -58,6 +61,10 @@ let AvatarList = React.createClass({
         fontWeight: 'bold',		
         fontSize: '20px',
         color: theme.palette.primary1Color
+      },
+      checkbox: {
+        marginLeft: '15px',
+        marginTop: '8px'
       },
       rightText: {
         color: grey500,
@@ -132,7 +139,7 @@ let AvatarList = React.createClass({
       }
 
       let handleClick = () => {
-        onTouchTap(item)
+        onTouchTap && onTouchTap(item)
       }
       
       let primaryText = name
@@ -143,6 +150,8 @@ let AvatarList = React.createClass({
             <span style={styles.rightText}>{rightText}</span>
           </div> )
       }
+      
+      let checkbox = <Checkbox style={styles.checkbox} />
 
       result.push(
         <ListItem
@@ -150,9 +159,10 @@ let AvatarList = React.createClass({
           primaryText={primaryText}
           secondaryText={secondaryText}
           rightAvatar={!this.props.avatarLeft && avatar}
-          leftAvatar={this.props.avatarLeft && avatar}
+          leftAvatar={(this.props.avatarLeft && avatar) || (this.props.checkboxes && checkbox)}
           insetChildren
           onTouchTap={handleClick}
+          style={styles.listItem}
         />
       )
     })

@@ -61,9 +61,45 @@ let Conversations = React.createClass({
   showConversation({id}) {
     this.context.router.push(`/conversations/${id}`)
   },
+  
+  getStyles() {
+    return styles = {
+      container: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative'
+      },
+      content: {
+        overflowY: 'auto',
+        flex: 1
+      },
+      loading: {
+        position: 'absolute'
+      },
+      empty: {
+        position: 'absolute',
+        fontWeight: 300,
+        color: grey500,
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '18px'
+      },
+      actionButton: {
+        position: 'absolute',
+        right: '16px',
+        bottom: '16px'
+      }
+    }
+  },
 
   render: function() {
     let content
+    
+    let styles = this.getStyles()
     
     let {loading, items} = this.state.conversations
     items = items || []
@@ -83,7 +119,7 @@ let Conversations = React.createClass({
         (itemA, itemB) =>
           itemA.lastMessage.created.getTime() < itemB.lastMessage.created.getTime()
       )
-    console.log(loading)
+    
     return (
       <div style={styles.container}>
 
@@ -106,37 +142,5 @@ let Conversations = React.createClass({
     )
   }
 })
-
-let styles = {
-  container: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative'
-  },
-  content: {
-    overflowY: 'auto',
-    flex: 1
-  },
-  loading: {
-    position: 'absolute'
-  },
-  empty: {
-    position: 'absolute',
-    fontWeight: 300,
-    color: grey500,
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '18px'
-  },
-  actionButton: {
-    position: 'absolute',
-    right: '16px',
-    bottom: '16px'
-  }
-}
 
 export default Radium(Conversations)

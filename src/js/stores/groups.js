@@ -21,7 +21,7 @@ export default Reflux.createStore({
     this.trigger({loading: true, items: []})
     new Promise(() => {
       this.trigger({loading: false, items: [{name: 'Group 1'},
-                                            {name: 'Group 2'}]})
+                                            {name: 'Hroup 2'}]})
     })
   }
 })
