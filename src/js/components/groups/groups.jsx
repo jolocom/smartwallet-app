@@ -7,6 +7,8 @@ import AvatarList from 'components/common/avatar-list.jsx'
 import GroupsActions from 'actions/groups'
 import GroupsStore from 'stores/groups'
 
+import {FloatingActionButton, FontIcon} from 'material-ui'
+
 import Debug from 'lib/debug'
 let debug = Debug('components:groups')
 
@@ -39,7 +41,20 @@ let Groups = React.createClass({
     }
   },
   
+  getStyles() {
+    return {
+      actionButton: {
+        position: 'absolute',
+        right: '16px',
+        bottom: '16px'
+      }
+    }
+  },
+  
   render() {
+    
+    let styles = this.getStyles()
+    
     return (
       <div style={styles.container}>
         <AvatarList onClick={this.createChat}
@@ -47,7 +62,17 @@ let Groups = React.createClass({
           items={this.state.groups.items}
           emptyMessage={"No groups"}
           />
+          
         {this.props.children}
+        
+        <FloatingActionButton
+          secondary
+          href="#/groups/new"
+          linkButton={true}
+          style={styles.actionButton}
+        >
+          <FontIcon className="material-icons">add</FontIcon>
+        </FloatingActionButton>
       </div>
     )
   }

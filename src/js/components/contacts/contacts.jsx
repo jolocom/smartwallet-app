@@ -46,11 +46,8 @@ let Contacts = React.createClass({
   },
   render() {
     
-    
     let items = this.state.contacts.items.map(
       (item) => Object.assign({},item,{secondaryText: item.email}))
-    
-    console.log(items)
 
     return (
       <div style={styles.container}>
