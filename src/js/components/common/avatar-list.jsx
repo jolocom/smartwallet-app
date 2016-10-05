@@ -82,7 +82,18 @@ let AvatarList = React.createClass({
     
     let result = []
     
-    items.forEach(({id, username, content, rightText, webId, name, email, secondaryText, imgUri}, i) => {
+    items.forEach((item, i) => {
+      
+      let {id,
+           username,
+           content,
+           rightText,
+           webId,
+           name,
+           email,
+           secondaryText,
+           imgUri,
+           onTouchTap} = item
       
       // Avatar
       let avatar
@@ -119,7 +130,7 @@ let AvatarList = React.createClass({
       }
 
       let handleClick = () => {
-        this.props.onClick(webId)
+        onTouchTap(item)
       }
       
       let primaryText = name

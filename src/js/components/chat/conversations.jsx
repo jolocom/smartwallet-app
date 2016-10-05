@@ -65,23 +65,6 @@ let Conversations = React.createClass({
   },
 
   renderItems(items) {
-    // maybe do this in the store already?
-    items.sort(
-      (itemA, itemB) => {
-        if (!itemA.lastMessage) {
-          if (!itemB.lastMessage) {
-            return 0
-          } else {
-            return -1
-          }
-        } else if (!itemB.lastMessage) {
-          return 1
-        }
-        return itemA.lastMessage.created.getTime() <
-          itemB.lastMessage.created.getTime()
-      }
-    )
-
     return (
       <List>
         {items.map((conversation) => {
@@ -101,6 +84,22 @@ let Conversations = React.createClass({
 
     let {loading, items} = this.state.conversations
     items = items.filter(conv => conv.lastMessage !== null)
+    
+    items.sort(
+      (itemA, itemB) => {
+        if (!itemA.lastMessage) {
+          if (!itemB.lastMessage) {
+            return 0
+          } else {
+            return -1
+          }
+        } else if (!itemB.lastMessage) {
+          return 1
+        }
+        return itemA.lastMessage.created.getTime() <
+          itemB.lastMessage.created.getTime()
+      }
+    )
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -110,20 +109,16 @@ let Conversations = React.createClass({
       content = this.renderItems(items)
     }
     
-    /*
-     <div>
-                                      <span>{item.otherPerson.name || 'Unnamed'}</span>
-                                      <span style={styles.date}>{item.date}</span>
-                                    </div>
-                                    */
-    items = items.map((item) =>
-                      Object.assign({},
-                                    item,
-                                    {name: item.otherPerson.name || 'Unnamed',
-                                     imgUri: item.otherPerson.img,
-                                     secondaryText: item.lastMessage.content,
-                                     rightText: moment(item.lastMessage.created).fromNow()}
-                                    ))
+    items = items.map(
+      (item) => Object.assign({},
+                              item,
+                              {name: item.otherPerson.name || 'Unnamed',
+                               imgUri: item.otherPerson.img,
+                               secondaryText: item.lastMessage.content,
+                               rightText: moment(item.lastMessage.created).fromNow(),
+                               onTouchTap: this.showConversation
+                              })
+    )
                   
     return (
       <div style={styles.container}>
