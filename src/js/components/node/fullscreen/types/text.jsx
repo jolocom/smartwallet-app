@@ -91,14 +91,13 @@ let TextNode = React.createClass({
     else
       menuItems.push('connect')
 
-
     return (
       <GenericFullScreen
         title={title}
         description={description}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
-        headerColor={'#9a9fa8'}
+        headerColor={this.props.node.confidential ? '#858a94' : '#9a9fa8'}
         fabItems={fabItems}
         menuItems={menuItems}
         state={this.props.state}

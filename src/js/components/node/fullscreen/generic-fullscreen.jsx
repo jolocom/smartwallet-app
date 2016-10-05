@@ -16,9 +16,11 @@ import ContentLink from 'material-ui/svg-icons/content/link'
 import ContentUnlink from 'material-ui/svg-icons/communication/call-split'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
-import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
+import DocIcon from 'components/icons/doc-icon.jsx'
+import PersonIcon from 'components/icons/person-icon.jsx'
+import ConfidIcon from 'components/icons/confid-icon.jsx'
 
-import SnackbarActions from 'actions/snackbar'
+//import SnackbarActions from 'actions/snackbar'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:generic-fullscreen')
@@ -126,6 +128,16 @@ let GenericFullScreen = React.createClass({
       },
       fabIcon: {
         fill: '#9a3460'
+      },
+      headerIcon: {
+        position: 'absolute',
+        zIndex: 1500,
+        width: '200px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        left: '0',
+        right: '0',
+        marginTop: '30px'
       }
     }
   },
@@ -348,6 +360,18 @@ let GenericFullScreen = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    let headerIcon
+    if (this.props.node.confidential) {
+      // Display confidential icon in header
+      headerIcon = <ConfidIcon />
+    } else if (this.props.node.type &&
+        this.props.node.type.includes('Person')) {
+      // Display person icon in header
+      headerIcon = this.props.node.img ? null : <PersonIcon />
+    } else {
+      // Display document icon in header (default)
+      headerIcon = <DocIcon />
+    }
 
     // @TODO bind handlers to preset actions here
     // in: {name: 'disconnect'}
@@ -370,8 +394,8 @@ let GenericFullScreen = React.createClass({
         <Layout>
           <Content>
             <div style={styles.container}>
-              <div>
-                <BitcoinIcon />
+              <div style={styles.headerIcon}>
+                {headerIcon}
               </div>
               <AppBar
                 onTouchTap={this._handleFull}
@@ -432,7 +456,7 @@ let GenericFullScreen = React.createClass({
                   })}
               </div>
               <h1 style={styles.title}>{this.props.title || 'No title'}</h1>
-              <Divider style={styles.titleDivider}/>
+              <Divider style={styles.titleDivider} />
               {this.props.children}
             </div>
           </Content>
