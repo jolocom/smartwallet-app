@@ -1,10 +1,9 @@
 import WebIDAgent from './webid.js'
 import {Parser} from '../rdf.js'
-import {Writer} from '../rdf.js'
+import {Writer} from '../rdf.js' 
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
-
 import rdf from 'rdflib'
 
 import Debug from 'lib/debug'
@@ -14,6 +13,7 @@ let debug = Debug('agents:graph')
 // it, and creating a "map" of the currently displayed graph.
 
 class GraphAgent {
+
 
   /**
    * @summary Populate a object wtih basic / generic node triples.
@@ -359,9 +359,9 @@ class GraphAgent {
     return fetch(Util.uriToProxied(uri), {
       credentials: 'include'
     }).then((ans) => {
-      if (!ans.ok)
+      if (!ans.ok) {
         throw new Error(ans.status) // Call the catch if response error
-
+      }
       return ans.text().then((res) => {
         return parser.parse(res, uri)
       })

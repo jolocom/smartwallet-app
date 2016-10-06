@@ -58,7 +58,10 @@ export const PRED = {
   mode: ACL('mode'),
   control: ACL('Control'),
   read: ACL('Read'),
-  write: ACL('Write')
+  write: ACL('Write'),
+  // INDEX FILE RELATED
+  readPermission: SCHEMA('ReadPermission'),
+  writePermission: SCHEMA('WritePermission')
 }
 
 export const CERT = {
