@@ -1,7 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import includes from 'lodash/includes'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
@@ -18,9 +17,6 @@ import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
 import Loading from 'components/common/loading.jsx'
-
-import GraphSearch from 'components/graph/search.jsx'
-import GraphFilters from 'components/graph/filters.jsx'
 
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
@@ -105,7 +101,7 @@ let App = React.createClass({
   },
 
   isPublicRoute(path = this.props.location.pathname) {
-    return path == '/' ||
+    return path === '/' ||
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
   },
 
@@ -211,13 +207,11 @@ let App = React.createClass({
     if (this.state.account.loggingIn && !this.isPublicRoute()) {
       return <Loading />
     }
-
-    
     // Deactivating search until we get it working
-    /*<IconButton
-      iconClassName="material-icons"
-      iconStyle={styles.icon}
-      onTouchTap={this._handleSearchTap}>search</IconButton>*/
+    /* <IconButton
+       iconClassName="material-icons"
+       iconStyle={styles.icon}
+       onTouchTap={this._handleSearchTap}>search</IconButton> */
     const nav = (
       <div>
         <IconButton
@@ -226,7 +220,6 @@ let App = React.createClass({
           onTouchTap={this._handleChatTap}>chat</IconButton>
       </div>
     )
-    
     // Deactivating search until we get it working
     /*
     (
@@ -278,12 +271,11 @@ let App = React.createClass({
             <Tour />
           </Layout>
         )}
-      
-      <Snackbar
-        open={this.state.snackbar.open}
-        message={this.state.snackbar.message}
-      />
-    </div>
+        <Snackbar
+          open={this.state.snackbar.open}
+          message={this.state.snackbar.message}
+       />
+      </div>
     )
   }
 
