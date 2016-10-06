@@ -1,8 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
-// import Carousel from 're-carousel'
-// import IndicatorDots from 'components/common/indicator-dots.jsx'
+import Carousel from 're-carousel'
+import IndicatorDots from 'components/common/indicator-dots.jsx'
 
 let Index = React.createClass({
   contextTypes: {
@@ -54,15 +54,21 @@ let Index = React.createClass({
         flexDirection: 'column'
       },
       content: {
-        flex: 1
       },
       img: {
         maxWidth: '100%'
       },
       title: {
-        color: muiTheme.jolocom.gray1,
-        fontSize: '28px',
-        fontWeight: '300'
+        color: '#a5a5a4',
+        fontSize: '20pt',
+        fontWeight: '100',
+        lineHeight: '28pt',
+        marginBottom: '10px'
+      },
+      subtitle: {
+        color: '#a5a5a4',
+        fontSize: '13pt',
+        lineHeight: '16pt'
       },
       logoStartImg: {
         padding: '24px',
@@ -100,38 +106,44 @@ let Index = React.createClass({
           <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
         </div> **/}
 
-        {/** <Carousel style={styles.intro} indicator={IndicatorDots}>
+        <Carousel style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
-            <h3 style={styles.title}>Own your data</h3>
             <div style={styles.content}>
-              <img src="/img/slide-data.png" style={styles.img} />
+              <img src="/img/logo_littlesister_start.svg" style={styles.img} />
             </div>
           </div>
           <div style={styles.slide}>
-            <h3 style={styles.title}>Create your personal digital identity</h3>
             <div style={styles.content}>
               <img src="/img/slide-identity.png" style={styles.img} />
             </div>
+            <h3 style={styles.title}>Create an independant and
+            secure digital identity.</h3>
+            <p style={styles.subtitle}>Collect your data at a secure place.
+              <br /> It’s yours, so only you own it!</p>
           </div>
           <div style={styles.slide}>
-            <h3 style={styles.title}>Own your data</h3>
             <div style={styles.content}>
               <img src="/img/slide-share.png" style={styles.img} />
             </div>
+            <h3 style={styles.title}>Have all your data at your fingertip.</h3>
+            <p style={styles.subtitle}>See all your data in one safe place.
+              <br /> Pull the plug and your data is only yours.</p>
           </div>
           <div style={styles.slide}>
-            <h3 style={styles.title}>Visualize your data</h3>
             <div style={styles.content}>
               <img src="/img/slide-visualize.png" style={styles.img} />
             </div>
+            <h3 style={styles.title}>Be aware of the information you share.</h3>
+            <p style={styles.subtitle}>See what you shared with whom.
+              <br /> Have total control over your data.</p>
           </div>
-        </Carousel> **/}
+        </Carousel>
 
-        <div style={styles.intro}>
+        {/** <div style={styles.intro}>
           <img
             src="/img/logo_littlesister_start.svg"
             style={styles.logoStartImg} />
-        </div>
+        </div> **/}
 
         <div style={styles.actions}>
           <RaisedButton
