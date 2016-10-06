@@ -83,6 +83,7 @@ let Index = React.createClass({
         marginTop: '20vh'
       },
       actions: {
+        display: 'flex',
         alignItems: 'stretch',
         padding: '16px',
         maxWidth: '80%',
@@ -93,7 +94,8 @@ let Index = React.createClass({
         width: '200px'
       },
       login: {
-        margin: '10px'
+        margin: '10px',
+        width: '200px'
       }
     }
 
