@@ -1,8 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
-import Carousel from 're-carousel'
-import IndicatorDots from 'components/common/indicator-dots.jsx'
+// import Carousel from 're-carousel'
+// import IndicatorDots from 'components/common/indicator-dots.jsx'
 
 let Index = React.createClass({
   contextTypes: {
@@ -64,14 +64,26 @@ let Index = React.createClass({
         fontSize: '28px',
         fontWeight: '300'
       },
+      logoStartImg: {
+        padding: '24px',
+        maxWidth: '80%',
+        width: '320px',
+        margin: 'auto',
+        marginTop: '20vh'
+      },
       actions: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        padding: '24px'
+        padding: '24px',
+        maxWidth: '80%',
+        width: '260px',
+        margin: 'auto'
       },
       signup: {
         marginBottom: '12px'
+      },
+      login: {
       }
     }
 
@@ -84,11 +96,11 @@ let Index = React.createClass({
     return (
       <div style={styles.container}>
 
-        <div style={styles.logo}>
+        {/** <div style={styles.logo}>
           <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
-        </div>
+        </div> **/}
 
-        <Carousel style={styles.intro} indicator={IndicatorDots}>
+        {/** <Carousel style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <h3 style={styles.title}>Own your data</h3>
             <div style={styles.content}>
@@ -113,7 +125,13 @@ let Index = React.createClass({
               <img src="/img/slide-visualize.png" style={styles.img} />
             </div>
           </div>
-        </Carousel>
+        </Carousel> **/}
+
+        <div style={styles.intro}>
+          <img
+            src="/img/logo_littlesister_start.svg"
+            style={styles.logoStartImg} />
+        </div>
 
         <div style={styles.actions}>
           <RaisedButton
@@ -128,7 +146,6 @@ let Index = React.createClass({
             onClick={this._handleLogin}
           />
         </div>
-
       </div>
     )
   },
