@@ -58,6 +58,9 @@ let Index = React.createClass({
       img: {
         maxWidth: '100%'
       },
+      startImg: {
+        marginTop: '15vh'
+      },
       title: {
         color: '#a5a5a4',
         fontSize: '20pt',
@@ -109,12 +112,13 @@ let Index = React.createClass({
         <Carousel style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={styles.content}>
-              <img src="/img/logo_littlesister_start.svg" style={styles.img} />
+              <img src="/img/logo_littlesister_start.svg"
+                style={styles.startImg} />
             </div>
           </div>
           <div style={styles.slide}>
             <div style={styles.content}>
-              <img src="/img/slide-identity.png" style={styles.img} />
+              <img src="/img/img_onboarding-01.svg" style={styles.img} />
             </div>
             <h3 style={styles.title}>Create an independant and
             secure digital identity.</h3>
@@ -123,7 +127,7 @@ let Index = React.createClass({
           </div>
           <div style={styles.slide}>
             <div style={styles.content}>
-              <img src="/img/slide-share.png" style={styles.img} />
+              <img src="/img/img_onboarding-01.svg" style={styles.img} />
             </div>
             <h3 style={styles.title}>Have all your data at your fingertip.</h3>
             <p style={styles.subtitle}>See all your data in one safe place.
@@ -131,7 +135,7 @@ let Index = React.createClass({
           </div>
           <div style={styles.slide}>
             <div style={styles.content}>
-              <img src="/img/slide-visualize.png" style={styles.img} />
+              <img src="/img/img_onboarding-01.svg" style={styles.img} />
             </div>
             <h3 style={styles.title}>Be aware of the information you share.</h3>
             <p style={styles.subtitle}>See what you shared with whom.
