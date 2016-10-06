@@ -17,6 +17,8 @@ import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
+import Loading from 'components/common/loading.jsx'
+
 import GraphSearch from 'components/graph/search.jsx'
 import GraphFilters from 'components/graph/filters.jsx'
 
@@ -207,7 +209,7 @@ let App = React.createClass({
     // @TODO render login screen when logging in, also makes sures child
     // components don't get rendered before any user data is available
     if (this.state.account.loggingIn && !this.isPublicRoute()) {
-      return <div />
+      return <Loading />
     }
 
     
