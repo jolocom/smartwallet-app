@@ -23,6 +23,7 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
+  profileDoc: FOAF('PersonalProfileDocument'),
 
   // --
   title: DC('title'),

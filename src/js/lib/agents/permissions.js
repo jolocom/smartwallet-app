@@ -7,31 +7,50 @@ import rdf from 'rdflib'
 class PermissionAgent {
 
   getSharedNodes(uri) {
-    this.gAgent = new graphAgent()
-    let indexUri = 'https://pre.webid.jolocom.de/profile/index'
-    // Will contain the list of URIS.
-    let sharedNodes = []
-    // Some error handling here perhaps.
+    // Add some error handling here perhaps.
     if (!uri) {
       return 
     }
 
+    // Find alternative to having this hard coded.
+    let indexUri = 'https://pre.webid.jolocom.de/profile/index'
+    this.gAgent = new graphAgent()
+    // Will contain the list of URIS.
+    let toBeResolved = []
+    let sharedNodes = {
+      typePerson: [],
+      typeImage: [],
+      typeDocument: []
+    }
+
     this.gAgent.findTriples(indexUri, rdf.sym(uri), undefined, undefined).then((graph)=>{
       graph.forEach((t)=>{
-        sharedNodes.push(t.object.uri)
+        toBeResolved.push(new Promise ((res, rej)=> {
+          this.resolveNodeType(t.object.uri).then((ans) => {
+            sharedNodes[ans].push(t.object.uri)
+            res()
+          })
+        }))
       })
-      this.resolveNodeType(sharedNodes[0]).then((res) => {
-        console.log('Hello!', res)
+
+      Promise.all(toBeResolved).then(()=>{
+        return sharedNodes
       })
     })
   }
 
+  // TODO TODO Multiple A statements
   // Given a RDF file uri, returns it's type.
   resolveNodeType(uri) {
+    let typeMap = {}
+    typeMap[PRED.Document.uri] = 'typeDocument'
+    typeMap[PRED.Image.uri] = 'typeImage'
+    typeMap[PRED.Person.uri] = 'typePerson'
+    typeMap[PRED.profileDoc.uri] = 'typePerson'
+
     return this.gAgent.findTriples(uri, rdf.sym(uri), PRED.type ,undefined).then((graph)=>{
       let temp = graph[0].object.uri 
-      alert(temp)
-      return temp
+      return typeMap[temp]
     })
   }
 }
