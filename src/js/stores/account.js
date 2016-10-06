@@ -159,9 +159,6 @@ export default Reflux.createStore({
       username: username,
       webId: webId
     }
-    // Load conversations for joining an existing one
-    // when clicking on "chat" FAB on sbody's profile
-    ConversationsActions.load(webId)
 
     this.trigger(this.state)
   },
