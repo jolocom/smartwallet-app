@@ -105,11 +105,6 @@ let Index = React.createClass({
 
     return (
       <div style={styles.container}>
-
-        {/** <div style={styles.logo}>
-          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
-        </div> **/}
-
         <Carousel style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={styles.content}>
