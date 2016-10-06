@@ -86,11 +86,11 @@ let Index = React.createClass({
         alignItems: 'stretch',
         padding: '16px',
         maxWidth: '80%',
-        width: '216px',
         margin: '0 auto 0px'
       },
       signup: {
-        margin: '10px'
+        margin: '10px',
+        width: '200px'
       },
       login: {
         margin: '10px'
