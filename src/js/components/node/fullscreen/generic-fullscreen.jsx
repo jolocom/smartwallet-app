@@ -20,7 +20,7 @@ import DocIcon from 'components/icons/doc-icon.jsx'
 import PersonIcon from 'components/icons/person-icon.jsx'
 import ConfidIcon from 'components/icons/confid-icon.jsx'
 
-//import SnackbarActions from 'actions/snackbar'
+import SnackbarActions from 'actions/snackbar'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:generic-fullscreen')
@@ -49,7 +49,8 @@ let GenericFullScreen = React.createClass({
     copyToClipboardText: React.PropTypes.any,
     title: React.PropTypes.string,
     fabItems: React.PropTypes.arrayOf(React.PropTypes.string),
-    children: React.PropTypes.any
+    children: React.PropTypes.any,
+    state: React.PropTypes.any
   },
 
   contextTypes: {
@@ -64,22 +65,20 @@ let GenericFullScreen = React.createClass({
   },
 
   componentDidMount() {
-
     // Luminance
     let backgroundImgMatches
     if (this.props.backgroundImg &&
         this.props.backgroundImg !== 'none' &&
         (backgroundImgMatches = /^url\(['"]?(.+)['"]?\)$/
                                .exec(this.props.backgroundImg))
-       )
-    {
+       ) {
       let backgroundImgUrl = backgroundImgMatches[1]
       let bgLuminanceP = this.getLuminanceForImageUrl(backgroundImgUrl)
       bgLuminanceP.then((lum) => {
-        debug('Background image has luminance of',lum)
+        debug('Background image has luminance of', lum)
         this.setState({luminance: lum})
       }).catch((e) => {
-        console.error('Couldn\'t compute luminance',e)
+        console.error('Couldn\'t compute luminance', e)
       })
     }
 
@@ -91,9 +90,6 @@ let GenericFullScreen = React.createClass({
   },
 
   getStyles() {
-    let {muiTheme} = this.context
-    let {gray1} = muiTheme.jolocom
-
     return {
       container: {
         flex: 1,
@@ -103,7 +99,8 @@ let GenericFullScreen = React.createClass({
       headers: {
         color: '#ffffff',
         height: this.state.fullscreen ? '90vh' : '40vh',
-        background: `${this.props.headerColor} ${this.props.backgroundImg} center / cover`,
+        background: `${this.props.headerColor}
+          ${this.props.backgroundImg} center / cover`,
         boxShadow: 'inset 0px 0px 129px -12px rgba(0,0,0,0.5)'
       },
       title: {
@@ -144,7 +141,8 @@ let GenericFullScreen = React.createClass({
 
   _handleClose() {
     graphActions.setState('activeNode', null, true)
-    this.context.router.push('/graph/' + encodeURIComponent(this.props.state.center.uri))
+    this.context.router.push('/graph/' +
+      encodeURIComponent(this.props.state.center.uri))
   },
 
   _handleDisconnect() {
@@ -153,11 +151,11 @@ let GenericFullScreen = React.createClass({
         this.props.node, this.props.state.center
       )
       // @TODO Wait until it's actually disconnected
-      SnackbarActions.showMessage('The node has been successfully disconnected.')
+      SnackbarActions
+        .showMessage('The node has been successfully disconnected.')
     }
     this._handleClose()
   },
-
 
   _handleConnect() {
     nodeActions.link(
@@ -179,9 +177,7 @@ let GenericFullScreen = React.createClass({
       // graphActions.drawAtUri(prev.uri, 1)
       this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
       nodeActions.remove(node, prev) // will refresh the graph
-    }
-    else
-    {
+    } else {
       this.context.router.push(`/graph/${encodeURIComponent(center.uri)}`)
       nodeActions.remove(node, center)
     }
@@ -227,7 +223,7 @@ let GenericFullScreen = React.createClass({
         return {
           title:
           'Disconnect',
-          icon: <ContentUnlink/>,
+          icon: <ContentUnlink />,
           handler: this._handleDisconnect
         }
       case 'edit':
@@ -289,7 +285,8 @@ let GenericFullScreen = React.createClass({
   },
 
   _handlePostCopyURL() {
-    SnackbarActions.showMessage('The URL of the node has been copied to your clipboard.')
+    SnackbarActions
+      .showMessage('The URL of the node has been copied to your clipboard.')
   },
 
   _handleEdit() {
@@ -309,52 +306,44 @@ let GenericFullScreen = React.createClass({
   },
 
   getLuminanceForImageUrl(url) {
-    return new Promise((res, rej) => {
-
+    return new Promise((resolve, reject) => {
       fetch(url, {
-          credentials: 'include',
-        }).then(function (response) {
-          return response.blob();
-        })
+        credentials: 'include'
+      }).then(function (response) {
+        return response.blob()
+      })
         .then((imageBlob) => {
           let imgDataUrl = URL.createObjectURL(imageBlob)
-
           let img = new Image()
-          img.crossOrigin = "Anonymous";
-
-          img.onload = (() => {
-
+          img.crossOrigin = 'Anonymous'
+          img.onload = () => {
             let canvas = document.createElement('CANVAS')
-            canvas.setAttribute('width',img.width)
-            canvas.setAttribute('height',img.height)
+            canvas.setAttribute('width', img.width)
+            canvas.setAttribute('height', img.height)
             canvas.width = canvas.style.width = img.width
             canvas.height = canvas.style.height = img.height
-
-            let context = canvas.getContext('2d');
-
+            let context = canvas.getContext('2d')
             context.drawImage(img, 0, 0)
 
             // Get top 75 pixels
-            let imgData = context.getImageData(0, 0, img.width, 75);
-
+            let imgData = context.getImageData(0, 0, img.width, 75)
             let lumsSum = 0
             let lumsLength = 0
-            for (var i=0; i<imgData.data.length; i+=4) {
-              let r = imgData.data[i],
-                  g = imgData.data[i+1],
-                  b = imgData.data[i+2],
-                  lum = (r+r+b+g+g+g)/6
+            for (var i = 0; i < imgData.data.length; i += 4) {
+              let r = imgData.data[i]
+              let g = imgData.data[i + 1]
+              let b = imgData.data[i + 2]
+              let lum = (r + r + b + g + g + g) / 6
               lumsSum += lum
               lumsLength++
             }
             let lumsMean = lumsSum / lumsLength
 
-            res(lumsMean)
-          })
+            resolve(lumsMean)
+          }
 
           img.src = imgDataUrl
-        });
-
+        })
     })
   },
 
@@ -386,9 +375,9 @@ let GenericFullScreen = React.createClass({
 
     // Always add the fullscreen menu item
 
-    if (this.state.luminance && this.state.luminance < 40)
+    if (this.state.luminance && this.state.luminance < 40) {
       styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
-
+    }
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>

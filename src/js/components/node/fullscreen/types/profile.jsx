@@ -12,7 +12,6 @@ import {
   List, ListItem, Divider
 } from 'material-ui'
 
-import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
 
 let ProfileNode = React.createClass({
@@ -50,8 +49,6 @@ let ProfileNode = React.createClass({
   },
 
   getStyles() {
-    let {muiTheme} = this.context
-
     return {
     }
   },
@@ -87,13 +84,13 @@ let ProfileNode = React.createClass({
     let fabItems = []
     if (!isMe) {
       fabItems.push('chat', 'bookmark')
-       if (this.props.state.center.isOwnedByUser &&
-          this.getNode().rank &&
-          this.getNode().rank == 'neighbour')
+      if (this.props.state.center.isOwnedByUser &&
+        this.getNode().rank &&
+        this.getNode().rank === 'neighbour') {
         fabItems.push('disconnect')
-      else
+      } else {
         fabItems.push('connect')
-
+      }
     }
 
     let menuItems = []
