@@ -56,22 +56,24 @@ let Index = React.createClass({
       content: {
       },
       img: {
-        maxWidth: '100%'
+        maxWidth: '100%',
+        width: '360px'
       },
       startImg: {
-        marginTop: '15vh'
+        marginTop: '15vh',
+        maxWidth: '100%',
+        width: '360px'
       },
       title: {
         color: '#a5a5a4',
-        fontSize: '20pt',
+        fontSize: '6vmin',
         fontWeight: '100',
-        lineHeight: '28pt',
-        marginBottom: '10px'
+        marginBottom: '10px',
+        maxWidth: '100%'
       },
       subtitle: {
         color: '#a5a5a4',
-        fontSize: '13pt',
-        lineHeight: '16pt'
+        fontSize: '3.5vmin'
       },
       logoStartImg: {
         padding: '24px',
@@ -81,18 +83,17 @@ let Index = React.createClass({
         marginTop: '20vh'
       },
       actions: {
-        display: 'flex',
-        flexDirection: 'column',
         alignItems: 'stretch',
-        padding: '24px',
+        padding: '16px',
         maxWidth: '80%',
-        width: '260px',
-        margin: 'auto'
+        width: '216px',
+        margin: '0 auto 0px'
       },
       signup: {
-        marginBottom: '12px'
+        margin: '10px'
       },
       login: {
+        margin: '10px'
       }
     }
 
@@ -127,7 +128,7 @@ let Index = React.createClass({
           </div>
           <div style={styles.slide}>
             <div style={styles.content}>
-              <img src="/img/img_onboarding-01.svg" style={styles.img} />
+              <img src="/img/img_onboarding-02.svg" style={styles.img} />
             </div>
             <h3 style={styles.title}>Have all your data at your fingertip.</h3>
             <p style={styles.subtitle}>See all your data in one safe place.
@@ -135,7 +136,7 @@ let Index = React.createClass({
           </div>
           <div style={styles.slide}>
             <div style={styles.content}>
-              <img src="/img/img_onboarding-01.svg" style={styles.img} />
+              <img src="/img/img_onboarding-03.svg" style={styles.img} />
             </div>
             <h3 style={styles.title}>Be aware of the information you share.</h3>
             <p style={styles.subtitle}>See what you shared with whom.
