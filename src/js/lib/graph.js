@@ -1033,6 +1033,10 @@ export default class GraphD3 extends EventEmitter {
       .selectAll('image')
       .attr('opacity', (d) => {
         if (d.confidential && d.rank !== 'center') {
+          if (!d.elipsisdepth) {
+            // Graph has <= 8 nodes, so no need to check if on elipsis node
+            return 1
+          }
           return d.elipsisdepth === -1 ? 1 : 0
         }
       })
