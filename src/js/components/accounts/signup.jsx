@@ -33,9 +33,16 @@ let Signup = React.createClass({
     unavailable: 'This username is already taken'
   },
 
+  helperMessages: {
+    userName: 'This is your unique identifier',
+    givenName: 'This will be shown in your profile node'
+  },
+
   getInitialState() {
     return {
-      disabledSubmit: true
+      disabledSubmit: true,
+      showHelperTextUserName: false,
+      showHelperTextGivenName: false
     }
   },
 
@@ -96,6 +103,30 @@ let Signup = React.createClass({
     })
   },
 
+  _handleHelperTextUserNameFocus() {
+    this.setState({
+      showHelperTextUserName: true
+    })
+  },
+
+  _handleHelperTextGivenNameFocus() {
+    this.setState({
+      showHelperTextGivenName: true
+    })
+  },
+
+  _handleHelperTextUserNameBlur() {
+    this.setState({
+      showHelperTextUserName: false
+    })
+  },
+
+  _handleHelperTextGivenNameBlur() {
+    this.setState({
+      showHelperTextGivenName: false
+    })
+  },
+
   getStyles() {
     let {muiTheme} = this.context
     let styles = {
@@ -145,6 +176,11 @@ let Signup = React.createClass({
       link: {
         color: muiTheme.palette.accent1Color,
         fontWeight: 'bold'
+      },
+      helperText: {
+        color: muiTheme.jolocom.gray2,
+        fontSize: '12px',
+        textAlign: 'left'
       }
     }
 
@@ -186,13 +222,21 @@ let Signup = React.createClass({
                 name="username"
                 autocorrect="off"
                 autocapitalize="none"
-                autocomplete="none" 
+                autocomplete="none"
                 floatingLabelText="Username"
                 validations="isAlphanumeric"
                 validationError={this.errorMessages.alphaNumeric}
                 inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._onUsernameChange}
+                onFocus={this._handleHelperTextUserNameFocus}
+                onBlur={this._handleHelperTextUserNameBlur}
                 />
+              <div>
+                <p style={styles.helperText}>
+                  {this.state.showHelperTextUserName
+                    ? this.helperMessages.userName : null}
+                </p>
+              </div>
               <FormsyText
                 name="password"
                 type="password"
@@ -205,7 +249,15 @@ let Signup = React.createClass({
                 validations="isWords"
                 validationError={this.errorMessages.name}
                 onChange={this._onNameChange}
+                onFocus={this._handleHelperTextGivenNameFocus}
+                onBlur={this._handleHelperTextGivenNameBlur}
                 />
+              <div>
+                <p style={styles.helperText}>
+                {this.state.showHelperTextGivenName
+                  ? this.helperMessages.givenName : null}
+                </p>
+              </div>
               <FormsyText
                 name="email"
                 floatingLabelText="Email"
