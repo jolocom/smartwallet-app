@@ -29,13 +29,13 @@ let ChangePassword = React.createClass({
   disableSubmit() {
     this.setState({disabledSubmit: true})
   },
-  
+
   _handlePasswordChange(e) {
     this.setState({
       newPassword: e.target.value.toLowerCase()
     })
   },
-  
+
   _handlePassword2Change(e) {
     this.setState({
       newPassword2: e.target.value.toLowerCase()
@@ -43,16 +43,15 @@ let ChangePassword = React.createClass({
   },
 
   changePassword() {
-    
-    if (this.state.newPassword != this.state.newPassword2) {
+    if (this.state.newPassword !== this.state.newPassword2) {
       SnackbarActions.showMessage('The two passwords do not match.')
       return
     }
-    
+
     let user = encodeURIComponent(this.props.params.username)
     let token = encodeURIComponent(this.props.params.token)
     let newpassword = this.state.newPassword
-    
+
     fetch(`${proxy}/resetpassword`, {
       method: 'POST',
       body: `username=${user}&code=${token}&password=${newpassword}`,
@@ -62,9 +61,8 @@ let ChangePassword = React.createClass({
       }
     }).then((res) => {
       if (!res.ok) {
-          throw new Error(res.statusText)
+        throw new Error(res.statusText)
       }
-      
       SnackbarActions.showMessage('Your password has been reset.')
       this.context.router.push('/login')
     }).catch((e) => {
@@ -72,7 +70,7 @@ let ChangePassword = React.createClass({
       console.error(e)
     })
   },
-  
+
   getStyles() {
     let styles = {
       container: {
@@ -151,7 +149,8 @@ let ChangePassword = React.createClass({
               type="submit" secondary
               disabled={this.state.disabledSubmit}
               style={styles.button}
-              label="CHANGE PASSWORD"/>
+              label="CHANGE PASSWORD"
+            />
           </Formsy.Form>
         </div>
       </div>
