@@ -103,8 +103,8 @@ let Util = {
   // TODO introduce discovery mechanism / protocol.
   // This is too hardcoded.
   getIndexUri(uri) {
-    let indexUri = uri.substring(0, uri.lastIndexOf('/') +1 )
-    indexUri += 'index'
+    let indexUri = this.webidRoot(uri)
+    indexUri += '/little-sister/index'
     return indexUri
   },
 

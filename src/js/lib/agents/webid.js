@@ -44,6 +44,25 @@ class WebIDAgent extends LDPAgent {
     })
   }
 
+  initIndex(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/index`
+    return this.put(
+      Util.uriToProxied(uri),
+      {'Content-type': 'text/turtle'},
+    )
+  }
+
+  initDisclaimer(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/Disclaimer`
+    return this.put(
+      Util.uriToProxied(uri),
+      {'Content-type': 'text/turtle'},
+      'Files in this folder are needed for features of the Little-Sister app.'
+    )
+  }
+
   // Converts the input from the forms to RDF data to put into the inbox card
   _inboxTriples(webId) {
     if (!webId) {
