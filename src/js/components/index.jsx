@@ -127,7 +127,7 @@ let Index = React.createClass({
             <div style={styles.content}>
               <img src="/img/img_onboarding-02.svg" style={styles.img} />
             </div>
-            <h3 style={styles.title}>Have all your data at your fingertip.</h3>
+            <h3 style={styles.title}>Have all your data at your fingertips.</h3>
             <p style={styles.subtitle}>See all your data in one safe place.
               <br /> Pull the plug and your data is only yours.</p>
           </div>
