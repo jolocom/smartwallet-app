@@ -122,6 +122,8 @@ let Profile = React.createClass({
       },
       uploadPassportButton: {
         margin: '0 10px 0 0',
+        position: 'relative',
+        top: '-11px',
         verticalAlign: 'top'
       },
       removePassportButton: {
@@ -347,11 +349,11 @@ let Profile = React.createClass({
                       onClick={this.downloadPK}
                     />
                     <div style={styles.divider}></div>
-                    <RaisedButton
+                    { /*<RaisedButton
                       type="submit"
                       secondary
                       label="Upload Private Key"
-                    />
+                    /> */ }
                   </div>
                 </div>
               </section>
@@ -367,7 +369,7 @@ let Profile = React.createClass({
   },
 
   _setPassportInputRef(el) {
-    this.passwordInputEl = el
+    this.passportInputEl = el
   },
 
   _handleUpdate() {
@@ -403,8 +405,8 @@ let Profile = React.createClass({
   },
 
   _handleSelectPassport() {
-    this.passportFileInputEl.value = null
-    this.passportFileInputEl.click()
+    this.passportInputEl.value = null
+    this.passportInputEl.click()
   },
 
   _handleRemove() {
@@ -423,7 +425,7 @@ let Profile = React.createClass({
   },
 
   _handleRemovePassport() {
-    this.passportFileInputEl.value = null
+    this.passportInputEl.value = null
 
     this.setState({
       passportImgUri: ''
