@@ -1,23 +1,28 @@
 import graphAgent from 'lib/agents/graph'
 import {PRED} from 'lib/namespaces'
+import Util from 'lib/util'
 import rdf from 'rdflib'
 
 // So we have one index file that contains the log of the relationships.
 // it's all triples.
 class PermissionAgent {
 
+
   getSharedNodes(uri) {
     // Add some error handling here perhaps.
     if (!uri) {
-      return 
+      throw new Error('No Uri supplied.')
     }
 
-    this.gAgent = new graphAgent()
-    // Find alternative to having this hard coded.
-    let indexUri = 'https://pre.webid.jolocom.de/profile/index'
-
-    // Will contain the list of URIS.
     let toBeResolved = []
+    this.gAgent = new graphAgent()
+    let webid = localStorage.getItem('jolocom.webId')
+
+    if (!webid) {
+      throw new Error('Logged in user not detected.')
+    }
+    let indexUri = Util.getIndexUri(webid)
+
     let sharedNodes = {
       typePerson: [],
       typeImage: [],

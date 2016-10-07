@@ -96,6 +96,19 @@ let Util = {
   },
 
   /*
+   * @summary Returns the uri of the index file belonging to an user.
+   * @param {string} uri - WebID of the user.
+   * @return {string} uri - Uri to the index file.
+   */
+  // TODO introduce discovery mechanism / protocol.
+  // This is too hardcoded.
+  getIndexUri(uri) {
+    let indexUri = uri.substring(0, uri.lastIndexOf('/') +1 )
+    indexUri += 'index'
+    return indexUri
+  },
+
+  /*
    * @summary Proxies a uri or not depending on the mode.
    * @param {string} uri - The uri to be proxied.
    * @return {string} uri - proxied / not proxied uri depending on mode.
