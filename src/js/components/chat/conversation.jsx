@@ -4,12 +4,13 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton, Avatar} from 'material-ui'
+import {AppBar, IconButton} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
 import Dialog from 'components/common/dialog.jsx'
 import Compose from 'components/common/compose.jsx'
+import UserAvatar from 'components/common/user-avatar.jsx'
 import Loading from 'components/common/loading.jsx'
 
 import ConversationActions from 'actions/conversation'
@@ -22,8 +23,6 @@ import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:conversation')
-
-import Util from 'lib/util'
 
 let Conversation = React.createClass({
 
@@ -197,33 +196,18 @@ let Conversation = React.createClass({
     let {account} = this.context
 
     let items = this.state.conversation.items || []
-    let otherPersonInitial = Util.nameInitial(otherPerson)
-    let userInitial = Util.nameInitial({
-      name: this.state.profile.givenName
-    })
 
-    if (this.state.profile.imgUri) {
-      var userAvatar = (
-        <Avatar
-          src={Util.uriToProxied(this.state.profile.imgUri)}
-          style={{backgroundSize: 'cover'}} />
-      )
-    } else {
-      userAvatar = (
-        <Avatar>{userInitial}</Avatar>
-      )
-    }
+    var userAvatar = (
+      <UserAvatar
+        name={this.state.profile.givenName}
+        imgUrl={this.state.profile.imgUri} />
+    )
 
-    if (otherPerson.img) {
-      var otherPersonAvatar = (
-        <Avatar src={Util.uriToProxied(otherPerson.img)}
-          style={{backgroundSize: 'cover'}} />
-      )
-    } else {
-      otherPersonAvatar = (
-        <Avatar>{otherPersonInitial}</Avatar>
-      )
-    }
+    var otherPersonAvatar = (
+      <UserAvatar
+        name={otherPerson.name}
+        imgUrl={otherPerson.img} />
+    )
 
     return items.map(function({author, content, created}, i) {
       let avatar = (author !== account.webId)
@@ -269,8 +253,7 @@ let Conversation = React.createClass({
             iconElementLeft={
               <IconButton
                 onClick={this.back}
-                iconClassName="material-icons"
-              >
+                iconClassName="material-icons">
                 arrow_back
               </IconButton>
             }
