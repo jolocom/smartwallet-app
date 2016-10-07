@@ -149,8 +149,8 @@ class GraphAgent {
           body: file
         }).then(() => {
 					return uri
-        }).catch(() => {
-      		console.log('error', e, 'occured while putting the image file')
+        }).catch((e) => {
+      		console.warn('error', e, 'occured while putting the image file')
         })
       })
     })
@@ -196,7 +196,7 @@ class GraphAgent {
       return acl_uri
     })
     .catch((e) => {
-      console.log('error', e, 'occured while putting the acl file')
+      console.warn('error', e, 'occured while putting the acl file')
     })
   }
 
@@ -207,11 +207,16 @@ class GraphAgent {
    * @param {object} predicate - triple predicate, undefined for wildcard.
    * @param {object} object - triple object, undefined for wildcard.
    * @return {array | objects} - All triples matching the description.
+   *   returns -1 if a network error occured. 
    */
 
   findTriples(uri, subject, predicate, object) {
     let writer = new Writer()
-    return this.fetchTriplesAtUri(uri).then((res) => {
+return this.fetchTriplesAtUri(uri).then((res) => {
+if (res.unav) {
+        return -1
+      }
+      
       for (let t of res.triples) {
         writer.addTriple(t.subject, t.predicate, t.object)
       }

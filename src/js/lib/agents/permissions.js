@@ -12,18 +12,24 @@ class PermissionAgent {
       return 
     }
 
+    this.gAgent = new graphAgent()
     // Find alternative to having this hard coded.
     let indexUri = 'https://pre.webid.jolocom.de/profile/index'
-    this.gAgent = new graphAgent()
+
     // Will contain the list of URIS.
     let toBeResolved = []
     let sharedNodes = {
       typePerson: [],
       typeImage: [],
-      typeDocument: []
+      typeDocument: [],
+      typeNotDetected: []
     }
 
+    // TODO Convert according to Axel's example.
     this.gAgent.findTriples(indexUri, rdf.sym(uri), undefined, undefined).then((graph)=>{
+      if (graph === -1) {
+        throw new Error('Could not access the index file.')
+      }
       graph.forEach((t)=>{
         toBeResolved.push(new Promise ((res, rej)=> {
           this.resolveNodeType(t.object.uri).then((ans) => {
@@ -32,10 +38,12 @@ class PermissionAgent {
           })
         }))
       })
-
       Promise.all(toBeResolved).then(()=>{
         return sharedNodes
       })
+    }).catch((e)=>{
+      console.warn(e)
+      return {}
     })
   }
 
@@ -49,6 +57,9 @@ class PermissionAgent {
     typeMap[PRED.profileDoc.uri] = 'typePerson'
 
     return this.gAgent.findTriples(uri, rdf.sym(uri), PRED.type ,undefined).then((graph)=>{
+      if (graph === -1) {
+        return 'typeNotDetected'
+      }
       let temp = graph[0].object.uri 
       return typeMap[temp]
     })
