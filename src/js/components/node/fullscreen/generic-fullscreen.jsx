@@ -350,16 +350,18 @@ let GenericFullScreen = React.createClass({
   render() {
     let styles = this.getStyles()
     let headerIcon
-    if (this.props.node.confidential) {
-      // Display confidential icon in header
-      headerIcon = <ConfidIcon />
-    } else if (this.props.node.type &&
-        this.props.node.type.includes('Person')) {
-      // Display person icon in header
-      headerIcon = this.props.node.img ? null : <PersonIcon />
-    } else {
-      // Display document icon in header (default)
-      headerIcon = <DocIcon />
+    if (!this.props.node.img) {
+      if (this.props.node.confidential) {
+        // Display confidential icon in header
+        headerIcon = <ConfidIcon />
+      } else if (this.props.node.type &&
+          this.props.node.type.includes('Person')) {
+        // Display person icon in header
+        headerIcon = <PersonIcon />
+      } else {
+        // Display document icon in header (default)
+        headerIcon = <DocIcon />
+      }
     }
 
     // @TODO bind handlers to preset actions here
