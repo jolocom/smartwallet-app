@@ -113,6 +113,13 @@ let Signup = React.createClass({
     this.setState({
       password: e.target.value
     })
+    // Sign up button is re-enabled once all required fields are non-empty
+    if ((this.state.username !== '') && (this.state.email !== '') &&
+      (this.state.email2 !== '')) {
+      this.setState({
+        disabledSubmit: false
+      })
+    }
   },
 
   _handleHelperTextUserNameFocus() {
@@ -307,10 +314,7 @@ let Signup = React.createClass({
             * indicates required field
           </p>
         </div>
-
         {cookieWarning}
-
-
         <p style={styles.help}>
           Already have an account?&nbsp;
           <Link to="/login" style={styles.link}>Login instead</Link>.

@@ -135,6 +135,7 @@ let Login = React.createClass({
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
             <div>
+              {/** TODO Give user feedback when user already exists **/}
               <TextField
                 floatingLabelText="Username"
                 value={this.state.username}
