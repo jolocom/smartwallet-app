@@ -95,9 +95,10 @@ let Login = React.createClass({
       content: {
         width: '300px',
         maxWidth: '90%',
-        padding: '20px',
-        margin: '0 auto 20px auto',
-        boxSizing: 'border-box'
+        padding: '0px 20px 20px',
+        margin: '10px auto 20px auto',
+        boxSizing: 'border-box',
+        backgroundColor: '#ffffff'
       },
       safariCookieWarning: {
         fontWeight: 'bold',
