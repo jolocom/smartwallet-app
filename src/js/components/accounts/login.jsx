@@ -19,7 +19,9 @@ let Login = React.createClass({
   getInitialState() {
     return {
       username: '',
-      password: ''
+      password: '',
+      userErrorMsg: '',
+      pwErrorMsg: ''
     }
   },
 
@@ -31,17 +33,33 @@ let Login = React.createClass({
   },
 
   login(e) {
+    // Handle empty form fields
+    if (this.state.username === '') {
+      this.setState({
+        userErrorMsg: 'Please enter a username'
+      })
+    } else if (this.state.password === '') {
+      this.setState({
+        pwErrorMsg: 'Please enter a password'
+      })
+    }
     Account.login(this.state.username, this.state.password)
     e.preventDefault()
   },
 
   _handleUsernameChange(e) {
     this.setState({
+      userErrorMsg: ''
+    })
+    this.setState({
       username: e.target.value.toLowerCase()
     })
   },
 
   _handlePasswordChange(e) {
+    this.setState({
+      pwErrorMsg: ''
+    })
     this.setState({
       password: e.target.value
     })
@@ -67,9 +85,8 @@ let Login = React.createClass({
         textTransform: 'uppercase'
       },
       logoImg: {
-        width: '32px',
-        height: '32px',
-        verticalAlign: 'middle'
+        maxWidth: '80%',
+        width: '256px'
       },
       title: {
         fontWeight: '200',
@@ -112,7 +129,8 @@ let Login = React.createClass({
     return (
       <div style={styles.container}>
         <div style={styles.logo}>
-          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom</div>
+          <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
+        </div>
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
             <div>
@@ -123,10 +141,12 @@ let Login = React.createClass({
                 autocorrect="off"
                 autocapitalize="none"
                 autocomplete="none"
+                errorText={this.state.userErrorMsg}
                 onChange={this._handleUsernameChange} />
               <TextField
                 floatingLabelText="Password"
                 type="password"
+                errorText={this.state.pwErrorMsg}
                 onChange={this._handlePasswordChange} />
               <Link
                 to="/forgot-password"
