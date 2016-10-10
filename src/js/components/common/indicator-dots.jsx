@@ -8,13 +8,13 @@ function IndicatorDots (props, context) {
       display: 'inline-block',
       height: '8px',
       width: '8px',
-      border: `1px solid ${muiTheme.jolocom.gray2}`,
       borderRadius: '4px',
-      backgroundColor: 'transparent',
       margin: '7px 5px',
       transitionDuration: '300ms'
     }
-    dotStyle.backgroundColor = props.index === i ? muiTheme.jolocom.gray2 : 'transparent'
+    dotStyle.backgroundColor = props.index === i
+      ? muiTheme.palette.accent1Color
+      : muiTheme.jolocom.gray1
     dots.push(<span key={i} style={dotStyle}></span>)
   }
   return <div style={styles.wrapper}>{dots}</div>
