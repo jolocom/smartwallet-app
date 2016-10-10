@@ -4,8 +4,8 @@ import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton} from 'material-ui'
 import {proxy} from 'settings'
-import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import AppBar from 'material-ui/AppBar'
+import {Link} from 'react-router'
 
 import SnackbarActions from 'actions/snackbar'
 
@@ -57,6 +57,7 @@ let ForgotPassword = React.createClass({
   },
 
   getStyles() {
+    let {muiTheme} = this.context
     let styles = {
       container: {
         textAlign: 'center',
@@ -84,6 +85,13 @@ let ForgotPassword = React.createClass({
       },
       button: {
         width: '100%'
+      },
+      help: {
+        color: muiTheme.jolocom.gray1
+      },
+      link: {
+        color: muiTheme.palette.accent1Color,
+        fontWeight: 'bold'
       }
     }
     return styles
@@ -128,6 +136,9 @@ let ForgotPassword = React.createClass({
               label="REQUEST PASSWORD" />
           </Formsy.Form>
         </div>
+        <p style={styles.help}>Don't have an account yet?&nbsp;
+          <Link to="/signup" style={styles.link}>Sign up</Link>.
+        </p>
       </div>
     )
   }
