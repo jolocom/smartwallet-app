@@ -175,7 +175,7 @@ let Graph = React.createClass({
 
   _handleSelectNode(node, svg) {
     let aclAgent = new AclAgent(node.uri)
-    aclAgent.allow('https://someDude.jol.de/profile/card#me', 'read')
+    aclAgent.allow(node.uri, 'read')
     aclAgent.commitIndex()
 
     graphActions.setState('selected', svg)

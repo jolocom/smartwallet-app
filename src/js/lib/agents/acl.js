@@ -19,6 +19,11 @@ class AclAgent {
       toDelete:[]
     }
 
+    this.indexPredMap = {
+      read: PRED.readPermission,
+      write: PRED.writePermission
+    }
+
     this.predMap = {
       write: PRED.write,
       read: PRED.read,
@@ -76,7 +81,7 @@ class AclAgent {
     // TODO Replace with SCHEMA lib
     this.indexChanges.toInsert.push({
        subject: user,
-       predicate: this.predMap[mode],
+       predicate: this.indexPredMap[mode],
        object: rdf.sym(this.uri)
      })
     // If user already has the permission.
@@ -146,7 +151,12 @@ class AclAgent {
         if (trip.length > 0) {
           let {subject, predicate, object} = trip[0]
           this.Writer.g.remove({subject,predicate,object})
-          this.indexChanges.toDelete.push(user,this.predMap[mode],rdf.sym(this.uri))
+          this.indexChanges.toDelete.push({
+            subject: user,
+            predicate: this.indexPredMap[mode],
+            object: rdf.sym(this.uri)
+          })
+
           // Here we check if the policy itself should be deleted next.
           let zomb = this.Writer.find(policy, PRED.mode, undefined)
           if (zomb.length > 0) {
@@ -252,20 +262,13 @@ class AclAgent {
     let indexUri = Util.getIndexUri() 
     if (this.indexChanges.toInsert.length > 0) {
       this.indexChanges.toInsert.forEach((el) => {
-        console.log('firing')
+        // KEEP AN EYE ON THIS
         updates.push(
-          new Promise((res) => {
-            this.gAgent.writeTriples(indexUri, [el], false).then((result)=>{
-              alert('kek')
-              res()
-            })
-          })
+          this.gAgent.writeTriples(indexUri, [el], false)
         )
       })
     }
-    console.log(updates)
     Promise.all(updates).then((res) => {
-      alert()
     })
     /*
     if (this.indexChanges.toDelete.length > 0) {

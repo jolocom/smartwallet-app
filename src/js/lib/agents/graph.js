@@ -279,8 +279,8 @@ class GraphAgent {
               object: t.object
             })
           } else {
-            // Think about this
-            return reject('A triple is already present in the file!')
+            // TODO Return false to save a request.
+            return resolve()
           }
           if (i === triples.length - 1) {
             return resolve()
