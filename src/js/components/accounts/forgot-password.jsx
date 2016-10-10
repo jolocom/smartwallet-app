@@ -4,6 +4,8 @@ import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton} from 'material-ui'
 import {proxy} from 'settings'
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
+import AppBar from 'material-ui/AppBar'
 
 import SnackbarActions from 'actions/snackbar'
 
@@ -73,13 +75,7 @@ let ForgotPassword = React.createClass({
         fontWeight: 'normal',
         fontSize: '20px',
         color: '#4B142B',
-        textAlign: 'left',
-        width: '300px',
-        maxWidth: '90%',
-        padding: '20px 20px 20px 0px',
-        margin: '0 auto 20px auto',
-        boxSizing: 'border-box',
-        float: 'left'
+        textAlign: 'left'
       },
       backButton: {
         float: 'left',
@@ -98,6 +94,15 @@ let ForgotPassword = React.createClass({
 
     return (
       <div style={styles.container}>
+        <AppBar
+          title="Forgot password"
+          style={{boxShadow: 'none'}}
+          titleStyle={styles.title}
+          iconElementLeft={<IconButton onClick={this.goBack}
+            iconClassName="material-icons">
+              arrow_back
+          </IconButton>}
+          />
         <div style={styles.content}>
           <Formsy.Form
             onValid={this.enableSubmit}
@@ -105,16 +110,6 @@ let ForgotPassword = React.createClass({
             onValidSubmit={this.forgotPassword}
           >
             <div style={{marginBottom: '20px'}}>
-              <div style={{width: '350px'}}>
-                <div style={styles.backButton}>
-                  <IconButton
-                    onClick={this.goBack}
-                    iconClassName="material-icons">
-                    arrow_back
-                  </IconButton>
-                </div>
-                <div style={styles.title}>Forgot password</div>
-              </div>
               <FormsyText name="username"
                 floatingLabelText="Username"
                 autocorrect="off"
