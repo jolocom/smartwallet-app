@@ -32,13 +32,13 @@ let ChangePassword = React.createClass({
 
   _handlePasswordChange(e) {
     this.setState({
-      newPassword: e.target.value.toLowerCase()
+      newPassword: e.target.value
     })
   },
 
   _handlePassword2Change(e) {
     this.setState({
-      newPassword2: e.target.value.toLowerCase()
+      newPassword2: e.target.value
     })
   },
 

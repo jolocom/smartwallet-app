@@ -6,6 +6,8 @@ import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
 import {Link} from 'react-router'
 
+import SnackbarActions from 'actions/snackbar'
+
 // import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
 
@@ -30,6 +32,7 @@ let Signup = React.createClass({
     alphaNumeric: 'Please only use letters and numbers',
     email: 'Please provide a valid email',
     name: 'Please enter a valid name',
+    password: 'Please enter a password',
     unavailable: 'This username is already taken'
   },
 
@@ -54,13 +57,16 @@ let Signup = React.createClass({
   },
 
   signup() {
+    if (this.state.email !== this.state.email2) {
+      SnackbarActions.showMessage('The two emails do not match.')
+      return
+    }
     let signupData = {
       username: this.state.username,
       name: this.state.name,
       email: this.state.email,
       password: this.state.password
     }
-
     Account.signup(signupData)
   },
 
@@ -94,6 +100,12 @@ let Signup = React.createClass({
   _onEmailChange(e) {
     this.setState({
       email: e.target.value
+    })
+  },
+
+  _onEmail2Change(e) {
+    this.setState({
+      email2: e.target.value
     })
   },
 
@@ -147,9 +159,8 @@ let Signup = React.createClass({
         textTransform: 'uppercase'
       },
       logoImg: {
-        width: '32px',
-        height: '32px',
-        verticalAlign: 'middle'
+        maxWidth: '80%',
+        width: '256px'
       },
       title: {
         fontWeight: '200',
@@ -158,9 +169,10 @@ let Signup = React.createClass({
       content: {
         width: '300px',
         maxWidth: '90%',
-        padding: '20px',
-        margin: '0 auto 20px auto',
-        boxSizing: 'border-box'
+        padding: '0px 20px 20px',
+        margin: '10px auto 20px auto',
+        boxSizing: 'border-box',
+        backgroundColor: '#ffffff'
       },
       safariCookieWarning: {
         fontWeight: 'bold',
@@ -181,6 +193,12 @@ let Signup = React.createClass({
         color: muiTheme.jolocom.gray2,
         fontSize: '12px',
         textAlign: 'left'
+      },
+      requiredMsg: {
+        textAlign: 'left',
+        color: muiTheme.jolocom.gray2,
+        fontSize: '12px',
+        marginTop: '20px'
       }
     }
 
@@ -209,7 +227,7 @@ let Signup = React.createClass({
     return (
       <div style={styles.container}>
         <div style={styles.logo}>
-          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom
+          <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
         <div style={styles.content}>
           <Formsy.Form
@@ -223,13 +241,14 @@ let Signup = React.createClass({
                 autocorrect="off"
                 autocapitalize="none"
                 autocomplete="none"
-                floatingLabelText="Username"
+                floatingLabelText="Username*"
                 validations="isAlphanumeric"
                 validationError={this.errorMessages.alphaNumeric}
                 inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._onUsernameChange}
                 onFocus={this._handleHelperTextUserNameFocus}
                 onBlur={this._handleHelperTextUserNameBlur}
+                required
                 />
               <div>
                 <p style={styles.helperText}>
@@ -238,14 +257,8 @@ let Signup = React.createClass({
                 </p>
               </div>
               <FormsyText
-                name="password"
-                type="password"
-                floatingLabelText="Password"
-                onChange={this._onPasswordChange}
-                />
-              <FormsyText
                 name="name"
-                floatingLabelText="Name"
+                floatingLabelText="Full name"
                 validations="isWords"
                 validationError={this.errorMessages.name}
                 onChange={this._onNameChange}
@@ -260,10 +273,26 @@ let Signup = React.createClass({
               </div>
               <FormsyText
                 name="email"
-                floatingLabelText="Email"
+                floatingLabelText="Email*"
                 validations="isEmail"
                 validationError={this.errorMessages.email}
                 onChange={this._onEmailChange}
+                required
+                />
+              <FormsyText
+                name="email"
+                floatingLabelText="Repeat Email*"
+                validations="isEmail"
+                validationError={this.errorMessages.email}
+                onChange={this._onEmail2Change}
+                required
+                />
+              <FormsyText
+                name="password"
+                type="password"
+                floatingLabelText="Password*"
+                onChange={this._onPasswordChange}
+                required
                 />
             </div>
 
@@ -274,9 +303,13 @@ let Signup = React.createClass({
               style={styles.button} label="Sign up"
             />
           </Formsy.Form>
+          <p style={styles.requiredMsg}>
+            * indicates required field
+          </p>
         </div>
 
         {cookieWarning}
+
 
         <p style={styles.help}>
           Already have an account?&nbsp;
