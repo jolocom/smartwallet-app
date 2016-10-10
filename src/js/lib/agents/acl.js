@@ -14,6 +14,10 @@ class AclAgent {
     this.g = rdf.graph()
     this.gAgent = new GraphAgent()
     this.Writer = new Writer()
+    this.indexChanges = {
+      toInsert:[],
+      toDelete:[]
+    }
 
     this.predMap = {
       write: PRED.write,
@@ -69,7 +73,12 @@ class AclAgent {
     if (typeof user === 'string') {
       user = rdf.sym(user) 
     }
-
+    // TODO Replace with SCHEMA lib
+    this.indexChanges.toInsert.push({
+       subject: user,
+       predicate: this.predMap[mode],
+       object: rdf.sym(this.uri)
+     })
     // If user already has the permission.
     if (_.includes(this.allowedPermissions(user, true), mode)){
       return
@@ -137,7 +146,7 @@ class AclAgent {
         if (trip.length > 0) {
           let {subject, predicate, object} = trip[0]
           this.Writer.g.remove({subject,predicate,object})
-          
+          this.indexChanges.toDelete.push(user,this.predMap[mode],rdf.sym(this.uri))
           // Here we check if the policy itself should be deleted next.
           let zomb = this.Writer.find(policy, PRED.mode, undefined)
           if (zomb.length > 0) {
@@ -232,10 +241,45 @@ class AclAgent {
     }).then((res)=>{
       if (!res.ok){
         throw new Error('Error while putting the file', res)  
-      } 
+      }
     }).catch((e)=>{
       console.error(e)
     }) 
+  }
+
+  commitIndex() {
+    let updates = []
+    let indexUri = Util.getIndexUri() 
+    if (this.indexChanges.toInsert.length > 0) {
+      this.indexChanges.toInsert.forEach((el) => {
+        console.log('firing')
+        updates.push(
+          new Promise((res) => {
+            this.gAgent.writeTriples(indexUri, [el], false).then((result)=>{
+              alert('kek')
+              res()
+            })
+          })
+        )
+      })
+    }
+    console.log(updates)
+    Promise.all(updates).then((res) => {
+      alert()
+    })
+    /*
+    if (this.indexChanges.toDelete.length > 0) {
+      let payload = {
+         uri: indexUri,
+         triples: []
+       }
+
+      this.indexChanges.toDelete.forEach((el) => {
+          payload.triples.push(el)
+      })
+      return this.gAgent.deleteTriple(payload)
+    }
+    */
   }
 }
 

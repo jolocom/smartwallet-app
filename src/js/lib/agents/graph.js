@@ -211,9 +211,10 @@ class GraphAgent {
    */
 
   findTriples(uri, subject, predicate, object) {
+    console.log('called!')
     let writer = new Writer()
-return this.fetchTriplesAtUri(uri).then((res) => {
-if (res.unav) {
+    return this.fetchTriplesAtUri(uri).then((res) => {
+      if (res.unav) {
         return -1
       }
       
@@ -264,33 +265,32 @@ if (res.unav) {
       validPredicate = (pred === PRED.isRelatedTo.uri ||
         pred === PRED.knows.uri)
     }
-
     let statements = []
+    // TODO REPLACE WITH PROMISE ALL
     return new Promise((resolve, reject) => {
       for (let i = 0; i < triples.length; i++) {
         let t = triples[i]
-        this.findTriples(t.subject.uri, t.subject, t.predicate, t.object)
-          .then((res) => {
-            if (res.length === 0) {
-              statements.push({
-                subject: t.subject,
-                predicate: t.predicate,
-                object: t.object
-              })
-            } else {
-              // Think about this
-              return reject('A triple is already present in the file!')
-            }
-            if (i === triples.length - 1) {
-              return resolve()
-            }
-          })
+        this.findTriples(uri, t.subject, t.predicate, t.object)
+        .then((res) => {
+          if (res.length === 0) {
+            statements.push({
+              subject: t.subject,
+              predicate: t.predicate,
+              object: t.object
+            })
+          } else {
+            // Think about this
+            return reject('A triple is already present in the file!')
+          }
+          if (i === triples.length - 1) {
+            return resolve()
+          }
+       })
       }
     }).then(() => {
       statements = statements.map(st => {
         return rdf.st(st.subject, st.predicate, st.object).toNT()
       }).join(' ')
-
       return fetch(Util.uriToProxied(uri), {
         method: 'PATCH',
         credentials: 'include',
@@ -310,7 +310,7 @@ if (res.unav) {
   }
 
 
-  /**
+  /*
    * @summary Deletes a triple from an rdf file.
    *
    * @param {string} uri -  the file we are removing from

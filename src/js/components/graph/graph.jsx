@@ -15,7 +15,7 @@ import Radium from 'radium'
 import NodeTypes from 'lib/node-types'
 
 // For testing purposes, remove TODO
-import PerAg from 'lib/agents/permissions'
+import AclAgent from 'lib/agents/acl'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:graph')
@@ -174,8 +174,9 @@ let Graph = React.createClass({
   },
 
   _handleSelectNode(node, svg) {
-    let pAgent = new PerAg()
-    pAgent.getSharedNodes(node.uri)
+    let aclAgent = new AclAgent(node.uri)
+    aclAgent.allow('https://someDude.jol.de/profile/card#me', 'read')
+    aclAgent.commitIndex()
 
     graphActions.setState('selected', svg)
   },
