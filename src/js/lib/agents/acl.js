@@ -130,11 +130,16 @@ class AclAgent {
       user = rdf.sym(user) 
     }
 
+    this.indexChanges.toDelete.push({
+      subject: user,
+      predicate: this.indexPredMap[mode],
+      object: rdf.sym(this.uri)
+    })
+
     // Check if the triple is present.
     if (!_.includes(this.allowedPermissions(user, true), mode)) {
       return
     } 
-
     // Finding the correct triple.
     mode = this.predMap[mode]
     
@@ -151,12 +156,6 @@ class AclAgent {
         if (trip.length > 0) {
           let {subject, predicate, object} = trip[0]
           this.Writer.g.remove({subject,predicate,object})
-          this.indexChanges.toDelete.push({
-            subject: user,
-            predicate: this.indexPredMap[mode],
-            object: rdf.sym(this.uri)
-          })
-
           // Here we check if the policy itself should be deleted next.
           let zomb = this.Writer.find(policy, PRED.mode, undefined)
           if (zomb.length > 0) {
@@ -259,6 +258,7 @@ class AclAgent {
 
   commitIndex() {
     let updates = []
+    console.log(this.indexChanges)
     let indexUri = Util.getIndexUri() 
     if (this.indexChanges.toInsert.length > 0) {
       this.indexChanges.toInsert.forEach((el) => {
@@ -268,9 +268,7 @@ class AclAgent {
         )
       })
     }
-    Promise.all(updates).then((res) => {
-    })
-    /*
+    
     if (this.indexChanges.toDelete.length > 0) {
       let payload = {
          uri: indexUri,
@@ -278,11 +276,17 @@ class AclAgent {
        }
 
       this.indexChanges.toDelete.forEach((el) => {
-          payload.triples.push(el)
+        payload.triples.push(el)
       })
-      return this.gAgent.deleteTriple(payload)
+      // The removal always happens at the end, think of 
+      // the implications
+      // CRASHES THE SOLID SERVER, USE WITH CARE.
+      updates.push(this.gAgent.deleteTriple(payload))
     }
-    */
+    
+    Promise.all(updates).then((res) => {
+      console.log('DONE', res)
+    })
   }
 }
 

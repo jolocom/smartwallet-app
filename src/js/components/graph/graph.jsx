@@ -14,7 +14,6 @@ import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 import Radium from 'radium'
 import NodeTypes from 'lib/node-types'
 
-// For testing purposes, remove TODO
 import AclAgent from 'lib/agents/acl'
 
 import Debug from 'lib/debug'
@@ -86,6 +85,7 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
+    this.aclAgent = new AclAgent('https://pre.jolocom.webid.de/profile/card')
     const {account} = this.context
 
     // Instantiating the graph object.
@@ -174,10 +174,7 @@ let Graph = React.createClass({
   },
 
   _handleSelectNode(node, svg) {
-    let aclAgent = new AclAgent(node.uri)
-    aclAgent.allow(node.uri, 'read')
-    aclAgent.commitIndex()
-
+    this.aclAgent.removeAllow(node.uri, 'write')
     graphActions.setState('selected', svg)
   },
 
@@ -186,6 +183,7 @@ let Graph = React.createClass({
   },
 
   _handleCenterChange(node) {
+    this.aclAgent.commitIndex()
     this.context.router.push(`/graph/${encodeURIComponent(node.uri)}/`)
   },
 
