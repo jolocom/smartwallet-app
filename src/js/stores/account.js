@@ -36,8 +36,9 @@ export default Reflux.createStore({
       }
     })
     .then((res) => {
-      if (res.status == 400) throw new Error('ALREADY_EXISTS')
-
+      if (res.status === 400) {
+        throw new Error('USERNAME_TAKEN')
+      }
       res.json().then((js) => {
         if (name || email) {
           let payload = {name, email}
@@ -48,10 +49,11 @@ export default Reflux.createStore({
       })
     })
     .catch((e) => {
-      if (e.message == 'ALREADY_EXISTS')
-        console.error('Account already exists')
-      else
-        console.error('Other account error')
+      if (e.message === 'USERNAME_TAKEN') {
+        SnackbarActions.showMessage('Username is already taken.')
+      } else {
+        SnackbarActions.showMessage('An account error has occured.')
+      }
     })
   },
 
