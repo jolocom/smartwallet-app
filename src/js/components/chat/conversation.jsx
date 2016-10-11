@@ -193,8 +193,8 @@ let Conversation = React.createClass({
   renderItems() {
     let styles = this.getStyles()
     let {otherPerson} = this.state.conversation
+    console.log('Conversation render! this.state.con ', this.state.conversation)
     let {account} = this.context
-
     let items = this.state.conversation.items || []
 
     var userAvatar = (
@@ -203,13 +203,15 @@ let Conversation = React.createClass({
         imgUrl={this.state.profile.imgUri} />
     )
 
-    var otherPersonAvatar = (
-      <UserAvatar
-        name={otherPerson.name}
-        imgUrl={otherPerson.img} />
-    )
-
     return items.map(function({author, content, created}, i) {
+      var otherPersonAvatar = (
+        <UserAvatar
+          name={author.charAt(8)}
+          // imgUrl={otherPerson.img}
+          imgUrl={author.img}
+        />
+      )
+
       let avatar = (author !== account.webId)
         ? 'otherPersonAvatar' : 'userAvatar'
       let from = (author !== account.webId)
