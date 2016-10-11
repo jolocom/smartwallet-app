@@ -29,6 +29,7 @@ import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
 import SnackbarStore from 'stores/snackbar'
+import SnackbarActions from 'actions/snackbar'
 
 // A pathname is considered public if either "/" or if it starts
 // with any of the following publicRoutes
@@ -210,7 +211,7 @@ let App = React.createClass({
       return <div />
     }
 
-    
+
     // Deactivating search until we get it working
     /*<IconButton
       iconClassName="material-icons"
@@ -224,7 +225,7 @@ let App = React.createClass({
           onTouchTap={this._handleChatTap}>chat</IconButton>
       </div>
     )
-    
+
     // Deactivating search until we get it working
     /*
     (
@@ -276,10 +277,12 @@ let App = React.createClass({
             <Tour />
           </Layout>
         )}
-      
+
       <Snackbar
         open={this.state.snackbar.open}
         message={this.state.snackbar.message}
+        action={this.state.snackbar.undo && 'undo'}
+        onActionTouchTap={this.state.snackbar.undoCallback}
       />
     </div>
     )
