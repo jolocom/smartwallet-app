@@ -44,7 +44,8 @@ let Signup = React.createClass({
     return {
       disabledSubmit: true,
       showHelperTextUserName: false,
-      showHelperTextGivenName: false
+      showHelperTextGivenName: false,
+      emailVerifyScreen: false
     }
   },
 
@@ -71,8 +72,13 @@ let Signup = React.createClass({
 
   componentDidUpdate() {
     if (this.state.account && this.state.account.username) {
-      this.context.router.push('/graph')
+      this.emailVerifyScreen() // TODO: test when server is working
+      // this.context.router.push('/graph')
     }
+  },
+
+  emailVerifyScreen() {
+    this.setState({emailVerifyScreen: true})
   },
 
   enableSubmit() {
@@ -185,6 +191,13 @@ let Signup = React.createClass({
         boxSizing: 'border-box',
         backgroundColor: '#ffffff'
       },
+      contentEmailVerify: {
+        width: '360px',
+        maxWidth: '90%',
+        padding: '0px 5px 5px',
+        margin: '10px auto 20px auto',
+        boxSizing: 'border-box'
+      },
       safariCookieWarning: {
         fontWeight: 'bold',
         padding: '0 20px',
@@ -211,15 +224,24 @@ let Signup = React.createClass({
         color: muiTheme.jolocom.gray2,
         fontSize: '12px',
         marginTop: '20px'
+      },
+      signUpMessage: {
+        textAlign: 'center',
+        color: muiTheme.jolocom.gray1,
+        fontSize: '12pt',
+        marginTop: '30px',
+        fontWeight: '100',
+        lineHeight: '14pt'
       }
     }
 
     return styles
   },
 
-  handleClick() {
-    Account.signup()
-  },
+  // What is the purpose of this function?
+  // handleClick() {
+  //   Account.signup()
+  // },
 
   render() {
     let styles = this.getStyles()
@@ -250,89 +272,99 @@ let Signup = React.createClass({
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
-        <div style={styles.content}>
-          <Formsy.Form
-            onValid={this.enableSubmit}
-            onInvalid={this.disableSubmit}
-            onValidSubmit={this.signup}
-            >
-            <div style={{marginBottom: '20px'}}>
-              <FormsyText
-                name="username"
-                autocorrect="off"
-                autocapitalize="none"
-                autocomplete="none"
-                floatingLabelText="Username*"
-                validations="isAlphanumeric"
-                validationError={this.errorMessages.alphaNumeric}
-                inputStyle={{textTransform: 'lowercase'}}
-                onChange={this._onUsernameChange}
-                onFocus={this._handleHelperTextUserNameFocus}
-                onBlur={this._handleHelperTextUserNameBlur}
-                required
-                />
-              <div>
-                <p style={styles.helperText}>
-                  {this.state.showHelperTextUserName
-                    ? this.helperMessages.userName : null}
-                </p>
-              </div>
-              <FormsyText
-                name="name"
-                floatingLabelText="Full name"
-                validations="isWords"
-                validationError={this.errorMessages.name}
-                onChange={this._onNameChange}
-                onFocus={this._handleHelperTextGivenNameFocus}
-                onBlur={this._handleHelperTextGivenNameBlur}
-                />
-              <div>
-                <p style={styles.helperText}>
-                {this.state.showHelperTextGivenName
-                  ? this.helperMessages.givenName : null}
-                </p>
-              </div>
-              <FormsyText
-                name="email"
-                floatingLabelText="Email*"
-                validations="isEmail"
-                validationError={this.errorMessages.email}
-                onChange={this._onEmailChange}
-                required
-                />
-              <FormsyText
-                name="email"
-                floatingLabelText="Repeat Email*"
-                validations="isEmail"
-                validationError={this.errorMessages.email}
-                onChange={this._onEmail2Change}
-                required
-                />
-              <FormsyText
-                name="password"
-                type="password"
-                floatingLabelText="Password*"
-                onChange={this._onPasswordChange}
-                required
-                />
-            </div>
+        {this.state.emailVerifyScreen
+          ? <div style={styles.contentEmailVerify}>
+            <p style={styles.signUpMessage}>
+              Thank you for signing up to Little Sister!<br />
+              Please check your email. We've sent you a message
+               with a confirmation link.
+            </p>
+          </div>
+          : <div>
+            <div style={styles.content}>
+              <Formsy.Form
+                onValid={this.enableSubmit}
+                onInvalid={this.disableSubmit}
+                onValidSubmit={this.signup}
+                >
+                <div style={{marginBottom: '20px'}}>
+                  <FormsyText
+                    name="username"
+                    autocorrect="off"
+                    autocapitalize="none"
+                    autocomplete="none"
+                    floatingLabelText="Username*"
+                    validations="isAlphanumeric"
+                    validationError={this.errorMessages.alphaNumeric}
+                    inputStyle={{textTransform: 'lowercase'}}
+                    onChange={this._onUsernameChange}
+                    onFocus={this._handleHelperTextUserNameFocus}
+                    onBlur={this._handleHelperTextUserNameBlur}
+                    required
+                    />
+                  <div>
+                    <p style={styles.helperText}>
+                      {this.state.showHelperTextUserName
+                        ? this.helperMessages.userName : null}
+                    </p>
+                  </div>
+                  <FormsyText
+                    name="name"
+                    floatingLabelText="Full name"
+                    validations="isWords"
+                    validationError={this.errorMessages.name}
+                    onChange={this._onNameChange}
+                    onFocus={this._handleHelperTextGivenNameFocus}
+                    onBlur={this._handleHelperTextGivenNameBlur}
+                    />
+                  <div>
+                    <p style={styles.helperText}>
+                    {this.state.showHelperTextGivenName
+                      ? this.helperMessages.givenName : null}
+                    </p>
+                  </div>
+                  <FormsyText
+                    name="email"
+                    floatingLabelText="Email*"
+                    validations="isEmail"
+                    validationError={this.errorMessages.email}
+                    onChange={this._onEmailChange}
+                    required
+                    />
+                  <FormsyText
+                    name="email"
+                    floatingLabelText="Repeat Email*"
+                    validations="isEmail"
+                    validationError={this.errorMessages.email}
+                    onChange={this._onEmail2Change}
+                    required
+                    />
+                  <FormsyText
+                    name="password"
+                    type="password"
+                    floatingLabelText="Password*"
+                    onChange={this._onPasswordChange}
+                    required
+                    />
+                </div>
 
-            <RaisedButton
-              type="submit"
-              secondary
-              disabled={this.state.disabledSubmit}
-              style={styles.button} label="Sign up"
-            />
-          </Formsy.Form>
-          <p style={styles.requiredMsg}>
-            * indicates required field
-          </p>
-        </div>
-        {cookieWarning}
-        <p style={styles.help}>
-          Already have an account?&nbsp;
-          <Link to="/login" style={styles.link}>Login instead</Link>.
-        </p>
+                <RaisedButton
+                  type="submit"
+                  secondary
+                  disabled={this.state.disabledSubmit}
+                  style={styles.button} label="Sign up"
+                />
+              </Formsy.Form>
+              <p style={styles.requiredMsg}>
+                * indicates required field
+              </p>
+            </div>
+            {cookieWarning}
+            <p style={styles.help}>
+              Already have an account?&nbsp;
+              <Link to="/login" style={styles.link}>Login instead</Link>.
+            </p>
+          </div>}
       </div>
     )
   }

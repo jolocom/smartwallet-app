@@ -210,7 +210,7 @@ let App = React.createClass({
       return <div />
     }
 
-    
+
     // Deactivating search until we get it working
     /*<IconButton
       iconClassName="material-icons"
@@ -224,7 +224,7 @@ let App = React.createClass({
           onTouchTap={this._handleChatTap}>chat</IconButton>
       </div>
     )
-    
+
     // Deactivating search until we get it working
     /*
     (
@@ -276,7 +276,7 @@ let App = React.createClass({
             <Tour />
           </Layout>
         )}
-      
+
       <Snackbar
         open={this.state.snackbar.open}
         message={this.state.snackbar.message}
