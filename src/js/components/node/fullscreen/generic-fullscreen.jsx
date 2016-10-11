@@ -150,9 +150,22 @@ let GenericFullScreen = React.createClass({
       nodeActions.disconnectNode(
         this.props.node, this.props.state.center
       )
+
+      let onDisconnectUndo = () => {
+        nodeActions.link(this.props.state.center.uri,
+                         'knows',
+                         this.props.node.uri,
+                         false)
+        let unsub = nodeActions.link.completed.listen(() => {
+          unsub()
+          graphActions.drawAtUri(this.props.state.center.uri, 0)
+        })
+      }
+
       // @TODO Wait until it's actually disconnected
-      SnackbarActions
-        .showMessage('The node has been successfully disconnected.')
+      SnackbarActions.showMessageUndo(
+          'The node has been successfully disconnected',
+          onDisconnectUndo)
     }
     this._handleClose()
   },

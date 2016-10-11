@@ -6,6 +6,8 @@ import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
+let {link} = nodeActions
+
 export default Reflux.createStore({
   listenables: nodeActions,
 
@@ -46,12 +48,12 @@ export default Reflux.createStore({
               triples.push({
                 subject: t.subject,
                 predicate: t.predicate,
-                object: t.object   
+                object: t.object
               })
-            } 
+            }
             resolve({uri: centerNode.uri, triples})
-          }) 
-        } else reject('Could not delete file') 
+          })
+        } else reject('Could not delete file')
       }).then((query)=>{
         this.gAgent.deleteTriple(query).then((result)=>{
           if (result.ok){
@@ -61,7 +63,7 @@ export default Reflux.createStore({
         })
       })
     })
-  }, 
+  },
 
   /**
    * @summary Disconnects a node from another node.
@@ -84,7 +86,7 @@ export default Reflux.createStore({
    * @param {string} start - subject uri describing connection
    * @param {string} type - predicate uri describing connection
    * @param {string} end - object uri describing connection
-   * @param {boolean} flag - fire the animation in the graph 
+   * @param {boolean} flag - fire the animation in the graph
    */
 
   link(start, type, end, flag) {
@@ -96,6 +98,6 @@ export default Reflux.createStore({
       predicate,
       object: rdf.sym(end)
     }
-    this.gAgent.writeTriples(start, [payload], flag)
+    this.gAgent.writeTriples(start, [payload], flag).then(link.completed)
   }
 })
