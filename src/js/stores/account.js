@@ -38,8 +38,7 @@ export default Reflux.createStore({
     .then((res) => {
       if (res.status === 400) {
         // Username is already taken
-        SnackbarActions.showMessage('Username is already taken.')
-        return
+        throw new Error('USERNAME_TAKEN')
       }
       res.json().then((js) => {
         if (name || email) {
@@ -49,6 +48,12 @@ export default Reflux.createStore({
           Account.login(data.username, data.password)
         }
       })
+    }).catch((e) => {
+      if (e.message === 'USERNAME_TAKEN') {
+        SnackbarActions.showMessage('Username is already taken.')
+      } else {
+        SnackbarActions.showMessage('An account error has occured.')
+      }
     })
   },
 
