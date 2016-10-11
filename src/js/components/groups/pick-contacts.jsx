@@ -69,7 +69,7 @@ console.log('render state',this.state)
 
     if (this.state.contacts)
       items = this.state.contacts.items.map(
-        (item) => Object.assign({},item,{secondaryText: item.email}))
+        (item) => Object.assign({},item,{secondaryText: item.email, id: item.webId}))
 
 
     let title = 'Add contacts to group'

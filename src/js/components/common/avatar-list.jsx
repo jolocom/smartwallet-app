@@ -22,10 +22,11 @@ let AvatarList = React.createClass({
     items: React.PropTypes.array,
   },
 
-  componentDidUpdate(prevProps) {
-/*    if (this.props.searchQuery !== prevProps.searchQuery) {
-      this.load()
-    }*/
+  componentWillMount() {
+    this.setState({checkboxes: {}})
+  },
+
+  componentDidMount() {
   },
 
   getStyles() {
@@ -156,7 +157,20 @@ let AvatarList = React.createClass({
           </div> )
       }
 
-      let checkbox = <Checkbox style={styles.checkbox} />
+      let onCheckboxCheck = (e, check) => {
+        let cbs = this.state.checkboxes
+        cbs[id] = {checked: check}
+        this.setState({checkboxes: Object.assign({},cbs)})
+      }
+
+      let checkbox = <Checkbox style={styles.checkbox}
+        checked={this.state.checkboxes[id] && this.state.checkboxes[id].checked || false}
+        onCheck={onCheckboxCheck} />
+
+
+      if (!id) {
+        console.error(item,'has no id property')
+      }
 
       let stylesF = Object.assign({},styles.listItem,this.props.checkboxes && styles.listItemCheckboxes)
 

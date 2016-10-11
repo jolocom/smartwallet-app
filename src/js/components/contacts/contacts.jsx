@@ -29,11 +29,11 @@ let Contacts = React.createClass({
         AccountStore.state.webId, AccountStore.state.webId, webId
     )
   },
-  
+
   componentDidMount() {
     ContactsActions.load(this.props.searchQuery)
   },
-  
+
   componentDidUpdate() {
     debug('did update',this.state)
     if (this.state.conversation && this.state.conversation.id) {
@@ -45,9 +45,9 @@ let Contacts = React.createClass({
     }
   },
   render() {
-    
+
     let items = this.state.contacts.items.map(
-      (item) => Object.assign({},item,{secondaryText: item.email}))
+      (item) => Object.assign({},item,{secondaryText: item.email, id: item.email}))
 
     return (
       <div style={styles.container}>
