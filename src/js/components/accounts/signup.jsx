@@ -3,12 +3,11 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
-import {RaisedButton} from 'material-ui'
+import {RaisedButton, IconButton, AppBar} from 'material-ui'
 import {Link} from 'react-router'
 
 import SnackbarActions from 'actions/snackbar'
 
-// import Availability from 'actions/availability'
 import AvailabilityStore from 'stores/availability'
 
 import Account from 'actions/account'
@@ -82,6 +81,10 @@ let Signup = React.createClass({
 
   disableSubmit() {
     this.setState({disabledSubmit: true})
+  },
+
+  goBack() {
+    this.context.router.push('/')
   },
 
   _onUsernameChange(e) {
@@ -162,7 +165,6 @@ let Signup = React.createClass({
         fontSize: '18px',
         fontWeight: '400',
         textAlign: 'center',
-        marginTop: '24px',
         textTransform: 'uppercase'
       },
       logoImg: {
@@ -170,8 +172,10 @@ let Signup = React.createClass({
         width: '256px'
       },
       title: {
-        fontWeight: '200',
-        fontSize: '20px'
+        fontWeight: 'normal',
+        fontSize: '20px',
+        color: '#4B142B',
+        textAlign: 'left'
       },
       content: {
         width: '300px',
@@ -190,7 +194,8 @@ let Signup = React.createClass({
         width: '100%'
       },
       help: {
-        color: muiTheme.jolocom.gray1
+        color: muiTheme.jolocom.gray1,
+        marginBottom: '10px'
       },
       link: {
         color: muiTheme.palette.accent1Color,
@@ -233,6 +238,15 @@ let Signup = React.createClass({
 
     return (
       <div style={styles.container}>
+        <AppBar
+          title="Sign up"
+          style={{boxShadow: 'none'}}
+          titleStyle={styles.title}
+          iconElementLeft={<IconButton onClick={this.goBack}
+            iconClassName="material-icons">
+              arrow_back
+          </IconButton>}
+          />
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>

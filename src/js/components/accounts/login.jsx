@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton, TextField} from 'material-ui'
+import {RaisedButton, TextField, IconButton, AppBar} from 'material-ui'
 import {Link} from 'react-router'
 
 import Account from 'actions/account'
@@ -30,6 +30,10 @@ let Login = React.createClass({
     if (account && account.webId) {
       this.context.router.push('/graph')
     }
+  },
+
+  goBack() {
+    this.context.router.push('/')
   },
 
   login(e) {
@@ -81,7 +85,6 @@ let Login = React.createClass({
         fontSize: '18px',
         fontWeight: '400',
         textAlign: 'center',
-        marginTop: '24px',
         textTransform: 'uppercase'
       },
       logoImg: {
@@ -89,8 +92,10 @@ let Login = React.createClass({
         width: '256px'
       },
       title: {
-        fontWeight: '200',
-        fontSize: '2.5em'
+        fontWeight: 'normal',
+        fontSize: '20px',
+        color: '#4B142B',
+        textAlign: 'left'
       },
       content: {
         width: '300px',
@@ -129,6 +134,15 @@ let Login = React.createClass({
     let styles = this.getStyles()
     return (
       <div style={styles.container}>
+        <AppBar
+          title="Log in"
+          style={{boxShadow: 'none'}}
+          titleStyle={styles.title}
+          iconElementLeft={<IconButton onClick={this.goBack}
+            iconClassName="material-icons">
+              arrow_back
+          </IconButton>}
+          />
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
