@@ -161,6 +161,9 @@ let AvatarList = React.createClass({
         let cbs = this.state.checkboxes
         cbs[id] = {checked: check}
         this.setState({checkboxes: Object.assign({},cbs)})
+        if (this.props.onChange)
+          this.props.onChange(this.props.items.filter((item) =>
+            cbs[item.id] !== undefined && cbs[item.id].checked))
       }
 
       let checkbox = <Checkbox style={styles.checkbox}

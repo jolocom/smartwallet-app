@@ -61,11 +61,18 @@ export default React.createClass({
     }
   },
 
+  _handleSubmit() {
+
+  },
+
+  _handleCheckedChanges(checked) {
+    console.log('checked list', checked)
+    this.setState({checked: checked})
+  },
+
   render() {
 
     let items = []
-
-console.log('render state',this.state)
 
     if (this.state.contacts)
       items = this.state.contacts.items.map(
@@ -105,6 +112,7 @@ console.log('render state',this.state)
             <AvatarList
               items={items}
               emptyMessage={"No contacts"}
+              onChange={this._handleCheckedChanges}
               checkboxes
             />
           </Content>
