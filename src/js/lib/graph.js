@@ -167,10 +167,11 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   refreshDimensions = function () {
+    this.historySpace = this.smallNodeSize * 0.7
     this.width = this.graphContainer.offsetWidth || STYLES.width
     this.height = this.graphContainer.offsetHeight || STYLES.height
     this.centerCoordinates = {
-      y: this.height / 2,
+      y: STYLES.largeNodeSize * 2.2,
       x: this.width / 2
     }
   }
@@ -204,8 +205,8 @@ export default class GraphD3 extends EventEmitter {
     // Center cicle
     this.svg.select('g.background-layer').append('svg:circle')
       .attr('class', 'center-circle')
-      .attr('cx', this.width * 0.5)
-      .attr('cy', this.height * 0.5)
+      .attr('cx', this.centerCoordinates.x)
+      .attr('cy', this.centerCoordinates.y)
       .attr('r', this.largeNodeSize * 0.57 * 1.1)
       .style('fill', STYLES.lightGrayColor)
 
@@ -257,7 +258,7 @@ export default class GraphD3 extends EventEmitter {
       .startAngle(0)
 
     let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NODES
-    let trans = this.width * 0.5 + ',' + this.height * 0.5
+    let trans = this.centerCoordinates.x + ',' + this.centerCoordinates.y
     let rot = this.archAngle * (maxRotationIndex - this.rotationIndex)
     // remove "maxRotationIndex -" to reverse the direction
     this.svg.select('.dial')
@@ -596,9 +597,9 @@ export default class GraphD3 extends EventEmitter {
       }
       self.onClick(this, data)
     })
-    /* this.node.on('dblclick', function (data) {
+    this.node.on('dblclick', function (data) {
       self.onDblClick(this, data)
-    })*/
+    })
 
     this.node.call(d3.drag().on('drag', this.drag)
                             .on('start', this.dragStart)
@@ -631,7 +632,6 @@ export default class GraphD3 extends EventEmitter {
   }
 
   drag = function(node) {
-    console.log(node)
     node.position.x = d3.event.sourceEvent.offsetX
     node.position.y = d3.event.sourceEvent.offsetY
     this.resetPos(0)
@@ -647,13 +647,13 @@ export default class GraphD3 extends EventEmitter {
       // We check if the node is dropped on top of the center node
       let w = this.centerCoordinates.x
       let h = this.centerCoordinates.y
-      let size = STYLES.largeNodeSize
-      let x = node.position.x > w - (size / 2) && node.position.x < w + (size / 2)
-      let y = node.position.y > h - (size / 2)  && node.position.y < h + (size / 2)
+      let size = STYLES.largeNodeSize / 2
+      let x = node.position.x > w - size && node.position.x < w + size
+      let y = node.position.y > h - size && node.position.y < h + size
       // If yes, we change the perspective
       if (x && y) {
-        this.emit('center-changed', node)
-      } else{
+        this.makeCenterNode(node)
+      } else {
         node.position.x = node.position.px
         node.position.y = node.position.py
         this.resetPos(100)
@@ -695,7 +695,7 @@ export default class GraphD3 extends EventEmitter {
           this.visibleDataNodes[i].position = this.nodePositions[i - 1]
         } else if (this.visibleDataNodes[i].rank === 'history') {
           let y = this.centerCoordinates.y + this.largeNodeSize * 2.1
-          y += this.dataNodes[i].histLevel * this.smallNodeSize
+          y += this.dataNodes[i].histLevel * this.historySpace
           let x = this.centerCoordinates.x
           let coordinates = {'x': x, 'y': y}
           this.visibleDataNodes[i].position = coordinates
@@ -834,10 +834,10 @@ export default class GraphD3 extends EventEmitter {
 
     first = true
     // Add history nodes to visibleDataNodes
-    for (let i = 0, count = 0; i < this.dataNodes.length; i++) {
+    for (let i = 0; i < this.dataNodes.length; i++) {
       if (this.dataNodes[i].rank === 'history') {
         let y = this.centerCoordinates.y + this.largeNodeSize * 2.1
-        y += this.dataNodes[i].histLevel * this.smallNodeSize
+        y += this.dataNodes[i].histLevel * this.historySpace
         let x = this.centerCoordinates.x
         let coordinates = {'x': x, 'y': y}
         this.dataNodes[i].position = coordinates
@@ -1216,15 +1216,9 @@ export default class GraphD3 extends EventEmitter {
         }
         if (alreadyExists) { continue }
 
-        let y = this.centerCoordinates.y + this.largeNodeSize * 2.1
-        y += rank * this.smallNodeSize
-        let x = this.centerCoordinates.x
-        let coordinates = {'x': x, 'y': y}
-
         history[j].connection = 'hist'
         history[j].rank = 'history'
         history[j].histLevel = rank
-        history[j].position = coordinates
 
         if (rank === 0) {
           this.dataNodes.push(history[j])
@@ -1311,46 +1305,52 @@ export default class GraphD3 extends EventEmitter {
 
   // Alternative to dragging the node to the center.
   // Does the same thing pretty much
+  makeCenterNode = function (node) {
+    this.isPulsing = true
+    let x = this.centerCoordinates.x
+    let y = this.centerCoordinates.y
+
+    d3.select('.dial')
+      .transition().duration(STYLES.nodeTransitionDuration)
+      .attr('opacity', 0)
+
+    d3.selectAll('.link')
+      .attr('opacity', 0)
+      .transition().remove()
+
+    d3.selectAll('svg .node').filter(function (d) {
+      return d === node
+    })
+      .attr('d', function(d) {
+        d.rank = 'center'
+      })
+
+    d3.selectAll('svg .node').filter(function (d) {
+      return d === node
+    })
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('transform', 'translate(' + x + ',' + y + ')')
+
+    d3.selectAll('svg .node').filter(function (d) {
+      return d.uri !== node.uri || d.rank !== node.rank
+    })
+    .transition().duration(STYLES.nodeTransitionDuration)
+    .attr('opacity', 0).on('end', function (data) {
+      d3.selectAll('svg .node').filter(function (d) {
+        return d.uri !== node.uri && d.rank !== 'center'
+      }).remove()
+    })
+
+    this.resetAll()
+
+    this.emit('center-changed', node)
+    this.pulseCenter()
+  }
+
   onDblClick = function (node, data) {
     d3.event.stopPropagation()
-
     if (data.rank !== 'center') {
-      this.isPulsing = true
-      let x = this.centerCoordinates.x
-      let y = this.centerCoordinates.y
-
-      d3.select('.dial')
-        .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('opacity', 0)
-
-      d3.selectAll('.link')
-        .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('opacity', 0)
-        .transition().remove()
-
-      d3.select(node)
-        .attr('d', function(d) {
-          d.rank = 'center'
-        })
-
-      d3.select(node)
-        .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('transform', 'translate(' + x + ',' + y + ')')
-
-      d3.selectAll('svg .node').filter(function (d) {
-        return d.uri !== data.uri || d.rank !== data.rank
-      })
-      .transition().duration(STYLES.nodeTransitionDuration)
-      .attr('opacity', 0).on('end', function (data) {
-        d3.selectAll('svg .node').filter(function (d) {
-          return d.uri !== data.uri && d.rank !== 'center'
-        }).remove()
-      })
-
-      this.resetAll()
-
-      this.emit('center-changed', data)
-      this.pulseCenter()
+      this.makeCenterNode(data)
     }
   }.bind(this)
 
