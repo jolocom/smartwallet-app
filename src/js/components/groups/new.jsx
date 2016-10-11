@@ -14,6 +14,8 @@ import ConversationsStore from 'stores/conversations'
 
 import ProfileStore from 'stores/profile'
 
+import ContactSelector from './pick-contacts.jsx'
+
 import Debug from 'lib/debug'
 let debug = Debug('components:groups:new')
 
@@ -70,7 +72,7 @@ export default React.createClass({
 
   startChat(webId) {
     debug('Starting chat with', webId)
-    
+
     if (!this.state.conversations.hydrated)
     {
       ConversationsActions.load(this.state.profile.webid)
@@ -99,9 +101,9 @@ export default React.createClass({
   back() {
     this.context.router.push('/chat')
   },
-  
+
   // @todo clean up above
-  
+
   getStyles() {
     const {muiTheme: {actionAppBar}} = this.context
     return {
@@ -118,12 +120,21 @@ export default React.createClass({
     }
   },
 
+  _handleGoToContactSelection(e) {
+    this.setState({pickingContacts: true})
+    e.preventDefault()
+    e.stopPropagation()
+    return false
+  },
+
   render() {
     const {webId} = this.props.params
 
     let title = 'New group'
 
     let content
+    if (this.state.pickingContacts)
+      content = <ContactSelector />
 
     if (!webId) {
       /*content = (
@@ -135,7 +146,7 @@ export default React.createClass({
     } else {
       // @TODO show loading screen
     }
-    
+
     let styles = this.getStyles()
 
     return (
@@ -162,7 +173,9 @@ export default React.createClass({
             style={styles.bar}
             />
           <Content>
-            Here the form.
+
+            list of contacts
+            <button type="button" onTouchTap={this._handleGoToContactSelection}> here </button>
             {content}
           </Content>
         </Layout>
