@@ -5,7 +5,13 @@ import includes from 'lodash/includes'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-import {Paper, AppBar, IconButton, Snackbar} from 'material-ui'
+import {
+  Paper,
+  AppBar,
+  IconButton,
+  Snackbar,
+  FlatButton,
+  Dialog} from 'material-ui'
 import Badge from 'material-ui/Badge'
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
@@ -22,9 +28,10 @@ import GraphFilters from 'components/graph/filters.jsx'
 
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
+import ConfirmStore from 'stores/confirm'
 
 import PinnedActions from 'actions/pinned'
-
+import ConfirmActions from 'actions/confirm'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
@@ -45,7 +52,8 @@ let App = React.createClass({
   mixins: [
     Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile'),
-    Reflux.connect(SnackbarStore, 'snackbar')
+    Reflux.connect(SnackbarStore, 'snackbar'),
+    Reflux.connect(ConfirmStore, 'confirm')
   ],
 
   propTypes: {
@@ -161,6 +169,10 @@ let App = React.createClass({
     this.refs.leftNav.show()
   },
 
+  handleConfirmClose() {
+    ConfirmActions.close()
+  },
+
   getStyles() {
     let styles = {
       container: {
@@ -242,6 +254,22 @@ let App = React.createClass({
     // <GraphFilters style={styles.filters} showDefaults />
     const filters = null
 
+    const confirmActions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleConfirmClose}
+      />,
+      <FlatButton
+        label={this.state.confirm.primaryActionText}
+        primary={true}
+        onTouchTap={ () => {
+          this.handleConfirmClose()
+          this.state.confirm.callback()
+        } }
+      />,
+    ];
+
     return (
       <div style={styles.container}>
         {this.isPublicRoute() ? this.props.children : (
@@ -284,6 +312,15 @@ let App = React.createClass({
         action={this.state.snackbar.undo && 'undo'}
         onActionTouchTap={this.state.snackbar.undoCallback}
       />
+
+      <Dialog
+            actions={confirmActions}
+            modal={false}
+            open={this.state.confirm.open}
+            onRequestClose={this.handleClose}
+          >
+            {this.state.confirm.message}
+      </Dialog>
     </div>
     )
   }
