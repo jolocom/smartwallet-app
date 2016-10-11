@@ -26,11 +26,11 @@ let Groups = React.createClass({
         AccountStore.state.webId, AccountStore.state.webId, webId
     )
   },
-  
+
   componentDidMount() {
     GroupsActions.load(this.props.searchQuery)
   },
-  
+
   componentDidUpdate() {
     if (this.state.conversation && this.state.conversation.id) {
       debug('componentDidUpdate; ' +
@@ -40,7 +40,7 @@ let Groups = React.createClass({
       )
     }
   },
-  
+
   getStyles() {
     return {
       actionButton: {
@@ -50,22 +50,21 @@ let Groups = React.createClass({
       }
     }
   },
-  
+
   render() {
-    
+
     let styles = this.getStyles()
-    
+
     return (
       <div style={styles.container}>
         <AvatarList onClick={this.createChat}
           searchQuery={this.props.searchQuery}
           items={this.state.groups.items}
           emptyMessage={"No groups"}
-          checkboxes
           />
-          
+
         {this.props.children}
-        
+
         <FloatingActionButton
           secondary
           href="#/groups/new"

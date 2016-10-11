@@ -27,7 +27,7 @@ let AvatarList = React.createClass({
       this.load()
     }*/
   },
-  
+
   getStyles() {
     return {
       loading: {
@@ -51,7 +51,9 @@ let AvatarList = React.createClass({
         paddingLeft: '15px'
       },
       listItemCheckboxes: {
-        paddingLeft: '50px'
+        paddingLeft: '50px',
+        boxSizing: 'border-box',
+        overflow: 'hidden'
       },
       listItemContainer: {
         position: 'relative',
@@ -61,7 +63,7 @@ let AvatarList = React.createClass({
         position: 'absolute',
         paddingTop: '4px',
         paddingLeft: '20px',
-        fontWeight: 'bold',		
+        fontWeight: 'bold',
         fontSize: '20px',
         color: theme.palette.primary1Color
       },
@@ -82,20 +84,20 @@ let AvatarList = React.createClass({
   },
 
   renderItems(items) {
-    
+
     let styles = this.getStyles()
 
     if (!this.props.noReordering) {
     items.sort((a, b) =>
                a.name.toLowerCase() > b.name.toLowerCase())
     }
-      
+
     let lastNameInitial = ''
-    
+
     let result = []
-    
+
     items.forEach((item, i) => {
-      
+
       let {id,
            username,
            content,
@@ -106,7 +108,7 @@ let AvatarList = React.createClass({
            secondaryText,
            imgUri,
            onTouchTap} = item
-      
+
       // Avatar
       let avatar
       if (imgUri) {
@@ -116,21 +118,21 @@ let AvatarList = React.createClass({
       } else {
         avatar = <Avatar>{nameInitial}</Avatar>
       }
-      
+
       // Initial
       let nameInitial = Utils.nameInitial({name: name})
-      
+
       // Grouping of initials
       if (nameInitial !== lastNameInitial && !this.props.noHeadings) {
         lastNameInitial = nameInitial
-        
+
         // Don't insert a divider before the first element
         if (i > 0) {
           result.push(<Divider
                         inset key={`divider_${i}`}
                         style={this.getStyles().separator} />)
         }
-        
+
         result.push(
           <Subheader
             key={`header_${i}`}
@@ -144,7 +146,7 @@ let AvatarList = React.createClass({
       let handleClick = () => {
         onTouchTap && onTouchTap(item)
       }
-      
+
       let primaryText = name
       if (rightText) {
         primaryText = (
@@ -153,11 +155,11 @@ let AvatarList = React.createClass({
             <span style={styles.rightText}>{rightText}</span>
           </div> )
       }
-      
+
       let checkbox = <Checkbox style={styles.checkbox} />
 
       let stylesF = Object.assign({},styles.listItem,this.props.checkboxes && styles.listItemCheckboxes)
-          
+
       result.push(
         <ListItem
           key={id || email}
@@ -171,7 +173,7 @@ let AvatarList = React.createClass({
         />
       )
     })
-    
+
     return result
   },
 
