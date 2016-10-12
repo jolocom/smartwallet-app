@@ -498,24 +498,24 @@ class GraphAgent {
 
   createGroupFile(webId,name,participantsWebIds) {
     let root = Util.webidRoot(webId)
-    let targetFile = root + '/groups/'+name+'.rdf'
+    let targetFile = root + '/groups/'+name
 
     let writer = new Writer()
 
-    //
-    // writer.addTriple({
-    //   subject: 'targetFile',
-    //   predicate: 'a',
-    //   object: PRED.group
-    // })
-    //
-    // participantsWebIds.forEach((participantWebId) => {
-    //   writer.addTriple({
-    //     subject: 'targetFile',
-    //     predicate: PRED.groupMember,
-    //     object: rdf.sym(participantWebId)
-    //   })
-    // })
+
+    writer.addTriple({
+      subject: rdf.sym('#'),
+      predicate: PRED.type,
+      object: PRED.group
+    })
+
+    participantsWebIds.forEach((participantWebId) => {
+      writer.addTriple({
+        subject: rdf.sym('#'),
+        predicate: PRED.groupMember,
+        object: rdf.sym(participantWebId)
+      })
+    })
 
     // @TODO sanitize
 

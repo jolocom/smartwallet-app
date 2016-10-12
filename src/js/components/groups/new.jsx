@@ -50,6 +50,15 @@ export default React.createClass({
     this.refs.dialog.show()
 
     /* DOING STUFF HERE */
+    console.log('bim')
+
+    /* DOING STUFF HERE */
+    localStorage['sox'] = localStorage['sox'] || 0
+    localStorage['sox'] = +localStorage['sox'] + 1
+
+    let GraphAgent = new gAgent
+    GraphAgent.newGroup(this.context.account.webId,'group'+localStorage['sox'],['https://axel.webid.jolocom.com/profile/card#me','https://toaster.webid.jolocom.com/profile/card#me'])
+
 
   },
 

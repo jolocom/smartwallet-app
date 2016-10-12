@@ -69,7 +69,7 @@ export default React.createClass({
 
   startChat(webId) {
     debug('Starting chat with', webId)
-    
+
     if (!this.state.conversations.hydrated)
     {
       ConversationsActions.load(this.state.profile.webid)
