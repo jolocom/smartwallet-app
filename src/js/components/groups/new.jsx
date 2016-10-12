@@ -16,6 +16,8 @@ import ProfileStore from 'stores/profile'
 
 import ContactSelector from './pick-contacts.jsx'
 
+import gAgent from 'lib/agents/graph'
+
 import Debug from 'lib/debug'
 let debug = Debug('components:groups:new')
 
@@ -32,6 +34,7 @@ export default React.createClass({
   },
 
   contextTypes: {
+    account: React.PropTypes.any,
     router: React.PropTypes.any,
     muiTheme: React.PropTypes.object
   },
@@ -45,6 +48,9 @@ export default React.createClass({
 
   componentDidMount() {
     this.refs.dialog.show()
+
+    /* DOING STUFF HERE */
+
   },
 
   componentWillMount() {
@@ -102,6 +108,12 @@ export default React.createClass({
     this.context.router.push('/chat')
   },
 
+  _handleSubmit() {
+    console.log(this.context.account)
+    let GraphAgent = new gAgent
+    GraphAgent.newGroup(this.context.account.webId,this.state.groupName,this.state.members)
+  },
+
   // @todo clean up above
 
   getStyles() {
@@ -127,6 +139,14 @@ export default React.createClass({
     return false
   },
 
+  _handleCheckedChanges(checked) {
+    this.setState({members: checked})
+  },
+
+  _onContactSelectorClose() {
+    this.setState({pickingContacts: false})
+  },
+
   render() {
     const {webId} = this.props.params
 
@@ -134,7 +154,9 @@ export default React.createClass({
 
     let content
     if (this.state.pickingContacts)
-      content = <ContactSelector />
+      content = <ContactSelector
+        onClose={this._onContactSelectorClose}
+        onCheckedChanges={this._handleCheckedChanges}/>
 
     if (!webId) {
       /*content = (
@@ -177,6 +199,8 @@ export default React.createClass({
             list of contacts
             <button type="button" onTouchTap={this._handleGoToContactSelection}> here </button>
             {content}
+            <input type="text" value={this.state.groupName} onChange={ e => this.setState({groupName: e.target.value})} />
+            <button type="button" onTouchTap={this._handleSubmit}> ready let's go </button>
           </Content>
         </Layout>
       </Dialog>

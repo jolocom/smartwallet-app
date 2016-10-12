@@ -24,6 +24,10 @@ export const PRED = {
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
 
+  // Groups
+  group: FOAF('group'),
+  groupMember: FOAF('member'),
+
   // --
   title: DC('title'),
   description: DC('description'),

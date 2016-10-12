@@ -62,12 +62,7 @@ export default React.createClass({
   },
 
   _handleSubmit() {
-
-  },
-
-  _handleCheckedChanges(checked) {
-    console.log('checked list', checked)
-    this.setState({checked: checked})
+    this.props.onClose()
   },
 
   render() {
@@ -93,7 +88,7 @@ export default React.createClass({
             titleStyle={styles.title}
             iconElementLeft={
               <IconButton
-                onClick={this.back}
+                onClick={this._handleSubmit}
                 iconClassName="material-icons"
               >
                 close
@@ -102,7 +97,7 @@ export default React.createClass({
             iconElementRight={
               <FlatButton
                 style={styles.icon}
-                label="Create"
+                label="Ok"
                 onTouchTap={this._handleSubmit}
               />
             }
@@ -112,7 +107,7 @@ export default React.createClass({
             <AvatarList
               items={items}
               emptyMessage={"No contacts"}
-              onChange={this._handleCheckedChanges}
+              onChange={this.props.onCheckedChanges}
               checkboxes
             />
           </Content>

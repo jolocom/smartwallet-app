@@ -155,7 +155,7 @@ class GraphAgent {
       })
     })
   }
-  
+
   // We create only one type of ACL file. Owner has full controll,
   // everyone else has read access. This will change in the future.
   // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
@@ -444,10 +444,10 @@ class GraphAgent {
       .then(getPartialGraphMap)
       .then(this.hydrateNodesConfidentiality)
   }
-  
+
   hydrateNodesConfidentiality(nodes) {
     let parser = new Parser()
-    
+
     return Promise.all(
       nodes
       .map((node) => {
@@ -478,15 +478,74 @@ class GraphAgent {
         })
       }))
   }
-    
+
   hydrateNodeConfidentiality = function(node) {
     return this.hydrateNodesConfidentiality([node]).then(([newNode,...rest]) => newNode)
   }.bind(this)
-  
+
   //Calls the above function, but passes the current webId as the URI.
   getGraphMapAtWebID(webId) {
     return this.getGraphMapAtUri(webId)
   }
+
+  // Group-related functions
+
+  newGroup(webId,name,webIds) {
+    return this.createGroupFile(webId,name,webIds)
+              .then(this.createGroupIndexIfNotExists)
+              .then(this.addGroupToIndex)
+  }
+
+  createGroupFile(webId,name,participantsWebIds) {
+    let root = Util.webidRoot(webId)
+    let targetFile = root + '/groups/'+name+'.rdf'
+
+    let writer = new Writer()
+
+    //
+    // writer.addTriple({
+    //   subject: 'targetFile',
+    //   predicate: 'a',
+    //   object: PRED.group
+    // })
+    //
+    // participantsWebIds.forEach((participantWebId) => {
+    //   writer.addTriple({
+    //     subject: 'targetFile',
+    //     predicate: PRED.groupMember,
+    //     object: rdf.sym(participantWebId)
+    //   })
+    // })
+
+    // @TODO sanitize
+
+    // little-sister/groups?
+    // @TODO create group file if not exists
+
+    return fetch(Util.uriToProxied(targetFile), {
+      method: 'PUT',
+      credentials: 'include',
+      body: writer.end(),
+      headers: {
+        'Content-Type': 'text/turtle',
+        // 'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
+      //    aclUri + ' rel="acl"'
+      }
+    })
+  }
+
+  createGroupIndexIfNotExists() {
+      return Promise.resolve()
+  }
+
+  addGroupToIndex() {
+      return Promise.resolve()
+      // return createGroupIndexIfNotExists().then()
+  }
+
+
+
+
 }
 
 export default GraphAgent
