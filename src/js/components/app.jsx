@@ -1,7 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import includes from 'lodash/includes'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
@@ -25,9 +24,6 @@ import Tour from 'components/tour.jsx'
 
 import Loading from 'components/common/loading.jsx'
 
-import GraphSearch from 'components/graph/search.jsx'
-import GraphFilters from 'components/graph/filters.jsx'
-
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
 import ConfirmStore from 'stores/confirm'
@@ -38,7 +34,6 @@ import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
 import SnackbarStore from 'stores/snackbar'
-import SnackbarActions from 'actions/snackbar'
 
 // A pathname is considered public if either "/" or if it starts
 // with any of the following publicRoutes
@@ -114,7 +109,7 @@ let App = React.createClass({
   },
 
   isPublicRoute(path = this.props.location.pathname) {
-    return path == '/' ||
+    return path === '/' ||
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
   },
 
@@ -171,8 +166,9 @@ let App = React.createClass({
     this.refs.leftNav.show()
   },
 
-  handleConfirmClose() {
+  _handleConfirmClose() {
     ConfirmActions.close()
+    this.state.confirm.callback()
   },
 
   getStyles() {
@@ -225,12 +221,11 @@ let App = React.createClass({
       return <Loading />
     }
 
-
     // Deactivating search until we get it working
-    /*<IconButton
-      iconClassName="material-icons"
-      iconStyle={styles.icon}
-      onTouchTap={this._handleSearchTap}>search</IconButton>*/
+    /* <IconButton
+       iconClassName="material-icons"
+       iconStyle={styles.icon}
+       onTouchTap={this._handleSearchTap}>search</IconButton> */
     const nav = (
       <div>
         <IconButton
@@ -259,18 +254,15 @@ let App = React.createClass({
     const confirmActions = [
       <FlatButton
         label="Cancel"
-        primary={true}
-        onTouchTap={this.handleConfirmClose}
+        primary
+        onTouchTap={this._handleConfirmClose}
       />,
       <FlatButton
         label={this.state.confirm.primaryActionText}
-        primary={true}
-        onTouchTap={ () => {
-          this.handleConfirmClose()
-          this.state.confirm.callback()
-        } }
-      />,
-    ];
+        primary
+        onTouchTap={this._handleConfirmClose}
+      />
+    ]
 
     return (
       <div style={styles.container}>
@@ -308,22 +300,23 @@ let App = React.createClass({
           </Layout>
         )}
 
-      <Snackbar
-        open={this.state.snackbar.open}
-        message={this.state.snackbar.message}
-        action={this.state.snackbar.undo && 'undo'}
-        onActionTouchTap={this.state.snackbar.undoCallback}
-      />
+        <Snackbar
+          open={this.state.snackbar.open}
+          message={this.state.snackbar.message}
+          action={this.state.snackbar.undo && 'undo'}
+          onActionTouchTap={this.state.snackbar.undoCallback}
+        />
 
-      <Dialog
-            actions={confirmActions}
-            modal={false}
-            open={this.state.confirm.open}
-            onRequestClose={this.handleClose}
-          >
-            {this.state.confirm.message}
-      </Dialog>
-    </div>
+        <Dialog
+          actions={confirmActions}
+          modal={false}
+          open={this.state.confirm.open}
+          onRequestClose={this.handleClose}
+        >
+          {this.state.confirm.message}
+        </Dialog>
+      </div>
+
     )
   }
 
