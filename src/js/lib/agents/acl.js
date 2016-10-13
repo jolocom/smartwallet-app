@@ -34,19 +34,16 @@ class AclAgent {
   // Checks if an object is contained in an array by comparing it's props.
   containsObj(arr, obj) {
     if (arr.length === 0) {
-      return false
+      return -1
     }
-    for (let el of arr) {
-      if (
-          el.subject.uri == obj.subject.uri &&
-          el.predicate.uri == obj.predicate.uri &&
-          el.object.uri == obj.object.uri
-        )
-      {
-        return true
-        break
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].subject.uri == obj.subject.uri &&
+          arr[i].predicate.uri == obj.predicate.uri &&
+          arr[i].object.uri == obj.object.uri
+        ) return i
       }
-    }
+    return -1
   }
 
   /**
@@ -103,12 +100,7 @@ class AclAgent {
       object: rdf.sym(this.uri)
     }
 
-    if (!this.containsObj(this.indexChanges.toInsert, payload)) {
-      console.warn('added')
-      this.indexChanges.toInsert.push(payload)
-    } else {
-      console.warn('+1')
-    }
+    this.indexAdd(payload)
 
     // If user already has the permission.
     if (_.includes(this.allowedPermissions(user, true), mode)){
@@ -156,11 +148,14 @@ class AclAgent {
       user = rdf.sym(user) 
     }
 
-    this.indexChanges.toDelete.push({
+    let payload = {
       subject: user,
       predicate: this.indexPredMap[mode],
       object: rdf.sym(this.uri)
-    })
+    }
+
+    // Update the index file accordingly.
+    this.indexRemove(payload)
 
     // Check if the triple is present.
     if (!_.includes(this.allowedPermissions(user, true), mode)) {
@@ -168,7 +163,7 @@ class AclAgent {
     } 
     // Finding the correct triple.
     mode = this.predMap[mode]
-    
+
     // Get the existing policies
     let policies = []
     let existing = this.Writer.find(undefined, identifier, user)
@@ -195,6 +190,38 @@ class AclAgent {
         }
       })
     }
+  }
+
+  indexRemove(payload) {
+    // If we said we want to add it, and now say we want to delete it, 
+    // the adding rule get's popped out.
+    let i = this.containsObj(this.indexChanges.toInsert, payload)
+    if (i !== -1) {
+      this.indexChanges.toInsert.splice(i, 1)
+      console.log(this.indexChanges, ' removed')
+      return
+    } 
+
+    // Making sure we don't add it twice
+    if (this.containsObj(this.indexChanges.toDelete, payload) === -1) {
+      this.indexChanges.toDelete.push(payload)
+    } 
+  }
+
+  indexAdd(payload) {
+    // If we said we want to delete it, and now say we want to add it, 
+    // the deletion rule get's popped out.
+    let i = this.containsObj(this.indexChanges.toDelete, payload)
+    if (i !== -1) {
+      this.indexChanges.toDelete.splice(i, 1)
+      return
+    }
+
+    // Making sure we don't add it twice
+    if (this.containsObj(this.indexChanges.toInsert, payload) === -1) {
+      this.indexChanges.toInsert.push(payload)
+    } 
+    console.log(this.indexChanges, ' added')
   }
 
   /**
