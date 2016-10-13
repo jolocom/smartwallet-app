@@ -240,8 +240,7 @@ let Graph = React.createClass({
     })
 
     let loading
-
-    if (this.state.loading) {
+    if (!this.state.loaded) {
       loading = <Loading style={styles.loading} />
     }
 
