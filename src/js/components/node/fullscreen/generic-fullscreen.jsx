@@ -199,6 +199,7 @@ let GenericFullScreen = React.createClass({
 
     if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
+      debug('Deleting center node; navigating to previous node',prev.uri)
       // graphActions.drawAtUri(prev.uri, 1)
       this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
       nodeActions.remove(node, prev) // will refresh the graph

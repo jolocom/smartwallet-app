@@ -145,6 +145,7 @@ export default Reflux.createStore({
   },
 
   onRefresh: function() {
+    debug('Refreshing the graph with current center',this.state.center.uri)
     this.drawAtUri(this.state.center.uri)
   },
 
@@ -169,7 +170,22 @@ export default Reflux.createStore({
 
   onNavigateToNode: function (node, defaultHistoryNode) {
     this.state.rotationIndex = 0
+    debug('navigateToNode',node.uri,
+    'History was',this.state.navHistory.map(e => e.uri))
+
+    node = Object.assign({},node) // Just being cautious
+    let oldCenter = Object.assign({}, this.state.center)
+
+    // Update the center node in the state without waiting for the graph map
+    this.state.center = {uri: node.uri}
+    this.state.neighbours = []
+    // this.trigger(this.state,false)
+
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
+
+      debug('navigateToNode',node.uri,
+      'graphMap received ; history was',this.state.navHistory.map(e => e.uri))
+
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
 
@@ -177,35 +193,49 @@ export default Reflux.createStore({
       // to the node history
 
       let historyCandidate
-      if (this.state.center && this.state.center.uri)
-        historyCandidate = this.state.center
+      if (oldCenter && oldCenter.uri)
+        historyCandidate = oldCenter
       else
         historyCandidate = defaultHistoryNode
+
+      this.state.center = triples[0]
 
       // We check if we're not navigating to the same node (e.g. went to the
       // full-screen view and then back), in which case we don't want to add
       // the node to the history
       if (!this.state.previousRenderedNodeUri ||
           this.state.previousRenderedNodeUri !== node.uri) {
-        this.state.navHistory.push(historyCandidate)
+
+        if (this.state.navHistory.length > 0 &&
+          this.state.center.uri === this.state.navHistory[this.state.navHistory.length - 1].uri) {
+            debug('Popping navHistory (same as new center node uri)',
+                this.state.navHistory[this.state.navHistory.length - 1].uri)
+            this.state.navHistory.pop()
+        }
+        else if (!this.state.previousRenderedNodeUri) {
+          debug('Pushing to history because no previousRenderedNodeUri',
+            historyCandiate.uri)
+          this.state.navHistory.push(historyCandidate)
+        }
+        else {
+          debug('Pushing to history',historyCandidate.uri,
+            'because previousRenderedNodeUri',this.state.previousRenderedNodeUri,
+            'is different from new node uri',node.uri)
+          this.state.navHistory.push(historyCandidate)
+        }
+
       }
 
       this.state.previousRenderedNodeUri = node.uri
 
-      this.state.center = triples[0]
-
-      if (this.state.navHistory.length > 1) {
-        if (this.state.center.uri === this.state.navHistory[this.state.navHistory.length - 2].uri) {
-          this.state.navHistory.pop()
-          this.state.navHistory.pop()
-        }
-        // Removed the brackets, one liners.
-        else if (this.state.navHistory.length > 1)
-          for (var j = 0; j < this.state.navHistory.length - 1; j++)
-            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri)
-              for (var k = 0; k < j + 2; k++)
-                this.state.navHistory.pop()
-      }
+      // if (this.state.navHistory.length > 1) {
+      //   // Removed the brackets, one liners.
+      //   else if (this.state.navHistory.length > 1)
+      //     for (var j = 0; j < this.state.navHistory.length - 1; j++)
+      //       if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri)
+      //         for (var k = 0; k < j + 2; k++)
+      //           this.state.navHistory.pop()
+      // }
 
       for (var i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
