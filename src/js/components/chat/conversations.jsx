@@ -17,7 +17,7 @@ import TimerMixin from 'react-timer-mixin'
 
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
-import Utils from 'lib/util'
+import UserAvatar from 'components/common/user-avatar.jsx'
 
 import Loading from 'components/common/loading.jsx'
 
@@ -149,14 +149,9 @@ let ConversationsListItem = React.createClass({
     if (otherPerson == null) {
       otherPerson = false
     }
-    let nameInitial = Utils.nameInitial(otherPerson)
-    let avatar
-    if (otherPerson.img) {
-      avatar = <Avatar src={Utils.uriToProxied(otherPerson.img)}
-        style={{backgroundSize: 'cover'}} />
-    } else {
-      avatar = <Avatar>{nameInitial}</Avatar>
-    }
+
+    let avatar = <UserAvatar name={otherPerson.name} imgUrl={otherPerson.img} />
+
     let date = moment(created).fromNow()
     return (
       <ListItem
@@ -168,7 +163,7 @@ let ConversationsListItem = React.createClass({
           </div>
         }
         secondaryText={content}
-        leftAvatar={avatar}
+        leftAvatar={<Avatar>{avatar}</Avatar>}
         onTouchTap={this._handleListItemTouchTap}
       />
     )

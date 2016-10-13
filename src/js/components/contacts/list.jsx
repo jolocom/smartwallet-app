@@ -7,11 +7,11 @@ import {grey500} from 'material-ui/styles/colors'
 import theme from 'styles/jolocom-theme'
 
 import Loading from 'components/common/loading.jsx'
+import Utils from 'lib/util.js'
 
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
-
-import Utils from 'lib/util'
+import UserAvatar from 'components/common/user-avatar.jsx'
 
 let ContactsList = React.createClass({
 
@@ -40,6 +40,12 @@ let ContactsList = React.createClass({
     let {items} = this.state.contacts
 
     items.sort((a, b) => {
+      if (!a.username) {
+        a.username = ' '
+      }
+      if (!b.username) {
+        b.username = ' '
+      }
       return a.username.toLowerCase() > b.username.toLowerCase()
     })
 
@@ -53,13 +59,7 @@ let ContactsList = React.createClass({
       let nameInitial = Utils.nameInitial({
         name: name
       })
-      let avatar
-      if (imgUri) {
-        avatar = <Avatar src={Utils.uriToProxied(imgUri)}
-          style={{backgroundSize: 'cover'}} />
-      } else {
-        avatar = <Avatar>{nameInitial}</Avatar>
-      }
+      let avatar = <UserAvatar name={name} imgUrl={imgUri} />
 
       if (nameInitial !== lastNameInitial) {
         lastNameInitial = nameInitial
@@ -82,9 +82,9 @@ let ContactsList = React.createClass({
       result.push(
         <ListItem
           key={username}
-          primaryText={name}
+          primaryText={name || 'Unnamed'}
           secondaryText={email}
-          rightAvatar={avatar}
+          rightAvatar={<Avatar>{avatar}</Avatar>}
           insetChildren
           onTouchTap={handleClick}
         />
@@ -112,7 +112,6 @@ let ContactsList = React.createClass({
       </div>
     )
   }
-
 })
 
 let styles = {

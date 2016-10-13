@@ -143,7 +143,7 @@ export default Reflux.createStore({
     this.state.user = result[0]
     this.trigger(this.state)
   },
-  
+
   onRefresh: function() {
     this.drawAtUri(this.state.center.uri)
   },
@@ -172,10 +172,10 @@ export default Reflux.createStore({
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
-      
+
       // Before updating the this.state.center, we push the old center node
       // to the node history
-      
+
       let historyCandidate
       if (this.state.center && this.state.center.uri)
         historyCandidate = this.state.center
@@ -189,9 +189,9 @@ export default Reflux.createStore({
           this.state.previousRenderedNodeUri !== node.uri) {
         this.state.navHistory.push(historyCandidate)
       }
-        
+
       this.state.previousRenderedNodeUri = node.uri
-      
+
       this.state.center = triples[0]
 
       if (this.state.navHistory.length > 1) {
@@ -223,7 +223,7 @@ export default Reflux.createStore({
     }
 
     this.state.activeNode = node
-    
+
     if (typeof node == 'string') {
       debug('Fetching information and user permisions about the node...')
       var activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node).then((result) => {
@@ -241,8 +241,8 @@ export default Reflux.createStore({
     let activeNodePermissionsP = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
       method: 'PATCH',
       credentials: 'include',
-      headers: {		
-         'Content-Type':'application/sparql-update'		
+      headers: {
+         'Content-Type':'application/sparql-update'
       }
     }).then((res)=>{
       if (!res.ok) {
@@ -263,8 +263,8 @@ export default Reflux.createStore({
         `${Utils.uriToProxied(this.state.center.uri)}`,
         { method: 'PATCH',
           credentials: 'include',
-          headers: {		
-            'Content-Type':'application/sparql-update'		
+          headers: {
+            'Content-Type':'application/sparql-update'
           }
         }
       )
@@ -276,7 +276,7 @@ export default Reflux.createStore({
         this.state.center.isOwnedByUser = false
       })
     }
-    
+
     activeNodeInfoP
       .then(() => Promise.all([activeNodePermissionsP,centerNodePermissionsP]))
       .then(() => {
