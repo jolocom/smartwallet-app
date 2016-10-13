@@ -1,3 +1,5 @@
+'use strict';
+
 import {Parser, Writer} from '../rdf'
 import LDPAgent from './ldp'
 import Util from '../util'
@@ -248,6 +250,7 @@ class ChatAgent extends LDPAgent {
       return t.subject == '#thread' || t.subject ==
         `${conversationUrl}#thread`
     })
+    console.rdftable(aboutThread)
 
     // let owner = _.find(aboutThread, (t) => {
     //   return t.predicate.uri == PRED.hasOwner.uri
@@ -266,37 +269,57 @@ class ChatAgent extends LDPAgent {
       return Promise.resolve(null)
     }
 
-    let webid = otherPerson.value
+    let otherPerson2 = _.clone(participants)
+    // let iterator = 0
 
-    let result = {}
-    return this.get(Util.uriToProxied(webid))
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response, webid)
-      })
-      .then((parsed) => {
-        let aboutPerson = _.filter(parsed.triples, (t) => {
-          return t.subject.uri === webid || t.subject.uri === '#me'
+    for (let person in otherPerson2) {
+      if (otherPerson2[person].value === myUri) {
+        otherPerson2.splice(person, 1)
+      }
+    }
+
+    // alert('Otherperson NEW ' + otherPerson2)
+
+    // alert('URL:' + conversationUrl + '*******' + participants)
+
+    console.log('otherPerson array', otherPerson2)
+
+    // let webid = otherPerson.value
+    let result = []
+
+    for (let person in otherPerson2) {
+      let webid = otherPerson2[person].value
+      console.log('working on ', otherPerson2[person])
+      this.get(Util.uriToProxied(webid))
+        .then((xhr) => {
+          let parser = new Parser()
+          return parser.parse(xhr.response, webid)
         })
-
-        let name = _.find(parsed.triples, (t) => {
-          return t.predicate.uri === PRED.givenName.uri
+        .then((parsed) => {
+          let aboutPerson = _.filter(parsed.triples, (t) => {
+            return t.subject.uri === webid || t.subject.uri === '#me'
+          })
+          let name = _.find(parsed.triples, (t) => {
+            return t.predicate.uri === PRED.givenName.uri
+          })
+          if (name) {
+            result.name = name.object.value
+          }
+          let img = _.find(aboutPerson, (t) => {
+            return t.predicate.uri === PRED.image.uri
+          })
+          if (img) {
+            result.img = img.object.value
+          }
+          // result.webid = otherPerson2[person]
+          result.push(otherPerson2[person])
+          //return result
         })
+    }
 
-        if (name) {
-          result.name = name.object.value
-        }
-
-        let img = _.find(aboutPerson, (t) => {
-          return t.predicate.uri === PRED.image.uri
-        })
-        if (img) {
-          result.img = img.object.value
-        }
-
-        result.webid = otherPerson
-        return result
-      })
+    console.log('RESULT ', result)
+    debugger;
+    return result
   }
 
   getInboxConversations(webid) {
