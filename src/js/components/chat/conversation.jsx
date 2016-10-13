@@ -195,6 +195,7 @@ let Conversation = React.createClass({
     let {otherPerson} = this.state.conversation
     console.log('Conversation render! this.state.con ', this.state.conversation)
     console.log('oP ', otherPerson)
+    console.log('sizeof', otherPerson.length)
     let {account} = this.context
     let items = this.state.conversation.items || []
 
@@ -208,7 +209,7 @@ let Conversation = React.createClass({
       var otherPersonAvatar = (
         <UserAvatar
           name={author.charAt(8)}
-          imgUrl={<otherPerson></otherPerson>.img}
+          imgUrl={otherPerson.img}
           // imgUrl={author.img}
         />
       )

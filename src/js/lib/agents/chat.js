@@ -318,7 +318,6 @@ class ChatAgent extends LDPAgent {
     }
 
     console.log('RESULT ', result)
-    debugger;
     return result
   }
 
