@@ -315,6 +315,19 @@ class ChatAgent extends LDPAgent {
       })
   }
 
+  getUnreadMessages(webId) {
+    let container = `${Util.webidRoot(webId)}/little-sister/unread-messages`
+
+    return this.get(Util.uriToProxied(container))
+      .then((xhr) => {
+        let parser = new Parser()
+        return parser.parse(xhr.response, container)
+      })
+      .then((result) => {
+        return result
+      })
+  }
+
   _linkConversation(conversationUrl, webid) {
     let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
 
