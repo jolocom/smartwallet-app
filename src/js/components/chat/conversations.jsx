@@ -98,7 +98,7 @@ let Conversations = React.createClass({
     let content
 
     let {loading, items} = this.state.conversations
-    items = items.filter(conv => conv.lastMessage !== null)
+    // items = items.filter(conv => conv.lastMessage !== null)
 
     if (loading) {
       content = <Loading style={styles.loading} />

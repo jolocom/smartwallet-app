@@ -95,6 +95,7 @@ export default Reflux.createStore({
         }).value()
       })
   },
+
   onNew(conversation) {
     debug('Adding new conversation to list of conversations',
       conversation, this.items, AccountStore.state.webId)
@@ -127,10 +128,12 @@ export default Reflux.createStore({
     })
   },
 
-  onLoadFailed() {
+  onLoadFailed(error) {
+    this.items = []
     this.trigger({
       hydrated: false,
-      loading: false
+      loading: false,
+      items: this.items
     })
   }
 

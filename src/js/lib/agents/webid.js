@@ -20,6 +20,7 @@ class WebIDAgent extends LDPAgent {
 
   // Gets the webId of the currently loged in user from local storage,
   getWebID() {
+    console.log('wia', this)
     return new Promise((resolve, reject) => {
       const webId = localStorage.getItem('jolocom.webId')
       if (!webId) {
@@ -31,10 +32,10 @@ class WebIDAgent extends LDPAgent {
   }
 
   initInbox(webId) {
-    return Promise.all(
+    return Promise.all([
       this.createConversationsContainer(webId),
       this.createUnreadMessagesContainer(webId)
-    )
+    ])
   }
 
   // @TODO this name is confusing, because there's already a
@@ -70,7 +71,7 @@ class WebIDAgent extends LDPAgent {
       {'Content-type': 'text/turtle'},
       writer.end()
     ).then(() => {
-      this._writeAcl(uri, webId)
+      return this._writeAcl(uri, webId)
     })
   }
 
@@ -82,7 +83,7 @@ class WebIDAgent extends LDPAgent {
       Util.uriToProxied(uri),
       {'Content-type': 'text/turtle'}
     ).then(() => {
-      this._writeAcl(uri, webId)
+      return this._writeAcl(uri, webId)
     })
   }
 

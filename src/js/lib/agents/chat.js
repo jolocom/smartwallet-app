@@ -102,13 +102,22 @@ class ChatAgent extends LDPAgent {
   }
 
   postMessage(conversationUrl, author, content) {
-    // TODO: implement
+    // TODO: Should use PATCH here to append new messages
     let msgId = `#${Util.randomString(5)}`
     let conversationId = `${conversationUrl}#thread`
     return this.get(Util.uriToProxied(conversationUrl))
       .then((xhr) => {
         let parser = new Parser()
         return parser.parse(xhr.response, conversationId)
+      })
+      .then((result) => {
+        this.notifyParticipants(
+          conversationUrl,
+          this._getParticipants(result.triples),
+          author,
+          content
+        )
+        return result
       })
       .then((result) => {
         let triples = [{// this is a message
@@ -214,7 +223,7 @@ class ChatAgent extends LDPAgent {
       .then((parsed) => {
         return Promise.all([
           this._lastMessage(conversationUrl),
-          this._otherPerson(parsed.triples, conversationUrl, myUri)
+          this._otherPerson(conversationUrl, parsed.triples, myUri)
         ])
       })
       .then((tmp) => {
@@ -232,7 +241,7 @@ class ChatAgent extends LDPAgent {
   _lastMessage(conversationUrl) {
     return this.getConversationMessages(conversationUrl)
       .then((messages) => {
-        if (messages.length == 0) {
+        if (messages.length === 0) {
           return null
         } else {
           return messages[messages.length - 1]
@@ -240,43 +249,34 @@ class ChatAgent extends LDPAgent {
       })
   }
 
-  _otherPerson(triples, conversationUrl, myUri) {
-    // TODO
+  _getParticipants(uri, triples) {
     let aboutThread = _.filter(triples, (t) => {
-      // Using == because t.subject is an object
-      // that has a .toString method
-      return t.subject == '#thread' || t.subject ==
-        `${conversationUrl}#thread`
+      return t.subject.value === '#thread' || t.subject.value ===
+        `${uri}#thread`
     })
 
-    // let owner = _.find(aboutThread, (t) => {
-    //   return t.predicate.uri == PRED.hasOwner.uri
-    // })
-    // if (owner) {
-    //   owner = owner.object
-    // }
-
-    // return Promise.resolve({webid: owner.value, name: owner.value})
-
-    let participants = _.map(_.filter(aboutThread, (t) => {
+    return _.map(_.filter(aboutThread, (t) => {
       return t.predicate.uri === PRED.hasSubscriber.uri
-    }), (t) => t.object)
-    let otherPerson = _.find(participants, (p) => p.value !== myUri)
+    }), (t) => t.object.value)
+  }
+
+  _otherPerson(uri, triples, myUri) {
+    let participants = this._getParticipants(uri, triples)
+    let otherPerson = _.find(participants, (p) => p !== myUri)
+
     if (!otherPerson) {
-      return Promise.resolve(null)
+      return Promise.resolve({})
     }
 
-    let webid = otherPerson.value
-
     let result = {}
-    return this.get(Util.uriToProxied(webid))
+    return this.get(Util.uriToProxied(otherPerson))
       .then((xhr) => {
         let parser = new Parser()
-        return parser.parse(xhr.response, webid)
+        return parser.parse(xhr.response, otherPerson)
       })
       .then((parsed) => {
         let aboutPerson = _.filter(parsed.triples, (t) => {
-          return t.subject.uri === webid || t.subject.uri === '#me'
+          return t.subject.uri === otherPerson || t.subject.uri === '#me'
         })
 
         let name = _.find(parsed.triples, (t) => {
@@ -326,6 +326,22 @@ class ChatAgent extends LDPAgent {
       .then((result) => {
         return result
       })
+  }
+
+  notifyParticipants(conversationUrl, participants, author, content) {
+    participants.forEach(({value}) => {
+      if (value !== author) {
+        this.addUnreadMessage(value, {
+          conversationUrl,
+          author,
+          content
+        })
+      }
+    })
+  }
+
+  addUnreadMessage(message) {
+    console.log('message', message)
   }
 
   _linkConversation(conversationUrl, webid) {
