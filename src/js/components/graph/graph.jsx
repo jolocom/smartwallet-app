@@ -174,7 +174,7 @@ let Graph = React.createClass({
   },
 
   _handleSelectNode(node, svg) {
-    this.aclAgent.removeAllow(node.uri, 'write')
+    this.aclAgent.allow(node.uri, 'write')
     graphActions.setState('selected', svg)
   },
 

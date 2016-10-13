@@ -31,6 +31,24 @@ class AclAgent {
     }
   }
 
+  // Checks if an object is contained in an array by comparing it's props.
+  containsObj(arr, obj) {
+    if (arr.length === 0) {
+      return false
+    }
+    for (let el of arr) {
+      if (
+          el.subject.uri == obj.subject.uri &&
+          el.predicate.uri == obj.predicate.uri &&
+          el.object.uri == obj.object.uri
+        )
+      {
+        return true
+        break
+      }
+    }
+  }
+
   /**
    * @summary Hydrates the object. Decided to not put in constructor,
    *          so that there's no async behaviour there. Also tries to
@@ -78,12 +96,20 @@ class AclAgent {
     if (typeof user === 'string') {
       user = rdf.sym(user) 
     }
-    // TODO Replace with SCHEMA lib
-    this.indexChanges.toInsert.push({
-       subject: user,
-       predicate: this.indexPredMap[mode],
-       object: rdf.sym(this.uri)
-     })
+
+    let payload = { 
+      subject: user,
+      predicate: this.indexPredMap[mode],
+      object: rdf.sym(this.uri)
+    }
+
+    if (!this.containsObj(this.indexChanges.toInsert, payload)) {
+      console.warn('added')
+      this.indexChanges.toInsert.push(payload)
+    } else {
+      console.warn('+1')
+    }
+
     // If user already has the permission.
     if (_.includes(this.allowedPermissions(user, true), mode)){
       return
