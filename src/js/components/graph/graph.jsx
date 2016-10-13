@@ -16,6 +16,7 @@ import NodeTypes from 'lib/node-types'
 
 // TESTING
 import AclAgent from 'lib/agents/acl'
+import pAgent from 'lib/agents/permissions'
 // END TESTING
 
 import Debug from 'lib/debug'
@@ -89,7 +90,8 @@ let Graph = React.createClass({
   componentDidMount() {
     // TESTING
     this.i = 0
-    this.aclAgent = new AclAgent('https://pre.jolocom.webid.de/profile/card')
+    this.aclAgent = new AclAgent('https://d.webid.jolocom.de/profile/card')
+    this.perAgent = new pAgent()
     // END TESTING
 
     const {account} = this.context
@@ -181,12 +183,19 @@ let Graph = React.createClass({
 
   _handleSelectNode(node, svg) {
     // TESTING
-    if (this.i < 5) {
+    if (this.i < 1) {
       this.aclAgent.allow(node.uri, 'write')
       this.i++
-    } else {
+    } else if (this.i < 2){
       this.aclAgent.removeAllow(node.uri, 'write')
-    }
+      this.i++
+    } else if (this.i < 3) {
+      this.aclAgent.commitIndex()
+      this.i++
+    } else if (this.i < 4)
+      this.perAgent.getSharedNodes(node.uri).then((res) => {
+        console.log(res)
+      })
     // END OF TESTING
 
     graphActions.setState('selected', svg)
@@ -197,12 +206,6 @@ let Graph = React.createClass({
   },
 
   _handleCenterChange(node) {
-
-    // TESTING
-    this.aclAgent.removeAllow(node.uri, 'write')
-    //this.aclAgent.commitIndex()
-    // END TESTING
-
     this.context.router.push(`/graph/${encodeURIComponent(node.uri)}/`)
   },
 

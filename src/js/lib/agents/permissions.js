@@ -5,8 +5,8 @@ import rdf from 'rdflib'
 
 // So we have one index file that contains the log of the relationships.
 // it's all triples.
-class PermissionAgent {
 
+class PermissionAgent {
 
   getSharedNodes(uri) {
     // Add some error handling here perhaps.
@@ -14,7 +14,6 @@ class PermissionAgent {
       throw new Error('No Uri supplied.')
     }
 
-    let toBeResolved = []
     this.gAgent = new graphAgent()
     let webid = localStorage.getItem('jolocom.webId')
 
@@ -30,20 +29,16 @@ class PermissionAgent {
       typeNotDetected: []
     }
 
-    // TODO Convert according to Axel's example.
-    this.gAgent.findTriples(indexUri, rdf.sym(uri), undefined, undefined).then((graph)=>{
+    return this.gAgent.findTriples(indexUri, rdf.sym(uri), undefined, undefined).then((graph)=>{
       if (graph === -1) {
         throw new Error('Could not access the index file.')
       }
-      graph.forEach((t)=>{
-        toBeResolved.push(new Promise ((res, rej)=> {
-          this.resolveNodeType(t.object.uri).then((ans) => {
-            sharedNodes[ans].push(t.object.uri)
-            res()
-          })
-        }))
-      })
-      Promise.all(toBeResolved).then(()=>{
+
+      return Promise.all(graph.map((t) => {
+        return this.resolveNodeType(t.object.uri).then((ans) => {
+          sharedNodes[ans].push(t.object.uri)
+        }) 
+      })).then(()=>{
         return sharedNodes
       })
     }).catch((e)=>{
