@@ -8,6 +8,11 @@ import rdf from 'rdflib'
 
 class PermissionAgent {
 
+  /* @summary Returns the nodes shared with the URI node
+   * @param{string} uri - The person we want to know the shared nodes with.
+   * return {array | objects} - The shared nodes grouped by node types, each object in the array contains the uri of the node and the granted permission.
+   *
+   */
   getSharedNodes(uri) {
     // Add some error handling here perhaps.
     if (!uri) {
@@ -36,7 +41,10 @@ class PermissionAgent {
 
       return Promise.all(graph.map((t) => {
         return this.resolveNodeType(t.object.uri).then((ans) => {
-          sharedNodes[ans].push(t.object.uri)
+          sharedNodes[ans].push({
+            node: t.object.uri,
+            perm: t.predicate.uri
+          })
         }) 
       })).then(()=>{
         return sharedNodes
