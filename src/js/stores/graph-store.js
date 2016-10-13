@@ -24,7 +24,7 @@ export default Reflux.createStore({
       center: null,
       neighbours: null,
       loading: false,
-      loaded: false,
+      initialized: false,
       newNode: null,
       navHistory: [],
       selected: null,
@@ -39,7 +39,7 @@ export default Reflux.createStore({
   },
 
   onLogout() {
-    this.loaded = false
+    this.initialized = false
     this.state = {
       // Graph related
       webId: null,
@@ -47,7 +47,7 @@ export default Reflux.createStore({
       center: null,
       neighbours: null,
       loading: false,
-      loaded: false,
+      initialized: false,
       newNode: null,
       navHistory: [],
       selected: null,
@@ -144,7 +144,7 @@ export default Reflux.createStore({
   onGetInitialGraphStateCompleted: function (result) {
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
-    this.state.loaded = true
+    this.state.initialized = true
     this.state.loading = false
     this.state.user = result[0]
     this.trigger(this.state)
@@ -152,6 +152,8 @@ export default Reflux.createStore({
 
   onGetInitialGraphStateFailed: function () {
     this.state.loading = false
+    this.state.initialized = true
+
     this.trigger(this.state)
   },
 
