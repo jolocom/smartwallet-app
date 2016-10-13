@@ -1,9 +1,9 @@
 import Reflux from 'reflux'
-import graphAgent from '../lib/agents/graph.js'
+import GraphAgent from '../lib/agents/graph.js'
 import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import Utils from 'lib/util'
-import d3Convertor from '../lib/d3-converter'
+import D3Convertor from '../lib/d3-converter'
 
 import Debug from 'lib/debug'
 let debug = Debug('stores:graph')
@@ -11,27 +11,26 @@ let debug = Debug('stores:graph')
 export default Reflux.createStore({
   listenables: [graphActions],
 
-  init: function(){
+  init: function() {
     this.listenTo(accountActions.logout, this.onLogout)
     this.listenTo(accountActions.login.completed, this.onLogin)
-    this.gAgent = new graphAgent()
-    this.convertor = new d3Convertor()
-    this.loaded = false
-
+    this.gAgent = new GraphAgent()
+    this.convertor = new D3Convertor()
 
     this.state = {
-      //These state keys describe the graph
+      // These state keys describe the graph
       webId: null,
       user: null,
       center: null,
       neighbours: null,
+      loading: false,
       loaded: false,
       newNode: null,
       navHistory: [],
       selected: null,
       rotationIndex: 0,
       previousRenderedNodeUri: null,
-      //These describe the ui
+      // These describe the ui
       showPinned: false,
       showSearch: false,
       plusDrawerOpen: false,
@@ -47,6 +46,7 @@ export default Reflux.createStore({
       user: null,
       center: null,
       neighbours: null,
+      loading: false,
       loaded: false,
       newNode: null,
       navHistory: [],
@@ -95,21 +95,20 @@ export default Reflux.createStore({
   },
   */
 
-  dissconnectNode: function(){
+  dissconnectNode: function() {
     // Animation / removing from the neighb array will go here.
   },
 
-
-
-  // This sends Graph.jsx and the Graph.js files a signal to add new ndoes to the graph
-  onDrawNewNode: function(object, predicate){
-    // This fetches the triples at the newly added file, it allows us to draw it
-    // the graph accurately
+  // This sends Graph.jsx and the Graph.js files a signal to add
+  // new ndoes to the graph
+  onDrawNewNode: function(object, predicate) {
+    // This fetches the triples at the newly added file,
+    // it allows us to draw it the graph accurately
     this.gAgent.fetchTriplesAtUri(object).then((result) => {
       // Adding the extra value to the object, the URI, it's usefull later.
       result.triples.uri = object
-        // Now we tell d3 to draw a new adjacent node on the graph, with the info from
-        // the triiple file
+        // Now we tell d3 to draw a new adjacent node on the graph,
+        // with the info from the triiple file
       result.triples.connection = predicate
       return result.triples
     }).then(this.gAgent.hydrateNodeConfidentiality).then((triples) => {
@@ -126,11 +125,17 @@ export default Reflux.createStore({
   },
 
   onGetInitialGraphState: function (webId) {
+    this.state.loading = true
+
+    this.trigger(this.state)
+
     this.state.previousRenderedNodeUri = webId
     this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+        triples[i] = this.convertor.convertToD3(
+          'a', triples[i], i, triples.length - 1
+        )
       }
       graphActions.getInitialGraphState.completed(triples)
     }).catch(graphActions.getInitialGraphState.failed)
@@ -140,7 +145,13 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.loaded = true
+    this.state.loading = false
     this.state.user = result[0]
+    this.trigger(this.state)
+  },
+
+  onGetInitialGraphStateFailed: function () {
+    this.state.loading = false
     this.trigger(this.state)
   },
 
@@ -149,15 +160,23 @@ export default Reflux.createStore({
   },
 
   drawAtUri: function (uri, number) {
-    debug('Drawing at URI',uri)
+    debug('Drawing at URI', uri)
     this.state.previousRenderedNodeUri = uri
-    this.trigger(Object.assign({},this.state,{neighbours: []}))
+    this.state.loading = true
+
+    this.trigger(Object.assign({}, this.state, {
+      neighbours: []
+    }))
+
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
+      this.state.loading = false
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
       this.state.center = triples[0]
       for (let i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+        triples[i] = this.convertor.convertToD3(
+          'a', triples[i], i, triples.length - 1
+        )
         this.state.neighbours.push(triples[i])
       }
       for (let i = 0; i < number; i++) {
@@ -168,6 +187,10 @@ export default Reflux.createStore({
   },
 
   onNavigateToNode: function (node, defaultHistoryNode) {
+    this.state.loading = true
+
+    this.trigger(this.state)
+
     this.state.rotationIndex = 0
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       this.state.neighbours = []
@@ -177,10 +200,11 @@ export default Reflux.createStore({
       // to the node history
 
       let historyCandidate
-      if (this.state.center && this.state.center.uri)
+      if (this.state.center && this.state.center.uri) {
         historyCandidate = this.state.center
-      else
+      } else {
         historyCandidate = defaultHistoryNode
+      }
 
       // We check if we're not navigating to the same node (e.g. went to the
       // full-screen view and then back), in which case we don't want to add
@@ -194,57 +218,79 @@ export default Reflux.createStore({
 
       this.state.center = triples[0]
 
+      let prevNode
       if (this.state.navHistory.length > 1) {
-        if (this.state.center.uri === this.state.navHistory[this.state.navHistory.length - 2].uri) {
+        prevNode = this.state.navHistory[this.state.navHistory.length - 2].uri
+        if (this.state.center.uri === prevNode) {
           this.state.navHistory.pop()
           this.state.navHistory.pop()
-        }
-        // Removed the brackets, one liners.
-        else if (this.state.navHistory.length > 1)
-          for (var j = 0; j < this.state.navHistory.length - 1; j++)
-            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri)
-              for (var k = 0; k < j + 2; k++)
+        } else if (this.state.navHistory.length > 1) {
+          for (let j = 0; j < this.state.navHistory.length - 1; j++) {
+            let index = this.state.navHistory.length - 2 - j
+            prevNode = this.state.navHistory[index].uri
+            if (this.state.center.uri === prevNode) {
+              for (let k = 0; k < j + 2; k++) {
                 this.state.navHistory.pop()
+              }
+            }
+          }
+        }
       }
 
-      for (var i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+      for (let i = 1; i < triples.length; i++) {
+        triples[i] = this.convertor.convertToD3(
+          'a', triples[i], i, triples.length - 1
+        )
         this.state.neighbours.push(triples[i])
       }
+
+      this.state.loading = false
+
       this.trigger(this.state)
     })
   },
 
   onViewNode(node) {
+    let activeNodeInfoP
+    let activeNodePermissionsP
+    let centerNodePermissionsP
 
     if (!node) {
-      console.log('Ignoring onViewNode because node is null.')
+      debug('Ignoring onViewNode because node is null.')
       return
     }
 
+    this.state.loading = true
+
+    this.trigger(this.state)
+
     this.state.activeNode = node
 
-    if (typeof node == 'string') {
+    if (typeof node === 'string') {
       debug('Fetching information and user permisions about the node...')
-      var activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node).then((result) => {
-        result.triples.uri = node
-        this.state.activeNode = node = this.convertor.convertToD3('a', result.triples)
-      })
+      activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node)
+        .then((result) => {
+          result.triples.uri = node
+          this.state.activeNode = node = this.convertor.convertToD3(
+            'a', result.triples
+          )
+        })
+
       this.state.activeNode = {uri: node}
-    }
-    else {
+    } else {
       debug('Fetching user permissions about the node...')
-      var activeNodeInfoP = Promise.resolve()
+      activeNodeInfoP = Promise.resolve()
     }
 
     // Check if the cookie is still valid
-    let activeNodePermissionsP = fetch(`${Utils.uriToProxied(this.state.activeNode.uri)}`, {
+    const activeNodeUri = `${Utils.uriToProxied(this.state.activeNode.uri)}`
+    activeNodePermissionsP = fetch(activeNodeUri, {
       method: 'PATCH',
       credentials: 'include',
       headers: {
-         'Content-Type':'application/sparql-update'
+        'Content-Type': 'application/sparql-update'
       }
-    }).then((res)=>{
+    }).then((res) => {
       if (!res.ok) {
         throw new Error(res.statusText)
       }
@@ -256,21 +302,20 @@ export default Reflux.createStore({
     if (!this.state.center) {
       this.state.center = {}
       this.state.center.isOwnedByUser = false
-      var updateCenterNode = Promise.resolve()
-    }
-    else {
-      var centerNodePermissionsP =fetch(
+    } else {
+      centerNodePermissionsP = fetch(
         `${Utils.uriToProxied(this.state.center.uri)}`,
         { method: 'PATCH',
           credentials: 'include',
           headers: {
-            'Content-Type':'application/sparql-update'
+            'Content-Type': 'application/sparql-update'
           }
         }
       )
-      .then((res)=>{
-        if (!res.ok)
+      .then((res) => {
+        if (!res.ok) {
           throw new Error(res.statusText)
+        }
         this.state.center.isOwnedByUser = true
       }).catch(() => {
         this.state.center.isOwnedByUser = false
@@ -278,8 +323,12 @@ export default Reflux.createStore({
     }
 
     activeNodeInfoP
-      .then(() => Promise.all([activeNodePermissionsP,centerNodePermissionsP]))
+      .then(() => Promise.all([activeNodePermissionsP, centerNodePermissionsP]))
+      .catch(() => {
+        debug('onViewNode failed')
+      })
       .then(() => {
+        this.state.loading = false
         this.trigger(this.state)
       })
   }

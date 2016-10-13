@@ -5,7 +5,7 @@ import CircularProgress from 'material-ui/CircularProgress'
 const Loading = ({style, ...props}) => {
   return (
     <div style={Object.assign({}, styles.container, style)}>
-      <CircularProgress {...props} />
+      <CircularProgress {...props} style={styles.spinner} />
     </div>
   )
 }
@@ -21,6 +21,10 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  spinner: {
+    margin: 0,
+    transform: 'translate(0, -30px)'
   }
 }
 
