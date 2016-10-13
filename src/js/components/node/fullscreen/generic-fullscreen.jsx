@@ -5,6 +5,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
 import ProfileActions from 'actions/profile'
+import ConfirmActions from 'actions/confirm'
 import Radium from 'radium'
 import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
@@ -146,15 +147,39 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleDisconnect() {
-    if (this.props.node.rank !== 'center') {
-      nodeActions.disconnectNode(
-        this.props.node, this.props.state.center
-      )
-      // @TODO Wait until it's actually disconnected
-      SnackbarActions
-        .showMessage('The node has been successfully disconnected.')
+    if (this.props.node.rank === 'center') {
+        this._handleClose()
     }
-    this._handleClose()
+    else {
+      ConfirmActions.confirm(
+        'Are you sure you want to disconnect this node ?',
+        'Disconnect',
+        () => {
+
+          this._handleClose()
+
+          nodeActions.disconnectNode(
+            this.props.node, this.props.state.center
+          )
+
+          let onDisconnectUndo = () => {
+            nodeActions.link(this.props.state.center.uri,
+                             'knows',
+                             this.props.node.uri,
+                             false)
+            let unsub = nodeActions.link.completed.listen(() => {
+              unsub()
+              graphActions.drawAtUri(this.props.state.center.uri, 0)
+            })
+          }
+
+          // @TODO Wait until it's actually disconnected
+          SnackbarActions.showMessageUndo(
+              'The node has been successfully disconnected',
+              onDisconnectUndo)
+        }
+      )
+    }
   },
 
   _handleConnect() {
