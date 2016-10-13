@@ -158,6 +158,7 @@ export default Reflux.createStore({
   },
 
   onRefresh: function() {
+    debug('Refreshing the graph with current center', this.state.center.uri)
     this.drawAtUri(this.state.center.uri)
   },
 
@@ -189,11 +190,22 @@ export default Reflux.createStore({
   },
 
   onNavigateToNode: function (node, defaultHistoryNode) {
+    let {navHistory} = this.state
+
     this.state.loading = true
 
     this.trigger(this.state)
 
     this.state.rotationIndex = 0
+
+    node = Object.assign({}, node) // Just being cautious
+    let oldCenter = Object.assign({}, this.state.center)
+
+    // Update the center node in the state without waiting for the graph map
+    this.state.center = {uri: node.uri}
+    this.state.neighbours = []
+    // this.trigger(this.state,false)
+
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
@@ -202,42 +214,42 @@ export default Reflux.createStore({
       // to the node history
 
       let historyCandidate
-      if (this.state.center && this.state.center.uri) {
-        historyCandidate = this.state.center
+      if (oldCenter && oldCenter.uri) {
+        historyCandidate = oldCenter
       } else {
         historyCandidate = defaultHistoryNode
       }
 
+      this.state.center = triples[0]
+
       // We check if we're not navigating to the same node (e.g. went to the
       // full-screen view and then back), in which case we don't want to add
       // the node to the history
+      const prevUri = navHistory.length && navHistory[navHistory.length - 1].uri
+
       if (!this.state.previousRenderedNodeUri ||
-          this.state.previousRenderedNodeUri !== node.uri) {
-        this.state.navHistory.push(historyCandidate)
-      }
-
-      this.state.previousRenderedNodeUri = node.uri
-
-      this.state.center = triples[0]
-
-      let prevNode
-      if (this.state.navHistory.length > 1) {
-        prevNode = this.state.navHistory[this.state.navHistory.length - 2].uri
-        if (this.state.center.uri === prevNode) {
-          this.state.navHistory.pop()
-          this.state.navHistory.pop()
-        } else if (this.state.navHistory.length > 1) {
-          for (let j = 0; j < this.state.navHistory.length - 1; j++) {
-            let index = this.state.navHistory.length - 2 - j
-            prevNode = this.state.navHistory[index].uri
-            if (this.state.center.uri === prevNode) {
-              for (let k = 0; k < j + 2; k++) {
-                this.state.navHistory.pop()
-              }
-            }
-          }
+        this.state.previousRenderedNodeUri !== node.uri) {
+        if (prevUri && this.state.center.uri === prevUri) {
+          navHistory.pop()
+        } else if (!this.state.previousRenderedNodeUri) {
+          navHistory.push(historyCandidate)
+        } else {
+          navHistory.push(historyCandidate)
         }
       }
+
+      this.state.navHistory = navHistory
+      this.state.previousRenderedNodeUri = node.uri
+
+      // if (this.state.navHistory.length > 1) {
+      //   // Removed the brackets, one liners.
+      //   else if (this.state.navHistory.length > 1)
+      //     for (var j = 0; j < this.state.navHistory.length - 1; j++)
+      //       if (this.state.center.uri == this.state.navHistory[
+      //          this.state.navHistory.length - 2 - j].uri)
+      //         for (var k = 0; k < j + 2; k++)
+      //           this.state.navHistory.pop()
+      // }
 
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
