@@ -276,7 +276,7 @@ export default Reflux.createStore({
 
     this.state.loading = true
 
-    this.trigger(this.state)
+    this.trigger(this.state) // can comment? not sure of implicatins
 
     this.state.activeNode = node
 
@@ -316,6 +316,7 @@ export default Reflux.createStore({
     if (!this.state.center) {
       this.state.center = {}
       this.state.center.isOwnedByUser = false
+      centerNodePermissionsP = Promise.resolve()
     } else {
       centerNodePermissionsP = fetch(
         `${Utils.uriToProxied(this.state.center.uri)}`,
