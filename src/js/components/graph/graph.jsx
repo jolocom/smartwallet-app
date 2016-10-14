@@ -182,7 +182,7 @@ let Graph = React.createClass({
   },
 
   _handleSelectNode(node, svg) {
-    // TESTING
+    /* TESTING
     if (this.i < 1) {
       this.aclAgent.allow(node.uri, 'write')
       this.i++
@@ -196,8 +196,8 @@ let Graph = React.createClass({
       this.perAgent.getSharedNodes(node.uri).then((res) => {
         console.log(res)
       })
-    // END OF TESTING
-
+     END OF TESTING
+    */
     graphActions.setState('selected', svg)
   },
 
