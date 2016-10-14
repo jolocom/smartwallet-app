@@ -257,11 +257,15 @@ let Conversation = React.createClass({
     let styles = this.getStyles()
     let {loading, otherPerson} = this.state.conversation
     let otherPersonNames = []
-    for (let person of otherPerson) {
-      otherPersonNames.push(person.name)
+    let collatedNames
+    if (otherPerson && otherPerson.length > 1) {
+      for (let person of otherPerson) {
+        otherPersonNames.push(person.name)
+        collatedNames = otherPersonNames.join(', ')
+      }
+    } else if (otherPerson && otherPerson.length === 1) {
+      collatedNames = otherPerson[0].name
     }
-    let collatedNames = otherPersonNames.join(', ')
-
     console.log('OtherP', otherPerson)
 
     if (loading) {
