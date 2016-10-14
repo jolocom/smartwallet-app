@@ -71,7 +71,6 @@ let Signup = React.createClass({
 
   componentDidUpdate() {
     if (this.state.account && this.state.account.username) {
-      // this.emailVerifyScreen() // TODO: test when server is working
       this.context.router.push('/graph')
     }
   },
