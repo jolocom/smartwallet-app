@@ -376,7 +376,13 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
-      .attr('xlink:href', (d) => Utils.uriToProxied(d.img))
+      .attr('xlink:href', (d) => {
+        if (d.elipsisdepth === 0) {
+          return d.img
+        } else {
+          return Utils.uriToProxied(d.img)
+        }
+      })
       .attr('width', (d) => {
         return d.rank === 'center' ? largeNode : smallNode
       })
@@ -688,8 +694,8 @@ export default class GraphD3 extends EventEmitter {
     this.nodePositions = []
     let difference = this.numberOfNeighbours - this.MAX_VISIBLE_NODES
     let rot = this.rotationIndex
-    let extraSpaceFront = (difference - rot) > 2 ? 2 : (difference - rot)
-    let extraSpaceBack = this.rotationIndex > 2 ? 2 : this.rotationIndex
+    let extraSpaceFront = 1
+    let extraSpaceBack = 1
     let totalspace = 0
     let num = 0.5
     let largeNode = STYLES.largeNodeSize
@@ -706,30 +712,11 @@ export default class GraphD3 extends EventEmitter {
     let first = true
 
     for (let i = 0,
-      back = extraSpaceBack,
-      front = extraSpaceFront,
-      numberOfNeighbours = this.MAX_VISIBLE_NODES;
+      numberOfNeighbours = this.MAX_VISIBLE_NODES + 2;
          i < (this.numberOfNeighbours + totalspace); i++) {
-      if (back > 0) {
-        if (back > 1) {
-          num = 0.15
-        } else {
-          if (i === 0) {
-            num = 0.5
-          }
-        }
-
-        let pos = {
-          x: Math.sin((Math.PI) - (angle) * num) * largeNode * 1.4 + center.x,
-          y: Math.cos((Math.PI) - (angle) * num) * largeNode * 1.4 + center.y,
-          p: 'back'
-        }
-        this.nodePositions.push(pos)
-        back--
-        num = num + 0.45
-      } else if (numberOfNeighbours > 0) {
-        if (i > 0 && first === true) {
-          num = 1.5
+      if (numberOfNeighbours > 0) {
+        if (first) {
+          num = 5.5
           first = false
         }
         let pos = {
@@ -742,20 +729,6 @@ export default class GraphD3 extends EventEmitter {
           num++
         }
         numberOfNeighbours--
-      } else if (front > 0) {
-        if (front > 1) {
-          num = num + 0.90
-        } else if (i - extraSpaceBack === this.MAX_VISIBLE_NODES) {
-          num++
-        }
-        let pos = {
-          x: Math.sin((Math.PI) - (angle) * num) * largeNode * 1.4 + center.x,
-          y: Math.cos((Math.PI) - (angle) * num) * largeNode * 1.4 + center.y,
-          p: 'front'
-        }
-        this.nodePositions.push(pos)
-        front--
-        num = num + 0.45
       }
     }
 
@@ -766,12 +739,24 @@ export default class GraphD3 extends EventEmitter {
     this.visibleDataNodes = []
     this.visibleDataNodes[0] = this.dataNodes[0] // @TODO not intuitive
     this.visibleDataLinks = []
-    let nodeCount = 0 - extraSpaceBack - extraSpaceFront
+    let nodeCount = 0
 
-    for (let i = this.rotationIndex + 1 - extraSpaceBack,
-      pos = 0,
-      end = 0;
-      i !== this.rotationIndex - extraSpaceBack;
+    let backButton = {rank: 'neighbour',
+                      connection: 'backButton',
+                      position: 0,
+                      elipsisdepth: 0,
+                      img: 'img/full.jpg'}
+    let frontButton = {rank: 'neighbour',
+                      connection: 'frontButton',
+                      position: this.MAX_VISIBLE_NODES + 1,
+                      elipsisdepth: 0,
+                      img: 'img/arrowBack.png'}
+
+    this.visibleDataNodes.push(backButton)
+
+    for (let i = this.rotationIndex + 1,
+      pos = 1;
+      i !== this.rotationIndex;
       i = (i + 1) % this.dataNodes.length) {
       if (this.dataNodes[i].rank === 'neighbour') {
         if (nodeCount < this.MAX_VISIBLE_NODES) {
@@ -779,22 +764,13 @@ export default class GraphD3 extends EventEmitter {
           let last = this.visibleDataNodes.length - 1
           this.visibleDataNodes[last].position = pos
           this.visibleDataNodes[last].elipsisdepth = -1
-          if (extraSpaceBack > pos) {
-            let x = 1 - pos
-            if (extraSpaceBack === 1) {
-              x = 0
-            }
-            this.visibleDataNodes[last].elipsisdepth = x
-          }
-          if (pos > this.MAX_VISIBLE_NODES + extraSpaceBack - 1) {
-            this.visibleDataNodes[last].elipsisdepth = end
-            end++
-          }
           nodeCount++
           pos++
         }
       }
     }
+
+    this.visibleDataNodes.push(frontButton)
 
     for (let i = 1; i < this.visibleDataNodes.length; i++) {
       this.visibleDataLinks.push({
@@ -962,9 +938,6 @@ export default class GraphD3 extends EventEmitter {
         if (d.rank === 'history') {
           return STYLES.grayColor
         } else if (d.type === 'passport') {
-          return theme.graph.textNodeColor
-        } else if (d.elipsisdepth === 0 ||
-                   d.elipsisdepth === 1) {
           return theme.graph.textNodeColor
         } else if (d.unavailable) {
           return STYLES.unavailableNodeColor
