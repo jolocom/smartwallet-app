@@ -141,6 +141,11 @@ let ConversationsListItem = React.createClass({
     let {conversation} = this.props
     let {otherPerson, lastMessage} = conversation
     let {created, content} = lastMessage || {}
+    let otherPersonNames = []
+    for (let person of otherPerson) {
+      otherPersonNames.push(person.name)
+    }
+    let collatedNames = otherPersonNames.join(', ')
 
     // If otherPerson var is null, then set it to false.
     // So it wont be used when listing conversations
@@ -167,7 +172,7 @@ let ConversationsListItem = React.createClass({
         key={conversation.id}
         primaryText={
           <div>
-            <span>{otherPerson.name || 'Unnamed'}</span>
+            <span>{collatedNames || 'Unnamed'}</span>
             <span style={styles.date}>{date}</span>
           </div>
         }

@@ -195,7 +195,6 @@ let Conversation = React.createClass({
     let {otherPerson} = this.state.conversation
     console.log('Conversation render! this.state.con ', this.state.conversation)
     console.log('oP ', otherPerson)
-    console.log('sizeof', otherPerson.length)
     let {account} = this.context
     let items = this.state.conversation.items || []
 
@@ -257,15 +256,13 @@ let Conversation = React.createClass({
     let content
     let styles = this.getStyles()
     let {loading, otherPerson} = this.state.conversation
-    let title = ''
+    let otherPersonNames = []
+    for (let person of otherPerson) {
+      otherPersonNames.push(person.name)
+    }
+    let collatedNames = otherPersonNames.join(', ')
 
     console.log('OtherP', otherPerson)
-
-    if (otherPerson && otherPerson instanceof Array) {
-      for (let person of otherPerson) {
-        title += person.name + ', '
-      }
-    }
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -277,7 +274,7 @@ let Conversation = React.createClass({
       <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
-            title={title}
+            title={collatedNames}
             iconElementLeft={
               <IconButton
                 onClick={this.back}
