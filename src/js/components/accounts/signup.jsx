@@ -44,8 +44,7 @@ let Signup = React.createClass({
     return {
       disabledSubmit: true,
       showHelperTextUserName: false,
-      showHelperTextGivenName: false,
-      emailVerifyScreen: false
+      showHelperTextGivenName: false
     }
   },
 
@@ -72,13 +71,9 @@ let Signup = React.createClass({
 
   componentDidUpdate() {
     if (this.state.account && this.state.account.username) {
-      this.emailVerifyScreen() // TODO: test when server is working
-      // this.context.router.push('/graph')
+      // this.emailVerifyScreen() // TODO: test when server is working
+      this.context.router.push('/graph')
     }
-  },
-
-  emailVerifyScreen() {
-    this.setState({emailVerifyScreen: true})
   },
 
   enableSubmit() {
@@ -272,7 +267,7 @@ let Signup = React.createClass({
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
-        {this.state.emailVerifyScreen
+        {AccountStore.state.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>
             <p style={styles.signUpMessage}>
               Thank you for signing up to Little Sister!<br />
