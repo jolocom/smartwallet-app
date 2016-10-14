@@ -59,7 +59,13 @@ let ContactsList = React.createClass({
       let nameInitial = Utils.nameInitial({
         name: name
       })
-      let avatar = <UserAvatar name={name} imgUrl={imgUri} />
+      let avatar
+      if (imgUri) {
+        avatar = <UserAvatar name={name} imgUrl={imgUri} />
+      } else if (!imgUri) {
+        avatar = <UserAvatar />
+      }
+      // let avatar = <UserAvatar name={name} imgUrl={imgUri} />
 
       if (nameInitial !== lastNameInitial) {
         lastNameInitial = nameInitial
