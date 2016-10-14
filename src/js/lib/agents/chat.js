@@ -268,34 +268,15 @@ class ChatAgent extends LDPAgent {
     // if (!otherPerson) {
     //   return Promise.resolve(null)
     // }
-
-      //let otherPerson2 = _.clone(participant)
-    // let iterator = 0
-    //
-    // for (let person in otherPerson2) {
-    //   if (otherPerson2[person].value === myUri) {
-    //     otherPerson2.splice(person, 1)
-    //   }
-    // }
-
     for (let person in participant) {
       if (participant[person].value === myUri) {
         participant.splice(person, 1)
       }
     }
 
-    // alert('Otherperson NEW ' + otherPerson2)
-
-    // alert('URL:' + conversationUrl + '*******' + participants)
-
-   // console.log('otherPerson array', otherPerson2)
-
-    // let webid = otherPerson.value
-
     let promises = []
     for (let person in participant) {
       let webid = participant[person].value
-      //console.log('working on ', otherPerson2[person])
       promises.push(this.get(Util.uriToProxied(webid))
         .then((xhr) => {
           let parser = new Parser()
@@ -317,7 +298,6 @@ class ChatAgent extends LDPAgent {
           if (img) {
             participant[person].img = img.object.value
           }
-          // result.webid = otherPerson2[person]
           return participant[person]
         }))
     }

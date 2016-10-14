@@ -19,7 +19,7 @@ export default Reflux.createStore({
   init: function() {
     this.listenTo(accountActions.logout, this.onLogout)
   },
-  
+
   getInitialState() {
     return {
       loading: false,
@@ -27,11 +27,11 @@ export default Reflux.createStore({
       items: this.items
     }
   },
-  
+
   onLogout() {
     this.items = []
   },
-  
+
   getConversationByWebId(webId) {
     for (let conversation of this.items) {
       if (conversation.otherPerson &&

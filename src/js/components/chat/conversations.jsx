@@ -161,10 +161,6 @@ let ConversationsListItem = React.createClass({
     if (otherPerson == null) {
       otherPerson = false
     }
-
-    console.log('otherPErson chats ', otherPerson)
-    console.log('lastMessage ', lastMessage)
-    debugger;
     let avatar
     let image
     if (otherPerson.length === 1 && otherPerson[0].img) {
@@ -176,8 +172,6 @@ let ConversationsListItem = React.createClass({
       image = <GroupIcon />
       avatar = <Avatar icon={<GroupIcon />} />
     }
-
-    // let avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
 
     let date = moment(created).fromNow()
     return (

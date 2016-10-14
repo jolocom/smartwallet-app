@@ -193,8 +193,6 @@ let Conversation = React.createClass({
   renderItems() {
     let styles = this.getStyles()
     let {otherPerson} = this.state.conversation
-    console.log('Conversation render! this.state.con ', this.state.conversation)
-    console.log('oP ', otherPerson)
     let {account} = this.context
     let items = this.state.conversation.items || []
 
@@ -205,16 +203,6 @@ let Conversation = React.createClass({
     )
 
     return items.map(function({author, content, created}, i) {
-
-      // author : webid of the author of the message
-      // example: joachim.webid
-
-      // otherPerson : array of participants
-      // [{webid:'axel.webid...', img: 'http://img1'}, {webid:'joachim.webid...', img: 'http://img2'}]
-
-      // needed:
-      // avatarImg: http://img2
-
       let image
       for (let person of otherPerson) {
         if (author === person.value) {
