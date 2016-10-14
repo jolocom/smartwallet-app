@@ -170,7 +170,7 @@ export default class GraphD3 extends EventEmitter {
     this.width = this.graphContainer.offsetWidth || STYLES.width
     this.height = this.graphContainer.offsetHeight || STYLES.height
     this.centerCoordinates = {
-      y: this.height / 2,
+      y: this.height * 3 / 7,
       x: this.width / 2
     }
   }
@@ -204,8 +204,8 @@ export default class GraphD3 extends EventEmitter {
     // Center cicle
     this.svg.select('g.background-layer').append('svg:circle')
       .attr('class', 'center-circle')
-      .attr('cx', this.width * 0.5)
-      .attr('cy', this.height * 0.5)
+      .attr('cx', this.centerCoordinates.x)
+      .attr('cy', this.centerCoordinates.y)
       .attr('r', this.largeNodeSize * 0.57 * 1.1)
       .style('fill', STYLES.lightGrayColor)
 
@@ -257,7 +257,7 @@ export default class GraphD3 extends EventEmitter {
       .startAngle(0)
 
     let maxRotationIndex = this.numberOfNeighbours - this.MAX_VISIBLE_NODES
-    let trans = this.width * 0.5 + ',' + this.height * 0.5
+    let trans = this.centerCoordinates.x + ',' + this.centerCoordinates.y
     let rot = this.archAngle * (maxRotationIndex - this.rotationIndex)
     // remove "maxRotationIndex -" to reverse the direction
     this.svg.select('.dial')
@@ -846,7 +846,11 @@ export default class GraphD3 extends EventEmitter {
     this.emit('view-node', data, node)
     d3.event.stopPropagation()
   }
+
   resetPos = function () {
+    let histSeparation = (this.smallNodeSize / 2)
+    let historyDist = this.centerCoordinates.y + this.largeNodeSize * 2.1
+
     d3.selectAll('.node')
       .transition('pos').duration(STYLES.nodeTransitionDuration / 5)
       .attr('transform', (d) => {
@@ -856,12 +860,10 @@ export default class GraphD3 extends EventEmitter {
           x = this.nodePositions[d.position].x
           y = this.nodePositions[d.position].y
         } else if (d.rank === 'history') {
-          y += this.largeNodeSize * 2.1 + d.histLevel * this.smallNodeSize
+          y += this.largeNodeSize * 2.1 + d.histLevel * histSeparation
         }
         return 'translate(' + x + ',' + y + ')'
       })
-    //
-    let historyDist = this.centerCoordinates.y + this.largeNodeSize * 2.1
 
     d3.selectAll('.link')
       .transition().duration(STYLES.nodeTransitionDuration / 5)
@@ -870,7 +872,7 @@ export default class GraphD3 extends EventEmitter {
         if (d.target.rank === 'center' || d.source.histLevel === 0) {
           return this.centerCoordinates.y
         } else if (d.target.rank === 'history') {
-          return historyDist + (d.source.histLevel - 1) * this.smallNodeSize
+          return historyDist + (d.source.histLevel - 1) * histSeparation
         }
       })
       .attr('x2', (d) => {
@@ -887,7 +889,7 @@ export default class GraphD3 extends EventEmitter {
         if (d.source.rank === 'neighbour') {
           return this.nodePositions[d.source.position].y
         } else {
-          return historyDist + d.source.histLevel * this.smallNodeSize
+          return historyDist + d.source.histLevel * histSeparation
         }
       })
   }
@@ -952,7 +954,8 @@ export default class GraphD3 extends EventEmitter {
         }
       })
     .attr('opacity', (d) => d.elipsisdepth === 0 ||
-                            d.elipsisdepth === 1 ? 0 : 1)
+                            d.elipsisdepth === 1 ||
+                            d.rank === 'history' ? 0 : 1)
 
     // Reset colour of all circles
     // Tries to interpret the url(#) as a colour @TODO
@@ -960,7 +963,7 @@ export default class GraphD3 extends EventEmitter {
       .select('.nodecircle')
       .style('fill', (d) => {
         if (d.rank === 'history') {
-          return STYLES.grayColor
+          return theme.graph.historyNodeColor
         } else if (d.type === 'passport') {
           return theme.graph.textNodeColor
         } else if (d.elipsisdepth === 0 ||
