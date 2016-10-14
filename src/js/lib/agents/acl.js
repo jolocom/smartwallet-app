@@ -21,7 +21,8 @@ class AclAgent {
 
     this.indexPredMap = {
       read: PRED.readPermission,
-      write: PRED.writePermission
+      write: PRED.writePermission,
+      control: PRED.owns
     }
 
     this.predMap = {
@@ -50,7 +51,7 @@ class AclAgent {
    * @summary Hydrates the object. Decided to not put in constructor,
    *          so that there's no async behaviour there. Also tries to
    *          deduce the URI to the acl file corresponding to the file.
-   * @return undefined, we want the side effect
+   * @return undefined, we want the side effect.
    */
 
   fetchInfo() {
@@ -69,6 +70,17 @@ class AclAgent {
       })
     }).catch((e) => {
       console.error(e, 'at fetchInfo')
+    })
+  }
+  
+  /**
+   * @summary Initiates a empty ACL file we can later populate, 
+   *          alternative to fetchInfo() 
+   * @returns undefined, we wat the side effect.
+   */
+  initiateNew() {
+    return Util.getAclUri(this.uri).then((aclUri)=>{
+      this.aclUri = aclUri
     })
   }
 
@@ -198,7 +210,6 @@ class AclAgent {
     let i = this.containsObj(this.indexChanges.toInsert, payload)
     if (i !== -1) {
       this.indexChanges.toInsert.splice(i, 1)
-      console.log(this.indexChanges, ' removed')
       return
     } 
 
@@ -221,7 +232,6 @@ class AclAgent {
     if (this.containsObj(this.indexChanges.toInsert, payload) === -1) {
       this.indexChanges.toInsert.push(payload)
     } 
-    console.log(this.indexChanges, ' added')
   }
 
   /**
@@ -231,7 +241,7 @@ class AclAgent {
   isAllowed(user, mode){
     if (!this.predMap[mode]) {
       console.error('Invalid mode supplied!')
-      return false
+     return false
     } 
     if (_.includes(this.allowedPermissions(user), mode)){
       return true 
@@ -311,11 +321,9 @@ class AclAgent {
 
   commitIndex() {
     let updates = []
-    console.log(this.indexChanges)
     let indexUri = Util.getIndexUri() 
     if (this.indexChanges.toInsert.length > 0) {
       this.indexChanges.toInsert.forEach((el) => {
-        // KEEP AN EYE ON THIS
         updates.push(
           this.gAgent.writeTriples(indexUri, [el], false)
         )
@@ -331,15 +339,9 @@ class AclAgent {
       this.indexChanges.toDelete.forEach((el) => {
         payload.triples.push(el)
       })
-      // The removal always happens at the end, think of 
-      // the implications
-      // CRASHES THE SOLID SERVER, USE WITH CARE.
       updates.push(this.gAgent.deleteTriple(payload))
     }
-    
-    Promise.all(updates).then((res) => {
-      console.log('DONE', res)
-    })
+    return Promise.all(updates)
   }
 }
 

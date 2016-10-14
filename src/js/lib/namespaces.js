@@ -65,7 +65,8 @@ export const PRED = {
   write: ACL('Write'),
   // INDEX FILE RELATED
   readPermission: SCHEMA('ReadPermission'),
-  writePermission: SCHEMA('WritePermission')
+  writePermission: SCHEMA('WritePermission'),
+  owns: SCHEMA('owns')
 }
 
 export const CERT = {

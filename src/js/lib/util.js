@@ -77,7 +77,7 @@ let Util = {
       credentials: 'include'
     }).then((ans) => {
       if (!ans.ok) {
-        throw new Error('Error while accessing the file.')
+        return uri + '.acl'
       }
       let linkHeader = ans.headers.get('Link')
       if (linkHeader) {

@@ -4,6 +4,7 @@ import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
+import AclAgent from './acl'
 import rdf from 'rdflib'
 
 import Debug from 'lib/debug'
@@ -163,39 +164,22 @@ class GraphAgent {
   // has write access
 
   createACL(uri, webID, confidential = false) {
-    let acl_writer = new Writer()
-    let acl_uri = `${uri}.acl`
-    let owner = rdf.sym('#owner')
+    let aclAgent = new AclAgent(uri)
 
-    acl_writer.addTriple(owner, PRED.type, PRED.auth)
-    acl_writer.addTriple(owner, PRED.access, rdf.sym(uri))
-    acl_writer.addTriple(owner, PRED.access, rdf.sym(acl_uri))
-    acl_writer.addTriple(owner, PRED.agent, rdf.sym(webID))
+    return aclAgent.initiateNew().then(()=>{
 
-    acl_writer.addTriple(owner, PRED.mode, PRED.control)
-    acl_writer.addTriple(owner, PRED.mode, PRED.read)
-    acl_writer.addTriple(owner, PRED.mode, PRED.write)
-
-    if (!confidential) {
-      let all = rdf.sym('#readall')
-
-      acl_writer.addTriple(all, PRED.type, PRED.auth)
-      acl_writer.addTriple(all, PRED.access, rdf.sym(uri))
-      acl_writer.addTriple(all, PRED.agentClass, PRED.Agent)
-      acl_writer.addTriple(all, PRED.mode, PRED.read)
-    }
-
-    return fetch(Util.uriToProxied(acl_uri), {
-      method: 'PUT',
-      credentials: 'include',
-      body: acl_writer.end(),
-      headers: {
-        'Content-Type': 'text/turtle'
+      aclAgent.allow(webID, 'read')
+      aclAgent.allow(webID, 'write')
+      aclAgent.allow(webID, 'control')
+      
+      if (!confidential) {
+        aclAgent.allow('*', 'read')
+        aclAgent.allow('*', 'write')
+        aclAgent.allow('*', 'control')
       }
-    }).then(() => {
-      return acl_uri
-    })
-    .catch((e) => {
+    }).then(()=>{
+      return Promise.all([aclAgent.commit(), aclAgent.commitIndex()])
+    }).catch((e) => {
       console.warn('error', e, 'occured while putting the acl file')
     })
   }
@@ -211,7 +195,6 @@ class GraphAgent {
    */
 
   findTriples(uri, subject, predicate, object) {
-    console.log('called!')
     let writer = new Writer()
     return this.fetchTriplesAtUri(uri).then((res) => {
       if (res.unav) {
