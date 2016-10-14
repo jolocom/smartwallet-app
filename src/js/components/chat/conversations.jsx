@@ -150,7 +150,16 @@ let ConversationsListItem = React.createClass({
       otherPerson = false
     }
 
-    let avatar = <UserAvatar name={otherPerson.name} imgUrl={otherPerson.img} />
+    console.log('otherPErson chats ', otherPerson)
+    console.log('lastMessage ', lastMessage)
+    let image
+    for (let person of otherPerson) {
+      if (lastMessage.author === person.value) {
+        image = person.img
+      }
+    }
+
+    let avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
 
     let date = moment(created).fromNow()
     return (

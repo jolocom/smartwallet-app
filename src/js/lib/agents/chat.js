@@ -261,20 +261,26 @@ class ChatAgent extends LDPAgent {
 
     // return Promise.resolve({webid: owner.value, name: owner.value})
 
-    let participants = _.map(_.filter(aboutThread, (t) => {
+    let participant = _.map(_.filter(aboutThread, (t) => {
       return t.predicate.uri === PRED.hasSubscriber.uri
     }), (t) => t.object)
-    let otherPerson = _.find(participants, (p) => p.value !== myUri)
-    if (!otherPerson) {
-      return Promise.resolve(null)
-    }
+    // let otherPerson = _.find(participant, (p) => p.value !== myUri)
+    // if (!otherPerson) {
+    //   return Promise.resolve(null)
+    // }
 
-    let otherPerson2 = _.clone(participants)
+      //let otherPerson2 = _.clone(participant)
     // let iterator = 0
+    //
+    // for (let person in otherPerson2) {
+    //   if (otherPerson2[person].value === myUri) {
+    //     otherPerson2.splice(person, 1)
+    //   }
+    // }
 
-    for (let person in otherPerson2) {
-      if (otherPerson2[person].value === myUri) {
-        otherPerson2.splice(person, 1)
+    for (let person in participant) {
+      if (participant[person].value === myUri) {
+        participant.splice(person, 1)
       }
     }
 
@@ -282,15 +288,15 @@ class ChatAgent extends LDPAgent {
 
     // alert('URL:' + conversationUrl + '*******' + participants)
 
-    console.log('otherPerson array', otherPerson2)
+   // console.log('otherPerson array', otherPerson2)
 
     // let webid = otherPerson.value
-    let result = []
 
-    for (let person in otherPerson2) {
-      let webid = otherPerson2[person].value
-      console.log('working on ', otherPerson2[person])
-      this.get(Util.uriToProxied(webid))
+    let promises = []
+    for (let person in participant) {
+      let webid = participant[person].value
+      //console.log('working on ', otherPerson2[person])
+      promises.push(this.get(Util.uriToProxied(webid))
         .then((xhr) => {
           let parser = new Parser()
           return parser.parse(xhr.response, webid)
@@ -303,22 +309,19 @@ class ChatAgent extends LDPAgent {
             return t.predicate.uri === PRED.givenName.uri
           })
           if (name) {
-            result.name = name.object.value
+            participant[person].name = name.object.value
           }
           let img = _.find(aboutPerson, (t) => {
             return t.predicate.uri === PRED.image.uri
           })
           if (img) {
-            result.img = img.object.value
+            participant[person].img = img.object.value
           }
           // result.webid = otherPerson2[person]
-          result.push(otherPerson2[person])
-          //return result
-        })
+          return participant[person]
+        }))
     }
-
-    console.log('RESULT ', result)
-    return result
+    return Promise.all(promises)
   }
 
   getInboxConversations(webid) {

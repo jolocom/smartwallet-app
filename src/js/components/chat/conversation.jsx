@@ -206,14 +206,30 @@ let Conversation = React.createClass({
     )
 
     return items.map(function({author, content, created}, i) {
+
+      // author : webid of the author of the message
+      // example: joachim.webid
+
+      // otherPerson : array of participants
+      // [{webid:'axel.webid...', img: 'http://img1'}, {webid:'joachim.webid...', img: 'http://img2'}]
+
+      // needed:
+      // avatarImg: http://img2
+
+      let image
+      for (let person of otherPerson) {
+        if (author === person.value) {
+          image = person.img
+        }
+      }
       var otherPersonAvatar = (
         <UserAvatar
           name={author.charAt(8)}
-          imgUrl={otherPerson.img}
+          // imgUrl={otherPerson[1].img}
+          imgUrl={image}
           // imgUrl={author.img}
         />
       )
-
       let avatar = (author !== account.webId)
         ? 'otherPersonAvatar' : 'userAvatar'
       let from = (author !== account.webId)
@@ -241,7 +257,15 @@ let Conversation = React.createClass({
     let content
     let styles = this.getStyles()
     let {loading, otherPerson} = this.state.conversation
-    let title = otherPerson && otherPerson.name
+    let title = ''
+
+    console.log('OtherP', otherPerson)
+
+    if (otherPerson && otherPerson instanceof Array) {
+      for (let person of otherPerson) {
+        title += person.name + ', '
+      }
+    }
 
     if (loading) {
       content = <Loading style={styles.loading} />
