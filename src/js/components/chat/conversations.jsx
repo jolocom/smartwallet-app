@@ -142,10 +142,19 @@ let ConversationsListItem = React.createClass({
     let {otherPerson, lastMessage} = conversation
     let {created, content} = lastMessage || {}
     let otherPersonNames = []
-    for (let person of otherPerson) {
-      otherPersonNames.push(person.name)
+    let collatedNames
+    if (otherPerson && otherPerson.length > 1) {
+      for (let person of otherPerson) {
+        otherPersonNames.push(person.name)
+        collatedNames = otherPersonNames.join(', ')
+      }
+    } else if (otherPerson && otherPerson.length === 1) {
+      collatedNames = otherPerson[0].name
     }
-    let collatedNames = otherPersonNames.join(', ')
+    // for (let person of otherPerson) {
+    //   otherPersonNames.push(person.name)
+    // }
+    // let collatedNames = otherPersonNames.join(', ')
 
     // If otherPerson var is null, then set it to false.
     // So it wont be used when listing conversations
