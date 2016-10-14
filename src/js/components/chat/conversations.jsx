@@ -4,6 +4,8 @@ import Reflux from 'reflux'
 
 import moment from 'moment'
 
+import GroupIcon from 'material-ui/svg-icons/social/group'
+
 import {
   List,
   ListItem,
@@ -151,10 +153,6 @@ let ConversationsListItem = React.createClass({
     } else if (otherPerson && otherPerson.length === 1) {
       collatedNames = otherPerson[0].name
     }
-    // for (let person of otherPerson) {
-    //   otherPersonNames.push(person.name)
-    // }
-    // let collatedNames = otherPersonNames.join(', ')
 
     // If otherPerson var is null, then set it to false.
     // So it wont be used when listing conversations
@@ -166,14 +164,20 @@ let ConversationsListItem = React.createClass({
 
     console.log('otherPErson chats ', otherPerson)
     console.log('lastMessage ', lastMessage)
+    debugger;
+    let avatar
     let image
-    for (let person of otherPerson) {
-      if (lastMessage.author === person.value) {
-        image = person.img
-      }
+    if (otherPerson.length === 1 && otherPerson[0].img) {
+      image = otherPerson[0].img
+      avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
+    } else if (otherPerson.length === 1 && !otherPerson[0].img) {
+      avatar = <UserAvatar />
+    } else if (otherPerson.length > 1) {
+      image = <GroupIcon />
+      avatar = <Avatar icon={<GroupIcon />} />
     }
 
-    let avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
+    // let avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
 
     let date = moment(created).fromNow()
     return (

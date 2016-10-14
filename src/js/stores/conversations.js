@@ -35,6 +35,7 @@ export default Reflux.createStore({
   getConversationByWebId(webId) {
     for (let conversation of this.items) {
       if (conversation.otherPerson &&
+          conversation.otherPerson.webid &&
           conversation.otherPerson.webid.value === webId) {
         return conversation
       }
