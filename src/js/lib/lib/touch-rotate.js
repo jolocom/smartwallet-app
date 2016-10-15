@@ -20,7 +20,7 @@ var TouchRotate = function (touchElement, callbacks) {
     var rad_starting_right = Math.atan2(opp, adj)
     return Math.PI / 2 - rad_starting_right
   }
-  
+
   // Handle mobile and desktop mouse events for rotation
   ['touchstart', 'mousedown', 'touchmove', 'mousedownmove'].forEach(function (eventName) {
     touchElement.addEventListener(eventName, function (e) {
@@ -35,8 +35,9 @@ var TouchRotate = function (touchElement, callbacks) {
 
   ['touchend', 'mouseup'].forEach(function (eventName) {
     document.addEventListener(eventName, function () {
-      if (typeof callbacks.end !== 'undefined')
+      if (typeof callbacks.end !== 'undefined') {
         callbacks['end']()
+      }
     })
   })
 

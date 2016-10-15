@@ -345,7 +345,7 @@ export default class GraphD3 extends EventEmitter {
             if (d.rank === 'history') {
               y += largeNode * 2
             } else {
-              y -= largeNode * 1.5
+              y += largeNode
             }
           }
           return 'translate(' + x + ',' + y + ')'
@@ -459,12 +459,13 @@ export default class GraphD3 extends EventEmitter {
     // Used as a background circle for image nodes
     nodeEnter.append('circle')
       .attr('class', 'nodeback')
-      .attr('r', STYLES.smallNodeSize / 5)
+      .attr('r', 0)
       .attr('fill', theme.graph.imageNodeColor)
+      .attr('opacity', 0)
 
     nodeEnter.append('circle')
       .attr('class', 'nodecircle')
-      .attr('r', STYLES.smallNodeSize / 5)
+      .attr('r', 0)
       .attr('fill', (d) => {
         if (d.elipsisdepth >= 0) {
           return theme.graph.textNodeColor
@@ -472,19 +473,12 @@ export default class GraphD3 extends EventEmitter {
           return theme.graph.transitionStartNodeColor
         }
       })
-
+      .attr('opacity', 0)
     // The name of the person, displays on the node
     nodeEnter.append('svg:text')
       .attr('class', 'nodetext')
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
-      .attr('opacity', (d) => {
-        if (d.img && d.rank !== 'history' && d.type !== 'passport') {
-          return 0
-        } else {
-          return 1
-        }
-      })
       .attr('dy', '.35em')
       .attr('font-size', (d) => {
         return d.rank === 'history' ? largeNode / 12 : largeNode / 8
@@ -515,7 +509,17 @@ export default class GraphD3 extends EventEmitter {
           return 'Unnamed'
         }
       })
-      .attr('opacity', (d) => d.elipsisdepth >= 0 ? 0 : 1)
+      .attr('opacity', 0)
+      .transition().delay(50)
+      .attr('opacity', (d) => {
+        if (d.elipsisdepth >= 0) {
+          return 0
+        } else if (d.img && d.rank !== 'history' && d.type !== 'passport') {
+          return 0
+        } else {
+          return 1
+        }
+      })
 
     // Add class hasNodeIcon
     // Adds a Confidential Icon for confidential nodes
@@ -595,22 +599,37 @@ export default class GraphD3 extends EventEmitter {
       .style('filter', 'url(#drop-shadow)')
 
     // Subscribe to the click listeners
-    this.node.on('click', function (data) {
-      if ((d3.event.timeStamp - this.last) < 1000) {
-        d3.event.stopPropagation()
-        return
+    this.node.on('mousedown', function (data) {
+      console.log('mouseDown = true')
+      self.mouseDown = true
+      self.last = d3.event.timeStamp
+      if (data.elipsisdepth >= 0) {
+        let dir = 1
+        if (data.connection === 'backButton') {
+          dir = -1
+        }
+        self.onHoldClick(dir)
       }
-      self.onClick(this, data)
+    })
+    this.node.on('click', function (data) {
+      self.mouseDown = false
+      console.log('mouseDown = false')
+      if ((d3.event.timeStamp - self.last) < 500) {
+        self.onClick(this, data)
+      }
     })
     this.node.on('dblclick', function (data) {
+      if (data.elipsisdepth >= 0) {
+        return
+      }
       self.onDblClick(this, data)
     })
 
     this.node.on('touchstart', function(data) {
-      if ((d3.event.timeStamp - this.last) < 500) {
+      if ((d3.event.timeStamp - self.last) < 500) {
         self.onDblClick(this, data)
       } else {
-        this.last = d3.event.timeStamp
+        self.last = d3.event.timeStamp
         self.onClick(this, data)
         d3.event.stopPropagation()
       }
@@ -627,6 +646,34 @@ export default class GraphD3 extends EventEmitter {
     })
   }.bind(this)
 
+  onHoldClick = function (dir) {
+    self = this
+    console.log('onHoldClick', this.mouseDown)
+    if (this.mouseDown) {
+      console.log('mouseISdown')
+      let rotationIndex = this.rotationIndex
+      let numberOfNeighbours = this.numberOfNeighbours
+      let MAX_VISIBLE = this.MAX_VISIBLE_NODES
+      if (dir === 1) {
+        if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
+          this.rotationIndex++
+          this.emit('change-rotation-index',
+          this.rotationIndex)
+          this.updateAfterRotationIndex('up')
+        }
+      } else {
+        if (rotationIndex > 0) {
+          this.rotationIndex--
+          this.emit('change-rotation-index',
+          this.rotationIndex)
+          this.updateAfterRotationIndex('down')
+        }
+      }
+      setTimeout(function () {
+        self.onHoldClick(dir)
+      }, 150)
+    }
+  }.bind(this)
   // We check if the node is dropped in the center, if yes we navigate to it.
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
@@ -745,12 +792,12 @@ export default class GraphD3 extends EventEmitter {
                       connection: 'backButton',
                       position: 0,
                       elipsisdepth: 0,
-                      img: 'img/full.jpg'}
+                      img: 'img/arrowLeft.png'}
     let frontButton = {rank: 'neighbour',
                       connection: 'frontButton',
                       position: this.MAX_VISIBLE_NODES + 1,
                       elipsisdepth: 0,
-                      img: 'img/arrowBack.png'}
+                      img: 'img/arrowRight.png'}
 
     this.visibleDataNodes.push(backButton)
 
@@ -874,6 +921,7 @@ export default class GraphD3 extends EventEmitter {
     }
 
     let smallSize = STYLES.smallNodeSize
+    let elipsisSize = STYLES.smallNodeSize * 0.7
     let largeSize = STYLES.largeNodeSize
 
     // Reset radius of dial to match shrunken center node size
@@ -892,13 +940,8 @@ export default class GraphD3 extends EventEmitter {
       .transition('grow').duration(speed)
       .attr('r', (d) => {
         if (d.elipsisdepth >= 0) {
-          if (d.elipsisdepth === 0) {
-            return STYLES.smallNodeSize * 0.27
-          } else {
-            return STYLES.smallNodeSize * 0.15
-          }
-        }
-        if (d.rank === 'center') {
+          return elipsisSize / 2
+        } else if (d.rank === 'center') {
           return ((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2
         } else if (d.rank === 'history') {
           return STYLES.smallNodeSize / 3
@@ -913,11 +956,7 @@ export default class GraphD3 extends EventEmitter {
       .transition('reset').duration(speed)
       .attr('r', (d) => {
         if (d.elipsisdepth >= 0) {
-          if (d.elipsisdepth === 0) {
-            return STYLES.smallNodeSize * 0.27
-          } else {
-            return STYLES.smallNodeSize * 0.15
-          }
+          return elipsisSize / 2
         }
         if (d.rank === 'center') {
           return ((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2
@@ -927,8 +966,23 @@ export default class GraphD3 extends EventEmitter {
           return STYLES.smallNodeSize / 2
         }
       })
-    .attr('opacity', (d) => d.elipsisdepth === 0 ||
-                            d.elipsisdepth === 1 ? 0 : 1)
+      .transition('reset').duration(100)
+      .attr('opacity', (d) => {
+        if (d.elipsisdepth === 0) {
+          let rotationIndex = this.rotationIndex
+          let numberOfNeighbours = this.numberOfNeighbours
+          let MAX_VISIBLE = this.MAX_VISIBLE_NODES
+          if (d.connection === 'backButton') {
+            if (rotationIndex === 0) {
+              return 0.4
+            }
+          } else if (rotationIndex === numberOfNeighbours - MAX_VISIBLE) {
+            return 0.4
+          }
+        } else {
+          return 1
+        }
+      })
 
     // Reset colour of all circles
     // Tries to interpret the url(#) as a colour @TODO
@@ -949,25 +1003,30 @@ export default class GraphD3 extends EventEmitter {
           return theme.graph.textNodeColor
         }
       })
-    .attr('opacity', (d) => {
-      if (d.elipsisdepth === 0) {
-        return 0.60
-      } else if (d.elipsisdepth === 1) {
-        return 0.25
-      } else {
-        return 1
-      }
-    })
+      .transition('reset').duration(100)
+      .attr('opacity', 1)
 
     // Reset sizes of all patterns
     d3.selectAll('svg .node')
       .selectAll('pattern')
       .transition('pattern').duration(speed)
       .attr('x', (d) => {
-        return d.rank === 'center' ? -largeSize / 2 : -smallSize / 2
+        if (d.rank === 'center') {
+          return -largeSize / 2
+        } else if (d.elipsisdepth >= 0) {
+          return -elipsisSize / 2
+        } else {
+          return -smallSize / 2
+        }
       })
       .attr('y', (d) => {
-        return d.rank === 'center' ? -largeSize / 2 : -smallSize / 2
+        if (d.rank === 'center') {
+          return -largeSize / 2
+        } else if (d.elipsisdepth >= 0) {
+          return -elipsisSize / 2
+        } else {
+          return -smallSize / 2
+        }
       })
 
     // Reset sizes of all images
@@ -975,10 +1034,22 @@ export default class GraphD3 extends EventEmitter {
       .selectAll('image')
       .transition('image').duration(STYLES.nodeTransitionDuration)
       .attr('width', (d) => {
-        return d.rank === 'center' ? largeSize : smallSize
+        if (d.rank === 'center') {
+          return largeSize
+        } else if (d.elipsisdepth >= 0) {
+          return elipsisSize
+        } else {
+          return smallSize
+        }
       })
       .attr('height', (d) => {
-        return d.rank === 'center' ? largeSize : smallSize
+        if (d.rank === 'center') {
+          return largeSize
+        } else if (d.elipsisdepth >= 0) {
+          return elipsisSize
+        } else {
+          return smallSize
+        }
       })
       .style('filter', null)
 
