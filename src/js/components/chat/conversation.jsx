@@ -4,7 +4,8 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton} from 'material-ui'
+import {AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import {Layout, Content} from 'components/layout'
 
@@ -254,7 +255,6 @@ let Conversation = React.createClass({
     } else if (otherPerson && otherPerson.length === 1) {
       collatedNames = otherPerson[0].name
     }
-    console.log('OtherP', otherPerson)
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -273,6 +273,19 @@ let Conversation = React.createClass({
                 iconClassName="material-icons">
                 arrow_back
               </IconButton>
+            }
+            iconElementRight={
+              <IconMenu
+                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              >
+                <MenuItem
+                  primaryText="Add another participant"
+                  onTouchTap={console.log('YES!!!!')}
+                />
+                <MenuItem primaryText="Send feedback to Dean" />
+              </IconMenu>
             }
           />
           <Content style={styles.content}>
