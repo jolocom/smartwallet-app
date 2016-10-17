@@ -60,6 +60,13 @@ export default Reflux.createStore({
         SnackbarActions.showMessage('An account error has occured.')
       }
     })
+    .catch((e) => {
+      if (e.message === 'USERNAME_TAKEN') {
+        SnackbarActions.showMessage('Username is already taken.')
+      } else {
+        SnackbarActions.showMessage('An account error has occured.')
+      }
+    })
   },
 
   /* @summary in case the user specified a name / email when registering,

@@ -50,19 +50,19 @@ class D3Converter {
         if (!props.blanks) {
           props.blanks = []
         }
-         
+
         if (!props.blanks[triple.subject.value]){
           props.blanks[triple.subject.value] = []
         }
 
         props.blanks[triple.subject.value].push(triple)
       }
-      
+
       // Make the following statements shorter
       let pred = triple.predicate.uri
       let obj = triple.object
 
-      // Updating the attributes of the node object. 
+      // Updating the attributes of the node object.
       // The resulting object will have all of it's props filled in, and will
       // be ready to be rendered by D3
       // Note, if a triple is not present, it will be set to null.
@@ -81,7 +81,7 @@ class D3Converter {
         if (pred === PRED.fullName.uri) {
           props.fullName = obj.value ? obj.value : obj.uri
         }
-        if (pred === PRED.title.uri) {
+        if (pred === PRED.title.uri || pred === PRED.title_DC.uri) {
           props.title = obj.value ? obj.value : obj.uri
         }
         if (pred === PRED.description.uri) {
@@ -100,14 +100,14 @@ class D3Converter {
         }
       }
     }
-    
+
     // @TODO Have a dedicated RDF type for bitcoin and passport nodes, so that
     // we don't need this hack.
     if (props.title == 'Bitcoin Address')
       props.type = 'bitcoin'
     else if (props.title == 'Passport')
       props.type = 'passport'
-   
+
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
       let angle = 0
@@ -138,15 +138,15 @@ class D3Converter {
       props.unavailable = true
       return props
     }
-    
-    // We specify the rank of the node here. Center is the center node 
+
+    // We specify the rank of the node here. Center is the center node
     // and Adjacent is a neighbour, smaller node. This data is not absolute,
     // it obviously depends on the viewport. Used for visualization purposes.
     if (rank === 'a') {
       props.rank = 'neighbour'
     }
 
-    if (rank === 'c') { 
+    if (rank === 'c') {
       props.rank = 'center'
     }
 
