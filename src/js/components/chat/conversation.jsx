@@ -102,7 +102,7 @@ let Conversation = React.createClass({
         flex: 1,
         overflowY: 'auto',
         paddingTop: '25px',
-        backgroundColor: '#f1f1f1',
+        backgroundColor: '#f8f9fb',
         position: 'absolute',
         top: 0,
         left: 0,
@@ -165,7 +165,7 @@ let Conversation = React.createClass({
       otherPersonAvatar: {
         body: {
           float: 'left',
-          background: '#F1F1F1',
+          background: '#f8f9fb',
           padding: 0,
           borderTopRightRadius: 0,
           marginRight: '6px'
@@ -177,7 +177,7 @@ let Conversation = React.createClass({
       userAvatar: {
         body: {
           float: 'right',
-          background: '#F1F1F1',
+          background: '#f8f9fb',
           padding: 0,
           borderTopRightRadius: 0,
           marginLeft: '6px'
