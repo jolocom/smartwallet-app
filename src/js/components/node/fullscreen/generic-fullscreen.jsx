@@ -146,6 +146,10 @@ let GenericFullScreen = React.createClass({
       encodeURIComponent(this.props.state.center.uri))
   },
 
+  _handlePrivacySettings() {
+    this.context.router.push('/privacysettings')
+  },
+
   _handleDisconnect() {
     if (this.props.node.rank === 'center') {
         this._handleClose()
@@ -256,6 +260,12 @@ let GenericFullScreen = React.createClass({
         return {
           title: 'Edit',
           handler: this._handleEdit,
+          icon: <EditorModeEdit />
+        }
+      case 'privacySettings':
+        return {
+          title: 'Privacy Settings',
+          handler: this._handlePrivacySettings,
           icon: <EditorModeEdit />
         }
       case 'fullscreen':

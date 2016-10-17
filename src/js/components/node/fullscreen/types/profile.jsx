@@ -99,6 +99,7 @@ let ProfileNode = React.createClass({
       menuItems.push('edit')
     }
     menuItems.push('copyUrl')
+    menuItems.push('privacySettings')
 
     return (
       <GenericFullScreen
