@@ -41,18 +41,18 @@ export default Reflux.createStore({
         // Username is already taken
         throw new Error('USERNAME_TAKEN')
       }
-      this.state = {
-        emailVerifyScreen: true
-      }
-      this.trigger(this.state)
-      // res.json().then((js) => {
-      //   if (name || email) {
-      //     let payload = {name, email}
-      //     Account.login(data.username, data.password, payload)
-      //   } else {
-      //     Account.login(data.username, data.password)
-      //   }
-      // })
+      // this.state = {
+      //   emailVerifyScreen: true
+      // }
+      // this.trigger(this.state)
+      res.json().then((js) => {
+        if (name || email) {
+          let payload = {name, email}
+          Account.login(data.username, data.password, payload)
+        } else {
+          Account.login(data.username, data.password)
+        }
+      })
     }).catch((e) => {
       if (e.message === 'USERNAME_TAKEN') {
         SnackbarActions.showMessage('Username is already taken.')
