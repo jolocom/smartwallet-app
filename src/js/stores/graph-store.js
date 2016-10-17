@@ -189,6 +189,8 @@ export default Reflux.createStore({
     })
   },
 
+  // defaultHistoryNode is useful when accessing a node graph view through
+  // the URL; then we can add the user's profile node as default history node
   onNavigateToNode: function (node, defaultHistoryNode) {
     let {navHistory} = this.state
 
@@ -207,6 +209,10 @@ export default Reflux.createStore({
     // this.trigger(this.state,false)
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
+      // WARNING: state may have changed between the body of the
+      // onNavigateToNode function and the body of this promise.
+      // Avoid relying on previous string/number values from the state.
+
       this.state.neighbours = []
       triples[0] = this.convertor.convertToD3('c', triples[0])
 
@@ -238,18 +244,13 @@ export default Reflux.createStore({
         }
       }
 
+      // this.state.navHistory is already a reference to navHistory
+      // Just making it explicit.
       this.state.navHistory = navHistory
-      this.state.previousRenderedNodeUri = node.uri
 
-      // if (this.state.navHistory.length > 1) {
-      //   // Removed the brackets, one liners.
-      //   else if (this.state.navHistory.length > 1)
-      //     for (var j = 0; j < this.state.navHistory.length - 1; j++)
-      //       if (this.state.center.uri == this.state.navHistory[
-      //          this.state.navHistory.length - 2 - j].uri)
-      //         for (var k = 0; k < j + 2; k++)
-      //           this.state.navHistory.pop()
-      // }
+      // previousRenderedNodeUri is the latest node that was rendered in
+      // graph view (not full-screen view)
+      this.state.previousRenderedNodeUri = node.uri
 
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
@@ -276,11 +277,14 @@ export default Reflux.createStore({
 
     this.state.loading = true
 
-    this.trigger(this.state) // can comment? not sure of implicatins
+    this.trigger(this.state)
 
+    // activeNode is the node we're viewing the full-screen view of
     this.state.activeNode = node
 
     if (typeof node === 'string') {
+      // Access by URL; we only have the URL of the node and we need to get
+      // more information about the neighbours, name, etc.
       debug('Fetching information and user permisions about the node...')
       activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node)
         .then((result) => {
@@ -291,12 +295,18 @@ export default Reflux.createStore({
         })
 
       this.state.activeNode = {uri: node}
+      // @TODO let's hope that the state doesn't change by the time the
+      // promise resolves
     } else {
+      // We passed in an object, so we already have information about the node
       debug('Fetching user permissions about the node...')
       activeNodeInfoP = Promise.resolve()
     }
 
-    // Check if the cookie is still valid
+    // Check if the cookie is still valid [?]
+
+    // We check if we have write access to the node
+    // This will let us decide whether or not we should show the delete button
     const activeNodeUri = `${Utils.uriToProxied(this.state.activeNode.uri)}`
     activeNodePermissionsP = fetch(activeNodeUri, {
       method: 'PATCH',
@@ -313,6 +323,9 @@ export default Reflux.createStore({
       this.state.activeNode.isOwnedByUser = false
     })
 
+    // We check if we have write access to the center node
+    // This will let us decide whether or not we should show the
+    // "disconnect from center node" button in the full-screen view
     if (!this.state.center) {
       this.state.center = {}
       this.state.center.isOwnedByUser = false

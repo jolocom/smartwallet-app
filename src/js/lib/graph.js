@@ -1303,10 +1303,7 @@ export default class GraphD3 extends EventEmitter {
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('opacity', 0)
 
-      d3.selectAll('.link')
-        .transition().duration(STYLES.nodeTransitionDuration)
-        .attr('opacity', 0)
-        .transition().remove()
+      d3.selectAll('.link').remove()
 
       d3.select(node)
         .attr('d', function(d) {
