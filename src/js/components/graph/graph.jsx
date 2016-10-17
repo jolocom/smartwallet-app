@@ -14,11 +14,6 @@ import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
 
-// TESTING
-import AclAgent from 'lib/agents/acl'
-import pAgent from 'lib/agents/permissions'
-// END TESTING
-
 import Debug from 'lib/debug'
 let debug = Debug('components:graph')
 
@@ -90,12 +85,6 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
-    // TESTING
-    this.i = 0
-    this.aclAgent = new AclAgent('https://d.webid.jolocom.de/profile/card')
-    this.perAgent = new pAgent()
-    // END TESTING
-
     const {account} = this.context
 
     // Instantiating the graph object.
@@ -178,22 +167,6 @@ let Graph = React.createClass({
   },
 
   _handleSelectNode(node, svg) {
-    /* TESTING
-    if (this.i < 1) {
-      this.aclAgent.allow(node.uri, 'write')
-      this.i++
-    } else if (this.i < 2){
-      this.aclAgent.removeAllow(node.uri, 'write')
-      this.i++
-    } else if (this.i < 3) {
-      this.aclAgent.commitIndex()
-      this.i++
-    } else if (this.i < 4)
-      this.perAgent.getSharedNodes(node.uri).then((res) => {
-        console.log(res)
-      })
-     END OF TESTING
-    */
     graphActions.setState('selected', svg)
   },
 
