@@ -154,7 +154,7 @@ let Signup = React.createClass({
     let styles = {
       container: {
         textAlign: 'center',
-        background: '#f1f1f1',
+        background: '#f8f9fb',
         height: '100%',
         overflowY: 'auto'
       },
