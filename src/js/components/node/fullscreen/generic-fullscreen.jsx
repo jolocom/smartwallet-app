@@ -42,7 +42,7 @@ let GenericFullScreen = React.createClass({
   propTypes: {
     node: React.PropTypes.object,
     center: React.PropTypes.object,
-    navHistory: React.PropTypes.object,
+    navHistory: React.PropTypes.any,
     onClose: React.PropTypes.func,
     backgroundImg: React.PropTypes.any,
     headerColor: React.PropTypes.any,
@@ -147,7 +147,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handlePrivacySettings() {
-    this.context.router.push('/privacysettings')
+    this.context.router.push('/privacy-settings')
   },
 
   _handleDisconnect() {

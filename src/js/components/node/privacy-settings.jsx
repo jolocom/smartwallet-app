@@ -6,6 +6,7 @@ let PrivacySettings = React.createClass({
   },
 
   render() {
+    // let styles = this.getStyles()
     return (
       <p>hi</p>
     )

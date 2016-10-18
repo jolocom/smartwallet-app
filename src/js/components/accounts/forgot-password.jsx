@@ -128,7 +128,7 @@ let ForgotPassword = React.createClass({
                 autocapitalize="none"
                 autocomplete="none"
                 validations="isAlphanumeric"
-                validationError='Please only use letters and numbers'
+                validationError="Please only use letters and numbers"
                 inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._handleUsernameChange}
               />
