@@ -5,7 +5,7 @@ import Radium from 'radium'
 import moment from 'moment'
 
 import {AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 
 import {Layout, Content} from 'components/layout'
 

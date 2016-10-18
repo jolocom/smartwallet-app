@@ -99,7 +99,8 @@ let Conversations = React.createClass({
   render: function() {
     let content
 
-    let {loading, items} = <this className="state conversations"></this>
+   // let {loading, items} = <this className="state conversations"></this>
+    let {loading, items} = this.state.conversations
     if (items) {
       items = items.filter(conv => conv.lastMessage !== null)
     }
