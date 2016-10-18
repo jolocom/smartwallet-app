@@ -3,6 +3,9 @@ import Radium from 'radium'
 import {IconButton} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
+import Subheader from 'material-ui/Subheader'
+import Divider from 'material-ui/Divider'
+import ActionVisibility from 'material-ui/svg-icons/action/visibility'
 
 let PrivacySettings = React.createClass({
 
@@ -28,7 +31,8 @@ let PrivacySettings = React.createClass({
         maxWidth: '90%',
         padding: '20px',
         margin: '0 auto 20px auto',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        textAlign: 'left'
       },
       title: {
         fontWeight: 'normal',
@@ -46,6 +50,14 @@ let PrivacySettings = React.createClass({
       toggleBtnRight: {
         borderTopRightRadius: '1em',
         borderBottomRightRadius: '1em'
+      },
+      headerIcon: {
+        marginBottom: '-6px',
+        marginRight: '6px',
+        fill: '#9b9faa'
+      },
+      divider: {
+        marginBottom: '10px'
       }
     }
     return styles
@@ -64,6 +76,11 @@ let PrivacySettings = React.createClass({
           </IconButton>}
           />
         <div style={styles.content}>
+          <Subheader>
+            <ActionVisibility style={styles.headerIcon} />
+            Recent chats
+          </Subheader>
+          <Divider style={styles.divider} />
           <FlatButton
             backgroundColor="#b5c945"
             labelStyle={{textColor: '#fff'}}
