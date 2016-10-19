@@ -193,12 +193,17 @@ let PrivacySettings = React.createClass({
           <Subheader style={{paddingLeft: '0px'}}>
             Disallow
           </Subheader>
-          <Chip
-            onRequestDelete={this._handleRequestDelete}
-            style={styles.chip}>
-            Commerzbank
-          </Chip>
-          <Divider style={styles.divider} />
+          <TextField onKeyPress={this._handleTextEnter}>
+            {
+              this.state.showChip
+              ? <Chip
+                onRequestDelete={this._handleRequestDelete}
+                style={styles.chip}>
+                {this.state.chipContents}
+              </Chip>
+              : null
+            }
+          </TextField>
           <Subheader style={{paddingLeft: '0px'}}>
             <EditorModeEdit style={styles.headerIcon} />
             Who can edit this node?
@@ -236,20 +241,31 @@ let PrivacySettings = React.createClass({
           <Subheader style={{paddingLeft: '0px'}}>
             Allow
           </Subheader>
-          <Chip
-            onRequestDelete={this._handleRequestDelete}
-            style={styles.chip}>
-            Commerzbank
-          </Chip>
-          <Divider style={styles.divider} />
+          <TextField onKeyPress={this._handleTextEnter}>
+            {
+              this.state.showChip
+              ? <Chip
+                onRequestDelete={this._handleRequestDelete}
+                style={styles.chip}>
+                {this.state.chipContents}
+              </Chip>
+              : null
+            }
+          </TextField>
           <Subheader style={{paddingLeft: '0px'}}>
             Disallow
           </Subheader>
-          <Chip
-            onRequestDelete={this._handleRequestDelete}
-            style={styles.chip}>
-            Commerzbank
-          </Chip>
+          <TextField onKeyPress={this._handleTextEnter}>
+            {
+              this.state.showChip
+              ? <Chip
+                onRequestDelete={this._handleRequestDelete}
+                style={styles.chip}>
+                {this.state.chipContents}
+              </Chip>
+              : null
+            }
+          </TextField>
         </div>
       </div>
     )
