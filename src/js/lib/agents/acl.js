@@ -15,8 +15,8 @@ class AclAgent {
     this.gAgent = new GraphAgent()
     this.Writer = new Writer()
     this.indexChanges = {
-      toInsert:[],
-      toDelete:[]
+      toInsert: [],
+      toDelete: []
     }
 
     this.indexPredMap = {
@@ -39,11 +39,11 @@ class AclAgent {
     }
 
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i].subject.uri == obj.subject.uri &&
-          arr[i].predicate.uri == obj.predicate.uri &&
-          arr[i].object.uri == obj.object.uri
-        ) return i
-      }
+      if (arr[i].subject.uri === obj.subject.uri &&
+          arr[i].predicate.uri === obj.predicate.uri &&
+          arr[i].object.uri === obj.object.uri
+      ) return i
+    }
     return -1
   }
 
@@ -72,14 +72,13 @@ class AclAgent {
       console.error(e, 'at fetchInfo')
     })
   }
-  
   /**
-   * @summary Initiates a empty ACL file we can later populate, 
-   *          alternative to fetchInfo() 
+   * @summary Initiates a empty ACL file we can later populate,
+   *          alternative to fetchInfo()
    * @returns undefined, we wat the side effect.
    */
   initiateNew() {
-    return Util.getAclUri(this.uri).then((aclUri)=>{
+    return Util.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     })
   }
@@ -106,7 +105,7 @@ class AclAgent {
       user = rdf.sym(user)
     }
 
-    let payload = { 
+    let payload = {
       subject: user,
       predicate: this.indexPredMap[mode],
       object: rdf.sym(this.uri)
@@ -203,22 +202,22 @@ class AclAgent {
   }
 
   indexRemove(payload) {
-    // If we said we want to add it, and now say we want to delete it, 
+    // If we said we want to add it, and now say we want to delete it,
     // the adding rule get's popped out.
     let i = this.containsObj(this.indexChanges.toInsert, payload)
     if (i !== -1) {
       this.indexChanges.toInsert.splice(i, 1)
       return
-    } 
+    }
 
     // Making sure we don't add it twice
     if (this.containsObj(this.indexChanges.toDelete, payload) === -1) {
       this.indexChanges.toDelete.push(payload)
-    } 
+    }
   }
 
   indexAdd(payload) {
-    // If we said we want to delete it, and now say we want to add it, 
+    // If we said we want to delete it, and now say we want to add it,
     // the deletion rule get's popped out.
     let i = this.containsObj(this.indexChanges.toDelete, payload)
     if (i !== -1) {
@@ -229,7 +228,7 @@ class AclAgent {
     // Making sure we don't add it twice
     if (this.containsObj(this.indexChanges.toInsert, payload) === -1) {
       this.indexChanges.toInsert.push(payload)
-    } 
+    }
   }
 
   /**
