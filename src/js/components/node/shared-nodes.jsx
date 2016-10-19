@@ -2,13 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import {IconButton} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
-import FlatButton from 'material-ui/FlatButton'
-import Subheader from 'material-ui/Subheader'
-import Divider from 'material-ui/Divider'
-import ActionVisibility from 'material-ui/svg-icons/action/visibility'
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import Chip from 'material-ui/Chip'
-import TextField from 'material-ui/TextField'
+import {GridList, GridTile} from 'material-ui/GridList'
 
 let SharedNodes = React.createClass({
 
@@ -19,58 +13,11 @@ let SharedNodes = React.createClass({
 
   getInitialState() {
     return {
-      currActiveViewBtn: 'visOnlyMe',
-      currActiveEditBtn: 'editOnlyMe',
-      showChip: false
     }
   },
 
   goBack() {
     this.context.router.push('/graph')
-  },
-
-  _handleRequestDelete() {
-    this.setState({showChip: false})
-  },
-
-  _handleTextEnter(e) {
-    if (e.key === 'Enter') {
-      this.setState({showChip: true})
-      this.setState({chipContents: e.target.value})
-    }
-  },
-  _setActive(activeBtn) {
-    if (activeBtn.includes('vis')) {
-      switch (activeBtn) {
-        case 'visOnlyMe':
-          this.setState({currActiveViewBtn: 'visOnlyMe'})
-          break
-        case 'visFriends':
-          this.setState({currActiveViewBtn: 'visFriends'})
-          break
-        case 'visEveryone':
-          this.setState({currActiveViewBtn: 'visEveryone'})
-          break
-        default:
-          this.setState({currActiveViewBtn: 'visOnlyMe'})
-          break
-      }
-    } else {
-      switch (activeBtn) {
-        case 'editOnlyMe':
-          this.setState({currActiveEditBtn: 'editOnlyMe'})
-          break
-        case 'editFriends':
-          this.setState({currActiveEditBtn: 'editFriends'})
-          break
-        case 'editEveryone':
-          this.setState({currActiveEditBtn: 'editEveryone'})
-          break
-        default:
-          this.setState({currActiveEditBtn: 'editOnlyMe'})
-          break
-      }
-    }
   },
 
   getStyles() {
@@ -82,7 +29,6 @@ let SharedNodes = React.createClass({
         overflowY: 'auto'
       },
       content: {
-        // width: '300px',
         maxWidth: '90%',
         padding: '20px',
         margin: '0 auto 20px auto',
@@ -129,6 +75,49 @@ let SharedNodes = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    const tilesData = [
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Breakfast',
+        author: 'jill111'
+      },
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Tasty burger',
+        author: 'pashminu'
+      },
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Camera',
+        author: 'Danson67'
+      },
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Morning',
+        author: 'fancycrave1'
+      },
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Hats',
+        author: 'Hans'
+      },
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Honey',
+        author: 'fancycravel'
+      },
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Vegetables',
+        author: 'jill111'
+      },
+      {
+        img: '/img/placeholder_nodetype.png',
+        title: 'Water plant',
+        author: 'BkrmadtyaKarki'
+      }
+    ]
+
     return (
       <div style={styles.container}>
         <AppBar
@@ -140,132 +129,23 @@ let SharedNodes = React.createClass({
           </IconButton>}
           />
         <div style={styles.content}>
-          <h3 style={{margin: '10px 0'}}>Privacy Settings for [node]</h3>
-          <Subheader style={{paddingLeft: '0px'}}>
-            <ActionVisibility style={styles.headerIcon} />
-            Who can see this node?
-          </Subheader>
-          <Divider style={styles.divider} />
-          <FlatButton
-            style={
-              this.state.currActiveViewBtn === 'visOnlyMe'
-              ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
-                  ...styles.toggleBtnActive}
-              : {...styles.toggleBtn, ...styles.toggleBtnLeft}
-            }
-            onTouchTap={this._setActive.bind(this, 'visOnlyMe')}>
-            Only Me
-          </FlatButton>
-          <FlatButton
-            className="toggleBtnActive"
-            style={
-              this.state.currActiveViewBtn === 'visFriends'
-              ? {...styles.toggleBtn, ...styles.toggleBtnActive}
-              : styles.toggleBtn
-            }
-            onTouchTap={this._setActive.bind(this, 'visFriends')}>
-            Friends
-          </FlatButton>
-          <FlatButton
-            style={
-              this.state.currActiveViewBtn === 'visEveryone'
-              ? {...styles.toggleBtn, ...styles.toggleBtnRight,
-                  ...styles.toggleBtnActive}
-              : {...styles.toggleBtn, ...styles.toggleBtnRight}
-            }
-            onTouchTap={this._setActive.bind(this, 'visEveryone')}>
-            Everyone
-          </FlatButton>
-          <Subheader style={{paddingLeft: '0px'}}>
-            Allow
-          </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
-          <Subheader style={{paddingLeft: '0px'}}>
-            Disallow
-          </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
-          <Subheader style={{paddingLeft: '0px'}}>
-            <EditorModeEdit style={styles.headerIcon} />
-            Who can edit this node?
-          </Subheader>
-          <Divider style={styles.divider} />
-          <FlatButton
-            style={
-              this.state.currActiveEditBtn === 'editOnlyMe'
-              ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
-                  ...styles.toggleBtnActive}
-              : {...styles.toggleBtn, ...styles.toggleBtnLeft}
-            }
-            onTouchTap={this._setActive.bind(this, 'editOnlyMe')}>
-            Only Me
-          </FlatButton>
-          <FlatButton
-            style={
-              this.state.currActiveEditBtn === 'editFriends'
-              ? {...styles.toggleBtn, ...styles.toggleBtnActive}
-              : {...styles.toggleBtn}
-            }
-            onTouchTap={this._setActive.bind(this, 'editFriends')}>
-            Friends
-          </FlatButton>
-          <FlatButton
-            style={
-              this.state.currActiveEditBtn === 'editEveryone'
-              ? {...styles.toggleBtn, ...styles.toggleBtnRight,
-                  ...styles.toggleBtnActive}
-              : {...styles.toggleBtn, ...styles.toggleBtnRight}
-            }
-            onTouchTap={this._setActive.bind(this, 'editEveryone')}>
-            Everyone
-          </FlatButton>
-          <Subheader style={{paddingLeft: '0px'}}>
-            Allow
-          </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
-          <Subheader style={{paddingLeft: '0px'}}>
-            Disallow
-          </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
+          <GridList
+            cellHeight={100}
+            cols={3}
+            style={styles.gridList}
+          >
+            {tilesData.map((tile) => (
+              <GridTile
+                key={tile.title}
+                title={<span>{tile.title}</span>}
+                titleBackground={'rgba(0, 0, 0, 0)'}
+                titlePosition={'bottom'}
+                subtitle={<span>by <b>{tile.author}</b></span>}
+              >
+                <img src={tile.img} />
+              </GridTile>
+            ))}
+          </GridList>
         </div>
       </div>
     )
