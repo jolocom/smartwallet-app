@@ -194,10 +194,10 @@ export default Reflux.createStore({
   onNavigateToNode: function (node, defaultHistoryNode) {
     let {navHistory} = this.state
 
+    /*
     this.state.loading = true
-
     this.trigger(this.state)
-
+    */
     this.state.rotationIndex = 0
 
     node = Object.assign({}, node) // Just being cautious

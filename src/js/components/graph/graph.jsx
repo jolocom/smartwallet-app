@@ -240,11 +240,14 @@ let Graph = React.createClass({
     })
 
     let loading
+
+    /*
     if (!this.state.initialized) {
       loading = <Loading style={styles.loading} />
     }
-
+    */
     return (
+
       <div style={styles.container}>
         <IndicatorOverlay ref="scrollIndicator" />
         <div style={styles.chart} ref="graph"></div>
