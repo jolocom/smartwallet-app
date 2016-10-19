@@ -18,7 +18,8 @@ let PrivacySettings = React.createClass({
 
   getInitialState() {
     return {
-      currActiveBtn: 'visOnlyMe'
+      currActiveViewBtn: 'visOnlyMe',
+      currActiveEditBtn: 'editOnlyMe'
     }
   },
 
@@ -31,19 +32,36 @@ let PrivacySettings = React.createClass({
   },
 
   _setActive(activeBtn) {
-    switch (activeBtn) {
-      case 'visOnlyMe':
-        this.setState({currActiveBtn: 'visOnlyMe'})
-        break
-      case 'visFriends':
-        this.setState({currActiveBtn: 'visFriends'})
-        break
-      case 'visEveryone':
-        this.setState({currActiveBtn: 'visEveryone'})
-        break
-      default:
-        this.setState({currActiveBtn: 'visOnlyMe'})
-        break
+    if (activeBtn.includes('vis')) {
+      switch (activeBtn) {
+        case 'visOnlyMe':
+          this.setState({currActiveViewBtn: 'visOnlyMe'})
+          break
+        case 'visFriends':
+          this.setState({currActiveViewBtn: 'visFriends'})
+          break
+        case 'visEveryone':
+          this.setState({currActiveViewBtn: 'visEveryone'})
+          break
+        default:
+          this.setState({currActiveViewBtn: 'visOnlyMe'})
+          break
+      }
+    } else {
+      switch (activeBtn) {
+        case 'editOnlyMe':
+          this.setState({currActiveEditBtn: 'editOnlyMe'})
+          break
+        case 'editFriends':
+          this.setState({currActiveEditBtn: 'editFriends'})
+          break
+        case 'editEveryone':
+          this.setState({currActiveEditBtn: 'editEveryone'})
+          break
+        default:
+          this.setState({currActiveEditBtn: 'editOnlyMe'})
+          break
+      }
     }
   },
 
@@ -122,7 +140,7 @@ let PrivacySettings = React.createClass({
           <Divider style={styles.divider} />
           <FlatButton
             style={
-              this.state.currActiveBtn === 'visOnlyMe'
+              this.state.currActiveViewBtn === 'visOnlyMe'
               ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
                   ...styles.toggleBtnActive}
               : {...styles.toggleBtn, ...styles.toggleBtnLeft}
@@ -133,7 +151,7 @@ let PrivacySettings = React.createClass({
           <FlatButton
             className="toggleBtnActive"
             style={
-              this.state.currActiveBtn === 'visFriends'
+              this.state.currActiveViewBtn === 'visFriends'
               ? {...styles.toggleBtn, ...styles.toggleBtnActive}
               : styles.toggleBtn
             }
@@ -142,7 +160,7 @@ let PrivacySettings = React.createClass({
           </FlatButton>
           <FlatButton
             style={
-              this.state.currActiveBtn === 'visEveryone'
+              this.state.currActiveViewBtn === 'visEveryone'
               ? {...styles.toggleBtn, ...styles.toggleBtnRight,
                   ...styles.toggleBtnActive}
               : {...styles.toggleBtn, ...styles.toggleBtnRight}
@@ -174,18 +192,32 @@ let PrivacySettings = React.createClass({
           </Subheader>
           <Divider style={styles.divider} />
           <FlatButton
-            backgroundColor="#b5c945"
-            style={{...styles.toggleBtn, ...styles.toggleBtnLeft}}>
+            style={
+              this.state.currActiveEditBtn === 'editOnlyMe'
+              ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
+                  ...styles.toggleBtnActive}
+              : {...styles.toggleBtn, ...styles.toggleBtnLeft}
+            }
+            onTouchTap={this._setActive.bind(this, 'editOnlyMe')}>
             Only Me
           </FlatButton>
           <FlatButton
-            backgroundColor="#e1e2e6"
-            style={styles.toggleBtn}>
+            style={
+              this.state.currActiveEditBtn === 'editFriends'
+              ? {...styles.toggleBtn, ...styles.toggleBtnActive}
+              : {...styles.toggleBtn}
+            }
+            onTouchTap={this._setActive.bind(this, 'editFriends')}>
             Friends
           </FlatButton>
           <FlatButton
-            backgroundColor="#e1e2e6"
-            style={{...styles.toggleBtn, ...styles.toggleBtnRight}}>
+            style={
+              this.state.currActiveEditBtn === 'editEveryone'
+              ? {...styles.toggleBtn, ...styles.toggleBtnRight,
+                  ...styles.toggleBtnActive}
+              : {...styles.toggleBtn, ...styles.toggleBtnRight}
+            }
+            onTouchTap={this._setActive.bind(this, 'editEveryone')}>
             Everyone
           </FlatButton>
           <Subheader style={{paddingLeft: '0px'}}>
