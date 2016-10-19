@@ -8,6 +8,7 @@ import Divider from 'material-ui/Divider'
 import ActionVisibility from 'material-ui/svg-icons/action/visibility'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import Chip from 'material-ui/Chip'
+import TextField from 'material-ui/TextField'
 
 let PrivacySettings = React.createClass({
 
@@ -19,7 +20,8 @@ let PrivacySettings = React.createClass({
   getInitialState() {
     return {
       currActiveViewBtn: 'visOnlyMe',
-      currActiveEditBtn: 'editOnlyMe'
+      currActiveEditBtn: 'editOnlyMe',
+      showChip: false
     }
   },
 
@@ -28,9 +30,15 @@ let PrivacySettings = React.createClass({
   },
 
   _handleRequestDelete() {
-    console.log('you deleted this chip whwhwhwhyyyyyy')
+    this.setState({showChip: false})
   },
 
+  _handleTextEnter(e) {
+    if (e.key === 'Enter') {
+      this.setState({showChip: true})
+      this.setState({chipContents: e.target.value})
+    }
+  },
   _setActive(activeBtn) {
     if (activeBtn.includes('vis')) {
       switch (activeBtn) {
@@ -171,12 +179,17 @@ let PrivacySettings = React.createClass({
           <Subheader style={{paddingLeft: '0px'}}>
             Allow
           </Subheader>
-          <Chip
-            onRequestDelete={this._handleRequestDelete}
-            style={styles.chip}>
-            Commerzbank
-          </Chip>
-          <Divider style={styles.divider} />
+          <TextField onKeyPress={this._handleTextEnter}>
+            {
+              this.state.showChip
+              ? <Chip
+                onRequestDelete={this._handleRequestDelete}
+                style={styles.chip}>
+                {this.state.chipContents}
+              </Chip>
+              : null
+            }
+          </TextField>
           <Subheader style={{paddingLeft: '0px'}}>
             Disallow
           </Subheader>
