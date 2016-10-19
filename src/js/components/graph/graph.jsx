@@ -240,9 +240,11 @@ let Graph = React.createClass({
     })
 
     let loading
+    /*
     if (!this.state.initialized) {
       loading = <Loading style={styles.loading} />
     }
+    */
 
     return (
       <div style={styles.container}>
