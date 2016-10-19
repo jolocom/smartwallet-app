@@ -103,6 +103,42 @@ class ChatAgent extends LDPAgent {
     })
   }
 
+  addUserToChatSubscriberList(webid, chatURI) {
+    let writer = new Writer()
+
+    return fetch(Util.uriToProxied(chatURI), {
+      method: 'POST',
+      credentials: 'include',
+      body: writer.end(),
+      headers: {
+        'Content-Type': 'text/turtle'
+      }
+    }).then(() => {
+      console.log('Added participant to the conversation!')
+    }).catch((e) => {
+      console.error(e, 'Failed adding participant to conversation.')
+    })
+  }
+
+  addUserToChatACL(aclURI) {
+    let writer = new Writer()
+    if (aclURI) {
+      aclURI += '.acl'
+    }
+    return fetch(Util.uriToProxied(aclURI), {
+      method: 'POST',
+      credentials: 'include',
+      body: writer.end(),
+      headers: {
+        'Content-Type': 'text/turtle'
+      }
+    }).then(() => {
+      console.log('Added participant to the chat ACL')
+    }).catch((e) => {
+      console.error(e, 'Failed adding participant to the ACL')
+    })
+  }
+
   postMessage(conversationUrl, author, content) {
     // TODO: implement
     let msgId = `#${Util.randomString(5)}`
@@ -250,7 +286,7 @@ class ChatAgent extends LDPAgent {
       return t.subject == '#thread' || t.subject ==
         `${conversationUrl}#thread`
     })
-    console.rdftable(aboutThread)
+    // console.rdftable(aboutThread)
 
     // let owner = _.find(aboutThread, (t) => {
     //   return t.predicate.uri == PRED.hasOwner.uri
