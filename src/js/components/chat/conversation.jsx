@@ -241,6 +241,10 @@ let Conversation = React.createClass({
     })
   },
 
+  _message() {
+    console.log('YES')
+  },
+
   render() {
     let content
     let styles = this.getStyles()
@@ -282,7 +286,7 @@ let Conversation = React.createClass({
               >
                 <MenuItem
                   primaryText="Add another participant"
-                  onTouchTap={console.log('YES!!!!')}
+                  onClick={this._message}
                 />
                 <MenuItem primaryText="Send feedback to Dean" />
               </IconMenu>
