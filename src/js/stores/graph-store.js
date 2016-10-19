@@ -276,9 +276,10 @@ export default Reflux.createStore({
       return
     }
 
+    /*
     this.state.loading = true
-
     this.trigger(this.state)
+    */
 
     // activeNode is the node we're viewing the full-screen view of
     this.state.activeNode = node
