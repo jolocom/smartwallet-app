@@ -85,6 +85,9 @@ let TextNode = React.createClass({
     } else {
       menuItems.push('connect')
     }
+    menuItems.push('privacySettings')
+    menuItems.push('viewSharedNodes')
+
     return (
       <GenericFullScreen
         title={title}
