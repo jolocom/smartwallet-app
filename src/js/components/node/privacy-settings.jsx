@@ -6,6 +6,8 @@ import FlatButton from 'material-ui/FlatButton'
 import Subheader from 'material-ui/Subheader'
 import Divider from 'material-ui/Divider'
 import ActionVisibility from 'material-ui/svg-icons/action/visibility'
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+import Chip from 'material-ui/Chip'
 
 let PrivacySettings = React.createClass({
 
@@ -14,8 +16,35 @@ let PrivacySettings = React.createClass({
     router: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      currActiveBtn: 'visOnlyMe'
+    }
+  },
+
   goBack() {
     this.context.router.push('/graph')
+  },
+
+  _handleRequestDelete() {
+    console.log('you deleted this chip whwhwhwhyyyyyy')
+  },
+
+  _setActive(activeBtn) {
+    switch (activeBtn) {
+      case 'visOnlyMe':
+        this.setState({currActiveBtn: 'visOnlyMe'})
+        break
+      case 'visFriends':
+        this.setState({currActiveBtn: 'visFriends'})
+        break
+      case 'visEveryone':
+        this.setState({currActiveBtn: 'visEveryone'})
+        break
+      default:
+        this.setState({currActiveBtn: 'visOnlyMe'})
+        break
+    }
   },
 
   getStyles() {
@@ -41,7 +70,8 @@ let PrivacySettings = React.createClass({
         textAlign: 'left'
       },
       toggleBtn: {
-        margin: '2px'
+        margin: '2px',
+        backgroundColor: '#e1e2e6'
       },
       toggleBtnLeft: {
         borderTopLeftRadius: '1em',
@@ -51,6 +81,10 @@ let PrivacySettings = React.createClass({
         borderTopRightRadius: '1em',
         borderBottomRightRadius: '1em'
       },
+      toggleBtnActive: {
+        backgroundColor: '#b5c945',
+        color: '#fff'
+      },
       headerIcon: {
         marginBottom: '-6px',
         marginRight: '6px',
@@ -58,6 +92,10 @@ let PrivacySettings = React.createClass({
       },
       divider: {
         marginBottom: '10px'
+      },
+      chip: {
+        marginBottom: '10px',
+        backgroundColor: 'transparent'
       }
     }
     return styles
@@ -76,14 +114,67 @@ let PrivacySettings = React.createClass({
           </IconButton>}
           />
         <div style={styles.content}>
-          <Subheader>
+          <h3 style={{margin: '10px 0'}}>Privacy Settings for [node]</h3>
+          <Subheader style={{paddingLeft: '0px'}}>
             <ActionVisibility style={styles.headerIcon} />
-            Recent chats
+            Who can see this node?
+          </Subheader>
+          <Divider style={styles.divider} />
+          <FlatButton
+            style={
+              this.state.currActiveBtn === 'visOnlyMe'
+              ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
+                  ...styles.toggleBtnActive}
+              : {...styles.toggleBtn, ...styles.toggleBtnLeft}
+            }
+            onTouchTap={this._setActive.bind(this, 'visOnlyMe')}>
+            Only Me
+          </FlatButton>
+          <FlatButton
+            className="toggleBtnActive"
+            style={
+              this.state.currActiveBtn === 'visFriends'
+              ? {...styles.toggleBtn, ...styles.toggleBtnActive}
+              : styles.toggleBtn
+            }
+            onTouchTap={this._setActive.bind(this, 'visFriends')}>
+            Friends
+          </FlatButton>
+          <FlatButton
+            style={
+              this.state.currActiveBtn === 'visEveryone'
+              ? {...styles.toggleBtn, ...styles.toggleBtnRight,
+                  ...styles.toggleBtnActive}
+              : {...styles.toggleBtn, ...styles.toggleBtnRight}
+            }
+            onTouchTap={this._setActive.bind(this, 'visEveryone')}>
+            Everyone
+          </FlatButton>
+          <Subheader style={{paddingLeft: '0px'}}>
+            Allow
+          </Subheader>
+          <Chip
+            onRequestDelete={this._handleRequestDelete}
+            style={styles.chip}>
+            Commerzbank
+          </Chip>
+          <Divider style={styles.divider} />
+          <Subheader style={{paddingLeft: '0px'}}>
+            Disallow
+          </Subheader>
+          <Chip
+            onRequestDelete={this._handleRequestDelete}
+            style={styles.chip}>
+            Commerzbank
+          </Chip>
+          <Divider style={styles.divider} />
+          <Subheader style={{paddingLeft: '0px'}}>
+            <EditorModeEdit style={styles.headerIcon} />
+            Who can edit this node?
           </Subheader>
           <Divider style={styles.divider} />
           <FlatButton
             backgroundColor="#b5c945"
-            labelStyle={{textColor: '#fff'}}
             style={{...styles.toggleBtn, ...styles.toggleBtnLeft}}>
             Only Me
           </FlatButton>
@@ -97,6 +188,23 @@ let PrivacySettings = React.createClass({
             style={{...styles.toggleBtn, ...styles.toggleBtnRight}}>
             Everyone
           </FlatButton>
+          <Subheader style={{paddingLeft: '0px'}}>
+            Allow
+          </Subheader>
+          <Chip
+            onRequestDelete={this._handleRequestDelete}
+            style={styles.chip}>
+            Commerzbank
+          </Chip>
+          <Divider style={styles.divider} />
+          <Subheader style={{paddingLeft: '0px'}}>
+            Disallow
+          </Subheader>
+          <Chip
+            onRequestDelete={this._handleRequestDelete}
+            style={styles.chip}>
+            Commerzbank
+          </Chip>
         </div>
       </div>
     )
