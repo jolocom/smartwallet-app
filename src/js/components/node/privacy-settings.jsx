@@ -21,7 +21,16 @@ let PrivacySettings = React.createClass({
     return {
       currActiveViewBtn: 'visOnlyMe',
       currActiveEditBtn: 'editOnlyMe',
-      showChip: false
+      viewAllowList: [
+        {key: 0, label: 'Commerzbank'},
+        {key: 1, label: 'Postbank'},
+        {key: 2, label: 'Postbank'},
+        {key: 3, label: 'Postbank'},
+        {key: 4, label: 'Postbank'}
+      ],
+      viewDisallowList: [],
+      editAllowList: [],
+      editDisallowList: []
     }
   },
 
@@ -30,15 +39,15 @@ let PrivacySettings = React.createClass({
   },
 
   _handleRequestDelete() {
-    this.setState({showChip: false})
   },
 
   _handleTextEnter(e) {
     if (e.key === 'Enter') {
-      this.setState({showChip: true})
-      this.setState({chipContents: e.target.value})
+      this.state.viewAllowList.push({key: 5, label: e.target.value})
     }
+    console.log(this.state.viewAllowList)
   },
+
   _setActive(activeBtn) {
     if (activeBtn.includes('vis')) {
       switch (activeBtn) {
@@ -73,6 +82,18 @@ let PrivacySettings = React.createClass({
     }
   },
 
+  renderViewAllowChip(data) {
+    let styles = this.getStyles()
+    return (
+      <Chip
+        key={data.key}
+        onRequestDelete={this._handleRequestDelete}
+        style={styles.chip}>
+        {data.label}
+      </Chip>
+    )
+  },
+
   getStyles() {
     let styles = {
       container: {
@@ -82,7 +103,6 @@ let PrivacySettings = React.createClass({
         overflowY: 'auto'
       },
       content: {
-        // width: '300px',
         maxWidth: '90%',
         padding: '20px',
         margin: '0 auto 20px auto',
@@ -119,9 +139,15 @@ let PrivacySettings = React.createClass({
       divider: {
         marginBottom: '10px'
       },
+      subheader: {
+        paddingLeft: '0'
+      },
+      chipWrapper: {
+        display: 'flex',
+        flexWrap: 'wrap'
+      },
       chip: {
-        marginBottom: '10px',
-        backgroundColor: 'transparent'
+        margin: '4px'
       }
     }
     return styles
@@ -141,7 +167,7 @@ let PrivacySettings = React.createClass({
           />
         <div style={styles.content}>
           <h3 style={{margin: '10px 0'}}>Privacy Settings for [node]</h3>
-          <Subheader style={{paddingLeft: '0px'}}>
+          <Subheader style={styles.subheader}>
             <ActionVisibility style={styles.headerIcon} />
             Who can see this node?
           </Subheader>
@@ -176,35 +202,18 @@ let PrivacySettings = React.createClass({
             onTouchTap={this._setActive.bind(this, 'visEveryone')}>
             Everyone
           </FlatButton>
-          <Subheader style={{paddingLeft: '0px'}}>
+          <Subheader style={styles.subheader}>
             Allow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
-          <Subheader style={{paddingLeft: '0px'}}>
+          <TextField onKeyPress={this._handleTextEnter} />
+          <div style={styles.chipWrapper}>
+            {this.state.viewAllowList.map(this.renderViewAllowChip, this)}
+          </div>
+          <Subheader style={styles.subheader}>
             Disallow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
-          <Subheader style={{paddingLeft: '0px'}}>
+          <TextField onKeyPress={this._handleTextEnter} />
+          <Subheader style={styles.subheader}>
             <EditorModeEdit style={styles.headerIcon} />
             Who can edit this node?
           </Subheader>
@@ -238,34 +247,14 @@ let PrivacySettings = React.createClass({
             onTouchTap={this._setActive.bind(this, 'editEveryone')}>
             Everyone
           </FlatButton>
-          <Subheader style={{paddingLeft: '0px'}}>
+          <Subheader style={styles.subheader}>
             Allow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
-          <Subheader style={{paddingLeft: '0px'}}>
+          <TextField onKeyPress={this._handleTextEnter} />
+          <Subheader style={styles.subheader}>
             Disallow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter}>
-            {
-              this.state.showChip
-              ? <Chip
-                onRequestDelete={this._handleRequestDelete}
-                style={styles.chip}>
-                {this.state.chipContents}
-              </Chip>
-              : null
-            }
-          </TextField>
+          <TextField onKeyPress={this._handleTextEnter} />
         </div>
       </div>
     )
@@ -273,7 +262,16 @@ let PrivacySettings = React.createClass({
 })
 
 export default Radium(PrivacySettings)
-
+//
+// {
+//   this.state.showChip
+//   ? <Chip
+//     onRequestDelete={this._handleRequestDelete}
+//     style={styles.chip}>
+//     {this.state.chipContents}
+//   </Chip>
+//   : null
+// }
 
 
 
