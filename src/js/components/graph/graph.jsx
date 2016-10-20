@@ -11,7 +11,7 @@ import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
-import Loading from 'components/common/loading.jsx'
+// import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
 
 import Debug from 'lib/debug'
