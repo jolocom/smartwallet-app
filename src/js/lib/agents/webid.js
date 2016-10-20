@@ -55,7 +55,7 @@ class WebIDAgent extends LDPAgent {
 
   initDisclaimer(webId) {
     const webIdRoot = Util.webidRoot(webId)
-    const uri = `${webIdRoot}/little-sister/Disclaimer`
+    const uri = `${webIdRoot}/little-sister/disclaimer`
     return this.put(
       Util.uriToProxied(uri),
       {'Content-type': 'text/turtle'},
