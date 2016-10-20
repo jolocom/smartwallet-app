@@ -43,39 +43,17 @@ let SharedNodes = React.createClass({
         color: '#4B142B',
         textAlign: 'left'
       },
-      toggleBtn: {
-        margin: '2px',
-        backgroundColor: '#e1e2e6'
-      },
-      toggleBtnLeft: {
-        borderTopLeftRadius: '1em',
-        borderBottomLeftRadius: '1em'
-      },
-      toggleBtnRight: {
-        borderTopRightRadius: '1em',
-        borderBottomRightRadius: '1em'
-      },
-      toggleBtnActive: {
-        backgroundColor: '#b5c945',
-        color: '#fff'
-      },
-      headerIcon: {
-        marginBottom: '-6px',
-        marginRight: '6px',
-        fill: '#9b9faa'
-      },
-      divider: {
-        marginBottom: '10px'
-      },
-      chip: {
-        marginBottom: '10px',
-        backgroundColor: 'transparent'
-      },
       gridList: {
       },
       caption: {
-        color: '#000',
         marginLeft: '-16px'
+      },
+      captionTitle: {
+        color: '#4B142B',
+        wordWrap: 'break-word'
+      },
+      captionNumItems: {
+        color: '#9aa1aa'
       },
       nodeTypeGridTile: {
         textAlign: 'center',
@@ -99,38 +77,58 @@ let SharedNodes = React.createClass({
         numItems: '5'
       },
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="institution" color="#46255f" />,
         nodeType: 'Institution',
         numItems: '2'
       },
       {
-        icon: <SharedNodeType type="event" />,
+        icon: <SharedNodeType type="event" color="#46255f" />,
         nodeType: 'Event',
         numItems: '7'
       },
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="thing" color="#46255f" />,
         nodeType: 'Thing',
         numItems: '1'
       },
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="app" color="#46255f" />,
         nodeType: 'App',
         numItems: '8'
       },
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="sensor" color="#46255f" />,
         nodeType: 'Sensor',
         numItems: '2'
       },
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="image" color="#46255f" />,
         nodeType: 'Image',
         numItems: '11'
       },
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="video" color="#46255f" />,
         nodeType: 'Video',
+        numItems: '100'
+      },
+      {
+        icon: <SharedNodeType type="audio" color="#46255f" />,
+        nodeType: 'Audio',
+        numItems: '100'
+      },
+      {
+        icon: <SharedNodeType type="confidential" color="#46255f" />,
+        nodeType: 'Confidential Document',
+        numItems: '100'
+      },
+      {
+        icon: <SharedNodeType type="document" color="#46255f" />,
+        nodeType: 'Document',
+        numItems: '100'
+      },
+      {
+        icon: <SharedNodeType type="note" color="#46255f" />,
+        nodeType: 'Note',
         numItems: '100'
       }
     ]
@@ -155,11 +153,18 @@ let SharedNodes = React.createClass({
               <GridTile
                 key={tile.nodeType}
                 style={styles.nodeTypeGridTile}
-                title={<span style={styles.caption}>{tile.nodeType}</span>}
+                title={<span
+                  style={{...styles.caption, ...styles.captionTitle}}>
+                  {tile.nodeType}
+                </span>}
                 titleBackground={'rgba(0, 0, 0, 0)'}
                 titlePosition={'bottom'}
-                subtitle={<span style={styles.caption}>
-                  {tile.numItems} items</span>}>
+                subtitle={
+                  <span
+                    style={{...styles.caption, ...styles.captionNumItems}}>
+                    {tile.numItems} items
+                  </span>
+                }>
                 <div style={styles.nodeTypeIcon}>{tile.icon}</div>
               </GridTile>
             ))}
