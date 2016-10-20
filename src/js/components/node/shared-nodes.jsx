@@ -32,8 +32,8 @@ let SharedNodes = React.createClass({
       },
       content: {
         maxWidth: '90%',
-        padding: '20px',
-        margin: '0 auto 20px auto',
+        padding: '10px',
+        margin: '0px auto 10px auto',
         boxSizing: 'border-box',
         textAlign: 'left'
       },
@@ -71,8 +71,20 @@ let SharedNodes = React.createClass({
         marginBottom: '10px',
         backgroundColor: 'transparent'
       },
+      gridList: {
+      },
       caption: {
-        color: '#000'
+        color: '#000',
+        marginLeft: '-16px'
+      },
+      nodeTypeGridTile: {
+        textAlign: 'center',
+        padding: '15px'
+      },
+      nodeTypeIcon: {
+        margin: '0 auto',
+        width: '50px',
+        padding: '15px'
       }
     }
     return styles
@@ -82,7 +94,7 @@ let SharedNodes = React.createClass({
     let styles = this.getStyles()
     const tilesData = [
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="person" color="#46255f" />,
         nodeType: 'Person',
         numItems: '5'
       },
@@ -92,7 +104,7 @@ let SharedNodes = React.createClass({
         numItems: '2'
       },
       {
-        icon: <SharedNodeType />,
+        icon: <SharedNodeType type="event" />,
         nodeType: 'Event',
         numItems: '7'
       },
@@ -142,12 +154,13 @@ let SharedNodes = React.createClass({
             {tilesData.map((tile) => (
               <GridTile
                 key={tile.nodeType}
+                style={styles.nodeTypeGridTile}
                 title={<span style={styles.caption}>{tile.nodeType}</span>}
                 titleBackground={'rgba(0, 0, 0, 0)'}
                 titlePosition={'bottom'}
-                subtitle={<span style={styles.caption}>{tile.numItems} items</span>}
-              >
-              {tile.icon}
+                subtitle={<span style={styles.caption}>
+                  {tile.numItems} items</span>}>
+                <div style={styles.nodeTypeIcon}>{tile.icon}</div>
               </GridTile>
             ))}
           </GridList>
