@@ -49,20 +49,18 @@ let SharedNodes = React.createClass({
         marginLeft: '-16px'
       },
       captionTitle: {
-        color: '#4B142B',
-        wordWrap: 'break-word'
+        color: '#4B142B'
       },
       captionNumItems: {
         color: '#9aa1aa'
       },
       nodeTypeGridTile: {
         textAlign: 'center',
-        padding: '15px'
+        paddingTop: '15px'
       },
       nodeTypeIcon: {
         margin: '0 auto',
-        width: '50px',
-        padding: '15px'
+        width: '70px'
       }
     }
     return styles
@@ -118,7 +116,7 @@ let SharedNodes = React.createClass({
       },
       {
         icon: <SharedNodeType type="confidential" color="#858a94" />,
-        nodeType: 'Confidential Document',
+        nodeType: 'Confidential',
         numItems: '100'
       },
       {
@@ -145,7 +143,7 @@ let SharedNodes = React.createClass({
           />
         <div style={styles.content}>
           <GridList
-            cellHeight={100}
+            cellHeight={125}
             cols={3}
             style={styles.gridList}
           >

@@ -61,15 +61,15 @@ let SharedNodeType = React.createClass({
         width: '100px'
       },
       circle: {
-        height: '50px',
-        width: '50px',
+        height: '70px',
+        width: '70px',
         backgroundColor: `${this.props.color}`,
         borderRadius: '50%'
       },
       icon: {
         width: '25',
         height: '25',
-        marginTop: '10'
+        marginTop: '20'
       }
     }
     return styles
