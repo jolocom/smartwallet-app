@@ -72,62 +72,62 @@ let SharedNodes = React.createClass({
     let styles = this.getStyles()
     const tilesData = [
       {
-        icon: <SharedNodeType type="person" color="#46255f" />,
+        icon: <SharedNodeType type="person" color="#829abe" />,
         nodeType: 'Person',
         numItems: '5'
       },
       {
-        icon: <SharedNodeType type="institution" color="#46255f" />,
+        icon: <SharedNodeType type="institution" color="#a1b5d5" />,
         nodeType: 'Institution',
         numItems: '2'
       },
       {
-        icon: <SharedNodeType type="event" color="#46255f" />,
+        icon: <SharedNodeType type="event" color="#beceea" />,
         nodeType: 'Event',
         numItems: '7'
       },
       {
-        icon: <SharedNodeType type="thing" color="#46255f" />,
+        icon: <SharedNodeType type="thing" color="#8495b1" />,
         nodeType: 'Thing',
         numItems: '1'
       },
       {
-        icon: <SharedNodeType type="app" color="#46255f" />,
+        icon: <SharedNodeType type="app" color="#9fadc5" />,
         nodeType: 'App',
         numItems: '8'
       },
       {
-        icon: <SharedNodeType type="sensor" color="#46255f" />,
+        icon: <SharedNodeType type="sensor" color="#b9c5da" />,
         nodeType: 'Sensor',
         numItems: '2'
       },
       {
-        icon: <SharedNodeType type="image" color="#46255f" />,
+        icon: <SharedNodeType type="image" color="#8490a2" />,
         nodeType: 'Image',
         numItems: '11'
       },
       {
-        icon: <SharedNodeType type="video" color="#46255f" />,
+        icon: <SharedNodeType type="video" color="#9ca6b6" />,
         nodeType: 'Video',
         numItems: '100'
       },
       {
-        icon: <SharedNodeType type="audio" color="#46255f" />,
+        icon: <SharedNodeType type="audio" color="#b4bccb" />,
         nodeType: 'Audio',
         numItems: '100'
       },
       {
-        icon: <SharedNodeType type="confidential" color="#46255f" />,
+        icon: <SharedNodeType type="confidential" color="#858a94" />,
         nodeType: 'Confidential Document',
         numItems: '100'
       },
       {
-        icon: <SharedNodeType type="document" color="#46255f" />,
+        icon: <SharedNodeType type="document" color="#9a9fa8" />,
         nodeType: 'Document',
         numItems: '100'
       },
       {
-        icon: <SharedNodeType type="note" color="#46255f" />,
+        icon: <SharedNodeType type="note" color="#afb3bb" />,
         nodeType: 'Note',
         numItems: '100'
       }
