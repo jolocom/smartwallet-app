@@ -3,6 +3,8 @@ import Radium from 'radium'
 import {IconButton} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import {GridList, GridTile} from 'material-ui/GridList'
+import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
+import SharedNodeType from 'components/node/shared-nodetype.jsx'
 
 let SharedNodes = React.createClass({
 
@@ -68,6 +70,9 @@ let SharedNodes = React.createClass({
       chip: {
         marginBottom: '10px',
         backgroundColor: 'transparent'
+      },
+      caption: {
+        color: '#000'
       }
     }
     return styles
@@ -77,44 +82,44 @@ let SharedNodes = React.createClass({
     let styles = this.getStyles()
     const tilesData = [
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Breakfast',
-        author: 'jill111'
+        icon: <SharedNodeType />,
+        nodeType: 'Person',
+        numItems: '5'
       },
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Tasty burger',
-        author: 'pashminu'
+        icon: <SharedNodeType />,
+        nodeType: 'Institution',
+        numItems: '2'
       },
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Camera',
-        author: 'Danson67'
+        icon: <SharedNodeType />,
+        nodeType: 'Event',
+        numItems: '7'
       },
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Morning',
-        author: 'fancycrave1'
+        icon: <SharedNodeType />,
+        nodeType: 'Thing',
+        numItems: '1'
       },
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Hats',
-        author: 'Hans'
+        icon: <SharedNodeType />,
+        nodeType: 'App',
+        numItems: '8'
       },
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Honey',
-        author: 'fancycravel'
+        icon: <SharedNodeType />,
+        nodeType: 'Sensor',
+        numItems: '2'
       },
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Vegetables',
-        author: 'jill111'
+        icon: <SharedNodeType />,
+        nodeType: 'Image',
+        numItems: '11'
       },
       {
-        img: '/img/placeholder_nodetype.png',
-        title: 'Water plant',
-        author: 'BkrmadtyaKarki'
+        icon: <SharedNodeType />,
+        nodeType: 'Video',
+        numItems: '100'
       }
     ]
 
@@ -136,13 +141,13 @@ let SharedNodes = React.createClass({
           >
             {tilesData.map((tile) => (
               <GridTile
-                key={tile.title}
-                title={<span>{tile.title}</span>}
+                key={tile.nodeType}
+                title={<span style={styles.caption}>{tile.nodeType}</span>}
                 titleBackground={'rgba(0, 0, 0, 0)'}
                 titlePosition={'bottom'}
-                subtitle={<span>by <b>{tile.author}</b></span>}
+                subtitle={<span style={styles.caption}>{tile.numItems} items</span>}
               >
-                <img src={tile.img} />
+              {tile.icon}
               </GridTile>
             ))}
           </GridList>
