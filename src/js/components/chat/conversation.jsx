@@ -62,6 +62,11 @@ let Conversation = React.createClass({
   },
 
   componentWillUnmount() {
+    const {webId} = this.context.account
+    const {id} = this.props.params
+
+    ConversationActions.unsubscribe(webId, id)
+
     this.refs.dialog.hide()
   },
 
