@@ -85,6 +85,7 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
+    console.log('Mounted again@!')
     const {account} = this.context
 
     // Instantiating the graph object.
@@ -209,6 +210,7 @@ let Graph = React.createClass({
   },
 
   render: function() {
+    console.log('rerendering')
     let styles = this.getStyles()
 
     if (this.graph) {
@@ -240,7 +242,6 @@ let Graph = React.createClass({
     })
 
     let loading
-
     /*
     if (!this.state.initialized) {
       loading = <Loading style={styles.loading} />
