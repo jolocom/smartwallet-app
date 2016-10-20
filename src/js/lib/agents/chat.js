@@ -103,13 +103,14 @@ class ChatAgent extends LDPAgent {
     })
   }
 
-  addUserToChatSubscriberList(webid, chatURI) {
-    let writer = new Writer()
+  addUserToChatSubscriberList(webIdOfUserToBeAdded, chatURI) {
+    let statement = `INSERT DATA { GRAPH
+      ${chatURI} { #thread ${PRED.hasSubscriber} ${webIdOfUserToBeAdded} } }`
 
     return fetch(Util.uriToProxied(chatURI), {
       method: 'PUT',
       credentials: 'include',
-      body: writer.end(),
+      body: statement,
       headers: {
         'Content-Type': 'text/turtle'
       }
