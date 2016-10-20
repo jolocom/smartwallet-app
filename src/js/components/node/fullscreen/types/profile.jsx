@@ -82,18 +82,19 @@ let ProfileNode = React.createClass({
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     let fabItems = []
+    let menuItems = []
+
     if (!isMe) {
       fabItems.push('chat', 'bookmark')
       if (this.props.state.center.isOwnedByUser &&
         this.getNode().rank &&
         this.getNode().rank === 'neighbour') {
-        fabItems.push('disconnect')
+        menuItems.push('disconnect')
       } else {
         fabItems.push('connect')
       }
     }
 
-    let menuItems = []
     if (isMe) {
       menuItems.push('edit')
     }

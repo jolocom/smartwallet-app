@@ -24,8 +24,7 @@ import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
-// import GraphSearch from 'components/graph/search.jsx'
-// import GraphFilters from 'components/graph/filters.jsx'
+import Loading from 'components/common/loading.jsx'
 
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
@@ -40,7 +39,6 @@ import UnreadMessagesActions from 'actions/unread-messages'
 import UnreadMessagesStore from 'stores/unread-messages'
 
 import SnackbarStore from 'stores/snackbar'
-// import SnackbarActions from 'actions/snackbar'
 
 // A pathname is considered public if either "/" or if it starts
 // with any of the following publicRoutes
@@ -181,8 +179,14 @@ let App = React.createClass({
     this.refs.leftNav.show()
   },
 
-  handleConfirmClose() {
+  _handleConfirmCancel() {
     ConfirmActions.close()
+  },
+
+  _handleConfirmClose() {
+    ConfirmActions.close()
+
+    this.state.confirm.callback() // Action when the user confirms
   },
 
   getStyles() {
@@ -235,7 +239,7 @@ let App = React.createClass({
     // @TODO render login screen when logging in, also makes sures child
     // components don't get rendered before any user data is available
     if (this.state.account.loggingIn && !this.isPublicRoute()) {
-      return <div />
+      return <Loading />
     }
 
     // Deactivating search until we get it working
@@ -280,18 +284,15 @@ let App = React.createClass({
     const confirmActions = [
       <FlatButton
         label="Cancel"
-        primary={true}
-        onTouchTap={this.handleConfirmClose}
+        primary
+        onTouchTap={this._handleConfirmCancel}
       />,
       <FlatButton
         label={this.state.confirm.primaryActionText}
-        primary={true}
-        onTouchTap={ () => {
-          this.handleConfirmClose()
-          this.state.confirm.callback()
-        } }
-      />,
-    ];
+        primary
+        onTouchTap={this._handleConfirmClose}
+      />
+    ]
 
     return (
       <div style={styles.container}>
@@ -333,22 +334,23 @@ let App = React.createClass({
           </Layout>
         )}
 
-      <Snackbar
-        open={this.state.snackbar.open}
-        message={this.state.snackbar.message}
-        action={this.state.snackbar.undo && 'undo'}
-        onActionTouchTap={this.state.snackbar.undoCallback}
-      />
+        <Snackbar
+          open={this.state.snackbar.open}
+          message={this.state.snackbar.message}
+          action={this.state.snackbar.undo && 'undo'}
+          onActionTouchTap={this.state.snackbar.undoCallback}
+        />
 
-      <Dialog
-            actions={confirmActions}
-            modal={false}
-            open={this.state.confirm.open}
-            onRequestClose={this.handleClose}
-          >
-            {this.state.confirm.message}
-      </Dialog>
-    </div>
+        <Dialog
+          actions={confirmActions}
+          modal={false}
+          open={this.state.confirm.open}
+          onRequestClose={this.handleClose}
+        >
+          {this.state.confirm.message}
+        </Dialog>
+      </div>
+
     )
   }
 
