@@ -19,6 +19,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   // Gets the webId of the currently loged in user from local storage,
+  // Why is this async?
   getWebID() {
     return new Promise((resolve, reject) => {
       const webId = localStorage.getItem('jolocom.webId')
@@ -41,6 +42,25 @@ class WebIDAgent extends LDPAgent {
     ).then(() => {
       this._writeAcl(uri, webId)
     })
+  }
+
+  initIndex(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/index`
+    return this.put(
+      Util.uriToProxied(uri),
+      {'Content-type': 'text/turtle'},
+    )
+  }
+
+  initDisclaimer(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/disclaimer`
+    return this.put(
+      Util.uriToProxied(uri),
+      {'Content-type': 'text/turtle'},
+      'Files in this folder are needed for features of the Little-Sister app.'
+    )
   }
 
   // Converts the input from the forms to RDF data to put into the inbox card

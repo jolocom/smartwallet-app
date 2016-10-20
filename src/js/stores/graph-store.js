@@ -198,7 +198,6 @@ export default Reflux.createStore({
     this.state.loading = true
     this.trigger(this.state)
     */
-
     this.state.rotationIndex = 0
 
     node = Object.assign({}, node) // Just being cautious

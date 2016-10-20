@@ -5,8 +5,6 @@ import GraphAgent from 'lib/agents/graph'
 import WebIdAgent from 'lib/agents/webid'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
-
-import ConversationsActions from 'actions/conversations'
 import SnackbarActions from 'actions/snackbar'
 
 export default Reflux.createStore({
@@ -132,7 +130,6 @@ export default Reflux.createStore({
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
       }).then((res) => {
-
         if (!res.ok) {
           throw new Error('Login authentication failed.')
         }
@@ -146,6 +143,8 @@ export default Reflux.createStore({
             }).then(() => {
               const webIdAgent = new WebIdAgent()
               webIdAgent.initInbox(js.webid)
+              webIdAgent.initIndex(js.webid)
+              webIdAgent.initDisclaimer(js.webid)
             })
           } else {
             Account.login.completed(username, js.webid)

@@ -24,6 +24,7 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
+  profileDoc: FOAF('PersonalProfileDocument'),
   isRelatedTo_HTTP: SCHEMA_HTTP('isRelatedTo'),
 
   // --
@@ -61,7 +62,11 @@ export const PRED = {
   mode: ACL('mode'),
   control: ACL('Control'),
   read: ACL('Read'),
-  write: ACL('Write')
+  write: ACL('Write'),
+  // INDEX FILE RELATED
+  readPermission: SCHEMA('ReadPermission'),
+  writePermission: SCHEMA('WritePermission'),
+  owns: SCHEMA('owns')
 }
 
 export const CERT = {
@@ -82,88 +87,6 @@ export const SSN = {
   Sensor: `${ssn}Sensor`
 }
 
-
-
-/*
-
-in the other files:
-
-
-import {PRED, NODE_TYPES} from 'namespaces.js'
-
-NODE_TYPES[PRED.PERSON].nodeColor etc
-
-
-
-default?
-NodeTypes[PRED.Person] ? NodeTypes[PRED.Person].nodeColor : STYLES.defaultNodeColor
-
-
-STYLES.js?
-
-mix of logic (component names, validation, form) and interface (colors)
-
-
-
-*/
-
-
 export const NODE_TYPES = {
 
 }
-//
-//
-//
-//
-//
-//
-//NodeTypes.register(FOAF('Person'), {
-//  /**
-//   * Node color in the graph
-//   */
-//  nodeColor: '#829abe',
-//
-//  /**
-//   * Node color in the graph
-//   */
-//  textColor: '#ffffff',
-//
-//  /**
-//   * Optional, icon used in the graph
-//   */
-//  icon: 'person',
-//
-//  /**
-//   * Optional, value to render, can be a text value or image
-//   */
-//  titleField: 'name'
-//
-//  /**
-//   *  Full screen react component
-//   */
-//  component: Person,
-//
-//  /**
-//   * Schema can be used to create the node creation form, validate values
-//   * Available validators:
-//   * https://github.com/christianalfoni/formsy-react/blob/master/API.md#validators
-//   */
-//  schema: {
-//    name: {
-//      predicate: FOAF('name'),
-//      label: 'Name',
-//      validations: 'isWords' /* optional, Formsy validation rule */
-//    },
-//    description: {
-//      predicate: DC('description'),
-//      label: 'Description'
-//    },
-//    image: {
-//
-//    }
-//  },
-//
-//  access: ['public', 'private'],
-//
-//  defaultAccess: ['public']
-// })

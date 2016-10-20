@@ -120,9 +120,9 @@ let Login = React.createClass({
                 floatingLabelText="Username"
                 value={this.state.username}
                 type="text"
-                autocorrect="off"
-                autocapitalize="none"
-                autocomplete="none"
+                autoCorrect="off"
+                autoCapitalize="none"
+                autoComplete="none"
                 onChange={this._handleUsernameChange} />
               <TextField
                 floatingLabelText="Password"

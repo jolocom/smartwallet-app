@@ -247,8 +247,8 @@ let Graph = React.createClass({
       loading = <Loading style={styles.loading} />
     }
     */
-
     return (
+
       <div style={styles.container}>
         <IndicatorOverlay ref="scrollIndicator" />
         <div style={styles.chart} ref="graph"></div>
