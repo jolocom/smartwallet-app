@@ -11,7 +11,7 @@ import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
-// import Loading from 'components/common/loading.jsx'
+import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
 
 import Debug from 'lib/debug'
@@ -51,6 +51,12 @@ let Graph = React.createClass({
 
   onStateUpdate(data, signal) {
     // Temp. make it more elegant later.
+
+    // Don't update anything while we're loading.
+    if (data.loading) {
+      return
+    }
+
     if (signal === 'nodeRemove') {
       this.graph.deleteNodeAndRender(data)
       this.setState({activeNode: null})
@@ -73,6 +79,7 @@ let Graph = React.createClass({
       this.state.newNode = null
       graphActions.setState('newNode', null, false)
     }
+
     if (signal === 'erase') {
       this.graph.eraseGraph()
     }
@@ -85,7 +92,6 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
-    console.log('Mounted again@!')
     const {account} = this.context
 
     // Instantiating the graph object.
@@ -116,7 +122,7 @@ let Graph = React.createClass({
   },
 
   // @TODO combine with componentWillUpdate ?
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     // We do not want to center the graph on the person we're viewing the
     // full-screen profile of.
 
@@ -144,6 +150,11 @@ let Graph = React.createClass({
           graphActions.navigateToNode({uri: nodeUri})
         }
       }
+    }
+
+    const {rotationIndex} = this.state
+    if (this.graph && prevState.rotationIndex !== rotationIndex) {
+      this.graph.setRotationIndex(this.state.rotationIndex)
     }
   },
 
@@ -210,12 +221,7 @@ let Graph = React.createClass({
   },
 
   render: function() {
-    console.log('rerendering')
     let styles = this.getStyles()
-
-    if (this.graph) {
-      this.graph.setRotationIndex(this.state.rotationIndex)
-    }
 
     let fab
 
@@ -242,11 +248,9 @@ let Graph = React.createClass({
     })
 
     let loading
-    /*
     if (!this.state.initialized) {
       loading = <Loading style={styles.loading} />
     }
-    */
 
     return (
       <div style={styles.container}>
