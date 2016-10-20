@@ -600,7 +600,6 @@ export default class GraphD3 extends EventEmitter {
 
     // Subscribe to the click listeners
     this.node.on('mousedown', function (data) {
-      console.log('mouseDown = true')
       self.mouseDown = true
       self.last = d3.event.timeStamp
       if (data.elipsisdepth >= 0) {
@@ -613,7 +612,6 @@ export default class GraphD3 extends EventEmitter {
     })
     this.node.on('click', function (data) {
       self.mouseDown = false
-      console.log('mouseDown = false')
       if ((d3.event.timeStamp - self.last) < 500) {
         self.onClick(this, data)
       }
@@ -647,10 +645,8 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   onHoldClick = function (dir) {
-    self = this
-    console.log('onHoldClick', this.mouseDown)
+    let self = this
     if (this.mouseDown) {
-      console.log('mouseISdown')
       let rotationIndex = this.rotationIndex
       let numberOfNeighbours = this.numberOfNeighbours
       let MAX_VISIBLE = this.MAX_VISIBLE_NODES
@@ -739,8 +735,6 @@ export default class GraphD3 extends EventEmitter {
     // Position nodes manually
 
     this.nodePositions = []
-    let difference = this.numberOfNeighbours - this.MAX_VISIBLE_NODES
-    let rot = this.rotationIndex
     let extraSpaceFront = 1
     let extraSpaceBack = 1
     let totalspace = 0
