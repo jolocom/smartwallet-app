@@ -36,6 +36,10 @@ export default Reflux.createStore({
 
   onRemove(node, centerNode){
 
+    // Prevent centerNode from being modified by the outside
+    // if the state of the graph store changes for instance
+    centerNode = Object.assign({},centerNode)
+
     let subject = rdf.sym(centerNode.uri)
     let object = rdf.sym(node.uri)
 
