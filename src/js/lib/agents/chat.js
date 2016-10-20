@@ -107,7 +107,7 @@ class ChatAgent extends LDPAgent {
     let writer = new Writer()
 
     return fetch(Util.uriToProxied(chatURI), {
-      method: 'POST',
+      method: 'PUT',
       credentials: 'include',
       body: writer.end(),
       headers: {
@@ -126,7 +126,7 @@ class ChatAgent extends LDPAgent {
       aclURI += '.acl'
     }
     return fetch(Util.uriToProxied(aclURI), {
-      method: 'POST',
+      method: 'PUT',
       credentials: 'include',
       body: writer.end(),
       headers: {
