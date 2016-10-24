@@ -104,15 +104,19 @@ class ChatAgent extends LDPAgent {
   }
 
   addUserToChatSubscriberList(webIdOfUserToBeAdded, chatURI) {
-    let statement = `INSERT DATA { GRAPH
-      ${chatURI} { #thread ${PRED.hasSubscriber} ${webIdOfUserToBeAdded} } }`
+    let statement =
+      `INSERT DATA {
+        ${Util.uriToProxied(chatURI)}#thread
+        ${PRED.hasSubscriber}
+        ${Util.uriToProxied(webIdOfUserToBeAdded)}.
+      };`
 
     return fetch(Util.uriToProxied(chatURI), {
-      method: 'PUT',
+      method: 'PATCH',
       credentials: 'include',
       body: statement,
       headers: {
-        'Content-Type': 'text/turtle'
+        'Content-Type': 'application/sparql-update'
       }
     }).then(() => {
       console.log('Added participant to the conversation!')
@@ -127,7 +131,7 @@ class ChatAgent extends LDPAgent {
       aclURI += '.acl'
     }
     return fetch(Util.uriToProxied(aclURI), {
-      method: 'PUT',
+      method: 'PATCH',
       credentials: 'include',
       body: writer.end(),
       headers: {

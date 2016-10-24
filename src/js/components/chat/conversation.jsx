@@ -20,6 +20,8 @@ import ConversationStore from 'stores/conversation'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
+import ChatAgent from 'lib/agents/chat'
+
 import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
@@ -91,6 +93,13 @@ let Conversation = React.createClass({
   back() {
     this.context.router.push('/conversations')
     ConversationStore.cleanState()
+  },
+
+  addParticipant() {
+    const chatAgent = new ChatAgent()
+    let webId = 'mocoloj.webid.jolocom.de'
+    let chatURI = 'dean.webid.jolocom.de/little-sister/chats/eflufa'
+    chatAgent.addUserToChatSubscriberList(webId, chatURI)
   },
 
   getStyles() {
@@ -241,10 +250,6 @@ let Conversation = React.createClass({
     })
   },
 
-  _message() {
-    console.log('YES')
-  },
-
   render() {
     let content
     let styles = this.getStyles()
@@ -286,7 +291,7 @@ let Conversation = React.createClass({
               >
                 <MenuItem
                   primaryText="Add another participant"
-                  onClick={this._message}
+                  onClick={this.addParticipant}
                 />
                 <MenuItem primaryText="Send feedback to Dean" />
               </IconMenu>
