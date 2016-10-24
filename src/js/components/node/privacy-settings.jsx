@@ -21,13 +21,8 @@ let PrivacySettings = React.createClass({
     return {
       currActiveViewBtn: 'visOnlyMe',
       currActiveEditBtn: 'editOnlyMe',
-      viewAllowList: [
-        {key: 0, label: 'Commerzbank'},
-        {key: 1, label: 'Postbank'},
-        {key: 2, label: 'Postbank'},
-        {key: 3, label: 'Postbank'},
-        {key: 4, label: 'Postbank'}
-      ],
+      numAllowedItems: 0,
+      viewAllowList: [],
       viewDisallowList: [],
       editAllowList: [],
       editDisallowList: []
@@ -43,9 +38,12 @@ let PrivacySettings = React.createClass({
 
   _handleTextEnter(e) {
     if (e.key === 'Enter') {
-      this.state.viewAllowList.push({key: 5, label: e.target.value})
+      let key = this.state.numAllowedItems
+      this.state.viewAllowList.push({key: key, label: e.target.value})
+      this.setState({numAllowedItems: this.state.numAllowedItems + 1})
+      console.log(this.state.viewAllowList)
+      console.log(this.state.numAllowedItems)
     }
-    console.log(this.state.viewAllowList)
   },
 
   _setActive(activeBtn) {

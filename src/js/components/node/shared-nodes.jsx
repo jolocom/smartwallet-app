@@ -3,7 +3,6 @@ import Radium from 'radium'
 import {IconButton} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import {GridList, GridTile} from 'material-ui/GridList'
-import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import SharedNodeType from 'components/node/shared-nodetype.jsx'
 
 let SharedNodes = React.createClass({
