@@ -31,8 +31,7 @@ let Login = React.createClass({
   },
 
   login(e) {
-    // Account.login(this.state.username, this.state.password)
-    this.context.router.push('/privacy-settings')
+    Account.login(this.state.username, this.state.password)
     e.preventDefault()
   },
 
