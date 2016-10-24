@@ -21,7 +21,10 @@ let PrivacySettings = React.createClass({
     return {
       currActiveViewBtn: 'visOnlyMe',
       currActiveEditBtn: 'editOnlyMe',
-      numAllowedItems: 0,
+      numViewAllowedItems: 0,
+      numViewDisallowedItems: 0,
+      numEditAllowedItems: 0,
+      numEditDisallowedItems: 0,
       viewAllowList: [],
       viewDisallowList: [],
       editAllowList: [],
@@ -43,10 +46,41 @@ let PrivacySettings = React.createClass({
 
   _handleTextEnter(e) {
     if (e.key === 'Enter') {
-      let key = this.state.numAllowedItems
-      this.state.viewAllowList.push({key: key, label: e.target.value})
-      this.setState({numAllowedItems: this.state.numAllowedItems + 1})
+      let key
+      switch (e.target.name) {
+        case 'viewAllow':
+          key = this.state.numViewAllowedItems
+          this.state.viewAllowList.push({key: key, label: e.target.value})
+          this.setState({
+            numViewAllowedItems: this.state.numViewAllowedItems + 1
+          })
+          break
+        case 'viewDisallow':
+          key = this.state.numViewDisallowedItems
+          this.state.viewDisallowList.push({key: key, label: e.target.value})
+          this.setState({
+            numViewDisallowedItems: this.state.numViewDisallowedItems + 1
+          })
+          break
+        case 'editAllow':
+          key = this.state.numEditAllowedItems
+          this.state.editAllowList.push({key: key, label: e.target.value})
+          this.setState({
+            numEditAllowedItems: this.state.numEditAllowedItems + 1
+          })
+          break
+        case 'editDisallow':
+          key = this.state.numEditDisallowedItems
+          this.state.editDisallowList.push({key: key, label: e.target.value})
+          this.setState({
+            numEditDisallowedItems: this.state.numEditDisallowedItems + 1
+          })
+          break
+        default:
+          break
+      }
       e.target.value = ''
+      console.log('num ', key)
     }
   },
 
@@ -84,7 +118,7 @@ let PrivacySettings = React.createClass({
     }
   },
 
-  renderViewAllowChip(data) {
+  renderChip(data) {
     let styles = this.getStyles()
     return (
       <Chip
@@ -207,14 +241,17 @@ let PrivacySettings = React.createClass({
           <Subheader style={styles.subheader}>
             Allow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter} />
+          <TextField name="viewAllow" onKeyPress={this._handleTextEnter} />
           <div style={styles.chipWrapper}>
-            {this.state.viewAllowList.map(this.renderViewAllowChip, this)}
+            {this.state.viewAllowList.map(this.renderChip, this)}
           </div>
           <Subheader style={styles.subheader}>
             Disallow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter} />
+          <TextField name="viewDisallow" onKeyPress={this._handleTextEnter} />
+          <div style={styles.chipWrapper}>
+            {this.state.viewDisallowList.map(this.renderChip, this)}
+          </div>
           <Subheader style={styles.subheader}>
             <EditorModeEdit style={styles.headerIcon} />
             Who can edit this node?
@@ -252,11 +289,17 @@ let PrivacySettings = React.createClass({
           <Subheader style={styles.subheader}>
             Allow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter} />
+          <TextField name="editAllow" onKeyPress={this._handleTextEnter} />
+          <div style={styles.chipWrapper}>
+            {this.state.editAllowList.map(this.renderChip, this)}
+          </div>
           <Subheader style={styles.subheader}>
             Disallow
           </Subheader>
-          <TextField onKeyPress={this._handleTextEnter} />
+          <TextField name="editDisallow" onKeyPress={this._handleTextEnter} />
+          <div style={styles.chipWrapper}>
+            {this.state.editDisallowList.map(this.renderChip, this)}
+          </div>
         </div>
       </div>
     )
