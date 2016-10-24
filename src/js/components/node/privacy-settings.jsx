@@ -36,12 +36,49 @@ let PrivacySettings = React.createClass({
     this.context.router.push('/graph')
   },
 
-  _handleRequestDelete(key) {
-    let newViewAllowList = this.state.viewAllowList
-    let chipToDelete = newViewAllowList.map((chip) => chip.key).indexOf(key)
-    newViewAllowList.splice(chipToDelete, 1)
-    this.setState({viewAllowList: newViewAllowList})
-    this.setState({numAllowedItems: this.state.numAllowedItems - 1})
+  _handleRequestDelete(data) {
+    console.log('data and key ', data, data.key)
+    let chipToDelete
+    switch (data.list) {
+      case 'viewAllow':
+        let newViewAllowList = this.state.viewAllowList
+        chipToDelete = newViewAllowList
+          .map((chip) => chip.key).indexOf(data.key)
+        newViewAllowList.splice(chipToDelete, 1)
+        this.setState({viewAllowList: newViewAllowList})
+        this.setState({numViewAllowedItems: this.state.numViewAllowedItems - 1})
+        break
+      case 'viewDisallow':
+        let newViewDisallowList = this.state.viewDisallowList
+        chipToDelete = newViewDisallowList
+          .map((chip) => chip.key).indexOf(data.key)
+        newViewDisallowList.splice(chipToDelete, 1)
+        this.setState({viewDisallowList: newViewDisallowList})
+        this.setState({
+          numViewDisallowedItems: this.state.numViewDisallowedItems - 1
+        })
+        break
+      case 'editAllow':
+        let newEditAllowList = this.state.editAllowList
+        chipToDelete = newEditAllowList
+          .map((chip) => chip.key).indexOf(data.key)
+        newEditAllowList.splice(chipToDelete, 1)
+        this.setState({editAllowList: newEditAllowList})
+        this.setState({
+          numEditAllowedItems: this.state.numEditAllowedItems - 1
+        })
+        break
+      case 'editDisallow':
+        let newEditDisallowList = this.state.editDisallowList
+        chipToDelete = newEditDisallowList
+          .map((chip) => chip.key).indexOf(data.key)
+        newEditDisallowList.splice(chipToDelete, 1)
+        this.setState({editDisallowList: newEditDisallowList})
+        this.setState({
+          numEditDisallowedItems: this.state.numEditDisallowedItems - 1
+        })
+        break
+    }
   },
 
   _handleTextEnter(e) {
@@ -50,28 +87,44 @@ let PrivacySettings = React.createClass({
       switch (e.target.name) {
         case 'viewAllow':
           key = this.state.numViewAllowedItems
-          this.state.viewAllowList.push({key: key, label: e.target.value})
+          this.state.viewAllowList.push({
+            key: key,
+            label: e.target.value,
+            list: 'viewAllow'
+          })
           this.setState({
             numViewAllowedItems: this.state.numViewAllowedItems + 1
           })
           break
         case 'viewDisallow':
           key = this.state.numViewDisallowedItems
-          this.state.viewDisallowList.push({key: key, label: e.target.value})
+          this.state.viewDisallowList.push({
+            key: key,
+            label: e.target.value,
+            list: 'viewDisallow'
+          })
           this.setState({
             numViewDisallowedItems: this.state.numViewDisallowedItems + 1
           })
           break
         case 'editAllow':
           key = this.state.numEditAllowedItems
-          this.state.editAllowList.push({key: key, label: e.target.value})
+          this.state.editAllowList.push({
+            key: key,
+            label: e.target.value,
+            list: 'editAllow'
+          })
           this.setState({
             numEditAllowedItems: this.state.numEditAllowedItems + 1
           })
           break
         case 'editDisallow':
           key = this.state.numEditDisallowedItems
-          this.state.editDisallowList.push({key: key, label: e.target.value})
+          this.state.editDisallowList.push({
+            key: key,
+            label: e.target.value,
+            list: 'editDisallow'
+          })
           this.setState({
             numEditDisallowedItems: this.state.numEditDisallowedItems + 1
           })
@@ -80,7 +133,6 @@ let PrivacySettings = React.createClass({
           break
       }
       e.target.value = ''
-      console.log('num ', key)
     }
   },
 
@@ -120,10 +172,11 @@ let PrivacySettings = React.createClass({
 
   renderChip(data) {
     let styles = this.getStyles()
+    console.log('mm chips ', data)
     return (
       <Chip
         key={data.key}
-        onRequestDelete={() => this._handleRequestDelete(data.key)}
+        onRequestDelete={() => this._handleRequestDelete(data)}
         style={styles.chip}>
         {data.label}
       </Chip>
