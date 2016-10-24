@@ -9,6 +9,7 @@ import ActionVisibility from 'material-ui/svg-icons/action/visibility'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
+import GraphStore from 'stores/graph-store'
 
 let PrivacySettings = React.createClass({
 
@@ -247,6 +248,7 @@ let PrivacySettings = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    let activeNode = GraphStore.state.activeNode.title
     return (
       <div style={styles.container}>
         <AppBar
@@ -258,7 +260,7 @@ let PrivacySettings = React.createClass({
           </IconButton>}
           />
         <div style={styles.content}>
-          <h3 style={{margin: '10px 0'}}>Privacy Settings for [node]</h3>
+          <h3 style={{margin: '10px 0'}}>Privacy Settings for {activeNode}</h3>
           <Subheader style={styles.subheader}>
             <ActionVisibility style={styles.headerIcon} />
             Who can see this node?
