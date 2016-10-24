@@ -33,7 +33,12 @@ let PrivacySettings = React.createClass({
     this.context.router.push('/graph')
   },
 
-  _handleRequestDelete() {
+  _handleRequestDelete(key) {
+    let newViewAllowList = this.state.viewAllowList
+    let chipToDelete = newViewAllowList.map((chip) => chip.key).indexOf(key)
+    newViewAllowList.splice(chipToDelete, 1)
+    this.setState({viewAllowList: newViewAllowList})
+    this.setState({numAllowedItems: this.state.numAllowedItems - 1})
   },
 
   _handleTextEnter(e) {
@@ -41,8 +46,7 @@ let PrivacySettings = React.createClass({
       let key = this.state.numAllowedItems
       this.state.viewAllowList.push({key: key, label: e.target.value})
       this.setState({numAllowedItems: this.state.numAllowedItems + 1})
-      console.log(this.state.viewAllowList)
-      console.log(this.state.numAllowedItems)
+      e.target.value = ''
     }
   },
 
@@ -85,7 +89,7 @@ let PrivacySettings = React.createClass({
     return (
       <Chip
         key={data.key}
-        onRequestDelete={this._handleRequestDelete}
+        onRequestDelete={() => this._handleRequestDelete(data.key)}
         style={styles.chip}>
         {data.label}
       </Chip>
