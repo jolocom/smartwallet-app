@@ -104,12 +104,20 @@ class ChatAgent extends LDPAgent {
   }
 
   addUserToChatSubscriberList(webIdOfUserToBeAdded, chatURI) {
-    let statement =
-      `INSERT DATA {
-        ${Util.uriToProxied(chatURI)}#thread
-        ${PRED.hasSubscriber}
-        ${Util.uriToProxied(webIdOfUserToBeAdded)}.
-      };`
+    let subject, predicate, object
+    subject = Util.uriToProxied(chatURI)
+    predicate = PRED.hasSubscriber
+    object = Util.uriToProxied(webIdOfUserToBeAdded)
+    let triple = rdf.st(subject, predicate, object)
+    // let statement =
+    //   `INSERT DATA {
+    //     ${Util.uriToProxied(chatURI)}
+    //     ${PRED.hasSubscriber}
+    //     ${Util.uriToProxied(webIdOfUserToBeAdded)}.
+    //   };`
+    let statement = `INSERT DATA { ${triple} . };`
+
+    console.log(statement)
 
     return fetch(Util.uriToProxied(chatURI), {
       method: 'PATCH',
