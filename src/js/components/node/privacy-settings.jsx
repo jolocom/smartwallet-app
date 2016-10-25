@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {IconButton} from 'material-ui'
+import {IconButton, List, ListItem, Checkbox} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import Subheader from 'material-ui/Subheader'
@@ -29,7 +29,8 @@ let PrivacySettings = React.createClass({
       viewAllowList: [],
       viewDisallowList: [],
       editAllowList: [],
-      editDisallowList: []
+      editDisallowList: [],
+      friendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea'] // TEMP
     }
   },
 
@@ -106,6 +107,15 @@ let PrivacySettings = React.createClass({
           this.setState({
             numViewDisallowedItems: this.state.numViewDisallowedItems + 1
           })
+          // if (this.state.friendList.indexOf(e.target.value)) {
+          //   let newFriendList = this.state.friendList
+          //   let friendToDelete = newFriendList.indexOf(e.target.value)
+          //   newFriendList.splice(friendToDelete, 1)
+          //   this.setState({
+          //     friendList: newFriendList
+          //   })
+          //   console.log(this.state.viewDisallowList)
+          // }
           break
         case 'editAllow':
           key = this.state.numEditAllowedItems
@@ -339,59 +349,82 @@ let PrivacySettings = React.createClass({
             Who can edit this node?
           </Subheader>
           <Divider style={styles.divider} />
-          <FlatButton
-            style={
-              this.state.currActiveEditBtn === 'editOnlyMe'
-              ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
-                  ...styles.toggleBtnActive}
-              : {...styles.toggleBtn, ...styles.toggleBtnLeft}
+            {
+              this.state.currActiveViewBtn === 'visEveryone'
+              ? <div>
+                <FlatButton
+                  style={
+                    this.state.currActiveEditBtn === 'editOnlyMe'
+                    ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
+                        ...styles.toggleBtnActive}
+                    : {...styles.toggleBtn, ...styles.toggleBtnLeft}
+                  }
+                  onTouchTap={this._setActive.bind(this, 'editOnlyMe')}>
+                  Only Me
+                </FlatButton>
+                <FlatButton
+                  style={
+                    this.state.currActiveEditBtn === 'editFriends'
+                    ? {...styles.toggleBtn, ...styles.toggleBtnActive}
+                    : {...styles.toggleBtn}
+                  }
+                  onTouchTap={this._setActive.bind(this, 'editFriends')}>
+                  Friends
+                </FlatButton>
+                <FlatButton
+                  style={
+                    this.state.currActiveEditBtn === 'editEveryone'
+                    ? {...styles.toggleBtn, ...styles.toggleBtnRight,
+                        ...styles.toggleBtnActive}
+                    : {...styles.toggleBtn, ...styles.toggleBtnRight}
+                  }
+                  onTouchTap={this._setActive.bind(this, 'editEveryone')}>
+                  Everyone
+                </FlatButton>
+                <div style={styles.customSettings}>
+                  <Subheader style={styles.subheader}>
+                    Allow
+                  </Subheader>
+                  <div style={styles.chipWrapper}>
+                    {this.state.editAllowList.map(this.renderChip, this)}
+                  </div>
+                  <TextField
+                    name="editAllow"
+                    hintText="Enter a node title"
+                    onKeyPress={this._handleTextEnter}
+                    fullWidth />
+                  <Subheader style={styles.subheader}>
+                    Disallow
+                  </Subheader>
+                  <div style={styles.chipWrapper}>
+                    {this.state.editDisallowList.map(this.renderChip, this)}
+                  </div>
+                  <TextField
+                    name="editDisallow"
+                    hintText="Enter a node title"
+                    onKeyPress={this._handleTextEnter}
+                    fullWidth />
+                </div>
+              </div>
+              : <div>
+                <List>
+                  {this.state.currActiveViewBtn === 'visOnlyMe'
+                    ? this.state.viewAllowList.map((viewer) => {
+                      return (
+                        <ListItem>
+                          <Checkbox label={viewer.label} labelPosition="left" />
+                        </ListItem>)
+                    })
+                    : this.state.friendList.map((friend) => {
+                      return (
+                        <ListItem>
+                          <Checkbox label={friend} labelPosition="left" />
+                        </ListItem>)
+                    })
+                  }
+                </List>
+              </div>
             }
-            onTouchTap={this._setActive.bind(this, 'editOnlyMe')}>
-            Only Me
-          </FlatButton>
-          <FlatButton
-            style={
-              this.state.currActiveEditBtn === 'editFriends'
-              ? {...styles.toggleBtn, ...styles.toggleBtnActive}
-              : {...styles.toggleBtn}
-            }
-            onTouchTap={this._setActive.bind(this, 'editFriends')}>
-            Friends
-          </FlatButton>
-          <FlatButton
-            style={
-              this.state.currActiveEditBtn === 'editEveryone'
-              ? {...styles.toggleBtn, ...styles.toggleBtnRight,
-                  ...styles.toggleBtnActive}
-              : {...styles.toggleBtn, ...styles.toggleBtnRight}
-            }
-            onTouchTap={this._setActive.bind(this, 'editEveryone')}>
-            Everyone
-          </FlatButton>
-          <div style={styles.customSettings}>
-            <Subheader style={styles.subheader}>
-              Allow
-            </Subheader>
-            <div style={styles.chipWrapper}>
-              {this.state.editAllowList.map(this.renderChip, this)}
-            </div>
-            <TextField
-              name="editAllow"
-              hintText="Enter a node title"
-              onKeyPress={this._handleTextEnter}
-              fullWidth />
-            <Subheader style={styles.subheader}>
-              Disallow
-            </Subheader>
-            <div style={styles.chipWrapper}>
-              {this.state.editDisallowList.map(this.renderChip, this)}
-            </div>
-            <TextField
-              name="editDisallow"
-              hintText="Enter a node title"
-              onKeyPress={this._handleTextEnter}
-              fullWidth />
-          </div>
         </div>
       </div>
     )
