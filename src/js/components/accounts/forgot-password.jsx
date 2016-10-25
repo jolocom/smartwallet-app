@@ -13,7 +13,7 @@ let ForgotPassword = React.createClass({
     muiTheme: React.PropTypes.object,
     router: React.PropTypes.object
   },
-  
+
   _handleUsernameChange(e) {
     this.setState({
       username: e.target.value.toLowerCase()
@@ -30,7 +30,7 @@ let ForgotPassword = React.createClass({
 
   forgotPassword() {
     let user = encodeURIComponent(this.state.username)
-    
+
     fetch(`${proxy}/forgotpassword`, {
       method: 'POST',
       body: `username=${user}`,
@@ -40,22 +40,15 @@ let ForgotPassword = React.createClass({
       }
     }).then((res) => {
       if (!res.ok) {
-          throw new Error(res.statusText)
+        throw new Error(res.statusText)
       }
-      
-      SnackbarActions.showMessage('An email was sent to you with further instructions.')
+
+      SnackbarActions.showMessage('An email was sent to you' +
+        'with further instructions.')
     }).catch((e) => {
       SnackbarActions.showMessage('An error occured : ' + e)
       console.error(e)
     })
-  },
-
-  enableSubmit() {
-    this.setState({disabledSubmit: false})
-  },
-
-  disableSubmit() {
-    this.setState({disabledSubmit: true})
   },
 
   goBack() {
@@ -126,9 +119,9 @@ let ForgotPassword = React.createClass({
                 floatingLabelText="Username"
                 autocorrect="off"
                 autocapitalize="none"
-                autocomplete="none" 
+                autocomplete="none"
                 validations="isAlphanumeric"
-                validationError='Please only use letters and numbers'
+                validationError="Please only use letters and numbers"
                 inputStyle={{textTransform: 'lowercase'}}
                 onChange={this._handleUsernameChange}
               />
