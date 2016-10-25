@@ -50,6 +50,7 @@ let Graph = React.createClass({
   },
 
   onStateUpdate(data, signal) {
+    console.log('sup?', data, signal);
     // Temp. make it more elegant later.
     if (signal === 'nodeRemove') {
       this.graph.deleteNodeAndRender(data)
