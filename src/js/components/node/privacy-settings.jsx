@@ -53,7 +53,8 @@ let PrivacySettings = React.createClass({
           canEdit: false
         }
       ],
-      isSelectAll: false
+      isSelectAllOnlyMe: false,
+      isSelectAllFriends: false
     }
   },
 
@@ -122,6 +123,7 @@ let PrivacySettings = React.createClass({
           this.state.viewAllowList.push({
             key: key,
             label: e.target.value,
+            canEdit: false,
             list: 'viewAllow'
           })
           this.setState({
@@ -133,6 +135,7 @@ let PrivacySettings = React.createClass({
           this.state.viewDisallowList.push({
             key: key,
             label: e.target.value,
+            canEdit: false,
             list: 'viewDisallow'
           })
           this.setState({
@@ -154,6 +157,7 @@ let PrivacySettings = React.createClass({
           this.state.editAllowList.push({
             key: key,
             label: e.target.value,
+            canEdit: false,
             list: 'editAllow'
           })
           this.setState({
@@ -165,6 +169,7 @@ let PrivacySettings = React.createClass({
           this.state.editDisallowList.push({
             key: key,
             label: e.target.value,
+            canEdit: false,
             list: 'editDisallow'
           })
           this.setState({
@@ -212,20 +217,45 @@ let PrivacySettings = React.createClass({
     }
   },
 
-  _handleSelectAll() {
+  _handleSelectAllPlusAllowed() {
+    let allExceptionsCanEdit = this.state.viewAllowList
+    allExceptionsCanEdit.map((f) => {
+      f.canEdit = !this.state.isSelectAllOnlyMe
+    })
+    this.setState({
+      viewAllowList: allExceptionsCanEdit
+    })
+    this.setState({
+      isSelectAllOnlyMe: !this.state.isSelectAllOnlyMe
+    })
+  },
+
+  _handleSelectAllMinusDisallowed() {
     let allFriendsCanEdit = this.state.allowFriendList
     allFriendsCanEdit.map((f) => {
-      f.canEdit = !this.state.isSelectAll
+      f.canEdit = !this.state.isSelectAllFriends
     })
     this.setState({
       allowFriendList: allFriendsCanEdit
     })
     this.setState({
-      isSelectAll: !this.state.isSelectAll
+      isSelectAllFriends: !this.state.isSelectAllFriends
     })
   },
 
-  _handleOnCheck(friend) {
+  _handleOnCheckOnlyMe(viewer) {
+    let newViewerList = this.state.viewAllowList
+    newViewerList.map((v) => {
+      if (v === viewer) {
+        v.canEdit = !v.canEdit
+      }
+    })
+    this.setState({
+      viewAllowList: newViewerList
+    })
+  },
+
+  _handleOnCheckFriend(friend) {
     let newFriendList = this.state.allowFriendList
     newFriendList.map((f) => {
       if (f === friend) {
@@ -320,6 +350,32 @@ let PrivacySettings = React.createClass({
   render() {
     let styles = this.getStyles()
     let activeNode = GraphStore.state.activeNode.title
+    let checkMate
+    if ((this.state.currActiveViewBtn === 'visOnlyMe') &&
+      this.state.numViewAllowedItems) {
+      checkMate = (
+        <ListItem>
+          <Checkbox
+            label="Select all"
+            labelStyle={styles.selectAllLabel}
+            labelPosition="left"
+            onCheck={this._handleSelectAllPlusAllowed}
+            checked={this.state.isSelectAllOnlyMe} />
+        </ListItem>
+      )
+    } else if ((this.state.currActiveViewBtn === 'visFriends') &&
+      (this.state.allowFriendList.length)) {
+      checkMate = (
+        <ListItem>
+          <Checkbox
+            label="Select all"
+            labelStyle={styles.selectAllLabel}
+            labelPosition="left"
+            onCheck={this._handleSelectAllMinusDisallowed}
+            checked={this.state.isSelectAllFriends} />
+        </ListItem>
+      )
+    }
     return (
       <div style={styles.container}>
         <AppBar
@@ -469,18 +525,20 @@ let PrivacySettings = React.createClass({
               </div>
               : <div>
                 <List>
-                  <ListItem>
-                    <Checkbox
-                      label="Select all"
-                      labelStyle={styles.selectAllLabel}
-                      labelPosition="left"
-                      onCheck={this._handleSelectAll} />
-                  </ListItem>
+                  {this.state.currActiveViewBtn === ''}
+                  {checkMate}
                   {this.state.currActiveViewBtn === 'visOnlyMe'
                     ? this.state.viewAllowList.map((viewer) => {
                       return (
                         <ListItem>
-                          <Checkbox label={viewer.label} labelPosition="left" />
+                          <Checkbox
+                            label={viewer.label}
+                            labelPosition="left"
+                            onCheck={
+                              this._handleOnCheckOnlyMe.bind(this, viewer)
+                            }
+                            checked={viewer.canEdit}
+                            />
                         </ListItem>)
                     })
                     : this.state.allowFriendList.map((friend) => {
@@ -490,7 +548,7 @@ let PrivacySettings = React.createClass({
                             label={friend.name}
                             labelPosition="left"
                             onCheck={
-                              this._handleOnCheck.bind(this, friend)
+                              this._handleOnCheckFriend.bind(this, friend)
                             }
                             checked={friend.canEdit} />
                         </ListItem>)
