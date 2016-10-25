@@ -299,28 +299,40 @@ let PrivacySettings = React.createClass({
             </FlatButton>
           </div>
           <div style={styles.customSettings}>
-            <Subheader style={styles.subheader}>
-              Allow
-            </Subheader>
-            <div style={styles.chipWrapper}>
-              {this.state.viewAllowList.map(this.renderChip, this)}
-            </div>
-            <TextField
-              name="viewAllow"
-              hintText="Enter a node title"
-              onKeyPress={this._handleTextEnter}
-              fullWidth />
-            <Subheader style={styles.subheader}>
-              Disallow
-            </Subheader>
-            <div style={styles.chipWrapper}>
-              {this.state.viewDisallowList.map(this.renderChip, this)}
-            </div>
-            <TextField
-              name="viewDisallow"
-              hintText="Enter a node title"
-              onKeyPress={this._handleTextEnter}
-              fullWidth />
+            {
+              this.state.currActiveViewBtn === 'visOnlyMe'
+              ? <div>
+                <Subheader style={styles.subheader}>
+                  Allow
+                </Subheader>
+                <div style={styles.chipWrapper}>
+                  {this.state.viewAllowList.map(this.renderChip, this)}
+                </div>
+                <TextField
+                  name="viewAllow"
+                  hintText="Enter a node title"
+                  onKeyPress={this._handleTextEnter}
+                  fullWidth />
+              </div>
+              : null
+            }
+            {
+              this.state.currActiveViewBtn === 'visOnlyMe'
+              ? null
+              : <div>
+                <Subheader style={styles.subheader}>
+                Disallow
+                </Subheader>
+                <div style={styles.chipWrapper}>
+                  {this.state.viewDisallowList.map(this.renderChip, this)}
+                </div>
+                <TextField
+                  name="viewDisallow"
+                  hintText="Enter a node title"
+                  onKeyPress={this._handleTextEnter}
+                  fullWidth />
+              </div>
+            }
           </div>
           <Subheader style={styles.subheader}>
             <EditorModeEdit style={styles.headerIcon} />
