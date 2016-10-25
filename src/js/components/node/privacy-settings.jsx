@@ -141,23 +141,13 @@ let PrivacySettings = React.createClass({
           this.state.allowFriendList.map((friend) => {
             if (friend.name === e.target.value) {
               let newFriendList = this.state.allowFriendList
-              let friendToDelete = newFriendList.map((friend) => friend.name)
-                .indexOf(friend)
+              let friendToDelete = newFriendList.indexOf(friend)
               newFriendList.splice(friendToDelete, 1)
               this.setState({
                 allowFriendList: newFriendList
               })
             }
           })
-          // if (this.state.friendList.indexOf(e.target.value)) {
-          //   let newFriendList = this.state.friendList
-          //   let friendToDelete = newFriendList.indexOf(e.target.value)
-          //   newFriendList.splice(friendToDelete, 1)
-          //   this.setState({
-          //     friendList: newFriendList
-          //   })
-          //   console.log(this.state.viewDisallowList)
-          // }
           break
         case 'editAllow':
           key = this.state.numEditAllowedItems
@@ -223,6 +213,13 @@ let PrivacySettings = React.createClass({
   },
 
   _handleSelectAll() {
+    let allFriendsCanEdit = this.state.allowFriendList
+    allFriendsCanEdit.map((f) => {
+      f.canEdit = !this.state.isSelectAll
+    })
+    this.setState({
+      allowFriendList: allFriendsCanEdit
+    })
     this.setState({
       isSelectAll: !this.state.isSelectAll
     })
@@ -233,6 +230,7 @@ let PrivacySettings = React.createClass({
     newFriendList.map((f) => {
       if (f === friend) {
         f.canEdit = !f.canEdit
+        console.log('friend ', f.name, f.canEdit)
       }
     })
     this.setState({
@@ -495,9 +493,7 @@ let PrivacySettings = React.createClass({
                             onCheck={
                               this._handleOnCheck.bind(this, friend)
                             }
-                            checked={
-                              friend.canEdit || this.state.isSelectAll
-                            } />
+                            checked={friend.canEdit} />
                         </ListItem>)
                     })
                   }
