@@ -195,7 +195,6 @@ export default Reflux.createStore({
     let {navHistory} = this.state
 
     this.state.loading = true
-
     this.trigger(this.state)
 
     this.state.rotationIndex = 0
@@ -276,7 +275,6 @@ export default Reflux.createStore({
     }
 
     this.state.loading = true
-
     this.trigger(this.state)
 
     // activeNode is the node we're viewing the full-screen view of

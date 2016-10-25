@@ -52,6 +52,12 @@ let Graph = React.createClass({
   onStateUpdate(data, signal) {
     console.log('sup?', data, signal);
     // Temp. make it more elegant later.
+
+    // Don't update anything while we're loading.
+    if (data.loading) {
+      return
+    }
+
     if (signal === 'nodeRemove') {
       this.graph.deleteNodeAndRender(data)
       this.setState({activeNode: null})
@@ -74,6 +80,7 @@ let Graph = React.createClass({
       this.state.newNode = null
       graphActions.setState('newNode', null, false)
     }
+
     if (signal === 'erase') {
       this.graph.eraseGraph()
     }
@@ -116,7 +123,7 @@ let Graph = React.createClass({
   },
 
   // @TODO combine with componentWillUpdate ?
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     // We do not want to center the graph on the person we're viewing the
     // full-screen profile of.
 
@@ -144,6 +151,11 @@ let Graph = React.createClass({
           graphActions.navigateToNode({uri: nodeUri})
         }
       }
+    }
+
+    const {rotationIndex} = this.state
+    if (this.graph && prevState.rotationIndex !== rotationIndex) {
+      this.graph.setRotationIndex(this.state.rotationIndex)
     }
   },
 
@@ -211,10 +223,6 @@ let Graph = React.createClass({
 
   render: function() {
     let styles = this.getStyles()
-
-    if (this.graph) {
-      this.graph.setRotationIndex(this.state.rotationIndex)
-    }
 
     let fab
 

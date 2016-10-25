@@ -275,24 +275,8 @@ export default class GraphD3 extends EventEmitter {
     // These make the following statements shorter
     let largeNode = this.largeNodeSize
     let smallNode = this.smallNodeSize
-    let fullPos = STYLES.fullScreenButtonPosition
-    let fullScreenRadius = STYLES.fullScreenButton / 2
-    let fullOffx = (STYLES.largeNodeSize / fullPos) - fullScreenRadius
-    let fullOffy = -(STYLES.largeNodeSize / fullPos) - fullScreenRadius
     // "View node info" button
     // @TODO should be in render and not inside the update pattern
-    let defsFull = this.svg.append('svg:defs')
-    defsFull.append('svg:pattern')
-      .attr('id', 'full')
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('x', fullOffx)
-      .attr('y', fullOffy)
-      .attr('patternUnits', 'userSpaceOnUse')
-      .append('svg:image')
-      .attr('xlink:href', 'img/full.jpg')
-      .attr('width', STYLES.fullScreenButton)
-      .attr('height', STYLES.fullScreenButton)
 
     // LINKS DATA JOIN
     this.link = this.svg.select('.background-layer .background-layer-links')
@@ -590,14 +574,6 @@ export default class GraphD3 extends EventEmitter {
       // This wraps the description nicely.
       .call(this.wrap, STYLES.largeNodeSize * 0.75, ' ', ' ')
 
-    let full = nodeEnter.append('circle')
-      .attr('class', 'nodefullscreen')
-      .attr('r', 0)
-      .style('fill', 'url(#full)')
-      .attr('cy', -STYLES.largeNodeSize / STYLES.fullScreenButtonPosition)
-      .attr('cx', STYLES.largeNodeSize / STYLES.fullScreenButtonPosition)
-      .style('filter', 'url(#drop-shadow)')
-
     // Subscribe to the click listeners
     this.node.on('mousedown', function (data) {
       self.mouseDown = true
@@ -643,10 +619,6 @@ export default class GraphD3 extends EventEmitter {
     })
 
     this.svg.on('wheel', self.onScroll)
-
-    full.on('click', function (data) {
-      self.onClickFull(this, data)
-    })
   }.bind(this)
 
   onHoldClick = function (dir) {
@@ -675,6 +647,7 @@ export default class GraphD3 extends EventEmitter {
       }, 150)
     }
   }.bind(this)
+
   // We check if the node is dropped in the center, if yes we navigate to it.
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
@@ -719,13 +692,21 @@ export default class GraphD3 extends EventEmitter {
 
   navigateToNode = function (node) {
     if (node.rank !== 'center') {
+      node.rank = 'center'
       this.isPulsing = true
       this.dataNodes = [node]
+      this.dataLinks = []
       this.numberOfNeighbours = 0
-      console.log(this.dataNodes)
-      this.emit('center-changed', node)
       this.setUpVisibleNodes()
+      this.d3update()
+      this.resetAll()
+      this.resetPos()
+
+      this.svg.select('.dial')
+        .attr('opacity', 0)
+
       this.pulseCenter()
+      this.emit('center-changed', node)
     }
   }.bind(this)
 
@@ -733,7 +714,7 @@ export default class GraphD3 extends EventEmitter {
   // all other highlighted nodes back to their normal size
 
   setUpVisibleNodes = function () {
-    console.error(this.dataNodes)
+    console.log(this.dataNodes)
     // No scrolling
     let x = this.centerCoordinates.x
     let y = this.centerCoordinates.y
@@ -747,6 +728,10 @@ export default class GraphD3 extends EventEmitter {
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NODES) {
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
+
+      if (this.numberOfNeighbours === 0) {
+        return
+      }
 
       let angle = (Math.PI * 2) / this.numberOfNeighbours
 
@@ -835,6 +820,7 @@ export default class GraphD3 extends EventEmitter {
     let backButton = {rank: 'neighbour',
                       connection: 'backButton',
                       position: this.nodePositions[0],
+
                       elipsisdepth: 0,
                       img: 'img/arrowLeft.png'}
     let frontButton = {rank: 'neighbour',
@@ -912,12 +898,6 @@ export default class GraphD3 extends EventEmitter {
       }
     })
   }.bind(this)
-
-  onClickFull = function (node, data) {
-    // stops propagation to node click handler
-    this.emit('view-node', data, node)
-    d3.event.stopPropagation()
-  }
 
   resetPos = function (speed) {
     if (isNaN(speed)) {
@@ -1137,12 +1117,6 @@ export default class GraphD3 extends EventEmitter {
       .transition('description').duration(speed)
       .attr('opacity', 0)
 
-    // Make the fullscreen button of all nodes smaller
-    d3.selectAll('svg .node')
-      .selectAll('.nodefullscreen')
-      .transition('reset').duration(speed)
-      .attr('r', 0)
-
     // Un-highlight all nodes
     d3.selectAll('svg .node')
       .attr('d', function(d) {
@@ -1210,12 +1184,6 @@ export default class GraphD3 extends EventEmitter {
         .attr('x', -STYLES.largeNodeSize / 2)
         .attr('y', -STYLES.largeNodeSize / 2)
 
-      if (this.mode !== 'preview') {
-      // Enlarge full screen button
-        d3.select(node).select('.nodefullscreen')
-          .transition('highlight').duration(STYLES.nodeTransitionDuration)
-          .attr('r', STYLES.fullScreenButton / 2)
-      }
       // Enlarge the image of the node we clicked on
       // We also blur it a bit and darken it, so that the text displays better
       d3.select(node).select('image')
@@ -1366,7 +1334,9 @@ export default class GraphD3 extends EventEmitter {
   // Alternative to dragging the node to the center.
   // Does the same thing pretty much
   onDblClick = function (node, data) {
-
+    if (this.mode !== 'preview') {
+      this.emit('view-node', data, node)
+    }
   }.bind(this)
 
   pulseCenter = function () {

@@ -28,7 +28,7 @@ let JolocomTheme = {
   contentFontFamily: 'Roboto, sans-serif',
   palette: palette,
   appBar: {
-    color: '#f0f0f0',
+    color: '#f8f9fb',
     textColor: '#4b132b'
   },
   // Used for actionable modals, like `add node`, `link node`
@@ -40,7 +40,7 @@ let JolocomTheme = {
     backgroundColor: '#b3c90f'
   },
   tabs: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f8f9fb',
     selectedTextColor: '#4b132b',
     textColor: fade('#4b132b', 0.8)
   },
@@ -54,8 +54,7 @@ let JolocomTheme = {
     textNodeColor: '#9a9fa9',
     imageNodeColor: '#afb3bb',
     dialColor: '#d1d1d1',
-    elipsis1: '#c9d1de',
-    elipsis2: '#dbe0e9',
+    elipsisColor: '#c3c6cd',
     backgroundColor: fade('#939f9a', 0.3),
     connectionColor: fade('#939f9a', 0.15),
     whiteBackground: '#f2f2f3'
@@ -71,7 +70,7 @@ let JolocomTheme = {
     gray1: '#9ba0aa',
     gray2: '#c3c6cc',
     gray3: '#e1e2e5',
-    gray4: '#f0f0f0',
+    gray4: '#f8f9fb',
     gray5: '#f7f7f7'
   }
 }

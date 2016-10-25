@@ -66,14 +66,14 @@ let Index = React.createClass({
       },
       title: {
         color: '#a5a5a4',
-        fontSize: '6vmin',
+        fontSize: '5.5vmin',
         fontWeight: '100',
         marginBottom: '10px',
         maxWidth: '100%'
       },
       subtitle: {
         color: '#a5a5a4',
-        fontSize: '3.5vmin'
+        fontSize: '3vmin'
       },
       logoStartImg: {
         padding: '24px',
@@ -118,7 +118,7 @@ let Index = React.createClass({
             <div style={styles.content}>
               <img src="/img/img_onboarding-01.svg" style={styles.img} />
             </div>
-            <h3 style={styles.title}>Create an independant and
+            <h3 style={styles.title}>Create an independant and<br />
             secure digital identity.</h3>
             <p style={styles.subtitle}>Collect your data at a secure place.
               <br /> It’s yours, so only you own it!</p>
@@ -127,7 +127,8 @@ let Index = React.createClass({
             <div style={styles.content}>
               <img src="/img/img_onboarding-02.svg" style={styles.img} />
             </div>
-            <h3 style={styles.title}>Have all your data at your fingertips.</h3>
+            <h3 style={styles.title}>Have all your data<br />
+            at your fingertips.</h3>
             <p style={styles.subtitle}>See all your data in one safe place.
               <br /> Pull the plug and your data is only yours.</p>
           </div>
@@ -135,9 +136,10 @@ let Index = React.createClass({
             <div style={styles.content}>
               <img src="/img/img_onboarding-03.svg" style={styles.img} />
             </div>
-            <h3 style={styles.title}>Be aware of the information you share.</h3>
+            <h3 style={styles.title}>Be aware of the<br />
+            information you share.</h3>
             <p style={styles.subtitle}>See what you shared with whom.
-              <br /> Have total control over your data.</p>
+              <br />Have total control over your data.</p>
           </div>
         </Carousel>
 
