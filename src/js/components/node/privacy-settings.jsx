@@ -30,7 +30,8 @@ let PrivacySettings = React.createClass({
       viewDisallowList: [],
       editAllowList: [],
       editDisallowList: [],
-      friendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea'] // TEMP
+      coreFriendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea'], // TEMP
+      allowFriendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea']
     }
   },
 
@@ -57,6 +58,11 @@ let PrivacySettings = React.createClass({
         this.setState({viewDisallowList: newViewDisallowList})
         this.setState({
           numViewDisallowedItems: this.state.numViewDisallowedItems - 1
+        })
+        this.state.coreFriendList.map((friend) => {
+          if (friend === data.label) {
+            this.state.allowFriendList.push(friend)
+          }
         })
         break
       case 'editAllow':
@@ -106,6 +112,16 @@ let PrivacySettings = React.createClass({
           })
           this.setState({
             numViewDisallowedItems: this.state.numViewDisallowedItems + 1
+          })
+          this.state.allowFriendList.map((friend) => {
+            if (friend === e.target.value) {
+              let newFriendList = this.state.allowFriendList
+              let friendToDelete = newFriendList.indexOf(friend)
+              newFriendList.splice(friendToDelete, 1)
+              this.setState({
+                allowFriendList: newFriendList
+              })
+            }
           })
           // if (this.state.friendList.indexOf(e.target.value)) {
           //   let newFriendList = this.state.friendList
@@ -415,7 +431,7 @@ let PrivacySettings = React.createClass({
                           <Checkbox label={viewer.label} labelPosition="left" />
                         </ListItem>)
                     })
-                    : this.state.friendList.map((friend) => {
+                    : this.state.allowFriendList.map((friend) => {
                       return (
                         <ListItem>
                           <Checkbox label={friend} labelPosition="left" />
