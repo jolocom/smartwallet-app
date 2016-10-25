@@ -11,8 +11,8 @@ import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
+import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
-import NodeTypes from 'lib/node-types'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:graph')
@@ -22,7 +22,9 @@ let Graph = React.createClass({
   mixins: [Reflux.listenTo(GraphStore, 'onStateUpdate')],
 
   propTypes: {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    params: React.PropTypes.object,
+    routes: React.PropTypes.object
   },
 
   contextTypes: {
@@ -96,53 +98,48 @@ let Graph = React.createClass({
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
 
     if (this.props.params.node) {
-      if (this.props.params.node == account.webId) {
+      if (this.props.params.node === account.webId) {
         debug('Home node (componentDidMount): redirecting to /graph')
-        this.context.router.push(`/graph/`)
-      }
-      else {
+        this.context.router.push('/graph/')
+      } else {
         debug('Navigating to node (componentDidMount)', this.props.params.node)
         graphActions.navigateToNode({uri: this.props.params.node},
                                     {uri: this.context.account.webId,
                                      name: this.context.account.username})
       }
-    }
-    else if (account.webId) {
+    } else if (account.webId) {
       debug('Navigating to default node', account.webId)
       // Load graph when user is logged in
       graphActions.getInitialGraphState(account.webId)
     }
-    
   },
-  
+
   // @TODO combine with componentWillUpdate ?
-  componentDidUpdate(prevProps) {    
+  componentDidUpdate(prevProps) {
     // We do not want to center the graph on the person we're viewing the
     // full-screen profile of.
-    
-    let fullscreenView = this.props.routes.length == 3 // /graph/[uri]/view
-    let viewChanged = prevProps.routes.length != this.props.routes.length
+
+    let fullscreenView = this.props.routes.length === 3 // /graph/[uri]/view
+    let viewChanged = prevProps.routes.length !== this.props.routes.length
     let nodeChanged = prevProps.params.node !== this.props.params.node // .uri?
-      
+
     // In case we disconnected from the node in full-screen view, we want to
     // navigate to the center node again (refresh) if viewChanged, even though
     // the center node will inevitably be the same (nodeChanged == false)
     if (!fullscreenView && (nodeChanged || viewChanged)) {
       if (this.props.params.node &&
-          this.props.params.node == this.context.account.webId) {
+          this.props.params.node === this.context.account.webId) {
         debug('Home node (componentDidUpdate): redirecting to /graph')
-        this.context.router.push(`/graph/`)
-      }
-      else {
+        this.context.router.push('/graph/')
+      } else {
         let nodeUri = this.props.params.node || this.context.account.webId
         debug('Navigating to node (componentDidUpdate)', nodeUri)
-        
+
         if (this.props.params.node) {
           graphActions.navigateToNode({uri: nodeUri},
                                       {uri: this.context.account.webId,
                                        name: this.context.account.username})
-        }
-        else {
+        } else {
           graphActions.navigateToNode({uri: nodeUri})
         }
       }
@@ -163,8 +160,7 @@ let Graph = React.createClass({
         newState.activeNode !== this.state.activeNode) {
       uri = encodeURIComponent(newState.activeNode.uri)
       this.context.router.push(`/graph/${uri}/view`)
-    }
-    else if (newContext.account.webId &&
+    } else if (newContext.account.webId &&
              newContext.account.webId !== this.context.account.webId) {
       graphActions.getInitialGraphState(newContext.account.webId)
     }
@@ -203,6 +199,10 @@ let Graph = React.createClass({
         position: 'absolute',
         bottom: '16px',
         right: '16px'
+      },
+      loading: {
+        backgroundColor: 'transparent',
+        position: 'absolute'
       }
     }
     return styles
@@ -239,10 +239,17 @@ let Graph = React.createClass({
       })
     })
 
+    let loading
+    if (!this.state.initialized) {
+      loading = <Loading style={styles.loading} />
+    }
+
     return (
       <div style={styles.container}>
         <IndicatorOverlay ref="scrollIndicator" />
         <div style={styles.chart} ref="graph"></div>
+
+        {loading}
 
         {fab}
 

@@ -404,6 +404,7 @@ export default Reflux.createStore({
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
       } else {
+         // @TODO don't send request when empty delete- & insertStatement
         fetch(Util.uriToProxied(oldData.webid), {
           method: 'PATCH',
           credentials: 'include',

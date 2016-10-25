@@ -9,6 +9,7 @@ let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
 let PURL = rdf.Namespace('http://purl.org/iot/vocab/m3-lite#')
 let SCHEMA = rdf.Namespace('https://schema.org/')
+let SCHEMA_HTTP = rdf.Namespace('http://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
@@ -23,9 +24,11 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
+  isRelatedTo_HTTP: SCHEMA_HTTP('isRelatedTo'),
 
   // --
   title: DC('title'),
+  title_DC: DC('title'),
   description: DC('description'),
   type: RDF('type'),
   // --
