@@ -230,7 +230,6 @@ let PrivacySettings = React.createClass({
     newFriendList.map((f) => {
       if (f === friend) {
         f.canEdit = !f.canEdit
-        console.log('friend ', f.name, f.canEdit)
       }
     })
     this.setState({
