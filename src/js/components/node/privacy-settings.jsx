@@ -31,7 +31,29 @@ let PrivacySettings = React.createClass({
       editAllowList: [],
       editDisallowList: [],
       coreFriendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea'], // TEMP
-      allowFriendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea']
+      allowFriendList: [
+        {
+          name: 'Brendan',
+          canEdit: false
+        },
+        {
+          name: 'Eric',
+          canEdit: false
+        },
+        {
+          name: 'Grace',
+          canEdit: false
+        },
+        {
+          name: 'Kerem',
+          canEdit: false
+        },
+        {
+          name: 'Chelsea',
+          canEdit: false
+        }
+      ],
+      isSelectAll: false
     }
   },
 
@@ -61,7 +83,10 @@ let PrivacySettings = React.createClass({
         })
         this.state.coreFriendList.map((friend) => {
           if (friend === data.label) {
-            this.state.allowFriendList.push(friend)
+            this.state.allowFriendList.push({
+              name: friend,
+              canEdit: false
+            })
           }
         })
         break
@@ -114,9 +139,10 @@ let PrivacySettings = React.createClass({
             numViewDisallowedItems: this.state.numViewDisallowedItems + 1
           })
           this.state.allowFriendList.map((friend) => {
-            if (friend === e.target.value) {
+            if (friend.name === e.target.value) {
               let newFriendList = this.state.allowFriendList
-              let friendToDelete = newFriendList.indexOf(friend)
+              let friendToDelete = newFriendList.map((friend) => friend.name)
+                .indexOf(friend)
               newFriendList.splice(friendToDelete, 1)
               this.setState({
                 allowFriendList: newFriendList
@@ -196,6 +222,24 @@ let PrivacySettings = React.createClass({
     }
   },
 
+  _handleSelectAll() {
+    this.setState({
+      isSelectAll: !this.state.isSelectAll
+    })
+  },
+
+  _handleOnCheck(friend) {
+    let newFriendList = this.state.allowFriendList
+    newFriendList.map((f) => {
+      if (f === friend) {
+        f.canEdit = !f.canEdit
+      }
+    })
+    this.setState({
+      allowFriendList: newFriendList
+    })
+  },
+
   renderChip(data) {
     let styles = this.getStyles()
     return (
@@ -267,6 +311,10 @@ let PrivacySettings = React.createClass({
       },
       customSettings: {
         marginLeft: '10px'
+      },
+      selectAllLabel: {
+        fontSize: '14px',
+        color: 'rgba(75, 19, 43, 0.541176)'
       }
     }
     return styles
@@ -424,6 +472,13 @@ let PrivacySettings = React.createClass({
               </div>
               : <div>
                 <List>
+                  <ListItem>
+                    <Checkbox
+                      label="Select all"
+                      labelStyle={styles.selectAllLabel}
+                      labelPosition="left"
+                      onCheck={this._handleSelectAll} />
+                  </ListItem>
                   {this.state.currActiveViewBtn === 'visOnlyMe'
                     ? this.state.viewAllowList.map((viewer) => {
                       return (
@@ -434,7 +489,15 @@ let PrivacySettings = React.createClass({
                     : this.state.allowFriendList.map((friend) => {
                       return (
                         <ListItem>
-                          <Checkbox label={friend} labelPosition="left" />
+                          <Checkbox
+                            label={friend.name}
+                            labelPosition="left"
+                            onCheck={
+                              this._handleOnCheck.bind(this, friend)
+                            }
+                            checked={
+                              friend.canEdit || this.state.isSelectAll
+                            } />
                         </ListItem>)
                     })
                   }
