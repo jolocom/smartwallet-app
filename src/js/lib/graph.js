@@ -714,7 +714,6 @@ export default class GraphD3 extends EventEmitter {
   // all other highlighted nodes back to their normal size
 
   setUpVisibleNodes = function () {
-    console.log(this.dataNodes)
     // No scrolling
     let x = this.centerCoordinates.x
     let y = this.centerCoordinates.y

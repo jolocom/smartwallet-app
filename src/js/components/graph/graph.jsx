@@ -50,7 +50,6 @@ let Graph = React.createClass({
   },
 
   onStateUpdate(data, signal) {
-    console.log('sup?', data, signal);
     // Temp. make it more elegant later.
 
     // Don't update anything while we're loading.
