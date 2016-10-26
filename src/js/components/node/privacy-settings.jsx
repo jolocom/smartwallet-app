@@ -499,28 +499,40 @@ let PrivacySettings = React.createClass({
                   Everyone
                 </FlatButton>
                 <div style={styles.customSettings}>
-                  <Subheader style={styles.subheader}>
-                    Allow
-                  </Subheader>
-                  <div style={styles.chipWrapper}>
-                    {this.state.editAllowList.map(this.renderChip, this)}
+                {
+                  this.state.currActiveEditBtn === 'editOnlyMe'
+                  ? <div>
+                    <Subheader style={styles.subheader}>
+                      Allow
+                    </Subheader>
+                    <div style={styles.chipWrapper}>
+                      {this.state.editAllowList.map(this.renderChip, this)}
+                    </div>
+                    <TextField
+                      name="editAllow"
+                      hintText="Enter a node title"
+                      onKeyPress={this._handleTextEnter}
+                      fullWidth />
                   </div>
-                  <TextField
-                    name="editAllow"
-                    hintText="Enter a node title"
-                    onKeyPress={this._handleTextEnter}
-                    fullWidth />
-                  <Subheader style={styles.subheader}>
+                  : null
+                }
+                {
+                  this.state.currActiveEditBtn === 'editOnlyMe'
+                  ? null
+                  : <div>
+                    <Subheader style={styles.subheader}>
                     Disallow
-                  </Subheader>
-                  <div style={styles.chipWrapper}>
-                    {this.state.editDisallowList.map(this.renderChip, this)}
+                    </Subheader>
+                    <div style={styles.chipWrapper}>
+                      {this.state.editDisallowList.map(this.renderChip, this)}
+                    </div>
+                    <TextField
+                      name="editDisallow"
+                      hintText="Enter a node title"
+                      onKeyPress={this._handleTextEnter}
+                      fullWidth />
                   </div>
-                  <TextField
-                    name="editDisallow"
-                    hintText="Enter a node title"
-                    onKeyPress={this._handleTextEnter}
-                    fullWidth />
+                }
                 </div>
               </div>
               : <div>
