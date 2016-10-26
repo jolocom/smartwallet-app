@@ -21,6 +21,10 @@ let SharedNodes = React.createClass({
     this.context.router.push('/graph')
   },
 
+  _handleListNodes() {
+    this.context.router.push('/node-list')
+  },
+
   getStyles() {
     let styles = {
       container: {
@@ -150,6 +154,7 @@ let SharedNodes = React.createClass({
               <GridTile
                 key={tile.nodeType}
                 style={styles.nodeTypeGridTile}
+                onTouchTap={this._handleListNodes}
                 title={<span
                   style={{...styles.caption, ...styles.captionTitle}}>
                   {tile.nodeType}
