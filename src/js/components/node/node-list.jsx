@@ -16,7 +16,7 @@ let NodeList = React.createClass({
   },
 
   goBack() {
-    this.context.router.push('/graph')
+    this.context.router.push('/shared-nodes')
   },
 
   getStyles() {
