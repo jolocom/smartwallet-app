@@ -16,10 +16,12 @@ import ProfileStore from 'stores/profile'
 
 import ContactSelector from './pick-contacts.jsx'
 
-import gAgent from 'lib/agents/graph'
+import GraphAgent from 'lib/agents/graph'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:groups:new')
+
+import FormsyText from 'formsy-material-ui/lib/FormsyText'
 
 export default React.createClass({
 
@@ -56,10 +58,14 @@ export default React.createClass({
     localStorage['sox'] = localStorage['sox'] || 0
     localStorage['sox'] = +localStorage['sox'] + 1
 
-    let GraphAgent = new gAgent
-    GraphAgent.newGroup(this.context.account.webId,'group'+localStorage['sox'],['https://axel.webid.jolocom.com/profile/card#me','https://toaster.webid.jolocom.com/profile/card#me'])
-
-
+    let graphAgent = new GraphAgent()
+    graphAgent.newGroup(
+      this.context.account.webId,
+      'group' + localStorage['sox'],
+      [
+        'https://axel.webid.jolocom.com/profile/card#me',
+        'https://toaster.webid.jolocom.com/profile/card#me'
+      ])
   },
 
   componentWillMount() {
@@ -210,6 +216,13 @@ export default React.createClass({
             {content}
             <input type="text" value={this.state.groupName} onChange={ e => this.setState({groupName: e.target.value})} />
             <button type="button" onTouchTap={this._handleSubmit}> ready let's go </button>
+            {/*<FormsyText name="groupname"*/}
+                        {/*floatingLabelText="Group name"*/}
+                        {/*autocorrect="off"*/}
+                        {/*autocapitalize="none"*/}
+                        {/*autocomplete="none"*/}
+                        {/*inputStyle={{textTransform: 'lowercase'}}*/}
+            {/*/>*/}
           </Content>
         </Layout>
       </Dialog>
