@@ -11,7 +11,7 @@ import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
-import Loading from 'components/common/loading.jsx'
+// import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
 
 import Debug from 'lib/debug'
@@ -85,6 +85,7 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
+    console.log('Mounted again@!')
     const {account} = this.context
 
     // Instantiating the graph object.
@@ -209,6 +210,7 @@ let Graph = React.createClass({
   },
 
   render: function() {
+    console.log('rerendering')
     let styles = this.getStyles()
 
     if (this.graph) {
@@ -240,11 +242,13 @@ let Graph = React.createClass({
     })
 
     let loading
+    /*
     if (!this.state.initialized) {
       loading = <Loading style={styles.loading} />
     }
-
+    */
     return (
+
       <div style={styles.container}>
         <IndicatorOverlay ref="scrollIndicator" />
         <div style={styles.chart} ref="graph"></div>
