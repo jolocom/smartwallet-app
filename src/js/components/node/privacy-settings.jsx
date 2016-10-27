@@ -62,26 +62,28 @@ let PrivacySettings = React.createClass({
     this.context.router.push('/graph')
   },
 
+  // Fired when removing a chip
   _handleRequestDelete(data) {
-    let chipToDelete
     switch (data.list) {
       case 'viewAllow':
-        let newViewAllowList = this.state.viewAllowList
-        chipToDelete = newViewAllowList
-          .map((chip) => chip.key).indexOf(data.key)
-        newViewAllowList.splice(chipToDelete, 1)
-        this.setState({viewAllowList: newViewAllowList})
-        this.setState({numViewAllowedItems: this.state.numViewAllowedItems - 1})
-        break
-      case 'viewDisallow':
-        let newViewDisallowList = this.state.viewDisallowList
-        chipToDelete = newViewDisallowList
-          .map((chip) => chip.key).indexOf(data.key)
-        newViewDisallowList.splice(chipToDelete, 1)
-        this.setState({viewDisallowList: newViewDisallowList})
-        this.setState({
-          numViewDisallowedItems: this.state.numViewDisallowedItems - 1
+        let newViewAllowList = this.state.viewAllowList.filter(chip => {
+          return chip.key !== data.key
         })
+        this.setState({
+          viewAllowList: newViewAllowList,
+          numViewAllowedItems: newViewAllowList.length
+        })
+        break
+
+      case 'viewDisallow':
+        let newViewDisallowList = this.state.viewDisallowList.filter(chip => {
+          return chip.key !== data.key
+        })
+        this.setState({
+          viewDisallowList: newViewDisallowList,
+          numViewDisallowedItems: newViewDisallowList.length
+        })
+
         this.state.coreFriendList.map((friend) => {
           if (friend === data.label) {
             this.state.allowFriendList.push({
@@ -91,24 +93,25 @@ let PrivacySettings = React.createClass({
           }
         })
         break
+
       case 'editAllow':
-        let newEditAllowList = this.state.editAllowList
-        chipToDelete = newEditAllowList
-          .map((chip) => chip.key).indexOf(data.key)
-        newEditAllowList.splice(chipToDelete, 1)
-        this.setState({editAllowList: newEditAllowList})
+        let newEditAllowList = this.state.editAllowList.filter(chip => {
+          return chip.key !== data.key
+        })
+
         this.setState({
-          numEditAllowedItems: this.state.numEditAllowedItems - 1
+          editAllowList: newEditAllowList,
+          numEditAllowedItems: newEditAllowList.length
         })
         break
+
       case 'editDisallow':
-        let newEditDisallowList = this.state.editDisallowList
-        chipToDelete = newEditDisallowList
-          .map((chip) => chip.key).indexOf(data.key)
-        newEditDisallowList.splice(chipToDelete, 1)
-        this.setState({editDisallowList: newEditDisallowList})
+        let newEditDisallowList = this.state.editDisallowList.filter(chip => {
+          return chip.key !== data.key
+        })
         this.setState({
-          numEditDisallowedItems: this.state.numEditDisallowedItems - 1
+          editDisallowList: newEditDisallowList,
+          numEditDisallowedItems: newEditDisallowList.length
         })
         break
     }
