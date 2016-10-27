@@ -1,23 +1,24 @@
 import React from 'react'
+import Reflux from 'reflux'
 import Radium from 'radium'
 import {IconButton} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import {GridList, GridTile} from 'material-ui/GridList'
 import SharedNodeType from 'components/node/shared-nodetype.jsx'
+import SharedNodesStore from 'stores/shared-nodes.js'
+import SharedNodesActions from 'actions/shared-nodes.js'
 
 let SharedNodes = React.createClass({
+
+  mixins: [Reflux.listenTo(SharedNodesStore, '_handleUpdate')],
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
     router: React.PropTypes.object
   },
 
-  getInitialState() {
-    return {
-    }
-  },
-
   componentDidMount() {
+    SharedNodesActions.getOverview()
   },
 
   goBack() {
@@ -27,6 +28,10 @@ let SharedNodes = React.createClass({
   _handleListNodes(nodeType) {
     // somehow pass nodeType
     this.context.router.push('/node-list')
+  },
+
+  _handleUpdate(newState) {
+    this.setState(newState)
   },
 
   getStyles() {
