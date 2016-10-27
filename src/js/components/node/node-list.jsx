@@ -1,7 +1,11 @@
 import React from 'react'
 import Radium from 'radium'
-import {IconButton} from 'material-ui'
+import {IconButton, List, ListItem, Checkbox} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
+import Avatar from 'material-ui/Avatar'
+import {pinkA200, transparent} from 'material-ui/styles/colors'
+import UncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
+import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
 
 let NodeList = React.createClass({
 
@@ -12,6 +16,26 @@ let NodeList = React.createClass({
 
   getInitialState() {
     return {
+      tempFileData: [
+        {
+          fileName: 'File1',
+          privacySetting: 'Private',
+          dateShared: 'Jan 14, 2014',
+          thumbnail: 'B'
+        },
+        {
+          fileName: 'File2',
+          privacySetting: 'Custom',
+          dateShared: 'Jan 11, 2011',
+          thumbnail: 'B'
+        },
+        {
+          fileName: 'File3',
+          privacySetting: 'Private',
+          dateShared: 'Jan 19, 2016',
+          thumbnail: 'B'
+        }
+      ]
     }
   },
 
@@ -58,6 +82,17 @@ let NodeList = React.createClass({
       nodeTypeIcon: {
         margin: '0 auto',
         width: '70px'
+      },
+      alphaLetter: {
+        position: 'absolute',
+        left: '10px',
+        marginTop: '10px'
+      },
+      listItems: {
+        marginLeft: '20px'
+      },
+      checkbox: {
+        fill: '#ff0000'
       }
     }
     return styles
@@ -76,7 +111,29 @@ let NodeList = React.createClass({
           </IconButton>}
           />
         <div style={styles.content}>
-          <p>NODE LIST</p>
+          <List>
+            <Avatar
+              style={styles.alphaLetter}
+              color={pinkA200}
+              backgroundColor={transparent}>
+              A
+            </Avatar>
+            <div style={styles.listItems}>
+              {this.state.tempFileData.map((file) => {
+                <ListItem
+                  secondaryText="hi"
+                  leftAvatar={<Avatar>{file.thumbnail}</Avatar>}>
+                  <Checkbox
+                    checkedIcon={<CheckedIcon />}
+                    uncheckedIcon={<UncheckedIcon />}
+                    style={styles.checkbox}
+                    label={file.fileName}
+                    labelPosition="left"
+                  />
+                </ListItem>
+              })}
+            </div>
+          </List>
         </div>
       </div>
     )
