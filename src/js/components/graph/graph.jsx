@@ -14,6 +14,8 @@ import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 // import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
 
+import aa from 'lib/agents/acl.js'
+
 import Debug from 'lib/debug'
 let debug = Debug('components:graph')
 
@@ -85,7 +87,14 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
-    console.log('Mounted again@!')
+    /*
+    let aaa = new aa('https://pre.webid.jolocom.de/scss7h')
+    aaa.fetchInfo().then(() => {
+      aaa.allow('https://d.webid.jolocom.de/profile/card#me', 'read')
+      aaa.commit()
+    })
+    */
+
     const {account} = this.context
 
     // Instantiating the graph object.
