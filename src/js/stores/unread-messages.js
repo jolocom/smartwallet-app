@@ -3,11 +3,17 @@ import Reflux from 'reflux'
 import ChatAgent from 'lib/agents/chat'
 import WebIDAgent from 'lib/agents/webid'
 
+import Subscription from 'lib/subscription'
+
 import UnreadMessagesActions from 'actions/unread-messages'
 
 import accountActions from '../actions/account'
 
-let {load} = UnreadMessagesActions
+import _ from 'lodash'
+
+const {load, read} = UnreadMessagesActions
+
+const subscriptions = {}
 
 export default Reflux.createStore({
   listenables: UnreadMessagesActions,
@@ -15,12 +21,13 @@ export default Reflux.createStore({
   items: [],
 
   init: function() {
+    this.agent = new ChatAgent()
+
     this.listenTo(accountActions.logout, this.onLogout)
   },
 
   getInitialState() {
     return {
-      loading: false,
       items: this.items
     }
   },
@@ -29,17 +36,34 @@ export default Reflux.createStore({
     this.items = []
   },
 
-  onLoad(webId) {
-    this.trigger({
-      loading: true
+  onSubscribe(webId) {
+    if (subscriptions[webId]) {
+      return
+    }
+
+    const container = this.agent.getUnreadMessagesContainer(webId)
+
+    subscriptions[webId] = new Subscription(container, () => {
+      UnreadMessagesActions.load(webId)
     })
+  },
 
-    const chatAgent = new ChatAgent()
+  onUnsubscribe(webId) {
+    if (subscriptions[webId]) {
+      subscriptions[webId].stop()
+      delete subscriptions[webId]
+    }
+  },
 
-    chatAgent.getUnreadMessages(webId).then(load.completed).catch((error) => {
+  onLoad(webId, subscribe) {
+    this.agent.getUnreadMessages(webId).then((items) => {
+      if (subscribe) {
+        UnreadMessagesActions.subscribe(webId)
+      }
+      load.completed(items)
+    }).catch((error) => {
       // @TODO container should be created by the solid server
       if (error.message === '404') {
-        console.log('container not found creating it')
         const wia = new WebIDAgent()
         wia.createUnreadMessagesContainer(webId)
       }
@@ -49,19 +73,57 @@ export default Reflux.createStore({
   },
 
   onLoadCompleted(items) {
-    console.log(items)
     this.items = items
 
     this.trigger({
-      loading: false,
       items: this.items
     })
   },
 
-  onLoadFailed(error) {
-    this.trigger({
-      loading: false
-    })
-  }
+  onLoadFailed() {},
 
+  onRead(webId, messageId) {
+    const message = _.find(this.items, {id: messageId})
+    if (!message) {
+      return
+    }
+
+    this.agent.removeUnreadMessage(webId, message)
+      .then(() => {
+        read.completed(messageId)
+      })
+      .catch(read.failed)
+  },
+
+  onReadCompleted(messageId) {
+    this.items = _.filter(this.items, (message) => {
+      return message.id !== messageId
+    })
+
+    this.trigger({
+      items: this.items
+    })
+  },
+
+  onReadFailed() {},
+
+  isUnread(messageId) {
+    for (let message in this.items) {
+      if (message.id === messageId) {
+        return true
+      }
+    }
+  },
+
+  unreadMessages(conversationUri) {
+    let messages = []
+
+    for (let message of this.items) {
+      if (message.conversationId.match(conversationUri)) {
+        messages.push(message)
+      }
+    }
+
+    return messages
+  }
 })

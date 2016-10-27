@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
 import ChatAgent from 'lib/agents/chat'
+import Subscription from 'lib/subscription'
 
 import Debug from 'lib/debug'
 let debug = Debug('stores:conversation')
@@ -9,8 +10,6 @@ let chatAgent = new ChatAgent()
 
 import ConversationActions from 'actions/conversation'
 import ConversationsStore from 'stores/conversations'
-
-import Utils from 'lib/util'
 
 let {load, addMessage} = ConversationActions
 
@@ -27,30 +26,35 @@ export default Reflux.createStore({
   getInitialState() {
     return this.state
   },
+
   cleanState() {
     this.state.loading = true
     this.state.items = []
     this.state.otherPerson = {}
   },
 
-  onLoad(webId, id) {
-    debug('onLoad with webId', webId, 'and id', id)
-
+  onLoad(webId, id, subscribe) {
+    // @TODO cache this url somewhere?
     ConversationsStore.getUri(webId, id).then((url) => {
-      debug('Got conversation URI', url)
+      if (subscribe) {
+        ConversationActions.subscribe(webId, id)
+      }
+
       return Promise.all([
         chatAgent.getConversation(url, webId),
         chatAgent.getConversationMessages(url)
       ]).then((result) => {
         let [conversation, items] = result
-        load.completed(conversation, items)
+        load.completed(conversation, items, subscribe)
+      }).then(() => {
+
       })
     }).catch((err) => {
       console.error('Couldn\'t get conversation URI', err)
     })
   },
 
-  onLoadCompleted(conversation, items) {
+  onLoadCompleted(conversation, items, subscribe) {
     this.state = _.extend({
       loading: false,
       items: items
@@ -65,43 +69,17 @@ export default Reflux.createStore({
     }
 
     ConversationsStore.getUri(webId, id).then((url) => {
-      // Proxy doesn't support WS yet, so falling back to polling
-      if (localStorage.getItem('jolocom.auth-mode') === 'proxy') {
-        setInterval(() => {
-          ConversationActions.load(webId, id)
-        }, 5000)
-      } else {
-        chatAgent.getConversation(url).then((conversation) => {
-          const socket = new WebSocket(conversation.updatesVia)
-
-          socket.onopen = function() {
-            this.send(`sub ${url}`)
-          }
-          
-          socket.onmessage = function(msg) {
-            if (msg.data && msg.data.slice(0, 3) === 'pub') {
-              ConversationActions.load(webId, id)
-            }
-          }
-
-          subscriptions[id] = socket
-        })
-      }
+      subscriptions[id] = new Subscription(url, () => {
+        ConversationActions.load(webId, id)
+      })
     })
   },
 
   onUnsubscribe(id) {
-    if (!subscriptions[id]) {
-      return
+    if (subscriptions[id]) {
+      subscriptions[id].stop()
+      delete subscriptions[id]
     }
-
-    if (localStorage.getItem('jolocom.auth-mode') === 'proxy') {
-      clearInterval(subscriptions[id])
-    } else {
-      subscriptions[id].close()
-    }
-
-    delete subscriptions[id]
   },
 
   onAddMessage(uri, author, content) {

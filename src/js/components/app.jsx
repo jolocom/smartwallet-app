@@ -105,6 +105,13 @@ let App = React.createClass({
     AccountActions.login()
   },
 
+  componentWillUnmount() {
+    const webId = this.state.account
+    if (webId) {
+      UnreadMessagesActions.unsubscribe(webId)
+    }
+  },
+
   componentDidUpdate(prevProps, prevState) {
     let {username} = this.state.account
 
@@ -135,7 +142,7 @@ let App = React.createClass({
 
     if (username) {
       ProfileActions.load()
-      UnreadMessagesActions.load(webId)
+      UnreadMessagesActions.load(webId, true)
     }
   },
 
@@ -227,7 +234,7 @@ let App = React.createClass({
         display: 'none'
       },
       chatBadge: {
-        display: this.getUnreadCount() ? 'block' : 'none'
+        display: this.getUnreadCount() ? 'flex' : 'none'
       }
     }
     return styles
