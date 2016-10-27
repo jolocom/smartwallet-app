@@ -1,7 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 
-import {IconButton, AppBar, FlatButton} from 'material-ui'
+import {IconButton, AppBar, FlatButton, TextField} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
@@ -20,8 +20,6 @@ import GraphAgent from 'lib/agents/graph'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:groups:new')
-
-import FormsyText from 'formsy-material-ui/lib/FormsyText'
 
 export default React.createClass({
 
@@ -216,6 +214,9 @@ export default React.createClass({
             {content}
             <input type="text" value={this.state.groupName} onChange={ e => this.setState({groupName: e.target.value})} />
             <button type="button" onTouchTap={this._handleSubmit}> ready let's go </button>
+            <TextField
+              floatingLabelText="Group name"
+            />
             {/*<FormsyText name="groupname"*/}
                         {/*floatingLabelText="Group name"*/}
                         {/*autocorrect="off"*/}
