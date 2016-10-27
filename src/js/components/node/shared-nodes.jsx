@@ -17,8 +17,14 @@ let SharedNodes = React.createClass({
     router: React.PropTypes.object
   },
 
+  propTypes: {
+    params: React.PropTypes.object
+  },
+
   componentDidMount() {
-    SharedNodesActions.getOverview()
+    // TODO is the initial state set correctly?
+    const {uri} = this.props.params
+    SharedNodesActions.getOverview(uri)
   },
 
   goBack() {

@@ -3,10 +3,8 @@ import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 import rdf from 'rdflib'
 
-// So we have one index file that contains the log of the relationships.
-// it's all triples.
-
-class PermissionAgent {
+// We have one index file that contains the log of the relationships.
+export default class PermissionAgent {
 
   /* @summary Returns the nodes shared with the URI node
    * @param{string} uri - The person we want to know the shared nodes with.
@@ -79,5 +77,3 @@ class PermissionAgent {
     })
   }
 }
-
-export default PermissionAgent
