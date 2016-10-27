@@ -17,6 +17,9 @@ let SharedNodes = React.createClass({
     }
   },
 
+  componentDidMount() {
+  },
+
   goBack() {
     this.context.router.push('/graph')
   },

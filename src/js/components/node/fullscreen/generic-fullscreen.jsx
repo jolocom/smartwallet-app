@@ -151,7 +151,8 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleViewSharedNodes() {
-    this.context.router.push('/shared-nodes')
+    this.context.router.push(encodeURIComponent(this.props.node.uri) +
+      '/shared-nodes')
   },
 
   _handleDisconnect() {
