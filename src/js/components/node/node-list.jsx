@@ -100,6 +100,7 @@ let NodeList = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    console.log(this.state.tempFileData)
     return (
       <div style={styles.container}>
         <AppBar
@@ -119,7 +120,7 @@ let NodeList = React.createClass({
               A
             </Avatar>
             <div style={styles.listItems}>
-              {this.state.tempFileData.map((file) => {
+              {this.state.tempFileData.map((file) => (
                 <ListItem
                   secondaryText="hi"
                   leftAvatar={<Avatar>{file.thumbnail}</Avatar>}>
@@ -130,8 +131,8 @@ let NodeList = React.createClass({
                     label={file.fileName}
                     labelPosition="left"
                   />
-                </ListItem>
-              })}
+                </ListItem>)
+              )}
             </div>
           </List>
         </div>
