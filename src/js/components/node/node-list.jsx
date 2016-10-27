@@ -16,6 +16,7 @@ let NodeList = React.createClass({
 
   getInitialState() {
     return {
+      isSelectable: false,
       tempFileData: [
         {
           fileName: 'File1',
@@ -41,6 +42,12 @@ let NodeList = React.createClass({
 
   goBack() {
     this.context.router.push('/shared-nodes')
+  },
+
+  _handleSelectable() {
+    this.setState({
+      isSelectable: !this.state.isSelectable
+    })
   },
 
   getStyles() {
@@ -92,7 +99,6 @@ let NodeList = React.createClass({
         marginLeft: '20px'
       },
       checkbox: {
-        fill: '#ff0000'
       }
     }
     return styles
@@ -100,6 +106,7 @@ let NodeList = React.createClass({
 
   render() {
     let styles = this.getStyles()
+    console.log(this.state.tempFileData)
     return (
       <div style={styles.container}>
         <AppBar
@@ -115,23 +122,31 @@ let NodeList = React.createClass({
             <Avatar
               style={styles.alphaLetter}
               color={pinkA200}
-              backgroundColor={transparent}>
+              backgroundColor={transparent}
+              onTouchTap={this._handleSelectable}>
               A
             </Avatar>
             <div style={styles.listItems}>
-              {this.state.tempFileData.map((file) => {
+              {this.state.tempFileData.map((file) => (
                 <ListItem
-                  secondaryText="hi"
+                  primaryText={file.fileName}
+                  secondaryText={
+                    `${file.privacySetting} | Shared ${file.dateShared}`
+                  }
                   leftAvatar={<Avatar>{file.thumbnail}</Avatar>}>
-                  <Checkbox
-                    checkedIcon={<CheckedIcon />}
-                    uncheckedIcon={<UncheckedIcon />}
-                    style={styles.checkbox}
-                    label={file.fileName}
-                    labelPosition="left"
-                  />
-                </ListItem>
-              })}
+                  {
+                    this.state.isSelectable
+                    ? <Checkbox
+                      checkedIcon={<CheckedIcon />}
+                      uncheckedIcon={<UncheckedIcon />}
+                      style={styles.checkbox}
+                      label={file.fileName}
+                      labelPosition="left"
+                    />
+                    : null
+                  }
+                </ListItem>)
+              )}
             </div>
           </List>
         </div>
