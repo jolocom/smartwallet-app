@@ -16,6 +16,26 @@ let NodeList = React.createClass({
 
   getInitialState() {
     return {
+      tempFileData: [
+        {
+          fileName: 'File1',
+          privacySetting: 'Private',
+          dateShared: 'Jan 14, 2014',
+          thumbnail: 'B'
+        },
+        {
+          fileName: 'File2',
+          privacySetting: 'Custom',
+          dateShared: 'Jan 11, 2011',
+          thumbnail: 'B'
+        },
+        {
+          fileName: 'File3',
+          privacySetting: 'Private',
+          dateShared: 'Jan 19, 2016',
+          thumbnail: 'B'
+        }
+      ]
     }
   },
 
@@ -99,39 +119,19 @@ let NodeList = React.createClass({
               A
             </Avatar>
             <div style={styles.listItems}>
-              <ListItem
-                secondaryText="Private | Shared Jan 4, 2014"
-                leftAvatar={<Avatar>A</Avatar>}>
-                <Checkbox
-                  checkedIcon={<CheckedIcon />}
-                  uncheckedIcon={<UncheckedIcon />}
-                  style={styles.checkbox}
-                  label="Adelle Charles"
-                  labelPosition="left"
-                />
-              </ListItem>
-              <ListItem
-                secondaryText="Private | Shared Jan 4, 2014"
-                leftAvatar={<Avatar>A</Avatar>}>
-                <Checkbox
-                  checkedIcon={<CheckedIcon />}
-                  uncheckedIcon={<UncheckedIcon />}
-                  style={styles.checkbox}
-                  label="Adelle Charles"
-                  labelPosition="left"
-                />
-              </ListItem>
-              <ListItem
-                secondaryText="Private | Shared Jan 4, 2014"
-                leftAvatar={<Avatar>A</Avatar>}>
-                <Checkbox
-                  checkedIcon={<CheckedIcon />}
-                  uncheckedIcon={<UncheckedIcon />}
-                  style={styles.checkbox}
-                  label="Adelle Charles"
-                  labelPosition="left"
-                />
-              </ListItem>
+              {this.state.tempFileData.map((file) => {
+                <ListItem
+                  secondaryText="hi"
+                  leftAvatar={<Avatar>{file.thumbnail}</Avatar>}>
+                  <Checkbox
+                    checkedIcon={<CheckedIcon />}
+                    uncheckedIcon={<UncheckedIcon />}
+                    style={styles.checkbox}
+                    label={file.fileName}
+                    labelPosition="left"
+                  />
+                </ListItem>
+              })}
             </div>
           </List>
         </div>
