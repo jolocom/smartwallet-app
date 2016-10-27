@@ -133,19 +133,19 @@ let NodeList = React.createClass({
                   secondaryText={
                     `${file.privacySetting} | Shared ${file.dateShared}`
                   }
-                  leftAvatar={<Avatar>{file.thumbnail}</Avatar>}>
-                  {
+                  leftAvatar={<Avatar>{file.thumbnail}</Avatar>}
+                  rightAvatar={
                     this.state.isSelectable
-                    ? <Checkbox
-                      checkedIcon={<CheckedIcon />}
-                      uncheckedIcon={<UncheckedIcon />}
-                      style={styles.checkbox}
-                      label={file.fileName}
-                      labelPosition="left"
-                    />
+                    ? <Avatar backgroundColor={transparent}>
+                      <Checkbox
+                        checkedIcon={<CheckedIcon />}
+                        uncheckedIcon={<UncheckedIcon />}
+                        labelPosition="left"
+                        style={styles.checkbox}
+                        />
+                    </Avatar>
                     : null
-                  }
-                </ListItem>)
+                  } />)
               )}
             </div>
           </List>
