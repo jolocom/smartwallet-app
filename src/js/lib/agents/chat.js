@@ -104,14 +104,22 @@ class ChatAgent extends LDPAgent {
   }
 
   addUserToChatSubscriberList(webIdOfUserToBeAdded, chatURI) {
-    let subject, predicate, object
+    // let subject, predicate, object
+    // chatURI = 'https://' + chatURI
+    // subject = rdf.sym(chatURI + '#thread')
+    // predicate = PRED.hasSubscriber
+    // webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
+    // object = rdf.sym(webIdOfUserToBeAdded)
+    // let triple = rdf.st(subject, predicate, object)
+    // let statement = `INSERT DATA { ${triple} };`
+
     chatURI = 'https://' + chatURI
-    subject = rdf.sym(chatURI + '#thread')
-    predicate = PRED.hasSubscriber
     webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
-    object = rdf.sym(webIdOfUserToBeAdded)
-    let triple = rdf.st(subject, predicate, object)
-    let statement = `INSERT DATA { ${triple} };`
+    const subject = rdf.sym(chatURI + '#thread')
+    const predicate = PRED.hasSubscriber
+    const object = rdf.sym(webIdOfUserToBeAdded)
+    const triple = rdf.st(subject, predicate, object)
+    const statement = `INSERT DATA { ${triple} };`
 
     console.log(statement)
 
@@ -129,20 +137,16 @@ class ChatAgent extends LDPAgent {
     })
   }
 
-  addUserToChatACL(aclURI) {
+  addUserToChatACL(chatURI, webIdOfUserToBeAdded) {
     let subject, predicate, object
-    aclURI = 'https://' + aclURI
+    let aclURI = 'https://' + chatURI + '.acl'
     subject = rdf.sym(chatURI + '#thread')
-    predicate = PRED.hasSubscriber
+    predicate = PRED.access
     webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
     object = rdf.sym(webIdOfUserToBeAdded)
     let triple = rdf.st(subject, predicate, object)
     let statement = `INSERT DATA { ${triple} };`
 
-    let writer = new Writer()
-    if (aclURI) {
-      aclURI += '.acl'
-    }
     return fetch(Util.uriToProxied(aclURI), {
       method: 'PATCH',
       credentials: 'include',
@@ -159,7 +163,7 @@ class ChatAgent extends LDPAgent {
 
   postMessage(conversationUrl, author, content) {
     // TODO: implement
-    let msgId = `#${Util.randomString(5)}`
+    let msgId = `<#${Util.randomString(5)}>`
     let conversationId = `${conversationUrl}#thread`
     return this.get(Util.uriToProxied(conversationUrl))
       .then((xhr) => {
@@ -174,7 +178,7 @@ class ChatAgent extends LDPAgent {
         }, { // written by...
           subject: msgId,
           predicate: PRED.hasCreator,
-          object: author
+          object: rdf.sym(author)
         }, { // with content...
           subject: msgId,
           predicate: PRED.content,
