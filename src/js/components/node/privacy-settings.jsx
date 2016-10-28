@@ -22,6 +22,10 @@ let PrivacySettings = React.createClass({
     router: React.PropTypes.object
   },
 
+  propTypes: {
+    params: React.PropTypes.object
+  },
+
   getInitialState() {
     return {
       currActiveViewBtn: 'visOnlyMe',
@@ -63,7 +67,8 @@ let PrivacySettings = React.createClass({
   },
 
   componentDidMount() {
-    PrivacyActions.fetchInitialData()
+    const {uri} = this.props.params
+    PrivacyActions.fetchInitialData(uri)
   },
 
   goBack() {
@@ -128,6 +133,7 @@ let PrivacySettings = React.createClass({
       let key
       switch (e.target.name) {
         case 'viewAllow':
+          PrivacyActions.allowRead(e.target.value)
           key = this.state.numViewAllowedItems
           this.state.viewAllowList.push({
             key: key,

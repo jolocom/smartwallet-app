@@ -147,7 +147,8 @@ let GenericFullScreen = React.createClass({
   },
 
   _handlePrivacySettings() {
-    this.context.router.push('/privacy-settings')
+    this.context.router.push(encodeURIComponent(this.props.node.uri) +
+      '/privacy-settings')
   },
 
   _handleViewSharedNodes() {

@@ -1,5 +1,6 @@
 import Reflux from 'reflux'
 import PrivacyActions from 'actions/privacy-settings'
+import AclAgent from 'lib/agents/acl'
 
 export default Reflux.createStore({
   listenables: PrivacyActions,
@@ -8,14 +9,17 @@ export default Reflux.createStore({
   },
 
   getInitialState() {
-
   },
 
-  fetchInitialData() {
-    // TODO
+  fetchInitialData(user) {
+    this.aclAgent = new AclAgent(user)
+    this.aclAgent.fetchInfo().then(this.trigger({}))
   },
 
-  allowView(user) {
-
+  allowRead(user) {
+    this.aclAgent.allow(user, 'read')
+    this.aclAgent.commitIndex()
+      .then(this.aclAgent.commit())
+      .then(this.trigger())
   }
 })

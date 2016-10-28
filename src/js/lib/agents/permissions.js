@@ -35,16 +35,16 @@ export default class PermissionAgent {
     }
 
     return this.gAgent.findTriples(
-      indexUri, rdf.sym(uri), undefined, undefined)
+      indexUri, undefined, undefined, rdf.sym(uri))
     .then((graph) => {
       if (graph === -1) {
         throw new Error('Could not access the index file.')
       }
 
       return Promise.all(graph.map((t) => {
-        return this.resolveNodeType(t.object.uri).then((ans) => {
+        return this.resolveNodeType(t.subject.uri).then((ans) => {
           sharedNodes[ans].push({
-            node: t.object.uri,
+            node: t.subject.uri,
             perm: t.predicate.uri
           })
         })
