@@ -1,4 +1,5 @@
 import React from 'react'
+import Reflux from 'reflux'
 import Radium from 'radium'
 import {IconButton, List, ListItem, Checkbox} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
@@ -10,8 +11,11 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
 import GraphStore from 'stores/graph-store'
+import PrivacyStore from 'stores/privacy-settings'
+import PrivacyActions from 'actions/privacy-settings'
 
 let PrivacySettings = React.createClass({
+  mixins: [Reflux.listenTo(PrivacyStore, '_handleUpdate')],
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
@@ -58,11 +62,18 @@ let PrivacySettings = React.createClass({
     }
   },
 
+  componentDidMount() {
+    PrivacyActions.fetchInitialData()
+  },
+
   goBack() {
     this.context.router.push('/graph')
   },
 
-  // Fired when removing a chip
+  _handleUpdate(storeState) {
+    alert('Yo')
+  },
+
   _handleRequestDelete(data) {
     switch (data.list) {
       case 'viewAllow':
@@ -74,7 +85,6 @@ let PrivacySettings = React.createClass({
           numViewAllowedItems: newViewAllowList.length
         })
         break
-
       case 'viewDisallow':
         let newViewDisallowList = this.state.viewDisallowList.filter(chip => {
           return chip.key !== data.key
@@ -83,7 +93,6 @@ let PrivacySettings = React.createClass({
           viewDisallowList: newViewDisallowList,
           numViewDisallowedItems: newViewDisallowList.length
         })
-
         this.state.coreFriendList.map((friend) => {
           if (friend === data.label) {
             this.state.allowFriendList.push({
@@ -93,18 +102,15 @@ let PrivacySettings = React.createClass({
           }
         })
         break
-
       case 'editAllow':
         let newEditAllowList = this.state.editAllowList.filter(chip => {
           return chip.key !== data.key
         })
-
         this.setState({
           editAllowList: newEditAllowList,
           numEditAllowedItems: newEditAllowList.length
         })
         break
-
       case 'editDisallow':
         let newEditDisallowList = this.state.editDisallowList.filter(chip => {
           return chip.key !== data.key
