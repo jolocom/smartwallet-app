@@ -105,17 +105,13 @@ class ChatAgent extends LDPAgent {
 
   addUserToChatSubscriberList(webIdOfUserToBeAdded, chatURI) {
     let subject, predicate, object
-    subject = Util.uriToProxied(chatURI)
+    chatURI = 'https://' + chatURI
+    subject = rdf.sym(chatURI + '#thread')
     predicate = PRED.hasSubscriber
-    object = Util.uriToProxied(webIdOfUserToBeAdded)
+    webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
+    object = rdf.sym(webIdOfUserToBeAdded)
     let triple = rdf.st(subject, predicate, object)
-    // let statement =
-    //   `INSERT DATA {
-    //     ${Util.uriToProxied(chatURI)}
-    //     ${PRED.hasSubscriber}
-    //     ${Util.uriToProxied(webIdOfUserToBeAdded)}.
-    //   };`
-    let statement = `INSERT DATA { ${triple} . };`
+    let statement = `INSERT DATA { ${triple} };`
 
     console.log(statement)
 
@@ -134,6 +130,15 @@ class ChatAgent extends LDPAgent {
   }
 
   addUserToChatACL(aclURI) {
+    let subject, predicate, object
+    aclURI = 'https://' + aclURI
+    subject = rdf.sym(chatURI + '#thread')
+    predicate = PRED.hasSubscriber
+    webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
+    object = rdf.sym(webIdOfUserToBeAdded)
+    let triple = rdf.st(subject, predicate, object)
+    let statement = `INSERT DATA { ${triple} };`
+
     let writer = new Writer()
     if (aclURI) {
       aclURI += '.acl'
