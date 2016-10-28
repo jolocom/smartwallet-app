@@ -209,14 +209,21 @@ export default React.createClass({
             />
           <Content>
 
+            <div
+              width="300px"
+              maxWidth="90%"
+              padding="20px"
+              margin="0 auto 20px auto"
+              boxSizing="border-box">
+            <TextField
+              floatingLabelText="Group name"
+            />
+            </div>
             list of contacts
             <button type="button" onTouchTap={this._handleGoToContactSelection}> here </button>
             {content}
             <input type="text" value={this.state.groupName} onChange={ e => this.setState({groupName: e.target.value})} />
             <button type="button" onTouchTap={this._handleSubmit}> ready let's go </button>
-            <TextField
-              floatingLabelText="Group name"
-            />
             {/*<FormsyText name="groupname"*/}
                         {/*floatingLabelText="Group name"*/}
                         {/*autocorrect="off"*/}
