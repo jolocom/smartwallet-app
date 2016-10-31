@@ -5,10 +5,13 @@ import AclAgent from 'lib/agents/acl'
 export default Reflux.createStore({
   listenables: PrivacyActions,
   init() {
-
+    this.state = {
+      viewAllowList: []
+    }
   },
 
   getInitialState() {
+    return this.state
   },
 
   fetchInitialData(user) {
@@ -18,8 +21,23 @@ export default Reflux.createStore({
 
   allowRead(user) {
     this.aclAgent.allow(user, 'read')
-    this.aclAgent.commitIndex()
-      .then(this.aclAgent.commit())
-      .then(this.trigger())
+    this.state.viewAllowList.push({
+      label: user,
+      key: this.state.viewAllowList.length,
+      canEdit: false,
+      list: 'viewAllow'
+    })
+    this.trigger(this.state)
+  },
+
+  allowWrite(user) {
+    this.aclAgent.removeAllow(user, 'read')
+    this.state.editAllowList.push({
+      label: user,
+      key: this.state.editAllowList.length,
+      canEdit: false,
+      list: 'editAllow'
+    })
+    this.trigger(this.state)
   }
 })

@@ -76,7 +76,7 @@ let PrivacySettings = React.createClass({
   },
 
   _handleUpdate(storeState) {
-    alert('Yo')
+    this.setState(storeState)
   },
 
   _handleRequestDelete(data) {
@@ -134,16 +134,6 @@ let PrivacySettings = React.createClass({
       switch (e.target.name) {
         case 'viewAllow':
           PrivacyActions.allowRead(e.target.value)
-          key = this.state.numViewAllowedItems
-          this.state.viewAllowList.push({
-            key: key,
-            label: e.target.value,
-            canEdit: false,
-            list: 'viewAllow'
-          })
-          this.setState({
-            numViewAllowedItems: this.state.numViewAllowedItems + 1
-          })
           break
         case 'viewDisallow':
           key = this.state.numViewDisallowedItems
@@ -168,16 +158,7 @@ let PrivacySettings = React.createClass({
           })
           break
         case 'editAllow':
-          key = this.state.numEditAllowedItems
-          this.state.editAllowList.push({
-            key: key,
-            label: e.target.value,
-            canEdit: false,
-            list: 'editAllow'
-          })
-          this.setState({
-            numEditAllowedItems: this.state.numEditAllowedItems + 1
-          })
+          PrivacyActions.allowWrite(e.target.value)
           break
         case 'editDisallow':
           key = this.state.numEditDisallowedItems
@@ -367,7 +348,7 @@ let PrivacySettings = React.createClass({
     let activeNode = GraphStore.state.activeNode.title
     let checkMate
     if ((this.state.currActiveViewBtn === 'visOnlyMe') &&
-      this.state.numViewAllowedItems) {
+      this.state.viewAllowList.length) {
       checkMate = (
         <ListItem>
           <Checkbox
@@ -391,6 +372,7 @@ let PrivacySettings = React.createClass({
         </ListItem>
       )
     }
+    console.log(this.state)
     return (
       <div style={styles.container}>
         <AppBar
@@ -459,7 +441,8 @@ let PrivacySettings = React.createClass({
               : null
             }
             {
-              this.state.currActiveViewBtn === 'visOnlyMe'
+              this.state.currActiveViewBtn === 'visOnlyMe' ||
+              this.state.currActiveViewBtn === 'visEveryone'
               ? null
               : <div>
                 <Subheader style={styles.subheader}>
@@ -532,7 +515,8 @@ let PrivacySettings = React.createClass({
                   : null
                 }
                 {
-                  this.state.currActiveEditBtn === 'editOnlyMe'
+                  this.state.currActiveEditBtn === 'editOnlyMe' ||
+                  this.state.currActiveEditBtn === 'editEveryone'
                   ? null
                   : <div>
                     <Subheader style={styles.subheader}>
