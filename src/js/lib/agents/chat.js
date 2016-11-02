@@ -102,7 +102,7 @@ class ChatAgent extends LDPAgent {
       console.error(e, 'occured while putting the acl file')
     })
   }
-
+  // complete 2 functions below
   addUserToChatSubscriberList(webIdOfUserToBeAdded, chatURI) {
     // let subject, predicate, object
     // chatURI = 'https://' + chatURI
@@ -163,7 +163,7 @@ class ChatAgent extends LDPAgent {
 
   postMessage(conversationUrl, author, content) {
     // TODO: implement
-    let msgId = `<#${Util.randomString(5)}>`
+    let msgId = `#${Util.randomString(5)}`
     let conversationId = `${conversationUrl}#thread`
     return this.get(Util.uriToProxied(conversationUrl))
       .then((xhr) => {
@@ -172,29 +172,29 @@ class ChatAgent extends LDPAgent {
       })
       .then((result) => {
         let triples = [{// this is a message
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.type,
           object: PRED.post
         }, { // written by...
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.hasCreator,
-          object: rdf.sym(author)
+          object: author
         }, { // with content...
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.content,
           object: N3Util.createLiteral(content)
         }, { // with timestamp...
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.created,
           object: N3Util.createLiteral(new Date().getTime())
         }, { // contained by
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.hasContainer,
-          object: conversationId
+          object: rdf.sym(conversationId)
         }, {
-          subject: conversationId,
+          subject: rdf.sym(conversationId),
           predicate: PRED.containerOf,
-          object: msgId
+          object: rdf.sym(msgId)
         }]
 
         let writer = new Writer({prefixes: result.prefixes})
@@ -383,7 +383,7 @@ class ChatAgent extends LDPAgent {
 
     var graph = rdf.graph()
 
-    graph.add('#inbox', PRED.spaceOf, rdf.lit(conversationUrl))
+    graph.add('#inbox', PRED.spaceOf, rdf.sym(conversationUrl))
 
     var toAdd = []
     graph.statementsMatching('#inbox', undefined, undefined)
@@ -415,7 +415,7 @@ class ChatAgent extends LDPAgent {
       {
         subject: '',
         predicate: PRED.maker,
-        object: initiator
+        object: rdf.sym(initiator)
       },
       {
         subject: '',
@@ -430,7 +430,7 @@ class ChatAgent extends LDPAgent {
       {
         subject: '#thread',
         predicate: PRED.hasOwner,
-        object: initiator
+        object: rdf.sym(initiator)
       }
     ]
 
@@ -443,7 +443,7 @@ class ChatAgent extends LDPAgent {
       writer.addTriple({
         subject: '#thread',
         predicate: PRED.hasSubscriber,
-        object: p
+        object: rdf.sym(p)
       })
     }
 
