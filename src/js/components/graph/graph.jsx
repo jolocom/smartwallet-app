@@ -111,8 +111,7 @@ let Graph = React.createClass({
       } else {
         debug('Navigating to node (componentDidMount)', this.props.params.node)
         graphActions.navigateToNode({uri: this.props.params.node},
-                                    {uri: this.context.account.webId,
-                                     name: this.context.account.username})
+         {uri: this.context.account.webId, name: this.context.account.username})
       }
     } else if (account.webId) {
       debug('Navigating to default node', account.webId)
@@ -144,8 +143,8 @@ let Graph = React.createClass({
 
         if (this.props.params.node) {
           graphActions.navigateToNode({uri: nodeUri},
-                                      {uri: this.context.account.webId,
-                                       name: this.context.account.username})
+            {uri: this.context.account.webId,
+              name: this.context.account.username})
         } else {
           graphActions.navigateToNode({uri: nodeUri})
         }
