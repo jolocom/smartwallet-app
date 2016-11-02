@@ -53,7 +53,7 @@ export default Reflux.createStore({
     this.state[key] = value
     if (flag) this.trigger(this.state)
   },
-  
+
   onChangeRotationIndex: function(rotationIndex, flag){
     this.state['rotationIndex'] = rotationIndex
     if (flag) this.trigger(this.state,'changeRotationIndex')
@@ -77,9 +77,9 @@ export default Reflux.createStore({
         }
         // Removed the brackets, one liners.
         else if(this.state.navHistory.length > 1)
-          for (var j = 0; j < this.state.navHistory.length-1; j++) 
-            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) 
-              for (var k = 0; k < j+2; k++) 
+          for (var j = 0; j < this.state.navHistory.length-1; j++)
+            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri)
+              for (var k = 0; k < j+2; k++)
                 this.state.navHistory.pop()
       }
 

@@ -37,6 +37,9 @@ export default class GraphD3 extends EventEmitter {
     this.rotationIndex = 0
 
     this.svg = d3.select(this.graphContainer).append('svg:svg')
+      .attr('class', (d) => {
+        return this.mode === 'preview' ? 'previewSVG' : 'SVG'
+      })
       .style('display', 'block')
       // .append('svg:g')
 
@@ -906,12 +909,8 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('.node')
       .transition('pos').duration(speed)
       .attr('transform', (d) => {
-        let x = this.centerCoordinates.x
-        let y = this.centerCoordinates.y
-        if (d.rank === 'neighbour' || d.rank === 'history') {
-          x = d.position.x
-          y = d.position.y
-        }
+        let x = d.position.x
+        let y = d.position.y
         return 'translate(' + x + ',' + y + ')'
       })
     //
@@ -1327,6 +1326,9 @@ export default class GraphD3 extends EventEmitter {
 
     this.svg
     .selectAll('.background-layer ~ *')
+    .remove()
+
+    d3.selectAll('.previewSVG')
     .remove()
   }.bind(this)
 
