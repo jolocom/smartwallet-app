@@ -221,7 +221,7 @@ let Conversation = React.createClass({
       }
       var otherPersonAvatar = (
         <UserAvatar
-          name={author.charAt(8)}
+          // name={author.charAt(8)}
           // imgUrl={otherPerson[1].img}
           imgUrl={image}
           // imgUrl={author.img}
