@@ -1327,9 +1327,6 @@ export default class GraphD3 extends EventEmitter {
     this.svg
     .selectAll('.background-layer ~ *')
     .remove()
-
-    d3.selectAll('.previewSVG')
-    .remove()
   }.bind(this)
 
   // Alternative to dragging the node to the center.
