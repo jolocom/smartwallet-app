@@ -87,6 +87,25 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
+  handleCheck(list, user) {
+    if (list === 'visOnlyMe') {
+      this.state.viewAllowList = this.state.viewAllowList.map(el => {
+        if (el === user) {
+          el.canEdit = !el.canEdit
+        }
+        return el
+      })
+    } else if (list === 'visFriends') {
+      this.state.friendViewAllowList = this.state.friendViewAllowList.map(f => {
+        if (f === user) {
+          f.canEdit = !f.canEdit
+        }
+        return f
+      })
+    }
+    this.trigger(this.state)
+  },
+
   fetchInitialData(user) {
     this.aclAgent = new AclAgent(user)
     this.aclAgent.fetchInfo().then(this.trigger({}))
@@ -117,9 +136,8 @@ export default Reflux.createStore({
       canEdit: false
     })
 
-    this.state.friendViewDisallowList = this.state.friendViewDisallowList.filter(el =>
-      el.label !== user
-    )
+    this.state.friendViewDisallowList =
+      this.state.friendViewDisallowList.filter(el => el.label !== user)
     this.trigger(this.state)
   },
 
@@ -175,9 +193,8 @@ export default Reflux.createStore({
       canEdit: false
     })
 
-    this.state.friendEditDisallowList = this.state.friendEditDisallowList.filter(el =>
-      el.label !== user
-    )
+    this.state.friendEditDisallowList =
+      this.state.friendEditDisallowList.filter(el => el.label !== user)
     this.trigger(this.state)
   }
 })

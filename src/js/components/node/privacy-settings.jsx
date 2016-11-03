@@ -61,7 +61,6 @@ let PrivacySettings = React.createClass({
   _handleTextEnter(e) {
     if (e.key === 'Enter') {
       switch (e.target.name) {
-        // FIRST SCREEN, only me, whitelisted.
         case 'viewAllow':
           PrivacyActions.allowRead(e.target.value)
           break
@@ -115,28 +114,8 @@ let PrivacySettings = React.createClass({
     })
   },
 
-  _handleOnCheckOnlyMe(viewer) {
-    this.state.viewAllowList = this.state.viewAllowList.map(el => {
-      if (el === viewer) {
-        el.canEdit = !el.canEdit
-      }
-    })
-  },
-
   _handleCheck(list, user) {
-
-  },
-
-  _handleOnCheckFriend(friend) {
-    let newFriendList = this.state.allowFriendList
-    newFriendList.map((f) => {
-      if (f === friend) {
-        f.canEdit = !f.canEdit
-      }
-    })
-    this.setState({
-      allowFriendList: newFriendList
-    })
+    PrivacyActions.handleCheck(list, user)
   },
 
   renderChip(data, func) {
@@ -227,18 +206,10 @@ let PrivacySettings = React.createClass({
 
     if (this.state.currActiveViewBtn === 'visOnlyMe') {
       list = this.state.viewAllowList
-      check = this._handleOnCheckOnlyMe
+      check = this._handleCheck
     } else if (this.state.currActiveViewBtn === 'visFriends') {
       list = this.state.friendViewAllowList
-      check = this._handleOnCheckFriend
-    } else {
-      if (this.state.currActiveEditBtn === 'editOnlyMe') {
-        list = this.state.editAllowList
-        check = this._handleOnCheckOnlyMe
-      } else if (this.state.currActiveEditBtn === 'editFriends') {
-        list = this.state.friendEditAllowList
-        check = this._handleOnCheckFriend
-      }
+      check = this._handleCheck
     }
 
     let checkMate
@@ -442,17 +413,16 @@ let PrivacySettings = React.createClass({
             }
           <div>
             <List>
-              {this.state.currActiveViewBtn === ''}
               {checkMate}
-              {this.state.currActiveEditBtn !== 'editEveryone'
+              {this.state.currActiveViewBtn !== 'visEveryone'
               ? list.map((viewer) => {
                 return (
                   <ListItem>
                     <Checkbox
                       label={viewer.label || viewer.name}
                       labelPosition='left'
-                      onCheck={function() {
-                        check(viewer)
+                      onCheck={() => {
+                        check(this.state.currActiveViewBtn, viewer)
                       }}
                       checked={viewer.canEdit}
                     />

@@ -10,5 +10,6 @@ export default Reflux.createActions({
   'disallowEdit': {asyncResult: false},
   'friendAllowEdit': {asyncResult: false},
   'friendDisallowEdit': {asyncResult: false},
-  'navigate': {asyncResult: false}
+  'navigate': {asyncResult: false},
+  'handleCheck': {asyncResult: false}
 })
