@@ -38,8 +38,6 @@ let PrivacySettings = React.createClass({
       friendEditAllowList: [],
       friendEditDisallowList: [],
 
-      coreFriendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea'], // TEMP
-
       isSelectAllOnlyMe: false,
       isSelectAllFriends: false
     }
@@ -51,7 +49,7 @@ let PrivacySettings = React.createClass({
   },
 
   goBack() {
-    // PrivacyActions.commit()
+    PrivacyActions.computeResult()
     this.context.router.push('/graph')
   },
 

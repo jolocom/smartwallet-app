@@ -12,5 +12,6 @@ export default Reflux.createActions({
   'friendDisallowEdit': {asyncResult: false},
   'navigate': {asyncResult: false},
   'handleCheck': {asyncResult: false},
-  'commit': {asyncResult: false}
+  'commit': {asyncResult: false},
+  'computeResult': {asyncResult: false}
 })

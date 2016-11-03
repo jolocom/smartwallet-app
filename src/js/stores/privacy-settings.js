@@ -1,10 +1,14 @@
 import Reflux from 'reflux'
 import PrivacyActions from 'actions/privacy-settings'
 import AclAgent from 'lib/agents/acl'
+import GraphAgent from 'lib/agents/graph'
 
 export default Reflux.createStore({
   listenables: PrivacyActions,
+
   init() {
+    this.gAgent = new GraphAgent()
+
     this.state = {
       currActiveViewBtn: 'visOnlyMe',
       currActiveEditBtn: 'editOnlyMe',
@@ -12,56 +16,12 @@ export default Reflux.createStore({
       viewAllowList: [],
       editAllowList: [],
 
-      friendViewAllowList: [
-        {
-          name: 'Brendan',
-          canEdit: false
-        },
-        {
-          name: 'Eric',
-          canEdit: false
-        },
-        {
-          name: 'Grace',
-          canEdit: false
-        },
-        {
-          name: 'Kerem',
-          canEdit: false
-        },
-        {
-          name: 'Chelsea',
-          canEdit: false
-        }
-      ],
+      friendViewAllowList: [],
 
-      friendEditAllowList: [
-        {
-          name: 'Brendan',
-          canEdit: false
-        },
-        {
-          name: 'Eric',
-          canEdit: false
-        },
-        {
-          name: 'Grace',
-          canEdit: false
-        },
-        {
-          name: 'Kerem',
-          canEdit: false
-        },
-        {
-          name: 'Chelsea',
-          canEdit: false
-        }
-      ],
+      friendEditAllowList: [],
 
       friendViewDisallowList: [],
       friendEditDisallowList: [],
-
-      coreFriendList: ['Brendan', 'Eric', 'Grace', 'Kerem', 'Chelsea'], // TEMP
 
       isSelectAllOnlyMe: false,
       isSelectAllFriends: false,
@@ -76,15 +36,16 @@ export default Reflux.createStore({
   },
 
   navigate(activeView, activeEdit) {
+  // TODO Evaluate the alternative.
+  /*
     if (activeEdit === 'editEveryone') {
       this.aclAgent.allow('*', 'write')
     } else if (activeView === 'viewEveryone') {
       this.aclAgent.allow('*', 'read')
-    } else {
-      this.aclAgent.removeAllow('*', 'read')
-      this.aclAgent.removeAllow('*', 'write')
+    } else if (activeView === 'visFriends') {
+      console.log(this.state.friendList)
     }
-
+  */
     if (activeView) {
       this.state.currActiveViewBtn = activeView
     }
@@ -94,6 +55,13 @@ export default Reflux.createStore({
     }
 
     this.trigger(this.state)
+  },
+
+  computeResult() {
+    if (this.state.currActiveViewBtn === 'visEveryone') {
+    }
+    if (this.state.currActiveEditBtn === 'editEveryone') {
+    }
   },
 
   handleCheck(list, user) {
@@ -127,8 +95,17 @@ export default Reflux.createStore({
           this.state.currActiveEditBtn = 'editEveryone'
         }
       })
-      this.trigger(this.state)
-    })
+    }).then(() => {
+      let webId = localStorage.getItem('jolocom.webId')
+      this.gAgent.findFriends(webId).then(res => {
+        res.forEach(el => {
+          this.state.friendViewAllowList.push({
+            name: el.object.uri,
+            canEdit: false
+          })
+        })
+      })
+    }).then(this.trigger(this.state))
   },
 
   allowRead(user) {

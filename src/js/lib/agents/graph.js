@@ -57,6 +57,17 @@ class GraphAgent {
   }
 
   /**
+   * @summary Returns all friends a profile has.
+   * @param {string} uri - The uri of the profile file.
+   */
+
+  findFriends(uri) {
+    return this.fetchTriplesAtUri(uri).then(res => {
+      return this.findTriples(uri, rdf.sym(uri), PRED.knows, undefined)
+    })
+  }
+
+  /**
    * @summary Curates the creation of a new node, delegates to other functions.
    * @param {string} currentUser - Current webID, used for creating acl
    *                 and connecting to the onwer.
