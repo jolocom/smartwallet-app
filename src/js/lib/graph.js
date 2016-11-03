@@ -498,8 +498,6 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', (d) => {
         if (d.elipsisdepth >= 0) {
           return 0
-        } else if (d.img && d.rank !== 'history' && d.type !== 'passport') {
-          return 0
         } else {
           return 1
         }
@@ -1060,7 +1058,9 @@ export default class GraphD3 extends EventEmitter {
           return smallSize
         }
       })
-      .style('filter', null)
+      .style('filter', (d) => {
+        return d.img && d.elipsisdepth < 0 ? 'url(#darkblur)' : null
+      })
 
     // Reset sizes of all confidential icons without unnecessary animation
     d3.selectAll('svg .node')
@@ -1092,22 +1092,6 @@ export default class GraphD3 extends EventEmitter {
           }
           return d.elipsisdepth === -1 ? 1 : 0
         }
-      })
-
-    // We set the name of the node to invisible in case it has a profile picture
-    // In case the node has no picture, we display its name.
-    d3.selectAll('svg .node')
-      .selectAll('.nodetext')
-      .transition('reset').duration(speed)
-      .attr('dy', function (d) {
-        return d3.select(this.parentNode).classed('hasNodeIcon')
-          ? (d.rank === 'center' ? '0.95em' : '.75em')
-          : '.35em' })
-      .attr('opacity', (d) => {
-        return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
-                d.rank !== 'history')
-                ? 0
-                : 1
       })
 
     // Hide the descriptions of all nodes
