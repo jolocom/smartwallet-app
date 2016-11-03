@@ -75,6 +75,18 @@ export default Reflux.createStore({
     return this.state
   },
 
+  navigate(activeView, activeEdit) {
+    if (activeView) {
+      this.state.currActiveViewBtn = activeView
+    }
+
+    if (activeEdit) {
+      this.state.currActiveEditBtn = activeEdit
+    }
+
+    this.trigger(this.state)
+  },
+
   fetchInitialData(user) {
     this.aclAgent = new AclAgent(user)
     this.aclAgent.fetchInfo().then(this.trigger({}))
@@ -85,8 +97,7 @@ export default Reflux.createStore({
     this.state.viewAllowList.push({
       label: user,
       key: this.state.editAllowList.length,
-      canEdit: false,
-      list: 'viewAllow'
+      canEdit: false
     })
     this.trigger(this.state)
   },
@@ -96,27 +107,10 @@ export default Reflux.createStore({
     this.state.viewAllowList = this.state.viewAllowList.filter(el =>
       el.label !== user
     )
-
     this.trigger(this.state)
   },
 
-  friendDisallowRead(user) {
-    // TODO LOGIC
-    this.state.friendViewDisallowList.push({
-      label: user,
-      key: this.state.friendViewDisallowList.length,
-      canEdit: false,
-      list: 'friendViewDisallow'
-    })
-
-    this.state.friendViewAllowList = this.state.friendViewAllowList.filter(el =>
-      el.name !== user
-    )
-
-    this.trigger(this.state)
-  },
-
-  friendViewAllow(user) {
+  friendAllowRead(user) {
     // TODO LOGIC
     this.state.friendViewAllowList.push({
       name: user,
@@ -129,13 +123,26 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
+  friendDisallowRead(user) {
+    // TODO LOGIC
+    this.state.friendViewDisallowList.push({
+      label: user,
+      key: this.state.friendViewDisallowList.length,
+      canEdit: false
+    })
+    this.state.friendViewAllowList = this.state.friendViewAllowList.filter(el =>
+      el.name !== user
+    )
+
+    this.trigger(this.state)
+  },
+
   allowEdit(user) {
     this.aclAgent.removeAllow(user, 'read')
     this.state.editAllowList.push({
       label: user,
       key: this.state.editAllowList.length,
-      canEdit: false,
-      list: 'editAllow'
+      canEdit: false
     })
     this.trigger(this.state)
   },
@@ -152,12 +159,24 @@ export default Reflux.createStore({
     this.state.friendEditDisallowList.push({
       label: user,
       key: this.state.friendEditDisallowList.length,
-      canEdit: false,
-      list: 'friendEditDisallow'
+      canEdit: false
     })
 
     this.state.friendEditAllowList = this.state.friendEditAllowList.filter(el =>
       el.name !== user
+    )
+    this.trigger(this.state)
+  },
+
+  friendAllowEdit(user) {
+    // TODO LOGIC
+    this.state.friendEditAllowList.push({
+      name: user,
+      canEdit: false
+    })
+
+    this.state.friendEditDisallowList = this.state.friendEditDisallowList.filter(el =>
+      el.label !== user
     )
     this.trigger(this.state)
   }

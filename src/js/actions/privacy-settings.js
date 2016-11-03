@@ -4,9 +4,11 @@ export default Reflux.createActions({
   'fetchInitialData': {asyncResult: true},
   'allowRead': {asyncResult: false},
   'disallowRead': {asyncResult: false},
+  'friendAllowRead': {asyncResult: false},
   'friendDisallowRead': {asyncResult: false},
   'allowEdit': {asyncResult: false},
   'disallowEdit': {asyncResult: false},
+  'friendAllowEdit': {asyncResult: false},
   'friendDisallowEdit': {asyncResult: false},
-  'friendViewAllow': {asyncResult: false}
+  'navigate': {asyncResult: false}
 })

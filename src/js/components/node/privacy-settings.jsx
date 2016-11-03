@@ -58,58 +58,6 @@ let PrivacySettings = React.createClass({
     this.setState(storeState)
   },
 
-  _handleRequestDelete(data) {
-    switch (data.list) {
-      // Removing a view allow chip.
-      case 'viewAllow':
-        PrivacyActions.disallowRead(data.label)
-
-        let newViewAllowList = this.state.viewAllowList.filter(chip => {
-          return chip.key !== data.key
-        })
-        this.setState({
-          viewAllowList: newViewAllowList,
-          numViewAllowedItems: newViewAllowList.length
-        })
-        break
-      case 'viewDisallow':
-        let newViewDisallowList = this.state.viewDisallowList.filter(chip => {
-          return chip.key !== data.key
-        })
-        this.setState({
-          viewDisallowList: newViewDisallowList,
-          numViewDisallowedItems: newViewDisallowList.length
-        })
-        this.state.coreFriendList.map((friend) => {
-          if (friend === data.label) {
-            this.state.allowFriendList.push({
-              name: friend,
-              canEdit: false
-            })
-          }
-        })
-        break
-      case 'editAllow':
-        let newEditAllowList = this.state.editAllowList.filter(chip => {
-          return chip.key !== data.key
-        })
-        this.setState({
-          editAllowList: newEditAllowList,
-          numEditAllowedItems: newEditAllowList.length
-        })
-        break
-      case 'editDisallow':
-        let newEditDisallowList = this.state.editDisallowList.filter(chip => {
-          return chip.key !== data.key
-        })
-        this.setState({
-          editDisallowList: newEditDisallowList,
-          numEditDisallowedItems: newEditDisallowList.length
-        })
-        break
-    }
-  },
-
   _handleTextEnter(e) {
     if (e.key === 'Enter') {
       switch (e.target.name) {
@@ -117,21 +65,14 @@ let PrivacySettings = React.createClass({
         case 'viewAllow':
           PrivacyActions.allowRead(e.target.value)
           break
-        case 'viewDisallow':
-          if (this.state.currActiveViewBtn === 'visFriends') {
-            PrivacyActions.friendDisallowRead(e.target.value)
-          } else {
-            PrivacyActions.disallowRead(e.target.value)
-          }
-          break
         case 'friendViewDisallow':
-          PrivacyActions.friendDissalowRead(e.target.value)
+          PrivacyActions.friendDisallowRead(e.target.value)
           break
         case 'editAllow':
           PrivacyActions.allowEdit(e.target.value)
           break
-        case 'editDisallow':
-          PrivacyActions.disallowEdit(e.target.value)
+        case 'friendEditDisallow':
+          PrivacyActions.friendDisallowEdit(e.target.value)
           break
         default:
           break
@@ -140,39 +81,12 @@ let PrivacySettings = React.createClass({
     }
   },
 
-  _setActive(activeBtn) {
-    // DISPATCH ACTIONS TODO
-    if (activeBtn.includes('vis')) {
-      switch (activeBtn) {
-        case 'visOnlyMe':
-          this.setState({currActiveViewBtn: 'visOnlyMe'})
-          break
-        case 'visFriends':
-          this.setState({currActiveViewBtn: 'visFriends'})
-          break
-        case 'visEveryone':
-          this.setState({currActiveViewBtn: 'visEveryone'})
-          break
-        default:
-          this.setState({currActiveViewBtn: 'visOnlyMe'})
-          break
-      }
-    } else {
-      switch (activeBtn) {
-        case 'editOnlyMe':
-          this.setState({currActiveEditBtn: 'editOnlyMe'})
-          break
-        case 'editFriends':
-          this.setState({currActiveEditBtn: 'editFriends'})
-          break
-        case 'editEveryone':
-          this.setState({currActiveEditBtn: 'editEveryone'})
-          break
-        default:
-          this.setState({currActiveEditBtn: 'editOnlyMe'})
-          break
-      }
-    }
+  _setActiveView(activeBtn) {
+    PrivacyActions.navigate(activeBtn, false)
+  },
+
+  _setActiveEdit(activeBtn) {
+    PrivacyActions.navigate(false, activeBtn)
   },
 
   _handleSelectAllPlusAllowed() {
@@ -202,15 +116,15 @@ let PrivacySettings = React.createClass({
   },
 
   _handleOnCheckOnlyMe(viewer) {
-    let newViewerList = this.state.viewAllowList
-    newViewerList.map((v) => {
-      if (v === viewer) {
-        v.canEdit = !v.canEdit
+    this.state.viewAllowList = this.state.viewAllowList.map(el => {
+      if (el === viewer) {
+        el.canEdit = !el.canEdit
       }
     })
-    this.setState({
-      viewAllowList: newViewerList
-    })
+  },
+
+  _handleCheck(list, user) {
+
   },
 
   _handleOnCheckFriend(friend) {
@@ -309,23 +223,19 @@ let PrivacySettings = React.createClass({
     let styles = this.getStyles()
     let activeNode = GraphStore.state.activeNode.title
 
-    console.log(this.state.currActiveViewBtn)
-    console.log(this.state.currActiveEditBtn)
-
     let list, check
+
     if (this.state.currActiveViewBtn === 'visOnlyMe') {
-      if (this.state.currActiveEditBtn === 'editOnlyMe') {
-        list = this.state.viewAllowList
-        check = this._handleOnCheckOnlyMe
-      } else {
-        list = this.state.friendViewAllowList
-        check = this._handleOnCheckFriend
-      }
+      list = this.state.viewAllowList
+      check = this._handleOnCheckOnlyMe
+    } else if (this.state.currActiveViewBtn === 'visFriends') {
+      list = this.state.friendViewAllowList
+      check = this._handleOnCheckFriend
     } else {
       if (this.state.currActiveEditBtn === 'editOnlyMe') {
         list = this.state.editAllowList
         check = this._handleOnCheckOnlyMe
-      } else {
+      } else if (this.state.currActiveEditBtn === 'editFriends') {
         list = this.state.friendEditAllowList
         check = this._handleOnCheckFriend
       }
@@ -384,7 +294,7 @@ let PrivacySettings = React.createClass({
                     ...styles.toggleBtnActive}
                 : {...styles.toggleBtn, ...styles.toggleBtnLeft}
               }
-              onTouchTap={this._setActive.bind(this, 'visOnlyMe')}>
+              onTouchTap={this._setActiveView.bind(this, 'visOnlyMe')}>
               Only Me
             </FlatButton>
             <FlatButton
@@ -394,7 +304,7 @@ let PrivacySettings = React.createClass({
                 ? {...styles.toggleBtn, ...styles.toggleBtnActive}
                 : styles.toggleBtn
               }
-              onTouchTap={this._setActive.bind(this, 'visFriends')}>
+              onTouchTap={this._setActiveView.bind(this, 'visFriends')}>
               Friends
             </FlatButton>
             <FlatButton
@@ -404,7 +314,7 @@ let PrivacySettings = React.createClass({
                   ...styles.toggleBtnActive} 
                 : {...styles.toggleBtn, ...styles.toggleBtnRight}
               }
-              onTouchTap={this._setActive.bind(this, 'visEveryone')}>
+              onTouchTap={this._setActiveView.bind(this, 'visEveryone')}>
               Everyone
             </FlatButton>
           </div>
@@ -438,11 +348,11 @@ let PrivacySettings = React.createClass({
                 </Subheader>
                 <div style={styles.chipWrapper}>
                   {this.state.friendViewDisallowList.map(el => {
-                    return this.renderChip(el, PrivacyActions.friendViewAllow)
+                    return this.renderChip(el, PrivacyActions.friendAllowRead)
                   }, this)}
                 </div>
                 <TextField
-                  name="viewDisallow"
+                  name="friendViewDisallow"
                   hintText="Enter a node title"
                   onKeyPress={this._handleTextEnter}
                   fullWidth />
@@ -464,7 +374,7 @@ let PrivacySettings = React.createClass({
                         ...styles.toggleBtnActive}
                     : {...styles.toggleBtn, ...styles.toggleBtnLeft}
                   }
-                  onTouchTap={this._setActive.bind(this, 'editOnlyMe')}>
+                  onTouchTap={this._setActiveEdit.bind(this, 'editOnlyMe')}>
                   Only Me
                 </FlatButton>
                 <FlatButton
@@ -473,7 +383,7 @@ let PrivacySettings = React.createClass({
                     ? {...styles.toggleBtn, ...styles.toggleBtnActive}
                     : {...styles.toggleBtn}
                   }
-                  onTouchTap={this._setActive.bind(this, 'editFriends')}>
+                  onTouchTap={this._setActiveEdit.bind(this, 'editFriends')}>
                   Friends
                 </FlatButton>
                 <FlatButton
@@ -483,7 +393,7 @@ let PrivacySettings = React.createClass({
                         ...styles.toggleBtnActive}
                     : {...styles.toggleBtn, ...styles.toggleBtnRight}
                   }
-                  onTouchTap={this._setActive.bind(this, 'editEveryone')}>
+                  onTouchTap={this._setActiveEdit.bind(this, 'editEveryone')}>
                   Everyone
                 </FlatButton>
                 <div style={styles.customSettings}>
@@ -507,47 +417,51 @@ let PrivacySettings = React.createClass({
                   </div>
                   : null
                 }
-                  {this.state.currActiveEditBtn === 'editOnlyMe' ||
-                  this.state.currActiveEditBtn === 'editEveryone'
-                  ? null
-                  : <div>
+                  { this.state.currActiveEditBtn === 'editFriends'
+                  ? <div>
                     <Subheader style={styles.subheader}>
                     Disallow
                     </Subheader>
                     <div style={styles.chipWrapper}>
                       {this.state.friendEditDisallowList.map(el => {
-                        return this.renderChip(el, PrivacyActions.friendDisallowEdit)
+                        return this.renderChip(el, PrivacyActions.friendAllowEdit)
                       }, this)}
 
                     </div>
                     <TextField
-                      name="editDisallow"
-                      hintText="Enter a node title"
+                      name='friendEditDisallow'
+                      hintText='Enter a node title'
                       onKeyPress={this._handleTextEnter}
                       fullWidth />
                   </div>
+                : null
                 }
                 </div>
               </div>
-              : <div>
-                <List>
-                  {this.state.currActiveViewBtn === ''}
-                  {checkMate}
-
-                  {list.map((viewer) => {
-                    return (
-                      <ListItem>
-                        <Checkbox
-                          label={viewer.label || viewer.name}
-                          labelPosition='left'
-                          onCheck={check}
-                          checked={viewer.canEdit}
-                          />
-                      </ListItem>)
-                  })}
-                </List>
-              </div>
+              : null
             }
+          <div>
+            <List>
+              {this.state.currActiveViewBtn === ''}
+              {checkMate}
+              {this.state.currActiveEditBtn !== 'editEveryone'
+              ? list.map((viewer) => {
+                return (
+                  <ListItem>
+                    <Checkbox
+                      label={viewer.label || viewer.name}
+                      labelPosition='left'
+                      onCheck={function() {
+                        check(viewer)
+                      }}
+                      checked={viewer.canEdit}
+                    />
+                  </ListItem>)
+              })
+            : null
+            }
+            </List>
+          </div>
         </div>
       </div>
     )
