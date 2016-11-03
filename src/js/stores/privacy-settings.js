@@ -116,6 +116,7 @@ export default Reflux.createStore({
   },
 
   fetchInitialData(user) {
+    this.init()
     this.aclAgent = new AclAgent(user)
     this.aclAgent.fetchInfo().then((data) => {
       this.aclAgent.allowedPermissions('*').map(el => {

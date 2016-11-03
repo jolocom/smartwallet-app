@@ -51,7 +51,7 @@ let PrivacySettings = React.createClass({
   },
 
   goBack() {
-    //PrivacyActions.commit()
+    // PrivacyActions.commit()
     this.context.router.push('/graph')
   },
 
