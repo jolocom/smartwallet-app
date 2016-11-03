@@ -76,6 +76,15 @@ export default Reflux.createStore({
   },
 
   navigate(activeView, activeEdit) {
+    if (activeEdit === 'editEveryone') {
+      this.aclAgent.allow('*', 'write')
+    } else if (activeView === 'viewEveryone') {
+      this.aclAgent.allow('*', 'read')
+    } else {
+      this.aclAgent.removeAllow('*', 'read')
+      this.aclAgent.removeAllow('*', 'write')
+    }
+
     if (activeView) {
       this.state.currActiveViewBtn = activeView
     }
@@ -108,7 +117,17 @@ export default Reflux.createStore({
 
   fetchInitialData(user) {
     this.aclAgent = new AclAgent(user)
-    this.aclAgent.fetchInfo().then(this.trigger({}))
+    this.aclAgent.fetchInfo().then((data) => {
+      this.aclAgent.allowedPermissions('*').map(el => {
+        if (el === 'read') {
+          this.state.currActiveViewBtn = 'visEveryone'
+        }
+        if (el === 'write') {
+          this.state.currActiveEditBtn = 'editEveryone'
+        }
+      })
+      this.trigger(this.state)
+    })
   },
 
   allowRead(user) {
@@ -156,7 +175,7 @@ export default Reflux.createStore({
   },
 
   allowEdit(user) {
-    this.aclAgent.removeAllow(user, 'read')
+    this.aclAgent.allow(user, 'write')
     this.state.editAllowList.push({
       label: user,
       key: this.state.editAllowList.length,
@@ -196,5 +215,10 @@ export default Reflux.createStore({
     this.state.friendEditDisallowList =
       this.state.friendEditDisallowList.filter(el => el.label !== user)
     this.trigger(this.state)
+  },
+
+  commit() {
+    this.aclAgent.commit()
+    this.aclAgent.commitIndex()
   }
 })
