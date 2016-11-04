@@ -59,19 +59,40 @@ export default Reflux.createStore({
   },
 
   computeResult() {
+    this.aclAgent.resetAcl()
+    this.aclAgent.allow(this.webId, 'read')
+    this.aclAgent.allow(this.webId, 'control')
+    this.aclAgent.allow(this.webId, 'write')
+
     if (this.state.currActiveViewBtn === 'visOnlyMe') {
-      this.aclAgent.resetAcl()
-      this.aclAgent.allow(this.webId, 'read')
-      this.aclAgent.allow(this.webId, 'control')
       this.state.viewAllowList.forEach(el => {
+        this.aclAgent.allow(el.label, 'read')
         if (el.canEdit) {
           this.aclAgent.allow(el.label, 'write')
         }
-        this.aclAgent.allow(el.label, 'read')
       })
+    } else if (this.state.currActiveViewBtn === 'visFriends') {
+      this.state.friendViewAllowList.forEach(el => {
+        this.aclAgent.allow(el.name, 'read')
+        if (el.canEdit) {
+          this.aclAgent.allow(el.name, 'write')
+        }
+      })
+    } else if (this.state.currActiveViewBtn === 'visEveryone') {
+      this.aclAgent.allow('*', 'read')
+      if (this.state.currActiveEditBtn === 'editOnlyMe') {
+        this.state.editAllowList.forEach(el => {
+          this.aclAgent.allow(el.label, 'write')
+        })
+      } else if (this.state.currActiveEditBtn === 'editFriends') {
+        this.state.friendEditAllowList.forEach(el => {
+          this.aclAgent.allow(el.name, 'write')
+        })
+      } else if (this.state.currActiveEditBtn === 'editEveryone') {
+        this.aclAgent.allow('*', 'write')
+      }
     }
-    if (this.state.currActiveEditBtn === 'editEveryone') {
-    }
+    console.log(this.aclAgent.Writer.end())
   },
 
   handleCheck(list, user) {
@@ -112,6 +133,10 @@ export default Reflux.createStore({
             name: el.object.uri,
             canEdit: false
           })
+          this.state.friendEditAllowList.push({
+            name: el.object.uri,
+            canEdit: true
+          })
         })
       })
     }).then(this.trigger(this.state))
@@ -128,7 +153,6 @@ export default Reflux.createStore({
   },
 
   disallowRead(user) {
-    // TODO, put logic
     this.state.viewAllowList = this.state.viewAllowList.filter(el =>
       el.label !== user
     )
@@ -136,7 +160,6 @@ export default Reflux.createStore({
   },
 
   friendAllowRead(user) {
-    // TODO LOGIC
     this.state.friendViewAllowList.push({
       name: user,
       canEdit: false
@@ -148,7 +171,6 @@ export default Reflux.createStore({
   },
 
   friendDisallowRead(user) {
-    // TODO LOGIC
     this.state.friendViewDisallowList.push({
       label: user,
       key: this.state.friendViewDisallowList.length,
@@ -179,7 +201,6 @@ export default Reflux.createStore({
   },
 
   friendDisallowEdit(user) {
-    // TODO LOGIC
     this.state.friendEditDisallowList.push({
       label: user,
       key: this.state.friendEditDisallowList.length,
@@ -193,7 +214,6 @@ export default Reflux.createStore({
   },
 
   friendAllowEdit(user) {
-    // TODO LOGIC
     this.state.friendEditAllowList.push({
       name: user,
       canEdit: false
