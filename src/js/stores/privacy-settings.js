@@ -8,6 +8,7 @@ export default Reflux.createStore({
 
   init() {
     this.gAgent = new GraphAgent()
+    this.webId = localStorage.getItem('jolocom.webId')
 
     this.state = {
       currActiveViewBtn: 'visOnlyMe',
@@ -58,7 +59,16 @@ export default Reflux.createStore({
   },
 
   computeResult() {
-    if (this.state.currActiveViewBtn === 'visEveryone') {
+    if (this.state.currActiveViewBtn === 'visOnlyMe') {
+      this.aclAgent.resetAcl()
+      this.aclAgent.allow(this.webId, 'read')
+      this.aclAgent.allow(this.webId, 'control')
+      this.state.viewAllowList.forEach(el => {
+        if (el.canEdit) {
+          this.aclAgent.allow(el.label, 'write')
+        }
+        this.aclAgent.allow(el.label, 'read')
+      })
     }
     if (this.state.currActiveEditBtn === 'editEveryone') {
     }
@@ -96,8 +106,7 @@ export default Reflux.createStore({
         }
       })
     }).then(() => {
-      let webId = localStorage.getItem('jolocom.webId')
-      this.gAgent.findFriends(webId).then(res => {
+      this.gAgent.findFriends(this.webId).then(res => {
         res.forEach(el => {
           this.state.friendViewAllowList.push({
             name: el.object.uri,

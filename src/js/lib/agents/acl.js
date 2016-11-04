@@ -84,6 +84,14 @@ class AclAgent {
   }
 
   /**
+   * @summary Removes all triples in the writer.
+   * Usefull when we want to reset / wipe the triples in the agent
+   */
+  resetAcl() {
+    this.Writer = new Writer()
+  }
+
+  /**
    * @summary Gives the specified user the specified permissions.
    * @param {string} user - the webid of the user, in case it's a * [wildcard],
    *                        then everyone is granted the specified access.
@@ -112,7 +120,7 @@ class AclAgent {
     }
 
     this.indexAdd(payload)
-
+    console.log('HEY, ADDING', user, 'PERMISSION TO', mode)
     // If user already has the permission.
     if (_.includes(this.allowedPermissions(user, true), mode)) {
       return

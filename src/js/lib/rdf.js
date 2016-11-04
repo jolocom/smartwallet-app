@@ -43,6 +43,8 @@ export class Writer {
   }
 
   end() {
+    console.log(this.g)
+    console.log(rdf.serialize(undefined, this.g, undefined, 'text/turtle'))
     return rdf.serialize(undefined, this.g, undefined, 'text/turtle')
   }
 }
