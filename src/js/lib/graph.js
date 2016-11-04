@@ -37,6 +37,9 @@ export default class GraphD3 extends EventEmitter {
     this.rotationIndex = 0
 
     this.svg = d3.select(this.graphContainer).append('svg:svg')
+      .attr('class', (d) => {
+        return this.mode === 'preview' ? 'previewSVG' : 'SVG'
+      })
       .style('display', 'block')
       // .append('svg:g')
 
@@ -817,16 +820,15 @@ export default class GraphD3 extends EventEmitter {
     let nodeCount = 0
 
     let backButton = {rank: 'neighbour',
-                      connection: 'backButton',
-                      position: this.nodePositions[0],
-
-                      elipsisdepth: 0,
-                      img: 'img/arrowLeft.png'}
+      connection: 'backButton',
+      position: this.nodePositions[0],
+      elipsisdepth: 0,
+      img: 'img/arrowLeft.png'}
     let frontButton = {rank: 'neighbour',
-                      connection: 'frontButton',
-                      position: this.nodePositions[this.MAX_VISIBLE_NODES + 1],
-                      elipsisdepth: 0,
-                      img: 'img/arrowRight.png'}
+      connection: 'frontButton',
+      position: this.nodePositions[this.MAX_VISIBLE_NODES + 1],
+      elipsisdepth: 0,
+      img: 'img/arrowRight.png'}
 
     this.visibleDataNodes.push(backButton)
 
@@ -906,12 +908,8 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('.node')
       .transition('pos').duration(speed)
       .attr('transform', (d) => {
-        let x = this.centerCoordinates.x
-        let y = this.centerCoordinates.y
-        if (d.rank === 'neighbour' || d.rank === 'history') {
-          x = d.position.x
-          y = d.position.y
-        }
+        let x = d.position.x
+        let y = d.position.y
         return 'translate(' + x + ',' + y + ')'
       })
     //
