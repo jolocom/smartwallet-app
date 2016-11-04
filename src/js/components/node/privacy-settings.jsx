@@ -49,7 +49,7 @@ let PrivacySettings = React.createClass({
   },
 
   goBack() {
-    PrivacyActions.computeResult()
+    // PrivacyActions.computeResult()
     this.context.router.push('/graph')
   },
 
@@ -431,6 +431,12 @@ let PrivacySettings = React.createClass({
             }
             </List>
           </div>
+          <FlatButton
+            style={Object.assign({},styles.toggelBtn, {backgroundColor: 'red'})}
+            onTouchTap={function() {
+              PrivacyActions.computeResult()
+            }}>
+          </FlatButton>
         </div>
       </div>
     )

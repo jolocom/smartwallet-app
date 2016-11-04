@@ -92,7 +92,6 @@ export default Reflux.createStore({
         this.aclAgent.allow('*', 'write')
       }
     }
-    console.log(this.aclAgent.Writer.end())
   },
 
   handleCheck(list, user) {
