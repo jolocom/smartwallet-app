@@ -660,8 +660,8 @@ export default class GraphD3 extends EventEmitter {
 
   drag = function(node) {
     if (node.rank !== 'center') {
-      node.position.x = d3.event.sourceEvent.offsetX
-      node.position.y = d3.event.sourceEvent.offsetY
+      node.position.x += d3.event.dx
+      node.position.y += d3.event.dy
       this.resetPos(0)
     }
   }.bind(this)
@@ -817,16 +817,15 @@ export default class GraphD3 extends EventEmitter {
     let nodeCount = 0
 
     let backButton = {rank: 'neighbour',
-                      connection: 'backButton',
-                      position: this.nodePositions[0],
-
-                      elipsisdepth: 0,
-                      img: 'img/arrowLeft.png'}
+      connection: 'backButton',
+      position: this.nodePositions[0],
+      elipsisdepth: 0,
+      img: 'img/arrowLeft.png'}
     let frontButton = {rank: 'neighbour',
-                      connection: 'frontButton',
-                      position: this.nodePositions[this.MAX_VISIBLE_NODES + 1],
-                      elipsisdepth: 0,
-                      img: 'img/arrowRight.png'}
+      connection: 'frontButton',
+      position: this.nodePositions[this.MAX_VISIBLE_NODES + 1],
+      elipsisdepth: 0,
+      img: 'img/arrowRight.png'}
 
     this.visibleDataNodes.push(backButton)
 
