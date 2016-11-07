@@ -11,7 +11,7 @@ import {EventEmitter} from 'events'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
-import TouchRotate from 'lib/lib/touch-rotate'
+// import TouchRotate from 'lib/lib/touch-rotate'
 import Utils from 'lib/util'
 import particles from './particles'
 
@@ -54,71 +54,71 @@ export default class GraphD3 extends EventEmitter {
     window.removeEventListener('resize', this.onResize)
     window.addEventListener('resize', this.onResize)
 
-    // TouchRotate setup
-    var thisInstance = this
-    var getTouchRotateCallbacks = function () {
-      var lastNotchRadian = false
-      var amountOfTurns = 0
-
-      return {
-        move: function (touchMoveRadian) {
-          // closure isn't functional #todo
-          // Normalization of touchMoveRadian
-          //   Quick fix because touchMoveRadian abruptly switches from
-          // (+3/2 * PI) to (-1/2 * PI)
-          //   This doesn't pose any problem when using touchMoveRadian
-          // as an absolute value, but if we are comparing the new
-          // touchMoveRadian to the previous one, then it is problematic
-          var radianDiff = touchMoveRadian - lastNotchRadian
-          let MAX_VISIBLE = thisInstance.MAX_VISIBLE_NODES
-          let numberOfNeighbours = thisInstance.numberOfNeighbours
-          let rotationIndex = thisInstance.rotationIndex
-          if (radianDiff < -Math.PI) {
-            radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
-          } else if (radianDiff > Math.PI) {
-            radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
-          }
-
-          // first drag
-          if (lastNotchRadian === false) {
-            lastNotchRadian = touchMoveRadian
-            thisInstance.emit('start-scrolling')
-          } else if (radianDiff < -Math.PI / MAX_VISIBLE * 2 / 3) {
-            lastNotchRadian = touchMoveRadian
-            amountOfTurns++
-            if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
-              thisInstance.rotationIndex++
-              thisInstance.emit('change-rotation-index',
-              thisInstance.rotationIndex)
-              thisInstance.updateAfterRotationIndex('up')
-            }
-          } else if (radianDiff > Math.PI / MAX_VISIBLE * 2 / 3) {
-            // @todo constant / not stateless
-            lastNotchRadian = touchMoveRadian
-            amountOfTurns--
-            if (thisInstance.rotationIndex > 0) {
-              thisInstance.rotationIndex--
-              thisInstance.emit('change-rotation-index',
-              thisInstance.rotationIndex)
-              thisInstance.updateAfterRotationIndex('down')
-            }
-          }
-          if (amountOfTurns > MAX_VISIBLE * 7 ||
-            amountOfTurns < -MAX_VISIBLE * 7) {
-            if (thisInstance.dataNodes[0].uri !== thisInstance.HOF_URI) {
-              thisInstance.emit('center-changed', {uri: thisInstance.HOF_URI})
-              amountOfTurns = 0
-            }
-          }
-        },
-        end: function () {
-          amountOfTurns = 0
-          lastNotchRadian = false
-        }
-      }
-    }
-
-    this.touch = new TouchRotate(this.graphContainer, getTouchRotateCallbacks())
+    // // TouchRotate setup
+    // var thisInstance = this
+    // var getTouchRotateCallbacks = function () {
+    //   var lastNotchRadian = false
+    //   var amountOfTurns = 0
+    //
+    //   return {
+    //     move: function (touchMoveRadian) {
+    //       // closure isn't functional #todo
+    //       // Normalization of touchMoveRadian
+    //       //   Quick fix because touchMoveRadian abruptly switches from
+    //       // (+3/2 * PI) to (-1/2 * PI)
+    //       //   This doesn't pose any problem when using touchMoveRadian
+    //       // as an absolute value, but if we are comparing the new
+    //       // touchMoveRadian to the previous one, then it is problematic
+    //       var radianDiff = touchMoveRadian - lastNotchRadian
+    //       let MAX_VISIBLE = thisInstance.MAX_VISIBLE_NODES
+    //       let numberOfNeighbours = thisInstance.numberOfNeighbours
+    //       let rotationIndex = thisInstance.rotationIndex
+    //       if (radianDiff < -Math.PI) {
+    //         radianDiff = touchMoveRadian + Math.PI * 2 - lastNotchRadian
+    //       } else if (radianDiff > Math.PI) {
+    //         radianDiff = lastNotchRadian - (touchMoveRadian + Math.PI * 2)
+    //       }
+    //
+    //       // first drag
+    //       if (lastNotchRadian === false) {
+    //         lastNotchRadian = touchMoveRadian
+    //         thisInstance.emit('start-scrolling')
+    //       } else if (radianDiff < -Math.PI / MAX_VISIBLE * 2 / 3) {
+    //         lastNotchRadian = touchMoveRadian
+    //         amountOfTurns++
+    //         if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
+    //           thisInstance.rotationIndex++
+    //           thisInstance.emit('change-rotation-index',
+    //           thisInstance.rotationIndex)
+    //           thisInstance.updateAfterRotationIndex('up')
+    //         }
+    //       } else if (radianDiff > Math.PI / MAX_VISIBLE * 2 / 3) {
+    //         // @todo constant / not stateless
+    //         lastNotchRadian = touchMoveRadian
+    //         amountOfTurns--
+    //         if (thisInstance.rotationIndex > 0) {
+    //           thisInstance.rotationIndex--
+    //           thisInstance.emit('change-rotation-index',
+    //           thisInstance.rotationIndex)
+    //           thisInstance.updateAfterRotationIndex('down')
+    //         }
+    //       }
+    //       if (amountOfTurns > MAX_VISIBLE * 7 ||
+    //         amountOfTurns < -MAX_VISIBLE * 7) {
+    //         if (thisInstance.dataNodes[0].uri !== thisInstance.HOF_URI) {
+    //          thisInstance.emit('center-changed', {uri: thisInstance.HOF_URI})
+    //           amountOfTurns = 0
+    //         }
+    //       }
+    //     },
+    //     end: function () {
+    //       amountOfTurns = 0
+    //       lastNotchRadian = false
+    //     }
+    //   }
+    // }
+    //
+// this.touch = new TouchRotate(this.graphContainer, getTouchRotateCallbacks())
   }
 
   // Function to be called when the state changes
@@ -577,7 +577,6 @@ export default class GraphD3 extends EventEmitter {
     // Subscribe to the click listeners
     this.node.on('mousedown', function (data) {
       self.mouseDown = true
-      self.last = d3.event.timeStamp
       if (data.elipsisdepth >= 0) {
         let dir = 1
         if (data.connection === 'backButton') {
@@ -586,10 +585,16 @@ export default class GraphD3 extends EventEmitter {
         self.onHoldClick(dir)
       }
     })
+
     this.node.on('click', function (data) {
       self.mouseDown = false
-      if ((d3.event.timeStamp - self.last) < 500) {
-        self.onClick(this, data)
+      if (data.elipsisdepth < 0) {
+        if (!self.last || (d3.event.timeStamp - self.last) > 500) {
+          self.onClick(this, data)
+          self.last = d3.event.timeStamp
+        } else {
+          self.onDblClick(this, data)
+        }
       }
     })
 
@@ -603,16 +608,6 @@ export default class GraphD3 extends EventEmitter {
     this.node.call(d3.drag().on('drag', this.drag)
                             .on('start', this.dragStart)
                             .on('end', this.dragEnd))
-
-    this.node.on('touchstart', function(data) {
-      if ((d3.event.timeStamp - self.last) < 500) {
-        self.onDblClick(this, data)
-      } else {
-        self.last = d3.event.timeStamp
-        self.onClick(this, data)
-        d3.event.stopPropagation()
-      }
-    })
 
     this.svg.on('click', function (data) {
       self.deselectAll()
