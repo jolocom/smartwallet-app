@@ -245,12 +245,34 @@ class AclAgent {
    */
   isAllowed(user, mode) {
     if (!this.predMap[mode]) {
-      console.error('Invalid mode supplied!')
       return false
     }
     if (_.includes(this.allowedPermissions(user), mode)) {
       return true
     }
+  }
+
+  /**
+   * @summary Returns a list of people allowed to do something
+   */
+  allAllowedUsers(mode) {
+    if (!this.predMap[mode]) {
+      return false
+    }
+
+    let pred = this.predMap[mode]
+    let users = []
+
+    // FIRST FIND ALL POLICIES CONTAINING READ
+    this.Writer.find(undefined, PRED.type, PRED.auth).forEach(trip => {
+      this.Writer.find(trip.subject, PRED.mode, pred).forEach(pol => {
+        this.Writer.find(pol.subject, PRED.agent, undefined).map(user => {
+          users.push(user.object)
+        })
+      })
+    })
+    console.log('returning', users)
+    return users
   }
 
   /**

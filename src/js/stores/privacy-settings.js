@@ -117,15 +117,6 @@ export default Reflux.createStore({
     this.init()
     this.aclAgent = new AclAgent(user)
     this.aclAgent.fetchInfo().then((data) => {
-      this.aclAgent.allowedPermissions('*').map(el => {
-        if (el === 'read') {
-          this.state.currActiveViewBtn = 'visEveryone'
-        }
-        if (el === 'write') {
-          this.state.currActiveEditBtn = 'editEveryone'
-        }
-      })
-    }).then(() => {
       this.gAgent.findFriends(this.webId).then(res => {
         res.forEach(el => {
           this.state.friendViewAllowList.push({
@@ -137,8 +128,23 @@ export default Reflux.createStore({
             canEdit: true
           })
         })
-      })
-    }).then(this.trigger(this.state))
+      }).then(() => {
+        this.aclAgent.allowedPermissions('*').map(el => {
+          if (el === 'read') {
+            this.state.currActiveViewBtn = 'visEveryone'
+          }
+          if (el === 'write') {
+            this.state.currActiveEditBtn = 'editEveryone'
+          }
+        })
+
+        if (this.state.currActiveViewBtn !== 'visEveryone') {
+          this.aclAgent.allAllowedUsers('write').map(el => {
+                        
+          })
+        }
+      }).then(this.trigger(this.state))
+    })
   },
 
   allowRead(user) {
