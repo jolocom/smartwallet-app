@@ -120,7 +120,6 @@ class AclAgent {
     }
 
     this.indexAdd(payload)
-    console.log('HEY, ADDING', user, 'PERMISSION TO', mode)
     // If user already has the permission.
     if (_.includes(this.allowedPermissions(user, true), mode)) {
       return
@@ -257,7 +256,7 @@ class AclAgent {
    */
   allAllowedUsers(mode) {
     if (!this.predMap[mode]) {
-      return false
+      return []
     }
 
     let pred = this.predMap[mode]
@@ -267,11 +266,11 @@ class AclAgent {
     this.Writer.find(undefined, PRED.type, PRED.auth).forEach(trip => {
       this.Writer.find(trip.subject, PRED.mode, pred).forEach(pol => {
         this.Writer.find(pol.subject, PRED.agent, undefined).map(user => {
+          
           users.push(user.object)
         })
       })
     })
-    console.log('returning', users)
     return users
   }
 

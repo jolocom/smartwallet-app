@@ -18,7 +18,6 @@ export default Reflux.createStore({
       editAllowList: [],
 
       friendViewAllowList: [],
-
       friendEditAllowList: [],
 
       friendViewDisallowList: [],
@@ -27,8 +26,7 @@ export default Reflux.createStore({
       isSelectAllOnlyMe: false,
       isSelectAllFriends: false,
 
-      allowFriendList: [
-      ]
+      allowFriendList: []
     }
   },
 
@@ -137,13 +135,22 @@ export default Reflux.createStore({
             this.state.currActiveEditBtn = 'editEveryone'
           }
         })
-
         if (this.state.currActiveViewBtn !== 'visEveryone') {
-          this.aclAgent.allAllowedUsers('write').map(el => {
-                        
+          this.state.currActiveViewBtn = 'visFriends'
+          this.aclAgent.allAllowedUsers('read').map(el => {
+            if (el.uri !== this.webId) {
+              let flag = this.state.friendViewAllowList.filter(friend => {
+                return friend.name === el.uri
+              })
+              if (flag.length === 0) {
+                this.state.currActiveViewBtn = 'visOnlyMe'
+              }
+            }
           })
         }
-      }).then(this.trigger(this.state))
+      }).then(() => {
+        this.trigger(this.state)
+      })
     })
   },
 
