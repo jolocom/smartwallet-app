@@ -136,13 +136,18 @@ export default Reflux.createStore({
           }
         })
         if (this.state.currActiveViewBtn !== 'visEveryone') {
-          this.state.currActiveViewBtn = 'visFriends'
+          let onlyFriends = true
           this.aclAgent.allAllowedUsers('read').map(el => {
             if (el.uri !== this.webId) {
               let flag = this.state.friendViewAllowList.filter(friend => {
                 return friend.name === el.uri
               })
               if (flag.length === 0) {
+                onlyFriends = false
+              }
+              if (onlyFriends) {
+                this.state.currActiveViewBtn = 'visFriends'
+              } else {
                 this.state.currActiveViewBtn = 'visOnlyMe'
               }
             }

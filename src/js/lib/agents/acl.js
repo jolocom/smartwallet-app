@@ -266,7 +266,6 @@ class AclAgent {
     this.Writer.find(undefined, PRED.type, PRED.auth).forEach(trip => {
       this.Writer.find(trip.subject, PRED.mode, pred).forEach(pol => {
         this.Writer.find(pol.subject, PRED.agent, undefined).map(user => {
-          
           users.push(user.object)
         })
       })
