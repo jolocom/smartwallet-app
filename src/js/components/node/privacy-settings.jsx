@@ -35,7 +35,6 @@ let PrivacySettings = React.createClass({
       friendViewDisallowList: [],
 
       editAllowList: [],
-      friendEditAllowList: [],
       friendEditDisallowList: [],
 
       isSelectAllOnlyMe: false,
