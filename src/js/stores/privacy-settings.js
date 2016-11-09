@@ -116,17 +116,15 @@ export default Reflux.createStore({
     this.aclAgent = new AclAgent(user)
     this.aclAgent.fetchInfo().then((data) => {
       this.gAgent.findFriends(this.webId).then(res => {
+        // We add all friends to the view list by default
         res.forEach(el => {
           this.state.friendViewAllowList.push({
             name: el.object.uri,
             canEdit: false
           })
-          this.state.friendEditAllowList.push({
-            name: el.object.uri,
-            canEdit: true
-          })
         })
       }).then(() => {
+        // Then we check if it is read all
         this.aclAgent.allowedPermissions('*').map(el => {
           if (el === 'read') {
             this.state.currActiveViewBtn = 'visEveryone'
@@ -135,18 +133,34 @@ export default Reflux.createStore({
             this.state.currActiveEditBtn = 'editEveryone'
           }
         })
+        // If it is not vis all, then we check if it is only readable
+        // for me, or for everyone.
         if (this.state.currActiveViewBtn !== 'visEveryone') {
           let onlyFriends = true
+          // We get all people who can read the file.
           this.aclAgent.allAllowedUsers('read').map(el => {
+            // We ignore the webId in the list
             if (el.uri !== this.webId) {
+              // We check, if a person who is allowed to read the file is not
+              // in our friend list, therefore the setting is set to
+              // "Visible only me" + whitelist
               let flag = this.state.friendViewAllowList.filter(friend => {
                 return friend.name === el.uri
               })
               if (flag.length === 0) {
                 onlyFriends = false
               }
+              // only visible to friends, we need to compute who has
+              // write access besides read access.
               if (onlyFriends) {
                 this.state.currActiveViewBtn = 'visFriends'
+                this.aclAgent.allAllowedUsers('write').map(user => {
+                  this.state.friendViewAllowList.forEach(el => {
+                    if (el.name === user.uri) {
+                      el.canEdit = true
+                    }
+                  })
+                })
               } else {
                 this.state.currActiveViewBtn = 'visOnlyMe'
               }
