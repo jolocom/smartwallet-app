@@ -18,8 +18,8 @@ export default Reflux.createStore({
       editAllowList: [],
 
       friendViewAllowList: [],
-
       friendViewDisallowList: [],
+
       friendEditDisallowList: [],
 
       isSelectAllOnlyMe: false,
@@ -32,7 +32,6 @@ export default Reflux.createStore({
   getInitialState() {
     return this.state
   },
-
   navigate(activeView, activeEdit) {
   // TODO Evaluate the alternative.
   /*
@@ -113,13 +112,16 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
+  // TODO TODO Break down, standardize
+  // TODO TODO Multpiple appearances bug
   fetchInitialData(user) {
     this.init()
     this.aclAgent = new AclAgent(user)
     this.aclAgent.fetchInfo().then((data) => {
+      let allowedToRead = this.aclAgent.allAllowedUsers('read')
       this.gAgent.findFriends(this.webId).then(res => {
         // We add all friends to the view list by default
-        res.forEach(el => {
+        res.map(el => {
           this.state.friendViewAllowList.push({
             name: el.object.uri,
             canEdit: false
@@ -135,12 +137,13 @@ export default Reflux.createStore({
             this.state.currActiveEditBtn = 'editEveryone'
           }
         })
+
         // If it is not vis all, then we check if it is only readable
         // for me, or for everyone.
         if (this.state.currActiveViewBtn !== 'visEveryone') {
           let onlyFriends = true
           // We get all people who can read the file.
-          this.aclAgent.allAllowedUsers('read').map(el => {
+          allowedToRead.map(el => {
             // We ignore the webId in the list
             if (el.uri !== this.webId) {
               // We check, if a person who is allowed to read the file is not
@@ -152,40 +155,66 @@ export default Reflux.createStore({
               if (flag.length === 0) {
                 onlyFriends = false
               }
-              // only visible to friends, we need to compute who has
-              // write access besides read access.
-              if (onlyFriends) {
-                this.state.currActiveViewBtn = 'visFriends'
-
-                this.aclAgent.allAllowedUsers('write').map(user => {
-                  if (user.uri === this.webId) {
-                    return
-                  }
-                  console.log('Starting itterating over', user)
-                  let found = false
-
-                  console.log('Starting itterating over all friends')
-                  this.state.friendViewAllowList.forEach(el => {
-                    console.log('Checking ', el)
-                    if (el.name === user.uri) {
-                      el.canEdit = true
-                      found = true
-                    }
-                  })
-                  console.log('Outcome is', found)
-                  if (!found) {
-                    this.state.friendViewDisallowList.push({
-                      label: el.name,
-                      key: this.state.friendViewDisallowList.length,
-                      canEdit: false
-                    })
-                  }
-                })
-              } else {
-                this.state.currActiveViewBtn = 'visOnlyMe'
-              }
             }
           })
+
+          // only visible to friends, we need to compute who has
+          // write access besides read access.
+          if (onlyFriends) {
+            this.state.currActiveViewBtn = 'visFriends'
+            this.state.friendViewAllowList.map(user => {
+              if (user.uri !== this.webId) {
+                let found = false
+                allowedToRead.map(friend => {
+                  if (friend.uri === user.name) {
+                    found = true
+                  }
+                })
+                if (!found) {
+                  this.state.friendViewAllowList =
+                  this.state.friendViewAllowList.filter(friend => {
+                    return friend.name !== user.name
+                  })
+                  this.state.friendViewDisallowList.push({
+                    label: user.name,
+                    key: this.state.friendViewDisallowList.length,
+                    canEdit: false
+                  })
+                }
+              }
+            })
+            this.aclAgent.allAllowedUsers('write').map(user => {
+              if (user.uri !== this.webId) {
+                this.state.friendViewAllowList.map(friend => {
+                  if (friend.name === user.uri) {
+                    friend.canEdit = true
+                  }
+                })
+              }
+            })
+          } else {
+            this.state.currActiveViewBtn = 'visOnlyMe'
+            allowedToRead.map(user => {
+              if (user.uri !== this.webId) {
+                this.state.viewAllowList.push({
+                  label: user.uri,
+                  key: this.state.viewAllowList.length,
+                  canEdit: false
+                })
+              }
+            })
+            this.aclAgent.allAllowedUsers('write').map(user => {
+              if (user.uri !== this.webId) {
+                console.log('YO!')
+                this.state.viewAllowList.map(person => {
+                  console.log(person, user)
+                  if (person.label === user.uri) {
+                    person.canEdit = true
+                  }
+                })
+              }
+            })
+          }
         }
       }).then(() => {
         this.trigger(this.state)
