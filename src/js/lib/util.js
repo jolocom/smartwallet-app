@@ -29,10 +29,8 @@ let Util = {
                      Math.pow((y1 - y2), 2))
   },
 
-  // for short randomStrings
   randomString(length) {
-    // Hope this is trully random, will need to do some extra research.
-    return Date.now().toString(36).substring(2, length + 3)
+    return Math.random().toString(36).substr(2, 5)
   },
 
   webidRoot(webid) {
