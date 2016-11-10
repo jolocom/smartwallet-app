@@ -134,7 +134,6 @@ class AclAgent {
       } else {
         // A policy has to be constructed
         let policyName = rdf.sym(`${this.aclUri}#${Util.randomString(5)}`)
-        console.log('GENERATING POLICY WITH NAME', policyName)
         this.Writer.addTriple(policyName, PRED.type, PRED.auth)
         this.Writer.addTriple(policyName, PRED.access, rdf.sym(this.uri))
         this.Writer.addTriple(policyName, PRED.mode, mode)

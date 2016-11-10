@@ -233,12 +233,9 @@ export default Reflux.createStore({
             })
           } else {
             // If it is a friend, but not in the acl, make chip
-
             this.state.friendViewAllowList.map(friend => {
               let friendFound = false
-              console.log(friend)
               this.aclAgent.allAllowedUsers('write').map(el => {
-                console.log(el)
                 if (el.uri !== this.webId) {
                   if (el.uri === friend.name) {
                     friendFound = true
@@ -319,6 +316,10 @@ export default Reflux.createStore({
   },
 
   friendDisallowEdit(user) {
+    this.state.friendViewAllowList =
+    this.state.friendViewAllowList.filter(el => {
+      return el.name !== user
+    })
     this.state.friendEditDisallowList.push({
       label: user,
       key: this.state.friendEditDisallowList.length,
