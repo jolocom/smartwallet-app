@@ -125,14 +125,15 @@ class AclAgent {
       return
     } else {
       mode = this.predMap[mode]
-
       let alt = this.Writer.find(undefined, identifier, user)
       if (alt.length > 0) {
+        console.log('INJECTING')
         // A policy regarding the user already exists, we will
         // add the rule in there.
         let policyName = alt[0].subject
         this.Writer.addTriple(policyName, PRED.mode, mode)
       } else {
+        console.log('CREATING')
         // A policy has to be constructed
         let policyName = rdf.sym(`${this.aclUri}#${Util.randomString(5)}`)
         this.Writer.addTriple(policyName, PRED.type, PRED.auth)

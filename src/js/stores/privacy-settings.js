@@ -61,14 +61,14 @@ export default Reflux.createStore({
     this.aclAgent.allow(this.webId, 'write')
 
     if (this.state.currActiveViewBtn === 'visOnlyMe') {
-      this.state.viewAllowList.forEach(el => {
+      this.state.viewAllowList.map(el => {
         this.aclAgent.allow(el.label, 'read')
         if (el.canEdit) {
           this.aclAgent.allow(el.label, 'write')
         }
       })
     } else if (this.state.currActiveViewBtn === 'visFriends') {
-      this.state.friendViewAllowList.forEach(el => {
+      this.state.friendViewAllowList.map(el => {
         this.aclAgent.allow(el.name, 'read')
         if (el.canEdit) {
           this.aclAgent.allow(el.name, 'write')
@@ -83,9 +83,7 @@ export default Reflux.createStore({
       } else if (this.state.currActiveEditBtn === 'editFriends') {
         this.state.friendViewAllowList.forEach(el => {
           // KEEP AN EYE ON THIS TODO
-          if (el.canEdit) {
-            this.aclAgent.allow(el.name, 'write')
-          }
+          this.aclAgent.allow(el.name, 'write')
         })
       } else if (this.state.currActiveEditBtn === 'editEveryone') {
         this.aclAgent.allow('*', 'write')
@@ -142,22 +140,27 @@ export default Reflux.createStore({
         // for me, or for everyone.
         if (this.state.currActiveViewBtn !== 'visEveryone') {
           let onlyFriends = true
-          // We get all people who can read the file.
-          allowedToRead.map(el => {
-            // We ignore the webId in the list
-            if (el.uri !== this.webId) {
-              // We check, if a person who is allowed to read the file is not
-              // in our friend list, therefore the setting is set to
-              // "Visible only me" + whitelist
-              let flag = this.state.friendViewAllowList.filter(friend => {
-                return friend.name === el.uri
-              })
-              if (flag.length === 0) {
-                onlyFriends = false
-              }
-            }
-          })
 
+          // The first one is the webid.
+          if (allowedToRead.length === 1) {
+            onlyFriends = false
+          } else {
+            // We get all people who can read the file.
+            allowedToRead.map(el => {
+              // We ignore the webId in the list
+              if (el.uri !== this.webId) {
+                // We check, if a person who is allowed to read the file is not
+                // in our friend list, therefore the setting is set to
+                // "Visible only me" + whitelist
+                let flag = this.state.friendViewAllowList.filter(friend => {
+                  return friend.name === el.uri
+                })
+                if (flag.length === 0) {
+                  onlyFriends = false
+                }
+              }
+            })
+          }
           // only visible to friends, we need to compute who has
           // write access besides read access.
           if (onlyFriends) {
@@ -205,9 +208,7 @@ export default Reflux.createStore({
             })
             this.aclAgent.allAllowedUsers('write').map(user => {
               if (user.uri !== this.webId) {
-                console.log('YO!')
                 this.state.viewAllowList.map(person => {
-                  console.log(person, user)
                   if (person.label === user.uri) {
                     person.canEdit = true
                   }
@@ -215,6 +216,21 @@ export default Reflux.createStore({
               }
             })
           }
+        } else {
+          // We need to detect if it is editable by me + whitelist or by friends
+          this.aclAgent.allAllowedUsers('write').map(user => {
+            let found = false
+            this.state.friendViewAllowList.map(friend => {
+              if (friend.name === user.uri) {
+                found = true
+              }
+            })
+            if (!found) {
+              this.state.currActiveEditBtn = 'editOnlyMe'
+            } else {
+              this.state.currActiveEditBtn = 'editFriends'
+            }
+          })
         }
       }).then(() => {
         this.trigger(this.state)
