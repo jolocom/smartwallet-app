@@ -33,16 +33,6 @@ export default Reflux.createStore({
     return this.state
   },
   navigate(activeView, activeEdit) {
-  // TODO Evaluate the alternative.
-  /*
-    if (activeEdit === 'editEveryone') {
-      this.aclAgent.allow('*', 'write')
-    } else if (activeView === 'viewEveryone') {
-      this.aclAgent.allow('*', 'read')
-    } else if (activeView === 'visFriends') {
-      console.log(this.state.friendList)
-    }
-  */
     if (activeView) {
       this.state.currActiveViewBtn = activeView
     }
@@ -82,7 +72,6 @@ export default Reflux.createStore({
         })
       } else if (this.state.currActiveEditBtn === 'editFriends') {
         this.state.friendViewAllowList.forEach(el => {
-          // KEEP AN EYE ON THIS TODO
           this.aclAgent.allow(el.name, 'write')
         })
       } else if (this.state.currActiveEditBtn === 'editEveryone') {
@@ -217,20 +206,55 @@ export default Reflux.createStore({
             })
           }
         } else {
+          if (this.state.currActiveEditBtn === 'editEveryone') {
+            return
+          }
           // We need to detect if it is editable by me + whitelist or by friends
+          let found = false
+          let list = []
           this.aclAgent.allAllowedUsers('write').map(user => {
-            let found = false
-            this.state.friendViewAllowList.map(friend => {
-              if (friend.name === user.uri) {
-                found = true
-              }
-            })
-            if (!found) {
-              this.state.currActiveEditBtn = 'editOnlyMe'
-            } else {
-              this.state.currActiveEditBtn = 'editFriends'
+            if (user.uri !== this.webId) {
+              this.state.friendViewAllowList.map(friend => {
+                if (friend.name === user.uri) {
+                  found = true
+                }
+              })
+              list.push(user.uri)
             }
           })
+          if (!found) {
+            this.state.currActiveEditBtn = 'editOnlyMe'
+            list.map(el => {
+              this.state.editAllowList.push({
+                label: el,
+                key: this.state.editAllowList.length,
+                canEdit: false
+              })
+            })
+          } else {
+            // If it is a friend, but not in the acl, make chip
+
+            this.state.friendViewAllowList.map(friend => {
+              let friendFound = false
+              console.log(friend)
+              this.aclAgent.allAllowedUsers('write').map(el => {
+                console.log(el)
+                if (el.uri !== this.webId) {
+                  if (el.uri === friend.name) {
+                    friendFound = true
+                  }
+                }
+              })
+              if (!friendFound) {
+                this.state.friendEditDisallowList.push({
+                  label: friend.name,
+                  key: this.state.friendEditDisallowList.length,
+                  canEdit: false
+                })
+              }
+            })
+            this.state.currActiveEditBtn = 'editFriends'
+          }
         }
       }).then(() => {
         this.trigger(this.state)
@@ -239,7 +263,6 @@ export default Reflux.createStore({
   },
 
   allowRead(user) {
-    this.aclAgent.allow(user, 'read')
     this.state.viewAllowList.push({
       label: user,
       key: this.state.editAllowList.length,
@@ -280,7 +303,6 @@ export default Reflux.createStore({
   },
 
   allowEdit(user) {
-    this.aclAgent.allow(user, 'write')
     this.state.editAllowList.push({
       label: user,
       key: this.state.editAllowList.length,
