@@ -104,7 +104,6 @@ let NodeAdd = React.createClass({
 
   _handleSubmit() {
     this.refs.form.submit()
-    this.close()
   },
 
   _handleSuccess() {

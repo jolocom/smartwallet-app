@@ -11,18 +11,25 @@ import JolocomTheme from 'styles/jolocom-theme'
 
 let Graph = React.createClass({
 
-  mixins : [Reflux.listenTo(previewStore, 'onStateUpdate')],
+  propTypes: {
+    onSelect: React.PropTypes.func
+  },
+
+  mixins: [Reflux.listenTo(previewStore, 'onStateUpdate')],
 
   getGraphEl() {
     return ReactDOM.findDOMNode(this.refs.graph)
   },
 
   onStateUpdate(data, signal) {
+    if (data) {
+      this.setState(data)
+    }
 
-    this.setState(data)
-    if (this.state.neighbours){
-      if (signal !== 'changeRotationIndex')
+    if (this.state.neighbours) {
+      if (signal !== 'changeRotationIndex') {
         this.graph.render(this.state)
+      }
       this.graph.updateHistory(this.state.navHistory)
     }
 
@@ -30,12 +37,12 @@ let Graph = React.createClass({
       previewActions.setState('newNode', null, true)
     }
 
-    if(signal == 'redraw') {
+    if (signal === 'redraw') {
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }
 
-    if (signal == 'navigateToNode') {
+    if (signal === 'navigateToNode') {
       this.graph.setRotationIndex(this.state.rotationIndex)
     }
   },
@@ -44,9 +51,7 @@ let Graph = React.createClass({
     this.notSync = true
     this.listenTo(GraphStore, this.onSync)
 
-    // We get the state and erase the 'parent graph'
     graphActions.getState('preview')
-    graphActions.eraseGraph()
 
     // Make sure we refresh our state every time we mount the component, this
     // then fires the drawing function from onStateUpdate
@@ -58,8 +63,12 @@ let Graph = React.createClass({
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
   },
 
-  onSync(state, signal){
-    if(signal=='preview' && this.notSync){
+  onSync(state, signal) {
+    if (!this.notSync || !state || !state.initialized) {
+      return false
+    }
+
+    if (signal === 'preview') {
       previewActions.setState('center', state.center)
       previewActions.setState('loaded', true)
       previewActions.setState('navHistory', state.navHistory)
@@ -68,14 +77,20 @@ let Graph = React.createClass({
       previewActions.changeRotationIndex(state.rotationIndex, true)
       this.graph.setRotationIndex(state.rotationIndex)
       this.notSync = false
+    } else {
+      graphActions.getState('preview')
+      graphActions.eraseGraph()
     }
   },
 
-  componentWillUnmount(){
-    graphActions.setState('center', this.state.center)
-    graphActions.setState('navHistory', this.state.navHistory)
-    graphActions.setState('neighbours', this.state.neighbours, true)
-    graphActions.changeRotationIndex(this.state.rotationIndex, true)
+  componentWillUnmount() {
+    if (this.state.center) {
+      graphActions.setState('center', this.state.center)
+      graphActions.setState('navHistory', this.state.navHistory)
+      graphActions.setState('neighbours', this.state.neighbours, true)
+      graphActions.changeRotationIndex(this.state.rotationIndex, true)
+    }
+
     if (this.graph) {
       this.graph.eraseGraph()
       this.graph.removeAllListeners()
@@ -92,7 +107,8 @@ let Graph = React.createClass({
     return styles
   },
 
-  // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
+  // We are using the buttons as placeholders,
+  // when the frontend is implemented, we will use the actuall buttons
   render() {
     let styles = this.getStyles()
 
@@ -101,9 +117,8 @@ let Graph = React.createClass({
     )
   },
 
-
-  _handleChangeRotationIndex(rotationIndex){
-    previewActions.changeRotationIndex(rotationIndex,true)
+  _handleChangeRotationIndex(rotationIndex) {
+    previewActions.changeRotationIndex(rotationIndex, true)
   },
 
   // TODO NOT WORKING
@@ -111,7 +126,7 @@ let Graph = React.createClass({
     previewActions.viewNode(node)
   },
 
-  _handleCenterChange(node){
+  _handleCenterChange(node) {
     previewActions.navigateToNode(node)
   },
 
@@ -119,4 +134,5 @@ let Graph = React.createClass({
     this.props.onSelect && this.props.onSelect(data)
   }
 })
+
 export default Radium(Graph)

@@ -5,6 +5,7 @@ import graphActions from 'actions/graph-actions'
 import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
+import Util from 'lib/util'
 
 let {link} = nodeActions
 
@@ -34,20 +35,24 @@ export default Reflux.createStore({
    * @param {object} centerNode - we disconnect from this node.
    */
 
-  onRemove(node, centerNode){
-
+  onRemove(node, centerNode) {
     // Prevent centerNode from being modified by the outside
     // if the state of the graph store changes for instance
-    centerNode = Object.assign({},centerNode)
+    centerNode = Object.assign({}, centerNode)
 
     let subject = rdf.sym(centerNode.uri)
     let object = rdf.sym(node.uri)
 
-    this.gAgent.deleteFile(object.uri).then((response)=>{
+    this.gAgent.deleteFile(object.uri).then((response) => {
       return new Promise((resolve, reject) => {
-        if (response.ok){
+        if (response.ok) {
           let triples = []
-          this.gAgent.findTriples(subject.uri, subject, undefined, object).then((result)=>{
+          this.gAgent.findTriples(
+            subject.uri,
+            subject,
+            undefined,
+            object
+          ).then((result) => {
             for (let t of result) {
               triples.push({
                 subject: t.subject,
@@ -58,9 +63,9 @@ export default Reflux.createStore({
             resolve({uri: centerNode.uri, triples})
           })
         } else reject('Could not delete file')
-      }).then((query)=>{
-        this.gAgent.deleteTriple(query).then((result)=>{
-          if (result.ok){
+      }).then((query) => {
+        this.gAgent.deleteTriple(query).then((result) => {
+          if (result.ok) {
             profileActions.load() // Reload profile info (bitcoin, passport)
             graphActions.refresh()
           }
@@ -76,11 +81,16 @@ export default Reflux.createStore({
    * @param {object} object - triple object describing connection
    */
 
-  onDisconnectNode(node, centerNode){
+  onDisconnectNode(node, centerNode) {
     let subject = rdf.sym(centerNode.uri)
     let predicate = rdf.sym(node.connection)
     let object = rdf.sym(node.uri)
-    this.gAgent.deleteTriple(subject.uri, subject, predicate, object).then(function(){
+    this.gAgent.deleteTriple(
+      subject.uri,
+      subject,
+      predicate,
+      object
+    ).then(() => {
       graphActions.drawAtUri(centerNode.uri, 0)
     })
   },
@@ -95,13 +105,43 @@ export default Reflux.createStore({
 
   link(start, type, end, flag) {
     let predicate = null
-    if(type === 'generic') predicate = PRED.isRelatedTo
-    if(type ==='knows') predicate = PRED.knows
-    let payload = {
-      subject: rdf.sym(start),
-      predicate,
-      object: rdf.sym(end)
-    }
-    this.gAgent.writeTriples(start, [payload], flag).then(link.completed)
+
+    Promise.all([
+      fetch(Util.uriToProxied(start), {method: 'HEAD', credentials: 'include'})
+        .then((res) => {
+          if (!res.ok) throw new Error(res.statusText)
+        }),
+      fetch(Util.uriToProxied(end), {method: 'HEAD', credentials: 'include'})
+        .then((res) => {
+          if (!res.ok) throw new Error(res.statusText)
+        })
+    ]).then(() => {
+      if (type === 'generic') {
+        predicate = PRED.isRelatedTo
+      }
+      if (type === 'knows') {
+        predicate = PRED.knows
+      }
+      let payload = {
+        subject: rdf.sym(start),
+        predicate,
+        object: rdf.sym(end)
+      }
+      return this.gAgent.writeTriples(start, [payload], flag)
+    }).then(() => {
+      link.completed(start)
+    }).catch(link.failed)
+  },
+
+  onLinkCompleted(node) {
+    this.trigger({
+      uri: node
+    })
+  },
+
+  onLinkFailed() {
+    this.trigger({
+      error: 'Failed to link selected nodes'
+    })
   }
 })

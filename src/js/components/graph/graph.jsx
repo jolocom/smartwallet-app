@@ -24,7 +24,7 @@ let Graph = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     params: React.PropTypes.object,
-    routes: React.PropTypes.object
+    routes: React.PropTypes.array
   },
 
   contextTypes: {
@@ -53,7 +53,7 @@ let Graph = React.createClass({
     // Temp. make it more elegant later.
 
     // Don't update anything while we're loading.
-    if (data.loading) {
+    if (data && data.loading) {
       return
     }
 
@@ -105,7 +105,8 @@ let Graph = React.createClass({
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
 
     if (this.props.params.node) {
-      if (this.props.params.node === account.webId) {
+      // dont redirect if this is the add node page
+      if (this.props.params.node === account.webId && !this.props.params.type) {
         debug('Home node (componentDidMount): redirecting to /graph')
         this.context.router.push('/graph/')
       } else {

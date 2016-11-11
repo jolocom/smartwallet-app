@@ -8,16 +8,16 @@ export default Reflux.createStore({
     return {
       open: false,
       message: '',
-      primaryActionText: false,
+      primaryActionText: 'Confirm',
       callback: null
     }
   },
 
-  onConfirm(message,primaryActionText,callback) {
+  onConfirm(message, primaryActionText, callback) {
     this.trigger({open: true, message, primaryActionText, callback}, true)
   },
 
   onClose() {
     this.trigger(Object.assign({}, this.state, {open: false}), true)
-  },
+  }
 })

@@ -70,16 +70,6 @@ let Profile = React.createClass({
     window.location.href = `${proxy}/exportkey`
   },
 
-  uploadPK() {
-    return fetch(`${proxy}/importkey`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'text/turtle'
-      }
-    })
-  },
-
   show() {
     ProfileActions.show()
   },

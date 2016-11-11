@@ -217,11 +217,10 @@ export default Reflux.createStore({
 
       // Before updating the this.state.center, we push the old center node
       // to the node history
-
       let historyCandidate
       if (oldCenter && oldCenter.uri) {
         historyCandidate = oldCenter
-      } else {
+      } else if (defaultHistoryNode) {
         historyCandidate = defaultHistoryNode
       }
 
@@ -230,15 +229,14 @@ export default Reflux.createStore({
       // We check if we're not navigating to the same node (e.g. went to the
       // full-screen view and then back), in which case we don't want to add
       // the node to the history
-      const prevUri = navHistory.length && navHistory[navHistory.length - 1].uri
+      const prevUri = navHistory &&
+        navHistory.length && navHistory[navHistory.length - 1].uri
 
       if (!this.state.previousRenderedNodeUri ||
         this.state.previousRenderedNodeUri !== node.uri) {
         if (prevUri && this.state.center.uri === prevUri) {
           navHistory.pop()
-        } else if (!this.state.previousRenderedNodeUri) {
-          navHistory.push(historyCandidate)
-        } else {
+        } else if (historyCandidate) {
           navHistory.push(historyCandidate)
         }
       }
@@ -259,6 +257,7 @@ export default Reflux.createStore({
       }
 
       this.state.loading = false
+      this.state.initialized = true
 
       this.trigger(this.state)
     })
