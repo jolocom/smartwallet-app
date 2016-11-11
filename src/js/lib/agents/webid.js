@@ -20,7 +20,6 @@ class WebIDAgent extends LDPAgent {
 
   // Gets the webId of the currently loged in user from local storage,
   getWebID() {
-    console.log('wia', this)
     return new Promise((resolve, reject) => {
       const webId = localStorage.getItem('jolocom.webId')
       if (!webId) {
