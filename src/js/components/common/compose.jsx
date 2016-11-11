@@ -6,6 +6,15 @@ import {IconButton} from 'material-ui'
 
 let Compose = React.createClass({
 
+  propTypes: {
+    style: React.PropTypes.object,
+    placeholder: React.PropTypes.string,
+    submitIcon: React.PropTypes.string,
+    onKeyDown: React.PropTypes.func,
+    onKeyUp: React.PropTypes.func,
+    onSubmit: React.PropTypes.func
+  },
+
   getInitialState() {
     return {
       content: ''
@@ -17,11 +26,11 @@ let Compose = React.createClass({
       return this.props.onKeyDown(e)
     }
 
-    if (e.keyCode === 13){
-      if (e.shiftKey){
+    if (e.keyCode === 13) {
+      if (e.shiftKey) {
         return true
       } else {
-        setTimeout(this.onSubmit.bind(this),5)
+        setTimeout(this.onSubmit.bind(this), 5)
         return false
       }
     }
@@ -98,9 +107,25 @@ let Compose = React.createClass({
     return (
       <div style={[styles.container, style]}>
         <div style={styles.textareaWrapper}>
-          <pre style={styles.pre}><span style={styles.span}>{this.state.content}</span><br/></pre>
-          <textarea placeholder={placeholder} onChange={this.onChange} onKeyDown={this.onKeyDown} ref="textarea" style={[styles.textarea, styles.pre]}></textarea>
-          <IconButton iconClassName="material-icons" secondary={true} onTouchTap={this.onSubmit} style={styles.button}>{submitIcon}</IconButton>
+          <pre style={styles.pre}>
+            <span style={styles.span}>
+              {this.state.content}
+            </span><br />
+          </pre>
+          <textarea
+            placeholder={placeholder}
+            onChange={this.onChange}
+            onKeyDown={this.onKeyDown}
+            ref="textarea"
+            style={[styles.textarea, styles.pre]} />
+          <IconButton
+            iconClassName="material-icons"
+            secondary
+            onTouchTap={this.onSubmit}
+            style={styles.button}
+          >
+            {submitIcon}
+          </IconButton>
         </div>
       </div>
     )
