@@ -3,9 +3,6 @@ import _ from 'lodash'
 import ChatAgent from 'lib/agents/chat'
 import Subscription from 'lib/subscription'
 
-import Debug from 'lib/debug'
-let debug = Debug('stores:conversation')
-
 let chatAgent = new ChatAgent()
 
 import ConversationActions from 'actions/conversation'

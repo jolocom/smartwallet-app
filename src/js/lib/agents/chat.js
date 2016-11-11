@@ -79,7 +79,11 @@ class ChatAgent extends LDPAgent {
     writer.addTriple($rdf.sym('#owner'), ACL('mode'), ACL('Write'))
 
     participants.forEach((participant) => {
-      writer.addTriple($rdf.sym('#participant'), PRED.type, ACL('Authorization'))
+      writer.addTriple(
+        $rdf.sym('#participant'),
+        PRED.type,
+        ACL('Authorization')
+      )
       writer.addTriple($rdf.sym('#participant'), ACL('accessTo'), $rdf.sym(uri))
       writer.addTriple($rdf.sym('#participant'),
         ACL('agent'), $rdf.sym(participant))
