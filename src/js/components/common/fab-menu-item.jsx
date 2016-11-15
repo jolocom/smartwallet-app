@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {FloatingActionButton, FontIcon} from 'material-ui'
+import {FloatingActionButton} from 'material-ui'
 
 class FabMenuItem extends React.Component {
 
@@ -13,7 +13,7 @@ class FabMenuItem extends React.Component {
   }
 
   render() {
-    let {icon, label, style, buttonStyle, iconStyle, ...otherProps} = this.props
+    let {icon, label, style, buttonStyle, ...otherProps} = this.props
 
     if (label) {
       label = <span>{label}</span>
@@ -22,9 +22,7 @@ class FabMenuItem extends React.Component {
     return (
       <div style={style}>
         <FloatingActionButton mini style={buttonStyle} {...otherProps}>
-          <FontIcon className="material-icons" style={iconStyle}>
-            {icon}
-          </FontIcon>
+          {icon}
         </FloatingActionButton>
       </div>
     )

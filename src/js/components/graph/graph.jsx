@@ -13,6 +13,8 @@ import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
+import AddNodeIcon from 'components/icons/addNode-icon.jsx'
+import LinkIcon from 'material-ui/svg-icons/content/link'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:graph')
@@ -229,10 +231,10 @@ let Graph = React.createClass({
       fab = (
         <FabMenu style={styles.menu} icon="add" closeIcon="close">
           <FabMenuItem
-            icon="radio_button_unchecked"
+            icon={<AddNodeIcon />}
             label="Node" onTouchTap={this._handleAddNodeTouchTap} />
           <FabMenuItem
-            icon="insert_link"
+            icon={<LinkIcon />}
             label="Link" onClick={this._handleLinkNodeTouchTap} />
         </FabMenu>
       )
