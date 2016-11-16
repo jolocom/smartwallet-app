@@ -92,9 +92,9 @@ let GenericFullScreen = React.createClass({
   getStyles() {
     return {
       container: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
+        // flex: 1,
+        // display: 'flex',
+        // flexDirection: 'column',
         overflowY: 'scroll'
       },
       headers: {
