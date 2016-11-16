@@ -94,7 +94,8 @@ let GenericFullScreen = React.createClass({
       container: {
         flex: 1,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        overflowY: 'scroll'
       },
       headers: {
         color: '#ffffff',
@@ -114,11 +115,11 @@ let GenericFullScreen = React.createClass({
         marginTop: '10px'
       },
       floatingButtons: {
-        position: 'absolute',
-        top: this.state.fullscreen ? '90vh' : '40vh',
+        position: 'relative',
         right: '10px',
         marginTop: '-28px',
-        zIndex: 1500
+        zIndex: 1500,
+        textAlign: 'right'
       },
       fabBtn: {
         margin: '0px 10px'
@@ -127,14 +128,20 @@ let GenericFullScreen = React.createClass({
         fill: '#9a3460'
       },
       headerIcon: {
-        position: 'absolute',
+        position: 'relative',
         zIndex: 1500,
         width: '100px',
+        height: '0',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        marginTop: '15vh'
+        top: '15vh'
+      },
+      subheader: {
+        marginTop: '30px',
+        paddingLeft: '24px',
+        lineHeight: '20px'
       }
     }
   },
