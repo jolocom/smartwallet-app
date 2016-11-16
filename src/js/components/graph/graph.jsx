@@ -14,8 +14,6 @@ import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
 // import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
 
-import aa from 'lib/agents/acl.js'
-
 import Debug from 'lib/debug'
 let debug = Debug('components:graph')
 
@@ -87,14 +85,6 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
-    /*
-    let aaa = new aa('https://pre.webid.jolocom.de/scss7h')
-    aaa.fetchInfo().then(() => {
-      aaa.allow('https://d.webid.jolocom.de/profile/card#me', 'read')
-      aaa.commit()
-    })
-    */
-
     const {account} = this.context
 
     // Instantiating the graph object.
@@ -126,12 +116,19 @@ let Graph = React.createClass({
 
   // @TODO combine with componentWillUpdate ?
   componentDidUpdate(prevProps) {
+    let nodeChanged = prevProps.params.node !== this.props.params.node
+    if (nodeChanged && this.props.params.node) {
+      let nodeUri = this.props.params.node || this.context.account.webId
+      graphActions.navigateToNode({uri: nodeUri},
+                                  {uri: this.context.account.webId,
+                                   name: this.context.account.username})
+    }
+    /*
     // We do not want to center the graph on the person we're viewing the
     // full-screen profile of.
 
     let fullscreenView = this.props.routes.length === 3 // /graph/[uri]/view
     let viewChanged = prevProps.routes.length !== this.props.routes.length
-    let nodeChanged = prevProps.params.node !== this.props.params.node // .uri?
 
     // In case we disconnected from the node in full-screen view, we want to
     // navigate to the center node again (refresh) if viewChanged, even though
@@ -142,6 +139,7 @@ let Graph = React.createClass({
         debug('Home node (componentDidUpdate): redirecting to /graph')
         this.context.router.push('/graph/')
       } else {
+        console.log('C')
         let nodeUri = this.props.params.node || this.context.account.webId
         debug('Navigating to node (componentDidUpdate)', nodeUri)
 
@@ -149,11 +147,15 @@ let Graph = React.createClass({
           graphActions.navigateToNode({uri: nodeUri},
                                       {uri: this.context.account.webId,
                                        name: this.context.account.username})
+        console.log('D')
         } else {
+          console.log('E')
           graphActions.navigateToNode({uri: nodeUri})
         }
       }
     }
+    console.log('F')
+  */
   },
 
   componentWillUnmount() {
@@ -219,9 +221,8 @@ let Graph = React.createClass({
   },
 
   render: function() {
-    console.log('rerendering')
+    console.log('Rendering according to the signal')
     let styles = this.getStyles()
-
     if (this.graph) {
       this.graph.setRotationIndex(this.state.rotationIndex)
     }

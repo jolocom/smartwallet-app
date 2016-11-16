@@ -267,28 +267,17 @@ export default Reflux.createStore({
 
   onViewNode(node) {
     let activeNodeInfoP
-    let activeNodePermissionsP
-    let centerNodePermissionsP
-
     if (!node) {
       debug('Ignoring onViewNode because node is null.')
       return
     }
-
-    /*
-    this.state.loading = true
-    this.trigger(this.state)
-    */
-
     // activeNode is the node we're viewing the full-screen view of
     this.state.activeNode = node
-
     if (typeof node === 'string') {
       // Access by URL; we only have the URL of the node and we need to get
       // more information about the neighbours, name, etc.
       debug('Fetching information and user permisions about the node...')
-      activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node)
-        .then((result) => {
+      this.gAgent.fetchTriplesAtUri(node).then((result) => {
           result.triples.uri = node
           this.state.activeNode = node = this.convertor.convertToD3(
             'a', result.triples
@@ -304,10 +293,15 @@ export default Reflux.createStore({
       activeNodeInfoP = Promise.resolve()
     }
 
-    // Check if the cookie is still valid [?]
+    this.state.activeNode.isOwnedByUser = true
+    this.state.center.isOwnedByUser = true
+    this.state.loading = false
+    this.trigger(this.state)
 
-    // We check if we have write access to the node
-    // This will let us decide whether or not we should show the delete button
+    // Check if the cookie is still valid [?]
+    // TODO TODO THIS CODE IS PROBABLY RESPONSIBLE FOR WIPING THE FILE TODO TODO
+    /* We check if we have write access to the node
+    * This will let us decide whether or not we should show the delete button
     const activeNodeUri = `${Utils.uriToProxied(this.state.activeNode.uri)}`
     activeNodePermissionsP = fetch(activeNodeUri, {
       method: 'PATCH',
@@ -360,5 +354,6 @@ export default Reflux.createStore({
         this.state.loading = false
         this.trigger(this.state)
       })
+    */
   }
 })
