@@ -328,14 +328,14 @@ class ChatAgent extends LDPAgent {
     //   return Promise.resolve(null)
     // }
     for (let person in participant) {
-      if (participant[person].value === myUri) {
+      if (participant[person].uri === myUri) {
         participant.splice(person, 1)
       }
     }
 
     let promises = []
     for (let person in participant) {
-      let webid = participant[person].value
+      let webid = participant[person].uri
       promises.push(this.get(Util.uriToProxied(webid))
         .then((xhr) => {
           let parser = new Parser()
