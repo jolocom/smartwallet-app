@@ -27,7 +27,6 @@ import CommunicationLocation
   from 'material-ui/svg-icons/communication/location-on'
 
 import {
-  FontIcon,
   List, ListItem, Divider, Subheader
 } from 'material-ui'
 
@@ -148,8 +147,6 @@ let ProfileNode = React.createClass({
     let {
       name,
       familyName,
-      description,
-      email,
       uri,
       img
     } = this.getNode()

@@ -79,7 +79,7 @@ let GenericFullScreen = React.createClass({
         debug('Background image has luminance of', lum)
         this.setState({luminance: lum})
       }).catch((e) => {
-        console.error('Couldn\'t compute luminance', e)
+        // console.error('Couldn\'t compute luminance', e)
       })
     }
 
@@ -153,14 +153,12 @@ let GenericFullScreen = React.createClass({
 
   _handleDisconnect() {
     if (this.props.node.rank === 'center') {
-        this._handleClose()
-    }
-    else {
+      this._handleClose()
+    } else {
       ConfirmActions.confirm(
         'Are you sure you want to disconnect this node ?',
         'Disconnect',
         () => {
-
           this._handleClose()
 
           nodeActions.disconnectNode(
@@ -204,7 +202,7 @@ let GenericFullScreen = React.createClass({
 
     if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
-      debug('Deleting center node; navigating to previous node',prev.uri)
+      debug('Deleting center node; navigating to previous node', prev.uri)
       // graphActions.drawAtUri(prev.uri, 1)
       this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
       nodeActions.remove(node, prev) // will refresh the graph
@@ -292,7 +290,7 @@ let GenericFullScreen = React.createClass({
       case 'edit':
         return (<EditorModeEdit />)*/
       default:
-        console.error('No action info found for', iconString)
+        // console.error('No action info found for', iconString)
         return {}
         // return (<AlertError />)
     }
