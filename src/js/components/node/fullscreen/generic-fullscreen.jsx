@@ -30,7 +30,8 @@ import {
   IconButton,
   IconMenu,
   MenuItem,
-  Divider
+  Divider,
+  Subheader
 } from 'material-ui'
 
 let GenericFullScreen = React.createClass({
@@ -107,11 +108,9 @@ let GenericFullScreen = React.createClass({
       title: {
         padding: '0 24px',
         color: '#4b132b',
-        marginTop: '30px',
         fontWeight: '100'
       },
       titleDivider: {
-        marginLeft: '24px',
         marginTop: '10px'
       },
       floatingButtons: {
@@ -139,7 +138,7 @@ let GenericFullScreen = React.createClass({
         top: '15vh'
       },
       subheader: {
-        marginTop: '30px',
+        marginTop: '40px',
         paddingLeft: '24px',
         lineHeight: '20px'
       }
@@ -469,6 +468,7 @@ let GenericFullScreen = React.createClass({
                     )
                   })}
               </div>
+              <Subheader style={styles.subheader}>Name</Subheader>
               <h1 style={styles.title}>{this.props.title || 'No title'}</h1>
               <Divider style={styles.titleDivider} />
               {this.props.children}
