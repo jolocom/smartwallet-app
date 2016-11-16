@@ -100,7 +100,6 @@ export default Reflux.createStore({
   },
 
   // TODO TODO Break down, standardize
-  // TODO TODO Multpiple appearances bug
   fetchInitialData(user) {
     this.init()
     this.aclAgent = new AclAgent(user)
