@@ -21,6 +21,16 @@ let SharedNodes = React.createClass({
     params: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      shared: {
+        typeDocument: [],
+        typePerson: [],
+        typeImage: []
+      }
+    }
+  },
+
   componentDidMount() {
     // TODO is the initial state set correctly?
     const {uri} = this.props.params
@@ -32,8 +42,7 @@ let SharedNodes = React.createClass({
   },
 
   _handleListNodes(nodeType) {
-    // somehow pass nodeType
-    this.context.router.push('/node-list')
+    // this.context.router.push('/node-list')
   },
 
   _handleUpdate(newState) {
@@ -85,77 +94,64 @@ let SharedNodes = React.createClass({
   },
 
   render() {
-    let styles = this.getStyles()
-    const tilesData = [
-      {
-        icon: <SharedNodeType type="person" color="#829abe" />,
+    const {typeDocument} = this.state.shared
+    const {typeImage} = this.state.shared
+    const {typePerson} = this.state.shared
+    const tilesData = []
+    const inactiveColor = '#beceea'
+
+    // TODO SHRINK!
+    if (typePerson.length === 0) {
+      tilesData.push({
+        icon: <SharedNodeType type='person' color={inactiveColor} />,
         nodeType: 'Person',
-        numItems: '5'
-      },
-      {
-        icon: <SharedNodeType type="institution" color="#a1b5d5" />,
-        nodeType: 'Institution',
-        numItems: '2'
-      },
-      {
-        icon: <SharedNodeType type="event" color="#beceea" />,
-        nodeType: 'Event',
-        numItems: '7'
-      },
-      {
-        icon: <SharedNodeType type="thing" color="#8495b1" />,
-        nodeType: 'Thing',
-        numItems: '1'
-      },
-      {
-        icon: <SharedNodeType type="app" color="#9fadc5" />,
-        nodeType: 'App',
-        numItems: '8'
-      },
-      {
-        icon: <SharedNodeType type="sensor" color="#b9c5da" />,
-        nodeType: 'Sensor',
-        numItems: '2'
-      },
-      {
-        icon: <SharedNodeType type="image" color="#8490a2" />,
+        numItems: 0
+      })
+    } else {
+      tilesData.push({
+        icon: <SharedNodeType type='person' color='#829abe' />,
+        nodeType: 'Person',
+        numItems: typePerson.length
+      })
+    }
+
+    if (typeImage.length === 0) {
+      tilesData.push({
+        icon: <SharedNodeType type='image' color={inactiveColor} />,
         nodeType: 'Image',
-        numItems: '11'
-      },
-      {
-        icon: <SharedNodeType type="video" color="#9ca6b6" />,
-        nodeType: 'Video',
-        numItems: '100'
-      },
-      {
-        icon: <SharedNodeType type="audio" color="#b4bccb" />,
-        nodeType: 'Audio',
-        numItems: '100'
-      },
-      {
-        icon: <SharedNodeType type="confidential" color="#858a94" />,
-        nodeType: 'Confidential',
-        numItems: '100'
-      },
-      {
-        icon: <SharedNodeType type="document" color="#9a9fa8" />,
+        numItems: 0
+      })
+    } else {
+      tilesData.push({
+        icon: <SharedNodeType type='image' color='#8490a2' />,
+        nodeType: 'Image',
+        numItems: typeImage.length
+      })
+    }
+
+    if (typeDocument.length === 0) {
+      tilesData.push({
+        icon: <SharedNodeType type='document' color={inactiveColor} />,
         nodeType: 'Document',
-        numItems: '100'
-      },
-      {
-        icon: <SharedNodeType type="note" color="#afb3bb" />,
-        nodeType: 'Note',
-        numItems: '100'
-      }
-    ]
+        numItems: 0
+      })
+    } else {
+      tilesData.push({
+        icon: <SharedNodeType type='document' color='#9a9fa8' />,
+        nodeType: 'Document',
+        numItems: typeDocument.length
+      })
+    }
+
+    let styles = this.getStyles()
 
     return (
       <div style={styles.container}>
         <AppBar
-          title="View shared nodes"
+          title='View shared nodes'
           titleStyle={styles.title}
           iconElementLeft={<IconButton onClick={this.goBack}
-            iconClassName="material-icons">
+            iconClassName='material-icons'>
               arrow_back
           </IconButton>}
           />

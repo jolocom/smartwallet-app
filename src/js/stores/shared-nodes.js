@@ -18,7 +18,6 @@ export default Reflux.createStore({
 
   onGetOverview(uri) {
     this.pAgent.getSharedNodes(uri).then(res => {
-      console.log(res)
       this.trigger({shared: res})
     })
   }
