@@ -6,6 +6,7 @@ import Utils from 'lib/util'
 
 import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
+import ProfileStore from 'stores/profile'
 
 import ActionInfoOutline from 'material-ui/svg-icons/action/info-outline'
 import SocialShare from 'material-ui/svg-icons/social/share'
@@ -36,6 +37,7 @@ let ProfileNode = React.createClass({
 
   mixins: [
     Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
+    Reflux.listenTo(ProfileStore, 'onProfileChange'),
     Reflux.connect(NodeStore, 'node')
   ],
 
@@ -244,7 +246,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Privacy"
-                  value="Private"
+                  value={this.state.privacy}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,

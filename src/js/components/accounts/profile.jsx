@@ -267,6 +267,19 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
+                      <ActionDescription color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Privacy"
+                        name="privacy"
+                        onChange={Util.linkToState(this, 'privacy')}
+                        value={this.state.privacy}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
                       <CommunicationEmail color={theme.jolocom.gray1} />
                     </div>
                     <div style={styles.field}>
