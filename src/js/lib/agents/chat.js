@@ -115,7 +115,8 @@ class ChatAgent extends LDPAgent {
 
     chatURI = 'https://' + chatURI
     webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
-    const subject = rdf.sym(chatURI + '#thread')
+    // const subject = rdf.sym(chatURI + '#thread')
+    const subject = '#thread'
     const predicate = PRED.hasSubscriber
     const object = rdf.sym(webIdOfUserToBeAdded)
     const triple = rdf.st(subject, predicate, object)
@@ -441,7 +442,7 @@ class ChatAgent extends LDPAgent {
     // Participant list
     for (var p of participants) {
       writer.addTriple({
-        subject: '#thread',
+        subject: rdf.sym('#thread'),
         predicate: PRED.hasSubscriber,
         object: rdf.sym(p)
       })
