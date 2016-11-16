@@ -11,7 +11,6 @@ import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ActionBookmark from 'material-ui/svg-icons/action/bookmark'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import ContentLink from 'material-ui/svg-icons/content/link'
 import ContentUnlink from 'material-ui/svg-icons/communication/call-split'
@@ -215,10 +214,6 @@ let GenericFullScreen = React.createClass({
     return this.props.node
   },
 
-  bookmarkFn() {
-    alert('woohoo bookmark!')
-  },
-
   _handleFull() {
     this.setState({fullscreen: !this.state.fullscreen})
   },
@@ -231,11 +226,6 @@ let GenericFullScreen = React.createClass({
           title: 'Chat',
           icon: <CommunicationChat />,
           handler: this._handleStartChat}
-      case 'bookmark':
-        return {
-          title: 'Bookmark',
-          icon: <ActionBookmark />,
-          handler: this.bookmarkFn}
       case 'delete':
         return {title: 'Delete', handler: this._handleDelete}
       case 'connect':
@@ -302,13 +292,13 @@ let GenericFullScreen = React.createClass({
     }
   },
 
-  _handleBookmarkClick() {
-    const {uri} = this.getNode()
-    if (uri) {
-      // @TODO fix bookmarking
-      // PinnedActions.pin(uri)
-    }
-  },
+  // _handleBookmarkClick() {
+  //   const {uri} = this.getNode()
+  //   if (uri) {
+  //     // @TODO fix bookmarking
+  //     // PinnedActions.pin(uri)
+  //   }
+  // },
 
   _handlePostCopyURL() {
     SnackbarActions
