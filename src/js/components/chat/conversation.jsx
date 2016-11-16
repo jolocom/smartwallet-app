@@ -98,7 +98,7 @@ let Conversation = React.createClass({
   addParticipant() {
     const chatAgent = new ChatAgent()
     let webId = 'mocoloj.webid.jolocom.de'
-    let chatURI = 'dean.webid.jolocom.de/little-sister/chats/eflufa'
+    let chatURI = 'dean.webid.jolocom.de/little-sister/chats/cqo9c8'
     chatAgent.addUserToChatSubscriberList(webId, chatURI)
   },
 
@@ -264,6 +264,8 @@ let Conversation = React.createClass({
     } else if (otherPerson && otherPerson.length === 1) {
       collatedNames = otherPerson[0].name
     }
+
+    console.log('otherPeople = ', otherPersonNames)
 
     if (loading) {
       content = <Loading style={styles.loading} />
