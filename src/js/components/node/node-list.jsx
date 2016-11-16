@@ -106,7 +106,6 @@ let NodeList = React.createClass({
 
   render() {
     let styles = this.getStyles()
-    console.log(this.state.tempFileData)
     return (
       <div style={styles.container}>
         <AppBar

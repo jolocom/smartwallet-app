@@ -1,7 +1,11 @@
 import Reflux from 'reflux'
+import Util from 'lib/util'
 import PrivacyActions from 'actions/privacy-settings'
 import AclAgent from 'lib/agents/acl'
 import GraphAgent from 'lib/agents/graph'
+import {Writer} from 'lib/rdf.js'
+import rdf from 'rdflib'
+import {PRED} from 'lib/namespaces'
 
 export default Reflux.createStore({
   listenables: PrivacyActions,
@@ -49,6 +53,7 @@ export default Reflux.createStore({
     this.aclAgent.allow(this.webId, 'read')
     this.aclAgent.allow(this.webId, 'control')
     this.aclAgent.allow(this.webId, 'write')
+    let indexUri = Util.getIndexUri()
 
     if (this.state.currActiveViewBtn === 'visOnlyMe') {
       this.state.viewAllowList.map(el => {
@@ -78,6 +83,42 @@ export default Reflux.createStore({
         this.aclAgent.allow('*', 'write')
       }
     }
+    // TODO, rethink a bit.
+    this.gAgent.fetchTriplesAtUri(indexUri).then(res => {
+      let indexWriter = new Writer()
+      res.triples.map(el => {
+        if (el.object.uri !== this.aclAgent.uri) {
+          indexWriter.addTriple(el)
+        }
+      })
+      this.aclAgent.Writer.find(undefined, undefined, undefined).map(result => {
+        if (result.predicate.uri === PRED.mode.uri) {
+          if (result.object.uri === PRED.read.uri) {
+            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined).map(each => {
+              indexWriter.addTriple(each.object, PRED.readPermission, rdf.sym(this.aclAgent.uri))
+            })
+          } else if (result.object.uri === PRED.write.uri) {
+            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined).map(each => {
+              indexWriter.addTriple(each.object, PRED.writePermission, rdf.sym(this.aclAgent.uri))
+            })
+          }
+        }
+      })
+      return fetch(Util.uriToProxied(indexUri), {
+        method: 'PUT',
+        credentials: 'include',
+        body: indexWriter.end(),
+        headers: {
+          'Content-Type': 'text/turtle'
+        }
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error('Error while putting the file', res)
+        }
+      }).catch((e) => {
+        console.error(e)
+      })
+    })
   },
 
   handleCheck(list, user) {
@@ -335,6 +376,6 @@ export default Reflux.createStore({
 
   commit() {
     this.aclAgent.commit()
-    this.aclAgent.commitIndex()
+    // this.aclAgent.commitIndex()
   }
 })

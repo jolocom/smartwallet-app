@@ -32,19 +32,17 @@ export class Writer {
   }
 
   addTriple(...args) {
-    let subject, predicate, object 
+    let subject, predicate, object
     // Allow to pass a single object
-    if (args.length === 1)
+    if (args.length === 1) {
       ({subject, predicate, object} = args[0])
-    else 
+    } else {
       ([subject, predicate, object] = args)
-
+    }
     this.g.add(subject, predicate, object)
   }
 
   end() {
-    console.log(rdf.serialize(undefined, this.g, undefined, 'text/turtle'))
-    console.log('========================================================')
     return rdf.serialize(undefined, this.g, undefined, 'text/turtle')
   }
 }
