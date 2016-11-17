@@ -23,6 +23,15 @@ import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import SocialShare from 'material-ui/svg-icons/social/share'
+import SocialPublic from 'material-ui/svg-icons/social/public'
+import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
+import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
+import ActionCompany from 'material-ui/svg-icons/action/account-balance'
+import AvWeb from 'material-ui/svg-icons/av/web'
+import ActionStar from 'material-ui/svg-icons/toggle/star'
+import CommunicationLocation
+  from 'material-ui/svg-icons/communication/location-on'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
@@ -267,7 +276,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <ActionDescription color={theme.jolocom.gray1} />
+                      <SocialShare color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -280,7 +289,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <ActionDescription color={theme.jolocom.gray1} />
+                      <SocialPersonOutline color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -293,7 +302,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <ActionDescription color={theme.jolocom.gray1} />
+                      <CommunicationPhone color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -306,7 +315,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <CommunicationEmail color={theme.jolocom.gray1} />
+                      <CommunicationEmail color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -319,7 +328,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <CommunicationEmail color={theme.jolocom.gray1} />
+                      <CommunicationLocation color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -332,7 +341,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <CommunicationEmail color={theme.jolocom.gray1} />
+                      <SocialPublic color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -345,7 +354,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <CommunicationEmail color={theme.jolocom.gray1} />
+                      <ActionStar color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -358,7 +367,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <CommunicationEmail color={theme.jolocom.gray1} />
+                      <ActionCompany color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
@@ -371,7 +380,7 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <CommunicationEmail color={theme.jolocom.gray1} />
+                      <AvWeb color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
