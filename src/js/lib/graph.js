@@ -614,7 +614,7 @@ export default class GraphD3 extends EventEmitter {
       self.deselectAll()
     })
 
-    this.svg.on('wheel', self.onScroll)
+    // this.svg.on('wheel', self.onScroll)
   }.bind(this)
 
   onHoldClick = function (dir) {
