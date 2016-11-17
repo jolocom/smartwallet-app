@@ -173,6 +173,11 @@ let App = React.createClass({
     ConfirmActions.close()
   },
 
+  _handleConfirmAction() {
+    this._handleConfirmClose()
+    this.state.confirm.callback() // Action when the user confirms
+  },
+
   getStyles() {
     let styles = {
       container: {
@@ -262,10 +267,7 @@ let App = React.createClass({
       <FlatButton
         label={this.state.confirm.primaryActionText}
         primary
-        onTouchTap={ () => {
-          this._handleConfirmClose()
-          this.state.confirm.callback() // Action when the user confirms
-        } }
+        onTouchTap={this._handleConfirmAction}
       />
     ]
 
@@ -321,7 +323,6 @@ let App = React.createClass({
           {this.state.confirm.message}
         </Dialog>
       </div>
-
     )
   }
 

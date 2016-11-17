@@ -11,7 +11,9 @@ export default Reflux.createStore({
   listenables: Account,
 
   state: {
-    loggingIn: true
+    loggingIn: true,
+    userExists: false,
+    emailVerifyScreen: false
   },
 
   getInitialState() {
@@ -35,8 +37,13 @@ export default Reflux.createStore({
     })
     .then((res) => {
       if (res.status === 400) {
+        // Username is already taken
         throw new Error('USERNAME_TAKEN')
       }
+      // this.state = {
+      //   emailVerifyScreen: true
+      // }
+      // this.trigger(this.state)
       res.json().then((js) => {
         if (name || email) {
           let payload = {name, email}
@@ -45,6 +52,12 @@ export default Reflux.createStore({
           Account.login(data.username, data.password)
         }
       })
+    }).catch((e) => {
+      if (e.message === 'USERNAME_TAKEN') {
+        SnackbarActions.showMessage('Username is already taken.')
+      } else {
+        SnackbarActions.showMessage('An account error has occured.')
+      }
     })
     .catch((e) => {
       if (e.message === 'USERNAME_TAKEN') {

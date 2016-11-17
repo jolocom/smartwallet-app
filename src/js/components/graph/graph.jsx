@@ -11,8 +11,10 @@ import FabMenuItem from 'components/common/fab-menu-item.jsx'
 import GraphStore from 'stores/graph-store'
 import graphActions from 'actions/graph-actions'
 import IndicatorOverlay from 'components/graph/indicator-overlay.jsx'
-// import Loading from 'components/common/loading.jsx'
+import Loading from 'components/common/loading.jsx'
 import Radium from 'radium'
+import AddNodeIcon from 'components/icons/addNode-icon.jsx'
+import LinkIcon from 'material-ui/svg-icons/content/link'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:graph')
@@ -51,6 +53,12 @@ let Graph = React.createClass({
 
   onStateUpdate(data, signal) {
     // Temp. make it more elegant later.
+
+    // Don't update anything while we're loading.
+    if (data.loading) {
+      return
+    }
+
     if (signal === 'nodeRemove') {
       this.graph.deleteNodeAndRender(data)
       this.setState({activeNode: null})
@@ -73,6 +81,7 @@ let Graph = React.createClass({
       this.state.newNode = null
       graphActions.setState('newNode', null, false)
     }
+
     if (signal === 'erase') {
       this.graph.eraseGraph()
     }
@@ -85,7 +94,6 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
-    console.log('WE MOUNTED!')
     const {account} = this.context
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
@@ -114,14 +122,24 @@ let Graph = React.createClass({
     }
   },
 
-  componentDidUpdate(prevProps) {
-    let fullscreenView = this.props.routes.length === 3
-    let prevFullscreenView = prevProps.routes.length === 3
-    let nodeChanged = prevProps.params.node !== this.props.params.node
-    console.log(this.props.routes, ' HELLO ')
+  // @TODO combine with componentWillUpdate ?
+  componentDidUpdate(prevProps, prevState) {
+    // We do not want to center the graph on the person we're viewing the
+    // full-screen profile of.
 
-    if (prevFullscreenView === fullscreenView) {
-      if (nodeChanged && this.props.params.node) {
+    let fullscreenView = this.props.routes.length === 3 // /graph/[uri]/view
+    let viewChanged = prevProps.routes.length !== this.props.routes.length
+    let nodeChanged = prevProps.params.node !== this.props.params.node // .uri?
+
+    // In case we disconnected from the node in full-screen view, we want to
+    // navigate to the center node again (refresh) if viewChanged, even though
+    // the center node will inevitably be the same (nodeChanged == false)
+    if (!fullscreenView && (nodeChanged || viewChanged)) {
+      if (this.props.params.node &&
+          this.props.params.node === this.context.account.webId) {
+        debug('Home node (componentDidUpdate): redirecting to /graph')
+        this.context.router.push('/graph/')
+      } else {
         let nodeUri = this.props.params.node || this.context.account.webId
         graphActions.navigateToNode({uri: nodeUri},
                                     {uri: this.context.account.webId,
@@ -131,6 +149,11 @@ let Graph = React.createClass({
       if (!fullscreenView) {
         this.state.activeNode = null
       }
+    }
+
+    const {rotationIndex} = this.state
+    if (this.graph && prevState.rotationIndex !== rotationIndex) {
+      this.graph.setRotationIndex(this.state.rotationIndex)
     }
   },
 
@@ -198,20 +221,16 @@ let Graph = React.createClass({
 
   render: function() {
     let styles = this.getStyles()
-    if (this.graph) {
-      this.graph.setRotationIndex(this.state.rotationIndex)
-    }
-
     let fab
 
     if (!this.context.searchActive) {
       fab = (
         <FabMenu style={styles.menu} icon="add" closeIcon="close">
           <FabMenuItem
-            icon="radio_button_unchecked"
+            icon={<AddNodeIcon />}
             label="Node" onTouchTap={this._handleAddNodeTouchTap} />
           <FabMenuItem
-            icon="insert_link"
+            icon={<LinkIcon />}
             label="Link" onClick={this._handleLinkNodeTouchTap} />
         </FabMenu>
       )
@@ -227,11 +246,9 @@ let Graph = React.createClass({
     })
 
     let loading
-    /*
     if (!this.state.initialized) {
       loading = <Loading style={styles.loading} />
     }
-    */
     return (
 
       <div style={styles.container}>

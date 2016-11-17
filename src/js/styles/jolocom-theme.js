@@ -54,8 +54,7 @@ let JolocomTheme = {
     textNodeColor: '#9a9fa9',
     imageNodeColor: '#afb3bb',
     dialColor: '#d1d1d1',
-    elipsis1: '#c9d1de',
-    elipsis2: '#dbe0e9',
+    elipsisColor: '#c3c6cd',
     backgroundColor: fade('#939f9a', 0.3),
     connectionColor: fade('#939f9a', 0.15),
     whiteBackground: '#f2f2f3'

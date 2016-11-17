@@ -32,13 +32,13 @@ let ChangePassword = React.createClass({
 
   _handlePasswordChange(e) {
     this.setState({
-      newPassword: e.target.value.toLowerCase()
+      newPassword: e.target.value
     })
   },
 
   _handlePassword2Change(e) {
     this.setState({
-      newPassword2: e.target.value.toLowerCase()
+      newPassword2: e.target.value
     })
   },
 
@@ -127,10 +127,11 @@ let ChangePassword = React.createClass({
             onInvalid={this.disableSubmit}
             onValidSubmit={this.changePassword}
           >
-            <h3 style={styles.username}>{this.props.params.username}</h3>
             <div style={{marginBottom: '20px'}}>
               <div style={{width: '400px'}}>
-                <div style={styles.title}>Change password</div>
+                <div style={styles.title}>
+                  Set new password for {this.props.params.username}
+                </div>
               </div>
               <FormsyText
                 name="password"

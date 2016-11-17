@@ -193,10 +193,9 @@ export default Reflux.createStore({
   // the URL; then we can add the user's profile node as default history node
   onNavigateToNode: function (node, defaultHistoryNode) {
     let {navHistory} = this.state
-    /*
     this.state.loading = true
     this.trigger(this.state)
-    */
+
     this.state.rotationIndex = 0
 
     node = Object.assign({}, node) // Just being cautious
@@ -269,8 +268,10 @@ export default Reflux.createStore({
       debug('Ignoring onViewNode because node is null.')
       return
     }
+    this.state.loading = true
+    this.trigger(this.state)
 
-    // activeNode is the node we're viewing the full-screen view
+    // activeNode is the node we're viewing the full-screen view of
     this.state.activeNode = node
     if (typeof node === 'string') {
       // Access by URL; we only have the URL of the node and we need to get
