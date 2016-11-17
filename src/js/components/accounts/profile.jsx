@@ -280,6 +280,32 @@ let Profile = React.createClass({
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
+                      <ActionDescription color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Username"
+                        name="username"
+                        onChange={Util.linkToState(this, 'username')}
+                        value={this.state.username}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <ActionDescription color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Mobile"
+                        name="mobile"
+                        onChange={Util.linkToState(this, 'mobile')}
+                        value={this.state.mobile}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
                       <CommunicationEmail color={theme.jolocom.gray1} />
                     </div>
                     <div style={styles.field}>
@@ -362,7 +388,7 @@ let Profile = React.createClass({
                       onClick={this.downloadPK}
                     />
                     <div style={styles.divider}></div>
-                    { /*<RaisedButton
+                    { /* <RaisedButton
                       type="submit"
                       secondary
                       label="Upload Private Key"

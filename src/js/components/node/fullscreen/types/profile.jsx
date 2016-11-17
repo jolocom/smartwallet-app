@@ -37,7 +37,7 @@ let ProfileNode = React.createClass({
 
   mixins: [
     Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
-    Reflux.listenTo(ProfileStore, 'onProfileChange'),
+    Reflux.connect(ProfileStore, 'profile'),
     Reflux.connect(NodeStore, 'node')
   ],
 
@@ -147,6 +147,7 @@ let ProfileNode = React.createClass({
   },
 
   render() {
+    console.log('state ', ProfileStore.state)
     this.state.reputation = 25
     let styles = this.getStyles()
     let {account} = this.context
@@ -250,7 +251,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Privacy"
-                  value={this.state.privacy}
+                  value={this.state.profile.privacy}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -262,7 +263,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Username"
-                  value={name}
+                  value={this.state.profile.username}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
@@ -282,7 +283,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Mobile"
-                  value="+40 176 30339668"
+                  value={this.state.profile.mobile}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,

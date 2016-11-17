@@ -26,6 +26,8 @@ let defaultProfile = {
   givenName: '',
   familyName: '',
   privacy: '',
+  username: '',
+  mobile: '',
   email: '',
   bitcoinAddress: '',
   bitcoinAddressNodeUri: '',
