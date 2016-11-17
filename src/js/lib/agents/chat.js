@@ -179,7 +179,7 @@ class ChatAgent extends LDPAgent {
         }, { // written by...
           subject: rdf.sym(msgId),
           predicate: PRED.hasCreator,
-          object: author
+          object: rdf.sym(author)
         }, { // with content...
           subject: rdf.sym(msgId),
           predicate: PRED.content,
@@ -240,7 +240,7 @@ class ChatAgent extends LDPAgent {
               )
             }
             if (t.predicate.uri == PRED.hasCreator.uri) {
-              acc[curr].author = t.object.value
+              acc[curr].author = t.object.uri
             }
           }
           return acc
@@ -355,6 +355,7 @@ class ChatAgent extends LDPAgent {
             return t.predicate.uri === PRED.image.uri
           })
           if (img) {
+           // participant[person].img = img.object.value
             participant[person].img = img.object.value
           }
           return participant[person]
