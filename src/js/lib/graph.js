@@ -647,6 +647,9 @@ export default class GraphD3 extends EventEmitter {
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
   dragStart = function(node) {
+    if (node.elipsisdepth >= 0) {
+      return
+    }
     if (node.rank !== 'center') {
       node.position.px = node.position.x
       node.position.py = node.position.y
@@ -654,6 +657,9 @@ export default class GraphD3 extends EventEmitter {
   }
 
   drag = function(node) {
+    if (node.elipsisdepth >= 0) {
+      return
+    }
     if (node.rank !== 'center') {
       node.position.x += d3.event.dx
       node.position.y += d3.event.dy
@@ -665,6 +671,9 @@ export default class GraphD3 extends EventEmitter {
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
   dragEnd = function (node) {
+    if (node.elipsisdepth >= 0) {
+      return
+    }
     if (node.rank === 'center' || node.unavailable) {
         // In here we would have the functionality that opens the node's card
     } else if (node.rank === 'neighbour' || node.rank === 'history') {
