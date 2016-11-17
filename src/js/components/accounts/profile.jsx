@@ -51,6 +51,10 @@ let Profile = React.createClass({
     Reflux.listenTo(ProfileStore, 'onProfileChange')
   ],
 
+  contextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
   getInitialState() {
     return {
       bitcoinErrorText: ''
@@ -100,12 +104,13 @@ let Profile = React.createClass({
   },
 
   getStyles() {
+    const {muiTheme} = this.context
     let styles = {
       image: {
         height: '176px'
       },
       bar: {
-        backgroundColor: grey500
+        backgroundColor: muiTheme.palette.primary1Color
       },
       content: {
         overflowY: 'auto'
@@ -195,15 +200,19 @@ let Profile = React.createClass({
         <Layout fixedHeader>
           <AppBar
             title="Edit profile"
+            titleStyle={{color: '#fff'}}
             style={styles.bar}
             iconElementLeft={
               <IconButton
+                iconStyle={{color: '#fff'}}
+                color="#fff"
                 onClick={this.hide}
                 iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={!this.state.loadingPassportPhoto &&
               !this.state.loadingDisplayPhoto
               ? <IconButton
+                iconStyle={{color: '#fff'}}
                 onClick={this._handleUpdate}
                 iconClassName="material-icons">check</IconButton>
               : <IconButton iconClassName="material-icons">
