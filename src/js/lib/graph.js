@@ -1255,6 +1255,7 @@ export default class GraphD3 extends EventEmitter {
       this.setUpVisibleNodes()
       this.d3update()
     }
+    this.setUpVisibleNodes()
     this.d3update()
     this.resetAll()
     this.resetPos()
