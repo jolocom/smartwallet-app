@@ -98,7 +98,7 @@ let Conversation = React.createClass({
   addParticipant() {
     const chatAgent = new ChatAgent()
     let webId = 'mocoloj.webid.jolocom.de'
-    let chatURI = 'dean.webid.jolocom.de/little-sister/chats/cqo9c8'
+    let chatURI = 'acl100.webid.jolocom.de/little-sister/chats/79fccc'
     chatAgent.addUserToChatSubscriberList(webId, chatURI)
   },
 
@@ -206,6 +206,8 @@ let Conversation = React.createClass({
     let {account} = this.context
     let items = this.state.conversation.items || []
 
+    console.log('ITEMS 1!! ', items)
+
     var userAvatar = (
       <UserAvatar
         name={this.state.profile.givenName}
@@ -215,8 +217,9 @@ let Conversation = React.createClass({
     return items.map(function({author, content, created}, i) {
       let image
       for (let person of otherPerson) {
-        if (author === person.value) {
+        if (author === person.uri) {
           image = person.img
+          console.log('IMAGE ', image)
         }
       }
       var otherPersonAvatar = (
