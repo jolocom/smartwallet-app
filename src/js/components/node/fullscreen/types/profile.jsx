@@ -54,6 +54,10 @@ let ProfileNode = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
+  onProfileChange: function(state) {
+    this.setState(state)
+  },
+
   componentWillMount() {
     this.onUpdatePinned()
   },
