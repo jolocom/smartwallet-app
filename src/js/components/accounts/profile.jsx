@@ -14,7 +14,9 @@ import {
   CardMedia,
   CardActions,
   FlatButton,
-  RaisedButton
+  RaisedButton,
+  List, ListItem,
+  Divider
 } from 'material-ui'
 
 import ActionDescription from 'material-ui/svg-icons/action/description'
@@ -258,6 +260,10 @@ let Profile = React.createClass({
             <main style={styles.main}>
               <section>
                 <div style={styles.form}>
+                  <List>
+                    <ListItem primaryText="General" />
+                  </List>
+                  <Divider />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
                       <ActionDescription color={theme.jolocom.gray1} />
