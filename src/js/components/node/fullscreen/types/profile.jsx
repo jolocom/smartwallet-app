@@ -147,7 +147,6 @@ let ProfileNode = React.createClass({
   },
 
   render() {
-    console.log('state ', ProfileStore.state)
     this.state.reputation = 25
     let styles = this.getStyles()
     let {account} = this.context
@@ -295,7 +294,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Email"
-                  value="annika@dasplankton.de"
+                  value={this.state.profile.email}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -307,7 +306,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Address"
-                  value="Waldemarstraße 37a 10997 Berlin"
+                  value={this.state.profile.address}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -319,7 +318,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Social media"
-                  value="http://facebook.de/annika.hamann"
+                  value={this.state.profile.socialMedia}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
@@ -339,7 +338,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Profession"
-                  value="UX Designer"
+                  value={this.state.profile.profession}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -351,7 +350,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Company"
-                  value="DasPlankton"
+                  value={this.state.profile.company}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -363,7 +362,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Url"
-                  value="http://dasplankton.de"
+                  value={this.state.profile.url}
                   floatingLabelFixed
                   readOnly />
               </ListItem>

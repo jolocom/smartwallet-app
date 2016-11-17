@@ -318,6 +318,71 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationEmail color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Address"
+                        name="address"
+                        onChange={Util.linkToState(this, 'address')}
+                        value={this.state.address}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationEmail color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Social media"
+                        name="socialMedia"
+                        onChange={Util.linkToState(this, 'socialMedia')}
+                        value={this.state.socialMedia}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationEmail color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Profession"
+                        name="profession"
+                        onChange={Util.linkToState(this, 'profession')}
+                        value={this.state.profession}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationEmail color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Company"
+                        name="company"
+                        onChange={Util.linkToState(this, 'company')}
+                        value={this.state.company}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationEmail color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Url"
+                        name="url"
+                        onChange={Util.linkToState(this, 'url')}
+                        value={this.state.url}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
                     <div style={Object.assign({},
                       styles.label, styles.labelPassport)}>
                       <PassportIcon style={styles.passportIcon} />
