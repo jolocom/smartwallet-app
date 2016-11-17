@@ -58,7 +58,7 @@ let NodeAddDefault = React.createClass({
     if(this.state.graphState.user && this.state.graphState.center){
       let currentUser = this.state.graphState.user
       let centerNode = this.state.graphState.center
-      let isConfidential = (this.state.type == 'confidential')
+      let isConfidential = (this.state.type === 'confidential')
       if (isConfidential) this.state.type = 'default'
 
       // @TODO Previously called nodeActions.create; except it cannot have a return value

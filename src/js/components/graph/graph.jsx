@@ -85,8 +85,8 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
+    console.log('WE MOUNTED!')
     const {account} = this.context
-
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
@@ -100,7 +100,7 @@ let Graph = React.createClass({
     if (this.props.params.node) {
       if (this.props.params.node === account.webId) {
         debug('Home node (componentDidMount): redirecting to /graph')
-        this.context.router.push('/graph/')
+        graphActions.getInitialGraphState(account.webId)
       } else {
         debug('Navigating to node (componentDidMount)', this.props.params.node)
         graphActions.navigateToNode({uri: this.props.params.node},
@@ -114,48 +114,24 @@ let Graph = React.createClass({
     }
   },
 
-  // @TODO combine with componentWillUpdate ?
   componentDidUpdate(prevProps) {
+    let fullscreenView = this.props.routes.length === 3
+    let prevFullscreenView = prevProps.routes.length === 3
     let nodeChanged = prevProps.params.node !== this.props.params.node
-    if (nodeChanged && this.props.params.node) {
-      let nodeUri = this.props.params.node || this.context.account.webId
-      graphActions.navigateToNode({uri: nodeUri},
-                                  {uri: this.context.account.webId,
-                                   name: this.context.account.username})
-    }
-    /*
-    // We do not want to center the graph on the person we're viewing the
-    // full-screen profile of.
+    console.log(this.props.routes, ' HELLO ')
 
-    let fullscreenView = this.props.routes.length === 3 // /graph/[uri]/view
-    let viewChanged = prevProps.routes.length !== this.props.routes.length
-
-    // In case we disconnected from the node in full-screen view, we want to
-    // navigate to the center node again (refresh) if viewChanged, even though
-    // the center node will inevitably be the same (nodeChanged == false)
-    if (!fullscreenView && (nodeChanged || viewChanged)) {
-      if (this.props.params.node &&
-          this.props.params.node === this.context.account.webId) {
-        debug('Home node (componentDidUpdate): redirecting to /graph')
-        this.context.router.push('/graph/')
-      } else {
-        console.log('C')
+    if (prevFullscreenView === fullscreenView) {
+      if (nodeChanged && this.props.params.node) {
         let nodeUri = this.props.params.node || this.context.account.webId
-        debug('Navigating to node (componentDidUpdate)', nodeUri)
-
-        if (this.props.params.node) {
-          graphActions.navigateToNode({uri: nodeUri},
-                                      {uri: this.context.account.webId,
-                                       name: this.context.account.username})
-        console.log('D')
-        } else {
-          console.log('E')
-          graphActions.navigateToNode({uri: nodeUri})
-        }
+        graphActions.navigateToNode({uri: nodeUri},
+                                    {uri: this.context.account.webId,
+                                     name: this.context.account.username})
+      }
+    } else {
+      if (!fullscreenView) {
+        this.state.activeNode = null
       }
     }
-    console.log('F')
-  */
   },
 
   componentWillUnmount() {
@@ -221,7 +197,6 @@ let Graph = React.createClass({
   },
 
   render: function() {
-    console.log('Rendering according to the signal')
     let styles = this.getStyles()
     if (this.graph) {
       this.graph.setRotationIndex(this.state.rotationIndex)

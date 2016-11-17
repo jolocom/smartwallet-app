@@ -14,14 +14,13 @@ let Node = React.createClass({
     navHistory: PropTypes.array,
     routeParams: PropTypes.object
   },
-  
+
   render: function() {
     let {node} = this.props
 
     if (!node || this.props.routeParams.node !== node.uri) {
-      debug('Fetching more information on node', this.props.routeParams.node)
-      graphActions.viewNode(this.props.routeParams.node) // hydrates activeNode
-      return <div></div>
+      graphActions.viewNode(this.props.routeParams.node)
+      return <div />
     }
 
     const NodeFullScreenComponent = NodeTypes.componentFor(node.type)
@@ -35,7 +34,6 @@ let Node = React.createClass({
       <NodeFullScreenComponent {...this.props} />
     )
   }
-  
 })
 
 export default Node

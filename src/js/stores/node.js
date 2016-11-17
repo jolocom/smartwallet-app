@@ -43,7 +43,7 @@ export default Reflux.createStore({
     let subject = rdf.sym(centerNode.uri)
     let object = rdf.sym(node.uri)
 
-    this.gAgent.deleteFile(object.uri).then((response)=>{
+    return this.gAgent.deleteFile(object.uri).then((response)=>{
       return new Promise((resolve, reject) => {
         if (response.ok){
           let triples = []

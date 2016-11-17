@@ -142,7 +142,6 @@ let GenericFullScreen = React.createClass({
 
   _handleClose() {
     graphActions.setState('activeNode', null, false)
-    console.log(this.props.state, 'Ayayaya')
     this.context.router.push('/graph/' +
       encodeURIComponent(this.props.state.center.uri))
   },
@@ -210,10 +209,14 @@ let GenericFullScreen = React.createClass({
 
     if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
-      debug('Deleting center node; navigating to previous node',prev.uri)
-      // graphActions.drawAtUri(prev.uri, 1)
       this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
-      nodeActions.remove(node, prev) // will refresh the graph
+      /*
+      let prev = navHis[navHis.length - 1]
+      debug('Deleting center node; navigating to previous node', prev.uri)
+      nodeActions.remove(node, prev).then(() => {
+        this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
+      })
+      */
     } else {
       this.context.router.push(`/graph/${encodeURIComponent(center.uri)}`)
       nodeActions.remove(node, center)
