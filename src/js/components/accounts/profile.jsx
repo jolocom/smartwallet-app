@@ -17,7 +17,6 @@ import {
   RaisedButton
 } from 'material-ui'
 
-import {grey500} from 'material-ui/styles/colors'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
