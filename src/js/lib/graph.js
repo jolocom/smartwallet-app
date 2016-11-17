@@ -1093,7 +1093,8 @@ export default class GraphD3 extends EventEmitter {
       .attr('dy', function (d) {
         return d3.select(this.parentNode).classed('hasNodeIcon')
           ? (d.rank === 'center' ? '0.95em' : '.75em')
-          : '.35em' })
+          : '.35em'
+      })
       .attr('opacity', (d) => {
         return (((d.img && d.type !== 'passport') || d.rank === 'elipsis') &&
                 d.rank !== 'history')
