@@ -298,7 +298,7 @@ export default class GraphD3 extends EventEmitter {
         })
         .attr('stroke', STYLES.lightGrayColor)
         .attr('opacity', (d) => {
-          d.source.elipsisdepth >= 0 ? 0 : 1
+          d.source.rank === 'elipsis' ? 0 : 1
         })
         .attr('x1', this.centerCoordinates.x)
         .attr('y1', this.centerCoordinates.y)
@@ -361,7 +361,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('patternUnits', 'userSpaceOnUse')
       .append('svg:image')
       .attr('xlink:href', (d) => {
-        if (d.elipsisdepth === 0) {
+        if (d.rank === 'elipsis') {
           return d.img
         } else {
           return Utils.uriToProxied(d.img)
@@ -451,7 +451,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('class', 'nodecircle')
       .attr('r', 0)
       .attr('fill', (d) => {
-        if (d.elipsisdepth >= 0) {
+        if (d.rank === 'elipsis') {
           return theme.graph.textNodeColor
         } else {
           return theme.graph.transitionStartNodeColor
@@ -496,7 +496,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('opacity', 0)
       .transition().delay(50)
       .attr('opacity', (d) => {
-        if (d.elipsisdepth >= 0) {
+        if (d.rank === 'elipsis') {
           return 0
         } else if (d.img && d.rank !== 'history' && d.type !== 'passport') {
           return 0
@@ -577,7 +577,7 @@ export default class GraphD3 extends EventEmitter {
     // Subscribe to the click listeners
     this.node.on('mousedown', function (data) {
       self.mouseDown = true
-      if (data.elipsisdepth >= 0) {
+      if (data.rank === 'elipsis') {
         let dir = 1
         if (data.connection === 'backButton') {
           dir = -1
@@ -588,7 +588,7 @@ export default class GraphD3 extends EventEmitter {
 
     this.node.on('click', function (data) {
       self.mouseDown = false
-      if (data.elipsisdepth < 0) {
+      if (data.rank !== 'elipsis') {
         if (!self.last || (d3.event.timeStamp - self.last) > 500) {
           self.onClick(this, data)
           self.last = d3.event.timeStamp
@@ -599,7 +599,7 @@ export default class GraphD3 extends EventEmitter {
     })
 
     this.node.on('dblclick', function (data) {
-      if (data.elipsisdepth >= 0) {
+      if (data.rank === 'elipsis') {
         return
       }
       self.onDblClick(this, data)
@@ -610,6 +610,7 @@ export default class GraphD3 extends EventEmitter {
                             .on('end', this.dragEnd))
 
     this.svg.on('click', function (data) {
+      self.mouseDown = false
       self.deselectAll()
     })
 
@@ -647,7 +648,7 @@ export default class GraphD3 extends EventEmitter {
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
   dragStart = function(node) {
-    if (node.elipsisdepth >= 0) {
+    if (node.rank === 'elipsis') {
       return
     }
     if (node.rank !== 'center') {
@@ -657,7 +658,7 @@ export default class GraphD3 extends EventEmitter {
   }
 
   drag = function(node) {
-    if (node.elipsisdepth >= 0) {
+    if (node.rank === 'elipsis') {
       return
     }
     if (node.rank !== 'center') {
@@ -671,7 +672,8 @@ export default class GraphD3 extends EventEmitter {
   // We also prevent the node from bouncing away
   // in case it's dropped to the middle
   dragEnd = function (node) {
-    if (node.elipsisdepth >= 0) {
+    this.mouseDown = false
+    if (node.rank === 'elipsis') {
       return
     }
     if (node.rank === 'center' || node.unavailable) {
@@ -820,15 +822,13 @@ export default class GraphD3 extends EventEmitter {
     this.visibleDataLinks = []
     let nodeCount = 0
 
-    let backButton = {rank: 'neighbour',
+    let backButton = {rank: 'elipsis',
       connection: 'backButton',
       position: this.nodePositions[0],
-      elipsisdepth: 0,
       img: 'img/arrowLeft.png'}
-    let frontButton = {rank: 'neighbour',
+    let frontButton = {rank: 'elipsis',
       connection: 'frontButton',
       position: this.nodePositions[this.MAX_VISIBLE_NODES + 1],
-      elipsisdepth: 0,
       img: 'img/arrowRight.png'}
 
     this.visibleDataNodes.push(backButton)
@@ -842,7 +842,6 @@ export default class GraphD3 extends EventEmitter {
           this.visibleDataNodes.push(this.dataNodes[i])
           let last = this.visibleDataNodes.length - 1
           this.visibleDataNodes[last].position = this.nodePositions[pos]
-          this.visibleDataNodes[last].elipsisdepth = -1
           nodeCount++
           pos++
         }
@@ -911,7 +910,9 @@ export default class GraphD3 extends EventEmitter {
       .attr('transform', (d) => {
         let x = this.centerCoordinates.x
         let y = this.centerCoordinates.y
-        if (d.rank === 'neighbour' || d.rank === 'history') {
+        if (d.rank === 'neighbour' ||
+        d.rank === 'history' ||
+        d.rank === 'elipsis') {
           x = d.position.x
           y = d.position.y
         }
@@ -943,7 +944,7 @@ export default class GraphD3 extends EventEmitter {
 
     d3.selectAll('line')
       .attr('opacity', (d) => {
-        return d.source.elipsisdepth >= 0 ? 0 : 1
+        return d.source.rank === 'elipsis' ? 0 : 1
       })
 
     // Reset size of all circles
@@ -951,7 +952,7 @@ export default class GraphD3 extends EventEmitter {
       .selectAll('.nodecircle')
       .transition('grow').duration(speed)
       .attr('r', (d) => {
-        if (d.elipsisdepth >= 0) {
+        if (d.rank === 'elipsis') {
           return elipsisSize / 2
         } else if (d.rank === 'center') {
           return ((STYLES.largeNodeSize / 2) + (STYLES.smallNodeSize / 2)) / 2
@@ -967,7 +968,7 @@ export default class GraphD3 extends EventEmitter {
       .selectAll('.nodeback')
       .transition('reset').duration(speed)
       .attr('r', (d) => {
-        if (d.elipsisdepth >= 0) {
+        if (d.rank === 'elipsis') {
           return elipsisSize / 2
         }
         if (d.rank === 'center') {
@@ -980,7 +981,7 @@ export default class GraphD3 extends EventEmitter {
       })
       .transition('reset').duration(100)
       .attr('opacity', (d) => {
-        if (d.elipsisdepth === 0) {
+        if (d.rank === 'elipsis') {
           let rotationIndex = this.rotationIndex
           let numberOfNeighbours = this.numberOfNeighbours
           let MAX_VISIBLE = this.MAX_VISIBLE_NODES
@@ -1025,7 +1026,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('x', (d) => {
         if (d.rank === 'center') {
           return -largeSize / 2
-        } else if (d.elipsisdepth >= 0) {
+        } else if (d.rank === 'elipsis') {
           return -elipsisSize / 2
         } else {
           return -smallSize / 2
@@ -1034,7 +1035,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('y', (d) => {
         if (d.rank === 'center') {
           return -largeSize / 2
-        } else if (d.elipsisdepth >= 0) {
+        } else if (d.rank === 'elipsis') {
           return -elipsisSize / 2
         } else {
           return -smallSize / 2
@@ -1048,7 +1049,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('width', (d) => {
         if (d.rank === 'center') {
           return largeSize
-        } else if (d.elipsisdepth >= 0) {
+        } else if (d.rank === 'elipsis') {
           return elipsisSize
         } else {
           return smallSize
@@ -1057,7 +1058,7 @@ export default class GraphD3 extends EventEmitter {
       .attr('height', (d) => {
         if (d.rank === 'center') {
           return largeSize
-        } else if (d.elipsisdepth >= 0) {
+        } else if (d.rank === 'elipsis') {
           return elipsisSize
         } else {
           return smallSize
@@ -1084,19 +1085,6 @@ export default class GraphD3 extends EventEmitter {
       })
       .style('filter', null)
 
-    // Hide confidential icon on elipsis nodes
-    d3.selectAll('svg .node')
-      .selectAll('image')
-      .attr('opacity', (d) => {
-        if (d.confidential && d.rank !== 'center') {
-          if (!d.elipsisdepth) {
-            // Graph has <= 8 nodes, so no need to check if on elipsis node
-            return 1
-          }
-          return d.elipsisdepth === -1 ? 1 : 0
-        }
-      })
-
     // We set the name of the node to invisible in case it has a profile picture
     // In case the node has no picture, we display its name.
     d3.selectAll('svg .node')
@@ -1107,7 +1095,7 @@ export default class GraphD3 extends EventEmitter {
           ? (d.rank === 'center' ? '0.95em' : '.75em')
           : '.35em' })
       .attr('opacity', (d) => {
-        return (((d.img && d.type !== 'passport') || d.elipsisdepth >= 0) &&
+        return (((d.img && d.type !== 'passport') || d.rank === 'elipsis') &&
                 d.rank !== 'history')
                 ? 0
                 : 1
@@ -1141,7 +1129,7 @@ export default class GraphD3 extends EventEmitter {
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank === 'history' ||
         d3.event.defaultPrevented ||
-        data.elipsisdepth >= 0) {
+        data.rank === 'elipsis') {
       return
     }
     if (data.highlighted) {
@@ -1433,6 +1421,7 @@ export default class GraphD3 extends EventEmitter {
       this.d3update()
       this.resetPos()
       this.resetAll(10)
+      this.d3update()
     }
   }.bind(this)
 
