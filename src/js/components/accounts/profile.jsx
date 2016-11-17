@@ -38,6 +38,8 @@ import ProfileStore from 'stores/profile'
 import JolocomTheme from 'styles/jolocom-theme'
 import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import PassportIcon from 'components/icons/passport-icon.jsx'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
@@ -279,12 +281,15 @@ let Profile = React.createClass({
                       <SocialShare color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
-                      <TextField
-                        placeholder="Privacy"
-                        name="privacy"
-                        onChange={Util.linkToState(this, 'privacy')}
+                      <SelectField
+                        floatingLabelText="Privacy"
+                        onChange={this._handleSetPrivacy}
                         value={this.state.privacy}
-                        style={styles.input} />
+                        style={styles.input}
+                        name="privacy">
+                        <MenuItem value="private" primaryText="Private" />
+                        <MenuItem value="public" primaryText="Public" />
+                      </SelectField>
                     </div>
                   </div>
                   <div style={styles.formRow}>
@@ -506,6 +511,12 @@ let Profile = React.createClass({
         bitcoinErrorText: ''
       })
     }
+  },
+
+  _handleSetPrivacy(event, index, value) {
+    this.setState({
+      privacy: value
+    })
   },
 
   _handleBitcoinKeyDown(e) {
