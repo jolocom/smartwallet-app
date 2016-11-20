@@ -734,10 +734,6 @@ export default class GraphD3 extends EventEmitter {
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
 
-      if (this.numberOfNeighbours === 0) {
-        return
-      }
-
       let angle = (Math.PI * 2) / this.numberOfNeighbours
 
       for (let i = 0; i < this.dataNodes.length; i++) {
@@ -1255,6 +1251,8 @@ export default class GraphD3 extends EventEmitter {
       }
       this.setUpVisibleNodes()
       this.d3update()
+      this.resetAll()
+      this.resetPos()
     }
     this.setUpVisibleNodes()
     this.d3update()
