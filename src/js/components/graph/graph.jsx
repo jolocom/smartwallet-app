@@ -105,7 +105,8 @@ let Graph = React.createClass({
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
-
+    console.log(this.state.initialized) 
+    /*
     if (this.props.params.node) {
       if (this.props.params.node === account.webId) {
         debug('Home node (componentDidMount): redirecting to /graph')
@@ -121,6 +122,8 @@ let Graph = React.createClass({
       // Load graph when user is logged in
       graphActions.getInitialGraphState(account.webId)
     }
+    */
+
   },
 
   // @TODO combine with componentWillUpdate ?
