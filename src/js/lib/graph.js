@@ -872,7 +872,7 @@ export default class GraphD3 extends EventEmitter {
         } else {
           this.visibleDataLinks.push({
             'source': this.dataNodes[i],
-            'target': this.dataNodes[0]
+            'target': this.dataNodes[i - 1]
           })
         }
       }
