@@ -24,10 +24,9 @@ class GraphAgent {
    * @param {string} nodeType - The type of the node
    * @return {object} node - The inicial writer with added triples
    */
-  baseNode(uri, writer, title, description, nodeType){
-
+  baseNode(uri, writer, title, description, nodeType) {
     if (title) {
-    writer.addTriple(uri, PRED.title, title)
+      writer.addTriple(uri, PRED.title, title)
     }
     if (description) {
       writer.addTriple(uri, PRED.description, description)
@@ -49,11 +48,11 @@ class GraphAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
-  addImage(uri,dstContainer, writer, image, confidential) {
-    if (image instanceof File){
+  addImage(uri, dstContainer, writer, image, confidential) {
+    if (image instanceof File) {
       let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
       writer.addTriple(uri, PRED.image, imgUri)
-	    return this.storeFile(imgUri, null, image, confidential)
+      return this.storeFile(imgUri, null, image, confidential)
     }
     writer.addTriple(uri, PRED.image, image)
     return
@@ -61,30 +60,31 @@ class GraphAgent {
 
   /**
    * @summary Curates the creation of a new node, delegates to other functions.
-   * @param {string} currentUser - Current webID, used for creating acl
+   * @param {string} currentUser - Current webID, used for creating acl.
    *                 and connecting to the onwer.
-   * @param {object} centerNode - The uri of the folder where the image goes
-   * @param {string} title - The title of the node
-   * @param {string} description - The description of the node
-   * @param {blob} image - The image if there's one
-   * @param {string} nodeType - The type [image / text] of the node
-   * @param {bool} confidential - If the img is to be confidential
+   * @param {object} centerNode - A object describing the center node.
+   * @param {string} title - The title of the node.
+   * @param {string} description - The description of the new node.
+   * @param {blob} image - The image if there's one.
+   * @param {string} nodeType - The type [image / text] of the node.
+   * @param {bool} confidential - If the img is to be confidential.
    */
 
-  createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
-
+  createNode(currentUser, centerNode, title, description,
+             image, nodeType, confidential = false) {
     let writer = new Writer()
-    let newNodeUri = rdf.sym(currentUser.storage + Util.randomString(5))
+    let newNodeUri = rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
-    return this.createACL(newNodeUri.uri, currentUser.uri, confidential)
+    return this.createACL(newNodeUri.uri, currentUser, confidential)
     .then((uri) => {
       aclUri = uri
-      writer.addTriple(newNodeUri, PRED.storage, currentUser.storage)
+      writer.addTriple(newNodeUri, PRED.storage, rdf.sym(centerNode.storage))
       writer.addTriple(newNodeUri, PRED.maker, rdf.sym(centerNode.uri))
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (image) {
-        return this.addImage(newNodeUri,currentUser.storage,writer,image,confidential)
+        return this.addImage(newNodeUri, centerNode.storage,
+                             writer, image, confidential)
       }
     }).then(() => {
       // Putting the RDF file for the node.
@@ -106,18 +106,17 @@ class GraphAgent {
         console.warn('Error,', error, 'occured when putting the rdf file.')
       })
       // Connecting the node to the one that created it
-    }).then(()=> {
+    }).then(() => {
       let payload = {
         subject: rdf.sym(centerNode.uri),
         predicate: PRED.isRelatedTo,
         object: newNodeUri
       }
       return this.writeTriples(centerNode.uri, [payload], false)
-		}).then(()=>{
-		  return newNodeUri.uri
-		})
+    }).then(() => {
+      return newNodeUri.uri
+    })
   }
-
 
   // Should we remove the ACL file associated with it as well?
   // PRO : we won't need the ACL file anymore

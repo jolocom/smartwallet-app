@@ -94,6 +94,7 @@ let Graph = React.createClass({
 
   // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render() {
+    console.log('YOYO', this.state)
     let styles = this.getStyles()
 
     return (

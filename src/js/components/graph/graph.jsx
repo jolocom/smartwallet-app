@@ -21,7 +21,7 @@ let debug = Debug('components:graph')
 
 let Graph = React.createClass({
 
-  mixins: [Reflux.listenTo(GraphStore, 'onStateUpdate')],
+  mixins: [Reflux.listenTo(GraphStore, 'onStateUpdate', 'setInitialState')],
 
   propTypes: {
     children: React.PropTypes.node,
@@ -43,7 +43,7 @@ let Graph = React.createClass({
   getChildContext() {
     return {
       node: this.state.center,
-      user: this.state.user
+      user: this.state.webId
     }
   },
 
@@ -51,10 +51,15 @@ let Graph = React.createClass({
     return ReactDOM.findDOMNode(this.refs.graph)
   },
 
+  setInitialState(initialState) {
+    this.state = initialState
+  },
+
   onStateUpdate(data, signal) {
+    this.setState(data)
     // Temp. make it more elegant later.
 
-    // Don't update anything while we're loading.
+    /* Don't update anything while we're loading.
     if (data.loading) {
       return
     }
@@ -85,6 +90,7 @@ let Graph = React.createClass({
     if (signal === 'erase') {
       this.graph.eraseGraph()
     }
+    */
   },
 
   addNode(type) {
@@ -94,8 +100,6 @@ let Graph = React.createClass({
 
   // This is the first thing that fires when the user logs in.
   componentDidMount() {
-    const {account} = this.context
-
     // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
     // Adding the listeners.
@@ -105,7 +109,10 @@ let Graph = React.createClass({
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
     this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
-    console.log(this.state.initialized) 
+
+    if (!this.state.initialized) {
+      graphActions.getInitialGraphState()
+    }
     /*
     if (this.props.params.node) {
       if (this.props.params.node === account.webId) {
@@ -123,14 +130,15 @@ let Graph = React.createClass({
       graphActions.getInitialGraphState(account.webId)
     }
     */
-
   },
 
-  // @TODO combine with componentWillUpdate ?
   componentDidUpdate(prevProps, prevState) {
-    // We do not want to center the graph on the person we're viewing the
-    // full-screen profile of.
+    if (this.state.initialized) {
+      this.graph.render(this.state)
+      this.graph.updateHistory(this.state.navHistory)
+    }
 
+    /*
     let fullscreenView = this.props.routes.length === 3 // /graph/[uri]/view
     let viewChanged = prevProps.routes.length !== this.props.routes.length
     let nodeChanged = prevProps.params.node !== this.props.params.node // .uri?
@@ -161,6 +169,7 @@ let Graph = React.createClass({
     if (this.graph && prevState.rotationIndex !== rotationIndex) {
       this.graph.setRotationIndex(this.state.rotationIndex)
     }
+  */
   },
 
   componentWillUnmount() {
@@ -192,7 +201,7 @@ let Graph = React.createClass({
   },
 
   _handleCenterChange(node) {
-    this.context.router.push(`/graph/${encodeURIComponent(node.uri)}/`)
+    graphActions.navigateToNode(node, this.state.center)
   },
 
   // max visible nodes reached, show indicator overlay

@@ -10,6 +10,9 @@ let debug = Debug('stores:graph')
 
 export default Reflux.createStore({
   listenables: [graphActions],
+  getInitialState: function() {
+    return this.state
+  },
 
   init: function() {
     this.listenTo(accountActions.logout, this.onLogout)
@@ -20,7 +23,6 @@ export default Reflux.createStore({
     this.state = {
       // These state keys describe the graph
       webId: null,
-      user: null,
       center: null,
       neighbours: null,
       loading: false,
@@ -29,7 +31,6 @@ export default Reflux.createStore({
       navHistory: [],
       selected: null,
       rotationIndex: 0,
-      previousRenderedNodeUri: null,
       // These describe the ui
       showPinned: false,
       showSearch: false,
@@ -43,7 +44,6 @@ export default Reflux.createStore({
     this.state = {
       // Graph related
       webId: null,
-      user: null,
       center: null,
       neighbours: null,
       loading: false,
@@ -51,7 +51,6 @@ export default Reflux.createStore({
       newNode: null,
       navHistory: [],
       selected: null,
-      previousRenderedNodeUri: null,
       // UI related
       showPinned: false,
       showSearch: false,
@@ -124,13 +123,11 @@ export default Reflux.createStore({
     this.trigger(this.state, source)
   },
 
-  onGetInitialGraphState: function (webId) {
+  onGetInitialGraphState() {
     this.state.loading = true
-
     this.trigger(this.state)
 
-    this.state.previousRenderedNodeUri = webId
-    this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
+    this.gAgent.getGraphMapAtWebID(this.state.webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
@@ -141,15 +138,15 @@ export default Reflux.createStore({
     }).catch(graphActions.getInitialGraphState.failed)
   },
 
-  onGetInitialGraphStateCompleted: function (result) {
+  onGetInitialGraphStateCompleted(result) {
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.initialized = true
     this.state.loading = false
-    this.state.user = result[0]
     this.trigger(this.state)
   },
 
+  // TODO, show an error perhaps.
   onGetInitialGraphStateFailed: function () {
     this.state.loading = false
     this.state.initialized = true
@@ -162,95 +159,79 @@ export default Reflux.createStore({
     this.drawAtUri(this.state.center.uri)
   },
 
-  drawAtUri: function (uri, number) {
-    debug('Drawing at URI', uri)
-    this.state.previousRenderedNodeUri = uri
+  // TODO - make sure loading works.
+  drawAtUri(uri, hisNodesToPop = 0) {
+    /*
     this.state.loading = true
-
-    this.trigger(Object.assign({}, this.state, {
-      neighbours: []
-    }))
+    this.trigger(this.state)
+    */
 
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       this.state.loading = false
+      this.state.center = this.convertor.convertToD3('c', triples[0])
+
       this.state.neighbours = []
-      triples[0] = this.convertor.convertToD3('c', triples[0])
-      this.state.center = triples[0]
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
           'a', triples[i], i, triples.length - 1
         )
         this.state.neighbours.push(triples[i])
       }
-      for (let i = 0; i < number; i++) {
+
+      for (let i = 0; i < hisNodesToPop; i++) {
         this.state.navHistory.pop()
       }
+
       this.trigger(this.state)
     })
   },
 
-  // defaultHistoryNode is useful when accessing a node graph view through
-  // the URL; then we can add the user's profile node as default history node
-  onNavigateToNode: function (node, defaultHistoryNode) {
-    let {navHistory} = this.state
-
+  // TODO - make sure loading works.
+  onNavigateToNode(node, defaultHistoryNode) {
+    /*
     this.state.loading = true
     this.trigger(this.state)
+    */
 
     this.state.rotationIndex = 0
 
-    node = Object.assign({}, node) // Just being cautious
-    let oldCenter = Object.assign({}, this.state.center)
-
-    // Update the center node in the state without waiting for the graph map
-    this.state.center = {uri: node.uri}
-    this.state.neighbours = []
-    // this.trigger(this.state,false)
-
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
-      // WARNING: state may have changed between the body of the
-      // onNavigateToNode function and the body of this promise.
-      // Avoid relying on previous string/number values from the state.
-
-      this.state.neighbours = []
-      triples[0] = this.convertor.convertToD3('c', triples[0])
-
-      // Before updating the this.state.center, we push the old center node
-      // to the node history
-
+      // Deciding which node to display as history.
       let historyCandidate
-      if (oldCenter && oldCenter.uri) {
-        historyCandidate = oldCenter
+      if (this.state.center && this.state.center.uri) {
+        historyCandidate = this.state.center
       } else {
         historyCandidate = defaultHistoryNode
       }
 
-      this.state.center = triples[0]
-
-      // We check if we're not navigating to the same node (e.g. went to the
-      // full-screen view and then back), in which case we don't want to add
-      // the node to the history
-      const prevUri = navHistory.length && navHistory[navHistory.length - 1].uri
-
-      if (!this.state.previousRenderedNodeUri ||
-        this.state.previousRenderedNodeUri !== node.uri) {
-        if (prevUri && this.state.center.uri === prevUri) {
-          navHistory.pop()
-        } else if (!this.state.previousRenderedNodeUri) {
-          navHistory.push(historyCandidate)
-        } else {
-          navHistory.push(historyCandidate)
+      // If we travel to a history node, pop it from the history.
+      if (node.connection === 'hist') {
+        for (let i = 0; i <= node.histLevel; i++) {
+          this.state.navHistory.pop()
+        }
+      } else {
+        // If we travel to a normal node, check if it is in history
+        // and then short circuit it.
+        let foundIndex = 0
+        if (this.state.navHistory.length > 1) {
+          for (let i = 0; i < this.state.navHistory.length; i++) {
+            if (this.state.navHistory[i].uri === node.uri) {
+              foundIndex = i
+              break
+            }
+          }
+          if (foundIndex) {
+            this.state.navHistory = this.state.navHistory.slice(0, foundIndex)
+          }
+        }
+        // Travel to normal node, that is not in history, simply add it to his.
+        if (!foundIndex) {
+          this.state.navHistory.push(historyCandidate)
         }
       }
 
-      // this.state.navHistory is already a reference to navHistory
-      // Just making it explicit.
-      this.state.navHistory = navHistory
-
-      // previousRenderedNodeUri is the latest node that was rendered in
-      // graph view (not full-screen view)
-      this.state.previousRenderedNodeUri = node.uri
-
+      this.state.center = this.convertor.convertToD3('c', triples[0])
+      this.state.neighbours = []
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
           'a', triples[i], i, triples.length - 1
@@ -258,8 +239,7 @@ export default Reflux.createStore({
         this.state.neighbours.push(triples[i])
       }
 
-      this.state.loading = false
-
+      // this.state.loading = false
       this.trigger(this.state)
     })
   },
