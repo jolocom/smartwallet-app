@@ -466,7 +466,13 @@ let GenericFullScreen = React.createClass({
                     )
                   })}
               </div>
-              <Subheader style={styles.subheader}>Name</Subheader>
+              <Subheader style={styles.subheader}>
+                {
+                  this.props.node.type.includes('Person')
+                  ? 'Name'
+                  : 'Title'
+                }
+              </Subheader>
               <h1 style={styles.title}>{this.props.title || 'No title'}</h1>
               <Divider style={styles.titleDivider} />
               {this.props.children}
