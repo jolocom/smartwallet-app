@@ -16,7 +16,7 @@ import {
   FlatButton,
   RaisedButton,
   List, ListItem,
-  Divider
+  Divider, Subheader
 } from 'material-ui'
 
 import ActionDescription from 'material-ui/svg-icons/action/description'
@@ -179,6 +179,27 @@ let Profile = React.createClass({
         width: '5px',
         height: 'auto',
         display: 'inline-block'
+      },
+      subheader: {
+        marginTop: '40px',
+        paddingLeft: '24px',
+        lineHeight: '20px'
+      },
+      titleDivider: {
+        marginTop: '10px'
+      },
+      title: {
+        padding: '0 24px',
+        color: '#4b132b',
+        fontWeight: '100',
+        fontSize: '1.5em'
+      },
+      sectionHeader: {
+        padding: '0 8px',
+        margin: '0'
+      },
+      sectionDivider: {
+        marginLeft: '24px'
       }
     }
     return styles
@@ -259,11 +280,19 @@ let Profile = React.createClass({
               onChange={this._handleSelectPassportFile} />
             <main style={styles.main}>
               <section>
+                <Subheader style={styles.subheader}>Name</Subheader>
+                <TextField
+                  name="givenName"
+                  style={styles.title}
+                  underlineStyle={{display: 'none'}}
+                  onChange={Util.linkToState(this, 'givenName')}
+                  value={this.state.givenName} />
+                <Divider style={styles.titleDivider} />
                 <div style={styles.form}>
-                  <List>
+                  <List style={styles.sectionHeader}>
                     <ListItem primaryText="General" />
                   </List>
-                  <Divider />
+                  <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
                       <ActionDescription color={theme.jolocom.gray1} />
