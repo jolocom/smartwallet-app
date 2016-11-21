@@ -90,9 +90,9 @@ export default Reflux.createStore({
             resolve({uri: centerNode.uri, triples})
           })
         } else reject('Could not delete file')
-      }).then((query)=>{
-        this.gAgent.deleteTriple(query).then((result)=>{
-          if (result.ok){
+      }).then((query) => {
+        this.gAgent.deleteTriple(query).then((result) => {
+          if (result.ok) {
             profileActions.load() // Reload profile info (bitcoin, passport)
             graphActions.refresh()
           }
@@ -101,19 +101,33 @@ export default Reflux.createStore({
     })
   },
 
-  /**
+  /** TODO - update documentation for this function.
    * @summary Disconnects a node from another node.
    * @param {object} subject - triple subject describing connection
    * @param {object} predicate - triple predicate describing connection
    * @param {object} object - triple object describing connection
    */
 
-  onDisconnectNode(node, centerNode){
-    let subject = rdf.sym(centerNode.uri)
-    let predicate = rdf.sym(node.connection)
-    let object = rdf.sym(node.uri)
-    this.gAgent.deleteTriple(subject.uri, subject, predicate, object).then(function(){
-      graphActions.drawAtUri(centerNode.uri, 0)
+  onDisconnectNode(...args) {
+    let payload
+    let {uri} = args[0]
+
+    if (args.length === 2) {
+      let {node, centerNode} = args[0]
+      payload = {
+        uri: centerNode.uri,
+        triples: [{
+          subject: rdf.sym(centerNode.uri),
+          predicate: rdf.sym(node.connection),
+          object: rdf.sym(node.uri)
+        }]
+      }
+    } else {
+      payload = args[0]
+    }
+    this.gAgent.deleteTriple(payload)
+    .then(function() {
+      graphActions.drawAtUri(uri, 0)
     })
   },
 

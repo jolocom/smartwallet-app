@@ -23,7 +23,8 @@ let TextNode = React.createClass({
     uri: React.PropTypes.string,
     img: React.PropTypes.string,
     type: React.PropTypes.string,
-    rank: React.PropTypes.string
+    rank: React.PropTypes.string,
+    graphState: React.PropTypes.object
   },
 
   onUpdatePinned() {
@@ -35,7 +36,9 @@ let TextNode = React.createClass({
   },
 
   render() {
-    let {title, description, email, uri, img, type, rank} = this.props
+    console.log(this.props)
+    let {title, description, email, uri,
+         img, type, rank, graphState} = this.props
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []
@@ -64,6 +67,7 @@ let TextNode = React.createClass({
         menuItems={menuItems}
         type={type}
         rank={rank}
+        graphState={graphState}
         uri={uri}
       >
         <List>

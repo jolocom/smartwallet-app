@@ -303,7 +303,6 @@ class GraphAgent {
     })
   }
 
-
   /**
    * @summary Deletes a triple from an rdf file.
    *
@@ -319,21 +318,18 @@ class GraphAgent {
   // uri,subj,pred,obj
   // {uri:uri, triples:[]}
   deleteTriple(...args) {
+    console.log(args)
     let subject, predicate, object
     let triples = []
     let uri, query
 
     // Check if we received only one object with multiple triples in there.
     if (args.length === 1) {
-      ({
-        uri
-      } = args[0])
+      ({uri} = args[0])
       triples = args[0].triples
     } else {
       ([uri, subject, predicate, object] = args)
-      triples = [{
-        subject, predicate, object
-      }]
+      triples = [{subject, predicate, object}]
     }
 
     let statement = triples.map(t => {

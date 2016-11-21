@@ -20,7 +20,8 @@ let ProfileNode = React.createClass({
     email: React.PropTypes.string,
     uri: React.PropTypes.string,
     img: React.PropTypes.string,
-    rank: React.PropTypes.string
+    rank: React.PropTypes.string,
+    graphState: React.PropTypes.object
   },
 
   contextTypes: {
@@ -41,7 +42,7 @@ let ProfileNode = React.createClass({
 
   render() {
     let {account} = this.context
-    let {name, description, email, uri, img} = this.props
+    let {name, description, email, uri, img, graphState} = this.props
 
     const isMe = account.webId === uri
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
@@ -68,6 +69,7 @@ let ProfileNode = React.createClass({
         headerColor={'#829abe'}
         fabItems={fabItems}
         menuItems={menuItems}
+        graphState={graphState}
       >
         <List >
           {description && (

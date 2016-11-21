@@ -1,3 +1,4 @@
+import rdf from 'rdflib'
 import React from 'react'
 import Dialog from 'components/common/dialog'
 import CopyToClipboard from 'react-copy-to-clipboard'
@@ -6,7 +7,6 @@ import {Layout, Content} from 'components/layout'
 import ProfileActions from 'actions/profile'
 import ConfirmActions from 'actions/confirm'
 import Radium from 'radium'
-import graphActions from 'actions/graph-actions'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
@@ -32,7 +32,8 @@ let GenericFullScreen = React.createClass({
     children: React.PropTypes.any,
     backgroundImg: React.PropTypes.any,
     rank: React.PropTypes.string,
-    uri: React.PropTypes.string
+    uri: React.PropTypes.string,
+    graphState: React.PropTypes.object
   },
 
   contextTypes: {
@@ -123,30 +124,36 @@ let GenericFullScreen = React.createClass({
     this.context.router.goBack()
   },
 
+  // WORKING ON THIS STILL TODO
   _handleDisconnect() {
     if (this.props.rank === 'center') {
       this._handleClose()
     } else {
+      let payload = {
+        uri: this.context.node.uri,
+        triples: []
+      }
+
+      this.props.graphState.neighbours.map(el => {
+        if (el.rank === this.props.rank && el.uri === this.props.uri) {
+          payload.triples.push({
+            subject: rdf.sym(this.context.node.uri),
+            predicate: rdf.sym(el.connection),
+            object: rdf.sym(el.uri)
+          })
+        }
+      })
+
       ConfirmActions.confirm(
         'Are you sure you want to disconnect this node ?',
         'Disconnect',
         () => {
           this._handleClose()
-          nodeActions.disconnectNode(
-
-          // TODO - work on this.
-            this.props.node, this.props.state.center
-          )
-
+          nodeActions.disconnectNode(payload)
           let onDisconnectUndo = () => {
-            nodeActions.link(this.props.state.center.uri,
-                             'knows',
-                             this.props.node.uri,
-                             false)
-            let unsub = nodeActions.link.completed.listen(() => {
-              unsub()
-              graphActions.drawAtUri(this.props.state.center.uri, 0)
-            })
+          // TODO - make sure this renders somehow
+            nodeActions.link(this.context.node.uri, 'knows',
+                             this.props.uri, false)
           }
 
           // @TODO Wait until it's actually disconnected
@@ -247,15 +254,6 @@ let GenericFullScreen = React.createClass({
               </FloatingActionButton>
             </CopyToClipboard>)
         }
-
-      /* case 'copy':
-        return (<ContentCopy />)
-      case 'save':
-        return (<ContentSave />)
-      case 'read':
-        return (<CommunicationImportContacts />)
-      case 'edit':
-        return (<EditorModeEdit />)*/
       default:
         console.error('No action info found for', iconString)
         return {}
