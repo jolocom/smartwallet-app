@@ -16,6 +16,7 @@ export default Reflux.createStore({
     this.gAgent = new GraphAgent()
     this.state = {
       title: null,
+      name: null,
       description: null,
       uri: null,
       imt: null,
@@ -53,6 +54,7 @@ export default Reflux.createStore({
       this.state.img = node.img
       this.state.type = node.type
       this.state.rank = node.rank
+      this.state.name = node.name
       this.state.initialized = true
       this.trigger(this.state)
     })
