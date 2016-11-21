@@ -1,109 +1,78 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-
 import Utils from 'lib/util'
-
-import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
-
-import {
-  FontIcon,
-  List, ListItem, Divider
-} from 'material-ui'
-
+import {FontIcon, List, ListItem, Divider} from 'material-ui'
 import PinnedStore from 'stores/pinned'
 
 let TextNode = React.createClass({
 
   mixins: [
-    Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
-    Reflux.connect(NodeStore, 'node')
+    Reflux.listenTo(PinnedStore, 'onUpdatePinned')
   ],
-
-  propTypes: {
-    state: React.PropTypes.object, /* @TODO fix this */
-    node: React.PropTypes.object,
-    onClose: React.PropTypes.func
-  },
-
-  contextTypes: {
-    history: React.PropTypes.any,
-    profile: React.PropTypes.object,
-    muiTheme: React.PropTypes.object
-  },
 
   componentWillMount() {
     this.onUpdatePinned()
   },
 
-  onUpdatePinned() {
-    const node = this.getNode()
+  propTypes: {
+    title: React.PropTypes.string,
+    description: React.PropTypes.string,
+    email: React.PropTypes.string,
+    uri: React.PropTypes.string,
+    img: React.PropTypes.string,
+    type: React.PropTypes.string,
+    rank: React.PropTypes.string
+  },
 
-    if (node) {
+  onUpdatePinned() {
+    if (this.props) {
       this.setState({
-        pinned: PinnedStore.isPinned(node.uri)
+        pinned: PinnedStore.isPinned(this.props.uri)
       })
     }
   },
 
-  getStyles() {
-    return {
-    }
-  },
-
-  getNode() {
-    if (this.props.state) {
-      return this.props.state.activeNode // TODO temp fix
-    } else {
-      return this.props.node
-    }
-  },
-
   render() {
-    let styles = this.getStyles()
-    let {
-      title,
-      description,
-      email,
-      uri,
-      img
-    } = this.getNode()
-
+    let {title, description, email, uri, img, type, rank} = this.props
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-
     let fabItems = ['copyUrl'] /* 'edit' */
-
     let menuItems = []
+
+    /* TODO - rebuild this mechanism.
     if (this.getNode().isOwnedByUser) {
       menuItems.push('delete')
     }
-    if (this.props.state.center.isOwnedByUser &&
-        this.getNode().rank &&
-        this.getNode().rank === 'neighbour') {
+    */
+
+    if (this.props.rank && this.props.rank === 'neighbour') {
+      menuItems.push('delete')
       menuItems.push('disconnect')
     } else {
       menuItems.push('connect')
     }
+
     return (
       <GenericFullScreen
         title={title}
         description={description}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
-        headerColor={this.props.node.confidential ? '#858a94' : '#9a9fa8'}
         fabItems={fabItems}
+        headerColor='#9a9fa8'
         menuItems={menuItems}
-        state={this.props.state}
-        node={this.props.node}
-         >
-        <List style={styles.list}>
+        type={type}
+        rank={rank}
+        uri={uri}
+      >
+        <List>
           {description && (
             <div>
               <ListItem
                 leftIcon={
                   <FontIcon color={'#9ba0aa'}
-                    className="material-icons">info</FontIcon>
+                    className='material-icons'>info</FontIcon>
                 }
                 primaryText={description}
               />
@@ -114,9 +83,9 @@ let TextNode = React.createClass({
             <ListItem
               leftIcon={
                 <FontIcon color={'#9ba0aa'}
-                  className="material-icons">email</FontIcon>}
+                  className='material-icons'>email</FontIcon>}
               primaryText={email}
-              secondaryText="Personal"
+              secondaryText='Personal'
             />
           )}
         </List>

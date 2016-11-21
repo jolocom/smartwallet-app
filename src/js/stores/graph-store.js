@@ -10,6 +10,7 @@ let debug = Debug('stores:graph')
 
 export default Reflux.createStore({
   listenables: [graphActions],
+
   getInitialState: function() {
     return this.state
   },
@@ -244,98 +245,17 @@ export default Reflux.createStore({
     })
   },
 
+  // TODO - make sure loading works.
   onViewNode(node) {
-    let activeNodeInfoP
-    let activeNodePermissionsP
-    let centerNodePermissionsP
-
     if (!node) {
       debug('Ignoring onViewNode because node is null.')
       return
     }
 
-    this.state.loading = true
-    this.trigger(this.state)
-
-    // activeNode is the node we're viewing the full-screen view of
+    /* activeNode is the node we're viewing the full-screen view of
     this.state.activeNode = node
-
-    if (typeof node === 'string') {
-      // Access by URL; we only have the URL of the node and we need to get
-      // more information about the neighbours, name, etc.
-      debug('Fetching information and user permisions about the node...')
-      activeNodeInfoP = this.gAgent.fetchTriplesAtUri(node)
-        .then((result) => {
-          result.triples.uri = node
-          this.state.activeNode = node = this.convertor.convertToD3(
-            'a', result.triples
-          )
-        })
-
-      this.state.activeNode = {uri: node}
-      // @TODO let's hope that the state doesn't change by the time the
-      // promise resolves
-    } else {
-      // We passed in an object, so we already have information about the node
-      debug('Fetching user permissions about the node...')
-      activeNodeInfoP = Promise.resolve()
-    }
-
-    // Check if the cookie is still valid [?]
-
-    // We check if we have write access to the node
-    // This will let us decide whether or not we should show the delete button
-    const activeNodeUri = `${Utils.uriToProxied(this.state.activeNode.uri)}`
-    activeNodePermissionsP = fetch(activeNodeUri, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/sparql-update'
-      }
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-      this.state.activeNode.isOwnedByUser = true
-    }).catch(() => {
-      this.state.activeNode.isOwnedByUser = false
-    })
-
-    // We check if we have write access to the center node
-    // This will let us decide whether or not we should show the
-    // "disconnect from center node" button in the full-screen view
-    if (!this.state.center) {
-      this.state.center = {}
-      this.state.center.isOwnedByUser = false
-      centerNodePermissionsP = Promise.resolve()
-    } else {
-      centerNodePermissionsP = fetch(
-        `${Utils.uriToProxied(this.state.center.uri)}`,
-        { method: 'PATCH',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/sparql-update'
-          }
-        }
-      )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText)
-        }
-        this.state.center.isOwnedByUser = true
-      }).catch(() => {
-        this.state.center.isOwnedByUser = false
-      })
-    }
-
-    activeNodeInfoP
-      .then(() => Promise.all([activeNodePermissionsP, centerNodePermissionsP]))
-      .catch(() => {
-        debug('onViewNode failed')
-      })
-      .then(() => {
-        this.state.loading = false
-        this.trigger(this.state)
-      })
+    this.state.loading = false
+    this.trigger(this.state)
+    */
   }
 })

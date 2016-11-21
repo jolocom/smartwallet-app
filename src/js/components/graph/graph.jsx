@@ -1,7 +1,6 @@
 // @see http://nicolashery.com/integrating-d3js-visualizations-in-a-react-app/
 // This file renders the whole graph component. Takes care of all the nuances.
 // It is also stateless,
-// Figuring out now how to make it maintain some changes through refreshes.
 import Reflux from 'reflux'
 import React from 'react'
 import ReactDOM from 'react/lib/ReactDOM'
@@ -16,11 +15,7 @@ import Radium from 'radium'
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import LinkIcon from 'material-ui/svg-icons/content/link'
 
-import Debug from 'lib/debug'
-let debug = Debug('components:graph')
-
 let Graph = React.createClass({
-
   mixins: [Reflux.listenTo(GraphStore, 'onStateUpdate', 'setInitialState')],
 
   propTypes: {
@@ -57,40 +52,6 @@ let Graph = React.createClass({
 
   onStateUpdate(data, signal) {
     this.setState(data)
-    // Temp. make it more elegant later.
-
-    /* Don't update anything while we're loading.
-    if (data.loading) {
-      return
-    }
-
-    if (signal === 'nodeRemove') {
-      this.graph.deleteNodeAndRender(data)
-      this.setState({activeNode: null})
-      // Important to avoid a re-render here.
-      graphActions.setState('activeNode', null, false)
-    } else if (signal !== 'preview') {
-      if (data) {
-        this.setState(data)
-      }
-      if (data && data.neighbours) {
-        this.graph.render(this.state)
-        this.graph.updateHistory(this.state.navHistory)
-      }
-    }
-
-    if (this.state.newNode) {
-      // this.graph.addNode(this.state.newNode)
-      // We update the state of the store to be
-      // in line with the state of the child
-      this.state.newNode = null
-      graphActions.setState('newNode', null, false)
-    }
-
-    if (signal === 'erase') {
-      this.graph.eraseGraph()
-    }
-    */
   },
 
   addNode(type) {
@@ -98,10 +59,9 @@ let Graph = React.createClass({
     this.context.router.push(`/graph/${uri}/add/${type}`)
   },
 
-  // This is the first thing that fires when the user logs in.
   componentDidMount() {
-    // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
+
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('select', this._handleSelectNode)
@@ -113,23 +73,6 @@ let Graph = React.createClass({
     if (!this.state.initialized) {
       graphActions.getInitialGraphState()
     }
-    /*
-    if (this.props.params.node) {
-      if (this.props.params.node === account.webId) {
-        debug('Home node (componentDidMount): redirecting to /graph')
-        this.context.router.push('/graph/')
-      } else {
-        debug('Navigating to node (componentDidMount)', this.props.params.node)
-        graphActions.navigateToNode({uri: this.props.params.node},
-                                    {uri: this.context.account.webId,
-                                     name: this.context.account.username})
-      }
-    } else if (account.webId) {
-      debug('Navigating to default node', account.webId)
-      // Load graph when user is logged in
-      graphActions.getInitialGraphState(account.webId)
-    }
-    */
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -137,39 +80,6 @@ let Graph = React.createClass({
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)
     }
-
-    /*
-    let fullscreenView = this.props.routes.length === 3 // /graph/[uri]/view
-    let viewChanged = prevProps.routes.length !== this.props.routes.length
-    let nodeChanged = prevProps.params.node !== this.props.params.node // .uri?
-
-    // In case we disconnected from the node in full-screen view, we want to
-    // navigate to the center node again (refresh) if viewChanged, even though
-    // the center node will inevitably be the same (nodeChanged == false)
-    if (!fullscreenView && (nodeChanged || viewChanged)) {
-      if (this.props.params.node &&
-          this.props.params.node === this.context.account.webId) {
-        debug('Home node (componentDidUpdate): redirecting to /graph')
-        this.context.router.push('/graph/')
-      } else {
-        let nodeUri = this.props.params.node || this.context.account.webId
-        debug('Navigating to node (componentDidUpdate)', nodeUri)
-
-        if (this.props.params.node) {
-          graphActions.navigateToNode({uri: nodeUri},
-                                      {uri: this.context.account.webId,
-                                       name: this.context.account.username})
-        } else {
-          graphActions.navigateToNode({uri: nodeUri})
-        }
-      }
-    }
-
-    const {rotationIndex} = this.state
-    if (this.graph && prevState.rotationIndex !== rotationIndex) {
-      this.graph.setRotationIndex(this.state.rotationIndex)
-    }
-  */
   },
 
   componentWillUnmount() {
@@ -180,6 +90,7 @@ let Graph = React.createClass({
   },
 
   componentWillUpdate(newProps, newState, newContext) {
+    /*
     let uri
 
     if (newState.activeNode &&
@@ -190,6 +101,7 @@ let Graph = React.createClass({
              newContext.account.webId !== this.context.account.webId) {
       graphActions.getInitialGraphState(newContext.account.webId)
     }
+    */
   },
 
   _handleSelectNode(node, svg) {
@@ -268,8 +180,8 @@ let Graph = React.createClass({
 
     return (
       <div style={styles.container}>
-        <IndicatorOverlay ref="scrollIndicator" />
-        <div style={styles.chart} ref="graph"></div>
+        <IndicatorOverlay ref='scrollIndicator' />
+        <div style={styles.chart} ref='graph' />
 
         {loading}
 
@@ -281,7 +193,9 @@ let Graph = React.createClass({
   },
 
   _handleViewNode(node) {
-    graphActions.viewNode(node)
+    let uri = encodeURIComponent(node.uri)
+    let type = encodeURIComponent(node.type)
+    this.context.router.push(`/graph/${uri}/${type}/view`)
   },
 
   _handleAddNodeTouchTap() {

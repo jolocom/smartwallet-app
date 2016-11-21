@@ -83,7 +83,7 @@ export default {
    */
   get(type) {
     if (typeof type === 'string') {
-        return _types[type]
+      return _types[type]
     }
 
     for (let nodeType in _types) {
@@ -97,16 +97,14 @@ export default {
    *
    */
   componentFor(type) {
-    if (type && typeof type == 'object' && 'uri' in type)
-      type=type.uri
-      
+    if (type && typeof type === 'object' && 'uri' in type) {
+      type = type.uri
+    }
+
     let config
     if (type && (config = this.get(type))) {
       return config.component
-    }
-    else
-    {
-      console.error('node-types.js - Could not find component for type ' + type)
+    } else {
       return this.get('default').component
     }
   }

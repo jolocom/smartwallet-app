@@ -71,7 +71,7 @@ let Graph = React.createClass({
     }
   },
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     graphActions.setState('center', this.state.center)
     graphActions.setState('navHistory', this.state.navHistory)
     graphActions.setState('neighbours', this.state.neighbours, true)
@@ -92,19 +92,16 @@ let Graph = React.createClass({
     return styles
   },
 
-  // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render() {
-    console.log('YOYO', this.state)
     let styles = this.getStyles()
 
     return (
-      <div style={styles.chart} ref="graph"></div>
+      <div style={styles.chart} ref='graph' />
     )
   },
 
-
-  _handleChangeRotationIndex(rotationIndex){
-    previewActions.changeRotationIndex(rotationIndex,true)
+  _handleChangeRotationIndex(rotationIndex) {
+    previewActions.changeRotationIndex(rotationIndex, true)
   },
 
   // TODO NOT WORKING
@@ -112,7 +109,7 @@ let Graph = React.createClass({
     previewActions.viewNode(node)
   },
 
-  _handleCenterChange(node){
+  _handleCenterChange(node) {
     previewActions.navigateToNode(node)
   },
 

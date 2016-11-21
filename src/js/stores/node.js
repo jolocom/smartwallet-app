@@ -4,6 +4,7 @@ import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
 import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
+import D3Convertor from '../lib/d3-converter'
 import {PRED} from 'lib/namespaces'
 
 let {link} = nodeActions
@@ -13,10 +14,23 @@ export default Reflux.createStore({
 
   init() {
     this.gAgent = new GraphAgent()
+    this.state = {
+      title: null,
+      description: null,
+      uri: null,
+      imt: null,
+      initialized: false,
+      rank: null,
+      type: null
+    }
   },
 
   getInitialState() {
-    return null
+    return this.state
+  },
+
+  resetState() {
+    this.init()
   },
 
   create(user, node, title, description, image, type) {
@@ -27,6 +41,23 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
+  onInitiate(uri) {
+    let convertor = new D3Convertor()
+    this.gAgent.fetchTriplesAtUri(uri).then((result) => {
+      result.triples.uri = uri
+      const node = convertor.convertToD3('a', result.triples)
+
+      this.state.title = node.name | node.title
+      this.state.description = node.description
+      this.state.uri = node.uri
+      this.state.img = node.img
+      this.state.type = node.type
+      this.state.rank = node.rank
+      this.state.initialized = true
+      this.trigger(this.state)
+    })
+  },
+
   /**
    * @summary Deletes a rdf file and it's connection to the center node
    * and plays the delete animation
@@ -34,18 +65,17 @@ export default Reflux.createStore({
    * @param {object} centerNode - we disconnect from this node.
    */
 
-  onRemove(node, centerNode){
-
+  onRemove(node, centerNode) {
     // Prevent centerNode from being modified by the outside
     // if the state of the graph store changes for instance
-    centerNode = Object.assign({},centerNode)
+    centerNode = Object.assign({}, centerNode)
 
     let subject = rdf.sym(centerNode.uri)
     let object = rdf.sym(node.uri)
 
-    this.gAgent.deleteFile(object.uri).then((response)=>{
+    this.gAgent.deleteFile(object.uri).then((response) => {
       return new Promise((resolve, reject) => {
-        if (response.ok){
+        if (response.ok) {
           let triples = []
           this.gAgent.findTriples(subject.uri, subject, undefined, object).then((result)=>{
             for (let t of result) {

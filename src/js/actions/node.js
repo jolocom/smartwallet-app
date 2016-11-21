@@ -2,9 +2,11 @@ import Reflux from 'reflux'
 
 export default Reflux.createActions({
   'create': {asyncResult: true},
+  'initiate': {asyncResult: true},
   'link': {asyncResult: true},
   'remove': {asyncResult: true},
-  'disconnectNode': {asyncResult: false}
+  'disconnectNode': {asyncResult: false},
+  'resetState': {asyncResult: false}
 
   // Not implemented yet.
   // 'load': {asyncResult: true},

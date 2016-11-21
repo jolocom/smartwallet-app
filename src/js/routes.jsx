@@ -34,7 +34,7 @@ const routes = (
       </Route>
     </Route>
     <Route path="graph(/:node)" component={Graph} title="Graph">
-      <Route path="/graph/:node/view" component={Node} />
+      <Route path="/graph/:node/:type/view" component={Node} />
       <Route path="/graph/:node/add/:type" component={AddNode} />
     </Route>
     <Route path="forgot-password" component={ForgotPassword} />

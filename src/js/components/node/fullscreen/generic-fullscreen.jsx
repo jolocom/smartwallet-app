@@ -1,5 +1,4 @@
 import React from 'react'
-import Reflux from 'reflux'
 import Dialog from 'components/common/dialog'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
@@ -7,7 +6,6 @@ import {Layout, Content} from 'components/layout'
 import ProfileActions from 'actions/profile'
 import ConfirmActions from 'actions/confirm'
 import Radium from 'radium'
-import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -18,39 +16,23 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
 import DocIcon from 'components/icons/doc-icon.jsx'
 import PersonIcon from 'components/icons/person-icon.jsx'
-import ConfidIcon from 'components/icons/confid-icon.jsx'
-
 import SnackbarActions from 'actions/snackbar'
 
-import Debug from 'lib/debug'
-let debug = Debug('components:generic-fullscreen')
-
-import {
-  AppBar,
-  IconButton,
-  IconMenu,
-  MenuItem,
-  Divider
-} from 'material-ui'
+import {AppBar, IconButton, IconMenu, MenuItem, Divider} from 'material-ui'
 
 let GenericFullScreen = React.createClass({
-  mixins: [
-    Reflux.connect(NodeStore, 'node')
-  ],
-
   propTypes: {
-    node: React.PropTypes.object,
-    center: React.PropTypes.object,
-    navHistory: React.PropTypes.object,
-    onClose: React.PropTypes.func,
-    backgroundImg: React.PropTypes.any,
-    headerColor: React.PropTypes.any,
-    menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
-    copyToClipboardText: React.PropTypes.any,
+    type: React.PropTypes.string,
     title: React.PropTypes.string,
+    menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
+    headerColor: React.PropTypes.any,
     fabItems: React.PropTypes.arrayOf(React.PropTypes.string),
+    copyToClipboardText: React.PropTypes.any,
+    description: React.PropTypes.string,
     children: React.PropTypes.any,
-    state: React.PropTypes.any
+    backgroundImg: React.PropTypes.any,
+    rank: React.PropTypes.string,
+    uri: React.PropTypes.string
   },
 
   contextTypes: {
@@ -61,7 +43,6 @@ let GenericFullScreen = React.createClass({
   },
 
   componentWillMount() {
-    // this.props.menuItems.unshift('fullscreen')
   },
 
   componentDidMount() {
@@ -75,18 +56,16 @@ let GenericFullScreen = React.createClass({
       let backgroundImgUrl = backgroundImgMatches[1]
       let bgLuminanceP = this.getLuminanceForImageUrl(backgroundImgUrl)
       bgLuminanceP.then((lum) => {
-        debug('Background image has luminance of', lum)
         this.setState({luminance: lum})
       }).catch((e) => {
         console.error('Couldn\'t compute luminance', e)
       })
     }
-
     this.refs.dialog.show()
   },
 
   componentWillUnmount() {
-    this.refs.dialog.hide()
+    nodeActions.resetState()
   },
 
   getStyles() {
@@ -140,24 +119,22 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleClose() {
-    graphActions.setState('activeNode', null, false)
-    this.context.router.push('/graph/' +
-      encodeURIComponent(this.props.state.center.uri))
+    nodeActions.resetState()
+    this.context.router.goBack()
   },
 
   _handleDisconnect() {
-    if (this.props.node.rank === 'center') {
-        this._handleClose()
-    }
-    else {
+    if (this.props.rank === 'center') {
+      this._handleClose()
+    } else {
       ConfirmActions.confirm(
         'Are you sure you want to disconnect this node ?',
         'Disconnect',
         () => {
-
           this._handleClose()
-
           nodeActions.disconnectNode(
+
+          // TODO - work on this.
             this.props.node, this.props.state.center
           )
 
@@ -182,17 +159,13 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleConnect() {
-    nodeActions.link(
-      this.context.account.webId,
-      'generic',
-      this.props.node.uri
-    )
+    nodeActions.link(this.context.account.webId, 'generic', this.props.uri)
     SnackbarActions.showMessage('You are now connected to the node.')
     this._handleClose()
   },
 
   _handleDelete() {
-    let node = this.props.state.activeNode
+    // let node = this.props.state.activeNode
     let center = this.props.state.center
     let navHis = this.props.state.navHistory
 
@@ -206,8 +179,6 @@ let GenericFullScreen = React.createClass({
       this.context.router.push(`/graph/${encodeURIComponent(center.uri)}`)
       nodeActions.remove(node, center)
     }
-
-    graphActions.setState('activeNode', null, true)
   },
 
   getNode() {
@@ -313,7 +284,6 @@ let GenericFullScreen = React.createClass({
     const {router} = this.context
     const {node} = this.props
     router.push(`/chat/new/${encodeURIComponent(node.uri)}`)
-    graphActions.setState('activeNode', null, true)
   },
 
   _preventDefault(e) {
@@ -366,38 +336,20 @@ let GenericFullScreen = React.createClass({
   render() {
     let styles = this.getStyles()
     let headerIcon
-    if (!this.props.node.img) {
-      if (this.props.node.confidential) {
-        // Display confidential icon in header
-        headerIcon = <ConfidIcon />
-      } else if (this.props.node.type &&
-          this.props.node.type.includes('Person')) {
-        // Display person icon in header
+
+    if (this.props.backgroundImg === 'none') {
+      if (this.props.type && this.props.type.includes('Person')) {
         headerIcon = <PersonIcon />
       } else {
-        // Display document icon in header (default)
         headerIcon = <DocIcon />
       }
     }
-
-    // @TODO bind handlers to preset actions here
-    // in: {name: 'disconnect'}
-    // out: {name: 'disconnect',
-    //    component: <Disconnect>, handler: disconnecthandler} (overwritable)
-    // map ((e) return object.assign({}, default, e))
-
-    // @TODO pass fab 0-3 and set which one is primary (flag?),
-    //    or reverse? ['primary','other button', 'other button']
-
-    // @TODO externalize fab handlers + component etc
-
-    // Always add the fullscreen menu item
 
     if (this.state.luminance && this.state.luminance < 40) {
       styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
     }
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog ref='dialog' fullscreen>
         <Layout>
           <Content>
             <div style={styles.container}>

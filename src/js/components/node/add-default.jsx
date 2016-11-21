@@ -25,26 +25,22 @@ let NodeAddDefault = React.createClass({
     this.gAgent = new GraphAgent()
   },
 
-  componentDidUpdate(prevProps, prevState) {
-  },
-
   submit() {
     if (!(this.state.title && this.state.title.trim())) {
       return false
     }
 
     let webId = localStorage.getItem('jolocom.webId')
-    let {title, description, image} = this.state
     let centerNode = this.state.graph.center
 
     if (centerNode && webId) {
-      let currentUser = webId
       let isConfidential = (this.state.type === 'confidential')
       if (isConfidential) {
         this.state.type = 'default'
       }
 
-      this.gAgent.createNode(currentUser, centerNode, title, description,
+      let {title, description, image} = this.state
+      this.gAgent.createNode(webId, centerNode, title, description,
                              image, this.state.type, isConfidential)
       .then((uri) => {
         graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
