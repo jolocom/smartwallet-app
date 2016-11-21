@@ -242,20 +242,20 @@ let ProfileNode = React.createClass({
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
+              // <ListItem
+              //   key={2}
+              //   leftIcon={<SocialShare color="#9ba0aa" />}>
+              //   <TextField
+              //     style={styles.inputStyle}
+              //     floatingLabelStyle={styles.labelStyle}
+              //     underlineStyle={styles.underlineStyle}
+              //     floatingLabelText="Privacy"
+              //     value={this.state.profile.privacy}
+              //     floatingLabelFixed
+              //     readOnly />
+              // </ListItem>,
               <ListItem
                 key={2}
-                leftIcon={<SocialShare color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Privacy"
-                  value={this.state.profile.privacy}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>,
-              <ListItem
-                key={3}
                 leftIcon={<SocialPersonOutline color="#9ba0aa" />}>
                 <TextField
                   style={styles.inputStyle}
