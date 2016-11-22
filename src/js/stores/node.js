@@ -118,7 +118,6 @@ export default Reflux.createStore({
    * @param {string} end - object uri describing connection
    * @param {boolean} flag - fire the animation in the graph
    */
-
   link(start, type, end, flag) {
     let predicate = null
     if (type === 'generic') {

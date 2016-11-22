@@ -59,7 +59,6 @@ let Graph = React.createClass({
 
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
-    this.graph.on('select', this._handleSelectNode)
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
@@ -93,10 +92,6 @@ let Graph = React.createClass({
       graphActions.getInitialGraphState(newContext.account.webId)
     }
     */
-  },
-
-  _handleSelectNode(node, svg) {
-    graphActions.setState('selected', svg)
   },
 
   _handleChangeRotationIndex(rotationIndex) {
@@ -191,6 +186,7 @@ let Graph = React.createClass({
   },
 
   _handleAddNodeTouchTap() {
+    this.graph.eraseGraph()
     this.addNode('node')
   },
 

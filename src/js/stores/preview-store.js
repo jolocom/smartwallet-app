@@ -9,7 +9,7 @@ export default Reflux.createStore({
   listenables: [previewActions],
 
   init: function() {
-    this.listenTo(GraphStore, this.updateGraphState, this.initialGraph)
+    this.listenTo(GraphStore, this.updateGraphState)
 
     this.gAgent = new GraphAgent()
     this.convertor = new D3Convertor()
@@ -23,8 +23,8 @@ export default Reflux.createStore({
     return this.state
   },
 
-  // Whenever the graph updates, we update the preview graph's store
-  // so that we can mount it with the updated state.
+  // Whenever the graph updates, we update the preview graph's
+  // store so that we can mount it with the latest state.
   updateGraphState(newState) {
     this.state = newState
   },
@@ -89,5 +89,5 @@ export default Reflux.createStore({
       // this.state.loading = false
       this.trigger(this.state)
     })
-  },
+  }
 })

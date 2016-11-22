@@ -32,10 +32,7 @@ let Graph = React.createClass({
 
   componentDidMount() {
     this.graph = new GraphD3(this.getGraphEl(), 'preview')
-    // Adding the listeners
     this.graph.on('center-changed', this._handleCenterChange)
-    this.graph.on('select', this._handleSelectNode)
-    this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
   },
 
@@ -65,17 +62,8 @@ let Graph = React.createClass({
     previewActions.changeRotationIndex(rotationIndex, true)
   },
 
-  // TODO NOT WORKING
-  _handleViewNode(node) {
-    previewActions.viewNode(node)
-  },
-
   _handleCenterChange(node) {
     previewActions.navigateToNode(node)
-  },
-
-  _handleSelectNode(data) {
-    this.props.onSelect && this.props.onSelect(data)
   }
 })
 export default Radium(Graph)

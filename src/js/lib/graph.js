@@ -1315,7 +1315,6 @@ export default class GraphD3 extends EventEmitter {
     this.svg
     .selectAll('.background-layer .background-layer-links *')
     .remove()
-
     this.svg
     .selectAll('.background-layer ~ *')
     .remove()

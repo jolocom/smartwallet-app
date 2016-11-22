@@ -16,7 +16,6 @@ export default Reflux.createStore({
     this.convertor = new D3Convertor()
 
     this.state = {
-      // These state keys describe the graph
       webId: null,
       center: null,
       neighbours: null,
@@ -26,7 +25,7 @@ export default Reflux.createStore({
       navHistory: [],
       selected: null,
       rotationIndex: 0,
-      // These describe the ui
+
       showPinned: false,
       showSearch: false,
       plusDrawerOpen: false,
@@ -76,12 +75,6 @@ export default Reflux.createStore({
     })
   },
 
-  // Is called by both graph.jsx and preview.jsx, we differentiate the caller
-  // this way making sure that we update the right component.
-  onGetState: function(source) {
-    this.trigger(this.state, source)
-  },
-
   onGetInitialGraphState() {
     /* TODO - make sure this works first.
     this.state.loading = true
@@ -116,11 +109,11 @@ export default Reflux.createStore({
   },
 
   onRefresh: function() {
-    this.drawAtUri(this.state.center.uri)
+    this.onDrawAtUri(this.state.center.uri)
   },
 
   // TODO - make sure loading works.
-  drawAtUri(uri, hisNodesToPop = 0) {
+  onDrawAtUri(uri, hisNodesToPop = 0) {
     /*
     this.state.loading = true
     this.trigger(this.state)
@@ -146,13 +139,17 @@ export default Reflux.createStore({
     })
   },
 
+  onSelect(svg) {
+    this.state.selected = svg
+    this.trigger(this.state)
+  },
+
   // TODO - make sure loading works.
   onNavigateToNode(node, defaultHistoryNode) {
     /*
     this.state.loading = true
     this.trigger(this.state)
     */
-
     this.state.rotationIndex = 0
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
@@ -202,18 +199,5 @@ export default Reflux.createStore({
       // this.state.loading = false
       this.trigger(this.state)
     })
-  },
-
-  // TODO - make sure loading works.
-  onViewNode(node) {
-    if (!node) {
-      return
-    }
-
-    /* activeNode is the node we're viewing the full-screen view of
-    this.state.activeNode = node
-    this.state.loading = false
-    this.trigger(this.state)
-    */
   }
 })
