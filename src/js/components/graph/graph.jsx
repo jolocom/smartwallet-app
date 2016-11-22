@@ -55,7 +55,7 @@ let Graph = React.createClass({
     // Temp. make it more elegant later.
 
     // Don't update anything while we're loading.
-    if (data.loading) {
+    if (data === null || data.loading) {
       return
     }
 
