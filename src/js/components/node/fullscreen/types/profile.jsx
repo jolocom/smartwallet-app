@@ -15,11 +15,7 @@ let ProfileNode = React.createClass({
   ],
 
   propTypes: {
-    name: React.PropTypes.string,
-    description: React.PropTypes.string,
-    email: React.PropTypes.string,
-    uri: React.PropTypes.string,
-    img: React.PropTypes.string,
+    node: React.PropTypes.object,
     graphState: React.PropTypes.object
   },
 
@@ -34,24 +30,21 @@ let ProfileNode = React.createClass({
   onUpdatePinned() {
     if (this.props) {
       this.setState({
-        pinned: PinnedStore.isPinned(this.props.uri)
+        pinned: PinnedStore.isPinned(this.props.node.uri)
       })
     }
   },
 
   render() {
-    let node
-    if (this.props.graphState.center.uri === this.props.uri) {
-      node = this.props.graphState.center
+    let {rank, description, email, uri, img} = this.props.node
+    let name
+    if (this.props.node.fullName && this.props.node.fullName > 0) {
+      name = this.props.node.fullName
     } else {
-      node = this.props.graphState.neighbours.find(el => {
-        return el.uri === this.props.uri
-      })
+      name = `${this.props.node.name} ${this.props.node.familyName}`
     }
 
-    let {rank, name, description, email, uri, img} = node
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-
     let fabItems = []
     let menuItems = []
 

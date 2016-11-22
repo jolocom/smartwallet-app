@@ -17,35 +17,20 @@ let TextNode = React.createClass({
   },
 
   propTypes: {
-    title: React.PropTypes.string,
-    description: React.PropTypes.string,
-    email: React.PropTypes.string,
-    uri: React.PropTypes.string,
-    img: React.PropTypes.string,
-    type: React.PropTypes.string,
+    node: React.PropTypes.object,
     graphState: React.PropTypes.object
   },
 
   onUpdatePinned() {
     if (this.props) {
       this.setState({
-        pinned: PinnedStore.isPinned(this.props.uri)
+        pinned: PinnedStore.isPinned(this.props.node.uri)
       })
     }
   },
 
   render() {
-    let node
-    if (this.props.graphState.center.uri === this.props.uri) {
-      node = this.props.graphState.center
-    } else {
-      node = this.props.graphState.neighbours.find(el => {
-        return el.uri === this.props.uri
-      })
-    }
-
-    let {rank, title, description, email, uri, img, type} = node
-
+    let {rank, title, description, email, uri, img, type} = this.props.node
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []

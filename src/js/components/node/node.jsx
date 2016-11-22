@@ -37,19 +37,26 @@ let Node = React.createClass({
   },
 
   render() {
+    let selectedNode
     let NodeFullScreenComponent
     let initialized = false
 
     if (this.state && this.state.initialized) {
       initialized = true
-      NodeFullScreenComponent = NodeTypes.componentFor(this.state.type)
+      if (this.state.graphState.center.uri === this.props.params.node) {
+        selectedNode = this.state.graphState.center
+      } else {
+        selectedNode = this.state.graphState.neighbours.find(el => {
+          return el.uri === this.props.params.node
+        })
+      }
+      NodeFullScreenComponent = NodeTypes.componentFor(selectedNode.type)
     }
 
     return (
       <div>
         {initialized
-          ? <NodeFullScreenComponent
-            uri={this.state.uri}
+          ? <NodeFullScreenComponent node={selectedNode}
             graphState={this.state.graphState} />
           : null}
       </div>

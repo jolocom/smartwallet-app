@@ -151,10 +151,10 @@ class D3Converter {
     }
 
     if (!props.name && !props.familyName) {
-      if (props.fullName){
+      if (props.fullName) {
         let fName = props.fullName
         props.name = fName.substring(0, fName.indexOf(' '))
-        props.familyName = fName.substring(props.name.length, fName.length -1)
+        props.familyName = fName.substring(props.name.length, fName.length)
       }
     }
     return props
