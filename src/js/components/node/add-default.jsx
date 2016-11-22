@@ -60,7 +60,7 @@ let NodeAddDefault = React.createClass({
               fullWidth={true}
               style={styles.input}
               onChange={({target}) => {
-                this.setState({title: target.value})
+                this.state.title = target.value
               }} />
             <SelectField value={this.state.type}
               onChange={this._handleTypeChange} style={styles.select}>
@@ -76,7 +76,7 @@ let NodeAddDefault = React.createClass({
               fullWidth={true}
               style={styles.input}
               onChange={({target}) => {
-                this.setState({description: target.value})
+                this.state.description = target.value
               }} />
             <ImageSelect onChange={this._handleSelectImage} />
           </div>
@@ -86,9 +86,7 @@ let NodeAddDefault = React.createClass({
   },
 
   _handleTypeChange(event, index, value) {
-    this.setState({
-      type: value
-    })
+    this.state = value
   },
 
   _handleSelectImage(image) {

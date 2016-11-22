@@ -187,7 +187,6 @@ let Graph = React.createClass({
 
   addNode(type) {
     let uri = encodeURIComponent(this.state.center.uri)
-    console.log('pushing route')
     this.context.router.push(`/graph/${uri}/add/${type}`)
   },
 
