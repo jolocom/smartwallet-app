@@ -1,9 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
-import Reflux from 'reflux'
 import {TextField, Paper, SelectField, MenuItem} from 'material-ui'
 import graphActions from 'actions/graph-actions'
-import previewStore from 'stores/preview-store'
 
 import {PRED} from 'lib/namespaces'
 import GraphPreview from './graph-preview.jsx'
@@ -11,14 +9,19 @@ import ImageSelect from 'components/common/image-select.jsx'
 import GraphAgent from 'lib/agents/graph.js'
 
 let NodeAddDefault = React.createClass({
-  mixins: [
-    Reflux.connect(previewStore, 'graph')
-  ],
 
   getInitialState() {
     return {
-      type: 'default'
+      type: 'default',
+      title: null,
+      description: null,
+      image: null
     }
+  },
+
+  propTypes: {
+    graphState: React.PropTypes.object,
+    node: React.PropTypes.object
   },
 
   componentDidMount() {
@@ -31,14 +34,10 @@ let NodeAddDefault = React.createClass({
     }
 
     let webId = localStorage.getItem('jolocom.webId')
-    let centerNode = this.state.graph.center
+    let centerNode = this.props.graphState.center
 
     if (centerNode && webId) {
-      let isConfidential = (this.state.type === 'confidential')
-      if (isConfidential) {
-        this.state.type = 'default'
-      }
-
+      let isConfidential = this.state.type === 'confidential'
       let {title, description, image} = this.state
       this.gAgent.createNode(webId, centerNode, title, description,
                              image, this.state.type, isConfidential)

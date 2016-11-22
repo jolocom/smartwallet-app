@@ -2,22 +2,16 @@ import Reflux from 'reflux'
 import GraphAgent from '../lib/agents/graph.js'
 import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
-import Utils from 'lib/util'
 import D3Convertor from '../lib/d3-converter'
 
-import Debug from 'lib/debug'
-let debug = Debug('stores:graph')
-
 export default Reflux.createStore({
+
   listenables: [graphActions],
 
-  getInitialState: function() {
-    return this.state
-  },
-
-  init: function() {
+  init() {
     this.listenTo(accountActions.logout, this.onLogout)
     this.listenTo(accountActions.login.completed, this.onLogin)
+
     this.gAgent = new GraphAgent()
     this.convertor = new D3Convertor()
 
@@ -40,63 +34,27 @@ export default Reflux.createStore({
     }
   },
 
-  onLogout() {
-    this.initialized = false
-    this.state = {
-      // Graph related
-      webId: null,
-      center: null,
-      neighbours: null,
-      loading: false,
-      initialized: false,
-      newNode: null,
-      navHistory: [],
-      selected: null,
-      // UI related
-      showPinned: false,
-      showSearch: false,
-      plusDrawerOpen: false,
-      activeNode: null
-    }
+  getInitialState() {
+    return this.state
   },
 
+  onLogout() {
+    this.init()
+  },
+
+  // TODO - not really needed.
   onLogin(username, webId) {
     this.state.webId = webId
   },
 
-  // These two are needed in order to transition between the preview graph and
-  // The actual graph.
-  onEraseGraph: function () {
-    this.trigger(null, 'erase')
-  },
-
-  onSetState: function(key, value, flag) {
-    this.state[key] = value
-    if (flag) this.trigger(this.state)
+  syncStateWithPreview(previewState) {
+    this.state = previewState
+    this.trigger(this.state)
   },
 
   onChangeRotationIndex: function (rotationIndex, flag) {
     this.state['rotationIndex'] = rotationIndex
     if (flag) this.trigger(this.state, 'changeRotationIndex')
-  },
-
-  /*
-  -- We use onRefresh() and do a reloading of the graph for now
-  deleteNode: function(node){
-    let nodeId = node.index > 0 ? node.index : node.uri
-    for (let i = this.state.neighbours.length -1 ; i >= 0; i--){
-     let sourceId = node.index > 0 ? this.state.neighbours[i].index
-       : this.state.neighbours[i].uri
-     if (sourceId === nodeId)
-       this.state.neighbours.splice(i, 1)
-    }
-    this.state.activeNode = node
-    this.trigger(this.state, 'nodeRemove')
-  },
-  */
-
-  dissconnectNode: function() {
-    // Animation / removing from the neighb array will go here.
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add
@@ -125,8 +83,10 @@ export default Reflux.createStore({
   },
 
   onGetInitialGraphState() {
+    /* TODO - make sure this works first.
     this.state.loading = true
     this.trigger(this.state)
+    */
 
     this.gAgent.getGraphMapAtWebID(this.state.webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
@@ -156,7 +116,6 @@ export default Reflux.createStore({
   },
 
   onRefresh: function() {
-    debug('Refreshing the graph with current center', this.state.center.uri)
     this.drawAtUri(this.state.center.uri)
   },
 
@@ -248,7 +207,6 @@ export default Reflux.createStore({
   // TODO - make sure loading works.
   onViewNode(node) {
     if (!node) {
-      debug('Ignoring onViewNode because node is null.')
       return
     }
 

@@ -1,99 +1,93 @@
 import Reflux from 'reflux'
-import graphAgent from '../lib/agents/graph.js'
+import GraphAgent from '../lib/agents/graph.js'
 import previewActions from '../actions/preview-actions'
-import accountActions from '../actions/account'
-import d3Convertor from '../lib/d3-converter'
+import D3Convertor from '../lib/d3-converter'
+import GraphStore from './graph-store'
 
 export default Reflux.createStore({
 
   listenables: [previewActions],
 
-  init: function(){
-    this.listenTo(accountActions.logout, this.onLogout)
+  init: function() {
+    this.listenTo(GraphStore, this.updateGraphState, this.initialGraph)
 
-    this.gAgent = new graphAgent()
-    this.convertor = new d3Convertor()
+    this.gAgent = new GraphAgent()
+    this.convertor = new D3Convertor()
 
     this.state = {
-      //These state keys describe the graph
-      user: null,
-      center:null,
-      neighbours: null,
-      loaded: false,
-      newNode: null,
-      rotationIndex: 0,
-      // Keeps track of all the nodes we navigated to.
-      navHistory: [],
-      //These describe the ui
-      showPinned: false,
-      showSearch: false,
-      activeNode: null
+      initialized: false
     }
   },
 
-  onLogout(){
-    this.state = {
-      // Graph related
-      user: null,
-      center: null,
-      neighbours: null,
-      loaded: false,
-      newNode: null,
-      navHistory: [],
-      // UI related
-      showPinned:false,
-      showSearch: false,
-      activeNode: null
-    }
+  getInitialState() {
+    return this.state
   },
 
-  onSetState: function(key, value, flag){
-      // No need to trigger here, since this is always called after the state
-      // of the child component has been changed.
-    this.state[key] = value
-    if (flag) this.trigger(this.state)
+  // Whenever the graph updates, we update the preview graph's store
+  // so that we can mount it with the updated state.
+  updateGraphState(newState) {
+    this.state = newState
   },
-  
-  onChangeRotationIndex: function(rotationIndex, flag){
+
+  onChangeRotationIndex: function(rotationIndex, flag) {
     this.state['rotationIndex'] = rotationIndex
-    if (flag) this.trigger(this.state,'changeRotationIndex')
+    if (flag) this.trigger(this.state, 'changeRotationIndex')
   },
 
-  onNavigateToNode: function(node){
-    this.state.neighbours = []
+  onNavigateToNode(node, defaultHistoryNode) {
+    /*
+    this.state.loading = true
+    this.trigger(this.state)
+    */
+
     this.state.rotationIndex = 0
+
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
-      triples[0] = this.convertor.convertToD3('c', triples[0])
-      // Before updating the this.state.center, we push the old center node
-      // to the node history
+      // Deciding which node to display as history.
+      let historyCandidate
+      if (this.state.center && this.state.center.uri) {
+        historyCandidate = this.state.center
+      } else {
+        historyCandidate = defaultHistoryNode
+      }
 
-      this.state.navHistory.push(this.state.center)
-      this.state.center = triples[0]
-
-      if(this.state.navHistory.length > 1) {
-        if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2].uri) {
-          this.state.navHistory.pop()
+      // If we travel to a history node, pop it from the history.
+      if (node.connection === 'hist') {
+        for (let i = 0; i <= node.histLevel; i++) {
           this.state.navHistory.pop()
         }
-        // Removed the brackets, one liners.
-        else if(this.state.navHistory.length > 1)
-          for (var j = 0; j < this.state.navHistory.length-1; j++) 
-            if (this.state.center.uri == this.state.navHistory[this.state.navHistory.length - 2 - j].uri) 
-              for (var k = 0; k < j+2; k++) 
-                this.state.navHistory.pop()
+      } else {
+        // If we travel to a normal node, check if it is in history
+        // and then short circuit it.
+        let foundIndex = 0
+        if (this.state.navHistory.length > 1) {
+          for (let i = 0; i < this.state.navHistory.length; i++) {
+            if (this.state.navHistory[i].uri === node.uri) {
+              foundIndex = i
+              break
+            }
+          }
+          if (foundIndex) {
+            this.state.navHistory = this.state.navHistory.slice(0, foundIndex)
+          }
+        }
+        // Travel to normal node, that is not in history, simply add it to his.
+        if (!foundIndex) {
+          this.state.navHistory.push(historyCandidate)
+        }
       }
 
-      for (var i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3('a', triples[i], i, triples.length - 1)
+      this.state.center = this.convertor.convertToD3('c', triples[0])
+      this.state.neighbours = []
+      for (let i = 1; i < triples.length; i++) {
+        triples[i] = this.convertor.convertToD3(
+          'a', triples[i], i, triples.length - 1
+        )
         this.state.neighbours.push(triples[i])
       }
-      this.trigger(this.state,'navigateToNode')
+
+      // this.state.loading = false
+      this.trigger(this.state)
     })
   },
-
-  // NOT WORKING ATM.
-  onViewNode(node) {
-    this.state.activeNode = node
-    this.trigger(this.state)
-  }
 })

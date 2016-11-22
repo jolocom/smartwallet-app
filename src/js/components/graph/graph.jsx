@@ -50,13 +50,8 @@ let Graph = React.createClass({
     this.state = initialState
   },
 
-  onStateUpdate(data, signal) {
+  onStateUpdate(data) {
     this.setState(data)
-  },
-
-  addNode(type) {
-    let uri = encodeURIComponent(this.state.center.uri)
-    this.context.router.push(`/graph/${uri}/add/${type}`)
   },
 
   componentDidMount() {
@@ -83,10 +78,6 @@ let Graph = React.createClass({
   },
 
   componentWillUnmount() {
-    if (this.graph) {
-      this.graph.eraseGraph()
-      this.graph.removeAllListeners()
-    }
   },
 
   componentWillUpdate(newProps, newState, newContext) {
@@ -153,13 +144,13 @@ let Graph = React.createClass({
 
     if (!this.context.searchActive) {
       fab = (
-        <FabMenu style={styles.menu} icon="add" closeIcon="close">
+        <FabMenu style={styles.menu} icon='add' closeIcon='close'>
           <FabMenuItem
             icon={<AddNodeIcon />}
-            label="Node" onTouchTap={this._handleAddNodeTouchTap} />
+            label='Node' onTouchTap={this._handleAddNodeTouchTap} />
           <FabMenuItem
             icon={<LinkIcon />}
-            label="Link" onClick={this._handleLinkNodeTouchTap} />
+            label='Link' onClick={this._handleLinkNodeTouchTap} />
         </FabMenu>
       )
     }
@@ -182,11 +173,8 @@ let Graph = React.createClass({
       <div style={styles.container}>
         <IndicatorOverlay ref='scrollIndicator' />
         <div style={styles.chart} ref='graph' />
-
         {loading}
-
         {fab}
-
         {children}
       </div>
     )
@@ -194,8 +182,13 @@ let Graph = React.createClass({
 
   _handleViewNode(node) {
     let uri = encodeURIComponent(node.uri)
-    let type = encodeURIComponent(node.type)
-    this.context.router.push(`/graph/${uri}/${type}/view`)
+    this.context.router.push(`/graph/${uri}/view`)
+  },
+
+  addNode(type) {
+    let uri = encodeURIComponent(this.state.center.uri)
+    console.log('pushing route')
+    this.context.router.push(`/graph/${uri}/add/${type}`)
   },
 
   _handleAddNodeTouchTap() {

@@ -26,12 +26,13 @@ let types = {
 let NodeAdd = React.createClass({
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    center: React.PropTypes.object,
+    neighbours: React.PropTypes.array
   },
 
   contextTypes: {
     router: React.PropTypes.any,
-    node: React.PropTypes.any,
     muiTheme: React.PropTypes.object
   },
 
@@ -60,20 +61,26 @@ let NodeAdd = React.createClass({
     }
   },
 
-  getTypeConfig(type) {
-    return types[type] || types.default
-  },
-
   render: function() {
+    let selectedNode
+    if (this.props.center.uri === this.props.params.node) {
+      selectedNode = this.props.center
+    } else {
+      selectedNode = this.props.neighbours.find(el => {
+        return el.uri === this.props.params.node
+      })
+    }
+
     let styles = this.getStyles()
-    let {node, type} = this.props.params
-    let config = this.getTypeConfig(type)
+    let {type} = this.props.params
+
+    let config = types[type] || types.default
     let title = config.title || `New ${type}`
 
     let Component = config.component
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog ref='dialog' fullscreen>
         <Layout>
           <AppBar
             title={title}
@@ -81,21 +88,24 @@ let NodeAdd = React.createClass({
             iconElementLeft={
               <IconButton
                 iconStyle={styles.icon}
-                iconClassName="material-icons"
+                iconClassName='material-icons'
                 onTouchTap={this._handleClose}>close
               </IconButton>
             }
             iconElementRight={
               <FlatButton
                 style={styles.icon}
-                label="Create"
+                label='Create'
                 onTouchTap={this._handleSubmit}
               />
             }
             style={styles.bar}
           />
           <Content style={styles.content}>
-            <Component ref="form" node={node} onSuccess={this._handleSuccess} />
+            <Component ref='form'
+              node={selectedNode}
+              onSuccess={this._handleSuccess}
+              graphState={this.props} />
           </Content>
         </Layout>
       </Dialog>
@@ -112,7 +122,6 @@ let NodeAdd = React.createClass({
   },
 
   _handleClose() {
-    this.refs.dialog.hide()
     this.context.router.goBack()
   }
 })
