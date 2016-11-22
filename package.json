@@ -93,7 +93,7 @@
     "moment": "^2.10.6",
     "n3": "^0.4.3",
     "radium": "^0.18.1",
-    "rdflib": "^0.6.1",
+    "rdflib": "^0.12.1",
     "re-carousel": "^1.2.6",
     "react": "15.3.2",
     "react-addons-create-fragment": "^15.0.0",

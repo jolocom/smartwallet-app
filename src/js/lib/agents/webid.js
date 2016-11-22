@@ -31,30 +31,21 @@ class WebIDAgent extends LDPAgent {
   }
 
   initInbox(webId) {
+    return Promise.all([
+      this.createConversationsContainer(webId),
+      this.createUnreadMessagesContainer(webId)
+    ])
+  }
+
+  // @TODO this name is confusing, because there's already a
+  // default notifications inbox provided by solid.
+  // Should be named 'conversations'
+  createConversationsContainer(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/inbox`
 
-    return this.put(
-      Util.uriToProxied(uri),
-      {'Content-type': 'text/turtle'},
-      this._inboxTriples(webId)
-    ).then(() => {
-      this._writeAcl(uri, webId)
-    })
-  }
-
-  // Converts the input from the forms to RDF data to put into the inbox card
-  _inboxTriples(webId) {
-    if (!webId) {
-      return Promise.reject('Must provide a webId!')
-    }
-
     let writer = new Writer()
 
-    // Please take a look at
-    // https://github.com/solid/solid-spec/blob/
-    // master/solid-webid-profiles.md#profile-representation-formats
-    // For extra info on the structure of a valid webId Profile
     // writer.addTriple(rdflib.sym(''), DC('title'), `Inbox of ${username}`)
     writer.addTriple({
       subject: '',
@@ -74,7 +65,25 @@ class WebIDAgent extends LDPAgent {
       object: PRED.space
     })
 
-    return writer.end()
+    return this.put(
+      Util.uriToProxied(uri),
+      {'Content-type': 'text/turtle'},
+      writer.end()
+    ).then(() => {
+      return this._writeAcl(uri, webId)
+    })
+  }
+
+  createUnreadMessagesContainer(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/unread-messages`
+
+    return this.put(
+      Util.uriToProxied(uri),
+      {'Content-type': 'text/turtle'}
+    ).then(() => {
+      return this._writeAcl(uri, webId)
+    })
   }
 
   _writeAcl(uri, webId) {
