@@ -20,7 +20,7 @@ export default Reflux.createStore({
     
     this.listenTo(accountActions.logout, this.onLogout)
   },
-  
+
   getInitialState() {
     return {
       loading: false,
@@ -28,14 +28,15 @@ export default Reflux.createStore({
       items: this.items
     }
   },
-  
+
   onLogout() {
     this.items = []
   },
-  
+
   getConversationByWebId(webId) {
     for (let conversation of this.items) {
       if (conversation.otherPerson &&
+          conversation.otherPerson.webid &&
           conversation.otherPerson.webid.value === webId) {
         return conversation
       }

@@ -1,3 +1,5 @@
+'use strict';
+
 import {Parser, Writer} from '../rdf'
 import LDPAgent from './ldp'
 import Util from '../util'
@@ -42,7 +44,7 @@ class ChatAgent extends LDPAgent {
         `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
       let hdrs = {'Content-type': 'text/turtle'}
       let conversationDocContent =
-        this._conversationTriples(initiator, participants)
+        this._conversationTriples(initiator, participants, conversationDoc)
       return this.put(Util.uriToProxied(conversationDoc),
         hdrs, conversationDocContent).then(() => {
           return Promise.all(participants.map((p) =>
@@ -100,6 +102,65 @@ class ChatAgent extends LDPAgent {
       console.error(e, 'occured while putting the acl file')
     })
   }
+  // complete 2 functions below
+  addUserToChatSubscriberList(webIdOfUserToBeAdded, chatURI) {
+    // let subject, predicate, object
+    // chatURI = 'https://' + chatURI
+    // subject = rdf.sym(chatURI + '#thread')
+    // predicate = PRED.hasSubscriber
+    // webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
+    // object = rdf.sym(webIdOfUserToBeAdded)
+    // let triple = rdf.st(subject, predicate, object)
+    // let statement = `INSERT DATA { ${triple} };`
+
+    chatURI = 'https://' + chatURI
+    webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
+    // const subject = rdf.sym(chatURI + '#thread')
+    const subject = '#thread'
+    const predicate = PRED.hasSubscriber
+    const object = rdf.sym(webIdOfUserToBeAdded)
+    const triple = rdf.st(subject, predicate, object)
+    const statement = `INSERT DATA { ${triple} };`
+
+    console.log(statement)
+
+    return fetch(Util.uriToProxied(chatURI), {
+      method: 'PATCH',
+      credentials: 'include',
+      body: statement,
+      headers: {
+        'Content-Type': 'application/sparql-update'
+      }
+    }).then(() => {
+      console.log('Added participant to the conversation!')
+    }).catch((e) => {
+      console.error(e, 'Failed adding participant to conversation.')
+    })
+  }
+
+  addUserToChatACL(chatURI, webIdOfUserToBeAdded) {
+    let subject, predicate, object
+    let aclURI = 'https://' + chatURI + '.acl'
+    subject = rdf.sym(chatURI + '#thread')
+    predicate = PRED.access
+    webIdOfUserToBeAdded = 'https://' + webIdOfUserToBeAdded
+    object = rdf.sym(webIdOfUserToBeAdded)
+    let triple = rdf.st(subject, predicate, object)
+    let statement = `INSERT DATA { ${triple} };`
+
+    return fetch(Util.uriToProxied(aclURI), {
+      method: 'PATCH',
+      credentials: 'include',
+      body: writer.end(),
+      headers: {
+        'Content-Type': 'text/turtle'
+      }
+    }).then(() => {
+      console.log('Added participant to the chat ACL')
+    }).catch((e) => {
+      console.error(e, 'Failed adding participant to the ACL')
+    })
+  }
 
   postMessage(conversationUrl, author, content) {
     // TODO: implement
@@ -112,29 +173,29 @@ class ChatAgent extends LDPAgent {
       })
       .then((result) => {
         let triples = [{// this is a message
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.type,
           object: PRED.post
         }, { // written by...
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.hasCreator,
-          object: author
+          object: rdf.sym(author)
         }, { // with content...
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.content,
           object: N3Util.createLiteral(content)
         }, { // with timestamp...
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.created,
           object: N3Util.createLiteral(new Date().getTime())
         }, { // contained by
-          subject: msgId,
+          subject: rdf.sym(msgId),
           predicate: PRED.hasContainer,
-          object: conversationId
+          object: rdf.sym(conversationId)
         }, {
-          subject: conversationId,
+          subject: rdf.sym(conversationId),
           predicate: PRED.containerOf,
-          object: msgId
+          object: rdf.sym(msgId)
         }]
 
         let writer = new Writer({prefixes: result.prefixes})
@@ -179,7 +240,7 @@ class ChatAgent extends LDPAgent {
               )
             }
             if (t.predicate.uri == PRED.hasCreator.uri) {
-              acc[curr].author = t.object.value
+              acc[curr].author = t.object.uri
             }
           }
           return acc
@@ -245,9 +306,15 @@ class ChatAgent extends LDPAgent {
     let aboutThread = _.filter(triples, (t) => {
       // Using == because t.subject is an object
       // that has a .toString method
-      return t.subject == '#thread' || t.subject ==
-        `${conversationUrl}#thread`
+      const imut = conversationUrl + '#thread'
+      console.log('t.subject!!! ',t.subject)
+      console.log('conversationUrl ', rdf.sym(imut))
+      // return t.subject === rdf.sym(imut)
+      return t.subject == '#thread' || t.subject ===
+        // `${conversationUrl}#thread`
+        rdf.sym(imut)
     })
+    // console.rdftable(aboutThread)
 
     // let owner = _.find(aboutThread, (t) => {
     //   return t.predicate.uri == PRED.hasOwner.uri
@@ -258,45 +325,48 @@ class ChatAgent extends LDPAgent {
 
     // return Promise.resolve({webid: owner.value, name: owner.value})
 
-    let participants = _.map(_.filter(aboutThread, (t) => {
+    let participant = _.map(_.filter(aboutThread, (t) => {
       return t.predicate.uri === PRED.hasSubscriber.uri
     }), (t) => t.object)
-    let otherPerson = _.find(participants, (p) => p.value !== myUri)
-    if (!otherPerson) {
-      return Promise.resolve(null)
+    // let otherPerson = _.find(participant, (p) => p.value !== myUri)
+    // if (!otherPerson) {
+    //   return Promise.resolve(null)
+    // }
+    for (let person in participant) {
+      if (participant[person].uri === myUri) {
+        participant.splice(person, 1)
+      }
     }
 
-    let webid = otherPerson.value
-
-    let result = {}
-    return this.get(Util.uriToProxied(webid))
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response, webid)
-      })
-      .then((parsed) => {
-        let aboutPerson = _.filter(parsed.triples, (t) => {
-          return t.subject.uri === webid || t.subject.uri === '#me'
+    let promises = []
+    for (let person in participant) {
+      let webid = participant[person].uri
+      promises.push(this.get(Util.uriToProxied(webid))
+        .then((xhr) => {
+          let parser = new Parser()
+          return parser.parse(xhr.response, webid)
         })
-
-        let name = _.find(parsed.triples, (t) => {
-          return t.predicate.uri === PRED.givenName.uri
-        })
-
-        if (name) {
-          result.name = name.object.value
-        }
-
-        let img = _.find(aboutPerson, (t) => {
-          return t.predicate.uri === PRED.image.uri
-        })
-        if (img) {
-          result.img = img.object.value
-        }
-
-        result.webid = otherPerson
-        return result
-      })
+        .then((parsed) => {
+          let aboutPerson = _.filter(parsed.triples, (t) => {
+            return t.subject.uri === webid || t.subject.uri === '#me'
+          })
+          let name = _.find(parsed.triples, (t) => {
+            return t.predicate.uri === PRED.givenName.uri
+          })
+          if (name) {
+            participant[person].name = name.object.value
+          }
+          let img = _.find(aboutPerson, (t) => {
+            return t.predicate.uri === PRED.image.uri
+          })
+          if (img) {
+           // participant[person].img = img.object.value
+            participant[person].img = img.object.value
+          }
+          return participant[person]
+        }))
+    }
+    return Promise.all(promises)
   }
 
   getInboxConversations(webid) {
@@ -320,7 +390,7 @@ class ChatAgent extends LDPAgent {
 
     var graph = rdf.graph()
 
-    graph.add('#inbox', PRED.spaceOf, rdf.lit(conversationUrl))
+    graph.add('#inbox', PRED.spaceOf, rdf.sym(conversationUrl))
 
     var toAdd = []
     graph.statementsMatching('#inbox', undefined, undefined)
@@ -340,8 +410,10 @@ class ChatAgent extends LDPAgent {
     })
   }
 
-  _conversationTriples(initiator, participants) {
+  _conversationTriples(initiator, participants, conversationURL) {
     let writer = new Writer()
+
+    conversationURL += '#thread'
 
     let triples = [
       {
@@ -352,22 +424,22 @@ class ChatAgent extends LDPAgent {
       {
         subject: '',
         predicate: PRED.maker,
-        object: initiator
+        object: rdf.sym(initiator)
       },
       {
         subject: '',
         predicate: PRED.primaryTopic,
-        object: '#thread'
+        object: rdf.sym(conversationURL)
       },
       {
-        subject: '#thread',
+        subject: rdf.sym(conversationURL),
         predicate: PRED.type,
         object: PRED.Thread
       },
       {
-        subject: '#thread',
+        subject: rdf.sym(conversationURL),
         predicate: PRED.hasOwner,
-        object: initiator
+        object: rdf.sym(initiator)
       }
     ]
 
@@ -378,9 +450,9 @@ class ChatAgent extends LDPAgent {
     // Participant list
     for (var p of participants) {
       writer.addTriple({
-        subject: '#thread',
+        subject: rdf.sym(conversationURL),
         predicate: PRED.hasSubscriber,
-        object: p
+        object: rdf.sym(p)
       })
     }
 

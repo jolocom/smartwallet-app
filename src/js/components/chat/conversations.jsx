@@ -4,20 +4,22 @@ import Reflux from 'reflux'
 
 import moment from 'moment'
 
+import GroupIcon from 'material-ui/svg-icons/social/group'
+
 import {
   List,
   ListItem,
   Avatar
+  // FloatingActionButton,
+  // FontIcon
 } from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
 import TimerMixin from 'react-timer-mixin'
 
-import AvatarList from 'components/common/avatar-list.jsx'
-
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
-import Utils from 'lib/util'
+import UserAvatar from 'components/common/user-avatar.jsx'
 
 import Loading from 'components/common/loading.jsx'
 
@@ -61,86 +63,175 @@ let Conversations = React.createClass({
   showConversation({id}) {
     this.context.router.push(`/conversations/${id}`)
   },
-  
-  getStyles() {
-    return {
-      container: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative'
-      },
-      content: {
-        overflowY: 'auto',
-        flex: 1
-      },
-      loading: {
-        position: 'absolute'
-      },
-      empty: {
-        position: 'absolute',
-        fontWeight: 300,
-        color: grey500,
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '18px'
-      },
-      actionButton: {
-        position: 'absolute',
-        right: '16px',
-        bottom: '16px'
+
+  renderItems(items) {
+    // maybe do this in the store already?
+    items.sort(
+      (itemA, itemB) => {
+        if (!itemA.lastMessage) {
+          if (!itemB.lastMessage) {
+            return 0
+          } else {
+            return -1
+          }
+        } else if (!itemB.lastMessage) {
+          return 1
+        }
+        return itemA.lastMessage.created.getTime() <
+          itemB.lastMessage.created.getTime()
       }
-    }
+    )
+
+    return (
+      <List>
+        {items.map((conversation) => {
+          return <ConversationsListItem
+            key={conversation.id}
+            conversation={conversation}
+            onTouchTap={this.showConversation}
+          />
+        })}
+      </List>
+    )
   },
 
   render: function() {
     let content
-    
-    let styles = this.getStyles()
-    
+
+    // let {loading, items} = <this className="state conversations"></this>
     let {loading, items} = this.state.conversations
-    items = items || []
-    items = items
-      .filter(conv => conv.lastMessage !== null)
-      .map(
-        (item) => Object.assign({},
-                                item,
-                                {name: item.otherPerson.name || 'Unnamed',
-                                 imgUri: item.otherPerson.img,
-                                 secondaryText: item.lastMessage.content,
-                                 rightText: moment(item.lastMessage.created).fromNow(),
-                                 onTouchTap: this.showConversation
-                                })
-      )
-      .sort(
-        (itemA, itemB) =>
-          itemA.lastMessage.created.getTime() < itemB.lastMessage.created.getTime()
-      )
-    
+    if (items && items.lastMessage !== null) {
+      items = items.filter(conv => conv.lastMessage !== null)
+    }
+
+    if (loading) {
+      content = <Loading style={styles.loading} />
+    } else if (!items || !items.length) {
+      content = <div style={styles.empty}>No conversations</div>
+    } else {
+      content = this.renderItems(items)
+    }
+
     return (
       <div style={styles.container}>
 
         <div style={styles.content}>
-         {
-            loading
-            ? <Loading style={styles.loading} />
-            : <AvatarList
-                items={items}
-                avatarLeft
-                noHeadings
-                noReordering
-                emptyMessage={'No conversations'}
-              />
-          }
+          {content}
         </div>
+
+        {/* <FloatingActionButton */}
+        {/* secondary */}
+        {/* href="#/chat/new" */}
+        {/* linkButton={true} */}
+        {/* style={styles.actionButton} */}
+        {/* > */}
+        {/* <FontIcon className="material-icons">add</FontIcon> */}
+        {/* </FloatingActionButton> */}
 
         {this.props.children}
       </div>
     )
   }
 })
+
+let ConversationsListItem = React.createClass({
+
+  propTypes: {
+    conversation: React.PropTypes.object.isRequired,
+    onTouchTap: React.PropTypes.func.isRequired
+  },
+
+  render() {
+    let {conversation} = this.props
+    let {otherPerson, lastMessage} = conversation
+    let {created, content} = lastMessage || {}
+    let otherPersonNames = []
+    let collatedNames
+    if (otherPerson && otherPerson.length > 1) {
+      for (let person of otherPerson) {
+        otherPersonNames.push(person.name)
+        collatedNames = otherPersonNames.join(', ')
+      }
+    } else if (otherPerson && otherPerson.length === 1) {
+      collatedNames = otherPerson[0].name
+    }
+
+    // If otherPerson var is null, then set it to false.
+    // So it wont be used when listing conversations
+    // to avoid errors
+
+    if (otherPerson == null) {
+      otherPerson = false
+    }
+    let avatar
+    let image
+    if (otherPerson.length === 1 && otherPerson[0].img) {
+      image = otherPerson[0].img
+      avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
+    } else if (otherPerson.length === 1 && !otherPerson[0].img) {
+      avatar = <UserAvatar />
+    } else if (otherPerson.length > 1) {
+      image = <GroupIcon />
+      avatar = <Avatar icon={<GroupIcon />} />
+    }
+
+    let date = moment(created).fromNow()
+    return (
+      <ListItem
+        key={conversation.id}
+        primaryText={
+          <div>
+            <span>{collatedNames || 'Unnamed'}</span>
+            <span style={styles.date}>{date}</span>
+          </div>
+        }
+        secondaryText={content}
+        leftAvatar={<Avatar>{avatar}</Avatar>}
+        onTouchTap={this._handleListItemTouchTap}
+      />
+    )
+  },
+
+  _handleListItemTouchTap() {
+    this.props.onTouchTap(this.props.conversation)
+  }
+})
+
+let styles = {
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative'
+  },
+  content: {
+    overflowY: 'auto',
+    flex: 1
+  },
+  loading: {
+    position: 'absolute'
+  },
+  empty: {
+    position: 'absolute',
+    fontWeight: 300,
+    color: grey500,
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '18px'
+  },
+  date: {
+    color: grey500,
+    fontSize: '12px',
+    float: 'right'
+  },
+  actionButton: {
+    position: 'absolute',
+    right: '16px',
+    bottom: '16px'
+  }
+}
 
 export default Radium(Conversations)

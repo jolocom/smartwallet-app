@@ -4,12 +4,14 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton, Avatar} from 'material-ui'
+import {AppBar, IconButton, IconMenu, MenuItem} from 'material-ui'
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 
 import {Layout, Content} from 'components/layout'
 
 import Dialog from 'components/common/dialog.jsx'
 import Compose from 'components/common/compose.jsx'
+import UserAvatar from 'components/common/user-avatar.jsx'
 import Loading from 'components/common/loading.jsx'
 
 import ConversationActions from 'actions/conversation'
@@ -18,12 +20,12 @@ import ConversationStore from 'stores/conversation'
 import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
+import ChatAgent from 'lib/agents/chat'
+
 import ProfileStore from 'stores/profile'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:conversation')
-
-import Util from 'lib/util'
 
 let Conversation = React.createClass({
 
@@ -91,6 +93,13 @@ let Conversation = React.createClass({
   back() {
     this.context.router.push('/conversations')
     ConversationStore.cleanState()
+  },
+
+  addParticipant() {
+    const chatAgent = new ChatAgent()
+    let webId = 'mocoloj.webid.jolocom.de'
+    let chatURI = 'acl100.webid.jolocom.de/little-sister/chats/79fccc'
+    chatAgent.addUserToChatSubscriberList(webId, chatURI)
   },
 
   getStyles() {
@@ -195,37 +204,32 @@ let Conversation = React.createClass({
     let styles = this.getStyles()
     let {otherPerson} = this.state.conversation
     let {account} = this.context
-
     let items = this.state.conversation.items || []
-    let otherPersonInitial = Util.nameInitial(otherPerson)
-    let userInitial = Util.nameInitial({
-      name: this.state.profile.givenName
-    })
 
-    if (this.state.profile.imgUri) {
-      var userAvatar = (
-        <Avatar
-          src={Util.uriToProxied(this.state.profile.imgUri)}
-          style={{backgroundSize: 'cover'}} />
-      )
-    } else {
-      userAvatar = (
-        <Avatar>{userInitial}</Avatar>
-      )
-    }
+    console.log('ITEMS 1!! ', items)
 
-    if (otherPerson.img) {
-      var otherPersonAvatar = (
-        <Avatar src={Util.uriToProxied(otherPerson.img)}
-          style={{backgroundSize: 'cover'}} />
-      )
-    } else {
-      otherPersonAvatar = (
-        <Avatar>{otherPersonInitial}</Avatar>
-      )
-    }
+    var userAvatar = (
+      <UserAvatar
+        name={this.state.profile.givenName}
+        imgUrl={this.state.profile.imgUri} />
+    )
 
     return items.map(function({author, content, created}, i) {
+      let image
+      for (let person of otherPerson) {
+        if (author === person.uri) {
+          image = person.img
+          console.log('IMAGE ', image)
+        }
+      }
+      var otherPersonAvatar = (
+        <UserAvatar
+          // name={author.charAt(8)}
+          // imgUrl={otherPerson[1].img}
+          imgUrl={image}
+          // imgUrl={author.img}
+        />
+      )
       let avatar = (author !== account.webId)
         ? 'otherPersonAvatar' : 'userAvatar'
       let from = (author !== account.webId)
@@ -253,7 +257,18 @@ let Conversation = React.createClass({
     let content
     let styles = this.getStyles()
     let {loading, otherPerson} = this.state.conversation
-    let title = otherPerson && otherPerson.name
+    let otherPersonNames = []
+    let collatedNames
+    if (otherPerson && otherPerson.length > 1) {
+      for (let person of otherPerson) {
+        otherPersonNames.push(person.name)
+        collatedNames = otherPersonNames.join(', ')
+      }
+    } else if (otherPerson && otherPerson.length === 1) {
+      collatedNames = otherPerson[0].name
+    }
+
+    console.log('otherPeople = ', otherPersonNames)
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -265,14 +280,26 @@ let Conversation = React.createClass({
       <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
-            title={title}
+            title={collatedNames}
             iconElementLeft={
               <IconButton
                 onClick={this.back}
-                iconClassName="material-icons"
-              >
+                iconClassName="material-icons">
                 arrow_back
               </IconButton>
+            }
+            iconElementRight={
+              <IconMenu
+                iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              >
+                <MenuItem
+                  primaryText="Add another participant"
+                  onClick={this.addParticipant}
+                />
+                <MenuItem primaryText="Send feedback to Dean" />
+              </IconMenu>
             }
           />
           <Content style={styles.content}>
