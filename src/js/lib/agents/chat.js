@@ -44,7 +44,7 @@ class ChatAgent extends LDPAgent {
         `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
       let hdrs = {'Content-type': 'text/turtle'}
       let conversationDocContent =
-        this._conversationTriples(initiator, participants)
+        this._conversationTriples(initiator, participants, conversationDoc)
       return this.put(Util.uriToProxied(conversationDoc),
         hdrs, conversationDocContent).then(() => {
           return Promise.all(participants.map((p) =>
@@ -306,8 +306,13 @@ class ChatAgent extends LDPAgent {
     let aboutThread = _.filter(triples, (t) => {
       // Using == because t.subject is an object
       // that has a .toString method
-      return t.subject == '#thread' || t.subject ==
-        `${conversationUrl}#thread`
+      const imut = conversationUrl + '#thread'
+      console.log('t.subject!!! ',t.subject)
+      console.log('conversationUrl ', rdf.sym(imut))
+      // return t.subject === rdf.sym(imut)
+      return t.subject == '#thread' || t.subject ===
+        // `${conversationUrl}#thread`
+        rdf.sym(imut)
     })
     // console.rdftable(aboutThread)
 
@@ -405,8 +410,10 @@ class ChatAgent extends LDPAgent {
     })
   }
 
-  _conversationTriples(initiator, participants) {
+  _conversationTriples(initiator, participants, conversationURL) {
     let writer = new Writer()
+
+    conversationURL += '#thread'
 
     let triples = [
       {
@@ -422,15 +429,15 @@ class ChatAgent extends LDPAgent {
       {
         subject: '',
         predicate: PRED.primaryTopic,
-        object: '#thread'
+        object: rdf.sym(conversationURL)
       },
       {
-        subject: '#thread',
+        subject: rdf.sym(conversationURL),
         predicate: PRED.type,
         object: PRED.Thread
       },
       {
-        subject: '#thread',
+        subject: rdf.sym(conversationURL),
         predicate: PRED.hasOwner,
         object: rdf.sym(initiator)
       }
@@ -443,7 +450,7 @@ class ChatAgent extends LDPAgent {
     // Participant list
     for (var p of participants) {
       writer.addTriple({
-        subject: rdf.sym('#thread'),
+        subject: rdf.sym(conversationURL),
         predicate: PRED.hasSubscriber,
         object: rdf.sym(p)
       })
