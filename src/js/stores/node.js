@@ -7,8 +7,6 @@ import rdf from 'rdflib'
 import D3Convertor from '../lib/d3-converter'
 import {PRED} from 'lib/namespaces'
 
-let {link} = nodeActions
-
 export default Reflux.createStore({
   listenables: nodeActions,
 
@@ -53,7 +51,6 @@ export default Reflux.createStore({
       this.state.uri = node.uri
       this.state.img = node.img
       this.state.type = node.type
-      this.state.rank = node.rank
       this.state.name = node.name
       this.state.initialized = true
       this.trigger(this.state)
@@ -79,7 +76,8 @@ export default Reflux.createStore({
       return new Promise((resolve, reject) => {
         if (response.ok) {
           let triples = []
-          this.gAgent.findTriples(subject.uri, subject, undefined, object).then((result)=>{
+          this.gAgent.findTriples(subject.uri, subject, undefined, object)
+          .then((result) => {
             for (let t of result) {
               triples.push({
                 subject: t.subject,
@@ -141,13 +139,16 @@ export default Reflux.createStore({
 
   link(start, type, end, flag) {
     let predicate = null
-    if(type === 'generic') predicate = PRED.isRelatedTo
-    if(type ==='knows') predicate = PRED.knows
+    if (type === 'generic') {
+      predicate = PRED.isRelatedTo
+    } else if (type === 'knows') {
+      predicate = PRED.knows
+    }
     let payload = {
       subject: rdf.sym(start),
       predicate,
       object: rdf.sym(end)
     }
-    this.gAgent.writeTriples(start, [payload], flag).then(link.completed)
+    this.gAgent.writeTriples(start, [payload], flag)
   }
 })

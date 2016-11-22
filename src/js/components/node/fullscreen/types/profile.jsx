@@ -20,7 +20,6 @@ let ProfileNode = React.createClass({
     email: React.PropTypes.string,
     uri: React.PropTypes.string,
     img: React.PropTypes.string,
-    rank: React.PropTypes.string,
     graphState: React.PropTypes.object
   },
 
@@ -41,24 +40,16 @@ let ProfileNode = React.createClass({
   },
 
   render() {
-    let {account} = this.context
     let {name, description, email, uri, img, graphState} = this.props
-
-    const isMe = account.webId === uri
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     let fabItems = []
     let menuItems = []
 
-    if (!isMe) {
-      if (this.props.rank && this.props.rank === 'neighbour') {
-        menuItems.push('disconnect')
-      } else {
-        menuItems.push('edit')
-        fabItems.push('connect')
-      }
-      fabItems.push('chat')
-    }
+    menuItems.push('disconnect')
+    menuItems.push('edit')
+    fabItems.push('connect')
+    fabItems.push('chat')
     menuItems.push('copyUrl')
 
     return (
@@ -70,6 +61,7 @@ let ProfileNode = React.createClass({
         fabItems={fabItems}
         menuItems={menuItems}
         graphState={graphState}
+        uri={uri}
       >
         <List >
           {description && (

@@ -23,7 +23,6 @@ let TextNode = React.createClass({
     uri: React.PropTypes.string,
     img: React.PropTypes.string,
     type: React.PropTypes.string,
-    rank: React.PropTypes.string,
     graphState: React.PropTypes.object
   },
 
@@ -36,9 +35,7 @@ let TextNode = React.createClass({
   },
 
   render() {
-    console.log(this.props)
-    let {title, description, email, uri,
-         img, type, rank, graphState} = this.props
+    let {title, description, email, uri, img, type, graphState} = this.props
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []
@@ -49,12 +46,10 @@ let TextNode = React.createClass({
     }
     */
 
-    if (this.props.rank && this.props.rank === 'neighbour') {
-      menuItems.push('delete')
-      menuItems.push('disconnect')
-    } else {
-      menuItems.push('connect')
-    }
+    // TODO - dynamic
+    menuItems.push('delete')
+    menuItems.push('disconnect')
+    menuItems.push('connect')
 
     return (
       <GenericFullScreen
@@ -66,7 +61,6 @@ let TextNode = React.createClass({
         headerColor='#9a9fa8'
         menuItems={menuItems}
         type={type}
-        rank={rank}
         graphState={graphState}
         uri={uri}
       >

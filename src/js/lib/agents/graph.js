@@ -288,7 +288,7 @@ class GraphAgent {
       return fetch(Util.uriToProxied(uri), {
         method: 'PATCH',
         credentials: 'include',
-        body: `INSERT DATA { ${statements } } ;`,
+        body: `INSERT DATA { ${statements} } ;`,
         headers: {
           'Content-Type': 'application/sparql-update'
         }
