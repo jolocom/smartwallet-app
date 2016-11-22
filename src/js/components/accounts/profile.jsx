@@ -284,10 +284,9 @@ let Profile = React.createClass({
                 <TextField
                   name="givenName"
                   style={styles.title}
-                  underlineStyle={{display: 'none'}}
                   onChange={Util.linkToState(this, 'givenName')}
                   value={this.state.givenName} />
-                <Divider style={styles.titleDivider} />
+                {/** <Divider style={styles.titleDivider} /> **/}
                 <div style={styles.form}>
                   <List style={styles.sectionHeader}>
                     <ListItem primaryText="General" />
@@ -295,66 +294,30 @@ let Profile = React.createClass({
                   <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <ActionDescription color={theme.jolocom.gray1} />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        placeholder="First Name"
-                        name="givenName"
-                        onChange={Util.linkToState(this, 'givenName')}
-                        value={this.state.givenName}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <ActionDescription color={theme.jolocom.gray1} />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        placeholder="Second Name"
-                        name="familyName"
-                        onChange={Util.linkToState(this, 'familyName')}
-                        value={this.state.familyName}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <SocialShare color="#9ba0aa" />
-                    </div>
-                    <div style={styles.field}>
-                      <SelectField
-                        floatingLabelText="Privacy"
-                        onChange={this._handleSetPrivacy}
-                        value={this.state.privacy}
-                        style={styles.input}
-                        name="privacy">
-                        <MenuItem value="private" primaryText="Private" />
-                        <MenuItem value="public" primaryText="Public" />
-                      </SelectField>
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
                       <SocialPersonOutline color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Username"
                         name="username"
+                        floatingLabelText="Username"
+                        floatingLabelFixed
                         onChange={Util.linkToState(this, 'username')}
                         value={this.state.username}
                         style={styles.input} />
                     </div>
                   </div>
+                  <List style={styles.sectionHeader}>
+                    <ListItem primaryText="Contact" />
+                  </List>
+                  <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
                       <CommunicationPhone color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Mobile"
+                        floatingLabelText="Mobile"
+                        floatingLabelFixed
                         name="mobile"
                         onChange={Util.linkToState(this, 'mobile')}
                         value={this.state.mobile}
@@ -367,7 +330,8 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Email"
+                        floatingLabelText="Email"
+                        floatingLabelFixed
                         name="email"
                         onChange={Util.linkToState(this, 'email')}
                         value={this.state.email}
@@ -380,7 +344,8 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Address"
+                        floatingLabelText="Address"
+                        floatingLabelFixed
                         name="address"
                         onChange={Util.linkToState(this, 'address')}
                         value={this.state.address}
@@ -393,20 +358,26 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Social media"
+                        floatingLabelText="Social Media"
+                        floatingLabelFixed
                         name="socialMedia"
                         onChange={Util.linkToState(this, 'socialMedia')}
                         value={this.state.socialMedia}
                         style={styles.input} />
                     </div>
                   </div>
+                  <List style={styles.sectionHeader}>
+                    <ListItem primaryText="Work" />
+                  </List>
+                  <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
                       <ActionStar color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Profession"
+                        floatingLabelText="Profession"
+                        floatingLabelFixed
                         name="profession"
                         onChange={Util.linkToState(this, 'profession')}
                         value={this.state.profession}
@@ -419,7 +390,8 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Company"
+                        floatingLabelText="Company"
+                        floatingLabelFixed
                         name="company"
                         onChange={Util.linkToState(this, 'company')}
                         value={this.state.company}
@@ -432,13 +404,18 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Url"
+                        floatingLabelText="Url"
+                        floatingLabelFixed
                         name="url"
                         onChange={Util.linkToState(this, 'url')}
                         value={this.state.url}
                         style={styles.input} />
                     </div>
                   </div>
+                  <List style={styles.sectionHeader}>
+                    <ListItem primaryText="Wallet" />
+                  </List>
+                  <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={Object.assign({},
                       styles.label, styles.labelPassport)}>
@@ -476,7 +453,8 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Bitcoin Address"
+                        floatingLabelText="Bitcoin Address"
+                        floatingLabelFixed
                         name="bitcoinAddress"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
                         errorText={this.state.bitcoinErrorText}
@@ -495,7 +473,8 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       {/* TODO: back-end implementation */}
                       <TextField
-                        placeholder="Add credit card"
+                        floatingLabelText="Credit Card"
+                        floatingLabelFixed
                         name="creditcard"
                         onChange={this._handleCreditCardValidation}
                         style={styles.input}
