@@ -35,7 +35,17 @@ let TextNode = React.createClass({
   },
 
   render() {
-    let {title, description, email, uri, img, type, graphState} = this.props
+    let node
+    if (this.props.graphState.center.uri === this.props.uri) {
+      node = this.props.graphState.center
+    } else {
+      node = this.props.graphState.neighbours.find(el => {
+        return el.uri === this.props.uri
+      })
+    }
+
+    let {rank, title, description, email, uri, img, type} = node
+
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []
@@ -61,7 +71,8 @@ let TextNode = React.createClass({
         headerColor='#9a9fa8'
         menuItems={menuItems}
         type={type}
-        graphState={graphState}
+        rank={rank}
+        graphState={this.props.graphState}
         uri={uri}
       >
         <List>

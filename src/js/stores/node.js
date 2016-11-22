@@ -4,7 +4,6 @@ import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
 import GraphAgent from 'lib/agents/graph.js'
 import rdf from 'rdflib'
-import D3Convertor from '../lib/d3-converter'
 import {PRED} from 'lib/namespaces'
 
 export default Reflux.createStore({
@@ -13,14 +12,8 @@ export default Reflux.createStore({
   init() {
     this.gAgent = new GraphAgent()
     this.state = {
-      title: null,
-      name: null,
-      description: null,
       uri: null,
-      imt: null,
-      initialized: false,
-      rank: null,
-      type: null
+      initialized: false
     }
   },
 
@@ -41,20 +34,9 @@ export default Reflux.createStore({
   },
 
   onInitiate(uri) {
-    let convertor = new D3Convertor()
-    this.gAgent.fetchTriplesAtUri(uri).then((result) => {
-      result.triples.uri = uri
-      const node = convertor.convertToD3('a', result.triples)
-
-      this.state.title = node.name | node.title
-      this.state.description = node.description
-      this.state.uri = node.uri
-      this.state.img = node.img
-      this.state.type = node.type
-      this.state.name = node.name
-      this.state.initialized = true
-      this.trigger(this.state)
-    })
+    this.state.uri = uri
+    this.state.initialized = true
+    this.trigger(this.state)
   },
 
   /**

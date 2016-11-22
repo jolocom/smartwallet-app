@@ -40,12 +40,22 @@ let ProfileNode = React.createClass({
   },
 
   render() {
-    let {name, description, email, uri, img, graphState} = this.props
+    let node
+    if (this.props.graphState.center.uri === this.props.uri) {
+      node = this.props.graphState.center
+    } else {
+      node = this.props.graphState.neighbours.find(el => {
+        return el.uri === this.props.uri
+      })
+    }
+
+    let {rank, name, description, email, uri, img} = node
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     let fabItems = []
     let menuItems = []
 
+    // TODO - dynamic
     menuItems.push('disconnect')
     menuItems.push('edit')
     fabItems.push('connect')
@@ -60,8 +70,9 @@ let ProfileNode = React.createClass({
         headerColor={'#829abe'}
         fabItems={fabItems}
         menuItems={menuItems}
-        graphState={graphState}
+        graphState={this.props.graphState}
         uri={uri}
+        rank={rank}
       >
         <List >
           {description && (

@@ -24,6 +24,7 @@ import {AppBar, IconButton, IconMenu, MenuItem, Divider} from 'material-ui'
 let GenericFullScreen = React.createClass({
   propTypes: {
     type: React.PropTypes.string,
+    rank: React.PropTypes.string,
     title: React.PropTypes.string,
     menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
     headerColor: React.PropTypes.any,
@@ -122,14 +123,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleDisconnect() {
-    let rank
-    if (this.props.uri === this.props.graphState.center.uri) {
-      rank = 'center'
-    } else {
-      rank = 'neighbour'
-    }
-
-    if (rank === 'center') {
+    if (this.props.rank === 'center') {
       this._handleClose()
     } else {
       /*
@@ -142,7 +136,7 @@ let GenericFullScreen = React.createClass({
       }
 
       this.props.graphState.neighbours.map(el => {
-        if (el.rank === rank && el.uri === this.props.uri) {
+        if (el.rank === this.props.rank && el.uri === this.props.uri) {
           payload.triples.push({
             subject: rdf.sym(this.context.node.uri),
             predicate: rdf.sym(el.connection),

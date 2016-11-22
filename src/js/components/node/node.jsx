@@ -5,8 +5,6 @@ import GraphStore from 'stores/graph-store.js'
 import NodeActions from 'actions/node.js'
 import NodeTypes from 'lib/node-types.js'
 
-import GraphActions from 'actions/graph-actions.js'
-
 let Node = React.createClass({
   /*
      We need the graph store state so that we can quickly retrieve
@@ -50,7 +48,9 @@ let Node = React.createClass({
     return (
       <div>
         {initialized
-          ? <NodeFullScreenComponent {...this.state} />
+          ? <NodeFullScreenComponent
+            uri={this.state.uri}
+            graphState={this.state.graphState} />
           : null}
       </div>
     )
