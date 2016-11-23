@@ -38,7 +38,12 @@ let Graph = React.createClass({
     this.graph = new GraphD3(this.getGraphEl(), 'preview')
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
-    this.graph.on('select', this.props.onSelect)
+    this.graph.on('select', this._handleSelect)
+  },
+
+  _handleSelect(data) {
+    // A onSelect function is not always passed to the component.
+    this.props.onSelect && this.props.onSelect(data)
   },
 
   componentWillUnmount() {

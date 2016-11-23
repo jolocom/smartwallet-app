@@ -47,11 +47,18 @@ let NodeAddDefault = React.createClass({
     }
   },
 
+  // Mostly for future use.
+  _handleNodeSelect() {
+
+  },
+
   render: function() {
     return (
       <div style={styles.container}>
         <div style={styles.graph}>
-          <GraphPreview />
+          <GraphPreview
+            onSelect={this._handleNodeSelect}
+          />
         </div>
         <Paper style={styles.form} rounded={false}>
           <div style={styles.row}>

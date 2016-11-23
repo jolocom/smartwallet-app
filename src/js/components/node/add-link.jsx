@@ -141,7 +141,9 @@ let NodeAddLink = React.createClass({
     return (
       <div style={styles.container}>
         <div style={styles.graph}>
-          <GraphPreview onSelect={this._handleNodeSelect} />
+          <GraphPreview
+            onSelect={this._handleNodeSelect}
+          />
         </div>
         <div style={styles.containerTable}>
           <Paper style={styles.form} rounded={false}>
