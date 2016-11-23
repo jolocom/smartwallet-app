@@ -7,8 +7,7 @@ import {
   FlatButton,
   TextField,
   Avatar,
-  FloatingActionButton,
-  Divider
+  FloatingActionButton
 } from 'material-ui'
 
 import Camera from 'material-ui/svg-icons/image/camera-alt'
@@ -103,8 +102,7 @@ export default React.createClass({
   startChat(webId) {
     debug('Starting chat with', webId)
 
-    if (!this.state.conversations.hydrated)
-    {
+    if (!this.state.conversations.hydrated) {
       ConversationsActions.load(this.state.profile.webid)
       let unsub = ConversationsActions.load.completed.listen(() => {
         unsub()
@@ -112,8 +110,7 @@ export default React.createClass({
           this.state.profile.webid, this.state.profile.webid, webId
         )
       })
-    }
-    else {
+    } else {
       ChatActions.create(
         this.state.profile.webid, this.state.profile.webid, webId
       )
@@ -135,7 +132,11 @@ export default React.createClass({
   _handleSubmit() {
     console.log(this.context.account)
     let GraphAgent = new gAgent
-    GraphAgent.newGroup(this.context.account.webId,this.state.groupName,this.state.members)
+    GraphAgent.newGroup(
+      this.context.account.webId,
+      this.state.groupName,
+      this.state.members
+    )
   },
 
   // @todo clean up above
@@ -169,7 +170,7 @@ export default React.createClass({
         color: '#511B32'
       },
       addMemberButton: {
-        marginLeft: '35%'
+        marginLeft: '38%'
       },
       memberList : {
 
@@ -198,10 +199,11 @@ export default React.createClass({
     let title = 'New group'
 
     let content
-    if (this.state.pickingContacts)
+    if (this.state.pickingContacts) {
       content = <ContactSelector
         onClose={this._onContactSelectorClose}
         onCheckedChanges={this._handleCheckedChanges}/>
+    }
 
     if (!webId) {
       /*content = (
@@ -267,14 +269,6 @@ export default React.createClass({
             {content}
             {/* <input type="text" value={this.state.groupName}
             onChange={ e => this.setState({groupName: e.target.value})} />*/}
-            <button type="button" onTouchTap={this._handleSubmit}> ready let's go </button>
-            {/*<FormsyText name="groupname"*/}
-                        {/*floatingLabelText="Group name"*/}
-                        {/*autocorrect="off"*/}
-                        {/*autocapitalize="none"*/}
-                        {/*autocomplete="none"*/}
-                        {/*inputStyle={{textTransform: 'lowercase'}}*/}
-            {/*/>*/}
           </Content>
         </Layout>
       </Dialog>
