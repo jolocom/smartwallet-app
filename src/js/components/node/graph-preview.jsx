@@ -19,6 +19,10 @@ let Graph = React.createClass({
     this.state = state
   },
 
+  propTypes: {
+    onSelect: React.PropTypes.func
+  },
+
   onStateUpdate(data) {
     this.setState(data)
   },
@@ -34,6 +38,7 @@ let Graph = React.createClass({
     this.graph = new GraphD3(this.getGraphEl(), 'preview')
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
+    this.graph.on('select', this.props.onSelect)
   },
 
   componentWillUnmount() {

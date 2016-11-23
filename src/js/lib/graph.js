@@ -1117,7 +1117,6 @@ export default class GraphD3 extends EventEmitter {
   onClick = function (node, data) {
     d3.event.stopPropagation()
     this.emit('select', data, node)
-
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank === 'history' ||
@@ -1132,6 +1131,7 @@ export default class GraphD3 extends EventEmitter {
     }
 
     node.parentNode.appendChild(node)
+
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
 

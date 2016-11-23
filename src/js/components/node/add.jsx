@@ -41,7 +41,8 @@ let NodeAdd = React.createClass({
   },
 
   close() {
-    this.refs.dialog.hide()
+    // TODO
+    // this.refs.dialog.hide()
     this.context.router.goBack()
   },
 
