@@ -7,7 +7,9 @@ import {
   FlatButton,
   TextField,
   Avatar,
-  FloatingActionButton
+  FloatingActionButton,
+  List,
+  ListItem
 } from 'material-ui'
 
 import Camera from 'material-ui/svg-icons/image/camera-alt'
@@ -263,6 +265,13 @@ export default React.createClass({
                 <AddMember />
               </FloatingActionButton>
             </div>
+            <List>
+              <div style={styles.listItems}>
+                <ListItem
+                  primaryText="test1"
+                  leftAvatar={<Avatar>A</Avatar>} />
+              </div>
+            </List>
             <div></div>
             {/* <button type="button"
             onTouchTap={this._handleGoToContactSelection}> here </button>*/}

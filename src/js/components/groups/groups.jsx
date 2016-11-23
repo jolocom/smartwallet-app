@@ -7,7 +7,10 @@ import AvatarList from 'components/common/avatar-list.jsx'
 import GroupsActions from 'actions/groups'
 import GroupsStore from 'stores/groups'
 
-import {FloatingActionButton, FontIcon} from 'material-ui'
+import {
+  FloatingActionButton,
+  FontIcon
+} from 'material-ui'
 
 import Debug from 'lib/debug'
 let debug = Debug('components:groups')
