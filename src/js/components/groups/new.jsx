@@ -6,10 +6,13 @@ import {
   AppBar,
   FlatButton,
   TextField,
-  Avatar
+  Avatar,
+  FloatingActionButton,
+  Divider
 } from 'material-ui'
 
 import Camera from 'material-ui/svg-icons/image/camera-alt'
+import AddMember from 'material-ui/svg-icons/social/person-add'
 
 import {Layout, Content} from 'components/layout'
 
@@ -156,6 +159,20 @@ export default React.createClass({
         marginRight: 'auto',
         left: '0',
         right: '0'
+      },
+      groupImage: {
+        marginLeft: '33%',
+        marginRight: '33%',
+        marginTop: '5%'
+      },
+      membersHeading: {
+        color: '#511B32'
+      },
+      addMemberButton: {
+
+      },
+      memberList : {
+
       }
     }
   },
@@ -199,8 +216,6 @@ export default React.createClass({
 
     let styles = this.getStyles()
 
-    // let avatarImage = <Camera />
-
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -226,13 +241,21 @@ export default React.createClass({
             />
           <Content>
             <div style={styles.container}>
-              <div>
-                <Avatar icon={<Camera />} />
+              <div style={styles.groupImage}>
+                <Avatar icon={<Camera />} size={120} />
               </div>
               <TextField
                 floatingLabelText="Group name"
               />
+              <h3 style={styles.membersHeading}>Members</h3>
             </div>
+            <div style={styles.addMemberButton}>
+              <FloatingActionButton mini={true} backgroundColor={'#953052'}>
+                <AddMember />
+              </FloatingActionButton>
+              <Divider />
+            </div>
+            <div></div>
             <button type="button" onTouchTap={this._handleGoToContactSelection}> here </button>
             {content}
             <input type="text" value={this.state.groupName} onChange={ e => this.setState({groupName: e.target.value})} />
