@@ -62,7 +62,6 @@ let Graph = React.createClass({
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
-    this.graph.on('start-scrolling', this.refs.scrollIndicator._handleClick)
 
     if (!this.state.initialized) {
       graphActions.getInitialGraphState()
@@ -76,26 +75,11 @@ let Graph = React.createClass({
     }
   },
 
-  componentWillUnmount() {
-  },
-
-  componentWillUpdate(newProps, newState, newContext) {
-    /*
-    let uri
-
-    if (newState.activeNode &&
-        newState.activeNode !== this.state.activeNode) {
-      uri = encodeURIComponent(newState.activeNode.uri)
-      this.context.router.push(`/graph/${uri}/view`)
-    } else if (newContext.account.webId &&
-             newContext.account.webId !== this.context.account.webId) {
-      graphActions.getInitialGraphState(newContext.account.webId)
-    }
-    */
+  componentWillUpdate() {
   },
 
   _handleChangeRotationIndex(rotationIndex) {
-    graphActions.changeRotationIndex(rotationIndex, false)
+    graphActions.changeRotationIndex(rotationIndex)
   },
 
   _handleCenterChange(node) {
@@ -186,7 +170,6 @@ let Graph = React.createClass({
   },
 
   _handleAddNodeTouchTap() {
-    this.graph.eraseGraph()
     this.addNode('node')
   },
 

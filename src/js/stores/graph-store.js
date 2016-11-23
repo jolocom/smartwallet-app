@@ -52,22 +52,13 @@ export default Reflux.createStore({
   },
 
   onChangeRotationIndex: function (rotationIndex, flag) {
-    this.state['rotationIndex'] = rotationIndex
-    if (flag) this.trigger(this.state, 'changeRotationIndex')
+    this.state.rotationIndex = rotationIndex
   },
 
-  // This sends Graph.jsx and the Graph.js files a signal to add
-  // new ndoes to the graph
-  onDrawNewNode: function(object, predicate) {
-    // This fetches the triples at the newly added file,
-    // it allows us to draw it the graph accurately
+  onDrawNewNode(object, predicate) {
     this.gAgent.fetchTriplesAtUri(object).then((result) => {
-      // Adding the extra value to the object, the URI, it's usefull later.
       result.triples.uri = object
-        // Now we tell d3 to draw a new adjacent node on the graph,
-        // with the info from the triiple file
       result.triples.connection = predicate
-      return result.triples
     }).then(this.gAgent.hydrateNodeConfidentiality).then((triples) => {
       this.state.newNode = this.convertor.convertToD3('a', triples)
       this.state.neighbours.push(this.state.newNode)

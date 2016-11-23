@@ -30,8 +30,7 @@ export default Reflux.createStore({
   },
 
   onChangeRotationIndex: function(rotationIndex, flag) {
-    this.state['rotationIndex'] = rotationIndex
-    if (flag) this.trigger(this.state, 'changeRotationIndex')
+    this.state.rotationIndex = rotationIndex
   },
 
   onNavigateToNode(node, defaultHistoryNode) {
@@ -58,7 +57,7 @@ export default Reflux.createStore({
         }
       } else {
         // If we travel to a normal node, check if it is in history
-        // and then short circuit it.
+        // and then short circuit the history.
         let foundIndex = 0
         if (this.state.navHistory.length > 1) {
           for (let i = 0; i < this.state.navHistory.length; i++) {

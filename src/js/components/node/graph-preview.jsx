@@ -59,7 +59,7 @@ let Graph = React.createClass({
   },
 
   _handleChangeRotationIndex(rotationIndex) {
-    previewActions.changeRotationIndex(rotationIndex, true)
+    previewActions.changeRotationIndex(rotationIndex)
   },
 
   _handleCenterChange(node) {
