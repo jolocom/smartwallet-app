@@ -169,7 +169,7 @@ export default React.createClass({
         color: '#511B32'
       },
       addMemberButton: {
-
+        marginLeft: '35%'
       },
       memberList : {
 
@@ -215,6 +215,7 @@ export default React.createClass({
     }
 
     let styles = this.getStyles()
+    let minifyAddMemberButton = true
 
     return (
       <Dialog ref="dialog" fullscreen>
@@ -246,19 +247,26 @@ export default React.createClass({
               </div>
               <TextField
                 floatingLabelText="Group name"
+                value={this.state.groupName}
+                onChange={ e => this.setState({groupName: e.target.value})}
               />
               <h3 style={styles.membersHeading}>Members</h3>
             </div>
             <div style={styles.addMemberButton}>
-              <FloatingActionButton mini={true} backgroundColor={'#953052'}>
+              <FloatingActionButton
+                mini={minifyAddMemberButton}
+                backgroundColor={'#953052'}
+                onMouseUp={this._handleGoToContactSelection}
+              >
                 <AddMember />
               </FloatingActionButton>
-              <Divider />
             </div>
             <div></div>
-            <button type="button" onTouchTap={this._handleGoToContactSelection}> here </button>
+            {/* <button type="button"
+            onTouchTap={this._handleGoToContactSelection}> here </button>*/}
             {content}
-            <input type="text" value={this.state.groupName} onChange={ e => this.setState({groupName: e.target.value})} />
+            {/* <input type="text" value={this.state.groupName}
+            onChange={ e => this.setState({groupName: e.target.value})} />*/}
             <button type="button" onTouchTap={this._handleSubmit}> ready let's go </button>
             {/*<FormsyText name="groupname"*/}
                         {/*floatingLabelText="Group name"*/}
