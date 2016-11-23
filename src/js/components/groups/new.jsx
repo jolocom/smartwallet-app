@@ -1,7 +1,15 @@
 import React from 'react'
 import Reflux from 'reflux'
 
-import {IconButton, AppBar, FlatButton, TextField} from 'material-ui'
+import {
+  IconButton,
+  AppBar,
+  FlatButton,
+  TextField,
+  Avatar
+} from 'material-ui'
+
+import Camera from 'material-ui/svg-icons/image/camera-alt'
 
 import {Layout, Content} from 'components/layout'
 
@@ -141,6 +149,13 @@ export default React.createClass({
       },
       icon: {
         color: actionAppBar.textColor
+      },
+      container: {
+        width: '15%',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        left: '0',
+        right: '0'
       }
     }
   },
@@ -184,6 +199,8 @@ export default React.createClass({
 
     let styles = this.getStyles()
 
+    // let avatarImage = <Camera />
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -208,18 +225,14 @@ export default React.createClass({
             style={styles.bar}
             />
           <Content>
-
-            <div
-              width="300px"
-              maxWidth="90%"
-              padding="20px"
-              margin="0 auto 20px auto"
-              boxSizing="border-box">
-            <TextField
-              floatingLabelText="Group name"
-            />
+            <div style={styles.container}>
+              <div>
+                <Avatar icon={<Camera />} />
+              </div>
+              <TextField
+                floatingLabelText="Group name"
+              />
             </div>
-            list of contacts
             <button type="button" onTouchTap={this._handleGoToContactSelection}> here </button>
             {content}
             <input type="text" value={this.state.groupName} onChange={ e => this.setState({groupName: e.target.value})} />
