@@ -20,6 +20,7 @@ export const PRED = {
   fullName: FOAF('name'),
   image: FOAF('img'),
   email: FOAF('mbox'),
+  socialMedia: FOAF('accountName'),
   inbox: TERMS('inbox'),
   storage: NIC('storage'),
   knows: FOAF('knows'),

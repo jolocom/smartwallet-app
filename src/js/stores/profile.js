@@ -108,6 +108,8 @@ export default Reflux.createStore({
         profile.fullName = obj
       } else if (t.predicate.uri === FOAF('img').uri) {
         profile.imgUri = obj
+      } else if (t.predicate.uri === FOAF('accountName').uri) {
+        profile.socialMedia = obj
       } else if (t.predicate.uri === FOAF('mbox').uri) {
         profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
       } else if (t.predicate.uri === PRED.bitcoin.uri) {
@@ -167,7 +169,8 @@ export default Reflux.createStore({
       familyName: FOAF('familyName'),
       givenName: FOAF('givenName'),
       imgUri: FOAF('img'),
-      email: FOAF('mbox')
+      email: FOAF('mbox'),
+      socialMedia: FOAF('accountName')
     }
 
     for (let pred in predicateMap) {

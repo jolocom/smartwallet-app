@@ -9,7 +9,6 @@ import GenericFullScreen from '../generic-fullscreen'
 import ProfileStore from 'stores/profile'
 
 import ActionInfoOutline from 'material-ui/svg-icons/action/info-outline'
-import SocialShare from 'material-ui/svg-icons/social/share'
 import SocialPublic from 'material-ui/svg-icons/social/public'
 import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'

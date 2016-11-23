@@ -19,12 +19,10 @@ import {
   Divider, Subheader
 } from 'material-ui'
 
-import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import SocialShare from 'material-ui/svg-icons/social/share'
 import SocialPublic from 'material-ui/svg-icons/social/public'
 import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
@@ -39,8 +37,6 @@ import ProfileStore from 'stores/profile'
 import JolocomTheme from 'styles/jolocom-theme'
 import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import PassportIcon from 'components/icons/passport-icon.jsx'
-import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
 
 import Util from 'lib/util'
 import GraphAgent from '../../lib/agents/graph.js'
