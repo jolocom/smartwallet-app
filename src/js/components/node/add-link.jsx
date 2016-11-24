@@ -45,6 +45,8 @@ let NodeAddLink = React.createClass({
   },
 
   submit() {
+    console.log(this.context)
+    console.log(this.props)
     // @TODO show error
     if (!this.validates()) return false
     let {startUri, endUri, type} = this.state

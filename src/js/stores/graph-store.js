@@ -21,7 +21,6 @@ export default Reflux.createStore({
       neighbours: null,
       loading: false,
       initialized: false,
-      newNode: null,
       navHistory: [],
       selected: null,
       rotationIndex: 0,
@@ -59,9 +58,10 @@ export default Reflux.createStore({
     this.gAgent.fetchTriplesAtUri(object).then((result) => {
       result.triples.uri = object
       result.triples.connection = predicate
-    }).then(this.gAgent.hydrateNodeConfidentiality).then((triples) => {
-      this.state.newNode = this.convertor.convertToD3('a', triples)
-      this.state.neighbours.push(this.state.newNode)
+      return result
+    }).then((triples) => {
+      let newNode = this.convertor.convertToD3('a', triples.triples)
+      this.state.neighbours.push(newNode)
       this.trigger(this.state)
     })
   },

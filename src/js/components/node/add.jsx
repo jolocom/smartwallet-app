@@ -1,4 +1,5 @@
 import React from 'react'
+import Reflux from 'reflux'
 import Radium from 'radium'
 
 import {AppBar, IconButton, FlatButton} from 'material-ui'
@@ -9,6 +10,7 @@ import {Layout, Content} from 'components/layout'
 import NodeAddDefault from './add-default.jsx'
 import NodeAddLink from './add-link.jsx'
 import NodeAddImage from './add-image.jsx'
+import PreviewStore from 'stores/preview-store'
 
 let types = {
   default: {
@@ -24,6 +26,7 @@ let types = {
 }
 
 let NodeAdd = React.createClass({
+  mixins: [Reflux.listenTo(PreviewStore, 'onStoreUpdate')],
 
   propTypes: {
     params: React.PropTypes.object,
@@ -34,6 +37,10 @@ let NodeAdd = React.createClass({
   contextTypes: {
     router: React.PropTypes.any,
     muiTheme: React.PropTypes.object
+  },
+
+  onStoreUpdate(newState) {
+    this.setState({graphState: newState})
   },
 
   componentDidMount() {
@@ -106,7 +113,7 @@ let NodeAdd = React.createClass({
             <Component ref='form'
               node={selectedNode}
               onSuccess={this._handleSuccess}
-              graphState={this.props} />
+              graphState={this.state.graphState} />
           </Content>
         </Layout>
       </Dialog>
