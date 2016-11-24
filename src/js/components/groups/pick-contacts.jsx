@@ -11,8 +11,8 @@ import AvatarList from 'components/common/avatar-list.jsx'
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 
-import Debug from 'lib/debug'
-let debug = Debug('components:groups:pick-contacts')
+// import Debug from 'lib/debug'
+// let debug = Debug('components:groups:pick-contacts')
 
 export default React.createClass({
 
@@ -21,7 +21,9 @@ export default React.createClass({
   ],
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    onClose: React.PropTypes.func,
+    onCheckedChanges: React.PropTypes.func
   },
 
   contextTypes: {
@@ -66,17 +68,19 @@ export default React.createClass({
   },
 
   render() {
-
     let items = []
 
-    if (this.state.contacts)
+    if (this.state.contacts) {
       items = this.state.contacts.items.map(
-        (item) => Object.assign({},item,{secondaryText: item.email, id: item.webId}))
-
+        (item) => Object.assign(
+          {},
+          item,
+          {secondaryText: item.email, id: item.webId}))
+    }
 
     let title = 'Add contacts to group'
 
-    let content
+    // let content
 
     let styles = this.getStyles()
 
