@@ -32,7 +32,12 @@ class D3Converter {
       x: null,
       y: null,
       confidential: node.confidential,
-      socialMedia: ''
+      socialMedia: '',
+      mobile: '',
+      address: '',
+      profession: '',
+      company: '',
+      url: ''
 
     }
 
@@ -96,6 +101,21 @@ class D3Converter {
         }
         if (pred === PRED.socialMedia.uri) {
           props.socialMedia = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.mobile.uri) {
+          props.mobile = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.address.uri) {
+          props.address = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.profession.uri) {
+          props.profession = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.company.uri) {
+          props.company = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.url.uri) {
+          props.url = obj.value ? obj.value : obj.uri
         }
         // Storage is used when adding files. Better to do it here then to send
         // extra requests upon upload.

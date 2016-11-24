@@ -154,7 +154,12 @@ let ProfileNode = React.createClass({
       familyName,
       uri,
       img,
-      socialMedia
+      socialMedia,
+      mobile,
+      address,
+      profession,
+      company,
+      url
     } = this.getNode()
 
     const isMe = account.webId === uri
@@ -282,7 +287,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Mobile"
-                  value={this.state.profile.mobile}
+                  value={isMe ? this.state.profile.mobile : mobile}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -306,7 +311,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Address"
-                  value={this.state.profile.address}
+                  value={isMe ? this.state.profile.address : address}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -338,7 +343,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Profession"
-                  value={this.state.profile.profession}
+                  value={isMe ? this.state.profile.profession : profession}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -350,7 +355,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Company"
-                  value={this.state.profile.company}
+                  value={isMe ? this.state.profile.company : company}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -362,7 +367,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Url"
-                  value={this.state.profile.url}
+                  value={isMe ? this.state.profile.url : url}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
