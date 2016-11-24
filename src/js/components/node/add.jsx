@@ -26,7 +26,7 @@ let types = {
 }
 
 let NodeAdd = React.createClass({
-  mixins: [Reflux.listenTo(PreviewStore, 'onStoreUpdate')],
+  mixins: [Reflux.listenTo(PreviewStore, 'onStoreUpdate', 'initialState')],
 
   propTypes: {
     params: React.PropTypes.object,
@@ -37,6 +37,10 @@ let NodeAdd = React.createClass({
   contextTypes: {
     router: React.PropTypes.any,
     muiTheme: React.PropTypes.object
+  },
+
+  initialState(state) {
+    this.setState({graphState: state})
   },
 
   onStoreUpdate(newState) {
