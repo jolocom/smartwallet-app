@@ -153,7 +153,8 @@ let ProfileNode = React.createClass({
       name,
       familyName,
       uri,
-      img
+      img,
+      socialMedia
     } = this.getNode()
 
     const isMe = account.webId === uri
@@ -317,7 +318,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Social media"
-                  value={this.state.profile.socialMedia}
+                  value={isMe ? this.state.profile.socialMedia : socialMedia}
                   floatingLabelFixed
                   readOnly />
               </ListItem>

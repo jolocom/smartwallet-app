@@ -31,7 +31,8 @@ class D3Converter {
       storage: null,
       x: null,
       y: null,
-      confidential: node.confidential
+      confidential: node.confidential,
+      socialMedia: ''
 
     }
 
@@ -92,6 +93,9 @@ class D3Converter {
         }
         if (pred === PRED.image.uri) {
           props.img = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.socialMedia.uri) {
+          props.socialMedia = obj.value ? obj.value : obj.uri
         }
         // Storage is used when adding files. Better to do it here then to send
         // extra requests upon upload.
