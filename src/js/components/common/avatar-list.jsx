@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import Reflux from 'reflux'
+// import Reflux from 'reflux'
 
 import {List, ListItem, Divider, Subheader, Avatar, Checkbox} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
@@ -8,9 +8,8 @@ import theme from 'styles/jolocom-theme'
 
 import Loading from 'components/common/loading.jsx'
 
-import ContactsActions from 'actions/contacts'
-import ContactsStore from 'stores/contacts'
-
+// import ContactsActions from 'actions/contacts'
+// import ContactsStore from 'stores/contacts'
 
 import Utils from 'lib/util'
 
@@ -20,6 +19,13 @@ let AvatarList = React.createClass({
     searchQuery: React.PropTypes.string,
     onClick: React.PropTypes.func,
     items: React.PropTypes.array,
+    noReordering: React.PropTypes.func,
+    noHeadings: React.PropTypes.string,
+    onChange: React.PropTypes.bool,
+    checkboxes: React.PropTypes.bool,
+    avatarLeft: React.PropTypes.object,
+    loading: React.PropTypes.bool,
+    emptyMessage: React.PropTypes.string
   },
 
   componentWillMount() {
@@ -85,12 +91,11 @@ let AvatarList = React.createClass({
   },
 
   renderItems(items) {
-
     let styles = this.getStyles()
 
     if (!this.props.noReordering) {
-    items.sort((a, b) =>
-               a.name.toLowerCase() > b.name.toLowerCase())
+      items.sort((a, b) =>
+        a.name.toLowerCase() > b.name.toLowerCase())
     }
 
     let lastNameInitial = ''
@@ -98,12 +103,11 @@ let AvatarList = React.createClass({
     let result = []
 
     items.forEach((item, i) => {
-
       let {id,
-           username,
-           content,
+           // username,
+           // content,
            rightText,
-           webId,
+           // webId,
            name,
            email,
            secondaryText,
@@ -113,9 +117,11 @@ let AvatarList = React.createClass({
       // Avatar
       let avatar
       if (imgUri) {
-        avatar = <Avatar
-                    src={Utils.uriToProxied(imgUri)}
-                    style={{backgroundSize: 'cover'}} />
+        avatar =
+          <Avatar
+            src={Utils.uriToProxied(imgUri)}
+            style={{backgroundSize: 'cover'}}
+          />
       } else {
         avatar = <Avatar>{nameInitial}</Avatar>
       }
@@ -130,8 +136,8 @@ let AvatarList = React.createClass({
         // Don't insert a divider before the first element
         if (i > 0) {
           result.push(<Divider
-                        inset key={`divider_${i}`}
-                        style={this.getStyles().separator} />)
+            inset key={`divider_${i}`}
+            style={this.getStyles().separator} />)
         }
 
         result.push(
@@ -154,28 +160,38 @@ let AvatarList = React.createClass({
           <div>
             <span>{name}</span>
             <span style={styles.rightText}>{rightText}</span>
-          </div> )
+          </div>
+        )
       }
 
       let onCheckboxCheck = (e, check) => {
         let cbs = this.state.checkboxes
         cbs[id] = {checked: check}
-        this.setState({checkboxes: Object.assign({},cbs)})
-        if (this.props.onChange)
+        this.setState({checkboxes: Object.assign({}, cbs)})
+        if (this.props.onChange) {
           this.props.onChange(this.props.items.filter((item) =>
-            cbs[item.id] !== undefined && cbs[item.id].checked))
+          cbs[item.id] !== undefined && cbs[item.id].checked))
+        }
       }
 
       let checkbox = <Checkbox style={styles.checkbox}
-        checked={this.state.checkboxes[id] && this.state.checkboxes[id].checked || false}
+        checked={
+          this.state.checkboxes[id] &&
+          this.state.checkboxes[id].checked ||
+          false
+        }
         onCheck={onCheckboxCheck} />
 
-
       if (!id) {
-        console.error(item,'has no id property')
+        console.error(item, ' has no id property')
       }
 
-      let stylesF = Object.assign({},styles.listItem,this.props.checkboxes && styles.listItemCheckboxes)
+      let stylesF = Object.assign(
+        {},
+        styles.listItem,
+        this.props.checkboxes &&
+        styles.listItemCheckboxes
+      )
 
       result.push(
         <ListItem
@@ -183,7 +199,10 @@ let AvatarList = React.createClass({
           primaryText={primaryText}
           secondaryText={secondaryText}
           rightAvatar={!this.props.avatarLeft && avatar}
-          leftAvatar={(this.props.avatarLeft && avatar) || (this.props.checkboxes && checkbox)}
+          leftAvatar={
+            (this.props.avatarLeft && avatar) ||
+            (this.props.checkboxes && checkbox)
+          }
           insetChildren
           onTouchTap={handleClick}
           style={stylesF}
@@ -196,13 +215,16 @@ let AvatarList = React.createClass({
 
   render() {
     let content
-    let items = this.props.items,
-        styles = this.getStyles()
+    let items = this.props.items
+    let styles = this.getStyles()
 
     if (this.props.loading) {
       content = <Loading style={styles.loading} />
     } else if (!items || !items.length) {
-      content = <div style={styles.empty}>{this.props.emptyMessage || 'Nothing'}</div>
+      content =
+        <div style={styles.empty}>
+          {this.props.emptyMessage || 'Nothing'}
+        </div>
     } else {
       content = <List>{this.renderItems(items)}</List>
     }
