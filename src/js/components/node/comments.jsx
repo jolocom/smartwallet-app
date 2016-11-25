@@ -33,7 +33,7 @@ let Comments = React.createClass({
   addComment: function(content) {
     CommentsActions.create({
       subject: this.props.node.uri,
-      author: this.state.profile.webid,
+      author: this.state.profile.webId,
       content: content
     })
   },

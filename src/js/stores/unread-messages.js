@@ -1,7 +1,7 @@
 import Reflux from 'reflux'
 
 import ChatAgent from 'lib/agents/chat'
-import WebIDAgent from 'lib/agents/webid'
+import AccountsAgent from 'lib/agents/accounts'
 
 import Subscription from 'lib/subscription'
 
@@ -62,10 +62,11 @@ export default Reflux.createStore({
       }
       load.completed(items)
     }).catch((error) => {
+      console.log(error)
       // @TODO container should be created by the solid server
-      if (error.message === '404') {
-        const wia = new WebIDAgent()
-        wia.createUnreadMessagesContainer(webId)
+      if (error.response && error.response.status === 404) {
+        const accounts = new AccountsAgent()
+        accounts.createUnreadMessagesContainer(webId)
       }
 
       return load.failed(error)

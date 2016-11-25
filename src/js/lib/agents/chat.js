@@ -44,7 +44,7 @@ class ChatAgent extends LDPAgent {
       let conversationDocContent =
         this._conversationTriples(initiator, participants)
       return this.put(Util.uriToProxied(conversationDoc),
-        hdrs, conversationDocContent).then(() => {
+        conversationDocContent, hdrs).then(() => {
           return Promise.all(participants.map((p) =>
             this._linkConversation(conversationDoc, p)
         ))
@@ -91,13 +91,8 @@ class ChatAgent extends LDPAgent {
       writer.addTriple($rdf.sym('#participant'), ACL('mode'), ACL('Write'))
     })
 
-    return fetch(Util.uriToProxied(aclUri), {
-      method: 'PUT',
-      credentials: 'include',
-      body: writer.end(),
-      headers: {
-        'Content-Type': 'text/turtle'
-      }
+    return this.put(this._proxify(aclUri), writer.end(), {
+      'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri
     }).catch((e) => {
@@ -151,38 +146,39 @@ class ChatAgent extends LDPAgent {
       created: new Date().getTime()
     }
 
-    return this.get(Util.uriToProxied(conversationUrl)).then((xhr) => {
+    return this.get(this._proxify(conversationUrl)).then((response) => {
       // store this in memory, so we dont need to fetch all data everytime
-      const conversation = $rdf.graph()
-      $rdf.parse(
-        xhr.response,
-        conversation,
-        conversationId,
-        'text/turtle'
-      )
-      return conversation
+      return response.text().then((text) => {
+        let parser = new Parser()
+        parser.parse(text, conversationId)
+        return parser
+      })
     }).then((conversation) => {
       const graph = $rdf.graph()
-      const uri = Util.uriToProxied(conversationUrl)
+      const uri = this._proxify(conversationUrl)
 
       graph.addAll(this._getMessageTriples(message))
 
       return this.patch(uri, null, graph.statements).then(() => {
-        const participants = conversation.each(
+        const participants = conversation.find(
           '#thread',
           PRED.hasSubscriber,
           undefined
-        ).map((l) => l.value)
+        ).map((t) => {
+          return t.object.value
+        })
 
         this.notifyParticipants(participants, message)
       })
     })
   }
   getConversationMessages(conversationUrl) {
-    return this.get(Util.uriToProxied(conversationUrl))
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response, conversationUrl)
+    return this.get(this._proxify(conversationUrl))
+      .then((response) => {
+        return response.text().then((text) => {
+          let parser = new Parser()
+          return parser.parse(text, conversationUrl)
+        })
       })
       .then((result) => {
         let posts = result.triples.filter((t) => {
@@ -234,11 +230,13 @@ class ChatAgent extends LDPAgent {
     let result = {
       id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
     }
-    return this.get(Util.uriToProxied(conversationUrl))
-      .then((xhr) => {
-        result.updatesVia = xhr.getResponseHeader('updates-via')
-        let parser = new Parser()
-        return parser.parse(xhr.response, conversationUrl)
+    return this.get(this._proxify(conversationUrl))
+      .then((response) => {
+        result.updatesVia = response.headers.get('updates-via')
+        return response.text().then((text) => {
+          let parser = new Parser()
+          return parser.parse(text, conversationUrl)
+        })
       })
       .then((parsed) => {
         return Promise.all([
@@ -253,8 +251,8 @@ class ChatAgent extends LDPAgent {
         result.otherPerson = otherPerson
         return result
       })
-      .catch(() => {
-        console.error('Failed to load conversation', conversationUrl)
+      .catch((e) => {
+        console.error('Failed to load conversation', e, conversationUrl)
       })
   }
 
@@ -290,9 +288,11 @@ class ChatAgent extends LDPAgent {
 
     let result = {}
     return this.get(Util.uriToProxied(otherPerson))
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response, otherPerson)
+      .then((response) => {
+        return response.text((text) => {
+          let parser = new Parser()
+          return parser.parse(text, otherPerson)
+        })
       })
       .then((parsed) => {
         let aboutPerson = _.filter(parsed.triples, (t) => {
@@ -319,13 +319,15 @@ class ChatAgent extends LDPAgent {
       })
   }
 
-  getInboxConversations(webid) {
-    let inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
+  getInboxConversations(webId) {
+    let inbox = `${Util.webidRoot(webId)}/little-sister/inbox`
     debug('Getting inbox conversations for webid', inbox)
-    return this.get(Util.uriToProxied(inbox))
-      .then((xhr) => {
-        let parser = new Parser()
-        return parser.parse(xhr.response, inbox)
+    return this.get(this._proxify(inbox))
+      .then((response) => {
+        return response.text().then((text) => {
+          let parser = new Parser()
+          return parser.parse(text, inbox)
+        })
       })
       .then((result) => {
         debug('Received inbox conversations', result)
@@ -373,13 +375,13 @@ class ChatAgent extends LDPAgent {
 
   getUnreadMessages(webId) {
     let container = this.getUnreadMessagesContainer(webId)
-    return this.get(Util.uriToProxied(container))
-      .then((xhr) => {
-        const g = $rdf.graph()
-
-        $rdf.parse(xhr.response, g, container, 'text/turtle')
-
-        return g
+    return this.get(this._proxify(container))
+      .then((response) => {
+        return response.text().then((text) => {
+          const parser = new Parser()
+          parser.parse(text, webId)
+          return parser.g
+        })
       })
       .then(this._parseMessages)
   }

@@ -1,9 +1,8 @@
 import LDPAgent from './ldp.js'
 import {endpoint} from 'settings'
-import Util from '../util'
-import {Writer} from '../rdf'
+import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
-import rdflib from 'rdflib'
+import $rdf from 'rdflib'
 
 // WebID related functions
 class WebIDAgent extends LDPAgent {
@@ -30,91 +29,255 @@ class WebIDAgent extends LDPAgent {
     })
   }
 
-  initInbox(webId) {
-    return Promise.all([
-      this.createConversationsContainer(webId),
-      this.createUnreadMessagesContainer(webId)
-    ])
-  }
-
-  // @TODO this name is confusing, because there's already a
-  // default notifications inbox provided by solid.
-  // Should be named 'conversations'
-  createConversationsContainer(webId) {
-    const webIdRoot = Util.webidRoot(webId)
-    const uri = `${webIdRoot}/little-sister/inbox`
-
-    let writer = new Writer()
-
-    // writer.addTriple(rdflib.sym(''), DC('title'), `Inbox of ${username}`)
-    writer.addTriple({
-      subject: '',
-      predicate: PRED.maker,
-      object: webId
-    })
-
-    writer.addTriple({
-      subject: '',
-      predicate: PRED.primaryTopic,
-      object: rdflib.sym('#inbox')
-    })
-
-    writer.addTriple({
-      subject: '#inbox',
-      predicate: PRED.type,
-      object: PRED.space
-    })
-
-    return this.put(
-      Util.uriToProxied(uri),
-      {'Content-type': 'text/turtle'},
-      writer.end()
-    ).then(() => {
-      return this._writeAcl(uri, webId)
+  getProfile() {
+    let parser = new Parser()
+    return this.getWebID().then((webId) => {
+      return this.get(this._proxify(webId))
+        .then((response) => {
+          return response.text()
+        }).then((text) => {
+          return parser.parse(text, webId)
+        }).then((answer) => {
+          return this._parseProfile(webId, answer.triples)
+        })
     })
   }
 
-  createUnreadMessagesContainer(webId) {
-    const webIdRoot = Util.webidRoot(webId)
-    const uri = `${webIdRoot}/little-sister/unread-messages`
+  _parseProfile(webId, triples) {
+    let profile = {
+      webId: webId
+    }
 
-    return this.put(
-      Util.uriToProxied(uri),
-      {'Content-type': 'text/turtle'}
-    ).then(() => {
-      return this._writeAcl(uri, webId)
-    })
-  }
+    let relevant = triples.filter((t) => t.subject.uri === webId)
 
-  _writeAcl(uri, webId) {
-    let writer = new Writer()
-    let ACL = rdflib.Namespace('http://www.w3.org/ns/auth/acl#')
-    let aclUri = `${uri}.acl`
-
-    writer.addTriple(rdflib.sym('#owner'), PRED.type, ACL('Authorization'))
-    writer.addTriple(rdflib.sym('#owner'), ACL('accessTo'), rdflib.sym(uri))
-    writer.addTriple(rdflib.sym('#owner'), ACL('accessTo'), rdflib.sym(aclUri))
-    writer.addTriple(rdflib.sym('#owner'), ACL('agent'), rdflib.sym(webId))
-    writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Control'))
-    writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Read'))
-    writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Write'))
-
-    writer.addTriple(rdflib.sym('#append'), PRED.type, ACL('Authorization'))
-    writer.addTriple(rdflib.sym('#append'), ACL('accessTo'), rdflib.sym(uri))
-    writer.addTriple(rdflib.sym('#append'), ACL('agentClass'), PRED.Agent)
-    writer.addTriple(rdflib.sym('#append'), ACL('mode'), ACL('Append'))
-
-    return fetch(Util.uriToProxied(aclUri), {
-      method: 'PUT',
-      credentials: 'include',
-      body: writer.end(),
-      headers: {
-        'Content-Type': 'text/turtle'
+    for (var t of relevant) {
+      let obj = t.object.uri ? t.object.uri : t.object.value
+      if (t.predicate.uri === PRED.givenName.uri) {
+        profile.givenName = obj
+      } else if (t.predicate.uri === PRED.familyName.uri) {
+        profile.familyName = obj
+      } else if (t.predicate.uri === PRED.fullName.uri) {
+        profile.fullName = obj
+      } else if (t.predicate.uri === PRED.image.uri) {
+        profile.imgUri = obj
+      } else if (t.predicate.uri === PRED.email.uri) {
+        profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
+      } else if (t.predicate.uri === PRED.bitcoin.uri) {
+        profile.bitcoinAddressNodeUri = obj
+        this.findObjectsByTerm(obj, PRED.description).then((res) => {
+          profile.bitcoinAddress = res.length ? res[0].value : ''
+        })
+      } else if (t.predicate.uri === PRED.passport.uri) {
+        profile.passportImgNodeUri = obj
+        this.findObjectsByTerm(obj, PRED.image).then((res) => {
+          profile.passportImgUri = res.length ? res[0].value : ''
+        })
       }
-    }).then(() => {
-      return aclUri
-    }).catch((e) => {
-      console.error(e, 'occured while putting the acl file')
+    }
+
+    let {fullName, givenName, familyName} = profile
+    if (!givenName && !familyName) {
+      if (fullName) {
+        profile.givenName = fullName.substring(0, fullName.indexOf(' '))
+        profile.familyName = fullName.substring(
+            givenName.length + 1, fullName.length)
+      }
+    }
+
+    return profile
+  }
+
+  updateProfile(newData, oldData) {
+    return this.getWebID().then((webId) => {
+      newData = Object.assign({}, newData)
+      oldData = Object.assign({}, oldData)
+
+      let toAdd = $rdf.graph()
+      let toDel = $rdf.graph()
+      let insertTriples = []
+      let deleteTriples = []
+
+      let predicateMap = {
+        familyName: PRED.familyName,
+        givenName: PRED.givenName,
+        imgUri: PRED.image,
+        email: PRED.email
+      }
+
+      for (let pred in predicateMap) {
+        if (newData[pred] !== oldData[pred]) {
+          if (!oldData[pred] || newData[pred]) {
+            // inserting
+            insertTriples.push({
+              subject: $rdf.sym(oldData.webId),
+              predicate: predicateMap[pred],
+              object: newData[pred]
+            })
+          }
+          if (!newData[pred] || oldData[pred]) {
+            // delete
+            deleteTriples.push({
+              subject: $rdf.sym(oldData.webId),
+              predicate: predicateMap[pred],
+              object: oldData[pred]
+            })
+          }
+        }
+      }
+
+      toAdd.addAll(insertTriples.map((t) => {
+        if (t.predicate.uri === PRED.email.uri) {
+          t.object = $rdf.sym(`mailto:${t.object}`)
+        }
+        return t
+      }))
+
+      toDel.addAll(deleteTriples.map((t) => {
+        if (t.predicate.uri === PRED.email.uri) {
+          t.object = $rdf.sym(`mailto:${t.object}`)
+        }
+        return t
+      }))
+
+      return new Promise((resolve, reject) => {
+        if (false && !deleteTriples.length && !insertTriples.length) {
+          // @TODO
+          resolve(newData)
+        } else {
+           // @TODO don't send request when empty delete- & insertStatement
+          this.patch(
+            this._proxify(oldData.webId), toDel.statements, toAdd.statements
+          )
+          .then((result) => {
+            resolve(newData)
+          })
+          .catch((e) => {
+            reject(e)
+          })
+        }
+      })
+    })
+  }
+
+  deleteBitcoinAddress(address) {
+    return this.getWebID().then((webId) => {
+      const toDel = $rdf.graph()
+
+      toDel.add(
+        $rdf.sym(webId),
+        PRED.isRelatedTo,
+        $rdf.sym(address)
+      )
+
+      toDel.add(
+        $rdf.sym(webId),
+        PRED.bitcoin,
+        $rdf.sym(address)
+      )
+
+      return Promise.all([
+        this.delete(this._proxify(address)),
+        this.delete(this._proxify(address + '.acl')),
+        this.patch(this._proxify(webId), toDel.statements)
+      ])
+    })
+  }
+
+  addBitcoinAddress(uri) {
+    return this.getWebID().then((webId) => {
+      const toAdd = $rdf.graph()
+
+      toAdd.add(
+        $rdf.sym(webId),
+        PRED.bitcoin,
+        $rdf.sym(uri)
+      )
+
+      return this.patch(this._proxify(webId), null, toAdd.statements)
+    })
+  }
+
+  updateBitcoinAddress(uri, oldAddress, newAddress) {
+    const toDel = $rdf.graph()
+    const toAdd = $rdf.graph()
+
+    toDel.add(
+      $rdf.sym(uri),
+      PRED.description,
+      oldAddress
+    )
+
+    toAdd.add(
+      $rdf.sym(uri),
+      PRED.description,
+      newAddress
+    )
+
+    return this.patch(this._proxify(uri), toDel.statements, toAdd.statements)
+  }
+
+  deletePassport(uri, imgUri) {
+    return this.getWebID().then((webId) => {
+      const toDel = $rdf.graph()
+
+      toDel.add(
+        $rdf.sym(webId),
+        PRED.isRelatedTo,
+        $rdf.sym(uri)
+      )
+
+      toDel.add(
+        $rdf.sym(webId),
+        PRED.passport,
+        $rdf.sym(uri)
+      )
+
+      return Promise.all([
+        this.delete(this._proxify(uri)),
+        this.delete(this._proxify(uri + '.acl')),
+        this.delete(this._proxify(imgUri)),
+        this.delete(this._proxify(imgUri + '.acl')),
+        this.patch(this._proxify(webId), toDel.statements)
+      ])
+    })
+  }
+
+  updatePassport(uri, oldImgUri, imgUri) {
+    return this.getWebId().then((webId) => {
+      const toDel = $rdf.graph()
+      const toAdd = $rdf.graph()
+
+      toDel.add(
+        $rdf.sym(uri),
+        PRED.image,
+        oldImgUri
+      )
+
+      toAdd.add(
+        $rdf.sym(uri),
+        PRED.image,
+        imgUri
+      )
+
+      return Promise.all([
+        this.patch(this._proxify(uri), toDel.statements, toAdd.statements),
+        this.delete(this._proxify(oldImgUri)),
+        this.delete(this._proxify(oldImgUri + '.acl'))
+      ])
+    })
+  }
+
+  addPassport(uri) {
+    return this.getWebID().then((webId) => {
+      const toAdd = $rdf.graph()
+
+      toAdd.add(
+        $rdf.sym(webId),
+        PRED.passport,
+        $rdf.sym(uri)
+      )
+
+      return this.patch(this._proxify(webId), null, toAdd.statements)
     })
   }
 

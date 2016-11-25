@@ -11,7 +11,7 @@ let debug = Debug('stores:graph')
 export default Reflux.createStore({
   listenables: [graphActions],
 
-  init: function() {
+  init() {
     this.listenTo(accountActions.logout, this.onLogout)
     this.listenTo(accountActions.login.completed, this.onLogin)
     this.gAgent = new GraphAgent()
@@ -66,16 +66,16 @@ export default Reflux.createStore({
 
   // These two are needed in order to transition between the preview graph and
   // The actual graph.
-  onEraseGraph: function () {
+  onEraseGraph() {
     this.trigger(null, 'erase')
   },
 
-  onSetState: function(key, value, flag) {
+  onSetState(key, value, flag) {
     this.state[key] = value
     if (flag) this.trigger(this.state)
   },
 
-  onChangeRotationIndex: function (rotationIndex, flag) {
+  onChangeRotationIndex(rotationIndex, flag) {
     this.state['rotationIndex'] = rotationIndex
     if (flag) this.trigger(this.state, 'changeRotationIndex')
   },
@@ -95,13 +95,13 @@ export default Reflux.createStore({
   },
   */
 
-  dissconnectNode: function() {
+  dissconnectNode() {
     // Animation / removing from the neighb array will go here.
   },
 
   // This sends Graph.jsx and the Graph.js files a signal to add
   // new ndoes to the graph
-  onDrawNewNode: function(object, predicate) {
+  onDrawNewNode(object, predicate) {
     // This fetches the triples at the newly added file,
     // it allows us to draw it the graph accurately
     this.gAgent.fetchTriplesAtUri(object).then((result) => {
@@ -120,11 +120,11 @@ export default Reflux.createStore({
 
   // Is called by both graph.jsx and preview.jsx, we differentiate the caller
   // this way making sure that we update the right component.
-  onGetState: function(source) {
+  onGetState(source) {
     this.trigger(this.state, source)
   },
 
-  onGetInitialGraphState: function (webId) {
+  onGetInitialGraphState(webId) {
     this.state.loading = true
 
     this.trigger(this.state)
@@ -141,7 +141,7 @@ export default Reflux.createStore({
     }).catch(graphActions.getInitialGraphState.failed)
   },
 
-  onGetInitialGraphStateCompleted: function (result) {
+  onGetInitialGraphStateCompleted(result) {
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.initialized = true
@@ -150,19 +150,18 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  onGetInitialGraphStateFailed: function () {
+  onGetInitialGraphStateFailed(e) {
     this.state.loading = false
     this.state.initialized = true
-
     this.trigger(this.state)
   },
 
-  onRefresh: function() {
+  onRefresh() {
     debug('Refreshing the graph with current center', this.state.center.uri)
     this.drawAtUri(this.state.center.uri)
   },
 
-  drawAtUri: function (uri, number) {
+  drawAtUri(uri, number) {
     debug('Drawing at URI', uri)
     this.state.previousRenderedNodeUri = uri
     this.state.loading = true
@@ -191,7 +190,7 @@ export default Reflux.createStore({
 
   // defaultHistoryNode is useful when accessing a node graph view through
   // the URL; then we can add the user's profile node as default history node
-  onNavigateToNode: function (node, defaultHistoryNode) {
+  onNavigateToNode(node, defaultHistoryNode) {
     let {navHistory} = this.state
 
     this.state.loading = true
@@ -305,16 +304,7 @@ export default Reflux.createStore({
     // We check if we have write access to the node
     // This will let us decide whether or not we should show the delete button
     const activeNodeUri = `${Utils.uriToProxied(this.state.activeNode.uri)}`
-    activeNodePermissionsP = fetch(activeNodeUri, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/sparql-update'
-      }
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
+    activeNodePermissionsP = this.gAgent.patch(activeNodeUri).then((res) => {
       this.state.activeNode.isOwnedByUser = true
     }).catch(() => {
       this.state.activeNode.isOwnedByUser = false
@@ -328,19 +318,9 @@ export default Reflux.createStore({
       this.state.center.isOwnedByUser = false
       centerNodePermissionsP = Promise.resolve()
     } else {
-      centerNodePermissionsP = fetch(
-        `${Utils.uriToProxied(this.state.center.uri)}`,
-        { method: 'PATCH',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/sparql-update'
-          }
-        }
-      )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText)
-        }
+      centerNodePermissionsP = this.gAgent.patch(
+        `${Utils.uriToProxied(this.state.center.uri)}`
+      ).then((res) => {
         this.state.center.isOwnedByUser = true
       }).catch(() => {
         this.state.center.isOwnedByUser = false

@@ -1,3 +1,5 @@
+import Util from '../util.js'
+
 const DEFAULT_ACCEPT = '*/*'
 const DEFAULT_CT = 'application/n-triples'
 
@@ -62,22 +64,22 @@ class HTTPAgent {
   // PUT a resource represented by url
   //
   // @param {string} url resource url
-  // @param {Object} headers headers hash
   // @param {string} body replacement object
+  // @param {Object} headers headers hash
   //
   // @return {Promise} promise with resulting xhr
-  put(url, headers, body) {
+  put(url, body, headers) {
     return this._req(url, 'PUT', body, headers)
   }
 
   // POST a resource to a container
   //
   // @param {string} url container url
-  // @param {Object} headers headers hash
   // @param {string} body new resource
+  // @param {Object} headers headers hash
   //
   // @return {Promise} promise with resulting xhr
-  post(url, headers, body) {
+  post(url, body, headers) {
     return this._req(url, 'POST', body, headers)
   }
 
@@ -90,13 +92,41 @@ class HTTPAgent {
     return this._req(url, 'HEAD')
   }
 
+  _proxify(url) {
+    return Util.uriToProxied(url)
+  }
+
   patch(url, toDel, toIns) {
+    return this._req(url, 'PATCH', composePatchQuery(toDel, toIns), {
+      'Content-Type': 'application/sparql-update'
+    })
+  }
+
+  _req(url, method, body = null, headers = {
+    'Accept': DEFAULT_ACCEPT,
+    'Content-type': DEFAULT_CT
+  }) {
     return fetch(url, {
-      method: 'PATCH',
-      credentials: 'include',
-      body: composePatchQuery(toDel, toIns),
-      headers: {
-        'Content-Type': 'application/sparql-update'
+      method,
+      headers,
+      body,
+      credentials: 'include'
+    })
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response
+      } else {
+        let error = new Error(response.statusText)
+        error.response = response
+        throw error
+      }
+    })
+    .then((response) => {
+      if (response.headers.get('Content-Type') === 'application/json') {
+        return response.json()
+      } else {
+        // @TODO parse turtle automatically?
+        return response
       }
     })
   }
@@ -109,36 +139,36 @@ class HTTPAgent {
    * @param {object} headers request headers
    */
 
-  _req(url, method = 'GET', body = null, headers = {
-    'Accept': DEFAULT_ACCEPT, 'Content-type': DEFAULT_CT
-  }) {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest()
-      xhr.withCredentials = true
-      xhr.open(method, url, true)
-      for (var headerKey in headers) {
-        let headerValue = headers[headerKey]
-        xhr.setRequestHeader(headerKey, headerValue)
-      }
-      xhr.onload = (event) => {
-        if ((event.target.status >= 200 && event.target.status < 300) ||
-          event.target.status === 304) {
-          resolve(event.target)
-        } else {
-          reject(new Error(event.target.status))
-        }
-      }
-      xhr.onerror = (error) => {
-        reject(error)
-      }
+  // _req(url, method = 'GET', body = null, headers = {
+  //   'Accept': DEFAULT_ACCEPT, 'Content-type': DEFAULT_CT
+  // }) {
+  //   return new Promise((resolve, reject) => {
+  //     let xhr = new XMLHttpRequest()
+  //     xhr.withCredentials = true
+  //     xhr.open(method, url, true)
+  //     for (var headerKey in headers) {
+  //       let headerValue = headers[headerKey]
+  //       xhr.setRequestHeader(headerKey, headerValue)
+  //     }
+  //     xhr.onload = (event) => {
+  //       if ((event.target.status >= 200 && event.target.status < 300) ||
+  //         event.target.status === 304) {
+  //         resolve(event.target)
+  //       } else {
+  //         reject(new Error(event.target.status))
+  //       }
+  //     }
+  //     xhr.onerror = (error) => {
+  //       reject(error)
+  //     }
 
-      if (body) {
-        xhr.send(body)
-      } else {
-        xhr.send()
-      }
-    })
-  }
+  //     if (body) {
+  //       xhr.send(body)
+  //     } else {
+  //       xhr.send()
+  //     }
+  //   })
+  // }
 }
 
 export default HTTPAgent

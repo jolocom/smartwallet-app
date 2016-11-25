@@ -157,6 +157,7 @@ class D3Converter {
         props.familyName = fName.substring(props.name.length, fName.length -1)
       }
     }
+
     return props
   }
 }

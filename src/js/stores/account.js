@@ -30,11 +30,12 @@ export default Reflux.createStore({
     localStorage.setItem('jolocom.auth-mode', 'proxy')
 
     this.accounts.register(username, password, email, name).then((account) => {
-      Account.login.completed(username, account.webid)
+      return this._login(username, password)
+    }).then((webId) => {
+      return this.accounts.initInbox(webId)
     }).catch((e) => {
-      console.log(e)
-      if (e.message === 'USERNAME_TAKEN') {
-        SnackbarActions.showMessage('Username is already taken.')
+      if (e.message) {
+        SnackbarActions.showMessage(e.message)
       } else {
         SnackbarActions.showMessage('An account error has occured.')
       }
@@ -48,6 +49,15 @@ export default Reflux.createStore({
    * @param {object} updatePayload - contains the name / email of a newly
    * created user. Only used when registering a new user.
   */
+
+  _login(username, password) {
+    this.trigger({loggingIn: true})
+
+    return this.accounts.login(username, password).then((account) => {
+      Account.login.completed(username, account.webid)
+      return account.webid
+    }).catch(Account.login.failed)
+  },
 
   onLogin(username, password) {
     const webId = localStorage.getItem('jolocom.webId')
@@ -64,26 +74,7 @@ export default Reflux.createStore({
         Account.logout()
       })
     } else if (username && password) {
-      this.trigger({loggingIn: true})
-
-      this.accounts.login(username, password).then((account) => {
-        if (updatePayload) {
-          this.onSetNameEmail(
-            account.webid, updatePayload.name, updatePayload.email
-          ).then(() => {
-            Account.login.completed(username, account.webid)
-          }).then(() => {
-            const webIdAgent = new WebIdAgent()
-            webIdAgent.initInbox(account.webid)
-          })
-        } else {
-          Account.login.completed(username, account.webid)
-        }
-      }).catch((e) => {
-        SnackbarActions.showMessage('Login authentication failed.')
-      })
-    } else {
-      this.trigger({loggingIn: false})
+      this._login(username, password)
     }
   },
 
@@ -99,6 +90,11 @@ export default Reflux.createStore({
     }
 
     this.trigger(this.state)
+  },
+
+  onLoginFailed(e) {
+    SnackbarActions.showMessage('Login authentication failed.')
+    this.trigger({loggingIn: false})
   },
 
   onLogout() {

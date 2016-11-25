@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
 import ChatAgent from 'lib/agents/chat'
+import AccountsAgent from 'lib/agents/accounts'
 
 import ConversationsActions from 'actions/conversations'
 import AccountStore from 'stores/account'
@@ -75,6 +76,13 @@ export default Reflux.createStore({
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
     let chatAgent = new ChatAgent()
     return chatAgent.getInboxConversations(webId)
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          const accounts = new AccountsAgent()
+          accounts.createConversationsContainer(webId)
+        }
+        return []
+      })
       .then(function(conversations) {
         debug('Received URLs of conversations', conversations)
         let results = conversations.map((url) => {

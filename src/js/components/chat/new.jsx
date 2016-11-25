@@ -14,17 +14,11 @@ import ChatStore from 'stores/chat'
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 
-import ProfileStore from 'stores/profile'
-
-import Debug from 'lib/debug'
-let debug = Debug('components:new')
-
 export default React.createClass({
 
   mixins: [
     Reflux.connect(ChatStore, 'conversation'),
-    Reflux.connect(ConversationsStore, 'conversations'),
-    Reflux.connect(ProfileStore, 'profile')
+    Reflux.connect(ConversationsStore, 'conversations')
   ],
 
   propTypes: {
@@ -32,7 +26,8 @@ export default React.createClass({
   },
 
   contextTypes: {
-    router: React.PropTypes.any
+    router: React.PropTypes.any,
+    account: React.PropTypes.object
   },
 
   getInitialState() {
@@ -48,7 +43,6 @@ export default React.createClass({
 
   componentWillMount() {
     if (this.props.params.webId) {
-      debug('componentWillMount; starting chat with props', this.props.params)
       this.startChat(this.props.params.webId)
     } else {
       // @TODO load contact list
@@ -61,8 +55,6 @@ export default React.createClass({
 
   componentDidUpdate() {
     if (this.state.conversation && this.state.conversation.id) {
-      debug('componentDidUpdate;' +
-        'redirection to conversation URL, with state', this.state)
       this.context.router.push(
         `/conversations/${this.state.conversation.id}`
       )
@@ -70,21 +62,17 @@ export default React.createClass({
   },
 
   startChat(webId) {
-    debug('Starting chat with', webId)
-    
-    if (!this.state.conversations.hydrated)
-    {
-      ConversationsActions.load(this.state.profile.webid)
+    if (!this.state.conversations.hydrated) {
+      ConversationsActions.load(this.context.account.webId)
       let unsub = ConversationsActions.load.completed.listen(() => {
         unsub()
         ChatActions.create(
-          this.state.profile.webid, this.state.profile.webid, webId
+          this.context.account.webId, this.context.account.webId, webId
         )
       })
-    }
-    else {
+    } else {
       ChatActions.create(
-        this.state.profile.webid, this.state.profile.webid, webId
+        this.context.account.webId, this.context.account.webId, webId
       )
     }
   },
