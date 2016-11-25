@@ -55,6 +55,8 @@ let Graph = React.createClass({
   },
 
   componentDidMount() {
+    console.log('MOUNTED')
+    console.log(this.state)
     this.graph = new GraphD3(this.getGraphEl(), 'main')
 
     // Adding the listeners.

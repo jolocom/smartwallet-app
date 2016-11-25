@@ -25,9 +25,7 @@ export default Reflux.createStore({
   onSignup(data) {
     fetch(`${proxy}/register`, {
       method: 'POST',
-      body: `username=${encodeURIComponent(data.username)}&
-             password=${encodeURIComponent(data.password)}&
-             email=${encodeURIComponent(data.email)}`,
+      body: `username=${encodeURIComponent(data.username)}&password=${encodeURIComponent(data.password)}&email=${encodeURIComponent(data.email)}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
@@ -120,8 +118,7 @@ export default Reflux.createStore({
 
       fetch(`${proxy}/login`, {
         method: 'POST',
-        body: `username=${encodeURIComponent(username)}&
-               password=${encodeURIComponent(password)}`,
+        body: `username=${username}&password=${password}`,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
