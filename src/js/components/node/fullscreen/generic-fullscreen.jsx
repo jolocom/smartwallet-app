@@ -152,7 +152,7 @@ let GenericFullScreen = React.createClass({
           nodeActions.disconnectNode(payload)
           let onDisconnectUndo = () => {
             let center = this.context.node.uri
-            nodeActions.link(center, 'knows', this.props.uri, true)
+            nodeActions.link(center, 'knows', this.props.uri, center)
           }
 
           SnackbarActions.showMessageUndo(

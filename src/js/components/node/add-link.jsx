@@ -14,8 +14,7 @@ let NodeAddLink = React.createClass({
       startUri: this.props.node.uri,
       endLabel: null,
       endUri: null,
-      connectionType: 'knows',
-      currentCenter: null
+      connectionType: 'knows'
     }
   },
 
@@ -24,7 +23,8 @@ let NodeAddLink = React.createClass({
   },
 
   propTypes: {
-    node: React.PropTypes.object
+    node: React.PropTypes.object,
+    graphState: React.PropTypes.object
   },
 
   getStyles() {
@@ -56,6 +56,7 @@ let NodeAddLink = React.createClass({
           <LowerPart
             {...this.state}
             updateParentField={this._handleFieldUpdate}
+            graphState={this.props.graphState}
             ref='Lower'
           />
         </div>
@@ -90,6 +91,7 @@ let LowerPart = React.createClass({
 
   propTypes: {
     node: React.PropTypes.object,
+    graphState: React.PropTypes.object,
     updateParentField: React.PropTypes.func
   },
 
@@ -212,13 +214,11 @@ let LowerPart = React.createClass({
   },
 
   submit() {
-    // @TODO show error
     if (!this.validates()) {
       SnackbarActions.showMessage('Invalid input.')
       return false
     }
     let {startUri, endUri, connectionType} = this.state
-
     Promise.all([
       fetch(Util.uriToProxied(startUri), {
         method: 'HEAD',
@@ -237,11 +237,8 @@ let LowerPart = React.createClass({
         }
       })
     ]).then(() => {
-      let flag = false
-      if (this.state.currentCenter === startUri) {
-        flag = true
-      }
-      nodeActions.link(startUri, connectionType, endUri, flag)
+      nodeActions.link(startUri, connectionType, endUri,
+        this.props.graphState.center.uri)
     }).catch((e) => {
       SnackbarActions.showMessage('The nodes you are trying to link together ' +
                                   'aren\'t accessible.')

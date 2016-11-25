@@ -116,9 +116,13 @@ export default Reflux.createStore({
    * @param {string} start - subject uri describing connection
    * @param {string} type - predicate uri describing connection
    * @param {string} end - object uri describing connection
-   * @param {boolean} flag - fire the animation in the graph
+   * @param {string} center - the current center node, helps decide
+   *                          if we fire the animation.
    */
-  link(start, type, end, flag) {
+  link(start, type, end, center) {
+    console.log('--------------')
+    console.log(start, center)
+    console.log('--------------')
     let predicate = null
     if (type === 'generic') {
       predicate = PRED.isRelatedTo
@@ -130,6 +134,6 @@ export default Reflux.createStore({
       predicate,
       object: rdf.sym(end)
     }
-    this.gAgent.writeTriples(start, [payload], flag)
+    this.gAgent.writeTriples(start, [payload], start === center)
   }
 })
