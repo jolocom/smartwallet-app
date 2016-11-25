@@ -5,6 +5,7 @@ import GraphAgent from 'lib/agents/graph'
 import WebIdAgent from 'lib/agents/webid'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
+import Util from 'lib/util'
 
 import SnackbarActions from 'actions/snackbar'
 
@@ -22,45 +23,32 @@ export default Reflux.createStore({
   },
 
   onSignup(data) {
-    localStorage.setItem('jolocom.auth-mode', 'proxy')
-
-    let user = encodeURIComponent(data.username)
-    let pass = encodeURIComponent(data.password)
-    let name = data.name
-    let email = encodeURIComponent(data.email)
-
     fetch(`${proxy}/register`, {
       method: 'POST',
-      body: `username=${user}&password=${pass}&email=${email}`,
+      body: `username=${encodeURIComponent(data.username)}&
+             password=${encodeURIComponent(data.password)}&
+             email=${encodeURIComponent(data.email)}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     })
     .then((res) => {
       if (res.status === 400) {
-        // Username is already taken
         throw new Error('USERNAME_TAKEN')
       }
-      // this.state = {
-      //   emailVerifyScreen: true
-      // }
-      // this.trigger(this.state)
-      res.json().then((js) => {
-        if (name || email) {
-          let payload = {name, email}
+      res.json().then(() => {
+        if (data.name || data.email) {
+          let payload = {
+            name: data.name,
+            email: data.email
+          }
           Account.login(data.username, data.password, payload)
         } else {
           Account.login(data.username, data.password)
         }
+        localStorage.setItem('jolocom.auth-mode', 'proxy')
       })
     }).catch((e) => {
-      if (e.message === 'USERNAME_TAKEN') {
-        SnackbarActions.showMessage('Username is already taken.')
-      } else {
-        SnackbarActions.showMessage('An account error has occured.')
-      }
-    })
-    .catch((e) => {
       if (e.message === 'USERNAME_TAKEN') {
         SnackbarActions.showMessage('Username is already taken.')
       } else {
@@ -108,21 +96,18 @@ export default Reflux.createStore({
 
   onLogin(username, password, updatePayload) {
     const webId = localStorage.getItem('jolocom.webId')
+    // The user is already logged in.
     if (webId) {
+      // Check if the session expired (?)
       this.trigger({loggingIn: true})
-
-      // Check if the cookie is still valid
-      fetch(`${proxy}/proxy?url=${webId}`, {
-        // using PATCH until HEAD is supported server-side; GET is too costly
-        method: 'PATCH',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/sparql-update'
-        }
+      fetch(Util.uriToProxied(webId), {
+        method: 'HEAD',
+        credentials: 'include'
       }).then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText)
         }
+
         Account.login.completed(
           localStorage.getItem('jolocom.username'),
           localStorage.getItem('jolocom.webId')
@@ -133,12 +118,10 @@ export default Reflux.createStore({
     } else if (username && password) {
       this.trigger({loggingIn: true})
 
-      let user = encodeURIComponent(username)
-      let pass = encodeURIComponent(password)
-
       fetch(`${proxy}/login`, {
         method: 'POST',
-        body: `username=${user}&password=${pass}`,
+        body: `username=${encodeURIComponent(username)}&
+               password=${encodeURIComponent(password)}`,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -150,9 +133,9 @@ export default Reflux.createStore({
 
         res.json().then((js) => {
           if (updatePayload) {
-            this.onSetNameEmail(
-              js.webid, updatePayload.name, updatePayload.email
-            ).then(() => {
+            this.onSetNameEmail(js.webid, updatePayload.name,
+                                updatePayload.email)
+            .then(() => {
               Account.login.completed(username, js.webid)
             }).then(() => {
               const webIdAgent = new WebIdAgent()
