@@ -56,35 +56,25 @@ let NodeAddLink = React.createClass({
           <LowerPart
             {...this.state}
             updateParentField={this._handleFieldUpdate}
+            ref='Lower'
           />
         </div>
       </div>
     )
   },
 
-  _handleNodeSelect(data) {
-    let name
-    if (data.name) {
-      name = data.name
-    } else if (data.title) {
-      name = data.title
-    } else name = data.uri
-
-    /*
-    let field = this.state.currentSelection
-    this.setState({startLabel: name})
-    if (this.state.currentSelection) {
-      this.setState({
-        [this.state.current]: name,
-        [this.state.targetSelection + 'Uri']: data.uri,
-        targetSelection: null
-      })
-    }
-    */
-  },
-
   _handleFieldUpdate(newField) {
     this.state.currentSelection = newField
+  },
+
+  /* The next two functions are a bit of an anti pattern
+     Still more readable and quicker than doing it the "Right way" */
+  _handleNodeSelect(data) {
+    this.refs.Lower && this.refs.Lower._handleNodeClick(data)
+  },
+
+  submit() {
+    this.refs.Lower && this.refs.Lower.submit()
   }
 })
 
@@ -287,23 +277,42 @@ let LowerPart = React.createClass({
     })
   },
 
+  _handleNodeClick(data) {
+    let map = {
+      start: ['startLabel', 'startUri'],
+      end: ['endLabel', 'endUri']
+    }
+
+    let name
+    if (data.name) {
+      name = data.name
+    } else if (data.title) {
+      name = data.title
+    } else {
+      name = data.uri
+    }
+
+    if (this.state.currentSelection) {
+      let fieldValue = map[this.state.currentSelection][0]
+      let fieldUri = map[this.state.currentSelection][1]
+      this.setState({
+        [fieldValue]: name,
+        [fieldUri]: data.uri,
+        currentSelection: null
+      })
+    }
+  },
+
   _handleTargetClick(clicked) {
-    /* The way I am updating the parent component's state
-       is a React anti pattern. This should be avoided in
-       the future to prevent confusion
-    */
     let {currentSelection} = this.state
     if (currentSelection) {
       if (currentSelection === clicked) {
         this.setState({currentSelection: null})
-        this.props.updateParentField(clicked)
       } else {
         this.setState({currentSelection: clicked})
-        this.props.updateParentField(clicked)
       }
     } else {
       this.setState({currentSelection: clicked})
-      this.props.updateParentField(clicked)
     }
   }
 })
