@@ -12,7 +12,6 @@ import {
   List, ListItem, Divider
 } from 'material-ui'
 
-import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
 
 let ProfileNode = React.createClass({
@@ -50,8 +49,6 @@ let ProfileNode = React.createClass({
   },
 
   getStyles() {
-    let {muiTheme} = this.context
-
     return {
     }
   },
@@ -85,18 +82,19 @@ let ProfileNode = React.createClass({
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
     let fabItems = []
-    if (!isMe) {
-      fabItems.push('chat', 'bookmark')
-       if (this.props.state.center.isOwnedByUser &&
-          this.getNode().rank &&
-          this.getNode().rank == 'neighbour')
-        fabItems.push('disconnect')
-      else
-        fabItems.push('connect')
+    let menuItems = []
 
+    if (!isMe) {
+      if (this.props.state.center.isOwnedByUser &&
+        this.getNode().rank &&
+        this.getNode().rank === 'neighbour') {
+        menuItems.push('disconnect')
+      } else {
+        fabItems.push('connect')
+      }
+      fabItems.push('chat')
     }
 
-    let menuItems = []
     if (isMe) {
       menuItems.push('edit')
     }
@@ -107,6 +105,7 @@ let ProfileNode = React.createClass({
         title={name}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
+        headerColor={'#829abe'}
         fabItems={fabItems}
         menuItems={menuItems}
         {...this.props}
@@ -116,7 +115,8 @@ let ProfileNode = React.createClass({
             <div>
               <ListItem
                 leftIcon={
-                  <FontIcon className="material-icons">info</FontIcon>
+                  <FontIcon color={'#9ba0aa'}
+                    className="material-icons">info</FontIcon>
                 }
                 primaryText={description}
               />
@@ -126,7 +126,8 @@ let ProfileNode = React.createClass({
           {email && (
             <ListItem
               leftIcon={
-                <FontIcon className="material-icons">email</FontIcon>}
+                <FontIcon color={'#9ba0aa'}
+                  className="material-icons">email</FontIcon>}
               primaryText={email}
               secondaryText="Personal"
             />

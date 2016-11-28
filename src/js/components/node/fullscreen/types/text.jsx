@@ -1,7 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import graphActions from 'stores/graph-store'
 
 import Utils from 'lib/util'
 
@@ -9,14 +8,10 @@ import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
 
 import {
-  MenuItem,
   FontIcon,
   List, ListItem, Divider
 } from 'material-ui'
 
-import {Content} from 'components/layout'
-
-import PinnedActions from 'actions/pinned'
 import PinnedStore from 'stores/pinned'
 
 let TextNode = React.createClass({
@@ -53,12 +48,10 @@ let TextNode = React.createClass({
   },
 
   getStyles() {
-    let {muiTheme} = this.context
-
     return {
     }
   },
-  
+
   getNode() {
     if (this.props.state) {
       return this.props.state.activeNode // TODO temp fix
@@ -76,58 +69,60 @@ let TextNode = React.createClass({
       uri,
       img
     } = this.getNode()
-    
+
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-    
-    let fabItems = ['bookmark',/* 'edit',*/ 'copyUrl']
-    
+
+    let fabItems = ['copyUrl'] /* 'edit' */
+
     let menuItems = []
-    if (this.getNode().isOwnedByUser)
+    if (this.getNode().isOwnedByUser) {
       menuItems.push('delete')
+    }
     if (this.props.state.center.isOwnedByUser &&
         this.getNode().rank &&
-        this.getNode().rank == 'neighbour')
+        this.getNode().rank === 'neighbour') {
       menuItems.push('disconnect')
-    else
+    } else {
       menuItems.push('connect')
-        
-    
+    }
     return (
       <GenericFullScreen
         title={title}
         description={description}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
+        headerColor={this.props.node.confidential ? '#858a94' : '#9a9fa8'}
         fabItems={fabItems}
         menuItems={menuItems}
         state={this.props.state}
         node={this.props.node}
          >
-          <List style={styles.list}>
-            {description && (
-              <div>
-                <ListItem
-                  leftIcon={
-                    <FontIcon className="material-icons">info</FontIcon>
-                  }
-                  primaryText={description}
-                />
-                <Divider inset />
-              </div>
-            )}
-            {email && (
+        <List style={styles.list}>
+          {description && (
+            <div>
               <ListItem
                 leftIcon={
-                  <FontIcon className="material-icons">email</FontIcon>}
-                primaryText={email}
-                secondaryText="Personal"
+                  <FontIcon color={'#9ba0aa'}
+                    className="material-icons">info</FontIcon>
+                }
+                primaryText={description}
               />
-            )}
-          </List>
+              <Divider inset />
+            </div>
+          )}
+          {email && (
+            <ListItem
+              leftIcon={
+                <FontIcon color={'#9ba0aa'}
+                  className="material-icons">email</FontIcon>}
+              primaryText={email}
+              secondaryText="Personal"
+            />
+          )}
+        </List>
       </GenericFullScreen>
     )
-  },
-
+  }
 })
 
 export default Radium(TextNode)

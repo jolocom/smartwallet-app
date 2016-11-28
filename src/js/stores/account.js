@@ -6,14 +6,15 @@ import WebIdAgent from 'lib/agents/webid'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
-import ConversationsActions from 'actions/conversations'
 import SnackbarActions from 'actions/snackbar'
 
 export default Reflux.createStore({
   listenables: Account,
 
   state: {
-    loggingIn: true
+    loggingIn: true,
+    userExists: false,
+    emailVerifyScreen: false
   },
 
   getInitialState() {
@@ -36,6 +37,14 @@ export default Reflux.createStore({
       }
     })
     .then((res) => {
+      if (res.status === 400) {
+        // Username is already taken
+        throw new Error('USERNAME_TAKEN')
+      }
+      // this.state = {
+      //   emailVerifyScreen: true
+      // }
+      // this.trigger(this.state)
       res.json().then((js) => {
         if (name || email) {
           let payload = {name, email}
@@ -44,6 +53,19 @@ export default Reflux.createStore({
           Account.login(data.username, data.password)
         }
       })
+    }).catch((e) => {
+      if (e.message === 'USERNAME_TAKEN') {
+        SnackbarActions.showMessage('Username is already taken.')
+      } else {
+        SnackbarActions.showMessage('An account error has occured.')
+      }
+    })
+    .catch((e) => {
+      if (e.message === 'USERNAME_TAKEN') {
+        SnackbarActions.showMessage('Username is already taken.')
+      } else {
+        SnackbarActions.showMessage('An account error has occured.')
+      }
     })
   },
 
@@ -122,11 +144,10 @@ export default Reflux.createStore({
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
       }).then((res) => {
-        
         if (!res.ok) {
           throw new Error('Login authentication failed.')
         }
-        
+
         res.json().then((js) => {
           if (updatePayload) {
             this.onSetNameEmail(

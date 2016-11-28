@@ -382,9 +382,8 @@ class GraphAgent {
   // After that it parses those links for their RDF data.
   getNeighbours(center, triples) {
     // We will only follow and parse these links
-    let Links = [PRED.knows.uri, PRED.isRelatedTo.uri]
+    let Links = [PRED.knows.uri, PRED.isRelatedTo.uri, PRED.isRelatedTo_HTTP.uri]
     let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
-
     // If there are adjacent nodes to draw,
     // we parse them and return an array of their triples
     let neighbourErrors = []
@@ -418,7 +417,7 @@ class GraphAgent {
         neighbourErrors.push(triple.object.uri)
       })
     })).then(() => {
-      debug('Loading done,', neighbourErrors.length, 'rdf files were / was skipped : ', neighbourErrors)
+      debug('Loading done,', graphMap, neighbourErrors.length, 'rdf files had errors: ', neighbourErrors)
       return graphMap
     })
   }

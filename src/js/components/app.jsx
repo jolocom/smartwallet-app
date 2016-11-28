@@ -1,11 +1,16 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import includes from 'lodash/includes'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
-import {Paper, AppBar, IconButton, Snackbar} from 'material-ui'
+import {
+  Paper,
+  AppBar,
+  IconButton,
+  Snackbar,
+  FlatButton,
+  Dialog} from 'material-ui'
 import Badge from 'material-ui/Badge'
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
@@ -17,14 +22,14 @@ import LeftNav from 'components/left-nav/nav.jsx'
 import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
-import GraphSearch from 'components/graph/search.jsx'
-import GraphFilters from 'components/graph/filters.jsx'
+import Loading from 'components/common/loading.jsx'
 
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
+import ConfirmStore from 'stores/confirm'
 
 import PinnedActions from 'actions/pinned'
-
+import ConfirmActions from 'actions/confirm'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
@@ -44,7 +49,8 @@ let App = React.createClass({
   mixins: [
     Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile'),
-    Reflux.connect(SnackbarStore, 'snackbar')
+    Reflux.connect(SnackbarStore, 'snackbar'),
+    Reflux.connect(ConfirmStore, 'confirm')
   ],
 
   propTypes: {
@@ -103,7 +109,7 @@ let App = React.createClass({
   },
 
   isPublicRoute(path = this.props.location.pathname) {
-    return path == '/' ||
+    return path === '/' ||
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
   },
 
@@ -160,6 +166,15 @@ let App = React.createClass({
     this.refs.leftNav.show()
   },
 
+  _handleConfirmClose() {
+    ConfirmActions.close()
+  },
+
+  _handleConfirmAction() {
+    this._handleConfirmClose()
+    this.state.confirm.callback() // Action when the user confirms
+  },
+
   getStyles() {
     let styles = {
       container: {
@@ -207,15 +222,14 @@ let App = React.createClass({
     // @TODO render login screen when logging in, also makes sures child
     // components don't get rendered before any user data is available
     if (this.state.account.loggingIn && !this.isPublicRoute()) {
-      return <div />
+      return <Loading />
     }
 
-    
     // Deactivating search until we get it working
-    /*<IconButton
-      iconClassName="material-icons"
-      iconStyle={styles.icon}
-      onTouchTap={this._handleSearchTap}>search</IconButton>*/
+    /* <IconButton
+       iconClassName="material-icons"
+       iconStyle={styles.icon}
+       onTouchTap={this._handleSearchTap}>search</IconButton> */
     const nav = (
       <div>
         <IconButton
@@ -224,7 +238,7 @@ let App = React.createClass({
           onTouchTap={this._handleChatTap}>chat</IconButton>
       </div>
     )
-    
+
     // Deactivating search until we get it working
     /*
     (
@@ -240,6 +254,19 @@ let App = React.createClass({
     // Deactivating the filters until we get them working
     // <GraphFilters style={styles.filters} showDefaults />
     const filters = null
+
+    const confirmActions = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onTouchTap={this._handleConfirmClose}
+      />,
+      <FlatButton
+        label={this.state.confirm.primaryActionText}
+        primary
+        onTouchTap={this._handleConfirmAction}
+      />
+    ]
 
     return (
       <div style={styles.container}>
@@ -276,12 +303,23 @@ let App = React.createClass({
             <Tour />
           </Layout>
         )}
-      
-      <Snackbar
-        open={this.state.snackbar.open}
-        message={this.state.snackbar.message}
-      />
-    </div>
+
+        <Snackbar
+          open={this.state.snackbar.open}
+          message={this.state.snackbar.message}
+          action={this.state.snackbar.undo && 'undo'}
+          onActionTouchTap={this.state.snackbar.undoCallback}
+        />
+
+        <Dialog
+          actions={confirmActions}
+          modal={false}
+          open={this.state.confirm.open}
+          onRequestClose={this.handleClose}
+        >
+          {this.state.confirm.message}
+        </Dialog>
+      </div>
     )
   }
 
