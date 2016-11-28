@@ -164,6 +164,9 @@ let ProfileNode = React.createClass({
       url
     } = this.getNode()
 
+    // Temporary soln for getting other user's username
+    let otherUsername = uri.match(/https:\/\/(.*).webid.*/)[1]
+
     const isMe = account.webId === uri
 
     if (name && familyName) {
@@ -269,7 +272,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Username"
-                  value={AccountStore.state.username}
+                  value={isMe ? AccountStore.state.username : otherUsername}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
