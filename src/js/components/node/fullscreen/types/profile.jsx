@@ -40,16 +40,12 @@ let ProfileNode = React.createClass({
   render() {
     let {rank, description, email, uri, img} = this.props.node
     let name
-    if (this.props.node.rank === 'center') {
-      if (this.props.node.fullName && this.props.node.fullName > 0) {
-        name = this.props.node.fullName
-      } else if (this.props.node.name && this.props.node.familyName) {
-        name = `${this.props.node.name} ${this.props.node.familyName}`
-      } else {
-        name = this.props.node.name | this.props.node.familyName
-      }
+    if (this.props.node.fullName && this.props.node.fullName > 0) {
+      name = this.props.node.fullName
+    } else if (this.props.node.name && this.props.node.familyName) {
+      name = `${this.props.node.name} ${this.props.node.familyName}`
     } else {
-      name = this.props.node.name
+      name = this.props.node.name || this.props.node.familyName
     }
 
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
