@@ -74,9 +74,10 @@ export default Reflux.createStore({
    * and plays the delete animation
    * @param {object} node - the node to be deleted.
    * @param {object} centerNode - we disconnect from this node.
+   * @param {bool} flag - should we remove the link as well?
    */
 
-  onRemove(node, centerNode) {
+  onRemove(node, centerNode, flag = true) {
     // Prevent centerNode from being modified by the outside
     // if the state of the graph store changes for instance
     centerNode = Object.assign({}, centerNode)
@@ -101,12 +102,16 @@ export default Reflux.createStore({
           })
         } else reject('Could not delete file')
       }).then((query) => {
-        this.gAgent.deleteTriple(query).then((result) => {
-          if (result.ok) {
-            profileActions.load() // Reload profile info (bitcoin, passport)
-            graphActions.refresh()
-          }
-        })
+        if (flag) {
+          this.gAgent.deleteTriple(query).then((result) => {
+            if (result.ok) {
+              profileActions.load() // Reload profile info (bitcoin, passport)
+              graphActions.refresh()
+            }
+          })
+        } else {
+          graphActions.refresh()
+        }
       })
     })
   },

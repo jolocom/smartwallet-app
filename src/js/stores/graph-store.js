@@ -99,7 +99,7 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  onRefresh: function() {
+  onRefresh() {
     this.onDrawAtUri(this.state.center.uri)
   },
 

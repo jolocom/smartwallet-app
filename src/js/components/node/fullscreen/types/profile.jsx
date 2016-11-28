@@ -39,6 +39,7 @@ let ProfileNode = React.createClass({
 
   render() {
     let {rank, description, email, uri, img} = this.props.node
+    let {centerWritePerm, writePerm} = this.props
     let name
     if (this.props.node.fullName && this.props.node.fullName > 0) {
       name = this.props.node.fullName
@@ -53,8 +54,11 @@ let ProfileNode = React.createClass({
     let menuItems = []
 
     if (this.props.writePerm) {
-      menuItems.push('delete')
       menuItems.push('edit')
+      // Making sure you can't delete your main node.
+      if (this.context.account.webId !== this.props.node.uri) {
+        menuItems.push('delete')
+      }
     }
 
     if (this.props.centerWritePerm) {
@@ -75,6 +79,8 @@ let ProfileNode = React.createClass({
         graphState={this.props.graphState}
         uri={uri}
         rank={rank}
+        writePerm={writePerm}
+        centerWritePerm={centerWritePerm}
       >
         <List >
           {description && (

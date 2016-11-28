@@ -171,10 +171,10 @@ let GenericFullScreen = React.createClass({
 
   // TODO - break into more actions. The animation should be smoother.
   _handleDelete() {
+    console.log(this.props, 'bum')
     let navHis = this.props.graphState.navHistory
     let centerNode = this.context.node
     let currentNode = { uri: this.props.uri }
-
     if (this.props.uri === this.props.graphState.center.uri) {
       let historyNode = navHis[navHis.length - 1]
       this._handleClose()
@@ -182,7 +182,7 @@ let GenericFullScreen = React.createClass({
       nodeActions.remove(currentNode, historyNode)
     } else {
       this._handleClose()
-      nodeActions.remove(currentNode, centerNode)
+      nodeActions.remove(currentNode, centerNode, this.props.centerWritePerm)
     }
   },
 

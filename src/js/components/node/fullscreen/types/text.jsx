@@ -33,6 +33,7 @@ let TextNode = React.createClass({
 
   render() {
     let {rank, title, description, email, uri, img, type} = this.props.node
+    let {centerWritePerm, writePerm} = this.props
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []
@@ -42,8 +43,6 @@ let TextNode = React.createClass({
       menuItems.push('delete')
     }
     */
-
-    console.log(this.props.writePerm) 
     if (this.props.writePerm) {
       menuItems.push('delete')
     }
@@ -67,6 +66,8 @@ let TextNode = React.createClass({
         rank={rank}
         graphState={this.props.graphState}
         uri={uri}
+        writePerm={writePerm}
+        centerWritePerm={centerWritePerm}
       >
         <List>
           {description && (
