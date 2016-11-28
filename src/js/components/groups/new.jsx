@@ -268,10 +268,13 @@ export default React.createClass({
             </div>
             <List>
               <div style={styles.listItems}>
-                <ListItem
-                  primaryText={this.state.members ? this.state.members[0].name
-                    : 'no contact selected'}
-                  leftAvatar={<Avatar>A</Avatar>} />
+                {this.state.members
+                  ? this.state.members.map((member) => (
+                    <ListItem
+                      primaryText={member.name}
+                      leftAvatar={<Avatar src={member.imgUri} />} />
+                    ))
+                  : null}
               </div>
             </List>
             <div></div>
