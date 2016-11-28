@@ -21,7 +21,8 @@ let Graph = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     params: React.PropTypes.object,
-    routes: React.PropTypes.object
+    routes: React.PropTypes.object,
+    snackbar: React.PropTypes.bool
   },
 
   contextTypes: {
@@ -73,8 +74,12 @@ let Graph = React.createClass({
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.initialized) {
-      this.graph.render(nextState)
-      this.graph.updateHistory(nextState.navHistory)
+      if (this.props.snackbar !== nextProps.snackbar) {
+        return
+      } else {
+        this.graph.render(nextState)
+        this.graph.updateHistory(nextState.navHistory)
+      }
     }
   },
 

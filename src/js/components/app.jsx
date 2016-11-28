@@ -295,6 +295,7 @@ let App = React.createClass({
             <Content>
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {
+                  snackbar: this.state.snackbar.open,
                   searchQuery: this.state.searchQuery
                 })
               })}
