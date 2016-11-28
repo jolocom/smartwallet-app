@@ -133,8 +133,8 @@ export default React.createClass({
 
   _handleSubmit() {
     console.log(this.context.account)
-    let GraphAgent = new gAgent
-    GraphAgent.newGroup(
+    let gAgent = new GraphAgent()
+    gAgent.newGroup(
       this.context.account.webId,
       this.state.groupName,
       this.state.members
