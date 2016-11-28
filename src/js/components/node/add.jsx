@@ -40,7 +40,7 @@ let NodeAdd = React.createClass({
   },
 
   initialState(state) {
-    this.state.graphState = state
+    this.setState({graphState: state})
   },
 
   onStoreUpdate(newState) {
@@ -48,7 +48,6 @@ let NodeAdd = React.createClass({
   },
 
   componentDidMount() {
-    console.log('props', this.props)
     this.refs.dialog && this.refs.dialog.show()
   },
 
