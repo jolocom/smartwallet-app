@@ -48,12 +48,10 @@ let NodeAdd = React.createClass({
   },
 
   componentDidMount() {
-    this.refs.dialog.show()
+    this.refs.dialog && this.refs.dialog.show()
   },
 
   close() {
-    // TODO
-    // this.refs.dialog.hide()
     this.context.router.goBack()
   },
 
@@ -73,7 +71,12 @@ let NodeAdd = React.createClass({
     }
   },
 
-  render: function() {
+  render() {
+    if (!this.props.center) {
+      this.context.router.goBack()
+      return (null)
+    }
+
     let selectedNode
     if (this.props.center.uri === this.props.params.node) {
       selectedNode = this.props.center

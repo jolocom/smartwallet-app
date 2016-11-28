@@ -67,7 +67,7 @@ export default Reflux.createStore({
   },
 
   onGetInitialGraphState() {
-    /* TODO - make sure this works first.
+    /*
     this.state.loading = true
     this.trigger(this.state)
     */
@@ -87,13 +87,13 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.initialized = true
-    this.state.loading = false
+    // this.state.loading = false
     this.trigger(this.state)
   },
 
   // TODO, show an error perhaps.
   onGetInitialGraphStateFailed: function () {
-    this.state.loading = false
+    // this.state.loading = false
     this.state.initialized = true
 
     this.trigger(this.state)

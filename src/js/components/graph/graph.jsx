@@ -55,8 +55,6 @@ let Graph = React.createClass({
   },
 
   componentDidMount() {
-    console.log('MOUNTED')
-    console.log(this.state)
     this.graph = new GraphD3(this.getGraphEl(), 'main')
 
     // Adding the listeners.
@@ -71,13 +69,13 @@ let Graph = React.createClass({
   },
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.initialized) {
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
-    }
   },
 
-  componentWillUpdate() {
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.initialized) {
+      this.graph.render(nextState)
+      this.graph.updateHistory(nextState.navHistory)
+    }
   },
 
   _handleChangeRotationIndex(rotationIndex) {
