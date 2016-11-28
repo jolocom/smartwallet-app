@@ -189,6 +189,7 @@ export default React.createClass({
 
   _handleCheckedChanges(checked) {
     this.setState({members: checked})
+    console.log('members ', this.state.members)
   },
 
   _onContactSelectorClose() {
@@ -268,7 +269,8 @@ export default React.createClass({
             <List>
               <div style={styles.listItems}>
                 <ListItem
-                  primaryText="test1"
+                  primaryText={this.state.members ? this.state.members[0].name
+                    : 'no contact selected'}
                   leftAvatar={<Avatar>A</Avatar>} />
               </div>
             </List>

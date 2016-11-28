@@ -119,7 +119,7 @@ export default React.createClass({
             <AvatarList
               items={items}
               emptyMessage={"No contacts"}
-              onChange={this.onCheckedChanges}
+              onChange={this.props.onCheckedChanges}
               checkboxes
             />
           </Content>
