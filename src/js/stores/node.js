@@ -3,6 +3,7 @@ import Reflux from 'reflux'
 import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
 import GraphAgent from 'lib/agents/graph.js'
+import AclAgent from 'lib/agents/acl.js'
 import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
@@ -33,10 +34,38 @@ export default Reflux.createStore({
     this.trigger(node)
   },
 
-  onInitiate(uri) {
+  onInitiate(uri, centerUri) {
     this.state.uri = uri
     this.state.initialized = true
-    this.trigger(this.state)
+    let webId = localStorage.getItem('jolocom.webId')
+
+    let checkCenter = new Promise((resolve, reject) => {
+      let aAgent = new AclAgent(centerUri)
+      aAgent.fetchInfo().then(() => {
+        this.state.centerWritePerm = aAgent.isAllowed(webId, 'write')
+        resolve()
+      }).catch(() => {
+        this.state.centerWritePerm = false
+        resolve()
+      })
+    })
+
+    let checkCurrent = new Promise((resolve, reject) => {
+      let aAgent = new AclAgent(uri)
+      aAgent.fetchInfo().then(() => {
+        this.state.writePerm = aAgent.isAllowed(webId, 'write')
+        resolve()
+      }).catch(() => {
+        this.state.writePerm = false
+        resolve()
+      })
+    })
+
+    Promise.all([checkCenter, checkCurrent]).then(() => {
+      this.trigger(this.state)
+    }).catch(() => {
+      this.trigger(this.state)
+    })
   },
 
   /**
@@ -120,9 +149,6 @@ export default Reflux.createStore({
    *                          if we fire the animation.
    */
   link(start, type, end, center) {
-    console.log('--------------')
-    console.log(start, center)
-    console.log('--------------')
     let predicate = null
     if (type === 'generic') {
       predicate = PRED.isRelatedTo

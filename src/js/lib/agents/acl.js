@@ -8,7 +8,7 @@ import {Writer} from '../rdf.js'
 class AclAgent {
   // TODO Check here if the user can modify the acl and throw error if not.
   // TODO Add support for multiple policies regarding a user per file.
-  constructor(uri){
+  constructor(uri) {
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
     this.g = rdf.graph()
@@ -30,21 +30,20 @@ class AclAgent {
    */
 
   fetchInfo() {
-    return Util.getAclUri(this.uri).then((aclUri)=>{
+    return Util.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
-      return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result)=>{
+      return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result) => {
         let {triples} = result
         for (let triple in triples) {
           let {subject, predicate, object} = triples[triple]
-          this.Writer.addTriple(subject,predicate,object)
+          this.Writer.addTriple(subject, predicate, object)
         }
-        if(this.Writer.find(undefined, PRED.type, PRED.auth).length === 0){
+
+        if (this.Writer.find(undefined, PRED.type, PRED.auth).length === 0) {
           throw new Error('Link is not an ACL file')
         }
       })
-    }).catch((e) => {
-      console.error(e, 'at fetchInfo')
     })
   }
 
@@ -56,22 +55,22 @@ class AclAgent {
    * @return undefined, we want the side effect
    */
 
-  allow(user, mode){
+  allow(user, mode) {
     let wildcard = user === '*'
     let identifier = wildcard ? PRED.agentClass : PRED.agent
 
     user = wildcard ? PRED.Agent : user
 
-    if (!this.predMap[mode]){
+    if (!this.predMap[mode]) {
       throw new Error('Invalid mode supplied!')
     }
 
     if (typeof user === 'string') {
-      user = rdf.sym(user) 
+      user = rdf.sym(user)
     }
 
     // If user already has the permission.
-    if (_.includes(this.allowedPermissions(user, true), mode)){
+    if (_.includes(this.allowedPermissions(user, true), mode)) {
       return
     } else {
       mode = this.predMap[mode]
@@ -157,16 +156,17 @@ class AclAgent {
    * @summary Tells if a user is allowed to do a certain thing on a file.
    * @return {bool} - Allowed / Not allowed.
    */
-  isAllowed(user, mode){
+  isAllowed(user, mode) {
     if (!this.predMap[mode]) {
       console.error('Invalid mode supplied!')
       return false
-    } 
-    if (_.includes(this.allowedPermissions(user), mode)){
-      return true 
+    }
+    if (_.includes(this.allowedPermissions(user), mode)) {
+      return true
+    } else {
+      return false
     }
   }
-
 
   /**
    * @summary Returns a list of permissions a user.
@@ -176,16 +176,19 @@ class AclAgent {
    *                        modes as well.
    * @return {array} - permissions [read,write,control]
    */
-  allowedPermissions(user, strict = false){
+  allowedPermissions(user, strict = false) {
     let wildcard = user === '*'
     user = wildcard ? PRED.Agent : user
     let identifier = wildcard ? PRED.agentClass : PRED.agent
-    
+
     let permissions = []
     let policies = []
 
-    if(typeof user === 'string'){
-      user = rdf.sym(user) 
+    if (typeof user === 'string') {
+      user = rdf.sym(user)
+    }
+    if (this.Writer.g.statements.length === 0) {
+      return []
     }
     let existing = this.Writer.find(undefined, identifier, user)
     if (existing.length > 0) {
@@ -214,7 +217,6 @@ class AclAgent {
     }
     return permissions
   }
-
 
   /**
    * @sumarry Serializes the new acl file and puts it to the server.

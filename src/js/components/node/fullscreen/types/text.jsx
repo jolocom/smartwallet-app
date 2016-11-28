@@ -18,6 +18,8 @@ let TextNode = React.createClass({
 
   propTypes: {
     node: React.PropTypes.object,
+    centerWritePerm: React.PropTypes.bool,
+    writePerm: React.PropTypes.bool,
     graphState: React.PropTypes.object
   },
 
@@ -41,10 +43,16 @@ let TextNode = React.createClass({
     }
     */
 
-    // TODO - dynamic
-    menuItems.push('delete')
-    menuItems.push('disconnect')
-    menuItems.push('connect')
+    console.log(this.props.writePerm) 
+    if (this.props.writePerm) {
+      menuItems.push('delete')
+    }
+
+    if (this.props.centerWritePerm) {
+      menuItems.push('disconnect')
+    }
+    menuItems.push('copyUrl')
+    // menuItems.push('connect')
 
     return (
       <GenericFullScreen

@@ -4,6 +4,7 @@ import NodeStore from 'stores/node.js'
 import GraphStore from 'stores/graph-store.js'
 import NodeActions from 'actions/node.js'
 import NodeTypes from 'lib/node-types.js'
+import Loading from 'components/common/loading.jsx'
 
 let Node = React.createClass({
   /*
@@ -32,11 +33,19 @@ let Node = React.createClass({
 
   componentDidMount() {
     if (!this.state.initialized) {
-      NodeActions.initiate(this.props.params.node)
+      NodeActions.initiate(this.props.params.node,
+      this.state.graphState.center.uri)
     }
   },
 
   render() {
+    let styles = {
+      loading: {
+        backgroundColor: 'red',
+        position: 'absolute'
+      }
+    }
+
     let selectedNode
     let NodeFullScreenComponent
     let initialized = false
@@ -52,13 +61,15 @@ let Node = React.createClass({
       }
       NodeFullScreenComponent = NodeTypes.componentFor(selectedNode.type)
     }
-
     return (
-      <div>
+      <div style={styles.container}>
         {initialized
-          ? <NodeFullScreenComponent node={selectedNode}
+          ? <NodeFullScreenComponent
+            node={selectedNode}
+            writePerm={this.state.writePerm}
+            centerWritePerm={this.state.centerWritePerm}
             graphState={this.state.graphState} />
-          : null}
+          : <Loading style={styles.loading} />}
       </div>
     )
   }

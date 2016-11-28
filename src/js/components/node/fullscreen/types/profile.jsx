@@ -16,6 +16,8 @@ let ProfileNode = React.createClass({
 
   propTypes: {
     node: React.PropTypes.object,
+    writePerm: React.PropTypes.bool,
+    centerWritePerm: React.PropTypes.bool,
     graphState: React.PropTypes.object
   },
 
@@ -38,22 +40,33 @@ let ProfileNode = React.createClass({
   render() {
     let {rank, description, email, uri, img} = this.props.node
     let name
-    if (this.props.node.fullName && this.props.node.fullName > 0) {
-      name = this.props.node.fullName
+    if (this.props.node.rank === 'center') {
+      if (this.props.node.fullName && this.props.node.fullName > 0) {
+        name = this.props.node.fullName
+      } else if (this.props.node.name && this.props.node.familyName) {
+        name = `${this.props.node.name} ${this.props.node.familyName}`
+      } else {
+        name = this.props.node.name | this.props.node.familyName
+      }
     } else {
-      name = `${this.props.node.name} ${this.props.node.familyName}`
+      name = this.props.node.name
     }
 
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = []
     let menuItems = []
 
-    // TODO - dynamic
-    menuItems.push('disconnect')
-    menuItems.push('edit')
-    fabItems.push('connect')
-    fabItems.push('chat')
+    if (this.props.writePerm) {
+      menuItems.push('delete')
+      menuItems.push('edit')
+    }
+
+    if (this.props.centerWritePerm) {
+      menuItems.push('disconnect')
+    }
+
     menuItems.push('copyUrl')
+    fabItems.push('chat')
 
     return (
       <GenericFullScreen
