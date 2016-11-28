@@ -165,6 +165,7 @@ let AvatarList = React.createClass({
       }
 
       let onCheckboxCheck = (e, check) => {
+        console.log("AAAA ", e, " CHECK ", check)
         let cbs = this.state.checkboxes
         cbs[id] = {checked: check}
         this.setState({checkboxes: Object.assign({}, cbs)})

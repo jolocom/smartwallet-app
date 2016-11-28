@@ -47,6 +47,10 @@ export default React.createClass({
     this.refs.dialog.hide()
   },
 
+  onCheckedChanges(e) {
+    console.log("CALLED ", this.state.AvatarList.checkboxes)
+  },
+
   getStyles() {
     const {muiTheme: {actionAppBar}} = this.context
     return {
@@ -64,6 +68,7 @@ export default React.createClass({
   },
 
   _handleSubmit() {
+    console.log('AvatarList Checkboxes ', this.state.AvatarList)
     this.props.onClose()
   },
 
@@ -75,7 +80,10 @@ export default React.createClass({
         (item) => Object.assign(
           {},
           item,
-          {secondaryText: item.email, id: item.webId}))
+          {secondaryText: item.email, id: item.webId}
+        ))
+
+      console.log('items ', items)
     }
 
     let title = 'Add contacts to group'
@@ -111,7 +119,7 @@ export default React.createClass({
             <AvatarList
               items={items}
               emptyMessage={"No contacts"}
-              onChange={this.props.onCheckedChanges}
+              onChange={this.onCheckedChanges}
               checkboxes
             />
           </Content>
