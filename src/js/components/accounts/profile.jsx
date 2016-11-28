@@ -5,6 +5,7 @@ import accepts from 'attr-accept'
 import {proxy} from 'settings'
 
 import Dialog from 'components/common/dialog.jsx'
+import AccountStore from 'stores/account'
 import {Layout, Content} from 'components/layout'
 import {
   AppBar,
@@ -45,7 +46,8 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange')
+    Reflux.listenTo(ProfileStore, 'onProfileChange'),
+    Reflux.connect(AccountStore, 'account')
   ],
 
   contextTypes: {
@@ -298,8 +300,9 @@ let Profile = React.createClass({
                         floatingLabelText="Username"
                         floatingLabelFixed
                         onChange={Util.linkToState(this, 'username')}
-                        value={this.state.username}
-                        style={styles.input} />
+                        value={AccountStore.state.username}
+                        style={styles.input}
+                        disabled />
                     </div>
                   </div>
                   <List style={styles.sectionHeader}>
