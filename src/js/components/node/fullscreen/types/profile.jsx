@@ -135,6 +135,11 @@ let ProfileNode = React.createClass({
       },
       underlineStyle: {
         display: 'none'
+      },
+      passportPreview: {
+        width: 'auto',
+        height: '40px',
+        marginTop: '30px'
       }
     }
   },
@@ -395,12 +400,14 @@ let ProfileNode = React.createClass({
                     floatingLabelStyle={styles.labelStyle}
                     underlineStyle={styles.underlineStyle}
                     floatingLabelText="Passport"
-                    value="No passport added"
+                    value={this.state.profile.passportImgUri}
                     floatingLabelFixed
                     readOnly>
-                    {/** <img
-                      src={Util.uriToProxied(this.state.passportImgUri)}
-                      style={styles.passportPreview} /> **/}
+                    <img
+                      src={Utils.uriToProxied(
+                        this.state.profile.passportImgUri
+                      )}
+                      style={styles.passportPreview} />
                   </TextField>
                 </ListItem>,
                 <ListItem
@@ -411,7 +418,7 @@ let ProfileNode = React.createClass({
                     floatingLabelStyle={styles.labelStyle}
                     underlineStyle={styles.underlineStyle}
                     floatingLabelText="Bitcoin address"
-                    value="No bitcoin address added"
+                    value={this.state.profile.bitcoinAddress}
                     floatingLabelFixed
                     readOnly />
                 </ListItem>,
