@@ -7,6 +7,7 @@ import Utils from 'lib/util'
 import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
 import ProfileStore from 'stores/profile'
+import AccountStore from 'stores/account'
 
 import ActionInfoOutline from 'material-ui/svg-icons/action/info-outline'
 import SocialPublic from 'material-ui/svg-icons/social/public'
@@ -37,7 +38,8 @@ let ProfileNode = React.createClass({
   mixins: [
     Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
     Reflux.connect(ProfileStore, 'profile'),
-    Reflux.connect(NodeStore, 'node')
+    Reflux.connect(NodeStore, 'node'),
+    Reflux.connect(AccountStore, 'account')
   ],
 
   propTypes: {
@@ -267,7 +269,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Username"
-                  value={this.state.profile.username}
+                  value={AccountStore.state.username}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
