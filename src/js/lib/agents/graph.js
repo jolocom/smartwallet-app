@@ -4,6 +4,7 @@ import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
+import SnackbarActions from 'actions/snackbar'
 
 import rdf from 'rdflib'
 
@@ -297,6 +298,11 @@ class GraphAgent {
           let pred = triples[0].predicate.uri
           GraphActions.drawNewNode(obj, pred)
         }
+        if (!res.ok) {
+          SnackbarActions.showMessage('Could not link the files.')
+        }
+      }).catch(e => {
+        SnackbarActions.showMessage('Could not link the files.')
       })
     })
   }

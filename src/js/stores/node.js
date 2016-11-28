@@ -2,6 +2,7 @@ import profileActions from 'actions/profile'
 import Reflux from 'reflux'
 import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
+import SnackbarActions from 'actions/snackbar'
 import GraphAgent from 'lib/agents/graph.js'
 import AclAgent from 'lib/agents/acl.js'
 import rdf from 'rdflib'
@@ -160,6 +161,8 @@ export default Reflux.createStore({
       predicate,
       object: rdf.sym(end)
     }
-    this.gAgent.writeTriples(start, [payload], start === center)
+    this.gAgent.writeTriples(start, [payload], start === center).catch(e => {
+      SnackbarActions.showMessage('The nodes are already linked.')
+    })
   }
 })
