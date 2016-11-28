@@ -101,9 +101,7 @@ class GraphAgent {
         if (response.ok) {
           return
         }
-        console.warn('An error occured when putting the rdf file.')
-      }).catch((error) => {
-        console.warn('Error,', error, 'occured when putting the rdf file.')
+        throw new Error('An error occured when putting the rdf file.')
       })
       // Connecting the node to the one that created it
     }).then(() => {

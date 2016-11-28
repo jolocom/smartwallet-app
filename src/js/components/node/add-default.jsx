@@ -7,6 +7,7 @@ import {PRED} from 'lib/namespaces'
 import GraphPreview from './graph-preview.jsx'
 import ImageSelect from 'components/common/image-select.jsx'
 import GraphAgent from 'lib/agents/graph.js'
+import SnackbarActions from 'actions/snackbar'
 
 let NodeAddDefault = React.createClass({
 
@@ -43,6 +44,8 @@ let NodeAddDefault = React.createClass({
                              image, this.state.type, isConfidential)
       .then((uri) => {
         graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+      }).catch(() => {
+        SnackbarActions.showMessage('Could not create the node.')
       })
     }
   },
