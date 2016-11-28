@@ -22,6 +22,7 @@ class D3Converter {
       has_blanks: false,
       uri: uri,
       name:null,
+      email: '',
       connection: connection,
       title:null,
       description:null,
@@ -86,6 +87,14 @@ class D3Converter {
         }
         if (pred === PRED.fullName.uri) {
           props.fullName = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.email.uri) {
+          props.email =
+            obj.value
+            ? obj.value.substring(obj.value.indexOf('mailto:') + 7,
+              obj.value.length)
+            : obj.uri.substring(obj.uri.indexOf('mailto:') + 7,
+              obj.uri.length)
         }
         if (pred === PRED.title.uri || pred === PRED.title_DC.uri) {
           props.title = obj.value ? obj.value : obj.uri

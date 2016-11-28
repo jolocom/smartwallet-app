@@ -161,7 +161,8 @@ let ProfileNode = React.createClass({
       address,
       profession,
       company,
-      url
+      url,
+      email
     } = this.getNode()
 
     // Temporary soln for getting other user's username
@@ -304,7 +305,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Email"
-                  value={this.state.profile.email}
+                  value={isMe ? this.state.profile.email : email}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
