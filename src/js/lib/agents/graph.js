@@ -1,6 +1,6 @@
 import WebIDAgent from './webid.js'
-import {Parser} from '../rdf.js'
-import {Writer} from '../rdf.js'
+import {Parser, Writer} from '../rdf.js'
+// import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
@@ -24,10 +24,9 @@ class GraphAgent {
    * @param {string} nodeType - The type of the node
    * @return {object} node - The inicial writer with added triples
    */
-  baseNode(uri, writer, title, description, nodeType){
-
+  baseNode(uri, writer, title, description, nodeType) {
     if (title) {
-    writer.addTriple(uri, PRED.title, title)
+      writer.addTriple(uri, PRED.title, title)
     }
     if (description) {
       writer.addTriple(uri, PRED.description, description)
@@ -49,11 +48,11 @@ class GraphAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
-  addImage(uri,dstContainer, writer, image, confidential) {
-    if (image instanceof File){
+  addImage(uri, dstContainer, writer, image, confidential) {
+    if (image instanceof File) {
       let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
       writer.addTriple(uri, PRED.image, imgUri)
-	    return this.storeFile(imgUri, null, image, confidential)
+      return this.storeFile(imgUri, null, image, confidential)
     }
     writer.addTriple(uri, PRED.image, image)
     return
@@ -71,8 +70,15 @@ class GraphAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
-  createNode(currentUser, centerNode, title, description, image, nodeType, confidential = false) {
-
+  createNode(
+    currentUser,
+    centerNode,
+    title,
+    description,
+    image,
+    nodeType,
+    confidential = false
+  ) {
     let writer = new Writer()
     let newNodeUri = rdf.sym(currentUser.storage + Util.randomString(5))
     let aclUri
@@ -84,7 +90,13 @@ class GraphAgent {
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (image) {
-        return this.addImage(newNodeUri,currentUser.storage,writer,image,confidential)
+        return this.addImage(
+          newNodeUri,
+          currentUser.storage,
+          writer,
+          image,
+          confidential
+        )
       }
     }).then(() => {
       // Putting the RDF file for the node.
@@ -106,18 +118,17 @@ class GraphAgent {
         console.warn('Error,', error, 'occured when putting the rdf file.')
       })
       // Connecting the node to the one that created it
-    }).then(()=> {
+    }).then(() => {
       let payload = {
         subject: rdf.sym(centerNode.uri),
         predicate: PRED.isRelatedTo,
         object: newNodeUri
       }
       return this.writeTriples(centerNode.uri, [payload], false)
-		}).then(()=>{
-		  return newNodeUri.uri
-		})
+    }).then(() => {
+      return newNodeUri.uri
+    })
   }
-
 
   // Should we remove the ACL file associated with it as well?
   // PRO : we won't need the ACL file anymore
@@ -131,14 +142,14 @@ class GraphAgent {
   }
 
   storeFile(finUri, dstContainer, file, confidential = false) {
-		let uri
+    let uri
     let wia = new WebIDAgent()
     return wia.getWebID().then((webID) => {
-			if (!finUri) {
+      if (!finUri) {
         uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-			} else {
-				uri = finUri
-			}
+      } else {
+        uri = finUri
+      }
       return this.createACL(uri, webID, confidential).then(() => {
         return fetch(Util.uriToProxied(uri), {
           method: 'PUT',
@@ -148,9 +159,9 @@ class GraphAgent {
           },
           body: file
         }).then(() => {
-					return uri
-        }).catch(() => {
-      		console.log('error', e, 'occured while putting the image file')
+          return uri
+        }).catch((e) => {
+          console.log('error', e, 'occured while putting the image file')
         })
       })
     })
@@ -163,37 +174,37 @@ class GraphAgent {
   // has write access
 
   createACL(uri, webID, confidential = false) {
-    let acl_writer = new Writer()
-    let acl_uri = `${uri}.acl`
+    let aclWriter = new Writer()
+    let aclUri = `${uri}.acl`
     let owner = rdf.sym('#owner')
 
-    acl_writer.addTriple(owner, PRED.type, PRED.auth)
-    acl_writer.addTriple(owner, PRED.access, rdf.sym(uri))
-    acl_writer.addTriple(owner, PRED.access, rdf.sym(acl_uri))
-    acl_writer.addTriple(owner, PRED.agent, rdf.sym(webID))
+    aclWriter.addTriple(owner, PRED.type, PRED.auth)
+    aclWriter.addTriple(owner, PRED.access, rdf.sym(uri))
+    aclWriter.addTriple(owner, PRED.access, rdf.sym(aclUri))
+    aclWriter.addTriple(owner, PRED.agent, rdf.sym(webID))
 
-    acl_writer.addTriple(owner, PRED.mode, PRED.control)
-    acl_writer.addTriple(owner, PRED.mode, PRED.read)
-    acl_writer.addTriple(owner, PRED.mode, PRED.write)
+    aclWriter.addTriple(owner, PRED.mode, PRED.control)
+    aclWriter.addTriple(owner, PRED.mode, PRED.read)
+    aclWriter.addTriple(owner, PRED.mode, PRED.write)
 
     if (!confidential) {
       let all = rdf.sym('#readall')
 
-      acl_writer.addTriple(all, PRED.type, PRED.auth)
-      acl_writer.addTriple(all, PRED.access, rdf.sym(uri))
-      acl_writer.addTriple(all, PRED.agentClass, PRED.Agent)
-      acl_writer.addTriple(all, PRED.mode, PRED.read)
+      aclWriter.addTriple(all, PRED.type, PRED.auth)
+      aclWriter.addTriple(all, PRED.access, rdf.sym(uri))
+      aclWriter.addTriple(all, PRED.agentClass, PRED.Agent)
+      aclWriter.addTriple(all, PRED.mode, PRED.read)
     }
 
-    return fetch(Util.uriToProxied(acl_uri), {
+    return fetch(Util.uriToProxied(aclUri), {
       method: 'PUT',
       credentials: 'include',
-      body: acl_writer.end(),
+      body: aclWriter.end(),
       headers: {
         'Content-Type': 'text/turtle'
       }
     }).then(() => {
-      return acl_uri
+      return aclUri
     })
     .catch((e) => {
       console.log('error', e, 'occured while putting the acl file')
@@ -289,7 +300,7 @@ class GraphAgent {
       return fetch(Util.uriToProxied(uri), {
         method: 'PATCH',
         credentials: 'include',
-        body: `INSERT DATA { ${statements } } ;`,
+        body: `INSERT DATA { ${statements} } ;`,
         headers: {
           'Content-Type': 'application/sparql-update'
         }
@@ -303,7 +314,6 @@ class GraphAgent {
       })
     })
   }
-
 
   /**
    * @summary Deletes a triple from an rdf file.
@@ -352,16 +362,15 @@ class GraphAgent {
     })
   }
 
-
   // This takes a standard URI, it proxies the request itself.
   fetchTriplesAtUri(uri) {
     let parser = new Parser()
     return fetch(Util.uriToProxied(uri), {
       credentials: 'include'
     }).then((ans) => {
-      if (!ans.ok)
+      if (!ans.ok) {
         throw new Error(ans.status) // Call the catch if response error
-
+      }
       return ans.text().then((res) => {
         return parser.parse(res, uri)
       })
@@ -382,7 +391,11 @@ class GraphAgent {
   // After that it parses those links for their RDF data.
   getNeighbours(center, triples) {
     // We will only follow and parse these links
-    let Links = [PRED.knows.uri, PRED.isRelatedTo.uri, PRED.isRelatedTo_HTTP.uri]
+    let Links = [
+      PRED.knows.uri,
+      PRED.isRelatedTo.uri,
+      PRED.isRelatedTo_HTTP.uri
+    ]
     let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
     // If there are adjacent nodes to draw,
     // we parse them and return an array of their triples
@@ -405,39 +418,43 @@ class GraphAgent {
             result.connection = triple.predicate.uri
             graphMap.push(result)
           }
-
         } else {
           // This is a valid node.
           result.triples.connection = triple.predicate.uri
           graphMap.push(result.triples)
           graphMap[graphMap.length - 1].uri = triple.object.uri
         }
-
       }).catch((err) => {
+        // @TODO Handle error!
         neighbourErrors.push(triple.object.uri)
       })
     })).then(() => {
-      debug('Loading done,', graphMap, neighbourErrors.length, 'rdf files had errors: ', neighbourErrors)
+      debug(
+        'Loading done,',
+        graphMap,
+        neighbourErrors.length,
+        'rdf files had errors: ',
+        neighbourErrors
+      )
       return graphMap
     })
   }
 
-  //Both getGraphMapAtUri and getGraphMapAtWebID return an array of nodes, each
-  //node being represented as an array of triples that define it. The result
-  //is pretty much a "map" of the currently displayed graph.
+  // Both getGraphMapAtUri and getGraphMapAtWebID return an array of nodes, each
+  // node being represented as an array of triples that define it. The result
+  // is pretty much a "map" of the currently displayed graph.
 
   getGraphMapAtUri(uri) {
-    debug('getGraphMapAtUri',uri)
+    debug('getGraphMapAtUri', uri)
 
     // centerNode is {prefixes: [...], triples: [...]}
-    let getPartialGraphMap = ((centerNode) =>
+    let getPartialGraphMap = (centerNode) =>
         this.getNeighbours(uri, centerNode.triples)
           .then((neibTriples) => {
             let firstNode = centerNode.triples
             firstNode.uri = uri
             return [firstNode].concat(neibTriples)
           })
-    )
 
     return this.fetchTriplesAtUri(uri)
       .then(getPartialGraphMap)
@@ -450,8 +467,9 @@ class GraphAgent {
     return Promise.all(
       nodes
       .map((node) => {
-        if (node.unav || /\/card(?:#me)?$/.test(node.uri))
+        if (node.unav || /\/card(?:#me)?$/.test(node.uri)) {
           return Promise.resolve(node)
+        }
 
         // @TODO Get ACL URL by parsing LINK header of RDF file HTTP Response
         let aclUri = node.uri + '.acl'
@@ -459,9 +477,9 @@ class GraphAgent {
         return fetch(Util.uriToProxied(aclUri), {
           credentials: 'include'
         }).then((ans) => {
-          if (!ans.ok)
+          if (!ans.ok) {
             throw new Error(ans.status) // Call the catch if response error
-
+          }
           return ans.text().then((res) => {
             let para = parser.parse(res, node.uri + '.acl')
 
@@ -470,7 +488,6 @@ class GraphAgent {
 
             return node
           })
-
         }).catch((e) => {
           console.error('Couldn\'t fetch ACL ' + node.uri + '.acl', e)
           return node
@@ -479,28 +496,28 @@ class GraphAgent {
   }
 
   hydrateNodeConfidentiality = function(node) {
-    return this.hydrateNodesConfidentiality([node]).then(([newNode,...rest]) => newNode)
+    return this.hydrateNodesConfidentiality(
+      [node]).then(([newNode, ...rest]) => newNode)
   }.bind(this)
 
-  //Calls the above function, but passes the current webId as the URI.
+  // Calls the above function, but passes the current webId as the URI.
   getGraphMapAtWebID(webId) {
     return this.getGraphMapAtUri(webId)
   }
 
   // Group-related functions
 
-  newGroup(webId,name,webIds) {
-    return this.createGroupFile(webId,name,webIds)
-              .then(this.createGroupIndexIfNotExists)
-              .then(this.addGroupToIndex)
+  newGroup(webId, name, webIds) {
+    return this.createGroupFile(webId, name, webIds)
+      .then(this.createGroupIndexIfNotExists)
+      .then(this.addGroupToIndex)
   }
 
-  createGroupFile(webId,name,participantsWebIds) {
+  createGroupFile(webId, name, participantsWebIds) {
     let root = Util.webidRoot(webId)
-    let targetFile = root + '/groups/'+name
+    let targetFile = root + '/groups/' + name
 
     let writer = new Writer()
-
 
     writer.addTriple({
       subject: rdf.sym('#'),
@@ -526,7 +543,7 @@ class GraphAgent {
       credentials: 'include',
       body: writer.end(),
       headers: {
-        'Content-Type': 'text/turtle',
+        'Content-Type': 'text/turtle'
         // 'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
       //    aclUri + ' rel="acl"'
       }
@@ -534,16 +551,13 @@ class GraphAgent {
   }
 
   createGroupIndexIfNotExists() {
-      return Promise.resolve()
+    return Promise.resolve()
   }
 
   addGroupToIndex() {
-      return Promise.resolve()
-      // return createGroupIndexIfNotExists().then()
+    return Promise.resolve()
+    // return createGroupIndexIfNotExists().then()
   }
-
-
-
 
 }
 
