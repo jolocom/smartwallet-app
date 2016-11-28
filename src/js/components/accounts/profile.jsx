@@ -475,7 +475,7 @@ let Profile = React.createClass({
                         floatingLabelText="Credit Card"
                         floatingLabelFixed
                         name="creditcard"
-                        onChange={this._handleCreditCardValidation}
+                        onChange={Util.linkToState(this, 'creditCard')}
                         style={styles.input}
                         value={this.state.creditCard} />
                     </div>
@@ -619,6 +619,7 @@ let Profile = React.createClass({
     } else {
       target.value = target.value.replace(/[^0-9]|\s/g, '')
     }
+    // Util.linkToState(this, 'creditCard')
   },
 
   _handleSelectPassportFile({target}) {

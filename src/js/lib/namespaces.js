@@ -26,6 +26,7 @@ export const PRED = {
   profession: FOAF('currentProject'), // TEMP pred
   company: FOAF('workplaceHomepage'), // TEMP pred
   url: FOAF('homepage'), // TEMP pred
+  creditCard: FOAF('holdsAccount'), // TEMP pred
   inbox: TERMS('inbox'),
   storage: NIC('storage'),
   knows: FOAF('knows'),

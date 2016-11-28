@@ -430,7 +430,7 @@ let ProfileNode = React.createClass({
                     floatingLabelStyle={styles.labelStyle}
                     underlineStyle={styles.underlineStyle}
                     floatingLabelText="Credit card"
-                    value="No credit card added"
+                    value={this.state.profile.creditCard}
                     floatingLabelFixed
                     readOnly />
                 </ListItem>

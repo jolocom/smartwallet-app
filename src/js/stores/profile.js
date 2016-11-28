@@ -38,6 +38,7 @@ let defaultProfile = {
   bitcoinAddressNodeUri: '',
   passportImgUri: '',
   passportImgNodeUri: '',
+  creditCard: '',
   webid: '#',
   imgUri: null
 }
@@ -120,6 +121,8 @@ export default Reflux.createStore({
         profile.company = obj
       } else if (t.predicate.uri === FOAF('homepage').uri) {
         profile.url = obj
+      } else if (t.predicate.uri === FOAF('holdsAccount').uri) {
+        profile.creditCard = obj
       } else if (t.predicate.uri === FOAF('mbox').uri) {
         profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
       } else if (t.predicate.uri === PRED.bitcoin.uri) {
@@ -185,7 +188,8 @@ export default Reflux.createStore({
       address: FOAF('based_near'),
       profession: FOAF('currentProject'),
       company: FOAF('workplaceHomepage'),
-      url: FOAF('homepage')
+      url: FOAF('homepage'),
+      creditCard: FOAF('holdsAccount')
     }
 
     for (let pred in predicateMap) {
