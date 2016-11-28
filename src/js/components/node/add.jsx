@@ -40,7 +40,7 @@ let NodeAdd = React.createClass({
   },
 
   initialState(state) {
-    this.setState({graphState: state})
+    this.state.graphState = state
   },
 
   onStoreUpdate(newState) {
@@ -48,6 +48,7 @@ let NodeAdd = React.createClass({
   },
 
   componentDidMount() {
+    console.log('props', this.props)
     this.refs.dialog && this.refs.dialog.show()
   },
 
@@ -72,20 +73,6 @@ let NodeAdd = React.createClass({
   },
 
   render() {
-    if (!this.props.center) {
-      this.context.router.goBack()
-      return (null)
-    }
-
-    let selectedNode
-    if (this.props.center.uri === this.props.params.node) {
-      selectedNode = this.props.center
-    } else {
-      selectedNode = this.props.neighbours.find(el => {
-        return el.uri === this.props.params.node
-      })
-    }
-
     let styles = this.getStyles()
     let {type} = this.props.params
 
@@ -95,35 +82,37 @@ let NodeAdd = React.createClass({
     let Component = config.component
 
     return (
-      <Dialog ref='dialog' fullscreen>
-        <Layout>
-          <AppBar
-            title={title}
-            titleStyle={styles.title}
-            iconElementLeft={
-              <IconButton
-                iconStyle={styles.icon}
-                iconClassName='material-icons'
-                onTouchTap={this._handleClose}>close
-              </IconButton>
-            }
-            iconElementRight={
-              <FlatButton
-                style={styles.icon}
-                label='Create'
-                onTouchTap={this._handleSubmit}
-              />
-            }
-            style={styles.bar}
-          />
-          <Content style={styles.content}>
-            <Component ref='form'
-              node={selectedNode}
-              onSuccess={this._handleSuccess}
-              graphState={this.state.graphState} />
-          </Content>
-        </Layout>
-      </Dialog>
+      <div>
+        <Dialog ref='dialog' fullscreen>
+          <Layout>
+            <AppBar
+              title={title}
+              titleStyle={styles.title}
+              iconElementLeft={
+                <IconButton
+                  iconStyle={styles.icon}
+                  iconClassName='material-icons'
+                  onTouchTap={this._handleClose}>close
+                </IconButton>
+              }
+              iconElementRight={
+                <FlatButton
+                  style={styles.icon}
+                  label='Create'
+                  onTouchTap={this._handleSubmit}
+                />
+              }
+              style={styles.bar}
+            />
+            <Content style={styles.content}>
+              <Component ref='form'
+                node={this.props.center}
+                onSuccess={this._handleSuccess}
+                graphState={this.state.graphState} />
+            </Content>
+          </Layout>
+        </Dialog>
+      </div>
     )
   },
 
