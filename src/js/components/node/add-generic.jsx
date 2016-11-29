@@ -14,6 +14,7 @@ import {
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
+import PersonIcon from 'components/icons/person-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -68,6 +69,19 @@ let NodeAddGeneric = React.createClass({
       },
       icon: {
         color: actionAppBar.textColor
+      },
+      image: {
+        height: '176px'
+      },
+      headerIcon: {
+        position: 'absolute',
+        zIndex: 1500,
+        width: '100px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        left: '0',
+        right: '0',
+        marginTop: '15vh'
       }
     }
   },
@@ -87,6 +101,9 @@ let NodeAddGeneric = React.createClass({
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
+          <div style={styles.headerIcon}>
+            <PersonIcon />
+          </div>
           <AppBar
             title={title}
             titleStyle={styles.title}
@@ -108,7 +125,11 @@ let NodeAddGeneric = React.createClass({
           />
           <Content style={styles.content}>
             <Card rounded={false}>
-              <CardMedia />
+              <CardMedia
+                style={Object.assign({},
+                  styles.image,
+                  {backgroundColor: '#9ca0aa'}
+                )} />
             </Card>
           </Content>
         </Layout>
