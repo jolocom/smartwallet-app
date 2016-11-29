@@ -82,6 +82,7 @@ let ProfileNode = React.createClass({
         rank={rank}
         writePerm={writePerm}
         centerWritePerm={centerWritePerm}
+        name={name}
       >
         <List >
           {description && (

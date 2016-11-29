@@ -34,7 +34,8 @@ let GenericFullScreen = React.createClass({
     children: React.PropTypes.any,
     backgroundImg: React.PropTypes.any,
     uri: React.PropTypes.string,
-    graphState: React.PropTypes.object
+    graphState: React.PropTypes.object,
+    centerWritePerm: React.PropTypes.bool
   },
 
   contextTypes: {
@@ -123,12 +124,12 @@ let GenericFullScreen = React.createClass({
   },
 
   _handlePrivacySettings() {
-    this.context.router.push(encodeURIComponent(this.props.node.uri) +
+    this.context.router.push(encodeURIComponent(this.props.uri) +
       '/privacy-settings')
   },
 
   _handleViewSharedNodes() {
-    this.context.router.push(encodeURIComponent(this.props.node.uri) +
+    this.context.router.push(encodeURIComponent(this.props.uri) +
       '/shared-nodes')
   },
 
@@ -181,7 +182,6 @@ let GenericFullScreen = React.createClass({
 
   // TODO - break into more actions. The animation should be smoother.
   _handleDelete() {
-    console.log(this.props, 'bum')
     let navHis = this.props.graphState.navHistory
     let centerNode = this.context.node
     let currentNode = { uri: this.props.uri }

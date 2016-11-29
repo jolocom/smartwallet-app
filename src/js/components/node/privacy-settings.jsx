@@ -10,7 +10,6 @@ import ActionVisibility from 'material-ui/svg-icons/action/visibility'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
-import GraphStore from 'stores/graph-store'
 import PrivacyStore from 'stores/privacy-settings'
 import PrivacyActions from 'actions/privacy-settings'
 
@@ -48,7 +47,7 @@ let PrivacySettings = React.createClass({
   },
 
   goBack() {
-    this.context.router.push('/graph')
+    this.context.router.goBack()
   },
 
   _handleUpdate(storeState) {
@@ -196,9 +195,12 @@ let PrivacySettings = React.createClass({
   },
 
   render() {
-    let styles = this.getStyles()
-    let activeNode = GraphStore.state.activeNode.title
+    console.log('=======================-=======================')
+    console.log(this.props)
+    console.log(this.state)
+    console.log('=======================-=======================')
 
+    let styles = this.getStyles()
     let list, check
 
     if (this.state.currActiveViewBtn === 'visOnlyMe') {
@@ -216,9 +218,9 @@ let PrivacySettings = React.createClass({
       checkMate = (
         <ListItem>
           <Checkbox
-            label="Select all"
+            label='Select all'
             labelStyle={styles.selectAllLabel}
-            labelPosition="left"
+            labelPosition='left'
             onCheck={this._handleSelectAllPlusAllowed}
             checked={this.state.isSelectAllOnlyMe} />
         </ListItem>
@@ -228,9 +230,9 @@ let PrivacySettings = React.createClass({
       checkMate = (
         <ListItem>
           <Checkbox
-            label="Select all"
+            label='Select all'
             labelStyle={styles.selectAllLabel}
-            labelPosition="left"
+            labelPosition='left'
             onCheck={this._handleSelectAllMinusDisallowed}
             checked={this.state.isSelectAllFriends} />
         </ListItem>
@@ -240,15 +242,17 @@ let PrivacySettings = React.createClass({
     return (
       <div style={styles.container}>
         <AppBar
-          title="Privacy Settings"
+          title='Privacy Settings'
           titleStyle={styles.title}
           iconElementLeft={<IconButton onClick={this.goBack}
-            iconClassName="material-icons">
+            iconClassName='material-icons'>
               arrow_back
           </IconButton>}
           />
         <div style={styles.content}>
-          <h3 style={{margin: '10px 0'}}>Privacy Settings for {activeNode}</h3>
+          <h3 style={{margin: '10px 0'}}>
+            Privacy Settings for {this.props.name}
+          </h3>
           <Subheader style={styles.subheader}>
             <ActionVisibility style={styles.headerIcon} />
             Who can see this node?
@@ -258,31 +262,41 @@ let PrivacySettings = React.createClass({
             <FlatButton
               style={
                 this.state.currActiveViewBtn === 'visOnlyMe'
-                ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
-                    ...styles.toggleBtnActive}
-                : {...styles.toggleBtn, ...styles.toggleBtnLeft}
+                ? {...styles.toggleBtn,
+                   ...styles.toggleBtnLeft,
+                   ...styles.toggleBtnActive}
+                : {...styles.toggleBtn,
+                   ...styles.toggleBtnLeft}
               }
-              onTouchTap={this._setActiveView.bind(this, 'visOnlyMe')}>
+              onTouchTap={() => {
+                this._setActiveView('visOnlyMe')
+              }}>
               Only Me
             </FlatButton>
             <FlatButton
-              className="toggleBtnActive"
+              className='toggleBtnActive'
               style={
                 this.state.currActiveViewBtn === 'visFriends'
                 ? {...styles.toggleBtn, ...styles.toggleBtnActive}
                 : styles.toggleBtn
               }
-              onTouchTap={this._setActiveView.bind(this, 'visFriends')}>
+              onTouchTap={() => {
+                this._setActiveView('visFriends')
+              }}>
               Friends
             </FlatButton>
             <FlatButton
               style={
                 this.state.currActiveViewBtn === 'visEveryone'
-                ? {...styles.toggleBtn, ...styles.toggleBtnRight,
-                  ...styles.toggleBtnActive} 
-                : {...styles.toggleBtn, ...styles.toggleBtnRight}
+                ? {...styles.toggleBtn,
+                   ...styles.toggleBtnRight,
+                   ...styles.toggleBtnActive}
+                : {...styles.toggleBtn,
+                   ...styles.toggleBtnRight}
               }
-              onTouchTap={this._setActiveView.bind(this, 'visEveryone')}>
+              onTouchTap={() => {
+                this._setActiveView('visEveryone')
+              }}>
               Everyone
             </FlatButton>
           </div>
@@ -320,8 +334,8 @@ let PrivacySettings = React.createClass({
                   }, this)}
                 </div>
                 <TextField
-                  name="friendViewDisallow"
-                  hintText="Enter a node title"
+                  name='friendViewDisallow'
+                  hintText='Enter a node title'
                   onKeyPress={this._handleTextEnter}
                   fullWidth />
               </div>
@@ -332,17 +346,21 @@ let PrivacySettings = React.createClass({
             Who can edit this node?
           </Subheader>
           <Divider style={styles.divider} />
-            {
+          {
               this.state.currActiveViewBtn === 'visEveryone'
               ? <div>
                 <FlatButton
                   style={
                     this.state.currActiveEditBtn === 'editOnlyMe'
-                    ? {...styles.toggleBtn, ...styles.toggleBtnLeft,
-                        ...styles.toggleBtnActive}
-                    : {...styles.toggleBtn, ...styles.toggleBtnLeft}
+                    ? {...styles.toggleBtn,
+                       ...styles.toggleBtnLeft,
+                       ...styles.toggleBtnActive}
+                    : {...styles.toggleBtn,
+                       ...styles.toggleBtnLeft}
                   }
-                  onTouchTap={this._setActiveEdit.bind(this, 'editOnlyMe')}>
+                  onTouchTap={() => {
+                    this._setActiveEdit('editOnlyMe')
+                  }}>
                   Only Me
                 </FlatButton>
                 <FlatButton
@@ -351,21 +369,28 @@ let PrivacySettings = React.createClass({
                     ? {...styles.toggleBtn, ...styles.toggleBtnActive}
                     : {...styles.toggleBtn}
                   }
-                  onTouchTap={this._setActiveEdit.bind(this, 'editFriends')}>
+                  onTouchTap={() => {
+                    this._setActiveEdit('editFriends')
+                  }}>
                   Friends
                 </FlatButton>
                 <FlatButton
+                  onTouchTap={() => {
+                    this._setActiveEdit('editEveryone')
+                  }}
                   style={
                     this.state.currActiveEditBtn === 'editEveryone'
-                    ? {...styles.toggleBtn, ...styles.toggleBtnRight,
-                        ...styles.toggleBtnActive}
-                    : {...styles.toggleBtn, ...styles.toggleBtnRight}
+                    ? {...styles.toggleBtn,
+                       ...styles.toggleBtnRight,
+                       ...styles.toggleBtnActive}
+                    : {...styles.toggleBtn,
+                       ...styles.toggleBtnRight}
                   }
-                  onTouchTap={this._setActiveEdit.bind(this, 'editEveryone')}>
+                >
                   Everyone
-                </FlatButton>
+                </ FlatButton>
                 <div style={styles.customSettings}>
-                {
+                  {
                   this.state.currActiveEditBtn === 'editOnlyMe'
                   ? <div>
                     <Subheader style={styles.subheader}>
@@ -378,8 +403,8 @@ let PrivacySettings = React.createClass({
 
                     </div>
                     <TextField
-                      name="editAllow"
-                      hintText="Enter a node title"
+                      name='editAllow'
+                      hintText='Enter a node title'
                       onKeyPress={this._handleTextEnter}
                       fullWidth />
                   </div>
@@ -392,7 +417,8 @@ let PrivacySettings = React.createClass({
                     </Subheader>
                     <div style={styles.chipWrapper}>
                       {this.state.friendEditDisallowList.map(el => {
-                        return this.renderChip(el, PrivacyActions.friendAllowEdit)
+                        return this.renderChip(el,
+                          PrivacyActions.friendAllowEdit)
                       }, this)}
 
                     </div>
@@ -430,12 +456,12 @@ let PrivacySettings = React.createClass({
             </List>
           </div>
           <FlatButton
-            style={Object.assign({},styles.toggelBtn, {backgroundColor: 'red'})}
-            onTouchTap={function() {
+            style={Object.assign({}, styles.toggelBtn)}
+            onTouchTap={() => {
               PrivacyActions.computeResult()
               PrivacyActions.commit()
-            }}>
-          </FlatButton>
+            }}
+          />
         </div>
       </div>
     )

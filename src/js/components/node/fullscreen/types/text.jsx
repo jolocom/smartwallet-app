@@ -67,6 +67,7 @@ let TextNode = React.createClass({
         uri={uri}
         writePerm={writePerm}
         centerWritePerm={centerWritePerm}
+        name={title}
       >
         <List>
           {description && (
