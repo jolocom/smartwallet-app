@@ -195,11 +195,6 @@ let PrivacySettings = React.createClass({
   },
 
   render() {
-    console.log('=======================-=======================')
-    console.log(this.props)
-    console.log(this.state)
-    console.log('=======================-=======================')
-
     let styles = this.getStyles()
     let list, check
 

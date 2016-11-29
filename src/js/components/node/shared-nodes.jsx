@@ -26,19 +26,19 @@ let SharedNodes = React.createClass({
       shared: {
         typeDocument: [],
         typePerson: [],
-        typeImage: []
+        typeImage: [],
+        typeNotDetected: []
       }
     }
   },
 
   componentDidMount() {
-    // TODO is the initial state set correctly?
     const {uri} = this.props.params
     SharedNodesActions.getOverview(uri)
   },
 
   goBack() {
-    this.context.router.push('/graph')
+    this.context.router.goBack()
   },
 
   _handleListNodes(nodeType) {
@@ -97,6 +97,7 @@ let SharedNodes = React.createClass({
     const {typeDocument} = this.state.shared
     const {typeImage} = this.state.shared
     const {typePerson} = this.state.shared
+    const {typeNotDetected} = this.state.shared
     const tilesData = []
     const inactiveColor = '#beceea'
 
@@ -143,8 +144,22 @@ let SharedNodes = React.createClass({
       })
     }
 
-    let styles = this.getStyles()
+    // THESE REPRESENT NODES WITH UNDETECTED TYPE, NEEDS CUSTOM ICON TODO
+    if (typeNotDetected.length === 0) {
+      tilesData.push({
+        icon: <SharedNodeType type='document' color={inactiveColor} />,
+        nodeType: 'Not Detected',
+        numItems: 0
+      })
+    } else {
+      tilesData.push({
+        icon: <SharedNodeType type='document' color='#9a9fa8' />,
+        nodeType: 'Not Detected',
+        numItems: typeNotDetected.length
+      })
+    }
 
+    let styles = this.getStyles()
     return (
       <div style={styles.container}>
         <AppBar

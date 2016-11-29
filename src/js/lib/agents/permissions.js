@@ -51,13 +51,10 @@ export default class PermissionAgent {
         return sharedNodes
       })
     }).catch((e) => {
-      console.warn(e)
       return {}
     })
   }
 
-  // TODO TODO Multiple A statements
-  // Given a RDF file uri, returns it's type.
   resolveNodeType(uri) {
     let typeMap = {}
     typeMap[PRED.Document.uri] = 'typeDocument'
@@ -68,7 +65,7 @@ export default class PermissionAgent {
     return this.gAgent.findTriples(uri, rdf.sym(uri),
        PRED.type, undefined)
     .then((graph) => {
-      if (graph === -1) {
+      if (graph === -1 || graph.length === 0) {
         return 'typeNotDetected'
       }
       let temp = graph[0].object.uri
