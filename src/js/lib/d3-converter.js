@@ -21,13 +21,13 @@ class D3Converter {
     let props = {
       has_blanks: false,
       uri: uri,
-      name:null,
+      name: null,
       email: '',
       connection: connection,
-      title:null,
-      description:null,
-      img:null,
-      type:null,
+      title: null,
+      description: null,
+      img: null,
+      type: null,
       rank: 'neighbour',
       storage: null,
       x: null,
@@ -47,21 +47,16 @@ class D3Converter {
     // rdf.graph().statementsMatching()
     let g = rdf.graph()
     for (let i = 0; i < node.length; i++) {
-
       g.add(node[i].subject, node[i].predicate, node[i].object)
-
       let triple = node[i]
       if (triple.subject.id >= 0) {
-
         props.has_blanks = true
         if (!props.blanks) {
           props.blanks = []
         }
-
-        if (!props.blanks[triple.subject.value]){
+        if (!props.blanks[triple.subject.value]) {
           props.blanks[triple.subject.value] = []
         }
-
         props.blanks[triple.subject.value].push(triple)
       }
 
@@ -78,7 +73,7 @@ class D3Converter {
       // key of the object. We need to make sure we are assigning the value
       // regardless of where it's stored
 
-      if (triple.subject.uri === uri){
+      if (triple.subject.uri === uri) {
         if (pred === PRED.givenName.uri) {
           props.name = obj.value ? obj.value : obj.uri
         }
@@ -136,37 +131,33 @@ class D3Converter {
 
     // @TODO Have a dedicated RDF type for bitcoin and passport nodes, so that
     // we don't need this hack.
-    if (props.title == 'Bitcoin Address')
+    if (props.title === 'Bitcoin Address') {
       props.type = 'bitcoin'
-    else if (props.title == 'Passport')
+    } else if (props.title === 'Passport') {
       props.type = 'passport'
-
+    }
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
       let angle = 0
 
-      if (this.n<8){
+      if (this.n < 8) {
         angle = (2 * Math.PI) / this.n
-      }
-      else {
-        angle= (2 * Math.PI) / 8
+      } else {
+        angle = (2 * Math.PI) / 8
       }
 
       let halfwidth = STYLES.width / 2
       let halfheight = STYLES.height / 2
 
       let largeNode = STYLES.largeNodeSize
-      props.x = Math.sin(angle * (this.i%8)) * largeNode * 0.5 + halfwidth
-      props.y = Math.cos(angle * (this.i%8)) * largeNode * 0.5 + halfheight
-
-    } else if (!i && !n && rank ==='a') {
+      props.x = Math.sin(angle * (this.i % 8)) * largeNode * 0.5 + halfwidth
+      props.y = Math.cos(angle * (this.i % 8)) * largeNode * 0.5 + halfheight
+    } else if (!i && !n && rank === 'a') {
       // This takes care of nodes that are added dynamically, the mid + 30 is
       // the optimal position for spawning new nodes dynamically
       props.x = STYLES.width / 2 + 60
       props.y = STYLES.height / 2 + 60
-
     }
-
     if (node.unav) {
       props.unavailable = true
       return props
@@ -184,10 +175,10 @@ class D3Converter {
     }
 
     if (!props.name && !props.familyName) {
-      if (props.fullName){
+      if (props.fullName) {
         let fName = props.fullName
         props.name = fName.substring(0, fName.indexOf(' '))
-        props.familyName = fName.substring(props.name.length, fName.length -1)
+        props.familyName = fName.substring(props.name.length, fName.length - 1)
       }
     }
     return props
