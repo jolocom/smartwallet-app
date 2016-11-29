@@ -147,6 +147,13 @@ let PrivacySettings = React.createClass({
         color: '#4B142B',
         textAlign: 'left'
       },
+      submitBtn: {
+        margin: '2px',
+        backgroundColor: '#b5c945',
+        minWidth: '30%',
+        color: '#fff',
+        fontSize: '2vmax'
+      },
       toggleBtn: {
         margin: '2px',
         backgroundColor: '#e1e2e6',
@@ -451,12 +458,15 @@ let PrivacySettings = React.createClass({
             </List>
           </div>
           <FlatButton
-            style={Object.assign({}, styles.toggelBtn)}
+            style={Object.assign({}, styles.submitBtn)}
             onTouchTap={() => {
               PrivacyActions.computeResult()
               PrivacyActions.commit()
+              this.goBack()
             }}
-          />
+          >
+            Commit
+          </FlatButton>
         </div>
       </div>
     )
