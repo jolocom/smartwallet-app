@@ -56,6 +56,8 @@ let Graph = React.createClass({
   },
 
   componentDidMount() {
+    const {account} = this.context
+    // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
 
     // Adding the listeners.
@@ -123,7 +125,6 @@ let Graph = React.createClass({
 
   render: function() {
     let styles = this.getStyles()
-
     let fab
 
     if (!this.context.searchActive) {
@@ -152,8 +153,8 @@ let Graph = React.createClass({
     if (!this.state.initialized) {
       loading = <Loading style={styles.loading} />
     }
-
     return (
+
       <div style={styles.container}>
         <IndicatorOverlay ref='scrollIndicator' />
         <div style={styles.chart} ref='graph' />

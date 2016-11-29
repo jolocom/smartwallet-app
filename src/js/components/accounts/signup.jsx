@@ -336,7 +336,6 @@ let Signup = React.createClass({
                     required
                     />
                 </div>
-
                 <RaisedButton
                   type="submit"
                   secondary

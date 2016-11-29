@@ -65,6 +65,7 @@ let ProfileNode = React.createClass({
       menuItems.push('disconnect')
     }
 
+    menuItems.push('viewSharedNodes')
     menuItems.push('copyUrl')
     fabItems.push('chat')
 

@@ -122,6 +122,16 @@ let GenericFullScreen = React.createClass({
     this.context.router.goBack()
   },
 
+  _handlePrivacySettings() {
+    this.context.router.push(encodeURIComponent(this.props.node.uri) +
+      '/privacy-settings')
+  },
+
+  _handleViewSharedNodes() {
+    this.context.router.push(encodeURIComponent(this.props.node.uri) +
+      '/shared-nodes')
+  },
+
   _handleDisconnect() {
     if (this.props.rank === 'center') {
       this._handleClose()
@@ -219,6 +229,16 @@ let GenericFullScreen = React.createClass({
           title: 'Edit',
           handler: this._handleEdit,
           icon: <EditorModeEdit />
+        }
+      case 'privacySettings':
+        return {
+          title: 'Privacy Settings',
+          handler: this._handlePrivacySettings
+        }
+      case 'viewSharedNodes':
+        return {
+          title: 'View shared nodes',
+          handler: this._handleViewSharedNodes
         }
       case 'fullscreen':
         return {

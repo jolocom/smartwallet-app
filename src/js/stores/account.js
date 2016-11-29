@@ -137,6 +137,8 @@ export default Reflux.createStore({
             }).then(() => {
               const webIdAgent = new WebIdAgent()
               webIdAgent.initInbox(js.webid)
+              webIdAgent.initIndex(js.webid)
+              webIdAgent.initDisclaimer(js.webid)
             })
           } else {
             Account.login.completed(username, js.webid)

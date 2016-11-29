@@ -130,11 +130,6 @@ export default Reflux.createStore({
     })
   },
 
-  onSelect(svg) {
-    this.state.selected = svg
-    this.trigger(this.state)
-  },
-
   // TODO - make sure loading works.
   onNavigateToNode(node, defaultHistoryNode) {
     /*

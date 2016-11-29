@@ -45,13 +45,12 @@ let TextNode = React.createClass({
     */
     if (this.props.writePerm) {
       menuItems.push('delete')
+      menuItems.push('privacySettings')
     }
 
     if (this.props.centerWritePerm) {
       menuItems.push('disconnect')
     }
-    menuItems.push('copyUrl')
-    // menuItems.push('connect')
 
     return (
       <GenericFullScreen
