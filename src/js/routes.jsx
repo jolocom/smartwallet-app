@@ -9,6 +9,7 @@ import Index from 'components/index.jsx'
 import Graph from 'components/graph/graph.jsx'
 import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
+import AddNodeGeneric from 'components/node/add-generic.jsx'
 import Chat from 'components/chat/chat.jsx'
 import Conversations from 'components/chat/conversations.jsx'
 import ChatNew from 'components/chat/new.jsx'
@@ -35,7 +36,7 @@ const routes = (
     </Route>
     <Route path="graph(/:node)" component={Graph} title="Graph">
       <Route path="/graph/:node/view" component={Node} />
-      <Route path="/graph/:node/add/:type" component={AddNode} />
+      <Route path="/graph/:node/add/:type" component={AddNodeGeneric} />
     </Route>
     <Route path="forgot-password" component={ForgotPassword} />
     <Route path="change-password/:username/:token" component={ChangePassword} />
