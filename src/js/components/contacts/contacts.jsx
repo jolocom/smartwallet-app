@@ -23,7 +23,10 @@ let Contacts = React.createClass({
   contextTypes: {
     router: React.PropTypes.any
   },
-
+  propTypes: {
+    searchQuery: React.PropTypes.string,
+    children: React.PropTypes.object
+  },
   createChat(webId) {
     ChatActions.create(
         AccountStore.state.webId, AccountStore.state.webId, webId
@@ -35,7 +38,7 @@ let Contacts = React.createClass({
   },
 
   componentDidUpdate() {
-    debug('did update',this.state)
+    debug('did update', this.state)
     if (this.state.conversation && this.state.conversation.id) {
       debug('componentDidUpdate; ' +
         'redirection to conversation URL, with state', this.state)
@@ -45,16 +48,20 @@ let Contacts = React.createClass({
     }
   },
   render() {
-
     let items = this.state.contacts.items.map(
-      (item) => Object.assign({},item,{secondaryText: item.email, id: item.email}))
+      (item) => Object.assign(
+        {},
+        item,
+        {secondaryText: item.email, id: item.email}
+      )
+    )
 
     return (
       <div style={styles.container}>
         <AvatarList onClick={this.createChat}
           searchQuery={this.props.searchQuery}
           items={items}
-          emptyMessage={"No contacts"}
+          emptyMessage={'No contacts'}
           />
         {this.props.children}
       </div>

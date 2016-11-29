@@ -23,11 +23,15 @@ let Groups = React.createClass({
   contextTypes: {
     router: React.PropTypes.any
   },
+  propTypes: {
+    searchQuery: React.PropTypes.string,
+    children: React.PropTypes.object
+  },
 
   createChat(webId) {
-    ChatActions.create(
-        AccountStore.state.webId, AccountStore.state.webId, webId
-    )
+    // ChatActions.create(
+      //  AccountStore.state.webId, AccountStore.state.webId, webId
+    // )
   },
 
   componentDidMount() {
@@ -55,7 +59,6 @@ let Groups = React.createClass({
   },
 
   render() {
-
     let styles = this.getStyles()
 
     return (
@@ -71,7 +74,7 @@ let Groups = React.createClass({
         <FloatingActionButton
           secondary
           href="#/groups/new"
-          linkButton={true}
+          linkButton
           style={styles.actionButton}
         >
           <FontIcon className="material-icons">add</FontIcon>
@@ -81,12 +84,12 @@ let Groups = React.createClass({
   }
 })
 
-let styles = {
-  container: {
-    flex: 1,
-    overflowY: 'auto',
-    position: 'relative'
-  }
-}
+// let styles = {
+//   container: {
+//     flex: 1,
+//     overflowY: 'auto',
+//     position: 'relative'
+//   }
+// }
 
 export default Radium(Groups)

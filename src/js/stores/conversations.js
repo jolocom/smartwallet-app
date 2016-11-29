@@ -17,7 +17,6 @@ export default Reflux.createStore({
 
   items: [],
   init: function() {
-    
     this.listenTo(accountActions.logout, this.onLogout)
   },
 

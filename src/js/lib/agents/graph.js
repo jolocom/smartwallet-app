@@ -426,6 +426,7 @@ class GraphAgent {
         }
       }).catch((err) => {
         // @TODO Handle error!
+        console.error(err)
         neighbourErrors.push(triple.object.uri)
       })
     })).then(() => {

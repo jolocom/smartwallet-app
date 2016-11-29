@@ -34,8 +34,7 @@ class Chat extends React.Component {
 
     if (path === '/contacts') {
       activeTab = 'contacts'
-    }
-    else if (path === '/groups') {
+    } else if (path === '/groups') {
       activeTab = 'groups'
     }
 

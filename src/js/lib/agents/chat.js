@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 
 import {Parser, Writer} from '../rdf'
 import LDPAgent from './ldp'
@@ -151,7 +151,7 @@ class ChatAgent extends LDPAgent {
     return fetch(Util.uriToProxied(aclURI), {
       method: 'PATCH',
       credentials: 'include',
-      body: writer.end(),
+      body: statement,
       headers: {
         'Content-Type': 'text/turtle'
       }
@@ -307,7 +307,7 @@ class ChatAgent extends LDPAgent {
       // Using == because t.subject is an object
       // that has a .toString method
       const imut = conversationUrl + '#thread'
-      console.log('t.subject!!! ',t.subject)
+      console.log('t.subject!!! ', t.subject)
       console.log('conversationUrl ', rdf.sym(imut))
       // return t.subject === rdf.sym(imut)
       return t.subject == '#thread' || t.subject ===

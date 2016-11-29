@@ -48,7 +48,7 @@ export default React.createClass({
   },
 
   onCheckedChanges(e) {
-    console.log("CALLED ", this.state.AvatarList.checkboxes)
+    console.log('CALLED ', this.state.AvatarList.checkboxes)
   },
 
   getStyles() {
@@ -118,7 +118,7 @@ export default React.createClass({
           <Content>
             <AvatarList
               items={items}
-              emptyMessage={"No contacts"}
+              emptyMessage={'No contacts'}
               onChange={this.props.onCheckedChanges}
               checkboxes
             />

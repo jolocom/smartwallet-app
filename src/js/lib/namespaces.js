@@ -86,31 +86,14 @@ export const SSN = {
   Sensor: `${ssn}Sensor`
 }
 
-
-
-/*
-
-in the other files:
-
-
+/*in the other files:
 import {PRED, NODE_TYPES} from 'namespaces.js'
-
 NODE_TYPES[PRED.PERSON].nodeColor etc
-
-
-
 default?
-NodeTypes[PRED.Person] ? NodeTypes[PRED.Person].nodeColor : STYLES.defaultNodeColor
-
-
+NodeTypes[PRED.Person] ? NodeTypes[PRED.Person].nodeColor :
+STYLES.defaultNodeColor
 STYLES.js?
-
-mix of logic (component names, validation, form) and interface (colors)
-
-
-
-*/
-
+mix of logic (component names, validation, form) and interface (colors)*/
 
 export const NODE_TYPES = {
 
@@ -121,7 +104,7 @@ export const NODE_TYPES = {
 //
 //
 //
-//NodeTypes.register(FOAF('Person'), {
+// NodeTypes.register(FOAF('Person'), {
 //  /**
 //   * Node color in the graph
 //   */
@@ -150,7 +133,8 @@ export const NODE_TYPES = {
 //  /**
 //   * Schema can be used to create the node creation form, validate values
 //   * Available validators:
-//   * https://github.com/christianalfoni/formsy-react/blob/master/API.md#validators
+//   * https://github.com/christianalfoni/formsy-react/blob/
+// master/API.md#validators
 //   */
 //  schema: {
 //    name: {
