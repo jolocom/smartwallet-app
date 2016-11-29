@@ -174,7 +174,7 @@ export default React.createClass({
       addMemberButton: {
         marginLeft: '38%'
       },
-      memberList : {
+      memberList: {
 
       }
     }
@@ -205,16 +205,16 @@ export default React.createClass({
     if (this.state.pickingContacts) {
       content = <ContactSelector
         onClose={this._onContactSelectorClose}
-        onCheckedChanges={this._handleCheckedChanges}/>
+        onCheckedChanges={this._handleCheckedChanges} />
     }
 
     if (!webId) {
-      /*content = (
+      /* content = (
         <ContactsList
           onClick={this.startChat}
           searchQuery={this.state.searchQuery}
         />
-      )*/
+      ) */
     } else {
       // @TODO show loading screen
     }
@@ -253,7 +253,7 @@ export default React.createClass({
               <TextField
                 floatingLabelText="Group name"
                 value={this.state.groupName}
-                onChange={ e => this.setState({groupName: e.target.value})}
+                onChange={e => this.setState({groupName: e.target.value})}
               />
               <h3 style={styles.membersHeading}>Members</h3>
             </div>

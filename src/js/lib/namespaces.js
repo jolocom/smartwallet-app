@@ -86,14 +86,16 @@ export const SSN = {
   Sensor: `${ssn}Sensor`
 }
 
-/*in the other files:
-import {PRED, NODE_TYPES} from 'namespaces.js'
-NODE_TYPES[PRED.PERSON].nodeColor etc
-default?
-NodeTypes[PRED.Person] ? NodeTypes[PRED.Person].nodeColor :
-STYLES.defaultNodeColor
-STYLES.js?
-mix of logic (component names, validation, form) and interface (colors)*/
+/*
+  in the other files:
+  import {PRED, NODE_TYPES} from 'namespaces.js'
+  NODE_TYPES[PRED.PERSON].nodeColor etc
+  default?
+  NodeTypes[PRED.Person] ? NodeTypes[PRED.Person].nodeColor :
+  STYLES.defaultNodeColor
+  STYLES.js?
+  mix of logic (component names, validation, form) and interface (colors)
+*/
 
 export const NODE_TYPES = {
 

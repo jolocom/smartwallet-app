@@ -66,7 +66,7 @@ let Groups = React.createClass({
         <AvatarList onClick={this.createChat}
           searchQuery={this.props.searchQuery}
           items={this.state.groups.items}
-          emptyMessage={"No groups"}
+          emptyMessage={'No groups'}
           />
 
         {this.props.children}
