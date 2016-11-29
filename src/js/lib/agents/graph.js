@@ -285,8 +285,7 @@ class GraphAgent {
               object: t.object
             })
           } else {
-            // TODO Return false to save a request.
-            return resolve()
+            return reject()
           }
           if (i === triples.length - 1) {
             return resolve()

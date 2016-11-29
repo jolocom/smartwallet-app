@@ -39,13 +39,6 @@ let Node = React.createClass({
   },
 
   render() {
-    let styles = {
-      loading: {
-        backgroundColor: 'red',
-        position: 'absolute'
-      }
-    }
-
     let selectedNode
     let NodeFullScreenComponent
     let initialized = false
@@ -61,15 +54,18 @@ let Node = React.createClass({
       }
       NodeFullScreenComponent = NodeTypes.componentFor(selectedNode.type)
     }
+    /* TODO Here we need to have a loading screen before the actual
+    state is there my React Fu is not there yet :D
+    */
     return (
-      <div style={styles.container}>
+      <div>
         {initialized
           ? <NodeFullScreenComponent
             node={selectedNode}
             writePerm={this.state.writePerm}
             centerWritePerm={this.state.centerWritePerm}
             graphState={this.state.graphState} />
-          : <Loading style={styles.loading} />}
+          : <Loading />}
       </div>
     )
   }
