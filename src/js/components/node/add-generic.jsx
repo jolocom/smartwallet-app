@@ -1,18 +1,22 @@
 import React from 'react'
 import Radium from 'radium'
+import Reflux from 'reflux'
 
 import {
   AppBar,
   IconButton,
   Card,
   CardMedia,
-  FlatButton
+  FlatButton,
+  TextField
 } from 'material-ui'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
+import nodeStore from 'stores/node'
+import Util from 'lib/util'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -32,6 +36,9 @@ import {Layout, Content} from 'components/layout'
 // }
 
 let NodeAddGeneric = React.createClass({
+  mixins: [
+    Reflux.connect(nodeStore, 'node')
+  ],
 
   propTypes: {
     params: React.PropTypes.object
@@ -78,6 +85,12 @@ let NodeAddGeneric = React.createClass({
         left: '0',
         right: '0',
         marginTop: '50px'
+      },
+      nodeTitle: {
+        padding: '0 24px',
+        color: '#4b132b',
+        fontWeight: '100',
+        fontSize: '1.5em'
       }
     }
   },
@@ -123,6 +136,11 @@ let NodeAddGeneric = React.createClass({
               <CardMedia
                 style={styles.image} />
             </Card>
+            <TextField
+              name="givenName"
+              style={styles.nodeTitle}
+              placeholder="Add node title"
+              onChange={Util.linkToState(this, 'title')} />
           </Content>
         </Layout>
       </Dialog>
