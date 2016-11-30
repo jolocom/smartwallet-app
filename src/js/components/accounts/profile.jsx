@@ -287,7 +287,7 @@ let Profile = React.createClass({
                 {/** <Divider style={styles.titleDivider} /> **/}
                 <div style={styles.form}>
                   <List style={styles.sectionHeader}>
-                    <ListItem primaryText="General" />
+                    <ListItem primaryText="General" disabled />
                   </List>
                   <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
@@ -306,7 +306,7 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <List style={styles.sectionHeader}>
-                    <ListItem primaryText="Contact" />
+                    <ListItem primaryText="Contact" disabled />
                   </List>
                   <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
@@ -366,7 +366,7 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <List style={styles.sectionHeader}>
-                    <ListItem primaryText="Work" />
+                    <ListItem primaryText="Work" disabled />
                   </List>
                   <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
@@ -412,7 +412,7 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <List style={styles.sectionHeader}>
-                    <ListItem primaryText="Wallet" />
+                    <ListItem primaryText="Wallet" disabled />
                   </List>
                   <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
