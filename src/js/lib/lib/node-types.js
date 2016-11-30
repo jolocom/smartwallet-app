@@ -65,16 +65,13 @@ export default {
     if (_types[type] !== undefined) {
       throw new Error(`Node type ${type} as already been registered`)
     }
-  
-    if (typeof type == 'object' && 'uri' in type)
-      type=type.uri
 
+    if (typeof type === 'object' && 'uri' in type) {
+      type = type.uri
+    }
     // validate config
-
     _types[type] = Object.assign({}, configDefault, config)
-    
-    if (Object.keys(_types).length === 1)
-    {
+    if (Object.keys(_types).length === 1) {
       _types['default'] = Object.assign({}, configDefault, config)
     }
   },

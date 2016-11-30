@@ -406,14 +406,14 @@ let PrivacySettings = React.createClass({
 
                     </div>
                     <TextField
-                      name='editAllow'
-                      hintText='Enter a node title'
+                      name="editAllow"
+                      hintText="Enter a node title"
                       onKeyPress={this._handleTextEnter}
                       fullWidth />
                   </div>
                   : null
                 }
-                  { this.state.currActiveEditBtn === 'editFriends'
+                  {this.state.currActiveEditBtn === 'editFriends'
                   ? <div>
                     <Subheader style={styles.subheader}>
                     Disallow
@@ -426,8 +426,8 @@ let PrivacySettings = React.createClass({
 
                     </div>
                     <TextField
-                      name='friendEditDisallow'
-                      hintText='Enter a node title'
+                      name="friendEditDisallow"
+                      hintText="Enter a node title"
                       onKeyPress={this._handleTextEnter}
                       fullWidth />
                   </div>
@@ -446,7 +446,7 @@ let PrivacySettings = React.createClass({
                   <ListItem>
                     <Checkbox
                       label={viewer.label || viewer.name}
-                      labelPosition='left'
+                      labelPosition="left"
                       onCheck={() => {
                         check(this.state.currActiveViewBtn, viewer)
                       }}

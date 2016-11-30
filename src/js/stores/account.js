@@ -23,9 +23,13 @@ export default Reflux.createStore({
   },
 
   onSignup(data) {
+    const usr = encodeURIComponent(data.username)
+    const psw = encodeURIComponent(data.password)
+    const eml = encodeURIComponent(data.email)
+
     fetch(`${proxy}/register`, {
       method: 'POST',
-      body: `username=${encodeURIComponent(data.username)}&password=${encodeURIComponent(data.password)}&email=${encodeURIComponent(data.email)}`,
+      body: `username=${usr}&password=${psw}&email=${eml}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }

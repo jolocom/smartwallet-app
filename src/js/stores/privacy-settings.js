@@ -94,12 +94,22 @@ export default Reflux.createStore({
       this.aclAgent.Writer.find(undefined, undefined, undefined).map(result => {
         if (result.predicate.uri === PRED.mode.uri) {
           if (result.object.uri === PRED.read.uri) {
-            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined).map(each => {
-              indexWriter.addTriple(each.object, PRED.readPermission, rdf.sym(this.aclAgent.uri))
+            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined)
+            .map(each => {
+              indexWriter.addTriple(
+                each.object,
+                PRED.readPermission,
+                rdf.sym(this.aclAgent.uri)
+              )
             })
           } else if (result.object.uri === PRED.write.uri) {
-            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined).map(each => {
-              indexWriter.addTriple(each.object, PRED.writePermission, rdf.sym(this.aclAgent.uri))
+            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined)
+            .map(each => {
+              indexWriter.addTriple(
+                each.object,
+                PRED.writePermission,
+                rdf.sym(this.aclAgent.uri)
+              )
             })
           }
         }

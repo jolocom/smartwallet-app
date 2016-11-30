@@ -104,42 +104,42 @@ let SharedNodes = React.createClass({
     // TODO SHRINK!
     if (typePerson.length === 0) {
       tilesData.push({
-        icon: <SharedNodeType type='person' color={inactiveColor} />,
-        nodeType: 'Person',
+        icon: <SharedNodeType type="person" color={inactiveColor} />,
+        nodeType: "Person",
         numItems: 0
       })
     } else {
       tilesData.push({
-        icon: <SharedNodeType type='person' color='#829abe' />,
-        nodeType: 'Person',
+        icon: <SharedNodeType type="person" color="#829abe" />,
+        nodeType: "Person",
         numItems: typePerson.length
       })
     }
 
     if (typeImage.length === 0) {
       tilesData.push({
-        icon: <SharedNodeType type='image' color={inactiveColor} />,
-        nodeType: 'Image',
+        icon: <SharedNodeType type="image" color={inactiveColor} />,
+        nodeType: "Image",
         numItems: 0
       })
     } else {
       tilesData.push({
-        icon: <SharedNodeType type='image' color='#8490a2' />,
-        nodeType: 'Image',
+        icon: <SharedNodeType type="image" color="#8490a2" />,
+        nodeType: "Image",
         numItems: typeImage.length
       })
     }
 
     if (typeDocument.length === 0) {
       tilesData.push({
-        icon: <SharedNodeType type='document' color={inactiveColor} />,
-        nodeType: 'Document',
+        icon: <SharedNodeType type="document" color={inactiveColor} />,
+        nodeType: "Document",
         numItems: 0
       })
     } else {
       tilesData.push({
-        icon: <SharedNodeType type='document' color='#9a9fa8' />,
-        nodeType: 'Document',
+        icon: <SharedNodeType type="document" color="#9a9fa8" />,
+        nodeType: "Document",
         numItems: typeDocument.length
       })
     }
@@ -147,14 +147,14 @@ let SharedNodes = React.createClass({
     // THESE REPRESENT NODES WITH UNDETECTED TYPE, NEEDS CUSTOM ICON TODO
     if (typeNotDetected.length === 0) {
       tilesData.push({
-        icon: <SharedNodeType type='document' color={inactiveColor} />,
-        nodeType: 'Not Detected',
+        icon: <SharedNodeType type="document" color={inactiveColor} />,
+        nodeType: "Not Detected",
         numItems: 0
       })
     } else {
       tilesData.push({
-        icon: <SharedNodeType type='document' color='#9a9fa8' />,
-        nodeType: 'Not Detected',
+        icon: <SharedNodeType type="document" color="#9a9fa8" />,
+        nodeType: "Not Detected",
         numItems: typeNotDetected.length
       })
     }
@@ -163,10 +163,10 @@ let SharedNodes = React.createClass({
     return (
       <div style={styles.container}>
         <AppBar
-          title='View shared nodes'
+          title="View shared nodes"
           titleStyle={styles.title}
           iconElementLeft={<IconButton onClick={this.goBack}
-            iconClassName='material-icons'>
+            iconClassName="material-icons">
               arrow_back
           </IconButton>}
           />
