@@ -17,6 +17,11 @@ import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 import nodeStore from 'stores/node'
 import Util from 'lib/util'
+import previewStore from 'stores/preview-store'
+import graphActions from 'actions/graph-actions'
+import {PRED} from 'lib/namespaces'
+import GraphAgent from 'lib/agents/graph.js'
+import GraphPreview from './graph-preview.jsx'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -37,7 +42,8 @@ import Util from 'lib/util'
 
 let NodeAddGeneric = React.createClass({
   mixins: [
-    Reflux.connect(nodeStore, 'node')
+    Reflux.connect(nodeStore, 'node'),
+    Reflux.connect(previewStore, 'graphState')
   ],
 
   propTypes: {
@@ -47,16 +53,57 @@ let NodeAddGeneric = React.createClass({
   contextTypes: {
     router: React.PropTypes.any,
     node: React.PropTypes.any,
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
+    user: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+      type: 'default'
+    }
   },
 
   componentDidMount() {
     this.refs.dialog.show()
+    this.gAgent = new GraphAgent()
+    this.listenTo(previewStore, this.getUser)
+  },
+
+  getUser(state) {
+    // We need to know the uri of the currently centered node, this way we
+    // deduce the Access Controll. Taking it from the graph preview.
+    if (state.center) this.user = state.center.uri
   },
 
   close() {
     this.refs.dialog.hide()
     this.context.router.goBack()
+  },
+
+  validates() {
+    let {title} = this.state
+    return title && title.trim()
+  },
+
+  submit() {
+    if (!this.validates()) return false
+    let {title, description, image} = this.state
+    if (this.state.graphState.user && this.state.graphState.center) {
+      let currentUser = this.state.graphState.user
+      let centerNode = this.state.graphState.center
+      // let isConfidential = (this.state.type == 'confidential')
+      // if (isConfidential) this.state.type = 'default'
+
+      // @TODO Previously called nodeActions.create;
+      // except it cannot have a return value
+      this.gAgent.createNode(currentUser, centerNode, title, description, image,
+        this.state.type, false).then((uri) => {
+          graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+        })
+    } else {
+      // console.log('Did not work,logged in user or center node not detected
+      // correctly.')
+    }
   },
 
   getStyles() {
@@ -112,6 +159,9 @@ let NodeAddGeneric = React.createClass({
           <div style={styles.headerIcon}>
             <AddNodeIcon />
           </div>
+          <div style={{display: 'none'}}>
+            <GraphPreview />
+          </div>
           <AppBar
             title={title}
             titleStyle={styles.title}
@@ -148,7 +198,7 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleSubmit() {
-    this.refs.form.submit()
+    this.submit()
     this.close()
   },
 
