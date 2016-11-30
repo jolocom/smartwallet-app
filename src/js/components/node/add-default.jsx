@@ -23,7 +23,7 @@ let NodeAddDefault = React.createClass({
             onSelect={this._handleNodeSelect}
           />
           <LowerPart
-            ref='Lower'
+            ref="Lower"
             graphState={this.props.graphState}
           />
         </div>
@@ -88,7 +88,7 @@ let LowerPart = React.createClass({
         <Paper style={styles.form} rounded={false}>
           <div style={styles.row}>
             <TextField
-              hintText='Title'
+              hintText="Title"
               fullWidth={true}
               style={styles.input}
               onChange={({target}) => {
@@ -96,14 +96,14 @@ let LowerPart = React.createClass({
               }} />
             <SelectField value={this.state.type}
               onChange={this._handleTypeChange} style={styles.select}>
-              <MenuItem value='default' primaryText='Plain text' />
-              <MenuItem value='image' primaryText='Image' />
-              <MenuItem value='confidential' primaryText='Confidential' />
+              <MenuItem value="default" primaryText="Plain text" />
+              <MenuItem value="image" primaryText="Image" />
+              <MenuItem value="confidential" primaryText="Confidential" />
             </SelectField>
           </div>
           <div style={styles.row}>
             <TextField
-              hintText='Description'
+              hintText="Description"
               fullWidth={true}
               style={styles.input}
               onChange={({target}) => {

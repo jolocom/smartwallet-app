@@ -57,7 +57,7 @@ let NodeAddLink = React.createClass({
             {...this.state}
             updateParentField={this._handleFieldUpdate}
             graphState={this.props.graphState}
-            ref='Lower'
+            ref="Lower"
           />
         </div>
       </div>
@@ -166,7 +166,7 @@ let LowerPart = React.createClass({
         <Paper style={styles.form} rounded={false}>
           <div style={styles.columnLeft}>
             <div style={styles.leftIcon} onClick={this._handleSelectSwap}>
-              <FontIcon className='material-icons'
+              <FontIcon className="material-icons"
                 style={styles.icon}
                 color={styles.icon.color}>
                 swap_vert
@@ -177,8 +177,8 @@ let LowerPart = React.createClass({
             <div style={styles.row}>
               <NodeTarget
                 value={startLabel}
-                field={'start'}
-                active={this.state.currentSelection === 'start'}
+                field={"start"}
+                active={this.state.currentSelection === "start"}
                 filledIcon={startIconFilled}
                 onChange={this.handleChangeStart}
                 onSelectTarget={this._handleTargetClick} />
@@ -187,15 +187,15 @@ let LowerPart = React.createClass({
                 value={this.state.connectionType}
                 onChange={this._handleTypeChange}
                 style={styles.select} >
-                <MenuItem value='generic' primaryText='Generic' />
-                <MenuItem value='knows' primaryText='Knows' />
+                <MenuItem value="generic" primaryText="Generic" />
+                <MenuItem value="knows" primaryText="Knows" />
               </SelectField>
             </div>
             <div style={styles.row}>
               <NodeTarget
                 value={endLabel}
-                field={'end'}
-                active={this.state.currentSelection === 'end'}
+                field={"end"}
+                active={this.state.currentSelection === "end"}
                 filledIcon={endIconFilled}
                 onChange={this.handleChangeEnd}
                 onSelectTarget={this._handleTargetClick} />

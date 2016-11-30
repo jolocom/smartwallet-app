@@ -13,7 +13,7 @@ let Node = React.createClass({
      on right now.
   */
   mixins: [Reflux.listenTo(NodeStore, 'onStateUpdate', 'setInitialState'),
-           Reflux.listenTo(GraphStore, 'x', 'getGraphState')],
+    Reflux.listenTo(GraphStore, 'x', 'getGraphState')],
 
   onStateUpdate(newState) {
     this.setState(newState)

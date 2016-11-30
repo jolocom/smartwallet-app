@@ -16,6 +16,7 @@ let types = {
   default: {
     component: NodeAddDefault
   },
+
   link: {
     component: NodeAddLink
   },
@@ -82,7 +83,7 @@ let NodeAdd = React.createClass({
 
     return (
       <div>
-        <Dialog ref='dialog' fullscreen>
+        <Dialog ref="dialog" fullscreen>
           <Layout>
             <AppBar
               title={title}
@@ -90,21 +91,21 @@ let NodeAdd = React.createClass({
               iconElementLeft={
                 <IconButton
                   iconStyle={styles.icon}
-                  iconClassName='material-icons'
+                  iconClassName="material-icons"
                   onTouchTap={this._handleClose}>close
                 </IconButton>
               }
               iconElementRight={
                 <FlatButton
                   style={styles.icon}
-                  label='Create'
+                  label="Create"
                   onTouchTap={this._handleSubmit}
                 />
               }
               style={styles.bar}
             />
             <Content style={styles.content}>
-              <Component ref='form'
+              <Component ref="form"
                 node={this.props.center}
                 onSuccess={this._handleSuccess}
                 graphState={this.state.graphState} />

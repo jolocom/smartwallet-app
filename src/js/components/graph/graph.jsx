@@ -56,8 +56,6 @@ let Graph = React.createClass({
   },
 
   componentDidMount() {
-    const {account} = this.context
-    // Instantiating the graph object.
     this.graph = new GraphD3(this.getGraphEl(), 'main')
 
     // Adding the listeners.
@@ -129,13 +127,13 @@ let Graph = React.createClass({
 
     if (!this.context.searchActive) {
       fab = (
-        <FabMenu style={styles.menu} icon='add' closeIcon='close'>
+        <FabMenu style={styles.menu} icon="add" closeIcon="close">
           <FabMenuItem
             icon={<AddNodeIcon />}
-            label='Node' onTouchTap={this._handleAddNodeTouchTap} />
+            label="Node" onTouchTap={this._handleAddNodeTouchTap} />
           <FabMenuItem
             icon={<LinkIcon />}
-            label='Link' onClick={this._handleLinkNodeTouchTap} />
+            label="Link" onClick={this._handleLinkNodeTouchTap} />
         </FabMenu>
       )
     }
@@ -156,8 +154,8 @@ let Graph = React.createClass({
     return (
 
       <div style={styles.container}>
-        <IndicatorOverlay ref='scrollIndicator' />
-        <div style={styles.chart} ref='graph' />
+        <IndicatorOverlay ref="scrollIndicator" />
+        <div style={styles.chart} ref="graph" />
         {loading}
         {fab}
         {children}

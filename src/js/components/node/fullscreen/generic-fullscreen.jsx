@@ -351,7 +351,7 @@ let GenericFullScreen = React.createClass({
       styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
     }
     return (
-      <Dialog ref='dialog' fullscreen>
+      <Dialog ref="dialog" fullscreen>
         <Layout>
           <Content>
             <div style={styles.container}>
@@ -365,7 +365,7 @@ let GenericFullScreen = React.createClass({
                   <IconMenu
                     iconButtonElement={
                       <IconButton
-                        iconClassName='material-icons'
+                        iconClassName="material-icons"
                         iconStyle={styles.icon}>
                           more_vert
                       </IconButton>
@@ -388,7 +388,7 @@ let GenericFullScreen = React.createClass({
                 }
                 iconElementLeft={
                   <IconButton
-                    iconClassName='material-icons'
+                    iconClassName="material-icons"
                     iconStyle={styles.icon}
                     onClick={this._handleClose}>
                       arrow_back

@@ -59,7 +59,7 @@ let TextNode = React.createClass({
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
         fabItems={fabItems}
-        headerColor='#9a9fa8'
+        headerColor="#9a9fa8"
         menuItems={menuItems}
         type={type}
         rank={rank}
@@ -75,7 +75,7 @@ let TextNode = React.createClass({
               <ListItem
                 leftIcon={
                   <FontIcon color={'#9ba0aa'}
-                    className='material-icons'>info</FontIcon>
+                    className="material-icons">info</FontIcon>
                 }
                 primaryText={description}
               />
@@ -86,9 +86,9 @@ let TextNode = React.createClass({
             <ListItem
               leftIcon={
                 <FontIcon color={'#9ba0aa'}
-                  className='material-icons'>email</FontIcon>}
+                  className="material-icons">email</FontIcon>}
               primaryText={email}
-              secondaryText='Personal'
+              secondaryText="Personal"
             />
           )}
         </List>
