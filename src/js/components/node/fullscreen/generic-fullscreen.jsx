@@ -253,7 +253,7 @@ let GenericFullScreen = React.createClass({
               text={this.props.copyToClipboardText}
               onCopy={this._handlePostCopyURL}
             >
-              <MenuItem primaryText='Copy URL' />
+              <MenuItem primaryText="Copy URL" />
             </CopyToClipboard>),
           fabItem: (
             <CopyToClipboard
@@ -269,7 +269,6 @@ let GenericFullScreen = React.createClass({
             </CopyToClipboard>)
         }
       default:
-        console.error('No action info found for', iconString)
         return {}
     }
   },

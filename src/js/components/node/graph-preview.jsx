@@ -64,7 +64,7 @@ let Graph = React.createClass({
     let styles = this.getStyles()
 
     return (
-      <div style={styles.chart} ref='graph' />
+      <div style={styles.chart} ref="graph" />
     )
   },
 

@@ -22,7 +22,8 @@ let PrivacySettings = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    name: React.PropTypes.string
   },
 
   getInitialState() {
@@ -220,9 +221,9 @@ let PrivacySettings = React.createClass({
       checkMate = (
         <ListItem>
           <Checkbox
-            label='Select all'
+            label="Select all"
             labelStyle={styles.selectAllLabel}
-            labelPosition='left'
+            labelPosition="left"
             onCheck={this._handleSelectAllPlusAllowed}
             checked={this.state.isSelectAllOnlyMe} />
         </ListItem>
@@ -232,9 +233,9 @@ let PrivacySettings = React.createClass({
       checkMate = (
         <ListItem>
           <Checkbox
-            label='Select all'
+            label="Select all"
             labelStyle={styles.selectAllLabel}
-            labelPosition='left'
+            labelPosition="left"
             onCheck={this._handleSelectAllMinusDisallowed}
             checked={this.state.isSelectAllFriends} />
         </ListItem>
@@ -244,10 +245,10 @@ let PrivacySettings = React.createClass({
     return (
       <div style={styles.container}>
         <AppBar
-          title='Privacy Settings'
+          title="Privacy Settings"
           titleStyle={styles.title}
           iconElementLeft={<IconButton onClick={this.goBack}
-            iconClassName='material-icons'>
+            iconClassName="material-icons">
               arrow_back
           </IconButton>}
           />
@@ -264,11 +265,11 @@ let PrivacySettings = React.createClass({
             <FlatButton
               style={
                 this.state.currActiveViewBtn === 'visOnlyMe'
-                ? {...styles.toggleBtn,
-                   ...styles.toggleBtnLeft,
-                   ...styles.toggleBtnActive}
-                : {...styles.toggleBtn,
-                   ...styles.toggleBtnLeft}
+               ? {...styles.toggleBtn,
+                  ...styles.toggleBtnLeft,
+                  ...styles.toggleBtnActive}
+               : {...styles.toggleBtn,
+                  ...styles.toggleBtnLeft}
               }
               onTouchTap={() => {
                 this._setActiveView('visOnlyMe')
@@ -276,7 +277,7 @@ let PrivacySettings = React.createClass({
               Only Me
             </FlatButton>
             <FlatButton
-              className='toggleBtnActive'
+              className="toggleBtnActive"
               style={
                 this.state.currActiveViewBtn === 'visFriends'
                 ? {...styles.toggleBtn, ...styles.toggleBtnActive}
@@ -290,11 +291,11 @@ let PrivacySettings = React.createClass({
             <FlatButton
               style={
                 this.state.currActiveViewBtn === 'visEveryone'
-                ? {...styles.toggleBtn,
-                   ...styles.toggleBtnRight,
-                   ...styles.toggleBtnActive}
-                : {...styles.toggleBtn,
-                   ...styles.toggleBtnRight}
+               ? {...styles.toggleBtn,
+                  ...styles.toggleBtnRight,
+                  ...styles.toggleBtnActive}
+               : {...styles.toggleBtn,
+                  ...styles.toggleBtnRight}
               }
               onTouchTap={() => {
                 this._setActiveView('visEveryone')
@@ -315,8 +316,8 @@ let PrivacySettings = React.createClass({
                   }, this)}
                 </div>
                 <TextField
-                  name='viewAllow'
-                  hintText='Enter a node title'
+                  name="viewAllow"
+                  hintText="Enter a node title"
                   onKeyPress={this._handleTextEnter}
                   fullWidth />
               </div>
@@ -336,8 +337,8 @@ let PrivacySettings = React.createClass({
                   }, this)}
                 </div>
                 <TextField
-                  name='friendViewDisallow'
-                  hintText='Enter a node title'
+                  name="friendViewDisallow"
+                  hintText="Enter a node title"
                   onKeyPress={this._handleTextEnter}
                   fullWidth />
               </div>
@@ -354,11 +355,11 @@ let PrivacySettings = React.createClass({
                 <FlatButton
                   style={
                     this.state.currActiveEditBtn === 'editOnlyMe'
-                    ? {...styles.toggleBtn,
-                       ...styles.toggleBtnLeft,
-                       ...styles.toggleBtnActive}
-                    : {...styles.toggleBtn,
-                       ...styles.toggleBtnLeft}
+                   ? {...styles.toggleBtn,
+                      ...styles.toggleBtnLeft,
+                      ...styles.toggleBtnActive}
+                   : {...styles.toggleBtn,
+                      ...styles.toggleBtnLeft}
                   }
                   onTouchTap={() => {
                     this._setActiveEdit('editOnlyMe')
@@ -382,11 +383,11 @@ let PrivacySettings = React.createClass({
                   }}
                   style={
                     this.state.currActiveEditBtn === 'editEveryone'
-                    ? {...styles.toggleBtn,
-                       ...styles.toggleBtnRight,
-                       ...styles.toggleBtnActive}
-                    : {...styles.toggleBtn,
-                       ...styles.toggleBtnRight}
+                   ? {...styles.toggleBtn,
+                      ...styles.toggleBtnRight,
+                      ...styles.toggleBtnActive}
+                   : {...styles.toggleBtn,
+                      ...styles.toggleBtnRight}
                   }
                 >
                   Everyone

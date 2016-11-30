@@ -177,8 +177,8 @@ let LowerPart = React.createClass({
             <div style={styles.row}>
               <NodeTarget
                 value={startLabel}
-                field={"start"}
-                active={this.state.currentSelection === "start"}
+                field={'start'}
+                active={this.state.currentSelection === 'start'}
                 filledIcon={startIconFilled}
                 onChange={this.handleChangeStart}
                 onSelectTarget={this._handleTargetClick} />
@@ -194,8 +194,8 @@ let LowerPart = React.createClass({
             <div style={styles.row}>
               <NodeTarget
                 value={endLabel}
-                field={"end"}
-                active={this.state.currentSelection === "end"}
+                field={'end'}
+                active={this.state.currentSelection === 'end'}
                 filledIcon={endIconFilled}
                 onChange={this.handleChangeEnd}
                 onSelectTarget={this._handleTargetClick} />
@@ -363,7 +363,7 @@ let NodeTarget = React.createClass({
     let styles = this.getStyles()
     return (
       <div style={styles.target} onClick={this._handleTouchTap}>
-        <FontIcon className='material-icons'
+        <FontIcon className="material-icons"
           style={styles.icon}
           color={styles.icon.color}>
           {filledIcon}
@@ -371,9 +371,9 @@ let NodeTarget = React.createClass({
 
         <div style={styles.inner}>
           <div style={styles.value}>
-            <TextField type='value'
+            <TextField type="value"
               value={this.props.value}
-              placeholder='Select node'
+              placeholder="Select node"
               onChange={this._handleFieldChange}
             />
           </div>
