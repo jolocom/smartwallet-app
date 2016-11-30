@@ -4,37 +4,32 @@ import Radium from 'radium'
 import {
   AppBar,
   IconButton,
-  TextField,
   Card,
   CardMedia,
-  FlatButton,
-  RaisedButton
+  FlatButton
 } from 'material-ui'
 
-import ActionDescription from 'material-ui/svg-icons/action/description'
-import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
-import PersonIcon from 'components/icons/person-icon.jsx'
+import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
-import NodeAddDefault from './add-default.jsx'
-import NodeAddLink from './add-link.jsx'
-import NodeAddImage from './add-image.jsx'
+// import NodeAddDefault from './add-default.jsx'
+// import NodeAddLink from './add-link.jsx'
+// import NodeAddImage from './add-image.jsx'
 
-let types = {
-  default: {
-    component: NodeAddDefault
-  },
-  link: {
-    component: NodeAddLink
-  },
-  image: {
-    title: 'Upload image',
-    component: NodeAddImage
-  }
-}
+// let types = {
+//   default: {
+//     component: NodeAddDefault
+//   },
+//   link: {
+//     component: NodeAddLink
+//   },
+//   image: {
+//     title: 'Upload image',
+//     component: NodeAddImage
+//   }
+// }
 
 let NodeAddGeneric = React.createClass({
 
@@ -71,38 +66,38 @@ let NodeAddGeneric = React.createClass({
         color: actionAppBar.textColor
       },
       image: {
-        height: '176px'
+        height: '176px',
+        backgroundColor: '#9ca0aa'
       },
       headerIcon: {
         position: 'absolute',
         zIndex: 1500,
-        width: '100px',
+        width: '200px',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        marginTop: '15vh'
+        marginTop: '50px'
       }
     }
   },
 
-  getTypeConfig(type) {
-    return types[type] || types.default
-  },
+  // getTypeConfig(type) {
+  //   return types[type] || types.default
+  // },
 
   render: function() {
     let styles = this.getStyles()
-    let {node, type} = this.props.params
-    let config = this.getTypeConfig(type)
-    let title = config.title || `New ${type}`
-
-    let Component = config.component
+    let title = 'Edit node'
+    // let {type} = this.props.params
+    // let config = this.getTypeConfig(type)
+    // let title = config.title || `New ${type}`
 
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
           <div style={styles.headerIcon}>
-            <PersonIcon />
+            <AddNodeIcon />
           </div>
           <AppBar
             title={title}
@@ -124,12 +119,9 @@ let NodeAddGeneric = React.createClass({
             style={styles.bar}
           />
           <Content style={styles.content}>
-            <Card rounded={false}>
+            <Card>
               <CardMedia
-                style={Object.assign({},
-                  styles.image,
-                  {backgroundColor: '#9ca0aa'}
-                )} />
+                style={styles.image} />
             </Card>
           </Content>
         </Layout>
