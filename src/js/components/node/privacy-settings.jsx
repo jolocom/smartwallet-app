@@ -358,11 +358,13 @@ let PrivacySettings = React.createClass({
                 <FlatButton
                   style={
                     this.state.currActiveEditBtn === 'editOnlyMe'
-                   ? {...styles.toggleBtn,
-                      ...styles.toggleBtnLeft,
-                      ...styles.toggleBtnActive}
-                   : {...styles.toggleBtn,
-                      ...styles.toggleBtnLeft}
+                      ? {
+                        ...styles.toggleBtn,
+                        ...styles.toggleBtnLeft,
+                        ...styles.toggleBtnActive}
+                      : {
+                        ...styles.toggleBtn,
+                        ...styles.toggleBtnLeft}
                   }
                   onTouchTap={() => {
                     this._setActiveEdit('editOnlyMe')
@@ -386,11 +388,13 @@ let PrivacySettings = React.createClass({
                   }}
                   style={
                     this.state.currActiveEditBtn === 'editEveryone'
-                   ? {...styles.toggleBtn,
-                      ...styles.toggleBtnRight,
-                      ...styles.toggleBtnActive}
-                   : {...styles.toggleBtn,
-                      ...styles.toggleBtnRight}
+                      ? {
+                        ...styles.toggleBtn,
+                        ...styles.toggleBtnRight,
+                        ...styles.toggleBtnActive}
+                      : {
+                        ...styles.toggleBtn,
+                        ...styles.toggleBtnRight}
                   }
                 >
                   Everyone
