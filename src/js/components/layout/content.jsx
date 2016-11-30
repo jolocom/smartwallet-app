@@ -8,7 +8,8 @@ let Content = React.createClass({
     return {
       flex: 1,
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      overflowY: 'auto'
     }
   },
 
