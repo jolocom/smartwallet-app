@@ -40,7 +40,7 @@ const routes = (
       <Route path="/graph/:node/view" component={Node} />
       <Route path="/graph/:node/add/:type" component={AddNode} />
     </Route>
-    <Route type=''path=":uri/privacy-settings" component={PrivacySettings} />
+    <Route path=":uri/privacy-settings" component={PrivacySettings} />
     <Route path=":uri/shared-nodes" component={SharedNodes} />
     <Route path="node-list" component={NodeList} />
     <Route path="forgot-password" component={ForgotPassword} />

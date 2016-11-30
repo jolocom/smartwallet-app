@@ -265,12 +265,14 @@ let PrivacySettings = React.createClass({
             <FlatButton
               style={
                 this.state.currActiveViewBtn === 'visOnlyMe'
-               ? {...styles.toggleBtn,
-                  ...styles.toggleBtnLeft,
-                  ...styles.toggleBtnActive}
-               : {...styles.toggleBtn,
-                  ...styles.toggleBtnLeft}
-              }
+                  ? {
+                    ...styles.toggleBtn,
+                    ...styles.toggleBtnLeft,
+                    ...styles.toggleBtnActive}
+                  : {
+                    ...styles.toggleBtn,
+                    ...styles.toggleBtnLeft}
+                }
               onTouchTap={() => {
                 this._setActiveView('visOnlyMe')
               }}>
@@ -291,11 +293,12 @@ let PrivacySettings = React.createClass({
             <FlatButton
               style={
                 this.state.currActiveViewBtn === 'visEveryone'
-               ? {...styles.toggleBtn,
-                  ...styles.toggleBtnRight,
-                  ...styles.toggleBtnActive}
-               : {...styles.toggleBtn,
-                  ...styles.toggleBtnRight}
+                  ? {
+                    ...styles.toggleBtn,
+                    ...styles.toggleBtnRight,
+                    ...styles.toggleBtnActive}
+                  : {...styles.toggleBtn,
+                    ...styles.toggleBtnRight}
               }
               onTouchTap={() => {
                 this._setActiveView('visEveryone')

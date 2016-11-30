@@ -105,13 +105,13 @@ let SharedNodes = React.createClass({
     if (typePerson.length === 0) {
       tilesData.push({
         icon: <SharedNodeType type="person" color={inactiveColor} />,
-        nodeType: "Person",
+        nodeType: 'Person',
         numItems: 0
       })
     } else {
       tilesData.push({
         icon: <SharedNodeType type="person" color="#829abe" />,
-        nodeType: "Person",
+        nodeType: 'Person',
         numItems: typePerson.length
       })
     }
@@ -119,13 +119,13 @@ let SharedNodes = React.createClass({
     if (typeImage.length === 0) {
       tilesData.push({
         icon: <SharedNodeType type="image" color={inactiveColor} />,
-        nodeType: "Image",
+        nodeType: 'Image',
         numItems: 0
       })
     } else {
       tilesData.push({
         icon: <SharedNodeType type="image" color="#8490a2" />,
-        nodeType: "Image",
+        nodeType: 'Image',
         numItems: typeImage.length
       })
     }
@@ -133,13 +133,13 @@ let SharedNodes = React.createClass({
     if (typeDocument.length === 0) {
       tilesData.push({
         icon: <SharedNodeType type="document" color={inactiveColor} />,
-        nodeType: "Document",
+        nodeType: 'Document',
         numItems: 0
       })
     } else {
       tilesData.push({
         icon: <SharedNodeType type="document" color="#9a9fa8" />,
-        nodeType: "Document",
+        nodeType: 'Document',
         numItems: typeDocument.length
       })
     }
@@ -148,13 +148,13 @@ let SharedNodes = React.createClass({
     if (typeNotDetected.length === 0) {
       tilesData.push({
         icon: <SharedNodeType type="document" color={inactiveColor} />,
-        nodeType: "Not Detected",
+        nodeType: 'Not Detected',
         numItems: 0
       })
     } else {
       tilesData.push({
         icon: <SharedNodeType type="document" color="#9a9fa8" />,
-        nodeType: "Not Detected",
+        nodeType: 'Not Detected',
         numItems: typeNotDetected.length
       })
     }
