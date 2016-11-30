@@ -29,8 +29,6 @@ class D3Converter {
       type:null,
       rank: 'neighbour',
       storage: null,
-      x: null,
-      y: null,
       confidential: node.confidential
 
     }
@@ -107,32 +105,6 @@ class D3Converter {
       props.type = 'bitcoin'
     else if (props.title == 'Passport')
       props.type = 'passport'
-
-    // Calculating the coordinates of the nodes so we can put them in a circle
-    if (i && n) {
-      let angle = 0
-
-      if (this.n<8){
-        angle = (2 * Math.PI) / this.n
-      }
-      else {
-        angle= (2 * Math.PI) / 8
-      }
-
-      let halfwidth = STYLES.width / 2
-      let halfheight = STYLES.height / 2
-
-      let largeNode = STYLES.largeNodeSize
-      props.x = Math.sin(angle * (this.i%8)) * largeNode * 0.5 + halfwidth
-      props.y = Math.cos(angle * (this.i%8)) * largeNode * 0.5 + halfheight
-
-    } else if (!i && !n && rank ==='a') {
-      // This takes care of nodes that are added dynamically, the mid + 30 is
-      // the optimal position for spawning new nodes dynamically
-      props.x = STYLES.width / 2 + 60
-      props.y = STYLES.height / 2 + 60
-
-    }
 
     if (node.unav) {
       props.unavailable = true

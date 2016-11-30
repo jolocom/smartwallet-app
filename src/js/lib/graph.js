@@ -739,8 +739,9 @@ export default class GraphD3 extends EventEmitter {
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NODES) {
       // Check to see whether node position has been calculated for
       // current numer of nodes
-      if (!this.nodePositions ||
-        this.numberOfNeighbours !== this.nodePositions.length) {
+      if (this.numberOfNeighbours !== 0 &&
+        (!this.nodePositions ||
+        this.numberOfNeighbours !== this.nodePositions.length)) {
         this.nodePositions = []
 
         // Angle for the separation between neighbour nodes
@@ -763,6 +764,7 @@ export default class GraphD3 extends EventEmitter {
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
 
+      // Position dataNodes
       for (let i = 0; i < this.dataNodes.length; i++) {
         if (this.dataNodes[i].rank === 'neighbour') {
           this.dataNodes[i].position = this.nodePositions[i - 1]
@@ -1144,6 +1146,7 @@ export default class GraphD3 extends EventEmitter {
       data.wasHighlighted = false
     }
 
+    // makes selected node apear bove all other nodes
     node.parentNode.appendChild(node)
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
@@ -1330,8 +1333,8 @@ export default class GraphD3 extends EventEmitter {
     .remove()
   }.bind(this)
 
-  // Alternative to dragging the node to the center.
-  // Does the same thing pretty much
+  // Doube click triggers node fillscreen
+
   onDblClick = function (node, data) {
     if (this.mode !== 'preview') {
       this.emit('view-node', data, node)
