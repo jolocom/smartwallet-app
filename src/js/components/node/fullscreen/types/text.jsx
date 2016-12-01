@@ -46,6 +46,8 @@ let TextNode = React.createClass({
       menuItems.push('disconnect')
     }
 
+    menuItems.push('copyUrl')
+
     return (
       <GenericFullScreen
         title={title}
