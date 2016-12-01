@@ -5,7 +5,6 @@ import accepts from 'attr-accept'
 import {proxy} from 'settings'
 
 import Dialog from 'components/common/dialog.jsx'
-import AccountStore from 'stores/account'
 import {Layout, Content} from 'components/layout'
 import {
   AppBar,
@@ -15,23 +14,15 @@ import {
   CardMedia,
   CardActions,
   FlatButton,
-  RaisedButton,
-  List, ListItem,
-  Divider, Subheader
+  RaisedButton
 } from 'material-ui'
 
+import {grey500} from 'material-ui/styles/colors'
+import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import SocialPublic from 'material-ui/svg-icons/social/public'
-import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
-import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
-import ActionCompany from 'material-ui/svg-icons/action/account-balance'
-import AvWeb from 'material-ui/svg-icons/av/web'
-import ActionStar from 'material-ui/svg-icons/toggle/star'
-import CommunicationLocation
-  from 'material-ui/svg-icons/communication/location-on'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
@@ -46,13 +37,8 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange'),
-    Reflux.connect(AccountStore, 'account')
+    Reflux.listenTo(ProfileStore, 'onProfileChange')
   ],
-
-  contextTypes: {
-    muiTheme: React.PropTypes.object
-  },
 
   getInitialState() {
     return {
@@ -103,13 +89,12 @@ let Profile = React.createClass({
   },
 
   getStyles() {
-    const {muiTheme} = this.context
     let styles = {
       image: {
         height: '176px'
       },
       bar: {
-        backgroundColor: muiTheme.palette.primary1Color
+        backgroundColor: grey500
       },
       content: {
         overflowY: 'auto'
@@ -177,27 +162,6 @@ let Profile = React.createClass({
         width: '5px',
         height: 'auto',
         display: 'inline-block'
-      },
-      subheader: {
-        marginTop: '40px',
-        paddingLeft: '24px',
-        lineHeight: '20px'
-      },
-      titleDivider: {
-        marginTop: '10px'
-      },
-      title: {
-        padding: '0 24px',
-        color: '#4b132b',
-        fontWeight: '100',
-        fontSize: '1.5em'
-      },
-      sectionHeader: {
-        padding: '0 8px',
-        margin: '0'
-      },
-      sectionDivider: {
-        marginLeft: '24px'
       }
     }
     return styles
@@ -220,19 +184,15 @@ let Profile = React.createClass({
         <Layout fixedHeader>
           <AppBar
             title="Edit profile"
-            titleStyle={{color: '#fff'}}
             style={styles.bar}
             iconElementLeft={
               <IconButton
-                iconStyle={{color: '#fff'}}
-                color="#fff"
                 onClick={this.hide}
                 iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={!this.state.loadingPassportPhoto &&
               !this.state.loadingDisplayPhoto
               ? <IconButton
-                iconStyle={{color: '#fff'}}
                 onClick={this._handleUpdate}
                 iconClassName="material-icons">check</IconButton>
               : <IconButton iconClassName="material-icons">
@@ -278,143 +238,46 @@ let Profile = React.createClass({
               onChange={this._handleSelectPassportFile} />
             <main style={styles.main}>
               <section>
-                <Subheader style={styles.subheader}>Name</Subheader>
-                <TextField
-                  name="givenName"
-                  style={styles.title}
-                  onChange={Util.linkToState(this, 'givenName')}
-                  value={this.state.givenName} />
-                {/** <Divider style={styles.titleDivider} /> **/}
                 <div style={styles.form}>
-                  <List style={styles.sectionHeader}>
-                    <ListItem primaryText="General" disabled />
-                  </List>
-                  <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <SocialPersonOutline color="#9ba0aa" />
+                      <ActionDescription color={theme.jolocom.gray1} />
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        name="username"
-                        floatingLabelText="Username"
-                        floatingLabelFixed
-                        onChange={Util.linkToState(this, 'username')}
-                        value={AccountStore.state.username}
-                        style={styles.input}
-                        disabled />
-                    </div>
-                  </div>
-                  <List style={styles.sectionHeader}>
-                    <ListItem primaryText="Contact" disabled />
-                  </List>
-                  <Divider style={styles.sectionDivider} />
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <CommunicationPhone color="#9ba0aa" />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        floatingLabelText="Mobile"
-                        floatingLabelFixed
-                        name="mobile"
-                        onChange={Util.linkToState(this, 'mobile')}
-                        value={this.state.mobile}
+                        placeholder="First Name"
+                        name="givenName"
+                        onChange={Util.linkToState(this, 'givenName')}
+                        value={this.state.givenName}
                         style={styles.input} />
                     </div>
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <CommunicationEmail color="#9ba0aa" />
+                      <ActionDescription color={theme.jolocom.gray1} />
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        floatingLabelText="Email"
-                        floatingLabelFixed
+                        placeholder="Second Name"
+                        name="familyName"
+                        onChange={Util.linkToState(this, 'familyName')}
+                        value={this.state.familyName}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationEmail color={theme.jolocom.gray1} />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        placeholder="Email"
                         name="email"
                         onChange={Util.linkToState(this, 'email')}
                         value={this.state.email}
                         style={styles.input} />
                     </div>
                   </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <CommunicationLocation color="#9ba0aa" />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        floatingLabelText="Address"
-                        floatingLabelFixed
-                        name="address"
-                        onChange={Util.linkToState(this, 'address')}
-                        value={this.state.address}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <SocialPublic color="#9ba0aa" />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        floatingLabelText="Social Media"
-                        floatingLabelFixed
-                        name="socialMedia"
-                        onChange={Util.linkToState(this, 'socialMedia')}
-                        value={this.state.socialMedia}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <List style={styles.sectionHeader}>
-                    <ListItem primaryText="Work" disabled />
-                  </List>
-                  <Divider style={styles.sectionDivider} />
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <ActionStar color="#9ba0aa" />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        floatingLabelText="Profession"
-                        floatingLabelFixed
-                        name="profession"
-                        onChange={Util.linkToState(this, 'profession')}
-                        value={this.state.profession}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <ActionCompany color="#9ba0aa" />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        floatingLabelText="Company"
-                        floatingLabelFixed
-                        name="company"
-                        onChange={Util.linkToState(this, 'company')}
-                        value={this.state.company}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <AvWeb color="#9ba0aa" />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        floatingLabelText="Url"
-                        floatingLabelFixed
-                        name="url"
-                        onChange={Util.linkToState(this, 'url')}
-                        value={this.state.url}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <List style={styles.sectionHeader}>
-                    <ListItem primaryText="Wallet" disabled />
-                  </List>
-                  <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={Object.assign({},
                       styles.label, styles.labelPassport)}>
@@ -452,8 +315,7 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        floatingLabelText="Bitcoin Address"
-                        floatingLabelFixed
+                        placeholder="Bitcoin Address"
                         name="bitcoinAddress"
                         onChange={Util.linkToState(this, 'bitcoinAddress')}
                         errorText={this.state.bitcoinErrorText}
@@ -472,10 +334,9 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       {/* TODO: back-end implementation */}
                       <TextField
-                        floatingLabelText="Credit Card"
-                        floatingLabelFixed
+                        placeholder="Add credit card"
                         name="creditcard"
-                        onChange={Util.linkToState(this, 'creditCard')}
+                        onChange={this._handleCreditCardValidation}
                         style={styles.input}
                         value={this.state.creditCard} />
                     </div>
@@ -488,7 +349,7 @@ let Profile = React.createClass({
                       onClick={this.downloadPK}
                     />
                     <div style={styles.divider}></div>
-                    { /* <RaisedButton
+                    { /*<RaisedButton
                       type="submit"
                       secondary
                       label="Upload Private Key"
@@ -532,12 +393,6 @@ let Profile = React.createClass({
         bitcoinErrorText: ''
       })
     }
-  },
-
-  _handleSetPrivacy(event, index, value) {
-    this.setState({
-      privacy: value
-    })
   },
 
   _handleBitcoinKeyDown(e) {
@@ -619,7 +474,6 @@ let Profile = React.createClass({
     } else {
       target.value = target.value.replace(/[^0-9]|\s/g, '')
     }
-    // Util.linkToState(this, 'creditCard')
   },
 
   _handleSelectPassportFile({target}) {

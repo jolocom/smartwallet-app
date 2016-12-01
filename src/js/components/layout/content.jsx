@@ -3,17 +3,12 @@ import Radium from 'radium'
 import _ from 'lodash'
 
 let Content = React.createClass({
-  propTypes: {
-    style: React.PropTypes.string,
-    children: React.PropTypes.object
-  },
 
   getStyles() {
     return {
       flex: 1,
       display: 'flex',
-      flexDirection: 'column',
-      overflowY: 'auto'
+      flexDirection: 'column'
     }
   },
 
