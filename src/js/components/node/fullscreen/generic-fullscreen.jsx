@@ -427,7 +427,7 @@ let GenericFullScreen = React.createClass({
               </div>
               <Subheader style={styles.subheader}>
                 {
-                  this.props.type.includes('Person')
+                  this.props.type && this.props.type.includes('Person')
                   ? 'Name'
                   : 'Title'
                 }

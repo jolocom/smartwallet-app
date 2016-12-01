@@ -37,12 +37,6 @@ let TextNode = React.createClass({
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []
-
-    /* TODO - rebuild this mechanism.
-    if (this.getNode().isOwnedByUser) {
-      menuItems.push('delete')
-    }
-    */
     if (this.props.writePerm) {
       menuItems.push('delete')
       menuItems.push('privacySettings')

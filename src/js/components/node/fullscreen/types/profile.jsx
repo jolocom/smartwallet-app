@@ -23,19 +23,10 @@ import LinearProgress from 'material-ui/LinearProgress'
 import CommunicationLocation
   from 'material-ui/svg-icons/communication/location-on'
 
-import {
-  List, ListItem, Divider, Subheader
-} from 'material-ui'
-
+import {List, ListItem, Divider, Subheader} from 'material-ui'
 import PinnedStore from 'stores/pinned'
 
 let ProfileNode = React.createClass({
-
-  getInitialState() {
-    return {
-      reuputation: 25
-    }
-  },
 
   mixins: [
     Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
@@ -50,7 +41,6 @@ let ProfileNode = React.createClass({
   },
 
   contextTypes: {
-    account: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   },
 
@@ -142,22 +132,23 @@ let ProfileNode = React.createClass({
   },
 
   render() {
+    console.log(this.state.profile)
     let styles = this.getStyles()
     let {writePerm, centerWritePerm} = this.props
     let {
       rank,
+      type,
       uri,
       img,
       socialMedia,
       mobile,
       address,
+      email,
       profession,
       company,
-      url,
-      email,
-      type
+      url
     } = this.props.node
-    const isMe = this.context.account.webId === uri
+    const isMe = this.state.profile.webid === uri
 
     let name
     if (this.props.node.fullName && this.props.node.fullName > 0) {
