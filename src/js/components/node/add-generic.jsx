@@ -8,7 +8,10 @@ import {
   Card,
   CardMedia,
   FlatButton,
-  TextField
+  TextField,
+  List,
+  ListItem,
+  SelectField, MenuItem, Chip
 } from 'material-ui'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
@@ -22,6 +25,10 @@ import graphActions from 'actions/graph-actions'
 import {PRED} from 'lib/namespaces'
 import GraphAgent from 'lib/agents/graph.js'
 import GraphPreview from './graph-preview.jsx'
+
+import ActionDescription from 'material-ui/svg-icons/action/description'
+import SocialShare from 'material-ui/svg-icons/social/share'
+import ActionLabel from 'material-ui/svg-icons/action/label'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -59,7 +66,14 @@ let NodeAddGeneric = React.createClass({
 
   getInitialState() {
     return {
-      type: 'default'
+      type: 'default',
+      privacy: 'Private',
+      tagArray: [
+        {
+          key: 1,
+          label: 'image'
+        }
+      ]
     }
   },
 
@@ -107,17 +121,17 @@ let NodeAddGeneric = React.createClass({
   },
 
   getStyles() {
-    const {muiTheme: {actionAppBar}} = this.context
+    const {muiTheme} = this.context
     return {
       bar: {
-        backgroundColor: actionAppBar.color,
-        color: actionAppBar.textColor
+        backgroundColor: muiTheme.actionAppBar.color,
+        color: muiTheme.actionAppBar.textColor
       },
       title: {
-        color: actionAppBar.textColor
+        color: muiTheme.actionAppBar.textColor
       },
       icon: {
-        color: actionAppBar.textColor
+        color: muiTheme.actionAppBar.textColor
       },
       image: {
         height: '176px',
@@ -134,10 +148,30 @@ let NodeAddGeneric = React.createClass({
         marginTop: '50px'
       },
       nodeTitle: {
-        padding: '0 24px',
+        padding: '10px 24px',
         color: '#4b132b',
         fontWeight: '100',
         fontSize: '1.5em'
+      },
+      accordionChildren: {
+        backgroundColor: muiTheme.jolocom.gray5
+      },
+      labelStyle: {
+        top: '30px'
+      },
+      inputStyle: {
+        marginTop: '-20px', height: '50px'
+      },
+      underlineStyle: {
+        display: 'none'
+      },
+      chipWrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        marginTop: '-10px'
+      },
+      chip: {
+        margin: '4px'
       }
     }
   },
@@ -191,10 +225,69 @@ let NodeAddGeneric = React.createClass({
               style={styles.nodeTitle}
               placeholder="Add node title"
               onChange={Util.linkToState(this, 'title')} />
+            <List>
+              <ListItem
+                primaryText="General"
+                primaryTogglesNestedList
+                nestedListStyle={styles.accordionChildren}
+                open
+                nestedItems={[
+                  <ListItem
+                    key={1}
+                    leftIcon={<SocialShare color="#9ba0aa" />}>
+                    <SelectField
+                      style={{marginTop: '-10px'}}
+                      value={this.state.privacy}
+                      onChange={this._handleTogglePrivacy}>
+                      <MenuItem value={'Private'} primaryText="Private" />
+                      <MenuItem value={'Public'} primaryText="Public" />
+                    </SelectField>
+                  </ListItem>,
+                  <ListItem
+                    key={2}
+                    leftIcon={<ActionDescription color="#9ba0aa" />}>
+                    <TextField
+                      style={styles.inputStyle}
+                      floatingLabelStyle={styles.labelStyle}
+                      underlineStyle={styles.underlineStyle}
+                      placeholder="Description"
+                      onChange={Util.linkToState(this, 'description')} />
+                  </ListItem>,
+                  <ListItem
+                    key={3}
+                    leftIcon={<ActionLabel color="#9ba0aa" />}>
+                    <div style={styles.chipWrapper}>
+                      {this.state.tagArray.map(this.renderChip, this)}
+                    </div>
+                  </ListItem>
+                ]} />
+            </List>
           </Content>
         </Layout>
       </Dialog>
     )
+  },
+
+  renderChip(data) {
+    let styles = this.getStyles()
+    return (
+      <Chip
+        key={data.key}
+        style={styles.chip}
+        onRequestDelete={this._handleChipDelete}>
+        {data.label}
+      </Chip>
+    )
+  },
+
+  _handleChipDelete() {
+    console.log('delete chip')
+  },
+
+  _handleTogglePrivacy(event, index, value) {
+    this.setState({
+      privacy: value
+    })
   },
 
   _handleSubmit() {
