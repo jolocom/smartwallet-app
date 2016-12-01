@@ -100,7 +100,7 @@
     "react-addons-transition-group": "^15.0.0",
     "react-addons-update": "^15.0.0",
     "react-copy-to-clipboard": "^4.2.2",
-    "react-dom": "^15.3.2",
+    "react-dom": "15.3.2",
     "react-router": "^2.8.0",
     "react-tap-event-plugin": "^1.0.0",
     "react-timer-mixin": "^0.13.3",

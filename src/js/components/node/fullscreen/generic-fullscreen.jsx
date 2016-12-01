@@ -30,8 +30,7 @@ import {
   IconButton,
   IconMenu,
   MenuItem,
-  Divider,
-  Subheader
+  Divider
 } from 'material-ui'
 
 let GenericFullScreen = React.createClass({
@@ -79,7 +78,7 @@ let GenericFullScreen = React.createClass({
         debug('Background image has luminance of', lum)
         this.setState({luminance: lum})
       }).catch((e) => {
-        // console.error('Couldn\'t compute luminance', e)
+        console.error('Couldn\'t compute luminance', e)
       })
     }
 
@@ -93,10 +92,9 @@ let GenericFullScreen = React.createClass({
   getStyles() {
     return {
       container: {
-        // flex: 1,
-        // display: 'flex',
-        // flexDirection: 'column',
-        overflowY: 'scroll'
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
       },
       headers: {
         color: '#ffffff',
@@ -108,17 +106,19 @@ let GenericFullScreen = React.createClass({
       title: {
         padding: '0 24px',
         color: '#4b132b',
+        marginTop: '30px',
         fontWeight: '100'
       },
       titleDivider: {
+        marginLeft: '24px',
         marginTop: '10px'
       },
       floatingButtons: {
-        position: 'relative',
+        position: 'absolute',
+        top: this.state.fullscreen ? '90vh' : '40vh',
         right: '10px',
         marginTop: '-28px',
-        zIndex: 1500,
-        textAlign: 'right'
+        zIndex: 1500
       },
       fabBtn: {
         margin: '0px 10px'
@@ -127,20 +127,14 @@ let GenericFullScreen = React.createClass({
         fill: '#9a3460'
       },
       headerIcon: {
-        position: 'relative',
+        position: 'absolute',
         zIndex: 1500,
         width: '100px',
-        height: '0',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        top: '15vh'
-      },
-      subheader: {
-        marginTop: '40px',
-        paddingLeft: '24px',
-        lineHeight: '20px'
+        marginTop: '15vh'
       }
     }
   },
@@ -153,12 +147,14 @@ let GenericFullScreen = React.createClass({
 
   _handleDisconnect() {
     if (this.props.node.rank === 'center') {
-      this._handleClose()
-    } else {
+        this._handleClose()
+    }
+    else {
       ConfirmActions.confirm(
         'Are you sure you want to disconnect this node ?',
         'Disconnect',
         () => {
+
           this._handleClose()
 
           nodeActions.disconnectNode(
@@ -202,7 +198,7 @@ let GenericFullScreen = React.createClass({
 
     if (node.rank === 'center') {
       let prev = navHis[navHis.length - 1]
-      debug('Deleting center node; navigating to previous node', prev.uri)
+      debug('Deleting center node; navigating to previous node',prev.uri)
       // graphActions.drawAtUri(prev.uri, 1)
       this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
       nodeActions.remove(node, prev) // will refresh the graph
@@ -290,7 +286,7 @@ let GenericFullScreen = React.createClass({
       case 'edit':
         return (<EditorModeEdit />)*/
       default:
-        // console.error('No action info found for', iconString)
+        console.error('No action info found for', iconString)
         return {}
         // return (<AlertError />)
     }
@@ -466,13 +462,6 @@ let GenericFullScreen = React.createClass({
                     )
                   })}
               </div>
-              <Subheader style={styles.subheader}>
-                {
-                  this.props.node.type.includes('Person')
-                  ? 'Name'
-                  : 'Title'
-                }
-              </Subheader>
               <h1 style={styles.title}>{this.props.title || 'No title'}</h1>
               <Divider style={styles.titleDivider} />
               {this.props.children}

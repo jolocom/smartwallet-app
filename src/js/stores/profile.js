@@ -25,20 +25,11 @@ let defaultProfile = {
   fullName: '',
   givenName: '',
   familyName: '',
-  privacy: '',
-  username: '',
-  mobile: '',
   email: '',
-  address: '',
-  socialMedia: '',
-  profession: '',
-  company: '',
-  url: '',
   bitcoinAddress: '',
   bitcoinAddressNodeUri: '',
   passportImgUri: '',
   passportImgNodeUri: '',
-  creditCard: '',
   webid: '#',
   imgUri: null
 }
@@ -109,20 +100,6 @@ export default Reflux.createStore({
         profile.fullName = obj
       } else if (t.predicate.uri === FOAF('img').uri) {
         profile.imgUri = obj
-      } else if (t.predicate.uri === FOAF('accountName').uri) {
-        profile.socialMedia = obj
-      } else if (t.predicate.uri === FOAF('phone').uri) {
-        profile.mobile = obj
-      } else if (t.predicate.uri === FOAF('based_near').uri) {
-        profile.address = obj
-      } else if (t.predicate.uri === FOAF('currentProject').uri) {
-        profile.profession = obj
-      } else if (t.predicate.uri === FOAF('workplaceHomepage').uri) {
-        profile.company = obj
-      } else if (t.predicate.uri === FOAF('homepage').uri) {
-        profile.url = obj
-      } else if (t.predicate.uri === FOAF('holdsAccount').uri) {
-        profile.creditCard = obj
       } else if (t.predicate.uri === FOAF('mbox').uri) {
         profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
       } else if (t.predicate.uri === PRED.bitcoin.uri) {
@@ -182,14 +159,7 @@ export default Reflux.createStore({
       familyName: FOAF('familyName'),
       givenName: FOAF('givenName'),
       imgUri: FOAF('img'),
-      email: FOAF('mbox'),
-      socialMedia: FOAF('accountName'),
-      mobile: FOAF('phone'),
-      address: FOAF('based_near'),
-      profession: FOAF('currentProject'),
-      company: FOAF('workplaceHomepage'),
-      url: FOAF('homepage'),
-      creditCard: FOAF('holdsAccount')
+      email: FOAF('mbox')
     }
 
     for (let pred in predicateMap) {
