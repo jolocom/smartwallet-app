@@ -20,6 +20,13 @@ export const PRED = {
   fullName: FOAF('name'),
   image: FOAF('img'),
   email: FOAF('mbox'),
+  socialMedia: FOAF('accountName'),
+  mobile: FOAF('phone'),
+  address: FOAF('based_near'), // TEMP pred
+  profession: FOAF('currentProject'), // TEMP pred
+  company: FOAF('workplaceHomepage'), // TEMP pred
+  url: FOAF('homepage'), // TEMP pred
+  creditCard: FOAF('holdsAccount'), // TEMP pred
   inbox: TERMS('inbox'),
   storage: NIC('storage'),
   knows: FOAF('knows'),

@@ -22,6 +22,7 @@ class D3Converter {
       has_blanks: false,
       uri: uri,
       name: null,
+      email: '',
       connection: connection,
       title: null,
       description: null,
@@ -31,7 +32,13 @@ class D3Converter {
       storage: null,
       x: null,
       y: null,
-      confidential: node.confidential
+      confidential: node.confidential,
+      socialMedia: '',
+      mobile: '',
+      address: '',
+      profession: '',
+      company: '',
+      url: ''
 
     }
 
@@ -41,18 +48,15 @@ class D3Converter {
     let g = rdf.graph()
     for (let i = 0; i < node.length; i++) {
       g.add(node[i].subject, node[i].predicate, node[i].object)
-
       let triple = node[i]
       if (triple.subject.id >= 0) {
         props.has_blanks = true
         if (!props.blanks) {
           props.blanks = []
         }
-
         if (!props.blanks[triple.subject.value]) {
           props.blanks[triple.subject.value] = []
         }
-
         props.blanks[triple.subject.value].push(triple)
       }
 
@@ -79,6 +83,14 @@ class D3Converter {
         if (pred === PRED.fullName.uri) {
           props.fullName = obj.value ? obj.value : obj.uri
         }
+        if (pred === PRED.email.uri) {
+          props.email =
+            obj.value
+            ? obj.value.substring(obj.value.indexOf('mailto:') + 7,
+              obj.value.length)
+            : obj.uri.substring(obj.uri.indexOf('mailto:') + 7,
+              obj.uri.length)
+        }
         if (pred === PRED.title.uri || pred === PRED.title_DC.uri) {
           props.title = obj.value ? obj.value : obj.uri
         }
@@ -90,6 +102,24 @@ class D3Converter {
         }
         if (pred === PRED.image.uri) {
           props.img = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.socialMedia.uri) {
+          props.socialMedia = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.mobile.uri) {
+          props.mobile = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.address.uri) {
+          props.address = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.profession.uri) {
+          props.profession = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.company.uri) {
+          props.company = obj.value ? obj.value : obj.uri
+        }
+        if (pred === PRED.url.uri) {
+          props.url = obj.value ? obj.value : obj.uri
         }
         // Storage is used when adding files. Better to do it here then to send
         // extra requests upon upload.
@@ -106,7 +136,6 @@ class D3Converter {
     } else if (props.title === 'Passport') {
       props.type = 'passport'
     }
-
     // Calculating the coordinates of the nodes so we can put them in a circle
     if (i && n) {
       let angle = 0
@@ -129,7 +158,6 @@ class D3Converter {
       props.x = STYLES.width / 2 + 60
       props.y = STYLES.height / 2 + 60
     }
-
     if (node.unav) {
       props.unavailable = true
       return props

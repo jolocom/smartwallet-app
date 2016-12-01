@@ -18,8 +18,14 @@ import ShareIcon from 'material-ui/svg-icons/content/reply'
 import DocIcon from 'components/icons/doc-icon.jsx'
 import PersonIcon from 'components/icons/person-icon.jsx'
 import SnackbarActions from 'actions/snackbar'
-
-import {AppBar, IconButton, IconMenu, MenuItem, Divider} from 'material-ui'
+import {
+  AppBar,
+  IconButton,
+  IconMenu,
+  MenuItem,
+  Divider,
+  Subheader
+} from 'material-ui'
 
 let GenericFullScreen = React.createClass({
   propTypes: {
@@ -58,7 +64,7 @@ let GenericFullScreen = React.createClass({
       bgLuminanceP.then((lum) => {
         this.setState({luminance: lum})
       }).catch((e) => {
-        console.error('Couldn\'t compute luminance', e)
+        // console.error('Couldn\'t compute luminance', e)
       })
     }
     this.refs.dialog.show()
@@ -71,9 +77,10 @@ let GenericFullScreen = React.createClass({
   getStyles() {
     return {
       container: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column'
+        // flex: 1,
+        // display: 'flex',
+        // flexDirection: 'column',
+        overflowY: 'scroll'
       },
       headers: {
         color: '#ffffff',
@@ -85,19 +92,17 @@ let GenericFullScreen = React.createClass({
       title: {
         padding: '0 24px',
         color: '#4b132b',
-        marginTop: '30px',
         fontWeight: '100'
       },
       titleDivider: {
-        marginLeft: '24px',
         marginTop: '10px'
       },
       floatingButtons: {
-        position: 'absolute',
-        top: this.state.fullscreen ? '90vh' : '40vh',
+        position: 'relative',
         right: '10px',
         marginTop: '-28px',
-        zIndex: 1500
+        zIndex: 1500,
+        textAlign: 'right'
       },
       fabBtn: {
         margin: '0px 10px'
@@ -106,14 +111,20 @@ let GenericFullScreen = React.createClass({
         fill: '#9a3460'
       },
       headerIcon: {
-        position: 'absolute',
+        position: 'relative',
         zIndex: 1500,
         width: '100px',
+        height: '0',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        marginTop: '15vh'
+        top: '15vh'
+      },
+      subheader: {
+        marginTop: '40px',
+        paddingLeft: '24px',
+        lineHeight: '20px'
       }
     }
   },
@@ -413,6 +424,13 @@ let GenericFullScreen = React.createClass({
                   )
                 })}
               </div>
+              <Subheader style={styles.subheader}>
+                {
+                  this.props.node.type.includes('Person')
+                  ? 'Name'
+                  : 'Title'
+                }
+              </Subheader>
               <h1 style={styles.title}>{this.props.title || 'No title'}</h1>
               <Divider style={styles.titleDivider} />
               {this.props.children}
