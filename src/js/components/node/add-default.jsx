@@ -94,7 +94,8 @@ let LowerPart = React.createClass({
               onChange={({target}) => {
                 this.setState({title: target.value})
               }} />
-            <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
+            <SelectField value={this.state.type}
+              onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="default" primaryText="Plain text" />
               <MenuItem value="image" primaryText="Image" />
               <MenuItem value="confidential" primaryText="Confidential" />
@@ -143,7 +144,6 @@ let LowerPart = React.createClass({
       })
     }
   },
-
 
   _handleSelectImage(image) {
     this.setState({image})

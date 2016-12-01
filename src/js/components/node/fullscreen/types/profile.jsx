@@ -368,7 +368,7 @@ let ProfileNode = React.createClass({
             ]}
           />
           <Divider />
-          { isMe
+          {isMe
             ? (<ListItem
               primaryText="Wallet"
               primaryTogglesNestedList

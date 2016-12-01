@@ -19,9 +19,6 @@ import DocIcon from 'components/icons/doc-icon.jsx'
 import PersonIcon from 'components/icons/person-icon.jsx'
 import SnackbarActions from 'actions/snackbar'
 
-import Debug from 'lib/debug'
-let debug = Debug('components:generic-fullscreen')
-
 import {
   AppBar,
   IconButton,
