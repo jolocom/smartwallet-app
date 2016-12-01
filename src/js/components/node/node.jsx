@@ -65,7 +65,7 @@ let Node = React.createClass({
             writePerm={this.state.writePerm}
             centerWritePerm={this.state.centerWritePerm}
             graphState={this.state.graphState} />
-          : <Loading />}
+          : null}
       </div>
     )
   }

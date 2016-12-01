@@ -38,7 +38,11 @@ let ProfileNode = React.createClass({
   },
 
   render() {
-    let {rank, description, email, uri, img} = this.props.node
+    console.log('me here')
+    console.log(this.props)
+    console.log(this.state)
+    console.log('me here')
+    let {rank, description, email, uri, img, confidential, type} = this.props.node
     let {centerWritePerm, writePerm} = this.props
     let name
     if (this.props.node.fullName && this.props.node.fullName > 0) {
@@ -83,6 +87,8 @@ let ProfileNode = React.createClass({
         writePerm={writePerm}
         centerWritePerm={centerWritePerm}
         name={name}
+        confidential={confidential}
+        type={type}
       >
         <List >
           {description && (
