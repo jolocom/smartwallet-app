@@ -116,9 +116,7 @@ let LowerPart = React.createClass({
   },
 
   _handleTypeChange(event, index, value) {
-    if (value) {
-      this.setState({type: value})
-    }
+    this.setState({type: value})
   },
 
   componentDidMount() {
