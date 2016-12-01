@@ -94,8 +94,7 @@ let LowerPart = React.createClass({
               onChange={({target}) => {
                 this.setState({title: target.value})
               }} />
-            <SelectField value={this.state.type}
-              onChange={this._handleTypeChange} style={styles.select}>
+            <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="default" primaryText="Plain text" />
               <MenuItem value="image" primaryText="Image" />
               <MenuItem value="confidential" primaryText="Confidential" />
@@ -114,6 +113,12 @@ let LowerPart = React.createClass({
         </Paper>
       </div>
     )
+  },
+
+  _handleTypeChange(event, index, value) {
+    if (value) {
+      this.setState({type: value})
+    }
   },
 
   componentDidMount() {
@@ -141,9 +146,6 @@ let LowerPart = React.createClass({
     }
   },
 
-  _handleTypeChange(event, index, value) {
-    this.setState({type: value})
-  },
 
   _handleSelectImage(image) {
     this.setState({image})

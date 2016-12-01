@@ -53,6 +53,7 @@ let Node = React.createClass({
       }
       NodeFullScreenComponent = NodeTypes.componentFor(selectedNode.type)
     }
+
     /* TODO Here we need to have a loading screen before the actual
     state is there my React Fu is not there yet :D
     */

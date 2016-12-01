@@ -157,9 +157,7 @@ let ProfileNode = React.createClass({
       email,
       type
     } = this.props.node
-
     const isMe = this.context.account.webId === uri
-    alert(isMe)
 
     let name
     if (this.props.node.fullName && this.props.node.fullName > 0) {
