@@ -637,11 +637,7 @@ export default class GraphD3 extends EventEmitter {
       self.deselectAll()
     })
 
-    this.svg.on('wheel', self.onScroll)
-
-    full.on('click', function (data) {
-      self.onClickFull(this, data)
-    })
+    // this.svg.on('wheel', self.onScroll)
   }.bind(this)
 
   onHoldClick = function (dir) {
@@ -834,7 +830,7 @@ export default class GraphD3 extends EventEmitter {
         } else {
           this.visibleDataLinks.push({
             'source': this.dataNodes[i],
-            'target': this.dataNodes[0]
+            'target': this.dataNodes[i - 1]
           })
         }
       }
@@ -1260,7 +1256,10 @@ export default class GraphD3 extends EventEmitter {
       }
       this.setUpVisibleNodes()
       this.d3update()
+      this.resetAll()
+      this.resetPos()
     }
+    this.setUpVisibleNodes()
     this.d3update()
     this.resetAll()
     this.resetPos()
