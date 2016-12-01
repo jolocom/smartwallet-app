@@ -80,6 +80,31 @@ class LDPAgent extends HTTPAgent {
       }
     })
   }
+
+  /*
+   * @summary Given a uri to a file, tries to get the uri of the file's ACL
+   * @param {string} uri - the uri of the file
+   * @return {string} aclUri - returns the correct acl uri if it can, otherwise
+   *                           it defaults to uri + .acl
+   */
+
+  getAclUri(uri) {
+    return this.head(this._proxify(uri)).then((result) => {
+      let linkHeader = result.headers.get('Link')
+      if (linkHeader) {
+        let aclHeader = linkHeader.split(',').find((part) => {
+          return part.indexOf('rel="acl"') > 0
+        })
+        if (aclHeader) {
+          aclHeader = aclHeader.split(';')[0].replace(/<|>/g, '')
+          // The Uri of the acl deduced succesfully
+          return uri.substring(0, uri.lastIndexOf('/') + 1) + aclHeader
+        }
+      } else {
+        return uri + '.acl'
+      }
+    })
+  }
 }
 
 export default LDPAgent

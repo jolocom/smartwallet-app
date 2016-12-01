@@ -149,17 +149,15 @@ class ChatAgent extends LDPAgent {
     return this.get(this._proxify(conversationUrl)).then((response) => {
       // store this in memory, so we dont need to fetch all data everytime
       return response.text().then((text) => {
-        let parser = new Parser()
-        parser.parse(text, conversationId)
-        return parser
+        return new Parser(text, conversationId)
       })
     }).then((conversation) => {
-      const graph = $rdf.graph()
+      const writer = new Writer()
       const uri = this._proxify(conversationUrl)
 
-      graph.addAll(this._getMessageTriples(message))
+      writer.addAll(this._getMessageTriples(message))
 
-      return this.patch(uri, null, graph.statements).then(() => {
+      return this.patch(uri, null, writer.all()).then(() => {
         const participants = conversation.find(
           '#thread',
           PRED.hasSubscriber,
@@ -286,35 +284,27 @@ class ChatAgent extends LDPAgent {
       return Promise.resolve({})
     }
 
-    let result = {}
-    return this.get(Util.uriToProxied(otherPerson))
+    return this.get(this._proxify(otherPerson))
       .then((response) => {
-        return response.text((text) => {
-          let parser = new Parser()
-          return parser.parse(text, otherPerson)
+        return response.text().then((text) => {
+          return new Parser(text, otherPerson)
         })
       })
       .then((parsed) => {
-        let aboutPerson = _.filter(parsed.triples, (t) => {
-          return t.subject.uri === otherPerson || t.subject.uri === '#me'
-        })
+        let result = {}
 
-        let name = _.find(parsed.triples, (t) => {
-          return t.predicate.uri === PRED.givenName.uri
-        })
-
+        let name = parsed.get(undefined, PRED.givenName, undefined)
         if (name) {
           result.name = name.object.value
         }
 
-        let img = _.find(aboutPerson, (t) => {
-          return t.predicate.uri === PRED.image.uri
-        })
+        let img = parsed.get($rdf.sym(otherPerson), PRED.image, undefined)
         if (img) {
           result.img = img.object.value
         }
 
         result.webid = otherPerson
+
         return result
       })
   }
@@ -325,15 +315,12 @@ class ChatAgent extends LDPAgent {
     return this.get(this._proxify(inbox))
       .then((response) => {
         return response.text().then((text) => {
-          let parser = new Parser()
-          return parser.parse(text, inbox)
+          return new Parser(text, inbox)
         })
       })
       .then((result) => {
-        debug('Received inbox conversations', result)
-        return result.triples.filter((t) => {
-          return t.predicate.uri === PRED.spaceOf.uri
-        }).map((t) => t.object.value || t.object.uri)
+        return result.find(undefined, PRED.spaceOf)
+          .map((t) => t.object.value || t.object.uri)
       })
   }
 
@@ -348,7 +335,7 @@ class ChatAgent extends LDPAgent {
       created: PRED.created,
       conversationId: PRED.hasContainer
     }
-    const subjects = g.statementsMatching(undefined, PRED.type, PRED.post)
+    const subjects = g.find(undefined, PRED.type, PRED.post)
 
     const messages = []
 
@@ -378,9 +365,7 @@ class ChatAgent extends LDPAgent {
     return this.get(this._proxify(container))
       .then((response) => {
         return response.text().then((text) => {
-          const parser = new Parser()
-          parser.parse(text, webId)
-          return parser.g
+          return new Parser(text, webId)
         })
       })
       .then(this._parseMessages)
@@ -396,36 +381,36 @@ class ChatAgent extends LDPAgent {
 
   addUnreadMessage(participant, message) {
     const container = this.getUnreadMessagesContainer(participant)
-    const graph = $rdf.graph()
+    const writer = new Writer()
 
-    graph.add(message.id, PRED.type, SOLID.Notification)
+    writer.add(message.id, PRED.type, SOLID.Notification)
 
-    graph.addAll(this._getMessageTriples(message))
+    // writer.addAll(this._getMessageTriples(message))
 
-    return this.patch(Util.uriToProxied(container), null, graph.statements)
+    return this.patch(this._proxify(container), null, writer.all())
   }
 
   removeUnreadMessage(webId, message) {
     const container = this.getUnreadMessagesContainer(webId)
 
     // @TODO use SPARQL DELETE here, this is kinda ugly :)
-    const graph = $rdf.graph()
+    const writer = new Writer()
 
-    graph.add(message.id, PRED.type, SOLID.Notification)
+    writer.add(message.id, PRED.type, SOLID.Notification)
 
-    graph.addAll(this._getMessageTriples(message))
+    // writer.addAll(this._getMessageTriples(message))
 
-    return this.patch(Util.uriToProxied(container), graph.statements)
+    return this.patch(this._proxify(container), writer.all())
   }
 
   _linkConversation(conversationUrl, webid) {
     const inbox = `${Util.webidRoot(webid)}/little-sister/inbox`
-    const graph = $rdf.graph()
+    const writer = new Writer()
 
-    graph.add('#inbox', PRED.spaceOf, $rdf.lit(conversationUrl))
+    writer.add('#inbox', PRED.spaceOf, $rdf.lit(conversationUrl))
 
-    this.patch(Util.uriToProxied(inbox),
-      null, graph.statementsMatching('#inbox', undefined, undefined)
+    this.patch(this._proxify(inbox),
+      null, writer.all()
     )
   }
 
@@ -460,9 +445,7 @@ class ChatAgent extends LDPAgent {
       }
     ]
 
-    for (var t of triples) {
-      writer.addTriple(t)
-    }
+    writer.addAll(triples)
 
     // Participant list
     for (var p of participants) {

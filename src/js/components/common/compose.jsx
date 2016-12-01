@@ -30,7 +30,9 @@ let Compose = React.createClass({
       if (e.shiftKey) {
         return true
       } else {
-        setTimeout(this.onSubmit.bind(this), 5)
+        setTimeout(() => {
+          this.onSubmit()
+        }, 5)
         return false
       }
     }

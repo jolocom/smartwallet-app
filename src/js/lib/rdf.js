@@ -14,21 +14,12 @@ export class Graph {
     this.g = $rdf.graph()
   }
 
-  parse(text, url) {
-    let payload = []
+  get(...args) {
+    return this.find(...args)[0]
+  }
 
-    $rdf.parse(text, this.g, url, 'text/turtle')
-
-    for (let i in this.g.statements) {
-      let statement = this.g.statements[i]
-      payload.push({
-        object: statement.object,
-        predicate: statement.predicate,
-        subject: statement.subject
-      })
-    }
-
-    return ({prefixes: {}, triples: payload})
+  any(...args) {
+    return this.g.any(...args)
   }
 
   find(sub, pred, obj) {
@@ -64,7 +55,31 @@ export class Graph {
   }
 }
 
-export class Parser extends Graph {}
+export class Parser extends Graph {
+  constructor(text, url) {
+    super()
+
+    if (text) {
+      this.parse(text, url)
+    }
+  }
+  parse(text, url) {
+    let payload = []
+
+    $rdf.parse(text, this.g, url, 'text/turtle')
+
+    for (let i in this.g.statements) {
+      let statement = this.g.statements[i]
+      payload.push({
+        object: statement.object,
+        predicate: statement.predicate,
+        subject: statement.subject
+      })
+    }
+
+    return ({prefixes: {}, triples: payload})
+  }
+}
 
 export class Writer extends Graph {
   end() {

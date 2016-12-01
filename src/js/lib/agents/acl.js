@@ -8,7 +8,7 @@ import {Writer} from '../rdf.js'
 class AclAgent {
   // TODO Check here if the user can modify the acl and throw error if not.
   // TODO Add support for multiple policies regarding a user per file.
-  constructor(uri){
+  constructor(uri) {
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
     this.g = rdf.graph()
@@ -30,16 +30,16 @@ class AclAgent {
    */
 
   fetchInfo() {
-    return Util.getAclUri(this.uri).then((aclUri)=>{
+    return this.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
-      return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result)=>{
+      return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result) => {
         let {triples} = result
         for (let triple in triples) {
           let {subject, predicate, object} = triples[triple]
-          this.Writer.addTriple(subject,predicate,object)
+          this.Writer.addTriple(subject, predicate, object)
         }
-        if(this.Writer.find(undefined, PRED.type, PRED.auth).length === 0){
+        if (this.Writer.find(undefined, PRED.type, PRED.auth).length === 0) {
           throw new Error('Link is not an ACL file')
         }
       })
@@ -56,22 +56,22 @@ class AclAgent {
    * @return undefined, we want the side effect
    */
 
-  allow(user, mode){
+  allow(user, mode) {
     let wildcard = user === '*'
     let identifier = wildcard ? PRED.agentClass : PRED.agent
 
     user = wildcard ? PRED.Agent : user
 
-    if (!this.predMap[mode]){
+    if (!this.predMap[mode]) {
       throw new Error('Invalid mode supplied!')
     }
 
     if (typeof user === 'string') {
-      user = rdf.sym(user) 
+      user = rdf.sym(user)
     }
 
     // If user already has the permission.
-    if (_.includes(this.allowedPermissions(user, true), mode)){
+    if (_.includes(this.allowedPermissions(user, true), mode)) {
       return
     } else {
       mode = this.predMap[mode]
@@ -100,52 +100,51 @@ class AclAgent {
    * @param {string} mode - permission to do what? [read, write, control]
    * @return undefined, we want the side effect
    */
-  
+
   removeAllow(user, mode) {
-    let policyName
     let wildcard = user === '*'
     let identifier = wildcard ? PRED.agentClass : PRED.agent
 
     user = wildcard ? PRED.Agent : user
 
-    if (!this.predMap[mode]){
+    if (!this.predMap[mode]) {
       throw new Error('Invalid mode supplied!')
     }
 
     if (typeof user === 'string') {
-      user = rdf.sym(user) 
+      user = rdf.sym(user)
     }
 
     // Check if the triple is present.
     if (!_.includes(this.allowedPermissions(user, true), mode)) {
       return
-    } 
+    }
 
     // Finding the correct triple.
     mode = this.predMap[mode]
-    
+
     // Get the existing policies
     let policies = []
     let existing = this.Writer.find(undefined, identifier, user)
-    if (existing.length > 0){
-      existing.forEach((el)=>{
-        policies.push(el.subject) 
-      }) 
+    if (existing.length > 0) {
+      existing.forEach((el) => {
+        policies.push(el.subject)
+      })
 
-      policies.forEach((policy)=>{
-        let trip = this.Writer.find(policy, PRED.mode, mode) 
+      policies.forEach((policy) => {
+        let trip = this.Writer.find(policy, PRED.mode, mode)
         if (trip.length > 0) {
           let {subject, predicate, object} = trip[0]
-          this.Writer.g.remove({subject,predicate,object})
-          
+          this.Writer.g.remove({subject, predicate, object})
+
           // Here we check if the policy itself should be deleted next.
           let zomb = this.Writer.find(policy, PRED.mode, undefined)
           if (zomb.length > 0) {
             // If not, then we return.
-            return 
+            return
           } else {
             // Otherwise we delete the policy triples as well.
-            let zombies = this.Writer.find(policy).slice()  
+            let zombies = this.Writer.find(policy).slice()
             this.Writer.g.remove(zombies)
           }
         }
@@ -157,16 +156,15 @@ class AclAgent {
    * @summary Tells if a user is allowed to do a certain thing on a file.
    * @return {bool} - Allowed / Not allowed.
    */
-  isAllowed(user, mode){
+  isAllowed(user, mode) {
     if (!this.predMap[mode]) {
       console.error('Invalid mode supplied!')
       return false
-    } 
-    if (_.includes(this.allowedPermissions(user), mode)){
-      return true 
+    }
+    if (_.includes(this.allowedPermissions(user), mode)) {
+      return true
     }
   }
-
 
   /**
    * @summary Returns a list of permissions a user.
@@ -176,16 +174,15 @@ class AclAgent {
    *                        modes as well.
    * @return {array} - permissions [read,write,control]
    */
-  allowedPermissions(user, strict = false){
+  allowedPermissions(user, strict = false) {
     let wildcard = user === '*'
     user = wildcard ? PRED.Agent : user
     let identifier = wildcard ? PRED.agentClass : PRED.agent
-    
     let permissions = []
     let policies = []
 
-    if(typeof user === 'string'){
-      user = rdf.sym(user) 
+    if (typeof user === 'string') {
+      user = rdf.sym(user)
     }
     let existing = this.Writer.find(undefined, identifier, user)
     if (existing.length > 0) {
@@ -201,13 +198,13 @@ class AclAgent {
         }
       })
     }
-    
+
     // We append the open permissions as well, since they apply to all users.
     // But only if strict is set to false.
-    if (!wildcard && !strict){
+    if (!wildcard && !strict) {
       let general = this.allowedPermissions('*')
       general.forEach((el) => {
-        if (!_.includes(permissions, el)){
+        if (!_.includes(permissions, el)) {
           permissions.push(el)
         }
       })
@@ -215,27 +212,17 @@ class AclAgent {
     return permissions
   }
 
-
   /**
    * @sumarry Serializes the new acl file and puts it to the server.
    *          Must be called at the end.
-   * @return {promise} - the server response. 
+   * @return {promise} - the server response.
    */
   commit() {
-    return fetch(Util.uriToProxied(this.aclUri), {
-      method: 'PUT',
-      credentials: 'include',
-      body: this.Writer.end(),
-      headers: {
-        'Content-Type': 'text/turtle',
-      }
-    }).then((res)=>{
-      if (!res.ok){
-        throw new Error('Error while putting the file', res)  
-      } 
-    }).catch((e)=>{
+    return this.put(this._proxify(this.aclUri), this.Writer.end(), {
+      'Content-Type': 'text/turtle'
+    }).catch((e) => {
       console.error(e)
-    }) 
+    })
   }
 }
 

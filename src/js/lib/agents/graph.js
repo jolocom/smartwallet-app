@@ -370,6 +370,28 @@ class GraphAgent extends LDPAgent {
   getGraphMapAtWebID(webId) {
     return this.getGraphMapAtUri(webId)
   }
+
+  linkNodes(start, type, end, flag) {
+    let predicate
+
+    return Promise.all([
+      this.head(this._proxify(start)),
+      this.head(this._proxify(end))
+    ]).then(() => {
+      if (type === 'generic') {
+        predicate = PRED.isRelatedTo
+      }
+      if (type === 'knows') {
+        predicate = PRED.knows
+      }
+      let payload = {
+        subject: $rdf.sym(start),
+        predicate,
+        object: $rdf.sym(end)
+      }
+      return this.gAgent.writeTriples(start, [payload], flag)
+    })
+  }
 }
 
 export default GraphAgent

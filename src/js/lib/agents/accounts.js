@@ -30,7 +30,7 @@ class AccountsAgent extends HTTPAgent {
         )
       }
 
-      this.patch(this._proxify(account.webid), null, writer.all())
+      this.patch(this._proxify(account.webid), writer.all())
 
       return account
     })
@@ -44,11 +44,10 @@ class AccountsAgent extends HTTPAgent {
     username = encodeURIComponent(username)
     password = encodeURIComponent(password)
 
-    return this.post(`${proxy}/login`, null, {
+    const params = `username=${username}&password=${password}`
+    return this.post(`${proxy}/login`, params, {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    },
-      `username=${username}&password=${password}`
-    )
+    })
   }
 
   logout() {

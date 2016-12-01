@@ -85,6 +85,7 @@ export default Reflux.createStore({
 
   onRead(webId, messageId) {
     const message = _.find(this.items, {id: messageId})
+
     if (!message) {
       return
     }
@@ -106,7 +107,9 @@ export default Reflux.createStore({
     })
   },
 
-  onReadFailed() {},
+  onReadFailed(err) {
+    console.error(err)
+  },
 
   isUnread(messageId) {
     for (let message in this.items) {

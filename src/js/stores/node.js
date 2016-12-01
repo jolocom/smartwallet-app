@@ -104,31 +104,7 @@ export default Reflux.createStore({
    */
 
   link(start, type, end, flag) {
-    let predicate = null
-
-    Promise.all([
-      fetch(Util.uriToProxied(start), {method: 'HEAD', credentials: 'include'})
-        .then((res) => {
-          if (!res.ok) throw new Error(res.statusText)
-        }),
-      fetch(Util.uriToProxied(end), {method: 'HEAD', credentials: 'include'})
-        .then((res) => {
-          if (!res.ok) throw new Error(res.statusText)
-        })
-    ]).then(() => {
-      if (type === 'generic') {
-        predicate = PRED.isRelatedTo
-      }
-      if (type === 'knows') {
-        predicate = PRED.knows
-      }
-      let payload = {
-        subject: rdf.sym(start),
-        predicate,
-        object: rdf.sym(end)
-      }
-      return this.gAgent.writeTriples(start, [payload], flag)
-    }).then(() => {
+    this.gAgent.linkNodes(start, type, end, flag).then(() => {
       link.completed(start)
     }).catch(link.failed)
   },
