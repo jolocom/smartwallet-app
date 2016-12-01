@@ -31,6 +31,7 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
+  profileDoc: FOAF('PersonalProfileDocument'),
   isRelatedTo_HTTP: SCHEMA_HTTP('isRelatedTo'),
 
   // --
@@ -68,7 +69,11 @@ export const PRED = {
   mode: ACL('mode'),
   control: ACL('Control'),
   read: ACL('Read'),
-  write: ACL('Write')
+  write: ACL('Write'),
+  // INDEX FILE RELATED
+  readPermission: SCHEMA('ReadPermission'),
+  writePermission: SCHEMA('WritePermission'),
+  owns: SCHEMA('owns')
 }
 
 export const CERT = {
@@ -92,12 +97,17 @@ export const SSN = {
 /*
 in the other files:
 import {PRED, NODE_TYPES} from 'namespaces.js'
+
 NODE_TYPES[PRED.PERSON].nodeColor etc
+
 default?
 NodeTypes[PRED.Person]
   ? NodeTypes[PRED.Person].nodeColor : STYLES.defaultNodeColor
+
 STYLES.js?
+
 mix of logic (component names, validation, form) and interface (colors)
+
 */
 
 export const NODE_TYPES = {
@@ -160,4 +170,3 @@ export const NODE_TYPES = {
 //
 //  defaultAccess: ['public']
 // })
-

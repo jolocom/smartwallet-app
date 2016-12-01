@@ -4,7 +4,6 @@ import NodeStore from 'stores/node.js'
 import GraphStore from 'stores/graph-store.js'
 import NodeActions from 'actions/node.js'
 import NodeTypes from 'lib/node-types.js'
-import Loading from 'components/common/loading.jsx'
 
 let Node = React.createClass({
   /*
