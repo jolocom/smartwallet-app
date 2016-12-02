@@ -194,18 +194,26 @@ let GenericFullScreen = React.createClass({
 
   // TODO - break into more actions. The animation should be smoother.
   _handleDelete() {
-    let navHis = this.props.graphState.navHistory
-    let centerNode = this.context.node
-    let currentNode = { uri: this.props.uri }
-    if (this.props.uri === this.props.graphState.center.uri) {
-      let historyNode = navHis[navHis.length - 1]
-      this._handleClose()
-      graphActions.drawAtUri(historyNode.uri, 1)
-      nodeActions.remove(currentNode, historyNode)
-    } else {
-      this._handleClose()
-      nodeActions.remove(currentNode, centerNode, this.props.centerWritePerm)
-    }
+    ConfirmActions.confirm('Are you sure you want to delete this node ?',
+      'Delete',
+      () => {
+        let navHis = this.props.graphState.navHistory
+        let centerNode = this.context.node
+        let currentNode = { uri: this.props.uri }
+        if (this.props.uri === this.props.graphState.center.uri) {
+          let historyNode = navHis[navHis.length - 1]
+          this._handleClose()
+          graphActions.drawAtUri(historyNode.uri, 1)
+          nodeActions.remove(currentNode, historyNode)
+        } else {
+          this._handleClose()
+          nodeActions.remove(
+            currentNode,
+            centerNode,
+            this.props.centerWritePerm)
+        }
+      }
+    )
   },
 
   _handleFull() {
