@@ -334,7 +334,6 @@ class GraphAgent {
   // uri,subj,pred,obj
   // {uri:uri, triples:[]}
   deleteTriple(...args) {
-    console.log(args)
     let subject, predicate, object
     let triples = []
     let uri, query

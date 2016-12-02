@@ -915,7 +915,7 @@ export default class GraphD3 extends EventEmitter {
     d3.selectAll('.link')
       .transition().duration(speed)
       .attr('x1', (d) => {
-        return d.target.position ? d.target.position.y : 0
+        return d.target.position ? d.target.position.x : 0
       })
       .attr('y1', (d) => {
         return d.target.position ? d.target.position.y : 0
