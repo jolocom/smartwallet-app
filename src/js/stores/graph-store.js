@@ -3,6 +3,7 @@ import GraphAgent from '../lib/agents/graph.js'
 import graphActions from '../actions/graph-actions'
 import accountActions from '../actions/account'
 import D3Convertor from '../lib/d3-converter'
+import Util from 'lib/util'
 
 export default Reflux.createStore({
 
@@ -79,7 +80,27 @@ export default Reflux.createStore({
           'a', triples[i], i, triples.length - 1
         )
       }
-      graphActions.getInitialGraphState.completed(triples)
+
+      // Making sure the images are accesable, otherwise not
+      // trying to display them.
+      Promise.all(triples.map(trip => {
+        const img = trip.img
+        if (!img) {
+          return
+        }
+        return fetch(Util.uriToProxied(img), {
+          method: 'HEAD',
+          credentials: 'include'
+        }).then(res => {
+          if (!res.ok) {
+            trip.img = ''
+          }
+        }).catch(() => {
+          trip.img = ''
+        })
+      })).then(() => {
+        graphActions.getInitialGraphState.completed(triples)
+      })
     }).catch(graphActions.getInitialGraphState.failed)
   },
 
@@ -173,17 +194,41 @@ export default Reflux.createStore({
         }
       }
 
-      this.state.center = this.convertor.convertToD3('c', triples[0])
+      let checkImages = []
       this.state.neighbours = []
+
+      this.state.center = this.convertor.convertToD3('c', triples[0])
+      checkImages.push(this.state.center)
+
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
           'a', triples[i], i, triples.length - 1
         )
         this.state.neighbours.push(triples[i])
+        checkImages.push(triples[i])
       }
 
-      // this.state.loading = false
-      this.trigger(this.state)
+      // Making sure the images are accesable, otherwise not
+      // trying to display them.
+      Promise.all(checkImages.map(trip => {
+        const img = trip.img
+        if (!img) {
+          return
+        }
+        return fetch(Util.uriToProxied(img), {
+          method: 'HEAD',
+          credentials: 'include'
+        }).then(res => {
+          if (!res.ok) {
+            trip.img = ''
+          }
+        }).catch(() => {
+          trip.img = ''
+        })
+      })).then(() => {
+        // this.state.loading = false
+        this.trigger(this.state)
+      })
     })
   }
 })
