@@ -134,6 +134,8 @@ export default Reflux.createStore({
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       this.state.loading = false
       this.state.center = this.convertor.convertToD3('c', triples[0])
+      let checkImages = []
+      checkImages.push(this.state.center)
 
       this.state.neighbours = []
       for (let i = 1; i < triples.length; i++) {
@@ -141,13 +143,32 @@ export default Reflux.createStore({
           'a', triples[i], i, triples.length - 1
         )
         this.state.neighbours.push(triples[i])
+        checkImages.push(triples[i])
       }
 
       for (let i = 0; i < hisNodesToPop; i++) {
         this.state.navHistory.pop()
       }
 
-      this.trigger(this.state)
+      Promise.all(checkImages.map(trip => {
+        const img = trip.img
+        if (!img) {
+          return
+        }
+        return fetch(Util.uriToProxied(img), {
+          method: 'HEAD',
+          credentials: 'include'
+        }).then(res => {
+          if (!res.ok) {
+            trip.img = ''
+          }
+        }).catch(() => {
+          trip.img = ''
+        })
+      })).then(() => {
+        // this.state.loading = false
+        this.trigger(this.state)
+      })
     })
   },
 
