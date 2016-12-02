@@ -1,103 +1,71 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-
 import Utils from 'lib/util'
-
-import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
-
-import {
-  FontIcon,
-  List, ListItem, Divider
-} from 'material-ui'
-
+import {FontIcon, List, ListItem, Divider} from 'material-ui'
 import PinnedStore from 'stores/pinned'
 
 let TextNode = React.createClass({
 
   mixins: [
-    Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
-    Reflux.connect(NodeStore, 'node')
+    Reflux.listenTo(PinnedStore, 'onUpdatePinned')
   ],
-
-  propTypes: {
-    state: React.PropTypes.object, /* @TODO fix this */
-    node: React.PropTypes.object,
-    onClose: React.PropTypes.func
-  },
-
-  contextTypes: {
-    history: React.PropTypes.any,
-    profile: React.PropTypes.object,
-    muiTheme: React.PropTypes.object
-  },
 
   componentWillMount() {
     this.onUpdatePinned()
   },
 
-  onUpdatePinned() {
-    const node = this.getNode()
+  propTypes: {
+    node: React.PropTypes.object,
+    centerWritePerm: React.PropTypes.bool,
+    writePerm: React.PropTypes.bool,
+    graphState: React.PropTypes.object
+  },
 
-    if (node) {
+  onUpdatePinned() {
+    if (this.props) {
       this.setState({
-        pinned: PinnedStore.isPinned(node.uri)
+        pinned: PinnedStore.isPinned(this.props.node.uri)
       })
     }
   },
 
-  getStyles() {
-    return {
-    }
-  },
-
-  getNode() {
-    if (this.props.state) {
-      return this.props.state.activeNode // TODO temp fix
-    } else {
-      return this.props.node
-    }
-  },
-
   render() {
-    let styles = this.getStyles()
-    let {
-      title,
-      description,
-      email,
-      uri,
-      img
-    } = this.getNode()
-
+    let {rank, title, description, email, uri, img, type} = this.props.node
+    let {centerWritePerm, writePerm} = this.props
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-
     let fabItems = ['copyUrl'] /* 'edit' */
-
     let menuItems = []
-    if (this.getNode().isOwnedByUser) {
+    if (this.props.writePerm) {
       menuItems.push('delete')
+      menuItems.push('privacySettings')
     }
-    if (this.props.state.center.isOwnedByUser &&
-        this.getNode().rank &&
-        this.getNode().rank === 'neighbour') {
+
+    if (this.props.centerWritePerm) {
       menuItems.push('disconnect')
-    } else {
-      menuItems.push('connect')
     }
+
+    menuItems.push('copyUrl')
+
     return (
       <GenericFullScreen
         title={title}
         description={description}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
-        headerColor={this.props.node.confidential ? '#858a94' : '#9a9fa8'}
         fabItems={fabItems}
+        headerColor="#9a9fa8"
         menuItems={menuItems}
-        state={this.props.state}
-        node={this.props.node}
-         >
-        <List style={styles.list}>
+        type={type}
+        rank={rank}
+        graphState={this.props.graphState}
+        uri={uri}
+        writePerm={writePerm}
+        centerWritePerm={centerWritePerm}
+        name={title}
+      >
+        <List>
           {description && (
             <div>
               <ListItem

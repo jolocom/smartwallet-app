@@ -318,8 +318,8 @@ let Profile = React.createClass({
                         floatingLabelText="Mobile"
                         floatingLabelFixed
                         name="mobile"
-                        onChange={Util.linkToState(this, 'mobile')}
-                        value={this.state.mobile}
+                        onChange={Util.linkToState(this, 'mobilePhone')}
+                        value={this.state.mobilePhone}
                         style={styles.input} />
                     </div>
                   </div>

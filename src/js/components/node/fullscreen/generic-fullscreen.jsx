@@ -1,14 +1,13 @@
+import rdf from 'rdflib'
 import React from 'react'
-import Reflux from 'reflux'
 import Dialog from 'components/common/dialog'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
 import ProfileActions from 'actions/profile'
 import ConfirmActions from 'actions/confirm'
-import Radium from 'radium'
-import NodeStore from 'stores/node'
 import graphActions from 'actions/graph-actions'
+import Radium from 'radium'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
@@ -18,12 +17,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import ShareIcon from 'material-ui/svg-icons/content/reply'
 import DocIcon from 'components/icons/doc-icon.jsx'
 import PersonIcon from 'components/icons/person-icon.jsx'
-import ConfidIcon from 'components/icons/confid-icon.jsx'
-
 import SnackbarActions from 'actions/snackbar'
-
-import Debug from 'lib/debug'
-let debug = Debug('components:generic-fullscreen')
 
 import {
   AppBar,
@@ -35,23 +29,20 @@ import {
 } from 'material-ui'
 
 let GenericFullScreen = React.createClass({
-  mixins: [
-    Reflux.connect(NodeStore, 'node')
-  ],
-
   propTypes: {
-    node: React.PropTypes.object,
-    center: React.PropTypes.object,
-    navHistory: React.PropTypes.object,
-    onClose: React.PropTypes.func,
-    backgroundImg: React.PropTypes.any,
-    headerColor: React.PropTypes.any,
-    menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
-    copyToClipboardText: React.PropTypes.any,
+    type: React.PropTypes.string,
+    rank: React.PropTypes.string,
     title: React.PropTypes.string,
+    menuItems: React.PropTypes.arrayOf(React.PropTypes.string),
+    headerColor: React.PropTypes.any,
     fabItems: React.PropTypes.arrayOf(React.PropTypes.string),
+    copyToClipboardText: React.PropTypes.any,
+    description: React.PropTypes.string,
     children: React.PropTypes.any,
-    state: React.PropTypes.any
+    backgroundImg: React.PropTypes.any,
+    uri: React.PropTypes.string,
+    graphState: React.PropTypes.object,
+    centerWritePerm: React.PropTypes.bool
   },
 
   contextTypes: {
@@ -59,10 +50,6 @@ let GenericFullScreen = React.createClass({
     node: React.PropTypes.object,
     muiTheme: React.PropTypes.object,
     account: React.PropTypes.object
-  },
-
-  componentWillMount() {
-    // this.props.menuItems.unshift('fullscreen')
   },
 
   componentDidMount() {
@@ -76,18 +63,16 @@ let GenericFullScreen = React.createClass({
       let backgroundImgUrl = backgroundImgMatches[1]
       let bgLuminanceP = this.getLuminanceForImageUrl(backgroundImgUrl)
       bgLuminanceP.then((lum) => {
-        debug('Background image has luminance of', lum)
         this.setState({luminance: lum})
       }).catch((e) => {
         // console.error('Couldn\'t compute luminance', e)
       })
     }
-
     this.refs.dialog.show()
   },
 
   componentWillUnmount() {
-    this.refs.dialog.hide()
+    nodeActions.resetState()
   },
 
   getStyles() {
@@ -146,37 +131,53 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleClose() {
-    graphActions.setState('activeNode', null, false)
-    this.context.router.push('/graph/' +
-      encodeURIComponent(this.props.state.center.uri))
+    nodeActions.resetState()
+    this.context.router.goBack()
+  },
+
+  _handlePrivacySettings() {
+    this.context.router.push(encodeURIComponent(this.props.uri) +
+      '/privacy-settings')
+  },
+
+  _handleViewSharedNodes() {
+    this.context.router.push(encodeURIComponent(this.props.uri) +
+      '/shared-nodes')
   },
 
   _handleDisconnect() {
-    if (this.props.node.rank === 'center') {
+    if (this.props.rank === 'center') {
       this._handleClose()
     } else {
-      ConfirmActions.confirm(
-        'Are you sure you want to disconnect this node ?',
+      /*
+        We do this so that we can disconnect all occurances
+        of the node we are disconnecting.
+      */
+      let payload = {
+        uri: this.context.node.uri,
+        triples: []
+      }
+
+      this.props.graphState.neighbours.map(el => {
+        if (el.rank === this.props.rank && el.uri === this.props.uri) {
+          payload.triples.push({
+            subject: rdf.sym(this.context.node.uri),
+            predicate: rdf.sym(el.connection),
+            object: rdf.sym(el.uri)
+          })
+        }
+      })
+
+      ConfirmActions.confirm('Are you sure you want to disconnect this node ?',
         'Disconnect',
         () => {
           this._handleClose()
-
-          nodeActions.disconnectNode(
-            this.props.node, this.props.state.center
-          )
-
+          nodeActions.disconnectNode(payload)
           let onDisconnectUndo = () => {
-            nodeActions.link(this.props.state.center.uri,
-                             'knows',
-                             this.props.node.uri,
-                             false)
-            let unsub = nodeActions.link.completed.listen(() => {
-              unsub()
-              graphActions.drawAtUri(this.props.state.center.uri, 0)
-            })
+            let center = this.context.node.uri
+            nodeActions.link(center, 'knows', this.props.uri, center)
           }
 
-          // @TODO Wait until it's actually disconnected
           SnackbarActions.showMessageUndo(
               'The node has been successfully disconnected',
               onDisconnectUndo)
@@ -186,36 +187,25 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleConnect() {
-    nodeActions.link(
-      this.context.account.webId,
-      'generic',
-      this.props.node.uri
-    )
+    nodeActions.link(this.context.account.webId, 'generic', this.props.uri)
     SnackbarActions.showMessage('You are now connected to the node.')
     this._handleClose()
   },
 
+  // TODO - break into more actions. The animation should be smoother.
   _handleDelete() {
-    let node = this.props.state.activeNode
-    let center = this.props.state.center
-    let navHis = this.props.state.navHistory
-
-    if (node.rank === 'center') {
-      let prev = navHis[navHis.length - 1]
-      debug('Deleting center node; navigating to previous node', prev.uri)
-      // graphActions.drawAtUri(prev.uri, 1)
-      this.context.router.push(`/graph/${encodeURIComponent(prev.uri)}`)
-      nodeActions.remove(node, prev) // will refresh the graph
+    let navHis = this.props.graphState.navHistory
+    let centerNode = this.context.node
+    let currentNode = { uri: this.props.uri }
+    if (this.props.uri === this.props.graphState.center.uri) {
+      let historyNode = navHis[navHis.length - 1]
+      this._handleClose()
+      graphActions.drawAtUri(historyNode.uri, 1)
+      nodeActions.remove(currentNode, historyNode)
     } else {
-      this.context.router.push(`/graph/${encodeURIComponent(center.uri)}`)
-      nodeActions.remove(node, center)
+      this._handleClose()
+      nodeActions.remove(currentNode, centerNode, this.props.centerWritePerm)
     }
-
-    graphActions.setState('activeNode', null, true)
-  },
-
-  getNode() {
-    return this.props.node
   },
 
   _handleFull() {
@@ -252,6 +242,16 @@ let GenericFullScreen = React.createClass({
           handler: this._handleEdit,
           icon: <EditorModeEdit />
         }
+      case 'privacySettings':
+        return {
+          title: 'Privacy Settings',
+          handler: this._handlePrivacySettings
+        }
+      case 'viewSharedNodes':
+        return {
+          title: 'View shared nodes',
+          handler: this._handleViewSharedNodes
+        }
       case 'fullscreen':
         return {
           handler: this._handleFull,
@@ -280,29 +280,10 @@ let GenericFullScreen = React.createClass({
               </FloatingActionButton>
             </CopyToClipboard>)
         }
-
-      /* case 'copy':
-        return (<ContentCopy />)
-      case 'save':
-        return (<ContentSave />)
-      case 'read':
-        return (<CommunicationImportContacts />)
-      case 'edit':
-        return (<EditorModeEdit />)*/
       default:
-        // console.error('No action info found for', iconString)
         return {}
-        // return (<AlertError />)
     }
   },
-
-  // _handleBookmarkClick() {
-  //   const {uri} = this.getNode()
-  //   if (uri) {
-  //     // @TODO fix bookmarking
-  //     // PinnedActions.pin(uri)
-  //   }
-  // },
 
   _handlePostCopyURL() {
     SnackbarActions
@@ -315,9 +296,7 @@ let GenericFullScreen = React.createClass({
 
   _handleStartChat() {
     const {router} = this.context
-    const {node} = this.props
-    router.push(`/chat/new/${encodeURIComponent(node.uri)}`)
-    graphActions.setState('activeNode', null, true)
+    router.push(`/chat/new/${encodeURIComponent(this.props.uri)}`)
   },
 
   _preventDefault(e) {
@@ -370,32 +349,14 @@ let GenericFullScreen = React.createClass({
   render() {
     let styles = this.getStyles()
     let headerIcon
-    if (!this.props.node.img) {
-      if (this.props.node.confidential) {
-        // Display confidential icon in header
-        headerIcon = <ConfidIcon />
-      } else if (this.props.node.type &&
-          this.props.node.type.includes('Person')) {
-        // Display person icon in header
+
+    if (this.props.backgroundImg === 'none') {
+      if (this.props.type && this.props.type.includes('Person')) {
         headerIcon = <PersonIcon />
       } else {
-        // Display document icon in header (default)
         headerIcon = <DocIcon />
       }
     }
-
-    // @TODO bind handlers to preset actions here
-    // in: {name: 'disconnect'}
-    // out: {name: 'disconnect',
-    //    component: <Disconnect>, handler: disconnecthandler} (overwritable)
-    // map ((e) return object.assign({}, default, e))
-
-    // @TODO pass fab 0-3 and set which one is primary (flag?),
-    //    or reverse? ['primary','other button', 'other button']
-
-    // @TODO externalize fab handlers + component etc
-
-    // Always add the fullscreen menu item
 
     if (this.state.luminance && this.state.luminance < 40) {
       styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
@@ -423,18 +384,17 @@ let GenericFullScreen = React.createClass({
                     onTouchTap={this._preventDefault}
                     anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                     targetOrigin={{horizontal: 'left', vertical: 'top'}}>
-
-                      {this.props.menuItems.map((menuItem) => {
-                        let menuItemInfo = this.getAction(menuItem)
-                        if ('menuItem' in menuItemInfo) {
-                          return menuItemInfo.menuItem
-                        }
-                        return (
-                          <MenuItem
-                            primaryText={menuItemInfo.title}
-                            onTouchTap={menuItemInfo.handler} />
-                        )
-                      })}
+                    {this.props.menuItems.map((menuItem) => {
+                      let menuItemInfo = this.getAction(menuItem)
+                      if ('menuItem' in menuItemInfo) {
+                        return menuItemInfo.menuItem
+                      }
+                      return (
+                        <MenuItem
+                          primaryText={menuItemInfo.title}
+                          onTouchTap={menuItemInfo.handler} />
+                      )
+                    })}
                   </IconMenu>
                 }
                 iconElementLeft={
@@ -447,28 +407,27 @@ let GenericFullScreen = React.createClass({
                   }
               />
               <div style={styles.floatingButtons}>
-                  {this.props.fabItems.map((fabItem, i) => {
-                    let fabItemInfo = this.getAction(fabItem)
-                    if ('fabItem' in fabItemInfo) {
-                      return fabItemInfo.fabItem
-                    }
-
-                    let lastItem = i === this.props.fabItems.length - 1
-                    return (
-                      <FloatingActionButton
-                        backgroundColor={!lastItem ? '#fff' : 'inherit'}
-                        style={styles.fabBtn}
-                        secondary={lastItem}
-                        iconStyle={!lastItem ? styles.fabIcon : {}}
-                        onTouchTap={this.getAction(fabItem).handler}>
-                        {this.getAction(fabItem).icon}
-                      </FloatingActionButton>
-                    )
-                  })}
+                {this.props.fabItems.map((fabItem, i) => {
+                  let fabItemInfo = this.getAction(fabItem)
+                  if ('fabItem' in fabItemInfo) {
+                    return fabItemInfo.fabItem
+                  }
+                  let lastItem = i === this.props.fabItems.length - 1
+                  return (
+                    <FloatingActionButton
+                      backgroundColor={!lastItem ? '#fff' : 'inherit'}
+                      style={styles.fabBtn}
+                      secondary={lastItem}
+                      iconStyle={!lastItem ? styles.fabIcon : {}}
+                      onTouchTap={this.getAction(fabItem).handler}>
+                      {this.getAction(fabItem).icon}
+                    </FloatingActionButton>
+                  )
+                })}
               </div>
               <Subheader style={styles.subheader}>
                 {
-                  this.props.node.type.includes('Person')
+                  this.props.type && this.props.type.includes('Person')
                   ? 'Name'
                   : 'Title'
                 }
