@@ -194,18 +194,23 @@ export default Reflux.createStore({
         }
       }
 
-      this.state.center = this.convertor.convertToD3('c', triples[0])
+      let checkImages = []
       this.state.neighbours = []
+
+      this.state.center = this.convertor.convertToD3('c', triples[0])
+      checkImages.push(this.state.center)
+
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
           'a', triples[i], i, triples.length - 1
         )
         this.state.neighbours.push(triples[i])
+        checkImages.push(triples[i])
       }
 
       // Making sure the images are accesable, otherwise not
       // trying to display them.
-      Promise.all(this.state.neighbours.map(trip => {
+      Promise.all(checkImages.map(trip => {
         const img = trip.img
         if (!img) {
           return
