@@ -146,7 +146,25 @@ export default Reflux.createStore({
             givenName.length + 1, fullName.length)
       }
     }
-    this.trigger(Object.assign({}, profile))
+
+    if (profile.imgUri) {
+      fetch(Util.uriToProxied(profile.imgUri), {
+        method: 'HEAD',
+        credentials: 'include'
+      }).then(res => {
+        if (!res.ok) {
+          profile.imgUri = null
+          this.trigger(Object.assign({}, profile))
+        } else {
+          this.trigger(Object.assign({}, profile))
+        }
+      }).catch((e) => {
+        profile.imgUri = null
+        this.trigger(Object.assign({}, profile))
+      })
+    } else {
+      this.trigger(Object.assign({}, profile))
+    }
   },
 
   onLogout() {
