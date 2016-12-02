@@ -27,7 +27,7 @@ let defaultProfile = {
   familyName: '',
   privacy: '',
   username: '',
-  mobile: '',
+  mobilePhone: '',
   email: '',
   address: '',
   socialMedia: '',
@@ -112,7 +112,7 @@ export default Reflux.createStore({
       } else if (t.predicate.uri === FOAF('accountName').uri) {
         profile.socialMedia = obj
       } else if (t.predicate.uri === FOAF('phone').uri) {
-        profile.mobile = obj
+        profile.mobilePhone = obj
       } else if (t.predicate.uri === FOAF('based_near').uri) {
         profile.address = obj
       } else if (t.predicate.uri === FOAF('currentProject').uri) {
@@ -184,7 +184,7 @@ export default Reflux.createStore({
       imgUri: FOAF('img'),
       email: FOAF('mbox'),
       socialMedia: FOAF('accountName'),
-      mobile: FOAF('phone'),
+      mobilePhone: FOAF('phone'),
       address: FOAF('based_near'),
       profession: FOAF('currentProject'),
       company: FOAF('workplaceHomepage'),

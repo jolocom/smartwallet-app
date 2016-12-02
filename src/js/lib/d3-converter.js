@@ -34,7 +34,7 @@ class D3Converter {
       y: null,
       confidential: node.confidential,
       socialMedia: '',
-      mobile: '',
+      mobilePhone: '',
       address: '',
       profession: '',
       company: '',
@@ -107,7 +107,7 @@ class D3Converter {
           props.socialMedia = obj.value ? obj.value : obj.uri
         }
         if (pred === PRED.mobile.uri) {
-          props.mobile = obj.value ? obj.value : obj.uri
+          props.mobilePhone = obj.value ? obj.value : obj.uri
         }
         if (pred === PRED.address.uri) {
           props.address = obj.value ? obj.value : obj.uri
@@ -181,6 +181,7 @@ class D3Converter {
         props.familyName = fName.substring(props.name.length, fName.length)
       }
     }
+    console.log('yoyoyoy', props)
     return props
   }
 }
