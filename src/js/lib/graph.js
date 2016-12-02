@@ -344,7 +344,7 @@ export default class GraphD3 extends EventEmitter {
     // add avatars
     // @todo review following code / integrate better
 
-    let defsImages = nodeEnter.filter((d) => d.type !== 'passport')
+    let defsImages = nodeEnter.filter((d) => d.type !== 'passport' && d.img)
       .append('svg:defs')
 
     defsImages.append('svg:pattern')
@@ -459,7 +459,7 @@ export default class GraphD3 extends EventEmitter {
       })
       .attr('opacity', 0)
     // The name of the person, displays on the node
-    nodeEnter.append('svg:text')
+    nodeEnter.filter((d) => d.rank !== 'elipsis').append('svg:text')
       .attr('class', 'nodetext')
       .style('fill', '#F0F7F5')
       .attr('text-anchor', 'middle')
@@ -574,7 +574,7 @@ export default class GraphD3 extends EventEmitter {
       // This wraps the description nicely.
       .call(this.wrap, STYLES.largeNodeSize * 0.75, ' ', ' ')
 
-    // Subscribe to the click listeners
+    // Subscribe to the click listeners for arrow nodes
     this.node.on('mousedown', function (data) {
       self.mouseDown = true
       if (data.rank === 'elipsis') {
@@ -586,6 +586,7 @@ export default class GraphD3 extends EventEmitter {
       }
     })
 
+    // Subscribe to the click listeners for neighbour nodes
     this.node.on('click', function (data) {
       self.mouseDown = false
       if (data.rank !== 'elipsis') {
@@ -598,6 +599,7 @@ export default class GraphD3 extends EventEmitter {
       }
     })
 
+    // Subscribe to the double click listeners for neighbour nodes
     this.node.on('dblclick', function (data) {
       if (data.rank === 'elipsis') {
         return
@@ -605,9 +607,13 @@ export default class GraphD3 extends EventEmitter {
       self.onDblClick(this, data)
     })
 
+    // Add drag listeners to neighbour nodes
+
     this.node.call(d3.drag().on('drag', this.drag)
                             .on('start', this.dragStart)
                             .on('end', this.dragEnd))
+
+    // Add click behaviour on background so that a click will deselect nodes.
 
     this.svg.on('click', function (data) {
       self.mouseDown = false
@@ -617,6 +623,7 @@ export default class GraphD3 extends EventEmitter {
     // this.svg.on('wheel', self.onScroll)
   }.bind(this)
 
+  // Arrow node function for rotating nodes
   onHoldClick = function (dir) {
     let self = this
     if (this.mouseDown) {
@@ -644,24 +651,18 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
-  // We check if the node is dropped in the center, if yes we navigate to it.
-  // We also prevent the node from bouncing away
-  // in case it's dropped to the middle
   dragStart = function(node) {
-    if (node.rank === 'elipsis') {
-      return
-    }
-    if (node.rank !== 'center') {
+    if (node.rank === 'elipsis' || node.rank === 'center' || node.unavailable) {
+      node.mobile = false
+    } else {
+      node.mobile = true
       node.position.px = node.position.x
       node.position.py = node.position.y
     }
   }
 
   drag = function(node) {
-    if (node.rank === 'elipsis') {
-      return
-    }
-    if (node.rank !== 'center') {
+    if (node.mobile) {
       node.position.x += d3.event.dx
       node.position.y += d3.event.dy
       this.resetPos(0)
@@ -669,16 +670,11 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   // We check if the node is dropped in the center, if yes we navigate to it.
-  // We also prevent the node from bouncing away
-  // in case it's dropped to the middle
+
   dragEnd = function (node) {
     this.mouseDown = false
-    if (node.rank === 'elipsis') {
-      return
-    }
-    if (node.rank === 'center' || node.unavailable) {
-        // In here we would have the functionality that opens the node's card
-    } else if (node.rank === 'neighbour' || node.rank === 'history') {
+
+    if (node.mobile) {
       // We check if the node is dropped on top of the center node
       let w = this.centerCoordinates.x
       let h = this.centerCoordinates.y
@@ -918,8 +914,12 @@ export default class GraphD3 extends EventEmitter {
 
     d3.selectAll('.link')
       .transition().duration(speed)
-      .attr('x1', (d) => d.target.position.x)
-      .attr('y1', (d) => d.target.position.y)
+      .attr('x1', (d) => {
+        return d.target.position ? d.target.position.x : 0
+      })
+      .attr('y1', (d) => {
+        return d.target.position ? d.target.position.y : 0
+      })
       .attr('x2', (d) => d.source.position.x)
       .attr('y2', (d) => d.source.position.y)
   }
@@ -1121,7 +1121,6 @@ export default class GraphD3 extends EventEmitter {
   onClick = function (node, data) {
     d3.event.stopPropagation()
     this.emit('select', data, node)
-
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank === 'history' ||
@@ -1136,6 +1135,7 @@ export default class GraphD3 extends EventEmitter {
     }
 
     node.parentNode.appendChild(node)
+
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
 
@@ -1315,7 +1315,6 @@ export default class GraphD3 extends EventEmitter {
     this.svg
     .selectAll('.background-layer .background-layer-links *')
     .remove()
-
     this.svg
     .selectAll('.background-layer ~ *')
     .remove()

@@ -8,7 +8,7 @@ export default (props) => {
       height="100"
       viewBox="0 0 200 200"
       {...props}>
-      <g fill-rule="evenodd" clip-rule="evenodd" fill="#FCFDFD">
+      <g fillRule="evenodd" clipRule="evenodd" fill="#FCFDFD">
         <path d="M99.265 197.615c-28.909
         0-57.823-.216-86.728.14-7.773.098-10.814-1.562-11.207-10.295-.701-15.663
         6.088-26.572 18.448-34.324 49.541-31.051 114.121-30.284 162.056
