@@ -20,6 +20,9 @@ import Login from 'components/accounts/login.jsx'
 import Signup from 'components/accounts/signup.jsx'
 import ForgotPassword from 'components/accounts/forgot-password'
 import ChangePassword from 'components/accounts/change-password'
+import PrivacySettings from 'components/node/privacy-settings.jsx'
+import SharedNodes from 'components/node/shared-nodes.jsx'
+import NodeList from 'components/node/node-list.jsx'
 
 const routes = (
   <Route path="/" component={App} >
@@ -37,6 +40,9 @@ const routes = (
       <Route path="/graph/:node/view" component={Node} />
       <Route path="/graph/:node/add/:type" component={AddNode} />
     </Route>
+    <Route path=":uri/privacy-settings" component={PrivacySettings} />
+    <Route path=":uri/shared-nodes" component={SharedNodes} />
+    <Route path="node-list" component={NodeList} />
     <Route path="forgot-password" component={ForgotPassword} />
     <Route path="change-password/:username/:token" component={ChangePassword} />
     <Route path="signup" component={Signup} />
