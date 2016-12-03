@@ -331,6 +331,9 @@ export default Reflux.createStore({
           }))
       }
     }
+    // The list of nodes related functions we can later Promise.all
+    let nodeCreationOperations = []
+
     // ############## PASSPORT
     let updatePassportFetch = []
     // if there is a passport node
@@ -422,7 +425,28 @@ export default Reflux.createStore({
       }
     } else { // if there's no passport node
       // if there is a new uri
+      console.log(GraphStore)
+      console.log(newData)
       if (newData.passportImgUri.trim()) {
+        nodeCreationOperations.push(new Promise((resolve, reject) => {
+          this.gAgent.createNode(
+            GraphStore.state.user,
+            GraphStore.state.center,
+            'Passport',
+            undefined,
+            newData.passportImgUri,
+            'default',
+            true
+            ).then(() => {
+            console.log('HELLO')
+            })
+        }))
+      }
+    }
+    Promise.all(nodeCreationOperations).then(res => {
+      console.log(res)
+    })
+        /*
         // CREATE PASSPORT
         // Create node and create link
         updatePassportFetch.push(this.gAgent.createNode(
@@ -446,8 +470,8 @@ export default Reflux.createStore({
               })
             }))
       }
-    }
-
+      */
+    /*
     return new Promise((resolve, reject) => {
       if (false && !deleteStatement && !insertStatement) { // @TODO
         this.trigger(Object.assign(profile, newData))
@@ -463,9 +487,6 @@ export default Reflux.createStore({
         }).then((result) => {
           return Promise.all(updateBtcFetch.concat(updatePassportFetch))
         }).then((result) => {
-          /* This is supposed to refresh the graph. Does not
-           * work well enough. Find a better way to do it.
-           */
           if (params.currentNode) {
             GraphActions.drawAtUri(params.currentNode, 0)
           }
@@ -477,6 +498,7 @@ export default Reflux.createStore({
         })
       }
     })
+    */
   },
 
   // extract RSA public key from triples

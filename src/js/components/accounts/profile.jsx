@@ -46,8 +46,7 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange'),
-    Reflux.connect(AccountStore, 'account')
+    Reflux.listenTo(ProfileStore, 'onProfileChange')
   ],
 
   contextTypes: {
@@ -204,6 +203,7 @@ let Profile = React.createClass({
   },
 
   render() {
+    console.log(this.state)
     let img
     let styles = this.getStyles()
     let {file, imgUri} = this.state
