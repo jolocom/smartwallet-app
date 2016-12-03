@@ -5,7 +5,6 @@ import accepts from 'attr-accept'
 import {proxy} from 'settings'
 
 import Dialog from 'components/common/dialog.jsx'
-import AccountStore from 'stores/account'
 import {Layout, Content} from 'components/layout'
 import {
   AppBar,
@@ -26,6 +25,7 @@ import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import SocialPublic from 'material-ui/svg-icons/social/public'
 import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
+import SnackbarActions from 'actions/snackbar'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
 import AvWeb from 'material-ui/svg-icons/av/web'
@@ -46,7 +46,7 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange')
+    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState')
   ],
 
   contextTypes: {
@@ -54,11 +54,8 @@ let Profile = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
-  // TODO ?
-  getInitialState() {
-    return {
-      bitcoinErrorText: ''
-    }
+  setInitialState(initState) {
+    this.setState(initState)
   },
 
   onProfileChange(state) {
@@ -71,18 +68,6 @@ let Profile = React.createClass({
     this.bitcoinErrorText = '9'
     this.refs.dialog.show()
   },
-
-  /*
-  componentDidUpdate(props, state) {
-    if (state.show !== this.state.show) {
-      if (this.state.show) {
-        this.refs.dialog.show()
-      } else {
-        this.refs.dialog.hide()
-      }
-    }
-  },
-  */
 
   downloadPK() {
     window.location.href = `${proxy}/exportkey`
@@ -98,12 +83,8 @@ let Profile = React.createClass({
     })
   },
 
-  show() {
-    ProfileActions.show()
-  },
-
   hide() {
-    console.log('hllo!')
+    this.refs.dialog.hide()
     this.context.router.goBack()
   },
 
@@ -209,18 +190,17 @@ let Profile = React.createClass({
   },
 
   render() {
-    console.log(this.state)
-    let img
     let styles = this.getStyles()
     let {file, imgUri} = this.state
 
+    let img
     if (file) {
       img = URL.createObjectURL(file)
     } else if (imgUri) {
       img = Util.uriToProxied(imgUri)
     }
-
     let bgImg = img || '/img/person-placeholder.png'
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout fixedHeader>
@@ -265,7 +245,6 @@ let Profile = React.createClass({
                       : <FlatButton
                         label="Select or take picture"
                         onClick={this._handleSelect} />}
-
               </CardActions>
             </Card>
             <input
@@ -305,8 +284,7 @@ let Profile = React.createClass({
                         name="username"
                         floatingLabelText="Username"
                         floatingLabelFixed
-                        onChange={Util.linkToState(this, 'username')}
-                        value={AccountStore.state.username}
+                        value={this.state.webid}
                         style={styles.input}
                         disabled />
                     </div>
@@ -428,7 +406,7 @@ let Profile = React.createClass({
                     </div>
                     <div style={styles.field}>
                       <div style={styles.passportContainer}>
-                      {this.state.passportImgUri
+                        {this.state.passportImgUri
                         ? <div>
                           <img
                             src={Util.uriToProxied(this.state.passportImgUri)}
@@ -439,14 +417,14 @@ let Profile = React.createClass({
                             style={styles.removePassportButton} />
                         </div>
                       : <div>
-                      {this.state.loadingPassportPhoto
-                        ? <LinearProgress
-                          mode="indeterminate"
-                          style="progBar" />
-                        : <FlatButton
-                          label="Upload passport"
-                          onClick={this._handleSelectPassport}
-                          style={styles.uploadPassportButton} />}
+                        {this.state.loadingPassportPhoto
+                          ? <LinearProgress
+                            mode="indeterminate"
+                            style="progBar" />
+                          : <FlatButton
+                            label="Upload passport"
+                            onClick={this._handleSelectPassport}
+                            style={styles.uploadPassportButton} />}
                       </div>}
                       </div>
                     </div>
@@ -476,7 +454,6 @@ let Profile = React.createClass({
                       <ActionCreditCard color={theme.jolocom.gray1} />
                     </div>
                     <div style={styles.field}>
-                      {/* TODO: back-end implementation */}
                       <TextField
                         floatingLabelText="Credit Card"
                         floatingLabelFixed
@@ -493,12 +470,7 @@ let Profile = React.createClass({
                       label="Download Private Key"
                       onClick={this.downloadPK}
                     />
-                    <div style={styles.divider}></div>
-                    { /* <RaisedButton
-                      type="submit"
-                      secondary
-                      label="Upload Private Key"
-                    /> */ }
+                    <div style={styles.divider} />
                   </div>
                 </div>
               </section>
@@ -518,21 +490,23 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
+    if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
       this.hide()
-      ProfileActions.update(Object.assign({}, this.state, { show: false }))
+      ProfileActions.update(this.state)
     }
   },
 
   // Front-end validation for bitcoin address - used as reference:
   // https://en.bitcoin.it/wiki/Address
   _handleBitcoinValidation({target}) {
-    if ((target.value.length < 26 || target.value.length > 35) ||
-      (!(target.value[0] === '1' || target.value[0] === '3')) ||
-      (!target.value.match(/^[0-9A-Z]+$/i))) {
-      this.setState({
-        bitcoinErrorText: 'Please enter a valid bitcoin address'
-      })
+    if (target.value.length > 0) {
+      if ((target.value.length < 26 || target.value.length > 35) ||
+        (!(target.value[0] === '1' || target.value[0] === '3')) ||
+        (!target.value.match(/^[0-9A-Z]+$/i))) {
+        this.setState({
+          bitcoinErrorText: 'Please enter a valid bitcoin address'
+        })
+      }
     } else {
       this.setState({
         bitcoinErrorText: ''
@@ -540,14 +514,10 @@ let Profile = React.createClass({
     }
   },
 
-  _handleSetPrivacy(event, index, value) {
-    this.setState({
-      privacy: value
-    })
-  },
-
   _handleBitcoinKeyDown(e) {
-    if (e.keyCode === 13) e.preventDefault()
+    if (e.keyCode === 13) {
+      e.preventDefault()
+    }
   },
 
   _handleSelect() {
@@ -601,18 +571,24 @@ let Profile = React.createClass({
 
       gAgent.storeFile(null, this.state.storage, file).then((res) => {
         this.setState({
-          loadingDisplayPhoto: false
+          loadingDisplayPhoto: false,
+          imgUri: res
         })
-        this.setState({imgUri: res})
       }).catch((e) => {
-        // console.log(e)
+        SnackbarActions.showMessage('Could not upload the photo.')
+        this.setState({
+          loadingDisplayPhoto: false,
+          imgUri: ''
+        })
       })
     }
   },
 
   // User can only enter non-space, numerical values and splits card number
   // into 4's for better readability
-  _handleCreditCardValidation({target}) {
+
+  /*  TODO This is not working.
+  _handleCreditCardValidation(target) {
     let val = target.value.replace(/[^0-9]|\s/g, '')
     let digitGroups = val.match(/\d{4,16}/g)
     let dGroup = digitGroups && digitGroups[0] || ''
@@ -627,6 +603,7 @@ let Profile = React.createClass({
     }
     // Util.linkToState(this, 'creditCard')
   },
+  */
 
   _handleSelectPassportFile({target}) {
     let gAgent = new GraphAgent()
@@ -646,15 +623,18 @@ let Profile = React.createClass({
 
       gAgent.storeFile(null, this.state.storage, file, true).then((res) => {
         this.setState({
-          loadingPassportPhoto: false
+          loadingPassportPhoto: false,
+          passportImgUri: ''
         })
-        this.setState({passportImgUri: res})
       }).catch((e) => {
-        // console.log(e)
+        SnackbarActions.showMessage('Could not upload the passport.')
+        this.setState({
+          loadingPassportPhoto: false,
+          passportImgUri: ''
+        })
       })
     }
   }
-
 })
 
 export default Radium(Profile)
