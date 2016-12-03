@@ -248,10 +248,33 @@ export default Reflux.createStore({
 
     let nodeCreationRequests = []
 
-    if (oldData.bitcoinAddress.trim() !== newData.bitcoinAddress.trim()) {
-      if (oldData.bitcoinAddress.trim().length === 0) {
-        nodeCreationRequests.push(
-          this.gAgent.createNode(
+    /*
+      was -> none
+      was -> changed
+
+      none -> added
+    */
+
+    const nodeUri = oldData.passportImgNodeUri.trim()
+    const imgUri = oldData.passportImgUri.trim()
+    let passportChanged = imgUri === newData.passportImgUri.trim()
+
+    if (passportChanged) {
+      if (imgUri > 0) {
+        nodeCreationRequests
+          .push(this.gAgent.deleteFile(Util.uriToProxied(nodeUri)))
+        nodeCreationRequests
+          .push(this.gAgent.deleteFile(Util.uriToProxied(imgUri)))
+
+        nodeCreationRequests.push(Util.getAclUri(nodeUri).then(aclUri => {
+          this.gAgent.deleteFile(aclUri)
+        }))
+        nodeCreationRequests.push(Util.getAclUri(imgUri).then(aclUri => {
+          this.gAgent.deleteFile(aclUri)
+        }))
+
+        if (newData.passportImgUri.trim().length > 0) {
+          nodeCreationRequests.push(this.gAgent.createNode(
             GraphStore.state.user,
             GraphStore.state.center,
             'Passport',
@@ -259,8 +282,18 @@ export default Reflux.createStore({
             newData.passportImgUri,
             'default',
             true
-          )
-        )
+          ))
+        }
+      } else {
+        nodeCreationRequests.push(this.gAgent.createNode(
+          GraphStore.state.user,
+          GraphStore.state.center,
+          'Passport',
+          undefined,
+          newData.passportImgUri,
+          'default',
+          true
+        ))
       }
     }
 
@@ -343,119 +376,7 @@ export default Reflux.createStore({
           }))
       }
     }
-    // The list of nodes related functions we can later Promise.all
-    let nodeCreationOperations = []
 
-    // ############## PASSPORT
-    let updatePassportFetch = []
-    // if there is a passport node
-    // if new uri is empty
-    if (oldData.passportImgUri.trim()) {
-      if (!newData.passportImgUri.trim()) {
-        // REMOVE EVERYTHING
-        // Delete node
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgNodeUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete node ACL
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgNodeUri + '.acl'), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete image
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete image ACL
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri) + '.acl', {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete link
-        let passportDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(oldData.webid),
-            PRED.isRelatedTo,
-            rdf.sym(profile.passportImgNodeUri)).toNT() + ' '
-        // Delete passport link
-        passportDeleteStatement += rdf.st(rdf.sym(oldData.webid),
-            PRED.passport,
-            rdf.sym(profile.passportImgNodeUri)).toNT() + ' }'
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.webid), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: passportDeleteStatement,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
-      } else if (oldData.passportImgUri.trim() !== // if the uri has changed
-        newData.passportImgUri.trim()) {
-        // UPDATE
-        let passportDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(newData.passportImgNodeUri),
-            PRED.image, oldData.passportImgUri).toNT() + ' }'
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(newData.passportImgNodeUri), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: `${passportDeleteStatement};`,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
-        let passportInsertStatement = 'INSERT DATA { ' +
-          rdf.st(rdf.sym(newData.passportImgNodeUri),
-            PRED.image, newData.passportImgUri).toNT() + ' }'
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(newData.passportImgNodeUri), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: `${passportInsertStatement};`,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
-        // Delete previous image
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete previous image ACL
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri + '.acl'), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-      }
-    } else { // if there's no passport node
-      // if there is a new uri
-      if (newData.passportImgUri.trim()) {
-        nodeCreationOperations.push(new Promise((resolve, reject) => {
-          this.gAgent.createNode(
-            GraphStore.state.user,
-            GraphStore.state.center,
-            'Passport',
-            undefined,
-            newData.passportImgUri,
-            'default',
-            true
-            ).then(() => {
-            console.log('HELLO')
-            })
-        }))
-      }
-    }
-    Promise.all(nodeCreationOperations).then(res => {
-      console.log(res)
-    })
         /*
         // CREATE PASSPORT
         // Create node and create link
