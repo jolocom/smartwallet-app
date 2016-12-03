@@ -50,16 +50,18 @@ let Profile = React.createClass({
   ],
 
   contextTypes: {
+    router: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   },
 
+  // TODO ?
   getInitialState() {
     return {
       bitcoinErrorText: ''
     }
   },
 
-  onProfileChange: function(state) {
+  onProfileChange(state) {
     this.setState(state)
   },
 
@@ -67,8 +69,10 @@ let Profile = React.createClass({
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
     this.bitcoinErrorText = '9'
+    this.refs.dialog.show()
   },
 
+  /*
   componentDidUpdate(props, state) {
     if (state.show !== this.state.show) {
       if (this.state.show) {
@@ -78,6 +82,7 @@ let Profile = React.createClass({
       }
     }
   },
+  */
 
   downloadPK() {
     window.location.href = `${proxy}/exportkey`
@@ -98,7 +103,8 @@ let Profile = React.createClass({
   },
 
   hide() {
-    ProfileActions.hide()
+    console.log('hllo!')
+    this.context.router.goBack()
   },
 
   getStyles() {

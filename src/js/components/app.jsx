@@ -303,7 +303,6 @@ let App = React.createClass({
                 })
               })}
             </Content>
-            <Profile />
             <Tour />
           </Layout>
         )}
