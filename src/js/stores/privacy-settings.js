@@ -310,6 +310,11 @@ export default Reflux.createStore({
   },
 
   allowRead(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.viewAllowList.push({
       label: user,
       key: this.state.editAllowList.length,
@@ -319,6 +324,11 @@ export default Reflux.createStore({
   },
 
   disallowRead(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.viewAllowList = this.state.viewAllowList.filter(el =>
       el.label !== user
     )
@@ -326,6 +336,11 @@ export default Reflux.createStore({
   },
 
   friendAllowRead(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.friendViewAllowList.push({
       name: user,
       canEdit: false
@@ -337,6 +352,11 @@ export default Reflux.createStore({
   },
 
   friendDisallowRead(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.friendViewDisallowList.push({
       label: user,
       key: this.state.friendViewDisallowList.length,
@@ -350,6 +370,11 @@ export default Reflux.createStore({
   },
 
   allowEdit(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.editAllowList.push({
       label: user,
       key: this.state.editAllowList.length,
@@ -359,6 +384,11 @@ export default Reflux.createStore({
   },
 
   disallowEdit(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.editAllowList = this.state.editAllowList.filter(el =>
       el.label !== user
     )
@@ -366,6 +396,11 @@ export default Reflux.createStore({
   },
 
   friendDisallowEdit(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.friendViewAllowList =
     this.state.friendViewAllowList.filter(el => {
       return el.name !== user
@@ -379,6 +414,11 @@ export default Reflux.createStore({
   },
 
   friendAllowEdit(user) {
+    if (user.indexOf('http://') !== 0 &&
+        user.indexOf('https://') !== 0) {
+      user = `https://${user}`
+    }
+
     this.state.friendEditDisallowList =
       this.state.friendEditDisallowList.filter(el => el.label !== user)
     this.trigger(this.state)
