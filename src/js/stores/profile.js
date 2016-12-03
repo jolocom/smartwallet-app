@@ -1,7 +1,6 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
 import accountActions from '../actions/account'
-import GraphActions from 'actions/graph-actions'
 import GraphStore from 'stores/graph-store'
 import GraphAgent from 'lib/agents/graph'
 import WebIDAgent from 'lib/agents/webid'
@@ -9,9 +8,6 @@ import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 import rdf from 'rdflib'
-
-import Debug from 'lib/debug'
-let debug = Debug('stores:profile')
 
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
@@ -185,11 +181,9 @@ export default Reflux.createStore({
   /* @param {object} params - {familyName: ,givenName: ,email: ,imgUri: }
    */
 
-  onUpdate: function (params) {
+  onUpdate(params) {
     let newData = Object.assign({}, params)
     let oldData = Object.assign({}, profile)
-    debug('Updating profile with old data ',
-      oldData, ' and new data', newData)
 
     let insertTriples = []
     let deleteTriples = []
@@ -250,6 +244,24 @@ export default Reflux.createStore({
     }
     if (insertStatement) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
+    }
+
+    let nodeCreationRequests = []
+
+    if (oldData.bitcoinAddress.trim() !== newData.bitcoinAddress.trim()) {
+      if (oldData.bitcoinAddress.trim().length === 0) {
+        nodeCreationRequests.push(
+          this.gAgent.createNode(
+            GraphStore.state.user,
+            GraphStore.state.center,
+            'Passport',
+            undefined,
+            newData.passportImgUri,
+            'default',
+            true
+          )
+        )
+      }
     }
 
     // ############## BITCOIN
@@ -425,8 +437,6 @@ export default Reflux.createStore({
       }
     } else { // if there's no passport node
       // if there is a new uri
-      console.log(GraphStore)
-      console.log(newData)
       if (newData.passportImgUri.trim()) {
         nodeCreationOperations.push(new Promise((resolve, reject) => {
           this.gAgent.createNode(

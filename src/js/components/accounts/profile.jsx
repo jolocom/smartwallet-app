@@ -624,7 +624,7 @@ let Profile = React.createClass({
       gAgent.storeFile(null, this.state.storage, file, true).then((res) => {
         this.setState({
           loadingPassportPhoto: false,
-          passportImgUri: ''
+          passportImgUri: res
         })
       }).catch((e) => {
         SnackbarActions.showMessage('Could not upload the passport.')
