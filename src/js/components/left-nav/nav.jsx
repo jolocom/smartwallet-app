@@ -104,6 +104,8 @@ let Nav = React.createClass({
   },
 
   editProfile() {
+    console.log(this.state)
+    console.log(this.props)
     this.setState({drawerOpen: false})
     this.context.router.push('profile')
   },

@@ -35,6 +35,7 @@ import CommunicationLocation
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
+import GraphStore from 'stores/graph-store'
 import JolocomTheme from 'styles/jolocom-theme'
 import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import PassportIcon from 'components/icons/passport-icon.jsx'
@@ -46,7 +47,8 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState')
+    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState'),
+    Reflux.connect(GraphStore, 'graphState')
   ],
 
   contextTypes: {
@@ -491,8 +493,8 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
-      this.hide()
       ProfileActions.update(this.state)
+      this.hide()
     }
   },
 
@@ -547,10 +549,7 @@ let Profile = React.createClass({
 
   _handleRemovePassport() {
     this.passportInputEl.value = null
-
-    this.setState({
-      passportImgUri: ''
-    })
+    this.setState({passportImgUri: ''})
   },
 
   _handleSelectFile({target}) {
