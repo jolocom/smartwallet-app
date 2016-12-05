@@ -9,9 +9,6 @@ import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 import rdf from 'rdflib'
 
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
-let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
-
 let wia = new WebIDAgent()
 
 export default Reflux.createStore({
@@ -135,17 +132,17 @@ export default Reflux.createStore({
     let deleteStatement = ''
 
     let predicateMap = {
-      familyName: FOAF('familyName'),
-      givenName: FOAF('givenName'),
-      imgUri: FOAF('img'),
-      email: FOAF('mbox'),
-      socialMedia: FOAF('accountName'),
-      mobilePhone: FOAF('phone'),
-      address: FOAF('based_near'),
-      profession: FOAF('currentProject'),
-      company: FOAF('workplaceHomepage'),
-      url: FOAF('homepage'),
-      creditCard: FOAF('holdsAccount')
+      familyName: PRED.familyName,
+      givenName: PRED.givenName,
+      imgUri: PRED.image,
+      email: PRED.email,
+      socialMedia: PRED.socialMedia,
+      mobilePhone: PRED.mobile,
+      address: PRED.address,
+      profession: PRED.profiession,
+      company: PRED.company,
+      url: PRED.homepage,
+      creditCard: PRED.creditCard
     }
 
     for (let pred in predicateMap) {
@@ -171,14 +168,14 @@ export default Reflux.createStore({
     }
 
     insertStatement = insertTriples.map((t) => {
-      if (t.predicate.uri === FOAF('mbox').uri) {
+      if (t.predicate.uri === PRED.email.uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
       }
       return rdf.st(t.subject, t.predicate, t.object).toNT()
     }).join(' ')
 
     deleteStatement = deleteTriples.map((t) => {
-      if (t.predicate.uri === FOAF('mbox').uri) {
+      if (t.predicate.uri === PRED.email.uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
       }
       return rdf.st(t.subject, t.predicate, t.object).toNT()
@@ -218,9 +215,24 @@ export default Reflux.createStore({
   updatePassport(newData, nodeCreationRequests) {
     const imgUri = this.state.passportImgNodeUri.trim()
     const nodeUri = this.state.passportImgUri.trim()
-    let centerNode = {
-      uri: this.state.webId,
-      storage: this.state.storage
+
+    // Abstracting it here, save a bit of typing.
+    let createPassport = () => {
+      return new Promise((resolve, reject) => {
+        return this.gAgent.createNode(
+          this.state.webId,
+          {uri: this.state.webId, storage: this.state.storage},
+          'Passport',
+          undefined,
+          newData.passportImgUri,
+          'passport',
+          true
+        ).then(res => {
+          this.state.passportImgNodeUri = res
+          this.state.passportImgUri = newData.passportImgUri
+          resolve()
+        })
+      })
     }
 
     if (imgUri.trim().length > 0) {
@@ -248,45 +260,10 @@ export default Reflux.createStore({
       this.state.passportImgUri = ''
 
       if (newData.passportImgUri.trim().length > 0) {
-        nodeCreationRequests.push(this.gAgent.createNode(
-          this.state.webId,
-          centerNode,
-          'Passport',
-          undefined,
-          newData.passportImgUri,
-          'passport',
-          true
-        ).then(res => {
-          this.state.passportImgNodeUri = res
-          this.state.passportImgUri = newData.passportImgUri
-        }))
+        nodeCreationRequests.push(createPassport())
       }
     } else {
-      nodeCreationRequests.push(this.gAgent.createNode(
-        this.state.webId,
-        centerNode,
-        'Passport',
-        undefined,
-        newData.passportImgUri,
-        'passport',
-        true
-      ).then(res => {
-        this.state.passportImgNodeUri = res
-        this.state.passportImgUri = newData.passportImgUri
-      }))
-    }
-  },
-
-  // extract RSA public key from triples
-  _parseKey (keySubject, triples) {
-    let relevant = triples.filter((t) => t.subject === keySubject)
-    let exponents = relevant.filter((t) => t.predicate === CERT.exponent)
-    let modulii = relevant.filter((t) => t.predicate === CERT.modulus)
-
-    // pick out first encountered modulus and exponent
-    return {
-      exponent: (exponents.length === 0 ? null : exponents[0].object),
-      modulus: (modulii.length === 0 ? null : modulii[0].object)
+      nodeCreationRequests.push(createPassport())
     }
   }
 })

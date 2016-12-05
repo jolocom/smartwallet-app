@@ -280,7 +280,7 @@ let Profile = React.createClass({
                         name="username"
                         floatingLabelText="Username"
                         floatingLabelFixed
-                        value={this.state.webid}
+                        value={this.state.webId}
                         style={styles.input}
                         disabled />
                     </div>
@@ -467,6 +467,7 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
+      console.log('shipping', this.state)
       ProfileActions.update(this.state)
       this.hide()
     }
@@ -499,6 +500,7 @@ let Profile = React.createClass({
 
   _handleRemovePassport() {
     this.passportInputEl.value = null
+    this.state.passportImgNodeUri = ''
     this.setState({passportImgUri: ''})
   },
 
