@@ -165,7 +165,7 @@ class GraphAgent {
         }).then(() => {
           return uri
         }).catch((e) => {
-          console.error('error', e, 'occured while putting the image file')
+          SnackbarActions.showMessage('Could not upload the image.')
         })
       })
     })
@@ -211,7 +211,7 @@ class GraphAgent {
       return aclUri
     })
     .catch((e) => {
-      console.log('error', e, 'occured while putting the acl file')
+      SnackbarActions.showMessage('Could not upload the acl file.')
     })
   }
 
