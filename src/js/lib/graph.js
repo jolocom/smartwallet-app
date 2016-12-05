@@ -548,10 +548,6 @@ export default class GraphD3 extends EventEmitter {
       })
       .style('font-size', '80%')
       .text(function (d) {
-        if (d.type === 'bitcoin') {
-          return ''
-        }
-
         // In case the person has no description available.
         if (d.description) {
           if (!d.description.includes(' ')) {
@@ -1192,7 +1188,7 @@ export default class GraphD3 extends EventEmitter {
       d3.select(node).select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('dy', function (d) {
-          if (d.description && d.type !== 'bitcoin') {
+          if (d.description) {
             if (d3.select(this.parentNode).classed('hasNodeIcon')) {
               return '.4em'
             }

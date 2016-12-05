@@ -37,7 +37,6 @@ import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 import GraphStore from 'stores/graph-store'
 import JolocomTheme from 'styles/jolocom-theme'
-import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 
 import Util from 'lib/util'
@@ -67,7 +66,6 @@ let Profile = React.createClass({
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
-    this.bitcoinErrorText = '9'
     this.refs.dialog.show()
   },
 
@@ -132,9 +130,6 @@ let Profile = React.createClass({
       removePassportButton: {
         verticalAlign: 'top'
       },
-      bitcoinIcon: {
-        width: '24px'
-      },
       form: {},
       formRow: {
         display: 'flex',
@@ -152,7 +147,6 @@ let Profile = React.createClass({
         marginRight: '16px'
       },
       labelPassport: {},
-      labelBitcoinAddress: {},
       progBar: {},
       privateKeyButtonRow: {
         display: 'flex',
@@ -432,26 +426,6 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <div style={styles.formRow}>
-                    <div style={Object.assign({},
-                      styles.label, styles.labelBitcoinAddress)}>
-                      <BitcoinIcon style={styles.bitcoinIcon} />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        floatingLabelText="Bitcoin Address"
-                        floatingLabelFixed
-                        name="bitcoinAddress"
-                        onChange={Util.linkToState(this, 'bitcoinAddress')}
-                        errorText={this.state.bitcoinErrorText}
-                        onBlur={this._handleBitcoinValidation}
-                        onKeyDown={this._handleBitcoinKeyDown}
-                        value={this.state.bitcoinAddress}
-                        style={styles.input}
-                        multiLine
-                        rowsMax={2} />
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
                     <div style={styles.label}>
                       <ActionCreditCard color={theme.jolocom.gray1} />
                     </div>
@@ -495,30 +469,6 @@ let Profile = React.createClass({
     if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
       ProfileActions.update(this.state)
       this.hide()
-    }
-  },
-
-  // Front-end validation for bitcoin address - used as reference:
-  // https://en.bitcoin.it/wiki/Address
-  _handleBitcoinValidation({target}) {
-    if (target.value.length > 0) {
-      if ((target.value.length < 26 || target.value.length > 35) ||
-        (!(target.value[0] === '1' || target.value[0] === '3')) ||
-        (!target.value.match(/^[0-9A-Z]+$/i))) {
-        this.setState({
-          bitcoinErrorText: 'Please enter a valid bitcoin address'
-        })
-      }
-    } else {
-      this.setState({
-        bitcoinErrorText: ''
-      })
-    }
-  },
-
-  _handleBitcoinKeyDown(e) {
-    if (e.keyCode === 13) {
-      e.preventDefault()
     }
   },
 
@@ -582,27 +532,6 @@ let Profile = React.createClass({
       })
     }
   },
-
-  // User can only enter non-space, numerical values and splits card number
-  // into 4's for better readability
-
-  /*  TODO This is not working.
-  _handleCreditCardValidation(target) {
-    let val = target.value.replace(/[^0-9]|\s/g, '')
-    let digitGroups = val.match(/\d{4,16}/g)
-    let dGroup = digitGroups && digitGroups[0] || ''
-    let parts = []
-    for (let i = 0, len = dGroup.length; i < len; i += 4) {
-      parts.push(dGroup.substring(i, i + 4))
-    }
-    if (parts.length) {
-      target.value = parts.join(' ')
-    } else {
-      target.value = target.value.replace(/[^0-9]|\s/g, '')
-    }
-    // Util.linkToState(this, 'creditCard')
-  },
-  */
 
   _handleSelectPassportFile({target}) {
     let gAgent = new GraphAgent()

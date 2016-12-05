@@ -32,8 +32,6 @@ export default Reflux.createStore({
       profession: '',
       company: '',
       url: '',
-      bitcoinAddress: '',
-      bitcoinAddressNodeUri: '',
       passportImgUri: '',
       passportImgNodeUri: '',
       creditCard: '',
@@ -79,7 +77,6 @@ export default Reflux.createStore({
     predicateMap[PRED.company] = 'company'
     predicateMap[PRED.url] = 'url'
     predicateMap[PRED.creditCard] = 'creditCard'
-    predicateMap[PRED.bitcoin] = 'bitcoinAdressNodeUri'
     predicateMap[PRED.passport] = 'passportImgNodeUri'
     predicateMap[PRED.storage] = 'storage'
 
@@ -94,15 +91,6 @@ export default Reflux.createStore({
     // when displaying here.
     if (this.state.email) {
       this.state.email = this.state.email.substring(7, this.state.email.length)
-    }
-
-    if (this.state.bitcoinAdressNodeUri) {
-      this.gAgent.findObjectsByTerm(
-        this.state.bitcoinAdressNodeUri,
-        PRED.description
-      ).then(res => {
-        this.state.bitcoinAddress = res.length ? res[0].value : ''
-      })
     }
 
     if (this.state.passportImgNodeUri) {
@@ -288,89 +276,6 @@ export default Reflux.createStore({
       }))
     }
   },
-
-    /*
-    console.log(nodeCreationRequests)
-    // ############## BITCOIN
-    let updateBtcFetch = []
-    if (params.bitcoinAddress.trim() !== profile.bitcoinAddress.trim()) {
-      if (!params.bitcoinAddress.trim()) {
-        // IF NEW VALUE IS NO VALUE
-        // DELETE
-        // Delete node
-        updateBtcFetch.push(fetch(
-          Util.uriToProxied(params.bitcoinAddressNodeUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete node ACL
-        updateBtcFetch.push(fetch(
-          Util.uriToProxied(params.bitcoinAddressNodeUri + '.acl'), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete link
-        let btcDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(oldData.webid),
-            PRED.isRelatedTo,
-            rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' '
-        // Delete btc link
-        btcDeleteStatement += rdf.st(rdf.sym(oldData.webid),
-            PRED.bitcoin,
-            rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' }'
-        updateBtcFetch.push(fetch(Util.uriToProxied(oldData.webid), {
-          method: 'PATCH',
-          credentials: 'include',
-          body: btcDeleteStatement,
-          headers: {
-            'Content-Type': 'application/sparql-update'
-          }
-        }))
-      } else if (!profile.bitcoinAddress.trim()) {
-        // IF OLD VALUE IS NO VALUE
-        // CREATE
-        // Create node and create link
-        updateBtcFetch.push(this.gAgent.createNode(GraphStore.state.user,
-          GraphStore.state.center,
-          'Bitcoin Address',
-          params.bitcoinAddress,
-          undefined, 'default').then(function(bitcoinNode) {
-            newData.bitcoinAddressNodeUri = bitcoinNode.uri
-
-          // Insert btc link
-            let btcInsertStatement = 'INSERT DATA { ' +
-              rdf.st(rdf.sym(oldData.webid),
-                PRED.bitcoin, bitcoinNode).toNT() + ' }'
-
-            return fetch(Util.uriToProxied(oldData.webid), {
-              method: 'PATCH',
-              credentials: 'include',
-              body: btcInsertStatement,
-              headers: {
-                'Content-Type': 'application/sparql-update'
-              }
-            })
-          }))
-      } else {
-        // UPDATE
-        let btcDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(params.bitcoinAddressNodeUri),
-            PRED.description, profile.bitcoinAddress).toNT() + ' }'
-        let btcInsertStatement = 'INSERT DATA { ' +
-          rdf.st(rdf.sym(params.bitcoinAddressNodeUri),
-            PRED.description, params.bitcoinAddress).toNT() + ' }'
-        updateBtcFetch.push(fetch(
-          Util.uriToProxied(params.bitcoinAddressNodeUri), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: `${btcDeleteStatement} ${btcInsertStatement} ;`,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
-      }
-    }
-    */
 
   // extract RSA public key from triples
   _parseKey (keySubject, triples) {

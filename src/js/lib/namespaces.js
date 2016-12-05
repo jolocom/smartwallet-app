@@ -59,7 +59,6 @@ export const PRED = {
   Person: FOAF('Person'),
   Thread: SIOC('Thread'),
   // --
-  bitcoin: CC('bitcoin'),
   passport: PURL('Passport'),
   // ACL RELATED
   auth: ACL('Authorization'),
