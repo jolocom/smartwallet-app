@@ -213,6 +213,7 @@ export default Reflux.createStore({
         'Content-Type': 'application/sparql-update'
       }
     }))
+
     if (this.state.passportImgUri.trim() !==
         newData.passportImgUri.trim()) {
       this.updatePassport(newData, nodeCreationRequests)
