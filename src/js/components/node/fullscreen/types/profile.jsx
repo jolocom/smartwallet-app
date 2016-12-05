@@ -148,7 +148,8 @@ let ProfileNode = React.createClass({
       company,
       url
     } = this.props.node
-    const isMe = this.state.profile.webid === uri
+
+    const isMe = this.state.profile.webId === uri
 
     let name
     if (this.props.node.fullName && this.props.node.fullName > 0) {
@@ -166,7 +167,7 @@ let ProfileNode = React.createClass({
     if (this.props.writePerm) {
       menuItems.push('edit')
       // Making sure you can't delete your main node.
-      if (isMe) {
+      if (!isMe) {
         menuItems.push('delete')
       }
     }

@@ -299,7 +299,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleEdit() {
-    ProfileActions.show()
+    this.context.router.push('/profile')
   },
 
   _handleStartChat() {

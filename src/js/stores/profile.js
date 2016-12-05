@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
 import GraphActions from 'actions/graph-actions'
+import SnackbarActions from 'actions/snackbar'
 import accountActions from '../actions/account'
 import GraphAgent from 'lib/agents/graph'
 import WebIDAgent from 'lib/agents/webid'
@@ -12,8 +13,6 @@ let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
 
 let wia = new WebIDAgent()
-
-let profile = {}
 
 export default Reflux.createStore({
   listenables: ProfileActions,
@@ -53,7 +52,6 @@ export default Reflux.createStore({
   },
 
   onLoad() {
-    console.log('init load')
     wia.getWebID().then((webId) => {
       this.gAgent.fetchTriplesAtUri(webId).then((res) => {
         ProfileActions.load.completed(webId, res.triples)
@@ -61,9 +59,8 @@ export default Reflux.createStore({
     })
   },
 
-  onLoadFailed(err) {
-    // TODO SNACKBAR
-    console.error('Failed loading webid profile', err)
+  onLoadFailed() {
+    SnackbarActions.showMessage('Failed to load the WebId profile info.')
   },
 
   onLoadCompleted(webId, triples) {
@@ -117,7 +114,7 @@ export default Reflux.createStore({
       })
     }
 
-    if (profile.imgUri) {
+    if (this.state.imgUri) {
       fetch(Util.uriToProxied(this.state.imgUri), {
         method: 'HEAD',
         credentials: 'include'
@@ -127,7 +124,7 @@ export default Reflux.createStore({
         }
         this.trigger(this.state)
       }).catch((e) => {
-        profile.imgUri = ''
+        this.state.imgUri = ''
         this.trigger(this.state)
       })
     } else {
@@ -181,6 +178,7 @@ export default Reflux.createStore({
             object: this.state[pred]
           })
         }
+        this.state[pred] = newData[pred]
       }
     }
 
@@ -204,10 +202,10 @@ export default Reflux.createStore({
     if (insertStatement.length > 0) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
-
+    // All network requests will be contained here, later awaited by with
+    // Promise.all
     let nodeCreationRequests = []
-
-    nodeCreationRequests.push(fetch(Util.uriToProxied(this.state.webid), {
+    nodeCreationRequests.push(fetch(Util.uriToProxied(this.state.webId), {
       method: 'PATCH',
       credentials: 'include',
       body: `${deleteStatement} ${insertStatement} ;`,
@@ -215,57 +213,52 @@ export default Reflux.createStore({
         'Content-Type': 'application/sparql-update'
       }
     }))
+    if (this.state.passportImgUri.trim() !==
+        newData.passportImgUri.trim()) {
+      this.updatePassport(newData, nodeCreationRequests)
+    }
 
-    const nodeUri = this.state.passportImgNodeUri.trim()
-    const imgUri = this.state.passportImgUri.trim()
-    let passportChanged = imgUri !== newData.passportImgUri.trim()
-    if (passportChanged) {
-      let centerNode = {
-        uri: this.state.webId,
-        storage: this.state.storage
+    Promise.all(nodeCreationRequests).then(res => {
+      const currentCenter = newData.graphState.center.uri
+      if (currentCenter === this.state.webId) {
+        GraphActions.drawAtUri(currentCenter, 0)
       }
+    })
+  },
 
-      if (imgUri.trim().length > 0) {
-        nodeCreationRequests.push(this.gAgent.deleteTriple(
-          this.state.webId,
-          rdf.sym(this.state.webId),
-          PRED.passport,
-          rdf.sym(this.state.passportImgNodeUri)
-        ))
+  updatePassport(newData, nodeCreationRequests) {
+    const imgUri = this.state.passportImgNodeUri.trim()
+    const nodeUri = this.state.passportImgUri.trim()
+    let centerNode = {
+      uri: this.state.webId,
+      storage: this.state.storage
+    }
 
-        nodeCreationRequests
-          .push(this.gAgent.deleteFile(nodeUri))
-        nodeCreationRequests
-          .push(this.gAgent.deleteFile(imgUri))
+    if (imgUri.trim().length > 0) {
+      nodeCreationRequests.push(this.gAgent.deleteTriple(
+        this.state.webId,
+        rdf.sym(this.state.webId),
+        PRED.passport,
+        rdf.sym(this.state.passportImgNodeUri)
+      ))
 
-        nodeCreationRequests.push(Util.getAclUri(nodeUri).then(aclUri => {
-          this.gAgent.deleteFile(aclUri)
-        }))
+      nodeCreationRequests
+        .push(this.gAgent.deleteFile(nodeUri))
+      nodeCreationRequests
+        .push(this.gAgent.deleteFile(imgUri))
 
-        nodeCreationRequests.push(Util.getAclUri(imgUri).then(aclUri => {
-          this.gAgent.deleteFile(aclUri)
-        }))
+      nodeCreationRequests.push(Util.getAclUri(nodeUri).then(aclUri => {
+        this.gAgent.deleteFile(aclUri)
+      }))
 
-        this.state.passportImgNodeUri = ''
-        this.state.passportImgUri = ''
+      nodeCreationRequests.push(Util.getAclUri(imgUri).then(aclUri => {
+        this.gAgent.deleteFile(aclUri)
+      }))
 
-        if (newData.passportImgUri.trim().length > 0) {
-          console.log('after that inserting new')
-          nodeCreationRequests.push(this.gAgent.createNode(
-            this.state.webId,
-            centerNode,
-            'Passport',
-            undefined,
-            newData.passportImgUri,
-            'passport',
-            true
-          ).then(res => {
-            this.state.passportImgNodeUri = res
-            this.state.passportImgUri = newData.passportImgUri
-          }))
-        }
-      } else {
-        console.log('inserting new')
+      this.state.passportImgNodeUri = ''
+      this.state.passportImgUri = ''
+
+      if (newData.passportImgUri.trim().length > 0) {
         nodeCreationRequests.push(this.gAgent.createNode(
           this.state.webId,
           centerNode,
@@ -279,12 +272,21 @@ export default Reflux.createStore({
           this.state.passportImgUri = newData.passportImgUri
         }))
       }
+    } else {
+      nodeCreationRequests.push(this.gAgent.createNode(
+        this.state.webId,
+        centerNode,
+        'Passport',
+        undefined,
+        newData.passportImgUri,
+        'passport',
+        true
+      ).then(res => {
+        this.state.passportImgNodeUri = res
+        this.state.passportImgUri = newData.passportImgUri
+      }))
     }
-
-    Promise.all(nodeCreationRequests).then(res => {
-      const currentCenter = newData.graphState.center.uri
-      GraphActions.drawAtUri(currentCenter, 0)
-    })
+  },
 
     /*
     console.log(nodeCreationRequests)
@@ -368,7 +370,6 @@ export default Reflux.createStore({
       }
     }
     */
-  },
 
   // extract RSA public key from triples
   _parseKey (keySubject, triples) {
