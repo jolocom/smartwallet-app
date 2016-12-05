@@ -31,7 +31,8 @@ class GraphAgent {
     if (description) {
       writer.addTriple(uri, PRED.description, description)
     }
-    if (nodeType === 'default') {
+    // TODO
+    if (nodeType === 'default' || nodeType === 'passport') {
       writer.addTriple(uri, PRED.type, PRED.Document)
     } else if (nodeType === 'image') {
       writer.addTriple(uri, PRED.type, PRED.Image)
@@ -116,9 +117,15 @@ class GraphAgent {
       })
       // Connecting the node to the one that created it
     }).then(() => {
+      let predicate = PRED.isRelatedTo
+
+      if (nodeType === 'passport') {
+        predicate = PRED.passport
+      }
+
       let payload = {
         subject: rdf.sym(centerNode.uri),
-        predicate: PRED.isRelatedTo,
+        predicate: predicate,
         object: newNodeUri
       }
       return this.writeTriples(centerNode.uri, [payload], false)
@@ -158,7 +165,7 @@ class GraphAgent {
         }).then(() => {
           return uri
         }).catch((e) => {
-          console.error('error', e, 'occured while putting the image file')
+          SnackbarActions.showMessage('Could not upload the image.')
         })
       })
     })
@@ -204,7 +211,7 @@ class GraphAgent {
       return aclUri
     })
     .catch((e) => {
-      console.log('error', e, 'occured while putting the acl file')
+      SnackbarActions.showMessage('Could not upload the acl file.')
     })
   }
 
@@ -394,7 +401,8 @@ class GraphAgent {
     let Links = [
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
-      PRED.isRelatedTo_HTTP.uri
+      PRED.isRelatedTo_HTTP.uri,
+      PRED.passport.uri
     ]
     let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
     // If there are adjacent nodes to draw,

@@ -1,494 +1,269 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
-import accountActions from '../actions/account'
 import GraphActions from 'actions/graph-actions'
-import GraphStore from 'stores/graph-store'
+import SnackbarActions from 'actions/snackbar'
+import accountActions from '../actions/account'
 import GraphAgent from 'lib/agents/graph'
 import WebIDAgent from 'lib/agents/webid'
-import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 import rdf from 'rdflib'
 
-import Debug from 'lib/debug'
-let debug = Debug('stores:profile')
-
-let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
-let CERT = rdf.Namespace('http://www.w3.org/ns/auth/cert#')
-
 let wia = new WebIDAgent()
-
-let profile = {}
-
-let defaultProfile = {
-  show: false,
-  fullName: '',
-  givenName: '',
-  familyName: '',
-  privacy: '',
-  username: '',
-  mobilePhone: '',
-  email: '',
-  address: '',
-  socialMedia: '',
-  profession: '',
-  company: '',
-  url: '',
-  bitcoinAddress: '',
-  bitcoinAddressNodeUri: '',
-  passportImgUri: '',
-  passportImgNodeUri: '',
-  creditCard: '',
-  webid: '#',
-  imgUri: null
-}
 
 export default Reflux.createStore({
   listenables: ProfileActions,
 
   init() {
-    this.listenTo(accountActions.logout, this.onLogout)
-    this.listenTo(GraphStore, this.graphUpdate)
-    this.gAgent = new GraphAgent()
-  },
-
-  graphUpdate(data) {
-    if (data && data.center) {
-      profile.storage = data.center.storage
-      profile.currentNode = data.center.uri
-      this.trigger(Object.assign({}, profile))
-    }
-  },
-
-  getInitialState () {
-    return profile
-  },
-
-  onShow() {
-    profile.show = true
-    this.trigger(Object.assign({}, profile))
-  },
-
-  onHide() {
-    profile.show = false
-    this.trigger(Object.assign({}, profile))
-  },
-
-  onLoad() {
-    let parser = new Parser()
-    wia.getWebID().then((user) => {
-      return fetch(Util.uriToProxied(user), {
-        method: 'GET',
-        credentials: 'include'
-      }).then((res) => {
-        return res.text()
-      }).then((text) => {
-        return parser.parse(text, user)
-      }).then((answer) => {
-        ProfileActions.load.completed(user, answer.triples)
-      }).catch(ProfileActions.load.failed)
-    })
-  },
-
-  onLoadFailed(err) {
-    console.error('Failed loading webid profile', err)
-  },
-
-  // change state from triples
-  onLoadCompleted(webid, triples) {
-    profile = Object.assign({}, defaultProfile)
-    let relevant = triples.filter((t) => t.subject.uri === webid)
-    profile.webid = webid
-    for (var t of relevant) {
-      let obj = t.object.uri ? t.object.uri : t.object.value
-      if (t.predicate.uri === FOAF('givenName').uri) {
-        profile.givenName = obj
-      } else if (t.predicate.uri === FOAF('familyName').uri) {
-        profile.familyName = obj
-      } else if (t.predicate.uri === FOAF('name').uri) {
-        profile.fullName = obj
-      } else if (t.predicate.uri === FOAF('img').uri) {
-        profile.imgUri = obj
-      } else if (t.predicate.uri === FOAF('accountName').uri) {
-        profile.socialMedia = obj
-      } else if (t.predicate.uri === FOAF('phone').uri) {
-        profile.mobilePhone = obj
-      } else if (t.predicate.uri === FOAF('based_near').uri) {
-        profile.address = obj
-      } else if (t.predicate.uri === FOAF('currentProject').uri) {
-        profile.profession = obj
-      } else if (t.predicate.uri === FOAF('workplaceHomepage').uri) {
-        profile.company = obj
-      } else if (t.predicate.uri === FOAF('homepage').uri) {
-        profile.url = obj
-      } else if (t.predicate.uri === FOAF('holdsAccount').uri) {
-        profile.creditCard = obj
-      } else if (t.predicate.uri === FOAF('mbox').uri) {
-        profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
-      } else if (t.predicate.uri === PRED.bitcoin.uri) {
-        profile.bitcoinAddressNodeUri = obj
-        this.gAgent.findObjectsByTerm(obj, PRED.description).then((res) => {
-          profile.bitcoinAddress = res.length ? res[0].value : ''
-        })
-      } else if (t.predicate.uri === PRED.passport.uri) {
-        profile.passportImgNodeUri = obj
-        this.gAgent.findObjectsByTerm(obj, PRED.image).then((res) => {
-          profile.passportImgUri = res.length ? res[0].value : ''
-        })
-      }
-    }
-
-    let {fullName, givenName, familyName} = profile
-    if (!givenName && !familyName) {
-      if (fullName) {
-        profile.givenName = fullName.substring(0, fullName.indexOf(' '))
-        profile.familyName = fullName.substring(
-            givenName.length + 1, fullName.length)
-      }
-    }
-
-    if (profile.imgUri) {
-      fetch(Util.uriToProxied(profile.imgUri), {
-        method: 'HEAD',
-        credentials: 'include'
-      }).then(res => {
-        if (!res.ok) {
-          profile.imgUri = null
-          this.trigger(Object.assign({}, profile))
-        } else {
-          this.trigger(Object.assign({}, profile))
-        }
-      }).catch((e) => {
-        profile.imgUri = null
-        this.trigger(Object.assign({}, profile))
-      })
-    } else {
-      this.trigger(Object.assign({}, profile))
-    }
-  },
-
-  onLogout() {
-    profile = {
+    this.state = {
       show: false,
       fullName: '',
       givenName: '',
       familyName: '',
+      privacy: '',
+      username: '',
+      mobilePhone: '',
       email: '',
-      webid: '#',
-      imgUri: null,
-      passportImgUri: null,
-      passportImgNodeUri: null
+      address: '',
+      socialMedia: '',
+      profession: '',
+      company: '',
+      url: '',
+      passportImgUri: '',
+      passportImgNodeUri: '',
+      creditCard: '',
+      webId: '',
+      imgUri: '',
+      storage: '',
+      centerNode: null
     }
+
+    this.listenTo(accountActions.logout, this.onLogout)
+    this.gAgent = new GraphAgent()
+  },
+
+  getInitialState () {
+    return this.state
+  },
+
+  onLoad() {
+    wia.getWebID().then((webId) => {
+      this.gAgent.fetchTriplesAtUri(webId).then((res) => {
+        ProfileActions.load.completed(webId, res.triples)
+      }).catch(ProfileActions.load.failed)
+    })
+  },
+
+  onLoadFailed() {
+    SnackbarActions.showMessage('Failed to load the WebId profile info.')
+  },
+
+  onLoadCompleted(webId, triples) {
+    this.state.webId = webId
+    let relevant = triples.filter((t) => t.subject.uri === webId)
+
+    let predicateMap = {}
+    predicateMap[PRED.familyName] = 'familyName'
+    predicateMap[PRED.givenName] = 'givenName'
+    predicateMap[PRED.image] = 'imgUri'
+    predicateMap[PRED.email] = 'email'
+    predicateMap[PRED.socialMedia] = 'socialMedia'
+    predicateMap[PRED.mobile] = 'mobilePhone'
+    predicateMap[PRED.address] = 'address'
+    predicateMap[PRED.profession] = 'profession'
+    predicateMap[PRED.company] = 'company'
+    predicateMap[PRED.url] = 'url'
+    predicateMap[PRED.creditCard] = 'creditCard'
+    predicateMap[PRED.passport] = 'passportImgNodeUri'
+    predicateMap[PRED.storage] = 'storage'
+
+    for (var t of relevant) {
+      if (predicateMap[t.predicate]) {
+        const obj = t.object.uri ? t.object.uri : t.object.value
+        this.state[predicateMap[t.predicate]] = obj
+      }
+    }
+
+    // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
+    // when displaying here.
+    if (this.state.email) {
+      this.state.email = this.state.email.substring(7, this.state.email.length)
+    }
+
+    if (this.state.passportImgNodeUri) {
+      this.gAgent.findObjectsByTerm(
+        this.state.passportImgNodeUri,
+        PRED.image
+      ).then(res => {
+        this.state.passportImgUri = res.length ? res[0].value : ''
+      })
+    }
+
+    if (this.state.imgUri) {
+      fetch(Util.uriToProxied(this.state.imgUri), {
+        method: 'HEAD',
+        credentials: 'include'
+      }).then(res => {
+        if (!res.ok) {
+          this.state.imgUri = ''
+        }
+        this.trigger(this.state)
+      }).catch((e) => {
+        this.state.imgUri = ''
+        this.trigger(this.state)
+      })
+    } else {
+      this.trigger(this.state)
+    }
+  },
+
+  onLogout() {
+    this.init()
   },
 
   /* @summary Updates the rdf profile based on input
   /* @param {object} params - {familyName: ,givenName: ,email: ,imgUri: }
    */
 
-  onUpdate: function (params) {
-    let newData = Object.assign({}, params)
-    let oldData = Object.assign({}, profile)
-    debug('Updating profile with old data ',
-      oldData, ' and new data', newData)
-
+  onUpdate(newData) {
     let insertTriples = []
     let deleteTriples = []
     let insertStatement = ''
     let deleteStatement = ''
 
     let predicateMap = {
-      familyName: FOAF('familyName'),
-      givenName: FOAF('givenName'),
-      imgUri: FOAF('img'),
-      email: FOAF('mbox'),
-      socialMedia: FOAF('accountName'),
-      mobilePhone: FOAF('phone'),
-      address: FOAF('based_near'),
-      profession: FOAF('currentProject'),
-      company: FOAF('workplaceHomepage'),
-      url: FOAF('homepage'),
-      creditCard: FOAF('holdsAccount')
+      familyName: PRED.familyName,
+      givenName: PRED.givenName,
+      imgUri: PRED.image,
+      email: PRED.email,
+      socialMedia: PRED.socialMedia,
+      mobilePhone: PRED.mobile,
+      address: PRED.address,
+      profession: PRED.profiession,
+      company: PRED.company,
+      url: PRED.homepage,
+      creditCard: PRED.creditCard
     }
 
     for (let pred in predicateMap) {
-      if (newData[pred] !== oldData[pred]) {
-        if (!oldData[pred] || newData[pred]) {
+      if (newData[pred] !== this.state[pred]) {
+        if (!this.state[pred] || newData[pred]) {
           // inserting
           insertTriples.push({
-            subject: rdf.sym(oldData.webid),
+            subject: rdf.sym(this.state.webId),
             predicate: predicateMap[pred],
             object: newData[pred]
           })
         }
-        if (!newData[pred] || oldData[pred]) {
+        if (!newData[pred] || this.state[pred]) {
           // delete
           deleteTriples.push({
-            subject: rdf.sym(oldData.webid),
+            subject: rdf.sym(this.state.webId),
             predicate: predicateMap[pred],
-            object: oldData[pred]
+            object: this.state[pred]
           })
         }
+        this.state[pred] = newData[pred]
       }
     }
 
     insertStatement = insertTriples.map((t) => {
-      if (t.predicate.uri === FOAF('mbox').uri) {
+      if (t.predicate.uri === PRED.email.uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
       }
       return rdf.st(t.subject, t.predicate, t.object).toNT()
     }).join(' ')
 
     deleteStatement = deleteTriples.map((t) => {
-      if (t.predicate.uri === FOAF('mbox').uri) {
+      if (t.predicate.uri === PRED.email.uri) {
         t.object = rdf.sym(`mailto:${t.object}`)
       }
       return rdf.st(t.subject, t.predicate, t.object).toNT()
     }).join(' ')
 
-    if (deleteStatement) {
+    if (deleteStatement.length > 0) {
       deleteStatement = `DELETE DATA { ${deleteStatement} }`
     }
-    if (insertStatement) {
+    if (insertStatement.length > 0) {
       insertStatement = `INSERT DATA { ${insertStatement} }`
     }
-
-    // ############## BITCOIN
-    let updateBtcFetch = []
-    if (params.bitcoinAddress.trim() !== profile.bitcoinAddress.trim()) {
-      if (!params.bitcoinAddress.trim()) {
-        // IF NEW VALUE IS NO VALUE
-        // DELETE
-        // Delete node
-        updateBtcFetch.push(fetch(
-          Util.uriToProxied(params.bitcoinAddressNodeUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete node ACL
-        updateBtcFetch.push(fetch(
-          Util.uriToProxied(params.bitcoinAddressNodeUri + '.acl'), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete link
-        let btcDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(oldData.webid),
-            PRED.isRelatedTo,
-            rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' '
-        // Delete btc link
-        btcDeleteStatement += rdf.st(rdf.sym(oldData.webid),
-            PRED.bitcoin,
-            rdf.sym(profile.bitcoinAddressNodeUri)).toNT() + ' }'
-        updateBtcFetch.push(fetch(Util.uriToProxied(oldData.webid), {
-          method: 'PATCH',
-          credentials: 'include',
-          body: btcDeleteStatement,
-          headers: {
-            'Content-Type': 'application/sparql-update'
-          }
-        }))
-      } else if (!profile.bitcoinAddress.trim()) {
-        // IF OLD VALUE IS NO VALUE
-        // CREATE
-        // Create node and create link
-        updateBtcFetch.push(this.gAgent.createNode(GraphStore.state.user,
-          GraphStore.state.center,
-          'Bitcoin Address',
-          params.bitcoinAddress,
-          undefined, 'default').then(function(bitcoinNode) {
-            newData.bitcoinAddressNodeUri = bitcoinNode.uri
-
-          // Insert btc link
-            let btcInsertStatement = 'INSERT DATA { ' +
-              rdf.st(rdf.sym(oldData.webid),
-                PRED.bitcoin, bitcoinNode).toNT() + ' }'
-
-            return fetch(Util.uriToProxied(oldData.webid), {
-              method: 'PATCH',
-              credentials: 'include',
-              body: btcInsertStatement,
-              headers: {
-                'Content-Type': 'application/sparql-update'
-              }
-            })
-          }))
-      } else {
-        // UPDATE
-        let btcDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(params.bitcoinAddressNodeUri),
-            PRED.description, profile.bitcoinAddress).toNT() + ' }'
-        let btcInsertStatement = 'INSERT DATA { ' +
-          rdf.st(rdf.sym(params.bitcoinAddressNodeUri),
-            PRED.description, params.bitcoinAddress).toNT() + ' }'
-        updateBtcFetch.push(fetch(
-          Util.uriToProxied(params.bitcoinAddressNodeUri), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: `${btcDeleteStatement} ${btcInsertStatement} ;`,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
+    // All network requests will be contained here, later awaited by with
+    // Promise.all
+    let nodeCreationRequests = []
+    nodeCreationRequests.push(fetch(Util.uriToProxied(this.state.webId), {
+      method: 'PATCH',
+      credentials: 'include',
+      body: `${deleteStatement} ${insertStatement} ;`,
+      headers: {
+        'Content-Type': 'application/sparql-update'
       }
-    }
-    // ############## PASSPORT
-    let updatePassportFetch = []
-    // if there is a passport node
-    // if new uri is empty
-    if (oldData.passportImgUri.trim()) {
-      if (!newData.passportImgUri.trim()) {
-        // REMOVE EVERYTHING
-        // Delete node
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgNodeUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete node ACL
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgNodeUri + '.acl'), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete image
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete image ACL
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri) + '.acl', {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete link
-        let passportDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(oldData.webid),
-            PRED.isRelatedTo,
-            rdf.sym(profile.passportImgNodeUri)).toNT() + ' '
-        // Delete passport link
-        passportDeleteStatement += rdf.st(rdf.sym(oldData.webid),
-            PRED.passport,
-            rdf.sym(profile.passportImgNodeUri)).toNT() + ' }'
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.webid), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: passportDeleteStatement,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
-      } else if (oldData.passportImgUri.trim() !== // if the uri has changed
+    }))
+
+    if (this.state.passportImgUri.trim() !==
         newData.passportImgUri.trim()) {
-        // UPDATE
-        let passportDeleteStatement = 'DELETE DATA { ' +
-          rdf.st(rdf.sym(newData.passportImgNodeUri),
-            PRED.image, oldData.passportImgUri).toNT() + ' }'
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(newData.passportImgNodeUri), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: `${passportDeleteStatement};`,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
-        let passportInsertStatement = 'INSERT DATA { ' +
-          rdf.st(rdf.sym(newData.passportImgNodeUri),
-            PRED.image, newData.passportImgUri).toNT() + ' }'
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(newData.passportImgNodeUri), {
-            method: 'PATCH',
-            credentials: 'include',
-            body: `${passportInsertStatement};`,
-            headers: {
-              'Content-Type': 'application/sparql-update'
-            }
-          }))
-        // Delete previous image
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-        // Delete previous image ACL
-        updatePassportFetch.push(fetch(
-          Util.uriToProxied(oldData.passportImgUri + '.acl'), {
-            method: 'DELETE',
-            credentials: 'include'
-          }))
-      }
-    } else { // if there's no passport node
-      // if there is a new uri
-      if (newData.passportImgUri.trim()) {
-        // CREATE PASSPORT
-        // Create node and create link
-        updatePassportFetch.push(this.gAgent.createNode(
-          GraphStore.state.user, GraphStore.state.center, 'Passport',
-          undefined, newData.passportImgUri, 'default', true).then(
-            function(passportNodeUri) {
-              newData.passportImgNodeUri = passportNodeUri
-
-          // Insert passport link
-              let passportInsertStatement = 'INSERT DATA { ' +
-                rdf.st(rdf.sym(oldData.webid),
-                  PRED.passport, rdf.sym(passportNodeUri)).toNT() + ' }'
-
-              return fetch(Util.uriToProxied(oldData.webid), {
-                method: 'PATCH',
-                credentials: 'include',
-                body: passportInsertStatement,
-                headers: {
-                  'Content-Type': 'application/sparql-update'
-                }
-              })
-            }))
-      }
+      this.updatePassport(newData, nodeCreationRequests)
     }
 
-    return new Promise((resolve, reject) => {
-      if (false && !deleteStatement && !insertStatement) { // @TODO
-        this.trigger(Object.assign(profile, newData))
-      } else {
-         // @TODO don't send request when empty delete- & insertStatement
-        fetch(Util.uriToProxied(oldData.webid), {
-          method: 'PATCH',
-          credentials: 'include',
-          body: `${deleteStatement} ${insertStatement} ;`,
-          headers: {
-            'Content-Type': 'application/sparql-update'
-          }
-        }).then((result) => {
-          return Promise.all(updateBtcFetch.concat(updatePassportFetch))
-        }).then((result) => {
-          /* This is supposed to refresh the graph. Does not
-           * work well enough. Find a better way to do it.
-           */
-          if (params.currentNode) {
-            GraphActions.drawAtUri(params.currentNode, 0)
-          }
-          profile.currentNode = params.currentNode
-          this.trigger(Object.assign(profile, newData))
-          resolve()
-        }).catch((e) => {
-          reject(e)
-        })
+    Promise.all(nodeCreationRequests).then(res => {
+      const currentCenter = newData.graphState.center.uri
+      if (currentCenter === this.state.webId) {
+        GraphActions.drawAtUri(currentCenter, 0)
       }
     })
   },
 
-  // extract RSA public key from triples
-  _parseKey (keySubject, triples) {
-    let relevant = triples.filter((t) => t.subject === keySubject)
-    let exponents = relevant.filter((t) => t.predicate === CERT.exponent)
-    let modulii = relevant.filter((t) => t.predicate === CERT.modulus)
+  updatePassport(newData, nodeCreationRequests) {
+    const imgUri = this.state.passportImgNodeUri.trim()
+    const nodeUri = this.state.passportImgUri.trim()
 
-    // pick out first encountered modulus and exponent
-    return {
-      exponent: (exponents.length === 0 ? null : exponents[0].object),
-      modulus: (modulii.length === 0 ? null : modulii[0].object)
+    // Abstracting it here, save a bit of typing.
+    let createPassport = () => {
+      return new Promise((resolve, reject) => {
+        return this.gAgent.createNode(
+          this.state.webId,
+          {uri: this.state.webId, storage: this.state.storage},
+          'Passport',
+          undefined,
+          newData.passportImgUri,
+          'passport',
+          true
+        ).then(res => {
+          this.state.passportImgNodeUri = res
+          this.state.passportImgUri = newData.passportImgUri
+          resolve()
+        })
+      })
+    }
+
+    if (imgUri.trim().length > 0) {
+      nodeCreationRequests.push(this.gAgent.deleteTriple(
+        this.state.webId,
+        rdf.sym(this.state.webId),
+        PRED.passport,
+        rdf.sym(this.state.passportImgNodeUri)
+      ))
+
+      nodeCreationRequests
+        .push(this.gAgent.deleteFile(nodeUri))
+      nodeCreationRequests
+        .push(this.gAgent.deleteFile(imgUri))
+
+      nodeCreationRequests.push(Util.getAclUri(nodeUri).then(aclUri => {
+        this.gAgent.deleteFile(aclUri)
+      }))
+
+      nodeCreationRequests.push(Util.getAclUri(imgUri).then(aclUri => {
+        this.gAgent.deleteFile(aclUri)
+      }))
+
+      this.state.passportImgNodeUri = ''
+      this.state.passportImgUri = ''
+
+      if (newData.passportImgUri.trim().length > 0) {
+        nodeCreationRequests.push(createPassport())
+      }
+    } else {
+      nodeCreationRequests.push(createPassport())
     }
   }
 })
