@@ -467,7 +467,6 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
-      console.log('shipping', this.state)
       ProfileActions.update(this.state)
       this.hide()
     }
