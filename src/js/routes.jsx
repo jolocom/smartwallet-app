@@ -24,6 +24,8 @@ import PrivacySettings from 'components/node/privacy-settings.jsx'
 import Profile from 'components/accounts/profile.jsx'
 import SharedNodes from 'components/node/shared-nodes.jsx'
 import NodeList from 'components/node/node-list.jsx'
+import ConfirmEmailVerification from
+  'components/accounts/confirm-email-verification.jsx'
 
 const routes = (
   <Route path="/" component={App} >
@@ -41,6 +43,10 @@ const routes = (
       <Route path="/graph/:node/view" component={Node} />
       <Route path="/graph/:node/add/:type" component={AddNode} />
     </Route>
+    <Route
+      path="verify-email/:username/:code"
+      component={ConfirmEmailVerification}
+    />
     <Route path="profile" component={Profile} />
     <Route path=":uri/privacy-settings" component={PrivacySettings} />
     <Route path=":uri/shared-nodes" component={SharedNodes} />
