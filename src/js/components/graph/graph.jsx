@@ -62,7 +62,7 @@ let Graph = React.createClass({
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
-    this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
+    // this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
 
     if (!this.state.initialized) {
       graphActions.getInitialGraphState()
