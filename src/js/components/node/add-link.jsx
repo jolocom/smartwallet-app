@@ -219,6 +219,12 @@ let LowerPart = React.createClass({
       return false
     }
     let {startUri, endUri, connectionType} = this.state
+
+    if (endUri.indexOf('http://') !== 0 &&
+        endUri.indexOf('https://') !== 0) {
+      endUri = `https://${endUri}`
+    }
+
     Promise.all([
       fetch(Util.uriToProxied(startUri), {
         method: 'HEAD',
