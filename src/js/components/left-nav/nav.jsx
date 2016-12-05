@@ -103,10 +103,10 @@ let Nav = React.createClass({
     this.setState({drawerOpen: false})
   },
 
-  editProfile() {
-    event.stopPropagation()
+  editProfile(event) {
     this.setState({drawerOpen: false})
     this.context.router.push('profile')
+    event.preventDefault()
   },
 
   goto(url) {
