@@ -228,7 +228,7 @@ export default class GraphD3 extends EventEmitter {
 
       // Emit event that indicatorOverlay should be drawn.
       // Listened to on graph.jsx
-      this.emit('scrolling-drawn')
+      // this.emit('scrolling-drawn')
     }
   }.bind(this)
 
