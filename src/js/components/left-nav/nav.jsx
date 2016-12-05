@@ -16,7 +16,6 @@ import AccountActions from 'actions/account'
 import UserAvatar from 'components/common/user-avatar.jsx'
 import GraphIcon from 'components/icons/graph-icon.jsx'
 
-import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 import Badge from 'material-ui/Badge'
 
@@ -105,7 +104,8 @@ let Nav = React.createClass({
   },
 
   editProfile() {
-    ProfileActions.show()
+    this.setState({drawerOpen: false})
+    this.context.router.push('profile')
   },
 
   goto(url) {
