@@ -22,10 +22,6 @@ let ForgotPassword = React.createClass({
     })
   },
 
-  componentDidMount() {
-    alert('WHY?')
-  },
-
   enableSubmit() {
     this.setState({disabledSubmit: false})
   },
