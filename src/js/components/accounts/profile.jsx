@@ -482,7 +482,7 @@ let Profile = React.createClass({
     this.passportInputEl.click()
   },
 
-  _handleRemove(event) {
+  _handleRemove() {
     this.fileInputEl.value = null
 
     if (this.state.file) {
