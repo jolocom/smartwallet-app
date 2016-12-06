@@ -73,19 +73,8 @@ let Profile = React.createClass({
     window.location.href = `${proxy}/exportkey`
   },
 
-<<<<<<< HEAD
   show() {
     ProfileActions.show()
-=======
-  uploadPK() {
-    return fetch(`${proxy}/importkey`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'text/turtle'
-      }
-    })
->>>>>>> origin/develop
   },
 
   hide() {
@@ -471,14 +460,8 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-<<<<<<< HEAD
     if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
       ProfileActions.update(Object.assign({}, this.state, { show: false }))
-=======
-    if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
-      ProfileActions.update(this.state)
-      this.hide()
->>>>>>> origin/develop
     }
   },
 
