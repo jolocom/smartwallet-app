@@ -185,12 +185,6 @@ class WebIDAgent extends LDPAgent {
 
       toDel.add(
         $rdf.sym(webId),
-        PRED.isRelatedTo,
-        $rdf.sym(uri)
-      )
-
-      toDel.add(
-        $rdf.sym(webId),
         PRED.passport,
         $rdf.sym(uri)
       )
@@ -229,21 +223,6 @@ class WebIDAgent extends LDPAgent {
       ])
     })
   }
-
-  addPassport(uri) {
-    return this.getWebID().then((webId) => {
-      const toAdd = $rdf.graph()
-
-      toAdd.add(
-        $rdf.sym(webId),
-        PRED.passport,
-        $rdf.sym(uri)
-      )
-
-      return this.patch(this._proxify(webId), null, toAdd.statements)
-    })
-  }
-
 }
 
 export default WebIDAgent

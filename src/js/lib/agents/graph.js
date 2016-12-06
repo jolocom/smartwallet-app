@@ -104,20 +104,20 @@ class GraphAgent extends LDPAgent {
     confidential = false
   ) {
     let writer = new Writer()
-    let newNodeUri = $rdf.sym(currentUser.storage + Util.randomString(5))
+    let newNodeUri = $rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
     return this.createACL(newNodeUri.uri, currentUser, confidential)
     .then((uri) => {
       aclUri = uri
 
-      writer.addTriple(newNodeUri, PRED.storage, currentUser.storage)
+      writer.addTriple(newNodeUri, PRED.storage, centerNode.storage)
       writer.addTriple(newNodeUri, PRED.maker, $rdf.sym(centerNode.uri))
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (image) {
         return this.addImage(
           newNodeUri,
-          currentUser.storage,
+          centerNode.storage,
           writer,
           image,
           confidential
@@ -191,6 +191,8 @@ class GraphAgent extends LDPAgent {
     let aclWriter = new Writer()
     let aclUri = `${uri}.acl`
     let owner = $rdf.sym('#owner')
+    console.log(uri)
+    console.log(webID)
 
     aclWriter.addTriple(owner, PRED.type, PRED.auth)
     aclWriter.addTriple(owner, PRED.access, $rdf.sym(uri))

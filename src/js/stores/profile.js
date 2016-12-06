@@ -72,7 +72,7 @@ export default Reflux.createStore({
       return
     }
     const OldPassImgUri = this.state.passportImgUri.trim()
-    const OldPassNodeUri = this.state.passportNodeUri.trim()
+    const OldPassNodeUri = this.state.passportImgNodeUri.trim()
 
     if (OldPassImgUri) {
       if (!newData.passportImgUri.trim()) {
@@ -86,16 +86,15 @@ export default Reflux.createStore({
       }
     } else if (newData.passportImgUri.trim()) {
       return this.gAgent.createNode(
-        newData.webId,
-        {uri: this.state.webid, storage: this.state.storage},
+        this.state.webId,
+        {uri: this.state.webId, storage: this.state.storage},
         'Passport',
         undefined,
         newData.passportImgUri,
-        'default',
+        'passport',
         true
       ).then((passportNodeUri) => {
         this.state.passportNodeUri = passportNodeUri
-        return this.wia.addPassport(passportNodeUri)
       })
     }
   },
