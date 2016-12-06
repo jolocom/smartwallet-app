@@ -62,10 +62,13 @@ let Graph = React.createClass({
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
-    this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
+    // this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
 
     if (!this.state.initialized) {
       graphActions.getInitialGraphState()
+    } else {
+      this.graph.render(this.state)
+      this.graph.updateHistory(this.state.navHistory)
     }
   },
 
@@ -148,11 +151,14 @@ let Graph = React.createClass({
     })
 
     let loading
-    if (!this.state.initialized) {
+    // This way won't fire with undefined or null
+    if (this.state.initialized === false) {
       loading = <Loading style={styles.loading} />
+    } else {
+      loading = null
     }
-    return (
 
+    return (
       <div style={styles.container}>
         <IndicatorOverlay ref="scrollIndicator" />
         <div style={styles.chart} ref="graph" />

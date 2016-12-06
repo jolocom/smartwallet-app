@@ -21,7 +21,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 
 import LeftNav from 'components/left-nav/nav.jsx'
-import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
 import Loading from 'components/common/loading.jsx'
@@ -339,7 +338,6 @@ let App = React.createClass({
                 })
               })}
             </Content>
-            <Profile />
             <Tour />
           </Layout>
         )}

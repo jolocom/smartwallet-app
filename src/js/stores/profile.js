@@ -1,8 +1,8 @@
 import Reflux from 'reflux'
 import ProfileActions from 'actions/profile'
-import accountActions from '../actions/account'
 import GraphActions from 'actions/graph-actions'
-import GraphStore from 'stores/graph-store'
+import SnackbarActions from 'actions/snackbar'
+import accountActions from '../actions/account'
 import GraphAgent from 'lib/agents/graph'
 import WebIDAgent from 'lib/agents/webid'
 
@@ -36,31 +36,12 @@ export default Reflux.createStore({
 
   init() {
     this.listenTo(accountActions.logout, this.onLogout)
-    this.listenTo(GraphStore, this.graphUpdate)
     this.gAgent = new GraphAgent()
     this.wia = new WebIDAgent()
   },
 
-  graphUpdate(data) {
-    if (data && data.center) {
-      profile.storage = data.center.storage
-      profile.currentNode = data.center.uri
-      this.trigger(Object.assign({}, profile))
-    }
-  },
-
   getInitialState () {
     return profile
-  },
-
-  onShow() {
-    profile.show = true
-    this.trigger(Object.assign({}, profile))
-  },
-
-  onHide() {
-    profile.show = false
-    this.trigger(Object.assign({}, profile))
   },
 
   onLoad() {
@@ -69,8 +50,8 @@ export default Reflux.createStore({
       .catch(ProfileActions.load.failed)
   },
 
-  onLoadFailed(err) {
-    console.error('Failed loading webid profile', err)
+  onLoadFailed() {
+    SnackbarActions.showMessage('Failed to load the WebId profile info.')
   },
 
   // change state from triples
@@ -96,8 +77,8 @@ export default Reflux.createStore({
       return this.wia.deleteBitcoinAddress(params.bitcoinAddressNodeUri)
     } else if (!profile.bitcoinAddress.trim()) {
       return this.gAgent.createNode(
-        GraphStore.state.user,
-        GraphStore.state.center,
+        profile.webId,
+        {uri: profile.webId, storage: profile.storage},
         'Bitcoin Address',
         params.bitcoinAddress,
         undefined,
@@ -131,8 +112,8 @@ export default Reflux.createStore({
       }
     } else if (params.passportImgUri.trim()) {
       return this.gAgent.createNode(
-        GraphStore.state.user,
-        GraphStore.state.center,
+        profile.webId,
+        {uri: profile.webId, storage: profile.storage},
         'Passport',
         undefined,
         params.passportImgUri,
@@ -153,8 +134,8 @@ export default Reflux.createStore({
 
   onUpdate(params) {
     Promise.all([
-      this._updateBitcoin(params),
-      // this._updatePassport(params),
+      // this._updateBitcoin(params),
+      this._updatePassport(params),
       this._updateProfile(params)
     ]).then(() => {
       if (params.currentNode) {

@@ -12,7 +12,6 @@ import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
 import AvWeb from 'material-ui/svg-icons/av/web'
-import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 import ActionStar from 'material-ui/svg-icons/toggle/star'
 import VerifiedUser from 'material-ui/svg-icons/action/verified-user'
@@ -132,7 +131,6 @@ let ProfileNode = React.createClass({
   },
 
   render() {
-    console.log(this.state.profile)
     let styles = this.getStyles()
     let {writePerm, centerWritePerm} = this.props
     let {
@@ -148,7 +146,8 @@ let ProfileNode = React.createClass({
       company,
       url
     } = this.props.node
-    const isMe = this.state.profile.webid === uri
+
+    const isMe = this.state.profile.webId === uri
 
     let name
     if (this.props.node.fullName && this.props.node.fullName > 0) {
@@ -166,7 +165,7 @@ let ProfileNode = React.createClass({
     if (this.props.writePerm) {
       menuItems.push('edit')
       // Making sure you can't delete your main node.
-      if (isMe) {
+      if (!isMe) {
         menuItems.push('delete')
       }
     }
@@ -385,18 +384,6 @@ let ProfileNode = React.createClass({
                 </ListItem>,
                 <ListItem
                   key={2}
-                  leftIcon={<BitcoinIcon />}>
-                  <TextField
-                    style={styles.inputStyle}
-                    floatingLabelStyle={styles.labelStyle}
-                    underlineStyle={styles.underlineStyle}
-                    floatingLabelText="Bitcoin address"
-                    value={this.state.profile.bitcoinAddress}
-                    floatingLabelFixed
-                    readOnly />
-                </ListItem>,
-                <ListItem
-                  key={3}
                   leftIcon={<ActionCreditCard color="#9ba0aa" />}>
                   <TextField
                     style={styles.inputStyle}

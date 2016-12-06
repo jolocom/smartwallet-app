@@ -38,11 +38,13 @@ let TextNode = React.createClass({
     let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []
     if (this.props.writePerm) {
-      menuItems.push('delete')
+      if (type !== 'passport') {
+        menuItems.push('delete')
+      }
       menuItems.push('privacySettings')
     }
 
-    if (this.props.centerWritePerm) {
+    if (this.props.centerWritePerm && type !== 'passport') {
       menuItems.push('disconnect')
     }
 

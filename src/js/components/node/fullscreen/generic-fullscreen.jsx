@@ -4,7 +4,6 @@ import Dialog from 'components/common/dialog'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
-import ProfileActions from 'actions/profile'
 import ConfirmActions from 'actions/confirm'
 import graphActions from 'actions/graph-actions'
 import Radium from 'radium'
@@ -301,7 +300,7 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleEdit() {
-    ProfileActions.show()
+    this.context.router.push('/profile')
   },
 
   _handleStartChat() {

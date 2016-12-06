@@ -65,43 +65,41 @@ class WebIDAgent extends LDPAgent {
 
     let relevant = triples.filter((t) => t.subject.uri === webId)
 
+    let predicateMap = {}
+    predicateMap[PRED.familyName] = 'familyName'
+    predicateMap[PRED.givenName] = 'givenName'
+    predicateMap[PRED.image] = 'imgUri'
+    predicateMap[PRED.email] = 'email'
+    predicateMap[PRED.socialMedia] = 'socialMedia'
+    predicateMap[PRED.mobile] = 'mobilePhone'
+    predicateMap[PRED.address] = 'address'
+    predicateMap[PRED.profession] = 'profession'
+    predicateMap[PRED.company] = 'company'
+    predicateMap[PRED.url] = 'url'
+    predicateMap[PRED.creditCard] = 'creditCard'
+    predicateMap[PRED.passport] = 'passportImgNodeUri'
+    predicateMap[PRED.storage] = 'storage'
+
     for (var t of relevant) {
-      let obj = t.object.uri ? t.object.uri : t.object.value
-      if (t.predicate.uri === PRED.givenName.uri) {
-        profile.givenName = obj
-      } else if (t.predicate.uri === PRED.familyName.uri) {
-        profile.familyName = obj
-      } else if (t.predicate.uri === PRED.fullName.uri) {
-        profile.fullName = obj
-      } else if (t.predicate.uri === PRED.image.uri) {
-        profile.imgUri = obj
-      } else if (t.predicate.uri === PRED.socialMedia.uri) {
-        profile.socialMedia = obj
-      } else if (t.predicate.uri === PRED.mobile.uri) {
-        profile.mobilePhone = obj
-      } else if (t.predicate.uri === PRED.address.uri) {
-        profile.address = obj
-      } else if (t.predicate.uri === PRED.profession.uri) {
-        profile.profession = obj
-      } else if (t.predicate.uri === PRED.company.uri) {
-        profile.company = obj
-      } else if (t.predicate.uri === PRED.url.uri) {
-        profile.url = obj
-      } else if (t.predicate.uri === PRED.creditCard.uri) {
-        profile.creditCard = obj
-      } else if (t.predicate.uri === PRED.email.uri) {
-        profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
-      } else if (t.predicate.uri === PRED.bitcoin.uri) {
-        profile.bitcoinAddressNodeUri = obj
-        this.findObjectsByTerm(obj, PRED.description).then((res) => {
-          profile.bitcoinAddress = res.length ? res[0].value : ''
-        })
-      } else if (t.predicate.uri === PRED.passport.uri) {
-        profile.passportImgNodeUri = obj
-        this.findObjectsByTerm(obj, PRED.image).then((res) => {
-          profile.passportImgUri = res.length ? res[0].value : ''
-        })
+      if (predicateMap[t.predicate]) {
+        const obj = t.object.uri ? t.object.uri : t.object.value
+        profile[predicateMap[t.predicate]] = obj
       }
+    }
+
+    // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
+    // when displaying here.
+    if (profile.email) {
+      profile.email = profile.email.substring(7, profile.email.length)
+    }
+
+    if (profile.passportImgNodeUri) {
+      this.findObjectsByTerm(
+        profile.passportImgNodeUri,
+        PRED.image
+      ).then(res => {
+        profile.passportImgUri = res.length ? res[0].value : ''
+      })
     }
 
     let {fullName, givenName, familyName} = profile

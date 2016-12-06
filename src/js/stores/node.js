@@ -111,7 +111,7 @@ export default Reflux.createStore({
         if (flag) {
           this.gAgent.deleteTriple(query).then((result) => {
             if (result.ok) {
-              profileActions.load() // Reload profile info (bitcoin, passport)
+              profileActions.load() // Reload profile info (passport)
               graphActions.refresh()
             }
           })
