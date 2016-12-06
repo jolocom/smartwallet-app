@@ -30,6 +30,7 @@ import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import ActionLabel from 'material-ui/svg-icons/action/label'
 import ContentAdd from 'material-ui/svg-icons/content/add'
+import FileIcon from 'material-ui/svg-icons/editor/attach-file'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -75,7 +76,7 @@ let NodeAddGeneric = React.createClass({
           label: 'image'
         }
       ],
-      uploadedFile: 'pic.jpg'
+      uploadedFile: ''
     }
   },
 
@@ -223,20 +224,37 @@ let NodeAddGeneric = React.createClass({
                 style={styles.image} />
             </Card>
             <TextField
-              name="givenName"
+              ref="nodeTitle"
               style={styles.nodeTitle}
               placeholder="Add node title"
               onChange={Util.linkToState(this, 'title')} />
-            <TextField
-              value={this.state.uploadedFile}
-              readOnly
-            />
-            <FloatingActionButton mini style={{width: '40px'}}>
-              <ContentAdd />
-            </FloatingActionButton>
-            <input
-              type="file"
-            />
+            <List>
+              <ListItem
+                key={1}
+                disabled
+                leftIcon={<FileIcon fill="#9ba0aa" />}
+                rightIcon={
+                  <FloatingActionButton
+                    mini style={{width: '40px'}}
+                    onClick={this._handleFileSelect}>
+                    <ContentAdd />
+                  </FloatingActionButton>
+                }>
+                <TextField
+                  style={styles.inputStyle}
+                  value={this.state.uploadedFile}
+                  placeholder="Files"
+                  readOnly
+                />
+                <input
+                  id="fileUpload"
+                  type="file"
+                  ref="fileInputEl"
+                  style={{display: 'none'}}
+                  onChange={this._handleFileUpload}
+                />
+              </ListItem>
+            </List>
             <List>
               <ListItem
                 primaryText="General"
@@ -278,6 +296,28 @@ let NodeAddGeneric = React.createClass({
         </Layout>
       </Dialog>
     )
+  },
+
+  _handleFileSelect() {
+    this.refs.fileInputEl.click()
+  },
+
+  _handleFileUpload({target}) {
+    let fileNameArray = target.value.split('\\')
+    let fileName = fileNameArray[fileNameArray.length - 1]
+    if (fileName.length > 15) {
+      fileName = fileName.substring(0, 4) + '...' +
+        fileName.substring(fileName.length - 5)
+    }
+    this.setState({
+      uploadedFile: fileName
+    })
+    if (this.refs.nodeTitle.input.value.length === 0) {
+      this.refs.nodeTitle.input.value = fileName
+      this.setState({
+        title: fileName
+      })
+    }
   },
 
   renderChip(data) {
