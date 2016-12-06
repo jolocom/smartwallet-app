@@ -1,12 +1,6 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
-import {proxy} from 'settings'
 import AccountsAgent from 'lib/agents/accounts'
-import GraphAgent from 'lib/agents/graph'
-import WebIdAgent from 'lib/agents/webid'
-import rdf from 'rdflib'
-import {PRED} from 'lib/namespaces'
-
 import SnackbarActions from 'actions/snackbar'
 
 export default Reflux.createStore({
@@ -32,7 +26,11 @@ export default Reflux.createStore({
     this.accounts.register(username, password, email, name).then((account) => {
       return this._login(username, password)
     }).then((webId) => {
-      return this.accounts.initInbox(webId)
+      return Promise.all([
+        this.accounts.initInbox(webId),
+        this.accounts.initIndex(webId),
+        this.accounts.initDisclaimer(webId)
+      ])
     }).catch((e) => {
       if (e.message) {
         SnackbarActions.showMessage(e.message)
@@ -61,7 +59,9 @@ export default Reflux.createStore({
 
   onLogin(username, password) {
     const webId = localStorage.getItem('jolocom.webId')
+    // The user is already logged in.
     if (webId) {
+      // Check if the session expired (?)
       this.trigger({loggingIn: true})
 
       // Check if the cookie is still valid

@@ -1,4 +1,5 @@
 import React from 'react'
+import Reflux from 'reflux'
 import Radium from 'radium'
 
 import {AppBar, IconButton, FlatButton} from 'material-ui'
@@ -9,11 +10,13 @@ import {Layout, Content} from 'components/layout'
 import NodeAddDefault from './add-default.jsx'
 import NodeAddLink from './add-link.jsx'
 import NodeAddImage from './add-image.jsx'
+import PreviewStore from 'stores/preview-store'
 
 let types = {
   default: {
     component: NodeAddDefault
   },
+
   link: {
     component: NodeAddLink
   },
@@ -24,23 +27,32 @@ let types = {
 }
 
 let NodeAdd = React.createClass({
+  mixins: [Reflux.listenTo(PreviewStore, 'onStoreUpdate', 'initialState')],
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    center: React.PropTypes.object,
+    neighbours: React.PropTypes.array
   },
 
   contextTypes: {
     router: React.PropTypes.any,
-    node: React.PropTypes.any,
     muiTheme: React.PropTypes.object
   },
 
+  initialState(state) {
+    this.setState({graphState: state})
+  },
+
+  onStoreUpdate(newState) {
+    this.setState({graphState: newState})
+  },
+
   componentDidMount() {
-    this.refs.dialog.show()
+    this.refs.dialog && this.refs.dialog.show()
   },
 
   close() {
-    this.refs.dialog.hide()
     this.context.router.goBack()
   },
 
@@ -60,45 +72,47 @@ let NodeAdd = React.createClass({
     }
   },
 
-  getTypeConfig(type) {
-    return types[type] || types.default
-  },
-
-  render: function() {
+  render() {
     let styles = this.getStyles()
-    let {node, type} = this.props.params
-    let config = this.getTypeConfig(type)
+    let {type} = this.props.params
+
+    let config = types[type] || types.default
     let title = config.title || `New ${type}`
 
     let Component = config.component
 
     return (
-      <Dialog ref="dialog" fullscreen>
-        <Layout>
-          <AppBar
-            title={title}
-            titleStyle={styles.title}
-            iconElementLeft={
-              <IconButton
-                iconStyle={styles.icon}
-                iconClassName="material-icons"
-                onTouchTap={this._handleClose}>close
-              </IconButton>
-            }
-            iconElementRight={
-              <FlatButton
-                style={styles.icon}
-                label="Create"
-                onTouchTap={this._handleSubmit}
-              />
-            }
-            style={styles.bar}
-          />
-          <Content style={styles.content}>
-            <Component ref="form" node={node} onSuccess={this._handleSuccess} />
-          </Content>
-        </Layout>
-      </Dialog>
+      <div>
+        <Dialog ref="dialog" fullscreen>
+          <Layout>
+            <AppBar
+              title={title}
+              titleStyle={styles.title}
+              iconElementLeft={
+                <IconButton
+                  iconStyle={styles.icon}
+                  iconClassName="material-icons"
+                  onTouchTap={this._handleClose}>close
+                </IconButton>
+              }
+              iconElementRight={
+                <FlatButton
+                  style={styles.icon}
+                  label="Create"
+                  onTouchTap={this._handleSubmit}
+                />
+              }
+              style={styles.bar}
+            />
+            <Content style={styles.content}>
+              <Component ref="form"
+                node={this.props.center}
+                onSuccess={this._handleSuccess}
+                graphState={this.state.graphState} />
+            </Content>
+          </Layout>
+        </Dialog>
+      </div>
     )
   },
 
@@ -111,7 +125,6 @@ let NodeAdd = React.createClass({
   },
 
   _handleClose() {
-    this.refs.dialog.hide()
     this.context.router.goBack()
   }
 })

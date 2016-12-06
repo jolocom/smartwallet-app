@@ -11,12 +11,21 @@ let defaultProfile = {
   fullName: '',
   givenName: '',
   familyName: '',
+  privacy: '',
+  username: '',
+  mobilePhone: '',
   email: '',
+  address: '',
+  socialMedia: '',
+  profession: '',
+  company: '',
+  url: '',
   bitcoinAddress: '',
   bitcoinAddressNodeUri: '',
   passportImgUri: '',
   passportImgNodeUri: '',
   webId: '#',
+  creditCard: '',
   imgUri: null
 }
 
@@ -78,7 +87,6 @@ export default Reflux.createStore({
   /* @summary Updates the rdf profile based on input
   /* @param {object} params - {familyName: ,givenName: ,email: ,imgUri: }
    */
-
   _updateBitcoin(params) {
     if (params.bitcoinAddress.trim() === profile.bitcoinAddress.trim()) {
       return

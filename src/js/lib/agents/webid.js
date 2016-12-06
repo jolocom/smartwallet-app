@@ -4,6 +4,8 @@ import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'
 
+const FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/')
+
 // WebID related functions
 class WebIDAgent extends LDPAgent {
 
@@ -18,6 +20,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   // Gets the webId of the currently loged in user from local storage,
+  // Why is this async?
   getWebID() {
     return new Promise((resolve, reject) => {
       const webId = localStorage.getItem('jolocom.webId')
@@ -39,6 +42,18 @@ class WebIDAgent extends LDPAgent {
           return parser.parse(text, webId)
         }).then((answer) => {
           return this._parseProfile(webId, answer.triples)
+        }).then((data) => {
+          if (data.imgUri) {
+            return this.head(this._proxify(data.imgUri))
+              .then((data) => {
+                return data
+              })
+              .catch((e) => {
+                data.imgUri = null
+                return data
+              })
+          }
+          return data
         })
     })
   }
@@ -60,6 +75,20 @@ class WebIDAgent extends LDPAgent {
         profile.fullName = obj
       } else if (t.predicate.uri === PRED.image.uri) {
         profile.imgUri = obj
+      } else if (t.predicate.uri === PRED.socialMedia.uri) {
+        profile.socialMedia = obj
+      } else if (t.predicate.uri === PRED.mobile.uri) {
+        profile.mobilePhone = obj
+      } else if (t.predicate.uri === PRED.address.uri) {
+        profile.address = obj
+      } else if (t.predicate.uri === PRED.profession.uri) {
+        profile.profession = obj
+      } else if (t.predicate.uri === PRED.company.uri) {
+        profile.company = obj
+      } else if (t.predicate.uri === PRED.url.uri) {
+        profile.url = obj
+      } else if (t.predicate.uri === PRED.creditCard.uri) {
+        profile.creditCard = obj
       } else if (t.predicate.uri === PRED.email.uri) {
         profile.email = obj.substring(obj.indexOf('mailto:') + 7, obj.length)
       } else if (t.predicate.uri === PRED.bitcoin.uri) {
@@ -98,10 +127,17 @@ class WebIDAgent extends LDPAgent {
       let deleteTriples = []
 
       let predicateMap = {
-        familyName: PRED.familyName,
-        givenName: PRED.givenName,
-        imgUri: PRED.image,
-        email: PRED.email
+        familyName: FOAF('familyName'),
+        givenName: FOAF('givenName'),
+        imgUri: FOAF('img'),
+        email: FOAF('mbox'),
+        socialMedia: FOAF('accountName'),
+        mobilePhone: FOAF('phone'),
+        address: FOAF('based_near'),
+        profession: FOAF('currentProject'),
+        company: FOAF('workplaceHomepage'),
+        url: FOAF('homepage'),
+        creditCard: FOAF('holdsAccount')
       }
 
       for (let pred in predicateMap) {

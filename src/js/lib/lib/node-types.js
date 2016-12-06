@@ -65,16 +65,13 @@ export default {
     if (_types[type] !== undefined) {
       throw new Error(`Node type ${type} as already been registered`)
     }
-  
-    if (typeof type == 'object' && 'uri' in type)
-      type=type.uri
 
+    if (typeof type === 'object' && 'uri' in type) {
+      type = type.uri
+    }
     // validate config
-
     _types[type] = Object.assign({}, configDefault, config)
-    
-    if (Object.keys(_types).length === 1)
-    {
+    if (Object.keys(_types).length === 1) {
       _types['default'] = Object.assign({}, configDefault, config)
     }
   },
@@ -83,7 +80,7 @@ export default {
    */
   get(type) {
     if (typeof type === 'string') {
-        return _types[type]
+      return _types[type]
     }
 
     for (let nodeType in _types) {
@@ -97,16 +94,14 @@ export default {
    *
    */
   componentFor(type) {
-    if (type && typeof type == 'object' && 'uri' in type)
-      type=type.uri
-      
+    if (type && typeof type === 'object' && 'uri' in type) {
+      type = type.uri
+    }
+
     let config
     if (type && (config = this.get(type))) {
       return config.component
-    }
-    else
-    {
-      console.error('node-types.js - Could not find component for type ' + type)
+    } else {
       return this.get('default').component
     }
   }

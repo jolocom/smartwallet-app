@@ -63,6 +63,24 @@ class AccountsAgent extends HTTPAgent {
     ])
   }
 
+  initIndex(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/index`
+    return this.put(this._proxify(uri), {
+      'Content-type': 'text/turtle'
+    })
+  }
+
+  initDisclaimer(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/disclaimer`
+    return this.put(
+      this._proxify(uri),
+      {'Content-type': 'text/turtle'},
+      'Files in this folder are needed for features of the Little-Sister app.'
+    )
+  }
+
   // @TODO this name is confusing, because there's already a
   // default notifications inbox provided by solid.
   // Should be named 'conversations'
@@ -77,7 +95,7 @@ class AccountsAgent extends HTTPAgent {
     writer.add('#inbox', PRED.type, PRED.space)
 
     return this.put(
-      Util.uriToProxied(uri),
+      this._proxify(uri),
       writer.end(),
       {'Content-type': 'text/turtle'}
     ).then(() => {
@@ -96,7 +114,7 @@ class AccountsAgent extends HTTPAgent {
     writer.add('#unread-messages', PRED.type, PRED.space)
 
     return this.put(
-      Util.uriToProxied(uri),
+      this._proxify(uri),
       writer.end(),
       {'Content-type': 'text/turtle'}
     ).then(() => {
@@ -122,7 +140,7 @@ class AccountsAgent extends HTTPAgent {
     writer.addTriple($rdf.sym('#append'), ACL('agentClass'), PRED.Agent)
     writer.addTriple($rdf.sym('#append'), ACL('mode'), ACL('Append'))
 
-    return this.put(Util.uriToProxied(aclUri), writer.end(), {
+    return this.put(this._proxify(aclUri), writer.end(), {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri

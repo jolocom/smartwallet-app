@@ -46,7 +46,10 @@ const publicRoutes = [
   '/login',
   '/signup',
   '/forgot-password',
-  '/change-password'
+  '/change-password',
+  '/privacy-settings',
+  '/shared-nodes',
+  '/node-list'
 ]
 
 let App = React.createClass({
@@ -331,6 +334,7 @@ let App = React.createClass({
             <Content>
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {
+                  snackbar: this.state.snackbar.open,
                   searchQuery: this.state.searchQuery
                 })
               })}

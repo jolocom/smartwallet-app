@@ -232,11 +232,6 @@ let Signup = React.createClass({
     return styles
   },
 
-  // What is the purpose of this function?
-  // handleClick() {
-  //   Account.signup()
-  // },
-
   render() {
     let styles = this.getStyles()
     let cookieWarning
@@ -341,7 +336,6 @@ let Signup = React.createClass({
                     required
                     />
                 </div>
-
                 <RaisedButton
                   type="submit"
                   secondary

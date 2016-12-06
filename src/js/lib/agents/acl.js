@@ -14,6 +14,16 @@ class AclAgent {
     this.g = rdf.graph()
     this.gAgent = new GraphAgent()
     this.Writer = new Writer()
+    this.indexChanges = {
+      toInsert: [],
+      toDelete: []
+    }
+
+    this.indexPredMap = {
+      read: PRED.readPermission,
+      write: PRED.writePermission,
+      control: PRED.owns
+    }
 
     this.predMap = {
       write: PRED.write,
@@ -22,11 +32,26 @@ class AclAgent {
     }
   }
 
+  // Checks if an object is contained in an array by comparing it's props.
+  containsObj(arr, obj) {
+    if (arr.length === 0) {
+      return -1
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].subject.uri === obj.subject.uri &&
+          arr[i].predicate.uri === obj.predicate.uri &&
+          arr[i].object.uri === obj.object.uri
+      ) return i
+    }
+    return -1
+  }
+
   /**
    * @summary Hydrates the object. Decided to not put in constructor,
    *          so that there's no async behaviour there. Also tries to
    *          deduce the URI to the acl file corresponding to the file.
-   * @return undefined, we want the side effect
+   * @return undefined, we want the side effect.
    */
 
   fetchInfo() {
@@ -43,9 +68,25 @@ class AclAgent {
           throw new Error('Link is not an ACL file')
         }
       })
-    }).catch((e) => {
-      console.error(e, 'at fetchInfo')
     })
+  }
+  /**
+   * @summary Initiates a empty ACL file we can later populate,
+   *          alternative to fetchInfo()
+   * @returns undefined, we wat the side effect.
+   */
+  initiateNew() {
+    return Util.getAclUri(this.uri).then((aclUri) => {
+      this.aclUri = aclUri
+    })
+  }
+
+  /**
+   * @summary Removes all triples in the writer.
+   * Usefull when we want to reset / wipe the triples in the agent
+   */
+  resetAcl() {
+    this.Writer = new Writer()
   }
 
   /**
@@ -70,12 +111,18 @@ class AclAgent {
       user = rdf.sym(user)
     }
 
+    let payload = {
+      subject: user,
+      predicate: this.indexPredMap[mode],
+      object: rdf.sym(this.uri)
+    }
+
+    this.indexAdd(payload)
     // If user already has the permission.
     if (_.includes(this.allowedPermissions(user, true), mode)) {
       return
     } else {
       mode = this.predMap[mode]
-
       let alt = this.Writer.find(undefined, identifier, user)
       if (alt.length > 0) {
         // A policy regarding the user already exists, we will
@@ -100,7 +147,6 @@ class AclAgent {
    * @param {string} mode - permission to do what? [read, write, control]
    * @return undefined, we want the side effect
    */
-
   removeAllow(user, mode) {
     let wildcard = user === '*'
     let identifier = wildcard ? PRED.agentClass : PRED.agent
@@ -114,6 +160,15 @@ class AclAgent {
     if (typeof user === 'string') {
       user = rdf.sym(user)
     }
+
+    let payload = {
+      subject: user,
+      predicate: this.indexPredMap[mode],
+      object: rdf.sym(this.uri)
+    }
+
+    // Update the index file accordingly.
+    this.indexRemove(payload)
 
     // Check if the triple is present.
     if (!_.includes(this.allowedPermissions(user, true), mode)) {
@@ -152,18 +207,71 @@ class AclAgent {
     }
   }
 
+  indexRemove(payload) {
+    // If we said we want to add it, and now say we want to delete it,
+    // the adding rule get's popped out.
+    let i = this.containsObj(this.indexChanges.toInsert, payload)
+    if (i !== -1) {
+      this.indexChanges.toInsert.splice(i, 1)
+      return
+    }
+
+    // Making sure we don't add it twice
+    if (this.containsObj(this.indexChanges.toDelete, payload) === -1) {
+      this.indexChanges.toDelete.push(payload)
+    }
+  }
+
+  indexAdd(payload) {
+    // If we said we want to delete it, and now say we want to add it,
+    // the deletion rule get's popped out.
+    let i = this.containsObj(this.indexChanges.toDelete, payload)
+    if (i !== -1) {
+      this.indexChanges.toDelete.splice(i, 1)
+      return
+    }
+
+    // Making sure we don't add it twice
+    if (this.containsObj(this.indexChanges.toInsert, payload) === -1) {
+      this.indexChanges.toInsert.push(payload)
+    }
+  }
+
   /**
    * @summary Tells if a user is allowed to do a certain thing on a file.
    * @return {bool} - Allowed / Not allowed.
    */
   isAllowed(user, mode) {
     if (!this.predMap[mode]) {
-      console.error('Invalid mode supplied!')
       return false
     }
     if (_.includes(this.allowedPermissions(user), mode)) {
       return true
+    } else {
+      return false
     }
+  }
+
+  /**
+   * @summary Returns a list of people allowed to do something
+   */
+  allAllowedUsers(mode) {
+    if (!this.predMap[mode]) {
+      return []
+    }
+
+    let pred = this.predMap[mode]
+    let users = []
+
+    // FIRST FIND ALL POLICIES CONTAINING READ
+    this.Writer.find(undefined, PRED.type, PRED.auth).forEach(trip => {
+      this.Writer.find(trip.subject, PRED.mode, pred).forEach(pol => {
+        this.Writer.find(pol.subject, PRED.agent, undefined).map(user => {
+          users.push(user.object)
+        })
+      })
+    })
+    return users
   }
 
   /**
@@ -183,6 +291,9 @@ class AclAgent {
 
     if (typeof user === 'string') {
       user = rdf.sym(user)
+    }
+    if (this.Writer.g.statements.length === 0) {
+      return []
     }
     let existing = this.Writer.find(undefined, identifier, user)
     if (existing.length > 0) {
@@ -223,6 +334,31 @@ class AclAgent {
     }).catch((e) => {
       console.error(e)
     })
+  }
+
+  commitIndex() {
+    let updates = []
+    let indexUri = Util.getIndexUri()
+    if (this.indexChanges.toInsert.length > 0) {
+      this.indexChanges.toInsert.forEach((el) => {
+        updates.push(
+          this.gAgent.writeTriples(indexUri, [el], false)
+        )
+      })
+    }
+
+    if (this.indexChanges.toDelete.length > 0) {
+      let payload = {
+        uri: indexUri,
+        triples: []
+      }
+
+      this.indexChanges.toDelete.forEach((el) => {
+        payload.triples.push(el)
+      })
+      updates.push(this.gAgent.deleteTriple(payload))
+    }
+    return Promise.all(updates)
   }
 }
 

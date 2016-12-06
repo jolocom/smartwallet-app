@@ -1,6 +1,6 @@
 import WebIDAgent from './webid.js'
 import LDPAgent from './ldp.js'
-import {Parser, Writer} from '../rdf.js'
+import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
@@ -55,18 +55,47 @@ class GraphAgent extends LDPAgent {
     return
   }
 
+  checkImages(triples) {
+    return Promise.all(triples.map(trip => {
+      const img = trip.img
+      if (!img) {
+        return
+      }
+      return this.fetch(this._proxify(img), {
+        method: 'HEAD',
+        credentials: 'include'
+      }).then(res => {
+        if (!res.ok) {
+          trip.img = ''
+        }
+      }).catch(() => {
+        trip.img = ''
+      })
+    }))
+  }
+
   /**
-   * @summary Curates the creation of a new node, delegates to other functions.
-   * @param {string} currentUser - Current webID, used for creating acl
-   *                 and connecting to the onwer.
-   * @param {object} centerNode - The uri of the folder where the image goes
-   * @param {string} title - The title of the node
-   * @param {string} description - The description of the node
-   * @param {blob} image - The image if there's one
-   * @param {string} nodeType - The type [image / text] of the node
-   * @param {bool} confidential - If the img is to be confidential
+   * @summary Returns all friends a profile has.
+   * @param {string} uri - The uri of the profile file.
    */
 
+  findFriends(uri) {
+    return this.fetchTriplesAtUri(uri).then(res => {
+      return this.findTriples(uri, $rdf.sym(uri), PRED.knows, undefined)
+    })
+  }
+
+  /**
+   * @summary Curates the creation of a new node, delegates to other functions.
+   * @param {string} currentUser - Current webID, used for creating acl.
+   *                 and connecting to the onwer.
+   * @param {object} centerNode - A object describing the center node.
+   * @param {string} title - The title of the node.
+   * @param {string} description - The description of the new node.
+   * @param {blob} image - The image if there's one.
+   * @param {string} nodeType - The type [image / text] of the node.
+   * @param {bool} confidential - If the img is to be confidential.
+   */
   createNode(
     currentUser,
     centerNode,
@@ -79,9 +108,10 @@ class GraphAgent extends LDPAgent {
     let writer = new Writer()
     let newNodeUri = $rdf.sym(currentUser.storage + Util.randomString(5))
     let aclUri
-    return this.createACL(newNodeUri.uri, currentUser.uri, confidential)
+    return this.createACL(newNodeUri.uri, currentUser, confidential)
     .then((uri) => {
       aclUri = uri
+
       writer.addTriple(newNodeUri, PRED.storage, currentUser.storage)
       writer.addTriple(newNodeUri, PRED.maker, $rdf.sym(centerNode.uri))
 
@@ -141,7 +171,7 @@ class GraphAgent extends LDPAgent {
         }).then(() => {
           return uri
         }).catch((e) => {
-          console.log('error', e, 'occured while putting the image file')
+          console.error('error', e, 'occured while putting the image file')
         })
       })
     })
@@ -227,6 +257,7 @@ class GraphAgent extends LDPAgent {
           if (res.ok && draw && validPredicate) {
             let obj = triples[0].object.uri
             let pred = triples[0].predicate.uri
+            // @TODO dont trigger actions from within the agents
             GraphActions.drawNewNode(obj, pred)
           }
         })
@@ -254,15 +285,11 @@ class GraphAgent extends LDPAgent {
 
     // Check if we received only one object with multiple triples in there.
     if (args.length === 1) {
-      ({
-        uri
-      } = args[0])
+      ({uri} = args[0])
       triples = args[0].triples
     } else {
       ([uri, subject, predicate, object] = args)
-      triples = [{
-        subject, predicate, object
-      }]
+      triples = [{subject, predicate, object}]
     }
 
     const toDel = $rdf.graph()
@@ -278,7 +305,9 @@ class GraphAgent extends LDPAgent {
   getNeighbours(center, triples) {
     // We will only follow and parse these links
     let Links = [
-      PRED.knows.uri, PRED.isRelatedTo.uri, PRED.isRelatedTo_HTTP.uri
+      PRED.knows.uri,
+      PRED.isRelatedTo.uri,
+      PRED.isRelatedTo_HTTP.uri
     ]
     let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
     // If there are adjacent nodes to draw,
@@ -333,37 +362,6 @@ class GraphAgent extends LDPAgent {
 
     return this.fetchTriplesAtUri(uri)
       .then(getPartialGraphMap)
-      .then((nodes) => {
-        return this.hydrateNodesConfidentiality(nodes)
-      })
-  }
-
-  hydrateNodesConfidentiality(nodes = []) {
-    let parser = new Parser()
-
-    return Promise.all(
-      nodes
-      .map((node) => {
-        if (node.unav || /\/card(?:#me)?$/.test(node.uri)) {
-          return Promise.resolve(node)
-        }
-
-        // @TODO Get ACL URL by parsing LINK header of RDF file HTTP Response
-        let aclUri = node.uri + '.acl'
-        return this.get(Util.uriToProxied(aclUri)).then((response) => {
-          return response.text().then((res) => {
-            let para = parser.parse(res, node.uri + '.acl')
-
-            node.confidential = para.triples.every(
-              (triple) => triple.subject.uri === aclUri + '#owner')
-
-            return node
-          })
-        }).catch((e) => {
-          console.error('Couldn\'t fetch ACL ' + node.uri + '.acl', e)
-          return node
-        })
-      }))
   }
 
   // Calls the above function, but passes the current webId as the URI.
