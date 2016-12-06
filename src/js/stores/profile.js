@@ -5,6 +5,7 @@ import SnackbarActions from 'actions/snackbar'
 import accountActions from '../actions/account'
 import GraphAgent from 'lib/agents/graph'
 import WebIDAgent from 'lib/agents/webid'
+import GraphStore from 'stores/graph-store'
 
 export default Reflux.createStore({
   listenables: ProfileActions,
@@ -33,6 +34,7 @@ export default Reflux.createStore({
       centerNode: null
     }
     this.listenTo(accountActions.logout, this.onLogout)
+    this.listenTo(GraphStore, this.graphChange)
     this.gAgent = new GraphAgent()
     this.wia = new WebIDAgent()
   },
@@ -43,11 +45,12 @@ export default Reflux.createStore({
 
   onLoad() {
     this.wia.getProfile()
-      .then((da)=>{
-        console.log(da,'da')
-        ProfileActions.load.completed
-      })
+      .then(ProfileActions.load.completed)
       .catch(ProfileActions.load.failed)
+  },
+
+  graphChange(graphState) {
+    this.state.centerNode = graphState.center.uri
   },
 
   onLoadFailed() {
@@ -98,7 +101,9 @@ export default Reflux.createStore({
   },
 
   _updateProfile(newData) {
-    return this.wia.updateProfile(newData, this.state)
+    return this.wia.updateProfile(newData, this.state).then(resultState => {
+      this.state = newData
+    })
   },
 
   onUpdate(newData) {
@@ -106,10 +111,9 @@ export default Reflux.createStore({
       this._updatePassport(newData, this.state),
       this._updateProfile(newData, this.state)
     ]).then(() => {
-      if (newData.currentNode) {
-        GraphActions.drawAtUri(newData.currentNode, 0)
+      if (this.state.centerNode === this.state.webId) {
+        GraphActions.drawAtUri(this.state.centerNode, 0)
       }
-
       this.trigger(this.state)
     }).catch((error) => {
       console.log(error)

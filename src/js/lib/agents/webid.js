@@ -51,7 +51,7 @@ class WebIDAgent extends LDPAgent {
                 return data
               })
           }
-          return data
+          return Object.assign(data, {webId})
         })
     })
   }
@@ -126,16 +126,12 @@ class WebIDAgent extends LDPAgent {
       socialMedia: PRED.socialMedia,
       mobilePhone: PRED.mobile,
       address: PRED.address,
-      profession: PRED.profiession,
+      profession: PRED.profession,
       company: PRED.company,
-      url: PRED.homepage,
+      url: PRED.url,
       creditCard: PRED.creditCard
     }
 
-    console.log('-=========-')
-    console.log(oldData)
-    console.log(newData)
-    console.log('-=========-')
     for (let pred in predicateMap) {
       if (newData[pred] !== oldData[pred]) {
         if (!oldData[pred] || newData[pred]) {
@@ -178,13 +174,8 @@ class WebIDAgent extends LDPAgent {
       this._proxify(oldData.webId), toDel.statements, toAdd.statements
     ))
 
-    if (oldData.passportImgUri.trim() !==
-        newData.passportImgUri.trim()) {
-      this.updatePassport(newData, nodeCreationRequests)
-    }
-
     return Promise.all(nodeCreationRequests).then(res => {
-      return res
+      return newData
     })
   }
 
