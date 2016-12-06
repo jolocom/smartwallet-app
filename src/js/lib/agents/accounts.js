@@ -5,14 +5,20 @@ import {PRED} from '../namespaces.js'
 import Util from '../util.js'
 import {Writer} from '../rdf.js'
 
+
+
 class AccountsAgent extends HTTPAgent {
   register(username, password, email, name) {
-    username = encodeURIComponent(username)
-    password = encodeURIComponent(password)
-    email = encodeURIComponent(email)
+    function encodeParams(username, password, email) {
+      username = encodeURIComponent(username)
+      password = encodeURIComponent(password)
+      email = encodeURIComponent(email)
+
+      return `username=${username}&password=${password}&email=${email}`
+    }
 
     return this.post(`${proxy}/register`,
-      `username=${username}&password=${password}&email=${email}`, {
+      encodeParams(username, password, email), {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     ).then((account) => {
@@ -30,7 +36,7 @@ class AccountsAgent extends HTTPAgent {
         )
       }
 
-      this.patch(this._proxify(account.webid), writer.all())
+      this.patch(this._proxify(account.webid), null, writer.all())
 
       return account
     })
@@ -66,7 +72,7 @@ class AccountsAgent extends HTTPAgent {
   initIndex(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/index`
-    return this.put(this._proxify(uri), {
+    return this.put(this._proxify(uri), '', {
       'Content-type': 'text/turtle'
     })
   }
@@ -74,10 +80,9 @@ class AccountsAgent extends HTTPAgent {
   initDisclaimer(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/disclaimer`
-    return this.put(
-      this._proxify(uri),
-      {'Content-type': 'text/turtle'},
-      'Files in this folder are needed for features of the Little-Sister app.'
+    return this.put(this._proxify(uri),
+      'Files in this folder are needed for features of the Little-Sister app.',
+      {'Content-type': 'text/turtle'}
     )
   }
 
