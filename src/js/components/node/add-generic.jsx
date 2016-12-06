@@ -79,6 +79,7 @@ let NodeAddGeneric = React.createClass({
         }
       ],
       uploadedFile: '',
+      uploadedFileType: 'document',
       hasFiles: false
     }
   },
@@ -234,39 +235,47 @@ let NodeAddGeneric = React.createClass({
               style={styles.nodeTitle}
               placeholder="Add node title"
               onChange={Util.linkToState(this, 'title')} />
-            <List>
-              <ListItem
-                key={1}
-                disabled
-                leftIcon={<FileIcon fill="#9ba0aa" />}
-                rightIcon={
-                  <FloatingActionButton
-                    mini style={{width: '40px'}}
-                    onClick={this._handleFileSelect}>
-                    <ContentAdd />
-                  </FloatingActionButton>
-                }>
-                {
-                  this.state.uploadedFile.length !== 0
-                  ? this.state.uploadedFile
-                  : 'Files'
-                }
-                <Divider style={styles.divider} />
-                <input
-                  id="fileUpload"
-                  type="file"
-                  ref="fileInputEl"
-                  style={{display: 'none'}}
-                  onChange={this._handleFileUpload}
-                />
-              </ListItem>
-            </List>
+              {
+                !this.state.hasFiles
+                ? <List>
+                  <ListItem
+                    key={1}
+                    disabled
+                    leftIcon={<FileIcon fill="#9ba0aa" />}
+                    rightIcon={
+                      <FloatingActionButton
+                        mini style={{width: '40px'}}
+                        onClick={this._handleFileSelect}>
+                        <ContentAdd />
+                      </FloatingActionButton>
+                    }>
+                    {
+                      this.state.uploadedFile.length !== 0
+                      ? this.state.uploadedFile
+                      : 'Files'
+                    }
+                    <Divider style={styles.divider} />
+                    <input
+                      id="fileUpload"
+                      type="file"
+                      ref="fileInputEl"
+                      style={{display: 'none'}}
+                      onChange={this._handleFileUpload}
+                    />
+                  </ListItem>
+                </List>
+                : null
+              }
             {
               this.state.hasFiles
               ? <List>
                 <ListItem
                   key={1}
-                  leftIcon={<ImageIcon color="#9ba0aa" />}
+                  leftIcon={
+                    this.state.fileType === 'image'
+                    ? <ImageIcon color="#9ba0aa" />
+                    : <FileIcon color="#9ba0aa" />
+                  }
                   nestedItems={[
                     <ListItem
                       key={1}
@@ -278,7 +287,11 @@ let NodeAddGeneric = React.createClass({
                       {this.state.uploadedFile}
                     </ListItem>
                   ]}>
-                  Images
+                  {
+                    this.state.fileType === 'image'
+                    ? 'Images'
+                    : 'Documents'
+                  }
                 </ListItem>
               </List>
               : null
@@ -327,7 +340,9 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleRemoveFile() {
-    this.refs.fileInputEl.value = null
+    if (this.refs.fileInputEl) {
+      this.refs.fileInputEl.value = null
+    }
     this.setState({
       hasFiles: false
     })
@@ -343,6 +358,7 @@ let NodeAddGeneric = React.createClass({
   _handleFileUpload({target}) {
     let fileNameArray = target.value.split('\\')
     let fileName = fileNameArray[fileNameArray.length - 1]
+    let fileType = fileName.split('.')[1]
     if (fileName.length > 15) {
       fileName = fileName.substring(0, 4) + '...' +
         fileName.substring(fileName.length - 5)
@@ -359,6 +375,12 @@ let NodeAddGeneric = React.createClass({
     this.setState({
       hasFiles: true
     })
+    // TODO make image file check more robust
+    if (fileType === 'jpg' || fileType === 'png' || fileType === 'gif') {
+      this.setState({
+        fileType: 'image'
+      })
+    }
   },
 
   renderChip(data) {
