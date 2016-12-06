@@ -26,7 +26,7 @@ export default Reflux.createStore({
     const usr = encodeURIComponent(data.username)
     const psw = encodeURIComponent(data.password)
     const eml = encodeURIComponent(data.email)
-
+    console.log('before fetch ', data)
     fetch(`${proxy}/register`, {
       method: 'POST',
       body: `username=${usr}&password=${psw}&email=${eml}`,
@@ -35,20 +35,35 @@ export default Reflux.createStore({
       }
     })
     .then((res) => {
+      console.log('fetch has completed')
       if (res.status === 400) {
         throw new Error('USERNAME_TAKEN')
       }
-      res.json().then(() => {
+      // here
+      this.state = {
+        emailVerifyScreen: true
+      }
+      this.trigger(this.state)
+      res.json().then((js) => {
         if (data.name || data.email) {
-          let payload = {
-            name: data.name,
-            email: data.email
-          }
-          Account.login(data.username, data.password, payload)
-        } else {
-          Account.login(data.username, data.password)
+          console.log('js ', js.webid, data.name, data.email)
+          this.onSetNameEmail(js.webid, data.name, data.email)
+          console.log('set name email done ', js.webid, data.name, data.email)
+          // let payload = {
+          //   name: data.name,
+          //   email: data.email
+          // }
+          console.log('successfully added name to RDF file!')
+          const webIdAgent = new WebIdAgent()
+          webIdAgent.initInbox(js.webid)
+          webIdAgent.initIndex(js.webid)
+          webIdAgent.initDisclaimer(js.webid)
         }
-        localStorage.setItem('jolocom.auth-mode', 'proxy')
+        //   Account.login(data.username, data.password, payload)
+        // } else {
+        //   Account.login(data.username, data.password)
+        // }
+        // localStorage.setItem('jolocom.auth-mode', 'proxy')
       })
     }).catch((e) => {
       if (e.message === 'USERNAME_TAKEN') {
@@ -84,6 +99,7 @@ export default Reflux.createStore({
         object: rdf.sym(`mailto:${email}`)
       })
     }
+    console.log('TRIPLES ', triples)
 
     return gAgent.writeTriples(webid, triples, false)
   },
