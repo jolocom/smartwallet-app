@@ -43,7 +43,10 @@ export default Reflux.createStore({
 
   onLoad() {
     this.wia.getProfile()
-      .then(ProfileActions.load.completed)
+      .then((da)=>{
+        console.log(da,'da')
+        ProfileActions.load.completed
+      })
       .catch(ProfileActions.load.failed)
   },
 
@@ -52,7 +55,7 @@ export default Reflux.createStore({
   },
 
   onLoadCompleted(data) {
-    Object.assign(this.state, data)
+    this.state = Object.assign(this.state, data)
     this.trigger(data)
   },
 
@@ -98,13 +101,13 @@ export default Reflux.createStore({
     return this.wia.updateProfile(newData, this.state)
   },
 
-  onUpdate(params) {
+  onUpdate(newData) {
     Promise.all([
-      this._updatePassport(params),
-      this._updateProfile(params)
+      this._updatePassport(newData, this.state),
+      this._updateProfile(newData, this.state)
     ]).then(() => {
-      if (params.currentNode) {
-        GraphActions.drawAtUri(params.currentNode, 0)
+      if (newData.currentNode) {
+        GraphActions.drawAtUri(newData.currentNode, 0)
       }
 
       this.trigger(this.state)

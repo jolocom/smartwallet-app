@@ -43,7 +43,7 @@ class WebIDAgent extends LDPAgent {
         }).then((data) => {
           if (data.imgUri) {
             return this.head(this._proxify(data.imgUri))
-              .then((data) => {
+              .then((res) => {
                 return data
               })
               .catch((e) => {
@@ -132,6 +132,10 @@ class WebIDAgent extends LDPAgent {
       creditCard: PRED.creditCard
     }
 
+    console.log('-=========-')
+    console.log(oldData)
+    console.log(newData)
+    console.log('-=========-')
     for (let pred in predicateMap) {
       if (newData[pred] !== oldData[pred]) {
         if (!oldData[pred] || newData[pred]) {
@@ -160,7 +164,7 @@ class WebIDAgent extends LDPAgent {
       return t
     }))
 
-    toDel.addAll(insertTriples.map((t) => {
+    toDel.addAll(deleteTriples.map((t) => {
       if (t.predicate.uri === PRED.email.uri) {
         t.object = $rdf.sym(`mailto:${t.object}`)
       }
