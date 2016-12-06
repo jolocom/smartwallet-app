@@ -201,7 +201,13 @@ let NodeAddGeneric = React.createClass({
       <Dialog ref="dialog" fullscreen>
         <Layout>
           <div style={styles.headerIcon}>
-            <AddNodeIcon />
+            {
+              this.state.hasFiles
+              ? this.state.fileType === 'image'
+                ? <ImageIcon />
+                : <FileIcon />
+              : <AddNodeIcon />
+            }
           </div>
           <div style={{display: 'none'}}>
             <GraphPreview />
@@ -379,6 +385,10 @@ let NodeAddGeneric = React.createClass({
     if (fileType === 'jpg' || fileType === 'png' || fileType === 'gif') {
       this.setState({
         fileType: 'image'
+      })
+    } else {
+      this.setState({
+        fileType: 'document'
       })
     }
   },
