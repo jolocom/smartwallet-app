@@ -10,7 +10,7 @@ import {
   FlatButton,
   TextField,
   List,
-  ListItem,
+  ListItem, Divider,
   SelectField, MenuItem, Chip, FloatingActionButton
 } from 'material-ui'
 
@@ -29,8 +29,10 @@ import GraphPreview from './graph-preview.jsx'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import ActionLabel from 'material-ui/svg-icons/action/label'
+import ActionDelete from 'material-ui/svg-icons/action/delete'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'
+import ImageIcon from 'material-ui/svg-icons/image/image'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -76,7 +78,8 @@ let NodeAddGeneric = React.createClass({
           label: 'image'
         }
       ],
-      uploadedFile: ''
+      uploadedFile: '',
+      hasFiles: false
     }
   },
 
@@ -175,6 +178,9 @@ let NodeAddGeneric = React.createClass({
       },
       chip: {
         margin: '4px'
+      },
+      divider: {
+        marginTop: '10px'
       }
     }
   },
@@ -240,12 +246,12 @@ let NodeAddGeneric = React.createClass({
                     <ContentAdd />
                   </FloatingActionButton>
                 }>
-                <TextField
-                  style={styles.inputStyle}
-                  value={this.state.uploadedFile}
-                  placeholder="Files"
-                  readOnly
-                />
+                {
+                  this.state.uploadedFile.length !== 0
+                  ? this.state.uploadedFile
+                  : 'Files'
+                }
+                <Divider style={styles.divider} />
                 <input
                   id="fileUpload"
                   type="file"
@@ -255,6 +261,28 @@ let NodeAddGeneric = React.createClass({
                 />
               </ListItem>
             </List>
+            {
+              this.state.hasFiles
+              ? <List>
+                <ListItem
+                  key={1}
+                  leftIcon={<ImageIcon color="#9ba0aa" />}
+                  nestedItems={[
+                    <ListItem
+                      key={1}
+                      rightIcon={
+                        <ActionDelete
+                          color="#9ba0aa"
+                          onTouchTap={this._handleRemoveFile} />
+                      }>
+                      {this.state.uploadedFile}
+                    </ListItem>
+                  ]}>
+                  Images
+                </ListItem>
+              </List>
+              : null
+            }
             <List>
               <ListItem
                 primaryText="General"
@@ -298,6 +326,16 @@ let NodeAddGeneric = React.createClass({
     )
   },
 
+  _handleRemoveFile() {
+    this.refs.fileInputEl.value = null
+    this.setState({
+      hasFiles: false
+    })
+    this.setState({
+      uploadedFile: ''
+    })
+  },
+
   _handleFileSelect() {
     this.refs.fileInputEl.click()
   },
@@ -318,6 +356,9 @@ let NodeAddGeneric = React.createClass({
         title: fileName
       })
     }
+    this.setState({
+      hasFiles: true
+    })
   },
 
   renderChip(data) {
