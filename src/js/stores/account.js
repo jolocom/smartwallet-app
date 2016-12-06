@@ -33,11 +33,12 @@ export default Reflux.createStore({
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
-    })
-    .then((res) => {
-      console.log('fetch has completed')
+    }).then((res) => {
       if (res.status === 400) {
         throw new Error('USERNAME_TAKEN')
+      }
+      if (res.status === 200) {
+        console.log('Creation of account successful! FETCH RES 200 OK!')
       }
       // here
       this.state = {
