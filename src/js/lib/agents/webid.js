@@ -4,8 +4,6 @@ import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'
 
-const FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/')
-
 // WebID related functions
 class WebIDAgent extends LDPAgent {
 
@@ -115,139 +113,75 @@ class WebIDAgent extends LDPAgent {
   }
 
   updateProfile(newData, oldData) {
-    return this.getWebID().then((webId) => {
-      newData = Object.assign({}, newData)
-      oldData = Object.assign({}, oldData)
+    let insertTriples = []
+    let deleteTriples = []
+    let toAdd = $rdf.graph()
+    let toDel = $rdf.graph()
 
-      let toAdd = $rdf.graph()
-      let toDel = $rdf.graph()
-      let insertTriples = []
-      let deleteTriples = []
+    let predicateMap = {
+      familyName: PRED.familyName,
+      givenName: PRED.givenName,
+      imgUri: PRED.image,
+      email: PRED.email,
+      socialMedia: PRED.socialMedia,
+      mobilePhone: PRED.mobile,
+      address: PRED.address,
+      profession: PRED.profiession,
+      company: PRED.company,
+      url: PRED.homepage,
+      creditCard: PRED.creditCard
+    }
 
-      let predicateMap = {
-        familyName: FOAF('familyName'),
-        givenName: FOAF('givenName'),
-        imgUri: FOAF('img'),
-        email: FOAF('mbox'),
-        socialMedia: FOAF('accountName'),
-        mobilePhone: FOAF('phone'),
-        address: FOAF('based_near'),
-        profession: FOAF('currentProject'),
-        company: FOAF('workplaceHomepage'),
-        url: FOAF('homepage'),
-        creditCard: FOAF('holdsAccount')
-      }
-
-      for (let pred in predicateMap) {
-        if (newData[pred] !== oldData[pred]) {
-          if (!oldData[pred] || newData[pred]) {
-            // inserting
-            insertTriples.push({
-              subject: $rdf.sym(oldData.webId),
-              predicate: predicateMap[pred],
-              object: newData[pred]
-            })
-          }
-          if (!newData[pred] || oldData[pred]) {
-            // delete
-            deleteTriples.push({
-              subject: $rdf.sym(oldData.webId),
-              predicate: predicateMap[pred],
-              object: oldData[pred]
-            })
-          }
-        }
-      }
-
-      toAdd.addAll(insertTriples.map((t) => {
-        if (t.predicate.uri === PRED.email.uri) {
-          t.object = $rdf.sym(`mailto:${t.object}`)
-        }
-        return t
-      }))
-
-      toDel.addAll(deleteTriples.map((t) => {
-        if (t.predicate.uri === PRED.email.uri) {
-          t.object = $rdf.sym(`mailto:${t.object}`)
-        }
-        return t
-      }))
-
-      return new Promise((resolve, reject) => {
-        if (false && !deleteTriples.length && !insertTriples.length) {
-          // @TODO
-          resolve(newData)
-        } else {
-           // @TODO don't send request when empty delete- & insertStatement
-          this.patch(
-            this._proxify(oldData.webId), toDel.statements, toAdd.statements
-          )
-          .then((result) => {
-            resolve(newData)
-          })
-          .catch((e) => {
-            reject(e)
+    for (let pred in predicateMap) {
+      if (newData[pred] !== oldData[pred]) {
+        if (!oldData[pred] || newData[pred]) {
+          // inserting
+          insertTriples.push({
+            subject: $rdf.sym(oldData.webId),
+            predicate: predicateMap[pred],
+            object: newData[pred]
           })
         }
-      })
+        if (!newData[pred] || oldData[pred]) {
+          // delete
+          deleteTriples.push({
+            subject: $rdf.sym(oldData.webId),
+            predicate: predicateMap[pred],
+            object: oldData[pred]
+          })
+        }
+      }
+    }
+
+    toAdd.addAll(insertTriples.map((t) => {
+      if (t.predicate.uri === PRED.email.uri) {
+        t.object = $rdf.sym(`mailto:${t.object}`)
+      }
+      return t
+    }))
+
+    toDel.addAll(insertTriples.map((t) => {
+      if (t.predicate.uri === PRED.email.uri) {
+        t.object = $rdf.sym(`mailto:${t.object}`)
+      }
+      return t
+    }))
+
+    // All network requests will be contained here, later awaited by with
+    // Promise.all
+    let nodeCreationRequests = []
+    nodeCreationRequests.push(this.patch(
+      this._proxify(oldData.webId), toDel.statements, toAdd.statements
+    ))
+
+    if (oldData.passportImgUri.trim() !==
+        newData.passportImgUri.trim()) {
+      this.updatePassport(newData, nodeCreationRequests)
+    }
+
+    return Promise.all(nodeCreationRequests).then(res => {
+      return res
     })
-  }
-
-  deleteBitcoinAddress(address) {
-    return this.getWebID().then((webId) => {
-      const toDel = $rdf.graph()
-
-      toDel.add(
-        $rdf.sym(webId),
-        PRED.isRelatedTo,
-        $rdf.sym(address)
-      )
-
-      toDel.add(
-        $rdf.sym(webId),
-        PRED.bitcoin,
-        $rdf.sym(address)
-      )
-
-      return Promise.all([
-        this.delete(this._proxify(address)),
-        this.delete(this._proxify(address + '.acl')),
-        this.patch(this._proxify(webId), toDel.statements)
-      ])
-    })
-  }
-
-  addBitcoinAddress(uri) {
-    return this.getWebID().then((webId) => {
-      const toAdd = $rdf.graph()
-
-      toAdd.add(
-        $rdf.sym(webId),
-        PRED.bitcoin,
-        $rdf.sym(uri)
-      )
-
-      return this.patch(this._proxify(webId), null, toAdd.statements)
-    })
-  }
-
-  updateBitcoinAddress(uri, oldAddress, newAddress) {
-    const toDel = $rdf.graph()
-    const toAdd = $rdf.graph()
-
-    toDel.add(
-      $rdf.sym(uri),
-      PRED.description,
-      oldAddress
-    )
-
-    toAdd.add(
-      $rdf.sym(uri),
-      PRED.description,
-      newAddress
-    )
-
-    return this.patch(this._proxify(uri), toDel.statements, toAdd.statements)
   }
 
   deletePassport(uri, imgUri) {

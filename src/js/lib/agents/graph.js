@@ -62,10 +62,7 @@ class GraphAgent extends LDPAgent {
       if (!img) {
         return
       }
-      return this.fetch(this._proxify(img), {
-        method: 'HEAD',
-        credentials: 'include'
-      }).then(res => {
+      return this.head(this._proxify(img)).then(res => {
         if (!res.ok) {
           trip.img = ''
         }

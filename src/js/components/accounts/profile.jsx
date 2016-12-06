@@ -461,7 +461,8 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
-      ProfileActions.update(Object.assign({}, this.state, { show: false }))
+      ProfileActions.update(Object.assign({}, this.state))
+      this.hide()
     }
   },
 
