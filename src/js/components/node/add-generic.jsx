@@ -11,7 +11,7 @@ import {
   TextField,
   List,
   ListItem,
-  SelectField, MenuItem, Chip
+  SelectField, MenuItem, Chip, FloatingActionButton
 } from 'material-ui'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
@@ -29,6 +29,7 @@ import GraphPreview from './graph-preview.jsx'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import ActionLabel from 'material-ui/svg-icons/action/label'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -73,7 +74,8 @@ let NodeAddGeneric = React.createClass({
           key: 1,
           label: 'image'
         }
-      ]
+      ],
+      uploadedFile: 'pic.jpg'
     }
   },
 
@@ -225,6 +227,16 @@ let NodeAddGeneric = React.createClass({
               style={styles.nodeTitle}
               placeholder="Add node title"
               onChange={Util.linkToState(this, 'title')} />
+            <TextField
+              value={this.state.uploadedFile}
+              readOnly
+            />
+            <FloatingActionButton mini style={{width: '40px'}}>
+              <ContentAdd />
+            </FloatingActionButton>
+            <input
+              type="file"
+            />
             <List>
               <ListItem
                 primaryText="General"
