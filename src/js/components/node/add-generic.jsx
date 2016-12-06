@@ -15,6 +15,7 @@ import {
 } from 'material-ui'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
+import DocIcon from 'components/icons/doc-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -147,12 +148,12 @@ let NodeAddGeneric = React.createClass({
       headerIcon: {
         position: 'absolute',
         zIndex: 1500,
-        width: '200px',
+        width: this.state.hasFiles ? '100px' : '200px',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        marginTop: '50px'
+        marginTop: this.state.hasFiles ? '15vh' : '50px'
       },
       nodeTitle: {
         padding: '10px 24px',
@@ -205,7 +206,7 @@ let NodeAddGeneric = React.createClass({
               this.state.hasFiles
               ? this.state.fileType === 'image'
                 ? <ImageIcon />
-                : <FileIcon />
+                : <DocIcon />
               : <AddNodeIcon />
             }
           </div>
