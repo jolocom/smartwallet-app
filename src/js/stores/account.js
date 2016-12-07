@@ -15,7 +15,8 @@ export default Reflux.createStore({
   state: {
     loggingIn: true,
     userExists: false,
-    emailVerifyScreen: false
+    emailVerifyScreen: false,
+    emailVerifyCompleted: false
   },
 
   getInitialState() {
@@ -191,5 +192,35 @@ export default Reflux.createStore({
   loggedIn() {
     // How would this work now?
     return localStorage.getItem('jolocom.webId')
+  },
+
+  // TODO Move to the appropriate agent.
+  onActivateEmail(user, code) {
+    fetch(`${proxy}/verifyemail`, {
+      method: 'POST',
+      body: `username=${user}&code=${code}`,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+      Account.activateEmail.completed()
+    }).catch((e) => {
+      Account.activateEmail.failed(e)
+      // console.error(e)
+    })
+  },
+
+  onActivateEmailCompleted() {
+    SnackbarActions.showMessage('Your account has been activated!')
+    this.state.emailVerifyCompleted = true
+    this.trigger(this.state)
+  },
+
+  onActivateEmailFailed(e) {
+    SnackbarActions.showMessage('Account activation failed.')
   }
 })
