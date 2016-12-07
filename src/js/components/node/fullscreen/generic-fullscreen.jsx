@@ -310,7 +310,15 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleEdit() {
-    ProfileActions.show()
+    const {router} = this.context
+    const {node} = this.props
+    if (this.props.node.type.includes('Person')) {
+      // Own profile
+      ProfileActions.show()
+    } else {
+      // Edit node owned by user
+      router.push(`/graph/${encodeURIComponent(node.uri)}/add/node`)
+    }
   },
 
   _handleStartChat() {

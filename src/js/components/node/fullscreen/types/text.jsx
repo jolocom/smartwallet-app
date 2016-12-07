@@ -72,11 +72,12 @@ let TextNode = React.createClass({
 
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
 
-    let fabItems = ['copyUrl'] /* 'edit' */
+    let fabItems = [] /* 'edit' */
 
     let menuItems = []
     if (this.getNode().isOwnedByUser) {
       menuItems.push('delete')
+      fabItems.push('edit')
     }
     if (this.props.state.center.isOwnedByUser &&
         this.getNode().rank &&
@@ -85,6 +86,7 @@ let TextNode = React.createClass({
     } else {
       menuItems.push('connect')
     }
+    fabItems.push('copyUrl')
     return (
       <GenericFullScreen
         title={title}

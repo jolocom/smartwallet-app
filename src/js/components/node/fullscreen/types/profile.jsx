@@ -196,9 +196,9 @@ let ProfileNode = React.createClass({
     }
 
     if (isMe) {
-      menuItems.push('edit')
+      fabItems.push('edit')
     }
-    menuItems.push('copyUrl')
+    fabItems.push('copyUrl')
 
     return (
       <GenericFullScreen
