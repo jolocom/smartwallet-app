@@ -1,10 +1,7 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
 import {proxy} from 'settings'
-import GraphAgent from 'lib/agents/graph'
 import WebIdAgent from 'lib/agents/webid'
-import rdf from 'rdflib'
-import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 
 import SnackbarActions from 'actions/snackbar'
