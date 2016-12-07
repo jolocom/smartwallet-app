@@ -56,11 +56,10 @@ export default Reflux.createStore({
    * applies the update and then logs the user.
    * @param {string} username
    * @param {string} password
-   * @param {object} updatePayload - contains the name / email of a newly
    * created user. Only used when registering a new user.
   */
 
-  onLogin(username, password, updatePayload) {
+  onLogin(username, password) {
     const webId = localStorage.getItem('jolocom.webId')
     // The user is already logged in.
     if (webId) {
@@ -83,7 +82,7 @@ export default Reflux.createStore({
       })
     } else if (username && password) {
       this.trigger({loggingIn: true})
-
+      // TODO Move to agent
       fetch(`${proxy}/login`, {
         method: 'POST',
         body: `username=${username}&password=${password}`,
@@ -97,23 +96,11 @@ export default Reflux.createStore({
         }
 
         res.json().then((js) => {
-          if (updatePayload) {
-            this.onSetNameEmail(
-              js.webid,
-              updatePayload.name,
-              updatePayload.email
-            )
-            .then(() => {
-              Account.login.completed(username, js.webid)
-            }).then(() => {
-              const webIdAgent = new WebIdAgent()
-              webIdAgent.initInbox(js.webid)
-              webIdAgent.initIndex(js.webid)
-              webIdAgent.initDisclaimer(js.webid)
-            })
-          } else {
-            Account.login.completed(username, js.webid)
-          }
+          const webIdAgent = new WebIdAgent()
+          webIdAgent.initInbox(js.webid)
+          webIdAgent.initIndex(js.webid)
+          webIdAgent.initDisclaimer(js.webid)
+          Account.login.completed(username, js.webid)
         })
       }).catch((e) => {
         SnackbarActions.showMessage('Login authentication failed.')
