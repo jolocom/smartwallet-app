@@ -146,15 +146,19 @@ let NodeAddGeneric = React.createClass({
         height: '176px',
         backgroundColor: '#9ca0aa'
       },
+      container: {
+        overflowY: 'scroll'
+      },
       headerIcon: {
-        position: 'absolute',
+        position: 'relative',
+        height: '0',
         zIndex: 1500,
         width: this.state.hasFiles ? '100px' : '200px',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        marginTop: this.state.hasFiles ? '15vh' : '50px'
+        top: this.state.hasFiles ? '15vh' : '50px'
       },
       nodeTitle: {
         padding: '10px 24px',
@@ -202,145 +206,147 @@ let NodeAddGeneric = React.createClass({
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
-          <div style={styles.headerIcon}>
-            {
-              this.state.hasFiles
-              ? this.state.fileType === 'image'
-                ? <ImgIcon />
-                : <DocIcon />
-              : <AddNodeIcon />
-            }
-          </div>
-          <div style={{display: 'none'}}>
-            <GraphPreview />
-          </div>
-          <AppBar
-            title={title}
-            titleStyle={styles.title}
-            iconElementLeft={
-              <IconButton
-                iconStyle={styles.icon}
-                iconClassName="material-icons"
-                onTouchTap={this._handleClose}>close
-              </IconButton>
-            }
-            iconElementRight={
-              <FlatButton
-                style={styles.icon}
-                label="Create"
-                onTouchTap={this._handleSubmit}
+          <Content>
+            <div style={styles.container}>
+              <div style={styles.headerIcon}>
+                {
+                  this.state.hasFiles
+                  ? this.state.fileType === 'image'
+                    ? <ImgIcon />
+                    : <DocIcon />
+                  : <AddNodeIcon />
+                }
+              </div>
+              <div style={{display: 'none'}}>
+                <GraphPreview />
+              </div>
+              <AppBar
+                title={title}
+                titleStyle={styles.title}
+                iconElementLeft={
+                  <IconButton
+                    iconStyle={styles.icon}
+                    iconClassName="material-icons"
+                    onTouchTap={this._handleClose}>close
+                  </IconButton>
+                }
+                iconElementRight={
+                  <FlatButton
+                    style={styles.icon}
+                    label="Create"
+                    onTouchTap={this._handleSubmit}
+                  />
+                }
+                style={styles.bar}
               />
-            }
-            style={styles.bar}
-          />
-          <Content style={styles.content}>
-            <Card>
-              <CardMedia
-                style={styles.image} />
-            </Card>
-            <TextField
-              ref="nodeTitle"
-              style={styles.nodeTitle}
-              placeholder="Add node title"
-              onChange={Util.linkToState(this, 'title')} />
+              <Card>
+                <CardMedia
+                  style={styles.image} />
+              </Card>
+              <TextField
+                ref="nodeTitle"
+                style={styles.nodeTitle}
+                placeholder="Add node title"
+                onChange={Util.linkToState(this, 'title')} />
+                {
+                  !this.state.hasFiles
+                  ? <List>
+                    <ListItem
+                      key={1}
+                      disabled
+                      leftIcon={<FileIcon fill="#9ba0aa" />}
+                      rightIcon={
+                        <FloatingActionButton
+                          mini style={{width: '40px'}}
+                          onClick={this._handleFileSelect}>
+                          <ContentAdd />
+                        </FloatingActionButton>
+                      }>
+                      {
+                        this.state.uploadedFile.length !== 0
+                        ? this.state.uploadedFile
+                        : 'Files'
+                      }
+                      <Divider style={styles.divider} />
+                      <input
+                        id="fileUpload"
+                        type="file"
+                        ref="fileInputEl"
+                        style={{display: 'none'}}
+                        onChange={this._handleFileUpload}
+                      />
+                    </ListItem>
+                  </List>
+                  : null
+                }
               {
-                !this.state.hasFiles
+                this.state.hasFiles
                 ? <List>
                   <ListItem
                     key={1}
-                    disabled
-                    leftIcon={<FileIcon fill="#9ba0aa" />}
-                    rightIcon={
-                      <FloatingActionButton
-                        mini style={{width: '40px'}}
-                        onClick={this._handleFileSelect}>
-                        <ContentAdd />
-                      </FloatingActionButton>
-                    }>
-                    {
-                      this.state.uploadedFile.length !== 0
-                      ? this.state.uploadedFile
-                      : 'Files'
+                    leftIcon={
+                      this.state.fileType === 'image'
+                      ? <ImageIcon color="#9ba0aa" />
+                      : <FileIcon color="#9ba0aa" />
                     }
-                    <Divider style={styles.divider} />
-                    <input
-                      id="fileUpload"
-                      type="file"
-                      ref="fileInputEl"
-                      style={{display: 'none'}}
-                      onChange={this._handleFileUpload}
-                    />
+                    nestedItems={[
+                      <ListItem
+                        key={1}
+                        rightIcon={
+                          <ActionDelete
+                            color="#9ba0aa"
+                            onTouchTap={this._handleRemoveFile} />
+                        }>
+                        {this.state.uploadedFile}
+                      </ListItem>
+                    ]}>
+                    {
+                      this.state.fileType === 'image'
+                      ? 'Images'
+                      : 'Documents'
+                    }
                   </ListItem>
                 </List>
                 : null
               }
-            {
-              this.state.hasFiles
-              ? <List>
+              <List>
                 <ListItem
-                  key={1}
-                  leftIcon={
-                    this.state.fileType === 'image'
-                    ? <ImageIcon color="#9ba0aa" />
-                    : <FileIcon color="#9ba0aa" />
-                  }
+                  primaryText="General"
+                  primaryTogglesNestedList
+                  nestedListStyle={styles.accordionChildren}
+                  open
                   nestedItems={[
                     <ListItem
                       key={1}
-                      rightIcon={
-                        <ActionDelete
-                          color="#9ba0aa"
-                          onTouchTap={this._handleRemoveFile} />
-                      }>
-                      {this.state.uploadedFile}
+                      leftIcon={<SocialShare color="#9ba0aa" />}>
+                      <SelectField
+                        style={{marginTop: '-10px'}}
+                        value={this.state.privacy}
+                        onChange={this._handleTogglePrivacy}>
+                        <MenuItem value={'Private'} primaryText="Private" />
+                        <MenuItem value={'Public'} primaryText="Public" />
+                      </SelectField>
+                    </ListItem>,
+                    <ListItem
+                      key={2}
+                      leftIcon={<ActionDescription color="#9ba0aa" />}>
+                      <TextField
+                        style={styles.inputStyle}
+                        floatingLabelStyle={styles.labelStyle}
+                        underlineStyle={styles.underlineStyle}
+                        placeholder="Description"
+                        onChange={Util.linkToState(this, 'description')} />
+                    </ListItem>,
+                    <ListItem
+                      key={3}
+                      leftIcon={<ActionLabel color="#9ba0aa" />}>
+                      <div style={styles.chipWrapper}>
+                        {this.state.tagArray.map(this.renderChip, this)}
+                      </div>
                     </ListItem>
-                  ]}>
-                  {
-                    this.state.fileType === 'image'
-                    ? 'Images'
-                    : 'Documents'
-                  }
-                </ListItem>
+                  ]} />
               </List>
-              : null
-            }
-            <List>
-              <ListItem
-                primaryText="General"
-                primaryTogglesNestedList
-                nestedListStyle={styles.accordionChildren}
-                open
-                nestedItems={[
-                  <ListItem
-                    key={1}
-                    leftIcon={<SocialShare color="#9ba0aa" />}>
-                    <SelectField
-                      style={{marginTop: '-10px'}}
-                      value={this.state.privacy}
-                      onChange={this._handleTogglePrivacy}>
-                      <MenuItem value={'Private'} primaryText="Private" />
-                      <MenuItem value={'Public'} primaryText="Public" />
-                    </SelectField>
-                  </ListItem>,
-                  <ListItem
-                    key={2}
-                    leftIcon={<ActionDescription color="#9ba0aa" />}>
-                    <TextField
-                      style={styles.inputStyle}
-                      floatingLabelStyle={styles.labelStyle}
-                      underlineStyle={styles.underlineStyle}
-                      placeholder="Description"
-                      onChange={Util.linkToState(this, 'description')} />
-                  </ListItem>,
-                  <ListItem
-                    key={3}
-                    leftIcon={<ActionLabel color="#9ba0aa" />}>
-                    <div style={styles.chipWrapper}>
-                      {this.state.tagArray.map(this.renderChip, this)}
-                    </div>
-                  </ListItem>
-                ]} />
-            </List>
+            </div>
           </Content>
         </Layout>
       </Dialog>
