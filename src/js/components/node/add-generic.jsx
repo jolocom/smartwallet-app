@@ -16,6 +16,7 @@ import {
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import DocIcon from 'components/icons/doc-icon.jsx'
+import ImgIcon from 'components/icons/imgNode-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -205,7 +206,7 @@ let NodeAddGeneric = React.createClass({
             {
               this.state.hasFiles
               ? this.state.fileType === 'image'
-                ? <ImageIcon />
+                ? <ImgIcon />
                 : <DocIcon />
               : <AddNodeIcon />
             }
