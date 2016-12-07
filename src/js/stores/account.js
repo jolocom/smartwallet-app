@@ -52,35 +52,6 @@ export default Reflux.createStore({
     })
   },
 
-  /* @summary in case the user specified a name / email when registering,
-   * we update his already created profile with the data he introduced.
-   * @param {string} name - the name we update the profile with.
-   * @param {string} email - the email we update the profile with.
-   */
-
-  onSetNameEmail(webid, name, email) {
-    let gAgent = new GraphAgent()
-    let triples = []
-    if (name) {
-      triples.push({
-        subject: rdf.sym(webid),
-        predicate: PRED.givenName,
-        object: name
-      })
-    }
-
-    if (email) {
-      triples.push({
-        subject: rdf.sym(webid),
-        predicate: PRED.email,
-        // Keep an eye on this.
-        object: rdf.sym(`mailto:${email}`)
-      })
-    }
-
-    return gAgent.writeTriples(webid, triples, false)
-  },
-
   /* @summary logs a user in. In case there's a updatePayload, first
    * applies the update and then logs the user.
    * @param {string} username
