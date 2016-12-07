@@ -1,8 +1,11 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
 import {proxy} from 'settings'
+import {PRED} from 'lib/namespaces'
 import WebIdAgent from 'lib/agents/webid'
+import GraphAgent from 'lib/agents/graph'
 import Util from 'lib/util'
+import $rdf from 'rdflib'
 
 import SnackbarActions from 'actions/snackbar'
 
@@ -165,11 +168,25 @@ export default Reflux.createStore({
       if (!res.ok) {
         throw new Error(res.statusText)
       }
-      Account.activateEmail.completed()
+
+      res.json().then(js => {
+        console.log(js)
+        Account.updateUserEmail(js.email, js.webId)
+      })
     }).catch((e) => {
       Account.activateEmail.failed(e)
       // console.error(e)
     })
+  },
+
+  onUpdateUserEmail(email, webId) {
+    console.log(email, webId, 'editing profile')
+    const gAgent = new GraphAgent()
+    gAgent.writeTriples(webId, [{
+      subject: $rdf.sym(webId),
+      predicate: PRED.email,
+      object: $rdf.sym(`mailto:${email}`)
+    }])
   },
 
   onActivateEmailCompleted() {
