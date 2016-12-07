@@ -10,6 +10,7 @@ import {
   FlatButton,
   TextField,
   List,
+  Avatar,
   ListItem, Divider,
   SelectField, MenuItem, Chip, FloatingActionButton
 } from 'material-ui'
@@ -27,6 +28,7 @@ import graphActions from 'actions/graph-actions'
 import {PRED} from 'lib/namespaces'
 import GraphAgent from 'lib/agents/graph.js'
 import GraphPreview from './graph-preview.jsx'
+import ProfileStore from 'stores/profile'
 
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
@@ -56,7 +58,8 @@ import ImageIcon from 'material-ui/svg-icons/image/image'
 let NodeAddGeneric = React.createClass({
   mixins: [
     Reflux.connect(nodeStore, 'node'),
-    Reflux.connect(previewStore, 'graphState')
+    Reflux.connect(previewStore, 'graphState'),
+    Reflux.connect(ProfileStore, 'profile')
   ],
 
   propTypes: {
@@ -80,7 +83,7 @@ let NodeAddGeneric = React.createClass({
           label: 'image'
         }
       ],
-      uploadedFile: '',
+      uploadedFileName: '',
       uploadedFileType: 'document',
       hasFiles: false
     }
@@ -188,6 +191,10 @@ let NodeAddGeneric = React.createClass({
       },
       divider: {
         marginTop: '10px'
+      },
+      addBtn: {
+        width: '40px',
+        boxShadow: 'none'
       }
     }
   },
@@ -257,14 +264,15 @@ let NodeAddGeneric = React.createClass({
                       leftIcon={<FileIcon fill="#9ba0aa" />}
                       rightIcon={
                         <FloatingActionButton
-                          mini style={{width: '40px'}}
+                          mini
+                          style={styles.addBtn}
                           onClick={this._handleFileSelect}>
                           <ContentAdd />
                         </FloatingActionButton>
                       }>
                       {
-                        this.state.uploadedFile.length !== 0
-                        ? this.state.uploadedFile
+                        this.state.uploadedFileName.length !== 0
+                        ? this.state.uploadedFileName
                         : 'Files'
                       }
                       <Divider style={styles.divider} />
@@ -292,12 +300,17 @@ let NodeAddGeneric = React.createClass({
                     nestedItems={[
                       <ListItem
                         key={1}
+                        leftAvatar={
+                          <Avatar
+                            src={Util.uriToProxied(this.state.uploadedFileUri)}
+                          />
+                        }
                         rightIcon={
                           <ActionDelete
                             color="#9ba0aa"
                             onTouchTap={this._handleRemoveFile} />
                         }>
-                        {this.state.uploadedFile}
+                        {this.state.uploadedFileName}
                       </ListItem>
                     ]}>
                     {
@@ -361,7 +374,7 @@ let NodeAddGeneric = React.createClass({
       hasFiles: false
     })
     this.setState({
-      uploadedFile: ''
+      uploadedFileName: ''
     })
   },
 
@@ -370,6 +383,19 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleFileUpload({target}) {
+    let gAgent = new GraphAgent()
+    this.setState({
+      uploadedFile: target.files[0]
+    })
+    gAgent.storeFile(null,
+      this.state.profile.storage, target.files[0], true)
+      .then((res) => {
+        this.setState({
+          uploadedFileUri: res
+        })
+      }).catch((e) => {
+        // console.log(e)
+      })
     let fileNameArray = target.value.split('\\')
     let fileName = fileNameArray[fileNameArray.length - 1]
     let fileType = fileName.split('.')[1]
@@ -378,7 +404,7 @@ let NodeAddGeneric = React.createClass({
         fileName.substring(fileName.length - 5)
     }
     this.setState({
-      uploadedFile: fileName
+      uploadedFileName: fileName
     })
     if (this.refs.nodeTitle.input.value.length === 0) {
       this.refs.nodeTitle.input.value = fileName
