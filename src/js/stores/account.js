@@ -16,7 +16,9 @@ export default Reflux.createStore({
     loggingIn: true,
     userExists: false,
     emailVerifyScreen: false,
-    emailVerifyCompleted: false
+    emailVerifyCompleted: false,
+    emailUpdateQueued: false,
+    emailToBeInserted: ''
   },
 
   getInitialState() {
@@ -59,6 +61,7 @@ export default Reflux.createStore({
    * created user. Only used when registering a new user.
   */
 
+  // TODO break down a bit, use agents
   onLogin(username, password) {
     const webId = localStorage.getItem('jolocom.webId')
     // The user is already logged in.
@@ -100,7 +103,13 @@ export default Reflux.createStore({
           webIdAgent.initInbox(js.webid)
           webIdAgent.initIndex(js.webid)
           webIdAgent.initDisclaimer(js.webid)
-          Account.login.completed(username, js.webid)
+
+          if (this.state.emailUpdateQueued) {
+            Account.updateUserEmail(
+              this.state.emailToBeInserted, js.webid, username)
+          } else {
+            Account.login.completed(username, js.webid)
+          }
         })
       }).catch((e) => {
         SnackbarActions.showMessage('Login authentication failed.')
@@ -168,10 +177,11 @@ export default Reflux.createStore({
       if (!res.ok) {
         throw new Error(res.statusText)
       }
-
       res.json().then(js => {
-        console.log(js)
-        Account.updateUserEmail(js.email, js.webId)
+        this.state.emailVerifyCompleted = true
+        this.state.emailUpdateQueued = true
+        this.state.emailToBeInserted = js.email
+        this.trigger(this.state)
       })
     }).catch((e) => {
       Account.activateEmail.failed(e)
@@ -179,14 +189,15 @@ export default Reflux.createStore({
     })
   },
 
-  onUpdateUserEmail(email, webId) {
-    console.log(email, webId, 'editing profile')
+  onUpdateUserEmail(email, webId, username) {
     const gAgent = new GraphAgent()
     gAgent.writeTriples(webId, [{
       subject: $rdf.sym(webId),
       predicate: PRED.email,
       object: $rdf.sym(`mailto:${email}`)
-    }])
+    }]).then(() => {
+      Account.login.completed(username, webId)
+    })
   },
 
   onActivateEmailCompleted() {

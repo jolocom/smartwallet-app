@@ -186,7 +186,6 @@ let Profile = React.createClass({
   },
 
   render() {
-    console.log(this.state)
     let styles = this.getStyles()
     let {file, imgUri} = this.state
 
