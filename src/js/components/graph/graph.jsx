@@ -171,7 +171,9 @@ let Graph = React.createClass({
 
   _handleViewNode(node) {
     let uri = encodeURIComponent(node.uri)
-    this.context.router.push(`/graph/${uri}/view`)
+    if (node.rank !== 'history') {
+      this.context.router.push(`/graph/${uri}/view`)
+    }
   },
 
   addNode(type) {

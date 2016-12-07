@@ -85,13 +85,6 @@ export default Reflux.createStore({
       }
     }
 
-    if (this.state.fullName) {
-      let stop = this.state.fullName.indexOf(' ') !== -1
-        ? this.state.fullName.indexOf(' ')
-        : this.state.fullName.length
-      this.state.givenName = this.state.fullName.substring(0, stop)
-    }
-
     // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
     // when displaying here.
     if (this.state.email) {
@@ -142,14 +135,15 @@ export default Reflux.createStore({
     let predicateMap = {
       familyName: PRED.familyName,
       givenName: PRED.givenName,
+      fullName: PRED.fullName,
       imgUri: PRED.image,
       email: PRED.email,
       socialMedia: PRED.socialMedia,
       mobilePhone: PRED.mobile,
       address: PRED.address,
-      profession: PRED.profiession,
+      profession: PRED.profession,
       company: PRED.company,
-      url: PRED.homepage,
+      url: PRED.url,
       creditCard: PRED.creditCard
     }
 
