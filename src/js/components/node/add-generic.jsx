@@ -148,7 +148,8 @@ let NodeAddGeneric = React.createClass({
       },
       image: {
         height: '176px',
-        backgroundColor: '#9ca0aa'
+        background: `#9ca0aa
+          url(${Util.uriToProxied(this.state.uploadedFileUri)}) center / cover`
       },
       container: {
         overflowY: 'scroll'
@@ -220,7 +221,7 @@ let NodeAddGeneric = React.createClass({
                 {
                   this.state.hasFiles
                   ? this.state.uploadedFileType === 'image'
-                    ? <ImgIcon />
+                    ? null
                     : <DocIcon />
                   : <AddNodeIcon />
                 }
@@ -380,6 +381,9 @@ let NodeAddGeneric = React.createClass({
     this.setState({
       uploadedFileName: ''
     })
+    this.setState({
+      uploadedFileUri: ''
+    })
   },
 
   _handleFileSelect() {
@@ -395,7 +399,6 @@ let NodeAddGeneric = React.createClass({
     gAgent.storeFile(null,
       this.state.profile.storage, file)
       .then((res) => {
-        console.log('file ', res)
         this.setState({
           uploadedFileUri: res
         })
