@@ -127,8 +127,11 @@ export default Reflux.createStore({
 
         res.json().then((js) => {
           if (updatePayload) {
-            this.onSetNameEmail(js.webid, updatePayload.name,
-                                updatePayload.email)
+            this.onSetNameEmail(
+              js.webid,
+              updatePayload.name,
+              updatePayload.email
+            )
             .then(() => {
               Account.login.completed(username, js.webid)
             }).then(() => {
