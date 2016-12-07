@@ -43,7 +43,8 @@ const publicRoutes = [
   '/change-password',
   '/privacy-settings',
   '/shared-nodes',
-  '/node-list'
+  '/node-list',
+  '/verify-email'
 ]
 
 let App = React.createClass({
