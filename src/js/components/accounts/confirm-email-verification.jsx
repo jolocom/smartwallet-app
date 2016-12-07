@@ -61,7 +61,7 @@ let ConfirmEmailVerification = React.createClass({
   },
 
   redirectToLogin() {
-    this.context.router.push('/')
+    this.context.router.push('/login')
   },
 
   render() {
