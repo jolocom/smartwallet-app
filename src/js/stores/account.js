@@ -42,11 +42,6 @@ export default Reflux.createStore({
         emailVerifyScreen: true
       }
       this.trigger(this.state)
-      res.json().then((js) => {
-        if (data.name || data.email) {
-          this.onSetNameEmail(js.webid, data.name, data.email)
-        }
-      })
     }).catch((e) => {
       if (e.message === 'USERNAME_TAKEN') {
         SnackbarActions.showMessage('Username is already taken.')
