@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
+import accepts from 'attr-accept'
 
 import {
   AppBar,
@@ -218,7 +219,7 @@ let NodeAddGeneric = React.createClass({
               <div style={styles.headerIcon}>
                 {
                   this.state.hasFiles
-                  ? this.state.fileType === 'image'
+                  ? this.state.uploadedFileType === 'image'
                     ? <ImgIcon />
                     : <DocIcon />
                   : <AddNodeIcon />
@@ -265,6 +266,7 @@ let NodeAddGeneric = React.createClass({
                       rightIcon={
                         <FloatingActionButton
                           mini
+                          secondary
                           style={styles.addBtn}
                           onClick={this._handleFileSelect}>
                           <ContentAdd />
@@ -293,7 +295,7 @@ let NodeAddGeneric = React.createClass({
                   <ListItem
                     key={1}
                     leftIcon={
-                      this.state.fileType === 'image'
+                      this.state.uploadedFileType === 'image'
                       ? <ImageIcon color="#9ba0aa" />
                       : <FileIcon color="#9ba0aa" />
                     }
@@ -301,9 +303,11 @@ let NodeAddGeneric = React.createClass({
                       <ListItem
                         key={1}
                         leftAvatar={
-                          <Avatar
+                          this.state.uploadedFileType === 'image'
+                          ? <Avatar
                             src={Util.uriToProxied(this.state.uploadedFileUri)}
-                          />
+                            />
+                          : null
                         }
                         rightIcon={
                           <ActionDelete
@@ -314,7 +318,7 @@ let NodeAddGeneric = React.createClass({
                       </ListItem>
                     ]}>
                     {
-                      this.state.fileType === 'image'
+                      this.state.uploadedFileType === 'image'
                       ? 'Images'
                       : 'Documents'
                     }
@@ -384,24 +388,24 @@ let NodeAddGeneric = React.createClass({
 
   _handleFileUpload({target}) {
     let gAgent = new GraphAgent()
+    let file = target.files[0]
     this.setState({
-      uploadedFile: target.files[0]
+      image: file
     })
     gAgent.storeFile(null,
-      this.state.profile.storage, target.files[0], true)
+      this.state.profile.storage, file)
       .then((res) => {
+        console.log('file ', res)
         this.setState({
           uploadedFileUri: res
         })
       }).catch((e) => {
         // console.log(e)
       })
-    let fileNameArray = target.value.split('\\')
-    let fileName = fileNameArray[fileNameArray.length - 1]
-    let fileType = fileName.split('.')[1]
-    if (fileName.length > 15) {
-      fileName = fileName.substring(0, 4) + '...' +
-        fileName.substring(fileName.length - 5)
+    let fileName = target.files[0].name
+    if (fileName.length > 20) {
+      fileName = fileName.substring(0, 9) + '...' +
+        fileName.substring(fileName.length - 9)
     }
     this.setState({
       uploadedFileName: fileName
@@ -415,14 +419,14 @@ let NodeAddGeneric = React.createClass({
     this.setState({
       hasFiles: true
     })
-    // TODO make image file check more robust
-    if (fileType === 'jpg' || fileType === 'png' || fileType === 'gif') {
+    // Only checks for image vs non-image for now
+    if (accepts(file, 'image/*')) {
       this.setState({
-        fileType: 'image'
+        uploadedFileType: 'image'
       })
     } else {
       this.setState({
-        fileType: 'document'
+        uploadedFileType: 'document'
       })
     }
   },
