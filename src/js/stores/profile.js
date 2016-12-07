@@ -64,6 +64,7 @@ export default Reflux.createStore({
 
     let predicateMap = {}
     predicateMap[PRED.familyName] = 'familyName'
+    predicateMap[PRED.fullName] = 'fullName'
     predicateMap[PRED.givenName] = 'givenName'
     predicateMap[PRED.image] = 'imgUri'
     predicateMap[PRED.email] = 'email'
@@ -82,6 +83,13 @@ export default Reflux.createStore({
         const obj = t.object.uri ? t.object.uri : t.object.value
         this.state[predicateMap[t.predicate]] = obj
       }
+    }
+
+    if (this.state.fullName) {
+      let stop = this.state.fullName.indexOf(' ') !== -1
+        ? this.state.fullName.indexOf(' ')
+        : this.state.fullName.length
+      this.state.givenName = this.state.fullName.substring(0, stop)
     }
 
     // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
