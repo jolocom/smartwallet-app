@@ -227,7 +227,7 @@ export default class GraphD3 extends EventEmitter {
 
       // Emit event that indicatorOverlay should be drawn.
       // Listened to on graph.jsx
-      this.emit('scrolling-drawn')
+      // this.emit('scrolling-drawn')
     }
   }.bind(this)
 
@@ -547,10 +547,6 @@ export default class GraphD3 extends EventEmitter {
       })
       .style('font-size', '80%')
       .text(function (d) {
-        if (d.type === 'bitcoin') {
-          return ''
-        }
-
         // In case the person has no description available.
         if (d.description) {
           if (!d.description.includes(' ')) {
@@ -929,8 +925,12 @@ export default class GraphD3 extends EventEmitter {
 
     d3.selectAll('.link')
       .transition().duration(speed)
-      .attr('x1', (d) => d.target.position.x)
-      .attr('y1', (d) => d.target.position.y)
+      .attr('x1', (d) => {
+        return d.target.position ? d.target.position.x : 0
+      })
+      .attr('y1', (d) => {
+        return d.target.position ? d.target.position.y : 0
+      })
       .attr('x2', (d) => d.source.position.x)
       .attr('y2', (d) => d.source.position.y)
   }
@@ -1132,7 +1132,6 @@ export default class GraphD3 extends EventEmitter {
   onClick = function (node, data) {
     d3.event.stopPropagation()
     this.emit('select', data, node)
-
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank === 'history' ||
@@ -1148,6 +1147,7 @@ export default class GraphD3 extends EventEmitter {
 
     // makes selected node apear bove all other nodes
     node.parentNode.appendChild(node)
+
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
 
@@ -1204,7 +1204,7 @@ export default class GraphD3 extends EventEmitter {
       d3.select(node).select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('dy', function (d) {
-          if (d.description && d.type !== 'bitcoin') {
+          if (d.description) {
             if (d3.select(this.parentNode).classed('hasNodeIcon')) {
               return '.4em'
             }
@@ -1327,7 +1327,6 @@ export default class GraphD3 extends EventEmitter {
     this.svg
     .selectAll('.background-layer .background-layer-links *')
     .remove()
-
     this.svg
     .selectAll('.background-layer ~ *')
     .remove()

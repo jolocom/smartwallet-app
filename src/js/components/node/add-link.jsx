@@ -1,91 +1,102 @@
 import React from 'react'
 import Radium from 'radium'
-import Reflux from 'reflux'
-import * as d3 from 'd3'
 import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
-
 import nodeActions from 'actions/node'
-import nodeStore from 'stores/node'
-import previewStore from 'stores/preview-store'
 import Util from 'lib/util'
-
 import GraphPreview from './graph-preview.jsx'
-
 import SnackbarActions from 'actions/snackbar'
 
 let NodeAddLink = React.createClass({
-  mixins: [
-    Reflux.connect(nodeStore, 'node'),
-    Reflux.listenTo(previewStore, 'onStoreChange')
-  ],
+  getInitialState() {
+    return {
+      currentSelection: 'start',
+      startLabel: this.props.node.name || this.props.node.title,
+      startUri: this.props.node.uri,
+      endLabel: null,
+      endUri: null,
+      connectionType: 'knows'
+    }
+  },
+
   contextTypes: {
-    node: React.PropTypes.object,
-    user: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   },
 
-  onStoreChange(input){
-    this.state.currentCenter = input.center.uri
+  propTypes: {
+    node: React.PropTypes.object,
+    graphState: React.PropTypes.object
+  },
+
+  getStyles() {
+    let styles = {
+
+      container: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      },
+      graph: {
+        background: 'rgba(0,0,0,0.1)',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }
+    }
+    return styles
+  },
+
+  render() {
+    let styles = this.getStyles()
+    return (
+      <div style={styles.container}>
+        <div style={styles.graph}>
+          <GraphPreview
+            onSelect={this._handleNodeSelect}
+          />
+          <LowerPart
+            {...this.state}
+            updateParentField={this._handleFieldUpdate}
+            graphState={this.props.graphState}
+            ref="Lower"
+          />
+        </div>
+      </div>
+    )
+  },
+
+  _handleFieldUpdate(newField) {
+    this.state.currentSelection = newField
+  },
+
+  /* The next two functions are a bit of an anti pattern
+     Still more readable and quicker than doing it the "Right way" */
+  _handleNodeSelect(data) {
+    this.refs.Lower && this.refs.Lower._handleNodeClick(data)
+  },
+
+  submit() {
+    this.refs.Lower && this.refs.Lower.submit()
+  }
+})
+
+/* This component represents the bottom part of the screen,
+   containing the target icons and fields for entering nodes.
+*/
+
+let LowerPart = React.createClass({
+
+  contextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+
+  propTypes: {
+    node: React.PropTypes.object,
+    graphState: React.PropTypes.object,
+    updateParentField: React.PropTypes.func
   },
 
   getInitialState() {
-
-    let name = this.props.node
-    
-    d3.selectAll('.node')
-      .filter(function(d) { return d.rank == 'center'})
-      .each(function(d){
-        if(d.name) {
-        name = d.name || d.title
-        }
-    })
-    
-    return {
-      targetSelection: 'start',
-      start: name,
-      startUri: this.props.node,
-      end: null,
-      endUri: null,
-      type: 'knows',
-      currentCenter: null
-    }
-  },
-  componentDidUpdate(prevProps, prevState) {
-    if (!prevState.node && this.state.node) {
-      this.props.onSuccess && this.props.onSuccess(this.state.node)
-    }
-  },
-  // @TODO this validation is bullshit ofcourse :)
-  validates() {
-    let {startUri, endUri, type} = this.state
-    return startUri && endUri && type
-  },
-  submit() {
-    //@TODO show error
-    if (!this.validates()) return false
-    
-    let {startUri, endUri, type} = this.state
-    
-    Promise.all([
-      fetch(Util.uriToProxied(startUri),{method: 'HEAD', credentials: 'include'})
-        .then((res) => {if (!res.ok) throw new Error(res.statusText) }),
-      fetch(Util.uriToProxied(endUri),{method: 'HEAD', credentials: 'include'})
-        .then((res) => {if (!res.ok) throw new Error(res.statusText) })
-    ]).then(() => {
-  
-      // We just pass the start node [object], end node [subject], and the type
-      // The user is the WEBID
-  
-      let flag = false
-      if(this.state.currentCenter == startUri){
-        flag = true
-      }
-      nodeActions.link(startUri, type, endUri,flag)
-    }).catch((e) => {
-      SnackbarActions.showMessage('The nodes you are trying to link together ' +
-                                  'aren\'t accessible.')
-      console.error('Link preflight error',e)
-    })
+    return this.props
   },
 
   getStyles() {
@@ -93,7 +104,6 @@ let NodeAddLink = React.createClass({
     let color = palette.accent1Color
     let imgUrl = 'img/arrow.png'
     let styles = {
-
       container: {
         flex: 1,
         display: 'flex',
@@ -109,7 +119,7 @@ let NodeAddLink = React.createClass({
       columnLeft: {
         width: '35px'
       },
-      columnRight : {
+      columnRight: {
         backgroundImage: 'url(' + imgUrl + ')',
         backgroundSize: 'cover',
         width: '100%'
@@ -144,130 +154,194 @@ let NodeAddLink = React.createClass({
     }
     return styles
   },
-  render: function() {
+
+  render() {
     let styles = this.getStyles()
-    let {start, end , targetSelection} = this.state
+    let {startLabel, endLabel} = this.state
+    let startIconFilled = startLabel && startLabel.trim().length > 0
+    let endIconFilled = endLabel && endLabel.trim().length > 0
+
     return (
-      <div style={styles.container}>
-        <div style={styles.graph}>
-          <GraphPreview onSelect={this._handleNodeSelect}/>
-        </div>
-        <div style={styles.containerTable}>
-            <Paper style={styles.form} rounded={false}>
-              <div style={styles.columnLeft}>
-                <div style={styles.leftIcon} onClick={this._handleSelectSwap}>
-                  <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>swap_vert</FontIcon>
-                </div>
-              </div>
-              <div style={styles.columnRight}>
-                <div style={styles.row}>
-                  <NodeTarget selection={start} field={'start'} full={ start ? true : false } targetSelection={targetSelection} onChangeEnd={this.handleChangeStart} onSelectTarget={this._handleSelectStartTarget}/>
-                  <SelectField value={this.state.type} onChange={this._handleTypeChange} style={styles.select}>
-                    <MenuItem value="generic" primaryText="Generic" />
-                    <MenuItem value="knows" primaryText="Knows" />
-                  </SelectField>
-                </div>
-                <div style={styles.row}>
-                  <NodeTarget selection={end} field={'end'} full={ end ? true : false } targetSelection={targetSelection} onChangeEnd={this.handleChangeEnd} onSelectTarget={this._handleSelectEndTarget}/>
-                </div>
-              </div>
-            </Paper>
-        </div>
+      <div style={styles.containerTable}>
+        <Paper style={styles.form} rounded={false}>
+          <div style={styles.columnLeft}>
+            <div style={styles.leftIcon} onClick={this._handleSelectSwap}>
+              <FontIcon className="material-icons"
+                style={styles.icon}
+                color={styles.icon.color}>
+                swap_vert
+              </FontIcon>
+            </div>
+          </div>
+          <div style={styles.columnRight}>
+            <div style={styles.row}>
+              <NodeTarget
+                value={startLabel}
+                field={'start'}
+                active={this.state.currentSelection === 'start'}
+                filledIcon={startIconFilled}
+                onChange={this.handleChangeStart}
+                onSelectTarget={this._handleTargetClick} />
+
+              <SelectField
+                value={this.state.connectionType}
+                onChange={this._handleTypeChange}
+                style={styles.select} >
+                <MenuItem value="generic" primaryText="Generic" />
+                <MenuItem value="knows" primaryText="Knows" />
+              </SelectField>
+            </div>
+            <div style={styles.row}>
+              <NodeTarget
+                value={endLabel}
+                field={'end'}
+                active={this.state.currentSelection === 'end'}
+                filledIcon={endIconFilled}
+                onChange={this.handleChangeEnd}
+                onSelectTarget={this._handleTargetClick} />
+
+            </div>
+          </div>
+        </Paper>
       </div>
     )
   },
 
-  handleChangeEnd: function(event) {
-
-    this.setState({endUri: event.target.value,
-                  end : event.target.value
-    })
-
+  // @TODO
+  validates() {
+    let {startUri, endUri, connectionType} = this.state
+    return startUri && endUri && connectionType
   },
-  handleChangeStart: function(event) {
 
-    this.setState({startUri: event.target.value,
-                  start : event.target.value
+  submit() {
+    if (!this.validates()) {
+      SnackbarActions.showMessage('Invalid input.')
+      return false
+    }
+    let {startUri, endUri, connectionType} = this.state
+
+    if (endUri.indexOf('http://') !== 0 &&
+        endUri.indexOf('https://') !== 0) {
+      endUri = `https://${endUri}`
+    }
+
+    Promise.all([
+      fetch(Util.uriToProxied(startUri), {
+        method: 'HEAD',
+        credentials: 'include'
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+      }),
+      fetch(Util.uriToProxied(endUri), {
+        method: 'HEAD',
+        credentials: 'include'
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+      })
+    ]).then(() => {
+      nodeActions.link(startUri, connectionType, endUri,
+        this.props.graphState.center.uri)
+    }).catch((e) => {
+      SnackbarActions.showMessage('The nodes you are trying to link together ' +
+                                  'aren\'t accessible.')
     })
-
   },
-  _handleSelectSwap: function() {
+
+  handleChangeStart(value) {
     this.setState({
-      start:this.state.end,
-      startUri:this.state.endUri,
-      end:this.state.start || '',
-      endUri:this.state.startUri || ''
+      startUri: value,
+      startLabel: value
     })
   },
+
+  handleChangeEnd(value) {
+    this.setState({
+      endUri: value,
+      endLabel: value
+    })
+  },
+
+  _handleSelectSwap() {
+    this.setState({
+      startLabel: this.state.endLabel || '',
+      startUri: this.state.endUri || '',
+      endLabel: this.state.startLabel || '',
+      endUri: this.state.startUri || ''
+    })
+  },
+
   _handleTypeChange(event, index, value) {
     this.setState({
-      type: value
+      connectionType: value
     })
   },
 
-  _handleNodeSelect(data) {
-    let name
-    if (data.name){
-      name = data.name
+  _handleNodeClick(data) {
+    let map = {
+      start: ['startLabel', 'startUri'],
+      end: ['endLabel', 'endUri']
     }
-    else if (data.title) {
-      name = data.title
-    }
-    else name=data.uri
 
-    if (this.state.targetSelection) {
+    let name
+    if (data.name) {
+      name = data.name
+    } else if (data.title) {
+      name = data.title
+    } else {
+      name = data.uri
+    }
+
+    if (this.state.currentSelection) {
+      let fieldValue = map[this.state.currentSelection][0]
+      let fieldUri = map[this.state.currentSelection][1]
       this.setState({
-        [this.state.targetSelection]: name,
-        [this.state.targetSelection+'Uri']:data.uri,
-        targetSelection: null
+        [fieldValue]: name,
+        [fieldUri]: data.uri,
+        currentSelection: null
       })
     }
   },
 
-  _handleSelectEndTarget(active) {
-    this.setState({targetSelection: active && 'end' || null})
-  },
-
-  _handleSelectStartTarget(active) {
-    this.setState({
-      targetSelection: active && 'start' || null })
+  _handleTargetClick(clicked) {
+    let {currentSelection} = this.state
+    if (currentSelection) {
+      if (currentSelection === clicked) {
+        this.setState({currentSelection: null})
+      } else {
+        this.setState({currentSelection: clicked})
+      }
+    } else {
+      this.setState({currentSelection: clicked})
+    }
   }
-
 })
 
+// Represents individual field / icon combination
 let NodeTarget = React.createClass({
+
   contextTypes: {
     muiTheme: React.PropTypes.object
   },
-  getInitialState() {
-    return {
-      selected: this.props.selection,
-      active: false,
-      full: this.props.full
-    }
+
+  propTypes: {
+    value: React.PropTypes.string,
+    field: React.PropTypes.string,
+    filledIcon: React.PropTypes.bool,
+    active: React.PropTypes.bool,
+    onChange: React.PropTypes.func,
+    onSelectTarget: React.PropTypes.func
   },
-  componentDidUpdate(prevProps) {
-    if (prevProps!=this.props ) {
-      let active = false
-      if(this.props.field == this.props.targetSelection){
-        active = true
-      }
-      this.setState({
-        selected : this.props.selection,
-        active : active,
-        full: this.props.full
-      })
-    }
-  },
+
   getStyles() {
     let {palette, textField} = this.context.muiTheme
 
-    let color
-
-    if (this.state.active) {
-      color = palette.primary1Color
-    } else color = textField.hintText
-
+    let color = this.props.active
+      ? palette.primary1Color
+      : textField.hintText
 
     return {
       target: {
@@ -281,10 +355,6 @@ let NodeTarget = React.createClass({
       inner: {
         flex: 1
       },
-      label: {
-        color: textField.hintText,
-        fontSize: '12px'
-      },
       value: {
         color: color
       }
@@ -292,25 +362,38 @@ let NodeTarget = React.createClass({
   },
 
   render() {
+    let filledIcon = this.props.filledIcon
+      ? 'gps_fixed'
+      : 'gps_not_fixed'
+
     let styles = this.getStyles()
     return (
       <div style={styles.target} onClick={this._handleTouchTap}>
-      {this.state.full ?
-      <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_fixed</FontIcon>
-      :
-      <FontIcon className="material-icons" style={styles.icon} color={styles.icon.color}>gps_not_fixed</FontIcon>
-      }
+        <FontIcon className="material-icons"
+          style={styles.icon}
+          color={styles.icon.color}>
+          {filledIcon}
+        </FontIcon>
 
         <div style={styles.inner}>
-          <div style={styles.label}>{this.props.label}</div>
-          <div style={styles.value}><TextField type="value" value={this.state.selected} placeholder="Select node" onChange={this.props.onChangeEnd}/></div>
+          <div style={styles.value}>
+            <TextField type="value"
+              value={this.props.value}
+              placeholder="Select node"
+              onChange={this._handleFieldChange}
+            />
+          </div>
         </div>
       </div>
     )
   },
+
+  _handleFieldChange(e) {
+    this.props.onChange(e.target.value)
+  },
+
   _handleTouchTap() {
-    let active = !this.state.active
-    this.props.onSelectTarget && this.props.onSelectTarget(active)
+    this.props.onSelectTarget(this.props.field)
   }
 })
 

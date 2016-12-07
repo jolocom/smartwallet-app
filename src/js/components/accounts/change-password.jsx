@@ -36,14 +36,14 @@ let ChangePassword = React.createClass({
     })
   },
 
-  _handlePassword2Change(e) {
+  _handlePasswordRepeatedChange(e) {
     this.setState({
-      newPassword2: e.target.value
+      newPasswordRepeated: e.target.value
     })
   },
 
   changePassword() {
-    if (this.state.newPassword !== this.state.newPassword2) {
+    if (this.state.newPassword !== this.state.newPasswordRepeated) {
       SnackbarActions.showMessage('The two passwords do not match.')
       return
     }
@@ -143,7 +143,7 @@ let ChangePassword = React.createClass({
                 name="password"
                 type="password"
                 floatingLabelText="Repeat password"
-                onChange={this._handlePassword2Change}
+                onChange={this._handlePasswordRepeatedChange}
               />
             </div>
             <RaisedButton
