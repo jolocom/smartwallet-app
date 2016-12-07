@@ -6,7 +6,7 @@ import {AppBar, IconButton, FlatButton} from 'material-ui'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
-import NodeAddDefault from './add-default.jsx'
+import NodeAddDefault from './add-generic.jsx'
 import NodeAddLink from './add-link.jsx'
 import NodeAddImage from './add-image.jsx'
 

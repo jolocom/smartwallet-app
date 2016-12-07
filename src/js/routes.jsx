@@ -36,7 +36,7 @@ const routes = (
     </Route>
     <Route path="graph(/:node)" component={Graph} title="Graph">
       <Route path="/graph/:node/view" component={Node} />
-      <Route path="/graph/:node/add/:type" component={AddNodeGeneric} />
+      <Route path="/graph/:node/add/:type" component={AddNode} />
     </Route>
     <Route path="forgot-password" component={ForgotPassword} />
     <Route path="change-password/:username/:token" component={ChangePassword} />
