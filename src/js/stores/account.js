@@ -178,10 +178,9 @@ export default Reflux.createStore({
         throw new Error(res.statusText)
       }
       res.json().then(js => {
-        this.state.emailVerifyCompleted = true
         this.state.emailUpdateQueued = true
         this.state.emailToBeInserted = js.email
-        this.trigger(this.state)
+        Account.activateEmail.completed()
       })
     }).catch((e) => {
       Account.activateEmail.failed(e)
