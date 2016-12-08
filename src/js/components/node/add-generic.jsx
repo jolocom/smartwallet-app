@@ -33,7 +33,7 @@ import ProfileStore from 'stores/profile'
 
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
-import ActionLabel from 'material-ui/svg-icons/action/label'
+import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'
