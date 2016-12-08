@@ -183,7 +183,6 @@ class WebIDAgent extends LDPAgent {
   deletePassport(uri, imgUri) {
     return this.getWebID().then((webId) => {
       const toDel = $rdf.graph()
-
       toDel.add(
         $rdf.sym(webId),
         PRED.passport,
@@ -201,7 +200,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   updatePassport(uri, oldImgUri, imgUri) {
-    return this.getWebId().then((webId) => {
+    return this.getWebID().then((webId) => {
       const toDel = $rdf.graph()
       const toAdd = $rdf.graph()
 
