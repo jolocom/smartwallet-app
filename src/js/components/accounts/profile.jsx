@@ -178,6 +178,7 @@ let Profile = React.createClass({
   },
 
   render() {
+    console.log(this.state)
     let nameUsed = this.state.givenName
       ? 'givenName'
       : 'fullName'

@@ -91,15 +91,6 @@ class WebIDAgent extends LDPAgent {
       profile.email = profile.email.substring(7, profile.email.length)
     }
 
-    if (profile.passportImgNodeUri) {
-      this.findObjectsByTerm(
-        profile.passportImgNodeUri,
-        PRED.image
-      ).then(res => {
-        profile.passportImgUri = res.length ? res[0].value : ''
-      })
-    }
-
     let {fullName, givenName, familyName} = profile
     if (!givenName && !familyName) {
       if (fullName) {
@@ -109,7 +100,17 @@ class WebIDAgent extends LDPAgent {
       }
     }
 
-    return profile
+    if (profile.passportImgNodeUri) {
+      return this.findObjectsByTerm(
+        profile.passportImgNodeUri,
+        PRED.image
+      ).then(res => {
+        profile.passportImgUri = res.length ? res[0].value : ''
+        return profile
+      })
+    } else {
+      return profile
+    }
   }
 
   updateProfile(newData, oldData) {

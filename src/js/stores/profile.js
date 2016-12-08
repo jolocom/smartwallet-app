@@ -40,6 +40,7 @@ export default Reflux.createStore({
   },
 
   getInitialState () {
+    console.log('dup', this.state)
     return this.state
   },
 
@@ -58,7 +59,11 @@ export default Reflux.createStore({
   },
 
   onLoadCompleted(data) {
-    this.state = Object.assign(this.state, data)
+    setTimeout(() => {
+      console.log(data.passportImgUri, 'data')
+    }, 5000)
+    this.state = Object.assign({}, this.state, data)
+    console.log(this.state)
     this.trigger(data)
   },
 
@@ -76,6 +81,7 @@ export default Reflux.createStore({
 
     if (OldPassImgUri) {
       if (!newData.passportImgUri.trim()) {
+        console.log('right here', OldPassImgUri, OldPassNodeUri)
         return this.wia.deletePassport(OldPassImgUri, OldPassNodeUri)
       } else if (OldPassImgUri !== newData.passportImgUri.trim()) {
         return this.wia.updatePassport(
