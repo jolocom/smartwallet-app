@@ -178,6 +178,9 @@ let Profile = React.createClass({
   },
 
   render() {
+    let nameUsed = this.state.givenName
+      ? 'givenName'
+      : 'fullName'
     let styles = this.getStyles()
     let {file, imgUri} = this.state
 
@@ -255,8 +258,11 @@ let Profile = React.createClass({
                 <TextField
                   name="givenName"
                   style={styles.title}
-                  onChange={Util.linkToState(this, 'givenName')}
-                  value={this.state.givenName} />
+                  onChange={Util.linkToState(this, nameUsed)}
+                  value={this.state.givenName
+                    ? this.state.givenName
+                    : this.state.fullName
+                  } />
                 {/** <Divider style={styles.titleDivider} /> **/}
                 <div style={styles.form}>
                   <List style={styles.sectionHeader}>
