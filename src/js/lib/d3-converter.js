@@ -127,9 +127,7 @@ class D3Converter {
 
     // @TODO Have a dedicated RDF type for bitcoin and passport nodes, so that
     // we don't need this hack.
-    if (props.title === 'Bitcoin Address') {
-      props.type = 'bitcoin'
-    } else if (props.title === 'Passport') {
+    if (props.title === 'Passport') {
       props.type = 'passport'
     }
     if (node.unav) {
