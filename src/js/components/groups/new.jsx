@@ -14,6 +14,7 @@ import {
 
 import Camera from 'material-ui/svg-icons/image/camera-alt'
 import AddMember from 'material-ui/svg-icons/social/person-add'
+import RemoveMember from 'material-ui/svg-icons/navigation/cancel'
 
 import {Layout, Content} from 'components/layout'
 
@@ -61,21 +62,18 @@ export default React.createClass({
   componentDidMount() {
     this.refs.dialog.show()
 
-    /* DOING STUFF HERE */
-    console.log('bim')
-
-    /* DOING STUFF HERE */
-    localStorage['sox'] = localStorage['sox'] || 0
-    localStorage['sox'] = +localStorage['sox'] + 1
-
-    let graphAgent = new GraphAgent()
-    graphAgent.newGroup(
-      this.context.account.webId,
-      'group' + localStorage['sox'],
-      [
-        'https://axel.webid.jolocom.com/profile/card#me',
-        'https://toaster.webid.jolocom.com/profile/card#me'
-      ])
+    // /* DOING STUFF HERE */
+    // localStorage['sox'] = localStorage['sox'] || 0
+    // localStorage['sox'] = +localStorage['sox'] + 1
+    //
+    // let graphAgent = new GraphAgent()
+    // graphAgent.newGroup(
+    //   this.context.account.webId,
+    //   'group' + localStorage['sox'],
+    //   [
+    //     'https://axel.webid.jolocom.com/profile/card#me',
+    //     'https://toaster.webid.jolocom.com/profile/card#me'
+    //   ])
   },
 
   componentWillMount() {
@@ -174,6 +172,10 @@ export default React.createClass({
       addMemberButton: {
         marginLeft: '38%'
       },
+      removeMemberFromList: {
+        marginTop: '2%'
+        // paddingTop: '5%'
+      },
       memberList: {
 
       }
@@ -270,9 +272,14 @@ export default React.createClass({
               <div style={styles.listItems}>
                 {this.state.members
                   ? this.state.members.map((member) => (
-                    <ListItem
-                      primaryText={member.name}
-                      leftAvatar={<Avatar src={member.imgUri} />} />
+                    <div>
+                      <ListItem
+                        primaryText={member.name}
+                        leftAvatar={<Avatar src={member.imgUri} />}
+                        rightIconButton={<RemoveMember
+                          style={styles.removeMemberFromList} />}
+                      />
+                    </div>
                     ))
                   : null}
               </div>
