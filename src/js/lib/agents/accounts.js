@@ -4,42 +4,27 @@ import $rdf from 'rdflib'
 import {PRED} from '../namespaces.js'
 import Util from '../util.js'
 import {Writer} from '../rdf.js'
-
-
+import querystring from 'querystring'
 
 class AccountsAgent extends HTTPAgent {
   register(username, password, email, name) {
-    function encodeParams(username, password, email) {
-      username = encodeURIComponent(username)
-      password = encodeURIComponent(password)
-      email = encodeURIComponent(email)
+    return this.post(`${proxy}/register`, querystring.stringify({
+      username, password, email, name
+    }), {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    })
+  }
 
-      return `username=${username}&password=${password}&email=${email}`
+  updateEmail(webId, email) {
+    const writer = new Writer()
+
+    if (email) {
+      writer.add(
+        $rdf.sym(webId), PRED.email, $rdf.sym(`mailto:${email}`)
+      )
     }
 
-    return this.post(`${proxy}/register`,
-      encodeParams(username, password, email), {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    ).then((account) => {
-      const writer = new Writer()
-
-      if (name) {
-        writer.add(
-          $rdf.sym(account.webid), PRED.givenName, name
-        )
-      }
-
-      if (email) {
-        writer.add(
-          $rdf.sym(account.webid), PRED.email, $rdf.sym(`mailto:${email}`)
-        )
-      }
-
-      this.patch(this._proxify(account.webid), null, writer.all())
-
-      return account
-    })
+    return this.patch(this._proxify(webId), null, writer.all())
   }
 
   checkLogin(webId) {
@@ -47,11 +32,9 @@ class AccountsAgent extends HTTPAgent {
   }
 
   login(username, password) {
-    username = encodeURIComponent(username)
-    password = encodeURIComponent(password)
-
-    const params = `username=${username}&password=${password}`
-    return this.post(`${proxy}/login`, params, {
+    return this.post(`${proxy}/login`, querystring.stringify({
+      username, password
+    }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     })
   }
@@ -62,23 +45,28 @@ class AccountsAgent extends HTTPAgent {
     })
   }
 
-  forgotPassword(username) {
-    let user = encodeURIComponent(username)
-
-    return this.post(`${proxy}/forgotpassword`, `username=${user}`, {
+  verifyEmail(username, code) {
+    return this.post(`${proxy}/verifyemail`, querystring.stringify({
+      username, code
+    }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     })
   }
 
-  resetPassword(username, token, password) {
-    username = encodeURIComponent(username)
-    token = encodeURIComponent(token)
-    password = encodeURIComponent(password)
+  forgotPassword(username) {
+    return this.post(`${proxy}/forgotpassword`, querystring.stringify({
+      username
+    }), {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    })
+  }
 
-    return this.post(`${proxy}/resetpassword`,
-      `username=${username}&code=${token}&password=${password}`, {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      })
+  resetPassword(username, code, password) {
+    return this.post(`${proxy}/resetpassword`, querystring.stringify({
+      username, code, password
+    }), {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    })
   }
 
   initInbox(webId) {

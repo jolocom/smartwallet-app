@@ -73,6 +73,9 @@ export default Reflux.createStore({
     this.state.loading = true
     this.trigger(this.state)
     */
+    if (!webId) {
+      return false
+    }
 
     this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])

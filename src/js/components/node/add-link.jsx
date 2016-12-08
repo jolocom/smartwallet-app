@@ -7,9 +7,16 @@ import SnackbarActions from 'actions/snackbar'
 
 let NodeAddLink = React.createClass({
   getInitialState() {
+    let name = this.props.node.name
+      ? this.props.node.name
+      : this.props.node.fullName
+    if (!name) {
+      name = this.props.node.title
+    }
+
     return {
       currentSelection: 'start',
-      startLabel: this.props.node.name || this.props.node.title,
+      startLabel: name,
       startUri: this.props.node.uri,
       endLabel: null,
       endUri: null,
@@ -270,6 +277,8 @@ let LowerPart = React.createClass({
     let name
     if (data.name) {
       name = data.name
+    } else if (data.fullName) {
+      name = data.fullName
     } else if (data.title) {
       name = data.title
     } else {

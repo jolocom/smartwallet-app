@@ -139,7 +139,7 @@ let ProfileNode = React.createClass({
       uri,
       img,
       socialMedia,
-      mobile,
+      mobilePhone,
       address,
       email,
       profession,
@@ -271,7 +271,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Mobile"
-                  value={mobile}
+                  value={mobilePhone}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,

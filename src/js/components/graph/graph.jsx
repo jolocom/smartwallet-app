@@ -64,9 +64,8 @@ let Graph = React.createClass({
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     // this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
-
     if (!this.state.initialized) {
-      graphActions.getInitialGraphState(this.state.webId)
+      graphActions.getInitialGraphState(this.context.account.webId)
     } else {
       this._renderGraph(this.state)
     }
@@ -183,7 +182,9 @@ let Graph = React.createClass({
 
   _handleViewNode(node) {
     let uri = encodeURIComponent(node.uri)
-    this.context.router.push(`/graph/${uri}/view`)
+    if (node.rank !== 'history') {
+      this.context.router.push(`/graph/${uri}/view`)
+    }
   },
 
   addNode(type) {

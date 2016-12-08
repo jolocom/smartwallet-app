@@ -43,7 +43,9 @@ export default Reflux.createStore({
 
     const container = this.agent.getUnreadMessagesContainer(webId)
 
-    subscriptions[webId] = new Subscription(container, () => {
+    subscriptions[webId] = new Subscription(container, {
+      interval: 60000
+    }, () => {
       UnreadMessagesActions.load(webId)
     })
   },

@@ -229,7 +229,7 @@ class GraphAgent extends LDPAgent {
    * @return {function} fetch request - .then contains the response.
    */
 
-  writeTriples(uri, triples, draw) {
+  writeTriples(uri, triples, draw = false) {
     let validPredicate = false
 
     if (triples.length === 1) {
