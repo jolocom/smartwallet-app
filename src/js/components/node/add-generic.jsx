@@ -18,7 +18,6 @@ import {
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import DocIcon from 'components/icons/doc-icon.jsx'
-import ImgIcon from 'components/icons/imgNode-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -34,7 +33,7 @@ import ProfileStore from 'stores/profile'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
-import ActionDelete from 'material-ui/svg-icons/action/delete'
+import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'
 import ImageIcon from 'material-ui/svg-icons/image/image'
@@ -301,6 +300,7 @@ let NodeAddGeneric = React.createClass({
                       ? <ImageIcon color="#9ba0aa" />
                       : <FileIcon color="#9ba0aa" />
                     }
+                    nestedListStyle={styles.accordionChildren}
                     nestedItems={[
                       <ListItem
                         key={1}
@@ -313,7 +313,7 @@ let NodeAddGeneric = React.createClass({
                         }
                         rightIcon={
                           <ActionDelete
-                            color="#9ba0aa"
+                            color="#4b132b"
                             onTouchTap={this._handleRemoveFile} />
                         }>
                         {this.state.uploadedFileName}
