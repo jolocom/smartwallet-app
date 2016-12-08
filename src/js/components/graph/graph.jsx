@@ -63,9 +63,8 @@ let Graph = React.createClass({
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     // this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
-
     if (!this.state.initialized) {
-      graphActions.getInitialGraphState(this.state.webId)
+      graphActions.getInitialGraphState(this.context.account.webId)
     } else {
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)

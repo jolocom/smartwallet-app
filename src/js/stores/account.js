@@ -26,6 +26,7 @@ export default Reflux.createStore({
     this.accounts.register(username, password, email, name).then((account) => {
       return this._login(username, password)
     }).then((webId) => {
+      console.log(webId)
       return Promise.all([
         this.accounts.initInbox(webId),
         this.accounts.initIndex(webId),

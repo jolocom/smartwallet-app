@@ -5,8 +5,6 @@ import {PRED} from '../namespaces.js'
 import Util from '../util.js'
 import {Writer} from '../rdf.js'
 
-
-
 class AccountsAgent extends HTTPAgent {
   register(username, password, email, name) {
     function encodeParams(username, password, email) {
