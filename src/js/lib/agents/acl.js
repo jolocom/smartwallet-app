@@ -2,6 +2,7 @@ import rdf from 'rdflib'
 import GraphAgent from 'lib/agents/graph.js'
 import _ from 'lodash'
 import Util from 'lib/util'
+import WebidAgent from 'lib/agents/webid'
 import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
 
@@ -14,6 +15,7 @@ class AclAgent {
     this.g = rdf.graph()
     this.gAgent = new GraphAgent()
     this.Writer = new Writer()
+    this.wia = new WebidAgent()
     this.indexChanges = {
       toInsert: [],
       toDelete: []
@@ -55,7 +57,7 @@ class AclAgent {
    */
 
   fetchInfo() {
-    return this.getAclUri(this.uri).then((aclUri) => {
+    return this.wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
       return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result) => {
@@ -76,7 +78,7 @@ class AclAgent {
    * @returns undefined, we wat the side effect.
    */
   initiateNew() {
-    return Util.getAclUri(this.uri).then((aclUri) => {
+    return this.wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     })
   }

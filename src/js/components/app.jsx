@@ -194,7 +194,7 @@ let App = React.createClass({
   },
 
   _handleConfirmAction() {
-    this._handleConfirmClose()
+    this._handleConfirmCancel()
     this.state.confirm.callback() // Action when the user confirms
   },
 

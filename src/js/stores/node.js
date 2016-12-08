@@ -38,7 +38,6 @@ export default Reflux.createStore({
   onInitiate(uri, centerUri) {
     this.state.uri = uri
     this.state.initialized = true
-
     // @TODO don't get this directly out of localstorage, but use the wia agent
     let webId = localStorage.getItem('jolocom.webId')
 
@@ -55,10 +54,10 @@ export default Reflux.createStore({
 
     let checkCurrent = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(uri)
-      aAgent.fetchInfo().then(() => {
+      aAgent.fetchInfo().then((res) => {
         this.state.writePerm = aAgent.isAllowed(webId, 'write')
         resolve()
-      }).catch(() => {
+      }).catch((res) => {
         this.state.writePerm = false
         resolve()
       })
