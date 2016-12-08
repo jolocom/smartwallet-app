@@ -19,7 +19,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 
 import LeftNav from 'components/left-nav/nav.jsx'
-import Profile from 'components/accounts/profile.jsx'
 import Tour from 'components/tour.jsx'
 
 import Loading from 'components/common/loading.jsx'
@@ -41,7 +40,10 @@ const publicRoutes = [
   '/login',
   '/signup',
   '/forgot-password',
-  '/change-password'
+  '/change-password',
+  '/privacy-settings',
+  '/shared-nodes',
+  '/node-list'
 ]
 
 let App = React.createClass({
@@ -295,11 +297,11 @@ let App = React.createClass({
             <Content>
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {
+                  snackbar: this.state.snackbar.open,
                   searchQuery: this.state.searchQuery
                 })
               })}
             </Content>
-            <Profile />
             <Tour />
           </Layout>
         )}

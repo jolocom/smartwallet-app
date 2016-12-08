@@ -14,20 +14,29 @@ import {
   CardMedia,
   CardActions,
   FlatButton,
-  RaisedButton
+  RaisedButton,
+  List, ListItem,
+  Divider, Subheader
 } from 'material-ui'
 
-import {grey500} from 'material-ui/styles/colors'
-import ActionDescription from 'material-ui/svg-icons/action/description'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import SocialPublic from 'material-ui/svg-icons/social/public'
+import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
+import SnackbarActions from 'actions/snackbar'
+import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
+import ActionCompany from 'material-ui/svg-icons/action/account-balance'
+import AvWeb from 'material-ui/svg-icons/av/web'
+import ActionStar from 'material-ui/svg-icons/toggle/star'
+import CommunicationLocation
+  from 'material-ui/svg-icons/communication/location-on'
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
+import GraphStore from 'stores/graph-store'
 import JolocomTheme from 'styles/jolocom-theme'
-import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 
 import Util from 'lib/util'
@@ -37,33 +46,27 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange')
+    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState'),
+    Reflux.connect(GraphStore, 'graphState')
   ],
 
-  getInitialState() {
-    return {
-      bitcoinErrorText: ''
-    }
+  contextTypes: {
+    router: React.PropTypes.object,
+    muiTheme: React.PropTypes.object
   },
 
-  onProfileChange: function(state) {
+  setInitialState(initState) {
+    this.setState(initState)
+  },
+
+  onProfileChange(state) {
     this.setState(state)
   },
 
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
-    this.bitcoinErrorText = '9'
-  },
-
-  componentDidUpdate(props, state) {
-    if (state.show !== this.state.show) {
-      if (this.state.show) {
-        this.refs.dialog.show()
-      } else {
-        this.refs.dialog.hide()
-      }
-    }
+    this.refs.dialog.show()
   },
 
   downloadPK() {
@@ -80,21 +83,19 @@ let Profile = React.createClass({
     })
   },
 
-  show() {
-    ProfileActions.show()
-  },
-
   hide() {
-    ProfileActions.hide()
+    this.refs.dialog.hide()
+    this.context.router.goBack()
   },
 
   getStyles() {
+    const {muiTheme} = this.context
     let styles = {
       image: {
         height: '176px'
       },
       bar: {
-        backgroundColor: grey500
+        backgroundColor: muiTheme.palette.primary1Color
       },
       content: {
         overflowY: 'auto'
@@ -129,9 +130,6 @@ let Profile = React.createClass({
       removePassportButton: {
         verticalAlign: 'top'
       },
-      bitcoinIcon: {
-        width: '24px'
-      },
       form: {},
       formRow: {
         display: 'flex',
@@ -149,7 +147,6 @@ let Profile = React.createClass({
         marginRight: '16px'
       },
       labelPassport: {},
-      labelBitcoinAddress: {},
       progBar: {},
       privateKeyButtonRow: {
         display: 'flex',
@@ -162,37 +159,62 @@ let Profile = React.createClass({
         width: '5px',
         height: 'auto',
         display: 'inline-block'
+      },
+      subheader: {
+        marginTop: '40px',
+        paddingLeft: '24px',
+        lineHeight: '20px'
+      },
+      titleDivider: {
+        marginTop: '10px'
+      },
+      title: {
+        padding: '0 24px',
+        color: '#4b132b',
+        fontWeight: '100',
+        fontSize: '1.5em'
+      },
+      sectionHeader: {
+        padding: '0 8px',
+        margin: '0'
+      },
+      sectionDivider: {
+        marginLeft: '24px'
       }
     }
     return styles
   },
 
   render() {
-    let img
     let styles = this.getStyles()
     let {file, imgUri} = this.state
 
+    let img
     if (file) {
       img = URL.createObjectURL(file)
     } else if (imgUri) {
       img = Util.uriToProxied(imgUri)
     }
-
     let bgImg = img || '/img/person-placeholder.png'
+
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout fixedHeader>
           <AppBar
             title="Edit profile"
+            titleStyle={{color: '#fff'}}
             style={styles.bar}
             iconElementLeft={
               <IconButton
+                iconStyle={{color: '#fff'}}
+                color="#fff"
                 onClick={this.hide}
                 iconClassName="material-icons">arrow_back</IconButton>
             }
             iconElementRight={!this.state.loadingPassportPhoto &&
               !this.state.loadingDisplayPhoto
               ? <IconButton
+                iconStyle={{color: '#fff'}}
                 onClick={this._handleUpdate}
                 iconClassName="material-icons">check</IconButton>
               : <IconButton iconClassName="material-icons">
@@ -219,7 +241,6 @@ let Profile = React.createClass({
                       : <FlatButton
                         label="Select or take picture"
                         onClick={this._handleSelect} />}
-
               </CardActions>
             </Card>
             <input
@@ -238,40 +259,58 @@ let Profile = React.createClass({
               onChange={this._handleSelectPassportFile} />
             <main style={styles.main}>
               <section>
+                <Subheader style={styles.subheader}>Name</Subheader>
+                <TextField
+                  name="givenName"
+                  style={styles.title}
+                  onChange={Util.linkToState(this, 'givenName')}
+                  value={this.state.givenName} />
+                {/** <Divider style={styles.titleDivider} /> **/}
                 <div style={styles.form}>
+                  <List style={styles.sectionHeader}>
+                    <ListItem primaryText="General" disabled />
+                  </List>
+                  <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <ActionDescription color={theme.jolocom.gray1} />
+                      <SocialPersonOutline color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="First Name"
-                        name="givenName"
-                        onChange={Util.linkToState(this, 'givenName')}
-                        value={this.state.givenName}
+                        name="username"
+                        floatingLabelText="Username"
+                        floatingLabelFixed
+                        value={this.state.webId}
+                        style={styles.input}
+                        disabled />
+                    </div>
+                  </div>
+                  <List style={styles.sectionHeader}>
+                    <ListItem primaryText="Contact" disabled />
+                  </List>
+                  <Divider style={styles.sectionDivider} />
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationPhone color="#9ba0aa" />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        floatingLabelText="Mobile"
+                        floatingLabelFixed
+                        name="mobile"
+                        onChange={Util.linkToState(this, 'mobilePhone')}
+                        value={this.state.mobilePhone}
                         style={styles.input} />
                     </div>
                   </div>
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <ActionDescription color={theme.jolocom.gray1} />
+                      <CommunicationEmail color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
-                        placeholder="Second Name"
-                        name="familyName"
-                        onChange={Util.linkToState(this, 'familyName')}
-                        value={this.state.familyName}
-                        style={styles.input} />
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={styles.label}>
-                      <CommunicationEmail color={theme.jolocom.gray1} />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        placeholder="Email"
+                        floatingLabelText="Email"
+                        floatingLabelFixed
                         name="email"
                         onChange={Util.linkToState(this, 'email')}
                         value={this.state.email}
@@ -279,13 +318,91 @@ let Profile = React.createClass({
                     </div>
                   </div>
                   <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <CommunicationLocation color="#9ba0aa" />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        floatingLabelText="Address"
+                        floatingLabelFixed
+                        name="address"
+                        onChange={Util.linkToState(this, 'address')}
+                        value={this.state.address}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <SocialPublic color="#9ba0aa" />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        floatingLabelText="Social Media"
+                        floatingLabelFixed
+                        name="socialMedia"
+                        onChange={Util.linkToState(this, 'socialMedia')}
+                        value={this.state.socialMedia}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <List style={styles.sectionHeader}>
+                    <ListItem primaryText="Work" disabled />
+                  </List>
+                  <Divider style={styles.sectionDivider} />
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <ActionStar color="#9ba0aa" />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        floatingLabelText="Profession"
+                        floatingLabelFixed
+                        name="profession"
+                        onChange={Util.linkToState(this, 'profession')}
+                        value={this.state.profession}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <ActionCompany color="#9ba0aa" />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        floatingLabelText="Company"
+                        floatingLabelFixed
+                        name="company"
+                        onChange={Util.linkToState(this, 'company')}
+                        value={this.state.company}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <div style={styles.formRow}>
+                    <div style={styles.label}>
+                      <AvWeb color="#9ba0aa" />
+                    </div>
+                    <div style={styles.field}>
+                      <TextField
+                        floatingLabelText="Url"
+                        floatingLabelFixed
+                        name="url"
+                        onChange={Util.linkToState(this, 'url')}
+                        value={this.state.url}
+                        style={styles.input} />
+                    </div>
+                  </div>
+                  <List style={styles.sectionHeader}>
+                    <ListItem primaryText="Wallet" disabled />
+                  </List>
+                  <Divider style={styles.sectionDivider} />
+                  <div style={styles.formRow}>
                     <div style={Object.assign({},
                       styles.label, styles.labelPassport)}>
                       <PassportIcon style={styles.passportIcon} />
                     </div>
                     <div style={styles.field}>
                       <div style={styles.passportContainer}>
-                      {this.state.passportImgUri
+                        {this.state.passportImgUri
                         ? <div>
                           <img
                             src={Util.uriToProxied(this.state.passportImgUri)}
@@ -296,35 +413,16 @@ let Profile = React.createClass({
                             style={styles.removePassportButton} />
                         </div>
                       : <div>
-                      {this.state.loadingPassportPhoto
-                        ? <LinearProgress
-                          mode="indeterminate"
-                          style="progBar" />
-                        : <FlatButton
-                          label="Upload passport"
-                          onClick={this._handleSelectPassport}
-                          style={styles.uploadPassportButton} />}
+                        {this.state.loadingPassportPhoto
+                          ? <LinearProgress
+                            mode="indeterminate"
+                            style="progBar" />
+                          : <FlatButton
+                            label="Upload passport"
+                            onClick={this._handleSelectPassport}
+                            style={styles.uploadPassportButton} />}
                       </div>}
                       </div>
-                    </div>
-                  </div>
-                  <div style={styles.formRow}>
-                    <div style={Object.assign({},
-                      styles.label, styles.labelBitcoinAddress)}>
-                      <BitcoinIcon style={styles.bitcoinIcon} />
-                    </div>
-                    <div style={styles.field}>
-                      <TextField
-                        placeholder="Bitcoin Address"
-                        name="bitcoinAddress"
-                        onChange={Util.linkToState(this, 'bitcoinAddress')}
-                        errorText={this.state.bitcoinErrorText}
-                        onBlur={this._handleBitcoinValidation}
-                        onKeyDown={this._handleBitcoinKeyDown}
-                        value={this.state.bitcoinAddress}
-                        style={styles.input}
-                        multiLine
-                        rowsMax={2} />
                     </div>
                   </div>
                   <div style={styles.formRow}>
@@ -332,11 +430,11 @@ let Profile = React.createClass({
                       <ActionCreditCard color={theme.jolocom.gray1} />
                     </div>
                     <div style={styles.field}>
-                      {/* TODO: back-end implementation */}
                       <TextField
-                        placeholder="Add credit card"
+                        floatingLabelText="Credit Card"
+                        floatingLabelFixed
                         name="creditcard"
-                        onChange={this._handleCreditCardValidation}
+                        onChange={Util.linkToState(this, 'creditCard')}
                         style={styles.input}
                         value={this.state.creditCard} />
                     </div>
@@ -348,12 +446,7 @@ let Profile = React.createClass({
                       label="Download Private Key"
                       onClick={this.downloadPK}
                     />
-                    <div style={styles.divider}></div>
-                    { /*<RaisedButton
-                      type="submit"
-                      secondary
-                      label="Upload Private Key"
-                    /> */ }
+                    <div style={styles.divider} />
                   </div>
                 </div>
               </section>
@@ -373,30 +466,10 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
+    if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
+      ProfileActions.update(this.state)
       this.hide()
-      ProfileActions.update(Object.assign({}, this.state, { show: false }))
     }
-  },
-
-  // Front-end validation for bitcoin address - used as reference:
-  // https://en.bitcoin.it/wiki/Address
-  _handleBitcoinValidation({target}) {
-    if ((target.value.length < 26 || target.value.length > 35) ||
-      (!(target.value[0] === '1' || target.value[0] === '3')) ||
-      (!target.value.match(/^[0-9A-Z]+$/i))) {
-      this.setState({
-        bitcoinErrorText: 'Please enter a valid bitcoin address'
-      })
-    } else {
-      this.setState({
-        bitcoinErrorText: ''
-      })
-    }
-  },
-
-  _handleBitcoinKeyDown(e) {
-    if (e.keyCode === 13) e.preventDefault()
   },
 
   _handleSelect() {
@@ -426,10 +499,8 @@ let Profile = React.createClass({
 
   _handleRemovePassport() {
     this.passportInputEl.value = null
-
-    this.setState({
-      passportImgUri: ''
-    })
+    this.state.passportImgNodeUri = ''
+    this.setState({passportImgUri: ''})
   },
 
   _handleSelectFile({target}) {
@@ -450,29 +521,16 @@ let Profile = React.createClass({
 
       gAgent.storeFile(null, this.state.storage, file).then((res) => {
         this.setState({
-          loadingDisplayPhoto: false
+          loadingDisplayPhoto: false,
+          imgUri: res
         })
-        this.setState({imgUri: res})
       }).catch((e) => {
-        // console.log(e)
+        SnackbarActions.showMessage('Could not upload the photo.')
+        this.setState({
+          loadingDisplayPhoto: false,
+          imgUri: ''
+        })
       })
-    }
-  },
-
-  // User can only enter non-space, numerical values and splits card number
-  // into 4's for better readability
-  _handleCreditCardValidation({target}) {
-    let val = target.value.replace(/[^0-9]|\s/g, '')
-    let digitGroups = val.match(/\d{4,16}/g)
-    let dGroup = digitGroups && digitGroups[0] || ''
-    let parts = []
-    for (let i = 0, len = dGroup.length; i < len; i += 4) {
-      parts.push(dGroup.substring(i, i + 4))
-    }
-    if (parts.length) {
-      target.value = parts.join(' ')
-    } else {
-      target.value = target.value.replace(/[^0-9]|\s/g, '')
     }
   },
 
@@ -494,15 +552,18 @@ let Profile = React.createClass({
 
       gAgent.storeFile(null, this.state.storage, file, true).then((res) => {
         this.setState({
-          loadingPassportPhoto: false
+          loadingPassportPhoto: false,
+          passportImgUri: res
         })
-        this.setState({passportImgUri: res})
       }).catch((e) => {
-        // console.log(e)
+        SnackbarActions.showMessage('Could not upload the passport.')
+        this.setState({
+          loadingPassportPhoto: false,
+          passportImgUri: ''
+        })
       })
     }
   }
-
 })
 
 export default Radium(Profile)

@@ -1,20 +1,11 @@
 import Reflux from 'reflux'
 
 export default Reflux.createActions({
-  'setState': {asyncResult: false},
-  'getState': {asyncResult: false},
   'changeRotationIndex': {asyncResult: false},
-  // Birth
+  'syncStateWithPreview': {asyncResult: false},
   'getInitialGraphState': {asyncResult: true},
-  // Life
   'drawNewNode': {asyncResult: false},
-  'deleteNode': {asyncResult: false},
-  'dissconnectNode': {asyncResult: false},
-  'navigateToNode': {asyncResult: true},
+  'navigateToNode': {asyncResult: false},
   'refresh': {asyncResult: false},
-  'drawAtUri': {asyncResult: false},
-  'highlight': {asyncResult: false},
-  'viewNode': {asyncResult: false},
-  // Death.
-  'eraseGraph': {asyncResult: false}
+  'drawAtUri': {asyncResult: false}
 })
