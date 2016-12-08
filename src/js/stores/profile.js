@@ -26,7 +26,7 @@ export default Reflux.createStore({
       company: '',
       url: '',
       passportImgUri: '',
-      passportImgNodeUri: '',
+      passportNodeUri: '',
       creditCard: '',
       webId: '',
       imgUri: '',
@@ -72,12 +72,22 @@ export default Reflux.createStore({
       return
     }
     const OldPassImgUri = this.state.passportImgUri.trim()
-    const OldPassNodeUri = this.state.passportImgNodeUri.trim()
-
+    const OldPassNodeUri = this.state.passportNodeUri.trim()
+    // TODO These state modifcations could be a bit more explicit perhaps
     if (OldPassImgUri) {
       if (!newData.passportImgUri.trim()) {
+        console.log(OldPassNodeUri)
+        console.log(OldPassImgUri)
+
+        this.state.passportImgUri = ''
+        this.state.passportNodeUri = ''
+
+        console.log(OldPassNodeUri)
+        console.log(OldPassImgUri)
+
         return this.wia.deletePassport(OldPassNodeUri, OldPassImgUri)
       } else if (OldPassImgUri !== newData.passportImgUri.trim()) {
+        this.state.passportImgUri = newData.passportImgUri
         return this.wia.updatePassport(
           OldPassNodeUri,
           OldPassImgUri,
@@ -95,6 +105,7 @@ export default Reflux.createStore({
         true
       ).then((passportNodeUri) => {
         this.state.passportNodeUri = passportNodeUri
+        this.state.passportImgUri = newData.passportImgUri
       })
     }
   },

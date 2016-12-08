@@ -75,7 +75,7 @@ class WebIDAgent extends LDPAgent {
     predicateMap[PRED.company] = 'company'
     predicateMap[PRED.url] = 'url'
     predicateMap[PRED.creditCard] = 'creditCard'
-    predicateMap[PRED.passport] = 'passportImgNodeUri'
+    predicateMap[PRED.passport] = 'passportNodeUri'
     predicateMap[PRED.storage] = 'storage'
 
     for (var t of relevant) {
@@ -100,9 +100,9 @@ class WebIDAgent extends LDPAgent {
       }
     }
 
-    if (profile.passportImgNodeUri) {
+    if (profile.passportNodeUri) {
       return this.findObjectsByTerm(
-        profile.passportImgNodeUri,
+        profile.passportNodeUri,
         PRED.image
       ).then(res => {
         profile.passportImgUri = res.length ? res[0].value : ''

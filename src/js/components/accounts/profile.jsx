@@ -178,7 +178,6 @@ let Profile = React.createClass({
   },
 
   render() {
-    console.log(this.state)
     let nameUsed = this.state.givenName
       ? 'givenName'
       : 'fullName'
@@ -466,6 +465,7 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
+      console.log('calling with', this.state)
       ProfileActions.update(Object.assign({},
         this.state
       ))

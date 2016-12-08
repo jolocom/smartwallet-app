@@ -191,8 +191,6 @@ class GraphAgent extends LDPAgent {
     let aclWriter = new Writer()
     let aclUri = `${uri}.acl`
     let owner = $rdf.sym('#owner')
-    console.log(uri)
-    console.log(webID)
 
     aclWriter.addTriple(owner, PRED.type, PRED.auth)
     aclWriter.addTriple(owner, PRED.access, $rdf.sym(uri))
