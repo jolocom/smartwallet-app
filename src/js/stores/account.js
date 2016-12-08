@@ -1,11 +1,11 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
 import {proxy} from 'settings'
-import GraphAgent from 'lib/agents/graph'
-import WebIdAgent from 'lib/agents/webid'
-import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
+import WebIdAgent from 'lib/agents/webid'
+import GraphAgent from 'lib/agents/graph'
 import Util from 'lib/util'
+import $rdf from 'rdflib'
 
 import SnackbarActions from 'actions/snackbar'
 
@@ -15,7 +15,10 @@ export default Reflux.createStore({
   state: {
     loggingIn: true,
     userExists: false,
-    emailVerifyScreen: false
+    emailVerifyScreen: false,
+    emailVerifyCompleted: false,
+    emailUpdateQueued: false,
+    emailToBeInserted: ''
   },
 
   getInitialState() {
@@ -26,30 +29,22 @@ export default Reflux.createStore({
     const usr = encodeURIComponent(data.username)
     const psw = encodeURIComponent(data.password)
     const eml = encodeURIComponent(data.email)
+    const name = encodeURIComponent(data.name)
 
     fetch(`${proxy}/register`, {
       method: 'POST',
-      body: `username=${usr}&password=${psw}&email=${eml}`,
+      body: `username=${usr}&password=${psw}&name=${name}&email=${eml}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
-    })
-    .then((res) => {
+    }).then((res) => {
       if (res.status === 400) {
         throw new Error('USERNAME_TAKEN')
       }
-      res.json().then(() => {
-        if (data.name || data.email) {
-          let payload = {
-            name: data.name,
-            email: data.email
-          }
-          Account.login(data.username, data.password, payload)
-        } else {
-          Account.login(data.username, data.password)
-        }
-        localStorage.setItem('jolocom.auth-mode', 'proxy')
-      })
+      this.state = {
+        emailVerifyScreen: true
+      }
+      this.trigger(this.state)
     }).catch((e) => {
       if (e.message === 'USERNAME_TAKEN') {
         SnackbarActions.showMessage('Username is already taken.')
@@ -59,44 +54,15 @@ export default Reflux.createStore({
     })
   },
 
-  /* @summary in case the user specified a name / email when registering,
-   * we update his already created profile with the data he introduced.
-   * @param {string} name - the name we update the profile with.
-   * @param {string} email - the email we update the profile with.
-   */
-
-  onSetNameEmail(webid, name, email) {
-    let gAgent = new GraphAgent()
-    let triples = []
-    if (name) {
-      triples.push({
-        subject: rdf.sym(webid),
-        predicate: PRED.givenName,
-        object: name
-      })
-    }
-
-    if (email) {
-      triples.push({
-        subject: rdf.sym(webid),
-        predicate: PRED.email,
-        // Keep an eye on this.
-        object: rdf.sym(`mailto:${email}`)
-      })
-    }
-
-    return gAgent.writeTriples(webid, triples, false)
-  },
-
   /* @summary logs a user in. In case there's a updatePayload, first
    * applies the update and then logs the user.
    * @param {string} username
    * @param {string} password
-   * @param {object} updatePayload - contains the name / email of a newly
    * created user. Only used when registering a new user.
   */
 
-  onLogin(username, password, updatePayload) {
+  // TODO break down a bit, use agents
+  onLogin(username, password) {
     const webId = localStorage.getItem('jolocom.webId')
     // The user is already logged in.
     if (webId) {
@@ -119,7 +85,7 @@ export default Reflux.createStore({
       })
     } else if (username && password) {
       this.trigger({loggingIn: true})
-
+      // TODO Move to agent
       fetch(`${proxy}/login`, {
         method: 'POST',
         body: `username=${username}&password=${password}`,
@@ -133,17 +99,14 @@ export default Reflux.createStore({
         }
 
         res.json().then((js) => {
-          if (updatePayload) {
-            this.onSetNameEmail(js.webid, updatePayload.name,
-                                updatePayload.email)
-            .then(() => {
-              Account.login.completed(username, js.webid)
-            }).then(() => {
-              const webIdAgent = new WebIdAgent()
-              webIdAgent.initInbox(js.webid)
-              webIdAgent.initIndex(js.webid)
-              webIdAgent.initDisclaimer(js.webid)
-            })
+          const webIdAgent = new WebIdAgent()
+          webIdAgent.initInbox(js.webid)
+          webIdAgent.initIndex(js.webid)
+          webIdAgent.initDisclaimer(js.webid)
+
+          if (this.state.emailUpdateQueued) {
+            Account.updateUserEmail(
+              this.state.emailToBeInserted, js.webid, username)
           } else {
             Account.login.completed(username, js.webid)
           }
@@ -199,5 +162,50 @@ export default Reflux.createStore({
   loggedIn() {
     // How would this work now?
     return localStorage.getItem('jolocom.webId')
+  },
+
+  // TODO Move to the appropriate agent.
+  onActivateEmail(user, code) {
+    fetch(`${proxy}/verifyemail`, {
+      method: 'POST',
+      body: `username=${user}&code=${code}`,
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
+      res.json().then(js => {
+        this.state.emailUpdateQueued = true
+        this.state.emailToBeInserted = js.email
+        Account.activateEmail.completed()
+      })
+    }).catch((e) => {
+      Account.activateEmail.failed(e)
+      // console.error(e)
+    })
+  },
+
+  onUpdateUserEmail(email, webId, username) {
+    const gAgent = new GraphAgent()
+    gAgent.writeTriples(webId, [{
+      subject: $rdf.sym(webId),
+      predicate: PRED.email,
+      object: $rdf.sym(`mailto:${email}`)
+    }]).then(() => {
+      Account.login.completed(username, webId)
+    })
+  },
+
+  onActivateEmailCompleted() {
+    SnackbarActions.showMessage('Your account has been activated!')
+    this.state.emailVerifyCompleted = true
+    this.trigger(this.state)
+  },
+
+  onActivateEmailFailed(e) {
+    SnackbarActions.showMessage('Account activation failed.')
   }
 })

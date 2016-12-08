@@ -171,7 +171,10 @@ let Nav = React.createClass({
                 <Avatar
                   style={{marginLeft: '-10px'}}>
                   <UserAvatar
-                    name={this.state.profile.givenName}
+                    name={this.state.profile.givenName
+                      ? this.state.profile.givenName
+                      : this.state.profile.fullName
+                    }
                     imgUrl={this.state.profile.imgUri} />
                 </Avatar>}
             />

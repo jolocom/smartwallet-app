@@ -4,7 +4,8 @@ let Actions = Reflux.createActions({
   login: {asyncResult: true},
   logout: {asyncResult: false},
   signup: {asyncResult: true},
-  setNameEmail: {asyncResult: true}
+  activateEmail: {asyncResult: true},
+  updateUserEmail: {asyncResult: false}
 })
 
 export default Actions

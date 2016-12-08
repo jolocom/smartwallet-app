@@ -34,32 +34,50 @@ class WebIDAgent extends LDPAgent {
   initInbox(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/inbox`
-
-    return this.put(
-      Util.uriToProxied(uri),
-      {'Content-type': 'text/turtle'},
-      this._inboxTriples(webId)
-    ).then(() => {
-      this._writeAcl(uri, webId)
+    return this.head(Util.uriToProxied(uri)).then(res => {
+      if (res.statusText !== 'OK') {
+        throw new Error()
+      }
+    }).catch(() => {
+      return this.put(
+        Util.uriToProxied(uri),
+        {'Content-type': 'text/turtle'},
+        this._inboxTriples(webId)
+      ).then(() => {
+        this._writeAcl(uri, webId)
+      })
     })
   }
 
   initIndex(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/index`
-    return this.put(Util.uriToProxied(uri), {
-      'Content-type': 'text/turtle'
+    return this.head(Util.uriToProxied(uri)).then(res => {
+      if (res.statusText !== 'OK') {
+        throw new Error()
+      }
+    }).catch(() => {
+      return this.put(Util.uriToProxied(uri), {
+        'Content-type': 'text/turtle'
+      })
     })
   }
 
   initDisclaimer(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/disclaimer`
-    return this.put(
-      Util.uriToProxied(uri),
-      {'Content-type': 'text/turtle'},
-      'Files in this folder are needed for features of the Little-Sister app.'
-    )
+
+    return this.head(Util.uriToProxied(uri)).then(res => {
+      if (res.statusText !== 'OK') {
+        throw new Error()
+      }
+    }).catch(() => {
+      return this.put(
+        Util.uriToProxied(uri),
+        {'Content-type': 'text/turtle'},
+        'These files are needed for features of the Little-Sister app.'
+      )
+    })
   }
 
   // Converts the input from the forms to RDF data to put into the inbox card
