@@ -35,7 +35,7 @@ let TextNode = React.createClass({
     let {rank, title, description, email, uri, img, type} = this.props.node
     let {centerWritePerm, writePerm} = this.props
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-    let fabItems = ['copyUrl'] /* 'edit' */
+    let fabItems = ['copyUrl']
     let menuItems = []
     if (this.props.writePerm) {
       if (type !== 'passport') {

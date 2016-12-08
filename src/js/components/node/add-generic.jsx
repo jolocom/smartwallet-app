@@ -196,7 +196,8 @@ let NodeAddGeneric = React.createClass({
       },
       addBtn: {
         width: '40px',
-        boxShadow: 'none'
+        boxShadow: 'none',
+        marginTop: '20px'
       }
     }
   },
