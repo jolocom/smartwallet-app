@@ -1,8 +1,8 @@
 import Reflux from 'reflux'
-import GraphAgent from '../lib/agents/graph.js'
-import graphActions from '../actions/graph-actions'
-import accountActions from '../actions/account'
-import D3Convertor from '../lib/d3-converter'
+import GraphAgent from 'lib/agents/graph.js'
+import graphActions from 'actions/graph-actions'
+import accountActions from 'actions/account'
+import D3Convertor from 'lib/d3-converter'
 
 export default Reflux.createStore({
 
@@ -28,7 +28,8 @@ export default Reflux.createStore({
       showPinned: false,
       showSearch: false,
       plusDrawerOpen: false,
-      activeNode: null
+      activeNode: null,
+      previewActive: false
     }
   },
 
@@ -46,7 +47,8 @@ export default Reflux.createStore({
   },
 
   syncStateWithPreview(previewState) {
-    this.state = previewState
+    this.state = Object.assign({}, previewState)
+    this.state.previewModeActive = false
     this.trigger(this.state)
   },
 
@@ -61,7 +63,7 @@ export default Reflux.createStore({
       return result
     }).then((triples) => {
       let newNode = this.convertor.convertToD3('a', triples.triples)
-      this.state.neighbours.push(newNode)
+      this.state.neighbours = this.state.neighbours.concat([newNode])
       this.trigger(this.state)
     })
   },
@@ -138,6 +140,11 @@ export default Reflux.createStore({
         this.trigger(this.state)
       })
     })
+  },
+
+  onEnterPreview() {
+    this.state.previewModeActive = true
+    this.trigger(this.state)
   },
 
   // TODO - make sure loading works.

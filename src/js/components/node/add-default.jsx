@@ -124,6 +124,7 @@ let LowerPart = React.createClass({
     this.gAgent = new GraphAgent()
   },
 
+  // THIS SHOULD BE IN A STORE / AGENT TODO
   submit() {
     if (!(this.state.title && this.state.title.trim())) {
       return false

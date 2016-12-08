@@ -3,7 +3,6 @@ import GraphAgent from '../lib/agents/graph.js'
 import previewActions from '../actions/preview-actions'
 import D3Convertor from '../lib/d3-converter'
 import GraphStore from './graph-store'
-import Util from 'lib/util'
 
 export default Reflux.createStore({
 
@@ -27,7 +26,7 @@ export default Reflux.createStore({
   // Whenever the graph updates, we update the preview graph's
   // store so that we can mount it with the latest state.
   updateGraphState(newState) {
-    this.state = newState
+    this.state = Object.assign({}, newState)
   },
 
   onChangeRotationIndex: function(rotationIndex, flag) {
