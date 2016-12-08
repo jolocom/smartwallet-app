@@ -3,23 +3,15 @@ import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton} from 'material-ui'
-import {proxy} from 'settings'
+import AccountActions from 'actions/account'
 import AppBar from 'material-ui/AppBar'
 import {Link} from 'react-router'
-
-import SnackbarActions from 'actions/snackbar'
 
 let ForgotPassword = React.createClass({
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
     router: React.PropTypes.object
-  },
-
-  _handleUsernameChange(e) {
-    this.setState({
-      username: e.target.value.toLowerCase()
-    })
   },
 
   enableSubmit() {
@@ -30,26 +22,8 @@ let ForgotPassword = React.createClass({
     this.setState({disabledSubmit: true})
   },
 
-  forgotPassword() {
-    let user = encodeURIComponent(this.state.username)
-
-    fetch(`${proxy}/forgotpassword`, {
-      method: 'POST',
-      body: `username=${user}`,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-      SnackbarActions
-        .showMessage('An email was sent to you with further instructions.')
-    }).catch((e) => {
-      SnackbarActions.showMessage('An error occured : ' + e)
-      // console.error(e)
-    })
+  forgotPassword({username}) {
+    AccountActions.forgotPassword(username)
   },
 
   goBack() {
@@ -118,7 +92,8 @@ let ForgotPassword = React.createClass({
             onValidSubmit={this.forgotPassword}
           >
             <div style={{marginBottom: '20px'}}>
-              <FormsyText name="username"
+              <FormsyText
+                name="username"
                 floatingLabelText="Username"
                 autoCorrect="off"
                 autoCapitalize="none"
@@ -126,11 +101,12 @@ let ForgotPassword = React.createClass({
                 validations="isAlphanumeric"
                 validationError="Please only use letters and numbers"
                 inputStyle={{textTransform: 'lowercase'}}
-                onChange={this._handleUsernameChange}
               />
             </div>
 
-            <RaisedButton type="submit" secondary
+            <RaisedButton
+              type="submit"
+              secondary
               disabled={this.state.disabledSubmit}
               style={styles.button}
               label="REQUEST PASSWORD" />

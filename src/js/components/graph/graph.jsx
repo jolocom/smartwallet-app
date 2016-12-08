@@ -33,7 +33,7 @@ let Graph = React.createClass({
 
   childContextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.string
   },
 
   getChildContext() {
@@ -65,7 +65,7 @@ let Graph = React.createClass({
     // this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
 
     if (!this.state.initialized) {
-      graphActions.getInitialGraphState()
+      graphActions.getInitialGraphState(this.state.webId)
     } else {
       this.graph.render(this.state)
       this.graph.updateHistory(this.state.navHistory)

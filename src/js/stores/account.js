@@ -119,5 +119,35 @@ export default Reflux.createStore({
   loggedIn() {
     // How would this work now?
     return localStorage.getItem('jolocom.webId')
+  },
+
+  onForgotPassword(username) {
+    this.accounts.forgotPassword(username)
+      .then(Account.forgotPassword.complete)
+      .catch(Account.forgotPassword.failed)
+  },
+
+  onForgotPasswordComplete() {
+    SnackbarActions
+      .showMessage('An email was sent to you with further instructions.')
+  },
+
+  onForgotPasswordFailed(e) {
+    SnackbarActions.showMessage('An error occured : ' + e)
+  },
+
+  onResetPassword(username, token, password) {
+    this.accounts.resetPassword(username, token, password)
+      .then(Account.resetPassword.complete)
+      .catch(Account.resetPassword.failed)
+  },
+
+  onResetPasswordComplete() {
+    SnackbarActions
+      .showMessage('You can now log in with your new password.')
+  },
+
+  onResetPasswordFailed(e) {
+    SnackbarActions.showMessage('An error occured : ' + e)
   }
 })

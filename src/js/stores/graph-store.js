@@ -66,13 +66,13 @@ export default Reflux.createStore({
     })
   },
 
-  onGetInitialGraphState() {
+  onGetInitialGraphState(webId) {
     /*
     this.state.loading = true
     this.trigger(this.state)
     */
 
-    this.gAgent.getGraphMapAtWebID(this.state.webId).then((triples) => {
+    this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(

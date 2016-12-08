@@ -93,22 +93,7 @@ export default Reflux.createStore({
 
       // Making sure the images are accesable, otherwise not
       // trying to display them.
-      Promise.all(checkImages.map(trip => {
-        const img = trip.img
-        if (!img) {
-          return
-        }
-        return fetch(Util.uriToProxied(img), {
-          method: 'HEAD',
-          credentials: 'include'
-        }).then(res => {
-          if (!res.ok) {
-            trip.img = ''
-          }
-        }).catch(() => {
-          trip.img = ''
-        })
-      })).then(() => {
+      this.gAgent.checkImages(checkImages).then(() => {
         // this.state.loading = false
         this.trigger(this.state)
       })

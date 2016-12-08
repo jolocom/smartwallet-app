@@ -62,6 +62,25 @@ class AccountsAgent extends HTTPAgent {
     })
   }
 
+  forgotPassword(username) {
+    let user = encodeURIComponent(username)
+
+    return this.post(`${proxy}/forgotpassword`, `username=${user}`, {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    })
+  }
+
+  resetPassword(username, token, password) {
+    username = encodeURIComponent(username)
+    token = encodeURIComponent(token)
+    password = encodeURIComponent(password)
+
+    return this.post(`${proxy}/resetpassword`,
+      `username=${username}&code=${token}&password=${password}`, {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      })
+  }
+
   initInbox(webId) {
     return Promise.all([
       this.createConversationsContainer(webId),
