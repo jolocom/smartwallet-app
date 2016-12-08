@@ -1,13 +1,9 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-
 import Utils from 'lib/util'
-
-import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
 import ProfileStore from 'stores/profile'
-import AccountStore from 'stores/account'
 
 import ActionInfoOutline from 'material-ui/svg-icons/action/info-outline'
 import SocialPublic from 'material-ui/svg-icons/social/public'
@@ -16,7 +12,6 @@ import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
 import AvWeb from 'material-ui/svg-icons/av/web'
-import BitcoinIcon from 'components/icons/bitcoin-icon.jsx'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 import ActionStar from 'material-ui/svg-icons/toggle/star'
 import VerifiedUser from 'material-ui/svg-icons/action/verified-user'
@@ -27,31 +22,24 @@ import LinearProgress from 'material-ui/LinearProgress'
 import CommunicationLocation
   from 'material-ui/svg-icons/communication/location-on'
 
-import {
-  List, ListItem, Divider, Subheader
-} from 'material-ui'
-
+import {List, ListItem, Divider, Subheader} from 'material-ui'
 import PinnedStore from 'stores/pinned'
 
 let ProfileNode = React.createClass({
 
   mixins: [
     Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
-    Reflux.connect(ProfileStore, 'profile'),
-    Reflux.connect(NodeStore, 'node'),
-    Reflux.connect(AccountStore, 'account')
+    Reflux.connect(ProfileStore, 'profile')
   ],
 
   propTypes: {
-    state: React.PropTypes.object, /* @TODO fix this */
     node: React.PropTypes.object,
-    onClose: React.PropTypes.func
+    writePerm: React.PropTypes.bool,
+    centerWritePerm: React.PropTypes.bool,
+    graphState: React.PropTypes.object
   },
 
   contextTypes: {
-    history: React.PropTypes.any,
-    profile: React.PropTypes.object,
-    account: React.PropTypes.object,
     muiTheme: React.PropTypes.object
   },
 
@@ -64,11 +52,9 @@ let ProfileNode = React.createClass({
   },
 
   onUpdatePinned() {
-    const node = this.getNode()
-
-    if (node) {
+    if (this.props) {
       this.setState({
-        pinned: PinnedStore.isPinned(node.uri)
+        pinned: PinnedStore.isPinned(this.props.node.uri)
       })
     }
   },
@@ -144,61 +130,53 @@ let ProfileNode = React.createClass({
     }
   },
 
-  getNode() {
-    if (this.props.state) {
-      return this.props.state.activeNode // TODO temp fix
-    } else {
-      return this.props.node
-    }
-  },
-
   render() {
-    this.state.reputation = 25
     let styles = this.getStyles()
-    let {account} = this.context
+    let {writePerm, centerWritePerm} = this.props
     let {
-      name,
-      familyName,
+      rank,
+      type,
       uri,
       img,
       socialMedia,
-      mobile,
+      mobilePhone,
       address,
+      email,
       profession,
       company,
-      url,
-      email
-    } = this.getNode()
+      url
+    } = this.props.node
 
-    // Temporary soln for getting other user's username
-    let otherUsername = uri.match(/https:\/\/(.*).webid.*/)[1]
+    const isMe = this.state.profile.webId === uri
 
-    const isMe = account.webId === uri
-
-    if (name && familyName) {
-      name = `${name} ${familyName}`
+    let name
+    if (this.props.node.fullName && this.props.node.fullName > 0) {
+      name = this.props.node.fullName
+    } else if (this.props.node.name && this.props.node.familyName) {
+      name = `${this.props.node.name} ${this.props.node.familyName}`
+    } else {
+      name = this.props.node.name || this.props.node.familyName
     }
 
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-
     let fabItems = []
     let menuItems = []
 
-    if (!isMe) {
-      if (this.props.state.center.isOwnedByUser &&
-        this.getNode().rank &&
-        this.getNode().rank === 'neighbour') {
-        menuItems.push('disconnect')
-      } else {
-        fabItems.push('connect')
+    if (this.props.writePerm) {
+      menuItems.push('edit')
+      // Making sure you can't delete your main node.
+      if (!isMe) {
+        menuItems.push('delete')
       }
-      fabItems.push('chat')
     }
 
-    if (isMe) {
-      fabItems.push('edit')
+    if (this.props.centerWritePerm) {
+      menuItems.push('disconnect')
     }
-    fabItems.push('copyUrl')
+
+    menuItems.push('viewSharedNodes')
+    menuItems.push('copyUrl')
+    fabItems.push('chat')
 
     return (
       <GenericFullScreen
@@ -208,7 +186,12 @@ let ProfileNode = React.createClass({
         headerColor={'#829abe'}
         fabItems={fabItems}
         menuItems={menuItems}
-        {...this.props}
+        graphState={this.props.graphState}
+        uri={uri}
+        rank={rank}
+        writePerm={writePerm}
+        centerWritePerm={centerWritePerm}
+        type={type}
       >
         <div style={styles.repContainer}>
           <table style={styles.repTable}>
@@ -228,7 +211,9 @@ let ProfileNode = React.createClass({
                   mode="determinate"
                   style={styles.repBar}
                   value={this.state.reputation} />
-                <div style={styles.repNumber}>{this.state.reputation}</div>
+                <div style={styles.repNumber}>
+                  {this.state.reputation}
+                </div>
               </td>
               <td>
                 <div>
@@ -258,18 +243,6 @@ let ProfileNode = React.createClass({
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
-              // <ListItem
-              //   key={2}
-              //   leftIcon={<SocialShare color="#9ba0aa" />}>
-              //   <TextField
-              //     style={styles.inputStyle}
-              //     floatingLabelStyle={styles.labelStyle}
-              //     underlineStyle={styles.underlineStyle}
-              //     floatingLabelText="Privacy"
-              //     value={this.state.profile.privacy}
-              //     floatingLabelFixed
-              //     readOnly />
-              // </ListItem>,
               <ListItem
                 key={2}
                 leftIcon={<SocialPersonOutline color="#9ba0aa" />}>
@@ -278,7 +251,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Username"
-                  value={isMe ? AccountStore.state.username : otherUsername}
+                  value={name}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
@@ -298,7 +271,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Mobile"
-                  value={isMe ? this.state.profile.mobile : mobile}
+                  value={mobilePhone}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -310,7 +283,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Email"
-                  value={isMe ? this.state.profile.email : email}
+                  value={email}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -322,7 +295,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Address"
-                  value={isMe ? this.state.profile.address : address}
+                  value={address}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -334,7 +307,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Social media"
-                  value={isMe ? this.state.profile.socialMedia : socialMedia}
+                  value={socialMedia}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
@@ -354,7 +327,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Profession"
-                  value={isMe ? this.state.profile.profession : profession}
+                  value={profession}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -366,7 +339,7 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Company"
-                  value={isMe ? this.state.profile.company : company}
+                  value={company}
                   floatingLabelFixed
                   readOnly />
               </ListItem>,
@@ -378,15 +351,14 @@ let ProfileNode = React.createClass({
                   floatingLabelStyle={styles.labelStyle}
                   underlineStyle={styles.underlineStyle}
                   floatingLabelText="Url"
-                  value={isMe ? this.state.profile.url : url}
+                  value={url}
                   floatingLabelFixed
                   readOnly />
               </ListItem>
             ]}
           />
           <Divider />
-          {
-            isMe
+          {isMe
             ? (<ListItem
               primaryText="Wallet"
               primaryTogglesNestedList
@@ -412,18 +384,6 @@ let ProfileNode = React.createClass({
                 </ListItem>,
                 <ListItem
                   key={2}
-                  leftIcon={<BitcoinIcon />}>
-                  <TextField
-                    style={styles.inputStyle}
-                    floatingLabelStyle={styles.labelStyle}
-                    underlineStyle={styles.underlineStyle}
-                    floatingLabelText="Bitcoin address"
-                    value={this.state.profile.bitcoinAddress}
-                    floatingLabelFixed
-                    readOnly />
-                </ListItem>,
-                <ListItem
-                  key={3}
                   leftIcon={<ActionCreditCard color="#9ba0aa" />}>
                   <TextField
                     style={styles.inputStyle}

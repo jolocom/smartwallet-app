@@ -3,7 +3,6 @@ import rdf from 'rdflib'
 const cert = 'http://www.w3.org/ns/auth/cert#'
 
 let ACL = rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-let CC = rdf.Namespace('https://cc.rww.io/vocab#')
 let DC = rdf.Namespace('http://purl.org/dc/terms/')
 let FOAF = rdf.Namespace('http://xmlns.com/foaf/0.1/')
 let NIC = rdf.Namespace('http://www.w3.org/ns/pim/space#')
@@ -31,6 +30,7 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
+  profileDoc: FOAF('PersonalProfileDocument'),
   isRelatedTo_HTTP: SCHEMA_HTTP('isRelatedTo'),
 
   // --
@@ -58,7 +58,6 @@ export const PRED = {
   Person: FOAF('Person'),
   Thread: SIOC('Thread'),
   // --
-  bitcoin: CC('bitcoin'),
   passport: PURL('Passport'),
   // ACL RELATED
   auth: ACL('Authorization'),
@@ -68,7 +67,11 @@ export const PRED = {
   mode: ACL('mode'),
   control: ACL('Control'),
   read: ACL('Read'),
-  write: ACL('Write')
+  write: ACL('Write'),
+  // INDEX FILE RELATED
+  readPermission: SCHEMA('ReadPermission'),
+  writePermission: SCHEMA('WritePermission'),
+  owns: SCHEMA('owns')
 }
 
 export const CERT = {

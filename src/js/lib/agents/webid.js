@@ -19,6 +19,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   // Gets the webId of the currently loged in user from local storage,
+  // Why is this async?
   getWebID() {
     return new Promise((resolve, reject) => {
       const webId = localStorage.getItem('jolocom.webId')
@@ -33,13 +34,49 @@ class WebIDAgent extends LDPAgent {
   initInbox(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/inbox`
+    return this.head(Util.uriToProxied(uri)).then(res => {
+      if (res.statusText !== 'OK') {
+        throw new Error()
+      }
+    }).catch(() => {
+      return this.put(
+        Util.uriToProxied(uri),
+        {'Content-type': 'text/turtle'},
+        this._inboxTriples(webId)
+      ).then(() => {
+        this._writeAcl(uri, webId)
+      })
+    })
+  }
 
-    return this.put(
-      Util.uriToProxied(uri),
-      {'Content-type': 'text/turtle'},
-      this._inboxTriples(webId)
-    ).then(() => {
-      this._writeAcl(uri, webId)
+  initIndex(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/index`
+    return this.head(Util.uriToProxied(uri)).then(res => {
+      if (res.statusText !== 'OK') {
+        throw new Error()
+      }
+    }).catch(() => {
+      return this.put(Util.uriToProxied(uri), {
+        'Content-type': 'text/turtle'
+      })
+    })
+  }
+
+  initDisclaimer(webId) {
+    const webIdRoot = Util.webidRoot(webId)
+    const uri = `${webIdRoot}/little-sister/disclaimer`
+
+    return this.head(Util.uriToProxied(uri)).then(res => {
+      if (res.statusText !== 'OK') {
+        throw new Error()
+      }
+    }).catch(() => {
+      return this.put(
+        Util.uriToProxied(uri),
+        {'Content-type': 'text/turtle'},
+        'These files are needed for features of the Little-Sister app.'
+      )
     })
   }
 
