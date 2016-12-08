@@ -261,7 +261,7 @@ let Signup = React.createClass({
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
-        {AccountStore.state.emailVerifyScreen
+        {this.state.account.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>
             <p style={styles.signUpMessage}>
               Thank you for signing up to Little Sister!<br />

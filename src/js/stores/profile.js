@@ -64,6 +64,7 @@ export default Reflux.createStore({
 
     let predicateMap = {}
     predicateMap[PRED.familyName] = 'familyName'
+    predicateMap[PRED.fullName] = 'fullName'
     predicateMap[PRED.givenName] = 'givenName'
     predicateMap[PRED.image] = 'imgUri'
     predicateMap[PRED.email] = 'email'
@@ -134,14 +135,15 @@ export default Reflux.createStore({
     let predicateMap = {
       familyName: PRED.familyName,
       givenName: PRED.givenName,
+      fullName: PRED.fullName,
       imgUri: PRED.image,
       email: PRED.email,
       socialMedia: PRED.socialMedia,
       mobilePhone: PRED.mobile,
       address: PRED.address,
-      profession: PRED.profiession,
+      profession: PRED.profession,
       company: PRED.company,
-      url: PRED.homepage,
+      url: PRED.url,
       creditCard: PRED.creditCard
     }
 
