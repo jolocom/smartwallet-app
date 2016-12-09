@@ -70,6 +70,30 @@ export default Reflux.createStore({
     })
   },
 
+  onCreate(
+    currentUser,
+    centerNode,
+    title,
+    description,
+    image,
+    nodeType,
+    confidential = false
+  ) {
+    this.gAgent.createNode(
+      currentUser,
+      centerNode,
+      title,
+      description,
+      image,
+      nodeType,
+      confidential
+    ).then(uri => {
+      graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+    }).catch(() => {
+      SnackbarActions.showMessage('Could not create the node.')
+    })
+  },
+
   /**
    * @summary Deletes a rdf file and it's connection to the center node
    * and plays the delete animation
