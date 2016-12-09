@@ -99,7 +99,7 @@ class WebIDAgent extends LDPAgent {
         if (space !== -1) {
           profile.givenName = fullName.substring(0, space)
           profile.familyName = fullName.substring(
-              givenName.length + 1, fullName.length)
+              profile.givenName.length + 1, fullName.length)
         }
       }
     }
