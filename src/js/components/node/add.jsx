@@ -118,7 +118,6 @@ let NodeAdd = React.createClass({
   },
 
   _handleClose() {
-    console.log('closing')
     this.context.router.goBack()
   }
 })

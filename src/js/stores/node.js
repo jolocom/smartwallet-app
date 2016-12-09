@@ -27,14 +27,6 @@ export default Reflux.createStore({
     this.init()
   },
 
-  create(user, node, title, description, image, type) {
-    this.gAgent.createNode(user, node, title, description, image, type)
-  },
-
-  onCreateCompleted(node) {
-    this.trigger(node)
-  },
-
   onInitiate(uri, centerUri) {
     this.state.uri = uri
     this.state.initialized = true

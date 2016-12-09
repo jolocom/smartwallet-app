@@ -1,6 +1,5 @@
 import {PRED} from '../namespaces'
 import LDPAgent from './ldp'
-import Util from '../util'
 import {Writer} from '../rdf'
 import $rdf from 'rdflib'
 
