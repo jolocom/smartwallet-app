@@ -46,7 +46,7 @@ export default Reflux.createStore({
   onLoad() {
     this.wia.getProfile()
       .then(ProfileActions.load.completed)
-      .catch(ProfileActions.load.failed)
+//      .catch(ProfileActions.load.failed)
   },
 
   graphChange(graphState) {
@@ -76,15 +76,8 @@ export default Reflux.createStore({
     // TODO These state modifcations could be a bit more explicit perhaps
     if (OldPassImgUri) {
       if (!newData.passportImgUri.trim()) {
-        console.log(OldPassNodeUri)
-        console.log(OldPassImgUri)
-
         this.state.passportImgUri = ''
         this.state.passportNodeUri = ''
-
-        console.log(OldPassNodeUri)
-        console.log(OldPassImgUri)
-
         return this.wia.deletePassport(OldPassNodeUri, OldPassImgUri)
       } else if (OldPassImgUri !== newData.passportImgUri.trim()) {
         this.state.passportImgUri = newData.passportImgUri

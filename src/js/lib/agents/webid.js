@@ -66,6 +66,7 @@ class WebIDAgent extends LDPAgent {
     let predicateMap = {}
     predicateMap[PRED.familyName] = 'familyName'
     predicateMap[PRED.givenName] = 'givenName'
+    predicateMap[PRED.fullName] = 'fullName'
     predicateMap[PRED.image] = 'imgUri'
     predicateMap[PRED.email] = 'email'
     predicateMap[PRED.socialMedia] = 'socialMedia'
@@ -94,9 +95,12 @@ class WebIDAgent extends LDPAgent {
     let {fullName, givenName, familyName} = profile
     if (!givenName && !familyName) {
       if (fullName) {
-        profile.givenName = fullName.substring(0, fullName.indexOf(' '))
-        profile.familyName = fullName.substring(
-            givenName.length + 1, fullName.length)
+        let space = fullName.indexOf(' ')
+        if (space !== -1) {
+          profile.givenName = fullName.substring(0, space)
+          profile.familyName = fullName.substring(
+              givenName.length + 1, fullName.length)
+        }
       }
     }
 
@@ -122,6 +126,7 @@ class WebIDAgent extends LDPAgent {
     let predicateMap = {
       familyName: PRED.familyName,
       givenName: PRED.givenName,
+      fullName: PRED.fullName,
       imgUri: PRED.image,
       email: PRED.email,
       socialMedia: PRED.socialMedia,
