@@ -87,11 +87,10 @@ let LowerPart = React.createClass({
           <div style={styles.row}>
             <TextField
               hintText="Title"
-              fullWidth={true}
+              fullWidth
               style={styles.input}
-              onChange={({target}) => {
-                this.setState({title: target.value})
-              }} />
+              onChange={this._handleTitleChange}
+            />
             <SelectField value={this.state.type}
               onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="default" primaryText="Plain text" />
@@ -102,16 +101,23 @@ let LowerPart = React.createClass({
           <div style={styles.row}>
             <TextField
               hintText="Description"
-              fullWidth={true}
+              fullWidth
               style={styles.input}
-              onChange={({target}) => {
-                this.setState({description: target.value})
-              }} />
+              onChange={this._handleDescriptionChange}
+            />
             <ImageSelect onChange={this._handleSelectImage} />
           </div>
         </Paper>
       </div>
     )
+  },
+
+  _handleTitleChange(event) {
+    this.setState({title: event.target.value})
+  },
+
+  _handleDescriptionChange(event) {
+    this.setState({description: event.target.value})
   },
 
   _handleTypeChange(event, index, value) {
