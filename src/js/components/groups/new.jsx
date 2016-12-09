@@ -174,7 +174,6 @@ export default React.createClass({
       },
       removeMemberFromList: {
         marginTop: '2%'
-        // paddingTop: '5%'
       },
       memberList: {
 
@@ -191,11 +190,14 @@ export default React.createClass({
 
   _handleCheckedChanges(checked) {
     this.setState({members: checked})
-    console.log('members ', this.state.members)
   },
 
   _onContactSelectorClose() {
     this.setState({pickingContacts: false})
+  },
+
+  removeMember(member) {
+    console.log(member)
   },
 
   render() {
@@ -223,6 +225,8 @@ export default React.createClass({
 
     let styles = this.getStyles()
     let minifyAddMemberButton = true
+
+    let test = 'Hello'
 
     return (
       <Dialog ref="dialog" fullscreen>
@@ -274,10 +278,13 @@ export default React.createClass({
                   ? this.state.members.map((member) => (
                     <div>
                       <ListItem
+                        key={member.webid}
                         primaryText={member.name}
                         leftAvatar={<Avatar src={member.imgUri} />}
                         rightIconButton={<RemoveMember
-                          style={styles.removeMemberFromList} />}
+                          style={styles.removeMemberFromList}
+                          onClick={this.removeMember(test)}
+                        />}
                       />
                     </div>
                     ))
