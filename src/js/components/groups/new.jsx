@@ -196,8 +196,11 @@ export default React.createClass({
     this.setState({pickingContacts: false})
   },
 
-  removeMember(member) {
-    console.log(member)
+  removeMember(key) {
+    let members = this.state.members
+    const memberToDelete = members.map((member) => member.webId).indexOf(key)
+    members.splice(memberToDelete, 1)
+    this.setState({members: members})
   },
 
   render() {
@@ -278,12 +281,12 @@ export default React.createClass({
                   ? this.state.members.map((member) => (
                     <div>
                       <ListItem
-                        key={member.webid}
+                        key={member.webId}
                         primaryText={member.name}
                         leftAvatar={<Avatar src={member.imgUri} />}
                         rightIconButton={<RemoveMember
                           style={styles.removeMemberFromList}
-                          onClick={this.removeMember(test)}
+                          onClick={() => {this.removeMember(member.webId)} }
                         />}
                       />
                     </div>
