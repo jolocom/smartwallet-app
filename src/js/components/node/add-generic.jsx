@@ -114,7 +114,8 @@ let NodeAddGeneric = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, image} = this.state
-
+    console.log(this.state)
+    debugger;
     let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.state.graphState.center
 
