@@ -117,11 +117,12 @@ class GraphAgent {
       })
       // Connecting the node to the one that created it
     }).then(() => {
-      let predicate = PRED.isRelatedTo
-
-      if (nodeType === 'passport') {
-        predicate = PRED.passport
-      }
+      let predicate = this.nodeTypePredicate(nodeType)
+      // let predicate = PRED.isRelatedTo
+      //
+      // if (nodeType === 'passport') {
+      //   predicate = PRED.passport
+      // }
 
       let payload = {
         subject: rdf.sym(centerNode.uri),
@@ -213,6 +214,19 @@ class GraphAgent {
     .catch((e) => {
       SnackbarActions.showMessage('Could not upload the acl file.')
     })
+  }
+  // @TODO Keep building... Need to know all possible node types!
+  nodeTypePredicate(nodeType) {
+    let predicate
+    switch (nodeType) {
+      case 'passport' :
+        predicate = PRED.passport
+        break
+      default :
+        predicate = PRED.isRelatedTo
+        break
+    }
+    return predicate
   }
 
   /**
