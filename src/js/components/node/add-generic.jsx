@@ -114,21 +114,20 @@ let NodeAddGeneric = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, image} = this.state
-    if (this.state.graphState.user && this.state.graphState.center) {
-      let currentUser = this.state.graphState.user
-      let centerNode = this.state.graphState.center
+
+    let webId = localStorage.getItem('jolocom.webId')
+    let centerNode = this.state.graphState.center
+
+    if (centerNode && webId) {
       // let isConfidential = (this.state.type == 'confidential')
       // if (isConfidential) this.state.type = 'default'
 
       // @TODO Previously called nodeActions.create;
       // except it cannot have a return value
-      this.gAgent.createNode(currentUser, centerNode, title, description, image,
+      this.gAgent.createNode(webId, centerNode, title, description, image,
         this.state.type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
-    } else {
-      // console.log('Did not work,logged in user or center node not detected
-      // correctly.')
     }
   },
 
