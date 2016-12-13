@@ -83,7 +83,7 @@ class GraphAgent {
    */
 
   createNode(currentUser, centerNode, title, description,
-             image, nodeType, confidential = false) {
+             image = false, nodeType, confidential = false) {
     let writer = new Writer()
     let newNodeUri = rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
@@ -219,8 +219,17 @@ class GraphAgent {
   nodeTypePredicate(nodeType) {
     let predicate
     switch (nodeType) {
+      case 'miscfile' :
+        // predicate = PRED.file
+        break
       case 'passport' :
         predicate = PRED.passport
+        break
+      case 'image' :
+        predicate = PRED.Image
+        break
+      case 'text' :
+        predicate = PRED.description
         break
       default :
         predicate = PRED.isRelatedTo
