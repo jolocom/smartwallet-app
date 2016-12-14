@@ -386,9 +386,9 @@ export default class GraphD3 extends EventEmitter {
     // convolve that with a Gaussian with standard deviation 3 and store result
     // in blur
 
-    // This basically takes care of blurring
-    this.filter.append('feGaussianBlur')
-      .attr('stdDeviation', 1.5)
+    // // This basically takes care of blurring
+    // this.filter.append('feGaussianBlur')
+    //   .attr('stdDeviation', 1.5)
     this.componentTransfer = this.filter.append('feComponentTransfer')
     this.componentTransfer.append('feFuncR')
       .attr('type', 'linear')
@@ -400,45 +400,45 @@ export default class GraphD3 extends EventEmitter {
       .attr('type', 'linear')
       .attr('slope', 0.3)
 
-    let defsShadow = this.svg.append('svg:defs')
-
-    let filterShadow = defsShadow.append('filter')
-      .attr('id', 'drop-shadow')
-
-    filterShadow.append('feGaussianBlur')
-      .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 0.8)
-      .attr('result', 'blur')
-
-    // translate output of Gaussian blur to the right and downwards with 2px
-    // store result in offsetBlur
-    filterShadow.append('feOffset')
-      .attr('in', 'blur')
-      .attr('dx', 0)
-      .attr('dy', 0.5)
-      .attr('result', 'offsetBlur')
-
-    // controls the color/opacity of drop shadow
-    filterShadow.append('feFlood')
-        .attr('in', 'offsetBlur')
-        .attr('flood-color', '#2c2c2c')
-        .attr('flood-opacity', '0.6')
-        .attr('result', 'offsetColor')
-
-    filterShadow.append('feComposite')
-        .attr('in', 'offsetColor')
-        .attr('in2', 'offsetBlur')
-        .attr('operator', 'in')
-        .attr('result', 'offsetBlur')
-
+    // let defsShadow = this.svg.append('svg:defs')
+    //
+    // let filterShadow = defsShadow.append('filter')
+    //   .attr('id', 'drop-shadow')
+    //
+    // filterShadow.append('feGaussianBlur')
+    //   .attr('in', 'SourceAlpha')
+    //   .attr('stdDeviation', 0.8)
+    //   .attr('result', 'blur')
+    //
+    // // translate output of Gaussian blur to the right and downwards with 2px
+    // // store result in offsetBlur
+    // filterShadow.append('feOffset')
+    //   .attr('in', 'blur')
+    //   .attr('dx', 0)
+    //   .attr('dy', 0.5)
+    //   .attr('result', 'offsetBlur')
+    //
+    // // controls the color/opacity of drop shadow
+    // filterShadow.append('feFlood')
+    //     .attr('in', 'offsetBlur')
+    //     .attr('flood-color', '#2c2c2c')
+    //     .attr('flood-opacity', '0.6')
+    //     .attr('result', 'offsetColor')
+    //
+    // filterShadow.append('feComposite')
+    //     .attr('in', 'offsetColor')
+    //     .attr('in2', 'offsetBlur')
+    //     .attr('operator', 'in')
+    //     .attr('result', 'offsetBlur')
+    //
     // overlay original SourceGraphic over translated blurred opacity by using
     // feMerge filter. Order of specifying inputs is important!
-    let feMerge = filterShadow.append('feMerge')
-
-    feMerge.append('feMergeNode')
-      .attr('in', 'offsetBlur')
-    feMerge.append('feMergeNode')
-      .attr('in', 'SourceGraphic')
+    // let feMerge = filterShadow.append('feMerge')
+    //
+    // feMerge.append('feMergeNode')
+    //   .attr('in', 'offsetBlur')
+    // feMerge.append('feMergeNode')
+    //   .attr('in', 'SourceGraphic')
 
     // Used as a background circle for image nodes
     nodeEnter.append('circle')
