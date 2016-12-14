@@ -38,7 +38,6 @@ export default class GraphD3 extends EventEmitter {
 
     this.svg = d3.select(this.graphContainer).append('svg:svg')
       .style('display', 'block')
-      // .append('svg:g')
 
     this.refreshDimensions()
 
@@ -647,6 +646,9 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
+  // Star drag interaction, check if node should be movable
+  // remeber initial position in px and py
+
   dragStart = function(node) {
     if (node.rank === 'elipsis' || node.rank === 'center' || node.unavailable) {
       node.mobile = false
@@ -656,6 +658,8 @@ export default class GraphD3 extends EventEmitter {
       node.position.py = node.position.y
     }
   }
+
+  // change node position by same amount as change in mouse position
 
   drag = function(node) {
     if (node.mobile) {
@@ -688,10 +692,15 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
+  // navigate to node as long as node is not already center node
+
   navigateToNode = function (node) {
     if (node.rank !== 'center') {
+      // change rank to center node
       node.rank = 'center'
+      // trigger animation
       this.isPulsing = true
+      // delete all other nodes
       this.dataNodes = [node]
       this.dataLinks = []
       this.numberOfNeighbours = 0
@@ -700,6 +709,7 @@ export default class GraphD3 extends EventEmitter {
       this.resetAll()
       this.resetPos()
 
+      // get rid of dial
       this.svg.select('.dial')
         .attr('opacity', 0)
 
@@ -708,11 +718,10 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
-  // Enlarges and displays extra info about the clicked node, while setting
-  // all other highlighted nodes back to their normal size
+  // Sets up the data for D3
 
   setUpVisibleNodes = function () {
-    // No scrolling
+    // Adds position to center Node
     let x = this.centerCoordinates.x
     let y = this.centerCoordinates.y
     let coordinates = {
@@ -720,24 +729,38 @@ export default class GraphD3 extends EventEmitter {
     }
     this.dataNodes[0].position = coordinates
 
-    this.nodePositions = []
+    // array to hold node positions
 
+    // check to see if scrolling is necessary or not
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NODES) {
+      // Check to see whether node position has been calculated for
+      // current numer of nodes
+      if (this.numberOfNeighbours !== 0 &&
+        (!this.nodePositions ||
+        this.numberOfNeighbours !== this.nodePositions.length)) {
+        this.nodePositions = []
+
+        // Angle for the separation between neighbour nodes
+        let angle = (Math.PI * 2) / this.numberOfNeighbours
+
+        for (let i = 0; i < this.dataNodes.length; i++) {
+          let dist = STYLES.largeNodeSize * 1.4
+          let pos = {
+            x: Math.sin((Math.PI) - angle * i) * dist + x,
+            y: Math.cos((Math.PI) - angle * i) * dist + y,
+            p: 'neighbours'
+          }
+
+          this.nodePositions.push(pos)
+        }
+      }
+
+      // if number of nodes does not excede the allowed number there is no need
+      // to modify this data
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
 
-      let angle = (Math.PI * 2) / this.numberOfNeighbours
-
-      for (let i = 0; i < this.dataNodes.length; i++) {
-        let dist = STYLES.largeNodeSize * 1.4
-        let pos = {
-          x: Math.sin((Math.PI) - angle * i) * dist + this.centerCoordinates.x,
-          y: Math.cos((Math.PI) - angle * i) * dist + this.centerCoordinates.y,
-          p: 'neighbours'
-        }
-
-        this.nodePositions.push(pos)
-      }
+      // Position dataNodes
       for (let i = 0; i < this.dataNodes.length; i++) {
         if (this.dataNodes[i].rank === 'neighbour') {
           this.dataNodes[i].position = this.nodePositions[i - 1]
@@ -754,55 +777,47 @@ export default class GraphD3 extends EventEmitter {
 
     // Yes scrolling (more than 8 visible nodes)
 
-    // Smooth radial scrolling animation
-    //  d3.select('.dial').transition()
-    //   .duration(100)
-    //   .call(this.arcTween,
-    // 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
+    // Check to see whether node position has been calculated for
+    // current numer of nodes
+    if (!this.nodePositions ||
+      this.numberOfNeighbours !== this.nodePositions.length + 2) {
+      this.nodePositions = []
+      // space for arrow nodes
+      let totalspace = 2
+      // ofest for the circular distrubution
+      let num = 0.5
 
-    // Position nodes manually
+      // this is to have shorter statementes later on
+      let largeNode = STYLES.largeNodeSize
+      let center = this.centerCoordinates
 
-    this.nodePositions = []
-    let extraSpaceFront = 1
-    let extraSpaceBack = 1
-    let totalspace = 0
-    let num = 0.5
-    let largeNode = STYLES.largeNodeSize
-    let center = this.centerCoordinates
+      let angle = (2 * Math.PI) / (this.MAX_VISIBLE_NODES + totalspace)
+      let first = true
 
-    if (extraSpaceFront > 0) {
-      totalspace++
-    }
-    if (extraSpaceBack > 0) {
-      totalspace++
-    }
-
-    let angle = (2 * Math.PI) / (this.MAX_VISIBLE_NODES + totalspace)
-    let first = true
-
-    for (let i = 0,
-      numberOfNeighbours = this.MAX_VISIBLE_NODES + 2;
-         i < (this.numberOfNeighbours + totalspace); i++) {
-      if (numberOfNeighbours > 0) {
-        if (first) {
-          num = 5.5
-          first = false
+      for (let i = 0,
+        numberOfNeighbours = this.MAX_VISIBLE_NODES + 2;
+        i < (this.numberOfNeighbours + totalspace); i++) {
+        if (numberOfNeighbours > 0) {
+          if (first) {
+            num = 5.5
+            first = false
+          }
+          let pos = {
+            x: Math.sin((Math.PI) - (angle) * num) * largeNode * 1.4 + center.x,
+            y: Math.cos((Math.PI) - (angle) * num) * largeNode * 1.4 + center.y,
+            p: 'neighbours'
+          }
+          this.nodePositions.push(pos)
+          if (numberOfNeighbours > 1) {
+            num++
+          }
+          numberOfNeighbours--
         }
-        let pos = {
-          x: Math.sin((Math.PI) - (angle) * num) * largeNode * 1.4 + center.x,
-          y: Math.cos((Math.PI) - (angle) * num) * largeNode * 1.4 + center.y,
-          p: 'neighbours'
-        }
-        this.nodePositions.push(pos)
-        if (numberOfNeighbours > 1) {
-          num++
-        }
-        numberOfNeighbours--
       }
     }
 
     // Hydrate visibleDataNodes based on rotationIndex
-    // @TODO iterate through this.neighbours rather;
+    // @TODO consider iterate through this.neighbours rather;
     // have this.neighbourNodes, this.center, this.historyNodes
     // and not have this.dataNodes (where 0 = xx)
     this.visibleDataNodes = []
@@ -845,7 +860,7 @@ export default class GraphD3 extends EventEmitter {
       })
     }
 
-    first = true
+    let first = true
     // Add history nodes to visibleDataNodes
     for (let i = 0; i < this.dataNodes.length; i++) {
       if (this.dataNodes[i].rank === 'history') {
@@ -1130,6 +1145,7 @@ export default class GraphD3 extends EventEmitter {
       data.wasHighlighted = false
     }
 
+    // makes selected node apear bove all other nodes
     node.parentNode.appendChild(node)
 
     // @TODO this could be done using d3js and
@@ -1316,8 +1332,8 @@ export default class GraphD3 extends EventEmitter {
     .remove()
   }.bind(this)
 
-  // Alternative to dragging the node to the center.
-  // Does the same thing pretty much
+  // Doube click triggers node fillscreen
+
   onDblClick = function (node, data) {
     if (this.mode !== 'preview') {
       this.emit('view-node', data, node)
