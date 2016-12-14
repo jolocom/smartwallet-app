@@ -18,6 +18,7 @@ import {
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import DocIcon from 'components/icons/doc-icon.jsx'
+import CollectionIcon from 'components/icons/collection-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -87,7 +88,8 @@ let NodeAddGeneric = React.createClass({
       uploadedFileType: 'document',
       hasImages: false,
       hasDocs: false,
-      hasFiles: false,
+      isSingleNode: false,
+      isCollection: false,
       docArray: [],
       imgArray: []
     }
@@ -151,8 +153,10 @@ let NodeAddGeneric = React.createClass({
       },
       image: {
         height: '176px',
-        background: `#9ca0aa
-          url(${Util.uriToProxied(this.state.uploadedFileUri)}) center / cover`
+        backgroundColor: '#9ca0aa',
+        backgroundImage: this.state.isCollection ? 'none'
+          : `url(${Util.uriToProxied(this.state.uploadedFileUri)})`,
+        backgroundSize: 'cover'
       },
       container: {
         overflowY: 'scroll'
@@ -161,12 +165,12 @@ let NodeAddGeneric = React.createClass({
         position: 'relative',
         height: '0',
         zIndex: 1500,
-        width: this.state.hasFiles ? '100px' : '200px',
+        width: this.state.isSingleNode ? '100px' : '200px',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        top: this.state.hasFiles ? '15vh' : '50px'
+        top: this.state.isSingleNode ? '15vh' : '50px'
       },
       nodeTitle: {
         padding: '10px 24px',
@@ -221,20 +225,21 @@ let NodeAddGeneric = React.createClass({
     // let {type} = this.props.params
     // let config = this.getTypeConfig(type)
     // let title = config.title || `New ${type}`
-
+    let headerIcon
+    if (this.state.isCollection) {
+      headerIcon = <CollectionIcon />
+    } else if (this.state.isSingleNode && this.state.imgArray.length > 0) {
+      headerIcon = this.state.uploadedFileType === 'image' ? null : <DocIcon />
+    } else {
+      headerIcon = <AddNodeIcon />
+    }
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
           <Content>
             <div style={styles.container}>
               <div style={styles.headerIcon}>
-                {
-                  this.state.hasFiles
-                  ? this.state.uploadedFileType === 'image'
-                    ? null
-                    : <DocIcon />
-                  : <AddNodeIcon />
-                }
+                {headerIcon}
               </div>
               <div style={{display: 'none'}}>
                 <GraphPreview />
@@ -268,7 +273,7 @@ let NodeAddGeneric = React.createClass({
                 placeholder="Add node title"
                 onChange={Util.linkToState(this, 'title')} />
                 {
-                  !this.state.hasFiles
+                  !this.state.isSingleNode
                   ? <List>
                     <ListItem
                       key={1}
@@ -305,7 +310,7 @@ let NodeAddGeneric = React.createClass({
                   : null
                 }
               {
-                this.state.hasFiles
+                this.state.isSingleNode
                 ? <List>
                   <ListItem
                     key={1}
@@ -350,7 +355,7 @@ let NodeAddGeneric = React.createClass({
                                 key={img.key}
                                 leftAvatar={
                                   <Avatar src={
-                                  Util.uriToProxied(this.state.uploadedFileUri)}
+                                  Util.uriToProxied(img.imgUri)}
                                   />
                                 }
                                 rightIcon={
@@ -445,7 +450,7 @@ let NodeAddGeneric = React.createClass({
       this.refs.fileInputEl.value = null
     }
     this.setState({
-      hasFiles: false
+      isSingleNode: false
     })
     this.setState({
       uploadedFileName: ''
@@ -462,17 +467,53 @@ let NodeAddGeneric = React.createClass({
   _handleFileUpload({target}) {
     let gAgent = new GraphAgent()
     let file = target.files[0]
-    this.setState({
-      image: file
-    })
     gAgent.storeFile(null,
       this.state.profile.storage, file)
       .then((res) => {
         this.setState({
           uploadedFileUri: res
         })
+        // Only checks for image vs non-image for now
+        if (accepts(file, 'image/*')) {
+          this.setState({
+            uploadedFileType: 'image'
+          })
+          this.state.imgArray.push({
+            file: file,
+            key: this.state.imgArray.length + 1,
+            imgUri: this.state.uploadedFileUri
+          })
+          if ((this.state.imgArray.length + this.state.docArray.length) > 1) {
+            // is a collection
+            this.setState({
+              isCollection: true
+            })
+          } else {
+            // is singular node
+            this.setState({
+              isCollection: false
+            })
+            this.setState({
+              isSingleNode: true
+            })
+          }
+          this.setState({
+            hasImages: true
+          })
+        } else {
+          this.setState({
+            uploadedFileType: 'document'
+          })
+          this.state.docArray.push({
+            file: file,
+            key: this.state.docArray.length + 1
+          })
+          this.setState({
+            hasDocs: true
+          })
+        }
       }).catch((e) => {
-        // console.log(e)
+        console.log(e)
       })
     let fileName = target.files[0].name
     if (fileName.length > 20) {
@@ -488,53 +529,6 @@ let NodeAddGeneric = React.createClass({
         title: fileName
       })
     }
-    this.setState({
-      hasFiles: true
-    })
-    // Only checks for image vs non-image for now
-    if (accepts(file, 'image/*')) {
-      this.setState({
-        uploadedFileType: 'image'
-      })
-      this.state.imgArray.push({
-        file: file,
-        key: this.state.imgArray.length + 1
-      })
-      this.setState({
-        hasImages: true
-      })
-    } else {
-      this.setState({
-        uploadedFileType: 'document'
-      })
-      this.state.docArray.push({
-        file: file,
-        key: this.state.docArray.length + 1
-      })
-      this.setState({
-        hasDocs: true
-      })
-    }
-  },
-
-  renderListItem() {
-    return (
-      <ListItem
-        key={1}
-        leftAvatar={
-          <Avatar
-            src={
-              Util.uriToProxied(this.state.uploadedFileUri)
-            } />
-        }
-        rightIcon={
-          <ActionDelete
-            color="#4b132b"
-            onTouchTap={this._handleRemoveFile} />
-        }>
-        {this.state.uploadedFileName}
-      </ListItem>
-    )
   },
 
   renderChip(data) {
