@@ -85,7 +85,11 @@ let NodeAddGeneric = React.createClass({
       ],
       uploadedFileName: '',
       uploadedFileType: 'document',
-      hasFiles: false
+      hasImages: false,
+      hasDocs: false,
+      hasFiles: false,
+      docArray: [],
+      imgArray: []
     }
   },
 
@@ -197,6 +201,12 @@ let NodeAddGeneric = React.createClass({
         width: '40px',
         boxShadow: 'none',
         marginTop: '20px'
+      },
+      imgListItems: {
+        display: this.state.hasImages ? 'block' : 'none'
+      },
+      docListItems: {
+        display: this.state.hasDocs ? 'block' : 'none'
       }
     }
   },
@@ -299,35 +309,89 @@ let NodeAddGeneric = React.createClass({
                 ? <List>
                   <ListItem
                     key={1}
-                    leftIcon={
-                      this.state.uploadedFileType === 'image'
-                      ? <ImageIcon color="#9ba0aa" />
-                      : <FileIcon color="#9ba0aa" />
-                    }
+                    open
                     nestedListStyle={styles.accordionChildren}
                     nestedItems={[
                       <ListItem
                         key={1}
-                        leftAvatar={
-                          this.state.uploadedFileType === 'image'
-                          ? <Avatar
-                            src={Util.uriToProxied(this.state.uploadedFileUri)}
-                            />
-                          : null
-                        }
+                        disabled
+                        style={{color: '#9ba0aa'}}
                         rightIcon={
-                          <ActionDelete
-                            color="#4b132b"
-                            onTouchTap={this._handleRemoveFile} />
+                          <FloatingActionButton
+                            mini
+                            secondary
+                            style={styles.addBtn}
+                            onClick={this._handleFileSelect}>
+                            <ContentAdd />
+                          </FloatingActionButton>
                         }>
-                        {this.state.uploadedFileName}
+                        Add more files
+                        <Divider style={styles.divider} />
+                        <input
+                          id="fileUpload"
+                          type="file"
+                          ref="fileInputEl"
+                          style={{display: 'none'}}
+                          onChange={this._handleFileUpload}
+                        />
+                      </ListItem>,
+                      <ListItem
+                        key={2}
+                        open
+                        style={styles.imgListItems}
+                        leftIcon={<ImageIcon color="#9ba0aa" />}
+                        rightToggle={<ImageIcon style={{display: 'none'}} />}
+                        nestedListStyle={{
+                          ...styles.accordionChildren, ...styles.imgListItems}}
+                        nestedItems={
+                          this.state.imgArray.map((img) => {
+                            return (
+                              <ListItem
+                                key={img.key}
+                                leftAvatar={
+                                  <Avatar src={
+                                  Util.uriToProxied(this.state.uploadedFileUri)}
+                                  />
+                                }
+                                rightIcon={
+                                  <ActionDelete
+                                    color="#4b132b"
+                                    onTouchTap={this._handleRemoveFile} />
+                                }>
+                                {img.file.name}
+                              </ListItem>
+                            )
+                          })
+                        }>
+                        Images
+                      </ListItem>,
+                      <ListItem
+                        key={3}
+                        open
+                        style={styles.docListItems}
+                        leftIcon={<FileIcon color="#9ba0aa" />}
+                        rightToggle={<FileIcon style={{display: 'none'}} />}
+                        nestedListStyle={{
+                          ...styles.accordionChildren, ...styles.docListItems}}
+                        nestedItems={
+                          this.state.docArray.map((doc) => {
+                            return (
+                              <ListItem
+                                key={doc.key}
+                                rightIcon={
+                                  <ActionDelete
+                                    color="#4b132b"
+                                    onTouchTap={this._handleRemoveFile} />
+                                }>
+                                {doc.file.name}
+                              </ListItem>
+                            )
+                          })
+                        }>
+                        Documents
                       </ListItem>
                     ]}>
-                    {
-                      this.state.uploadedFileType === 'image'
-                      ? 'Images'
-                      : 'Documents'
-                    }
+                    Files
                   </ListItem>
                 </List>
                 : null
@@ -432,11 +496,45 @@ let NodeAddGeneric = React.createClass({
       this.setState({
         uploadedFileType: 'image'
       })
+      this.state.imgArray.push({
+        file: file,
+        key: this.state.imgArray.length + 1
+      })
+      this.setState({
+        hasImages: true
+      })
     } else {
       this.setState({
         uploadedFileType: 'document'
       })
+      this.state.docArray.push({
+        file: file,
+        key: this.state.docArray.length + 1
+      })
+      this.setState({
+        hasDocs: true
+      })
     }
+  },
+
+  renderListItem() {
+    return (
+      <ListItem
+        key={1}
+        leftAvatar={
+          <Avatar
+            src={
+              Util.uriToProxied(this.state.uploadedFileUri)
+            } />
+        }
+        rightIcon={
+          <ActionDelete
+            color="#4b132b"
+            onTouchTap={this._handleRemoveFile} />
+        }>
+        {this.state.uploadedFileName}
+      </ListItem>
+    )
   },
 
   renderChip(data) {
