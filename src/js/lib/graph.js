@@ -582,7 +582,6 @@ export default class GraphD3 extends EventEmitter {
         }
         self.onHoldClick(dir)
       }
-      console.log('mouseDown on non arrow')
     })
 
     // Subscribe to the click listeners for neighbour nodes
@@ -608,7 +607,7 @@ export default class GraphD3 extends EventEmitter {
     // Add click behaviour on background so that a click will deselect nodes.
 
     this.svg.on('click', function (data) {
-      if(self.mouseDown){
+      if (self.mouseDown) {
         self.mouseDown = false
       } else {
         self.deselectAll()
@@ -650,7 +649,6 @@ export default class GraphD3 extends EventEmitter {
   // remeber initial position in px and py
 
   dragStart = function(node) {
-    console.log('dragStart')
     if (node.rank === 'elipsis' || node.rank === 'center' || node.unavailable) {
       node.mobile = false
     } else {
@@ -664,7 +662,6 @@ export default class GraphD3 extends EventEmitter {
   // change node position by same amount as change in mouse position
 
   drag = function(node) {
-    console.log('dragging')
     if (node.mobile) {
       node.position.x += d3.event.dx
       node.position.y += d3.event.dy
@@ -676,8 +673,6 @@ export default class GraphD3 extends EventEmitter {
   // We check if the node is dropped in the center, if yes we navigate to it.
 
   dragEnd = function (node) {
-    console.log(d3.event);
-    console.log('dragended distanceTraveled = ', node.distanceTraveled)
     this.mouseDown = false
 
     if (node.mobile) {
@@ -706,13 +701,10 @@ export default class GraphD3 extends EventEmitter {
 
   clicked = function (object, data) {
     if (this.mode === 'preview') {
-      console.log('preview')
       this.onClick(object, data)
     } else if (data.rank === 'history') {
-      console.log('hostoryNode')
       this.navigateToNode(data)
     } else if (data.rank !== 'elipsis') {
-      console.log('opencard!')
       this.onDblClick(object, data)
     }
   }
@@ -961,7 +953,6 @@ export default class GraphD3 extends EventEmitter {
   }
 
   resetAll = function (speed) {
-    console.error('reseting')
     if (!speed) {
       speed = STYLES.nodeTransitionDuration
     }
@@ -1192,18 +1183,9 @@ export default class GraphD3 extends EventEmitter {
 
       // NODE signifies the node that we clicked on. We enlarge it.
       // Enlarge the node
-      console.log('node:', node)
-      console.log('data:', data)
       node.selectAll('circle')
         .transition().duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
-        // .each((d) => {
-        //   if (!d.img) {
-        //     node.select('.nodecircle')
-        //       .transition('highlight').duration(STYLES.nodeTransitionDuration)
-        //       .style('fill', theme.graph.enlargedNodeColor)
-        //   }
-        // })
 
       node.selectAll('.nodecircle').filter((d) => !d.img)
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
