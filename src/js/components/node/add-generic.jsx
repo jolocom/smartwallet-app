@@ -120,7 +120,6 @@ let NodeAddGeneric = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, image} = this.state
-    console.log(this.state)
     // debugger;
     let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.state.graphState.center
@@ -490,7 +489,6 @@ let NodeAddGeneric = React.createClass({
         isCollection: false
       })
       if (this.state.imgArray.length === 1) {
-        console.log('img array ', this.state.imgArray[0])
         this.setState({
           uploadedFileUri: this.state.imgArray[0].imgUri
         })
