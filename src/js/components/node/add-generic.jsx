@@ -89,7 +89,8 @@ let NodeAddGeneric = React.createClass({
       hasDocs: false,
       hasFiles: false,
       docArray: [],
-      imgArray: []
+      imgArray: [],
+      fileArray: []
     }
   },
 
@@ -113,6 +114,35 @@ let NodeAddGeneric = React.createClass({
   validates() {
     let {title} = this.state
     return title && title.trim()
+  },
+
+  nodeType() {
+    // Defaulting to type text
+    let type = 'text'
+    // Check if it's a file node
+    if (this.state.hasFiles && !this.state.hasDocs &&
+      !this.state.hasImages) {
+      if (this.state.fileArray.size === 1) {
+        type = 'file'
+      } else {
+        type = 'collection'
+      }
+    } else if (this.state.hasDocs && !this.state.hasFiles &&
+      !this.state.hasImages) {
+      if (this.state.docArray.length === 1) {
+        type = 'document'
+      } else {
+        type = 'collection'
+      }
+    } else if (this.state.hasImages && !this.state.hasFiles &&
+      !this.state.hasDocs) {
+      if (this.state.imgArray.length === 1) {
+        type = 'image'
+      } else {
+        type = 'collection'
+      }
+    }
+    return type
   },
 
   submit() {
