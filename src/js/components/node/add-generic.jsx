@@ -88,10 +88,12 @@ let NodeAddGeneric = React.createClass({
       uploadedFileType: 'document',
       hasImages: false,
       hasDocs: false,
+      hasFiles: false,
       isSingleNode: false,
       isCollection: false,
       docArray: [],
-      imgArray: []
+      imgArray: [],
+      fileArray: []
     }
   },
 
@@ -117,12 +119,55 @@ let NodeAddGeneric = React.createClass({
     return title && title.trim()
   },
 
+  nodeType() {
+    // Defaulting to type text
+    let type = 'text'
+    // Check if it's a file node
+    if (this.state.hasFiles && !this.state.hasDocs &&
+      !this.state.hasImages) {
+      if (this.state.fileArray.size === 1) {
+        type = 'file'
+      } else {
+        type = 'collection'
+      }
+    } else if (this.state.hasDocs && !this.state.hasFiles && // If Doc...
+      !this.state.hasImages) {
+      if (this.state.docArray.length === 1) {
+        type = 'document'
+      } else {
+        type = 'collection'
+      }
+    } else if (this.state.hasImages && !this.state.hasFiles && // If image
+      !this.state.hasDocs) {
+      if (this.state.imgArray.length === 1) {
+        type = 'image'
+      } else {
+        type = 'collection'
+      }
+    } else if (this.state.hasImages && this.state.hasFiles) { // Combinations
+      type = 'collection'
+    } else if (this.state.hasImages && this.state.hasDocs) {
+      type = 'collection'
+    } else if (this.state.hasFiles && this.state.hasDocs) {
+      type = 'collection'
+    } else if (this.state.hasFiles && this.state.hasImages &&
+    this.state.hasDocs) {
+      type = 'collection'
+    }
+    return type
+  },
+
   submit() {
     if (!this.validates()) return false
     let {title, description, image} = this.state
     // debugger;
     let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.state.graphState.center
+    let type = this.nodeType()
+
+    console.log('TYPE == ', type)
+
+    debugger;
 
     if (centerNode && webId) {
       // let isConfidential = (this.state.type == 'confidential')
@@ -131,7 +176,7 @@ let NodeAddGeneric = React.createClass({
       // @TODO Previously called nodeActions.create;
       // except it cannot have a return value
       this.gAgent.createNode(webId, centerNode, title, description, image,
-        this.state.type, false).then((uri) => {
+        type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
     }
@@ -519,8 +564,9 @@ let NodeAddGeneric = React.createClass({
         this.setState({
           uploadedFileUri: res
         })
-        // Only checks for image vs non-image for now
+        // Checks for image
         if (accepts(file, 'image/*')) {
+        //if (accepts(file, '.jpg') || accepts(file, '.png')) {
           this.setState({
             uploadedFileType: 'image'
           })
@@ -546,7 +592,11 @@ let NodeAddGeneric = React.createClass({
           this.setState({
             hasImages: true
           })
-        } else {
+          // Checks for documents
+        } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
+        accepts(file, '.odt') || accepts(file, '.pages') ||
+        accepts(file, '.pdf') || accepts(file, '.pptx') ||
+        accepts(file, '.keynote')) {
           this.setState({
             uploadedFileType: 'document'
           })
@@ -556,6 +606,18 @@ let NodeAddGeneric = React.createClass({
           })
           this.setState({
             hasDocs: true
+          })
+          // Checks for misc files
+        } else {
+          this.setState({
+            uploadedFileType: 'file'
+          })
+          this.state.fileArray.push({
+            file: file,
+            key: this.state.fileArray.length + 1
+          })
+          this.setState({
+            hasFiles: true
           })
         }
       }).catch((e) => {
