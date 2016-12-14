@@ -29,10 +29,8 @@ let Util = {
                      Math.pow((y1 - y2), 2))
   },
 
-  // for short randomStrings
   randomString(length) {
-    // Hope this is trully random, will need to do some extra research.
-    return Date.now().toString(36).substring(2, length + 3)
+    return Math.random().toString(36).substr(2, 5)
   },
 
   webidRoot(webid) {
@@ -77,7 +75,7 @@ let Util = {
       credentials: 'include'
     }).then((ans) => {
       if (!ans.ok) {
-        throw new Error('Error while accessing the file.')
+        return uri + '.acl'
       }
       let linkHeader = ans.headers.get('Link')
       if (linkHeader) {
@@ -93,6 +91,23 @@ let Util = {
         return uri + '.acl'
       }
     })
+  },
+
+  /*
+   * @summary Returns the uri of the index file belonging to an user.
+   * @param {string} uri - WebID of the user.
+   *   if empty, no the current webid is used.
+   * @return {string} uri - Uri to the index file.
+   */
+  // TODO introduce discovery mechanism / protocol.
+  // This is too hardcoded.
+  getIndexUri(uri) {
+    if (!uri) {
+      uri = localStorage.getItem('jolocom.webId')
+    }
+    let indexUri = this.webidRoot(uri)
+    indexUri += '/little-sister/index'
+    return indexUri
   },
 
   /*

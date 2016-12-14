@@ -1,10 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {IconButton, Avatar} from 'material-ui'
+// import {IconButton, Avatar} from 'material-ui'
 
 import ProfileActions from 'actions/profile'
-import graphActions from 'actions/graph-actions'
+// import graphActions from 'actions/graph-actions'
 
 let Header = React.createClass({
   contextTypes: {
@@ -31,7 +31,8 @@ let Header = React.createClass({
         padding: '16px',
         // backgroundColor: this.context.muiTheme.jolocom.gray4,
         backgroundColor: '#4b132b',
-        // borderBottom: `1px solid ${this.context.muiTheme.palette.borderColor}`
+        // borderBottom: `1px solid
+        // ${this.context.muiTheme.palette.borderColor}`
         borderBottom: '1px solid rgba(99,60,56,0.5)'
       },
       profile: {
@@ -62,12 +63,13 @@ let Header = React.createClass({
     }
   },
   render() {
-    let initials, {profile} = this.context
-    let name = profile.givenName ? profile.givenName : profile.fullName
+    // let initials, {profile} = this.context
+    // let {profile} = this.context
+    // let name = profile.givenName ? profile.givenName : profile.fullName
 
     let styles = this.getStyles()
-    if (name)
-      initials = name[0]
+    // if (name)
+    //   initials = name[0]
     return (
       <header style={styles.header}>
         {/**
@@ -77,11 +79,18 @@ let Header = React.createClass({
             <span style={styles.name}>{name}</span>
             <span style={styles.email}>{profile.email}</span>
           </div>
-          <IconButton iconStyle={styles.editIcon} iconClassName="material-icons" onTouchTap={this.editProfile}>mode_edit</IconButton>
+          <IconButton iconStyle={styles.editIcon}
+         iconClassName="material-icons"
+         onTouchTap={this.editProfile}>mode_edit
+         </IconButton>
         </div>
       **/}
         <div>
-          <img src="/img/jolocom_logo_white.svg" style={styles.logoImg} onTouchTap={this._handleNavigateHome}/>
+          <img
+            src="/img/jolocom_logo_white.svg"
+            style={styles.logoImg}
+            onTouchTap={this._handleNavigateHome}
+          />
         </div>
       </header>
     )

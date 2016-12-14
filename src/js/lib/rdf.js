@@ -1,13 +1,23 @@
-// THIS FILE TAKES CARE OF CONVERTING TEXT TO RDF AND WRITING RDF TRIPLES TO TURTLE
-// The parser takes text and converts it to turtle, returning an array of triples.
-// The parser also requires a base uri parameter to resolve relative URIs correctly.
-// The writer takes triples and writes them to a turtle file. Serializes it basically.
+/*
+ The parser takes text and converts it to turtle,
+ returning an array of triples.
+ The parser also requires a base uri parameter to resolve
+ relative URIs correctly.
+ The writer takes triples and writes them to a turtle file.
+ Serializes it basically.
+*/
+
 import rdf from 'rdflib'
 
 export class Parser {
   parse(text, url) {
     let payload = []
     rdf.parse(text, rdf.graph(), url, 'text/turtle', (err, triples) => {
+      if (err) {
+        return {
+          triples: []
+        }
+      }
       for (let i in triples.statements) {
         let statement = triples.statements[i]
         payload.push({
@@ -17,28 +27,31 @@ export class Parser {
         })
       }
     })
-    return ({ prefixes: {}, triples: payload})
+    return ({
+      prefixes: {},
+      triples: payload
+    })
   }
 }
 
 export class Writer {
 
-  constructor(){
+  constructor() {
     this.g = rdf.graph()
   }
 
-  find(sub, pred, obj){
+  find(sub, pred, obj) {
     return this.g.statementsMatching(sub, pred, obj)
   }
 
   addTriple(...args) {
-    let subject, predicate, object 
+    let subject, predicate, object
     // Allow to pass a single object
-    if (args.length === 1)
+    if (args.length === 1) {
       ({subject, predicate, object} = args[0])
-    else 
+    } else {
       ([subject, predicate, object] = args)
-
+    }
     this.g.add(subject, predicate, object)
   }
 

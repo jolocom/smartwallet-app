@@ -16,7 +16,6 @@ import AccountActions from 'actions/account'
 import UserAvatar from 'components/common/user-avatar.jsx'
 import GraphIcon from 'components/icons/graph-icon.jsx'
 
-import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 import Badge from 'material-ui/Badge'
 
@@ -104,8 +103,10 @@ let Nav = React.createClass({
     this.setState({drawerOpen: false})
   },
 
-  editProfile() {
-    ProfileActions.show()
+  editProfile(event) {
+    this.setState({drawerOpen: false})
+    this.context.router.push('profile')
+    event.preventDefault()
   },
 
   goto(url) {
@@ -170,7 +171,10 @@ let Nav = React.createClass({
                 <Avatar
                   style={{marginLeft: '-10px'}}>
                   <UserAvatar
-                    name={this.state.profile.givenName}
+                    name={this.state.profile.givenName
+                      ? this.state.profile.givenName
+                      : this.state.profile.fullName
+                    }
                     imgUrl={this.state.profile.imgUri} />
                 </Avatar>}
             />

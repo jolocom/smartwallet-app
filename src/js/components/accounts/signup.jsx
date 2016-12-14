@@ -232,11 +232,6 @@ let Signup = React.createClass({
     return styles
   },
 
-  // What is the purpose of this function?
-  // handleClick() {
-  //   Account.signup()
-  // },
-
   render() {
     let styles = this.getStyles()
     let cookieWarning
@@ -266,7 +261,7 @@ let Signup = React.createClass({
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
-        {AccountStore.state.emailVerifyScreen
+        {this.state.account.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>
             <p style={styles.signUpMessage}>
               Thank you for signing up to Little Sister!<br />
@@ -284,9 +279,9 @@ let Signup = React.createClass({
                 <div style={{marginBottom: '20px'}}>
                   <FormsyText
                     name="username"
-                    autocorrect="off"
-                    autocapitalize="none"
-                    autocomplete="none"
+                    autoCorrect="off"
+                    autoCapitalize="none"
+                    autoComplete="none"
                     floatingLabelText="Username*"
                     validations="isAlphanumeric"
                     validationError={this.errorMessages.alphaNumeric}
@@ -341,7 +336,6 @@ let Signup = React.createClass({
                     required
                     />
                 </div>
-
                 <RaisedButton
                   type="submit"
                   secondary
