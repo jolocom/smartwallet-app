@@ -207,10 +207,10 @@ let NodeAddGeneric = React.createClass({
         marginTop: '20px'
       },
       imgListItems: {
-        display: this.state.hasImages ? 'block' : 'none'
+        display: this.state.imgArray.length >= 1 ? 'block' : 'none'
       },
       docListItems: {
-        display: this.state.hasDocs ? 'block' : 'none'
+        display: this.state.docArray.length >= 1 ? 'block' : 'none'
       }
     }
   },
@@ -292,11 +292,7 @@ let NodeAddGeneric = React.createClass({
                           <ContentAdd />
                         </FloatingActionButton>
                       }>
-                      {
-                        this.state.uploadedFileName.length !== 0
-                        ? this.state.uploadedFileName
-                        : 'Files'
-                      }
+                      Files
                       <Divider style={styles.divider} />
                       <input
                         id="fileUpload"
@@ -361,7 +357,9 @@ let NodeAddGeneric = React.createClass({
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
-                                    onTouchTap={this._handleRemoveFile} />
+                                    onTouchTap={
+                                      () => this._handleRemoveImgFile(img.key)
+                                    } />
                                 }>
                                 {img.file.name}
                               </ListItem>
@@ -386,7 +384,10 @@ let NodeAddGeneric = React.createClass({
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
-                                    onTouchTap={this._handleRemoveFile} />
+                                    onTouchTap={
+                                      () => this._handleRemoveDocFile(doc.key)
+                                    }
+                                  />
                                 }>
                                 {doc.file.name}
                               </ListItem>
@@ -445,18 +446,65 @@ let NodeAddGeneric = React.createClass({
     )
   },
 
-  _handleRemoveFile() {
+  _handleRemoveDocFile(key) {
     if (this.refs.fileInputEl) {
       this.refs.fileInputEl.value = null
     }
+    let newDocArray = this.state.docArray
+    const docToDelete = newDocArray.map((doc) => doc.key).indexOf(key)
+    newDocArray.splice(docToDelete, 1)
+    if (newDocArray.length + this.state.imgArray.length === 1) {
+      this.setState({
+        isCollection: false
+      })
+      if (this.state.imgArray.length === 1) {
+        this.setState({
+          uploadedFileUri: this.state.imgArray[0].imgUri
+        })
+      }
+    } else if (newDocArray.length + this.state.imgArray.length < 1) {
+      this.setState({
+        isSingleNode: false
+      })
+    }
     this.setState({
-      isSingleNode: false
+      docArray: newDocArray
     })
+    // this.setState({
+    //   isSingleNode: false
+    // })
+    // this.setState({
+    //   uploadedFileName: ''
+    // })
+  },
+
+  _handleRemoveImgFile(key) {
+    if (this.refs.fileInputEl) {
+      this.refs.fileInputEl.value = null
+    }
+    let newImgArray = this.state.imgArray
+    const imgToDelete = newImgArray.map((img) => img.key).indexOf(key)
+    newImgArray.splice(imgToDelete, 1)
+    if (newImgArray.length + this.state.docArray.length === 1) {
+      this.setState({
+        isCollection: false
+      })
+      if (this.state.imgArray.length === 1) {
+        console.log('img array ', this.state.imgArray[0])
+        this.setState({
+          uploadedFileUri: this.state.imgArray[0].imgUri
+        })
+      }
+    } else if (newImgArray.length + this.state.docArray.length < 1) {
+      this.setState({
+        isSingleNode: false
+      })
+      this.setState({
+        uploadedFileUri: ''
+      })
+    }
     this.setState({
-      uploadedFileName: ''
-    })
-    this.setState({
-      uploadedFileUri: ''
+      imgArray: newImgArray
     })
   },
 
