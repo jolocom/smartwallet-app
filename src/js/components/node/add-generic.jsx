@@ -115,7 +115,7 @@ let NodeAddGeneric = React.createClass({
     if (!this.validates()) return false
     let {title, description, image} = this.state
     console.log(this.state)
-    debugger;
+    // debugger;
     let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.state.graphState.center
 
@@ -263,7 +263,11 @@ let NodeAddGeneric = React.createClass({
                     <ListItem
                       key={1}
                       disabled
-                      leftIcon={<FileIcon fill="#9ba0aa" />}
+                      leftIcon={
+                        <AddNodeIcon
+                          viewBox="0 0 24 24"
+                          stroke="#9ba0aa" />
+                      }
                       rightIcon={
                         <FloatingActionButton
                           mini
