@@ -18,7 +18,7 @@ let UserAvatar = React.createClass({
 
   render() {
     let imgUrl = this.props.imgUrl
-    let name = this.props.name
+    // let name = this.props.name
 
     let avatar
 
@@ -31,14 +31,15 @@ let UserAvatar = React.createClass({
             backgroundImage: `url(${Utils.uriToProxied(imgUrl)})`
           }} />
       )
-    } else if (name && name.trim() && (name !== 'Unnamed')) {
-      // User has no display image but has a non-empty name
-      let nameInitial = name[0].toUpperCase()
-      avatar = <Avatar>{nameInitial}</Avatar>
     } else {
       // User has no image and no specified name
       avatar = <Avatar icon={<UserIcon />} />
     }
+    // else if (name && name.trim() && (name !== 'Unnamed')) {
+    //   // User has no display image but has a non-empty name
+    //   let nameInitial = name[0].toUpperCase()
+    //   avatar = <Avatar>{nameInitial}</Avatar>
+    // }
     return avatar
   }
 

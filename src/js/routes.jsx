@@ -14,6 +14,8 @@ import Conversations from 'components/chat/conversations.jsx'
 import ChatNew from 'components/chat/new.jsx'
 import Conversation from 'components/chat/conversation.jsx'
 import Contacts from 'components/contacts/contacts.jsx'
+import Groups from 'components/groups/groups.jsx'
+import GroupsNew from 'components/groups/new.jsx'
 import Contact from 'components/contacts/contact.jsx'
 
 import Login from 'components/accounts/login.jsx'
@@ -35,6 +37,9 @@ const routes = (
         <Route path="/conversations/:id" component={Conversation} />
       </Route>
       <Route path="new(/:webId)" component={ChatNew} />
+      <Route path="/groups" component={Groups}>
+        <Route path="/groups/new" component={GroupsNew} />
+      </Route>
       <Route path="/contacts" component={Contacts}>
         <Route path=":username" component={Contact} />
       </Route>

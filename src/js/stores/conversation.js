@@ -64,14 +64,15 @@ export default Reflux.createStore({
         // We first query the host so that the user is asked for a client cert
         // Chrome will then remember the choice during the WS connection and
         // will thus not cancel it
-        new Promise((res,rej) => {
-          if (Utils.isChrome())
+        new Promise((resolve, reject) => {
+          if (Utils.isChrome()) {
             fetch(url, {
               method: 'HEAD',
               credentials: 'include'
-            }).then(res)
-          else
-            res()
+            }).then(resolve)
+          } else {
+            resolve()
+          }
         })
         .then(() => {
           this.socket = new WebSocket(conversation.updatesVia)

@@ -4,6 +4,8 @@ import Reflux from 'reflux'
 
 import moment from 'moment'
 
+import GroupIcon from 'material-ui/svg-icons/social/group'
+
 import {
   List,
   ListItem,
@@ -87,7 +89,6 @@ let Conversations = React.createClass({
             key={conversation.id}
             conversation={conversation}
             onTouchTap={this.showConversation}
-
           />
         })}
       </List>
@@ -97,8 +98,11 @@ let Conversations = React.createClass({
   render: function() {
     let content
 
+    // let {loading, items} = <this className="state conversations"></this>
     let {loading, items} = this.state.conversations
-    items = items.filter(conv => conv.lastMessage !== null)
+    if (items && items.lastMessage !== null) {
+      items = items.filter(conv => conv.lastMessage !== null)
+    }
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -116,12 +120,12 @@ let Conversations = React.createClass({
         </div>
 
         {/* <FloatingActionButton */}
-          {/* secondary */}
-          {/* href="#/chat/new" */}
-          {/* linkButton={true} */}
-          {/* style={styles.actionButton} */}
+        {/* secondary */}
+        {/* href="#/chat/new" */}
+        {/* linkButton={true} */}
+        {/* style={styles.actionButton} */}
         {/* > */}
-          {/* <FontIcon className="material-icons">add</FontIcon> */}
+        {/* <FontIcon className="material-icons">add</FontIcon> */}
         {/* </FloatingActionButton> */}
 
         {this.props.children}
@@ -141,6 +145,16 @@ let ConversationsListItem = React.createClass({
     let {conversation} = this.props
     let {otherPerson, lastMessage} = conversation
     let {created, content} = lastMessage || {}
+    let otherPersonNames = []
+    let collatedNames
+    if (otherPerson && otherPerson.length > 1) {
+      for (let person of otherPerson) {
+        otherPersonNames.push(person.name)
+        collatedNames = otherPersonNames.join(', ')
+      }
+    } else if (otherPerson && otherPerson.length === 1) {
+      collatedNames = otherPerson[0].name
+    }
 
     // If otherPerson var is null, then set it to false.
     // So it wont be used when listing conversations
@@ -149,8 +163,17 @@ let ConversationsListItem = React.createClass({
     if (otherPerson == null) {
       otherPerson = false
     }
-
-    let avatar = <UserAvatar name={otherPerson.name} imgUrl={otherPerson.img} />
+    let avatar
+    let image
+    if (otherPerson.length === 1 && otherPerson[0].img) {
+      image = otherPerson[0].img
+      avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
+    } else if (otherPerson.length === 1 && !otherPerson[0].img) {
+      avatar = <UserAvatar />
+    } else if (otherPerson.length > 1) {
+      image = <GroupIcon />
+      avatar = <Avatar icon={<GroupIcon />} />
+    }
 
     let date = moment(created).fromNow()
     return (
@@ -158,7 +181,7 @@ let ConversationsListItem = React.createClass({
         key={conversation.id}
         primaryText={
           <div>
-            <span>{otherPerson.name || 'Unnamed'}</span>
+            <span>{collatedNames || 'Unnamed'}</span>
             <span style={styles.date}>{date}</span>
           </div>
         }

@@ -33,6 +33,10 @@ export const PRED = {
   profileDoc: FOAF('PersonalProfileDocument'),
   isRelatedTo_HTTP: SCHEMA_HTTP('isRelatedTo'),
 
+  // Groups
+  group: FOAF('group'),
+  groupMember: FOAF('member'),
+
   // --
   title: DC('title'),
   title_DC: DC('title'),
@@ -111,12 +115,7 @@ mix of logic (component names, validation, form) and interface (colors)
 export const NODE_TYPES = {
 
 }
-//
-//
-//
-//
-//
-//
+
 // NodeTypes.register(FOAF('Person'), {
 //  /**
 //   * Node color in the graph

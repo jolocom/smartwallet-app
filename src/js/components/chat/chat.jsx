@@ -34,6 +34,8 @@ class Chat extends React.Component {
 
     if (path === '/contacts') {
       activeTab = 'contacts'
+    } else if (path === '/groups') {
+      activeTab = 'groups'
     }
 
     return activeTab
@@ -76,14 +78,14 @@ class Chat extends React.Component {
       </IconButton>
     )
 
-    const searchIcon = (
-      <IconButton
-        iconClassName="material-icons"
-        iconStyle={styles.icon}
-      >
-        search
-      </IconButton>
-    )
+    // const searchIcon = (
+    //   <IconButton
+    //     iconClassName="material-icons"
+    //     iconStyle={styles.icon}
+    //   >
+    //     search
+    //   </IconButton>
+    // )
 
     return (
       <Dialog ref="dialog" fullscreen>
@@ -93,13 +95,15 @@ class Chat extends React.Component {
               title="Chat"
               style={styles.bar}
               iconElementLeft={backIcon}
-              iconElementRight={searchIcon} />
+              // {iconElementRight={searchIcon}}
+            />
             <Tabs valueLink={{
               value: this.state.activeTab,
               requestChange: (tab) => this._handleTabsChange(tab)
             }}>
               <Tab label="Conversations" value="chat" />
               <Tab label="Contacts" value="contacts" />
+              <Tab label="Groups" value="groups" />
             </Tabs>
           </Paper>
           <Content style={styles.conversationsContainer}>
@@ -119,6 +123,9 @@ class Chat extends React.Component {
         break
       case 'contacts':
         this.context.router.push('/contacts')
+        break
+      case 'groups':
+        this.context.router.push('/groups')
         break
     }
   }

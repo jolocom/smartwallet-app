@@ -7,8 +7,6 @@ import {Layout, Content} from 'components/layout'
 
 import Dialog from 'components/common/dialog.jsx'
 
-import ContactsList from 'components/contacts/list.jsx'
-
 import ChatActions from 'actions/chat'
 import ChatStore from 'stores/chat'
 import ConversationsActions from 'actions/conversations'
@@ -71,9 +69,8 @@ export default React.createClass({
 
   startChat(webId) {
     debug('Starting chat with', webId)
-    
-    if (!this.state.conversations.hydrated)
-    {
+
+    if (!this.state.conversations.hydrated) {
       ConversationsActions.load(this.state.profile.webid)
       let unsub = ConversationsActions.load.completed.listen(() => {
         unsub()
@@ -81,8 +78,7 @@ export default React.createClass({
           this.state.profile.webid, this.state.profile.webid, webId
         )
       })
-    }
-    else {
+    } else {
       ChatActions.create(
         this.state.profile.webid, this.state.profile.webid, webId
       )
@@ -109,12 +105,12 @@ export default React.createClass({
     let content
 
     if (!webId) {
-      content = (
+      /* content = (
         <ContactsList
           onClick={this.startChat}
           searchQuery={this.state.searchQuery}
         />
-      )
+      )*/
     } else {
       // @TODO show loading screen
     }

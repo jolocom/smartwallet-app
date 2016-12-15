@@ -122,7 +122,6 @@ class GraphAgent {
       if (nodeType === 'passport') {
         predicate = PRED.passport
       }
-
       let payload = {
         subject: rdf.sym(centerNode.uri),
         predicate: predicate,
@@ -456,7 +455,6 @@ class GraphAgent {
         firstNode.uri = uri
         return [firstNode].concat(neibTriples)
       })
-
     return this.fetchTriplesAtUri(uri)
       .then(getPartialGraphMap)
   }
@@ -465,6 +463,61 @@ class GraphAgent {
   getGraphMapAtWebID(webId) {
     return this.getGraphMapAtUri(webId)
   }
+
+  // Group-related functions
+
+  newGroup(webId, name, webIds) {
+    return this.createGroupFile(webId, name, webIds)
+      .then(this.createGroupIndexIfNotExists)
+      .then(this.addGroupToIndex)
+  }
+
+  createGroupFile(webId, name, participantsWebIds) {
+    let root = Util.webidRoot(webId)
+    let targetFile = root + '/groups/' + name
+
+    let writer = new Writer()
+
+    writer.addTriple({
+      subject: rdf.sym('#'),
+      predicate: PRED.type,
+      object: PRED.group
+    })
+
+    participantsWebIds.forEach((participantWebId) => {
+      writer.addTriple({
+        subject: rdf.sym('#'),
+        predicate: PRED.groupMember,
+        object: rdf.sym(participantWebId)
+      })
+    })
+
+    // @TODO sanitize
+
+    // little-sister/groups?
+    // @TODO create group file if not exists
+
+    return fetch(Util.uriToProxied(targetFile), {
+      method: 'PUT',
+      credentials: 'include',
+      body: writer.end(),
+      headers: {
+        'Content-Type': 'text/turtle'
+        // 'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
+      //    aclUri + ' rel="acl"'
+      }
+    })
+  }
+
+  createGroupIndexIfNotExists() {
+    return Promise.resolve()
+  }
+
+  addGroupToIndex() {
+    return Promise.resolve()
+    // return createGroupIndexIfNotExists().then()
+  }
+
 }
 
 export default GraphAgent

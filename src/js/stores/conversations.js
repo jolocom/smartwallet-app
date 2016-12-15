@@ -19,7 +19,7 @@ export default Reflux.createStore({
   init: function() {
     this.listenTo(accountActions.logout, this.onLogout)
   },
-  
+
   getInitialState() {
     return {
       loading: false,
@@ -27,14 +27,15 @@ export default Reflux.createStore({
       items: this.items
     }
   },
-  
+
   onLogout() {
     this.items = []
   },
-  
+
   getConversationByWebId(webId) {
     for (let conversation of this.items) {
       if (conversation.otherPerson &&
+          conversation.otherPerson.webid &&
           conversation.otherPerson.webid.value === webId) {
         return conversation
       }
@@ -74,6 +75,7 @@ export default Reflux.createStore({
   _getConversations(webId, query) {
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
     let chatAgent = new ChatAgent()
+    this.trigger({loading: true, ...this.state})
     return chatAgent.getInboxConversations(webId)
       .then(function(conversations) {
         debug('Received URLs of conversations', conversations)
@@ -99,6 +101,7 @@ export default Reflux.createStore({
     debug('Adding new conversation to list of conversations',
       conversation, this.items, AccountStore.state.webId)
     let chatAgent = new ChatAgent()
+    this.trigger({loading: true, ...this.state})
     return chatAgent.getConversation(conversation.url, AccountStore.state.webId)
       .then((conversationItem) => {
         debug('Triggering the state with the new conversation item ;' +

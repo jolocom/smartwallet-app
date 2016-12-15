@@ -44,6 +44,7 @@ let ForgotPassword = React.createClass({
       if (!res.ok) {
         throw new Error(res.statusText)
       }
+
       SnackbarActions
         .showMessage('An email was sent to you with further instructions.')
     }).catch((e) => {
