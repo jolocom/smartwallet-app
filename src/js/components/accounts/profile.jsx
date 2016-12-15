@@ -107,7 +107,8 @@ let Profile = React.createClass({
         display: 'none'
       },
       input: {
-        width: '100%'
+        width: '100%',
+        marginTop: 0
       },
       passportContainer: {
         paddingTop: '28px',
@@ -139,6 +140,7 @@ let Profile = React.createClass({
       label: {
         display: 'inline-block',
         textAlign: 'right',
+        paddingTop: '22px',
         paddingLeft: '16px',
         paddingRight: '32px'
       },
@@ -285,7 +287,6 @@ let Profile = React.createClass({
                       <TextField
                         name="username"
                         floatingLabelText="Username"
-                        floatingLabelFixed
                         value={this.state.webId}
                         style={styles.input}
                         disabled />
@@ -302,7 +303,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Mobile"
-                        floatingLabelFixed
                         name="mobile"
                         onChange={Util.linkToState(this, 'mobilePhone')}
                         value={this.state.mobilePhone}
@@ -316,7 +316,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Email"
-                        floatingLabelFixed
                         name="email"
                         onChange={Util.linkToState(this, 'email')}
                         value={this.state.email}
@@ -330,7 +329,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Address"
-                        floatingLabelFixed
                         name="address"
                         onChange={Util.linkToState(this, 'address')}
                         value={this.state.address}
@@ -344,7 +342,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Social Media"
-                        floatingLabelFixed
                         name="socialMedia"
                         onChange={Util.linkToState(this, 'socialMedia')}
                         value={this.state.socialMedia}
@@ -362,7 +359,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Profession"
-                        floatingLabelFixed
                         name="profession"
                         onChange={Util.linkToState(this, 'profession')}
                         value={this.state.profession}
@@ -376,7 +372,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Company"
-                        floatingLabelFixed
                         name="company"
                         onChange={Util.linkToState(this, 'company')}
                         value={this.state.company}
@@ -390,7 +385,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Url"
-                        floatingLabelFixed
                         name="url"
                         onChange={Util.linkToState(this, 'url')}
                         value={this.state.url}
@@ -438,7 +432,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Credit Card"
-                        floatingLabelFixed
                         name="creditcard"
                         onChange={Util.linkToState(this, 'creditCard')}
                         style={styles.input}

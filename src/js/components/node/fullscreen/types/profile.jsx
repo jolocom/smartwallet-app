@@ -329,7 +329,7 @@ let ProfileNode = React.createClass({
     if (this.props.writePerm) {
       menuItems.push('edit')
       // Making sure you can't delete your main node.
-      if (!this.isMe) {
+      if (!this.isMe()) {
         menuItems.push('delete')
       }
     }
