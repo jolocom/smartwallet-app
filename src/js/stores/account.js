@@ -51,13 +51,14 @@ export default Reflux.createStore({
     this.trigger({loggingIn: true})
 
     return this.accounts.login(username, password).then((account) => {
-      Promise.all([
-        this.accounts.initInbox(account.webid),
-        this.accounts.initIndex(account.webid),
-        this.accounts.initDisclaimer(account.webid)
-      ])
-
       if (this.state.emailUpdateQueued) {
+        // init after activation only
+        Promise.all([
+          this.accounts.initInbox(account.webid),
+          this.accounts.initIndex(account.webid),
+          this.accounts.initDisclaimer(account.webid)
+        ])
+
         Account.updateUserEmail(
           this.state.emailToBeInserted, account.webid, username)
       } else {
