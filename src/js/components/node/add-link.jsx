@@ -2,7 +2,6 @@ import React from 'react'
 import Radium from 'radium'
 import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 import nodeActions from 'actions/node'
-import Util from 'lib/util'
 import GraphPreview from './graph-preview.jsx'
 import SnackbarActions from 'actions/snackbar'
 
@@ -232,30 +231,12 @@ let LowerPart = React.createClass({
       endUri = `https://${endUri}`
     }
 
-    Promise.all([
-      fetch(Util.uriToProxied(startUri), {
-        method: 'HEAD',
-        credentials: 'include'
-      }).then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText)
-        }
-      }),
-      fetch(Util.uriToProxied(endUri), {
-        method: 'HEAD',
-        credentials: 'include'
-      }).then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText)
-        }
-      })
-    ]).then(() => {
-      nodeActions.link(startUri, connectionType, endUri,
-        this.props.graphState.center.uri)
-    }).catch((e) => {
-      SnackbarActions.showMessage('The nodes you are trying to link together ' +
-                                  'aren\'t accessible.')
-    })
+    nodeActions.link(
+      startUri,
+      connectionType,
+      endUri,
+      this.props.graphState.center.uri
+    )
   },
 
   handleChangeStart(value) {
@@ -331,7 +312,6 @@ let LowerPart = React.createClass({
 
 // Represents individual field / icon combination
 let NodeTarget = React.createClass({
-
   contextTypes: {
     muiTheme: React.PropTypes.object
   },

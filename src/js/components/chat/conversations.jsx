@@ -7,7 +7,8 @@ import moment from 'moment'
 import {
   List,
   ListItem,
-  Avatar
+  Avatar,
+  Badge
   // FloatingActionButton,
   // FontIcon
 } from 'material-ui'
@@ -20,6 +21,8 @@ import ConversationsStore from 'stores/conversations'
 import UserAvatar from 'components/common/user-avatar.jsx'
 
 import Loading from 'components/common/loading.jsx'
+
+import UnreadMessagesStore from 'stores/unread-messages'
 
 let Conversations = React.createClass({
 
@@ -98,7 +101,7 @@ let Conversations = React.createClass({
     let content
 
     let {loading, items} = this.state.conversations
-    items = items.filter(conv => conv.lastMessage !== null)
+    // items = items.filter(conv => conv.lastMessage !== null)
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -153,13 +156,28 @@ let ConversationsListItem = React.createClass({
     let avatar = <UserAvatar name={otherPerson.name} imgUrl={otherPerson.img} />
 
     let date = moment(created).fromNow()
+
+    const unreadMessages = UnreadMessagesStore.unreadMessages(conversation.uri)
+    let unread
+
+    if (unreadMessages.length) {
+      unread = <Badge
+        badgeContent={unreadMessages.length}
+        secondary
+        style={styles.unread}
+        badgeStyle={styles.unreadBadge}
+      />
+    }
+
     return (
       <ListItem
+        style={styles.item}
         key={conversation.id}
         primaryText={
           <div>
             <span>{otherPerson.name || 'Unnamed'}</span>
             <span style={styles.date}>{date}</span>
+            {unread}
           </div>
         }
         secondaryText={content}
@@ -199,6 +217,9 @@ let styles = {
     justifyContent: 'center',
     fontSize: '18px'
   },
+  item: {
+    position: 'relative'
+  },
   date: {
     color: grey500,
     fontSize: '12px',
@@ -208,6 +229,18 @@ let styles = {
     position: 'absolute',
     right: '16px',
     bottom: '16px'
+  },
+  unread: {
+    padding: 0,
+    position: 'absolute',
+    right: '16px',
+    bottom: '16px'
+  },
+  unreadBadge: {
+    width: '18px',
+    height: '18px',
+    fontSize: '11px',
+    position: 'static'
   }
 }
 

@@ -3,7 +3,6 @@ import GraphAgent from '../lib/agents/graph.js'
 import previewActions from '../actions/preview-actions'
 import D3Convertor from '../lib/d3-converter'
 import GraphStore from './graph-store'
-import Util from 'lib/util'
 
 export default Reflux.createStore({
 
@@ -27,7 +26,7 @@ export default Reflux.createStore({
   // Whenever the graph updates, we update the preview graph's
   // store so that we can mount it with the latest state.
   updateGraphState(newState) {
-    this.state = newState
+    this.state = Object.assign({}, newState)
   },
 
   onChangeRotationIndex: function(rotationIndex, flag) {
@@ -93,22 +92,7 @@ export default Reflux.createStore({
 
       // Making sure the images are accesable, otherwise not
       // trying to display them.
-      Promise.all(checkImages.map(trip => {
-        const img = trip.img
-        if (!img) {
-          return
-        }
-        return fetch(Util.uriToProxied(img), {
-          method: 'HEAD',
-          credentials: 'include'
-        }).then(res => {
-          if (!res.ok) {
-            trip.img = ''
-          }
-        }).catch(() => {
-          trip.img = ''
-        })
-      })).then(() => {
+      this.gAgent.checkImages(checkImages).then(() => {
         // this.state.loading = false
         this.trigger(this.state)
       })

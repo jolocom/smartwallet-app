@@ -10,8 +10,10 @@ import {
   IconButton,
   Snackbar,
   FlatButton,
-  Dialog} from 'material-ui'
-import Badge from 'material-ui/Badge'
+  Dialog,
+  Badge
+} from 'material-ui'
+
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -31,6 +33,9 @@ import PinnedActions from 'actions/pinned'
 import ConfirmActions from 'actions/confirm'
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
+
+import UnreadMessagesActions from 'actions/unread-messages'
+import UnreadMessagesStore from 'stores/unread-messages'
 
 import SnackbarStore from 'stores/snackbar'
 
@@ -53,7 +58,8 @@ let App = React.createClass({
     Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile'),
     Reflux.connect(SnackbarStore, 'snackbar'),
-    Reflux.connect(ConfirmStore, 'confirm')
+    Reflux.connect(ConfirmStore, 'confirm'),
+    Reflux.connect(UnreadMessagesStore, 'unreadMessages')
   ],
 
   propTypes: {
@@ -102,6 +108,13 @@ let App = React.createClass({
     AccountActions.login()
   },
 
+  componentWillUnmount() {
+    const webId = this.state.account
+    if (webId) {
+      UnreadMessagesActions.unsubscribe(webId)
+    }
+  },
+
   componentDidUpdate(prevProps, prevState) {
     let {username} = this.state.account
 
@@ -117,7 +130,7 @@ let App = React.createClass({
   },
 
   checkLogin() {
-    let {username, loggingIn} = this.state.account
+    let {username, loggingIn, webId} = this.state.account
 
     // session is still loading, so return for now
     if (username === undefined && loggingIn) {
@@ -132,7 +145,14 @@ let App = React.createClass({
 
     if (username) {
       ProfileActions.load()
+      UnreadMessagesActions.load(webId, true)
     }
+  },
+
+  getUnreadCount() {
+    const {unreadMessages} = this.state
+    return unreadMessages && unreadMessages.items &&
+      unreadMessages.items.length || 0
   },
 
   _handlePinnedTap() {
@@ -169,12 +189,12 @@ let App = React.createClass({
     this.refs.leftNav.show()
   },
 
-  _handleConfirmClose() {
+  _handleConfirmCancel() {
     ConfirmActions.close()
   },
 
   _handleConfirmAction() {
-    this._handleConfirmClose()
+    this._handleConfirmCancel()
     this.state.confirm.callback() // Action when the user confirms
   },
 
@@ -203,17 +223,20 @@ let App = React.createClass({
         height: '48px'
       },
       menuIcon: {
-        marginTop: '-20px',
-        position: 'relative',
-        top: '-4px',
         cursor: 'pointer'
       },
+      navBadge: {
+        padding: 0
+      },
       hamburgerBadge: {
-        top: 10,
-        right: 20,
-        width: 15,
-        height: 15,
+        top: -4,
+        right: -4,
+        width: 12,
+        height: 12,
         display: 'none'
+      },
+      chatBadge: {
+        display: this.getUnreadCount() ? 'flex' : 'none'
       }
     }
     return styles
@@ -229,16 +252,25 @@ let App = React.createClass({
     }
 
     // Deactivating search until we get it working
-    /* <IconButton
-       iconClassName="material-icons"
-       iconStyle={styles.icon}
-       onTouchTap={this._handleSearchTap}>search</IconButton> */
+    /*
+    <IconButton
+      iconClassName="material-icons"
+      iconStyle={styles.icon}
+      onTouchTap={this._handleSearchTap}>search</IconButton>
+    */
     const nav = (
       <div>
-        <IconButton
-          iconClassName="material-icons"
-          iconStyle={styles.icon}
-          onTouchTap={this._handleChatTap}>chat</IconButton>
+        <Badge
+          badgeContent={this.getUnreadCount()}
+          secondary
+          style={styles.navBadge}
+          badgeStyle={styles.chatBadge}
+        >
+          <IconButton
+            iconClassName="material-icons"
+            iconStyle={styles.icon}
+            onTouchTap={this._handleChatTap}>chat</IconButton>
+        </Badge>
       </div>
     )
 
@@ -262,7 +294,7 @@ let App = React.createClass({
       <FlatButton
         label="Cancel"
         primary
-        onTouchTap={this._handleConfirmClose}
+        onTouchTap={this._handleConfirmCancel}
       />,
       <FlatButton
         label={this.state.confirm.primaryActionText}
@@ -284,13 +316,17 @@ let App = React.createClass({
                   <Badge
                     badgeContent={''}
                     secondary
+                    style={styles.navBadge}
                     badgeStyle={styles.hamburgerBadge}>
-                    <NavigationMenu
+                    <IconButton
                       onTouchTap={this.showDrawer}
-                      style={styles.menuIcon} />
+                    >
+                      <NavigationMenu
+                        onTouchTap={this.showDrawer}
+                        style={styles.menuIcon} />
+                    </IconButton>
                   </Badge>
-                }
-                onLeftIconButtonTouchTap={this.showDrawer} />
+                } />
               {filters}
               {search}
             </Paper>

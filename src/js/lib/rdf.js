@@ -1,47 +1,41 @@
-/*
- The parser takes text and converts it to turtle,
- returning an array of triples.
- The parser also requires a base uri parameter to resolve
- relative URIs correctly.
- The writer takes triples and writes them to a turtle file.
- Serializes it basically.
-*/
+// THIS FILE TAKES CARE OF CONVERTING TEXT TO RDF AND
+// WRITING RDF TRIPLES TO TURTLE
+// The parser takes text and converts it to turtle,
+// returning an array of triples.
+// The parser also requires a base uri parameter to resolve
+// relative URIs correctly.
+// The writer takes triples and writes them to a turtle file.
+// Serializes it basically.
 
-import rdf from 'rdflib'
+import $rdf from 'rdflib'
 
-export class Parser {
-  parse(text, url) {
-    let payload = []
-    rdf.parse(text, rdf.graph(), url, 'text/turtle', (err, triples) => {
-      if (err) {
-        return {
-          triples: []
-        }
-      }
-      for (let i in triples.statements) {
-        let statement = triples.statements[i]
-        payload.push({
-          object: statement.object,
-          predicate: statement.predicate,
-          subject: statement.subject
-        })
-      }
-    })
-    return ({
-      prefixes: {},
-      triples: payload
-    })
-  }
-}
-
-export class Writer {
-
+export class Graph {
   constructor() {
-    this.g = rdf.graph()
+    this.g = $rdf.graph()
+  }
+
+  get(...args) {
+    return this.find(...args)[0]
+  }
+
+  any(...args) {
+    return this.g.any(...args)
   }
 
   find(sub, pred, obj) {
     return this.g.statementsMatching(sub, pred, obj)
+  }
+
+  all() {
+    return this.find(undefined, undefined, undefined)
+  }
+
+  add(...args) {
+    this.addTriple(...args)
+  }
+
+  addAll(triples) {
+    this.g.addAll(triples)
   }
 
   addTriple(...args) {
@@ -52,10 +46,43 @@ export class Writer {
     } else {
       ([subject, predicate, object] = args)
     }
+
     this.g.add(subject, predicate, object)
   }
 
+  serialize() {
+    return $rdf.serialize(undefined, this.g, undefined, 'text/turtle')
+  }
+}
+
+export class Parser extends Graph {
+  constructor(text, url) {
+    super()
+
+    if (text) {
+      this.parse(text, url)
+    }
+  }
+  parse(text, url) {
+    let payload = []
+
+    $rdf.parse(text, this.g, url, 'text/turtle')
+
+    for (let i in this.g.statements) {
+      let statement = this.g.statements[i]
+      payload.push({
+        object: statement.object,
+        predicate: statement.predicate,
+        subject: statement.subject
+      })
+    }
+
+    return ({prefixes: {}, triples: payload})
+  }
+}
+
+export class Writer extends Graph {
   end() {
-    return rdf.serialize(undefined, this.g, undefined, 'text/turtle')
+    return this.serialize()
   }
 }

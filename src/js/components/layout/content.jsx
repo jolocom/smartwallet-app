@@ -5,7 +5,7 @@ import _ from 'lodash'
 let Content = React.createClass({
   propTypes: {
     style: React.PropTypes.string,
-    children: React.PropTypes.object
+    children: React.PropTypes.node
   },
 
   getStyles() {
