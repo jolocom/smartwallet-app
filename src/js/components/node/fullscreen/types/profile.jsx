@@ -43,7 +43,11 @@ let ProfileNode = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
-  onProfileChange: function(state) {
+  getInitialState() {
+    return {}
+  },
+
+  onProfileChange(state) {
     this.setState(state)
   },
 
@@ -74,8 +78,12 @@ let ProfileNode = React.createClass({
       repTable: {
         width: '100%'
       },
+      repBarContainer: {
+        display: 'flex',
+        alignItems: 'center'
+      },
       repBar: {
-        width: '90%',
+        flex: 1,
         height: '10px',
         borderRadius: '5px'
       },
@@ -92,7 +100,8 @@ let ProfileNode = React.createClass({
         color: muiTheme.palette.textColor
       },
       repLeftCol: {
-        width: '70%'
+        width: '70%',
+        verticalAlign: 'middle'
       },
       repRightCol: {
         width: '30%'
@@ -130,14 +139,10 @@ let ProfileNode = React.createClass({
     }
   },
 
-  render() {
+  getGroups() {
     let styles = this.getStyles()
-    let {writePerm, centerWritePerm} = this.props
+
     let {
-      rank,
-      type,
-      uri,
-      img,
       socialMedia,
       mobilePhone,
       address,
@@ -147,16 +152,175 @@ let ProfileNode = React.createClass({
       url
     } = this.props.node
 
-    const isMe = this.state.profile.webId === uri
+    let groups = [{
+      title: 'General',
+      fields: [{
+        icon: <ActionInfoOutline color="#9ba0aa" />,
+        floatingLabelText: 'Node type',
+        value: 'Profile'
+      }, {
+        icon: <SocialPersonOutline color="#9ba0aa" />,
+        label: 'Username',
+        value: this.getName()
+      }]
+    }, {
+      title: 'Contact',
+      fields: [{
+        icon: <CommunicationPhone color="#9ba0aa" />,
+        label: 'mobile',
+        value: mobilePhone
+      }, {
+        icon: <CommunicationEmail color="#9ba0aa" />,
+        label: 'Email',
+        value: email
+      }, {
+        icon: <CommunicationLocation color="#9ba0aa" />,
+        label: 'Address',
+        value: address
+      }, {
+        icon: <SocialPublic color="#9ba0aa" />,
+        label: 'Social media',
+        value: socialMedia
+      }]
+    }, {
+      title: 'Work',
+      fields: [{
+        icon: <ActionStar color="#9ba0aa" />,
+        lable: 'Profession',
+        value: profession
+      }, {
+        icon: <ActionCompany color="#9ba0aa" />,
+        lable: 'Company',
+        value: company
+      }, {
+        icon: <AvWeb color="#9ba0aa" />,
+        lable: 'Url',
+        value: url
+      }]
+    }]
 
-    let name
-    if (this.props.node.fullName && this.props.node.fullName > 0) {
-      name = this.props.node.fullName
-    } else if (this.props.node.name && this.props.node.familyName) {
-      name = `${this.props.node.name} ${this.props.node.familyName}`
-    } else {
-      name = this.props.node.name || this.props.node.familyName
+    if (this.isMe()) {
+      groups.push({
+        title: 'Wallet',
+        icon: <ActionLock style={styles.lockIcon} />,
+        fields: [{
+          icon: <PassportIcon />,
+          field: (
+            <TextField
+              style={styles.inputStyle}
+              floatingLabelStyle={styles.labelStyle}
+              underlineStyle={styles.underlineStyle}
+              floatingLabelText="Passport"
+              value={this.state.profile.passportImgUri}
+              floatingLabelFixed
+              readOnly>
+              <img
+                src={Utils.uriToProxied(
+                  this.state.profile.passportImgUri
+                )}
+                style={styles.passportPreview} />
+            </TextField>
+          )
+        }, {
+          icon: <ActionCreditCard color="#9ba0aa" />,
+          field: (
+            <TextField
+              style={styles.inputStyle}
+              floatingLabelStyle={styles.labelStyle}
+              underlineStyle={styles.underlineStyle}
+              floatingLabelText="Credit card"
+              value={this.state.profile.creditCard}
+              floatingLabelFixed
+              readOnly
+            />
+          )
+        }]
+      })
     }
+
+    return groups
+  },
+
+  renderField({key, icon, label, value, field, ...otherProps}) {
+    let styles = this.getStyles()
+
+    if (!field) {
+      field = (
+        <TextField
+          style={styles.inputStyle}
+          floatingLabelStyle={styles.labelStyle}
+          underlineStyle={styles.underlineStyle}
+          floatingLabelText={label}
+          value={value}
+          floatingLabelFixed
+          readOnly
+          {...otherProps}
+        />
+      )
+    }
+
+    return (
+      <ListItem
+        key={key}
+        leftIcon={icon}>
+        {field}
+      </ListItem>
+    )
+  },
+
+  renderGroups(renderEmptyFields = false) {
+    let styles = this.getStyles()
+    let groups = this.getGroups()
+
+    let result = []
+    groups.forEach((group) => {
+      let fields = group.fields.filter((field) => {
+        return renderEmptyFields || field.value
+      })
+      // dont render empty groups
+      if (fields.length) {
+        result.push(
+          <ListItem
+            primaryText={group.title}
+            primaryTogglesNestedList
+            nestedListStyle={styles.accordionChildren}
+            open
+            nestedItems={fields.map(this.renderField)}
+          >{group.icon}</ListItem>
+        )
+        result.push(<Divider />)
+      }
+    })
+    return result
+  },
+
+  isMe() {
+    if (this.state && this.state.profile) {
+      return this.state.profile.webId === this.props.node.uri
+    }
+  },
+
+  getName() {
+    if (!this.props) {
+      return
+    } else if (this.props.node.fullName && this.props.node.fullName > 0) {
+      return this.props.node.fullName
+    } else if (this.props.node.name && this.props.node.familyName) {
+      return `${this.props.node.name} ${this.props.node.familyName}`
+    } else {
+      return this.props.node.name || this.props.node.familyName
+    }
+  },
+
+  render() {
+    let styles = this.getStyles()
+    let {writePerm, centerWritePerm} = this.props
+    let {
+      rank,
+      type,
+      uri,
+      img
+    } = this.props.node
 
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
     let fabItems = []
@@ -165,7 +329,7 @@ let ProfileNode = React.createClass({
     if (this.props.writePerm) {
       menuItems.push('edit')
       // Making sure you can't delete your main node.
-      if (!isMe) {
+      if (!this.isMe) {
         menuItems.push('delete')
       }
     }
@@ -180,7 +344,7 @@ let ProfileNode = React.createClass({
 
     return (
       <GenericFullScreen
-        title={name}
+        title={this.getName()}
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
         headerColor={'#829abe'}
@@ -206,13 +370,15 @@ let ProfileNode = React.createClass({
               </td>
             </tr>
             <tr>
-              <td styles={styles.repRightCol}>
-                <LinearProgress
-                  mode="determinate"
-                  style={styles.repBar}
-                  value={this.state.reputation} />
-                <div style={styles.repNumber}>
-                  {this.state.reputation}
+              <td style={styles.repLeftCol}>
+                <div style={styles.repBarContainer}>
+                  <LinearProgress
+                    mode="determinate"
+                    style={styles.repBar}
+                    value={this.state.reputation} />
+                  <div style={styles.repNumber}>
+                    {this.state.reputation}
+                  </div>
                 </div>
               </td>
               <td>
@@ -225,180 +391,7 @@ let ProfileNode = React.createClass({
         </div>
         <Divider />
         <List style={styles.accordion}>
-          <ListItem
-            primaryText="General"
-            primaryTogglesNestedList
-            nestedListStyle={styles.accordionChildren}
-            open
-            nestedItems={[
-              <ListItem
-                key={1}
-                leftIcon={<ActionInfoOutline color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Node type"
-                  value="Profile"
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>,
-              <ListItem
-                key={2}
-                leftIcon={<SocialPersonOutline color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Username"
-                  value={name}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>
-            ]}
-          />
-          <Divider />
-          <ListItem
-            primaryText="Contact"
-            primaryTogglesNestedList
-            nestedListStyle={styles.accordionChildren}
-            nestedItems={[
-              <ListItem
-                key={1}
-                leftIcon={<CommunicationPhone color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Mobile"
-                  value={mobilePhone}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>,
-              <ListItem
-                key={2}
-                leftIcon={<CommunicationEmail color="#9ba0aa" />}>
-                <TextField
-                  style={{...styles.inputStyle, ...styles.highlight}}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Email"
-                  value={email}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>,
-              <ListItem
-                key={3}
-                leftIcon={<CommunicationLocation color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Address"
-                  value={address}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>,
-              <ListItem
-                key={4}
-                leftIcon={<SocialPublic color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Social media"
-                  value={socialMedia}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>
-            ]}
-          />
-          <Divider />
-          <ListItem
-            primaryText="Work"
-            primaryTogglesNestedList
-            nestedListStyle={styles.accordionChildren}
-            nestedItems={[
-              <ListItem
-                key={1}
-                leftIcon={<ActionStar color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Profession"
-                  value={profession}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>,
-              <ListItem
-                key={2}
-                leftIcon={<ActionCompany color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Company"
-                  value={company}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>,
-              <ListItem
-                key={3}
-                leftIcon={<AvWeb color="#9ba0aa" />}>
-                <TextField
-                  style={styles.inputStyle}
-                  floatingLabelStyle={styles.labelStyle}
-                  underlineStyle={styles.underlineStyle}
-                  floatingLabelText="Url"
-                  value={url}
-                  floatingLabelFixed
-                  readOnly />
-              </ListItem>
-            ]}
-          />
-          <Divider />
-          {isMe
-            ? (<ListItem
-              primaryText="Wallet"
-              primaryTogglesNestedList
-              nestedListStyle={styles.accordionChildren}
-              nestedItems={[
-                <ListItem
-                  key={1}
-                  leftIcon={<PassportIcon />}>
-                  <TextField
-                    style={styles.inputStyle}
-                    floatingLabelStyle={styles.labelStyle}
-                    underlineStyle={styles.underlineStyle}
-                    floatingLabelText="Passport"
-                    value={this.state.profile.passportImgUri}
-                    floatingLabelFixed
-                    readOnly>
-                    <img
-                      src={Utils.uriToProxied(
-                        this.state.profile.passportImgUri
-                      )}
-                      style={styles.passportPreview} />
-                  </TextField>
-                </ListItem>,
-                <ListItem
-                  key={2}
-                  leftIcon={<ActionCreditCard color="#9ba0aa" />}>
-                  <TextField
-                    style={styles.inputStyle}
-                    floatingLabelStyle={styles.labelStyle}
-                    underlineStyle={styles.underlineStyle}
-                    floatingLabelText="Credit card"
-                    value={this.state.profile.creditCard}
-                    floatingLabelFixed
-                    readOnly />
-                </ListItem>
-              ]}>
-              <ActionLock style={styles.lockIcon} />
-            </ListItem>)
-            : null
-          }
+          {this.renderGroups()}
         </List>
       </GenericFullScreen>
     )

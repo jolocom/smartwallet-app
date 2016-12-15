@@ -164,7 +164,12 @@ let Graph = React.createClass({
         <div style={styles.chart} ref="graph" />
         {loading}
         {fab}
-        {children}
+        {React.Children.map(children,
+          (child) => React.cloneElement(child, {
+            // @TODO fix this disaster
+            graph: this.state
+          })
+        )}
       </div>
     )
   },
