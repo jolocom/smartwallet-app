@@ -23,7 +23,7 @@ let Node = React.createClass({
   },
 
   setInitialState(initState) {
-    this.state = initState
+    this.state = Object.assign({}, initState)
   },
 
   propTypes: {

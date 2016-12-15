@@ -35,7 +35,6 @@ import CommunicationLocation
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
-import GraphStore from 'stores/graph-store'
 import JolocomTheme from 'styles/jolocom-theme'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 
@@ -46,8 +45,7 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState'),
-    Reflux.connect(GraphStore, 'graphState')
+    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState')
   ],
 
   contextTypes: {
@@ -73,14 +71,8 @@ let Profile = React.createClass({
     window.location.href = `${proxy}/exportkey`
   },
 
-  uploadPK() {
-    return fetch(`${proxy}/importkey`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'text/turtle'
-      }
-    })
+  show() {
+    ProfileActions.show()
   },
 
   hide() {
@@ -472,8 +464,11 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
-      ProfileActions.update(this.state)
+    if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
+      console.log('calling with', this.state)
+      ProfileActions.update(Object.assign({},
+        this.state
+      ))
       this.hide()
     }
   },

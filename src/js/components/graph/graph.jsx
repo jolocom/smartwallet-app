@@ -21,7 +21,7 @@ let Graph = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     params: React.PropTypes.object,
-    routes: React.PropTypes.object,
+    routes: React.PropTypes.array,
     snackbar: React.PropTypes.bool
   },
 
@@ -33,7 +33,7 @@ let Graph = React.createClass({
 
   childContextTypes: {
     node: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.string
   },
 
   getChildContext() {
@@ -48,7 +48,8 @@ let Graph = React.createClass({
   },
 
   setInitialState(initialState) {
-    this.state = initialState
+    this.state = Object.assign({}, initialState)
+    this.setState(this.state)
   },
 
   onStateUpdate(data) {
@@ -63,25 +64,35 @@ let Graph = React.createClass({
     this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     // this.graph.on('scrolling-drawn', this._handleScrollingDrawn)
-
     if (!this.state.initialized) {
-      graphActions.getInitialGraphState()
+      graphActions.getInitialGraphState(this.context.account.webId)
     } else {
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
+      this._renderGraph(this.state)
     }
   },
 
-  componentDidUpdate(prevProps, prevState) {
+  _renderGraph(state) {
+    state = Object.assign({}, state)
+    this.graph.render(state)
+    this.graph.updateHistory(state.navHistory)
   },
 
   componentWillUpdate(nextProps, nextState) {
-    if (nextState.initialized) {
-      if (this.props.snackbar !== nextProps.snackbar) {
-        return
-      } else {
-        this.graph.render(nextState)
-        this.graph.updateHistory(nextState.navHistory)
+    // We just came back from the graph preview mode
+    if (this.state.previewModeActive && !nextState.previewModeActive) {
+      this._renderGraph(nextState)
+      return
+    }
+    // The component just mounted, the firs render
+    if (!this.state.initialized && nextState.initialized) {
+      this._renderGraph(nextState)
+    } else if (this.state.initialized) {
+    // Some data changed (center / neighb. / node data)
+      const oldCenterData = JSON.stringify(this.state.center)
+      const newCenterData = JSON.stringify(nextState.center)
+      if (oldCenterData !== newCenterData ||
+        this.state.neighbours.length !== nextState.neighbours.length) {
+        this._renderGraph(nextState)
       }
     }
   },
@@ -177,6 +188,7 @@ let Graph = React.createClass({
   },
 
   addNode(type) {
+    graphActions.enterPreview()
     let uri = encodeURIComponent(this.state.center.uri)
     this.context.router.push(`/graph/${uri}/add/${type}`)
   },

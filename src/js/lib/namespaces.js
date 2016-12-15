@@ -92,8 +92,14 @@ export const SSN = {
   Sensor: `${ssn}Sensor`
 }
 
+export const SOLID = {
+  Notification: TERMS('Notification'),
+  read: TERMS('read')
+}
+
 /*
 in the other files:
+
 import {PRED, NODE_TYPES} from 'namespaces.js'
 
 NODE_TYPES[PRED.PERSON].nodeColor etc

@@ -45,7 +45,8 @@ export default Reflux.createStore({
 
           let formattedContacts = contacts.map((contact) => {
             let nameTriples = contact.triples.filter((triple) =>
-            triple.predicate.uri === PRED.givenName.uri)
+            triple.predicate.uri === PRED.givenName.uri ||
+              triple.predicate.uri === PRED.fullName.uri)
             let emailTriples = contact.triples.filter((triple) =>
             triple.predicate.uri === PRED.email.uri)
             let avatarTriples = contact.triples.filter((triple) =>
@@ -54,7 +55,8 @@ export default Reflux.createStore({
               name: nameTriples.length && nameTriples[0].object.value,
               username: nameTriples.length && nameTriples[0].object.value,
               webId: contact.uri || '????',
-              email: emailTriples.length && emailTriples[0].object.value,
+              email: emailTriples.length && emailTriples[0].object.value
+                .replace('mailto:', ''),
               imgUri: avatarTriples.length && avatarTriples[0] &&
               avatarTriples[0].object.value
             }

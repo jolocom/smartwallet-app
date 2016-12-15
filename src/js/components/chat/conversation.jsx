@@ -13,6 +13,7 @@ import Compose from 'components/common/compose.jsx'
 import UserAvatar from 'components/common/user-avatar.jsx'
 import Loading from 'components/common/loading.jsx'
 
+import UnreadMessagesActions from 'actions/unread-messages'
 import ConversationActions from 'actions/conversation'
 import ConversationStore from 'stores/conversation'
 
@@ -53,8 +54,7 @@ let Conversation = React.createClass({
     const {id} = this.props.params
     debug('componentDidMount; loading conversation with props', this.props)
 
-    ConversationActions.load(webId, id)
-    ConversationActions.subscribe(webId, id)
+    ConversationActions.load(webId, id, true)
 
     this.refs.dialog.show()
 
@@ -62,6 +62,11 @@ let Conversation = React.createClass({
   },
 
   componentWillUnmount() {
+    const {id} = this.props.params
+
+    ConversationActions.unsubscribe(id)
+    ConversationStore.cleanState()
+
     this.refs.dialog.hide()
   },
 
@@ -89,7 +94,6 @@ let Conversation = React.createClass({
 
   back() {
     this.context.router.push('/conversations')
-    ConversationStore.cleanState()
   },
 
   getStyles() {
@@ -115,7 +119,83 @@ let Conversation = React.createClass({
         right: 0,
         bottom: 0,
         height: '75px'
-      },
+      }
+    }
+    return styles
+  },
+
+  renderItems() {
+    return this.state.conversation.items.map((item, i) => {
+      return (
+        <ConversationItem
+          conversation={this.state.conversation}
+          item={item}
+          key={i}
+        />
+      )
+    })
+  },
+
+  render() {
+    let content
+    let styles = this.getStyles()
+    let {loading, otherPerson} = this.state.conversation
+    let title = otherPerson && otherPerson.name
+
+    if (loading) {
+      content = <Loading style={styles.loading} />
+    } else {
+      content = this.renderItems()
+    }
+
+    return (
+      <Dialog ref="dialog" fullscreen>
+        <Layout>
+          <AppBar
+            title={title}
+            iconElementLeft={
+              <IconButton
+                onClick={this.back}
+                iconClassName="material-icons">
+                arrow_back
+              </IconButton>
+            }
+          />
+          <Content style={styles.content}>
+            <div ref="items" style={styles.conversation}>
+              {content}
+            </div>
+            <Compose
+              style={styles.compose}
+              placeholder="Write a message..."
+              onSubmit={this.addMessage}
+            />
+          </Content>
+        </Layout>
+      </Dialog>
+    )
+  }
+})
+
+@Radium
+class ConversationItem extends React.Component {
+
+  static propTypes = {
+    item: React.PropTypes.object,
+    conversation: React.PropTypes.object
+  }
+
+  static contextTypes = {
+    account: React.PropTypes.object,
+    profile: React.PropTypes.object
+  }
+
+  componentDidMount() {
+    UnreadMessagesActions.read(this.context.account.webId, this.props.item.id)
+  }
+
+  getStyles() {
+    return {
       message: {
         padding: '0 20px',
         marginBottom: '10px',
@@ -187,91 +267,49 @@ let Conversation = React.createClass({
         }
       }
     }
-    return styles
-  },
+  }
 
-  renderItems() {
+  render() {
     let styles = this.getStyles()
-    let {otherPerson} = this.state.conversation
+    let {otherPerson} = this.props.conversation
     let {account} = this.context
 
-    let items = this.state.conversation.items || []
-
-    var userAvatar = (
+    let userAvatar = (
       <UserAvatar
-        name={this.state.profile.givenName}
-        imgUrl={this.state.profile.imgUri} />
+        name={this.context.profile.givenName}
+        imgUrl={this.context.profile.imgUri} />
     )
 
-    var otherPersonAvatar = (
+    let otherPersonAvatar = (
       <UserAvatar
         name={otherPerson.name}
         imgUrl={otherPerson.img} />
     )
 
-    return items.map(function({author, content, created}, i) {
-      let avatar = (author !== account.webId)
-        ? 'otherPersonAvatar' : 'userAvatar'
-      let from = (author !== account.webId)
-        ? 'contact' : 'me'
-      return (
-        <div style={[styles.message]} key={i}>
-          <div style={[styles.body, styles[avatar].body]}>
-            {avatar === 'otherPersonAvatar' && otherPersonAvatar}
-            {avatar === 'userAvatar' && userAvatar}
-          </div>
-          <div style={[styles.body, styles[from].body]}>
-            {content}
-          </div>
-          <div style={[styles.meta, styles[from].meta]}>
-            <span style={styles.date}>
-              {moment(created).fromNow()}
-            </span>
-          </div>
-        </div>
-      )
-    })
-  },
+    let {author, content, created} = this.props.item
 
-  render() {
-    let content
-    let styles = this.getStyles()
-    let {loading, otherPerson} = this.state.conversation
-    let title = otherPerson && otherPerson.name
-
-    if (loading) {
-      content = <Loading style={styles.loading} />
-    } else {
-      content = this.renderItems()
-    }
+    let avatar = (author !== account.webId)
+      ? 'otherPersonAvatar' : 'userAvatar'
+    let from = (author !== account.webId)
+      ? 'contact' : 'me'
 
     return (
-      <Dialog ref="dialog" fullscreen>
-        <Layout>
-          <AppBar
-            title={title}
-            iconElementLeft={
-              <IconButton
-                onClick={this.back}
-                iconClassName="material-icons">
-                arrow_back
-              </IconButton>
-            }
-          />
-          <Content style={styles.content}>
-            <div ref="items" style={styles.conversation}>
-              {content}
-            </div>
-            <Compose
-              style={styles.compose}
-              placeholder="Write a message..."
-              onSubmit={this.addMessage}
-            />
-          </Content>
-        </Layout>
-      </Dialog>
+      <div style={[styles.message]}>
+        <div style={[styles.body, styles[avatar].body]}>
+          {avatar === 'otherPersonAvatar' && otherPersonAvatar}
+          {avatar === 'userAvatar' && userAvatar}
+        </div>
+        <div style={[styles.body, styles[from].body]}>
+          {content}
+        </div>
+        <div style={[styles.meta, styles[from].meta]}>
+          <span style={styles.date}>
+            {moment(created).fromNow()}
+          </span>
+        </div>
+      </div>
     )
   }
-})
+}
 
 export default Radium(Conversation)
