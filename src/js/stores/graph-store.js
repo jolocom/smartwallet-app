@@ -68,7 +68,7 @@ export default Reflux.createStore({
     })
   },
 
-  onGetInitialGraphState() {
+  onGetInitialGraphState(webId) {
     this.state.loading = true
     this.trigger(this.state)
 

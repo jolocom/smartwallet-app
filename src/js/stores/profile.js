@@ -50,7 +50,9 @@ export default Reflux.createStore({
   },
 
   graphChange(graphState) {
-    this.state.centerNode = graphState.center.uri
+    if (graphState.center) {
+      this.state.centerNode = graphState.center.uri
+    }
   },
 
   onLoadFailed() {
