@@ -360,6 +360,23 @@ class ChatAgent extends LDPAgent {
     return messages
   }
 
+  getUnreadMessagesIds(webId) {
+    let container = this.getUnreadMessagesContainer(webId)
+    return this.get(this._proxify(container))
+      .then((response) => {
+        return response.text().then((text) => {
+          return new Parser(text, webId)
+        })
+      })
+      .then((g) => {
+        const ids = g.find(undefined, PRED.type, SOLID.Notification)
+
+        return ids.map(({subject}) => {
+          return subject.toString()
+        })
+      })
+  }
+
   getUnreadMessages(webId) {
     let container = this.getUnreadMessagesContainer(webId)
     return this.get(this._proxify(container))
@@ -385,7 +402,7 @@ class ChatAgent extends LDPAgent {
 
     writer.add(message.id, PRED.type, SOLID.Notification)
 
-    // writer.addAll(this._getMessageTriples(message))
+    writer.addAll(this._getMessageTriples(message))
 
     return this.patch(this._proxify(container), null, writer.all())
   }
@@ -393,12 +410,11 @@ class ChatAgent extends LDPAgent {
   removeUnreadMessage(webId, message) {
     const container = this.getUnreadMessagesContainer(webId)
 
-    // @TODO use SPARQL DELETE here, this is kinda ugly :)
     const writer = new Writer()
 
     writer.add(message.id, PRED.type, SOLID.Notification)
 
-    // writer.addAll(this._getMessageTriples(message))
+    writer.addAll(this._getMessageTriples(message))
 
     return this.patch(this._proxify(container), writer.all())
   }
