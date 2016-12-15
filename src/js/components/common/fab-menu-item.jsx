@@ -5,7 +5,7 @@ import {FloatingActionButton} from 'material-ui'
 class FabMenuItem extends React.Component {
 
   static propTypes = {
-    icon: React.PropTypes.string,
+    icon: React.PropTypes.any,
     label: React.PropTypes.string,
     style: React.PropTypes.object,
     buttonStyle: React.PropTypes.object,

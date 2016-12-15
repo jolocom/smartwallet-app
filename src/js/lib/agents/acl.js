@@ -2,6 +2,7 @@ import rdf from 'rdflib'
 import GraphAgent from 'lib/agents/graph.js'
 import _ from 'lodash'
 import Util from 'lib/util'
+import WebidAgent from 'lib/agents/webid'
 import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
 
@@ -14,6 +15,7 @@ class AclAgent {
     this.g = rdf.graph()
     this.gAgent = new GraphAgent()
     this.Writer = new Writer()
+    this.wia = new WebidAgent()
     this.indexChanges = {
       toInsert: [],
       toDelete: []
@@ -55,7 +57,7 @@ class AclAgent {
    */
 
   fetchInfo() {
-    return Util.getAclUri(this.uri).then((aclUri) => {
+    return this.wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
       return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result) => {
@@ -76,7 +78,7 @@ class AclAgent {
    * @returns undefined, we wat the side effect.
    */
   initiateNew() {
-    return Util.getAclUri(this.uri).then((aclUri) => {
+    return this.wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     })
   }
@@ -177,6 +179,7 @@ class AclAgent {
 
     // Finding the correct triple.
     mode = this.predMap[mode]
+
     // Get the existing policies
     let policies = []
     let existing = this.Writer.find(undefined, identifier, user)
@@ -190,6 +193,7 @@ class AclAgent {
         if (trip.length > 0) {
           let {subject, predicate, object} = trip[0]
           this.Writer.g.remove({subject, predicate, object})
+
           // Here we check if the policy itself should be deleted next.
           let zomb = this.Writer.find(policy, PRED.mode, undefined)
           if (zomb.length > 0) {
@@ -307,6 +311,7 @@ class AclAgent {
         }
       })
     }
+
     // We append the open permissions as well, since they apply to all users.
     // But only if strict is set to false.
     if (!wildcard && !strict) {
@@ -326,17 +331,8 @@ class AclAgent {
    * @return {promise} - the server response.
    */
   commit() {
-    return fetch(Util.uriToProxied(this.aclUri), {
-      method: 'PUT',
-      credentials: 'include',
-      body: this.Writer.end(),
-      headers: {
-        'Content-Type': 'text/turtle'
-      }
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error('Error while putting the file', res)
-      }
+    return this.put(this._proxify(this.aclUri), this.Writer.end(), {
+      'Content-Type': 'text/turtle'
     }).catch((e) => {
       console.error(e)
     })
