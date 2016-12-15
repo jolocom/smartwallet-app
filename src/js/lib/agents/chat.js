@@ -293,7 +293,7 @@ class ChatAgent extends LDPAgent {
       .then((parsed) => {
         let result = {}
 
-        let name = parsed.get(undefined, PRED.givenName, undefined)
+        let name = parsed.get(undefined, PRED.fullName, undefined)
         if (name) {
           result.name = name.object.value
         }
