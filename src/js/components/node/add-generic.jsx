@@ -78,12 +78,7 @@ let NodeAddGeneric = React.createClass({
     return {
       type: 'default',
       privacy: 'Private',
-      tagArray: [
-        {
-          key: 1,
-          label: 'image'
-        }
-      ],
+      tagArray: [],
       uploadedFileName: '',
       uploadedFileType: 'document',
       hasImages: false,
@@ -580,6 +575,10 @@ let NodeAddGeneric = React.createClass({
             this.setState({
               isCollection: true
             })
+            this.state.tagArray.push({
+              key: 1,
+              label: 'Collection'
+            })
           } else {
             // is singular node
             this.setState({
@@ -591,6 +590,10 @@ let NodeAddGeneric = React.createClass({
           }
           this.setState({
             hasImages: true
+          })
+          this.state.tagArray.push({
+            key: 2,
+            label: 'Image'
           })
           // Checks for documents
         } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
@@ -606,6 +609,10 @@ let NodeAddGeneric = React.createClass({
           })
           this.setState({
             hasDocs: true
+          })
+          this.state.tagArray.push({
+            key: 3,
+            label: 'Document'
           })
           // Checks for misc files
         } else {
@@ -645,14 +652,17 @@ let NodeAddGeneric = React.createClass({
       <Chip
         key={data.key}
         style={styles.chip}
-        onRequestDelete={this._handleChipDelete}>
+        onRequestDelete={() => this._handleChipDelete(data.key)}>
         {data.label}
       </Chip>
     )
   },
 
-  _handleChipDelete() {
+  _handleChipDelete(key) {
     console.log('delete chip')
+    let newTagArray = this.state.tagArray
+    const tagToDelete = newTagArray.map((tag) => tag.key).indexOf(key)
+    newTagArray.splice(tagToDelete, 1)
   },
 
   _handleTogglePrivacy(event, index, value) {
