@@ -1,7 +1,13 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import {IconButton, List, ListItem, Checkbox} from 'material-ui'
+import {
+  IconButton,
+  List,
+  ListItem,
+  Checkbox,
+  FloatingActionButton
+} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import Subheader from 'material-ui/Subheader'
@@ -12,6 +18,10 @@ import Chip from 'material-ui/Chip'
 import TextField from 'material-ui/TextField'
 import PrivacyStore from 'stores/privacy-settings'
 import PrivacyActions from 'actions/privacy-settings'
+import AddNodeIcon from 'components/icons/addNode-icon.jsx'
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import PersonIcon from 'material-ui/svg-icons/social/person'
+import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 
 let PrivacySettings = React.createClass({
   mixins: [Reflux.listenTo(PrivacyStore, '_handleUpdate')],
@@ -192,7 +202,7 @@ let PrivacySettings = React.createClass({
         fill: '#9b9faa'
       },
       divider: {
-        marginBottom: '10px'
+        marginTop: '10px'
       },
       subheader: {
         paddingLeft: '0'
@@ -210,6 +220,11 @@ let PrivacySettings = React.createClass({
       selectAllLabel: {
         fontSize: '14px',
         color: 'rgba(75, 19, 43, 0.541176)'
+      },
+      addBtn: {
+        width: '40px',
+        boxShadow: 'none',
+        marginTop: '12px'
       }
     }
     return styles
@@ -343,6 +358,26 @@ let PrivacySettings = React.createClass({
               </div>
             }
           </div>
+          <List>
+            <ListItem
+              key={1}
+              disabled
+              secondaryText="Add person"
+              leftIcon={
+                <PersonIcon />
+              }
+              rightIcon={
+                <FloatingActionButton
+                  mini
+                  secondary
+                  style={styles.addBtn}>
+                  <PersonAddIcon />
+                </FloatingActionButton>
+              }>
+              CONTACTS
+              <Divider style={styles.divider} />
+            </ListItem>
+          </List>
           <FlatButton
             style={Object.assign({}, styles.submitBtn)}
             onTouchTap={() => {
