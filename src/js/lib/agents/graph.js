@@ -311,10 +311,11 @@ class GraphAgent extends LDPAgent {
     let Links = [
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
-      PRED.isRelatedTo_HTTP.uri,
       PRED.passport.uri
     ]
-    let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
+    let neighbours = triples.filter((t) =>
+      Links.indexOf(t.predicate.uri) >= 0
+    )
     // If there are adjacent nodes to draw,
     // we parse them and return an array of their triples
     let neighbourErrors = []
@@ -346,6 +347,7 @@ class GraphAgent extends LDPAgent {
         neighbourErrors.push(triple.object.uri)
       })
     })).then(() => {
+      console.log('return')
       return graphMap
     })
   }
@@ -355,23 +357,51 @@ class GraphAgent extends LDPAgent {
   // is pretty much a "map" of the currently displayed graph.
 
   getGraphMapAtUri(uri) {
-    // centerNode is {prefixes: [...], triples: [...]}
-    let getPartialGraphMap = (centerNode) => {
-      return this.getNeighbours(uri, centerNode.triples)
-        .then((neibTriples) => {
+    // The triples of the "core" center node.
+    return this.fetchTriplesAtUri(uri).then(centerNode => {
+      // The extended profile, following the seeAlso pred
+      this.getExtendedProfile(centerNode).then(extendedProfile => {
+        // Now we can fetch all the nodes the file is connected to.
+        return this.getNeighbours(uri, extendedProfile).then((neibTriples) => {
           let firstNode = centerNode.triples
           firstNode.uri = uri
           return [firstNode].concat(neibTriples)
         })
-    }
-
-    return this.fetchTriplesAtUri(uri)
-      .then(getPartialGraphMap)
+      })
+    })
   }
 
-  // Calls the above function, but passes the current webId as the URI.
-  getGraphMapAtWebID(webId) {
-    return this.getGraphMapAtUri(webId)
+  /**
+   * @summary Follows all the seeAlso links and assembles the extended profile.
+   * @param {object} node - A object describing the current center node with
+   *  structure {prefixes: [], triples: []}.
+   * @return {array} triples - Tripples of the extended profile.
+   */
+
+  getExtendedProfile(node) {
+    // In case of error we just return the initial triples.
+    let triples = node.triples
+    if (!triples.length) {
+      return triples
+    }
+    // Find the seeAlso triples.
+    let extendedProfLinks = []
+    triples.forEach(t => {
+      if (t.predicate.uri === PRED.seeAlso.uri) {
+        extendedProfLinks.push(t.object.uri)
+      }
+    })
+
+    // Fetch the triples from the seeAlso files.
+    Promise.all(extendedProfLinks.map(link => {
+      return this.fetchTriplesAtUri(link).then(result => {
+        triples = triples.concat(result.triples)
+      })
+    })).then(() => {
+      return triples
+    }).catch((e) => {
+      return triples
+    })
   }
 
   linkNodes(start, type, end, flag) {
