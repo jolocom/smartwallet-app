@@ -60,7 +60,6 @@ class LDPAgent extends HTTPAgent {
 
   // This takes a standard URI, it proxies the request itself.
   fetchTriplesAtUri(uri) {
-    console.log('fetching at', uri)
     let parser = new Parser()
     return this.get(this._proxify(uri)).then((ans) => {
       if (!ans.ok) {
@@ -72,7 +71,6 @@ class LDPAgent extends HTTPAgent {
       })
     }).catch((err) => { // Catch is automatically called on network errors only
       let statusCode = err.message
-      console.log('answering', triples)
       return {
         uri: uri,
         unav: true,

@@ -102,10 +102,11 @@ export default Reflux.createStore({
   },
 
   // TODO, show an error perhaps.
-  onGetInitialGraphStateFailed: function () {
+  onGetInitialGraphStateFailed: function (e) {
     // this.state.loading = false
+    throw new Error(e)
     this.state.initialized = true
-    this.trigger(this.state)
+    // this.trigger(this.state)
   },
 
   onRefresh() {

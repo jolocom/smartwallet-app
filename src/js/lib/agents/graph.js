@@ -347,7 +347,6 @@ class GraphAgent extends LDPAgent {
         neighbourErrors.push(triple.object.uri)
       })
     })).then(() => {
-      console.log('return')
       return graphMap
     })
   }
@@ -360,7 +359,7 @@ class GraphAgent extends LDPAgent {
     // The triples of the "core" center node.
     return this.fetchTriplesAtUri(uri).then(centerNode => {
       // The extended profile, following the seeAlso pred
-      this.getExtendedProfile(centerNode).then(extendedProfile => {
+      return this.getExtendedProfile(centerNode).then(extendedProfile => {
         // Now we can fetch all the nodes the file is connected to.
         return this.getNeighbours(uri, extendedProfile).then((neibTriples) => {
           let firstNode = centerNode.triples
@@ -381,6 +380,7 @@ class GraphAgent extends LDPAgent {
   getExtendedProfile(node) {
     // In case of error we just return the initial triples.
     let triples = node.triples
+
     if (!triples.length) {
       return triples
     }
@@ -393,7 +393,7 @@ class GraphAgent extends LDPAgent {
     })
 
     // Fetch the triples from the seeAlso files.
-    Promise.all(extendedProfLinks.map(link => {
+    return Promise.all(extendedProfLinks.map(link => {
       return this.fetchTriplesAtUri(link).then(result => {
         triples = triples.concat(result.triples)
       })
