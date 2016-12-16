@@ -153,12 +153,25 @@ let PrivacySettings = React.createClass({
         backgroundColor: '#b5c945',
         minWidth: '30%',
         color: '#fff',
-        fontSize: '2vmax'
+        fontSize: '2vmax',
+        display: 'none'
+      },
+      toggleBtns: {
+        textAlign: 'center'
+      },
+      selectPrompt: {
+        color: '#e1e2e6',
+        width: '80%',
+        padding: '20px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        left: '0',
+        right: '0'
       },
       toggleBtn: {
         margin: '2px',
         backgroundColor: '#e1e2e6',
-        minWidth: '30%',
+        minWidth: '40%',
         fontSize: '2vmax'
       },
       toggleBtnLeft: {
@@ -253,14 +266,6 @@ let PrivacySettings = React.createClass({
           </IconButton>}
           />
         <div style={styles.content}>
-          <h3 style={{margin: '10px 0'}}>
-            Privacy Settings for {this.props.name}
-          </h3>
-          <Subheader style={styles.subheader}>
-            <ActionVisibility style={styles.headerIcon} />
-            Who can see this node?
-          </Subheader>
-          <Divider style={styles.divider} />
           <div style={styles.toggleBtns}>
             <FlatButton
               style={
@@ -276,19 +281,7 @@ let PrivacySettings = React.createClass({
               onTouchTap={() => {
                 this._setActiveView('visOnlyMe')
               }}>
-              Only Me
-            </FlatButton>
-            <FlatButton
-              className="toggleBtnActive"
-              style={
-                this.state.currActiveViewBtn === 'visFriends'
-                ? {...styles.toggleBtn, ...styles.toggleBtnActive}
-                : styles.toggleBtn
-              }
-              onTouchTap={() => {
-                this._setActiveView('visFriends')
-              }}>
-              Friends
+              Private
             </FlatButton>
             <FlatButton
               style={
@@ -303,8 +296,11 @@ let PrivacySettings = React.createClass({
               onTouchTap={() => {
                 this._setActiveView('visEveryone')
               }}>
-              Everyone
+              Public
             </FlatButton>
+            <div style={styles.selectPrompt}>
+              Please select who you want to share your node with.
+            </div>
           </div>
           <div style={styles.customSettings}>
             {
@@ -346,124 +342,6 @@ let PrivacySettings = React.createClass({
                   fullWidth />
               </div>
             }
-          </div>
-          <Subheader style={styles.subheader}>
-            <EditorModeEdit style={styles.headerIcon} />
-            Who can edit this node?
-          </Subheader>
-          <Divider style={styles.divider} />
-          {
-              this.state.currActiveViewBtn === 'visEveryone'
-              ? <div>
-                <FlatButton
-                  style={
-                    this.state.currActiveEditBtn === 'editOnlyMe'
-                      ? {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnLeft,
-                        ...styles.toggleBtnActive}
-                      : {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnLeft}
-                  }
-                  onTouchTap={() => {
-                    this._setActiveEdit('editOnlyMe')
-                  }}>
-                  Only Me
-                </FlatButton>
-                <FlatButton
-                  style={
-                    this.state.currActiveEditBtn === 'editFriends'
-                    ? {...styles.toggleBtn, ...styles.toggleBtnActive}
-                    : {...styles.toggleBtn}
-                  }
-                  onTouchTap={() => {
-                    this._setActiveEdit('editFriends')
-                  }}>
-                  Friends
-                </FlatButton>
-                <FlatButton
-                  onTouchTap={() => {
-                    this._setActiveEdit('editEveryone')
-                  }}
-                  style={
-                    this.state.currActiveEditBtn === 'editEveryone'
-                      ? {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnRight,
-                        ...styles.toggleBtnActive}
-                      : {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnRight}
-                  }
-                >
-                  Everyone
-                </ FlatButton>
-                <div style={styles.customSettings}>
-                  {
-                  this.state.currActiveEditBtn === 'editOnlyMe'
-                  ? <div>
-                    <Subheader style={styles.subheader}>
-                      Allow
-                    </Subheader>
-                    <div style={styles.chipWrapper}>
-                      {this.state.editAllowList.map(el => {
-                        return this.renderChip(el, PrivacyActions.disallowEdit)
-                      }, this)}
-
-                    </div>
-                    <TextField
-                      name="editAllow"
-                      hintText="Enter a node title"
-                      onKeyPress={this._handleTextEnter}
-                      fullWidth />
-                  </div>
-                  : null
-                }
-                  {this.state.currActiveEditBtn === 'editFriends'
-                  ? <div>
-                    <Subheader style={styles.subheader}>
-                    Disallow
-                    </Subheader>
-                    <div style={styles.chipWrapper}>
-                      {this.state.friendEditDisallowList.map(el => {
-                        return this.renderChip(el,
-                          PrivacyActions.friendAllowEdit)
-                      }, this)}
-
-                    </div>
-                    <TextField
-                      name="friendEditDisallow"
-                      hintText="Enter a node title"
-                      onKeyPress={this._handleTextEnter}
-                      fullWidth />
-                  </div>
-                : null
-                }
-                </div>
-              </div>
-              : null
-            }
-          <div>
-            <List>
-              {checkMate}
-              {this.state.currActiveViewBtn !== 'visEveryone'
-              ? list.map((viewer) => {
-                return (
-                  <ListItem>
-                    <Checkbox
-                      label={viewer.label || viewer.name}
-                      labelPosition="left"
-                      onCheck={() => {
-                        check(this.state.currActiveViewBtn, viewer)
-                      }}
-                      checked={viewer.canEdit}
-                    />
-                  </ListItem>)
-              })
-            : null
-            }
-            </List>
           </div>
           <FlatButton
             style={Object.assign({}, styles.submitBtn)}
