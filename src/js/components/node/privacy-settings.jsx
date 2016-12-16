@@ -270,6 +270,16 @@ let PrivacySettings = React.createClass({
     })
   },
 
+  _handleRemovePerson(key) {
+    let newPersonArray = this.state.personArray
+    const personToDelete = newPersonArray.map(
+      (person) => person.key).indexOf(key)
+    newPersonArray.splice(personToDelete, 1)
+    this.setState({
+      personArray: newPersonArray
+    })
+  },
+
   render() {
     let styles = this.getStyles()
     let list, check
@@ -422,7 +432,6 @@ let PrivacySettings = React.createClass({
           {
             this.state.personArray.map((person) => {
               if (person.key > 3 && this.state.viewAllContacts) {
-                // set state to display view all button
                 return
               }
               return (
