@@ -280,6 +280,10 @@ let PrivacySettings = React.createClass({
     })
   },
 
+  _handleAddContact() {
+    this.context.router.push('/add-contacts')
+  },
+
   render() {
     let styles = this.getStyles()
     let list, check
@@ -367,47 +371,6 @@ let PrivacySettings = React.createClass({
               Please select who you want to share your node with.
             </div>
           </div>
-          <div style={styles.customSettings}>
-            {
-              this.state.currActiveViewBtn === 'visOnlyMe'
-              ? <div>
-                <Subheader style={styles.subheader}>
-                  Allow
-                </Subheader>
-                <div style={styles.chipWrapper}>
-                  {this.state.viewAllowList.map(el => {
-                    return this.renderChip(el, PrivacyActions.disallowRead)
-                  }, this)}
-                </div>
-                <TextField
-                  name="viewAllow"
-                  hintText="Enter a node title"
-                  onKeyPress={this._handleTextEnter}
-                  fullWidth />
-              </div>
-              : null
-            }
-            {
-              this.state.currActiveViewBtn === 'visOnlyMe' ||
-              this.state.currActiveViewBtn === 'visEveryone'
-              ? null
-              : <div>
-                <Subheader style={styles.subheader}>
-                Disallow
-                </Subheader>
-                <div style={styles.chipWrapper}>
-                  {this.state.friendViewDisallowList.map(el => {
-                    return this.renderChip(el, PrivacyActions.friendAllowRead)
-                  }, this)}
-                </div>
-                <TextField
-                  name="friendViewDisallow"
-                  hintText="Enter a node title"
-                  onKeyPress={this._handleTextEnter}
-                  fullWidth />
-              </div>
-            }
-          </div>
           <List>
             <ListItem
               key={1}
@@ -420,7 +383,8 @@ let PrivacySettings = React.createClass({
                 <FloatingActionButton
                   mini
                   secondary
-                  style={styles.addBtn}>
+                  style={styles.addBtn}
+                  onTouchTap={this._handleAddContact}>
                   <PersonAddIcon />
                 </FloatingActionButton>
               }>
