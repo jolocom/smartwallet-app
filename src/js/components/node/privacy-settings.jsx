@@ -6,7 +6,8 @@ import {
   List,
   ListItem,
   Checkbox,
-  FloatingActionButton
+  FloatingActionButton,
+  Avatar
 } from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
@@ -22,6 +23,11 @@ import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import PersonIcon from 'material-ui/svg-icons/social/person'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
+import GroupIcon from 'material-ui/svg-icons/social/group'
+import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
+import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
+
+import Util from 'lib/util'
 
 let PrivacySettings = React.createClass({
   mixins: [Reflux.listenTo(PrivacyStore, '_handleUpdate')],
@@ -48,7 +54,32 @@ let PrivacySettings = React.createClass({
       friendEditDisallowList: [],
 
       isSelectAllOnlyMe: false,
-      isSelectAllFriends: false
+      isSelectAllFriends: false,
+
+      viewAllContacts: true,
+
+      personArray: [
+        {
+          key: 1,
+          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
+          name: 'Eelco'
+        },
+        {
+          key: 2,
+          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
+          name: 'Isabel'
+        },
+        {
+          key: 3,
+          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
+          name: 'Oldcake'
+        },
+        {
+          key: 4,
+          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
+          name: 'Sabine'
+        }
+      ]
     }
   },
 
@@ -225,9 +256,18 @@ let PrivacySettings = React.createClass({
         width: '40px',
         boxShadow: 'none',
         marginTop: '12px'
+      },
+      viewAllBtn: {
+        display: this.state.viewAllContacts ? 'block' : 'none'
       }
     }
     return styles
+  },
+
+  viewAllContacts() {
+    this.setState({
+      viewAllContacts: false
+    })
   },
 
   render() {
@@ -375,6 +415,59 @@ let PrivacySettings = React.createClass({
                 </FloatingActionButton>
               }>
               CONTACTS
+              <Divider style={styles.divider} />
+            </ListItem>
+          </List>
+          <List>
+          {
+            this.state.personArray.map((person) => {
+              if (person.key > 3 && this.state.viewAllContacts) {
+                // set state to display view all button
+                return
+              }
+              return (
+                <ListItem
+                  key={person.key}
+                  leftAvatar={
+                    <Avatar src={
+                    Util.uriToProxied(person.imgUri)}
+                    />
+                  }
+                  rightIcon={
+                    <ActionDelete
+                      color="#4b132b"
+                      onTouchTap={
+                        () => this._handleRemovePerson(person.key)
+                      } />
+                  }>
+                  {person.name}
+                </ListItem>
+              )
+            })
+          }
+          </List>
+          <FlatButton
+            label="VIEW ALL"
+            secondary
+            style={styles.viewAllBtn}
+            onTouchTap={this.viewAllContacts} />
+          <List>
+            <ListItem
+              key={1}
+              disabled
+              secondaryText="Add groups"
+              leftIcon={
+                <GroupIcon />
+              }
+              rightIcon={
+                <FloatingActionButton
+                  mini
+                  secondary
+                  style={styles.addBtn}>
+                  <GroupAddIcon />
+                </FloatingActionButton>
+              }>
+              GROUPS
               <Divider style={styles.divider} />
             </ListItem>
           </List>
