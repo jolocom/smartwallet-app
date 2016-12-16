@@ -83,7 +83,7 @@ class GraphAgent {
    */
 
   createNode(currentUser, centerNode, title, description,
-             image, nodeType, confidential = false) {
+             image = false, nodeType, confidential = false) {
     let writer = new Writer()
     let newNodeUri = rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
