@@ -571,13 +571,11 @@ export default class GraphD3 extends EventEmitter {
     })
 
     // Add drag listeners to neighbour nodes
-
     this.node.call(d3.drag().on('drag', this.drag)
                             .on('start', this.dragStart)
                             .on('end', this.dragEnd))
 
     // Add click behaviour on background so that a click will deselect nodes.
-
     this.svg.on('click', function (data) {
       self.mouseDown = false
       self.deselectAll()
