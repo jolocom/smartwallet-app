@@ -61,23 +61,26 @@ let PrivacySettings = React.createClass({
       personArray: [
         {
           key: 1,
-          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
-          name: 'Eelco'
+          imgUri: 'https://annika.webid.jolocom.de/files/' +
+            'fm86xd-DSC09243-1-Kopie_s.jpg',
+          name: 'Annika'
         },
         {
           key: 2,
-          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
+          imgUri: 'https://isabel.webid.jolocom.de/files/' +
+            'wxrlz-Pure-Geometry-3.jpg',
           name: 'Isabel'
         },
         {
           key: 3,
-          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
-          name: 'Oldcake'
+          imgUri: 'https://chrish.webid.jolocom.de/files/' +
+            '2xn822-1476035839171-434432581.jpg',
+          name: 'Chris'
         },
         {
           key: 4,
-          imgUri: 'https://annika.webid.jolocom.de/files/fm86xd-DSC09243-1-Kopie_s.jpg',
-          name: 'Sabine'
+          imgUri: 'https://lovius.webid.jolocom.de/files/1bo0jw-carla.png',
+          name: 'Carla'
         }
       ]
     }

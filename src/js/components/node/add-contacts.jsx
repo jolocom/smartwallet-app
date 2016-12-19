@@ -158,7 +158,7 @@ let AddContact = React.createClass({
               iconElementRight={
                 <FlatButton
                   style={styles.icon}
-                  label="Create"
+                  label="Add"
                   onTouchTap={this._handleSubmit}
                 />
               }
