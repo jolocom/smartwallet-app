@@ -1,10 +1,11 @@
 import React from 'react'
 import Radium from 'radium'
 import {TextField, Paper, SelectField, MenuItem} from 'material-ui'
+import WebIdAgent from 'lib/agents/webid'
 
-import GraphPreview from './graph-preview.jsx'
-import ImageSelect from 'components/common/image-select.jsx'
-import GraphAgent from 'lib/agents/graph.js'
+import GraphPreview from 'components/node/graph-preview'
+import ImageSelect from 'components/common/image-select'
+import GraphAgent from 'lib/agents/graph'
 import nodeActions from 'actions/node'
 
 let NodeAddDefault = React.createClass({
@@ -129,13 +130,14 @@ let LowerPart = React.createClass({
   },
 
   submit() {
+    const wia = new WebIdAgent()
+    const webId = wia.getWebId()
+
     if (!(this.state.title && this.state.title.trim())) {
       return
     }
 
-    let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.props.graphState.center
-
     if (centerNode && webId) {
       let isConfidential = this.state.type === 'confidential'
       let {title, description, image} = this.state
