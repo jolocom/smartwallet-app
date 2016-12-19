@@ -18,42 +18,40 @@ class WebIDAgent extends LDPAgent {
   }
 
   // Gets the webId of the currently loged in user from local storage,
-  // Why is this async?
   getWebID() {
-    return new Promise((resolve, reject) => {
-      const webId = localStorage.getItem('jolocom.webId')
-      if (!webId) {
-        reject(new Error('Not logged in'))
-      } else {
-        resolve(webId)
-      }
-    })
+    const webId = localStorage.getItem('jolocom.webId')
+    if (webId) {
+      return webId
+    }
+    return ''
   }
 
   getProfile() {
+    const webId = this.getWebID()
+    if (!webId) {
+      throw new Error('No webid detected.')
+    }
     let parser = new Parser()
-    return this.getWebID().then((webId) => {
-      return this.get(this._proxify(webId))
-        .then((response) => {
-          return response.text()
-        }).then((text) => {
-          return parser.parse(text, webId)
-        }).then((answer) => {
-          return this._parseProfile(webId, answer.triples)
-        }).then((data) => {
-          if (data.imgUri) {
-            return this.head(this._proxify(data.imgUri))
-              .then((res) => {
-                return data
-              })
-              .catch((e) => {
-                data.imgUri = null
-                return data
-              })
-          }
-          return Object.assign(data, {webId})
-        })
-    })
+    return this.get(this._proxify(webId))
+      .then((response) => {
+        return response.text()
+      }).then((text) => {
+        return parser.parse(text, webId)
+      }).then((answer) => {
+        return this._parseProfile(webId, answer.triples)
+      }).then((data) => {
+        if (data.imgUri) {
+          return this.head(this._proxify(data.imgUri))
+            .then((res) => {
+              return data
+            })
+            .catch((e) => {
+              data.imgUri = null
+              return data
+            })
+        }
+        return Object.assign(data, {webId})
+      })
   }
 
   _parseProfile(webId, triples) {
@@ -186,22 +184,25 @@ class WebIDAgent extends LDPAgent {
   }
 
   deletePassport(uri, imgUri) {
-    return this.getWebID().then((webId) => {
-      const toDel = $rdf.graph()
-      toDel.add(
-        $rdf.sym(webId),
-        PRED.passport,
-        $rdf.sym(uri)
-      )
+    const webId = this.getWebID()
+    if (!webId) {
+      throw new Error('No webid detected.')
+    }
 
-      return Promise.all([
-        this.delete(this._proxify(uri)),
-        this.delete(this._proxify(uri + '.acl')),
-        this.delete(this._proxify(imgUri)),
-        this.delete(this._proxify(imgUri + '.acl')),
-        this.patch(this._proxify(webId), toDel.statements)
-      ])
-    })
+    const toDel = $rdf.graph()
+    toDel.add(
+      $rdf.sym(webId),
+      PRED.passport,
+      $rdf.sym(uri)
+    )
+
+    return Promise.all([
+      this.delete(this._proxify(uri)),
+      this.delete(this._proxify(uri + '.acl')),
+      this.delete(this._proxify(imgUri)),
+      this.delete(this._proxify(imgUri + '.acl')),
+      this.patch(this._proxify(webId), toDel.statements)
+    ])
   }
 
   updatePassport(uri, oldImgUri, imgUri) {
