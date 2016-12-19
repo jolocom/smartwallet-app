@@ -9,7 +9,8 @@ import {
   List,
   ListItem,
   Avatar,
-  Checkbox
+  Checkbox,
+  TextField
 } from 'material-ui'
 import {Tabs, Tab} from 'material-ui/Tabs'
 
@@ -102,6 +103,11 @@ let AddContact = React.createClass({
       },
       selectedAvatar: {
         margin: '6px'
+      },
+      webidField: {
+        margin: '20px',
+        fontSize: '20pt',
+        fontWeight: '100'
       }
     }
   },
@@ -173,6 +179,13 @@ let AddContact = React.createClass({
                       })
                     }
                   </div>
+                </div>
+                <div>
+                  <TextField
+                    placeholder="Type in the WebID"
+                    fullWidth
+                    style={styles.webidField}
+                    />
                 </div>
                 <List>
                   <Avatar
