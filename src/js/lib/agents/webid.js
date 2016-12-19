@@ -18,7 +18,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   // Gets the webId of the currently loged in user from local storage,
-  getWebID() {
+  getWebId() {
     const webId = localStorage.getItem('jolocom.webId')
     if (webId) {
       return webId
@@ -27,7 +27,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   getProfile() {
-    const webId = this.getWebID()
+    const webId = this.getWebId()
     if (!webId) {
       throw new Error('No webid detected.')
     }
@@ -184,7 +184,7 @@ class WebIDAgent extends LDPAgent {
   }
 
   deletePassport(uri, imgUri) {
-    const webId = this.getWebID()
+    const webId = this.getWebId()
     if (!webId) {
       throw new Error('No webid detected.')
     }
@@ -206,28 +206,30 @@ class WebIDAgent extends LDPAgent {
   }
 
   updatePassport(uri, oldImgUri, imgUri) {
-    return this.getWebID().then((webId) => {
-      const toDel = $rdf.graph()
-      const toAdd = $rdf.graph()
+    const webId = this.getWebId()
+    if (!webId) {
+      throw new Error('No webid detected.')
+    }
+    const toDel = $rdf.graph()
+    const toAdd = $rdf.graph()
 
-      toDel.add(
-        $rdf.sym(uri),
-        PRED.image,
-        oldImgUri
-      )
+    toDel.add(
+      $rdf.sym(uri),
+      PRED.image,
+      oldImgUri
+    )
 
-      toAdd.add(
-        $rdf.sym(uri),
-        PRED.image,
-        imgUri
-      )
+    toAdd.add(
+      $rdf.sym(uri),
+      PRED.image,
+      imgUri
+    )
 
-      return Promise.all([
-        this.patch(this._proxify(uri), toDel.statements, toAdd.statements),
-        this.delete(this._proxify(oldImgUri)),
-        this.delete(this._proxify(oldImgUri + '.acl'))
-      ])
-    })
+    return Promise.all([
+      this.patch(this._proxify(uri), toDel.statements, toAdd.statements),
+      this.delete(this._proxify(oldImgUri)),
+      this.delete(this._proxify(oldImgUri + '.acl'))
+    ])
   }
 }
 

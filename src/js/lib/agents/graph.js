@@ -162,7 +162,7 @@ class GraphAgent extends LDPAgent {
   storeFile(finUri, dstContainer, file, confidential = false) {
     let uri
     let wia = new WebIDAgent()
-    const webId = wia.getWebID()
+    const webId = wia.getWebId()
 
     if (!webId) {
       throw new Error('No webId detected.')
