@@ -38,6 +38,7 @@ import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'
 import ImageIcon from 'material-ui/svg-icons/image/image'
+import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -341,6 +342,24 @@ let NodeAddGeneric = React.createClass({
                         onChange={this._handleFileUpload}
                       />
                     </ListItem>
+                    <ListItem
+                      key={2}
+                      disabled
+                      leftIcon={
+                        <SocialPersonOutline color="#9ba0aa" />
+                      }
+                      rightIcon={
+                        <FloatingActionButton
+                          mini
+                          secondary
+                          style={styles.addBtn}
+                          onClick={this._handleContactsAndGroups}>
+                          <ContentAdd />
+                        </FloatingActionButton>
+                      }>
+                      Contacts and Groups
+                      <Divider style={styles.divider} />
+                    </ListItem>
                   </List>
                   : null
                 }
@@ -548,6 +567,15 @@ let NodeAddGeneric = React.createClass({
 
   _handleFileSelect() {
     this.refs.fileInputEl.click()
+  },
+
+  _handleContactsAndGroups () {
+    this.setState({
+      isCollection: true
+    })
+    this.setState({
+      isSingleNode: false
+    })
   },
 
   _handleFileUpload({target}) {
