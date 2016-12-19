@@ -19,6 +19,7 @@ import {transparent, pinkA200} from 'material-ui/styles/colors'
 import Util from 'lib/util'
 import UncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
+import ClearIcon from 'material-ui/svg-icons/content/clear'
 
 let AddContact = React.createClass({
 
@@ -60,7 +61,9 @@ let AddContact = React.createClass({
             'fm86xd-DSC09243-1-Kopie_s.jpg',
           name: 'Sabine'
         }
-      ]
+      ],
+      selectedArray: [],
+      hasSelected: false
     }
   },
 
@@ -90,7 +93,33 @@ let AddContact = React.createClass({
         marginTop: '10px'
       },
       checkbox: {
+      },
+      selectedList: {
+        color: '#e1e2e6',
+        width: '80%',
+        padding: '20px',
+        display: this.state.hasSelected ? 'block' : 'none'
+      },
+      selectedAvatar: {
+        margin: '6px'
       }
+    }
+  },
+
+  _handleCheck(name) {
+    this.state.contactArray.map((contact) => {
+      if (contact.name === name) {
+        this.state.selectedArray.push(contact)
+      }
+    })
+    if (this.state.selectedArray.length >= 1) {
+      this.setState({
+        hasSelected: true
+      })
+    } else {
+      this.setState({
+        hasSelected: false
+      })
     }
   },
 
@@ -122,6 +151,20 @@ let AddContact = React.createClass({
             />
             <Tabs>
               <Tab label="Contacts">
+                <div>
+                  <div style={styles.selectedList}>
+                    Shared node: Fertigung autos <br />
+                    {
+                      this.state.selectedArray.map((selected) => {
+                        return (
+                          <Avatar
+                            style={styles.selectedAvatar}
+                            src={Util.uriToProxied(selected.imgUri)} />
+                        )
+                      })
+                    }
+                  </div>
+                </div>
                 <List>
                   <Avatar
                     style={styles.alphaLetter}
@@ -144,6 +187,7 @@ let AddContact = React.createClass({
                             <Checkbox
                               checkedIcon={<CheckedIcon />}
                               uncheckedIcon={<UncheckedIcon />}
+                              onCheck={() => this._handleCheck(contact.name)}
                               style={styles.checkbox}
                               />
                           }>
