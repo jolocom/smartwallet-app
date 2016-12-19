@@ -26,7 +26,8 @@ let AddContact = React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     center: React.PropTypes.object,
-    neighbours: React.PropTypes.array
+    neighbours: React.PropTypes.array,
+    checked: React.PropTypes.bool
   },
 
   contextTypes: {
@@ -109,7 +110,19 @@ let AddContact = React.createClass({
   _handleCheck(name) {
     this.state.contactArray.map((contact) => {
       if (contact.name === name) {
-        this.state.selectedArray.push(contact)
+        console.log('name')
+        if (this.state.selectedArray.indexOf(contact) !== -1) {
+          console.log('already exists ',
+            this.state.selectedArray.indexOf(contact))
+          let newSelectedArray = this.state.selectedArray
+          newSelectedArray.splice(contact, 1)
+          this.setState({
+            selectedArray: newSelectedArray
+          })
+        } else {
+          console.log('push')
+          this.state.selectedArray.push(contact)
+        }
       }
     })
     if (this.state.selectedArray.length >= 1) {
