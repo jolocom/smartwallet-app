@@ -1,4 +1,5 @@
 import url from 'url'
+import WebIdAgent from 'lib/agents/webid'
 import {proxy} from 'settings'
 
 // Misc utility functions
@@ -72,7 +73,8 @@ let Util = {
   // This is too hardcoded.
   getIndexUri(uri) {
     if (!uri) {
-      uri = localStorage.getItem('jolocom.webId')
+      const wia = new WebIdAgent()
+      uri = wia.getWebId()
     }
     let indexUri = this.webidRoot(uri)
     indexUri += '/little-sister/index'

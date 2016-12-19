@@ -3,8 +3,9 @@ import Reflux from 'reflux'
 import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
 import SnackbarActions from 'actions/snackbar'
-import GraphAgent from 'lib/agents/graph.js'
-import AclAgent from 'lib/agents/acl.js'
+import GraphAgent from 'lib/agents/graph'
+import AclAgent from 'lib/agents/acl'
+import WebIdAgent from 'lib/agents/webid'
 import $rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
@@ -30,8 +31,8 @@ export default Reflux.createStore({
   onInitiate(uri, centerUri) {
     this.state.uri = uri
     this.state.initialized = true
-    // @TODO don't get this directly out of localstorage, but use the wia agent
-    let webId = localStorage.getItem('jolocom.webId')
+    const wia = new WebIdAgent()
+    const webId = wia.getWebId()
 
     let checkCenter = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(centerUri)
