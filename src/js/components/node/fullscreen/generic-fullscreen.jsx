@@ -87,7 +87,7 @@ let GenericFullScreen = React.createClass({
         height: this.state.fullscreen ? '90vh' : '40vh',
         background: `${this.props.headerColor}
           ${this.props.backgroundImg} center / cover`,
-        boxShadow: 'inset 0px 0px 129px -12px rgba(0,0,0,0.5)'
+        boxShadow: 'inset 0px 65px 80px -15px rgba(0,0,0,0.6)'
       },
       title: {
         padding: '0 24px',
@@ -120,6 +120,9 @@ let GenericFullScreen = React.createClass({
         left: '0',
         right: '0',
         top: '15vh'
+      },
+      icon: {
+        color: 'white'
       },
       subheader: {
         marginTop: '40px',
@@ -367,9 +370,6 @@ let GenericFullScreen = React.createClass({
       }
     }
 
-    if (this.state.luminance && this.state.luminance < 40) {
-      styles.icon = Object.assign({}, styles.icon || {}, {color: 'white'})
-    }
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
