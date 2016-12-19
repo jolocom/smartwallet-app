@@ -121,7 +121,7 @@ let NodeAddGeneric = React.createClass({
     if (this.state.hasFiles && !this.state.hasDocs &&
       !this.state.hasImages) {
       if (this.state.fileArray.size === 1) {
-        type = 'file'
+        type = 'miscFile'
       } else {
         type = 'collection'
       }
@@ -565,6 +565,7 @@ let NodeAddGeneric = React.createClass({
           this.setState({
             uploadedFileType: 'image'
           })
+          console.log('FU setting uploaded file type to image!')
           this.state.imgArray.push({
             file: file,
             key: this.state.imgArray.length + 1,
@@ -579,6 +580,7 @@ let NodeAddGeneric = React.createClass({
               key: 1,
               label: 'Collection'
             })
+            console.log('FU setting uploaded file type to collection!')
           } else {
             // is singular node
             this.setState({
@@ -599,10 +601,14 @@ let NodeAddGeneric = React.createClass({
         } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
         accepts(file, '.odt') || accepts(file, '.pages') ||
         accepts(file, '.pdf') || accepts(file, '.pptx') ||
-        accepts(file, '.keynote')) {
+        accepts(file, '.keynote') || accepts(file, '.doc') ||
+        accepts(file, '.odp') || accepts(file, '.ppt') ||
+        accepts(file, '.ods') || accepts(file, '.xlsx') ||
+        accepts(file, '.xls') || accepts(file, '.html')) {
           this.setState({
             uploadedFileType: 'document'
           })
+          console.log('FU setting uploaded file type to document!')
           this.state.docArray.push({
             file: file,
             key: this.state.docArray.length + 1
@@ -617,8 +623,9 @@ let NodeAddGeneric = React.createClass({
           // Checks for misc files
         } else {
           this.setState({
-            uploadedFileType: 'file'
+            uploadedFileType: 'miscFile'
           })
+          console.log('FU setting uploaded file type to miscFile!')
           this.state.fileArray.push({
             file: file,
             key: this.state.fileArray.length + 1
