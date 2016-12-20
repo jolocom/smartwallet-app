@@ -51,10 +51,14 @@ class GraphAgent {
 
   addImage(uri, dstContainer, writer, image, confidential) {
     if (image instanceof File) {
+      console.log('image instance of file! ')
       let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+      console.log('Adding image at uri = ', imgUri)
       writer.addTriple(uri, PRED.image, imgUri)
       return this.storeFile(imgUri, null, image, confidential)
     }
+    console.log('not instacvnce of file')
+    debugger;
     writer.addTriple(uri, PRED.image, image)
     return
   }
@@ -83,7 +87,8 @@ class GraphAgent {
    */
 
   createNode(currentUser, centerNode, title, description,
-             image = false, nodeType, confidential = false) {
+             image, nodeType, confidential = false) {
+    console.log('image is classed as ', image)
     let writer = new Writer()
     let newNodeUri = rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
@@ -93,12 +98,15 @@ class GraphAgent {
       writer.addTriple(newNodeUri, PRED.storage, rdf.sym(centerNode.storage))
       writer.addTriple(newNodeUri, PRED.maker, rdf.sym(centerNode.uri))
 
+      console.log('image inside of createNode ', image)
+
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (image) {
         return this.addImage(newNodeUri, centerNode.storage,
                              writer, image, confidential)
       }
     }).then(() => {
+      console.log('Putting the RDF file for the node. ', newNodeUri.uri)
       // Putting the RDF file for the node.
       return fetch(Util.uriToProxied(newNodeUri.uri), {
         method: 'PUT',
@@ -160,13 +168,14 @@ class GraphAgent {
           method: 'PUT',
           credentials: 'include',
           headers: {
-            'Content-Type': 'image'
+            'Content-Type': 'file'
           },
           body: file
         }).then(() => {
+          console.log('successfully uploaded file to server at ', uri)
           return uri
         }).catch((e) => {
-          SnackbarActions.showMessage('Could not upload the image.')
+          SnackbarActions.showMessage('Could not upload the file.')
         })
       })
     })
@@ -300,6 +309,7 @@ class GraphAgent {
       let pred = triples[0].predicate.uri
       validPredicate = (pred === PRED.isRelatedTo.uri ||
         pred === PRED.knows.uri)
+      console.log('WRITING pred = ', pred)
     }
     let statements = []
     // TODO REPLACE WITH PROMISE ALL
@@ -334,6 +344,7 @@ class GraphAgent {
           'Content-Type': 'application/sparql-update'
         }
       }).then((res) => {
+        debugger;
         // At the moment the animation fires when we only add one triple.
         if (res.ok && draw && validPredicate) {
           let obj = triples[0].object.uri

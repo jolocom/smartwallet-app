@@ -154,7 +154,9 @@ let NodeAddGeneric = React.createClass({
 
   submit() {
     if (!this.validates()) return false
-    let {title, description, image} = this.state
+    let {title, description, file} = this.state
+    // let {title, description, image} = this.state
+    console.log('STATE ', this.state)
     // debugger;
     let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.state.graphState.center
@@ -162,15 +164,34 @@ let NodeAddGeneric = React.createClass({
 
     console.log('TYPE == ', type)
 
-    debugger;
-
-    if (centerNode && webId) {
+    if (centerNode && webId && (this.state.imgArray[0] !== undefined)) {
       // let isConfidential = (this.state.type == 'confidential')
       // if (isConfidential) this.state.type = 'default'
 
       // @TODO Previously called nodeActions.create;
       // except it cannot have a return value
-      this.gAgent.createNode(webId, centerNode, title, description, image,
+      //
+      // if (this.state.imgArray[0].imgUri === undefined) {
+      //
+      // }
+      this.gAgent.createNode(
+        webId,
+        centerNode,
+        title,
+        description,
+        this.state.imgArray[0].imgUri,
+        type, false).then((uri) => {
+          graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+        })
+      console.log('there was something in the imgArray')
+    } else if (centerNode && webId) {
+      console.log('there was NOT something in the imgArray')
+      this.gAgent.createNode(
+        webId,
+        centerNode,
+        title,
+        description,
+        file,
         type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
@@ -561,7 +582,6 @@ let NodeAddGeneric = React.createClass({
         })
         // Checks for image
         if (accepts(file, 'image/*')) {
-        //if (accepts(file, '.jpg') || accepts(file, '.png')) {
           this.setState({
             uploadedFileType: 'image'
           })
