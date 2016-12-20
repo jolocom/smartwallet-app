@@ -132,6 +132,7 @@ export default class GraphD3 extends EventEmitter {
     this.rendered = true
 
     this.refreshDimensions() // ?
+    console.table(this.state.neighbours)
     this.orderNodes()
     // if render is the changeNodes function, then this makes sense.
 
