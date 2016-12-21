@@ -132,7 +132,6 @@ export default class GraphD3 extends EventEmitter {
     this.rendered = true
 
     this.refreshDimensions() // ?
-    console.table(this.state.neighbours)
     this.orderNodes()
     // if render is the changeNodes function, then this makes sense.
 
@@ -177,8 +176,10 @@ export default class GraphD3 extends EventEmitter {
 
   orderNodes= function () {
     this.state.neighbours.sort(function(a, b) {
-      let A = (a.name || a.title || 'zzzzzz').toLowerCase()
-      let B = (b.name || b.title || 'zzzzzz').toLowerCase()
+      let A = (a.name || a.title || a.fullName || a.familyName || 'zzzzzz')
+      .toLowerCase()
+      let B = (b.name || b.title || b.fullName || b.familyName || 'zzzzzz')
+      .toLowerCase()
       if (A > B) {
         return 1
       } else if (A < B) {
