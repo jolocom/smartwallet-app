@@ -33,6 +33,9 @@ import ProfileStore from 'stores/profile'
 
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
+import Group from 'material-ui/svg-icons/social/group'
+import Person from 'material-ui/svg-icons/social/person'
+
 import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
 import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
 import ContentAdd from 'material-ui/svg-icons/content/add'
@@ -334,7 +337,7 @@ let NodeAddGeneric = React.createClass({
                 placeholder="Add node title"
                 onChange={Util.linkToState(this, 'title')} />
                 {
-                  !this.state.isSingleNode
+                  !this.state.isSingleNode && !this.state.isCollection
                   ? <List>
                     <ListItem
                       key={1}
@@ -383,6 +386,7 @@ let NodeAddGeneric = React.createClass({
                     </ListItem>
                   </List>
                   : null
+
                 }
               {
                 this.state.isSingleNode
@@ -477,6 +481,57 @@ let NodeAddGeneric = React.createClass({
                       </ListItem>
                     ]}>
                     Files
+                  </ListItem>
+                </List>
+                : null
+              }
+              {
+                this.state.isCollection
+                ? <List>
+                  <ListItem
+                    primaryText="Contacts and Groups"
+                    primaryTogglesNestedList
+                    nestedListStyle={styles.accordionChildren}
+                    open
+                    nestedItems={[
+                      <ListItem
+                        key={1}
+                        disabled
+                        leftIcon={
+                          <Person color="#9ba0aa" />
+                        }
+                        rightIcon={
+                          <FloatingActionButton
+                            mini
+                            secondary
+                            style={styles.addBtn}
+                            onClick={this._handleContacts}>
+                            <ContentAdd />
+                          </FloatingActionButton>
+                        }>
+                        Contacts
+                        <Divider style={styles.divider} />
+                      </ListItem>,
+                      <ListItem
+                        key={2}
+                        disabled
+                        leftIcon={
+                          <Group color="#9ba0aa" />
+                        }
+                        rightIcon={
+                          <FloatingActionButton
+                            mini
+                            secondary
+                            style={styles.addBtn}
+                            onClick={this._handleGroups}>
+                            <ContentAdd />
+                          </FloatingActionButton>
+                        }>
+                        Groups
+                        <Divider style={styles.divider} />
+                      </ListItem>
+                    ]}
+                    >
                   </ListItem>
                 </List>
                 : null
@@ -597,6 +652,14 @@ let NodeAddGeneric = React.createClass({
     this.setState({
       isSingleNode: false
     })
+  },
+
+  _handleContacts () {
+
+  },
+
+  _handleGroups () {
+
   },
 
   _handleFileUpload({target}) {
