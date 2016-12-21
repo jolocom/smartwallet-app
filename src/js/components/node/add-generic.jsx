@@ -31,16 +31,17 @@ import GraphAgent from 'lib/agents/graph.js'
 import GraphPreview from './graph-preview.jsx'
 import ProfileStore from 'stores/profile'
 
-import ActionDescription from 'material-ui/svg-icons/action/description'
-import SocialShare from 'material-ui/svg-icons/social/share'
-import Group from 'material-ui/svg-icons/social/group'
-import Person from 'material-ui/svg-icons/social/person'
-
-import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
 import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
+import ActionDescription from 'material-ui/svg-icons/action/description'
+import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
+import SocialShare from 'material-ui/svg-icons/social/share'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'
+import Group from 'material-ui/svg-icons/social/group'
+import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
 import ImageIcon from 'material-ui/svg-icons/image/image'
+import Person from 'material-ui/svg-icons/social/person'
+import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
 
 // import NodeAddDefault from './add-default.jsx'
@@ -507,7 +508,7 @@ let NodeAddGeneric = React.createClass({
                             secondary
                             style={styles.addBtn}
                             onClick={this._handleContacts}>
-                            <ContentAdd />
+                            <PersonAddIcon />
                           </FloatingActionButton>
                         }>
                         Contacts
@@ -525,7 +526,7 @@ let NodeAddGeneric = React.createClass({
                             secondary
                             style={styles.addBtn}
                             onClick={this._handleGroups}>
-                            <ContentAdd />
+                            <GroupAddIcon />
                           </FloatingActionButton>
                         }>
                         Groups
@@ -656,7 +657,7 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleContacts () {
-
+    this.context.router.push('/add-contacts/')
   },
 
   _handleGroups () {
