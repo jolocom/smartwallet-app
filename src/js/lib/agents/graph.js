@@ -436,7 +436,8 @@ class GraphAgent {
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
       PRED.isRelatedTo_HTTP.uri,
-      PRED.passport.uri
+      PRED.passport.uri,
+      PRED.Image.uri
     ]
     let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
     // If there are adjacent nodes to draw,
