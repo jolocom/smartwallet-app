@@ -159,7 +159,6 @@ let NodeAddGeneric = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, file} = this.state
-    // let {title, description, image} = this.state
     console.log('STATE ', this.state)
     // debugger;
     let webId = localStorage.getItem('jolocom.webId')
@@ -168,6 +167,7 @@ let NodeAddGeneric = React.createClass({
 
     console.log('TYPE == ', type)
 
+    // CREATE IMAGE NODE
     if (centerNode && webId && (this.state.imgArray[0] !== undefined)) {
       // let isConfidential = (this.state.type == 'confidential')
       // if (isConfidential) this.state.type = 'default'
@@ -188,7 +188,7 @@ let NodeAddGeneric = React.createClass({
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
       console.log('there was something in the imgArray')
-    } else if (centerNode && webId) {
+    } else if (centerNode && webId) { // CREATE FILE NODE
       console.log('there was NOT something in the imgArray')
       this.gAgent.createNode(
         webId,
