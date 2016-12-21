@@ -292,7 +292,8 @@ let NodeAddGeneric = React.createClass({
     let headerIcon
     if (this.state.isCollection) {
       headerIcon = <CollectionIcon />
-    } else if (this.state.isSingleNode && this.state.imgArray.length > 0) {
+    } else if (this.state.isSingleNode &&
+      (this.state.imgArray.length > 0 || this.state.docArray.length > 0)) {
       headerIcon = this.state.uploadedFileType === 'image' ? null : <DocIcon />
     } else {
       headerIcon = <AddNodeIcon />
@@ -682,25 +683,6 @@ let NodeAddGeneric = React.createClass({
             key: this.state.imgArray.length + 1,
             imgUri: this.state.uploadedFileUri
           })
-          if ((this.state.imgArray.length + this.state.docArray.length) > 1) {
-            // is a collection
-            this.setState({
-              isCollection: true
-            })
-            this.state.tagArray.push({
-              key: 1,
-              label: 'Collection'
-            })
-            console.log('FU setting uploaded file type to collection!')
-          } else {
-            // is singular node
-            this.setState({
-              isCollection: false
-            })
-            this.setState({
-              isSingleNode: true
-            })
-          }
           this.setState({
             hasImages: true
           })
@@ -748,6 +730,28 @@ let NodeAddGeneric = React.createClass({
       }).catch((e) => {
         console.log(e)
       })
+      console.log('arraylengths ',
+        this.state.imgArray.length, this.state.docArray.length)
+    if ((this.state.imgArray.length + this.state.docArray.length) > 1) {
+      console.log('collection')
+      // is a collection
+      this.setState({
+        isCollection: true
+      })
+      this.state.tagArray.push({
+        key: 1,
+        label: 'Collection'
+      })
+      console.log('FU setting uploaded file type to collection!')
+    } else {
+      // is singular node
+      this.setState({
+        isCollection: false
+      })
+      this.setState({
+        isSingleNode: true
+      })
+    }
     let fileName = target.files[0].name
     if (fileName.length > 20) {
       fileName = fileName.substring(0, 9) + '...' +
