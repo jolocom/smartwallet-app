@@ -56,11 +56,11 @@ class GraphAgent {
       console.log('Adding image at uri = ', imgUri)
       writer.addTriple(uri, PRED.image, imgUri)
       return this.storeFile(imgUri, null, image, confidential)
+    } else {
+      console.log('not instacvnce of file')
+      writer.addTriple(uri, PRED.image, image)
+      return
     }
-    console.log('not instacvnce of file')
-    debugger;
-    writer.addTriple(uri, PRED.image, image)
-    return
   }
 
   /**
@@ -87,8 +87,7 @@ class GraphAgent {
    */
 
   createNode(currentUser, centerNode, title, description,
-             image, nodeType, confidential = false) {
-    console.log('image is classed as ', image)
+             file, nodeType, confidential = false) {
     let writer = new Writer()
     let newNodeUri = rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
@@ -97,13 +96,14 @@ class GraphAgent {
       aclUri = uri
       writer.addTriple(newNodeUri, PRED.storage, rdf.sym(centerNode.storage))
       writer.addTriple(newNodeUri, PRED.maker, rdf.sym(centerNode.uri))
+      writer.addTriple(newNodeUri, PRED.description, nodeType)
 
-      console.log('image inside of createNode ', image)
+      console.log('image inside of createNode ', file)
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
-      if (image) {
+      if (file) {
         return this.addImage(newNodeUri, centerNode.storage,
-                             writer, image, confidential)
+                             writer, file, confidential)
       }
     }).then(() => {
       console.log('Putting the RDF file for the node. ', newNodeUri.uri)
@@ -224,21 +224,15 @@ class GraphAgent {
       SnackbarActions.showMessage('Could not upload the acl file.')
     })
   }
-  // @TODO Keep building... Need to know all possible node types!
+  // @TODO Keep building... Need to know all predicates for possible node types!
   nodeTypePredicate(nodeType) {
     let predicate
     switch (nodeType) {
-      case 'miscfile' :
-        // predicate = PRED.file
-        break
       case 'passport' :
         predicate = PRED.passport
         break
       case 'image' :
         predicate = PRED.Image
-        break
-      case 'text' :
-        predicate = PRED.description
         break
       default :
         predicate = PRED.isRelatedTo
@@ -312,6 +306,7 @@ class GraphAgent {
       console.log('WRITING pred = ', pred)
     }
     let statements = []
+
     // TODO REPLACE WITH PROMISE ALL
     return new Promise((resolve, reject) => {
       for (let i = 0; i < triples.length; i++) {
