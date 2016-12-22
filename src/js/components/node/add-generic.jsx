@@ -169,7 +169,8 @@ let NodeAddGeneric = React.createClass({
     console.log('TYPE == ', type)
 
     // CREATE IMAGE NODE
-    if (centerNode && webId && (this.state.imgArray[0] !== undefined)) {
+    if (centerNode && webId && (this.state.imgArray[0] !== undefined) &&
+      (type !== 'collection')) {
       // let isConfidential = (this.state.type == 'confidential')
       // if (isConfidential) this.state.type = 'default'
 
@@ -189,7 +190,8 @@ let NodeAddGeneric = React.createClass({
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
       console.log('there was something in the imgArray')
-    } else if (centerNode && webId) { // CREATE FILE NODE
+    } else if (centerNode && webId && (type !== 'collection')) {
+      // CREATE OTHER FILE NODE
       console.log('there was NOT something in the imgArray')
       this.gAgent.createNode(
         webId,
@@ -199,6 +201,29 @@ let NodeAddGeneric = React.createClass({
         file,
         type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+        })
+    } else if (centerNode && webId && (type === 'collection')) { // COLLECTION
+      console.log('Initiating collection creation!!!!')
+      console.log('First phase')
+      this.gAgent.createNode(
+        webId,
+        centerNode,
+        title,
+        description,
+        null,
+        type, false).then((uri) => { // @TODO FILL
+          console.log('Second phase')
+          console.log('uri is ', uri)
+          this.gAgent.createNode(
+          webId,
+          uri,
+          title,
+          description,
+          file,
+          type, false).then((uri) => {
+            console.log('CREATED COLLECTION, APPARENTLY.')
+            graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+          })
         })
     }
   },

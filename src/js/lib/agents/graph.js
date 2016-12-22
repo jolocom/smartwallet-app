@@ -105,6 +105,7 @@ class GraphAgent {
         return this.addImage(newNodeUri, centerNode.storage,
                              writer, file, confidential)
       }
+      debugger;
     }).then(() => {
       console.log('Putting the RDF file for the node. ', newNodeUri.uri)
       // Putting the RDF file for the node.
@@ -124,6 +125,7 @@ class GraphAgent {
         throw new Error('An error occured when putting the rdf file.')
       })
       // Connecting the node to the one that created it
+        debugger;
     }).then(() => {
       let predicate = this.nodeTypePredicate(nodeType)
       // let predicate = PRED.isRelatedTo
@@ -138,8 +140,10 @@ class GraphAgent {
         object: newNodeUri
       }
       return this.writeTriples(centerNode.uri, [payload], false)
+        debugger;
     }).then(() => {
       return newNodeUri.uri
+        debugger;
     })
   }
 
