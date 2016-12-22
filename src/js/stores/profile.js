@@ -46,11 +46,13 @@ export default Reflux.createStore({
   onLoad() {
     this.wia.getProfile()
       .then(ProfileActions.load.completed)
-//      .catch(ProfileActions.load.failed)
+      .catch(ProfileActions.load.failed)
   },
 
   graphChange(graphState) {
-    this.state.centerNode = graphState.center.uri
+    if (graphState.center) {
+      this.state.centerNode = graphState.center.uri
+    }
   },
 
   onLoadFailed() {

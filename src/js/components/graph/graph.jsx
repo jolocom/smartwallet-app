@@ -116,7 +116,8 @@ let Graph = React.createClass({
       container: {
         flex: 1,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        position: 'relative'
       },
       chart: {
         flex: 1,
@@ -129,7 +130,8 @@ let Graph = React.createClass({
       },
       loading: {
         backgroundColor: 'transparent',
-        position: 'absolute'
+        position: 'absolute',
+        top: 0
       }
     }
     return styles
