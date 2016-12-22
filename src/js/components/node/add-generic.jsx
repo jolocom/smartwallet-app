@@ -202,30 +202,31 @@ let NodeAddGeneric = React.createClass({
         type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
-    } else if (centerNode && webId && (type === 'collection')) { // COLLECTION
-      console.log('Initiating collection creation!!!!')
-      console.log('First phase')
-      this.gAgent.createNode(
-        webId,
-        centerNode,
-        title,
-        description,
-        null,
-        type, false).then((uri) => { // @TODO FILL
-          console.log('Second phase')
-          console.log('uri is ', uri)
-          this.gAgent.createNode(
-          webId,
-          uri,
-          title,
-          description,
-          file,
-          type, false).then((uri) => {
-            console.log('CREATED COLLECTION, APPARENTLY.')
-            graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
-          })
-        })
-    }
+     }
+     // else if (centerNode && webId && (type === 'collection')) { // COLLECTION
+    //   console.log('Initiating collection creation!!!!')
+    //   console.log('First phase')
+    //   this.gAgent.createNode(
+    //     webId,
+    //     centerNode,
+    //     title,
+    //     description,
+    //     null,
+    //     type, false).then((uri) => { // @TODO FILL
+    //       console.log('Second phase')
+    //       console.log('uri is ', uri)
+    //       this.gAgent.createNode(
+    //       webId,
+    //       uri,
+    //       title,
+    //       description,
+    //       file,
+    //       type, false).then((uri) => {
+    //         console.log('CREATED COLLECTION, APPARENTLY.')
+    //         graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+    //       })
+    //     })
+    // }
   },
 
   getStyles() {
