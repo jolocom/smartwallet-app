@@ -31,16 +31,17 @@ import GraphAgent from 'lib/agents/graph.js'
 import GraphPreview from './graph-preview.jsx'
 import ProfileStore from 'stores/profile'
 
-import ActionDescription from 'material-ui/svg-icons/action/description'
-import SocialShare from 'material-ui/svg-icons/social/share'
-import Group from 'material-ui/svg-icons/social/group'
-import Person from 'material-ui/svg-icons/social/person'
-
-import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
 import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
+import ActionDescription from 'material-ui/svg-icons/action/description'
+import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
+import SocialShare from 'material-ui/svg-icons/social/share'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'
+import Group from 'material-ui/svg-icons/social/group'
+import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
 import ImageIcon from 'material-ui/svg-icons/image/image'
+import Person from 'material-ui/svg-icons/social/person'
+import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
 
 // import NodeAddDefault from './add-default.jsx'
@@ -159,7 +160,6 @@ let NodeAddGeneric = React.createClass({
   submit() {
     if (!this.validates()) return false
     let {title, description, file} = this.state
-    // let {title, description, image} = this.state
     console.log('STATE ', this.state)
     // debugger;
     let webId = localStorage.getItem('jolocom.webId')
@@ -168,7 +168,9 @@ let NodeAddGeneric = React.createClass({
 
     console.log('TYPE == ', type)
 
-    if (centerNode && webId && (this.state.imgArray[0] !== undefined)) {
+    // CREATE IMAGE NODE
+    if (centerNode && webId && (this.state.imgArray[0] !== undefined) &&
+      (type !== 'collection')) {
       // let isConfidential = (this.state.type == 'confidential')
       // if (isConfidential) this.state.type = 'default'
 
@@ -188,7 +190,8 @@ let NodeAddGeneric = React.createClass({
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
       console.log('there was something in the imgArray')
-    } else if (centerNode && webId) {
+    } else if (centerNode && webId && (type !== 'collection')) {
+      // CREATE OTHER FILE NODE
       console.log('there was NOT something in the imgArray')
       this.gAgent.createNode(
         webId,
@@ -199,7 +202,31 @@ let NodeAddGeneric = React.createClass({
         type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
-    }
+     }
+     // else if (centerNode && webId && (type === 'collection')) { // COLLECTION
+    //   console.log('Initiating collection creation!!!!')
+    //   console.log('First phase')
+    //   this.gAgent.createNode(
+    //     webId,
+    //     centerNode,
+    //     title,
+    //     description,
+    //     null,
+    //     type, false).then((uri) => { // @TODO FILL
+    //       console.log('Second phase')
+    //       console.log('uri is ', uri)
+    //       this.gAgent.createNode(
+    //       webId,
+    //       uri,
+    //       title,
+    //       description,
+    //       file,
+    //       type, false).then((uri) => {
+    //         console.log('CREATED COLLECTION, APPARENTLY.')
+    //         graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+    //       })
+    //     })
+    // }
   },
 
   getStyles() {
@@ -512,7 +539,7 @@ let NodeAddGeneric = React.createClass({
                             secondary
                             style={styles.addBtn}
                             onClick={this._handleContacts}>
-                            <ContentAdd />
+                            <PersonAddIcon />
                           </FloatingActionButton>
                         }>
                         Contacts
@@ -530,7 +557,7 @@ let NodeAddGeneric = React.createClass({
                             secondary
                             style={styles.addBtn}
                             onClick={this._handleGroups}>
-                            <ContentAdd />
+                            <GroupAddIcon />
                           </FloatingActionButton>
                         }>
                         Groups
@@ -661,7 +688,7 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleContacts () {
-
+    this.context.router.push('/add-contacts/')
   },
 
   _handleGroups () {
