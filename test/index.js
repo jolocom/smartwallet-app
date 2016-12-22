@@ -9,5 +9,5 @@ global.sinon = sinon
 global.expect = chai.expect
 global.should = chai.should()
 
-const context = require.context('../src/js', true, /.*\.js$/)
+const context = require.context('../src/js', true, /.*\.test\.js$/)
 context.keys().forEach(context)
