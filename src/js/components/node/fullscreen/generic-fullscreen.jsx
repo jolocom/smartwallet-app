@@ -220,7 +220,7 @@ let GenericFullScreen = React.createClass({
   },
 
   // menuItem (optional?)
-  getAction(iconString) {
+  getAction(iconString, i) {
     switch (iconString) {
       case 'chat':
         return {
@@ -269,6 +269,7 @@ let GenericFullScreen = React.createClass({
           icon: <ShareIcon />,
           menuItem: (
             <CopyToClipboard
+              key={i}
               text={this.props.copyToClipboardText}
               onCopy={this._handlePostCopyURL}
             >
@@ -276,6 +277,7 @@ let GenericFullScreen = React.createClass({
             </CopyToClipboard>),
           fabItem: (
             <CopyToClipboard
+              key={i}
               text={this.props.copyToClipboardText}
               onCopy={this._handlePostCopyURL}
             >
@@ -390,14 +392,16 @@ let GenericFullScreen = React.createClass({
                     }
                     onTouchTap={this._preventDefault}
                     anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                    targetOrigin={{horizontal: 'left', vertical: 'top'}}>
-                    {this.props.menuItems.map((menuItem) => {
-                      let menuItemInfo = this.getAction(menuItem)
+                    targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                  >
+                    {this.props.menuItems.map((menuItem, i) => {
+                      let menuItemInfo = this.getAction(menuItem, i)
                       if ('menuItem' in menuItemInfo) {
                         return menuItemInfo.menuItem
                       }
                       return (
                         <MenuItem
+                          key={i}
                           primaryText={menuItemInfo.title}
                           onTouchTap={menuItemInfo.handler} />
                       )
@@ -415,13 +419,15 @@ let GenericFullScreen = React.createClass({
               />
               <div style={styles.floatingButtons}>
                 {this.props.fabItems.map((fabItem, i) => {
-                  let fabItemInfo = this.getAction(fabItem)
+                  let fabItemInfo = this.getAction(fabItem, i)
                   if ('fabItem' in fabItemInfo) {
                     return fabItemInfo.fabItem
                   }
+
                   let lastItem = i === this.props.fabItems.length - 1
                   return (
                     <FloatingActionButton
+                      key={i}
                       backgroundColor={!lastItem ? '#fff' : 'inherit'}
                       style={styles.fabBtn}
                       secondary={lastItem}

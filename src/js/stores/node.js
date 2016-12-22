@@ -3,9 +3,10 @@ import Reflux from 'reflux'
 import nodeActions from 'actions/node'
 import graphActions from 'actions/graph-actions'
 import SnackbarActions from 'actions/snackbar'
-import GraphAgent from 'lib/agents/graph.js'
-import AclAgent from 'lib/agents/acl.js'
-import rdf from 'rdflib'
+import GraphAgent from 'lib/agents/graph'
+import AclAgent from 'lib/agents/acl'
+import WebIdAgent from 'lib/agents/webid'
+import $rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 
 export default Reflux.createStore({
@@ -27,18 +28,11 @@ export default Reflux.createStore({
     this.init()
   },
 
-  create(user, node, title, description, image, type) {
-    this.gAgent.createNode(user, node, title, description, image, type)
-  },
-
-  onCreateCompleted(node) {
-    this.trigger(node)
-  },
-
   onInitiate(uri, centerUri) {
     this.state.uri = uri
     this.state.initialized = true
-    let webId = localStorage.getItem('jolocom.webId')
+    const wia = new WebIdAgent()
+    const webId = wia.getWebId()
 
     let checkCenter = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(centerUri)
@@ -53,10 +47,10 @@ export default Reflux.createStore({
 
     let checkCurrent = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(uri)
-      aAgent.fetchInfo().then(() => {
+      aAgent.fetchInfo().then((res) => {
         this.state.writePerm = aAgent.isAllowed(webId, 'write')
         resolve()
-      }).catch(() => {
+      }).catch((res) => {
         this.state.writePerm = false
         resolve()
       })
@@ -66,6 +60,30 @@ export default Reflux.createStore({
       this.trigger(this.state)
     }).catch(() => {
       this.trigger(this.state)
+    })
+  },
+
+  onCreate(
+    currentUser,
+    centerNode,
+    title,
+    description,
+    image,
+    nodeType,
+    confidential = false
+  ) {
+    this.gAgent.createNode(
+      currentUser,
+      centerNode,
+      title,
+      description,
+      image,
+      nodeType,
+      confidential
+    ).then(uri => {
+      graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+    }).catch(() => {
+      SnackbarActions.showMessage('Could not create the node.')
     })
   },
 
@@ -82,15 +100,19 @@ export default Reflux.createStore({
     // if the state of the graph store changes for instance
     centerNode = Object.assign({}, centerNode)
 
-    let subject = rdf.sym(centerNode.uri)
-    let object = rdf.sym(node.uri)
+    let subject = $rdf.sym(centerNode.uri)
+    let object = $rdf.sym(node.uri)
 
     this.gAgent.deleteFile(object.uri).then((response) => {
       return new Promise((resolve, reject) => {
         if (response.ok) {
           let triples = []
-          this.gAgent.findTriples(subject.uri, subject, undefined, object)
-          .then((result) => {
+          this.gAgent.findTriples(
+            subject.uri,
+            subject,
+            undefined,
+            object
+          ).then((result) => {
             for (let t of result) {
               triples.push({
                 subject: t.subject,
@@ -132,9 +154,9 @@ export default Reflux.createStore({
       payload = {
         uri: centerNode.uri,
         triples: [{
-          subject: rdf.sym(centerNode.uri),
-          predicate: rdf.sym(node.connection),
-          object: rdf.sym(node.uri)
+          subject: $rdf.sym(centerNode.uri),
+          predicate: $rdf.sym(node.connection),
+          object: $rdf.sym(node.uri)
         }]
       }
     } else {
@@ -162,9 +184,9 @@ export default Reflux.createStore({
       predicate = PRED.knows
     }
     let payload = {
-      subject: rdf.sym(start),
+      subject: $rdf.sym(start),
       predicate,
-      object: rdf.sym(end)
+      object: $rdf.sym(end)
     }
     this.gAgent.writeTriples(start, [payload], start === center).catch(e => {
       SnackbarActions.showMessage('The nodes are already linked.')

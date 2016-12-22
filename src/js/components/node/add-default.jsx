@@ -1,13 +1,12 @@
 import React from 'react'
 import Radium from 'radium'
 import {TextField, Paper, SelectField, MenuItem} from 'material-ui'
-import graphActions from 'actions/graph-actions'
+import WebIdAgent from 'lib/agents/webid'
 
-import {PRED} from 'lib/namespaces'
-import GraphPreview from './graph-preview.jsx'
-import ImageSelect from 'components/common/image-select.jsx'
-import GraphAgent from 'lib/agents/graph.js'
-import SnackbarActions from 'actions/snackbar'
+import GraphPreview from 'components/node/graph-preview'
+import ImageSelect from 'components/common/image-select'
+import GraphAgent from 'lib/agents/graph'
+import nodeActions from 'actions/node'
 
 let NodeAddDefault = React.createClass({
   propTypes: {
@@ -89,11 +88,10 @@ let LowerPart = React.createClass({
           <div style={styles.row}>
             <TextField
               hintText="Title"
-              fullWidth={true}
+              fullWidth
               style={styles.input}
-              onChange={({target}) => {
-                this.setState({title: target.value})
-              }} />
+              onChange={this._handleTitleChange}
+            />
             <SelectField value={this.state.type}
               onChange={this._handleTypeChange} style={styles.select}>
               <MenuItem value="default" primaryText="Plain text" />
@@ -104,16 +102,23 @@ let LowerPart = React.createClass({
           <div style={styles.row}>
             <TextField
               hintText="Description"
-              fullWidth={true}
+              fullWidth
               style={styles.input}
-              onChange={({target}) => {
-                this.setState({description: target.value})
-              }} />
+              onChange={this._handleDescriptionChange}
+            />
             <ImageSelect onChange={this._handleSelectImage} />
           </div>
         </Paper>
       </div>
     )
+  },
+
+  _handleTitleChange(event) {
+    this.setState({title: event.target.value})
+  },
+
+  _handleDescriptionChange(event) {
+    this.setState({description: event.target.value})
   },
 
   _handleTypeChange(event, index, value) {
@@ -125,23 +130,27 @@ let LowerPart = React.createClass({
   },
 
   submit() {
+    const wia = new WebIdAgent()
+    const webId = wia.getWebId()
+
     if (!(this.state.title && this.state.title.trim())) {
-      return false
+      return
     }
 
-    let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.props.graphState.center
-
     if (centerNode && webId) {
       let isConfidential = this.state.type === 'confidential'
       let {title, description, image} = this.state
-      this.gAgent.createNode(webId, centerNode, title, description,
-                             image, this.state.type, isConfidential)
-      .then((uri) => {
-        graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
-      }).catch(() => {
-        SnackbarActions.showMessage('Could not create the node.')
-      })
+
+      nodeActions.create(
+        webId,
+        centerNode,
+        title,
+        description,
+        image,
+        this.state.type,
+        isConfidential
+      )
     }
   },
 

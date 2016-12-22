@@ -1,12 +1,7 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
-import {proxy} from 'settings'
-import {PRED} from 'lib/namespaces'
+import AccountsAgent from 'lib/agents/accounts'
 import WebIdAgent from 'lib/agents/webid'
-import GraphAgent from 'lib/agents/graph'
-import Util from 'lib/util'
-import $rdf from 'rdflib'
-
 import SnackbarActions from 'actions/snackbar'
 
 export default Reflux.createStore({
@@ -25,29 +20,22 @@ export default Reflux.createStore({
     return this.state
   },
 
-  onSignup(data) {
-    const usr = encodeURIComponent(data.username)
-    const psw = encodeURIComponent(data.password)
-    const eml = encodeURIComponent(data.email)
-    const name = encodeURIComponent(data.name)
+  init() {
+    this.accounts = new AccountsAgent()
+    this.wia = new WebIdAgent()
+  },
 
-    fetch(`${proxy}/register`, {
-      method: 'POST',
-      body: `username=${usr}&password=${psw}&name=${name}&email=${eml}`,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    }).then((res) => {
-      if (res.status === 400) {
-        throw new Error('USERNAME_TAKEN')
-      }
+  onSignup({username, password, email, name}) {
+    localStorage.setItem('jolocom.auth-mode', 'proxy')
+
+    this.accounts.register(username, password, email, name).then((account) => {
       this.state = {
         emailVerifyScreen: true
       }
       this.trigger(this.state)
     }).catch((e) => {
-      if (e.message === 'USERNAME_TAKEN') {
-        SnackbarActions.showMessage('Username is already taken.')
+      if (e.message) {
+        SnackbarActions.showMessage(e.message)
       } else {
         SnackbarActions.showMessage('An account error has occured.')
       }
@@ -61,61 +49,47 @@ export default Reflux.createStore({
    * created user. Only used when registering a new user.
   */
 
-  // TODO break down a bit, use agents
+  _login(username, password) {
+    this.trigger({loggingIn: true})
+
+    return this.accounts.login(username, password).then((account) => {
+      if (this.state.emailUpdateQueued) {
+        // init after activation only
+        Promise.all([
+          this.accounts.initInbox(account.webid),
+          this.accounts.initIndex(account.webid),
+          this.accounts.initDisclaimer(account.webid)
+        ])
+
+        Account.updateUserEmail(
+          this.state.emailToBeInserted, account.webid, username)
+      } else {
+        Account.login.completed(username, account.webid)
+      }
+
+      return account.webid
+    }).catch(Account.login.failed)
+  },
+
   onLogin(username, password) {
-    const webId = localStorage.getItem('jolocom.webId')
+    const webId = this.wia.getWebId()
+
     // The user is already logged in.
     if (webId) {
       // Check if the session expired (?)
       this.trigger({loggingIn: true})
-      fetch(Util.uriToProxied(webId), {
-        method: 'HEAD',
-        credentials: 'include'
-      }).then((res) => {
-        if (!res.ok) {
-          throw new Error(res.statusText)
-        }
 
+      // Check if the cookie is still valid
+      this.accounts.checkLogin(webId).then(() => {
         Account.login.completed(
           localStorage.getItem('jolocom.username'),
-          localStorage.getItem('jolocom.webId')
+          webId
         )
       }).catch(() => {
         Account.logout()
       })
     } else if (username && password) {
-      this.trigger({loggingIn: true})
-      // TODO Move to agent
-      fetch(`${proxy}/login`, {
-        method: 'POST',
-        body: `username=${username}&password=${password}`,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      }).then((res) => {
-        if (!res.ok) {
-          throw new Error('Login authentication failed.')
-        }
-
-        res.json().then((js) => {
-          const webIdAgent = new WebIdAgent()
-          webIdAgent.initInbox(js.webid)
-          webIdAgent.initIndex(js.webid)
-          webIdAgent.initDisclaimer(js.webid)
-
-          if (this.state.emailUpdateQueued) {
-            Account.updateUserEmail(
-              this.state.emailToBeInserted, js.webid, username)
-          } else {
-            Account.login.completed(username, js.webid)
-          }
-        })
-      }).catch((e) => {
-        SnackbarActions.showMessage('Login authentication failed.')
-      })
-    } else {
-      this.trigger({loggingIn: false})
+      this._login(username, password)
     }
   },
 
@@ -133,18 +107,16 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
+  onLoginFailed(e) {
+    SnackbarActions.showMessage('Login authentication failed.')
+    this.trigger({loggingIn: false})
+  },
+
   onLogout() {
     const authMode = localStorage.getItem('jolocom.auth-mode')
 
     if (authMode === 'proxy') {
-      fetch(`${proxy}/logout`, {
-        method: 'POST',
-        credentials: 'include',
-        // Not sure if the headers are necessary.
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      })
+      this.accounts.logout()
     }
 
     this.state = {
@@ -161,46 +133,58 @@ export default Reflux.createStore({
 
   loggedIn() {
     // How would this work now?
-    return localStorage.getItem('jolocom.webId')
+    const webId = this.wia.getWebId()
+    if (webId) {
+      return webId
+    }
   },
 
-  // TODO Move to the appropriate agent.
-  onActivateEmail(user, code) {
-    fetch(`${proxy}/verifyemail`, {
-      method: 'POST',
-      body: `username=${user}&code=${code}`,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-      res.json().then(js => {
-        this.state.emailUpdateQueued = true
-        this.state.emailToBeInserted = js.email
-        Account.activateEmail.completed()
-      })
-    }).catch((e) => {
-      Account.activateEmail.failed(e)
-      // console.error(e)
-    })
+  onForgotPassword(username) {
+    this.accounts.forgotPassword(username)
+      .then(Account.forgotPassword.complete)
+      .catch(Account.forgotPassword.failed)
+  },
+
+  onForgotPasswordComplete() {
+    SnackbarActions
+      .showMessage('An email was sent to you with further instructions.')
+  },
+
+  onForgotPasswordFailed(e) {
+    SnackbarActions.showMessage('An error occured : ' + e)
+  },
+
+  onResetPassword(username, token, password) {
+    this.accounts.resetPassword(username, token, password)
+      .then(Account.resetPassword.complete)
+      .catch(Account.resetPassword.failed)
+  },
+
+  onResetPasswordComplete() {
+    SnackbarActions
+      .showMessage('You can now log in with your new password.')
+  },
+
+  onResetPasswordFailed(e) {
+    SnackbarActions.showMessage('An error occured : ' + e)
+  },
+
+  onActivateEmail(username, code) {
+    this.accounts.verifyEmail(username, code).then(js => {
+      Account.activateEmail.completed(js.email)
+    }).catch(Account.activateEmail.failed)
   },
 
   onUpdateUserEmail(email, webId, username) {
-    const gAgent = new GraphAgent()
-    gAgent.writeTriples(webId, [{
-      subject: $rdf.sym(webId),
-      predicate: PRED.email,
-      object: $rdf.sym(`mailto:${email}`)
-    }]).then(() => {
+    this.accounts.updateEmail(webId, email).then(() => {
       Account.login.completed(username, webId)
     })
   },
 
-  onActivateEmailCompleted() {
+  onActivateEmailCompleted(email) {
     SnackbarActions.showMessage('Your account has been activated!')
+    this.state.emailUpdateQueued = true
+    this.state.emailToBeInserted = email
     this.state.emailVerifyCompleted = true
     this.trigger(this.state)
   },

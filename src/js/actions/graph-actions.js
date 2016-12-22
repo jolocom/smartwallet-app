@@ -7,5 +7,6 @@ export default Reflux.createActions({
   'drawNewNode': {asyncResult: false},
   'navigateToNode': {asyncResult: false},
   'refresh': {asyncResult: false},
-  'drawAtUri': {asyncResult: false}
+  'drawAtUri': {asyncResult: false},
+  'enterPreview': {asyncResult: false}
 })

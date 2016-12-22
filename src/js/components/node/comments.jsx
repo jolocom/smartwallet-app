@@ -22,6 +22,11 @@ let Comments = React.createClass({
     TimerMixin
   ],
 
+  propTypes: {
+    node: React.PropTypes.object,
+    style: React.PropTypes.object
+  },
+
   componentDidMount: function() {
     this.setInterval(() => {
       CommentsActions.load(this.props.node)
@@ -33,7 +38,7 @@ let Comments = React.createClass({
   addComment: function(content) {
     CommentsActions.create({
       subject: this.props.node.uri,
-      author: this.state.profile.webid,
+      author: this.state.profile.webId,
       content: content
     })
   },
@@ -65,11 +70,19 @@ let Comments = React.createClass({
           {this.state.comments.items.map(function({author, content}) {
             let avatar = <Avatar src={author.imgUri}>{author[0]}</Avatar>
             return (
-              <ListItem primaryText={author} secondaryText={content} leftAvatar={avatar}/>
+              <ListItem
+                primaryText={author}
+                secondaryText={content}
+                leftAvatar={avatar}
+              />
             )
           })}
         </List>
-        <Compose placeholder="Write a comment..." onSubmit={this.addComment} style={styles.compose}/>
+        <Compose
+          placeholder="Write a comment..."
+          onSubmit={this.addComment}
+          style={styles.compose}
+        />
       </div>
     )
   }

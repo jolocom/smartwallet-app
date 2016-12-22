@@ -9,29 +9,32 @@ import graphActions from 'actions/graph-actions'
 import JolocomTheme from 'styles/jolocom-theme'
 
 let Graph = React.createClass({
+  propTypes: {
+    onSelect: React.PropTypes.func
+  },
+
   mixins: [Reflux.listenTo(previewStore, 'onStateUpdate', 'initialState')],
 
   getGraphEl() {
     return ReactDOM.findDOMNode(this.refs.graph)
   },
 
-  initialState(state) {
-    this.state = state
-  },
-
-  propTypes: {
-    onSelect: React.PropTypes.func
+  initialState(initialState) {
+    this.state = Object.assign({}, initialState)
   },
 
   onStateUpdate(data) {
     this.setState(data)
   },
 
-  componentDidUpdate() {
-    if (this.state.initialized) {
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.center.uri !== nextState.center.uri ||
+        this.state.neighbours.length !== nextState.neighbours.length) {
+      this.graph.render(nextState)
+      this.graph.updateHistory(nextState.navHistory)
     }
+  },
+  componentDidUpdate() {
   },
 
   componentDidMount() {
@@ -39,6 +42,9 @@ let Graph = React.createClass({
     this.graph.on('center-changed', this._handleCenterChange)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
     this.graph.on('select', this._handleSelect)
+
+    this.graph.render(this.state)
+    this.graph.updateHistory(this.state.navHistory)
   },
 
   _handleSelect(data) {
@@ -76,4 +82,5 @@ let Graph = React.createClass({
     previewActions.navigateToNode(node)
   }
 })
+
 export default Radium(Graph)
