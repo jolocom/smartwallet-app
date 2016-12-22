@@ -586,7 +586,6 @@ export default class GraphD3 extends EventEmitter {
 
     // Subscribe to the click listeners for neighbour nodes
     this.node.on('click', function (data) {
-      console.log('clickListener')
       d3.event.stopPropagation()
       let object = d3.selectAll('.node').filter((d) => d === data)
       self.clicked(object, data)
@@ -652,7 +651,6 @@ export default class GraphD3 extends EventEmitter {
   // remeber initial position in px and py
 
   dragStart = function(node) {
-    console.log('dragstart')
     if (node.rank === 'elipsis' || node.rank === 'center' || node.unavailable) {
       node.mobile = false
     } else {
@@ -666,7 +664,6 @@ export default class GraphD3 extends EventEmitter {
   // change node position by same amount as change in mouse position
 
   drag = function(node) {
-    console.log('drag')
     if (node.mobile) {
       node.position.x += d3.event.dx
       node.position.y += d3.event.dy
@@ -678,7 +675,6 @@ export default class GraphD3 extends EventEmitter {
   // We check if the node is dropped in the center, if yes we navigate to it.
 
   dragEnd = function (node) {
-    console.log('dragEnd')
     this.mouseDown = false
 
     if (node.mobile) {
@@ -695,10 +691,6 @@ export default class GraphD3 extends EventEmitter {
         node.position.x = node.position.px
         node.position.y = node.position.py
         this.resetPos(100)
-        // if (node.distanceTraveled <= 10) {
-        //   let object = d3.selectAll('.node').filter((d) => d === node)
-        //   this.clicked(object, node)
-        // }
       }
     }
   }.bind(this)
@@ -706,7 +698,6 @@ export default class GraphD3 extends EventEmitter {
   // click behaviour
 
   clicked = function (object, data) {
-    console.log('clicked')
     if (this.mode === 'preview') {
       this.onClick(object, data)
     } else if (data.rank === 'history') {
@@ -719,7 +710,6 @@ export default class GraphD3 extends EventEmitter {
   // navigate to node as long as node is not already center node
 
   navigateToNode = function (node) {
-    console.log('navigate')
     if (node.rank !== 'center') {
       // change rank to center node
       node.rank = 'center'
