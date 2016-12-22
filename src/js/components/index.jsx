@@ -14,7 +14,7 @@ let Index = React.createClass({
   componentWillMount() {
     const {account} = this.context
     if (account && account.webId) {
-      // this.context.router.push('/graph')
+      this.context.router.push('/graph')
     }
   },
 
