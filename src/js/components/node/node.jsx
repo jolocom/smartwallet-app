@@ -42,7 +42,7 @@ let Node = React.createClass({
       if (this.props.graph.center.uri === this.props.params.node) {
         selectedNode = this.props.graph.center
       } else {
-        selectedNode = this.state.graph.neighbours.find(el => {
+        selectedNode = this.props.graph.neighbours.find(el => {
           return el.uri === this.props.params.node
         })
       }
