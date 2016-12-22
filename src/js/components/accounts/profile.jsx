@@ -10,9 +10,6 @@ import {
   AppBar,
   IconButton,
   TextField,
-  Card,
-  CardMedia,
-  CardActions,
   FlatButton,
   RaisedButton,
   List, ListItem,
@@ -24,7 +21,7 @@ import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import SocialPublic from 'material-ui/svg-icons/social/public'
-import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
+import SocialPerson from 'material-ui/svg-icons/social/person'
 import SnackbarActions from 'actions/snackbar'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
@@ -91,8 +88,48 @@ let Profile = React.createClass({
   getStyles() {
     const {muiTheme} = this.context
     let styles = {
-      image: {
-        height: '176px'
+      profileImage: {
+        minHeight: '240px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      profileImageBackground: {
+        flex: 1,
+        width: '100%'
+      },
+      profileImageAction: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        height: '80px',
+        background: 'linear-gradient(0deg, rgba(0,0,0,0.3), transparent)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      profileImageActionButton: {
+        color: muiTheme.palette.alternateTextColor
+      },
+      profileImagePlaceholder: {
+        borderRadius: '50%',
+        width: '96px',
+        height: '96px',
+        marginBottom: '80px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: muiTheme.jolocom.gray3
+      },
+      profileImageIcon: {
+        width: '48px',
+        height: '48px',
+        color: muiTheme.jolocom.gray1
+      },
+      profileImageProgress: {
+        alignSelf: 'flex-end'
       },
       bar: {
         backgroundColor: muiTheme.palette.primary1Color
@@ -125,7 +162,6 @@ let Profile = React.createClass({
       uploadPassportButton: {
         margin: '0 10px 0 0',
         position: 'relative',
-        top: '-11px',
         verticalAlign: 'top'
       },
       removePassportButton: {
@@ -187,20 +223,63 @@ let Profile = React.createClass({
     return styles
   },
 
+  renderProfileImage() {
+    let styles = this.getStyles()
+    let image
+    let backgroundImage
+
+    let {file, imgUri} = this.state
+
+    if (file) {
+      backgroundImage = URL.createObjectURL(file)
+    } else if (imgUri) {
+      backgroundImage = Util.uriToProxied(imgUri)
+    }
+
+    if (backgroundImage) {
+      image = (
+        <div
+          style={Object.assign({},
+            styles.profileImageBackground,
+            {background: `url(${backgroundImage}) center / cover`}
+          )}
+        />
+      )
+    } else {
+      image = (
+        <div style={styles.profileImagePlaceholder}>
+          <SocialPerson style={styles.profileImageIcon} />
+        </div>
+      )
+    }
+
+    return (
+      <div style={styles.profileImage}>
+        {image}
+        <div style={styles.profileImageAction}>
+          {this.state.loadingDisplayPhoto
+            ? <LinearProgress
+              mode="indeterminate"
+              style={styles.profileImageProgress} />
+            : backgroundImage
+              ? <FlatButton
+                style={styles.profileImageActionButton}
+                label="Remove"
+                onClick={this._handleRemove} />
+              : <FlatButton
+                style={styles.profileImageActionButton}
+                label="Select or take picture"
+                onClick={this._handleSelect} />}
+        </div>
+      </div>
+    )
+  },
+
   render() {
     let nameUsed = this.state.givenName
       ? 'givenName'
       : 'fullName'
     let styles = this.getStyles()
-    let {file, imgUri} = this.state
-
-    let img
-    if (file) {
-      img = URL.createObjectURL(file)
-    } else if (imgUri) {
-      img = Util.uriToProxied(imgUri)
-    }
-    let bgImg = img || '/img/person-placeholder.png'
 
     return (
       <Dialog ref="dialog" fullscreen>
@@ -214,7 +293,7 @@ let Profile = React.createClass({
                 iconStyle={{color: '#fff'}}
                 color="#fff"
                 onClick={this.hide}
-                iconClassName="material-icons">arrow_back</IconButton>
+                iconClassName="material-icons">close</IconButton>
             }
             iconElementRight={!this.state.loadingPassportPhoto &&
               !this.state.loadingDisplayPhoto
@@ -222,32 +301,15 @@ let Profile = React.createClass({
                 iconStyle={{color: '#fff'}}
                 onClick={this._handleUpdate}
                 iconClassName="material-icons">check</IconButton>
-              : <IconButton iconClassName="material-icons">
-                  hourglass_empty
+              : <IconButton
+                iconStyle={{color: '#fff'}}
+                iconClassName="material-icons">
+                hourglass_empty
               </IconButton>
             }
           />
           <Content style={styles.content}>
-            <Card rounded={false}>
-              <CardMedia
-                style={Object.assign({},
-                  styles.image,
-                  {background: `url(${bgImg}) center / cover`}
-                )} />
-              <CardActions>
-                {this.state.loadingDisplayPhoto
-                  ? <LinearProgress
-                    mode="indeterminate"
-                    style="progBar" />
-                  : img
-                      ? <FlatButton
-                        label="Remove"
-                        onClick={this._handleRemove} />
-                      : <FlatButton
-                        label="Select or take picture"
-                        onClick={this._handleSelect} />}
-              </CardActions>
-            </Card>
+            {this.renderProfileImage()}
             <input
               ref={this._setFileInputRef}
               type="file"
@@ -281,7 +343,7 @@ let Profile = React.createClass({
                   <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <SocialPersonOutline color="#9ba0aa" />
+                      <SocialPerson color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField

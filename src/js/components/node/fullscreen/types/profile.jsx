@@ -7,7 +7,7 @@ import ProfileStore from 'stores/profile'
 
 import ActionInfoOutline from 'material-ui/svg-icons/action/info-outline'
 import SocialPublic from 'material-ui/svg-icons/social/public'
-import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
+import SocialPerson from 'material-ui/svg-icons/social/person'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
@@ -80,23 +80,31 @@ let ProfileNode = React.createClass({
       },
       repBarContainer: {
         display: 'flex',
-        alignItems: 'center'
+        flexDirection: 'column',
+        alignItems: 'flex-start'
       },
       repBar: {
         flex: 1,
         height: '10px',
-        borderRadius: '5px'
+        borderRadius: '5px',
+        backgroundColor: muiTheme.jolocom.gray3
       },
       repSubheader: {
-        paddingLeft: '0'
+        paddingLeft: '0',
+        fontSize: '14px',
+        lineHeight: '16px',
+        marginBottom: '8px'
       },
       verifiedSubheader: {
         paddingLeft: '0',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: '14px',
+        lineHeight: '16px',
+        marginBottom: '8px'
       },
       repNumber: {
         padding: '10px 0',
-        fontSize: '20pt',
+        fontSize: '18px',
         color: muiTheme.palette.textColor
       },
       repLeftCol: {
@@ -126,7 +134,8 @@ let ProfileNode = React.createClass({
         marginLeft: '18px'
       },
       inputStyle: {
-        marginTop: '-20px', height: '50px'
+        cursor: 'auto',
+        marginTop: '-16px', height: '48px'
       },
       underlineStyle: {
         display: 'none'
@@ -159,7 +168,7 @@ let ProfileNode = React.createClass({
         floatingLabelText: 'Node type',
         value: 'Profile'
       }, {
-        icon: <SocialPersonOutline color="#9ba0aa" />,
+        icon: <SocialPerson color="#9ba0aa" />,
         label: 'Username',
         value: this.getName()
       }]
@@ -212,7 +221,6 @@ let ProfileNode = React.createClass({
               underlineStyle={styles.underlineStyle}
               floatingLabelText="Passport"
               value={this.state.profile.passportImgUri}
-              floatingLabelFixed
               readOnly>
               <img
                 src={Utils.uriToProxied(
@@ -230,7 +238,6 @@ let ProfileNode = React.createClass({
               underlineStyle={styles.underlineStyle}
               floatingLabelText="Credit card"
               value={this.state.profile.creditCard}
-              floatingLabelFixed
               readOnly
             />
           )
@@ -252,7 +259,6 @@ let ProfileNode = React.createClass({
           underlineStyle={styles.underlineStyle}
           floatingLabelText={label}
           value={value}
-          floatingLabelFixed
           readOnly
           {...otherProps}
         />
@@ -261,6 +267,7 @@ let ProfileNode = React.createClass({
 
     return (
       <ListItem
+        disabled
         key={key}
         leftIcon={icon}>
         {field}
@@ -315,6 +322,7 @@ let ProfileNode = React.createClass({
   render() {
     let styles = this.getStyles()
     let {writePerm, centerWritePerm} = this.props
+    const {muiTheme} = this.context
     let {
       rank,
       type,
@@ -365,7 +373,7 @@ let ProfileNode = React.createClass({
               </td>
               <td>
                 <Subheader style={styles.verifiedSubheader}>
-                  Verification
+                  Verified
                 </Subheader>
               </td>
             </tr>
@@ -374,10 +382,11 @@ let ProfileNode = React.createClass({
                 <div style={styles.repBarContainer}>
                   <LinearProgress
                     mode="determinate"
+                    color={muiTheme.jolocom.gray2}
                     style={styles.repBar}
-                    value={this.state.reputation} />
+                    value={this.state.reputation || 0} />
                   <div style={styles.repNumber}>
-                    {this.state.reputation}
+                    {this.state.reputation || 'No reputation'}
                   </div>
                 </div>
               </td>
