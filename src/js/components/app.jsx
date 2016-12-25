@@ -1,6 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
-import Radium from 'radium'
+import Radium, {StyleRoot} from 'radium'
 import {bankUri} from 'lib/fixtures'
 
 import {Layout, Content} from 'components/layout'
@@ -305,7 +305,7 @@ let App = React.createClass({
     ]
 
     return (
-      <div style={styles.container}>
+      <StyleRoot style={styles.container}>
         {this.isPublicRoute() ? this.props.children : (
           <Layout>
             <Paper style={styles.header}>
@@ -359,7 +359,7 @@ let App = React.createClass({
         >
           {this.state.confirm.message}
         </Dialog>
-      </div>
+      </StyleRoot>
     )
   }
 

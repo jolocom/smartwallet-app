@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import Account from 'actions/account'
 import AccountsAgent from 'lib/agents/accounts'
+import WebIdAgent from 'lib/agents/webid'
 import SnackbarActions from 'actions/snackbar'
 
 export default Reflux.createStore({
@@ -21,6 +22,7 @@ export default Reflux.createStore({
 
   init() {
     this.accounts = new AccountsAgent()
+    this.wia = new WebIdAgent()
   },
 
   onSignup({username, password, email, name}) {
@@ -70,7 +72,8 @@ export default Reflux.createStore({
   },
 
   onLogin(username, password) {
-    const webId = localStorage.getItem('jolocom.webId')
+    const webId = this.wia.getWebId()
+
     // The user is already logged in.
     if (webId) {
       // Check if the session expired (?)
@@ -80,7 +83,7 @@ export default Reflux.createStore({
       this.accounts.checkLogin(webId).then(() => {
         Account.login.completed(
           localStorage.getItem('jolocom.username'),
-          localStorage.getItem('jolocom.webId')
+          webId
         )
       }).catch(() => {
         Account.logout()
@@ -130,7 +133,10 @@ export default Reflux.createStore({
 
   loggedIn() {
     // How would this work now?
-    return localStorage.getItem('jolocom.webId')
+    const webId = this.wia.getWebId()
+    if (webId) {
+      return webId
+    }
   },
 
   onForgotPassword(username) {
