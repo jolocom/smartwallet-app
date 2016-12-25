@@ -71,7 +71,7 @@ export default Reflux.createStore({
             name: name,
             username: name,
             webId: contact.uri || '????',
-            email: email.replace('mailto:', ''),
+            email: email && email.replace('mailto:', ''),
             imgUri: avatar
           }
         })
