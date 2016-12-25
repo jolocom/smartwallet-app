@@ -18,11 +18,12 @@ import Dialog from 'components/common/dialog.jsx'
 import {Layout} from 'components/layout'
 import {transparent, pinkA200} from 'material-ui/styles/colors'
 import Util from 'lib/util'
+import ContactsStore from 'stores/contacts'
 import UncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
-import ClearIcon from 'material-ui/svg-icons/content/clear'
 
 let AddContact = React.createClass({
+  mixins: [Reflux.listenTo(ContactsStore, 'onUpdate', 'onInitial')],
 
   propTypes: {
     params: React.PropTypes.object,
@@ -34,6 +35,10 @@ let AddContact = React.createClass({
   contextTypes: {
     router: React.PropTypes.any,
     muiTheme: React.PropTypes.object
+  },
+
+  onUpdate(state) {
+    console.log(state)
   },
 
   getInitialState() {
