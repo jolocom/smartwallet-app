@@ -18,107 +18,34 @@ export default Reflux.createStore({
       privacyMode: 'private',
       allowedContacts: []
     }
+
+    // We will store all modifications here, and apply them with a patch.
+    this.toRemove = []
+    this.toAdd = []
   },
 
   getInitialState() {
     return this.state
   },
 
-  // TODO CHECK
   changePrivacyMode(mode) {
     if (mode === 'public' || mode === 'private') {
       this.state.privacyMode = mode
       this.trigger(this.state)
     }
   },
-  removeContact(webId) {
+
+  removeContact(contact) {
     this.state.allowedContacts = this.state.allowedContacts.filter(el => {
-      return webId !== el.webId
+      return contact.webId !== el.webId
+    })
+    contact.perm.forEach(permission => {
+      this.aclAgent.removeAllow(contact.webId, permission)
     })
     this.trigger(this.state)
   },
 
   computeResult() {
-    this.aclAgent.resetAcl()
-    this.aclAgent.allow(this.webId, 'read')
-    this.aclAgent.allow(this.webId, 'control')
-    this.aclAgent.allow(this.webId, 'write')
-    let indexUri = Util.getIndexUri()
-
-    if (this.state.currActiveViewBtn === 'visOnlyMe') {
-      this.state.viewAllowList.map(el => {
-        this.aclAgent.allow(el.label, 'read')
-        if (el.canEdit) {
-          this.aclAgent.allow(el.label, 'write')
-        }
-      })
-    } else if (this.state.currActiveViewBtn === 'visFriends') {
-      this.state.friendViewAllowList.map(el => {
-        this.aclAgent.allow(el.name, 'read')
-        if (el.canEdit) {
-          this.aclAgent.allow(el.name, 'write')
-        }
-      })
-    } else if (this.state.currActiveViewBtn === 'visEveryone') {
-      this.aclAgent.allow('*', 'read')
-      if (this.state.currActiveEditBtn === 'editOnlyMe') {
-        this.state.editAllowList.forEach(el => {
-          this.aclAgent.allow(el.label, 'write')
-        })
-      } else if (this.state.currActiveEditBtn === 'editFriends') {
-        this.state.friendViewAllowList.forEach(el => {
-          this.aclAgent.allow(el.name, 'write')
-        })
-      } else if (this.state.currActiveEditBtn === 'editEveryone') {
-        this.aclAgent.allow('*', 'write')
-      }
-    }
-    // TODO, rethink a bit.
-    this.gAgent.fetchTriplesAtUri(indexUri).then(res => {
-      let indexWriter = new Writer()
-      res.triples.map(el => {
-        if (el.object.uri !== this.aclAgent.uri) {
-          indexWriter.addTriple(el)
-        }
-      })
-      this.aclAgent.Writer.find(undefined, undefined, undefined).map(result => {
-        if (result.predicate.uri === PRED.mode.uri) {
-          if (result.object.uri === PRED.read.uri) {
-            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined)
-            .map(each => {
-              indexWriter.addTriple(
-                each.object,
-                PRED.readPermission,
-                rdf.sym(this.aclAgent.uri)
-              )
-            })
-          } else if (result.object.uri === PRED.write.uri) {
-            this.aclAgent.Writer.find(result.subject, PRED.agent, undefined)
-            .map(each => {
-              indexWriter.addTriple(
-                each.object,
-                PRED.writePermission,
-                rdf.sym(this.aclAgent.uri)
-              )
-            })
-          }
-        }
-      })
-      return fetch(Util.uriToProxied(indexUri), {
-        method: 'PUT',
-        credentials: 'include',
-        body: indexWriter.end(),
-        headers: {
-          'Content-Type': 'text/turtle'
-        }
-      }).then((res) => {
-        if (!res.ok) {
-          throw new Error('Error while putting the file', res)
-        }
-      }).catch((e) => {
-        console.error(e)
-      })
-    })
   },
 
   // TODO User profile image / name.
@@ -139,30 +66,40 @@ export default Reflux.createStore({
     })
   },
 
-  allowRead(user) {
+  _allowRead(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
     }
 
-    this.state.viewAllowList.push({
-      label: user,
-      key: this.state.editAllowList.length,
-      canEdit: false
+    this.toAdd.push({
+      webId: user,
+      permission: 'read'
     })
+
     this.trigger(this.state)
   },
 
-  disallowRead(user) {
+  _disallowRead(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
     }
 
-    this.state.viewAllowList = this.state.viewAllowList.filter(el =>
-      el.label !== user
-    )
-    this.trigger(this.state)
+    let found = false
+    this.toAdd = this.toAdd.filter(entry => {
+      if (entry.webId === user && entry.permission === 'read') {
+        found = true
+      }
+      return !found
+    })
+
+    if (!found) {
+      this.toRemove.push({
+        webId: user,
+        permission: 'write'
+      })
+    }
   },
 
   allowEdit(user) {

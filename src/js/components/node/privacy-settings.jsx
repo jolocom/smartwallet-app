@@ -140,8 +140,8 @@ let PrivacySettings = React.createClass({
     })
   },
 
-  _handleRemovePerson(webId) {
-    PrivacyActions.removeContact(webId)
+  _handleRemovePerson(contact) {
+    PrivacyActions.removeContact(contact)
   },
 
   _handleAddContact() {
@@ -227,7 +227,7 @@ let PrivacySettings = React.createClass({
                   rightIcon={
                     <ActionDelete
                       color="#4b132b"
-                      onTouchTap={() => this._handleRemovePerson(contact.webId)}
+                      onTouchTap={() => this._handleRemovePerson(contact)}
                     />
                   }>
                   {contact.webId}
