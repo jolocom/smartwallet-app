@@ -21,6 +21,11 @@ class AclAgent {
       toDelete: []
     }
 
+    this.permToPred = {}
+    this.permToPred[PRED.read.uri] = 'read'
+    this.permToPred[PRED.write.uri] = 'write'
+    this.permToPred[PRED.control.uri] = 'control'
+
     this.indexPredMap = {
       read: PRED.readPermission,
       write: PRED.writePermission,
@@ -32,6 +37,8 @@ class AclAgent {
       read: PRED.read,
       control: PRED.control
     }
+    this.toAdd = []
+    this.toDelete = []
   }
 
   // Checks if an object is contained in an array by comparing it's props.
@@ -110,46 +117,23 @@ class AclAgent {
    */
 
   allow(user, mode) {
-    let wildcard = user === '*'
-    let identifier = wildcard ? PRED.agentClass : PRED.agent
-
-    user = wildcard ? PRED.Agent : user
-
-    if (!this.predMap[mode]) {
-      throw new Error('Invalid mode supplied!')
-    }
-
-    if (typeof user === 'string') {
-      user = rdf.sym(user)
-    }
-
-    let payload = {
-      subject: user,
-      predicate: this.indexPredMap[mode],
-      object: rdf.sym(this.uri)
-    }
-
-    this.indexAdd(payload)
-    // If user already has the permission.
-    if (_.includes(this.allowedPermissions(user, true), mode)) {
-      return
-    } else {
-      mode = this.predMap[mode]
-      let alt = this.Writer.find(undefined, identifier, user)
-      if (alt.length > 0) {
-        // A policy regarding the user already exists, we will
-        // add the rule in there.
-        let policyName = alt[0].subject
-        this.Writer.addTriple(policyName, PRED.mode, mode)
-      } else {
-        // A policy has to be constructed
-        let policyName = rdf.sym(`${this.aclUri}#${Util.randomString(5)}`)
-        this.Writer.addTriple(policyName, PRED.type, PRED.auth)
-        this.Writer.addTriple(policyName, PRED.access, rdf.sym(this.uri))
-        this.Writer.addTriple(policyName, PRED.mode, mode)
-        this.Writer.addTriple(policyName, identifier, user)
+    let policyName
+    this.tmp.forEach(entry => {
+      if (entry.user === user) {
+        policyName = entry.source
+        entry.mode.push(this.predMap[mode].uri)
       }
+    })
+
+    if (!policyName) {
+      policyName = !policyName && this.aclUri + Util.randomString(5)
+      this.tmp.push({source: policyName, user, mode: [this.predMap[mode].uri]})
     }
+
+    this.toAdd.push({
+      subject: policyName,
+      object: mode
+    })
   }
 
   /**
