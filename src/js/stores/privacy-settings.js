@@ -31,6 +31,12 @@ export default Reflux.createStore({
       this.trigger(this.state)
     }
   },
+  removeContact(webId) {
+    this.state.allowedContacts = this.state.allowedContacts.filter(el => {
+      return webId !== el.webId
+    })
+    this.trigger(this.state)
+  },
 
   computeResult() {
     this.aclAgent.resetAcl()

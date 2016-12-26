@@ -140,9 +140,8 @@ let PrivacySettings = React.createClass({
     })
   },
 
-  _handleRemovePerson(key) {
-    const newArray = this.state.allowedContacts.filter(el => key !== el.webId)
-    this.setState({allowedContacts: newArray})
+  _handleRemovePerson(webId) {
+    PrivacyActions.removeContact(webId)
   },
 
   _handleAddContact() {
@@ -169,7 +168,7 @@ let PrivacySettings = React.createClass({
             {/* The top two buttons */}
             <FlatButton
               style={
-                this.state.currActiveViewBtn === 'private'
+                this.state.privacyMode === 'private'
                   ? {...styles.toggleBtnLeft, ...styles.toggleBtnActive}
                   : {...styles.toggleBtnLeft}
                 }
@@ -180,7 +179,7 @@ let PrivacySettings = React.createClass({
             </FlatButton>
             <FlatButton
               style={
-                this.state.currActiveViewBtn === 'public'
+                this.state.privacyMode === 'public'
                   ? {...styles.toggleBtnRight, ...styles.toggleBtnActive}
                   : {...styles.toggleBtnRight}
               }

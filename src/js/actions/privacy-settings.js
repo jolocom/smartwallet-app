@@ -13,5 +13,6 @@ export default Reflux.createActions({
   'changePrivacyMode': {asyncResult: false},
   'handleCheck': {asyncResult: false},
   'commit': {asyncResult: false},
-  'computeResult': {asyncResult: false}
+  'computeResult': {asyncResult: false},
+  'removeContact': {asyncResult: false}
 })
