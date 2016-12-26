@@ -45,8 +45,8 @@ export default Reflux.createStore({
         }))
       }).then((nodes) => {
         // nodes = [{uri: node uri, triples:[]}]
-        let contacts = nodes.filter((node) =>
-          node.triples.some((triple) => {
+        let contacts = nodes.filter(node =>
+          node.triples.some(triple => {
             // Out of the contacts we are filtering out only the people
             // Presumably you would only "know" people anyways.
             if (triple.predicate.uri === PRED.type.uri) {
@@ -54,7 +54,7 @@ export default Reflux.createStore({
             }
           })
         )
-        let formattedContacts = contacts.map((contact) => {
+        let formattedContacts = contacts.map(contact => {
           let name, email, avatar
           contact.triples.forEach(t => {
             const pred = t.predicate.uri

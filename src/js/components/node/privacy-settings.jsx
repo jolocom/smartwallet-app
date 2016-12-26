@@ -11,16 +11,10 @@ import {
 } from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
-import Subheader from 'material-ui/Subheader'
 import Divider from 'material-ui/Divider'
-import ActionVisibility from 'material-ui/svg-icons/action/visibility'
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import Chip from 'material-ui/Chip'
-import TextField from 'material-ui/TextField'
 import PrivacyStore from 'stores/privacy-settings'
 import PrivacyActions from 'actions/privacy-settings'
-import AddNodeIcon from 'components/icons/addNode-icon.jsx'
-import ContentAdd from 'material-ui/svg-icons/content/add'
 import PersonIcon from 'material-ui/svg-icons/social/person'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
 import GroupIcon from 'material-ui/svg-icons/social/group'
@@ -44,45 +38,8 @@ let PrivacySettings = React.createClass({
 
   getInitialState() {
     return {
-      currActiveViewBtn: 'visOnlyMe',
-      currActiveEditBtn: 'editOnlyMe',
-      viewAllowList: [],
-      friendViewAllowList: [],
-      friendViewDisallowList: [],
-
-      editAllowList: [],
-      friendEditDisallowList: [],
-
-      isSelectAllOnlyMe: false,
-      isSelectAllFriends: false,
-
-      viewAllContacts: true,
-
-      personArray: [
-        {
-          key: 1,
-          imgUri: 'https://annika.webid.jolocom.de/files/' +
-            'fm86xd-DSC09243-1-Kopie_s.jpg',
-          name: 'Annika'
-        },
-        {
-          key: 2,
-          imgUri: 'https://isabel.webid.jolocom.de/files/' +
-            'wxrlz-Pure-Geometry-3.jpg',
-          name: 'Isabel'
-        },
-        {
-          key: 3,
-          imgUri: 'https://chrish.webid.jolocom.de/files/' +
-            '2xn822-1476035839171-434432581.jpg',
-          name: 'Chris'
-        },
-        {
-          key: 4,
-          imgUri: 'https://lovius.webid.jolocom.de/files/1bo0jw-carla.png',
-          name: 'Carla'
-        }
-      ]
+      privacyMode: 'private',
+      allowedContacts: []
     }
   },
 
@@ -99,34 +56,8 @@ let PrivacySettings = React.createClass({
     this.setState(storeState)
   },
 
-  _handleTextEnter(e) {
-    if (e.key === 'Enter') {
-      switch (e.target.name) {
-        case 'viewAllow':
-          PrivacyActions.allowRead(e.target.value)
-          break
-        case 'friendViewDisallow':
-          PrivacyActions.friendDisallowRead(e.target.value)
-          break
-        case 'editAllow':
-          PrivacyActions.allowEdit(e.target.value)
-          break
-        case 'friendEditDisallow':
-          PrivacyActions.friendDisallowEdit(e.target.value)
-          break
-        default:
-          break
-      }
-      e.target.value = ''
-    }
-  },
-
-  _setActiveView(activeBtn) {
-    PrivacyActions.navigate(activeBtn, false)
-  },
-
-  _setActiveEdit(activeBtn) {
-    PrivacyActions.navigate(false, activeBtn)
+  _changePrivacyMode(mode) {
+    PrivacyActions.changePrivacyMode(mode)
   },
 
   _handleSelectAllPlusAllowed() {
@@ -328,6 +259,9 @@ let PrivacySettings = React.createClass({
     }
 
     return (
+      null
+    )
+/*
       <div style={styles.container}>
         <AppBar
           title="Privacy Settings"
@@ -460,6 +394,7 @@ let PrivacySettings = React.createClass({
         </div>
       </div>
     )
+  */
   }
 })
 
