@@ -48,7 +48,9 @@ export default Reflux.createStore({
 
   // TODO Implement
   computeResult() {
-    this.aclAgent.initialize()
+    this.aclAgent.initialize().then(() => {
+      console.log('HUSTON', this.aclAgent.allAllowedUsers('read'))
+    })
   },
 
   // TODO User profile image / name.

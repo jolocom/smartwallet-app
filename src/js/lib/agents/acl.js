@@ -74,22 +74,22 @@ class AclAgent {
   }
 
   initialize() {
-    this._fetchInfo().then(() => {
-      let tmp = []
+    return this._fetchInfo().then(() => {
+      this.tmp = []
       this.Writer.find(undefined, PRED.agent, undefined).forEach(pol => {
-        tmp.push({
-          users: pol.object.uri,
+        this.tmp.push({
+          user: pol.object.uri,
           source: pol.subject.uri,
           mode: []
         })
       })
 
-      tmp.forEach(entry => {
-        this.Writer.find(rdf.sym(entry.source), PRED.mode, undefined).forEach(pol => {
+      this.tmp.forEach(entry => {
+        this.Writer.find(rdf.sym(entry.source), PRED.mode, undefined)
+        .forEach(pol => {
           entry.mode.push(pol.object.mode || pol.object.uri)
         })
       })
-      console.log(tmp)
     })
   }
 
@@ -257,11 +257,7 @@ class AclAgent {
     if (!this.predMap[mode]) {
       return false
     }
-    if (_.includes(this.allowedPermissions(user), mode)) {
-      return true
-    } else {
-      return false
-    }
+    return _.includes(this.allowedPermissions(user), mode)
   }
 
   /**
@@ -272,16 +268,12 @@ class AclAgent {
       return []
     }
 
-    let pred = this.predMap[mode]
+    let pred = this.predMap[mode].uri
     let users = []
-
-    // FIRST FIND ALL POLICIES CONTAINING READ
-    this.Writer.find(undefined, PRED.type, PRED.auth).forEach(trip => {
-      this.Writer.find(trip.subject, PRED.mode, pred).forEach(pol => {
-        this.Writer.find(pol.subject, PRED.agent, undefined).map(user => {
-          users.push(user.object.uri || user.object.value)
-        })
-      })
+    this.tmp.forEach(entry => {
+      if (entry.mode.indexOf(pred) !== -1) {
+        users.push(entry.user)
+      }
     })
     return users
   }
