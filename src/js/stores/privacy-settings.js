@@ -115,25 +115,6 @@ export default Reflux.createStore({
     })
   },
 
-  handleCheck(list, user) {
-    if (list === 'visOnlyMe') {
-      this.state.viewAllowList = this.state.viewAllowList.map(el => {
-        if (el === user) {
-          el.canEdit = !el.canEdit
-        }
-        return el
-      })
-    } else if (list === 'visFriends') {
-      this.state.friendViewAllowList = this.state.friendViewAllowList.map(f => {
-        if (f === user) {
-          f.canEdit = !f.canEdit
-        }
-        return f
-      })
-    }
-    this.trigger(this.state)
-  },
-
   // TODO User profile image / name.
   fetchInitialData(file) {
     let users = []

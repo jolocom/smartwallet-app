@@ -5,14 +5,12 @@ import {
   IconButton,
   List,
   ListItem,
-  Checkbox,
   FloatingActionButton,
   Avatar
 } from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import Divider from 'material-ui/Divider'
-import Chip from 'material-ui/Chip'
 import PrivacyStore from 'stores/privacy-settings'
 import PrivacyActions from 'actions/privacy-settings'
 import PersonIcon from 'material-ui/svg-icons/social/person'
@@ -58,48 +56,6 @@ let PrivacySettings = React.createClass({
 
   _changePrivacyMode(mode) {
     PrivacyActions.changePrivacyMode(mode)
-  },
-
-  _handleSelectAllPlusAllowed() {
-    let allExceptionsCanEdit = this.state.viewAllowList
-    allExceptionsCanEdit.map((f) => {
-      f.canEdit = !this.state.isSelectAllOnlyMe
-    })
-    this.setState({
-      viewAllowList: allExceptionsCanEdit
-    })
-    this.setState({
-      isSelectAllOnlyMe: !this.state.isSelectAllOnlyMe
-    })
-  },
-
-  _handleSelectAllMinusDisallowed() {
-    let allFriendsCanEdit = this.state.allowFriendList
-    allFriendsCanEdit.map((f) => {
-      f.canEdit = !this.state.isSelectAllFriends
-    })
-    this.setState({
-      allowFriendList: allFriendsCanEdit
-    })
-    this.setState({
-      isSelectAllFriends: !this.state.isSelectAllFriends
-    })
-  },
-
-  _handleCheck(list, user) {
-    PrivacyActions.handleCheck(list, user)
-  },
-
-  renderChip(data, func) {
-    let styles = this.getStyles()
-    return (
-      <Chip
-        key={data.key}
-        onRequestDelete={() => func(data.label)}
-        style={styles.chip}>
-        {data.label}
-      </Chip>
-    )
   },
 
   getStyles() {
@@ -163,30 +119,8 @@ let PrivacySettings = React.createClass({
         backgroundColor: '#b5c945',
         color: '#fff'
       },
-      headerIcon: {
-        marginBottom: '-6px',
-        marginRight: '6px',
-        fill: '#9b9faa'
-      },
       divider: {
         marginTop: '10px'
-      },
-      subheader: {
-        paddingLeft: '0'
-      },
-      chipWrapper: {
-        display: 'flex',
-        flexWrap: 'wrap'
-      },
-      chip: {
-        margin: '4px'
-      },
-      customSettings: {
-        marginLeft: '10px'
-      },
-      selectAllLabel: {
-        fontSize: '14px',
-        color: 'rgba(75, 19, 43, 0.541176)'
       },
       addBtn: {
         width: '40px',
@@ -223,43 +157,6 @@ let PrivacySettings = React.createClass({
   render() {
     console.log('YOYO', this.state)
     let styles = this.getStyles()
-    let list, check
-
-    if (this.state.currActiveViewBtn === 'visOnlyMe') {
-      list = this.state.viewAllowList
-      check = this._handleCheck
-    } else if (this.state.currActiveViewBtn === 'visFriends') {
-      list = this.state.friendViewAllowList
-      check = this._handleCheck
-    }
-
-    let checkMate
-
-    if ((this.state.currActiveViewBtn === 'visOnlyMe') &&
-      this.state.viewAllowList.length) {
-      checkMate = (
-        <ListItem>
-          <Checkbox
-            label="Select all"
-            labelStyle={styles.selectAllLabel}
-            labelPosition="left"
-            onCheck={this._handleSelectAllPlusAllowed}
-            checked={this.state.isSelectAllOnlyMe} />
-        </ListItem>
-      )
-    } else if ((this.state.currActiveViewBtn === 'visFriends') &&
-      (this.state.friendViewAllowList.legth)) {
-      checkMate = (
-        <ListItem>
-          <Checkbox
-            label="Select all"
-            labelStyle={styles.selectAllLabel}
-            labelPosition="left"
-            onCheck={this._handleSelectAllMinusDisallowed}
-            checked={this.state.isSelectAllFriends} />
-        </ListItem>
-      )
-    }
 
     return (
       <div style={styles.container}>
