@@ -141,13 +141,8 @@ let PrivacySettings = React.createClass({
   },
 
   _handleRemovePerson(key) {
-    let newPersonArray = this.state.personArray
-    const personToDelete = newPersonArray.map(
-      (person) => person.key).indexOf(key)
-    newPersonArray.splice(personToDelete, 1)
-    this.setState({
-      personArray: newPersonArray
-    })
+    const newArray = this.state.allowedContacts.filter(el => key !== el.webId)
+    this.setState({allowedContacts: newArray})
   },
 
   _handleAddContact() {
@@ -155,9 +150,7 @@ let PrivacySettings = React.createClass({
   },
 
   render() {
-    console.log('YOYO', this.state)
     let styles = this.getStyles()
-
     return (
       <div style={styles.container}>
         <AppBar
@@ -235,7 +228,7 @@ let PrivacySettings = React.createClass({
                   rightIcon={
                     <ActionDelete
                       color="#4b132b"
-                      onTouchTap={() => this._handleRemovePerson(contact.key)}
+                      onTouchTap={() => this._handleRemovePerson(contact.webId)}
                     />
                   }>
                   {contact.webId}
