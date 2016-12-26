@@ -56,14 +56,14 @@ class AclAgent {
    * @return undefined, we want the side effect.
    */
 
-  fetchInfo() {
+  _fetchInfo() {
     return this.wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
       return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result) => {
-        let {triples} = result
+        const {triples} = result
         for (let triple in triples) {
-          let {subject, predicate, object} = triples[triple]
+          const {subject, predicate, object} = triples[triple]
           this.Writer.addTriple(subject, predicate, object)
         }
         if (this.Writer.find(undefined, PRED.type, PRED.auth).length === 0) {
@@ -72,14 +72,24 @@ class AclAgent {
       })
     })
   }
-  /**
-   * @summary Initiates a empty ACL file we can later populate,
-   *          alternative to fetchInfo()
-   * @returns undefined, we wat the side effect.
-   */
-  initiateNew() {
-    return this.wia.getAclUri(this.uri).then((aclUri) => {
-      this.aclUri = aclUri
+
+  initialize() {
+    this._fetchInfo().then(() => {
+      let tmp = []
+      this.Writer.find(undefined, PRED.agent, undefined).forEach(pol => {
+        tmp.push({
+          users: pol.object.uri,
+          source: pol.subject.uri,
+          mode: []
+        })
+      })
+
+      tmp.forEach(entry => {
+        this.Writer.find(rdf.sym(entry.source), PRED.mode, undefined).forEach(pol => {
+          entry.mode.push(pol.object.mode || pol.object.uri)
+        })
+      })
+      console.log(tmp)
     })
   }
 

@@ -36,7 +36,7 @@ export default Reflux.createStore({
 
     let checkCenter = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(centerUri)
-      aAgent.fetchInfo().then(() => {
+      aAgent._fetchInfo().then(() => {
         this.state.centerWritePerm = aAgent.isAllowed(webId, 'write')
         resolve()
       }).catch(() => {
@@ -47,7 +47,7 @@ export default Reflux.createStore({
 
     let checkCurrent = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(uri)
-      aAgent.fetchInfo().then((res) => {
+      aAgent._fetchInfo().then((res) => {
         this.state.writePerm = aAgent.isAllowed(webId, 'write')
         resolve()
       }).catch((res) => {

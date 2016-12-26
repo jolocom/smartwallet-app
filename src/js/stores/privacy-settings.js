@@ -1,17 +1,14 @@
 import Reflux from 'reflux'
-import Util from 'lib/util'
 import PrivacyActions from 'actions/privacy-settings'
 import AclAgent from 'lib/agents/acl'
 import GraphAgent from 'lib/agents/graph'
-import {Writer} from 'lib/rdf.js'
-import rdf from 'rdflib'
-import {PRED} from 'lib/namespaces'
 
 export default Reflux.createStore({
   listenables: PrivacyActions,
 
   init() {
     this.gAgent = new GraphAgent()
+    // TODO Use agent
     this.webId = localStorage.getItem('jolocom.webId')
 
     this.state = {
@@ -28,6 +25,7 @@ export default Reflux.createStore({
     return this.state
   },
 
+  // TODO What should change here?
   changePrivacyMode(mode) {
     if (mode === 'public' || mode === 'private') {
       this.state.privacyMode = mode
@@ -36,48 +34,46 @@ export default Reflux.createStore({
   },
 
   removeContact(contact) {
-    this.state.allowedContacts = this.state.allowedContacts.filter(el => {
-      return contact.webId !== el.webId
-    })
+    this.state.allowedContacts = this.state.allowedContacts.filter(el =>
+      contact.webId !== el.webId
+    )
+
+    /* TODO Reflect
     contact.perm.forEach(permission => {
       this.aclAgent.removeAllow(contact.webId, permission)
     })
+    */
     this.trigger(this.state)
   },
 
+  // TODO Implement
   computeResult() {
+    this.aclAgent.initialize()
   },
 
   // TODO User profile image / name.
   fetchInitialData(file) {
-    let users = []
-
+    // Resets the state
     this.init()
     this.aclAgent = new AclAgent(file)
-    this.aclAgent.fetchInfo().then(data => {
+    this.aclAgent._fetchInfo().then(data => {
       this.aclAgent.allAllowedUsers('read').forEach(user => {
-        users.push({
+        this.state.allowedContacts.push({
           webId: user,
           perm: this.aclAgent.allowedPermissions(user, true)
         })
       })
-      this.state.allowedContacts = users
       this.trigger(this.state)
     })
   },
 
+  // TODO Abstract http / https check.
   _allowRead(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
     }
-
-    this.toAdd.push({
-      webId: user,
-      permission: 'read'
-    })
-
-    this.trigger(this.state)
+    this.aclAgent.allow(user, 'read')
   },
 
   _disallowRead(user) {
@@ -85,47 +81,23 @@ export default Reflux.createStore({
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
     }
-
-    let found = false
-    this.toAdd = this.toAdd.filter(entry => {
-      if (entry.webId === user && entry.permission === 'read') {
-        found = true
-      }
-      return !found
-    })
-
-    if (!found) {
-      this.toRemove.push({
-        webId: user,
-        permission: 'write'
-      })
-    }
+    this.aclAgent.removeAllow(user, 'read')
   },
 
-  allowEdit(user) {
+  _allowEdit(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
     }
-
-    this.state.editAllowList.push({
-      label: user,
-      key: this.state.editAllowList.length,
-      canEdit: false
-    })
-    this.trigger(this.state)
+    this.aclAgent.allow(user, 'write')
   },
 
-  disallowEdit(user) {
+  _disallowEdit(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
     }
-
-    this.state.editAllowList = this.state.editAllowList.filter(el =>
-      el.label !== user
-    )
-    this.trigger(this.state)
+    this.aclAgent.removeAllow(user, 'write')
   },
 
   commit() {

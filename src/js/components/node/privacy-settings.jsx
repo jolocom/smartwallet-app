@@ -44,6 +44,8 @@ let PrivacySettings = React.createClass({
   componentDidMount() {
     const {uri} = this.props.params
     PrivacyActions.fetchInitialData(uri)
+    // TEST TEST TEST
+    PrivacyActions.computeResult()
   },
 
   goBack() {
