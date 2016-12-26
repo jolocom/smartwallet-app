@@ -143,17 +143,19 @@ let PrivacySettings = React.createClass({
         left: '0',
         right: '0'
       },
-      toggleBtn: {
+      toggleBtnLeft: {
         margin: '2px',
         backgroundColor: '#e1e2e6',
         minWidth: '40%',
-        fontSize: '2vmax'
-      },
-      toggleBtnLeft: {
+        fontSize: '2vmax',
         borderTopLeftRadius: '1em',
         borderBottomLeftRadius: '1em'
       },
       toggleBtnRight: {
+        margin: '2px',
+        backgroundColor: '#e1e2e6',
+        minWidth: '40%',
+        fontSize: '2vmax',
         borderTopRightRadius: '1em',
         borderBottomRightRadius: '1em'
       },
@@ -259,48 +261,40 @@ let PrivacySettings = React.createClass({
     }
 
     return (
-      null
-    )
-/*
       <div style={styles.container}>
         <AppBar
           title="Privacy Settings"
           titleStyle={styles.title}
-          iconElementLeft={<IconButton onClick={this.goBack}
-            iconClassName="material-icons">
-              arrow_back
-          </IconButton>}
-          />
+          iconElementLeft={
+            <IconButton
+              onClick={this.goBack}
+              iconClassName="material-icons">
+                arrow_back
+            </IconButton>
+          }
+        />
         <div style={styles.content}>
           <div style={styles.toggleBtns}>
+            {/* The top two buttons */}
             <FlatButton
               style={
-                this.state.currActiveViewBtn === 'visOnlyMe'
-                  ? {
-                    ...styles.toggleBtn,
-                    ...styles.toggleBtnLeft,
-                    ...styles.toggleBtnActive}
-                  : {
-                    ...styles.toggleBtn,
-                    ...styles.toggleBtnLeft}
+                this.state.currActiveViewBtn === 'private'
+                  ? {...styles.toggleBtnLeft, ...styles.toggleBtnActive}
+                  : {...styles.toggleBtnLeft}
                 }
               onTouchTap={() => {
-                this._setActiveView('visOnlyMe')
+                this._changePrivacyMode('private')
               }}>
               Private
             </FlatButton>
             <FlatButton
               style={
-                this.state.currActiveViewBtn === 'visEveryone'
-                  ? {
-                    ...styles.toggleBtn,
-                    ...styles.toggleBtnRight,
-                    ...styles.toggleBtnActive}
-                  : {...styles.toggleBtn,
-                    ...styles.toggleBtnRight}
+                this.state.currActiveViewBtn === 'public'
+                  ? {...styles.toggleBtnRight, ...styles.toggleBtnActive}
+                  : {...styles.toggleBtnRight}
               }
               onTouchTap={() => {
-                this._setActiveView('visEveryone')
+                this._changePrivacyMode('public')
               }}>
               Public
             </FlatButton>
@@ -308,6 +302,7 @@ let PrivacySettings = React.createClass({
               Please select who you want to share your node with.
             </div>
           </div>
+
           <List>
             <ListItem
               key={1}
@@ -394,7 +389,6 @@ let PrivacySettings = React.createClass({
         </div>
       </div>
     )
-  */
   }
 })
 
