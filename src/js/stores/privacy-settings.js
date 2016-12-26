@@ -134,22 +134,22 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  // TODO User profile image
-  fetchInitialData(user) {
+  // TODO User profile image / name.
+  fetchInitialData(file) {
     let users = []
 
     this.init()
-    this.aclAgent = new AclAgent(user)
+    this.aclAgent = new AclAgent(file)
     this.aclAgent.fetchInfo().then(data => {
-      return this.aclAgent.allAllowedUsers('read').forEach(user => {
+      this.aclAgent.allAllowedUsers('read').forEach(user => {
         users.push({
           webId: user,
           perm: this.aclAgent.allowedPermissions(user, true)
         })
       })
+      this.state.allowedContacts = users
+      this.trigger(this.state)
     })
-    this.state.allowedContacts = users
-    this.trigger(this.state)
   },
 
   allowRead(user) {

@@ -221,6 +221,7 @@ let PrivacySettings = React.createClass({
   },
 
   render() {
+    console.log('YOYO', this.state)
     let styles = this.getStyles()
     let list, check
 
@@ -308,9 +309,7 @@ let PrivacySettings = React.createClass({
               key={1}
               disabled
               secondaryText="Add person"
-              leftIcon={
-                <PersonIcon />
-              }
+              leftIcon={<PersonIcon />}
               rightIcon={
                 <FloatingActionButton
                   mini
@@ -324,28 +323,25 @@ let PrivacySettings = React.createClass({
               <Divider style={styles.divider} />
             </ListItem>
           </List>
+
+          {/* The list of contacts that have access to the file */}
           <List>
-          {
-            this.state.personArray.map((person) => {
-              if (person.key > 3 && this.state.viewAllContacts) {
-                return
-              }
+            {this.state.allowedContacts.map(contact => {
               return (
                 <ListItem
-                  key={person.key}
+                  key={contact.webId}
                   leftAvatar={
                     <Avatar src={
-                    Util.uriToProxied(person.imgUri)}
+                    Util.uriToProxied('http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624')}
                     />
                   }
                   rightIcon={
                     <ActionDelete
                       color="#4b132b"
-                      onTouchTap={
-                        () => this._handleRemovePerson(person.key)
-                      } />
+                      onTouchTap={() => this._handleRemovePerson(contact.key)}
+                    />
                   }>
-                  {person.name}
+                  {contact.webId}
                 </ListItem>
               )
             })
