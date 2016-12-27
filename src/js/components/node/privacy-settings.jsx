@@ -148,8 +148,11 @@ let PrivacySettings = React.createClass({
     PrivacyActions.removeContact(contact)
   },
 
+  // TODO
   _handleAddContact(selected) {
-    console.log('HELLO ', selected)
+    selected.forEach(contact =>
+      PrivacyActions.allowRead(contact)
+    )
   },
 
   _handleShowAddContact() {
@@ -161,6 +164,7 @@ let PrivacySettings = React.createClass({
   },
 
   render() {
+    console.log(this.state.allowedContacts)
     let styles = this.getStyles()
     return (
       <div>

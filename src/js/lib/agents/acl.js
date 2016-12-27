@@ -16,6 +16,7 @@ class AclAgent extends HTTPAgent {
   // TODO Add support for multiple policies regarding a user per file.
   constructor(uri) {
     super()
+    this.tmp = []
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
     this.gAgent = new GraphAgent()
@@ -76,7 +77,6 @@ class AclAgent extends HTTPAgent {
 
   initialize() {
     return this._fetchInfo().then(() => {
-      this.tmp = []
       this.Writer.find(undefined, PRED.agent, undefined).forEach(pol => {
         this.tmp.push({
           user: pol.object.uri,
@@ -294,7 +294,6 @@ class AclAgent extends HTTPAgent {
         return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
       }
     })
-    console.log(this.toRemove)
     const removeQuery = this.toRemove.map(entry => {
       return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
     })

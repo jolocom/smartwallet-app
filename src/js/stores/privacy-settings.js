@@ -48,11 +48,13 @@ export default Reflux.createStore({
 
   // TODO Implement
   computeResult() {
+    /*
     this.aclAgent.initialize().then(() => {
       this.aclAgent.removeAllow('https://testdude.com', 'control')
       this.aclAgent.removeAllow('https://testdude.com', 'read')
       this.aclAgent.commit()
     })
+    */
   },
 
   // TODO User profile image / name.
@@ -60,7 +62,7 @@ export default Reflux.createStore({
     // Resets the state
     this.init()
     this.aclAgent = new AclAgent(file)
-    this.aclAgent._fetchInfo().then(data => {
+    this.aclAgent.initialize().then(() => {
       this.aclAgent.allAllowedUsers('read').forEach(user => {
         this.state.allowedContacts.push({
           webId: user,
@@ -72,15 +74,17 @@ export default Reflux.createStore({
   },
 
   // TODO Abstract http / https check.
-  _allowRead(user) {
-    if (user.indexOf('http://') !== 0 &&
-        user.indexOf('https://') !== 0) {
-      user = `https://${user}`
+  allowRead(webId) {
+    if (webId.indexOf('http://') !== 0 &&
+        webId.indexOf('https://') !== 0) {
+      webId = `https://${webId}`
     }
-    this.aclAgent.allow(user, 'read')
+    this.aclAgent.allow(webId, 'read')
+    this.state.allowedContacts.push({webId})
+    this.trigger(this.state)
   },
 
-  _disallowRead(user) {
+  disallowRead(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
