@@ -49,9 +49,9 @@ export default Reflux.createStore({
   // TODO Implement
   computeResult() {
     this.aclAgent.initialize().then(() => {
-      console.log('HUSTON', this.aclAgent.allAllowedUsers('read'))
-      this.aclAgent.allow('testuser.webid.jolocom.com/profile/card#me', 'write')
-      this.aclAgent.allow('testuser.webid.jolocom.com/profile/card#me', 'read')
+      this.aclAgent.allow('https://testdude.com', 'control')
+      this.aclAgent.removeAllow('https://testdude.com', 'write')
+      this.aclAgent.commit()
     })
   },
 

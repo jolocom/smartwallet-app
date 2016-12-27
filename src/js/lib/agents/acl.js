@@ -3,13 +3,19 @@ import GraphAgent from 'lib/agents/graph.js'
 import _ from 'lodash'
 import Util from 'lib/util'
 import WebidAgent from 'lib/agents/webid'
+import HTTPAgent from 'lib/agents/http'
 import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
 
-class AclAgent {
+// @TODO We keep the state / model for real time lookups.
+// @TODO We keep the toAdd / toRemove so we can commit.
+
+// @TODO Make sure MODE is consistent.
+class AclAgent extends HTTPAgent {
   // TODO Check here if the user can modify the acl and throw error if not.
   // TODO Add support for multiple policies regarding a user per file.
   constructor(uri) {
+    super()
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
     this.g = rdf.graph()
@@ -20,11 +26,6 @@ class AclAgent {
       toInsert: [],
       toDelete: []
     }
-
-    this.permToPred = {}
-    this.permToPred[PRED.read.uri] = 'read'
-    this.permToPred[PRED.write.uri] = 'write'
-    this.permToPred[PRED.control.uri] = 'control'
 
     this.indexPredMap = {
       read: PRED.readPermission,
@@ -38,7 +39,7 @@ class AclAgent {
       control: PRED.control
     }
     this.toAdd = []
-    this.toDelete = []
+    this.toRemove = []
   }
 
   // Checks if an object is contained in an array by comparing it's props.
@@ -116,23 +117,32 @@ class AclAgent {
    * @return undefined, we want the side effect
    */
 
+  // @TODO check if present in toRemove.
+  // @TODO test the doubling detection.
   allow(user, mode) {
     let policyName
+    let newPolicy = true
     this.tmp.forEach(entry => {
       if (entry.user === user) {
+        newPolicy = false
         policyName = entry.source
         entry.mode.push(this.predMap[mode].uri)
+        if (entry.mode.indexOf(this.predMap[mode].uri) !== -1) {
+          throw new Error('Policy already present')
+        }
       }
     })
 
-    if (!policyName) {
-      policyName = !policyName && this.aclUri + Util.randomString(5)
+    if (newPolicy) {
+      policyName = this.aclUri + Util.randomString(5)
       this.tmp.push({source: policyName, user, mode: [this.predMap[mode].uri]})
     }
 
     this.toAdd.push({
-      subject: policyName,
-      object: mode
+      user,
+      policy: policyName,
+      perm: this.predMap[mode].uri,
+      newPolicy
     })
   }
 
@@ -143,64 +153,26 @@ class AclAgent {
    * @param {string} mode - permission to do what? [read, write, control]
    * @return undefined, we want the side effect
    */
+
+  // @TODO Remove multiple policies doing the same thing.
+  // @TODO Snackbar instead of console warn.
+  // @TODO CHECK AND TEST.
+
   removeAllow(user, mode) {
-    let wildcard = user === '*'
-    let identifier = wildcard ? PRED.agentClass : PRED.agent
+    let policyName
+    this.tmp = this.tmp.filter(entry => {
+      if (entry.user === user && entry.mode.indexOf(this.predMap[mode].uri)) {
+        policyName = entry.source
+        return true
+      }
+      return false
+    })
 
-    user = wildcard ? PRED.Agent : user
-
-    if (!this.predMap[mode]) {
-      throw new Error('Invalid mode supplied!')
-    }
-
-    if (typeof user === 'string') {
-      user = rdf.sym(user)
-    }
-
-    let payload = {
-      subject: user,
-      predicate: this.indexPredMap[mode],
-      object: rdf.sym(this.uri)
-    }
-
-    // Update the index file accordingly.
-    this.indexRemove(payload)
-
-    // Check if the triple is present.
-    if (!_.includes(this.allowedPermissions(user, true), mode)) {
-      return
-    }
-
-    // Finding the correct triple.
-    mode = this.predMap[mode]
-
-    // Get the existing policies
-    let policies = []
-    let existing = this.Writer.find(undefined, identifier, user)
-    if (existing.length > 0) {
-      existing.forEach((el) => {
-        policies.push(el.subject)
-      })
-
-      policies.forEach((policy) => {
-        let trip = this.Writer.find(policy, PRED.mode, mode)
-        if (trip.length > 0) {
-          let {subject, predicate, object} = trip[0]
-          this.Writer.g.remove({subject, predicate, object})
-
-          // Here we check if the policy itself should be deleted next.
-          let zomb = this.Writer.find(policy, PRED.mode, undefined)
-          if (zomb.length > 0) {
-            // If not, then we return.
-            return
-          } else {
-            // Otherwise we delete the policy triples as well.
-            let zombies = this.Writer.find(policy).slice()
-            this.Writer.g.remove(zombies)
-          }
-        }
-      })
-    }
+    this.toRemove.push({
+      user: user,
+      policy: policyName,
+      perm: this.predMap[mode].uri
+    })
   }
 
   indexRemove(payload) {
@@ -316,8 +288,21 @@ class AclAgent {
    *          Must be called at the end.
    * @return {promise} - the server response.
    */
+
+  // @TODO Initiate a new policy.
+  // @TODO Wipe zombies.
   commit() {
-    return this.put(this._proxify(this.aclUri), this.Writer.end(), {
+    const addQuery = this.toAdd.map(entry => {
+      if (entry.newPolicy) {
+      } else {
+        return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
+      }
+    })
+    const removeQuery = this.toRemove.map(entry => {
+      return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
+    })
+
+    return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
     }).catch((e) => {
       console.error(e)
