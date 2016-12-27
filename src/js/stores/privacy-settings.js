@@ -48,13 +48,11 @@ export default Reflux.createStore({
 
   // TODO Implement
   computeResult() {
-    /*
     this.aclAgent.initialize().then(() => {
-      this.aclAgent.removeAllow('https://testdude.com', 'write')
-      this.aclAgent.allow('https://testdude.com', 'control')
+      this.aclAgent.removeAllow('https://testdude.com', 'control')
+      this.aclAgent.removeAllow('https://testdude.com', 'read')
       this.aclAgent.commit()
     })
-    */
   },
 
   // TODO User profile image / name.

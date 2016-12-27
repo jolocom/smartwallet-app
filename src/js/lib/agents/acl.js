@@ -155,7 +155,8 @@ class AclAgent extends HTTPAgent {
   removeAllow(user, mode) {
     let policyName
     this.tmp = this.tmp.filter(entry => {
-      if (entry.user === user && entry.mode.indexOf(this.predMap[mode].uri)) {
+      if (entry.user === user &&
+          entry.mode.indexOf(this.predMap[mode].uri) !== -1) {
         policyName = entry.source
         return true
       }
@@ -293,10 +294,10 @@ class AclAgent extends HTTPAgent {
         return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
       }
     })
+    console.log(this.toRemove)
     const removeQuery = this.toRemove.map(entry => {
       return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
     })
-
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
     }).catch((e) => {
