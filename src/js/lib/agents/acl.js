@@ -18,19 +18,12 @@ class AclAgent extends HTTPAgent {
     super()
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
-    this.g = rdf.graph()
     this.gAgent = new GraphAgent()
     this.Writer = new Writer()
     this.wia = new WebidAgent()
     this.indexChanges = {
       toInsert: [],
       toDelete: []
-    }
-
-    this.indexPredMap = {
-      read: PRED.readPermission,
-      write: PRED.writePermission,
-      control: PRED.owns
     }
 
     this.predMap = {
@@ -124,12 +117,13 @@ class AclAgent extends HTTPAgent {
     let newPolicy = true
     this.tmp.forEach(entry => {
       if (entry.user === user) {
-        newPolicy = false
-        policyName = entry.source
-        entry.mode.push(this.predMap[mode].uri)
         if (entry.mode.indexOf(this.predMap[mode].uri) !== -1) {
           throw new Error('Policy already present')
         }
+
+        newPolicy = false
+        policyName = entry.source
+        entry.mode.push(this.predMap[mode].uri)
       }
     })
 
@@ -291,6 +285,7 @@ class AclAgent extends HTTPAgent {
 
   // @TODO Initiate a new policy.
   // @TODO Wipe zombies.
+  // @TODO Snackbar.
   commit() {
     const addQuery = this.toAdd.map(entry => {
       if (entry.newPolicy) {

@@ -29,7 +29,9 @@ let AddContact = React.createClass({
     params: React.PropTypes.object,
     center: React.PropTypes.object,
     neighbours: React.PropTypes.array,
-    checked: React.PropTypes.bool
+    checked: React.PropTypes.bool,
+    onClose: React.PropTypes.func,
+    onSubmit: React.PropTypes.func
   },
 
   contextTypes: {
@@ -211,16 +213,16 @@ let AddContact = React.createClass({
   },
 
   _handleSubmit() {
-    this.refs.form.submit()
+    this.props.onSubmit(this.state.selected)
     this._handleClose()
   },
 
-  _handleChange(eve) {
-    ContactsActions.load(eve.target.value)
+  _handleChange(event) {
+    ContactsActions.load(event.target.value)
   },
 
   _handleClose() {
-    this.context.router.goBack()
+    this.props.onClose()
   }
 })
 

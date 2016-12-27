@@ -15,6 +15,7 @@ import PrivacyStore from 'stores/privacy-settings'
 import PrivacyActions from 'actions/privacy-settings'
 import PersonIcon from 'material-ui/svg-icons/social/person'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
+import AddContacts from 'components/node/add-contacts.jsx'
 import GroupIcon from 'material-ui/svg-icons/social/group'
 import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
 import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
@@ -37,7 +38,8 @@ let PrivacySettings = React.createClass({
   getInitialState() {
     return {
       privacyMode: 'private',
-      allowedContacts: []
+      allowedContacts: [],
+      addScreen: false
     }
   },
 
@@ -146,134 +148,149 @@ let PrivacySettings = React.createClass({
     PrivacyActions.removeContact(contact)
   },
 
-  _handleAddContact() {
-    this.context.router.push('/add-contacts')
+  _handleAddContact(selected) {
+    console.log('HELLO ', selected)
+  },
+
+  _handleShowAddContact() {
+    this.setState({addScreen: true})
+  },
+
+  _handleCloseAddContact() {
+    this.setState({addScreen: false})
   },
 
   render() {
     let styles = this.getStyles()
     return (
-      <div style={styles.container}>
-        <AppBar
-          title="Privacy Settings"
-          titleStyle={styles.title}
-          iconElementLeft={
-            <IconButton
-              onClick={this.goBack}
-              iconClassName="material-icons">
-                arrow_back
-            </IconButton>
-          }
-        />
-        <div style={styles.content}>
-          <div style={styles.toggleBtns}>
-            {/* The top two buttons */}
-            <FlatButton
-              style={
-                this.state.privacyMode === 'private'
-                  ? {...styles.toggleBtnLeft, ...styles.toggleBtnActive}
-                  : {...styles.toggleBtnLeft}
-                }
-              onTouchTap={() => {
-                this._changePrivacyMode('private')
-              }}>
-              Private
-            </FlatButton>
-            <FlatButton
-              style={
-                this.state.privacyMode === 'public'
-                  ? {...styles.toggleBtnRight, ...styles.toggleBtnActive}
-                  : {...styles.toggleBtnRight}
-              }
-              onTouchTap={() => {
-                this._changePrivacyMode('public')
-              }}>
-              Public
-            </FlatButton>
-            <div style={styles.selectPrompt}>
-              Please select who you want to share your node with.
-            </div>
-          </div>
-
-          <List>
-            <ListItem
-              key={1}
-              disabled
-              secondaryText="Add person"
-              leftIcon={<PersonIcon />}
-              rightIcon={
-                <FloatingActionButton
-                  mini
-                  secondary
-                  style={styles.addBtn}
-                  onTouchTap={this._handleAddContact}>
-                  <PersonAddIcon />
-                </FloatingActionButton>
-              }>
-              CONTACTS
-              <Divider style={styles.divider} />
-            </ListItem>
-          </List>
-
-          {/* The list of contacts that have access to the file */}
-          <List>
-            {this.state.allowedContacts.map(contact => {
-              return (
-                <ListItem
-                  key={contact.webId}
-                  leftAvatar={
-                    <Avatar src={
-                    Util.uriToProxied('http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624')}
-                    />
+      <div>
+        {this.state.addScreen
+        ? <AddContacts
+          onClose={this._handleCloseAddContact}
+          onSubmit={this._handleAddContact}
+          />
+        : <div style={styles.container}>
+          <AppBar
+            title="Privacy Settings"
+            titleStyle={styles.title}
+            iconElementLeft={
+              <IconButton
+                onClick={this.goBack}
+                iconClassName="material-icons">
+                  arrow_back
+              </IconButton>
+            }
+          />
+          <div style={styles.content}>
+            <div style={styles.toggleBtns}>
+              {/* The top two buttons */}
+              <FlatButton
+                style={
+                  this.state.privacyMode === 'private'
+                    ? {...styles.toggleBtnLeft, ...styles.toggleBtnActive}
+                    : {...styles.toggleBtnLeft}
                   }
-                  rightIcon={
-                    <ActionDelete
-                      color="#4b132b"
-                      onTouchTap={() => this._handleRemovePerson(contact)}
-                    />
-                  }>
-                  {contact.webId}
-                </ListItem>
-              )
-            })
-          }
-          </List>
-          <FlatButton
-            label="VIEW ALL"
-            secondary
-            style={styles.viewAllBtn}
-            onTouchTap={this.viewAllContacts} />
-          <List>
-            <ListItem
-              key={1}
-              disabled
-              secondaryText="Add groups"
-              leftIcon={
-                <GroupIcon />
-              }
-              rightIcon={
-                <FloatingActionButton
-                  mini
-                  secondary
-                  style={styles.addBtn}>
-                  <GroupAddIcon />
-                </FloatingActionButton>
-              }>
-              GROUPS
-              <Divider style={styles.divider} />
-            </ListItem>
-          </List>
-          <FlatButton
-            style={Object.assign({}, styles.submitBtn)}
-            onTouchTap={() => {
-              PrivacyActions.computeResult()
-              PrivacyActions.commit()
-              this.goBack()
-            }}
-          >
-            Commit
-          </FlatButton>
-        </div>
+                onTouchTap={() => {
+                  this._changePrivacyMode('private')
+                }}>
+                Private
+              </FlatButton>
+              <FlatButton
+                style={
+                  this.state.privacyMode === 'public'
+                    ? {...styles.toggleBtnRight, ...styles.toggleBtnActive}
+                    : {...styles.toggleBtnRight}
+                }
+                onTouchTap={() => {
+                  this._changePrivacyMode('public')
+                }}>
+                Public
+              </FlatButton>
+              <div style={styles.selectPrompt}>
+                Please select who you want to share your node with.
+              </div>
+            </div>
+
+            <List>
+              <ListItem
+                key={1}
+                disabled
+                secondaryText="Add person"
+                leftIcon={<PersonIcon />}
+                rightIcon={
+                  <FloatingActionButton
+                    mini
+                    secondary
+                    style={styles.addBtn}
+                    onTouchTap={this._handleShowAddContact}>
+                    <PersonAddIcon />
+                  </FloatingActionButton>
+                }>
+                CONTACTS
+                <Divider style={styles.divider} />
+              </ListItem>
+            </List>
+
+            {/* The list of contacts that have access to the file */}
+            <List>
+              {this.state.allowedContacts.map(contact => {
+                return (
+                  <ListItem
+                    key={contact.webId}
+                    leftAvatar={
+                      <Avatar src={
+                      Util.uriToProxied('http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624')}
+                      />
+                    }
+                    rightIcon={
+                      <ActionDelete
+                        color="#4b132b"
+                        onTouchTap={() => this._handleRemovePerson(contact)}
+                      />
+                    }>
+                    {contact.webId}
+                  </ListItem>
+                )
+              })
+            }
+            </List>
+            <FlatButton
+              label="VIEW ALL"
+              secondary
+              style={styles.viewAllBtn}
+              onTouchTap={this.viewAllContacts} />
+            <List>
+              <ListItem
+                key={1}
+                disabled
+                secondaryText="Add groups"
+                leftIcon={
+                  <GroupIcon />
+                }
+                rightIcon={
+                  <FloatingActionButton
+                    mini
+                    secondary
+                    style={styles.addBtn}>
+                    <GroupAddIcon />
+                  </FloatingActionButton>
+                }>
+                GROUPS
+                <Divider style={styles.divider} />
+              </ListItem>
+            </List>
+            <FlatButton
+              style={Object.assign({}, styles.submitBtn)}
+              onTouchTap={() => {
+                PrivacyActions.computeResult()
+                PrivacyActions.commit()
+                this.goBack()
+              }}
+            >
+              Commit
+            </FlatButton>
+          </div>
+        </div>}
       </div>
     )
   }
