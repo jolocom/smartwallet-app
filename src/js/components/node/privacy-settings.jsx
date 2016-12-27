@@ -19,6 +19,7 @@ import AddContacts from 'components/node/add-contacts.jsx'
 import GroupIcon from 'material-ui/svg-icons/social/group'
 import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
 import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
+import Edit from 'material-ui/svg-icons/editor/mode-edit'
 
 import Util from 'lib/util'
 
@@ -64,6 +65,10 @@ let PrivacySettings = React.createClass({
 
   getStyles() {
     let styles = {
+      test: {
+        marginRight: '5%',
+        size: '60px'
+      },
       container: {
         textAlign: 'center',
         background: '#ffffff',
@@ -244,6 +249,12 @@ let PrivacySettings = React.createClass({
                     leftAvatar={
                       <Avatar src={
                       Util.uriToProxied('http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624')}
+                      />
+                    }
+                    rightToggle={
+                      <Edit style={styles.test}
+                        color="#4b132b"
+                        onTouchTap={() => this._handleRemovePerson(contact)}
                       />
                     }
                     rightIcon={
