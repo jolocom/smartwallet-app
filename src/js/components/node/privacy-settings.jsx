@@ -164,7 +164,6 @@ let PrivacySettings = React.createClass({
   },
 
   render() {
-    console.log(this.state.allowedContacts)
     let styles = this.getStyles()
     return (
       <div>
@@ -172,6 +171,7 @@ let PrivacySettings = React.createClass({
         ? <AddContacts
           onClose={this._handleCloseAddContact}
           onSubmit={this._handleAddContact}
+          selected={this.state.allowedContacts}
           />
         : <div style={styles.container}>
           <AppBar

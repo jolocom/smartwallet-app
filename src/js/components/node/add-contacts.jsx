@@ -31,7 +31,8 @@ let AddContact = React.createClass({
     neighbours: React.PropTypes.array,
     checked: React.PropTypes.bool,
     onClose: React.PropTypes.func,
-    onSubmit: React.PropTypes.func
+    onSubmit: React.PropTypes.func,
+    selected: React.PropTypes.array
   },
 
   contextTypes: {
@@ -61,6 +62,10 @@ let AddContact = React.createClass({
   },
 
   componentDidMount() {
+    this.props.selected.forEach(user => {
+      this.state.selected.push(user.webId)
+    })
+
     ContactsActions.load()
     this.refs.dialog && this.refs.dialog.show()
   },
