@@ -66,7 +66,7 @@ export default Reflux.createStore({
       this.aclAgent.allAllowedUsers('read').forEach(user => {
         this.state.allowedContacts.push({
           webId: user,
-          perm: this.aclAgent.allowedPermissions(user, true)
+          edit: this.aclAgent.isAllowed(user, 'write')
         })
       })
       this.trigger(this.state)

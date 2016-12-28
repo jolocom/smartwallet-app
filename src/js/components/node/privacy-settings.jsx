@@ -55,6 +55,16 @@ let PrivacySettings = React.createClass({
     this.context.router.goBack()
   },
 
+  // TODO swap and perhaps functional
+  _handleToggleEdit(contact) {
+    this.state.allowedContacts.forEach(user => {
+      if (contact.webId === user.webId) {
+        user.edit = !user.edit
+      }
+    })
+    this.setState(this.state)
+  },
+
   _handleUpdate(storeState) {
     this.setState(storeState)
   },
@@ -253,8 +263,8 @@ let PrivacySettings = React.createClass({
                     }
                     rightToggle={
                       <Edit style={styles.test}
-                        color="#4b132b"
-                        onTouchTap={() => this._handleRemovePerson(contact)}
+                        color={contact.edit ? "#4b132b" : 'red'}
+                        onTouchTap={() => this._handleToggleEdit(contact)}
                       />
                     }
                     rightIcon={
