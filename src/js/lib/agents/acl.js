@@ -128,7 +128,7 @@ class AclAgent extends HTTPAgent {
     })
 
     if (newPolicy) {
-      policyName = this.aclUri + Util.randomString(5)
+      policyName = this.aclUri + '#' + Util.randomString(5)
       this.tmp.push({
         source: policyName,
         user,
@@ -286,33 +286,55 @@ class AclAgent extends HTTPAgent {
     return permissions
   }
 
+  _newAuthorization(authName, user, mode) {
+    let boilerplate = []
+    boilerplate.push(
+      rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
+      rdf.st(rdf.sym(authName), PRED.access, rdf.sym(this.uri)),
+      rdf.st(rdf.sym(authName), PRED.agent, rdf.sym(user)),
+      rdf.st(rdf.sym(authName), PRED.mode, rdf.sym(mode))
+    )
+    return boilerplate
+  }
+
   /**
    * @sumarry Serializes the new acl file and puts it to the server.
    *          Must be called at the end.
    * @return {promise} - the server response.
    */
 
-  // @TODO Initiate a new policy.
+  // @TODO Test new policy init.
   // @TODO Wipe zombies.
   // @TODO Snackbar.
+
   commit() {
-    // No changes to commit.
     if (!this.toAdd.length && !this.toRemove.length) {
       return
     }
 
-    const addQuery = this.toAdd.map(entry => {
-      if (entry.newPolicy) {
+    // These are used for composing the final patch.
+    let addQuery = []
+    let removeQuery = []
+    // Adding / removing whole authorization blocks.
+    let authCreationQuery = []
+    let authRemoveQuery = []
+
+    this.toAdd.forEach(e => {
+      if (e.newPolicy) {
+        authCreationQuery = authCreationQuery.concat(
+          this._newAuthorization(e.policy, e.user, e.perm)
+        )
       } else {
-        return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
+        addQuery.push(rdf.st(rdf.sym(e.policy), PRED.mode, rdf.sym(e.perm)))
       }
     })
 
-    const removeQuery = this.toRemove.map(entry => {
-      return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
+    addQuery = addQuery.concat(authCreationQuery)
+
+    this.toRemove.forEach(e => {
+      removeQuery.push(rdf.st(rdf.sym(e.policy), PRED.mode, rdf.sym(e.perm)))
     })
 
-    console.log(Object.assign({}, this.tmp))
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
     }).then(() => {
