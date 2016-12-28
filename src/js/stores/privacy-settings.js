@@ -92,7 +92,7 @@ export default Reflux.createStore({
     this.aclAgent.removeAllow(user, 'read')
   },
 
-  _allowEdit(user) {
+  allowEdit(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`
@@ -100,7 +100,7 @@ export default Reflux.createStore({
     this.aclAgent.allow(user, 'write')
   },
 
-  _disallowEdit(user) {
+  disallowEdit(user) {
     if (user.indexOf('http://') !== 0 &&
         user.indexOf('https://') !== 0) {
       user = `https://${user}`

@@ -56,7 +56,14 @@ let PrivacySettings = React.createClass({
   },
 
   // TODO swap and perhaps functional
+  // TODO Move to store ?
   _handleToggleEdit(contact) {
+    if (contact.edit) {
+      PrivacyActions.disallowEdit(contact.webId)
+    } else {
+      PrivacyActions.allowEdit(contact.webId)
+    }
+
     this.state.allowedContacts.forEach(user => {
       if (contact.webId === user.webId) {
         user.edit = !user.edit
@@ -71,6 +78,11 @@ let PrivacySettings = React.createClass({
 
   _changePrivacyMode(mode) {
     PrivacyActions.changePrivacyMode(mode)
+  },
+
+  test() {
+    console.log('commiting.')
+    PrivacyActions.commit()
   },
 
   getStyles() {
@@ -294,6 +306,7 @@ let PrivacySettings = React.createClass({
                 }
                 rightIcon={
                   <FloatingActionButton
+                    onTouchTap={this.test}
                     mini
                     secondary
                     style={styles.addBtn}>

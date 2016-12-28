@@ -129,7 +129,11 @@ class AclAgent extends HTTPAgent {
 
     if (newPolicy) {
       policyName = this.aclUri + Util.randomString(5)
-      this.tmp.push({source: policyName, user, mode: [this.predMap[mode].uri]})
+      this.tmp.push({
+        source: policyName,
+        user,
+        mode: [this.predMap[mode].uri]
+      })
     }
 
     this.toAdd.push({
@@ -154,19 +158,23 @@ class AclAgent extends HTTPAgent {
 
   removeAllow(user, mode) {
     let policyName
+    const predicate = this.predMap[mode].uri
+
     this.tmp = this.tmp.filter(entry => {
-      if (entry.user === user &&
-          entry.mode.indexOf(this.predMap[mode].uri) !== -1) {
+      if (entry.user === user && entry.mode.indexOf(predicate) !== -1) {
         policyName = entry.source
-        return true
+        if (entry.mode.length === 1) {
+          return false
+        }
+        entry.mode = entry.mode.filter(el => el !== predicate)
       }
-      return false
+      return true
     })
 
     this.toRemove.push({
       user: user,
       policy: policyName,
-      perm: this.predMap[mode].uri
+      perm: predicate
     })
   }
 
@@ -288,17 +296,28 @@ class AclAgent extends HTTPAgent {
   // @TODO Wipe zombies.
   // @TODO Snackbar.
   commit() {
+    // No changes to commit.
+    if (!this.toAdd.length && !this.toRemove.length) {
+      return
+    }
+
     const addQuery = this.toAdd.map(entry => {
       if (entry.newPolicy) {
       } else {
         return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
       }
     })
+
     const removeQuery = this.toRemove.map(entry => {
       return rdf.st(rdf.sym(entry.policy), PRED.mode, rdf.sym(entry.perm))
     })
+
+    console.log(Object.assign({}, this.tmp))
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
+    }).then(() => {
+      this.toAdd = []
+      this.toRemove = []
     }).catch((e) => {
       console.error(e)
     })
