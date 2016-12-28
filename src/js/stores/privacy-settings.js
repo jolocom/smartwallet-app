@@ -34,15 +34,13 @@ export default Reflux.createStore({
   },
 
   removeContact(contact) {
+    this.aclAgent.removeAllow(contact.webId, 'read')
+    if (contact.edit) {
+      this.aclAgent.removeAllow(contact.webId, 'write')
+    }
     this.state.allowedContacts = this.state.allowedContacts.filter(el =>
       contact.webId !== el.webId
     )
-
-    /* TODO Reflect
-    contact.perm.forEach(permission => {
-      this.aclAgent.removeAllow(contact.webId, permission)
-    })
-    */
     this.trigger(this.state)
   },
 
