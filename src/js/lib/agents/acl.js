@@ -43,8 +43,6 @@ class AclAgent extends HTTPAgent {
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
     this.gAgent = new GraphAgent()
-    this.Writer = new Writer()
-    this.wia = new WebidAgent()
     this.indexChanges = {
       toInsert: [],
       toDelete: []
@@ -53,9 +51,9 @@ class AclAgent extends HTTPAgent {
     this.predMap = {
       write: PRED.write.uri,
       read: PRED.read.uri,
-      control: PRED.control.uri,
-      test: 'one'
+      control: PRED.control.uri
     }
+
     this.revPredMap = {}
     this.revPredMap[PRED.write.uri] = 'write'
     this.revPredMap[PRED.read.uri] = 'read'
@@ -88,25 +86,38 @@ class AclAgent extends HTTPAgent {
    */
 
   _fetchInfo() {
-    return this.wia.getAclUri(this.uri).then((aclUri) => {
+    const wia = new WebidAgent()
+    return wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
-      return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result) => {
+      let results = []
+      return this.gAgent.fetchTriplesAtUri(this.aclUri).then(result => {
         const {triples} = result
-        for (let triple in triples) {
-          const {subject, predicate, object} = triples[triple]
-          this.Writer.addTriple(subject, predicate, object)
-        }
-        if (this.Writer.find(undefined, PRED.type, PRED.auth).length === 0) {
-          throw new Error('Link is not an ACL file')
-        }
+        triples.forEach(t => {
+          results.push(t)
+        })
+        return results
       })
     })
   }
 
   initialize() {
-    return this._fetchInfo().then(() => {
-      this.Writer.find(undefined, PRED.agent, undefined).forEach(pol => {
+    return this._fetchInfo().then((trips) => {
+      const writer = new Writer()
+
+      trips.forEach(t => {
+        writer.addTriple(t.subject, t.predicate, t.object)
+      })
+
+      writer.find(undefined, PRED.agentClass, undefined).forEach(pol => {
+        this.tmp.push({
+          user: '*',
+          source: pol.subject.uri,
+          mode: []
+        })
+      })
+
+      writer.find(undefined, PRED.agent, undefined).forEach(pol => {
         this.tmp.push({
           user: pol.object.uri,
           source: pol.subject.uri,
@@ -115,7 +126,7 @@ class AclAgent extends HTTPAgent {
       })
 
       this.tmp.forEach(entry => {
-        this.Writer.find(rdf.sym(entry.source), PRED.mode, undefined)
+        writer.find(rdf.sym(entry.source), PRED.mode, undefined)
         .forEach(pol => {
           entry.mode.push(pol.object.mode || pol.object.uri)
         })
@@ -128,7 +139,6 @@ class AclAgent extends HTTPAgent {
    * Usefull when we want to reset / wipe the triples in the agent
    */
   resetAcl() {
-    this.Writer = new Writer()
   }
 
   /**
