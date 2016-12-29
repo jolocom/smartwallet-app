@@ -34,6 +34,7 @@ export default Reflux.createStore({
   },
 
   removeContact(contact) {
+    console.log(contact)
     this.aclAgent.removeAllow(contact.webId, 'read')
     if (contact.edit) {
       this.aclAgent.removeAllow(contact.webId, 'write')

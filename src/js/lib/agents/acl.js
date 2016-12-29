@@ -4,8 +4,31 @@ import _ from 'lodash'
 import Util from 'lib/util'
 import WebidAgent from 'lib/agents/webid'
 import HTTPAgent from 'lib/agents/http'
+import LDPAgent from 'lib/agents/ldp'
 import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
+
+/*
+  this.tmp = {
+    user: pol.object.uri,
+    source: pol.subject.uri,
+    mode: []
+  }
+
+  this.toAdd = {
+    user,
+    policy: policyName,
+    perm: this.predMap[mode].uri,
+    newPolicy
+  }
+
+  this.toRemove = {
+    user: user,
+    policy: policyName,
+    perm: predicate,
+    zombie
+  }
+*/
 
 // @TODO We keep the state / model for real time lookups.
 // @TODO We keep the toAdd / toRemove so we can commit.
@@ -28,10 +51,16 @@ class AclAgent extends HTTPAgent {
     }
 
     this.predMap = {
-      write: PRED.write,
-      read: PRED.read,
-      control: PRED.control
+      write: PRED.write.uri,
+      read: PRED.read.uri,
+      control: PRED.control.uri,
+      test: 'one'
     }
+    this.revPredMap = {}
+    this.revPredMap[PRED.write.uri] = 'write'
+    this.revPredMap[PRED.read.uri] = 'read'
+    this.revPredMap[PRED.control.uri] = 'control'
+
     this.toAdd = []
     this.toRemove = []
   }
@@ -110,36 +139,62 @@ class AclAgent extends HTTPAgent {
    * @return undefined, we want the side effect
    */
 
-  // @TODO check if present in toRemove.
+  // @TODO Test the inRemove presence.
   // @TODO test the doubling detection.
   allow(user, mode) {
     let policyName
     let newPolicy = true
+    let tempFound = false
+
+    this.toRemove = this.toRemove.filter(e => {
+      // TODO Check for array edge cases
+      if (e.user === user && e.perm === this.predMap[mode]) {
+        this.tmp.push({
+          source: e.policy,
+          user,
+          mode: [e.perm]
+        })
+
+        tempFound = true
+        return false
+      }
+      return true
+    })
+    // We found it in the remove list, undoing and removing.
+    if (tempFound) {
+      return
+    }
+
+    // Check if the policy is already present, possibly redundant.
     this.tmp.forEach(entry => {
       if (entry.user === user) {
-        if (entry.mode.indexOf(this.predMap[mode].uri) !== -1) {
+        // Exactly the same policy, throw.
+        if (entry.mode.indexOf(this.predMap[mode]) !== -1) {
           throw new Error('Policy already present')
         }
-
+        /* Policy regarding user exists, we can just plug in the mode.
+           @TODO Make sure not to do this if there's another user. */
         newPolicy = false
         policyName = entry.source
-        entry.mode.push(this.predMap[mode].uri)
+        entry.mode.push(this.predMap[mode])
       }
     })
 
+    /* If there's no policy or anything related to this user,
+       we roll a new one. */
     if (newPolicy) {
       policyName = this.aclUri + '#' + Util.randomString(5)
       this.tmp.push({
         source: policyName,
         user,
-        mode: [this.predMap[mode].uri]
+        mode: [this.predMap[mode]]
       })
     }
 
     this.toAdd.push({
       user,
       policy: policyName,
-      perm: this.predMap[mode].uri,
+      perm: this.predMap[mode],
       newPolicy
     })
   }
@@ -158,12 +213,13 @@ class AclAgent extends HTTPAgent {
 
   removeAllow(user, mode) {
     let policyName
-    const predicate = this.predMap[mode].uri
-
+    let zombie = false
+    const predicate = this.predMap[mode]
     this.tmp = this.tmp.filter(entry => {
       if (entry.user === user && entry.mode.indexOf(predicate) !== -1) {
         policyName = entry.source
         if (entry.mode.length === 1) {
+          zombie = true
           return false
         }
         entry.mode = entry.mode.filter(el => el !== predicate)
@@ -174,7 +230,8 @@ class AclAgent extends HTTPAgent {
     this.toRemove.push({
       user: user,
       policy: policyName,
-      perm: predicate
+      perm: predicate,
+      zombie
     })
   }
 
@@ -227,7 +284,7 @@ class AclAgent extends HTTPAgent {
       return []
     }
 
-    let pred = this.predMap[mode].uri
+    let pred = this.predMap[mode]
     let users = []
     this.tmp.forEach(entry => {
       if (entry.mode.indexOf(pred) !== -1) {
@@ -245,33 +302,20 @@ class AclAgent extends HTTPAgent {
    *                        modes as well.
    * @return {array} - permissions [read,write,control]
    */
+  // TODO SUPPORT FOR WILDCARD
   allowedPermissions(user, strict = false) {
     let wildcard = user === '*'
-    user = wildcard ? PRED.Agent : user
-    let identifier = wildcard ? PRED.agentClass : PRED.agent
     let permissions = []
-    let policies = []
 
-    if (typeof user === 'string') {
-      user = rdf.sym(user)
-    }
-    if (this.Writer.g.statements.length === 0) {
-      return []
-    }
-    let existing = this.Writer.find(undefined, identifier, user)
-    if (existing.length > 0) {
-      existing.forEach((statement) => {
-        policies.push(statement.subject)
-      })
-      policies.forEach((policy) => {
-        let triples = this.Writer.find(policy, PRED.mode, undefined)
-        for (let el of triples) {
-          if (!_.includes(permissions, _.findKey(this.predMap, el.object))) {
-            permissions.push(_.findKey(this.predMap, el.object))
+    this.tmp.forEach(entry => {
+      if (entry.user === user) {
+        entry.mode.forEach(p => {
+          if (!_.includes(permissions, this.revPredMap[p])) {
+            permissions.push(this.revPredMap[p])
           }
-        }
-      })
-    }
+        })
+      }
+    })
 
     // We append the open permissions as well, since they apply to all users.
     // But only if strict is set to false.
@@ -311,13 +355,14 @@ class AclAgent extends HTTPAgent {
     if (!this.toAdd.length && !this.toRemove.length) {
       return
     }
-
+    console.log('ADDING ', Object.assign({}, this.toAdd), 'AND ', Object.assign({}, this.toRemove))
     // These are used for composing the final patch.
     let addQuery = []
     let removeQuery = []
     // Adding / removing whole authorization blocks.
     let authCreationQuery = []
-    let authRemoveQuery = []
+    // Authorization blocks that have no modes or users are useless / zombies.
+    let zombiePolicies = []
 
     this.toAdd.forEach(e => {
       if (e.newPolicy) {
@@ -329,20 +374,44 @@ class AclAgent extends HTTPAgent {
       }
     })
 
-    addQuery = addQuery.concat(authCreationQuery)
-
     this.toRemove.forEach(e => {
-      removeQuery.push(rdf.st(rdf.sym(e.policy), PRED.mode, rdf.sym(e.perm)))
+      if (e.zombie) {
+        zombiePolicies.push(e.policy)
+      } else {
+        removeQuery.push(rdf.st(rdf.sym(e.policy), PRED.mode, rdf.sym(e.perm)))
+      }
     })
 
+    addQuery = addQuery.concat(authCreationQuery)
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
     }).then(() => {
+      if (zombiePolicies.length) {
+        this._wipeZombies(zombiePolicies)
+      }
       this.toAdd = []
       this.toRemove = []
     }).catch((e) => {
-      console.error(e)
     })
+  }
+
+  /* @summary - A zombie policy is one that has no users or / and no
+   *   permissions associated to it, therefore it can be wiped.
+   *
+   * P.S. I wish the function was as badass as it's name would suggest.
+   */
+  _wipeZombies(policies) {
+    const ldpAgent = new LDPAgent()
+    return Promise.all(policies.map(pol => {
+      return ldpAgent.findTriples(
+        this.aclUri,
+        rdf.sym(pol),
+        undefined,
+        undefined
+      ).then(triples => {
+        return this.patch(this._proxify(this.aclUri), triples, [])
+      })
+    }))
   }
 
   commitIndex() {
