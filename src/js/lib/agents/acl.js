@@ -29,14 +29,9 @@ import {Writer} from '../rdf.js'
     zombie
   }
 */
-
-// @TODO We keep the state / model for real time lookups.
-// @TODO We keep the toAdd / toRemove so we can commit.
-
 // @TODO Make sure MODE is consistent.
 class AclAgent extends HTTPAgent {
   // TODO Check here if the user can modify the acl and throw error if not.
-  // TODO Add support for multiple policies regarding a user per file.
   constructor(uri) {
     super()
     this.tmp = []
@@ -149,51 +144,38 @@ class AclAgent extends HTTPAgent {
    * @return undefined, we want the side effect
    */
 
-  // @TODO Test the inRemove presence.
-  // @TODO test the doubling detection.
+  // @TODO Wipe then add does not work now.
   allow(user, mode) {
     let policyName
     let newPolicy = true
     let tempFound = false
-
     this.toRemove = this.toRemove.filter(e => {
-      // TODO Check for array edge cases
-      if (e.user === user && e.perm === this.predMap[mode]) {
-        this.tmp.push({
-          source: e.policy,
-          user,
-          mode: [e.perm]
-        })
-
+      const exists = e.user === user && e.perm === this.predMap[mode]
+      if (exists) {
+        this.tmp.push({source: e.policy, user, mode: [e.perm]})
         tempFound = true
-        return false
       }
-      return true
+      return !exists
     })
-    // We found it in the remove list, undoing and removing.
+
     if (tempFound) {
       return
     }
 
-    // Check if the policy is already present, possibly redundant.
     this.tmp.forEach(entry => {
       if (entry.user === user) {
-        // Exactly the same policy, throw.
         if (entry.mode.indexOf(this.predMap[mode]) !== -1) {
           throw new Error('Policy already present')
         }
-        /* Policy regarding user exists, we can just plug in the mode.
-           @TODO Make sure not to do this if there's another user. */
+        /* @TODO Make sure not to do this if there's another user. */
         newPolicy = false
         policyName = entry.source
         entry.mode.push(this.predMap[mode])
       }
     })
 
-    /* If there's no policy or anything related to this user,
-       we roll a new one. */
     if (newPolicy) {
-      policyName = this.aclUri + '#' + Util.randomString(5)
+      policyName = `${this.aclUri}#${Util.randomString(5)}`
       this.tmp.push({
         source: policyName,
         user,
@@ -217,24 +199,21 @@ class AclAgent extends HTTPAgent {
    * @return undefined, we want the side effect
    */
 
-  // @TODO Remove multiple policies doing the same thing.
   // @TODO Snackbar instead of console warn.
-  // @TODO CHECK AND TEST.
-
   removeAllow(user, mode) {
     let policyName
     let zombie = false
     const predicate = this.predMap[mode]
     this.tmp = this.tmp.filter(entry => {
-      if (entry.user === user && entry.mode.indexOf(predicate) !== -1) {
+      const exists = entry.user === user && entry.mode.indexOf(predicate) !== -1
+      if (exists) {
         policyName = entry.source
+        entry.mode = entry.mode.filter(el => el !== predicate)
         if (entry.mode.length === 1) {
           zombie = true
-          return false
         }
-        entry.mode = entry.mode.filter(el => el !== predicate)
       }
-      return true
+      return !exists
     })
 
     this.toRemove.push({
