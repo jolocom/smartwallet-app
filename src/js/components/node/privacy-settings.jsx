@@ -47,15 +47,12 @@ let PrivacySettings = React.createClass({
   componentDidMount() {
     const {uri} = this.props.params
     PrivacyActions.fetchInitialData(uri)
-    // TEST TEST TEST
-    PrivacyActions.computeResult()
   },
 
   goBack() {
     this.context.router.goBack()
   },
 
-  // TODO swap and perhaps functional
   // TODO Move to store ?
   _handleToggleEdit(contact) {
     if (contact.edit) {
@@ -65,7 +62,7 @@ let PrivacySettings = React.createClass({
     }
 
     this.state.allowedContacts.forEach(user => {
-      if (contact.webId === user.webId) {
+      if (user.webId === contact.webId) {
         user.edit = !user.edit
       }
     })
@@ -81,7 +78,6 @@ let PrivacySettings = React.createClass({
   },
 
   test() {
-    console.log('commiting.')
     PrivacyActions.commit()
   },
 
@@ -175,7 +171,6 @@ let PrivacySettings = React.createClass({
     PrivacyActions.removeContact(contact)
   },
 
-  // TODO
   _handleAddContact(selected) {
     selected.forEach(contact =>
       PrivacyActions.allowRead(contact)
@@ -241,8 +236,9 @@ let PrivacySettings = React.createClass({
                 Please select who you want to share your node with.
               </div>
             </div>
-
-            <List>
+            {this.state.privacyMode === 'private'
+            ? <div>
+              <List>
               <ListItem
                 key={1}
                 disabled
@@ -262,7 +258,6 @@ let PrivacySettings = React.createClass({
               </ListItem>
             </List>
 
-            {/* The list of contacts that have access to the file */}
             <List>
               {this.state.allowedContacts.map(contact => {
                 return (
@@ -317,16 +312,9 @@ let PrivacySettings = React.createClass({
                 <Divider style={styles.divider} />
               </ListItem>
             </List>
-            <FlatButton
-              style={Object.assign({}, styles.submitBtn)}
-              onTouchTap={() => {
-                PrivacyActions.computeResult()
-                PrivacyActions.commit()
-                this.goBack()
-              }}
-            >
-              Commit
-            </FlatButton>
+            </div>
+            : <div>Everyone can view this.</div>
+            }
           </div>
         </div>}
       </div>

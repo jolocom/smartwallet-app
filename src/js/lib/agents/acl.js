@@ -1,35 +1,13 @@
-import rdf from 'rdflib'
 import GraphAgent from 'lib/agents/graph.js'
-import _ from 'lodash'
-import Util from 'lib/util'
 import WebidAgent from 'lib/agents/webid'
 import HTTPAgent from 'lib/agents/http'
 import LDPAgent from 'lib/agents/ldp'
 import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
+import Util from 'lib/util'
+import rdf from 'rdflib'
+import _ from 'lodash'
 
-/*
-  this.tmp = {
-    user: pol.object.uri,
-    source: pol.subject.uri,
-    mode: []
-  }
-
-  this.toAdd = {
-    user,
-    policy: policyName,
-    perm: this.predMap[mode].uri,
-    newPolicy
-  }
-
-  this.toRemove = {
-    user: user,
-    policy: policyName,
-    perm: predicate,
-    zombie
-  }
-*/
-// @TODO Make sure MODE is consistent.
 class AclAgent extends HTTPAgent {
   // TODO Check here if the user can modify the acl and throw error if not.
   constructor(uri) {
@@ -104,7 +82,7 @@ class AclAgent extends HTTPAgent {
         writer.addTriple(t.subject, t.predicate, t.object)
       })
 
-      writer.find(undefined, PRED.agentClass, undefined).forEach(pol => {
+      writer.find(undefined, PRED.agentClass, PRED.Agent).forEach(pol => {
         this.tmp.push({
           user: '*',
           source: pol.subject.uri,
@@ -127,13 +105,6 @@ class AclAgent extends HTTPAgent {
         })
       })
     })
-  }
-
-  /**
-   * @summary Removes all triples in the writer.
-   * Usefull when we want to reset / wipe the triples in the agent
-   */
-  resetAcl() {
   }
 
   /**
@@ -208,10 +179,10 @@ class AclAgent extends HTTPAgent {
       const exists = entry.user === user && entry.mode.indexOf(predicate) !== -1
       if (exists) {
         policyName = entry.source
-        entry.mode = entry.mode.filter(el => el !== predicate)
         if (entry.mode.length === 1) {
           zombie = true
         }
+        entry.mode = entry.mode.filter(el => el !== predicate)
       }
       return !exists
     })
@@ -291,7 +262,6 @@ class AclAgent extends HTTPAgent {
    *                        modes as well.
    * @return {array} - permissions [read,write,control]
    */
-  // TODO SUPPORT FOR WILDCARD
   allowedPermissions(user, strict = false) {
     let wildcard = user === '*'
     let permissions = []
@@ -310,7 +280,7 @@ class AclAgent extends HTTPAgent {
     // But only if strict is set to false.
     if (!wildcard && !strict) {
       let general = this.allowedPermissions('*')
-      general.forEach((el) => {
+      general.forEach(el => {
         if (!_.includes(permissions, el)) {
           permissions.push(el)
         }
@@ -320,11 +290,15 @@ class AclAgent extends HTTPAgent {
   }
 
   _newAuthorization(authName, user, mode) {
+    const wild = user === '*'
+    user = wild ? PRED.Agent : rdf.sym(user)
+    const pred = wild ? PRED.agentClass : PRED.agent
+
     let boilerplate = []
     boilerplate.push(
       rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
       rdf.st(rdf.sym(authName), PRED.access, rdf.sym(this.uri)),
-      rdf.st(rdf.sym(authName), PRED.agent, rdf.sym(user)),
+      rdf.st(rdf.sym(authName), pred, user),
       rdf.st(rdf.sym(authName), PRED.mode, rdf.sym(mode))
     )
     return boilerplate
@@ -336,21 +310,17 @@ class AclAgent extends HTTPAgent {
    * @return {promise} - the server response.
    */
 
-  // @TODO Test new policy init.
-  // @TODO Wipe zombies.
   // @TODO Snackbar.
-
   commit() {
     if (!this.toAdd.length && !this.toRemove.length) {
       return
     }
-    console.log('ADDING ', Object.assign({}, this.toAdd), 'AND ', Object.assign({}, this.toRemove))
     // These are used for composing the final patch.
     let addQuery = []
     let removeQuery = []
+
     // Adding / removing whole authorization blocks.
     let authCreationQuery = []
-    // Authorization blocks that have no modes or users are useless / zombies.
     let zombiePolicies = []
 
     this.toAdd.forEach(e => {

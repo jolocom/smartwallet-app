@@ -2,14 +2,16 @@ import Reflux from 'reflux'
 import PrivacyActions from 'actions/privacy-settings'
 import AclAgent from 'lib/agents/acl'
 import GraphAgent from 'lib/agents/graph'
+import WebidAgent from 'lib/agents/webid'
 
 export default Reflux.createStore({
   listenables: PrivacyActions,
 
   init() {
     this.gAgent = new GraphAgent()
-    // TODO Use agent
-    this.webId = localStorage.getItem('jolocom.webId')
+
+    const wia = new WebidAgent()
+    this.webId = wia.getWebId()
 
     this.state = {
       privacyMode: 'private',
@@ -25,16 +27,19 @@ export default Reflux.createStore({
     return this.state
   },
 
-  // TODO What should change here?
   changePrivacyMode(mode) {
-    if (mode === 'public' || mode === 'private') {
+    if (mode !== this.state.privacyMode) {
+      if (mode === 'public') {
+        this.aclAgent.allow('*', 'read')
+      } else {
+        this.aclAgent.removeAllow('*', 'read')
+      }
       this.state.privacyMode = mode
       this.trigger(this.state)
     }
   },
 
   removeContact(contact) {
-    console.log(contact)
     this.aclAgent.removeAllow(contact.webId, 'read')
     if (contact.edit) {
       this.aclAgent.removeAllow(contact.webId, 'write')
@@ -45,17 +50,6 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  // TODO Implement
-  computeResult() {
-    /*
-    this.aclAgent.initialize().then(() => {
-      this.aclAgent.removeAllow('https://testdude.com', 'control')
-      this.aclAgent.removeAllow('https://testdude.com', 'read')
-      this.aclAgent.commit()
-    })
-    */
-  },
-
   // TODO User profile image / name.
   fetchInitialData(file) {
     // Resets the state
@@ -63,47 +57,39 @@ export default Reflux.createStore({
     this.aclAgent = new AclAgent(file)
     this.aclAgent.initialize().then(() => {
       this.aclAgent.allAllowedUsers('read').forEach(user => {
+        if (user === '*') {
+          return
+        }
+
         this.state.allowedContacts.push({
           webId: user,
           edit: this.aclAgent.isAllowed(user, 'write')
         })
       })
+
+      if (this.aclAgent.isAllowed('*', 'read')) {
+        this.state.privacyMode = 'public'
+      }
+
       this.trigger(this.state)
     })
   },
 
-  // TODO Abstract http / https check.
   allowRead(webId) {
-    if (webId.indexOf('http://') !== 0 &&
-        webId.indexOf('https://') !== 0) {
-      webId = `https://${webId}`
-    }
     this.aclAgent.allow(webId, 'read')
     this.state.allowedContacts.push({webId})
     this.trigger(this.state)
   },
 
   disallowRead(user) {
-    if (user.indexOf('http://') !== 0 &&
-        user.indexOf('https://') !== 0) {
-      user = `https://${user}`
-    }
     this.aclAgent.removeAllow(user, 'read')
   },
 
   allowEdit(user) {
-    if (user.indexOf('http://') !== 0 &&
-        user.indexOf('https://') !== 0) {
-      user = `https://${user}`
-    }
     this.aclAgent.allow(user, 'write')
   },
 
   disallowEdit(user) {
-    if (user.indexOf('http://') !== 0 &&
-        user.indexOf('https://') !== 0) {
-      user = `https://${user}`
-    }
     this.aclAgent.removeAllow(user, 'write')
   },
 
