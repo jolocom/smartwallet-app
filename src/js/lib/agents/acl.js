@@ -355,8 +355,8 @@ class AclAgent extends HTTPAgent {
         ))
       }
     })
-
     addQuery = addQuery.concat(this.authCreationQuery)
+    console.log(Object.assign({}, removeQuery))
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
     }).then(() => {
@@ -416,17 +416,16 @@ class AclAgent extends HTTPAgent {
     this.authCreationQuery = this.authCreationQuery.concat(
       this._newAuthorization(name, agent, modes)
     )
-    /*
+
     modes.forEach(perm => {
       this.toRemove.push({
         user: agent,
         subject: authName,
-        predicat: PRED.agent,
-        object: perm,
+        predicate: PRED.agent,
+        object: agent,
         zombie: false
       })
     })
-    */
 
     modes.forEach(perm => {
       this.toAdd.push({
