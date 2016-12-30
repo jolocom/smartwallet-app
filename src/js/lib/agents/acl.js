@@ -27,6 +27,10 @@ class AclAgent extends HTTPAgent {
       control: PRED.control.uri
     }
 
+    // @TODO Think about scoping here.
+    this.authCreationQuery = []
+    this.zombiePolicies = []
+
     this.revPredMap = {}
     this.revPredMap[PRED.write.uri] = 'write'
     this.revPredMap[PRED.read.uri] = 'read'
@@ -82,6 +86,7 @@ class AclAgent extends HTTPAgent {
         writer.addTriple(t.subject, t.predicate, t.object)
       })
 
+      // Read all / Write all, basically public permission.
       writer.find(undefined, PRED.agentClass, PRED.Agent).forEach(pol => {
         this.tmp.push({
           user: '*',
@@ -116,14 +121,15 @@ class AclAgent extends HTTPAgent {
    */
 
   // @TODO Wipe then add does not work now.
+  // @TODO Don't inject in case more than one user.
   allow(user, mode) {
     let policyName
     let newPolicy = true
     let tempFound = false
     this.toRemove = this.toRemove.filter(e => {
-      const exists = e.user === user && e.perm === this.predMap[mode]
+      const exists = e.user === user && e.object === this.predMap[mode]
       if (exists) {
-        this.tmp.push({source: e.policy, user, mode: [e.perm]})
+        this.tmp.push({source: e.subject, user, mode: [e.predicate]})
         tempFound = true
       }
       return !exists
@@ -138,10 +144,16 @@ class AclAgent extends HTTPAgent {
         if (entry.mode.indexOf(this.predMap[mode]) !== -1) {
           throw new Error('Policy already present')
         }
-        /* @TODO Make sure not to do this if there's another user. */
-        newPolicy = false
-        policyName = entry.source
-        entry.mode.push(this.predMap[mode])
+        // We can inject only if this is the only user in the policy.
+        if (this.getAuthAgents(entry.source).length === 1) {
+          newPolicy = false
+          policyName = entry.source
+          entry.mode.push(this.predMap[mode])
+        } else {
+          this.splitAuth(entry.user, entry.source, entry.mode)
+          this.allow(entry.user, mode)
+          throw new Error('Splitting first')
+        }
       }
     })
 
@@ -156,8 +168,9 @@ class AclAgent extends HTTPAgent {
 
     this.toAdd.push({
       user,
-      policy: policyName,
-      perm: this.predMap[mode],
+      subject: policyName,
+      predicate: PRED.mode,
+      object: this.predMap[mode],
       newPolicy
     })
   }
@@ -176,21 +189,34 @@ class AclAgent extends HTTPAgent {
     let zombie = false
     const predicate = this.predMap[mode]
     this.tmp = this.tmp.filter(entry => {
-      const exists = entry.user === user && entry.mode.indexOf(predicate) !== -1
-      if (exists) {
-        policyName = entry.source
-        if (entry.mode.length === 1) {
-          zombie = true
+      const found = entry.user === user && entry.mode.indexOf(predicate) !== -1
+      if (found) {
+        if (this.getAuthAgents(entry.source).length === 1) {
+          policyName = entry.source
+          if (entry.mode.length === 1) {
+            zombie = true
+          }
+          entry.mode = entry.mode.filter(el => el !== predicate)
+        } else {
         }
-        entry.mode = entry.mode.filter(el => el !== predicate)
       }
-      return !exists
+
+      return !found || entry.mode.length !== 0
+      /*
+      if (!found) {
+        if (entry.mode.length === 0) {
+          return false
+        }
+      }
+      return true
+      */
     })
 
     this.toRemove.push({
       user: user,
-      policy: policyName,
-      perm: predicate,
+      subject: policyName,
+      predicate: PRED.mode,
+      object: predicate,
       zombie
     })
   }
@@ -289,21 +315,6 @@ class AclAgent extends HTTPAgent {
     return permissions
   }
 
-  _newAuthorization(authName, user, mode) {
-    const wild = user === '*'
-    user = wild ? PRED.Agent : rdf.sym(user)
-    const pred = wild ? PRED.agentClass : PRED.agent
-
-    let boilerplate = []
-    boilerplate.push(
-      rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
-      rdf.st(rdf.sym(authName), PRED.access, rdf.sym(this.uri)),
-      rdf.st(rdf.sym(authName), pred, user),
-      rdf.st(rdf.sym(authName), PRED.mode, rdf.sym(mode))
-    )
-    return boilerplate
-  }
-
   /**
    * @sumarry Serializes the new acl file and puts it to the server.
    *          Must be called at the end.
@@ -319,37 +330,44 @@ class AclAgent extends HTTPAgent {
     let addQuery = []
     let removeQuery = []
 
-    // Adding / removing whole authorization blocks.
-    let authCreationQuery = []
-    let zombiePolicies = []
-
     this.toAdd.forEach(e => {
       if (e.newPolicy) {
-        authCreationQuery = authCreationQuery.concat(
-          this._newAuthorization(e.policy, e.user, e.perm)
+        this.authCreationQuery = this.authCreationQuery.concat(
+          this._newAuthorization(e.subject, e.user, [e.object])
         )
       } else {
-        addQuery.push(rdf.st(rdf.sym(e.policy), PRED.mode, rdf.sym(e.perm)))
+        addQuery.push(rdf.st(
+          rdf.sym(e.subject),
+          e.predicate,
+          rdf.sym(e.object)
+        ))
       }
     })
 
     this.toRemove.forEach(e => {
       if (e.zombie) {
-        zombiePolicies.push(e.policy)
+        this.zombiePolicies.push(e.subject)
       } else {
-        removeQuery.push(rdf.st(rdf.sym(e.policy), PRED.mode, rdf.sym(e.perm)))
+        removeQuery.push(rdf.st(
+          rdf.sym(e.subject),
+          e.predicate,
+          rdf.sym(e.object)
+        ))
       }
     })
 
-    addQuery = addQuery.concat(authCreationQuery)
+    addQuery = addQuery.concat(this.authCreationQuery)
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
     }).then(() => {
-      if (zombiePolicies.length) {
-        this._wipeZombies(zombiePolicies)
+      if (this.zombiePolicies.length) {
+        this._wipeZombies(this.zombiePolicies)
       }
+      // @TODO Abstract into a function
       this.toAdd = []
       this.toRemove = []
+      this.zombiePlicies = []
+      this.authCreationQuery = []
     }).catch((e) => {
     })
   }
@@ -371,6 +389,78 @@ class AclAgent extends HTTPAgent {
         return this.patch(this._proxify(this.aclUri), triples, [])
       })
     }))
+  }
+
+  // Given an authorization policy name, returns
+  // all users mentioned.
+  getAuthAgents(authName) {
+    let users = this.tmp.filter(policy =>
+      policy.source === authName
+    )
+    users = users.map(entry => entry.user)
+    return users
+  }
+
+  splitAuth(agent, authName, modes) {
+    // We can't split when there's only one user
+    if (this.getAuthAgents(authName).length === 1) {
+      return
+    }
+
+    this.tmp = this.tmp.filter(el => {
+      return el.user !== agent && el.source !== authName
+    })
+
+    // @TODO
+    const name = `${authName}${Util.randomString(3)}`
+    this.authCreationQuery = this.authCreationQuery.concat(
+      this._newAuthorization(name, agent, modes)
+    )
+    /*
+    modes.forEach(perm => {
+      this.toRemove.push({
+        user: agent,
+        subject: authName,
+        predicat: PRED.agent,
+        object: perm,
+        zombie: false
+      })
+    })
+    */
+
+    modes.forEach(perm => {
+      this.toAdd.push({
+        user: agent,
+        subject: name,
+        predicate: PRED.mode,
+        object: perm,
+        newPolicy: false
+      })
+    })
+
+    this.tmp.push({
+      user: agent,
+      source: name,
+      mode: modes
+    })
+  }
+
+  _newAuthorization(authName, user, modes) {
+    const wild = user === '*'
+    user = wild ? PRED.Agent : rdf.sym(user)
+    const pred = wild ? PRED.agentClass : PRED.agent
+
+    let boilerplate = []
+    boilerplate.push(
+      rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
+      rdf.st(rdf.sym(authName), PRED.access, rdf.sym(this.uri)),
+      rdf.st(rdf.sym(authName), pred, user),
+    )
+
+    modes.forEach(mode => {
+      boilerplate.push(rdf.st(rdf.sym(authName), PRED.mode, rdf.sym(mode)))
+    })
+    return boilerplate
   }
 
   commitIndex() {
