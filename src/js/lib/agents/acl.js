@@ -356,7 +356,6 @@ class AclAgent extends HTTPAgent {
       }
     })
     addQuery = addQuery.concat(this.authCreationQuery)
-    console.log(Object.assign({}, removeQuery))
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
     }).then(() => {
@@ -407,11 +406,12 @@ class AclAgent extends HTTPAgent {
       return
     }
 
+    // Remove the user from the previous authorization spec.
     this.tmp = this.tmp.filter(el => {
       return el.user !== agent && el.source !== authName
     })
 
-    // @TODO
+    // Create the new one.
     const name = `${authName}${Util.randomString(3)}`
     this.authCreationQuery = this.authCreationQuery.concat(
       this._newAuthorization(name, agent, modes)
@@ -424,16 +424,6 @@ class AclAgent extends HTTPAgent {
         predicate: PRED.agent,
         object: agent,
         zombie: false
-      })
-    })
-
-    modes.forEach(perm => {
-      this.toAdd.push({
-        user: agent,
-        subject: name,
-        predicate: PRED.mode,
-        object: perm,
-        newPolicy: false
       })
     })
 
