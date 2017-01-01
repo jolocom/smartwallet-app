@@ -19,7 +19,7 @@ import AddContacts from 'components/node/add-contacts.jsx'
 import GroupIcon from 'material-ui/svg-icons/social/group'
 import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
 import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
-import Edit from 'material-ui/svg-icons/editor/mode-edit'
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
 
 import Util from 'lib/util'
 
@@ -77,13 +77,13 @@ let PrivacySettings = React.createClass({
     PrivacyActions.changePrivacyMode(mode)
   },
 
-  test() {
+  _handleSubmit() {
     PrivacyActions.commit()
   },
 
   getStyles() {
     let styles = {
-      test: {
+      editIconToggle: {
         marginRight: '5%',
         size: '60px'
       },
@@ -108,11 +108,10 @@ let PrivacySettings = React.createClass({
       },
       submitBtn: {
         margin: '2px',
-        backgroundColor: '#b5c945',
+        backgroundColor: '#9a3460',
         minWidth: '30%',
         color: '#fff',
-        fontSize: '2vmax',
-        display: 'none'
+        fontSize: '2vmax'
       },
       toggleBtns: {
         textAlign: 'center'
@@ -264,13 +263,11 @@ let PrivacySettings = React.createClass({
                   <ListItem
                     key={contact.webId}
                     leftAvatar={
-                      <Avatar src={
-                      Util.uriToProxied('http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624')}
-                      />
+                      <Avatar src={Util.uriToProxied(contact.imgUri)}/>
                     }
                     rightToggle={
-                      <Edit style={styles.test}
-                        color={contact.edit ? "#4b132b" : 'red'}
+                      <EditIcon style={styles.editIconToggle}
+                        color={contact.edit ? "#4b132b" : '#d2d2d2'}
                         onTouchTap={() => this._handleToggleEdit(contact)}
                       />
                     }
@@ -280,7 +277,7 @@ let PrivacySettings = React.createClass({
                         onTouchTap={() => this._handleRemovePerson(contact)}
                       />
                     }>
-                    {contact.webId}
+                    {contact.name ? contact.name : contact.webId}
                   </ListItem>
                 )
               })
@@ -301,7 +298,6 @@ let PrivacySettings = React.createClass({
                 }
                 rightIcon={
                   <FloatingActionButton
-                    onTouchTap={this.test}
                     mini
                     secondary
                     style={styles.addBtn}>
@@ -313,8 +309,13 @@ let PrivacySettings = React.createClass({
               </ListItem>
             </List>
             </div>
-            : <div>Everyone can view this.</div>
-            }
+            : null }
+            <FlatButton
+              style={styles.submitBtn}
+              onTouchTap={this._handleSubmit}
+            >
+              COMMIT
+            </FlatButton>
           </div>
         </div>}
       </div>

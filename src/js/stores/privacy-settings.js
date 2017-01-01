@@ -3,6 +3,7 @@ import PrivacyActions from 'actions/privacy-settings'
 import AclAgent from 'lib/agents/acl'
 import GraphAgent from 'lib/agents/graph'
 import WebidAgent from 'lib/agents/webid'
+import {PRED} from 'lib/namespaces'
 
 export default Reflux.createStore({
   listenables: PrivacyActions,
@@ -50,14 +51,13 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  // TODO User profile image / name.
   fetchInitialData(file) {
     // Resets the state
     this.init()
     this.aclAgent = new AclAgent(file)
     this.aclAgent.initialize().then(() => {
       this.aclAgent.allAllowedUsers('read').forEach(user => {
-        if (user === '*') {
+        if (user === '*' || user === this.webId) {
           return
         }
 
@@ -70,14 +70,35 @@ export default Reflux.createStore({
       if (this.aclAgent.isAllowed('*', 'read')) {
         this.state.privacyMode = 'public'
       }
-
-      this.trigger(this.state)
+    }).then(() => {
+      return this.hydrateContacts().then(() => this.trigger(this.state))
     })
   },
 
-  allowRead(webId) {
-    this.aclAgent.allow(webId, 'read')
-    this.state.allowedContacts.push({webId})
+  // @TODO This is a frequently needed function, abstract perhaps.
+  hydrateContacts() {
+    return Promise.all(this.state.allowedContacts.map(contact => {
+      return this.gAgent.fetchTriplesAtUri(contact.webId).then(tr => {
+        tr.triples.forEach(tr => {
+          if (tr.predicate.uri === PRED.image.uri) {
+            contact.imgUri = tr.object.uri ? tr.object.uri : tr.object.value
+          }
+          if (tr.predicate.uri === PRED.givenName.uri ||
+            tr.predicate.uri === PRED.fullName.uri) {
+            contact.name = tr.object.value
+          }
+        })
+      })
+    }))
+  },
+
+  allowRead(contact) {
+    this.aclAgent.allow(contact.webId, 'read')
+    this.state.allowedContacts.push({
+      webId: contact.webId,
+      imgUri: contact.imgUri,
+      name: contact.name
+    })
     this.trigger(this.state)
   },
 

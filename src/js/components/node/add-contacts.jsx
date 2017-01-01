@@ -54,7 +54,8 @@ let AddContact = React.createClass({
           imgUri: el.imgUri,
           name: el.name,
           webId: el.webId,
-          selected: this.state.selected.indexOf(el.webId) !== -1
+          selected: this.state.selected.findIndex(entry =>
+            entry.webId === el.webId) !== -1
         }
       })
       this.setState({contacts})
@@ -63,7 +64,11 @@ let AddContact = React.createClass({
 
   componentDidMount() {
     this.props.selected.forEach(user => {
-      this.state.selected.push(user.webId)
+      this.state.selected.push({
+        webId: user.webId,
+        imgUri: user.imgUri,
+        name: user.name
+      })
     })
 
     ContactsActions.load()
@@ -123,7 +128,11 @@ let AddContact = React.createClass({
         return pers !== user.webId
       })
     } else {
-      newSelected = this.state.selected.concat([user.webId])
+      newSelected = this.state.selected.concat([{
+        webId: contact.webId,
+        imgUri: contact.imgUri,
+        name: contact.name
+      }])
       user.selected = true
     }
     this.setState({selected: newSelected})

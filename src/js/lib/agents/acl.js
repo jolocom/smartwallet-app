@@ -9,10 +9,9 @@ import rdf from 'rdflib'
 import _ from 'lodash'
 
 class AclAgent extends HTTPAgent {
-  // TODO Check here if the user can modify the acl and throw error if not.
   constructor(uri) {
     super()
-    this.tmp = []
+    this.model = []
     this.aclUri = `${this.uri}.acl`
     this.uri = uri
     this.gAgent = new GraphAgent()
@@ -27,7 +26,6 @@ class AclAgent extends HTTPAgent {
       control: PRED.control.uri
     }
 
-    // @TODO Think about scoping here.
     this.authCreationQuery = []
     this.zombiePolicies = []
 
@@ -88,7 +86,7 @@ class AclAgent extends HTTPAgent {
 
       // Read all / Write all, basically public permission.
       writer.find(undefined, PRED.agentClass, PRED.Agent).forEach(pol => {
-        this.tmp.push({
+        this.model.push({
           user: '*',
           source: pol.subject.uri,
           mode: []
@@ -96,14 +94,14 @@ class AclAgent extends HTTPAgent {
       })
 
       writer.find(undefined, PRED.agent, undefined).forEach(pol => {
-        this.tmp.push({
+        this.model.push({
           user: pol.object.uri,
           source: pol.subject.uri,
           mode: []
         })
       })
 
-      this.tmp.forEach(entry => {
+      this.model.forEach(entry => {
         writer.find(rdf.sym(entry.source), PRED.mode, undefined)
         .forEach(pol => {
           entry.mode.push(pol.object.mode || pol.object.uri)
@@ -120,16 +118,16 @@ class AclAgent extends HTTPAgent {
    * @return undefined, we want the side effect
    */
 
-  // @TODO Wipe then add does not work now.
-  // @TODO Don't inject in case more than one user.
   allow(user, mode) {
     let policyName
     let newPolicy = true
     let tempFound = false
+    const pred = this.predMap[mode]
+
     this.toRemove = this.toRemove.filter(e => {
-      const exists = e.user === user && e.object === this.predMap[mode]
+      const exists = e.user === user && e.object === pred
       if (exists) {
-        this.tmp.push({source: e.subject, user, mode: [e.predicate]})
+        this.model.push({source: e.subject, user, mode: [e.predicate]})
         tempFound = true
       }
       return !exists
@@ -139,19 +137,18 @@ class AclAgent extends HTTPAgent {
       return
     }
 
-    this.tmp.forEach(entry => {
+    this.model.forEach(entry => {
       if (entry.user === user) {
-        if (entry.mode.indexOf(this.predMap[mode]) !== -1) {
+        if (entry.mode.indexOf(pred) !== -1) {
           throw new Error('Policy already present')
         }
         // We can inject only if this is the only user in the policy.
         if (this.getAuthAgents(entry.source).length === 1) {
           newPolicy = false
           policyName = entry.source
-          entry.mode.push(this.predMap[mode])
+          entry.mode.push(pred)
         } else {
-          this.splitAuth(entry.user, entry.source, entry.mode)
-          this.allow(entry.user, mode)
+          this.splitAuth(entry.user, entry.source, entry.mode.concat(pred))
           throw new Error('Splitting first')
         }
       }
@@ -159,10 +156,10 @@ class AclAgent extends HTTPAgent {
 
     if (newPolicy) {
       policyName = `${this.aclUri}#${Util.randomString(5)}`
-      this.tmp.push({
-        source: policyName,
+      this.model.push({
         user,
-        mode: [this.predMap[mode]]
+        source: policyName,
+        mode: [pred]
       })
     }
 
@@ -170,7 +167,7 @@ class AclAgent extends HTTPAgent {
       user,
       subject: policyName,
       predicate: PRED.mode,
-      object: this.predMap[mode],
+      object: pred,
       newPolicy
     })
   }
@@ -188,28 +185,23 @@ class AclAgent extends HTTPAgent {
     let policyName
     let zombie = false
     const predicate = this.predMap[mode]
-    this.tmp = this.tmp.filter(entry => {
+    this.model = this.model.filter(entry => {
       const found = entry.user === user && entry.mode.indexOf(predicate) !== -1
       if (found) {
+        policyName = entry.source
         if (this.getAuthAgents(entry.source).length === 1) {
-          policyName = entry.source
           if (entry.mode.length === 1) {
             zombie = true
           }
           entry.mode = entry.mode.filter(el => el !== predicate)
         } else {
+          this.splitAuth(entry.user, entry.source, entry.mode.filter(m =>
+            m !== predicate)
+          )
+          throw new Error('Splitting first')
         }
       }
-
       return !found || entry.mode.length !== 0
-      /*
-      if (!found) {
-        if (entry.mode.length === 0) {
-          return false
-        }
-      }
-      return true
-      */
     })
 
     this.toRemove.push({
@@ -272,7 +264,7 @@ class AclAgent extends HTTPAgent {
 
     let pred = this.predMap[mode]
     let users = []
-    this.tmp.forEach(entry => {
+    this.model.forEach(entry => {
       if (entry.mode.indexOf(pred) !== -1) {
         users.push(entry.user)
       }
@@ -292,7 +284,7 @@ class AclAgent extends HTTPAgent {
     let wildcard = user === '*'
     let permissions = []
 
-    this.tmp.forEach(entry => {
+    this.model.forEach(entry => {
       if (entry.user === user) {
         entry.mode.forEach(p => {
           if (!_.includes(permissions, this.revPredMap[p])) {
@@ -362,15 +354,15 @@ class AclAgent extends HTTPAgent {
       if (this.zombiePolicies.length) {
         this._wipeZombies(this.zombiePolicies)
       }
-      // @TODO Abstract into a function
-      this.toAdd = []
-      this.toRemove = []
-      this.zombiePlicies = []
-      this.authCreationQuery = []
-    }).catch((e) => {
+      this._cleanUp()
     })
   }
-
+  _cleanUp() {
+    this.toAdd = []
+    this.toRemove = []
+    this.zombiePolicies = []
+    this.authCreationQuery = []
+  }
   /* @summary - A zombie policy is one that has no users or / and no
    *   permissions associated to it, therefore it can be wiped.
    *
@@ -393,7 +385,7 @@ class AclAgent extends HTTPAgent {
   // Given an authorization policy name, returns
   // all users mentioned.
   getAuthAgents(authName) {
-    let users = this.tmp.filter(policy =>
+    let users = this.model.filter(policy =>
       policy.source === authName
     )
     users = users.map(entry => entry.user)
@@ -406,9 +398,8 @@ class AclAgent extends HTTPAgent {
       return
     }
 
-    // Remove the user from the previous authorization spec.
-    this.tmp = this.tmp.filter(el => {
-      return el.user !== agent && el.source !== authName
+    this.model = this.model.filter(el => {
+      return el.user !== agent || el.source !== authName
     })
 
     // Create the new one.
@@ -417,17 +408,15 @@ class AclAgent extends HTTPAgent {
       this._newAuthorization(name, agent, modes)
     )
 
-    modes.forEach(perm => {
-      this.toRemove.push({
-        user: agent,
-        subject: authName,
-        predicate: PRED.agent,
-        object: agent,
-        zombie: false
-      })
+    this.toRemove.push({
+      user: agent,
+      subject: authName,
+      predicate: PRED.agent,
+      object: agent,
+      zombie: false
     })
 
-    this.tmp.push({
+    this.model.push({
       user: agent,
       source: name,
       mode: modes
