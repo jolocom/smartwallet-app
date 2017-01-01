@@ -72,13 +72,15 @@ let Util = {
   // TODO introduce discovery mechanism / protocol.
   // This is too hardcoded.
   getIndexUri(uri) {
-    if (!uri) {
-      const wia = new WebIdAgent()
-      uri = wia.getWebId()
-    }
-    let indexUri = this.webidRoot(uri)
-    indexUri += '/little-sister/index'
+    const wia = new WebIdAgent()
+    const webId = wia.getWebId()
+    let indexUri = this.webidRoot(webId)
+    indexUri += `/little-sister/index/${this.formatWebId(uri)}`
     return indexUri
+  },
+
+  formatWebId(webId) {
+    return this.webidRoot(webId).replace(/.*?:\/\//g, '')
   },
 
   /*

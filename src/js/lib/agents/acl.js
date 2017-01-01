@@ -347,6 +347,7 @@ class AclAgent extends HTTPAgent {
         ))
       }
     })
+
     addQuery = addQuery.concat(this.authCreationQuery)
     return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
@@ -354,7 +355,11 @@ class AclAgent extends HTTPAgent {
       if (this.zombiePolicies.length) {
         this._wipeZombies(this.zombiePolicies)
       }
-      this._cleanUp()
+      this.updateIndex().then(() => {
+        this._cleanUp()
+      }).catch(e => {
+        this._cleanUp()
+      })
     })
   }
   _cleanUp() {
@@ -441,29 +446,71 @@ class AclAgent extends HTTPAgent {
     return boilerplate
   }
 
-  commitIndex() {
-    let updates = []
-    let indexUri = Util.getIndexUri()
-    if (this.indexChanges.toInsert.length > 0) {
-      this.indexChanges.toInsert.forEach((el) => {
-        updates.push(
-          this.gAgent.writeTriples(indexUri, [el], false)
-        )
-      })
-    }
+  // This is a quick implementation. It works, but should be optimized a bit.
+  updateIndex() {
+    let add = []
+    let rem = []
+    let map = {}
+    map[PRED.read.uri] = PRED.readPermission
+    map[PRED.write.uri] = PRED.writePermission
 
-    if (this.indexChanges.toDelete.length > 0) {
-      let payload = {
-        uri: indexUri,
-        triples: []
+    this.toRemove.forEach(st => {
+      if (st.user === '*') {
+        return
       }
+      const index = rem.findIndex(el => el.webId === st.user)
+      if (index === -1) {
+        rem.push({
+          webId: st.user,
+          file: this.uri,
+          perm: [st.object]
+        })
+      } else {
+        rem[index].perm.push(st.object)
+      }
+    })
 
-      this.indexChanges.toDelete.forEach((el) => {
-        payload.triples.push(el)
+    this.toAdd.forEach(st => {
+      if (st.user === '*') {
+        return
+      }
+      const index = add.findIndex(el => el.webId === st.user)
+      if (index === -1) {
+        add.push({
+          webId: st.user,
+          file: this.uri,
+          perm: [st.object]
+        })
+      } else {
+        add[index].perm.push(st.object)
+      }
+    })
+
+    const addReq = add.map(pol => {
+      let query = []
+      pol.perm.forEach(permission => query.push(
+        rdf.st(rdf.sym(pol.webId),
+        map[permission],
+        rdf.sym(pol.file))
+      ))
+      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), '', query, {
+        'Content-Type': 'text/turtle'
       })
-      updates.push(this.gAgent.deleteTriple(payload))
-    }
-    return Promise.all(updates)
+    })
+
+    const remReq = rem.map(pol => {
+      let query = []
+      pol.perm.forEach(permission => query.push(
+        rdf.st(rdf.sym(pol.webId),
+        map[permission],
+        rdf.sym(pol.file))
+      ))
+      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), query, '', {
+        'Content-Type': 'text/turtle'
+      })
+    })
+
+    return Promise.all(remReq.concat(addReq))
   }
 }
 
