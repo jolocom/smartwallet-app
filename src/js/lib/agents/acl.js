@@ -9,6 +9,7 @@ import rdf from 'rdflib'
 import _ from 'lodash'
 
 class AclAgent extends HTTPAgent {
+
   constructor(uri) {
     super()
     this.model = []
@@ -213,36 +214,6 @@ class AclAgent extends HTTPAgent {
     })
   }
 
-  indexRemove(payload) {
-    // If we said we want to add it, and now say we want to delete it,
-    // the adding rule get's popped out.
-    let i = this.containsObj(this.indexChanges.toInsert, payload)
-    if (i !== -1) {
-      this.indexChanges.toInsert.splice(i, 1)
-      return
-    }
-
-    // Making sure we don't add it twice
-    if (this.containsObj(this.indexChanges.toDelete, payload) === -1) {
-      this.indexChanges.toDelete.push(payload)
-    }
-  }
-
-  indexAdd(payload) {
-    // If we said we want to delete it, and now say we want to add it,
-    // the deletion rule get's popped out.
-    let i = this.containsObj(this.indexChanges.toDelete, payload)
-    if (i !== -1) {
-      this.indexChanges.toDelete.splice(i, 1)
-      return
-    }
-
-    // Making sure we don't add it twice
-    if (this.containsObj(this.indexChanges.toInsert, payload) === -1) {
-      this.indexChanges.toInsert.push(payload)
-    }
-  }
-
   /**
    * @summary Tells if a user is allowed to do a certain thing on a file.
    * @return {bool} - Allowed / Not allowed.
@@ -368,6 +339,7 @@ class AclAgent extends HTTPAgent {
     this.zombiePolicies = []
     this.authCreationQuery = []
   }
+
   /* @summary - A zombie policy is one that has no users or / and no
    *   permissions associated to it, therefore it can be wiped.
    *

@@ -9,19 +9,12 @@ export default Reflux.createStore({
   listenables: PrivacyActions,
 
   init() {
-    this.gAgent = new GraphAgent()
-
     const wia = new WebidAgent()
     this.webId = wia.getWebId()
-
     this.state = {
       privacyMode: 'private',
       allowedContacts: []
     }
-
-    // We will store all modifications here, and apply them with a patch.
-    this.toRemove = []
-    this.toAdd = []
   },
 
   getInitialState() {
@@ -71,14 +64,15 @@ export default Reflux.createStore({
         this.state.privacyMode = 'public'
       }
     }).then(() => {
-      return this.hydrateContacts().then(() => this.trigger(this.state))
+      return this._hydrateContacts().then(() => this.trigger(this.state))
     })
   },
 
   // @TODO This is a frequently needed function, abstract perhaps.
-  hydrateContacts() {
+  _hydrateContacts() {
+    const gAgent = new GraphAgent()
     return Promise.all(this.state.allowedContacts.map(contact => {
-      return this.gAgent.fetchTriplesAtUri(contact.webId).then(tr => {
+      return gAgent.fetchTriplesAtUri(contact.webId).then(tr => {
         tr.triples.forEach(tr => {
           if (tr.predicate.uri === PRED.image.uri) {
             contact.imgUri = tr.object.uri ? tr.object.uri : tr.object.value
@@ -102,10 +96,6 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  disallowRead(user) {
-    this.aclAgent.removeAllow(user, 'read')
-  },
-
   allowEdit(user) {
     this.aclAgent.allow(user, 'write')
   },
@@ -116,6 +106,5 @@ export default Reflux.createStore({
 
   commit() {
     this.aclAgent.commit()
-    // this.aclAgent.commitIndex()
   }
 })

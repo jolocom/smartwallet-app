@@ -53,7 +53,6 @@ let PrivacySettings = React.createClass({
     this.context.router.goBack()
   },
 
-  // TODO Move to store ?
   _handleToggleEdit(contact) {
     if (contact.edit) {
       PrivacyActions.disallowEdit(contact.webId)
