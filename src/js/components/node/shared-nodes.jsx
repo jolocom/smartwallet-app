@@ -101,6 +101,8 @@ let SharedNodes = React.createClass({
     const tilesData = []
     const inactiveColor = '#beceea'
 
+    console.log(this.state.shared, 'ASDASDASD')
+
     // TODO SHRINK!
     if (typePerson.length === 0) {
       tilesData.push({

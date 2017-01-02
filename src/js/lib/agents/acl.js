@@ -13,22 +13,16 @@ class AclAgent extends HTTPAgent {
   constructor(uri) {
     super()
     this.model = []
-    this.aclUri = `${this.uri}.acl`
-    this.uri = uri
     this.gAgent = new GraphAgent()
-    this.indexChanges = {
-      toInsert: [],
-      toDelete: []
-    }
+
+    this.aclUri
+    this.uri = uri
 
     this.predMap = {
       write: PRED.write.uri,
       read: PRED.read.uri,
       control: PRED.control.uri
     }
-
-    this.authCreationQuery = []
-    this.zombiePolicies = []
 
     this.revPredMap = {}
     this.revPredMap[PRED.write.uri] = 'write'
@@ -37,21 +31,8 @@ class AclAgent extends HTTPAgent {
 
     this.toAdd = []
     this.toRemove = []
-  }
-
-  // Checks if an object is contained in an array by comparing it's props.
-  containsObj(arr, obj) {
-    if (arr.length === 0) {
-      return -1
-    }
-
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].subject.uri === obj.subject.uri &&
-          arr[i].predicate.uri === obj.predicate.uri &&
-          arr[i].object.uri === obj.object.uri
-      ) return i
-    }
-    return -1
+    this.authCreationQuery = []
+    this.zombiePolicies = []
   }
 
   /**
@@ -63,6 +44,7 @@ class AclAgent extends HTTPAgent {
 
   _fetchInfo() {
     const wia = new WebidAgent()
+
     return wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {

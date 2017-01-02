@@ -17,7 +17,6 @@ export default Reflux.createStore({
 
   onGetOverview(uri) {
     this.pAgent = new PermissionAgent(uri)
-    this.pAgent.initialize()
     this.pAgent.getSharedNodes(uri).then(res => {
       this.trigger({shared: res})
     })
