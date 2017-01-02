@@ -421,6 +421,11 @@ export default class GraphD3 extends EventEmitter {
     nodeEnter.filter((d) => d.rank !== 'elipsis').append('svg:text')
       .attr('class', 'nodetext')
       .style('fill', '#F0F7F5')
+      .style('-moz-user-select', 'none')
+      .style('-webkit-user-select', 'none')
+      .style('-ms-user-select', 'none')
+      .style('user-select', 'none')
+      .style('-o-user-select:', 'none')
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .attr('font-size', (d) => {
@@ -504,6 +509,11 @@ export default class GraphD3 extends EventEmitter {
           : '0.95em'
       })
       .style('font-size', '80%')
+      .style('-moz-user-select', 'none')
+      .style('-webkit-user-select', 'none')
+      .style('-ms-user-select', 'none')
+      .style('user-select', 'none')
+      .style('-o-user-select:', 'none')
       .text(function (d) {
         // In case the person has no description available.
         if (d.description) {
@@ -565,7 +575,6 @@ export default class GraphD3 extends EventEmitter {
     this.node.call(drag)
 
     // Add click behaviour on background so that a click will deselect nodes.
-
     this.svg.on('click', function (data) {
       if (self.mouseDown) {
         self.mouseDown = false
