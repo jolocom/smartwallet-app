@@ -521,7 +521,6 @@ let Profile = React.createClass({
 
   _handleUpdate() {
     if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
-      console.log('calling with', this.state)
       ProfileActions.update(Object.assign({},
         this.state
       ))
