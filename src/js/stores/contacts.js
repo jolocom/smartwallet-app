@@ -1,11 +1,8 @@
 import Reflux from 'reflux'
-import _ from 'lodash'
 import ContactsActions from 'actions/contacts'
-import AccountStore from 'stores/account'
-import {
-  PRED
-} from 'lib/namespaces'
+import {PRED} from 'lib/namespaces'
 import GraphAgent from 'lib/agents/graph'
+import WebIdAgent from 'lib/agents/webid'
 
 export default Reflux.createStore({
   listenables: ContactsActions,
@@ -19,60 +16,75 @@ export default Reflux.createStore({
     }
   },
 
+  init() {
+    this.gAgent = new GraphAgent()
+    this.wia = new WebIdAgent()
+    this.webId = this.wia.getWebId()
+  },
+
+  /*
+  * @summary Loads the list of people you know from your profile.
+  * @param {string} query - If provided, only strings matching
+  *  the query be returned.
+  * @return {array} items - List of objects structure
+  *  {name,username,webid,email,imgUri} matching the query.
+  */
   onLoad(query) {
-    if (!query || query === '') {
-      if (!this.gAgent) {
-        this.gAgent = new GraphAgent()
-      }
-
-      this.gAgent.findObjectsByTerm(
-        AccountStore.state.webId, PRED.knows).then((res) => {
-          return Promise.all(res.map((node) => {
-            return this.gAgent.fetchTriplesAtUri(node.uri)
-              .then((triples) => Object.assign(
-                {},
-                triples,
-                {uri: node.uri}))
-          }))
-        }).then((nodes) => {
-          let contacts = nodes.filter((node) =>
-            node.triples.some((triple) => {
-              if (triple.predicate.uri === PRED.type.uri) {
-                return triple.predicate.uri ===
-                  PRED.type.uri && triple.object.uri === PRED.Person.uri
-              }
-            }))
-
-          let formattedContacts = contacts.map((contact) => {
-            let nameTriples = contact.triples.filter((triple) =>
-            triple.predicate.uri === PRED.givenName.uri ||
-              triple.predicate.uri === PRED.fullName.uri)
-            let emailTriples = contact.triples.filter((triple) =>
-            triple.predicate.uri === PRED.email.uri)
-            let avatarTriples = contact.triples.filter((triple) =>
-            triple.predicate.uri === PRED.image.uri)
+    if (!query) {
+      // Fetch a list of friends and their triples.
+      return this.gAgent.findFriends(this.webId).then((res) => {
+        res = res.map(el => el.object)
+        return Promise.all(res.map((friend) => {
+          return this.gAgent.fetchTriplesAtUri(friend.uri)
+          .then(triples => {
             return {
-              name: nameTriples.length && nameTriples[0].object.value,
-              username: nameTriples.length && nameTriples[0].object.value,
-              webId: contact.uri || '????',
-              email: emailTriples.length && emailTriples[0].object.value
-                .replace('mailto:', ''),
-              imgUri: avatarTriples.length && avatarTriples[0] &&
-              avatarTriples[0].object.value
+              uri: friend.uri,
+              triples: triples.triples
             }
           })
-
-          this.items = formattedContacts
-
-          this.trigger({
-            loading: false,
-            items: this.items
+        }))
+      }).then((nodes) => {
+        // nodes = [{uri: node uri, triples:[]}]
+        let contacts = nodes.filter((node) =>
+          node.triples.some((triple) => {
+            // Out of the contacts we are filtering out only the people
+            // Presumably you would only "know" people anyways.
+            if (triple.predicate.uri === PRED.type.uri) {
+              return triple.object.uri === PRED.Person.uri
+            }
           })
+        )
+        let formattedContacts = contacts.map((contact) => {
+          let name, email, avatar
+          contact.triples.forEach(t => {
+            const pred = t.predicate.uri
+            const obj = t.object.uri ? t.object.uri : t.object.value
+            if (pred === PRED.givenName.uri || pred === PRED.fullName.uri) {
+              name = obj
+            } else if (pred === PRED.email.uri) {
+              email = obj
+            } else if (pred === PRED.image.uri) {
+              avatar = obj
+            }
+          })
+          return {
+            name: name,
+            username: name,
+            webId: contact.uri || '????',
+            email: email.replace('mailto:', ''),
+            imgUri: avatar
+          }
         })
+
+        this.items = formattedContacts
+        this.trigger({
+          loading: false,
+          items: this.items
+        })
+      })
     } else {
       let regEx = new RegExp(`.*${query}.*`, 'i')
-
-      let results = _.filter(this.items, (contact) => {
+      let results = this.items.filter(contact => {
         return contact.name.match(regEx)
       })
 

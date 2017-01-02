@@ -527,6 +527,9 @@ export default class GraphD3 extends EventEmitter {
       // This wraps the description nicely.
       .call(this.wrap, STYLES.largeNodeSize * 0.75, ' ', ' ')
 
+    this.node.on('mouseover', function(d) {
+      d3.select(this).style('cursor', 'pointer')
+    })
     // Subscribe to the click listeners for arrow nodes
     this.node.on('mousedown', function (data) {
       self.mouseDown = true
@@ -541,15 +544,9 @@ export default class GraphD3 extends EventEmitter {
 
     // Subscribe to the click listeners for neighbour nodes
     this.node.on('click', function (data) {
-      self.mouseDown = false
-      if (data.rank !== 'elipsis') {
-        if (!self.last || (d3.event.timeStamp - self.last) > 500) {
-          self.onClick(this, data)
-          self.last = d3.event.timeStamp
-        } else {
-          self.onDblClick(this, data)
-        }
-      }
+      d3.event.stopPropagation()
+      let object = d3.selectAll('.node').filter((d) => d === data)
+      self.clicked(object, data)
     })
 
     // Subscribe to the double click listeners for neighbour nodes
@@ -561,16 +558,20 @@ export default class GraphD3 extends EventEmitter {
     })
 
     // Add drag listeners to neighbour nodes
+    let drag = d3.drag().on('drag', this.drag)
+                 .on('start', this.dragStart)
+                 .on('end', this.dragEnd)
 
-    this.node.call(d3.drag().on('drag', this.drag)
-                            .on('start', this.dragStart)
-                            .on('end', this.dragEnd))
+    this.node.call(drag)
 
     // Add click behaviour on background so that a click will deselect nodes.
 
     this.svg.on('click', function (data) {
-      self.mouseDown = false
-      self.deselectAll()
+      if (self.mouseDown) {
+        self.mouseDown = false
+      } else {
+        self.deselectAll()
+      }
     })
 
     // this.svg.on('wheel', self.onScroll)
@@ -614,6 +615,7 @@ export default class GraphD3 extends EventEmitter {
       node.mobile = true
       node.position.px = node.position.x
       node.position.py = node.position.y
+      node.distanceTraveled = 0
     }
   }
 
@@ -623,6 +625,7 @@ export default class GraphD3 extends EventEmitter {
     if (node.mobile) {
       node.position.x += d3.event.dx
       node.position.y += d3.event.dy
+      node.distanceTraveled += Math.abs(d3.event.dx) + Math.abs(d3.event.dy)
       this.resetPos(0)
     }
   }.bind(this)
@@ -649,6 +652,18 @@ export default class GraphD3 extends EventEmitter {
       }
     }
   }.bind(this)
+
+  // click behaviour
+
+  clicked = function (object, data) {
+    if (this.mode === 'preview') {
+      this.onClick(object, data)
+    } else if (data.rank === 'history') {
+      this.navigateToNode(data)
+    } else if (data.rank !== 'elipsis') {
+      this.onDblClick(object, data)
+    }
+  }
 
   // navigate to node as long as node is not already center node
 
@@ -708,7 +723,6 @@ export default class GraphD3 extends EventEmitter {
             y: Math.cos((Math.PI) - angle * i) * dist + y,
             p: 'neighbours'
           }
-
           this.nodePositions.push(pos)
         }
       }
@@ -1084,12 +1098,10 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   onClick = function (node, data) {
-    d3.event.stopPropagation()
     this.emit('select', data, node)
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank === 'history' ||
-        d3.event.defaultPrevented ||
         data.rank === 'elipsis') {
       return
     }
@@ -1100,7 +1112,9 @@ export default class GraphD3 extends EventEmitter {
     }
 
     // makes selected node apear bove all other nodes
-    node.parentNode.appendChild(node)
+    // let node = d3.selectAll('.node').filter((d) => d === data)
+    //
+    // node.parentNode.appendChild(node)
 
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
@@ -1120,26 +1134,23 @@ export default class GraphD3 extends EventEmitter {
 
       // NODE signifies the node that we clicked on. We enlarge it.
       // Enlarge the node
-      d3.select(node).selectAll('circle')
-        .transition('grow').duration(STYLES.nodeTransitionDuration)
+      node.selectAll('circle')
+        .transition().duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
-        .each((d) => {
-          if (!d.img) {
-            d3.select(node).select('.nodecircle')
-              .transition('highlight').duration(STYLES.nodeTransitionDuration)
-              .style('fill', theme.graph.enlargedNodeColor)
-          }
-        })
+
+      node.selectAll('.nodecircle').filter((d) => !d.img)
+        .transition('highlight').duration(STYLES.nodeTransitionDuration)
+        .style('fill', theme.graph.enlargedNodeColor)
 
       // Enlarge the pattern of the node we clicked on
-      d3.select(node).select('pattern')
+      node.select('pattern')
         .transition('pattern').duration(STYLES.nodeTransitionDuration)
         .attr('x', -STYLES.largeNodeSize / 2)
         .attr('y', -STYLES.largeNodeSize / 2)
 
       // Enlarge the image of the node we clicked on
       // We also blur it a bit and darken it, so that the text displays better
-      d3.select(node).select('image')
+      node.select('image')
         .transition('image').duration(STYLES.nodeTransitionDuration)
         .attr('width', STYLES.largeNodeSize)
         .attr('height', STYLES.largeNodeSize)
@@ -1150,12 +1161,12 @@ export default class GraphD3 extends EventEmitter {
       // on some fails to disappear; needs further investigation
 
       // Fade in the description
-      d3.select(node).selectAll('text')
+      node.selectAll('text')
         .transition('description').duration(STYLES.nodeTransitionDuration)
         .attr('opacity', 0.9)
 
       // Fade in the node name and make the text opaque
-      d3.select(node).select('.nodetext')
+      node.select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('dy', function (d) {
           if (d.description) {
@@ -1173,11 +1184,11 @@ export default class GraphD3 extends EventEmitter {
         .attr('opacity', 1)
 
       // Move the icon up if description
-      d3.select(node)
-        .filter((d) => d.description)
+      node.filter((d) => d.description)
         .select('.nodeIcon')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('y', (d) => d.rank === 'center' ? -70 : -60)
+
       data.highlighted = true
     }
   }.bind(this)
@@ -1277,7 +1288,6 @@ export default class GraphD3 extends EventEmitter {
   // .background-layer must be the first element of this.svg,
   // and its first element must be .background-layer-links
   eraseGraph = function () {
-    if (this.force) { this.force.stop() }
     this.svg
     .selectAll('.background-layer .background-layer-links *')
     .remove()
