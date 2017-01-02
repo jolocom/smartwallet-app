@@ -1,39 +1,34 @@
 import React, {PropTypes} from 'react'
 import Reflux from 'reflux'
 import NodeStore from 'stores/node.js'
-import GraphStore from 'stores/graph-store.js'
 import NodeActions from 'actions/node.js'
 import NodeTypes from 'lib/node-types.js'
 
 let Node = React.createClass({
-  /*
-     We need the graph store state so that we can quickly retrieve
-     the connection between the center node and the node we are focused
-     on right now.
-  */
-  mixins: [Reflux.listenTo(NodeStore, 'onStateUpdate', 'setInitialState'),
-    Reflux.listenTo(GraphStore, 'x', 'getGraphState')],
+  mixins: [
+    Reflux.listenTo(NodeStore, 'onStateUpdate', 'setInitialState')
+  ],
+
+  propTypes: {
+    params: PropTypes.object,
+    graph: PropTypes.object
+  },
 
   onStateUpdate(newState) {
     this.setState(newState)
   },
 
-  getGraphState(graphState) {
-    this.state.graphState = graphState
-  },
-
   setInitialState(initState) {
-    this.state = Object.assign({}, initState)
+    this.setState(initState)
   },
 
-  propTypes: {
-    params: PropTypes.object
-  },
+  // @TODO we have to find something better then passing around the graph state
+  // into all child components
+  componentDidUpdate(prevProps, prevState) {
+    const graph = this.props.graph
 
-  componentDidMount() {
-    if (!this.state.initialized) {
-      NodeActions.initiate(this.props.params.node,
-      this.state.graphState.center.uri)
+    if (!this.state.initialized && graph && graph.center) {
+      NodeActions.initiate(this.props.params.node, graph.center.uri)
     }
   },
 
@@ -44,10 +39,10 @@ let Node = React.createClass({
 
     if (this.state && this.state.initialized) {
       initialized = true
-      if (this.state.graphState.center.uri === this.props.params.node) {
-        selectedNode = this.state.graphState.center
+      if (this.props.graph.center.uri === this.props.params.node) {
+        selectedNode = this.props.graph.center
       } else {
-        selectedNode = this.state.graphState.neighbours.find(el => {
+        selectedNode = this.props.graph.neighbours.find(el => {
           return el.uri === this.props.params.node
         })
       }
@@ -56,6 +51,8 @@ let Node = React.createClass({
 
     /* TODO Here we need to have a loading screen before the actual
     state is there my React Fu is not there yet :D
+    --> GenericFullScreen should be moved here, so we can render the loading
+    screen in there and then render the NodeType component from there
     */
     return (
       <div>
@@ -64,7 +61,7 @@ let Node = React.createClass({
             node={selectedNode}
             writePerm={this.state.writePerm}
             centerWritePerm={this.state.centerWritePerm}
-            graphState={this.state.graphState} />
+            graphState={this.state.graph} />
           : null}
       </div>
     )
