@@ -60,6 +60,8 @@ let Signup = React.createClass({
       SnackbarActions.showMessage('The two emails do not match.')
       return
     }
+    this.disableSubmit()
+
     let signupData = {
       username: this.state.username,
       name: this.state.name,
