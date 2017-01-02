@@ -61,7 +61,7 @@ let Node = React.createClass({
             node={selectedNode}
             writePerm={this.state.writePerm}
             centerWritePerm={this.state.centerWritePerm}
-            graphState={this.state.graph} />
+            graphState={this.props.graph} />
           : null}
       </div>
     )
