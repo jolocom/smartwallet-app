@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import {FlatButton, AppBar} from 'material-ui'
-import Carousel from 're-carousel'
+import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -54,13 +54,18 @@ let Index = React.createClass({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        boxSizing: 'border-box'
-      },
-      content: {
-        // flex: 1
+        boxSizing: 'border-box',
+        userSelect: 'none',
+        alignItems: 'center'
       },
       img: {
-        maxWidth: '100%'
+        flex: 1,
+        maxWidth: '100%',
+        width: '360px',
+        userSelect: 'none',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain'
       },
       welcome: {
         color: muiTheme.jolocom.gray1,
@@ -93,36 +98,62 @@ let Index = React.createClass({
     let styles = this.getStyles()
 
     return (
-      <Dialog ref="dialog" fullscreen={true} visible={this.state.show}>
+      <Dialog ref="dialog" fullscreen visible={this.state.show}>
         <Layout>
           <Content>
             <AppBar
               showMenuIconButton={false}
               style={styles.header}
-              iconElementRight={<FlatButton onClick={this._handleSkip} style={styles.skip}>Skip</FlatButton>}
+              iconElementRight={
+                <FlatButton onClick={this._handleSkip} style={styles.skip}>
+                  Skip
+                </FlatButton>
+              }
             />
 
             <Carousel style={styles.tour} indicator={IndicatorDots}>
               <div style={styles.slide}>
-                <div style={styles.content}><img src="/img/logo.png" style={styles.logo}/></div>
+                <div style={Object.assign({}, styles.img, {
+                  backgroundImage: 'url(/img/logo.png)'
+                })} />
                 <h2 style={styles.welcome}>Welcome!</h2>
                 <h3 style={styles.title}>Swipe through to see how it works</h3>
               </div>
               <div style={styles.slide}>
-                <div style={styles.content}><img src="/img/tour_2.png" style={styles.img}/></div>
-                <h3 style={styles.title}>This is your <strong style={styles.em}>center node</strong>, which starts with you.</h3>
+                <div style={Object.assign({}, styles.img, {
+                  backgroundImage: 'url(/img/tour_2.png)'
+                })} />
+                <h3 style={styles.title}>
+                  This is your <strong style={styles.em}>center node</strong>,
+                  which starts with you.`
+                </h3>
               </div>
               <div style={styles.slide}>
-                <div style={styles.content}><img src="/img/tour_3.gif" style={styles.img}/></div>
-                <h3 style={styles.title}>Build your graph by<strong style={styles.em}>adding nodes</strong>.</h3>
+                <div style={Object.assign({}, styles.img, {
+                  backgroundImage: 'url(/img/tour_3.gif)'
+                })} />
+                <h3 style={styles.title}>
+                  Build your graph by <strong style={styles.em}>adding nodes
+                  </strong>.
+                </h3>
               </div>
               <div style={styles.slide}>
-                <div style={styles.content}><img src="/img/tour_4.gif" style={styles.img}/></div>
-                <h3 style={styles.title}><strong style={styles.em}>Move around</strong> the graph by dragging nodes into the center.</h3>
+                <div style={Object.assign({}, styles.img, {
+                  backgroundImage: 'url(/img/tour_4.gif)'
+                })} />
+                <h3 style={styles.title}>
+                  <strong style={styles.em}>Move around
+                  </strong> the graph by dragging nodes into the center.
+                </h3>
               </div>
               <div style={styles.slide}>
-                <div style={styles.content}><img src="/img/tour_5.gif" style={styles.img}/></div>
-                <h3 style={styles.title}><strong style={styles.em}>Create links</strong> between nodes to easily share data.</h3>
+                <div style={Object.assign({}, styles.img, {
+                  backgroundImage: 'url(/img/tour_5.gif)'
+                })} />
+                <h3 style={styles.title}>
+                  <strong style={styles.em}>Create links
+                  </strong> between nodes to easily share data.
+                </h3>
               </div>
             </Carousel>
           </Content>
