@@ -19,7 +19,6 @@ export default Reflux.createStore({
   init() {
     this.gAgent = new GraphAgent()
     this.wia = new WebIdAgent()
-    this.webId = this.wia.getWebId()
   },
 
   /*
@@ -30,6 +29,7 @@ export default Reflux.createStore({
   *  {name,username,webid,email,imgUri} matching the query.
   */
   onLoad(query) {
+    this.webId = this.wia.getWebId()
     if (!query) {
       // Fetch a list of friends and their triples.
       return this.gAgent.findFriends(this.webId).then((res) => {

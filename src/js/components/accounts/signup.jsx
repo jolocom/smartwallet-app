@@ -44,7 +44,8 @@ let Signup = React.createClass({
     return {
       disabledSubmit: true,
       showHelperTextUserName: false,
-      showHelperTextGivenName: false
+      showHelperTextGivenName: false,
+      emailVerifyScreen: false
     }
   },
 
