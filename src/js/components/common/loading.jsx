@@ -23,8 +23,7 @@ const styles = {
     justifyContent: 'center'
   },
   spinner: {
-    margin: 0,
-    transform: 'translate(0, -30px)'
+    margin: 0
   }
 }
 

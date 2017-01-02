@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton} from 'material-ui'
-import Carousel from 're-carousel'
+import {RaisedButton, IconButton} from 'material-ui'
+import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 
 let Index = React.createClass({
@@ -48,21 +48,28 @@ let Index = React.createClass({
       },
       slide: {
         backgroundColor: muiTheme.jolocom.gray4,
-        padding: '24px',
+        padding: '24px 24px 48px',
         height: '100%',
+        boxSizing: 'border-box',
         display: 'flex',
-        flexDirection: 'column'
-      },
-      content: {
+        flexDirection: 'column',
+        userSelect: 'none',
+        alignItems: 'center'
       },
       img: {
+        flex: 1,
         maxWidth: '100%',
-        width: '360px'
+        width: '360px',
+        userSelect: 'none',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain'
       },
       startImg: {
         marginTop: '15vh',
         maxWidth: '100%',
-        width: '360px'
+        width: '360px',
+        userSelect: 'none'
       },
       title: {
         color: '#a5a5a4',
@@ -96,6 +103,26 @@ let Index = React.createClass({
       login: {
         margin: '10px',
         width: '200px'
+      },
+      previous: {
+        position: 'absolute',
+        top: '50%',
+        left: '20px',
+        marginTop: '-12px',
+        zIndex: 100,
+        '@media screen and (max-width: 1024px)': {
+          display: 'none'
+        }
+      },
+      next: {
+        position: 'absolute',
+        top: '50%',
+        right: '20px',
+        marginTop: '-12px',
+        zIndex: 100,
+        '@media screen and (max-width: 1024px)': {
+          display: 'none'
+        }
       }
     }
 
@@ -107,35 +134,51 @@ let Index = React.createClass({
 
     return (
       <div style={styles.container}>
-        <Carousel style={styles.intro} indicator={IndicatorDots}>
+        <div style={styles.previous}>
+          <IconButton
+            iconClassName="material-icons"
+            onClick={this._handlePrevious}
+          >chevron_left</IconButton>
+        </div>
+
+        <div style={styles.next}>
+          <IconButton
+            iconClassName="material-icons"
+            onClick={this._handleNext}
+          >chevron_right</IconButton>
+        </div>
+
+        <Carousel
+          ref={this._setCarouselRef}
+          auto={false}
+          style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
-            <div style={styles.content}>
-              <img src="/img/logo_littlesister_start.svg"
-                style={styles.startImg} />
-            </div>
+            <div style={Object.assign({}, styles.img, {
+              backgroundImage: 'url(/img/logo_littlesister_start.svg)'
+            })} />
           </div>
           <div style={styles.slide}>
-            <div style={styles.content}>
-              <img src="/img/img_onboarding-01.svg" style={styles.img} />
-            </div>
+            <div style={Object.assign({}, styles.img, {
+              backgroundImage: 'url(/img/img_onboarding-01.svg)'
+            })} />
             <h3 style={styles.title}>Create an independant and<br />
             secure digital identity.</h3>
             <p style={styles.subtitle}>Collect your data at a secure place.
               <br /> It’s yours, so only you own it!</p>
           </div>
           <div style={styles.slide}>
-            <div style={styles.content}>
-              <img src="/img/img_onboarding-02.svg" style={styles.img} />
-            </div>
+            <div style={Object.assign({}, styles.img, {
+              backgroundImage: 'url(/img/img_onboarding-02.svg)'
+            })} />
             <h3 style={styles.title}>Have all your data<br />
             at your fingertips.</h3>
             <p style={styles.subtitle}>See all your data in one safe place.
               <br /> Pull the plug and your data is only yours.</p>
           </div>
           <div style={styles.slide}>
-            <div style={styles.content}>
-              <img src="/img/img_onboarding-03.svg" style={styles.img} />
-            </div>
+            <div style={Object.assign({}, styles.img, {
+              backgroundImage: 'url(/img/img_onboarding-03.svg)'
+            })} />
             <h3 style={styles.title}>Be aware of the<br />
             information you share.</h3>
             <p style={styles.subtitle}>See what you shared with whom.
@@ -164,6 +207,18 @@ let Index = React.createClass({
         </div>
       </div>
     )
+  },
+
+  _setCarouselRef(c) {
+    this.carousel = c
+  },
+
+  _handlePrevious() {
+    this.carousel.slideTowards('right')
+  },
+
+  _handleNext() {
+    this.carousel.slideTowards('left')
   },
 
   _handleSignup() {
