@@ -572,20 +572,10 @@ export default class GraphD3 extends EventEmitter {
     this.node.on('mouseover', function(d) {
       d3.select(this).style('cursor', 'pointer')
     })
-    // Subscribe to the click listeners for arrow nodes
-    this.node.on('mousedown', function (data) {
-      self.mouseDown = true
-      if (data.rank === 'elipsis') {
-        let dir = 1
-        if (data.connection === 'backButton') {
-          dir = -1
-        }
-        self.onHoldClick(dir)
-      }
-    })
 
     // Subscribe to the click listeners for neighbour nodes
     this.node.on('click', function (data) {
+      self.mouseDown = false
       d3.event.stopPropagation()
       let object = d3.selectAll('.node').filter((d) => d === data)
       self.clicked(object, data)
@@ -609,11 +599,8 @@ export default class GraphD3 extends EventEmitter {
     // Add click behaviour on background so that a click will deselect nodes.
 
     this.svg.on('click', function (data) {
-      if (self.mouseDown) {
-        self.mouseDown = false
-      } else {
-        self.deselectAll()
-      }
+      self.mouseDown = false
+      self.deselectAll()
     })
 
     // this.svg.on('wheel', self.onScroll)
@@ -622,48 +609,62 @@ export default class GraphD3 extends EventEmitter {
   // Arrow node function for rotating nodes
   onHoldClick = function (dir) {
     let self = this
-    if (this.mouseDown) {
-      let rotationIndex = this.rotationIndex
-      let numberOfNeighbours = this.numberOfNeighbours
-      let MAX_VISIBLE = this.MAX_VISIBLE_NODES
-      if (dir === 1) {
-        if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
-          this.rotationIndex++
-          this.emit('change-rotation-index',
-          this.rotationIndex)
-          this.updateAfterRotationIndex('up')
-        }
-      } else {
-        if (rotationIndex > 0) {
-          this.rotationIndex--
-          this.emit('change-rotation-index',
-          this.rotationIndex)
-          this.updateAfterRotationIndex('down')
-        }
+    let rotationIndex = this.rotationIndex
+    let numberOfNeighbours = this.numberOfNeighbours
+    let MAX_VISIBLE = this.MAX_VISIBLE_NODES
+    if (dir === 1) {
+      if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
+        this.rotationIndex++
+        this.emit('change-rotation-index',
+        this.rotationIndex)
+        this.updateAfterRotationIndex('up')
       }
-      setTimeout(function () {
-        self.onHoldClick(dir)
-      }, 150)
+    } else {
+      if (rotationIndex > 0) {
+        this.rotationIndex--
+        this.emit('change-rotation-index',
+        this.rotationIndex)
+        this.updateAfterRotationIndex('down')
+      }
     }
+    setTimeout(function () {
+      if (self.mouseDown) {
+        self.onHoldClick(dir)
+      }
+    }, 150)
+    document.addEventListener('touchend', this.mouseUp)
   }.bind(this)
-
   // Star drag interaction, check if node should be movable
   // remeber initial position in px and py
+
+  mouseUp = function () {
+    document.removeEventListener('touchend', this.mouseUp)
+    this.mouseDown = false
+  }.bind(this)
 
   dragStart = function(node) {
     if (node.rank === 'elipsis' || node.rank === 'center' || node.unavailable) {
       node.mobile = false
+      if (node.rank === 'elipsis') {
+        this.mouseDown = true
+        let dir = 1
+        if (node.connection === 'backButton') {
+          dir = -1
+        }
+        this.onHoldClick(dir)
+      }
     } else {
       node.mobile = true
       node.position.px = node.position.x
       node.position.py = node.position.y
       node.distanceTraveled = 0
     }
-  }
+  }.bind(this)
 
   // change node position by same amount as change in mouse position
 
   drag = function(node) {
+    this.mouseDown = false
     if (node.mobile) {
       node.position.x += d3.event.dx
       node.position.y += d3.event.dy
@@ -676,7 +677,6 @@ export default class GraphD3 extends EventEmitter {
 
   dragEnd = function (node) {
     this.mouseDown = false
-
     if (node.mobile) {
       // We check if the node is dropped on top of the center node
       let w = this.centerCoordinates.x
