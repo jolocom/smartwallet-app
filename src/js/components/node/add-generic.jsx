@@ -740,6 +740,7 @@ let NodeAddGeneric = React.createClass({
             key: 2,
             label: 'Image'
           })
+          this.setState(this.state)
           // Checks for documents
         } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
         accepts(file, '.odt') || accepts(file, '.pages') ||
@@ -779,6 +780,7 @@ let NodeAddGeneric = React.createClass({
             key: 3,
             label: 'Document'
           })
+          this.setState(this.state)
           // Checks for misc files
         } else {
           this.setState({
@@ -812,6 +814,7 @@ let NodeAddGeneric = React.createClass({
             key: 3,
             label: 'File'
           })
+          this.setState(this.state)
         }
       }).catch((e) => {
         console.log(e)
