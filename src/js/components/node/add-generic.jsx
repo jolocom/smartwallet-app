@@ -366,7 +366,7 @@ let NodeAddGeneric = React.createClass({
                 placeholder="Add node title"
                 onChange={Util.linkToState(this, 'title')} />
                 {
-                  !this.state.isSingleNode && !this.state.isCollection
+                  !this.state.isSingleNode
                   ? <List>
                     <ListItem
                       key={1}
@@ -395,6 +395,12 @@ let NodeAddGeneric = React.createClass({
                         onChange={this._handleFileUpload}
                       />
                     </ListItem>
+                  </List>
+                  : null
+                }
+                {
+                  !this.state.isSingleNode && !this.state.isCollection
+                  ? <List>
                     <ListItem
                       key={2}
                       disabled
@@ -415,7 +421,6 @@ let NodeAddGeneric = React.createClass({
                     </ListItem>
                   </List>
                   : null
-
                 }
               {
                 this.state.isSingleNode
