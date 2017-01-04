@@ -62,6 +62,7 @@ import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
 // }
 
 let NodeAddGeneric = React.createClass({
+
   mixins: [
     Reflux.connect(nodeStore, 'node'),
     Reflux.connect(previewStore, 'graphState'),
@@ -202,8 +203,8 @@ let NodeAddGeneric = React.createClass({
         type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
-     }
-     // else if (centerNode && webId && (type === 'collection')) { // COLLECTION
+    }
+    // else if (centerNode && webId && (type === 'collection')) { // COLLECTION
     //   console.log('Initiating collection creation!!!!')
     //   console.log('First phase')
     //   this.gAgent.createNode(
@@ -470,7 +471,8 @@ let NodeAddGeneric = React.createClass({
                                     color="#4b132b"
                                     onTouchTap={
                                       () => this._handleRemoveImgFile(img.key)
-                                    } />
+                                    }
+                                  />
                                 }>
                                 {img.file.name}
                               </ListItem>
@@ -757,8 +759,8 @@ let NodeAddGeneric = React.createClass({
       }).catch((e) => {
         console.log(e)
       })
-      console.log('arraylengths ',
-        this.state.imgArray.length, this.state.docArray.length)
+    console.log('arraylengths ',
+      this.state.imgArray.length, this.state.docArray.length)
     if ((this.state.imgArray.length + this.state.docArray.length) > 1) {
       console.log('collection')
       // is a collection
