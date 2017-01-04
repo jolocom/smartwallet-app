@@ -398,30 +398,30 @@ let NodeAddGeneric = React.createClass({
                   </List>
                   : null
                 }
-                {
-                  !this.state.isSingleNode && !this.state.isCollection
-                  ? <List>
-                    <ListItem
-                      key={2}
-                      disabled
-                      leftIcon={
-                        <SocialPersonOutline color="#9ba0aa" />
-                      }
-                      rightIcon={
-                        <FloatingActionButton
-                          mini
-                          secondary
-                          style={styles.addBtn}
-                          onClick={this._handleContactsAndGroups}>
-                          <ContentAdd />
-                        </FloatingActionButton>
-                      }>
-                      Contacts and Groups
-                      <Divider style={styles.divider} />
-                    </ListItem>
-                  </List>
-                  : null
-                }
+                {/*{*/}
+                  {/*!this.state.isSingleNode && !this.state.isCollection*/}
+                  {/*? <List>*/}
+                    {/*<ListItem*/}
+                      {/*key={2}*/}
+                      {/*disabled*/}
+                      {/*leftIcon={*/}
+                        {/*<SocialPersonOutline color="#9ba0aa" />*/}
+                      {/*}*/}
+                      {/*rightIcon={*/}
+                        {/*<FloatingActionButton*/}
+                          {/*mini*/}
+                          {/*secondary*/}
+                          {/*style={styles.addBtn}*/}
+                          {/*onClick={this._handleContactsAndGroups}>*/}
+                          {/*<ContentAdd />*/}
+                        {/*</FloatingActionButton>*/}
+                      {/*}>*/}
+                      {/*Contacts and Groups*/}
+                      {/*<Divider style={styles.divider} />*/}
+                    {/*</ListItem>*/}
+                  {/*</List>*/}
+                  {/*: null*/}
+                {/*}*/}
               {
                 this.state.isSingleNode
                 ? <List>
