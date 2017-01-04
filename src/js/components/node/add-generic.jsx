@@ -385,7 +385,7 @@ let NodeAddGeneric = React.createClass({
                           <ContentAdd />
                         </FloatingActionButton>
                       }>
-                      Files
+                      File
                       <Divider style={styles.divider} />
                       <input
                         id="fileUpload"
@@ -443,7 +443,7 @@ let NodeAddGeneric = React.createClass({
                             <ContentAdd />
                           </FloatingActionButton>
                         }>
-                        Add more files
+                        Replace file staged for upload with another
                         <Divider style={styles.divider} />
                         <input
                           id="fileUpload"
@@ -515,7 +515,7 @@ let NodeAddGeneric = React.createClass({
                         Documents
                       </ListItem>
                     ]}>
-                    Files
+                    File
                   </ListItem>
                 </List>
                 : null
@@ -712,14 +712,30 @@ let NodeAddGeneric = React.createClass({
             uploadedFileType: 'image'
           })
           console.log('FU setting uploaded file type to image!')
-          this.state.imgArray.push({
+          // JUST USE 1 FILE INSTEAD ATM
+          //
+          // this.state.imgArray.push({
+          //   file: file,
+          //   key: this.state.imgArray.length + 1,
+          //   imgUri: this.state.uploadedFileUri
+          // })
+          this.state.imgArray[0] = {
             file: file,
             key: this.state.imgArray.length + 1,
             imgUri: this.state.uploadedFileUri
-          })
+          }
+          if (this.state.docArray[0]) {
+            this.state.docArray.pop()
+          }
+          if (this.state.fileArray[0]) {
+            this.state.fileArray.pop()
+          }
           this.setState({
-            hasImages: true
+            hasImages: true,
+            hasDocs: false,
+            hasFiles: false
           })
+          this.state.tagArray = []
           this.state.tagArray.push({
             key: 2,
             label: 'Image'
@@ -736,13 +752,29 @@ let NodeAddGeneric = React.createClass({
             uploadedFileType: 'document'
           })
           console.log('FU setting uploaded file type to document!')
-          this.state.docArray.push({
+          // USING 1 FILE INSTEAD OF MULTIPLE UPLOAD CAPABILITIES
+          //
+          // this.state.docArray.push({
+          //   file: file,
+          //   key: this.state.docArray.length + 1
+          // })
+          this.state.docArray[0] = {
             file: file,
-            key: this.state.docArray.length + 1
-          })
+            key: this.state.imgArray.length + 1,
+            imgUri: this.state.uploadedFileUri
+          }
+          if (this.state.imgArray[0]) {
+            this.state.docArray.pop()
+          }
+          if (this.state.fileArray[0]) {
+            this.state.fileArray.pop()
+          }
           this.setState({
-            hasDocs: true
+            hasDocs: true,
+            hasImages: false,
+            hasFiles: false
           })
+          this.state.tagArray = []
           this.state.tagArray.push({
             key: 3,
             label: 'Document'
@@ -753,12 +785,32 @@ let NodeAddGeneric = React.createClass({
             uploadedFileType: 'miscFile'
           })
           console.log('FU setting uploaded file type to miscFile!')
-          this.state.fileArray.push({
+          // Currently only 1 file should be uploaded
+          //
+          // this.state.fileArray.push({
+          //   file: file,
+          //   key: this.state.fileArray.length + 1
+          // })
+          this.state.fileArray[0] = {
             file: file,
-            key: this.state.fileArray.length + 1
-          })
+            key: this.state.fileArray.length + 1,
+            imgUri: this.state.uploadedFileUri
+          }
+          if (this.state.docArray[0]) {
+            this.state.docArray.pop()
+          }
+          if (this.state.imgArray[0]) {
+            this.state.fileArray.pop()
+          }
           this.setState({
-            hasFiles: true
+            hasFiles: true,
+            hasImages: false,
+            hasDocs: false
+          })
+          this.state.tagArray = []
+          this.state.tagArray.push({
+            key: 3,
+            label: 'File'
           })
         }
       }).catch((e) => {
