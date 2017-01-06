@@ -42,7 +42,7 @@ import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
 import ImageIcon from 'material-ui/svg-icons/image/image'
 import Person from 'material-ui/svg-icons/social/person'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
-import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
+// import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
 
 // import NodeAddDefault from './add-default.jsx'
 // import NodeAddLink from './add-link.jsx'
@@ -513,6 +513,34 @@ let NodeAddGeneric = React.createClass({
                           })
                         }>
                         Documents
+                      </ListItem>,
+                      <ListItem
+                        key={4}
+                        open
+                        style={styles.docListItems}
+                        leftIcon={<FileIcon color="#9ba0aa" />}
+                        rightToggle={<FileIcon style={{display: 'none'}} />}
+                        nestedListStyle={{
+                          ...styles.accordionChildren, ...styles.docListItems}}
+                        nestedItems={
+                          this.state.fileArray.map((f) => {
+                            return (
+                              <ListItem
+                                key={f.key}
+                                rightIcon={
+                                  <ActionDelete
+                                    color="#4b132b"
+                                    onTouchTap={
+                                      () => this._handleRemoveDocFile(f.key)
+                                    }
+                                  />
+                                }>
+                                {f.file.name}
+                              </ListItem>
+                            )
+                          })
+                        }>
+                        Miscellaneous files
                       </ListItem>
                     ]}>
                     File
@@ -737,7 +765,7 @@ let NodeAddGeneric = React.createClass({
           })
           this.state.tagArray = []
           this.state.tagArray.push({
-            key: 2,
+            key: 1,
             label: 'Image'
           })
           this.setState(this.state)
@@ -761,11 +789,11 @@ let NodeAddGeneric = React.createClass({
           // })
           this.state.docArray[0] = {
             file: file,
-            key: this.state.imgArray.length + 1,
+            key: this.state.docArray.length + 1,
             imgUri: this.state.uploadedFileUri
           }
           if (this.state.imgArray[0]) {
-            this.state.docArray.pop()
+            this.state.imgArray.pop()
           }
           if (this.state.fileArray[0]) {
             this.state.fileArray.pop()
@@ -777,7 +805,7 @@ let NodeAddGeneric = React.createClass({
           })
           this.state.tagArray = []
           this.state.tagArray.push({
-            key: 3,
+            key: 2,
             label: 'Document'
           })
           this.setState(this.state)
@@ -795,14 +823,14 @@ let NodeAddGeneric = React.createClass({
           // })
           this.state.fileArray[0] = {
             file: file,
-            key: this.state.fileArray.length + 1,
+            key: this.state.fileArray.length +1,
             imgUri: this.state.uploadedFileUri
           }
           if (this.state.docArray[0]) {
             this.state.docArray.pop()
           }
           if (this.state.imgArray[0]) {
-            this.state.fileArray.pop()
+            this.state.imgArray.pop()
           }
           this.setState({
             hasFiles: true,
