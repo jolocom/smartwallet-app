@@ -82,16 +82,16 @@ let NodeAddGeneric = React.createClass({
 
   getInitialState() {
     return {
-      type: 'default',
+      type: 'default', // Unneccessary? What is the point of this var?
       privacy: 'Private',
       tagArray: [],
       uploadedFileName: '',
-      uploadedFileType: 'document',
+      uploadedFileType: '',
       hasImages: false,
       hasDocs: false,
       hasFiles: false,
       isSingleNode: false,
-      isCollection: false,
+      isCollection: false, // Kept for the sake of the future.
       docArray: [],
       imgArray: [],
       fileArray: []
@@ -115,7 +115,7 @@ let NodeAddGeneric = React.createClass({
     this.context.router.goBack()
   },
 
-  validates() {
+  validates() { // What is this validating? Needs descriptive function name
     let {title} = this.state
     return title && title.trim()
   },
@@ -303,6 +303,9 @@ let NodeAddGeneric = React.createClass({
       },
       docListItems: {
         display: this.state.docArray.length >= 1 ? 'block' : 'none'
+      },
+      miscFileListItems: {
+        display: this.state.fileArray.length >= 1 ? 'block' : 'none'
       }
     }
   },
@@ -517,11 +520,13 @@ let NodeAddGeneric = React.createClass({
                       <ListItem
                         key={4}
                         open
-                        style={styles.docListItems}
+                        style={styles.miscFileListItems}
                         leftIcon={<FileIcon color="#9ba0aa" />}
                         rightToggle={<FileIcon style={{display: 'none'}} />}
                         nestedListStyle={{
-                          ...styles.accordionChildren, ...styles.docListItems}}
+                          ...styles.accordionChildren,
+                          ...styles.miscFileListItems
+                        }}
                         nestedItems={
                           this.state.fileArray.map((f) => {
                             return (
@@ -823,7 +828,7 @@ let NodeAddGeneric = React.createClass({
           // })
           this.state.fileArray[0] = {
             file: file,
-            key: this.state.fileArray.length +1,
+            key: this.state.fileArray.length + 1,
             imgUri: this.state.uploadedFileUri
           }
           if (this.state.docArray[0]) {
