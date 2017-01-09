@@ -158,7 +158,55 @@ let NodeAddGeneric = React.createClass({
     return type
   },
 
+  uploadFiles() {
+    let gAgent = new GraphAgent()
+
+    // UPLOAD IMAGES
+    if (this.state.imgArray.length >= 1) {
+      for (let img in this.state.imgArray) {
+        let file = this.state.imgArray[img].file
+        gAgent.storeFile(null,
+          this.state.profile.storage, file)
+          .then((res) => {
+            console.log('Successfully uploaded: ', res)
+          }).catch((e) => {
+            console.log(e)
+          })
+      }
+    }
+
+    // UPLOAD DOCS
+    if (this.state.docArray.length >= 1) {
+      for (let doc in this.state.docArray) {
+        let file = this.state.docArray[doc].file
+        gAgent.storeFile(null,
+          this.state.profile.storage, file)
+          .then((res) => {
+            console.log('Successfully uploaded: ', res)
+          }).catch((e) => {
+            console.log(e)
+          })
+      }
+    }
+
+    // UPLOAD MISC FILES
+    if (this.state.fileArray.length >= 1) {
+      for (let miscFile in this.state.fileArray) {
+        let file = this.state.fileArray[miscFile].file
+        gAgent.storeFile(null,
+          this.state.profile.storage, file)
+          .then((res) => {
+            console.log('Successfully uploaded: ', res)
+          }).catch((e) => {
+            console.log(e)
+          })
+      }
+    }
+  },
+
   submit() {
+    this.uploadFiles()
+
     if (!this.validates()) return false
     let {title, description, file} = this.state
     console.log('STATE ', this.state)
@@ -401,30 +449,30 @@ let NodeAddGeneric = React.createClass({
                   </List>
                   : null
                 }
-                {/*{*/}
-                  {/*!this.state.isSingleNode && !this.state.isCollection*/}
-                  {/*? <List>*/}
-                    {/*<ListItem*/}
-                      {/*key={2}*/}
-                      {/*disabled*/}
-                      {/*leftIcon={*/}
-                        {/*<SocialPersonOutline color="#9ba0aa" />*/}
-                      {/*}*/}
-                      {/*rightIcon={*/}
-                        {/*<FloatingActionButton*/}
-                          {/*mini*/}
-                          {/*secondary*/}
-                          {/*style={styles.addBtn}*/}
-                          {/*onClick={this._handleContactsAndGroups}>*/}
-                          {/*<ContentAdd />*/}
-                        {/*</FloatingActionButton>*/}
-                      {/*}>*/}
-                      {/*Contacts and Groups*/}
-                      {/*<Divider style={styles.divider} />*/}
-                    {/*</ListItem>*/}
-                  {/*</List>*/}
-                  {/*: null*/}
-                {/*}*/}
+                {/* { */}
+                  {/* !this.state.isSingleNode && !this.state.isCollection */}
+                  {/* ? <List> */}
+                    {/* <ListItem */}
+                      {/* key={2} */}
+                      {/* disabled */}
+                      {/* leftIcon={ */}
+                        {/* <SocialPersonOutline color="#9ba0aa" /> */}
+                      {/* } */}
+                      {/* rightIcon={ */}
+                        {/* <FloatingActionButton */}
+                          {/* mini */}
+                          {/* secondary */}
+                          {/* style={styles.addBtn} */}
+                          {/* onClick={this._handleContactsAndGroups}> */}
+                          {/* <ContentAdd /> */}
+                        {/* </FloatingActionButton> */}
+                      {/* }> */}
+                      {/* Contacts and Groups */}
+                      {/* <Divider style={styles.divider} /> */}
+                    {/* </ListItem> */}
+                  {/* </List> */}
+                  {/* : null */}
+                {/* } */}
               {
                 this.state.isSingleNode
                 ? <List>
@@ -731,20 +779,14 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleFileUpload({target}) {
-    let gAgent = new GraphAgent()
+    // let gAgent = new GraphAgent()
     let file = target.files[0]
-    gAgent.storeFile(null,
-      this.state.profile.storage, file)
-      .then((res) => {
-        this.setState({
-          uploadedFileUri: res
-        })
         // Checks for image
-        if (accepts(file, 'image/*')) {
-          this.setState({
-            uploadedFileType: 'image'
-          })
-          console.log('FU setting uploaded file type to image!')
+    if (accepts(file, 'image/*')) {
+      this.setState({
+        uploadedFileType: 'image'
+      })
+      console.log('FU setting uploaded file type to image!')
           // JUST USE 1 FILE INSTEAD ATM
           //
           // this.state.imgArray.push({
@@ -752,106 +794,103 @@ let NodeAddGeneric = React.createClass({
           //   key: this.state.imgArray.length + 1,
           //   imgUri: this.state.uploadedFileUri
           // })
-          this.state.imgArray[0] = {
-            file: file,
-            key: this.state.imgArray.length + 1,
-            imgUri: this.state.uploadedFileUri
-          }
-          if (this.state.docArray[0]) {
-            this.state.docArray.pop()
-          }
-          if (this.state.fileArray[0]) {
-            this.state.fileArray.pop()
-          }
-          this.setState({
-            hasImages: true,
-            hasDocs: false,
-            hasFiles: false
-          })
-          this.state.tagArray = []
-          this.state.tagArray.push({
-            key: 1,
-            label: 'Image'
-          })
-          this.setState(this.state)
-          // Checks for documents
-        } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
-        accepts(file, '.odt') || accepts(file, '.pages') ||
-        accepts(file, '.pdf') || accepts(file, '.pptx') ||
-        accepts(file, '.keynote') || accepts(file, '.doc') ||
-        accepts(file, '.odp') || accepts(file, '.ppt') ||
-        accepts(file, '.ods') || accepts(file, '.xlsx') ||
-        accepts(file, '.xls') || accepts(file, '.html')) {
-          this.setState({
-            uploadedFileType: 'document'
-          })
-          console.log('FU setting uploaded file type to document!')
-          // USING 1 FILE INSTEAD OF MULTIPLE UPLOAD CAPABILITIES
-          //
-          // this.state.docArray.push({
-          //   file: file,
-          //   key: this.state.docArray.length + 1
-          // })
-          this.state.docArray[0] = {
-            file: file,
-            key: this.state.docArray.length + 1,
-            imgUri: this.state.uploadedFileUri
-          }
-          if (this.state.imgArray[0]) {
-            this.state.imgArray.pop()
-          }
-          if (this.state.fileArray[0]) {
-            this.state.fileArray.pop()
-          }
-          this.setState({
-            hasDocs: true,
-            hasImages: false,
-            hasFiles: false
-          })
-          this.state.tagArray = []
-          this.state.tagArray.push({
-            key: 2,
-            label: 'Document'
-          })
-          this.setState(this.state)
-          // Checks for misc files
-        } else {
-          this.setState({
-            uploadedFileType: 'miscFile'
-          })
-          console.log('FU setting uploaded file type to miscFile!')
-          // Currently only 1 file should be uploaded
-          //
-          // this.state.fileArray.push({
-          //   file: file,
-          //   key: this.state.fileArray.length + 1
-          // })
-          this.state.fileArray[0] = {
-            file: file,
-            key: this.state.fileArray.length + 1,
-            imgUri: this.state.uploadedFileUri
-          }
-          if (this.state.docArray[0]) {
-            this.state.docArray.pop()
-          }
-          if (this.state.imgArray[0]) {
-            this.state.imgArray.pop()
-          }
-          this.setState({
-            hasFiles: true,
-            hasImages: false,
-            hasDocs: false
-          })
-          this.state.tagArray = []
-          this.state.tagArray.push({
-            key: 3,
-            label: 'File'
-          })
-          this.setState(this.state)
-        }
-      }).catch((e) => {
-        console.log(e)
+      this.state.imgArray[0] = {
+        file: file,
+        key: this.state.imgArray.length + 1,
+        imgUri: this.state.uploadedFileUri
+      }
+      if (this.state.docArray[0]) {
+        this.state.docArray.pop()
+      }
+      if (this.state.fileArray[0]) {
+        this.state.fileArray.pop()
+      }
+      this.setState({
+        hasImages: true,
+        hasDocs: false,
+        hasFiles: false
       })
+      this.state.tagArray = []
+      this.state.tagArray.push({
+        key: 1,
+        label: 'Image'
+      })
+      this.setState(this.state)
+      // Checks for documents
+    } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
+      accepts(file, '.odt') || accepts(file, '.pages') ||
+      accepts(file, '.pdf') || accepts(file, '.pptx') ||
+      accepts(file, '.keynote') || accepts(file, '.doc') ||
+      accepts(file, '.odp') || accepts(file, '.ppt') ||
+      accepts(file, '.ods') || accepts(file, '.xlsx') ||
+      accepts(file, '.xls') || accepts(file, '.html')) {
+      this.setState({
+        uploadedFileType: 'document'
+      })
+      console.log('FU setting uploaded file type to document!')
+      // USING 1 FILE INSTEAD OF MULTIPLE UPLOAD CAPABILITIES
+      //
+      // this.state.docArray.push({
+      //   file: file,
+      //   key: this.state.docArray.length + 1
+      // })
+      this.state.docArray[0] = {
+        file: file,
+        key: this.state.docArray.length + 1,
+        imgUri: this.state.uploadedFileUri
+      }
+      if (this.state.imgArray[0]) {
+        this.state.imgArray.pop()
+      }
+      if (this.state.fileArray[0]) {
+        this.state.fileArray.pop()
+      }
+      this.setState({
+        hasDocs: true,
+        hasImages: false,
+        hasFiles: false
+      })
+      this.state.tagArray = []
+      this.state.tagArray.push({
+        key: 2,
+        label: 'Document'
+      })
+      this.setState(this.state)
+      // Checks for misc files
+    } else {
+      this.setState({
+        uploadedFileType: 'miscFile'
+      })
+      console.log('FU setting uploaded file type to miscFile!')
+      // Currently only 1 file should be uploaded
+      //
+      // this.state.fileArray.push({
+      //   file: file,
+      //   key: this.state.fileArray.length + 1
+      // })
+      this.state.fileArray[0] = {
+        file: file,
+        key: this.state.fileArray.length + 1,
+        imgUri: this.state.uploadedFileUri
+      }
+      if (this.state.docArray[0]) {
+        this.state.docArray.pop()
+      }
+      if (this.state.imgArray[0]) {
+        this.state.imgArray.pop()
+      }
+      this.setState({
+        hasFiles: true,
+        hasImages: false,
+        hasDocs: false
+      })
+      this.state.tagArray = []
+      this.state.tagArray.push({
+        key: 3,
+        label: 'File'
+      })
+      this.setState(this.state)
+    }
     console.log('arraylengths ',
       this.state.imgArray.length, this.state.docArray.length)
     if ((this.state.imgArray.length + this.state.docArray.length) > 1) {
