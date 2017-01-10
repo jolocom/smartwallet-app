@@ -40,6 +40,7 @@
     "cheerio": "^0.20.0",
     "cross-env": "^2.0.0",
     "del": "^1.2.0",
+    "enzyme": "^2.6.0",
     "eslint": "^3.3.1",
     "eslint-config-standard": "^5.3.5",
     "eslint-config-standard-jsx": "^2.0.0",
