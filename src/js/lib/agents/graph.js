@@ -88,6 +88,7 @@ class GraphAgent {
 
   createNode(currentUser, centerNode, title, description,
              file, nodeType, confidential = false) {
+    console.log('NODE TYPE ', nodeType)
     let writer = new Writer()
     let newNodeUri = rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
@@ -102,8 +103,12 @@ class GraphAgent {
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (file) {
-        return this.addImage(newNodeUri, centerNode.storage,
-                             writer, file, confidential)
+        if (nodeType === 'image') {
+          return this.addImage(newNodeUri, centerNode.storage,
+            writer, file, confidential)
+        } else {
+          writer.addTriple(newNodeUri, PRED.attachment, rdf.sym(file))
+        }
       }
     }).then(() => {
       console.log('Putting the RDF file for the node. ', newNodeUri.uri)
