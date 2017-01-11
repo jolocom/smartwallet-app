@@ -102,6 +102,9 @@ let PrivacySettings = React.createClass({
         zIndex: 1400,
         overflowY: 'auto'
       },
+      icon: {
+        color: actionAppBar.textColor
+      },
       content: {
         maxWidth: '90%',
         padding: '20px',
@@ -210,7 +213,7 @@ let PrivacySettings = React.createClass({
             iconElementLeft={
               <IconButton
                 onClick={this.goBack}
-                color="#fff"
+                iconStyle={styles.icon}
                 iconClassName="material-icons">
                   arrow_back
               </IconButton>
