@@ -130,7 +130,7 @@ let NodeAddGeneric = React.createClass({
     } else if (this.state.docArray.length >= 1) {
       console.log('setting type to doc')
       type = 'document'
-    } else if (this.state.fileArray >= 1) {
+    } else if (this.state.fileArray.length >= 1) {
       type = 'miscFile'
     }
 
@@ -140,115 +140,161 @@ let NodeAddGeneric = React.createClass({
   uploadFiles() {
     let gAgent = new GraphAgent()
     // This function is built to be compatible with multiple file upload
-
-    // UPLOAD IMAGES
-    if (this.state.imgArray.length >= 1) {
-      for (let img in this.state.imgArray) {
-        let file = this.state.imgArray[img].file
-        gAgent.storeFile(null,
-          this.state.profile.storage, file)
-          .then((res) => {
-            this.state.imgArray[img].uri = res
-            console.log('Successfully uploaded: ', res)
-            console.log('imgArray after uploaded file ',
-              this.state.imgArray[img])
-          }).catch((e) => {
-            console.log(e)
-          })
+    return new Promise((resolve, reject) => {
+      if (this.state.imgArray.length >= 1) {
+        for (let img in this.state.imgArray) {
+          let file = this.state.imgArray[img].file
+          gAgent.storeFile(null,
+            this.state.profile.storage, file)
+            .then((res) => {
+              this.state.imgArray[img].uri = res
+              console.log('Successfully uploaded: ', res)
+              console.log('imgArray after uploaded file ',
+                this.state.imgArray[img])
+            }).catch((e) => {
+              console.log(e)
+              return reject()
+            })
+        }
       }
-    }
 
-    // UPLOAD DOCS
-    if (this.state.docArray.length >= 1) {
-      for (let doc in this.state.docArray) {
-        let file = this.state.docArray[doc].file
-        gAgent.storeFile(null,
-          this.state.profile.storage, file)
-          .then((res) => {
-            console.log('Successfully uploaded: ', res)
-          }).catch((e) => {
-            console.log(e)
-          })
+      // UPLOAD DOCS
+      if (this.state.docArray.length >= 1) {
+        for (let doc in this.state.docArray) {
+          let file = this.state.docArray[doc].file
+          gAgent.storeFile(null,
+            this.state.profile.storage, file)
+            .then((res) => {
+              console.log('Successfully uploaded: ', res)
+            }).catch((e) => {
+              console.log(e)
+              return reject()
+            })
+        }
       }
-    }
 
-    // UPLOAD MISC FILES
-    if (this.state.fileArray.length >= 1) {
-      for (let miscFile in this.state.fileArray) {
-        let file = this.state.fileArray[miscFile].file
-        gAgent.storeFile(null,
-          this.state.profile.storage, file)
-          .then((res) => {
-            console.log('Successfully uploaded: ', res)
-          }).catch((e) => {
-            console.log(e)
-          })
+      // UPLOAD MISC FILES
+      if (this.state.fileArray.length >= 1) {
+        for (let miscFile in this.state.fileArray) {
+          let file = this.state.fileArray[miscFile].file
+          gAgent.storeFile(null,
+            this.state.profile.storage, file)
+            .then((res) => {
+              console.log('Successfully uploaded: ', res)
+            }).catch((e) => {
+              console.log(e)
+              return reject()
+            })
+        }
       }
-    }
+      return resolve()
+    })
+    // // UPLOAD IMAGES
+    // if (this.state.imgArray.length >= 1) {
+    //   for (let img in this.state.imgArray) {
+    //     let file = this.state.imgArray[img].file
+    //     gAgent.storeFile(null,
+    //       this.state.profile.storage, file)
+    //       .then((res) => {
+    //         this.state.imgArray[img].uri = res
+    //         console.log('Successfully uploaded: ', res)
+    //         console.log('imgArray after uploaded file ',
+    //           this.state.imgArray[img])
+    //       }).catch((e) => {
+    //         console.log(e)
+    //       })
+    //   }
+    // }
+    //
+    // // UPLOAD DOCS
+    // if (this.state.docArray.length >= 1) {
+    //   for (let doc in this.state.docArray) {
+    //     let file = this.state.docArray[doc].file
+    //     gAgent.storeFile(null,
+    //       this.state.profile.storage, file)
+    //       .then((res) => {
+    //         console.log('Successfully uploaded: ', res)
+    //       }).catch((e) => {
+    //         console.log(e)
+    //       })
+    //   }
+    // }
+    //
+    // // UPLOAD MISC FILES
+    // if (this.state.fileArray.length >= 1) {
+    //   for (let miscFile in this.state.fileArray) {
+    //     let file = this.state.fileArray[miscFile].file
+    //     gAgent.storeFile(null,
+    //       this.state.profile.storage, file)
+    //       .then((res) => {
+    //         console.log('Successfully uploaded: ', res)
+    //       }).catch((e) => {
+    //         console.log(e)
+    //       })
+    //   }
+    // }
   },
 
   submit() {
-    this.uploadFiles()
+    this.uploadFiles().then(() => {
+      if (!this.validates()) return false
+      let {title, description, file} = this.state
+      console.log('STATE ', this.state)
+      let webId = localStorage.getItem('jolocom.webId')
+      let centerNode = this.state.graphState.center
+      let type = this.nodeType()
 
-    if (!this.validates()) return false
-    let {title, description, file} = this.state
-    console.log('STATE ', this.state)
-// debugger;
-    let webId = localStorage.getItem('jolocom.webId')
-    let centerNode = this.state.graphState.center
-    let type = this.nodeType()
-
-    console.log('TYPE == ', type)
+      console.log('TYPE == ', type)
 
 // CREATE IMAGE NODE
-    if (centerNode && webId && (this.state.imgArray[0] !== undefined) &&
-      (type !== 'collection')) {
-      // let isConfidential = (this.state.type == 'confidential')
-      // if (isConfidential) this.state.type = 'default'
+      if (centerNode && webId && (this.state.imgArray[0] !== undefined) &&
+        (type !== 'collection')) {
+        // let isConfidential = (this.state.type == 'confidential')
+        // if (isConfidential) this.state.type = 'default'
 
-      // @TODO Previously called nodeActions.create;
-      // except it cannot have a return value
-      //
-      // if (this.state.imgArray[0].imgUri === undefined) {
-      //
-      // }
-      console.log('Creating node:')
-      console.log('IMGURI = ', this.state.imgArray[0])
-      console.log('FILE = ', file)
-      this.gAgent.createNode(
-        webId,
-        centerNode,
-        title,
-        description,
-        // this.state.imgArray[0].uri,
-        'this is the uri',
-        type, false).then((uri) => {
+        // @TODO Previously called nodeActions.create;
+        // except it cannot have a return value
+        //
+        // if (this.state.imgArray[0].imgUri === undefined) {
+        //
+        // }
+        console.log('Creating node:')
+        console.log('IMGURI = ', this.state.imgArray[0])
+        console.log('FILE = ', file)
+        this.gAgent.createNode(
+          webId,
+          centerNode,
+          title,
+          description,
+          // this.state.imgArray[0].uri,
+          'this is the uri',
+          type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
-      console.log('there was something in the imgArray')
-    } else if (centerNode && webId && (type !== 'collection')) {
-      // CREATE OTHER FILE NODE
-      console.log('there was NOT something in the imgArray')
-      this.gAgent.createNode(
-        webId,
-        centerNode,
-        title,
-        description,
-        // file,
-        'uri goes here',
-        type, false).then((uri) => {
+        console.log('there was something in the imgArray')
+      } else if (centerNode && webId && (type !== 'collection')) {
+        // CREATE OTHER FILE NODE
+        console.log('there was NOT something in the imgArray')
+        this.gAgent.createNode(
+          webId,
+          centerNode,
+          title,
+          description,
+          // file,
+          'uri goes here',
+          type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
-    } else if (centerNode && webId && (type === 'collection')) { // COLLECTION
-      console.log('Initiating collection creation!!!!')
-      console.log('First phase')
-      this.gAgent.createNode(
-        webId,
-        centerNode,
-        title,
-        description,
-        null,
-        type, false).then((uri) => { // @TODO FILL
+      } else if (centerNode && webId && (type === 'collection')) { // COLLECTION
+        console.log('Initiating collection creation!!!!')
+        console.log('First phase')
+        this.gAgent.createNode(
+          webId,
+          centerNode,
+          title,
+          description,
+          null,
+          type, false).then((uri) => { // @TODO FILL
           console.log('Second phase')
           console.log('uri is ', uri)
           this.gAgent.createNode(
@@ -258,11 +304,85 @@ let NodeAddGeneric = React.createClass({
             description,
             file,
             type, false).then((uri) => {
-              console.log('CREATED COLLECTION, APPARENTLY.')
-              graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+            console.log('CREATED COLLECTION, APPARENTLY.')
+            graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
           })
         })
-    }
+      }
+    })
+
+//     if (!this.validates()) return false
+//     let {title, description, file} = this.state
+//     console.log('STATE ', this.state)
+//     let webId = localStorage.getItem('jolocom.webId')
+//     let centerNode = this.state.graphState.center
+//     let type = this.nodeType()
+//
+//     console.log('TYPE == ', type)
+//
+// // CREATE IMAGE NODE
+//     if (centerNode && webId && (this.state.imgArray[0] !== undefined) &&
+//       (type !== 'collection')) {
+//       // let isConfidential = (this.state.type == 'confidential')
+//       // if (isConfidential) this.state.type = 'default'
+//
+//       // @TODO Previously called nodeActions.create;
+//       // except it cannot have a return value
+//       //
+//       // if (this.state.imgArray[0].imgUri === undefined) {
+//       //
+//       // }
+//       console.log('Creating node:')
+//       console.log('IMGURI = ', this.state.imgArray[0])
+//       console.log('FILE = ', file)
+//       this.gAgent.createNode(
+//         webId,
+//         centerNode,
+//         title,
+//         description,
+//         // this.state.imgArray[0].uri,
+//         'this is the uri',
+//         type, false).then((uri) => {
+//           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+//         })
+//       console.log('there was something in the imgArray')
+//     } else if (centerNode && webId && (type !== 'collection')) {
+//       // CREATE OTHER FILE NODE
+//       console.log('there was NOT something in the imgArray')
+//       this.gAgent.createNode(
+//         webId,
+//         centerNode,
+//         title,
+//         description,
+//         // file,
+//         'uri goes here',
+//         type, false).then((uri) => {
+//           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+//         })
+//     } else if (centerNode && webId && (type === 'collection')) { // COLLECTION
+//       console.log('Initiating collection creation!!!!')
+//       console.log('First phase')
+//       this.gAgent.createNode(
+//         webId,
+//         centerNode,
+//         title,
+//         description,
+//         null,
+//         type, false).then((uri) => { // @TODO FILL
+//           console.log('Second phase')
+//           console.log('uri is ', uri)
+//           this.gAgent.createNode(
+//             webId,
+//             uri,
+//             title,
+//             description,
+//             file,
+//             type, false).then((uri) => {
+//               console.log('CREATED COLLECTION, APPARENTLY.')
+//               graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+//           })
+//         })
+//     }
   },
 
   getStyles() {
