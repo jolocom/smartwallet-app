@@ -123,43 +123,23 @@ let NodeAddGeneric = React.createClass({
   nodeType() {
     // Defaulting to type text
     let type = 'text'
-    // Check if it's a file node
-    if (this.state.hasFiles && !this.state.hasDocs &&
-      !this.state.hasImages) {
-      if (this.state.fileArray.size === 1) {
-        type = 'miscFile'
-      } else {
-        type = 'collection'
-      }
-    } else if (this.state.hasDocs && !this.state.hasFiles && // If Doc...
-      !this.state.hasImages) {
-      if (this.state.docArray.length === 1) {
-        type = 'document'
-      } else {
-        type = 'collection'
-      }
-    } else if (this.state.hasImages && !this.state.hasFiles && // If image
-      !this.state.hasDocs) {
-      if (this.state.imgArray.length === 1) {
-        type = 'image'
-      } else {
-        type = 'collection'
-      }
-    } else if (this.state.hasImages && this.state.hasFiles) { // Combinations
-      type = 'collection'
-    } else if (this.state.hasImages && this.state.hasDocs) {
-      type = 'collection'
-    } else if (this.state.hasFiles && this.state.hasDocs) {
-      type = 'collection'
-    } else if (this.state.hasFiles && this.state.hasImages &&
-    this.state.hasDocs) {
-      type = 'collection'
+
+    if (this.state.imgArray.length >= 1) {
+      console.log('setting type to image')
+      type = 'image'
+    } else if (this.state.docArray.length >= 1) {
+      console.log('setting type to doc')
+      type = 'document'
+    } else if (this.state.fileArray >= 1) {
+      type = 'miscFile'
     }
+
     return type
   },
 
   uploadFiles() {
     let gAgent = new GraphAgent()
+    // This function is built to be compatible with multiple file upload
 
     // UPLOAD IMAGES
     if (this.state.imgArray.length >= 1) {
@@ -168,7 +148,10 @@ let NodeAddGeneric = React.createClass({
         gAgent.storeFile(null,
           this.state.profile.storage, file)
           .then((res) => {
+            this.state.imgArray[img].uri = res
             console.log('Successfully uploaded: ', res)
+            console.log('imgArray after uploaded file ',
+              this.state.imgArray[img])
           }).catch((e) => {
             console.log(e)
           })
@@ -210,14 +193,14 @@ let NodeAddGeneric = React.createClass({
     if (!this.validates()) return false
     let {title, description, file} = this.state
     console.log('STATE ', this.state)
-    // debugger;
+// debugger;
     let webId = localStorage.getItem('jolocom.webId')
     let centerNode = this.state.graphState.center
     let type = this.nodeType()
 
     console.log('TYPE == ', type)
 
-    // CREATE IMAGE NODE
+// CREATE IMAGE NODE
     if (centerNode && webId && (this.state.imgArray[0] !== undefined) &&
       (type !== 'collection')) {
       // let isConfidential = (this.state.type == 'confidential')
@@ -229,12 +212,16 @@ let NodeAddGeneric = React.createClass({
       // if (this.state.imgArray[0].imgUri === undefined) {
       //
       // }
+      console.log('Creating node:')
+      console.log('IMGURI = ', this.state.imgArray[0])
+      console.log('FILE = ', file)
       this.gAgent.createNode(
         webId,
         centerNode,
         title,
         description,
-        this.state.imgArray[0].imgUri,
+        // this.state.imgArray[0].uri,
+        'this is the uri',
         type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
@@ -247,35 +234,35 @@ let NodeAddGeneric = React.createClass({
         centerNode,
         title,
         description,
-        file,
+        // file,
+        'uri goes here',
         type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
+    } else if (centerNode && webId && (type === 'collection')) { // COLLECTION
+      console.log('Initiating collection creation!!!!')
+      console.log('First phase')
+      this.gAgent.createNode(
+        webId,
+        centerNode,
+        title,
+        description,
+        null,
+        type, false).then((uri) => { // @TODO FILL
+          console.log('Second phase')
+          console.log('uri is ', uri)
+          this.gAgent.createNode(
+            webId,
+            uri,
+            title,
+            description,
+            file,
+            type, false).then((uri) => {
+              console.log('CREATED COLLECTION, APPARENTLY.')
+              graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+          })
+        })
     }
-    // else if (centerNode && webId && (type === 'collection')) { // COLLECTION
-    //   console.log('Initiating collection creation!!!!')
-    //   console.log('First phase')
-    //   this.gAgent.createNode(
-    //     webId,
-    //     centerNode,
-    //     title,
-    //     description,
-    //     null,
-    //     type, false).then((uri) => { // @TODO FILL
-    //       console.log('Second phase')
-    //       console.log('uri is ', uri)
-    //       this.gAgent.createNode(
-    //       webId,
-    //       uri,
-    //       title,
-    //       description,
-    //       file,
-    //       type, false).then((uri) => {
-    //         console.log('CREATED COLLECTION, APPARENTLY.')
-    //         graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
-    //       })
-    //     })
-    // }
   },
 
   getStyles() {
@@ -519,7 +506,7 @@ let NodeAddGeneric = React.createClass({
                                 key={img.key}
                                 leftAvatar={
                                   <Avatar src={
-                                  Util.uriToProxied(img.imgUri)}
+                                  Util.uriToProxied(img.uri)}
                                   />
                                 }
                                 rightIcon={
@@ -709,7 +696,7 @@ let NodeAddGeneric = React.createClass({
       })
       if (this.state.imgArray.length === 1) {
         this.setState({
-          uploadedFileUri: this.state.imgArray[0].imgUri
+          uploadedFileUri: this.state.imgArray[0].uri
         })
       }
     } else if (newDocArray.length + this.state.imgArray.length < 1) {
@@ -741,7 +728,7 @@ let NodeAddGeneric = React.createClass({
       })
       if (this.state.imgArray.length === 1) {
         this.setState({
-          uploadedFileUri: this.state.imgArray[0].imgUri
+          uploadedFileUri: this.state.imgArray[0].uri
         })
       }
     } else if (newImgArray.length + this.state.docArray.length < 1) {
@@ -797,7 +784,7 @@ let NodeAddGeneric = React.createClass({
       this.state.imgArray[0] = {
         file: file,
         key: this.state.imgArray.length + 1,
-        imgUri: this.state.uploadedFileUri
+        uri: this.state.uploadedFileUri
       }
       if (this.state.docArray[0]) {
         this.state.docArray.pop()
@@ -806,9 +793,7 @@ let NodeAddGeneric = React.createClass({
         this.state.fileArray.pop()
       }
       this.setState({
-        hasImages: true,
-        hasDocs: false,
-        hasFiles: false
+        hasImages: true
       })
       this.state.tagArray = []
       this.state.tagArray.push({
@@ -837,7 +822,7 @@ let NodeAddGeneric = React.createClass({
       this.state.docArray[0] = {
         file: file,
         key: this.state.docArray.length + 1,
-        imgUri: this.state.uploadedFileUri
+        uri: this.state.uploadedFileUri
       }
       if (this.state.imgArray[0]) {
         this.state.imgArray.pop()
@@ -847,8 +832,6 @@ let NodeAddGeneric = React.createClass({
       }
       this.setState({
         hasDocs: true,
-        hasImages: false,
-        hasFiles: false
       })
       this.state.tagArray = []
       this.state.tagArray.push({
@@ -871,7 +854,7 @@ let NodeAddGeneric = React.createClass({
       this.state.fileArray[0] = {
         file: file,
         key: this.state.fileArray.length + 1,
-        imgUri: this.state.uploadedFileUri
+        uri: this.state.uploadedFileUri
       }
       if (this.state.docArray[0]) {
         this.state.docArray.pop()
@@ -880,9 +863,7 @@ let NodeAddGeneric = React.createClass({
         this.state.imgArray.pop()
       }
       this.setState({
-        hasFiles: true,
-        hasImages: false,
-        hasDocs: false
+        hasFiles: true
       })
       this.state.tagArray = []
       this.state.tagArray.push({
