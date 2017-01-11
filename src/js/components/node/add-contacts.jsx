@@ -219,17 +219,18 @@ let AddContact = React.createClass({
     )
   },
 
-  _handleSubmit() {
+  _handleSubmit(event) {
     this.props.onSubmit(this.state.selected)
-    this._handleClose()
+    this._handleClose(event)
   },
 
   _handleChange(event) {
     ContactsActions.load(event.target.value)
   },
 
-  _handleClose() {
+  _handleClose(event) {
     this.props.onClose()
+    event.preventDefault()
   }
 })
 
