@@ -81,15 +81,25 @@ let PrivacySettings = React.createClass({
   },
 
   getStyles() {
+    const {muiTheme: {actionAppBar}} = this.context
     let styles = {
       editIconToggle: {
         marginRight: '5%',
         size: '60px'
       },
+      bar: {
+        backgroundColor: actionAppBar.color,
+        color: actionAppBar.textColor
+      },
       container: {
+        position: 'fixed',
         textAlign: 'center',
         background: '#ffffff',
         height: '100%',
+        width: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 1400,
         overflowY: 'auto'
       },
       content: {
@@ -102,15 +112,14 @@ let PrivacySettings = React.createClass({
       title: {
         fontWeight: 'normal',
         fontSize: '20px',
-        color: '#4B142B',
+        color: actionAppBar.textColor,
         textAlign: 'left'
       },
       submitBtn: {
-        margin: '2px',
-        backgroundColor: '#9a3460',
-        minWidth: '30%',
-        color: '#fff',
-        fontSize: '2vmax'
+        fontWeight: 'normal',
+        fontSize: '20px',
+        color: actionAppBar.textColor,
+        backgroundColor: actionAppBar.color
       },
       toggleBtns: {
         textAlign: 'center'
@@ -128,15 +137,15 @@ let PrivacySettings = React.createClass({
         margin: '2px',
         backgroundColor: '#e1e2e6',
         minWidth: '40%',
-        fontSize: '2vmax',
+        fontSize: '1.5vmax',
         borderTopLeftRadius: '1em',
         borderBottomLeftRadius: '1em'
       },
       toggleBtnRight: {
-        margin: '2px',
+        margin: '1px',
         backgroundColor: '#e1e2e6',
         minWidth: '40%',
-        fontSize: '2vmax',
+        fontSize: '1.5vmax',
         borderTopRightRadius: '1em',
         borderBottomRightRadius: '1em'
       },
@@ -196,13 +205,23 @@ let PrivacySettings = React.createClass({
         : <div style={styles.container}>
           <AppBar
             title="Privacy Settings"
+            style={styles.bar}
             titleStyle={styles.title}
             iconElementLeft={
               <IconButton
                 onClick={this.goBack}
+                color="#fff"
                 iconClassName="material-icons">
                   arrow_back
               </IconButton>
+            }
+            iconElementRight={
+              <FlatButton
+                style={styles.submitBtn}
+                onTouchTap={this._handleSubmit}
+              >
+              SAVE
+              </FlatButton>
             }
           />
           <div style={styles.content}>
@@ -309,12 +328,6 @@ let PrivacySettings = React.createClass({
             </List>
             </div>
             : null }
-            <FlatButton
-              style={styles.submitBtn}
-              onTouchTap={this._handleSubmit}
-            >
-              COMMIT
-            </FlatButton>
           </div>
         </div>}
       </div>

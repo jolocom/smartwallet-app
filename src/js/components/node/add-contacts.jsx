@@ -91,13 +91,6 @@ let AddContact = React.createClass({
       listItems: {
         marginLeft: '40px'
       },
-      alphaLetter: {
-        position: 'absolute',
-        left: '10px',
-        marginTop: '10px'
-      },
-      checkbox: {
-      },
       selectedList: {
         color: '#e1e2e6',
         width: '80%',
