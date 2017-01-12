@@ -139,18 +139,22 @@ let NodeAddGeneric = React.createClass({
 
   uploadFiles() {
     let gAgent = new GraphAgent()
+    let storedFile
+    let uri = ''
     // This function is built to be compatible with multiple file upload
     return new Promise((resolve, reject) => {
       if (this.state.imgArray.length >= 1) {
         for (let img in this.state.imgArray) {
           let file = this.state.imgArray[img].file
-          gAgent.storeFile(null,
+          storedFile = gAgent.storeFile(null,
             this.state.profile.storage, file)
             .then((res) => {
               this.state.imgArray[img].uri = res
               console.log('Successfully uploaded: ', res)
+              uri = res
               console.log('imgArray after uploaded file ',
                 this.state.imgArray[img])
+              console.log('uri reading ', this.state.imgArray[img].uri)
             }).catch((e) => {
               console.log(e)
               return reject()
@@ -187,7 +191,14 @@ let NodeAddGeneric = React.createClass({
             })
         }
       }
-      return resolve()
+
+      Promise.all([storedFile]).then(() => {
+        resolve(uri)
+      })
+
+      console.log('returning at the bottom')
+      debugger;
+      return resolve(uri)
     })
     // // UPLOAD IMAGES
     // if (this.state.imgArray.length >= 1) {
@@ -236,7 +247,7 @@ let NodeAddGeneric = React.createClass({
   },
 
   submit() {
-    this.uploadFiles().then(() => {
+    this.uploadFiles().then((uri) => {
       if (!this.validates()) return false
       let {title, description, file} = this.state
       console.log('STATE ', this.state)
@@ -245,29 +256,23 @@ let NodeAddGeneric = React.createClass({
       let type = this.nodeType()
 
       console.log('TYPE == ', type)
+      console.log('URI returned from promise ', uri)
 
-// CREATE IMAGE NODE
+      debugger;
+
+      // CREATE IMAGE NODE
       if (centerNode && webId && (this.state.imgArray[0] !== undefined) &&
         (type !== 'collection')) {
-        // let isConfidential = (this.state.type == 'confidential')
-        // if (isConfidential) this.state.type = 'default'
 
-        // @TODO Previously called nodeActions.create;
-        // except it cannot have a return value
-        //
-        // if (this.state.imgArray[0].imgUri === undefined) {
-        //
-        // }
         console.log('Creating node:')
-        console.log('IMGURI = ', this.state.imgArray[0])
-        console.log('FILE = ', file)
+        console.log('IMGURI = ', this.state.imgArray[0].uri)
+
         this.gAgent.createNode(
           webId,
           centerNode,
           title,
           description,
-          // this.state.imgArray[0].uri,
-          'this is the uri',
+          this.state.imgArray[0].uri,
           type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         })
@@ -280,7 +285,7 @@ let NodeAddGeneric = React.createClass({
           centerNode,
           title,
           description,
-          // file,
+          file.uri,
           'uri goes here',
           type, false).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
@@ -470,12 +475,29 @@ let NodeAddGeneric = React.createClass({
   // },
 
   render: function() {
+    console.log('RENDER')
+    console.log('imgArray[0] = ', this.state.imgArray[0])
     let styles = this.getStyles()
     let title = 'Edit node'
     // let {type} = this.props.params
     // let config = this.getTypeConfig(type)
     // let title = config.title || `New ${type}`
     let headerIcon
+    let reader = new FileReader()
+    let imagePreview
+
+    if (this.state.imgArray[0]) {
+      reader.onload = (e) => {
+        imagePreview = e.target.result
+        console.log('image preview ', imagePreview)
+      }
+
+      reader.readAsDataURL(this.state.imgArray[0].file)
+
+      // imagePreview = reader.readAsDataURL(this.state.imgArray[0].file)
+      // console.log(imagePreview)
+    }
+
     if (this.state.isCollection) {
       headerIcon = <CollectionIcon />
     } else if (this.state.isSingleNode &&
@@ -516,7 +538,9 @@ let NodeAddGeneric = React.createClass({
               />
               <Card>
                 <CardMedia
-                  style={styles.image} />
+                  style={styles.image} >
+                  <img id="preview" src={imagePreview} />
+                </CardMedia>
               </Card>
               <TextField
                 ref="nodeTitle"
