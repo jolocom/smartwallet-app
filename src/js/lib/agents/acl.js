@@ -119,7 +119,6 @@ class AclAgent extends HTTPAgent {
     if (tempFound) {
       return
     }
-
     this.model.forEach(entry => {
       if (entry.user === user) {
         if (entry.mode.indexOf(pred) !== -1) {
@@ -163,11 +162,20 @@ class AclAgent extends HTTPAgent {
    * @return undefined, we want the side effect
    */
 
-  // @TODO Snackbar instead of console warn.
   removeAllow(user, mode) {
     let policyName
     let zombie = false
+    let tempFound = false
     const predicate = this.predMap[mode]
+
+    this.toAdd = this.toAdd.filter(e => {
+      const exists = e.user === user && e.object === predicate
+      if (exists) {
+        tempFound = true
+      }
+      return !exists
+    })
+
     this.model = this.model.filter(entry => {
       const found = entry.user === user && entry.mode.indexOf(predicate) !== -1
       if (found) {
@@ -186,6 +194,10 @@ class AclAgent extends HTTPAgent {
       }
       return !found || entry.mode.length !== 0
     })
+
+    if (tempFound) {
+      return
+    }
 
     this.toRemove.push({
       user: user,
