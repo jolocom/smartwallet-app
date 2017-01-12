@@ -405,10 +405,7 @@ let NodeAddGeneric = React.createClass({
       },
       image: {
         height: '176px',
-        backgroundColor: '#9ca0aa',
-        backgroundImage: this.state.isCollection ? 'none'
-          : `url(${Util.uriToProxied(this.state.uploadedFileUri)})`,
-        backgroundSize: 'cover'
+        background: 'center / cover'
       },
       container: {
         overflowY: 'scroll'
@@ -484,12 +481,12 @@ let NodeAddGeneric = React.createClass({
     // let title = config.title || `New ${type}`
     let headerIcon
     let reader = new FileReader()
-    let imagePreview
 
     if (this.state.imgArray[0]) {
       reader.onload = (e) => {
-        imagePreview = e.target.result
-        console.log('image preview ', imagePreview)
+        //imagePreview = e.target.result
+        document.getElementById('preview').src = e.target.result
+        //console.log('image preview ', imagePreview)
       }
 
       reader.readAsDataURL(this.state.imgArray[0].file)
@@ -539,7 +536,7 @@ let NodeAddGeneric = React.createClass({
               <Card>
                 <CardMedia
                   style={styles.image} >
-                  <img id="preview" src={imagePreview} />
+                  <img id="preview" style={styles.image} />
                 </CardMedia>
               </Card>
               <TextField
