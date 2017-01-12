@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton, TextField} from 'material-ui'
+import {RaisedButton, TextField, IconButton, AppBar} from 'material-ui'
 import {Link} from 'react-router'
 
 import Account from 'actions/account'
@@ -19,7 +19,9 @@ let Login = React.createClass({
   getInitialState() {
     return {
       username: '',
-      password: ''
+      password: '',
+      userErrorMsg: '',
+      pwErrorMsg: ''
     }
   },
 
@@ -30,18 +32,38 @@ let Login = React.createClass({
     }
   },
 
+  goBack() {
+    this.context.router.push('/')
+  },
+
   login(e) {
+    // Handle empty form fields
+    if (this.state.username === '') {
+      this.setState({
+        userErrorMsg: 'Please enter a username'
+      })
+    } else if (this.state.password === '') {
+      this.setState({
+        pwErrorMsg: 'Please enter a password'
+      })
+    }
     Account.login(this.state.username, this.state.password)
     e.preventDefault()
   },
 
   _handleUsernameChange(e) {
     this.setState({
+      userErrorMsg: ''
+    })
+    this.setState({
       username: e.target.value.toLowerCase()
     })
   },
 
   _handlePasswordChange(e) {
+    this.setState({
+      pwErrorMsg: ''
+    })
     this.setState({
       password: e.target.value
     })
@@ -52,7 +74,7 @@ let Login = React.createClass({
     let styles = {
       container: {
         textAlign: 'center',
-        background: '#f1f1f1',
+        background: '#f8f9fb',
         height: '100%',
         overflowY: 'auto'
       },
@@ -63,24 +85,25 @@ let Login = React.createClass({
         fontSize: '18px',
         fontWeight: '400',
         textAlign: 'center',
-        marginTop: '24px',
         textTransform: 'uppercase'
       },
       logoImg: {
-        width: '32px',
-        height: '32px',
-        verticalAlign: 'middle'
+        maxWidth: '80%',
+        width: '256px'
       },
       title: {
-        fontWeight: '200',
-        fontSize: '2.5em'
+        fontWeight: 'normal',
+        fontSize: '20px',
+        color: '#4B142B',
+        textAlign: 'left'
       },
       content: {
         width: '300px',
         maxWidth: '90%',
-        padding: '20px',
-        margin: '0 auto 20px auto',
-        boxSizing: 'border-box'
+        padding: '0px 20px 20px',
+        margin: '10px auto 20px auto',
+        boxSizing: 'border-box',
+        backgroundColor: '#ffffff'
       },
       safariCookieWarning: {
         fontWeight: 'bold',
@@ -111,22 +134,35 @@ let Login = React.createClass({
     let styles = this.getStyles()
     return (
       <div style={styles.container}>
+        <AppBar
+          title="Log in"
+          style={{boxShadow: 'none'}}
+          titleStyle={styles.title}
+          iconElementLeft={<IconButton onClick={this.goBack}
+            iconClassName="material-icons">
+              arrow_back
+          </IconButton>}
+          />
         <div style={styles.logo}>
-          <img src="/img/logo.png" style={styles.logoImg} /> Jolocom</div>
+          <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
+        </div>
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
             <div>
+              {/** TODO Give user feedback when user already exists **/}
               <TextField
                 floatingLabelText="Username"
                 value={this.state.username}
                 type="text"
-                autocorrect="off"
-                autocapitalize="none"
-                autocomplete="none"
+                autoCorrect="off"
+                autoCapitalize="none"
+                autoComplete="none"
+                errorText={this.state.userErrorMsg}
                 onChange={this._handleUsernameChange} />
               <TextField
                 floatingLabelText="Password"
                 type="password"
+                errorText={this.state.pwErrorMsg}
                 onChange={this._handlePasswordChange} />
               <Link
                 to="/forgot-password"

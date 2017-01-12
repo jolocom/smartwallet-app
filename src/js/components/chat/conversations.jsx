@@ -9,9 +9,10 @@ import GroupIcon from 'material-ui/svg-icons/social/group'
 import {
   List,
   ListItem,
-  Avatar
-  // FloatingActionButton,
-  // FontIcon
+  Avatar,
+  Badge,
+  FloatingActionButton,
+  FontIcon
 } from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
@@ -22,6 +23,8 @@ import ConversationsStore from 'stores/conversations'
 import UserAvatar from 'components/common/user-avatar.jsx'
 
 import Loading from 'components/common/loading.jsx'
+
+import UnreadMessagesStore from 'stores/unread-messages'
 
 let Conversations = React.createClass({
 
@@ -96,14 +99,12 @@ let Conversations = React.createClass({
     )
   },
 
-  render: function() {
+  render() {
     let content
 
-   // let {loading, items} = <this className="state conversations"></this>
     let {loading, items} = this.state.conversations
-    if (items && items.lastMessage !== null) {
-      items = items.filter(conv => conv.lastMessage !== null)
-    }
+
+    items = items.filter(conv => conv.lastMessage !== null)
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -120,14 +121,13 @@ let Conversations = React.createClass({
           {content}
         </div>
 
-        {/* <FloatingActionButton */}
-          {/* secondary */}
-          {/* href="#/chat/new" */}
-          {/* linkButton={true} */}
-          {/* style={styles.actionButton} */}
-        {/* > */}
-          {/* <FontIcon className="material-icons">add</FontIcon> */}
-        {/* </FloatingActionButton> */}
+        <FloatingActionButton
+          secondary
+          href="#/chat/new"
+          style={styles.actionButton}
+        >
+          <FontIcon className="material-icons">add</FontIcon>
+        </FloatingActionButton>
 
         {this.props.children}
       </div>
@@ -142,48 +142,65 @@ let ConversationsListItem = React.createClass({
     onTouchTap: React.PropTypes.func.isRequired
   },
 
+  contextTypes: {
+    account: React.PropTypes.any
+  },
+
   render() {
     let {conversation} = this.props
-    let {otherPerson, lastMessage} = conversation
+    let {participants, lastMessage} = conversation
     let {created, content} = lastMessage || {}
-    let otherPersonNames = []
-    let collatedNames
-    if (otherPerson && otherPerson.length > 1) {
-      for (let person of otherPerson) {
-        otherPersonNames.push(person.name)
-        collatedNames = otherPersonNames.join(', ')
-      }
-    } else if (otherPerson && otherPerson.length === 1) {
-      collatedNames = otherPerson[0].name
+
+    let title
+
+    // omit current user
+    participants = participants || []
+    participants = participants.filter((p) => {
+      return p.webid !== this.context.account.webId
+    })
+
+    if (!participants || !participants.length) {
+      participants = null
+      title = 'Unnamed'
+    } else if (participants.length > 1) {
+      title = participants.map(p => p.name).join(', ')
+    } else if (participants.length === 1) {
+      title = participants[0].name
     }
 
-    // If otherPerson var is null, then set it to false.
-    // So it wont be used when listing conversations
-    // to avoid errors
-
-    if (otherPerson == null) {
-      otherPerson = false
-    }
     let avatar
-    let image
-    if (otherPerson.length === 1 && otherPerson[0].img) {
-      image = otherPerson[0].img
-      avatar = <UserAvatar name={otherPerson.name} imgUrl={image} />
-    } else if (otherPerson.length === 1 && !otherPerson[0].img) {
-      avatar = <UserAvatar />
-    } else if (otherPerson.length > 1) {
-      image = <GroupIcon />
+    if (participants.length === 1) {
+      avatar = <UserAvatar
+        name={participants[0].name}
+        imgUrl={participants[0].img}
+      />
+    } else if (participants.length > 1) {
       avatar = <Avatar icon={<GroupIcon />} />
     }
 
     let date = moment(created).fromNow()
+
+    const unreadMessages = UnreadMessagesStore.unreadMessages(conversation.uri)
+    let unread
+
+    if (unreadMessages.length) {
+      unread = <Badge
+        badgeContent={unreadMessages.length}
+        secondary
+        style={styles.unread}
+        badgeStyle={styles.unreadBadge}
+      />
+    }
+
     return (
       <ListItem
+        style={styles.item}
         key={conversation.id}
         primaryText={
           <div>
-            <span>{collatedNames || 'Unnamed'}</span>
+            <span>{title}</span>
             <span style={styles.date}>{date}</span>
+            {unread}
           </div>
         }
         secondaryText={content}
@@ -223,6 +240,9 @@ let styles = {
     justifyContent: 'center',
     fontSize: '18px'
   },
+  item: {
+    position: 'relative'
+  },
   date: {
     color: grey500,
     fontSize: '12px',
@@ -232,6 +252,18 @@ let styles = {
     position: 'absolute',
     right: '16px',
     bottom: '16px'
+  },
+  unread: {
+    padding: 0,
+    position: 'absolute',
+    right: '16px',
+    bottom: '16px'
+  },
+  unreadBadge: {
+    width: '18px',
+    height: '18px',
+    fontSize: '11px',
+    position: 'static'
   }
 }
 

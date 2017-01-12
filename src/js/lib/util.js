@@ -1,4 +1,5 @@
 import url from 'url'
+import WebIdAgent from 'lib/agents/webid'
 import {proxy} from 'settings'
 
 // Misc utility functions
@@ -29,10 +30,8 @@ let Util = {
                      Math.pow((y1 - y2), 2))
   },
 
-  // for short randomStrings
   randomString(length) {
-    // Hope this is trully random, will need to do some extra research.
-    return Date.now().toString(36).substring(2, length + 3)
+    return Math.random().toString(36).substr(2, 5)
   },
 
   webidRoot(webid) {
@@ -65,34 +64,21 @@ let Util = {
   },
 
   /*
-   * @summary Given a uri to a file, tries to get the uri of the file's ACL
-   * @param {string} uri - the uri of the file
-   * @return {string} aclUri - returns the correct acl uri if it can, otherwise
-   *                           it defaults to uri + .acl
+   * @summary Returns the uri of the index file belonging to an user.
+   * @param {string} uri - WebID of the user.
+   *   if empty, no the current webid is used.
+   * @return {string} uri - Uri to the index file.
    */
-
-  getAclUri(uri) {
-    return fetch(Util.uriToProxied(uri), {
-      method: 'HEAD',
-      credentials: 'include'
-    }).then((ans) => {
-      if (!ans.ok) {
-        throw new Error('Error while accessing the file.')
-      }
-      let linkHeader = ans.headers.get('Link')
-      if (linkHeader) {
-        let aclHeader = linkHeader.split(',').find((part) => {
-          return part.indexOf('rel="acl"') > 0
-        })
-        if (aclHeader) {
-          aclHeader = aclHeader.split(';')[0].replace(/<|>/g, '')
-          // The Uri of the acl deduced succesfully
-          return uri.substring(0, uri.lastIndexOf('/') + 1) + aclHeader
-        }
-      } else {
-        return uri + '.acl'
-      }
-    })
+  // TODO introduce discovery mechanism / protocol.
+  // This is too hardcoded.
+  getIndexUri(uri) {
+    if (!uri) {
+      const wia = new WebIdAgent()
+      uri = wia.getWebId()
+    }
+    let indexUri = this.webidRoot(uri)
+    indexUri += '/little-sister/index'
+    return indexUri
   },
 
   /*

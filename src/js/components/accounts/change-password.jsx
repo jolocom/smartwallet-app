@@ -3,7 +3,7 @@ import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
-import {proxy} from 'settings'
+import AccountActions from 'actions/account'
 
 import SnackbarActions from 'actions/snackbar'
 
@@ -18,10 +18,6 @@ let ChangePassword = React.createClass({
     params: React.PropTypes.string.isRequired
   },
 
-  errorMessage: {
-    email: 'Please provide a valid email'
-  },
-
   enableSubmit() {
     this.setState({disabledSubmit: false})
   },
@@ -30,52 +26,23 @@ let ChangePassword = React.createClass({
     this.setState({disabledSubmit: true})
   },
 
-  _handlePasswordChange(e) {
-    this.setState({
-      newPassword: e.target.value.toLowerCase()
-    })
+  showValidationError() {
+    console.log(arguments)
+    SnackbarActions.showMessage('The two passwords do not match.')
   },
 
-  _handlePassword2Change(e) {
-    this.setState({
-      newPassword2: e.target.value.toLowerCase()
-    })
-  },
-
-  changePassword() {
-    if (this.state.newPassword !== this.state.newPassword2) {
-      SnackbarActions.showMessage('The two passwords do not match.')
-      return
-    }
-
-    let user = encodeURIComponent(this.props.params.username)
-    let token = encodeURIComponent(this.props.params.token)
-    let newpassword = this.state.newPassword
-
-    fetch(`${proxy}/resetpassword`, {
-      method: 'POST',
-      body: `username=${user}&code=${token}&password=${newpassword}`,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      }
-    }).then((res) => {
-      if (!res.ok) {
-        throw new Error(res.statusText)
-      }
-      SnackbarActions.showMessage('Your password has been reset.')
-      this.context.router.push('/login')
-    }).catch((e) => {
-      SnackbarActions.showMessage('An error occured : ' + e)
-      console.error(e)
-    })
+  changePassword({password}) {
+    const {username, token} = this.props.params
+    AccountActions.resetPassword(
+      username, token, password
+    )
   },
 
   getStyles() {
     let styles = {
       container: {
         textAlign: 'center',
-        background: '#f1f1f1',
+        background: '#f8f9fb',
         height: '100%',
         overflowY: 'auto'
       },
@@ -125,24 +92,27 @@ let ChangePassword = React.createClass({
           <Formsy.Form
             onValid={this.enableSubmit}
             onInvalid={this.disableSubmit}
+            onInvalidSubmit={this.showValidationError}
             onValidSubmit={this.changePassword}
           >
-            <h3 style={styles.username}>{this.props.params.username}</h3>
             <div style={{marginBottom: '20px'}}>
               <div style={{width: '400px'}}>
-                <div style={styles.title}>Change password</div>
+                <div style={styles.title}>
+                  Set new password for {this.props.params.username}
+                </div>
               </div>
               <FormsyText
                 name="password"
                 type="password"
                 floatingLabelText="New password"
-                onChange={this._handlePasswordChange}
+                // onChange={this._handlePasswordChange}
               />
               <FormsyText
-                name="password"
+                name="repeatPassword"
                 type="password"
                 floatingLabelText="Repeat password"
-                onChange={this._handlePassword2Change}
+                validations="equalsField:password"
+                // onChange={this._handlePasswordRepeatedChange}
               />
             </div>
             <RaisedButton
@@ -159,3 +129,4 @@ let ChangePassword = React.createClass({
 })
 
 export default Radium(ChangePassword)
+

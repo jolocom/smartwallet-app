@@ -6,80 +6,54 @@ import GraphD3 from 'lib/graph'
 import previewStore from 'stores/preview-store'
 import previewActions from 'actions/preview-actions'
 import graphActions from 'actions/graph-actions'
-import GraphStore from '../../stores/graph-store'
 import JolocomTheme from 'styles/jolocom-theme'
 
 let Graph = React.createClass({
+  propTypes: {
+    onSelect: React.PropTypes.func
+  },
 
-  mixins : [Reflux.listenTo(previewStore, 'onStateUpdate')],
+  mixins: [Reflux.listenTo(previewStore, 'onStateUpdate', 'initialState')],
 
   getGraphEl() {
     return ReactDOM.findDOMNode(this.refs.graph)
   },
 
-  onStateUpdate(data, signal) {
+  initialState(initialState) {
+    this.state = Object.assign({}, initialState)
+  },
 
+  onStateUpdate(data) {
     this.setState(data)
-    if (this.state.neighbours){
-      if (signal !== 'changeRotationIndex')
-        this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
-    }
+  },
 
-    if (this.state.newNode) {
-      previewActions.setState('newNode', null, true)
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.center.uri !== nextState.center.uri ||
+        this.state.neighbours.length !== nextState.neighbours.length) {
+      this.graph.render(nextState)
+      this.graph.updateHistory(nextState.navHistory)
     }
-
-    if(signal == 'redraw') {
-      this.graph.render(this.state)
-      this.graph.updateHistory(this.state.navHistory)
-    }
-
-    if (signal == 'navigateToNode') {
-      this.graph.setRotationIndex(this.state.rotationIndex)
-    }
+  },
+  componentDidUpdate() {
   },
 
   componentDidMount() {
-    this.notSync = true
-    this.listenTo(GraphStore, this.onSync)
-
-    // We get the state and erase the 'parent graph'
-    graphActions.getState('preview')
-    graphActions.eraseGraph()
-
-    // Make sure we refresh our state every time we mount the component, this
-    // then fires the drawing function from onStateUpdate
     this.graph = new GraphD3(this.getGraphEl(), 'preview')
-
-    this.graph.on('select', this._handleSelectNode)
     this.graph.on('center-changed', this._handleCenterChange)
-    this.graph.on('view-node', this._handleViewNode)
     this.graph.on('change-rotation-index', this._handleChangeRotationIndex)
+    this.graph.on('select', this._handleSelect)
+
+    this.graph.render(this.state)
+    this.graph.updateHistory(this.state.navHistory)
   },
 
-  onSync(state, signal){
-    if(signal=='preview' && this.notSync){
-      previewActions.setState('center', state.center)
-      previewActions.setState('loaded', true)
-      previewActions.setState('navHistory', state.navHistory)
-      previewActions.setState('neighbours', state.neighbours)
-      previewActions.setState('user', state.user, true)
-      previewActions.changeRotationIndex(state.rotationIndex, true)
-      this.graph.setRotationIndex(state.rotationIndex)
-      this.notSync = false
-    }
+  _handleSelect(data) {
+    // A onSelect function is not always passed to the component.
+    this.props.onSelect && this.props.onSelect(data)
   },
 
-  componentWillUnmount(){
-    graphActions.setState('center', this.state.center)
-    graphActions.setState('navHistory', this.state.navHistory)
-    graphActions.setState('neighbours', this.state.neighbours, true)
-    graphActions.changeRotationIndex(this.state.rotationIndex, true)
-    if (this.graph) {
-      this.graph.eraseGraph()
-      this.graph.removeAllListeners()
-    }
+  componentWillUnmount() {
+    graphActions.syncStateWithPreview(this.state)
   },
 
   getStyles() {
@@ -92,31 +66,21 @@ let Graph = React.createClass({
     return styles
   },
 
-  // We are using the buttons as placeholders, when the frontend is implemented, we will use the actuall buttons
   render() {
     let styles = this.getStyles()
 
     return (
-      <div style={styles.chart} ref="graph"></div>
+      <div style={styles.chart} ref="graph" />
     )
   },
 
-
-  _handleChangeRotationIndex(rotationIndex){
-    previewActions.changeRotationIndex(rotationIndex,true)
+  _handleChangeRotationIndex(rotationIndex) {
+    previewActions.changeRotationIndex(rotationIndex)
   },
 
-  // TODO NOT WORKING
-  _handleViewNode(node) {
-    previewActions.viewNode(node)
-  },
-
-  _handleCenterChange(node){
+  _handleCenterChange(node) {
     previewActions.navigateToNode(node)
-  },
-
-  _handleSelectNode(data) {
-    this.props.onSelect && this.props.onSelect(data)
   }
 })
+
 export default Radium(Graph)

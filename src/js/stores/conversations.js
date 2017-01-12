@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import _ from 'lodash'
 import ChatAgent from 'lib/agents/chat'
+import AccountsAgent from 'lib/agents/accounts'
 
 import ConversationsActions from 'actions/conversations'
 import AccountStore from 'stores/account'
@@ -76,6 +77,13 @@ export default Reflux.createStore({
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
     let chatAgent = new ChatAgent()
     return chatAgent.getInboxConversations(webId)
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          const accounts = new AccountsAgent()
+          accounts.createConversationsContainer(webId)
+        }
+        return []
+      })
       .then(function(conversations) {
         debug('Received URLs of conversations', conversations)
         let results = conversations.map((url) => {
@@ -96,6 +104,7 @@ export default Reflux.createStore({
         }).value()
       })
   },
+
   onNew(conversation) {
     debug('Adding new conversation to list of conversations',
       conversation, this.items, AccountStore.state.webId)
@@ -113,7 +122,10 @@ export default Reflux.createStore({
   },
 
   onLoad(webId, query) {
-    debug('onLoad with webId', webId)
+    this.trigger({
+      loading: true,
+      items: this.items
+    })
     this._getConversations(webId, query).then(load.completed).catch(load.failed)
   },
 
@@ -129,9 +141,11 @@ export default Reflux.createStore({
   },
 
   onLoadFailed() {
+    this.items = []
     this.trigger({
       hydrated: false,
-      loading: false
+      loading: false,
+      items: this.items
     })
   }
 

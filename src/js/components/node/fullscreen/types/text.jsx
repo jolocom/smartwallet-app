@@ -1,97 +1,55 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import graphActions from 'stores/graph-store'
-
 import Utils from 'lib/util'
-
-import NodeStore from 'stores/node'
 import GenericFullScreen from '../generic-fullscreen'
-
-import {
-  MenuItem,
-  FontIcon,
-  List, ListItem, Divider
-} from 'material-ui'
-
-import {Content} from 'components/layout'
-
-import PinnedActions from 'actions/pinned'
+import {FontIcon, List, ListItem, Divider} from 'material-ui'
 import PinnedStore from 'stores/pinned'
 
 let TextNode = React.createClass({
 
   mixins: [
-    Reflux.listenTo(PinnedStore, 'onUpdatePinned'),
-    Reflux.connect(NodeStore, 'node')
+    Reflux.listenTo(PinnedStore, 'onUpdatePinned')
   ],
-
-  propTypes: {
-    state: React.PropTypes.object, /* @TODO fix this */
-    node: React.PropTypes.object,
-    onClose: React.PropTypes.func
-  },
-
-  contextTypes: {
-    history: React.PropTypes.any,
-    profile: React.PropTypes.object,
-    muiTheme: React.PropTypes.object
-  },
 
   componentWillMount() {
     this.onUpdatePinned()
   },
 
-  onUpdatePinned() {
-    const node = this.getNode()
+  propTypes: {
+    node: React.PropTypes.object,
+    centerWritePerm: React.PropTypes.bool,
+    writePerm: React.PropTypes.bool,
+    graphState: React.PropTypes.object
+  },
 
-    if (node) {
+  onUpdatePinned() {
+    if (this.props) {
       this.setState({
-        pinned: PinnedStore.isPinned(node.uri)
+        pinned: PinnedStore.isPinned(this.props.node.uri)
       })
     }
   },
 
-  getStyles() {
-    let {muiTheme} = this.context
-
-    return {
-    }
-  },
-  
-  getNode() {
-    if (this.props.state) {
-      return this.props.state.activeNode // TODO temp fix
-    } else {
-      return this.props.node
-    }
-  },
-
   render() {
-    let styles = this.getStyles()
-    let {
-      title,
-      description,
-      email,
-      uri,
-      img
-    } = this.getNode()
-    
+    let {rank, title, description, email, uri, img, type} = this.props.node
+    let {centerWritePerm, writePerm} = this.props
     let backgroundImg = img ? `url(${Utils.uriToProxied(img)})` : 'none'
-    
-    let fabItems = ['bookmark',/* 'edit',*/ 'copyUrl']
-    
+    let fabItems = ['copyUrl'] /* 'edit' */
     let menuItems = []
-    if (this.getNode().isOwnedByUser)
-      menuItems.push('delete')
-    if (this.props.state.center.isOwnedByUser &&
-        this.getNode().rank &&
-        this.getNode().rank == 'neighbour')
+    if (this.props.writePerm) {
+      if (type !== 'passport') {
+        menuItems.push('delete')
+      }
+      menuItems.push('privacySettings')
+    }
+
+    if (this.props.centerWritePerm && type !== 'passport') {
       menuItems.push('disconnect')
-    else
-      menuItems.push('connect')
-        
-    
+    }
+
+    menuItems.push('copyUrl')
+
     return (
       <GenericFullScreen
         title={title}
@@ -99,35 +57,42 @@ let TextNode = React.createClass({
         copyToClipboardText={uri}
         backgroundImg={backgroundImg}
         fabItems={fabItems}
+        headerColor="#9a9fa8"
         menuItems={menuItems}
-        state={this.props.state}
-        node={this.props.node}
-         >
-          <List style={styles.list}>
-            {description && (
-              <div>
-                <ListItem
-                  leftIcon={
-                    <FontIcon className="material-icons">info</FontIcon>
-                  }
-                  primaryText={description}
-                />
-                <Divider inset />
-              </div>
-            )}
-            {email && (
+        type={type}
+        rank={rank}
+        graphState={this.props.graphState}
+        uri={uri}
+        writePerm={writePerm}
+        centerWritePerm={centerWritePerm}
+        name={title}
+      >
+        <List>
+          {description && (
+            <div>
               <ListItem
                 leftIcon={
-                  <FontIcon className="material-icons">email</FontIcon>}
-                primaryText={email}
-                secondaryText="Personal"
+                  <FontIcon color={'#9ba0aa'}
+                    className="material-icons">info</FontIcon>
+                }
+                primaryText={description}
               />
-            )}
-          </List>
+              <Divider inset />
+            </div>
+          )}
+          {email && (
+            <ListItem
+              leftIcon={
+                <FontIcon color={'#9ba0aa'}
+                  className="material-icons">email</FontIcon>}
+              primaryText={email}
+              secondaryText="Personal"
+            />
+          )}
+        </List>
       </GenericFullScreen>
     )
-  },
-
+  }
 })
 
 export default Radium(TextNode)
