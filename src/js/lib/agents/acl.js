@@ -106,17 +106,31 @@ class AclAgent extends HTTPAgent {
     let newPolicy = true
     let tempFound = false
     const pred = this.predMap[mode]
-
+    let tempPolicy
     this.toRemove = this.toRemove.filter(e => {
       const exists = e.user === user && e.object === pred
       if (exists) {
-        this.model.push({source: e.subject, user, mode: [e.predicate]})
+        tempPolicy = e
         tempFound = true
       }
       return !exists
     })
 
     if (tempFound) {
+      if (tempPolicy.zombie) {
+        this.model.push({
+          user,
+          source: tempPolicy.subject,
+          mode: [tempPolicy.object]
+        })
+      } else {
+        this.model.forEach(entry => {
+          if (entry.user === tempPolicy.user &&
+              entry.source === tempPolicy.subject) {
+            entry.mode.push(tempPolicy.object)
+          }
+        })
+      }
       return
     }
     this.model.forEach(entry => {
