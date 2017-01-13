@@ -35,6 +35,10 @@ let NodeList = React.createClass({
     })
   },
 
+  viewNode(uri) {
+    this.context.router.push(`/graph/${encodeURIComponent(uri)}/view`)
+  },
+
   getStyles() {
     let styles = {
       container: {
@@ -113,6 +117,9 @@ let NodeList = React.createClass({
             <div style={styles.listItems}>
               {this.state.nodeList.map((node) => (
                 <ListItem
+                  onClick={() => {
+                    this.viewNode(node.uri)
+                  }}
                   primaryText={node.uri}
                   secondaryText={
                     node.perm

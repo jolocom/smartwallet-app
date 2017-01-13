@@ -43,9 +43,10 @@ let SharedNodes = React.createClass({
     this.context.router.goBack()
   },
 
-  _handleListNodes(nodeType) {
+  _handleListNodes(nodeType, event) {
     this.setState({selectedType: nodeType})
     this.setState({listNodes: true})
+    event.preventDefault()
   },
 
   _handleCloseListNodes() {
