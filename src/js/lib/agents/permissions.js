@@ -42,7 +42,7 @@ export default class PermissionAgent {
       return Promise.all(filtered.map((t) => {
         return this.resolveNodeType(t.object.uri).then((ans) => {
           sharedNodes[ans].push({
-            node: t.object.uri,
+            uri: t.object.uri,
             perm: t.predicate.uri
           })
         })

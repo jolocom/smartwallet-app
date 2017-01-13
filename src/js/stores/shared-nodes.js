@@ -6,9 +6,7 @@ export default Reflux.createStore({
   listenables: ViewShared,
 
   init() {
-    this.state = {
-      shared: {}
-    }
+    this.state = {}
   },
 
   getInitialState() {

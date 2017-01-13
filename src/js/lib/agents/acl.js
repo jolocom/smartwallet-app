@@ -341,6 +341,7 @@ class AclAgent extends HTTPAgent {
       })
     })
   }
+
   _cleanUp() {
     this.toAdd = []
     this.toRemove = []

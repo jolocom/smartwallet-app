@@ -14,34 +14,19 @@ let NodeList = React.createClass({
     router: React.PropTypes.object
   },
 
+  propTypes: {
+    handleClose: React.PropTypes.func,
+    nodes: React.PropTypes.array
+  },
+
   getInitialState() {
     return {
-      isSelectable: false,
-      tempFileData: [
-        {
-          fileName: 'File1',
-          privacySetting: 'Private',
-          dateShared: 'Jan 14, 2014',
-          thumbnail: 'B'
-        },
-        {
-          fileName: 'File2',
-          privacySetting: 'Custom',
-          dateShared: 'Jan 11, 2011',
-          thumbnail: 'B'
-        },
-        {
-          fileName: 'File3',
-          privacySetting: 'Private',
-          dateShared: 'Jan 19, 2016',
-          thumbnail: 'B'
-        }
-      ]
+      nodeList: this.props.nodes
     }
   },
 
   goBack() {
-    this.context.router.push('/shared-nodes')
+    this.props.handleClose()
   },
 
   _handleSelectable() {
@@ -126,13 +111,14 @@ let NodeList = React.createClass({
               A
             </Avatar>
             <div style={styles.listItems}>
-              {this.state.tempFileData.map((file) => (
+              {this.state.nodeList.map((node) => (
                 <ListItem
-                  primaryText={file.fileName}
+                  primaryText={node.uri}
                   secondaryText={
-                    `${file.privacySetting} | Shared ${file.dateShared}`
+                    node.perm
+                    //`${node.privacySetting} | Shared ${node.dateShared}`
                   }
-                  leftAvatar={<Avatar>{file.thumbnail}</Avatar>}
+                  leftAvatar={<Avatar>{node.thumbnail}</Avatar>}
                   rightAvatar={
                     this.state.isSelectable
                     ? <Avatar backgroundColor={transparent}>

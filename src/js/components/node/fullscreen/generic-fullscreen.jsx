@@ -148,7 +148,6 @@ let GenericFullScreen = React.createClass({
   },
 
   _handleDisconnect() {
-    console.log(Object.assign({}, this.props))
     if (this.props.rank === 'center') {
       this._handleClose()
     } else {
