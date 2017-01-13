@@ -102,50 +102,28 @@ let SharedNodes = React.createClass({
   },
 
   render() {
-    const {typeDocument} = this.state.shared
-    const {typeImage} = this.state.shared
-    const {typePerson} = this.state.shared
-    const {typeNotDetected} = this.state.shared
     const tilesData = []
     const inactiveColor = '#beceea'
+    const activeColor = '#829abe'
 
-    // TODO Loop
-    tilesData.push({
-      icon: <SharedNodeType
-        type="person"
-        color={typePerson.length ? "#829abe" : inactiveColor}
-      />,
-      nodeType: 'typePerson',
-      numItems: typePerson.length
-    })
+    const map = {
+      typeImage: 'image',
+      typeDocument: 'document',
+      typePerson: 'person',
+      typeNotDetected: 'document'
+    }
 
-    tilesData.push({
-      icon: <SharedNodeType
-        type="image"
-        color={typeImage.length ? "#829abe" : inactiveColor}
-      />,
-      nodeType: 'typeImage',
-      numItems: typeImage.length
-    })
-
-    tilesData.push({
-      icon: <SharedNodeType
-        type="document"
-        color={typeDocument.length ? "#829abe" : inactiveColor}
-      />,
-      nodeType: 'typeDocument',
-      numItems: typeDocument.length
-    })
-
-    // @TODO Custom icon.
-    tilesData.push({
-      icon: <SharedNodeType
-        type="document"
-        color={typeNotDetected.length ? "#829abe" : inactiveColor}
-      />,
-      nodeType: 'Not Detected',
-      numItems: typeNotDetected.length
-    })
+    for (const type of Object.keys(this.state.shared)) {
+      const len = this.state.shared[type].length
+      tilesData.push({
+        icon: <SharedNodeType
+          type={map[type]}
+          color={len ? activeColor : inactiveColor}
+        />,
+        nodeType: type,
+        numItems: len
+      })
+    }
 
     let styles = this.getStyles()
     return (
