@@ -259,78 +259,77 @@ let PrivacySettings = React.createClass({
             {this.state.privacyMode === 'private'
             ? <div>
               <List>
-              <ListItem
-                key={1}
-                disabled
-                secondaryText="Add person"
-                leftIcon={<PersonIcon />}
-                rightIcon={
-                  <FloatingActionButton
-                    mini
-                    secondary
-                    style={styles.addBtn}
-                    onTouchTap={this._handleShowAddContact}>
-                    <PersonAddIcon />
-                  </FloatingActionButton>
-                }>
-                CONTACTS
-                <Divider style={styles.divider} />
-              </ListItem>
-            </List>
-
-            <List>
-              {this.state.allowedContacts.map(contact => {
-                return (
-                  <ListItem
-                    key={contact.webId}
-                    leftAvatar={
-                      <Avatar src={Util.uriToProxied(contact.imgUri)}/>
-                    }
-                    rightToggle={
-                      <EditIcon style={styles.editIconToggle}
-                        color={contact.edit ? "#4b132b" : '#d2d2d2'}
-                        onTouchTap={() => this._handleToggleEdit(contact)}
-                      />
-                    }
-                    rightIcon={
-                      <ActionDelete
-                        color="#4b132b"
-                        onTouchTap={() => this._handleRemovePerson(contact)}
-                      />
-                    }>
-                    {contact.name ? contact.name : contact.webId}
-                  </ListItem>
-                )
-              })
-            }
-            </List>
-            <FlatButton
-              label="VIEW ALL"
-              secondary
-              style={styles.viewAllBtn}
-              onTouchTap={this.viewAllContacts} />
-            <List>
-              <ListItem
-                key={1}
-                disabled
-                secondaryText="Add groups"
-                leftIcon={
-                  <GroupIcon />
-                }
-                rightIcon={
-                  <FloatingActionButton
-                    mini
-                    secondary
-                    style={styles.addBtn}>
-                    <GroupAddIcon />
-                  </FloatingActionButton>
-                }>
-                GROUPS
-                <Divider style={styles.divider} />
-              </ListItem>
-            </List>
+                <ListItem
+                  key={1}
+                  disabled
+                  secondaryText="Add person"
+                  leftIcon={<PersonIcon />}
+                  rightIcon={
+                    <FloatingActionButton
+                      mini
+                      secondary
+                      style={styles.addBtn}
+                      onTouchTap={this._handleShowAddContact}>
+                      <PersonAddIcon />
+                    </FloatingActionButton>
+                  }>
+                  CONTACTS
+                  <Divider style={styles.divider} />
+                </ListItem>
+              </List>
+              <List>
+                {this.state.allowedContacts.map(contact => {
+                  return (
+                    <ListItem
+                      key={contact.webId}
+                      leftAvatar={
+                        <Avatar src={Util.uriToProxied(contact.imgUri)}/>
+                      }
+                      rightToggle={
+                        <EditIcon style={styles.editIconToggle}
+                          color={contact.edit ? '#4b132b' : '#d2d2d2'}
+                          onTouchTap={() => this._handleToggleEdit(contact)}
+                        />
+                      }
+                      rightIcon={
+                        <ActionDelete
+                          color="#4b132b"
+                          onTouchTap={() => this._handleRemovePerson(contact)}
+                        />
+                      }>
+                      {contact.name ? contact.name : contact.webId}
+                    </ListItem>
+                  )
+                })
+              }
+              </List>
+              <FlatButton
+                label="VIEW ALL"
+                secondary
+                style={styles.viewAllBtn}
+                onTouchTap={this.viewAllContacts} />
+              <List>
+                <ListItem
+                  key={1}
+                  disabled
+                  secondaryText="Add groups"
+                  leftIcon={
+                    <GroupIcon />
+                  }
+                  rightIcon={
+                    <FloatingActionButton
+                      mini
+                      secondary
+                      style={styles.addBtn}>
+                      <GroupAddIcon />
+                    </FloatingActionButton>
+                  }>
+                  GROUPS
+                  <Divider style={styles.divider} />
+                </ListItem>
+              </List>
             </div>
-            : null }
+            : null}
           </div>
         </div>}
       </div>

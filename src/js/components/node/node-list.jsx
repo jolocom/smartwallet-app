@@ -123,7 +123,7 @@ let NodeList = React.createClass({
                   primaryText={node.uri}
                   secondaryText={
                     node.perm
-                    //`${node.privacySetting} | Shared ${node.dateShared}`
+                    // `${node.privacySetting} | Shared ${node.dateShared}`
                   }
                   leftAvatar={<Avatar>{node.thumbnail}</Avatar>}
                   rightAvatar={
