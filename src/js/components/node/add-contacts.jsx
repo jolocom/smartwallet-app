@@ -25,8 +25,7 @@ import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
 let AddContact = React.createClass({
   mixins: [Reflux.listenTo(ContactsStore, 'onStoreUpdate')],
 
-  propTypes: {
-    params: React.PropTypes.object,
+  propTypes: { params: React.PropTypes.object,
     center: React.PropTypes.object,
     neighbours: React.PropTypes.array,
     checked: React.PropTypes.bool,
@@ -186,25 +185,10 @@ let AddContact = React.createClass({
                   <div style={styles.listItems}>
                     {this.state.contacts.map((contact, i) => {
                       return (
-                        <ListItem
-                          key={contact.webId}
-                          leftAvatar={
-                            <Avatar src={Util.uriToProxied(contact.imgUri)} />
-                          }
-                          rightToggle={
-                            <Checkbox
-                              checkedIcon={<CheckedIcon />}
-                              uncheckedIcon={<UncheckedIcon />}
-                              checked={contact.selected}
-                              onCheck={() => {
-                                this._handleCheck(contact)
-                              }}
-                              style={styles.checkbox}
-                            />
-                          }>
-                          {contact.name}
-                        </ListItem>
-                      )
+                        <WrappedListItem
+                          contact={contact}
+                          onCheck={this._handleCheck}
+                        />)
                     })}
                   </div>
                 </List>
@@ -234,4 +218,35 @@ let AddContact = React.createClass({
   }
 })
 
+let WrappedListItem = React.createClass({
+  propTypes: {
+    onCheck: React.PropTypes.func,
+    contact: React.PropTypes.object
+  },
+
+  _handleCheck() {
+    this.props.onCheck(this.props.contact)
+  },
+
+  render() {
+    const {contact} = this.props
+    return (
+      <ListItem
+        key={contact.webId}
+        leftAvatar={
+          <Avatar src={Util.uriToProxied(contact.imgUri)} />
+        }
+        rightToggle={
+          <Checkbox
+            checkedIcon={<CheckedIcon />}
+            uncheckedIcon={<UncheckedIcon />}
+            checked={contact.selected}
+            onCheck={this._handleCheck}
+          />
+        }>
+        {contact.name}
+      </ListItem>
+    )
+  }
+})
 export default Radium(AddContact)
