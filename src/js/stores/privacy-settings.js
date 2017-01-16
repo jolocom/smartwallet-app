@@ -10,8 +10,6 @@ export default Reflux.createStore({
   listenables: PrivacyActions,
 
   init() {
-    const wia = new WebidAgent()
-    this.webId = wia.getWebId()
     this.state = {
       privacyMode: 'private',
       allowedContacts: [],
@@ -31,8 +29,15 @@ export default Reflux.createStore({
       } else {
         this.aclAgent.removeAllow('*', 'read')
       }
-      this.state.unsavedChanges = true
       this.state.privacyMode = mode
+      this.trigger(this.state)
+      this._markUnsavedChanges()
+    }
+  },
+
+  _markUnsavedChanges() {
+    if (!this.state.unsavedChanges) {
+      this.state.unsavedChanges = true
       this.trigger(this.state)
     }
   },
@@ -45,8 +50,7 @@ export default Reflux.createStore({
     this.state.allowedContacts = this.state.allowedContacts.filter(el =>
       contact.webId !== el.webId
     )
-    this.state.unsavedChanges = true
-    this.trigger(this.state)
+    this._markUnsavedChanges()
   },
 
   fetchInitialData(file) {
@@ -54,8 +58,10 @@ export default Reflux.createStore({
     this.init()
     this.aclAgent = new AclAgent(file)
     this.aclAgent.initialize().then(() => {
+      const wia = new WebidAgent()
+      const webId = wia.getWebId()
       this.aclAgent.allAllowedUsers('read').forEach(user => {
-        if (user === '*' || user === this.webId) {
+        if (user === '*' || user === webId) {
           return
         }
 
@@ -98,20 +104,17 @@ export default Reflux.createStore({
       imgUri: contact.imgUri,
       name: contact.name
     })
-    this.state.unsavedChanges = true
-    this.trigger(this.state)
+    this._markUnsavedChanges()
   },
 
   allowEdit(user) {
     this.aclAgent.allow(user, 'write')
-    this.state.unsavedChanges = true
-    this.trigger(this.state)
+    this._markUnsavedChanges()
   },
 
   disallowEdit(user) {
     this.aclAgent.removeAllow(user, 'write')
-    this.state.unsavedChanges = true
-    this.trigger(this.state)
+    this._markUnsavedChanges()
   },
 
   commit() {
@@ -120,7 +123,6 @@ export default Reflux.createStore({
     }).catch(() => {
       Snackbar.showMessage('Could not apply changes.')
     })
-    this.state.unsavedChanges = false
-    this.trigger(this.state)
+    this._markUnsavedChanges()
   }
 })
