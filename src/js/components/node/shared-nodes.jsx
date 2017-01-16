@@ -44,8 +44,10 @@ let SharedNodes = React.createClass({
   },
 
   _handleListNodes(nodeType, event) {
-    this.setState({selectedType: nodeType})
-    this.setState({listNodes: true})
+    this.setState({
+      selectedType: nodeType,
+      listNodes: true
+    })
     event.preventDefault()
   },
 
