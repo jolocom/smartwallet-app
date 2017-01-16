@@ -351,7 +351,10 @@ let WrappedListItem = React.createClass({
     return (
       <ListItem
         key={contact.webId}
-        leftAvatar={<Avatar src={Util.uriToProxied(contact.imgUri)} />}
+        leftAvatar={contact.imgUri
+          ? <Avatar src={Util.uriToProxied(contact.imgUri)} />
+          : <Avatar icon={<PersonIcon />} />
+        }
         rightToggle={
           <EditIcon style={styles.editIconToggle}
             color={contact.edit ? '#4b132b' : '#d2d2d2'}

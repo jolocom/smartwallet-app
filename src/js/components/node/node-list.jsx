@@ -4,6 +4,7 @@ import {IconButton, List, ListItem} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import Avatar from 'material-ui/Avatar'
 import {pinkA200, transparent} from 'material-ui/styles/colors'
+import AttachmentIcon from 'material-ui/svg-icons/file/attachment.js'
 
 let NodeList = React.createClass({
 
@@ -145,7 +146,7 @@ const WrappedListItem = React.createClass({
           node.perm
           // `${node.privacySetting} | Shared ${node.dateShared}`
         }
-        leftAvatar={<Avatar>{node.thumbnail}</Avatar>}
+        leftAvatar={<Avatar icon={<AttachmentIcon />} />}
       />
     )
   }

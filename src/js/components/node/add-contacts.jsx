@@ -21,6 +21,7 @@ import ContactsStore from 'stores/contacts'
 import ContactsActions from 'actions/contacts'
 import UncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
+import PersonIcon from 'material-ui/svg-icons/social/person'
 
 let AddContact = React.createClass({
   mixins: [Reflux.listenTo(ContactsStore, 'onStoreUpdate')],
@@ -163,10 +164,17 @@ let AddContact = React.createClass({
                     {this.state.contacts.map(contact => {
                       if (contact.selected) {
                         return (
-                          <Avatar
-                            style={styles.selectedAvatar}
-                            src={Util.uriToProxied(contact.imgUri)}
-                          />
+                          <div>
+                            {contact.imgUri
+                            ? <Avatar
+                              style={styles.selectedAvatar}
+                              src={Util.uriToProxied(contact.imgUri)}
+                              />
+                            : <Avatar
+                              style={styles.selectedAvatar}
+                              icon={<PersonIcon />} />
+                          }
+                          </div>
                         )
                       }
                     })
@@ -234,7 +242,9 @@ let WrappedListItem = React.createClass({
       <ListItem
         key={contact.webId}
         leftAvatar={
-          <Avatar src={Util.uriToProxied(contact.imgUri)} />
+          contact.imgUri
+            ? <Avatar src={Util.uriToProxied(contact.imgUri)} />
+            : <Avatar icon={<PersonIcon />} />
         }
         rightToggle={
           <Checkbox
