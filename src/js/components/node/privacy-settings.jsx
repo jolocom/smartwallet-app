@@ -81,10 +81,6 @@ let PrivacySettings = React.createClass({
     this.setState(storeState)
   },
 
-  _changePrivacyMode(mode) {
-    PrivacyActions.changePrivacyMode(mode)
-  },
-
   _handleSubmit() {
     PrivacyActions.commit()
   },
@@ -196,6 +192,14 @@ let PrivacySettings = React.createClass({
     )
   },
 
+  _handleSetPrivate() {
+    PrivacyActions.changePrivacyMode('private')
+  },
+
+  _handleSetPublic() {
+    PrivacyActions.changePrivacyMode('public')
+  },
+
   _handleShowAddContact() {
     this.setState({addScreen: true})
   },
@@ -245,9 +249,8 @@ let PrivacySettings = React.createClass({
                     ? {...styles.toggleBtnLeft, ...styles.toggleBtnActive}
                     : {...styles.toggleBtnLeft}
                   }
-                onTouchTap={() => {
-                  this._changePrivacyMode('private')
-                }}>
+                onTouchTap={this._handleSetPrivate}
+              >
                 Private
               </FlatButton>
               <FlatButton
@@ -256,9 +259,8 @@ let PrivacySettings = React.createClass({
                     ? {...styles.toggleBtnRight, ...styles.toggleBtnActive}
                     : {...styles.toggleBtnRight}
                 }
-                onTouchTap={() => {
-                  this._changePrivacyMode('public')
-                }}>
+                onTouchTap={this._handleSetPublic}
+              >
                 Public
               </FlatButton>
               <div style={styles.selectPrompt}>
