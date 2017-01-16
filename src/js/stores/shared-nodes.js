@@ -6,10 +6,7 @@ export default Reflux.createStore({
   listenables: ViewShared,
 
   init() {
-    this.pAgent = new PermissionAgent()
-    this.state = {
-      shared: {}
-    }
+    this.state = {}
   },
 
   getInitialState() {
@@ -17,6 +14,7 @@ export default Reflux.createStore({
   },
 
   onGetOverview(uri) {
+    this.pAgent = new PermissionAgent(uri)
     this.pAgent.getSharedNodes(uri).then(res => {
       this.trigger({shared: res})
     })

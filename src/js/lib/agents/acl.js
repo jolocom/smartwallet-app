@@ -1,52 +1,38 @@
-import rdf from 'rdflib'
 import GraphAgent from 'lib/agents/graph.js'
-import _ from 'lodash'
-import Util from 'lib/util'
 import WebidAgent from 'lib/agents/webid'
+import HTTPAgent from 'lib/agents/http'
+import LDPAgent from 'lib/agents/ldp'
 import {PRED} from 'lib/namespaces'
 import {Writer} from '../rdf.js'
+import Util from 'lib/util'
+import rdf from 'rdflib'
+import _ from 'lodash'
 
-class AclAgent {
-  // TODO Check here if the user can modify the acl and throw error if not.
-  // TODO Add support for multiple policies regarding a user per file.
+class AclAgent extends HTTPAgent {
+
   constructor(uri) {
-    this.aclUri = `${this.uri}.acl`
-    this.uri = uri
-    this.g = rdf.graph()
+    super()
+    this.model = []
     this.gAgent = new GraphAgent()
-    this.Writer = new Writer()
-    this.wia = new WebidAgent()
-    this.indexChanges = {
-      toInsert: [],
-      toDelete: []
-    }
 
-    this.indexPredMap = {
-      read: PRED.readPermission,
-      write: PRED.writePermission,
-      control: PRED.owns
-    }
+    this.aclUri
+    this.uri = uri
 
     this.predMap = {
-      write: PRED.write,
-      read: PRED.read,
-      control: PRED.control
-    }
-  }
-
-  // Checks if an object is contained in an array by comparing it's props.
-  containsObj(arr, obj) {
-    if (arr.length === 0) {
-      return -1
+      write: PRED.write.uri,
+      read: PRED.read.uri,
+      control: PRED.control.uri
     }
 
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].subject.uri === obj.subject.uri &&
-          arr[i].predicate.uri === obj.predicate.uri &&
-          arr[i].object.uri === obj.object.uri
-      ) return i
-    }
-    return -1
+    this.revPredMap = {}
+    this.revPredMap[PRED.write.uri] = 'write'
+    this.revPredMap[PRED.read.uri] = 'read'
+    this.revPredMap[PRED.control.uri] = 'control'
+
+    this.toAdd = []
+    this.toRemove = []
+    this.authCreationQuery = []
+    this.zombiePolicies = []
   }
 
   /**
@@ -56,39 +42,55 @@ class AclAgent {
    * @return undefined, we want the side effect.
    */
 
-  fetchInfo() {
-    return this.wia.getAclUri(this.uri).then((aclUri) => {
+  _fetchInfo() {
+    const wia = new WebidAgent()
+
+    return wia.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
-      return this.gAgent.fetchTriplesAtUri(this.aclUri).then((result) => {
-        let {triples} = result
-        for (let triple in triples) {
-          let {subject, predicate, object} = triples[triple]
-          this.Writer.addTriple(subject, predicate, object)
-        }
-        if (this.Writer.find(undefined, PRED.type, PRED.auth).length === 0) {
-          throw new Error('Link is not an ACL file')
-        }
+      let results = []
+      return this.gAgent.fetchTriplesAtUri(this.aclUri).then(result => {
+        const {triples} = result
+        triples.forEach(t => {
+          results.push(t)
+        })
+        return results
       })
     })
   }
-  /**
-   * @summary Initiates a empty ACL file we can later populate,
-   *          alternative to fetchInfo()
-   * @returns undefined, we wat the side effect.
-   */
-  initiateNew() {
-    return this.wia.getAclUri(this.uri).then((aclUri) => {
-      this.aclUri = aclUri
-    })
-  }
 
-  /**
-   * @summary Removes all triples in the writer.
-   * Usefull when we want to reset / wipe the triples in the agent
-   */
-  resetAcl() {
-    this.Writer = new Writer()
+  initialize() {
+    return this._fetchInfo().then((trips) => {
+      const writer = new Writer()
+
+      trips.forEach(t => {
+        writer.addTriple(t.subject, t.predicate, t.object)
+      })
+
+      // Read all / Write all, basically public permission.
+      writer.find(undefined, PRED.agentClass, PRED.Agent).forEach(pol => {
+        this.model.push({
+          user: '*',
+          source: pol.subject.uri,
+          mode: []
+        })
+      })
+
+      writer.find(undefined, PRED.agent, undefined).forEach(pol => {
+        this.model.push({
+          user: pol.object.uri,
+          source: pol.subject.uri,
+          mode: []
+        })
+      })
+
+      this.model.forEach(entry => {
+        writer.find(rdf.sym(entry.source), PRED.mode, undefined)
+        .forEach(pol => {
+          entry.mode.push(pol.object.mode || pol.object.uri)
+        })
+      })
+    })
   }
 
   /**
@@ -100,46 +102,70 @@ class AclAgent {
    */
 
   allow(user, mode) {
-    let wildcard = user === '*'
-    let identifier = wildcard ? PRED.agentClass : PRED.agent
-
-    user = wildcard ? PRED.Agent : user
-
-    if (!this.predMap[mode]) {
-      throw new Error('Invalid mode supplied!')
-    }
-
-    if (typeof user === 'string') {
-      user = rdf.sym(user)
-    }
-
-    let payload = {
-      subject: user,
-      predicate: this.indexPredMap[mode],
-      object: rdf.sym(this.uri)
-    }
-
-    this.indexAdd(payload)
-    // If user already has the permission.
-    if (_.includes(this.allowedPermissions(user, true), mode)) {
-      return
-    } else {
-      mode = this.predMap[mode]
-      let alt = this.Writer.find(undefined, identifier, user)
-      if (alt.length > 0) {
-        // A policy regarding the user already exists, we will
-        // add the rule in there.
-        let policyName = alt[0].subject
-        this.Writer.addTriple(policyName, PRED.mode, mode)
-      } else {
-        // A policy has to be constructed
-        let policyName = rdf.sym(`${this.aclUri}#${Util.randomString(5)}`)
-        this.Writer.addTriple(policyName, PRED.type, PRED.auth)
-        this.Writer.addTriple(policyName, PRED.access, rdf.sym(this.uri))
-        this.Writer.addTriple(policyName, PRED.mode, mode)
-        this.Writer.addTriple(policyName, identifier, user)
+    let policyName
+    let newPolicy = true
+    let tempFound = false
+    const pred = this.predMap[mode]
+    let tempPolicy
+    this.toRemove = this.toRemove.filter(e => {
+      const exists = e.user === user && e.object === pred
+      if (exists) {
+        tempPolicy = e
+        tempFound = true
       }
+      return !exists
+    })
+
+    if (tempFound) {
+      if (tempPolicy.zombie) {
+        this.model.push({
+          user,
+          source: tempPolicy.subject,
+          mode: [tempPolicy.object]
+        })
+      } else {
+        this.model.forEach(entry => {
+          if (entry.user === tempPolicy.user &&
+              entry.source === tempPolicy.subject) {
+            entry.mode.push(tempPolicy.object)
+          }
+        })
+      }
+      return
     }
+    this.model.forEach(entry => {
+      if (entry.user === user) {
+        if (entry.mode.indexOf(pred) !== -1) {
+          throw new Error('Policy already present')
+        }
+        // We can inject only if this is the only user in the policy.
+        if (this.getAuthAgents(entry.source).length === 1) {
+          newPolicy = false
+          policyName = entry.source
+          entry.mode.push(pred)
+        } else {
+          this.splitAuth(entry.user, entry.source, entry.mode.concat(pred))
+          throw new Error('Splitting first')
+        }
+      }
+    })
+
+    if (newPolicy) {
+      policyName = `${this.aclUri}#${Util.randomString(5)}`
+      this.model.push({
+        user,
+        source: policyName,
+        mode: [pred]
+      })
+    }
+
+    this.toAdd.push({
+      user,
+      subject: policyName,
+      predicate: PRED.mode,
+      object: pred,
+      newPolicy
+    })
   }
 
   /**
@@ -149,94 +175,51 @@ class AclAgent {
    * @param {string} mode - permission to do what? [read, write, control]
    * @return undefined, we want the side effect
    */
+
   removeAllow(user, mode) {
-    let wildcard = user === '*'
-    let identifier = wildcard ? PRED.agentClass : PRED.agent
+    let policyName
+    let zombie = false
+    let tempFound = false
+    const predicate = this.predMap[mode]
 
-    user = wildcard ? PRED.Agent : user
+    this.toAdd = this.toAdd.filter(e => {
+      const exists = e.user === user && e.object === predicate
+      if (exists) {
+        tempFound = true
+      }
+      return !exists
+    })
 
-    if (!this.predMap[mode]) {
-      throw new Error('Invalid mode supplied!')
-    }
-
-    if (typeof user === 'string') {
-      user = rdf.sym(user)
-    }
-
-    let payload = {
-      subject: user,
-      predicate: this.indexPredMap[mode],
-      object: rdf.sym(this.uri)
-    }
-
-    // Update the index file accordingly.
-    this.indexRemove(payload)
-
-    // Check if the triple is present.
-    if (!_.includes(this.allowedPermissions(user, true), mode)) {
-      return
-    }
-
-    // Finding the correct triple.
-    mode = this.predMap[mode]
-
-    // Get the existing policies
-    let policies = []
-    let existing = this.Writer.find(undefined, identifier, user)
-    if (existing.length > 0) {
-      existing.forEach((el) => {
-        policies.push(el.subject)
-      })
-
-      policies.forEach((policy) => {
-        let trip = this.Writer.find(policy, PRED.mode, mode)
-        if (trip.length > 0) {
-          let {subject, predicate, object} = trip[0]
-          this.Writer.g.remove({subject, predicate, object})
-
-          // Here we check if the policy itself should be deleted next.
-          let zomb = this.Writer.find(policy, PRED.mode, undefined)
-          if (zomb.length > 0) {
-            // If not, then we return.
-            return
-          } else {
-            // Otherwise we delete the policy triples as well.
-            let zombies = this.Writer.find(policy).slice()
-            this.Writer.g.remove(zombies)
+    this.model = this.model.filter(entry => {
+      const found = entry.user === user && entry.mode.indexOf(predicate) !== -1
+      if (found) {
+        policyName = entry.source
+        if (this.getAuthAgents(entry.source).length === 1) {
+          if (entry.mode.length === 1) {
+            zombie = true
           }
+          entry.mode = entry.mode.filter(el => el !== predicate)
+        } else {
+          this.splitAuth(entry.user, entry.source, entry.mode.filter(m =>
+            m !== predicate)
+          )
+          throw new Error('Splitting first')
         }
-      })
-    }
-  }
+      }
+      return !found || entry.mode.length !== 0
+    })
 
-  indexRemove(payload) {
-    // If we said we want to add it, and now say we want to delete it,
-    // the adding rule get's popped out.
-    let i = this.containsObj(this.indexChanges.toInsert, payload)
-    if (i !== -1) {
-      this.indexChanges.toInsert.splice(i, 1)
+    if (tempFound) {
       return
     }
 
-    // Making sure we don't add it twice
-    if (this.containsObj(this.indexChanges.toDelete, payload) === -1) {
-      this.indexChanges.toDelete.push(payload)
-    }
-  }
-
-  indexAdd(payload) {
-    // If we said we want to delete it, and now say we want to add it,
-    // the deletion rule get's popped out.
-    let i = this.containsObj(this.indexChanges.toDelete, payload)
-    if (i !== -1) {
-      this.indexChanges.toDelete.splice(i, 1)
-      return
-    }
-
-    // Making sure we don't add it twice
-    if (this.containsObj(this.indexChanges.toInsert, payload) === -1) {
-      this.indexChanges.toInsert.push(payload)
-    }
+    this.toRemove.push({
+      user: user,
+      subject: policyName,
+      predicate: PRED.mode,
+      object: predicate,
+      zombie
+    })
   }
 
   /**
@@ -247,11 +230,7 @@ class AclAgent {
     if (!this.predMap[mode]) {
       return false
     }
-    if (_.includes(this.allowedPermissions(user), mode)) {
-      return true
-    } else {
-      return false
-    }
+    return _.includes(this.allowedPermissions(user), mode)
   }
 
   /**
@@ -264,14 +243,10 @@ class AclAgent {
 
     let pred = this.predMap[mode]
     let users = []
-
-    // FIRST FIND ALL POLICIES CONTAINING READ
-    this.Writer.find(undefined, PRED.type, PRED.auth).forEach(trip => {
-      this.Writer.find(trip.subject, PRED.mode, pred).forEach(pol => {
-        this.Writer.find(pol.subject, PRED.agent, undefined).map(user => {
-          users.push(user.object)
-        })
-      })
+    this.model.forEach(entry => {
+      if (entry.mode.indexOf(pred) !== -1) {
+        users.push(entry.user)
+      }
     })
     return users
   }
@@ -286,37 +261,23 @@ class AclAgent {
    */
   allowedPermissions(user, strict = false) {
     let wildcard = user === '*'
-    user = wildcard ? PRED.Agent : user
-    let identifier = wildcard ? PRED.agentClass : PRED.agent
     let permissions = []
-    let policies = []
 
-    if (typeof user === 'string') {
-      user = rdf.sym(user)
-    }
-    if (this.Writer.g.statements.length === 0) {
-      return []
-    }
-    let existing = this.Writer.find(undefined, identifier, user)
-    if (existing.length > 0) {
-      existing.forEach((statement) => {
-        policies.push(statement.subject)
-      })
-      policies.forEach((policy) => {
-        let triples = this.Writer.find(policy, PRED.mode, undefined)
-        for (let el of triples) {
-          if (!_.includes(permissions, _.findKey(this.predMap, el.object))) {
-            permissions.push(_.findKey(this.predMap, el.object))
+    this.model.forEach(entry => {
+      if (entry.user === user) {
+        entry.mode.forEach(p => {
+          if (!_.includes(permissions, this.revPredMap[p])) {
+            permissions.push(this.revPredMap[p])
           }
-        }
-      })
-    }
+        })
+      }
+    })
 
     // We append the open permissions as well, since they apply to all users.
     // But only if strict is set to false.
     if (!wildcard && !strict) {
       let general = this.allowedPermissions('*')
-      general.forEach((el) => {
+      general.forEach(el => {
         if (!_.includes(permissions, el)) {
           permissions.push(el)
         }
@@ -330,37 +291,207 @@ class AclAgent {
    *          Must be called at the end.
    * @return {promise} - the server response.
    */
+
   commit() {
-    return this.put(this._proxify(this.aclUri), this.Writer.end(), {
+    if (!this.toAdd.length && !this.toRemove.length) {
+      return Promise.resolve()
+    }
+    // These are used for composing the final patch.
+    let addQuery = []
+    let removeQuery = []
+
+    this.toAdd.forEach(e => {
+      if (e.newPolicy) {
+        this.authCreationQuery = this.authCreationQuery.concat(
+          this._newAuthorization(e.subject, e.user, [e.object])
+        )
+      } else {
+        addQuery.push(rdf.st(
+          rdf.sym(e.subject),
+          e.predicate,
+          rdf.sym(e.object)
+        ))
+      }
+    })
+
+    this.toRemove.forEach(e => {
+      if (e.zombie) {
+        this.zombiePolicies.push(e.subject)
+      } else {
+        removeQuery.push(rdf.st(
+          rdf.sym(e.subject),
+          e.predicate,
+          rdf.sym(e.object)
+        ))
+      }
+    })
+
+    addQuery = addQuery.concat(this.authCreationQuery)
+    return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
       'Content-Type': 'text/turtle'
-    }).catch((e) => {
-      console.error(e)
+    }).then(() => {
+      if (this.zombiePolicies.length) {
+        this._wipeZombies(this.zombiePolicies)
+      }
+      this.updateIndex().then(() => {
+        this._cleanUp()
+      }).catch(e => {
+        this._cleanUp()
+        throw new Error(e)
+      })
     })
   }
 
-  commitIndex() {
-    let updates = []
-    let indexUri = Util.getIndexUri()
-    if (this.indexChanges.toInsert.length > 0) {
-      this.indexChanges.toInsert.forEach((el) => {
-        updates.push(
-          this.gAgent.writeTriples(indexUri, [el], false)
-        )
+  _cleanUp() {
+    this.toAdd = []
+    this.toRemove = []
+    this.zombiePolicies = []
+    this.authCreationQuery = []
+  }
+
+  /* @summary - A zombie policy is one that has no users or / and no
+   *   permissions associated to it, therefore it can be wiped.
+   *
+   * P.S. I wish the function was as badass as it's name would suggest.
+   */
+  _wipeZombies(policies) {
+    const ldpAgent = new LDPAgent()
+    return Promise.all(policies.map(pol => {
+      return ldpAgent.findTriples(
+        this.aclUri,
+        rdf.sym(pol),
+        undefined,
+        undefined
+      ).then(triples => {
+        return this.patch(this._proxify(this.aclUri), triples, [])
       })
+    }))
+  }
+
+  // Given an authorization policy name, returns
+  // all users mentioned.
+  getAuthAgents(authName) {
+    let users = this.model.filter(policy =>
+      policy.source === authName
+    )
+    users = users.map(entry => entry.user)
+    return users
+  }
+
+  splitAuth(agent, authName, modes) {
+    // We can't split when there's only one user
+    if (this.getAuthAgents(authName).length === 1) {
+      return
     }
 
-    if (this.indexChanges.toDelete.length > 0) {
-      let payload = {
-        uri: indexUri,
-        triples: []
+    this.model = this.model.filter(el => {
+      return el.user !== agent || el.source !== authName
+    })
+
+    // Create the new one.
+    const name = `${authName}${Util.randomString(3)}`
+    this.authCreationQuery = this.authCreationQuery.concat(
+      this._newAuthorization(name, agent, modes)
+    )
+
+    this.toRemove.push({
+      user: agent,
+      subject: authName,
+      predicate: PRED.agent,
+      object: agent,
+      zombie: false
+    })
+
+    this.model.push({
+      user: agent,
+      source: name,
+      mode: modes
+    })
+  }
+
+  _newAuthorization(authName, user, modes) {
+    const wild = user === '*'
+    user = wild ? PRED.Agent : rdf.sym(user)
+    const pred = wild ? PRED.agentClass : PRED.agent
+
+    let boilerplate = []
+    boilerplate.push(
+      rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
+      rdf.st(rdf.sym(authName), PRED.access, rdf.sym(this.uri)),
+      rdf.st(rdf.sym(authName), pred, user),
+    )
+
+    modes.forEach(mode => {
+      boilerplate.push(rdf.st(rdf.sym(authName), PRED.mode, rdf.sym(mode)))
+    })
+    return boilerplate
+  }
+
+  // This is a quick implementation. It works, but should be optimized a bit.
+  updateIndex() {
+    let add = []
+    let rem = []
+    let map = {}
+    map[PRED.read.uri] = PRED.readPermission
+    map[PRED.write.uri] = PRED.writePermission
+
+    this.toRemove.forEach(st => {
+      if (st.user === '*') {
+        return
       }
+      const index = rem.findIndex(el => el.webId === st.user)
+      if (index === -1) {
+        rem.push({
+          webId: st.user,
+          file: this.uri,
+          perm: [st.object]
+        })
+      } else {
+        rem[index].perm.push(st.object)
+      }
+    })
 
-      this.indexChanges.toDelete.forEach((el) => {
-        payload.triples.push(el)
+    this.toAdd.forEach(st => {
+      if (st.user === '*') {
+        return
+      }
+      const index = add.findIndex(el => el.webId === st.user)
+      if (index === -1) {
+        add.push({
+          webId: st.user,
+          file: this.uri,
+          perm: [st.object]
+        })
+      } else {
+        add[index].perm.push(st.object)
+      }
+    })
+
+    const addReq = add.map(pol => {
+      let query = []
+      pol.perm.forEach(permission => query.push(
+        rdf.st(rdf.sym(pol.webId),
+        map[permission],
+        rdf.sym(pol.file))
+      ))
+      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), '', query, {
+        'Content-Type': 'text/turtle'
       })
-      updates.push(this.gAgent.deleteTriple(payload))
-    }
-    return Promise.all(updates)
+    })
+
+    const remReq = rem.map(pol => {
+      let query = []
+      pol.perm.forEach(permission => query.push(
+        rdf.st(rdf.sym(pol.webId),
+        map[permission],
+        rdf.sym(pol.file))
+      ))
+      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), query, '', {
+        'Content-Type': 'text/turtle'
+      })
+    })
+
+    return Promise.all(remReq.concat(addReq))
   }
 }
 

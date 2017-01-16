@@ -1,11 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
-import {IconButton, List, ListItem, Checkbox} from 'material-ui'
+import {IconButton, List, ListItem} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import Avatar from 'material-ui/Avatar'
 import {pinkA200, transparent} from 'material-ui/styles/colors'
-import UncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
-import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
 
 let NodeList = React.createClass({
 
@@ -14,40 +12,29 @@ let NodeList = React.createClass({
     router: React.PropTypes.object
   },
 
+  propTypes: {
+    handleClose: React.PropTypes.func,
+    nodes: React.PropTypes.array
+  },
+
   getInitialState() {
     return {
-      isSelectable: false,
-      tempFileData: [
-        {
-          fileName: 'File1',
-          privacySetting: 'Private',
-          dateShared: 'Jan 14, 2014',
-          thumbnail: 'B'
-        },
-        {
-          fileName: 'File2',
-          privacySetting: 'Custom',
-          dateShared: 'Jan 11, 2011',
-          thumbnail: 'B'
-        },
-        {
-          fileName: 'File3',
-          privacySetting: 'Private',
-          dateShared: 'Jan 19, 2016',
-          thumbnail: 'B'
-        }
-      ]
+      nodeList: this.props.nodes
     }
   },
 
   goBack() {
-    this.context.router.push('/shared-nodes')
+    this.props.handleClose()
   },
 
   _handleSelectable() {
     this.setState({
       isSelectable: !this.state.isSelectable
     })
+  },
+
+  viewNode(uri) {
+    this.context.router.push(`/graph/${encodeURIComponent(uri)}/view`)
   },
 
   getStyles() {
@@ -97,8 +84,6 @@ let NodeList = React.createClass({
       },
       listItems: {
         marginLeft: '20px'
-      },
-      checkbox: {
       }
     }
     return styles
@@ -126,25 +111,11 @@ let NodeList = React.createClass({
               A
             </Avatar>
             <div style={styles.listItems}>
-              {this.state.tempFileData.map((file) => (
-                <ListItem
-                  primaryText={file.fileName}
-                  secondaryText={
-                    `${file.privacySetting} | Shared ${file.dateShared}`
-                  }
-                  leftAvatar={<Avatar>{file.thumbnail}</Avatar>}
-                  rightAvatar={
-                    this.state.isSelectable
-                    ? <Avatar backgroundColor={transparent}>
-                      <Checkbox
-                        checkedIcon={<CheckedIcon />}
-                        uncheckedIcon={<UncheckedIcon />}
-                        labelPosition="left"
-                        style={styles.checkbox}
-                        />
-                    </Avatar>
-                    : null
-                  } />)
+              {this.state.nodeList.map((node) =>
+                <WrappedListItem
+                  node={node}
+                  handleView={this.viewNode}
+                />
               )}
             </div>
           </List>
@@ -154,4 +125,29 @@ let NodeList = React.createClass({
   }
 })
 
+const WrappedListItem = React.createClass({
+  propTypes: {
+    node: React.PropTypes.object,
+    handleView: React.PropTypes.func
+  },
+
+  viewNode() {
+    this.props.handleView(this.props.node.uri)
+  },
+
+  render() {
+    const {node} = this.props
+    return (
+      <ListItem
+        onClick={this.viewNode}
+        primaryText={node.uri}
+        secondaryText={
+          node.perm
+          // `${node.privacySetting} | Shared ${node.dateShared}`
+        }
+        leftAvatar={<Avatar>{node.thumbnail}</Avatar>}
+      />
+    )
+  }
+})
 export default Radium(NodeList)

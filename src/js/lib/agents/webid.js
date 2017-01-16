@@ -1,21 +1,10 @@
 import LDPAgent from './ldp.js'
-import {endpoint} from 'settings'
 import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'
 
 // WebID related functions
 class WebIDAgent extends LDPAgent {
-
-  // Should this send it to the proxy?
-  isFakeIDAvailable(username) {
-    return this.head(`${endpoint}/${username}`)
-      .then(() => {
-        return false
-      }).catch(() => {
-        return true
-      })
-  }
 
   // Gets the webId of the currently loged in user from local storage,
   getWebId() {

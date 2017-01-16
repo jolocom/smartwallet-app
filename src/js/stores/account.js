@@ -7,15 +7,6 @@ import SnackbarActions from 'actions/snackbar'
 export default Reflux.createStore({
   listenables: Account,
 
-  state: {
-    loggingIn: true,
-    userExists: false,
-    emailVerifyScreen: false,
-    emailVerifyCompleted: false,
-    emailUpdateQueued: false,
-    emailToBeInserted: ''
-  },
-
   getInitialState() {
     return this.state
   },
@@ -23,6 +14,15 @@ export default Reflux.createStore({
   init() {
     this.accounts = new AccountsAgent()
     this.wia = new WebIdAgent()
+
+    this.state = {
+      loggingIn: true,
+      userExists: false,
+      emailVerifyScreen: false,
+      emailVerifyCompleted: false,
+      emailUpdateQueued: false,
+      emailToBeInserted: ''
+    }
   },
 
   onSignup({username, password, email, name}) {

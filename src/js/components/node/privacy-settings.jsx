@@ -1,17 +1,28 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import {IconButton, List, ListItem, Checkbox} from 'material-ui'
+import {
+  IconButton,
+  List,
+  ListItem,
+  FloatingActionButton,
+  Avatar
+} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
+import ConfirmActions from 'actions/confirm'
 import FlatButton from 'material-ui/FlatButton'
-import Subheader from 'material-ui/Subheader'
 import Divider from 'material-ui/Divider'
-import ActionVisibility from 'material-ui/svg-icons/action/visibility'
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import Chip from 'material-ui/Chip'
-import TextField from 'material-ui/TextField'
 import PrivacyStore from 'stores/privacy-settings'
 import PrivacyActions from 'actions/privacy-settings'
+import PersonIcon from 'material-ui/svg-icons/social/person'
+import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
+import AddContacts from 'components/node/add-contacts.jsx'
+import GroupIcon from 'material-ui/svg-icons/social/group'
+import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
+import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+
+import Util from 'lib/util'
 
 let PrivacySettings = React.createClass({
   mixins: [Reflux.listenTo(PrivacyStore, '_handleUpdate')],
@@ -28,17 +39,10 @@ let PrivacySettings = React.createClass({
 
   getInitialState() {
     return {
-      currActiveViewBtn: 'visOnlyMe',
-      currActiveEditBtn: 'editOnlyMe',
-      viewAllowList: [],
-      friendViewAllowList: [],
-      friendViewDisallowList: [],
-
-      editAllowList: [],
-      friendEditDisallowList: [],
-
-      isSelectAllOnlyMe: false,
-      isSelectAllFriends: false
+      privacyMode: 'private',
+      allowedContacts: [],
+      addScreen: false,
+      unsavedChanges: false
     }
   },
 
@@ -48,92 +52,59 @@ let PrivacySettings = React.createClass({
   },
 
   goBack() {
-    this.context.router.goBack()
+    if (this.state.unsavedChanges) {
+      const msg = 'You have unsaved changes, are you sure you want to exit?'
+      ConfirmActions.confirm(msg, 'Exit', () => {
+        this.context.router.goBack()
+      })
+    } else {
+      this.context.router.goBack()
+    }
+  },
+
+  _handleToggleEdit(contact) {
+    if (contact.edit) {
+      PrivacyActions.disallowEdit(contact.webId)
+    } else {
+      PrivacyActions.allowEdit(contact.webId)
+    }
+
+    this.state.allowedContacts.forEach(user => {
+      if (user.webId === contact.webId) {
+        user.edit = !user.edit
+      }
+    })
+    this.setState(this.state)
   },
 
   _handleUpdate(storeState) {
     this.setState(storeState)
   },
 
-  _handleTextEnter(e) {
-    if (e.key === 'Enter') {
-      switch (e.target.name) {
-        case 'viewAllow':
-          PrivacyActions.allowRead(e.target.value)
-          break
-        case 'friendViewDisallow':
-          PrivacyActions.friendDisallowRead(e.target.value)
-          break
-        case 'editAllow':
-          PrivacyActions.allowEdit(e.target.value)
-          break
-        case 'friendEditDisallow':
-          PrivacyActions.friendDisallowEdit(e.target.value)
-          break
-        default:
-          break
-      }
-      e.target.value = ''
-    }
-  },
-
-  _setActiveView(activeBtn) {
-    PrivacyActions.navigate(activeBtn, false)
-  },
-
-  _setActiveEdit(activeBtn) {
-    PrivacyActions.navigate(false, activeBtn)
-  },
-
-  _handleSelectAllPlusAllowed() {
-    let allExceptionsCanEdit = this.state.viewAllowList
-    allExceptionsCanEdit.map((f) => {
-      f.canEdit = !this.state.isSelectAllOnlyMe
-    })
-    this.setState({
-      viewAllowList: allExceptionsCanEdit
-    })
-    this.setState({
-      isSelectAllOnlyMe: !this.state.isSelectAllOnlyMe
-    })
-  },
-
-  _handleSelectAllMinusDisallowed() {
-    let allFriendsCanEdit = this.state.allowFriendList
-    allFriendsCanEdit.map((f) => {
-      f.canEdit = !this.state.isSelectAllFriends
-    })
-    this.setState({
-      allowFriendList: allFriendsCanEdit
-    })
-    this.setState({
-      isSelectAllFriends: !this.state.isSelectAllFriends
-    })
-  },
-
-  _handleCheck(list, user) {
-    PrivacyActions.handleCheck(list, user)
-  },
-
-  renderChip(data, func) {
-    let styles = this.getStyles()
-    return (
-      <Chip
-        key={data.key}
-        onRequestDelete={() => func(data.label)}
-        style={styles.chip}>
-        {data.label}
-      </Chip>
-    )
+  _handleSubmit() {
+    PrivacyActions.commit()
   },
 
   getStyles() {
-    let styles = {
+    const {muiTheme: {actionAppBar}} = this.context
+    return {
+      bar: {
+        backgroundColor: actionAppBar.color,
+        color: actionAppBar.textColor
+      },
       container: {
+        position: 'fixed',
         textAlign: 'center',
         background: '#ffffff',
         height: '100%',
+        width: '100%',
+        top: 0,
+        left: 0,
+        zIndex: 1400,
         overflowY: 'auto'
+      },
+      icon: {
+        color: actionAppBar.textColor
       },
       content: {
         maxWidth: '90%',
@@ -145,27 +116,40 @@ let PrivacySettings = React.createClass({
       title: {
         fontWeight: 'normal',
         fontSize: '20px',
-        color: '#4B142B',
+        color: actionAppBar.textColor,
         textAlign: 'left'
       },
       submitBtn: {
-        margin: '2px',
-        backgroundColor: '#b5c945',
-        minWidth: '30%',
-        color: '#fff',
-        fontSize: '2vmax'
+        fontWeight: 'normal',
+        fontSize: '20px',
+        color: actionAppBar.textColor,
+        backgroundColor: actionAppBar.color
       },
-      toggleBtn: {
-        margin: '2px',
-        backgroundColor: '#e1e2e6',
-        minWidth: '30%',
-        fontSize: '2vmax'
+      toggleBtns: {
+        textAlign: 'center'
+      },
+      selectPrompt: {
+        color: '#e1e2e6',
+        width: '80%',
+        padding: '20px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        left: '0',
+        right: '0'
       },
       toggleBtnLeft: {
+        margin: '2px',
+        backgroundColor: '#e1e2e6',
+        minWidth: '40%',
+        fontSize: '1.5vmax',
         borderTopLeftRadius: '1em',
         borderBottomLeftRadius: '1em'
       },
       toggleBtnRight: {
+        margin: '1px',
+        backgroundColor: '#e1e2e6',
+        minWidth: '40%',
+        fontSize: '1.5vmax',
         borderTopRightRadius: '1em',
         borderBottomRightRadius: '1em'
       },
@@ -173,311 +157,224 @@ let PrivacySettings = React.createClass({
         backgroundColor: '#b5c945',
         color: '#fff'
       },
-      headerIcon: {
-        marginBottom: '-6px',
-        marginRight: '6px',
-        fill: '#9b9faa'
-      },
       divider: {
-        marginBottom: '10px'
+        marginTop: '10px'
       },
-      subheader: {
-        paddingLeft: '0'
+      addBtn: {
+        width: '40px',
+        boxShadow: 'none',
+        marginTop: '12px'
       },
-      chipWrapper: {
-        display: 'flex',
-        flexWrap: 'wrap'
-      },
-      chip: {
-        margin: '4px'
-      },
-      customSettings: {
-        marginLeft: '10px'
-      },
-      selectAllLabel: {
-        fontSize: '14px',
-        color: 'rgba(75, 19, 43, 0.541176)'
+      viewAllBtn: {
+        display: this.state.viewAllContacts ? 'block' : 'none'
       }
     }
-    return styles
+  },
+
+  viewAllContacts() {
+    this.setState({
+      viewAllContacts: false
+    })
+  },
+
+  _handleRemovePerson(contact) {
+    PrivacyActions.removeContact(contact)
+  },
+
+  _handleAddContact(selected) {
+    selected.forEach(contact =>
+      PrivacyActions.allowRead(contact)
+    )
+  },
+
+  _handleSetPrivate() {
+    PrivacyActions.changePrivacyMode('private')
+  },
+
+  _handleSetPublic() {
+    PrivacyActions.changePrivacyMode('public')
+  },
+
+  _handleShowAddContact() {
+    this.setState({addScreen: true})
+  },
+
+  _handleCloseAddContact() {
+    this.setState({addScreen: false})
   },
 
   render() {
     let styles = this.getStyles()
-    let list, check
-
-    if (this.state.currActiveViewBtn === 'visOnlyMe') {
-      list = this.state.viewAllowList
-      check = this._handleCheck
-    } else if (this.state.currActiveViewBtn === 'visFriends') {
-      list = this.state.friendViewAllowList
-      check = this._handleCheck
-    }
-
-    let checkMate
-
-    if ((this.state.currActiveViewBtn === 'visOnlyMe') &&
-      this.state.viewAllowList.length) {
-      checkMate = (
-        <ListItem>
-          <Checkbox
-            label="Select all"
-            labelStyle={styles.selectAllLabel}
-            labelPosition="left"
-            onCheck={this._handleSelectAllPlusAllowed}
-            checked={this.state.isSelectAllOnlyMe} />
-        </ListItem>
-      )
-    } else if ((this.state.currActiveViewBtn === 'visFriends') &&
-      (this.state.friendViewAllowList.legth)) {
-      checkMate = (
-        <ListItem>
-          <Checkbox
-            label="Select all"
-            labelStyle={styles.selectAllLabel}
-            labelPosition="left"
-            onCheck={this._handleSelectAllMinusDisallowed}
-            checked={this.state.isSelectAllFriends} />
-        </ListItem>
-      )
-    }
-
     return (
-      <div style={styles.container}>
-        <AppBar
-          title="Privacy Settings"
-          titleStyle={styles.title}
-          iconElementLeft={<IconButton onClick={this.goBack}
-            iconClassName="material-icons">
-              arrow_back
-          </IconButton>}
+      <div>
+        {this.state.addScreen
+        ? <AddContacts
+          onClose={this._handleCloseAddContact}
+          onSubmit={this._handleAddContact}
+          selected={this.state.allowedContacts}
           />
-        <div style={styles.content}>
-          <h3 style={{margin: '10px 0'}}>
-            Privacy Settings for {this.props.name}
-          </h3>
-          <Subheader style={styles.subheader}>
-            <ActionVisibility style={styles.headerIcon} />
-            Who can see this node?
-          </Subheader>
-          <Divider style={styles.divider} />
-          <div style={styles.toggleBtns}>
-            <FlatButton
-              style={
-                this.state.currActiveViewBtn === 'visOnlyMe'
-                  ? {
-                    ...styles.toggleBtn,
-                    ...styles.toggleBtnLeft,
-                    ...styles.toggleBtnActive}
-                  : {
-                    ...styles.toggleBtn,
-                    ...styles.toggleBtnLeft}
+        : <div style={styles.container}>
+          <AppBar
+            title="Privacy Settings"
+            style={styles.bar}
+            titleStyle={styles.title}
+            iconElementLeft={
+              <IconButton
+                onClick={this.goBack}
+                iconStyle={styles.icon}
+                iconClassName="material-icons">
+                  arrow_back
+              </IconButton>
+            }
+            iconElementRight={
+              <FlatButton
+                style={styles.submitBtn}
+                onTouchTap={this._handleSubmit}
+              >
+              SAVE
+              </FlatButton>
+            }
+          />
+          <div style={styles.content}>
+            <div style={styles.toggleBtns}>
+              {/* The top two buttons */}
+              <FlatButton
+                style={
+                  this.state.privacyMode === 'private'
+                    ? {...styles.toggleBtnLeft, ...styles.toggleBtnActive}
+                    : {...styles.toggleBtnLeft}
+                  }
+                onTouchTap={this._handleSetPrivate}
+              >
+                Private
+              </FlatButton>
+              <FlatButton
+                style={
+                  this.state.privacyMode === 'public'
+                    ? {...styles.toggleBtnRight, ...styles.toggleBtnActive}
+                    : {...styles.toggleBtnRight}
                 }
-              onTouchTap={() => {
-                this._setActiveView('visOnlyMe')
-              }}>
-              Only Me
-            </FlatButton>
-            <FlatButton
-              className="toggleBtnActive"
-              style={
-                this.state.currActiveViewBtn === 'visFriends'
-                ? {...styles.toggleBtn, ...styles.toggleBtnActive}
-                : styles.toggleBtn
+                onTouchTap={this._handleSetPublic}
+              >
+                Public
+              </FlatButton>
+              <div style={styles.selectPrompt}>
+                Please select who you want to share your node with.
+              </div>
+            </div>
+            {this.state.privacyMode === 'private'
+            ? <div>
+              <List>
+                <ListItem
+                  key={1}
+                  disabled
+                  secondaryText="Add person"
+                  leftIcon={<PersonIcon />}
+                  rightIcon={
+                    <FloatingActionButton
+                      mini
+                      secondary
+                      style={styles.addBtn}
+                      onTouchTap={this._handleShowAddContact}>
+                      <PersonAddIcon />
+                    </FloatingActionButton>
+                  }>
+                  CONTACTS
+                  <Divider style={styles.divider} />
+                </ListItem>
+              </List>
+              <List>
+                {this.state.allowedContacts.map(contact => {
+                  return (
+                    <WrappedListItem
+                      handleRemove={this._handleRemovePerson}
+                      handleToggle={this._handleToggleEdit}
+                      contact={contact} />
+                  )
+                })
               }
-              onTouchTap={() => {
-                this._setActiveView('visFriends')
-              }}>
-              Friends
-            </FlatButton>
-            <FlatButton
-              style={
-                this.state.currActiveViewBtn === 'visEveryone'
-                  ? {
-                    ...styles.toggleBtn,
-                    ...styles.toggleBtnRight,
-                    ...styles.toggleBtnActive}
-                  : {...styles.toggleBtn,
-                    ...styles.toggleBtnRight}
-              }
-              onTouchTap={() => {
-                this._setActiveView('visEveryone')
-              }}>
-              Everyone
-            </FlatButton>
-          </div>
-          <div style={styles.customSettings}>
-            {
-              this.state.currActiveViewBtn === 'visOnlyMe'
-              ? <div>
-                <Subheader style={styles.subheader}>
-                  Allow
-                </Subheader>
-                <div style={styles.chipWrapper}>
-                  {this.state.viewAllowList.map(el => {
-                    return this.renderChip(el, PrivacyActions.disallowRead)
-                  }, this)}
-                </div>
-                <TextField
-                  name="viewAllow"
-                  hintText="Enter a node title"
-                  onKeyPress={this._handleTextEnter}
-                  fullWidth />
-              </div>
-              : null
-            }
-            {
-              this.state.currActiveViewBtn === 'visOnlyMe' ||
-              this.state.currActiveViewBtn === 'visEveryone'
-              ? null
-              : <div>
-                <Subheader style={styles.subheader}>
-                Disallow
-                </Subheader>
-                <div style={styles.chipWrapper}>
-                  {this.state.friendViewDisallowList.map(el => {
-                    return this.renderChip(el, PrivacyActions.friendAllowRead)
-                  }, this)}
-                </div>
-                <TextField
-                  name="friendViewDisallow"
-                  hintText="Enter a node title"
-                  onKeyPress={this._handleTextEnter}
-                  fullWidth />
-              </div>
-            }
-          </div>
-          <Subheader style={styles.subheader}>
-            <EditorModeEdit style={styles.headerIcon} />
-            Who can edit this node?
-          </Subheader>
-          <Divider style={styles.divider} />
-          {
-              this.state.currActiveViewBtn === 'visEveryone'
-              ? <div>
-                <FlatButton
-                  style={
-                    this.state.currActiveEditBtn === 'editOnlyMe'
-                      ? {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnLeft,
-                        ...styles.toggleBtnActive}
-                      : {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnLeft}
+              </List>
+              <FlatButton
+                label="VIEW ALL"
+                secondary
+                style={styles.viewAllBtn}
+                onTouchTap={this.viewAllContacts} />
+              <List>
+                <ListItem
+                  key={1}
+                  disabled
+                  secondaryText="Add groups"
+                  leftIcon={
+                    <GroupIcon />
                   }
-                  onTouchTap={() => {
-                    this._setActiveEdit('editOnlyMe')
-                  }}>
-                  Only Me
-                </FlatButton>
-                <FlatButton
-                  style={
-                    this.state.currActiveEditBtn === 'editFriends'
-                    ? {...styles.toggleBtn, ...styles.toggleBtnActive}
-                    : {...styles.toggleBtn}
-                  }
-                  onTouchTap={() => {
-                    this._setActiveEdit('editFriends')
-                  }}>
-                  Friends
-                </FlatButton>
-                <FlatButton
-                  onTouchTap={() => {
-                    this._setActiveEdit('editEveryone')
-                  }}
-                  style={
-                    this.state.currActiveEditBtn === 'editEveryone'
-                      ? {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnRight,
-                        ...styles.toggleBtnActive}
-                      : {
-                        ...styles.toggleBtn,
-                        ...styles.toggleBtnRight}
-                  }
-                >
-                  Everyone
-                </ FlatButton>
-                <div style={styles.customSettings}>
-                  {
-                  this.state.currActiveEditBtn === 'editOnlyMe'
-                  ? <div>
-                    <Subheader style={styles.subheader}>
-                      Allow
-                    </Subheader>
-                    <div style={styles.chipWrapper}>
-                      {this.state.editAllowList.map(el => {
-                        return this.renderChip(el, PrivacyActions.disallowEdit)
-                      }, this)}
-
-                    </div>
-                    <TextField
-                      name="editAllow"
-                      hintText="Enter a node title"
-                      onKeyPress={this._handleTextEnter}
-                      fullWidth />
-                  </div>
-                  : null
-                }
-                  {this.state.currActiveEditBtn === 'editFriends'
-                  ? <div>
-                    <Subheader style={styles.subheader}>
-                    Disallow
-                    </Subheader>
-                    <div style={styles.chipWrapper}>
-                      {this.state.friendEditDisallowList.map(el => {
-                        return this.renderChip(el,
-                          PrivacyActions.friendAllowEdit)
-                      }, this)}
-
-                    </div>
-                    <TextField
-                      name="friendEditDisallow"
-                      hintText="Enter a node title"
-                      onKeyPress={this._handleTextEnter}
-                      fullWidth />
-                  </div>
-                : null
-                }
-                </div>
-              </div>
-              : null
-            }
-          <div>
-            <List>
-              {checkMate}
-              {this.state.currActiveViewBtn !== 'visEveryone'
-              ? list.map((viewer) => {
-                return (
-                  <ListItem>
-                    <Checkbox
-                      label={viewer.label || viewer.name}
-                      labelPosition="left"
-                      onCheck={() => {
-                        check(this.state.currActiveViewBtn, viewer)
-                      }}
-                      checked={viewer.canEdit}
-                    />
-                  </ListItem>)
-              })
-            : null
-            }
-            </List>
+                  rightIcon={
+                    <FloatingActionButton
+                      mini
+                      secondary
+                      style={styles.addBtn}>
+                      <GroupAddIcon />
+                    </FloatingActionButton>
+                  }>
+                  GROUPS
+                  <Divider style={styles.divider} />
+                </ListItem>
+              </List>
+            </div>
+            : null}
           </div>
-          <FlatButton
-            style={Object.assign({}, styles.submitBtn)}
-            onTouchTap={() => {
-              PrivacyActions.computeResult()
-              PrivacyActions.commit()
-              this.goBack()
-            }}
-          >
-            Commit
-          </FlatButton>
-        </div>
+        </div>}
       </div>
     )
+  }
+})
+
+let WrappedListItem = React.createClass({
+  propTypes: {
+    handleRemove: React.PropTypes.func,
+    handleToggle: React.PropTypes.func,
+    contact: React.PropTypes.object
+  },
+
+  getStyles() {
+    return {
+      editIconToggle: {
+        marginRight: '5%',
+        size: '60px'
+      }
+    }
+  },
+
+  render() {
+    const styles = this.getStyles()
+    const {contact} = this.props
+
+    return (
+      <ListItem
+        key={contact.webId}
+        leftAvatar={<Avatar src={Util.uriToProxied(contact.imgUri)} />}
+        rightToggle={
+          <EditIcon style={styles.editIconToggle}
+            color={contact.edit ? '#4b132b' : '#d2d2d2'}
+            onTouchTap={this._handleToggleEdit}
+          />
+        }
+        rightIcon={
+          <ActionDelete
+            color="#4b132b"
+            onTouchTap={this._handleRemovePerson} />
+        }
+      >
+        {contact.name ? contact.name : contact.webId}
+      </ListItem>
+    )
+  },
+
+  _handleRemovePerson() {
+    this.props.handleRemove(this.props.contact)
+  },
+
+  _handleToggleEdit() {
+    this.props.handleToggle(this.props.contact)
   }
 })
 

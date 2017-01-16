@@ -29,7 +29,9 @@ class GraphAgent extends LDPAgent {
       writer.addTriple(uri, PRED.description, description)
     }
     // TODO
-    if (nodeType === 'default' || nodeType === 'passport') {
+    if (nodeType === 'default' ||
+        nodeType === 'passport' ||
+        nodeType === 'confidential') {
       writer.addTriple(uri, PRED.type, PRED.Document)
     } else if (nodeType === 'image') {
       writer.addTriple(uri, PRED.type, PRED.Image)

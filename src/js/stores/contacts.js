@@ -19,7 +19,6 @@ export default Reflux.createStore({
   init() {
     this.gAgent = new GraphAgent()
     this.wia = new WebIdAgent()
-    this.webId = this.wia.getWebId()
   },
 
   /*
@@ -30,6 +29,7 @@ export default Reflux.createStore({
   *  {name,username,webid,email,imgUri} matching the query.
   */
   onLoad(query) {
+    this.webId = this.wia.getWebId()
     if (!query) {
       // Fetch a list of friends and their triples.
       return this.gAgent.findFriends(this.webId).then((res) => {
@@ -45,8 +45,8 @@ export default Reflux.createStore({
         }))
       }).then((nodes) => {
         // nodes = [{uri: node uri, triples:[]}]
-        let contacts = nodes.filter((node) =>
-          node.triples.some((triple) => {
+        let contacts = nodes.filter(node =>
+          node.triples.some(triple => {
             // Out of the contacts we are filtering out only the people
             // Presumably you would only "know" people anyways.
             if (triple.predicate.uri === PRED.type.uri) {
@@ -54,7 +54,7 @@ export default Reflux.createStore({
             }
           })
         )
-        let formattedContacts = contacts.map((contact) => {
+        let formattedContacts = contacts.map(contact => {
           let name, email, avatar
           contact.triples.forEach(t => {
             const pred = t.predicate.uri
@@ -71,7 +71,7 @@ export default Reflux.createStore({
             name: name,
             username: name,
             webId: contact.uri || '????',
-            email: email.replace('mailto:', ''),
+            email: email && email.replace('mailto:', ''),
             imgUri: avatar
           }
         })
