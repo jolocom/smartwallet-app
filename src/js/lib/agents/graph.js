@@ -50,17 +50,12 @@ class GraphAgent {
    */
 
   addImage(uri, dstContainer, writer, image, confidential) {
-    if (image instanceof File) {
-      console.log('image instance of file! ')
-      let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
-      console.log('Adding image at uri = ', imgUri)
-      writer.addTriple(uri, PRED.image, imgUri)
-      return this.storeFile(imgUri, null, image, confidential)
-    } else {
-      console.log('not instacvnce of file')
-      writer.addTriple(uri, PRED.image, image)
-      return
+
+    if (image) {
+      writer.addTriple(uri, PRED.image, rdf.sym(image))
+      // return this.storeFile(imgUri, null, image, confidential)
     }
+
   }
 
   /**
