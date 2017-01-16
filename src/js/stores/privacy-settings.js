@@ -30,16 +30,13 @@ export default Reflux.createStore({
         this.aclAgent.removeAllow('*', 'read')
       }
       this.state.privacyMode = mode
-      this.trigger(this.state)
       this._markUnsavedChanges()
     }
   },
 
   _markUnsavedChanges() {
-    if (!this.state.unsavedChanges) {
-      this.state.unsavedChanges = true
-      this.trigger(this.state)
-    }
+    this.state.unsavedChanges = true
+    this.trigger(this.state)
   },
 
   removeContact(contact) {
@@ -123,6 +120,7 @@ export default Reflux.createStore({
     }).catch(() => {
       Snackbar.showMessage('Could not apply changes.')
     })
-    this._markUnsavedChanges()
+    this.state.unsavedChanges = false
+    this.trigger(this.state)
   }
 })
