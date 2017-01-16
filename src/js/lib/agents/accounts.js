@@ -111,7 +111,7 @@ class AccountsAgent extends HTTPAgent {
     return this.put(
       this._proxify(uri),
       writer.end(),
-      {'Content-type': 'text/turtle' }
+      {'Content-type': 'text/turtle'}
     ).then(() => {
       return this._writeAcl(uri, webId)
     })

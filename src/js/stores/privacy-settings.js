@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import PrivacyActions from 'actions/privacy-settings'
 import AclAgent from 'lib/agents/acl'
+import Snackbar from 'actions/snackbar'
 import GraphAgent from 'lib/agents/graph'
 import WebidAgent from 'lib/agents/webid'
 import {PRED} from 'lib/namespaces'
@@ -13,7 +14,9 @@ export default Reflux.createStore({
     this.webId = wia.getWebId()
     this.state = {
       privacyMode: 'private',
-      allowedContacts: []
+      allowedContacts: [],
+      addScreen: false,
+      unsavedChanges: false
     }
   },
 
@@ -28,6 +31,7 @@ export default Reflux.createStore({
       } else {
         this.aclAgent.removeAllow('*', 'read')
       }
+      this.state.unsavedChanges = true
       this.state.privacyMode = mode
       this.trigger(this.state)
     }
@@ -41,6 +45,7 @@ export default Reflux.createStore({
     this.state.allowedContacts = this.state.allowedContacts.filter(el =>
       contact.webId !== el.webId
     )
+    this.state.unsavedChanges = true
     this.trigger(this.state)
   },
 
@@ -93,18 +98,29 @@ export default Reflux.createStore({
       imgUri: contact.imgUri,
       name: contact.name
     })
+    this.state.unsavedChanges = true
     this.trigger(this.state)
   },
 
   allowEdit(user) {
     this.aclAgent.allow(user, 'write')
+    this.state.unsavedChanges = true
+    this.trigger(this.state)
   },
 
   disallowEdit(user) {
     this.aclAgent.removeAllow(user, 'write')
+    this.state.unsavedChanges = true
+    this.trigger(this.state)
   },
 
   commit() {
-    this.aclAgent.commit()
+    this.aclAgent.commit().then(() => {
+      Snackbar.showMessage('Changes saved.')
+    }).catch(() => {
+      Snackbar.showMessage('Could not apply changes.')
+    })
+    this.state.unsavedChanges = false
+    this.trigger(this.state)
   }
 })

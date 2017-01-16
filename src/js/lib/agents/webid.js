@@ -1,5 +1,4 @@
 import LDPAgent from './ldp.js'
-import {endpoint} from 'settings'
 import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'

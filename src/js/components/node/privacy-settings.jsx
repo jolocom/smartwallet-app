@@ -9,6 +9,7 @@ import {
   Avatar
 } from 'material-ui'
 import AppBar from 'material-ui/AppBar'
+import ConfirmActions from 'actions/confirm'
 import FlatButton from 'material-ui/FlatButton'
 import Divider from 'material-ui/Divider'
 import PrivacyStore from 'stores/privacy-settings'
@@ -40,7 +41,8 @@ let PrivacySettings = React.createClass({
     return {
       privacyMode: 'private',
       allowedContacts: [],
-      addScreen: false
+      addScreen: false,
+      unsavedChanges: false
     }
   },
 
@@ -50,7 +52,14 @@ let PrivacySettings = React.createClass({
   },
 
   goBack() {
-    this.context.router.goBack()
+    if (this.state.unsavedChanges) {
+      const msg = 'You have unsaved changes, are you sure you want to exit?'
+      ConfirmActions.confirm(msg, 'Exit', () => {
+        this.context.router.goBack()
+      })
+    } else {
+      this.context.router.goBack()
+    }
   },
 
   _handleToggleEdit(contact) {
@@ -283,7 +292,7 @@ let PrivacySettings = React.createClass({
                     <ListItem
                       key={contact.webId}
                       leftAvatar={
-                        <Avatar src={Util.uriToProxied(contact.imgUri)}/>
+                        <Avatar src={Util.uriToProxied(contact.imgUri)} />
                       }
                       rightToggle={
                         <EditIcon style={styles.editIconToggle}

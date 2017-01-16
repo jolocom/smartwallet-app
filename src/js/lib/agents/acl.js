@@ -292,10 +292,9 @@ class AclAgent extends HTTPAgent {
    * @return {promise} - the server response.
    */
 
-  // @TODO Snackbar.
   commit() {
     if (!this.toAdd.length && !this.toRemove.length) {
-      return
+      return Promise.resolve()
     }
     // These are used for composing the final patch.
     let addQuery = []
@@ -338,6 +337,7 @@ class AclAgent extends HTTPAgent {
         this._cleanUp()
       }).catch(e => {
         this._cleanUp()
+        throw new Error(e)
       })
     })
   }
