@@ -87,11 +87,7 @@ let PrivacySettings = React.createClass({
 
   getStyles() {
     const {muiTheme: {actionAppBar}} = this.context
-    let styles = {
-      editIconToggle: {
-        marginRight: '5%',
-        size: '60px'
-      },
+    return {
       bar: {
         backgroundColor: actionAppBar.color,
         color: actionAppBar.textColor
@@ -173,7 +169,6 @@ let PrivacySettings = React.createClass({
         display: this.state.viewAllContacts ? 'block' : 'none'
       }
     }
-    return styles
   },
 
   viewAllContacts() {
@@ -291,25 +286,10 @@ let PrivacySettings = React.createClass({
               <List>
                 {this.state.allowedContacts.map(contact => {
                   return (
-                    <ListItem
-                      key={contact.webId}
-                      leftAvatar={
-                        <Avatar src={Util.uriToProxied(contact.imgUri)} />
-                      }
-                      rightToggle={
-                        <EditIcon style={styles.editIconToggle}
-                          color={contact.edit ? '#4b132b' : '#d2d2d2'}
-                          onTouchTap={() => this._handleToggleEdit(contact)}
-                        />
-                      }
-                      rightIcon={
-                        <ActionDelete
-                          color="#4b132b"
-                          onTouchTap={() => this._handleRemovePerson(contact)}
-                        />
-                      }>
-                      {contact.name ? contact.name : contact.webId}
-                    </ListItem>
+                    <WrappedListItem
+                      handleRemove={this._handleRemovePerson}
+                      handleToggle={this._handleToggleEdit}
+                      contact={contact} />
                   )
                 })
               }
@@ -345,6 +325,56 @@ let PrivacySettings = React.createClass({
         </div>}
       </div>
     )
+  }
+})
+
+let WrappedListItem = React.createClass({
+  propTypes: {
+    handleRemove: React.PropTypes.func,
+    handleToggle: React.PropTypes.func,
+    contact: React.PropTypes.object
+  },
+
+  getStyles() {
+    return {
+      editIconToggle: {
+        marginRight: '5%',
+        size: '60px'
+      }
+    }
+  },
+
+  render() {
+    const styles = this.getStyles()
+    const {contact} = this.props
+
+    return (
+      <ListItem
+        key={contact.webId}
+        leftAvatar={<Avatar src={Util.uriToProxied(contact.imgUri)} />}
+        rightToggle={
+          <EditIcon style={styles.editIconToggle}
+            color={contact.edit ? '#4b132b' : '#d2d2d2'}
+            onTouchTap={this._handleToggleEdit}
+          />
+        }
+        rightIcon={
+          <ActionDelete
+            color="#4b132b"
+            onTouchTap={this._handleRemovePerson} />
+        }
+      >
+        {contact.name ? contact.name : contact.webId}
+      </ListItem>
+    )
+  },
+
+  _handleRemovePerson() {
+    this.props.handleRemove(this.props.contact)
+  },
+
+  _handleToggleEdit() {
+    this.props.handleToggle(this.props.contact)
   }
 })
 
