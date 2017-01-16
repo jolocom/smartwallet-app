@@ -43,12 +43,11 @@ let SharedNodes = React.createClass({
     this.context.router.goBack()
   },
 
-  _handleListNodes(nodeType, event) {
+  _handleListNodes(nodeType) {
     this.setState({
       selectedType: nodeType,
       listNodes: true
     })
-    event.preventDefault()
   },
 
   _handleCloseListNodes() {
@@ -60,7 +59,7 @@ let SharedNodes = React.createClass({
   },
 
   getStyles() {
-    let styles = {
+    return {
       container: {
         textAlign: 'center',
         background: '#ffffff',
@@ -79,28 +78,8 @@ let SharedNodes = React.createClass({
         fontSize: '20px',
         color: '#4B142B',
         textAlign: 'left'
-      },
-      gridList: {
-      },
-      caption: {
-        marginLeft: '-16px'
-      },
-      captionTitle: {
-        color: '#4B142B'
-      },
-      captionNumItems: {
-        color: '#9aa1aa'
-      },
-      nodeTypeGridTile: {
-        textAlign: 'center',
-        paddingTop: '15px'
-      },
-      nodeTypeIcon: {
-        margin: '0 auto',
-        width: '70px'
       }
     }
-    return styles
   },
 
   render() {
@@ -153,32 +132,80 @@ let SharedNodes = React.createClass({
                 cols={3}
                 style={styles.gridList}
               >
-                {tilesData.map((tile) => (
-                  <GridTile
-                    key={tile.nodeType}
-                    style={styles.nodeTypeGridTile}
-                    onTouchTap={this._handleListNodes.bind(this, tile.nodeType)}
-                    title={<span
-                      style={{...styles.caption, ...styles.captionTitle}}>
-                      {tile.nodeType}
-                    </span>}
-                    titleBackground={'rgba(0, 0, 0, 0)'}
-                    titlePosition={'bottom'}
-                    subtitle={
-                      <span
-                        style={{...styles.caption, ...styles.captionNumItems}}>
-                        {tile.numItems} items
-                      </span>
-                    }>
-                    <div style={styles.nodeTypeIcon}>{tile.icon}</div>
-                  </GridTile>
-               ))}
+                {tilesData.map((tile) =>
+                  <WrappedGridTile
+                    tile={tile}
+                    handleList={this._handleListNodes}
+                  />
+                )}
               </GridList>
             </div>
           </div>
          }
       </div>
     )
+  }
+})
+
+let WrappedGridTile = React.createClass({
+  propTypes: {
+    tile: React.PropTypes.object,
+    handleList: React.PropTypes.func
+  },
+
+  getStyles() {
+    return {
+      nodeTypeGridTile: {
+        textAlign: 'center',
+        paddingTop: '15px'
+      },
+      caption: {
+        marginLeft: '-16px'
+      },
+      captionTitle: {
+        color: '#4B142B'
+      },
+      captionNumItems: {
+        color: '#9aa1aa'
+      },
+      nodeTypeIcon: {
+        margin: '0 auto',
+        width: '70px'
+      }
+    }
+  },
+
+  render() {
+    const {tile} = this.props
+    const styles = this.getStyles()
+    return (
+      <GridTile
+        key={tile.nodeType}
+        style={styles.nodeTypeGridTile}
+        onTouchTap={this._handleListNodes}
+        title={
+          <span
+            style={{...styles.caption, ...styles.captionTitle}}>
+            {tile.nodeType}
+          </span>}
+        titleBackground={'rgba(0, 0, 0, 0)'}
+        titlePosition={'bottom'}
+        subtitle={
+          <span
+            style={{...styles.caption, ...styles.captionNumItems}}>
+            {tile.numItems} items
+          </span>
+        }
+      >
+        <div style={styles.nodeTypeIcon}>{tile.icon}</div>
+      </GridTile>
+
+    )
+  },
+
+  _handleListNodes(event) {
+    event.preventDefault()
+    this.props.handleList(this.props.tile.nodeType)
   }
 })
 
