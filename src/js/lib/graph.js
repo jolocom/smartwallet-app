@@ -728,11 +728,14 @@ export default class GraphD3 extends EventEmitter {
         let angle = (Math.PI * 2) / this.numberOfNeighbours
 
         for (let i = 0; i < this.dataNodes.length; i++) {
+          // rotates graph half a step for even numbered nodes
+          if (!(this.numberOfNeighbours % 2) && i === 0) {
+            i -= 0.5
+          }
           let dist = STYLES.largeNodeSize * 1.4
           let pos = {
             x: Math.sin((Math.PI) - angle * i) * dist + x,
-            y: Math.cos((Math.PI) - angle * i) * dist + y,
-            p: 'neighbours'
+            y: Math.cos((Math.PI) - angle * i) * dist + y
           }
           this.nodePositions.push(pos)
         }
