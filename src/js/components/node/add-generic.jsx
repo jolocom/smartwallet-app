@@ -349,6 +349,7 @@ let NodeAddGeneric = React.createClass({
 
   getStyles() {
     const {muiTheme} = this.context
+    const worker = new Worker()
     return {
       bar: {
         backgroundColor: muiTheme.actionAppBar.color,
@@ -364,7 +365,7 @@ let NodeAddGeneric = React.createClass({
         height: '176px',
         maxWidth: '100%',
         maxHeight: '60%',
-        backgroundImage: '',
+        backgroundImage: URL.createObjectURL(this.state.imgArray[0]),
         background: 'cover'
       },
       container: {
@@ -471,6 +472,8 @@ let NodeAddGeneric = React.createClass({
     } else {
       headerIcon = <AddNodeIcon />
     }
+
+    console.log('Refs = ', this.refs)
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>

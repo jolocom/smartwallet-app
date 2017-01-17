@@ -50,12 +50,10 @@ class GraphAgent {
    */
 
   addImage(uri, dstContainer, writer, image, confidential) {
-
     if (image) {
       writer.addTriple(uri, PRED.image, rdf.sym(image))
       // return this.storeFile(imgUri, null, image, confidential)
     }
-
   }
 
   /**
