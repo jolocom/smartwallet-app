@@ -119,6 +119,8 @@ export default Reflux.createStore({
       Snackbar.showMessage('Changes saved.')
     }).catch(() => {
       Snackbar.showMessage('Could not apply changes.')
+      this.state.unsavedChanges = true
+      this.trigger(this.state)
     })
     this.state.unsavedChanges = false
     this.trigger(this.state)

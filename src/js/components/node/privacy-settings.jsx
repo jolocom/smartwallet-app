@@ -82,6 +82,7 @@ let PrivacySettings = React.createClass({
   },
 
   _handleSubmit() {
+    this.setState({unsavedChanges: false})
     PrivacyActions.commit()
   },
 
@@ -229,6 +230,7 @@ let PrivacySettings = React.createClass({
             iconElementRight={
               <FlatButton
                 style={styles.submitBtn}
+                disabled={!this.state.unsavedChanges}
                 onTouchTap={this._handleSubmit}
               >
               SAVE
