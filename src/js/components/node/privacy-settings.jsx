@@ -109,7 +109,7 @@ let PrivacySettings = React.createClass({
       },
       content: {
         maxWidth: '90%',
-        padding: '20px',
+        paddingTop: '20px',
         margin: '0 auto 20px auto',
         boxSizing: 'border-box',
         textAlign: 'left'
@@ -340,8 +340,16 @@ let WrappedListItem = React.createClass({
   getStyles() {
     return {
       editIconToggle: {
-        marginRight: '5%',
         size: '60px'
+      },
+      rightToggleContainer: {
+        width: '15%',
+        minWidth: '65px',
+        maxWidth: '100px',
+        paddingRight: '10px'
+      },
+      deleteIcon: {
+        float: 'right'
       }
     }
   },
@@ -358,15 +366,18 @@ let WrappedListItem = React.createClass({
           : <Avatar icon={<PersonIcon />} />
         }
         rightToggle={
-          <EditIcon style={styles.editIconToggle}
-            color={contact.edit ? '#4b132b' : '#d2d2d2'}
-            onTouchTap={this._handleToggleEdit}
-          />
-        }
-        rightIcon={
-          <ActionDelete
-            color="#4b132b"
-            onTouchTap={this._handleRemovePerson} />
+          <div style={styles.rightToggleContainer}>
+            <EditIcon style={styles.editIconToggle}
+              color={contact.edit ? '#4b132b' : '#d2d2d2'}
+              onTouchTap={this._handleToggleEdit}
+            />
+
+            <ActionDelete
+              style={styles.deleteIcon}
+              color="#4b132b"
+              onTouchTap={this._handleRemovePerson}
+            />
+          </div>
         }
       >
         {contact.name ? contact.name : contact.webId}
@@ -375,7 +386,12 @@ let WrappedListItem = React.createClass({
   },
 
   _handleRemovePerson() {
-    this.props.handleRemove(this.props.contact)
+    const {contact} = this.props
+    const name = contact.name ? contact.name : contact.webId
+    const msg = `Are you sure you want to revoke access rights from ${name}?`
+    ConfirmActions.confirm(msg, 'Revoke', () => {
+      this.props.handleRemove(this.props.contact)
+    })
   },
 
   _handleToggleEdit() {
