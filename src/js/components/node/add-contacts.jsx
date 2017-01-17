@@ -98,7 +98,8 @@ let AddContact = React.createClass({
         display: this.state.selected.length > 0 ? 'block' : 'none'
       },
       selectedAvatar: {
-        margin: '6px'
+        margin: '6px',
+        float: 'left'
       },
       webidField: {
         margin: '20px',
@@ -161,7 +162,7 @@ let AddContact = React.createClass({
               <Tab label="Contacts">
                 <div>
                   <div style={styles.selectedList}>
-                    {this.state.contacts.map(contact => {
+                    {this.state.contacts.map((contact) => {
                       if (contact.selected) {
                         return (
                           <div>
