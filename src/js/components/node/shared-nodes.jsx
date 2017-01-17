@@ -94,6 +94,13 @@ let SharedNodes = React.createClass({
       typeNotDetected: 'document'
     }
 
+    const nameMap = {
+      typeImage: 'Image',
+      typeDocument: 'Document',
+      typePerson: 'Person',
+      typeNotDetected: 'Unknown'
+    }
+
     for (const type of Object.keys(this.state.shared)) {
       const len = this.state.shared[type].length
       tilesData.push({
@@ -102,6 +109,7 @@ let SharedNodes = React.createClass({
           color={len ? activeColor : inactiveColor}
         />,
         nodeType: type,
+        title: nameMap[type],
         numItems: len
       })
     }
@@ -186,7 +194,7 @@ let WrappedGridTile = React.createClass({
         title={
           <span
             style={{...styles.caption, ...styles.captionTitle}}>
-            {tile.nodeType}
+            {tile.title}
           </span>}
         titleBackground={'rgba(0, 0, 0, 0)'}
         titlePosition={'bottom'}
