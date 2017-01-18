@@ -343,6 +343,10 @@ let NodeAddGeneric = React.createClass({
       },
       image: {
         height: '176px',
+        backgroundColor: '#9ca0aa',
+        backgroundImage: this.state.isCollection ? 'none'
+          : `url(${Util.uriToProxied(this.state.uploadedFileUri)})`,
+        backgroundSize: 'cover'
       },
       container: {
         overflowY: 'scroll'
@@ -351,12 +355,12 @@ let NodeAddGeneric = React.createClass({
         position: 'relative',
         height: '0',
         zIndex: 1500,
-        width: this.state.isSingleNode ? '100px' : '200px',
+        width: '200px',
         marginLeft: 'auto',
         marginRight: 'auto',
         left: '0',
         right: '0',
-        top: this.state.isSingleNode ? '15vh' : '50px'
+        top: '50px'
       },
       nodeTitle: {
         padding: '10px 24px',
@@ -416,7 +420,7 @@ let NodeAddGeneric = React.createClass({
     // let {type} = this.props.params
     // let config = this.getTypeConfig(type)
     // let title = config.title || `New ${type}`
-    let headerIcon
+    let headerIcon = <AddNodeIcon />
     let reader = new FileReader()
     let imagePreview
     const URL = window.URL || window.webkitURL
@@ -460,16 +464,16 @@ let NodeAddGeneric = React.createClass({
 
     console.log('bg image ', backgroundImage)
 
-    if (this.state.isCollection) {
-      headerIcon = <CollectionIcon />
-    } else if (this.state.isSingleNode &&
-      (this.state.imgArray.length > 0 || this.state.docArray.length > 0)) {
-      headerIcon = this.state.uploadedFileType === 'image' ? null : <DocIcon />
-    } else {
-      headerIcon = <AddNodeIcon />
-    }
+    // if (this.state.isCollection) {
+    //   headerIcon = <CollectionIcon />
+    // } else if (this.state.isSingleNode &&
+    //   (this.state.imgArray.length > 0 || this.state.docArray.length > 0)) {
+    //   headerIcon = this.state.uploadedFileType === 'image' ? null : <DocIcon />
+    // } else {
+    //   headerIcon = <AddNodeIcon />
+    // }
 
-    let bgImg = backgroundImage || <AddNodeIcon />
+    // let bgImg = backgroundImage || <AddNodeIcon />
 
     console.log('Refs = ', this.refs)
     return (
@@ -504,11 +508,10 @@ let NodeAddGeneric = React.createClass({
               />
               <Card>
                 <CardMedia
-                  style={Object.assign({},
-                    styles.image,
-                    {background: `url(${bgImg}) center / cover`}
-                  )}
-                />
+                  style={styles.image}
+                >
+                  <AddNodeIcon />
+                </CardMedia>
               </Card>
               <TextField
                 ref="nodeTitle"
