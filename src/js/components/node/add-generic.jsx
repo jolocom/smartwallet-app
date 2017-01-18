@@ -11,7 +11,6 @@ import {
   FlatButton,
   TextField,
   List,
-  Avatar,
   ListItem, Divider,
   SelectField, MenuItem, Chip, FloatingActionButton
 } from 'material-ui'
@@ -37,29 +36,11 @@ import ActionLabel from 'material-ui/svg-icons/maps/local-offer'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'
+import UploadFileIcon from 'material-ui/svg-icons/file/file-upload'
 import Group from 'material-ui/svg-icons/social/group'
 import GroupAddIcon from 'material-ui/svg-icons/social/group-add'
-import ImageIcon from 'material-ui/svg-icons/image/image'
 import Person from 'material-ui/svg-icons/social/person'
 import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
-// import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
-
-// import NodeAddDefault from './add-default.jsx'
-// import NodeAddLink from './add-link.jsx'
-// import NodeAddImage from './add-image.jsx'
-
-// let types = {
-//   default: {
-//     component: NodeAddDefault
-//   },
-//   link: {
-//     component: NodeAddLink
-//   },
-//   image: {
-//     title: 'Upload image',
-//     component: NodeAddImage
-//   }
-// }
 
 let NodeAddGeneric = React.createClass({
 
@@ -349,7 +330,6 @@ let NodeAddGeneric = React.createClass({
 
   getStyles() {
     const {muiTheme} = this.context
-    const worker = new Worker()
     return {
       bar: {
         backgroundColor: muiTheme.actionAppBar.color,
@@ -363,10 +343,6 @@ let NodeAddGeneric = React.createClass({
       },
       image: {
         height: '176px',
-        maxWidth: '100%',
-        maxHeight: '60%',
-        backgroundImage: URL.createObjectURL(this.state.imgArray[0]),
-        background: 'cover'
       },
       container: {
         overflowY: 'scroll'
@@ -443,26 +419,46 @@ let NodeAddGeneric = React.createClass({
     let headerIcon
     let reader = new FileReader()
     let imagePreview
+    const URL = window.URL || window.webkitURL
+    let image, imageURL
 
-    if (this.state.imgArray[0]) {
-      reader.onload = (e) => {
-        imagePreview = e
-        // document.getElementById('preview').src = e.target.result
+    // if (this.state.imgArray[0] && URL) {
+    //   reader.onload = (e) => {
+    //     imageURL = URL.createObjectURL(e.target.result)
+    //     // image = document.createElement('img')
+    //     // working one !
+    //     // document.getElementById('preview').src = e.target.result
+    //
+    //     // this.refs.preview.setAttribute('backgroundImage', e.target.result)
+    //
+    //     // document.getElementById('fileAvatar').src = e.target.result
+    //     // ocument.getElementsByClassName('fileAvatar').src = e.target.result
+    //
+    //     // console.log(document.getElementById('preview').src)
+    //
+    //     image.onload = () => {
+    //       URL.revokeObjectURL(imageURL)
+    //     }
+    //     console.log(imagePreview)
+    //     debugger;
+    //   }
+    //
+    //   reader.readAsDataURL(this.state.imgArray[0].file)
+    //
+    //   // imagePreview = reader.readAsDataURL(this.state.imgArray[0].file)
+    //   // console.log(imagePreview)
+    // }
+    let localImage, backgroundImage
 
-        this.refs.preview.setAttribute('backgroundImage', e.target.result)
-
-        // document.getElementById('fileAvatar').src = e.target.result
-        // ocument.getElementsByClassName('fileAvatar').src = e.target.result
-
-        // console.log(document.getElementById('preview').src)
-        console.log(imagePreview)
-      }
-
-      reader.readAsDataURL(this.state.imgArray[0].file)
-
-      // imagePreview = reader.readAsDataURL(this.state.imgArray[0].file)
-      // console.log(imagePreview)
+    if (this.state.imgArray && this.state.imgArray[0]) {
+      localImage = this.state.imgArray[0]
     }
+    //
+    // if (localImage) {
+    //   backgroundImage = URL.createObjectURL(localImage)
+    // }
+
+    console.log('bg image ', backgroundImage)
 
     if (this.state.isCollection) {
       headerIcon = <CollectionIcon />
@@ -472,6 +468,8 @@ let NodeAddGeneric = React.createClass({
     } else {
       headerIcon = <AddNodeIcon />
     }
+
+    let bgImg = backgroundImage || <AddNodeIcon />
 
     console.log('Refs = ', this.refs)
     return (
@@ -506,13 +504,11 @@ let NodeAddGeneric = React.createClass({
               />
               <Card>
                 <CardMedia
-                  style={styles.image} ref="preview">
-                  {/*{*/}
-                   {/*this.state.imgArray.length >= 1*/}
-                     {/*? <img id="preview" style={styles.image} />*/}
-                     {/*: null*/}
-                  {/*}*/}
-                </CardMedia>
+                  style={Object.assign({},
+                    styles.image,
+                    {background: `url(${bgImg}) center / cover`}
+                  )}
+                />
               </Card>
               <TextField
                 ref="nodeTitle"
@@ -611,8 +607,12 @@ let NodeAddGeneric = React.createClass({
                         key={2}
                         open
                         style={styles.imgListItems}
-                        leftIcon={<ImageIcon color="#9ba0aa" />}
-                        rightToggle={<ImageIcon style={{display: 'none'}} />}
+                        leftIcon={<UploadFileIcon color="#9ba0aa" />}
+                        rightToggle={
+                          <UploadFileIcon
+                            style={{display: 'none'}}
+                          />
+                        }
                         nestedListStyle={{
                           ...styles.accordionChildren, ...styles.imgListItems}}
                         nestedItems={
@@ -620,11 +620,7 @@ let NodeAddGeneric = React.createClass({
                             return (
                               <ListItem
                                 key={img.key}
-                                leftAvatar={
-                                  <Avatar className="fileAvatar">
-                                    {/* <img className="fileAvatar" /*/}
-                                  </Avatar>
-                                }
+                                leftIcon={<FileIcon />}
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
@@ -644,8 +640,12 @@ let NodeAddGeneric = React.createClass({
                         key={3}
                         open
                         style={styles.docListItems}
-                        leftIcon={<FileIcon color="#9ba0aa" />}
-                        rightToggle={<FileIcon style={{display: 'none'}} />}
+                        leftIcon={<UploadFileIcon color="#9ba0aa" />}
+                        rightToggle={
+                          <UploadFileIcon
+                            style={{display: 'none'}}
+                          />
+                        }
                         nestedListStyle={{
                           ...styles.accordionChildren, ...styles.docListItems}}
                         nestedItems={
@@ -653,6 +653,7 @@ let NodeAddGeneric = React.createClass({
                             return (
                               <ListItem
                                 key={doc.key}
+                                leftIcon={<FileIcon />}
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
@@ -672,8 +673,12 @@ let NodeAddGeneric = React.createClass({
                         key={4}
                         open
                         style={styles.miscFileListItems}
-                        leftIcon={<FileIcon color="#9ba0aa" />}
-                        rightToggle={<FileIcon style={{display: 'none'}} />}
+                        leftIcon={<UploadFileIcon color="#9ba0aa" />}
+                        rightToggle={
+                          <UploadFileIcon
+                            style={{display: 'none'}}
+                          />
+                        }
                         nestedListStyle={{
                           ...styles.accordionChildren,
                           ...styles.miscFileListItems
@@ -683,6 +688,7 @@ let NodeAddGeneric = React.createClass({
                             return (
                               <ListItem
                                 key={f.key}
+                                leftIcon={<FileIcon />}
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
