@@ -41,7 +41,8 @@ let GenericFullScreen = React.createClass({
     backgroundImg: React.PropTypes.any,
     uri: React.PropTypes.string,
     graphState: React.PropTypes.object,
-    centerWritePerm: React.PropTypes.bool
+    centerWritePerm: React.PropTypes.bool,
+    attachment: React.PropTypes.string
   },
 
   contextTypes: {
