@@ -105,10 +105,8 @@ let NodeAddGeneric = React.createClass({
     let type = 'text'
 
     if (this.state.imgArray.length >= 1) {
-      console.log('setting type to image')
       type = 'image'
     } else if (this.state.docArray.length >= 1) {
-      console.log('setting type to doc')
       type = 'document'
     } else if (this.state.fileArray.length >= 1) {
       type = 'miscFile'
@@ -717,7 +715,6 @@ let NodeAddGeneric = React.createClass({
       this.setState({
         uploadedFileType: 'image'
       })
-      console.log('FU setting uploaded file type to image!')
           // JUST USE 1 FILE INSTEAD ATM
           //
           // this.state.imgArray.push({
@@ -756,7 +753,6 @@ let NodeAddGeneric = React.createClass({
       this.setState({
         uploadedFileType: 'document'
       })
-      console.log('FU setting uploaded file type to document!')
       // USING 1 FILE INSTEAD OF MULTIPLE UPLOAD CAPABILITIES
 
       this.state.docArray[0] = {
@@ -784,7 +780,6 @@ let NodeAddGeneric = React.createClass({
       this.setState({
         uploadedFileType: 'miscFile'
       })
-      console.log('FU setting uploaded file type to miscFile!')
 
       this.state.fileArray[0] = {
         file: file,
@@ -807,10 +802,7 @@ let NodeAddGeneric = React.createClass({
       })
       this.setState(this.state)
     }
-    console.log('arraylengths ',
-      this.state.imgArray.length, this.state.docArray.length)
     if ((this.state.imgArray.length + this.state.docArray.length) > 1) {
-      console.log('collection')
       // is a collection
       this.setState({
         isCollection: true
@@ -857,7 +849,6 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleChipDelete(key) {
-    console.log('delete chip')
     let newTagArray = this.state.tagArray
     const tagToDelete = newTagArray.map((tag) => tag.key).indexOf(key)
     newTagArray.splice(tagToDelete, 1)
