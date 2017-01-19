@@ -112,7 +112,6 @@ class D3Converter {
         }
       }
     })
-
     // @TODO Have a dedicated RDF type for bitcoin and passport nodes, so that
     // we don't need this hack.
     if (props.title === 'Passport') {
