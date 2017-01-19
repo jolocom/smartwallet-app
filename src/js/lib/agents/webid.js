@@ -1,151 +1,225 @@
 import LDPAgent from './ldp.js'
-import {endpoint} from 'settings'
-import Util from '../util'
-import {Writer} from '../rdf'
+import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
-import rdflib from 'rdflib'
+import $rdf from 'rdflib'
 
 // WebID related functions
 class WebIDAgent extends LDPAgent {
 
-  // Should this send it to the proxy?
-  isFakeIDAvailable(username) {
-    return this.head(`${endpoint}/${username}`)
-      .then(() => {
-        return false
-      }).catch(() => {
-        return true
-      })
-  }
-
   // Gets the webId of the currently loged in user from local storage,
-  // Why is this async?
-  getWebID() {
-    return new Promise((resolve, reject) => {
-      const webId = localStorage.getItem('jolocom.webId')
-      if (!webId) {
-        reject(new Error('Not logged in'))
-      } else {
-        resolve(webId)
-      }
-    })
+  getWebId() {
+    const webId = localStorage.getItem('jolocom.webId')
+    if (webId) {
+      return webId
+    }
+    return ''
   }
 
-  initInbox(webId) {
-    const webIdRoot = Util.webidRoot(webId)
-    const uri = `${webIdRoot}/little-sister/inbox`
-    return this.head(Util.uriToProxied(uri)).then(res => {
-      if (res.statusText !== 'OK') {
-        throw new Error()
-      }
-    }).catch(() => {
-      return this.put(
-        Util.uriToProxied(uri),
-        {'Content-type': 'text/turtle'},
-        this._inboxTriples(webId)
-      ).then(() => {
-        this._writeAcl(uri, webId)
-      })
-    })
-  }
-
-  initIndex(webId) {
-    const webIdRoot = Util.webidRoot(webId)
-    const uri = `${webIdRoot}/little-sister/index`
-    return this.head(Util.uriToProxied(uri)).then(res => {
-      if (res.statusText !== 'OK') {
-        throw new Error()
-      }
-    }).catch(() => {
-      return this.put(Util.uriToProxied(uri), {
-        'Content-type': 'text/turtle'
-      })
-    })
-  }
-
-  initDisclaimer(webId) {
-    const webIdRoot = Util.webidRoot(webId)
-    const uri = `${webIdRoot}/little-sister/disclaimer`
-
-    return this.head(Util.uriToProxied(uri)).then(res => {
-      if (res.statusText !== 'OK') {
-        throw new Error()
-      }
-    }).catch(() => {
-      return this.put(
-        Util.uriToProxied(uri),
-        {'Content-type': 'text/turtle'},
-        'These files are needed for features of the Little-Sister app.'
-      )
-    })
-  }
-
-  // Converts the input from the forms to RDF data to put into the inbox card
-  _inboxTriples(webId) {
+  getProfile() {
+    const webId = this.getWebId()
     if (!webId) {
-      return Promise.reject('Must provide a webId!')
+      throw new Error('No webid detected.')
+    }
+    let parser = new Parser()
+    return this.get(this._proxify(webId))
+      .then((response) => {
+        return response.text()
+      }).then((text) => {
+        return parser.parse(text, webId)
+      }).then((answer) => {
+        return this._parseProfile(webId, answer.triples)
+      }).then((data) => {
+        if (data.imgUri) {
+          return this.head(this._proxify(data.imgUri))
+            .then((res) => {
+              return data
+            })
+            .catch((e) => {
+              data.imgUri = null
+              return data
+            })
+        }
+        return Object.assign(data, {webId})
+      })
+  }
+
+  _parseProfile(webId, triples) {
+    let profile = {
+      webId: webId
     }
 
-    let writer = new Writer()
+    let relevant = triples.filter((t) => t.subject.uri === webId)
 
-    // Please take a look at
-    // https://github.com/solid/solid-spec/blob/
-    // master/solid-webid-profiles.md#profile-representation-formats
-    // For extra info on the structure of a valid webId Profile
-    // writer.addTriple(rdflib.sym(''), DC('title'), `Inbox of ${username}`)
-    writer.addTriple({
-      subject: '',
-      predicate: PRED.maker,
-      object: webId
-    })
+    let predicateMap = {}
+    predicateMap[PRED.familyName] = 'familyName'
+    predicateMap[PRED.givenName] = 'givenName'
+    predicateMap[PRED.fullName] = 'fullName'
+    predicateMap[PRED.image] = 'imgUri'
+    predicateMap[PRED.email] = 'email'
+    predicateMap[PRED.socialMedia] = 'socialMedia'
+    predicateMap[PRED.mobile] = 'mobilePhone'
+    predicateMap[PRED.address] = 'address'
+    predicateMap[PRED.profession] = 'profession'
+    predicateMap[PRED.company] = 'company'
+    predicateMap[PRED.url] = 'url'
+    predicateMap[PRED.creditCard] = 'creditCard'
+    predicateMap[PRED.passport] = 'passportNodeUri'
+    predicateMap[PRED.storage] = 'storage'
 
-    writer.addTriple({
-      subject: '',
-      predicate: PRED.primaryTopic,
-      object: rdflib.sym('#inbox')
-    })
-
-    writer.addTriple({
-      subject: '#inbox',
-      predicate: PRED.type,
-      object: PRED.space
-    })
-
-    return writer.end()
-  }
-
-  _writeAcl(uri, webId) {
-    let writer = new Writer()
-    let ACL = rdflib.Namespace('http://www.w3.org/ns/auth/acl#')
-    let aclUri = `${uri}.acl`
-
-    writer.addTriple(rdflib.sym('#owner'), PRED.type, ACL('Authorization'))
-    writer.addTriple(rdflib.sym('#owner'), ACL('accessTo'), rdflib.sym(uri))
-    writer.addTriple(rdflib.sym('#owner'), ACL('accessTo'), rdflib.sym(aclUri))
-    writer.addTriple(rdflib.sym('#owner'), ACL('agent'), rdflib.sym(webId))
-    writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Control'))
-    writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Read'))
-    writer.addTriple(rdflib.sym('#owner'), ACL('mode'), ACL('Write'))
-
-    writer.addTriple(rdflib.sym('#append'), PRED.type, ACL('Authorization'))
-    writer.addTriple(rdflib.sym('#append'), ACL('accessTo'), rdflib.sym(uri))
-    writer.addTriple(rdflib.sym('#append'), ACL('agentClass'), PRED.Agent)
-    writer.addTriple(rdflib.sym('#append'), ACL('mode'), ACL('Append'))
-
-    return fetch(Util.uriToProxied(aclUri), {
-      method: 'PUT',
-      credentials: 'include',
-      body: writer.end(),
-      headers: {
-        'Content-Type': 'text/turtle'
+    for (var t of relevant) {
+      if (predicateMap[t.predicate]) {
+        const obj = t.object.uri ? t.object.uri : t.object.value
+        profile[predicateMap[t.predicate]] = obj
       }
-    }).then(() => {
-      return aclUri
-    }).catch((e) => {
-      console.error(e, 'occured while putting the acl file')
+    }
+
+    // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
+    // when displaying here.
+    if (profile.email) {
+      profile.email = profile.email.substring(7, profile.email.length)
+    }
+
+    let {fullName, givenName, familyName} = profile
+    if (!givenName && !familyName) {
+      if (fullName) {
+        let space = fullName.indexOf(' ')
+        if (space !== -1) {
+          profile.givenName = fullName.substring(0, space)
+          profile.familyName = fullName.substring(
+              profile.givenName.length + 1, fullName.length)
+        }
+      }
+    }
+
+    if (profile.passportNodeUri) {
+      return this.findObjectsByTerm(
+        profile.passportNodeUri,
+        PRED.image
+      ).then(res => {
+        profile.passportImgUri = res.length ? res[0].value : ''
+        return profile
+      })
+    } else {
+      return profile
+    }
+  }
+
+  updateProfile(newData, oldData) {
+    let insertTriples = []
+    let deleteTriples = []
+    let toAdd = $rdf.graph()
+    let toDel = $rdf.graph()
+
+    let predicateMap = {
+      familyName: PRED.familyName,
+      givenName: PRED.givenName,
+      fullName: PRED.fullName,
+      imgUri: PRED.image,
+      email: PRED.email,
+      socialMedia: PRED.socialMedia,
+      mobilePhone: PRED.mobile,
+      address: PRED.address,
+      profession: PRED.profession,
+      company: PRED.company,
+      url: PRED.url,
+      creditCard: PRED.creditCard
+    }
+
+    for (let pred in predicateMap) {
+      if (newData[pred] !== oldData[pred]) {
+        if (!oldData[pred] || newData[pred]) {
+          // inserting
+          insertTriples.push({
+            subject: $rdf.sym(oldData.webId),
+            predicate: predicateMap[pred],
+            object: newData[pred]
+          })
+        }
+        if (!newData[pred] || oldData[pred]) {
+          // delete
+          deleteTriples.push({
+            subject: $rdf.sym(oldData.webId),
+            predicate: predicateMap[pred],
+            object: oldData[pred]
+          })
+        }
+      }
+    }
+
+    toAdd.addAll(insertTriples.map((t) => {
+      if (t.predicate.uri === PRED.email.uri) {
+        t.object = $rdf.sym(`mailto:${t.object}`)
+      }
+      return t
+    }))
+
+    toDel.addAll(deleteTriples.map((t) => {
+      if (t.predicate.uri === PRED.email.uri) {
+        t.object = $rdf.sym(`mailto:${t.object}`)
+      }
+      return t
+    }))
+
+    // All network requests will be contained here, later awaited by with
+    // Promise.all
+    let nodeCreationRequests = []
+    nodeCreationRequests.push(this.patch(
+      this._proxify(oldData.webId), toDel.statements, toAdd.statements
+    ))
+
+    return Promise.all(nodeCreationRequests).then(res => {
+      return newData
     })
   }
 
+  deletePassport(uri, imgUri) {
+    const webId = this.getWebId()
+    if (!webId) {
+      throw new Error('No webid detected.')
+    }
+
+    const toDel = $rdf.graph()
+    toDel.add(
+      $rdf.sym(webId),
+      PRED.passport,
+      $rdf.sym(uri)
+    )
+
+    return Promise.all([
+      this.delete(this._proxify(uri)),
+      this.delete(this._proxify(uri + '.acl')),
+      this.delete(this._proxify(imgUri)),
+      this.delete(this._proxify(imgUri + '.acl')),
+      this.patch(this._proxify(webId), toDel.statements)
+    ])
+  }
+
+  updatePassport(uri, oldImgUri, imgUri) {
+    const webId = this.getWebId()
+    if (!webId) {
+      throw new Error('No webid detected.')
+    }
+    const toDel = $rdf.graph()
+    const toAdd = $rdf.graph()
+
+    toDel.add(
+      $rdf.sym(uri),
+      PRED.image,
+      oldImgUri
+    )
+
+    toAdd.add(
+      $rdf.sym(uri),
+      PRED.image,
+      imgUri
+    )
+
+    return Promise.all([
+      this.patch(this._proxify(uri), toDel.statements, toAdd.statements),
+      this.delete(this._proxify(oldImgUri)),
+      this.delete(this._proxify(oldImgUri + '.acl'))
+    ])
+  }
 }
 
 export default WebIDAgent

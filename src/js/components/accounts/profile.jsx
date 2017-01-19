@@ -10,9 +10,6 @@ import {
   AppBar,
   IconButton,
   TextField,
-  Card,
-  CardMedia,
-  CardActions,
   FlatButton,
   RaisedButton,
   List, ListItem,
@@ -24,7 +21,7 @@ import ActionCreditCard from 'material-ui/svg-icons/action/credit-card'
 import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import SocialPublic from 'material-ui/svg-icons/social/public'
-import SocialPersonOutline from 'material-ui/svg-icons/social/person-outline'
+import SocialPerson from 'material-ui/svg-icons/social/person'
 import SnackbarActions from 'actions/snackbar'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
@@ -35,7 +32,6 @@ import CommunicationLocation
 
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
-import GraphStore from 'stores/graph-store'
 import JolocomTheme from 'styles/jolocom-theme'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 
@@ -46,8 +42,7 @@ const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
   mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState'),
-    Reflux.connect(GraphStore, 'graphState')
+    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState')
   ],
 
   contextTypes: {
@@ -73,14 +68,8 @@ let Profile = React.createClass({
     window.location.href = `${proxy}/exportkey`
   },
 
-  uploadPK() {
-    return fetch(`${proxy}/importkey`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'text/turtle'
-      }
-    })
+  show() {
+    ProfileActions.show()
   },
 
   hide() {
@@ -91,8 +80,49 @@ let Profile = React.createClass({
   getStyles() {
     const {muiTheme} = this.context
     let styles = {
-      image: {
-        height: '176px'
+      profileImage: {
+        minHeight: '240px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      profileImageBackground: {
+        flex: 1,
+        width: '100%'
+      },
+      profileImageAction: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '80px',
+        background: 'linear-gradient(0deg, rgba(0,0,0,0.3), transparent)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      profileImageActionButton: {
+        color: muiTheme.palette.alternateTextColor
+      },
+      profileImagePlaceholder: {
+        borderRadius: '50%',
+        width: '96px',
+        height: '96px',
+        marginBottom: '80px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: muiTheme.jolocom.gray3
+      },
+      profileImageIcon: {
+        width: '48px',
+        height: '48px',
+        color: muiTheme.jolocom.gray1
+      },
+      profileImageProgress: {
+        alignSelf: 'flex-end'
       },
       bar: {
         backgroundColor: muiTheme.palette.primary1Color
@@ -107,7 +137,8 @@ let Profile = React.createClass({
         display: 'none'
       },
       input: {
-        width: '100%'
+        width: '100%',
+        marginTop: 0
       },
       passportContainer: {
         paddingTop: '28px',
@@ -124,7 +155,6 @@ let Profile = React.createClass({
       uploadPassportButton: {
         margin: '0 10px 0 0',
         position: 'relative',
-        top: '-11px',
         verticalAlign: 'top'
       },
       removePassportButton: {
@@ -139,6 +169,7 @@ let Profile = React.createClass({
       label: {
         display: 'inline-block',
         textAlign: 'right',
+        paddingTop: '22px',
         paddingLeft: '16px',
         paddingRight: '32px'
       },
@@ -185,20 +216,63 @@ let Profile = React.createClass({
     return styles
   },
 
+  renderProfileImage() {
+    let styles = this.getStyles()
+    let image
+    let backgroundImage
+
+    let {file, imgUri} = this.state
+
+    if (file) {
+      backgroundImage = URL.createObjectURL(file)
+    } else if (imgUri) {
+      backgroundImage = Util.uriToProxied(imgUri)
+    }
+
+    if (backgroundImage) {
+      image = (
+        <div
+          style={Object.assign({},
+            styles.profileImageBackground,
+            {background: `url(${backgroundImage}) center / cover`}
+          )}
+        />
+      )
+    } else {
+      image = (
+        <div style={styles.profileImagePlaceholder}>
+          <SocialPerson style={styles.profileImageIcon} />
+        </div>
+      )
+    }
+
+    return (
+      <div style={styles.profileImage}>
+        {image}
+        <div style={styles.profileImageAction}>
+          {this.state.loadingDisplayPhoto
+            ? <LinearProgress
+              mode="indeterminate"
+              style={styles.profileImageProgress} />
+            : backgroundImage
+              ? <FlatButton
+                style={styles.profileImageActionButton}
+                label="Remove"
+                onClick={this._handleRemove} />
+              : <FlatButton
+                style={styles.profileImageActionButton}
+                label="Select or take picture"
+                onClick={this._handleSelect} />}
+        </div>
+      </div>
+    )
+  },
+
   render() {
     let nameUsed = this.state.givenName
       ? 'givenName'
       : 'fullName'
     let styles = this.getStyles()
-    let {file, imgUri} = this.state
-
-    let img
-    if (file) {
-      img = URL.createObjectURL(file)
-    } else if (imgUri) {
-      img = Util.uriToProxied(imgUri)
-    }
-    let bgImg = img || '/img/person-placeholder.png'
 
     return (
       <Dialog ref="dialog" fullscreen>
@@ -212,7 +286,7 @@ let Profile = React.createClass({
                 iconStyle={{color: '#fff'}}
                 color="#fff"
                 onClick={this.hide}
-                iconClassName="material-icons">arrow_back</IconButton>
+                iconClassName="material-icons">close</IconButton>
             }
             iconElementRight={!this.state.loadingPassportPhoto &&
               !this.state.loadingDisplayPhoto
@@ -220,32 +294,15 @@ let Profile = React.createClass({
                 iconStyle={{color: '#fff'}}
                 onClick={this._handleUpdate}
                 iconClassName="material-icons">check</IconButton>
-              : <IconButton iconClassName="material-icons">
-                  hourglass_empty
+              : <IconButton
+                iconStyle={{color: '#fff'}}
+                iconClassName="material-icons">
+                hourglass_empty
               </IconButton>
             }
           />
           <Content style={styles.content}>
-            <Card rounded={false}>
-              <CardMedia
-                style={Object.assign({},
-                  styles.image,
-                  {background: `url(${bgImg}) center / cover`}
-                )} />
-              <CardActions>
-                {this.state.loadingDisplayPhoto
-                  ? <LinearProgress
-                    mode="indeterminate"
-                    style="progBar" />
-                  : img
-                      ? <FlatButton
-                        label="Remove"
-                        onClick={this._handleRemove} />
-                      : <FlatButton
-                        label="Select or take picture"
-                        onClick={this._handleSelect} />}
-              </CardActions>
-            </Card>
+            {this.renderProfileImage()}
             <input
               ref={this._setFileInputRef}
               type="file"
@@ -279,13 +336,12 @@ let Profile = React.createClass({
                   <Divider style={styles.sectionDivider} />
                   <div style={styles.formRow}>
                     <div style={styles.label}>
-                      <SocialPersonOutline color="#9ba0aa" />
+                      <SocialPerson color="#9ba0aa" />
                     </div>
                     <div style={styles.field}>
                       <TextField
                         name="username"
                         floatingLabelText="Username"
-                        floatingLabelFixed
                         value={this.state.webId}
                         style={styles.input}
                         disabled />
@@ -302,7 +358,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Mobile"
-                        floatingLabelFixed
                         name="mobile"
                         onChange={Util.linkToState(this, 'mobilePhone')}
                         value={this.state.mobilePhone}
@@ -316,7 +371,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Email"
-                        floatingLabelFixed
                         name="email"
                         onChange={Util.linkToState(this, 'email')}
                         value={this.state.email}
@@ -330,7 +384,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Address"
-                        floatingLabelFixed
                         name="address"
                         onChange={Util.linkToState(this, 'address')}
                         value={this.state.address}
@@ -344,7 +397,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Social Media"
-                        floatingLabelFixed
                         name="socialMedia"
                         onChange={Util.linkToState(this, 'socialMedia')}
                         value={this.state.socialMedia}
@@ -362,7 +414,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Profession"
-                        floatingLabelFixed
                         name="profession"
                         onChange={Util.linkToState(this, 'profession')}
                         value={this.state.profession}
@@ -376,7 +427,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Company"
-                        floatingLabelFixed
                         name="company"
                         onChange={Util.linkToState(this, 'company')}
                         value={this.state.company}
@@ -390,7 +440,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Url"
-                        floatingLabelFixed
                         name="url"
                         onChange={Util.linkToState(this, 'url')}
                         value={this.state.url}
@@ -438,7 +487,6 @@ let Profile = React.createClass({
                     <div style={styles.field}>
                       <TextField
                         floatingLabelText="Credit Card"
-                        floatingLabelFixed
                         name="creditcard"
                         onChange={Util.linkToState(this, 'creditCard')}
                         style={styles.input}
@@ -472,8 +520,10 @@ let Profile = React.createClass({
   },
 
   _handleUpdate() {
-    if (!this.loadingPassportPhoto && !this.loadingDisplayPhoto) {
-      ProfileActions.update(this.state)
+    if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
+      ProfileActions.update(Object.assign({},
+        this.state
+      ))
       this.hide()
     }
   },

@@ -38,7 +38,6 @@ export default class GraphD3 extends EventEmitter {
 
     this.svg = d3.select(this.graphContainer).append('svg:svg')
       .style('display', 'block')
-      // .append('svg:g')
 
     this.refreshDimensions()
 
@@ -123,7 +122,7 @@ export default class GraphD3 extends EventEmitter {
 
   // Function to be called when the state changes
   render = function (state) { // nodes
-    this.state = state
+    this.state = Object.assign({}, state)
     if (this.rendered) {
       this.eraseGraph() // erase everything, including background
     }
@@ -177,8 +176,10 @@ export default class GraphD3 extends EventEmitter {
 
   orderNodes= function () {
     this.state.neighbours.sort(function(a, b) {
-      let A = (a.name || a.title || 'zzzzzz').toLowerCase()
-      let B = (b.name || b.title || 'zzzzzz').toLowerCase()
+      let A = (a.name || a.title || a.fullName || a.familyName || 'zzzzzz')
+      .toLowerCase()
+      let B = (b.name || b.title || b.fullName || b.familyName || 'zzzzzz')
+      .toLowerCase()
       if (A > B) {
         return 1
       } else if (A < B) {
@@ -386,9 +387,9 @@ export default class GraphD3 extends EventEmitter {
     // convolve that with a Gaussian with standard deviation 3 and store result
     // in blur
 
-    // This basically takes care of blurring
-    this.filter.append('feGaussianBlur')
-      .attr('stdDeviation', 1.5)
+    // // This basically takes care of blurring
+    // this.filter.append('feGaussianBlur')
+    //   .attr('stdDeviation', 1.5)
     this.componentTransfer = this.filter.append('feComponentTransfer')
     this.componentTransfer.append('feFuncR')
       .attr('type', 'linear')
@@ -399,46 +400,6 @@ export default class GraphD3 extends EventEmitter {
     this.componentTransfer.append('feFuncB')
       .attr('type', 'linear')
       .attr('slope', 0.3)
-
-    let defsShadow = this.svg.append('svg:defs')
-
-    let filterShadow = defsShadow.append('filter')
-      .attr('id', 'drop-shadow')
-
-    filterShadow.append('feGaussianBlur')
-      .attr('in', 'SourceAlpha')
-      .attr('stdDeviation', 0.8)
-      .attr('result', 'blur')
-
-    // translate output of Gaussian blur to the right and downwards with 2px
-    // store result in offsetBlur
-    filterShadow.append('feOffset')
-      .attr('in', 'blur')
-      .attr('dx', 0)
-      .attr('dy', 0.5)
-      .attr('result', 'offsetBlur')
-
-    // controls the color/opacity of drop shadow
-    filterShadow.append('feFlood')
-        .attr('in', 'offsetBlur')
-        .attr('flood-color', '#2c2c2c')
-        .attr('flood-opacity', '0.6')
-        .attr('result', 'offsetColor')
-
-    filterShadow.append('feComposite')
-        .attr('in', 'offsetColor')
-        .attr('in2', 'offsetBlur')
-        .attr('operator', 'in')
-        .attr('result', 'offsetBlur')
-
-    // overlay original SourceGraphic over translated blurred opacity by using
-    // feMerge filter. Order of specifying inputs is important!
-    let feMerge = filterShadow.append('feMerge')
-
-    feMerge.append('feMergeNode')
-      .attr('in', 'offsetBlur')
-    feMerge.append('feMergeNode')
-      .attr('in', 'SourceGraphic')
 
     // Used as a background circle for image nodes
     nodeEnter.append('circle')
@@ -462,6 +423,11 @@ export default class GraphD3 extends EventEmitter {
     nodeEnter.filter((d) => d.rank !== 'elipsis').append('svg:text')
       .attr('class', 'nodetext')
       .style('fill', '#F0F7F5')
+      .style('-moz-user-select', 'none')
+      .style('-webkit-user-select', 'none')
+      .style('-ms-user-select', 'none')
+      .style('user-select', 'none')
+      .style('-o-user-select:', 'none')
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .attr('font-size', (d) => {
@@ -497,8 +463,6 @@ export default class GraphD3 extends EventEmitter {
       .transition().delay(50)
       .attr('opacity', (d) => {
         if (d.rank === 'elipsis') {
-          return 0
-        } else if (d.img && d.rank !== 'history' && d.type !== 'passport') {
           return 0
         } else {
           return 1
@@ -547,6 +511,11 @@ export default class GraphD3 extends EventEmitter {
           : '0.95em'
       })
       .style('font-size', '80%')
+      .style('-moz-user-select', 'none')
+      .style('-webkit-user-select', 'none')
+      .style('-ms-user-select', 'none')
+      .style('user-select', 'none')
+      .style('-o-user-select:', 'none')
       .text(function (d) {
         // In case the person has no description available.
         if (d.description) {
@@ -570,29 +539,16 @@ export default class GraphD3 extends EventEmitter {
       // This wraps the description nicely.
       .call(this.wrap, STYLES.largeNodeSize * 0.75, ' ', ' ')
 
-    // Subscribe to the click listeners for arrow nodes
-    this.node.on('mousedown', function (data) {
-      self.mouseDown = true
-      if (data.rank === 'elipsis') {
-        let dir = 1
-        if (data.connection === 'backButton') {
-          dir = -1
-        }
-        self.onHoldClick(dir)
-      }
+    this.node.on('mouseover', function(d) {
+      d3.select(this).style('cursor', 'pointer')
     })
 
     // Subscribe to the click listeners for neighbour nodes
     this.node.on('click', function (data) {
       self.mouseDown = false
-      if (data.rank !== 'elipsis') {
-        if (!self.last || (d3.event.timeStamp - self.last) > 500) {
-          self.onClick(this, data)
-          self.last = d3.event.timeStamp
-        } else {
-          self.onDblClick(this, data)
-        }
-      }
+      d3.event.stopPropagation()
+      let object = d3.selectAll('.node').filter((d) => d === data)
+      self.clicked(object, data)
     })
 
     // Subscribe to the double click listeners for neighbour nodes
@@ -604,13 +560,13 @@ export default class GraphD3 extends EventEmitter {
     })
 
     // Add drag listeners to neighbour nodes
+    let drag = d3.drag().on('drag', this.drag)
+                 .on('start', this.dragStart)
+                 .on('end', this.dragEnd)
 
-    this.node.call(d3.drag().on('drag', this.drag)
-                            .on('start', this.dragStart)
-                            .on('end', this.dragEnd))
+    this.node.call(drag)
 
     // Add click behaviour on background so that a click will deselect nodes.
-
     this.svg.on('click', function (data) {
       self.mouseDown = false
       self.deselectAll()
@@ -622,45 +578,66 @@ export default class GraphD3 extends EventEmitter {
   // Arrow node function for rotating nodes
   onHoldClick = function (dir) {
     let self = this
-    if (this.mouseDown) {
-      let rotationIndex = this.rotationIndex
-      let numberOfNeighbours = this.numberOfNeighbours
-      let MAX_VISIBLE = this.MAX_VISIBLE_NODES
-      if (dir === 1) {
-        if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
-          this.rotationIndex++
-          this.emit('change-rotation-index',
-          this.rotationIndex)
-          this.updateAfterRotationIndex('up')
-        }
-      } else {
-        if (rotationIndex > 0) {
-          this.rotationIndex--
-          this.emit('change-rotation-index',
-          this.rotationIndex)
-          this.updateAfterRotationIndex('down')
-        }
+    let rotationIndex = this.rotationIndex
+    let numberOfNeighbours = this.numberOfNeighbours
+    let MAX_VISIBLE = this.MAX_VISIBLE_NODES
+    if (dir === 1) {
+      if (rotationIndex < numberOfNeighbours - MAX_VISIBLE) {
+        this.rotationIndex++
+        this.emit('change-rotation-index',
+        this.rotationIndex)
+        this.updateAfterRotationIndex('up')
       }
-      setTimeout(function () {
-        self.onHoldClick(dir)
-      }, 150)
+    } else {
+      if (rotationIndex > 0) {
+        this.rotationIndex--
+        this.emit('change-rotation-index',
+        this.rotationIndex)
+        this.updateAfterRotationIndex('down')
+      }
     }
+    setTimeout(function () {
+      if (self.mouseDown) {
+        self.onHoldClick(dir)
+      }
+    }, 150)
+    document.addEventListener('touchend', this.mouseUp)
+  }.bind(this)
+  // Star drag interaction, check if node should be movable
+  // remeber initial position in px and py
+
+  mouseUp = function () {
+    document.removeEventListener('touchend', this.mouseUp)
+    this.mouseDown = false
   }.bind(this)
 
   dragStart = function(node) {
     if (node.rank === 'elipsis' || node.rank === 'center' || node.unavailable) {
       node.mobile = false
+      if (node.rank === 'elipsis') {
+        this.mouseDown = true
+        let dir = 1
+        if (node.connection === 'backButton') {
+          dir = -1
+        }
+        this.onHoldClick(dir)
+      }
     } else {
       node.mobile = true
       node.position.px = node.position.x
       node.position.py = node.position.y
+      node.distanceTraveled = 0
     }
-  }
+  }.bind(this)
+
+  // change node position by same amount as change in mouse position
 
   drag = function(node) {
+    this.mouseDown = false
     if (node.mobile) {
       node.position.x += d3.event.dx
       node.position.y += d3.event.dy
+      node.distanceTraveled += Math.abs(d3.event.dx) + Math.abs(d3.event.dy)
       this.resetPos(0)
     }
   }.bind(this)
@@ -669,7 +646,6 @@ export default class GraphD3 extends EventEmitter {
 
   dragEnd = function (node) {
     this.mouseDown = false
-
     if (node.mobile) {
       // We check if the node is dropped on top of the center node
       let w = this.centerCoordinates.x
@@ -688,10 +664,27 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
+  // click behaviour
+
+  clicked = function (object, data) {
+    if (this.mode === 'preview') {
+      this.onClick(object, data)
+    } else if (data.rank === 'history') {
+      this.navigateToNode(data)
+    } else if (data.rank !== 'elipsis') {
+      this.onDblClick(object, data)
+    }
+  }
+
+  // navigate to node as long as node is not already center node
+
   navigateToNode = function (node) {
     if (node.rank !== 'center') {
+      // change rank to center node
       node.rank = 'center'
+      // trigger animation
       this.isPulsing = true
+      // delete all other nodes
       this.dataNodes = [node]
       this.dataLinks = []
       this.numberOfNeighbours = 0
@@ -700,6 +693,7 @@ export default class GraphD3 extends EventEmitter {
       this.resetAll()
       this.resetPos()
 
+      // get rid of dial
       this.svg.select('.dial')
         .attr('opacity', 0)
 
@@ -708,11 +702,10 @@ export default class GraphD3 extends EventEmitter {
     }
   }.bind(this)
 
-  // Enlarges and displays extra info about the clicked node, while setting
-  // all other highlighted nodes back to their normal size
+  // Sets up the data for D3
 
   setUpVisibleNodes = function () {
-    // No scrolling
+    // Adds position to center Node
     let x = this.centerCoordinates.x
     let y = this.centerCoordinates.y
     let coordinates = {
@@ -720,24 +713,37 @@ export default class GraphD3 extends EventEmitter {
     }
     this.dataNodes[0].position = coordinates
 
-    this.nodePositions = []
+    // array to hold node positions
 
+    // check to see if scrolling is necessary or not
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NODES) {
+      // Check to see whether node position has been calculated for
+      // current numer of nodes
+      if (this.numberOfNeighbours !== 0 &&
+        (!this.nodePositions ||
+        this.numberOfNeighbours !== this.nodePositions.length)) {
+        this.nodePositions = []
+
+        // Angle for the separation between neighbour nodes
+        let angle = (Math.PI * 2) / this.numberOfNeighbours
+
+        for (let i = 0; i < this.dataNodes.length; i++) {
+          let dist = STYLES.largeNodeSize * 1.4
+          let pos = {
+            x: Math.sin((Math.PI) - angle * i) * dist + x,
+            y: Math.cos((Math.PI) - angle * i) * dist + y,
+            p: 'neighbours'
+          }
+          this.nodePositions.push(pos)
+        }
+      }
+
+      // if number of nodes does not excede the allowed number there is no need
+      // to modify this data
       this.visibleDataNodes = this.dataNodes
       this.visibleDataLinks = this.dataLinks
 
-      let angle = (Math.PI * 2) / this.numberOfNeighbours
-
-      for (let i = 0; i < this.dataNodes.length; i++) {
-        let dist = STYLES.largeNodeSize * 1.4
-        let pos = {
-          x: Math.sin((Math.PI) - angle * i) * dist + this.centerCoordinates.x,
-          y: Math.cos((Math.PI) - angle * i) * dist + this.centerCoordinates.y,
-          p: 'neighbours'
-        }
-
-        this.nodePositions.push(pos)
-      }
+      // Position dataNodes
       for (let i = 0; i < this.dataNodes.length; i++) {
         if (this.dataNodes[i].rank === 'neighbour') {
           this.dataNodes[i].position = this.nodePositions[i - 1]
@@ -754,55 +760,47 @@ export default class GraphD3 extends EventEmitter {
 
     // Yes scrolling (more than 8 visible nodes)
 
-    // Smooth radial scrolling animation
-    //  d3.select('.dial').transition()
-    //   .duration(100)
-    //   .call(this.arcTween,
-    // 2*Math.PI*(this.rotationIndex+1)/this.numberOfNeighbours)
+    // Check to see whether node position has been calculated for
+    // current numer of nodes
+    if (!this.nodePositions ||
+      this.numberOfNeighbours !== this.nodePositions.length + 2) {
+      this.nodePositions = []
+      // space for arrow nodes
+      let totalspace = 2
+      // ofest for the circular distrubution
+      let num = 0.5
 
-    // Position nodes manually
+      // this is to have shorter statementes later on
+      let largeNode = STYLES.largeNodeSize
+      let center = this.centerCoordinates
 
-    this.nodePositions = []
-    let extraSpaceFront = 1
-    let extraSpaceBack = 1
-    let totalspace = 0
-    let num = 0.5
-    let largeNode = STYLES.largeNodeSize
-    let center = this.centerCoordinates
+      let angle = (2 * Math.PI) / (this.MAX_VISIBLE_NODES + totalspace)
+      let first = true
 
-    if (extraSpaceFront > 0) {
-      totalspace++
-    }
-    if (extraSpaceBack > 0) {
-      totalspace++
-    }
-
-    let angle = (2 * Math.PI) / (this.MAX_VISIBLE_NODES + totalspace)
-    let first = true
-
-    for (let i = 0,
-      numberOfNeighbours = this.MAX_VISIBLE_NODES + 2;
-         i < (this.numberOfNeighbours + totalspace); i++) {
-      if (numberOfNeighbours > 0) {
-        if (first) {
-          num = 5.5
-          first = false
+      for (let i = 0,
+        numberOfNeighbours = this.MAX_VISIBLE_NODES + 2;
+        i < (this.numberOfNeighbours + totalspace); i++) {
+        if (numberOfNeighbours > 0) {
+          if (first) {
+            num = 5.5
+            first = false
+          }
+          let pos = {
+            x: Math.sin((Math.PI) - (angle) * num) * largeNode * 1.4 + center.x,
+            y: Math.cos((Math.PI) - (angle) * num) * largeNode * 1.4 + center.y,
+            p: 'neighbours'
+          }
+          this.nodePositions.push(pos)
+          if (numberOfNeighbours > 1) {
+            num++
+          }
+          numberOfNeighbours--
         }
-        let pos = {
-          x: Math.sin((Math.PI) - (angle) * num) * largeNode * 1.4 + center.x,
-          y: Math.cos((Math.PI) - (angle) * num) * largeNode * 1.4 + center.y,
-          p: 'neighbours'
-        }
-        this.nodePositions.push(pos)
-        if (numberOfNeighbours > 1) {
-          num++
-        }
-        numberOfNeighbours--
       }
     }
 
     // Hydrate visibleDataNodes based on rotationIndex
-    // @TODO iterate through this.neighbours rather;
+    // @TODO consider iterate through this.neighbours rather;
     // have this.neighbourNodes, this.center, this.historyNodes
     // and not have this.dataNodes (where 0 = xx)
     this.visibleDataNodes = []
@@ -845,7 +843,7 @@ export default class GraphD3 extends EventEmitter {
       })
     }
 
-    first = true
+    let first = true
     // Add history nodes to visibleDataNodes
     for (let i = 0; i < this.dataNodes.length; i++) {
       if (this.dataNodes[i].rank === 'history') {
@@ -1056,7 +1054,9 @@ export default class GraphD3 extends EventEmitter {
           return smallSize
         }
       })
-      .style('filter', null)
+      .style('filter', (d) => {
+        return d.img && d.rank !== 'elipsis' ? 'url(#darkblur)' : null
+      })
 
     // Reset sizes of all confidential icons without unnecessary animation
     d3.selectAll('svg .node')
@@ -1087,12 +1087,6 @@ export default class GraphD3 extends EventEmitter {
           ? (d.rank === 'center' ? '0.95em' : '.75em')
           : '.35em'
       })
-      .attr('opacity', (d) => {
-        return (((d.img && d.type !== 'passport') || d.rank === 'elipsis') &&
-                d.rank !== 'history')
-                ? 0
-                : 1
-      })
 
     // Hide the descriptions of all nodes
     d3.selectAll('svg .node')
@@ -1115,12 +1109,10 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   onClick = function (node, data) {
-    d3.event.stopPropagation()
     this.emit('select', data, node)
     // d3.event.defaultPrevented returns true if the click event was fired by
     // a drag event. Prevents a click being registered upon drag release.
     if (data.rank === 'history' ||
-        d3.event.defaultPrevented ||
         data.rank === 'elipsis') {
       return
     }
@@ -1130,7 +1122,10 @@ export default class GraphD3 extends EventEmitter {
       data.wasHighlighted = false
     }
 
-    node.parentNode.appendChild(node)
+    // makes selected node apear bove all other nodes
+    // let node = d3.selectAll('.node').filter((d) => d === data)
+    //
+    // node.parentNode.appendChild(node)
 
     // @TODO this could be done using d3js and
     // modifying ".selected" from the nodes (.update()), no?
@@ -1150,26 +1145,23 @@ export default class GraphD3 extends EventEmitter {
 
       // NODE signifies the node that we clicked on. We enlarge it.
       // Enlarge the node
-      d3.select(node).selectAll('circle')
-        .transition('grow').duration(STYLES.nodeTransitionDuration)
+      node.selectAll('circle')
+        .transition().duration(STYLES.nodeTransitionDuration)
         .attr('r', STYLES.largeNodeSize / 2)
-        .each((d) => {
-          if (!d.img) {
-            d3.select(node).select('.nodecircle')
-              .transition('highlight').duration(STYLES.nodeTransitionDuration)
-              .style('fill', theme.graph.enlargedNodeColor)
-          }
-        })
+
+      node.selectAll('.nodecircle').filter((d) => !d.img)
+        .transition('highlight').duration(STYLES.nodeTransitionDuration)
+        .style('fill', theme.graph.enlargedNodeColor)
 
       // Enlarge the pattern of the node we clicked on
-      d3.select(node).select('pattern')
+      node.select('pattern')
         .transition('pattern').duration(STYLES.nodeTransitionDuration)
         .attr('x', -STYLES.largeNodeSize / 2)
         .attr('y', -STYLES.largeNodeSize / 2)
 
       // Enlarge the image of the node we clicked on
       // We also blur it a bit and darken it, so that the text displays better
-      d3.select(node).select('image')
+      node.select('image')
         .transition('image').duration(STYLES.nodeTransitionDuration)
         .attr('width', STYLES.largeNodeSize)
         .attr('height', STYLES.largeNodeSize)
@@ -1180,12 +1172,12 @@ export default class GraphD3 extends EventEmitter {
       // on some fails to disappear; needs further investigation
 
       // Fade in the description
-      d3.select(node).selectAll('text')
+      node.selectAll('text')
         .transition('description').duration(STYLES.nodeTransitionDuration)
         .attr('opacity', 0.9)
 
       // Fade in the node name and make the text opaque
-      d3.select(node).select('.nodetext')
+      node.select('.nodetext')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('dy', function (d) {
           if (d.description) {
@@ -1203,11 +1195,11 @@ export default class GraphD3 extends EventEmitter {
         .attr('opacity', 1)
 
       // Move the icon up if description
-      d3.select(node)
-        .filter((d) => d.description)
+      node.filter((d) => d.description)
         .select('.nodeIcon')
         .transition('highlight').duration(STYLES.nodeTransitionDuration)
         .attr('y', (d) => d.rank === 'center' ? -70 : -60)
+
       data.highlighted = true
     }
   }.bind(this)
@@ -1307,7 +1299,6 @@ export default class GraphD3 extends EventEmitter {
   // .background-layer must be the first element of this.svg,
   // and its first element must be .background-layer-links
   eraseGraph = function () {
-    if (this.force) { this.force.stop() }
     this.svg
     .selectAll('.background-layer .background-layer-links *')
     .remove()
@@ -1316,8 +1307,8 @@ export default class GraphD3 extends EventEmitter {
     .remove()
   }.bind(this)
 
-  // Alternative to dragging the node to the center.
-  // Does the same thing pretty much
+  // Doube click triggers node fillscreen
+
   onDblClick = function (node, data) {
     if (this.mode !== 'preview') {
       this.emit('view-node', data, node)

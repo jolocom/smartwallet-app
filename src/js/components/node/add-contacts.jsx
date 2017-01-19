@@ -16,19 +16,23 @@ import {Tabs, Tab} from 'material-ui/Tabs'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout} from 'components/layout'
-import {transparent, pinkA200} from 'material-ui/styles/colors'
 import Util from 'lib/util'
+import ContactsStore from 'stores/contacts'
+import ContactsActions from 'actions/contacts'
 import UncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
-import ClearIcon from 'material-ui/svg-icons/content/clear'
+import PersonIcon from 'material-ui/svg-icons/social/person'
 
 let AddContact = React.createClass({
+  mixins: [Reflux.listenTo(ContactsStore, 'onStoreUpdate')],
 
-  propTypes: {
-    params: React.PropTypes.object,
+  propTypes: { params: React.PropTypes.object,
     center: React.PropTypes.object,
     neighbours: React.PropTypes.array,
-    checked: React.PropTypes.bool
+    checked: React.PropTypes.bool,
+    onClose: React.PropTypes.func,
+    onSubmit: React.PropTypes.func,
+    selected: React.PropTypes.array
   },
 
   contextTypes: {
@@ -38,37 +42,36 @@ let AddContact = React.createClass({
 
   getInitialState() {
     return {
-      contactArray: [
-        {
-          key: 1,
-          imgUri: 'https://annika.webid.jolocom.de/files/' +
-            'fm86xd-DSC09243-1-Kopie_s.jpg',
-          name: 'Annika'
-        },
-        {
-          key: 2,
-          imgUri: 'https://isabel.webid.jolocom.de/files/' +
-            'wxrlz-Pure-Geometry-3.jpg',
-          name: 'Isabel'
-        },
-        {
-          key: 3,
-          imgUri: 'https://chrish.webid.jolocom.de/files/' +
-            '2xn822-1476035839171-434432581.jpg',
-          name: 'Chris'
-        },
-        {
-          key: 4,
-          imgUri: 'https://lovius.webid.jolocom.de/files/1bo0jw-carla.png',
-          name: 'Carla'
+      contacts: [],
+      selected: []
+    }
+  },
+
+  onStoreUpdate(newState) {
+    if (!newState.loading) {
+      let contacts = newState.items.map((el) => {
+        return {
+          imgUri: el.imgUri,
+          name: el.name,
+          webId: el.webId,
+          selected: this.state.selected.findIndex(entry =>
+            entry.webId === el.webId) !== -1
         }
-      ],
-      selectedArray: [],
-      hasSelected: false
+      })
+      this.setState({contacts})
     }
   },
 
   componentDidMount() {
+    this.props.selected.forEach(user => {
+      this.state.selected.push({
+        webId: user.webId,
+        imgUri: user.imgUri,
+        name: user.name
+      })
+    })
+
+    ContactsActions.load()
     this.refs.dialog && this.refs.dialog.show()
   },
 
@@ -99,10 +102,11 @@ let AddContact = React.createClass({
         color: '#e1e2e6',
         width: '80%',
         padding: '20px',
-        display: this.state.hasSelected ? 'block' : 'none'
+        display: this.state.selected.length > 0 ? 'block' : 'none'
       },
       selectedAvatar: {
-        margin: '6px'
+        margin: '6px',
+        float: 'left'
       },
       webidField: {
         margin: '20px',
@@ -112,30 +116,27 @@ let AddContact = React.createClass({
     }
   },
 
-  _handleCheck(name) {
-    this.state.contactArray.map((contact) => {
-      if (contact.name === name) {
-        if (this.state.selectedArray.indexOf(contact) !== -1) {
-          let contactToRemove = this.state.selectedArray.indexOf(contact)
-          let newSelectedArray = this.state.selectedArray
-          newSelectedArray.splice(contactToRemove, 1)
-          this.setState({
-            selectedArray: newSelectedArray
-          })
-        } else {
-          this.state.selectedArray.push(contact)
-        }
-      }
-    })
-    if (this.state.selectedArray.length >= 1) {
-      this.setState({
-        hasSelected: true
+  _handleCheck(contact) {
+    let user = this.state.contacts.find(pers => pers.webId === contact.webId)
+    if (!user) {
+      return
+    }
+    // Doing this instead of using push / other destructive operations.
+    let newSelected
+    if (user.selected) {
+      user.selected = false
+      newSelected = this.state.selected.filter(pers => {
+        return pers !== user.webId
       })
     } else {
-      this.setState({
-        hasSelected: false
-      })
+      newSelected = this.state.selected.concat([{
+        webId: contact.webId,
+        imgUri: contact.imgUri,
+        name: contact.name
+      }])
+      user.selected = true
     }
+    this.setState({selected: newSelected})
   },
 
   render() {
@@ -168,15 +169,23 @@ let AddContact = React.createClass({
               <Tab label="Contacts">
                 <div>
                   <div style={styles.selectedList}>
-                    Shared node: Fertigung autos <br />
-                    {
-                      this.state.selectedArray.map((selected) => {
+                    {this.state.contacts.map((contact) => {
+                      if (contact.selected) {
                         return (
-                          <Avatar
-                            style={styles.selectedAvatar}
-                            src={Util.uriToProxied(selected.imgUri)} />
+                          <div>
+                            {contact.imgUri
+                            ? <Avatar
+                              style={styles.selectedAvatar}
+                              src={Util.uriToProxied(contact.imgUri)}
+                              />
+                            : <Avatar
+                              style={styles.selectedAvatar}
+                              icon={<PersonIcon />} />
+                          }
+                          </div>
                         )
-                      })
+                      }
+                    })
                     }
                   </div>
                 </div>
@@ -185,39 +194,18 @@ let AddContact = React.createClass({
                     placeholder="Type in the WebID"
                     fullWidth
                     style={styles.webidField}
-                    />
+                    onChange={this._handleChange}
+                  />
                 </div>
                 <List>
-                  <Avatar
-                    style={styles.alphaLetter}
-                    color={pinkA200}
-                    backgroundColor={transparent}>
-                    A
-                  </Avatar>
                   <div style={styles.listItems}>
-                  {
-                    this.state.contactArray.map((contact) => {
+                    {this.state.contacts.map((contact, i) => {
                       return (
-                        <ListItem
-                          key={contact.key}
-                          leftAvatar={
-                            <Avatar src={
-                            Util.uriToProxied(contact.imgUri)}
-                            />
-                          }
-                          rightToggle={
-                            <Checkbox
-                              checkedIcon={<CheckedIcon />}
-                              uncheckedIcon={<UncheckedIcon />}
-                              onCheck={() => this._handleCheck(contact.name)}
-                              style={styles.checkbox}
-                              />
-                          }>
-                          {contact.name}
-                        </ListItem>
-                      )
-                    })
-                  }
+                        <WrappedListItem
+                          contact={contact}
+                          onCheck={this._handleCheck}
+                        />)
+                    })}
                   </div>
                 </List>
               </Tab>
@@ -231,14 +219,52 @@ let AddContact = React.createClass({
     )
   },
 
-  _handleSubmit() {
-    this.refs.form.submit()
-    this._handleClose()
+  _handleSubmit(event) {
+    this.props.onSubmit(this.state.selected)
+    this._handleClose(event)
   },
 
-  _handleClose() {
-    this.context.router.goBack()
+  _handleChange(event) {
+    ContactsActions.load(event.target.value)
+  },
+
+  _handleClose(event) {
+    this.props.onClose()
+    event.preventDefault()
   }
 })
 
+let WrappedListItem = React.createClass({
+  propTypes: {
+    onCheck: React.PropTypes.func,
+    contact: React.PropTypes.object
+  },
+
+  _handleCheck() {
+    this.props.onCheck(this.props.contact)
+  },
+
+  render() {
+    const {contact} = this.props
+    return (
+      <ListItem
+        key={contact.webId}
+        leftAvatar={
+          contact.imgUri
+            ? <Avatar src={Util.uriToProxied(contact.imgUri)} />
+            : <Avatar icon={<PersonIcon />} />
+        }
+        rightToggle={
+          <Checkbox
+            checkedIcon={<CheckedIcon />}
+            uncheckedIcon={<UncheckedIcon />}
+            checked={contact.selected}
+            onCheck={this._handleCheck}
+          />
+        }>
+        {contact.name}
+      </ListItem>
+    )
+  }
+})
 export default Radium(AddContact)

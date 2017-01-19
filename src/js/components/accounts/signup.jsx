@@ -44,7 +44,8 @@ let Signup = React.createClass({
     return {
       disabledSubmit: true,
       showHelperTextUserName: false,
-      showHelperTextGivenName: false
+      showHelperTextGivenName: false,
+      emailVerifyScreen: false
     }
   },
 
@@ -60,6 +61,8 @@ let Signup = React.createClass({
       SnackbarActions.showMessage('The two emails do not match.')
       return
     }
+    this.disableSubmit()
+
     let signupData = {
       username: this.state.username,
       name: this.state.name,
@@ -226,6 +229,12 @@ let Signup = React.createClass({
         marginTop: '30px',
         fontWeight: '100',
         lineHeight: '14pt'
+      },
+      input: {
+        boxShadow: 'none' // Disable required styles in firefox
+      },
+      username: {
+        textTransform: 'lowercase'
       }
     }
 
@@ -275,6 +284,7 @@ let Signup = React.createClass({
                 onValid={this.enableSubmit}
                 onInvalid={this.disableSubmit}
                 onValidSubmit={this.signup}
+                autoComplete="off"
                 >
                 <div style={{marginBottom: '20px'}}>
                   <FormsyText
@@ -285,7 +295,9 @@ let Signup = React.createClass({
                     floatingLabelText="Username*"
                     validations="isAlphanumeric"
                     validationError={this.errorMessages.alphaNumeric}
-                    inputStyle={{textTransform: 'lowercase'}}
+                    inputStyle={
+                      Object.assign({}, styles.input, styles.username)
+                    }
                     onChange={this._onUsernameChange}
                     onFocus={this._handleHelperTextUserNameFocus}
                     onBlur={this._handleHelperTextUserNameBlur}
@@ -302,6 +314,7 @@ let Signup = React.createClass({
                     floatingLabelText="Full name"
                     validations="isWords"
                     validationError={this.errorMessages.name}
+                    inputStyle={styles.input}
                     onChange={this._onNameChange}
                     onFocus={this._handleHelperTextGivenNameFocus}
                     onBlur={this._handleHelperTextGivenNameBlur}
@@ -314,24 +327,32 @@ let Signup = React.createClass({
                   </div>
                   <FormsyText
                     name="email"
+                    type="email"
+                    autoComplete="off"
                     floatingLabelText="Email*"
                     validations="isEmail"
                     validationError={this.errorMessages.email}
+                    inputStyle={styles.input}
                     onChange={this._onEmailChange}
                     required
                     />
                   <FormsyText
-                    name="email"
+                    name="repeatEmail"
+                    type="email"
+                    autoComplete="off"
                     floatingLabelText="Repeat Email*"
                     validations="isEmail"
                     validationError={this.errorMessages.email}
+                    inputStyle={styles.input}
                     onChange={this._onEmail2Change}
                     required
                     />
                   <FormsyText
                     name="password"
                     type="password"
+                    autoComplete="new-password"
                     floatingLabelText="Password*"
+                    inputStyle={styles.input}
                     onChange={this._onPasswordChange}
                     required
                     />

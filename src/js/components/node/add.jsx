@@ -52,10 +52,6 @@ let NodeAdd = React.createClass({
     this.refs.dialog && this.refs.dialog.show()
   },
 
-  close() {
-    this.context.router.goBack()
-  },
-
   getStyles() {
     const {muiTheme: {actionAppBar}} = this.context
     return {
@@ -118,11 +114,7 @@ let NodeAdd = React.createClass({
 
   _handleSubmit() {
     this.refs.form.submit()
-    this.close()
-  },
-
-  _handleSuccess() {
-    this.close()
+    this._handleClose()
   },
 
   _handleClose() {

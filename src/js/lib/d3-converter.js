@@ -1,7 +1,5 @@
 import rdf from 'rdflib'
 import {PRED} from './namespaces.js'
-import STYLES from 'styles/app.js'
-
 // D3 Converter takes a node (a node in this context is an array of triples that
 // describe an rdf document) and then, based on that returns an array where the
 // triples are represented in a different format. This array can then be fed
@@ -30,8 +28,6 @@ class D3Converter {
       type: null,
       rank: 'neighbour',
       storage: null,
-      x: null,
-      y: null,
       confidential: node.confidential,
       socialMedia: '',
       mobilePhone: '',
@@ -39,7 +35,6 @@ class D3Converter {
       profession: '',
       company: '',
       url: ''
-
     }
 
     // We create a rdf.graph() object, and populate it with the triples, this
@@ -54,6 +49,7 @@ class D3Converter {
         if (!props.blanks) {
           props.blanks = []
         }
+
         if (!props.blanks[triple.subject.value]) {
           props.blanks[triple.subject.value] = []
         }
@@ -134,29 +130,6 @@ class D3Converter {
     if (props.title === 'Passport') {
       props.type = 'passport'
     }
-
-    // Calculating the coordinates of the nodes so we can put them in a circle
-    if (i && n) {
-      let angle = 0
-
-      if (this.n < 8) {
-        angle = (2 * Math.PI) / this.n
-      } else {
-        angle = (2 * Math.PI) / 8
-      }
-
-      let halfwidth = STYLES.width / 2
-      let halfheight = STYLES.height / 2
-
-      let largeNode = STYLES.largeNodeSize
-      props.x = Math.sin(angle * (this.i % 8)) * largeNode * 0.5 + halfwidth
-      props.y = Math.cos(angle * (this.i % 8)) * largeNode * 0.5 + halfheight
-    } else if (!i && !n && rank === 'a') {
-      // This takes care of nodes that are added dynamically, the mid + 30 is
-      // the optimal position for spawning new nodes dynamically
-      props.x = STYLES.width / 2 + 60
-      props.y = STYLES.height / 2 + 60
-    }
     if (node.unav) {
       props.unavailable = true
       return props
@@ -180,6 +153,7 @@ class D3Converter {
         props.familyName = fName.substring(props.name.length, fName.length)
       }
     }
+
     return props
   }
 }

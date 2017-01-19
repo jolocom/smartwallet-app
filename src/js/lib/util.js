@@ -1,4 +1,5 @@
 import url from 'url'
+import WebIdAgent from 'lib/agents/webid'
 import {proxy} from 'settings'
 
 // Misc utility functions
@@ -63,37 +64,6 @@ let Util = {
   },
 
   /*
-   * @summary Given a uri to a file, tries to get the uri of the file's ACL
-   * @param {string} uri - the uri of the file
-   * @return {string} aclUri - returns the correct acl uri if it can, otherwise
-   *                           it defaults to uri + .acl
-   */
-
-  getAclUri(uri) {
-    return fetch(Util.uriToProxied(uri), {
-      method: 'HEAD',
-      credentials: 'include'
-    }).then((ans) => {
-      if (!ans.ok) {
-        return uri + '.acl'
-      }
-      let linkHeader = ans.headers.get('Link')
-      if (linkHeader) {
-        let aclHeader = linkHeader.split(',').find((part) => {
-          return part.indexOf('rel="acl"') > 0
-        })
-        if (aclHeader) {
-          aclHeader = aclHeader.split(';')[0].replace(/<|>/g, '')
-          // The Uri of the acl deduced succesfully
-          return uri.substring(0, uri.lastIndexOf('/') + 1) + aclHeader
-        }
-      } else {
-        return uri + '.acl'
-      }
-    })
-  },
-
-  /*
    * @summary Returns the uri of the index file belonging to an user.
    * @param {string} uri - WebID of the user.
    *   if empty, no the current webid is used.
@@ -102,12 +72,15 @@ let Util = {
   // TODO introduce discovery mechanism / protocol.
   // This is too hardcoded.
   getIndexUri(uri) {
-    if (!uri) {
-      uri = localStorage.getItem('jolocom.webId')
-    }
-    let indexUri = this.webidRoot(uri)
-    indexUri += '/little-sister/index'
+    const wia = new WebIdAgent()
+    const webId = wia.getWebId()
+    let indexUri = this.webidRoot(webId)
+    indexUri += `/little-sister/index/${this.formatWebId(uri)}`
     return indexUri
+  },
+
+  formatWebId(webId) {
+    return this.webidRoot(webId).replace(/.*?:\/\//g, '')
   },
 
   /*

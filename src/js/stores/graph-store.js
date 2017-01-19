@@ -1,9 +1,8 @@
 import Reflux from 'reflux'
-import GraphAgent from '../lib/agents/graph.js'
-import graphActions from '../actions/graph-actions'
-import accountActions from '../actions/account'
-import D3Convertor from '../lib/d3-converter'
-import Util from 'lib/util'
+import GraphAgent from 'lib/agents/graph.js'
+import graphActions from 'actions/graph-actions'
+import accountActions from 'actions/account'
+import D3Convertor from 'lib/d3-converter'
 
 export default Reflux.createStore({
 
@@ -29,7 +28,8 @@ export default Reflux.createStore({
       showPinned: false,
       showSearch: false,
       plusDrawerOpen: false,
-      activeNode: null
+      activeNode: null,
+      previewActive: false
     }
   },
 
@@ -47,7 +47,8 @@ export default Reflux.createStore({
   },
 
   syncStateWithPreview(previewState) {
-    this.state = previewState
+    this.state = Object.assign({}, previewState)
+    this.state.previewModeActive = false
     this.trigger(this.state)
   },
 
@@ -62,18 +63,20 @@ export default Reflux.createStore({
       return result
     }).then((triples) => {
       let newNode = this.convertor.convertToD3('a', triples.triples)
-      this.state.neighbours.push(newNode)
+      this.state.neighbours = this.state.neighbours.concat([newNode])
       this.trigger(this.state)
     })
   },
 
-  onGetInitialGraphState() {
-    /*
+  onGetInitialGraphState(webId) {
     this.state.loading = true
     this.trigger(this.state)
-    */
 
-    this.gAgent.getGraphMapAtWebID(this.state.webId).then((triples) => {
+    if (!webId) {
+      return false
+    }
+
+    this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
       triples[0] = this.convertor.convertToD3('c', triples[0])
       for (let i = 1; i < triples.length; i++) {
         triples[i] = this.convertor.convertToD3(
@@ -83,22 +86,7 @@ export default Reflux.createStore({
 
       // Making sure the images are accesable, otherwise not
       // trying to display them.
-      Promise.all(triples.map(trip => {
-        const img = trip.img
-        if (!img) {
-          return
-        }
-        return fetch(Util.uriToProxied(img), {
-          method: 'HEAD',
-          credentials: 'include'
-        }).then(res => {
-          if (!res.ok) {
-            trip.img = ''
-          }
-        }).catch(() => {
-          trip.img = ''
-        })
-      })).then(() => {
+      this.gAgent.checkImages(triples).then(() => {
         graphActions.getInitialGraphState.completed(triples)
       })
     }).catch(graphActions.getInitialGraphState.failed)
@@ -108,15 +96,14 @@ export default Reflux.createStore({
     this.state.center = result[0]
     this.state.neighbours = result.slice(1, result.length)
     this.state.initialized = true
-    // this.state.loading = false
+    this.state.loading = false
     this.trigger(this.state)
   },
 
   // TODO, show an error perhaps.
   onGetInitialGraphStateFailed: function () {
-    // this.state.loading = false
+    this.state.loading = false
     this.state.initialized = true
-
     this.trigger(this.state)
   },
 
@@ -124,12 +111,9 @@ export default Reflux.createStore({
     this.onDrawAtUri(this.state.center.uri)
   },
 
-  // TODO - make sure loading works.
   onDrawAtUri(uri, hisNodesToPop = 0) {
-    /*
     this.state.loading = true
     this.trigger(this.state)
-    */
 
     return this.gAgent.getGraphMapAtUri(uri).then((triples) => {
       this.state.loading = false
@@ -150,34 +134,23 @@ export default Reflux.createStore({
         this.state.navHistory.pop()
       }
 
-      Promise.all(checkImages.map(trip => {
-        const img = trip.img
-        if (!img) {
-          return
-        }
-        return fetch(Util.uriToProxied(img), {
-          method: 'HEAD',
-          credentials: 'include'
-        }).then(res => {
-          if (!res.ok) {
-            trip.img = ''
-          }
-        }).catch(() => {
-          trip.img = ''
-        })
-      })).then(() => {
-        // this.state.loading = false
+      this.gAgent.checkImages(checkImages).then(() => {
+        this.state.loading = false
         this.trigger(this.state)
       })
     })
   },
 
+  onEnterPreview() {
+    this.state.previewModeActive = true
+    this.trigger(this.state)
+  },
+
   // TODO - make sure loading works.
   onNavigateToNode(node, defaultHistoryNode) {
-    /*
     this.state.loading = true
     this.trigger(this.state)
-    */
+
     this.state.rotationIndex = 0
 
     this.gAgent.getGraphMapAtUri(node.uri).then((triples) => {
@@ -231,22 +204,7 @@ export default Reflux.createStore({
 
       // Making sure the images are accesable, otherwise not
       // trying to display them.
-      Promise.all(checkImages.map(trip => {
-        const img = trip.img
-        if (!img) {
-          return
-        }
-        return fetch(Util.uriToProxied(img), {
-          method: 'HEAD',
-          credentials: 'include'
-        }).then(res => {
-          if (!res.ok) {
-            trip.img = ''
-          }
-        }).catch(() => {
-          trip.img = ''
-        })
-      })).then(() => {
+      this.gAgent.checkImages(checkImages).then(() => {
         // this.state.loading = false
         this.trigger(this.state)
       })
