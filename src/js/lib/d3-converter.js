@@ -68,7 +68,7 @@ class D3Converter {
       // 'uri' key in the object otherwise it's value is stored in the 'value'
       // key of the object. We need to make sure we are assigning the value
       // regardless of where it's stored
-
+      // TODO Rewrite, this is terrible!
       if (triple.subject.uri === uri) {
         if (pred === PRED.givenName.uri) {
           props.name = obj.value ? obj.value : obj.uri
@@ -87,6 +87,7 @@ class D3Converter {
             : obj.uri.substring(obj.uri.indexOf('mailto:') + 7,
               obj.uri.length)
         }
+
         if (pred === PRED.title.uri || pred === PRED.title_DC.uri) {
           props.title = obj.value ? obj.value : obj.uri
         }
