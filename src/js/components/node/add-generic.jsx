@@ -16,8 +16,6 @@ import {
 } from 'material-ui'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
-import DocIcon from 'components/icons/doc-icon.jsx'
-import CollectionIcon from 'components/icons/collection-icon.jsx'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -119,116 +117,6 @@ let NodeAddGeneric = React.createClass({
     return type
   },
 
-  // uploadFiles() {
-  //   let gAgent = new GraphAgent()
-  //   let storedFile
-  //   // This function is built to be compatible with multiple file upload
-  //     if (this.state.imgArray.length >= 1) {
-  //       for (let img in this.state.imgArray) {
-  //         let file = this.state.imgArray[img].file
-  //         storedFile = gAgent.storeFile(null,
-  //           this.state.profile.storage, file)
-  //           .then((res) => {
-  //             console.log('storedFile resolved = ', res)
-  //             this.state.imgArray[img].uri = storedFile
-  //             console.log('storedfile = ', storedFile)
-  //             // console.log('Successfully uploaded: ', res)
-  //             // uri = res
-  //             console.log('imgArray after uploaded file ',
-  //               this.state.imgArray[img])
-  //             console.log('uri reading ', this.state.imgArray[img].uri)
-  //             this.setState({
-  //               uploadedFileUri: res
-  //             })
-  //             }).catch((e) => {
-  //               console.log(e)
-  //             })
-  //       }
-  //     }
-  //
-  //     // UPLOAD DOCS
-  //     if (this.state.docArray.length >= 1) {
-  //       for (let doc in this.state.docArray) {
-  //         let file = this.state.docArray[doc].file
-  //         gAgent.storeFile(null,
-  //           this.state.profile.storage, file)
-  //           // .then((res) => {
-  //           //   console.log('Successfully uploaded: ', res)
-  //           // }).catch((e) => {
-  //           //   console.log(e)
-  //           //   return reject()
-  //           // })
-  //       }
-  //     }
-  //
-  //     // UPLOAD MISC FILES
-  //     if (this.state.fileArray.length >= 1) {
-  //       for (let miscFile in this.state.fileArray) {
-  //         let file = this.state.fileArray[miscFile].file
-  //         gAgent.storeFile(null,
-  //           this.state.profile.storage, file)
-  //           // .then((res) => {
-  //           //   console.log('Successfully uploaded: ', res)
-  //           // }).catch((e) => {
-  //           //   console.log(e)
-  //           //   return reject()
-  //           // })
-  //       }
-  //     }
-  //     //
-  //     // Promise.all([storedFile]).then(() => {
-  //     //   resolve(uri)
-  //     // })
-  //
-  //     console.log('returning at the bottom')
-  //     // return resolve(uri)
-  //  // })
-  //   // // UPLOAD IMAGES
-  //   // if (this.state.imgArray.length >= 1) {
-  //   //   for (let img in this.state.imgArray) {
-  //   //     let file = this.state.imgArray[img].file
-  //   //     gAgent.storeFile(null,
-  //   //       this.state.profile.storage, file)
-  //   //       .then((res) => {
-  //   //         this.state.imgArray[img].uri = res
-  //   //         console.log('Successfully uploaded: ', res)
-  //   //         console.log('imgArray after uploaded file ',
-  //   //           this.state.imgArray[img])
-  //   //       }).catch((e) => {
-  //   //         console.log(e)
-  //   //       })
-  //   //   }
-  //   // }
-  //   //
-  //   // // UPLOAD DOCS
-  //   // if (this.state.docArray.length >= 1) {
-  //   //   for (let doc in this.state.docArray) {
-  //   //     let file = this.state.docArray[doc].file
-  //   //     gAgent.storeFile(null,
-  //   //       this.state.profile.storage, file)
-  //   //       .then((res) => {
-  //   //         console.log('Successfully uploaded: ', res)
-  //   //       }).catch((e) => {
-  //   //         console.log(e)
-  //   //       })
-  //   //   }
-  //   // }
-  //   //
-  //   // // UPLOAD MISC FILES
-  //   // if (this.state.fileArray.length >= 1) {
-  //   //   for (let miscFile in this.state.fileArray) {
-  //   //     let file = this.state.fileArray[miscFile].file
-  //   //     gAgent.storeFile(null,
-  //   //       this.state.profile.storage, file)
-  //   //       .then((res) => {
-  //   //         console.log('Successfully uploaded: ', res)
-  //   //       }).catch((e) => {
-  //   //         console.log(e)
-  //   //       })
-  //   //   }
-  //   // }
-  // },
-
   submit() {
     const gAgent = new GraphAgent()
     const {title, description} = this.state
@@ -236,21 +124,14 @@ let NodeAddGeneric = React.createClass({
     const centerNode = this.state.graphState.center
     const type = this.nodeType()
 
-    // Upload Files to server
+    // Check which array is populated, upload the files and then create a node
 
     if (this.state.imgArray.length >= 1) {
-      // const file = this.state.imgArray[0].file
       gAgent.storeFile(
         null,
         this.state.profile.storage,
         this.state.imgArray[0].file
       ).then((res) => {
-        console.log('Successfully stored file at ', res)
-
-        // Create node
-
-        console.log('uploadeFileUri === ', this.state.uploadedFileUri)
-
         this.gAgent.createNode(
           webId,
           centerNode,
@@ -260,7 +141,6 @@ let NodeAddGeneric = React.createClass({
           type,
           false).then((uri) => {
             graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
-            console.log('finished creating node')
           }).catch((e) => {
             console.log('Unable to create node ', e)
           })
@@ -270,16 +150,11 @@ let NodeAddGeneric = React.createClass({
     }
 
     if (this.state.docArray.length >= 1) {
-      // const file = this.state.imgArray[0].file
       gAgent.storeFile(
         null,
         this.state.profile.storage,
         this.state.docArray[0].file
       ).then((res) => {
-        console.log('Successfully stored file at ', res)
-
-        // Create node
-
         this.gAgent.createNode(
           webId,
           centerNode,
@@ -289,7 +164,6 @@ let NodeAddGeneric = React.createClass({
           type,
           false).then((uri) => {
             graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
-            console.log('finished creating node')
           }).catch((e) => {
             console.log('Unable to create node ', e)
           })
@@ -299,16 +173,11 @@ let NodeAddGeneric = React.createClass({
     }
 
     if (this.state.fileArray.length >= 1) {
-      // const file = this.state.imgArray[0].file
       gAgent.storeFile(
         null,
         this.state.profile.storage,
         this.state.fileArray[0].file
       ).then((res) => {
-        console.log('Successfully stored file at ', res)
-
-        // Create node
-
         this.gAgent.createNode(
           webId,
           centerNode,
@@ -318,7 +187,6 @@ let NodeAddGeneric = React.createClass({
           type,
           false).then((uri) => {
             graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
-            console.log('finished creating node')
           }).catch((e) => {
             console.log('Unable to create node ', e)
           })
@@ -413,69 +281,33 @@ let NodeAddGeneric = React.createClass({
   // },
 
   render: function() {
-    console.log('RENDER')
-    console.log('imgArray[0] = ', this.state.imgArray[0])
     let styles = this.getStyles()
     let title = 'Edit node'
     // let {type} = this.props.params
     // let config = this.getTypeConfig(type)
     // let title = config.title || `New ${type}`
     let headerIcon = <AddNodeIcon />
-    let reader = new FileReader()
-    let imagePreview
-    const URL = window.URL || window.webkitURL
-    let image, imageURL
 
+    // HALF WORKING LOCAL-IMAGE PREVIEW
     // if (this.state.imgArray[0] && URL) {
     //   reader.onload = (e) => {
-    //     imageURL = URL.createObjectURL(e.target.result)
-    //     // image = document.createElement('img')
     //     // working one !
     //     // document.getElementById('preview').src = e.target.result
-    //
-    //     // this.refs.preview.setAttribute('backgroundImage', e.target.result)
-    //
-    //     // document.getElementById('fileAvatar').src = e.target.result
-    //     // ocument.getElementsByClassName('fileAvatar').src = e.target.result
-    //
-    //     // console.log(document.getElementById('preview').src)
-    //
-    //     image.onload = () => {
-    //       URL.revokeObjectURL(imageURL)
-    //     }
-    //     console.log(imagePreview)
-    //     debugger;
     //   }
     //
     //   reader.readAsDataURL(this.state.imgArray[0].file)
     //
-    //   // imagePreview = reader.readAsDataURL(this.state.imgArray[0].file)
-    //   // console.log(imagePreview)
     // }
-    let localImage, backgroundImage
-
-    if (this.state.imgArray && this.state.imgArray[0]) {
-      localImage = this.state.imgArray[0]
-    }
-    //
-    // if (localImage) {
-    //   backgroundImage = URL.createObjectURL(localImage)
-    // }
-
-    console.log('bg image ', backgroundImage)
 
     // if (this.state.isCollection) {
     //   headerIcon = <CollectionIcon />
     // } else if (this.state.isSingleNode &&
     //   (this.state.imgArray.length > 0 || this.state.docArray.length > 0)) {
-    //   headerIcon = this.state.uploadedFileType === 'image' ? null : <DocIcon />
+    // headerIcon = this.state.uploadedFileType === 'image' ? null : <DocIcon />
     // } else {
     //   headerIcon = <AddNodeIcon />
     // }
 
-    // let bgImg = backgroundImage || <AddNodeIcon />
-
-    console.log('Refs = ', this.refs)
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -524,11 +356,6 @@ let NodeAddGeneric = React.createClass({
                     <ListItem
                       key={1}
                       disabled
-                      leftIcon={
-                        <AddNodeIcon
-                          viewBox="0 0 24 24"
-                          stroke="#9ba0aa" />
-                      }
                       rightIcon={
                         <FloatingActionButton
                           mini
@@ -716,7 +543,7 @@ let NodeAddGeneric = React.createClass({
               {
                 this.state.isCollection
                 ? <List>
-                  <ListItem
+                  <ListItem>
                     primaryText="Contacts and Groups"
                     primaryTogglesNestedList
                     nestedListStyle={styles.accordionChildren}
@@ -759,7 +586,6 @@ let NodeAddGeneric = React.createClass({
                         <Divider style={styles.divider} />
                       </ListItem>
                     ]}
-                    >
                   </ListItem>
                 </List>
                 : null
@@ -832,12 +658,6 @@ let NodeAddGeneric = React.createClass({
     this.setState({
       docArray: newDocArray
     })
-    // this.setState({
-    //   isSingleNode: false
-    // })
-    // this.setState({
-    //   uploadedFileName: ''
-    // })
   },
 
   _handleRemoveImgFile(key) {
@@ -887,7 +707,6 @@ let NodeAddGeneric = React.createClass({
   },
 
   _handleGroups () {
-
   },
 
   _handleFileUpload({target}) {
@@ -939,11 +758,7 @@ let NodeAddGeneric = React.createClass({
       })
       console.log('FU setting uploaded file type to document!')
       // USING 1 FILE INSTEAD OF MULTIPLE UPLOAD CAPABILITIES
-      //
-      // this.state.docArray.push({
-      //   file: file,
-      //   key: this.state.docArray.length + 1
-      // })
+
       this.state.docArray[0] = {
         file: file,
         key: this.state.docArray.length + 1,
@@ -956,7 +771,7 @@ let NodeAddGeneric = React.createClass({
         this.state.fileArray.pop()
       }
       this.setState({
-        hasDocs: true,
+        hasDocs: true
       })
       this.state.tagArray = []
       this.state.tagArray.push({
@@ -970,12 +785,7 @@ let NodeAddGeneric = React.createClass({
         uploadedFileType: 'miscFile'
       })
       console.log('FU setting uploaded file type to miscFile!')
-      // Currently only 1 file should be uploaded
-      //
-      // this.state.fileArray.push({
-      //   file: file,
-      //   key: this.state.fileArray.length + 1
-      // })
+
       this.state.fileArray[0] = {
         file: file,
         key: this.state.fileArray.length + 1,
@@ -1009,7 +819,6 @@ let NodeAddGeneric = React.createClass({
         key: 1,
         label: 'Collection'
       })
-      console.log('FU setting uploaded file type to collection!')
     } else {
       // is singular node
       this.setState({

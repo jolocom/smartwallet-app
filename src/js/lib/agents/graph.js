@@ -81,7 +81,6 @@ class GraphAgent {
 
   createNode(currentUser, centerNode, title, description,
              file, nodeType, confidential = false) {
-    console.log('NODE TYPE ', nodeType)
     let writer = new Writer()
     let newNodeUri = rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
@@ -91,8 +90,6 @@ class GraphAgent {
       writer.addTriple(newNodeUri, PRED.storage, rdf.sym(centerNode.storage))
       writer.addTriple(newNodeUri, PRED.maker, rdf.sym(centerNode.uri))
       writer.addTriple(newNodeUri, PRED.description, nodeType)
-
-      console.log('image inside of createNode ', file)
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (file) {
@@ -104,7 +101,6 @@ class GraphAgent {
         }
       }
     }).then(() => {
-      console.log('Putting the RDF file for the node. ', newNodeUri.uri)
       // Putting the RDF file for the node.
       return fetch(Util.uriToProxied(newNodeUri.uri), {
         method: 'PUT',
@@ -170,7 +166,6 @@ class GraphAgent {
           },
           body: file
         }).then(() => {
-          console.log('successfully uploaded file to server at ', uri)
           return uri
         }).catch((e) => {
           SnackbarActions.showMessage('Could not upload the file.')
@@ -301,7 +296,6 @@ class GraphAgent {
       let pred = triples[0].predicate.uri
       validPredicate = (pred === PRED.isRelatedTo.uri ||
         pred === PRED.knows.uri)
-      console.log('WRITING pred = ', pred)
     }
     let statements = []
 

@@ -58,7 +58,7 @@ let TextNode = React.createClass({
         })
       })
     }
-  }, // Remove
+  },
 
   render() {
     let {rank, title, description, email, uri, img, type} = this.props.node
