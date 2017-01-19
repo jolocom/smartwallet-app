@@ -1,4 +1,3 @@
-import rdf from 'rdflib'
 import {PRED} from './namespaces.js'
 // D3 Converter takes a node (a node in this context is an array of triples that
 // describe an rdf document) and then, based on that returns an array where the
@@ -36,16 +35,14 @@ class D3Converter {
       url: ''
     }
 
-    // We create a rdf.graph() object, and populate it with the triples, this
-    // allows us to then parse them using the rdflib's function
-    // rdf.graph().statementsMatching()
-    let g = rdf.graph()
-    console.log(node)
-    node.forEach(triple => {
-      g.add(triple.subject, triple.predicate, triple.object)
+    if (node.unav) {
+      props.unavailable = true
+      return props
+    }
 
+    node.forEach(triple => {
       let pred = triple.predicate.uri
-      let obj = triple.object
+      let obj = triple.object.value ? triple.object.value : triple.object.uri
 
       // Updating the attributes of the node object.
       // The resulting object will have all of it's props filled in, and will
@@ -55,71 +52,37 @@ class D3Converter {
       // 'uri' key in the object otherwise it's value is stored in the 'value'
       // key of the object. We need to make sure we are assigning the value
       // regardless of where it's stored
-      // TODO Rewrite, this is terrible!
-      if (triple.subject.uri === uri) {
-        if (pred === PRED.givenName.uri) {
-          props.name = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.familyName.uri) {
-          props.familyName = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.fullName.uri) {
-          props.fullName = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.email.uri) {
-          props.email =
-            obj.value
-            ? obj.value.substring(obj.value.indexOf('mailto:') + 7,
-              obj.value.length)
-            : obj.uri.substring(obj.uri.indexOf('mailto:') + 7,
-              obj.uri.length)
-        }
+      const predMap = {}
+      predMap[PRED.givenName.uri] = 'name'
+      predMap[PRED.familyName.uri] = 'familyName'
+      predMap[PRED.fullName.uri] = 'fullName'
+      predMap[PRED.email.uri] = 'email'
+      predMap[PRED.title.uri] = 'title'
+      predMap[PRED.title_DC.uri] = 'title'
+      predMap[PRED.description.uri] = 'description'
+      predMap[PRED.type.uri] = 'type'
+      predMap[PRED.image.uri] = 'img'
+      predMap[PRED.socialMedia.uri] = 'socialMedia'
+      predMap[PRED.mobile.uri] = 'mobilePhone'
+      predMap[PRED.address.uri] = 'address'
+      predMap[PRED.profession.uri] = 'profession'
+      predMap[PRED.company.uri] = 'company'
+      predMap[PRED.url.uri] = 'url'
+      predMap[PRED.storage.uri] = 'storage'
 
-        if (pred === PRED.title.uri || pred === PRED.title_DC.uri) {
-          props.title = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.description.uri) {
-          props.description = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.type.uri) {
-          props.type = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.image.uri) {
-          props.img = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.socialMedia.uri) {
-          props.socialMedia = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.mobile.uri) {
-          props.mobilePhone = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.address.uri) {
-          props.address = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.profession.uri) {
-          props.profession = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.company.uri) {
-          props.company = obj.value ? obj.value : obj.uri
-        }
-        if (pred === PRED.url.uri) {
-          props.url = obj.value ? obj.value : obj.uri
-        }
-        // Storage is used when adding files. Better to do it here then to send
-        // extra requests upon upload.
-        if (pred === PRED.storage.uri) {
-          props.storage = obj.value ? obj.value : obj.uri
+      if (predMap[pred] && triple.subject.uri === uri) {
+        if (predMap[pred] === 'email') {
+          props[predMap[pred]] = obj.substring(obj.indexOf('mailto:') + 7)
+        } else {
+          props[predMap[pred]] = obj
         }
       }
     })
+
     // @TODO Have a dedicated RDF type for bitcoin and passport nodes, so that
     // we don't need this hack.
     if (props.title === 'Passport') {
       props.type = 'passport'
-    }
-    if (node.unav) {
-      props.unavailable = true
-      return props
     }
 
     // We specify the rank of the node here. Center is the center node
@@ -127,9 +90,7 @@ class D3Converter {
     // it obviously depends on the viewport. Used for visualization purposes.
     if (rank === 'a') {
       props.rank = 'neighbour'
-    }
-
-    if (rank === 'c') {
+    } else if (rank === 'c') {
       props.rank = 'center'
     }
 
