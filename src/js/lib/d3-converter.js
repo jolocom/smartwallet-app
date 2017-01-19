@@ -17,7 +17,6 @@ class D3Converter {
     let connection = node.connection ? node.connection : null
 
     let props = {
-      has_blanks: false,
       uri: uri,
       name: null,
       email: '',
@@ -41,22 +40,10 @@ class D3Converter {
     // allows us to then parse them using the rdflib's function
     // rdf.graph().statementsMatching()
     let g = rdf.graph()
-    for (let i = 0; i < node.length; i++) {
-      g.add(node[i].subject, node[i].predicate, node[i].object)
-      let triple = node[i]
-      if (triple.subject.id >= 0) {
-        props.has_blanks = true
-        if (!props.blanks) {
-          props.blanks = []
-        }
+    console.log(node)
+    node.forEach(triple => {
+      g.add(triple.subject, triple.predicate, triple.object)
 
-        if (!props.blanks[triple.subject.value]) {
-          props.blanks[triple.subject.value] = []
-        }
-        props.blanks[triple.subject.value].push(triple)
-      }
-
-      // Make the following statements shorter
       let pred = triple.predicate.uri
       let obj = triple.object
 
@@ -124,7 +111,7 @@ class D3Converter {
           props.storage = obj.value ? obj.value : obj.uri
         }
       }
-    }
+    })
 
     // @TODO Have a dedicated RDF type for bitcoin and passport nodes, so that
     // we don't need this hack.
