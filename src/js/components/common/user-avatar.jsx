@@ -13,33 +13,29 @@ let UserAvatar = React.createClass({
 
   propTypes: {
     imgUrl: React.PropTypes.any, // TODO change type to something more precise
-    name: React.PropTypes.string
+    name: React.PropTypes.string,
+    style: React.PropTypes.object
   },
 
   render() {
-    let imgUrl = this.props.imgUrl
-    // let name = this.props.name
-
+    let {imgUrl, name, style} = this.props
     let avatar
 
+    style = style || {}
+
     if (imgUrl) {
-      // User has display image
       avatar = (
         <Avatar
-          style={{
+          style={Object.assign({
             backgroundSize: 'cover',
             backgroundImage: `url(${Utils.uriToProxied(imgUrl)})`
-          }} />
+          }, style)} />
       )
-    }
-    // else if (name && name.trim() && (name !== 'Unnamed')) {
-    //   // User has no display image but has a non-empty name
-    //   let nameInitial = name[0].toUpperCase()
-    //   avatar = <Avatar>{nameInitial}</Avatar>
-    // }
-    else {
-      // User has no image and no specified name
-      avatar = <Avatar icon={<UserIcon />} />
+    } else if (name && name.trim() && (name !== 'Unnamed')) {
+      let nameInitial = name[0].toUpperCase()
+      avatar = <Avatar style={style}>{nameInitial}</Avatar>
+    } else {
+      avatar = <Avatar style={style} icon={<UserIcon />} />
     }
     return avatar
   }

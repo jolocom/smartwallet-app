@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
 
-import {List, ListItem, Divider, Subheader, Avatar} from 'material-ui'
+import {List, ListItem, Divider, Checkbox, Avatar} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 import theme from 'styles/jolocom-theme'
 
@@ -16,8 +16,11 @@ import UserAvatar from 'components/common/user-avatar.jsx'
 let ContactsList = React.createClass({
 
   propTypes: {
+    children: React.PropTypes.node,
     searchQuery: React.PropTypes.string,
-    onClick: React.PropTypes.func
+    onItemTouchTap: React.PropTypes.func,
+    selectable: React.PropTypes.bool,
+    onItemCheck: React.PropTypes.func
   },
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
@@ -52,47 +55,57 @@ let ContactsList = React.createClass({
     let lastNameInitial = ''
     let result = []
 
-    items.forEach(({username, webId, name, email, imgUri}, i) => {
+    items.forEach((contact, i) => {
+      let {webId, name, email, imgUri} = contact
       // Check if name is set then set the first character as the name
       // initial otherwise, check if name is empty or whitespaces then
       // set it to Unnamed and let its initial be ?
       let nameInitial = Utils.nameInitial({
         name: name
       })
-      let avatar
-      if (imgUri) {
-        avatar = <UserAvatar name={name} imgUrl={imgUri} />
-      } else if (!imgUri) {
-        avatar = <UserAvatar />
-      }
-      // let avatar = <UserAvatar name={name} imgUrl={imgUri} />
+      let avatar = <UserAvatar name={name} imgUrl={imgUri} />
 
-      if (nameInitial !== lastNameInitial) {
+      let leftAvatar
+      let leftCheckbox
+      if (!this.props.selectable && nameInitial !== lastNameInitial) {
         lastNameInitial = nameInitial
         if (i > 0) {
           result.push(<Divider inset key={`divider_${i}`} />)
         }
-        result.push(
-          <Subheader
-            key={`header_${i}`}
-            style={styles.header}
+        leftAvatar = (
+          <Avatar
+            backgroundColor="transparent"
+            color={theme.palette.primary1Color}
+            style={{left: 8}}
           >
             {nameInitial}
-          </Subheader>)
+          </Avatar>
+        )
+      } else if (this.props.selectable) {
+        let handleItemCheck = () => {
+          if (typeof this.props.onItemCheck === 'function') {
+            this.props.onItemCheck(contact)
+          }
+        }
+        leftCheckbox = <Checkbox onCheck={handleItemCheck} />
       }
 
-      let handleClick = () => {
-        this.props.onClick(webId)
+      let handleItemTouchTap = () => {
+        if (typeof this.props.onItemTouchTap === 'function') {
+          this.props.onItemTouchTap(contact)
+        }
       }
 
       result.push(
         <ListItem
-          key={username}
+          key={webId}
           primaryText={name || 'Unnamed'}
           secondaryText={email}
-          rightAvatar={<Avatar>{avatar}</Avatar>}
+          leftCheckbox={leftCheckbox}
+          leftAvatar={leftAvatar}
+          rightAvatar={avatar}
           insetChildren
-          onTouchTap={handleClick}
+          onTouchTap={handleItemTouchTap}
         />
       )
     })
@@ -109,7 +122,12 @@ let ContactsList = React.createClass({
     } else if (!items || !items.length) {
       content = <div style={styles.empty}>No contacts</div>
     } else {
-      content = <List>{this.renderItems()}</List>
+      content = (
+        <List>
+          {this.props.children}
+          {this.renderItems()}
+        </List>
+      )
     }
 
     return (

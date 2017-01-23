@@ -11,7 +11,7 @@ import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
 import Chat from 'components/chat/chat.jsx'
 import Conversations from 'components/chat/conversations.jsx'
-import ChatNew from 'components/chat/new.jsx'
+import NewConversation from 'components/chat/new-conversation.jsx'
 import Conversation from 'components/chat/conversation.jsx'
 import Contacts from 'components/contacts/contacts.jsx'
 import Contact from 'components/contacts/contact.jsx'
@@ -34,7 +34,7 @@ const routes = (
       <Route path="/conversations" component={Conversations}>
         <Route path="/conversations/:id" component={Conversation} />
       </Route>
-      <Route path="new(/:webId)" component={ChatNew} />
+      <Route path="new(/:webId)" component={NewConversation} />
       <Route path="/contacts" component={Contacts}>
         <Route path=":username" component={Contact} />
       </Route>

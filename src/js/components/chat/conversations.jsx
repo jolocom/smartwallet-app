@@ -69,21 +69,12 @@ let Conversations = React.createClass({
 
   renderItems(items) {
     // maybe do this in the store already?
-    items.sort(
-      (itemA, itemB) => {
-        if (!itemA.lastMessage) {
-          if (!itemB.lastMessage) {
-            return 0
-          } else {
-            return -1
-          }
-        } else if (!itemB.lastMessage) {
-          return 1
-        }
-        return itemA.lastMessage.created.getTime() <
-          itemB.lastMessage.created.getTime()
-      }
-    )
+    // items.sort(
+    //   (itemA, itemB) => {
+    //     return itemA.lastMessage.created.getTime() <
+    //       itemB.lastMessage.created.getTime()
+    //   }
+    // )
 
     return (
       <List>
@@ -92,7 +83,6 @@ let Conversations = React.createClass({
             key={conversation.id}
             conversation={conversation}
             onTouchTap={this.showConversation}
-
           />
         })}
       </List>
@@ -103,8 +93,6 @@ let Conversations = React.createClass({
     let content
 
     let {loading, items} = this.state.conversations
-
-    items = items.filter(conv => conv.lastMessage !== null)
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -148,7 +136,7 @@ let ConversationsListItem = React.createClass({
 
   render() {
     let {conversation} = this.props
-    let {participants, lastMessage} = conversation
+    let {participants, subject, lastMessage} = conversation
     let {created, content} = lastMessage || {}
 
     let title
@@ -163,7 +151,11 @@ let ConversationsListItem = React.createClass({
       participants = null
       title = 'Unnamed'
     } else if (participants.length > 1) {
-      title = participants.map(p => p.name).join(', ')
+      if (subject && subject.trim()) {
+        title = subject
+      } else {
+        title = participants.map(p => p.name).join(', ')
+      }
     } else if (participants.length === 1) {
       title = participants[0].name
     }
@@ -203,7 +195,7 @@ let ConversationsListItem = React.createClass({
             {unread}
           </div>
         }
-        secondaryText={content}
+        secondaryText={content || (<em>New conversation</em>)}
         leftAvatar={<Avatar>{avatar}</Avatar>}
         onTouchTap={this._handleListItemTouchTap}
       />

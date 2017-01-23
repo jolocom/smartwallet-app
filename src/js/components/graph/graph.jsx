@@ -3,7 +3,7 @@
 // It is also stateless,
 import Reflux from 'reflux'
 import React from 'react'
-import ReactDOM from 'react/lib/ReactDOM'
+import ReactDOM from 'react-dom'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'

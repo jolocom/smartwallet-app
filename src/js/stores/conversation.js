@@ -8,7 +8,7 @@ let chatAgent = new ChatAgent()
 import ConversationActions from 'actions/conversation'
 import ConversationsStore from 'stores/conversations'
 
-let {load, addMessage} = ConversationActions
+let {load, addMessage, setSubject} = ConversationActions
 
 const subscriptions = {}
 
@@ -97,6 +97,26 @@ export default Reflux.createStore({
       this.state.items = [item]
     }
 
+    this.trigger(this.state)
+  },
+
+  onSetSubject(uri, subject) {
+    const oldSubject = this.state.subject
+
+    // Optimistic updates
+    // @TODO we should do this throughout the app
+    this.state.subject = subject
+    this.trigger(this.state)
+
+    return chatAgent.setSubject(uri, oldSubject, subject)
+      .catch((e) => {
+        setSubject.failed(e, oldSubject)
+      })
+  },
+
+  onSetSubjectFailed(e, oldSubject) {
+    console.error('onSetSubjectFailed', e)
+    this.state.subject = oldSubject
     this.trigger(this.state)
   }
 
