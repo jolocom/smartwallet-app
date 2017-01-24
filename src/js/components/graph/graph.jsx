@@ -59,7 +59,9 @@ let Graph = React.createClass({
   componentDidMount() {
     let showWelcome = !localStorage.getItem('jolocom.welcome')
     this.graph = new GraphD3(this.getGraphEl(), 'main', showWelcome)
-    this._handleFirst()
+    if (showWelcome) {
+      this._handleFirst()
+    }
 
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)

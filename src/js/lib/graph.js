@@ -263,7 +263,7 @@ export default class GraphD3 extends EventEmitter {
         .style('fill', 'url(#arrow)')
       let self = this
       setTimeout(function () {
-        self.removeWelcome();
+        self.removeWelcome()
       }, 5000)
     }
 
@@ -299,7 +299,6 @@ export default class GraphD3 extends EventEmitter {
   }.bind(this)
 
   removeWelcome = function() {
-    console.log('removeWelcome')
     this.welcomeArrow.transition()
     .duration(STYLES.nodeTransitionDuration)
     .attr('opacity', 0)
