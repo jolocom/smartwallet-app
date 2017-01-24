@@ -42,9 +42,19 @@ let ConfirmEmailVerification = React.createClass({
       },
       confirmMessage: {
         textAlign: 'center',
+        fontWeight: '300',
         color: theme.jolocom.gray1,
         fontSize: '18pt',
         marginTop: '30px',
+        lineHeight: '14pt',
+        marginBottom: '15px'
+      },
+      username: {
+        textAlign: 'center',
+        fontWeight: '400',
+        color: theme.jolocom.gray1,
+        fontSize: '18pt',
+        marginTop: '10px',
         lineHeight: '14pt',
         marginBottom: '15px'
       },
@@ -88,14 +98,14 @@ let ConfirmEmailVerification = React.createClass({
     return (
       <div style={styles.container}>
         <div style={styles.content}>
-          <div >
+          <div>
             <p style = {styles.confirmMessage}>Congrats!</p>
           </div>
-          <div>
-            <p style={styles.confirmMessage}>Your username is</p>
-            <p style={styles.confirmMessage}>
-              {this.props.params.username}
-              </p>
+          <div style={styles.confirmMessage} >
+            <p> Your username is</p>
+            </div>
+            <div style={styles.username}>
+            <p> {this.props.params.username}</p>
           </div>
 
           <RaisedButton
