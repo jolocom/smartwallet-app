@@ -89,10 +89,10 @@ let ConfirmEmailVerification = React.createClass({
       <div style={styles.container}>
         <div style={styles.content}>
           <div >
-            <h1 style = {styles.confirmMessage}>Congrats!</h1>
+            <p style = {styles.confirmMessage}>Congrats!</p>
           </div>
           <div>
-            <h1 style={styles.confirmMessage}>Your username is</h1>
+            <p style={styles.confirmMessage}>Your username is</p>
             <p style={styles.confirmMessage}>
               {this.props.params.username}
               </p>
