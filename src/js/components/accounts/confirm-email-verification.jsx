@@ -1,16 +1,23 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import {RaisedButton} from 'material-ui'
+import {RaisedButton, TextField} from 'material-ui'
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
+import JolocomTheme from 'styles/jolocom-theme'
+
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
+const theme = getMuiTheme(JolocomTheme)
 
 let ConfirmEmailVerification = React.createClass({
 
   mixins: [Reflux.listenTo(AccountStore, 'onStateUpdate', 'setInitialState')],
 
   contextTypes: {
+    muiTheme: React.PropTypes.object,
     router: React.PropTypes.object
+
   },
 
   propTypes: {
@@ -18,6 +25,7 @@ let ConfirmEmailVerification = React.createClass({
   },
 
   getStyles() {
+    let {muiTheme} = this.context
     let styles = {
       container: {
         textAlign: 'center',
@@ -29,10 +37,19 @@ let ConfirmEmailVerification = React.createClass({
         width: '300px',
         maxWidth: '90%',
         padding: '20px',
-        margin: '0 auto 20px auto',
+        margin: '20px auto 20px auto',
         boxSizing: 'border-box'
       },
+      confirmMessage: {
+        textAlign: 'center',
+        color: theme.jolocom.gray1,
+        fontSize: '18pt',
+        marginTop: '30px',
+        lineHeight: '14pt',
+        marginBottom: '15px'
+      },
       button: {
+        marginTop: '30px',
         width: '100%'
       }
     }
@@ -41,6 +58,7 @@ let ConfirmEmailVerification = React.createClass({
 
   setInitialState(initState) {
     this.setState(initState)
+    this.activateEmailAccount
   },
 
   onStateUpdate(newState) {
@@ -66,16 +84,26 @@ let ConfirmEmailVerification = React.createClass({
 
   render() {
     let styles = this.getStyles()
+
     return (
       <div style={styles.container}>
         <div style={styles.content}>
-          <h3>Click the button below to activate your Web ID!</h3>
+          <div >
+            <h1 style = {styles.confirmMessage}>Congrats!</h1>
+          </div>
+          <div>
+            <h1 style={styles.confirmMessage}>Your username is</h1>
+            <p style={styles.confirmMessage}>
+              {this.props.params.username}
+              </p>
+          </div>
+
           <RaisedButton
-            type="submit" secondary
-            disabled={this.state.disabledSubmit}
-            style={styles.button}
-            label="CONFIRM ACTIVATION"
-            onClick={this.activateEmailAccount}
+          type="submit" secondary
+          disabled={this.state.disabledSubmit}
+          style={styles.button}
+          label="GET STARTED"
+          onClick={this.activateEmailAccount}
           />
         </div>
       </div>
