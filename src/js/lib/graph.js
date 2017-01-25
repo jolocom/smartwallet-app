@@ -209,6 +209,7 @@ export default class GraphD3 extends EventEmitter {
       let dy = 1
       this.WelcomeText =
       this.svg.append('svg:text')
+        // .attr('font-weight', 'lighter')
         .attr('class', 'welcomeText')
         .attr('font-size', largeNode / 5)
         .style('fill', '#9B9FAA')
@@ -233,6 +234,7 @@ export default class GraphD3 extends EventEmitter {
         .attr('x', this.width / 2)
         .attr('y', (this.height / 2) + largeNode)
         .text('Connect to other users')
+
       this.WelcomeText.append('tspan')
         .attr('x', this.width / 2)
         .attr('dy', dy + 'em')
@@ -264,7 +266,7 @@ export default class GraphD3 extends EventEmitter {
       let self = this
       setTimeout(function () {
         self.removeWelcome()
-      }, 5000)
+      }, 10000)
     }
 
     // Center cicle
