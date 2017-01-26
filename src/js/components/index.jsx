@@ -110,9 +110,10 @@ let Index = React.createClass({
         left: '20px',
         marginTop: '-12px',
         zIndex: 100,
-        '@media screen and (max-width: 1024px)': {
+        '@media screen and (max-width: 500px)': {
           display: 'none'
         }
+
       },
       next: {
         position: 'absolute',
@@ -120,7 +121,7 @@ let Index = React.createClass({
         right: '20px',
         marginTop: '-12px',
         zIndex: 100,
-        '@media screen and (max-width: 1024px)': {
+        '@media screen and (max-width: 500px)': {
           display: 'none'
         }
       }
