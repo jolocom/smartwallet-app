@@ -1,6 +1,6 @@
 import Reflux from 'reflux'
 import React from 'react'
-import ReactDOM from 'react/lib/ReactDOM'
+import ReactDOM from 'react-dom'
 import Radium from 'radium'
 import GraphD3 from 'lib/graph'
 import previewStore from 'stores/preview-store'
