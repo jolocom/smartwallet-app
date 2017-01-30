@@ -74,7 +74,6 @@ export default class NewConversation extends Reflux.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    console.log('componentDidUpdate', this.state)
     const id = this.state.conversation && this.state.conversation.id
     if (nextState.conversation && nextState.conversation.id !== id) {
       this.context.router.push(
@@ -87,7 +86,7 @@ export default class NewConversation extends Reflux.Component {
     if (typeof participants === 'string') {
       participants = [participants]
     }
-    console.log('trigger create')
+
     ChatActions.create(
       this.context.account.webId, participants, subject
     )
@@ -145,7 +144,6 @@ export default class NewConversation extends Reflux.Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <Dialog ref="dialog" fullscreen>
         {this.renderContent()}
@@ -160,7 +158,6 @@ export default class NewConversation extends Reflux.Component {
   }
 
   _handleSelectContact({webId}) {
-    console.log('_handleSelectContact', webId)
     this.startChat(webId)
   }
 

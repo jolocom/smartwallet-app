@@ -129,7 +129,7 @@ let Conversation = React.createClass({
   getParticipant(uri) {
     let {participants} = this.state.conversation
     return participants.filter((p) => {
-      return p.webid === uri
+      return p.webId === uri
     })[0]
   },
 
@@ -157,7 +157,7 @@ let Conversation = React.createClass({
     // omit current user
     participants = participants || []
     participants = participants.filter((p) => {
-      return p.webid !== this.context.account.webId
+      return p.webId !== this.context.account.webId
     })
 
     if (!participants || !participants.length) {

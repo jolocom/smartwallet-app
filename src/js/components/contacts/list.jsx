@@ -20,7 +20,8 @@ let ContactsList = React.createClass({
     searchQuery: React.PropTypes.string,
     onItemTouchTap: React.PropTypes.func,
     selectable: React.PropTypes.bool,
-    onItemCheck: React.PropTypes.func
+    onItemCheck: React.PropTypes.func,
+    filter: React.PropTypes.func
   },
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
@@ -51,6 +52,10 @@ let ContactsList = React.createClass({
       }
       return a.username.toLowerCase() > b.username.toLowerCase()
     })
+
+    if (this.props.filter) {
+      items = items.filter(this.props.filter)
+    }
 
     let lastNameInitial = ''
     let result = []

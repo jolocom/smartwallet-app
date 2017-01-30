@@ -1,20 +1,28 @@
 import React from 'react'
 import Radium from 'radium'
 
+import map from 'lodash/map'
+import values from 'lodash/values'
+
 import {
-  IconButton, FlatButton, AppBar, List, ListItem, TextField
+  IconButton, FlatButton, FloatingActionButton,
+  AppBar, List, ListItem, TextField
 } from 'material-ui'
 
 import MDialog from 'material-ui/Dialog'
 
+import PersonAddIcon from 'material-ui/svg-icons/social/person-add'
+
 import {Layout, Content} from 'components/layout'
 
 import Dialog from 'components/common/dialog.jsx'
+import UserAvatar from 'components/common/user-avatar.jsx'
 
 import ContactsList from 'components/contacts/list.jsx'
 
 import ConversationActions from 'actions/conversation'
 
+@Radium
 export default class ConversationSettings extends React.Component {
   static propTypes = {
     conversation: React.PropTypes.object
@@ -23,27 +31,6 @@ export default class ConversationSettings extends React.Component {
   static contextTypes = {
     router: React.PropTypes.any,
     account: React.PropTypes.object
-  }
-
-  _handleSubmitAddParticipants = (selected) => {
-    this.setState({
-      participants: selected
-    })
-  }
-
-  _handleCancelAddParticipants = () => {
-    this.setState({
-      addParticipants: false
-    })
-  }
-
-  _handleRemoveParticipant = (webId) => {
-    const {conversation} = this.props
-    ConversationActions.removeParticipant(conversation.uri, webId)
-  }
-
-  _handleClose = () => {
-    this.hide()
   }
 
   constructor(props) {
@@ -62,31 +49,18 @@ export default class ConversationSettings extends React.Component {
     this.refs.dialog.hide()
   }
 
-  _handleEditSubject = () => {
-    this.refs.editSubject.show()
-  }
-
-  _handleSubjectSubmit = (subject) => {
-    const {conversation} = this.props
-
-    // doing this optimisticly for now
-    ConversationActions.setSubject(
-      conversation.uri, subject
-    )
-  }
-
   render() {
     const {conversation} = this.props
 
     return (
-      <Dialog ref='dialog' fullscreen>
+      <Dialog ref="dialog" fullscreen>
         <Layout>
           <AppBar
-            title='Group Settings'
+            title="Group Settings"
             iconElementLeft={
               <IconButton
                 onClick={this._handleClose}
-                iconClassName='material-icons'
+                iconClassName="material-icons"
               >
                 arrow_back
               </IconButton>
@@ -97,24 +71,69 @@ export default class ConversationSettings extends React.Component {
               <ListItem leftAvatar={<div />} disabled>
                 <TextField
                   style={{width: '100%'}}
-                  floatingLabelText='Subject'
+                  floatingLabelText="Subject"
                   onTouchTap={this._handleEditSubject}
                   value={conversation.subject}
                 />
               </ListItem>
             </List>
-            <List>
 
-            </List>
+            <FloatingActionButton
+              secondary
+              onTouchTap={this._handleAddParticipants}
+            >
+              <PersonAddIcon />
+            </FloatingActionButton>
+
+            <Participants
+              participants={conversation.participants}
+              onRemove={this._handleRemoveParticipant}
+            />
           </Content>
           <SubjectDialog
-            ref='editSubject'
+            ref="editSubject"
             subject={conversation.subject}
             onSubmit={this._handleSubjectSubmit}
+          />
+          <AddParticipants
+            ref="addParticipants"
+            participants={map(conversation.participants, 'webId')}
+            onSubmit={this._handleSubmitAddParticipants}
           />
         </Layout>
       </Dialog>
     )
+  }
+
+  _handleEditSubject = () => {
+    this.refs.editSubject.show()
+  }
+
+  _handleSubjectSubmit = (subject) => {
+    const {conversation} = this.props
+
+    ConversationActions.setSubject(
+      conversation.uri, subject
+    )
+  }
+
+  _handleAddParticipants = () => {
+    this.refs.addParticipants.show()
+  }
+
+  _handleSubmitAddParticipants = (participants) => {
+    const {conversation} = this.props
+    ConversationActions.addParticipants(conversation.uri, participants)
+    this.refs.addParticipants.hide()
+  }
+
+  _handleRemoveParticipant = (webId) => {
+    const {conversation} = this.props
+    ConversationActions.removeParticipant(conversation.uri, webId)
+  }
+
+  _handleClose = () => {
+    this.hide()
   }
 }
 
@@ -161,12 +180,12 @@ class SubjectDialog extends React.Component {
   render() {
     const actions = [
       <FlatButton
-        label='Cancel'
+        label="Cancel"
         primary
         onTouchTap={this._handleClose}
       />,
       <FlatButton
-        label='Submit'
+        label="Submit"
         primary
         disabled={!this.state.subject.trim()}
         onTouchTap={this._handleSubmit}
@@ -175,14 +194,14 @@ class SubjectDialog extends React.Component {
 
     return (
       <MDialog
-        title='Edit Subject'
+        title="Edit Subject"
         actions={actions}
         modal
         open={this.state.open}
       >
         <TextField
           style={{width: '100%'}}
-          floatingLabelText='Subject'
+          floatingLabelText="Subject"
           onChange={this._handleChange}
           value={this.state.subject}
         />
@@ -191,70 +210,145 @@ class SubjectDialog extends React.Component {
   }
 }
 
+class Participants extends React.Component {
+  static contextTypes = {
+    account: React.PropTypes.object
+  }
+
+  static propTypes = {
+    participants: React.PropTypes.array,
+    onRemove: React.PropTypes.func
+  }
+
+  static defaultProps = {
+    participants: []
+  }
+
+  render() {
+    const {participants} = this.props
+    return (
+      <List>
+        {participants.map((p) => {
+          let avatar = <UserAvatar name={p.name} imgUrl={p.imgUri} />
+          let removeButton
+
+          if (p.webId !== this.context.account.webId) {
+            removeButton = (
+              <IconButton
+                iconClassName="material-icons"
+              >
+                close
+              </IconButton>
+            )
+          }
+
+          let handleTouchTap = () => {
+            if (this.props.onRemove) {
+              this.props.onRemove(p.webId)
+            }
+          }
+
+          return (
+            <ListItem
+              key={p.webId}
+              disabled
+              primaryText={p.name || p.email}
+              leftAvatar={avatar}
+              rightIconButton={removeButton}
+              onTouchTap={handleTouchTap}
+            />
+          )
+        })}
+      </List>
+    )
+  }
+}
+
 class AddParticipants extends React.Component {
   static propTypes = {
-    onSelect: React.PropTypes.func,
-    onSubmit: React.PropTypes.func,
-    onCancel: React.PropTypes.func,
-    searchQuery: React.PropTypes.string
-  }
-
-  _handleSubmit = () => {
-    if (typeof this.props.onSubmit === 'function') {
-      this.props.onSubmit(this.state.selected)
-    }
-  }
-
-  _handleCheck = ({webId}) => {
-    let {selected} = this.state
-    const index = selected.indexOf(webId)
-    if (index !== -1) {
-      selected.splice(index, 1)
-    } else {
-      selected.push(webId)
-    }
-    this.setState({
-      selected
-    })
+    participants: React.PropTypes.array,
+    onSubmit: React.PropTypes.func
   }
 
   constructor(props) {
     super(props)
 
     this.state = {
-      selected: []
+      selected: {}
     }
+  }
+
+  show() {
+    this.refs.dialog.show()
+  }
+
+  hide() {
+    this.refs.dialog.hide()
+  }
+
+  get selected() {
+    return values(this.state.selected)
   }
 
   render() {
     return (
-      <Layout>
-        <AppBar
-          title='Add Participants'
-          iconElementLeft={
-            <IconButton
-              onTouchTap={this.props.onCancel}
-              iconClassName='material-icons'
-            >
-              arrow_back
-            </IconButton>
-          }
-          iconElementRight={
-            <FlatButton
-              label='Next'
-              disabled={!this.state.selected.length}
-              onTouchTap={this._handleSubmit}
-            />
-          }
-        />
-        <Content>
-          <ContactsList
-            selectable
-            onItemCheck={this._handleCheck}
-            searchQuery={this.props.searchQuery}
+      <Dialog ref="dialog" fullscreen>
+        <Layout>
+          <AppBar
+            title="Add Participants"
+            iconElementLeft={
+              <IconButton
+                onTouchTap={this._handleCancel}
+                iconClassName="material-icons"
+              >
+                arrow_back
+              </IconButton>
+            }
+            iconElementRight={
+              <FlatButton
+                label="Add"
+                disabled={!this.selected.length}
+                onTouchTap={this._handleSubmit}
+              />
+            }
           />
-        </Content>
-      </Layout>
+          <Content>
+            <ContactsList
+              selectable
+              filter={this._handleFilter}
+              onItemCheck={this._handleCheck}
+            />
+          </Content>
+        </Layout>
+      </Dialog>
     )
+  }
+
+  _handleFilter = (contact) => {
+    return this.props.participants.indexOf(contact.webId) === -1
+  }
+
+  _handleSubmit = () => {
+    if (typeof this.props.onSubmit === 'function') {
+      this.props.onSubmit(this.selected)
+    }
+  }
+
+  _handleCancel = () => {
+    this.hide()
+  }
+
+  _handleCheck = (p) => {
+    let {selected} = this.state
+
+    if (selected[p.webId]) {
+      delete selected[p.webId]
+    } else {
+      selected[p.webId] = p
+    }
+
+    this.setState({
+      selected
+    })
   }
 }

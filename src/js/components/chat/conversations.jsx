@@ -68,14 +68,6 @@ let Conversations = React.createClass({
   },
 
   renderItems(items) {
-    // maybe do this in the store already?
-    // items.sort(
-    //   (itemA, itemB) => {
-    //     return itemA.lastMessage.created.getTime() <
-    //       itemB.lastMessage.created.getTime()
-    //   }
-    // )
-
     return (
       <List>
         {items.map((conversation) => {
@@ -144,7 +136,7 @@ let ConversationsListItem = React.createClass({
     // omit current user
     participants = participants || []
     participants = participants.filter((p) => {
-      return p.webid !== this.context.account.webId
+      return p.webId !== this.context.account.webId
     })
 
     if (!participants || !participants.length) {

@@ -51,14 +51,15 @@ export default class ChatAgent extends LDPAgent {
     let writer = new Writer()
     let ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     let aclUri = `${uri}.acl`
+    let subject = $rdf.sym(`${uri}#owner`)
 
-    writer.addTriple($rdf.sym('#owner'), PRED.type, ACL('Authorization'))
-    writer.addTriple($rdf.sym('#owner'), ACL('accessTo'), $rdf.sym(uri))
-    writer.addTriple($rdf.sym('#owner'), ACL('accessTo'), $rdf.sym(aclUri))
-    writer.addTriple($rdf.sym('#owner'), ACL('agent'), $rdf.sym(initiator))
-    writer.addTriple($rdf.sym('#owner'), ACL('mode'), ACL('Control'))
-    writer.addTriple($rdf.sym('#owner'), ACL('mode'), ACL('Read'))
-    writer.addTriple($rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+    writer.addTriple(subject, PRED.type, ACL('Authorization'))
+    writer.addTriple(subject, ACL('accessTo'), $rdf.sym(uri))
+    writer.addTriple(subject, ACL('accessTo'), $rdf.sym(aclUri))
+    writer.addTriple(subject, ACL('agent'), $rdf.sym(initiator))
+    writer.addTriple(subject, ACL('mode'), ACL('Control'))
+    writer.addTriple(subject, ACL('mode'), ACL('Read'))
+    writer.addTriple(subject, ACL('mode'), ACL('Write'))
 
     participants.forEach((participant) => {
       writer.addAll(this._getParticipantACL(uri, participant))
@@ -74,16 +75,17 @@ export default class ChatAgent extends LDPAgent {
   }
 
   _getParticipantACL(uri, participant) {
-    const subject = $rdf.sym('#participant')
+    const subject = $rdf.sym(`${uri}#participant`)
     const ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     let statements = []
-    statements.push($rdf.triple(subject, PRED.type, ACL('Authorization')))
-    statements.push($rdf.triple(subject, ACL('accessTo'), $rdf.sym(uri)))
-    statements.push($rdf.triple(subject, ACL('agent'), $rdf.sym(participant)))
-    statements.push($rdf.triple(subject, ACL('mode'), ACL('Read')))
-    statements.push($rdf.triple(subject, ACL('mode'), ACL('Write')))
 
-    return statements.push
+    statements.push($rdf.st(subject, PRED.type, ACL('Authorization')))
+    statements.push($rdf.st(subject, ACL('accessTo'), $rdf.sym(uri)))
+    statements.push($rdf.st(subject, ACL('agent'), $rdf.sym(participant)))
+    statements.push($rdf.st(subject, ACL('mode'), ACL('Read')))
+    statements.push($rdf.st(subject, ACL('mode'), ACL('Write')))
+
+    return statements
   }
 
   _getMessageTriples({id, conversationId, author, content, created}) {
@@ -122,8 +124,8 @@ export default class ChatAgent extends LDPAgent {
     }]
   }
 
-  postMessage(conversationUrl, author, content) {
-    const conversationId = `${conversationUrl}#thread`
+  postMessage(uri, author, content) {
+    const conversationId = `${uri}#thread`
     const message = {
       id: `#${Util.randomString(5)}`,
       conversationId,
@@ -132,20 +134,19 @@ export default class ChatAgent extends LDPAgent {
       created: new Date().getTime()
     }
 
-    return this.get(this._proxify(conversationUrl)).then((response) => {
+    return this.get(this._proxify(uri)).then((response) => {
       // store this in memory, so we dont need to fetch all data everytime
       return response.text().then((text) => {
         return new Parser(text, conversationId)
       })
     }).then((conversation) => {
       const writer = new Writer()
-      const uri = this._proxify(conversationUrl)
 
       writer.addAll(this._getMessageTriples(message))
 
-      return this.patch(uri, null, writer.all()).then(() => {
+      return this.patch(this._proxify(uri), null, writer.all()).then(() => {
         const participants = conversation.find(
-          '#thread',
+          $rdf.sym(conversationId),
           PRED.hasSubscriber,
           undefined
         ).map((t) => {
@@ -287,7 +288,7 @@ export default class ChatAgent extends LDPAgent {
           result.img = img.object.value
         }
 
-        result.webid = uri
+        result.webId = uri
 
         return result
       })
@@ -415,19 +416,15 @@ export default class ChatAgent extends LDPAgent {
     )
   }
 
-  _conversationTriples(conversationUrl, initiator, participants, subject = '') {
+  _conversationTriples(uri, initiator, participants, subject = '') {
     let writer = new Writer()
 
-    conversationUrl += '#thread'
-
-    if (!N3Util.isLiteral(subject)) {
-      subject = N3Util.createLiteral(subject)
-    }
+    let thread = $rdf.sym(`${uri}#thread`)
 
     let triples = [{
       subject: '',
       predicate: PRED.title,
-      object: subject
+      object: $rdf.literal(subject)
     }, {
       subject: '',
       predicate: PRED.maker,
@@ -435,21 +432,25 @@ export default class ChatAgent extends LDPAgent {
     }, {
       subject: '',
       predicate: PRED.primaryTopic,
-      object: $rdf.sym(conversationUrl)
+      object: thread
     }, {
-      subject: $rdf.sym(conversationUrl),
+      subject: thread,
       predicate: PRED.type,
       object: PRED.Thread
     }, {
-      subject: $rdf.sym(conversationUrl),
+      subject: thread,
       predicate: PRED.hasOwner,
       object: $rdf.sym(initiator)
+    }, {
+      subject: thread,
+      predicate: PRED.created,
+      object: $rdf.literal(new Date().getTime())
     }]
 
     writer.addAll(triples)
 
     writer.addTriple({
-      subject: $rdf.sym(conversationUrl),
+      subject: thread,
       predicate: PRED.hasSubscriber,
       object: $rdf.sym(initiator)
     })
@@ -457,7 +458,7 @@ export default class ChatAgent extends LDPAgent {
     // Participant list
     for (let p of participants) {
       writer.addTriple({
-        subject: $rdf.sym(conversationUrl),
+        subject: thread,
         predicate: PRED.hasSubscriber,
         object: $rdf.sym(p)
       })
@@ -475,32 +476,41 @@ export default class ChatAgent extends LDPAgent {
   }
 
   addParticipant(uri, webId) {
+    const statements = [$rdf.st(
+      $rdf.sym(`${uri}#thread`), PRED.hasSubscriber, $rdf.sym(webId)
+    )]
+    const acl = this._getParticipantACL(uri, webId)
+
     return Promise.all([
-      () => {
-        const toAdd = $rdf.st(
-          '#thread', PRED.hasSubscriber, $rdf.sym(webId)
-        )
-        return this.patch(this._proxify(uri), undefined, [toAdd])
-      },
-      () => {
-        const toAdd = this._getParticipantACL(uri, webId)
-        return this.patch(this._proxify(`${uri}.acl`), undefined, toAdd)
-      }
+      this.patch(this._proxify(uri), null, statements),
+      this.patch(this._proxify(`${uri}.acl`), null, acl)
+    ])
+  }
+
+  addParticipants(uri, participants) {
+    let statements = []
+    let acl = []
+    participants.forEach((webId) => {
+      statements.push($rdf.st(
+        $rdf.sym(`${uri}#thread`), PRED.hasSubscriber, $rdf.sym(webId)
+      ))
+      acl = acl.concat(this._getParticipantACL(uri, webId))
+    })
+
+    return Promise.all([
+      this.patch(this._proxify(uri), null, statements),
+      this.patch(this._proxify(`${uri}.acl`), null, acl)
     ])
   }
 
   removeParticipant(uri, webId) {
     return Promise.all([
-      () => {
-        const toDel = $rdf.st(
-          '#thread', PRED.hasSubscriber, $rdf.sym(webId)
-        )
-        return this.patch(this._proxify(uri), [toDel])
-      },
-      () => {
-        const toDel = this._getParticipantACL(uri, webId)
-        return this.patch(this._proxify(`${uri}.acl`), toDel)
-      }
+      this.patch(this._proxify(uri), [$rdf.st(
+        $rdf.sym(`${uri}#thread`), PRED.hasSubscriber, $rdf.sym(webId)
+      )]),
+      this.patch(this._proxify(`${uri}.acl`),
+        this._getParticipantACL(uri, webId)
+      )
     ])
   }
 

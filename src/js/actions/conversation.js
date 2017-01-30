@@ -6,6 +6,6 @@ export default Reflux.createActions({
   'subscribe': {},
   'unsubscribe': {},
   'setSubject': {asyncResult: true},
-  'addParticipant': {asyncResult: true},
+  'addParticipants': {asyncResult: true},
   'removeParticipant': {asyncResult: true}
 })

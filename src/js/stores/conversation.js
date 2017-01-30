@@ -8,7 +8,7 @@ let chatAgent = new ChatAgent()
 import ConversationActions from 'actions/conversation'
 import ConversationsStore from 'stores/conversations'
 
-let {load, addMessage, setSubject} = ConversationActions
+let {load, addMessage, setSubject, addParticipants} = ConversationActions
 
 const subscriptions = {}
 
@@ -115,9 +115,26 @@ export default Reflux.createStore({
   },
 
   onSetSubjectFailed(e, oldSubject) {
-    console.error('onSetSubjectFailed', e)
     this.state.subject = oldSubject
     this.trigger(this.state)
-  }
+  },
 
+  onAddParticipants(uri, participants) {
+    const oldParticipants = this.state.participants.slice(0)
+
+    this.state.participants = this.state.participants.concat(participants)
+
+    this.trigger(this.state)
+
+    chatAgent.addParticipants(uri, participants.map(p => p.webId))
+      .catch((e) => {
+        addParticipants.failed(e, oldParticipants)
+      })
+  },
+
+  onAddParticipantsFailed(e, oldParticipants) {
+    console.error(e)
+    this.state.participants = oldParticipants
+    this.trigger(this.state)
+  }
 })

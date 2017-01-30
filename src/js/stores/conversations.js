@@ -89,11 +89,12 @@ export default Reflux.createStore({
         return Promise.all(results)
       })
       .then((conversations) => {
-        return _.chain(conversations).map((conversation) => {
-          return conversation
+        return _.chain(conversations).sortBy((conversation) => {
+          return conversation.lastMessage && conversation.lastMessage.created ||
+            conversation.created || -1
         }).filter((conversation) => {
           return conversation && (!regEx || conversation.id.match(regEx))
-        }).value()
+        }).value().reverse()
       })
   },
 
