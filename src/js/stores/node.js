@@ -16,7 +16,8 @@ export default Reflux.createStore({
     this.gAgent = new GraphAgent()
     this.state = {
       uri: null,
-      initialized: false
+      initialized: false,
+      selectedNdoe: {}
     }
   },
 
@@ -24,19 +25,47 @@ export default Reflux.createStore({
     return this.state
   },
 
+  onGetRemoteNodeInfo(nodeUri) {
+
+  },
+
   resetState() {
     this.init()
   },
 
-  onInitiate(uri, centerUri) {
+  _getNodeType(graphState, uri) {
+    if (graphState.center.uri === uri) {
+      return graphState.center
+    } else {
+      return graphState.neighbours.find(el => {
+        return el.uri === uri
+      })
+    }
+  },
+
+  onInitiate(graphState, uri) {
+    let getNodeType
+
     this.state.uri = uri
-    this.state.initialized = true
     const wia = new WebIdAgent()
     const webId = wia.getWebId()
+    const centerUri = graphState.center.uri
+    const selectedNodeObj = this._getNodeType(graphState, uri)
+
+    if (selectedNodeObj) {
+      this.state.selectedNode = selectedNodeObj
+      getNodeType = Promise.resolve()
+    } else {
+      getNodeType = new Promise((resolve, reject) => {
+        return this.gAgent.getFileModel(uri).then(res => {
+          resolve(res[0])
+        })
+      })
+    }
 
     let checkCenter = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(centerUri)
-      aAgent.fetchInfo().then(() => {
+      aAgent.initialize().then(() => {
         this.state.centerWritePerm = aAgent.isAllowed(webId, 'write')
         resolve()
       }).catch(() => {
@@ -47,7 +76,7 @@ export default Reflux.createStore({
 
     let checkCurrent = new Promise((resolve, reject) => {
       let aAgent = new AclAgent(uri)
-      aAgent.fetchInfo().then((res) => {
+      aAgent.initialize().then((res) => {
         this.state.writePerm = aAgent.isAllowed(webId, 'write')
         resolve()
       }).catch((res) => {
@@ -56,9 +85,14 @@ export default Reflux.createStore({
       })
     })
 
-    Promise.all([checkCenter, checkCurrent]).then(() => {
+    Promise.all([getNodeType, checkCenter, checkCurrent]).then((res) => {
+      if (res[0]) {
+        this.state.selectedNode = res[0]
+      }
+      this.state.initialized = true
       this.trigger(this.state)
     }).catch(() => {
+      this.state.initialized = true
       this.trigger(this.state)
     })
   },

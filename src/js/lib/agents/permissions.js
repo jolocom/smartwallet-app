@@ -3,8 +3,9 @@ import {PRED} from 'lib/namespaces'
 import Util from 'lib/util'
 import rdf from 'rdflib'
 
-// We have one index file that contains the log of the relationships.
-export default class PermissionAgent {
+export default class PermissionAgent extends GraphAgent {
+  // Commit
+  // Get Data
 
   /* @summary Returns the nodes shared with the URI node
    * @param{string} uri - The person we want to know the shared nodes with.
@@ -13,19 +14,14 @@ export default class PermissionAgent {
    * permission.
    *
    */
+
   getSharedNodes(uri) {
     // Add some error handling here perhaps.
     if (!uri) {
       throw new Error('No Uri supplied.')
     }
 
-    this.gAgent = new GraphAgent()
-    let webid = localStorage.getItem('jolocom.webId')
-
-    if (!webid) {
-      throw new Error('Logged in user not detected.')
-    }
-    let indexUri = Util.getIndexUri(webid)
+    const indexUri = Util.getIndexUri(uri)
 
     let sharedNodes = {
       typePerson: [],
@@ -34,16 +30,18 @@ export default class PermissionAgent {
       typeNotDetected: []
     }
 
-    return this.gAgent.findTriples(
+    return this.findTriples(
       indexUri, rdf.sym(uri), undefined, undefined)
     .then((graph) => {
       if (graph === -1) {
         throw new Error('Could not access the index file.')
       }
-      return Promise.all(graph.map((t) => {
+      const filtered = graph.filter(t =>
+        t.predicate.uri === PRED.readPermission.uri)
+      return Promise.all(filtered.map((t) => {
         return this.resolveNodeType(t.object.uri).then((ans) => {
           sharedNodes[ans].push({
-            node: t.object.uri,
+            uri: t.object.uri,
             perm: t.predicate.uri
           })
         })
@@ -62,14 +60,13 @@ export default class PermissionAgent {
     typeMap[PRED.Person.uri] = 'typePerson'
     typeMap[PRED.profileDoc.uri] = 'typePerson'
 
-    return this.gAgent.findTriples(uri, rdf.sym(uri),
+    return this.findTriples(uri, rdf.sym(uri),
        PRED.type, undefined)
     .then((graph) => {
       if (graph === -1 || graph.length === 0) {
         return 'typeNotDetected'
       }
-      let temp = graph[0].object.uri
-      return typeMap[temp]
+      return typeMap[graph[0].object.uri]
     })
   }
 }

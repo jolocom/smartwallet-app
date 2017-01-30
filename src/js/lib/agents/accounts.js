@@ -78,9 +78,11 @@ class AccountsAgent extends HTTPAgent {
 
   initIndex(webId) {
     const webIdRoot = Util.webidRoot(webId)
-    const uri = `${webIdRoot}/little-sister/index`
-    return this.put(this._proxify(uri), '', {
-      'Content-type': 'text/turtle'
+    const uri = `${webIdRoot}/little-sister/index/info`
+    const msg = 'These files keep track of what was shared with your friends.'
+    return this.put(this._proxify(uri), msg, {
+      'Content-type': 'text/turtle',
+      'Link': 'http://www.w3.org/ns/ldp#BasicContainer; rel="type"'
     })
   }
 

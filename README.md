@@ -9,6 +9,11 @@ little-sister - Social app / linked data explorer built for [SoLiD](https://gith
 Setup for development
 ---------------------
 
+Setup requires Node.JS to be installed on your computer. If you do not have it please see:
+https://nodejs.org/en/download/
+
+After cloning the little-sister repository to a directory on your computer. Enter the directory and run the following command:
+
 ## Installation
 ```bash
 npm install -g gulp
@@ -184,4 +189,4 @@ Once you have installed the git flow plugin, you should initialize its branch ma
 git flow init -d
 ```
 
-Copyright (C) 2015-2016  JOLOCOM UG
+Copyright (C) 2014-2017  JOLOCOM UG

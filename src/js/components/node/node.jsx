@@ -6,7 +6,7 @@ import NodeTypes from 'lib/node-types.js'
 
 let Node = React.createClass({
   mixins: [
-    Reflux.listenTo(NodeStore, 'onStateUpdate', 'setInitialState')
+    Reflux.listenTo(NodeStore, 'onStateUpdate')
   ],
 
   propTypes: {
@@ -14,39 +14,54 @@ let Node = React.createClass({
     graph: PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      uri: null,
+      initialized: false,
+      selectedNode: {}
+    }
+  },
+
   onStateUpdate(newState) {
     this.setState(newState)
   },
 
-  setInitialState(initState) {
-    this.setState(initState)
+  componentDidMount() {
+    // In order to trigger componentDidUpdate
+    this.setState(this.state)
   },
 
   // @TODO we have to find something better then passing around the graph state
   // into all child components
-  componentDidUpdate(prevProps, prevState) {
-    const graph = this.props.graph
-
+  componentDidUpdate() {
+    // the props are not available instantly, so this has to be here
+    // rather than in DidMount
+    const {graph} = this.props
     if (!this.state.initialized && graph && graph.center) {
-      NodeActions.initiate(this.props.params.node, graph.center.uri)
+      NodeActions.initiate(graph, this.props.params.node)
     }
   },
 
-  render() {
-    let selectedNode
-    let NodeFullScreenComponent
-    let initialized = false
-
-    if (this.state && this.state.initialized) {
-      initialized = true
-      if (this.props.graph.center.uri === this.props.params.node) {
-        selectedNode = this.props.graph.center
+  /*
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.initialized) {
+      const {graph} = this.props
+      if (graph.center.uri === this.props.params.node) {
+        this.selectedNode = graph.center
       } else {
-        selectedNode = this.props.graph.neighbours.find(el => {
+        this.selectedNode = graph.neighbours.find(el => {
           return el.uri === this.props.params.node
         })
       }
-      NodeFullScreenComponent = NodeTypes.componentFor(selectedNode.type)
+    }
+  },
+  */
+
+  render() {
+    let NodeFSComponent
+    const initialized = this.state.initialized && this.state.selectedNode
+    if (initialized) {
+      NodeFSComponent = NodeTypes.componentFor(this.state.selectedNode.type)
     }
 
     /* TODO Here we need to have a loading screen before the actual
@@ -57,11 +72,11 @@ let Node = React.createClass({
     return (
       <div>
         {initialized
-          ? <NodeFullScreenComponent
-            node={selectedNode}
+          ? <NodeFSComponent
+            node={this.state.selectedNode}
             writePerm={this.state.writePerm}
             centerWritePerm={this.state.centerWritePerm}
-            graphState={this.state.graph} />
+            graphState={this.props.graph} />
           : null}
       </div>
     )

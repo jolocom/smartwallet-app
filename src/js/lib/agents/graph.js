@@ -4,6 +4,7 @@ import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
+import D3Convertor from 'lib/d3-converter'
 
 import $rdf from 'rdflib'
 
@@ -29,7 +30,9 @@ class GraphAgent extends LDPAgent {
       writer.addTriple(uri, PRED.description, description)
     }
     // TODO
-    if (nodeType === 'default' || nodeType === 'passport') {
+    if (nodeType === 'default' ||
+        nodeType === 'passport' ||
+        nodeType === 'confidential') {
       writer.addTriple(uri, PRED.type, PRED.Document)
     } else if (nodeType === 'image') {
       writer.addTriple(uri, PRED.type, PRED.Image)
@@ -350,6 +353,36 @@ class GraphAgent extends LDPAgent {
     })).then(() => {
       return graphMap
     })
+  }
+
+  /**
+   * @summary Given a uri, returns a JS object we can render
+   *   describing the rdf file there.
+   * @param {string} uri - The uri of the rdf file.
+   * @return {object} node - JS object describing the node ready for render.
+   */
+  getFileModel(uri) {
+    return this.fetchTriplesAtUri(uri).then(triples => {
+      triples.triples.uri = uri
+      return this.convertToNodes('a', [triples.triples])
+    })
+  }
+
+  /**
+   * @summary Given an array of triples, converts it to a JS object
+   *  that is ready to be rendered.
+   * @param {array | arrays} Triples - The triples describing the file.
+   * @return {object} node - JS object describing the node ready for render.
+   */
+  convertToNodes(r, triples) {
+    const convertor = new D3Convertor()
+    const len = triples.length - 1
+    let result = []
+    triples.forEach((triple, i) => {
+      result.push(convertor.convertToD3(r, triple, i, len))
+    })
+
+    return result
   }
 
   // Both getGraphMapAtUri and getGraphMapAtWebID return an array of nodes, each
