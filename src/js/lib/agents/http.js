@@ -42,6 +42,9 @@ function composePatchQuery (toDel, toIns) {
 
 // HTTP Requests
 class HTTPAgent {
+  constructor() {
+    this._fetch = window.fetch;
+  }
 
   // GET a resource represented by url
   //
@@ -106,7 +109,7 @@ class HTTPAgent {
     'Accept': DEFAULT_ACCEPT,
     'Content-type': DEFAULT_CT
   }) {
-    return fetch(url, {
+    return this._fetch(url, {
       method,
       headers,
       body,

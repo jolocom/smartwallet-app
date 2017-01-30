@@ -6,9 +6,13 @@ import Util from '../util.js'
 import {Writer} from '../rdf.js'
 import querystring from 'querystring'
 
-class AccountsAgent extends HTTPAgent {
+class AccountsAgent {
+  constructor() {
+    this.http = new HTTPAgent;
+  }
+
   register(username, password, email, name) {
-    return this.post(`${proxy}/register`, querystring.stringify({
+    return this.http.post(`${proxy}/register`, querystring.stringify({
       username, password, email, name
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -24,15 +28,15 @@ class AccountsAgent extends HTTPAgent {
       )
     }
 
-    return this.patch(this._proxify(webId), null, writer.all())
+    return this.http.patch(this.http._proxify(webId), null, writer.all())
   }
 
   checkLogin(webId) {
-    return this.patch(`${proxy}/proxy?url=${webId}`)
+    return this.http.patch(`${proxy}/proxy?url=${webId}`)
   }
 
   login(username, password) {
-    return this.post(`${proxy}/login`, querystring.stringify({
+    return this.http.post(`${proxy}/login`, querystring.stringify({
       username, password
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -40,13 +44,13 @@ class AccountsAgent extends HTTPAgent {
   }
 
   logout() {
-    return this.post(`${proxy}/logout`, null, {
+    return this.http.post(`${proxy}/logout`, null, {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     })
   }
 
   verifyEmail(username, code) {
-    return this.post(`${proxy}/verifyemail`, querystring.stringify({
+    return this.http.post(`${proxy}/verifyemail`, querystring.stringify({
       username, code
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -54,7 +58,7 @@ class AccountsAgent extends HTTPAgent {
   }
 
   forgotPassword(username) {
-    return this.post(`${proxy}/forgotpassword`, querystring.stringify({
+    return this.http.post(`${proxy}/forgotpassword`, querystring.stringify({
       username
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -62,7 +66,7 @@ class AccountsAgent extends HTTPAgent {
   }
 
   resetPassword(username, code, password) {
-    return this.post(`${proxy}/resetpassword`, querystring.stringify({
+    return this.http.post(`${proxy}/resetpassword`, querystring.stringify({
       username, code, password
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -80,7 +84,7 @@ class AccountsAgent extends HTTPAgent {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/index/info`
     const msg = 'These files keep track of what was shared with your friends.'
-    return this.put(this._proxify(uri), msg, {
+    return this.http.put(this.http._proxify(uri), msg, {
       'Content-type': 'text/turtle',
       'Link': 'http://www.w3.org/ns/ldp#BasicContainer; rel="type"'
     })
@@ -89,7 +93,7 @@ class AccountsAgent extends HTTPAgent {
   initDisclaimer(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/disclaimer`
-    return this.put(this._proxify(uri),
+    return this.http.put(this.http._proxify(uri),
       'Files in this folder are needed for features of the Little-Sister app.',
       {'Content-type': 'text/turtle'}
     )
@@ -108,8 +112,8 @@ class AccountsAgent extends HTTPAgent {
     writer.add('', PRED.primaryTopic, $rdf.sym('#inbox'))
     writer.add('#inbox', PRED.type, PRED.space)
 
-    return this.put(
-      this._proxify(uri),
+    return this.http.put(
+      this.http._proxify(uri),
       writer.end(),
       {'Content-type': 'text/turtle'}
     ).then(() => {
@@ -127,8 +131,8 @@ class AccountsAgent extends HTTPAgent {
     writer.add('', PRED.primaryTopic, $rdf.sym('#unread-messages'))
     writer.add('#unread-messages', PRED.type, PRED.space)
 
-    return this.put(
-      this._proxify(uri),
+    return this.http.put(
+      this.http._proxify(uri),
       writer.end(),
       {'Content-type': 'text/turtle'}
     ).then(() => {
@@ -154,7 +158,7 @@ class AccountsAgent extends HTTPAgent {
     writer.addTriple($rdf.sym('#append'), ACL('agentClass'), PRED.Agent)
     writer.addTriple($rdf.sym('#append'), ACL('mode'), ACL('Append'))
 
-    return this.put(this._proxify(aclUri), writer.end(), {
+    return this.http.put(this.http._proxify(aclUri), writer.end(), {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri
