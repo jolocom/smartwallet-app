@@ -1,18 +1,17 @@
-import HTTPAgent from './http.js'
-import {proxy} from 'settings'
+import HTTPAgent from './http'
 import $rdf from 'rdflib'
-import {PRED} from '../namespaces.js'
-import Util from '../util.js'
-import {Writer} from '../rdf.js'
+import {PRED} from '../namespaces'
+import Util from '../util'
+import {Writer} from '../rdf'
 import querystring from 'querystring'
 
 class AccountsAgent {
   constructor() {
-    this.http = new HTTPAgent;
+    this.http = new HTTPAgent({proxy: true});
   }
 
   register(username, password, email, name) {
-    return this.http.post(`${proxy}/register`, querystring.stringify({
+    return this.http.post('/register', querystring.stringify({
       username, password, email, name
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -28,15 +27,15 @@ class AccountsAgent {
       )
     }
 
-    return this.http.patch(this.http._proxify(webId), null, writer.all())
+    return this.http.patch(webId, null, writer.all())
   }
 
-  checkLogin(webId) {
-    return this.http.patch(`${proxy}/proxy?url=${webId}`)
+  checkLogin(webId) { // Resolves if logged in, rejects if not
+    return this.http.patch(webId)
   }
 
-  login(username, password) {
-    return this.http.post(`${proxy}/login`, querystring.stringify({
+  login(username, password) { // TODO: Document expected return value
+    return this.http.post('/login', querystring.stringify({
       username, password
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -44,13 +43,13 @@ class AccountsAgent {
   }
 
   logout() {
-    return this.http.post(`${proxy}/logout`, null, {
+    return this.http.post(`/logout`, null, {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     })
   }
 
-  verifyEmail(username, code) {
-    return this.http.post(`${proxy}/verifyemail`, querystring.stringify({
+  verifyEmail(username, code) { // Resolves with object {email: '<address>'}
+    return this.http.post(`/verifyemail`, querystring.stringify({
       username, code
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -58,7 +57,7 @@ class AccountsAgent {
   }
 
   forgotPassword(username) {
-    return this.http.post(`${proxy}/forgotpassword`, querystring.stringify({
+    return this.http.post(`/forgotpassword`, querystring.stringify({
       username
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -66,7 +65,7 @@ class AccountsAgent {
   }
 
   resetPassword(username, code, password) {
-    return this.http.post(`${proxy}/resetpassword`, querystring.stringify({
+    return this.http.post(`/resetpassword`, querystring.stringify({
       username, code, password
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -83,9 +82,9 @@ class AccountsAgent {
   initIndex(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/index/info`
-    const msg = 'These files keep track of what was shared with your friends.'
-    return this.http.put(this.http._proxify(uri), msg, {
-      'Content-type': 'text/turtle',
+    const msg = 'These files keep track of what was shared with your friends.' // TODO: i18n
+    return this.http.put(uri, msg, {
+      'Content-Type': 'text/turtle',
       'Link': 'http://www.w3.org/ns/ldp#BasicContainer; rel="type"'
     })
   }
@@ -93,9 +92,9 @@ class AccountsAgent {
   initDisclaimer(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/disclaimer`
-    return this.http.put(this.http._proxify(uri),
-      'Files in this folder are needed for features of the Little-Sister app.',
-      {'Content-type': 'text/turtle'}
+    return this.http.put(uri,
+      'Files in this folder are needed for features of the Little-Sister app.', // TODO: i18n
+      {'Content-Type': 'text/turtle'}
     )
   }
 
@@ -105,7 +104,7 @@ class AccountsAgent {
   createConversationsContainer(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/inbox`
-
+    
     let writer = new Writer()
 
     writer.add('', PRED.maker, webId)
@@ -113,9 +112,9 @@ class AccountsAgent {
     writer.add('#inbox', PRED.type, PRED.space)
 
     return this.http.put(
-      this.http._proxify(uri),
+      uri,
       writer.end(),
-      {'Content-type': 'text/turtle'}
+      {'Content-Type': 'text/turtle'}
     ).then(() => {
       return this._writeAcl(uri, webId)
     })
@@ -132,9 +131,9 @@ class AccountsAgent {
     writer.add('#unread-messages', PRED.type, PRED.space)
 
     return this.http.put(
-      this.http._proxify(uri),
+      uri,
       writer.end(),
-      {'Content-type': 'text/turtle'}
+      {'Content-Type': 'text/turtle'}
     ).then(() => {
       return this._writeAcl(uri, webId)
     })
@@ -158,7 +157,7 @@ class AccountsAgent {
     writer.addTriple($rdf.sym('#append'), ACL('agentClass'), PRED.Agent)
     writer.addTriple($rdf.sym('#append'), ACL('mode'), ACL('Append'))
 
-    return this.http.put(this.http._proxify(aclUri), writer.end(), {
+    return this.http.put(aclUri, writer.end(), {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri
