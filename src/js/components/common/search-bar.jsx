@@ -100,10 +100,10 @@ let SearchBar = React.createClass({
         style={styles.bar}
         title={
           <input placeholder="Search..."
-          onChange={this._handleChange}
-          onKeyUp={this._handleKeyUp}
-          ref="input"
-          style={styles.input} />
+            onChange={this._handleChange}
+            onKeyUp={this._handleKeyUp}
+            ref="input"
+            style={styles.input} />
         }
         iconElementLeft={
           <IconButton onClick={this.hide}>
