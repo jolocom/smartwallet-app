@@ -4,7 +4,13 @@ import {Writer, Parser} from '../rdf.js'
 import $rdf from 'rdflib'
 
 // Linked-Data Platform related functions
-class LDPAgent extends HTTPAgent {
+class LDPAgent extends HTTPAgent { // TODO: Remove when done refactoring
+  constructor() {
+    super()
+    this.proxiedHTTP = new HTTPAgent({proxy: true})
+    this.normalHTTP = new HTTPAgent
+  }
+
   // create a directory on LDP server
   createBasicContainer(containerUrl) {
     let headers = {
@@ -12,7 +18,7 @@ class LDPAgent extends HTTPAgent {
       'Link': `<${LDP.BasicContainer}>; rel="type"`
     }
 
-    return this.put(containerUrl, '', headers)
+    return this.normalHTTP.put(containerUrl, '', headers)
   }
 
   /**
@@ -61,7 +67,7 @@ class LDPAgent extends HTTPAgent {
   // This takes a standard URI, it proxies the request itself.
   fetchTriplesAtUri(uri) {
     let parser = new Parser()
-    return this.get(this._proxify(uri)).then((ans) => {
+    return this.proxiedHTTP.get(uri).then((ans) => {
       if (!ans.ok) {
         throw new Error(ans.status) // Call the catch if response error
       }
@@ -89,7 +95,7 @@ class LDPAgent extends HTTPAgent {
    */
 
   getAclUri(uri) {
-    return this.head(this._proxify(uri)).then((result) => {
+    return this.proxiedHTTP.head(uri).then((result) => {
       let linkHeader = result.headers.get('Link')
       if (linkHeader) {
         let aclHeader = linkHeader.split(',').find((part) => {
@@ -100,9 +106,9 @@ class LDPAgent extends HTTPAgent {
           // The Uri of the acl deduced succesfully
           return uri.substring(0, uri.lastIndexOf('/') + 1) + aclHeader
         }
-      } else {
-        return uri + '.acl'
       }
+      
+      return uri + '.acl'
     })
   }
 }
