@@ -1,7 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import {RaisedButton, TextField} from 'material-ui'
+import {RaisedButton} from 'material-ui'
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
 import JolocomTheme from 'styles/jolocom-theme'
@@ -25,7 +25,6 @@ let ConfirmEmailVerification = React.createClass({
   },
 
   getStyles() {
-    let {muiTheme} = this.context
     let styles = {
       container: {
         textAlign: 'center',
@@ -99,21 +98,21 @@ let ConfirmEmailVerification = React.createClass({
       <div style={styles.container}>
         <div style={styles.content}>
           <div>
-            <p style = {styles.confirmMessage}>Congrats!</p>
+            <p style={styles.confirmMessage}>Congrats!</p>
           </div>
           <div style={styles.confirmMessage} >
             <p> Your username is</p>
-            </div>
-            <div style={styles.username}>
+          </div>
+          <div style={styles.username}>
             <p> {this.props.params.username}</p>
           </div>
 
           <RaisedButton
-          type="submit" secondary
-          disabled={this.state.disabledSubmit}
-          style={styles.button}
-          label="GET STARTED"
-          onClick={this.activateEmailAccount}
+            type="submit" secondary
+            disabled={this.state.disabledSubmit}
+            style={styles.button}
+            label="GET STARTED"
+            onClick={this.activateEmailAccount}
           />
         </div>
       </div>
