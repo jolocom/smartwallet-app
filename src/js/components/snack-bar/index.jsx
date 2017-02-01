@@ -1,21 +1,16 @@
 import React from 'react'
-import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 
 import { Snackbar } from 'material-ui'
 
-import SnackbarStore from 'stores/snackbar'
+export default connect({
+  props: ['snackBar']
+})((props) => {
+  const {snackBar} = props
 
-export const SnackbarContainer = React.createClass({
-  mixins: [
-    Reflux.connect(SnackbarStore, 'snackbar')
-  ],
-
-  render() {
-    return <Snackbar
-      open={this.state.snackbar.open}
-      message={this.state.snackbar.message}
-      action={this.state.snackbar.undo && 'undo'}
-      onActionTouchTap={this.state.snackbar.undoCallback}
-    />
-  }
+  return <Snackbar
+    open={snackBar.open} message={snackBar.message}
+    action={snackBar.undo && 'undo'}
+    onActionTouchTap={snackBar.undoCallback}
+  />
 })
