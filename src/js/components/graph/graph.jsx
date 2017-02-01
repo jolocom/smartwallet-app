@@ -21,8 +21,7 @@ let Graph = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     params: React.PropTypes.object,
-    routes: React.PropTypes.array,
-    snackbar: React.PropTypes.bool
+    routes: React.PropTypes.array
   },
 
   contextTypes: {

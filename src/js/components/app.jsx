@@ -8,11 +8,10 @@ import {
   Paper,
   AppBar,
   IconButton,
-  Snackbar,
-  FlatButton,
-  Dialog,
   Badge
 } from 'material-ui'
+import {SnackbarContainer} from 'components/snack-bar'
+import {ConfirmationDialog} from 'components/confirmation-dialog'
 
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
@@ -27,17 +26,14 @@ import Loading from 'components/common/loading.jsx'
 
 import AccountActions from 'actions/account'
 import AccountStore from 'stores/account'
-import ConfirmStore from 'stores/confirm'
 
 import PinnedActions from 'actions/pinned'
-import ConfirmActions from 'actions/confirm'
+
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
 import UnreadMessagesActions from 'actions/unread-messages'
 import UnreadMessagesStore from 'stores/unread-messages'
-
-import SnackbarStore from 'stores/snackbar'
 
 // A pathname is considered public if either "/" or if it starts
 // with any of the following publicRoutes
@@ -58,8 +54,6 @@ let App = React.createClass({
   mixins: [
     Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile'),
-    Reflux.connect(SnackbarStore, 'snackbar'),
-    Reflux.connect(ConfirmStore, 'confirm'),
     Reflux.connect(UnreadMessagesStore, 'unreadMessages')
   ],
 
@@ -190,15 +184,6 @@ let App = React.createClass({
     this.refs.leftNav.show()
   },
 
-  _handleConfirmCancel() {
-    ConfirmActions.close()
-  },
-
-  _handleConfirmAction() {
-    this._handleConfirmCancel()
-    this.state.confirm.callback() // Action when the user confirms
-  },
-
   getStyles() {
     let styles = {
       container: {
@@ -291,19 +276,6 @@ let App = React.createClass({
     // <GraphFilters style={styles.filters} showDefaults />
     const filters = null
 
-    const confirmActions = [
-      <FlatButton
-        label="Cancel"
-        primary
-        onTouchTap={this._handleConfirmCancel}
-      />,
-      <FlatButton
-        label={this.state.confirm.primaryActionText}
-        primary
-        onTouchTap={this._handleConfirmAction}
-      />
-    ]
-
     return (
       <StyleRoot style={styles.container}>
         {this.isPublicRoute() ? this.props.children : (
@@ -333,9 +305,9 @@ let App = React.createClass({
             </Paper>
             <LeftNav ref="leftNav" />
             <Content>
+              // TODO: Nuke this, because this is not the right way to do things
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {
-                  snackbar: this.state.snackbar.open,
                   searchQuery: this.state.searchQuery
                 })
               })}
@@ -344,21 +316,8 @@ let App = React.createClass({
           </Layout>
         )}
 
-        <Snackbar
-          open={this.state.snackbar.open}
-          message={this.state.snackbar.message}
-          action={this.state.snackbar.undo && 'undo'}
-          onActionTouchTap={this.state.snackbar.undoCallback}
-        />
-
-        <Dialog
-          actions={confirmActions}
-          modal={false}
-          open={this.state.confirm.open}
-          onRequestClose={this.handleClose}
-        >
-          {this.state.confirm.message}
-        </Dialog>
+        <SnackbarContainer />
+        <ConfirmationDialog />
       </StyleRoot>
     )
   }
