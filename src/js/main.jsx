@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { hashHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import { AppContainer } from 'react-hot-loader'
 
-import Routes from './routes.jsx'
+import createStore from './redux/create'
 
 injectTapEventPlugin()
 
@@ -32,14 +35,38 @@ moment.locale('en', {
 })
 
 let rootEl = document.getElementById('app')
+// import {submission} from './reducers';
 
-ReactDOM.render(<AppContainer><Routes /></AppContainer>, rootEl)
+const store = createStore()
+const createSelectLocationState = () => {
+  let prevRoutingState, prevRoutingStateJS
+  return (state) => {
+    const routingState = state.get('routing')
+    // console.log(routingState)
+    if (typeof prevRoutingState === 'undefined' || prevRoutingState !== routingState) {
+      prevRoutingState = routingState
+      prevRoutingStateJS = routingState
+      // prevRoutingStateJS = routingState.toJS()
+    }
+    return prevRoutingStateJS
+  }
+}
+const history = syncHistoryWithStore(hashHistory, store, {
+  selectLocationState: createSelectLocationState()
+})
+
+const render = () => {
+  ReactDOM.render(<AppContainer>
+    <Provider store={store}>
+      {require('./routes.jsx').default(history)}
+    </Provider>
+  </AppContainer>, rootEl)
+}
+
+render()
 
 if (module.hot) {
   module.hot.accept('./routes.jsx', () => {
-    ReactDOM.render(
-      <AppContainer component={require('./routes.jsx').default} />,
-      rootEl
-    )
+    render()
   })
 }

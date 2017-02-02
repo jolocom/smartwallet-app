@@ -1,10 +1,12 @@
 import rdf from 'rdflib'
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Dialog from 'components/common/dialog'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
-import ConfirmActions from 'actions/confirm'
+import { open as confirmDialog } from 'redux/modules/confirmation-dialog'
 import graphActions from 'actions/graph-actions'
 import Radium from 'radium'
 
@@ -27,8 +29,12 @@ import {
   Subheader
 } from 'material-ui'
 
-let GenericFullScreen = React.createClass({
-  propTypes: {
+@connect(
+  (state) => ({foo: 5}),
+  (dispatch) => bindActionCreators({confirmDialog}, dispatch)
+)
+class GenericFullScreen extends React.Component {
+  static propTypes = {
     type: React.PropTypes.string,
     rank: React.PropTypes.string,
     title: React.PropTypes.string,
@@ -41,15 +47,16 @@ let GenericFullScreen = React.createClass({
     backgroundImg: React.PropTypes.any,
     uri: React.PropTypes.string,
     graphState: React.PropTypes.object,
-    centerWritePerm: React.PropTypes.bool
-  },
+    centerWritePerm: React.PropTypes.bool,
+    confirmDialog: React.PropTypes.func
+  }
 
-  contextTypes: {
+  static contextTypes = {
     router: React.PropTypes.any,
     node: React.PropTypes.object,
     muiTheme: React.PropTypes.object,
     account: React.PropTypes.object
-  },
+  }
 
   componentDidMount() {
     // Luminance
@@ -68,11 +75,11 @@ let GenericFullScreen = React.createClass({
       })
     }
     this.refs.dialog.show()
-  },
+  }
 
   componentWillUnmount() {
     nodeActions.resetState()
-  },
+  }
 
   getStyles() {
     return {
@@ -130,22 +137,22 @@ let GenericFullScreen = React.createClass({
         lineHeight: '20px'
       }
     }
-  },
+  }
 
   _handleClose() {
     nodeActions.resetState()
     this.context.router.goBack()
-  },
+  }
 
   _handlePrivacySettings() {
     this.context.router.push(encodeURIComponent(this.props.uri) +
       '/privacy-settings')
-  },
+  }
 
   _handleViewSharedNodes() {
     this.context.router.push(encodeURIComponent(this.props.uri) +
       '/shared-nodes')
-  },
+  }
 
   _handleDisconnect() {
     if (this.props.rank === 'center') {
@@ -170,9 +177,10 @@ let GenericFullScreen = React.createClass({
         }
       })
 
-      ConfirmActions.confirm('Are you sure you want to disconnect this node ?',
-        'Disconnect',
-        () => {
+      this.props.confirmDialog({
+        message: 'Are you sure you want to disconnect this node ?',
+        primaryActionText: 'Disconnect',
+        callback: () => {
           this._handleClose()
           nodeActions.disconnectNode(payload)
           let onDisconnectUndo = () => {
@@ -184,21 +192,22 @@ let GenericFullScreen = React.createClass({
               'The node has been successfully disconnected',
               onDisconnectUndo)
         }
-      )
+      })
     }
-  },
+  }
 
   _handleConnect() {
     nodeActions.link(this.context.account.webId, 'generic', this.props.uri)
     SnackbarActions.showMessage('You are now connected to the node.')
     this._handleClose()
-  },
+  }
 
   // TODO - break into more actions. The animation should be smoother.
   _handleDelete() {
-    ConfirmActions.confirm('Are you sure you want to delete this node ?',
-      'Delete',
-      () => {
+    this.props.confirmDialog({
+      message: 'Are you sure you want to delete this node ?',
+      primaryActionText: 'Delete',
+      callback: () => {
         let navHis = this.props.graphState.navHistory
         let centerNode = this.context.node
         let currentNode = { uri: this.props.uri }
@@ -215,12 +224,12 @@ let GenericFullScreen = React.createClass({
             this.props.centerWritePerm)
         }
       }
-    )
-  },
+    })
+  }
 
   _handleFull() {
     this.setState({fullscreen: !this.state.fullscreen})
-  },
+  }
 
   // menuItem (optional?)
   getAction(iconString, i) {
@@ -300,26 +309,26 @@ let GenericFullScreen = React.createClass({
       default:
         return {}
     }
-  },
+  }
 
   _handlePostCopyURL() {
     SnackbarActions
       .showMessage('The URL of the node has been copied to your clipboard.')
-  },
+  }
 
   _handleEdit() {
     this.context.router.push('/profile')
-  },
+  }
 
   _handleStartChat() {
     const {router} = this.context
     router.push(`/chat/new/${encodeURIComponent(this.props.uri)}`)
-  },
+  }
 
   _preventDefault(e) {
     e.stopPropagation()
     return false
-  },
+  }
 
   getLuminanceForImageUrl(url) {
     return new Promise((resolve, reject) => {
@@ -361,7 +370,7 @@ let GenericFullScreen = React.createClass({
           img.src = imgDataUrl
         })
     })
-  },
+  }
 
   render() {
     let styles = this.getStyles()
@@ -459,6 +468,6 @@ let GenericFullScreen = React.createClass({
       </Dialog>
     )
   }
-})
+}
 
 export default Radium(GenericFullScreen)
