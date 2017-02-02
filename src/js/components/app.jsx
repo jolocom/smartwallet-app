@@ -305,7 +305,7 @@ let App = React.createClass({
             </Paper>
             <LeftNav ref="leftNav" />
             <Content>
-              // TODO: Nuke this, because this is not the right way to do things
+              {/* TODO: Nuke this, because this is not the right way to do things */}
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {
                   searchQuery: this.state.searchQuery
