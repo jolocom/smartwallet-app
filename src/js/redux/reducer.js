@@ -1,0 +1,8 @@
+import { combineReducers } from 'redux-immutable'
+// import multireducer from 'multireducer'
+import { routerReducer } from 'react-router-redux'
+
+export default combineReducers({
+  routing: routerReducer,
+  confirm: require('./modules/confirmation-dialog').default
+})
