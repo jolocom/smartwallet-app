@@ -27,8 +27,8 @@ import NodeList from 'components/node/node-list.jsx'
 import ConfirmEmailVerification from
   'components/accounts/confirm-email-verification.jsx'
 
-const routes = (
-  <Route path="/" component={App} >
+function getRoutes() {
+  return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
     <Route path="/chat" component={Chat}>
       <Route path="/conversations" component={Conversations}>
@@ -55,9 +55,9 @@ const routes = (
     <Route path="change-password/:username/:token" component={ChangePassword} />
     <Route path="signup" component={Signup} />
     <Route path="login" component={Login} />
-  </Route>
-)
+  </Route>)
+}
 
-export default () => {
-  return (<Router history={hashHistory}>{routes}</Router>)
+export default (history) => {
+  return (<Router history={history}>{getRoutes()}</Router>)
 }
