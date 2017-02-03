@@ -8,7 +8,7 @@ import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
 import { open as confirmDialog } from 'redux/modules/confirmation-dialog'
 import graphActions from 'actions/graph-actions'
-import Radium from 'radium'
+// import Radium from 'radium'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
@@ -52,10 +52,16 @@ class GenericFullScreen extends React.Component {
   }
 
   static contextTypes = {
-    router: React.PropTypes.any,
+    router: React.PropTypes.any.isRequired,
     node: React.PropTypes.object,
     muiTheme: React.PropTypes.object,
-    account: React.PropTypes.object
+    account: React.PropTypes.object,
+    store: React.PropTypes.object
+  }
+
+  constructor() {
+    super()
+    this.state = { fullscreen: false }
   }
 
   componentDidMount() {
@@ -238,37 +244,39 @@ class GenericFullScreen extends React.Component {
         return {
           title: 'Chat',
           icon: <CommunicationChat />,
-          handler: this._handleStartChat}
+          handler: () => this._handleStartChat()}
       case 'delete':
-        return {title: 'Delete', handler: this._handleDelete}
+        return {
+          title: 'Delete',
+          handler: () => this._handleDelete()}
       case 'connect':
         return {
           title:
           'Connect',
           icon: <ContentLink />,
-          handler: this._handleConnect
+          handler: () => this._handleConnect()
         }
       case 'disconnect':
         return {
           title:
           'Disconnect',
           icon: <ContentUnlink />,
-          handler: this._handleDisconnect
+          handler: () => this._handleDisconnect()
         }
       case 'edit':
         return {
           title: 'Edit',
-          handler: this._handleEdit,
+          handler: () => this._handleEdit(),
           icon: <EditorModeEdit />
         }
       case 'privacySettings':
         return {
           title: 'Privacy Settings',
-          handler: this._handlePrivacySettings
+          handler: () => this._handlePrivacySettings()
         }
       case 'viewSharedNodes':
         const obj = {
-          handler: this._handleViewSharedNodes,
+          handler: () => this._handleViewSharedNodes(),
           title: 'View shared nodes'
         }
         if (this.props.title) {
@@ -278,7 +286,7 @@ class GenericFullScreen extends React.Component {
         return obj
       case 'fullscreen':
         return {
-          handler: this._handleFull,
+          handler: () => this._handleFull(),
           title: this.state.fullscreen ? 'Exit full screen' : 'Full screen'
         }
       case 'copyUrl': // @TODO not optimal
@@ -383,7 +391,8 @@ class GenericFullScreen extends React.Component {
         headerIcon = <DocIcon />
       }
     }
-
+    const onTouchTapHandler = () => this._handleFull()
+    const onClickHandler = () => this._handleClose()
     return (
       <Dialog ref="dialog" fullscreen>
         <Layout>
@@ -393,7 +402,7 @@ class GenericFullScreen extends React.Component {
                 {headerIcon}
               </div>
               <AppBar
-                onTouchTap={this._handleFull}
+                onTouchTap={onTouchTapHandler}
                 style={styles.headers}
                 iconElementRight={
                   <IconMenu
@@ -426,7 +435,7 @@ class GenericFullScreen extends React.Component {
                   <IconButton
                     iconClassName="material-icons"
                     iconStyle={styles.icon}
-                    onClick={this._handleClose}>
+                    onClick={onClickHandler}>
                       arrow_back
                   </IconButton>
                   }
@@ -470,4 +479,4 @@ class GenericFullScreen extends React.Component {
   }
 }
 
-export default Radium(GenericFullScreen)
+export default GenericFullScreen

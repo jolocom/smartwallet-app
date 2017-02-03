@@ -64,7 +64,8 @@ let App = React.createClass({
   },
 
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    store: React.PropTypes.object.isRequired
   },
 
   childContextTypes: {
@@ -74,7 +75,8 @@ let App = React.createClass({
     username: React.PropTypes.string,
     searchActive: React.PropTypes.bool,
     location: React.PropTypes.object,
-    route: React.PropTypes.object
+    route: React.PropTypes.object,
+    store: React.PropTypes.object
   },
 
   getChildContext: function () {
@@ -230,7 +232,7 @@ let App = React.createClass({
 
   render() {
     const styles = this.getStyles()
-
+    console.log(this.context)
     // @TODO render login screen when logging in, also makes sures child
     // components don't get rendered before any user data is available
     if (this.state.account.loggingIn && !this.isPublicRoute()) {
