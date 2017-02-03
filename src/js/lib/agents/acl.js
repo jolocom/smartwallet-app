@@ -8,6 +8,18 @@ import Util from 'lib/util'
 import rdf from 'rdflib'
 import _ from 'lodash'
 
+const PERMS_PRED_MAP = {
+  write: PRED.write.uri,
+  read: PRED.read.uri,
+  control: PRED.control.uri
+}
+
+const REV_PERMS_PRED_MAP = {
+  [PRED.write.uri]: 'write',
+  [PRED.read.uri]: 'read',
+  [PRED.control.uri]: 'control'
+}
+
 class AclAgent extends HTTPAgent {
 
   constructor(uri) {
@@ -17,17 +29,6 @@ class AclAgent extends HTTPAgent {
 
     this.aclUri
     this.uri = uri
-
-    this.predMap = {
-      write: PRED.write.uri,
-      read: PRED.read.uri,
-      control: PRED.control.uri
-    }
-
-    this.revPredMap = {}
-    this.revPredMap[PRED.write.uri] = 'write'
-    this.revPredMap[PRED.read.uri] = 'read'
-    this.revPredMap[PRED.control.uri] = 'control'
 
     this.toAdd = []
     this.toRemove = []
@@ -61,36 +62,44 @@ class AclAgent extends HTTPAgent {
 
   initialize() {
     return this._fetchInfo().then((trips) => {
-      const writer = new Writer()
+      this.model = this._buildModel(trips)
+    })
+  }
 
-      trips.forEach(t => {
-        writer.addTriple(t.subject, t.predicate, t.object)
+  static _buildModel(triples) {
+    const writer = new Writer()
+    const model = []
+
+    triples.forEach(t => {
+      writer.addTriple(t.subject, t.predicate, t.object)
+    })
+
+    // Read all / Write all, basically public permission.
+    writer.find(undefined, PRED.agentClass, PRED.Agent).forEach(pol => {
+      model.push({
+        user: '*',
+        source: pol.subject.uri,
+        mode: []
       })
+    })
 
-      // Read all / Write all, basically public permission.
-      writer.find(undefined, PRED.agentClass, PRED.Agent).forEach(pol => {
-        this.model.push({
-          user: '*',
-          source: pol.subject.uri,
-          mode: []
-        })
+    writer.find(undefined, PRED.agent, undefined).forEach(pol => {
+      model.push({
+        user: pol.object.uri,
+        source: pol.subject.uri,
+        mode: []
       })
+    })
 
-      writer.find(undefined, PRED.agent, undefined).forEach(pol => {
-        this.model.push({
-          user: pol.object.uri,
-          source: pol.subject.uri,
-          mode: []
-        })
-      })
-
-      this.model.forEach(entry => {
-        writer.find(rdf.sym(entry.source), PRED.mode, undefined)
+    model.forEach(entry => {
+      writer
+        .find(rdf.sym(entry.source), PRED.mode, undefined)
         .forEach(pol => {
           entry.mode.push(pol.object.mode || pol.object.uri)
         })
-      })
     })
+
+    return model
   }
 
   /**
@@ -105,10 +114,10 @@ class AclAgent extends HTTPAgent {
     let policyName
     let newPolicy = true
     let tempFound = false
-    const pred = this.predMap[mode]
+    const mode_pred = PERMS_PRED_MAP[mode]
     let tempPolicy
     this.toRemove = this.toRemove.filter(e => {
-      const exists = e.user === user && e.object === pred
+      const exists = e.user === user && e.object === mode_pred
       if (exists) {
         tempPolicy = e
         tempFound = true
@@ -135,16 +144,16 @@ class AclAgent extends HTTPAgent {
     }
     this.model.forEach(entry => {
       if (entry.user === user) {
-        if (entry.mode.indexOf(pred) !== -1) {
+        if (entry.mode.indexOf(mode_pred) !== -1) {
           throw new Error('Policy already present')
         }
         // We can inject only if this is the only user in the policy.
-        if (this.getAuthAgents(entry.source).length === 1) {
+        if (this._getAuthAgents(entry.source).length === 1) {
           newPolicy = false
           policyName = entry.source
-          entry.mode.push(pred)
+          entry.mode.push(mode_pred)
         } else {
-          this.splitAuth(entry.user, entry.source, entry.mode.concat(pred))
+          this._splitAuth(entry.user, entry.source, entry.mode.concat(mode_pred))
           throw new Error('Splitting first')
         }
       }
@@ -155,7 +164,7 @@ class AclAgent extends HTTPAgent {
       this.model.push({
         user,
         source: policyName,
-        mode: [pred]
+        mode: [mode_pred]
       })
     }
 
@@ -163,7 +172,7 @@ class AclAgent extends HTTPAgent {
       user,
       subject: policyName,
       predicate: PRED.mode,
-      object: pred,
+      object: mode_pred,
       newPolicy
     })
   }
@@ -180,7 +189,7 @@ class AclAgent extends HTTPAgent {
     let policyName
     let zombie = false
     let tempFound = false
-    const predicate = this.predMap[mode]
+    const predicate = PERMS_PRED_MAP[mode]
 
     this.toAdd = this.toAdd.filter(e => {
       const exists = e.user === user && e.object === predicate
@@ -194,13 +203,13 @@ class AclAgent extends HTTPAgent {
       const found = entry.user === user && entry.mode.indexOf(predicate) !== -1
       if (found) {
         policyName = entry.source
-        if (this.getAuthAgents(entry.source).length === 1) {
+        if (this._getAuthAgents(entry.source).length === 1) {
           if (entry.mode.length === 1) {
             zombie = true
           }
           entry.mode = entry.mode.filter(el => el !== predicate)
         } else {
-          this.splitAuth(entry.user, entry.source, entry.mode.filter(m =>
+          this._splitAuth(entry.user, entry.source, entry.mode.filter(m =>
             m !== predicate)
           )
           throw new Error('Splitting first')
@@ -227,21 +236,21 @@ class AclAgent extends HTTPAgent {
    * @return {bool} - Allowed / Not allowed.
    */
   isAllowed(user, mode) {
-    if (!this.predMap[mode]) {
+    if (!PERMS_PRED_MAP[mode]) {
       return false
     }
-    return _.includes(this.allowedPermissions(user), mode)
+    return _.includes(this._allowedPermissions(user), mode)
   }
 
   /**
    * @summary Returns a list of people allowed to do something
    */
   allAllowedUsers(mode) {
-    if (!this.predMap[mode]) {
+    if (!PERMS_PRED_MAP[mode]) {
       return []
     }
 
-    let pred = this.predMap[mode]
+    let pred = PERMS_PRED_MAP[mode]
     let users = []
     this.model.forEach(entry => {
       if (entry.mode.indexOf(pred) !== -1) {
@@ -259,15 +268,15 @@ class AclAgent extends HTTPAgent {
    *                        modes as well.
    * @return {array} - permissions [read,write,control]
    */
-  allowedPermissions(user, strict = false) {
+  _allowedPermissions(user, strict = false) {
     let wildcard = user === '*'
     let permissions = []
 
     this.model.forEach(entry => {
       if (entry.user === user) {
         entry.mode.forEach(p => {
-          if (!_.includes(permissions, this.revPredMap[p])) {
-            permissions.push(this.revPredMap[p])
+          if (!_.includes(permissions, REV_PERMS_PRED_MAP[p])) {
+            permissions.push(REV_PERMS_PRED_MAP[p])
           }
         })
       }
@@ -276,7 +285,7 @@ class AclAgent extends HTTPAgent {
     // We append the open permissions as well, since they apply to all users.
     // But only if strict is set to false.
     if (!wildcard && !strict) {
-      let general = this.allowedPermissions('*')
+      let general = this._allowedPermissions('*')
       general.forEach(el => {
         if (!_.includes(permissions, el)) {
           permissions.push(el)
@@ -333,7 +342,7 @@ class AclAgent extends HTTPAgent {
       if (this.zombiePolicies.length) {
         this._wipeZombies(this.zombiePolicies)
       }
-      this.updateIndex().then(() => {
+      this._updateIndex().then(() => {
         this._cleanUp()
       }).catch(e => {
         this._cleanUp()
@@ -370,7 +379,7 @@ class AclAgent extends HTTPAgent {
 
   // Given an authorization policy name, returns
   // all users mentioned.
-  getAuthAgents(authName) {
+  _getAuthAgents(authName) {
     let users = this.model.filter(policy =>
       policy.source === authName
     )
@@ -378,9 +387,9 @@ class AclAgent extends HTTPAgent {
     return users
   }
 
-  splitAuth(agent, authName, modes) {
+  _splitAuth(agent, authName, modes) {
     // We can't split when there's only one user
-    if (this.getAuthAgents(authName).length === 1) {
+    if (this._getAuthAgents(authName).length === 1) {
       return
     }
 
@@ -428,7 +437,7 @@ class AclAgent extends HTTPAgent {
   }
 
   // This is a quick implementation. It works, but should be optimized a bit.
-  updateIndex() {
+  _updateIndex() {
     let add = []
     let rem = []
     let map = {}
