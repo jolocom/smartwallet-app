@@ -29,10 +29,6 @@ import {
   Subheader
 } from 'material-ui'
 
-@connect(
-  (state) => ({foo: 5}),
-  (dispatch) => bindActionCreators({confirmDialog}, dispatch)
-)
 class GenericFullScreen extends React.Component {
   static propTypes = {
     type: React.PropTypes.string,
