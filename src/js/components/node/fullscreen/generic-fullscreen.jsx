@@ -29,10 +29,6 @@ import {
   Subheader
 } from 'material-ui'
 
-@connect(
-  (state) => ({foo: 5}),
-  (dispatch) => bindActionCreators({confirmDialog}, dispatch)
-)
 class GenericFullScreen extends React.Component {
   static propTypes = {
     type: React.PropTypes.string,
@@ -391,6 +387,7 @@ class GenericFullScreen extends React.Component {
         headerIcon = <DocIcon />
       }
     }
+
     const onTouchTapHandler = () => this._handleFull()
     const onClickHandler = () => this._handleClose()
     return (
@@ -479,4 +476,7 @@ class GenericFullScreen extends React.Component {
   }
 }
 
-export default GenericFullScreen
+export default connect(
+  (state) => ({}),
+  (dispatch) => bindActionCreators({confirmDialog}, dispatch)
+)(GenericFullScreen)
