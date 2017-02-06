@@ -76,6 +76,7 @@ let App = React.createClass({
     searchActive: React.PropTypes.bool,
     location: React.PropTypes.object,
     route: React.PropTypes.object,
+    router: React.PropTypes.object,
     store: React.PropTypes.object
   },
 
@@ -88,7 +89,8 @@ let App = React.createClass({
       username: account && account.username, // backward compat
       searchActive,
       location: this.props.location,
-      route: this.props.route
+      route: this.props.route,
+      router: this.context.router
     }
   },
 
@@ -232,7 +234,6 @@ let App = React.createClass({
 
   render() {
     const styles = this.getStyles()
-    console.log(this.context)
     // @TODO render login screen when logging in, also makes sures child
     // components don't get rendered before any user data is available
     if (this.state.account.loggingIn && !this.isPublicRoute()) {

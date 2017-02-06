@@ -31,12 +31,14 @@ let Graph = React.createClass({
   },
 
   childContextTypes: {
+    router: React.PropTypes.object,
     node: React.PropTypes.object,
     user: React.PropTypes.string
   },
 
   getChildContext() {
     return {
+      router: this.context.router,
       node: this.state.center,
       user: this.state.webId
     }
