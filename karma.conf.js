@@ -11,7 +11,10 @@ module.exports = function (config) {
     preprocessors: {
       'test/index.js': [ 'webpack', 'sourcemap' ] //preprocess with webpack and our sourcemap loader
     },
-    reporters: [ 'dots' ], //report results in this format
+    reporters: [ 'mocha' ], //report results in this format
+    mochaReporter: {
+      showDiff: true
+    },
     webpack: webpackConfig,
     webpackServer: {
       noInfo: true //please don't spam the console when running in karma!

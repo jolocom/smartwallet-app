@@ -25,7 +25,8 @@ class AclAgent extends HTTPAgent {
   constructor(uri) {
     super()
     this.model = []
-    this.gAgent = new GraphAgent()
+    this.gAgent = new GraphAgent
+    this.ldpAgent = new LDPAgent
 
     this.aclUri
     this.uri = uri
@@ -44,13 +45,11 @@ class AclAgent extends HTTPAgent {
    */
 
   _fetchInfo() {
-    const wia = new WebidAgent()
-
-    return wia.getAclUri(this.uri).then((aclUri) => {
+    return this.ldpAgent.getAclUri(this.uri).then((aclUri) => {
       this.aclUri = aclUri
     }).then(() => {
       let results = []
-      return this.gAgent.fetchTriplesAtUri(this.aclUri).then(result => {
+      return this.ldpAgent.fetchTriplesAtUri(this.aclUri).then(result => {
         const {triples} = result
         triples.forEach(t => {
           results.push(t)
@@ -62,7 +61,7 @@ class AclAgent extends HTTPAgent {
 
   initialize() {
     return this._fetchInfo().then((trips) => {
-      this.model = this._buildModel(trips)
+      this.model = AclAgent._buildModel(trips)
     })
   }
 
@@ -109,23 +108,22 @@ class AclAgent extends HTTPAgent {
    * @param {string} mode - permission to do what? [read, write, control]
    * @return undefined, we want the side effect
    */
-
   allow(user, mode) {
+    const modePred = PERMS_PRED_MAP[mode]
+
     let policyName
     let newPolicy = true
-    let tempFound = false
-    const mode_pred = PERMS_PRED_MAP[mode]
-    let tempPolicy
-    this.toRemove = this.toRemove.filter(e => {
-      const exists = e.user === user && e.object === mode_pred
+    let tempPolicy = null
+    
+    this.toRemove = this.toRemove.filter(policy => {
+      const exists = policy.user === user && policy.object === modePred
       if (exists) {
-        tempPolicy = e
-        tempFound = true
+        tempPolicy = policy
       }
       return !exists
     })
 
-    if (tempFound) {
+    if (tempPolicy) {
       if (tempPolicy.zombie) {
         this.model.push({
           user,
@@ -144,27 +142,27 @@ class AclAgent extends HTTPAgent {
     }
     this.model.forEach(entry => {
       if (entry.user === user) {
-        if (entry.mode.indexOf(mode_pred) !== -1) {
+        if (entry.mode.indexOf(modePred) !== -1) {
           throw new Error('Policy already present')
         }
         // We can inject only if this is the only user in the policy.
         if (this._getAuthAgents(entry.source).length === 1) {
           newPolicy = false
           policyName = entry.source
-          entry.mode.push(mode_pred)
+          entry.mode.push(modePred)
         } else {
-          this._splitAuth(entry.user, entry.source, entry.mode.concat(mode_pred))
+          this._splitAuth(entry.user, entry.source, entry.mode.concat(modePred))
           throw new Error('Splitting first')
         }
       }
     })
 
     if (newPolicy) {
-      policyName = `${this.aclUri}#${Util.randomString(5)}`
+      policyName = this._generatePolicyName()
       this.model.push({
         user,
         source: policyName,
-        mode: [mode_pred]
+        mode: [modePred]
       })
     }
 
@@ -172,9 +170,13 @@ class AclAgent extends HTTPAgent {
       user,
       subject: policyName,
       predicate: PRED.mode,
-      object: mode_pred,
+      object: modePred,
       newPolicy
     })
+  }
+
+  _generatePolicyName() {
+    return `${this.aclUri}#${Util.randomString(5)}`
   }
 
   /**
