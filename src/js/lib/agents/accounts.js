@@ -7,7 +7,7 @@ import querystring from 'querystring'
 
 class AccountsAgent {
   constructor() {
-    this.http = new HTTPAgent({proxy: true});
+    this.http = new HTTPAgent({proxy: true})
   }
 
   register(username, password, email, name) {
@@ -43,13 +43,13 @@ class AccountsAgent {
   }
 
   logout() {
-    return this.http.post(`/logout`, null, {
+    return this.http.post('/logout', null, {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     })
   }
 
   verifyEmail(username, code) { // Resolves with object {email: '<address>'}
-    return this.http.post(`/verifyemail`, querystring.stringify({
+    return this.http.post('/verifyemail', querystring.stringify({
       username, code
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -57,7 +57,7 @@ class AccountsAgent {
   }
 
   forgotPassword(username) {
-    return this.http.post(`/forgotpassword`, querystring.stringify({
+    return this.http.post('/forgotpassword', querystring.stringify({
       username
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -65,7 +65,7 @@ class AccountsAgent {
   }
 
   resetPassword(username, code, password) {
-    return this.http.post(`/resetpassword`, querystring.stringify({
+    return this.http.post('/resetpassword', querystring.stringify({
       username, code, password
     }), {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -82,7 +82,8 @@ class AccountsAgent {
   initIndex(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/index/info`
-    const msg = 'These files keep track of what was shared with your friends.' // TODO: i18n
+    // TODO: i18n
+    const msg = 'These files keep track of what was shared with your friends.'
     return this.http.put(uri, msg, {
       'Content-Type': 'text/turtle',
       'Link': 'http://www.w3.org/ns/ldp#BasicContainer; rel="type"'
@@ -93,7 +94,8 @@ class AccountsAgent {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/disclaimer`
     return this.http.put(uri,
-      'Files in this folder are needed for features of the Little-Sister app.', // TODO: i18n
+      // TODO: i18n
+      'Files in this folder are needed for features of the Little-Sister app.',
       {'Content-Type': 'text/turtle'}
     )
   }
@@ -104,7 +106,7 @@ class AccountsAgent {
   createConversationsContainer(webId) {
     const webIdRoot = Util.webidRoot(webId)
     const uri = `${webIdRoot}/little-sister/inbox`
-    
+
     let writer = new Writer()
 
     writer.add('', PRED.maker, webId)

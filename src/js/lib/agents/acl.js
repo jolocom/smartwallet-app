@@ -1,5 +1,4 @@
 import GraphAgent from 'lib/agents/graph.js'
-import WebidAgent from 'lib/agents/webid'
 import HTTPAgent from 'lib/agents/http'
 import LDPAgent from 'lib/agents/ldp'
 import {PRED} from 'lib/namespaces'
@@ -25,8 +24,8 @@ class AclAgent extends HTTPAgent {
   constructor(uri) {
     super()
     this.model = []
-    this.gAgent = new GraphAgent
-    this.ldpAgent = new LDPAgent
+    this.gAgent = new GraphAgent()
+    this.ldpAgent = new LDPAgent()
 
     this.aclUri
     this.uri = uri
@@ -114,7 +113,7 @@ class AclAgent extends HTTPAgent {
     let policyName
     let newPolicy = true
     let tempPolicy = null
-    
+
     this.toRemove = this.toRemove.filter(policy => {
       const exists = policy.user === user && policy.object === modePred
       if (exists) {

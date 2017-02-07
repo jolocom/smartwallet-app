@@ -8,7 +8,7 @@ class LDPAgent extends HTTPAgent { // TODO: Remove when done refactoring
   constructor() {
     super()
     this.proxiedHTTP = new HTTPAgent({proxy: true})
-    this.normalHTTP = new HTTPAgent
+    this.normalHTTP = new HTTPAgent()
   }
 
   // create a directory on LDP server
@@ -107,7 +107,7 @@ class LDPAgent extends HTTPAgent { // TODO: Remove when done refactoring
           return uri.substring(0, uri.lastIndexOf('/') + 1) + aclHeader
         }
       }
-      
+
       return uri + '.acl'
     })
   }

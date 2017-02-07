@@ -1,5 +1,4 @@
 /* global describe: true, it: true */
-var assert = require('chai').assert
 var expect = require('chai').expect
 import {Parser} from '../rdf.js'
 import AclAgent from './acl'
@@ -28,16 +27,15 @@ async function initAgentWithDummyACL(uri, aclUri) {
   const agent = new AclAgent(uri)
   agent.ldpAgent.getAclUri = async (requestedUri) => {
     expect(requestedUri).to.equal(uri)
-    return aclUri;
+    return aclUri
   }
   agent.ldpAgent.fetchTriplesAtUri = async (requestedUri) => {
     expect(requestedUri).to.equal(aclUri)
-    return (new Parser).parse(DUMMY_ACL_1, aclUri)
+    return (new Parser()).parse(DUMMY_ACL_1, aclUri)
   }
   await agent.initialize()
   return agent
 }
-
 
 describe('AclAgent', function() {
   describe('#initialize', function() {
@@ -50,17 +48,18 @@ describe('AclAgent', function() {
 
       expect(agent.model).to.deep.equal([{
         user: 'https://alice.example.com/profile/card#me',
-        source: 'https://alice.example.com/docs/shared-file1.acl#authorization1',
+        source: 'https://alice.example.com/docs/' +
+                'shared-file1.acl#authorization1',
         mode: [
           'http://www.w3.org/ns/auth/acl#Read',
           'http://www.w3.org/ns/auth/acl#Write',
           'http://www.w3.org/ns/auth/acl#Control'
         ]
       }])
-      
+
       expect(agent.uri).to.equal(uri)
       expect(agent.aclUri).to.equal(aclUri)
-      
+
       expect(agent.toAdd).to.deep.equal([])
       expect(agent.toRemove).to.deep.equal([])
       expect(agent.authCreationQuery).to.deep.equal([])
@@ -73,13 +72,15 @@ describe('AclAgent', function() {
       const uri = 'https://alice.example.com/docs/shared-file1'
       const aclUri = uri + '.acl'
       const agent = await initAgentWithDummyACL(uri, aclUri)
-      agent._generatePolicyName = () => 'https://alice.example.com/docs/shared-file1#new'
+      agent._generatePolicyName = () =>
+        'https://alice.example.com/docs/shared-file1#new'
       agent.allow('https://bob.example.com/profile/card#me', 'read')
 
       expect(agent.model).to.deep.equal([
         {
           user: 'https://alice.example.com/profile/card#me',
-          source: 'https://alice.example.com/docs/shared-file1.acl#authorization1',
+          source: 'https://alice.example.com/docs/' +
+                  'shared-file1.acl#authorization1',
           mode: [
             'http://www.w3.org/ns/auth/acl#Read',
             'http://www.w3.org/ns/auth/acl#Write',
@@ -90,11 +91,11 @@ describe('AclAgent', function() {
           user: 'https://bob.example.com/profile/card#me',
           source: 'https://alice.example.com/docs/shared-file1#new',
           mode: [
-            'http://www.w3.org/ns/auth/acl#Read',
+            'http://www.w3.org/ns/auth/acl#Read'
           ]
-        },
+        }
       ])
-      
+
       // expect(agent.toAdd).to.deep.equal([
       //   {
       //     newPolicy: true,
@@ -110,80 +111,92 @@ describe('AclAgent', function() {
       // expect(agent.toRemove).to.deep.equal([])
     })
 
-    it('should correctly handle trying to add duplicate rules', async function() {
-      const uri = 'https://alice.example.com/docs/shared-file1'
-      const aclUri = uri + '.acl'
-      const agent = await initAgentWithDummyACL(uri, aclUri)
-      agent.allow('https://bob.example.com/profile/card#me', 'read')
-      expect(() => agent.allow('https://bob.example.com/profile/card#me', 'read'))
-            .to.throw('Policy already present')
-    })
+    it('should correctly handle trying to add duplicate rules',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+        agent.allow('https://bob.example.com/profile/card#me', 'read')
+        expect(() => agent.allow('https://bob.example.com/profile/card#me',
+                                 'read'))
+              .to.throw('Policy already present')
+      }
+    )
 
-    it('should correctly handle trying to re-add a new rule after removal', async function() {
-      const uri = 'https://alice.example.com/docs/shared-file1'
-      const aclUri = uri + '.acl'
-      const agent = await initAgentWithDummyACL(uri, aclUri)
-      agent._generatePolicyName = () => 'https://alice.example.com/docs/shared-file1#new'
+    it('should correctly handle trying to re-add a new rule after removal',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+        agent._generatePolicyName = () =>
+          'https://alice.example.com/docs/shared-file1#new'
 
-      agent.allow('https://bob.example.com/profile/card#me', 'read')
-      agent.removeAllow('https://bob.example.com/profile/card#me', 'read')
-      agent.allow('https://bob.example.com/profile/card#me', 'read')
+        agent.allow('https://bob.example.com/profile/card#me', 'read')
+        agent.removeAllow('https://bob.example.com/profile/card#me', 'read')
+        agent.allow('https://bob.example.com/profile/card#me', 'read')
 
-      expect(agent.model).to.deep.equal([
-        {
-          user: 'https://alice.example.com/profile/card#me',
-          source: 'https://alice.example.com/docs/shared-file1.acl#authorization1',
-          mode: [
-            'http://www.w3.org/ns/auth/acl#Read',
-            'http://www.w3.org/ns/auth/acl#Write',
-            'http://www.w3.org/ns/auth/acl#Control'
-          ]
-        },
-        {
-          user: 'https://bob.example.com/profile/card#me',
-          source: 'https://alice.example.com/docs/shared-file1#new',
-          mode: [
-            'http://www.w3.org/ns/auth/acl#Read',
-          ]
-        },
-      ])
-      // expect(agent.toAdd).to.deep.equal([
-      //   {
-      //     newPolicy: true,
-      //     object: "http://www.w3.org/ns/auth/acl#Read",
-      //     predicate: {
-      //       termType: "NamedNode",
-      //       value: "http://www.w3.org/ns/auth/acl#mode"
-      //     },
-      //     subject: "https://alice.example.com/docs/shared-file1#new",
-      //     user: "https://bob.example.com/profile/card#me"
-      //   }
-      // ])
-      expect(agent.toRemove).to.deep.equal([])
-    })
-    
-    it('should correctly handle trying to re-add an existing rule after removal', async function() {
-      const uri = 'https://alice.example.com/docs/shared-file1'
-      const aclUri = uri + '.acl'
-      const agent = await initAgentWithDummyACL(uri, aclUri)
-      agent._generatePolicyName = () => 'https://alice.example.com/docs/shared-file1#new'
+        expect(agent.model).to.deep.equal([
+          {
+            user: 'https://alice.example.com/profile/card#me',
+            source: 'https://alice.example.com/docs/' +
+                    'shared-file1.acl#authorization1',
+            mode: [
+              'http://www.w3.org/ns/auth/acl#Read',
+              'http://www.w3.org/ns/auth/acl#Write',
+              'http://www.w3.org/ns/auth/acl#Control'
+            ]
+          },
+          {
+            user: 'https://bob.example.com/profile/card#me',
+            source: 'https://alice.example.com/docs/shared-file1#new',
+            mode: [
+              'http://www.w3.org/ns/auth/acl#Read'
+            ]
+          }
+        ])
 
-      agent.removeAllow('https://alice.example.com/profile/card#me', 'write')
-      agent.allow('https://alice.example.com/profile/card#me', 'write')
+        // expect(agent.toAdd).to.deep.equal([
+        //   {
+        //     newPolicy: true,
+        //     object: "http://www.w3.org/ns/auth/acl#Read",
+        //     predicate: {
+        //       termType: "NamedNode",
+        //       value: "http://www.w3.org/ns/auth/acl#mode"
+        //     },
+        //     subject: "https://alice.example.com/docs/shared-file1#new",
+        //     user: "https://bob.example.com/profile/card#me"
+        //   }
+        // ])
+        expect(agent.toRemove).to.deep.equal([])
+      }
+    )
 
-      expect(agent.model).to.deep.equal([
-        {
-          user: 'https://alice.example.com/profile/card#me',
-          source: 'https://alice.example.com/docs/shared-file1.acl#authorization1',
-          mode: [
-            'http://www.w3.org/ns/auth/acl#Read',
-            'http://www.w3.org/ns/auth/acl#Control',
-            'http://www.w3.org/ns/auth/acl#Write'
-          ]
-        }
-      ])
-      expect(agent.toAdd).to.deep.equal([])
-      expect(agent.toRemove).to.deep.equal([])
-    })
+    it('should handle trying to re-add an existing rule after removal',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+        agent._generatePolicyName = () =>
+          'https://alice.example.com/docs/shared-file1#new'
+
+        agent.removeAllow('https://alice.example.com/profile/card#me', 'write')
+        agent.allow('https://alice.example.com/profile/card#me', 'write')
+
+        expect(agent.model).to.deep.equal([
+          {
+            user: 'https://alice.example.com/profile/card#me',
+            source: 'https://alice.example.com/docs/' +
+                    'shared-file1.acl#authorization1',
+            mode: [
+              'http://www.w3.org/ns/auth/acl#Read',
+              'http://www.w3.org/ns/auth/acl#Control',
+              'http://www.w3.org/ns/auth/acl#Write'
+            ]
+          }
+        ])
+        expect(agent.toAdd).to.deep.equal([])
+        expect(agent.toRemove).to.deep.equal([])
+      }
+    )
   })
 })

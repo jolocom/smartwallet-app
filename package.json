@@ -11,7 +11,8 @@
     "test:chrome": "npm run test -- --browsers Chrome",
     "test:firefox": "npm run test -- --browsers Firefox",
     "test:safari": "npm run test -- --browsers Safari",
-    "test:ie": "npm run test -- --browsers IE"
+    "test:ie": "npm run test -- --browsers IE",
+    "lint": "eslint src/js/**"
   },
   "repository": {
     "type": "git",
