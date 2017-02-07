@@ -10,7 +10,7 @@ const DUMMY_ACL_1 = `
 <#authorization1>
     a acl:Authorization;
     acl:accessTo <https://alice.example.com/docs/shared-file1>;
-    acl:mode acl:Read, acl:Write, acl:Control;
+    acl:mode acl:Read, acl:Write;
     acl:agent <https://alice.example.com/profile/card#me>.
 
 # Group authorization, giving Read/Write access to two groups, which are
@@ -52,8 +52,7 @@ describe('AclAgent', function() {
                 'shared-file1.acl#authorization1',
         mode: [
           'http://www.w3.org/ns/auth/acl#Read',
-          'http://www.w3.org/ns/auth/acl#Write',
-          'http://www.w3.org/ns/auth/acl#Control'
+          'http://www.w3.org/ns/auth/acl#Write'
         ]
       }])
 
@@ -68,6 +67,25 @@ describe('AclAgent', function() {
   })
 
   describe('#allow', function() {
+    it('should be able to add permission to existing policy', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      agent.allow('https://alice.example.com/profile/card#me', 'control')
+      expect(agent.model).to.deep.equal([
+        {
+          user: 'https://alice.example.com/profile/card#me',
+          source: 'https://alice.example.com/docs/' +
+                  'shared-file1.acl#authorization1',
+          mode: [
+            'http://www.w3.org/ns/auth/acl#Read',
+            'http://www.w3.org/ns/auth/acl#Write',
+            'http://www.w3.org/ns/auth/acl#Control'
+          ]
+        }
+      ])
+    })
+
     it('should be able to add a new non-existing rule', async function() {
       const uri = 'https://alice.example.com/docs/shared-file1'
       const aclUri = uri + '.acl'
@@ -83,8 +101,7 @@ describe('AclAgent', function() {
                   'shared-file1.acl#authorization1',
           mode: [
             'http://www.w3.org/ns/auth/acl#Read',
-            'http://www.w3.org/ns/auth/acl#Write',
-            'http://www.w3.org/ns/auth/acl#Control'
+            'http://www.w3.org/ns/auth/acl#Write'
           ]
         },
         {
@@ -142,8 +159,7 @@ describe('AclAgent', function() {
                     'shared-file1.acl#authorization1',
             mode: [
               'http://www.w3.org/ns/auth/acl#Read',
-              'http://www.w3.org/ns/auth/acl#Write',
-              'http://www.w3.org/ns/auth/acl#Control'
+              'http://www.w3.org/ns/auth/acl#Write'
             ]
           },
           {
@@ -189,7 +205,6 @@ describe('AclAgent', function() {
                     'shared-file1.acl#authorization1',
             mode: [
               'http://www.w3.org/ns/auth/acl#Read',
-              'http://www.w3.org/ns/auth/acl#Control',
               'http://www.w3.org/ns/auth/acl#Write'
             ]
           }
