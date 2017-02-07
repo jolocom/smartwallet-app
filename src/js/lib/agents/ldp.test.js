@@ -11,7 +11,7 @@ const DUMMY_JSON_HEADERS = {
 }
 const DUMMY_TURTLE_HEADERS = {
   get: (field) => ({
-    'Content-Type': 'application/json'
+    'Content-Type': 'text/turtle'
   })[field]
 }
 
@@ -45,7 +45,7 @@ describe('LDPAgent', function () {
           expect(options.method).to.equal('GET')
           expect(url).to.equal('http://foo.com/test')
           return {
-            status: 200, ok: true, DUMMY_TURTLE_HEADERS,
+            status: 200, ok: true, headers: DUMMY_TURTLE_HEADERS,
             text: async () => `
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 <http://foo.com/profile/alice> foaf:name "Alice" .
@@ -94,7 +94,7 @@ describe('LDPAgent', function () {
           expect(options.method).to.equal('GET')
           expect(url).to.equal('http://foo.com/test')
           return {
-            status: 200, ok: true, DUMMY_TURTLE_HEADERS,
+            status: 200, ok: true, headers: DUMMY_TURTLE_HEADERS,
             text: async () => `
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 _:a foaf:name "Alice" .

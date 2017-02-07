@@ -9,7 +9,7 @@ const DUMMY_JSON_HEADERS = {
 }
 const DUMMY_HTML_HEADERS = {
   get: (field) => ({
-    'Content-Type': 'application/json'
+    'Content-Type': 'text/html'
   })[field]
 }
 
