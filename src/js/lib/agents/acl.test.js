@@ -1,5 +1,6 @@
 /* global describe: true, it: true */
 var expect = require('chai').expect
+import rdf from 'rdflib'
 import {Parser} from '../rdf.js'
 import AclAgent from './acl'
 
@@ -113,19 +114,16 @@ describe('AclAgent', function() {
         }
       ])
 
-      // expect(agent.toAdd).to.deep.equal([
-      //   {
-      //     newPolicy: true,
-      //     object: "http://www.w3.org/ns/auth/acl#Read",
-      //     predicate: {
-      //       termType: "NamedNode",
-      //       value: "http://www.w3.org/ns/auth/acl#mode"
-      //     },
-      //     subject: "https://alice.example.com/docs/shared-file1#new",
-      //     user: "https://bob.example.com/profile/card#me"
-      //   }
-      // ])
-      // expect(agent.toRemove).to.deep.equal([])
+      expect(agent.toAdd).to.deep.equal([
+        {
+          newPolicy: true,
+          object: 'http://www.w3.org/ns/auth/acl#Read',
+          predicate: rdf.sym('http://www.w3.org/ns/auth/acl#mode'),
+          subject: 'https://alice.example.com/docs/shared-file1#new',
+          user: 'https://bob.example.com/profile/card#me'
+        }
+      ])
+      expect(agent.toRemove).to.deep.equal([])
     })
 
     it('should correctly handle trying to add duplicate rules',
@@ -171,18 +169,15 @@ describe('AclAgent', function() {
           }
         ])
 
-        // expect(agent.toAdd).to.deep.equal([
-        //   {
-        //     newPolicy: true,
-        //     object: "http://www.w3.org/ns/auth/acl#Read",
-        //     predicate: {
-        //       termType: "NamedNode",
-        //       value: "http://www.w3.org/ns/auth/acl#mode"
-        //     },
-        //     subject: "https://alice.example.com/docs/shared-file1#new",
-        //     user: "https://bob.example.com/profile/card#me"
-        //   }
-        // ])
+        expect(agent.toAdd).to.deep.equal([
+          {
+            newPolicy: true,
+            object: 'http://www.w3.org/ns/auth/acl#Read',
+            predicate: rdf.sym('http://www.w3.org/ns/auth/acl#mode'),
+            subject: 'https://alice.example.com/docs/shared-file1#new',
+            user: 'https://bob.example.com/profile/card#me'
+          }
+        ])
         expect(agent.toRemove).to.deep.equal([])
       }
     )
