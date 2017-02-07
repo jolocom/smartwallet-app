@@ -97,7 +97,8 @@ class HTTPAgent {
   }
 
   _proxify(uri) {
-    console.warning('DEPRECATED - HTTPAgent._proxify: pass proxy option to constructor instead')
+    console.warning('DEPRECATED - HTTPAgent._proxify: ' +
+                    'pass proxy option to constructor instead')
     return this.__proxify(uri)
   }
 
