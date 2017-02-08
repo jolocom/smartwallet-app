@@ -67,7 +67,7 @@ describe('HTTPAgent', function() {
         headers: DUMMY_HTML_HEADERS}
 
       const agent = new HTTPAgent()
-      expect(agent._proxyURL).to.be.null
+      expect(agent._proxyURL).to.equal('')
       agent._fetch = async (url, options) => {
         expect(url).to.equal('/test/')
         return fakeResponse
