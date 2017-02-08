@@ -43,8 +43,8 @@ function composePatchQuery (toDel, toIns) {
 // HTTP Requests
 class HTTPAgent {
   constructor({proxy} = {}) {
-    this._fetch = window.fetch
-    this._proxyURL = proxy === true ? settings.proxy : null
+    this._fetch = window.fetch.bind(window)
+    this._proxyURL = proxy === true ? settings.proxy : ''
   }
 
   // GET a resource represented by url
@@ -97,9 +97,9 @@ class HTTPAgent {
   }
 
   _proxify(uri) {
-    console.warning('DEPRECATED - HTTPAgent._proxify: ' +
+    console.warn('DEPRECATED - HTTPAgent._proxify: ' +
                     'pass proxy option to constructor instead')
-    return this.__proxify(uri)
+    return `${settings.proxy}/proxy?url=${uri}`
   }
 
   __proxify(uri) { // Temporary to gracefuly deprecate public use of _proxify
@@ -126,7 +126,6 @@ class HTTPAgent {
     if (this._proxyURL) {
       url = this.__proxify(url)
     }
-
     return this._fetch(url, {
       method,
       headers,
