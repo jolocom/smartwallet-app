@@ -1,5 +1,7 @@
 /* global describe: true, it: true */
 var expect = require('chai').expect
+
+import * as settings from 'settings'
 import AccountsAgent from './accounts'
 
 const DUMMY_JSON_HEADERS = {
@@ -21,7 +23,7 @@ describe('AccountsAgent', function () {
         expect(options.method).to.equal('POST')
         expect(options.body).to.equal('username=user&password=pass&' +
           'email=email&name=name')
-        expect(url).to.equal('/register')
+        expect(url).to.equal(`${settings.proxy}/register`)
         return {
           status: 200, json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
@@ -35,7 +37,7 @@ describe('AccountsAgent', function () {
   describe('#updateEmail', function () {
     it('should be able to update email', async function () {
       const agent = new AccountsAgent()
-      agent.http._fetch = async (url, options) => {
+      agent.httpProxied._fetch = async (url, options) => {
         expect(url).to.equal('http://my-test-id')
         expect(options.method).to.equal('PATCH')
         expect(options.body).to.equal(
@@ -58,7 +60,7 @@ describe('AccountsAgent', function () {
     it('should be able to check if the user is (still) logged in',
       async function () {
         const agent = new AccountsAgent()
-        agent.http._fetch = async (url, options) => {
+        agent.httpProxied._fetch = async (url, options) => {
           expect(url).to.equal('http://my-test-id')
           expect(options.method).to.equal('PATCH')
           expect(options.body).to.equal('')
@@ -81,7 +83,7 @@ describe('AccountsAgent', function () {
       agent.http._fetch = async (url, options) => {
         expect(options.method).to.equal('POST')
         expect(options.body).to.equal('username=user&password=pass')
-        expect(url).to.equal('/login')
+        expect(url).to.equal(`${settings.proxy}/login`)
         expect(options.headers['Content-Type'])
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
         return {
@@ -98,7 +100,7 @@ describe('AccountsAgent', function () {
       agent.http._fetch = async (url, options) => {
         expect(options.method).to.equal('POST')
         expect(options.body).to.equal('username=user&password=pass')
-        expect(url).to.equal('/login')
+        expect(url).to.equal(`${settings.proxy}/login`)
         expect(options.headers['Content-Type'])
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
         return ({
@@ -117,7 +119,7 @@ describe('AccountsAgent', function () {
       agent.http._fetch = async (url, options) => {
         expect(options.method).to.equal('POST')
         expect(options.body).to.be.null
-        expect(url).to.equal('/logout')
+        expect(url).to.equal(`${settings.proxy}/logout`)
         expect(options.headers['Content-Type'])
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
         return {
@@ -134,7 +136,7 @@ describe('AccountsAgent', function () {
     it('should be able verify an e-mail address', async function () {
       const agent = new AccountsAgent()
       agent.http._fetch = async (url, options) => {
-        expect(url).to.equal('/verifyemail')
+        expect(url).to.equal(`${settings.proxy}/verifyemail`)
         expect(options.method).to.equal('POST')
         expect(options.body)
               .to.equal('username=http%3A%2F%2Fmy-test-id&code=verysecret')
@@ -153,7 +155,7 @@ describe('AccountsAgent', function () {
     it('should correctly handle verification failures', async function () {
       const agent = new AccountsAgent()
       agent.http._fetch = async (url, options) => {
-        expect(url).to.equal('/verifyemail')
+        expect(url).to.equal(`${settings.proxy}/verifyemail`)
         expect(options.method).to.equal('POST')
         expect(options.body)
               .to.equal('username=http%3A%2F%2Fmy-test-id&code=verysecret')
@@ -236,7 +238,7 @@ describe('AccountsAgent', function () {
       }
 
       const agent = new AccountsAgent()
-      agent.http._fetch = (url, options) => {
+      agent.httpProxied._fetch = (url, options) => {
         const fetch = fetches[url]
         fetch.called = true
         return fetch(url, options)
@@ -251,7 +253,7 @@ describe('AccountsAgent', function () {
   describe('#initIndex', function () {
     it('should correctly create the index for a user', async function () {
       const agent = new AccountsAgent()
-      agent.http._fetch = async (url, options) => {
+      agent.httpProxied._fetch = async (url, options) => {
         expect(url).to.equal('http://myid/little-sister/index/info')
         expect(options.method).to.equal('PUT')
         expect(options.body).to.equal('These files keep track of what ' +
@@ -270,7 +272,7 @@ describe('AccountsAgent', function () {
     it('should correctly initialize the disclaimer for a user',
       async function () {
         const agent = new AccountsAgent()
-        agent.http._fetch = async (url, options) => {
+        agent.httpProxied._fetch = async (url, options) => {
           expect(url).to.equal('http://myid/little-sister/disclaimer')
           expect(options.method).to.equal('PUT')
           expect(options.body).to.equal(

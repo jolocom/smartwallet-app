@@ -43,7 +43,7 @@ function composePatchQuery (toDel, toIns) {
 // HTTP Requests
 class HTTPAgent {
   constructor({proxy} = {}) {
-    this._fetch = window.fetch.bind(window)
+    this._fetch = window.fetch ? window.fetch.bind(window) : null
     this._proxyURL = proxy === true ? settings.proxy : ''
   }
 
