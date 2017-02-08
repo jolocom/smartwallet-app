@@ -4,7 +4,7 @@ import {
   Drawer,
   List,
   ListItem,
-  MakeSelectable,
+  makeSelectable,
   Divider,
   FontIcon,
   Avatar
@@ -19,7 +19,7 @@ import GraphIcon from 'components/icons/graph-icon.jsx'
 import ProfileStore from 'stores/profile'
 import Badge from 'material-ui/Badge'
 
-let SelectableList = MakeSelectable(List)
+let SelectableList = makeSelectable(List)
 
 let Nav = React.createClass({
 
