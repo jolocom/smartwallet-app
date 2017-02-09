@@ -8,7 +8,7 @@ export var close = action('confirmation-dialog', 'close', {
   expectedParams: []
 })
 
-const initialState = Map({
+const initialState = new Map({
   open: false,
   message: '',
   primaryActionText: 'Confirm',
