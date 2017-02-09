@@ -285,7 +285,6 @@ export default class ChatAgent extends LDPAgent {
         ])
       })
       .then(([conversation, lastMessage, participants]) => {
-        console.log(conversation)
         return Object.assign(result, conversation, {
           lastMessage,
           participants

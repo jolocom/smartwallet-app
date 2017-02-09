@@ -90,9 +90,9 @@ export default Reflux.createStore({
       })
       .then((conversations) => {
         return _.chain(conversations).sortBy((conversation) => {
-          const date = conversation.lastMessage && conversation.lastMessage.created ||
-            conversation.created
-          console.log(date)
+          const date = conversation.lastMessage &&
+            conversation.lastMessage.created || conversation.created
+
           return date && date.getTime() || -1
         }).filter((conversation) => {
           return conversation && (!regEx || conversation.id.match(regEx))
