@@ -1,11 +1,15 @@
 import LDPAgent from './ldp.js'
+import HTTPAgent from './http.js'
 import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'
 
 // WebID related functions
-class WebIDAgent extends LDPAgent {
-
+class WebIDAgent {
+  constructor() {
+    this.ldp = new LDPAgent()
+    this.http = new HTTPAgent({proxy: true})
+  }
   // Gets the webId of the currently loged in user from local storage,
   getWebId() {
     const webId = localStorage.getItem('jolocom.webId')
@@ -15,13 +19,13 @@ class WebIDAgent extends LDPAgent {
     return ''
   }
 
-  getProfile() {
+  getProfile() { // NOTE This Function assumes a proxied WEBID
     const webId = this.getWebId()
     if (!webId) {
       throw new Error('No webid detected.')
     }
     let parser = new Parser()
-    return this.get(this._proxify(webId))
+    return this.http.get(webId)
       .then((response) => {
         return response.text()
       }).then((text) => {
@@ -30,7 +34,7 @@ class WebIDAgent extends LDPAgent {
         return this._parseProfile(webId, answer.triples)
       }).then((data) => {
         if (data.imgUri) {
-          return this.head(this._proxify(data.imgUri))
+          return this.http.head(data.imgUri)
             .then((res) => {
               return data
             })
@@ -48,8 +52,7 @@ class WebIDAgent extends LDPAgent {
       webId: webId
     }
 
-    let relevant = triples.filter((t) => t.subject.uri === webId)
-
+    let relevant = triples.filter((t) => t.subject.value === webId)
     let predicateMap = {}
     predicateMap[PRED.familyName] = 'familyName'
     predicateMap[PRED.givenName] = 'givenName'
@@ -75,6 +78,7 @@ class WebIDAgent extends LDPAgent {
 
     // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
     // when displaying here.
+    // @TODO Refactor so not so hardcoded
     if (profile.email) {
       profile.email = profile.email.substring(7, profile.email.length)
     }
@@ -92,7 +96,7 @@ class WebIDAgent extends LDPAgent {
     }
 
     if (profile.passportNodeUri) {
-      return this.findObjectsByTerm(
+      return this.ldp.findObjectsByTerm(
         profile.passportNodeUri,
         PRED.image
       ).then(res => {
@@ -163,8 +167,8 @@ class WebIDAgent extends LDPAgent {
     // All network requests will be contained here, later awaited by with
     // Promise.all
     let nodeCreationRequests = []
-    nodeCreationRequests.push(this.patch(
-      this._proxify(oldData.webId), toDel.statements, toAdd.statements
+    nodeCreationRequests.push(this.http.patch(
+      this.http._proxify(oldData.webId), toDel.statements, toAdd.statements
     ))
 
     return Promise.all(nodeCreationRequests).then(res => {
@@ -186,11 +190,11 @@ class WebIDAgent extends LDPAgent {
     )
 
     return Promise.all([
-      this.delete(this._proxify(uri)),
-      this.delete(this._proxify(uri + '.acl')),
-      this.delete(this._proxify(imgUri)),
-      this.delete(this._proxify(imgUri + '.acl')),
-      this.patch(this._proxify(webId), toDel.statements)
+      this.http.delete(this.http._proxify(uri)),
+      this.http.delete(this.http._proxify(uri + '.acl')),
+      this.http.delete(this.http._proxify(imgUri)),
+      this.http.delete(this.http._proxify(imgUri + '.acl')),
+      this.http.patch(this.http._proxify(webId), toDel.statements)
     ])
   }
 
@@ -215,9 +219,10 @@ class WebIDAgent extends LDPAgent {
     )
 
     return Promise.all([
-      this.patch(this._proxify(uri), toDel.statements, toAdd.statements),
-      this.delete(this._proxify(oldImgUri)),
-      this.delete(this._proxify(oldImgUri + '.acl'))
+      this.http.patch(this.http._proxify(uri), toDel.statements,
+        toAdd.statements),
+      this.http.delete(this.http._proxify(oldImgUri)),
+      this.http.delete(this.http._proxify(oldImgUri + '.acl'))
     ])
   }
 }
