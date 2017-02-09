@@ -10,14 +10,14 @@ import { close } from 'redux/modules/confirmation-dialog'
   (state) => ({ confirm: state.get('confirm').toJS() }),
   (dispatch) => bindActionCreators({close}, dispatch)
 )
-export class ConfirmationDialog extends React.Component {
+export default class ConfirmationDialog extends React.Component {
   static propTypes = {
     close: React.PropTypes.func,
     confirm: React.PropTypes.object
   }
 
   _handleConfirmAction() {
-    this._handleConfirmCancel()
+    this.props.close()
     this.props.confirm.callback() // Action when the user confirms
   }
 
@@ -26,18 +26,19 @@ export class ConfirmationDialog extends React.Component {
   }
 
   render() {
-    console.log('!!!!')
+    const confirmHandler = () => this._handleConfirmAction()
+    const cancelHandler = () => this._handleConfirmCancel()
 
     const confirmActions = [
       <FlatButton
         label="Cancel"
         primary
-        onTouchTap={this._handleConfirmCancel}
+        onTouchTap={cancelHandler}
       />,
       <FlatButton
         label={this.props.confirm.primaryActionText}
         primary
-        onTouchTap={this._handleConfirmAction}
+        onTouchTap={confirmHandler}
       />
     ]
 

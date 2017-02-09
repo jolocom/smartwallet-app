@@ -11,7 +11,7 @@ import {
   Badge
 } from 'material-ui'
 import {SnackbarContainer} from 'components/snack-bar'
-import {ConfirmationDialog} from 'components/confirmation-dialog'
+import ConfirmationDialog from 'components/confirmation-dialog'
 
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
