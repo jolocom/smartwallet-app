@@ -25,7 +25,8 @@ describe('AccountsAgent', function () {
           'email=email&name=name')
         expect(url).to.equal(`${settings.proxy}/register`)
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -38,7 +39,7 @@ describe('AccountsAgent', function () {
     it('should be able to update email', async function () {
       const agent = new AccountsAgent()
       agent.httpProxied._fetch = async (url, options) => {
-        expect(url).to.equal('http://my-test-id')
+        expect(url).to.equal(`${settings.proxy}/proxy?url=http://my-test-id`)
         expect(options.method).to.equal('PATCH')
         expect(options.body).to.equal(
           'INSERT DATA { <http://my-test-id> ' +
@@ -48,7 +49,8 @@ describe('AccountsAgent', function () {
           .to.equal('application/sparql-update')
 
         return ({
-          status: 200, responseText: 'TEST',
+          status: 200,
+          responseText: 'TEST',
           headers: DUMMY_HTML_HEADERS
         })
       }
@@ -61,14 +63,15 @@ describe('AccountsAgent', function () {
       async function () {
         const agent = new AccountsAgent()
         agent.httpProxied._fetch = async (url, options) => {
-          expect(url).to.equal('http://my-test-id')
+          expect(url).to.equal(`${settings.proxy}/proxy?url=http://my-test-id`)
           expect(options.method).to.equal('PATCH')
           expect(options.body).to.equal('')
           expect(options.headers['Content-Type'])
                 .to.equal('application/sparql-update')
 
           return ({
-            status: 200, responseText: 'TEST',
+            status: 200,
+            responseText: 'TEST',
             headers: DUMMY_HTML_HEADERS
           })
         }
@@ -87,7 +90,8 @@ describe('AccountsAgent', function () {
         expect(options.headers['Content-Type'])
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -104,7 +108,8 @@ describe('AccountsAgent', function () {
         expect(options.headers['Content-Type'])
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
         return ({
-          status: 403, statusText: 'Nope',
+          status: 403,
+          statusText: 'Nope',
           headers: DUMMY_HTML_HEADERS
         })
       }
@@ -123,7 +128,8 @@ describe('AccountsAgent', function () {
         expect(options.headers['Content-Type'])
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -144,7 +150,8 @@ describe('AccountsAgent', function () {
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
 
         return {
-          status: 200, json: () => ({ email: 'yougot@mail.com' }),
+          status: 200,
+          json: () => ({ email: 'yougot@mail.com' }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -162,7 +169,8 @@ describe('AccountsAgent', function () {
         expect(options.headers['Content-Type'])
               .to.equal('application/x-www-form-urlencoded; charset=UTF-8')
         return ({
-          status: 403, statusText: 'Nope',
+          status: 403,
+          statusText: 'Nope',
           headers: DUMMY_HTML_HEADERS
         })
       }
@@ -183,10 +191,12 @@ describe('AccountsAgent', function () {
           '   "#inbox" a n:space .\n')
         expect(options.headers['Content-Type']).to.equal('text/turtle')
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
+      /*
       const inboxACLFetch = async (url, options) => {
         expect(options.method).to.equal('PUT')
 
@@ -204,7 +214,8 @@ describe('AccountsAgent', function () {
           '       n0:Append.\n')
         expect(options.headers['Content-Type']).to.equal('text/turtle')
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -218,7 +229,8 @@ describe('AccountsAgent', function () {
           'n0:primaryTopic <#unread-messages> .\n' +
           '   "#unread-messages" a n:space .\n')
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -226,15 +238,19 @@ describe('AccountsAgent', function () {
         expect(options.method).to.equal('PUT')
         expect(options.headers['Content-Type']).to.equal('text/turtle')
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
+      */
       const fetches = {
-        'http://myid/little-sister/inbox': inboxFetch,
+        'http://myid/little-sister/inbox': inboxFetch
+      /*
         'http://myid/little-sister/inbox.acl': inboxACLFetch,
         'http://myid/little-sister/unread-messages': unreadFetch,
         'http://myid/little-sister/unread-messages.acl': unreadACLFetch
+      */
       }
 
       const agent = new AccountsAgent()
@@ -254,13 +270,15 @@ describe('AccountsAgent', function () {
     it('should correctly create the index for a user', async function () {
       const agent = new AccountsAgent()
       agent.httpProxied._fetch = async (url, options) => {
-        expect(url).to.equal('http://myid/little-sister/index/info')
+        expect(url).to.equal(settings.proxy +
+          '/proxy?url=http://myid/little-sister/index/info')
         expect(options.method).to.equal('PUT')
         expect(options.body).to.equal('These files keep track of what ' +
                                       'was shared with your friends.')
         expect(options.headers['Content-Type']).to.equal('text/turtle')
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -273,14 +291,16 @@ describe('AccountsAgent', function () {
       async function () {
         const agent = new AccountsAgent()
         agent.httpProxied._fetch = async (url, options) => {
-          expect(url).to.equal('http://myid/little-sister/disclaimer')
+          expect(url).to.equal(settings.proxy +
+            '/proxy?url=http://myid/little-sister/disclaimer')
           expect(options.method).to.equal('PUT')
           expect(options.body).to.equal(
             'Files in this folder are needed ' +
             'for features of the Little-Sister app.')
           expect(options.headers['Content-Type']).to.equal('text/turtle')
           return {
-            status: 200, json: () => ({ foo: 5 }),
+            status: 200,
+            json: () => ({ foo: 5 }),
             headers: DUMMY_JSON_HEADERS
           }
         }

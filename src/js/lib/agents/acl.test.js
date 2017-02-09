@@ -171,7 +171,7 @@ describe('AclAgent', function() {
       ])
     })
 
-    it('should correctly initialize new wildCard policy', async function() {
+    it('should correctly initialize new wildcard policy', async function() {
       const SIMPLIFIED_DUMMY_ACL = `
         @prefix acl: <http://www.w3.org/ns/auth/acl#>.
         
@@ -224,6 +224,16 @@ describe('AclAgent', function() {
           ]
         }
       ])
+      expect(agent.toAdd).to.deep.equal([
+        {
+          newPolicy: true,
+          object: 'http://www.w3.org/ns/auth/acl#Read',
+          predicate: rdf.sym('http://www.w3.org/ns/auth/acl#mode'),
+          subject: 'https://alice.example.com/docs/shared-file1.acl#readAll',
+          user: '*'
+        }
+      ])
+      expect(agent.toRemove).to.deep.equal([])
     })
 
     it('should be able to add a new non-existing rule', async function() {
@@ -389,6 +399,33 @@ describe('AclAgent', function() {
       expect(agent.toAdd).to.deep.equal([])
     })
 
+    it('should correctly remove wildcard permission', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      agent.removeAllow('*', 'read')
+      expect(agent.model).to.deep.equal([
+        {
+          user: 'https://alice.example.com/profile/card#me',
+          source: 'https://alice.example.com/docs/' +
+                  'shared-file1.acl#authorization1',
+          mode: [
+            'http://www.w3.org/ns/auth/acl#Read',
+            'http://www.w3.org/ns/auth/acl#Write'
+          ]
+        },
+        {
+          user: 'https://fred.example.com/profile/card#me',
+          source: 'https://alice.example.com/docs/' +
+                  'shared-file1.acl#authorization2',
+          mode: [
+            'http://www.w3.org/ns/auth/acl#Read',
+            'http://www.w3.org/ns/auth/acl#Write'
+          ]
+        }
+      ])
+    })
+
     it('should handle trying to remove a non-existent rule',
       async function() {
         const uri = 'https://alice.example.com/docs/shared-file1'
@@ -488,15 +525,13 @@ describe('AclAgent', function() {
       }
     )
 
-    it('should correclty remove a policy regarding different user that was just added',
+    it('should correclty remove a new policy regarding new user after adding',
       async function() {
         const uri = 'https://alice.example.com/docs/shared-file1'
         const aclUri = uri + '.acl'
         const agent = await initAgentWithDummyACL(uri, aclUri)
         agent.allow('https://bob.example.com/profile/card#me', 'write')
         agent.removeAllow('https://bob.example.com/profile/card#me', 'write')
-        expect(agent.toAdd).to.deep.equal([])
-        expect(agent.toRemove).to.deep.equal([])
         expect(agent.model).to.deep.equal([
           {
             user: '*',
@@ -525,6 +560,8 @@ describe('AclAgent', function() {
             ]
           }
         ])
+        expect(agent.toAdd).to.deep.equal([])
+        expect(agent.toRemove).to.deep.equal([])
       }
     )
   })
@@ -536,8 +573,7 @@ describe('AclAgent', function() {
         const aclUri = uri + '.acl'
         const agent = await initAgentWithDummyACL(uri, aclUri)
 
-        const user = '*'
-        expect(agent._allowedPermissions(user)).to.deep.equal(['read'])
+        expect(agent._allowedPermissions('*')).to.deep.equal(['read'])
       })
 
     it('should correctly return the permission a user has on a file',
@@ -547,7 +583,11 @@ describe('AclAgent', function() {
         const agent = await initAgentWithDummyACL(uri, aclUri)
 
         const user = 'https://alice.example.com/profile/card#me'
-        expect(agent._allowedPermissions(user)).to.deep.equal(['read', 'write'])
+        agent.allow('*', 'control')
+        expect(agent._allowedPermissions(user, true))
+          .to.deep.equal(['read', 'write'])
+        expect(agent._allowedPermissions(user, false))
+          .to.deep.equal(['read', 'write', 'control'])
       })
   })
 
@@ -592,4 +632,19 @@ describe('AclAgent', function() {
       expect(agent.allAllowedUsers('invalidPermission')).to.deep.equal([])
     })
   })
+  /*
+  describe('#commit', function() {
+    it('should not attempt commit if no changes are pending', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      agent.patch = (url, removeQuerry, addQuerry) => {
+        expect(url).to.equal('https://alice.example.com/docs/shared-file1.acl')
+      }
+
+      agent.allow('wuba', 'write')
+      agent.commit()
+    })
+  })
+  */
 })

@@ -99,6 +99,7 @@ class HTTPAgent {
   _proxify(uri) {
     console.warn('DEPRECATED - HTTPAgent._proxify: ' +
                     'pass proxy option to constructor instead')
+    console.log(settings, 'hello world')
     return `${settings.proxy}/proxy?url=${uri}`
   }
 
