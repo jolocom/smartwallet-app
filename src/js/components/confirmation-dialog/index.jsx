@@ -26,6 +26,8 @@ export class ConfirmationDialog extends React.Component {
   }
 
   render() {
+    console.log('!!!!')
+
     const confirmActions = [
       <FlatButton
         label="Cancel"
