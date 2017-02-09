@@ -128,7 +128,7 @@ let ConversationsListItem = React.createClass({
 
   render() {
     let {conversation} = this.props
-    let {participants, subject, lastMessage} = conversation
+    let {loading, participants, subject, lastMessage} = conversation
     let {created, content} = lastMessage || {}
 
     let title
@@ -139,17 +139,14 @@ let ConversationsListItem = React.createClass({
       return p.webId !== this.context.account.webId
     })
 
-    if (!participants || !participants.length) {
-      participants = null
-      title = 'Unnamed'
-    } else if (participants.length > 1) {
-      if (subject && subject.trim()) {
-        title = subject
-      } else {
-        title = participants.map(p => p.name).join(', ')
-      }
-    } else if (participants.length === 1) {
+    if (participants.length === 1) {
       title = participants[0].name
+    } else if (subject && subject.trim()) {
+      title = subject
+    } else if (participants.length > 1) {
+      title = participants.map(p => p.name).join(', ')
+    } else {
+      title = 'Unnamed'
     }
 
     let avatar

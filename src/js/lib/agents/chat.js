@@ -226,20 +226,28 @@ export default class ChatAgent extends LDPAgent {
       .then((parsed) => {
         return Promise.all([
           this._lastMessage(conversationUrl),
+          this._getOwner(parsed, conversationUrl),
           this._getParticipants(parsed, conversationUrl),
           this._getSubject(parsed, conversationUrl)
         ])
       })
-      .then(([lastMessage, participants, subject]) => {
+      .then(([lastMessage, owner, participants, subject]) => {
         result.uri = conversationUrl
         result.subject = subject
         result.lastMessage = lastMessage
+        result.owner = owner
         result.participants = participants
         return result
       })
       .catch((e) => {
         console.error('Failed to load conversation', e, conversationUrl)
       })
+  }
+
+  _getOwner(parsed, conversationUrl) {
+    const subject = parsed.get(undefined, PRED.maker, undefined)
+
+    return subject && subject.object.value
   }
 
   _getSubject(parsed, conversationUrl) {

@@ -78,15 +78,10 @@ export default class ConversationSettings extends React.Component {
               </ListItem>
             </List>
 
-            <FloatingActionButton
-              secondary
-              onTouchTap={this._handleAddParticipants}
-            >
-              <PersonAddIcon />
-            </FloatingActionButton>
-
             <Participants
+              owner={conversation.owner}
               participants={conversation.participants}
+              onAdd={this._handleAddParticipants}
               onRemove={this._handleRemoveParticipant}
             />
           </Content>
@@ -216,7 +211,9 @@ class Participants extends React.Component {
   }
 
   static propTypes = {
+    owner: React.PropTypes.string,
     participants: React.PropTypes.array,
+    onAdd: React.PropTypes.func,
     onRemove: React.PropTypes.func
   }
 
@@ -225,27 +222,48 @@ class Participants extends React.Component {
   }
 
   render() {
-    const {participants} = this.props
+    const {participants, owner} = this.props
+
+    let addParticipants
+
+    if (owner === this.context.account.webId) {
+      addParticipants = (
+        <FloatingActionButton
+          secondary
+          mini
+          onTouchTap={this._handleAddParticipants}
+        >
+          <PersonAddIcon />
+        </FloatingActionButton>
+      )
+    }
+
     return (
       <List>
+        <ListItem
+          primaryText="Participants"
+          disabled
+          leftAvatar={addParticipants}
+        />
         {participants.map((p) => {
           let avatar = <UserAvatar name={p.name} imgUrl={p.imgUri} />
           let removeButton
 
           if (p.webId !== this.context.account.webId) {
+            let handleTouchTap = () => {
+              if (this.props.onRemove) {
+                this.props.onRemove(p.webId)
+              }
+            }
+
             removeButton = (
               <IconButton
                 iconClassName="material-icons"
+                onTouchTap={handleTouchTap}
               >
                 close
               </IconButton>
             )
-          }
-
-          let handleTouchTap = () => {
-            if (this.props.onRemove) {
-              this.props.onRemove(p.webId)
-            }
           }
 
           return (
@@ -255,12 +273,17 @@ class Participants extends React.Component {
               primaryText={p.name || p.email}
               leftAvatar={avatar}
               rightIconButton={removeButton}
-              onTouchTap={handleTouchTap}
             />
           )
         })}
       </List>
     )
+  }
+
+  _handleAddParticipants = () => {
+    if (this.props.onAdd) {
+      this.props.onAdd()
+    }
   }
 }
 

@@ -160,10 +160,11 @@ let Conversation = React.createClass({
       return p.webId !== this.context.account.webId
     })
 
-    if (!participants || !participants.length) {
-      participants = null
-      title = 'Unnamed'
-    } else if (participants.length > 1) {
+    if (loading && !participants.length) {
+      title = 'Loading...'
+    } else if (participants.length === 1) {
+      title = participants[0].name
+    } else {
       if (subject && subject.trim()) {
         title = subject
       } else {
@@ -178,8 +179,6 @@ let Conversation = React.createClass({
           Settings
         </FlatButton>
       )
-    } else if (participants.length === 1) {
-      title = participants[0].name
     }
 
     if (loading) {
