@@ -158,6 +158,7 @@ let ConversationsListItem = React.createClass({
     } else if (participants.length > 1) {
       avatar = <Avatar icon={<GroupIcon />} />
     }
+    console.log(conversation)
 
     let date = moment(created).fromNow()
 

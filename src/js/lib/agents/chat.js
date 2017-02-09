@@ -1,11 +1,8 @@
 import {Parser, Writer} from '../rdf'
 import LDPAgent from './ldp'
 import Util from '../util'
-import {PRED, SOLID} from '../namespaces.js'
-import N3 from 'n3'
+import {PRED, SOLID, XSD} from '../namespaces.js'
 import $rdf from 'rdflib'
-
-let N3Util = N3.Util
 
 // Chat related functions
 export default class ChatAgent extends LDPAgent {
@@ -45,6 +42,69 @@ export default class ChatAgent extends LDPAgent {
         subject
       }
     })
+  }
+
+  _linkConversation(conversationUrl, webId) {
+    const inbox = `${Util.webidRoot(webId)}/little-sister/inbox`
+
+    const writer = new Writer()
+
+    writer.add('#inbox', PRED.spaceOf, $rdf.literal(conversationUrl))
+
+    this.patch(this._proxify(inbox),
+      null, writer.all()
+    )
+  }
+
+  _conversationTriples(uri, initiator, participants, subject = '') {
+    let writer = new Writer()
+
+    let thread = $rdf.sym(`${uri}#thread`)
+
+    let triples = [{
+      subject: '',
+      predicate: PRED.title,
+      object: subject
+    }, {
+      subject: '',
+      predicate: PRED.maker,
+      object: $rdf.sym(initiator)
+    }, {
+      subject: '',
+      predicate: PRED.primaryTopic,
+      object: thread
+    }, {
+      subject: thread,
+      predicate: PRED.type,
+      object: PRED.Thread
+    }, {
+      subject: thread,
+      predicate: PRED.hasOwner,
+      object: $rdf.sym(initiator)
+    }, {
+      subject: thread,
+      predicate: PRED.created,
+      object: $rdf.lit(new Date().getTime(), undefined, XSD('int'))
+    }]
+
+    writer.addAll(triples)
+
+    writer.addTriple({
+      subject: thread,
+      predicate: PRED.hasSubscriber,
+      object: $rdf.sym(initiator)
+    })
+
+    // Participant list
+    for (let p of participants) {
+      writer.addTriple({
+        subject: thread,
+        predicate: PRED.hasSubscriber,
+        object: $rdf.sym(p)
+      })
+    }
+
+    return writer.end()
   }
 
   _writeConversationAcl(uri, initiator, participants = []) {
@@ -89,14 +149,6 @@ export default class ChatAgent extends LDPAgent {
   }
 
   _getMessageTriples({id, conversationId, author, content, created}) {
-    if (!N3Util.isLiteral(content)) {
-      content = N3Util.createLiteral(content)
-    }
-
-    if (!N3Util.isLiteral(created)) {
-      created = N3Util.createLiteral(created)
-    }
-
     return [{// this is a message
       subject: id,
       predicate: PRED.type,
@@ -108,11 +160,11 @@ export default class ChatAgent extends LDPAgent {
     }, { // with content...
       subject: id,
       predicate: PRED.content,
-      object: content
+      object: $rdf.lit(content)
     }, { // with timestamp...
       subject: id,
       predicate: PRED.created,
-      object: created
+      object: $rdf.lit(created, undefined, XSD('int'))
     }, { // contained by
       subject: id,
       predicate: PRED.hasContainer,
@@ -181,11 +233,11 @@ export default class ChatAgent extends LDPAgent {
               continue
             }
             if (t.predicate.uri === PRED.content.uri) {
-              acc[curr].content = N3Util.getLiteralValue(t.object)
+              acc[curr].content = t.object.value
             }
             if (t.predicate.uri === PRED.created.uri) {
               acc[curr].created = new Date(
-                parseInt(N3Util.getLiteralValue(t.object))
+                parseInt(t.object.value)
               )
             }
 
@@ -214,7 +266,8 @@ export default class ChatAgent extends LDPAgent {
   // id, updatesVia, otherPerson, lastMessage
   getConversation(conversationUrl, myUri) {
     let result = {
-      id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1')
+      id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1'),
+      uri: conversationUrl
     }
     return this.get(this._proxify(conversationUrl))
       .then((response) => {
@@ -225,35 +278,34 @@ export default class ChatAgent extends LDPAgent {
       })
       .then((parsed) => {
         return Promise.all([
+          this._parseConversation(parsed, conversationUrl),
+          // store this in the conversation rdf
           this._lastMessage(conversationUrl),
-          this._getOwner(parsed, conversationUrl),
-          this._getParticipants(parsed, conversationUrl),
-          this._getSubject(parsed, conversationUrl)
+          this._getParticipants(parsed, conversationUrl)
         ])
       })
-      .then(([lastMessage, owner, participants, subject]) => {
-        result.uri = conversationUrl
-        result.subject = subject
-        result.lastMessage = lastMessage
-        result.owner = owner
-        result.participants = participants
-        return result
+      .then(([conversation, lastMessage, participants]) => {
+        console.log(conversation)
+        return Object.assign(result, conversation, {
+          lastMessage,
+          participants
+        })
       })
       .catch((e) => {
         console.error('Failed to load conversation', e, conversationUrl)
       })
   }
 
-  _getOwner(parsed, conversationUrl) {
-    const subject = parsed.get(undefined, PRED.maker, undefined)
-
-    return subject && subject.object.value
-  }
-
-  _getSubject(parsed, conversationUrl) {
+  _parseConversation(parsed, conversationUrl) {
     const subject = parsed.get(undefined, PRED.title, undefined)
+    const owner = parsed.get(undefined, PRED.maker, undefined)
+    const created = parsed.get(undefined, PRED.created, undefined)
 
-    return subject && subject.object.value
+    return {
+      subject: subject && subject.object.value,
+      owner: owner && owner.object.value,
+      created: created && new Date(parseInt(created.object.value))
+    }
   }
 
   _lastMessage(conversationUrl) {
@@ -410,69 +462,6 @@ export default class ChatAgent extends LDPAgent {
     writer.addAll(this._getMessageTriples(message))
 
     return this.patch(this._proxify(container), writer.all())
-  }
-
-  _linkConversation(conversationUrl, webId) {
-    const inbox = `${Util.webidRoot(webId)}/little-sister/inbox`
-
-    const writer = new Writer()
-
-    writer.add('#inbox', PRED.spaceOf, $rdf.lit(conversationUrl))
-
-    this.patch(this._proxify(inbox),
-      null, writer.all()
-    )
-  }
-
-  _conversationTriples(uri, initiator, participants, subject = '') {
-    let writer = new Writer()
-
-    let thread = $rdf.sym(`${uri}#thread`)
-
-    let triples = [{
-      subject: '',
-      predicate: PRED.title,
-      object: $rdf.literal(subject)
-    }, {
-      subject: '',
-      predicate: PRED.maker,
-      object: $rdf.sym(initiator)
-    }, {
-      subject: '',
-      predicate: PRED.primaryTopic,
-      object: thread
-    }, {
-      subject: thread,
-      predicate: PRED.type,
-      object: PRED.Thread
-    }, {
-      subject: thread,
-      predicate: PRED.hasOwner,
-      object: $rdf.sym(initiator)
-    }, {
-      subject: thread,
-      predicate: PRED.created,
-      object: $rdf.literal(new Date().getTime())
-    }]
-
-    writer.addAll(triples)
-
-    writer.addTriple({
-      subject: thread,
-      predicate: PRED.hasSubscriber,
-      object: $rdf.sym(initiator)
-    })
-
-    // Participant list
-    for (let p of participants) {
-      writer.addTriple({
-        subject: thread,
-        predicate: PRED.hasSubscriber,
-        object: $rdf.sym(p)
-      })
-    }
-
-    return writer.end()
   }
 
   setSubject(uri, oldSubject, newSubject) {
