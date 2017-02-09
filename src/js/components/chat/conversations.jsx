@@ -128,7 +128,7 @@ let ConversationsListItem = React.createClass({
 
   render() {
     let {conversation} = this.props
-    let {loading, participants, subject, lastMessage} = conversation
+    let {participants, subject, lastMessage} = conversation
     let {created, content} = lastMessage || {}
 
     let title
