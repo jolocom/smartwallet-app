@@ -4,6 +4,8 @@ import rdf from 'rdflib'
 import {Parser} from '../rdf.js'
 import AclAgent from './acl'
 
+// TODO Make sure we are testing wildcard / * related functionality
+
 const DUMMY_ACL_1 = `
 @prefix acl: <http://www.w3.org/ns/auth/acl#>.
 
@@ -338,5 +340,33 @@ describe('AclAgent', function() {
         ])
       }
     )
+  })
+
+  describe('#allowedPermissions', function() {
+    it('should correctly return the permission a user has on a file',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+
+        const user = 'https://alice.example.com/profile/card#me'
+        expect(agent._allowedPermissions(user)).to.deep.equal(['read', 'write'])
+      })
+  })
+
+  describe('#isAllowed', function() {
+    it('should detect if the user is allowed to read / write / control',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+
+        const user = 'https://alice.example.com/profile/card#me'
+        expect(agent.isAllowed(user, 'read')).to.be.true
+        expect(agent.isAllowed(user, 'write')).to.be.true
+        expect(agent.isAllowed(user, 'control')).to.be.false
+        expect(agent.isAllowed('invaliduser', 'write')).to.be.false
+        console.log(agent.allAllowedUsers('read'))
+      })
   })
 })
