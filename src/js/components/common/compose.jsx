@@ -4,22 +4,21 @@ import Radium from 'radium'
 
 import {IconButton} from 'material-ui'
 
-let Compose = React.createClass({
-
-  propTypes: {
+class Compose extends React.Component {
+  static propTypes = {
     style: React.PropTypes.object,
     placeholder: React.PropTypes.string,
     submitIcon: React.PropTypes.string,
     onKeyDown: React.PropTypes.func,
     onKeyUp: React.PropTypes.func,
     onSubmit: React.PropTypes.func
-  },
+  }
 
   getInitialState() {
     return {
       content: ''
     }
-  },
+  }
 
   onKeyDown(e) {
     if (this.props.onKeyDown) {
@@ -36,27 +35,27 @@ let Compose = React.createClass({
         return false
       }
     }
-  },
+  }
 
   onKeyUp(e) {
     if (this.props.onKeyUp) {
       this.props.onKeyUp(e)
     }
     return false
-  },
+  }
 
   onSubmit() {
     if (this.props.onSubmit(this.state.content)) {
       this.setState({content: ''})
       ReactDOM.findDOMNode(this.refs.textarea).value = ''
     }
-  },
+  }
 
   onChange(e) {
     this.setState({
       content: e.target.value
     })
-  },
+  }
 
   getStyles() {
     return {
@@ -97,7 +96,7 @@ let Compose = React.createClass({
         position: 'fixed'
       }
     }
-  },
+  }
 
   render() {
     let {style, placeholder, submitIcon} = this.props
@@ -105,6 +104,10 @@ let Compose = React.createClass({
     let styles = this.getStyles()
 
     submitIcon = submitIcon || 'send'
+
+    const onChange = (...args) => this.onChange(...args)
+    const onKeyDown = (...args) => this.onKeyDown(...args)
+    const onSubmit = (...args) => this.onSubmit(...args)
 
     return (
       <div style={[styles.container, style]}>
@@ -116,14 +119,14 @@ let Compose = React.createClass({
           </pre>
           <textarea
             placeholder={placeholder}
-            onChange={this.onChange}
-            onKeyDown={this.onKeyDown}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
             ref="textarea"
             style={[styles.textarea, styles.pre]} />
           <IconButton
             iconClassName="material-icons"
             secondary
-            onTouchTap={this.onSubmit}
+            onTouchTap={onSubmit}
             style={styles.button}
           >
             {submitIcon}
@@ -132,6 +135,6 @@ let Compose = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default Radium(Compose)

@@ -1,6 +1,11 @@
 import React from 'react'
 import Reflux from 'reflux'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { show as showDialog,
+         hide as hideDialog } from 'redux/modules/common/dialog'
+
 import {IconButton, AppBar} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
@@ -14,7 +19,7 @@ import ChatStore from 'stores/chat'
 import ConversationsActions from 'actions/conversations'
 import ConversationsStore from 'stores/conversations'
 
-export default React.createClass({
+let NewChat = React.createClass({
 
   mixins: [
     Reflux.connect(ChatStore, 'conversation'),
@@ -22,7 +27,9 @@ export default React.createClass({
   ],
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -38,7 +45,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    this.refs.dialog.show()
+    this.showDialog('new_chat')
   },
 
   componentWillMount() {
@@ -50,7 +57,7 @@ export default React.createClass({
   },
 
   componentWillUnmount() {
-    this.refs.dialog.hide()
+    this.hideDialog('new_chat')
   },
 
   componentDidUpdate() {
@@ -108,7 +115,7 @@ export default React.createClass({
     }
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog fullscreen>
         <Layout>
           <AppBar
             title={title}
@@ -136,3 +143,8 @@ export default React.createClass({
     )
   }
 })
+
+export default connect(
+  (state) => {},
+  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
+)(NewChat)
