@@ -41,6 +41,7 @@ module.exports = {
         "space-before-function-paren": [
           "off"
         ],
-        "generator-star-spacing": 0
+        "generator-star-spacing": 0,
+        "react/jsx-no-bind": 0
     }
 };

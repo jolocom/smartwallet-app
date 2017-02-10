@@ -4,5 +4,6 @@ import { routerReducer } from 'react-router-redux'
 
 export default combineReducers({
   routing: routerReducer,
-  confirm: require('./modules/confirmation-dialog').default
+  confirm: require('./modules/confirmation-dialog').default,
+  dialog: require('./modules/common/dialog').default
 })

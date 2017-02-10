@@ -3,7 +3,12 @@ import Radium from 'radium'
 
 import {AppBar, Tabs, Tab, Paper, IconButton} from 'material-ui'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { show as showDialog,
+         hide as hideDialog } from 'redux/modules/common/dialog'
 import Dialog from 'components/common/dialog.jsx'
+
 import {Layout, Content} from 'components/layout'
 
 import GraphStore from 'stores/graph-store'
@@ -16,7 +21,9 @@ class Chat extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.node,
-    location: React.PropTypes.object
+    location: React.PropTypes.object,
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -40,11 +47,11 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    this.refs.dialog.show()
+    this.props.showDialog('chat')
   }
 
   componentWillUnmount() {
-    this.refs.dialog.hide()
+    this.props.hideDialog('chat')
   }
 
   componentWillUpdate(newProps) {
@@ -56,7 +63,7 @@ class Chat extends React.Component {
   }
 
   close() {
-    this.refs.dialog.hide()
+    this.props.hideDialog('chat')
     if (GraphStore.state.center == null) {
       this.context.router.push('/graph')
     } else {
@@ -86,7 +93,7 @@ class Chat extends React.Component {
     )
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog id="chat" fullscreen>
         <Layout>
           <Paper>
             <AppBar
@@ -137,4 +144,7 @@ let styles = {
   }
 }
 
-export default Radium(Chat)
+export default Radium(connect(
+  (state) => {},
+  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
+)(Chat))

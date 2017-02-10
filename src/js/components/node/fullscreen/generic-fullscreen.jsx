@@ -7,6 +7,8 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
 import { open as confirmDialog } from 'redux/modules/confirmation-dialog'
+import { show as showDialog,
+         hide as hideDialog } from 'redux/modules/common/dialog'
 import graphActions from 'actions/graph-actions'
 // import Radium from 'radium'
 
@@ -44,7 +46,9 @@ class GenericFullScreen extends React.Component {
     uri: React.PropTypes.string,
     graphState: React.PropTypes.object,
     centerWritePerm: React.PropTypes.bool,
-    confirmDialog: React.PropTypes.func
+    confirmDialog: React.PropTypes.func,
+    showDialog: React.PropTypes.func,
+    hideDialog: React.PropTypes.func
   }
 
   static contextTypes = {
@@ -76,7 +80,7 @@ class GenericFullScreen extends React.Component {
         // console.error('Couldn\'t compute luminance', e)
       })
     }
-    this.refs.dialog.show()
+    this.showDialog('fullscreen')
   }
 
   componentWillUnmount() {
@@ -391,7 +395,7 @@ class GenericFullScreen extends React.Component {
     const onTouchTapHandler = () => this._handleFull()
     const onClickHandler = () => this._handleClose()
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog fullscreen>
         <Layout>
           <Content>
             <div style={styles.container}>
@@ -478,5 +482,7 @@ class GenericFullScreen extends React.Component {
 
 export default connect(
   (state) => ({}),
-  (dispatch) => bindActionCreators({confirmDialog}, dispatch)
+  (dispatch) => bindActionCreators({
+    confirmDialog, showDialog, hideDialog
+  }, dispatch)
 )(GenericFullScreen)

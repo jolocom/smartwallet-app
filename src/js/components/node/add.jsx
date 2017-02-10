@@ -2,6 +2,11 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { show as showDialog,
+         hide as hideDialog } from 'redux/modules/common/dialog'
+
 import {AppBar, IconButton, FlatButton} from 'material-ui'
 
 import Dialog from 'components/common/dialog.jsx'
@@ -32,7 +37,9 @@ let NodeAdd = React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     center: React.PropTypes.object,
-    neighbours: React.PropTypes.array
+    neighbours: React.PropTypes.array,
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -49,7 +56,7 @@ let NodeAdd = React.createClass({
   },
 
   componentDidMount() {
-    this.refs.dialog && this.refs.dialog.show()
+    this.props.showDialog('add_node')
   },
 
   getStyles() {
@@ -79,7 +86,7 @@ let NodeAdd = React.createClass({
 
     return (
       <div>
-        <Dialog ref="dialog" fullscreen>
+        <Dialog fullscreen>
           <Layout>
             <AppBar
               title={title}
@@ -122,4 +129,7 @@ let NodeAdd = React.createClass({
   }
 })
 
-export default Radium(NodeAdd)
+export default Radium(connect(
+  (state) => {},
+  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
+)(NodeAdd))
