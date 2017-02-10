@@ -4,6 +4,11 @@ import Radium from 'radium'
 import accepts from 'attr-accept'
 import {proxy} from 'settings'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { show as showDialog,
+         hide as hideDialog } from 'redux/modules/common/dialog'
+
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 import {
@@ -50,6 +55,11 @@ let Profile = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
+  propTypes: {
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
+  },
+
   setInitialState(initState) {
     this.setState(initState)
   },
@@ -61,7 +71,7 @@ let Profile = React.createClass({
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
-    this.refs.dialog.show()
+    this.props.showDialog('profile')
   },
 
   downloadPK() {
@@ -73,7 +83,7 @@ let Profile = React.createClass({
   },
 
   hide() {
-    this.refs.dialog.hide()
+    this.props.hideDialog('profile')
     this.context.router.goBack()
   },
 
@@ -275,7 +285,7 @@ let Profile = React.createClass({
     let styles = this.getStyles()
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog id="profile" fullscreen>
         <Layout fixedHeader>
           <AppBar
             title="Edit profile"
@@ -622,4 +632,7 @@ let Profile = React.createClass({
   }
 })
 
-export default Radium(Profile)
+export default Radium(connect(
+  (state) => {},
+  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
+)(Profile))

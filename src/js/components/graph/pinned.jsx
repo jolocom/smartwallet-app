@@ -1,6 +1,10 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { show as showDialog,
+         hide as hideDialog } from 'redux/modules/common/dialog'
 
 import {AppBar, IconButton} from 'material-ui'
 
@@ -39,7 +43,7 @@ import PinnedStore from 'stores/pinned'
 //   }
 // })
 
-let PinnedNodes = React.createClass({
+const PinnedNodes = React.createClass({
 
   mixins: [Reflux.connect(PinnedStore, 'pinned')],
 
@@ -47,12 +51,17 @@ let PinnedNodes = React.createClass({
     history: React.PropTypes.any
   },
 
+  propTypes: {
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
+  },
+
   componentDidUpdate(props, state) {
     if (state.show !== this.state.show) {
       if (this.state.show) {
-        this.refs.dialog.show()
+        this.props.showDialog('pinned')
       } else {
-        this.refs.dialog.hide()
+        this.props.hideDialog('pinned')
       }
     }
   },
@@ -82,20 +91,26 @@ let PinnedNodes = React.createClass({
     let styles = this.getStyles()
 
     let {nodes} = this.state.pinned
+    const getTapHandler = (nodeID) => () => this._handleNodeTap(nodeID)
 
     return (
-      <Dialog ref="dialog" fullscreen={true}>
+      <Dialog id="pinned" fullscreen>
         <Layout>
           <AppBar
             title="Pinned nodes"
-            iconElementLeft={<IconButton iconClassName="material-icons" onTouchTap={this.close}>arrow_back</IconButton>}
+            iconElementLeft={<IconButton
+              iconClassName="material-icons"
+              onTouchTap={this.close}>
+                arrow_back
+            </IconButton>}
             style={styles.bar}
           />
           <Content>
             {nodes.map(function(node) {
               return (
                 <div className="element" key={node.id}>
-                  <div className="node" onTouchTap={() => this._handleNodeTap(node.id)}></div>
+                  <div className="node"
+                    onTouchTap={getTapHandler(node.id)}></div>
                   <div className="title"></div>
                 </div>
               )
@@ -107,4 +122,7 @@ let PinnedNodes = React.createClass({
   }
 })
 
-export default Radium(PinnedNodes)
+export default Radium(connect(
+  (state) => {},
+  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
+)(PinnedNodes))
