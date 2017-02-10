@@ -1,10 +1,10 @@
 import _ from 'lodash'
 
 export function action(module, name, options) {
-  const id = 'little-sister/' + module + name
+  const id = 'little-sister/' + module + '/' + name
   const creator = (params) => {
     return {
-      'type': 'little-sister/' + module + name,
+      type: id,
       ...params
     }
   }

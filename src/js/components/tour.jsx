@@ -1,23 +1,34 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import Radium from 'radium'
 import {FlatButton, AppBar} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
+import { hide as hideDialog } from 'redux/modules/common/dialog'
 
-let Index = React.createClass({
-  contextTypes: {
+@connect(
+  (state) => ({ confirm: state.get('confirm').toJS() }),
+  (dispatch) => bindActionCreators({hideDialog}, dispatch)
+)
+class Index extends React.Component {
+  static propTypes = {
+    hideDialog: React.PropTypes.func.isRequired
+  }
+
+  static contextTypes = {
     history: React.PropTypes.any,
     username: React.PropTypes.string,
     muiTheme: React.PropTypes.object
-  },
+  }
 
   getInitialState() {
     return {
       show: !localStorage.getItem('jolocom.tour')
     }
-  },
+  }
 
   getStyles() {
     let {muiTheme} = this.context
@@ -92,13 +103,13 @@ let Index = React.createClass({
     }
 
     return styles
-  },
+  }
 
   render() {
     let styles = this.getStyles()
 
     return (
-      <Dialog ref="dialog" fullscreen visible={this.state.show}>
+      <Dialog id="tour" fullscreen visible={this.state.show}>
         <Layout>
           <Content>
             <AppBar
@@ -160,13 +171,12 @@ let Index = React.createClass({
         </Layout>
       </Dialog>
     )
-  },
-
-  _handleSkip() {
-    this.refs.dialog.hide()
-    localStorage.setItem('jolocom.tour', true)
   }
 
-})
+  _handleSkip() {
+    this.hideDialog('tour')
+    localStorage.setItem('jolocom.tour', true)
+  }
+}
 
 export default Radium(Index)
