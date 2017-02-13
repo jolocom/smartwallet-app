@@ -29,7 +29,11 @@ export function connect(params, wantedActions = []) {
 
   const mapStateToProps = (state, props) => {
     const getPropPair = (state, prop) => {
-      const pair = [prop.split('.').slice(-1), state.getIn(prop)]
+      if (_.isString(prop)) {
+        prop = prop.split('.')
+      }
+
+      const pair = [prop.slice(-1), state.getIn(prop)]
       if (pair[1].toJS) {
         pair[1] = pair[1].toJS()
       }
@@ -62,9 +66,17 @@ export function connect(params, wantedActions = []) {
     }
   }
 
-  const connected = reduxConnect(mapStateToProps, mapDispatchToProps)
-  connected.reconnect = (connector) => {
-    return connector(mapStateToProps, mapDispatchToProps)
+  const connector = (component) => {
+    const connected = reduxConnect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(component)
+    connected.mapStateToProps = mapStateToProps
+    connected.mapDispatchToProps = mapDispatchToProps
+    connected.reconnect = (reconnector) => {
+      return reconnector(mapStateToProps, mapDispatchToProps)
+    }
+    return connected
   }
-  return connect
+  return connector
 }
