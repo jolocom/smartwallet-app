@@ -3,6 +3,7 @@ var expect = require('chai').expect
 import rdf from 'rdflib'
 import {Parser} from '../rdf.js'
 import AclAgent from './acl'
+import {PRED} from 'lib/namespaces'
 
 // TODO Make sure we are testing wildcard / * related functionality
 
@@ -630,6 +631,31 @@ describe('AclAgent', function() {
         ]
       )
       expect(agent.allAllowedUsers('invalidPermission')).to.deep.equal([])
+    })
+  })
+
+  describe('#_newAuthorization', function() {
+    it('should construct a new authorization', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      const authName = 'mockNew'
+      const mode = 'http://www.w3.org/ns/auth/acl#Read'
+
+      expect(agent._newAuthorization(authName, '*', [mode])).to.deep.equal([
+        rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
+        rdf.st(rdf.sym(authName), PRED.access, rdf.sym(uri)),
+        rdf.st(rdf.sym(authName), PRED.agentClass, PRED.Agent),
+        rdf.st(rdf.sym(authName), PRED.mode, rdf.sym(mode))
+      ])
+
+      const user = 'http://mockUser.com/profile/card'
+      expect(agent._newAuthorization(authName, user, [mode])).to.deep.equal([
+        rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
+        rdf.st(rdf.sym(authName), PRED.access, rdf.sym(uri)),
+        rdf.st(rdf.sym(authName), PRED.agent, rdf.sym(user)),
+        rdf.st(rdf.sym(authName), PRED.mode, rdf.sym(mode))
+      ])
     })
   })
   /*
