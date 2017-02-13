@@ -1,12 +1,16 @@
 import { createStore as _createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { routerMiddleware } from 'react-router-redux'
+import backendMiddleware from './middleware/backend'
 
 export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
   const reduxRouterMiddleware = routerMiddleware(history)
   const middleware = [
-    // throttleActions([search.SEARCH], 5000),
+    backendMiddleware(
+      'NOT IMPLEMENTED YET: this should be a ' +
+      'single object to access the backend'
+    ),
     reduxRouterMiddleware
   ]
 
