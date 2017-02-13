@@ -1,12 +1,14 @@
 import { Map } from 'immutable'
 import { action } from './'
 
-export var confirm = action('confirmation-dialog', 'confirm', {
+export const confirm = action('confirmation-dialog', 'confirm', {
   expectedParams: ['message', 'primaryActionText', 'callback']
 })
-export var close = action('confirmation-dialog', 'close', {
+export const openConfirmDialog = confirm
+export const close = action('confirmation-dialog', 'close', {
   expectedParams: []
 })
+export const closeConfirmDialog = close
 
 const initialState = new Map({
   open: false,
