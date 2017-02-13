@@ -720,6 +720,7 @@ url=${aliceIndex}https://fred.example.com/profile/card#me`
         return 'https://alice.example.com/index/' + uri
       }
 
+      // TODO Check for options
       agent.patch = async (url, toDel, toIns, options) => {
         expect(url).to.equal(resultMap[url].indexUri)
         expect(toIns).to.deep.equal(resultMap[url].toIns)
@@ -736,19 +737,73 @@ url=${aliceIndex}https://fred.example.com/profile/card#me`
     })
   })
 
-  /*
   describe('#commit', function() {
     it('should not attempt commit if no changes are pending', async function() {
       const uri = 'https://alice.example.com/docs/shared-file1'
       const aclUri = uri + '.acl'
       const agent = await initAgentWithDummyACL(uri, aclUri)
-      agent.patch = (url, removeQuerry, addQuerry) => {
-        expect(url).to.equal('https://alice.example.com/docs/shared-file1.acl')
+      agent.patch = async (url, toDel, toIns, options) => {
+        expect(url).to.equal(`${settings.proxy}/proxy?url=${aclUri}`)
+        expect(toDel).to.equal([])
+        expect(toIns).to.equal([])
       }
 
-      agent.allow('wuba', 'write')
+      agent.commit()
+    })
+
+    it('should correctly commit adding to existing policy', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      agent._updateIndex = async() => {}
+      agent.patch = async (url, toDel, toIns, options) => {
+        expect(url).to.equal(`${settings.proxy}/proxy?url=${aclUri}`)
+        expect(toIns).to.deep.equal([
+          rdf.st(
+            rdf.sym(aclUri + '#authorization1'),
+            PRED.mode,
+            PRED.control
+          )
+        ])
+        expect(toDel).to.deep.equal([])
+      }
+      agent.allow('https://alice.example.com/profile/card#me', 'control')
+      agent.commit()
+    })
+
+    it('should correctly commit adding new policy', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+
+      agent._generatePolicyName = () =>
+        'https://alice.example.com/docs/shared-file1.acl#newPol'
+      agent._updateIndex = async() => {}
+      agent.patch = async (url, toDel, toIns, options) => {
+        expect(url).to.equal(`${settings.proxy}/proxy?url=${aclUri}`)
+        expect(toIns).to.deep.equal([
+          rdf.st(
+            rdf.sym(aclUri + '#newPol'),
+            PRED.type,
+            PRED.auth
+          ), rdf.st(
+            rdf.sym(aclUri + '#newPol'),
+            PRED.access,
+            rdf.sym(uri)
+          ), rdf.st(
+            rdf.sym(aclUri + '#newPol'),
+            PRED.agent,
+            rdf.sym('https://mock.example.com/profile/card#me')
+          ), rdf.st(
+            rdf.sym(aclUri + '#newPol'),
+            PRED.mode,
+            PRED.read
+          )
+        ])
+        expect(toDel).to.deep.equal([])
+      }
+      agent.allow('https://mock.example.com/profile/card#me', 'read')
       agent.commit()
     })
   })
-  */
 })

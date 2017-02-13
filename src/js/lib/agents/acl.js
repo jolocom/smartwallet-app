@@ -344,19 +344,18 @@ class AclAgent extends HTTPAgent {
     })
 
     addQuery = addQuery.concat(this.authCreationQuery)
-    return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
-      'Content-Type': 'text/turtle'
-    }).then(() => {
-      if (this.zombiePolicies.length) {
-        this._wipeZombies(this.zombiePolicies)
-      }
-      this._updateIndex().then(() => {
-        this._cleanUp()
-      }).catch(e => {
-        this._cleanUp()
-        throw new Error(e)
+    return this.patch(this._proxify(this.aclUri), removeQuery, addQuery)
+      .then(() => {
+        if (this.zombiePolicies.length) {
+          this._wipeZombies(this.zombiePolicies)
+        }
+        this._updateIndex().then(() => {
+          this._cleanUp()
+        }).catch(e => {
+          this._cleanUp()
+          throw new Error(e)
+        })
       })
-    })
   }
 
   _cleanUp() {
@@ -491,9 +490,7 @@ class AclAgent extends HTTPAgent {
         map[permission],
         rdf.sym(pol.file))
       ))
-      return this.patch(this._proxify(this.getIndexUri(pol.webId)), '', query, {
-        'Content-Type': 'text/turtle'
-      })
+      return this.patch(this._proxify(this.getIndexUri(pol.webId)), '', query)
     })
 
     const remReq = rem.map(pol => {
@@ -503,9 +500,7 @@ class AclAgent extends HTTPAgent {
         map[permission],
         rdf.sym(pol.file))
       ))
-      return this.patch(this._proxify(this.getIndexUri(pol.webId)), query, '', {
-        'Content-Type': 'text/turtle'
-      })
+      return this.patch(this._proxify(this.getIndexUri(pol.webId)), query, '')
     })
 
     return Promise.all(remReq.concat(addReq))
