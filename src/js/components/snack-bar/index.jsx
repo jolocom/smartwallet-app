@@ -4,13 +4,13 @@ import { connect } from 'redux/utils'
 import { Snackbar } from 'material-ui'
 
 export default connect({
-  props: ['snackbar']
+  props: ['snackBar']
 })((props) => {
-  const {snackbar} = props
+  const {snackBar} = props
 
   return <Snackbar
-    open={snackbar.open} message={snackbar.message}
-    action={snackbar.undo && 'undo'}
-    onActionTouchTap={snackbar.undoCallback}
+    open={snackBar.open} message={snackBar.message}
+    action={snackBar.undo && 'undo'}
+    onActionTouchTap={snackBar.undoCallback}
   />
 })
