@@ -27,29 +27,44 @@ export function connect(params, wantedActions = []) {
   }
   wantedActions = params.actions || wantedActions
 
-  return reduxConnect(
-    (state, props) => {
-      if (typeof wantedProps !== 'function') {
-        return _.fromPairs(wantedProps.map(prop => {
-          const pair = [prop.split('.').slice(-1), state.getIn(prop)]
-          if (pair[1].toJS) {
-            pair[1] = pair[1].toJS()
-          }
-        }))
-      } else {
-        return wantedProps(state, props)
+  const mapStateToProps = (state, props) => {
+    const getPropPair = (state, prop) => {
+      const pair = [prop.split('.').slice(-1), state.getIn(prop)]
+      if (pair[1].toJS) {
+        pair[1] = pair[1].toJS()
       }
-    },
-    (dispatch, props) => {
-      if (typeof wantedActions !== 'function') {
-        return bindActionCreators(_.fromPairs(wantedActions.map(id => {
-          const [moduleName, actionName] = id.split(':')
-          const module = require('redux/modules/' + moduleName)
-          return [actionName, [actionName, module[actionName]]]
-        })), dispatch)
-      } else {
-        return wantedActions(dispatch, props)
-      }
+      return pair
     }
-  )
+
+    if (typeof wantedProps !== 'function') {
+      return _.fromPairs(wantedProps.map(prop => {
+        return getPropPair(state, prop)
+      }))
+    } else {
+      return wantedProps(state, props)
+    }
+  }
+
+  const mapDispatchToProps = (dispatch, props) => {
+    const getModuleAndActionNameFromID = (id) => {
+      const [moduleName, actionName] = id.split(':')
+      const module = require('redux/modules/' + moduleName)
+      return [module, actionName]
+    }
+
+    if (typeof wantedActions !== 'function') {
+      return bindActionCreators(_.fromPairs(wantedActions.map(id => {
+        const [module, actionName] = getModuleAndActionNameFromID(id)
+        return [actionName, module[actionName]]
+      })), dispatch)
+    } else {
+      return wantedActions(dispatch, props)
+    }
+  }
+
+  const connected = reduxConnect(mapStateToProps, mapDispatchToProps)
+  connected.reconnect = (connector) => {
+    return connector(mapStateToProps, mapDispatchToProps)
+  }
+  return connect
 }

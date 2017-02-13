@@ -480,6 +480,6 @@ export default connect(
   (state) => ({}),
   (dispatch) => [
     'confirmation-dialog:openConfirmDialog',
-    'dialog:showDialog', 'dialog:hideDialog'
+    'common/dialog:showDialog', 'common/dialog:hideDialog'
   ]
 )(GenericFullScreen)

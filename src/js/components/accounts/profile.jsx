@@ -631,7 +631,7 @@ let Profile = React.createClass({
 
 export default Radium(connect({
   actions: [
-    'dialog:showDialog, dialog:hideDialog',
+    'common/dialog:showDialog, common/dialog:hideDialog',
     'snack-bar:showSnackBarMessage'
   ]
 })(Profile))
