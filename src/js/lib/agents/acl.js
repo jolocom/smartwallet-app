@@ -447,9 +447,10 @@ class AclAgent extends HTTPAgent {
   _updateIndex() {
     let add = []
     let rem = []
-    let map = {}
-    map[PRED.read.uri] = PRED.readPermission
-    map[PRED.write.uri] = PRED.writePermission
+    let map = {
+      [PRED.read.uri]: PRED.readPermission,
+      [PRED.write.uri]: PRED.writePermission
+    }
 
     this.toRemove.forEach(st => {
       if (st.user === '*') {

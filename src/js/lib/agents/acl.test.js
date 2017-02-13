@@ -658,6 +658,19 @@ describe('AclAgent', function() {
       ])
     })
   })
+
+  describe('#_getAuthAgents', function() {
+    it('should return agents mentioned in a policy', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      const user = 'https://alice.example.com/profile/card#me'
+      expect(agent._getAuthAgents(`${aclUri}#authorization1`))
+        .to.deep.equal([user])
+      expect(agent._getAuthAgents(`${aclUri}#readAll`))
+        .to.deep.equal(['*'])
+    })
+  })
   /*
   describe('#commit', function() {
     it('should not attempt commit if no changes are pending', async function() {
