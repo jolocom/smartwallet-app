@@ -118,7 +118,6 @@ class AccountsAgent {
     writer.add('', PRED.maker, webId)
     writer.add('', PRED.primaryTopic, $rdf.sym('#inbox'))
     writer.add('#inbox', PRED.type, PRED.space)
-
     return this.httpProxied.put(
       uri,
       writer.end(),
@@ -137,7 +136,6 @@ class AccountsAgent {
     writer.add('', PRED.maker, webId)
     writer.add('', PRED.primaryTopic, $rdf.sym('#unread-messages'))
     writer.add('#unread-messages', PRED.type, PRED.space)
-
     return this.httpProxied.put(
       uri,
       writer.end(),

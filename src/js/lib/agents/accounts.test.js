@@ -196,7 +196,7 @@ describe('AccountsAgent', function () {
           headers: DUMMY_JSON_HEADERS
         }
       }
-      /*
+
       const inboxACLFetch = async (url, options) => {
         expect(options.method).to.equal('PUT')
 
@@ -243,14 +243,16 @@ describe('AccountsAgent', function () {
           headers: DUMMY_JSON_HEADERS
         }
       }
-      */
+      const inboxUri = 'http://myid/little-sister/inbox'
+      const inboxAclUri = 'http://myid/little-sister/inbox.acl'
+      const unreadUri = 'http://myid/little-sister/unread-messages'
+      const unreadAclUri = 'http://myid/little-sister/unread-messages.acl'
+
       const fetches = {
-        'http://myid/little-sister/inbox': inboxFetch
-      /*
-        'http://myid/little-sister/inbox.acl': inboxACLFetch,
-        'http://myid/little-sister/unread-messages': unreadFetch,
-        'http://myid/little-sister/unread-messages.acl': unreadACLFetch
-      */
+        [`${settings.proxy}/proxy?url=${inboxUri}`]: inboxFetch,
+        [`${settings.proxy}/proxy?url=${inboxAclUri}`]: inboxACLFetch,
+        [`${settings.proxy}/proxy?url=${unreadUri}`]: unreadFetch,
+        [`${settings.proxy}/proxy?url=${unreadAclUri}`]: unreadACLFetch
       }
 
       const agent = new AccountsAgent()
@@ -259,8 +261,8 @@ describe('AccountsAgent', function () {
         fetch.called = true
         return fetch(url, options)
       }
-      await agent.initInbox('http://myid/profile/card#me')
 
+      await agent.initInbox('http://myid/profile/card#me')
       expect(Object.values(fetches).map(fetch => fetch.called))
             .to.deep.equal([true, true, true, true])
     })
