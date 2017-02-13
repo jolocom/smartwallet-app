@@ -1,15 +1,18 @@
 import { Map } from 'immutable'
 import { action } from '../'
 
-export var show = action('confirmation-dialog', 'show', {
+export const show = action('confirmation-dialog', 'show', {
   expectedParams: ['id']
 })
-export var hide = action('confirmation-dialog', 'hide', {
+export const showDialog = show
+export const hide = action('confirmation-dialog', 'hide', {
   expectedParams: ['id']
 })
-export var toggle = action('confirmation-dialog', 'toggle', {
+export const hideDialog = hide
+export const toggle = action('confirmation-dialog', 'toggle', {
   expectedParams: ['id']
 })
+export const toggleDialog = hide
 
 const initialState = new Map({
 })

@@ -1,14 +1,10 @@
 import rdf from 'rdflib'
 import React from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { connect } from 'redux/utils'
 import Dialog from 'components/common/dialog'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'
 import {Layout, Content} from 'components/layout'
-import { open as confirmDialog } from 'redux/modules/confirmation-dialog'
-import { show as showDialog,
-         hide as hideDialog } from 'redux/modules/common/dialog'
 import graphActions from 'actions/graph-actions'
 // import Radium from 'radium'
 
@@ -46,7 +42,7 @@ class GenericFullScreen extends React.Component {
     uri: React.PropTypes.string,
     graphState: React.PropTypes.object,
     centerWritePerm: React.PropTypes.bool,
-    confirmDialog: React.PropTypes.func,
+    openConfirmDialog: React.PropTypes.func,
     showDialog: React.PropTypes.func,
     hideDialog: React.PropTypes.func
   }
@@ -183,7 +179,7 @@ class GenericFullScreen extends React.Component {
         }
       })
 
-      this.props.confirmDialog({
+      this.props.openConfirmDialog({
         message: 'Are you sure you want to disconnect this node ?',
         primaryActionText: 'Disconnect',
         callback: () => {
@@ -210,7 +206,7 @@ class GenericFullScreen extends React.Component {
 
   // TODO - break into more actions. The animation should be smoother.
   _handleDelete() {
-    this.props.confirmDialog({
+    this.props.openConfirmDialog({
       message: 'Are you sure you want to delete this node ?',
       primaryActionText: 'Delete',
       callback: () => {
@@ -482,7 +478,8 @@ class GenericFullScreen extends React.Component {
 
 export default connect(
   (state) => ({}),
-  (dispatch) => bindActionCreators({
-    confirmDialog, showDialog, hideDialog
-  }, dispatch)
+  (dispatch) => [
+    'confirmation-dialog:openConfirmDialog',
+    'dialog:showDialog', 'dialog:hideDialog'
+  ]
 )(GenericFullScreen)

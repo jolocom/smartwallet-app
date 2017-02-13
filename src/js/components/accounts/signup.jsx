@@ -1,12 +1,11 @@
 import React from 'react'
 import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton, AppBar} from 'material-ui'
 import {Link} from 'react-router'
-
-import SnackbarActions from 'actions/snackbar'
 
 import AvailabilityStore from 'stores/availability'
 
@@ -20,6 +19,10 @@ let Signup = React.createClass({
     Reflux.connect(AvailabilityStore, 'available'),
     Reflux.connect(AccountStore, 'account')
   ],
+
+  propTypes: {
+    showSnackBarMessage: React.PropTypes.func.isRequired
+  },
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
@@ -58,7 +61,7 @@ let Signup = React.createClass({
 
   signup() {
     if (this.state.email !== this.state.email2) {
-      SnackbarActions.showMessage('The two emails do not match.')
+      this.props.showSnackBarMessage('The two emails do not match.')
       return
     }
     this.disableSubmit()
@@ -379,4 +382,6 @@ let Signup = React.createClass({
   }
 })
 
-export default Radium(Signup)
+export default Radium(connect({
+  actions: ['snack-bar:showSnackBarMessage']
+})(Signup))

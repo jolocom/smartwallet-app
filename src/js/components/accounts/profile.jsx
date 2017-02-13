@@ -4,10 +4,7 @@ import Radium from 'radium'
 import accepts from 'attr-accept'
 import {proxy} from 'settings'
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { show as showDialog,
-         hide as hideDialog } from 'redux/modules/common/dialog'
+import { connect } from 'redux/utils'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -27,7 +24,6 @@ import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import SocialPublic from 'material-ui/svg-icons/social/public'
 import SocialPerson from 'material-ui/svg-icons/social/person'
-import SnackbarActions from 'actions/snackbar'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
 import AvWeb from 'material-ui/svg-icons/av/web'
@@ -57,7 +53,8 @@ let Profile = React.createClass({
 
   propTypes: {
     showDialog: React.PropTypes.func.isRequired,
-    hideDialog: React.PropTypes.func.isRequired
+    hideDialog: React.PropTypes.func.isRequired,
+    showSnackBarMessage: React.PropTypes.func.isRequired
   },
 
   setInitialState(initState) {
@@ -591,7 +588,7 @@ let Profile = React.createClass({
           imgUri: res
         })
       }).catch((e) => {
-        SnackbarActions.showMessage('Could not upload the photo.')
+        this.props.showSnackBarMessage('Could not upload the photo.')
         this.setState({
           loadingDisplayPhoto: false,
           imgUri: ''
@@ -622,7 +619,7 @@ let Profile = React.createClass({
           passportImgUri: res
         })
       }).catch((e) => {
-        SnackbarActions.showMessage('Could not upload the passport.')
+        this.props.showSnackBarMessage('Could not upload the passport.')
         this.setState({
           loadingPassportPhoto: false,
           passportImgUri: ''
@@ -632,7 +629,9 @@ let Profile = React.createClass({
   }
 })
 
-export default Radium(connect(
-  (state) => {},
-  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
-)(Profile))
+export default Radium(connect({
+  actions: [
+    'dialog:showDialog, dialog:hideDialog',
+    'snack-bar:showSnackBarMessage'
+  ]
+})(Profile))

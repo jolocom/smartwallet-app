@@ -1,7 +1,7 @@
 import { Map } from 'immutable'
 import { action } from './'
 
-export var showMessage = action('snack-bar', 'showMessage', {
+export const showMessage = action('snack-bar', 'showMessage', {
   expectedParams: ['message'],
   creator: params => {
     const action = showMessage.buildAction(params)
@@ -13,10 +13,11 @@ export var showMessage = action('snack-bar', 'showMessage', {
     }
   }
 })
-export var closeShownMessage = action('snack-bar', 'closeShownMessage', {
+export const showSnackBarMessage = showMessage
+export const closeShownMessage = action('snack-bar', 'closeShownMessage', {
   expectedParams: ['id']
 })
-export var showMessageUndo = action('snack-bar', 'showMessageUndo', {
+export const showMessageUndo = action('snack-bar', 'showMessageUndo', {
   expectedParams: ['message', 'callback'],
   creator: params => {
     return showMessage({
@@ -25,6 +26,7 @@ export var showMessageUndo = action('snack-bar', 'showMessageUndo', {
     })
   }
 })
+export const showSnackBarUndoMessage = showMessageUndo
 
 const initialState = new Map({
   open: false,
