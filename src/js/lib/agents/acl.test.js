@@ -805,5 +805,51 @@ url=${aliceIndex}https://fred.example.com/profile/card#me`
       agent.allow('https://mock.example.com/profile/card#me', 'read')
       agent.commit()
     })
+
+    it('should commit removing from existing policy', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      agent._updateIndex = async() => {}
+      agent.patch = async (url, toDel, toIns, options) => {
+        expect(url).to.equal(`${settings.proxy}/proxy?url=${aclUri}`)
+        expect(toDel).to.deep.equal([
+          rdf.st(
+            rdf.sym(aclUri + '#authorization1'),
+            PRED.mode,
+            PRED.write
+          )
+        ])
+        expect(toIns).to.deep.equal([])
+      }
+      agent.removeAllow('https://alice.example.com/profile/card#me', 'write')
+      agent.commit()
+    })
+
+    it('should commit removing all permissions from policy', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+
+      agent._updateIndex = async() => {}
+      agent._wipeZombies = async(policies) => {
+        expect(policies).to.deep.equal([aclUri + '#authorization1'])
+      }
+
+      agent.patch = async (url, toDel, toIns, options) => {
+        expect(url).to.equal(`${settings.proxy}/proxy?url=${aclUri}`)
+        expect(toDel).to.deep.equal([
+          rdf.st(
+            rdf.sym(aclUri + '#authorization1'),
+            PRED.mode,
+            PRED.read
+          )
+        ])
+        expect(toIns).to.deep.equal([])
+      }
+      agent.removeAllow('https://alice.example.com/profile/card#me', 'read')
+      agent.removeAllow('https://alice.example.com/profile/card#me', 'write')
+      agent.commit()
+    })
   })
 })
