@@ -6,8 +6,6 @@ import AclAgent from './acl'
 import {PRED} from 'lib/namespaces'
 import * as settings from 'settings'
 
-// TODO Make sure we are testing wildcard / * related functionality
-
 const DUMMY_ACL_1 = `
 @prefix acl: <http://www.w3.org/ns/auth/acl#>.
 
@@ -640,7 +638,7 @@ describe('AclAgent', function() {
       const uri = 'https://alice.example.com/docs/shared-file1'
       const aclUri = uri + '.acl'
       const agent = await initAgentWithDummyACL(uri, aclUri)
-      const authName = 'mockNew'
+      const authName = aclUri + '#mockNew'
       const mode = 'http://www.w3.org/ns/auth/acl#Read'
 
       expect(agent._newAuthorization(authName, '*', [mode])).to.deep.equal([
@@ -849,6 +847,26 @@ url=${aliceIndex}https://fred.example.com/profile/card#me`
       }
       agent.removeAllow('https://alice.example.com/profile/card#me', 'read')
       agent.removeAllow('https://alice.example.com/profile/card#me', 'write')
+      agent.commit()
+    })
+
+    it('should correctly handle wildcard statements', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+
+      agent._updateIndex = async() => {}
+      agent._wipeZombies = async(policies) => {
+        expect(policies).to.deep.equal([aclUri + '#readAll'])
+      }
+
+      agent.patch = async (url, toDel, toIns, options) => {
+        expect(url).to.equal(`${settings.proxy}/proxy?url=${aclUri}`)
+        expect(toDel).to.deep.equal([])
+        expect(toIns).to.deep.equal([])
+      }
+
+      agent.removeAllow('*', 'read')
       agent.commit()
     })
   })

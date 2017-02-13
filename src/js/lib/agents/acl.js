@@ -429,7 +429,6 @@ class AclAgent extends HTTPAgent {
     const wild = user === '*'
     user = wild ? PRED.Agent : rdf.sym(user)
     const pred = wild ? PRED.agentClass : PRED.agent
-
     let boilerplate = []
     boilerplate.push(
       rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
