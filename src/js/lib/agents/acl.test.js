@@ -4,6 +4,7 @@ import rdf from 'rdflib'
 import {Parser} from '../rdf.js'
 import AclAgent from './acl'
 import {PRED} from 'lib/namespaces'
+import * as settings from 'settings'
 
 // TODO Make sure we are testing wildcard / * related functionality
 
@@ -671,6 +672,70 @@ describe('AclAgent', function() {
         .to.deep.equal(['*'])
     })
   })
+
+  describe('#_updateIndex', function() {
+    it('should correctly update the index files', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      const aliceIndex = 'https://alice.example.com/index/'
+      const first = `${settings.proxy}/proxy?\
+url=${aliceIndex}http://firstMockUser.com/card`
+
+      const second = `${settings.proxy}/proxy?\
+url=${aliceIndex}https://fred.example.com/profile/card#me`
+
+      const resultMap = {
+        [first]: {
+          uri: 'http://firstMockUser.com/card',
+          indexUri: first,
+          toIns: [rdf.st(
+            rdf.sym('http://firstMockUser.com/card'),
+            PRED.readPermission,
+            rdf.sym(uri)
+          ), rdf.st(
+            rdf.sym('http://firstMockUser.com/card'),
+            PRED.writePermission,
+            rdf.sym(uri)
+          )],
+          toDel: ''
+        },
+        [second]: {
+          uri: 'https://fred.example.com/profile/card#me',
+          indexUri: second,
+          toIns: '',
+          toDel: [rdf.st(
+            rdf.sym('https://fred.example.com/profile/card#me'),
+            PRED.readPermission,
+            rdf.sym(uri)
+          ), rdf.st(
+            rdf.sym('https://fred.example.com/profile/card#me'),
+            PRED.writePermission,
+            rdf.sym(uri)
+          )]
+        }
+      }
+
+      agent.getIndexUri = (uri) => {
+        return 'https://alice.example.com/index/' + uri
+      }
+
+      agent.patch = async (url, toDel, toIns, options) => {
+        expect(url).to.equal(resultMap[url].indexUri)
+        expect(toIns).to.deep.equal(resultMap[url].toIns)
+        expect(toDel).to.deep.equal(resultMap[url].toDel)
+        return {}
+      }
+
+      agent.allow('http://firstMockUser.com/card', 'read')
+      agent.allow('http://firstMockUser.com/card', 'write')
+      agent.removeAllow('https://fred.example.com/profile/card#me', 'read')
+      agent.removeAllow('https://fred.example.com/profile/card#me', 'write')
+
+      agent._updateIndex()
+    })
+  })
+
   /*
   describe('#commit', function() {
     it('should not attempt commit if no changes are pending', async function() {

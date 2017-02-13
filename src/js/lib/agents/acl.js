@@ -26,6 +26,7 @@ class AclAgent extends HTTPAgent {
     this.model = []
     this.gAgent = new GraphAgent()
     this.ldpAgent = new LDPAgent()
+    this.getIndexUri = Util.getIndexUri
 
     this.aclUri
     this.uri = uri
@@ -483,7 +484,6 @@ class AclAgent extends HTTPAgent {
         add[index].perm.push(st.object)
       }
     })
-
     const addReq = add.map(pol => {
       let query = []
       pol.perm.forEach(permission => query.push(
@@ -491,7 +491,7 @@ class AclAgent extends HTTPAgent {
         map[permission],
         rdf.sym(pol.file))
       ))
-      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), '', query, {
+      return this.patch(this._proxify(this.getIndexUri(pol.webId)), '', query, {
         'Content-Type': 'text/turtle'
       })
     })
@@ -503,7 +503,7 @@ class AclAgent extends HTTPAgent {
         map[permission],
         rdf.sym(pol.file))
       ))
-      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), query, '', {
+      return this.patch(this._proxify(this.getIndexUri(pol.webId)), query, '', {
         'Content-Type': 'text/turtle'
       })
     })
