@@ -78,9 +78,9 @@ class WebIDAgent {
 
     // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
     // when displaying here.
-    // @TODO Refactor so not so hardcoded
     if (profile.email) {
-      profile.email = profile.email.substring(7, profile.email.length)
+      profile.email = profile.email.substring(
+        profile.email.indexOf(':') + 1, profile.email.length)
     }
 
     let {fullName, givenName, familyName} = profile
