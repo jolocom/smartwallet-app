@@ -22,7 +22,7 @@ import { connect as reduxConnect } from 'react-redux'
  */
 export function connect(params, wantedActions = []) {
   let wantedProps = params.props || params
-  if (!wantedProps.map) {
+  if (!wantedProps.map && typeof wantedProps !== 'function') {
     wantedProps = []
   }
   wantedActions = params.actions || wantedActions
@@ -39,6 +39,7 @@ export function connect(params, wantedActions = []) {
       }
       return pair
     }
+
 
     if (typeof wantedProps !== 'function') {
       return _.fromPairs(wantedProps.map(prop => {
@@ -73,9 +74,9 @@ export function connect(params, wantedActions = []) {
     )(component)
     connected.mapStateToProps = mapStateToProps
     connected.mapDispatchToProps = mapDispatchToProps
-    connected.reconnect = (reconnector) => {
-      return reconnector(mapStateToProps, mapDispatchToProps)
-    }
+    // connected.reconnect = (reconnector) => {
+    //   return reconnector(mapStateToProps, mapDispatchToProps)
+    // }
     return connected
   }
   return connector
