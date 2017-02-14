@@ -57,7 +57,11 @@ let Graph = React.createClass({
   },
 
   componentDidMount() {
-    this.graph = new GraphD3(this.getGraphEl(), 'main')
+    let showWelcome = !localStorage.getItem('jolocom.welcome')
+    this.graph = new GraphD3(this.getGraphEl(), 'main', showWelcome)
+    if (showWelcome) {
+      this._handleFirst()
+    }
 
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
@@ -206,6 +210,10 @@ let Graph = React.createClass({
 
   _handleLinkNodeTouchTap() {
     this.addNode('link')
+  },
+
+  _handleFirst() {
+    localStorage.setItem('jolocom.welcome', true)
   }
 })
 
