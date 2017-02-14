@@ -149,28 +149,24 @@ class WebIDAgent {
         }
       }
     }
-
     toAdd.addAll(insertTriples.map((t) => {
       if (t.predicate.uri === PRED.email.uri) {
         t.object = $rdf.sym(`mailto:${t.object}`)
       }
       return t
     }))
-
     toDel.addAll(deleteTriples.map((t) => {
       if (t.predicate.uri === PRED.email.uri) {
         t.object = $rdf.sym(`mailto:${t.object}`)
       }
       return t
     }))
-
     // All network requests will be contained here, later awaited by with
     // Promise.all
     let nodeCreationRequests = []
     nodeCreationRequests.push(this.http.patch(
-      this.http._proxify(oldData.webId), toDel.statements, toAdd.statements
+      oldData.webId, toDel.statements, toAdd.statements
     ))
-
     return Promise.all(nodeCreationRequests).then(res => {
       return newData
     })
