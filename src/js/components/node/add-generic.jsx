@@ -339,9 +339,7 @@ let NodeAddGeneric = React.createClass({
               <Card>
                 <CardMedia
                   style={styles.image}
-                >
-                  <AddNodeIcon />
-                </CardMedia>
+                />
               </Card>
               <TextField
                 ref="nodeTitle"
