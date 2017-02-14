@@ -2,10 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { show as showDialog,
-         hide as hideDialog } from 'redux/modules/common/dialog'
+import { connect } from 'redux/utils'
 
 import {
   AppBar,
@@ -267,7 +264,6 @@ let WrappedListItem = React.createClass({
     )
   }
 })
-export default Radium(connect(
-  (state) => {},
-  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
-)(AddContact))
+export default Radium(connect({
+  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
+})(AddContact))

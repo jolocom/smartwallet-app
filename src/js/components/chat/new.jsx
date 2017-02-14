@@ -1,10 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { show as showDialog,
-         hide as hideDialog } from 'redux/modules/common/dialog'
+import { connect } from 'redux/utils'
 
 import {IconButton, AppBar} from 'material-ui'
 
@@ -144,7 +141,6 @@ let NewChat = React.createClass({
   }
 })
 
-export default connect(
-  (state) => {},
-  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
-)(NewChat)
+export default connect({
+  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
+})(NewChat)
