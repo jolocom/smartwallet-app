@@ -3,10 +3,7 @@ import Radium from 'radium'
 
 import {AppBar, Tabs, Tab, Paper, IconButton} from 'material-ui'
 
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { show as showDialog,
-         hide as hideDialog } from 'redux/modules/common/dialog'
+import { connect } from 'redux/utils'
 import Dialog from 'components/common/dialog.jsx'
 
 import {Layout, Content} from 'components/layout'
@@ -144,7 +141,6 @@ let styles = {
   }
 }
 
-export default Radium(connect(
-  (state) => {},
-  (dispatch) => bindActionCreators({showDialog, hideDialog}, dispatch)
-)(Chat))
+export default Radium(connect({
+  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
+})(Chat))

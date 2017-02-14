@@ -476,10 +476,9 @@ class GenericFullScreen extends React.Component {
   }
 }
 
-export default connect(
-  (state) => ({}),
-  (dispatch) => [
+export default connect({
+  actions: [
     'confirmation-dialog:openConfirmDialog',
     'common/dialog:showDialog', 'common/dialog:hideDialog'
   ]
-)(GenericFullScreen)
+})(GenericFullScreen)

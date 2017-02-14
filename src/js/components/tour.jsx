@@ -1,18 +1,16 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import {FlatButton, AppBar} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
-import { hide as hideDialog } from 'redux/modules/common/dialog'
 
-@connect(
-  (state) => ({ confirm: state.get('confirm').toJS() }),
-  (dispatch) => bindActionCreators({hideDialog}, dispatch)
-)
+@connect({
+  props: ['confirm'],
+  actions: ['common/dialog:hideDialog']
+})
 class Index extends React.Component {
   static propTypes = {
     hideDialog: React.PropTypes.func.isRequired
@@ -174,7 +172,7 @@ class Index extends React.Component {
   }
 
   _handleSkip() {
-    this.hideDialog('tour')
+    this.props.hideDialog('tour')
     localStorage.setItem('jolocom.tour', true)
   }
 }
