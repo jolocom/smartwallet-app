@@ -1,5 +1,6 @@
 /* global describe: true, it: true */
 import React from 'react'
+import Immutable from 'immutable'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import ConfirmationDialog from './'
@@ -7,12 +8,16 @@ import ConfirmationDialog from './'
 describe('(Component) ConfirmationDialog', function() {
   it('should render properly if opened', function() {
     const wrapper = shallow(
-      (<ConfirmationDialog.WrappedComponent confirm={{
-        open: true,
-        message: 'test msg',
-        primaryActionText: 'Primary Action Text',
-        callback: null
-      }} />),
+      (<ConfirmationDialog.WrappedComponent {
+        ...ConfirmationDialog.mapStateToProps(Immutable.fromJS({
+          confirm: {
+            open: true,
+            message: 'test msg',
+            primaryActionText: 'Primary Action Text',
+            callback: null
+          }
+        }))
+      } />),
       { context: { muiTheme: { } } }
     )
 
@@ -21,12 +26,16 @@ describe('(Component) ConfirmationDialog', function() {
 
   it('should not render if closed', function() {
     const wrapper = shallow(
-      (<ConfirmationDialog.WrappedComponent confirm={{
-        open: false,
-        message: 'test msg',
-        primaryActionText: 'Primary Action Text',
-        callback: null
-      }} />),
+      (<ConfirmationDialog.WrappedComponent {
+        ...ConfirmationDialog.mapStateToProps(Immutable.fromJS({
+          confirm: {
+            open: false,
+            message: 'test msg',
+            primaryActionText: 'Primary Action Text',
+            callback: null
+          }
+        }))
+      } />),
       { context: { muiTheme: { } } }
     )
 
