@@ -468,14 +468,10 @@ let Profile = React.createClass({
                             style={styles.removePassportButton} />
                         </div>
                       : <div>
-                        {this.state.loadingPassportPhoto
-                          ? <LinearProgress
-                            mode="indeterminate"
-                            style="progBar" />
-                          : <FlatButton
-                            label="Upload passport"
-                            onClick={this._handleSelectPassport}
-                            style={styles.uploadPassportButton} />}
+                        <FlatButton
+                          label="Upload passport"
+                          onClick={this._handleSelectPassport}
+                          style={styles.uploadPassportButton} />
                       </div>}
                       </div>
                     </div>
