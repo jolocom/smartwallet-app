@@ -4,7 +4,7 @@ import { connect } from 'redux/utils'
 import { FlatButton, Dialog } from 'material-ui'
 
 @connect({
-  state: ['confirm'],
+  props: ['confirm'],
   actions: ['confirmation-dialog:close']
 })
 export default class ConfirmationDialog extends React.Component {
