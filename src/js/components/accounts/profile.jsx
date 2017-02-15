@@ -595,9 +595,7 @@ let Profile = React.createClass({
       })
     } else {
       this.setState({
-        loadingPassportPhoto: true
-      })
-      this.setState({
+        loadingPassportPhoto: true,
         error: null,
         passportFile: file
       })
