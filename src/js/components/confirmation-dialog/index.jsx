@@ -1,15 +1,12 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { connect } from 'redux/utils'
 
 import { FlatButton, Dialog } from 'material-ui'
 
-import { close } from 'redux/modules/confirmation-dialog'
-
-@connect(
-  (state) => ({ confirm: state.get('confirm').toJS() }),
-  (dispatch) => bindActionCreators({close}, dispatch)
-)
+@connect({
+  state: ['confirm'],
+  actions: ['confirmation-dialog:close']
+})
 export default class ConfirmationDialog extends React.Component {
   static propTypes = {
     close: React.PropTypes.func,
