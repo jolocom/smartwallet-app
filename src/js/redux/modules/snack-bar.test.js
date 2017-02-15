@@ -1,6 +1,5 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
-import * as sinon from 'sinon'
 import * as snackBar from './snack-bar'
 import {stub} from '../../../../test/utils'
 const reducer = snackBar.default
