@@ -850,6 +850,7 @@ let NodeAddGeneric = React.createClass({
     let newTagArray = this.state.tagArray
     const tagToDelete = newTagArray.map((tag) => tag.key).indexOf(key)
     newTagArray.splice(tagToDelete, 1)
+    this.forceUpdate()
   },
 
   _handleTogglePrivacy(event, index, value) {
