@@ -42,6 +42,20 @@ class AccountsAgent {
     })
   }
 
+  async loginAndSetup(username, password, email) {
+    const account = await this.login(username, password)
+    await this.setupUpdatedAccount(account.webid, email)
+    return account
+  }
+
+  setupUpdatedAccount(webid, email) {
+    return Promise.all([
+      this.initInbox(webid),
+      this.initIndex(webid),
+      this.initDisclaimer(webid)
+    ]).then(this.updateEmail(webid, email))
+  }
+
   logout() {
     return this.http.post('/logout', null, {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'

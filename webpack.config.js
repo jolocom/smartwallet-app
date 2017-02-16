@@ -3,6 +3,7 @@ var path = require('path')
 
 module.exports = {
   entry: [
+    'babel-polyfill',
     'whatwg-fetch',
     'react-hot-loader/patch',
     'webpack-dev-server/client?https://localhost:8080',
