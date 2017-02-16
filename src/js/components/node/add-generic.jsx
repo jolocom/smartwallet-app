@@ -125,10 +125,20 @@ let NodeAddGeneric = React.createClass({
     const type = this.nodeType()
 
     // Case where no file is uploaded
-
     if (this.state.imgArray.length + this.state.docArray.length +
       this.state.fileArray.length === 0) {
-        console.log('no files were uploaded')
+      this.gAgent.createNode(
+        webId,
+        centerNode,
+        title,
+        description,
+        null,
+        type,
+        false).then((uri) => {
+          graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+        }).catch((e) => {
+          console.log('Unable to create node ', e)
+        })
     }
 
     // Check which array is populated, upload the files and then create a node
