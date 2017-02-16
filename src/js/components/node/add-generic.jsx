@@ -4,6 +4,7 @@ import Reflux from 'reflux'
 import accepts from 'attr-accept'
 
 import {
+  Avatar,
   AppBar,
   IconButton,
   Card,
@@ -484,7 +485,10 @@ let NodeAddGeneric = React.createClass({
                             return (
                               <ListItem
                                 key={img.key}
-                                leftIcon={<ImageIcon fill="#9ba0aa" />}
+                                leftIcon={
+                                  <Avatar
+                                    src={this.state.uploadedFilePreview}
+                                />}
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
