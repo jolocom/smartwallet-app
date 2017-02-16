@@ -171,56 +171,6 @@ class WebIDAgent {
       return newData
     })
   }
-
-  deletePassport(uri, imgUri) {
-    const webId = this.getWebId()
-    if (!webId) {
-      throw new Error('No webid detected.')
-    }
-
-    const toDel = $rdf.graph()
-    toDel.add(
-      $rdf.sym(webId),
-      PRED.passport,
-      $rdf.sym(uri)
-    )
-
-    return Promise.all([
-      this.http.delete(this.http._proxify(uri)),
-      this.http.delete(this.http._proxify(uri + '.acl')),
-      this.http.delete(this.http._proxify(imgUri)),
-      this.http.delete(this.http._proxify(imgUri + '.acl')),
-      this.http.patch(this.http._proxify(webId), toDel.statements)
-    ])
-  }
-
-  updatePassport(uri, oldImgUri, imgUri) {
-    const webId = this.getWebId()
-    if (!webId) {
-      throw new Error('No webid detected.')
-    }
-    const toDel = $rdf.graph()
-    const toAdd = $rdf.graph()
-
-    toDel.add(
-      $rdf.sym(uri),
-      PRED.image,
-      oldImgUri
-    )
-
-    toAdd.add(
-      $rdf.sym(uri),
-      PRED.image,
-      imgUri
-    )
-
-    return Promise.all([
-      this.http.patch(this.http._proxify(uri), toDel.statements,
-        toAdd.statements),
-      this.http.delete(this.http._proxify(oldImgUri)),
-      this.http.delete(this.http._proxify(oldImgUri + '.acl'))
-    ])
-  }
 }
 
 export default WebIDAgent

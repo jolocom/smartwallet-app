@@ -302,12 +302,4 @@ describe('WebIDAgent', function() {
     })
   })
   })
-/*
-  describe('#deletePassport', function(){
-
-  })
-  describe('#updatePassport', function(){
-
-  })
-*/
 })
