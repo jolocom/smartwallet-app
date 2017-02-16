@@ -124,6 +124,13 @@ let NodeAddGeneric = React.createClass({
     const centerNode = this.state.graphState.center
     const type = this.nodeType()
 
+    // Case where no file is uploaded
+
+    if (this.state.imgArray.length + this.state.docArray.length +
+      this.state.fileArray.length === 0) {
+        console.log('no files were uploaded')
+    }
+
     // Check which array is populated, upload the files and then create a node
 
     if (this.state.imgArray.length >= 1) {
@@ -296,7 +303,6 @@ let NodeAddGeneric = React.createClass({
       headerIcon = <ImageIcon style={styles.docIcon} />
     } else if (this.state.docArray.length > 0 ||
       this.state.fileArray.length > 0) {
-      console.log('array ', this.state.docArray, this.state.fileArray)
       headerIcon = <DocIcon style={styles.docIcon} />
     } else {
       headerIcon = <AddNodeIcon />
