@@ -16,6 +16,8 @@ import {
 } from 'material-ui'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
+import DocIcon from 'components/icons/doc-icon.jsx'
+import ImageIcon from 'components/icons/image-icon'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
@@ -228,6 +230,11 @@ let NodeAddGeneric = React.createClass({
         right: '0',
         top: '50px'
       },
+      docIcon: {
+        width: '100%',
+        marginTop: '50px',
+        height: '100px'
+      },
       nodeTitle: {
         padding: '10px 24px',
         color: '#4b132b',
@@ -284,7 +291,16 @@ let NodeAddGeneric = React.createClass({
     // let {type} = this.props.params
     // let config = this.getTypeConfig(type)
     // let title = config.title || `New ${type}`
-    let headerIcon = <AddNodeIcon />
+    let headerIcon
+    if (this.state.imgArray.length > 0) {
+      headerIcon = <ImageIcon style={styles.docIcon} />
+    } else if (this.state.docArray.length > 0 ||
+      this.state.fileArray.length > 0) {
+      console.log('array ', this.state.docArray, this.state.fileArray)
+      headerIcon = <DocIcon style={styles.docIcon} />
+    } else {
+      headerIcon = <AddNodeIcon />
+    }
 
     // HALF WORKING LOCAL-IMAGE PREVIEW
     // if (this.state.imgArray[0] && URL) {
@@ -446,7 +462,7 @@ let NodeAddGeneric = React.createClass({
                             return (
                               <ListItem
                                 key={img.key}
-                                leftIcon={<FileIcon />}
+                                leftIcon={<ImageIcon fill="#9ba0aa" />}
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
@@ -519,7 +535,7 @@ let NodeAddGeneric = React.createClass({
                                   <ActionDelete
                                     color="#4b132b"
                                     onTouchTap={
-                                      () => this._handleRemoveDocFile(f.key)
+                                      () => this._handleRemoveMiscFile(f.key)
                                     }
                                   />
                                 }>
@@ -653,6 +669,18 @@ let NodeAddGeneric = React.createClass({
     }
     this.setState({
       docArray: newDocArray
+    })
+  },
+
+  _handleRemoveMiscFile(key) {
+    if (this.refs.fileInputEl) {
+      this.refs.fileInputEl.value = null
+    }
+    let newMiscFileArray = this.state.fileArray
+    const miscToDelete = newMiscFileArray.map((misc) => misc.key).indexOf(key)
+    newMiscFileArray.splice(miscToDelete, 1)
+    this.setState({
+      fileArray: newMiscFileArray
     })
   },
 
