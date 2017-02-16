@@ -469,8 +469,14 @@ let Profile = React.createClass({
                         </div>
                       : <div>
                         <FlatButton
-                          label="Upload passport"
-                          onClick={this._handleSelectPassport}
+                          label= {this.state.loadingPassportPhoto
+                            ? "Loading"
+                            : "Upload passport"
+                          }
+                          onClick={this.state.loadingPassportPhoto
+                            ? () => {}
+                            : this._handleSelectPassport
+                          }
                           style={styles.uploadPassportButton} />
                       </div>}
                       </div>
