@@ -5,16 +5,28 @@ export function action(module, name, options) {
   const creator = options.creator || ((params) => {
     return creator.buildAction(params)
   })
+  creator.buildAction = (params) => {
+    return {
+      type: id,
+      ...params
+    }
+  }
 
   return _enchanceCreator(creator, id, options)
 }
 
 export function asyncAction(module, prefix, options) {
-  const id = 'little-sister/' + module + '/' + _.snakeCase(name).toUpperCase()
-  const creator = (params) => {
+  const id = 'little-sister/' + module + '/' + _.snakeCase(prefix).toUpperCase()
+  const creator = options.creator || ((params) => {
+    return creator.buildAction(params, options.promise)
+  })
+  creator.id_success = id + '_SUCCESS'
+  creator.id_fail = id + '_FAIL'
+
+  creator.buildAction = (params, promise) => {
     return {
-      types: [id, id + '_SUCCESS', id + '_FAIL'],
-      promise: options.promise,
+      types: [id, creator.id_success, creator.id_fail],
+      promise: promise,
       ...params
     }
   }
@@ -25,12 +37,6 @@ export function asyncAction(module, prefix, options) {
 function _enchanceCreator(creator, id, options) {
   creator.getParams = (action) => {
     return _.pick(action, options.expectedParams)
-  }
-  creator.buildAction = (params) => {
-    return {
-      type: id,
-      ...params
-    }
   }
 
   creator.id = id

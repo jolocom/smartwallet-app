@@ -81,3 +81,7 @@ export function connect(params, wantedActions = []) {
   }
   return connector
 }
+
+export function actionsFrom(module, actions) {
+  return _.map(actions, action => module + ':' + action)
+}

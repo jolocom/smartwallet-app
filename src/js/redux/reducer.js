@@ -6,5 +6,9 @@ export default combineReducers({
   routing: routerReducer,
   confirm: require('./modules/confirmation-dialog').default,
   dialog: require('./modules/common/dialog').default,
-  snackBar: require('./modules/snack-bar').default
+  snackBar: require('./modules/snack-bar').default,
+  account: combineReducers({
+    login: require('./modules/account/login').default,
+    emailUpdateQueued: () => false
+  })
 })
