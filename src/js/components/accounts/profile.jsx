@@ -469,9 +469,9 @@ let Profile = React.createClass({
                         </div>
                       : <div>
                         <FlatButton
-                          label= {this.state.loadingPassportPhoto
-                            ? "Loading"
-                            : "Upload passport"
+                          label={this.state.loadingPassportPhoto
+                            ? 'Loading'
+                            : 'Upload passport'
                           }
                           onClick={this.state.loadingPassportPhoto
                             ? () => {}
