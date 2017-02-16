@@ -230,7 +230,7 @@ let NodeAddGeneric = React.createClass({
         height: '176px',
         backgroundColor: '#9ca0aa',
         backgroundImage: this.state.isCollection ? 'none'
-          : `url(${Util.uriToProxied(this.state.uploadedFileUri)})`,
+          : `url(${this.state.uploadedFilePreview})`,
         backgroundSize: 'cover'
       },
       container: {
@@ -310,7 +310,13 @@ let NodeAddGeneric = React.createClass({
     // let title = config.title || `New ${type}`
     let headerIcon
     if (this.state.imgArray.length > 0) {
-      headerIcon = <ImageIcon style={styles.docIcon} />
+      let reader = new FileReader()
+      reader.readAsDataURL(this.state.imgArray[0].file)
+      reader.onloadend = () => {
+        this.setState({
+          uploadedFilePreview: reader.result
+        })
+      }
     } else if (this.state.docArray.length > 0 ||
       this.state.fileArray.length > 0) {
       headerIcon = <DocIcon style={styles.docIcon} />
