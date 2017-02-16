@@ -189,4 +189,4 @@ Once you have installed the git flow plugin, you should initialize its branch ma
 git flow init -d
 ```
 
-Copyright (C) 2015-2016  JOLOCOM UG
+Copyright (C) 2014-2017  JOLOCOM UG

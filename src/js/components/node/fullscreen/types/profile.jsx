@@ -349,7 +349,6 @@ let ProfileNode = React.createClass({
     menuItems.push('viewSharedNodes')
     menuItems.push('copyUrl')
     fabItems.push('chat')
-
     return (
       <GenericFullScreen
         title={this.getName()}

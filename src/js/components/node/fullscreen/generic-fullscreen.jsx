@@ -259,10 +259,15 @@ let GenericFullScreen = React.createClass({
           handler: this._handlePrivacySettings
         }
       case 'viewSharedNodes':
-        return {
-          title: 'View shared nodes',
-          handler: this._handleViewSharedNodes
+        const obj = {
+          handler: this._handleViewSharedNodes,
+          title: 'View shared nodes'
         }
+        if (this.props.title) {
+          obj.title = `Shared with ${this.props.title}`
+        }
+
+        return obj
       case 'fullscreen':
         return {
           handler: this._handleFull,
