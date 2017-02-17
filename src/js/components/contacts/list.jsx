@@ -42,10 +42,17 @@ let ContactsList = React.createClass({
     ContactsActions.load(this.props.searchQuery)
   },
 
-  renderItems() {
+  // @TODO factor this out into the store
+  getContacts() {
+    if (!this.state.contacts) {
+      return []
+    }
+
     let {items} = this.state.contacts
 
-    items.sort((a, b) => {
+    let contacts = items.slice(0)
+
+    contacts.sort((a, b) => {
       if (!a.username) {
         a.username = ' '
       }
@@ -56,12 +63,16 @@ let ContactsList = React.createClass({
     })
 
     if (this.props.filter) {
-      items = items.filter(this.props.filter)
+      contacts = contacts.filter(this.props.filter)
     }
 
+    return contacts
+  },
+
+  renderItems(contacts) {
     let result = []
 
-    items.forEach((contact, i) => {
+    contacts.forEach((contact, i) => {
       result.push(
         <Contact
           key={contact.webId}
@@ -77,17 +88,19 @@ let ContactsList = React.createClass({
 
   render() {
     let content
-    let {loading, items} = this.state.contacts
+    let {loading} = this.state.contacts
+
+    const contacts = this.getContacts()
 
     if (loading) {
       content = <Loading style={styles.loading} />
-    } else if (!items || !items.length) {
+    } else if (!contacts || !contacts.length) {
       content = <div style={styles.empty}>No contacts</div>
     } else {
       content = (
         <List>
           {this.props.children}
-          {this.renderItems()}
+          {this.renderItems(contacts)}
         </List>
       )
     }

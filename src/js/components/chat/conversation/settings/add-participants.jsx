@@ -55,7 +55,11 @@ export default class AddParticipants extends React.Component {
   renderSelected() {
     return this.selected.map((p) => {
       return (
-        <UserAvatar name={p.name} imgUri={p.imgUri} /> // @TODO use Chips here?
+        <UserAvatar
+          key={p.webId}
+          name={p.name}
+          imgUri={p.imgUri}
+        /> // @TODO use Chips here?
       )
     })
   }
