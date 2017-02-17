@@ -1,65 +1,64 @@
 import {Parser, Writer} from '../rdf'
-import LDPAgent from './ldp'
 import Util from '../util'
 import {PRED, SOLID, XSD} from '../namespaces.js'
 import $rdf from 'rdflib'
+import HTTPAgent from './http'
 
 // Chat related functions
-export default class ChatAgent extends LDPAgent {
+export default class ChatAgent {
 
-  // @param {String} initiator itiator's webid url
-  // @param {Array.<String>} participants webids (including the initiator)
-  //
-  // @return {Promise.<Object>} object containing conversation id and doc url
-  createConversation(initiator, participants, subject) {
-    // POST conversation to initiators container
-    // update inbox indices of all participants
-    let conversationId = Util.randomString(5)
-    let conversationDoc =
-      `${Util.webidRoot(initiator)}/little-sister/chats/${conversationId}`
-    let hdrs = {'Content-type': 'text/turtle'}
-    let conversationDocContent = this._conversationTriples(
-      conversationDoc, initiator, participants, subject
-    )
-
-    return this.put(
-      Util.uriToProxied(conversationDoc), conversationDocContent, hdrs
-    ).then(() => {
-      return Promise.all([initiator].concat(participants).map((p) =>
-        this._linkConversation(conversationDoc, p)
-      ))
-    }).then(() => {
-      return this._writeConversationAcl(
-        conversationDoc, initiator, participants
-      )
-    })
-    .then(() => {
-      return {
-        id: conversationId,
-        url: conversationDoc,
-        initiator,
-        participants,
-        subject
-      }
-    })
+  constructor() {
+    this.http = new HTTPAgent({proxy: true})
   }
 
-  _linkConversation(conversationUrl, webId) {
+  /**
+   *  @param {Object} [Conversation] Object containing the conversation params
+   *
+   *  @return {Promise.<Conversation>} The conversation
+   */
+  createConversation(conversation) {
+    conversation = Object.assign({
+      id: Util.randomString(5),
+      created: new Date(),
+      subject: ''
+    }, conversation)
+
+    let {id, initiator, participants} = conversation
+
+    conversation.url = `${Util.webidRoot(initiator)}/little-sister/chats/${id}`
+
+    let content = this._conversationTriples(conversation)
+
+    let headers = {'Content-Type': 'text/turtle'}
+
+    return this.http.put(conversation.url, content, headers)
+      .then(() => {
+        return Promise.all([initiator].concat(participants).map((p) =>
+          this._linkConversation(conversation.url, p)
+        ))
+      })
+      .then(() => {
+        return this._writeConversationAcl(conversation)
+      })
+      .then(() => {
+        return conversation
+      })
+  }
+
+  _linkConversation(url, webId) {
     const inbox = `${Util.webidRoot(webId)}/little-sister/inbox`
 
     const writer = new Writer()
 
-    writer.add('#inbox', PRED.spaceOf, $rdf.literal(conversationUrl))
+    writer.add('#inbox', PRED.spaceOf, $rdf.literal(url))
 
-    this.patch(this._proxify(inbox),
-      null, writer.all()
-    )
+    return this.http.patch(inbox, null, writer.all())
   }
 
-  _conversationTriples(uri, initiator, participants, subject = '') {
+  _conversationTriples({url, initiator, participants, subject, created}) {
     let writer = new Writer()
 
-    let thread = $rdf.sym(`${uri}#thread`)
+    let thread = $rdf.sym(`${url}#thread`)
 
     let triples = [{
       subject: '',
@@ -84,7 +83,7 @@ export default class ChatAgent extends LDPAgent {
     }, {
       subject: thread,
       predicate: PRED.created,
-      object: $rdf.lit(new Date().getTime(), undefined, XSD('int'))
+      object: $rdf.lit(created.getTime(), undefined, XSD('int'))
     }]
 
     writer.addAll(triples)
@@ -107,14 +106,17 @@ export default class ChatAgent extends LDPAgent {
     return writer.end()
   }
 
-  _writeConversationAcl(uri, initiator, participants = []) {
-    let writer = new Writer()
-    let ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-    let aclUri = `${uri}.acl`
-    let subject = $rdf.sym(`${uri}#owner`)
+  _writeConversationAcl({url, initiator, participants = []}) {
+    const writer = new Writer()
+    const ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+    const aclUri = `${url}.acl`
+    const subject = $rdf.sym(`${url}#owner`)
+    const headers = {
+      'Content-Type': 'text/turtle'
+    }
 
     writer.addTriple(subject, PRED.type, ACL('Authorization'))
-    writer.addTriple(subject, ACL('accessTo'), $rdf.sym(uri))
+    writer.addTriple(subject, ACL('accessTo'), $rdf.sym(url))
     writer.addTriple(subject, ACL('accessTo'), $rdf.sym(aclUri))
     writer.addTriple(subject, ACL('agent'), $rdf.sym(initiator))
     writer.addTriple(subject, ACL('mode'), ACL('Control'))
@@ -122,25 +124,24 @@ export default class ChatAgent extends LDPAgent {
     writer.addTriple(subject, ACL('mode'), ACL('Write'))
 
     participants.forEach((participant) => {
-      writer.addAll(this._getParticipantACL(uri, participant))
+      writer.addAll(this._getParticipantACL(url, participant))
     })
 
-    return this.put(this._proxify(aclUri), writer.end(), {
-      'Content-Type': 'text/turtle'
-    }).then(() => {
-      return aclUri
-    }).catch((e) => {
-      console.error(e, 'occured while putting the acl file')
-    })
+    return this.http.put(aclUri, writer.end(), headers)
+      .then(() => {
+        return aclUri
+      }).catch((e) => {
+        console.error(e, 'occured while putting the acl file')
+      })
   }
 
-  _getParticipantACL(uri, participant) {
-    const subject = $rdf.sym(`${uri}#participant`)
+  _getParticipantACL(url, participant) {
+    const subject = $rdf.sym(`${url}#participant`)
     const ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     let statements = []
 
     statements.push($rdf.st(subject, PRED.type, ACL('Authorization')))
-    statements.push($rdf.st(subject, ACL('accessTo'), $rdf.sym(uri)))
+    statements.push($rdf.st(subject, ACL('accessTo'), $rdf.sym(url)))
     statements.push($rdf.st(subject, ACL('agent'), $rdf.sym(participant)))
     statements.push($rdf.st(subject, ACL('mode'), ACL('Read')))
     statements.push($rdf.st(subject, ACL('mode'), ACL('Write')))
@@ -148,69 +149,73 @@ export default class ChatAgent extends LDPAgent {
     return statements
   }
 
-  _getMessageTriples({id, conversationId, author, content, created}) {
-    return [{// this is a message
-      subject: id,
-      predicate: PRED.type,
-      object: PRED.post
-    }, { // written by...
-      subject: id,
-      predicate: PRED.hasCreator,
-      object: author
-    }, { // with content...
-      subject: id,
-      predicate: PRED.content,
-      object: $rdf.lit(content)
-    }, { // with timestamp...
-      subject: id,
-      predicate: PRED.created,
-      object: $rdf.lit(created, undefined, XSD('int'))
-    }, { // contained by
-      subject: id,
-      predicate: PRED.hasContainer,
-      object: conversationId
-    }, {
-      subject: conversationId,
-      predicate: PRED.containerOf,
-      object: id
-    }]
-  }
+  getInboxConversations(webId) {
+    let inbox = `${Util.webidRoot(webId)}/little-sister/inbox`
 
-  postMessage(uri, author, content) {
-    const conversationId = `${uri}#thread`
-    const message = {
-      id: `#${Util.randomString(5)}`,
-      conversationId,
-      author,
-      content,
-      created: new Date().getTime()
-    }
-
-    return this.get(this._proxify(uri)).then((response) => {
-      // store this in memory, so we dont need to fetch all data everytime
-      return response.text().then((text) => {
-        return new Parser(text, conversationId)
-      })
-    }).then((conversation) => {
-      const writer = new Writer()
-
-      writer.addAll(this._getMessageTriples(message))
-
-      return this.patch(this._proxify(uri), null, writer.all()).then(() => {
-        const participants = conversation.find(
-          $rdf.sym(conversationId),
-          PRED.hasSubscriber,
-          undefined
-        ).map((t) => {
-          return t.object.value
+    return this.http.get(inbox)
+      .then((response) => {
+        return response.text().then((text) => {
+          return new Parser(text, inbox)
         })
-
-        this.notifyParticipants(participants, message)
       })
-    })
+      .then((result) => {
+        return result.find(undefined, PRED.spaceOf)
+          .map((t) => t.object.value || t.object.uri)
+      })
   }
+
+  // Returns relevant conversation metadata
+  // (id, updatesVia, otherPerson, lastMessage)
+  //
+  // @param {String} conversationUrl conversation resource url
+  //
+  // @return {Object} conversation meta:
+  // id, updatesVia, otherPerson, lastMessage
+  getConversation(conversationUrl, myUri) {
+    let result = {
+      id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1'),
+      uri: conversationUrl
+    }
+    return this.http.get(conversationUrl)
+      .then((response) => {
+        result.updatesVia = response.headers.get('updates-via')
+        return response.text().then((text) => {
+          return new Parser(text, conversationUrl)
+        })
+      })
+      .then((parsed) => {
+        return Promise.all([
+          this._parseConversation(parsed, conversationUrl),
+          // store this in the conversation rdf
+          this._lastMessage(conversationUrl),
+          this._getParticipants(parsed, conversationUrl)
+        ])
+      })
+      .then(([conversation, lastMessage, participants]) => {
+        return Object.assign(result, conversation, {
+          lastMessage,
+          participants
+        })
+      })
+      .catch((e) => {
+        console.error('Failed to load conversation', e, conversationUrl)
+      })
+  }
+
+  _parseConversation(parsed, conversationUrl) {
+    const subject = parsed.get(undefined, PRED.title, undefined)
+    const owner = parsed.get(undefined, PRED.maker, undefined)
+    const created = parsed.get(undefined, PRED.created, undefined)
+
+    return {
+      subject: subject && subject.object.value,
+      owner: owner && owner.object.value,
+      created: created && new Date(parseInt(created.object.value))
+    }
+  }
+
   getConversationMessages(conversationUrl) {
-    return this.get(this._proxify(conversationUrl))
+    return this.http.get(conversationUrl)
       .then((response) => {
         return response.text().then((text) => {
           let parser = new Parser()
@@ -257,55 +262,6 @@ export default class ChatAgent extends LDPAgent {
         return msgs
       })
   }
-  // Returns relevant conversation metadata
-  // (id, updatesVia, otherPerson, lastMessage)
-  //
-  // @param {String} conversationUrl conversation resource url
-  //
-  // @return {Object} conversation meta:
-  // id, updatesVia, otherPerson, lastMessage
-  getConversation(conversationUrl, myUri) {
-    let result = {
-      id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1'),
-      uri: conversationUrl
-    }
-    return this.get(this._proxify(conversationUrl))
-      .then((response) => {
-        result.updatesVia = response.headers.get('updates-via')
-        return response.text().then((text) => {
-          return new Parser(text, conversationUrl)
-        })
-      })
-      .then((parsed) => {
-        return Promise.all([
-          this._parseConversation(parsed, conversationUrl),
-          // store this in the conversation rdf
-          this._lastMessage(conversationUrl),
-          this._getParticipants(parsed, conversationUrl)
-        ])
-      })
-      .then(([conversation, lastMessage, participants]) => {
-        return Object.assign(result, conversation, {
-          lastMessage,
-          participants
-        })
-      })
-      .catch((e) => {
-        console.error('Failed to load conversation', e, conversationUrl)
-      })
-  }
-
-  _parseConversation(parsed, conversationUrl) {
-    const subject = parsed.get(undefined, PRED.title, undefined)
-    const owner = parsed.get(undefined, PRED.maker, undefined)
-    const created = parsed.get(undefined, PRED.created, undefined)
-
-    return {
-      subject: subject && subject.object.value,
-      owner: owner && owner.object.value,
-      created: created && new Date(parseInt(created.object.value))
-    }
-  }
 
   _lastMessage(conversationUrl) {
     return this.getConversationMessages(conversationUrl)
@@ -325,8 +281,9 @@ export default class ChatAgent extends LDPAgent {
     }))
   }
 
+  // @TODO should be handled in the store, and loaded from state
   getParticipantData(uri) {
-    return this.get(this._proxify(uri))
+    return this.http.get(uri)
       .then((response) => {
         return response.text().then((text) => {
           return new Parser(text, uri)
@@ -353,19 +310,73 @@ export default class ChatAgent extends LDPAgent {
       })
   }
 
-  getInboxConversations(webId) {
-    let inbox = `${Util.webidRoot(webId)}/little-sister/inbox`
+  _getMessageTriples({id, conversationId, author, content, created}) {
+    id = `#${id}`
 
-    return this.get(this._proxify(inbox))
-      .then((response) => {
-        return response.text().then((text) => {
-          return new Parser(text, inbox)
+    if (created instanceof Date) {
+      created = created.getTime()
+    }
+
+    return [{// this is a message
+      subject: id,
+      predicate: PRED.type,
+      object: PRED.post
+    }, { // written by...
+      subject: id,
+      predicate: PRED.hasCreator,
+      object: author
+    }, { // with content...
+      subject: id,
+      predicate: PRED.content,
+      object: $rdf.lit(content)
+    }, { // with timestamp...
+      subject: id,
+      predicate: PRED.created,
+      object: $rdf.lit(created, undefined, XSD('int'))
+    }, { // contained by
+      subject: id,
+      predicate: PRED.hasContainer,
+      object: conversationId
+    }, {
+      subject: conversationId,
+      predicate: PRED.containerOf,
+      object: id
+    }]
+  }
+
+  postMessage(uri, message) {
+    const conversationId = `${uri}#thread`
+
+    message = Object.assign({
+      id: Util.randomString(5),
+      conversationId,
+      author: null,
+      content: null,
+      created: new Date()
+    }, message)
+
+    return this.http.get(uri).then((response) => {
+      // store this in memory, so we dont need to fetch all data everytime
+      return response.text().then((text) => {
+        return new Parser(text, conversationId)
+      })
+    }).then((conversation) => {
+      const writer = new Writer()
+
+      writer.addAll(this._getMessageTriples(message))
+
+      return this.http.patch(uri, null, writer.all()).then(() => {
+        const participants = conversation.find(
+          $rdf.sym(conversationId),
+          PRED.hasSubscriber,
+          undefined
+        ).map((t) => {
+          return t.object.value
         })
+
+        return this.notifyParticipants(participants, message)
       })
-      .then((result) => {
-        return result.find(undefined, PRED.spaceOf)
-          .map((t) => t.object.value || t.object.uri)
-      })
+    })
   }
 
   getUnreadMessagesContainer(webId) {
@@ -406,7 +417,7 @@ export default class ChatAgent extends LDPAgent {
 
   getUnreadMessagesIds(webId) {
     let container = this.getUnreadMessagesContainer(webId)
-    return this.get(this._proxify(container))
+    return this.http.get(container)
       .then((response) => {
         return response.text().then((text) => {
           return new Parser(text, webId)
@@ -423,7 +434,7 @@ export default class ChatAgent extends LDPAgent {
 
   getUnreadMessages(webId) {
     let container = this.getUnreadMessagesContainer(webId)
-    return this.get(this._proxify(container))
+    return this.http.get(container)
       .then((response) => {
         return response.text().then((text) => {
           return new Parser(text, webId)
@@ -433,22 +444,22 @@ export default class ChatAgent extends LDPAgent {
   }
 
   notifyParticipants(participants, message) {
-    participants.forEach((participant) => {
+    return Promise.all(participants.map((participant) => {
       if (participant !== message.author) {
-        this.addUnreadMessage(participant, message)
+        return this.addUnreadMessage(participant, message)
       }
-    })
+    }))
   }
 
   addUnreadMessage(participant, message) {
     const container = this.getUnreadMessagesContainer(participant)
     const writer = new Writer()
 
-    writer.add(message.id, PRED.type, SOLID.Notification)
+    writer.add(`#${message.id}`, PRED.type, SOLID.Notification)
 
     writer.addAll(this._getMessageTriples(message))
 
-    return this.patch(this._proxify(container), null, writer.all())
+    return this.http.patch(container, null, writer.all())
   }
 
   removeUnreadMessage(webId, message) {
@@ -456,11 +467,11 @@ export default class ChatAgent extends LDPAgent {
 
     const writer = new Writer()
 
-    writer.add(message.id, PRED.type, SOLID.Notification)
+    writer.add(`#${message.id}`, PRED.type, SOLID.Notification)
 
     writer.addAll(this._getMessageTriples(message))
 
-    return this.patch(this._proxify(container), writer.all())
+    return this.http.patch(container, writer.all())
   }
 
   setSubject(uri, oldSubject, newSubject) {
@@ -468,7 +479,7 @@ export default class ChatAgent extends LDPAgent {
 
     const newTriple = $rdf.st('', PRED.title, $rdf.literal(newSubject))
 
-    return this.patch(this._proxify(uri), [oldTriple], [newTriple])
+    return this.http.patch(uri, [oldTriple], [newTriple])
   }
 
   addParticipant(uri, webId) {
@@ -478,8 +489,8 @@ export default class ChatAgent extends LDPAgent {
     const acl = this._getParticipantACL(uri, webId)
 
     return Promise.all([
-      this.patch(this._proxify(uri), null, statements),
-      this.patch(this._proxify(`${uri}.acl`), null, acl)
+      this.http.patch(uri, null, statements),
+      this.http.patch(`${uri}.acl`, null, acl)
     ])
   }
 
@@ -494,17 +505,17 @@ export default class ChatAgent extends LDPAgent {
     })
 
     return Promise.all([
-      this.patch(this._proxify(uri), null, statements),
-      this.patch(this._proxify(`${uri}.acl`), null, acl)
+      this.http.patch(uri, null, statements),
+      this.http.patch(`${uri}.acl`, null, acl)
     ])
   }
 
   removeParticipant(uri, webId) {
     return Promise.all([
-      this.patch(this._proxify(uri), [$rdf.st(
+      this.http.patch(uri, [$rdf.st(
         $rdf.sym(`${uri}#thread`), PRED.hasSubscriber, $rdf.sym(webId)
       )]),
-      this.patch(this._proxify(`${uri}.acl`),
+      this.http.patch(`${uri}.acl`,
         this._getParticipantACL(uri, webId)
       )
     ])

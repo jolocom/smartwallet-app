@@ -15,8 +15,6 @@ import Loading from 'components/common/loading'
 
 import ConversationSettings from './settings'
 
-import ConversationSettings from './conversation-settings.jsx'
-
 import UnreadMessagesActions from 'actions/unread-messages'
 import ConversationActions from 'actions/conversation'
 import ConversationStore from 'stores/conversation'
