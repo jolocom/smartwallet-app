@@ -77,17 +77,16 @@ export default Reflux.createStore({
     }
 
     this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
-      triples[0] = this.convertor.convertToD3('c', triples[0])
-      for (let i = 1; i < triples.length; i++) {
-        triples[i] = this.convertor.convertToD3(
-          'a', triples[i], i, triples.length - 1
-        )
-      }
+      let results = []
+      const center = triples.slice(0, 1)
+      const adjacent = triples.slice(1, triples.length)
+      results = results.concat(this.gAgent.convertToNodes('c', center))
+      results = results.concat(this.gAgent.convertToNodes('a', adjacent))
 
       // Making sure the images are accesable, otherwise not
       // trying to display them.
-      this.gAgent.checkImages(triples).then(() => {
-        graphActions.getInitialGraphState.completed(triples)
+      this.gAgent.checkImages(results).then(() => {
+        graphActions.getInitialGraphState.completed(results)
       })
     }).catch(graphActions.getInitialGraphState.failed)
   },
