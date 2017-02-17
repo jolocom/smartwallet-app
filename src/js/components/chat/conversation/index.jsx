@@ -8,10 +8,12 @@ import {AppBar, IconButton, FlatButton} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
-import Dialog from 'components/common/dialog.jsx'
-import Compose from 'components/common/compose.jsx'
-import UserAvatar from 'components/common/user-avatar.jsx'
-import Loading from 'components/common/loading.jsx'
+import Dialog from 'components/common/dialog'
+import Compose from 'components/common/compose'
+import UserAvatar from 'components/common/user-avatar'
+import Loading from 'components/common/loading'
+
+import ConversationSettings from './settings'
 
 import ConversationSettings from './conversation-settings.jsx'
 
