@@ -76,14 +76,14 @@ class Chat extends React.Component {
       </IconButton>
     )
 
-    // const searchIcon = (
-    //   <IconButton
-    //     iconClassName="material-icons"
-    //     iconStyle={styles.icon}
-    //   >
-    //     search
-    //   </IconButton>
-    // )
+    const searchIcon = (
+      <IconButton
+        iconClassName="material-icons"
+        iconStyle={styles.icon}
+      >
+        search
+      </IconButton>
+    )
 
     return (
       <Dialog ref="dialog" fullscreen>
@@ -93,8 +93,7 @@ class Chat extends React.Component {
               title="Chat"
               style={styles.bar}
               iconElementLeft={backIcon}
-              // {iconElementRight={searchIcon}}
-            />
+              iconElementRight={searchIcon} />
             <Tabs valueLink={{
               value: this.state.activeTab,
               requestChange: (tab) => this._handleTabsChange(tab)

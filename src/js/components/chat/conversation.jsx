@@ -4,16 +4,14 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton, FlatButton} from 'material-ui'
+import {AppBar, IconButton} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
-import Dialog from 'components/common/dialog'
-import Compose from 'components/common/compose'
-import UserAvatar from 'components/common/user-avatar'
-import Loading from 'components/common/loading'
-
-import ConversationSettings from './settings'
+import Dialog from 'components/common/dialog.jsx'
+import Compose from 'components/common/compose.jsx'
+import UserAvatar from 'components/common/user-avatar.jsx'
+import Loading from 'components/common/loading.jsx'
 
 import UnreadMessagesActions from 'actions/unread-messages'
 import ConversationActions from 'actions/conversation'
@@ -23,6 +21,9 @@ import ContactActions from 'actions/contact'
 import ContactStore from 'stores/contact'
 
 import ProfileStore from 'stores/profile'
+
+import Debug from 'lib/debug'
+let debug = Debug('components:conversation')
 
 let Conversation = React.createClass({
 
@@ -34,8 +35,7 @@ let Conversation = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.any,
-    account: React.PropTypes.any,
-    muiTheme: React.PropTypes.object
+    account: React.PropTypes.any
   },
 
   propTypes: {
@@ -52,6 +52,7 @@ let Conversation = React.createClass({
   componentDidMount() {
     const {webId} = this.context.account
     const {id} = this.props.params
+    debug('componentDidMount; loading conversation with props', this.props)
 
     ConversationActions.load(webId, id, true)
 
@@ -71,6 +72,7 @@ let Conversation = React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.conversation && this.state.conversation) {
+      debug('componentDidUpdate; loading conversation', this.state.conversation)
       ContactActions.load(this.state.conversation.username)
     }
     if (this.state.atBottom) {
@@ -94,10 +96,6 @@ let Conversation = React.createClass({
     this.context.router.push('/conversations')
   },
 
-  addParticipant(webId) {
-    ConversationActions.addParticipant(this.state.conversation.uri, webId)
-  },
-
   getStyles() {
     let styles = {
       content: {
@@ -108,7 +106,7 @@ let Conversation = React.createClass({
         flex: 1,
         overflowY: 'auto',
         paddingTop: '25px',
-        backgroundColor: 'rgb(240, 240, 240)',
+        backgroundColor: '#f8f9fb',
         position: 'absolute',
         top: 0,
         left: 0,
@@ -126,60 +124,23 @@ let Conversation = React.createClass({
     return styles
   },
 
-  getParticipant(uri) {
-    let {participants} = this.state.conversation
-    return participants.filter((p) => {
-      return p.webId === uri
-    })[0]
-  },
-
   renderItems() {
-    return this.state.conversation &&
-      this.state.conversation.items.map((item, i) => {
-        return (
-          <ConversationItem
-            conversation={this.state.conversation}
-            item={item}
-            author={this.getParticipant(item.author)}
-            key={i}
-          />
-        )
-      })
+    return this.state.conversation.items.map((item, i) => {
+      return (
+        <ConversationItem
+          conversation={this.state.conversation}
+          item={item}
+          key={i}
+        />
+      )
+    })
   },
 
   render() {
     let content
     let styles = this.getStyles()
-    let {loading, participants, subject} = this.state.conversation
-    let title
-    let groupSettings
-
-    // omit current user
-    participants = participants || []
-    participants = participants.filter((p) => {
-      return p.webId !== this.context.account.webId
-    })
-
-    if (loading && !participants.length) {
-      title = 'Loading...'
-    } else if (participants.length === 1) {
-      title = participants[0].name
-    } else {
-      if (subject && subject.trim()) {
-        title = subject
-      } else {
-        title = participants.map(p => p.name).join(', ')
-      }
-      title = title.trim() || participants.map(p => p.name).join(', ')
-
-      groupSettings = (
-        <FlatButton
-          onTouchTap={this._handleShowSettings}
-        >
-          Settings
-        </FlatButton>
-      )
-    }
+    let {loading, otherPerson} = this.state.conversation
+    let title = otherPerson && otherPerson.name
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -199,7 +160,6 @@ let Conversation = React.createClass({
                 arrow_back
               </IconButton>
             }
-            iconElementRight={groupSettings}
           />
           <Content style={styles.content}>
             <div ref="items" style={styles.conversation}>
@@ -212,16 +172,8 @@ let Conversation = React.createClass({
             />
           </Content>
         </Layout>
-        <ConversationSettings
-          ref="settings"
-          conversation={this.state.conversation}
-        />
       </Dialog>
     )
-  },
-
-  _handleShowSettings() {
-    this.refs.settings.show()
   }
 })
 
@@ -229,14 +181,13 @@ let Conversation = React.createClass({
 class ConversationItem extends React.Component {
 
   static propTypes = {
-    author: React.PropTypes.object,
-    item: React.PropTypes.object
+    item: React.PropTypes.object,
+    conversation: React.PropTypes.object
   }
 
   static contextTypes = {
     account: React.PropTypes.object,
-    profile: React.PropTypes.object,
-    muiTheme: React.PropTypes.object
+    profile: React.PropTypes.object
   }
 
   componentDidMount() {
@@ -244,8 +195,6 @@ class ConversationItem extends React.Component {
   }
 
   getStyles() {
-    const muiTheme = this.context.muiTheme
-
     return {
       message: {
         padding: '0 20px',
@@ -273,7 +222,8 @@ class ConversationItem extends React.Component {
           background: '#ffffff',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'left'
@@ -282,29 +232,34 @@ class ConversationItem extends React.Component {
       me: {
         body: {
           float: 'right',
-          background: muiTheme.palette.primary1Color,
+          background: '#B5CA11',
           whiteSpace: 'normal',
           wordWrap: 'break-word',
-          maxWidth: '85%'
+          maxWidth: '85%',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'
         },
         meta: {
           textAlign: 'right'
         }
       },
-      contactAvatar: {
+      otherPersonAvatar: {
         body: {
           float: 'left',
+          background: '#f8f9fb',
           padding: 0,
+          borderTopRightRadius: 0,
           marginRight: '6px'
         },
         meta: {
           textAlign: 'left'
         }
       },
-      meAvatar: {
+      userAvatar: {
         body: {
           float: 'right',
+          background: '#f8f9fb',
           padding: 0,
+          borderTopRightRadius: 0,
           marginLeft: '6px'
         },
         meta: {
@@ -316,39 +271,38 @@ class ConversationItem extends React.Component {
 
   render() {
     let styles = this.getStyles()
+    let {otherPerson} = this.props.conversation
     let {account} = this.context
+
+    let userAvatar = (
+      <UserAvatar
+        name={this.context.profile.givenName}
+        imgUrl={this.context.profile.imgUri} />
+    )
+
+    let otherPersonAvatar = (
+      <UserAvatar
+        name={otherPerson.name}
+        imgUrl={otherPerson.img} />
+    )
 
     let {author, content, created} = this.props.item
 
-    let style
-    let avatar
-    if (author === account.webId) {
-      style = 'me'
-      avatar = (
-        <UserAvatar
-          name={this.context.profile.givenName}
-          imgUrl={this.context.profile.imgUri}
-        />
-      )
-    } else {
-      style = 'contact'
-      avatar = (
-        <UserAvatar
-          name={this.props.author.name}
-          imgUrl={this.props.author.img}
-        />
-      )
-    }
+    let avatar = (author !== account.webId)
+      ? 'otherPersonAvatar' : 'userAvatar'
+    let from = (author !== account.webId)
+      ? 'contact' : 'me'
 
     return (
       <div style={[styles.message]}>
-        <div style={[styles.body, styles[`${style}Avatar`].body]}>
-          {avatar}
+        <div style={[styles.body, styles[avatar].body]}>
+          {avatar === 'otherPersonAvatar' && otherPersonAvatar}
+          {avatar === 'userAvatar' && userAvatar}
         </div>
-        <div style={[styles.body, styles[style].body]}>
+        <div style={[styles.body, styles[from].body]}>
           {content}
         </div>
-        <div style={[styles.meta, styles[style].meta]}>
+        <div style={[styles.meta, styles[from].meta]}>
           <span style={styles.date}>
             {moment(created).fromNow()}
           </span>

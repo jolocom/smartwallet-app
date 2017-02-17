@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import Reflux from 'reflux'
 
 import ContactsList from 'components/contacts/list.jsx'
 import ChatActions from 'actions/chat'
@@ -8,53 +9,42 @@ import AccountStore from 'stores/account'
 
 import ChatStore from 'stores/chat'
 
-@Radium
-export default class Contacts extends React.Component {
-  static propTypes = {
-    searchQuery: React.PropTypes.string,
-    children: React.PropTypes.node
-  }
+import Debug from 'lib/debug'
+let debug = Debug('components:contacts')
 
-  static contextTypes = {
+let Contacts = React.createClass({
+
+  mixins: [
+    Reflux.connect(ChatStore, 'conversation')
+  ],
+  contextTypes: {
     router: React.PropTypes.any
-  }
-
-  constructor() {
-    super()
-
-    this.store = ChatStore
-
-    this.state = {
-
-    }
-  }
+  },
 
   createChat(webId) {
     ChatActions.create(
-        AccountStore.state.webId, webId
+        AccountStore.state.webId, AccountStore.state.webId, webId
     )
-  }
-
+  },
   componentDidUpdate() {
-    if (this.state.id) {
+    if (this.state.conversation && this.state.conversation.id) {
+      debug('componentDidUpdate; ' +
+        'redirection to conversation URL, with state', this.state)
       this.context.router.push(
-        `/conversations/${this.state.id}`
+        `/conversations/${this.state.conversation.id}`
       )
     }
-  }
-
+  },
   render() {
     return (
       <div style={styles.container}>
-        <ContactsList
-          onClick={this.createChat}
-          searchQuery={this.props.searchQuery}
-        />
+        <ContactsList onClick={this.createChat}
+          searchQuery={this.props.searchQuery} />
         {this.props.children}
       </div>
     )
   }
-}
+})
 
 let styles = {
   container: {
@@ -63,3 +53,5 @@ let styles = {
     position: 'relative'
   }
 }
+
+export default Radium(Contacts)

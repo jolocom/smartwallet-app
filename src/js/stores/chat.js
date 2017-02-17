@@ -2,35 +2,37 @@ import Reflux from 'reflux'
 import ChatAgent from 'lib/agents/chat'
 
 import ChatActions from 'actions/chat'
-
+import ConversationsActions from 'actions/conversations'
 let {create} = ChatActions
 
-export default class ChatStore extends Reflux.Store {
-  constructor() {
-    super()
+import Debug from 'lib/debug'
+let debug = Debug('stores:chat')
 
-    this.agent = new ChatAgent()
-    this.state = {
-      conversation: null
-    }
-    this.listenables = ChatActions
-  }
+let chatAgent = new ChatAgent()
 
-  onReset() {
-    this.setState({conversation: null})
-  }
+export default Reflux.createStore({
+  listenables: ChatActions,
 
-  onCreate(initiator, participants, subject) {
-    this.agent.createConversation(initiator, participants, subject)
-      .then(create.completed)
-      .catch(create.failed)
-  }
+  onCreate(initiator, ...participants) {
+    debug('Creating chat')
+    chatAgent.createConversation(initiator, participants)
+      .then(({conversation, isNew}) => {
+        if (isNew) {
+          ConversationsActions.new(conversation)
+        }
+        return conversation
+      })
+      .then((conversation) => {
+        setTimeout(() => create.completed(conversation), 1000)
+      })
+    // setTimeout because we need to wait for
+    // the trigger update of the items by .new
+  },
 
   onCreateCompleted(conversation) {
-    this.setState({conversation})
-  }
+    debug('Create completed; triggering the new state', conversation)
+    this.trigger(conversation)
 
-  onCreateFailed(e) {
-    console.error('Creating conversation failed', e)
+    // window.location.href='#/conversations/' + conversation.id
   }
-}
+})
