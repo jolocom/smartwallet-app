@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import Radium from 'radium'
 
 import {IconButton} from 'material-ui'
@@ -122,6 +122,7 @@ let Compose = React.createClass({
             style={[styles.textarea, styles.pre]} />
           <IconButton
             iconClassName="material-icons"
+            secondary
             onTouchTap={this.onSubmit}
             style={styles.button}
           >

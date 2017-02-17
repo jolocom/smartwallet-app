@@ -3,7 +3,7 @@
 // It is also stateless,
 import Reflux from 'reflux'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 import GraphD3 from 'lib/graph'
 import FabMenu from 'components/common/fab-menu.jsx'
 import FabMenuItem from 'components/common/fab-menu-item.jsx'
@@ -57,11 +57,7 @@ let Graph = React.createClass({
   },
 
   componentDidMount() {
-    let showWelcome = !localStorage.getItem('jolocom.welcome')
-    this.graph = new GraphD3(this.getGraphEl(), 'main', showWelcome)
-    if (showWelcome) {
-      this._handleFirst()
-    }
+    this.graph = new GraphD3(this.getGraphEl(), 'main')
 
     // Adding the listeners.
     this.graph.on('center-changed', this._handleCenterChange)
@@ -210,10 +206,6 @@ let Graph = React.createClass({
 
   _handleLinkNodeTouchTap() {
     this.addNode('link')
-  },
-
-  _handleFirst() {
-    localStorage.setItem('jolocom.welcome', true)
   }
 })
 

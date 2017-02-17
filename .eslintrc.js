@@ -40,7 +40,6 @@ module.exports = {
         ],
         "space-before-function-paren": [
           "off"
-        ],
-        "generator-star-spacing": 0
+        ]
     }
 };

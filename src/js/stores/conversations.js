@@ -3,24 +3,22 @@ import _ from 'lodash'
 import ChatAgent from 'lib/agents/chat'
 import AccountsAgent from 'lib/agents/accounts'
 
-import conversationsActions from 'actions/conversations'
-import chatActions from 'actions/chat'
+import ConversationsActions from 'actions/conversations'
 import AccountStore from 'stores/account'
 
 import accountActions from '../actions/account'
 
-let {load} = conversationsActions
+import Debug from 'lib/debug'
+let debug = Debug('stores:conversations')
+
+let {load} = ConversationsActions
 
 export default Reflux.createStore({
-  listenables: conversationsActions,
+  listenables: ConversationsActions,
 
   items: [],
-
   init: function() {
-    this.listenTo(chatActions.create.completed, this.onNew)
     this.listenTo(accountActions.logout, this.onLogout)
-
-    this.agent = new ChatAgent()
   },
 
   getInitialState() {
@@ -38,7 +36,6 @@ export default Reflux.createStore({
   getConversationByWebId(webId) {
     for (let conversation of this.items) {
       if (conversation.otherPerson &&
-          conversation.otherPerson.webid &&
           conversation.otherPerson.webid.value === webId) {
         return conversation
       }
@@ -54,12 +51,17 @@ export default Reflux.createStore({
   },
 
   getUri(webId, id) {
+    debug('Getting URI for conversation with id ', id)
     return new Promise((resolve, reject) => {
       let conversation = this.getConversation(id)
       if (conversation) {
+        debug('Found conversation in the items.')
         resolve(conversation.uri)
       } else {
+        debug('Couldn\'t find conversation in the items;' +
+          'retrieving all conversations.')
         this._getConversations(webId, id).then((conversations) => {
+          debug('getUri received conversations', conversations)
           if (conversations[0]) {
             resolve(conversations[0].uri)
           } else {
@@ -72,8 +74,8 @@ export default Reflux.createStore({
 
   _getConversations(webId, query) {
     let regEx = query && query !== '' && new RegExp(`.*${query}.*`, 'i')
-
-    return this.agent.getInboxConversations(webId)
+    let chatAgent = new ChatAgent()
+    return chatAgent.getInboxConversations(webId)
       .catch((error) => {
         if (error.response && error.response.status === 404) {
           const accounts = new AccountsAgent()
@@ -81,42 +83,41 @@ export default Reflux.createStore({
         }
         return []
       })
-      .then((conversations) => {
+      .then(function(conversations) {
+        debug('Received URLs of conversations', conversations)
         let results = conversations.map((url) => {
-          return this.agent.getConversation(url, webId)
+          return chatAgent.getConversation(url, webId)
         })
 
         return Promise.all(results)
       })
-      .then((conversations) => {
-        return _.chain(conversations).sortBy((conversation) => {
-          const date = conversation.lastMessage &&
-            conversation.lastMessage.created || conversation.created
-
-          return date && date.getTime() || -1
+      .then(function(conversations) {
+        debug('Received conversations', conversations)
+        return _.chain(conversations).map((conversation) => {
+          return conversation
         }).filter((conversation) => {
+          // @TODO we don't want to display
+          // conversations with no last messages ?
           return conversation && (!regEx || conversation.id.match(regEx))
-        }).value().reverse()
+          // && conversation.lastMessage
+        }).value()
       })
   },
 
   onNew(conversation) {
-    let existingConversation =
-      this.getConversationByWebId(conversation.participants[1])
-
-    if (existingConversation) {
-      return
-    }
-
-    return this.agent.getConversation(
-      conversation.url, AccountStore.state.webId
-    ).then((conversationItem) => {
-      this.items = this.items.concat(conversationItem)
-      this.trigger({
-        loading: false, hydrated: true, items: this.items
+    debug('Adding new conversation to list of conversations',
+      conversation, this.items, AccountStore.state.webId)
+    let chatAgent = new ChatAgent()
+    return chatAgent.getConversation(conversation.url, AccountStore.state.webId)
+      .then((conversationItem) => {
+        debug('Triggering the state with the new conversation item ;' +
+          'new state should be',
+          {loading: false, items: this.items.concat(conversationItem)})
+        this.items = this.items.concat(conversationItem)
+        this.trigger({
+          loading: false, hydrated: true, items: this.items})
       })
-      return conversation
-    })
+      .then(() => conversation)
   },
 
   onLoad(webId, query) {
@@ -128,6 +129,7 @@ export default Reflux.createStore({
   },
 
   onLoadCompleted(conversations) {
+    debug('onLoadCompleted with conversations', conversations)
     this.items = conversations
 
     this.trigger({

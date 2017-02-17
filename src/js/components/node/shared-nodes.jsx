@@ -179,9 +179,6 @@ let WrappedGridTile = React.createClass({
       nodeTypeIcon: {
         margin: '0 auto',
         width: '70px'
-      },
-      pointer: {
-        cursor: 'pointer'
       }
     }
   },
@@ -193,6 +190,7 @@ let WrappedGridTile = React.createClass({
       <GridTile
         key={tile.nodeType}
         style={styles.nodeTypeGridTile}
+        onTouchTap={this._handleListNodes}
         title={
           <span
             style={{...styles.caption, ...styles.captionTitle}}>
@@ -207,14 +205,7 @@ let WrappedGridTile = React.createClass({
           </span>
         }
       >
-        <div
-          onTouchTap={this._handleListNodes}
-          style={this.props.tile.numItems > 0
-            ? Object.assign({}, styles.nodeTypeIcon, styles.pointer)
-            : styles.nodeTypeIcon
-          }>
-          {tile.icon}
-        </div>
+        <div style={styles.nodeTypeIcon}>{tile.icon}</div>
       </GridTile>
 
     )
@@ -222,9 +213,7 @@ let WrappedGridTile = React.createClass({
 
   _handleListNodes(event) {
     event.preventDefault()
-    if (this.props.tile.numItems > 0) {
-      this.props.handleList(this.props.tile.nodeType)
-    }
+    this.props.handleList(this.props.tile.nodeType)
   }
 })
 

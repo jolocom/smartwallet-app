@@ -1,4 +1,4 @@
-import * as settings from 'settings'
+import Util from '../util.js'
 
 const DEFAULT_ACCEPT = '*/*'
 const DEFAULT_CT = 'application/n-triples'
@@ -42,10 +42,6 @@ function composePatchQuery (toDel, toIns) {
 
 // HTTP Requests
 class HTTPAgent {
-  constructor({proxy} = {}) {
-    this._fetch = window.fetch ? window.fetch.bind(window) : null
-    this._proxyURL = proxy === true ? settings.proxy : ''
-  }
 
   // GET a resource represented by url
   //
@@ -96,21 +92,8 @@ class HTTPAgent {
     return this._req(url, 'HEAD')
   }
 
-  _proxify(uri) {
-    console.warn('DEPRECATED - HTTPAgent._proxify: ' +
-                    'pass proxy option to constructor instead')
-    return `${settings.proxy}/proxy?url=${uri}`
-  }
-
-  __proxify(uri) { // Temporary to gracefuly deprecate public use of _proxify
-    if (!uri) {
-      return
-    }
-    let mode = localStorage.getItem('jolocom.auth-mode')
-    if (mode === 'cert') {
-      return uri
-    }
-    return `${this._proxyURL}/proxy?url=${uri}`
+  _proxify(url) {
+    return Util.uriToProxied(url)
   }
 
   patch(url, toDel, toIns) {
@@ -123,10 +106,7 @@ class HTTPAgent {
     'Accept': DEFAULT_ACCEPT,
     'Content-type': DEFAULT_CT
   }) {
-    if (this._proxyURL) {
-      url = this.__proxify(url)
-    }
-    return this._fetch(url, {
+    return fetch(url, {
       method,
       headers,
       body,

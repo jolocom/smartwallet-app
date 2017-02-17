@@ -4,5 +4,5 @@
     "react",
     "survivejs-kanban"
   ],
-  "plugins": ["react-hot-loader/babel", "syntax-async-functions", "transform-regenerator"]
+  "plugins": ["react-hot-loader/babel"]
 }

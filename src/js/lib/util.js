@@ -1,4 +1,5 @@
 import url from 'url'
+import WebIdAgent from 'lib/agents/webid'
 import {proxy} from 'settings'
 
 // Misc utility functions
@@ -71,7 +72,6 @@ let Util = {
   // TODO introduce discovery mechanism / protocol.
   // This is too hardcoded.
   getIndexUri(uri) {
-    const WebIdAgent = require('lib/agents/webid')
     const wia = new WebIdAgent()
     const webId = wia.getWebId()
     let indexUri = this.webidRoot(webId)

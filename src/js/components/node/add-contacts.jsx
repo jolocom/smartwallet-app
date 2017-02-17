@@ -119,7 +119,7 @@ let AddContact = React.createClass({
     if (user.selected) {
       user.selected = false
       newSelected = this.state.selected.filter(pers => {
-        return pers.webId !== user.webId
+        return pers !== user.webId
       })
     } else {
       newSelected = this.state.selected.concat([{

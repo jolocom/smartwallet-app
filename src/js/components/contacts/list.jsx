@@ -2,28 +2,22 @@ import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
 
-import {List, ListItem, Checkbox} from 'material-ui'
+import {List, ListItem, Divider, Subheader, Avatar} from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 import theme from 'styles/jolocom-theme'
 
 import Loading from 'components/common/loading.jsx'
+import Utils from 'lib/util.js'
 
 import ContactsActions from 'actions/contacts'
 import ContactsStore from 'stores/contacts'
 import UserAvatar from 'components/common/user-avatar.jsx'
 
-import UncheckedIcon from 'material-ui/svg-icons/toggle/radio-button-unchecked'
-import CheckedIcon from 'material-ui/svg-icons/action/check-circle'
-
 let ContactsList = React.createClass({
 
   propTypes: {
-    children: React.PropTypes.node,
     searchQuery: React.PropTypes.string,
-    onItemTouchTap: React.PropTypes.func,
-    selectable: React.PropTypes.bool,
-    onItemCheck: React.PropTypes.func,
-    filter: React.PropTypes.func
+    onClick: React.PropTypes.func
   },
 
   mixins: [Reflux.connect(ContactsStore, 'contacts')],
@@ -42,17 +36,10 @@ let ContactsList = React.createClass({
     ContactsActions.load(this.props.searchQuery)
   },
 
-  // @TODO factor this out into the store
-  getContacts() {
-    if (!this.state.contacts) {
-      return []
-    }
-
+  renderItems() {
     let {items} = this.state.contacts
 
-    let contacts = items.slice(0)
-
-    contacts.sort((a, b) => {
+    items.sort((a, b) => {
       if (!a.username) {
         a.username = ' '
       }
@@ -62,23 +49,44 @@ let ContactsList = React.createClass({
       return a.username.toLowerCase() > b.username.toLowerCase()
     })
 
-    if (this.props.filter) {
-      contacts = contacts.filter(this.props.filter)
-    }
-
-    return contacts
-  },
-
-  renderItems(contacts) {
+    let lastNameInitial = ''
     let result = []
 
-    contacts.forEach((contact, i) => {
+    items.forEach(({username, webId, name, email, imgUri}, i) => {
+      // Check if name is set then set the first character as the name
+      // initial otherwise, check if name is empty or whitespaces then
+      // set it to Unnamed and let its initial be ?
+      let nameInitial = Utils.nameInitial({
+        name: name
+      })
+      let avatar = <UserAvatar name={name} imgUrl={imgUri} />
+
+      if (nameInitial !== lastNameInitial) {
+        lastNameInitial = nameInitial
+        if (i > 0) {
+          result.push(<Divider inset key={`divider_${i}`} />)
+        }
+        result.push(
+          <Subheader
+            key={`header_${i}`}
+            style={styles.header}
+          >
+            {nameInitial}
+          </Subheader>)
+      }
+
+      let handleClick = () => {
+        this.props.onClick(webId)
+      }
+
       result.push(
-        <Contact
-          key={contact.webId}
-          onCheck={this.props.onItemCheck}
-          onTouchTap={this.props.onItemTouchTap}
-          contact={contact}
+        <ListItem
+          key={username}
+          primaryText={name || 'Unnamed'}
+          secondaryText={email}
+          rightAvatar={<Avatar>{avatar}</Avatar>}
+          insetChildren
+          onTouchTap={handleClick}
         />
       )
     })
@@ -88,21 +96,14 @@ let ContactsList = React.createClass({
 
   render() {
     let content
-    let {loading} = this.state.contacts
-
-    const contacts = this.getContacts()
+    let {loading, items} = this.state.contacts
 
     if (loading) {
       content = <Loading style={styles.loading} />
-    } else if (!contacts || !contacts.length) {
+    } else if (!items || !items.length) {
       content = <div style={styles.empty}>No contacts</div>
     } else {
-      content = (
-        <List>
-          {this.props.children}
-          {this.renderItems(contacts)}
-        </List>
-      )
+      content = <List>{this.renderItems()}</List>
     }
 
     return (
@@ -112,57 +113,6 @@ let ContactsList = React.createClass({
     )
   }
 })
-
-class Contact extends React.Component {
-  static propTypes = {
-    contact: React.PropTypes.object,
-    onCheck: React.PropTypes.func,
-    onTouchTap: React.PropTypes.func
-  }
-
-  render() {
-    let {webId, name, email, imgUri} = this.props.contact
-    // Check if name is set then set the first character as the name
-    // initial otherwise, check if name is empty or whitespaces then
-    // set it to Unnamed and let its initial be ?
-    let avatar = <UserAvatar name={name} imgUrl={imgUri} />
-    let checkbox
-
-    if (this.props.onCheck) {
-      checkbox = (
-        <Checkbox
-          onCheck={this._handleCheck}
-          checkedIcon={<CheckedIcon />}
-          uncheckedIcon={<UncheckedIcon />}
-        />
-      )
-    }
-
-    return (
-      <ListItem
-        key={webId}
-        primaryText={name || 'Unnamed'}
-        secondaryText={email}
-        rightToggle={checkbox}
-        leftAvatar={avatar}
-        insetChildren
-        onTouchTap={this._handleTouchTap}
-      />
-    )
-  }
-
-  _handleCheck = () => {
-    if (typeof this.props.onCheck === 'function') {
-      this.props.onCheck(this.props.contact)
-    }
-  }
-
-  _handleTouchTap = () => {
-    if (typeof this.props.onTouchTap === 'function') {
-      this.props.onTouchTap(this.props.contact)
-    }
-  }
-}
 
 let styles = {
   loading: {

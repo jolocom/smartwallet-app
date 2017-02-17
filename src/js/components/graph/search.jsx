@@ -1,7 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react/lib/ReactDOM'
 
 import {
   Paper,

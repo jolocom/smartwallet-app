@@ -22,9 +22,9 @@ const theme = getMuiTheme(JolocomTheme)
 
 export default class GraphD3 extends EventEmitter {
 
-  constructor(el, mode, welcome) {
+  constructor(el, mode) {
     super()
-    this.welcome = welcome
+
     this.mode = mode
     this.MAX_VISIBLE_NODES = 8
     this.HOF_URI = 'https://hof.webid.jolocom.de/profile/card#me'
@@ -194,7 +194,6 @@ export default class GraphD3 extends EventEmitter {
   drawBackground = function () {
     this.isPulsing = false
     this.svg.selectAll('.dial, .dots, .background, .center-circle').remove()
-    this.svg.selectAll('.welcomeText, .welcomeArrow').remove()
     /* this.svg.select('g.background-layer').append('svg:rect')
     `` used for the positioning of the lines; see if we need it
       .attr('class','background')
@@ -202,72 +201,6 @@ export default class GraphD3 extends EventEmitter {
       .attr('height', this.height)
       .attr('fill', 'transparent')
     */
-    if (this.welcome && this.numberOfNeighbours === 0) {
-      this.welcome = false
-      let largeNode = this.largeNodeSize
-      let smallNode = this.smallNodeSize
-      let dy = 1
-      this.WelcomeText =
-      this.svg.append('svg:text')
-        // .attr('font-weight', 'lighter')
-        .attr('class', 'welcomeText')
-        .attr('font-size', largeNode / 5)
-        .style('fill', '#9B9FAA')
-        .style('-moz-user-select', 'none')
-        .style('-webkit-user-select', 'none')
-        .style('-ms-user-select', 'none')
-        .style('user-select', 'none')
-        .style('-o-user-select:', 'none')
-        .attr('text-anchor', 'middle')
-
-      this.WelcomeText.append('tspan')
-        .attr('x', this.width / 2)
-        .attr('y', (this.height / 2) - largeNode)
-        .text('Welcome!')
-
-      this.WelcomeText.append('tspan')
-        .attr('x', this.width / 2)
-        .attr('dy', dy + 'em')
-        .text('This is your home node.')
-
-      this.WelcomeText.append('tspan')
-        .attr('x', this.width / 2)
-        .attr('y', (this.height / 2) + largeNode)
-        .text('Connect to other users')
-
-      this.WelcomeText.append('tspan')
-        .attr('x', this.width / 2)
-        .attr('dy', dy + 'em')
-        .text('and add new nodes?')
-
-      this.svg.append('svg:pattern')
-        .attr('id', 'arrow')
-        .attr('class', 'image')
-        .attr('width', '100%')
-        .attr('height', '100%')
-        .attr('x', -largeNode / 2)
-        .attr('y', -largeNode / 2)
-        .attr('patternUnits', 'userSpaceOnUse')
-        .append('svg:image')
-        .attr('xlink:href', 'img/welcomearrow.svg')
-        .attr('width', largeNode)
-        .attr('height', largeNode)
-        .attr('preserveAspectRatio', 'xMinYMin slice')
-
-      this.welcomeArrow = this.svg.append('circle')
-        .attr('r', largeNode / 2)
-        .attr('class', 'welcomeArrow')
-        .attr('transform', (d) => {
-          let x = this.width / 2
-          let y = this.height - smallNode
-          return 'translate(' + x + ',' + y + ')'
-        })
-        .style('fill', 'url(#arrow)')
-      let self = this
-      setTimeout(function () {
-        self.removeWelcome()
-      }, 10000)
-    }
 
     // Center cicle
     this.svg.select('g.background-layer').append('svg:circle')
@@ -299,16 +232,6 @@ export default class GraphD3 extends EventEmitter {
       // this.emit('scrolling-drawn')
     }
   }.bind(this)
-
-  removeWelcome = function() {
-    this.welcomeArrow.transition()
-    .duration(STYLES.nodeTransitionDuration)
-    .attr('opacity', 0)
-
-    this.welcomeText.transition()
-    .duration(STYLES.nodeTransitionDuration)
-    .attr('opacity', 0)
-  }
 
   updateDial = function() {
     // Don't do anything if we haven't received the state yet;
@@ -1066,6 +989,7 @@ export default class GraphD3 extends EventEmitter {
           return 1
         }
       })
+
     // Reset colour of all circles
     // Tries to interpret the url(#) as a colour @TODO
     d3.selectAll('svg .node')
