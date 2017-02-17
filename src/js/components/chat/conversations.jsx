@@ -4,13 +4,15 @@ import Reflux from 'reflux'
 
 import moment from 'moment'
 
+import GroupIcon from 'material-ui/svg-icons/social/group'
+
 import {
   List,
   ListItem,
   Avatar,
-  Badge
-  // FloatingActionButton,
-  // FontIcon
+  Badge,
+  FloatingActionButton,
+  FontIcon
 } from 'material-ui'
 import {grey500} from 'material-ui/styles/colors'
 
@@ -66,23 +68,6 @@ let Conversations = React.createClass({
   },
 
   renderItems(items) {
-    // maybe do this in the store already?
-    items.sort(
-      (itemA, itemB) => {
-        if (!itemA.lastMessage) {
-          if (!itemB.lastMessage) {
-            return 0
-          } else {
-            return -1
-          }
-        } else if (!itemB.lastMessage) {
-          return 1
-        }
-        return itemA.lastMessage.created.getTime() <
-          itemB.lastMessage.created.getTime()
-      }
-    )
-
     return (
       <List>
         {items.map((conversation) => {
@@ -90,18 +75,16 @@ let Conversations = React.createClass({
             key={conversation.id}
             conversation={conversation}
             onTouchTap={this.showConversation}
-
           />
         })}
       </List>
     )
   },
 
-  render: function() {
+  render() {
     let content
 
     let {loading, items} = this.state.conversations
-    // items = items.filter(conv => conv.lastMessage !== null)
 
     if (loading) {
       content = <Loading style={styles.loading} />
@@ -118,14 +101,13 @@ let Conversations = React.createClass({
           {content}
         </div>
 
-        {/* <FloatingActionButton */}
-          {/* secondary */}
-          {/* href="#/chat/new" */}
-          {/* linkButton={true} */}
-          {/* style={styles.actionButton} */}
-        {/* > */}
-          {/* <FontIcon className="material-icons">add</FontIcon> */}
-        {/* </FloatingActionButton> */}
+        <FloatingActionButton
+          secondary
+          href="#/chat/new"
+          style={styles.actionButton}
+        >
+          <FontIcon className="material-icons">add</FontIcon>
+        </FloatingActionButton>
 
         {this.props.children}
       </div>
@@ -140,20 +122,42 @@ let ConversationsListItem = React.createClass({
     onTouchTap: React.PropTypes.func.isRequired
   },
 
+  contextTypes: {
+    account: React.PropTypes.any
+  },
+
   render() {
     let {conversation} = this.props
-    let {otherPerson, lastMessage} = conversation
+    let {participants, subject, lastMessage} = conversation
     let {created, content} = lastMessage || {}
 
-    // If otherPerson var is null, then set it to false.
-    // So it wont be used when listing conversations
-    // to avoid errors
+    let title
 
-    if (otherPerson == null) {
-      otherPerson = false
+    // omit current user
+    participants = participants || []
+    participants = participants.filter((p) => {
+      return p.webId !== this.context.account.webId
+    })
+
+    if (participants.length === 1) {
+      title = participants[0].name
+    } else if (subject && subject.trim()) {
+      title = subject
+    } else if (participants.length > 1) {
+      title = participants.map(p => p.name).join(', ')
+    } else {
+      title = 'Unnamed'
     }
 
-    let avatar = <UserAvatar name={otherPerson.name} imgUrl={otherPerson.img} />
+    let avatar
+    if (participants.length === 1) {
+      avatar = <UserAvatar
+        name={participants[0].name}
+        imgUrl={participants[0].img}
+      />
+    } else if (participants.length > 1) {
+      avatar = <Avatar icon={<GroupIcon />} />
+    }
 
     let date = moment(created).fromNow()
 
@@ -175,12 +179,12 @@ let ConversationsListItem = React.createClass({
         key={conversation.id}
         primaryText={
           <div>
-            <span>{otherPerson.name || 'Unnamed'}</span>
+            <span>{title}</span>
             <span style={styles.date}>{date}</span>
             {unread}
           </div>
         }
-        secondaryText={content}
+        secondaryText={content || (<em>New conversation</em>)}
         leftAvatar={<Avatar>{avatar}</Avatar>}
         onTouchTap={this._handleListItemTouchTap}
       />
