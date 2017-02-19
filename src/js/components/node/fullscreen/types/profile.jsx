@@ -338,17 +338,16 @@ let ProfileNode = React.createClass({
       menuItems.push('edit')
       // Making sure you can't delete your main node.
       if (!this.isMe()) {
+        menuItems.push('viewSharedNodes')
         menuItems.push('delete')
+        fabItems.push('chat')
+        if (this.props.centerWritePerm) {
+          menuItems.push('disconnect')
+        }
       }
     }
 
-    if (this.props.centerWritePerm) {
-      menuItems.push('disconnect')
-    }
-
-    menuItems.push('viewSharedNodes')
     menuItems.push('copyUrl')
-    fabItems.push('chat')
     return (
       <GenericFullScreen
         title={this.getName()}
