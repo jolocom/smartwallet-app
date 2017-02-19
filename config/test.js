@@ -4,5 +4,5 @@
 module.exports = {
   proxy: 'https://proxy.jolocom.de',
   endpoint: 'https://localhost:8443',
-  dev: false
+  dev: true
 }

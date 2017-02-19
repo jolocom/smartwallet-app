@@ -51,7 +51,7 @@ class GraphAgent extends LDPAgent {
 
   addImage(uri, dstContainer, writer, image, confidential) {
     if (image instanceof File) {
-      let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+      let imgUri = `${dstContainer}files/${Util.randomString(5)}`
       writer.addTriple(uri, PRED.image, imgUri)
       return this.storeFile(imgUri, null, image, confidential)
     }

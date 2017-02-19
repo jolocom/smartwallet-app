@@ -164,7 +164,6 @@ let Index = React.createClass({
 
   _handleSkip() {
     this.refs.dialog.hide()
-    localStorage.setItem('jolocom.tour', true)
   }
 
 })

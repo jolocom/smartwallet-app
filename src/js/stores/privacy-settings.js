@@ -95,13 +95,16 @@ export default Reflux.createStore({
   },
 
   allowRead(contact) {
-    this.aclAgent.allow(contact.webId, 'read')
-    this.state.allowedContacts.push({
-      webId: contact.webId,
-      imgUri: contact.imgUri,
-      name: contact.name
-    })
-    this._markUnsavedChanges()
+    try {
+      this.aclAgent.allow(contact.webId, 'read')
+      this.state.allowedContacts.push({
+        webId: contact.webId,
+        imgUri: contact.imgUri,
+        name: contact.name
+      })
+      this._markUnsavedChanges()
+    } catch (e) {
+    }
   },
 
   allowEdit(user) {
@@ -117,7 +120,7 @@ export default Reflux.createStore({
   commit() {
     this.aclAgent.commit().then(() => {
       Snackbar.showMessage('Changes saved.')
-    }).catch(() => {
+    }).catch((e) => {
       Snackbar.showMessage('Could not apply changes.')
       this.state.unsavedChanges = true
       this.trigger(this.state)
