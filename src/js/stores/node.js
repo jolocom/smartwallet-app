@@ -223,7 +223,11 @@ export default Reflux.createStore({
       object: $rdf.sym(end)
     }
     this.gAgent.writeTriples(start, [payload], start === center).catch(e => {
-      SnackbarActions.showMessage('The nodes are already linked.')
+      if (e === 'DUPLICATE') {
+        SnackbarActions.showMessage('The nodes are already linked.')
+      } else {
+        SnackbarActions.showMessage('No permission to link to this node.')
+      }
     })
   }
 })

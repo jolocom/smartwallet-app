@@ -252,7 +252,7 @@ class GraphAgent extends LDPAgent {
               toAdd.add(t.subject, t.predicate, t.object)
             } else {
               // Think about this
-              return reject('A triple is already present in the file!')
+              return reject('DUPLICATE')
             }
             if (i === triples.length - 1) {
               return resolve()
