@@ -341,13 +341,11 @@ let ProfileNode = React.createClass({
       // Making sure you can't delete your main node.
       if (!this.isMe()) {
         menuItems.push('delete')
-        if (this.props.centerWritePerm) {
-          menuItems.push('disconnect')
-        }
       }
     }
 
     if (!this.isMe()) {
+      menuItems.push('disconnect')
       menuItems.push('viewSharedNodes')
       fabItems.push('chat')
     }
