@@ -434,7 +434,7 @@ class AclAgent extends HTTPAgent {
     boilerplate.push(
       rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
       rdf.st(rdf.sym(authName), PRED.access, rdf.sym(this.uri)),
-      rdf.st(rdf.sym(authName), pred, user),
+      rdf.st(rdf.sym(authName), pred, user)
     )
 
     modes.forEach(mode => {
