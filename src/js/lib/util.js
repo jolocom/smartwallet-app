@@ -34,7 +34,8 @@ let Util = {
   },
 
   webidRoot(webid) {
-    let matches = webid.match(/^(.*)\/profile\/card#me$/)
+    let matches = webid.match(/^(.*)\/profile\/card#me$/) ||
+      webid.match(/^(.*)\/card#i$/)
     return matches && matches[1]
   },
 
@@ -71,7 +72,7 @@ let Util = {
   // TODO introduce discovery mechanism / protocol.
   // This is too hardcoded.
   getIndexUri(uri) {
-    const WebIdAgent = require('lib/agents/webid')
+    const WebIdAgent = require('lib/agents/webid').default
     const wia = new WebIdAgent()
     const webId = wia.getWebId()
     let indexUri = this.webidRoot(webId)
@@ -79,8 +80,9 @@ let Util = {
     return indexUri
   },
 
+  // TODO Rethink
   formatWebId(webId) {
-    return this.webidRoot(webId).replace(/.*?:\/\//g, '')
+    return this.webidRoot(webId).replace(/[: .\/]/g, '')
   },
 
   /*

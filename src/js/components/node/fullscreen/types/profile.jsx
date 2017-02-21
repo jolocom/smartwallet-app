@@ -302,7 +302,9 @@ let ProfileNode = React.createClass({
   },
 
   isMe() {
+    console.log('Caleld here')
     if (this.state && this.state.profile) {
+      console.log('HERE I AM', this.state.profile.webId === this.props.node.uri)
       return this.state.profile.webId === this.props.node.uri
     }
   },
@@ -342,13 +344,13 @@ let ProfileNode = React.createClass({
       }
     }
 
-    if (this.props.centerWritePerm) {
+    if (!this.isMe()) {
       menuItems.push('disconnect')
+      menuItems.push('viewSharedNodes')
+      fabItems.push('chat')
     }
 
-    menuItems.push('viewSharedNodes')
     menuItems.push('copyUrl')
-    fabItems.push('chat')
     return (
       <GenericFullScreen
         title={this.getName()}
