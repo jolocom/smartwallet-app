@@ -81,17 +81,6 @@ let App = React.createClass({
 
   getChildContext: function () {
     let {account, profile, searchActive} = this.state
-    console.log({
-      muiTheme: this.theme,
-      profile,
-      account,
-      username: account && account.username, // backward compat
-      searchActive,
-      location: this.props.location,
-      route: this.props.route,
-      router: this.context.router,
-      store: this.context.store
-    })
     return {
       muiTheme: this.theme,
       profile,
