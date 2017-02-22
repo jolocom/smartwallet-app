@@ -7,8 +7,5 @@ export default combineReducers({
   confirm: require('./modules/confirmation-dialog').default,
   dialog: require('./modules/common/dialog').default,
   snackBar: require('./modules/snack-bar').default,
-  account: combineReducers({
-    login: require('./modules/account/login').default,
-    emailUpdateQueued: () => false
-  })
+  account: require('./modules/account').default
 })

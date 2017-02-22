@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 import Radium, {StyleRoot} from 'radium'
 import {bankUri} from 'lib/fixtures'
 
@@ -20,12 +21,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 
 import LeftNav from 'components/left-nav/nav.jsx'
-import Tour from 'components/tour.jsx'
+import Tour from 'components/tour'
 
 import Loading from 'components/common/loading.jsx'
-
-import AccountActions from 'actions/account'
-import AccountStore from 'stores/account'
 
 import PinnedActions from 'actions/pinned'
 
@@ -52,7 +50,6 @@ const publicRoutes = [
 let App = React.createClass({
 
   mixins: [
-    Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile'),
     Reflux.connect(UnreadMessagesStore, 'unreadMessages')
   ],
@@ -60,7 +57,9 @@ let App = React.createClass({
   propTypes: {
     location: React.PropTypes.object,
     children: React.PropTypes.node,
-    route: React.PropTypes.object
+    route: React.PropTypes.object,
+    account: React.PropTypes.object.isRequired,
+    doLogin: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -82,6 +81,17 @@ let App = React.createClass({
 
   getChildContext: function () {
     let {account, profile, searchActive} = this.state
+    console.log({
+      muiTheme: this.theme,
+      profile,
+      account,
+      username: account && account.username, // backward compat
+      searchActive,
+      location: this.props.location,
+      route: this.props.route,
+      router: this.context.router,
+      store: this.context.store
+    })
     return {
       muiTheme: this.theme,
       profile,
@@ -90,7 +100,8 @@ let App = React.createClass({
       searchActive,
       location: this.props.location,
       route: this.props.route,
-      router: this.context.router
+      router: this.context.router,
+      store: this.context.store
     }
   },
 
@@ -104,21 +115,21 @@ let App = React.createClass({
 
   componentWillMount() {
     this.theme = getMuiTheme(JolocomTheme)
-    AccountActions.login()
+    this.props.doLogin({})
   },
 
   componentWillUnmount() {
-    const webId = this.state.account
+    const webId = this.props.account
     if (webId) {
       UnreadMessagesActions.unsubscribe(webId)
     }
   },
 
   componentDidUpdate(prevProps, prevState) {
-    let {username} = this.state.account
+    let {username} = this.props.account
 
-    if (prevState.account.username === undefined ||
-      prevState.account.username !== username) {
+    if (prevProps.account.username === undefined ||
+      prevProps.account.username !== username) {
       this.checkLogin()
     }
   },
@@ -129,7 +140,7 @@ let App = React.createClass({
   },
 
   checkLogin() {
-    let {username, loggingIn, webId} = this.state.account
+    let {username, loggingIn, webId} = this.props.account
 
     // session is still loading, so return for now
     if (username === undefined && loggingIn) {
@@ -236,7 +247,7 @@ let App = React.createClass({
     const styles = this.getStyles()
     // @TODO render login screen when logging in, also makes sures child
     // components don't get rendered before any user data is available
-    if (this.state.account.loggingIn && !this.isPublicRoute()) {
+    if (this.props.account.loggingIn && !this.isPublicRoute()) {
       return <Loading />
     }
 
@@ -327,4 +338,7 @@ let App = React.createClass({
 
 })
 
-export default Radium(App)
+export default Radium(connect({
+  props: ['account'],
+  actions: ['account:doLogin']
+})(App))
