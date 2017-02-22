@@ -11,25 +11,29 @@ import {Layout, Content} from 'components/layout'
   props: ['confirm'],
   actions: ['common/dialog:hideDialog']
 })
-class Index extends React.Component {
+class Tour extends React.Component {
   static propTypes = {
     hideDialog: React.PropTypes.func.isRequired
   }
 
   static contextTypes = {
-    history: React.PropTypes.any,
-    username: React.PropTypes.string,
-    muiTheme: React.PropTypes.object
+    history: React.PropTypes.any.isRequired,
+    username: React.PropTypes.string.isRequired,
+    muiTheme: React.PropTypes.object.isRequired,
+    store: React.PropTypes.object.isRequired
   }
 
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       show: !localStorage.getItem('jolocom.tour')
     }
   }
 
   getStyles() {
     let {muiTheme} = this.context
+    console.log(this.context)
 
     let styles = {
       container: {
@@ -177,4 +181,4 @@ class Index extends React.Component {
   }
 }
 
-export default Radium(Index)
+export default Radium(Tour)

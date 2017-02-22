@@ -3,7 +3,7 @@ import React from 'react'
 import {FloatingActionButton} from 'material-ui'
 
 const FabMenuItem = props => {
-  let {icon, label, style, buttonStyle, ...otherProps} = this.props
+  let {icon, label, style, buttonStyle, ...otherProps} = props
 
   if (label) {
     label = <span>{label}</span>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import { connect, actionsFrom } from 'redux/utils'
+import { connect } from 'redux/utils'
 import { RaisedButton, TextField, IconButton, AppBar } from 'material-ui'
 import { Link } from 'react-router'
 
@@ -9,9 +9,11 @@ import Utils from 'lib/util'
 // login for development
 const Login = connect({
   props: ['account.login', 'account.emailUpdateQueued'],
-  actions: actionsFrom('account/login',
-    ['doLogin', 'setUsername', 'setPassword']
-  )
+  actions: [
+    'account:doLogin',
+    'account:setLoginUsername',
+    'account:setLoginPassword'
+  ]
 })(React.createClass({
 
   contextTypes: {
@@ -24,17 +26,8 @@ const Login = connect({
     login: React.PropTypes.object.isRequired,
     emailUpdateQueued: React.PropTypes.bool.isRequired,
     doLogin: React.PropTypes.func.isRequired,
-    setUsername: React.PropTypes.func.isRequired,
-    setPassword: React.PropTypes.func.isRequired
-  },
-
-  getInitialState() {
-    return {
-      username: '',
-      password: '',
-      userErrorMsg: '',
-      pwErrorMsg: ''
-    }
+    setLoginUsername: React.PropTypes.func.isRequired,
+    setLoginPassword: React.PropTypes.func.isRequired
   },
 
   componentWillMount() {
@@ -58,13 +51,13 @@ const Login = connect({
   },
 
   _handleUsernameChange(e) {
-    this.props.setUsername({
+    this.props.setLoginUsername({
       username: e.target.value.toLowerCase()
     })
   },
 
   _handlePasswordChange(e) {
-    this.props.setPassword({
+    this.props.setLoginPassword({
       password: e.target.value
     })
   },

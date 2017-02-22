@@ -9,19 +9,17 @@ import {Link} from 'react-router'
 
 import AvailabilityStore from 'stores/availability'
 
-import Account from 'actions/account'
-import AccountStore from 'stores/account'
-
 import Utils from 'lib/util'
 
 let Signup = React.createClass({
   mixins: [
-    Reflux.connect(AvailabilityStore, 'available'),
-    Reflux.connect(AccountStore, 'account')
+    Reflux.connect(AvailabilityStore, 'available')
   ],
 
   propTypes: {
-    showSnackBarMessage: React.PropTypes.func.isRequired
+    showSnackBarMessage: React.PropTypes.func.isRequired,
+    doSignup: React.PropTypes.func.isRequired,
+    account: React.PropTypes.object
   },
 
   contextTypes: {
@@ -72,11 +70,11 @@ let Signup = React.createClass({
       email: this.state.email,
       password: this.state.password
     }
-    Account.signup(signupData)
+    this.props.doSignup(signupData)
   },
 
   componentDidUpdate() {
-    if (this.state.account && this.state.account.username) {
+    if (this.props.account && this.props.account.username) {
       this.context.router.push('/graph')
     }
   },
@@ -273,7 +271,7 @@ let Signup = React.createClass({
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
-        {this.state.account.emailVerifyScreen
+        {this.props.account.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>
             <p style={styles.signUpMessage}>
               Thank you for signing up to Little Sister!<br />
@@ -383,5 +381,6 @@ let Signup = React.createClass({
 })
 
 export default Radium(connect({
-  actions: ['snack-bar:showSnackBarMessage']
+  props: ['acount'],
+  actions: ['snack-bar:showSnackBarMessage', 'account:doSignup']
 })(Signup))

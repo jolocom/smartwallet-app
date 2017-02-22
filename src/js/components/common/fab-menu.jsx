@@ -14,16 +14,16 @@ class FabMenu extends React.Component {
     onTouchTap: React.PropTypes.func
   }
 
-  getDefaultProps() {
-    return {
-      icon: 'add',
-      closeIcon: 'clear',
-      duration: 0.3
-    }
+  static defaultProps = {
+    icon: 'add',
+    closeIcon: 'clear',
+    duration: 0.3
   }
 
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       open: false
     }
   }
