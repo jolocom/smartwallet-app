@@ -24,18 +24,22 @@ class GraphAgent extends LDPAgent {
    */
   baseNode(uri, writer, title, description, nodeType) {
     if (title) {
-      writer.addTriple(uri, PRED.title, title)
+      writer.addTriple($rdf.sym(uri), PRED.title, $rdf.literal(title))
     }
     if (description) {
-      writer.addTriple(uri, PRED.description, description)
+      writer.addTriple(
+        $rdf.sym(uri),
+        PRED.description,
+        $rdf.literal(description)
+      )
     }
     // TODO
     if (nodeType === 'default' ||
         nodeType === 'passport' ||
         nodeType === 'confidential') {
-      writer.addTriple(uri, PRED.type, PRED.Document)
+      writer.addTriple($rdf.sym(uri), PRED.type, PRED.Document)
     } else if (nodeType === 'image') {
-      writer.addTriple(uri, PRED.type, PRED.Image)
+      writer.addTriple($rdf.sym(uri), PRED.type, PRED.Image)
     }
     return writer
   }
