@@ -13,19 +13,22 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
 
     // The user is already logged in.
     if (webId) {
-      return doLogin.buildAction(params, async () => {
+      return async dispatch => {
         const accounts = new AccountsAgent()
         const loggedIn = await accounts.checkLogin(webId)
           .then(() => true).catch(() => false)
+
         if (loggedIn) {
-          return {
-            username: localStorage.getItem('jolocom.username'),
-            webId
-          }
+          dispatch(doLogin.buildAction(params, async () => {
+            return {
+              username: localStorage.getItem('jolocom.username'),
+              webId
+            }
+          }))
         } else {
-          // TODO: session expired, log ourt
+          dispatch(doLogout())
         }
-      })
+      }
     } else if (params.username && params.password) {
       return doLogin.buildAction(params, async () => {
         const accounts = new AccountsAgent()

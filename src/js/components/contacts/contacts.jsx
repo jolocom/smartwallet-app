@@ -1,11 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 
 import ContactsList from 'components/contacts/list.jsx'
 import ChatActions from 'actions/chat'
-
-import AccountStore from 'stores/account'
 
 import ChatStore from 'stores/chat'
 
@@ -20,10 +19,13 @@ let Contacts = React.createClass({
   contextTypes: {
     router: React.PropTypes.any
   },
+  propTypes: {
+    account: React.PropTypes.object
+  },
 
   createChat(webId) {
     ChatActions.create(
-        AccountStore.state.webId, AccountStore.state.webId, webId
+      this.props.account.webId, this.props.account.webId, webId
     )
   },
   componentDidUpdate() {
@@ -54,4 +56,6 @@ let styles = {
   }
 }
 
-export default Radium(Contacts)
+export default connect({
+  props: ['account']
+})(Radium(Contacts))
