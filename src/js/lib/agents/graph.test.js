@@ -188,6 +188,31 @@ describe('GraphAgent', function() {
 
   describe('#createNode', function() {
     const gAgent = new GraphAgent()
+    const originalAddImg = gAgent.addImage
+
+    gAgent.randomString = () => 'abcde'
+    gAgent.createAcl = (uri, user, confidential) => {
+      expect(uri).to.equal(newNodeUri)
+      expect(user).to.equal(currentUser)
+      expect(confidential).to.be.nodeInfo.confidential
+    }
+    gAgent.addImage = async() => {
+      expect(true).to.be.false
+    }
+    gAgent.put = async(uri, body, headers) => {
+      expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
+      expect(headers).to.deep.equal({
+        'Content-Type': 'text/turtle'
+      })
+      expect(body)
+        .to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri, nodeInfo.image))
+    }
+    gAgent.linkNodes = async(start, type, end, render) => {
+      expect(start).to.equal(centerNode.uri)
+      expect(type).to.equal('generic')
+      expect(end).to.equal(newNodeUri)
+      expect(render).to.be.false
+    }
 
     const currentUser = 'https://testuser.com/profile/card#me'
     const centerNode = {
@@ -199,48 +224,32 @@ describe('GraphAgent', function() {
       title: 'title',
       description: 'description is here',
       confidential: false,
-      nodeType: 'default'
+      nodeType: 'default',
+      image: false
     }
-
-    gAgent.createAcl = (uri, user, confidential) => {
-      expect(uri).to.equal(newNodeUri)
-      expect(user).to.equal(currentUser)
-      expect(confidential).to.be.nodeInfo.confidential
-    }
-    const originalAddImg = gAgent.addImage
-    gAgent.addImage = async() => {
-      expect(true).to.be.false
-    }
-    gAgent.randomString = () => 'abcde'
 
     const _bodyFor = (nodeType, uri, image) => {
       const typeMap = {
         'default': PRED.Document,
         'image': PRED.Image
       }
-      const expectedWriter = new Writer()
 
-      expectedWriter.addAll([{
-        subject: rdf.sym(uri),
-        predicate: PRED.type,
-        object: typeMap[nodeType]
-      }, {
-        subject: rdf.sym(uri),
-        predicate: PRED.title,
-        object: rdf.literal(nodeInfo.title)
-      }, {
-        subject: rdf.sym(uri),
-        predicate: PRED.description,
-        object: rdf.literal(nodeInfo.description)
-      }, {
-        subject: rdf.sym(uri),
-        predicate: PRED.storage,
-        object: rdf.sym(centerNode.storage)
-      }, {
-        subject: rdf.sym(uri),
-        predicate: PRED.maker,
-        object: rdf.sym(centerNode.uri)
-      }])
+      const expectedWriter = new Writer()
+      const statements = [
+        {pred: PRED.type, obj: typeMap[nodeType]},
+        {pred: PRED.title, obj: rdf.literal(nodeInfo.title)},
+        {pred: PRED.description, obj: rdf.literal(nodeInfo.description)},
+        {pred: PRED.storage, obj: rdf.sym(centerNode.storage)},
+        {pred: PRED.maker, obj: rdf.sym(centerNode.uri)}
+      ]
+
+      statements.forEach(trip => {
+        expectedWriter.add({
+          subject: rdf.sym(uri),
+          predicate: trip.pred,
+          object: trip.obj
+        })
+      })
 
       if (image) {
         expectedWriter.addTriple({
@@ -252,56 +261,27 @@ describe('GraphAgent', function() {
 
       return expectedWriter.end()
     }
-
+    // A lot of references passed around at the moment.
     it('Should create public basic node with no image', async function() {
-      gAgent.put = async(uri, body, headers) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
-        expect(headers).to.deep.equal({
-          'Content-Type': 'text/turtle'
-        })
-        expect(body).to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri))
-      }
-
-      gAgent.linkNodes = async(start, type, end, render) => {
-        expect(start).to.equal(centerNode.uri)
-        expect(type).to.equal('generic')
-        expect(end).to.equal(newNodeUri)
-        expect(render).to.be.false
-      }
-
       gAgent.createNode(currentUser, centerNode, nodeInfo)
     })
 
     it('Should create private basic node with no image', async function() {
       nodeInfo.confidential = true
-
-      gAgent.put = async(uri, body, headers) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
-        expect(headers).to.deep.equal({
-          'Content-Type': 'text/turtle'
-        })
-        expect(body).to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri))
-      }
-
-      gAgent.createNode(currentUser, centerNode, nodeInfo)
+      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+      nodeInfo.confidential = false
     })
 
     it('Should create public basic node with image', async function() {
       nodeInfo.image = 'https://imagelink.com'
       nodeInfo.confidential = false
       nodeInfo.nodeType = 'image'
-
       gAgent.addImage = originalAddImg
-      gAgent.put = async(uri, body, headers) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
-        expect(headers).to.deep.equal({
-          'Content-Type': 'text/turtle'
-        })
-        expect(body)
-          .to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri, nodeInfo.image))
-      }
 
-      gAgent.createNode(currentUser, centerNode, nodeInfo)
+      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+
+      nodeInfo.nodeType = 'default'
+      nodeInfo.image = false
     })
   })
 })
