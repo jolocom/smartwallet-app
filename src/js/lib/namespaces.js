@@ -55,6 +55,7 @@ export const PRED = {
   hasContainer: SIOC('hasContainer'),
   containerOf: SIOC('containerOf'),
   // --
+  attachment: SIOC('attachment'),
   Document: FOAF('Document'),
   Image: FOAF('Image'),
   Agent: FOAF('Agent'),

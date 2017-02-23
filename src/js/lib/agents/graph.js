@@ -55,8 +55,6 @@ class GraphAgent extends LDPAgent {
       writer.addTriple(uri, PRED.image, imgUri)
       return this.storeFile(imgUri, null, image, confidential)
     }
-    writer.addTriple(uri, PRED.image, image)
-    return
   }
 
   checkImages(triples) {
@@ -97,34 +95,27 @@ class GraphAgent extends LDPAgent {
    * @param {string} nodeType - The type [image / text] of the node.
    * @param {bool} confidential - If the img is to be confidential.
    */
-  createNode(
-    currentUser,
-    centerNode,
-    title,
-    description,
-    image,
-    nodeType,
-    confidential = false
-  ) {
+
+  createNode(currentUser, centerNode, title, description,
+             file, nodeType, confidential = false) {
     let writer = new Writer()
     let newNodeUri = $rdf.sym(centerNode.storage + Util.randomString(5))
     let aclUri
     return this.createACL(newNodeUri.uri, currentUser, confidential)
     .then((uri) => {
       aclUri = uri
-
-      writer.addTriple(newNodeUri, PRED.storage, centerNode.storage)
+      writer.addTriple(newNodeUri, PRED.storage, $rdf.sym(centerNode.storage))
       writer.addTriple(newNodeUri, PRED.maker, $rdf.sym(centerNode.uri))
+      writer.addTriple(newNodeUri, PRED.description, nodeType)
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
-      if (image) {
-        return this.addImage(
-          newNodeUri,
-          centerNode.storage,
-          writer,
-          image,
-          confidential
-        )
+      if (file) {
+        if (nodeType === 'image') {
+          return this.addImage(newNodeUri, centerNode.storage,
+            writer, file, confidential)
+        } else {
+          writer.addTriple(newNodeUri, PRED.attachment, $rdf.sym(file))
+        }
       }
     }).then(() => {
       // Putting the RDF file for the node.
@@ -137,11 +128,12 @@ class GraphAgent extends LDPAgent {
       })
       // Connecting the node to the one that created it
     }).then(() => {
-      let predicate = PRED.isRelatedTo
-
-      if (nodeType === 'passport') {
-        predicate = PRED.passport
-      }
+      let predicate = this.nodeTypePredicate(nodeType)
+      // let predicate = PRED.isRelatedTo
+      //
+      // if (nodeType === 'passport') {
+      //   predicate = PRED.passport
+      // }
 
       let payload = {
         subject: $rdf.sym(centerNode.uri),
@@ -165,6 +157,7 @@ class GraphAgent extends LDPAgent {
   storeFile(finUri, dstContainer, file, confidential = false) {
     let uri
     let wia = new WebIDAgent()
+
     const webId = wia.getWebId()
 
     if (!webId) {
@@ -177,11 +170,11 @@ class GraphAgent extends LDPAgent {
     }
     return this.createACL(uri, webId, confidential).then(() => {
       return this.put(Util.uriToProxied(uri), file, {
-        'Content-Type': 'image'
+        'Content-Type': 'file'
       }).then(() => {
         return uri
       }).catch((e) => {
-        throw new Error('Could not upload the image')
+        throw new Error('Could not upload the file')
       })
     })
   }
@@ -219,8 +212,72 @@ class GraphAgent extends LDPAgent {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri
-    }).catch((e) => {
-      console.log('error', e, 'occured while putting the acl file')
+    })
+    .catch((e) => {
+      SnackbarActions.showMessage('Could not upload the acl file.')
+    })
+  }
+  // @TODO Keep building... Need to know all predicates for possible node types!
+  nodeTypePredicate(nodeType) {
+    let predicate
+    switch (nodeType) {
+      case 'passport' :
+        predicate = PRED.passport
+        break
+      case 'image' :
+        predicate = PRED.Image
+        break
+      default :
+        predicate = PRED.isRelatedTo
+        break
+    }
+    return predicate
+  }
+
+  /**
+   * @summary Find the triple in the RDF file at the uri.
+   * @param {string} uri - uri of the rdf file.
+   * @param {object} subject - triple subject, undefined for wildcard.
+   * @param {object} predicate - triple predicate, undefined for wildcard.
+   * @param {object} object - triple object, undefined for wildcard.
+   * @return {array | objects} - All triples matching the description.
+   *   returns -1 if a network error occured.
+   */
+
+  findTriples(uri, subject, predicate, object) {
+    let writer = new Writer()
+    return this.fetchTriplesAtUri(uri).then((res) => {
+      if (res.unav) {
+        return -1
+      }
+      for (let t of res.triples) {
+        writer.addTriple(t.subject, t.predicate, t.object)
+      }
+      return writer.g.statementsMatching(subject, predicate, object)
+    })
+  }
+
+  /* @summary Finds the objects related to the supplied characteristic.
+   * @param {string} uri - The uri of the file to check
+   * @param {string} value - The field name we are interested in
+   * @return {array | objects} - All objects (in the rdf sense) associated
+   * with the value
+   */
+
+  findObjectsByTerm(uri, pred) {
+    return new Promise((resolve, reject) => {
+      if (!uri) {
+        reject('No uri')
+      } else {
+        let user = $rdf.sym(uri) //  + '#me'
+        let result = []
+        this.findTriples(uri, user, pred, undefined).then((res) => {
+          for (let triple of res) {
+            result.push(triple.object)
+          }
+          resolve(result)
+        })
+      }
     })
   }
 
@@ -317,7 +374,8 @@ class GraphAgent extends LDPAgent {
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
       PRED.isRelatedTo_HTTP.uri,
-      PRED.passport.uri
+      PRED.passport.uri,
+      PRED.Image.uri
     ]
     let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
     // If there are adjacent nodes to draw,

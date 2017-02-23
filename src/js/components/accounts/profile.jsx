@@ -605,7 +605,6 @@ let Profile = React.createClass({
         error: null,
         passportFile: file
       })
-
       gAgent.storeFile(null, this.state.storage, file, true).then((res) => {
         this.setState({
           loadingPassportPhoto: false,
