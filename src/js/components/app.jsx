@@ -80,12 +80,13 @@ let App = React.createClass({
   },
 
   getChildContext: function () {
-    let {account, profile, searchActive} = this.state
+    let {profile, searchActive} = this.state
+    let {account} = this.props
+
     return {
       muiTheme: this.theme,
       profile,
       account,
-      username: account && account.username, // backward compat
       searchActive,
       location: this.props.location,
       route: this.props.route,

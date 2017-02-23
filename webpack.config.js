@@ -28,7 +28,7 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: 'js'
   },
-  externals:[{
+  externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
   plugins: [
@@ -37,9 +37,12 @@ module.exports = {
   module: {
     loaders: [
       {
-        test:   /\.jsx?/,
+        test: /\.jsx?$/,
         loader: 'babel',
-        include: path.join(__dirname, 'src', 'js'),
+        include: [
+          path.join(__dirname, 'src', 'js'),
+          path.join(__dirname, 'test')
+        ],
         exclude: 'node_modules'
       },
       {
