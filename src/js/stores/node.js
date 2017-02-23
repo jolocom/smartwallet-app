@@ -106,15 +106,8 @@ export default Reflux.createStore({
     nodeType,
     confidential = false
   ) {
-    this.gAgent.createNode(
-      currentUser,
-      centerNode,
-      title,
-      description,
-      image,
-      nodeType,
-      confidential
-    ).then(uri => {
+    const node = {title, description, image, nodeType, confidential}
+    this.gAgent.createNode(currentUser, centerNode, node).then(uri => {
       graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
     }).catch(() => {
       SnackbarActions.showMessage('Could not create the node.')

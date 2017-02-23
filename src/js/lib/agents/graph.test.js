@@ -11,6 +11,10 @@ describe('GraphAgent', function() {
     const uri = 'https://testuri.com/'
     const title = 'Test Name'
     const description = 'Description. With some characters.'
+    const centerNode = {
+      uri: 'https://centernode.com/profile/card',
+      storage: 'https://centernode.com/files'
+    }
 
     const expected = [{
       subject: rdf.sym(uri),
@@ -21,6 +25,16 @@ describe('GraphAgent', function() {
       subject: rdf.sym(uri),
       predicate: PRED.description,
       object: rdf.literal(description),
+      why: rdf.sym('chrome:theSession')
+    }, {
+      subject: rdf.sym(uri),
+      predicate: PRED.storage,
+      object: rdf.sym(centerNode.storage),
+      why: rdf.sym('chrome:theSession')
+    }, {
+      subject: rdf.sym(uri),
+      predicate: PRED.maker,
+      object: rdf.sym(centerNode.uri),
       why: rdf.sym('chrome:theSession')
     }]
 
@@ -44,7 +58,8 @@ describe('GraphAgent', function() {
         new Writer(),
         title,
         description,
-        nodeType
+        nodeType,
+        centerNode
       ).g.statements).to.deep.equal(expected)
       triples.pop()
     }

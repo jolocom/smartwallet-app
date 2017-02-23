@@ -22,10 +22,11 @@ class GraphAgent extends LDPAgent {
    * @param {string} nodeType - The type of the node
    * @return {object} node - The inicial writer with added triples
    */
-  baseNode(uri, writer, title, description, nodeType) {
+  baseNode(uri, writer, title, description, nodeType, centerNode) {
     if (!writer || !nodeType || !uri) {
       throw new Error('baseNode: not enough arguments')
     }
+
     if (title) {
       writer.addTriple($rdf.sym(uri), PRED.title, $rdf.literal(title))
     }
@@ -36,13 +37,13 @@ class GraphAgent extends LDPAgent {
         $rdf.literal(description)
       )
     }
+    writer.addTriple($rdf.sym(uri), PRED.storage, $rdf.sym(centerNode.storage))
+    writer.addTriple($rdf.sym(uri), PRED.maker, $rdf.sym(centerNode.uri))
     // TODO
-    if (nodeType === 'default' ||
-        nodeType === 'passport' ||
-        nodeType === 'confidential') {
-      writer.addTriple($rdf.sym(uri), PRED.type, PRED.Document)
-    } else if (nodeType === 'image') {
+    if (nodeType === 'image') {
       writer.addTriple($rdf.sym(uri), PRED.type, PRED.Image)
+    } else {
+      writer.addTriple($rdf.sym(uri), PRED.type, PRED.Document)
     }
     return writer
   }
@@ -103,58 +104,35 @@ class GraphAgent extends LDPAgent {
    * @param {string} nodeType - The type [image / text] of the node.
    * @param {bool} confidential - If the img is to be confidential.
    */
-  createNode(
-    currentUser,
-    centerNode,
-    title,
-    description,
-    image,
-    nodeType,
-    confidential = false
-  ) {
-    let writer = new Writer()
-    let newNodeUri = $rdf.sym(centerNode.storage + Util.randomString(5))
-    let aclUri
-    return this.createACL(newNodeUri.uri, currentUser, confidential)
+  createNode(currentUser, centerNode, nodeInfo) {
+    const writer = new Writer()
+    const {confidential, title, description, nodeType, image} = nodeInfo
+    const newNodeUri = centerNode.storage + Util.randomString(5)
+
+    return this.createACL(newNodeUri, currentUser, confidential)
     .then((uri) => {
-      aclUri = uri
+      this.baseNode(
+        newNodeUri,
+        writer,
+        title,
+        description,
+        nodeType,
+        centerNode)
 
-      writer.addTriple(newNodeUri, PRED.storage, centerNode.storage)
-      writer.addTriple(newNodeUri, PRED.maker, $rdf.sym(centerNode.uri))
-
-      this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (image) {
-        return this.addImage(
-          newNodeUri,
-          centerNode.storage,
-          writer,
-          image,
-          confidential
-        )
+        const storage = centerNode.storage
+        return this.addImage(newNodeUri, storage, writer, image, confidential)
       }
     }).then(() => {
-      // Putting the RDF file for the node.
       return this.put(Util.uriToProxied(newNodeUri.uri), writer.end(), {
-        'Content-Type': 'text/turtle',
-        'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
-          aclUri + ' rel="acl"'
-      }).catch((error) => {
-        console.warn('Error,', error, 'occured when putting the $rdf file.')
+        'Content-Type': 'text/turtle'
       })
-      // Connecting the node to the one that created it
     }).then(() => {
-      let predicate = PRED.isRelatedTo
+      let type = nodeType === 'passport'
+        ? 'passport'
+        : 'generic'
 
-      if (nodeType === 'passport') {
-        predicate = PRED.passport
-      }
-
-      let payload = {
-        subject: $rdf.sym(centerNode.uri),
-        predicate: predicate,
-        object: newNodeUri
-      }
-      return this.writeTriples(centerNode.uri, [payload], false)
+      return this.linkNodes(centerNode.uri, type, newNodeUri, false)
     }).then(() => {
       return newNodeUri.uri
     })
@@ -416,18 +394,17 @@ class GraphAgent extends LDPAgent {
   }
 
   linkNodes(start, type, end, flag) {
-    let predicate
+    const predMap = {
+      'generic': PRED.isRelatedTo,
+      'knows': PRED.knows,
+      'passport': PRED.passport
+    }
 
     return Promise.all([
       this.head(this._proxify(start)),
       this.head(this._proxify(end))
     ]).then(() => {
-      if (type === 'generic') {
-        predicate = PRED.isRelatedTo
-      }
-      if (type === 'knows') {
-        predicate = PRED.knows
-      }
+      const predicate = predMap[type]
       let payload = {
         subject: $rdf.sym(start),
         predicate,
