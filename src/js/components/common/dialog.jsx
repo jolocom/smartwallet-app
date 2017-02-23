@@ -6,7 +6,7 @@ import { show, hide } from 'redux/modules/common/dialog'
 
 @connect(
   (state, props) => ({
-    visible: state.getIn('dialog', [props.id, 'visible']).toJS()
+    // visible: state.getIn('dialog', [props.id, 'visible']).toJS()
   }),
   (dispatch) => bindActionCreators({show, hide}, dispatch)
 )

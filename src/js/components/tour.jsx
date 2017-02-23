@@ -7,20 +7,20 @@ import IndicatorDots from 'components/common/indicator-dots.jsx'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
+import theme from 'styles/jolocom-theme'
+
+@Radium
 @connect({
   props: ['confirm'],
   actions: ['common/dialog:hideDialog']
 })
-class Tour extends React.Component {
+export default class Tour extends React.Component {
   static propTypes = {
-    hideDialog: React.PropTypes.func.isRequired
+    hideDialog: React.PropTypes.func
   }
 
   static contextTypes = {
-    history: React.PropTypes.any.isRequired,
-    username: React.PropTypes.string.isRequired,
-    muiTheme: React.PropTypes.object.isRequired,
-    store: React.PropTypes.object.isRequired
+    store: React.PropTypes.object
   }
 
   constructor(props) {
@@ -32,9 +32,6 @@ class Tour extends React.Component {
   }
 
   getStyles() {
-    let {muiTheme} = this.context
-    console.log(this.context)
-
     let styles = {
       container: {
         width: '100%',
@@ -50,7 +47,7 @@ class Tour extends React.Component {
         boxShadow: 'none'
       },
       skip: {
-        color: muiTheme.jolocom.gray1
+        color: theme.jolocom.gray1
       },
       logo: {
         maxWidth: '60%',
@@ -81,17 +78,17 @@ class Tour extends React.Component {
         backgroundSize: 'contain'
       },
       welcome: {
-        color: muiTheme.jolocom.gray1,
+        color: theme.jolocom.gray1,
         fontSize: '32px'
       },
       title: {
-        color: muiTheme.jolocom.gray1,
+        color: theme.jolocom.gray1,
         fontSize: '20px',
         fontWeight: '300',
         padding: '18px 0'
       },
       em: {
-        color: muiTheme.palette.accent1Color
+        color: theme.palette.accent1Color
       },
       actions: {
         display: 'flex',
@@ -180,5 +177,3 @@ class Tour extends React.Component {
     localStorage.setItem('jolocom.tour', true)
   }
 }
-
-export default Radium(Tour)
