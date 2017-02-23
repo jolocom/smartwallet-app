@@ -159,4 +159,15 @@ describe('GraphAgent', function() {
       })
     })
   })
+
+  describe('#deleteFile', function() {
+    it('Should send a delete request', function() {
+      const gAgent = new GraphAgent()
+      const fileUri = 'https://testfile.com/first'
+      gAgent.deleteFile = (uri) => {
+        expect(uri).to.equal(fileUri)
+      }
+      gAgent.deleteFile(fileUri)
+    })
+  })
 })
