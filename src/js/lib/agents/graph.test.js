@@ -185,4 +185,123 @@ describe('GraphAgent', function() {
       gAgent.deleteFile(fileUri)
     })
   })
+
+  describe('#createNode', function() {
+    const gAgent = new GraphAgent()
+
+    const currentUser = 'https://testuser.com/profile/card#me'
+    const centerNode = {
+      uri: 'https://centernodeuri.com/',
+      storage: 'https://centernodeuri.com/storage/'
+    }
+    const newNodeUri = centerNode.storage + 'abcde'
+    const nodeInfo = {
+      title: 'title',
+      description: 'description is here',
+      confidential: false,
+      nodeType: 'default'
+    }
+
+    gAgent.createAcl = (uri, user, confidential) => {
+      expect(uri).to.equal(newNodeUri)
+      expect(user).to.equal(currentUser)
+      expect(confidential).to.be.nodeInfo.confidential
+    }
+    const originalAddImg = gAgent.addImage
+    gAgent.addImage = async() => {
+      expect(true).to.be.false
+    }
+    gAgent.randomString = () => 'abcde'
+
+    const _bodyFor = (nodeType, uri, image) => {
+      const typeMap = {
+        'default': PRED.Document,
+        'image': PRED.Image
+      }
+      const expectedWriter = new Writer()
+
+      expectedWriter.addAll([{
+        subject: rdf.sym(uri),
+        predicate: PRED.type,
+        object: typeMap[nodeType]
+      }, {
+        subject: rdf.sym(uri),
+        predicate: PRED.title,
+        object: rdf.literal(nodeInfo.title)
+      }, {
+        subject: rdf.sym(uri),
+        predicate: PRED.description,
+        object: rdf.literal(nodeInfo.description)
+      }, {
+        subject: rdf.sym(uri),
+        predicate: PRED.storage,
+        object: rdf.sym(centerNode.storage)
+      }, {
+        subject: rdf.sym(uri),
+        predicate: PRED.maker,
+        object: rdf.sym(centerNode.uri)
+      }])
+
+      if (image) {
+        expectedWriter.addTriple({
+          subject: rdf.sym(uri),
+          predicate: PRED.image,
+          object: rdf.literal(image)
+        })
+      }
+
+      return expectedWriter.end()
+    }
+
+    it('Should create public basic node with no image', async function() {
+      gAgent.put = async(uri, body, headers) => {
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'text/turtle'
+        })
+        expect(body).to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri))
+      }
+
+      gAgent.linkNodes = async(start, type, end, render) => {
+        expect(start).to.equal(centerNode.uri)
+        expect(type).to.equal('generic')
+        expect(end).to.equal(newNodeUri)
+        expect(render).to.be.false
+      }
+
+      gAgent.createNode(currentUser, centerNode, nodeInfo)
+    })
+
+    it('Should create private basic node with no image', async function() {
+      nodeInfo.confidential = true
+
+      gAgent.put = async(uri, body, headers) => {
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'text/turtle'
+        })
+        expect(body).to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri))
+      }
+
+      gAgent.createNode(currentUser, centerNode, nodeInfo)
+    })
+
+    it('Should create public basic node with image', async function() {
+      nodeInfo.image = 'https://imagelink.com'
+      nodeInfo.confidential = false
+      nodeInfo.nodeType = 'image'
+
+      gAgent.addImage = originalAddImg
+      gAgent.put = async(uri, body, headers) => {
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'text/turtle'
+        })
+        expect(body)
+          .to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri, nodeInfo.image))
+      }
+
+      gAgent.createNode(currentUser, centerNode, nodeInfo)
+    })
+  })
 })

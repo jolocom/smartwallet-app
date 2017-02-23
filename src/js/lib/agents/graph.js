@@ -39,6 +39,7 @@ class GraphAgent extends LDPAgent {
     }
     writer.addTriple($rdf.sym(uri), PRED.storage, $rdf.sym(centerNode.storage))
     writer.addTriple($rdf.sym(uri), PRED.maker, $rdf.sym(centerNode.uri))
+
     // TODO
     if (nodeType === 'image') {
       writer.addTriple($rdf.sym(uri), PRED.type, PRED.Image)
@@ -62,7 +63,7 @@ class GraphAgent extends LDPAgent {
       throw new Error('addImage: not enough arguments')
     }
     if (image instanceof File) {
-      let imgUri = `${dstContainer}files/${Util.randomString(5)}`
+      let imgUri = `${dstContainer}files/${this.randomString(5)}`
       writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(imgUri))
       return this.storeFile(imgUri, null, image, confidential)
     }
@@ -107,24 +108,19 @@ class GraphAgent extends LDPAgent {
   createNode(currentUser, centerNode, nodeInfo) {
     const writer = new Writer()
     const {confidential, title, description, nodeType, image} = nodeInfo
-    const newNodeUri = centerNode.storage + Util.randomString(5)
+    const newNodeUri = centerNode.storage + this.randomString(5)
 
     return this.createACL(newNodeUri, currentUser, confidential)
     .then((uri) => {
-      this.baseNode(
-        newNodeUri,
-        writer,
-        title,
-        description,
-        nodeType,
-        centerNode)
+      const des = description
+      this.baseNode(newNodeUri, writer, title, des, nodeType, centerNode)
 
       if (image) {
         const storage = centerNode.storage
         return this.addImage(newNodeUri, storage, writer, image, confidential)
       }
     }).then(() => {
-      return this.put(Util.uriToProxied(newNodeUri.uri), writer.end(), {
+      return this.put(Util.uriToProxied(newNodeUri), writer.end(), {
         'Content-Type': 'text/turtle'
       })
     }).then(() => {
@@ -138,10 +134,15 @@ class GraphAgent extends LDPAgent {
     })
   }
 
+  _randomString() {
+    return Util.randomString(5)
+  }
+
   // Should we remove the ACL file associated with it as well?
   // PRO : we won't need the ACL file anymore
   // CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
+
   deleteFile(uri) {
     return this.delete(Util.uriToProxied(uri))
   }
@@ -155,7 +156,7 @@ class GraphAgent extends LDPAgent {
       throw new Error('No webId detected.')
     }
     if (!finUri) {
-      uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
+      uri = `${dstContainer}files/${this.randomString(5)}-${file.name}`
     } else {
       uri = finUri
     }
