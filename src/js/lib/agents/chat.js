@@ -110,21 +110,27 @@ export default class ChatAgent {
     const writer = new Writer()
     const ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     const aclUri = `${url}.acl`
-    const subject = $rdf.sym(`${url}#owner`)
+    const owner = $rdf.sym(`${url}#owner`)
+    const participant = $rdf.sym(`${url}#participant`)
     const headers = {
       'Content-Type': 'text/turtle'
     }
 
-    writer.addTriple(subject, PRED.type, ACL('Authorization'))
-    writer.addTriple(subject, ACL('accessTo'), $rdf.sym(url))
-    writer.addTriple(subject, ACL('accessTo'), $rdf.sym(aclUri))
-    writer.addTriple(subject, ACL('agent'), $rdf.sym(initiator))
-    writer.addTriple(subject, ACL('mode'), ACL('Control'))
-    writer.addTriple(subject, ACL('mode'), ACL('Read'))
-    writer.addTriple(subject, ACL('mode'), ACL('Write'))
+    writer.addTriple(owner, PRED.type, ACL('Authorization'))
+    writer.addTriple(owner, ACL('accessTo'), $rdf.sym(url))
+    writer.addTriple(owner, ACL('accessTo'), $rdf.sym(aclUri))
+    writer.addTriple(owner, ACL('agent'), $rdf.sym(initiator))
+    writer.addTriple(owner, ACL('mode'), ACL('Control'))
+    writer.addTriple(owner, ACL('mode'), ACL('Read'))
+    writer.addTriple(owner, ACL('mode'), ACL('Write'))
 
-    participants.forEach((participant) => {
-      writer.addAll(this._getParticipantACL(url, participant))
+    writer.addTriple(participant, PRED.type, ACL('Authorization'))
+    writer.addTriple(participant, ACL('accessTo'), $rdf.sym(url))
+    writer.addTriple(participant, ACL('mode'), ACL('Read'))
+    writer.addTriple(participant, ACL('mode'), ACL('Write'))
+
+    participants.forEach((webId) => {
+      writer.addTriple(participant, ACL('agent'), $rdf.sym(webId))
     })
 
     return this.http.put(aclUri, writer.end(), headers)
@@ -133,20 +139,6 @@ export default class ChatAgent {
       }).catch((e) => {
         console.error(e, 'occured while putting the acl file')
       })
-  }
-
-  _getParticipantACL(url, participant) {
-    const subject = $rdf.sym(`${url}#participant`)
-    const ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
-    let statements = []
-
-    statements.push($rdf.st(subject, PRED.type, ACL('Authorization')))
-    statements.push($rdf.st(subject, ACL('accessTo'), $rdf.sym(url)))
-    statements.push($rdf.st(subject, ACL('agent'), $rdf.sym(participant)))
-    statements.push($rdf.st(subject, ACL('mode'), ACL('Read')))
-    statements.push($rdf.st(subject, ACL('mode'), ACL('Write')))
-
-    return statements
   }
 
   getInboxConversations(webId) {
@@ -164,13 +156,12 @@ export default class ChatAgent {
       })
   }
 
-  // Returns relevant conversation metadata
-  // (id, updatesVia, otherPerson, lastMessage)
-  //
-  // @param {String} conversationUrl conversation resource url
-  //
-  // @return {Object} conversation meta:
-  // id, updatesVia, otherPerson, lastMessage
+  /**
+   * Returns relevant conversation metadata
+   * @param {String} conversationUrl conversation resource url
+   * @return {Object} conversation meta:
+   * id, updatesVia, participants, lastMessage
+   */
   getConversation(conversationUrl, myUri) {
     let result = {
       id: conversationUrl.replace(/^.*\/chats\/([a-z0-9]+)$/i, '$1'),
@@ -230,7 +221,7 @@ export default class ChatAgent {
         let groups = posts.reduce((acc, curr) => {
           if (!(curr in acc)) {
             acc[curr] = {
-              id: curr.toString()
+              id: curr.toString().replace('#', '')
             }
           }
           for (var t of result.triples) {
@@ -395,15 +386,14 @@ export default class ChatAgent {
     const messages = []
 
     subjects.forEach(({subject}) => {
-      const id = subject.toString()
+      const id = subject.toString().replace('#', '')
 
       let message = {
         id
       }
 
       for (let field in schema) {
-        let value = g.any(id, schema[field])
-
+        let value = g.any(subject, schema[field])
         if (value) {
           message[field] = value.toString()
         }
@@ -427,7 +417,7 @@ export default class ChatAgent {
         const ids = g.find(undefined, PRED.type, SOLID.Notification)
 
         return ids.map(({subject}) => {
-          return subject.toString()
+          return subject.toString().replace('#', '')
         })
       })
   }
@@ -482,15 +472,22 @@ export default class ChatAgent {
     return this.http.patch(uri, [oldTriple], [newTriple])
   }
 
+  _getParticipantACLTriple(uri, webId) {
+    const ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
+    const subject = $rdf.sym(`${uri}#participant`)
+
+    return $rdf.st(subject, ACL('agent'), $rdf.sym(webId))
+  }
+
   addParticipant(uri, webId) {
     const statements = [$rdf.st(
       $rdf.sym(`${uri}#thread`), PRED.hasSubscriber, $rdf.sym(webId)
     )]
-    const acl = this._getParticipantACL(uri, webId)
+    const acl = this._getParticipantACLTriple(uri, webId)
 
     return Promise.all([
       this.http.patch(uri, null, statements),
-      this.http.patch(`${uri}.acl`, null, acl)
+      this.http.patch(`${uri}.acl`, null, [acl])
     ])
   }
 
@@ -501,7 +498,7 @@ export default class ChatAgent {
       statements.push($rdf.st(
         $rdf.sym(`${uri}#thread`), PRED.hasSubscriber, $rdf.sym(webId)
       ))
-      acl = acl.concat(this._getParticipantACL(uri, webId))
+      acl.push(this._getParticipantACLTriple(uri, webId))
     })
 
     return Promise.all([
@@ -516,7 +513,7 @@ export default class ChatAgent {
         $rdf.sym(`${uri}#thread`), PRED.hasSubscriber, $rdf.sym(webId)
       )]),
       this.http.patch(`${uri}.acl`,
-        this._getParticipantACL(uri, webId)
+        [this._getParticipantACLTriple(uri, webId)]
       )
     ])
   }

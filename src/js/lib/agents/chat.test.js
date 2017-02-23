@@ -40,6 +40,39 @@ ${id}:thread
 `
 }
 
+const CONVERSATION_WITH_MESSAGE = (
+  {id, created, owner, participant, message}
+) => {
+  return `@prefix terms: <http://purl.org/dc/terms/>.
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+@prefix c: <${owner}/profile/card#>.
+@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+@prefix n: <http://rdfs.org/sioc/ns#>.
+@prefix c0: <${participant}/profile/card#>.
+
+   "" terms:title ""; n0:maker c:me; n0:primaryTopic <#thread> .
+<#thread>
+    terms:created
+       "${created.getTime()}"^^XML:int;
+    n:hasOwner
+       c:me;
+    n:hasSubscriber
+       c:me, c0:me;
+    a    n:Thread.
+"#${message.id}"
+    terms:created
+       "${message.created.getTime()}"^^XML:int;
+    n:content
+       "${message.content}";
+    n:hasContainer
+       "${owner}/little-sister/chats/${id}#thread";
+    n:hasCreator
+       "${message.author}";
+    a    n:Post.
+"${owner}/little-sister/chats/${id}#thread"
+   n:containerOf "#${message.id}".`
+}
+
 const CONVERSATION_ACL = ({id, owner, participant}) => {
   return `@prefix ${id}: <${owner}/little-sister/chats/${id}#>.
 @prefix n0: <http://www.w3.org/ns/auth/acl#>.
@@ -50,8 +83,7 @@ const CONVERSATION_ACL = ({id, owner, participant}) => {
 ${id}:owner
     a    n0:Authorization;
     n0:accessTo
-        <https://${owner}/little-sister/chats/${id}.acl>,
-        ch:${id};
+       <${owner}/little-sister/chats/${id}.acl>, ch:${id};
     n0:agent
        c:me;
     n0:mode
@@ -136,45 +168,84 @@ const REMOVE_UNREAD = ({conversationUri, id, created, author, content}) => {
 `
 }
 
-// conversationWith message
-const CONVERSATION_WITH_MESSAGE = () => {
-  return `
-@prefix terms: <http://purl.org/dc/terms/>.
-@prefix n0: <http://xmlns.com/foaf/0.1/>.
-@prefix c: </profile/card#>.
-@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+const UNREAD_MESSAGES = (webId) => {
+  return `@prefix n0: <http://xmlns.com/foaf/0.1/>.
 @prefix n: <http://rdfs.org/sioc/ns#>.
-@prefix c0: <https://joachim.webid.jolocom.de/profile/card#>.
+@prefix terms: <http://purl.org/dc/terms/>.
+@prefix ter: <http://www.w3.org/ns/solid/terms#>.
+@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
 
-   "" terms:title ""; n0:maker c:me; n0:primaryTopic <#thread> .
-<#thread>
+""
+    n0:maker
+       "${webId}";
+    n0:primaryTopic
+       <#unread-messages>.
+   "#unread-messages" a n:space .
+"#jeqmm"
     terms:created
-       "1487311366714"^^XML:int;
-    n:hasOwner
-       c:me;
-    n:hasSubscriber
-       c:me, c0:me;
-    a    n:Thread.
-"#fg9p2"
-    terms:created
-       "1487311688487"^^XML:int;
+       "1481813472301"^^XML:int;
     n:content
-       "Message\n";
+       "hey!";
     n:hasContainer
-       "https://eelcochat.webid.jolocom.de/little-sister/chats/qpj7f#thread";
+       "https://p2.webid.jolocom.de/little-sister/chats/cekeh#thread";
     n:hasCreator
-       "https://eelcochat.webid.jolocom.de/profile/card#me";
-    a    n:Post.
-"https://eelcochat.webid.jolocom.de/little-sister/chats/qpj7f#thread"
-   n:containerOf "#fg9p2".`
+       "https://p2.webid.jolocom.de/profile/card#me";
+    a    n:Post, ter:Notification.
+"https://p2.webid.jolocom.de/little-sister/chats/cekeh#thread"
+   n:containerOf "#jeqmm".
+`
 }
 
-// Unread messages
-const UNREAD_MESSAGES = () => {
-  return `@prefix terms: <http://www.w3.org/ns/solid/terms#>.
+const CONVERSATIONS = (webId) => {
+  return `
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+@prefix n: <http://rdfs.org/sioc/ns#>.
 
-   "#jeqmm" a terms:Notification .
+""
+    n0:maker
+       "${webId}/profile/card#me";
+    n0:primaryTopic
+       <#inbox>.
+"#inbox"
+    n:spaceOf
+        "${webId}/little-sister/chats/bvfsq";
+    a    n:space.
+`
+}
 
+const ADD_PARTICIPANT = ({conversationUri, participant}) => {
+  return `INSERT DATA { <${conversationUri}#thread> <http://rdfs.org/sioc/ns#hasSubscriber> <${participant}>  };
+`
+}
+
+const ADD_PARTICIPANT_ACL = ({conversationUri, participant}) => {
+  return `INSERT DATA { <${conversationUri}#participant> <http://www.w3.org/ns/auth/acl#agent> <${participant}>  };
+`
+}
+
+const ADD_PARTICIPANTS = ({conversationUri, participants}) => {
+  return `INSERT DATA { <${conversationUri}#thread> <http://rdfs.org/sioc/ns#hasSubscriber> <${participants[0]}>  . <${conversationUri}#thread> <http://rdfs.org/sioc/ns#hasSubscriber> <${participants[1]}>  };
+`
+}
+
+const ADD_PARTICIPANTS_ACL = ({conversationUri, participants}) => {
+  return `INSERT DATA { <${conversationUri}#participant> <http://www.w3.org/ns/auth/acl#agent> <${participants[0]}>  . <${conversationUri}#participant> <http://www.w3.org/ns/auth/acl#agent> <${participants[1]}>  };
+`
+}
+
+const REMOVE_PARTICIPANT = ({conversationUri, participant}) => {
+  return `DELETE DATA { <${conversationUri}#thread> <http://rdfs.org/sioc/ns#hasSubscriber> <${participant}>  };
+`
+}
+
+const REMOVE_PARTICIPANT_ACL = ({conversationUri, participant}) => {
+  return `DELETE DATA { <${conversationUri}#participant> <http://www.w3.org/ns/auth/acl#agent> <${participant}>  };
+`
+}
+
+const SET_SUBJECT = (subject, newSubject) => {
+  return `DELETE DATA { "" <http://purl.org/dc/terms/title> "${subject}"  };
+INSERT DATA { "" <http://purl.org/dc/terms/title> "${newSubject}"  };
 `
 }
 
@@ -255,8 +326,10 @@ describe('ChatAgent', function () {
       const agent = new ChatAgent()
       agent.http._fetch = (url, options) => {
         const fetch = fetches[url]
-        fetch.called = true
-        return fetch(url, options)
+        return fetch(url, options).then((response) => {
+          fetch.success = true
+          return response
+        })
       }
 
       await agent.createConversation({
@@ -266,7 +339,7 @@ describe('ChatAgent', function () {
         participants: [`${p2}/profile/card#me`]
       })
 
-      expect(Object.values(fetches).map(fetch => fetch.called))
+      expect(Object.values(fetches).map(fetch => fetch.success))
         .to.deep.equal([true, true, true, true])
     })
 
@@ -357,8 +430,10 @@ describe('ChatAgent', function () {
       const agent = new ChatAgent()
       agent.http._fetch = (url, options) => {
         const fetch = fetches[url]
-        fetch.called = true
-        return fetch(url, options)
+        return fetch(url, options).then((response) => {
+          fetch.success = true
+          return response
+        })
       }
 
       await agent.createConversation({
@@ -369,7 +444,7 @@ describe('ChatAgent', function () {
         participants: [`${p2}/profile/card#me`, `${p3}/profile/card#me`]
       })
 
-      expect(Object.values(fetches).map(fetch => fetch.called))
+      expect(Object.values(fetches).map(fetch => fetch.success))
         .to.deep.equal([true, true, true, true, true])
     })
   })
@@ -465,32 +540,90 @@ describe('ChatAgent', function () {
     })
   })
 
-  // describe('#getInboxConversations', function() {
+  describe('#getInboxConversations', function() {
+    it('should get a list of conversation ids', async function() {
+      const agent = new ChatAgent()
+      agent.http._fetch = async (url, options) => {
+        expect(options.method).to.equal('GET')
+        return {
+          status: 200,
+          text: () => Promise.resolve(CONVERSATIONS(p1)),
+          headers: DUMMY_TURTLE_HEADERS
+        }
+      }
 
-  // })
+      const result = await agent.getInboxConversations(`${p1}/profile/card#me`)
 
-  // describe('#getConversation', function() {
+      expect(result).to.deep.equal(
+        ['https://p1.webid.jolocom.de/little-sister/chats/bvfsq']
+      )
+    })
+  })
 
-  // })
+  describe('#getConversation', function() {
+    const id = 'acbdfg'
+    const uri = `https://p1.webid.jolocom.de/little-sister/chats/${id}`
+    const created = new Date()
 
-  // describe('#getConversationMessages', function() {
+    const message = {
+      id: 'xyz',
+      author: `${p2}/profile/card#me`,
+      created: new Date(),
+      content: 'All your base are belong to me'
+    }
 
-  // })
+    it('should get a conversation', async function() {
+      const agent = new ChatAgent()
+      agent.http._fetch = async (url, options) => {
+        expect(options.method).to.equal('GET')
 
+        if (url === `https://proxy.jolocom.de/proxy?url=${uri}`) {
+          return {
+            status: 200,
+            text: () => Promise.resolve(CONVERSATION_WITH_MESSAGE({
+              id: id,
+              created: created,
+              owner: p1,
+              participant: p2,
+              message
+            })),
+            headers: {
+              get: (field) => ({
+                'content-type': 'text/turtle',
+                'updates-via': uri
+              })[field.toLowerCase()]
+            }
+          }
+        } else {
+          return {
+            status: 200,
+            text: () => Promise.resolve(''),
+            headers: DUMMY_TURTLE_HEADERS
+          }
+        }
+      }
+
+      const result = await agent.getConversation(uri)
+
+      expect(result).to.deep.equal({
+        created: created,
+        id: id,
+        lastMessage: message,
+        owner: `${p1}/profile/card#me`,
+        participants: [
+          {webId: `${p1}/profile/card#me`},
+          {webId: `${p2}/profile/card#me`}
+        ],
+        subject: '',
+        updatesVia: uri,
+        uri: uri
+      })
+    })
+  })
+
+  // Not writing this for now, this should be moved away
   // describe('#getParticipantData', function() {
 
-  // })
-
-  // describe('#getUnreadMessagesContainer', function() {
-    
-  // })
-
-  // describe('#getUnreadMessagesIds', function() {
-    
-  // })
-
-  // describe('#getUnreadMessages', function() {
-    
   // })
 
   describe('#unread-messages', function() {
@@ -500,6 +633,57 @@ describe('ChatAgent', function () {
     const participant = `${p2}/profile/card#me`
     const created = new Date()
     const content = 'All your base are belong to me'
+
+    it('should return the unread messages container uri', function() {
+      const agent = new ChatAgent()
+      expect(agent.getUnreadMessagesContainer(`${p1}/profile/card#me`))
+        .to.equal(`${p1}/little-sister/unread-messages`)
+    })
+
+    it('should get a list of unread message ids', async function() {
+      const agent = new ChatAgent()
+      agent.http._fetch = async (url, options) => {
+        expect(options.method).to.equal('GET')
+        return {
+          status: 200,
+          text: () => Promise.resolve(UNREAD_MESSAGES(p1)),
+          headers: DUMMY_TURTLE_HEADERS
+        }
+      }
+
+      const result = await agent.getUnreadMessagesIds(`${p1}/profile/card#me`)
+
+      expect(result).to.deep.equal(
+        ['jeqmm']
+      )
+    })
+
+    it('should get a list of unread messages', async function() {
+      const conversationId = 'https://p2.webid.jolocom.de/little-sister' +
+        '/chats/cekeh#thread'
+
+      const agent = new ChatAgent()
+      agent.http._fetch = async (url, options) => {
+        expect(options.method).to.equal('GET')
+        return {
+          status: 200,
+          text: () => Promise.resolve(UNREAD_MESSAGES(p1)),
+          headers: DUMMY_TURTLE_HEADERS
+        }
+      }
+
+      const result = await agent.getUnreadMessages(`${p1}/profile/card#me`)
+
+      expect(result).to.deep.equal(
+        [{
+          id: 'jeqmm',
+          conversationId: conversationId,
+          author: 'https://p2.webid.jolocom.de/profile/card#me',
+          content: 'hey!',
+          created: '1481813472301'
+        }]
+      )
+    })
 
     it('should add unread message notification', async function() {
       const agent = new ChatAgent()
@@ -568,19 +752,146 @@ describe('ChatAgent', function () {
     })
   })
 
-  // describe('#setSubject', function() {
-    
-  // })
+  describe('#setSubject', function() {
+    const conversationUri = `${p1}/little-sister/chats/qpj7f`
+    const subject = 'All your base are belong to us'
+    const newSubject = 'KOOKOOOOOOOO'
 
-  // describe('#addParticipant', function() {
-    
-  // })
+    it('should update the subject', async function() {
+      const agent = new ChatAgent()
 
-  // describe('#addParticipants', function() {
-    
-  // })
+      agent.http._fetch = async (url, options) => {
+        expect(options.method).to.equal('PATCH')
+        expect(options.body).to.equal(SET_SUBJECT(subject, newSubject))
+        expect(options.headers['Content-Type'])
+          .to.equal('application/sparql-update')
 
-  // describe('#removeParticipant', function() {
-    
-  // })
+        return {
+          status: 200,
+          text: () => 'Patch applied OK',
+          headers: DUMMY_HTML_HEADERS
+        }
+      }
+
+      const response = await agent.setSubject(
+        conversationUri, subject, newSubject
+      )
+
+      expect(response.status).to.equal(200)
+    })
+  })
+
+  describe('#participants', function() {
+    const conversationUri = `${p1}/little-sister/chats/qpj7f`
+    const participant = `${p3}/profile/card#me`
+
+    it('should add participant', async function() {
+      const agent = new ChatAgent()
+
+      agent.http._fetch = async (url, options) => {
+        let body
+        if (url.match(/\.acl$/)) {
+          body = ADD_PARTICIPANT_ACL({
+            conversationUri,
+            participant
+          })
+        } else {
+          body = ADD_PARTICIPANT({
+            conversationUri,
+            participant
+          })
+        }
+        expect(options.method).to.equal('PATCH')
+        expect(options.body).to.equal(body)
+        expect(options.headers['Content-Type'])
+          .to.equal('application/sparql-update')
+
+        return {
+          status: 200,
+          text: () => 'Patch applied OK',
+          headers: DUMMY_HTML_HEADERS
+        }
+      }
+
+      const response = await agent.addParticipant(
+        conversationUri, participant
+      )
+      expect(response.map(({status}) => status)).to.deep.equal([200, 200])
+    })
+
+    it('should add multiple participants', async function() {
+      const agent = new ChatAgent()
+
+      const participants = [
+        `${p2}/profile/card#me`,
+        `${p3}/profile/card#me`
+      ]
+
+      agent.http._fetch = async (url, options) => {
+        let body
+        if (url.match(/\.acl$/)) {
+          body = ADD_PARTICIPANTS_ACL({
+            conversationUri,
+            participants
+          })
+        } else {
+          body = ADD_PARTICIPANTS({
+            conversationUri,
+            participants
+          })
+        }
+        expect(options.method).to.equal('PATCH')
+        expect(options.body).to.equal(body)
+        expect(options.headers['Content-Type'])
+          .to.equal('application/sparql-update')
+
+        return {
+          status: 200,
+          text: () => 'Patch applied OK',
+          headers: DUMMY_HTML_HEADERS
+        }
+      }
+
+      const response = await agent.addParticipants(
+        conversationUri, participants
+      )
+
+      expect(response.map(({status}) => status)).to.deep.equal([200, 200])
+    })
+
+    it('should remove participant', async function() {
+      const agent = new ChatAgent()
+
+      agent.http._fetch = async (url, options) => {
+        let body
+        if (url.match(/\.acl$/)) {
+          body = REMOVE_PARTICIPANT_ACL({
+            conversationUri,
+            participant
+          })
+        } else {
+          body = REMOVE_PARTICIPANT({
+            conversationUri,
+            participant
+          })
+        }
+        expect(options.method).to.equal('PATCH')
+        expect(options.body).to.equal(body)
+        expect(options.headers['Content-Type'])
+          .to.equal('application/sparql-update')
+
+        return {
+          status: 200,
+          text: () => 'Patch applied OK',
+          headers: DUMMY_HTML_HEADERS
+        }
+      }
+
+      const response = await agent.removeParticipant(
+        conversationUri, participant
+      )
+
+      expect(response.map(({status}) => status)).to.deep.equal([200, 200])
+    })
+  })
 })
