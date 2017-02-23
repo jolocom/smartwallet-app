@@ -13,6 +13,7 @@ let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
 
+export const XSD = rdf.Namespace('http://www.w3.org/2001/XMLSchema#')
 export const PRED = {
   givenName: FOAF('givenName'),
   familyName: FOAF('familyName'),
@@ -47,8 +48,10 @@ export const PRED = {
   space: SIOC('space'),
   post: SIOC('Post'),
   hasCreator: SIOC('hasCreator'),
+  modified: DC('modified'),
   content: SIOC('content'),
   created: DC('created'),
+
   hasContainer: SIOC('hasContainer'),
   containerOf: SIOC('containerOf'),
   // --
