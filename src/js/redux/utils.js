@@ -60,7 +60,6 @@ export function connect(params, wantedActions = []) {
 
     if (typeof wantedActions !== 'function') {
       return bindActionCreators(_.fromPairs(wantedActions.map(id => {
-        console.log(id)
         const [module, actionName] = getModuleAndActionNameFromID(id)
         return [actionName, module[actionName]]
       })), dispatch)
