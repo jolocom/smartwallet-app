@@ -34,12 +34,13 @@ export function connect(params, wantedActions = []) {
       }
 
       const pair = [prop.slice(-1), state.getIn(prop)]
+
       if (pair[1].toJS) {
         pair[1] = pair[1].toJS()
       }
+
       return pair
     }
-
 
     if (typeof wantedProps !== 'function') {
       return _.fromPairs(wantedProps.map(prop => {

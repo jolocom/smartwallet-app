@@ -5,6 +5,7 @@ export function action(module, name, options) {
   const creator = options.creator || ((params) => {
     return creator.buildAction(params)
   })
+
   creator.buildAction = (params) => {
     return {
       type: id,
