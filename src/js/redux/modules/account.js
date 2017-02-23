@@ -14,7 +14,8 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
     // The user is already logged in.
     if (webId) {
       return doLogin.buildAction(params, async () => {
-        const loggedIn = await this.accounts.checkLogin(webId)
+        const accounts = new AccountsAgent()
+        const loggedIn = await accounts.checkLogin(webId)
           .then(() => true).catch(() => false)
         if (loggedIn) {
           return {
@@ -210,7 +211,7 @@ export default function reducer(state = initialState, action = {}) {
     case doLogin.id_success:
       return state.merge({
         loggingIn: false,
-        username: action.username,
+        username: action.result.username,
         webId: action.result.webId
       })
     case doLogin.id_fail:
