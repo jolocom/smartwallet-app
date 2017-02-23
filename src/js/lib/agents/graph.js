@@ -23,6 +23,9 @@ class GraphAgent extends LDPAgent {
    * @return {object} node - The inicial writer with added triples
    */
   baseNode(uri, writer, title, description, nodeType) {
+    if (!writer || !nodeType || !uri) {
+      throw new Error('baseNode: not enough arguments')
+    }
     if (title) {
       writer.addTriple($rdf.sym(uri), PRED.title, $rdf.literal(title))
     }
@@ -54,27 +57,30 @@ class GraphAgent extends LDPAgent {
    */
 
   addImage(uri, dstContainer, writer, image, confidential) {
+    if (!uri || !dstContainer || !writer || !image || confidential) {
+      throw new Error('addImage: not enough arguments')
+    }
     if (image instanceof File) {
       let imgUri = `${dstContainer}files/${Util.randomString(5)}`
-      writer.addTriple(uri, PRED.image, imgUri)
+      writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(imgUri))
       return this.storeFile(imgUri, null, image, confidential)
     }
-    writer.addTriple(uri, PRED.image, image)
+    writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(image))
     return
   }
 
-  checkImages(triples) {
-    return Promise.all(triples.map(trip => {
-      const img = trip.img
+  checkImages(nodes) {
+    return Promise.all(nodes.map(node => {
+      const img = node.img
       if (!img) {
         return
       }
       return this.head(this._proxify(img)).then(res => {
         if (!res.ok) {
-          trip.img = ''
+          node.img = ''
         }
       }).catch(() => {
-        trip.img = ''
+        node.img = ''
       })
     }))
   }
