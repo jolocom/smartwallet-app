@@ -34,12 +34,13 @@ export function connect(params, wantedActions = []) {
       }
 
       const pair = [prop.slice(-1), state.getIn(prop)]
+
       if (pair[1].toJS) {
         pair[1] = pair[1].toJS()
       }
+
       return pair
     }
-
 
     if (typeof wantedProps !== 'function') {
       return _.fromPairs(wantedProps.map(prop => {
@@ -59,6 +60,7 @@ export function connect(params, wantedActions = []) {
 
     if (typeof wantedActions !== 'function') {
       return bindActionCreators(_.fromPairs(wantedActions.map(id => {
+        console.log(id)
         const [module, actionName] = getModuleAndActionNameFromID(id)
         return [actionName, module[actionName]]
       })), dispatch)

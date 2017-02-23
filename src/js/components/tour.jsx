@@ -7,13 +7,13 @@ import IndicatorDots from 'components/common/indicator-dots.jsx'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
-import theme from 'styles/jolocom-theme'
+import {theme} from 'styles'
 
-@Radium
 @connect({
-  props: ['confirm'],
+  props: {},
   actions: ['common/dialog:hideDialog']
 })
+@Radium
 export default class Tour extends React.Component {
   static propTypes = {
     hideDialog: React.PropTypes.func
@@ -29,6 +29,10 @@ export default class Tour extends React.Component {
     this.state = {
       show: !localStorage.getItem('jolocom.tour')
     }
+  }
+
+  componentDidUpdate(){
+    console.log(this.props)
   }
 
   getStyles() {
@@ -172,7 +176,7 @@ export default class Tour extends React.Component {
     )
   }
 
-  _handleSkip() {
+  _handleSkip = () => {
     this.props.hideDialog('tour')
     localStorage.setItem('jolocom.tour', true)
   }
