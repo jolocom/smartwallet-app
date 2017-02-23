@@ -129,7 +129,7 @@ describe('GraphAgent', function() {
       })
 
       testNode.img = 'https://randomuri.com/image.jpg'
-      gAgent._fetch = (uri) => {
+      gAgent._fetch = async(uri) => {
         expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' +
           'https://randomuri.com/image.jpg')
         throw new Error()
