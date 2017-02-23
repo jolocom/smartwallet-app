@@ -1,16 +1,15 @@
 import React from 'react'
 import Radium from 'radium'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import { show, hide } from 'redux/modules/common/dialog'
+import { connect } from 'redux/utils'
 
-@connect(
-  (state, props) => ({
-    // visible: state.getIn('dialog', [props.id, 'visible']).toJS()
-  }),
-  (dispatch) => bindActionCreators({show, hide}, dispatch)
-)
-class Dialog extends React.Component {
+@connect({
+  actions: [
+    'common/dialog:show',
+    'common/dialog:hide'
+  ]
+})
+@Radium
+export default class Dialog extends React.Component {
   static propTypes = {
     id: React.PropTypes.string.isRequired,
     visible: React.PropTypes.bool,
@@ -23,7 +22,7 @@ class Dialog extends React.Component {
   }
 
   constructor(props) {
-    super()
+    super(props)
 
     if (props.visible) {
       props.show(props.id)
@@ -72,5 +71,3 @@ class Dialog extends React.Component {
     )
   }
 }
-
-export default Radium(Dialog)
