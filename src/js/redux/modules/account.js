@@ -55,20 +55,129 @@ export const doSignup = action('account', 'doSignup', {
     return dispatch => {
       localStorage.setItem('jolocom.auth-mode', 'proxy')
 
-      this.accounts.register(
+      const accounts = new AccountsAgent()
+      accounts.register(
         username, password, email, name
       ).then((account) => {
         dispatch(showEmailVerifyScreen())
       }).catch((e) => {
         if (e.message) {
-          dispatch(showMessage(e.message))
+          dispatch(showMessage({message: e.message}))
         } else {
-          dispatch(showMessage('An account error has occured.'))
+          dispatch(showMessage({message: 'An account error has occured.'}))
         }
       })
     }
   }
 })
+export const doLogout = action('account', 'doLogout', {
+  expectedParams: [],
+  creator: params => {
+    const authMode = localStorage.getItem('jolocom.auth-mode')
+
+    const accounts = new AccountsAgent()
+    if (authMode === 'proxy') {
+      accounts.logout()
+    }
+
+    localStorage.removeItem('jolocom.username')
+    localStorage.removeItem('jolocom.webId')
+    localStorage.removeItem('jolocom.auth-mode')
+
+    return doLogout.buildAction(params)
+  }
+})
+export const doForgotPassword = asyncAction(
+  'account', 'doForgotPassword',
+  {
+    expectedParams: ['username'],
+    creator: params => {
+      return dispatch => {
+        const accounts = new AccountsAgent()
+        return doForgotPassword.buildAction(
+          params,
+          accounts.forgotPassword(params.username)
+            .then(() => dispatch(showMessage({
+              message: 'An email was sent to you with further instructions.'
+            })))
+            .catch(e => {
+              dispatch(showMessage({
+                message: 'An error occured : ' + e
+              }))
+              throw e
+            })
+        )
+      }
+    }
+  }
+)
+export const doResetPassword = asyncAction(
+  'account', 'doResetPassword',
+  {
+    expectedParams: ['username', 'token', 'password'],
+    creator: params => {
+      return dispatch => {
+        const accounts = new AccountsAgent()
+        return doResetPassword.buildAction(
+          params,
+          accounts.resetPassword(params.username, params.token, params.password)
+            .then(() => dispatch(showMessage({
+              message: 'You can now log in with your new password.'
+            })))
+            .catch(e => {
+              dispatch(showMessage({
+                message: 'An error occured : ' + e
+              }))
+              throw e
+            })
+        )
+      }
+    }
+  }
+)
+export const doActivateEmail = asyncAction(
+  'account', 'doActivateEmail',
+  {
+    expectedParams: ['username', 'code'],
+    creator: params => {
+      return dispatch => {
+        const accounts = new AccountsAgent()
+        return doActivateEmail.buildAction(
+          params,
+          accounts.verifyEmail(params.username, params.code)
+            .then(() => dispatch(showMessage({
+              message: 'Your account has been activated!'
+            })))
+            .catch(e => {
+              dispatch(showMessage({
+                message: 'Account activation failed.'
+              }))
+              throw e
+            })
+        )
+      }
+    }
+  }
+)
+export const doUpdateUserEmail = action(
+  'account', 'doUpdateUserEmail',
+  {
+    expectedParams: ['email', 'webId', 'username'],
+    creator: params => {
+      return async dispatch => {
+        const accounts = new AccountsAgent()
+        await accounts.updateEmail(params.webId, params.email)
+
+        _saveAuthInfo(_saveToLocalStorage, params.username, params.webId)
+        dispatch({type: doLogin.id_success, result: {
+          username: params.username,
+          webId: params.webId
+        }})
+      }
+    }
+  }
+)
+
 export const showEmailVerifyScreen = action(
   'account/login', 'showEmailVerifyScreen',
   {expectedParams: []}
@@ -107,6 +216,17 @@ export default function reducer(state = initialState, action = {}) {
     case doLogin.id_fail:
       return state.merge({
         failureMsg: 'Failed to log in'
+      })
+    case doLogout.id:
+      return state.merge({
+        loggingIn: false,
+        username: null
+      })
+    case doActivateEmail.id_success:
+      return state.merge({
+        emailUpdateQueued: true,
+        emailToBeInserted: action.result.email,
+        emailVerifyCompleted: true
       })
     default:
       return state
