@@ -517,5 +517,4 @@ export default class ChatAgent {
       )
     ])
   }
-
 }
