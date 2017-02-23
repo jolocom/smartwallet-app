@@ -75,11 +75,7 @@ class GraphAgent extends LDPAgent {
       if (!img) {
         return
       }
-      return this.head(this._proxify(img)).then(res => {
-        if (!res.ok) {
-          node.img = ''
-        }
-      }).catch(() => {
+      return this.head(this._proxify(img)).catch((e) => {
         node.img = ''
       })
     }))

@@ -115,11 +115,11 @@ describe('GraphAgent', function() {
       const gAgent = new GraphAgent()
       const testNode = {img: 'https://randomuri.com/image.jpg'}
 
-      gAgent.head = async(uri) => {
+      gAgent._fetch = async(uri) => {
         expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' +
           'https://randomuri.com/image.jpg')
         return {
-          ok: false
+          status: 403
         }
       }
 
@@ -129,7 +129,7 @@ describe('GraphAgent', function() {
       })
 
       testNode.img = 'https://randomuri.com/image.jpg'
-      gAgent.head = (uri) => {
+      gAgent._fetch = (uri) => {
         expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' +
           'https://randomuri.com/image.jpg')
         throw new Error()
@@ -138,6 +138,24 @@ describe('GraphAgent', function() {
       await gAgent.checkImages([testNode])
       expect(testNode).to.deep.equal({
         img: ''
+      })
+    })
+
+    it('Should leave available immages untouched', async function() {
+      const gAgent = new GraphAgent()
+      const testNode = {img: 'https://randomuri.com/image.jpg'}
+
+      gAgent.head = async(uri) => {
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' +
+          'https://randomuri.com/image.jpg')
+        return {
+          ok: true
+        }
+      }
+
+      await gAgent.checkImages([testNode])
+      expect(testNode).to.deep.equal({
+        img: 'https://randomuri.com/image.jpg'
       })
     })
   })
