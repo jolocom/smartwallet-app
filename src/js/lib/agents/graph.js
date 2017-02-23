@@ -49,7 +49,7 @@ class GraphAgent extends LDPAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
-  addImage(uri, dstContainer, writer, image, confidential)
+  addImage(uri, dstContainer, writer, image, confidential) {
     if (image instanceof File) {
       let imgUri = `${dstContainer}files/${Util.randomString(5)}`
       writer.addTriple(uri, PRED.image, imgUri)
