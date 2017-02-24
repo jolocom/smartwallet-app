@@ -31,8 +31,8 @@ export default class Tour extends React.Component {
     }
   }
 
-  componentDidUpdate(){
-    console.log(this.props)
+  componentDidUpdate() {
+    // console.log(this.props)
   }
 
   getStyles() {

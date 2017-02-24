@@ -6,39 +6,38 @@ import { Link } from 'react-router'
 
 import Utils from 'lib/util'
 
+import {theme} from 'styles'
+
 // login for development
 const Login = connect({
-  props: ['account.login', 'account.emailUpdateQueued'],
+  props: ['account', 'account.login', 'account.emailUpdateQueued'],
   actions: [
     'account:doLogin',
     'account:setLoginUsername',
-    'account:setLoginPassword'
+    'account:setLoginPassword',
+    'router:pushRoute'
   ]
-})(React.createClass({
-
-  contextTypes: {
-    muiTheme: React.PropTypes.object,
-    account: React.PropTypes.object,
-    router: React.PropTypes.object
-  },
+})(Radium(React.createClass({
 
   propTypes: {
     login: React.PropTypes.object.isRequired,
+    account: React.PropTypes.object.isRequired,
     emailUpdateQueued: React.PropTypes.bool.isRequired,
+    pushRoute: React.PropTypes.func.isRequired,
     doLogin: React.PropTypes.func.isRequired,
     setLoginUsername: React.PropTypes.func.isRequired,
     setLoginPassword: React.PropTypes.func.isRequired
   },
 
   componentWillMount() {
-    const {account} = this.context
+    const {account} = this.props
     if (account && account.webId) {
-      this.context.router.push('/graph')
+      this.props.pushRoute('/graph')
     }
   },
 
   goBack() {
-    this.context.router.push('/')
+    this.props.pushRoute('/')
   },
 
   login(e) {
@@ -63,7 +62,6 @@ const Login = connect({
   },
 
   getStyles() {
-    let {muiTheme} = this.context
     let styles = {
       container: {
         textAlign: 'center',
@@ -107,10 +105,10 @@ const Login = connect({
         width: '100%'
       },
       help: {
-        color: muiTheme.jolocom.gray1
+        color: theme.jolocom.gray1
       },
       link: {
-        color: muiTheme.palette.accent1Color,
+        color: theme.palette.accent1Color,
         fontWeight: 'bold'
       },
       forgotPassword: {
@@ -186,6 +184,6 @@ const Login = connect({
       </div>
     )
   }
-}))
+})))
 
-export default Radium(Login)
+export default Login

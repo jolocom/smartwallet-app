@@ -46,7 +46,7 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
 
         _saveAuthInfo(_saveToLocalStorage, params.username, account.webId)
 
-        return {username: params.username, webId: account.webId}
+        return {username: params.username, webId: account.webid}
       })
     } else {
       return dispatch => {} // Do nothing
@@ -217,10 +217,6 @@ export default function reducer(state = initialState, action = {}) {
         username: action.result.username,
         webId: action.result.webId
       })
-    case doLogin.id_fail:
-      return state.merge({
-        failureMsg: 'Failed to log in'
-      })
     case doLogout.id:
       return state.merge({
         loggingIn: false,
@@ -293,6 +289,16 @@ const initialLoginState = Immutable.fromJS({
 
 export function loginReducer(state = initialLoginState, action = {}) {
   switch (action.type) {
+    case doLogin.id:
+      return state.merge({
+        failureMsg: ''
+      })
+    case doLogin.id_fail:
+      return state.merge({
+        failureMsg: 'Failed to log in'
+      })
+    case doLogin.id_success:
+      return initialLoginState
     case setLoginUsername.id:
       return state.merge({
         userErrorMsg: '',
