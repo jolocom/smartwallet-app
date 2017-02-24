@@ -3,6 +3,7 @@ import Radium from 'radium'
 import { connect } from 'redux/utils'
 
 @connect({
+  props: (state, props) => ({actuallyVisible: state.getIn(['dialog', props.id, 'visible'])}),
   actions: [
     'common/dialog:show',
     'common/dialog:hide'
@@ -13,6 +14,7 @@ export default class Dialog extends React.Component {
   static propTypes = {
     id: React.PropTypes.string.isRequired,
     visible: React.PropTypes.bool,
+    actuallyVisible: React.PropTypes.bool,
     children: React.PropTypes.node,
     style: React.PropTypes.object,
     fullscreen: React.PropTypes.bool,
@@ -56,7 +58,7 @@ export default class Dialog extends React.Component {
   render() {
     let styles = this.getStyles()
 
-    let {style, fullscreen, visible} = this.props
+    let {style, fullscreen, actuallyVisible} = this.props
 
     return (
       <div
@@ -64,7 +66,7 @@ export default class Dialog extends React.Component {
           styles.container,
           style,
           fullscreen && styles.fullscreen,
-          visible && styles.visible
+          actuallyVisible && styles.visible
         ]}>
         {this.props.children}
       </div>

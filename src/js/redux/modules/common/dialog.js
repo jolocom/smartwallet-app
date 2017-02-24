@@ -15,7 +15,6 @@ export const toggle = action('common/dialog', 'toggle', {
 export const toggleDialog = hide
 
 const initialState = new Map({
-  visible: false
 })
 
 export default function reducer(state = initialState, action = {}) {
