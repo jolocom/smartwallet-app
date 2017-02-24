@@ -4,7 +4,7 @@ import * as snackBar from './snack-bar'
 import {stub} from '../../../../test/utils'
 const reducer = snackBar.default
 
-describe('Snack bar reducer', function() {
+describe.only('Snack bar reducer', function() {
   describe('INIT', function() {
     it('should correctly initialize', function() {
       expect(reducer(undefined, '@INIT').toJS()).to.deep.equal({
@@ -54,12 +54,12 @@ describe('Snack bar reducer', function() {
 
   describe('closeShownMessage', () => {
     it('should correctly close a shown message', () => {
-      let state = reducer().toJS()
+      let state = reducer()
 
       state = reducer(state, snackBar.showMessage.buildAction({
         message: 'test', id: 1
       }))
-      expect(state).to.deep.equal({
+      expect(state.toJS()).to.deep.equal({
         open: true,
         message: 'test',
         undo: false,
@@ -68,22 +68,22 @@ describe('Snack bar reducer', function() {
       })
 
       state = reducer(state, snackBar.closeShownMessage({id: 1}))
-      expect(state).to.deep.equal({
+      expect(state.toJS()).to.deep.equal({
         open: false,
-        message: null,
+        message: '',
         undo: false,
         undoCallback: null,
-        id: 1
+        id: null
       })
     })
 
     it('should ignore requests to close old messages', () => {
-      let state = reducer().toJS()
+      let state = reducer()
 
       state = reducer(state, snackBar.showMessage.buildAction({
         message: 'test', id: 1
       }))
-      expect(state).to.deep.equal({
+      expect(state.toJS()).to.deep.equal({
         open: true,
         message: 'test',
         undo: false,
@@ -92,7 +92,7 @@ describe('Snack bar reducer', function() {
       })
 
       state = reducer(state, snackBar.closeShownMessage({id: 2}))
-      expect(state).to.deep.equal({
+      expect(state.toJS()).to.deep.equal({
         open: true,
         message: 'test',
         undo: false,

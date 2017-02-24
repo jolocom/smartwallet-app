@@ -1,4 +1,4 @@
-import { Map } from 'immutable'
+import Immutable from 'immutable'
 import { action } from './'
 
 export const showMessage = action('snack-bar', 'showMessage', {
@@ -28,7 +28,7 @@ export const showMessageUndo = action('snack-bar', 'showMessageUndo', {
 })
 export const showSnackBarUndoMessage = showMessageUndo
 
-const initialState = new Map({
+const initialState = Immutable.fromJS({
   open: false,
   message: '',
   undo: false,
@@ -46,7 +46,7 @@ export default function reducer(state = initialState, action = {}) {
       })
     case closeShownMessage.id:
       // Don't do anything if trying to close an old message
-      return action.id === state.id ? initialState : state
+      return action.id === state.get('id') ? initialState : state
     default:
       return state
   }
