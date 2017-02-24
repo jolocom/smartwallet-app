@@ -35,6 +35,12 @@ export function connect(params, wantedActions = []) {
 
       const pair = [prop.slice(-1), state.getIn(prop)]
 
+      if (typeof pair[1] === 'undefined') {
+        throw new Error(
+          'Trying to get non-existing state "' + prop +
+          '" in Redux connect() wrapper')
+      }
+
       if (pair[1].toJS) {
         pair[1] = pair[1].toJS()
       }

@@ -381,6 +381,10 @@ let Signup = React.createClass({
 })
 
 export default Radium(connect({
-  props: ['acount'],
-  actions: ['snack-bar:showSnackBarMessage', 'account:doSignup']
+  props: ['account'],
+  actions: [
+    'snack-bar:showSnackBarMessage',
+    'account:doSignup',
+    'router:pushRoute'
+  ]
 })(Signup))

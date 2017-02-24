@@ -146,19 +146,25 @@ export const doActivateEmail = asyncAction(
     creator: params => {
       return dispatch => {
         const accounts = new AccountsAgent()
-        return doActivateEmail.buildAction(
+        dispatch(doActivateEmail.buildAction(
           params,
-          accounts.verifyEmail(params.username, params.code)
-            .then(() => dispatch(showMessage({
-              message: 'Your account has been activated!'
-            })))
+          () => accounts.verifyEmail(params.username, params.code)
+          // () => new Promise(resolve => {
+          //   setTimeout(() => resolve(true), 1000)
+          // })
+            .then((data) => {
+              dispatch(showMessage({
+                message: 'Your account has been activated!'
+              }))
+              return data
+            })
             .catch(e => {
               dispatch(showMessage({
                 message: 'Account activation failed.'
               }))
               throw e
             })
-        )
+        ))
       }
     }
   }
@@ -228,6 +234,8 @@ export default function reducer(state = initialState, action = {}) {
         emailToBeInserted: action.result.email,
         emailVerifyCompleted: true
       })
+    case showEmailVerifyScreen.id:
+      return state.merge({emailVerifyScreen: true})
     default:
       return state
   }
@@ -313,8 +321,6 @@ export function loginReducer(state = initialLoginState, action = {}) {
       return state.merge({
         [action.field + 'ErrorMsg']: action.message
       })
-    case showEmailVerifyScreen.id:
-      return state.merge({emailVerifyScreen: true})
     default:
       return state
   }

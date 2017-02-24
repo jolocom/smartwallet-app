@@ -16,7 +16,7 @@ let ConfirmEmailVerification = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.string,
+    params: React.PropTypes.object,
     account: React.PropTypes.object,
     doActivateEmail: React.PropTypes.func.isRequired
   },
@@ -63,10 +63,10 @@ let ConfirmEmailVerification = React.createClass({
   },
 
   activateEmailAccount() {
-    let user = encodeURIComponent(this.props.params.username)
+    let username = encodeURIComponent(this.props.params.username)
     let code = encodeURIComponent(this.props.params.code)
 
-    this.props.doActivateEmail(user, code)
+    this.props.doActivateEmail({username, code})
     this.setState({disabledSubmit: true})
   },
 
