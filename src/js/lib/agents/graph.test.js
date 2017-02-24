@@ -311,7 +311,6 @@ describe('GraphAgent', function() {
     })
   })
 
-  /*
   // @TODO
   describe('#storeFile', function() {
     it('Should correcly store a public file', async function() {
@@ -320,16 +319,42 @@ describe('GraphAgent', function() {
   })
 
   describe('#createAcl', function() {
-    it('Should correctly create public acl', async function() {
-      const gAgent = new GraphAgent()
-      const uri = 'https://mockfile.com/card'
-      gAgent.put = async(finUri, body, headers) => {
-        expect(finUri).to.equal(`https://proxy.jolocom.de/proxy?url=${uri}.acl`)
-        expect(headers).to.deep.equal({
-          'Content-Type': 'text/turtle'
+    const gAgent = new GraphAgent()
+    const uri = 'https://mockfile.com/card'
+    const webId = 'https://eugeniu.com/profile/card'
+    const writer = new Writer()
+
+    const tripleMap = [
+      {pred: PRED.type, obj: [PRED.auth]},
+      {pred: PRED.access, obj: [rdf.sym(uri), rdf.sym(uri + '.acl')]},
+      {pred: PRED.agent, obj: [rdf.sym(webId)]},
+      {pred: PRED.mode, obj: [PRED.read, PRED.write, PRED.control]}
+    ]
+
+    gAgent.put = async(finUri, body, headers) => {
+      expect(finUri).to.equal(`https://proxy.jolocom.de/proxy?url=${uri}.acl`)
+      expect(headers).to.deep.equal({
+        'Content-Type': 'text/turtle'
+      })
+      expect(body).to.equal(writer.end())
+    }
+
+    it('Should correctly create private acl', async function() {
+      tripleMap.forEach(st => {
+        st.obj.forEach(obj => {
+          writer.addTriple(rdf.sym(uri + 'acl#owner'), st.pred, obj)
         })
-      }
+      })
+      gAgent.createAcl(uri, webId, false)
+    })
+
+    it('Should correctly create public acl', async function() {
+      const all = rdf.sym(uri + '.acl#readall')
+      writer.addTriple(all, PRED.type, PRED.auth)
+      writer.addTriple(all, PRED.access, rdf.sym(uri))
+      writer.addTriple(all, PRED.agentClass, PRED.Agent)
+      writer.addTriple(all, PRED.mode, PRED.read)
+      gAgent.createAcl(uri, webId, true)
     })
   })
-  */
 })

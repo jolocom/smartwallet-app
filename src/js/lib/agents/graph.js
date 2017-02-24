@@ -174,9 +174,9 @@ class GraphAgent extends LDPAgent {
     const owner = $rdf.sym(`${aclUri}#owner`)
 
     const tripleMap = [
-      {pred: PRED.type, obj: PRED.auth},
+      {pred: PRED.type, obj: [PRED.auth]},
       {pred: PRED.access, obj: [$rdf.sym(uri), $rdf.sym(aclUri)]},
-      {pred: PRED.agent, obj: $rdf.sym(webId)},
+      {pred: PRED.agent, obj: [$rdf.sym(webId)]},
       {pred: PRED.mode, obj: [PRED.read, PRED.write, PRED.control]}
     ]
 
