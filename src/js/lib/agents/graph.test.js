@@ -191,7 +191,7 @@ describe('GraphAgent', function() {
     const originalAddImg = gAgent.addImage
 
     gAgent.randomString = () => 'abcde'
-    gAgent.createAcl = (uri, user, confidential) => {
+    gAgent.createAcl = async(uri, user, confidential) => {
       expect(uri).to.equal(newNodeUri)
       expect(user).to.equal(currentUser)
       expect(confidential).to.equal(nodeInfo.confidential)
