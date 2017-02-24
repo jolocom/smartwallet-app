@@ -59,7 +59,7 @@ class GraphAgent extends LDPAgent {
    */
 
   addImage(uri, dstContainer, writer, image, confidential) {
-    if (!uri || !dstContainer || !writer || !image || confidential) {
+    if (!writer || !image) {
       throw new Error('addImage: not enough arguments')
     }
     if (image instanceof File) {
@@ -110,7 +110,7 @@ class GraphAgent extends LDPAgent {
     const {confidential, title, description, nodeType, image} = nodeInfo
     const newNodeUri = centerNode.storage + this.randomString(5)
 
-    return this.createACL(newNodeUri, currentUser, confidential)
+    return this.createAcl(newNodeUri, currentUser, confidential)
     .then((uri) => {
       const des = description
       this.baseNode(newNodeUri, writer, title, des, nodeType, centerNode)
@@ -148,13 +148,11 @@ class GraphAgent extends LDPAgent {
   }
 
   storeFile(finUri, dstContainer, file, confidential = false) {
-    const wia = new WebIDAgent()
-    const webId = wia.getWebId() || (() => {
+    const uri = finUri || `${dstContainer}files/${this.randomString(5)}`
+    const webId = this._getWebId() || (() => {
       throw new Error('No webId detected.')
     })()
-    const uri = finUri || `${dstContainer}files/${this.randomString(5)}`
-
-    return this.createACL(finUri, webId, confidential).then(() => {
+    return this.createAcl(finUri, webId, confidential).then(() => {
       return this.put(Util.uriToProxied(uri), file, {
         'Content-Type': 'image'
       }).then(() => uri).catch((e) => {
@@ -163,42 +161,44 @@ class GraphAgent extends LDPAgent {
     })
   }
 
+  _getWebId() {
+    const wia = new WebIDAgent()
+    return wia.getWebId()
+  }
   // We create only one type of ACL file. Owner has full controll,
   // everyone else has read access. This will change in the future.
-  // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
-  // PUT ACL and WRITE TRIPLE should be called after making sure that the user
-  // has write access
+  // @TODO Optimize slightly.
+  createAcl(uri, webId, confidential = false) {
+    const writer = new Writer()
+    const aclUri = `${uri}.acl`
+    const owner = $rdf.sym(`${aclUri}#owner`)
 
-  createACL(uri, webID, confidential = false) {
-    let aclWriter = new Writer()
-    let aclUri = `${uri}.acl`
-    let owner = $rdf.sym('#owner')
+    const tripleMap = [
+      {pred: PRED.type, obj: PRED.auth},
+      {pred: PRED.access, obj: [$rdf.sym(uri), $rdf.sym(aclUri)]},
+      {pred: PRED.agent, obj: $rdf.sym(webId)},
+      {pred: PRED.mode, obj: [PRED.read, PRED.write, PRED.control]}
+    ]
 
-    aclWriter.addTriple(owner, PRED.type, PRED.auth)
-    aclWriter.addTriple(owner, PRED.access, $rdf.sym(uri))
-    aclWriter.addTriple(owner, PRED.access, $rdf.sym(aclUri))
-    aclWriter.addTriple(owner, PRED.agent, $rdf.sym(webID))
-
-    aclWriter.addTriple(owner, PRED.mode, PRED.control)
-    aclWriter.addTriple(owner, PRED.mode, PRED.read)
-    aclWriter.addTriple(owner, PRED.mode, PRED.write)
+    tripleMap.forEach(st => {
+      st.obj.forEach(obj => {
+        writer.addTriple(owner, st.pred, obj)
+      })
+    })
 
     if (!confidential) {
-      let all = $rdf.sym('#readall')
-
-      aclWriter.addTriple(all, PRED.type, PRED.auth)
-      aclWriter.addTriple(all, PRED.access, $rdf.sym(uri))
-      aclWriter.addTriple(all, PRED.agentClass, PRED.Agent)
-      aclWriter.addTriple(all, PRED.mode, PRED.read)
+      const all = $rdf.sym(`${aclUri}#readall`)
+      writer.addTriple(all, PRED.type, PRED.auth)
+      writer.addTriple(all, PRED.access, $rdf.sym(uri))
+      writer.addTriple(all, PRED.agentClass, PRED.Agent)
+      writer.addTriple(all, PRED.mode, PRED.read)
     }
 
-    return this.put(Util.uriToProxied(aclUri), aclWriter.end(), {
+    return this.put(Util.uriToProxied(aclUri), writer.end(), {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri
-    }).catch((e) => {
-      console.log('error', e, 'occured while putting the acl file')
-    })
+    }).catch(e => {})
   }
 
   /**

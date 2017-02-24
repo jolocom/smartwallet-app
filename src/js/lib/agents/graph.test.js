@@ -194,7 +194,7 @@ describe('GraphAgent', function() {
     gAgent.createAcl = (uri, user, confidential) => {
       expect(uri).to.equal(newNodeUri)
       expect(user).to.equal(currentUser)
-      expect(confidential).to.be.nodeInfo.confidential
+      expect(confidential).to.equal(nodeInfo.confidential)
     }
     gAgent.put = async(uri, body, headers) => {
       expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
@@ -311,9 +311,25 @@ describe('GraphAgent', function() {
     })
   })
 
+  /*
+  // @TODO
   describe('#storeFile', function() {
     it('Should correcly store a public file', async function() {
 
     })
   })
+
+  describe('#createAcl', function() {
+    it('Should correctly create public acl', async function() {
+      const gAgent = new GraphAgent()
+      const uri = 'https://mockfile.com/card'
+      gAgent.put = async(finUri, body, headers) => {
+        expect(finUri).to.equal(`https://proxy.jolocom.de/proxy?url=${uri}.acl`)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'text/turtle'
+        })
+      }
+    })
+  })
+  */
 })
