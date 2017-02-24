@@ -51,4 +51,54 @@ describe('Snack bar reducer', function() {
       }])
     })
   })
+
+  describe('closeShownMessage', () => {
+    it('should correctly close a shown message', () => {
+      let state = reducer().toJS()
+
+      state = reducer(state, snackBar.showMessage.buildAction({
+        message: 'test', id: 1
+      }))
+      expect(state).to.deep.equal({
+        open: true,
+        message: 'test',
+        undo: false,
+        undoCallback: null,
+        id: 1
+      })
+
+      state = reducer(state, snackBar.closeShownMessage({id: 1}))
+      expect(state).to.deep.equal({
+        open: false,
+        message: null,
+        undo: false,
+        undoCallback: null,
+        id: 1
+      })
+    })
+
+    it('should ignore requests to close old messages', () => {
+      let state = reducer().toJS()
+
+      state = reducer(state, snackBar.showMessage.buildAction({
+        message: 'test', id: 1
+      }))
+      expect(state).to.deep.equal({
+        open: true,
+        message: 'test',
+        undo: false,
+        undoCallback: null,
+        id: 1
+      })
+
+      state = reducer(state, snackBar.closeShownMessage({id: 2}))
+      expect(state).to.deep.equal({
+        open: true,
+        message: 'test',
+        undo: false,
+        undoCallback: null,
+        id: 1
+      })
+    })
+  })
 })
