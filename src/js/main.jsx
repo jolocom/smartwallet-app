@@ -38,7 +38,7 @@ moment.locale('en', {
 let rootEl = document.getElementById('app')
 // import {submission} from './reducers';
 
-const store = createStore()
+const store = createStore(hashHistory)
 const createSelectLocationState = () => {
   let prevRoutingState, prevRoutingStateJS
   return (state) => {
