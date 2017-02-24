@@ -148,24 +148,16 @@ class GraphAgent extends LDPAgent {
   }
 
   storeFile(finUri, dstContainer, file, confidential = false) {
-    let uri
-    let wia = new WebIDAgent()
-    const webId = wia.getWebId()
-
-    if (!webId) {
+    const wia = new WebIDAgent()
+    const webId = wia.getWebId() || (() => {
       throw new Error('No webId detected.')
-    }
-    if (!finUri) {
-      uri = `${dstContainer}files/${this.randomString(5)}-${file.name}`
-    } else {
-      uri = finUri
-    }
-    return this.createACL(uri, webId, confidential).then(() => {
+    })()
+    const uri = finUri || `${dstContainer}files/${this.randomString(5)}`
+
+    return this.createACL(finUri, webId, confidential).then(() => {
       return this.put(Util.uriToProxied(uri), file, {
         'Content-Type': 'image'
-      }).then(() => {
-        return uri
-      }).catch((e) => {
+      }).then(() => uri).catch((e) => {
         throw new Error('Could not upload the image')
       })
     })

@@ -196,9 +196,6 @@ describe('GraphAgent', function() {
       expect(user).to.equal(currentUser)
       expect(confidential).to.be.nodeInfo.confidential
     }
-    gAgent.addImage = async() => {
-      expect(true).to.be.false
-    }
     gAgent.put = async(uri, body, headers) => {
       expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
       expect(headers).to.deep.equal({
@@ -263,25 +260,60 @@ describe('GraphAgent', function() {
     }
     // A lot of references passed around at the moment.
     it('Should create public basic node with no image', async function() {
+      gAgent.addImage = async() => {
+        expect(true).to.be.false
+      }
       gAgent.createNode(currentUser, centerNode, nodeInfo)
+      gAgent.addImage = originalAddImg
     })
 
     it('Should create private basic node with no image', async function() {
+      gAgent.addImage = async() => {
+        expect(true).to.be.false
+      }
       nodeInfo.confidential = true
       await gAgent.createNode(currentUser, centerNode, nodeInfo)
       nodeInfo.confidential = false
+      gAgent.addImage = originalAddImg
     })
 
     it('Should create public basic node with image', async function() {
       nodeInfo.image = 'https://imagelink.com'
       nodeInfo.confidential = false
-      nodeInfo.nodeType = 'image'
-      gAgent.addImage = originalAddImg
+      nodeInfo.nodeType = 'default'
 
       await gAgent.createNode(currentUser, centerNode, nodeInfo)
 
       nodeInfo.nodeType = 'default'
       nodeInfo.image = false
+    })
+
+    it('Should create private basic node with image', async function() {
+      nodeInfo.image = 'https://imagelink.com'
+      nodeInfo.confidential = true
+      nodeInfo.nodeType = 'default'
+
+      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+
+      nodeInfo.nodeType = 'default'
+      nodeInfo.image = false
+    })
+
+    it('Should create pubilic image node with image', async function() {
+      nodeInfo.image = 'https://imagelink.com'
+      nodeInfo.confidential = false
+      nodeInfo.nodeType = 'image'
+
+      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+
+      nodeInfo.nodeType = 'default'
+      nodeInfo.image = false
+    })
+  })
+
+  describe('#storeFile', function() {
+    it('Should correcly store a public file', async function() {
+
     })
   })
 })
