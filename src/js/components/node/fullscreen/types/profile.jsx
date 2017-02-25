@@ -302,7 +302,9 @@ let ProfileNode = React.createClass({
   },
 
   isMe() {
+    console.log('Caleld here')
     if (this.state && this.state.profile) {
+      console.log('HERE I AM', this.state.profile.webId === this.props.node.uri)
       return this.state.profile.webId === this.props.node.uri
     }
   },
@@ -338,13 +340,14 @@ let ProfileNode = React.createClass({
       menuItems.push('edit')
       // Making sure you can't delete your main node.
       if (!this.isMe()) {
-        menuItems.push('viewSharedNodes')
         menuItems.push('delete')
-        fabItems.push('chat')
-        if (this.props.centerWritePerm) {
-          menuItems.push('disconnect')
-        }
       }
+    }
+
+    if (!this.isMe()) {
+      menuItems.push('disconnect')
+      menuItems.push('viewSharedNodes')
+      fabItems.push('chat')
     }
 
     menuItems.push('copyUrl')
