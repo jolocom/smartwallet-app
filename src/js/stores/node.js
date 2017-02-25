@@ -152,7 +152,7 @@ export default Reflux.createStore({
         } else reject('Could not delete file')
       }).then((query) => {
         if (flag) {
-          this.gAgent.deleteTriple(query).then((result) => {
+          this.gAgent.deleteTriples(query).then((result) => {
             if (result.ok) {
               profileActions.load() // Reload profile info (passport)
               graphActions.refresh()
@@ -189,7 +189,7 @@ export default Reflux.createStore({
     } else {
       payload = args[0]
     }
-    this.gAgent.deleteTriple(payload)
+    this.gAgent.deleteTriples(payload)
     .then(function() {
       graphActions.drawAtUri(uri, 0)
     })
@@ -204,23 +204,24 @@ export default Reflux.createStore({
    *                          if we fire the animation.
    */
   link(start, type, end, center) {
-    let predicate = null
-    if (type === 'generic') {
-      predicate = PRED.isRelatedTo
-    } else if (type === 'knows') {
-      predicate = PRED.knows
+    const predMap = {
+      generic: PRED.isRelatedTo,
+      knows: PRED.knows
     }
-    let payload = {
-      subject: $rdf.sym(start),
-      predicate,
-      object: $rdf.sym(end)
-    }
-    this.gAgent.writeTriples(start, [payload], start === center).catch(e => {
-      if (e === 'DUPLICATE') {
-        SnackbarActions.showMessage('The nodes are already linked.')
-      } else {
-        SnackbarActions.showMessage('No permission to link to this node.')
-      }
-    })
+    const pred = predMap[type]
+    const rerender = start === center
+
+    this.gAgent.linkNodes($rdf.sym(start), pred, $rdf.sym(end))
+      .then(() => {
+        if (rerender) {
+          graphActions.drawNewNode(end, pred.uri)
+        }
+      }).catch(e => {
+        if (e === 'DUPLICATE') {
+          SnackbarActions.showMessage('The nodes are already linked.')
+        } else {
+          SnackbarActions.showMessage('No permission to link to this node.')
+        }
+      })
   }
 })

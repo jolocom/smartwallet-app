@@ -3,7 +3,6 @@ import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
-import GraphActions from '../../actions/graph-actions'
 import D3Convertor from 'lib/d3-converter'
 
 import $rdf from 'rdflib'
@@ -65,7 +64,7 @@ class GraphAgent extends LDPAgent {
     if (image instanceof File) {
       let imgUri = `${dstContainer}files/${this.randomString(5)}`
       writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(imgUri))
-      return this.storeFile(imgUri, null, image, confidential)
+      return this.storeFile(imgUri, '', image, confidential)
     }
     writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(image))
     return
@@ -128,7 +127,7 @@ class GraphAgent extends LDPAgent {
         ? 'passport'
         : 'generic'
 
-      return this.linkNodes(centerNode.uri, type, newNodeUri, false)
+      return this.linkNodes(centerNode.uri, type, newNodeUri)
     }).then(() => {
       return newNodeUri.uri
     })
@@ -209,44 +208,18 @@ class GraphAgent extends LDPAgent {
    * @return {function} fetch request - .then contains the response.
    */
 
-  writeTriples(uri, triples, draw = false) {
-    let validPredicate = false
-
-    if (triples.length === 1) {
-      let pred = triples[0].predicate.uri
-      validPredicate = (pred === PRED.isRelatedTo.uri ||
-        pred === PRED.knows.uri)
-    }
-
+  writeTriples(uri, tripsToWrite) {
     const toAdd = $rdf.graph()
-
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < triples.length; i++) {
-        let t = triples[i]
-        this.findTriples(t.subject.uri, t.subject, t.predicate, t.object)
-          .then((res) => {
-            if (res.length === 0) {
-              toAdd.add(t.subject, t.predicate, t.object)
-            } else {
-              // Think about this
-              return reject('DUPLICATE')
-            }
-            if (i === triples.length - 1) {
-              return resolve()
-            }
-          })
-      }
+    return this.fetchTriplesAtUri(uri).then(fetchedTrips => {
+      const writer = new Writer()
+      writer.addAll(fetchedTrips)
+      tripsToWrite.forEach(t => {
+        if (writer.find(t.subject, t.predicate, t.object).length === 0) {
+          toAdd.add(t.subject, t.predicate, t.object)
+        }
+      })
     }).then(() => {
-      return this.patch(this._proxify(uri), null, toAdd.statements)
-        .then((res) => {
-          // At the moment the animation fires when we only add one triple.
-          if (res.ok && draw && validPredicate) {
-            let obj = triples[0].object.uri
-            let pred = triples[0].predicate.uri
-            // @TODO dont trigger actions from within the agents
-            GraphActions.drawNewNode(obj, pred)
-          }
-        })
+      return this.patch(this._proxify(uri), [], toAdd.statements)
     })
   }
 
@@ -262,14 +235,14 @@ class GraphAgent extends LDPAgent {
    * @return {promise} fetch request - .then contains the response.
    */
 
-  // uri,subj,pred,obj
+  // uri, subj, pred, obj
   // {uri:uri, triples:[]}
-  deleteTriple(...args) {
+  deleteTriples(...args) {
     let subject, predicate, object
     let triples = []
     let uri
 
-    // Check if we received only one object with multiple triples in there.
+    // Check if we received only one object with more triples.
     if (args.length === 1) {
       ({uri} = args[0])
       triples = args[0].triples
@@ -279,10 +252,9 @@ class GraphAgent extends LDPAgent {
     }
 
     const toDel = $rdf.graph()
-
     toDel.addAll(triples)
 
-    return this.patch(this._proxify(uri), toDel.statements)
+    return this.patch(this._proxify(uri), toDel.statements, [])
   }
 
   // This function gets passed a center uri and it's triples,
@@ -290,17 +262,18 @@ class GraphAgent extends LDPAgent {
   // After that it parses those links for their RDF data.
   getNeighbours(center, triples) {
     // We will only follow and parse these links
-    let Links = [
+    const links = [
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
       PRED.isRelatedTo_HTTP.uri,
       PRED.passport.uri
     ]
-    let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
+    const neighbours = triples.filter((t) =>
+        links.indexOf(t.predicate.uri) >= 0)
     // If there are adjacent nodes to draw,
     // we parse them and return an array of their triples
-    let neighbourErrors = []
-    let graphMap = []
+    const neighbourErrors = []
+    const graphMap = []
 
     return Promise.all(neighbours.map((triple) => {
       return this.fetchTriplesAtUri(triple.object.uri).then((result) => {
@@ -308,16 +281,7 @@ class GraphAgent extends LDPAgent {
         if (result.unav) {
           // We are setting the connection field of the node, we need it
           // in order to be able to dissconnect it from our center node later.
-
           neighbourErrors.push(triple.object.uri)
-
-          // if forbidden access to node, do not show it
-          // (we assume the center node isn't ours then)
-          // @TODO find better way to know if we have rights to center node
-          if (result.status !== 403) {
-            result.connection = triple.predicate.uri
-            graphMap.push(result)
-          }
         } else {
           // This is a valid node.
           result.triples.connection = triple.predicate.uri
@@ -386,7 +350,7 @@ class GraphAgent extends LDPAgent {
     return this.getGraphMapAtUri(webId)
   }
 
-  linkNodes(start, type, end, flag) {
+  linkNodes(start, type, end) {
     const predMap = {
       'generic': PRED.isRelatedTo,
       'knows': PRED.knows,
@@ -403,7 +367,7 @@ class GraphAgent extends LDPAgent {
         predicate,
         object: $rdf.sym(end)
       }
-      return this.gAgent.writeTriples(start, [payload], flag)
+      return this.gAgent.writeTriples(start, [payload])
     })
   }
 }

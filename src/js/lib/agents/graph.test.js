@@ -204,11 +204,10 @@ describe('GraphAgent', function() {
       expect(body)
         .to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri, nodeInfo.image))
     }
-    gAgent.linkNodes = async(start, type, end, render) => {
+    gAgent.linkNodes = async(start, type, end) => {
       expect(start).to.equal(centerNode.uri)
       expect(type).to.equal('generic')
       expect(end).to.equal(newNodeUri)
-      expect(render).to.be.false
     }
 
     const currentUser = 'https://testuser.com/profile/card#me'
@@ -355,6 +354,98 @@ describe('GraphAgent', function() {
       writer.addTriple(all, PRED.agentClass, PRED.Agent)
       writer.addTriple(all, PRED.mode, PRED.read)
       gAgent.createAcl(uri, webId, true)
+    })
+  })
+
+  describe('#writeTriple', function() {
+    const gAgent = new GraphAgent()
+    const destination = 'https://testfile.com/card'
+    const triples = [{
+      subject: rdf.sym('https://eugeniu.com/profile/card'),
+      predicate: PRED.type,
+      object: PRED.Document
+    }]
+
+    it('Should add new triple correctly', async function() {
+      gAgent.fetchTriplesAtUri = async(uri) => {
+        expect(uri).to.equal(destination)
+        return []
+      }
+      gAgent.patch = async(uri, toDel, toAdd) => {
+        const g = rdf.graph()
+        g.addAll(triples)
+
+        expect(toAdd).to.deep.equal(g.statements)
+        expect(toDel).to.deep.equal([])
+        expect(uri)
+          .to.equal('https://proxy.jolocom.de/proxy?url=' + destination)
+      }
+
+      await gAgent.writeTriples(destination, triples)
+    })
+
+    it('Should not add duplicate triple', async function() {
+      gAgent.fetchTriplesAtUri = async(uri) => {
+        expect(uri).to.equal(destination)
+        return triples
+      }
+
+      gAgent.patch = async(uri, toDel, toAdd) => {
+        expect(toAdd).to.deep.equal([])
+        expect(toDel).to.deep.equal([])
+        expect(uri)
+          .to.equal('https://proxy.jolocom.de/proxy?url=' + destination)
+      }
+
+      await gAgent.writeTriples(destination, triples)
+    })
+  })
+
+  describe('#deleteTriples', function() {
+    const gAgent = new GraphAgent()
+    const target = 'https://fakeprofile.com/card'
+
+    it('Should correctly attempt to delete a triple', async function() {
+      const expected = [{
+        subject: rdf.literal('subjectUri'),
+        predicate: PRED.knows,
+        object: rdf.sym('https://testuser'),
+        why: rdf.sym('chrome:theSession')
+      }]
+
+      gAgent.patch = async(uri, toDel, toAdd) => {
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + target)
+        expect(toAdd).to.deep.equal([])
+        expect(toDel).to.deep.equal(expected)
+      }
+
+      gAgent.deleteTriples(
+        target,
+        expected[0].subject,
+        expected[0].predicate,
+        expected[0].object
+      )
+    })
+
+    it('Should correctly attempt to delete more triples', async function() {
+      const expected = [{
+        subject: rdf.literal('subjectUri'),
+        predicate: PRED.knows,
+        object: rdf.sym('https://testuser'),
+        why: rdf.sym('chrome:theSession')
+      }, {
+        subject: rdf.literal('secondSubjectUri'),
+        predicate: PRED.knows,
+        object: rdf.sym('https://testusertwo'),
+        why: rdf.sym('chrome:theSession')
+      }]
+
+      gAgent.patch = async(uri, toDel, toAdd) => {
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + target)
+        expect(toAdd).to.deep.equal([])
+        expect(toDel).to.deep.equal(expected)
+      }
+      gAgent.deleteTriples({uri: target, triples: expected})
     })
   })
 })

@@ -69,21 +69,18 @@ class LDPAgent extends HTTPAgent { // TODO: Remove when done refactoring
     let parser = new Parser()
     return this.proxiedHTTP.get(uri).then((ans) => {
       if (!ans.ok) {
-        throw new Error(ans.status) // Call the catch if response error
+        throw new Error(ans.status)
       }
 
       return ans.text().then((res) => {
         return parser.parse(res, uri)
       })
-    }).catch((err) => { // Catch is automatically called on network errors only
-      let statusCode = err.message
-      console.log(err.message)
+    }).catch(() => {
       return {
         uri: uri,
         unav: true,
         connection: null,
-        triples: [],
-        statusCode: parseInt(statusCode)
+        triples: []
       }
     })
   }
