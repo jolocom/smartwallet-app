@@ -448,4 +448,109 @@ describe('GraphAgent', function() {
       gAgent.deleteTriples({uri: target, triples: expected})
     })
   })
+  describe('#getNeighbours', function() {
+    it('Should correctly handle node with no neighours', async function() {
+      const gAgent = new GraphAgent()
+      const triples = []
+      gAgent.fetchTriplesAtUri = async(uri) => {
+        expect(false).to.be.true
+      }
+
+      gAgent.getNeighbours(triples)
+    })
+
+    it('Should correctly get the neighbours of a profile', async function() {
+      const gAgent = new GraphAgent()
+      const usrOne = 'https://testuserone'
+      const usrTwo = 'https://testusertwo'
+
+      const triples = [{
+        subject: rdf.literal('subjectUri'),
+        predicate: PRED.type,
+        object: PRED.Document,
+        why: rdf.sym('chrome:theSession')
+      }, {
+        subject: rdf.literal('secondSubjectUri'),
+        predicate: PRED.knows,
+        object: rdf.sym(usrOne),
+        why: rdf.sym('chrome:theSession')
+      }, {
+        subject: rdf.literal('secondSubjectUri'),
+        predicate: PRED.knows,
+        object: rdf.sym(usrTwo),
+        why: rdf.sym('chrome:theSession')
+      }]
+
+      const responseMap = {
+        [usrOne]: {
+          triples: [{
+            subject: rdf.sym(usrOne),
+            predicate: PRED.type,
+            object: PRED.Document,
+            why: rdf.sym('chrome:theSession')
+          }]
+        },
+        [usrTwo]: {
+          triples: [{
+            subject: rdf.sym(usrTwo),
+            predicate: PRED.type,
+            object: PRED.Document,
+            why: rdf.sym('chrome:theSession')
+          }]
+        }
+      }
+
+      gAgent.fetchTriplesAtUri = async(uri) => {
+        expect(uri)
+          .to.equal(responseMap[uri].triples[0].subject.uri)
+        return responseMap[uri]
+      }
+
+      const result = await gAgent.getNeighbours(triples)
+      expect(result).to
+        .deep.equal([responseMap[usrOne].triples, responseMap[usrTwo].triples])
+    })
+  })
+
+  // @TODO Perhaps test all potential fields
+  describe('#getFileModel', function() {
+    it('Should retrieve and convert a rdf file.', async function() {
+      const gAgent = new GraphAgent()
+      const targetUri = 'https://mockresource.com/profile/card'
+      gAgent.fetchTriplesAtUri = async(uri) => {
+        expect(uri).to.equal(targetUri)
+        return {
+          triples: [{
+            subject: rdf.sym(targetUri),
+            predicate: PRED.type,
+            object: PRED.Document,
+            why: rdf.sym('chrome:theSession')
+          }]
+        }
+      }
+
+      const result = await gAgent.getFileModel(targetUri)
+      expect(result).to.deep.equal(
+        [{
+          address: '',
+          company: '',
+          confidential: undefined,
+          connection: null,
+          description: null,
+          email: '',
+          img: null,
+          mobilePhone: '',
+          name: null,
+          profession: '',
+          rank: 'neighbour',
+          socialMedia: '',
+          storage: null,
+          title: null,
+          type: 'http://xmlns.com/foaf/0.1/Document',
+          uri: 'https://mockresource.com/profile/card',
+          url: ''
+        }]
+      )
+    })
+  })
 })

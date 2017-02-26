@@ -260,7 +260,7 @@ class GraphAgent extends LDPAgent {
   // This function gets passed a center uri and it's triples,
   // and then finds all possible links that we choose to display.
   // After that it parses those links for their RDF data.
-  getNeighbours(center, triples) {
+  getNeighbours(triples) {
     const links = [
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
@@ -275,8 +275,8 @@ class GraphAgent extends LDPAgent {
       return this.fetchTriplesAtUri(neighb.object.uri).then((result) => {
         if (!result.unav) {
           result.triples.connection = neighb.predicate.uri
+          result.triples.uri = neighb.object.uri
           graphMap.push(result.triples)
-          graphMap[graphMap.length - 1].uri = neighb.object.uri
         }
       })
     })).then(() => {
@@ -314,14 +314,10 @@ class GraphAgent extends LDPAgent {
     return result
   }
 
-  // Both getGraphMapAtUri and getGraphMapAtWebID return an array of nodes, each
-  // node being represented as an array of triples that define it. The result
-  // is pretty much a "map" of the currently displayed graph.
-
   getGraphMapAtUri(uri) {
     // centerNode is {prefixes: [...], triples: [...]}
     let getPartialGraphMap = (centerNode) => {
-      return this.getNeighbours(uri, centerNode.triples)
+      return this.getNeighbours(centerNode.triples)
         .then((neibTriples) => {
           let firstNode = centerNode.triples
           firstNode.uri = uri
@@ -331,11 +327,6 @@ class GraphAgent extends LDPAgent {
 
     return this.fetchTriplesAtUri(uri)
       .then(getPartialGraphMap)
-  }
-
-  // Calls the above function, but passes the current webId as the URI.
-  getGraphMapAtWebID(webId) {
-    return this.getGraphMapAtUri(webId)
   }
 
   linkNodes(start, type, end) {
