@@ -339,7 +339,7 @@ class GraphAgent extends LDPAgent {
         predicate,
         object: $rdf.sym(end)
       }
-      return this.gAgent.writeTriples(start, [payload])
+      return this.writeTriples(start, [payload])
     }).catch(e => {
       return
     })
