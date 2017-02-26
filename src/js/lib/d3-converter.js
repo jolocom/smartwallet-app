@@ -5,13 +5,7 @@ import {PRED} from './namespaces.js'
 // to D3 to draw a graph based on the data
 
 class D3Converter {
-  convertToD3(rank, node, i, n) {
-    // We need to know the index of the node and the total amount of nodes
-    // in order to be able to calculate their initial position, so that they are
-    // possitioned in a circle
-    this.i = i + 1
-    this.n = n
-
+  convertToD3(rank, node) {
     let uri = node.uri
     let connection = node.connection ? node.connection : null
 

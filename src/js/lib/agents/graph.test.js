@@ -553,4 +553,40 @@ describe('GraphAgent', function() {
       )
     })
   })
+  describe('#linkNodes', function() {
+    const gAgent = new GraphAgent()
+    const start = 'https://startnode.com/card'
+    const type = 'generic'
+    const end = 'https://endnode.com/card'
+
+    const expectedPayload = [{
+      subject: rdf.sym(start),
+      predicate: PRED.isRelatedTo,
+      object: rdf.sym(end)
+    }]
+
+    gAgent.head = async(uri) => {}
+    gAgent.writeTriples = async(uri, payload) => {
+      expect(uri).to.equal(start)
+      expect(payload).to.deep.equal(expectedPayload)
+    }
+
+    it('Should correctly link 2 nodes', async function() {
+      gAgent.linkNodes(start, type, end)
+    })
+
+    it('Should not link in case resoruces are not available',
+      async function() {
+        gAgent.head = async(uri) => {
+          throw new Error()
+        }
+
+        gAgent.writeTriples = async(uri, payload) => {
+          expect(uri).to.equal(start)
+          expect(payload).to.deep.equal([])
+        }
+
+        gAgent.linkNodes(start, type, end)
+      })
+  })
 })

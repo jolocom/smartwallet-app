@@ -300,33 +300,26 @@ class GraphAgent extends LDPAgent {
   /**
    * @summary Given an array of triples, converts it to a JS object
    *  that is ready to be rendered.
+   * @param {string} r - The rank of the node (center | adjacent)
    * @param {array | arrays} Triples - The triples describing the file.
    * @return {object} node - JS object describing the node ready for render.
    */
   convertToNodes(r, triples) {
-    const convertor = new D3Convertor()
-    const len = triples.length - 1
-    let result = []
-    triples.forEach((triple, i) => {
-      result.push(convertor.convertToD3(r, triple, i, len))
+    const result = []
+    triples.forEach(triple => {
+      result.push((new D3Convertor()).convertToD3(r, triple))
     })
-
     return result
   }
 
   getGraphMapAtUri(uri) {
-    // centerNode is {prefixes: [...], triples: [...]}
-    let getPartialGraphMap = (centerNode) => {
-      return this.getNeighbours(centerNode.triples)
-        .then((neibTriples) => {
-          let firstNode = centerNode.triples
-          firstNode.uri = uri
-          return [firstNode].concat(neibTriples)
-        })
-    }
-
-    return this.fetchTriplesAtUri(uri)
-      .then(getPartialGraphMap)
+    return this.fetchTriplesAtUri(uri).then(centerTriples => {
+      return this.getNeighbours(centerTriples.triples).then(neibTrips => {
+        const firstNode = centerTriples.triples
+        firstNode.uri = uri
+        return [firstNode].concat(neibTrips)
+      })
+    })
   }
 
   linkNodes(start, type, end) {
@@ -347,6 +340,8 @@ class GraphAgent extends LDPAgent {
         object: $rdf.sym(end)
       }
       return this.gAgent.writeTriples(start, [payload])
+    }).catch(e => {
+      return
     })
   }
 }
