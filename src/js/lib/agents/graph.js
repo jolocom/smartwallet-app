@@ -261,7 +261,6 @@ class GraphAgent extends LDPAgent {
   // and then finds all possible links that we choose to display.
   // After that it parses those links for their RDF data.
   getNeighbours(center, triples) {
-    // We will only follow and parse these links
     const links = [
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
@@ -269,27 +268,16 @@ class GraphAgent extends LDPAgent {
       PRED.passport.uri
     ]
     const neighbours = triples.filter((t) =>
-        links.indexOf(t.predicate.uri) >= 0)
-    // If there are adjacent nodes to draw,
-    // we parse them and return an array of their triples
-    const neighbourErrors = []
+      links.indexOf(t.predicate.uri) >= 0)
     const graphMap = []
 
-    return Promise.all(neighbours.map((triple) => {
-      return this.fetchTriplesAtUri(triple.object.uri).then((result) => {
-        // This is a node that coulnt't be retrieved, either 404, 401 etc.
-        if (result.unav) {
-          // We are setting the connection field of the node, we need it
-          // in order to be able to dissconnect it from our center node later.
-          neighbourErrors.push(triple.object.uri)
-        } else {
-          // This is a valid node.
-          result.triples.connection = triple.predicate.uri
+    return Promise.all(neighbours.map(neighb => {
+      return this.fetchTriplesAtUri(neighb.object.uri).then((result) => {
+        if (!result.unav) {
+          result.triples.connection = neighb.predicate.uri
           graphMap.push(result.triples)
-          graphMap[graphMap.length - 1].uri = triple.object.uri
+          graphMap[graphMap.length - 1].uri = neighb.object.uri
         }
-      }).catch(() => {
-        neighbourErrors.push(triple.object.uri)
       })
     })).then(() => {
       return graphMap
