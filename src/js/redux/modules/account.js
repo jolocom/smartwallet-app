@@ -6,7 +6,7 @@ import { showMessage } from './snack-bar'
 export const doLogin = asyncAction('account/login', 'doLogin', {
   expectedParams: ['username', 'password', 'updateUserEmail'],
   creator: (params) => {
-    return async (dispatch, _, backend) => {
+    return async (dispatch, _, {backend}) => {
       const webId = backend.webId.getWebId()
 
       // The user is already logged in.
@@ -51,7 +51,7 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
 export const doSignup = action('account', 'doSignup', {
   expectedParams: ['username', 'password', 'email', 'name'],
   creator: ({username, password, email, name}) => {
-    return (dispatch, _, backend) => {
+    return (dispatch, _, {backend}) => {
       localStorage.setItem('jolocom.auth-mode', 'proxy')
 
       const accounts = backend.accounts
@@ -72,7 +72,7 @@ export const doSignup = action('account', 'doSignup', {
 export const doLogout = action('account', 'doLogout', {
   expectedParams: [],
   creator: params => {
-    return (dispatch, _, backend) => {
+    return (dispatch, _, {backend}) => {
       const authMode = localStorage.getItem('jolocom.auth-mode')
 
       const accounts = backend.accounts
@@ -93,7 +93,7 @@ export const doForgotPassword = asyncAction(
   {
     expectedParams: ['username'],
     creator: params => {
-      return (dispatch, _, backend) => {
+      return (dispatch, _, {backend}) => {
         const accounts = backend.accounts
         return doForgotPassword.buildAction(
           params,
@@ -117,7 +117,7 @@ export const doResetPassword = asyncAction(
   {
     expectedParams: ['username', 'token', 'password'],
     creator: params => {
-      return (dispatch, _, backend) => {
+      return (dispatch, _, {backend}) => {
         const accounts = backend.accounts
         return doResetPassword.buildAction(
           params,
@@ -141,7 +141,7 @@ export const doActivateEmail = asyncAction(
   {
     expectedParams: ['username', 'code'],
     creator: params => {
-      return (dispatch, _, backend) => {
+      return (dispatch, _, {backend}) => {
         const accounts = backend.accounts
         dispatch(doActivateEmail.buildAction(
           params,
@@ -171,7 +171,7 @@ export const doUpdateUserEmail = action(
   {
     expectedParams: ['email', 'webId', 'username'],
     creator: params => {
-      return async (dispatch, _, backend) => {
+      return async (dispatch, _, {backend}) => {
         const accounts = backend.accounts
         await accounts.updateEmail(params.webId, params.email)
 
@@ -200,6 +200,7 @@ const initialState = Immutable.fromJS({
   username: '',
   password: '',
   userExists: false,
+  loggingIn: false,
   emailVerifyScreen: false,
   emailVerifyCompleted: false,
   emailUpdateQueued: false,
@@ -223,7 +224,7 @@ export default function reducer(state = initialState, action = {}) {
     case doLogout.id:
       return state.merge({
         loggingIn: false,
-        username: null
+        username: ''
       })
     case doActivateEmail.id_success:
       return state.merge({
