@@ -6,6 +6,10 @@ export function stub(options = {}) {
       return options.returns
     }
   }
+  func.returns = (val) => {
+    options.returns = val
+    return func
+  }
   func.called = false
   return func
 }
