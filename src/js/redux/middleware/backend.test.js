@@ -27,7 +27,9 @@ describe('Backend/async Redux middleware', function() {
     handle(action)
     expect(next.called).to.be.false
     expect(action.called).to.be.true
-    expect(action.calledWithArgs).to.deep.equal(['dispatch()', 'getState()'])
+    expect(action.calledWithArgs).to.deep.equal([
+      'dispatch()', 'getState()', {backend: 'dummy backend'}
+    ])
   })
 
   it('should handle promise actions that resolve', async function() {

@@ -1,20 +1,17 @@
 import _ from 'lodash'
 import Immutable from 'immutable'
-import AccountsAgent from 'lib/agents/accounts'
-import WebIDAgent from 'lib/agents/webid'
 import { action, asyncAction } from './'
 import { showMessage } from './snack-bar'
 
 export const doLogin = asyncAction('account/login', 'doLogin', {
   expectedParams: ['username', 'password', 'updateUserEmail'],
   creator: (params) => {
-    const wia = new WebIDAgent()
-    const webId = wia.getWebId()
+    return async (dispatch, _, backend) => {
+      const webId = backend.webId.getWebId()
 
-    // The user is already logged in.
-    if (webId) {
-      return async dispatch => {
-        const accounts = new AccountsAgent()
+      // The user is already logged in.
+      if (webId) {
+        const accounts = backend.accounts
         const loggedIn = await accounts.checkLogin(webId)
           .then(() => true).catch(() => false)
 
@@ -28,38 +25,36 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
         } else {
           dispatch(doLogout())
         }
+      } else if (params.username && params.password) {
+        dispatch(doLogin.buildAction(params, async (backend) => {
+          const accounts = backend.accounts
+          let promise
+          if (params.updateUserEmail) {
+            // init after activation only
+            promise = accounts.loginAndSetup(
+              params.username, params.password,
+              params.updateUserEmail
+            )
+          } else {
+            promise = accounts.login(params.username, params.password)
+          }
+          const account = await promise
+
+          _saveAuthInfo(_saveToLocalStorage, params.username, account.webId)
+
+          return {username: params.username, webId: account.webid}
+        }))
       }
-    } else if (params.username && params.password) {
-      return doLogin.buildAction(params, async () => {
-        const accounts = new AccountsAgent()
-        let promise
-        if (params.updateUserEmail) {
-          // init after activation only
-          promise = accounts.loginAndSetup(
-            params.username, params.password,
-            params.updateUserEmail
-          )
-        } else {
-          promise = accounts.login(params.username, params.password)
-        }
-        const account = await promise
-
-        _saveAuthInfo(_saveToLocalStorage, params.username, account.webId)
-
-        return {username: params.username, webId: account.webid}
-      })
-    } else {
-      return dispatch => {} // Do nothing
     }
   }
 })
 export const doSignup = action('account', 'doSignup', {
   expectedParams: ['username', 'password', 'email', 'name'],
   creator: ({username, password, email, name}) => {
-    return dispatch => {
+    return (dispatch, _, backend) => {
       localStorage.setItem('jolocom.auth-mode', 'proxy')
 
-      const accounts = new AccountsAgent()
+      const accounts = backend.accounts
       accounts.register(
         username, password, email, name
       ).then((account) => {
@@ -77,18 +72,20 @@ export const doSignup = action('account', 'doSignup', {
 export const doLogout = action('account', 'doLogout', {
   expectedParams: [],
   creator: params => {
-    const authMode = localStorage.getItem('jolocom.auth-mode')
+    return (dispatch, _, backend) => {
+      const authMode = localStorage.getItem('jolocom.auth-mode')
 
-    const accounts = new AccountsAgent()
-    if (authMode === 'proxy') {
-      accounts.logout()
+      const accounts = backend.accounts
+      if (authMode === 'proxy') {
+        accounts.logout()
+      }
+
+      localStorage.removeItem('jolocom.username')
+      localStorage.removeItem('jolocom.webId')
+      localStorage.removeItem('jolocom.auth-mode')
+
+      dispatch(doLogout.buildAction(params))
     }
-
-    localStorage.removeItem('jolocom.username')
-    localStorage.removeItem('jolocom.webId')
-    localStorage.removeItem('jolocom.auth-mode')
-
-    return doLogout.buildAction(params)
   }
 })
 export const doForgotPassword = asyncAction(
@@ -96,8 +93,8 @@ export const doForgotPassword = asyncAction(
   {
     expectedParams: ['username'],
     creator: params => {
-      return dispatch => {
-        const accounts = new AccountsAgent()
+      return (dispatch, _, backend) => {
+        const accounts = backend.accounts
         return doForgotPassword.buildAction(
           params,
           accounts.forgotPassword(params.username)
@@ -120,8 +117,8 @@ export const doResetPassword = asyncAction(
   {
     expectedParams: ['username', 'token', 'password'],
     creator: params => {
-      return dispatch => {
-        const accounts = new AccountsAgent()
+      return (dispatch, _, backend) => {
+        const accounts = backend.accounts
         return doResetPassword.buildAction(
           params,
           accounts.resetPassword(params.username, params.token, params.password)
@@ -144,8 +141,8 @@ export const doActivateEmail = asyncAction(
   {
     expectedParams: ['username', 'code'],
     creator: params => {
-      return dispatch => {
-        const accounts = new AccountsAgent()
+      return (dispatch, _, backend) => {
+        const accounts = backend.accounts
         dispatch(doActivateEmail.buildAction(
           params,
           () => accounts.verifyEmail(params.username, params.code)
@@ -174,8 +171,8 @@ export const doUpdateUserEmail = action(
   {
     expectedParams: ['email', 'webId', 'username'],
     creator: params => {
-      return async dispatch => {
-        const accounts = new AccountsAgent()
+      return async (dispatch, _, backend) => {
+        const accounts = backend.accounts
         await accounts.updateEmail(params.webId, params.email)
 
         _saveAuthInfo(_saveToLocalStorage, params.username, params.webId)
