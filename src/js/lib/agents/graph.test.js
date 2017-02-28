@@ -567,7 +567,7 @@ describe('GraphAgent', function() {
           storage: null,
           title: null,
           type: 'http://xmlns.com/foaf/0.1/Document',
-          uri: 'https://mockresource.com/profile/card',
+          uri: MOCK_WEBID,
           url: ''
         }]
       )
