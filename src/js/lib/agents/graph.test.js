@@ -96,7 +96,6 @@ describe('GraphAgent', function() {
     })
   })
 
-  // @TODO Add test for uploading instanceof File
   describe('#addImage', function() {
     const gAgent = new GraphAgent()
     const uri = 'https://test.com/profile/card#me'
@@ -120,12 +119,13 @@ describe('GraphAgent', function() {
         }])
       }
     )
+
     it('Should correctly throw if no arguments are passed', function() {
       expect(() => gAgent.addImage()).to.throw('addImage: not enough arguments')
     })
   })
 
-  describe('#testImages', function() {
+  describe('#checkImages', function() {
     it('Should correctly detect unavailable images', async function() {
       const gAgent = new GraphAgent()
       const testNode = {img: 'https://randomuri.com/image.jpg'}
@@ -312,8 +312,35 @@ describe('GraphAgent', function() {
 
   // @TODO
   describe('#storeFile', function() {
-    it('Should correcly store a public file', async function() {
+    it('Should correcly store a public and private files', async function() {
+      const mockWebId = 'https://mockwebid.com/card'
+      const mockFile = {name: 'mockName'}
+      const mockDstCont = 'https://mockwebid.com/'
+      let mockDestination = 'https://mockwebid.com/files/x'
+      let mockConfidential = false
 
+      const gAgent = new GraphAgent()
+      gAgent._getWebId = () => mockWebId
+      gAgent.createAcl = async(finalUri, webId, confidential) => {
+        expect(finalUri).to.equal(mockDestination)
+        expect(webId).to.equal(mockWebId)
+        expect(confidential).to.equal(mockConfidential)
+      }
+      gAgent.put = async(uri, file, headers) => {
+        expect(uri)
+          .to.equal('https://proxy.jolocom.de/proxy?url=' + mockDestination)
+        expect(file).to.deep.equal(mockFile)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'image'
+        })
+      }
+      gAgent.randomString = () => 'abcde'
+      await gAgent.storeFile(mockDestination, null, mockFile, mockConfidential)
+
+      mockConfidential = true
+      mockDestination = `${mockDstCont}files/abcde`
+
+      await gAgent.storeFile(null, mockDstCont, mockFile, mockConfidential)
     })
   })
 
@@ -588,5 +615,47 @@ describe('GraphAgent', function() {
 
         gAgent.linkNodes(start, type, end)
       })
+  })
+
+  describe('#convertToNodes', function() {
+    it('Should correctly convert triples to node', async function() {
+      const uri = 'https://mockuser.com'
+      const triples = [[
+        {
+          subject: rdf.sym(uri),
+          predicate: PRED.title,
+          object: rdf.literal('Mock Title'),
+          why: rdf.sym('chrome:theSession')
+        }, {
+          subject: rdf.sym(uri),
+          predicate: PRED.description,
+          object: rdf.literal('Mock Description'),
+          why: rdf.sym('chrome:theSession')
+        }
+      ]]
+      triples[0].uri = uri
+
+      expect((new GraphAgent()).convertToNodes('a', triples)).to.deep.equal([
+        {
+          address: '',
+          company: '',
+          confidential: undefined,
+          connection: null,
+          description: 'Mock Description',
+          email: '',
+          img: null,
+          mobilePhone: '',
+          name: null,
+          profession: '',
+          rank: 'neighbour',
+          socialMedia: '',
+          storage: null,
+          title: 'Mock Title',
+          type: null,
+          uri: uri,
+          url: ''
+        }
+      ])
+    })
   })
 })

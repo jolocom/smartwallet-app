@@ -151,7 +151,7 @@ class GraphAgent extends LDPAgent {
     const webId = this._getWebId() || (() => {
       throw new Error('No webId detected.')
     })()
-    return this.createAcl(finUri, webId, confidential).then(() => {
+    return this.createAcl(uri, webId, confidential).then(() => {
       return this.put(Util.uriToProxied(uri), file, {
         'Content-Type': 'image'
       }).then(() => uri).catch((e) => {
