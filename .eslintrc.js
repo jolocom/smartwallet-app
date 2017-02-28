@@ -3,6 +3,14 @@ module.exports = {
         "browser": true,
         "es6": true
     },
+    "globals": {
+        "describe": false,
+        "it": false,
+        "before": false,
+        "beforeEach": false,
+        "after": false,
+        "afterEach": false
+    },
     "extends": ["standard", "standard-jsx", "standard-react"],
     "parser": "babel-eslint",
     "parserOptions": {

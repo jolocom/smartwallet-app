@@ -4,7 +4,7 @@ import {stub} from '../../../../test/utils'
 import * as account from './account'
 const reducer = account.default
 
-describe.only('Account module reducer', function() {
+describe('Account module reducer', function() {
   beforeEach(() => {
     localStorage.clear()
   })
