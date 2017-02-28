@@ -122,7 +122,6 @@ let Compose = React.createClass({
             style={[styles.textarea, styles.pre]} />
           <IconButton
             iconClassName="material-icons"
-            secondary
             onTouchTap={this.onSubmit}
             style={styles.button}
           >
