@@ -5,19 +5,21 @@ import PermAgent from './permissions'
 import {PRED} from 'lib/namespaces'
 
 describe('PermissionsAgent', function() {
-  const uri = 'https://mockuri.com'
-  const fileOne = 'https://mockfileone.com'
-  const fileTwo = 'https://mockfiletwo.com'
-  const fileThree = 'https://mockfilethree.com'
-  const fileFour = 'https://mockfilefour.com'
+  const URI = 'https://mockuri.com'
+  const FILE_ONE = 'https://mockfileone.com'
+  const FILE_TWO = 'https://mockfiletwo.com'
+  const FILE_THREE = 'https://mockfilethree.com'
+  const FILE_FOUR = 'https://mockfilefour.com'
 
   describe('#resolveNodeType', function() {
     it('Should correctly return when fetch fails', async function() {
       const pAgent = new PermAgent()
-      const mockUri = 'https://mockuri.com'
+      const mockUri = 'https://mockuri.com/index'
+
+      pAgent._getIndexUri = (uri) => 'https://mockuri.com/index'
 
       pAgent.findTriples = async(uri, subj, pred, obj) => {
-        expect(uri).to.equal(mockUri)
+        expect(uri).to.equal('https://mockuri.com/index')
         expect(subj).to.deep.equal(rdf.sym(uri))
         expect(pred).to.deep.equal(PRED.type)
         expect(obj).to.be.undefined
@@ -25,18 +27,20 @@ describe('PermissionsAgent', function() {
         return -1
       }
 
-      expect(await pAgent.resolveNodeType(mockUri)).to.equal('typeNotDetected')
+      expect(await pAgent.resolveNodeType(mockUri))
+        .to.equal('typeNotDetected')
     })
+
     it('Should resolve the correct nodeTypes', async function() {
       const expectedMap = {
-        [fileOne]: {type: 'typeDocument', obj: PRED.Document},
-        [fileTwo]: {type: 'typeImage', obj: PRED.Image},
-        [fileThree]: {type: 'typePerson', obj: PRED.Person},
-        [fileFour]: {type: 'typePerson', obj: PRED.Person}
+        [FILE_ONE]: {type: 'typeDocument', obj: PRED.Document},
+        [FILE_TWO]: {type: 'typeImage', obj: PRED.Image},
+        [FILE_THREE]: {type: 'typePerson', obj: PRED.Person},
+        [FILE_FOUR]: {type: 'typePerson', obj: PRED.Person}
       }
       const responseMap = {}
 
-      const temp = [fileOne, fileTwo, fileThree, fileFour]
+      const temp = [FILE_ONE, FILE_TWO, FILE_THREE, FILE_FOUR]
       temp.forEach(uri => {
         responseMap[uri] = [{
           subject: rdf.sym(uri),
@@ -56,18 +60,18 @@ describe('PermissionsAgent', function() {
         return responseMap[uri]
       }
 
-      expect(await pAgent.resolveNodeType(fileOne))
-        .to.deep.equal(expectedMap[fileOne].type)
-      expect(await pAgent.resolveNodeType(fileTwo))
-        .to.deep.equal(expectedMap[fileTwo].type)
-      expect(await pAgent.resolveNodeType(fileThree))
-        .to.deep.equal(expectedMap[fileThree].type)
-      expect(await pAgent.resolveNodeType(fileFour))
-        .to.deep.equal(expectedMap[fileFour].type)
+      expect(await pAgent.resolveNodeType(FILE_ONE))
+        .to.deep.equal(expectedMap[FILE_ONE].type)
+      expect(await pAgent.resolveNodeType(FILE_TWO))
+        .to.deep.equal(expectedMap[FILE_TWO].type)
+      expect(await pAgent.resolveNodeType(FILE_THREE))
+        .to.deep.equal(expectedMap[FILE_THREE].type)
+      expect(await pAgent.resolveNodeType(FILE_FOUR))
+        .to.deep.equal(expectedMap[FILE_FOUR].type)
     })
   })
 
-  describe('#getSharedNodes', async function() {
+  describe('#getSharedNodes', function() {
     it('Should correctly throw if no uri provided', async function() {
       expect(() => (new PermAgent())
         .getSharedNodes()).to.throw('No Uri supplied.')
@@ -75,29 +79,30 @@ describe('PermissionsAgent', function() {
 
     it('Should correctly handle index GET fail', async function() {
       const pAgent = new PermAgent()
-      pAgent._getIndexUri = () => 'https://indexmock.com'
+      pAgent._getIndexUri = (uri) => 'https://mockuri.com/index'
       pAgent.findTriples = async() => -1
 
       expect(await pAgent.getSharedNodes('mockuri.com')).to.deep.equal({})
     })
+
     it('Should correctly return shared nodes', async function() {
       const pAgent = new PermAgent()
       const expectedMap = {
-        [fileOne]: {uri: fileOne, type: 'typeDocument'},
-        [fileTwo]: {uri: fileTwo, type: 'typeImage'},
-        [fileThree]: {uri: fileThree, type: 'typePerson'},
-        [fileFour]: {uri: fileFour, type: 'typeNotDetected'}
+        [FILE_ONE]: {uri: FILE_ONE, type: 'typeDocument'},
+        [FILE_TWO]: {uri: FILE_TWO, type: 'typeImage'},
+        [FILE_THREE]: {uri: FILE_THREE, type: 'typePerson'},
+        [FILE_FOUR]: {uri: FILE_FOUR, type: 'typeNotDetected'}
       }
-      pAgent._getIndexUri = (uri) => 'mockIndexFile'
+      pAgent._getIndexUri = (uri) => 'https://mockuri.com/index'
 
       pAgent.findTriples = async(indexUri, subj, pred, obj) => {
-        expect(indexUri).to.equal('mockIndexFile')
+        expect(indexUri).to.equal('https://mockuri.com/index')
         expect(pred).to.be.undefined
         expect(obj).to.be.undefined
 
         return Object.keys(expectedMap).map(key => {
           return {
-            subject: rdf.sym(uri),
+            subject: rdf.sym(URI),
             predicate: PRED.readPermission,
             object: rdf.sym(expectedMap[key].uri)
           }
@@ -109,12 +114,12 @@ describe('PermissionsAgent', function() {
         return expectedMap[nodeUri].type
       }
 
-      const result = await pAgent.getSharedNodes(uri)
+      const result = await pAgent.getSharedNodes(URI)
       expect(result).to.deep.equal({
-        typeDocument: [{ perm: PRED.readPermission.uri, uri: fileOne }],
-        typeImage: [{ perm: PRED.readPermission.uri, uri: fileTwo }],
-        typePerson: [{ perm: PRED.readPermission.uri, uri: fileThree }],
-        typeNotDetected: [{ perm: PRED.readPermission.uri, uri: fileFour }]
+        typeDocument: [{ perm: PRED.readPermission.uri, uri: FILE_ONE }],
+        typeImage: [{ perm: PRED.readPermission.uri, uri: FILE_TWO }],
+        typePerson: [{ perm: PRED.readPermission.uri, uri: FILE_THREE }],
+        typeNotDetected: [{ perm: PRED.readPermission.uri, uri: FILE_FOUR }]
       })
     })
   })

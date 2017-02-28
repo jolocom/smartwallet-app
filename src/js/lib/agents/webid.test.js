@@ -1,4 +1,4 @@
-
+/* global describe: true, it: true */
 var expect = require('chai').expect
 import {Parser} from '../rdf'
 // import HTTPAgent from './http'

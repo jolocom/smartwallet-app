@@ -22,7 +22,6 @@ export default class PermissionAgent extends GraphAgent {
     }
 
     const indexUri = this._getIndexUri(uri)
-
     const sharedNodes = {
       typePerson: [],
       typeImage: [],
