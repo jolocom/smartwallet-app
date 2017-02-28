@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Immutable from 'immutable'
 import { action, asyncAction } from './'
-import { showMessage } from './snack-bar'
+import * as snackBar from './snack-bar'
 
 export const doLogin = asyncAction('account/login', 'doLogin', {
   expectedParams: ['username', 'password', 'updateUserEmail'],
@@ -51,21 +51,22 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
 export const doSignup = action('account', 'doSignup', {
   expectedParams: ['username', 'password', 'email', 'name'],
   creator: ({username, password, email, name}) => {
-    return (dispatch, _, {backend}) => {
+    return async (dispatch, _, {backend}) => {
       localStorage.setItem('jolocom.auth-mode', 'proxy')
 
       const accounts = backend.accounts
-      accounts.register(
-        username, password, email, name
-      ).then((account) => {
+      try {
+        await accounts.register(username, password, email, name)
         dispatch(showEmailVerifyScreen())
-      }).catch((e) => {
+      } catch (e) {
         if (e.message) {
-          dispatch(showMessage({message: e.message}))
+          dispatch(snackBar.showMessage({message: e.message}))
         } else {
-          dispatch(showMessage({message: 'An account error has occured.'}))
+          dispatch(snackBar.showMessage({
+            message: 'An account error has occured.'
+          }))
         }
-      })
+      }
     }
   }
 })
@@ -98,11 +99,11 @@ export const doForgotPassword = asyncAction(
         return doForgotPassword.buildAction(
           params,
           accounts.forgotPassword(params.username)
-            .then(() => dispatch(showMessage({
+            .then(() => dispatch(snackBar.showMessage({
               message: 'An email was sent to you with further instructions.'
             })))
             .catch(e => {
-              dispatch(showMessage({
+              dispatch(snackBar.showMessage({
                 message: 'An error occured : ' + e
               }))
               throw e
@@ -122,11 +123,11 @@ export const doResetPassword = asyncAction(
         return doResetPassword.buildAction(
           params,
           accounts.resetPassword(params.username, params.token, params.password)
-            .then(() => dispatch(showMessage({
+            .then(() => dispatch(snackBar.showMessage({
               message: 'You can now log in with your new password.'
             })))
             .catch(e => {
-              dispatch(showMessage({
+              dispatch(snackBar.showMessage({
                 message: 'An error occured : ' + e
               }))
               throw e
@@ -143,20 +144,16 @@ export const doActivateEmail = asyncAction(
     creator: params => {
       return (dispatch, _, {backend}) => {
         const accounts = backend.accounts
-        dispatch(doActivateEmail.buildAction(
-          params,
+        dispatch(doActivateEmail.buildAction(params,
           () => accounts.verifyEmail(params.username, params.code)
-          // () => new Promise(resolve => {
-          //   setTimeout(() => resolve(true), 1000)
-          // })
             .then((data) => {
-              dispatch(showMessage({
+              dispatch(snackBar.showMessage({
                 message: 'Your account has been activated!'
               }))
               return data
             })
             .catch(e => {
-              dispatch(showMessage({
+              dispatch(snackBar.showMessage({
                 message: 'Account activation failed.'
               }))
               throw e
@@ -224,7 +221,8 @@ export default function reducer(state = initialState, action = {}) {
     case doLogout.id:
       return state.merge({
         loggingIn: false,
-        username: ''
+        username: '',
+        webId: null
       })
     case doActivateEmail.id_success:
       return state.merge({
