@@ -6,9 +6,10 @@ import GraphAgent from './graph'
 import rdf from 'rdflib'
 
 describe('GraphAgent', function() {
+  const MOCK_WEBID = 'https://mockwebid.com/card'
+
   describe('#baseNode', function() {
     const gAgent = new GraphAgent()
-    const uri = 'https://testuri.com/'
     const title = 'Test Name'
     const description = 'Description. With some characters.'
     const centerNode = {
@@ -17,22 +18,22 @@ describe('GraphAgent', function() {
     }
 
     const expected = [{
-      subject: rdf.sym(uri),
+      subject: rdf.sym(MOCK_WEBID),
       predicate: PRED.title,
       object: rdf.literal(title),
       why: rdf.sym('chrome:theSession')
     }, {
-      subject: rdf.sym(uri),
+      subject: rdf.sym(MOCK_WEBID),
       predicate: PRED.description,
       object: rdf.literal(description),
       why: rdf.sym('chrome:theSession')
     }, {
-      subject: rdf.sym(uri),
+      subject: rdf.sym(MOCK_WEBID),
       predicate: PRED.storage,
       object: rdf.sym(centerNode.storage),
       why: rdf.sym('chrome:theSession')
     }, {
-      subject: rdf.sym(uri),
+      subject: rdf.sym(MOCK_WEBID),
       predicate: PRED.maker,
       object: rdf.sym(centerNode.uri),
       why: rdf.sym('chrome:theSession')
@@ -47,14 +48,14 @@ describe('GraphAgent', function() {
 
     const checkType = (nodeType, triples) => {
       triples.push({
-        subject: rdf.sym(uri),
+        subject: rdf.sym(MOCK_WEBID),
         predicate: PRED.type,
         object: nodeTypeMap[nodeType],
         why: rdf.sym('chrome:theSession')
       })
 
       expect(gAgent.baseNode(
-        uri,
+        MOCK_WEBID,
         new Writer(),
         title,
         description,
@@ -98,7 +99,6 @@ describe('GraphAgent', function() {
 
   describe('#addImage', function() {
     const gAgent = new GraphAgent()
-    const uri = 'https://test.com/profile/card#me'
     const container = 'https://test.com/files/'
     const confidential = false
 
@@ -110,9 +110,9 @@ describe('GraphAgent', function() {
           expect(true).to.be.false
         }
 
-        gAgent.addImage(uri, container, writer, image, confidential)
+        gAgent.addImage(MOCK_WEBID, container, writer, image, confidential)
         expect(writer.g.statements).to.deep.equal([{
-          subject: rdf.sym(uri),
+          subject: rdf.sym(MOCK_WEBID),
           predicate: PRED.image,
           object: rdf.literal(image),
           why: rdf.sym('chrome:theSession')
@@ -128,11 +128,11 @@ describe('GraphAgent', function() {
   describe('#checkImages', function() {
     it('Should correctly detect unavailable images', async function() {
       const gAgent = new GraphAgent()
-      const testNode = {img: 'https://randomuri.com/image.jpg'}
+      const imgUri = 'https://mockuri.com/omage.jpg'
+      const testNode = {img: imgUri}
 
       gAgent._fetch = async(uri) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' +
-          'https://randomuri.com/image.jpg')
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + imgUri)
         return {
           status: 403
         }
@@ -143,10 +143,9 @@ describe('GraphAgent', function() {
         img: ''
       })
 
-      testNode.img = 'https://randomuri.com/image.jpg'
+      testNode.img = imgUri
       gAgent._fetch = async(uri) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' +
-          'https://randomuri.com/image.jpg')
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + imgUri)
         throw new Error()
       }
 
@@ -158,11 +157,11 @@ describe('GraphAgent', function() {
 
     it('Should leave available immages untouched', async function() {
       const gAgent = new GraphAgent()
-      const testNode = {img: 'https://randomuri.com/image.jpg'}
+      const imgUri = 'https://mockuri.com/omage.jpg'
+      const testNode = {img: imgUri}
 
       gAgent.head = async(uri) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' +
-          'https://randomuri.com/image.jpg')
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + imgUri)
         return {
           ok: true
         }
@@ -170,7 +169,7 @@ describe('GraphAgent', function() {
 
       await gAgent.checkImages([testNode])
       expect(testNode).to.deep.equal({
-        img: 'https://randomuri.com/image.jpg'
+        img: imgUri
       })
     })
   })
@@ -178,7 +177,7 @@ describe('GraphAgent', function() {
   describe('#deleteFile', function() {
     it('Should send a delete request', function() {
       const gAgent = new GraphAgent()
-      const fileUri = 'https://testfile.com/first'
+      const fileUri = 'https://mockuser.com/mockfile'
       gAgent.deleteFile = (uri) => {
         expect(uri).to.equal(fileUri)
       }
@@ -193,7 +192,7 @@ describe('GraphAgent', function() {
     gAgent.randomString = () => 'abcde'
     gAgent.createAcl = async(uri, user, confidential) => {
       expect(uri).to.equal(newNodeUri)
-      expect(user).to.equal(currentUser)
+      expect(user).to.equal(MOCK_WEBID)
       expect(confidential).to.equal(nodeInfo.confidential)
     }
     gAgent.put = async(uri, body, headers) => {
@@ -210,9 +209,8 @@ describe('GraphAgent', function() {
       expect(end).to.equal(newNodeUri)
     }
 
-    const currentUser = 'https://testuser.com/profile/card#me'
     const centerNode = {
-      uri: 'https://centernodeuri.com/',
+      uri: MOCK_WEBID,
       storage: 'https://centernodeuri.com/storage/'
     }
     const newNodeUri = centerNode.storage + 'abcde'
@@ -262,7 +260,7 @@ describe('GraphAgent', function() {
       gAgent.addImage = async() => {
         expect(true).to.be.false
       }
-      gAgent.createNode(currentUser, centerNode, nodeInfo)
+      gAgent.createNode(MOCK_WEBID, centerNode, nodeInfo)
       gAgent.addImage = originalAddImg
     })
 
@@ -271,7 +269,7 @@ describe('GraphAgent', function() {
         expect(true).to.be.false
       }
       nodeInfo.confidential = true
-      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+      await gAgent.createNode(MOCK_WEBID, centerNode, nodeInfo)
       nodeInfo.confidential = false
       gAgent.addImage = originalAddImg
     })
@@ -281,7 +279,7 @@ describe('GraphAgent', function() {
       nodeInfo.confidential = false
       nodeInfo.nodeType = 'default'
 
-      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+      await gAgent.createNode(MOCK_WEBID, centerNode, nodeInfo)
 
       nodeInfo.nodeType = 'default'
       nodeInfo.image = false
@@ -292,7 +290,7 @@ describe('GraphAgent', function() {
       nodeInfo.confidential = true
       nodeInfo.nodeType = 'default'
 
-      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+      await gAgent.createNode(MOCK_WEBID, centerNode, nodeInfo)
 
       nodeInfo.nodeType = 'default'
       nodeInfo.image = false
@@ -303,27 +301,25 @@ describe('GraphAgent', function() {
       nodeInfo.confidential = false
       nodeInfo.nodeType = 'image'
 
-      await gAgent.createNode(currentUser, centerNode, nodeInfo)
+      await gAgent.createNode(MOCK_WEBID, centerNode, nodeInfo)
 
       nodeInfo.nodeType = 'default'
       nodeInfo.image = false
     })
   })
 
-  // @TODO
   describe('#storeFile', function() {
     it('Should correcly store a public and private files', async function() {
-      const mockWebId = 'https://mockwebid.com/card'
       const mockFile = {name: 'mockName'}
       const mockDstCont = 'https://mockwebid.com/'
       let mockDestination = 'https://mockwebid.com/files/x'
       let mockConfidential = false
 
       const gAgent = new GraphAgent()
-      gAgent._getWebId = () => mockWebId
+      gAgent._getWebId = () => MOCK_WEBID
       gAgent.createAcl = async(finalUri, webId, confidential) => {
         expect(finalUri).to.equal(mockDestination)
-        expect(webId).to.equal(mockWebId)
+        expect(webId).to.equal(MOCK_WEBID)
         expect(confidential).to.equal(mockConfidential)
       }
       gAgent.put = async(uri, file, headers) => {
@@ -347,13 +343,12 @@ describe('GraphAgent', function() {
   describe('#createAcl', function() {
     const gAgent = new GraphAgent()
     const uri = 'https://mockfile.com/card'
-    const webId = 'https://eugeniu.com/profile/card'
     const writer = new Writer()
 
     const tripleMap = [
       {pred: PRED.type, obj: [PRED.auth]},
       {pred: PRED.access, obj: [rdf.sym(uri), rdf.sym(uri + '.acl')]},
-      {pred: PRED.agent, obj: [rdf.sym(webId)]},
+      {pred: PRED.agent, obj: [rdf.sym(MOCK_WEBID)]},
       {pred: PRED.mode, obj: [PRED.read, PRED.write, PRED.control]}
     ]
 
@@ -371,7 +366,7 @@ describe('GraphAgent', function() {
           writer.addTriple(rdf.sym(uri + 'acl#owner'), st.pred, obj)
         })
       })
-      gAgent.createAcl(uri, webId, false)
+      gAgent.createAcl(uri, MOCK_WEBID, false)
     })
 
     it('Should correctly create public acl', async function() {
@@ -380,7 +375,7 @@ describe('GraphAgent', function() {
       writer.addTriple(all, PRED.access, rdf.sym(uri))
       writer.addTriple(all, PRED.agentClass, PRED.Agent)
       writer.addTriple(all, PRED.mode, PRED.read)
-      gAgent.createAcl(uri, webId, true)
+      gAgent.createAcl(uri, MOCK_WEBID, true)
     })
   })
 
@@ -388,7 +383,7 @@ describe('GraphAgent', function() {
     const gAgent = new GraphAgent()
     const destination = 'https://testfile.com/card'
     const triples = [{
-      subject: rdf.sym('https://eugeniu.com/profile/card'),
+      subject: rdf.sym(MOCK_WEBID),
       predicate: PRED.type,
       object: PRED.Document
     }]
@@ -430,7 +425,6 @@ describe('GraphAgent', function() {
 
   describe('#deleteTriples', function() {
     const gAgent = new GraphAgent()
-    const target = 'https://fakeprofile.com/card'
 
     it('Should correctly attempt to delete a triple', async function() {
       const expected = [{
@@ -441,13 +435,13 @@ describe('GraphAgent', function() {
       }]
 
       gAgent.patch = async(uri, toDel, toAdd) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + target)
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + MOCK_WEBID)
         expect(toAdd).to.deep.equal([])
         expect(toDel).to.deep.equal(expected)
       }
 
       gAgent.deleteTriples(
-        target,
+        MOCK_WEBID,
         expected[0].subject,
         expected[0].predicate,
         expected[0].object
@@ -468,11 +462,11 @@ describe('GraphAgent', function() {
       }]
 
       gAgent.patch = async(uri, toDel, toAdd) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + target)
+        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + MOCK_WEBID)
         expect(toAdd).to.deep.equal([])
         expect(toDel).to.deep.equal(expected)
       }
-      gAgent.deleteTriples({uri: target, triples: expected})
+      gAgent.deleteTriples({uri: MOCK_WEBID, triples: expected})
     })
   })
   describe('#getNeighbours', function() {
@@ -543,12 +537,11 @@ describe('GraphAgent', function() {
   describe('#getFileModel', function() {
     it('Should retrieve and convert a rdf file.', async function() {
       const gAgent = new GraphAgent()
-      const targetUri = 'https://mockresource.com/profile/card'
       gAgent.fetchTriplesAtUri = async(uri) => {
-        expect(uri).to.equal(targetUri)
+        expect(uri).to.equal(MOCK_WEBID)
         return {
           triples: [{
-            subject: rdf.sym(targetUri),
+            subject: rdf.sym(MOCK_WEBID),
             predicate: PRED.type,
             object: PRED.Document,
             why: rdf.sym('chrome:theSession')
@@ -556,7 +549,7 @@ describe('GraphAgent', function() {
         }
       }
 
-      const result = await gAgent.getFileModel(targetUri)
+      const result = await gAgent.getFileModel(MOCK_WEBID)
       expect(result).to.deep.equal(
         [{
           address: '',
@@ -580,6 +573,7 @@ describe('GraphAgent', function() {
       )
     })
   })
+
   describe('#linkNodes', function() {
     const gAgent = new GraphAgent()
     const start = 'https://startnode.com/card'
@@ -619,21 +613,20 @@ describe('GraphAgent', function() {
 
   describe('#convertToNodes', function() {
     it('Should correctly convert triples to node', async function() {
-      const uri = 'https://mockuser.com'
       const triples = [[
         {
-          subject: rdf.sym(uri),
+          subject: rdf.sym(MOCK_WEBID),
           predicate: PRED.title,
           object: rdf.literal('Mock Title'),
           why: rdf.sym('chrome:theSession')
         }, {
-          subject: rdf.sym(uri),
+          subject: rdf.sym(MOCK_WEBID),
           predicate: PRED.description,
           object: rdf.literal('Mock Description'),
           why: rdf.sym('chrome:theSession')
         }
       ]]
-      triples[0].uri = uri
+      triples[0].uri = MOCK_WEBID
 
       expect((new GraphAgent()).convertToNodes('a', triples)).to.deep.equal([
         {
@@ -652,7 +645,7 @@ describe('GraphAgent', function() {
           storage: null,
           title: 'Mock Title',
           type: null,
-          uri: uri,
+          uri: MOCK_WEBID,
           url: ''
         }
       ])
