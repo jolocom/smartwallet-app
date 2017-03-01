@@ -86,7 +86,7 @@ export default Reflux.createStore({
   },
 
   onAddMessage(uri, author, content) {
-    return chatAgent.postMessage(uri, author, content)
+    return chatAgent.postMessage(uri, {author, content})
       .then(() => {
         addMessage.completed({
           type: 'message',
