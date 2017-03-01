@@ -76,7 +76,7 @@ class GenericFullScreen extends React.Component {
         // console.error('Couldn\'t compute luminance', e)
       })
     }
-    this.showDialog('fullscreen')
+    this.props.showDialog('fullscreen')
   }
 
   componentWillUnmount() {
@@ -391,7 +391,7 @@ class GenericFullScreen extends React.Component {
     const onTouchTapHandler = () => this._handleFull()
     const onClickHandler = () => this._handleClose()
     return (
-      <Dialog fullscreen>
+      <Dialog id="fullscreen" fullscreen>
         <Layout>
           <Content>
             <div style={styles.container}>
