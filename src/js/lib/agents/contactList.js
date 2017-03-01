@@ -1,12 +1,12 @@
 import {PRED} from '../namespaces'
-import LDPAgent from './ldp'
+import HTTPAgent from './http'
 import {Writer} from '../rdf'
 import $rdf from 'rdflib'
 
 export default class ContactList {
 
   constructor() {
-    this.ldpAgent = new LDPAgent()
+    this.http = new HTTPAgent({proxy: true})
   }
 
   addContact(initiator, contactWebId, contactName) {
@@ -21,18 +21,10 @@ export default class ContactList {
     // rdf.sym()
     toAdd.add($rdf.st(initiator, PRED.knows, contactWebId))
     toAdd.add($rdf.st(contactWebId, PRED.givenName, contactName))
-
-    return this.patch(this._proxify(uri), [], toAdd.all())
-      .catch(() => {
-        throw new Error('Error applying patch')
-      })
+    return this.patch(uri, [], toAdd.all())
   }
 
   patch(uri, toDel, toAdd) {
-    return this.ldpAgent.patch(uri, toDel, toAdd)
-  }
-
-  _proxify(uri) {
-    return this.ldpAgent._proxify(uri)
+    return this.http.patch(uri, toDel, toAdd)
   }
 }

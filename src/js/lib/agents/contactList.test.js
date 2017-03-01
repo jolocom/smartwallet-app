@@ -17,8 +17,7 @@ describe('ContactListAgent', function() {
       const initWebId = 'https://init.com/card'
       const contWebId = 'https://contact.com/card'
       const contName = 'Mark Musterman'
-      const expectedUri = 'https://proxy.jolocom.de/proxy?url=' +
-        initWebId + '/little-sister/contactList'
+      const expectedUri = 'https://init.com/card/little-sister/contactList'
 
       cAgent.patch = async(uri, toDel, toAdd) => {
         expect(uri).to.equal(expectedUri)
