@@ -17,7 +17,7 @@ export default Reflux.createStore({
     this.state = {
       uri: null,
       initialized: false,
-      selectedNdoe: {}
+      selectedNode: {}
     }
   },
 
