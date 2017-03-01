@@ -5,18 +5,21 @@ import $rdf from 'rdflib'
 
 export default class ContactList extends LDPAgent {
 
-  addContact(initiator, contactWebID, contactName) {
+  addContact(initiator, contactWebId, contactName) {
+    if (!initiator || !contactWebId || !contactName) {
+      throw new Error('Not enough arguments')
+    }
+
     const uri = `${initiator}/little-sister/contactList`
-
     const toAdd = new Writer()
+    // @TODO initiator and contactWebId should both be
+    // rdf.sym()
+    toAdd.add($rdf.st(initiator, PRED.knows, contactWebId))
+    toAdd.add($rdf.st(contactWebId, PRED.givenName, contactName))
 
-    toAdd.add($rdf.st(initiator, PRED.knows, contactWebID))
-    toAdd.add($rdf.st(contactWebID, PRED.givenName, contactName))
-
-    return this.patch(this._proxify(uri), null, toAdd.all()).then(() => {
-      console.log('Patch Success! Appended contact to list!')
-    }).catch((err) => {
-      console.error('ERROR APPLYING PATCH! ', err)
-    })
+    return this.patch(this._proxify(uri), [], toAdd.all())
+      .catch(() => {
+        throw new Error('Error applying patch')
+      })
   }
 }
