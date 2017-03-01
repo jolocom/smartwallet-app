@@ -6,7 +6,7 @@ import WebIDAgent from './webid'
 
 describe('WebIDAgent', function() {
   var webId = 'https://newuser.webid.jolocom.de/profile/card#me'
-  const dummyText = " @prefix pro: <./>. \
+  const dummyText = '@prefix pro: <./>.\
       @prefix n0: <http://xmlns.com/foaf/0.1/>.\
       @prefix cert: <http://www.w3.org/ns/auth/cert#>.\
       @prefix sp: <http://www.w3.org/ns/pim/space#>.\
@@ -71,7 +71,7 @@ describe('WebIDAgent', function() {
           cert:exponent\
              \"65537\"^^XML:int;\
           cert:modulus\
-              \"F2F728B2A763F049BA7FEE7DA24426B505BE658A21865\"^^XML:hexBinary."
+              \"F2F728B2A763F049BA7FEE7DA24426B505BE658A21865\"^^XML:hexBinary.'
 
   const DUMMY_HTML_HEADERS = {
     get: (field) => ({
@@ -88,7 +88,7 @@ describe('WebIDAgent', function() {
       expect(webId).to.deep.equal(localStorage.getItem('jolocom.webId'))
     })
   })
-  describe('#getProfile', function(){
+  describe('#getProfile', function() {
     it('should return a response profile document', async () => {
       const agent = new WebIDAgent()
       const fakeResponse = {
@@ -151,7 +151,7 @@ describe('WebIDAgent', function() {
     })
   })
   // @TODO Have not tested function if passportNodeUri exists
-  describe('#_parseProfile', function(){
+  describe('#_parseProfile', function() {
     it('should map only information relevant to the user', async () => {
       webId = 'https://newuser.webid.jolocom.de/profile/card#me'
       const agent = new WebIDAgent()
@@ -163,51 +163,53 @@ describe('WebIDAgent', function() {
       expect(profile.email).to.deep.equal(undefined)
     })
 
-   it('should return an object with all profile fields provided', async () => {
-     webId = 'https://newuser.webid.jolocom.de/profile/card#me'
-     const agent = new WebIDAgent()
-     const parser = new Parser()
-     const answer = parser.parse(dummyText, webId)
-     const profile = agent._parseProfile(webId, answer.triples)
-     expect(profile).to.deep.equal({
-       givenName: 'newuser',
-       familyName: 'whoopie',
-       fullName: 'newuser whoopie',
-       imgUri: 'https://newuser.webid.jolocom.de/files/66553399-pj.jpg',
-       socialMedia: 'http://twitter.com/tweeter',
-       mobilePhone: '049 9374829438',
-       address: 'Berlin',
-       profession: 'dreamer',
-       company: 'Jolocom',
-       url: 'http://jolocom.com',
-       email: 'newuser@yopmail.com',
-       storage: 'https://newuser.webid.jolocom.de/',
-       webId: 'https://newuser.webid.jolocom.de/profile/card#me'
-     })
-   })
-     it('should parse name if no givenName supplied', async () => {
-       webId = 'https://newuser.webid.jolocom.de/profile/card#me'
-       var nameText = '@prefix pro: <./>.\
-       @prefix n0: <http://xmlns.com/foaf/0.1/>.\
-       pro:card a n0:PersonalProfileDocument; \
-       n0:maker <#me>; n0:primaryTopic <#me> .\
-       <#me>\
-       a    n0:Person;\
-            n0:name\
-            "newuser whoopie".'
-       const agent = new WebIDAgent()
-       const parser = new Parser()
-       const answer = parser.parse(nameText, webId)
-       const profile = agent._parseProfile(webId, answer.triples)
-       expect(profile).to.deep.equal({
-         givenName: 'newuser',
-         familyName: 'whoopie',
-         fullName: 'newuser whoopie',
-         webId: 'https://newuser.webid.jolocom.de/profile/card#me'
-       })
-     })
+    it('should return an object with all profile fields provided', async () => {
+      webId = 'https://newuser.webid.jolocom.de/profile/card#me'
+      const agent = new WebIDAgent()
+      const parser = new Parser()
+      const answer = parser.parse(dummyText, webId)
+      const profile = agent._parseProfile(webId, answer.triples)
+      expect(profile).to.deep.equal({
+        givenName: 'newuser',
+        familyName: 'whoopie',
+        fullName: 'newuser whoopie',
+        imgUri: 'https://newuser.webid.jolocom.de/files/66553399-pj.jpg',
+        socialMedia: 'http://twitter.com/tweeter',
+        mobilePhone: '049 9374829438',
+        address: 'Berlin',
+        profession: 'dreamer',
+        company: 'Jolocom',
+        url: 'http://jolocom.com',
+        email: 'newuser@yopmail.com',
+        storage: 'https://newuser.webid.jolocom.de/',
+        webId: 'https://newuser.webid.jolocom.de/profile/card#me'
+      })
+    })
+
+    it('should parse name if no givenName supplied', async () => {
+      webId = 'https://newuser.webid.jolocom.de/profile/card#me'
+      var nameText = '@prefix pro: <./>.\
+      @prefix n0: <http://xmlns.com/foaf/0.1/>.\
+      pro:card a n0:PersonalProfileDocument; \
+      n0:maker <#me>; n0:primaryTopic <#me> .\
+      <#me>\
+      a    n0:Person;\
+           n0:name\
+           "newuser whoopie".'
+      const agent = new WebIDAgent()
+      const parser = new Parser()
+      const answer = parser.parse(nameText, webId)
+      const profile = agent._parseProfile(webId, answer.triples)
+      expect(profile).to.deep.equal({
+        givenName: 'newuser',
+        familyName: 'whoopie',
+        fullName: 'newuser whoopie',
+        webId: 'https://newuser.webid.jolocom.de/profile/card#me'
+      })
+    })
   })
-  describe('#updateProfile', function(){
+
+  describe('#updateProfile', function() {
     it('should return the added data in the profile', async () => {
       const oldProfile = {
         givenName: 'newuser',
@@ -221,7 +223,8 @@ describe('WebIDAgent', function() {
       }
       const agent = new WebIDAgent()
       const fakeResponse = {
-        status: 200, responseText: 'ya',
+        status: 200,
+        responseText: 'ya',
         headers: DUMMY_HTML_HEADERS,
         text: function() {
           return this.responseText
@@ -239,67 +242,70 @@ describe('WebIDAgent', function() {
       })
     })
 
-  it('should return the profile without the removed data', async () => {
-    const oldProfile = {
-      givenName: 'newuser',
-      socialMedia: 'http://twitter.com/tweeter',
-      mobilePhone: '049 9374829438',
-      webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
-    }
-    const newProfile = {
-      givenName: 'newuser',
-      socialMedia: 'http://twitter.com/tweeter',
-      webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
-    }
-    const agent = new WebIDAgent()
-    const fakeResponse = {
-      status: 200, responseText: 'ya',
-      headers: DUMMY_HTML_HEADERS,
-      text: function() {
-        return this.responseText
+    it('should return the profile without the removed data', async () => {
+      const oldProfile = {
+        givenName: 'newuser',
+        socialMedia: 'http://twitter.com/tweeter',
+        mobilePhone: '049 9374829438',
+        webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
       }
-    }
-    agent.http._fetch = async (url, options) => {
-      return fakeResponse
-    }
-    var profile = await agent.updateProfile(newProfile, oldProfile)
-    expect(profile).to.deep.equal({
-      givenName: 'newuser',
-      socialMedia: 'http://twitter.com/tweeter',
-      webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
-    })
-  })
-  it('should return the profile with the updated data', async () => {
-    const oldProfile = {
-      givenName: 'newuser',
-      socialMedia: 'http://twitter.com/tweeter',
-      mobilePhone: '049 9374829438',
-      webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
-    }
-    const newProfile = {
-      givenName: 'newuser',
-      socialMedia: 'http://twitter.com/tweeter',
-      mobilePhone: '049 1111111111',
-      webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
-    }
-    const agent = new WebIDAgent()
-    const fakeResponse = {
-      status: 200, responseText: 'ya',
-      headers: DUMMY_HTML_HEADERS,
-      text: function() {
-        return this.responseText
+      const newProfile = {
+        givenName: 'newuser',
+        socialMedia: 'http://twitter.com/tweeter',
+        webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
       }
-    }
-    agent.http._fetch = async (url, options) => {
-      return fakeResponse
-    }
-    var profile = await agent.updateProfile(newProfile, oldProfile)
-    expect(profile).to.deep.equal({
-      givenName: 'newuser',
-      socialMedia: 'http://twitter.com/tweeter',
-      mobilePhone: '049 1111111111',
-      webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
+      const agent = new WebIDAgent()
+      const fakeResponse = {
+        status: 200,
+        responseText: 'ya',
+        headers: DUMMY_HTML_HEADERS,
+        text: function() {
+          return this.responseText
+        }
+      }
+      agent.http._fetch = async (url, options) => {
+        return fakeResponse
+      }
+      var profile = await agent.updateProfile(newProfile, oldProfile)
+      expect(profile).to.deep.equal({
+        givenName: 'newuser',
+        socialMedia: 'http://twitter.com/tweeter',
+        webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
+      })
     })
-  })
+
+    it('should return the profile with the updated data', async () => {
+      const oldProfile = {
+        givenName: 'newuser',
+        socialMedia: 'http://twitter.com/tweeter',
+        mobilePhone: '049 9374829438',
+        webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
+      }
+      const newProfile = {
+        givenName: 'newuser',
+        socialMedia: 'http://twitter.com/tweeter',
+        mobilePhone: '049 1111111111',
+        webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
+      }
+      const agent = new WebIDAgent()
+      const fakeResponse = {
+        status: 200,
+        responseText: 'ya',
+        headers: DUMMY_HTML_HEADERS,
+        text: function() {
+          return this.responseText
+        }
+      }
+      agent.http._fetch = async (url, options) => {
+        return fakeResponse
+      }
+      var profile = await agent.updateProfile(newProfile, oldProfile)
+      expect(profile).to.deep.equal({
+        givenName: 'newuser',
+        socialMedia: 'http://twitter.com/tweeter',
+        mobilePhone: '049 1111111111',
+        webId: 'https://anyolduser.webid.jolocom.de/profile/card#me'
+      })
+    })
   })
 })
