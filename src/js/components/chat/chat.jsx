@@ -44,11 +44,11 @@ class Chat extends React.Component {
   }
 
   componentDidMount() {
-    this.props.showDialog('chat')
+    this.props.showDialog({id: 'chat'})
   }
 
   componentWillUnmount() {
-    this.props.hideDialog('chat')
+    this.props.hideDialog({id: 'chat'})
   }
 
   componentWillUpdate(newProps) {
@@ -60,7 +60,7 @@ class Chat extends React.Component {
   }
 
   close() {
-    this.props.hideDialog('chat')
+    this.props.hideDialog({id: 'chat'})
     if (GraphStore.state.center == null) {
       this.context.router.push('/graph')
     } else {

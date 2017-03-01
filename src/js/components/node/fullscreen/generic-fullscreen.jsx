@@ -76,7 +76,7 @@ class GenericFullScreen extends React.Component {
         // console.error('Couldn\'t compute luminance', e)
       })
     }
-    this.props.showDialog('fullscreen')
+    this.props.showDialog({id: 'fullscreen'})
   }
 
   componentWillUnmount() {

@@ -76,7 +76,7 @@ let AddContact = React.createClass({
     })
 
     ContactsActions.load()
-    this.props.showDialog('add_contact')
+    this.props.showDialog({id: 'add_contact'})
   },
 
   getStyles() {
