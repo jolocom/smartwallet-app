@@ -390,7 +390,6 @@ class GenericFullScreen extends React.Component {
 
     const onTouchTapHandler = () => this._handleFull()
     const onClickHandler = () => this._handleClose()
-    console.log('RENDERING', this.props, this.state)
     return (
       <Dialog id="fullscreen" fullscreen>
         <Layout>
