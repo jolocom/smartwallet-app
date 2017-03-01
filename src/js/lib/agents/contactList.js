@@ -3,7 +3,10 @@ import LDPAgent from './ldp'
 import {Writer} from '../rdf'
 import $rdf from 'rdflib'
 
-export default class ContactList extends LDPAgent {
+export default class ContactList {
+  constructor() {
+    this.ldpAgent = new LDPAgent()
+  }
 
   addContact(initiator, contactWebId, contactName) {
     if (!initiator || !contactWebId || !contactName) {
@@ -21,5 +24,13 @@ export default class ContactList extends LDPAgent {
       .catch(() => {
         throw new Error('Error applying patch')
       })
+  }
+
+  patch(uri, toDel, toAdd) {
+    return this.ldpAgent.patch(uri, toDel, toAdd)
+  }
+
+  _proxify(uri) {
+    return this.ldpAgent._proxify(uri)
   }
 }
