@@ -719,9 +719,9 @@ export default class GraphD3 extends EventEmitter {
     if (this.numberOfNeighbours <= this.MAX_VISIBLE_NODES) {
       // Check to see whether node position has been calculated for
       // current numer of nodes
-      if (this.numberOfNeighbours !== 0 &&
+      if (this.numberOfNeighbours &&
         (!this.nodePositions ||
-        this.numberOfNeighbours !== this.nodePositions.length)) {
+        this.numberOfNeighbours !== this.nodePositions.length - 1)) {
         this.nodePositions = []
 
         // Angle for the separation between neighbour nodes
