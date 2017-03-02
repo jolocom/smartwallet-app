@@ -49,7 +49,7 @@ let Nav = React.createClass({
         width: '80vw',
         transform: this.props.open
           ? 'translateX(0)'
-          : 'translateX(-80vw)'
+          : 'translateX(-100vw)'
         // width: 0.8 * window.innerWidth,
         // transform: this.refs.drawer
         // ? `translate3d(${this.refs.drawer.state.open ? 0
