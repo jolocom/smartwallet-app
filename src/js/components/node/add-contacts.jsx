@@ -169,7 +169,7 @@ let AddContact = React.createClass({
                     {this.state.contacts.map((contact) => {
                       if (contact.selected) {
                         return (
-                          <div>
+                          <div key={contact.webId}>
                             {contact.imgUri
                             ? <Avatar
                               style={styles.selectedAvatar}
@@ -199,6 +199,7 @@ let AddContact = React.createClass({
                     {this.state.contacts.map((contact, i) => {
                       return (
                         <WrappedListItem
+                          key={contact.webId}
                           contact={contact}
                           onCheck={this._handleCheck}
                         />)
