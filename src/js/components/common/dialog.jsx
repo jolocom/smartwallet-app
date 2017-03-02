@@ -3,7 +3,9 @@ import Radium from 'radium'
 import { connect } from 'redux/utils'
 
 @connect({
-  props: (state, props) => ({actuallyVisible: state.getIn(['dialog', props.id, 'visible'])}),
+  props: (state, props) => ({
+    actuallyVisible: state.getIn(['dialog', props.id, 'visible'])
+  }),
   actions: [
     'common/dialog:show',
     'common/dialog:hide'
@@ -23,13 +25,11 @@ export default class Dialog extends React.Component {
     hide: React.PropTypes.func
   }
 
-  constructor(props) {
-    super(props)
-
-    if (props.visible) {
-      props.show({id: props.id})
+  componentWillMount() {
+    if (this.props.visible) {
+      this.props.show({id: this.props.id})
     } else {
-      props.hide({id: props.id})
+      this.props.hide({id: this.props.id})
     }
   }
 
