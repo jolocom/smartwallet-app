@@ -7,5 +7,6 @@ export default combineReducers({
   confirm: require('./modules/confirmation-dialog').default,
   dialog: require('./modules/common/dialog').default,
   snackBar: require('./modules/snack-bar').default,
-  account: require('./modules/account').default
+  account: require('./modules/account').default,
+  leftNav: require('./modules/left-nav').default
 })
