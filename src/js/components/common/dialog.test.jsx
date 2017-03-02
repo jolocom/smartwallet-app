@@ -17,7 +17,7 @@ describe('(Component) Dialog', function() {
           test: {visible: true}
         }}), {id: 'test'})}
         show={show} hide={hide}
-        />),
+        />)
     )
 
     expect(wrapper).to.have.lengthOf(1)
@@ -34,7 +34,7 @@ describe('(Component) Dialog', function() {
           test: {visible: false}
         }}), {id: 'test'})}
         show={show} hide={hide}
-        />),
+        />)
     )
 
     expect(wrapper).to.have.lengthOf(1)

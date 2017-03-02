@@ -144,6 +144,6 @@ let styles = {
   }
 }
 
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(Chat))
+})(Radium(Chat))

@@ -4,8 +4,8 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import {AppBar, IconButton, FlatButton} from 'material-ui'
 import { connect } from 'redux/utils'
+import {AppBar, IconButton, FlatButton} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
 
@@ -361,6 +361,6 @@ class ConversationItem extends React.Component {
   }
 }
 
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(Conversation))
+})(Radium(Conversation))

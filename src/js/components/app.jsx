@@ -330,7 +330,7 @@ let App = React.createClass({
 
 })
 
-export default Radium(connect({
+export default connect({
   props: ['account'],
   actions: ['account:doLogin', 'left-nav:showLeftNav']
-})(App))
+})(Radium(App))
