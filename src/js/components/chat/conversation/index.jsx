@@ -5,6 +5,7 @@ import Radium from 'radium'
 import moment from 'moment'
 
 import {AppBar, IconButton, FlatButton} from 'material-ui'
+import { connect } from 'redux/utils'
 
 import {Layout, Content} from 'components/layout'
 
@@ -39,7 +40,9 @@ let Conversation = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
   },
 
   getInitialState() {
@@ -55,7 +58,7 @@ let Conversation = React.createClass({
 
     ConversationActions.load(webId, id, true)
 
-    this.refs.dialog.show()
+    this.showDialog('conversation_' + this.props.params.id)
 
     this.itemsEl = ReactDOM.findDOMNode(this.refs.items)
   },
@@ -66,7 +69,7 @@ let Conversation = React.createClass({
     ConversationActions.unsubscribe(id)
     ConversationStore.cleanState()
 
-    this.refs.dialog.hide()
+    this.hideDialog('conversation_' + this.props.params.id)
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -188,7 +191,7 @@ let Conversation = React.createClass({
     }
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog fullscreen>
         <Layout>
           <AppBar
             title={title}
@@ -358,4 +361,6 @@ class ConversationItem extends React.Component {
   }
 }
 
-export default Radium(Conversation)
+export default Radium(connect({
+  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
+})(Conversation))

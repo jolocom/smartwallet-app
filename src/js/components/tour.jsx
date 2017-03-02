@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import {FlatButton, AppBar} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
@@ -6,22 +7,35 @@ import IndicatorDots from 'components/common/indicator-dots.jsx'
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 
-let Index = React.createClass({
-  contextTypes: {
-    history: React.PropTypes.any,
-    username: React.PropTypes.string,
-    muiTheme: React.PropTypes.object
-  },
+import {theme} from 'styles'
 
-  getInitialState() {
-    return {
+@connect({
+  props: {},
+  actions: ['common/dialog:hideDialog']
+})
+@Radium
+export default class Tour extends React.Component {
+  static propTypes = {
+    hideDialog: React.PropTypes.func
+  }
+
+  static contextTypes = {
+    store: React.PropTypes.object
+  }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
       show: !localStorage.getItem('jolocom.tour')
     }
-  },
+  }
+
+  componentDidUpdate() {
+    // console.log(this.props)
+  }
 
   getStyles() {
-    let {muiTheme} = this.context
-
     let styles = {
       container: {
         width: '100%',
@@ -37,7 +51,7 @@ let Index = React.createClass({
         boxShadow: 'none'
       },
       skip: {
-        color: muiTheme.jolocom.gray1
+        color: theme.jolocom.gray1
       },
       logo: {
         maxWidth: '60%',
@@ -68,17 +82,17 @@ let Index = React.createClass({
         backgroundSize: 'contain'
       },
       welcome: {
-        color: muiTheme.jolocom.gray1,
+        color: theme.jolocom.gray1,
         fontSize: '32px'
       },
       title: {
-        color: muiTheme.jolocom.gray1,
+        color: theme.jolocom.gray1,
         fontSize: '20px',
         fontWeight: '300',
         padding: '18px 0'
       },
       em: {
-        color: muiTheme.palette.accent1Color
+        color: theme.palette.accent1Color
       },
       actions: {
         display: 'flex',
@@ -92,13 +106,13 @@ let Index = React.createClass({
     }
 
     return styles
-  },
+  }
 
   render() {
     let styles = this.getStyles()
 
     return (
-      <Dialog ref="dialog" fullscreen visible={this.state.show}>
+      <Dialog id="tour" fullscreen visible={this.state.show}>
         <Layout>
           <Content>
             <AppBar
@@ -160,12 +174,10 @@ let Index = React.createClass({
         </Layout>
       </Dialog>
     )
-  },
-
-  _handleSkip() {
-    this.refs.dialog.hide()
   }
 
-})
-
-export default Radium(Index)
+  _handleSkip = () => {
+    this.props.hideDialog('tour')
+    localStorage.setItem('jolocom.tour', true)
+  }
+}
