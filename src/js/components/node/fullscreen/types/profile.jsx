@@ -251,6 +251,10 @@ let ProfileNode = React.createClass({
   renderField({key, icon, label, value, field, ...otherProps}) {
     let styles = this.getStyles()
 
+    if (!key) {
+      key = `field.${label}`
+    }
+
     if (!field) {
       field = (
         <TextField
@@ -284,10 +288,12 @@ let ProfileNode = React.createClass({
       let fields = group.fields.filter((field) => {
         return renderEmptyFields || field.value
       })
+
       // dont render empty groups
       if (fields.length) {
         result.push(
           <ListItem
+            key={`group.${group.title}`}
             primaryText={group.title}
             primaryTogglesNestedList
             nestedListStyle={styles.accordionChildren}
@@ -295,7 +301,7 @@ let ProfileNode = React.createClass({
             nestedItems={fields.map(this.renderField)}
           >{group.icon}</ListItem>
         )
-        result.push(<Divider />)
+        result.push(<Divider key={`divider.${group.title}`} />)
       }
     })
     return result
@@ -368,35 +374,37 @@ let ProfileNode = React.createClass({
       >
         <div style={styles.repContainer}>
           <table style={styles.repTable}>
-            <tr>
-              <td style={styles.repLeftCol}>
-                <Subheader style={styles.repSubheader}>Reputation</Subheader>
-              </td>
-              <td>
-                <Subheader style={styles.verifiedSubheader}>
-                  Verified
-                </Subheader>
-              </td>
-            </tr>
-            <tr>
-              <td style={styles.repLeftCol}>
-                <div style={styles.repBarContainer}>
-                  <LinearProgress
-                    mode="determinate"
-                    color={muiTheme.jolocom.gray2}
-                    style={styles.repBar}
-                    value={this.state.reputation || 0} />
-                  <div style={styles.repNumber}>
-                    {this.state.reputation || 'No reputation'}
+            <tbody>
+              <tr>
+                <td style={styles.repLeftCol}>
+                  <Subheader style={styles.repSubheader}>Reputation</Subheader>
+                </td>
+                <td>
+                  <Subheader style={styles.verifiedSubheader}>
+                    Verified
+                  </Subheader>
+                </td>
+              </tr>
+              <tr>
+                <td style={styles.repLeftCol}>
+                  <div style={styles.repBarContainer}>
+                    <LinearProgress
+                      mode="determinate"
+                      color={muiTheme.jolocom.gray2}
+                      style={styles.repBar}
+                      value={this.state.reputation || 0} />
+                    <div style={styles.repNumber}>
+                      {this.state.reputation || 'No reputation'}
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td>
-                <div>
-                  <VerifiedUser style={styles.verifiedIcon} />
-                </div>
-              </td>
-            </tr>
+                </td>
+                <td>
+                  <div>
+                    <VerifiedUser style={styles.verifiedIcon} />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <Divider />
