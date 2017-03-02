@@ -39,7 +39,6 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
             promise = accounts.login(params.username, params.password)
           }
           const account = await promise
-
           _saveAuthInfo(_saveToLocalStorage, params.username, account.webid)
 
           return {username: params.username, webId: account.webid}
