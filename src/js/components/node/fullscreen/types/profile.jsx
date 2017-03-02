@@ -348,13 +348,13 @@ let ProfileNode = React.createClass({
       }
     }
 
-    if (this.props.centerWritePerm) {
+    if (!this.isMe()) {
       menuItems.push('disconnect')
+      menuItems.push('viewSharedNodes')
+      menuItems.push('viewSharedNodes')
     }
 
-    menuItems.push('viewSharedNodes')
     menuItems.push('copyUrl')
-    fabItems.push('chat')
     return (
       <GenericFullScreen
         title={this.getName()}
