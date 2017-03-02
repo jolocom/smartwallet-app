@@ -2,11 +2,33 @@ import _ from 'lodash'
 
 export function action(module, name, options) {
   const id = 'little-sister/' + module + '/' + _.snakeCase(name).toUpperCase()
-  const creator = options.creator || ((params) => {
-    return creator.buildAction(params)
+  const creator = options.creator || ((...args) => {
+    return creator.buildAction(...args)
   })
 
-  creator.buildAction = (params) => {
+  creator.buildAction = (...args) => {
+    let hasParamsObject = false
+    if (_.isObject(args[0])) {
+      const params = args[0]
+      const paramsConform = _.every(
+        options.expectedParams,
+        key => _.has(params, key)
+      )
+      if (paramsConform) {
+        hasParamsObject = true
+      }
+    }
+
+    let params
+    if (!hasParamsObject) {
+      params = _(options.expectedParams)
+                .map((key, idx) => [key, args[idx]])
+                .fromPairs()
+                .valueOf()
+    } else {
+      params = args[0]
+    }
+
     return {
       type: id,
       ...params
