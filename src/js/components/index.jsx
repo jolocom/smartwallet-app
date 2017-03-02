@@ -11,12 +11,12 @@ let Index = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
-  componentWillMount() {
-    const {account} = this.context
-    if (account && account.webId) {
-      this.context.router.push('/graph')
-    }
-  },
+  // componentWillMount() {
+  //   const {account} = this.context
+  //   if (account && account.webId) {
+  //     this.context.router.push('/graph')
+  //   }
+  // },
 
   getStyles() {
     let {muiTheme} = this.context
