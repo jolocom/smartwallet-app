@@ -141,7 +141,7 @@ let AddContact = React.createClass({
 
     return (
       <div>
-        <Dialog ref="dialog" fullscreen>
+        <Dialog id="add_contact" fullscreen>
           <Layout>
             <AppBar
               title="Add Contacts"
