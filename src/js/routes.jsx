@@ -2,19 +2,19 @@ import React from 'react'
 
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import { Router, Route, IndexRoute } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
 import Graph from 'components/graph/graph.jsx'
 import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
-import Chat from 'components/chat/chat.jsx'
-import Conversations from 'components/chat/conversations.jsx'
-import ChatNew from 'components/chat/new.jsx'
-import Conversation from 'components/chat/conversation.jsx'
-import Contacts from 'components/contacts/contacts.jsx'
-import Contact from 'components/contacts/contact.jsx'
+import Chat from 'components/chat'
+import Conversations from 'components/chat/conversations'
+import NewConversation from 'components/chat/conversation/new'
+import Conversation from 'components/chat/conversation'
+import Contacts from 'components/contacts/contacts'
+import Contact from 'components/contacts/contact'
 
 import Login from 'components/accounts/login'
 import Signup from 'components/accounts/signup'
@@ -34,7 +34,7 @@ function getRoutes() {
       <Route path="/conversations" component={Conversations}>
         <Route path="/conversations/:id" component={Conversation} />
       </Route>
-      <Route path="new(/:webId)" component={ChatNew} />
+      <Route path="new(/:webId)" component={NewConversation} />
       <Route path="/contacts" component={Contacts}>
         <Route path=":username" component={Contact} />
       </Route>

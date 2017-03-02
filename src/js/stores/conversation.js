@@ -8,7 +8,13 @@ let chatAgent = new ChatAgent()
 import ConversationActions from 'actions/conversation'
 import ConversationsStore from 'stores/conversations'
 
-let {load, addMessage} = ConversationActions
+let {
+  load,
+  addMessage,
+  setSubject,
+  addParticipants,
+  removeParticipant
+} = ConversationActions
 
 const subscriptions = {}
 
@@ -98,6 +104,64 @@ export default Reflux.createStore({
     }
 
     this.trigger(this.state)
-  }
+  },
 
+  onSetSubject(uri, subject) {
+    const oldSubject = this.state.subject
+
+    // Optimistic updates
+    // @TODO we should do this throughout the app
+    this.state.subject = subject
+    this.trigger(this.state)
+
+    return chatAgent.setSubject(uri, oldSubject, subject)
+      .catch((e) => {
+        setSubject.failed(e, oldSubject)
+      })
+  },
+
+  onSetSubjectFailed(e, oldSubject) {
+    this.state.subject = oldSubject
+    this.trigger(this.state)
+  },
+
+  onAddParticipants(uri, participants) {
+    const oldParticipants = this.state.participants.slice(0)
+
+    this.state.participants = this.state.participants.concat(participants)
+
+    this.trigger(this.state)
+
+    chatAgent.addParticipants(uri, participants.map(p => p.webId))
+      .catch((e) => {
+        addParticipants.failed(e, oldParticipants)
+      })
+  },
+
+  onAddParticipantsFailed(e, oldParticipants) {
+    console.error(e)
+    this.state.participants = oldParticipants
+    this.trigger(this.state)
+  },
+
+  onRemoveParticipant(uri, participant) {
+    const oldParticipants = this.state.participants.slice(0)
+
+    this.state.participants = this.state.participants.filter((p) => {
+      return p.webId !== participant
+    })
+
+    this.trigger(this.state)
+
+    chatAgent.removeParticipant(uri, participant)
+      .catch((e) => {
+        removeParticipant.failed(e, oldParticipants)
+      })
+  },
+
+  onRemoveParticipantsFailed(e, oldParticipants) {
+    console.error(e)
+    this.state.participants = oldParticipants
+    this.trigger(this.state)
+  }
 })

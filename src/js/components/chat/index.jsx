@@ -3,24 +3,21 @@ import Radium from 'radium'
 
 import {AppBar, Tabs, Tab, Paper, IconButton} from 'material-ui'
 
-import { connect } from 'redux/utils'
 import Dialog from 'components/common/dialog.jsx'
-
 import {Layout, Content} from 'components/layout'
 
 import GraphStore from 'stores/graph-store'
 
-class Chat extends React.Component {
-
+@Radium
+export default class Chat extends React.Component {
   static contextTypes = {
-    router: React.PropTypes.any
+    router: React.PropTypes.any,
+    store: React.PropTypes.object
   }
 
   static propTypes = {
     children: React.PropTypes.node,
-    location: React.PropTypes.object,
-    showDialog: React.PropTypes.func.isRequired,
-    hideDialog: React.PropTypes.func.isRequired
+    location: React.PropTypes.object
   }
 
   constructor(props) {
@@ -29,8 +26,6 @@ class Chat extends React.Component {
     this.state = {
       activeTab: this.getActiveTab(props.location.pathname)
     }
-
-    this._handleBackTouchTap = this._handleBackTouchTap.bind(this)
   }
 
   getActiveTab(path) {
@@ -43,14 +38,6 @@ class Chat extends React.Component {
     return activeTab
   }
 
-  componentDidMount() {
-    this.props.showDialog({id: 'chat'})
-  }
-
-  componentWillUnmount() {
-    this.props.hideDialog({id: 'chat'})
-  }
-
   componentWillUpdate(newProps) {
     if (this.props.location.pathname !== newProps.location.pathname) {
       this.setState({
@@ -60,7 +47,6 @@ class Chat extends React.Component {
   }
 
   close() {
-    this.props.hideDialog({id: 'chat'})
     if (GraphStore.state.center == null) {
       this.context.router.push('/graph')
     } else {
@@ -80,6 +66,7 @@ class Chat extends React.Component {
       </IconButton>
     )
 
+    /*
     const searchIcon = (
       <IconButton
         iconClassName="material-icons"
@@ -88,16 +75,18 @@ class Chat extends React.Component {
         search
       </IconButton>
     )
+    */
 
     return (
-      <Dialog id="chat" fullscreen>
+      <Dialog id="chat" visible fullscreen>
         <Layout>
           <Paper>
             <AppBar
               title="Chat"
               style={styles.bar}
               iconElementLeft={backIcon}
-              iconElementRight={searchIcon} />
+              // iconElementRight={searchIcon}
+            />
             <Tabs valueLink={{
               value: this.state.activeTab,
               requestChange: (tab) => this._handleTabsChange(tab)
@@ -127,7 +116,7 @@ class Chat extends React.Component {
     }
   }
 
-  _handleBackTouchTap() {
+  _handleBackTouchTap = () => {
     this.close()
   }
 }
@@ -140,7 +129,3 @@ let styles = {
     overflowY: 'auto'
   }
 }
-
-export default connect({
-  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(Radium(Chat))
