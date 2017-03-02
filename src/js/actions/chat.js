@@ -1,6 +1,6 @@
 import Reflux from 'reflux'
 
 export default Reflux.createActions({
-  'reset' : {},
+  'reset': {},
   'create': {asyncResult: true}
 })

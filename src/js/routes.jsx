@@ -2,7 +2,7 @@ import React from 'react'
 
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import { Router, Route, IndexRoute } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
@@ -13,8 +13,8 @@ import Chat from 'components/chat'
 import Conversations from 'components/chat/conversations'
 import NewConversation from 'components/chat/conversation/new'
 import Conversation from 'components/chat/conversation'
-import Contacts from 'components/contacts/contacts.jsx'
-import Contact from 'components/contacts/contact.jsx'
+import Contacts from 'components/contacts/contacts'
+import Contact from 'components/contacts/contact'
 
 import Login from 'components/accounts/login'
 import Signup from 'components/accounts/signup'
