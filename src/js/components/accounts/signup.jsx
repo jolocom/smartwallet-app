@@ -380,11 +380,11 @@ let Signup = React.createClass({
   }
 })
 
-export default Radium(connect({
+export default connect({
   props: ['account'],
   actions: [
     'snack-bar:showSnackBarMessage',
     'account:doSignup',
     'router:pushRoute'
   ]
-})(Signup))
+})(Radium(Signup))

@@ -264,6 +264,6 @@ let WrappedListItem = React.createClass({
     )
   }
 })
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(AddContact))
+})(Radium(AddContact))

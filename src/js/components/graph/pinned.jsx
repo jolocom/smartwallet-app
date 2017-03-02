@@ -119,6 +119,6 @@ const PinnedNodes = React.createClass({
   }
 })
 
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(PinnedNodes))
+})(Radium(PinnedNodes))

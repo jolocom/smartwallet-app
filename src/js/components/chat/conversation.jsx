@@ -316,6 +316,6 @@ class ConversationItem extends React.Component {
   }
 }
 
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(Conversation))
+})(Radium(Conversation))
