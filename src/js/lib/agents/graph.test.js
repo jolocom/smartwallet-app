@@ -7,12 +7,13 @@ import rdf from 'rdflib'
 
 describe('GraphAgent', function() {
   const WEBID = 'https://mockwebid.com/card'
+  const PROXY_URL = 'https://proxy.jolocom.de/proxy?url='
 
   describe('#baseNode', function() {
     const gAgent = new GraphAgent()
+
     const title = 'Test Name'
     const desc = 'Description. With some characters.'
-
     const centerNode = {
       uri: 'https://centernode.com/profile/card',
       storage: 'https://centernode.com/files'
@@ -142,43 +143,46 @@ describe('GraphAgent', function() {
   })
 
   describe('#checkImages', function() {
+    const imgUri = 'https://mockuri.com/image.jpg'
+
     it('Should correctly detect unavailable images', async function() {
       const gAgent = new GraphAgent()
-      const imgUri = 'https://mockuri.com/omage.jpg'
       const testNode = {img: imgUri}
 
       gAgent._fetch = async(uri) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + imgUri)
+        expect(uri).to.equal(PROXY_URL + imgUri)
         return {
           status: 403
         }
       }
-
-      await gAgent.checkImages([testNode])
-      expect(testNode).to.deep.equal({
-        img: ''
-      })
-
-      testNode.img = imgUri
-      gAgent._fetch = async(uri) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + imgUri)
-        throw new Error()
-      }
-
       await gAgent.checkImages([testNode])
       expect(testNode).to.deep.equal({
         img: ''
       })
     })
 
-    it('Should leave available immages untouched', async function() {
+    it('Should correctly detect unavailable images', async function() {
       const gAgent = new GraphAgent()
-      const imgUri = 'https://mockuri.com/omage.jpg'
+      const testNode = {img: imgUri}
+
+      gAgent._fetch = async(uri) => {
+        expect(uri).to.equal(PROXY_URL + imgUri)
+        throw new Error()
+      }
+      await gAgent.checkImages([testNode])
+      expect(testNode).to.deep.equal({
+        img: ''
+      })
+    })
+
+    it('Should leave available images untouched', async function() {
+      const gAgent = new GraphAgent()
       const testNode = {img: imgUri}
 
       gAgent.head = async(uri) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + imgUri)
+        expect(uri).to.equal(PROXY_URL + imgUri)
         return {
+          status: 200,
           ok: true
         }
       }
@@ -212,7 +216,7 @@ describe('GraphAgent', function() {
       expect(confidential).to.equal(nodeInfo.confidential)
     }
     gAgent.put = async(uri, body, headers) => {
-      expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + newNodeUri)
+      expect(uri).to.equal(PROXY_URL + newNodeUri)
       expect(headers).to.deep.equal({
         'Content-Type': 'text/turtle'
       })
@@ -325,73 +329,119 @@ describe('GraphAgent', function() {
   })
 
   describe('#storeFile', function() {
-    it('Should correcly store a public and private files', async function() {
-      const mockFile = {name: 'mockName'}
-      const mockDstCont = 'https://mockwebid.com/'
-      let mockDestination = 'https://mockwebid.com/files/x'
-      let mockConfidential = false
+    const mockFile = {name: 'mockName'}
 
+    it('Should store public file with provided uri', async function() {
+      const mockDestination = 'https://mockwebid.com/files/x'
+      const mockConfidential = false
       const gAgent = new GraphAgent()
+
       gAgent._getWebId = () => WEBID
       gAgent.createAcl = async(finalUri, webId, confidential) => {
         expect(finalUri).to.equal(mockDestination)
         expect(webId).to.equal(WEBID)
-        expect(confidential).to.equal(mockConfidential)
+        expect(confidential).to.be.false
+        return
       }
+
       gAgent.put = async(uri, file, headers) => {
         expect(uri)
-          .to.equal('https://proxy.jolocom.de/proxy?url=' + mockDestination)
+          .to.equal(PROXY_URL + mockDestination)
         expect(file).to.deep.equal(mockFile)
         expect(headers).to.deep.equal({
           'Content-Type': 'image'
         })
+        return
       }
-      gAgent.randomString = () => 'abcde'
+
       await gAgent.storeFile(mockDestination, null, mockFile, mockConfidential)
+    })
 
-      mockConfidential = true
-      mockDestination = `${mockDstCont}files/abcde`
+    it('Should store private file given the container uri ', async function() {
+      const mockDstCont = 'https://mockwebid.com/'
+      const expectedDestination = `${mockDstCont}files/abcde`
+      const mockConfidential = true
+      const gAgent = new GraphAgent()
 
-      await gAgent.storeFile(null, mockDstCont, mockFile, mockConfidential)
+      gAgent._getWebId = () => WEBID
+
+      gAgent.randomString = () => 'abcde'
+
+      gAgent.createAcl = async(finalUri, webId, confidential) => {
+        expect(finalUri).to.equal(expectedDestination)
+        expect(webId).to.equal(WEBID)
+        expect(confidential).to.be.true
+        return
+      }
+
+      gAgent.put = async(uri, file, headers) => {
+        expect(uri)
+          .to.equal(PROXY_URL + expectedDestination)
+        expect(file).to.deep.equal(mockFile)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'image'
+        })
+        return
+      }
+
+      await gAgent.storeFile('', mockDstCont, mockFile, mockConfidential)
     })
   })
 
   describe('#createAcl', function() {
-    const gAgent = new GraphAgent()
-    const uri = 'https://mockfile.com/card'
-    const writer = new Writer()
-
     const tripleMap = [
       {pred: PRED.type, obj: [PRED.auth]},
-      {pred: PRED.access, obj: [rdf.sym(uri), rdf.sym(uri + '.acl')]},
+      {pred: PRED.access, obj: [rdf.sym(WEBID), rdf.sym(WEBID + '.acl')]},
       {pred: PRED.agent, obj: [rdf.sym(WEBID)]},
       {pred: PRED.mode, obj: [PRED.read, PRED.write, PRED.control]}
     ]
 
-    gAgent.put = async(finUri, body, headers) => {
-      expect(finUri).to.equal(`https://proxy.jolocom.de/proxy?url=${uri}.acl`)
-      expect(headers).to.deep.equal({
-        'Content-Type': 'text/turtle'
-      })
-      expect(body).to.equal(writer.end())
-    }
-
     it('Should correctly create private acl', async function() {
+      const writer = new Writer()
+      const gAgent = new GraphAgent()
+
       tripleMap.forEach(st => {
         st.obj.forEach(obj => {
-          writer.addTriple(rdf.sym(uri + 'acl#owner'), st.pred, obj)
+          writer.addTriple(rdf.sym(WEBID + 'acl#owner'), st.pred, obj)
         })
       })
-      gAgent.createAcl(uri, WEBID, false)
+
+      gAgent.put = async(finUri, body, headers) => {
+        expect(finUri).to.equal(`${PROXY_URL}${WEBID}.acl`)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'text/turtle'
+        })
+        expect(body).to.equal(writer.end())
+      }
+
+      await gAgent.createAcl(WEBID, WEBID, false)
     })
 
     it('Should correctly create public acl', async function() {
-      const all = rdf.sym(uri + '.acl#readall')
+      const writer = new Writer()
+      const all = rdf.sym(WEBID + '.acl#readall')
+      const gAgent = new GraphAgent()
+
+      gAgent.put = async(finUri, body, headers) => {
+        expect(finUri).to.equal(`${PROXY_URL}${WEBID}.acl`)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'text/turtle'
+        })
+        expect(body).to.equal(writer.end())
+      }
+
+      tripleMap.forEach(st => {
+        st.obj.forEach(obj => {
+          writer.addTriple(rdf.sym(WEBID + 'acl#owner'), st.pred, obj)
+        })
+      })
+
       writer.addTriple(all, PRED.type, PRED.auth)
-      writer.addTriple(all, PRED.access, rdf.sym(uri))
+      writer.addTriple(all, PRED.access, rdf.sym(WEBID))
       writer.addTriple(all, PRED.agentClass, PRED.Agent)
       writer.addTriple(all, PRED.mode, PRED.read)
-      gAgent.createAcl(uri, WEBID, true)
+
+      gAgent.createAcl(WEBID, WEBID, true)
     })
   })
 
@@ -416,7 +466,7 @@ describe('GraphAgent', function() {
         expect(toAdd).to.deep.equal(g.statements)
         expect(toDel).to.deep.equal([])
         expect(uri)
-          .to.equal('https://proxy.jolocom.de/proxy?url=' + destination)
+          .to.equal(PROXY_URL + destination)
       }
 
       await gAgent.writeTriples(destination, triples)
@@ -432,7 +482,7 @@ describe('GraphAgent', function() {
         expect(toAdd).to.deep.equal([])
         expect(toDel).to.deep.equal([])
         expect(uri)
-          .to.equal('https://proxy.jolocom.de/proxy?url=' + destination)
+          .to.equal(PROXY_URL + destination)
       }
 
       await gAgent.writeTriples(destination, triples)
@@ -451,7 +501,7 @@ describe('GraphAgent', function() {
       }]
 
       gAgent.patch = async(uri, toDel, toAdd) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + WEBID)
+        expect(uri).to.equal(PROXY_URL + WEBID)
         expect(toAdd).to.deep.equal([])
         expect(toDel).to.deep.equal(expected)
       }
@@ -478,7 +528,7 @@ describe('GraphAgent', function() {
       }]
 
       gAgent.patch = async(uri, toDel, toAdd) => {
-        expect(uri).to.equal('https://proxy.jolocom.de/proxy?url=' + WEBID)
+        expect(uri).to.equal(PROXY_URL + WEBID)
         expect(toAdd).to.deep.equal([])
         expect(toDel).to.deep.equal(expected)
       }
