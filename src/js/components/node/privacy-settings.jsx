@@ -1,7 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import {
   IconButton,
@@ -11,7 +10,6 @@ import {
   Avatar
 } from 'material-ui'
 import AppBar from 'material-ui/AppBar'
-import { open as confirmDialog } from 'redux/modules/confirmation-dialog'
 import FlatButton from 'material-ui/FlatButton'
 import Divider from 'material-ui/Divider'
 import PrivacyStore from 'stores/privacy-settings'
@@ -26,10 +24,9 @@ import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
 
 import Util from 'lib/util'
 
-let PrivacySettings = connect(
-  (state) => ({}),
-  (dispatch) => bindActionCreators({confirmDialog}, dispatch)
-)(
+let PrivacySettings = connect({
+  actions: ['confirmation-dialog:openConfirmDialog']
+})(
 React.createClass({
   mixins: [Reflux.listenTo(PrivacyStore, '_handleUpdate')],
 
@@ -41,7 +38,7 @@ React.createClass({
   propTypes: {
     params: React.PropTypes.object,
     name: React.PropTypes.string,
-    confirmDialog: React.PropTypes.func
+    openConfirmDialog: React.PropTypes.func
   },
 
   getInitialState() {
@@ -61,9 +58,12 @@ React.createClass({
   goBack() {
     if (this.state.unsavedChanges) {
       const message = 'You have unsaved changes, are you sure you want to exit?'
-      this.props.confirmDialog({message, primaryActionText: 'Exit', callback: () => {
-        this.context.router.goBack()
-      }})
+      this.props.openConfirmDialog({
+        message, primaryActionText: 'Exit',
+        callback: () => {
+          this.context.router.goBack()
+        }
+      })
     } else {
       this.context.router.goBack()
     }
@@ -337,16 +337,14 @@ React.createClass({
   }
 }))
 
-let WrappedListItem = connect(
-  (state) => ({}),
-  (dispatch) => (bindActionCreators({confirmDialog}))
-)(
-React.createClass({
+let WrappedListItem = connect({
+  actions: ['confirmation-dialog:openConfirmDialog']
+})(React.createClass({
   propTypes: {
     handleRemove: React.PropTypes.func,
     handleToggle: React.PropTypes.func,
     contact: React.PropTypes.object,
-    confirmDialog: React.PropTypes.func
+    openConfirmDialog: React.PropTypes.func
   },
 
   getStyles() {
@@ -400,8 +398,10 @@ React.createClass({
   _handleRemovePerson() {
     const {contact} = this.props
     const name = contact.name ? contact.name : contact.webId
-    const message = `Are you sure you want to revoke access rights from ${name}?`
-    this.props.confirmDialog({message, primaryActionText: 'Revoke',
+    const message = 'Are you sure you want to revoke ' +
+      `access rights from ${name}?`
+    this.props.openConfirmDialog({
+      message, primaryActionText: 'Revoke',
       callback: () => {
         this.props.handleRemove(this.props.contact)
       }
