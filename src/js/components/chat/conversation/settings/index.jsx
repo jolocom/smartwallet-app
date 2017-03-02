@@ -1,6 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 
+import { connect } from 'redux/utils'
+
 import map from 'lodash/map'
 
 import {
@@ -20,15 +22,21 @@ import Participants from './participants'
 import AddParticipants from './add-participants'
 import SubjectDialog from './subject-dialog'
 
+@connect({
+  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
+})
 @Radium
 export default class ConversationSettings extends React.Component {
   static propTypes = {
-    conversation: React.PropTypes.object
+    conversation: React.PropTypes.object,
+    showDialog: React.PropTypes.func,
+    hideDialog: React.PropTypes.func
   }
 
   static contextTypes = {
     router: React.PropTypes.any,
-    account: React.PropTypes.object
+    account: React.PropTypes.object,
+    store: React.PropTypes.object
   }
 
   constructor(props) {
@@ -39,19 +47,11 @@ export default class ConversationSettings extends React.Component {
     }
   }
 
-  show() {
-    this.refs.dialog.show()
-  }
-
-  hide() {
-    this.refs.dialog.hide()
-  }
-
   render() {
     const {conversation} = this.props
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog id="conversationSettings" fullscreen>
         <Layout>
           <AppBar
             title="Group Settings"
@@ -89,7 +89,6 @@ export default class ConversationSettings extends React.Component {
             onSubmit={this._handleSubjectSubmit}
           />
           <AddParticipants
-            ref="addParticipants"
             participants={map(conversation.participants, 'webId')}
             onSubmit={this._handleSubmitAddParticipants}
           />
@@ -111,13 +110,13 @@ export default class ConversationSettings extends React.Component {
   }
 
   _handleAddParticipants = () => {
-    this.refs.addParticipants.show()
+    this.props.showDialog({id: 'addParticipants'})
   }
 
   _handleSubmitAddParticipants = (participants) => {
     const {conversation} = this.props
     ConversationActions.addParticipants(conversation.uri, participants)
-    this.refs.addParticipants.hide()
+    this.props.hideDialog({id: 'addParticipants'})
   }
 
   _handleRemoveParticipant = (webId) => {
@@ -126,6 +125,6 @@ export default class ConversationSettings extends React.Component {
   }
 
   _handleClose = () => {
-    this.hide()
+    this.props.hideDialog({id: 'conversationSettings'})
   }
 }

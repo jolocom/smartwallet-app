@@ -25,12 +25,16 @@ export default class Dialog extends React.Component {
     hide: React.PropTypes.func
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.visible) {
       this.props.show({id: this.props.id})
     } else {
       this.props.hide({id: this.props.id})
     }
+  }
+
+  componentWillUnMount() {
+    this.props.hide({id: this.props.id})
   }
 
   getStyles() {
