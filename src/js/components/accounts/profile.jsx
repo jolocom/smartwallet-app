@@ -68,7 +68,7 @@ let Profile = React.createClass({
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
-    this.props.showDialog('profile')
+    this.props.showDialog({id: 'profile'})
   },
 
   downloadPK() {
@@ -80,7 +80,7 @@ let Profile = React.createClass({
   },
 
   hide() {
-    this.props.hideDialog('profile')
+    this.props.hideDialog({id: 'profile'})
     this.context.router.goBack()
   },
 

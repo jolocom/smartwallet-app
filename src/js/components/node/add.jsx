@@ -53,7 +53,7 @@ let NodeAdd = React.createClass({
   },
 
   componentDidMount() {
-    this.props.showDialog('add_node')
+    this.props.showDialog({id: 'add_node'})
   },
 
   getStyles() {

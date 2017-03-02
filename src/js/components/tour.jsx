@@ -177,7 +177,7 @@ export default class Tour extends React.Component {
   }
 
   _handleSkip = () => {
-    this.props.hideDialog('tour')
+    this.props.hideDialog({id: 'tour'})
     localStorage.setItem('jolocom.tour', true)
   }
 }

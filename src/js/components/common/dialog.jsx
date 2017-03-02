@@ -27,9 +27,9 @@ export default class Dialog extends React.Component {
     super(props)
 
     if (props.visible) {
-      props.show(props.id)
+      props.show({id: props.id})
     } else {
-      props.hide(props.id)
+      props.hide({id: props.id})
     }
   }
 
