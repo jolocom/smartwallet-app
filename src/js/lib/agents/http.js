@@ -110,7 +110,7 @@ class HTTPAgent {
     if (mode === 'cert') {
       return uri
     }
-    return `${this._proxyURL}/proxy?url=${uri}`
+    return `${this._proxyURL || settings.proxy}/proxy?url=${uri}`
   }
 
   patch(url, toDel, toIns) {
