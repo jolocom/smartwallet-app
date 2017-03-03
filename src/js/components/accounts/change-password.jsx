@@ -1,11 +1,9 @@
 import React from 'react'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton} from 'material-ui'
-import AccountActions from 'actions/account'
-
-import SnackbarActions from 'actions/snackbar'
 
 let ChangePassword = React.createClass({
 
@@ -15,7 +13,9 @@ let ChangePassword = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.string.isRequired
+    params: React.PropTypes.string.isRequired,
+    showSnackBarMessage: React.PropTypes.func.isRequired,
+    doResetPassword: React.PropTypes.func.isRequired
   },
 
   enableSubmit() {
@@ -27,14 +27,13 @@ let ChangePassword = React.createClass({
   },
 
   showValidationError() {
-    console.log(arguments)
-    SnackbarActions.showMessage('The two passwords do not match.')
+    this.props.showSnackBarMessage('The two passwords do not match.')
   },
 
   changePassword({password}) {
     const {username, token} = this.props.params
-    AccountActions.resetPassword(
-      username, token, password
+    this.props.doResetPassword(
+      {username, token, password}
     )
   },
 
@@ -128,5 +127,7 @@ let ChangePassword = React.createClass({
   }
 })
 
-export default Radium(ChangePassword)
+export default connect({
+  actions: ['snack-bar:showSnackBarMessage', 'account:doResetPassword']
+})(Radium(ChangePassword))
 

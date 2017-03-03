@@ -1,27 +1,45 @@
 import React from 'react'
 import Radium from 'radium'
+import { connect } from 'redux/utils'
 import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 import nodeActions from 'actions/node'
 import GraphPreview from './graph-preview.jsx'
-import SnackbarActions from 'actions/snackbar'
 
 let NodeAddLink = React.createClass({
   getInitialState() {
-    let name = this.props.node.name
-      ? this.props.node.name
-      : this.props.node.fullName
-    if (!name) {
-      name = this.props.node.title
-    }
-
     return {
       currentSelection: 'start',
-      startLabel: name,
-      startUri: this.props.node.uri,
-      endLabel: null,
+      startLabel: this.getNodeName(this.props.node),
+      startUri: this.props.node && this.props.node.uri,
+      endLabel: '',
       endUri: null,
       connectionType: 'knows'
     }
+  },
+
+  componentWillUpdate(newProps) {
+    if (this.props.node !== newProps.node) {
+      this.setState({
+        startLabel: this.getNodeName(newProps.node),
+        startUri: newProps.node && newProps.node.uri
+      })
+    }
+  },
+
+  getNodeName(node) {
+    if (!node) {
+      return ''
+    }
+
+    let name = node.name
+      ? node.name
+      : node.fullName
+
+    if (!name) {
+      name = node.title
+    }
+
+    return name
   },
 
   contextTypes: {
@@ -98,7 +116,8 @@ let LowerPart = React.createClass({
   propTypes: {
     node: React.PropTypes.object,
     graphState: React.PropTypes.object,
-    updateParentField: React.PropTypes.func
+    updateParentField: React.PropTypes.func,
+    showSnackBarMessage: React.PropTypes.func
   },
 
   getInitialState() {
@@ -185,7 +204,7 @@ let LowerPart = React.createClass({
                 value={startLabel}
                 field={'start'}
                 active={this.state.currentSelection === 'start'}
-                filledIcon={startIconFilled}
+                filledIcon={!!startIconFilled}
                 onChange={this.handleChangeStart}
                 onSelectTarget={this._handleTargetClick} />
 
@@ -202,7 +221,7 @@ let LowerPart = React.createClass({
                 value={endLabel}
                 field={'end'}
                 active={this.state.currentSelection === 'end'}
-                filledIcon={endIconFilled}
+                filledIcon={!!endIconFilled}
                 onChange={this.handleChangeEnd}
                 onSelectTarget={this._handleTargetClick} />
 
@@ -221,7 +240,7 @@ let LowerPart = React.createClass({
 
   submit() {
     if (!this.validates()) {
-      SnackbarActions.showMessage('Invalid input.')
+      this.props.showSnackBarMessage('Invalid input.')
       return false
     }
     let {startUri, endUri, connectionType} = this.state
@@ -325,6 +344,10 @@ let NodeTarget = React.createClass({
     onSelectTarget: React.PropTypes.func
   },
 
+  defaultProps: {
+    value: ''
+  },
+
   getStyles() {
     let {palette, textField} = this.context.muiTheme
 
@@ -366,7 +389,9 @@ let NodeTarget = React.createClass({
 
         <div style={styles.inner}>
           <div style={styles.value}>
-            <TextField type="value"
+            <TextField
+              type="value"
+              name={this.props.field}
               value={this.props.value}
               placeholder="Select node"
               onChange={this._handleFieldChange}
@@ -385,5 +410,9 @@ let NodeTarget = React.createClass({
     this.props.onSelectTarget(this.props.field)
   }
 })
+
+connect({
+  actions: ['snack-bar:showSnackBarMessage']
+})(Radium(LowerPart))
 
 export default Radium(NodeAddLink)

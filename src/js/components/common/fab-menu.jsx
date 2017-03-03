@@ -3,9 +3,8 @@ import Radium from 'radium'
 
 import {FloatingActionButton, FontIcon} from 'material-ui'
 
-let FabMenu = React.createClass({
-
-  propTypes: {
+class FabMenu extends React.Component {
+  static propTypes = {
     children: React.PropTypes.node,
     duration: React.PropTypes.number,
     icon: React.PropTypes.string,
@@ -13,33 +12,33 @@ let FabMenu = React.createClass({
     overlay: React.PropTypes.number,
     onClick: React.PropTypes.func,
     onTouchTap: React.PropTypes.func
-  },
+  }
 
-  getDefaultProps() {
-    return {
-      icon: 'add',
-      closeIcon: 'clear',
-      duration: 0.3
-    }
-  },
+  static defaultProps = {
+    icon: 'add',
+    closeIcon: 'clear',
+    duration: 0.3
+  }
 
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props)
+
+    this.state = {
       open: false
     }
-  },
+  }
 
   open() {
     this.setState({open: true})
-  },
+  }
 
   close() {
     this.setState({open: false})
-  },
+  }
 
   toggle() {
     this.setState({open: !this.state.open})
-  },
+  }
 
   calculateTransitionDelays(index) {
     let length = this.props.children.length
@@ -50,7 +49,7 @@ let FabMenu = React.createClass({
       appear: factor,
       disappear: duration - factor
     }
-  },
+  }
 
   getStyles() {
     let styles = {
@@ -74,7 +73,7 @@ let FabMenu = React.createClass({
       }
     }
     return styles
-  },
+  }
 
   render() {
     let {
@@ -115,7 +114,7 @@ let FabMenu = React.createClass({
       <div style={styles.container}>
         <nav style={styles.nav}>
           <FloatingActionButton
-            onTouchTap={this.toggle}
+            onTouchTap={() => this.toggle()}
             style={styles.item}
             iconStyle={{
               transition: `transform ${duration}s`,
@@ -133,7 +132,6 @@ let FabMenu = React.createClass({
       </div>
     )
   }
-
-})
+}
 
 export default Radium(FabMenu)
