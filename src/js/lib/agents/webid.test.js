@@ -1,4 +1,5 @@
 /* global describe: true, it: true */
+/* eslint no-multi-str: "none" */
 var expect = require('chai').expect
 import {Parser} from '../rdf'
 // import HTTPAgent from './http'
