@@ -353,7 +353,7 @@ let ProfileNode = React.createClass({
     if (!this.isMe()) {
       menuItems.push('disconnect')
       menuItems.push('viewSharedNodes')
-      fabItems.push('chat')
+      menuItems.push('chat')
     }
 
     menuItems.push('copyUrl')
