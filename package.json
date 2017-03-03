@@ -1,6 +1,6 @@
 {
   "name": "little-sister",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Social app / linked data explorer built for SoLiD infrastracture",
   "main": "index.js",
   "scripts": {
@@ -96,7 +96,7 @@
     "d3-shape": "^1.0.2",
     "debug": "^2.2.0",
     "events": "^1.1.0",
-    "formsy-material-ui": "^0.5.2",
+    "formsy-material-ui": "^0.5.3",
     "formsy-react": "^0.18.1",
     "history": "^1.17.0",
     "immutable": "^3.8.1",

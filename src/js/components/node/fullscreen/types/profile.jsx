@@ -308,7 +308,9 @@ let ProfileNode = React.createClass({
   },
 
   isMe() {
+    console.log('Caleld here')
     if (this.state && this.state.profile) {
+      console.log('HERE I AM', this.state.profile.webId === this.props.node.uri)
       return this.state.profile.webId === this.props.node.uri
     }
   },
@@ -351,7 +353,7 @@ let ProfileNode = React.createClass({
     if (!this.isMe()) {
       menuItems.push('disconnect')
       menuItems.push('viewSharedNodes')
-      menuItems.push('viewSharedNodes')
+      menuItems.push('chat')
     }
 
     menuItems.push('copyUrl')

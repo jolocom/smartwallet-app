@@ -7,7 +7,6 @@ import ContactsList from 'components/contacts/list.jsx'
 import ChatActions from 'actions/chat'
 
 import AccountStore from 'stores/account'
-
 import ChatStore from 'stores/chat'
 
 @connect({

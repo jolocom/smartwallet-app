@@ -81,7 +81,6 @@ React.createClass({
         user.edit = !user.edit
       }
     })
-    this.setState(this.state)
   },
 
   _handleUpdate(storeState) {

@@ -475,14 +475,16 @@ let Profile = React.createClass({
                             style={styles.removePassportButton} />
                         </div>
                       : <div>
-                        {this.state.loadingPassportPhoto
-                          ? <LinearProgress
-                            mode="indeterminate"
-                            style="progBar" />
-                          : <FlatButton
-                            label="Upload passport"
-                            onClick={this._handleSelectPassport}
-                            style={styles.uploadPassportButton} />}
+                        <FlatButton
+                          label={this.state.loadingPassportPhoto
+                            ? 'Loading'
+                            : 'Upload passport'
+                          }
+                          onClick={this.state.loadingPassportPhoto
+                            ? () => {}
+                            : this._handleSelectPassport
+                          }
+                          style={styles.uploadPassportButton} />
                       </div>}
                       </div>
                     </div>
@@ -606,9 +608,7 @@ let Profile = React.createClass({
       })
     } else {
       this.setState({
-        loadingPassportPhoto: true
-      })
-      this.setState({
+        loadingPassportPhoto: true,
         error: null,
         passportFile: file
       })

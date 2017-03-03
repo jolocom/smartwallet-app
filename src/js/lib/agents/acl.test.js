@@ -85,6 +85,16 @@ describe('AclAgent', function() {
           ]
         }
       ])
+      expect(agent.toRemove).to.deep.equal([])
+      expect(agent.toAdd).to.deep.equal([
+        {
+          newPolicy: false,
+          object: 'http://www.w3.org/ns/auth/acl#Control',
+          predicate: rdf.sym('http://www.w3.org/ns/auth/acl#mode'),
+          subject: aclUri + '#authorization1',
+          user: 'https://alice.example.com/profile/card#me'
+        }
+      ])
     })
 
     it('should be able to add a new non-existing rule', async function() {
@@ -135,6 +145,9 @@ describe('AclAgent', function() {
         expect(() => agent.allow('https://bob.example.com/profile/card#me',
                                  'read'))
               .to.throw('Policy already present')
+
+        expect(agent.toAdd).to.have.lengthOf(1)
+        expect(agent.toRemove).to.deep.equal([])
       }
     )
 
@@ -206,6 +219,123 @@ describe('AclAgent', function() {
         ])
         expect(agent.toAdd).to.deep.equal([])
         expect(agent.toRemove).to.deep.equal([])
+      }
+    )
+  })
+
+  describe('#removeAllow', function() {
+    it('should remove permission from existing policy', async function() {
+      const uri = 'https://alice.example.com/docs/shared-file1'
+      const aclUri = uri + '.acl'
+      const agent = await initAgentWithDummyACL(uri, aclUri)
+      agent.removeAllow('https://alice.example.com/profile/card#me', 'write')
+
+      expect(agent.model).to.deep.equal([
+        {
+          user: 'https://alice.example.com/profile/card#me',
+          source: 'https://alice.example.com/docs/' +
+                  'shared-file1.acl#authorization1',
+          mode: [
+            'http://www.w3.org/ns/auth/acl#Read'
+          ]
+        }
+      ])
+      expect(agent.toRemove).to.deep.equal([
+        {
+          zombie: false,
+          object: 'http://www.w3.org/ns/auth/acl#Write',
+          predicate: rdf.sym('http://www.w3.org/ns/auth/acl#mode'),
+          subject: aclUri + '#authorization1',
+          user: 'https://alice.example.com/profile/card#me'
+        }
+      ])
+      expect(agent.toAdd).to.deep.equal([])
+    })
+
+    it('should handle trying to remove a non-existent rule',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+        expect(() => agent.removeAllow('nonexistent', 'read'))
+          .to.throw('Policy does not exist')
+      }
+    )
+
+    it('should correctly handle trying to remove a rule after adding it',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+
+        agent.allow('https://alice.example.com/profile/card#me',
+          'control')
+        agent.removeAllow('https://alice.example.com/profile/card#me',
+          'control')
+
+        expect(agent.model).to.deep.equal([
+          {
+            user: 'https://alice.example.com/profile/card#me',
+            source: 'https://alice.example.com/docs/' +
+                    'shared-file1.acl#authorization1',
+            mode: [
+              'http://www.w3.org/ns/auth/acl#Read',
+              'http://www.w3.org/ns/auth/acl#Write'
+            ]
+          }
+        ])
+        expect(agent.toAdd).to.deep.equal([])
+        expect(agent.toRemove).to.deep.equal([])
+      }
+    )
+
+    it('should flag a policy for removal if it has no valid rules left',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+        agent.removeAllow('https://alice.example.com/profile/card#me', 'write')
+        agent.removeAllow('https://alice.example.com/profile/card#me', 'read')
+        expect(agent.toRemove).to.deep.equal([
+          {
+            zombie: false,
+            object: 'http://www.w3.org/ns/auth/acl#Write',
+            predicate: rdf.sym('http://www.w3.org/ns/auth/acl#mode'),
+            subject: aclUri + '#authorization1',
+            user: 'https://alice.example.com/profile/card#me'
+          },
+          {
+            zombie: true,
+            object: 'http://www.w3.org/ns/auth/acl#Read',
+            predicate: rdf.sym('http://www.w3.org/ns/auth/acl#mode'),
+            subject: aclUri + '#authorization1',
+            user: 'https://alice.example.com/profile/card#me'
+          }
+        ])
+        expect(agent.model).to.deep.equal([])
+      }
+    )
+
+    it('should correclty remove a policy regarding different user that was just added',
+      async function() {
+        const uri = 'https://alice.example.com/docs/shared-file1'
+        const aclUri = uri + '.acl'
+        const agent = await initAgentWithDummyACL(uri, aclUri)
+        agent.allow('https://bob.example.com/profile/card#me', 'write')
+        agent.removeAllow('https://bob.example.com/profile/card#me', 'write')
+        expect(agent.toAdd).to.deep.equal([])
+        expect(agent.toRemove).to.deep.equal([])
+        expect(agent.model).to.deep.equal([
+          {
+            user: 'https://alice.example.com/profile/card#me',
+            source: 'https://alice.example.com/docs/' +
+                    'shared-file1.acl#authorization1',
+            mode: [
+              'http://www.w3.org/ns/auth/acl#Read',
+              'http://www.w3.org/ns/auth/acl#Write'
+            ]
+          }
+        ])
       }
     )
   })

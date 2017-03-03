@@ -48,8 +48,10 @@ export const PRED = {
   space: SIOC('space'),
   post: SIOC('Post'),
   hasCreator: SIOC('hasCreator'),
+  modified: DC('modified'),
   content: SIOC('content'),
   created: DC('created'),
+
   hasContainer: SIOC('hasContainer'),
   containerOf: SIOC('containerOf'),
   // --
