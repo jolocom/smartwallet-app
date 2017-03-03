@@ -5,3 +5,4 @@ node_js:
 install: npm install
 before_script: utils/lint-files-changed.sh
 script: npm run test:phantomjs
+after_success: cat ./coverage/lcov.info | node_modules/.bin/codacy-coverage
