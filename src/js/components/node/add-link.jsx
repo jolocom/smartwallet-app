@@ -1,9 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
+import { connect } from 'redux/utils'
 import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 import nodeActions from 'actions/node'
 import GraphPreview from './graph-preview.jsx'
-import SnackbarActions from 'actions/snackbar'
 
 let NodeAddLink = React.createClass({
   getInitialState() {
@@ -98,7 +98,8 @@ let LowerPart = React.createClass({
   propTypes: {
     node: React.PropTypes.object,
     graphState: React.PropTypes.object,
-    updateParentField: React.PropTypes.func
+    updateParentField: React.PropTypes.func,
+    showSnackBarMessage: React.PropTypes.func.isRequired
   },
 
   getInitialState() {
@@ -221,7 +222,7 @@ let LowerPart = React.createClass({
 
   submit() {
     if (!this.validates()) {
-      SnackbarActions.showMessage('Invalid input.')
+      this.props.showSnackBarMessage('Invalid input.')
       return false
     }
     let {startUri, endUri, connectionType} = this.state
@@ -386,4 +387,6 @@ let NodeTarget = React.createClass({
   }
 })
 
-export default Radium(NodeAddLink)
+export default connect({
+  actions: ['snack-bar:showSnackBarMessage']
+})(Radium(NodeAddLink))

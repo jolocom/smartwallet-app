@@ -1,37 +1,27 @@
 import React from 'react'
 import Radium from 'radium'
 
+import { connect } from 'redux/utils'
+
 import ContactsList from 'components/contacts/list.jsx'
 import ChatActions from 'actions/chat'
-
-import AccountStore from 'stores/account'
-
-import ChatStore from 'stores/chat'
 
 @Radium
 export default class Contacts extends React.Component {
   static propTypes = {
     searchQuery: React.PropTypes.string,
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    account: React.PropTypes.object
   }
 
   static contextTypes = {
-    router: React.PropTypes.any
-  }
-
-  constructor() {
-    super()
-
-    this.store = ChatStore
-
-    this.state = {
-
-    }
+    router: React.PropTypes.any,
+    store: React.PropTypes.object
   }
 
   createChat(webId) {
     ChatActions.create(
-        AccountStore.state.webId, webId
+      this.props.account.webId, this.props.account.webId, webId
     )
   }
 
@@ -63,3 +53,7 @@ let styles = {
     position: 'relative'
   }
 }
+
+export default connect({
+  props: ['account']
+})(Radium(Contacts))

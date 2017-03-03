@@ -2,6 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 
 import Dialog from 'components/common/dialog.jsx'
+import { connect } from 'redux/utils'
 import {Layout} from 'components/layout'
 
 import ContactActions from 'actions/contact'
@@ -9,12 +10,16 @@ import ContactStore from 'stores/contact'
 
 import Profile from '../node/fullscreen/types/profile'
 
-export default React.createClass({
+export default connect({
+  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
+})(React.createClass({
 
   mixins: [Reflux.connect(ContactStore, 'contact')],
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -31,11 +36,11 @@ export default React.createClass({
   },
 
   open() {
-    this.refs.dialog.show()
+    this.props.showDialog(this.props.params.username)
   },
 
   close() {
-    this.refs.dialog.hide()
+    this.props.hideDialog(this.props.params.username)
     this.context.router.push('/contacts')
   },
 
@@ -47,11 +52,13 @@ export default React.createClass({
     let {contact} = this.state
 
     return (
-      <Dialog ref="dialog" fullscreen visible={this.state.open}>
+      <Dialog id={this.props.params.username}
+        visible={this.state.open} fullscreen
+      >
         <Layout>
           <Profile node={contact} onClose={this.close} />
         </Layout>
       </Dialog>
     )
   }
-})
+}))

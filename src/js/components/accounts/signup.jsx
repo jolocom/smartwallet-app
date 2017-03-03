@@ -1,25 +1,26 @@
 import React from 'react'
 import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton, AppBar} from 'material-ui'
 import {Link} from 'react-router'
 
-import SnackbarActions from 'actions/snackbar'
-
 import AvailabilityStore from 'stores/availability'
-
-import Account from 'actions/account'
-import AccountStore from 'stores/account'
 
 import Utils from 'lib/util'
 
 let Signup = React.createClass({
   mixins: [
-    Reflux.connect(AvailabilityStore, 'available'),
-    Reflux.connect(AccountStore, 'account')
+    Reflux.connect(AvailabilityStore, 'available')
   ],
+
+  propTypes: {
+    showSnackBarMessage: React.PropTypes.func.isRequired,
+    doSignup: React.PropTypes.func.isRequired,
+    account: React.PropTypes.object
+  },
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
@@ -56,26 +57,25 @@ let Signup = React.createClass({
     }
   },
 
-  signup(model) {
-    if (model.email !== model.repeatEmail) {
-      SnackbarActions.showMessage('The two emails do not match.')
+  signup() {
+    if (this.state.email !== this.state.email2) {
+      this.props.showSnackBarMessage('The two emails do not match.')
       return
     }
 
     this.disableSubmit()
 
     let signupData = {
-      username: model.username,
-      name: model.name,
-      email: model.email,
-      password: model.password
+      username: this.state.username,
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password
     }
-
-    Account.signup(signupData)
+    this.props.doSignup(signupData)
   },
 
   componentDidUpdate() {
-    if (this.state.account && this.state.account.username) {
+    if (this.props.account && this.props.account.username) {
       this.context.router.push('/graph')
     }
   },
@@ -234,7 +234,7 @@ let Signup = React.createClass({
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
-        {this.state.account.emailVerifyScreen
+        {this.props.account.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>
             <p style={styles.signUpMessage}>
               Thank you for signing up to Little Sister!<br />
@@ -338,4 +338,11 @@ let Signup = React.createClass({
   }
 })
 
-export default Radium(Signup)
+export default Radium(connect({
+  props: ['account'],
+  actions: [
+    'snack-bar:showSnackBarMessage',
+    'account:doSignup',
+    'router:pushRoute'
+  ]
+})(Signup))

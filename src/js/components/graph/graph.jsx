@@ -21,8 +21,7 @@ let Graph = React.createClass({
   propTypes: {
     children: React.PropTypes.node,
     params: React.PropTypes.object,
-    routes: React.PropTypes.array,
-    snackbar: React.PropTypes.bool
+    routes: React.PropTypes.array
   },
 
   contextTypes: {
@@ -32,12 +31,14 @@ let Graph = React.createClass({
   },
 
   childContextTypes: {
+    router: React.PropTypes.object,
     node: React.PropTypes.object,
     user: React.PropTypes.string
   },
 
   getChildContext() {
     return {
+      router: this.context.router,
       node: this.state.center,
       user: this.state.webId
     }

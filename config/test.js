@@ -2,6 +2,7 @@
 // endpoint - A String that is the http/s address of the app
 // dev      - A boolean that if true allows to login app without certificate
 module.exports = {
+  proxy: 'https://proxy',
   endpoint: 'https://localhost:8443',
   dev: true
 }

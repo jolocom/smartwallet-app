@@ -79,7 +79,7 @@ class LDPAgent extends HTTPAgent { // TODO: Remove when done refactoring
       })
     }).catch((err) => { // Catch is automatically called on network errors only
       let statusCode = err.message
-      console.log(err.message)
+      // console.log(err.message)
       return {
         uri: uri,
         unav: true,

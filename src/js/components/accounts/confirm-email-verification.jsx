@@ -1,9 +1,7 @@
 import React from 'react'
-import Reflux from 'reflux'
 import Radium from 'radium'
+import { connect } from 'redux/utils'
 import {RaisedButton} from 'material-ui'
-import AccountActions from 'actions/account'
-import AccountStore from 'stores/account'
 import JolocomTheme from 'styles/jolocom-theme'
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -12,16 +10,15 @@ const theme = getMuiTheme(JolocomTheme)
 
 let ConfirmEmailVerification = React.createClass({
 
-  mixins: [Reflux.listenTo(AccountStore, 'onStateUpdate', 'setInitialState')],
-
   contextTypes: {
     muiTheme: React.PropTypes.object,
     router: React.PropTypes.object
-
   },
 
   propTypes: {
-    params: React.PropTypes.string
+    params: React.PropTypes.object,
+    account: React.PropTypes.object,
+    doActivateEmail: React.PropTypes.func.isRequired
   },
 
   getStyles() {
@@ -65,24 +62,16 @@ let ConfirmEmailVerification = React.createClass({
     return styles
   },
 
-  setInitialState(initState) {
-    this.setState(initState)
-    this.activateEmailAccount
-  },
-
-  onStateUpdate(newState) {
-    this.setState(newState)
-  },
-
   activateEmailAccount() {
-    let user = encodeURIComponent(this.props.params.username)
+    let username = encodeURIComponent(this.props.params.username)
     let code = encodeURIComponent(this.props.params.code)
 
-    AccountActions.activateEmail(user, code)
+    this.props.doActivateEmail({username, code})
+    this.setState({disabledSubmit: true})
   },
 
   componentDidUpdate() {
-    if (this.state.emailVerifyCompleted) {
+    if (this.props.account.emailVerifyCompleted) {
       this.redirectToLogin()
     }
   },
@@ -121,4 +110,7 @@ let ConfirmEmailVerification = React.createClass({
 
 })
 
-export default Radium(ConfirmEmailVerification)
+export default connect({
+  props: ['account'],
+  actions: ['account:doActivateEmail']
+})(Radium(ConfirmEmailVerification))

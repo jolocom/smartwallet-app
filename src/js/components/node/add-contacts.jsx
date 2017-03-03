@@ -2,6 +2,8 @@ import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
 
+import { connect } from 'redux/utils'
+
 import {
   AppBar,
   IconButton,
@@ -32,7 +34,9 @@ let AddContact = React.createClass({
     checked: React.PropTypes.bool,
     onClose: React.PropTypes.func,
     onSubmit: React.PropTypes.func,
-    selected: React.PropTypes.array
+    selected: React.PropTypes.array,
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -72,7 +76,7 @@ let AddContact = React.createClass({
     })
 
     ContactsActions.load()
-    this.refs.dialog && this.refs.dialog.show()
+    this.props.showDialog('add_contact')
   },
 
   getStyles() {
@@ -260,4 +264,6 @@ let WrappedListItem = React.createClass({
     )
   }
 })
-export default Radium(AddContact)
+export default Radium(connect({
+  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
+})(AddContact))

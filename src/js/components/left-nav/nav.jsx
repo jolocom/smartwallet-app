@@ -9,10 +9,10 @@ import {
   FontIcon,
   Avatar
 } from 'material-ui'
+import { connect } from 'redux/utils'
 
 import Header from './header.jsx'
 
-import AccountActions from 'actions/account'
 import UserAvatar from 'components/common/user-avatar.jsx'
 import GraphIcon from 'components/icons/graph-icon.jsx'
 
@@ -30,6 +30,10 @@ let Nav = React.createClass({
   contextTypes: {
     router: React.PropTypes.object,
     profile: React.PropTypes.any
+  },
+
+  propTypes: {
+    doLogout: React.PropTypes.func.isRequired
   },
 
   getInitialState() {
@@ -115,7 +119,7 @@ let Nav = React.createClass({
   },
 
   logout() {
-    AccountActions.logout()
+    this.props.doLogout()
   },
 
   drawerRequestChange(open, reason) {
@@ -202,4 +206,6 @@ let Nav = React.createClass({
 
 })
 
-export default Nav
+export default connect({
+  actions: ['account:doLogout']
+})(Nav)
