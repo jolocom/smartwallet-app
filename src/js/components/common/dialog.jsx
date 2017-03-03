@@ -37,16 +37,6 @@ export default class Dialog extends React.Component {
     this.props.hide({id: this.props.id})
   }
 
-  constructor(props) {
-    super(props)
-
-    if (props.visible) {
-      props.show({id: props.id})
-    } else {
-      props.hide({id: props.id})
-    }
-  }
-
   getStyles() {
     return {
       container: {
