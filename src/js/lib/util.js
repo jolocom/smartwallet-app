@@ -81,7 +81,7 @@ let Util = {
 
   // TODO Rethink
   formatWebId(webId) {
-    return this.webidRoot(webId).replace(/[: .\/]/g, '')
+    return this.webidRoot(webId).replace(/[: ./]/g, '')
   },
 
   /*
