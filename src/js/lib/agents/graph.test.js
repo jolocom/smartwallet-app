@@ -1,4 +1,4 @@
-/* global describe: true, it: true */
+/* global describe: true, it: true, beforeEach: true */
 var expect = require('chai').expect
 import {Writer} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
@@ -10,7 +10,9 @@ describe('GraphAgent', function() {
   const PROXY_URL = 'https://proxy.jolocom.de/proxy?url='
 
   describe('#baseNode', function() {
-    const gAgent = new GraphAgent()
+    beforeEach(function() {
+      this.gAgent = new GraphAgent()
+    })
 
     const title = 'Test Name'
     const desc = 'Description. With some characters.'
@@ -52,7 +54,9 @@ describe('GraphAgent', function() {
         why: rdf.sym('chrome:theSession')
       }]
 
-      const result = gAgent.baseNode(WEBID, w, title, desc, type, centerNode)
+      const result = this.gAgent.baseNode(
+        WEBID, w, title, desc, type, centerNode
+      )
       expect(result.g.statements).to.deep.equal(expected.concat(nodeTypeTrip))
     })
 
@@ -66,7 +70,9 @@ describe('GraphAgent', function() {
         why: rdf.sym('chrome:theSession')
       }]
 
-      const result = gAgent.baseNode(WEBID, w, title, desc, type, centerNode)
+      const result = this.gAgent.baseNode(
+        WEBID, w, title, desc, type, centerNode
+      )
       expect(result.g.statements).to.deep.equal(expected.concat(nodeTypeTrip))
     })
 
@@ -80,7 +86,9 @@ describe('GraphAgent', function() {
         why: rdf.sym('chrome:theSession')
       }]
 
-      const result = gAgent.baseNode(WEBID, w, title, desc, type, centerNode)
+      const result = this.gAgent.baseNode(
+        WEBID, w, title, desc, type, centerNode
+      )
       expect(result.g.statements).to.deep.equal(expected.concat(nodeTypeTrip))
     })
 
@@ -94,22 +102,24 @@ describe('GraphAgent', function() {
         why: rdf.sym('chrome:theSession')
       }]
 
-      const result = gAgent.baseNode(WEBID, w, title, desc, type, centerNode)
+      const result = this.gAgent.baseNode(
+        WEBID, w, title, desc, type, centerNode
+      )
       expect(result.g.statements).to.deep.equal(expected.concat(nodeTypeTrip))
     })
 
     it('Should throw if not enough arguments are provided', function() {
       expect(() => {
-        gAgent.baseNode()
+        this.gAgent.baseNode()
       }).to.throw('baseNode: not enough arguments')
       expect(() => {
-        gAgent.baseNode(undefined, new Writer(), title, desc, 'default')
+        this.gAgent.baseNode(undefined, new Writer(), title, desc, 'default')
       }).to.throw('baseNode: not enough arguments')
       expect(() => {
-        gAgent.baseNode('test', undefined, title, desc, 'default')
+        this.gAgent.baseNode('test', undefined, title, desc, 'default')
       }).to.throw('baseNode: not enough arguments')
       expect(() => {
-        gAgent.baseNode('test', new Writer(), title, desc, undefined)
+        this.gAgent.baseNode('test', new Writer(), title, desc, undefined)
       }).to.throw('baseNode: not enough arguments')
     })
   })
@@ -206,28 +216,28 @@ describe('GraphAgent', function() {
   })
 
   describe('#createNode', function() {
-    const gAgent = new GraphAgent()
-    const originalAddImg = gAgent.addImage
-
-    gAgent.randomString = () => 'abcde'
-    gAgent.createAcl = async(uri, user, confidential) => {
-      expect(uri).to.equal(newNodeUri)
-      expect(user).to.equal(WEBID)
-      expect(confidential).to.equal(nodeInfo.confidential)
-    }
-    gAgent.put = async(uri, body, headers) => {
-      expect(uri).to.equal(PROXY_URL + newNodeUri)
-      expect(headers).to.deep.equal({
-        'Content-Type': 'text/turtle'
-      })
-      expect(body)
-        .to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri, nodeInfo.image))
-    }
-    gAgent.linkNodes = async(start, type, end) => {
-      expect(start).to.equal(center.uri)
-      expect(type).to.equal('generic')
-      expect(end).to.equal(newNodeUri)
-    }
+    beforeEach(function() {
+      this.gAgent = new GraphAgent()
+      this.gAgent.randomString = () => 'abcde'
+      this.gAgent.createAcl = async(uri, user, confidential) => {
+        expect(uri).to.equal(newNodeUri)
+        expect(user).to.equal(WEBID)
+        expect(confidential).to.equal(nodeInfo.confidential)
+      }
+      this.gAgent.put = async(uri, body, headers) => {
+        expect(uri).to.equal(PROXY_URL + newNodeUri)
+        expect(headers).to.deep.equal({
+          'Content-Type': 'text/turtle'
+        })
+        expect(body)
+          .to.equal(_bodyFor(nodeInfo.nodeType, newNodeUri, nodeInfo.image))
+      }
+      this.gAgent.linkNodes = async(start, type, end) => {
+        expect(start).to.equal(center.uri)
+        expect(type).to.equal('generic')
+        expect(end).to.equal(newNodeUri)
+      }
+    })
 
     const center = {
       uri: WEBID,
@@ -236,7 +246,7 @@ describe('GraphAgent', function() {
     const newNodeUri = center.storage + 'abcde'
     const nodeInfo = {
       title: 'title',
-      desc: 'description is here',
+      description: 'description is here',
       confidential: false,
       nodeType: 'default',
       image: false
@@ -277,21 +287,20 @@ describe('GraphAgent', function() {
     }
     // A lot of references passed around at the moment.
     it('Should create public basic node with no image', async function() {
-      gAgent.addImage = async() => {
+      this.gAgent.addImage = async() => {
         expect(true).to.be.false
       }
-      gAgent.createNode(WEBID, center, nodeInfo)
-      gAgent.addImage = originalAddImg
+
+      this.gAgent.createNode(WEBID, center, nodeInfo)
     })
 
     it('Should create private basic node with no image', async function() {
-      gAgent.addImage = async() => {
+      this.gAgent.addImage = async() => {
         expect(true).to.be.false
       }
       nodeInfo.confidential = true
-      await gAgent.createNode(WEBID, center, nodeInfo)
+      await this.gAgent.createNode(WEBID, center, nodeInfo)
       nodeInfo.confidential = false
-      gAgent.addImage = originalAddImg
     })
 
     it('Should create public basic node with image', async function() {
@@ -299,7 +308,7 @@ describe('GraphAgent', function() {
       nodeInfo.confidential = false
       nodeInfo.nodeType = 'default'
 
-      await gAgent.createNode(WEBID, center, nodeInfo)
+      await this.gAgent.createNode(WEBID, center, nodeInfo)
 
       nodeInfo.nodeType = 'default'
       nodeInfo.image = false
@@ -310,7 +319,7 @@ describe('GraphAgent', function() {
       nodeInfo.confidential = true
       nodeInfo.nodeType = 'default'
 
-      await gAgent.createNode(WEBID, center, nodeInfo)
+      await this.gAgent.createNode(WEBID, center, nodeInfo)
 
       nodeInfo.nodeType = 'default'
       nodeInfo.image = false
@@ -321,7 +330,7 @@ describe('GraphAgent', function() {
       nodeInfo.confidential = false
       nodeInfo.nodeType = 'image'
 
-      await gAgent.createNode(WEBID, center, nodeInfo)
+      await this.gAgent.createNode(WEBID, center, nodeInfo)
 
       nodeInfo.nodeType = 'default'
       nodeInfo.image = false
