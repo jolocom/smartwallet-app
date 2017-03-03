@@ -3,7 +3,6 @@ import LDPAgent from './ldp.js'
 import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
-import GraphActions from '../../actions/graph-actions'
 import D3Convertor from 'lib/d3-converter'
 
 import $rdf from 'rdflib'
@@ -22,20 +21,29 @@ class GraphAgent extends LDPAgent {
    * @param {string} nodeType - The type of the node
    * @return {object} node - The inicial writer with added triples
    */
-  baseNode(uri, writer, title, description, nodeType) {
+  baseNode(uri, writer, title, description, nodeType, centerNode) {
+    if (!writer || !nodeType || !uri) {
+      throw new Error('baseNode: not enough arguments')
+    }
+
     if (title) {
-      writer.addTriple(uri, PRED.title, title)
+      writer.addTriple($rdf.sym(uri), PRED.title, $rdf.literal(title))
     }
     if (description) {
-      writer.addTriple(uri, PRED.description, description)
+      writer.addTriple(
+        $rdf.sym(uri),
+        PRED.description,
+        $rdf.literal(description)
+      )
     }
+    writer.addTriple($rdf.sym(uri), PRED.storage, $rdf.sym(centerNode.storage))
+    writer.addTriple($rdf.sym(uri), PRED.maker, $rdf.sym(centerNode.uri))
+
     // TODO
-    if (nodeType === 'default' ||
-        nodeType === 'passport' ||
-        nodeType === 'confidential') {
-      writer.addTriple(uri, PRED.type, PRED.Document)
-    } else if (nodeType === 'image') {
-      writer.addTriple(uri, PRED.type, PRED.Image)
+    if (nodeType === 'image') {
+      writer.addTriple($rdf.sym(uri), PRED.type, PRED.Image)
+    } else {
+      writer.addTriple($rdf.sym(uri), PRED.type, PRED.Document)
     }
     return writer
   }
@@ -50,27 +58,26 @@ class GraphAgent extends LDPAgent {
    */
 
   addImage(uri, dstContainer, writer, image, confidential) {
-    if (image instanceof File) {
-      let imgUri = `${dstContainer}files/${Util.randomString(5)}`
-      writer.addTriple(uri, PRED.image, imgUri)
-      return this.storeFile(imgUri, null, image, confidential)
+    if (!writer || !image) {
+      throw new Error('addImage: not enough arguments')
     }
-    writer.addTriple(uri, PRED.image, image)
+    if (image instanceof File) {
+      let imgUri = `${dstContainer}files/${this.randomString(5)}`
+      writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(imgUri))
+      return this.storeFile(imgUri, '', image, confidential)
+    }
+    writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(image))
     return
   }
 
-  checkImages(triples) {
-    return Promise.all(triples.map(trip => {
-      const img = trip.img
+  checkImages(nodes) {
+    return Promise.all(nodes.map(node => {
+      const img = node.img
       if (!img) {
         return
       }
-      return this.head(this._proxify(img)).then(res => {
-        if (!res.ok) {
-          trip.img = ''
-        }
-      }).catch(() => {
-        trip.img = ''
+      return this.head(this._proxify(img)).catch((e) => {
+        node.img = ''
       })
     }))
   }
@@ -97,131 +104,100 @@ class GraphAgent extends LDPAgent {
    * @param {string} nodeType - The type [image / text] of the node.
    * @param {bool} confidential - If the img is to be confidential.
    */
-  createNode(
-    currentUser,
-    centerNode,
-    title,
-    description,
-    image,
-    nodeType,
-    confidential = false
-  ) {
-    let writer = new Writer()
-    let newNodeUri = $rdf.sym(centerNode.storage + Util.randomString(5))
-    let aclUri
-    return this.createACL(newNodeUri.uri, currentUser, confidential)
+  createNode(currentUser, centerNode, nodeInfo) {
+    const writer = new Writer()
+    const {confidential, title, description, nodeType, image} = nodeInfo
+    const newNodeUri = centerNode.storage + this.randomString(5)
+
+    return this.createAcl(newNodeUri, currentUser, confidential)
     .then((uri) => {
-      aclUri = uri
+      const des = description
+      this.baseNode(newNodeUri, writer, title, des, nodeType, centerNode)
 
-      writer.addTriple(newNodeUri, PRED.storage, centerNode.storage)
-      writer.addTriple(newNodeUri, PRED.maker, $rdf.sym(centerNode.uri))
-
-      this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (image) {
-        return this.addImage(
-          newNodeUri,
-          centerNode.storage,
-          writer,
-          image,
-          confidential
-        )
+        const storage = centerNode.storage
+        return this.addImage(newNodeUri, storage, writer, image, confidential)
       }
     }).then(() => {
-      // Putting the RDF file for the node.
-      return this.put(Util.uriToProxied(newNodeUri.uri), writer.end(), {
-        'Content-Type': 'text/turtle',
-        'Link': '<http://www.w3.org/ns/ldp#Resource>; rel="type", ' +
-          aclUri + ' rel="acl"'
-      }).catch((error) => {
-        console.warn('Error,', error, 'occured when putting the $rdf file.')
+      return this.put(Util.uriToProxied(newNodeUri), writer.end(), {
+        'Content-Type': 'text/turtle'
       })
-      // Connecting the node to the one that created it
     }).then(() => {
-      let predicate = PRED.isRelatedTo
+      let type = nodeType === 'passport'
+        ? 'passport'
+        : 'generic'
 
-      if (nodeType === 'passport') {
-        predicate = PRED.passport
-      }
-
-      let payload = {
-        subject: $rdf.sym(centerNode.uri),
-        predicate: predicate,
-        object: newNodeUri
-      }
-      return this.writeTriples(centerNode.uri, [payload], false)
+      return this.linkNodes(centerNode.uri, type, newNodeUri)
     }).then(() => {
       return newNodeUri.uri
     })
+  }
+
+  _randomString() {
+    return Util.randomString(5)
   }
 
   // Should we remove the ACL file associated with it as well?
   // PRO : we won't need the ACL file anymore
   // CON : it can be a parent ACL file, that would
   // result in other children loosing the ACL as well.
+
   deleteFile(uri) {
     return this.delete(Util.uriToProxied(uri))
   }
 
   storeFile(finUri, dstContainer, file, confidential = false) {
-    let uri
-    let wia = new WebIDAgent()
-    const webId = wia.getWebId()
-
-    if (!webId) {
+    const uri = finUri || `${dstContainer}files/${this.randomString(5)}`
+    const webId = this._getWebId() || (() => {
       throw new Error('No webId detected.')
-    }
-    if (!finUri) {
-      uri = `${dstContainer}files/${Util.randomString(5)}-${file.name}`
-    } else {
-      uri = finUri
-    }
-    return this.createACL(uri, webId, confidential).then(() => {
+    })()
+    return this.createAcl(uri, webId, confidential).then(() => {
       return this.put(Util.uriToProxied(uri), file, {
         'Content-Type': 'image'
-      }).then(() => {
-        return uri
-      }).catch((e) => {
+      }).then(() => uri).catch((e) => {
         throw new Error('Could not upload the image')
       })
     })
   }
 
+  _getWebId() {
+    const wia = new WebIDAgent()
+    return wia.getWebId()
+  }
   // We create only one type of ACL file. Owner has full controll,
   // everyone else has read access. This will change in the future.
-  // THIS WHOLE FUNCTION IS TERRIBLE, MAKE USE OF THE API TODO
-  // PUT ACL and WRITE TRIPLE should be called after making sure that the user
-  // has write access
+  // @TODO Optimize slightly.
+  createAcl(uri, webId, confidential = false) {
+    const writer = new Writer()
+    const aclUri = `${uri}.acl`
+    const owner = $rdf.sym(`${aclUri}#owner`)
 
-  createACL(uri, webID, confidential = false) {
-    let aclWriter = new Writer()
-    let aclUri = `${uri}.acl`
-    let owner = $rdf.sym('#owner')
+    const tripleMap = [
+      {pred: PRED.type, obj: [PRED.auth]},
+      {pred: PRED.access, obj: [$rdf.sym(uri), $rdf.sym(aclUri)]},
+      {pred: PRED.agent, obj: [$rdf.sym(webId)]},
+      {pred: PRED.mode, obj: [PRED.read, PRED.write, PRED.control]}
+    ]
 
-    aclWriter.addTriple(owner, PRED.type, PRED.auth)
-    aclWriter.addTriple(owner, PRED.access, $rdf.sym(uri))
-    aclWriter.addTriple(owner, PRED.access, $rdf.sym(aclUri))
-    aclWriter.addTriple(owner, PRED.agent, $rdf.sym(webID))
-
-    aclWriter.addTriple(owner, PRED.mode, PRED.control)
-    aclWriter.addTriple(owner, PRED.mode, PRED.read)
-    aclWriter.addTriple(owner, PRED.mode, PRED.write)
+    tripleMap.forEach(st => {
+      st.obj.forEach(obj => {
+        writer.addTriple(owner, st.pred, obj)
+      })
+    })
 
     if (!confidential) {
-      let all = $rdf.sym('#readall')
-
-      aclWriter.addTriple(all, PRED.type, PRED.auth)
-      aclWriter.addTriple(all, PRED.access, $rdf.sym(uri))
-      aclWriter.addTriple(all, PRED.agentClass, PRED.Agent)
-      aclWriter.addTriple(all, PRED.mode, PRED.read)
+      const all = $rdf.sym(`${aclUri}#readall`)
+      writer.addTriple(all, PRED.type, PRED.auth)
+      writer.addTriple(all, PRED.access, $rdf.sym(uri))
+      writer.addTriple(all, PRED.agentClass, PRED.Agent)
+      writer.addTriple(all, PRED.mode, PRED.read)
     }
 
-    return this.put(Util.uriToProxied(aclUri), aclWriter.end(), {
+    return this.put(Util.uriToProxied(aclUri), writer.end(), {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri
-    }).catch((e) => {
-      console.log('error', e, 'occured while putting the acl file')
-    })
+    }).catch(e => {})
   }
 
   /**
@@ -232,44 +208,18 @@ class GraphAgent extends LDPAgent {
    * @return {function} fetch request - .then contains the response.
    */
 
-  writeTriples(uri, triples, draw = false) {
-    let validPredicate = false
-
-    if (triples.length === 1) {
-      let pred = triples[0].predicate.uri
-      validPredicate = (pred === PRED.isRelatedTo.uri ||
-        pred === PRED.knows.uri)
-    }
-
+  writeTriples(uri, tripsToWrite) {
     const toAdd = $rdf.graph()
-
-    return new Promise((resolve, reject) => {
-      for (let i = 0; i < triples.length; i++) {
-        let t = triples[i]
-        this.findTriples(t.subject.uri, t.subject, t.predicate, t.object)
-          .then((res) => {
-            if (res.length === 0) {
-              toAdd.add(t.subject, t.predicate, t.object)
-            } else {
-              // Think about this
-              return reject('DUPLICATE')
-            }
-            if (i === triples.length - 1) {
-              return resolve()
-            }
-          })
-      }
+    return this.fetchTriplesAtUri(uri).then(fetchedTrips => {
+      const writer = new Writer()
+      writer.addAll(fetchedTrips)
+      tripsToWrite.forEach(t => {
+        if (writer.find(t.subject, t.predicate, t.object).length === 0) {
+          toAdd.add(t.subject, t.predicate, t.object)
+        }
+      })
     }).then(() => {
-      return this.patch(this._proxify(uri), null, toAdd.statements)
-        .then((res) => {
-          // At the moment the animation fires when we only add one triple.
-          if (res.ok && draw && validPredicate) {
-            let obj = triples[0].object.uri
-            let pred = triples[0].predicate.uri
-            // @TODO dont trigger actions from within the agents
-            GraphActions.drawNewNode(obj, pred)
-          }
-        })
+      return this.patch(this._proxify(uri), [], toAdd.statements)
     })
   }
 
@@ -285,14 +235,14 @@ class GraphAgent extends LDPAgent {
    * @return {promise} fetch request - .then contains the response.
    */
 
-  // uri,subj,pred,obj
+  // uri, subj, pred, obj
   // {uri:uri, triples:[]}
-  deleteTriple(...args) {
+  deleteTriples(...args) {
     let subject, predicate, object
     let triples = []
     let uri
 
-    // Check if we received only one object with multiple triples in there.
+    // Check if we received only one object with more triples.
     if (args.length === 1) {
       ({uri} = args[0])
       triples = args[0].triples
@@ -302,53 +252,32 @@ class GraphAgent extends LDPAgent {
     }
 
     const toDel = $rdf.graph()
-
     toDel.addAll(triples)
 
-    return this.patch(this._proxify(uri), toDel.statements)
+    return this.patch(this._proxify(uri), toDel.statements, [])
   }
 
   // This function gets passed a center uri and it's triples,
   // and then finds all possible links that we choose to display.
   // After that it parses those links for their RDF data.
-  getNeighbours(center, triples) {
-    // We will only follow and parse these links
-    let Links = [
+  getNeighbours(triples) {
+    const links = [
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
       PRED.isRelatedTo_HTTP.uri,
       PRED.passport.uri
     ]
-    let neighbours = triples.filter((t) => Links.indexOf(t.predicate.uri) >= 0)
-    // If there are adjacent nodes to draw,
-    // we parse them and return an array of their triples
-    let neighbourErrors = []
-    let graphMap = []
+    const neighbours = triples.filter((t) =>
+      links.indexOf(t.predicate.uri) >= 0)
+    const graphMap = []
 
-    return Promise.all(neighbours.map((triple) => {
-      return this.fetchTriplesAtUri(triple.object.uri).then((result) => {
-        // This is a node that coulnt't be retrieved, either 404, 401 etc.
-        if (result.unav) {
-          // We are setting the connection field of the node, we need it
-          // in order to be able to dissconnect it from our center node later.
-
-          neighbourErrors.push(triple.object.uri)
-
-          // if forbidden access to node, do not show it
-          // (we assume the center node isn't ours then)
-          // @TODO find better way to know if we have rights to center node
-          if (result.status !== 403) {
-            result.connection = triple.predicate.uri
-            graphMap.push(result)
-          }
-        } else {
-          // This is a valid node.
-          result.triples.connection = triple.predicate.uri
+    return Promise.all(neighbours.map(neighb => {
+      return this.fetchTriplesAtUri(neighb.object.uri).then((result) => {
+        if (!result.unav) {
+          result.triples.connection = neighb.predicate.uri
+          result.triples.uri = neighb.object.uri
           graphMap.push(result.triples)
-          graphMap[graphMap.length - 1].uri = triple.object.uri
         }
-      }).catch(() => {
-        neighbourErrors.push(triple.object.uri)
       })
     })).then(() => {
       return graphMap
@@ -371,63 +300,48 @@ class GraphAgent extends LDPAgent {
   /**
    * @summary Given an array of triples, converts it to a JS object
    *  that is ready to be rendered.
+   * @param {string} r - The rank of the node (center | adjacent)
    * @param {array | arrays} Triples - The triples describing the file.
    * @return {object} node - JS object describing the node ready for render.
    */
   convertToNodes(r, triples) {
-    const convertor = new D3Convertor()
-    const len = triples.length - 1
-    let result = []
-    triples.forEach((triple, i) => {
-      result.push(convertor.convertToD3(r, triple, i, len))
+    const result = []
+    triples.forEach(triple => {
+      result.push((new D3Convertor()).convertToD3(r, triple))
     })
-
     return result
   }
 
-  // Both getGraphMapAtUri and getGraphMapAtWebID return an array of nodes, each
-  // node being represented as an array of triples that define it. The result
-  // is pretty much a "map" of the currently displayed graph.
-
   getGraphMapAtUri(uri) {
-    // centerNode is {prefixes: [...], triples: [...]}
-    let getPartialGraphMap = (centerNode) => {
-      return this.getNeighbours(uri, centerNode.triples)
-        .then((neibTriples) => {
-          let firstNode = centerNode.triples
-          firstNode.uri = uri
-          return [firstNode].concat(neibTriples)
-        })
+    return this.fetchTriplesAtUri(uri).then(centerTriples => {
+      return this.getNeighbours(centerTriples.triples).then(neibTrips => {
+        const firstNode = centerTriples.triples
+        firstNode.uri = uri
+        return [firstNode].concat(neibTrips)
+      })
+    })
+  }
+
+  linkNodes(start, type, end) {
+    const predMap = {
+      'generic': PRED.isRelatedTo,
+      'knows': PRED.knows,
+      'passport': PRED.passport
     }
-
-    return this.fetchTriplesAtUri(uri)
-      .then(getPartialGraphMap)
-  }
-
-  // Calls the above function, but passes the current webId as the URI.
-  getGraphMapAtWebID(webId) {
-    return this.getGraphMapAtUri(webId)
-  }
-
-  linkNodes(start, type, end, flag) {
-    let predicate
 
     return Promise.all([
       this.head(this._proxify(start)),
       this.head(this._proxify(end))
     ]).then(() => {
-      if (type === 'generic') {
-        predicate = PRED.isRelatedTo
-      }
-      if (type === 'knows') {
-        predicate = PRED.knows
-      }
+      const predicate = predMap[type]
       let payload = {
         subject: $rdf.sym(start),
         predicate,
         object: $rdf.sym(end)
       }
-      return this.gAgent.writeTriples(start, [payload], flag)
+      return this.writeTriples(start, [payload])
+    }).catch(e => {
+      return
     })
   }
 }
