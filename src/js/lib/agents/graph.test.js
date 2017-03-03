@@ -155,7 +155,7 @@ describe('GraphAgent', function() {
   describe('#checkImages', function() {
     const imgUri = 'https://mockuri.com/image.jpg'
 
-    it('Should correctly detect unavailable images', async function() {
+    it('Should correctly detect bad status code', async function() {
       const gAgent = new GraphAgent()
       const testNode = {img: imgUri}
 
@@ -171,7 +171,7 @@ describe('GraphAgent', function() {
       })
     })
 
-    it('Should correctly detect unavailable images', async function() {
+    it('Should correctly detect network error', async function() {
       const gAgent = new GraphAgent()
       const testNode = {img: imgUri}
 
@@ -455,8 +455,6 @@ describe('GraphAgent', function() {
   })
 
   describe('#writeTriple', function() {
-    const gAgent = new GraphAgent()
-    const destination = 'https://testfile.com/card'
     const triples = [{
       subject: rdf.sym(WEBID),
       predicate: PRED.type,
@@ -464,48 +462,50 @@ describe('GraphAgent', function() {
     }]
 
     it('Should add new triple correctly', async function() {
+      const gAgent = new GraphAgent()
+
       gAgent.fetchTriplesAtUri = async(uri) => {
-        expect(uri).to.equal(destination)
+        expect(uri).to.equal(WEBID)
         return []
       }
+
       gAgent.patch = async(uri, toDel, toAdd) => {
         const g = rdf.graph()
         g.addAll(triples)
 
         expect(toAdd).to.deep.equal(g.statements)
         expect(toDel).to.deep.equal([])
-        expect(uri)
-          .to.equal(PROXY_URL + destination)
+        expect(uri).to.equal(PROXY_URL + WEBID)
       }
 
-      await gAgent.writeTriples(destination, triples)
+      await gAgent.writeTriples(WEBID, triples)
     })
 
     it('Should not add duplicate triple', async function() {
+      const gAgent = new GraphAgent()
+
       gAgent.fetchTriplesAtUri = async(uri) => {
-        expect(uri).to.equal(destination)
+        expect(uri).to.equal(WEBID)
         return triples
       }
 
       gAgent.patch = async(uri, toDel, toAdd) => {
         expect(toAdd).to.deep.equal([])
         expect(toDel).to.deep.equal([])
-        expect(uri)
-          .to.equal(PROXY_URL + destination)
+        expect(uri).to.equal(PROXY_URL + WEBID)
       }
 
-      await gAgent.writeTriples(destination, triples)
+      await gAgent.writeTriples(WEBID, triples)
     })
   })
 
   describe('#deleteTriples', function() {
-    const gAgent = new GraphAgent()
-
     it('Should correctly attempt to delete a triple', async function() {
+      const gAgent = new GraphAgent()
       const expected = [{
-        subject: rdf.literal('subjectUri'),
+        subject: rdf.sym('subjectUri'),
         predicate: PRED.knows,
-        object: rdf.sym('https://testuser'),
+        object: rdf.sym('objectUri'),
         why: rdf.sym('chrome:theSession')
       }]
 
@@ -515,15 +515,12 @@ describe('GraphAgent', function() {
         expect(toDel).to.deep.equal(expected)
       }
 
-      gAgent.deleteTriples(
-        WEBID,
-        expected[0].subject,
-        expected[0].predicate,
-        expected[0].object
-      )
+      const {subject, predicate, object} = expected[0]
+      await gAgent.deleteTriples(WEBID, subject, predicate, object)
     })
 
     it('Should correctly attempt to delete more triples', async function() {
+      const gAgent = new GraphAgent()
       const expected = [{
         subject: rdf.literal('subjectUri'),
         predicate: PRED.knows,
@@ -541,9 +538,11 @@ describe('GraphAgent', function() {
         expect(toAdd).to.deep.equal([])
         expect(toDel).to.deep.equal(expected)
       }
-      gAgent.deleteTriples({uri: WEBID, triples: expected})
+
+      await gAgent.deleteTriples({uri: WEBID, triples: expected})
     })
   })
+
   describe('#getNeighbours', function() {
     it('Should correctly handle node with no neighours', async function() {
       const gAgent = new GraphAgent()
@@ -552,26 +551,26 @@ describe('GraphAgent', function() {
         expect(false).to.be.true
       }
 
-      gAgent.getNeighbours(triples)
+      await gAgent.getNeighbours(triples)
     })
 
     it('Should correctly get the neighbours of a profile', async function() {
       const gAgent = new GraphAgent()
-      const usrOne = 'https://testuserone'
-      const usrTwo = 'https://testusertwo'
+      const usrOne = 'https://testuserone.com/card'
+      const usrTwo = 'https://testusertwo.com/card'
 
       const triples = [{
-        subject: rdf.literal('subjectUri'),
+        subject: rdf.sym(WEBID),
         predicate: PRED.type,
         object: PRED.Document,
         why: rdf.sym('chrome:theSession')
       }, {
-        subject: rdf.literal('secondSubjectUri'),
+        subject: rdf.sym(WEBID),
         predicate: PRED.knows,
         object: rdf.sym(usrOne),
         why: rdf.sym('chrome:theSession')
       }, {
-        subject: rdf.literal('secondSubjectUri'),
+        subject: rdf.sym(WEBID),
         predicate: PRED.knows,
         object: rdf.sym(usrTwo),
         why: rdf.sym('chrome:theSession')
@@ -579,6 +578,7 @@ describe('GraphAgent', function() {
 
       const responseMap = {
         [usrOne]: {
+          uri: usrOne,
           triples: [{
             subject: rdf.sym(usrOne),
             predicate: PRED.type,
@@ -587,6 +587,7 @@ describe('GraphAgent', function() {
           }]
         },
         [usrTwo]: {
+          uri: usrTwo,
           triples: [{
             subject: rdf.sym(usrTwo),
             predicate: PRED.type,
@@ -597,60 +598,75 @@ describe('GraphAgent', function() {
       }
 
       gAgent.fetchTriplesAtUri = async(uri) => {
-        expect(uri)
-          .to.equal(responseMap[uri].triples[0].subject.uri)
+        expect(uri).to.equal(responseMap[uri].uri)
         return responseMap[uri]
       }
 
       const result = await gAgent.getNeighbours(triples)
-      expect(result).to
-        .deep.equal([responseMap[usrOne].triples, responseMap[usrTwo].triples])
+
+      const userOneTripls = responseMap[usrOne].triples
+      const userTwoTripls = responseMap[usrTwo].triples
+
+      expect(result).to.deep.equal([userOneTripls, userTwoTripls])
     })
   })
 
-  // @TODO Perhaps test all potential fields
   describe('#getFileModel', function() {
     it('Should retrieve and convert a rdf file.', async function() {
       const gAgent = new GraphAgent()
+      const tripsToBeAdded = [
+        {pred: PRED.address, obj: 'MockStr 1'},
+        {pred: PRED.company, obj: 'MockCompany'},
+        {pred: PRED.description, obj: 'MockDescription'},
+        {pred: PRED.email, obj: 'mailto:mock@mock.com'},
+        {pred: PRED.image, obj: 'Avatar.jpg'},
+        {pred: PRED.mobile, obj: '555-555-555'},
+        {pred: PRED.givenName, obj: 'John'},
+        {pred: PRED.profession, obj: 'PseudoMocker'},
+        {pred: PRED.socialMedia, obj: 'fb.com/googleplus'},
+        {pred: PRED.url, obj: 'mockhomepage.com'}
+      ]
+
       gAgent.fetchTriplesAtUri = async(uri) => {
         expect(uri).to.equal(WEBID)
-        return {
-          triples: [{
+
+        const trips = tripsToBeAdded.map(t => {
+          return {
             subject: rdf.sym(WEBID),
-            predicate: PRED.type,
-            object: PRED.Document,
+            predicate: t.pred,
+            object: rdf.literal(t.obj),
             why: rdf.sym('chrome:theSession')
-          }]
-        }
+          }
+        })
+        return {triples: trips}
       }
 
       const result = await gAgent.getFileModel(WEBID)
       expect(result).to.deep.equal(
         [{
-          address: '',
-          company: '',
+          address: 'MockStr 1',
+          company: 'MockCompany',
           confidential: undefined,
           connection: null,
-          description: null,
-          email: '',
-          img: null,
-          mobilePhone: '',
-          name: null,
-          profession: '',
+          description: 'MockDescription',
+          email: 'mock@mock.com',
+          img: 'Avatar.jpg',
+          mobilePhone: '555-555-555',
+          name: 'John',
+          profession: 'PseudoMocker',
           rank: 'neighbour',
-          socialMedia: '',
+          socialMedia: 'fb.com/googleplus',
           storage: null,
           title: null,
-          type: 'http://xmlns.com/foaf/0.1/Document',
+          type: null,
           uri: WEBID,
-          url: ''
+          url: 'mockhomepage.com'
         }]
       )
     })
   })
 
   describe('#linkNodes', function() {
-    const gAgent = new GraphAgent()
     const start = 'https://startnode.com/card'
     const type = 'generic'
     const end = 'https://endnode.com/card'
@@ -661,29 +677,33 @@ describe('GraphAgent', function() {
       object: rdf.sym(end)
     }]
 
-    gAgent.head = async(uri) => {}
-    gAgent.writeTriples = async(uri, payload) => {
-      expect(uri).to.equal(start)
-      expect(payload).to.deep.equal(expectedPayload)
-    }
-
     it('Should correctly link 2 nodes', async function() {
-      gAgent.linkNodes(start, type, end)
+      const gAgent = new GraphAgent()
+
+      gAgent.head = async(uri) => {}
+
+      gAgent.writeTriples = async(uri, payload) => {
+        expect(uri).to.equal(start)
+        expect(payload).to.deep.equal(expectedPayload)
+      }
+
+      await gAgent.linkNodes(start, type, end)
     })
 
-    it('Should not link in case resoruces are not available',
-      async function() {
-        gAgent.head = async(uri) => {
-          throw new Error()
-        }
+    it('Should not link when files are not available', async function() {
+      const gAgent = new GraphAgent()
 
-        gAgent.writeTriples = async(uri, payload) => {
-          expect(uri).to.equal(start)
-          expect(payload).to.deep.equal([])
-        }
+      gAgent.head = async(uri) => {
+        throw new Error()
+      }
 
-        gAgent.linkNodes(start, type, end)
-      })
+      gAgent.writeTriples = async(uri, payload) => {
+        expect(uri).to.equal(start)
+        expect(payload).to.deep.equal([])
+      }
+
+      await gAgent.linkNodes(start, type, end)
+    })
   })
 
   describe('#convertToNodes', function() {
