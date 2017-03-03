@@ -4,21 +4,22 @@ import Radium from 'radium'
 
 import {IconButton} from 'material-ui'
 
-class Compose extends React.Component {
-  static propTypes = {
+let Compose = React.createClass({
+
+  propTypes: {
     style: React.PropTypes.object,
     placeholder: React.PropTypes.string,
     submitIcon: React.PropTypes.string,
     onKeyDown: React.PropTypes.func,
     onKeyUp: React.PropTypes.func,
     onSubmit: React.PropTypes.func
-  }
+  },
 
   getInitialState() {
     return {
       content: ''
     }
-  }
+  },
 
   onKeyDown(e) {
     if (this.props.onKeyDown) {
@@ -35,27 +36,27 @@ class Compose extends React.Component {
         return false
       }
     }
-  }
+  },
 
   onKeyUp(e) {
     if (this.props.onKeyUp) {
       this.props.onKeyUp(e)
     }
     return false
-  }
+  },
 
   onSubmit() {
     if (this.props.onSubmit(this.state.content)) {
       this.setState({content: ''})
       ReactDOM.findDOMNode(this.refs.textarea).value = ''
     }
-  }
+  },
 
   onChange(e) {
     this.setState({
       content: e.target.value
     })
-  }
+  },
 
   getStyles() {
     return {
@@ -96,7 +97,7 @@ class Compose extends React.Component {
         position: 'fixed'
       }
     }
-  }
+  },
 
   render() {
     let {style, placeholder, submitIcon} = this.props
@@ -104,10 +105,6 @@ class Compose extends React.Component {
     let styles = this.getStyles()
 
     submitIcon = submitIcon || 'send'
-
-    const onChange = (...args) => this.onChange(...args)
-    const onKeyDown = (...args) => this.onKeyDown(...args)
-    const onSubmit = (...args) => this.onSubmit(...args)
 
     return (
       <div style={[styles.container, style]}>
@@ -119,8 +116,8 @@ class Compose extends React.Component {
           </pre>
           <textarea
             placeholder={placeholder}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
+            onChange={this.onChange}
+            onKeyDown={this.onKeyDown}
             ref="textarea"
             style={[styles.textarea, styles.pre]} />
           <IconButton
@@ -134,6 +131,6 @@ class Compose extends React.Component {
       </div>
     )
   }
-}
+})
 
 export default Radium(Compose)

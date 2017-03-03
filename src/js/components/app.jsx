@@ -59,7 +59,8 @@ let App = React.createClass({
     children: React.PropTypes.node,
     route: React.PropTypes.object,
     account: React.PropTypes.object.isRequired,
-    doLogin: React.PropTypes.func.isRequired
+    doLogin: React.PropTypes.func.isRequired,
+    showLeftNav: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
@@ -186,7 +187,7 @@ let App = React.createClass({
   },
 
   showDrawer() {
-    this.refs.leftNav.show()
+    this.props.showLeftNav()
   },
 
   getStyles() {
@@ -307,7 +308,7 @@ let App = React.createClass({
               {filters}
               {search}
             </Paper>
-            <LeftNav ref="leftNav" />
+            <LeftNav />
             <Content>
               { /* TODO: Nuke this, because this is not
               the right way to do things */ }
@@ -329,7 +330,7 @@ let App = React.createClass({
 
 })
 
-export default Radium(connect({
+export default connect({
   props: ['account'],
-  actions: ['account:doLogin']
-})(App))
+  actions: ['account:doLogin', 'left-nav:showLeftNav']
+})(Radium(App))

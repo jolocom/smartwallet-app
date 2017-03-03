@@ -56,9 +56,9 @@ const PinnedNodes = React.createClass({
   componentDidUpdate(props, state) {
     if (state.show !== this.state.show) {
       if (this.state.show) {
-        this.props.showDialog('pinned')
+        this.props.showDialog({id: 'pinned'})
       } else {
-        this.props.hideDialog('pinned')
+        this.props.hideDialog({id: 'pinned'})
       }
     }
   },
@@ -119,6 +119,6 @@ const PinnedNodes = React.createClass({
   }
 })
 
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(PinnedNodes))
+})(Radium(PinnedNodes))

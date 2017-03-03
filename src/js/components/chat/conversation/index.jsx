@@ -41,9 +41,7 @@ let Conversation = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object,
-    showDialog: React.PropTypes.func.isRequired,
-    hideDialog: React.PropTypes.func.isRequired
+    params: React.PropTypes.object
   },
 
   getInitialState() {
@@ -59,8 +57,6 @@ let Conversation = React.createClass({
 
     ConversationActions.load(webId, id, true)
 
-    this.showDialog('conversation_' + this.props.params.id)
-
     this.itemsEl = ReactDOM.findDOMNode(this.refs.items)
   },
 
@@ -69,8 +65,6 @@ let Conversation = React.createClass({
 
     ConversationActions.unsubscribe(id)
     ConversationStore.cleanState()
-
-    this.hideDialog('conversation_' + this.props.params.id)
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -164,7 +158,7 @@ let Conversation = React.createClass({
       return p.webId !== this.context.account.webId
     })
 
-    if (loading && !participants.length) {
+    if (loading) {
       title = 'Loading...'
     } else if (participants.length === 1) {
       title = participants[0].name
@@ -192,7 +186,7 @@ let Conversation = React.createClass({
     }
 
     return (
-      <Dialog fullscreen>
+      <Dialog id='conversation' visible fullscreen>
         <Layout>
           <AppBar
             title={title}
@@ -225,7 +219,7 @@ let Conversation = React.createClass({
   },
 
   _handleShowSettings() {
-    this.refs.settings.show()
+    this.props.showDialog({id: 'conversationSettings'})
   }
 })
 
@@ -362,6 +356,6 @@ class ConversationItem extends React.Component {
   }
 }
 
-export default Radium(connect({
-  actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(Conversation))
+export default connect({
+  actions: ['common/dialog:showDialog']
+})(Radium(Conversation))

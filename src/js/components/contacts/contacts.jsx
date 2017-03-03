@@ -6,12 +6,18 @@ import { connect } from 'redux/utils'
 import ContactsList from 'components/contacts/list.jsx'
 import ChatActions from 'actions/chat'
 
+import AccountStore from 'stores/account'
+
+import ChatStore from 'stores/chat'
+
+@connect({
+  props: ['account']
+})
 @Radium
 export default class Contacts extends React.Component {
   static propTypes = {
     searchQuery: React.PropTypes.string,
-    children: React.PropTypes.node,
-    account: React.PropTypes.object
+    children: React.PropTypes.node
   }
 
   static contextTypes = {
@@ -19,9 +25,19 @@ export default class Contacts extends React.Component {
     store: React.PropTypes.object
   }
 
+  constructor() {
+    super()
+
+    this.store = ChatStore
+
+    this.state = {
+
+    }
+  }
+
   createChat(webId) {
     ChatActions.create(
-      this.props.account.webId, this.props.account.webId, webId
+      AccountStore.state.webId, webId
     )
   }
 
@@ -53,7 +69,3 @@ let styles = {
     position: 'relative'
   }
 }
-
-export default connect({
-  props: ['account']
-})(Radium(Contacts))

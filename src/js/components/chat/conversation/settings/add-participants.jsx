@@ -1,6 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 
+import { connect } from 'redux/utils'
+
 import {
   IconButton,
   FlatButton,
@@ -14,6 +16,10 @@ import Dialog from 'components/common/dialog'
 import {Layout, Content} from 'components/layout'
 
 import ContactsList from 'components/contacts/list'
+
+@connect({
+  'actions': ['common/dialog:hideDialog']
+})
 
 @Radium
 export default class AddParticipants extends React.Component {
@@ -40,14 +46,6 @@ export default class AddParticipants extends React.Component {
     }
   }
 
-  show() {
-    this.refs.dialog.show()
-  }
-
-  hide() {
-    this.refs.dialog.hide()
-  }
-
   get selected() {
     return values(this.state.selected)
   }
@@ -68,7 +66,7 @@ export default class AddParticipants extends React.Component {
     let styles = this.getStyles()
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog id="addParticipants" fullscreen>
         <Layout>
           <AppBar
             title="Add Participants"
@@ -114,7 +112,7 @@ export default class AddParticipants extends React.Component {
   }
 
   _handleCancel = () => {
-    this.hide()
+    this.props.hideDialog({id: 'addParticipants'})
   }
 
   _handleCheck = (p) => {

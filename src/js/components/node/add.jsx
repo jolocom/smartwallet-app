@@ -8,6 +8,7 @@ import {AppBar, IconButton, FlatButton} from 'material-ui'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
+import Loading from 'components/common/loading'
 
 import NodeAddDefault from './add-default.jsx'
 import NodeAddLink from './add-link.jsx'
@@ -18,7 +19,6 @@ let types = {
   default: {
     component: NodeAddDefault
   },
-
   link: {
     component: NodeAddLink
   },
@@ -29,7 +29,9 @@ let types = {
 }
 
 let NodeAdd = React.createClass({
-  mixins: [Reflux.listenTo(PreviewStore, 'onStoreUpdate', 'initialState')],
+  mixins: [
+    Reflux.listenTo(PreviewStore, 'onStoreUpdate', 'initialState')
+  ],
 
   propTypes: {
     params: React.PropTypes.object,
@@ -44,16 +46,16 @@ let NodeAdd = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {graphState: null}
+  },
+
   initialState(state) {
     this.setState({graphState: state})
   },
 
   onStoreUpdate(newState) {
     this.setState({graphState: newState})
-  },
-
-  componentDidMount() {
-    this.props.showDialog('add_node')
   },
 
   getStyles() {
@@ -81,38 +83,46 @@ let NodeAdd = React.createClass({
 
     let Component = config.component
 
+    let content
+    if (this.state.graphState) {
+      content = (
+        <Component ref="form"
+          node={this.props.center}
+          onSuccess={this._handleSuccess}
+          graphState={this.state.graphState}
+        />
+      )
+    } else {
+      content = <Loading />
+    }
+
     return (
-      <div>
-        <Dialog fullscreen>
-          <Layout>
-            <AppBar
-              title={title}
-              titleStyle={styles.title}
-              iconElementLeft={
-                <IconButton
-                  iconStyle={styles.icon}
-                  iconClassName="material-icons"
-                  onTouchTap={this._handleClose}>close
-                </IconButton>
-              }
-              iconElementRight={
-                <FlatButton
-                  style={styles.icon}
-                  label="Create"
-                  onTouchTap={this._handleSubmit}
-                />
-              }
-              style={styles.bar}
-            />
-            <Content style={styles.content}>
-              <Component ref="form"
-                node={this.props.center}
-                onSuccess={this._handleSuccess}
-                graphState={this.state.graphState} />
-            </Content>
-          </Layout>
-        </Dialog>
-      </div>
+      <Dialog id="add_node" visible fullscreen>
+        <Layout>
+          <AppBar
+            title={title}
+            titleStyle={styles.title}
+            iconElementLeft={
+              <IconButton
+                iconStyle={styles.icon}
+                iconClassName="material-icons"
+                onTouchTap={this._handleClose}>close
+              </IconButton>
+            }
+            iconElementRight={
+              <FlatButton
+                style={styles.icon}
+                label="Create"
+                onTouchTap={this._handleSubmit}
+              />
+            }
+            style={styles.bar}
+          />
+          <Content style={styles.content}>
+            {content}
+          </Content>
+        </Layout>
+      </Dialog>
     )
   },
 
@@ -126,6 +136,6 @@ let NodeAdd = React.createClass({
   }
 })
 
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(NodeAdd))
+})(Radium(NodeAdd))

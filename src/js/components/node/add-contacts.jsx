@@ -76,7 +76,7 @@ let AddContact = React.createClass({
     })
 
     ContactsActions.load()
-    this.props.showDialog('add_contact')
+    this.props.showDialog({id: 'add_contact'})
   },
 
   getStyles() {
@@ -141,7 +141,7 @@ let AddContact = React.createClass({
 
     return (
       <div>
-        <Dialog ref="dialog" fullscreen>
+        <Dialog id="add_contact" fullscreen>
           <Layout>
             <AppBar
               title="Add Contacts"
@@ -169,7 +169,7 @@ let AddContact = React.createClass({
                     {this.state.contacts.map((contact) => {
                       if (contact.selected) {
                         return (
-                          <div>
+                          <div key={contact.webId}>
                             {contact.imgUri
                             ? <Avatar
                               style={styles.selectedAvatar}
@@ -199,6 +199,7 @@ let AddContact = React.createClass({
                     {this.state.contacts.map((contact, i) => {
                       return (
                         <WrappedListItem
+                          key={contact.webId}
                           contact={contact}
                           onCheck={this._handleCheck}
                         />)
@@ -264,6 +265,6 @@ let WrappedListItem = React.createClass({
     )
   }
 })
-export default Radium(connect({
+export default connect({
   actions: ['common/dialog:showDialog', 'common/dialog:hideDialog']
-})(AddContact))
+})(Radium(AddContact))
