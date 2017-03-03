@@ -73,8 +73,7 @@ let Util = {
   // This is too hardcoded.
   getIndexUri(uri) {
     const WebIdAgent = require('lib/agents/webid').default
-    const wia = new WebIdAgent()
-    const webId = wia.getWebId()
+    const webId = (new WebIdAgent()).getWebId()
     let indexUri = this.webidRoot(webId)
     indexUri += `/little-sister/index/${this.formatWebId(uri)}`
     return indexUri
