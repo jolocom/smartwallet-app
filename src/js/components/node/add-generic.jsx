@@ -4,6 +4,7 @@ import Reflux from 'reflux'
 import accepts from 'attr-accept'
 
 import {
+  Avatar,
   AppBar,
   IconButton,
   Card,
@@ -124,6 +125,23 @@ let NodeAddGeneric = React.createClass({
     const centerNode = this.state.graphState.center
     const type = this.nodeType()
 
+    // Case where no file is uploaded
+    if (this.state.imgArray.length + this.state.docArray.length +
+      this.state.fileArray.length === 0) {
+      this.gAgent.createNode(
+        webId,
+        centerNode,
+        title,
+        description,
+        null,
+        type,
+        false).then((uri) => {
+          graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+        }).catch((e) => {
+          console.log('Unable to create node ', e)
+        })
+    }
+
     // Check which array is populated, upload the files and then create a node
 
     if (this.state.imgArray.length >= 1) {
@@ -213,7 +231,7 @@ let NodeAddGeneric = React.createClass({
         height: '176px',
         backgroundColor: '#9ca0aa',
         backgroundImage: this.state.isCollection ? 'none'
-          : `url(${Util.uriToProxied(this.state.uploadedFileUri)})`,
+          : `url(${this.state.uploadedFilePreview})`,
         backgroundSize: 'cover'
       },
       container: {
@@ -293,10 +311,15 @@ let NodeAddGeneric = React.createClass({
     // let title = config.title || `New ${type}`
     let headerIcon
     if (this.state.imgArray.length > 0) {
-      headerIcon = <ImageIcon style={styles.docIcon} />
+      let reader = new FileReader()
+      reader.readAsDataURL(this.state.imgArray[0].file)
+      reader.onloadend = () => {
+        this.setState({
+          uploadedFilePreview: reader.result
+        })
+      }
     } else if (this.state.docArray.length > 0 ||
       this.state.fileArray.length > 0) {
-      console.log('array ', this.state.docArray, this.state.fileArray)
       headerIcon = <DocIcon style={styles.docIcon} />
     } else {
       headerIcon = <AddNodeIcon />
@@ -462,7 +485,10 @@ let NodeAddGeneric = React.createClass({
                             return (
                               <ListItem
                                 key={img.key}
-                                leftIcon={<ImageIcon fill="#9ba0aa" />}
+                                leftIcon={
+                                  <Avatar
+                                    src={this.state.uploadedFilePreview}
+                                />}
                                 rightIcon={
                                   <ActionDelete
                                     color="#4b132b"
