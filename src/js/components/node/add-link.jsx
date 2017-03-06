@@ -411,6 +411,6 @@ let NodeTarget = React.createClass({
   }
 })
 
-connect({
+export default connect({
   actions: ['snack-bar:showSnackBarMessage']
 })(Radium(NodeAddLink))
