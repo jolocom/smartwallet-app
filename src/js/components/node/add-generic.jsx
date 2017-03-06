@@ -133,6 +133,19 @@ let NodeAddGeneric = React.createClass({
     }
   },
 
+  // Automatically sets node title to fileName if title is unspecified
+  _autofillWithFilename(file) {
+    let fileName = file.name
+    if (fileName.length > 20) {
+      fileName = fileName.substring(0, 9) + '...' +
+        fileName.substring(fileName.length - 9)
+    }
+    this.refs.nodeTitle.input.value = fileName
+    this.setState({
+      nodeTitle: fileName
+    })
+  },
+
   // Works for uploading single files at a time
   _handleFileUpload({target}) {
     if (this.state.uploadedFile) {
@@ -162,15 +175,7 @@ let NodeAddGeneric = React.createClass({
         uploadedFileType: 'miscFile'
       })
     }
-    let fileName = file.name
-    if (fileName.length > 20) {
-      fileName = fileName.substring(0, 9) + '...' +
-        fileName.substring(fileName.length - 9)
-    }
-    this.refs.nodeTitle.input.value = fileName
-    this.setState({
-      nodeTitle: fileName
-    })
+    this._autofillWithFilename(file)
   },
 
   _handleRemoveFile() {
@@ -181,6 +186,7 @@ let NodeAddGeneric = React.createClass({
     })
   },
 
+  // Displays option to upload file
   _renderEmptySelection() {
     const styles = this.getStyles()
     return (
@@ -214,6 +220,7 @@ let NodeAddGeneric = React.createClass({
     )
   },
 
+  // Displays file selected
   _renderFileSelected() {
     const styles = this.getStyles()
     return (
@@ -290,6 +297,7 @@ let NodeAddGeneric = React.createClass({
     const type = this.state.uploadedFileType
 
     if (!this.state.uploadedFile) {
+      // No file staged for upload
       gAgent.createNode(
         webId,
         centerNode,
@@ -303,6 +311,7 @@ let NodeAddGeneric = React.createClass({
           console.log('Unable to create node ', e)
         })
     } else {
+      // File (image, doc, misc) staged for upload
       gAgent.storeFile(
         null,
         this.state.profile.storage,
@@ -326,6 +335,7 @@ let NodeAddGeneric = React.createClass({
     }
   },
 
+  // TODO privacyBtn used here to clear file upload - for testing purposes
   render() {
     const styles = this.getStyles()
     let headerIcon
