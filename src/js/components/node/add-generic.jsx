@@ -110,6 +110,7 @@ let NodeAddGeneric = React.createClass({
     })
   },
 
+  // Works for uploading single files at a time
   _handleFileUpload({target}) {
     const file = target.files[0]
     this.setState({
@@ -134,6 +135,45 @@ let NodeAddGeneric = React.createClass({
         uploadedFileType: 'miscFile'
       })
     }
+  },
+
+  _renderEmptySelection() {
+    const styles = this.getStyles()
+    return (
+      <List>
+        <ListItem
+          key={1}
+          disabled
+          primaryText="File"
+          leftIcon={
+            <div style={styles.fileListIcon}>
+              <AddNodeIcon
+                stroke="#9ca0aa" />
+            </div>
+          }
+          rightIcon={
+            <FloatingActionButton
+              mini
+              secondary
+              containerElement="label"
+              style={styles.addBtn}>
+              <ContentAdd />
+              <input
+                type="file"
+                style={{display: 'none'}}
+                onChange={this._handleFileUpload}
+              />
+            </FloatingActionButton>
+          } />
+        <Divider style={styles.divider} inset />
+      </List>
+    )
+  },
+
+  _renderFileSelected() {
+    return (
+      <div>FILE HAS BEEN CHOSEN</div>
+    )
   },
 
   submit() {
@@ -179,33 +219,10 @@ let NodeAddGeneric = React.createClass({
               name="nodeTitle"
               placeholder="Add node title"
               onChange={this._handleTitleChange} />
-            <List>
-              <ListItem
-                key={1}
-                disabled
-                primaryText="File"
-                leftIcon={
-                  <div style={styles.fileListIcon}>
-                    <AddNodeIcon
-                      stroke="#9ca0aa" />
-                  </div>
-                }
-                rightIcon={
-                  <FloatingActionButton
-                    mini
-                    secondary
-                    containerElement="label"
-                    style={styles.addBtn}>
-                    <ContentAdd />
-                    <input
-                      type="file"
-                      style={{display: 'none'}}
-                      onChange={this._handleFileUpload}
-                    />
-                  </FloatingActionButton>
-                } />
-              <Divider style={styles.divider} inset />
-            </List>
+            {
+              this.state.file
+              ? this._renderEmptySelection() : this._renderFileSelected()
+            }
             <List style={styles.generalAccordion}>
               <ListItem
                 primaryText="General"
