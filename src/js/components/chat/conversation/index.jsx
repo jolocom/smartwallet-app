@@ -4,6 +4,8 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
+import { connect } from 'redux/utils'
+
 import {AppBar, IconButton, FlatButton} from 'material-ui'
 
 import {Layout, Content} from 'components/layout'
@@ -39,7 +41,8 @@ let Conversation = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    showDialog: React.PropTypes.func.isRequired
   },
 
   getInitialState() {
@@ -55,8 +58,6 @@ let Conversation = React.createClass({
 
     ConversationActions.load(webId, id, true)
 
-    this.refs.dialog.show()
-
     this.itemsEl = ReactDOM.findDOMNode(this.refs.items)
   },
 
@@ -65,8 +66,6 @@ let Conversation = React.createClass({
 
     ConversationActions.unsubscribe(id)
     ConversationStore.cleanState()
-
-    this.refs.dialog.hide()
   },
 
   componentDidUpdate(prevProps, prevState) {
@@ -160,7 +159,7 @@ let Conversation = React.createClass({
       return p.webId !== this.context.account.webId
     })
 
-    if (loading && !participants.length) {
+    if (loading) {
       title = 'Loading...'
     } else if (participants.length === 1) {
       title = participants[0].name
@@ -188,7 +187,7 @@ let Conversation = React.createClass({
     }
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog id="conversation" visible fullscreen>
         <Layout>
           <AppBar
             title={title}
@@ -221,7 +220,7 @@ let Conversation = React.createClass({
   },
 
   _handleShowSettings() {
-    this.refs.settings.show()
+    this.props.showDialog({id: 'conversationSettings'})
   }
 })
 
@@ -358,4 +357,6 @@ class ConversationItem extends React.Component {
   }
 }
 
-export default Radium(Conversation)
+export default connect({
+  actions: ['common/dialog:showDialog']
+})(Radium(Conversation))

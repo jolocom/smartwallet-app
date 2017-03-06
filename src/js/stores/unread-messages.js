@@ -64,7 +64,7 @@ export default Reflux.createStore({
       }
       load.completed(items)
     }).catch((error) => {
-      console.log(error)
+      console.error(error.stack)
       // @TODO container should be created by the solid server
       if (error.response && error.response.status === 404) {
         const accounts = new AccountsAgent()

@@ -53,10 +53,6 @@ export default class NewConversation extends Reflux.Component {
     this._handleCancelCreateGroup = this._handleCancelCreateGroup.bind(this)
   }
 
-  componentDidMount() {
-    this.refs.dialog.show()
-  }
-
   componentWillMount() {
     super.componentWillMount()
 
@@ -67,10 +63,6 @@ export default class NewConversation extends Reflux.Component {
     } else {
       // @TODO load contact list
     }
-  }
-
-  componentWillUnmount() {
-    this.refs.dialog.hide()
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -145,7 +137,7 @@ export default class NewConversation extends Reflux.Component {
 
   render() {
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog id="newConversation" visible fullscreen>
         {this.renderContent()}
       </Dialog>
     )

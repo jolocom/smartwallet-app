@@ -131,14 +131,6 @@ export default Reflux.createStore({
     this.trigger(this.state)
   },
 
-  loggedIn() {
-    // How would this work now?
-    const webId = this.wia.getWebId()
-    if (webId) {
-      return webId
-    }
-  },
-
   onForgotPassword(username) {
     this.accounts.forgotPassword(username)
       .then(Account.forgotPassword.complete)

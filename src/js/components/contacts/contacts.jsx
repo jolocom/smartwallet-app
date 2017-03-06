@@ -1,6 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 
+import { connect } from 'redux/utils'
+
 import ContactsList from 'components/contacts/list.jsx'
 import ChatActions from 'actions/chat'
 
@@ -8,6 +10,9 @@ import AccountStore from 'stores/account'
 
 import ChatStore from 'stores/chat'
 
+@connect({
+  props: ['account']
+})
 @Radium
 export default class Contacts extends React.Component {
   static propTypes = {
@@ -16,7 +21,8 @@ export default class Contacts extends React.Component {
   }
 
   static contextTypes = {
-    router: React.PropTypes.any
+    router: React.PropTypes.any,
+    store: React.PropTypes.object
   }
 
   constructor() {
@@ -31,7 +37,7 @@ export default class Contacts extends React.Component {
 
   createChat(webId) {
     ChatActions.create(
-        AccountStore.state.webId, webId
+      AccountStore.state.webId, webId
     )
   }
 
