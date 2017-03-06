@@ -162,6 +162,15 @@ let NodeAddGeneric = React.createClass({
         uploadedFileType: 'miscFile'
       })
     }
+    let fileName = file.name
+    if (fileName.length > 20) {
+      fileName = fileName.substring(0, 9) + '...' +
+        fileName.substring(fileName.length - 9)
+    }
+    this.refs.nodeTitle.input.value = fileName
+    this.setState({
+      nodeTitle: fileName
+    })
   },
 
   _handleRemoveFile() {
@@ -348,6 +357,7 @@ let NodeAddGeneric = React.createClass({
             <TextField
               style={styles.nodeTitle}
               value={this.state.nodeTitle}
+              ref="nodeTitle"
               name="nodeTitle"
               placeholder="Add node title"
               onChange={this._handleTitleChange} />
