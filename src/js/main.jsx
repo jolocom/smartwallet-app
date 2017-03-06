@@ -44,7 +44,8 @@ const createSelectLocationState = () => {
   return (state) => {
     const routingState = state.get('routing')
     // console.log(routingState)
-    if (typeof prevRoutingState === 'undefined' || prevRoutingState !== routingState) {
+    if (typeof prevRoutingState === 'undefined' ||
+        prevRoutingState !== routingState) {
       prevRoutingState = routingState
       prevRoutingStateJS = routingState
       // prevRoutingStateJS = routingState.toJS()

@@ -112,7 +112,7 @@ export default class Tour extends React.Component {
     let styles = this.getStyles()
 
     return (
-      <Dialog id='tour' fullscreen visible={this.state.show}>
+      <Dialog id="tour" fullscreen visible={this.state.show}>
         <Layout>
           <Content>
             <AppBar

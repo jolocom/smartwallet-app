@@ -2,7 +2,7 @@ import React from 'react'
 
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import { Router, Route, IndexRoute } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'

@@ -41,7 +41,8 @@ let Conversation = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    showDialog: React.PropTypes.func.isRequired
   },
 
   getInitialState() {
@@ -186,7 +187,7 @@ let Conversation = React.createClass({
     }
 
     return (
-      <Dialog id='conversation' visible fullscreen>
+      <Dialog id="conversation" visible fullscreen>
         <Layout>
           <AppBar
             title={title}

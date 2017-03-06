@@ -20,12 +20,12 @@ import ContactsList from 'components/contacts/list'
 @connect({
   'actions': ['common/dialog:hideDialog']
 })
-
 @Radium
 export default class AddParticipants extends React.Component {
   static propTypes = {
     participants: React.PropTypes.array,
-    onSubmit: React.PropTypes.func
+    onSubmit: React.PropTypes.func,
+    hideDialog: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
