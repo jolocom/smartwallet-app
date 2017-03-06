@@ -1,9 +1,14 @@
-import React, { Component } from 'react'
-// import Radium from 'radium'
-// import Reflux from 'reflux'
+import React from 'react'
+import Radium from 'radium'
+import Reflux from 'reflux'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import {Layout, Content} from 'components/layout'
+import GraphAgent from 'lib/agents/graph.js'
+import graphActions from 'actions/graph-actions'
+import previewStore from 'stores/preview-store'
+import {PRED} from 'lib/namespaces'
+
 import {
   Card,
   CardMedia,
@@ -17,16 +22,23 @@ import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import FlatButton from 'material-ui/FlatButton'
 
-export default class NodeAddGeneric extends Component {
+let NodeAddGeneric = React.createClass({
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      nodeTitle: ''
+  mixins: [
+    Reflux.connect(previewStore, 'graphState')
+  ],
+
+  getInitialState() {
+    return {
+      nodeTitle: '',
+      nodeDesc: ''
     }
+  },
+
+  componentDidMount() {
     this._handleTitleChange = this._handleTitleChange.bind(this)
     this._handleDescChange = this._handleDescChange.bind(this)
-  }
+  },
 
   getStyles() {
     return {
@@ -81,19 +93,39 @@ export default class NodeAddGeneric extends Component {
         height: '36px'
       }
     }
-  }
+  },
 
   _handleTitleChange(event) {
     this.setState({
       nodeTitle: event.target.value
     })
-  }
+  },
 
   _handleDescChange(event) {
     this.setState({
       nodeDesc: event.target.value
     })
-  }
+  },
+
+  submit() {
+    const gAgent = new GraphAgent()
+    const {nodeTitle, nodeDesc} = this.state
+    const webId = localStorage.getItem('jolocom.webId')
+    const centerNode = this.state.graphState.center
+    const type = 'text'
+    gAgent.createNode(
+      webId,
+      centerNode,
+      nodeTitle,
+      nodeDesc,
+      null,
+      type,
+      false).then((uri) => {
+        graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+      }).catch((e) => {
+        console.log('Unable to create node ', e)
+      })
+  },
 
   render() {
     let styles = this.getStyles()
@@ -174,4 +206,6 @@ export default class NodeAddGeneric extends Component {
       </Layout>
     )
   }
-}
+})
+
+export default Radium(NodeAddGeneric)
