@@ -2,7 +2,7 @@ import React from 'react'
 
 // @TODO preferred way to handle history, can we do this with gold server?
 // import createBrowserHistory from 'history/lib/createBrowserHistory'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import { Router, Route, IndexRoute } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
@@ -16,12 +16,12 @@ import Conversation from 'components/chat/conversation'
 import Contacts from 'components/contacts/contacts.jsx'
 import Contact from 'components/contacts/contact.jsx'
 
-import Login from 'components/accounts/login.jsx'
-import Signup from 'components/accounts/signup.jsx'
+import Login from 'components/accounts/login'
+import Signup from 'components/accounts/signup'
 import ForgotPassword from 'components/accounts/forgot-password'
 import ChangePassword from 'components/accounts/change-password'
-import PrivacySettings from 'components/node/privacy-settings.jsx'
-import Profile from 'components/accounts/profile.jsx'
+import PrivacySettings from 'components/node/privacy-settings'
+import Profile from 'components/accounts/profile'
 import SharedNodes from 'components/node/shared-nodes.jsx'
 import NodeList from 'components/node/node-list.jsx'
 import AddContacts from 'components/node/add-contacts.jsx'
@@ -29,8 +29,8 @@ import AddContacts from 'components/node/add-contacts.jsx'
 import ConfirmEmailVerification from
   'components/accounts/confirm-email-verification.jsx'
 
-const routes = (
-  <Route path="/" component={App} >
+function getRoutes() {
+  return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
     <Route path="/chat" component={Chat}>
       <Route path="/conversations" component={Conversations}>
@@ -58,9 +58,9 @@ const routes = (
     <Route path="change-password/:username/:token" component={ChangePassword} />
     <Route path="signup" component={Signup} />
     <Route path="login" component={Login} />
-  </Route>
-)
+  </Route>)
+}
 
-export default () => {
-  return (<Router history={hashHistory}>{routes}</Router>)
+export default (history) => {
+  return (<Router history={history}>{getRoutes()}</Router>)
 }

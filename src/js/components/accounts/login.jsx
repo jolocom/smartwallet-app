@@ -1,76 +1,67 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton, TextField, IconButton, AppBar} from 'material-ui'
-import {Link} from 'react-router'
-
-import Account from 'actions/account'
+import { connect } from 'redux/utils'
+import { RaisedButton, TextField, IconButton, AppBar } from 'material-ui'
+import { Link } from 'react-router'
 
 import Utils from 'lib/util'
 
+import {theme} from 'styles'
+
 // login for development
-let Login = React.createClass({
+const Login = connect({
+  props: ['account', 'account.login', 'account.emailUpdateQueued'],
+  actions: [
+    'account:doLogin',
+    'account:setLoginUsername',
+    'account:setLoginPassword',
+    'router:pushRoute'
+  ]
+})(Radium(React.createClass({
 
-  contextTypes: {
-    muiTheme: React.PropTypes.object,
-    account: React.PropTypes.object,
-    router: React.PropTypes.object
-  },
-
-  getInitialState() {
-    return {
-      username: '',
-      password: '',
-      userErrorMsg: '',
-      pwErrorMsg: ''
-    }
+  propTypes: {
+    login: React.PropTypes.object.isRequired,
+    account: React.PropTypes.object.isRequired,
+    emailUpdateQueued: React.PropTypes.bool.isRequired,
+    pushRoute: React.PropTypes.func.isRequired,
+    doLogin: React.PropTypes.func.isRequired,
+    setLoginUsername: React.PropTypes.func.isRequired,
+    setLoginPassword: React.PropTypes.func.isRequired
   },
 
   componentWillMount() {
-    const {account} = this.context
+    const {account} = this.props
     if (account && account.webId) {
-      this.context.router.push('/graph')
+      this.props.pushRoute('/graph')
     }
   },
 
   goBack() {
-    this.context.router.push('/')
+    this.props.pushRoute('/')
   },
 
   login(e) {
-    // Handle empty form fields
-    if (this.state.username === '') {
-      this.setState({
-        userErrorMsg: 'Please enter a username'
-      })
-    } else if (this.state.password === '') {
-      this.setState({
-        pwErrorMsg: 'Please enter a password'
-      })
-    }
-    Account.login(this.state.username, this.state.password)
+    this.props.doLogin({
+      username: this.props.login.username,
+      password: this.props.login.password,
+      updateUserEmail: this.props.emailUpdateQueued
+    })
     e.preventDefault()
   },
 
   _handleUsernameChange(e) {
-    this.setState({
-      userErrorMsg: ''
-    })
-    this.setState({
+    this.props.setLoginUsername({
       username: e.target.value.toLowerCase()
     })
   },
 
   _handlePasswordChange(e) {
-    this.setState({
-      pwErrorMsg: ''
-    })
-    this.setState({
+    this.props.setLoginPassword({
       password: e.target.value
     })
   },
 
   getStyles() {
-    let {muiTheme} = this.context
     let styles = {
       container: {
         textAlign: 'center',
@@ -114,10 +105,10 @@ let Login = React.createClass({
         width: '100%'
       },
       help: {
-        color: muiTheme.jolocom.gray1
+        color: theme.jolocom.gray1
       },
       link: {
-        color: muiTheme.palette.accent1Color,
+        color: theme.palette.accent1Color,
         fontWeight: 'bold'
       },
       forgotPassword: {
@@ -152,17 +143,17 @@ let Login = React.createClass({
               {/** TODO Give user feedback when user already exists **/}
               <TextField
                 floatingLabelText="Username"
-                value={this.state.username}
+                value={this.props.login.username}
                 type="text"
                 autoCorrect="off"
                 autoCapitalize="none"
                 autoComplete="none"
-                errorText={this.state.userErrorMsg}
+                errorText={this.props.login.userErrorMsg}
                 onChange={this._handleUsernameChange} />
               <TextField
                 floatingLabelText="Password"
                 type="password"
-                errorText={this.state.pwErrorMsg}
+                errorText={this.props.login.pwErrorMsg}
                 onChange={this._handlePasswordChange} />
               <Link
                 to="/forgot-password"
@@ -175,6 +166,9 @@ let Login = React.createClass({
             style={styles.button}
             label="Login" />
         </form>
+        <div style={{paddingBottom: '8px', color: 'red'}}>
+          {this.props.login.failureMsg}
+        </div>
         {
         Utils.isSafari()
           ? <p style={styles.safariCookieWarning}>In order for the
@@ -190,6 +184,6 @@ let Login = React.createClass({
       </div>
     )
   }
-})
+})))
 
-export default Radium(Login)
+export default Login
