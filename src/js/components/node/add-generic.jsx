@@ -165,8 +165,10 @@ let NodeAddGeneric = React.createClass({
                   <FloatingActionButton
                     mini
                     secondary
+                    containerElement="label"
                     style={styles.addBtn}>
                     <ContentAdd />
+                    <input type="file" style={{display: 'none'}} />
                   </FloatingActionButton>
                 } />
               <Divider style={styles.divider} inset />
