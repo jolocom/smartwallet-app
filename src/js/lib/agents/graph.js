@@ -27,7 +27,7 @@ class GraphAgent extends LDPAgent {
       writer.addTriple(uri, PRED.title, title)
     }
     if (description) {
-      writer.addTriple(uri, PRED.description, description)
+      // writer.addTriple(uri, PRED.description, description)
     }
     // TODO
     if (nodeType === 'default' ||
@@ -106,7 +106,7 @@ class GraphAgent extends LDPAgent {
       aclUri = uri
       writer.addTriple(newNodeUri, PRED.storage, $rdf.sym(centerNode.storage))
       writer.addTriple(newNodeUri, PRED.maker, $rdf.sym(centerNode.uri))
-      writer.addTriple(newNodeUri, PRED.description, nodeType)
+      writer.addTriple(newNodeUri, PRED.description, description)
 
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (file) {
