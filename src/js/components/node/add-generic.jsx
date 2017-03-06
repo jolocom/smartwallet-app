@@ -38,7 +38,8 @@ let NodeAddGeneric = React.createClass({
       nodeTitle: '',
       nodeDesc: '',
       uploadedFile: null,
-      uploadedFileType: ''
+      uploadedFileType: '',
+      uploadedFilePreview: null
     }
   },
 
@@ -114,6 +115,16 @@ let NodeAddGeneric = React.createClass({
     })
   },
 
+  _handleImagePreview(file) {
+    let reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      this.setState({
+        uploadedFilePreview: reader.result
+      })
+    }
+  },
+
   // Works for uploading single files at a time
   _handleFileUpload({target}) {
     if (this.state.uploadedFile) {
@@ -127,6 +138,7 @@ let NodeAddGeneric = React.createClass({
       this.setState({
         uploadedFileType: 'image'
       })
+      this._handleImagePreview(file)
     } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
       accepts(file, '.odt') || accepts(file, '.pages') ||
       accepts(file, '.pdf') || accepts(file, '.pptx') ||
@@ -225,21 +237,12 @@ let NodeAddGeneric = React.createClass({
               }
               nestedListStyle={styles.accordionChildren}
               nestedItems={[
-                this.state.uploadedFileType === 'image'
-                ? <ListItem
+                <ListItem
                   leftIcon={
-                    <Avatar>A</Avatar>
+                    this.state.uploadedFileType === 'image'
+                    ? <Avatar src={this.state.uploadedFilePreview} />
+                    : <FileIcon />
                   }
-                  rightIcon={
-                    <ActionDelete
-                      color="#4b132b"
-                      onTouchTap={this._handleRemoveFile}
-                    />
-                  }>
-                  {this.state.uploadedFile.name}
-                </ListItem>
-                : <ListItem
-                  leftIcon={<FileIcon />}
                   rightIcon={
                     <ActionDelete
                       color="#4b132b"
