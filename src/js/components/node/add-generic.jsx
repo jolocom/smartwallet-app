@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Reflux from 'reflux'
+import accepts from 'attr-accept'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import {Layout, Content} from 'components/layout'
@@ -31,7 +32,9 @@ let NodeAddGeneric = React.createClass({
   getInitialState() {
     return {
       nodeTitle: '',
-      nodeDesc: ''
+      nodeDesc: '',
+      uploadedFile: null,
+      uploadedFileType: ''
     }
   },
 
@@ -107,6 +110,32 @@ let NodeAddGeneric = React.createClass({
     })
   },
 
+  _handleFileUpload({target}) {
+    const file = target.files[0]
+    this.setState({
+      uploadedFile: file
+    })
+    if (accepts(file, 'image/*')) {
+      this.setState({
+        uploadedFileType: 'image'
+      })
+    } else if (accepts(file, '.txt') || (accepts(file, '.docx')) ||
+      accepts(file, '.odt') || accepts(file, '.pages') ||
+      accepts(file, '.pdf') || accepts(file, '.pptx') ||
+      accepts(file, '.keynote') || accepts(file, '.doc') ||
+      accepts(file, '.odp') || accepts(file, '.ppt') ||
+      accepts(file, '.ods') || accepts(file, '.xlsx') ||
+      accepts(file, '.xls') || accepts(file, '.html')) {
+      this.setState({
+        uploadedFileType: 'document'
+      })
+    } else {
+      this.setState({
+        uploadedFileType: 'miscFile'
+      })
+    }
+  },
+
   submit() {
     const gAgent = new GraphAgent()
     const {nodeTitle, nodeDesc} = this.state
@@ -128,8 +157,8 @@ let NodeAddGeneric = React.createClass({
   },
 
   render() {
-    let styles = this.getStyles()
-    let headerIcon = <AddNodeIcon height="100%" width="100%" />
+    const styles = this.getStyles()
+    const headerIcon = <AddNodeIcon height="100%" width="100%" />
     return (
       <Layout>
         <Content>
@@ -168,7 +197,11 @@ let NodeAddGeneric = React.createClass({
                     containerElement="label"
                     style={styles.addBtn}>
                     <ContentAdd />
-                    <input type="file" style={{display: 'none'}} />
+                    <input
+                      type="file"
+                      style={{display: 'none'}}
+                      onChange={this._handleFileUpload}
+                    />
                   </FloatingActionButton>
                 } />
               <Divider style={styles.divider} inset />
