@@ -4,6 +4,9 @@ import Reflux from 'reflux'
 import accepts from 'attr-accept'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
+import ImageIcon from 'components/icons/image-icon'
+import DocIcon from 'components/icons/doc-icon.jsx'
+
 import {Layout, Content} from 'components/layout'
 import GraphAgent from 'lib/agents/graph.js'
 import graphActions from 'actions/graph-actions'
@@ -56,11 +59,12 @@ let NodeAddGeneric = React.createClass({
       headerContainer: {
         height: '176px',
         backgroundColor: '#9ca0aa',
-        backgroundImage: 'none',
+        backgroundImage: `url(${this.state.uploadedFilePreview})`,
         backgroundSize: 'cover'
       },
       headerIconContainer: {
-        height: '176px'
+        height: '176px',
+        paddingTop: '20px'
       },
       nodeTitle: {
         padding: '10px 24px',
@@ -159,6 +163,12 @@ let NodeAddGeneric = React.createClass({
   _handleRemoveFile() {
     this.setState({
       uploadedFile: null
+    })
+    this.setState({
+      uploadedFileType: 'none'
+    })
+    this.setState({
+      uploadedFilePreview: ''
     })
   },
 
@@ -284,7 +294,17 @@ let NodeAddGeneric = React.createClass({
 
   render() {
     const styles = this.getStyles()
-    const headerIcon = <AddNodeIcon height="100%" width="100%" />
+    let headerIcon
+    switch (this.state.uploadedFileType) {
+      case 'image':
+        headerIcon = null
+        break
+      case 'document':
+        headerIcon = <DocIcon height="70%" width="100%" />
+        break
+      default:
+        headerIcon = <AddNodeIcon height="90%" width="100%" />
+    }
     return (
       <Layout>
         <Content>
