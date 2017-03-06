@@ -47,11 +47,6 @@ let NodeAddGeneric = React.createClass({
     }
   },
 
-  componentDidMount() {
-    this._handleTitleChange = this._handleTitleChange.bind(this)
-    this._handleDescChange = this._handleDescChange.bind(this)
-  },
-
   getStyles() {
     return {
       container: {
