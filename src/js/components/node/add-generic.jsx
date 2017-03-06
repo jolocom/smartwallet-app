@@ -4,13 +4,13 @@ import Reflux from 'reflux'
 import accepts from 'attr-accept'
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
-import ImageIcon from 'components/icons/image-icon'
 import DocIcon from 'components/icons/doc-icon.jsx'
 
 import {Layout, Content} from 'components/layout'
 import GraphAgent from 'lib/agents/graph.js'
 import graphActions from 'actions/graph-actions'
 import previewStore from 'stores/preview-store'
+import ProfileStore from 'stores/profile'
 import {PRED} from 'lib/namespaces'
 
 import {
@@ -33,7 +33,8 @@ import FileIcon from 'material-ui/svg-icons/editor/attach-file'
 let NodeAddGeneric = React.createClass({
 
   mixins: [
-    Reflux.connect(previewStore, 'graphState')
+    Reflux.connect(previewStore, 'graphState'),
+    Reflux.connect(ProfileStore, 'profile')
   ],
 
   getInitialState() {
@@ -41,7 +42,7 @@ let NodeAddGeneric = React.createClass({
       nodeTitle: '',
       nodeDesc: '',
       uploadedFile: null,
-      uploadedFileType: '',
+      uploadedFileType: 'text',
       uploadedFilePreview: null
     }
   },
@@ -166,7 +167,7 @@ let NodeAddGeneric = React.createClass({
   _handleRemoveFile() {
     this.setState({
       uploadedFile: null,
-      uploadedFileType: 'none',
+      uploadedFileType: 'text',
       uploadedFilePreview: ''
     })
   },
@@ -209,13 +210,13 @@ let NodeAddGeneric = React.createClass({
     return (
       <div>
         <ListItem
-          key={1}
+          key={2}
           primaryText="Files"
           open
           nestedListStyle={styles.accordionChildren}
           nestedItems={[
             <ListItem
-              key={1}
+              key={3}
               disabled
               style={{color: '#9ba0aa'}}
               rightIcon={
@@ -236,7 +237,7 @@ let NodeAddGeneric = React.createClass({
               <Divider style={{...styles.divider, ...styles.dividerSelected}} />
             </ListItem>,
             <ListItem
-              key={2}
+              key={4}
               open
               leftIcon={<UploadFileIcon color="#9ba0aa" />}
               rightToggle={
@@ -247,6 +248,7 @@ let NodeAddGeneric = React.createClass({
               nestedListStyle={styles.accordionChildren}
               nestedItems={[
                 <ListItem
+                  key={5}
                   leftIcon={
                     this.state.uploadedFileType === 'image'
                     ? <Avatar src={this.state.uploadedFilePreview} />
@@ -276,19 +278,43 @@ let NodeAddGeneric = React.createClass({
     const {nodeTitle, nodeDesc} = this.state
     const webId = localStorage.getItem('jolocom.webId')
     const centerNode = this.state.graphState.center
-    const type = 'text'
-    gAgent.createNode(
-      webId,
-      centerNode,
-      nodeTitle,
-      nodeDesc,
-      null,
-      type,
-      false).then((uri) => {
-        graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+    const type = this.state.uploadedFileType
+
+    if (!this.state.uploadedFile) {
+      gAgent.createNode(
+        webId,
+        centerNode,
+        nodeTitle,
+        nodeDesc,
+        null,
+        type,
+        false).then((uri) => {
+          graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+        }).catch((e) => {
+          console.log('Unable to create node ', e)
+        })
+    } else {
+      gAgent.storeFile(
+        null,
+        this.state.profile.storage,
+        this.state.uploadedFile
+      ).then((res) => {
+        gAgent.createNode(
+          webId,
+          centerNode,
+          nodeTitle,
+          nodeDesc,
+          res,
+          type,
+          false).then((uri) => {
+            graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+          }).catch((e) => {
+            console.log('Unable to create node ', e)
+          })
       }).catch((e) => {
-        console.log('Unable to create node ', e)
+        console.log('Unable to store file ', e)
       })
+    }
   },
 
   render() {
@@ -299,6 +325,7 @@ let NodeAddGeneric = React.createClass({
         headerIcon = null
         break
       case 'document':
+      case 'miscFile':
         headerIcon = <DocIcon height="70%" width="100%" />
         break
       default:
@@ -332,13 +359,14 @@ let NodeAddGeneric = React.createClass({
             </List>
             <List style={styles.generalAccordion}>
               <ListItem
+                key={6}
                 primaryText="General"
                 primaryTogglesNestedList
                 open
                 nestedListStyle={styles.accordionChildren}
                 nestedItems={[
                   <ListItem
-                    key={1}
+                    key={7}
                     leftIcon={<SocialShare color="#9ba0aa" />}>
                     <FlatButton
                       label="Privacy Settings"
@@ -347,7 +375,7 @@ let NodeAddGeneric = React.createClass({
                     />
                   </ListItem>,
                   <ListItem
-                    key={2}
+                    key={8}
                     leftIcon={<ActionDescription color="#9ba0aa" />}>
                     <TextField
                       style={styles.inputStyle}
