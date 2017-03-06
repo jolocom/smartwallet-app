@@ -80,6 +80,9 @@ let NodeAddGeneric = React.createClass({
       divider: {
         marginRight: '20px'
       },
+      dividerSelected: {
+        marginTop: '16px'
+      },
       accordionChildren: {
         backgroundColor: '#f7f7f7'
       },
@@ -162,12 +165,8 @@ let NodeAddGeneric = React.createClass({
 
   _handleRemoveFile() {
     this.setState({
-      uploadedFile: null
-    })
-    this.setState({
-      uploadedFileType: 'none'
-    })
-    this.setState({
+      uploadedFile: null,
+      uploadedFileType: 'none',
       uploadedFilePreview: ''
     })
   },
@@ -234,7 +233,7 @@ let NodeAddGeneric = React.createClass({
                 </FloatingActionButton>
               }>
               Replace file staged for upload with another
-              <Divider style={styles.divider} inset />
+              <Divider style={{...styles.divider, ...styles.dividerSelected}} />
             </ListItem>,
             <ListItem
               key={2}
