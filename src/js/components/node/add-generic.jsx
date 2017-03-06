@@ -11,6 +11,7 @@ import previewStore from 'stores/preview-store'
 import {PRED} from 'lib/namespaces'
 
 import {
+  Avatar,
   Card,
   CardMedia,
   TextField,
@@ -22,6 +23,9 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 import ActionDescription from 'material-ui/svg-icons/action/description'
 import SocialShare from 'material-ui/svg-icons/social/share'
 import FlatButton from 'material-ui/FlatButton'
+import UploadFileIcon from 'material-ui/svg-icons/file/file-upload'
+import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
+import FileIcon from 'material-ui/svg-icons/editor/attach-file'
 
 let NodeAddGeneric = React.createClass({
 
@@ -112,6 +116,9 @@ let NodeAddGeneric = React.createClass({
 
   // Works for uploading single files at a time
   _handleFileUpload({target}) {
+    if (this.state.uploadedFile) {
+      this._handleRemoveFile()
+    }
     const file = target.files[0]
     this.setState({
       uploadedFile: file
@@ -137,10 +144,16 @@ let NodeAddGeneric = React.createClass({
     }
   },
 
+  _handleRemoveFile() {
+    this.setState({
+      uploadedFile: null
+    })
+  },
+
   _renderEmptySelection() {
     const styles = this.getStyles()
     return (
-      <List>
+      <div>
         <ListItem
           key={1}
           disabled
@@ -166,13 +179,83 @@ let NodeAddGeneric = React.createClass({
             </FloatingActionButton>
           } />
         <Divider style={styles.divider} inset />
-      </List>
+      </div>
     )
   },
 
   _renderFileSelected() {
+    const styles = this.getStyles()
     return (
-      <div>FILE HAS BEEN CHOSEN</div>
+      <div>
+        <ListItem
+          key={1}
+          primaryText="Files"
+          open
+          nestedListStyle={styles.accordionChildren}
+          nestedItems={[
+            <ListItem
+              key={1}
+              disabled
+              style={{color: '#9ba0aa'}}
+              rightIcon={
+                <FloatingActionButton
+                  mini
+                  secondary
+                  containerElement="label"
+                  style={styles.addBtn}>
+                  <ContentAdd />
+                  <input
+                    type="file"
+                    style={{display: 'none'}}
+                    onChange={this._handleFileUpload}
+                  />
+                </FloatingActionButton>
+              }>
+              Replace file staged for upload with another
+              <Divider style={styles.divider} inset />
+            </ListItem>,
+            <ListItem
+              key={2}
+              open
+              leftIcon={<UploadFileIcon color="#9ba0aa" />}
+              rightToggle={
+                <UploadFileIcon
+                  style={{display: 'none'}}
+                />
+              }
+              nestedListStyle={styles.accordionChildren}
+              nestedItems={[
+                this.state.uploadedFileType === 'image'
+                ? <ListItem
+                  leftIcon={
+                    <Avatar>A</Avatar>
+                  }
+                  rightIcon={
+                    <ActionDelete
+                      color="#4b132b"
+                      onTouchTap={this._handleRemoveFile}
+                    />
+                  }>
+                  {this.state.uploadedFile.name}
+                </ListItem>
+                : <ListItem
+                  leftIcon={<FileIcon />}
+                  rightIcon={
+                    <ActionDelete
+                      color="#4b132b"
+                      onTouchTap={this._handleRemoveFile}
+                    />
+                  }>
+                  {this.state.uploadedFile.name}
+                </ListItem>
+              ]}>
+              {
+                this.state.uploadedFileType === 'image'
+                ? 'Images' : 'Documents'
+              }
+            </ListItem>
+          ]} />
+      </div>
     )
   },
 
@@ -219,10 +302,12 @@ let NodeAddGeneric = React.createClass({
               name="nodeTitle"
               placeholder="Add node title"
               onChange={this._handleTitleChange} />
+            <List>
             {
-              this.state.file
-              ? this._renderEmptySelection() : this._renderFileSelected()
+              this.state.uploadedFile
+              ? this._renderFileSelected() : this._renderEmptySelection()
             }
+            </List>
             <List style={styles.generalAccordion}>
               <ListItem
                 primaryText="General"
@@ -236,6 +321,7 @@ let NodeAddGeneric = React.createClass({
                     <FlatButton
                       label="Privacy Settings"
                       style={styles.privacyBtn}
+                      onTouchTap={this._handleRemoveFile}
                     />
                   </ListItem>,
                   <ListItem
