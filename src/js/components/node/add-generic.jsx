@@ -80,7 +80,8 @@ let NodeAddGeneric = React.createClass({
         marginTop: '16px'
       },
       accordionChildren: {
-        backgroundColor: '#f7f7f7'
+        backgroundColor: '#f7f7f7',
+        paddingTop: '15px'
       },
       labelStyle: {
         top: '30px'
@@ -319,11 +320,12 @@ let NodeAddGeneric = React.createClass({
           nodeDesc,
           res,
           type,
-          false).then((uri) => {
-            graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
-          }).catch((e) => {
-            console.log('Unable to create node ', e)
-          })
+          true
+        ).then((uri) => {
+          graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
+        }).catch((e) => {
+          console.log('Unable to create node ', e)
+        })
       }).catch((e) => {
         console.log('Unable to store file ', e)
       })
@@ -380,15 +382,6 @@ let NodeAddGeneric = React.createClass({
                 open
                 nestedListStyle={styles.accordionChildren}
                 nestedItems={[
-                  <ListItem
-                    key={7}
-                    leftIcon={<SocialShare color="#9ba0aa" />}>
-                    <FlatButton
-                      label="Privacy Settings"
-                      style={styles.privacyBtn}
-                      onTouchTap={this._handleRemoveFile}
-                    />
-                  </ListItem>,
                   <ListItem
                     key={8}
                     leftIcon={<ActionDescription color="#9ba0aa" />}>
