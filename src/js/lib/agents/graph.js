@@ -49,6 +49,7 @@ class GraphAgent extends LDPAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
+  //Not used right now
   addImage(uri, dstContainer, writer, image, confidential) {
     if (image instanceof File) {
       let imgUri = `${dstContainer}files/${Util.randomString(5)}`
@@ -107,14 +108,13 @@ class GraphAgent extends LDPAgent {
       writer.addTriple(newNodeUri, PRED.storage, $rdf.sym(centerNode.storage))
       writer.addTriple(newNodeUri, PRED.maker, $rdf.sym(centerNode.uri))
       writer.addTriple(newNodeUri, PRED.description, description)
-
+      
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (file) {
         if (nodeType === 'image') {
-          return this.addImage(newNodeUri, centerNode.storage,
-            writer, file, confidential)
+            writer.addTriple(newNodeUri,PRED.image,file)
         } else {
-          writer.addTriple(newNodeUri, PRED.attachment, $rdf.sym(file))
+            writer.addTriple(newNodeUri, PRED.attachment, $rdf.sym(file))
         }
       }
     }).then(() => {
