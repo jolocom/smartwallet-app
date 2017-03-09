@@ -1,9 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
+import { connect } from 'redux/utils'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton} from 'material-ui'
-import AccountActions from 'actions/account'
 import AppBar from 'material-ui/AppBar'
 import {Link} from 'react-router'
 
@@ -12,6 +12,10 @@ let ForgotPassword = React.createClass({
   contextTypes: {
     muiTheme: React.PropTypes.object,
     router: React.PropTypes.object
+  },
+
+  propTypes: {
+    doForgotPassword: React.PropTypes.func.isRequired
   },
 
   enableSubmit() {
@@ -23,7 +27,7 @@ let ForgotPassword = React.createClass({
   },
 
   forgotPassword({username}) {
-    AccountActions.forgotPassword(username)
+    this.props.doForgotPassword({username})
   },
 
   goBack() {
@@ -120,4 +124,6 @@ let ForgotPassword = React.createClass({
   }
 })
 
-export default Radium(ForgotPassword)
+export default connect({
+  actions: ['snack-bar:showSnackBarMessage', 'account:doForgotPassword']
+})(Radium(ForgotPassword))

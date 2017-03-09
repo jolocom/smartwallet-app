@@ -4,6 +4,8 @@ import Radium from 'radium'
 import accepts from 'attr-accept'
 import {proxy} from 'settings'
 
+import { connect } from 'redux/utils'
+
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
 import {
@@ -22,7 +24,6 @@ import LinearProgress from 'material-ui/LinearProgress'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import SocialPublic from 'material-ui/svg-icons/social/public'
 import SocialPerson from 'material-ui/svg-icons/social/person'
-import SnackbarActions from 'actions/snackbar'
 import CommunicationPhone from 'material-ui/svg-icons/communication/phone'
 import ActionCompany from 'material-ui/svg-icons/action/account-balance'
 import AvWeb from 'material-ui/svg-icons/av/web'
@@ -50,6 +51,12 @@ let Profile = React.createClass({
     muiTheme: React.PropTypes.object
   },
 
+  propTypes: {
+    showDialog: React.PropTypes.func.isRequired,
+    hideDialog: React.PropTypes.func.isRequired,
+    showSnackBarMessage: React.PropTypes.func.isRequired
+  },
+
   setInitialState(initState) {
     this.setState(initState)
   },
@@ -61,7 +68,7 @@ let Profile = React.createClass({
   componentDidMount() {
     this.loadingPassportPhoto = false
     this.loadingDisplayPhoto = false
-    this.refs.dialog.show()
+    this.props.showDialog({id: 'profile'})
   },
 
   downloadPK() {
@@ -73,7 +80,7 @@ let Profile = React.createClass({
   },
 
   hide() {
-    this.refs.dialog.hide()
+    this.props.hideDialog({id: 'profile'})
     this.context.router.goBack()
   },
 
@@ -275,7 +282,7 @@ let Profile = React.createClass({
     let styles = this.getStyles()
 
     return (
-      <Dialog ref="dialog" fullscreen>
+      <Dialog id="profile" fullscreen>
         <Layout fixedHeader>
           <AppBar
             title="Edit profile"
@@ -583,7 +590,7 @@ let Profile = React.createClass({
           imgUri: res
         })
       }).catch((e) => {
-        SnackbarActions.showMessage('Could not upload the photo.')
+        this.props.showSnackBarMessage('Could not upload the photo.')
         this.setState({
           loadingDisplayPhoto: false,
           imgUri: ''
@@ -612,7 +619,7 @@ let Profile = React.createClass({
           passportImgUri: res
         })
       }).catch((e) => {
-        SnackbarActions.showMessage('Could not upload the passport.')
+        this.props.showSnackBarMessage('Could not upload the passport.')
         this.setState({
           loadingPassportPhoto: false,
           passportImgUri: ''
@@ -622,4 +629,9 @@ let Profile = React.createClass({
   }
 })
 
-export default Radium(Profile)
+export default connect({
+  actions: [
+    'common/dialog:showDialog', 'common/dialog:hideDialog',
+    'snack-bar:showSnackBarMessage'
+  ]
+})(Radium(Profile))
