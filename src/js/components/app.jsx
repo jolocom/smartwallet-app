@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 import Radium, {StyleRoot} from 'radium'
 import {bankUri} from 'lib/fixtures'
 
@@ -8,11 +9,10 @@ import {
   Paper,
   AppBar,
   IconButton,
-  Snackbar,
-  FlatButton,
-  Dialog,
   Badge
 } from 'material-ui'
+import SnackbarContainer from 'components/snack-bar'
+import ConfirmationDialog from 'components/confirmation-dialog'
 
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
@@ -21,23 +21,17 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 
 import LeftNav from 'components/left-nav/nav.jsx'
-import Tour from 'components/tour.jsx'
+import Tour from 'components/tour'
 
 import Loading from 'components/common/loading.jsx'
 
-import AccountActions from 'actions/account'
-import AccountStore from 'stores/account'
-import ConfirmStore from 'stores/confirm'
-
 import PinnedActions from 'actions/pinned'
-import ConfirmActions from 'actions/confirm'
+
 import ProfileActions from 'actions/profile'
 import ProfileStore from 'stores/profile'
 
 import UnreadMessagesActions from 'actions/unread-messages'
 import UnreadMessagesStore from 'stores/unread-messages'
-
-import SnackbarStore from 'stores/snackbar'
 
 // A pathname is considered public if either "/" or if it starts
 // with any of the following publicRoutes
@@ -56,21 +50,22 @@ const publicRoutes = [
 let App = React.createClass({
 
   mixins: [
-    Reflux.connect(AccountStore, 'account'),
     Reflux.connect(ProfileStore, 'profile'),
-    Reflux.connect(SnackbarStore, 'snackbar'),
-    Reflux.connect(ConfirmStore, 'confirm'),
     Reflux.connect(UnreadMessagesStore, 'unreadMessages')
   ],
 
   propTypes: {
     location: React.PropTypes.object,
     children: React.PropTypes.node,
-    route: React.PropTypes.object
+    route: React.PropTypes.object,
+    account: React.PropTypes.object.isRequired,
+    doLogin: React.PropTypes.func.isRequired,
+    showLeftNav: React.PropTypes.func.isRequired
   },
 
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    store: React.PropTypes.object.isRequired
   },
 
   childContextTypes: {
@@ -80,19 +75,24 @@ let App = React.createClass({
     username: React.PropTypes.string,
     searchActive: React.PropTypes.bool,
     location: React.PropTypes.object,
-    route: React.PropTypes.object
+    route: React.PropTypes.object,
+    router: React.PropTypes.object,
+    store: React.PropTypes.object
   },
 
   getChildContext: function () {
-    let {account, profile, searchActive} = this.state
+    let {profile, searchActive} = this.state
+    let {account} = this.props
+
     return {
       muiTheme: this.theme,
       profile,
       account,
-      username: account && account.username, // backward compat
       searchActive,
       location: this.props.location,
-      route: this.props.route
+      route: this.props.route,
+      router: this.context.router,
+      store: this.context.store
     }
   },
 
@@ -106,21 +106,21 @@ let App = React.createClass({
 
   componentWillMount() {
     this.theme = getMuiTheme(JolocomTheme)
-    AccountActions.login()
+    this.props.doLogin({})
   },
 
   componentWillUnmount() {
-    const webId = this.state.account
+    const webId = this.props.account
     if (webId) {
       UnreadMessagesActions.unsubscribe(webId)
     }
   },
 
   componentDidUpdate(prevProps, prevState) {
-    let {username} = this.state.account
+    let {username} = this.props.account
 
-    if (prevState.account.username === undefined ||
-      prevState.account.username !== username) {
+    if (prevProps.account.username === undefined ||
+      prevProps.account.username !== username) {
       this.checkLogin()
     }
   },
@@ -131,7 +131,7 @@ let App = React.createClass({
   },
 
   checkLogin() {
-    let {username, loggingIn, webId} = this.state.account
+    let {username, loggingIn, webId} = this.props.account
 
     // session is still loading, so return for now
     if (username === undefined && loggingIn) {
@@ -187,16 +187,7 @@ let App = React.createClass({
   },
 
   showDrawer() {
-    this.refs.leftNav.show()
-  },
-
-  _handleConfirmCancel() {
-    ConfirmActions.close()
-  },
-
-  _handleConfirmAction() {
-    this._handleConfirmCancel()
-    this.state.confirm.callback() // Action when the user confirms
+    this.props.showLeftNav()
   },
 
   getStyles() {
@@ -245,10 +236,9 @@ let App = React.createClass({
 
   render() {
     const styles = this.getStyles()
-
     // @TODO render login screen when logging in, also makes sures child
     // components don't get rendered before any user data is available
-    if (this.state.account.loggingIn && !this.isPublicRoute()) {
+    if (this.props.account.loggingIn && !this.isPublicRoute()) {
       return <Loading />
     }
 
@@ -291,19 +281,6 @@ let App = React.createClass({
     // <GraphFilters style={styles.filters} showDefaults />
     const filters = null
 
-    const confirmActions = [
-      <FlatButton
-        label="Cancel"
-        primary
-        onTouchTap={this._handleConfirmCancel}
-      />,
-      <FlatButton
-        label={this.state.confirm.primaryActionText}
-        primary
-        onTouchTap={this._handleConfirmAction}
-      />
-    ]
-
     return (
       <StyleRoot style={styles.container}>
         {this.isPublicRoute() ? this.props.children : (
@@ -331,11 +308,12 @@ let App = React.createClass({
               {filters}
               {search}
             </Paper>
-            <LeftNav ref="leftNav" />
+            <LeftNav />
             <Content>
+              { /* TODO: Nuke this, because this is not
+              the right way to do things */ }
               {React.Children.map(this.props.children, (el) => {
                 return React.cloneElement(el, {
-                  snackbar: this.state.snackbar.open,
                   searchQuery: this.state.searchQuery
                 })
               })}
@@ -344,25 +322,15 @@ let App = React.createClass({
           </Layout>
         )}
 
-        <Snackbar
-          open={this.state.snackbar.open}
-          message={this.state.snackbar.message}
-          action={this.state.snackbar.undo && 'undo'}
-          onActionTouchTap={this.state.snackbar.undoCallback}
-        />
-
-        <Dialog
-          actions={confirmActions}
-          modal={false}
-          open={this.state.confirm.open}
-          onRequestClose={this.handleClose}
-        >
-          {this.state.confirm.message}
-        </Dialog>
+        <SnackbarContainer />
+        <ConfirmationDialog />
       </StyleRoot>
     )
   }
 
 })
 
-export default Radium(App)
+export default connect({
+  props: ['account'],
+  actions: ['account:doLogin', 'left-nav:showLeftNav']
+})(Radium(App))

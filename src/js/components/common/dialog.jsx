@@ -1,18 +1,45 @@
 import React from 'react'
 import Radium from 'radium'
+import { connect } from 'redux/utils'
 
-let Dialog = React.createClass({
+@connect({
+  props: (state, props) => ({
+    actuallyVisible: state.getIn(['dialog', props.id, 'visible'])
+  }),
+  actions: [
+    'common/dialog:show',
+    'common/dialog:hide'
+  ]
+})
+@Radium
+export default class Dialog extends React.Component {
+  static propTypes = {
+    id: React.PropTypes.string.isRequired,
+    visible: React.PropTypes.bool,
+    actuallyVisible: React.PropTypes.bool,
+    children: React.PropTypes.node,
+    style: React.PropTypes.object,
+    fullscreen: React.PropTypes.bool,
 
-  getInitialState() {
-    return {
-      visible: this.props.visible
+    show: React.PropTypes.func,
+    hide: React.PropTypes.func
+  }
+
+  componentDidMount() {
+    if (this.props.visible) {
+      this.props.show({id: this.props.id})
+    } else {
+      this.props.hide({id: this.props.id})
     }
-  },
+  }
+
+  componentWillUnmount() {
+    this.props.hide({id: this.props.id})
+  }
 
   getStyles() {
     return {
       container: {
-
       },
       fullscreen: {
         position: 'fixed',
@@ -30,25 +57,12 @@ let Dialog = React.createClass({
         transform: 'translate(0, 0)'
       }
     }
-  },
-
-  show() {
-    this.setState({visible: true})
-  },
-
-  hide() {
-    this.setState({visible: false})
-  },
-
-  toggle() {
-    this.setState({visible: !this.state.visible})
-  },
+  }
 
   render() {
     let styles = this.getStyles()
 
-    let {style, fullscreen} = this.props
-    let {visible} = this.state
+    let {style, fullscreen, actuallyVisible} = this.props
 
     return (
       <div
@@ -56,13 +70,10 @@ let Dialog = React.createClass({
           styles.container,
           style,
           fullscreen && styles.fullscreen,
-          visible && styles.visible
+          actuallyVisible && styles.visible
         ]}>
         {this.props.children}
       </div>
     )
   }
-
-})
-
-export default Radium(Dialog)
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import {
   IconButton,
@@ -9,7 +10,6 @@ import {
   Avatar
 } from 'material-ui'
 import AppBar from 'material-ui/AppBar'
-import ConfirmActions from 'actions/confirm'
 import FlatButton from 'material-ui/FlatButton'
 import Divider from 'material-ui/Divider'
 import PrivacyStore from 'stores/privacy-settings'
@@ -24,7 +24,10 @@ import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
 
 import Util from 'lib/util'
 
-let PrivacySettings = React.createClass({
+let PrivacySettings = connect({
+  actions: ['confirmation-dialog:openConfirmDialog']
+})(
+React.createClass({
   mixins: [Reflux.listenTo(PrivacyStore, '_handleUpdate')],
 
   contextTypes: {
@@ -34,7 +37,8 @@ let PrivacySettings = React.createClass({
 
   propTypes: {
     params: React.PropTypes.object,
-    name: React.PropTypes.string
+    name: React.PropTypes.string,
+    openConfirmDialog: React.PropTypes.func
   },
 
   getInitialState() {
@@ -53,9 +57,12 @@ let PrivacySettings = React.createClass({
 
   goBack() {
     if (this.state.unsavedChanges) {
-      const msg = 'You have unsaved changes, are you sure you want to exit?'
-      ConfirmActions.confirm(msg, 'Exit', () => {
-        this.context.router.goBack()
+      const message = 'You have unsaved changes, are you sure you want to exit?'
+      this.props.openConfirmDialog({
+        message, primaryActionText: 'Exit',
+        callback: () => {
+          this.context.router.goBack()
+        }
       })
     } else {
       this.context.router.goBack()
@@ -74,6 +81,7 @@ let PrivacySettings = React.createClass({
         user.edit = !user.edit
       }
     })
+    this.setState(this.state)
   },
 
   _handleUpdate(storeState) {
@@ -327,13 +335,16 @@ let PrivacySettings = React.createClass({
       </div>
     )
   }
-})
+}))
 
-let WrappedListItem = React.createClass({
+let WrappedListItem = connect({
+  actions: ['confirmation-dialog:openConfirmDialog']
+})(React.createClass({
   propTypes: {
     handleRemove: React.PropTypes.func,
     handleToggle: React.PropTypes.func,
-    contact: React.PropTypes.object
+    contact: React.PropTypes.object,
+    openConfirmDialog: React.PropTypes.func
   },
 
   getStyles() {
@@ -370,7 +381,6 @@ let WrappedListItem = React.createClass({
               color={contact.edit ? '#4b132b' : '#d2d2d2'}
               onTouchTap={this._handleToggleEdit}
             />
-
             <ActionDelete
               style={styles.deleteIcon}
               color="#4b132b"
@@ -387,15 +397,19 @@ let WrappedListItem = React.createClass({
   _handleRemovePerson() {
     const {contact} = this.props
     const name = contact.name ? contact.name : contact.webId
-    const msg = `Are you sure you want to revoke access rights from ${name}?`
-    ConfirmActions.confirm(msg, 'Revoke', () => {
-      this.props.handleRemove(this.props.contact)
+    const message = 'Are you sure you want to revoke ' +
+      `access rights from ${name}?`
+    this.props.openConfirmDialog({
+      message, primaryActionText: 'Revoke',
+      callback: () => {
+        this.props.handleRemove(this.props.contact)
+      }
     })
   },
 
   _handleToggleEdit() {
     this.props.handleToggle(this.props.contact)
   }
-})
+}))
 
 export default Radium(PrivacySettings)
