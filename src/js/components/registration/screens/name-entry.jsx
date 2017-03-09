@@ -1,5 +1,4 @@
 import React from 'react'
-import Radium from 'radium'
 import { connect } from 'redux/utils'
 import Presentation from '../presentation/name-entry'
 
@@ -7,7 +6,6 @@ import Presentation from '../presentation/name-entry'
   props: ['registration'],
   actions: ['registration:goForward', 'registration:setHumanName']
 })
-@Radium
 export default class RegistrationNameEntryScreen extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,

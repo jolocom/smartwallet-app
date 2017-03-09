@@ -1,5 +1,4 @@
 import React from 'react'
-import Radium from 'radium'
 import { connect } from 'redux/utils'
 import Presentation from '../presentation/entropy'
 
@@ -10,7 +9,6 @@ import Presentation from '../presentation/entropy'
     'registration:addMaskedImagePoint', 'registration:addEntropyFromDeltas'
   ]
 })
-@Radium
 export default class Dialog extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,

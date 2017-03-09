@@ -1,5 +1,4 @@
 import React from 'react'
-import Radium from 'radium'
 import { connect } from 'redux/utils'
 import Presentation from '../presentation/write-phrase'
 
@@ -7,7 +6,6 @@ import Presentation from '../presentation/write-phrase'
   props: ['registration'],
   actions: ['registration:goForward', 'registration:setPassphraseWrittenDown']
 })
-@Radium
 export default class RegistrationWritePhraseScreen extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,
