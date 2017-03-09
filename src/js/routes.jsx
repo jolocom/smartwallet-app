@@ -27,9 +27,44 @@ import NodeList from 'components/node/node-list.jsx'
 import ConfirmEmailVerification from
   'components/accounts/confirm-email-verification.jsx'
 
+import RegistrationNameEntryScreen from
+  'components/registration/screens/name-entry'
+import RegistrationEntropyScreen from
+  'components/registration/screens/entropy'
+import RegistrationUserTypeScreen from
+  'components/registration/screens/user-type'
+import RegistrationWritePhraseScreen from
+  'components/registration/screens/write-phrase'
+import RegistrationPhraseInfoScreen from
+  'components/registration/screens/phrase-info'
+import RegistrationPinScreen from
+  'components/registration/screens/pin'
+import RegistrationIdentifierScreen from
+  'components/registration/screens/identifier'
+import RegistrationPasswordScreen from
+  'components/registration/screens/password'
+
 function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
+
+    <Route path="/registration"
+      component={RegistrationNameEntryScreen} />
+    <Route path="/registration/entropy"
+      component={RegistrationEntropyScreen} />
+    <Route path="/registration/user-type"
+      component={RegistrationUserTypeScreen} />
+    <Route path="/registration/write-phrase"
+      component={RegistrationWritePhraseScreen} />
+    <Route path="/registration/phrase-info"
+      component={RegistrationPhraseInfoScreen} />
+    <Route path="/registration/pin"
+      component={RegistrationPinScreen} />
+    <Route path="/registration/email"
+      component={RegistrationIdentifierScreen} />
+    <Route path="/registration/password"
+      component={RegistrationPasswordScreen} />
+
     <Route path="/chat" component={Chat}>
       <Route path="/conversations" component={Conversations}>
         <Route path="/conversations/:id" component={Conversation} />

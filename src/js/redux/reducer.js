@@ -8,5 +8,6 @@ export default combineReducers({
   dialog: require('./modules/common/dialog').default,
   snackBar: require('./modules/snack-bar').default,
   account: require('./modules/account').default,
+  registration: require('./modules/registration').default,
   leftNav: require('./modules/left-nav').default
 })

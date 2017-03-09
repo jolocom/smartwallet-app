@@ -7,7 +7,7 @@ https://files.slack.com/files-pri/T03K1SCA9-F4FC09FNX/170308_jolocom_wallet_regi
 | ----------------------------------- | ----------------------------------- | -----------------------------------------------------------------|
 | /registration                       | RegistrationNameEntryScreen         | Initial name entry screen                                        |
 | /registration/entropy               | RegistrationEntropyScreen           | Entropy gathering screen                                         |
-| /registration/usertype              | RegistrationUserTypeScreen          | Expert vs. layman choice                                         |
+| /registration/user-type             | RegistrationUserTypeScreen          | Expert vs. layman choice                                         |
 | /registration/write-phrase          | RegistrationWritePhraseScreen       | Showing of the passphrase confirming writing it down             |
 | /registration/phrase-info           | RegistrationPhraseInfoScreen        | Inform user about the implications of Jolocom storing passphrase |
 | /registration/pin                   | RegistrationPinScreen               | PIN code entry                                                   |
@@ -22,14 +22,13 @@ Located under the registration key of the global state, it contains the followin
 * humanName (as in first RegistrationNameEntryScreen)
   * value: always a string, initialized as empty string
   * valid: bool
-  * errorMsg: empty string or message
 * userType: null | "expert" | "layman"
 * maskedImage
   * uncovered: an object fed to the MaskedImage component holding the uncovered areas
 * passphrase:
   * sufficientEntropy: bool, whether enough entropy has been gathered to generate a secure random string
-  * randomString: string, when enough entropy has been gathered
-  * passphrase: string, conversion of random string into passphrase the user can write down
+  * randomString: null or string when enough entropy has been gathered
+  * phrase: string, conversion of random string into passphrase the user can write down
   * writtenDown
 * pin
   * value
@@ -64,8 +63,8 @@ Name / user type / email / password entry
 -----------------------------------------
 
 RegistrationNameEntryScreen is connected to Redux, passing on its data to the pure functional componenent RegistrationNameEntryComponent taking the following props:
-* name
-* onNameChange
+* value
+* onChange
 * onSubmit - connected to goForward()
 * valid
 
