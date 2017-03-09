@@ -9,7 +9,7 @@ import Presentation from '../presentation/entropy'
     'registration:addMaskedImagePoint', 'registration:addEntropyFromDeltas'
   ]
 })
-export default class Dialog extends React.Component {
+export default class RegistrationEntropyScreen extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,
 

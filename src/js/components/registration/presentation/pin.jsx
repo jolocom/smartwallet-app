@@ -3,7 +3,7 @@ import Radium from 'radium'
 
 const Pin = (props) => {
   return <div>
-    <h1>Name entry</h1>
+    <h1>Pin entry</h1>
     <div onClick={props.onSubmit}>Next!</div>
   </div>
 }

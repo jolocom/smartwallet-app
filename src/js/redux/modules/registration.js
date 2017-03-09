@@ -7,7 +7,8 @@ const NEXT_ROUTES = {
   '/registration/entropy': '/registration/user-type',
   '/registration/write-phrase': '/registration/pin',
   '/registration/phrase-info': '/registration/email',
-  '/registration/email': '/registration/paaaword'
+  '/registration/email': '/registration/password',
+  '/registration/password': '/registration/pin'
 }
 const CHECK_BEFORE_SWITCHING = {
   '/registration/user-type': 'userType'
@@ -21,13 +22,13 @@ export const goForward = action('registration', 'goForward', {
       const pathname = state.get('routing').locationBeforeTransitions.pathname
 
       const toCheck = CHECK_BEFORE_SWITCHING[pathname]
-      if (toCheck && !state.getIn(['registration', toCheck]).valid) {
+      if (toCheck && !state.getIn(['registration', toCheck, 'valid'])) {
         return
       }
 
       let nextUrl
-      let userType = state.getIn(['registration', 'userType', 'value'])
       if (pathname === '/registration/user-type') {
+        const userType = state.getIn(['registration', 'userType', 'value'])
         nextUrl = userType === 'expert'
                   ? '/registration/write-phrase'
                   : '/registration/phrase-info'
@@ -72,6 +73,9 @@ export const setPin = action('registration', 'setPin', {
 export const setUsername = action('registration', 'setUsername', {
   expectedParams: ['value']
 })
+export const setEmail = action('registration', 'setEmail', {
+  expectedParams: ['value']
+})
 export const setPassword = action('registration', 'setPassword', {
   expectedParams: ['value']
 })
@@ -93,6 +97,10 @@ const initialState = Immutable.fromJS({
     value: '',
     valid: false
   },
+  pin: {
+    value: '',
+    valid: false
+  },
   userType: {
     value: '',
     valid: false
@@ -111,8 +119,18 @@ const initialState = Immutable.fromJS({
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case goForward.id:
-      return state.merge({})
+    case setUserType.id:
+      const valid = ['expert', 'layman'].indexOf(action.value) !== -1
+      if (action.value && !valid) {
+        throw Error('Invalid user type: ' + action.value)
+      }
+
+      return state.merge({
+        userType: {
+          value: action.value,
+          valid
+        }
+      })
     default:
       return state
   }

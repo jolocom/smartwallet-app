@@ -4,7 +4,7 @@ import Presentation from '../presentation/pin'
 
 @connect({
   props: ['registration'],
-  actions: ['registration:goForward', 'registration:setHumanName']
+  actions: ['registration:goForward', 'registration:setPin']
 })
 export default class RegistrationPinScreen extends React.Component {
   static propTypes = {

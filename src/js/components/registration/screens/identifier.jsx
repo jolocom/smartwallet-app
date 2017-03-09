@@ -6,7 +6,7 @@ import Presentation from '../presentation/identifier'
   props: ['registration'],
   actions: ['registration:goForward', 'registration:setEmail']
 })
-export default class Dialog extends React.Component {
+export default class RegistrationIdentifierScreen extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,
 
