@@ -131,6 +131,15 @@ export default function reducer(state = initialState, action = {}) {
           valid
         }
       })
+    case setPin.id:
+      if (!/[0-9]{0,4}/.test(action.value)) {
+        return state
+      }
+
+      return state.merge({
+        value: action.value,
+        valid: action.value.length === 4
+      })
     default:
       return state
   }
