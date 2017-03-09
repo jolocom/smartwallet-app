@@ -6,6 +6,8 @@ engines:
         - javascript
   eslint:
     enabled: true
+  fixme:
+    enabled: false
 ratings:
   paths:
   - src/**/*
