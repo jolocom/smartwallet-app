@@ -59,7 +59,11 @@ let Node = React.createClass({
 
   render() {
     let NodeFSComponent
-    const initialized = this.state.initialized && this.state.selectedNode
+    let initialized = false
+    if (this.state.initialized && this.state.selectedNode) {
+      initialized = true
+    }
+
     if (initialized) {
       NodeFSComponent = NodeTypes.componentFor(this.state.selectedNode.type)
     }
