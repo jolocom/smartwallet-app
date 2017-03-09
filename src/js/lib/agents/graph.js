@@ -111,9 +111,9 @@ class GraphAgent extends LDPAgent {
       this.baseNode(newNodeUri, writer, title, description, nodeType)
       if (file) {
         if (nodeType === 'image') {
-            writer.addTriple(newNodeUri, PRED.image, file)
+          writer.addTriple(newNodeUri, PRED.image, file)
         } else {
-        writer.addTriple(newNodeUri, PRED.attachment, $rdf.sym(file))
+          writer.addTriple(newNodeUri, PRED.attachment, $rdf.sym(file))
         }
       }
     }).then(() => {
