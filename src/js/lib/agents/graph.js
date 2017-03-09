@@ -51,7 +51,7 @@ class GraphAgent extends LDPAgent {
 
   addImage(uri, dstContainer, writer, image, confidential) {
     if (image instanceof File) {
-      let imgUri = `${dstContainer}files/${Util.randomString(5)}-${image.name}`
+      let imgUri = `${dstContainer}files/${Util.randomString(5)}`
       writer.addTriple(uri, PRED.image, imgUri)
       return this.storeFile(imgUri, null, image, confidential)
     }
@@ -252,7 +252,7 @@ class GraphAgent extends LDPAgent {
               toAdd.add(t.subject, t.predicate, t.object)
             } else {
               // Think about this
-              return reject('A triple is already present in the file!')
+              return reject('DUPLICATE')
             }
             if (i === triples.length - 1) {
               return resolve()

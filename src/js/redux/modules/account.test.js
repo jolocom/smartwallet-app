@@ -323,12 +323,12 @@ describe('Account module reducer', function() {
     })
 
     it('should handle errors correctly', async () => {
-      const thunk = account.doSignup({
-        username: 'user',
-        password: 'pass',
-        name: 'the name',
-        email: 'test@test.com'
-      })
+      // const thunk = account.doSignup({
+      //   username: 'user',
+      //   password: 'pass',
+      //   name: 'the name',
+      //   email: 'test@test.com'
+      // })
       // const backend = {
       //   webId: {getWebId: () => 'http://person/profile/card'},
       //   accounts: {
@@ -344,7 +344,8 @@ describe('Account module reducer', function() {
       // const showMessageDispatch = stub()
       // showMessageThunk(showMessageDispatch)
       // const showMessageAction = showMessageDispatch.calledWithArgs[0]
-      // expect(showMessageAction).to.deep.equal(snackBar.showMessage.buildAction({
+      // expect(showMessageAction)
+      //       .to.deep.equal(snackBar.showMessage.buildAction({
       //   id: showMessageAction.id,
       //   message: expectedMessage
       // }))

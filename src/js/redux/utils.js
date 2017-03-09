@@ -77,7 +77,12 @@ export function connect(params, wantedActions = []) {
   const connector = (component) => {
     const connected = reduxConnect(
       mapStateToProps,
-      mapDispatchToProps
+      mapDispatchToProps,
+      (stateProps, dispatchProps, ownProps) =>
+        Object.assign({}, ownProps, stateProps, dispatchProps),
+      {
+        withRef: true
+      }
     )(component)
     connected.mapStateToProps = mapStateToProps
     connected.mapDispatchToProps = mapDispatchToProps

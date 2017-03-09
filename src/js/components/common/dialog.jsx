@@ -33,7 +33,7 @@ export default class Dialog extends React.Component {
     }
   }
 
-  componentWillUnMount() {
+  componentWillUnmount() {
     this.props.hide({id: this.props.id})
   }
 

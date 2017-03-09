@@ -127,7 +127,12 @@ let NodeAdd = React.createClass({
   },
 
   _handleSubmit() {
-    this.refs.form.submit()
+    let formInstance = this.refs.form
+    if (formInstance.getWrappedInstance) {
+      formInstance = formInstance.getWrappedInstance()
+    }
+
+    formInstance.submit()
     this._handleClose()
   },
 

@@ -381,7 +381,6 @@ let WrappedListItem = connect({
               color={contact.edit ? '#4b132b' : '#d2d2d2'}
               onTouchTap={this._handleToggleEdit}
             />
-
             <ActionDelete
               style={styles.deleteIcon}
               color="#4b132b"

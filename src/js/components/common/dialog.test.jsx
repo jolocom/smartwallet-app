@@ -19,6 +19,7 @@ describe('(Component) Dialog', function() {
         show={show} hide={hide}
         />)
     )
+    wrapper.instance().componentDidMount()
 
     expect(wrapper).to.have.lengthOf(1)
     expect(wrapper.prop('style')['opacity']).to.equal(1)
@@ -36,6 +37,7 @@ describe('(Component) Dialog', function() {
         show={show} hide={hide}
         />)
     )
+    wrapper.instance().componentDidMount()
 
     expect(wrapper).to.have.lengthOf(1)
     expect(wrapper.prop('style')['opacity']).to.not.equal(1)

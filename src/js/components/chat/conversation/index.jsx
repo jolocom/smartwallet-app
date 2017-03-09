@@ -41,7 +41,8 @@ let Conversation = React.createClass({
   },
 
   propTypes: {
-    params: React.PropTypes.object
+    params: React.PropTypes.object,
+    showDialog: React.PropTypes.func.isRequired
   },
 
   getInitialState() {

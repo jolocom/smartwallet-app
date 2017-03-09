@@ -190,6 +190,7 @@ class AclAgent extends HTTPAgent {
     let policyName
     let zombie = false
     let tempFound = false
+    let presentInModel = false
     const predicate = PERMS_PRED_MAP[mode]
 
     this.toAdd = this.toAdd.filter(e => {
@@ -203,6 +204,7 @@ class AclAgent extends HTTPAgent {
     this.model = this.model.filter(entry => {
       const found = entry.user === user && entry.mode.indexOf(predicate) !== -1
       if (found) {
+        presentInModel = true
         policyName = entry.source
         if (this._getAuthAgents(entry.source).length === 1) {
           if (entry.mode.length === 1) {
@@ -218,6 +220,10 @@ class AclAgent extends HTTPAgent {
       }
       return !found || entry.mode.length !== 0
     })
+
+    if (!tempFound && !presentInModel) {
+      throw new Error('Policy does not exist')
+    }
 
     if (tempFound) {
       return
