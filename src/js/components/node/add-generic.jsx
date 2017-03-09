@@ -24,8 +24,6 @@ import {
 } from 'material-ui'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import ActionDescription from 'material-ui/svg-icons/action/description'
-import SocialShare from 'material-ui/svg-icons/social/share'
-import FlatButton from 'material-ui/FlatButton'
 import UploadFileIcon from 'material-ui/svg-icons/file/file-upload'
 import ActionDelete from 'material-ui/svg-icons/navigation/cancel'
 import FileIcon from 'material-ui/svg-icons/editor/attach-file'

@@ -4,6 +4,7 @@ import {Writer} from '../rdf.js'
 import {PRED} from 'lib/namespaces'
 import Util from '../util.js'
 import GraphActions from '../../actions/graph-actions'
+import SnackbarActions from 'actions/snackbar'
 import D3Convertor from 'lib/d3-converter'
 
 import $rdf from 'rdflib'

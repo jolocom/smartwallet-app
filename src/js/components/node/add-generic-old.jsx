@@ -18,7 +18,6 @@ import {
 
 import AddNodeIcon from 'components/icons/addNode-icon.jsx'
 import DocIcon from 'components/icons/doc-icon.jsx'
-import ImageIcon from 'components/icons/image-icon'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'
