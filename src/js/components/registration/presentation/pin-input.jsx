@@ -30,7 +30,7 @@ const STYLES = {
 
 function getCharAt(s, pos) {
   if (!s || pos >= s.length) {
-    return ''
+    return <span>&nbsp;</span>
   }
 
   return s.charAt(pos)
