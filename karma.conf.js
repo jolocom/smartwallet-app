@@ -10,11 +10,18 @@ module.exports = function (config) {
     ],
     preprocessors: {
       // preprocess with webpack and our sourcemap loader
-      'test/index.js': [ 'webpack', 'sourcemap' ]
+      'test/index.js': [ 'webpack', 'sourcemap' ],
+      'src/js/**/!(*.test).jsx?': 'coverage'
     },
-    reporters: [ 'mocha' ], // report results in this format
+    reporters: [ 'mocha', 'coverage' ], // report results in this format
     mochaReporter: {
       showDiff: true
+    },
+    coverageReporter: {
+      type: 'lcovonly',
+      dir: 'coverage',
+      subdir: '.',
+      file: 'lcov.info'
     },
     webpack: webpackConfig,
     webpackServer: {

@@ -1,7 +1,12 @@
 language: node_js
+addons:
+  code_climate:
 node_js:
   - "6"
 
 install: npm install
 before_script: utils/lint-files-changed.sh
 script: npm run test:phantomjs
+after_success:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < ./coverage/lcov.info
