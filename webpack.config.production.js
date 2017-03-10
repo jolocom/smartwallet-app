@@ -1,4 +1,3 @@
-var webpack = require('webpack')
 var path = require('path')
 
 module.exports = {
@@ -23,20 +22,18 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: 'js/'
   },
-  externals:[{
+  externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
   plugins: [],
   module: {
     loaders: [
       {
-        test:   /\.jsx?/,
         loader: 'babel',
         include: path.resolve(__dirname) + '/src/js',
-        exclude: 'node_modules'
+        exclude: ['node_modules', 'test']
       },
       {
-        test: /\.json$/,
         loader: 'json-loader'
       }
     ]
