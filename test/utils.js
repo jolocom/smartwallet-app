@@ -1,5 +1,5 @@
 
-export function stub(options = {}) {
+export default function stub(options = {}) {
   const func = (...args) => {
     func.called = true
     func.calledWithArgs = args
