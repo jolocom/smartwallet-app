@@ -52,6 +52,12 @@ export const addMaskedImagePoint = action(
     expectedParams: ['x', 'y']
   }
 )
+export const setMaskedImageUncovering = action(
+  'registration', 'setMaskedImageUncovering',
+  {
+    expectedParams: ['value']
+  }
+)
 export const addEntropyFromDeltas = action(
   'registration', 'addEntropyFromDeltas',
   {
@@ -106,7 +112,15 @@ const initialState = Immutable.fromJS({
     valid: false
   },
   maskedImage: {
-    uncovered: []
+    uncovered: [
+      [50, 50],
+      [60, 50],
+      [70, 50],
+      [80, 50],
+      [90, 50],
+      [100, 50]
+    ],
+    uncovering: false
   },
   passphrase: {
     sufficientEntropy: false,
@@ -142,6 +156,13 @@ export default function reducer(state = initialState, action = {}) {
           valid: action.value.length === 4
         }
       })
+    case setMaskedImageUncovering.id:
+      return state.setIn(['maskedImage', 'uncovering'], action.value)
+    case addMaskedImagePoint.id:
+      return state.updateIn(
+        ['maskedImage', 'uncovered'],
+        list => list.push([action.x, action.y])
+      )
     default:
       return state
   }

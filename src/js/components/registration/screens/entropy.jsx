@@ -6,7 +6,8 @@ import Presentation from '../presentation/entropy'
   props: ['registration'],
   actions: [
     'registration:goForward',
-    'registration:addMaskedImagePoint', 'registration:addEntropyFromDeltas'
+    'registration:addMaskedImagePoint', 'registration:setMaskedImageUncovering',
+    'registration:addEntropyFromDeltas'
   ]
 })
 export default class RegistrationEntropyScreen extends React.Component {
@@ -15,14 +16,17 @@ export default class RegistrationEntropyScreen extends React.Component {
 
     goForward: React.PropTypes.func.isRequired,
     addEntropyFromDeltas: React.PropTypes.func.isRequired,
-    addMaskedImagePoint: React.PropTypes.func.isRequired
+    addMaskedImagePoint: React.PropTypes.func.isRequired,
+    setMaskedImageUncovering: React.PropTypes.func.isRequired
   }
 
   render() {
     return <Presentation
       imagePointsUncovered={this.props.registration.maskedImage.uncovered}
+      imageUncovering={this.props.registration.maskedImage.uncovering}
+      onImageUncoveringChange={this.props.setMaskedImageUncovering}
       valid={this.props.registration.passphrase.sufficientEntropy}
-      onMouseMovement={this.props.addEntropyFromDeltas}
+      onImagePointUncoverd={this.props.addMaskedImagePoint}
       onMaskedImagePoint={this.props.addMaskedImagePoint}
       onSubmit={this.props.goForward}
     />
