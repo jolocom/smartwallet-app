@@ -27,15 +27,34 @@ module.exports = {
   }],
   plugins: [],
   module: {
-    loaders: [
-      {
-        loader: 'babel',
-        include: path.resolve(__dirname) + '/src/js',
-        exclude: ['node_modules', 'test']
+    loaders: [{
+      test: (abspath) => {
+        var reg = /\.jsx?$/
+        if (!reg.test(abspath)) {
+          return false
+        }
+
+        reg = /.+\.test\.jsx?$/
+        if (reg.test(abspath)) {
+          return false
+        }
+
+        reg = /.+test/
+        if (reg.test(abspath)) {
+          return false
+        }
+        return true
       },
-      {
-        loader: 'json-loader'
-      }
-    ]
-  }
+      loader: 'babel',
+      include: [
+        path.join(__dirname, 'src', 'js')
+      ],
+      exclude: [ /node_modules/, /test/, /\.test\.jsx?$/ ]
+    },
+    {
+      test: /\.json$/,
+      loader: 'json-loader'
+    }]
+  },
+  debug: true
 }
