@@ -1,25 +1,26 @@
 import React from 'react'
 import Reflux from 'reflux'
+import { connect } from 'redux/utils'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton, AppBar} from 'material-ui'
 import {Link} from 'react-router'
 
-import SnackbarActions from 'actions/snackbar'
-
 import AvailabilityStore from 'stores/availability'
-
-import Account from 'actions/account'
-import AccountStore from 'stores/account'
 
 import Utils from 'lib/util'
 
 let Signup = React.createClass({
   mixins: [
-    Reflux.connect(AvailabilityStore, 'available'),
-    Reflux.connect(AccountStore, 'account')
+    Reflux.connect(AvailabilityStore, 'available')
   ],
+
+  propTypes: {
+    showSnackBarMessage: React.PropTypes.func.isRequired,
+    doSignup: React.PropTypes.func.isRequired,
+    account: React.PropTypes.object
+  },
 
   contextTypes: {
     muiTheme: React.PropTypes.object,
@@ -58,9 +59,10 @@ let Signup = React.createClass({
 
   signup() {
     if (this.state.email !== this.state.email2) {
-      SnackbarActions.showMessage('The two emails do not match.')
+      this.props.showSnackBarMessage('The two emails do not match.')
       return
     }
+
     this.disableSubmit()
 
     let signupData = {
@@ -69,11 +71,11 @@ let Signup = React.createClass({
       email: this.state.email,
       password: this.state.password
     }
-    Account.signup(signupData)
+    this.props.doSignup(signupData)
   },
 
   componentDidUpdate() {
-    if (this.state.account && this.state.account.username) {
+    if (this.props.account && this.props.account.username) {
       this.context.router.push('/graph')
     }
   },
@@ -88,44 +90,6 @@ let Signup = React.createClass({
 
   goBack() {
     this.context.router.push('/')
-  },
-
-  _onUsernameChange(e) {
-    this.setState({
-      username: e.target.value.toLowerCase()
-    })
-    // Availability.check(e.target.value.toLowerCase())
-  },
-
-  _onNameChange(e) {
-    this.setState({
-      name: e.target.value
-    })
-  },
-
-  _onEmailChange(e) {
-    this.setState({
-      email: e.target.value
-    })
-  },
-
-  _onEmail2Change(e) {
-    this.setState({
-      email2: e.target.value
-    })
-  },
-
-  _onPasswordChange(e) {
-    this.setState({
-      password: e.target.value
-    })
-    // Sign up button is re-enabled once all required fields are non-empty
-    if ((this.state.username !== '') && (this.state.email !== '') &&
-      (this.state.email2 !== '')) {
-      this.setState({
-        disabledSubmit: false
-      })
-    }
   },
 
   _handleHelperTextUserNameFocus() {
@@ -270,7 +234,7 @@ let Signup = React.createClass({
         <div style={styles.logo}>
           <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
         </div>
-        {this.state.account.emailVerifyScreen
+        {this.props.account.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>
             <p style={styles.signUpMessage}>
               Thank you for signing up to Little Sister!<br />
@@ -298,7 +262,6 @@ let Signup = React.createClass({
                     inputStyle={
                       Object.assign({}, styles.input, styles.username)
                     }
-                    onChange={this._onUsernameChange}
                     onFocus={this._handleHelperTextUserNameFocus}
                     onBlur={this._handleHelperTextUserNameBlur}
                     required
@@ -315,7 +278,6 @@ let Signup = React.createClass({
                     validations="isWords"
                     validationError={this.errorMessages.name}
                     inputStyle={styles.input}
-                    onChange={this._onNameChange}
                     onFocus={this._handleHelperTextGivenNameFocus}
                     onBlur={this._handleHelperTextGivenNameBlur}
                     />
@@ -333,7 +295,6 @@ let Signup = React.createClass({
                     validations="isEmail"
                     validationError={this.errorMessages.email}
                     inputStyle={styles.input}
-                    onChange={this._onEmailChange}
                     required
                     />
                   <FormsyText
@@ -344,7 +305,6 @@ let Signup = React.createClass({
                     validations="isEmail"
                     validationError={this.errorMessages.email}
                     inputStyle={styles.input}
-                    onChange={this._onEmail2Change}
                     required
                     />
                   <FormsyText
@@ -353,7 +313,6 @@ let Signup = React.createClass({
                     autoComplete="new-password"
                     floatingLabelText="Password*"
                     inputStyle={styles.input}
-                    onChange={this._onPasswordChange}
                     required
                     />
                 </div>
@@ -379,4 +338,11 @@ let Signup = React.createClass({
   }
 })
 
-export default Radium(Signup)
+export default connect({
+  props: ['account'],
+  actions: [
+    'snack-bar:showSnackBarMessage',
+    'account:doSignup',
+    'router:pushRoute'
+  ]
+})(Radium(Signup))

@@ -28,18 +28,28 @@ module.exports = {
     noParse: [
       /node_modules\/sinon/
     ],
-    loaders: [
-      {
-        test:   /\.jsx?/,
-        loader: 'babel',
-        include: [path.join(__dirname, 'src', 'js'), path.join(__dirname, 'test')],
-        exclude: 'node_modules'
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      }
-    ]
+    loaders: [{
+      test: /\.jsx?/,
+      loader: 'babel',
+      include: [
+        path.join(__dirname, 'src', 'js'), path.join(__dirname, 'test')
+      ],
+      exclude: 'node_modules'
+    },
+    {
+      test: /\.json$/,
+      loader: 'json-loader'
+    }],
+    postLoaders: [{
+      test: /\.jsx?$/,
+      loader: 'istanbul-instrumenter',
+      exclude: [
+        /\.test\.jsx?$/
+      ],
+      include: [
+        path.join(__dirname, 'src', 'js')
+      ]
+    }]
   },
   externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}',

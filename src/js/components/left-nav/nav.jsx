@@ -9,10 +9,10 @@ import {
   FontIcon,
   Avatar
 } from 'material-ui'
+import { connect } from 'redux/utils'
 
 import Header from './header.jsx'
 
-import AccountActions from 'actions/account'
 import UserAvatar from 'components/common/user-avatar.jsx'
 import GraphIcon from 'components/icons/graph-icon.jsx'
 
@@ -32,11 +32,12 @@ let Nav = React.createClass({
     profile: React.PropTypes.any
   },
 
-  getInitialState() {
-    return {
-      selected: 'graph',
-      drawerOpen: false
-    }
+  propTypes: {
+    open: React.PropTypes.bool.isRequired,
+    selected: React.PropTypes.string.isRequired,
+    doLogout: React.PropTypes.func.isRequired,
+    showLeftNav: React.PropTypes.func.isRequired,
+    hideLeftNav: React.PropTypes.func.isRequired
   },
 
   getStyles() {
@@ -46,9 +47,9 @@ let Nav = React.createClass({
         color: '#ffffff',
         fontWeight: '400',
         width: '80vw',
-        transform: this.state.drawerOpen
+        transform: this.props.open
           ? 'translateX(0)'
-          : 'translateX(-80vw)'
+          : 'translateX(-100vw)'
         // width: 0.8 * window.innerWidth,
         // transform: this.refs.drawer
         // ? `translate3d(${this.refs.drawer.state.open ? 0
@@ -95,31 +96,27 @@ let Nav = React.createClass({
     }
   },
 
-  show() {
-    this.setState({drawerOpen: true})
-  },
-
-  hide() {
-    this.setState({drawerOpen: false})
-  },
-
   editProfile(event) {
-    this.setState({drawerOpen: false})
+    this.props.hideLeftNav()
     this.context.router.push('profile')
     event.preventDefault()
   },
 
   goto(url) {
     this.context.router.push(url)
-    this.setState({drawerOpen: false})
+    this.props.hideLeftNav()
   },
 
   logout() {
-    AccountActions.logout()
+    this.props.doLogout()
   },
 
   drawerRequestChange(open, reason) {
-    this.setState({drawerOpen: open})
+    if (open) {
+      this.props.showLeftNav()
+    } else {
+      this.props.hideLeftNav()
+    }
   },
 
   render() {
@@ -134,13 +131,13 @@ let Nav = React.createClass({
         ref="drawer"
         docked={false}
         containerStyle={styles.drawerBody}
-        open={this.state.drawerOpen}
+        open={this.props.open}
         onRequestChange={this.drawerRequestChange}
         >
-        <Header onClose={this.hide} />
+        <Header onClose={this.props.hideLeftNav} />
         <div>
           <SelectableList
-            value={this.state.selected}
+            value={this.props.selected}
             onChange={this._handleNavChange}>
             <Badge
               badgeContent={10}
@@ -161,7 +158,7 @@ let Nav = React.createClass({
           </SelectableList>
           <Divider style={styles.menuDivider} />
           <SelectableList
-            value={this.state.selected}
+            value={this.props.selected}
             onChange={this._handleNavChange}
             >
             <ListItem primaryText="Profile"
@@ -202,4 +199,7 @@ let Nav = React.createClass({
 
 })
 
-export default Nav
+export default connect({
+  props: ['leftNav.open', 'leftNav.selected'],
+  actions: ['account:doLogout', 'left-nav:showLeftNav', 'left-nav:hideLeftNav']
+})(Nav)
