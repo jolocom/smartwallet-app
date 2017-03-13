@@ -7,7 +7,7 @@ const Entropy = (props) => {
     <h1>Entropy</h1>
     <MaskedImage
       image={IMAGE_DATA_URL}
-      uncovered={props.imagePointsUncovered}
+      uncoveredPaths={props.imageUncoveredPaths}
       uncovering={props.imageUncovering}
       onPointUncovered={props.onImagePointUncoverd}
       onUncoveringChange={props.onImageUncoveringChange}
@@ -17,9 +17,7 @@ const Entropy = (props) => {
 }
 Entropy.propTypes = {
   imageUncovering: React.PropTypes.bool.isRequired,
-  imagePointsUncovered: React.PropTypes.arrayOf(
-    React.PropTypes.arrayOf(React.PropTypes.number)
-  ).isRequired,
+  imageUncoveredPaths: React.PropTypes.any.isRequired,
 
   onImagePointUncoverd: React.PropTypes.func.isRequired,
   onImageUncoveringChange: React.PropTypes.func.isRequired,

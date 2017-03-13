@@ -4,9 +4,8 @@ import React from 'react'
 class MaskedImage extends React.Component {
   static propTypes = {
     image: React.PropTypes.string.isRequired,
-    uncovered: React.PropTypes.arrayOf(
-      React.PropTypes.arrayOf(React.PropTypes.number)
-    ).isRequired,
+    // Type checking too slow for paths
+    uncoveredPaths: React.PropTypes.any.isRequired,
     uncovering: React.PropTypes.bool.isRequired,
     onPointUncovered: React.PropTypes.func.isRequired,
     onUncoveringChange: React.PropTypes.func.isRequired
@@ -52,17 +51,24 @@ class MaskedImage extends React.Component {
       onMouseUp={() => this.onRevealEnd()}
     >
       <defs>
-        <clipPath id="mask">
-          {props && props.uncovered.map(([x, y], idx) => <circle
-            key={idx} r="5" cx={x} cy={y}
-          />)}
-        </clipPath>
+        <mask id="mask">
+          {props && props.uncoveredPaths.map((path, pathIdx) =>
+            <polyline key={pathIdx} points={
+              path.map(point => `${point[0]},${point[1]}`).join(' ')
+            } style={{
+              strokeWidth: '20px', stroke: '#F00',
+              strokeLinecap: 'round', strokeLinejoin: 'round',
+              fill: 'rgba(0, 0, 0, 0)'
+            }} />
+          )}
+        </mask>
       </defs>
 
       <image
         x="0" y="0" width="240" height="150"
         href={props.image}
-        style={{clipPath: 'url(#mask)'}} />
+        mask="url(#mask)"
+      />
     </svg>)
   }
 }
