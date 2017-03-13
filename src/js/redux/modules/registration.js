@@ -55,7 +55,51 @@ export const addMaskedImagePoint = action(
 export const addEntropyFromDeltas = action(
   'registration', 'addEntropyFromDeltas',
   {
-    expectedParams: ['x', 'y', 'z']
+    expectedParams: ['dx', 'dy'],
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        if (getState().getIn([
+          'registration', 'passphrase', 'randomString'])
+        ) {
+          return
+        }
+
+        const entropy = services.entropy
+        entropy.addFromDelta(params.dx)
+        entropy.addFromDelta(params.dy)
+        if (params.dz) {
+          entropy.addFromDelta(params.dz)
+        }
+
+        dispatch(setEntropyStatus.buildAction({
+          sufficientEntropy: entropy.isReady(),
+          progress: entropy.getProgress()
+        }))
+
+        if (!getState().getIn(['registration', 'passphrase', 'randomString']) &&
+            entropy.isReady()) {
+          dispatch(setRandomString(entropy.getRandomPhrase(4)))
+        }
+      }
+    }
+  }
+)
+const setEntropyStatus = action(
+  'registration', 'setEntropyStatus',
+  {
+    expectedParams: ['sufficientEntropy', 'progress']
+  }
+)
+const setPassphrase = action(
+  'registration', 'setPassphrase',
+  {
+    expectedParams: ['passphrase']
+  }
+)
+const setRandomString = action(
+  'registration', 'setRandomString',
+  {
+    expectedParams: ['randomString']
   }
 )
 export const setPassphraseWrittenDown = action(
@@ -130,6 +174,17 @@ export default function reducer(state = initialState, action = {}) {
           value: action.value,
           valid
         }
+      })
+    case setEntropyStatus.id:
+      return state.merge({
+        passphrase: {
+          sufficientEntropy: action.sufficientEntropy,
+          progress: action.progress
+        }
+      })
+    case setRandomString.id:
+      return state.mergeIn(['passphrase'], {
+        randomString: action.randomString
       })
     default:
       return state

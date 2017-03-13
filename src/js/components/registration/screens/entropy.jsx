@@ -22,7 +22,9 @@ export default class RegistrationEntropyScreen extends React.Component {
     return <Presentation
       imagePointsUncovered={this.props.registration.maskedImage.uncovered}
       valid={this.props.registration.passphrase.sufficientEntropy}
-      onMouseMovement={this.props.addEntropyFromDeltas}
+      onMouseMovement={(x, y) => this.props.addEntropyFromDeltas({
+        dx: x, dy: y
+      })}
       onMaskedImagePoint={this.props.addMaskedImagePoint}
       onSubmit={this.props.goForward}
     />
