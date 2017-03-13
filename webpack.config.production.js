@@ -28,28 +28,12 @@ module.exports = {
   plugins: [],
   module: {
     loaders: [{
-      test: (abspath) => {
-        var reg = /\.jsx?$/
-        if (!reg.test(abspath)) {
-          return false
-        }
-
-        reg = /.+\.test\.jsx?$/
-        if (reg.test(abspath)) {
-          return false
-        }
-
-        reg = /.+test/
-        if (reg.test(abspath)) {
-          return false
-        }
-        return true
-      },
+      test: /\.jsx?$/,
       loader: 'babel',
       include: [
-        path.join(__dirname, 'src', 'js')
+        path.join(__dirname, 'src', 'js'), path.join(__dirname, 'test')
       ],
-      exclude: [ /node_modules/, /test/, /\.test\.jsx?$/ ]
+      exclude: /node_modules/
     },
     {
       test: /\.json$/,
