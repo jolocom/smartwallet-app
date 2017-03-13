@@ -3,16 +3,17 @@ import Radium from 'radium'
 
 const UserType = (props) => {
   return <div>
-    <h1>User type</h1>
+    <h1>Hi !, are you...</h1>
     <div onClick={() => props.onChange('expert')}>
       {props.value === 'expert' && '*'}
-      Expert
+      ...a total tech Geek and want to be in absolute control?
     </div>
     <div onClick={() => props.onChange('layman')}>
       {props.value === 'layman' && '*'}
-      Layman
+      ...the laid-back type, who doesn't want any hassle.
     </div>
     <div onClick={props.onSubmit}>Next!</div>
+    <div onClick={() => { /*why snackbar*/ }}> WHY?</div>
   </div>
 }
 UserType.propTypes = {
