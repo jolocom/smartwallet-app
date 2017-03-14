@@ -1,4 +1,6 @@
 import Immutable from 'immutable'
+import Mnemonic from 'bitcore-mnemonic'
+import * as buffer from 'buffer'
 import { action } from './'
 import { pushRoute } from './router'
 
@@ -58,9 +60,9 @@ export const addEntropyFromDeltas = action(
     expectedParams: ['dx', 'dy'],
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        if (getState().getIn([
-          'registration', 'passphrase', 'randomString'])
-        ) {
+        if (getState().getIn(
+          ['registration', 'passphrase', 'phrase']
+        )) {
           return
         }
 
@@ -76,9 +78,12 @@ export const addEntropyFromDeltas = action(
           progress: entropy.getProgress()
         }))
 
-        if (!getState().getIn(['registration', 'passphrase', 'randomString']) &&
+        if (!getState().getIn(['registration', 'passphrase', 'phrase']) &&
             entropy.isReady()) {
-          dispatch(setRandomString(entropy.getRandomPhrase(4)))
+          const randomNumbers = entropy.getRandomNumbers(12)
+          dispatch(setPassphrase(
+            new Mnemonic(buffer.Buffer.from(randomNumbers), Mnemonic.Words.ENGLISH).toString()
+          ))
         }
       }
     }
@@ -93,7 +98,7 @@ const setEntropyStatus = action(
 const setPassphrase = action(
   'registration', 'setPassphrase',
   {
-    expectedParams: ['passphrase']
+    expectedParams: ['phrase']
   }
 )
 const setRandomString = action(
@@ -154,6 +159,7 @@ const initialState = Immutable.fromJS({
   },
   passphrase: {
     sufficientEntropy: false,
+    progress: 0,
     randomString: null,
     phrase: null,
     writtenDown: false
@@ -185,6 +191,10 @@ export default function reducer(state = initialState, action = {}) {
     case setRandomString.id:
       return state.mergeIn(['passphrase'], {
         randomString: action.randomString
+      })
+    case setPassphrase.id:
+      return state.mergeIn(['passphrase'], {
+        phrase: action.phrase
       })
     default:
       return state

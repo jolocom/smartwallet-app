@@ -18,7 +18,7 @@ export default class EntropyService {
     return this.generator.isReady()
   }
 
-  getRandomPhrase(wordCount) {
-    return this.generator.randomWords(wordCount).join(' ')
+  getRandomNumbers(count) {
+    return this.generator.randomWords(count).map(s => parseInt(s))
   }
 }
