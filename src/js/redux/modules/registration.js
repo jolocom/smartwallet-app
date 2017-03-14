@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { action } from './'
 import { pushRoute } from './router'
+import toggleable from './generic/toggleable'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -46,10 +47,10 @@ export const setHumanName = action('registration', 'setHumanName', {
 export const setUserType = action('registration', 'setUserType', {
   expectedParams: ['value']
 })
-export const addMaskedImagePoint = action(
-  'registration', 'addMaskedImagePoint',
+export const setMaskedImageUncovering = action(
+  'registration', 'setMaskedImageUncovering',
   {
-    expectedParams: ['x', 'y']
+    expectedParams: ['value']
   }
 )
 export const addEntropyFromDeltas = action(
@@ -80,6 +81,11 @@ export const setPassword = action('registration', 'setPassword', {
   expectedParams: ['value']
 })
 
+const passwordVisibility = toggleable('registration', 'password', {
+  initialValue: false
+})
+export const {toggle: togglePassword} = passwordVisibility.actions
+
 const initialState = Immutable.fromJS({
   humanName: {
     value: '',
@@ -106,7 +112,7 @@ const initialState = Immutable.fromJS({
     valid: false
   },
   maskedImage: {
-    uncovered: []
+    uncovering: false
   },
   passphrase: {
     sufficientEntropy: false,
@@ -118,6 +124,11 @@ const initialState = Immutable.fromJS({
 })
 
 export default function reducer(state = initialState, action = {}) {
+  state = state.setIn(
+    ['password', 'visible'],
+    passwordVisibility.reducer(state, action)
+  )
+
   switch (action.type) {
     case setUserType.id:
       const valid = ['expert', 'layman'].indexOf(action.value) !== -1
@@ -131,6 +142,19 @@ export default function reducer(state = initialState, action = {}) {
           valid
         }
       })
+    case setPin.id:
+      if (!/^[0-9]{0,4}$/.test(action.value)) {
+        return state
+      }
+
+      return state.merge({
+        pin: {
+          value: action.value,
+          valid: action.value.length === 4
+        }
+      })
+    case setMaskedImageUncovering.id:
+      return state.setIn(['maskedImage', 'uncovering'], action.value)
     default:
       return state
   }
