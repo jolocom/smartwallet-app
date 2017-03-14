@@ -1,7 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
 
-
 const STYLES = {
   container: {
     position: 'relative',
@@ -26,7 +25,6 @@ const STYLES = {
     left: '-50000px'
   }
 }
-
 
 function getCharAt(s, pos) {
   if (!s || pos >= s.length) {
