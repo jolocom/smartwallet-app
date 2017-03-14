@@ -79,9 +79,12 @@ export const setEmail = action('registration', 'setEmail', {
 export const setPassword = action('registration', 'setPassword', {
   expectedParams: ['value']
 })
-export const setRepeatedPassword = action('registration', 'setRepeatedPassword', {
-  expectedParams: ['value']
-})
+export const setRepeatedPassword = action(
+  'registration', 'setRepeatedPassword',
+  {
+    expectedParams: ['value']
+  }
+)
 
 const initialState = Immutable.fromJS({
   humanName: {
@@ -136,27 +139,33 @@ export default function reducer(state = initialState, action = {}) {
         }
       })
     case setPassword.id:
-      let repeatedValue = state.get('password').get('repeated');
-      let validPassword = action.value === repeatedValue && action.value.length > 0
+      const repeatedValue = state.get('password').get('repeated')
+      const validPassword = (
+        action.value === repeatedValue &&
+        action.value.length > 0
+      )
+
       return state.mergeIn(
         ['password'],
         {
           value: action.value,
-          repeated: repeatedValue,
           valid: validPassword
         }
-      );
+      )
     case setRepeatedPassword.id:
-      let passwordValue = state.get('password').get('value');
-      let validRepeatedPassword = action.value === passwordValue && action.value.length > 0
+      const passwordValue = state.get('password').get('value')
+      const validRepeatedPassword = (
+        action.value === passwordValue &&
+        action.value.length > 0
+      )
+
       return state.mergeIn(
         ['password'],
         {
-          value: passwordValue,
           repeated: action.value,
           valid: validRepeatedPassword
         }
-      );
+      )
     default:
       return state
   }
