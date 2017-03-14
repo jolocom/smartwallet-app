@@ -131,6 +131,13 @@ export default function reducer(state = initialState, action = {}) {
           valid
         }
       })
+    case setHumanName.id:
+      return state.merge({
+        humanName: {
+          value: action.value,
+          valid: action.value !== ''
+        }
+      })
     default:
       return state
   }
