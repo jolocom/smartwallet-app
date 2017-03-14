@@ -33,7 +33,7 @@ export function connect(params, wantedActions = []) {
         prop = prop.split('.')
       }
 
-      const pair = [prop.slice(-1), state.getIn(prop)]
+      const pair = [prop.slice(-1)[0], state.getIn(prop)]
 
       if (typeof pair[1] === 'undefined') {
         throw new Error(
