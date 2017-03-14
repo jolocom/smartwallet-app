@@ -1,4 +1,6 @@
 import Immutable from 'immutable'
+import Mnemonic from 'bitcore-mnemonic'
+import * as buffer from 'buffer'
 import { action } from './'
 import { pushRoute } from './router'
 
@@ -46,16 +48,63 @@ export const setHumanName = action('registration', 'setHumanName', {
 export const setUserType = action('registration', 'setUserType', {
   expectedParams: ['value']
 })
-export const addMaskedImagePoint = action(
-  'registration', 'addMaskedImagePoint',
+export const setMaskedImageUncovering = action(
+  'registration', 'setMaskedImageUncovering',
   {
-    expectedParams: ['x', 'y']
+    expectedParams: ['value']
   }
 )
 export const addEntropyFromDeltas = action(
   'registration', 'addEntropyFromDeltas',
   {
-    expectedParams: ['x', 'y', 'z']
+    expectedParams: ['dx', 'dy'],
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        if (getState().getIn(
+          ['registration', 'passphrase', 'phrase']
+        )) {
+          return
+        }
+
+        const entropy = services.entropy
+        entropy.addFromDelta(params.dx)
+        entropy.addFromDelta(params.dy)
+        if (params.dz) {
+          entropy.addFromDelta(params.dz)
+        }
+
+        dispatch(setEntropyStatus.buildAction({
+          sufficientEntropy: entropy.isReady(),
+          progress: entropy.getProgress()
+        }))
+
+        if (!getState().getIn(['registration', 'passphrase', 'phrase']) &&
+            entropy.isReady()) {
+          const randomNumbers = entropy.getRandomNumbers(12)
+          dispatch(setPassphrase(
+            new Mnemonic(buffer.Buffer.from(randomNumbers), Mnemonic.Words.ENGLISH).toString()
+          ))
+        }
+      }
+    }
+  }
+)
+const setEntropyStatus = action(
+  'registration', 'setEntropyStatus',
+  {
+    expectedParams: ['sufficientEntropy', 'progress']
+  }
+)
+const setPassphrase = action(
+  'registration', 'setPassphrase',
+  {
+    expectedParams: ['phrase']
+  }
+)
+const setRandomString = action(
+  'registration', 'setRandomString',
+  {
+    expectedParams: ['randomString']
   }
 )
 export const setPassphraseWrittenDown = action(
@@ -113,10 +162,11 @@ const initialState = Immutable.fromJS({
     valid: false
   },
   maskedImage: {
-    uncovered: []
+    uncovering: false
   },
   passphrase: {
     sufficientEntropy: false,
+    progress: 0,
     randomString: null,
     phrase: null,
     writtenDown: false
@@ -166,6 +216,34 @@ export default function reducer(state = initialState, action = {}) {
           valid: validRepeatedPassword
         }
       )
+    case setEntropyStatus.id:
+      return state.merge({
+        passphrase: {
+          sufficientEntropy: action.sufficientEntropy,
+          progress: action.progress
+        }
+      })
+    case setRandomString.id:
+      return state.mergeIn(['passphrase'], {
+        randomString: action.randomString
+      })
+    case setPassphrase.id:
+      return state.mergeIn(['passphrase'], {
+        phrase: action.phrase
+      })
+    case setPin.id:
+      if (!/^[0-9]{0,4}$/.test(action.value)) {
+        return state
+      }
+
+      return state.merge({
+        pin: {
+          value: action.value,
+          valid: action.value.length === 4
+        }
+      })
+    case setMaskedImageUncovering.id:
+      return state.setIn(['maskedImage', 'uncovering'], action.value)
     default:
       return state
   }
