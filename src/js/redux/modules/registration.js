@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { action } from './'
 import { pushRoute } from './router'
+import toggleable from './generic/toggleable'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -80,6 +81,11 @@ export const setPassword = action('registration', 'setPassword', {
   expectedParams: ['value']
 })
 
+const passwordVisibility = toggleable('registration', 'password', {
+  initialValue: false
+})
+export const {toggle: togglePassword} = passwordVisibility.actions
+
 const initialState = Immutable.fromJS({
   humanName: {
     value: '',
@@ -118,6 +124,11 @@ const initialState = Immutable.fromJS({
 })
 
 export default function reducer(state = initialState, action = {}) {
+  state = state.setIn(
+    ['password', 'visible'],
+    passwordVisibility.reducer(state, action)
+  )
+
   switch (action.type) {
     case setUserType.id:
       const valid = ['expert', 'layman'].indexOf(action.value) !== -1
