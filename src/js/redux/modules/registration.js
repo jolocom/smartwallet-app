@@ -46,10 +46,10 @@ export const setHumanName = action('registration', 'setHumanName', {
 export const setUserType = action('registration', 'setUserType', {
   expectedParams: ['value']
 })
-export const addMaskedImagePoint = action(
-  'registration', 'addMaskedImagePoint',
+export const setMaskedImageUncovering = action(
+  'registration', 'setMaskedImageUncovering',
   {
-    expectedParams: ['x', 'y']
+    expectedParams: ['value']
   }
 )
 export const addEntropyFromDeltas = action(
@@ -106,7 +106,7 @@ const initialState = Immutable.fromJS({
     valid: false
   },
   maskedImage: {
-    uncovered: []
+    uncovering: false
   },
   passphrase: {
     sufficientEntropy: false,
@@ -142,6 +142,8 @@ export default function reducer(state = initialState, action = {}) {
           valid: action.value.length === 4
         }
       })
+    case setMaskedImageUncovering.id:
+      return state.setIn(['maskedImage', 'uncovering'], action.value)
     default:
       return state
   }
