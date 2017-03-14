@@ -105,7 +105,7 @@ class GraphAgent extends LDPAgent {
    * @param {string} nodeType - The type [image / text] of the node.
    * @param {bool} confidential - If the img is to be confidential.
    */
-  
+
   createNode(currentUser, centerNode, nodeInfo) {
     const writer = new Writer()
     const {confidential, title, description, nodeType, image} = nodeInfo
