@@ -288,6 +288,7 @@ let ProfileNode = React.createClass({
       let fields = group.fields.filter((field) => {
         return renderEmptyFields || field.value
       })
+
       // dont render empty groups
       if (fields.length) {
         result.push(
@@ -350,7 +351,7 @@ let ProfileNode = React.createClass({
     if (!this.isMe()) {
       menuItems.push('disconnect')
       menuItems.push('viewSharedNodes')
-      fabItems.push('chat')
+      menuItems.push('chat')
     }
 
     menuItems.push('copyUrl')

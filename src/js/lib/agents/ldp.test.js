@@ -44,7 +44,7 @@ describe('LDPAgent', function () {
         agent.proxiedHTTP._fetch = async (url, options) => {
           expect(options.method).to.equal('GET')
           expect(url).to.equal(
-            agent.proxiedHTTP._proxify('http://foo.com/test'))
+            agent.proxiedHTTP.__proxify('http://foo.com/test'))
           return {
             status: 200, ok: true, headers: DUMMY_TURTLE_HEADERS,
             text: async () => `
@@ -94,7 +94,8 @@ describe('LDPAgent', function () {
         agent.proxiedHTTP._fetch = async (url, options) => {
           expect(options.method).to.equal('GET')
           expect(url).to.equal(
-            agent.proxiedHTTP._proxify('http://foo.com/test'))
+            agent.proxiedHTTP.__proxify('http://foo.com/test')
+          )
           return {
             status: 200, ok: true, headers: DUMMY_TURTLE_HEADERS,
             text: async () => `
@@ -120,7 +121,7 @@ _:b foaf:name "Bob" .
         agent.proxiedHTTP._fetch = async (url, options) => {
           expect(options.method).to.equal('HEAD')
           expect(url).to.equal(
-            agent.proxiedHTTP._proxify('http://foo.com/test'))
+            agent.proxiedHTTP.__proxify('http://foo.com/test'))
           return {
             status: 200, ok: true, headers: {
               get: (field) => ({
@@ -141,7 +142,7 @@ _:b foaf:name "Bob" .
       const agent = new LDPAgent()
       agent.proxiedHTTP._fetch = async (url, options) => {
         expect(options.method).to.equal('HEAD')
-        expect(url).to.equal(agent.proxiedHTTP._proxify('http://foo.com/test'))
+        expect(url).to.equal(agent.proxiedHTTP.__proxify('http://foo.com/test'))
         return {
           status: 200, ok: true, headers: {
             get: (field) => ({ 'Content-Type': 'text/rdf' })[field]
@@ -159,7 +160,7 @@ _:b foaf:name "Bob" .
       const agent = new LDPAgent()
       agent.proxiedHTTP._fetch = async (url, options) => {
         expect(options.method).to.equal('HEAD')
-        expect(url).to.equal(agent.proxiedHTTP._proxify('http://foo.com/test'))
+        expect(url).to.equal(agent.proxiedHTTP.__proxify('http://foo.com/test'))
         return {
           status: 200, ok: true, headers: {
             get: (field) => ({

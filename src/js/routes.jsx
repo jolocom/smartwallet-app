@@ -13,8 +13,9 @@ import Chat from 'components/chat'
 import Conversations from 'components/chat/conversations'
 import NewConversation from 'components/chat/conversation/new'
 import Conversation from 'components/chat/conversation'
-import Contacts from 'components/contacts/contacts.jsx'
-import Contact from 'components/contacts/contact.jsx'
+
+import Contacts from 'components/contacts/contacts'
+import Contact from 'components/contacts/contact'
 
 import Login from 'components/accounts/login'
 import Signup from 'components/accounts/signup'

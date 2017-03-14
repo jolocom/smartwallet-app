@@ -146,7 +146,7 @@ export default Reflux.createStore({
 
   onRemoveParticipant(uri, participant) {
     const oldParticipants = this.state.participants.slice(0)
-    console.log(uri, participant)
+
     this.state.participants = this.state.participants.filter((p) => {
       return p.webId !== participant
     })
