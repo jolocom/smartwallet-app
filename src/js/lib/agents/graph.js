@@ -57,6 +57,7 @@ class GraphAgent extends LDPAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
+  // Not used right now
   addImage(uri, dstContainer, writer, image, confidential) {
     if (!writer || !image) {
       throw new Error('addImage: not enough arguments')
@@ -104,6 +105,7 @@ class GraphAgent extends LDPAgent {
    * @param {string} nodeType - The type [image / text] of the node.
    * @param {bool} confidential - If the img is to be confidential.
    */
+  
   createNode(currentUser, centerNode, nodeInfo) {
     const writer = new Writer()
     const {confidential, title, description, nodeType, image} = nodeInfo
@@ -265,7 +267,8 @@ class GraphAgent extends LDPAgent {
       PRED.knows.uri,
       PRED.isRelatedTo.uri,
       PRED.isRelatedTo_HTTP.uri,
-      PRED.passport.uri
+      PRED.passport.uri,
+      PRED.Image.uri
     ]
     const neighbours = triples.filter((t) =>
       links.indexOf(t.predicate.uri) >= 0)
