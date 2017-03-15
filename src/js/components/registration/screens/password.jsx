@@ -32,7 +32,7 @@ export default class RegistrationPasswordScreen extends React.Component {
       visibleValue={password.visibleValue ? 'input': 'password'}
       visibleRepeatedValue={password.visibleRepeatedValue ? 'input': 'password'}
       onTogglePasswordValue={this.props.togglePasswordValue}
-      onToggleRepeatedPasswordValue={this.props.togglePasswordRepeatedValue}
+      onTogglePasswordRepeatedValue={this.props.togglePasswordRepeatedValue}
       onChangePassword={this.props.setPassword}
       onChangeRepeatedPassword={this.props.setRepeatedPassword}
       onSubmit={this.props.goForward}
