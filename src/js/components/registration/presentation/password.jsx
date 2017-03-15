@@ -2,7 +2,9 @@ import React from 'react'
 import Radium from 'radium'
 
 function Password(props){
+
     return <div >
+    <h1>Please enter a password:</h1>
       <input type='password' value={ props.value }  onChange={e => props.onChangePassword(e.target.value)} />
       <br/>
 	  <input type='password' value={ props.repeatedValue }  onChange={e => props.onChangeRepeatedPassword(e.target.value)} />

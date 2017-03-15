@@ -18,7 +18,7 @@ const UserType = (props) => {
   var messageSelect = 'Please make a selection. If you are not sure, checkout \
    \'WHY?\''
   return <div>
-    <h1>Hi {props.user === '' ? props.user : 'TODO: Connect to Name'}
+    <h1>Hi {props.user}
     !, are you...</h1>
     <div>
       <RaisedButton onClick={() => props.onChange('expert')}>

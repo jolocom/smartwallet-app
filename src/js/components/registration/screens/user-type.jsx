@@ -31,7 +31,7 @@ export default class RegistrationUserTypeScreen extends React.Component {
         closeConfirmDialog={this.props.closeConfirmDialog}
         configSimpleDialog={this.props.configSimpleDialog}
         showSimpleDialog={this.props.showSimpleDialog}
-        user={this.props.registration.humanName}
+        user={this.props.registration.humanName.value}
       />
     </div>
   }
