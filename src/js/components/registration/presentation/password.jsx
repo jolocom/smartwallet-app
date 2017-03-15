@@ -5,8 +5,9 @@ function Password(props){
     return <div >
       <input type={ props.visibleValue } value={ props.value }  onChange={e => props.onChangePassword(e.target.value)} />
       <br/>
-      <div onClick={props.onTogglePasswordValue}>toggle</div>
+      <div onClick={e => props.onTogglePasswordValue(e.target.value)}>toggle</div>
 	  <input type={ props.visibleRepeatedValue } value={ props.repeatedValue }  onChange={e => props.onChangeRepeatedPassword(e.target.value)} />
+	  <div onClick={e => props.onToggleRepeatedPasswordValue(e.target.value)}>toggle</div>
 	  <div onClick={ props.onSubmit }>Next!</div>
 	</div>;
 }

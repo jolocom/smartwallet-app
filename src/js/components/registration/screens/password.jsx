@@ -19,6 +19,8 @@ export default class RegistrationPasswordScreen extends React.Component {
     goForward: React.PropTypes.func.isRequired,
     setPassword: React.PropTypes.func.isRequired,
     setRepeatedPassword: React.PropTypes.func.isRequired,
+    togglePasswordRepeatedValue: React.PropTypes.func.isRequired,
+    togglePasswordValue: React.PropTypes.func.isRequired,
   }
 
   render() {
@@ -30,7 +32,7 @@ export default class RegistrationPasswordScreen extends React.Component {
       visibleValue={password.visibleValue ? 'input': 'password'}
       visibleRepeatedValue={password.visibleRepeatedValue ? 'input': 'password'}
       onTogglePasswordValue={this.props.togglePasswordValue}
-      onToggleRepeatedPasswordValue={this.props.toggleRepeatedPasswordValue}
+      onToggleRepeatedPasswordValue={this.props.togglePasswordRepeatedValue}
       onChangePassword={this.props.setPassword}
       onChangeRepeatedPassword={this.props.setRepeatedPassword}
       onSubmit={this.props.goForward}

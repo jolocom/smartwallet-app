@@ -195,7 +195,7 @@ export default function reducer(state = initialState, action = {}) {
       visibleRepeatedValue: passwordRepeatedValueVisibility.reducer(
         state.get('password').get('visibleRepeatedValue'),
         action
-      ),
+      )
     }
   )
 
