@@ -3,6 +3,7 @@ import Mnemonic from 'bitcore-mnemonic'
 import * as buffer from 'buffer'
 import { action } from './'
 import { pushRoute } from './router'
+import toggleable from './generic/toggleable'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -135,6 +136,11 @@ export const setRepeatedPassword = action(
   }
 )
 
+const passwordVisibility = toggleable('registration', 'password', {
+  initialValue: false
+})
+export const {toggle: togglePassword} = passwordVisibility.actions
+
 const initialState = Immutable.fromJS({
   humanName: {
     value: '',
@@ -175,6 +181,11 @@ const initialState = Immutable.fromJS({
 })
 
 export default function reducer(state = initialState, action = {}) {
+  state = state.setIn(
+    ['password', 'visible'],
+    passwordVisibility.reducer(state.get("password").get("visible"), action)
+  )
+
   switch (action.type) {
     case setUserType.id:
       const valid = ['expert', 'layman'].indexOf(action.value) !== -1
