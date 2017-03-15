@@ -23,10 +23,10 @@ export default function reducer(state = initialState, action = {}) {
     case toggleSimpleDialog.id:
     case hideSimpleDialog.id:
     case showSimpleDialog.id:
-      return state.merge(simpleDialogVisibility(state, action))
+      return state.set('visible', simpleDialogVisibility.reducer(state.visible, action))
     case configSimpleDialog.id:
       console.log(configSimpleDialog.getParams(action))
-      return state.merge(...configSimpleDialog.getParams(action))
+      return state.merge(configSimpleDialog.getParams(action))
     default:
       return state
   }
