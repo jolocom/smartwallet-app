@@ -265,6 +265,14 @@ export default function reducer(state = initialState, action = {}) {
         }
       })
 
+    case setEmail.id:
+      return state.merge({
+        email: {
+          value: action.value,
+          valid: /([\w.]+)@([\w.]+)\.(\w+)/.test(action.value)
+        }
+      }
+    )
     default:
       return state
   }
