@@ -4,7 +4,13 @@ import Presentation from '../presentation/password'
 
 @connect({
   props: ['registration'],
-  actions: ['registration:goForward', 'registration:setPassword', 'registration:setRepeatedPassword']
+  actions: [
+    'registration:goForward',
+    'registration:setPassword',
+    'registration:togglePasswordValue',
+    'registration:setRepeatedPassword',
+    'registration:togglePasswordRepeatedValue',
+  ]
 })
 
 export default class RegistrationPasswordScreen extends React.Component {
@@ -16,10 +22,15 @@ export default class RegistrationPasswordScreen extends React.Component {
   }
 
   render() {
+    const password = this.props.registration.password
     return <Presentation
-      value={this.props.registration.password.value}
-      repeatedValue={this.props.registration.password.repeated}
-      valid={this.props.registration.password.valid}
+      value={password.value}
+      repeatedValue={password.repeated}
+      valid={password.valid}
+      visibleValue={password.visibleValue ? 'input': 'password'}
+      visibleRepeatedValue={password.visibleRepeatedValue ? 'input': 'password'}
+      onTogglePasswordValue={this.props.togglePasswordValue}
+      onToggleRepeatedPasswordValue={this.props.toggleRepeatedPasswordValue}
       onChangePassword={this.props.setPassword}
       onChangeRepeatedPassword={this.props.setRepeatedPassword}
       onSubmit={this.props.goForward}

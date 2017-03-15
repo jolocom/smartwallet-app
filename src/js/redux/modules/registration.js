@@ -136,10 +136,15 @@ export const setRepeatedPassword = action(
   }
 )
 
-const passwordVisibility = toggleable('registration', 'password', {
+const passwordValueVisibility = toggleable('registration', 'passwordValue', {
   initialValue: false
 })
-export const {toggle: togglePassword} = passwordVisibility.actions
+export const {toggle: togglePasswordValue} = passwordValueVisibility.actions
+
+const passwordRepeatedValueVisibility = toggleable('registration', 'passwordRepeatedValue', {
+  initialValue: false
+})
+export const {toggle: togglePasswordRepeatedValue} = passwordRepeatedValueVisibility.actions
 
 const initialState = Immutable.fromJS({
   humanName: {
@@ -181,9 +186,17 @@ const initialState = Immutable.fromJS({
 })
 
 export default function reducer(state = initialState, action = {}) {
-  state = state.setIn(
-    ['password', 'visible'],
-    passwordVisibility.reducer(state.get("password").get("visible"), action)
+  state = state.mergeIn(
+    ['password'],{
+      visibleValue: passwordValueVisibility.reducer(
+        state.get('password').get('visibleValue'),
+        action
+      ),
+      visibleRepeatedValue: passwordRepeatedValueVisibility.reducer(
+        state.get('password').get('visibleRepeatedValue'),
+        action
+      ),
+    }
   )
 
   switch (action.type) {
@@ -214,7 +227,7 @@ export default function reducer(state = initialState, action = {}) {
         }
       )
     case setRepeatedPassword.id:
-      const passwordValue = state.get('password').get('value')
+      const passwordValue = state.get('password').get('visibleValue')
       const validRepeatedPassword = (
         action.value === passwordValue &&
         action.value.length > 0
