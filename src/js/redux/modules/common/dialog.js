@@ -12,7 +12,7 @@ export const hideDialog = hide
 export const toggle = action('common/dialog', 'toggle', {
   expectedParams: ['id']
 })
-export const toggleDialog = hide
+export const toggleDialog = toggle
 
 const initialState = new Map({
 })

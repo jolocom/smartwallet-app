@@ -126,7 +126,7 @@ const initialState = Immutable.fromJS({
 export default function reducer(state = initialState, action = {}) {
   state = state.setIn(
     ['password', 'visible'],
-    passwordVisibility.reducer(state, action)
+    passwordVisibility.reducer(state.get("password").get("visible"), action)
   )
 
   switch (action.type) {
