@@ -5,11 +5,11 @@ export function genericReducer(actions, {initialState}) {
   return function reducer(state = initialState, action = {}) {
     switch (action.type) {
       case actions.show.id:
-        return state.set('visible', true)
+        return true
       case actions.hide.id:
-        return state.set('visible', false)
+        return false
       case actions.toggle.id:
-        return state.update('visible', value => !value)
+        return !state
       default:
         return state
     }
