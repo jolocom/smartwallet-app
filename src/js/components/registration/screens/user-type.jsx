@@ -7,7 +7,7 @@ import Presentation from '../presentation/user-type'
   actions: ['registration:goForward', 'registration:setUserType',
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog',
-    'simple-dialog:openSimpleDialog', 'simple-dialog:closeSimpleDialog']
+    'simple-dialog:showSimpleDialog', 'simple-dialog:configSimpleDialog']
 })
 export default class RegistrationUserTypeScreen extends React.Component {
   static propTypes = {
@@ -16,8 +16,8 @@ export default class RegistrationUserTypeScreen extends React.Component {
     setUserType: React.PropTypes.func.isRequired,
     openConfirmDialog: React.PropTypes.func.isRequired,
     closeConfirmDialog: React.PropTypes.func.isRequired,
-    openSimpleDialog: React.PropTypes.func.isRequired,
-    closeSimpleDialog: React.PropTypes.func.isRequired
+    configSimpleDialog: React.PropTypes.func.isRequired,
+    showSimpleDialog: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -29,8 +29,8 @@ export default class RegistrationUserTypeScreen extends React.Component {
         onSubmit={this.props.goForward}
         openConfirmDialog={this.props.openConfirmDialog}
         closeConfirmDialog={this.props.closeConfirmDialog}
-        openSimpleDialog={this.props.openSimpleDialog}
-        closeSimpleDialog={this.props.closeSimpleDialog}
+        configSimpleDialog={this.props.configSimpleDialog}
+        showSimpleDialog={this.props.showSimpleDialog}
         user={this.props.registration.humanName}
       />
     </div>

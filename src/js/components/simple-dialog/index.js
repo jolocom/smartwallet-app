@@ -5,16 +5,16 @@ import { FlatButton, Dialog } from 'material-ui'
 
 @connect({
   props: ['simpleDialog'],
-  actions: ['simple-dialog:close']
+  actions: ['simple-dialog:hideSimpleDialog']
 })
-export default class simpleDialog extends React.Component {
+export default class SimpleDialog extends React.Component {
   static propTypes = {
-    close: React.PropTypes.func,
+    hideSimpleDialog: React.PropTypes.func,
     simpleDialog: React.PropTypes.object
   }
 
   _handleOK() {
-    this.props.close()
+    this.props.hideSimpleDialog()
   }
 
   render() {
@@ -22,7 +22,8 @@ export default class simpleDialog extends React.Component {
 
     const simpleActions = [
       <FlatButton
-        label="OK"
+        label={this.props.simpleDialog.primaryActionText === undefined ? 'OK'
+        : this.props.simpleDialog.primaryActionText}
         primary
         onTouchTap={OKHandler}
       />
@@ -31,7 +32,7 @@ export default class simpleDialog extends React.Component {
     return <Dialog
       actions={simpleActions}
       modal={false}
-      open={this.props.simpleDialog.open}
+      open={this.props.simpleDialog.visible}
       onRequestClose={this.handleClose}
     >
       {this.props.simpleDialog.message}

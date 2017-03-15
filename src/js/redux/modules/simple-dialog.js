@@ -1,27 +1,32 @@
 import { Map } from 'immutable'
 import { action } from './'
+import toggleable from './generic/toggleable'
 
-export const openSimple = action('simple-dialog', 'openSimple', {
+const simpleDialogVisibility = toggleable('simple-dialog', 'simpleDialog', {
+  initialValue: false
+})
+export const {toggle: toggleSimpleDialog, show: showSimpleDialog,
+hide: hideSimpleDialog } = simpleDialogVisibility.actions
+
+export const configSimpleDialogMessage = action('simple-dialog', 'configSimpleDialogMessage', {
   expectedParams: ['message', 'primaryActionText']
 })
-export const openSimpleDialog = openSimple
-export const close = action('simple-dialog', 'close', {
-  expectedParams: []
-})
-export const closeSimpleDialog = close
-
+export const configSimpleDialog = configSimpleDialogMessage
 const initialState = new Map({
-  open: false,
+  visible: false,
   message: '',
   primaryActionText: 'OK'
 })
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case openSimple.id:
-      return state.merge({open: true, ...openSimple.getParams(action)})
-    case close.id:
-      return state.set('open', false)
+    case toggleSimpleDialog.id:
+    case hideSimpleDialog.id:
+    case showSimpleDialog.id:
+      return state.merge(simpleDialogVisibility(state, action))
+    case configSimpleDialog.id:
+      console.log(configSimpleDialog.getParams(action))
+      return state.merge(...configSimpleDialog.getParams(action))
     default:
       return state
   }

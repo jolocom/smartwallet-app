@@ -17,7 +17,6 @@ const UserType = (props) => {
    we\'ll save your passphrase for you')
   var messageSelect = 'Please make a selection. If you are not sure, checkout \
    \'WHY?\''
-
   return <div>
     <h1>Hi {props.user === '' ? props.user : 'TODO: Connect to Name'}
     !, are you...</h1>
@@ -36,12 +35,12 @@ const UserType = (props) => {
     <div>
       <FlatButton onClick={props.valid ? () =>
         props.openConfirmDialog(messageConfirm, 'Confirm', props.onSubmit)
-        : () => props.openSimpleDialog(messageSelect, 'OK')}>
+        : () => { props.configSimpleDialog(messageSelect); props.showSimpleDialog() }}>
           Next!
       </FlatButton>
     </div>
     <div>
-      <FlatButton onClick={() => props.openSimpleDialog(messageWhy, 'OK')}>
+      <FlatButton onClick={() => { props.configSimpleDialog(messageWhy); props.showSimpleDialog() }}>
       WHY?
       </FlatButton>
     </div>
@@ -54,8 +53,8 @@ UserType.propTypes = {
   onSubmit: React.PropTypes.func.isRequired,
   openConfirmDialog: React.PropTypes.func,
   closeConfirmDialog: React.PropTypes.func,
-  openSimpleDialog: React.PropTypes.func,
-  closeSimpleDialog: React.PropTypes.func,
+  configSimpleDialog: React.PropTypes.func,
+  showSimpleDialog: React.PropTypes.func,
   user: React.PropTypes.string
 }
 
