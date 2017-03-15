@@ -23,6 +23,7 @@ function Password(props) {
 			onChange={
 				e => props.onChangeRepeatedPassword(e.target.value)
 			}
+
 		/>
 		<div onClick={
 			e => props.onTogglePasswordRepeatedValue(e.target.value)
