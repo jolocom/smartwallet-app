@@ -199,6 +199,7 @@ export default function reducer(state = initialState, action = {}) {
           valid
         }
       })
+
     case setPassword.id:
       const repeatedValue = state.get('password').get('repeated')
       const validPassword = (
@@ -255,6 +256,15 @@ export default function reducer(state = initialState, action = {}) {
       })
     case setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
+
+    case setHumanName.id:
+      return state.merge({
+        humanName: {
+          value: action.value,
+          valid: action.value !== ''
+        }
+      })
+
     default:
       return state
   }
