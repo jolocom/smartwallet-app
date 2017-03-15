@@ -3,12 +3,13 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { routerMiddleware } from 'react-router-redux'
 import backendMiddleware from './middleware/backend'
 import Backend from '../backend'
+import createServices from '../services'
 
 export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
   const reduxRouterMiddleware = routerMiddleware(history)
   const middleware = [
-    backendMiddleware(new Backend()),
+    backendMiddleware(new Backend(), createServices()),
     reduxRouterMiddleware
   ]
 

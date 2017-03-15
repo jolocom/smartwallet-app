@@ -1,14 +1,21 @@
 import React from 'react'
 import Radium from 'radium'
 
-const Password = (props) => {
-  return <div>
-    <h1>Enter a password</h1>
-    <div onClick={props.onSubmit}>Next!</div>
-  </div>
+function Password(props){
+    return <div >
+      <input type='password' value={ props.value }  onChange={e => props.onChangePassword(e.target.value)} />
+      <br/>
+	  <input type='password' value={ props.repeatedValue }  onChange={e => props.onChangeRepeatedPassword(e.target.value)} />
+	  <div onClick={props.onSubmit}>Next!</div>
+	</div>;
 }
+
 Password.propTypes = {
-  onSubmit: React.PropTypes.func.isRequired
+  onSubmit: React.PropTypes.func.isRequired,
+  onChangeRepeatedPassword: React.PropTypes.func.isRequired,
+  onChangePassword: React.PropTypes.func.isRequired,
+  value: React.PropTypes.string.isRequired,
+  repeatedValue:  React.PropTypes.string.isRequired,
 }
 
 export default Radium(Password)

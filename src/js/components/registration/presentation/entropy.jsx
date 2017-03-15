@@ -3,7 +3,10 @@ import Radium from 'radium'
 import MaskedImage from './masked-image'
 
 const Entropy = (props) => {
-  return <div>
+  return <div
+    style={{ width: '400px', height: '400px', backgroundColor: '#EEE' }}
+    onMouseMove={(e) => props.onMouseMovement(e.clientX, e.clientY)}
+  >
     <h1>Entropy</h1>
     <MaskedImage
       image={IMAGE_DATA_URL}
@@ -16,8 +19,8 @@ const Entropy = (props) => {
   </div>
 }
 Entropy.propTypes = {
+  onMouseMovement: React.PropTypes.func.isRequired,
   imageUncovering: React.PropTypes.bool.isRequired,
-  imageUncoveredPaths: React.PropTypes.any.isRequired,
 
   onImagePointUncoverd: React.PropTypes.func.isRequired,
   onImageUncoveringChange: React.PropTypes.func.isRequired,
