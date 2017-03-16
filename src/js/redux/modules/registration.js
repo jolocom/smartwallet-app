@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import Mnemonic from 'bitcore-mnemonic'
 import * as buffer from 'buffer'
-import { action } from './'
+import { action, asyncAction } from './'
 import { pushRoute } from './router'
 import toggleable from './generic/toggleable'
 
@@ -122,6 +122,12 @@ export const setPin = action('registration', 'setPin', {
 })
 export const setUsername = action('registration', 'setUsername', {
   expectedParams: ['value']
+})
+export const checkUserName = asyncAction('registration', 'checkUserName', {
+  expectedParams: ['username'],
+  promise: (backend) => new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), 2000)
+  })
 })
 export const setEmail = action('registration', 'setEmail', {
   expectedParams: ['value']
@@ -264,7 +270,12 @@ export default function reducer(state = initialState, action = {}) {
           valid: action.value !== ''
         }
       })
-
+    case checkUserName.id:
+      return state.merge({})
+    case checkUserName.id_success:
+      return state.merge({})
+    case checkUserName.id_fail:
+      return state.merge({})
     case setEmail.id:
       return state.merge({
         email: {
