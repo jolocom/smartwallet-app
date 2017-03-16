@@ -1,32 +1,47 @@
 import React from 'react'
 import Radium from 'radium'
-
+import Theme from '../../../styles/jolocom-theme'
 
 const STYLES = {
   container: {
     position: 'relative',
     width: '200px',
     height: '40px',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    fontFamily: Theme.contentFontFamily
   },
   inputBall: {
     position: 'relative',
     display: 'inline-block',
     verticalAlign: 'center',
-    color: '#FFF',
-    width: '40px',
-    height: '40px',
-    borderRadius: '20px',
-    backgroundColor: '#000',
-    lineHeight: '40px',
+    color: Theme.palette.alternateTextColor,
+    margin: '0 3px',
+    width: '24px',
+    height: '24px',
+    borderRadius: '12px',
+    backgroundColor: Theme.palette.textColor,
+    lineHeight: '24px',
     textAlign: 'center'
   },
   focusedBall: {
-    backgroundColor: '#5F5'
+    backgroundColor: Theme.palette.primary1Color
   },
   numberInput: {
     position: 'absolute',
     left: '-50000px'
+  },
+  clear: {
+    display: 'inline-block',
+    color: Theme.palette.alternateTextColor,
+    backgroundColor: Theme.palette.textColor,
+    fontFamily: 'monospace',
+    lineHeight: '14px',
+    textAlign: 'center',
+    borderRadius: '7px',
+    width: '14px',
+    height: '14px',
+    marginLeft: '3px',
+    cursor: 'pointer'
   }
 }
 
@@ -85,10 +100,13 @@ class PinInput extends React.Component {
           {getCharAt(props.value, idx)}
         </div>
       ))}
-      {!props.disabled && <div onClick={() => this.clearAndFocus()}
-        style={{display: 'inline-block'}}>
-        BOOM!
-      </div>}
+      {!props.disabled && (props.value.length || null) &&
+        <div onClick={() => this.clearAndFocus()}
+          style={STYLES.clear}
+        >
+        x
+        </div>
+      }
 
       <div>
         <input style={STYLES.numberInput}

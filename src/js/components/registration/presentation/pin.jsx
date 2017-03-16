@@ -1,9 +1,16 @@
 import React from 'react'
 import Radium from 'radium'
+import Theme from '../../../styles/jolocom-theme'
 import PinInput from './pin-input'
 
+const STYLES = {
+  root: {
+    backgrondColor: Theme.jolocom.gray1
+  }
+}
+
 const Pin = (props) => {
-  return <div>
+  return <div style={STYLES.root}>
     <h1>Create a PIN for secure login</h1>
     <PinInput
       value={props.value}
