@@ -4,15 +4,31 @@ import PinInput from './pin-input'
 
 const Pin = (props) => {
   return <div>
-    <h1>Pin entry</h1>
-    <PinInput value={props.value} onChange={props.onChange} />
-    <div onClick={props.onSubmit}>Next!</div>
+    <h1>Create a PIN for secure login</h1>
+    <PinInput
+      value={props.value}
+      disabled={props.confirm}
+      onChange={props.onChange} />
+    {props.confirm && <div onClick={props.onChangeRequest}>
+      Change secure PIN
+    </div>}
+    {props.confirm && <div>
+      This secure PIN will be needed for transactions and
+      saving information on the Blockchain.
+    </div>}
+    <div onClick={props.onSubmit}>
+      {!props.valid && 'Almost done'}
+      {props.valid && !props.confirm && 'Done'}
+      {props.valid && props.confirm && 'All right'}
+    </div>
   </div>
 }
 Pin.propTypes = {
   value: React.PropTypes.string.isRequired,
   valid: React.PropTypes.bool.isRequired,
+  confirm: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
+  onChangeRequest: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired
 }
 

@@ -21,6 +21,9 @@ const STYLES = {
     lineHeight: '40px',
     textAlign: 'center'
   },
+  focusedBall: {
+    backgroundColor: '#5F5'
+  },
   numberInput: {
     position: 'absolute',
     left: '-50000px'
@@ -39,10 +42,32 @@ function getCharAt(s, pos) {
 class PinInput extends React.Component {
   static propTypes = {
     value: React.PropTypes.string.isRequired,
+    disabled: React.PropTypes.bool,
     onChange: React.PropTypes.func.isRequired
   }
 
   componentDidMount() {
+    this.refs.input.focus()
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.disabled) {
+      this.refs.input.blur()
+    }
+  }
+
+  handleKeyDown(e) {
+    if (e.which === 8) {
+      e.preventDefault()
+    }
+  }
+
+  handleChange(e) {
+    this.props.onChange(e.target.value)
+  }
+
+  clearAndFocus() {
+    this.props.onChange('')
     this.refs.input.focus()
   }
 
@@ -51,19 +76,27 @@ class PinInput extends React.Component {
 
     return (<div style={STYLES.container}>
       {[0, 1, 2, 3].map((idx) => (
-        <div key={idx} style={STYLES.inputBall}
+        <div key={idx} style={[
+          STYLES.inputBall,
+          idx === props.value.length && STYLES.focusedBall
+        ]}
           onClick={() => this.refs.input.focus()}
         >
           {getCharAt(props.value, idx)}
         </div>
       ))}
+      {!props.disabled && <div onClick={() => this.clearAndFocus()}
+        style={{display: 'inline-block'}}>
+        BOOM!
+      </div>}
 
       <div>
         <input style={STYLES.numberInput}
           type="number"
           ref="input"
           value={props.value}
-          onChange={(e) => props.onChange(e.target.value)}
+          onKeyDown={(e) => this.handleKeyDown(e)}
+          onChange={(e) => this.handleChange(e)}
         />
       </div>
     </div>)
