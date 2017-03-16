@@ -29,6 +29,9 @@ export default class RegistrationPasswordScreen extends React.Component {
       value={password.value}
       repeatedValue={password.repeated}
       valid={password.valid}
+      lowerCase={password.lowerCase ? 'hidden': ''}
+      upperCase={password.upperCase ? 'hidden': ''}
+      digitWarning={password.digit ? 'hidden': ''}
       visibleValue={password.visibleValue ? 'input': 'password'}
       visibleRepeatedValue={password.visibleRepeatedValue ? 'input': 'password'}
       onTogglePasswordValue={this.props.togglePasswordValue}

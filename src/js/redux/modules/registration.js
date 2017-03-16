@@ -162,6 +162,9 @@ const initialState = Immutable.fromJS({
   password: {
     value: '',
     repeated: '',
+    lowerCase:false,
+    upperCase: false,
+    digit: false,
     valid: false
   },
   pin: {
@@ -184,6 +187,32 @@ const initialState = Immutable.fromJS({
   },
   complete: false
 })
+
+const isPasswordValid = (passwordValue, repeatedValue) => {
+  return repeatedValue === passwordValue &&
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(passwordValue)
+}
+
+const passwordCharacters = (password) =>{
+  let lowerCaseExist = false
+  let upperCaseExist = false
+  let digitExist = false
+  if(/[a-z]/.test(password)){
+    lowerCaseExist = true
+  }
+  if(/[A-Z]/.test(password)){
+    upperCaseExist = true
+  }
+  if (/[0-9]/.test(password)) {
+    digitExist = true
+  }
+  const checkResult = {
+    lowerCase: lowerCaseExist,
+    upperCase: upperCaseExist,
+    digit: digitExist
+  }
+  return checkResult
+}
 
 export default function reducer(state = initialState, action = {}) {
   state = state.mergeIn(
@@ -215,24 +244,22 @@ export default function reducer(state = initialState, action = {}) {
 
     case setPassword.id:
       const repeatedValue = state.get('password').get('repeated')
-      const validPassword = (
-        action.value === repeatedValue &&
-        action.value.length > 0
-      )
-
+      const validPassword = isPasswordValid(action.value, repeatedValue)
+      const characters = passwordCharacters(action.value)
+      console.log('we\'re heeeeeeeeeeeeeeeeeere =================== ', validPassword)
       return state.mergeIn(
         ['password'],
         {
           value: action.value,
-          valid: validPassword
+          valid: validPassword,
+          lowerCase: characters.lowerCase,
+          upperCase: characters.upperCase,
+          digit: characters.digit
         }
       )
     case setRepeatedPassword.id:
-      const passwordValue = state.get('password').get('visibleValue')
-      const validRepeatedPassword = (
-        action.value === passwordValue &&
-        action.value.length > 0
-      )
+      const passwordValue = state.get('password').get('value')
+      const validRepeatedPassword = isPasswordValid(action.value, passwordValue)
 
       return state.mergeIn(
         ['password'],

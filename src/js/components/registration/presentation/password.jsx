@@ -16,6 +16,15 @@ function Password(props) {
 		}>
 			toggle!
 		</div>
+		<div  hidden={ props.lowerCase }>
+			lower case please !
+		</div>
+		<div hidden={ props.upperCase } >
+			upper case please !
+		</div>
+		<div hidden={props.digitWarning} >
+			digit please !
+		</div>
 
 		<input
 			type={props.visibleRepeatedValue}
@@ -43,7 +52,10 @@ Password.propTypes = {
 	value: React.PropTypes.string.isRequired,
 	visibleValue: React.PropTypes.string.isRequired,
 	repeatedValue: React.PropTypes.string.isRequired,
-	visibleRepeatedValue: React.PropTypes.string.isRequired
+	visibleRepeatedValue: React.PropTypes.string.isRequired,
+	lowerCase: React.PropTypes.string.isRequired,
+  upperCase: React.PropTypes.string.isRequired,
+  digitWarning: React.PropTypes.string.isRequired
 }
 
 export default Radium(Password)
