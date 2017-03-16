@@ -41,6 +41,7 @@ Located under the registration key of the global state, it contains the followin
   * valid
 * password
   * value
+  * repeated
   * valid
 * complete: bool, if all fields are filled out and valid
 
@@ -56,6 +57,7 @@ Redux actions
 * switchToExpertMode()
 * setPin(value)
 * setUsername(value)
+* checkUsername(username) - async action, resolves if available
 * setPassword(value)
 
 
