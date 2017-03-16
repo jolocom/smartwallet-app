@@ -5,10 +5,11 @@ import Theme from '../../../styles/jolocom-theme'
 const STYLES = {
   container: {
     position: 'relative',
-    width: '200px',
-    height: '40px',
-    overflow: 'hidden',
-    fontFamily: Theme.contentFontFamily
+    width: '140px',
+    height: '24px',
+    textAlign: 'center',
+    padding: '0 20px',
+    overflow: 'hidden'
   },
   inputBall: {
     position: 'relative',
@@ -19,19 +20,26 @@ const STYLES = {
     width: '24px',
     height: '24px',
     borderRadius: '12px',
-    backgroundColor: Theme.palette.textColor,
+    backgroundColor: Theme.palette.disabledColor,
     lineHeight: '24px',
     textAlign: 'center'
   },
   focusedBall: {
     backgroundColor: Theme.palette.primary1Color
   },
+  filledBall: {
+    backgroundColor: Theme.palette.textColor
+  },
   numberInput: {
     position: 'absolute',
     left: '-50000px'
   },
   clear: {
-    display: 'inline-block',
+    display: 'block',
+    boxSizing: 'border-box',
+    position: 'absolute',
+    right: '10px',
+    top: (24 / 2 - 14 / 2) + 'px',
     color: Theme.palette.alternateTextColor,
     backgroundColor: Theme.palette.textColor,
     fontFamily: 'monospace',
@@ -40,6 +48,7 @@ const STYLES = {
     borderRadius: '7px',
     width: '14px',
     height: '14px',
+    paddingLeft: '1px',
     marginLeft: '3px',
     cursor: 'pointer'
   }

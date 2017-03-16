@@ -1,17 +1,47 @@
 import React from 'react'
 import Radium from 'radium'
+import {RaisedButton} from 'material-ui'
 import Theme from '../../../styles/jolocom-theme'
 import PinInput from './pin-input'
 
 const STYLES = {
   root: {
-    backgrondColor: Theme.jolocom.gray1
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: Theme.jolocom.gray4
+  },
+  header: {
+    marginTop: '50px',
+    marginBottom: '30px',
+    color: '#A4A4A4'
+  },
+  input: {
+    display: 'inline-block'
+  },
+  button: {
+    display: 'inline-block',
+    marginTop: '30px'
+  }
+}
+
+function getButtonLabel(props) {
+  if (!props.valid) {
+    return 'Almost done'
+  }
+  if (props.confirm) {
+    return 'All right'
+  } else {
+    return 'Done'
   }
 }
 
 const Pin = (props) => {
   return <div style={STYLES.root}>
-    <h1>Create a PIN for secure login</h1>
+    <div style={STYLES.header}>Create a PIN for secure login</div>
     <PinInput
       value={props.value}
       disabled={props.confirm}
@@ -23,10 +53,13 @@ const Pin = (props) => {
       This secure PIN will be needed for transactions and
       saving information on the Blockchain.
     </div>}
-    <div onClick={props.onSubmit}>
-      {!props.valid && 'Almost done'}
-      {props.valid && !props.confirm && 'Done'}
-      {props.valid && props.confirm && 'All right'}
+
+    <div style={STYLES.button}>
+      <RaisedButton
+        secondary={props.valid}
+        label={getButtonLabel(props)}
+        onClick={props.onSubmit}
+      />
     </div>
   </div>
 }
