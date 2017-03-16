@@ -246,7 +246,6 @@ export default function reducer(state = initialState, action = {}) {
       const repeatedValue = state.get('password').get('repeated')
       const validPassword = isPasswordValid(action.value, repeatedValue)
       const characters = passwordCharacters(action.value)
-      console.log('we\'re heeeeeeeeeeeeeeeeeere =================== ', validPassword)
       return state.mergeIn(
         ['password'],
         {
