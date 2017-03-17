@@ -81,7 +81,7 @@ let App = React.createClass({
   },
 
   isPublicRoute(path = this.props.location.pathname) {
-    return path === '/' &&
+    return path === '/' ||
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
   },
 
