@@ -14,10 +14,10 @@ import { connect } from 'redux/utils'
 import Header from './header.jsx'
 
 import UserAvatar from 'components/common/user-avatar.jsx'
-import GraphIcon from 'components/icons/graph-icon.jsx'
 
 import ProfileStore from 'stores/profile'
-import Badge from 'material-ui/Badge'
+
+import {navItems} from 'routes'
 
 let SelectableList = makeSelectable(List)
 
@@ -47,16 +47,10 @@ let Nav = React.createClass({
         color: '#ffffff',
         fontWeight: '400',
         width: '80vw',
+        maxWidth: '320px',
         transform: this.props.open
           ? 'translateX(0)'
           : 'translateX(-100vw)'
-        // width: 0.8 * window.innerWidth,
-        // transform: this.refs.drawer
-        // ? `translate3d(${this.refs.drawer.state.open ? 0
-        //   : -(this.refs.drawer.getMaxTranslateX() + 40)}px, 0, 0)`
-        //   : '0px'
-        // transform: `translate3d(${this.refs.drawer.state.open ? 0
-        //   : this.refs.drawer.getMaxTranslateX()}px, 0, 0)`
       },
       menuItem: {
         color: '#ffffff',
@@ -119,13 +113,42 @@ let Nav = React.createClass({
     }
   },
 
+  renderNavItems() {
+    const styles = this.getStyles()
+
+    return navItems.map((item) => {
+      let icon
+      if (typeof item.icon === 'string') {
+        icon = (
+          <FontIcon
+            style={styles.menuItemIcon}
+            className="material-icons">{item.icon}
+          </FontIcon>
+        )
+      } else {
+        icon = <item.icon />
+      }
+
+      return (
+        <ListItem
+          key={item.route}
+          primaryText={item.title}
+          onTouchTap={this.hide}
+          value={item.route}
+          style={styles.menuItemActive}
+          leftIcon={icon}
+        />
+      )
+    })
+  },
+
   render() {
     // let initials, {profile} = this.context
     // let name = profile.givenName ? profile.givenName : profile.fullName
     // if (name) {
     //   initials = name[0]
     // }
-    let styles = this.getStyles()
+    const styles = this.getStyles()
     return (
       <Drawer
         ref="drawer"
@@ -138,23 +161,9 @@ let Nav = React.createClass({
         <div>
           <SelectableList
             value={this.props.selected}
-            onChange={this._handleNavChange}>
-            <Badge
-              badgeContent={10}
-              secondary style={styles.badgeItem}
-              badgeStyle={styles.badgeNotification}>
-              {/** TODO: make selection style dynamic **/}
-              <ListItem primaryText="Little Sister"
-                onTouchTap={this.hide}
-                value="graph"
-                style={styles.menuItemActive}
-                leftIcon={
-                  <FontIcon
-                    style={styles.menuItemIcon}
-                    className="material-icons" />}>
-                <GraphIcon style={styles.graphIcon} />
-              </ListItem>
-            </Badge>
+            onChange={this._handleNavChange}
+          >
+            {this.renderNavItems()}
           </SelectableList>
           <Divider style={styles.menuDivider} />
           <SelectableList
@@ -193,10 +202,11 @@ let Nav = React.createClass({
   },
 
   _handleNavChange(event, selected) {
-    /* this.setState({selected})
-    this.goto(`/${selected}`) */
+    if (selected) {
+      this.setState({selected})
+      this.goto(selected)
+    }
   }
-
 })
 
 export default connect({
