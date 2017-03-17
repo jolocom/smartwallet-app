@@ -67,7 +67,9 @@ class PinInput extends React.Component {
   static propTypes = {
     value: React.PropTypes.string.isRequired,
     disabled: React.PropTypes.bool,
-    onChange: React.PropTypes.func.isRequired
+    focused: React.PropTypes.bool.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+    onFocusChange: React.PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -102,7 +104,10 @@ class PinInput extends React.Component {
       {[0, 1, 2, 3].map((idx) => (
         <div key={idx} style={[
           STYLES.inputBall,
-          idx === props.value.length && STYLES.focusedBall
+          props.value.charAt(idx) !== '' && STYLES.filledBall,
+          idx === props.value.length &&
+            props.focused &&
+            STYLES.focusedBall
         ]}
           onClick={() => this.refs.input.focus()}
         >
@@ -124,6 +129,8 @@ class PinInput extends React.Component {
           value={props.value}
           onKeyDown={(e) => this.handleKeyDown(e)}
           onChange={(e) => this.handleChange(e)}
+          onFocus={() => props.onFocusChange(true)}
+          onBlur={() => props.onFocusChange(false)}
         />
       </div>
     </div>)

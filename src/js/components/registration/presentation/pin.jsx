@@ -12,6 +12,7 @@ const STYLES = {
     alignItems: 'center',
     width: '100%',
     height: '100%',
+    padding: '50px',
     backgroundColor: Theme.jolocom.gray4
   },
   header: {
@@ -44,8 +45,10 @@ const Pin = (props) => {
     <div style={STYLES.header}>Create a PIN for secure login</div>
     <PinInput
       value={props.value}
+      focused={props.focused}
       disabled={props.confirm}
-      onChange={props.onChange} />
+      onChange={props.onChange}
+      onFocusChange={props.onFocusChange} />
     {props.confirm && <div onClick={props.onChangeRequest}>
       Change secure PIN
     </div>}
@@ -56,6 +59,7 @@ const Pin = (props) => {
 
     <div style={STYLES.button}>
       <RaisedButton
+        disabled={!props.valid}
         secondary={props.valid}
         label={getButtonLabel(props)}
         onClick={props.onSubmit}
@@ -66,10 +70,12 @@ const Pin = (props) => {
 Pin.propTypes = {
   value: React.PropTypes.string.isRequired,
   valid: React.PropTypes.bool.isRequired,
+  focused: React.PropTypes.bool.isRequired,
   confirm: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
   onChangeRequest: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired
+  onSubmit: React.PropTypes.func.isRequired,
+  onFocusChange: React.PropTypes.func.isRequired
 }
 
 export default Radium(Pin)

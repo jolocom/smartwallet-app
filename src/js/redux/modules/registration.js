@@ -73,6 +73,9 @@ export const setPin = action('registration', 'setPin', {
 export const setPinConfirm = action('registration', 'setPinConfirm', {
   expectedParams: ['value']
 })
+export const setPinFocused = action('registration', 'setPinFocused', {
+  expectedParams: ['value']
+})
 export const submitPin = action('registration', 'submitPin', {
   expectedParams: [],
   creator: () => {
@@ -119,6 +122,7 @@ const initialState = Immutable.fromJS({
   },
   pin: {
     value: '',
+    focused: false,
     confirm: false,
     valid: false
   },
@@ -165,6 +169,12 @@ export default function reducer(state = initialState, action = {}) {
       return state.mergeDeep({
         pin: {
           confirm: action.value
+        }
+      })
+    case setPinFocused.id:
+      return state.mergeDeep({
+        pin: {
+          focused: action.value
         }
       })
     default:

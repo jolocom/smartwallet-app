@@ -7,6 +7,7 @@ import Presentation from '../presentation/pin'
   actions: [
     'registration:setPin',
     'registration:setPinConfirm',
+    'registration:setPinFocused',
     'registration:submitPin'
   ]
 })
@@ -16,6 +17,7 @@ export default class RegistrationPinScreen extends React.Component {
 
     setPin: React.PropTypes.func.isRequired,
     setPinConfirm: React.PropTypes.func.isRequired,
+    setPinFocused: React.PropTypes.func.isRequired,
     submitPin: React.PropTypes.func.isRequired
   }
 
@@ -23,12 +25,14 @@ export default class RegistrationPinScreen extends React.Component {
     return <Presentation
       value={this.props.registration.pin.value}
       valid={this.props.registration.pin.valid}
+      focused={this.props.registration.pin.focused}
       confirm={this.props.registration.pin.confirm}
       onChange={this.props.setPin}
       onChangeRequest={() => {
         this.props.setPin('')
         this.props.setPinConfirm(false)
       }}
+      onFocusChange={this.props.setPinFocused}
       onSubmit={this.props.submitPin}
     />
   }
