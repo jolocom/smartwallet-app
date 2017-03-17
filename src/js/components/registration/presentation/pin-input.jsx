@@ -8,8 +8,7 @@ const STYLES = {
     width: '140px',
     height: '24px',
     textAlign: 'center',
-    padding: '0 20px',
-    overflow: 'hidden'
+    padding: '0 20px'
   },
   inputBall: {
     position: 'relative',

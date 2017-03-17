@@ -12,16 +12,25 @@ const STYLES = {
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    padding: '50px',
+    padding: '5%',
     backgroundColor: Theme.jolocom.gray4
   },
   header: {
     marginTop: '50px',
     marginBottom: '30px',
-    color: '#A4A4A4'
+    color: Theme.jolocom.gray1
   },
   input: {
     display: 'inline-block'
+  },
+  changeLink: {
+    margin: '20px 0',
+    color: Theme.palette.accent1Color,
+    textTransform: 'uppercase'
+  },
+  explanation: {
+    marginTop: '140px',
+    color: Theme.jolocom.gray1
   },
   button: {
     display: 'inline-block',
@@ -42,17 +51,23 @@ function getButtonLabel(props) {
 
 const Pin = (props) => {
   return <div style={STYLES.root}>
-    <div style={STYLES.header}>Create a PIN for secure login</div>
+    <div style={STYLES.header}>
+      {props.confirm || 'Create a PIN for secure login.'}
+      {props.confirm && 'Your Secure PIN.'}
+    </div>
     <PinInput
       value={props.value}
       focused={props.focused}
       disabled={props.confirm}
       onChange={props.onChange}
       onFocusChange={props.onFocusChange} />
-    {props.confirm && <div onClick={props.onChangeRequest}>
+    {props.confirm && <div
+      style={STYLES.changeLink}
+      onClick={props.onChangeRequest}
+    >
       Change secure PIN
     </div>}
-    {props.confirm && <div>
+    {props.confirm && <div style={STYLES.explanation}>
       This secure PIN will be needed for transactions and
       saving information on the Blockchain.
     </div>}
