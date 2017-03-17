@@ -7,8 +7,8 @@ export const showLeftNav = action('left-nav', 'showLeftNav', {
 export const hideLeftNav = action('left-nav', 'hideLeftNav', {
   expectedParams: []
 })
-export const selectItem = action('left-nav', 'select', {
-  expectedParams: []
+export const selectItem = action('left-nav', 'selectItem', {
+  expectedParams: ['value']
 })
 
 const initialState = new Map({

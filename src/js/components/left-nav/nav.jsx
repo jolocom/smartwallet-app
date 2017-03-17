@@ -37,7 +37,8 @@ let Nav = React.createClass({
     selected: React.PropTypes.string.isRequired,
     doLogout: React.PropTypes.func.isRequired,
     showLeftNav: React.PropTypes.func.isRequired,
-    hideLeftNav: React.PropTypes.func.isRequired
+    hideLeftNav: React.PropTypes.func.isRequired,
+    selectItem: React.PropTypes.func.isRequired
   },
 
   getStyles() {
@@ -202,8 +203,8 @@ let Nav = React.createClass({
   },
 
   _handleNavChange(event, selected) {
+    this.props.selectItem(selected || '')
     if (selected) {
-      this.setState({selected})
       this.goto(selected)
     }
   }
@@ -211,5 +212,10 @@ let Nav = React.createClass({
 
 export default connect({
   props: ['leftNav.open', 'leftNav.selected'],
-  actions: ['account:doLogout', 'left-nav:showLeftNav', 'left-nav:hideLeftNav']
+  actions: [
+    'account:doLogout',
+    'left-nav:showLeftNav',
+    'left-nav:hideLeftNav',
+    'left-nav:selectItem'
+  ]
 })(Nav)

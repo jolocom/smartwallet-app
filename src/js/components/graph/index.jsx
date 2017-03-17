@@ -40,8 +40,10 @@ export default class GraphScreen extends React.Component {
   constructor(props) {
     super(props)
 
-    console.log(UnreadMessagesStore)
-    // UnreadMessagesStore.listenTo()
+    // temp until we move to redux
+    this.unreadListener = UnreadMessagesStore.listen(
+      this.onUnReadMessageUpdate, this
+    )
 
     this.state = {
       searchActive: false,
@@ -61,6 +63,12 @@ export default class GraphScreen extends React.Component {
     if (webId) {
       UnreadMessagesActions.unsubscribe(webId)
     }
+    
+    this.unreadListener()
+  }
+
+  onUnReadMessageUpdate(unreadMessages) {
+    this.setState({unreadMessages})
   }
 
   getUnreadCount() {
