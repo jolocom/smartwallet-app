@@ -53,7 +53,6 @@ const STYLES = {
   }
 }
 
-
 function getCharAt(s, pos) {
   if (!s || pos >= s.length) {
     return <span>&nbsp;</span>

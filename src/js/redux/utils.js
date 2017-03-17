@@ -81,7 +81,8 @@ export function connect(params, wantedActions = []) {
       (stateProps, dispatchProps, ownProps) =>
         Object.assign({}, ownProps, stateProps, dispatchProps),
       {
-        withRef: true
+        withRef: true,
+        pure: typeof params.pure !== 'undefined' ? params.pure : true
       }
     )(component)
     connected.mapStateToProps = mapStateToProps

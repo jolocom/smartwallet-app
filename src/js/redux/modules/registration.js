@@ -1,6 +1,9 @@
 import Immutable from 'immutable'
+import Mnemonic from 'bitcore-mnemonic'
+import * as buffer from 'buffer'
 import { action } from './'
 import { pushRoute } from './router'
+import toggleable from './generic/toggleable'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -46,16 +49,63 @@ export const setHumanName = action('registration', 'setHumanName', {
 export const setUserType = action('registration', 'setUserType', {
   expectedParams: ['value']
 })
-export const addMaskedImagePoint = action(
-  'registration', 'addMaskedImagePoint',
+export const setMaskedImageUncovering = action(
+  'registration', 'setMaskedImageUncovering',
   {
-    expectedParams: ['x', 'y']
+    expectedParams: ['value']
   }
 )
 export const addEntropyFromDeltas = action(
   'registration', 'addEntropyFromDeltas',
   {
-    expectedParams: ['x', 'y', 'z']
+    expectedParams: ['dx', 'dy'],
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        if (getState().getIn(
+          ['registration', 'passphrase', 'phrase']
+        )) {
+          return
+        }
+
+        const entropy = services.entropy
+        entropy.addFromDelta(params.dx)
+        entropy.addFromDelta(params.dy)
+        if (params.dz) {
+          entropy.addFromDelta(params.dz)
+        }
+
+        dispatch(setEntropyStatus.buildAction({
+          sufficientEntropy: entropy.isReady(),
+          progress: entropy.getProgress()
+        }))
+
+        if (!getState().getIn(['registration', 'passphrase', 'phrase']) &&
+            entropy.isReady()) {
+          const randomNumbers = entropy.getRandomNumbers(12)
+          dispatch(setPassphrase(
+            new Mnemonic(buffer.Buffer.from(randomNumbers), Mnemonic.Words.ENGLISH).toString()
+          ))
+        }
+      }
+    }
+  }
+)
+const setEntropyStatus = action(
+  'registration', 'setEntropyStatus',
+  {
+    expectedParams: ['sufficientEntropy', 'progress']
+  }
+)
+const setPassphrase = action(
+  'registration', 'setPassphrase',
+  {
+    expectedParams: ['phrase']
+  }
+)
+const setRandomString = action(
+  'registration', 'setRandomString',
+  {
+    expectedParams: ['randomString']
   }
 )
 export const setPassphraseWrittenDown = action(
@@ -102,6 +152,22 @@ export const setEmail = action('registration', 'setEmail', {
 export const setPassword = action('registration', 'setPassword', {
   expectedParams: ['value']
 })
+export const setRepeatedPassword = action(
+  'registration', 'setRepeatedPassword',
+  {
+    expectedParams: ['value']
+  }
+)
+
+const passwordValueVisibility = toggleable('registration', 'passwordValue', {
+  initialValue: false
+})
+export const {toggle: togglePasswordValue} = passwordValueVisibility.actions
+
+const passwordRepeatedValueVisibility = toggleable('registration', 'passwordRepeatedValue', {
+  initialValue: false
+})
+export const {toggle: togglePasswordRepeatedValue} = passwordRepeatedValueVisibility.actions
 
 const initialState = Immutable.fromJS({
   humanName: {
@@ -118,6 +184,7 @@ const initialState = Immutable.fromJS({
   },
   password: {
     value: '',
+    repeated: '',
     valid: false
   },
   pin: {
@@ -131,10 +198,11 @@ const initialState = Immutable.fromJS({
     valid: false
   },
   maskedImage: {
-    uncovered: []
+    uncovering: false
   },
   passphrase: {
     sufficientEntropy: false,
+    progress: 0,
     randomString: null,
     phrase: null,
     writtenDown: false
@@ -143,6 +211,19 @@ const initialState = Immutable.fromJS({
 })
 
 export default function reducer(state = initialState, action = {}) {
+  state = state.mergeIn(
+    ['password'],{
+      visibleValue: passwordValueVisibility.reducer(
+        state.get('password').get('visibleValue'),
+        action
+      ),
+      visibleRepeatedValue: passwordRepeatedValueVisibility.reducer(
+        state.get('password').get('visibleRepeatedValue'),
+        action
+      )
+    }
+  )
+
   switch (action.type) {
     case setUserType.id:
       const valid = ['expert', 'layman'].indexOf(action.value) !== -1
@@ -155,6 +236,50 @@ export default function reducer(state = initialState, action = {}) {
           value: action.value,
           valid
         }
+      })
+
+    case setPassword.id:
+      const repeatedValue = state.get('password').get('repeated')
+      const validPassword = (
+        action.value === repeatedValue &&
+        action.value.length > 0
+      )
+
+      return state.mergeIn(
+        ['password'],
+        {
+          value: action.value,
+          valid: validPassword
+        }
+      )
+    case setRepeatedPassword.id:
+      const passwordValue = state.get('password').get('visibleValue')
+      const validRepeatedPassword = (
+        action.value === passwordValue &&
+        action.value.length > 0
+      )
+
+      return state.mergeIn(
+        ['password'],
+        {
+          repeated: action.value,
+          valid: validRepeatedPassword
+        }
+      )
+    case setEntropyStatus.id:
+      return state.merge({
+        passphrase: {
+          sufficientEntropy: action.sufficientEntropy,
+          progress: action.progress
+        }
+      })
+    case setRandomString.id:
+      return state.mergeIn(['passphrase'], {
+        randomString: action.randomString
+      })
+    case setPassphrase.id:
+      return state.mergeIn(['passphrase'], {
+        phrase: action.phrase
       })
     case setPin.id:
       if (!/^[0-9]{0,4}$/.test(action.value)) {
@@ -177,6 +302,25 @@ export default function reducer(state = initialState, action = {}) {
           focused: action.value
         }
       })
+    case setMaskedImageUncovering.id:
+      return state.setIn(['maskedImage', 'uncovering'], action.value)
+
+    case setHumanName.id:
+      return state.merge({
+        humanName: {
+          value: action.value,
+          valid: action.value !== ''
+        }
+      })
+
+    case setEmail.id:
+      return state.merge({
+        email: {
+          value: action.value,
+          valid: /([\w.]+)@([\w.]+)\.(\w+)/.test(action.value)
+        }
+      }
+    )
     default:
       return state
   }
