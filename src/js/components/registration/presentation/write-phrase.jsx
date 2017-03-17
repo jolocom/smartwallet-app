@@ -79,6 +79,7 @@ const WritePhrase = (props) => {
           labelStyle={styles.confirmCheckLabel}
           checkedIcon={<Checked />}
           uncheckedIcon={<Unchecked style={styles.uncheckedIcon} />}
+          onClick={(e) => props.onToggle(e.target.checked)}
         />
       </div>
       <RaisedButton
@@ -90,6 +91,7 @@ const WritePhrase = (props) => {
 }
 
 WritePhrase.propTypes = {
+  onToggle: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
   value: React.PropTypes.string.isRequired
 }
