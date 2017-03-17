@@ -3,13 +3,6 @@ import Radium from 'radium'
 import Theme from '../../../styles/jolocom-theme'
 
 const STYLES = {
-  container: {
-    position: 'relative',
-    width: '140px',
-    height: '24px',
-    textAlign: 'center',
-    padding: '0 20px'
-  },
   inputBall: {
     position: 'relative',
     display: 'inline-block',
