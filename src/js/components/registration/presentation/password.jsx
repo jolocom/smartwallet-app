@@ -2,21 +2,6 @@ import React from 'react'
 import Radium from 'radium'
 import PasswordField from 'material-ui-password-field'
 
-const styles = {
-  errorStyle: {
-    color: '#0f0f0f',
-  },
-  underlineStyle: {
-    borderColor: 'red'
-  },
-  floatingLabelStyle: {
-    color: 'red',
-  },
-  floatingLabelFocusStyle: {
-    color: 'red',
-  },
-};
-
 function Password(props) {
 	return <div >
 		<div  className='heere' style={{backgroundColor: '#f0f0f0',position: 'absolute', left: '25%',right: '25%'}}>
@@ -37,12 +22,9 @@ function Password(props) {
 			<PasswordField
 				style={{ position: 'relative', left: 'center'}}
 				floatingLabelText="Repeat Password"
-			  hintText="At least 8 characters, 1 upper case letter,
-			  						1 lower case letter and 1 digit"
 				disabled={ props.repeatedValueState }
 				id='1'
 				type={props.visibleRepeatedValue}
-				underlineFocusStyle={{ borderColor: props.passwordsMatch }}
 				value={props.repeatedValue}
 				onChange={
 					e => props.onChangeRepeatedPassword(e.target.value)
