@@ -108,8 +108,8 @@ class PinInput extends React.Component {
       {(props.value.length > 0) &&
         <div onClick={() => this.clearAndFocus()}
           style={{...STYLES.img, ...{
-          backgroundImage: 'url(/img/ic_clear_black_24px.svg)'
-        }}}
+            backgroundImage: 'url(/img/ic_clear_black_24px.svg)'
+          }}}
         />
       }
       </div>
