@@ -9,7 +9,7 @@ import {
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
 
-const styles = {
+const STYLES = {
   container: {
     backgroundColor: '#f8f9fb',
     height: '100vh',
@@ -54,31 +54,31 @@ const styles = {
 
 const WritePhrase = (props) => {
   return (
-    <div style={styles.container}>
+    <div style={STYLES.container}>
       <Avatar
         src="/img/img_techguy.svg"
         size={60}
-        style={styles.avatar} />
-      <h1 style={styles.heading}>Your secure phrase</h1>
-      <p style={styles.phrase}>
+        style={STYLES.avatar} />
+      <h1 style={STYLES.heading}>Your secure phrase</h1>
+      <p style={STYLES.phrase}>
         {
           props.value || 'The flying red fox is jumping enthusiastically over\
           the little brown dog.'
         }
       </p>
-      <p style={styles.sidenote}>
+      <p style={STYLES.sidenote}>
         IMPORTANT <br />
         Write these words down on an analog and secure place. Store it in at
         least two different places. Without these words you cannot access your
         wallet again. Anyone with these words can get access to your wallet!
         By the way! Taking a screenshot is not secure!
       </p>
-      <div style={styles.confirmCheck}>
+      <div style={STYLES.confirmCheck}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
-          labelStyle={styles.confirmCheckLabel}
+          labelStyle={STYLES.confirmCheckLabel}
           checkedIcon={<Checked />}
-          uncheckedIcon={<Unchecked style={styles.uncheckedIcon} />}
+          uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
           onClick={(e) => props.onToggle(e.target.checked)}
         />
       </div>
