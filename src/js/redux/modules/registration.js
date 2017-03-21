@@ -11,7 +11,8 @@ const NEXT_ROUTES = {
   '/registration/password': '/registration/pin'
 }
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/user-type': 'userType'
+  '/registration/user-type': 'userType',
+  '/registration/email': 'email'
 }
 
 export const goForward = action('registration', 'goForward', {
