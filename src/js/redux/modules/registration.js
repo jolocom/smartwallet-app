@@ -1,7 +1,6 @@
+import * as _ from 'lodash'
 import Immutable from 'immutable'
-import Mnemonic from 'bitcore-mnemonic'
-import * as buffer from 'buffer'
-import { action } from './'
+import { action, asyncAction } from './'
 import { pushRoute } from './router'
 import toggleable from './generic/toggleable'
 
@@ -22,24 +21,12 @@ export const goForward = action('registration', 'goForward', {
   creator: () => {
     return (dispatch, getState) => {
       const state = getState()
-      const pathname = state.get('routing').locationBeforeTransitions.pathname
-
-      const toCheck = CHECK_BEFORE_SWITCHING[pathname]
-      if (toCheck && !state.getIn(['registration', toCheck, 'valid'])) {
-        return
-      }
-
-      let nextUrl
-      if (pathname === '/registration/user-type') {
-        const userType = state.getIn(['registration', 'userType', 'value'])
-        nextUrl = userType === 'expert'
-                  ? '/registration/write-phrase'
-                  : '/registration/phrase-info'
+      if (state.getIn(['registration', 'complete'])) {
+        dispatch(registerWallet())
       } else {
-        nextUrl = NEXT_ROUTES[pathname]
+        const nextUrl = _getNextURLFromState(state)
+        dispatch(pushRoute(nextUrl))
       }
-
-      dispatch(pushRoute(nextUrl))
     }
   }
 })
@@ -60,7 +47,7 @@ export const addEntropyFromDeltas = action(
   {
     expectedParams: ['dx', 'dy'],
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
+      return (dispatch, getState, {backend, services}) => {
         if (getState().getIn(
           ['registration', 'passphrase', 'phrase']
         )) {
@@ -81,9 +68,9 @@ export const addEntropyFromDeltas = action(
 
         if (!getState().getIn(['registration', 'passphrase', 'phrase']) &&
             entropy.isReady()) {
-          const randomNumbers = entropy.getRandomNumbers(12)
+          const randomString = entropy.getRandomString(12)
           dispatch(setPassphrase(
-            new Mnemonic(buffer.Buffer.from(randomNumbers), Mnemonic.Words.ENGLISH).toString()
+            backend.generateSeedPhrase(randomString)
           ))
         }
       }
@@ -158,6 +145,29 @@ export const setRepeatedPassword = action(
     expectedParams: ['value']
   }
 )
+export const registerWallet = asyncAction('registration', 'registerWallet', {
+  expectedParams: [],
+  creator: (params) => {
+    return (dispatch, getState) => {
+      const state = getState().get('registration').toJS()
+      dispatch(registerWallet.buildAction(params, (backend) => {
+        const userType = state.userType.value
+        if (userType === 'expert') {
+          return backend.wallet.registerWithSeedPhrase({
+            userName: state.username.value,
+            seedPhrase: state.passphrase.phrase
+          })
+        } else {
+          return backend.wallet.registerWithCredentials({
+            userName: state.username.value,
+            email: state.email.value,
+            password: state.password.value
+          })
+        }
+      }))
+    }
+  }
+})
 
 const passwordValueVisibility = toggleable('registration', 'passwordValue', {
   initialValue: false
@@ -205,7 +215,13 @@ const initialState = Immutable.fromJS({
     progress: 0,
     randomString: null,
     phrase: null,
-    writtenDown: false
+    writtenDown: false,
+    valid: false
+  },
+  wallet: {
+    registering: false,
+    registered: false,
+    errorMsg: null
   },
   complete: false
 })
@@ -223,6 +239,7 @@ export default function reducer(state = initialState, action = {}) {
       )
     }
   )
+  state = state.set('complete', _isComplete(state))
 
   switch (action.type) {
     case setUserType.id:
@@ -314,7 +331,7 @@ export default function reducer(state = initialState, action = {}) {
       })
 
     case setEmail.id:
-      return state.merge({
+      return state.mergeDeep({
         email: {
           value: action.value,
           valid: /([\w.]+)@([\w.]+)\.(\w+)/.test(action.value)
@@ -324,11 +341,74 @@ export default function reducer(state = initialState, action = {}) {
     case setPassphraseWrittenDown.id:
       return state.mergeDeep({
         passphrase: {
-          writtenDown: action.value
+          writtenDown: action.value,
+          valid: !!state.getIn('passphrase', 'phrase') && action.value
         }
-      }
-      )
+      })
+    case registerWallet.id:
+      return state.mergeDeep({
+        wallet: {
+          registering: true,
+          registered: false,
+          errorMsg: null
+        }
+      })
+    case registerWallet.id_success:
+      return state.mergeDeep({
+        wallet: {
+          registering: false,
+          registered: true
+        }
+      })
+    case registerWallet.id_fail:
+      return state.mergeDeep({
+        wallet: {
+          registering: false,
+          registered: false,
+          errorMsg: action.error.message
+        }
+      })
     default:
       return state
   }
+}
+
+export function _isComplete(state) {
+  const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
+  const areFieldsValid = (fields) => _.every(fields, isFieldValid)
+
+  let complete = areFieldsValid(['username', 'userType', 'pin'])
+  if (state.getIn(['userType', 'value']) === 'layman') {
+    complete = complete && areFieldsValid(['email', 'password'])
+  } else {
+    complete = complete && areFieldsValid(['passphrase'])
+  }
+
+  return complete
+}
+
+export function _getNextURLFromState(state) {
+  const currentPath = state.get('routing').locationBeforeTransitions.pathname
+
+  if (!_canGoForward(state, currentPath)) {
+    return
+  }
+
+  const userType = state.getIn(['registration', 'userType', 'value'])
+  return _getNextURL(currentPath, userType)
+}
+
+export function _getNextURL(currentPath, userType) {
+  if (currentPath === '/registration/user-type') {
+    return userType === 'expert'
+              ? '/registration/write-phrase'
+              : '/registration/phrase-info'
+  }
+
+  return NEXT_ROUTES[currentPath]
+}
+
+export function _canGoForward(state, currentPath) {
+  const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
+  return !toCheck || !state.getIn(['registration', toCheck, 'valid'])
 }
