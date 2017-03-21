@@ -1,5 +1,5 @@
 export default class WalletAgent {
-  generateSeedPhrase() {
+  generateSeedPhrase(randomString) {
     return 'blabla blabla blabla blabla blabla blabla blabla blabla'
   }
 
@@ -8,19 +8,35 @@ export default class WalletAgent {
   }
 
   registerWithSeedPhrase({userName, seedPhrase}) {
-
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(new Wallet())
+      }, 2000)
+    })
   }
 
   registerWithCredentials({userName, email, password}) {
-
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(new Wallet())
+      }, 2000)
+    })
   }
 
   loginWithSeedPhrase({userName, seedPhrase}) {
-
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(new Wallet())
+      }, 2000)
+    })
   }
 
   loginWithCredentials({userName, email, password}) {
-
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(new Wallet())
+      }, 2000)
+    })
   }
 }
 
