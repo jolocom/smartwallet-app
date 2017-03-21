@@ -135,7 +135,7 @@ const Login = connect({
           </IconButton>}
           />
         <div style={styles.logo}>
-          <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
+          <img src="/img/logo.svg" style={styles.logoImg} />
         </div>
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
