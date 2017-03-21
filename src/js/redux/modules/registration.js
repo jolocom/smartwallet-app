@@ -321,6 +321,13 @@ export default function reducer(state = initialState, action = {}) {
         }
       }
     )
+    case setPassphraseWrittenDown.id:
+      return state.mergeDeep({
+        passphrase: {
+          writtenDown: action.value
+        }
+      }
+      )
     default:
       return state
   }
