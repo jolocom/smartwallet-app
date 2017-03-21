@@ -32,12 +32,12 @@ const STYLES = {
     position: 'absolute',
     height: '24px',
     width: '24px',
-    marginLeft: '50%+50pxw',
     cursor: 'pointer'
   },
   img: {
     userSelect: 'none',
-    marginTop: '4px',
+    marginTop: '5px',
+    marginLeft: '5px',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -109,8 +109,8 @@ class PinInput extends React.Component {
       {(props.value.length > 0) &&
         <div onClick={() => this.clearAndFocus()}
           style={{...STYLES.img, ...{
-            backgroundImage: 'url(/img/ic_clear_black_24px.svg)'
-        }}}
+            backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+          }}}
         />
       }
       </div>
