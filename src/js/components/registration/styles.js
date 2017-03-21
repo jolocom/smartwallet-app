@@ -10,5 +10,8 @@ export default {
     height: '100%',
     padding: '5%',
     backgroundColor: Theme.jolocom.gray4
+  },
+  header: {
+    color: Theme.jolocom.grey1
   }
 }
