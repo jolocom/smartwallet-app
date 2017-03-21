@@ -1,4 +1,3 @@
-import {RaisedButton} from 'material-ui'
 import Transitions from 'material-ui/styles/transitions'
 import React from 'react'
 import Radium from 'radium'
@@ -16,24 +15,22 @@ export default class HoverButton extends React.Component {
   render () {
     const transition = `background-color 450ms
     ${Transitions.easeOutFunction} 0ms`
-    return <div style={{ display: 'inline-block' }}>
-      <style>
-        {`
-        #hoverbutton:hover {
-          transition: ${transition} !important;
-          background-color: ${this.props.hoverColor} !important;
-          color: ${this.props.backgroundColor} !important;
+    const STYLES = {
+      hoverbutton: {
+        ':hover': {
+          transition: transition,
+          backgroundColor: this.props.hoverColor,
+          color: this.props.backgroundColor
         }
+      }
+    }
 
-        `}
-      </style>
-      <RaisedButton
-        id="hoverbutton"
-        backgroundColor={this.props.backgroundColor}
-        style={this.props.style}
+    return <div>
+      <div
+        style={Object.assign(STYLES.hoverbutton, this.props.style)}
         onClick={this.props.onClick}>
         {this.props.children}
-      </RaisedButton>
+      </div>
     </div>
 }
 }

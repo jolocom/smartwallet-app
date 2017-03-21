@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton, FlatButton} from 'material-ui'
+import {FlatButton} from 'material-ui'
 import Theme from '../../../styles/jolocom-theme'
 import RegistrationStyles from '../styles'
 import HoverButton from '../../common/hover-button'
@@ -21,12 +21,13 @@ const STYLES = Object.assign(RegistrationStyles, {
     borderRadius: '2px',
     primary: false,
     backgroundColor: Theme.jolocom.gray1,
-    selectedColor: Theme.palette.primary1Color
+    selectedColor: Theme.palette.primary1Color,
+    textAlign: 'center'
   },
 
   tileinside: {
     color: Theme.jolocom.gray5,
-    padding: '10px',
+    padding: '5px 5px 5px 5px',
     margin: '0px'
   },
   img: {
@@ -71,9 +72,9 @@ const UserType = (props) => {
         style={STYLES.tile}
         onClick={() => { props.onChange('expert'); props.onSubmit() }}>
         <div style={STYLES.tileinside}>
-          <div style={Object.assign(STYLES.img, {
+          <div style={{...STYLES.img, ...{
             backgroundImage: 'url(/img/img_techguy.svg)'
-          })} />
+          }}} />
         ...a total tech Geek and want to be in absolute control?
         </div>
       </HoverButton>
@@ -87,10 +88,10 @@ const UserType = (props) => {
         onClick={() => { props.onChange('layman'); props.onSubmit() }}
         onTouchTap={() => { props.onChange('layman'); props.onSubmit() }}>
         <div style={STYLES.tileinside}>
-          <div style={Object.assign(STYLES.img, {
+          <div style={{...STYLES.img, ...{
             backgroundImage: 'url(/img/img_nohustle.svg)'
-          })} />
-            ...the laid-back type, who doesn't want any hassle.
+          }}} />
+          ...the laid-back type, who doesn't want any hassle.
         </div>
       </HoverButton>
     </div>
