@@ -55,6 +55,7 @@ Redux actions
 * setPassphraseWrittenDown(value: bool)
 * switchToExpertMode()
 * setPin(value)
+* clearPin() - erases the PIN
 * setUsername(value)
 * setPassword(value)
 

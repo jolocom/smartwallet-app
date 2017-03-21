@@ -120,6 +120,29 @@ export const switchToExpertMode = action('registration', 'switchToExpertMode', {
 export const setPin = action('registration', 'setPin', {
   expectedParams: ['value']
 })
+export const setPinConfirm = action('registration', 'setPinConfirm', {
+  expectedParams: ['value']
+})
+export const setPinFocused = action('registration', 'setPinFocused', {
+  expectedParams: ['value']
+})
+export const submitPin = action('registration', 'submitPin', {
+  expectedParams: [],
+  creator: () => {
+    return (dispatch, getState) => {
+      const pinState = getState().getIn(['registration', 'pin'])
+      if (!pinState.get('valid')) {
+        return
+      }
+
+      if (pinState.get('confirm')) {
+        dispatch(goForward())
+      } else {
+        dispatch(setPinConfirm(true))
+      }
+    }
+  }
+})
 export const setUsername = action('registration', 'setUsername', {
   expectedParams: ['value']
 })
@@ -166,6 +189,8 @@ const initialState = Immutable.fromJS({
   },
   pin: {
     value: '',
+    focused: false,
+    confirm: false,
     valid: false
   },
   userType: {
@@ -261,10 +286,20 @@ export default function reducer(state = initialState, action = {}) {
         return state
       }
 
-      return state.merge({
+      return state.mergeIn(['pin'], {
+        value: action.value,
+        valid: action.value.length === 4
+      })
+    case setPinConfirm.id:
+      return state.mergeDeep({
         pin: {
-          value: action.value,
-          valid: action.value.length === 4
+          confirm: action.value
+        }
+      })
+    case setPinFocused.id:
+      return state.mergeDeep({
+        pin: {
+          focused: action.value
         }
       })
     case setMaskedImageUncovering.id:
@@ -286,6 +321,13 @@ export default function reducer(state = initialState, action = {}) {
         }
       }
     )
+    case setPassphraseWrittenDown.id:
+      return state.mergeDeep({
+        passphrase: {
+          writtenDown: action.value
+        }
+      }
+      )
     default:
       return state
   }
