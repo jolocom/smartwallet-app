@@ -1,6 +1,51 @@
 import React from 'react'
 import Radium from 'radium'
 import {RaisedButton, FlatButton} from 'material-ui'
+import Theme from '../../../styles/jolocom-theme'
+import RegistrationStyles from '../styles'
+import HoverButton from '../../common/hover-button'
+
+const STYLES = Object.assign(RegistrationStyles, {
+  header: {
+    marginTop: '40px',
+    marginBottom: '30px'
+  },
+  tile: {
+    display: 'flex',
+    maxwidth: '90%',
+    height: '150px',
+    width: '300px',
+    alignItems: 'center',
+    marginTop: '10px',
+    marginBottom: '10px',
+    borderRadius: '10px',
+    primary: false,
+    backgroundColor: Theme.jolocom.gray1,
+    selectedColor: '#b3c90f',
+    ':hover': {
+      'color': '#e6ff2e'
+    }
+  },
+
+  tileinside: {
+    color: Theme.jolocom.gray5,
+    padding: '10px',
+    margin: '0px'
+  },
+  img: {
+    position: 'relative',
+    flex: 1,
+    maxWidth: '100%',
+    height: '80px',
+    width: '300px',
+    userSelect: 'none',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain'
+
+  }
+
+})
 
 const UserType = (props) => {
   var messageWhy = 'If you select the Geek option, you are the keeper of your \
@@ -8,7 +53,6 @@ const UserType = (props) => {
    to uncover the picture. You must be prepared to keep the passphrase you \
    in a safe place where you are not going to loose it and where others \
    can\'t get to it. This phrase + a secret pin is how you \'login\' to the \
-   wallet in the future.\nIf you select the \'No hassle\' option we will \
    save your passphrase for you, but you will then need a password to get it'
 
   var messageConfirm = 'You have selected ' + (props.value === 'expert'
@@ -17,30 +61,58 @@ const UserType = (props) => {
    we\'ll save your passphrase for you')
   var messageSelect = 'Please make a selection. If you are not sure, checkout \
    \'WHY?\''
-  return <div>
-    <h1>Hi {props.user}
-    !, are you...</h1>
-    <div>
-      <RaisedButton onClick={() => props.onChange('expert')}>
-        {props.value === 'expert' && '*'}
-        ...a total tech Geek and want to be in absolute control?
-      </RaisedButton>
+  return <div style={STYLES.container}>
+    <div style={STYLES.header}>
+      {'Hi' + props.user + '!, are you...'}
     </div>
     <div>
-      <RaisedButton onClick={() => props.onChange('layman')}>
-        {props.value === 'layman' && '*'}
-        ...the laid-back type, who doesn't want any hassle.
-      </RaisedButton>
+      <HoverButton
+        id="tile-reg"
+        backgroundColor={(props.value === 'expert'
+        ? STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
+        labelColor={STYLES.tile.selectedColor}
+        style={STYLES.tile}
+        onClick={() => { props.onChange('expert'); props.onSubmit() }}>
+        <div style={STYLES.tileinside}>
+          <div style={Object.assign(STYLES.img, {
+            backgroundImage: 'url(/img/img_techguy.svg)'
+          })} />
+        ...a total tech Geek and want to be in absolute control?
+        </div>
+      </HoverButton>
+    </div>
+    <div>
+      <HoverButton
+      id="tile-reg1"
+      backgroundColor={(props.value === 'layman' ?
+      STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
+        labelColor={STYLES.tile.selectedColor}
+        style={STYLES.tile}
+        onClick={() => { props.onChange('layman'); props.onSubmit() }}
+        onTouchTap={() => { props.onChange('layman'); props.onSubmit() }}>
+        <div style={STYLES.tileinside}>
+          <div style={Object.assign(STYLES.img, {
+            backgroundImage: 'url(/img/img_nohustle.svg)'
+          })} />
+            ...the laid-back type, who doesn't want any hassle.
+        </div>
+      </HoverButton>
     </div>
     <div>
       <FlatButton onClick={props.valid ? () =>
         props.openConfirmDialog(messageConfirm, 'Confirm', props.onSubmit)
-        : () => { props.configSimpleDialog(messageSelect); props.showSimpleDialog() }}>
+        : () => {
+          props.configSimpleDialog(messageSelect)
+          props.showSimpleDialog()
+        }
+        }>
           Next!
       </FlatButton>
     </div>
     <div>
-      <FlatButton onClick={() => { props.configSimpleDialog(messageWhy); props.showSimpleDialog() }}>
+      <FlatButton onClick={() => {
+        props.configSimpleDialog(messageWhy); props.showSimpleDialog()
+      }}>
       WHY?
       </FlatButton>
     </div>
