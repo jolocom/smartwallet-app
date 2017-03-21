@@ -159,16 +159,6 @@ export const setRepeatedPassword = action(
   }
 )
 
-const passwordValueVisibility = toggleable('registration', 'passwordValue', {
-  initialValue: false
-})
-export const {toggle: togglePasswordValue} = passwordValueVisibility.actions
-
-const passwordRepeatedValueVisibility = toggleable('registration', 'passwordRepeatedValue', {
-  initialValue: false
-})
-export const {toggle: togglePasswordRepeatedValue} = passwordRepeatedValueVisibility.actions
-
 const initialState = Immutable.fromJS({
   humanName: {
     value: '',
@@ -215,8 +205,8 @@ const initialState = Immutable.fromJS({
 })
 
 const isPasswordValid = (passwordValue, repeatedValue) => {
-  return repeatedValue === passwordValue &&
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(passwordValue)
+  return( (repeatedValue === passwordValue) &&
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\S\s]{8,}$/.test(passwordValue))
 }
 
 const passwordCharacters = (password) =>{
@@ -276,7 +266,7 @@ const scorePassword = (pass) =>{
 
 const checkPassStrength = (pass) => {
   let score = scorePassword(pass);
-  if (pass.length) {
+  if (pass.length > 7) {
     if (score > 70)
       return "strong";
     if (score > 40)
@@ -287,19 +277,6 @@ const checkPassStrength = (pass) => {
 }
 
 export default function reducer(state = initialState, action = {}) {
-  state = state.mergeIn(
-    ['password'],{
-      visibleValue: passwordValueVisibility.reducer(
-        state.get('password').get('visibleValue'),
-        action
-      ),
-      visibleRepeatedValue: passwordRepeatedValueVisibility.reducer(
-        state.get('password').get('visibleRepeatedValue'),
-        action
-      )
-    }
-  )
-
   switch (action.type) {
     case setUserType.id:
       const valid = ['expert', 'layman'].indexOf(action.value) !== -1
@@ -315,14 +292,16 @@ export default function reducer(state = initialState, action = {}) {
       })
 
     case setPassword.id:
-      const repeatedValue = state.get('password').get('repeated')
-      const validPassword = isPasswordValid(action.value, repeatedValue)
+      const oldRepeatedValue = state.get('password').get('repeated')
+      const validPassword = isPasswordValid(action.value, oldRepeatedValue)
       const characters = passwordCharacters(action.value)
+      const newRepeatedValue = isPasswordValid(action.value, action.value)? oldRepeatedValue: ''
       const passwordStrength = checkPassStrength(action.value)
       return state.mergeIn(
         ['password'],
         {
           value: action.value,
+          repeated: newRepeatedValue,
           valid: validPassword,
           lowerCase: characters.lowerCase,
           upperCase: characters.upperCase,
@@ -333,7 +312,6 @@ export default function reducer(state = initialState, action = {}) {
     case setRepeatedPassword.id:
       const passwordValue = state.get('password').get('value')
       const validRepeatedPassword = isPasswordValid(action.value, passwordValue)
-
       return state.mergeIn(
         ['password'],
         {

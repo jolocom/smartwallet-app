@@ -7,9 +7,7 @@ import Presentation from '../presentation/password'
   actions: [
     'registration:goForward',
     'registration:setPassword',
-    'registration:togglePasswordValue',
     'registration:setRepeatedPassword',
-    'registration:togglePasswordRepeatedValue',
   ]
 })
 
@@ -19,8 +17,6 @@ export default class RegistrationPasswordScreen extends React.Component {
     goForward: React.PropTypes.func.isRequired,
     setPassword: React.PropTypes.func.isRequired,
     setRepeatedPassword: React.PropTypes.func.isRequired,
-    togglePasswordRepeatedValue: React.PropTypes.func.isRequired,
-    togglePasswordValue: React.PropTypes.func.isRequired,
   }
 
   render() {
@@ -28,16 +24,12 @@ export default class RegistrationPasswordScreen extends React.Component {
  
     return <Presentation
       value={password.value}
-      repeatedValueState={password.value.length < 7}
+      digit={password.digit}
+      lowerCase={password.lowerCase}
+      upperCase={password.upperCase}
       repeatedValue={password.repeated}
       valid={password.valid}
       passwordBarreColor={password.strength === 'weak' ? 'red': 'green'}
-      showFirstBare={password.value.length > 2? 'visible': 'hidden'}
-      showSecondBare={password.value.length > 4? 'visible': 'hidden'}
-      showThirdBare={password.value.length > 7? 'visible': 'hidden'}
-      showRepeatedValueFirstBare={password.repeated.length > 2? 'visible': 'hidden'}
-      showRepeatedValueSecondBare={password.repeated.length > 4? 'visible': 'hidden'}
-      showRepeatedValueThirdBare={password.repeated.length > 7? 'visible': 'hidden'}
       strength={password.strength}
       onChangePassword={this.props.setPassword}
       onChangeRepeatedPassword={this.props.setRepeatedPassword}
