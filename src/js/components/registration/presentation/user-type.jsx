@@ -18,13 +18,10 @@ const STYLES = Object.assign(RegistrationStyles, {
     alignItems: 'center',
     marginTop: '10px',
     marginBottom: '10px',
-    borderRadius: '10px',
+    borderRadius: '2px',
     primary: false,
     backgroundColor: Theme.jolocom.gray1,
-    selectedColor: '#b3c90f',
-    ':hover': {
-      'color': '#e6ff2e'
-    }
+    selectedColor: Theme.palette.primary1Color
   },
 
   tileinside: {
@@ -41,7 +38,8 @@ const STYLES = Object.assign(RegistrationStyles, {
     userSelect: 'none',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain'
+    backgroundSize: 'contain',
+    marginBottom: '10px'
 
   }
 
@@ -67,10 +65,9 @@ const UserType = (props) => {
     </div>
     <div>
       <HoverButton
-        id="tile-reg"
         backgroundColor={(props.value === 'expert'
         ? STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
-        labelColor={STYLES.tile.selectedColor}
+        hoverColor={STYLES.tile.selectedColor}
         style={STYLES.tile}
         onClick={() => { props.onChange('expert'); props.onSubmit() }}>
         <div style={STYLES.tileinside}>
@@ -83,10 +80,9 @@ const UserType = (props) => {
     </div>
     <div>
       <HoverButton
-      id="tile-reg1"
       backgroundColor={(props.value === 'layman' ?
       STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
-        labelColor={STYLES.tile.selectedColor}
+        hoverColor={STYLES.tile.selectedColor}
         style={STYLES.tile}
         onClick={() => { props.onChange('layman'); props.onSubmit() }}
         onTouchTap={() => { props.onChange('layman'); props.onSubmit() }}>
