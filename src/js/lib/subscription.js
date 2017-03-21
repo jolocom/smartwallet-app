@@ -20,7 +20,7 @@ export default class Subscription {
     if (localStorage.getItem('jolocom.auth-mode') !== 'proxy') {
       this.initWebSocket()
     } else {
-      this.initPolling()
+      // this.initPolling()
     }
   }
   initWebSocket() {

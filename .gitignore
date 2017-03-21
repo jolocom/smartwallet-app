@@ -52,4 +52,4 @@ chrome-user-data
 .idea
 *.iml
 .vscode
-/nbproject
+nbproject
