@@ -99,15 +99,6 @@ const UserType = (props) => {
       </HoverButton>
     </div>
     <div>
-      <FlatButton onClick={props.valid ? () =>
-        props.openConfirmDialog(messageConfirm, 'Confirm', props.onSubmit)
-        : () => {
-          props.configSimpleDialog(messageSelect)
-          props.showSimpleDialog()
-        }
-        }>
-          Next!
-      </FlatButton>
     </div>
     <div>
       <FlatButton onClick={() => {
