@@ -162,6 +162,7 @@ const initialState = Immutable.fromJS({
   password: {
     value: '',
     repeated: '',
+    strength:'weak',
     lowerCase:false,
     upperCase: false,
     digit: false,
@@ -214,6 +215,52 @@ const passwordCharacters = (password) =>{
   return checkResult
 }
 
+const scorePassword = (pass) =>{
+  let characters = passwordCharacters(pass)
+  const isValid = characters.lowerCase && characters.upperCase && characters.digit
+  if (isValid) {
+    var score = 0;
+    if (!pass)
+        return score;
+
+    // award every unique letter until 5 repetitions
+    let letters = new Object();
+    for (let i=0; i<pass.length; i++) {
+        letters[pass[i]] = (letters[pass[i]] || 0) + 1;
+        score += 5.0 / letters[pass[i]];
+    }
+
+    // bonus points for mixing it up
+    let variations = {
+        digits: /\d/.test(pass),
+        lower: /[a-z]/.test(pass),
+        upper: /[A-Z]/.test(pass),
+        nonWords: /\W/.test(pass),
+    }
+
+    let variationCount = 0;
+    for (let check in variations) {
+        variationCount += (variations[check] == true) ? 1 : 0;
+    }
+    score += (variationCount - 1) * 10;
+
+    return parseInt(score);
+  }
+  return 0
+}
+
+const checkPassStrength = (pass) => {
+  let score = scorePassword(pass);
+  if (pass.length) {
+    if (score > 70)
+      return "strong";
+    if (score > 40)
+      return "good";
+  }
+
+  return "weak";
+}
+
 export default function reducer(state = initialState, action = {}) {
   state = state.mergeIn(
     ['password'],{
@@ -246,6 +293,7 @@ export default function reducer(state = initialState, action = {}) {
       const repeatedValue = state.get('password').get('repeated')
       const validPassword = isPasswordValid(action.value, repeatedValue)
       const characters = passwordCharacters(action.value)
+      const passwordStrength = checkPassStrength(action.value)
       return state.mergeIn(
         ['password'],
         {
@@ -253,7 +301,8 @@ export default function reducer(state = initialState, action = {}) {
           valid: validPassword,
           lowerCase: characters.lowerCase,
           upperCase: characters.upperCase,
-          digit: characters.digit
+          digit: characters.digit,
+          strength: passwordStrength
         }
       )
     case setRepeatedPassword.id:

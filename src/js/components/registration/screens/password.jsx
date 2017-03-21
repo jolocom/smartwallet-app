@@ -25,17 +25,20 @@ export default class RegistrationPasswordScreen extends React.Component {
 
   render() {
     const password = this.props.registration.password
+ 
     return <Presentation
       value={password.value}
+      repeatedValueState={password.value.length < 7}
       repeatedValue={password.repeated}
       valid={password.valid}
-      lowerCase={password.lowerCase ? 'hidden': ''}
-      upperCase={password.upperCase ? 'hidden': ''}
-      digitWarning={password.digit ? 'hidden': ''}
-      visibleValue={password.visibleValue ? 'input': 'password'}
-      visibleRepeatedValue={password.visibleRepeatedValue ? 'input': 'password'}
-      onTogglePasswordValue={this.props.togglePasswordValue}
-      onTogglePasswordRepeatedValue={this.props.togglePasswordRepeatedValue}
+      passwordBarreColor={password.strength === 'weak' ? 'red': 'green'}
+      showFirstBare={password.value.length > 2? 'visible': 'hidden'}
+      showSecondBare={password.value.length > 4? 'visible': 'hidden'}
+      showThirdBare={password.value.length > 7? 'visible': 'hidden'}
+      showRepeatedValueFirstBare={password.repeated.length > 2? 'visible': 'hidden'}
+      showRepeatedValueSecondBare={password.repeated.length > 4? 'visible': 'hidden'}
+      showRepeatedValueThirdBare={password.repeated.length > 7? 'visible': 'hidden'}
+      strength={password.strength}
       onChangePassword={this.props.setPassword}
       onChangeRepeatedPassword={this.props.setRepeatedPassword}
       onSubmit={this.props.goForward}
