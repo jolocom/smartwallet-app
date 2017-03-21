@@ -3,6 +3,9 @@
  * for the corresponding component style you want to change and add the
  * updated styles to `JolocomTheme`
  * https://git.io/v6vXz
+ *
+ * Style guidelines for Jolocom:
+ * http://bit.ly/2n5ohrH
  */
 
 import {fade} from 'material-ui/utils/colorManipulator'
