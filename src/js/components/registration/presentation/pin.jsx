@@ -52,7 +52,8 @@ const Pin = (props) => {
       focused={props.focused}
       disabled={props.confirm}
       onChange={props.onChange}
-      onFocusChange={props.onFocusChange} />
+      onFocusChange={props.onFocusChange}
+      confirm={props.confirm} />
     {props.confirm && <div
       style={STYLES.changeLink}
       onClick={props.onChangeRequest}

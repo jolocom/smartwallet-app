@@ -60,7 +60,8 @@ class PinInput extends React.Component {
     disabled: React.PropTypes.bool,
     focused: React.PropTypes.bool.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    onFocusChange: React.PropTypes.func.isRequired
+    onFocusChange: React.PropTypes.func.isRequired,
+    confirm: React.PropTypes.bool.isRequired
   }
 
   componentDidMount() {
@@ -106,7 +107,7 @@ class PinInput extends React.Component {
         </div>
       ))}
       <div style={{...STYLES.clear}}>
-      {(props.value.length > 0) &&
+      {(props.value.length > 0) && (!props.confirm) &&
         <div onClick={() => this.clearAndFocus()}
           style={{...STYLES.img, ...{
             backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
