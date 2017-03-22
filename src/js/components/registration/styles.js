@@ -12,6 +12,6 @@ export default {
     backgroundColor: Theme.jolocom.gray4
   },
   header: {
-    color: Theme.jolocom.grey1
+    color: Theme.jolocom.gray1
   }
 }
