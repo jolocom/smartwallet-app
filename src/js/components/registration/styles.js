@@ -8,7 +8,7 @@ export default {
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    padding: '5%',
+    padding: '5% 0%',
     backgroundColor: Theme.jolocom.gray4
   },
   header: {
