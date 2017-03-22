@@ -13,6 +13,11 @@ const STYLES = {
     margin: '20px',
     textAlign: 'center'
   },
+  floatingLabel: {
+    textAlign: 'center',
+    width: '100%',
+    transformOrigin: 'center top 0px'
+  },
   sidenote: {
     fontSize: '11pt',
     fontWeight: '300',
@@ -37,6 +42,7 @@ const NameEntry = (props) => {
       style={{'marginTop': '10%'}}
       defaultValue={props.value}
       floatingLabelText="Unique Username"
+      floatingLabelStyle={STYLES.floatingLabel}
       onChange={(e) => props.onChange(e.target.value)}
       errorText=""
     />
