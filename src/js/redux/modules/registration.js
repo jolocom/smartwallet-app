@@ -388,10 +388,12 @@ export function _isComplete(state) {
 }
 
 export function _getNextURLFromState(state) {
-  const currentPath = state.get('routing').locationBeforeTransitions.pathname
+  const currentPath = state.getIn([
+    'routing', 'locationBeforeTransitions', 'pathname'
+  ])
 
   if (!_canGoForward(state, currentPath)) {
-    return
+    return null
   }
 
   const userType = state.getIn(['registration', 'userType', 'value'])
@@ -410,5 +412,5 @@ export function _getNextURL(currentPath, userType) {
 
 export function _canGoForward(state, currentPath) {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  return !toCheck || !state.getIn(['registration', toCheck, 'valid'])
+  return !toCheck || state.getIn(['registration', toCheck, 'valid'])
 }
