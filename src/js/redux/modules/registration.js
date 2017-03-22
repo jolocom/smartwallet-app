@@ -1,8 +1,7 @@
 import * as _ from 'lodash'
 import Immutable from 'immutable'
-import { action, asyncAction } from './'
-import { pushRoute } from './router'
-import toggleable from './generic/toggleable'
+import { makeActions } from './'
+import * as router from './router'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -16,35 +15,31 @@ const CHECK_BEFORE_SWITCHING = {
   '/registration/user-type': 'userType'
 }
 
-export const goForward = action('registration', 'goForward', {
-  expectedParams: [],
-  creator: () => {
-    return (dispatch, getState) => {
-      const state = getState()
-      if (state.getIn(['registration', 'complete'])) {
-        dispatch(registerWallet())
-      } else {
-        const nextUrl = _getNextURLFromState(state)
-        dispatch(pushRoute(nextUrl))
+const actions = module.exports = makeActions('registration', {
+  goForward: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        const state = getState()
+        if (state.getIn(['registration', 'complete'])) {
+          dispatch(actions.registerWallet())
+        } else {
+          const nextUrl = helpers._getNextURLFromState(state)
+          dispatch(router.pushRoute(nextUrl))
+        }
       }
     }
-  }
-})
-export const setHumanName = action('registration', 'setHumanName', {
-  expectedParams: ['value']
-})
-export const setUserType = action('registration', 'setUserType', {
-  expectedParams: ['value']
-})
-export const setMaskedImageUncovering = action(
-  'registration', 'setMaskedImageUncovering',
-  {
+  },
+  setHumanName: {
     expectedParams: ['value']
-  }
-)
-export const addEntropyFromDeltas = action(
-  'registration', 'addEntropyFromDeltas',
-  {
+  },
+  setUserType: {
+    expectedParams: ['value']
+  },
+  setMaskedImageUncovering: {
+    expectedParams: ['value']
+  },
+  addEntropyFromDeltas: {
     expectedParams: ['dx', 'dy'],
     creator: (params) => {
       return (dispatch, getState, {backend, services}) => {
@@ -61,7 +56,7 @@ export const addEntropyFromDeltas = action(
           entropy.addFromDelta(params.dz)
         }
 
-        dispatch(setEntropyStatus.buildAction({
+        dispatch(actions.setEntropyStatus.buildAction({
           sufficientEntropy: entropy.isReady(),
           progress: entropy.getProgress()
         }))
@@ -69,115 +64,91 @@ export const addEntropyFromDeltas = action(
         if (!getState().getIn(['registration', 'passphrase', 'phrase']) &&
             entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
-          dispatch(setPassphrase(
+          dispatch(actions.setPassphrase(
             backend.generateSeedPhrase(randomString)
           ))
         }
       }
     }
-  }
-)
-const setEntropyStatus = action(
-  'registration', 'setEntropyStatus',
-  {
+  },
+  setEntropyStatus: {
     expectedParams: ['sufficientEntropy', 'progress']
-  }
-)
-const setPassphrase = action(
-  'registration', 'setPassphrase',
-  {
+  },
+  setPassphrase: {
     expectedParams: ['phrase']
-  }
-)
-const setRandomString = action(
-  'registration', 'setRandomString',
-  {
+  },
+  setRandomString: {
     expectedParams: ['randomString']
-  }
-)
-export const setPassphraseWrittenDown = action(
-  'registration', 'setPassphraseWrittenDown',
-  {
+  },
+  setPassphraseWrittenDown: {
     expectedParams: ['value']
-  }
-)
-export const switchToExpertMode = action('registration', 'switchToExpertMode', {
-  expectedParams: []
-})
-export const setPin = action('registration', 'setPin', {
-  expectedParams: ['value']
-})
-export const setPinConfirm = action('registration', 'setPinConfirm', {
-  expectedParams: ['value']
-})
-export const setPinFocused = action('registration', 'setPinFocused', {
-  expectedParams: ['value']
-})
-export const submitPin = action('registration', 'submitPin', {
-  expectedParams: [],
-  creator: () => {
-    return (dispatch, getState) => {
-      const pinState = getState().getIn(['registration', 'pin'])
-      if (!pinState.get('valid')) {
-        return
-      }
-
-      if (pinState.get('confirm')) {
-        dispatch(goForward())
-      } else {
-        dispatch(setPinConfirm(true))
-      }
-    }
-  }
-})
-export const setUsername = action('registration', 'setUsername', {
-  expectedParams: ['value']
-})
-export const setEmail = action('registration', 'setEmail', {
-  expectedParams: ['value']
-})
-export const setPassword = action('registration', 'setPassword', {
-  expectedParams: ['value']
-})
-export const setRepeatedPassword = action(
-  'registration', 'setRepeatedPassword',
-  {
+  },
+  switchToExpertMode: {
+    expectedParams: []
+  },
+  setPin: {
     expectedParams: ['value']
-  }
-)
-export const registerWallet = asyncAction('registration', 'registerWallet', {
-  expectedParams: [],
-  creator: (params) => {
-    return (dispatch, getState) => {
-      const state = getState().get('registration').toJS()
-      dispatch(registerWallet.buildAction(params, (backend) => {
-        const userType = state.userType.value
-        if (userType === 'expert') {
-          return backend.wallet.registerWithSeedPhrase({
-            userName: state.username.value,
-            seedPhrase: state.passphrase.phrase
-          })
-        } else {
-          return backend.wallet.registerWithCredentials({
-            userName: state.username.value,
-            email: state.email.value,
-            password: state.password.value
-          })
+  },
+  setPinConfirm: {
+    expectedParams: ['value']
+  },
+  setPinFocused: {
+    expectedParams: ['value']
+  },
+  submitPin: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        const pinState = getState().getIn(['registration', 'pin'])
+        if (!pinState.get('valid')) {
+          return
         }
-      }))
+
+        if (pinState.get('confirm')) {
+          dispatch(actions.goForward())
+        } else {
+          dispatch(actions.setPinConfirm(true))
+        }
+      }
+    }
+  },
+  setUsername: {
+    expectedParams: ['value']
+  },
+  setEmail: {
+    expectedParams: ['value']
+  },
+  setPassword: {
+    expectedParams: ['value']
+  },
+  setRepeatedPassword: {
+    expectedParams: ['value']
+  },
+  registerWallet: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState) => {
+        const state = getState().get('registration').toJS()
+        dispatch(actions.registerWallet.buildAction(params, (backend) => {
+          const userType = state.userType.value
+          if (userType === 'expert') {
+            return backend.wallet.registerWithSeedPhrase({
+              userName: state.username.value,
+              seedPhrase: state.passphrase.phrase
+            })
+          } else {
+            return backend.wallet.registerWithCredentials({
+              userName: state.username.value,
+              email: state.email.value,
+              password: state.password.value
+            })
+          }
+        }))
+      }
     }
   }
 })
-
-const passwordValueVisibility = toggleable('registration', 'passwordValue', {
-  initialValue: false
-})
-export const {toggle: togglePasswordValue} = passwordValueVisibility.actions
-
-const passwordRepeatedValueVisibility = toggleable('registration', 'passwordRepeatedValue', {
-  initialValue: false
-})
-export const {toggle: togglePasswordRepeatedValue} = passwordRepeatedValueVisibility.actions
 
 const initialState = Immutable.fromJS({
   humanName: {
@@ -226,23 +197,11 @@ const initialState = Immutable.fromJS({
   complete: false
 })
 
-export default function reducer(state = initialState, action = {}) {
-  state = state.mergeIn(
-    ['password'],{
-      visibleValue: passwordValueVisibility.reducer(
-        state.get('password').get('visibleValue'),
-        action
-      ),
-      visibleRepeatedValue: passwordRepeatedValueVisibility.reducer(
-        state.get('password').get('visibleRepeatedValue'),
-        action
-      )
-    }
-  )
-  state = state.set('complete', _isComplete(state))
+module.exports.default = (state = initialState, action = {}) => {
+  state = state.set('complete', helpers._isComplete(state))
 
   switch (action.type) {
-    case setUserType.id:
+    case actions.setUserType.id:
       const valid = ['expert', 'layman'].indexOf(action.value) !== -1
       if (action.value && !valid) {
         throw Error('Invalid user type: ' + action.value)
@@ -255,7 +214,7 @@ export default function reducer(state = initialState, action = {}) {
         }
       })
 
-    case setPassword.id:
+    case actions.setPassword.id:
       const repeatedValue = state.get('password').get('repeated')
       const validPassword = (
         action.value === repeatedValue &&
@@ -269,7 +228,7 @@ export default function reducer(state = initialState, action = {}) {
           valid: validPassword
         }
       )
-    case setRepeatedPassword.id:
+    case actions.setRepeatedPassword.id:
       const passwordValue = state.get('password').get('visibleValue')
       const validRepeatedPassword = (
         action.value === passwordValue &&
@@ -283,22 +242,22 @@ export default function reducer(state = initialState, action = {}) {
           valid: validRepeatedPassword
         }
       )
-    case setEntropyStatus.id:
+    case actions.setEntropyStatus.id:
       return state.merge({
         passphrase: {
           sufficientEntropy: action.sufficientEntropy,
           progress: action.progress
         }
       })
-    case setRandomString.id:
+    case actions.setRandomString.id:
       return state.mergeIn(['passphrase'], {
         randomString: action.randomString
       })
-    case setPassphrase.id:
+    case actions.setPassphrase.id:
       return state.mergeIn(['passphrase'], {
         phrase: action.phrase
       })
-    case setPin.id:
+    case actions.setPin.id:
       if (!/^[0-9]{0,4}$/.test(action.value)) {
         return state
       }
@@ -307,22 +266,22 @@ export default function reducer(state = initialState, action = {}) {
         value: action.value,
         valid: action.value.length === 4
       })
-    case setPinConfirm.id:
+    case actions.setPinConfirm.id:
       return state.mergeDeep({
         pin: {
           confirm: action.value
         }
       })
-    case setPinFocused.id:
+    case actions.setPinFocused.id:
       return state.mergeDeep({
         pin: {
           focused: action.value
         }
       })
-    case setMaskedImageUncovering.id:
+    case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
 
-    case setHumanName.id:
+    case actions.setHumanName.id:
       return state.merge({
         humanName: {
           value: action.value,
@@ -330,7 +289,7 @@ export default function reducer(state = initialState, action = {}) {
         }
       })
 
-    case setEmail.id:
+    case actions.setEmail.id:
       return state.mergeDeep({
         email: {
           value: action.value,
@@ -338,14 +297,14 @@ export default function reducer(state = initialState, action = {}) {
         }
       }
     )
-    case setPassphraseWrittenDown.id:
+    case actions.setPassphraseWrittenDown.id:
       return state.mergeDeep({
         passphrase: {
           writtenDown: action.value,
           valid: !!state.getIn('passphrase', 'phrase') && action.value
         }
       })
-    case registerWallet.id:
+    case actions.registerWallet.id:
       return state.mergeDeep({
         wallet: {
           registering: true,
@@ -353,14 +312,14 @@ export default function reducer(state = initialState, action = {}) {
           errorMsg: null
         }
       })
-    case registerWallet.id_success:
+    case actions.registerWallet.id_success:
       return state.mergeDeep({
         wallet: {
           registering: false,
           registered: true
         }
       })
-    case registerWallet.id_fail:
+    case actions.registerWallet.id_fail:
       return state.mergeDeep({
         wallet: {
           registering: false,
@@ -373,7 +332,8 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export function _isComplete(state) {
+const helpers = module.exports.helpers = {}
+helpers._isComplete = (state) => {
   const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
   const areFieldsValid = (fields) => _.every(fields, isFieldValid)
 
@@ -387,20 +347,20 @@ export function _isComplete(state) {
   return complete
 }
 
-export function _getNextURLFromState(state) {
+helpers._getNextURLFromState = (state) => {
   const currentPath = state.getIn([
     'routing', 'locationBeforeTransitions', 'pathname'
   ])
 
-  if (!_canGoForward(state, currentPath)) {
+  if (!helpers._canGoForward(state, currentPath)) {
     return null
   }
 
   const userType = state.getIn(['registration', 'userType', 'value'])
-  return _getNextURL(currentPath, userType)
+  return helpers._getNextURL(currentPath, userType)
 }
 
-export function _getNextURL(currentPath, userType) {
+helpers._getNextURL = (currentPath, userType) => {
   if (currentPath === '/registration/user-type') {
     return userType === 'expert'
               ? '/registration/write-phrase'
@@ -410,7 +370,7 @@ export function _getNextURL(currentPath, userType) {
   return NEXT_ROUTES[currentPath]
 }
 
-export function _canGoForward(state, currentPath) {
+helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
   return !toCheck || state.getIn(['registration', toCheck, 'valid'])
 }

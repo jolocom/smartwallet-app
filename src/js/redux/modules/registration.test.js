@@ -2,21 +2,64 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as registration from './registration'
-import {stub} from '../../../../test/utils'
+import * as router from './router'
+import {stub, withStubs} from '../../../../test/utils'
 const reducer = registration.default
+const helpers = registration.helpers
 
-describe.only('Wallet registration reducer', function() {
+describe.only('Wallet registration Redux module', function() {
   describe('goForward', function() {
+    describe('action', function() {
+      it('should dispatch the wallet registration action when complete', () => {
+        const dispatch = stub()
+        const getState = () => Immutable.fromJS({registration: {
+          complete: true
+        }})
+
+        const thunk = registration.goForward()
+
+        withStubs([
+          [registration.actions, 'registerWallet', {returns: 'register'}]],
+          () => {
+            thunk(dispatch, getState)
+            expect(dispatch.calledWithArgs)
+              .to.deep.equal(['register'])
+          }
+        )
+      })
+
+      it('should go to the next page if requested', () => {
+        const dispatch = stub()
+        const getState = () => Immutable.fromJS({registration: {
+          complete: false
+        }})
+
+        const thunk = registration.goForward()
+
+        withStubs([
+          [router, 'pushRoute', {returns: 'push'}],
+          [registration.helpers, '_getNextURLFromState', {returns: '/next/'}]],
+          () => {
+            thunk(dispatch, getState)
+            expect(dispatch.calledWithArgs)
+              .to.deep.equal(['push'])
+            expect(router.pushRoute.calledWithArgs)
+              .to.deep.equal(['/next/'])
+          }
+        )
+      })
+    })
+
     describe('_canGoForward()', function() {
       it('should return true if there is nothing to check', function() {
-        expect(registration._canGoForward(Immutable.fromJS({
+        expect(helpers._canGoForward(Immutable.fromJS({
           registration: {}
         }), '/registration/something')).to.equal(true)
       })
 
       it('should return true if the validation for a page succeeds', () => {
         const test = (path, key) => {
-          expect(registration._canGoForward(Immutable.fromJS({
+          expect(helpers._canGoForward(Immutable.fromJS({
             registration: {[key]: {valid: true}}
           }), path)).to.equal(true)
         }
@@ -31,7 +74,7 @@ describe.only('Wallet registration reducer', function() {
 
       it('should return false if the validation for a page fails', () => {
         const test = (path, key) => {
-          expect(registration._canGoForward(Immutable.fromJS({
+          expect(helpers._canGoForward(Immutable.fromJS({
             registration: {[key]: {valid: false}}
           }), path)).to.equal(false)
         }
@@ -48,16 +91,16 @@ describe.only('Wallet registration reducer', function() {
 
   describe('_getNextURL()', function() {
     it('should return correct URL when choosing expert', () => {
-      expect(registration._getNextURL('/registration/user-type', 'expert'))
+      expect(helpers._getNextURL('/registration/user-type', 'expert'))
         .to.equal('/registration/write-phrase')
     })
     it('should return correct URL when choosing layman', () => {
-      expect(registration._getNextURL('/registration/user-type', 'layman'))
+      expect(helpers._getNextURL('/registration/user-type', 'layman'))
         .to.equal('/registration/phrase-info')
     })
     it('should return correct next URL', () => {
       const test = (url, next) =>
-        expect(registration._getNextURL(url)).to.equal(next)
+        expect(helpers._getNextURL(url)).to.equal(next)
 
       test('/registration/user-type', '/registration/phrase-info')
       test('/registration', '/registration/entropy')
@@ -71,7 +114,7 @@ describe.only('Wallet registration reducer', function() {
 
   describe('_getNextURLFromState()', function() {
     it('should return null if we cannot continue', () => {
-      expect(registration._getNextURLFromState(Immutable.fromJS({
+      expect(helpers._getNextURLFromState(Immutable.fromJS({
         routing: {
           locationBeforeTransitions: {pathname: '/registration/user-type'}
         },
@@ -79,23 +122,23 @@ describe.only('Wallet registration reducer', function() {
       }))).to.equal(null)
     })
     it('should return the correct next page', () => {
-      expect(registration._getNextURLFromState(Immutable.fromJS({
+      expect(helpers._getNextURLFromState(Immutable.fromJS({
         routing: {
           locationBeforeTransitions: {pathname: '/registration'}
         },
         registration: {username: {valid: true, value: 'Tom'}}
       }))).to.equal(
-        registration._getNextURL('/registration', null)
+        helpers._getNextURL('/registration', null)
       )
     })
     it('should return the correct next page after user type selection', () => {
-      expect(registration._getNextURLFromState(Immutable.fromJS({
+      expect(helpers._getNextURLFromState(Immutable.fromJS({
         routing: {
           locationBeforeTransitions: {pathname: '/registration/user-type'}
         },
         registration: {userType: {valid: true, value: 'expert'}}
       }))).to.equal(
-        registration._getNextURL('/registration/user-type', 'expert')
+        helpers._getNextURL('/registration/user-type', 'expert')
       )
     })
   })
@@ -103,7 +146,7 @@ describe.only('Wallet registration reducer', function() {
   describe('_isComplete()', function() {
     const test = ({invalid, result, userType = null}) => {
       invalid = new Immutable.Set(invalid)
-      expect(registration._isComplete(Immutable.fromJS({
+      expect(helpers._isComplete(Immutable.fromJS({
         username: {valid: !invalid.has('username')},
         userType: {
           valid: !invalid.has('userType'),
