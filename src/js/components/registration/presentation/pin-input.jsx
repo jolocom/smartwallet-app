@@ -27,22 +27,22 @@ const STYLES = {
     left: '-50000px'
   },
   clear: {
-    display: 'block',
-    boxSizing: 'border-box',
+    display: 'inline-block',
+    verticalAlign: 'center',
     position: 'absolute',
-    right: '10px',
-    top: (24 / 2 - 14 / 2) + 'px',
-    color: Theme.palette.alternateTextColor,
-    backgroundColor: Theme.palette.textColor,
-    fontFamily: 'monospace',
-    lineHeight: '14px',
-    textAlign: 'center',
-    borderRadius: '7px',
-    width: '14px',
-    height: '14px',
-    paddingLeft: '1px',
-    marginLeft: '3px',
+    height: '24px',
+    width: '24px',
     cursor: 'pointer'
+  },
+  img: {
+    userSelect: 'none',
+    marginTop: '5px',
+    marginLeft: '5px',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    width: '14px',
+    height: '14px'
   }
 }
 
@@ -105,13 +105,15 @@ class PinInput extends React.Component {
           {getCharAt(props.value, idx)}
         </div>
       ))}
-      {!props.disabled && (props.value.length || null) &&
+      <div style={{...STYLES.clear}}>
+      {(props.value.length > 0) &&
         <div onClick={() => this.clearAndFocus()}
-          style={STYLES.clear}
-        >
-        x
-        </div>
+          style={{...STYLES.img, ...{
+            backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+          }}}
+        />
       }
+      </div>
 
       <div>
         <input style={STYLES.numberInput}

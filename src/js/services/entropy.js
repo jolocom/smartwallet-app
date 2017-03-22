@@ -21,4 +21,8 @@ export default class EntropyService {
   getRandomNumbers(count) {
     return this.generator.randomWords(count).map(s => parseInt(s))
   }
+
+  getRandomString(wordCount) {
+    return this.generator.randomWords(wordCount).join('')
+  }
 }

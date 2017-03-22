@@ -19,6 +19,7 @@ export default class RegistrationWritePhraseScreen extends React.Component {
       value={this.props.registration.passphrase.phrase}
       onToggle={this.props.setPassphraseWrittenDown}
       onSubmit={this.props.goForward}
+      isChecked={this.props.registration.passphrase.writtenDown}
     />
   }
 }

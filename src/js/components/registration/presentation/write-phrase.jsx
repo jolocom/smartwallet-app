@@ -62,8 +62,8 @@ const WritePhrase = (props) => {
       <h1 style={STYLES.heading}>Your secure phrase</h1>
       <p style={STYLES.phrase}>
         {
-          props.value || 'The flying red fox is jumping enthusiastically over\
-          the little brown dog.'
+          props.value || 'The flying red fox is jumping enthusiastically over' +
+          'the little brown dog.'
         }
       </p>
       <p style={STYLES.sidenote}>
@@ -85,7 +85,8 @@ const WritePhrase = (props) => {
       <RaisedButton
         label="NEXT STEP"
         secondary
-        onClick={props.onSubmit} />
+        onClick={props.onSubmit}
+        disabled={!props.isChecked} />
     </div>
   )
 }
@@ -93,7 +94,8 @@ const WritePhrase = (props) => {
 WritePhrase.propTypes = {
   onToggle: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
-  value: React.PropTypes.string.isRequired
+  value: React.PropTypes.string.isRequired,
+  isChecked: React.PropTypes.bool.isRequired
 }
 
 export default Radium(WritePhrase)
