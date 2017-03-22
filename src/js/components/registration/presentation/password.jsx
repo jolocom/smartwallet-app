@@ -20,7 +20,10 @@ function Password(props) {
 		<input
 			type={props.visibleRepeatedValue}
 			value={props.repeatedValue}
-			onChange={e => props.onChangeRepeatedPassword(e.target.value)}
+			onChange={
+				e => props.onChangeRepeatedPassword(e.target.value)
+			}
+
 		/>
 		<div onClick={
 			e => props.onTogglePasswordRepeatedValue(e.target.value)

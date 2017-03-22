@@ -16,10 +16,10 @@ export default class RegistrationWritePhraseScreen extends React.Component {
 
   render() {
     return <Presentation
-      value={this.props.registration.passphrase.writtenDown}
-      valid={this.props.registration.passphrase.valid}
-      onChange={this.props.setPassphraseWrittenDown}
+      value={this.props.registration.passphrase.phrase}
+      onToggle={this.props.setPassphraseWrittenDown}
       onSubmit={this.props.goForward}
+      isChecked={this.props.registration.passphrase.writtenDown}
     />
   }
 }
