@@ -388,12 +388,9 @@ export function _isComplete(state) {
 }
 
 export function _getNextURLFromState(state) {
-  const currentPath = state.getIn([
-    'routing', 'locationBeforeTransitions', 'pathname'
-  ])
-
+  const currentPath = state.get('routing').locationBeforeTransitions.pathname
   if (!_canGoForward(state, currentPath)) {
-    return null
+    return
   }
 
   const userType = state.getIn(['registration', 'userType', 'value'])
