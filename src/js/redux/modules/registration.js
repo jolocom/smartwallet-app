@@ -2,7 +2,8 @@ import * as _ from 'lodash'
 import Immutable from 'immutable'
 import { action, asyncAction } from './'
 import { pushRoute } from './router'
-import toggleable from './generic/toggleable'
+import { isPasswordValid, checkPassStrength,
+  passwordCharacters } from '../../lib/password-util'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -70,8 +71,11 @@ export const addEntropyFromDeltas = action(
             entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
           dispatch(setPassphrase(
-            backend.generateSeedPhrase(randomString)
-          ))
+            new Mnemonic(
+              buffer.Buffer.from(randomNumbers),
+              Mnemonic.Words.ENGLISH).toString()
+            )
+          )
         }
       }
     }
@@ -169,16 +173,6 @@ export const registerWallet = asyncAction('registration', 'registerWallet', {
   }
 })
 
-const passwordValueVisibility = toggleable('registration', 'passwordValue', {
-  initialValue: false
-})
-export const {toggle: togglePasswordValue} = passwordValueVisibility.actions
-
-const passwordRepeatedValueVisibility = toggleable('registration', 'passwordRepeatedValue', {
-  initialValue: false
-})
-export const {toggle: togglePasswordRepeatedValue} = passwordRepeatedValueVisibility.actions
-
 const initialState = Immutable.fromJS({
   humanName: {
     value: '',
@@ -195,6 +189,10 @@ const initialState = Immutable.fromJS({
   password: {
     value: '',
     repeated: '',
+    strength: 'weak',
+    hasLowerCase: false,
+    hasUpperCase: false,
+    hasDigit: false,
     valid: false
   },
   pin: {
@@ -227,18 +225,6 @@ const initialState = Immutable.fromJS({
 })
 
 export default function reducer(state = initialState, action = {}) {
-  state = state.mergeIn(
-    ['password'],{
-      visibleValue: passwordValueVisibility.reducer(
-        state.get('password').get('visibleValue'),
-        action
-      ),
-      visibleRepeatedValue: passwordRepeatedValueVisibility.reducer(
-        state.get('password').get('visibleRepeatedValue'),
-        action
-      )
-    }
-  )
   state = state.set('complete', _isComplete(state))
 
   switch (action.type) {
@@ -256,31 +242,33 @@ export default function reducer(state = initialState, action = {}) {
       })
 
     case setPassword.id:
-      const repeatedValue = state.get('password').get('repeated')
-      const validPassword = (
-        action.value === repeatedValue &&
-        action.value.length > 0
+      const oldRepeatedValue = state.get('password').get('repeated')
+      const validPassword = isPasswordValid(action.value, oldRepeatedValue)
+      const characters = passwordCharacters(action.value)
+      const newRepeatedValue = (
+        isPasswordValid(action.value, action.value) ? oldRepeatedValue : ''
       )
-
+      const passwordStrength = checkPassStrength(action.value)
       return state.mergeIn(
         ['password'],
         {
           value: action.value,
-          valid: validPassword
+          repeated: newRepeatedValue,
+          valid: validPassword,
+          hasLowerCase: characters.lowerCase,
+          hasUpperCase: characters.upperCase,
+          hasDigit: characters.digit,
+          strength: passwordStrength
         }
       )
     case setRepeatedPassword.id:
-      const passwordValue = state.get('password').get('visibleValue')
-      const validRepeatedPassword = (
-        action.value === passwordValue &&
-        action.value.length > 0
-      )
-
+      const passwordValue = state.get('password').get('value')
+      const validRepeatedValue = isPasswordValid(action.value, passwordValue)
       return state.mergeIn(
         ['password'],
         {
           repeated: action.value,
-          valid: validRepeatedPassword
+          valid: validRepeatedValue
         }
       )
     case setEntropyStatus.id:

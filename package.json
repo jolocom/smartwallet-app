@@ -108,6 +108,7 @@
     "json-loader": "^0.5.4",
     "lodash": "^4.13.1",
     "material-ui": "^0.16.0",
+    "material-ui-password-field": "^1.1.1",
     "moment": "^2.10.6",
     "n3": "^0.4.3",
     "querystring": "^0.2.0",
