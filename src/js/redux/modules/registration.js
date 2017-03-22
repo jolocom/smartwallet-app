@@ -3,7 +3,8 @@ import Mnemonic from 'bitcore-mnemonic'
 import * as buffer from 'buffer'
 import { action } from './'
 import { pushRoute } from './router'
-import toggleable from './generic/toggleable'
+import { isPasswordValid, checkPassStrength,
+  passwordCharacters } from '../../lib/password-util'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -83,8 +84,11 @@ export const addEntropyFromDeltas = action(
             entropy.isReady()) {
           const randomNumbers = entropy.getRandomNumbers(12)
           dispatch(setPassphrase(
-            new Mnemonic(buffer.Buffer.from(randomNumbers), Mnemonic.Words.ENGLISH).toString()
-          ))
+            new Mnemonic(
+              buffer.Buffer.from(randomNumbers),
+              Mnemonic.Words.ENGLISH).toString()
+            )
+          )
         }
       }
     }
@@ -175,10 +179,10 @@ const initialState = Immutable.fromJS({
   password: {
     value: '',
     repeated: '',
-    strength:'weak',
-    lowerCase:false,
-    upperCase: false,
-    digit: false,
+    strength: 'weak',
+    hasLowerCase: false,
+    hasUpperCase: false,
+    hasDigit: false,
     valid: false
   },
   pin: {
@@ -204,78 +208,6 @@ const initialState = Immutable.fromJS({
   complete: false
 })
 
-const isPasswordValid = (passwordValue, repeatedValue) => {
-  return( (repeatedValue === passwordValue) &&
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\S\s]{8,}$/.test(passwordValue))
-}
-
-const passwordCharacters = (password) =>{
-  let lowerCaseExist = false
-  let upperCaseExist = false
-  let digitExist = false
-  if(/[a-z]/.test(password)){
-    lowerCaseExist = true
-  }
-  if(/[A-Z]/.test(password)){
-    upperCaseExist = true
-  }
-  if (/[0-9]/.test(password)) {
-    digitExist = true
-  }
-  const checkResult = {
-    lowerCase: lowerCaseExist,
-    upperCase: upperCaseExist,
-    digit: digitExist
-  }
-  return checkResult
-}
-
-const scorePassword = (pass) =>{
-  let characters = passwordCharacters(pass)
-  const isValid = characters.lowerCase && characters.upperCase && characters.digit
-  if (isValid) {
-    var score = 0;
-    if (!pass)
-        return score;
-
-    // award every unique letter until 5 repetitions
-    let letters = new Object();
-    for (let i=0; i<pass.length; i++) {
-        letters[pass[i]] = (letters[pass[i]] || 0) + 1;
-        score += 5.0 / letters[pass[i]];
-    }
-
-    // bonus points for mixing it up
-    let variations = {
-        digits: /\d/.test(pass),
-        lower: /[a-z]/.test(pass),
-        upper: /[A-Z]/.test(pass),
-        nonWords: /\W/.test(pass),
-    }
-
-    let variationCount = 0;
-    for (let check in variations) {
-        variationCount += (variations[check] == true) ? 1 : 0;
-    }
-    score += (variationCount - 1) * 10;
-
-    return parseInt(score);
-  }
-  return 0
-}
-
-const checkPassStrength = (pass) => {
-  let score = scorePassword(pass);
-  if (pass.length > 7) {
-    if (score > 70)
-      return "strong";
-    if (score > 40)
-      return "good";
-  }
-
-  return "weak";
-}
-
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case setUserType.id:
@@ -295,7 +227,9 @@ export default function reducer(state = initialState, action = {}) {
       const oldRepeatedValue = state.get('password').get('repeated')
       const validPassword = isPasswordValid(action.value, oldRepeatedValue)
       const characters = passwordCharacters(action.value)
-      const newRepeatedValue = isPasswordValid(action.value, action.value)? oldRepeatedValue: ''
+      const newRepeatedValue = (
+        isPasswordValid(action.value, action.value) ? oldRepeatedValue : ''
+      )
       const passwordStrength = checkPassStrength(action.value)
       return state.mergeIn(
         ['password'],
@@ -303,20 +237,20 @@ export default function reducer(state = initialState, action = {}) {
           value: action.value,
           repeated: newRepeatedValue,
           valid: validPassword,
-          lowerCase: characters.lowerCase,
-          upperCase: characters.upperCase,
-          digit: characters.digit,
+          hasLowerCase: characters.lowerCase,
+          hasUpperCase: characters.upperCase,
+          hasDigit: characters.digit,
           strength: passwordStrength
         }
       )
     case setRepeatedPassword.id:
       const passwordValue = state.get('password').get('value')
-      const validRepeatedPassword = isPasswordValid(action.value, passwordValue)
+      const validRepeatedValue = isPasswordValid(action.value, passwordValue)
       return state.mergeIn(
         ['password'],
         {
           repeated: action.value,
-          valid: validRepeatedPassword
+          valid: validRepeatedValue
         }
       )
     case setEntropyStatus.id:
