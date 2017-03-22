@@ -7,7 +7,7 @@ const reducer = registration.default
 
 describe.only('Wallet registration reducer', function() {
   describe('goForward', function() {
-    describe('_canGoForward', function() {
+    describe('_canGoForward()', function() {
       it('should return true if there is nothing to check', function() {
         expect(registration._canGoForward(Immutable.fromJS({
           registration: {}
@@ -46,7 +46,7 @@ describe.only('Wallet registration reducer', function() {
     })
   })
 
-  describe('_getNextURL', function() {
+  describe('_getNextURL()', function() {
     it('should return correct URL when choosing expert', () => {
       expect(registration._getNextURL('/registration/user-type', 'expert'))
         .to.equal('/registration/write-phrase')
@@ -69,7 +69,7 @@ describe.only('Wallet registration reducer', function() {
     })
   })
 
-  describe('_getNextURLFromState', function() {
+  describe('_getNextURLFromState()', function() {
     it('should return null if we cannot continue', () => {
       expect(registration._getNextURLFromState(Immutable.fromJS({
         routing: {
@@ -78,5 +78,54 @@ describe.only('Wallet registration reducer', function() {
         registration: {userType: {valid: false}}
       }))).to.equal(null)
     })
+    it('should return the correct next page', () => {
+      expect(registration._getNextURLFromState(Immutable.fromJS({
+        routing: {
+          locationBeforeTransitions: {pathname: '/registration'}
+        },
+        registration: {username: {valid: true, value: 'Tom'}}
+      }))).to.equal(
+        registration._getNextURL('/registration', null)
+      )
+    })
+    it('should return the correct next page after user type selection', () => {
+      expect(registration._getNextURLFromState(Immutable.fromJS({
+        routing: {
+          locationBeforeTransitions: {pathname: '/registration/user-type'}
+        },
+        registration: {userType: {valid: true, value: 'expert'}}
+      }))).to.equal(
+        registration._getNextURL('/registration/user-type', 'expert')
+      )
+    })
+  })
+
+  describe('_isComplete()', function() {
+    // const test = ({invalid, result}) => {
+    //   expect(registration._isComplete(Immutable.fromJS({
+    //     username: {valid: !invalid.username},
+    //     userType: {valid: !invalid.userType},
+    //     pin: {valid: !invalid.pin},
+    //     email: {valid: !invalid.email},
+    //     password: {valid: !invalid.password},
+    //     passphrase: {valid: !invalid.passphrase}
+    //   }))).to.equal(result)
+    // }
+
+    // it('should return false if nothing is filled in', () => {
+    //   test({
+    //     invalid: [
+    //       'username', 'userType', 'pin', 'emai',
+    //       'password', 'passphrase'
+    //     ],
+    //     result: false
+    //   })
+    // })
+
+    // it('should return false if one of the base fields is missing', () => {
+    //   test({invalid: ['username'], result: false})
+    //   test({invalid: ['userType'], result: false})
+    //   test({invalid: ['pin'], result: false})
+    // })
   })
 })
