@@ -6,18 +6,10 @@ import Theme from '../../../styles/jolocom-theme'
 import {RaisedButton} from 'material-ui'
 
 const STYLES = Object.assign(RegistrationStyles, {
-  prompt: {
-    marginTop: '10px',
-    width: '200px',
-    maxWidth: '80%',
-    color: Theme.jolocom.gray1,
-    textAlign: 'center'
-  },
-  promptshow: {
-    display: 'relative'
-  },
-  prompthide: {
-    display: 'relative'
+  img: {
+    width: '100%',
+    margin: 'auto',
+    alignItems: 'center'
   }
 
 })
@@ -27,21 +19,23 @@ const Entropy = (props) => {
     onMouseMove={(e) => props.onMouseMovement(e.clientX, e.clientY)}
     >
 
-    <MaskedImage
-      image={IMAGE_DATA_URL}
-      uncoveredPaths={props.imageUncoveredPaths}
-      uncovering={props.imageUncovering}
-      onPointUncovered={props.onImagePointUncoverd}
-      onUncoveringChange={props.onImageUncoveringChange}
-      message1={'Hi ' + props.user + '!, for...'}
-      message2={'...more security we need some random data.'}
-      message3={'Please put your finger anywhere on the screen and draw on it randomly.'}
-      >
-      </MaskedImage>
-      <RaisedButton
-        label="NEXT STEP"
-        secondary
-        onClick={props.onSubmit} />
+      <MaskedImage
+        image={IMAGE_DATA_URL}
+        uncoveredPaths={props.imageUncoveredPaths}
+        uncovering={props.imageUncovering}
+        onPointUncovered={props.onImagePointUncoverd}
+        onUncoveringChange={props.onImageUncoveringChange}
+        message1={'Hi ' + props.user + '!, for...'}
+        message2={'...more security we need some random data.'}
+        message3={'Please put your finger anywhere on the screen and draw on it randomly.'}
+        >
+        </MaskedImage>
+
+        <RaisedButton
+          label="NEXT STEP"
+          secondary
+          onClick={props.onSubmit} />
+
   </div>
 }
 Entropy.propTypes = {

@@ -44,7 +44,7 @@ class MaskedImage extends React.Component {
   render() {
     const props = this.props
 
-    return (<svg
+    return (<svg style={{width: '240px', height: '150px', margin: 'auto'}}
       onTouchStart={() => this.onRevealStart()}
       onMouseDown={() => this.onRevealStart()}
       onMouseMove={(e) => this.onReveal(e)}
@@ -66,7 +66,7 @@ class MaskedImage extends React.Component {
 
         </mask>
       </defs>
-      <foreignObject width="200" height="150" textAnchor="middle"
+      <foreignObject width="240" height="150" textAnchor="middle"
                   requiredExtensions="http://www.w3.org/1999/xhtml">
         <div xmlns="http://www.w3.org/1999/xhtml" style={{textAlign: 'center',
           color: Theme.jolocom.gray1}}>
