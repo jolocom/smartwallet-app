@@ -7,7 +7,7 @@ export default class HoverButton extends React.Component {
   static propTypes = {
     backgroundColor: React.PropTypes.string.isRequired,
     hoverColor: React.PropTypes.string.isRequired,
-    style: React.PropTypes.Object,
+    style: React.PropTypes.any,
     onClick: React.PropTypes.func.isRequired,
     children: React.PropTypes.node
   }
@@ -32,5 +32,5 @@ export default class HoverButton extends React.Component {
         {this.props.children}
       </div>
     </div>
-}
+  }
 }

@@ -12,6 +12,9 @@ export default {
     backgroundColor: Theme.jolocom.gray4
   },
   header: {
-    color: Theme.jolocom.gray1
+    marginTop: '40px',
+    marginBottom: '30px',
+    color: Theme.jolocom.gray1,
+    textAlign: 'center'
   }
 }

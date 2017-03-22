@@ -6,15 +6,11 @@ import RegistrationStyles from '../styles'
 import HoverButton from '../../common/hover-button'
 
 const STYLES = Object.assign(RegistrationStyles, {
-  header: {
-    marginTop: '40px',
-    marginBottom: '30px'
-  },
   tile: {
     display: 'flex',
     maxwidth: '90%',
-    height: '150px',
-    width: '300px',
+    height: '180px',
+    width: '290px',
     alignItems: 'center',
     marginTop: '10px',
     marginBottom: '10px',
@@ -22,13 +18,19 @@ const STYLES = Object.assign(RegistrationStyles, {
     primary: false,
     backgroundColor: Theme.jolocom.gray1,
     selectedColor: Theme.palette.primary1Color,
-    textAlign: 'center'
+    textAlign: 'center',
+    padding: '5%'
   },
 
   tileinside: {
     color: Theme.jolocom.gray5,
-    padding: '5px 5px 5px 5px',
-    margin: '0px'
+    display: 'flex',
+    flexDirection: 'column',
+    width: '80%',
+    height: '100%',
+    position: 'relative',
+    alignItems: 'center',
+    margin: 'auto'
   },
   img: {
     position: 'relative',
@@ -63,7 +65,7 @@ const UserType = (props) => {
    \'WHY?\''
   return <div style={STYLES.container}>
     <div style={STYLES.header}>
-      {'Hi' + props.user + '!, are you...'}
+      {'Hi ' + props.user + '!, are you...'}
     </div>
     <div>
       <HoverButton
@@ -75,24 +77,21 @@ const UserType = (props) => {
         <div style={STYLES.tileinside}>
           <div style={{...STYLES.img, ...{
             backgroundImage: 'url(/img/img_techguy.svg)'
-          }}} />
-        ...a total tech Geek and want to be in absolute control?
+          }}} />...a total tech Geek and want to be in absolute control?
         </div>
       </HoverButton>
     </div>
     <div>
       <HoverButton
-      backgroundColor={(props.value === 'layman' ?
-      STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
+        backgroundColor={(props.value === 'layman'
+        ? STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
         hoverColor={STYLES.tile.selectedColor}
         style={STYLES.tile}
-        onClick={() => { props.onChange('layman'); props.onSubmit() }}
-        onTouchTap={() => { props.onChange('layman'); props.onSubmit() }}>
+        onClick={() => { props.onChange('layman'); props.onSubmit() }}>
         <div style={STYLES.tileinside}>
           <div style={{...STYLES.img, ...{
             backgroundImage: 'url(/img/img_nohustle.svg)'
-          }}} />
-          ...the laid-back type, who doesn't want any hassle.
+          }}} />...the laid-back type, who doesn't want any hassle.
         </div>
       </HoverButton>
     </div>

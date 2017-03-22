@@ -1,27 +1,52 @@
 import React from 'react'
 import Radium from 'radium'
 import MaskedImage from './masked-image'
+import RegistrationStyles from '../styles'
+import Theme from '../../../styles/jolocom-theme'
+import {RaisedButton} from 'material-ui'
+
+const STYLES = Object.assign(RegistrationStyles, {
+  prompt: {
+    marginTop: '10px',
+    width: '200px',
+    maxWidth: '80%',
+    color: Theme.jolocom.gray1,
+    textAlign: 'center'
+  },
+  promptshow: {
+    display: 'relative'
+  },
+  prompthide: {
+    display: 'relative'
+  }
+
+})
 
 const Entropy = (props) => {
-  return <div
-    style={{ width: '400px', height: '400px', backgroundColor: '#EEE' }}
+  return <div style={STYLES.container}
     onMouseMove={(e) => props.onMouseMovement(e.clientX, e.clientY)}
-  >
-    <h1>Entropy</h1>
+    >
+
     <MaskedImage
       image={IMAGE_DATA_URL}
       uncoveredPaths={props.imageUncoveredPaths}
       uncovering={props.imageUncovering}
       onPointUncovered={props.onImagePointUncoverd}
       onUncoveringChange={props.onImageUncoveringChange}
-    />
-    <div onClick={props.onSubmit}>Next!</div>
+      message1={'Hi ' + props.user + '!, for...'}
+      message2={'...more security we need some random data.'}
+      message3={'Please put your finger anywhere on the screen and draw on it randomly.'}
+      >
+      </MaskedImage>
+      <RaisedButton
+        label="NEXT STEP"
+        secondary
+        onClick={props.onSubmit} />
   </div>
 }
 Entropy.propTypes = {
-  onMouseMovement: React.PropTypes.func.isRequired,
   imageUncovering: React.PropTypes.bool.isRequired,
-
+  user: React.PropTypes.string,
   onImagePointUncoverd: React.PropTypes.func.isRequired,
   onImageUncoveringChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired

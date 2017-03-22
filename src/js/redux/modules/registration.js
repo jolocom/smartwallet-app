@@ -354,10 +354,7 @@ helpers._isComplete = (state) => {
 }
 
 helpers._getNextURLFromState = (state) => {
-  const currentPath = state.getIn([
-    'routing', 'locationBeforeTransitions', 'pathname'
-  ])
-
+  const currentPath = state.get('routing').locationBeforeTransitions.pathname
   if (!helpers._canGoForward(state, currentPath)) {
     return null
   }
