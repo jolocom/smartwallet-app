@@ -101,31 +101,51 @@ describe.only('Wallet registration reducer', function() {
   })
 
   describe('_isComplete()', function() {
-    // const test = ({invalid, result}) => {
-    //   expect(registration._isComplete(Immutable.fromJS({
-    //     username: {valid: !invalid.username},
-    //     userType: {valid: !invalid.userType},
-    //     pin: {valid: !invalid.pin},
-    //     email: {valid: !invalid.email},
-    //     password: {valid: !invalid.password},
-    //     passphrase: {valid: !invalid.passphrase}
-    //   }))).to.equal(result)
-    // }
+    const test = ({invalid, result, userType = null}) => {
+      invalid = new Immutable.Set(invalid)
+      expect(registration._isComplete(Immutable.fromJS({
+        username: {valid: !invalid.has('username')},
+        userType: {
+          valid: !invalid.has('userType'),
+          value: userType
+        },
+        pin: {valid: !invalid.has('pin')},
+        email: {valid: !invalid.has('email')},
+        password: {valid: !invalid.has('password')},
+        passphrase: {valid: !invalid.has('passphrase')}
+      }))).to.equal(result)
+    }
 
-    // it('should return false if nothing is filled in', () => {
-    //   test({
-    //     invalid: [
-    //       'username', 'userType', 'pin', 'emai',
-    //       'password', 'passphrase'
-    //     ],
-    //     result: false
-    //   })
-    // })
+    it('should return false if nothing is filled in', () => {
+      test({
+        invalid: [
+          'username', 'userType', 'pin', 'emai',
+          'password', 'passphrase'
+        ],
+        result: false
+      })
+    })
 
-    // it('should return false if one of the base fields is missing', () => {
-    //   test({invalid: ['username'], result: false})
-    //   test({invalid: ['userType'], result: false})
-    //   test({invalid: ['pin'], result: false})
-    // })
+    it('should return false if one of the base fields is missing', () => {
+      test({invalid: ['username'], result: false})
+      test({invalid: ['userType'], result: false})
+      test({invalid: ['pin'], result: false})
+    })
+
+    it('should return false if required expert fields are missing', () => {
+      test({invalid: ['passphrase'], result: false, userType: 'expert'})
+    })
+
+    it('should return true if all required expert fields are there', () => {
+      test({invalid: ['email', 'password'], result: true, userType: 'expert'})
+    })
+
+    it('should return true if all required layman fields are there', () => {
+      test({invalid: ['passphrase'], result: true, userType: 'layman'})
+    })
+
+    it('should return false if required layman fields are missing', () => {
+      test({invalid: ['email', 'password'], result: false, userType: 'layman'})
+    })
   })
 })
