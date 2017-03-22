@@ -34,7 +34,7 @@ const NameEntry = (props) => {
       end up on your buiseness card one day.
     </p>
     <TextField
-      style={{'margin-top': '10%'}}
+      style={{'marginTop': '10%'}}
       defaultValue={props.value}
       floatingLabelText="Unique Username"
       onChange={(e) => props.onChange(e.target.value)}

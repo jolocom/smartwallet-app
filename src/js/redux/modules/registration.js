@@ -21,12 +21,24 @@ export const goForward = action('registration', 'goForward', {
   creator: () => {
     return (dispatch, getState) => {
       const state = getState()
-      if (state.getIn(['registration', 'complete'])) {
-        dispatch(registerWallet())
-      } else {
-        const nextUrl = _getNextURLFromState(state)
-        dispatch(pushRoute(nextUrl))
+      const pathname = state.get('routing').locationBeforeTransitions.pathname
+
+      const toCheck = CHECK_BEFORE_SWITCHING[pathname]
+      if (toCheck && !state.getIn(['registration', toCheck, 'valid'])) {
+        return
       }
+
+      let nextUrl
+      if (pathname === '/registration/user-type') {
+        const userType = state.getIn(['registration', 'userType', 'value'])
+        nextUrl = userType === 'expert'
+                  ? '/registration/write-phrase'
+                  : '/registration/phrase-info'
+      } else {
+        nextUrl = NEXT_ROUTES[pathname]
+      }
+
+      dispatch(pushRoute(nextUrl))
     }
   }
 })
