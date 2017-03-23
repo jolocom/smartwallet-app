@@ -1,4 +1,4 @@
-import Theme from '../../styles/jolocom-theme'
+import theme from '../../styles/jolocom-theme'
 
 export default {
   container: {
@@ -8,22 +8,25 @@ export default {
     alignItems: 'center',
     textAlign: 'center',
     height: '100%',
-    padding: '5%',
-    backgroundColor: Theme.jolocom.gray4
+    padding: '16px',
+    backgroundColor: theme.jolocom.gray4,
+    boxSizing: 'border-box'
   },
   header: {
-    marginTop: '40px',
-    // marginBottom: '30px',
-    color: Theme.jolocom.gray1,
+    margin: '40px 0 16px 0',
+    color: theme.jolocom.gray1,
     fontSize: '18pt',
     fontWeight: '300'
   },
   sideNoteGray: {
-    fontSize: '11pt',
+    fontSize: '11px',
     fontWeight: '300',
-    color: Theme.jolocom.gray1
+    color: theme.jolocom.gray1
   },
   elementSpacing: {
     margin: '10px 0'
+  },
+  footer: {
+    padding: '16px'
   }
 }

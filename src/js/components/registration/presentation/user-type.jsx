@@ -19,8 +19,7 @@ const STYLES = Object.assign(RegistrationStyles, {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    marginTop: '8px',
-    marginBottom: '8px',
+    marginTop: '8px 0 8px',
     borderRadius: '2px',
     primary: false,
     backgroundColor: theme.jolocom.gray1,
@@ -116,7 +115,7 @@ const UserType = (props) => {
         </div>
       </HoverButton>
     </div>
-    <div>
+    <div style={STYLES.footer}>
       <FlatButton onClick={() => {
         props.configSimpleDialog(messageWhy); props.showSimpleDialog()
       }}>

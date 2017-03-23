@@ -9,11 +9,11 @@ const STYLES = {
     verticalAlign: 'center',
     color: Theme.palette.alternateTextColor,
     margin: '0 3px',
-    width: '24px',
-    height: '24px',
-    borderRadius: '12px',
+    width: '48px',
+    height: '48px',
+    borderRadius: '24px',
     backgroundColor: Theme.palette.disabledColor,
-    lineHeight: '24px',
+    lineHeight: '48px',
     textAlign: 'center'
   },
   focusedBall: {
@@ -30,19 +30,19 @@ const STYLES = {
     display: 'inline-block',
     verticalAlign: 'center',
     position: 'absolute',
-    height: '24px',
-    width: '24px',
+    height: '48px',
+    width: '48px',
     cursor: 'pointer'
   },
   img: {
     userSelect: 'none',
-    marginTop: '5px',
-    marginLeft: '5px',
+    marginTop: '14px',
+    marginLeft: '8px',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
-    width: '14px',
-    height: '14px'
+    width: '24px',
+    height: '24px'
   }
 }
 

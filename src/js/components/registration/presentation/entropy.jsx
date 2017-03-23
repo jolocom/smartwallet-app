@@ -4,13 +4,12 @@ import MaskedImage from './masked-image'
 import RegistrationStyles from '../styles'
 import {RaisedButton} from 'material-ui'
 
-const STYLES = Object.assign(RegistrationStyles, {
+const STYLES = Object.assign({}, RegistrationStyles, {
   img: {
     width: '100%',
     margin: 'auto',
     alignItems: 'center'
   }
-
 })
 
 const Entropy = (props) => {
@@ -29,10 +28,12 @@ const Entropy = (props) => {
         message3={'Please put your finger anywhere on the screen and draw on it randomly.'} // eslint-disable-line max-len
       />
 
-      <RaisedButton
-        label="NEXT STEP"
-        secondary
-        onClick={props.onSubmit} />
+      <div style={STYLES.footer}>
+        <RaisedButton
+          label="NEXT STEP"
+          secondary
+          onClick={props.onSubmit} />
+      </div>
     </div>
   )
 }
