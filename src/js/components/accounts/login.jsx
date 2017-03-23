@@ -8,6 +8,8 @@ import Utils from 'lib/util'
 
 import {theme} from 'styles'
 
+import {routes} from 'routes'
+
 // login for development
 const Login = connect({
   props: ['account', 'account.login', 'account.emailUpdateQueued'],
@@ -32,7 +34,7 @@ const Login = connect({
   componentWillMount() {
     const {account} = this.props
     if (account && account.webId) {
-      this.props.pushRoute('/graph')
+      this.props.pushRoute(routes.home)
     }
   },
 
@@ -179,7 +181,7 @@ const Login = connect({
         : ''
         }
         <p style={styles.help}>Don't have an account yet?&nbsp;
-          <Link to="/signup" style={styles.link}>Sign up</Link>.
+          <Link to={routes.signup} style={styles.link}>Sign up</Link>.
         </p>
       </div>
     )
