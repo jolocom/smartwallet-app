@@ -18,6 +18,10 @@ const STYLES = {
     width: '100%',
     transformOrigin: 'center top 0px'
   },
+  inputStyle: {
+    textAlign: 'center'
+  }
+  ,
   sidenote: {
     fontSize: '11pt',
     fontWeight: '300',
@@ -43,6 +47,7 @@ const NameEntry = (props) => {
       defaultValue={props.value}
       floatingLabelText="Unique Username"
       floatingLabelStyle={STYLES.floatingLabel}
+      inputStyle={STYLES.inputStyle}
       onChange={(e) => props.onChange(e.target.value)}
       errorText=""
     />
