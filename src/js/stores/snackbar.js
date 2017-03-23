@@ -29,7 +29,7 @@ export default Reflux.createStore({
       message: message,
       undo: true,
       undoCallback: undoCallback
-  }, true)
+    }, true)
     clearTimeout(this.hideTimeout)
     this.hideTimeout = setTimeout(() => {
       this.trigger({open: false, message: '', undo: true}, true)

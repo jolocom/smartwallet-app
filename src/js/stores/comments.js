@@ -128,7 +128,7 @@ export default Reflux.createStore({
             console.log('does not exist or type not set')
             continue
           }
-          if (graphs[subj][RDF.type].indexOf(SIOC.Post) == -1) {
+          if (graphs[subj][RDF.type].indexOf(SIOC.Post) === -1) {
             // not a Post
             console.log('not a Post')
             continue
