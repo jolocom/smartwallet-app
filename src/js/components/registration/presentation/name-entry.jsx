@@ -20,8 +20,7 @@ const STYLES = {
   },
   inputStyle: {
     textAlign: 'center'
-  }
-  ,
+  },
   sidenote: {
     fontSize: '11pt',
     fontWeight: '300',
