@@ -7,10 +7,10 @@ import {
   Avatar
 } from 'material-ui'
 
-import RegistrationStyles from '../styles'
+import registrationStyles from '../styles'
 
 const STYLES = {
-  root: RegistrationStyles
+  root: registrationStyles
 }
 
 const PhraseInfo = (props) => {

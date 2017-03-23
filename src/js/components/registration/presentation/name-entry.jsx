@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+<<<<<<< HEAD
 import RegistrationStyles from '../styles'
 import TextField from 'material-ui/TextField'
 import {RaisedButton} from 'material-ui'
@@ -28,6 +29,17 @@ const STYLES = {
     margin: '20px',
     textAlign: 'center'
   }
+=======
+import registrationStyles from '../styles'
+
+import {
+  RaisedButton,
+  TextField
+} from 'material-ui'
+
+const STYLES = {
+  root: registrationStyles
+>>>>>>> #540-wallet-registration
 }
 
 const NameEntry = (props) => {

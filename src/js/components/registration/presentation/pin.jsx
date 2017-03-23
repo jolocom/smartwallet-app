@@ -1,34 +1,29 @@
 import React from 'react'
 import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
-import Theme from '../../../styles/jolocom-theme'
 import PinInput from './pin-input'
-import RegistrationStyles from '../styles'
 
-const STYLES = {
-  root: RegistrationStyles.container,
-  header: {
-    marginTop: '50px',
-    marginBottom: '30px',
-    color: Theme.jolocom.gray1
-  },
+import theme from '../../../styles/jolocom-theme'
+import registrationStyles from '../styles'
+
+const STYLES = Object.assign({}, registrationStyles, {
   input: {
     display: 'inline-block'
   },
   changeLink: {
     margin: '20px 0',
-    color: Theme.palette.accent1Color,
+    color: theme.palette.accent1Color,
     textTransform: 'uppercase'
   },
   explanation: {
     marginTop: '140px',
-    color: Theme.jolocom.gray1
+    color: theme.jolocom.gray1
   },
-  button: {
-    display: 'inline-block',
-    marginTop: '30px'
+  content: {
+    padding: '16px',
+    flex: 1
   }
-}
+})
 
 function getButtonLabel(props) {
   if (!props.valid) {
@@ -42,46 +37,55 @@ function getButtonLabel(props) {
 }
 
 const Pin = (props) => {
-  return <div style={STYLES.root}>
-    <div style={{...RegistrationStyles.elementSpacing,
-      ...RegistrationStyles.header}}>
-      {props.confirm || 'Create a PIN for secure login.'}
-      {props.confirm && 'Your Secure PIN.'}
-    </div>
-    <PinInput
-      value={props.value}
-      focused={props.focused}
-      disabled={props.confirm}
-      onChange={props.onChange}
-      onFocusChange={props.onFocusChange}
-      confirm={props.confirm} />
-    {props.confirm && <div
-      style={STYLES.changeLink}
-      onClick={props.onChangeRequest}
-    >
-      Change secure PIN
-    </div>}
-    {
-    props.confirm &&
-      <div style={{
-        ...RegistrationStyles.sideNoteGray,
-        ...RegistrationStyles.elementSpacing,
-        ...STYLES.explanation}}>
-        This secure PIN will be needed for transactions and
-        saving information on the Blockchain.
-      </div>
-    }
+  let confirm
 
-    <div style={STYLES.button}>
-      <RaisedButton
-        disabled={!props.valid}
-        secondary={props.valid}
-        label={getButtonLabel(props)}
-        onClick={props.onSubmit}
-      />
+  if (props.confirm) {
+    confirm = (
+      <div>
+        <div
+          style={STYLES.changeLink}
+          onClick={props.onChangeRequest}
+        >
+          Change secure PIN
+        </div>
+        <div style={STYLES.explanation}>
+          This secure PIN will be needed for transactions and
+          saving information on the Blockchain.
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={STYLES.container}>
+      <div style={STYLES.header}>
+        {props.confirm || 'Create a PIN for secure login.'}
+        {props.confirm && 'Your Secure PIN.'}
+      </div>
+      <div style={STYLES.content}>
+        <PinInput
+          value={props.value}
+          focused={props.focused}
+          disabled={props.confirm}
+          onChange={props.onChange}
+          onFocusChange={props.onFocusChange}
+          confirm={props.confirm} />
+
+        {confirm}
+      </div>
+
+      <div style={STYLES.footer}>
+        <RaisedButton
+          disabled={!props.valid}
+          secondary={props.valid}
+          label={getButtonLabel(props)}
+          onClick={props.onSubmit}
+        />
+      </div>
     </div>
-  </div>
+  )
 }
+
 Pin.propTypes = {
   value: React.PropTypes.string.isRequired,
   valid: React.PropTypes.bool.isRequired,
