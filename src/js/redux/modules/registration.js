@@ -30,6 +30,8 @@ const actions = module.exports = makeActions('registration', {
           dispatch(router.pushRoute(nextUrl))
         }
       }
+
+      dispatch(pushRoute(nextUrl))
     }
   },
   setHumanName: {
