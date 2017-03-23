@@ -4,6 +4,7 @@ import Radium from 'radium'
 import {
   Checkbox,
   RaisedButton,
+  FlatButton,
   Avatar
 } from 'material-ui'
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
@@ -12,19 +13,18 @@ import Checked from 'material-ui/svg-icons/action/check-circle'
 const STYLES = {
   container: {
     backgroundColor: '#f8f9fb',
-    height: '100vh',
-    textAlign: 'center'
+    textAlign: 'center',
+    padding: '5%'
   },
   heading: {
     fontSize: '18pt',
     fontWeight: '300',
     color: '#939393',
-    margin: '20px'
+    margin: '20px 0'
   },
   phrase: {
     fontSize: '18pt',
     fontWeight: '300',
-    margin: '20px',
     color: '#942f51',
     lineHeight: '25pt',
     backgroundColor: '#fff',
@@ -34,12 +34,11 @@ const STYLES = {
     fontSize: '11pt',
     fontWeight: '300',
     color: '#b3c90f',
-    margin: '20px'
+    margin: '20px 0'
   },
   confirmCheck: {
-    margin: '20px'
   },
-  confirmCheckLabel: {
+  sideNoteGray: {
     fontSize: '11pt',
     fontWeight: '300',
     color: '#939393'
@@ -47,8 +46,11 @@ const STYLES = {
   uncheckedIcon: {
     fill: '#939393'
   },
-  avatar: {
-    marginTop: '20px'
+  nextBtn: {
+    margin: '20px 0'
+  },
+  storeBtn: {
+    margin: '20px 0'
   }
 }
 
@@ -57,8 +59,7 @@ const WritePhrase = (props) => {
     <div style={STYLES.container}>
       <Avatar
         src="/img/img_techguy.svg"
-        size={60}
-        style={STYLES.avatar} />
+        size={60} />
       <h1 style={STYLES.heading}>Your secure phrase</h1>
       <p style={STYLES.phrase}>
         {
@@ -76,7 +77,7 @@ const WritePhrase = (props) => {
       <div style={STYLES.confirmCheck}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
-          labelStyle={STYLES.confirmCheckLabel}
+          labelStyle={STYLES.sideNoteGray}
           checkedIcon={<Checked />}
           uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
           onClick={(e) => props.onToggle(e.target.checked)}
@@ -85,8 +86,15 @@ const WritePhrase = (props) => {
       <RaisedButton
         label="NEXT STEP"
         secondary
+        style={STYLES.nextBtn}
         onClick={props.onSubmit}
         disabled={!props.isChecked} />
+      <p style={STYLES.sideNoteGray}>
+        Actually, I do not want to be responsible for the storage.
+      </p>
+      <FlatButton
+        label="STORE IT FOR ME"
+        style={STYLES.storeBtn} />
     </div>
   )
 }
