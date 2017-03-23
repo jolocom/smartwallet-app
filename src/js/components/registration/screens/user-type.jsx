@@ -21,7 +21,7 @@ export default class RegistrationUserTypeScreen extends React.Component {
   }
 
   render() {
-    return <div>
+    return (
       <Presentation
         value={this.props.registration.userType.value}
         valid={this.props.registration.userType.valid}
@@ -33,6 +33,6 @@ export default class RegistrationUserTypeScreen extends React.Component {
         showSimpleDialog={this.props.showSimpleDialog}
         user={this.props.registration.humanName.value}
       />
-    </div>
+    )
   }
 }
