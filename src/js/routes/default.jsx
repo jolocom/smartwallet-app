@@ -24,6 +24,8 @@ import PrivacySettings from 'components/node/privacy-settings'
 import Profile from 'components/accounts/profile'
 import SharedNodes from 'components/node/shared-nodes.jsx'
 import NodeList from 'components/node/node-list.jsx'
+import AddContacts from 'components/node/add-contacts.jsx'
+
 import ConfirmEmailVerification from
   'components/accounts/confirm-email-verification.jsx'
 
@@ -67,6 +69,7 @@ function getRoutes() {
       component={ConfirmEmailVerification}
     />
     <Route path="profile" component={Profile} />
+    <Route path="add-contacts" component={AddContacts} />
     <Route path=":uri/privacy-settings" component={PrivacySettings} />
     <Route path=":uri/shared-nodes" component={SharedNodes} />
     <Route path="node-list" component={NodeList} />
