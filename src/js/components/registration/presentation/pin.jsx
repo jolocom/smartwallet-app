@@ -3,10 +3,11 @@ import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
 import PinInput from './pin-input'
 
-import theme from '../../../styles/jolocom-theme'
-import registrationStyles from '../styles'
+import {theme} from 'styles'
 
-const STYLES = Object.assign({}, registrationStyles, {
+import {Container, Header, Content, Block, Footer} from './ui'
+
+const STYLES = {
   input: {
     display: 'inline-block'
   },
@@ -23,7 +24,7 @@ const STYLES = Object.assign({}, registrationStyles, {
     padding: '16px',
     flex: 1
   }
-})
+}
 
 function getButtonLabel(props) {
   if (!props.valid) {
@@ -41,7 +42,7 @@ const Pin = (props) => {
 
   if (props.confirm) {
     confirm = (
-      <div>
+      <Block>
         <div
           style={STYLES.changeLink}
           onClick={props.onChangeRequest}
@@ -52,17 +53,17 @@ const Pin = (props) => {
           This secure PIN will be needed for transactions and
           saving information on the Blockchain.
         </div>
-      </div>
+      </Block>
     )
   }
 
   return (
-    <div style={STYLES.container}>
-      <div style={STYLES.header}>
+    <Container>
+      <Header>
         {props.confirm || 'Create a PIN for secure login.'}
         {props.confirm && 'Your Secure PIN.'}
-      </div>
-      <div style={STYLES.content}>
+      </Header>
+      <Content style={STYLES.content}>
         <PinInput
           value={props.value}
           focused={props.focused}
@@ -72,17 +73,17 @@ const Pin = (props) => {
           confirm={props.confirm} />
 
         {confirm}
-      </div>
+      </Content>
 
-      <div style={STYLES.footer}>
+      <Footer>
         <RaisedButton
           disabled={!props.valid}
           secondary={props.valid}
           label={getButtonLabel(props)}
           onClick={props.onSubmit}
         />
-      </div>
-    </div>
+      </Footer>
+    </Container>
   )
 }
 

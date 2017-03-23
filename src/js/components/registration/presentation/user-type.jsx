@@ -3,23 +3,18 @@
 import React from 'react'
 import Radium from 'radium'
 import {FlatButton} from 'material-ui'
-import theme from '../../../styles/jolocom-theme'
-import registrationStyles from '../styles'
+import {theme} from 'styles'
+
 import HoverButton from '../../common/hover-button'
 
-// @FIX this will extend the registrationStyles
-// Use Object.assign({}, ...) to clone the object
-const STYLES = Object.assign(registrationStyles, {
-  content: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1
-  },
+import {Container, Header, Content, Footer} from './ui'
+
+const STYLES = {
   tile: {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    marginTop: '8px 0 8px',
+    margin: '8px 0 8px',
     borderRadius: '2px',
     primary: false,
     backgroundColor: theme.jolocom.gray1,
@@ -45,7 +40,7 @@ const STYLES = Object.assign(registrationStyles, {
     backgroundSize: 'contain',
     marginBottom: '8px'
   }
-})
+}
 
 const UserType = (props) => {
   const messageWhy = (
@@ -85,44 +80,44 @@ const UserType = (props) => {
   // use methods for event handlers
   // eg: onClick={this._handleExpertClick}
   // actually this component is a bit too completed to be just a bare function :)
-  return <div style={STYLES.container}>
-    <div style={STYLES.header}>
-      {'Hi ' + props.user + '!, are you...' /* @FIX use a string template */}
-    </div>
-    <div style={STYLES.content}>
-      <HoverButton
-        backgroundColor={(props.value === 'expert'
-        ? STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
-        hoverColor={STYLES.tile.selectedColor}
-        style={STYLES.tile}
-        onClick={() => { props.onChange('expert'); props.onSubmit() }}>
-        <div style={STYLES.tileinside}>
-          <div style={{...STYLES.img, ...{
-            backgroundImage: 'url(/img/img_techguy.svg)'
-          }}} />...a total tech Geek and want to be in absolute control?
-        </div>
-      </HoverButton>
-      <HoverButton
-        backgroundColor={(props.value === 'layman'
-        ? STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
-        hoverColor={STYLES.tile.selectedColor}
-        style={STYLES.tile}
-        onClick={() => { props.onChange('layman'); props.onSubmit() }}>
-        <div style={STYLES.tileinside}>
-          <div style={{...STYLES.img, ...{
-            backgroundImage: 'url(/img/img_nohustle.svg)'
-          }}} />...the laid-back type, who doesn't want any hassle.
-        </div>
-      </HoverButton>
-    </div>
-    <div style={STYLES.footer}>
-      <FlatButton onClick={() => {
-        props.configSimpleDialog(messageWhy); props.showSimpleDialog()
-      }}>
-      WHY?
-      </FlatButton>
-    </div>
-  </div>
+  return (
+    <Container>
+      <Header title={`Hi ${props.user}! are you...`} />
+      <Content>
+        <HoverButton
+          backgroundColor={(props.value === 'expert'
+          ? STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
+          hoverColor={STYLES.tile.selectedColor}
+          style={STYLES.tile}
+          onClick={() => { props.onChange('expert'); props.onSubmit() }}>
+          <div style={STYLES.tileinside}>
+            <div style={{...STYLES.img, ...{
+              backgroundImage: 'url(/img/img_techguy.svg)'
+            }}} />...a total tech Geek and want to be in absolute control?
+          </div>
+        </HoverButton>
+        <HoverButton
+          backgroundColor={(props.value === 'layman'
+          ? STYLES.tile.selectedColor : STYLES.tile.backgroundColor)}
+          hoverColor={STYLES.tile.selectedColor}
+          style={STYLES.tile}
+          onClick={() => { props.onChange('layman'); props.onSubmit() }}>
+          <div style={STYLES.tileinside}>
+            <div style={{...STYLES.img, ...{
+              backgroundImage: 'url(/img/img_nohustle.svg)'
+            }}} />...the laid-back type, who doesn't want any hassle.
+          </div>
+        </HoverButton>
+      </Content>
+      <Footer>
+        <FlatButton onClick={() => {
+          props.configSimpleDialog(messageWhy); props.showSimpleDialog()
+        }}>
+        WHY?
+        </FlatButton>
+      </Footer>
+    </Container>
+  )
 }
 
 UserType.propTypes = {

@@ -1,40 +1,43 @@
 import React from 'react'
 import Radium from 'radium'
 import MaskedImage from './masked-image'
-import registrationStyles from '../styles'
 import {RaisedButton} from 'material-ui'
 
-const STYLES = Object.assign({}, registrationStyles, {
+import {Container, Content, Footer} from './ui'
+
+const STYLES = {
   img: {
     width: '100%',
     margin: 'auto',
     alignItems: 'center'
   }
-})
+}
 
 const Entropy = (props) => {
   return (
-    <div style={STYLES.container}
+    <Container
       onMouseMove={(e) => props.onMouseMovement(e.clientX, e.clientY)}
     >
-      <MaskedImage
-        image={IMAGE_DATA_URL}
-        uncoveredPaths={props.imageUncoveredPaths}
-        uncovering={props.imageUncovering}
-        onPointUncovered={props.onImagePointUncoverd}
-        onUncoveringChange={props.onImageUncoveringChange}
-        message1={'Hi ' + props.user + '!, for...'}
-        message2={'...more security we need some random data.'}
-        message3={'Please put your finger anywhere on the screen and draw on it randomly.'} // eslint-disable-line max-len
-      />
-
-      <div style={STYLES.footer}>
+      <Content>
+        <MaskedImage
+          image={IMAGE_DATA_URL}
+          style={STYLES.img}
+          uncoveredPaths={props.imageUncoveredPaths}
+          uncovering={props.imageUncovering}
+          onPointUncovered={props.onImagePointUncoverd}
+          onUncoveringChange={props.onImageUncoveringChange}
+          message1={'Hi ' + props.user + '!, for...'}
+          message2={'...more security we need some random data.'}
+          message3={'Please put your finger anywhere on the screen and draw on it randomly.'} // eslint-disable-line max-len
+        />
+      </Content>
+      <Footer>
         <RaisedButton
           label="NEXT STEP"
           secondary
           onClick={props.onSubmit} />
-      </div>
-    </div>
+      </Footer>
+    </Container>
   )
 }
 
