@@ -205,6 +205,7 @@ const initialState = Immutable.fromJS({
 })
 
 module.exports.default = (state = initialState, action = {}) => {
+  console.log(state.toJS())
   state = state.set('complete', helpers._isComplete(state))
 
   switch (action.type) {

@@ -4,7 +4,7 @@ import Immutable from 'immutable'
 import * as registration from './registration'
 import * as router from './router'
 import {stub, withStubs} from '../../../../test/utils'
-
+const reducer = require('./registration').default
 const helpers = registration.helpers
 
 describe.only('Wallet registration Redux module', function() {
@@ -114,31 +114,33 @@ describe.only('Wallet registration Redux module', function() {
 
   describe('_getNextURLFromState()', function() {
     it('should return null if we cannot continue', () => {
-      expect(helpers._getNextURLFromState(Immutable.fromJS({
+      expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
           locationBeforeTransitions: {pathname: '/registration/user-type'}
         },
-        registration: {userType: {valid: false}}
+        registration: Immutable.fromJS({userType: {valid: false}})
       }))).to.equal(null)
     })
 
     it('should return the correct next page', () => {
-      expect(helpers._getNextURLFromState(Immutable.fromJS({
+      expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
           locationBeforeTransitions: {pathname: '/registration'}
         },
-        registration: {username: {valid: true, value: 'Tom'}}
+        registration: Immutable.fromJS({username: {valid: true, value: 'Tom'}})
       }))).to.equal(
         helpers._getNextURL('/registration', null)
       )
     })
 
     it('should return the correct next page after user type selection', () => {
-      expect(helpers._getNextURLFromState(Immutable.fromJS({
+      expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
           locationBeforeTransitions: {pathname: '/registration/user-type'}
         },
-        registration: {userType: {valid: true, value: 'expert'}}
+        registration: Immutable.fromJS({userType: {
+          valid: true, value: 'expert'
+        }})
       }))).to.equal(
         helpers._getNextURL('/registration/user-type', 'expert')
       )
@@ -387,5 +389,129 @@ describe.only('Wallet registration Redux module', function() {
         }
       )
     })
+  })
+
+  describe('reducer', function() {
+    describe('setUserType', function() {
+      it('should correctly initialize', () => {
+        let state = reducer(undefined, '@@INIT')
+
+        expect(state.get('userType').toJS())
+          .to.deep.equal({value: '', valid: false})
+      })
+
+      it('should throw an error when supplying invalid value', () => {
+        expect(() => reducer(Immutable.fromJS({
+        }), registration.setUserType('bla'))).to.throw('Invalid user type: bla')
+      })
+
+      it('should be able to set the user type to a valid value', () => {
+        let state = reducer(undefined, '@@INIT')
+
+        state = reducer(state, registration.setUserType('expert'))
+        expect(state.get('userType').toJS())
+          .to.deep.equal({value: 'expert', valid: true})
+
+        state = reducer(state, registration.setUserType('layman'))
+        expect(state.get('userType').toJS())
+          .to.deep.equal({value: 'layman', valid: true})
+      })
+    })
+    // describe('setPassword', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setRepeatedPassword', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setEntropyStatus', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setRandomString', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setPassphrase', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setPin', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setPinConfirm', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setPinFocused', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setMaskedImageUncovering', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setEmail', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('setPassphraseWrittenDown', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
+    // describe('registerWallet', function() {
+    //   it('should correctly initialize', () => {
+    //     let state = reducer(undefined, '@@INIT')
+
+    //     expect(state.get('userType').toJS())
+    //       .to.deep.equal({value: '', valid: false})
+    //   })
+    // })
   })
 })
