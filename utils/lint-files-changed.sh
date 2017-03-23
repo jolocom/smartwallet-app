@@ -1,5 +1,4 @@
 #!/bin/bash
-exit 0 # TEMPORARY
 
 CHANGED_FILES=$(git diff develop --name-only --diff-filter=ACM | grep "\.jsx\{0,1\}$")
 
