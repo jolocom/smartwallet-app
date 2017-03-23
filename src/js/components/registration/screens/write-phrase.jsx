@@ -15,6 +15,10 @@ export default class RegistrationWritePhraseScreen extends React.Component {
     setPassphraseWrittenDown: React.PropTypes.func.isRequired
   }
 
+  componentDidMount() {
+    this.props.setPassphraseWrittenDown(false)
+  }
+
   render() {
     return <Presentation
       value={this.props.registration.passphrase.phrase}
