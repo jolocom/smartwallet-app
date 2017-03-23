@@ -313,5 +313,79 @@ describe.only('Wallet registration Redux module', function() {
   })
 
   describe('registerWallet', function() {
+    it('should register with seedphrase if expert', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        userType: {value: 'expert'},
+        username: {value: 'usr'},
+        pin: {value: '1234'},
+        passphrase: {phrase: 'bla bla bla'},
+        email: {value: 'test@test.com'},
+        password: {value: 'abdcd'}
+      }})
+      const backend = {wallet: {
+        registerWithSeedPhrase: stub().returns('regSeed'),
+        registerWithCredentials: stub().returns('regCreds')
+      }}
+
+      withStubs([
+        [registration.actions, 'goForward', {returns: 'forward'}],
+        [registration.actions.registerWallet, 'buildAction',
+          {returns: 'action'}]],
+        () => {
+          const thunk = registration.registerWallet()
+          thunk(dispatch, getState)
+          expect(dispatch.calledWithArgs[0]).to.equal('action')
+
+          const registerAction = registration.actions.registerWallet
+          const promise = registerAction.buildAction.calledWithArgs[1]
+          expect(promise(backend))
+            .to.equal(backend.wallet.registerWithSeedPhrase.returns())
+          expect(backend.wallet.registerWithSeedPhrase.calls)
+            .to.deep.equal([{args: [{
+              seedPhrase: 'bla bla bla',
+              userName: 'usr'
+            }]}])
+        }
+      )
+    })
+
+    it('should register with credentials if expert', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        userType: {value: 'layman'},
+        username: {value: 'usr'},
+        pin: {value: '1234'},
+        passphrase: {phrase: 'bla bla bla'},
+        email: {value: 'test@test.com'},
+        password: {value: 'abdcd'}
+      }})
+      const backend = {wallet: {
+        registerWithSeedPhrase: stub().returns('regSeed'),
+        registerWithCredentials: stub().returns('regCreds')
+      }}
+
+      withStubs([
+        [registration.actions, 'goForward', {returns: 'forward'}],
+        [registration.actions.registerWallet, 'buildAction',
+          {returns: 'action'}]],
+        () => {
+          const thunk = registration.registerWallet()
+          thunk(dispatch, getState)
+          expect(dispatch.calledWithArgs[0]).to.equal('action')
+
+          const registerAction = registration.actions.registerWallet
+          const promise = registerAction.buildAction.calledWithArgs[1]
+          expect(promise(backend))
+            .to.equal(backend.wallet.registerWithCredentials.returns())
+          expect(backend.wallet.registerWithCredentials.calls)
+            .to.deep.equal([{args: [{
+              userName: 'usr',
+              email: 'test@test.com',
+              password: 'abdcd'
+            }]}])
+        }
+      )
+    })
   })
 })
