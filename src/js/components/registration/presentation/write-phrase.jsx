@@ -61,7 +61,7 @@ const WritePhrase = (props) => {
       <Block style={{width: '100%'}}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
-          labelStyle={{color: theme.jolocom.gray1}}
+          labelStyle={{color: theme.jolocom.gray1, fontSize: '13px'}}
           checkedIcon={<Checked />}
           uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
           onClick={(e) => props.onToggle(e.target.checked)}
