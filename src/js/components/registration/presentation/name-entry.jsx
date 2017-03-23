@@ -55,8 +55,7 @@ const NameEntry = (props) => {
       </Content>
       <Footer>
         <RaisedButton
-          style={{'margin': '4%'}}
-          label="next step"
+          label="NEXT STEP"
           secondary
           onClick={props.onSubmit}
           disabled={!props.valid}
