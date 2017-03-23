@@ -14,21 +14,27 @@ import theme from '../../../styles/jolocom-theme'
 
 const STYLES = {
   root: registrationStyles,
+  phraseWrapper: Object.assign({}, registrationStyles.elementSpacing, {
+    lineHeight: '32px',
+    padding: '8px'
+  }),
   phrase: {
-    fontSize: '18pt',
+    fontSize: '22px',
     fontWeight: '300',
     color: '#942f51',
-    lineHeight: '25pt',
-    backgroundColor: '#fff',
-    padding: '10px'
+    backgroundColor: '#fff'
   },
   sideNoteGreen: {
-    fontSize: '11pt',
+    fontSize: '13px',
     fontWeight: '300',
     color: theme.palette.primary1Color
   },
   uncheckedIcon: {
     fill: theme.jolocom.gray1
+  },
+  confirm: {
+    margin: '8px 0',
+    width: '100%'
   }
 }
 
@@ -46,13 +52,11 @@ const WritePhrase = (props) => {
           Your secure phrase
         </h1>
       </div>
-      <div style={STYLES.root.elementSpacing}>
-        <p style={STYLES.phrase}>
-          {
-            props.value || 'The flying red fox is jumping enthusiastically' +
+      <div style={STYLES.phraseWrapper}>
+        <span style={STYLES.phrase}>{
+          props.value || 'The flying red fox is jumping enthusiastically' +
             'over the little brown dog.'
-          }
-        </p>
+        }</span>
       </div>
       <div style={STYLES.root.elementSpacing}>
         <p style={STYLES.sideNoteGreen}>
@@ -63,7 +67,7 @@ const WritePhrase = (props) => {
           By the way! Taking a screenshot is not secure!
         </p>
       </div>
-      <div style={STYLES.root.elementSpacing}>
+      <div style={STYLES.confirm}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
           labelStyle={STYLES.root.sideNoteGray}
@@ -72,7 +76,7 @@ const WritePhrase = (props) => {
           onClick={(e) => props.onToggle(e.target.checked)}
         />
       </div>
-      <div style={STYLES.root.elementSpacing}>
+      <div style={Object.assign({flex: 1}, STYLES.root.elementSpacing)}>
         <RaisedButton
           label="NEXT STEP"
           secondary

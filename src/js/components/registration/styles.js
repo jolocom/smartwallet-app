@@ -15,16 +15,16 @@ export default {
   header: {
     margin: '40px 0 16px 0',
     color: theme.jolocom.gray1,
-    fontSize: '18pt',
+    fontSize: '24px',
     fontWeight: '300'
   },
   sideNoteGray: {
-    fontSize: '11px',
+    fontSize: '13px',
     fontWeight: '300',
     color: theme.jolocom.gray1
   },
   elementSpacing: {
-    margin: '10px 0'
+    margin: '8px 0'
   },
   footer: {
     padding: '16px'
