@@ -6,15 +6,24 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    width: '100%',
+    textAlign: 'center',
     height: '100%',
     padding: '5%',
     backgroundColor: Theme.jolocom.gray4
   },
   header: {
-    marginTop: '40px',
-    marginBottom: '30px',
+    // marginTop: '40px',
+    // marginBottom: '30px',
     color: Theme.jolocom.gray1,
-    textAlign: 'center'
+    fontSize: '18pt',
+    fontWeight: '300'
+  },
+  sideNoteGray: {
+    fontSize: '11pt',
+    fontWeight: '300',
+    color: Theme.jolocom.gray1
+  },
+  elementSpacing: {
+    margin: '10px 0'
   }
 }

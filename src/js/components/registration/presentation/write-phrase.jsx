@@ -9,19 +9,11 @@ import {
 } from 'material-ui'
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
+import RegistrationStyles from '../styles'
+import Theme from '../../../styles/jolocom-theme'
 
 const STYLES = {
-  container: {
-    backgroundColor: '#f8f9fb',
-    textAlign: 'center',
-    padding: '5%'
-  },
-  heading: {
-    fontSize: '18pt',
-    fontWeight: '300',
-    color: '#939393',
-    margin: '20px 0'
-  },
+  root: RegistrationStyles,
   phrase: {
     fontSize: '18pt',
     fontWeight: '300',
@@ -30,72 +22,70 @@ const STYLES = {
     backgroundColor: '#fff',
     padding: '10px'
   },
-  sidenote: {
+  sideNoteGreen: {
     fontSize: '11pt',
     fontWeight: '300',
-    color: '#b3c90f',
-    margin: '20px 0'
-  },
-  confirmCheck: {
-  },
-  sideNoteGray: {
-    fontSize: '11pt',
-    fontWeight: '300',
-    color: '#939393'
+    color: Theme.palette.primary1Color
   },
   uncheckedIcon: {
-    fill: '#939393'
-  },
-  nextBtn: {
-    margin: '20px 0'
-  },
-  storeBtn: {
-    margin: '20px 0'
+    fill: Theme.jolocom.gray1
   }
 }
 
 const WritePhrase = (props) => {
   return (
-    <div style={STYLES.container}>
-      <Avatar
-        src="/img/img_techguy.svg"
-        size={60} />
-      <h1 style={STYLES.heading}>Your secure phrase</h1>
-      <p style={STYLES.phrase}>
-        {
-          props.value || 'The flying red fox is jumping enthusiastically over' +
-          'the little brown dog.'
-        }
-      </p>
-      <p style={STYLES.sidenote}>
-        IMPORTANT <br />
-        Write these words down on an analog and secure place. Store it in at
-        least two different places. Without these words you cannot access your
-        wallet again. Anyone with these words can get access to your wallet!
-        By the way! Taking a screenshot is not secure!
-      </p>
-      <div style={STYLES.confirmCheck}>
+    <div style={STYLES.root.container}>
+      <div style={STYLES.root.elementSpacing}>
+        <Avatar
+          src="/img/img_techguy.svg"
+          size={60} />
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <h1 style={STYLES.root.header}>Your secure phrase</h1>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <p style={STYLES.phrase}>
+          {
+            props.value || 'The flying red fox is jumping enthusiastically' +
+            'over the little brown dog.'
+          }
+        </p>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <p style={STYLES.sideNoteGreen}>
+          IMPORTANT <br />
+          Write these words down on an analog and secure place. Store it in at
+          least two different places. Without these words you cannot access your
+          wallet again. Anyone with these words can get access to your wallet!
+          By the way! Taking a screenshot is not secure!
+        </p>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
-          labelStyle={STYLES.sideNoteGray}
+          labelStyle={STYLES.root.sideNoteGray}
           checkedIcon={<Checked />}
           uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
           onClick={(e) => props.onToggle(e.target.checked)}
         />
       </div>
-      <RaisedButton
-        label="NEXT STEP"
-        secondary
-        style={STYLES.nextBtn}
-        onClick={props.onSubmit}
-        disabled={!props.isChecked} />
-      <p style={STYLES.sideNoteGray}>
-        Actually, I do not want to be responsible for the storage.
-      </p>
-      <FlatButton
-        label="STORE IT FOR ME"
-        onClick={() => { props.onChange('layman'); props.onSubmit() }}
-        style={STYLES.storeBtn} />
+      <div style={STYLES.root.elementSpacing}>
+        <RaisedButton
+          label="NEXT STEP"
+          secondary
+          onClick={props.onSubmit}
+          disabled={!props.isChecked} />
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <p style={STYLES.root.sideNoteGray}>
+          Actually, I do not want to be responsible for the storage.
+        </p>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <FlatButton
+          label="STORE IT FOR ME"
+          onClick={() => { props.onChange('layman'); props.onSubmit() }} />
+      </div>
     </div>
   )
 }

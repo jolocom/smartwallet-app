@@ -7,66 +7,53 @@ import {
   Avatar
 } from 'material-ui'
 
+import RegistrationStyles from '../styles'
+
 const STYLES = {
-  container: {
-    backgroundColor: '#f8f9fb',
-    textAlign: 'center',
-    padding: '5%',
-    height: '100vh'
-  },
-  heading: {
-    fontSize: '18pt',
-    fontWeight: '300',
-    color: '#939393',
-    margin: '20px 0'
-  },
-  sideNoteGray: {
-    fontSize: '11pt',
-    fontWeight: '300',
-    color: '#939393'
-  },
-  nextBtn: {
-    margin: '20px 0'
-  },
-  optionBtn: {
-    margin: '20px 0'
-  },
-  switchMode: {
-    marginTop: '20px'
-  }
+  root: RegistrationStyles
 }
 
 const PhraseInfo = (props) => {
   return (
-    <div style={STYLES.container}>
-      <Avatar
-        src="/img/img_nohustle.svg"
-        size={60} />
-      <h1 style={STYLES.heading}>
-        We created a secure phrase for you with which you can access your wallet
-        again.
-      </h1>
-      <p style={STYLES.sideNoteGray}>
-        Since you decided for the no hassle mode, we will store it for you. this
-        way you can recover it through your E-Mail.
-      </p>
-      <RaisedButton
-        label="AlRIGHT"
-        secondary
-        style={STYLES.nextBtn}
-        onClick={props.onSubmit} />
-      <div style={STYLES.switchMode}>
+    <div style={STYLES.root.container}>
+      <div style={STYLES.root.elementSpacing}>
+        <Avatar
+          src="/img/img_nohustle.svg"
+          size={60} />
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <h1 style={STYLES.root.header}>
+          We created a secure phrase for you with which you can access your
+          wallet again.
+        </h1>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <p style={STYLES.root.sideNoteGray}>
+          Since you decided for the no hassle mode, we will store it for you.
+          This way you can recover it through your E-Mail.
+        </p>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <RaisedButton
+          label="AlRIGHT"
+          secondary
+          onClick={props.onSubmit} />
+      </div>
+      <br /><br />
+      <div style={STYLES.root.elementSpacing}>
         <Avatar
           src="/img/img_techguy.svg"
           size={60} />
-        <br /><br />
-        <p style={STYLES.sideNoteGray}>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
+        <p style={STYLES.root.sideNoteGray}>
           Actually, I do want to store it manually myself.
         </p>
+      </div>
+      <div style={STYLES.root.elementSpacing}>
         <FlatButton
           label="SHOW SECURE PHRASE"
-          onClick={() => { props.onChange('expert'); props.onSubmit() }}
-          style={STYLES.optionBtn} />
+          onClick={() => { props.onChange('expert'); props.onSubmit() }} />
       </div>
     </div>
   )
