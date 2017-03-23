@@ -22,7 +22,8 @@ const PhraseInfo = (props) => {
           size={60} />
       </div>
       <div style={STYLES.root.elementSpacing}>
-        <h1 style={STYLES.root.header}>
+        <h1 style={{...STYLES.root.header,
+          ...STYLES.root.elementSpacing}}>
           We created a secure phrase for you with which you can access your
           wallet again.
         </h1>

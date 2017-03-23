@@ -91,7 +91,7 @@ const UserType = (props) => {
   // eg: onClick={this._handleExpertClick}
   // actually this component is a bit too completed to be just a bare function :)
   return <div style={STYLES.container}>
-    <div style={{...STYLES.header, ...STYLES.elementSpacing}}>
+    <div style={STYLES.header}>
       {'Hi ' + props.user + '!, are you...' /* @FIX use a string template */}
     </div>
     <div>

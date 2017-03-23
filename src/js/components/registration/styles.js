@@ -12,7 +12,7 @@ export default {
     backgroundColor: Theme.jolocom.gray4
   },
   header: {
-    // marginTop: '40px',
+    marginTop: '40px',
     // marginBottom: '30px',
     color: Theme.jolocom.gray1,
     fontSize: '18pt',

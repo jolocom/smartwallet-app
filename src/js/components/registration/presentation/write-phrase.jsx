@@ -41,7 +41,10 @@ const WritePhrase = (props) => {
           size={60} />
       </div>
       <div style={STYLES.root.elementSpacing}>
-        <h1 style={STYLES.root.header}>Your secure phrase</h1>
+        <h1 style={{...STYLES.root.header,
+          ...STYLES.root.elementSpacing}}>
+          Your secure phrase
+        </h1>
       </div>
       <div style={STYLES.root.elementSpacing}>
         <p style={STYLES.phrase}>
