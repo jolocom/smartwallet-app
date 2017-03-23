@@ -4,7 +4,7 @@ import Immutable from 'immutable'
 import * as registration from './registration'
 import * as router from './router'
 import {stub, withStubs} from '../../../../test/utils'
-const reducer = registration.default
+
 const helpers = registration.helpers
 
 describe.only('Wallet registration Redux module', function() {
