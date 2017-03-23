@@ -455,6 +455,23 @@ describe.only('Wallet registration Redux module', function() {
             valid: false
           })
       })
+      it('should correctly update', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setEntropyStatus({
+          sufficientEntropy: 'bla',
+          progress: 0.4
+        }))
+
+        expect(state.get('passphrase').toJS())
+          .to.deep.equal({
+            sufficientEntropy: 'bla',
+            progress: 0.4,
+            randomString: null,
+            phrase: null,
+            writtenDown: false,
+            valid: false
+          })
+      })
     })
     // describe('setRandomString', function() {
     //   it('should correctly initialize', () => {

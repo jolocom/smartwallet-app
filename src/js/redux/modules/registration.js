@@ -250,7 +250,7 @@ module.exports.default = (state = initialState, action = {}) => {
         valid: validRepeatedValue
       })
     case actions.setEntropyStatus.id:
-      return state.merge({
+      return state.mergeDeep({
         passphrase: {
           sufficientEntropy: action.sufficientEntropy,
           progress: action.progress
