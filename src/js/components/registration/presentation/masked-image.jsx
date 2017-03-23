@@ -1,4 +1,5 @@
 import React from 'react'
+import theme from '../../../styles/jolocom-theme'
 // import Radium from 'radium'
 
 class MaskedImage extends React.Component {
@@ -43,7 +44,7 @@ class MaskedImage extends React.Component {
   render() {
     const props = this.props
 
-    return (<svg
+    return (<svg style={{width: '240px', height: '150px', margin: 'auto'}}
       onTouchStart={() => this.onRevealStart()}
       onMouseDown={() => this.onRevealStart()}
       onMouseMove={(e) => this.onReveal(e)}
@@ -58,11 +59,25 @@ class MaskedImage extends React.Component {
             } style={{
               strokeWidth: '20px', stroke: '#F00',
               strokeLinecap: 'round', strokeLinejoin: 'round',
-              fill: 'rgba(0, 0, 0, 0)'
+              fill: 'rgba(0, 0, 0, 0)',
+              textAlign: 'center'
             }} />
           )}
+
         </mask>
       </defs>
+      <foreignObject width="240" height="150" textAnchor="middle"
+        requiredExtensions="http://www.w3.org/1999/xhtml"
+      >
+        <div xmlns="http://www.w3.org/1999/xhtml" style={{textAlign: 'center',
+          color: theme.jolocom.gray1}}>
+          <p>{props.uncoveredPaths.length > 0 ? '' : props.message1}</p>
+          <br />
+          <p>{props.uncoveredPaths.length > 0 ? '' : props.message2}</p>
+          <br />
+          <p>{props.uncoveredPaths.length > 0 ? '' : props.message3}</p>
+        </div>
+      </foreignObject>
 
       <image
         x="0" y="0" width="240" height="150"

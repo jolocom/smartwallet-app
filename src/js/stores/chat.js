@@ -21,8 +21,9 @@ export default class ChatStore extends Reflux.Store {
   }
 
   onCreate(initiator, participants, subject) {
-    this.agent.createConversation(initiator, participants, subject)
-      .then(create.completed)
+    this.agent.createConversation({
+      initiator, participants, subject
+    }).then(create.completed)
       .catch(create.failed)
   }
 

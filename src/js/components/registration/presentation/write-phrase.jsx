@@ -4,95 +4,93 @@ import Radium from 'radium'
 import {
   Checkbox,
   RaisedButton,
+  FlatButton,
   Avatar
 } from 'material-ui'
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
 
+import {theme} from 'styles'
+
+import {Container, Header, Block, SideNote, Footer} from './ui'
+
 const STYLES = {
-  container: {
-    backgroundColor: '#f8f9fb',
-    height: '100vh',
-    textAlign: 'center'
-  },
-  heading: {
-    fontSize: '18pt',
-    fontWeight: '300',
-    color: '#939393',
-    margin: '20px'
+  phraseWrapper: {
+    lineHeight: '32px',
+    padding: '8px'
   },
   phrase: {
-    fontSize: '18pt',
+    fontSize: '22px',
     fontWeight: '300',
-    margin: '20px',
     color: '#942f51',
-    lineHeight: '25pt',
-    backgroundColor: '#fff',
-    padding: '10px'
+    backgroundColor: '#fff'
   },
-  sidenote: {
-    fontSize: '11pt',
-    fontWeight: '300',
-    color: '#b3c90f',
-    margin: '20px'
-  },
-  confirmCheck: {
-    margin: '20px'
-  },
-  confirmCheckLabel: {
-    fontSize: '11pt',
-    fontWeight: '300',
-    color: '#939393'
+  sideNoteGreen: {
+    color: theme.palette.primary1Color
   },
   uncheckedIcon: {
-    fill: '#939393'
-  },
-  avatar: {
-    marginTop: '20px'
+    fill: theme.jolocom.gray1
   }
 }
 
 const WritePhrase = (props) => {
   return (
-    <div style={STYLES.container}>
-      <Avatar
-        src="/img/img_techguy.svg"
-        size={60}
-        style={STYLES.avatar} />
-      <h1 style={STYLES.heading}>Your secure phrase</h1>
-      <p style={STYLES.phrase}>
-        {
-          props.value || 'The flying red fox is jumping enthusiastically over' +
-          'the little brown dog.'
-        }
-      </p>
-      <p style={STYLES.sidenote}>
-        IMPORTANT <br />
-        Write these words down on an analog and secure place. Store it in at
-        least two different places. Without these words you cannot access your
-        wallet again. Anyone with these words can get access to your wallet!
-        By the way! Taking a screenshot is not secure!
-      </p>
-      <div style={STYLES.confirmCheck}>
+    <Container>
+      <Block>
+        <Avatar
+          src="/img/img_techguy.svg"
+          size={60} />
+      </Block>
+      <Header title="Your secure phrase" />
+
+      <Block style={STYLES.phraseWrapper}>
+        <span style={STYLES.phrase}>{
+          props.value || 'The flying red fox is jumping enthusiastically' +
+            'over the little brown dog.'
+        }</span>
+      </Block>
+      <Block>
+        <SideNote style={STYLES.sideNoteGreen}>
+          IMPORTANT <br />
+          Write these words down on an analog and secure place. Store it in at
+          least two different places. Without these words you cannot access your
+          wallet again. Anyone with these words can get access to your wallet!
+          By the way! Taking a screenshot is not secure!
+        </SideNote>
+      </Block>
+      <Block style={{width: '100%'}}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
-          labelStyle={STYLES.confirmCheckLabel}
+          labelStyle={{color: theme.jolocom.gray1, fontSize: '13px'}}
           checkedIcon={<Checked />}
           uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
           onClick={(e) => props.onToggle(e.target.checked)}
         />
-      </div>
-      <RaisedButton
-        label="NEXT STEP"
-        secondary
-        onClick={props.onSubmit}
-        disabled={!props.isChecked} />
-    </div>
+      </Block>
+      <Block style={{flex: 1}}>
+        <RaisedButton
+          label="NEXT STEP"
+          secondary
+          onClick={props.onSubmit}
+          disabled={!props.isChecked} />
+      </Block>
+      <Block>
+        <SideNote>
+          Actually, I do not want to be responsible for the storage.
+        </SideNote>
+      </Block>
+      <Footer>
+        <FlatButton
+          label="STORE IT FOR ME"
+          onClick={() => { props.onChange('layman'); props.onSubmit() }} />
+      </Footer>
+    </Container>
   )
 }
 
 WritePhrase.propTypes = {
   onToggle: React.PropTypes.func.isRequired,
+  onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
   value: React.PropTypes.string.isRequired,
   isChecked: React.PropTypes.bool.isRequired

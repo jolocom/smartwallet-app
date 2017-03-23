@@ -1,3 +1,4 @@
+
 export function stub(options = {}) {
   const func = (...args) => {
     func.called = true

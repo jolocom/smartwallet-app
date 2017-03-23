@@ -1,3 +1,6 @@
+/*eslint-disable */
+// @TODO this file isn't used anymore, remove?
+
 import React from 'react'
 
 import Util from 'lib/util'
@@ -20,7 +23,6 @@ let PlusDrawer = React.createClass({
   },
 
   toInbox: function() {
-
     this.props.toggle()
     this.props.addNodeToInbox({
       title: this.state.title,
@@ -56,3 +58,4 @@ let PlusDrawer = React.createClass({
 })
 
 export default PlusDrawer
+/*eslint-enable */

@@ -68,43 +68,6 @@ export default Reflux.createStore({
     this.init()
   },
 
-  _updatePassport(newData) {
-    if (this.state.passportImgUri.trim() ===
-      newData.passportImgUri.trim()) {
-      return
-    }
-    const OldPassImgUri = this.state.passportImgUri.trim()
-    const OldPassNodeUri = this.state.passportNodeUri.trim()
-    // TODO These state modifcations could be a bit more explicit perhaps
-    if (OldPassImgUri) {
-      if (!newData.passportImgUri.trim()) {
-        this.state.passportImgUri = ''
-        this.state.passportNodeUri = ''
-        return this.wia.deletePassport(OldPassNodeUri, OldPassImgUri)
-      } else if (OldPassImgUri !== newData.passportImgUri.trim()) {
-        this.state.passportImgUri = newData.passportImgUri
-        return this.wia.updatePassport(
-          OldPassNodeUri,
-          OldPassImgUri,
-          newData.passportImgUri
-        )
-      }
-    } else if (newData.passportImgUri.trim()) {
-      return this.gAgent.createNode(
-        this.state.webId,
-        {uri: this.state.webId, storage: this.state.storage},
-        'Passport',
-        undefined,
-        newData.passportImgUri,
-        'passport',
-        true
-      ).then((passportNodeUri) => {
-        this.state.passportNodeUri = passportNodeUri
-        this.state.passportImgUri = newData.passportImgUri
-      })
-    }
-  },
-
   _updateProfile(newData) {
     return this.wia.updateProfile(newData, this.state).then(resultState => {
       this.state = newData
@@ -113,7 +76,6 @@ export default Reflux.createStore({
 
   onUpdate(newData) {
     Promise.all([
-      this._updatePassport(newData, this.state),
       this._updateProfile(newData, this.state)
     ]).then(() => {
       if (this.state.centerNode === this.state.webId) {

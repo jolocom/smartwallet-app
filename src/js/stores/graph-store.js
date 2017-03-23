@@ -76,7 +76,7 @@ export default Reflux.createStore({
       return false
     }
 
-    this.gAgent.getGraphMapAtWebID(webId).then((triples) => {
+    this.gAgent.getGraphMapAtUri(webId).then((triples) => {
       let results = []
       const center = triples.slice(0, 1)
       const adjacent = triples.slice(1, triples.length)

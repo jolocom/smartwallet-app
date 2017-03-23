@@ -5,11 +5,9 @@ import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'
 
 // WebID related functions
-class WebIDAgent extends LDPAgent {
-
+class WebIDAgent {
   constructor() {
-    super()
-
+    this.ldp = new LDPAgent()
     this.http = new HTTPAgent({proxy: true})
   }
 
@@ -22,7 +20,7 @@ class WebIDAgent extends LDPAgent {
     return ''
   }
 
-  getProfile() {
+  getProfile() { // NOTE This Function assumes a proxied WEBID
     const webId = this.getWebId()
 
     if (!webId) {
@@ -56,8 +54,7 @@ class WebIDAgent extends LDPAgent {
       webId: webId
     }
 
-    let relevant = triples.filter((t) => t.subject.uri === webId)
-
+    let relevant = triples.filter((t) => t.subject.value === webId)
     let predicateMap = {}
     predicateMap[PRED.familyName] = 'familyName'
     predicateMap[PRED.givenName] = 'givenName'
@@ -84,7 +81,8 @@ class WebIDAgent extends LDPAgent {
     // Emails are stored in form mailto:abc@gmail.com, we remove 'mailto:'
     // when displaying here.
     if (profile.email) {
-      profile.email = profile.email.substring(7, profile.email.length)
+      profile.email = profile.email.substring(
+        profile.email.indexOf(':') + 1, profile.email.length)
     }
 
     let {fullName, givenName, familyName} = profile
@@ -100,7 +98,7 @@ class WebIDAgent extends LDPAgent {
     }
 
     if (profile.passportNodeUri) {
-      return this.findObjectsByTerm(
+      return this.ldp.findObjectsByTerm(
         profile.passportNodeUri,
         PRED.image
       ).then(res => {
@@ -153,28 +151,24 @@ class WebIDAgent extends LDPAgent {
         }
       }
     }
-
     toAdd.addAll(insertTriples.map((t) => {
       if (t.predicate.uri === PRED.email.uri) {
         t.object = $rdf.sym(`mailto:${t.object}`)
       }
       return t
     }))
-
     toDel.addAll(deleteTriples.map((t) => {
       if (t.predicate.uri === PRED.email.uri) {
         t.object = $rdf.sym(`mailto:${t.object}`)
       }
       return t
     }))
-
     // All network requests will be contained here, later awaited by with
     // Promise.all
     let nodeCreationRequests = []
     nodeCreationRequests.push(this.http.patch(
       oldData.webId, toDel.statements, toAdd.statements
     ))
-
     return Promise.all(nodeCreationRequests).then(res => {
       return newData
     })

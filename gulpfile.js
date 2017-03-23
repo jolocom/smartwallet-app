@@ -6,11 +6,60 @@ var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
 var webpackConfigProduction = require('./webpack.config.production.js');
+var eslint = require('gulp-eslint');
 
+var path = require('path');
 var concat = require('gulp-concat');
+
+function startDevServer(config, callback) {
+	// modify some webpack config options
+	var myConfig = Object.create(config);
+	myConfig.devtool = 'eval';
+	myConfig.debug = true;
+
+	// Start a webpack-dev-server
+	new WebpackDevServer(webpack(myConfig), {
+		https: true,
+		publicPath: '/' + myConfig.output.publicPath,
+		hot: true,
+		inline: true,
+		contentBase: 'dist',
+		stats: {
+			colors: true
+		}
+	}).listen(8080, '0.0.0.0', function (err) {
+		if (err) throw new gutil.PluginError('webpack-dev-server', err);
+		gutil.log('[webpack-dev-server]', 'https://localhost:8080');
+	});
+}
+
+function setRoutesEntry(config, entry) {
+	var myConfig = Object.create(config);
+	var entry = entry || process.env.ENTRY || 'default';
+	myConfig.resolve.alias.routes = path.join(
+		__dirname, 'src', 'js', 'routes', entry + '.jsx'
+	);
+	return myConfig;
+}
+
+gulp.task('lint', function() {
+    return gulp.src([
+    	'src/js/**/*.js',
+    	'src/js/**/*.jsx',
+    	'!src/js/**/*.test.js',
+    	'!src/js/**/*.test.jsx'
+    ]).pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
+});
 
 // The development server (the recommended option for development)
 gulp.task('default', ['webpack-dev-server']);
+
+gulp.task('wallet', function(callback) {
+	var myConfig = setRoutesEntry(webpackConfig, 'wallet');
+	startDevServer(myConfig, callback);
+});
 
 gulp.task('html', function() {
   return gulp.src('./src/index.html')
@@ -41,7 +90,7 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
-	var myConfig = Object.create(webpackConfigProduction);
+	var myConfig = setRoutesEntry(webpackConfigProduction);
 	myConfig.plugins = myConfig.plugins.concat(
 		new webpack.DefinePlugin({
 			'process.env': {
@@ -83,24 +132,6 @@ gulp.task('webpack:build-dev', function(callback) {
 	});
 });
 
-gulp.task('webpack-dev-server', function (callback) {
-	// modify some webpack config options
-	var myConfig = Object.create(webpackConfig);
-	myConfig.devtool = 'eval';
-	myConfig.debug = true;
-
-	// Start a webpack-dev-server
-	new WebpackDevServer(webpack(myConfig), {
-		https: true,
-		publicPath: '/' + myConfig.output.publicPath,
-		hot: true,
-		inline: true,
-		contentBase: 'dist',
-		stats: {
-			colors: true
-		}
-	}).listen(8080, '0.0.0.0', function (err) {
-		if (err) throw new gutil.PluginError('webpack-dev-server', err);
-		gutil.log('[webpack-dev-server]', 'https://localhost:8080');
-	});
+gulp.task('webpack-dev-server', function(callback) {
+	startDevServer(webpackConfig, callback)
 });

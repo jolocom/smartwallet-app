@@ -1,20 +1,17 @@
 import React from 'react'
 import Radium from 'radium'
 import PasswordField from 'material-ui-password-field'
-import RegistrationStyles from '../styles'
-import Theme from '../../../styles/jolocom-theme'
+import {theme} from 'styles'
 import {RaisedButton} from 'material-ui'
 
+import {Container, Header, Content, Block, Footer} from './ui'
+
 const STYLES = {
-  root: RegistrationStyles.container,
   password: {
     margin: '0px 30px 10px 30px',
     backgroundColor: '#ffffff'
   },
   passwordsContainer: {
-    maxWidth: '450px',
-    width: '100%',
-    margin: '0px 30px 10px 30px',
     backgroundColor: '#ffffff'
   },
   strengthBare: {
@@ -23,11 +20,10 @@ const STYLES = {
   },
   explanation: [{
     marginTop: '20px',
-    color: Theme.jolocom.gray1
-  },
-  {
+    color: theme.jolocom.gray1
+  }, {
     marginTop: '20px',
-    color: Theme.jolocom.gray1,
+    color: theme.jolocom.gray1,
     visibility: 'hidden'
   }],
   button: {
@@ -100,49 +96,54 @@ StrengthBar.propTypes = {
 }
 
 function Password(props) {
-  return <div style={STYLES.root}>
-    <div style={STYLES.passwordsContainer}>
-      <PasswordField
-        style={STYLES.password}
-        floatingLabelText="Password"
-        hintText={props.strength + ' password'}
-        value={props.value}
-        onChange={
-          e => props.onChangePassword(e.target.value)
-        }
-        errorText={props.passwordStrengthErrorMessage}
-      />
-      <StrengthBar strength={props.strength} value={props.value} />
-      <PasswordField
-        style={STYLES.password}
-        floatingLabelText="Repeat Password"
-        disabled={props.repeatedValueState}
-        value={props.repeatedValue}
-        onChange={
-          e => props.onChangeRepeatedPassword(e.target.value)
-        }
-        errorText={props.passwordsMatchErrorMessage}
-      />
-    </div>
-    <div
-      style={STYLES.explanation[props.repeatedValueState ? 0 : 1]}
-    >
-      <dl>
-        <dt>For more security please use at least :</dt>
-        <dd>- one Number</dd>
-        <dd>- one Upper Case (e.g. A,B,C...)</dd>
-        <dd>- one Lower Case (e.g. a,b,c...)</dd>
-      </dl>
-    </div>
-    <div style={STYLES.button} >
-      <RaisedButton
-        disabled={!props.valid}
-        secondary={props.valid}
-        label="NEXT STEP"
-        onClick={props.onSubmit}
-      />
-    </div>
-  </div>
+  return (
+    <Container>
+      <Header title="... and a password" />
+      <Content>
+        <Block style={STYLES.passwordsContainer}>
+          <PasswordField
+            style={STYLES.password}
+            floatingLabelText="Password"
+            hintText={props.strength + ' password'}
+            value={props.value}
+            onChange={
+              e => props.onChangePassword(e.target.value)
+            }
+            errorText={props.passwordStrengthErrorMessage}
+          />
+          <StrengthBar strength={props.strength} value={props.value} />
+          <PasswordField
+            style={STYLES.password}
+            floatingLabelText="Repeat Password"
+            disabled={props.repeatedValueState}
+            value={props.repeatedValue}
+            onChange={
+              e => props.onChangeRepeatedPassword(e.target.value)
+            }
+            errorText={props.passwordsMatchErrorMessage}
+          />
+        </Block>
+        <Block
+          style={STYLES.explanation[props.repeatedValueState ? 0 : 1]}
+        >
+          <dl>
+            <dt>For more security please use at least :</dt>
+            <dd>- one Number</dd>
+            <dd>- one Upper Case (e.g. A,B,C...)</dd>
+            <dd>- one Lower Case (e.g. a,b,c...)</dd>
+          </dl>
+        </Block>
+      </Content>
+      <Footer>
+        <RaisedButton
+          disabled={!props.valid}
+          secondary={props.valid}
+          label="NEXT STEP"
+          onClick={props.onSubmit}
+        />
+      </Footer>
+    </Container>
+  )
 }
 
 Password.propTypes = {

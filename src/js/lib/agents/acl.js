@@ -26,6 +26,7 @@ class AclAgent extends HTTPAgent {
     this.model = []
     this.gAgent = new GraphAgent()
     this.ldpAgent = new LDPAgent()
+    this.getIndexUri = Util.getIndexUri
 
     this.aclUri
     this.uri = uri
@@ -343,19 +344,18 @@ class AclAgent extends HTTPAgent {
     })
 
     addQuery = addQuery.concat(this.authCreationQuery)
-    return this.patch(this._proxify(this.aclUri), removeQuery, addQuery, {
-      'Content-Type': 'text/turtle'
-    }).then(() => {
-      if (this.zombiePolicies.length) {
-        this._wipeZombies(this.zombiePolicies)
-      }
-      this._updateIndex().then(() => {
-        this._cleanUp()
-      }).catch(e => {
-        this._cleanUp()
-        throw new Error(e)
+    return this.patch(this._proxify(this.aclUri), removeQuery, addQuery)
+      .then(() => {
+        if (this.zombiePolicies.length) {
+          this._wipeZombies(this.zombiePolicies)
+        }
+        this._updateIndex().then(() => {
+          this._cleanUp()
+        }).catch(e => {
+          this._cleanUp()
+          throw new Error(e)
+        })
       })
-    })
   }
 
   _cleanUp() {
@@ -429,7 +429,6 @@ class AclAgent extends HTTPAgent {
     const wild = user === '*'
     user = wild ? PRED.Agent : rdf.sym(user)
     const pred = wild ? PRED.agentClass : PRED.agent
-
     let boilerplate = []
     boilerplate.push(
       rdf.st(rdf.sym(authName), PRED.type, PRED.auth),
@@ -447,9 +446,10 @@ class AclAgent extends HTTPAgent {
   _updateIndex() {
     let add = []
     let rem = []
-    let map = {}
-    map[PRED.read.uri] = PRED.readPermission
-    map[PRED.write.uri] = PRED.writePermission
+    let map = {
+      [PRED.read.uri]: PRED.readPermission,
+      [PRED.write.uri]: PRED.writePermission
+    }
 
     this.toRemove.forEach(st => {
       if (st.user === '*') {
@@ -482,7 +482,6 @@ class AclAgent extends HTTPAgent {
         add[index].perm.push(st.object)
       }
     })
-
     const addReq = add.map(pol => {
       let query = []
       pol.perm.forEach(permission => query.push(
@@ -490,9 +489,7 @@ class AclAgent extends HTTPAgent {
         map[permission],
         rdf.sym(pol.file))
       ))
-      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), '', query, {
-        'Content-Type': 'text/turtle'
-      })
+      return this.patch(this._proxify(this.getIndexUri(pol.webId)), '', query)
     })
 
     const remReq = rem.map(pol => {
@@ -502,9 +499,7 @@ class AclAgent extends HTTPAgent {
         map[permission],
         rdf.sym(pol.file))
       ))
-      return this.patch(this._proxify(Util.getIndexUri(pol.webId)), query, '', {
-        'Content-Type': 'text/turtle'
-      })
+      return this.patch(this._proxify(this.getIndexUri(pol.webId)), query, '')
     })
 
     return Promise.all(remReq.concat(addReq))

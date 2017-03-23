@@ -6,7 +6,7 @@ import { Router, Route, IndexRoute } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
-import Graph from 'components/graph/graph.jsx'
+import Graph from 'components/graph'
 import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
 import Chat from 'components/chat'
@@ -24,47 +24,33 @@ import PrivacySettings from 'components/node/privacy-settings'
 import Profile from 'components/accounts/profile'
 import SharedNodes from 'components/node/shared-nodes.jsx'
 import NodeList from 'components/node/node-list.jsx'
+import AddContacts from 'components/node/add-contacts.jsx'
+
 import ConfirmEmailVerification from
   'components/accounts/confirm-email-verification.jsx'
 
-import RegistrationNameEntryScreen from
-  'components/registration/screens/name-entry'
-import RegistrationEntropyScreen from
-  'components/registration/screens/entropy'
-import RegistrationUserTypeScreen from
-  'components/registration/screens/user-type'
-import RegistrationWritePhraseScreen from
-  'components/registration/screens/write-phrase'
-import RegistrationPhraseInfoScreen from
-  'components/registration/screens/phrase-info'
-import RegistrationPinScreen from
-  'components/registration/screens/pin'
-import RegistrationIdentifierScreen from
-  'components/registration/screens/identifier'
-import RegistrationPasswordScreen from
-  'components/registration/screens/password'
+import GraphIcon from 'components/icons/graph-icon.jsx'
+
+export const routes = {
+  login: '/login',
+  signup: '/signup',
+  home: '/graph',
+  forgotPassword: '/forgot-password',
+  changePassword: '/change-password',
+  verifyEmail: '/verify-email'
+}
+
+export const publicRoutes = Object.values(routes)
+
+export const navItems = [{
+  title: 'Graph',
+  route: routes.home,
+  icon: GraphIcon
+}]
 
 function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
-
-    <Route path="/registration"
-      component={RegistrationNameEntryScreen} />
-    <Route path="/registration/entropy"
-      component={RegistrationEntropyScreen} />
-    <Route path="/registration/user-type"
-      component={RegistrationUserTypeScreen} />
-    <Route path="/registration/write-phrase"
-      component={RegistrationWritePhraseScreen} />
-    <Route path="/registration/phrase-info"
-      component={RegistrationPhraseInfoScreen} />
-    <Route path="/registration/pin"
-      component={RegistrationPinScreen} />
-    <Route path="/registration/email"
-      component={RegistrationIdentifierScreen} />
-    <Route path="/registration/password"
-      component={RegistrationPasswordScreen} />
-
     <Route path="/chat" component={Chat}>
       <Route path="/conversations" component={Conversations}>
         <Route path="/conversations/:id" component={Conversation} />
@@ -83,6 +69,7 @@ function getRoutes() {
       component={ConfirmEmailVerification}
     />
     <Route path="profile" component={Profile} />
+    <Route path="add-contacts" component={AddContacts} />
     <Route path=":uri/privacy-settings" component={PrivacySettings} />
     <Route path=":uri/shared-nodes" component={SharedNodes} />
     <Route path="node-list" component={NodeList} />

@@ -30,6 +30,8 @@ const actions = module.exports = makeActions('registration', {
           dispatch(router.pushRoute(nextUrl))
         }
       }
+
+      dispatch(pushRoute(nextUrl))
     }
   },
   setHumanName: {
@@ -353,10 +355,7 @@ helpers._isComplete = (state) => {
 }
 
 helpers._getNextURLFromState = (state) => {
-  const currentPath = state.getIn([
-    'routing', 'locationBeforeTransitions', 'pathname'
-  ])
-
+  const currentPath = state.get('routing').locationBeforeTransitions.pathname
   if (!helpers._canGoForward(state, currentPath)) {
     return null
   }
@@ -370,6 +369,12 @@ helpers._getNextURL = (currentPath, userType) => {
     return userType === 'expert'
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
+  } else if ((currentPath === '/registration/write-phrase') &&
+    (userType === 'layman')) {
+    return '/registration/phrase-info'
+  } else if ((currentPath === '/registration/phrase-info') &&
+    (userType === 'expert')) {
+    return '/registration/write-phrase'
   }
 
   return NEXT_ROUTES[currentPath]

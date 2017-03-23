@@ -63,21 +63,10 @@ export class Parser extends Graph {
       this.parse(text, url)
     }
   }
+  // @TODO We never use prefixes, return only statements.
   parse(text, url) {
-    let payload = []
-
     $rdf.parse(text, this.g, url, 'text/turtle')
-
-    for (let i in this.g.statements) {
-      let statement = this.g.statements[i]
-      payload.push({
-        object: statement.object,
-        predicate: statement.predicate,
-        subject: statement.subject
-      })
-    }
-
-    return ({prefixes: {}, triples: payload})
+    return ({prefixes: {}, triples: this.g.statements})
   }
 }
 
