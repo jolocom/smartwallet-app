@@ -5,13 +5,7 @@ import {PRED} from './namespaces.js'
 // to D3 to draw a graph based on the data
 
 class D3Converter {
-  convertToD3(rank, node, i, n) {
-    // We need to know the index of the node and the total amount of nodes
-    // in order to be able to calculate their initial position, so that they are
-    // possitioned in a circle
-    this.i = i + 1
-    this.n = n
-
+  convertToD3(rank, node) {
     let uri = node.uri
     let connection = node.connection ? node.connection : null
 
@@ -40,35 +34,35 @@ class D3Converter {
       return props
     }
 
-    node.forEach(triple => {
-      let pred = triple.predicate.uri
-      let obj = triple.object.value ? triple.object.value : triple.object.uri
+    // Updating the attributes of the node object.
+    // The resulting object will have all of it's props filled in, and will
+    // be ready to be rendered by D3
+    // Note, if a triple is not present, it will be set to null.
+    // If the resource is a URI, it's value is stored next to the
+    // 'uri' key in the object otherwise it's value is stored in the 'value'
+    // key of the object. We need to make sure we are assigning the value
+    // regardless of where it's stored
+    const predMap = {}
+    predMap[PRED.givenName.uri] = 'name'
+    predMap[PRED.familyName.uri] = 'familyName'
+    predMap[PRED.fullName.uri] = 'fullName'
+    predMap[PRED.email.uri] = 'email'
+    predMap[PRED.title.uri] = 'title'
+    predMap[PRED.title_DC.uri] = 'title'
+    predMap[PRED.description.uri] = 'description'
+    predMap[PRED.type.uri] = 'type'
+    predMap[PRED.image.uri] = 'img'
+    predMap[PRED.socialMedia.uri] = 'socialMedia'
+    predMap[PRED.mobile.uri] = 'mobilePhone'
+    predMap[PRED.address.uri] = 'address'
+    predMap[PRED.profession.uri] = 'profession'
+    predMap[PRED.company.uri] = 'company'
+    predMap[PRED.url.uri] = 'url'
+    predMap[PRED.storage.uri] = 'storage'
 
-      // Updating the attributes of the node object.
-      // The resulting object will have all of it's props filled in, and will
-      // be ready to be rendered by D3
-      // Note, if a triple is not present, it will be set to null.
-      // If the resource is a URI, it's value is stored next to the
-      // 'uri' key in the object otherwise it's value is stored in the 'value'
-      // key of the object. We need to make sure we are assigning the value
-      // regardless of where it's stored
-      const predMap = {}
-      predMap[PRED.givenName.uri] = 'name'
-      predMap[PRED.familyName.uri] = 'familyName'
-      predMap[PRED.fullName.uri] = 'fullName'
-      predMap[PRED.email.uri] = 'email'
-      predMap[PRED.title.uri] = 'title'
-      predMap[PRED.title_DC.uri] = 'title'
-      predMap[PRED.description.uri] = 'description'
-      predMap[PRED.type.uri] = 'type'
-      predMap[PRED.image.uri] = 'img'
-      predMap[PRED.socialMedia.uri] = 'socialMedia'
-      predMap[PRED.mobile.uri] = 'mobilePhone'
-      predMap[PRED.address.uri] = 'address'
-      predMap[PRED.profession.uri] = 'profession'
-      predMap[PRED.company.uri] = 'company'
-      predMap[PRED.url.uri] = 'url'
-      predMap[PRED.storage.uri] = 'storage'
+    node.forEach(triple => {
+      const pred = triple.predicate.uri
+      const obj = triple.object.value ? triple.object.value : triple.object.uri
 
       if (predMap[pred] && triple.subject.uri === uri) {
         if (predMap[pred] === 'email') {

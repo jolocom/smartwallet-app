@@ -24,7 +24,7 @@ Located under the registration key of the global state, it contains the followin
   * valid: bool
 * userType: null | "expert" | "layman"
 * maskedImage
-  * uncovered: an object fed to the MaskedImage component holding the uncovered areas
+  * uncovering: bool, whether the image is uncovering, e.g. the user is touching the screen
 * passphrase:
   * sufficientEntropy: bool, whether enough entropy has been gathered to generate a secure random string
   * randomString: null or string when enough entropy has been gathered
@@ -41,6 +41,7 @@ Located under the registration key of the global state, it contains the followin
   * valid
 * password
   * value
+  * repeated
   * valid
 * complete: bool, if all fields are filled out and valid
 
@@ -50,12 +51,14 @@ Redux actions
 * goForward() - knows which screen where on, and goes to the correct next screen based on that and other state if current screen is valid
 * setHumanName()
 * setUserType(check) - checks type and throws error if necessary
-* addMaskedImagePoint(point: {x, y}) - add touched point to masked image state
+* setMaskedImageUncovering(value: bool)
 * addEntropyFromDeltas({dx, dy, dz?}) - add entropy from mouse movement or accelerometers, actual logic is seperate from React/Redux
 * setPassphraseWrittenDown(value: bool)
 * switchToExpertMode()
 * setPin(value)
+* clearPin() - erases the PIN
 * setUsername(value)
+* checkUsername(username) - async action, resolves if available
 * setPassword(value)
 
 
@@ -96,3 +99,8 @@ Passphrase info
 ----------------
 
 Uses switchToExpertMode() and goForward()
+
+Masked image
+------------
+
+Stores in the Redux state whether the image is uncovering, container component contains state about the uncovered points, and the MaskedImage pure presentation component renders this to an SVG and collects mouse and touch input.

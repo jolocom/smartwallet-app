@@ -21,52 +21,54 @@ export default class PermissionAgent extends GraphAgent {
       throw new Error('No Uri supplied.')
     }
 
-    const indexUri = Util.getIndexUri(uri)
-
-    let sharedNodes = {
+    const indexUri = this._getIndexUri(uri)
+    const sharedNodes = {
       typePerson: [],
       typeImage: [],
       typeDocument: [],
       typeNotDetected: []
     }
 
-    return this.findTriples(
-      indexUri, rdf.sym(uri), undefined, undefined)
-    .then((graph) => {
-      if (graph === -1) {
-        throw new Error('Could not access the index file.')
-      }
-      const filtered = graph.filter(t =>
-        t.predicate.uri === PRED.readPermission.uri)
-      return Promise.all(filtered.map((t) => {
-        return this.resolveNodeType(t.object.uri).then((ans) => {
-          sharedNodes[ans].push({
-            uri: t.object.uri,
-            perm: t.predicate.uri
+    return this.findTriples(indexUri, rdf.sym(uri), undefined, undefined)
+      .then(graph => {
+        if (graph === -1) {
+          throw new Error('Could not access the index file.')
+        }
+        const filtered = graph.filter(t =>
+          t.predicate.uri === PRED.readPermission.uri)
+
+        return Promise.all(filtered.map((t) => {
+          return this.resolveNodeType(t.object.uri).then((ans) => {
+            sharedNodes[ans].push({
+              uri: t.object.uri,
+              perm: t.predicate.uri
+            })
           })
+        })).then(() => {
+          return sharedNodes
         })
-      })).then(() => {
-        return sharedNodes
+      }).catch((e) => {
+        return {}
       })
-    }).catch((e) => {
-      return {}
-    })
   }
 
   resolveNodeType(uri) {
-    let typeMap = {}
-    typeMap[PRED.Document.uri] = 'typeDocument'
-    typeMap[PRED.Image.uri] = 'typeImage'
-    typeMap[PRED.Person.uri] = 'typePerson'
-    typeMap[PRED.profileDoc.uri] = 'typePerson'
+    const typeMap = {
+      [PRED.Document.uri]: 'typeDocument',
+      [PRED.Image.uri]: 'typeImage',
+      [PRED.Person.uri]: 'typePerson',
+      [PRED.profileDoc.uri]: 'typePerson'
+    }
 
-    return this.findTriples(uri, rdf.sym(uri),
-       PRED.type, undefined)
-    .then((graph) => {
+    return this.findTriples(uri, rdf.sym(uri), PRED.type).then((graph) => {
       if (graph === -1 || graph.length === 0) {
         return 'typeNotDetected'
       }
       return typeMap[graph[0].object.uri]
     })
+  }
+
+  _getIndexUri(uri) {
+    return Util.getIndexUri(uri)
   }
 }

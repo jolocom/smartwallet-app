@@ -57,6 +57,15 @@ export function asyncAction(module, prefix, options) {
   return _enchanceCreator(creator, id, options)
 }
 
+export function makeActions(module, defs) {
+  const actions = _(defs).map((def, name) => {
+    const actionType = def.async ? asyncAction : action
+    return [name, actionType(module, name, def)]
+  }).fromPairs().valueOf()
+  actions.actions = actions
+  return actions
+}
+
 function _enchanceCreator(creator, id, options) {
   creator.getParams = (action) => {
     return _.pick(action, options.expectedParams)

@@ -122,9 +122,6 @@ class Contact extends React.Component {
 
   render() {
     let {webId, name, email, imgUri} = this.props.contact
-    // Check if name is set then set the first character as the name
-    // initial otherwise, check if name is empty or whitespaces then
-    // set it to Unnamed and let its initial be ?
     let avatar = <UserAvatar name={name} imgUrl={imgUri} />
     let checkbox
 

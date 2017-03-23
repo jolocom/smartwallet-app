@@ -33,7 +33,7 @@ export function connect(params, wantedActions = []) {
         prop = prop.split('.')
       }
 
-      const pair = [prop.slice(-1), state.getIn(prop)]
+      const pair = [prop.slice(-1)[0], state.getIn(prop)]
 
       if (typeof pair[1] === 'undefined') {
         throw new Error(
@@ -81,7 +81,8 @@ export function connect(params, wantedActions = []) {
       (stateProps, dispatchProps, ownProps) =>
         Object.assign({}, ownProps, stateProps, dispatchProps),
       {
-        withRef: true
+        withRef: true,
+        pure: typeof params.pure !== 'undefined' ? params.pure : true
       }
     )(component)
     connected.mapStateToProps = mapStateToProps
