@@ -368,6 +368,12 @@ helpers._getNextURL = (currentPath, userType) => {
     return userType === 'expert'
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
+  } else if ((currentPath === '/registration/write-phrase') &&
+    (userType === 'layman')) {
+    return '/registration/phrase-info'
+  } else if ((currentPath === '/registration/phrase-info') &&
+    (userType === 'expert')) {
+    return '/registration/write-phrase'
   }
 
   return NEXT_ROUTES[currentPath]

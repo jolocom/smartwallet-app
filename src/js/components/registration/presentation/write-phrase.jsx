@@ -94,6 +94,7 @@ const WritePhrase = (props) => {
       </p>
       <FlatButton
         label="STORE IT FOR ME"
+        onClick={() => { props.onChange('layman'); props.onSubmit() }}
         style={STYLES.storeBtn} />
     </div>
   )
@@ -101,6 +102,7 @@ const WritePhrase = (props) => {
 
 WritePhrase.propTypes = {
   onToggle: React.PropTypes.func.isRequired,
+  onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
   value: React.PropTypes.string.isRequired,
   isChecked: React.PropTypes.bool.isRequired

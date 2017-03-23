@@ -65,6 +65,7 @@ const PhraseInfo = (props) => {
         </p>
         <FlatButton
           label="SHOW SECURE PHRASE"
+          onClick={() => { props.onChange('expert'); props.onSubmit() }}
           style={STYLES.optionBtn} />
       </div>
     </div>
@@ -72,6 +73,7 @@ const PhraseInfo = (props) => {
 }
 
 PhraseInfo.propTypes = {
+  onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired
 }
 
