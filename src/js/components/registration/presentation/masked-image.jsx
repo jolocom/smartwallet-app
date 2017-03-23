@@ -67,7 +67,8 @@ class MaskedImage extends React.Component {
         </mask>
       </defs>
       <foreignObject width="240" height="150" textAnchor="middle"
-                  requiredExtensions="http://www.w3.org/1999/xhtml">
+        requiredExtensions="http://www.w3.org/1999/xhtml"
+      >
         <div xmlns="http://www.w3.org/1999/xhtml" style={{textAlign: 'center',
           color: Theme.jolocom.gray1}}>
           <p>{props.uncoveredPaths.length > 0 ? '' : props.message1}</p>

@@ -24,8 +24,7 @@ const STYLES = {
   explanation: [{
     marginTop: '20px',
     color: Theme.jolocom.gray1
-  },
-  {
+  }, {
     marginTop: '20px',
     color: Theme.jolocom.gray1,
     visibility: 'hidden'

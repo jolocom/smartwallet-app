@@ -63,7 +63,7 @@ export default class GraphScreen extends React.Component {
     if (webId) {
       UnreadMessagesActions.unsubscribe(webId)
     }
-    
+
     this.unreadListener()
   }
 

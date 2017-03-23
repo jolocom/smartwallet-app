@@ -6,7 +6,12 @@ import {
   ListItem
 } from 'material-ui'
 
-class SearchResults extends React.Component {
+@Radium
+export default class SearchResults extends React.Component {
+
+  static propTypes = {
+    style: React.PropTypes.object
+  }
 
   static contextTypes = {
     muiTheme: React.PropTypes.object
@@ -67,5 +72,3 @@ class SearchResults extends React.Component {
   }
 
 }
-
-export default Radium(SearchResults)

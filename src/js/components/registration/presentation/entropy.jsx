@@ -2,7 +2,6 @@ import React from 'react'
 import Radium from 'radium'
 import MaskedImage from './masked-image'
 import RegistrationStyles from '../styles'
-import Theme from '../../../styles/jolocom-theme'
 import {RaisedButton} from 'material-ui'
 
 const STYLES = Object.assign(RegistrationStyles, {
@@ -15,10 +14,10 @@ const STYLES = Object.assign(RegistrationStyles, {
 })
 
 const Entropy = (props) => {
-  return <div style={STYLES.container}
-    onMouseMove={(e) => props.onMouseMovement(e.clientX, e.clientY)}
+  return (
+    <div style={STYLES.container}
+      onMouseMove={(e) => props.onMouseMovement(e.clientX, e.clientY)}
     >
-
       <MaskedImage
         image={IMAGE_DATA_URL}
         uncoveredPaths={props.imageUncoveredPaths}
@@ -27,22 +26,24 @@ const Entropy = (props) => {
         onUncoveringChange={props.onImageUncoveringChange}
         message1={'Hi ' + props.user + '!, for...'}
         message2={'...more security we need some random data.'}
-        message3={'Please put your finger anywhere on the screen and draw on it randomly.'}
-        >
-        </MaskedImage>
+        message3={'Please put your finger anywhere on the screen and draw on it randomly.'} // eslint-disable-line max-len
+      />
 
-        <RaisedButton
-          label="NEXT STEP"
-          secondary
-          onClick={props.onSubmit} />
-
-  </div>
+      <RaisedButton
+        label="NEXT STEP"
+        secondary
+        onClick={props.onSubmit} />
+    </div>
+  )
 }
+
 Entropy.propTypes = {
   imageUncovering: React.PropTypes.bool.isRequired,
+  imageUncoveredPaths: React.PropTypes.any,
   user: React.PropTypes.string,
   onImagePointUncoverd: React.PropTypes.func.isRequired,
   onImageUncoveringChange: React.PropTypes.func.isRequired,
+  onMouseMovement: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired
 }
 

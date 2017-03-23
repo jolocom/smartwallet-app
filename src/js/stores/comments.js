@@ -83,7 +83,7 @@ export default Reflux.createStore({
         res = tmp
         // see what it contains
         let containerOf = res.triples.filter((t) =>
-          t.predicate == SIOC.containerOf).map((t) =>
+          t.predicate === SIOC.containerOf).map((t) =>
           t.object)
         // .. and fetch the contained object docs
         return Promise.all(containerOf.map((c) =>
@@ -117,7 +117,7 @@ export default Reflux.createStore({
         }, {})
 
         // origin graph contains the graphs with these subjects
-        let contains = graphs[origin][SIOC.containerOf] !=
+        let contains = graphs[origin][SIOC.containerOf] !==
           undefined ? graphs[origin][SIOC.containerOf] : []
 
         let msgs = []
@@ -143,7 +143,7 @@ export default Reflux.createStore({
             id: subj,
             author: authors[0],
             content: N3Util.getLiteralValue(contents[0]),
-            reply: (replies != undefined && replies.length != 0)
+            reply: (replies !== undefined && replies.length !== 0)
               ? replies[0] : null,
             created: timestamps[0]
           })
