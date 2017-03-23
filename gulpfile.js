@@ -6,6 +6,7 @@ var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
 var webpackConfigProduction = require('./webpack.config.production.js');
+var eslint = require('gulp-eslint');
 
 var path = require('path');
 var concat = require('gulp-concat');
@@ -40,6 +41,17 @@ function setRoutesEntry(config, entry) {
 	);
 	return myConfig;
 }
+
+gulp.task('lint', function() {
+    return gulp.src([
+    	'src/js/**/*.js',
+    	'src/js/**/*.jsx',
+    	'!src/js/**/*.test.js',
+    	'!src/js/**/*.test.jsx'
+    ]).pipe(eslint())
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
+});
 
 // The development server (the recommended option for development)
 gulp.task('default', ['webpack-dev-server']);
