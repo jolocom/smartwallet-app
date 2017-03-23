@@ -1,12 +1,12 @@
 import React from 'react'
 import Radium from 'radium'
 import PasswordField from 'material-ui-password-field'
-import RegistrationStyles from '../styles'
-import Theme from '../../../styles/jolocom-theme'
+import registrationStyles from '../styles'
+import theme from '../../../styles/jolocom-theme'
 import {RaisedButton} from 'material-ui'
 
 const STYLES = {
-  root: RegistrationStyles.container,
+  root: registrationStyles.container,
   password: {
     margin: '0px 30px 10px 30px',
     backgroundColor: '#ffffff'
@@ -23,10 +23,10 @@ const STYLES = {
   },
   explanation: [{
     marginTop: '20px',
-    color: Theme.jolocom.gray1
+    color: theme.jolocom.gray1
   }, {
     marginTop: '20px',
-    color: Theme.jolocom.gray1,
+    color: theme.jolocom.gray1,
     visibility: 'hidden'
   }],
   button: {

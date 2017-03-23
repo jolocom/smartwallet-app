@@ -3,53 +3,48 @@
 import React from 'react'
 import Radium from 'radium'
 import {FlatButton} from 'material-ui'
-import Theme from '../../../styles/jolocom-theme'
-import RegistrationStyles from '../styles'
+import theme from '../../../styles/jolocom-theme'
+import registrationStyles from '../styles'
 import HoverButton from '../../common/hover-button'
 
-// @FIX this will extend the RegistrationStyles
+// @FIX this will extend the registrationStyles
 // Use Object.assign({}, ...) to clone the object
-const STYLES = Object.assign(RegistrationStyles, {
-  tile: {
-    display: 'flex',
-    maxwidth: '90%',
-    height: '180px',
-    width: '290px',
-    alignItems: 'center',
-    marginTop: '10px',
-    marginBottom: '10px',
-    borderRadius: '2px',
-    primary: false,
-    backgroundColor: Theme.jolocom.gray1,
-    selectedColor: Theme.palette.primary1Color,
-    textAlign: 'center',
-    padding: '5%'
-  },
-
-  tileinside: {
-    color: Theme.jolocom.gray5,
+const STYLES = Object.assign(registrationStyles, {
+  content: {
     display: 'flex',
     flexDirection: 'column',
-    width: '80%',
-    height: '100%',
-    position: 'relative',
-    alignItems: 'center',
-    margin: 'auto'
+    flex: 1
+  },
+  tile: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    margin: '8px 0 8px',
+    borderRadius: '2px',
+    primary: false,
+    backgroundColor: theme.jolocom.gray1,
+    selectedColor: theme.palette.primary1Color,
+    textAlign: 'center',
+    padding: '16px',
+    boxSizing: 'border-box'
+  },
+  tileinside: {
+    color: theme.jolocom.gray5,
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'stretch',
+    fontWeight: 200,
+    fontSize: '18px'
   },
   img: {
-    position: 'relative',
     flex: 1,
-    maxWidth: '100%',
-    height: '80px',
-    width: '300px',
     userSelect: 'none',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
-    marginBottom: '10px'
-    // @FIX watch these empty lines :)
+    marginBottom: '8px'
   }
-
 })
 
 
@@ -76,7 +71,7 @@ const UserType = (props) => {
     <div style={STYLES.header}>
       {'Hi ' + props.user + '!, are you...' /* @FIX use a string template */}
     </div>
-    <div>
+    <div style={STYLES.content}>
       <HoverButton
         backgroundColor={STYLES.tile.backgroundColor}
         hoverColor={STYLES.tile.selectedColor}
@@ -88,8 +83,6 @@ const UserType = (props) => {
           }}} />...a total tech Geek and want to be in absolute control?
         </div>
       </HoverButton>
-    </div>
-    <div>
       <HoverButton
         backgroundColor={STYLES.tile.backgroundColor}
         hoverColor={STYLES.tile.selectedColor}
@@ -102,9 +95,7 @@ const UserType = (props) => {
         </div>
       </HoverButton>
     </div>
-    <div>
-    </div>
-    <div>
+    <div style={STYLES.footer}>
       <FlatButton onClick={()=>props.onWhySelect(messageWhy)}>
       WHY?
       </FlatButton>

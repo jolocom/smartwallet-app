@@ -25,12 +25,12 @@ export default class HoverButton extends React.Component {
       }
     }
 
-    return <div>
+    return (
       <div
         style={Object.assign(STYLES.hoverbutton, this.props.style)}
         onClick={this.props.onClick}>
         {this.props.children}
       </div>
-    </div>
+    )
   }
 }

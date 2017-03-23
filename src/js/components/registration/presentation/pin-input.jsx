@@ -1,26 +1,26 @@
 import React from 'react'
 import Radium from 'radium'
-import Theme from '../../../styles/jolocom-theme'
+import theme from '../../../styles/jolocom-theme'
 
 const STYLES = {
   inputBall: {
     position: 'relative',
     display: 'inline-block',
     verticalAlign: 'center',
-    color: Theme.palette.alternateTextColor,
+    color: theme.palette.alternateTextColor,
     margin: '0 3px',
-    width: '24px',
-    height: '24px',
-    borderRadius: '12px',
-    backgroundColor: Theme.palette.disabledColor,
-    lineHeight: '24px',
+    width: '48px',
+    height: '48px',
+    borderRadius: '24px',
+    backgroundColor: theme.palette.disabledColor,
+    lineHeight: '48px',
     textAlign: 'center'
   },
   focusedBall: {
-    backgroundColor: Theme.palette.primary1Color
+    backgroundColor: theme.palette.primary1Color
   },
   filledBall: {
-    backgroundColor: Theme.palette.textColor
+    backgroundColor: theme.palette.textColor
   },
   numberInput: {
     position: 'absolute',
@@ -30,19 +30,19 @@ const STYLES = {
     display: 'inline-block',
     verticalAlign: 'center',
     position: 'absolute',
-    height: '24px',
-    width: '24px',
+    height: '48px',
+    width: '48px',
     cursor: 'pointer'
   },
   img: {
     userSelect: 'none',
-    marginTop: '5px',
-    marginLeft: '5px',
+    marginTop: '14px',
+    marginLeft: '8px',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
-    width: '14px',
-    height: '14px'
+    width: '24px',
+    height: '24px'
   }
 }
 

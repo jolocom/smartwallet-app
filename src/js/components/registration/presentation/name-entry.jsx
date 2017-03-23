@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import RegistrationStyles from '../styles'
+import registrationStyles from '../styles'
 
 import {
   RaisedButton,
@@ -8,7 +8,7 @@ import {
 } from 'material-ui'
 
 const STYLES = {
-  root: RegistrationStyles
+  root: registrationStyles
 }
 
 const NameEntry = (props) => {
