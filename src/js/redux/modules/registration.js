@@ -63,11 +63,10 @@ const actions = module.exports = makeActions('registration', {
           progress: entropy.getProgress()
         }))
 
-        if (!getState().getIn(['registration', 'passphrase', 'phrase']) &&
-            entropy.isReady()) {
+        if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
           dispatch(actions.setPassphrase(
-            backend.generateSeedPhrase(randomString)
+            backend.wallet.generateSeedPhrase(randomString)
           ))
         }
       }

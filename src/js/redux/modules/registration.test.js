@@ -121,6 +121,7 @@ describe.only('Wallet registration Redux module', function() {
         registration: {userType: {valid: false}}
       }))).to.equal(null)
     })
+
     it('should return the correct next page', () => {
       expect(helpers._getNextURLFromState(Immutable.fromJS({
         routing: {
@@ -131,6 +132,7 @@ describe.only('Wallet registration Redux module', function() {
         helpers._getNextURL('/registration', null)
       )
     })
+
     it('should return the correct next page after user type selection', () => {
       expect(helpers._getNextURLFromState(Immutable.fromJS({
         routing: {
@@ -190,5 +192,126 @@ describe.only('Wallet registration Redux module', function() {
     it('should return false if required layman fields are missing', () => {
       test({invalid: ['email', 'password'], result: false, userType: 'layman'})
     })
+  })
+
+  describe('addEntropyFromDeltas', function() {
+    it('should not do anything when phrase is already generated', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        passphrase: {phrase: 'xyx'}
+      }})
+      const services = {entropy: {addFromDelta: stub()}}
+
+      const thunk = registration.addEntropyFromDeltas({dx: 5, dy: 3})
+      thunk(dispatch, getState, {services})
+
+      expect(services.entropy.addFromDelta.called).to.equal(false)
+    })
+
+    it('should add entropy when necessary', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        passphrase: {phrase: null}
+      }})
+      const services = {entropy: {
+        addFromDelta: stub(),
+        isReady: stub().returns(false),
+        getProgress: stub().returns(0.5),
+        getRandomString: stub().returns('bla')
+      }}
+
+      const thunk = registration.addEntropyFromDeltas({dx: 5, dy: 3})
+      thunk(dispatch, getState, {services})
+
+      expect(services.entropy.addFromDelta.called).to.equal(true)
+      expect(dispatch.calls).to.deep.equal([{args: [
+        registration.setEntropyStatus({
+          sufficientEntropy: false,
+          progress: 0.5
+        })
+      ]}])
+      expect(services.entropy.getRandomString.called).to.equal(false)
+    })
+
+    it('should generate the seedphrase when ready', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        passphrase: {phrase: null}
+      }})
+      const services = {entropy: {
+        addFromDelta: stub(),
+        isReady: stub().returns(true),
+        getProgress: stub().returns(1),
+        getRandomString: stub().returns('bla bla bla bla bla bla bla')
+      }}
+      const backend = {wallet: {
+        generateSeedPhrase: stub().returns('seedphrase')
+      }}
+
+      const thunk = registration.addEntropyFromDeltas({dx: 5, dy: 3})
+      thunk(dispatch, getState, {services, backend})
+
+      expect(services.entropy.addFromDelta.called).to.equal(true)
+      expect(services.entropy.getRandomString.called).to.equal(true)
+      expect(backend.wallet.generateSeedPhrase.called).to.equal(true)
+      expect(dispatch.calls).to.deep.equal([
+        {args: [registration.setEntropyStatus({
+          sufficientEntropy: true,
+          progress: 1
+        })]},
+        {args: [registration.setPassphrase({
+          phrase: 'seedphrase'
+        })]}
+      ])
+    })
+  })
+
+  describe('submitPin', function() {
+    it('should not do anything if the pin is not valid', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        pin: {valid: false}
+      }})
+
+      const thunk = registration.submitPin()
+      thunk(dispatch, getState)
+
+      expect(dispatch.calls).to.deep.equal([])
+    })
+
+    it('should confirm when the pin is valid', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        pin: {valid: true, confirm: false}
+      }})
+
+      withStubs([
+          [registration.actions, 'setPinConfirm', {returns: 'confirm'}]],
+          () => {
+            const thunk = registration.submitPin()
+            thunk(dispatch, getState)
+            expect(dispatch.calls).to.deep.equal([{args: ['confirm']}])
+          }
+      )
+    })
+
+    it('should go forward if the pin is valid and confirmed', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        pin: {valid: true, confirm: true}
+      }})
+
+      withStubs([
+          [registration.actions, 'goForward', {returns: 'forward'}]],
+          () => {
+            const thunk = registration.submitPin()
+            thunk(dispatch, getState)
+            expect(dispatch.calls).to.deep.equal([{args: ['forward']}])
+          }
+      )
+    })
+  })
+
+  describe('registerWallet', function() {
   })
 })

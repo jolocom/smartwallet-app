@@ -3,13 +3,11 @@ export function stub(options = {}) {
     func.called = true
     func.calledWithArgs = args
     func.calls.push({args: args})
-    if (options.returns) {
-      return options.returns
-    }
+    return options.returns
   }
-  func.returns = (val) => {
-    if (val) {
-      options.returns = val
+  func.returns = (...args) => {
+    if (args.length) {
+      options.returns = args[0]
       return func
     } else {
       return options.returns
