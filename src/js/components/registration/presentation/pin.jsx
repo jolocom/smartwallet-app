@@ -61,10 +61,16 @@ const Pin = (props) => {
     >
       Change secure PIN
     </div>}
-    {props.confirm && <div style={STYLES.explanation}>
-      This secure PIN will be needed for transactions and
-      saving information on the Blockchain.
-    </div>}
+    {
+    props.confirm &&
+      <div style={{
+        ...RegistrationStyles.sideNoteGray,
+        ...RegistrationStyles.elementSpacing,
+        ...STYLES.explanation}}>
+        This secure PIN will be needed for transactions and
+        saving information on the Blockchain.
+      </div>
+    }
 
     <div style={STYLES.button}>
       <RaisedButton
