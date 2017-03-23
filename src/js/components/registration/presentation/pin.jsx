@@ -43,7 +43,8 @@ function getButtonLabel(props) {
 
 const Pin = (props) => {
   return <div style={STYLES.root}>
-    <div style={STYLES.header}>
+    <div style={{...RegistrationStyles.header,
+      ...RegistrationStyles.elementSpacing}}>
       {props.confirm || 'Create a PIN for secure login.'}
       {props.confirm && 'Your Secure PIN.'}
     </div>
