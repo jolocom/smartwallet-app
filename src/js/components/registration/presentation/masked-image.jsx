@@ -1,5 +1,5 @@
 import React from 'react'
-import Theme from '../../../styles/jolocom-theme'
+import theme from '../../../styles/jolocom-theme'
 // import Radium from 'radium'
 
 class MaskedImage extends React.Component {
@@ -70,7 +70,7 @@ class MaskedImage extends React.Component {
         requiredExtensions="http://www.w3.org/1999/xhtml"
       >
         <div xmlns="http://www.w3.org/1999/xhtml" style={{textAlign: 'center',
-          color: Theme.jolocom.gray1}}>
+          color: theme.jolocom.gray1}}>
           <p>{props.uncoveredPaths.length > 0 ? '' : props.message1}</p>
           <br />
           <p>{props.uncoveredPaths.length > 0 ? '' : props.message2}</p>

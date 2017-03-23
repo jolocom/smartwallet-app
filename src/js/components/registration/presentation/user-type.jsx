@@ -4,12 +4,12 @@ import React from 'react'
 import Radium from 'radium'
 import {FlatButton} from 'material-ui'
 import theme from '../../../styles/jolocom-theme'
-import RegistrationStyles from '../styles'
+import registrationStyles from '../styles'
 import HoverButton from '../../common/hover-button'
 
-// @FIX this will extend the RegistrationStyles
+// @FIX this will extend the registrationStyles
 // Use Object.assign({}, ...) to clone the object
-const STYLES = Object.assign(RegistrationStyles, {
+const STYLES = Object.assign(registrationStyles, {
   content: {
     display: 'flex',
     flexDirection: 'column',

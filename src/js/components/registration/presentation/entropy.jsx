@@ -1,10 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
 import MaskedImage from './masked-image'
-import RegistrationStyles from '../styles'
+import registrationStyles from '../styles'
 import {RaisedButton} from 'material-ui'
 
-const STYLES = Object.assign({}, RegistrationStyles, {
+const STYLES = Object.assign({}, registrationStyles, {
   img: {
     width: '100%',
     margin: 'auto',

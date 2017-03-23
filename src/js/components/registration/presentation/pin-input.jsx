@@ -1,26 +1,26 @@
 import React from 'react'
 import Radium from 'radium'
-import Theme from '../../../styles/jolocom-theme'
+import theme from '../../../styles/jolocom-theme'
 
 const STYLES = {
   inputBall: {
     position: 'relative',
     display: 'inline-block',
     verticalAlign: 'center',
-    color: Theme.palette.alternateTextColor,
+    color: theme.palette.alternateTextColor,
     margin: '0 3px',
     width: '48px',
     height: '48px',
     borderRadius: '24px',
-    backgroundColor: Theme.palette.disabledColor,
+    backgroundColor: theme.palette.disabledColor,
     lineHeight: '48px',
     textAlign: 'center'
   },
   focusedBall: {
-    backgroundColor: Theme.palette.primary1Color
+    backgroundColor: theme.palette.primary1Color
   },
   filledBall: {
-    backgroundColor: Theme.palette.textColor
+    backgroundColor: theme.palette.textColor
   },
   numberInput: {
     position: 'absolute',

@@ -9,11 +9,11 @@ import {
 } from 'material-ui'
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
-import RegistrationStyles from '../styles'
-import Theme from '../../../styles/jolocom-theme'
+import registrationStyles from '../styles'
+import theme from '../../../styles/jolocom-theme'
 
 const STYLES = {
-  root: RegistrationStyles,
+  root: registrationStyles,
   phrase: {
     fontSize: '18pt',
     fontWeight: '300',
@@ -25,10 +25,10 @@ const STYLES = {
   sideNoteGreen: {
     fontSize: '11pt',
     fontWeight: '300',
-    color: Theme.palette.primary1Color
+    color: theme.palette.primary1Color
   },
   uncheckedIcon: {
-    fill: Theme.jolocom.gray1
+    fill: theme.jolocom.gray1
   }
 }
 
