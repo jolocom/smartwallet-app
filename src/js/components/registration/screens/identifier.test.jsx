@@ -25,7 +25,7 @@ describe('(Component) RegistrationIdentifierScreen', function() {
     )
 
     expect(wrapper.find('Identifier').prop('value')).to.be.empty
-    expect(wrapper.find('Identifier').prop('userName')).to.be.equal('xyz')
+    expect(wrapper.find('Identifier').prop('userName')).be.equal('xyz')
     expect(wrapper.find('Identifier').prop('valid')).to.be.false
   })
 })
