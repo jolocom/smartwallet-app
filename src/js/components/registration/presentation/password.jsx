@@ -13,7 +13,7 @@ const STYLES = {
   },
   passwordsContainer: {
     backgroundColor: '#ffffff',
-    maxWidth: '360'
+    maxWidth: '360px'
   },
   strengthBare: {
     marginRight: '30px',
