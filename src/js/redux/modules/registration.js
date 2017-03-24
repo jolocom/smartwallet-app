@@ -191,8 +191,8 @@ const initialState = Immutable.fromJS({
   passphrase: {
     sufficientEntropy: false,
     progress: 0,
-    randomString: null,
-    phrase: null,
+    randomString: '',
+    phrase: '',
     writtenDown: false,
     valid: false
   },
