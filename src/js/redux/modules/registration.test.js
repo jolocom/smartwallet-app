@@ -213,7 +213,7 @@ describe.only('Wallet registration Redux module', function() {
     it('should add entropy when necessary', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
-        passphrase: {phrase: null}
+        passphrase: {phrase: ''}
       }})
       const services = {entropy: {
         addFromDelta: stub(),
@@ -238,7 +238,7 @@ describe.only('Wallet registration Redux module', function() {
     it('should generate the seedphrase when ready', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
-        passphrase: {phrase: null}
+        passphrase: {phrase: ''}
       }})
       const services = {entropy: {
         addFromDelta: stub(),
@@ -449,8 +449,8 @@ describe.only('Wallet registration Redux module', function() {
           .to.deep.equal({
             sufficientEntropy: false,
             progress: 0,
-            randomString: null,
-            phrase: null,
+            randomString: '',
+            phrase: '',
             writtenDown: false,
             valid: false
           })
