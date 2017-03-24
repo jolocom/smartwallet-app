@@ -12,7 +12,8 @@ const STYLES = {
     backgroundColor: '#ffffff'
   },
   passwordsContainer: {
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    maxWidth: '360'
   },
   strengthBare: {
     marginRight: '30px',
