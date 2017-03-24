@@ -417,7 +417,7 @@ describe.only('Wallet registration Redux module', function() {
           .to.deep.equal({value: 'layman', valid: true})
       })
     })
-    describe('setPassword', function() {
+    describe('password', function() {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -430,6 +430,139 @@ describe.only('Wallet registration Redux module', function() {
             hasUpperCase: false,
             hasDigit: false,
             valid: false
+          })
+      })
+
+      it('should correctly update the password', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPassword('test'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'test',
+            repeated: '',
+            strength: 'weak',
+            hasLowerCase: true,
+            hasUpperCase: false,
+            hasDigit: false,
+            valid: false
+          })
+      })
+
+      it('should detect uppercase letters', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPassword('Test'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'Test',
+            repeated: '',
+            strength: 'weak',
+            hasLowerCase: true,
+            hasUpperCase: true,
+            hasDigit: false,
+            valid: false
+          })
+      })
+
+      it('should detect digits', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPassword('Test123'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'Test123',
+            repeated: '',
+            strength: 'weak',
+            hasLowerCase: true,
+            hasUpperCase: true,
+            hasDigit: true,
+            valid: false
+          })
+      })
+
+      it('should detect good password strength', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPassword('TestTime123'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'TestTime123',
+            repeated: '',
+            strength: 'good',
+            hasLowerCase: true,
+            hasUpperCase: true,
+            hasDigit: true,
+            valid: false
+          })
+      })
+
+      it('should detect strong password strength', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPassword('TeStTiMe526!@#'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'TeStTiMe526!@#',
+            repeated: '',
+            strength: 'strong',
+            hasLowerCase: true,
+            hasUpperCase: true,
+            hasDigit: true,
+            valid: false
+          })
+      })
+
+      it('should clear repeated password when editing original', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = state.setIn(['password', 'repeated'], 'test')
+        state = reducer(state, registration.setPassword('TeStTiMe526!@#'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'TeStTiMe526!@#',
+            repeated: '',
+            strength: 'strong',
+            hasLowerCase: true,
+            hasUpperCase: true,
+            hasDigit: true,
+            valid: false
+          })
+      })
+
+      it('should detect invalid repeated passwords', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = state.setIn(['password', 'repeated'], 'test')
+        state = reducer(state, registration.setPassword('TeStTiMe526!@#'))
+        state = reducer(state, registration.setRepeatedPassword('TeStTiMe'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'TeStTiMe526!@#',
+            repeated: 'TeStTiMe',
+            strength: 'strong',
+            hasLowerCase: true,
+            hasUpperCase: true,
+            hasDigit: true,
+            valid: false
+          })
+      })
+
+      it('should detect valid repeated passwords', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = state.setIn(['password', 'repeated'], 'test')
+        state = reducer(state, registration.setPassword('TeStTiMe526!@#'))
+        state = reducer(state, registration.setRepeatedPassword('TeStTiMe526!@#'))
+
+        expect(state.get('password').toJS())
+          .to.deep.equal({
+            value: 'TeStTiMe526!@#',
+            repeated: 'TeStTiMe526!@#',
+            strength: 'strong',
+            hasLowerCase: true,
+            hasUpperCase: true,
+            hasDigit: true,
+            valid: true
           })
       })
     })

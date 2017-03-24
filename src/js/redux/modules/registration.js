@@ -30,8 +30,6 @@ const actions = module.exports = makeActions('registration', {
           dispatch(router.pushRoute(nextUrl))
         }
       }
-
-      dispatch(pushRoute(nextUrl))
     }
   },
   setHumanName: {
@@ -225,15 +223,13 @@ module.exports.default = (state = initialState, action = {}) => {
       const oldRepeatedValue = state.get('password').get('repeated')
       const validPassword = isPasswordValid(action.value, oldRepeatedValue)
       const characters = passwordCharacters(action.value)
-      const newRepeatedValue = (
-        isPasswordValid(action.value, action.value) ? oldRepeatedValue : ''
-      )
       const passwordStrength = checkPassStrength(action.value)
+
       return state.mergeIn(
         ['password'],
         {
           value: action.value,
-          repeated: newRepeatedValue,
+          repeated: '',
           valid: validPassword,
           hasLowerCase: characters.lowerCase,
           hasUpperCase: characters.upperCase,
