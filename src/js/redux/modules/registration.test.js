@@ -623,6 +623,32 @@ describe.only('Wallet registration Redux module', function() {
             valid: false
           })
       })
+      
+      it('should correctly update focused', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPinFocused(true))
+
+        expect(state.get('pin').toJS())
+          .to.deep.equal({
+            value: '',
+            focused: true,
+            confirm: false,
+            valid: false
+          })
+      })
+
+      it('should correctly update confirm', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPinConfirm(true))
+
+        expect(state.get('pin').toJS())
+          .to.deep.equal({
+            value: '',
+            focused: false,
+            confirm: true,
+            valid: false
+          })
+      })
     })
     describe('setEmail', function() {
       it('should correctly initialize', () => {
@@ -630,6 +656,22 @@ describe.only('Wallet registration Redux module', function() {
 
         expect(state.get('email').toJS())
           .to.deep.equal({value: '', valid: false})
+      })
+
+      it('should correctly update', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setEmail('test'))
+
+        expect(state.get('email').toJS())
+          .to.deep.equal({value: 'test', valid: false})
+      })
+
+      it('should correctly detect valid e-mail addresses', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setEmail('test@test.com'))
+
+        expect(state.get('email').toJS())
+          .to.deep.equal({value: 'test@test.com', valid: true})
       })
     })
     // describe('setPassphraseWrittenDown', function() {
@@ -649,6 +691,49 @@ describe.only('Wallet registration Redux module', function() {
             registering: false,
             registered: false,
             errorMsg: null
+          })
+      })
+
+      it('should correctly handle registration start', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, {
+          type: registration.registerWallet.id
+        })
+
+        expect(state.get('wallet').toJS())
+          .to.deep.equal({
+            registering: true,
+            registered: false,
+            errorMsg: null
+          })
+      })
+
+      it('should correctly handle registration success', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, {
+          type: registration.registerWallet.id_success
+        })
+
+        expect(state.get('wallet').toJS())
+          .to.deep.equal({
+            registering: false,
+            registered: true,
+            errorMsg: null
+          })
+      })
+
+      it('should correctly handle registration fail', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, {
+          type: registration.registerWallet.id_fail,
+          error: new Error('test')
+        })
+
+        expect(state.get('wallet').toJS())
+          .to.deep.equal({
+            registering: false,
+            registered: false,
+            errorMsg: 'test'
           })
       })
     })
