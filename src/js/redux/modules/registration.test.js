@@ -566,14 +566,6 @@ describe.only('Wallet registration Redux module', function() {
           })
       })
     })
-    // describe('setRepeatedPassword', function() {
-    //   it('should correctly initialize', () => {
-    //     let state = reducer(undefined, '@@INIT')
-
-    //     expect(state.get('userType').toJS())
-    //       .to.deep.equal({value: '', valid: false})
-    //   })
-    // })
     describe('setEntropyStatus', function() {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
@@ -606,23 +598,7 @@ describe.only('Wallet registration Redux module', function() {
           })
       })
     })
-    // describe('setRandomString', function() {
-    //   it('should correctly initialize', () => {
-    //     let state = reducer(undefined, '@@INIT')
-
-    //     expect(state.get('userType').toJS())
-    //       .to.deep.equal({value: '', valid: false})
-    //   })
-    // })
-    // describe('setPassphrase', function() {
-    //   it('should correctly initialize', () => {
-    //     let state = reducer(undefined, '@@INIT')
-
-    //     expect(state.get('userType').toJS())
-    //       .to.deep.equal({value: '', valid: false})
-    //   })
-    // })
-    describe('setPin', function() {
+    describe('pin', function() {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -634,23 +610,20 @@ describe.only('Wallet registration Redux module', function() {
             valid: false
           })
       })
+
+      it('should correctly update its value', () => {
+        let state = reducer(undefined, '@@INIT')
+        state = reducer(state, registration.setPin('12'))
+
+        expect(state.get('pin').toJS())
+          .to.deep.equal({
+            value: '12',
+            focused: false,
+            confirm: false,
+            valid: false
+          })
+      })
     })
-    // describe('setPinConfirm', function() {
-    //   it('should correctly initialize', () => {
-    //     let state = reducer(undefined, '@@INIT')
-
-    //     expect(state.get('userType').toJS())
-    //       .to.deep.equal({value: '', valid: false})
-    //   })
-    // })
-    // describe('setPinFocused', function() {
-    //   it('should correctly initialize', () => {
-    //     let state = reducer(undefined, '@@INIT')
-
-    //     expect(state.get('userType').toJS())
-    //       .to.deep.equal({value: '', valid: false})
-    //   })
-    // })
     describe('setEmail', function() {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')

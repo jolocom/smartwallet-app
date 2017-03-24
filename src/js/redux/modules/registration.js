@@ -224,7 +224,7 @@ module.exports.default = (state = initialState, action = {}) => {
       const validPassword = isPasswordValid(action.value, oldRepeatedValue)
       const characters = passwordCharacters(action.value)
       const passwordStrength = checkPassStrength(action.value)
-
+      
       return state.mergeIn(
         ['password'],
         {
