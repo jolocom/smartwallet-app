@@ -53,7 +53,7 @@ export default class RegistrationEntropyScreen extends React.Component {
       user={this.props.registration.humanName.value}
       onImagePointUncoverd={(...args) => this.handleUncoveredPoint(...args)}
       onImageUncoveringChange={(val) => this.handleUncoveringChange(val)}
-
+      onMouseMovement={(x, y) => this.addEntropyFromDeltas(x, y)}
       onSubmit={this.props.goForward}
     />
   }
