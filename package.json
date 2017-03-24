@@ -6,6 +6,7 @@
   "scripts": {
     "solid": "solid start --port 8443 --ssl-cert ./etc/localhost.cert --ssl-key ./etc/localhost.key --root ./dist -v",
     "start": "gulp",
+    "start:wallet": "gulp wallet",
     "build:prod": "npm i --production && gulp build",
     "test": "cross-env NODE_ENV=test karma start karma.conf.js --single-run",
     "test:watch": "npm run test -- --auto-watch --no-single-run",
