@@ -7,7 +7,7 @@ import {stub, withStubs} from '../../../../test/utils'
 const reducer = require('./registration').default
 const helpers = registration.helpers
 
-describe.only('Wallet registration Redux module', function() {
+describe('Wallet registration Redux module', function() {
   describe('goForward', function() {
     describe('action', function() {
       it('should dispatch the wallet registration action when complete', () => {
