@@ -50,7 +50,12 @@ const NameEntry = (props) => {
           floatingLabelStyle={STYLES.floatingLabel}
           inputStyle={STYLES.inputStyle}
           onChange={(e) => props.onChange(e.target.value)}
-          errorText=""
+          errorText={props.errorMsg}
+        />
+        <br />
+        <RaisedButton
+          label="check"
+          onClick={props.onCheck}
         />
       </Content>
       <Footer>
@@ -58,7 +63,7 @@ const NameEntry = (props) => {
           label="NEXT STEP"
           secondary
           onClick={props.onSubmit}
-          disabled={!props.valid}
+          disabled={false}
         />
       </Footer>
     </Container>
@@ -68,8 +73,10 @@ const NameEntry = (props) => {
 NameEntry.propTypes = {
   value: React.PropTypes.string.isRequired,
   valid: React.PropTypes.bool.isRequired,
+  errorMsg: React.PropTypes.string.isRequired,
   onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired
+  onSubmit: React.PropTypes.func.isRequired,
+  onCheck: React.PropTypes.func.isRequired
 }
 
 export default Radium(NameEntry)
