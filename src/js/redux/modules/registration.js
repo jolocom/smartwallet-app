@@ -42,7 +42,7 @@ const actions = module.exports = makeActions('registration', {
     expectedParams: ['value']
   },
   addEntropyFromDeltas: {
-    expectedParams: ['dx', 'dy'],
+    expectedParams: ['x', 'y'],
     creator: (params) => {
       return (dispatch, getState, {backend, services}) => {
         if (getState().getIn(
@@ -52,10 +52,10 @@ const actions = module.exports = makeActions('registration', {
         }
 
         const entropy = services.entropy
-        entropy.addFromDelta(params.dx)
-        entropy.addFromDelta(params.dy)
+        entropy.addFromDelta(params.x)
+        entropy.addFromDelta(params.y)
         if (params.dz) {
-          entropy.addFromDelta(params.dz)
+          entropy.addFromDelta(params.z)
         }
 
         dispatch(actions.setEntropyStatus.buildAction({
