@@ -3,6 +3,10 @@ import Radium from 'radium'
 
 let Layout = React.createClass({
 
+  propTypes: {
+    children: React.PropTypes.node
+  },
+
   contextTypes: {
     muiTheme: React.PropTypes.object.isRequired
   },

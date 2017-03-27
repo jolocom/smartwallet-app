@@ -1,14 +1,12 @@
+/* eslint-disable */
+// @TODO is this even used still?
 import React from 'react'
 import Radium from 'radium'
 import accepts from 'attr-accept'
-import _ from 'lodash'
-
-import NodeActions from 'actions/node'
 
 import {TextField, RaisedButton} from 'material-ui'
 
 import {PRED} from 'lib/namespaces'
-import graphAgent from 'lib/agents/graph.js'
 
 let NodeAddImage = React.createClass({
 
@@ -119,3 +117,4 @@ let styles = {
 }
 
 export default Radium(NodeAddImage)
+/* eslint-enable */
