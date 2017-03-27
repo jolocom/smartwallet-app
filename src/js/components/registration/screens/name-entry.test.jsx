@@ -1,4 +1,3 @@
-/* global describe: true, it: true */
 import React from 'react'
 import Immutable from 'immutable'
 import { expect } from 'chai'
