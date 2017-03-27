@@ -57,19 +57,19 @@ let Signup = React.createClass({
     }
   },
 
-  signup() {
-    if (this.state.email !== this.state.email2) {
+  signup(data) {
+    if (data.email !== data.repeatEmail) {
       this.props.showSnackBarMessage('The two emails do not match.')
       return
     }
 
     this.disableSubmit()
-
+    console.log(data)
     let signupData = {
-      username: this.state.username,
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password
+      username: data.username,
+      name: data.name,
+      email: data.email,
+      password: data.password
     }
     this.props.doSignup(signupData)
   },
