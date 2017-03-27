@@ -14,7 +14,8 @@ const NEXT_ROUTES = {
   '/registration/password': '/registration/pin'
 }
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/user-type': 'userType'
+  '/registration/user-type': 'userType',
+  '/registration/email': 'email'
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -125,6 +126,18 @@ const actions = module.exports = makeActions('registration', {
   setRepeatedPassword: {
     expectedParams: ['value']
   },
+  checkUsername: {
+    expectedParams: ['username'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState) => {
+        const state = getState().get('registration').toJS()
+        dispatch(actions.checkUsername.buildAction(params, (backend) => {
+          return backend.webId.checkUsername(state.username.value)
+        }))
+      }
+    }
+  },
   registerWallet: {
     expectedParams: [],
     async: true,
@@ -152,12 +165,11 @@ const actions = module.exports = makeActions('registration', {
 })
 
 const initialState = Immutable.fromJS({
-  humanName: {
-    value: '',
-    valid: false
-  },
   username: {
     value: '',
+    checking: false,
+    checked: false,
+    errorMsg: '',
     valid: false
   },
   email: {
@@ -284,9 +296,9 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
 
-    case actions.setHumanName.id:
-      return state.merge({
-        humanName: {
+    case actions.setUsername.id:
+      return state.mergeDeep({
+        username: {
           value: action.value,
           valid: action.value !== ''
         }
@@ -328,6 +340,30 @@ module.exports.default = (state = initialState, action = {}) => {
           registering: false,
           registered: false,
           errorMsg: action.error.message
+        }
+      })
+    case actions.checkUsername.id:
+      return state.mergeDeep({
+        username: {
+          checking: true,
+          checked: false,
+          errorMsg: 'checking'
+        }
+      })
+    case actions.checkUsername.id_success:
+      return state.mergeDeep({
+        username: {
+          checking: false,
+          checked: true,
+          errorMsg: ''
+        }
+      })
+    case actions.checkUsername.id_fail:
+      return state.mergeDeep({
+        username: {
+          checking: false,
+          checked: true,
+          errorMsg: 'username already exists'
         }
       })
     default:
