@@ -25,9 +25,9 @@ describe.only('(Component) RegistrationIdentifierScreen', function() {
     expect(wrapper.find('Identifier').prop('value')).to.be.empty
     expect(wrapper.find('Identifier').prop('valid')).to.be.false
   })
-  it('should call setEmail onchange', function() {
+  it('should call setEmail onchange with proper params', function() {
     const setEmail = stub()
-    function goForward() { }
+    const goForward = () => {}
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
         ...RegistrationIdentifierScreen.mapStateToProps(Immutable.fromJS({
@@ -44,11 +44,34 @@ describe.only('(Component) RegistrationIdentifierScreen', function() {
        />),
       { context: { muiTheme: { } } }
     )
-    wrapper.find(Presentation).props().onChange('ha@gmail.com')
+    wrapper.find(Presentation).props().onChange('test@test.test')
     expect(setEmail.called).to.be.true
     expect(setEmail.calls).to.deep.equal([{ 'args': [
-      'ha@gmail.com'
+      'test@test.test'
     ]
     }])
+  })
+  it('should call goForward onSubmit with proper params', function() {
+    const setEmail = () => {}
+    const goForward = stub()
+    const wrapper = shallow(
+      (<RegistrationIdentifierScreen.WrappedComponent {
+        ...RegistrationIdentifierScreen.mapStateToProps(Immutable.fromJS({
+          registration: {
+            email: {
+              value: '',
+              valid: false
+            }
+          }
+        }))
+      }
+        setEmail={setEmail}
+        goForward={goForward}
+       />),
+      { context: { muiTheme: { } } }
+    )
+    wrapper.find(Presentation).props().onSubmit()
+    expect(goForward.called).to.be.true
+    expect(goForward.calls).to.deep.equal([{'args': []}])
   })
 })
