@@ -6,7 +6,7 @@ import { Router, Route, IndexRoute } from 'react-router'
 
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
-import Graph from 'components/graph/graph.jsx'
+import Graph from 'components/graph'
 import Node from 'components/node/node.jsx'
 import AddNode from 'components/node/add.jsx'
 import Chat from 'components/chat'
@@ -28,6 +28,25 @@ import AddContacts from 'components/node/add-contacts.jsx'
 
 import ConfirmEmailVerification from
   'components/accounts/confirm-email-verification.jsx'
+
+import GraphIcon from 'components/icons/graph-icon.jsx'
+
+export const routes = {
+  login: '/login',
+  signup: '/signup',
+  home: '/graph',
+  forgotPassword: '/forgot-password',
+  changePassword: '/change-password',
+  verifyEmail: '/verify-email'
+}
+
+export const publicRoutes = Object.values(routes)
+
+export const navItems = [{
+  title: 'Graph',
+  route: routes.home,
+  icon: GraphIcon
+}]
 
 function getRoutes() {
   return (<Route path="/" component={App} >
