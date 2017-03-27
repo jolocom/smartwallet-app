@@ -23,7 +23,7 @@ export default class RegistrationUserTypeScreen extends React.Component {
         valid={this.props.registration.userType.valid}
         onSelect={this._handleClick}
         onWhySelect={this._handleWhy}
-        user={this.props.registration.humanName.value} />
+        user={this.props.registration.username.value} />
     )
   }
 
