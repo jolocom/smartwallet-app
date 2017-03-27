@@ -60,7 +60,7 @@ const history = syncHistoryWithStore(hashHistory, store, {
 const render = () => {
   ReactDOM.render(<AppContainer>
     <Provider store={store}>
-      {require('./routes.jsx').default(history)}
+      {require('routes').default(history)}
     </Provider>
   </AppContainer>, rootEl)
 }
@@ -68,7 +68,7 @@ const render = () => {
 render()
 
 if (module.hot) {
-  module.hot.accept('./routes.jsx', () => {
+  module.hot.accept('routes', () => {
     render()
   })
 }

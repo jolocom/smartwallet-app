@@ -1,8 +1,8 @@
-export default function backendMiddleware(backend) {
+export default function backendMiddleware(backend, services) {
   return ({dispatch, getState}) => {
     return next => action => {
       if (typeof action === 'function') {
-        return action(dispatch, getState, {backend})
+        return action(dispatch, getState, {backend, services})
       }
 
       const { promise, types, ...rest } = action

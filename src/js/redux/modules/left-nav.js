@@ -7,9 +7,12 @@ export const showLeftNav = action('left-nav', 'showLeftNav', {
 export const hideLeftNav = action('left-nav', 'hideLeftNav', {
   expectedParams: []
 })
+export const selectItem = action('left-nav', 'selectItem', {
+  expectedParams: ['value']
+})
 
 const initialState = new Map({
-  selected: 'graph',
+  selected: '',
   open: false
 })
 
@@ -19,6 +22,8 @@ export default function reducer(state = initialState, action = {}) {
       return state.set('open', true)
     case hideLeftNav.id:
       return state.set('open', false)
+    case selectItem.id:
+      return state.set('selected', action.value)
     default:
       return state
   }
