@@ -15,7 +15,7 @@ describe('(Component) RegistrationUserTypeScreen', function() {
               value: '',
               valid: false
             },
-            humanName: {
+            username: {
               value: ''
             }
           }
@@ -42,7 +42,7 @@ describe('(Component) RegistrationUserTypeScreen', function() {
               value: '',
               valid: false
             },
-            humanName: {
+            username: {
               value: ''
             }
           }
@@ -76,7 +76,7 @@ describe('(Component) RegistrationUserTypeScreen', function() {
               value: '',
               valid: false
             },
-            humanName: {
+            username: {
               value: ''
             }
           }

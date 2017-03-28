@@ -11,7 +11,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
           registration: {
-            humanName: {
+            username: {
               value: '',
               valid: false
             }
@@ -24,44 +24,44 @@ describe('(Component) RegistrationNameEntryScreen', function() {
     expect(wrapper.find('NameEntry').prop('value')).to.be.empty
     expect(wrapper.find('NameEntry').prop('valid')).to.be.false
   })
-  it('should call setHumanName onChange', function() {
-    const setHumanName = stub()
+  it('should call setUsername onChange', function() {
+    const setUsername = stub()
     const goForward = () => {}
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
           registration: {
-            humanName: {
+            username: {
               value: '',
               valid: false
             }
           }
         }))
       }
-        setHumanName={setHumanName}
+        setUsername={setUsername}
         goForward={goForward}
      />),
       { context: { muiTheme: { } } }
     )
 
     wrapper.find('NameEntry').prop('onChange')('test')
-    expect(setHumanName.called).to.be.true
+    expect(setUsername.called).to.be.true
   })
   it('should call goForward onSubmit with proper params', function() {
-    const setHumanName = () => {}
+    const setUsername = () => {}
     const goForward = stub()
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
           registration: {
-            humanName: {
+            username: {
               value: '',
               valid: false
             }
           }
         }))
       }
-        setHumanName={setHumanName}
+        setUsername={setUsername}
         goForward={goForward}
        />),
       { context: { muiTheme: { } } }
