@@ -6,7 +6,7 @@ import { stub } from '../../../../../test/utils'
 import RegistrationIdentifierScreen from './identifier'
 import Presentation from '../presentation/identifier'
 
-describe.only('(Component) RegistrationIdentifierScreen', function() {
+describe('(Component) RegistrationIdentifierScreen', function() {
   it('should render properly the first time', function() {
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
