@@ -11,6 +11,13 @@ class WebIDAgent {
     this.http = new HTTPAgent({proxy: true})
   }
 
+  checkUsername(username) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
   // Gets the webId of the currently loged in user from local storage,
   getWebId() {
     const webId = localStorage.getItem('jolocom.webId')

@@ -18,6 +18,7 @@ export default class RegistrationIdentifierScreen extends React.Component {
     return <Presentation
       value={this.props.registration.email.value}
       valid={this.props.registration.email.valid}
+      username={this.props.registration.username.value}
       onChange={this.props.setEmail}
       onSubmit={this.props.goForward}
     />
