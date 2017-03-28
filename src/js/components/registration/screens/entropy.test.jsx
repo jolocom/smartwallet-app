@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
 import RegistrationEntropyScreen from './entropy'
 
-describe.only('(Component) RegistrationEntropyScreen', function() {
+describe('(Component) RegistrationEntropyScreen', function() {
   it('should render properly the first time', function() {
     const goForward = stub()
     const setMaskedImageUncovering = stub()
