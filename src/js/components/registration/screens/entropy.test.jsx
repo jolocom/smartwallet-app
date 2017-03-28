@@ -43,11 +43,15 @@ describe('(Component) RegistrationEntropyScreen', function() {
     expect(addEntropyFromDeltas.calls).to.deep.equal([{
       'args': [{
         x: 2,
-        y:2
+        y: 2
       }]
     }])
     wrapper.find('Entropy').props().onImageUncoveringChange(true)
     expect(setMaskedImageUncovering.called).to.be.true
-    expect(setMaskedImageUncovering.calls).to.deep.equal([{ args: [true]}])
+    expect(setMaskedImageUncovering.calls).to.deep.equal([{
+      args: [
+        true
+      ]
+    }])
   })
 })
