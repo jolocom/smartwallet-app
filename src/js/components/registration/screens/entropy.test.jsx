@@ -14,7 +14,7 @@ describe.only('(Component) RegistrationEntropyScreen', function() {
       (<RegistrationEntropyScreen.WrappedComponent {
         ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
           registration: {
-            humanName: {
+            username: {
               value: 'xyz'
             },
             maskedImage: {
@@ -38,7 +38,16 @@ describe.only('(Component) RegistrationEntropyScreen', function() {
     expect(wrapper.find('Entropy').prop('user')).to.equal('xyz')
     wrapper.find('Entropy').props().onSubmit()
     expect(goForward.called).to.be.true
-    wrapper.find('Entropy').props().onImagePointUncoverd(2, 2)
-    expect(true).to.be.true
+    wrapper.find('Entropy').props().onMouseMovement(2, 2)
+    expect(addEntropyFromDeltas.called).to.be.true
+    expect(addEntropyFromDeltas.calls).to.deep.equal([{
+      'args': [{
+        x: 2,
+        y:2
+      }]
+    }])
+    wrapper.find('Entropy').props().onImageUncoveringChange(true)
+    expect(setMaskedImageUncovering.called).to.be.true
+    expect(setMaskedImageUncovering.calls).to.deep.equal([{ args: [true]}])
   })
 })
