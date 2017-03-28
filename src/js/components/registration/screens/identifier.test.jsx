@@ -6,7 +6,7 @@ import { stub } from '../../../../../test/utils'
 import RegistrationIdentifierScreen from './identifier'
 import Presentation from '../presentation/identifier'
 
-describe.only('(Component) RegistrationIdentifierScreen', function() {
+describe('(Component) RegistrationIdentifierScreen', function() {
   it('should render properly the first time', function() {
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
@@ -15,6 +15,9 @@ describe.only('(Component) RegistrationIdentifierScreen', function() {
             email: {
               value: '',
               valid: false
+            },
+            username: {
+              value: 'xyz'
             }
           }
         }))
@@ -24,6 +27,7 @@ describe.only('(Component) RegistrationIdentifierScreen', function() {
 
     expect(wrapper.find('Identifier').prop('value')).to.be.empty
     expect(wrapper.find('Identifier').prop('valid')).to.be.false
+    expect(wrapper.find('Identifier').prop('username')).to.equal('xyz')
   })
   it('should call setEmail onchange with proper params', function() {
     const setEmail = stub()
@@ -35,6 +39,9 @@ describe.only('(Component) RegistrationIdentifierScreen', function() {
             email: {
               value: '',
               valid: false
+            },
+            username: {
+              value: 'xyz'
             }
           }
         }))
@@ -61,6 +68,9 @@ describe.only('(Component) RegistrationIdentifierScreen', function() {
             email: {
               value: '',
               valid: false
+            },
+            username: {
+              value: 'xyz'
             }
           }
         }))

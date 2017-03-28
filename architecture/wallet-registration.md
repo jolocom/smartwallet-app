@@ -19,9 +19,12 @@ Redux state
 
 Located under the registration key of the global state, it contains the following data:
 
-* humanName (as in first RegistrationNameEntryScreen)
+* username (as in first RegistrationNameEntryScreen)
   * value: always a string, initialized as empty string
-  * valid: bool
+  * valid: bool - non-empty and checked whether already exists on Jolocom proxy
+  * checking: bool - checking for already existing username
+  * checked: bool - check
+  * errorMsg: string - empty or checking error
 * userType: null | "expert" | "layman"
 * maskedImage
   * uncovering: bool, whether the image is uncovering, e.g. the user is touching the screen
@@ -29,37 +32,52 @@ Located under the registration key of the global state, it contains the followin
   * sufficientEntropy: bool, whether enough entropy has been gathered to generate a secure random string
   * randomString: null or string when enough entropy has been gathered
   * phrase: string, conversion of random string into passphrase the user can write down
-  * writtenDown
+  * progress: number - 0 between 1, progress towards having enough entropy to generate random string
+  * writtenDown: bool
 * pin
   * value
   * valid
-* username
-  * value
-  * valid
+  * focused - bool: is the pin input focused?
+  * confirm - bool: if true, the pin was entered and the user pressed next, but we are asking for confirmation
 * email
   * value
   * valid
 * password
-  * value
-  * repeated
-  * valid
+  * value: string
+  * repeated: string
+  * valid: true, non-empty, with digit, uppercase, lowercase and strong enough
+  * strength: 'weak' | 'good' | 'strong'
+  * hasUpperCase
+  * hasLowerCase
+  * hasDigit
+* wallet
+  * registering: bool
+  * registered: bool
+  * errorMsg: string
 * complete: bool, if all fields are filled out and valid
 
 Redux actions
 -------------
 
 * goForward() - knows which screen where on, and goes to the correct next screen based on that and other state if current screen is valid
-* setHumanName()
 * setUserType(check) - checks type and throws error if necessary
 * setMaskedImageUncovering(value: bool)
-* addEntropyFromDeltas({dx, dy, dz?}) - add entropy from mouse movement or accelerometers, actual logic is seperate from React/Redux
+* addEntropyFromDeltas({x, y, z?}) - add entropy from mouse movement or accelerometers, actual logic is seperate from React/Redux
 * setPassphraseWrittenDown(value: bool)
+* setEntropyStatus({sufficientEntropy, progress})
+* setPassphrase(value)
+* setRandomString(value)
 * switchToExpertMode()
 * setPin(value)
-* clearPin() - erases the PIN
+* setPinConfirm(value : bool)
+* setPinFocused(value : bool)
+* submitPin() - ask for confirmation or go forward if confirmed
 * setUsername(value)
 * checkUsername(username) - async action, resolves if available
+* setEmail(value)
 * setPassword(value)
+* setRepeatedPassword(value)
+* (async) registerWallet()
 
 
 Name / user type / email / password entry

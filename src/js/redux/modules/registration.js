@@ -33,9 +33,6 @@ const actions = module.exports = makeActions('registration', {
       }
     }
   },
-  setHumanName: {
-    expectedParams: ['value']
-  },
   setUserType: {
     expectedParams: ['value']
   },
