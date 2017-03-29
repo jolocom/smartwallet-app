@@ -130,8 +130,9 @@ const actions = module.exports = makeActions('registration', {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
-          return backend.webId.checkUsername(state.username.value)
-          .then(() => dispatch(actions.goForward()))
+          return backend.webId
+            .checkUsername(state.username.value)
+              .then(() => dispatch(actions.goForward()))
         }))
       }
     }
