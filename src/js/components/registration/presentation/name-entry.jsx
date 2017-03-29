@@ -52,11 +52,6 @@ const NameEntry = (props) => {
           onChange={(e) => props.onChange(e.target.value)}
           errorText={props.errorMsg}
         />
-        <br />
-        <RaisedButton
-          label="check"
-          onClick={props.onCheck}
-        />
       </Content>
       <Footer>
         <RaisedButton
@@ -75,8 +70,7 @@ NameEntry.propTypes = {
   valid: React.PropTypes.bool.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
   onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  onCheck: React.PropTypes.func.isRequired
+  onSubmit: React.PropTypes.func.isRequired
 }
 
 export default Radium(NameEntry)

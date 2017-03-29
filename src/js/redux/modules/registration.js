@@ -33,9 +33,6 @@ const actions = module.exports = makeActions('registration', {
       }
     }
   },
-  setHumanName: {
-    expectedParams: ['value']
-  },
   setUserType: {
     expectedParams: ['value']
   },
@@ -134,6 +131,7 @@ const actions = module.exports = makeActions('registration', {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.webId.checkUsername(state.username.value)
+          .then(() => dispatch(actions.goForward()))
         }))
       }
     }
@@ -236,7 +234,7 @@ module.exports.default = (state = initialState, action = {}) => {
       const validPassword = isPasswordValid(action.value, oldRepeatedValue)
       const characters = passwordCharacters(action.value)
       const passwordStrength = checkPassStrength(action.value)
-      
+
       return state.mergeIn(
         ['password'],
         {

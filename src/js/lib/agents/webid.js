@@ -14,7 +14,11 @@ class WebIDAgent {
   checkUsername(username) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve()
+        if (username === 'reject') {
+          reject()
+        } else {
+          resolve()
+        }
       }, 2000)
     })
   }
