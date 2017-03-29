@@ -48,7 +48,7 @@ const UserType = (props) => {
       to uncover the picture. You must be prepared to keep the passphrase you
       in a safe place where you are not going to loose it and where others
       can't get to it. This phrase and a secret pin is how you 'login' to your
-      wallet in the future. <br /><br />If you select the <b>No Hassle</b>
+      wallet in the future. <br /><br />If you select the <b>No Hassle </b>
       option, we will save your passphrase for you, but you will then need a
       password to get it.
     </div>

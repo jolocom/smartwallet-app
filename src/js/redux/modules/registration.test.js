@@ -552,7 +552,8 @@ describe('Wallet registration Redux module', function() {
         let state = reducer(undefined, '@@INIT')
         state = state.setIn(['password', 'repeated'], 'test')
         state = reducer(state, registration.setPassword('TeStTiMe526!@#'))
-        state = reducer(state, registration.setRepeatedPassword('TeStTiMe526!@#'))
+        state = reducer(state,
+          registration.setRepeatedPassword('TeStTiMe526!@#'))
 
         expect(state.get('password').toJS())
           .to.deep.equal({
@@ -591,8 +592,8 @@ describe('Wallet registration Redux module', function() {
           .to.deep.equal({
             sufficientEntropy: 'bla',
             progress: 0.4,
-            randomString: null,
-            phrase: null,
+            randomString: '',
+            phrase: '',
             writtenDown: false,
             valid: false
           })
@@ -623,7 +624,7 @@ describe('Wallet registration Redux module', function() {
             valid: false
           })
       })
-      
+
       it('should correctly update focused', () => {
         let state = reducer(undefined, '@@INIT')
         state = reducer(state, registration.setPinFocused(true))
