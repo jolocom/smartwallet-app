@@ -591,8 +591,8 @@ describe('Wallet registration Redux module', function() {
           .to.deep.equal({
             sufficientEntropy: 'bla',
             progress: 0.4,
-            randomString: null,
-            phrase: null,
+            randomString: '',
+            phrase: '',
             writtenDown: false,
             valid: false
           })
