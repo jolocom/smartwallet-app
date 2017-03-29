@@ -26,7 +26,6 @@ describe('(Component) RegistrationNameEntryScreen', function() {
   })
   it('should call setUsername onChange', function() {
     const setUsername = stub()
-    const goForward = () => {}
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
@@ -39,7 +38,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
         }))
       }
         setUsername={setUsername}
-        goForward={goForward}
+        checkUsername={() => {}}
      />),
       { context: { muiTheme: { } } }
     )
@@ -47,9 +46,8 @@ describe('(Component) RegistrationNameEntryScreen', function() {
     wrapper.find('NameEntry').prop('onChange')('test')
     expect(setUsername.called).to.be.true
   })
-  it('should call goForward onSubmit with proper params', function() {
-    const setUsername = () => {}
-    const goForward = stub()
+  it('should call checkUsername onSubmit with proper params', function() {
+    const checkUsername = stub()
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
@@ -61,13 +59,13 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           }
         }))
       }
-        setUsername={setUsername}
-        goForward={goForward}
+        setUsername={() => {}}
+        checkUsername={checkUsername}
        />),
       { context: { muiTheme: { } } }
     )
-    wrapper.find('NameEntry').props().onSubmit()
-    expect(goForward.called).to.be.true
-    expect(goForward.calls).to.deep.equal([{'args': []}])
+    wrapper.find('NameEntry').prop('onSubmit')()
+    expect(checkUsername.called).to.be.true
+    expect(checkUsername.calls).to.deep.equal([{'args': []}])
   })
 })
