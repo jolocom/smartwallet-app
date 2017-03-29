@@ -32,8 +32,6 @@ describe('(Component) RegistrationUserTypeScreen', function() {
   function() {
     const goForward = stub()
     const setUserType = stub()
-    const configSimpleDialog = stub()
-    const showSimpleDialog = stub()
     const wrapper = shallow(
       (<RegistrationUserTypeScreen.WrappedComponent {
         ...RegistrationUserTypeScreen.mapStateToProps(Immutable.fromJS({
@@ -50,22 +48,20 @@ describe('(Component) RegistrationUserTypeScreen', function() {
       }
         goForward={goForward}
         setUserType={setUserType}
-        configSimpleDialog={configSimpleDialog}
-        showSimpleDialog={showSimpleDialog}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('UserType').prop('onSelect')('layman')
+    wrapper.find('UserType').props().onSelect('layman')
     expect(setUserType.called).to.be.true
     expect(setUserType.calls).to.deep.equal([{'args': ['layman']}])
     expect(goForward.called).to.be.true
     expect(goForward.calls).to.deep.equal([{'args': []}])
   })
-  it('should call showSimpleDialog and configSimpleDialog' +
-    ' onSelect with proper params', function() {
-    const goForward = stub()
-    const setUserType = stub()
+  it('should call showSimpleDialog and configSimpleDialog onSelect with ' +
+    'proper params', function() {
     const configSimpleDialog = stub()
     const showSimpleDialog = stub()
     const wrapper = shallow(
@@ -82,15 +78,15 @@ describe('(Component) RegistrationUserTypeScreen', function() {
           }
         }))
       }
-        goForward={goForward}
-        setUserType={setUserType}
+        goForward={() => {}}
+        setUserType={() => {}}
         configSimpleDialog={configSimpleDialog}
         showSimpleDialog={showSimpleDialog}
       />),
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('UserType').prop('onWhySelect')('message')
+    wrapper.find('UserType').props().onWhySelect('message')
     expect(configSimpleDialog.called).to.be.true
     expect(configSimpleDialog.calls).to.deep.equal([{'args': ['message']}])
     expect(showSimpleDialog.called).to.be.true

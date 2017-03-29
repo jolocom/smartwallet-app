@@ -5,7 +5,7 @@ import UserType from './user-type'
 describe('(Component) UserType', function() {
   it('should render properly the first time', function() {
     shallow((<UserType
-      value={''}
+      value=""
       isChecked={false}
       onToggle={() => {}}
       onChange={() => {}}

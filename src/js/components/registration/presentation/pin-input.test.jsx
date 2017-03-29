@@ -5,9 +5,9 @@ import PinInput from './pin-input'
 describe('(Component) PinInput', function() {
   it('should render properly the first time', function() {
     shallow((<PinInput
-      value={''}
-      focused={false}
-      confirm={false}
+      value=""
+      focused
+      confirm
       onChange={() => {}}
       onFocusChange={() => {}}
       />),

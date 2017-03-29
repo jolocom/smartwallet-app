@@ -5,9 +5,9 @@ import Entropy from './entropy'
 describe('(Component) Entropy', function() {
   it('should render properly the first time', function() {
     shallow((<Entropy
-      imageUncovering={false}
-      imageUncoveredPaths={'path'}
-      user={''}
+      imageUncovering
+      imageUncoveredPaths=""
+      user=""
       onImagePointUncoverd={() => {}}
       onImageUncoveringChange={() => {}}
       onMouseMovement={() => {}}

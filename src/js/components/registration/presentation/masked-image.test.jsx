@@ -5,9 +5,9 @@ import MaskedImage from './masked-image'
 describe('(Component) MaskedImage', function() {
   it('should render properly the first time', function() {
     shallow((<MaskedImage
-      image={'path'}
+      image=""
       uncoveredPaths={{map: () => {}}}
-      uncovering={false}
+      uncovering
       onPointUncovered={() => {}}
       onUncoveringChange={() => {}}
       />),

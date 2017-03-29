@@ -22,7 +22,11 @@ describe('(Component) RegistrationPasswordScreen', function() {
             }
           }
         }))
-      } />),
+      }
+        setPassword={() => {}}
+        setRepeatedPassword={() => {}}
+        goForward={() => {}}
+      />),
       { context: { muiTheme: { } } }
     )
 
@@ -34,9 +38,67 @@ describe('(Component) RegistrationPasswordScreen', function() {
     expect(wrapper.find('Password').prop('hasDigit')).to.be.false
     expect(wrapper.find('Password').prop('valid')).to.be.false
   })
-  it('should call the right function for every event', function() {
-    const changePassword = stub()
+  it('should call setPassword onChangePassword with ' +
+    'the proper params', function() {
+    const setPassword = stub()
+    const wrapper = shallow(
+        (<RegistrationPasswordScreen.WrappedComponent {
+          ...RegistrationPasswordScreen.mapStateToProps(Immutable.fromJS({
+            registration: {
+              password: {
+                value: '',
+                repeated: '',
+                strength: 'weak',
+                hasLowerCase: false,
+                hasUpperCase: false,
+                hasDigit: false,
+                valid: false
+              }
+            }
+          }))
+        }
+          setPassword={setPassword}
+          setRepeatedPassword={() => {}}
+          goForward={() => {}}
+       />),
+        { context: { muiTheme: { } } }
+      )
+
+    wrapper.find('Password').props().onChangePassword('Test')
+    expect(setPassword.called).to.be.true
+    expect(setPassword.calls).to.deep.equal([{'args': ['Test']}])
+  })
+  it('should call changeRepeatedPassword onChangeRepeatedPassword ' +
+    'with the proper params', function() {
     const changeRepeatedPassword = stub()
+    const wrapper = shallow(
+        (<RegistrationPasswordScreen.WrappedComponent {
+          ...RegistrationPasswordScreen.mapStateToProps(Immutable.fromJS({
+            registration: {
+              password: {
+                value: '',
+                repeated: '',
+                strength: 'weak',
+                hasLowerCase: false,
+                hasUpperCase: false,
+                hasDigit: false,
+                valid: false
+              }
+            }
+          }))
+        }
+          setPassword={() => {}}
+          setRepeatedPassword={changeRepeatedPassword}
+          goForward={() => {}}
+        />),
+        { context: { muiTheme: { } } }
+      )
+
+    wrapper.find('Password').props().onChangeRepeatedPassword('Test')
+    expect(changeRepeatedPassword.called).to.be.true
+    expect(changeRepeatedPassword.calls).to.deep.equal([{'args': ['Test']}])
+  })
+  it('should call goForward onSubmit with proper params', function() {
     const goForward = stub()
     const wrapper = shallow(
       (<RegistrationPasswordScreen.WrappedComponent {
@@ -54,22 +116,14 @@ describe('(Component) RegistrationPasswordScreen', function() {
           }
         }))
       }
-        setPassword={changePassword}
-        setRepeatedPassword={changeRepeatedPassword}
+        setPassword={() => {}}
+        setRepeatedPassword={() => {}}
         goForward={goForward}
-     />),
+      />),
       { context: { muiTheme: { } } }
     )
-    wrapper.find('Password').prop('onChangePassword')('Test1')
-    wrapper.find('Password').prop('onChangeRepeatedPassword')('Test2')
-    wrapper.find('Password').prop('onSubmit')()
 
-    expect(changePassword.called).to.be.true
-    expect(changePassword.calls).to.deep.equal([{'args': ['Test1']}])
-
-    expect(changeRepeatedPassword.called).to.be.true
-    expect(changeRepeatedPassword.calls).to.deep.equal([{'args': ['Test2']}])
-
+    wrapper.find('Password').props().onSubmit()
     expect(goForward.called).to.be.true
     expect(goForward.calls).to.deep.equal([{'args': []}])
   })

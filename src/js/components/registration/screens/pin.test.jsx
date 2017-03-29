@@ -7,10 +7,6 @@ import RegistrationPinScreen from './pin'
 
 describe('(Component) RegistrationPinScreen', function() {
   it('should render properly the first time', function() {
-    const setPin = () => {}
-    const setPinConfirm = () => {}
-    const setPinFocused = () => {}
-    const submitPin = () => {}
     const wrapper = shallow(
       (<RegistrationPinScreen.WrappedComponent {
         ...RegistrationPinScreen.mapStateToProps(Immutable.fromJS({
@@ -24,10 +20,10 @@ describe('(Component) RegistrationPinScreen', function() {
           }
         }))
       }
-        setPin={setPin}
-        setPinConfirm={setPinConfirm}
-        setPinFocused={setPinFocused}
-        submitPin={submitPin}
+        setPin={() => {}}
+        setPinConfirm={() => {}}
+        setPinFocused={() => {}}
+        submitPin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -39,9 +35,6 @@ describe('(Component) RegistrationPinScreen', function() {
   })
   it('should call setPin onChange with proper params', function() {
     const setPin = stub()
-    const setPinConfirm = () => {}
-    const setPinFocused = () => {}
-    const submitPin = () => {}
     const wrapper = shallow(
       (<RegistrationPinScreen.WrappedComponent {
         ...RegistrationPinScreen.mapStateToProps(Immutable.fromJS({
@@ -56,9 +49,9 @@ describe('(Component) RegistrationPinScreen', function() {
         }))
       }
         setPin={setPin}
-        setPinConfirm={setPinConfirm}
-        setPinFocused={setPinFocused}
-        submitPin={submitPin}
+        setPinConfirm={() => {}}
+        setPinFocused={() => {}}
+        submitPin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -67,44 +60,40 @@ describe('(Component) RegistrationPinScreen', function() {
     expect(setPin.called).to.be.true
     expect(setPin.calls).to.deep.equal([{'args': [1234]}])
   })
-  it('should call setPin and setPinConfirm ' +
-    'onChangeRequest with proper params', function() {
-    const setPin = stub()
-    const setPinConfirm = stub()
-    const setPinFocused = () => {}
-    const submitPin = () => {}
-    const wrapper = shallow(
-      (<RegistrationPinScreen.WrappedComponent {
-        ...RegistrationPinScreen.mapStateToProps(Immutable.fromJS({
-          registration: {
-            pin: {
-              value: '',
-              focused: false,
-              confirm: false,
-              valid: false
+  it('should call setPin and setPinConfirm onChangeRequest with proper params',
+    function() {
+      const setPin = stub()
+      const setPinConfirm = stub()
+      const wrapper = shallow(
+        (<RegistrationPinScreen.WrappedComponent {
+          ...RegistrationPinScreen.mapStateToProps(Immutable.fromJS({
+            registration: {
+              pin: {
+                value: '',
+                focused: false,
+                confirm: false,
+                valid: false
+              }
             }
-          }
-        }))
-      }
-        setPin={setPin}
-        setPinConfirm={setPinConfirm}
-        setPinFocused={setPinFocused}
-        submitPin={submitPin}
-      />),
-      { context: { muiTheme: { } } }
-    )
+          }))
+        }
+          setPin={setPin}
+          setPinConfirm={setPinConfirm}
+          setPinFocused={() => {}}
+          submitPin={() => {}}
+        />),
+        { context: { muiTheme: { } } }
+      )
 
-    wrapper.find('Pin').prop('onChangeRequest')()
-    expect(setPin.called).to.be.true
-    expect(setPin.calls).to.deep.equal([{'args': ['']}])
-    expect(setPinConfirm.called).to.be.true
-    expect(setPinConfirm.calls).to.deep.equal([{'args': [false]}])
-  })
+      wrapper.find('Pin').prop('onChangeRequest')()
+      expect(setPin.called).to.be.true
+      expect(setPin.calls).to.deep.equal([{'args': ['']}])
+      expect(setPinConfirm.called).to.be.true
+      expect(setPinConfirm.calls).to.deep.equal([{'args': [false]}])
+    }
+  )
   it('should call setPinFocused onFocusChange with proper params', function() {
-    const setPin = () => {}
-    const setPinConfirm = () => {}
     const setPinFocused = stub()
-    const submitPin = () => {}
     const wrapper = shallow(
       (<RegistrationPinScreen.WrappedComponent {
         ...RegistrationPinScreen.mapStateToProps(Immutable.fromJS({
@@ -118,10 +107,10 @@ describe('(Component) RegistrationPinScreen', function() {
           }
         }))
       }
-        setPin={setPin}
-        setPinConfirm={setPinConfirm}
+        setPin={() => {}}
+        setPinConfirm={() => {}}
         setPinFocused={setPinFocused}
-        submitPin={submitPin}
+        submitPin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -131,9 +120,6 @@ describe('(Component) RegistrationPinScreen', function() {
     expect(setPinFocused.calls).to.deep.equal([{'args': []}])
   })
   it('should call submitPin onSubmit with proper params', function() {
-    const setPin = () => {}
-    const setPinConfirm = () => {}
-    const setPinFocused = () => {}
     const submitPin = stub()
     const wrapper = shallow(
       (<RegistrationPinScreen.WrappedComponent {
@@ -148,9 +134,9 @@ describe('(Component) RegistrationPinScreen', function() {
           }
         }))
       }
-        setPin={setPin}
-        setPinConfirm={setPinConfirm}
-        setPinFocused={setPinFocused}
+        setPin={() => {}}
+        setPinConfirm={() => {}}
+        setPinFocused={() => {}}
         submitPin={submitPin}
       />),
       { context: { muiTheme: { } } }

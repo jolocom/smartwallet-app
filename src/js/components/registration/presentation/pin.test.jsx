@@ -5,10 +5,10 @@ import Pin from './pin'
 describe('(Component) Pin', function() {
   it('should render properly the first time', function() {
     shallow((<Pin
-      value={''}
+      value=""
       valid
-      focused={false}
-      confirm={false}
+      focused
+      confirm
       onChangeRequest={() => {}}
       onFocusChange={() => {}}
       onSubmit={() => {}}
