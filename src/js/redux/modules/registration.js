@@ -166,8 +166,8 @@ const initialState = Immutable.fromJS({
   username: {
     value: '',
     checking: false,
-    checked: false,
     errorMsg: '',
+    blank: true,
     valid: false
   },
   email: {
@@ -294,14 +294,6 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
 
-    case actions.setUsername.id:
-      return state.mergeDeep({
-        username: {
-          value: action.value,
-          valid: action.value !== ''
-        }
-      })
-
     case actions.setEmail.id:
       return state.mergeDeep({
         email: {
@@ -340,11 +332,20 @@ module.exports.default = (state = initialState, action = {}) => {
           errorMsg: action.error.message
         }
       })
+
+    case actions.setUsername.id:
+      return state.mergeDeep({
+        username: {
+          value: action.value,
+          blank: action.value === '',
+          errorMsg: ''
+        }
+      })
+
     case actions.checkUsername.id:
       return state.mergeDeep({
         username: {
           checking: true,
-          checked: false,
           errorMsg: 'checking'
         }
       })
@@ -352,16 +353,15 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         username: {
           checking: false,
-          checked: true,
-          errorMsg: ''
+          errorMsg: '',
+          valid: true
         }
       })
     case actions.checkUsername.id_fail:
       return state.mergeDeep({
         username: {
           checking: false,
-          checked: true,
-          errorMsg: 'username already exists'
+          errorMsg: action.error.message
         }
       })
     default:
