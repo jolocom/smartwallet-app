@@ -37,7 +37,8 @@ let Nav = React.createClass({
     selected: React.PropTypes.string.isRequired,
     doLogout: React.PropTypes.func.isRequired,
     showLeftNav: React.PropTypes.func.isRequired,
-    hideLeftNav: React.PropTypes.func.isRequired
+    hideLeftNav: React.PropTypes.func.isRequired,
+    account: React.PropTypes.object.isRequired
   },
 
   getStyles() {
@@ -102,6 +103,15 @@ let Nav = React.createClass({
     event.preventDefault()
   },
 
+  viewProfile(event) {
+    this.props.hideLeftNav()
+
+    const uri = encodeURIComponent(this.props.account.webId)
+
+    this.context.router.push(`graph/${uri}/view`)
+    event.preventDefault()
+  },
+
   goto(url) {
     this.context.router.push(url)
     this.props.hideLeftNav()
@@ -162,7 +172,7 @@ let Nav = React.createClass({
             onChange={this._handleNavChange}
             >
             <ListItem primaryText="Profile"
-              onTouchTap={this.editProfile}
+              onTouchTap={this.viewProfile}
               style={styles.menuItem}
               leftAvatar={
                 <Avatar
@@ -200,6 +210,6 @@ let Nav = React.createClass({
 })
 
 export default connect({
-  props: ['leftNav.open', 'leftNav.selected'],
+  props: ['account', 'leftNav.open', 'leftNav.selected'],
   actions: ['account:doLogout', 'left-nav:showLeftNav', 'left-nav:hideLeftNav']
 })(Nav)
