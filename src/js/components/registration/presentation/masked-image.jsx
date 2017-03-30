@@ -47,6 +47,7 @@ class MaskedImage extends React.Component {
     return (<svg style={{width: '240px', height: '150px', margin: 'auto'}}
       onTouchStart={() => this.onRevealStart()}
       onMouseDown={() => this.onRevealStart()}
+      onClick={() => this.onRevealStart()}
       onMouseMove={(e) => this.onReveal(e)}
       onTouchEnd={() => this.onRevealEnd()}
       onMouseUp={() => this.onRevealEnd()}
