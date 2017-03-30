@@ -36,15 +36,15 @@ const Identifier = (props) => {
             floatingLabelText="E-mail address"
             value={props.value}
             onChange={(e) => props.onChange(e.target.value)}
+            errorText={props.errorMsg}
           />
         </Block>
       </Content>
       <Footer>
         <RaisedButton
-          onClick={props.onSubmit}
+          onClick={() => props.onSubmit()}
           label="NEXT STEP"
           secondary
-          disabled={!props.valid}
         />
       </Footer>
     </Container>
@@ -53,7 +53,7 @@ const Identifier = (props) => {
 
 Identifier.propTypes = {
   value: React.PropTypes.string.isRequired,
-  valid: React.PropTypes.bool.isRequired,
+  errorMsg: React.PropTypes.string.isRequired,
   username: React.PropTypes.string.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
   onChange: React.PropTypes.func.isRequired

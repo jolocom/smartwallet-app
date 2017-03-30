@@ -11,22 +11,6 @@ class WebIDAgent {
     this.http = new HTTPAgent({proxy: true})
   }
 
-  checkUsername(username) {
-    return new Promise((resolve, reject) => {
-      fetch(`https://${username}.webid.jolocom.de/profile/card#me`)
-      .then((response) => {
-        if (response.ok) {
-          reject(new Error('This username already exists!'))
-        } else {
-          resolve()
-        }
-      })
-      .catch((e) => {
-        // eslint-disable-next-line max-len
-        reject(new Error('network error, please make sure you have an internet connection'))
-      })
-    })
-  }
   // Gets the webId of the currently loged in user from local storage,
   getWebId() {
     const webId = localStorage.getItem('jolocom.webId')
