@@ -346,8 +346,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.checkUsername.id:
       return state.mergeDeep({
         username: {
-          checking: true,
-          errorMsg: 'checking'
+          checking: true
         }
       })
     case actions.checkUsername.id_success:

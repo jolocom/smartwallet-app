@@ -2,6 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
+import CircularProgress from 'material-ui/CircularProgress'
 import {RaisedButton} from 'material-ui'
 
 import {Container, Header, Content, SideNote, Footer} from './ui'
@@ -28,10 +29,19 @@ const STYLES = {
     color: '#939393',
     margin: '20px',
     textAlign: 'center'
+  },
+  spinner: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%'
   }
 }
 
 const NameEntry = (props) => {
+  let spinner = null
+  if (props.checking) {
+    spinner = <CircularProgress style={STYLES.spinner} />
+  }
   return (
     <Container>
       <Header title="Let's get started! Please type in a username." />
@@ -52,6 +62,7 @@ const NameEntry = (props) => {
           onChange={(e) => props.onChange(e.target.value)}
           errorText={props.errorMsg}
         />
+        {spinner}
       </Content>
       <Footer>
         <RaisedButton
@@ -69,6 +80,7 @@ NameEntry.propTypes = {
   value: React.PropTypes.string.isRequired,
   blank: React.PropTypes.bool.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
+  checking: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired
 }
