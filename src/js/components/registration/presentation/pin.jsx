@@ -57,12 +57,17 @@ const Pin = (props) => {
     )
   }
 
+  let headerTitle
+
+  if (props.confirm) {
+    headerTitle = 'Your Secure PIN.'
+  } else {
+    headerTitle = 'Create a PIN for secure login.'
+  }
+
   return (
     <Container>
-      <Header>
-        {props.confirm || 'Create a PIN for secure login.'}
-        {props.confirm && 'Your Secure PIN.'}
-      </Header>
+      <Header title={headerTitle} />
       <Content style={STYLES.content}>
         <PinInput
           value={props.value}

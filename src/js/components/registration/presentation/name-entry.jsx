@@ -41,7 +41,7 @@ const NameEntry = (props) => {
           <br />
           It will be part of your
           <span style={{color: '#942f51'}}> WebID</span> and it might<br />
-          end up on your buiseness card one day.
+          end up on your business card one day.
         </SideNote>
         <TextField
           style={{'marginTop': '10%'}}
