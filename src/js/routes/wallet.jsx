@@ -27,7 +27,11 @@ import RegistrationIdentifierScreen from
 import RegistrationPasswordScreen from
   'components/registration/screens/password'
 
-import WalletScreen from 'components/wallet'
+import WalletTabsScreen from 'components/wallet/screens/tabs'
+import WalletHomeScreen from 'components/wallet/screens/home'
+import WalletMoneyScreen from 'components/wallet/screens/money'
+import WalletIdentityScreen from 'components/wallet/screens/identity'
+import WalletContactScreen from 'components/wallet/screens/contact'
 
 export const routes = {
   login: '/login',
@@ -50,24 +54,32 @@ function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
 
-    <Route path="/registration"
+    <Route path="registration"
       component={RegistrationNameEntryScreen} />
-    <Route path="/registration/entropy"
+    <Route path="registration/entropy"
       component={RegistrationEntropyScreen} />
-    <Route path="/registration/user-type"
+    <Route path="registration/user-type"
       component={RegistrationUserTypeScreen} />
-    <Route path="/registration/write-phrase"
+    <Route path="registration/write-phrase"
       component={RegistrationWritePhraseScreen} />
-    <Route path="/registration/phrase-info"
+    <Route path="registration/phrase-info"
       component={RegistrationPhraseInfoScreen} />
-    <Route path="/registration/pin"
+    <Route path="registration/pin"
       component={RegistrationPinScreen} />
-    <Route path="/registration/email"
+    <Route path="registration/email"
       component={RegistrationIdentifierScreen} />
-    <Route path="/registration/password"
+    <Route path="registration/password"
       component={RegistrationPasswordScreen} />
 
-    <Route path="wallet" component={WalletScreen} />
+    <Route path="wallet/identity/contact"
+      component={WalletContactScreen} />
+    <Route path="wallet" component={WalletTabsScreen}>
+      <IndexRoute component={WalletHomeScreen} />
+      <Route path="identity"
+        component={WalletIdentityScreen} />
+      <Route path="money"
+        component={WalletMoneyScreen} />
+    </Route>
 
     <Route path="profile" component={Profile} />
 

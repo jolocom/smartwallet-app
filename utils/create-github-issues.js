@@ -44,12 +44,22 @@ function main(args) {
   const issues = parseIssues(args.issues)
   const github = setupGithubAPI(args)
   const promises = issues.forEach((issue) => {
+    // console.log({
+    //   owner: args.owner,
+    //   repo: args.repo,
+    //   title: issue.title,
+    //   body: issue.body,
+    //   labels: issue.labels,
+    //   milestones: issue.milestones
+    // })
+    // return Promise.resolve()
     return github.issues.create({
       owner: args.owner,
       repo: args.repo,
       title: issue.title,
       body: issue.body,
-      labels: issue.labels
+      labels: issue.labels,
+      milestones: issue.milestones
     })
   })
   Promise.all(promises)

@@ -6,6 +6,98 @@ Relevant walkthroughs:
 https://files.slack.com/files-pri/T03K1SCA9-F4FDEGVM1/170308_jolocom_wallet_verification-05.jpg
 https://files.slack.com/files-pri/T03K1SCA9-F4N1QENKV/170322_jolocom_wallet-10.png
 
+| Route                                        | Container component                 | Description                                                 |
+| -------------------------------------------- | ----------------------------------- | ------------------------------------------------------------|
+| /wallet                                      | WalletRedirectScreen                | Screen that redirects either to intro or identity section   |
+| /wallet/:section                             | WalletTabScreen                     |                                                             |
+| /wallet/intro                                | WalletIntroScreen                   |                                                             |
+| /wallet/money                                | WalletMoneyScreen                   |                                                             |
+| /wallet/identity                             | WalletIdentityScreen                |                                                             |
+| /wallet/identity/contact/edit                | WalletContactEditScreen             |                                                             |
+| /wallet/identity/passport/add                | WalletPassportAddScreen             |                                                             |
+| /wallet/identity/passport/add/photos         | WalletPassportPhotosScreen          |                                                             |
+| /wallet/identity/drivers-licence/add         | WalletDriversLicenseAddScreen       |                                                             |
+| /wallet/identity/drivers-licence/add/photos  | WalletDriversLicensePhotosScreen    |                                                             |
+
+
+Redux state: Money screen
+=========================
+
+* currency
+  * ether
+    * loaded: bool
+    * amount: number or null
+
+Redux state: Identity screen
+============================
+
+* username
+  * loaded: bool
+  * value: string or null
+* phone
+  * loaded: bool
+  * numbers
+    * [zero-based index]
+      * type: 'mobile' | 'private' | 'work' | 'other'
+      * value: string or null
+      * verified: bool or null
+* email
+  * loaded
+  * addresses
+    * [zero-based index]
+      * type: 'mobile' | 'private' | 'work' | 'other'
+      * value: string or null
+      * verified: bool or null
+* passport
+  * loaded: bool
+  * number: string
+  * givenName: string
+  * familyName: string
+  * birthDate: Date
+  * age: number
+  * gender: 'male' | 'female'
+  * showAddress: bool
+  * streetAndNumber: string
+  * city: string
+  * zip: string
+  * state: string
+  * country: string, the two-letter country code
+
+Redux state: Contact edit screen
+================================
+
+* phone
+  * loaded: bool
+  * verifying: null or string containing normalized number
+  * numbers
+    * [zero-based index]
+      * type: 'mobile' | 'private' | 'work' | 'other'
+      * value: string or null
+      * changed
+      * verified: bool or null
+* email
+  * loaded
+  * addresses
+    * [zero-based index]
+      * type: 'mobile' | 'private' | 'work' | 'other'
+      * value: string or null
+      * changed
+      * verified: bool or null
+* passport
+  * loaded: bool
+  * number: string
+  * givenName: string
+  * familyName: string
+  * birthDate: Date
+  * age: number
+  * gender: 'male' | 'female'
+  * showAddress: bool
+  * streetAndNumber: string
+  * city: string
+  * zip: string
+  * state: string
+  * country: string, the two-letter country code
+
 ======================================
 
 Parts:
