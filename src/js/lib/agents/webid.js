@@ -3,7 +3,6 @@ import HTTPAgent from './http.js'
 import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'
-// import {accountStatusEndpoint} from 'settings'
 
 // WebID related functions
 class WebIDAgent {
@@ -12,53 +11,10 @@ class WebIDAgent {
     this.http = new HTTPAgent({proxy: true})
   }
 
-  // checkUsername(username) {
-  //   console.log(accountStatusEndpoint)
-  //   return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       if (username === 'reject') {
-  //         reject()
-  //       } else {
-  //         resolve()
-  //       }
-  //     }, 2000)
-  //   })
-  // }
-
-  // checkUsername(username) {
-  //   let payload = {
-  //     method: 'accountStatus',
-  //     accountName: username
-  //   }
-  //   let header = {
-  //     // dataType: 'json',
-  //     'contentType': 'application/json'
-  //   }
-  //   return this.http.post(accountStatusEndpoint,
-  //          JSON.stringify(payload), JSON.stringify(header))
-  // }
-
-  // checkUsername(username) {
-  //   let payload = {
-  //     method: 'accountStatus',
-  //     accountName: username
-  //   }
-  //
-  //   $.ajax({
-  //     url: accountStatusEndpoint,
-  //     data: JSON.stringify(payload),
-  //     type: 'POST',
-  //     dataType: 'json',
-  //     contentType: 'application/json'
-  //   }).done().fail()
-  // }
-
   checkUsername(username) {
-    // console.log(`${username}.webid.jolocom.de/profile/card#me`)
     return new Promise((resolve, reject) => {
       fetch(`https://${username}.webid.jolocom.de/profile/card#me`)
       .then((response) => {
-        // console.log(response.ok)
         if (response.ok) {
           reject(new Error('This username already exists!'))
         } else {
@@ -66,7 +22,7 @@ class WebIDAgent {
         }
       })
       .catch((e) => {
-        console.error(e.message)
+        // eslint-disable-next-line max-len
         reject(new Error('network error, please make sure you have an internet connection'))
       })
     })
