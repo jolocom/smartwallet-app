@@ -155,7 +155,7 @@ let Index = React.createClass({
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/logo_littlesister_start.svg)'
+              backgroundImage: 'url(/img/logo_start.svg)'
             })} />
           </div>
           <div style={styles.slide}>
@@ -189,7 +189,7 @@ let Index = React.createClass({
 
         {/** <div style={styles.intro}>
           <img
-            src="/img/logo_littlesister_start.svg"
+            src="/img/logo_start.svg"
             style={styles.logoStartImg} />
         </div> **/}
 

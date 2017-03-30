@@ -144,7 +144,7 @@ let Nav = React.createClass({
               secondary style={styles.badgeItem}
               badgeStyle={styles.badgeNotification}>
               {/** TODO: make selection style dynamic **/}
-              <ListItem primaryText="Little Sister"
+              <ListItem primaryText="Graph"
                 onTouchTap={this.hide}
                 value="graph"
                 style={styles.menuItemActive}
