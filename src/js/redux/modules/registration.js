@@ -14,8 +14,7 @@ const NEXT_ROUTES = {
   '/registration/password': '/registration/pin'
 }
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/user-type': 'userType',
-  '/registration/email': 'email'
+  '/registration/user-type': 'userType'
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -117,6 +116,22 @@ const actions = module.exports = makeActions('registration', {
   setEmail: {
     expectedParams: ['value']
   },
+  checkEmail: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        const emailState = getState().getIn(['registration', 'email'])
+        if (emailState.get('valid')) {
+          dispatch(actions.goForward())
+        } else {
+          dispatch(actions.emailError())
+        }
+      }
+    }
+  },
+  emailError: {
+    expectedParams: []
+  },
   setPassword: {
     expectedParams: ['value']
   },
@@ -173,7 +188,8 @@ const initialState = Immutable.fromJS({
   },
   email: {
     value: '',
-    valid: false
+    valid: false,
+    errorMsg: ''
   },
   password: {
     value: '',
@@ -299,10 +315,16 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         email: {
           value: action.value,
-          valid: /([\w.]+)@([\w.]+)\.(\w+)/.test(action.value)
+          valid: /([\w.]+)@([\w.]+)\.(\w+)/.test(action.value),
+          errorMsg: ''
         }
-      }
-    )
+      })
+    case actions.emailError.id:
+      return state.mergeDeep({
+        email: {
+          errorMsg: 'This email address is invalid. Please check it again'
+        }
+      })
     case actions.setPassphraseWrittenDown.id:
       return state.mergeDeep({
         passphrase: {
