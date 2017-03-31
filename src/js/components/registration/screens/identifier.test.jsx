@@ -14,31 +14,33 @@ describe('(Component) RegistrationIdentifierScreen', function() {
           registration: {
             email: {
               value: '',
-              valid: false
+              errorMsg: ''
             },
             username: {
               value: 'xyz'
             }
           }
         }))
-      } />),
+      }
+        setEmail={() => {}}
+        checkEmail={() => {}}
+      />),
       { context: { muiTheme: { } } }
     )
 
     expect(wrapper.find('Identifier').prop('value')).to.be.empty
-    expect(wrapper.find('Identifier').prop('valid')).to.be.false
     expect(wrapper.find('Identifier').prop('username')).to.equal('xyz')
   })
   it('should call setEmail onchange with proper params', function() {
     const setEmail = stub()
-    const goForward = () => {}
+    const checkEmail = () => {}
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
         ...RegistrationIdentifierScreen.mapStateToProps(Immutable.fromJS({
           registration: {
             email: {
               value: '',
-              valid: false
+              errorMsg: ''
             },
             username: {
               value: 'xyz'
@@ -47,7 +49,7 @@ describe('(Component) RegistrationIdentifierScreen', function() {
         }))
       }
         setEmail={setEmail}
-        goForward={goForward}
+        checkEmail={checkEmail}
        />),
       { context: { muiTheme: { } } }
     )
@@ -58,16 +60,16 @@ describe('(Component) RegistrationIdentifierScreen', function() {
     ]
     }])
   })
-  it('should call goForward onSubmit with proper params', function() {
+  it('should call checkEmail onSubmit with proper params', function() {
     const setEmail = () => {}
-    const goForward = stub()
+    const checkEmail = stub()
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
         ...RegistrationIdentifierScreen.mapStateToProps(Immutable.fromJS({
           registration: {
             email: {
               value: '',
-              valid: false
+              errorMsg: ''
             },
             username: {
               value: 'xyz'
@@ -76,12 +78,12 @@ describe('(Component) RegistrationIdentifierScreen', function() {
         }))
       }
         setEmail={setEmail}
-        goForward={goForward}
+        checkEmail={checkEmail}
        />),
       { context: { muiTheme: { } } }
     )
     wrapper.find(Presentation).props().onSubmit()
-    expect(goForward.called).to.be.true
-    expect(goForward.calls).to.deep.equal([{'args': []}])
+    expect(checkEmail.called).to.be.true
+    expect(checkEmail.calls).to.deep.equal([{'args': []}])
   })
 })

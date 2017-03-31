@@ -91,12 +91,7 @@ describe('(Component) RegistrationEntropyScreen', function() {
 
       wrapper.find('Entropy').props().onMouseMovement(2, 2)
       expect(addEntropyFromDeltas.called).to.be.true
-      expect(addEntropyFromDeltas.calls).to.deep.equal([{
-        'args': [{
-          x: 2,
-          y: 2
-        }]
-      }])
+      expect(addEntropyFromDeltas.calls).to.deep.equal([{'args': [2, 2]}])
     }
   )
   it('should call setMaskedImageUncovering onImageUncoveringChange ' +

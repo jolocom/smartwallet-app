@@ -13,16 +13,19 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           registration: {
             username: {
               value: '',
-              valid: false
+              errorMsg: ''
             }
           }
         }))
-      } />),
+      }
+        setUsername={() => {}}
+        checkUsername={() => {}}
+      />),
       { context: { muiTheme: { } } }
     )
 
     expect(wrapper.find('NameEntry').prop('value')).to.be.empty
-    expect(wrapper.find('NameEntry').prop('valid')).to.be.false
+    expect(wrapper.find('NameEntry').prop('errorMsg')).to.be.empty
   })
   it('should call setUsername onChange', function() {
     const setUsername = stub()
@@ -32,7 +35,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           registration: {
             username: {
               value: '',
-              valid: false
+              errorMsg: ''
             }
           }
         }))
@@ -54,7 +57,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           registration: {
             username: {
               value: '',
-              valid: false
+              errorMsg: ''
             }
           }
         }))

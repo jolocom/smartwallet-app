@@ -28,6 +28,7 @@ export default class RegistrationEntropyScreen extends React.Component {
       count: 0,
       imageMask: new ImageMaskBuilder()
     }
+    this.handleUncoveringChange = this.handleUncoveringChange.bind(this)
   }
 
   handleUncoveringChange(uncovering) {
@@ -52,8 +53,8 @@ export default class RegistrationEntropyScreen extends React.Component {
       valid={this.props.registration.passphrase.sufficientEntropy}
       user={this.props.registration.username.value}
       onImagePointUncoverd={(...args) => this.handleUncoveredPoint(...args)}
-      onImageUncoveringChange={(val) => this.handleUncoveringChange(val)}
-      onMouseMovement={(x, y) => this.props.addEntropyFromDeltas({x, y})}
+      onImageUncoveringChange={this.handleUncoveringChange}
+      onMouseMovement={this.props.addEntropyFromDeltas}
       onSubmit={this.props.goForward}
     />
   }

@@ -6,15 +6,16 @@ import { isPasswordValid, checkPassStrength,
   passwordCharacters } from '../../lib/password-util'
 
 const NEXT_ROUTES = {
-  '/registration': '/registration/entropy',
-  '/registration/entropy': '/registration/user-type',
-  '/registration/write-phrase': '/registration/pin',
-  '/registration/phrase-info': '/registration/email',
-  '/registration/email': '/registration/password',
-  '/registration/password': '/registration/pin'
+  '/registration': '/registration/entropy'
 }
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/user-type': 'userType'
+  '/registration': 'entropy',
+  '/registration/user-type': 'userType',
+  '/registration/write-phrase': 'passphrase',
+  '/registration/phrase-info': 'passphrase',
+  '/registration/email': 'email',
+  '/registration/password': 'password',
+  '/registration/pin': 'pin'
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -434,5 +435,6 @@ helpers._getNextURL = (currentPath, userType) => {
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  return !toCheck || state.getIn(['registration', toCheck, 'valid'])
+  let result = !toCheck || state.getIn(['registration', toCheck, 'valid'])
+  return result || false
 }

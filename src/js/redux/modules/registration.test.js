@@ -7,7 +7,7 @@ import {stub, withStubs} from '../../../../test/utils'
 const reducer = require('./registration').default
 const helpers = registration.helpers
 
-describe('Wallet registration Redux module', function() {
+describe.only('Wallet registration Redux module', function() {
   describe('goForward', function() {
     describe('action', function() {
       it('should dispatch the wallet registration action when complete', () => {
@@ -50,7 +50,7 @@ describe('Wallet registration Redux module', function() {
       })
     })
 
-    describe('_canGoForward()', function() {
+    describe.only('_canGoForward()', function() {
       it('should return true if there is nothing to check', function() {
         expect(helpers._canGoForward(Immutable.fromJS({
           registration: {}
@@ -65,7 +65,7 @@ describe('Wallet registration Redux module', function() {
         }
         test('/registration', 'username')
         test('/registration/user-type', 'userType')
-        test('/registration/entropy', 'entropy')
+        // test('/registration/entropy', 'entropy')
         test('/registration/write-phrase', 'passphrase')
         test('/registration/email', 'email')
         test('/registration/password', 'password')
@@ -656,7 +656,7 @@ describe('Wallet registration Redux module', function() {
         let state = reducer(undefined, '@@INIT')
 
         expect(state.get('email').toJS())
-          .to.deep.equal({value: '', valid: false})
+          .to.deep.equal({value: '', errorMsg: '', valid: false})
       })
 
       it('should correctly update', () => {
@@ -664,7 +664,7 @@ describe('Wallet registration Redux module', function() {
         state = reducer(state, registration.setEmail('test'))
 
         expect(state.get('email').toJS())
-          .to.deep.equal({value: 'test', valid: false})
+          .to.deep.equal({value: 'test', errorMsg: '', valid: false})
       })
 
       it('should correctly detect valid e-mail addresses', () => {
@@ -672,7 +672,7 @@ describe('Wallet registration Redux module', function() {
         state = reducer(state, registration.setEmail('test@test.com'))
 
         expect(state.get('email').toJS())
-          .to.deep.equal({value: 'test@test.com', valid: true})
+          .to.deep.equal({value: 'test@test.com', errorMsg: '', valid: true})
       })
     })
     // describe('setPassphraseWrittenDown', function() {

@@ -42,7 +42,7 @@ const Identifier = (props) => {
       </Content>
       <Footer>
         <RaisedButton
-          onClick={() => props.onSubmit()}
+          onClick={props.onSubmit}
           label="NEXT STEP"
           secondary
         />
