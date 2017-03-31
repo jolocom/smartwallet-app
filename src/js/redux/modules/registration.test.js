@@ -63,13 +63,13 @@ describe('Wallet registration Redux module', function() {
             registration: {[key]: {valid: true}}
           }), path)).to.equal(true)
         }
-        test('/registration', 'username')
-        test('/registration/user-type', 'userType')
+        test('/registration/', 'username')
+        test('/registration/user-type/', 'userType')
         // test('/registration/entropy', 'entropy')
-        test('/registration/write-phrase', 'passphrase')
-        test('/registration/email', 'email')
-        test('/registration/password', 'password')
-        test('/registration/pin', 'pin')
+        test('/registration/write-phrase/', 'passphrase')
+        test('/registration/email/', 'email')
+        test('/registration/password/', 'password')
+        test('/registration/pin/', 'pin')
       })
 
       it('should return false if the validation for a page fails', () => {
@@ -78,13 +78,13 @@ describe('Wallet registration Redux module', function() {
             registration: {[key]: {valid: false}}
           }), path)).to.equal(false)
         }
-        test('/registration', 'username')
-        test('/registration/user-type', 'userType')
-        test('/registration/entropy', 'entropy')
-        test('/registration/write-phrase', 'passphrase')
-        test('/registration/email', 'email')
-        test('/registration/password', 'password')
-        test('/registration/pin', 'pin')
+        test('/registration/', 'username')
+        test('/registration/user-type/', 'userType')
+        test('/registration/entropy/', 'entropy')
+        test('/registration/write-phrase/', 'passphrase')
+        test('/registration/email/', 'email')
+        test('/registration/password/', 'password')
+        test('/registration/pin/', 'pin')
       })
     })
   })
@@ -116,7 +116,7 @@ describe('Wallet registration Redux module', function() {
     it('should return null if we cannot continue', () => {
       expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
-          locationBeforeTransitions: {pathname: '/registration/user-type'}
+          locationBeforeTransitions: {pathname: '/registration/user-type/'}
         },
         registration: Immutable.fromJS({userType: {valid: false}})
       }))).to.equal(null)
