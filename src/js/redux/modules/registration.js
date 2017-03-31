@@ -9,8 +9,9 @@ const NEXT_ROUTES = {
   '/registration': '/registration/entropy'
 }
 const CHECK_BEFORE_SWITCHING = {
-  '/registration': 'entropy',
+  '/registration': 'username',
   '/registration/user-type': 'userType',
+  '/registration/entropy': 'entropy',
   '/registration/write-phrase': 'passphrase',
   '/registration/phrase-info': 'passphrase',
   '/registration/email': 'email',
