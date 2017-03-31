@@ -69,7 +69,7 @@ const NameEntry = (props) => {
           label="NEXT STEP"
           secondary
           onClick={props.onSubmit}
-          disabled={props.blank}
+          disabled={!props.alphaNum}
         />
       </Footer>
     </Container>
@@ -78,7 +78,7 @@ const NameEntry = (props) => {
 
 NameEntry.propTypes = {
   value: React.PropTypes.string.isRequired,
-  blank: React.PropTypes.bool.isRequired,
+  alphaNum: React.PropTypes.bool.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
   checking: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,

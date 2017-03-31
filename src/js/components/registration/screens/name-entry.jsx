@@ -17,7 +17,7 @@ export default class RegistrationNameEntryScreen extends React.Component {
   render() {
     return <Presentation
       value={this.props.registration.username.value}
-      blank={this.props.registration.username.blank}
+      alphaNum={this.props.registration.username.alphaNum}
       errorMsg={this.props.registration.username.errorMsg}
       checking={this.props.registration.username.checking}
       onChange={this.props.setUsername}

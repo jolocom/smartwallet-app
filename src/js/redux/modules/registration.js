@@ -369,7 +369,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         username: {
           value: action.value,
-          blank: action.value === '',
+          alphaNum: (/^[a-z0-9]+$/i.test(action.value)),
           errorMsg: ''
         }
       })

@@ -124,7 +124,7 @@ class PinInput extends React.Component {
 
       <div>
         <input style={STYLES.numberInput}
-          type="number"
+          type="text"
           ref="input"
           value={props.value}
           onKeyDown={this.handleKeyDown}
