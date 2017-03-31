@@ -6,8 +6,17 @@ import { isPasswordValid, checkPassStrength,
   passwordCharacters } from '../../lib/password-util'
 
 const NEXT_ROUTES = {
-  '/registration': '/registration/entropy'
+  '/registration': '/registration/entropy',
+  '/registration/user-type': '/registration/phrase-info',
+  '/registration': '/registration/entropy',
+  '/registration/entropy': '/registration/user-type',
+  '/registration/write-phrase': '/registration/pin',
+  '/registration/user-type': '/registration/phrase-info',
+  '/registration/phrase-info': '/registration/email',
+  '/registration/email': '/registration/password',
+  '/registration/password': '/registration/pin'
 }
+
 const CHECK_BEFORE_SWITCHING = {
   '/registration': 'username',
   '/registration/user-type': 'userType',
