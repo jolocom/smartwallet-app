@@ -34,6 +34,7 @@ const Entropy = (props) => {
       <Footer>
         <RaisedButton
           label="NEXT STEP"
+          disabled={!props.valid}
           secondary
           onClick={props.onSubmit} />
       </Footer>
