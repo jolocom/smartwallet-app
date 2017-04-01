@@ -324,7 +324,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         email: {
           value: action.value,
-          valid: /([\w.]+)@([\w.]+)\.(\w+)/.test(action.value),
+          valid: /^([\w.]+)@([\w.]+)\.(\w+)/.test(action.value),
           errorMsg: ''
         }
       })
