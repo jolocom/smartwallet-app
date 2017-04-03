@@ -38,9 +38,6 @@ const initialState = Immutable.fromJS({
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.detectActiveTab.id:
-    console.log(action, state.merge({
-        activeTab: action.activeTab
-      }).toJS())
       return state.merge({
         activeTab: action.activeTab
       })
