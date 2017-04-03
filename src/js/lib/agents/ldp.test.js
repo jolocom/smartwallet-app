@@ -1,5 +1,6 @@
 /* global describe: true, it: true */
 var expect = require('chai').expect
+import * as settings from 'settings'
 import $rdf from 'rdflib'
 import { PRED } from 'lib/namespaces'
 import LDPAgent from './ldp'
@@ -28,7 +29,8 @@ describe('LDPAgent', function () {
         expect(options.body).to.equal('')
 
         return {
-          status: 200, json: () => ({ foo: 5 }),
+          status: 200,
+          json: () => ({ foo: 5 }),
           headers: DUMMY_JSON_HEADERS
         }
       }
@@ -43,10 +45,12 @@ describe('LDPAgent', function () {
         const agent = new LDPAgent()
         agent.proxiedHTTP._fetch = async (url, options) => {
           expect(options.method).to.equal('GET')
-          expect(url).to.equal(
-            agent.proxiedHTTP._proxify('http://foo.com/test'))
+          expect(url)
+            .to.equal(`${settings.proxy}/proxy?url=http://foo.com/test`)
           return {
-            status: 200, ok: true, headers: DUMMY_TURTLE_HEADERS,
+            status: 200,
+            ok: true,
+            headers: DUMMY_TURTLE_HEADERS,
             text: async () => `
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 <http://foo.com/profile/alice> foaf:name "Alice" .
@@ -71,7 +75,8 @@ describe('LDPAgent', function () {
       const agent = new LDPAgent()
       agent.proxiedHTTP._fetch = async (url, options) => {
         expect(options.method).to.equal('GET')
-        expect(url).to.equal('http://foo.com/test')
+        expect(url)
+          .to.equal(`${settings.proxy}/proxy?url=http://foo.com/test`)
         return {
           status: 404, ok: false, statusText: 'Go away'
         }
@@ -93,10 +98,12 @@ describe('LDPAgent', function () {
         const agent = new LDPAgent()
         agent.proxiedHTTP._fetch = async (url, options) => {
           expect(options.method).to.equal('GET')
-          expect(url).to.equal(
-            agent.proxiedHTTP._proxify('http://foo.com/test'))
+          expect(url)
+            .to.equal(`${settings.proxy}/proxy?url=http://foo.com/test`)
           return {
-            status: 200, ok: true, headers: DUMMY_TURTLE_HEADERS,
+            status: 200,
+            ok: true,
+            headers: DUMMY_TURTLE_HEADERS,
             text: async () => `
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 _:a foaf:name "Alice" .
@@ -119,10 +126,12 @@ _:b foaf:name "Bob" .
         const agent = new LDPAgent()
         agent.proxiedHTTP._fetch = async (url, options) => {
           expect(options.method).to.equal('HEAD')
-          expect(url).to.equal(
-            agent.proxiedHTTP._proxify('http://foo.com/test'))
+          expect(url).to.equal(settings.proxy +
+            '/proxy?url=http://foo.com/test')
           return {
-            status: 200, ok: true, headers: {
+            status: 200,
+            ok: true,
+            headers: {
               get: (field) => ({
                 'Content-Type': 'text/rdf',
                 'Link': '<testAcl>; rel="acl"'
@@ -141,9 +150,12 @@ _:b foaf:name "Bob" .
       const agent = new LDPAgent()
       agent.proxiedHTTP._fetch = async (url, options) => {
         expect(options.method).to.equal('HEAD')
-        expect(url).to.equal(agent.proxiedHTTP._proxify('http://foo.com/test'))
+        expect(url).to.equal(settings.proxy +
+          '/proxy?url=http://foo.com/test')
         return {
-          status: 200, ok: true, headers: {
+          status: 200,
+          ok: true,
+          headers: {
             get: (field) => ({ 'Content-Type': 'text/rdf' })[field]
           },
           text: async () => ''
@@ -159,9 +171,12 @@ _:b foaf:name "Bob" .
       const agent = new LDPAgent()
       agent.proxiedHTTP._fetch = async (url, options) => {
         expect(options.method).to.equal('HEAD')
-        expect(url).to.equal(agent.proxiedHTTP._proxify('http://foo.com/test'))
+        expect(url).to.equal(settings.proxy +
+          '/proxy?url=http://foo.com/test')
         return {
-          status: 200, ok: true, headers: {
+          status: 200,
+          ok: true,
+          headers: {
             get: (field) => ({
               'Content-Type': 'text/rdf',
               'Link': 'something; rel="bla"'

@@ -5,6 +5,10 @@ import accepts from 'attr-accept'
 import {IconButton} from 'material-ui'
 
 let ImageSelect = React.createClass({
+  propTypes: {
+    onError: React.PropTypes.func,
+    onChange: React.PropTypes.func
+  },
 
   open() {
     this.fileInputEl.value = null
@@ -15,13 +19,18 @@ let ImageSelect = React.createClass({
     return (
       <div>
         <input
-          ref={el => this.fileInputEl = el}
+          ref={el => { this.fileInputEl = el }}
           type="file"
           name="file"
           style={styles.file}
           multiple={false}
           onChange={this._handleSelectFile} />
-        <IconButton iconClassName="material-icons" onClick={() => this.open()}>photo_camera</IconButton>
+        <IconButton
+          iconClassName="material-icons"
+          onClick={() => this.open()}
+        >
+          photo_camera
+        </IconButton>
       </div>
     )
   },

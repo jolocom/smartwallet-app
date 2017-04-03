@@ -57,19 +57,18 @@ let Signup = React.createClass({
     }
   },
 
-  signup() {
-    if (this.state.email !== this.state.email2) {
+  signup(model) {
+    if (model.email !== model.repeatEmail) {
       this.props.showSnackBarMessage('The two emails do not match.')
       return
     }
 
     this.disableSubmit()
-
     let signupData = {
-      username: this.state.username,
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password
+      username: model.username,
+      name: model.name,
+      email: model.email,
+      password: model.password
     }
     this.props.doSignup(signupData)
   },
@@ -232,7 +231,7 @@ let Signup = React.createClass({
           </IconButton>}
           />
         <div style={styles.logo}>
-          <img src="/img/logo_littlesister.svg" style={styles.logoImg} />
+          <img src="./img/logo.svg" style={styles.logoImg} />
         </div>
         {this.props.account.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>

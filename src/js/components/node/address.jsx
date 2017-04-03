@@ -24,7 +24,10 @@ let AddressNode = React.createClass({
 
   getStyles() {
     let address = `${this.state.address}, ${this.state.city}`
-    let background = `http://maps.googleapis.com/maps/api/staticmap?center=${address}&zoom=15&scale=true&size=640x352&maptype=roadmap&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:1%7C{$address}`
+    let background = 'http://maps.googleapis.com/maps/api/staticmap?' +
+      `center=${address}&zoom=15&scale=true&size=640x352&maptype=roadmap` +
+      '&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7' +
+      'Clabel:1%7C{$address}'
 
     return {
       container: {
@@ -58,12 +61,12 @@ let AddressNode = React.createClass({
     let {address, city, zipcode} = this.state
 
     let subtitle = `${zipcode} ${city}`
-    let avatar = <Avatar icon={<Verified/>} backgroundColor="transparent"/>
+    let avatar = <Avatar icon={<Verified />} backgroundColor="transparent" />
 
     return (
       <div style={styles.container}>
         <Card zDepth={0}>
-          <CardMedia style={styles.media}/>
+          <CardMedia style={styles.media} />
           <CardHeader
             title={address}
             subtitle={subtitle}
@@ -71,7 +74,9 @@ let AddressNode = React.createClass({
             />
         </Card>
         <div style={styles.content}>
-          <p style={styles.lead}>The following IDs are associated with this address and verified</p>
+          <p style={styles.lead}>
+            The following IDs are associated with this address and verified
+          </p>
           <ul style={styles.list}>
             <li>Agora Collective</li>
             <li>Joachim Lohkamp</li>

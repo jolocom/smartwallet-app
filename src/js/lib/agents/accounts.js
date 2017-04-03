@@ -12,6 +12,24 @@ class AccountsAgent {
     this.httpProxied = new HTTPAgent({proxy: true})
   }
 
+  checkUsername(username) {
+    return new Promise((resolve, reject) => {
+      this.http.head(`https://${username}.webid.jolocom.de/profile/card#me`)
+      .then((response) => {
+        reject(new Error('This username already exists!'))
+      })
+      .catch((e) => {
+        // console.log(e.typeError)
+        if (e.response && e.response.status === 401) {
+          resolve()
+        } else {
+          // eslint-disable-next-line max-len
+          reject(new Error('network error, please make sure you have an internet connection'))
+        }
+      })
+    })
+  }
+
   register(username, password, email, name) {
     return this.http.post(`${settings.proxy}/register`, querystring.stringify({
       username, password, email, name
@@ -132,7 +150,6 @@ class AccountsAgent {
     writer.add('', PRED.maker, webId)
     writer.add('', PRED.primaryTopic, $rdf.sym('#inbox'))
     writer.add('#inbox', PRED.type, PRED.space)
-
     return this.httpProxied.put(
       uri,
       writer.end(),
@@ -151,7 +168,6 @@ class AccountsAgent {
     writer.add('', PRED.maker, webId)
     writer.add('', PRED.primaryTopic, $rdf.sym('#unread-messages'))
     writer.add('#unread-messages', PRED.type, PRED.space)
-
     return this.httpProxied.put(
       uri,
       writer.end(),

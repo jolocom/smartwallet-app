@@ -4,6 +4,8 @@ import {RaisedButton, IconButton} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 
+import {routes} from 'routes'
+
 let Index = React.createClass({
   contextTypes: {
     router: React.PropTypes.object,
@@ -155,7 +157,7 @@ let Index = React.createClass({
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/logo_littlesister_start.svg)'
+              backgroundImage: 'url(/img/logo_start.svg)'
             })} />
           </div>
           <div style={styles.slide}>
@@ -189,7 +191,7 @@ let Index = React.createClass({
 
         {/** <div style={styles.intro}>
           <img
-            src="/img/logo_littlesister_start.svg"
+            src="/img/logo_start.svg"
             style={styles.logoStartImg} />
         </div> **/}
 
@@ -223,7 +225,7 @@ let Index = React.createClass({
   },
 
   _handleSignup() {
-    this.context.router.push('/signup')
+    this.context.router.push(routes.signup)
   },
 
   _handleLogin() {
