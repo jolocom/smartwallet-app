@@ -12,7 +12,7 @@ export default class WalletIdentityScreen extends React.Component {
 
   render() {
     return (<div>
-      Identity<br />
+      <Presentation/><br />
       {/* <Link to="/wallet/identity/contact"></Link> */}
     </div>)
   }
