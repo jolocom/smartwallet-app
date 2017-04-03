@@ -53,7 +53,8 @@ Entropy.propTypes = {
   onImagePointUncoverd: React.PropTypes.func.isRequired,
   onImageUncoveringChange: React.PropTypes.func.isRequired,
   onMouseMovement: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired
+  onSubmit: React.PropTypes.func.isRequired,
+  valid: React.PropTypes.bool
 }
 
 export default Radium(Entropy)

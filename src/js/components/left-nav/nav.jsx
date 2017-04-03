@@ -29,7 +29,8 @@ let Nav = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.object,
-    profile: React.PropTypes.any
+    profile: React.PropTypes.any,
+    account: React.PropTypes.any
   },
 
   propTypes: {
