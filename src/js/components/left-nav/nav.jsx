@@ -97,6 +97,15 @@ let Nav = React.createClass({
     event.preventDefault()
   },
 
+  viewProfile(event) {
+    this.props.hideLeftNav()
+
+    const uri = encodeURIComponent(this.props.account.webId)
+
+    this.context.router.push(`graph/${uri}/view`)
+    event.preventDefault()
+  },
+
   goto(url) {
     this.context.router.push(url)
     this.props.hideLeftNav()
@@ -172,7 +181,7 @@ let Nav = React.createClass({
             onChange={this._handleNavChange}
             >
             <ListItem primaryText="Profile"
-              onTouchTap={this.editProfile}
+              onTouchTap={this.viewProfile}
               style={styles.menuItem}
               leftAvatar={
                 <Avatar
