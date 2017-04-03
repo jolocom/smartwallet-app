@@ -2,7 +2,7 @@
 import {expect} from 'chai'
 import {stub} from '../../../../test/utils'
 import backendMiddleware from './backend'
-const middleware = backendMiddleware('dummy backend')
+const middleware = backendMiddleware('dummy backend', 'dummy services')
 
 describe('Backend/async Redux middleware', function() {
   it('should handle normal actions correctly', function() {
@@ -28,7 +28,10 @@ describe('Backend/async Redux middleware', function() {
     expect(next.called).to.be.false
     expect(action.called).to.be.true
     expect(action.calledWithArgs).to.deep.equal([
-      'dispatch()', 'getState()', {backend: 'dummy backend'}
+      'dispatch()', 'getState()', {
+        backend: 'dummy backend',
+        services: 'dummy services'
+      }
     ])
   })
 

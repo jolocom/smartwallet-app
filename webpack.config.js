@@ -20,6 +20,7 @@ module.exports = {
       stores: 'stores',
       lib: 'lib',
       styles: 'styles',
+      routes: path.join(__dirname, 'src', 'js', 'routes', 'default.jsx'),
       settings: path.join(__dirname, 'config', 'development.js')
     }
   },
