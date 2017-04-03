@@ -12,6 +12,13 @@ class MaskedImage extends React.Component {
     onUncoveringChange: React.PropTypes.func.isRequired
   }
 
+  constructor(props) {
+    super(props)
+    this.onRevealStart = this.onRevealStart.bind(this)
+    this.onReveal = this.onReveal.bind(this)
+    this.onRevealEnd = this.onRevealEnd.bind(this)
+  }
+
   // componentDidMount() {
   //   this.refs.input.focus()
   // }
@@ -45,11 +52,12 @@ class MaskedImage extends React.Component {
     const props = this.props
 
     return (<svg style={{width: '240px', height: '150px', margin: 'auto'}}
-      onTouchStart={() => this.onRevealStart()}
-      onMouseDown={() => this.onRevealStart()}
-      onMouseMove={(e) => this.onReveal(e)}
-      onTouchEnd={() => this.onRevealEnd()}
-      onMouseUp={() => this.onRevealEnd()}
+      onTouchStart={this.onRevealStart}
+      onMouseDown={this.onRevealStart}
+      onClick={this.onRevealStart}
+      onMouseMove={this.onReveal}
+      onTouchEnd={this.onRevealEnd}
+      onMouseUp={this.onRevealEnd}
     >
       <defs>
         <mask id="mask">
@@ -66,10 +74,8 @@ class MaskedImage extends React.Component {
 
         </mask>
       </defs>
-      <foreignObject width="240" height="150" textAnchor="middle"
-        requiredExtensions="http://www.w3.org/1999/xhtml"
-      >
-        <div xmlns="http://www.w3.org/1999/xhtml" style={{textAlign: 'center',
+      <foreignObject width="240" height="150" textAnchor="middle">
+        <div  xmlns="http://www.w3.org/1999/xhtml" style={{textAlign: 'center',
           color: theme.jolocom.gray1}}>
           <p>{props.uncoveredPaths.length > 0 ? '' : props.message1}</p>
           <br />

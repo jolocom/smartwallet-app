@@ -16,7 +16,11 @@ const STYLES = {
 const Entropy = (props) => {
   return (
     <Container
-      onMouseMove={(e) => props.onMouseMovement(e.clientX, e.clientY)}
+      onMouseMove={(e) => {
+        if (props.imageUncovering) {
+          props.onMouseMovement(e.clientX, e.clientY)
+        }
+      }}
     >
       <Content>
         <MaskedImage
@@ -34,6 +38,7 @@ const Entropy = (props) => {
       <Footer>
         <RaisedButton
           label="NEXT STEP"
+          disabled={!props.valid}
           secondary
           onClick={props.onSubmit} />
       </Footer>

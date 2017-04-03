@@ -8,14 +8,22 @@ import { isPasswordValid, checkPassStrength,
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
   '/registration/entropy': '/registration/user-type',
-  '/registration/write-phrase': '/registration/pin',
+  '/registration/user-type': '/registration/phrase-info',
   '/registration/phrase-info': '/registration/email',
   '/registration/email': '/registration/password',
-  '/registration/password': '/registration/pin'
+  '/registration/password': '/registration/pin',
+  '/registration/write-phrase': '/registration/pin'
 }
+
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/user-type': 'userType',
-  '/registration/email': 'email'
+  '/registration/': 'username',
+  '/registration/user-type/': 'userType',
+  '/registration/entropy/': 'entropy',
+  '/registration/write-phrase/': 'passphrase',
+  '/registration/phrase-info/': 'passphrase',
+  '/registration/email/': 'email',
+  '/registration/password/': 'password',
+  '/registration/pin/': 'pin'
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -117,6 +125,22 @@ const actions = module.exports = makeActions('registration', {
   setEmail: {
     expectedParams: ['value']
   },
+  checkEmail: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        const emailState = getState().getIn(['registration', 'email'])
+        if (emailState.get('valid')) {
+          dispatch(actions.goForward())
+        } else {
+          dispatch(actions.emailError())
+        }
+      }
+    }
+  },
+  emailError: {
+    expectedParams: []
+  },
   setPassword: {
     expectedParams: ['value']
   },
@@ -130,7 +154,7 @@ const actions = module.exports = makeActions('registration', {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
-          return backend.webId
+          return backend.accounts
             .checkUsername(state.username.value)
               .then(() => dispatch(actions.goForward()))
         }))
@@ -173,7 +197,8 @@ const initialState = Immutable.fromJS({
   },
   email: {
     value: '',
-    valid: false
+    valid: false,
+    errorMsg: ''
   },
   password: {
     value: '',
@@ -299,10 +324,16 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         email: {
           value: action.value,
-          valid: /([\w.]+)@([\w.]+)\.(\w+)/.test(action.value)
+          valid: /^([\w.]+)@([\w.]+)\.(\w+)/.test(action.value),
+          errorMsg: ''
         }
-      }
-    )
+      })
+    case actions.emailError.id:
+      return state.mergeDeep({
+        email: {
+          errorMsg: 'This email address is invalid. Please check it again'
+        }
+      })
     case actions.setPassphraseWrittenDown.id:
       return state.mergeDeep({
         passphrase: {
@@ -338,7 +369,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         username: {
           value: action.value,
-          blank: action.value === '',
+          alphaNum: (/^[a-z0-9]+$/i.test(action.value)),
           errorMsg: ''
         }
       })
@@ -346,8 +377,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.checkUsername.id:
       return state.mergeDeep({
         username: {
-          checking: true,
-          errorMsg: 'checking'
+          checking: true
         }
       })
     case actions.checkUsername.id_success:
@@ -413,5 +443,6 @@ helpers._getNextURL = (currentPath, userType) => {
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  return !toCheck || state.getIn(['registration', toCheck, 'valid'])
+  let result = !toCheck || state.getIn(['registration', toCheck, 'valid'])
+  return result || false
 }

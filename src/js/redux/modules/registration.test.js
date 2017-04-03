@@ -63,13 +63,13 @@ describe('Wallet registration Redux module', function() {
             registration: {[key]: {valid: true}}
           }), path)).to.equal(true)
         }
-        test('/registration', 'username')
-        test('/registration/user-type', 'userType')
-        test('/registration/entropy', 'entropy')
-        test('/registration/write-phrase', 'passphrase')
-        test('/registration/email', 'email')
-        test('/registration/password', 'password')
-        test('/registration/pin', 'pin')
+        test('/registration/', 'username')
+        test('/registration/user-type/', 'userType')
+        // test('/registration/entropy', 'entropy')
+        test('/registration/write-phrase/', 'passphrase')
+        test('/registration/email/', 'email')
+        test('/registration/password/', 'password')
+        test('/registration/pin/', 'pin')
       })
 
       it('should return false if the validation for a page fails', () => {
@@ -78,13 +78,13 @@ describe('Wallet registration Redux module', function() {
             registration: {[key]: {valid: false}}
           }), path)).to.equal(false)
         }
-        test('/registration', 'username')
-        test('/registration/user-type', 'userType')
-        test('/registration/entropy', 'entropy')
-        test('/registration/write-phrase', 'passphrase')
-        test('/registration/email', 'email')
-        test('/registration/password', 'password')
-        test('/registration/pin', 'pin')
+        test('/registration/', 'username')
+        test('/registration/user-type/', 'userType')
+        test('/registration/entropy/', 'entropy')
+        test('/registration/write-phrase/', 'passphrase')
+        test('/registration/email/', 'email')
+        test('/registration/password/', 'password')
+        test('/registration/pin/', 'pin')
       })
     })
   })
@@ -116,7 +116,7 @@ describe('Wallet registration Redux module', function() {
     it('should return null if we cannot continue', () => {
       expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
-          locationBeforeTransitions: {pathname: '/registration/user-type'}
+          locationBeforeTransitions: {pathname: '/registration/user-type/'}
         },
         registration: Immutable.fromJS({userType: {valid: false}})
       }))).to.equal(null)
@@ -656,7 +656,7 @@ describe('Wallet registration Redux module', function() {
         let state = reducer(undefined, '@@INIT')
 
         expect(state.get('email').toJS())
-          .to.deep.equal({value: '', valid: false})
+          .to.deep.equal({value: '', errorMsg: '', valid: false})
       })
 
       it('should correctly update', () => {
@@ -664,7 +664,7 @@ describe('Wallet registration Redux module', function() {
         state = reducer(state, registration.setEmail('test'))
 
         expect(state.get('email').toJS())
-          .to.deep.equal({value: 'test', valid: false})
+          .to.deep.equal({value: 'test', errorMsg: '', valid: false})
       })
 
       it('should correctly detect valid e-mail addresses', () => {
@@ -672,7 +672,7 @@ describe('Wallet registration Redux module', function() {
         state = reducer(state, registration.setEmail('test@test.com'))
 
         expect(state.get('email').toJS())
-          .to.deep.equal({value: 'test@test.com', valid: true})
+          .to.deep.equal({value: 'test@test.com', errorMsg: '', valid: true})
       })
     })
     // describe('setPassphraseWrittenDown', function() {

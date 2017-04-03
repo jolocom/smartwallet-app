@@ -92,10 +92,7 @@ describe('(Component) RegistrationEntropyScreen', function() {
       wrapper.find('Entropy').props().onMouseMovement(2, 2)
       expect(addEntropyFromDeltas.called).to.be.true
       expect(addEntropyFromDeltas.calls).to.deep.equal([{
-        'args': [{
-          x: 2,
-          y: 2
-        }]
+        'args': [{x: 2, y: 2}]
       }])
     }
   )

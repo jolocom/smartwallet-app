@@ -64,6 +64,12 @@ class PinInput extends React.Component {
     confirm: React.PropTypes.bool.isRequired
   }
 
+  constructor(props) {
+    super(props)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.clearAndFocus = this.clearAndFocus.bind(this)
+  }
   componentDidMount() {
     this.refs.input.focus()
   }
@@ -108,7 +114,7 @@ class PinInput extends React.Component {
       ))}
       <div style={{...STYLES.clear}}>
       {(props.value.length > 0) && (!props.confirm) &&
-        <div onClick={() => this.clearAndFocus()}
+        <div onClick={this.clearAndFocus}
           style={{...STYLES.img, ...{
             backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
           }}}
@@ -118,11 +124,11 @@ class PinInput extends React.Component {
 
       <div>
         <input style={STYLES.numberInput}
-          type="number"
+          type="text"
           ref="input"
           value={props.value}
-          onKeyDown={(e) => this.handleKeyDown(e)}
-          onChange={(e) => this.handleChange(e)}
+          onKeyDown={this.handleKeyDown}
+          onChange={this.handleChange}
           onFocus={() => props.onFocusChange(true)}
           onBlur={() => props.onFocusChange(false)}
         />
