@@ -193,7 +193,8 @@ const initialState = Immutable.fromJS({
     checking: false,
     errorMsg: '',
     blank: true,
-    valid: false
+    valid: false,
+    alphaNum: false
   },
   email: {
     value: '',
