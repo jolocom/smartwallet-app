@@ -3,14 +3,18 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/contact'
 
 @connect({
-  props: []
+  props: ['wallet.contact'],
+  actions: ['wallet/contact:saveChanges']
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    saveChanges: React.PropTypes.func.isRequired
   }
 
   render() {
-    return (<Presentation />)
+    return <Presentation
+      onSubmit={this.props.saveChanges}
+    />
   }
 }

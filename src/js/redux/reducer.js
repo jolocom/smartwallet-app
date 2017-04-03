@@ -12,6 +12,7 @@ export default combineReducers({
   registration: require('./modules/registration').default,
   leftNav: require('./modules/left-nav').default,
   wallet: combineReducers({
-    tabs: require('./modules/wallet/tabs').default
+    tabs: require('./modules/wallet/tabs').default,
+    contact: require('./modules/wallet/contact').default
   })
 })
