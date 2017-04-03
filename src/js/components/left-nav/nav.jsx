@@ -39,7 +39,8 @@ let Nav = React.createClass({
     doLogout: React.PropTypes.func.isRequired,
     showLeftNav: React.PropTypes.func.isRequired,
     hideLeftNav: React.PropTypes.func.isRequired,
-    selectItem: React.PropTypes.func.isRequired
+    selectItem: React.PropTypes.func.isRequired,
+    account: React.PropTypes.any
   },
 
   getStyles() {
