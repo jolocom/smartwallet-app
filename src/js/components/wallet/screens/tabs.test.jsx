@@ -6,7 +6,7 @@ import { shallow } from 'enzyme'
 import WalletTabScreen from './tabs'
 import {stub} from '../../../../../test/utils'
 
-describe.only('(Component) WalletTabScreen', function() {
+describe('(Component) WalletTabScreen', function() {
   it('call detectTab with the current path', function() {
     const detectActiveTab = stub()
     const switchTab = stub()
