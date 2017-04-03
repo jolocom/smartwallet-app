@@ -18,21 +18,29 @@ const STYLES = {
 }
 
 @connect({
-  props: []
+  props: ['wallet.tabs.activeTab'],
+  actions: ['wallet/tabs:detectActiveTab', 'wallet/tabs:switchTab']
 })
 @Radium
 export default class WalletTabScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    location: React.PropTypes.object
+    location: React.PropTypes.object,
+    activeTab: React.PropTypes.string,
+
+    detectActiveTab: React.PropTypes.func.isRequired,
+    switchTab: React.PropTypes.func.isRequired
+  }
+
+  componentDidMount() {
+    this.props.detectActiveTab({path: this.props.location.pathname})
+  }
+
+  componentDidUpdate() {
+    this.props.detectActiveTab({path: this.props.location.pathname})
   }
 
   render() {
-    const activeTab = {
-      '/wallet/identity': 'identity',
-      '/wallet/money': 'money'
-    }[this.props.location.pathname] || null
-
     return (
       <Layout>
         <Paper>
@@ -41,7 +49,8 @@ export default class WalletTabScreen extends React.Component {
             style={STYLES.bar}
             iconElementLeft={<LeftNavToggle />}
           />
-          <Tabs value={activeTab}>
+          <Tabs value={this.props.activeTab}
+            onChange={(tab) => this.props.switchTab({tab})}>
             <Tab label="Identity" value="identity" />
             <Tab label="Money" value="money" />
             {/* <Tab label="Health" value="health" /> */}
