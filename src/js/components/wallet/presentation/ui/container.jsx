@@ -8,7 +8,7 @@ const STYLE = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  // textAlign: 'center',
+  textAlign: 'center',
   height: '100%',
   padding: '16px',
   backgroundColor: theme.jolocom.gray4,

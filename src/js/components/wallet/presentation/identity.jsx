@@ -3,6 +3,7 @@ import Radium from 'radium'
 import {Container, Content, Block} from './ui'
 import Info from 'material-ui/svg-icons/action/info'
 import ContentAdd from 'material-ui/svg-icons/content/add'
+import {theme} from 'styles'
 
 import {
   TextField,
@@ -20,7 +21,8 @@ const STYLES = {
     color: 'rgba(75, 19, 43, 0.5)'
   },
   iconName: {
-    top: '40px'
+    top: '40px',
+    fill: theme.palette.accent1Color
   },
   divider: {
     marginLeft: '16px'
@@ -29,6 +31,9 @@ const STYLES = {
     width: '40px',
     boxShadow: 'none',
     marginTop: '27px'
+  },
+  infoHeader: {
+    textAlign: 'left'
   }
 }
 
@@ -46,7 +51,8 @@ export default class WalletIdentity extends React.Component {
             <List>
               <ListItem
                 key={1}
-                rightIcon={<Info style={STYLES.iconName} />}>
+                rightIcon={<Info style={STYLES.iconName} />}
+                disabled>
                 <TextField
                   floatingLabelText="Name"
                   inputStyle={STYLES.inputName}
@@ -66,6 +72,7 @@ export default class WalletIdentity extends React.Component {
                 key={2}
                 disabled
                 primaryText="Contact"
+                style={STYLES.infoHeader}
                 rightIcon={
                   <FloatingActionButton
                     mini
