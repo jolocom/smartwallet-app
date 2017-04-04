@@ -5,9 +5,16 @@ import {Layout} from 'components/layout'
 import {
   EditAppBar,
   EditHeader,
-  Container
+  Container,
+  EditListItem
 } from './ui'
 import {theme} from 'styles'
+import ContentMail from 'material-ui/svg-icons/content/mail'
+import {
+  List,
+  ListItem,
+  TextField
+} from 'material-ui'
 
 const STYLES = {
   title: {
@@ -23,7 +30,9 @@ const STYLES = {
 @Radium
 export default class WalletContact extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    onChange: React.PropTypes.func,
+    email: React.PropTypes.string
   }
 
   render() {
@@ -34,6 +43,15 @@ export default class WalletContact extends React.Component {
           onSave={() => { null }} onClose={() => { null }} />
         <Container>
           <EditHeader title="Contact" />
+          <List>
+            <EditListItem
+              Icon={ContentMail}
+              iconStyle={{top: '40px'}}
+              textLabel="Email Address"
+              textName="email"
+              textValue="a@a.com"
+              onChange={() => { null }} />
+          </List>
         </Container>
       </Layout>
     )
