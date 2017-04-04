@@ -7,7 +7,7 @@ import {stub, withStubs} from '../../../../../test/utils'
 const reducer = require('./tabs').default
 // const helpers = registration.helpers
 
-describe.only('Wallet tabs Redux module', function() {
+describe('Wallet tabs Redux module', function() {
   it('should switch tabs correctly', () => {
     const dispatch = stub()
 
@@ -28,5 +28,18 @@ describe.only('Wallet tabs Redux module', function() {
           .to.deep.equal(['/wallet/money'])
       }
     )
+  })
+
+  it('should correctly detect active tab', function() {
+    let state = reducer(undefined, '@@INIT')
+
+    state = reducer(state, tabs.detectActiveTab({path: '/wallet/identity'}))
+    expect(state.get('activeTab')).to.equal('identity')
+
+    state = reducer(state, tabs.detectActiveTab({path: '/wallet/money'}))
+    expect(state.get('activeTab')).to.equal('money')
+
+    state = reducer(state, tabs.detectActiveTab({path: '/wallet'}))
+    expect(state.get('activeTab')).to.equal(null)
   })
 })
