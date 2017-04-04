@@ -13,12 +13,9 @@ const actions = module.exports = makeActions('wallet/tabs', {
   detectActiveTab: {
     expectedParams: ['path'],
     creator: (params) => {
-      return (dispatch, getState) => {
-        // const state = getState()
-        const cleanPath = params.path.replace(/^(.+)\/+$/, '$1')
-        const activeTab = PATHNAME_TO_TAB[cleanPath] || null
-        dispatch(actions.detectActiveTab.buildAction({path: cleanPath, activeTab}))
-      }
+      const cleanPath = params.path.replace(/^(.+)\/+$/, '$1')
+      const activeTab = PATHNAME_TO_TAB[cleanPath] || null
+      return actions.detectActiveTab.buildAction({path: cleanPath, activeTab})
     }
   },
   switchTab: {
@@ -38,9 +35,6 @@ const initialState = Immutable.fromJS({
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.detectActiveTab.id:
-    console.log(action, state.merge({
-        activeTab: action.activeTab
-      }).toJS())
       return state.merge({
         activeTab: action.activeTab
       })
