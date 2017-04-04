@@ -13,12 +13,9 @@ const actions = module.exports = makeActions('wallet/tabs', {
   detectActiveTab: {
     expectedParams: ['path'],
     creator: (params) => {
-      return (dispatch, getState) => {
-        // const state = getState()
-        const cleanPath = params.path.replace(/^(.+)\/+$/, '$1')
-        const activeTab = PATHNAME_TO_TAB[cleanPath] || null
-        dispatch(actions.detectActiveTab.buildAction({path: cleanPath, activeTab}))
-      }
+      const cleanPath = params.path.replace(/^(.+)\/+$/, '$1')
+      const activeTab = PATHNAME_TO_TAB[cleanPath] || null
+      return actions.detectActiveTab.buildAction({path: cleanPath, activeTab})
     }
   },
   switchTab: {
