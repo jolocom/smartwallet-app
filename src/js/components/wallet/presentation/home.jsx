@@ -24,7 +24,7 @@ export default class WalletHome extends React.Component {
     // TODO replace placeholder img
     return (
       <Container>
-        <img src="/img/img_onboarding-01.svg" />
+        <img src="/img/illu_wallet.svg" />
         <Block>
           <h1 style={STYLES.greeting}>Hi AnnikaH23</h1>
         </Block>
