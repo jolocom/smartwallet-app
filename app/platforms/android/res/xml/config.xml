@@ -4,6 +4,27 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <feature name="FileTransfer">
+        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
+    </feature>
+    <feature name="Notification">
+        <param name="android-package" value="org.apache.cordova.dialogs.Notification" />
+    </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="Zip">
+        <param name="android-package" value="org.apache.cordova.Zip" />
+    </feature>
+    <feature name="CodePush">
+        <param name="android-package" value="com.microsoft.cordova.CodePush" />
+        <param name="onload" value="true" />
+    </feature>
     <name>Jolocom</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -20,5 +41,12 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="market:*" />
+    <icon density="ldpi" src="res/android/ldpi/icon.png" />
+    <icon density="mdpi" src="res/android/mdpi/icon.png" />
+    <icon density="hdpi" src="res/android/hdpi/icon.png" />
+    <icon density="xhdpi" src="res/android/xhdpi/icon.png" />
+    <icon density="xxhdpi" src="res/android/xxhdpi/icon.png" />
+    <icon density="xxxhdpi" src="res/android/xxxhdpi/icon.png" />
     <preference name="loglevel" value="DEBUG" />
+    <preference name="CodePushDeploymentKey" value="YaLoyv3FaE8Yoll11ieegqf2fk_YVkWBGkm5e" />
 </widget>

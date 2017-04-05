@@ -155,12 +155,12 @@ let Index = React.createClass({
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/logo_start.svg)'
+              backgroundImage: 'url(img/logo_start.svg)'
             })} />
           </div>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/img_onboarding-01.svg)'
+              backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
             <h3 style={styles.title}>Create an independant and<br />
             secure digital identity.</h3>
@@ -169,7 +169,7 @@ let Index = React.createClass({
           </div>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/img_onboarding-02.svg)'
+              backgroundImage: 'url(img/img_onboarding-02.svg)'
             })} />
             <h3 style={styles.title}>Have all your data<br />
             at your fingertips.</h3>
@@ -178,7 +178,7 @@ let Index = React.createClass({
           </div>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/img_onboarding-03.svg)'
+              backgroundImage: 'url(img/img_onboarding-03.svg)'
             })} />
             <h3 style={styles.title}>Be aware of the<br />
             information you share.</h3>

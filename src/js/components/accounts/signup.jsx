@@ -231,7 +231,7 @@ let Signup = React.createClass({
           </IconButton>}
           />
         <div style={styles.logo}>
-          <img src="./img/logo.svg" style={styles.logoImg} />
+          <img src="img/logo.svg" style={styles.logoImg} />
         </div>
         {this.props.account.emailVerifyScreen
           ? <div style={styles.contentEmailVerify}>

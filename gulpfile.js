@@ -8,12 +8,20 @@ var webpackConfig = require('./webpack.config.js');
 var webpackConfigProduction = require('./webpack.config.production.js');
 
 var concat = require('gulp-concat');
+var clean = require('gulp-clean');
+var rename = require('gulp-rename');
 
 // The development server (the recommended option for development)
 gulp.task('default', ['webpack-dev-server']);
 
-gulp.task('html', function() {
+gulp.task('html', ['clean'], function() {
   return gulp.src('./src/index.html')
+    .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('html:cordova', ['clean'], function() {
+  return gulp.src('./src/cordova.html')
+	  .pipe(rename('index.html'))
     .pipe(gulp.dest('./dist/'));
 });
 
@@ -28,6 +36,11 @@ gulp.task('data', function(){
     .pipe(gulp.dest('./dist/'));
 });
 
+gulp.task('clean', function () {
+  return gulp.src('./dist/index.html', {read: false})
+    .pipe(clean());
+});
+
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
 // Disadvantage: Requests are not blocked until bundle is available,
@@ -38,6 +51,7 @@ gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'data'], function() 
 
 // Production build
 gulp.task('build', ['webpack:build', 'html', 'img']);
+gulp.task('build:cordova', ['webpack:build', 'html:cordova', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
@@ -67,7 +81,6 @@ gulp.task('webpack:build', function(callback) {
 var myDevConfig = Object.create(webpackConfig);
 myDevConfig.devtool = 'sourcemap';
 myDevConfig.debug = true;
-
 
 // create a single instance of the compiler to allow caching
 var devCompiler = webpack(myDevConfig);
