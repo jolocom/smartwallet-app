@@ -1,15 +1,13 @@
 import React from 'react'
 import Radium from 'radium'
-import {Container, Content, Block} from './ui'
+import {Container, Content, Block, PlusMenu} from './ui'
 import Info from 'material-ui/svg-icons/action/info'
-import ContentAdd from 'material-ui/svg-icons/content/add'
 import {theme} from 'styles'
 
 import {
   TextField,
   Divider,
-  List, ListItem,
-  FloatingActionButton
+  List, ListItem
 } from 'material-ui'
 
 const STYLES = {
@@ -66,24 +64,7 @@ export default class WalletIdentity extends React.Component {
             </List>
           </Block>
           <Block>
-            {/** TODO create separate component **/}
-            <List>
-              <ListItem
-                key={2}
-                disabled
-                primaryText="Contact"
-                style={STYLES.infoHeader}
-                rightIcon={
-                  <FloatingActionButton
-                    mini
-                    secondary
-                    containerElement="label"
-                    style={STYLES.addBtn}>
-                    <ContentAdd />
-                  </FloatingActionButton>
-                } />
-              <Divider style={STYLES.divider} />
-            </List>
+            <PlusMenu name="Contact" />
           </Block>
         </Content>
       {/* <Link to="/wallet/identity/contact"></Link> */}
