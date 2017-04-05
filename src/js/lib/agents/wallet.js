@@ -44,7 +44,7 @@ export default class WalletAgent {
       setTimeout(() => {
         let information = {
           emails: [{address: 'adress1@example.com', verified: true},
-            {adress: 'adress2@example.com', verified: false}],
+            {address: 'adress2@example.com', verified: false}],
           telNums: [{num: '+4917912345678', type: 'work', verified: true},
             {num: '+4917923456789', type: 'personal', verified: false}]
         }
@@ -52,10 +52,87 @@ export default class WalletAgent {
       }, 2000)
     })
   }
+
+  getUsernInformation({email}) {
+    const identity = {
+      webid: 'www.AnnikaHamman.jolocom.com',
+      username: {
+        value: 'AnnikaHamman',
+        verified: false,
+      },
+      phone: [{
+          number: '+49 176 12345678',
+          type: 'mobile',
+          verified: true
+      }],
+      email: [{
+          address: 'info@jolocom.com',
+          type: 'mobile',
+          verified: true
+      }],
+      Repuation: 0,
+      passport: {
+        number: null,
+        givenName: null,
+        familyName: null,
+        birthDate: null,
+        gender: null,
+        street: null,
+        streetAndNumber: null,
+        city: null,
+        zip: null,
+        state: null,
+        country: null
+      }
+    }
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(identity)
+      }, 2000)
+    })
+  }
 }
+
 export class Wallet {
   constructor() {
     this.webID = 'https://demo.webid.jolocom.com/profile/card'
     this.lightWaller = 'something'
+  }
+
+  getUsernInformation({email}) {
+    const identity = {
+      username: {
+        value: 'AnnikaHamman'
+      },
+      phone: [{
+          number: '+49 176 12345678',
+          type: 'mobile',
+          verified: true
+      }],
+      email: [{
+          address: 'info@jolocom.com',
+          type: 'mobile',
+          verified: true
+      }],
+      Repuation: 0,
+      passport: {
+        number: null,
+        givenName: null,
+        familyName: null,
+        birthDate: null,
+        gender: null,
+        street: null,
+        streetAndNumber: null,
+        city: null,
+        zip: null,
+        state: null,
+        country: null
+      }
+    }
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(identity)
+      }, 2000)
+    })
   }
 }

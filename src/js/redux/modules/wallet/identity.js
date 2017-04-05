@@ -1,47 +1,66 @@
-import * as _ from 'lodash'
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 
-const actions = module.exports = makeActions('identity', {
-  getUserData: {
-    expectedParams: []
+const actions = module.exports = makeActions('wallet/identity', {
+  goToContactManagement: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        dispatch(router.pushRoute('/wallet/identity/contact/edit'))
+      }
+    }
   },
-  setUserData: {
-    expectedParams: ['field', 'value']
+  goToPassportManagement: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        dispatch(router.pushRoute('/wallet/identity/passport/add'))
+      }
+    }
   },
-  deleteUserData: {
-    expectedParams: ['field']
+  goToDivingLicenceManagement: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        dispatch(router.pushRoute('/wallet/identity/drivers-licence/add'))
+      }
+    }
   },
-  updateUserData: {
-    expectedParams: ['field', 'value']
+  getIdentityInformation: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.getIdentityInformation.buildAction(params,
+        (backend) => {
+          return backend.wallet.getUsernInformation({email: 'test@test.com'})
+        }))
+      }
+    }
   }
 })
 
+const mapBackendToState = (data) => Immutable.fromJS(data).merge({loaded: true})
+
 const initialState = Immutable.fromJS({
+  loaded: false,
+  webId: null,
   username: {
-    loaded: false,
+    verified: false,
     value: null
-  },
-  phone: {
-    loaded: false,
-    numbers: [{
-      type: null,
-      value: null,
-      verified: false
-    }]
-  },
-  email: {
-    loaded: false,
-    addresses: [{
-      type: null,
-      value: null,
-      changed: false,
-      verified: false
-    }]
-  },
-  passport: {
-    loaded: false,
+    },
+  phone: [{
+    type: null,
+    value: null,
+    verified: false
+  }],
+  email: [{
+    type: null,
+    value: null,
+    verified: false
+  }],
+  passport:{
     number: null,
     givenName: null,
     familyName: null,
@@ -53,20 +72,19 @@ const initialState = Immutable.fromJS({
     city: null,
     zip: null,
     state: null,
-    country: null
+    country: null,
+    verified: false,
   }
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.getUserData.id:
-      return getState()
-    case actions.setUserData.id:
-      return state.set([action.field], action.value)
-    case actions.deleteUserData.id:
+    case actions.getIdentityInformation.id_success:
+      return mapBackendToState(action.result)
+    case actions.getIdentityInformation.id:
       return state
-    case actions.updateUserData.id:
-      state.mergeIn([], {})
+    case actions.getIdentityInformation.id_fail:
+      return state
     default:
       return state
   }
