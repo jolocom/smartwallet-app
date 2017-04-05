@@ -13,6 +13,14 @@ const actions = module.exports = makeActions('wallet/contact', {
       }
     }
   },
+  exitWithoutSaving: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(router.pushRoute('/wallet/identity'))
+      }
+    }
+  },
   getAccountInformation: {
     expectedParams: [],
     async: true,
@@ -27,38 +35,42 @@ const actions = module.exports = makeActions('wallet/contact', {
   },
   setInformation: {
     expectedParams: ['field', 'index', 'value']
+  },
+  deleteInformation: {
+    expectedParams: ['field', 'index']
   }
 })
 
 const initialState = Immutable.fromJS({
+  newInformation: {
+    emails: []
+  }
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.getAccountInformation.id_success:
       let initialState = {
-        originalInformation: action.result,
-        information: action.result
+        originalInformation: action.result
       }
       // let prop
       // console.log(action.result)
-      for (let prop in initialState.information) {
-        for (let i = 0; i < initialState.information[prop].length; i++) {
-          initialState.information[prop][i].delete = false
-          initialState.information[prop][i].update = false
+      for (let prop in initialState.originalInformation) {
+        for (let i = 0; i < initialState.originalInformation[prop].length; i++) { // eslint-disable-line max-len
+          initialState.originalInformation[prop][i].delete = false
+          // initialState.originalInformation[prop][i].update = false
         }
       }
       // console.log(Immutable.fromJS(action.result).toJS())
-      return Immutable.fromJS(initialState)
-      // console.log(action.result)
+      return state.merge(Immutable.fromJS(initialState))
+
     case actions.setInformation.id:
-      console.log(action)
-      let update = state.getIn(['originalInformation',
-        action.field, action.index, 'address']) !== action.value
-      state = state.setIn(['information',
-        action.field, action.index, 'address'], action.value)
-      return state.setIn(['information',
-        action.field, action.index, 'update'], update)
+      return state.setIn(['newInformation',
+        action.field, action.index], action.value)
+
+    case actions.deleteInformation.id:
+      return state.setIn(['originalInformation',
+        action.field, action.index, 'delete'], true)
     default:
       return state
   }

@@ -10,17 +10,22 @@ export default class WalletContact extends React.Component {
     children: React.PropTypes.node,
     onSubmit: React.PropTypes.func.isRequired,
     action: React.PropTypes.func.isRequired,
-    setInformation: React.PropTypes.func.isRequired
+    setInformation: React.PropTypes.func.isRequired,
+    deleteInformation: React.PropTypes.func.isRequired
   }
 
   render() {
     return (
       <div>
         <div onClick={this.props.action}>
-        contact
+        getAccountInformation
         </div>
-        <div onClick={() => this.props.setInformation('emails', '0', 'qwee')}>
+        <div onClick={() => this.props.setInformation('emails', '0',
+          {adress: 'qwee'})}>
         setEmail
+        </div>
+        <div onClick={() => this.props.deleteInformation('emails', '0')}>
+        deleteEmail
         </div>
       </div>
     )
