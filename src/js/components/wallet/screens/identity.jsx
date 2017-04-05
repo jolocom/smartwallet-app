@@ -25,10 +25,9 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   render() {
-    return (<div>
-      Identity<br />
-      {/* <Link to="/wallet/identity/contact"></Link> */}
-      <a onClick={ this.props.goToContactManagement }> name : {this.props.wallet.identity.username.value}</a>
-    </div>)
+
+    return (
+      <Presentation />
+    )
   }
 }

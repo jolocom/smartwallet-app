@@ -1,6 +1,11 @@
+var path = require('path')
 var webpackConfig = require('./webpack.config.test.js')
 
 module.exports = function (config) {
+  webpackConfig.resolve.alias.routes = path.join(
+		__dirname, 'src', 'js', 'routes', 'default'
+	)
+
   config.set({
     browsers: [ 'PhantomJS' ],
     singleRun: true, // just run once by default
