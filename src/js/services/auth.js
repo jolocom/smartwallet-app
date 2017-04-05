@@ -2,6 +2,9 @@ export default class AuthService {
   constructor(backend) {
     this.backend = backend
     this.currentUser = null
+    this.currentUser = {
+      wallet: new (require('../lib/agents/wallet').Wallet)()
+    }
   }
 
   async registerWithSeedPhrase({userName, seedPhrase}) {
