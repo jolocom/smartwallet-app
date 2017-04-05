@@ -27,7 +27,10 @@ export default class WalletIdentityScreen extends React.Component {
   render() {
 
     return (
-      <Presentation />
+      <Presentation
+        username={this.props.wallet.identity.username.value}
+        isUsernameValide={this.props.wallet.identity.username.valid}
+      />
     )
   }
 }

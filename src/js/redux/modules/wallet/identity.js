@@ -31,10 +31,10 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {backend, services}) => {
+      return (dispatch, getState, {services}) => {
         dispatch(actions.getIdentityInformation.buildAction(params,
-        (backend) => {
-          return backend.wallet.getUsernInformation({email: 'test@test.com'})
+        () => {
+          return services.auth.currentUser.wallet.getUserInformation({email: 'test@test.com'})
         }))
       }
     }

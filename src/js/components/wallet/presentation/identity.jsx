@@ -38,7 +38,9 @@ const STYLES = {
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    username: React.PropTypes.string.isRequired,
+    isUsernameValid: React.PropTypes.bool.isRequired
   }
 
   render() {
@@ -57,7 +59,7 @@ export default class WalletIdentity extends React.Component {
                   floatingLabelStyle={STYLES.labelName}
                   underlineShow={false}
                   floatingLabelFixed
-                  value="Annika Hamann"
+                  value={this.props.username}
                 />
               </ListItem>
               <Divider style={STYLES.divider} />
