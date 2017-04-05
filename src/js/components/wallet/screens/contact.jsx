@@ -7,7 +7,8 @@ import Presentation from '../presentation/contact'
   actions: ['wallet/contact:saveChanges',
     'wallet/contact:getAccountInformation',
     'wallet/contact:setInformation',
-    'wallet/contact:deleteInformation']
+    'wallet/contact:deleteInformation',
+    'wallet/contact:updateInformation']
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
@@ -15,15 +16,17 @@ export default class WalletContactScreen extends React.Component {
     saveChanges: React.PropTypes.func.isRequired,
     getAccountInformation: React.PropTypes.func.isRequired,
     setInformation: React.PropTypes.func.isRequired,
-    deleteInformation: React.PropTypes.func.isRequired
+    deleteInformation: React.PropTypes.func.isRequired,
+    updateInformation: React.PropTypes.func.isRequired
   }
 
   render() {
     return <Presentation
       onSubmit={this.props.saveChanges}
-      action={this.props.getAccountInformation}
+      getAccountInformation={this.props.getAccountInformation}
       setInformation={this.props.setInformation}
       deleteInformation={this.props.deleteInformation}
+      updateInformation={this.props.updateInformation}
     />
   }
 }

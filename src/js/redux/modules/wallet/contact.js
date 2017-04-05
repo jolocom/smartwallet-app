@@ -38,6 +38,9 @@ const actions = module.exports = makeActions('wallet/contact', {
   },
   deleteInformation: {
     expectedParams: ['field', 'index']
+  },
+  updateInformation: {
+    expectedParams: ['field', 'index', 'value']
   }
 })
 
@@ -71,6 +74,19 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.deleteInformation.id:
       return state.setIn(['originalInformation',
         action.field, action.index, 'delete'], true)
+
+    case actions.updateInformation.id:
+      if (state.getIn(['originalInformation',
+        action.field, action.index, 'verified']) === false) {
+        state = state.setIn(['originalInformation',
+          action.field, action.index, 'update'], true)
+        if (action.field === 'emails') {
+          state = state.setIn(['originalInformation',
+            action.field, action.index, 'adress'], action.value)
+        }
+      }
+      return state
+
     default:
       return state
   }
