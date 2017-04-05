@@ -39,9 +39,15 @@ const STYLES = {
 export default class WalletIdentity extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    username: React.PropTypes.string.isRequired,
-    isUsernameValid: React.PropTypes.bool.isRequired
-  }
+    username: React.PropTypes.object.isRequired,
+    email: React.PropTypes.object.isRequired,
+    passport: React.PropTypes.object.isRequired,
+    isLoaded: React.PropTypes.bool.isRequired,
+    phone:  React.PropTypes.object.isRequired,
+    goToContactManagement: React.PropTypes.func.isRequired,
+    goToPassportManagement: React.PropTypes.func.isRequired,
+    goToDivingLicenceManagement: React.PropTypes.func.isRequired
+}
 
   render() {
     return (
@@ -59,14 +65,20 @@ export default class WalletIdentity extends React.Component {
                   floatingLabelStyle={STYLES.labelName}
                   underlineShow={false}
                   floatingLabelFixed
-                  value={this.props.username}
+                  value={this.props.username.value}
                 />
               </ListItem>
               <Divider style={STYLES.divider} />
             </List>
           </Block>
           <Block>
-            <PlusMenu name="Contact" />
+            <PlusMenu name="Contact" onClick={this.props.goToContactManagement} />
+          </Block>
+          <Block>
+            <PlusMenu name="Passport" onClick={ this.props.goToPassportManagement}/>
+          </Block>
+          <Block>
+            <PlusMenu name="Diving Licnece" onClick={ this.props.goToDivingLicenceManagement}/>
           </Block>
         </Content>
       {/* <Link to="/wallet/identity/contact"></Link> */}

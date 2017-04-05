@@ -7,7 +7,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: [],
     creator: () => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/identity/contact/edit'))
+        dispatch(router.pushRoute('/wallet/identity/contact'))
       }
     }
   },
@@ -15,7 +15,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: [],
     creator: () => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/identity/passport/add'))
+        dispatch(router.pushRoute('/wallet/identity/passport'))
       }
     }
   },
@@ -23,7 +23,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: [],
     creator: () => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/identity/drivers-licence/add'))
+        dispatch(router.pushRoute('/wallet/identity/drivers-licence'))
       }
     }
   },
@@ -45,34 +45,34 @@ const mapBackendToState = (data) => Immutable.fromJS(data).merge({loaded: true})
 
 const initialState = Immutable.fromJS({
   loaded: false,
-  webId: null,
+  webId: '',
   username: {
     verified: false,
-    value: null
+    value: ''
     },
   phone: [{
-    type: null,
-    value: null,
+    type: '',
+    value: '',
     verified: false
   }],
   email: [{
-    type: null,
-    value: null,
+    type: '',
+    value: '',
     verified: false
   }],
   passport:{
-    number: null,
-    givenName: null,
-    familyName: null,
-    birthDate: null,
-    age: null,
-    gender: null,
-    showAddress: null,
-    streetAndNumber: null,
-    city: null,
-    zip: null,
-    state: null,
-    country: null,
+    number: '',
+    givenName: '',
+    familyName: '',
+    birthDate: '',
+    age: '',
+    gender: '',
+    showAddress: '',
+    streetAndNumber: '',
+    city: '',
+    zip: '',
+    state: '',
+    country: '',
     verified: false,
   }
 })
