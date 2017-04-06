@@ -30,9 +30,8 @@ export default class WalletIdentityScreen extends React.Component {
     return (
       <Presentation
         username={identity.username}
-        phone={identity.phone[0]}
+        contact={identity.contact}
         webId={identity.webId}
-        email={identity.email[0]}
         passport={identity.passport}
         isLoaded={identity.loaded}
         goToContactManagement={this.props.goToContactManagement}

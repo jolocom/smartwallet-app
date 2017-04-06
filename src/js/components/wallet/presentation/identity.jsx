@@ -40,10 +40,9 @@ export default class WalletIdentity extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     username: React.PropTypes.object.isRequired,
-    email: React.PropTypes.object.isRequired,
     passport: React.PropTypes.object.isRequired,
     isLoaded: React.PropTypes.bool.isRequired,
-    phone:  React.PropTypes.object.isRequired,
+    contact:  React.PropTypes.object.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
     goToDivingLicenceManagement: React.PropTypes.func.isRequired
@@ -86,3 +85,13 @@ export default class WalletIdentity extends React.Component {
     )
   }
 }
+// const Field = (props) => {
+//   if (props.isEmpty) {
+//     return ( <Block>
+//       <PlusMenu name={props.name} onClick={props.action} />
+//       </Block>
+//   )
+//   } else {
+//       return <PlusMenu name={props.name} onClick={props.action} value={props.value}/>
+//     }
+// }

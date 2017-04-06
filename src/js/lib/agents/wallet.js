@@ -62,19 +62,23 @@ export class Wallet {
 
   getUserInformation({email}) {
     const identity = {
+      webid: 'https://demo.webid.jolocom.com/profile/card',
       username: {
-        value: 'AnnikaHamman'
+        value: 'AnnikaHamman',
+        verified: ''
       },
-      phone: [{
+      contact: {
+        phone: [{
           number: '+49 176 12345678',
           type: 'mobile',
           verified: true
-      }],
-      email: [{
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: true
-      }],
+        }],
+        email: [{
+            address: 'info@jolocom.com',
+            type: 'mobile',
+            verified: true
+        }]
+      },
       Repuation: 0,
       passport: {
         number: null,

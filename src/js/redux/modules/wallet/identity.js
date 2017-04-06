@@ -50,16 +50,18 @@ const initialState = Immutable.fromJS({
     verified: false,
     value: ''
     },
-  phone: [{
-    type: '',
-    value: '',
-    verified: false
-  }],
-  email: [{
-    type: '',
-    value: '',
-    verified: false
-  }],
+  contact: {
+    phone: [{
+      type: '',
+      value: '',
+      verified: false
+    }],
+    email: [{
+      type: '',
+      value: '',
+      verified: false
+    }]
+  },
   passport:{
     number: '',
     givenName: '',
@@ -73,7 +75,7 @@ const initialState = Immutable.fromJS({
     zip: '',
     state: '',
     country: '',
-    verified: false,
+    verified: false
   }
 })
 
