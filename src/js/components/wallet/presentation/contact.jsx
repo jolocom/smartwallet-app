@@ -36,7 +36,9 @@ export default class WalletContact extends React.Component {
     onChange: React.PropTypes.func,
     contact: React.PropTypes.object,
     focused: React.PropTypes.string,
-    onFocusChange: React.PropTypes.func
+    onFocusChange: React.PropTypes.func,
+    information: React.PropTypes.object,
+    getAccountInformation: React.PropTypes.func
   }
 
   componentDidMount() {
@@ -44,6 +46,30 @@ export default class WalletContact extends React.Component {
   }
 
   render() {
+    let fields
+    for (let age in this.props.information) {
+      fields = this.props.information[age].emails.map(
+        (email) => {
+          return (
+            <Block key={email.address}>
+              <EditListItem
+                id={email.address}
+                icon={ContentMail}
+                iconStyle={STYLES.icon}
+                textLabel="Email Address"
+                textName="email"
+                textValue={email.address}
+                focused={this.props.focused === email.address}
+                onFocusChange={this.props.onFocusChange}
+                onChange={this.props.onChange} />
+            </Block>
+          )
+        }
+      )
+    }
+    // fields = [<div key="key1">blah1</div>, <div key="key2">blah2</div>]
+
+    console.log(fields)
     return (
       <Container>
         <EditAppBar title="Edit Contact"
@@ -51,7 +77,7 @@ export default class WalletContact extends React.Component {
         <Content>
           <EditHeader title="Contact" />
           <List>
-            <Block>
+            {/* <Block>
               <EditListItem
                 id={this.props.contact.id}
                 icon={ContentMail}
@@ -62,7 +88,8 @@ export default class WalletContact extends React.Component {
                 focused={this.props.focused === this.props.contact.id}
                 onFocusChange={this.props.onFocusChange}
                 onChange={this.props.onChange} />
-            </Block>
+            </Block> */}
+            {fields}
           </List>
         </Content>
       </Container>

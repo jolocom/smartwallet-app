@@ -16,7 +16,8 @@ export default class WalletContactScreen extends React.Component {
     contact: React.PropTypes.object,
     onChange: React.PropTypes.func,
     focused: React.PropTypes.string,
-    setFocused: React.PropTypes.func
+    setFocused: React.PropTypes.func,
+    getAccountInformation: React.PropTypes.func
   }
   constructor() {
     super()
@@ -43,6 +44,8 @@ export default class WalletContactScreen extends React.Component {
         onChange={this.state.onChange}
         focused={this.state.focused}
         onFocusChange={this.state.onFocusChange}
+        information={this.props.contact}
+        getAccountInformation={this.props.getAccountInformation}
       />
     )
   }
