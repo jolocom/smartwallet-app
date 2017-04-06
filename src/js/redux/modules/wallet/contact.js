@@ -6,10 +6,37 @@ import * as router from '../router'
 const actions = module.exports = makeActions('wallet/contact', {
   saveChanges: {
     expectedParams: [],
+    async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/identity'))
+        // dispatch(router.pushRoute('/wallet/identity'))
         // dispatch(router.pushRoute('/wallet/identity/contact'))
+    //     let promises = []
+    //     const state = getState().toJS()
+    //     for (let prop in state.originalInformation) {
+    //       for (let i = 0; i < state.originalInformation[prop].length; i++) {
+    //
+    //       }
+    //     }
+    //   }
+        dispatch(actions.getAccountInformation.buildAction(params, (backend) => { //eslint-disable-line
+          let promises = []
+          const state = getState().toJS()
+          for (let prop in state.originalInformation) {
+            for (let i = 0; i < state.originalInformation[prop].length; i++) {
+              if (state.originalInformation[prop][i].delete) {
+                promises.push(
+                  backend.wallet.deleteEmail(
+                    state.originalInformation[prop][i].address))
+              } else if (state.originalInformation[prop][i].update) {
+                promises.push(
+                  backend.wallet.updateEmail(
+                    state.originalInformation[prop][i].address))
+              }
+            }
+          }
+          return Promise.all(promises)
+        }))
       }
     }
   },
@@ -61,7 +88,7 @@ module.exports.default = (state = initialState, action = {}) => {
       for (let prop in initialState.originalInformation) {
         for (let i = 0; i < initialState.originalInformation[prop].length; i++) { // eslint-disable-line max-len
           initialState.originalInformation[prop][i].delete = false
-          // initialState.originalInformation[prop][i].update = false
+          initialState.originalInformation[prop][i].update = false
         }
       }
       // console.log(Immutable.fromJS(action.result).toJS())
@@ -82,7 +109,7 @@ module.exports.default = (state = initialState, action = {}) => {
           action.field, action.index, 'update'], true)
         if (action.field === 'emails') {
           state = state.setIn(['originalInformation',
-            action.field, action.index, 'adress'], action.value)
+            action.field, action.index, 'address'], action.value)
         }
       }
       return state

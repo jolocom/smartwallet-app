@@ -3,7 +3,7 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/contact'
 
 @connect({
-  props: ['wallet'],
+  props: ['wallet.contact'],
   actions: ['wallet/contact:saveChanges',
     'wallet/contact:getAccountInformation',
     'wallet/contact:setInformation',
@@ -17,16 +17,19 @@ export default class WalletContactScreen extends React.Component {
     getAccountInformation: React.PropTypes.func.isRequired,
     setInformation: React.PropTypes.func.isRequired,
     deleteInformation: React.PropTypes.func.isRequired,
-    updateInformation: React.PropTypes.func.isRequired
+    updateInformation: React.PropTypes.func.isRequired,
+    contact: React.PropTypes.object.isRequired
   }
 
   render() {
+    // console.log(this.props.contact)
     return <Presentation
       onSubmit={this.props.saveChanges}
       getAccountInformation={this.props.getAccountInformation}
       setInformation={this.props.setInformation}
       deleteInformation={this.props.deleteInformation}
       updateInformation={this.props.updateInformation}
+      information={this.props.contact}
     />
   }
 }
