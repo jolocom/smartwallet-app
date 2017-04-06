@@ -4,6 +4,8 @@ import {RaisedButton, IconButton} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 
+import {routes} from 'routes'
+
 let Index = React.createClass({
   contextTypes: {
     router: React.PropTypes.object,
@@ -223,7 +225,7 @@ let Index = React.createClass({
   },
 
   _handleSignup() {
-    this.context.router.push('/signup')
+    this.context.router.push(routes.signup)
   },
 
   _handleLogin() {

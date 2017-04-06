@@ -1,13 +1,17 @@
 import React from 'react'
 import Radium from 'radium'
 
-let Spacer = React.createClass({
+@Radium
+export default class Spacer extends React.Component {
+  static propTypes = {
+    children: React.PropTypes.node
+  }
 
   getStyles() {
     return {
       flex: '1'
     }
-  },
+  }
 
   render() {
     return (
@@ -16,7 +20,4 @@ let Spacer = React.createClass({
       </div>
     )
   }
-
-})
-
-export default Radium(Spacer)
+}

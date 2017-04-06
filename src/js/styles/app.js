@@ -11,7 +11,7 @@ const STYLES = {
   smallNodeSize: window.innerWidth / 4.7,
   largeNodeSize: window.innerWidth / 3.5,
   graphCanvasHeight: window.innerHeight - 118,
-  fullScreenButton: null ,
+  fullScreenButton: null,
   fullScreenButtonPosition: 2.8,
   tempCold: '#5E35B1',
   tempCool: '#039BE5',
@@ -20,7 +20,11 @@ const STYLES = {
   tempHot: '#E53935'
 }
 
-STYLES.largeNodeSize = STYLES.largeNodeSize > 150 ? 150 : STYLES.largeNodeSize
-STYLES.smallNodeSize = STYLES.smallNodeSize > 120 ? 120 : STYLES.smallNodeSize
-STYLES.fullScreenButton = STYLES.smallNodeSize/2.5 < 44 ? 44 : STYLES.smallNodeSize/2.5
+STYLES.largeNodeSize = STYLES.largeNodeSize > 150
+  ? 150 : STYLES.largeNodeSize
+STYLES.smallNodeSize = STYLES.smallNodeSize > 120
+  ? 120 : STYLES.smallNodeSize
+STYLES.fullScreenButton = STYLES.smallNodeSize / 2.5 < 44
+  ? 44 : STYLES.smallNodeSize / 2.5
+
 export default STYLES

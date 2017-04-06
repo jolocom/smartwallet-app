@@ -30,12 +30,14 @@ export default Reflux.createStore({
       this.trigger({
         nodes: this.nodes
       })
-    } catch(e) {console.error(e)}
+    } catch (e) {
+      console.error(e)
+    }
   },
   getStoredNodes() {
     try {
       return JSON.parse(localStorage.getItem('jlc.pinned')) || []
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       return []
     }
@@ -48,7 +50,8 @@ export default Reflux.createStore({
   },
   // onPin(node) {
   //   // FIXME: not guaranteed to be unique
-  //   if (this.nodes.filter((n) => n.name && n.name == node.name).length != 0) {
+  //   if (
+  //    this.nodes.filter((n) => n.name && n.name == node.name).length != 0) {
   //     console.log('Node is already pinned!')
   //     return
   //   }

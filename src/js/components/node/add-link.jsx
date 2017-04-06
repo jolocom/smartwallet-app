@@ -403,7 +403,12 @@ let NodeTarget = React.createClass({
   },
 
   _handleFieldChange(e) {
-    this.props.onChange(e.target.value)
+    let value = e.target.value
+    if (value.match(/^http/i)) {
+      value = value.toLowerCase()
+    }
+
+    this.props.onChange(value)
   },
 
   _handleTouchTap() {
