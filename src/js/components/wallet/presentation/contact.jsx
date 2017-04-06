@@ -38,7 +38,10 @@ export default class WalletContact extends React.Component {
     focused: React.PropTypes.string,
     onFocusChange: React.PropTypes.func,
     information: React.PropTypes.object,
-    getAccountInformation: React.PropTypes.func
+    getAccountInformation: React.PropTypes.func,
+    updateInformation: React.PropTypes.func,
+    setInformation: React.PropTypes.func,
+    exitWithoutSaving: React.PropTypes.func
   }
 
   componentDidMount() {
@@ -46,22 +49,25 @@ export default class WalletContact extends React.Component {
   }
 
   render() {
-    let fields
+    let emailFields
     for (let age in this.props.information) {
-      fields = this.props.information[age].emails.map(
-        (email) => {
+      emailFields = this.props.information[age].emails.map(
+        (email, i) => {
           return (
-            <Block key={email.address}>
+            <Block key={age + 'emails' + i}>
               <EditListItem
-                id={email.address}
+                id={age + 'emails' + i}
                 icon={ContentMail}
                 iconStyle={STYLES.icon}
                 textLabel="Email Address"
                 textName="email"
                 textValue={email.address}
-                focused={this.props.focused === email.address}
+                focused={this.props.focused === age + 'emails' + i}
                 onFocusChange={this.props.onFocusChange}
-                onChange={this.props.onChange} />
+                onChange={age === 'originalInformation'
+                ? (e) => this.props.updateInformation('emails', i, e.target.value) //eslint-disable-line
+                : (e) => this.props.setInformation('emails', i, e.target.value)
+              } />
             </Block>
           )
         }
@@ -69,11 +75,11 @@ export default class WalletContact extends React.Component {
     }
     // fields = [<div key="key1">blah1</div>, <div key="key2">blah2</div>]
 
-    console.log(fields)
+    // console.log(fields)
     return (
       <Container>
         <EditAppBar title="Edit Contact"
-          onSave={() => { null }} onClose={() => { null }} />
+          onSave={() => { null }} onClose={this.props.exitWithoutSaving} />
         <Content>
           <EditHeader title="Contact" />
           <List>
@@ -89,7 +95,7 @@ export default class WalletContact extends React.Component {
                 onFocusChange={this.props.onFocusChange}
                 onChange={this.props.onChange} />
             </Block> */}
-            {fields}
+            {emailFields}
           </List>
         </Content>
       </Container>

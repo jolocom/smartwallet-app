@@ -8,7 +8,8 @@ import Presentation from '../presentation/contact'
     'wallet/contact:getAccountInformation',
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
-    'wallet/contact:updateInformation']
+    'wallet/contact:updateInformation',
+    'wallet/contact:exitWithoutSaving']
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
@@ -17,7 +18,10 @@ export default class WalletContactScreen extends React.Component {
     onChange: React.PropTypes.func,
     focused: React.PropTypes.string,
     setFocused: React.PropTypes.func,
-    getAccountInformation: React.PropTypes.func
+    getAccountInformation: React.PropTypes.func,
+    updateInformation: React.PropTypes.func,
+    setInformation: React.PropTypes.func,
+    exitWithoutSaving: React.PropTypes.func
   }
   constructor() {
     super()
@@ -30,8 +34,7 @@ export default class WalletContactScreen extends React.Component {
           'b@b.com'
         ]
       },
-      focused: 'email1',
-      onChange: () => { null },
+      focused: 'address1@example.com',
       onFocusChange: (value) => {
         this.setState({focused: value})
       }
@@ -46,6 +49,9 @@ export default class WalletContactScreen extends React.Component {
         onFocusChange={this.state.onFocusChange}
         information={this.props.contact}
         getAccountInformation={this.props.getAccountInformation}
+        updateInformation={this.props.updateInformation}
+        setInformation={this.props.setInformation}
+        exitWithoutSaving={this.props.exitWithoutSaving}
       />
     )
   }
