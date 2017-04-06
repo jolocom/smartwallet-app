@@ -77,6 +77,16 @@ export class Wallet {
             address: 'info@jolocom.com',
             type: 'mobile',
             verified: true
+        },
+        {
+            address: 'info@jolocom.com',
+            type: 'mobile',
+            verified: false
+        },
+        {
+            address: 'info@jolocom.com',
+            type: 'mobile',
+            verified: true
         }]
       },
       Repuation: 0,
