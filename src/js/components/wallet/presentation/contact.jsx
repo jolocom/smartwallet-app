@@ -1,19 +1,17 @@
 import React from 'react'
 import Radium from 'radium'
-import {Layout} from 'components/layout'
-
 import {
   EditAppBar,
   EditHeader,
   Container,
+  Content,
+  Block,
   EditListItem
 } from './ui'
 import {theme} from 'styles'
 import ContentMail from 'material-ui/svg-icons/content/mail'
 import {
-  List,
-  ListItem,
-  TextField
+  List
 } from 'material-ui'
 
 const STYLES = {
@@ -24,6 +22,10 @@ const STYLES = {
   },
   titleDivider: {
     marginTop: '10px'
+  },
+  icon: {
+    top: '40px',
+    marginRight: '40px'
   }
 }
 
@@ -32,28 +34,34 @@ export default class WalletContact extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     onChange: React.PropTypes.func,
-    email: React.PropTypes.string
+    contact: React.PropTypes.object,
+    focused: React.PropTypes.string,
+    onFocusChange: React.PropTypes.func
   }
 
   render() {
     return (
-
-      <Layout fixedHeader>
+      <Container>
         <EditAppBar title="Edit Contact"
           onSave={() => { null }} onClose={() => { null }} />
-        <Container>
+        <Content>
           <EditHeader title="Contact" />
           <List>
-            <EditListItem
-              Icon={ContentMail}
-              iconStyle={{top: '40px'}}
-              textLabel="Email Address"
-              textName="email"
-              textValue="a@a.com"
-              onChange={() => { null }} />
+            <Block>
+              <EditListItem
+                id={this.props.contact.id}
+                icon={ContentMail}
+                iconStyle={STYLES.icon}
+                textLabel="Email Address"
+                textName="email"
+                textValue={this.props.contact.emails[0]}
+                focused={this.props.focused === this.props.contact.id}
+                onFocusChange={this.props.onFocusChange}
+                onChange={this.props.onChange} />
+            </Block>
           </List>
-        </Container>
-      </Layout>
+        </Content>
+      </Container>
     )
   }
 }
