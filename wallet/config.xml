@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.jolocom.wallet" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Wallet</name>
+    <description>
+        A self-sovereign blockchain-enabled identify
+    </description>
+    <author email="info@jolocom.com" href="http://www.jolocom.com">
+        Jolocom Team
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <preference name="CodePushDeploymentKey" value="YaLoyv3FaE8Yoll11ieegqf2fk_YVkWBGkm5e" />
+        <icon density="ldpi" src="res/android/ldpi/icon.png" />
+        <icon density="mdpi" src="res/android/mdpi/icon.png" />
+        <icon density="hdpi" src="res/android/hdpi/icon.png" />
+        <icon density="xhdpi" src="res/android/xhdpi/icon.png" />
+        <icon density="xxhdpi" src="res/android/xxhdpi/icon.png" />
+        <icon density="xxxhdpi" src="res/android/xxxhdpi/icon.png" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <preference name="CodePushDeploymentKey" value="PtVM-Mez6bYbitXdE88YeYZvUNfzVkWBGkm5e" />
+        <icon height="180" src="res/ios/app-icon@180x180.png" width="180" />
+        <icon height="60" src="res/ios/app-icon@60x60.png" width="60" />
+        <icon height="120" src="res/ios/app-icon@120x120.png" width="120" />
+        <icon height="76" src="res/ios/app-icon@76x76.png" width="76" />
+        <icon height="152" src="res/ios/app-icon@152x152.png" width="152" />
+        <icon height="40" src="res/ios/app-icon@80x80.png" width="40" />
+        <icon height="80" src="res/ios/app-icon@80x80.png" width="80" />
+        <icon height="29" src="res/ios/app-icon@29x29.png" width="29" />
+        <icon height="58" src="res/ios/app-icon@58x58.png" width="58" />
+        <icon height="50" src="res/ios/app-icon@50x50.png" width="50" />
+        <icon height="100" src="res/ios/app-icon@120x120.png" width="100" />
+        <icon height="167" src="res/ios/app-icon@167x167.png" width="167" />
+    </platform>
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-code-push" spec="~1.9.3-beta" />
+</widget>
