@@ -13,23 +13,37 @@ import Presentation from '../presentation/contact'
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    saveChanges: React.PropTypes.func.isRequired,
-    getAccountInformation: React.PropTypes.func.isRequired,
-    setInformation: React.PropTypes.func.isRequired,
-    deleteInformation: React.PropTypes.func.isRequired,
-    updateInformation: React.PropTypes.func.isRequired,
-    contact: React.PropTypes.object.isRequired
+    contact: React.PropTypes.object,
+    onChange: React.PropTypes.func,
+    focused: React.PropTypes.string,
+    setFocused: React.PropTypes.func
   }
+  constructor() {
+    super()
 
+    this.state = {
+      contact: {
+        id: 'email1',
+        emails: [
+          'a@a.com',
+          'b@b.com'
+        ]
+      },
+      focused: 'email1',
+      onChange: () => { null },
+      onFocusChange: (value) => {
+        this.setState({focused: value})
+      }
+    }
+  }
   render() {
-    // console.log(this.props.contact)
-    return <Presentation
-      onSubmit={this.props.saveChanges}
-      getAccountInformation={this.props.getAccountInformation}
-      setInformation={this.props.setInformation}
-      deleteInformation={this.props.deleteInformation}
-      updateInformation={this.props.updateInformation}
-      information={this.props.contact}
-    />
+    return (
+      <Presentation
+        contact={this.state.contact}
+        onChange={this.state.onChange}
+        focused={this.state.focused}
+        onFocusChange={this.state.onFocusChange}
+      />
+    )
   }
 }
