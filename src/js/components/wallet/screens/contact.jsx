@@ -9,51 +9,48 @@ import Presentation from '../presentation/contact'
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
     'wallet/contact:updateInformation',
-    'wallet/contact:exitWithoutSaving']
+    'wallet/contact:exitWithoutSaving',
+    'wallet/contact:saveChanges',
+    'wallet/contact:addNewEntry']
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     contact: React.PropTypes.object,
-    onChange: React.PropTypes.func,
-    focused: React.PropTypes.string,
-    setFocused: React.PropTypes.func,
     getAccountInformation: React.PropTypes.func,
     updateInformation: React.PropTypes.func,
     setInformation: React.PropTypes.func,
+    deleteInformation: React.PropTypes.func,
     exitWithoutSaving: React.PropTypes.func,
-    loading: React.PropTypes.bool
+    saveChanges: React.PropTypes.func,
+    addNewEntry: React.PropTypes.func
   }
   constructor() {
     super()
 
     this.state = {
-      contact: {
-        id: 'email1',
-        emails: [
-          'a@a.com',
-          'b@b.com'
-        ]
-      },
-      focused: 'address1@example.com',
+      focused: '',
       onFocusChange: (value) => {
         this.setState({focused: value})
       }
     }
   }
+  componentDidMount() {
+    this.props.getAccountInformation()
+  }
   render() {
     return (
       <Presentation
-        contact={this.state.contact}
         onChange={this.state.onChange}
         focused={this.state.focused}
         onFocusChange={this.state.onFocusChange}
-        information={this.props.contact}
-        getAccountInformation={this.props.getAccountInformation}
+        information={this.props.contact.information}
+        loading={this.props.contact.loading}
         updateInformation={this.props.updateInformation}
         setInformation={this.props.setInformation}
         exitWithoutSaving={this.props.exitWithoutSaving}
-        loading={this.props.loading}
+        saveChanges={this.props.saveChanges}
+        addNewEntry={this.props.addNewEntry}
       />
     )
   }

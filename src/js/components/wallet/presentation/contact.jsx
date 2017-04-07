@@ -42,50 +42,83 @@ export default class WalletContact extends React.Component {
     updateInformation: React.PropTypes.func,
     setInformation: React.PropTypes.func,
     exitWithoutSaving: React.PropTypes.func,
-    loading: React.PropTypes.bool
-  }
-
-  componentDidMount() {
-    this.props.getAccountInformation()
+    saveChanges: React.PropTypes.func,
+    loading: React.PropTypes.bool,
+    addNewEntry: React.PropTypes.func
   }
 
   render() {
-    let emailFields
-    for (let age in this.props.information) {
-      emailFields = this.props.information[age].emails.map(
+    let emailFields = []
+    // console.log(emailFields)
+    if (this.props.loading === false) {
+      emailFields.push(this.props.information.originalInformation.emails.map(
+      (email, i) => {
+        return (
+          <Block key={'originalInformation' + 'emails' + i}>
+            <EditListItem
+              id={'originalInformation' + 'emails' + i}
+              icon={ContentMail}
+              iconStyle={STYLES.icon}
+              textLabel="Email Address"
+              textName="email"
+              textValue={email.address}
+              focused={
+                this.props.focused === 'originalInformation' + 'emails' + i}
+              onFocusChange={this.props.onFocusChange}
+              onChange={
+               (e) => this.props.updateInformation('emails', i, e.target.value)}
+              />
+          </Block>
+        )
+      }
+      ))
+      emailFields.push(this.props.information.newInformation.emails.map(
         (email, i) => {
           return (
-            <Block key={age + 'emails' + i}>
+            <Block key={'newInformation' + 'emails' + i}>
               <EditListItem
-                id={age + 'emails' + i}
+                id={'newInformation' + 'emails' + i}
                 icon={ContentMail}
                 iconStyle={STYLES.icon}
                 textLabel="Email Address"
                 textName="email"
                 textValue={email.address}
-                focused={this.props.focused === age + 'emails' + i}
+                focused={
+                  this.props.focused === 'newInformation' + 'emails' + i}
                 onFocusChange={this.props.onFocusChange}
-                onChange={age === 'originalInformation'
-                ? (e) => this.props.updateInformation('emails', i, e.target.value) //eslint-disable-line
-                : (e) => this.props.setInformation('emails', i, e.target.value)
-              } />
+                onChange={
+                 (e) => this.props.setInformation(
+                   'emails', i, {address: e.target.value})}
+                />
             </Block>
           )
         }
+      ))
+      emailFields.push(
+        <Block key="addEmailField">
+          <AddNew onClick={() => {
+            this.props.addNewEntry('emails')
+            this.props.onFocusChange(
+              'newInformation' + 'emails' +
+               this.props.information.newInformation.emails.length)
+          }}
+            value="Additional email" />
+        </Block>
       )
     }
     // fields = [<div key="key1">blah1</div>, <div key="key2">blah2</div>]
 
-    // console.log(fields)
+    // console.log(emailFields)
     return (
       <Container>
         <EditAppBar title="Edit Contact"
-          onSave={() => { null }} onClose={this.props.exitWithoutSaving} loading={this.props.loading} />
+          loading={this.props.loading}
+          onSave={this.props.saveChanges}
+          onClose={this.props.exitWithoutSaving} />
         <Content>
           <EditHeader title="Contact" />
           <List>
             {emailFields}
-            <AddNew onClick={() => { null }} value="Additional email" />
           </List>
         </Content>
       </Container>
