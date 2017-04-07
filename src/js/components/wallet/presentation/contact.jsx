@@ -88,7 +88,7 @@ export default class WalletContact extends React.Component {
                 onFocusChange={this.props.onFocusChange}
                 onChange={
                  (e) => this.props.setInformation(
-                   'emails', i, {address: e.target.value})}
+                   'emails', i, e.target.value)}
                 />
             </Block>
           )
