@@ -62,6 +62,7 @@ export default class WalletContact extends React.Component {
               textLabel="Email Address"
               textName="email"
               textValue={email.address}
+              verified={email.verified}
               focused={
                 this.props.focused === 'originalInformation' + 'emails' + i}
               onFocusChange={this.props.onFocusChange}
@@ -83,6 +84,7 @@ export default class WalletContact extends React.Component {
                 textLabel="Email Address"
                 textName="email"
                 textValue={email.address}
+                verifed={email.verified}
                 focused={
                   this.props.focused === 'newInformation' + 'emails' + i}
                 onFocusChange={this.props.onFocusChange}

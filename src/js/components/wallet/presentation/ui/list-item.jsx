@@ -5,10 +5,36 @@ import {
   TextField
 } from 'material-ui'
 
+import {theme} from 'styles'
 var STYLES = {
   icon: {
-    color: '#9ba0aa',
-    focuscolor: '#b3c90f'
+    color: theme.jolocom.gray1,
+    focuscolor: theme.palette.primary1Color
+  },
+  clear: {
+    display: 'inline-block',
+    marginTop: '20px',
+    position: 'absolute',
+    height: '48px',
+    width: '48px',
+    cursor: 'pointer'
+  },
+  img: {
+    userSelect: 'none',
+    marginTop: '14px',
+    marginLeft: '8px',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    width: '24px',
+    height: '24px'
+  },
+  disabled: {
+    color: theme.palette.textColor
+  },
+  disabledUnderline: {
+    borderBottom: 'solid',
+    borderWidth: 'medium medium 1px'
   }
 }
 
@@ -21,10 +47,12 @@ export default class EditListItem extends React.Component {
     textLabel: React.PropTypes.string.isRequired,
     textName: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string,
+    verified: React.PropTypes.bool.isRequired,
     children: React.PropTypes.node,
     focused: React.PropTypes.bool.isRequired,
     onFocusChange: React.PropTypes.func.isRequired,
-    onChange: React.PropTypes.func.isRequired
+    onChange: React.PropTypes.func.isRequired,
+    onDelete: React.PropTypes.func
   }
   render() {
     var props = this.props
@@ -35,7 +63,15 @@ export default class EditListItem extends React.Component {
           color={props.focused
               ? STYLES.icon.focuscolor
               : STYLES.icon.color} />
-            {props.focused
+            {props.verified
+            ? <TextField
+              disabled
+              inputStyle={STYLES.disabled}
+              underlineDisabledStyle={STYLES.disabledUnderline}
+              floatingLabelText={'Verified ' + props.textLabel}
+              name={props.textName}
+              value={props.textValue} />
+            : props.focused
             ? <TextField autoFocus
               floatingLabelText={props.textLabel}
               name={props.textName}
@@ -45,8 +81,17 @@ export default class EditListItem extends React.Component {
               floatingLabelText={props.textLabel}
               name={props.textName}
               onChange={props.onChange}
-              value={props.textValue} />}
-
+              value={props.textValue} />
+            }
+        <div style={{...STYLES.clear}}>
+            {props.verified
+            ? <div onClick={() => this.onDelete()}
+              style={{...STYLES.img, ...{
+                backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+              }}} />
+              : <div />
+            }
+        </div>
       </div>
     )
   }
