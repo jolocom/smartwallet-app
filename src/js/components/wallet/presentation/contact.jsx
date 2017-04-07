@@ -35,7 +35,6 @@ export default class WalletContact extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     onChange: React.PropTypes.func,
-    contact: React.PropTypes.object,
     focused: React.PropTypes.string,
     onFocusChange: React.PropTypes.func,
     information: React.PropTypes.object,
@@ -43,6 +42,7 @@ export default class WalletContact extends React.Component {
     updateInformation: React.PropTypes.func,
     setInformation: React.PropTypes.func,
     exitWithoutSaving: React.PropTypes.func,
+    saveChanges: React.PropTypes.func,
     loading: React.PropTypes.bool
   }
 
@@ -81,7 +81,8 @@ export default class WalletContact extends React.Component {
     return (
       <Container>
         <EditAppBar title="Edit Contact"
-          onSave={() => { null }} onClose={this.props.exitWithoutSaving} loading={this.props.loading} />
+          onSave={this.props.saveChanges}
+          onClose={this.props.exitWithoutSaving} />
         <Content>
           <EditHeader title="Contact" />
           <List>

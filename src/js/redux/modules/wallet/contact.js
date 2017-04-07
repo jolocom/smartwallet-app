@@ -9,6 +9,7 @@ const actions = module.exports = makeActions('wallet/contact', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
+        const state = getState().getIn(['wallet', 'contact']).toJS()
         // dispatch(router.pushRoute('/wallet/identity'))
         // dispatch(router.pushRoute('/wallet/identity/contact'))
     //     let promises = []
@@ -19,24 +20,32 @@ const actions = module.exports = makeActions('wallet/contact', {
     //       }
     //     }
     //   }
-        dispatch(actions.getAccountInformation.buildAction(params, (backend) => { //eslint-disable-line
+        dispatch(actions.saveChanges.buildAction(params, (backend) => { //eslint-disable-line
           let promises = []
-          const state = getState().toJS()
-          for (let prop in state.originalInformation) {
-            for (let i = 0; i < state.originalInformation[prop].length; i++) {
-              if (state.originalInformation[prop][i].delete) {
-                promises.push(
-                  backend.wallet.deleteEmail(
-                    state.originalInformation[prop][i].address))
-              } else if (state.originalInformation[prop][i].update) {
-                promises.push(
-                  backend.wallet.updateEmail(
-                    state.originalInformation[prop][i].address))
-              }
+          // console.log(state)
+          for (let i = 0;
+            i < state.information.originalInformation.emails.length; i++) {
+            if (state.information.originalInformation.emails[i].delete) {
+              promises.push(
+                backend.wallet.deleteEmail(
+                  state.information.originalInformation.emails[i].address))
+            } else if (state.information.originalInformation.emails[i].update) {
+              promises.push(
+                backend.wallet.updateEmail(
+                  state.information.originalInformation.emails[i].address))
             }
           }
+          for (let i = 0;
+            i < state.information.newInformation.emails.length; i++) {
+            promises.push(
+              backend.wallet.setEmail(
+                state.information.newInformation.emails[i].address))
+          }
+          // console.log(promises)
           return Promise.all(promises)
+          // .then(dispatch(router.pushRoute('/wallet/identity')))
         }))
+        // dispatch(router.pushRoute('/wallet/identity'))
       }
     }
   },
@@ -72,9 +81,12 @@ const actions = module.exports = makeActions('wallet/contact', {
 })
 
 const initialState = Immutable.fromJS({
-  newInformation: {
-    emails: []
-  }
+  information: {
+    newInformation: {
+      emails: []
+    }
+  },
+  loading: true
 })
 
 module.exports.default = (state = initialState, action = {}) => {
@@ -92,23 +104,24 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       }
       // console.log(Immutable.fromJS(action.result).toJS())
-      return state.merge(Immutable.fromJS(initialState))
+      state = state.mergeIn(['information'], Immutable.fromJS(initialState))
+      return state.setIn(['loading'], false)
 
     case actions.setInformation.id:
-      return state.setIn(['newInformation',
+      return state.setIn(['information', 'newInformation',
         action.field, action.index], action.value)
 
     case actions.deleteInformation.id:
-      return state.setIn(['originalInformation',
+      return state.setIn(['information', 'originalInformation',
         action.field, action.index, 'delete'], true)
 
     case actions.updateInformation.id:
-      if (state.getIn(['originalInformation',
+      if (state.getIn(['information', 'originalInformation',
         action.field, action.index, 'verified']) === false) {
-        state = state.setIn(['originalInformation',
+        state = state.setIn(['information', 'originalInformation',
           action.field, action.index, 'update'], true)
         if (action.field === 'emails') {
-          state = state.setIn(['originalInformation',
+          state = state.setIn(['information', 'originalInformation',
             action.field, action.index, 'address'], action.value)
         }
       }
