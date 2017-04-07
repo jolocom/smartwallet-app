@@ -29,7 +29,7 @@ const STYLES = {
   }
 }
 
-const EditAppBar = ({title, onSave, onClose}) => {
+const EditAppBar = ({title, onSave, onClose, loading}) => {
   return (
     <AppBar
       title={title}
@@ -46,7 +46,9 @@ const EditAppBar = ({title, onSave, onClose}) => {
         <HoverButton
           backgroundColor={theme.palette.primary1Color}
           style={STYLES.appBarButton} hoverColor={STYLES.appBarButton.color}
-          onClick={() => { onSave() }}>SAVE</HoverButton>
+          onClick={() => { loading ? null : onSave() }}>
+          {loading ? 'LOADING...' : 'SAVE'}
+        </HoverButton>
       }
     />
   )
@@ -56,7 +58,8 @@ EditAppBar.propTypes = {
   title: React.PropTypes.string,
   children: React.PropTypes.node,
   onSave: React.PropTypes.func,
-  onClose: React.PropTypes.func
+  onClose: React.PropTypes.func,
+  loading: React.PropTypes.bool
 }
 
 export default Radium(EditAppBar)

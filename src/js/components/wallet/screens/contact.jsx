@@ -21,7 +21,8 @@ export default class WalletContactScreen extends React.Component {
     getAccountInformation: React.PropTypes.func,
     updateInformation: React.PropTypes.func,
     setInformation: React.PropTypes.func,
-    exitWithoutSaving: React.PropTypes.func
+    exitWithoutSaving: React.PropTypes.func,
+    loading: React.PropTypes.bool
   }
   constructor() {
     super()
@@ -52,6 +53,7 @@ export default class WalletContactScreen extends React.Component {
         updateInformation={this.props.updateInformation}
         setInformation={this.props.setInformation}
         exitWithoutSaving={this.props.exitWithoutSaving}
+        loading={this.props.loading}
       />
     )
   }

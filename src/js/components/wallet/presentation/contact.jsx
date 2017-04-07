@@ -42,7 +42,8 @@ export default class WalletContact extends React.Component {
     getAccountInformation: React.PropTypes.func,
     updateInformation: React.PropTypes.func,
     setInformation: React.PropTypes.func,
-    exitWithoutSaving: React.PropTypes.func
+    exitWithoutSaving: React.PropTypes.func,
+    loading: React.PropTypes.bool
   }
 
   componentDidMount() {
@@ -80,7 +81,7 @@ export default class WalletContact extends React.Component {
     return (
       <Container>
         <EditAppBar title="Edit Contact"
-          onSave={() => { null }} onClose={this.props.exitWithoutSaving} />
+          onSave={() => { null }} onClose={this.props.exitWithoutSaving} loading={this.props.loading} />
         <Content>
           <EditHeader title="Contact" />
           <List>
