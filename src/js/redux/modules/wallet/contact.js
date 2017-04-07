@@ -111,8 +111,17 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.setIn(['loading'], false)
 
     case actions.setInformation.id:
-      return state.setIn(['information', 'newInformation',
-        action.field, action.index], action.value)
+      if (action.field === 'emails') {
+        let localState = state.toJS()
+        localState.information.newInformation
+        .emails[action.index].address = action.value
+        localState.information.newInformation
+        .emails[action.index].valid = /^([\w.]+)@([\w.]+)\.(\w+)/
+        .test(action.value)
+        // console.log(localState)
+        return Immutable.fromJS(localState)
+      }
+      return state
 
     case actions.deleteInformation.id:
       return state.setIn(['information', 'originalInformation',
