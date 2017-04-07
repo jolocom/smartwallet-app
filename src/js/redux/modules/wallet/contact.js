@@ -77,6 +77,9 @@ const actions = module.exports = makeActions('wallet/contact', {
   },
   updateInformation: {
     expectedParams: ['field', 'index', 'value']
+  },
+  addNewEntry: {
+    expectedParams: ['field']
   }
 })
 
@@ -127,6 +130,13 @@ module.exports.default = (state = initialState, action = {}) => {
       }
       return state
 
+    case actions.addNewEntry.id:
+      // console.log(state)
+      let newArray = state.getIn(
+        ['information', 'newInformation', action.field])
+        .push({address: '', valid: false})
+      return state.setIn(['information', 'newInformation', action.field],
+       newArray)
     default:
       return state
   }
