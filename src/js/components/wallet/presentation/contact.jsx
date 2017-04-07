@@ -6,7 +6,8 @@ import {
   Container,
   Content,
   Block,
-  EditListItem
+  EditListItem,
+  AddNew
 } from './ui'
 import {theme} from 'styles'
 import ContentMail from 'material-ui/svg-icons/content/mail'
@@ -83,19 +84,8 @@ export default class WalletContact extends React.Component {
         <Content>
           <EditHeader title="Contact" />
           <List>
-            {/* <Block>
-              <EditListItem
-                id={this.props.contact.id}
-                icon={ContentMail}
-                iconStyle={STYLES.icon}
-                textLabel="Email Address"
-                textName="email"
-                textValue={this.props.contact.emails[0]}
-                focused={this.props.focused === this.props.contact.id}
-                onFocusChange={this.props.onFocusChange}
-                onChange={this.props.onChange} />
-            </Block> */}
             {emailFields}
+            <AddNew onClick={() => { null }} value="Additional email" />
           </List>
         </Content>
       </Container>
