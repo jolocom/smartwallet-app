@@ -57,8 +57,8 @@ const EditAppBar = ({title, onSave, onClose, loading}) => {
 EditAppBar.propTypes = {
   title: React.PropTypes.string,
   children: React.PropTypes.node,
-  onSave: React.PropTypes.func,
-  onClose: React.PropTypes.func,
+  onSave: React.PropTypes.func.isRequired,
+  onClose: React.PropTypes.func.isRequired,
   loading: React.PropTypes.bool
 }
 
