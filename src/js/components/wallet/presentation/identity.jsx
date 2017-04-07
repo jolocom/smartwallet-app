@@ -7,6 +7,8 @@ import CommunicationCall from 'material-ui/svg-icons/communication/call';
 import ActionInfo from 'material-ui/svg-icons/communication/chat-bubble';
 import {indigo500} from 'material-ui/styles/colors';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
+
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 import {
   TextField,
   Divider,
@@ -16,7 +18,7 @@ import {
 const STYLES = {
   inputName: {
     color: '#4b132b',
-    fontSize: '1.5em'
+    fontSize: '1em'
   },
   labelName: {
     color: 'rgba(75, 19, 43, 0.5)'
@@ -35,66 +37,43 @@ const STYLES = {
   },
   infoHeader: {
     textAlign: 'left'
+  },
+  refresh: {
+    display: 'inline-block',
+    position: 'relative',
   }
 }
 
-// CustomList.propTypes = {
-//   element: React.PropTypes.string.isRequired,
-//   // contact:  React.PropTypes.object.isRequired
-// }
-
-
-// <List>
-//       <ListItem
-//         leftIcon={<CommunicationCall color={indigo500} />}
-//         rightIcon={<CommunicationChatBubble />}
-//         primaryText="(650) 555 - 1234"
-//         secondaryText="Mobile"
-//       />
-//       <ListItem
-//         insetChildren={true}
-//         rightIcon={<CommunicationChatBubble />}
-//         primaryText="(323) 555 - 6789"
-//         secondaryText="Work"
-//       />
-//     </List>
-//     <Divider inset={true} />
-//     <List>
-//       <ListItem
-//         leftIcon={<CommunicationEmail color={indigo500} />}
-//         primaryText="aliconnors@example.com"
-//         secondaryText="Personal"
-//       />
-//       <ListItem
-//         insetChildren={true}
-//         primaryText="ali_connors@example.com"
-//         secondaryText="Work"
-//       />
-//     </List>
-
-
-
-
 const PhoneList = (props) => {
   let display = []
-  if (!props.phone.length) {
+  if (!props.phone[0].number) {
     return null
   }
   for (let i=0; i<props.phone.length; i++) {
-    display.push(<CommunicationCall
+    display.push(<ListItem disabled>
+    <CommunicationCall
       style={{marginRight: '25px'}}
       color={indigo500}
-    />)
-    display.push(<TextField
+    />
+    <TextField
       floatingLabelText={(props.phone[i].verified ?  'V':'not v')+'erified Phone number'}
       inputStyle={STYLES.inputName}
       floatingLabelStyle={STYLES.labelName}
       floatingLabelFixed
       underlineShow={false}
+      style={{width: '200px',padding: '0'}}
       value={props.phone[i].number}
-    />)
-    display.push(<VerifiedUser verified={props.phone[i].verified}/>)
-    display.push(<br/>)
+    />
+    <TextField
+      inputStyle={STYLES.inputName}
+      floatingLabelStyle={STYLES.labelName}
+      floatingLabelFixed
+      underlineShow={false}
+      style={{maxWidth: '60px'}}
+      value={props.phone[i].type}
+    />
+    <VerifiedUser verified={props.phone[i].verified}/>
+    </ListItem>)
   }
   return <List disabled>
    {display}
@@ -103,28 +82,28 @@ const PhoneList = (props) => {
 
 const EmailList = (props) => {
   let display = []
-  if (!props.email.length) {
+  if (!props.email[0].address) {
     return null
   }
   for (let i=0; i<props.email.length; i++) {
-    display.push(<CommunicationEmail color={indigo500} />)
     display.push(
-        <TextField
-          floatingLabelText={(props.email[i].verified ?  'V':'Not v')+'erified Email'}
-          inputStyle={STYLES.inputName}
-          floatingLabelStyle={STYLES.labelName}
-          floatingLabelFixed
-          underlineShow={false}
-          value={props.email[i].address}
-          style={{marginLeft: '25px'}}
-        />
-    )
-    display.push(<VerifiedUser verified={props.email[i].verified}/>)
-    display.push(<br/>)
+    <ListItem disabled>
+    <CommunicationEmail color={indigo500} />
+    <TextField
+      floatingLabelText={(props.email[i].verified ?  'V':'Not v')+'erified Email'}
+      inputStyle={STYLES.inputName}
+      floatingLabelStyle={STYLES.labelName}
+      floatingLabelFixed
+      underlineShow={false}
+      value={props.email[i].address}
+      style={{marginLeft: '25px'}}
+    />
+    <VerifiedUser verified={props.email[i].verified}/>
+    </ListItem>)
   }
-  return <List disabled>
+  return <spam>
             {display}
-  </List>
+  </spam>
 }
 
 @Radium
@@ -141,6 +120,18 @@ export default class WalletIdentity extends React.Component {
 }
 
   render() {
+    if (!this.props.isLoaded) {
+      return    <div style={{ margin: 'auto'}}> <RefreshIndicator
+      size={50}
+      left={70}
+      top={0}
+      loadingColor={theme.palette.accent1Color}
+      status="loading"
+      style={STYLES.refresh}
+      
+    /></div>
+    }
+
     return (
       <Container>
         <Content>
@@ -163,17 +154,17 @@ export default class WalletIdentity extends React.Component {
             </List>
           </Block>
           <Block>
-            <PlusMenu name="Contact" onClick={this.props.goToContactManagement} />
+            <PlusMenu name="Contact" goToManagement={this.props.goToContactManagement} />
           </Block>
           <Block>
             <PhoneList phone={this.props.contact.phone} />
             <EmailList email={this.props.contact.email} />
           </Block>
           <Block>
-            <PlusMenu name="Passport" onClick={ this.props.goToPassportManagement}/>
+            <PlusMenu name="Passport" goToManagement={ this.props.goToPassportManagement}/>
           </Block>
           <Block>
-            <PlusMenu name="Diving Licnece" onClick={ this.props.goToDivingLicenceManagement}/>
+            <PlusMenu name="Diving Licnece" goToManagement={ this.props.goToDivingLicenceManagement}/>
           </Block>
         </Content>
       {/* <Link to="/wallet/identity/contact"></Link> */}
@@ -184,7 +175,7 @@ export default class WalletIdentity extends React.Component {
 
 
 const VerifiedUser = (props) => {
-  const color = props.verified ? 'green' : 'red'
+  const color = props.verified ? '#b3c90f' : '#9ba0aa'
   return <svg xmlns="http://www.w3.org/2000/svg"
     width="24" 
     height="24" 
