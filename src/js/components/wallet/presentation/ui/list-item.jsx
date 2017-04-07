@@ -2,8 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
-  TextField,
-  ListItem
+  TextField
 } from 'material-ui'
 
 var STYLES = {
@@ -16,17 +15,16 @@ var STYLES = {
 @Radium
 export default class EditListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string,
+    id: React.PropTypes.string.isRequired,
     icon: React.PropTypes.any,
     iconStyle: React.PropTypes.object,
-    textLabel: React.PropTypes.string,
-    textName: React.PropTypes.string,
+    textLabel: React.PropTypes.string.isRequired,
+    textName: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string,
     children: React.PropTypes.node,
-    onSave: React.PropTypes.func,
-    focused: React.PropTypes.bool,
-    onFocusChange: React.PropTypes.func,
-    onChange: React.PropTypes.func
+    focused: React.PropTypes.bool.isRequired,
+    onFocusChange: React.PropTypes.func.isRequired,
+    onChange: React.PropTypes.func.isRequired
   }
   render() {
     var props = this.props
