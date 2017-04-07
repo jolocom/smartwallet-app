@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import {Container, Content, Block, PlusMenu} from './ui'
+import IconMenu from './ui/plus-menu'
 import Info from 'material-ui/svg-icons/action/info'
 import {theme} from 'styles'
 import CommunicationCall from 'material-ui/svg-icons/communication/call';
@@ -50,13 +51,14 @@ const PhoneList = (props) => {
     return null
   }
   for (let i=0; i<props.phone.length; i++) {
-    display.push(<ListItem disabled>
+    display.push(<ListItem key={i} disabled>
     <CommunicationCall
       style={{marginRight: '25px'}}
       color={indigo500}
     />
     <TextField
       floatingLabelText={(props.phone[i].verified ?  'V':'not v')+'erified Phone number'}
+      key="1"
       inputStyle={STYLES.inputName}
       floatingLabelStyle={STYLES.labelName}
       floatingLabelFixed
@@ -66,6 +68,7 @@ const PhoneList = (props) => {
     />
     <TextField
       inputStyle={STYLES.inputName}
+      key="2"
       floatingLabelStyle={STYLES.labelName}
       floatingLabelFixed
       underlineShow={false}
@@ -87,7 +90,7 @@ const EmailList = (props) => {
   }
   for (let i=0; i<props.email.length; i++) {
     display.push(
-    <ListItem disabled>
+    <ListItem disabled key={i}>
     <CommunicationEmail color={indigo500} />
     <TextField
       floatingLabelText={(props.email[i].verified ?  'V':'Not v')+'erified Email'}
@@ -154,17 +157,17 @@ export default class WalletIdentity extends React.Component {
             </List>
           </Block>
           <Block>
-            <PlusMenu name="Contact" goToManagement={this.props.goToContactManagement} />
+            <PlusMenu name="Contact" choice={this.props.contact.email.length || this.props.contact.phone.length} goToManagement={this.props.goToContactManagement} />
           </Block>
           <Block>
             <PhoneList phone={this.props.contact.phone} />
             <EmailList email={this.props.contact.email} />
           </Block>
           <Block>
-            <PlusMenu name="Passport" goToManagement={ this.props.goToPassportManagement}/>
+            <PlusMenu name="Passport" choice={this.props.passport.number} goToManagement={ this.props.goToPassportManagement}/>
           </Block>
           <Block>
-            <PlusMenu name="Diving Licnece" goToManagement={ this.props.goToDivingLicenceManagement}/>
+            <PlusMenu name="Diving Licnece" choice={false} goToManagement={ this.props.goToDivingLicenceManagement}/>
           </Block>
         </Content>
       {/* <Link to="/wallet/identity/contact"></Link> */}

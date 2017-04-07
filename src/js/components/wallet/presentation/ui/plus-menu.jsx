@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 
 import {
@@ -15,34 +16,36 @@ const STYLES = {
   addBtn: {
     width: '40px',
     boxShadow: 'none',
-    marginTop: '27px'
+    marginTop: '2px'
   },
   infoHeader: {
     textAlign: 'left'
   }
 }
 
-const PlusMenu = ({name, style, children, ...props}) => {
+
+const PlusMenu = (props) => {
   return (
-    <div style={Object.assign({}, STYLES, style)} {...props}>
+    <div style={props.style}>
       <List>
         <ListItem
           key={2}
           disabled
-          primaryText={name}
+          primaryText={props.name}
           style={STYLES.infoHeader}
           rightIcon={
             <FloatingActionButton
               mini
               secondary
+              onClick={props.goToManagement}
               containerElement="label"
               style={STYLES.addBtn}>
-              <ContentAdd />
+              {props.choice ? <ContentCreate/> : <ContentAdd/>}
             </FloatingActionButton>
           } />
         <Divider style={STYLES.divider} />
       </List>
-      {children}
+      {props.children}
     </div>
   )
 }
@@ -50,7 +53,9 @@ const PlusMenu = ({name, style, children, ...props}) => {
 PlusMenu.propTypes = {
   name: React.PropTypes.any,
   children: React.PropTypes.node,
-  style: React.PropTypes.object
+  style: React.PropTypes.object,
+  goToManagement: React.PropTypes.func.isRequired,
+  choice: React.PropTypes.bool
 }
 
 export default Radium(PlusMenu)
