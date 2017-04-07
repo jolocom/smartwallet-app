@@ -57,7 +57,7 @@ const AddNew = ({value, onClick}) => {
 
 AddNew.propTypes = {
   value: React.PropTypes.any,
-  onClick: React.PropTypes.func
+  onClick: React.PropTypes.func.isRequired
 }
 
 export default Radium(AddNew)
