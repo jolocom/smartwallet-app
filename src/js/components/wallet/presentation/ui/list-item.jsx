@@ -47,6 +47,7 @@ export default class EditListItem extends React.Component {
     textLabel: React.PropTypes.string.isRequired,
     textName: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string,
+    errorText: React.PropTypes.string,
     verified: React.PropTypes.bool.isRequired,
     children: React.PropTypes.node,
     focused: React.PropTypes.bool.isRequired,
@@ -76,21 +77,27 @@ export default class EditListItem extends React.Component {
               floatingLabelText={props.textLabel}
               name={props.textName}
               onChange={props.onChange}
-              value={props.textValue} />
+              value={props.textValue}
+              errorText={this.props.errorText} />
             : <TextField
               floatingLabelText={props.textLabel}
               name={props.textName}
               onChange={props.onChange}
-              value={props.textValue} />
+              value={props.textValue}
+              errorText={this.props.errorText} />
             }
         <div style={{...STYLES.clear}}>
-            {props.verified
-            ? <div onClick={() => this.onDelete()}
+            {/* {props.verified
+            ? <div onClick={() => this.props.onDelete()}
               style={{...STYLES.img, ...{
                 backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
               }}} />
               : <div />
-            }
+            } */}
+          <div onClick={() => this.props.onDelete()}
+            style={{...STYLES.img, ...{
+              backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+            }}} />
         </div>
       </div>
     )

@@ -11,7 +11,8 @@ import Presentation from '../presentation/contact'
     'wallet/contact:updateInformation',
     'wallet/contact:exitWithoutSaving',
     'wallet/contact:saveChanges',
-    'wallet/contact:addNewEntry']
+    'wallet/contact:addNewEntry',
+    'wallet/contact:validate']
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
@@ -23,7 +24,8 @@ export default class WalletContactScreen extends React.Component {
     deleteInformation: React.PropTypes.func,
     exitWithoutSaving: React.PropTypes.func,
     saveChanges: React.PropTypes.func,
-    addNewEntry: React.PropTypes.func
+    addNewEntry: React.PropTypes.func,
+    validate: React.PropTypes.func
   }
   constructor() {
     super()
@@ -46,11 +48,14 @@ export default class WalletContactScreen extends React.Component {
         onFocusChange={this.state.onFocusChange}
         information={this.props.contact.information}
         loading={this.props.contact.loading}
+        showErrors={this.props.contact.showErrors}
+        deleteInformation={this.props.deleteInformation}
         updateInformation={this.props.updateInformation}
         setInformation={this.props.setInformation}
         exitWithoutSaving={this.props.exitWithoutSaving}
         saveChanges={this.props.saveChanges}
         addNewEntry={this.props.addNewEntry}
+        validate={this.props.validate}
       />
     )
   }
