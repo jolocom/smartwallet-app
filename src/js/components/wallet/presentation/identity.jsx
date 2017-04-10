@@ -1,12 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
-import {Container, Content, Block, PlusMenu} from './ui'
-import IconMenu from './ui/plus-menu'
+import {Container, Content, Block, PlusMenu, StaticListItem} from './ui'
 import Info from 'material-ui/svg-icons/action/info'
 import {theme} from 'styles'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
-import ActionInfo from 'material-ui/svg-icons/communication/chat-bubble'
-import {indigo500} from 'material-ui/styles/colors'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 
 import RefreshIndicator from 'material-ui/RefreshIndicator'
@@ -18,11 +15,11 @@ import {
 
 const STYLES = {
   inputName: {
-    color: '#4b132b',
+    color: theme.palette.textColor,
     fontSize: '1em'
   },
   labelName: {
-    color: 'rgba(75, 19, 43, 0.5)'
+    color: theme.palette.lighterTextColor
   },
   iconName: {
     top: '20px',
@@ -45,51 +42,19 @@ const STYLES = {
   }
 }
 
-const Phone = (props) => {
-  return <ListItem key={props.index} disabled>
-    <CommunicationCall
-      style={{marginRight: '25px'}}
-      color={indigo500}
-    />
-    <TextField
-      floatingLabelText={
-        (props.phone.verified ? 'V' : 'Unv') + 'erified Phone number'
-      }
-      key="1"
-      inputStyle={STYLES.inputName}
-      floatingLabelStyle={STYLES.labelName}
-      floatingLabelFixed
-      underlineShow={false}
-      style={{width: '200px', padding: '0'}}
-      value={props.phone.number}
-      name={'number' + props.phone.number}
-      />
-    <TextField
-      inputStyle={STYLES.inputName}
-      key="2"
-      floatingLabelStyle={STYLES.labelName}
-      floatingLabelFixed
-      underlineShow={false}
-      style={{maxWidth: '60px'}}
-      name={'type ' + props.phone.number}
-      value={props.phone.type}
-    />
-    <VerifiedUser verified={props.phone.verified} />
-  </ListItem>
-}
-
-Phone.propTypes = {
-  index: React.PropTypes.number.isRequired,
-  phone: React.PropTypes.object.isRequired
-}
-
 const PhoneList = (props) => {
   let display = []
   if (!props.phone[0].number) {
     return null
   }
   for (let i = 0; i < props.phone.length; i++) {
-    display.push(<Phone index={i} key={i} phone={props.phone[i]} />)
+    display.push(<StaticListItem
+      index={i}
+      verified={props.phone[i].verified}
+      textValue={props.phone[i].number}
+      textLabel="Phone Number"
+      icon={CommunicationCall}
+      secondaryTextValue={props.phone[i].type} />)
   }
   return <List disabled>
    {display}
@@ -100,34 +65,18 @@ PhoneList.propTypes = {
   phone: React.PropTypes.array.isRequired
 }
 
-const Email = (props) => {
-  return <ListItem disabled>
-    <CommunicationEmail color={indigo500} />
-    <TextField
-      floatingLabelText={(props.email.verified ? 'V' : 'Unv') + 'erified Email'}
-      inputStyle={STYLES.inputName}
-      floatingLabelStyle={STYLES.labelName}
-      floatingLabelFixed
-      underlineShow={false}
-      name={props.email.address}
-      value={props.email.address}
-      style={{marginLeft: '25px'}}
-    />
-    <VerifiedUser verified={props.email.verified} />
-  </ListItem>
-}
-Email.propTypes = {
-  index: React.PropTypes.number.isRequired,
-  email: React.PropTypes.object.isRequired
-}
-
 const EmailList = (props) => {
   let display = []
   if (!props.email[0].address) {
     return null
   }
   for (let i = 0; i < props.email.length; i++) {
-    display.push(<Email index={i} key={i} email={props.email[i]} />)
+    display.push(<StaticListItem
+      index={i}
+      verified={props.email[i].verified}
+      textValue={props.email[i].address}
+      textLabel="Email"
+      icon={CommunicationEmail} />)
   }
   return <List disabled>
             {display}
@@ -207,7 +156,7 @@ export default class WalletIdentity extends React.Component {
           </Block>
           <Block>
             <PlusMenu
-              name="Diving Licnece"
+              name="Driving License"
               choice={false}
               goToManagement={this.props.goToDivingLicenceManagement}
             />
@@ -217,22 +166,4 @@ export default class WalletIdentity extends React.Component {
       </Container>
     )
   }
-}
-const VerifiedUser = (props) => {
-  const color = props.verified ? '#b3c90f' : '#9ba0aa'
-  return <svg xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    style={{color: color, fill: 'currentColor'}}
-    viewBox="0 0 24 24"
-  >
-    <path
-      d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45
-      9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"
-    />
-  </svg>
-}
-
-VerifiedUser.propTypes = {
-  verified: React.PropTypes.bool.isRequired
 }
