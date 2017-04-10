@@ -57,7 +57,7 @@ const PhoneList = (props) => {
       color={indigo500}
     />
     <TextField
-      floatingLabelText={(props.phone[i].verified ?  'V':'not v')+'erified Phone number'}
+      floatingLabelText={(props.phone[i].verified ?  'V':'Unv')+'erified Phone number'}
       key="1"
       inputStyle={STYLES.inputName}
       floatingLabelStyle={STYLES.labelName}
@@ -93,7 +93,7 @@ const EmailList = (props) => {
     <ListItem disabled key={i}>
     <CommunicationEmail color={indigo500} />
     <TextField
-      floatingLabelText={(props.email[i].verified ?  'V':'Not v')+'erified Email'}
+      floatingLabelText={(props.email[i].verified ?  'V':'Unv')+'erified Email'}
       inputStyle={STYLES.inputName}
       floatingLabelStyle={STYLES.labelName}
       floatingLabelFixed
@@ -131,7 +131,7 @@ export default class WalletIdentity extends React.Component {
       loadingColor={theme.palette.accent1Color}
       status="loading"
       style={STYLES.refresh}
-      
+
     /></div>
     }
 
@@ -163,14 +163,15 @@ export default class WalletIdentity extends React.Component {
             <PhoneList phone={this.props.contact.phone} />
             <EmailList email={this.props.contact.email} />
           </Block>
+          {/*
           <Block>
             <PlusMenu name="Passport" choice={this.props.passport.number} goToManagement={ this.props.goToPassportManagement}/>
           </Block>
           <Block>
-            <PlusMenu name="Diving Licnece" choice={false} goToManagement={ this.props.goToDivingLicenceManagement}/>
+            <PlusMenu name="Driving License" choice={false} goToManagement={ this.props.goToDivingLicenceManagement}/>
           </Block>
+          */}
         </Content>
-      {/* <Link to="/wallet/identity/contact"></Link> */}
       </Container>
     )
   }
@@ -180,11 +181,11 @@ export default class WalletIdentity extends React.Component {
 const VerifiedUser = (props) => {
   const color = props.verified ? '#b3c90f' : '#9ba0aa'
   return <svg xmlns="http://www.w3.org/2000/svg"
-    width="24" 
-    height="24" 
+    width="24"
+    height="24"
     style={{color: color, fill: 'currentColor'}}
     viewBox="0 0 24 24"
   >
     <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
-  </svg> 
+  </svg>
 }
