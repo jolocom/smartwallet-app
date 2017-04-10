@@ -45,26 +45,24 @@ const STYLES = {
   }
 }
 
-const PhoneList = (props) => {
-  let display = []
-  if (!props.phone[0].number) {
-    return null
-  }
-  for (let i=0; i<props.phone.length; i++) {
-    display.push(<ListItem key={i} disabled>
+const Phone = (props) => {
+return <ListItem key={props.index} disabled>
     <CommunicationCall
       style={{marginRight: '25px'}}
       color={indigo500}
     />
     <TextField
-      floatingLabelText={(props.phone[i].verified ?  'V':'not v')+'erified Phone number'}
+      floatingLabelText={
+        (props.phone.verified ?  'V':'not v') + 'erified Phone number'
+      }
       key="1"
       inputStyle={STYLES.inputName}
       floatingLabelStyle={STYLES.labelName}
       floatingLabelFixed
       underlineShow={false}
       style={{width: '200px',padding: '0'}}
-      value={props.phone[i].number}
+      value={props.phone.number}
+      name={'number' + props.phone.number}
     />
     <TextField
       inputStyle={STYLES.inputName}
@@ -73,14 +71,56 @@ const PhoneList = (props) => {
       floatingLabelFixed
       underlineShow={false}
       style={{maxWidth: '60px'}}
-      value={props.phone[i].type}
+      name={'type ' + props.phone.number}
+      value={props.phone.type}
     />
-    <VerifiedUser verified={props.phone[i].verified}/>
-    </ListItem>)
+    <VerifiedUser verified={props.phone.verified}/>
+  </ListItem>
+}
+
+Phone.propTypes = {
+  index: React.PropTypes.number.isRequired,
+  phone: React.PropTypes.object.isRequired
+}
+
+const PhoneList = (props) => {
+  let display = []
+  if (!props.phone[0].number) {
+    return null
+  }
+  for (let i=0; i<props.phone.length; i++) {
+    display.push(<Phone index={i} key={i} phone={props.phone[i]} />)
   }
   return <List disabled>
    {display}
   </List>
+}
+
+PhoneList.propTypes = {
+  phone: React.PropTypes.array.isRequired
+}
+
+const Email = (props) => {
+  return <ListItem disabled>
+    <CommunicationEmail color={indigo500}/>
+    <TextField
+     floatingLabelText={(props.email.verified ?  'V':'Not v')+'erified Email'}
+     inputStyle={STYLES.inputName}
+     floatingLabelStyle={STYLES.labelName}
+     floatingLabelFixed
+     underlineShow={false}
+     name={props.email.address}
+     value={props.email.address}
+     style={{marginLeft: '25px'}}
+    />
+    <VerifiedUser verified={props.email.verified} />
+  </ListItem>
+}
+
+
+Email.propTypes = {
+  index: React.PropTypes.number.isRequired,
+  email: React.PropTypes.object.isRequired
 }
 
 const EmailList = (props) => {
@@ -89,24 +129,15 @@ const EmailList = (props) => {
     return null
   }
   for (let i=0; i<props.email.length; i++) {
-    display.push(
-    <ListItem disabled key={i}>
-    <CommunicationEmail color={indigo500} />
-    <TextField
-      floatingLabelText={(props.email[i].verified ?  'V':'Not v')+'erified Email'}
-      inputStyle={STYLES.inputName}
-      floatingLabelStyle={STYLES.labelName}
-      floatingLabelFixed
-      underlineShow={false}
-      value={props.email[i].address}
-      style={{marginLeft: '25px'}}
-    />
-    <VerifiedUser verified={props.email[i].verified}/>
-    </ListItem>)
+    display.push(<Email index={i} key={i} email={props.email[i]} />)
   }
-  return <spam>
+  return <List disabled>
             {display}
-  </spam>
+  </List>
+}
+
+EmailList.propTypes = {
+  email: React.PropTypes.array.isRequired
 }
 
 @Radium
@@ -157,17 +188,32 @@ export default class WalletIdentity extends React.Component {
             </List>
           </Block>
           <Block>
-            <PlusMenu name="Contact" choice={(this.props.contact.email.length + this.props.contact.phone.length) > 0} goToManagement={this.props.goToContactManagement} />
+            <PlusMenu
+              name="Contact"
+              choice={
+                (this.props.contact.email.length +
+                  this.props.contact.phone.length) > 0
+              }
+              goToManagement={this.props.goToContactManagement} 
+            />
           </Block>
           <Block>
             <PhoneList phone={this.props.contact.phone} />
             <EmailList email={this.props.contact.email} />
           </Block>
           <Block>
-            <PlusMenu name="Passport" choice={this.props.passport.number} goToManagement={ this.props.goToPassportManagement}/>
+            <PlusMenu
+              name="Passport"
+              choice={this.props.passport.number}
+              goToManagement={ this.props.goToPassportManagement}
+            />
           </Block>
           <Block>
-            <PlusMenu name="Diving Licnece" choice={false} goToManagement={ this.props.goToDivingLicenceManagement}/>
+            <PlusMenu
+              name="Diving Licnece"
+              choice={false}
+              goToManagement={this.props.goToDivingLicenceManagement}
+            />
           </Block>
         </Content>
       {/* <Link to="/wallet/identity/contact"></Link> */}
@@ -185,6 +231,13 @@ const VerifiedUser = (props) => {
     style={{color: color, fill: 'currentColor'}}
     viewBox="0 0 24 24"
   >
-    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+    <path
+      d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45
+      9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"
+    />
   </svg> 
+}
+
+VerifiedUser.propTypes = {
+  verified: React.PropTypes.bool.isRequired
 }
