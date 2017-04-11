@@ -17,7 +17,8 @@ const STYLES = {
 @Radium
 export default class WalletHome extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    onClick: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -36,7 +37,8 @@ export default class WalletHome extends React.Component {
           </SideNote>
         </Block>
         <Footer>
-          <FlatButton label="GET STARTED" />
+          <FlatButton label="GET STARTED"
+            onClick={() => { this.props.onClick() }} />
         </Footer>
       </Container>
     )

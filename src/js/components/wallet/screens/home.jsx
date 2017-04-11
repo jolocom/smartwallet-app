@@ -3,14 +3,20 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/home'
 
 @connect({
-  props: []
+  props: ['wallet'],
+  actions: [
+    'wallet/identity:goToIdentity'
+  ]
 })
 export default class WalletHomeScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    wallet: React.PropTypes.object,
+    goToIdentity: React.PropTypes.func.isRequired
   }
 
   render() {
-    return (<Presentation />)
+    return (<Presentation
+      onClick={this.props.goToIdentity} />)
   }
 }
