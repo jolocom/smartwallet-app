@@ -50,6 +50,7 @@ const PhoneList = (props) => {
   for (let i = 0; i < props.phone.length; i++) {
     display.push(<StaticListItem
       index={i}
+      key={i}
       verified={props.phone[i].verified}
       textValue={props.phone[i].number}
       textLabel="Phone Number"
@@ -73,6 +74,7 @@ const EmailList = (props) => {
   for (let i = 0; i < props.email.length; i++) {
     display.push(<StaticListItem
       index={i}
+      key={i}
       verified={props.email[i].verified}
       textValue={props.email[i].address}
       textLabel="Email"

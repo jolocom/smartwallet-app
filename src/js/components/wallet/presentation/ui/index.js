@@ -1,7 +1,7 @@
 
 export { default as EditHeader } from './edit-header'
 export { default as EditAppBar } from './edit-app-bar'
-export { default as EditListItem } from './list-item'
+export { default as EditListItem } from './edit-list-item'
 export { default as Container } from './container'
 export { default as Header } from './header'
 export { default as Block } from './block'

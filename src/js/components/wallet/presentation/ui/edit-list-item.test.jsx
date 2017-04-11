@@ -1,8 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import EditListItem from './list-item'
+import EditListItem from './edit-list-item'
 
-describe('(Component) EditListItem', function() {
+describe.only('(Component) EditListItem', function() {
   it('should render properly the first time', function() {
     shallow((<EditListItem
       id=""
@@ -10,8 +10,10 @@ describe('(Component) EditListItem', function() {
       textLabel=""
       textName=""
       focused
+      verified
       onFocusChange={() => {}}
       onChange={() => {}}
+      onDelete={() => {}}
 
       />),
       { context: { muiTheme: { } } }

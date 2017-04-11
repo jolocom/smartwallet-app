@@ -47,12 +47,13 @@ export default class EditListItem extends React.Component {
     textLabel: React.PropTypes.string.isRequired,
     textName: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string,
+    errorText: React.PropTypes.string,
     verified: React.PropTypes.bool.isRequired,
     children: React.PropTypes.node,
     focused: React.PropTypes.bool.isRequired,
     onFocusChange: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    onDelete: React.PropTypes.func
+    onDelete: React.PropTypes.func.isRequired
   }
   render() {
     var props = this.props
@@ -76,21 +77,20 @@ export default class EditListItem extends React.Component {
               floatingLabelText={props.textLabel}
               name={props.textName}
               onChange={props.onChange}
-              value={props.textValue} />
+              value={props.textValue}
+              errorText={this.props.errorText} />
             : <TextField
               floatingLabelText={props.textLabel}
               name={props.textName}
               onChange={props.onChange}
-              value={props.textValue} />
+              value={props.textValue}
+              errorText={this.props.errorText} />
             }
         <div style={{...STYLES.clear}}>
-            {props.verified
-            ? <div onClick={() => this.onDelete()}
-              style={{...STYLES.img, ...{
-                backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
-              }}} />
-              : <div />
-            }
+          <div onClick={() => this.props.onDelete()}
+            style={{...STYLES.img, ...{
+              backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+            }}} />
         </div>
       </div>
     )

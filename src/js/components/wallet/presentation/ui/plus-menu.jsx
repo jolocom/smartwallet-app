@@ -25,10 +25,10 @@ const STYLES = {
     transition: 'none'
   },
   iconCreate: {
-    height: '30',
-    width: '30',
+    height: '30px',
+    width: '30px',
     backgroundColor: theme.jolocom.gray4,
-    borderRadius: '20',
+    borderRadius: '20px',
     boxShadow: '3px 3px 3px #c3c6cc',
     borderColor: theme.jolocom.gray2,
     borderWidth: '1px',
@@ -38,8 +38,8 @@ const STYLES = {
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   iconAdd: {
-    height: '40',
-    width: '40',
+    height: '40px',
+    width: '40px',
     color: theme.palette.accent1Color,
     backgroundColor: theme.jolocom.gray4,
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
