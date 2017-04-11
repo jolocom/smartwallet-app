@@ -1,15 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import NameEntry from './name-entry'
+import AddNew from './add-new'
 
-describe('(Component) NameEntry', function() {
+describe('(Component) AddNew', function() {
   it('should render properly the first time', function() {
-    shallow((<NameEntry
+    shallow((<AddNew
       value=""
-      valid
-      errorMsg=""
-      onSubmit={() => {}}
-      onChange={() => {}}
+      onClick={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

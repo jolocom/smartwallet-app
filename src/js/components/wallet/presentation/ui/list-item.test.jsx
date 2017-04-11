@@ -1,18 +1,18 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Pin from './pin'
+import EditListItem from './list-item'
 
-describe('(Component) Pin', function() {
+describe('(Component) EditListItem', function() {
   it('should render properly the first time', function() {
-    shallow((<Pin
-      value=""
-      valid
+    shallow((<EditListItem
+      id=""
+      icon=""
+      textLabel=""
+      textName=""
       focused
-      confirm
-      onChangeRequest={() => {}}
       onFocusChange={() => {}}
-      onSubmit={() => {}}
       onChange={() => {}}
+
       />),
       { context: { muiTheme: { } } }
     )
