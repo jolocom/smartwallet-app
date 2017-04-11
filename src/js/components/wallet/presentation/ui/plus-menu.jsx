@@ -21,7 +21,8 @@ const STYLES = {
     display: 'inline-block',
     verticalAlign: 'center',
     color: theme.jolocom.gray4,
-    marginLeft: '20px'
+    marginLeft: '20px',
+    transition: 'none'
   },
   iconCreate: {
     height: '30',
@@ -33,13 +34,15 @@ const STYLES = {
     borderWidth: '1px',
     borderStyle: 'solid',
     color: theme.palette.accent1Color,
-    padding: '5px'
+    padding: '5px',
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   iconAdd: {
     height: '40',
     width: '40',
     color: theme.palette.accent1Color,
-    backgroundColor: theme.jolocom.gray4
+    backgroundColor: theme.jolocom.gray4,
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   infoHeader: {
     textAlign: 'left',
