@@ -144,12 +144,10 @@ module.exports.default = (state = initialState, action = {}) => {
       return state
 
     case actions.addNewEntry.id:
-      // console.log(state)
-      let newArray = state.getIn(
-        ['information', 'newInformation', action.field])
-        .push({address: '', valid: false, delete: false})
-      return state.setIn(['information', 'newInformation', action.field],
-       newArray)
+      let mutableState = state.toJS()
+      mutableState.information.newInformation.emails
+      .push({address: '', valid: false, delete: false})
+      return Immutable.fromJS(mutableState)
 
     case actions.validate.id:
       // console.log(state)

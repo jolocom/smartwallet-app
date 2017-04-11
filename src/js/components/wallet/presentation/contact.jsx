@@ -127,7 +127,6 @@ export default class WalletContact extends React.Component {
         </Block>
       )
     }
-    // fields = [<div key="key1">blah1</div>, <div key="key2">blah2</div>]
 
     // console.log(emailFields)
     return (
