@@ -171,6 +171,7 @@ const initialState = Immutable.fromJS({
     errorMsg: '',
     valid: false
   },
+  Repuation: 0,
   email: {
     value: '',
     valid: false

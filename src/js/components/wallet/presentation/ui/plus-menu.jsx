@@ -1,48 +1,88 @@
 import React from 'react'
 import Radium from 'radium'
-import ContentAdd from 'material-ui/svg-icons/content/add'
+import ContentCreate from 'material-ui/svg-icons/content/create'
+import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
+import {theme} from 'styles'
 
 import {
-  List, ListItem,
-  FloatingActionButton,
+  List,
+  IconButton,
   Divider
 } from 'material-ui'
 
 const STYLES = {
   divider: {
-    marginLeft: '16px'
+    width: '150%'
   },
   addBtn: {
     width: '40px',
     boxShadow: 'none',
-    marginTop: '27px'
+    padding: '6px',
+    display: 'inline-block',
+    verticalAlign: 'center',
+    color: theme.jolocom.gray4,
+    marginLeft: '20px',
+    transition: 'none'
+  },
+  iconCreate: {
+    height: '30',
+    width: '30',
+    backgroundColor: theme.jolocom.gray4,
+    borderRadius: '20',
+    boxShadow: '3px 3px 3px #c3c6cc',
+    borderColor: theme.jolocom.gray2,
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    color: theme.palette.accent1Color,
+    padding: '5px',
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
+  },
+  iconAdd: {
+    height: '40',
+    width: '40',
+    color: theme.palette.accent1Color,
+    backgroundColor: theme.jolocom.gray4,
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   infoHeader: {
-    textAlign: 'left'
+    textAlign: 'left',
+    color: theme.palette.textColor,
+    width: '150px',
+    marginBottom: '15px',
+    display: 'inline-block'
+  },
+  item: {
+    alignItems: 'center',
+    marginLeft: '16px',
+    display: 'inline-block',
+    verticalAlign: 'top',
+    width: '70%'
   }
-}
 
-const PlusMenu = ({name, style, children, ...props}) => {
+}
+const PlusMenu = (props) => {
   return (
-    <div style={Object.assign({}, STYLES, style)} {...props}>
+    <div style={props.style}>
       <List>
-        <ListItem
-          key={2}
-          disabled
-          primaryText={name}
-          style={STYLES.infoHeader}
-          rightIcon={
-            <FloatingActionButton
-              mini
-              secondary
-              containerElement="label"
-              style={STYLES.addBtn}>
-              <ContentAdd />
-            </FloatingActionButton>
-          } />
-        <Divider style={STYLES.divider} />
+        <div style={STYLES.item}>
+          <div style={STYLES.infoHeader}>
+          {props.name}
+          </div>
+          <Divider style={STYLES.divider} />
+        </div>
+        <div style={STYLES.addBtn}>
+          <IconButton
+            onClick={props.goToManagement}
+            containerElement="label"
+            style={STYLES.addBtn}
+            iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
+            {props.choice
+            ? <ContentCreate color={STYLES.iconCreate.color} />
+            : <ContentAddCircle color={STYLES.iconAdd.color} />}
+          </IconButton>
+        </div>
       </List>
-      {children}
+      {props.children}
     </div>
   )
 }
@@ -50,7 +90,9 @@ const PlusMenu = ({name, style, children, ...props}) => {
 PlusMenu.propTypes = {
   name: React.PropTypes.any,
   children: React.PropTypes.node,
-  style: React.PropTypes.object
+  style: React.PropTypes.object,
+  goToManagement: React.PropTypes.func.isRequired,
+  choice: React.PropTypes.bool
 }
 
 export default Radium(PlusMenu)

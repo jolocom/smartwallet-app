@@ -9,8 +9,6 @@ const STYLE = {
   flexDirection: 'column',
   alignItems: 'left',
   textAlign: 'left',
-  width: '100%',
-  height: '100%',
   padding: '16px',
   backgroundColor: theme.jolocom.gray4,
   boxSizing: 'border-box'
