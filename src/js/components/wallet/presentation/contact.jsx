@@ -55,38 +55,38 @@ export default class WalletContact extends React.Component {
     // console.log(emailFields)
     if (this.props.loading === false) {
       emailFields.push(this.props.information.originalInformation.emails
-      .filter((element) => !element.delete)
       .map((email, i) => {
-        return (
-          <Block key={'originalInformation' + 'emails' + i}>
-            <EditListItem
-              id={'originalInformation' + 'emails' + i}
-              icon={ContentMail}
-              iconStyle={STYLES.icon}
-              textLabel="Email Address"
-              textName="email"
-              textValue={email.address}
-              verified={email.verified}
-              errorText={
-                this.props.showErrors &&
-                !email.valid ? 'Email not valid' : ''}
-              focused={
-                this.props.focused === 'originalInformation' + 'emails' + i}
-              onFocusChange={this.props.onFocusChange}
-              onChange={
-               (e) => this.props.updateInformation('emails', i, e.target.value)}
-              onDelete={() => {
-                this.props.deleteInformation('originalInformation', 'emails', i)
-              }}
-              />
-          </Block>
-        )
+        if (!email.delete) {
+          return (
+            <Block key={'originalInformation' + 'emails' + i}>
+              <EditListItem
+                id={'originalInformation' + 'emails' + i}
+                icon={ContentMail}
+                iconStyle={STYLES.icon}
+                textLabel="Email Address"
+                textName="email"
+                textValue={email.address}
+                verified={email.verified}
+                errorText={
+                  this.props.showErrors &&
+                  !email.valid ? 'Email not valid' : ''}
+                focused={
+                  this.props.focused === 'originalInformation' + 'emails' + i}
+                onFocusChange={this.props.onFocusChange}
+                onChange={
+                 (e) => this.props.updateInformation('emails', i, e.target.value)} //eslint-disable-line
+                onDelete={() => {
+                  this.props.deleteInformation('originalInformation', 'emails', i) //eslint-disable-line
+                }}
+                />
+            </Block>
+          )
+        }
       }
       ))
-      emailFields.push(this.props.information.newInformation
-      .emails.filter((element) => !element.delete)
-      .map(
-        (email, i) => {
+      emailFields.push(this.props.information.newInformation.emails
+      .map((email, i) => {
+        if (!email.delete) {
           return (
             <Block key={'newInformation' + 'emails' + i}>
               <EditListItem
@@ -113,7 +113,8 @@ export default class WalletContact extends React.Component {
             </Block>
           )
         }
-      ))
+      }
+    ))
       emailFields.push(
         <Block key="addEmailField">
           <AddNew onClick={() => {

@@ -29,9 +29,11 @@ const actions = module.exports = makeActions('wallet/contact', {
             }
             for (let i = 0;
               i < state.information.newInformation.emails.length; i++) {
-              promises.push(
+              if (!state.information.newInformation.emails[i].delete) {
+                promises.push(
                 backend.wallet.setEmail(
                   state.information.newInformation.emails[i].address))
+              }
             }
             // console.log(promises)
             return Promise.all(promises)
@@ -89,6 +91,9 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.getAccountInformation.id:
+      return state.setIn(['loading'], true)
+
     case actions.getAccountInformation.id_success:
       let initialState = {
         originalInformation: action.result
@@ -153,13 +158,14 @@ module.exports.default = (state = initialState, action = {}) => {
       // console.log(originalEmails)
       for (let i = 0;
         i < originalEmails.length; i++) {
-        if (originalEmails[i].update && !originalEmails[i].valid) {
+        if (originalEmails[i].update && !originalEmails[i].valid &&
+            !originalEmails[i].delete) {
           return state.setIn(['showErrors'], true)
         }
       }
       for (let i = 0;
         i < newEmails.length; i++) {
-        if (!newEmails[i].valid) {
+        if (!newEmails[i].valid && !newEmails[i].delete) {
           return state.setIn(['showErrors'], true)
         }
       }
