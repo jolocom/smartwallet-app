@@ -25,7 +25,7 @@ const STYLES = {
     marginTop: '10px'
   },
   icon: {
-    top: '40px',
+    marginTop: '40px',
     marginRight: '40px'
   }
 }

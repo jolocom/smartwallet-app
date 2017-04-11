@@ -14,7 +14,7 @@ var STYLES = {
   clear: {
     display: 'inline-block',
     marginTop: '20px',
-    position: 'absolute',
+    marginLeft: '10px',
     height: '48px',
     width: '48px',
     cursor: 'pointer'
@@ -35,6 +35,9 @@ var STYLES = {
   disabledUnderline: {
     borderBottom: 'solid',
     borderWidth: 'medium medium 1px'
+  },
+  item: {
+    display: 'flex'
   }
 }
 
@@ -58,7 +61,7 @@ export default class EditListItem extends React.Component {
   render() {
     var props = this.props
     return (
-      <div onFocus={() => { props.onFocusChange(props.id) }}
+      <div style={STYLES.item} onFocus={() => { props.onFocusChange(props.id) }}
         onBlur={() => { props.onFocusChange('') }}>
         <props.icon style={props.iconStyle}
           color={props.focused
