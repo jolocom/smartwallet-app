@@ -7,11 +7,13 @@ var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
 var webpackConfigProduction = require('./webpack.config.production.js');
 var eslint = require('gulp-eslint');
-
+var fs = require('fs');
 var path = require('path');
 var concat = require('gulp-concat');
 var clean = require('gulp-clean');
 var rename = require('gulp-rename');
+
+var cordova = require('cordova-lib').cordova
 
 function startDevServer(config, callback) {
 	// modify some webpack config options
@@ -68,12 +70,6 @@ gulp.task('html', ['clean'], function() {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('html:cordova', ['clean'], function() {
-  return gulp.src('./src/cordova.html')
-	  .pipe(rename('index.html'))
-    .pipe(gulp.dest('./dist/'));
-});
-
 gulp.task('img', function() {
   return gulp.src('./src/img/**.*')
     .pipe(gulp.dest('./dist/img'));
@@ -100,7 +96,6 @@ gulp.task('build-dev', ['webpack:build-dev', 'html', 'img', 'data'], function() 
 
 // Production build
 gulp.task('build', ['webpack:build', 'html', 'img']);
-gulp.task('build:cordova', ['webpack:build', 'html:cordova', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
@@ -147,4 +142,88 @@ gulp.task('webpack:build-dev', function(callback) {
 
 gulp.task('webpack-dev-server', function(callback) {
 	startDevServer(webpackConfig, callback)
+});
+
+// Cordova tasks
+gulp.task('html:cordova', ['clean'], function() {
+  return gulp.src('./src/cordova.html')
+    .pipe(rename('index.html'))
+    .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('build:cordova', ['webpack:build', 'html:cordova', 'img']);
+
+gulp.task('cordova:configure', function() {
+  var config = process.env.ENTRY || 'graph'
+
+  return gulp.src('./app/' + config + '.xml')
+    .pipe(rename('config.xml'))
+    .pipe(gulp.dest('./app/'));
+});
+
+gulp.task('release:ios', ['cordova:configure'], function (callback) {
+  process.chdir(path.join(__dirname, 'app'));
+
+  var exists = fs.existsSync(
+    path.join(cordova.findProjectRoot(), 'platforms', 'ios')
+  );
+
+  Promise.resolve()
+    .then(function() {
+      if (exists) {
+        return cordova.raw.platforms('rm', 'ios');
+      }
+      return exists
+    })
+    .then(function() {
+      return cordova.raw.platforms('add', 'ios');
+    })
+    .then(function() {
+      return cordova.raw.build({
+        'platforms': ['ios'],
+        'options': [
+          '--release',
+          '--gradleArg=--no-daemon',
+          '--buildConfig=../cordova.json'
+        ]
+      });
+    })
+    .then(function() {
+      callback()
+    })
+    .catch(function(e) {
+      callback(e)
+    })
+});
+
+gulp.task('release:android', ['build:cordova', 'cordova:configure'], function (callback) {
+  process.chdir(path.join(__dirname, 'app'));
+
+  var androidPath = path.join(cordova.findProjectRoot(), 'platforms', 'android');
+
+  Promise.resolve()
+    .then(function() {
+      return fs.existsSync(androidPath);
+    })
+    .then(function(exists) {
+      if (!exists) {
+        return cordova.raw.platforms('add', 'android');
+      }
+    })
+    .then(function() {
+      return cordova.raw.build({
+        'platforms': ['android'],
+        'options': [
+          '--release',
+          '--gradleArg=--no-daemon',
+          '--buildConfig=../cordova.json'
+        ]
+      });
+    })
+    .then(function() {
+      callback()
+    })
+    .catch(function(e) {
+      callback(e)
+    })
 });
