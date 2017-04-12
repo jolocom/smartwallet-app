@@ -29,7 +29,8 @@ const actions = module.exports = makeActions('wallet/contact', {
             }
             for (let i = 0;
               i < state.information.newInformation.emails.length; i++) {
-              if (!state.information.newInformation.emails[i].delete) {
+              if (!state.information.newInformation.emails[i].delete &&
+                  !state.information.newInformation.emails[i].blank) {
                 promises.push(
                 backend.wallet.setEmail(
                   state.information.newInformation.emails[i].address))
@@ -91,11 +92,20 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.saveChanges.id:
+      return state.setIn(['loading'], true)
+
+    case actions.saveChanges.id_success:
+      return state.setIn(['loading'], false)
+
     case actions.getAccountInformation.id:
       return state.setIn(['loading'], true)
 
     case actions.getAccountInformation.id_success:
       let initialState = {
+        newInformation: {
+          emails: []
+        },
         originalInformation: action.result
       }
       // let prop
@@ -119,6 +129,8 @@ module.exports.default = (state = initialState, action = {}) => {
         localState.information.newInformation
         .emails[action.index].valid = /^([\w.]+)@([\w.]+)\.(\w+)/
         .test(action.value)
+        localState.information.newInformation
+        .emails[action.index].blank = action.value === ''
         // console.log(localState)
         return Immutable.fromJS(localState)
       }
@@ -139,6 +151,8 @@ module.exports.default = (state = initialState, action = {}) => {
           state = state.setIn(['information', 'originalInformation',
             action.field, action.index, 'valid'], /^([\w.]+)@([\w.]+)\.(\w+)/
             .test(action.value))
+          state = state.setIn(['information', 'originalInformation',
+            action.field, action.index, 'delete'], action.value === '')
         }
       }
       return state
@@ -146,7 +160,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.addNewEntry.id:
       let mutableState = state.toJS()
       mutableState.information.newInformation.emails
-      .push({address: '', valid: false, delete: false})
+      .push({address: '', valid: false, delete: false, blank: true})
       return Immutable.fromJS(mutableState)
 
     case actions.validate.id:
@@ -163,7 +177,8 @@ module.exports.default = (state = initialState, action = {}) => {
       }
       for (let i = 0;
         i < newEmails.length; i++) {
-        if (!newEmails[i].valid && !newEmails[i].delete) {
+        if (!newEmails[i].valid && !newEmails[i].delete &&
+          !newEmails[i].blank) {
           return state.setIn(['showErrors'], true)
         }
       }

@@ -12,7 +12,8 @@ import {
 import {theme} from 'styles'
 import ContentMail from 'material-ui/svg-icons/content/mail'
 import {
-  List
+  List,
+  CircularProgress
 } from 'material-ui'
 
 const STYLES = {
@@ -27,6 +28,11 @@ const STYLES = {
   icon: {
     marginTop: '40px',
     marginRight: '40px'
+  },
+  spinner: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%'
   }
 }
 
@@ -51,6 +57,22 @@ export default class WalletContact extends React.Component {
   }
 
   render() {
+    if (this.props.loading === true) {
+      return (
+        <Container>
+          <EditAppBar title="Edit Contact"
+            loading={this.props.loading}
+            onSave={this.props.saveChanges}
+            onClose={this.props.exitWithoutSaving} />
+          <Content>
+            <EditHeader title="Contact" />
+            <List>
+              <CircularProgress style={STYLES.spinner} />
+            </List>
+          </Content>
+        </Container>
+      )
+    }
     let emailFields = []
     // console.log(emailFields)
     if (this.props.loading === false) {
@@ -99,7 +121,8 @@ export default class WalletContact extends React.Component {
                 verified={false}
                 errorText={
                   this.props.showErrors &&
-                  !email.valid ? 'Email not valid' : ''}
+                  !email.valid &&
+                  !email.blank ? 'Email not valid' : ''}
                 focused={
                   this.props.focused === 'newInformation' + 'emails' + i}
                 onFocusChange={this.props.onFocusChange}
@@ -115,17 +138,41 @@ export default class WalletContact extends React.Component {
         }
       }
     ))
-      emailFields.push(
-        <Block key="addEmailField">
-          <AddNew onClick={() => {
-            this.props.addNewEntry('emails')
-            this.props.onFocusChange(
-              'newInformation' + 'emails' +
-               this.props.information.newInformation.emails.length)
-          }}
-            value="Additional email" />
-        </Block>
-      )
+      if (emailFields[0].length === 0 && emailFields[1].length === 0) {
+        emailFields.push(
+          <EditListItem
+            id={'newInformation' + 'emails' + 0}
+            icon={ContentMail}
+            iconStyle={STYLES.icon}
+            textLabel="Email Address"
+            textName="email"
+            textValue=""
+            verified={false}
+            focused={this.props.focused === 'newInformation' + 'emails' + 0}
+            onFocusChange={() => {
+              this.props.addNewEntry('emails')
+              this.props.onFocusChange('newInformation' + 'emails' + 0)
+            }}
+            onChange={
+             (e) => this.props.setInformation(
+               'emails', 0, e.target.value)}
+            onDelete={() => {
+              this.props.deleteInformation('newInformation', 'emails', 0)
+            }} />
+        )
+      } else {
+        emailFields.push(
+          <Block key="addEmailField">
+            <AddNew onClick={() => {
+              this.props.addNewEntry('emails')
+              this.props.onFocusChange(
+                'newInformation' + 'emails' +
+                 this.props.information.newInformation.emails.length)
+            }}
+              value="Additional Email" />
+          </Block>
+        )
+      }
     }
 
     // console.log(emailFields)

@@ -18,7 +18,8 @@ const STYLES = {
   titleDivider: {
     marginTop: '20px',
     margin: '20px 40px 20px 40px',
-    width: '100%'
+    width: '100%',
+    minWidth: '350px'
   }
 }
 

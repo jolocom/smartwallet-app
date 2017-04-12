@@ -11,7 +11,9 @@ const STYLE = {
   textAlign: 'left',
   padding: '16px',
   backgroundColor: theme.jolocom.gray4,
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
+  overflowY: 'auto',
+  minHeight: '100%'
 }
 
 const Container = ({style, children, ...props} = {}) => {
