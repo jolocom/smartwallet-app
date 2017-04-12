@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.jolocom.graph" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Graph</name>
+<widget id="com.jolocom.wallet" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>SmartWallet</name>
     <description>
         A self-sovereign blockchain-enabled identify
     </description>
@@ -17,7 +17,7 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <preference name="CodePushDeploymentKey" value="YaLoyv3FaE8Yoll11ieegqf2fk_YVkWBGkm5e" />
+        <preference name="CodePushDeploymentKey" value="Ba3smaTq-THOVCHLyIv_uFBh0pRNVkWBGkm5e" />
         <icon density="ldpi" src="res/android/ldpi/icon.png" />
         <icon density="mdpi" src="res/android/mdpi/icon.png" />
         <icon density="hdpi" src="res/android/hdpi/icon.png" />
@@ -32,7 +32,7 @@
         <preference name="StatusBarStyle" value="black-translucent" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-        <preference name="CodePushDeploymentKey" value="PtVM-Mez6bYbitXdE88YeYZvUNfzVkWBGkm5e" />
+        <preference name="CodePushDeploymentKey" value="YAoycT2uXsEMrnwarl4x7Lae4ngGVkWBGkm5e" />
         <icon height="180" src="res/ios/app-icon@180x180.png" width="180" />
         <icon height="60" src="res/ios/app-icon@60x60.png" width="60" />
         <icon height="120" src="res/ios/app-icon@120x120.png" width="120" />

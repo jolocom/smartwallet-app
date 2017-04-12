@@ -15,7 +15,9 @@
     "test:firefox": "npm run test -- --browsers Firefox",
     "test:safari": "npm run test -- --browsers Safari",
     "test:ie": "npm run test -- --browsers IE",
-    "lint": "eslint src/js/**"
+    "lint": "eslint src/js/**",
+    "ios": "cd app && cordova run ios",
+    "android": "cd app && cordova run android"
   },
   "repository": {
     "type": "git",

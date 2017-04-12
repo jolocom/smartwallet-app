@@ -152,7 +152,7 @@ gulp.task('html:cordova', ['clean'], function() {
 });
 
 gulp.task('build:cordova', [
-  'cordova:configure', 'webpack:build', 'html:cordova', 'img'
+  'webpack:build', 'html:cordova', 'img'
 ]);
 
 gulp.task('cordova:configure', function() {
@@ -163,7 +163,9 @@ gulp.task('cordova:configure', function() {
     .pipe(gulp.dest('./app/'));
 });
 
-gulp.task('release:ios', ['build:cordova'], function (callback) {
+gulp.task('cordova:init', ['cordova:add-ios', 'cordova:add-android'])
+
+gulp.task('cordova:add-ios', ['cordova:configure'], function (callback) {
   process.chdir(path.join(__dirname, 'app'));
 
   var exists = fs.existsSync(
@@ -175,11 +177,46 @@ gulp.task('release:ios', ['build:cordova'], function (callback) {
       if (exists) {
         return cordova.raw.platforms('rm', 'ios');
       }
-      return exists
     })
     .then(function() {
       return cordova.raw.platforms('add', 'ios');
     })
+    .then(function() {
+      callback()
+    })
+    .catch(function(e) {
+      callback(e)
+    })
+});
+
+gulp.task('cordova:add-android', ['cordova:configure'], function (callback) {
+  process.chdir(path.join(__dirname, 'app'));
+
+  var exists = fs.existsSync(
+    path.join(cordova.findProjectRoot(), 'platforms', 'android')
+  );
+
+  Promise.resolve()
+    .then(function() {
+      if (exists) {
+        return cordova.raw.platforms('rm', 'android');
+      }
+    })
+    .then(function() {
+      return cordova.raw.platforms('add', 'android');
+    })
+    .then(function() {
+      callback()
+    })
+    .catch(function(e) {
+      callback(e)
+    })
+});
+
+gulp.task('release:ios', ['build:cordova', 'cordova:add-ios'], function (callback) {
+  process.chdir(path.join(__dirname, 'app'));
+
+  Promise.resolve()
     .then(function() {
       return cordova.raw.build({
         'platforms': ['ios'],
@@ -198,20 +235,10 @@ gulp.task('release:ios', ['build:cordova'], function (callback) {
     })
 });
 
-gulp.task('release:android', ['build:cordova'], function (callback) {
+gulp.task('release:android', ['build:cordova', 'cordova:add-android'], function (callback) {
   process.chdir(path.join(__dirname, 'app'));
 
-  var androidPath = path.join(cordova.findProjectRoot(), 'platforms', 'android');
-
   Promise.resolve()
-    .then(function() {
-      return fs.existsSync(androidPath);
-    })
-    .then(function(exists) {
-      if (!exists) {
-        return cordova.raw.platforms('add', 'android');
-      }
-    })
     .then(function() {
       return cordova.raw.build({
         'platforms': ['android'],
