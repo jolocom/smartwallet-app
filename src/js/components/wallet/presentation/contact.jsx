@@ -100,6 +100,7 @@ export default class WalletContact extends React.Component {
                 onDelete={() => {
                   this.props.deleteInformation('originalInformation', 'emails', i) //eslint-disable-line
                 }}
+                enableDelete
                 />
             </Block>
           )
@@ -132,6 +133,7 @@ export default class WalletContact extends React.Component {
                 onDelete={() => {
                   this.props.deleteInformation('newInformation', 'emails', i)
                 }}
+                enableDelete={!email.blank}
                 />
             </Block>
           )
