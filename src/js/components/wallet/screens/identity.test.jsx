@@ -17,7 +17,7 @@ describe('(Component) WalletIdentityScreen', function() {
               username: {
                 verified: true,
                 value: 'AnnikaHamman'
-                },
+              },
               contact: {
                 phone: [{
                   number: '+49 176 12345678',
@@ -25,9 +25,9 @@ describe('(Component) WalletIdentityScreen', function() {
                   verified: true
                 }],
                 email: [{
-                    address: 'info@jolocom.com',
-                    type: 'mobile',
-                    verified: true
+                  address: 'info@jolocom.com',
+                  type: 'mobile',
+                  verified: true
                 }]
               },
               passport: {
@@ -50,7 +50,7 @@ describe('(Component) WalletIdentityScreen', function() {
         }))
       }
         goToPassportManagement={() => {}}
-        goToDivingLicenceManagement={() => {}}
+        goToDrivingLicenceManagement={() => {}}
         goToContactManagement={() => {}}
         getIdentityInformation={() => {}}
       />),
@@ -68,135 +68,130 @@ describe('(Component) WalletIdentityScreen', function() {
       phone: [{number: '+49 176 12345678', type: 'mobile', verified: true}],
       email: [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
     })
-     expect(wrapper.find('WalletIdentity').prop('passport')).to.deep.equal({
-      number: '',givenName: '',familyName: '',birthDate: '',age: '',gender: '',
+    expect(wrapper.find('WalletIdentity').prop('passport')).to.deep.equal({
+      number: '', givenName: '', familyName: '', birthDate: '', gender: '',
       showAddress: '', streetAndNumber: '', city: '', zip: '', state: '',
       country: '', verified: false
     })
   })
-  it('should call goToDivingLicenceManagement on goToDivingLicenceManagement ' +
-    'with proper params', function() {
-      const goToDivingLicenceManagement = stub()
-      const wrapper = shallow(
-        (<WalletIdentityScreen.WrappedComponent {
-          ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-            wallet: {
-              identity: {
-                loaded: false,
-                webId: '',
-                username: {},
-                contact: {},
-                passport: {}
-              }
+  it('should call goToDrivingLicenceManagement with proper params', () => {
+    const goToDrivingLicenceManagement = stub()
+    const wrapper = shallow(
+      (<WalletIdentityScreen.WrappedComponent {
+        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            identity: {
+              loaded: false,
+              webId: '',
+              username: {},
+              contact: {},
+              passport: {}
             }
-          }))
-        }
-          goToPassportManagement={() => {}}
-          goToDivingLicenceManagement={goToDivingLicenceManagement}
-          goToContactManagement={() => {}}
-          getIdentityInformation={() => {}}
-        />),
-        { context: { muiTheme: { } } }
+          }
+        }))
+      }
+        goToPassportManagement={() => {}}
+        goToDrivingLicenceManagement={goToDrivingLicenceManagement}
+        goToContactManagement={() => {}}
+        getIdentityInformation={() => {}}
+       />),
+      { context: { muiTheme: { } } }
       )
 
-      wrapper.find('WalletIdentity').props().goToDivingLicenceManagement()
-      expect(goToDivingLicenceManagement.called).to.be.true
-      expect(goToDivingLicenceManagement.calls).to.deep.equal([{ args: []}])
-    }
-  )
+    wrapper.find('WalletIdentity').props().goToDrivingLicenceManagement()
+    expect(goToDrivingLicenceManagement.called).to.be.true
+    expect(goToDrivingLicenceManagement.calls).to.deep.equal([{args: []}])
+  })
   it('should call goToPassportManagement on goToPassportManagement ' +
-    'with proper params', function() {
-      const goToPassportManagement = stub()
-      const wrapper = shallow(
-        (<WalletIdentityScreen.WrappedComponent {
-          ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-            wallet: {
-              identity: {
-                loaded: false,
-                webId: '',
-                username: {},
-                contact: {
-                  phone: [],
-                  email: []
-                },
-                passport: {}
-              }
+    'with proper params', () => {
+    const goToPassportManagement = stub()
+    const wrapper = shallow(
+      (<WalletIdentityScreen.WrappedComponent {
+        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            identity: {
+              loaded: false,
+              webId: '',
+              username: {},
+              contact: {
+                phone: [],
+                email: []
+              },
+              passport: {}
             }
-          }))
-        }
-          goToPassportManagement={goToPassportManagement}
-          goToDivingLicenceManagement={() => {}}
-          goToContactManagement={() => {}}
-          getIdentityInformation={() => {}}
-        />),
-        { context: { muiTheme: { } } }
-      )
+          }
+        }))
+      }
+        goToPassportManagement={goToPassportManagement}
+        goToDrivingLicenceManagement={() => {}}
+        goToContactManagement={() => {}}
+        getIdentityInformation={() => {}}
+       />),
+      { context: { muiTheme: { } } }
+    )
 
-      wrapper.find('WalletIdentity').props().goToPassportManagement()
-      expect(goToPassportManagement.called).to.be.true
-      expect(goToPassportManagement.calls).to.deep.equal([{ args: []}])
-    }
-  )
+    wrapper.find('WalletIdentity').props().goToPassportManagement()
+    expect(goToPassportManagement.called).to.be.true
+    expect(goToPassportManagement.calls).to.deep.equal([{args: []}])
+  })
   it('should call goToContactManagement on goToContactManagement ' +
-    'with proper params', function() {
-      const goToContactManagement = stub()
-      const wrapper = shallow(
-        (<WalletIdentityScreen.WrappedComponent {
-          ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-            wallet: {
-              identity: {
-                loaded: false,
-                webId: '',
-                username: {},
-                contact: {
-                  phone: [],
-                  email: []
-                },
-                passport: {}
-              }
+    'with proper params', () => {
+    const goToContactManagement = stub()
+    const wrapper = shallow(
+      (<WalletIdentityScreen.WrappedComponent {
+        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            identity: {
+              loaded: false,
+              webId: '',
+              username: {},
+              contact: {
+                phone: [],
+                email: []
+              },
+              passport: {}
             }
-          }))
-        }
-          goToPassportManagement={() => {}}
-          goToDivingLicenceManagement={() => {}}
-          goToContactManagement={goToContactManagement}
-          getIdentityInformation={() => {}}
-        />),
-        { context: { muiTheme: { } } }
-      )
+          }
+        }))
+      }
+        goToPassportManagement={() => {}}
+        goToDrivingLicenceManagement={() => {}}
+        goToContactManagement={goToContactManagement}
+        getIdentityInformation={() => {}}
+       />),
+      { context: { muiTheme: { } } }
+    )
 
-      wrapper.find('WalletIdentity').props().goToContactManagement()
-      expect(goToContactManagement.called).to.be.true
-      expect(goToContactManagement.calls).to.deep.equal([{ args: []}])
-    }
-  )
+    wrapper.find('WalletIdentity').props().goToContactManagement()
+    expect(goToContactManagement.called).to.be.true
+    expect(goToContactManagement.calls).to.deep.equal([{args: []}])
+  })
   it('should call getIdentityInformation on componentWillMount   ' +
-    'with proper params', function() {
-      const getIdentityInformation = stub()
-      const wrapper = shallow(
-        (<WalletIdentityScreen.WrappedComponent {
-          ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-            wallet: {
-              identity: {
-                loaded: false,
-                webId: '',
-                username: {},
-                contact: {},
-                passport: {}
-              }
+    'with proper params', () => {
+    const getIdentityInformation = stub()
+    shallow(
+      (<WalletIdentityScreen.WrappedComponent {
+        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            identity: {
+              loaded: false,
+              webId: '',
+              username: {},
+              contact: {},
+              passport: {}
             }
-          }))
-        }
-          goToPassportManagement={() => {}}
-          goToDivingLicenceManagement={() => {}}
-          goToContactManagement={() => {}}
-          getIdentityInformation={getIdentityInformation}
-        />),
-        { context: { muiTheme: { } } }
-      )
+          }
+        }))
+      }
+        goToPassportManagement={() => {}}
+        goToDrivingLicenceManagement={() => {}}
+        goToContactManagement={() => {}}
+        getIdentityInformation={getIdentityInformation}
+       />),
+      { context: { muiTheme: { } } }
+    )
 
-      expect(getIdentityInformation.called).to.be.true
-      expect(getIdentityInformation.calls).to.deep.equal([{ args: []}])
-    }
-  )
+    expect(getIdentityInformation.called).to.be.true
+    expect(getIdentityInformation.calls).to.deep.equal([{args: []}])
+  })
 })
