@@ -92,6 +92,12 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.saveChanges.id:
+      return state.setIn(['loading'], true)
+
+    case actions.saveChanges.id_success:
+      return state.setIn(['loading'], false)
+
     case actions.getAccountInformation.id:
       return state.setIn(['loading'], true)
 

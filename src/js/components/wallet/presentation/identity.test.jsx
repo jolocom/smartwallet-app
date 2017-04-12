@@ -12,7 +12,7 @@ describe('(Component) Wallet Identity', function() {
         contact={{email: [], phone: []}}
         goToContactManagement={() => {}}
         goToPassportManagement={() => {}}
-        goToDivingLicenceManagement={() => {}}
+        goToDrivingLicenceManagement={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

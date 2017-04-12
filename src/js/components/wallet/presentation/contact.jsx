@@ -12,7 +12,8 @@ import {
 import {theme} from 'styles'
 import ContentMail from 'material-ui/svg-icons/content/mail'
 import {
-  List
+  List,
+  CircularProgress
 } from 'material-ui'
 
 const STYLES = {
@@ -27,6 +28,11 @@ const STYLES = {
   icon: {
     marginTop: '40px',
     marginRight: '40px'
+  },
+  spinner: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%'
   }
 }
 
@@ -51,6 +57,22 @@ export default class WalletContact extends React.Component {
   }
 
   render() {
+    if (this.props.loading === true) {
+      return (
+        <Container>
+          <EditAppBar title="Edit Contact"
+            loading={this.props.loading}
+            onSave={this.props.saveChanges}
+            onClose={this.props.exitWithoutSaving} />
+          <Content>
+            <EditHeader title="Contact" />
+            <List>
+              <CircularProgress style={STYLES.spinner} />
+            </List>
+          </Content>
+        </Container>
+      )
+    }
     let emailFields = []
     // console.log(emailFields)
     if (this.props.loading === false) {
@@ -149,7 +171,6 @@ export default class WalletContact extends React.Component {
         )
       }
     }
-    // fields = [<div key="key1">blah1</div>, <div key="key2">blah2</div>]
 
     // console.log(emailFields)
     return (

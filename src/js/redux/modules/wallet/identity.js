@@ -6,7 +6,7 @@ const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
     expectedParams: [],
     creator: () => {
-      return (dispatch, getState) => {
+      return (dispatch) => {
         dispatch(router.pushRoute('/wallet/identity/contact'))
       }
     }
@@ -14,24 +14,16 @@ const actions = module.exports = makeActions('wallet/identity', {
   goToPassportManagement: {
     expectedParams: [],
     creator: () => {
-      return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/identity/passport'))
+      return (dispatch) => {
+        dispatch(router.pushRoute('/wallet/identity/passport/add'))
       }
     }
   },
-  goToDivingLicenceManagement: {
+  goToDrivingLicenceManagement: {
     expectedParams: [],
     creator: () => {
-      return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/identity/drivers-licence'))
-      }
-    }
-  },
-  goToIdentity: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/identity/'))
+      return (dispatch) => {
+        dispatch(router.pushRoute('/wallet/identity/drivers-licence/add'))
       }
     }
   },
@@ -39,10 +31,12 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
+      return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params,
         () => {
-          return services.auth.currentUser.wallet.getUserInformation({email: 'test@test.com'})
+          return services.auth.currentUser.wallet.getUserInformation({
+            email: 'test@test.com'
+          })
         }))
       }
     }
@@ -57,7 +51,7 @@ const initialState = Immutable.fromJS({
   username: {
     verified: false,
     value: ''
-    },
+  },
   contact: {
     phone: [{
       type: '',
@@ -70,12 +64,11 @@ const initialState = Immutable.fromJS({
       verified: false
     }]
   },
-  passport:{
+  passport: {
     number: '',
     givenName: '',
     familyName: '',
     birthDate: '',
-    age: '',
     gender: '',
     showAddress: '',
     streetAndNumber: '',
@@ -91,10 +84,6 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.getIdentityInformation.id_success:
       return mapBackendToState(action.result)
-    case actions.getIdentityInformation.id:
-      return state
-    case actions.getIdentityInformation.id_fail:
-      return state
     default:
       return state
   }
