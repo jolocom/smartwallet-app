@@ -12,9 +12,10 @@ Setup for development
 Setup requires Node.JS to be installed on your computer. If you do not have it please see:
 https://nodejs.org/en/download/
 
+## Installation
+
 After cloning the little-sister repository to a directory on your computer. Enter the directory and run the following command:
 
-## Installation
 ```bash
 npm install -g gulp
 npm install
@@ -22,19 +23,41 @@ npm install
 
 ## Building
 
-### With hot module reloading support
+### Browser
+
+#### With hot module reloading support
 
 ```bash
 gulp
 ```
 This will make webpack-dev-server serve Little-Sister on https://localhost:8080 and will reload only the modules you've modified instead of rebuilding the entire bundle on every change. The changes will be applied live to your browser.
 
-### Without hot module reloading
+#### Without hot module reloading
 
 ```bash
 gulp build-dev
 ```
 Rebuilding will be much slower this way, because the entire bundle will be rebuilt on each change.
+
+### Mobile (Cordova)
+
+First make sure to build the Cordova distribution.
+
+```bash
+gulp build:cordova
+```
+
+#### iOS
+
+```bash
+npm run ios
+```
+
+#### Android
+
+```bash
+npm run android
+```
 
 ### Notes
 
@@ -52,14 +75,36 @@ npm install --production
 ```
 
 ## Building
-                 
+
+### Browser
+
 ```bash
 gulp build
 ```
 
-`gulp build` has a similar effect to just using `gulp`, except it runs some additional, non vital operations (for example asset minimization) that make the final `app.js` file more optimized.
+### Mobile (Cordova)
 
-Running `gulp build` takes more time, and can therefore cause the development feedback cycle to take longer. Consequently, it shouldn't really be used during development.
+First make sure to build the Cordova distribution.
+
+```bash
+gulp build:cordova
+```
+
+#### iOS
+
+A valid code sign identity & provisioning needs to be configured in `cordova.json` before a release can be build.
+
+```bash
+gulp release:ios
+```
+
+#### Android
+
+Building a valid release package requires a keystore to be configured in `cordova.json`.
+
+```bash
+gulp release:android
+```
 
 Choosing a SoLiD server
 -----------------------

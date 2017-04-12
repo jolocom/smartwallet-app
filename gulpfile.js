@@ -151,7 +151,9 @@ gulp.task('html:cordova', ['clean'], function() {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('build:cordova', ['webpack:build', 'html:cordova', 'img']);
+gulp.task('build:cordova', [
+  'cordova:configure', 'webpack:build', 'html:cordova', 'img'
+]);
 
 gulp.task('cordova:configure', function() {
   var config = process.env.ENTRY || 'graph'
@@ -161,7 +163,7 @@ gulp.task('cordova:configure', function() {
     .pipe(gulp.dest('./app/'));
 });
 
-gulp.task('release:ios', ['cordova:configure'], function (callback) {
+gulp.task('release:ios', ['build:cordova'], function (callback) {
   process.chdir(path.join(__dirname, 'app'));
 
   var exists = fs.existsSync(
@@ -196,7 +198,7 @@ gulp.task('release:ios', ['cordova:configure'], function (callback) {
     })
 });
 
-gulp.task('release:android', ['build:cordova', 'cordova:configure'], function (callback) {
+gulp.task('release:android', ['build:cordova'], function (callback) {
   process.chdir(path.join(__dirname, 'app'));
 
   var androidPath = path.join(cordova.findProjectRoot(), 'platforms', 'android');
