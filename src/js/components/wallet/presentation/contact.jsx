@@ -53,7 +53,9 @@ export default class WalletContact extends React.Component {
     loading: React.PropTypes.bool,
     showErrors: React.PropTypes.bool,
     addNewEntry: React.PropTypes.func,
-    validate: React.PropTypes.func
+    validate: React.PropTypes.func,
+    confirm: React.PropTypes.func,
+    close: React.PropTypes.func
   }
 
   render() {
@@ -98,7 +100,16 @@ export default class WalletContact extends React.Component {
                 onChange={
                  (e) => this.props.updateInformation('emails', i, e.target.value)} //eslint-disable-line
                 onDelete={() => {
-                  this.props.deleteInformation('originalInformation', 'emails', i) //eslint-disable-line
+                  email.verified
+                  ? this.props.confirm(
+                    'Are you sure you want to delete a verified email?',
+                    'Delete', () => {
+                      this.props.deleteInformation('originalInformation',
+                      'emails', i)
+                      this.props.close()
+                    })
+                  : this.props.deleteInformation('originalInformation',
+                  'emails', i)
                 }}
                 enableDelete
                 />
