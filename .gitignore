@@ -55,6 +55,7 @@ chrome-user-data
 nbproject
 
 # Cordova
+app/plugins
 app/platforms
 app/build.json
 cordova.json
