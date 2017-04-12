@@ -99,7 +99,8 @@ export default class WalletContact extends React.Component {
                 verified={false}
                 errorText={
                   this.props.showErrors &&
-                  !email.valid ? 'Email not valid' : ''}
+                  !email.valid &&
+                  !email.blank ? 'Email not valid' : ''}
                 focused={
                   this.props.focused === 'newInformation' + 'emails' + i}
                 onFocusChange={this.props.onFocusChange}
