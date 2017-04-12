@@ -15,6 +15,8 @@ import Header from './header.jsx'
 
 import UserAvatar from 'components/common/user-avatar.jsx'
 
+import graphActions from 'actions/graph-actions'
+
 import ProfileStore from 'stores/profile'
 
 import {navItems} from 'routes'
@@ -104,6 +106,8 @@ let Nav = React.createClass({
 
   logout() {
     this.props.doLogout()
+    graphActions.clearState()
+    this.goto('/')
   },
 
   drawerRequestChange(open, reason) {
