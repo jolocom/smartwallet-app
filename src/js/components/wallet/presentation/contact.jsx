@@ -142,10 +142,7 @@ export default class WalletContact extends React.Component {
         emailFields.push(
           <Block key="addEmailField">
             <AddNew onClick={() => {
-              this.props.addNewEntry('emails')
-              this.props.onFocusChange(
-                'newInformation' + 'emails' +
-                 this.props.information.newInformation.emails.length)
+              this._handleAddNewClick()
             }}
               value="Additional Email" />
           </Block>
@@ -169,5 +166,16 @@ export default class WalletContact extends React.Component {
         </Content>
       </Container>
     )
+  }
+  _handleAddNewClick = () => {
+    if (this.props.information.newInformation.emails.length === 0 ||
+      this.props.information.newInformation.emails[
+        this.props.information.newInformation.emails.length - 1].address !==
+         '') {
+      this.props.addNewEntry('emails')
+      this.props.onFocusChange(
+        'newInformation' + 'emails' +
+         this.props.information.newInformation.emails.length)
+    }
   }
 }
