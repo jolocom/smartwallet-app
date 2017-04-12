@@ -89,12 +89,13 @@ export default class EditListItem extends React.Component {
               value={props.textValue}
               errorText={this.props.errorText} />
             }
-        <div style={{...STYLES.clear}}>
-          <div onClick={() => this.props.onDelete()}
-            style={{...STYLES.img, ...{
-              backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
-            }}} />
-        </div>
+            {props.textValue !== '' &&
+              <div style={{...STYLES.clear}}>
+                <div onClick={() => this.props.onDelete()}
+                  style={{...STYLES.img, ...{
+                    backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+                  }}} />
+              </div>}
       </div>
     )
   }
