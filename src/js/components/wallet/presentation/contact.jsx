@@ -189,9 +189,9 @@ export default class WalletContact extends React.Component {
     )
   }
   _handleAddNewClick = () => {
-    if (this.props.information.newInformation.emails.length === 0 ||
-      this.props.information.newInformation.emails[
-        this.props.information.newInformation.emails.length - 1].address !==
+    var length = this.props.information.newInformation.emails.length
+    if (length === 0 ||
+      this.props.information.newInformation.emails[length - 1].address !==
          '') {
       this.props.addNewEntry('emails')
       this.props.onFocusChange(
