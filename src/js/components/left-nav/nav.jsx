@@ -29,8 +29,7 @@ let Nav = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.object,
-    profile: React.PropTypes.any,
-    account: React.PropTypes.any
+    profile: React.PropTypes.any
   },
 
   propTypes: {
@@ -39,8 +38,7 @@ let Nav = React.createClass({
     doLogout: React.PropTypes.func.isRequired,
     showLeftNav: React.PropTypes.func.isRequired,
     hideLeftNav: React.PropTypes.func.isRequired,
-    selectItem: React.PropTypes.func.isRequired,
-    account: React.PropTypes.any
+    selectItem: React.PropTypes.func.isRequired
   },
 
   getStyles() {
@@ -96,15 +94,6 @@ let Nav = React.createClass({
   editProfile(event) {
     this.props.hideLeftNav()
     this.context.router.push('profile')
-    event.preventDefault()
-  },
-
-  viewProfile(event) {
-    this.props.hideLeftNav()
-
-    const uri = encodeURIComponent(this.props.account.webId)
-
-    this.context.router.push(`graph/${uri}/view`)
     event.preventDefault()
   },
 
@@ -183,7 +172,7 @@ let Nav = React.createClass({
             onChange={this._handleNavChange}
             >
             <ListItem primaryText="Profile"
-              onTouchTap={this.viewProfile}
+              onTouchTap={this.editProfile}
               style={styles.menuItem}
               leftAvatar={
                 <Avatar
