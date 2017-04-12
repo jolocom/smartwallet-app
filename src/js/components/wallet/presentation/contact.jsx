@@ -138,17 +138,41 @@ export default class WalletContact extends React.Component {
         }
       }
     ))
-      emailFields.push(
-        <Block key="addEmailField">
-          <AddNew onClick={() => {
-            this.props.addNewEntry('emails')
-            this.props.onFocusChange(
-              'newInformation' + 'emails' +
-               this.props.information.newInformation.emails.length)
-          }}
-            value="Additional email" />
-        </Block>
-      )
+      if (emailFields[0].length === 0 && emailFields[1].length === 0) {
+        emailFields.push(
+          <EditListItem
+            id={'newInformation' + 'emails' + 0}
+            icon={ContentMail}
+            iconStyle={STYLES.icon}
+            textLabel="Email Address"
+            textName="email"
+            textValue=""
+            verified={false}
+            focused={this.props.focused === 'newInformation' + 'emails' + 0}
+            onFocusChange={() => {
+              this.props.addNewEntry('emails')
+              this.props.onFocusChange('newInformation' + 'emails' + 0)
+            }}
+            onChange={
+             (e) => this.props.setInformation(
+               'emails', 0, e.target.value)}
+            onDelete={() => {
+              this.props.deleteInformation('newInformation', 'emails', 0)
+            }} />
+        )
+      } else {
+        emailFields.push(
+          <Block key="addEmailField">
+            <AddNew onClick={() => {
+              this.props.addNewEntry('emails')
+              this.props.onFocusChange(
+                'newInformation' + 'emails' +
+                 this.props.information.newInformation.emails.length)
+            }}
+              value="Additional Email" />
+          </Block>
+        )
+      }
     }
 
     // console.log(emailFields)
