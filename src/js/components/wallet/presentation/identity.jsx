@@ -99,7 +99,7 @@ export default class WalletIdentity extends React.Component {
     contact: React.PropTypes.object.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
-    goToDivingLicenceManagement: React.PropTypes.func.isRequired
+    goToDrivingLicenceManagement: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -160,7 +160,7 @@ export default class WalletIdentity extends React.Component {
             <PlusMenu
               name="Driving License"
               choice={false}
-              goToManagement={this.props.goToDivingLicenceManagement}
+              goToManagement={this.props.goToDrivingLicenceManagement}
             />
           </Block>
         </Content>
