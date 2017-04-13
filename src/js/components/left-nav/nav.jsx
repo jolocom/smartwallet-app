@@ -15,7 +15,7 @@ import Header from './header.jsx'
 
 import UserAvatar from 'components/common/user-avatar.jsx'
 
-import graphActions from 'actions/graph-actions'
+import accountActions from 'actions/account'
 
 import ProfileStore from 'stores/profile'
 
@@ -106,7 +106,8 @@ let Nav = React.createClass({
 
   logout() {
     this.props.doLogout()
-    graphActions.clearState()
+    // Reflux signal, so reflux components can update.
+    accountActions.logout()
     this.goto('/')
   },
 

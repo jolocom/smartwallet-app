@@ -9,6 +9,7 @@ export default Reflux.createStore({
   listenables: [graphActions],
 
   init() {
+    this.listenTo(accountActions.logout, this.onLogout)
     this.listenTo(accountActions.login.completed, this.onLogin)
 
     this.gAgent = new GraphAgent()
@@ -36,7 +37,7 @@ export default Reflux.createStore({
     return this.state
   },
 
-  clearState() {
+  onLogout() {
     this.init()
   },
 
