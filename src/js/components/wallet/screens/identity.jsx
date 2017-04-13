@@ -10,7 +10,9 @@ import Presentation from '../presentation/identity'
     'wallet/identity:goToDrivingLicenceManagement',
     'wallet/identity:goToContactManagement',
     'confirmation-dialog:openConfirmDialog',
-    'confirmation-dialog:closeConfirmDialog'
+    'confirmation-dialog:closeConfirmDialog',
+    'simple-dialog:showSimpleDialog',
+    'simple-dialog:configSimpleDialog'
   ]
 })
 
@@ -23,7 +25,9 @@ export default class WalletIdentityScreen extends React.Component {
     goToContactManagement: React.PropTypes.func.isRequired,
     closeConfirmDialog: React.PropTypes.func.isRequired,
     openConfirmDialog: React.PropTypes.func.isRequired,
-    getIdentityInformation: React.PropTypes.func.isRequired
+    getIdentityInformation: React.PropTypes.func.isRequired,
+    configSimpleDialog: React.PropTypes.func.isRequired,
+    showSimpleDialog: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -36,6 +40,12 @@ export default class WalletIdentityScreen extends React.Component {
     const confirmButtonText = 'REQUEST VERIFICATION'
     this.props.openConfirmDialog(message, cancelButtonText, close, confirmButtonText)
   }
+
+  showUserInfo(message) {
+    this.props.configSimpleDialog(message, 'ALRIGHT')
+    this.props.showSimpleDialog()
+  }
+
   render() {
     const identity = this.props.wallet.identity
     return (
@@ -49,6 +59,7 @@ export default class WalletIdentityScreen extends React.Component {
         goToPassportManagement={this.props.goToPassportManagement}
         goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
         verify={(message) => this.verifyEmail(message)}
+        showUsernameInfo={(message) => this.showUserInfo(message)}
       />
     )
   }

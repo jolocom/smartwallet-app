@@ -24,8 +24,7 @@ const STYLES = {
   },
   iconName: {
     top: '20px',
-    fill: theme.palette.accent1Color,
-    cursor: 'pointer'
+    fill: theme.palette.accent1Color
   },
   divider: {
     marginLeft: '16px'
@@ -41,6 +40,12 @@ const STYLES = {
   refresh: {
     display: 'inline-block',
     position: 'relative'
+  },
+  floatingLabel: {
+    textAlign: 'center',
+    width: '100%',
+    transformOrigin: 'center top 0px',
+    color: theme.palette.lighterTextColor
   }
 }
 
@@ -77,10 +82,9 @@ const EmailList = (props) => {
   }
   for (let i = 0; i < props.email.length; i++) {
     display.push(
-      <div>
+      <div key={i}>
         <StaticListItem
           index={i}
-          key={i}
           verified={props.email[i].verified}
           textValue={props.email[i].address}
           textLabel="Email"
@@ -112,6 +116,36 @@ const message = (
   </div>
 )
 
+const InfoDetail = (props) => {
+  const personalDetails = <span style={{maxWidth: '300px'}}>
+    <TextField
+      key="1"
+      value={props.username}
+      errorText="is your username"
+      errorStyle={STYLES.floatingLabel}
+      inputStyle={{textAlign: 'center'}}
+    />
+    <br/>
+    <TextField
+      key="2"
+      value={props.webId}
+      errorText="is your WebID"
+      errorStyle={STYLES.floatingLabel}
+      inputStyle={{textAlign: 'center'}}
+    />
+  </span>
+
+  return <span
+    onClick={() => props.showDetails(personalDetails)}>
+    <Info style={STYLES.iconName}/>
+  </span>
+}
+
+InfoDetail.propTypes = {
+  showDetails: React.PropTypes.func.isRequired
+}
+
+
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
@@ -119,11 +153,13 @@ export default class WalletIdentity extends React.Component {
     username: React.PropTypes.object.isRequired,
     passport: React.PropTypes.object.isRequired,
     isLoaded: React.PropTypes.bool.isRequired,
+    webId: React.PropTypes.string.isRequired,
     contact: React.PropTypes.object.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
+    goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
     verify: React.PropTypes.func.isRequired,
-    goToDrivingLicenceManagement: React.PropTypes.func.isRequired
+    showUsernameInfo: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -143,9 +179,11 @@ export default class WalletIdentity extends React.Component {
         <Content>
           <Block>
             <List>
-              <ListItem key={1} disabled rightIcon={<Info
-                style={STYLES.iconName}
-              />} >
+              <ListItem key={1} disabled rightIcon={<InfoDetail
+                showDetails={(details) =>this.props.showUsernameInfo(details)}
+                webId={this.props.webId}
+                username={this.props.username.value}
+              /> }>
                 <TextField
                   floatingLabelText="Name"
                   inputStyle={STYLES.inputName}

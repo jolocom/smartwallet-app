@@ -88,7 +88,7 @@ export class Wallet {
 
   getUserInformation({email}) {
     const identity = {
-      webid: 'https://demo.webid.jolocom.com/profile/card',
+      webId: 'https://demo.webid.jolocom.com/profile/card',
       username: {
         value: 'AnnikaHamman',
         verified: ''
