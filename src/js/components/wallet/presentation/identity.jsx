@@ -112,7 +112,8 @@ EmailList.propTypes = {
 
 const iconPhoneMessage = (
   <div>
-    <b>Phone Number Verification</b> <br />
+    <b>Verification</b> <br />
+    <br />
     <span>
       Your number hasn't been verified yet. For verification we will
       send you a sms with an authentication code to this number. You will need
@@ -123,17 +124,18 @@ const iconPhoneMessage = (
 
 const iconEmailMessage = (
   <div>
-    <b>Email Verification</b> <br />
+    <b>Verification</b> <br />
+    <br />
     <span>
-      Your email hasn't been verified yet. For verification we will
-      send you an with an authentication link to this address. You will need to
-      click on that link to verify the email.
+      Your email hasn't been verified yet. Click "Request Verification" to get
+      an email with a verification link.
     </span>
   </div>
 )
 const buttonEmailMessage = (
   <div>
-    <b>Email Verification</b> <br />
+    <b>Verification</b> <br />
+    <br />
     <span>
       We've sent a verification link to this address.
     </span>
