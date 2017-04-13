@@ -5,13 +5,12 @@ import Info from 'material-ui/svg-icons/action/info'
 import {theme} from 'styles'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-
-import RefreshIndicator from 'material-ui/RefreshIndicator'
 import {
   TextField,
   Divider,
   List, ListItem,
-  FlatButton
+  FlatButton,
+  CircularProgress
 } from 'material-ui'
 
 const STYLES = {
@@ -44,6 +43,11 @@ const STYLES = {
   },
   requestBtn: {
     marginLeft: '50px'
+  },
+  spinner: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%'
   }
 }
 
@@ -156,14 +160,7 @@ export default class WalletIdentity extends React.Component {
 
   render() {
     if (!this.props.isLoaded) {
-      return <div style={{ margin: 'auto' }}> <RefreshIndicator
-        size={50}
-        left={70}
-        top={0}
-        loadingColor={theme.palette.accent1Color}
-        status="loading"
-        style={STYLES.refresh}
-    /></div>
+      return <CircularProgress style={STYLES.spinner} />
     }
 
     return (
