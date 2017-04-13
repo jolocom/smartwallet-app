@@ -34,16 +34,12 @@ export default class WalletIdentityScreen extends React.Component {
     this.props.getIdentityInformation()
   }
 
-  verifyEmail(message) {
+  confirm(message) {
     const close = this.props.closeConfirmDialog
     const cancelButtonText = 'OK'
     const confirmButtonText = 'REQUEST VERIFICATION'
-    this.props.openConfirmDialog(message, cancelButtonText, close, confirmButtonText)
-  }
-
-  showUserInfo(message) {
-    this.props.configSimpleDialog(message, 'ALRIGHT')
-    this.props.showSimpleDialog()
+    this.props.openConfirmDialog(message, cancelButtonText, close,
+    confirmButtonText)
   }
 
   render() {
@@ -58,8 +54,11 @@ export default class WalletIdentityScreen extends React.Component {
         goToContactManagement={this.props.goToContactManagement}
         goToPassportManagement={this.props.goToPassportManagement}
         goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
-        verify={(message) => this.verifyEmail(message)}
-        showUsernameInfo={(message) => this.showUserInfo(message)}
+        confirm={(message) => this.confirm(message)}
+        verify={(message) => {
+          this.props.configSimpleDialog(message)
+          this.props.showSimpleDialog()
+        }}
       />
     )
   }

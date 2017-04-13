@@ -5,13 +5,12 @@ import Info from 'material-ui/svg-icons/action/info'
 import {theme} from 'styles'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-
-import RefreshIndicator from 'material-ui/RefreshIndicator'
 import {
   TextField,
   Divider,
   List, ListItem,
-  FlatButton
+  FlatButton,
+  CircularProgress
 } from 'material-ui'
 
 const STYLES = {
@@ -46,6 +45,14 @@ const STYLES = {
     width: '100%',
     transformOrigin: 'center top 0px',
     color: theme.palette.lighterTextColor
+  },
+  requestBtn: {
+    marginLeft: '50px'
+  },
+  spinner: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%'
   }
 }
 
@@ -62,7 +69,7 @@ const PhoneList = (props) => {
       textValue={props.phone[i].number}
       textLabel="Phone Number"
       icon={CommunicationCall}
-      onVerify={() => props.verify(message)}
+      onVerify={() => props.confirm(iconPhoneMessage)}
       secondaryTextValue={props.phone[i].type} />)
   }
   return <List disabled>
@@ -72,7 +79,7 @@ const PhoneList = (props) => {
 
 PhoneList.propTypes = {
   phone: React.PropTypes.array.isRequired,
-  verify: React.PropTypes.func.isRequired
+  confirm: React.PropTypes.func.isRequired
 }
 
 const EmailList = (props) => {
@@ -88,11 +95,15 @@ const EmailList = (props) => {
           verified={props.email[i].verified}
           textValue={props.email[i].address}
           textLabel="Email"
-          onVerify={() => props.verify(message)}
+          onVerify={() => props.confirm(iconEmailMessage)}
           icon={CommunicationEmail}
         />
         {!props.email[i].verified
-          ? <FlatButton label="Request Verification" secondary />
+          ? <FlatButton
+            label="Request Verification"
+            secondary
+            style={STYLES.requestBtn}
+            onClick={() => props.verify(buttonEmailMessage)} />
           : null}
       </div>)
   }
@@ -103,15 +114,18 @@ const EmailList = (props) => {
 
 EmailList.propTypes = {
   email: React.PropTypes.array.isRequired,
-  verify: React.PropTypes.func.isRequired
+  verify: React.PropTypes.func.isRequired,
+  confirm: React.PropTypes.func.isRequired
 }
 
-const message = (
+const iconPhoneMessage = (
   <div>
-    <b>Verification</b> <br/>
+    <b>Verification</b> <br />
+    <br />
     <span>
-      Your number hasn't been verified yet. For Verification we
-      sent you a sms with an authentication code to this number.
+      Your number hasn't been verified yet. For verification we will
+      send you a sms with an authentication code to this number. You will need
+      enter that code here.
     </span>
   </div>
 )
@@ -145,6 +159,25 @@ InfoDetail.propTypes = {
   showDetails: React.PropTypes.func.isRequired
 }
 
+const iconEmailMessage = (
+  <div>
+    <b>Verification</b> <br />
+    <br />
+    <span>
+      Your email hasn't been verified yet. Click "Request Verification" to get
+      an email with a verification link.
+    </span>
+  </div>
+)
+const buttonEmailMessage = (
+  <div>
+    <b>Verification</b> <br />
+    <br />
+    <span>
+      We've sent a verification link to this address.
+    </span>
+  </div>
+)
 
 @Radium
 export default class WalletIdentity extends React.Component {
@@ -158,20 +191,13 @@ export default class WalletIdentity extends React.Component {
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
-    verify: React.PropTypes.func.isRequired,
-    showUsernameInfo: React.PropTypes.func.isRequired
+    confirm: React.PropTypes.func.isRequired,
+    verify: React.PropTypes.func.isRequired
   }
 
   render() {
     if (!this.props.isLoaded) {
-      return <div style={{ margin: 'auto' }}> <RefreshIndicator
-        size={50}
-        left={70}
-        top={0}
-        loadingColor={theme.palette.accent1Color}
-        status="loading"
-        style={STYLES.refresh}
-    /></div>
+      return <CircularProgress style={STYLES.spinner} />
     }
 
     return (
@@ -180,7 +206,7 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <List>
               <ListItem key={1} disabled rightIcon={<InfoDetail
-                showDetails={(details) =>this.props.showUsernameInfo(details)}
+                showDetails={(details) =>this.props.verify(details)}
                 webId={this.props.webId}
                 username={this.props.username.value}
               /> }>
@@ -209,12 +235,12 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <PhoneList
               phone={this.props.contact.phone}
-              verify={this.props.verify}
-            />
+              confirm={this.props.confirm}
+              verify={this.props.verify} />
             <EmailList
               email={this.props.contact.email}
-              verify={this.props.verify}
-            />
+              confirm={this.props.confirm}
+              verify={this.props.verify} />
           </Block>
           <Block>
             <PlusMenu
