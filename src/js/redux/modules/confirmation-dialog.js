@@ -2,7 +2,8 @@ import { Map } from 'immutable'
 import { action } from './'
 
 export const confirm = action('confirmation-dialog', 'confirm', {
-  expectedParams: ['message', 'primaryActionText', 'callback', 'cancelActionText']
+  expectedParams: ['message', 'primaryActionText', 'callback',
+    'cancelActionText']
 })
 export const openConfirmDialog = confirm
 export const close = action('confirmation-dialog', 'close', {
