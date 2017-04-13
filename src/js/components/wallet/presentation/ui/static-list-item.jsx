@@ -40,6 +40,7 @@ export default class StaticListItem extends React.Component {
     verified: React.PropTypes.bool.isRequired,
     textLabel: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string.isRequired,
+    onVerify: React.PropTypes.func,
     secondaryTextValue: React.PropTypes.string
   }
 
@@ -65,7 +66,8 @@ export default class StaticListItem extends React.Component {
         <div style={STYLES.secondaryTextField}>
         {props.secondaryTextValue}
         </div>
-        <VerifiedShield verified={props.verified} style={{marginLeft: '5px'}} />
+        <VerifiedShield verified={props.verified} style={{marginLeft: '5px'}}
+          verify={props.onVerify} />
       </ListItem>
     )
   }

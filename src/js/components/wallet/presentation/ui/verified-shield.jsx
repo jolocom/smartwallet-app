@@ -8,6 +8,7 @@ const VerifiedShield = (props) => {
     height="24"
     style={Object.assign(props.style, {color: color, fill: 'currentColor'})}
     viewBox="0 0 24 24"
+    onClick={props.verified ? () => {} : props.verify}
   >
     <path
       d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45
@@ -18,6 +19,7 @@ const VerifiedShield = (props) => {
 
 VerifiedShield.propTypes = {
   verified: React.PropTypes.bool.isRequired,
-  style: React.PropTypes.object
+  style: React.PropTypes.object,
+  onClick: React.PropTypes.func
 }
 export default Radium(VerifiedShield)

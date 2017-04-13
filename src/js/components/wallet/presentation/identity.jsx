@@ -23,7 +23,8 @@ const STYLES = {
   },
   iconName: {
     top: '20px',
-    fill: theme.palette.accent1Color
+    fill: theme.palette.accent1Color,
+    cursor: 'pointer'
   },
   divider: {
     marginLeft: '16px'
@@ -55,6 +56,7 @@ const PhoneList = (props) => {
       textValue={props.phone[i].number}
       textLabel="Phone Number"
       icon={CommunicationCall}
+      onVerify={() => props.verify(message)}
       secondaryTextValue={props.phone[i].type} />)
   }
   return <List disabled>
@@ -63,7 +65,8 @@ const PhoneList = (props) => {
 }
 
 PhoneList.propTypes = {
-  phone: React.PropTypes.array.isRequired
+  phone: React.PropTypes.array.isRequired,
+  verify: React.PropTypes.func.isRequired
 }
 
 const EmailList = (props) => {
@@ -78,7 +81,9 @@ const EmailList = (props) => {
       verified={props.email[i].verified}
       textValue={props.email[i].address}
       textLabel="Email"
-      icon={CommunicationEmail} />)
+      onVerify={() => props.verify(message)}
+      icon={CommunicationEmail}
+    />)
   }
   return <List disabled>
             {display}
@@ -86,8 +91,19 @@ const EmailList = (props) => {
 }
 
 EmailList.propTypes = {
-  email: React.PropTypes.array.isRequired
+  email: React.PropTypes.array.isRequired,
+  verify: React.PropTypes.func.isRequired
 }
+
+const message = (
+  <div>
+    <b>Verification</b> <br/>
+    <span>
+      Your number hasn't been verified yet. For Verification we
+      sent you a sms with an authentication code to this number.
+    </span>
+  </div>
+)
 
 @Radium
 export default class WalletIdentity extends React.Component {
@@ -99,6 +115,7 @@ export default class WalletIdentity extends React.Component {
     contact: React.PropTypes.object.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
+    verify: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired
   }
 
@@ -119,10 +136,9 @@ export default class WalletIdentity extends React.Component {
         <Content>
           <Block>
             <List>
-              <ListItem
-                key={1}
-                rightIcon={<Info style={STYLES.iconName} />}
-                disabled>
+              <ListItem key={1} disabled rightIcon={<Info
+                style={STYLES.iconName}
+              />} >
                 <TextField
                   floatingLabelText="Name"
                   inputStyle={STYLES.inputName}
@@ -146,8 +162,14 @@ export default class WalletIdentity extends React.Component {
             />
           </Block>
           <Block>
-            <PhoneList phone={this.props.contact.phone} />
-            <EmailList email={this.props.contact.email} />
+            <PhoneList
+              phone={this.props.contact.phone}
+              verify={this.props.verify}
+            />
+            <EmailList
+              email={this.props.contact.email}
+              verify={this.props.verify}
+            />
           </Block>
           <Block>
             <PlusMenu

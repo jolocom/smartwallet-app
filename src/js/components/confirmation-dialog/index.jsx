@@ -10,7 +10,8 @@ import { FlatButton, Dialog } from 'material-ui'
 export default class ConfirmationDialog extends React.Component {
   static propTypes = {
     close: React.PropTypes.func,
-    confirm: React.PropTypes.object
+    confirm: React.PropTypes.object,
+    cancelActionText: React.PropTypes.string
   }
 
   _handleConfirmAction() {
@@ -28,7 +29,7 @@ export default class ConfirmationDialog extends React.Component {
 
     const confirmActions = [
       <FlatButton
-        label="Cancel"
+        label={this.props.confirm.cancelActionText || 'Cancel'}
         primary
         onTouchTap={cancelHandler}
       />,
