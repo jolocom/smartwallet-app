@@ -112,7 +112,11 @@ export default Reflux.createStore({
     this.trigger({loggingIn: false})
   },
 
+  // Logic is implemented by redux, this is action is still needed
+  // for legacy support.
+
   onLogout() {
+    /*
     const authMode = localStorage.getItem('jolocom.auth-mode')
 
     if (authMode === 'proxy') {
@@ -127,8 +131,8 @@ export default Reflux.createStore({
     localStorage.removeItem('jolocom.username')
     localStorage.removeItem('jolocom.webId')
     localStorage.removeItem('jolocom.auth-mode')
-
     this.trigger(this.state)
+    */
   },
 
   onForgotPassword(username) {
