@@ -10,7 +10,8 @@ import RefreshIndicator from 'material-ui/RefreshIndicator'
 import {
   TextField,
   Divider,
-  List, ListItem
+  List, ListItem,
+  FlatButton
 } from 'material-ui'
 
 const STYLES = {
@@ -72,13 +73,20 @@ const EmailList = (props) => {
     return null
   }
   for (let i = 0; i < props.email.length; i++) {
-    display.push(<StaticListItem
-      index={i}
-      key={i}
-      verified={props.email[i].verified}
-      textValue={props.email[i].address}
-      textLabel="Email"
-      icon={CommunicationEmail} />)
+    display.push(
+      <div>
+        <StaticListItem
+          index={i}
+          key={i}
+          verified={props.email[i].verified}
+          textValue={props.email[i].address}
+          textLabel="Email"
+          icon={CommunicationEmail}
+        />
+        {!props.email[i].verified
+          ? <FlatButton label="Request Verification" secondary />
+          : null}
+      </div>)
   }
   return <List disabled>
             {display}
