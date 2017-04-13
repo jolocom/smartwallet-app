@@ -53,7 +53,9 @@ export default class WalletContact extends React.Component {
     loading: React.PropTypes.bool,
     showErrors: React.PropTypes.bool,
     addNewEntry: React.PropTypes.func,
-    validate: React.PropTypes.func
+    validate: React.PropTypes.func,
+    confirm: React.PropTypes.func,
+    close: React.PropTypes.func
   }
 
   render() {
@@ -98,8 +100,18 @@ export default class WalletContact extends React.Component {
                 onChange={
                  (e) => this.props.updateInformation('emails', i, e.target.value)} //eslint-disable-line
                 onDelete={() => {
-                  this.props.deleteInformation('originalInformation', 'emails', i) //eslint-disable-line
+                  email.verified
+                  ? this.props.confirm(
+                    'Are you sure you want to delete a verified email?',
+                    'Delete', () => {
+                      this.props.deleteInformation('originalInformation',
+                      'emails', i)
+                      this.props.close()
+                    })
+                  : this.props.deleteInformation('originalInformation',
+                  'emails', i)
                 }}
+                enableDelete
                 />
             </Block>
           )
@@ -132,6 +144,7 @@ export default class WalletContact extends React.Component {
                 onDelete={() => {
                   this.props.deleteInformation('newInformation', 'emails', i)
                 }}
+                enableDelete={!email.blank}
                 />
             </Block>
           )
@@ -164,10 +177,7 @@ export default class WalletContact extends React.Component {
         emailFields.push(
           <Block key="addEmailField">
             <AddNew onClick={() => {
-              this.props.addNewEntry('emails')
-              this.props.onFocusChange(
-                'newInformation' + 'emails' +
-                 this.props.information.newInformation.emails.length)
+              this._handleAddNewClick()
             }}
               value="Additional Email" />
           </Block>
@@ -190,5 +200,16 @@ export default class WalletContact extends React.Component {
         </Content>
       </Container>
     )
+  }
+  _handleAddNewClick = () => {
+    var length = this.props.information.newInformation.emails.length
+    if (length === 0 ||
+      this.props.information.newInformation.emails[length - 1].address !==
+         '') {
+      this.props.addNewEntry('emails')
+      this.props.onFocusChange(
+        'newInformation' + 'emails' +
+         this.props.information.newInformation.emails.length)
+    }
   }
 }

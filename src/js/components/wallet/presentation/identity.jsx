@@ -10,7 +10,8 @@ import RefreshIndicator from 'material-ui/RefreshIndicator'
 import {
   TextField,
   Divider,
-  List, ListItem
+  List, ListItem,
+  FlatButton
 } from 'material-ui'
 
 const STYLES = {
@@ -75,15 +76,21 @@ const EmailList = (props) => {
     return null
   }
   for (let i = 0; i < props.email.length; i++) {
-    display.push(<StaticListItem
-      index={i}
-      key={i}
-      verified={props.email[i].verified}
-      textValue={props.email[i].address}
-      textLabel="Email"
-      onVerify={() => props.verify(message)}
-      icon={CommunicationEmail}
-    />)
+    display.push(
+      <div>
+        <StaticListItem
+          index={i}
+          key={i}
+          verified={props.email[i].verified}
+          textValue={props.email[i].address}
+          textLabel="Email"
+          onVerify={() => props.verify(message)}
+          icon={CommunicationEmail}
+        />
+        {!props.email[i].verified
+          ? <FlatButton label="Request Verification" secondary />
+          : null}
+      </div>)
   }
   return <List disabled>
             {display}
@@ -155,8 +162,8 @@ export default class WalletIdentity extends React.Component {
             <PlusMenu
               name="Contact"
               choice={
-                (this.props.contact.email.length +
-                  this.props.contact.phone.length) > 0
+                !(this.props.contact.email[0].address === '' &&
+                this.props.contact.phone[0].number === '')
               }
               goToManagement={this.props.goToContactManagement}
             />

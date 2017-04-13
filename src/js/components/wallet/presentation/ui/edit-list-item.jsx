@@ -56,7 +56,8 @@ export default class EditListItem extends React.Component {
     focused: React.PropTypes.bool.isRequired,
     onFocusChange: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    onDelete: React.PropTypes.func.isRequired
+    onDelete: React.PropTypes.func,
+    enableDelete: React.PropTypes.bool.isRequired
   }
   render() {
     var props = this.props
@@ -89,12 +90,14 @@ export default class EditListItem extends React.Component {
               value={props.textValue}
               errorText={this.props.errorText} />
             }
-        <div style={{...STYLES.clear}}>
+        {this.props.enableDelete
+        ? (<div style={{...STYLES.clear}}>
           <div onClick={() => this.props.onDelete()}
             style={{...STYLES.img, ...{
               backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
             }}} />
-        </div>
+        </div>)
+        : ''}
       </div>
     )
   }
