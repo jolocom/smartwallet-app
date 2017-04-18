@@ -5,7 +5,7 @@ import * as contact from './contact'
 import {stub, withStubs} from '../../../../../test/utils'
 const reducer = require('./contact').default
 
-describe.only('# Wallet contact redux module', () => {
+describe('# Wallet contact redux module', () => {
   describe('# actions ', () => {
     it('exitWithoutSaving should redirect the user to the identity screen',
      () => {
