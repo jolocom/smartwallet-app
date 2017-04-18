@@ -2,7 +2,7 @@ import sjcl from 'sjcl'
 
 export default class EntropyService {
   constructor() {
-    this.generator = new sjcl.prng(5) // eslint-disable-line new-cap
+    this.generator = new sjcl.prng(7) // eslint-disable-line new-cap
     // this.generator.startCollectors()
   }
 

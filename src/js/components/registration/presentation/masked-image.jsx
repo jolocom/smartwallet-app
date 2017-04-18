@@ -89,8 +89,13 @@ class MaskedImage extends React.Component {
       />
 
       {props.uncoveredPaths.length === 0 && <g>
+<<<<<<< HEAD
         <text x="350" y="150" fontSize="21" dy="0"
           textAnchor="middle" fill={theme.jolocom.gray1}
+=======
+        <text x="350" y="150" fontSize="21" dy="0" textAnchor="middle"
+          fill={theme.jolocom.gray1}
+>>>>>>> e9eafb6... Fixes #640
         >
           <tspan x="350" dy="0.6em">{props.message1}</tspan>
           <tspan x="350" dy="1.6em">{props.message2}</tspan>
