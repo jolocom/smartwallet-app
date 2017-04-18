@@ -139,7 +139,7 @@ const InfoDetail = (props) => {
       errorStyle={STYLES.floatingLabel}
       inputStyle={{textAlign: 'center'}}
     />
-    <br/>
+    <br />
     <TextField
       key="2"
       value={props.webId}
@@ -151,7 +151,7 @@ const InfoDetail = (props) => {
 
   return <span
     onClick={() => props.showDetails(personalDetails)}>
-    <Info style={STYLES.iconName}/>
+    <Info style={STYLES.iconName} />
   </span>
 }
 
@@ -206,10 +206,10 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <List>
               <ListItem key={1} disabled rightIcon={<InfoDetail
-                showDetails={(details) =>this.props.verify(details)}
+                showDetails={(details) => this.props.verify(details)}
                 webId={this.props.webId}
                 username={this.props.username.value}
-              /> }>
+              />}>
                 <TextField
                   floatingLabelText="Name"
                   inputStyle={STYLES.inputName}
