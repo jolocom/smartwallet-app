@@ -4,8 +4,7 @@ import Radium from 'radium'
 import TextField from 'material-ui/TextField'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Header, Content, Footer} from '../../structure'
-import {SideNote} from './ui'
+import {Container, Header, Content, Footer, SideNote} from '../../structure'
 
 const STYLES = {
   heading: {

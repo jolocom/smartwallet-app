@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
-import {Container, Content, Block, PlusMenu, StaticListItem} from './ui'
+import {PlusMenu, StaticListItem, TabContainer} from './ui'
+import {Content, Block} from '../../structure'
 import Info from 'material-ui/svg-icons/action/info'
 import {theme} from 'styles'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
@@ -201,7 +202,7 @@ export default class WalletIdentity extends React.Component {
     }
 
     return (
-      <Container>
+      <TabContainer>
         <Content>
           <Block>
             <List>
@@ -258,7 +259,7 @@ export default class WalletIdentity extends React.Component {
           </Block>
         </Content>
       {/* <Link to="/wallet/identity/contact"></Link> */}
-      </Container>
+      </TabContainer>
     )
   }
 }

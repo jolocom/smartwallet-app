@@ -1,6 +1,11 @@
 import React from 'react'
 import Radium from 'radium'
-import {Container, SideNote, Block, Footer} from './ui'
+import {
+  Container,
+  Block,
+  Footer,
+  SideNote
+} from '../../structure'
 import {theme} from 'styles'
 
 import {
@@ -24,7 +29,7 @@ export default class WalletHome extends React.Component {
   render() {
     // TODO replace placeholder img
     return (
-      <Container style={{alignItems: 'center'}}>
+      <Container >
         <img src="/img/illu_wallet.svg" />
         <Block>
           <h1 style={STYLES.greeting}>Hi AnnikaH23</h1>

@@ -7,8 +7,8 @@ import {
   Avatar
 } from 'material-ui'
 
-import {Container, Header, Content, Block, Footer} from '../../structure'
-import {SideNote} from './ui'
+import {Container, Header, Content, Block, Footer, SideNote}
+from '../../structure'
 
 const PhraseInfo = (props) => {
   return (
