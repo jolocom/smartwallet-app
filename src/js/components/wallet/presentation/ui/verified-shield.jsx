@@ -20,6 +20,6 @@ const VerifiedShield = (props) => {
 VerifiedShield.propTypes = {
   verified: React.PropTypes.bool.isRequired,
   style: React.PropTypes.object,
-  onClick: React.PropTypes.func
+  verify: React.PropTypes.func
 }
 export default Radium(VerifiedShield)

@@ -1,5 +1,4 @@
 import {expect} from 'chai'
-import Immutable from 'immutable'
 import * as identity from './identity'
 // import * as router from '../router'
 import {stub, withStubs} from '../../../../../test/utils'

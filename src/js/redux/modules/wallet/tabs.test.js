@@ -1,6 +1,5 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
-import Immutable from 'immutable'
 import * as tabs from './tabs'
 import * as router from '../router'
 import {stub, withStubs} from '../../../../../test/utils'
