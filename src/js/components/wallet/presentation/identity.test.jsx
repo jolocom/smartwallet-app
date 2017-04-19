@@ -9,7 +9,17 @@ describe('(Component) Wallet Identity', function() {
         username={{}}
         passport={{}}
         isLoaded
-        contact={{email: [], phone: []}}
+        contact={{
+          email: [{
+            type: '',
+            address: '',
+            verified: false
+          }],
+          phone: [{
+            type: '',
+            number: '',
+            verified: false
+          }]}}
         goToContactManagement={() => {}}
         goToPassportManagement={() => {}}
         goToDrivingLicenceManagement={() => {}}

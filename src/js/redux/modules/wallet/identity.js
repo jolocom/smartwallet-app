@@ -55,12 +55,12 @@ const initialState = Immutable.fromJS({
   contact: {
     phone: [{
       type: '',
-      value: '',
+      number: '',
       verified: false
     }],
     email: [{
       type: '',
-      value: '',
+      address: '',
       verified: false
     }]
   },
