@@ -128,7 +128,7 @@ let App = React.createClass({
         {this.props.children}
 
         <LeftNav />
-        <Tour />
+        {/** <Tour /> **/}
         <SnackbarContainer />
         <ConfirmationDialog />
         <SimpleDialog />
