@@ -24,7 +24,7 @@ export default class WalletHome extends React.Component {
   render() {
     // TODO replace placeholder img
     return (
-      <Container>
+      <Container style={{alignItems: 'center'}}>
         <img src="/img/illu_wallet.svg" />
         <Block>
           <h1 style={STYLES.greeting}>Hi AnnikaH23</h1>

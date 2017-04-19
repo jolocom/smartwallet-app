@@ -27,6 +27,14 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  goToIdentity: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch) => {
+        dispatch(router.pushRoute('/wallet/identity/'))
+      }
+    }
+  },
   getIdentityInformation: {
     expectedParams: [],
     async: true,
