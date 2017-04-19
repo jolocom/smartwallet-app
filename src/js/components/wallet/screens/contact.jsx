@@ -35,10 +35,7 @@ export default class WalletContactScreen extends React.Component {
     super()
 
     this.state = {
-      focused: '',
-      onFocusChange: (value) => {
-        this.setState({focused: value})
-      }
+      focused: ''
     }
   }
   componentDidMount() {
@@ -47,9 +44,8 @@ export default class WalletContactScreen extends React.Component {
   render() {
     return (
       <Presentation
-        onChange={this.state.onChange}
         focused={this.state.focused}
-        onFocusChange={this.state.onFocusChange}
+        onFocusChange={this._onFocusChange}
         information={this.props.contact.information}
         loading={this.props.contact.loading}
         showErrors={this.props.contact.showErrors}
@@ -64,5 +60,9 @@ export default class WalletContactScreen extends React.Component {
         close={this.props.close}
       />
     )
+  }
+
+  _onFocusChange = (value) => {
+    this.setState({focused: value})
   }
 }

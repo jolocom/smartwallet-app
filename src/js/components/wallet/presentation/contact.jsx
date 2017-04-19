@@ -42,7 +42,6 @@ const STYLES = {
 export default class WalletContact extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    onChange: React.PropTypes.func,
     focused: React.PropTypes.string,
     onFocusChange: React.PropTypes.func,
     information: React.PropTypes.object,
