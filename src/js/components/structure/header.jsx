@@ -32,7 +32,7 @@ const Header = ({image, title, style, children, ...props}) => {
 Header.propTypes = {
   image: React.PropTypes.any,
   title: React.PropTypes.string,
-  children: React.PropTypes.node,
+  children: React.PropTypes.any,
   style: React.PropTypes.object
 }
 

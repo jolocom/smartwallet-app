@@ -4,7 +4,7 @@ import PasswordField from 'material-ui-password-field'
 import {theme} from 'styles'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Header, Content, Block, Footer} from './ui'
+import {Container, Header, Content, Block, Footer} from '../../structure'
 
 const STYLES = {
   password: {
