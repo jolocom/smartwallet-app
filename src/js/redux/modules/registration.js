@@ -11,7 +11,8 @@ const NEXT_ROUTES = {
   '/registration/write-phrase': '/registration/pin',
   '/registration/phrase-info': '/registration/email',
   '/registration/email': '/registration/password',
-  '/registration/password': '/registration/pin'
+  '/registration/password': '/registration/pin',
+  '/registration/pin': '/wallet'
 }
 const CHECK_BEFORE_SWITCHING = {
   '/registration/user-type': 'userType',
