@@ -41,7 +41,7 @@ describe('# Wallet identity redux module', () => {
     })
   })
 
-  describe.only('# actions ', () => {
+  describe('# actions ', () => {
     it('goToDrivingLicenceManagement should redirect the user to drivering ' +
     'licence management', () => {
       const dispatch = stub()
