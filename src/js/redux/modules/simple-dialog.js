@@ -10,14 +10,15 @@ hide: hideSimpleDialog } = simpleDialogVisibility.actions
 
 export const configSimpleDialogMessage = action(
   'simple-dialog', 'configSimpleDialogMessage', {
-    expectedParams: ['message', 'primaryActionText']
+    expectedParams: ['message', 'primaryActionText', 'style']
   })
 
 export const configSimpleDialog = configSimpleDialogMessage
 const initialState = new Map({
   visible: false,
   message: '',
-  primaryActionText: 'OK'
+  primaryActionText: 'OK',
+  style: {}
 })
 
 export default function reducer(state = initialState, action = {}) {

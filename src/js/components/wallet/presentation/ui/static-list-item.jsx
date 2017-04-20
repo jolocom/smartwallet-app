@@ -36,7 +36,6 @@ var STYLES = {
 export default class StaticListItem extends React.Component {
   static propTypes = {
     icon: React.PropTypes.any.isRequired,
-    index: React.PropTypes.number.isRequired,
     verified: React.PropTypes.bool.isRequired,
     textLabel: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string.isRequired,
@@ -47,7 +46,7 @@ export default class StaticListItem extends React.Component {
   render() {
     var props = this.props
     return (
-      <ListItem key={props.index} style={props.verified ? {paddingBottom: '5px'}
+      <ListItem style={props.verified ? {paddingBottom: '5px'}
       : {paddingBottom: '0px'}} disabled>
         <props.icon
           style={STYLES.icon}

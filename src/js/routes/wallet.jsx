@@ -33,6 +33,9 @@ import WalletMoneyScreen from 'components/wallet/screens/money'
 import WalletIdentityScreen from 'components/wallet/screens/identity'
 import WalletContactScreen from 'components/wallet/screens/contact'
 
+import ExpertLoginPassphraseScreen from 'components/login/screens/phrase'
+import ExpertLoginPinScreen from 'components/login/screens/pin'
+
 export const routes = {
   login: '/login',
   signup: '/registration',
@@ -87,6 +90,8 @@ function getRoutes() {
     <Route path="change-password/:username/:token" component={ChangePassword} />
     <Route path="signup" component={Signup} />
     <Route path="login" component={Login} />
+    <Route path="/login/expert" component={ExpertLoginPassphraseScreen} />
+    <Route path="/login/expert/pin-entry" component={ExpertLoginPinScreen} />
   </Route>)
 }
 
