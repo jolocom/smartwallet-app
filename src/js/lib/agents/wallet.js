@@ -23,6 +23,14 @@ export default class WalletAgent {
     })
   }
 
+  checkPassphrase({passphrase}) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(new Wallet())
+      }, 2000)
+    })
+  }
+
   loginWithSeedPhrase({userName, seedPhrase}) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -32,6 +40,14 @@ export default class WalletAgent {
   }
 
   loginWithCredentials({userName, email, password}) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(new Wallet())
+      }, 2000)
+    })
+  }
+
+  expertLogin({passphrase, pin}) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(new Wallet())
