@@ -42,21 +42,19 @@ const STYLES = {
 export default class WalletContact extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    focused: React.PropTypes.string,
-    onFocusChange: React.PropTypes.func,
-    information: React.PropTypes.object,
-    getAccountInformation: React.PropTypes.func,
-    updateInformation: React.PropTypes.func,
-    deleteInformation: React.PropTypes.func,
-    setInformation: React.PropTypes.func,
-    exitWithoutSaving: React.PropTypes.func,
-    saveChanges: React.PropTypes.func,
-    loading: React.PropTypes.bool,
+    focused: React.PropTypes.string.isRequired,
+    onFocusChange: React.PropTypes.func.isRequired,
+    information: React.PropTypes.object.isRequired,
+    updateInformation: React.PropTypes.func.isRequired,
+    deleteInformation: React.PropTypes.func.isRequired,
+    setInformation: React.PropTypes.func.isRequired,
+    exitWithoutSaving: React.PropTypes.func.isRequired,
+    saveChanges: React.PropTypes.func.isRequired,
+    loading: React.PropTypes.bool.isRequired,
     showErrors: React.PropTypes.bool,
-    addNewEntry: React.PropTypes.func,
-    validate: React.PropTypes.func,
-    confirm: React.PropTypes.func,
-    close: React.PropTypes.func
+    addNewEntry: React.PropTypes.func.isRequired,
+    confirm: React.PropTypes.func.isRequired,
+    close: React.PropTypes.func.isRequired
   }
 
   render() {

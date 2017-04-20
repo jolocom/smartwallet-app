@@ -8,12 +8,15 @@ describe('(Component) Contact', function() {
       focused=""
       information={{}}
       loading
-      getAccountInformation={() => {}}
       updateInformation={() => {}}
+      deleteInformation={() => {}}
       setInformation={() => {}}
       exitWithoutSaving={() => {}}
-      onChange={() => {}}
       onFocusChange={() => {}}
+      saveChanges={() => {}}
+      addNewEntry={() => {}}
+      confirm={() => {}}
+      close={() => {}}
 
       />),
       { context: { muiTheme: { } } }
