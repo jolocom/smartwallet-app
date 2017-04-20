@@ -65,7 +65,7 @@ const actions = module.exports = makeActions('registration', {
         }
 
         dispatch(actions.setEntropyStatus.buildAction({
-          sufficientEntropy: entropy.isReady(),
+          sufficientEntropy: entropy.getProgress() >= 1,
           progress: entropy.getProgress()
         }))
 

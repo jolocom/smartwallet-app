@@ -5,6 +5,7 @@ import theme from '../../../styles/jolocom-theme'
 class MaskedImage extends React.Component {
   static propTypes = {
     image: React.PropTypes.string.isRequired,
+    style: React.PropTypes.object.isRequired,
     // Type checking too slow for paths
     uncoveredPaths: React.PropTypes.any.isRequired,
     uncovering: React.PropTypes.bool.isRequired,
@@ -27,11 +28,14 @@ class MaskedImage extends React.Component {
     this.onRevealEnd()
   }
 
-  onRevealStart() {
+  onRevealStart(e) {
+    // console.log('start')
+    e.preventDefault()
     this.props.onUncoveringChange(true)
   }
 
   onRevealEnd() {
+    // console.log('end')
     this.props.onUncoveringChange(false)
   }
 
@@ -50,14 +54,16 @@ class MaskedImage extends React.Component {
 
   render() {
     const props = this.props
+    // console.log(props.uncoveredPaths.length)
 
-    return (<svg style={{width: '240px', height: '150px', margin: 'auto'}}
-      onTouchStart={this.onRevealStart}
-      onMouseDown={this.onRevealStart}
-      onClick={this.onRevealStart}
-      onMouseMove={this.onReveal}
-      onTouchEnd={this.onRevealEnd}
-      onMouseUp={this.onRevealEnd}
+    return (<svg
+      style={this.props.style}
+      onTouchStart={(e) => this.onRevealStart(e)}
+      onTouchMove={(e) => this.onReveal(e)}
+      onTouchEnd={() => this.onRevealEnd()}
+      onMouseDown={(e) => this.onRevealStart(e)}
+      onMouseMove={(e) => this.onReveal(e)}
+      onMouseUp={() => this.onRevealEnd()}
     >
       <defs>
         <mask id="mask">
@@ -65,7 +71,7 @@ class MaskedImage extends React.Component {
             <polyline key={pathIdx} points={
               path.map(point => `${point[0]},${point[1]}`).join(' ')
             } style={{
-              strokeWidth: '20px', stroke: '#F00',
+              strokeWidth: '20px', stroke: '#FFF',
               strokeLinecap: 'round', strokeLinejoin: 'round',
               fill: 'rgba(0, 0, 0, 0)',
               textAlign: 'center'
@@ -74,22 +80,26 @@ class MaskedImage extends React.Component {
 
         </mask>
       </defs>
-      <foreignObject width="240" height="150" textAnchor="middle">
-        <div xmlns="http://www.w3.org/1999/xhtml" style={{textAlign: 'center',
-          color: theme.jolocom.gray1}}>
-          <p>{props.uncoveredPaths.length > 0 ? '' : props.message1}</p>
-          <br />
-          <p>{props.uncoveredPaths.length > 0 ? '' : props.message2}</p>
-          <br />
-          <p>{props.uncoveredPaths.length > 0 ? '' : props.message3}</p>
-        </div>
-      </foreignObject>
 
       <image
-        x="0" y="0" width="240" height="150"
+        x="0" y="0" width="700" height="639"
         href={props.image}
         mask="url(#mask)"
+        draggable={false}
       />
+
+      {props.uncoveredPaths.length === 0 && <g>
+        <text x="350" y="150" fontSize="21" dy="0"
+          textAnchor="middle" fill={theme.jolocom.gray1}
+        >
+          <tspan x="350" dy="0.6em">{props.message1}</tspan>
+          <tspan x="350" dy="1.6em">{props.message2}</tspan>
+          <tspan x="350" dy="1.2em">{props.message3}</tspan>
+          <tspan x="350" dy="1.6em">{props.message4}</tspan>
+          <tspan x="350" dy="1.2em">{props.message5}</tspan>
+          <tspan x="350" dy="1.2em">{props.message6}</tspan>
+        </text>
+      </g>}
     </svg>)
   }
 }
