@@ -16,6 +16,14 @@ describe('(Component) WalletContactScreen', function() {
           contact: {}
         }}))}
         getAccountInformation={getAccountInformation}
+        updateInformation={() => {}}
+        setInformation={() => {}}
+        deleteInformation={() => {}}
+        exitWithoutSaving={() => {}}
+        saveChanges={() => {}}
+        addNewEntry={() => {}}
+        confirm={() => {}}
+        close={() => {}}
       />)
     )
 
