@@ -27,6 +27,14 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  goToIdentity: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch) => {
+        dispatch(router.pushRoute('/wallet/identity/'))
+      }
+    }
+  },
   getIdentityInformation: {
     expectedParams: [],
     async: true,
@@ -55,12 +63,12 @@ const initialState = Immutable.fromJS({
   contact: {
     phone: [{
       type: '',
-      value: '',
+      number: '',
       verified: false
     }],
     email: [{
       type: '',
-      value: '',
+      address: '',
       verified: false
     }]
   },

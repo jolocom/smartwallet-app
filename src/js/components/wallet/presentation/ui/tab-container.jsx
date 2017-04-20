@@ -16,7 +16,7 @@ const STYLE = {
   minHeight: '100%'
 }
 
-const Container = ({style, children, ...props} = {}) => {
+const TabContainer = ({style, children, ...props} = {}) => {
   return (
     <div style={Object.assign({}, STYLE, style)} {...props}>
       {children}
@@ -24,9 +24,9 @@ const Container = ({style, children, ...props} = {}) => {
   )
 }
 
-Container.propTypes = {
+TabContainer.propTypes = {
   children: React.PropTypes.node,
   style: React.PropTypes.object
 }
 
-export default Radium(Container)
+export default Radium(TabContainer)

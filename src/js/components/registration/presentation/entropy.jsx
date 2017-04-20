@@ -3,7 +3,7 @@ import Radium from 'radium'
 import MaskedImage from './masked-image'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Content, Footer} from './ui'
+import {Container, Content, Footer} from '../../structure'
 
 const STYLES = {
   img: {

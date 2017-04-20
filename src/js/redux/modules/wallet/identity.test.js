@@ -1,5 +1,4 @@
 import {expect} from 'chai'
-import Immutable from 'immutable'
 import * as identity from './identity'
 // import * as router from '../router'
 import {stub, withStubs} from '../../../../../test/utils'
@@ -14,8 +13,8 @@ describe('# Wallet identity redux module', () => {
         webId: '',
         username: {verified: false, value: ''},
         contact: {
-          phone: [{type: '', value: '', verified: false}],
-          email: [{type: '', value: '', verified: false}]
+          phone: [{type: '', number: '', verified: false}],
+          email: [{type: '', address: '', verified: false}]
         },
         passport: {
           number: '', givenName: '', familyName: '', birthDate: '',
@@ -86,6 +85,23 @@ describe('# Wallet identity redux module', () => {
           args: [{
             payload: {
               args: ['/wallet/identity/contact'],
+              method: 'push'
+            },
+            type: '@@router/CALL_HISTORY_METHOD'
+          }]
+        }])
+      }
+    )
+    it('goToIdentity should redirect the user to the wallet Identity Tab',
+      () => {
+        const dispatch = stub()
+        const thunk = identity.actions.goToIdentity()
+        thunk(dispatch)
+        expect(dispatch.called).to.be.true
+        expect(dispatch.calls).to.deep.equal([{
+          args: [{
+            payload: {
+              args: ['/wallet/identity/'],
               method: 'push'
             },
             type: '@@router/CALL_HISTORY_METHOD'

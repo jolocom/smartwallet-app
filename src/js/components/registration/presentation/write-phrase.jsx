@@ -12,7 +12,7 @@ import Checked from 'material-ui/svg-icons/action/check-circle'
 
 import {theme} from 'styles'
 
-import {Container, Header, Block, SideNote, Footer} from './ui'
+import {Container, Header, Block, Footer, SideNote} from '../../structure'
 
 const STYLES = {
   phraseWrapper: {

@@ -11,7 +11,7 @@ import Presentation from '../presentation/home'
 export default class WalletHomeScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    wallet: React.PropTypes.object,
+    wallet: React.PropTypes.any,
     goToIdentity: React.PropTypes.func.isRequired
   }
 

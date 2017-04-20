@@ -80,7 +80,6 @@ describe('Wallet registration Redux module', function() {
         }
         test('/registration', 'username')
         test('/registration/user-type', 'userType')
-        test('/registration/entropy', 'entropy')
         test('/registration/write-phrase', 'passphrase')
         test('/registration/email', 'email')
         test('/registration/password', 'password')

@@ -168,15 +168,13 @@ module.exports.default = (state = initialState, action = {}) => {
       let originalEmails = state.toJS().information.originalInformation.emails
       let newEmails = state.toJS().information.newInformation.emails
       // console.log(originalEmails)
-      for (let i = 0;
-        i < originalEmails.length; i++) {
+      for (let i = 0; i < originalEmails.length; i++) {
         if (originalEmails[i].update && !originalEmails[i].valid &&
             !originalEmails[i].delete) {
           return state.setIn(['showErrors'], true)
         }
       }
-      for (let i = 0;
-        i < newEmails.length; i++) {
+      for (let i = 0; i < newEmails.length; i++) {
         if (!newEmails[i].valid && !newEmails[i].delete &&
           !newEmails[i].blank) {
           return state.setIn(['showErrors'], true)

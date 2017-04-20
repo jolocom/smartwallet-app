@@ -35,7 +35,6 @@ describe('(Component) WalletIdentityScreen', function() {
                 givenName: '',
                 familyName: '',
                 birthDate: '',
-                age: '',
                 gender: '',
                 showAddress: '',
                 streetAndNumber: '',

@@ -3,12 +3,14 @@ import Radium from 'radium'
 import {
   EditAppBar,
   EditHeader,
-  Container,
-  Content,
-  Block,
   EditListItem,
-  AddNew
+  AddNew,
+  TabContainer
 } from './ui'
+import {
+  Content,
+  Block
+} from '../../structure'
 import {theme} from 'styles'
 import ContentMail from 'material-ui/svg-icons/content/mail'
 import {
@@ -40,7 +42,6 @@ const STYLES = {
 export default class WalletContact extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    onChange: React.PropTypes.func,
     focused: React.PropTypes.string,
     onFocusChange: React.PropTypes.func,
     information: React.PropTypes.object,
@@ -61,7 +62,7 @@ export default class WalletContact extends React.Component {
   render() {
     if (this.props.loading === true) {
       return (
-        <Container>
+        <TabContainer>
           <EditAppBar title="Edit Contact"
             loading={this.props.loading}
             onSave={this.props.saveChanges}
@@ -72,7 +73,7 @@ export default class WalletContact extends React.Component {
               <CircularProgress style={STYLES.spinner} />
             </List>
           </Content>
-        </Container>
+        </TabContainer>
       )
     }
     let emailFields = []
@@ -187,7 +188,7 @@ export default class WalletContact extends React.Component {
 
     // console.log(emailFields)
     return (
-      <Container>
+      <TabContainer>
         <EditAppBar title="Edit Contact"
           loading={this.props.loading}
           onSave={this.props.saveChanges}
@@ -198,7 +199,7 @@ export default class WalletContact extends React.Component {
             {emailFields}
           </List>
         </Content>
-      </Container>
+      </TabContainer>
     )
   }
   _handleAddNewClick = () => {
