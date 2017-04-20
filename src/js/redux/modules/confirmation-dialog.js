@@ -3,7 +3,7 @@ import { action } from './'
 
 export const confirm = action('confirmation-dialog', 'confirm', {
   expectedParams: ['message', 'primaryActionText', 'callback',
-    'cancelActionText']
+    'cancelActionText', 'style']
 })
 export const openConfirmDialog = confirm
 export const close = action('confirmation-dialog', 'close', {
@@ -16,7 +16,8 @@ const initialState = new Map({
   message: '',
   primaryActionText: 'Confirm',
   callback: null, // stores a global callback when OK is pressed
-  cancelActionText: ''
+  cancelActionText: '',
+  style: {}
 })
 
 export default function reducer(state = initialState, action = {}) {

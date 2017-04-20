@@ -1,4 +1,5 @@
 import React from 'react'
+import Radium from 'radium'
 import { connect } from 'redux/utils'
 
 import { FlatButton, Dialog } from 'material-ui'
@@ -7,6 +8,8 @@ import { FlatButton, Dialog } from 'material-ui'
   props: ['simpleDialog'],
   actions: ['simple-dialog:hideSimpleDialog']
 })
+
+@Radium
 export default class SimpleDialog extends React.Component {
   static propTypes = {
     hideSimpleDialog: React.PropTypes.func,
@@ -34,6 +37,7 @@ export default class SimpleDialog extends React.Component {
       modal={false}
       open={this.props.simpleDialog.visible}
       onRequestClose={this.handleClose}
+      contentStyle={this.props.simpleDialog.style}
     >
       {this.props.simpleDialog.message}
     </Dialog>

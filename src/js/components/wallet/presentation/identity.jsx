@@ -54,6 +54,12 @@ const STYLES = {
     position: 'absolute',
     top: '50%',
     left: '50%'
+  },
+  simpleDialog: {
+    maxWidth: '460px'
+  },
+  confimDialog: {
+    maxWidth: '460px'
   }
 }
 
@@ -64,13 +70,12 @@ const PhoneList = (props) => {
   }
   for (let i = 0; i < props.phone.length; i++) {
     display.push(<StaticListItem
-      index={i}
       key={i}
       verified={props.phone[i].verified}
       textValue={props.phone[i].number}
       textLabel="Phone Number"
       icon={CommunicationCall}
-      onVerify={() => props.confirm(iconPhoneMessage)}
+      onVerify={() => props.confirm(iconPhoneMessage, STYLES.confimDialog)}
       secondaryTextValue={props.phone[i].type} />)
   }
   return <List disabled>
@@ -92,11 +97,10 @@ const EmailList = (props) => {
     display.push(
       <div key={i}>
         <StaticListItem
-          index={i}
           verified={props.email[i].verified}
           textValue={props.email[i].address}
           textLabel="Email"
-          onVerify={() => props.confirm(iconEmailMessage)}
+          onVerify={() => props.confirm(iconEmailMessage, STYLES.confimDialog)}
           icon={CommunicationEmail}
         />
         {!props.email[i].verified
@@ -104,7 +108,10 @@ const EmailList = (props) => {
             label="Request Verification"
             secondary
             style={STYLES.requestBtn}
-            onClick={() => props.verify(buttonEmailMessage)} />
+            onClick={() => props.verify(buttonEmailMessage,
+              'OK',
+              STYLES.simpleDialog
+            )} />
           : null}
       </div>)
   }
@@ -132,21 +139,23 @@ const iconPhoneMessage = (
 )
 
 const InfoDetail = (props) => {
-  const personalDetails = <span style={{maxWidth: '300px'}}>
+  const personalDetails = <span>
     <TextField
-      key="1"
+      id="usernameField"
       value={props.username}
       errorText="is your username"
       errorStyle={STYLES.floatingLabel}
       inputStyle={{textAlign: 'center'}}
+      fullWidth
     />
     <br />
     <TextField
-      key="2"
+      id="webIdField"
       value={props.webId}
       errorText="is your WebID"
       errorStyle={STYLES.floatingLabel}
       inputStyle={{textAlign: 'center'}}
+      fullWidth
     />
   </span>
 
@@ -207,7 +216,11 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <List>
               <ListItem key={1} disabled rightIcon={<InfoDetail
-                showDetails={(details) => this.props.verify(details)}
+                showDetails={(details) => this.props.verify(
+                  details,
+                  'REQUEST VERIFICATION',
+                  STYLES.simpleDialog
+                )}
                 webId={this.props.webId}
                 username={this.props.username.value}
               />}>
