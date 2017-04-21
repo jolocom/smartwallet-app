@@ -149,6 +149,7 @@ export class Wallet {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(identity)
+        /* reject()*/
       }, 2000)
     })
   }
