@@ -216,6 +216,8 @@ gulp.task('cordova:add-android', ['cordova:configure'], function (callback) {
 gulp.task('release:ios', ['build:cordova', 'cordova:add-ios'], function (callback) {
   process.chdir(path.join(__dirname, 'app'));
 
+  var config = process.env.ENTRY || 'graph'
+
   Promise.resolve()
     .then(function() {
       return cordova.raw.build({
@@ -223,7 +225,7 @@ gulp.task('release:ios', ['build:cordova', 'cordova:add-ios'], function (callbac
         'options': [
           '--release',
           '--gradleArg=--no-daemon',
-          '--buildConfig=../cordova.json'
+          '--buildConfig=' + config + '.json'
         ]
       });
     })

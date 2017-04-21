@@ -57,5 +57,6 @@ nbproject
 # Cordova
 app/plugins
 app/platforms
-app/build.json
-cordova.json
+app/config.xml
+app/wallet.json
+app/graph.json

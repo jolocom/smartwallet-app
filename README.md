@@ -23,6 +23,12 @@ npm install
 
 ## Building
 
+By default the 'graph' app will be build. To change the build to 'wallet' prefix the build commands with this environment variable.
+
+```bash
+ENTRY='wallet'
+```
+
 ### Browser
 
 #### With hot module reloading support
@@ -76,6 +82,12 @@ npm install --production
 
 ## Building
 
+By default the 'graph' app will be build. To change the build to 'wallet' prefix the build commands with this environment variable.
+
+```bash
+ENTRY='wallet'
+```
+
 ### Browser
 
 ```bash
@@ -84,15 +96,9 @@ gulp build
 
 ### Mobile (Cordova)
 
-First make sure to build the Cordova distribution.
-
-```bash
-gulp build:cordova
-```
-
 #### iOS
 
-A valid code sign identity & provisioning needs to be configured in `cordova.json` before a release can be build.
+A valid code sign identity & provisioning needs to be configured in `app/[ENTRY].json` before a release can be build.
 
 ```bash
 gulp release:ios
@@ -100,7 +106,7 @@ gulp release:ios
 
 #### Android
 
-Building a valid release package requires a keystore to be configured in `cordova.json`.
+Building a valid release package requires a keystore to be configured in `app/[ENTRY].json`.
 
 ```bash
 gulp release:android
