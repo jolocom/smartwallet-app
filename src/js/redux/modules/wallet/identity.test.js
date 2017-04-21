@@ -9,6 +9,7 @@ describe('# Wallet identity redux module', () => {
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal({
+        error: false,
         loaded: false,
         webId: '',
         username: {verified: false, value: ''},
@@ -35,13 +36,14 @@ describe('# Wallet identity redux module', () => {
       state = reducer(state, action)
       expect(state.toJS())
         .to.deep.equal({
+          error: false,
           loaded: true,
           status: 'succeeded'
         })
     })
   })
 
-  describe.only('# actions ', () => {
+  describe('# actions ', () => {
     it('goToDrivingLicenceManagement should redirect the user to drivering ' +
     'licence management', () => {
       const dispatch = stub()
