@@ -179,6 +179,7 @@ const iconEmailMessage = (
     </span>
   </div>
 )
+
 const buttonEmailMessage = (
   <div>
     <b>Verification</b> <br />
