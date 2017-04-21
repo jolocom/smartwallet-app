@@ -9,7 +9,8 @@ describe('Simple dialog reducer', function() {
       expect(reducer(undefined, '@INIT').toJS()).to.deep.equal({
         visible: false,
         message: '',
-        primaryActionText: 'OK'
+        primaryActionText: 'OK',
+        style: {}
       })
     })
   })
@@ -18,11 +19,12 @@ describe('Simple dialog reducer', function() {
     it('should correctly handle the configSimpleDialog action', function() {
       expect(reducer(reducer(undefined, '@INIT'),
         simpleDialog.configSimpleDialog(
-        'test msg', 'Primary Action Text',
+        'test msg', 'Primary Action Text', {}
       )).toJS()).to.deep.equal({
         visible: false,
         message: 'test msg',
-        primaryActionText: 'Primary Action Text'
+        primaryActionText: 'Primary Action Text',
+        style: {}
       })
     })
   })
@@ -32,7 +34,8 @@ describe('Simple dialog reducer', function() {
         simpleDialog.showSimpleDialog()).toJS()).to.deep.equal({
           visible: true,
           message: '',
-          primaryActionText: 'OK'
+          primaryActionText: 'OK',
+          style: {}
         })
     })
   })
@@ -42,7 +45,8 @@ describe('Simple dialog reducer', function() {
         simpleDialog.hideSimpleDialog()).toJS()).to.deep.equal({
           visible: false,
           message: '',
-          primaryActionText: 'OK'
+          primaryActionText: 'OK',
+          style: {}
         })
     })
   })

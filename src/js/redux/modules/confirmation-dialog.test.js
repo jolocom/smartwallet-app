@@ -11,7 +11,8 @@ describe('Confirmation dialog reducer', function() {
         message: '',
         primaryActionText: 'Confirm',
         callback: null,
-        cancelActionText: ''
+        cancelActionText: '',
+        style: {}
       })
     })
   })
@@ -27,7 +28,8 @@ describe('Confirmation dialog reducer', function() {
         message: 'test msg',
         primaryActionText: 'Primary Action Text',
         callback,
-        cancelActionText: undefined
+        cancelActionText: undefined,
+        style: undefined
       })
     })
   })
