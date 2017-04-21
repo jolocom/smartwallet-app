@@ -107,10 +107,8 @@ const actions = module.exports = makeActions('registration', {
       return (dispatch, getState) => {
         const pinState = getState().getIn(['registration', 'pin'])
         if (!pinState.get('valid')) {
-          console.log('pin not valid')
           return
         }
-        console.log('pin: ' + pinState.get('confirm'))
         if (pinState.get('confirm')) {
           dispatch(actions.goForward())
         } else {
@@ -422,6 +420,5 @@ helpers._getNextURL = (currentPath, userType) => {
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  console.log('toCheck:' + toCheck)
   return !toCheck || state.getIn(['registration', toCheck, 'valid'])
 }
