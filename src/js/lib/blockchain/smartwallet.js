@@ -161,6 +161,10 @@ export default class SmartWallet {
 		0x1605970Cc47370750596A24fAF143AFfA6C406E9
 		*/
 
+    /*
+    only for testing
+    using a already deployed identity contract
+
     return new Promise((resolve, reject) => {
       setTimeout(
         () => {
@@ -168,44 +172,62 @@ export default class SmartWallet {
         },
         2000
       )
-    })
-
-    console.log('SmartWallet: start creating identity contract')
-    var identityContract = this.web3.eth.contract(IdentityContract.abi)
-    var address = '0x' + this.mainAddress
-    this._calculateEstimatedGas(
-      IdentityContract.unlinked_binary,
-      function(_err, _estimatedGas) {
-        console.log(
-          'SmartWallet: estimated gas for Idenitiy contract deployment ' +
-            _estimatedGas
-        )
-        let identity = identityContract.new(
-          {
-            from: address,
-            data: IdentityContract.unlinked_binary,
-            gas: _estimatedGas
-          },
-          function(e, contract) {
-            if (!e) {
-              if (!contract.address) {
-                console.log(
-                  'SmartWallet: Contract transaction send: TransactionHash: ' +
-                    contract.transactionHash +
-                    ' waiting to be mined...'
-                )
-              } else {
-                console.log('SmartWallet: Identity Contract created')
-                console.log(
-                  'SmartWallet: Contract mined! Address: ' + contract.address
-                )
+    }) */
+    return new Promise((resolve, reject) => {
+      console.log('SmartWallet: start creating identity contract')
+      var identityContract = this.web3.eth.contract(IdentityContract.abi)
+      var address = '0x' + this.mainAddress
+      this._calculateEstimatedGas(
+        IdentityContract.unlinked_binary,
+        function(_err, _estimatedGas) {
+          console.log(
+            'SmartWallet: estimated gas for Idenitiy contract deployment ' +
+              _estimatedGas
+          )
+          let identity = identityContract.new(
+            {
+              from: address,
+              data: IdentityContract.unlinked_binary,
+              gas: _estimatedGas
+            },
+            function(e, contract) {
+              if (!e) {
+                if (!contract.address) {
+                  console.log(
+                    'SmartWallet: Contract transaction send: TransactionHash: ' +
+                      contract.transactionHash +
+                      ' waiting to be mined...'
+                  )
+                } else {
+                  console.log('SmartWallet: Identity Contract created')
+                  console.log(
+                    'SmartWallet: Contract mined! Address: ' + contract.address
+                  )
+                  resolve(contract.address)
+                }
               }
             }
-          }
-        )
-      }
-    )
+          )
+        }
+      )
+    })
   }
+
+  /* _getAttributeFromIdentityContract(identityContractAddress, name) {
+
+		var id = this._createAttributeID(name)
+
+		var contract = this.web3.eth.contract(IdentityContract.abi).at(identityContractAddress)
+
+		var webID = contract.getAttributeValue(id, function (err, result) {
+
+			console.log("smart contract call: getAttributeValue")
+			console.log(result)
+
+		})
+
+	}*/
+
   addProperty(id, value, password) {
     console.log(
       'SmartWallet start to add a property to identity contract ' +
@@ -243,6 +265,7 @@ export default class SmartWallet {
       )
     })
   }
+  waitingForTransactionToBeMined(txhash) {}
 
   _contractMethodTransaction(_contract, _methodName, _args, _callback) {
     // status: not fnished
