@@ -52,6 +52,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={() => {}}
         getIdentityInformation={() => {}}
+        openConfirmDialog={() => {}}
+        closeConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -93,6 +97,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={goToDrivingLicenceManagement}
         goToContactManagement={() => {}}
         getIdentityInformation={() => {}}
+        openConfirmDialog={() => {}}
+        closeConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
       )
@@ -125,6 +133,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={() => {}}
         getIdentityInformation={() => {}}
+        openConfirmDialog={() => {}}
+        closeConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
@@ -157,6 +169,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={goToContactManagement}
         getIdentityInformation={() => {}}
+        openConfirmDialog={() => {}}
+        closeConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
@@ -186,6 +202,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={() => {}}
         getIdentityInformation={getIdentityInformation}
+        openConfirmDialog={() => {}}
+        closeConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )

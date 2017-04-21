@@ -14,6 +14,7 @@ describe('(Component) EditListItem', function() {
       onFocusChange={() => {}}
       onChange={() => {}}
       onDelete={() => {}}
+      enableDelete={false}
 
       />),
       { context: { muiTheme: { } } }

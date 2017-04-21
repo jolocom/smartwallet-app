@@ -7,17 +7,22 @@ import RegistrationNameEntryScreen from './name-entry'
 
 describe('(Component) RegistrationNameEntryScreen', function() {
   it('should render properly the first time', function() {
+    const setUsername = stub()
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
           registration: {
             username: {
               value: '',
-              valid: false
+              valid: false,
+              errorMsg: ''
             }
           }
         }))
-      } />),
+      }
+        setUsername={setUsername}
+        checkUsername={() => {}}
+     />),
       { context: { muiTheme: { } } }
     )
 
@@ -32,7 +37,8 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           registration: {
             username: {
               value: '',
-              valid: false
+              valid: false,
+              errorMsg: ''
             }
           }
         }))
@@ -54,7 +60,8 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           registration: {
             username: {
               value: '',
-              valid: false
+              valid: false,
+              errorMsg: ''
             }
           }
         }))

@@ -13,7 +13,10 @@ describe('(Component) WalletContactScreen', function() {
     const wrapper = shallow(
       (<WalletContactScreen.WrappedComponent id="test" visible
         {...WalletContactScreen.mapStateToProps(Immutable.fromJS({wallet: {
-          contact: {}
+          contact: {
+            loading: false,
+            information: {}
+          }
         }}))}
         getAccountInformation={getAccountInformation}
         updateInformation={() => {}}
@@ -34,8 +37,20 @@ describe('(Component) WalletContactScreen', function() {
     const wrapper = shallow(
      (<WalletContactScreen.WrappedComponent id="test" visible
        {...WalletContactScreen.mapStateToProps(Immutable.fromJS({wallet: {
-         contact: {}
+         contact: {
+           loading: false,
+           information: {}
+         }
        }}))}
+       getAccountInformation={() => {}}
+       updateInformation={() => {}}
+       setInformation={() => {}}
+       deleteInformation={() => {}}
+       exitWithoutSaving={() => {}}
+       saveChanges={() => {}}
+       addNewEntry={() => {}}
+       confirm={() => {}}
+       close={() => {}}
      />)
     )
     wrapper.instance()._onFocusChange('boo')

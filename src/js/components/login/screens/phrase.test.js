@@ -12,7 +12,8 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
           login: {
             passphrase: {
-              value: ''
+              value: '',
+              failed: false
             }
           }
         }))
@@ -34,7 +35,8 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
           login: {
             passphrase: {
-              value: 'test'
+              value: 'test',
+              failed: false
             }
           }
         }))
@@ -47,8 +49,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
 
     wrapper.find('Passphrase').props().onSubmit('test')
     expect(submitPassphrase.called).to.be.true
-    expect(submitPassphrase.calls).to.deep.equal([{ args: ['test']}])
-   
+    expect(submitPassphrase.calls).to.deep.equal([{args: ['test']}])
   })
   it('should call setPassphrase onChange with proper params', () => {
     const setPassphrase = stub()
@@ -57,7 +58,8 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
           login: {
             passphrase: {
-              value: 'test'
+              value: 'test',
+              failed: false
             }
           }
         }))
@@ -70,7 +72,6 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
 
     wrapper.find('Passphrase').props().onChange('test')
     expect(setPassphrase.called).to.be.true
-    expect(setPassphrase.calls).to.deep.equal([{ args: ['test']}])
-   
+    expect(setPassphrase.calls).to.deep.equal([{args: ['test']}])
   })
 })
