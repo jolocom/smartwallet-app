@@ -195,6 +195,7 @@ export default class WalletIdentity extends React.Component {
     username: React.PropTypes.object.isRequired,
     passport: React.PropTypes.object.isRequired,
     isLoaded: React.PropTypes.bool.isRequired,
+    isError: React.PropTypes.bool.isRequired,
     webId: React.PropTypes.string.isRequired,
     contact: React.PropTypes.object.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
@@ -208,7 +209,6 @@ export default class WalletIdentity extends React.Component {
     if (!this.props.isLoaded) {
       return <CircularProgress style={STYLES.spinner} />
     }
-
     return (
       <TabContainer>
         <Content>

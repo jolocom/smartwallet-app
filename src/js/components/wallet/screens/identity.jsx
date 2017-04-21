@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'redux/utils'
 import Presentation from '../presentation/identity'
+import WalletError from '../presentation/error'
 
 @connect({
   props: ['wallet'],
@@ -46,6 +47,13 @@ export default class WalletIdentityScreen extends React.Component {
 
   render() {
     const identity = this.props.wallet.identity
+    if (identity.error) {
+      return (
+        <WalletError
+          onClick={this.props.getIdentityInformation} />
+
+      )
+    }
     return (
       <Presentation
         username={identity.username}
@@ -53,6 +61,7 @@ export default class WalletIdentityScreen extends React.Component {
         webId={identity.webId}
         passport={identity.passport}
         isLoaded={identity.loaded}
+        isError={identity.error}
         goToContactManagement={this.props.goToContactManagement}
         goToPassportManagement={this.props.goToPassportManagement}
         goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
