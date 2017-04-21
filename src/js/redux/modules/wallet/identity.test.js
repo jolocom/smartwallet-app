@@ -41,7 +41,7 @@ describe('# Wallet identity redux module', () => {
     })
   })
 
-  describe('# actions ', () => {
+  describe.only('# actions ', () => {
     it('goToDrivingLicenceManagement should redirect the user to drivering ' +
     'licence management', () => {
       const dispatch = stub()
@@ -112,34 +112,24 @@ describe('# Wallet identity redux module', () => {
     it('getIdentityInformation should get the identity information from ' +
       'the backend', () => {
       const getState = stub()
-      const services = {
-        auth: {
-          currentUser: {
-            wallet: {
-              getUserInformation: stub().returns('information')
-            }
-          }
-        }
-      }
+      const services = {auth: {currentUser: {wallet: {
+        getUserInformation: stub().returns('information')
+      }}}}
       const dispatch = stub()
       const thunk = identity.actions.getIdentityInformation()
-      withStubs([
-        [services.auth.currentUser.wallet, 'getUserInformation', {
-          returns: 'information'
-        }]
-      ], () => {
-        thunk(dispatch, getState, {services})
-        expect(dispatch.calledWithArgs[0].promise())
-          .to.deep.equal('information')
-      })
-      withStubs([
-        [identity.actions.getIdentityInformation, 'buildAction', {
-          returns: 'build'
-        }]
-      ], () => {
-        thunk(dispatch, getState, {services})
-        expect(dispatch.calledWithArgs[0]).to.deep.equal('build')
-      })
+
+      thunk(dispatch, getState, {services})
+
+      expect(dispatch.called).to.be.true
+      expect(dispatch.calls[0].args[0].promise()).to.equal('information')
+      expect(dispatch.calls[0].args[0].types).to.deep.equal([
+        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION',
+        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_SUCCESS',
+        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_FAIL'
+      ])
+      const backendCall = services.auth.currentUser.wallet.getUserInformation
+      expect(backendCall.called).to.be.true
+      expect(backendCall.calls).to.deep.equal([{args: [{email: 'test@test.com'}]}])
     })
   })
 })
