@@ -17,6 +17,7 @@ export default class WalletHomeScreen extends React.Component {
 
   render() {
     return (<Presentation
-      onClick={this.props.goToIdentity} />)
+      onClick={this.props.goToIdentity}
+      username={this.props.wallet.identity.username.value} />)
   }
 }

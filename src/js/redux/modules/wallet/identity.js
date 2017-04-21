@@ -51,7 +51,7 @@ const actions = module.exports = makeActions('wallet/identity', {
   }
 })
 
-const mapBackendToState = (data) => Immutable.fromJS(data).merge({loaded: true})
+const mapBackendToState = (data) => Immutable.fromJS(data).merge({loaded: true, error: false})
 const mapBackendToStateError = (data) =>
   Immutable.fromJS(data).merge({loaded: true, error: true})
 const initialState = Immutable.fromJS({
