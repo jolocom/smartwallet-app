@@ -55,11 +55,9 @@ const STYLES = {
     top: '50%',
     left: '50%'
   },
-  simpleDialog: {
-    maxWidth: '460px'
-  },
-  confimDialog: {
-    maxWidth: '460px'
+  dialog: {
+    maxWidth: '460px',
+    width: '100%'
   }
 }
 
@@ -75,7 +73,7 @@ const PhoneList = (props) => {
       textValue={props.phone[i].number}
       textLabel="Phone Number"
       icon={CommunicationCall}
-      onVerify={() => props.confirm(iconPhoneMessage, STYLES.confimDialog)}
+      onVerify={() => props.confirm(iconPhoneMessage, STYLES.dialog)}
       secondaryTextValue={props.phone[i].type} />)
   }
   return <List disabled>
@@ -100,7 +98,7 @@ const EmailList = (props) => {
           verified={props.email[i].verified}
           textValue={props.email[i].address}
           textLabel="Email"
-          onVerify={() => props.confirm(iconEmailMessage, STYLES.confimDialog)}
+          onVerify={() => props.confirm(iconEmailMessage, STYLES.dialog)}
           icon={CommunicationEmail}
         />
         {!props.email[i].verified
@@ -110,7 +108,7 @@ const EmailList = (props) => {
             style={STYLES.requestBtn}
             onClick={() => props.verify(buttonEmailMessage,
               'OK',
-              STYLES.simpleDialog
+              STYLES.dialog
             )} />
           : null}
       </div>)
@@ -220,7 +218,7 @@ export default class WalletIdentity extends React.Component {
                 showDetails={(details) => this.props.verify(
                   details,
                   'REQUEST VERIFICATION',
-                  STYLES.simpleDialog
+                  STYLES.dialog
                 )}
                 webId={this.props.webId}
                 username={this.props.username.value}
