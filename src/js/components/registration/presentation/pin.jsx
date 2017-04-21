@@ -80,7 +80,7 @@ const Pin = (props) => {
           disabled={!props.valid}
           secondary={props.valid}
           label={getButtonLabel(props)}
-          onClick={props.onSubmit}
+          onClick={() => { props.onSubmit() }}
         />
       </Footer>
     </Container>
