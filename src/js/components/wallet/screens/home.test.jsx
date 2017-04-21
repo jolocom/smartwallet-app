@@ -13,11 +13,14 @@ describe('(Component) WalletHomeScreen', function() {
     const wrapper = shallow(
       (<WalletHomeScreen.WrappedComponent id="test" visible
         {...WalletHomeScreen.mapStateToProps(Immutable.fromJS({wallet: {
+          identity: {
+            username: 'test'
+          }
         }}))}
         goToIdentity={goToIdentity}
       />)
     )
-    wrapper.find('WalletHome').prop('onClick')()
+    wrapper.find('WalletHome').props().onClick()
     expect(goToIdentity.calls).to.deep.equal([
       {args: []}
     ])
