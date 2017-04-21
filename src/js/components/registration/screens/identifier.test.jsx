@@ -8,6 +8,8 @@ import Presentation from '../presentation/identifier'
 
 describe('(Component) RegistrationIdentifierScreen', function() {
   it('should render properly the first time', function() {
+    const setEmail = stub()
+    const goForward = () => {}
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
         ...RegistrationIdentifierScreen.mapStateToProps(Immutable.fromJS({
@@ -21,7 +23,10 @@ describe('(Component) RegistrationIdentifierScreen', function() {
             }
           }
         }))
-      } />),
+      }
+        setEmail={setEmail}
+        goForward={goForward}
+    />),
       { context: { muiTheme: { } } }
     )
 
