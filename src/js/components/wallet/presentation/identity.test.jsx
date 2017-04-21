@@ -9,6 +9,7 @@ describe('(Component) Wallet Identity', function() {
         username={{}}
         passport={{}}
         isLoaded
+        webId={''}
         contact={{
           email: [{
             type: '',
@@ -23,6 +24,8 @@ describe('(Component) Wallet Identity', function() {
         goToContactManagement={() => {}}
         goToPassportManagement={() => {}}
         goToDrivingLicenceManagement={() => {}}
+        confirm={() => {}}
+        verify={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

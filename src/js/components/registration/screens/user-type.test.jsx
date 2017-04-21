@@ -20,7 +20,12 @@ describe('(Component) RegistrationUserTypeScreen', function() {
             }
           }
         }))
-      } />),
+      }
+        goForward={() => {}}
+        setUserType={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
+     />),
       { context: { muiTheme: { } } }
     )
 
