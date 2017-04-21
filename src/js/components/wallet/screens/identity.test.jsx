@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
 import WalletIdentityScreen from './identity'
 
-describe('(Component) WalletIdentityScreen', function() {
+describe.only('(Component) WalletIdentityScreen', function() {
   it('should render properly the first time', function() {
     const wrapper = shallow(
       (<WalletIdentityScreen.WrappedComponent {
@@ -52,6 +52,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={() => {}}
         getIdentityInformation={() => {}}
+        closeConfirmDialog={() => {}}
+        openConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -93,6 +97,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={goToDrivingLicenceManagement}
         goToContactManagement={() => {}}
         getIdentityInformation={() => {}}
+        closeConfirmDialog={() => {}}
+        openConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
       )
@@ -125,6 +133,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={() => {}}
         getIdentityInformation={() => {}}
+        closeConfirmDialog={() => {}}
+        openConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
@@ -157,6 +169,10 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={goToContactManagement}
         getIdentityInformation={() => {}}
+        closeConfirmDialog={() => {}}
+        openConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
@@ -165,7 +181,7 @@ describe('(Component) WalletIdentityScreen', function() {
     expect(goToContactManagement.called).to.be.true
     expect(goToContactManagement.calls).to.deep.equal([{args: []}])
   })
-  it('should call getIdentityInformation on componentWillMount   ' +
+  it('should call getIdentityInformation on componentWillMount ' +
     'with proper params', () => {
     const getIdentityInformation = stub()
     shallow(
@@ -186,11 +202,93 @@ describe('(Component) WalletIdentityScreen', function() {
         goToDrivingLicenceManagement={() => {}}
         goToContactManagement={() => {}}
         getIdentityInformation={getIdentityInformation}
+        closeConfirmDialog={() => {}}
+        openConfirmDialog={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
 
     expect(getIdentityInformation.called).to.be.true
     expect(getIdentityInformation.calls).to.deep.equal([{args: []}])
+  })
+  it('should call openConfirmDialog on confirm with proper params', () => {
+    const openConfirmDialog = stub()
+    const closeConfirmDialog = stub()
+    const wrapper = shallow(
+      (<WalletIdentityScreen.WrappedComponent {
+        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            identity: {
+              loaded: false,
+              webId: '',
+              username: {},
+              contact: {},
+              passport: {}
+            }
+          }
+        }))
+      }
+        goToPassportManagement={() => {}}
+        goToDrivingLicenceManagement={() => {}}
+        goToContactManagement={() => {}}
+        getIdentityInformation={() => {}}
+        openConfirmDialog={openConfirmDialog}
+        closeConfirmDialog={closeConfirmDialog}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
+       />),
+      { context: { muiTheme: { } } }
+    )
+
+    wrapper.find('WalletIdentity').props().confirm('message', {})
+    expect(openConfirmDialog.called).to.be.true
+    expect(openConfirmDialog.calls[0].args[0]).to.equal('message')
+    expect(openConfirmDialog.calls[0].args[1]).to.equal('REQUEST VERIFICATION')
+    expect(openConfirmDialog.calls[0].args[3]).to.equal('OK')
+    expect(openConfirmDialog.calls[0].args[4]).to.deep.equal({})
+
+    openConfirmDialog.calls[0].args[2]()
+    expect(closeConfirmDialog.called).to.be.true
+    expect(closeConfirmDialog.calls).to.deep.equal([{args: []}])
+  })
+  it('should call openConfirmDialog on verify with proper params', () => {
+    const configSimpleDialog = stub()
+    const showSimpleDialog = stub()
+    const wrapper = shallow(
+      (<WalletIdentityScreen.WrappedComponent {
+        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            identity: {
+              loaded: false,
+              webId: '',
+              username: {},
+              contact: {},
+              passport: {}
+            }
+          }
+        }))
+      }
+        goToPassportManagement={() => {}}
+        goToDrivingLicenceManagement={() => {}}
+        goToContactManagement={() => {}}
+        getIdentityInformation={() => {}}
+        openConfirmDialog={() => {}}
+        closeConfirmDialog={() => {}}
+        configSimpleDialog={configSimpleDialog}
+        showSimpleDialog={showSimpleDialog}
+
+       />),
+      { context: { muiTheme: { } } }
+    )
+
+    wrapper.find('WalletIdentity').props().verify('message', 'OK', {})
+    expect(configSimpleDialog.called).to.be.true
+    expect(showSimpleDialog.called).to.be.true
+    expect(configSimpleDialog.calls).to.deep.equal([{args: [
+      'message', 'OK', {}
+    ]}])
+    expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
   })
 })
