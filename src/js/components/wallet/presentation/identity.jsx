@@ -15,6 +15,9 @@ import {
 } from 'material-ui'
 
 const STYLES = {
+  listItem: {
+    whiteSpace: 'nowrap'
+  },
   inputName: {
     color: theme.palette.textColor,
     fontSize: '1em'
@@ -230,16 +233,15 @@ export default class WalletIdentity extends React.Component {
                   STYLES.simpleDialog
                 )}
                 webId={this.props.webId}
-                username={this.props.username.value}
-              />}>
+                username={this.props.username.value} />}
+                style={STYLES.listItem}>
                 <TextField
                   floatingLabelText="Name"
                   inputStyle={STYLES.inputName}
                   floatingLabelStyle={STYLES.labelName}
                   underlineShow={false}
                   floatingLabelFixed
-                  value={this.props.username.value}
-                />
+                  value={this.props.username.value} />
               </ListItem>
               <Divider style={STYLES.divider} />
             </List>
@@ -279,7 +281,6 @@ export default class WalletIdentity extends React.Component {
             />
           </Block>
         </Content>
-      {/* <Link to="/wallet/identity/contact"></Link> */}
       </TabContainer>
     )
   }

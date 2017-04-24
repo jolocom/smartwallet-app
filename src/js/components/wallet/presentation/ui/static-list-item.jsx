@@ -11,7 +11,7 @@ import {
 var STYLES = {
   icon: {
     color: theme.jolocom.gray1,
-    marginRight: '25px'
+    marginRight: '15px'
   },
   inputName: {
     color: theme.palette.textColor,
@@ -21,14 +21,14 @@ var STYLES = {
     color: theme.palette.lighterTextColor
   },
   mainTextField: {
-    width: '200px',
+    width: '150px',
     padding: '0'
   },
   secondaryTextField: {
     width: '60px',
     display: 'inline-block',
     color: theme.jolocom.gray1,
-    marginRight: '20px'
+    marginRight: '10px'
   },
   verifiedListItem: {
     paddingBottom: '5px'
@@ -37,9 +37,11 @@ var STYLES = {
     paddingBottom: '0px'
   },
   verifiedShield: {
-    marginLeft: '5px'
+    marginLeft: '0px'
+  },
+  listItem: {
+    whiteSpace: 'nowrap'
   }
-
 }
 
 @Radium
@@ -56,8 +58,9 @@ export default class StaticListItem extends React.Component {
   render() {
     var props = this.props
     return (
-      <ListItem style={props.verified ? STYLES.verifiedListItem
-      : STYLES.unverifiedListItem} disabled>
+      <ListItem style={Object.assign(STYLES.listItem,
+        props.verified ? STYLES.verifiedListItem
+      : STYLES.unverifiedListItem)} disabled>
         <props.icon
           style={STYLES.icon}
           color={STYLES.icon.color} />
