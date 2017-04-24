@@ -30,6 +30,12 @@ const STYLES = {
   },
   uncheckedIcon: {
     fill: theme.jolocom.gray1
+  },
+  checkBox: {
+    width: '50%'
+  },
+  button: {
+    flex: 1
   }
 }
 
@@ -58,7 +64,7 @@ const WritePhrase = (props) => {
           By the way! Taking a screenshot is not secure!
         </SideNote>
       </Block>
-      <Block style={{width: '100%'}}>
+      <Block style={STYLES.checkBox}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
           labelStyle={{color: theme.jolocom.gray1, fontSize: '13px'}}
@@ -67,7 +73,7 @@ const WritePhrase = (props) => {
           onClick={(e) => props.onToggle(e.target.checked)}
         />
       </Block>
-      <Block style={{flex: 1}}>
+      <Block style={STYLES.button}>
         <RaisedButton
           label="NEXT STEP"
           secondary

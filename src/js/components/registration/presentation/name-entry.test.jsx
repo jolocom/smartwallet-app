@@ -10,6 +10,7 @@ describe('(Component) NameEntry', function() {
       errorMsg=""
       onSubmit={() => {}}
       onChange={() => {}}
+      handleDialog={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

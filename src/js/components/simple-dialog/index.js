@@ -22,13 +22,17 @@ export default class SimpleDialog extends React.Component {
 
   parseStyle(style) {
     let localStyle = {...style}
-    if(localStyle === undefined)
+    if (localStyle === undefined) {
       return {contentStyle: {}, actionsContainerStyle: {}}
-    if (localStyle.contentStyle === undefined)
+    }
+    if (localStyle.contentStyle === undefined) {
       localStyle.contentStyle = {}
-    if (localStyle.actionsContainerStyle === undefined)
+    }
+    if (localStyle.actionsContainerStyle === undefined) {
       localStyle.actionsContainerStyle = {}
-    return {...localStyle}
+      return {...localStyle}
+    }
+    return localStyle
   }
 
   render() {
@@ -50,6 +54,7 @@ export default class SimpleDialog extends React.Component {
       onRequestClose={this.handleClose}
       contentStyle={style.contentStyle}
       actionsContainerStyle={style.actionsContainerStyle}
+      autoScrollBodyContent
     >
       {this.props.simpleDialog.message}
     </Dialog>
