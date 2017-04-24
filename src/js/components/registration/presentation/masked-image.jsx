@@ -1,20 +1,14 @@
 import React from 'react'
 import theme from '../../../styles/jolocom-theme'
-// import Radium from 'radium'
 
 class MaskedImage extends React.Component {
   static propTypes = {
     image: React.PropTypes.string.isRequired,
-    // Type checking too slow for paths
     uncoveredPaths: React.PropTypes.any.isRequired,
     uncovering: React.PropTypes.bool.isRequired,
     onPointUncovered: React.PropTypes.func.isRequired,
     onUncoveringChange: React.PropTypes.func.isRequired
   }
-
-  // componentDidMount() {
-  //   this.refs.input.focus()
-  // }
 
   componentWillUnmount() {
     this.onRevealEnd()

@@ -50,7 +50,15 @@ describe('(Component) RegistrationNameEntryScreen', function() {
     )
     wrapper.find('NameEntry').prop('handleDialog')('whoo')
     expect(configSimpleDialog.calledWithArgs).to.deep.equal(
-      ['whoo', 'OK', {}]
+      ['whoo', 'OK',
+        {
+          actionsContainerStyle: {
+            textAlign: 'center'
+          },
+          contentStyle: {
+            textAlign: 'center'
+          }
+        }]
     )
     expect(showSimpleDialog.called).to.be.true
   })
