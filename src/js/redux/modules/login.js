@@ -53,13 +53,15 @@ const initialState = Immutable.fromJS({
   passphrase: {
     value: '',
     failed: false,
-    valid: false
+    valid: false,
+    errorMsg: ''
   },
   pin: {
     value: '',
     focused: false,
     failed: false,
-    valid: false
+    valid: false,
+    errorMsg: ''
   }
 })
 
@@ -68,7 +70,8 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setPassphrase.id:
       return state.mergeDeep({
         passphrase: {
-          value: action.value
+          value: action.value,
+          valid: action.value.length > 0
         }
       })
 
@@ -76,14 +79,17 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         passphrase: {
           value: '',
-          valid: false
+          valid: false,
+          failed: false
         }
       })
 
     case actions.submitPassphrase.id_success:
       return state.mergeDeep({
         passphrase: {
-          valid: true
+          errorMsg: '',
+          valid: true,
+          failed: false
         }
       })
 
@@ -91,7 +97,8 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         passphrase: {
           errorMsg: 'Your passphrase is not correct',
-          valid: false
+          valid: false,
+          failed: true
         }
       })
 
@@ -117,13 +124,29 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         pin: {
           value: '',
-          valid: false
+          valid: false,
+          failed: false
         }
       })
     case actions.goForward.id_fail:
       return state.mergeDeep({
         pin: {
-          errorMsg: 'Your Pin is Not correct!'
+          errorMsg: 'Your Pin is Not correct!',
+          failed: true,
+          valid: false
+        }
+      })
+    case actions.goForward.id_success:
+      return state.mergeDeep({
+        pin: {
+          errorMsg: '',
+          failed: false,
+          valid: true
+        },
+        passphrase: {
+          errorMsg: '',
+          failed: false,
+          valid: true
         }
       })
 
