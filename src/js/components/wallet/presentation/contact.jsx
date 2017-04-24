@@ -28,7 +28,7 @@ const STYLES = {
     marginTop: '10px'
   },
   icon: {
-    marginTop: '40px',
+    marginTop: '35px',
     marginRight: '40px'
   },
   spinner: {
