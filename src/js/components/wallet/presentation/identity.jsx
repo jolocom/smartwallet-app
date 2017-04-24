@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {PlusMenu, StaticListItem, TabContainer} from './ui'
+import {PlusMenu, StaticListItem, TabContainer, HalfScreenContainer} from './ui'
 import {Content, Block} from '../../structure'
 import Info from 'material-ui/svg-icons/action/info'
 import {theme} from 'styles'
@@ -30,7 +30,8 @@ const STYLES = {
     fill: theme.palette.accent1Color
   },
   divider: {
-    marginLeft: '16px'
+    marginLeft: '16px',
+    width: '105%'
   },
   addBtn: {
     width: '40px',
@@ -223,64 +224,66 @@ export default class WalletIdentity extends React.Component {
     }
     return (
       <TabContainer>
-        <Content>
-          <Block>
-            <List>
-              <ListItem key={1} disabled rightIcon={<InfoDetail
-                showDetails={(details) => this.props.verify(
-                  details,
-                  'OK',
-                  STYLES.simpleDialog
-                )}
-                webId={this.props.webId}
-                username={this.props.username.value} />}
-                style={STYLES.listItem}>
-                <TextField
-                  floatingLabelText="Name"
-                  inputStyle={STYLES.inputName}
-                  floatingLabelStyle={STYLES.labelName}
-                  underlineShow={false}
-                  floatingLabelFixed
-                  value={this.props.username.value} />
-              </ListItem>
-              <Divider style={STYLES.divider} />
-            </List>
-          </Block>
-          <Block>
-            <PlusMenu
-              name="Contact"
-              choice={
-                !(this.props.contact.email[0].address === '' &&
-                this.props.contact.phone[0].number === '')
-              }
-              goToManagement={this.props.goToContactManagement}
-            />
-          </Block>
-          <Block>
-            <PhoneList
-              phone={this.props.contact.phone}
-              confirm={this.props.confirm}
-              verify={this.props.verify} />
-            <EmailList
-              email={this.props.contact.email}
-              confirm={this.props.confirm}
-              verify={this.props.verify} />
-          </Block>
-          <Block>
-            <PlusMenu
-              name="Passport"
-              choice={this.props.passport.number}
-              goToManagement={this.props.goToPassportManagement}
-            />
-          </Block>
-          <Block>
-            <PlusMenu
-              name="Driving License"
-              choice={false}
-              goToManagement={this.props.goToDrivingLicenceManagement}
-            />
-          </Block>
-        </Content>
+        <HalfScreenContainer>
+          <Content>
+            <Block>
+              <List>
+                <ListItem key={1} disabled rightIcon={<InfoDetail
+                  showDetails={(details) => this.props.verify(
+                    details,
+                    'OK',
+                    STYLES.simpleDialog
+                  )}
+                  webId={this.props.webId}
+                  username={this.props.username.value} />}
+                  style={STYLES.listItem}>
+                  <TextField
+                    floatingLabelText="Name"
+                    inputStyle={STYLES.inputName}
+                    floatingLabelStyle={STYLES.labelName}
+                    underlineShow={false}
+                    floatingLabelFixed
+                    value={this.props.username.value} />
+                </ListItem>
+                <Divider style={STYLES.divider} />
+              </List>
+            </Block>
+            <Block>
+              <PlusMenu
+                name="Contact"
+                choice={
+                  !(this.props.contact.email[0].address === '' &&
+                  this.props.contact.phone[0].number === '')
+                }
+                goToManagement={this.props.goToContactManagement}
+              />
+            </Block>
+            <Block>
+              <PhoneList
+                phone={this.props.contact.phone}
+                confirm={this.props.confirm}
+                verify={this.props.verify} />
+              <EmailList
+                email={this.props.contact.email}
+                confirm={this.props.confirm}
+                verify={this.props.verify} />
+            </Block>
+            <Block>
+              <PlusMenu
+                name="Passport"
+                choice={this.props.passport.number}
+                goToManagement={this.props.goToPassportManagement}
+              />
+            </Block>
+            <Block>
+              <PlusMenu
+                name="Driving License"
+                choice={false}
+                goToManagement={this.props.goToDrivingLicenceManagement}
+              />
+            </Block>
+          </Content>
+        </HalfScreenContainer>
       </TabContainer>
     )
   }

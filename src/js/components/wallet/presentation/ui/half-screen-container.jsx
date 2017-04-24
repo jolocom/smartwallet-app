@@ -5,15 +5,15 @@ import {theme} from 'styles'
 
 const STYLE = {
   position: 'relative',
-  display: 'flex',
+  display: 'inline',
   flexDirection: 'column',
   alignItems: 'left',
   textAlign: 'left',
-  padding: '10px',
   backgroundColor: theme.jolocom.gray4,
   boxSizing: 'border-box',
-  overflowY: 'auto',
-  minHeight: '100%'
+  minHeight: '100%',
+  minWidth: '300px',
+  width: '50%'
 }
 
 const TabContainer = ({style, children, ...props} = {}) => {

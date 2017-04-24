@@ -47,7 +47,6 @@ const STYLES = {
   infoHeader: {
     textAlign: 'left',
     color: theme.palette.textColor,
-    width: '150px',
     marginBottom: '15px',
     display: 'inline-block'
   },
@@ -57,12 +56,17 @@ const STYLES = {
     display: 'inline-block',
     verticalAlign: 'top',
     width: '70%'
+  },
+  root: {
+    width: '100%',
+    maxWidth: '800px',
+    whiteSpace: 'nowrap'
   }
 
 }
 const PlusMenu = (props) => {
   return (
-    <div style={props.style}>
+    <div style={Object.assign(STYLES.root, props.style)}>
       <List>
         <div style={STYLES.item}>
           <div style={STYLES.infoHeader}>
