@@ -17,7 +17,8 @@ import {
 const STYLES = {
   inputName: {
     color: theme.palette.textColor,
-    fontSize: '1em'
+    fontSize: '1em',
+    width: '80%'
   },
   labelName: {
     color: theme.palette.lighterTextColor
@@ -58,6 +59,15 @@ const STYLES = {
   dialog: {
     maxWidth: '460px',
     width: '100%'
+  },
+  simpleDialog: {
+    contentStyle: {
+      maxWidth: '460px',
+      width: '100%'
+    },
+    actionsContainerStyle: {
+      textAlign: 'center'
+    }
   }
 }
 
@@ -108,7 +118,7 @@ const EmailList = (props) => {
             style={STYLES.requestBtn}
             onClick={() => props.verify(buttonEmailMessage,
               'OK',
-              STYLES.dialog
+              STYLES.simpleDialog
             )} />
           : null}
       </div>)
@@ -218,7 +228,7 @@ export default class WalletIdentity extends React.Component {
                 showDetails={(details) => this.props.verify(
                   details,
                   'REQUEST VERIFICATION',
-                  STYLES.dialog
+                  STYLES.simpleDialog
                 )}
                 webId={this.props.webId}
                 username={this.props.username.value}

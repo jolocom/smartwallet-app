@@ -31,13 +31,18 @@ export default class SimpleDialog extends React.Component {
         onTouchTap={OKHandler}
       />
     ]
-
+    const style = this.props.simpleDialog.style
+    const contentStyle = style.contentStyle !== undefined ?
+      style.contentStyle : {}
+    const actionsContainerStyle = style.actionsContainerStyle !== undefined ?
+      style.actionsContainerStyle : {}
     return <Dialog
       actions={simpleActions}
       modal={false}
       open={this.props.simpleDialog.visible}
       onRequestClose={this.handleClose}
-      contentStyle={this.props.simpleDialog.style}
+      contentStyle={contentStyle}
+      actionsContainerStyle={actionsContainerStyle}
     >
       {this.props.simpleDialog.message}
     </Dialog>
