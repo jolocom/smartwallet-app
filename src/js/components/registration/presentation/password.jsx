@@ -4,7 +4,7 @@ import PasswordField from 'material-ui-password-field'
 import {theme} from 'styles'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Header, Content, Block, Footer} from './ui'
+import {Container, Header, Content, Block, Footer} from '../../structure'
 
 const STYLES = {
   password: {
@@ -15,7 +15,7 @@ const STYLES = {
     backgroundColor: '#ffffff',
     maxWidth: '360px'
   },
-  strengthBare: {
+  strengthBar: {
     marginRight: '30px',
     marginLeft: '30px'
   },
@@ -58,7 +58,7 @@ const showBar = (value, strength, barIndex) => {
 }
 
 function StrengthBar(props) {
-  return <div style={STYLES.strengthBare}>
+  return <div style={STYLES.strengthBar}>
     <svg width="100%" height="4">
       <line
         x1="0%"

@@ -12,6 +12,7 @@ describe('(Component) Pin', function() {
       onChangeRequest={() => {}}
       onFocusChange={() => {}}
       onSubmit={() => {}}
+      onChange={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

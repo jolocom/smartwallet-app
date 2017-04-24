@@ -12,7 +12,7 @@ import Checked from 'material-ui/svg-icons/action/check-circle'
 
 import {theme} from 'styles'
 
-import {Container, Header, Block, SideNote, Footer, ColumnContainer} from './ui'
+import {Container, Header, Block, Footer, SideNote} from '../../structure'
 
 const STYLES = {
   phraseWrapper: {
@@ -30,6 +30,12 @@ const STYLES = {
   },
   uncheckedIcon: {
     fill: theme.jolocom.gray1
+  },
+  checkBox: {
+    width: '50%'
+  },
+  button: {
+    flex: 1
   }
 }
 
@@ -44,50 +50,47 @@ const WritePhrase = (props) => {
         </Block>
         <Header title="Your secure phrase" />
 
-        <Block style={STYLES.phraseWrapper}>
-          <span style={STYLES.phrase}>{
-            props.value || 'The flying red fox is jumping enthusiastically' +
-              'over the little brown dog.'
-          }</span>
-        </Block>
-        <Block>
-          <SideNote style={STYLES.sideNoteGreen}>
-            IMPORTANT <br />
-            Write these words down on an analog and secure place. Store it in at
-            least two different places. Without these words you cannot access
-            your wallet again.
-            Anyone with these words can get access to your wallet!
-            By the way! Taking a screenshot is not secure!
-          </SideNote>
-        </Block>
-        <Block style={{width: '80%', margin: 'auto'}}>
-          <Checkbox
-            label="Yes, I have securely written down my phrase."
-            labelStyle={{color: theme.jolocom.gray1, fontSize: '13px',
-              marginLeft: '5px', display: 'inline-block', position: 'relative'}}
-            checkedIcon={<Checked />}
-            uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
-            onClick={(e) => props.onToggle(e.target.checked)}
-          />
-        </Block>
-        <Block style={{flex: 1}}>
-          <RaisedButton
-            label="NEXT STEP"
-            secondary
-            onClick={props.onSubmit}
-            disabled={!props.isChecked} />
-        </Block>
-        <Block>
-          <SideNote>
-            Actually, I do not want to be responsible for the storage.
-          </SideNote>
-        </Block>
-        <Footer>
-          <FlatButton
-            label="STORE IT FOR ME"
-            onClick={() => { props.onChange('layman'); props.onSubmit() }} />
-        </Footer>
-      </ColumnContainer>
+      <Block style={STYLES.phraseWrapper}>
+        <span style={STYLES.phrase}>{
+          props.value || 'The flying red fox is jumping enthusiastically' +
+            'over the little brown dog.'
+        }</span>
+      </Block>
+      <Block>
+        <SideNote style={STYLES.sideNoteGreen}>
+          IMPORTANT <br />
+          Write these words down on an analog and secure place. Store it in at
+          least two different places. Without these words you cannot access your
+          wallet again. Anyone with these words can get access to your wallet!
+          By the way! Taking a screenshot is not secure!
+        </SideNote>
+      </Block>
+      <Block style={STYLES.checkBox}>
+        <Checkbox
+          label="Yes, I have securely written down my phrase."
+          labelStyle={{color: theme.jolocom.gray1, fontSize: '13px'}}
+          checkedIcon={<Checked />}
+          uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
+          onClick={(e) => props.onToggle(e.target.checked)}
+        />
+      </Block>
+      <Block style={STYLES.button}>
+        <RaisedButton
+          label="NEXT STEP"
+          secondary
+          onClick={props.onSubmit}
+          disabled={!props.isChecked} />
+      </Block>
+      <Block>
+        <SideNote>
+          Actually, I do not want to be responsible for the storage.
+        </SideNote>
+      </Block>
+      <Footer>
+        <FlatButton
+          label="STORE IT FOR ME"
+          onClick={() => { props.onChange('layman'); props.onSubmit() }} />
+      </Footer>
     </Container>
   )
 }

@@ -1,10 +1,10 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import UserType from './user-type'
+import WritePhrase from './write-phrase'
 
-describe('(Component) UserType', function() {
+describe('(Component) WritePhrase', function() {
   it('should render properly the first time', function() {
-    shallow((<UserType
+    shallow((<WritePhrase
       value=""
       isChecked={false}
       onToggle={() => {}}

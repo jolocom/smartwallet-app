@@ -5,7 +5,8 @@ import TextField from 'material-ui/TextField'
 import CircularProgress from 'material-ui/CircularProgress'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Header, Content, SideNote, Footer} from './ui'
+import {Container, Header, Content, Footer, SideNote} from '../../structure'
+import {theme} from 'styles'
 
 const STYLES = {
   heading: {
@@ -54,7 +55,7 @@ const NameEntry = (props) => {
           end up on your business card one day.
         </SideNote>
         <TextField
-          style={{'marginTop': '10%'}}
+          style={STYLES.textField}
           defaultValue={props.value}
           floatingLabelText="Unique Username"
           floatingLabelStyle={STYLES.floatingLabel}
@@ -82,7 +83,8 @@ NameEntry.propTypes = {
   errorMsg: React.PropTypes.string.isRequired,
   checking: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired
+  onSubmit: React.PropTypes.func.isRequired,
+  handleDialog: React.PropTypes.func.isRequired
 }
 
 export default Radium(NameEntry)
