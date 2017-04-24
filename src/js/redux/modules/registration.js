@@ -441,6 +441,5 @@ helpers._getNextURL = (currentPath, userType) => {
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  let result = !toCheck || state.getIn(['registration', toCheck, 'valid'])
-  return result || false
+  return !toCheck || state.getIn(['registration', toCheck, 'valid'])
 }
