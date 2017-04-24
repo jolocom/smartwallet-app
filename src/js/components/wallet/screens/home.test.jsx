@@ -9,6 +9,7 @@ import {stub} from '../../../../../test/utils'
 describe('(Component) WalletHomeScreen', function() {
   it('call goToIdentity button on click', function() {
     const goToIdentity = stub()
+    const getIdentityInformation = stub()
 
     const wrapper = shallow(
       (<WalletHomeScreen.WrappedComponent id="test" visible
@@ -18,6 +19,7 @@ describe('(Component) WalletHomeScreen', function() {
           }
         }}))}
         goToIdentity={goToIdentity}
+        getIdentityInformation={getIdentityInformation}
       />)
     )
     wrapper.find('WalletHome').props().onClick()

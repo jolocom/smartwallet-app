@@ -19,11 +19,23 @@ describe('Wallet registration Redux module', function() {
         const thunk = registration.goForward()
 
         withStubs([
-          [registration.actions, 'registerWallet', {returns: 'register'}]],
+          [registration.actions, 'registerWallet', {returns: 'register'}],
+          [router, 'pushRoute', {returns: 'push'}],
+          [registration.helpers, '_getNextURLFromState', {returns: '/next/'}]],
           () => {
             thunk(dispatch, getState)
-            expect(dispatch.calledWithArgs)
-              .to.deep.equal(['register'])
+            expect(dispatch.calls)
+              .to.deep.equal([{
+                args: [
+                  'register'
+                ]
+              },
+              {
+                args: [
+                  'push'
+                ]
+              }
+              ])
           }
         )
       })

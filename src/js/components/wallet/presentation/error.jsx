@@ -13,6 +13,9 @@ import {
 } from 'material-ui'
 
 const STYLES = {
+  topBlock: {
+    marginTop: '100px'
+  },
   greeting: {
     fontSize: '20px',
     color: theme.palette.textColor
@@ -27,6 +30,8 @@ const STYLES = {
 export default class WalletError extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
+    message: React.PropTypes.string,
+    buttonLabel: React.PropTypes.string.isRequired,
     onClick: React.PropTypes.func.isRequired
   }
 
@@ -34,16 +39,16 @@ export default class WalletError extends React.Component {
     // TODO replace placeholder img
     return (
       <Container >
-        <Block>
+        <Block style={STYLES.topBlock}>
           <h1 style={STYLES.issue}>!!?!?!</h1>
         </Block>
         <Block>
           <SideNote>
-            ....oops something went wrong! We were not able to load your data
+            {this.props.message}
           </SideNote>
         </Block>
         <Footer>
-          <FlatButton label="RETRY"
+          <FlatButton label={this.props.buttonLabel}
             onClick={() => { this.props.onClick() }} />
         </Footer>
       </Container>
