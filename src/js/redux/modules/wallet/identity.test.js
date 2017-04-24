@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import * as identity from './identity'
 // import * as router from '../router'
-import {stub, withStubs} from '../../../../../test/utils'
+import {stub} from '../../../../../test/utils'
 const reducer = require('./identity').default
 
 describe('# Wallet identity redux module', () => {
@@ -131,7 +131,9 @@ describe('# Wallet identity redux module', () => {
       ])
       const backendCall = services.auth.currentUser.wallet.getUserInformation
       expect(backendCall.called).to.be.true
-      expect(backendCall.calls).to.deep.equal([{args: [{email: 'test@test.com'}]}])
+      expect(backendCall.calls).to.deep.equal([{args: [{
+        email: 'test@test.com'
+      }]}])
     })
   })
 })
