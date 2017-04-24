@@ -5,7 +5,7 @@ import * as router from './router'
 import {stub, withStubs} from '../../../../test/utils'
 const reducer = require('./login').default
 
-describe.only('Wallet login Redux module', function() {
+describe('Wallet login Redux module', function() {
   describe('setPassphrase', () => {
     it('should return the correct value', () => {
       const action = login.actions.setPassphrase('test')
