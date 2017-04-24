@@ -36,9 +36,6 @@ const STYLES = {
     paddingLeft: '5px',
     paddingRight: '5px'
   },
-  dialog: {
-    textAlign: 'center'
-  },
   textField: {
     marginTop: '10%'
   },
@@ -47,7 +44,8 @@ const STYLES = {
 
 const NameEntry = (props) => {
   var webIdmessage = (
-    <div style={STYLES.dialog}> Your WebID is your identity on the web.
+    <div > Your WebID is your identity on the web.
+      <br />
       <br />
       It is the link to your secured personal data and the
       verifications of it that are stored on the blockchain
