@@ -20,6 +20,17 @@ export default class SimpleDialog extends React.Component {
     this.props.hideSimpleDialog()
   }
 
+  parseStyle(style) {
+    let localStyle = {...style}
+    if(localStyle === undefined)
+      return {contentStyle: {}, actionsContainerStyle: {}}
+    if (localStyle.contentStyle === undefined)
+      localStyle.contentStyle = {}
+    if (localStyle.actionsContainerStyle === undefined)
+      localStyle.actionsContainerStyle = {}
+    return {...localStyle}
+  }
+
   render() {
     const OKHandler = () => this._handleOK()
 
@@ -31,18 +42,14 @@ export default class SimpleDialog extends React.Component {
         onTouchTap={OKHandler}
       />
     ]
-    const style = this.props.simpleDialog.style
-    const contentStyle = style.contentStyle !== undefined ?
-      style.contentStyle : {}
-    const actionsContainerStyle = style.actionsContainerStyle !== undefined ?
-      style.actionsContainerStyle : {}
+    const style = this.parseStyle(this.props.simpleDialog.style)
     return <Dialog
       actions={simpleActions}
       modal={false}
       open={this.props.simpleDialog.visible}
       onRequestClose={this.handleClose}
-      contentStyle={contentStyle}
-      actionsContainerStyle={actionsContainerStyle}
+      contentStyle={style.contentStyle}
+      actionsContainerStyle={style.actionsContainerStyle}
     >
       {this.props.simpleDialog.message}
     </Dialog>

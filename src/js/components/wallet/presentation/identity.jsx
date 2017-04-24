@@ -17,8 +17,7 @@ import {
 const STYLES = {
   inputName: {
     color: theme.palette.textColor,
-    fontSize: '1em',
-    width: '80%'
+    fontSize: '1em'
   },
   labelName: {
     color: theme.palette.lighterTextColor
