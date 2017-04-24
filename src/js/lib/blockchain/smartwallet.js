@@ -34,7 +34,7 @@ export default class SmartWallet {
     // this.gethHost = 'http://localhost:8545'
     this.globalKeystore = null
     this.web3 = null
-    this.password = 'test123'
+    this.password = ''
     this.mainAddress = '0x'
 
     /*
@@ -46,16 +46,34 @@ export default class SmartWallet {
     this.identityAddress = '0x'
     this.provider = null
   }
+  createDigitalIdentity(userName, password) {
+    return new Promise((resolve, reject) => {
+      this.globalKeystore.keyFromPassword(
+        password,
+        function(err, pwDerivedKey) {
+          if (err) throw err
+
+          this._createIdentityContract().then(identityAddress => {
+            console.log('SmartWallet: Identity Contract created succesfull')
+            resolve(identityAddress)
+          })
+        }.bind(this)
+      )
+    })
+  }
 
   setIdentityAddress(identityAddress) {
     this.identityAddress = identityAddress
   }
-  createDigitalIdentity(userName, seedPhrase, password) {
-    console.log('SmartWallet: start registerWithSeedPhrase')
-    console.log('SmartWallet: username ' + userName)
+  getIdentityAddress() {
+    return this.identityAddress
+  }
+  init(seedPhrase, password) {
+    console.log('SmartWallet: create LightWallet')
     console.log('SmartWallet: seedPhrase -> ' + seedPhrase)
+    console.log(password)
 
-    return new Promise((resolve, reject) =>
+    return new Promise((resolve, reject) => {
       keystore.createVault(
         {
           password: password,
@@ -70,6 +88,7 @@ export default class SmartWallet {
           // Allowing you to only decrypt private keys on an as-needed basis.
           // You can generate that value with this convenient method:
 
+          console.log(password)
           ks.keyFromPassword(
             password,
             function(err, pwDerivedKey) {
@@ -94,18 +113,13 @@ export default class SmartWallet {
               console.log('SmartWallet: main addresses ' + this.mainAddress)
               this._getBalances(addresses)
 
-              this._createIdentityContract().then(identityAddress => {
-                console.log(
-                  'SmartWallet: Identity Contract created succesfull'
-                )
-                resolve(identityAddress)
-              })
-
+              resolve(this.mainAddress)
               // this.identityAddress = '0xe9372945a8acbb44388f068ea78ba0ab97d497ea'
             }.bind(this)
           )
         }.bind(this)
-      ))
+      )
+    })
   }
   _setProvider(ks, privateKey, mainAddress) {
     this.globalKeystore = ks
@@ -164,14 +178,14 @@ export default class SmartWallet {
     // only for testing
     // using a already deployed identity contract
 
-    return new Promise((resolve, reject) => {
+    /* return new Promise((resolve, reject) => {
       setTimeout(
         () => {
           resolve('0xe9372945a8acbb44388f068ea78ba0ab97d497ea')
         },
         2000
       )
-    })
+    })*/
     return new Promise((resolve, reject) => {
       console.log('SmartWallet: start creating identity contract')
       var identityContract = this.web3.eth.contract(IdentityContract.abi)
@@ -212,20 +226,23 @@ export default class SmartWallet {
     })
   }
 
-  /* _getAttributeFromIdentityContract(identityContractAddress, name) {
+  getProperty(propertyId) {
+    console.log('get propertyId')
+    console.log(this.identityAddress)
+    let id = this._createAttributeID(propertyId)
 
-		var id = this._createAttributeID(name)
+    let contract = this.web3.eth
+      .contract(IdentityContract.abi)
+      .at(this.identityAddress)
 
-		var contract = this.web3.eth.contract(IdentityContract.abi).at(identityContractAddress)
-
-		var webID = contract.getAttributeValue(id, function (err, result) {
-
-			console.log("smart contract call: getAttributeValue")
-			console.log(result)
-
-		})
-
-	}*/
+    return new Promise((resolve, reject) => {
+      contract.getProperty(id, function(err, result) {
+        console.log('SmartWallet: getProperty call')
+        console.log(result)
+        resolve(result)
+      })
+    })
+  }
 
   addProperty(id, value, password) {
     console.log(
@@ -269,19 +286,17 @@ export default class SmartWallet {
       fromBlock: 'latest',
       toBlock: 'latest',
       address: contractAddress
-      // topics: [web3.sha3('newtest(string,uint256,string,string,uint256)')]
     })
     return new Promise((resolve, reject) => {
       filter.watch(function(error, result) {
-        console.log('filter watch')
-        console.log(result)
+        // console.log(result)
         if (
           result.transactionHash == result.transactionHash &&
           result.type == 'mined'
         ) {
           console.log('SmartWallet: Transaction mined!')
           resolve(result.transactionHash)
-          //  filter.stopWatching()
+          filter.stopWatching()
         }
       })
     })

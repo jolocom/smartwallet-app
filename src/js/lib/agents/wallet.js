@@ -22,24 +22,25 @@ export default class WalletAgent {
       seedPhrase
     }
   ) {
+    console.log(
+      'WalletAgent: See Transactions and Smartcontracts on: https://ropsten.etherscan.io/'
+    )
     let password = '1234'
     let wallet = new SmartWallet()
     wallet
-      .createDigitalIdentity(userName, seedPhrase, password)
-      .then(identityAddress => {
-        console.log(
-          'WalletAgent: Identity Contract created successfull => ' +
-            identityAddress
-        )
-        wallet.setIdentityAddress(identityAddress)
-        return identityAddress
+      .init(seedPhrase, password)
+      .then(result => {
+        return wallet.createDigitalIdentity(userName, password)
+        console.log('wallet created')
+        console.log(result)
       })
       .then(identityAddress => {
+        wallet.setIdentityAddress(identityAddress)
         return wallet.addIdentityAddressToLookupContract(identityAddress)
       })
       .then(result => {
         console.log(
-          'WalletAgent: identityAddress added to Lookup Contract successfull txhash -> ' +
+          'WalletAgent: identityAddress addedtoLookupContract Transaction waiting to be mined txhash -> ' +
             result.txhash
         )
 
@@ -53,13 +54,23 @@ export default class WalletAgent {
           'WalletAgent: Transaction add address to lookup contracted got mined -> ' +
             transactionMined
         )
-        return wallet.addProperty('webid1', 'fakewebid1', password)
+        return wallet.addProperty('webid', 'fakewebid_', password)
       })
       .then(txhash => {
         console.log(
           'WalletAgent: addPropertyTransaction waiting to be mined txhash: ' +
             txhash
         )
+        let identityAddress = wallet.getIdentityAddress()
+        return wallet.waitingForTransactionToBeMined(identityAddress, txhash)
+      })
+      .then(txhash => {
+        console.log(
+          'WalletAgent: addPropertyTransaction got minded txhash: ' + txhash
+        )
+        wallet.getProperty('webid').then(webid => {
+          console.log(webid)
+        })
       })
 
     return new Promise((resolve, reject) => {
@@ -95,6 +106,8 @@ export default class WalletAgent {
       seedPhrase
     }
   ) {
+    let password = '1234'
+
     return new Promise((resolve, reject) => {
       setTimeout(
         () => {
