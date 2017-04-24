@@ -29,7 +29,17 @@ var STYLES = {
     display: 'inline-block',
     color: theme.jolocom.gray1,
     marginRight: '20px'
+  },
+  verifiedListItem: {
+    paddingBottom: '5px'
+  },
+  unverifiedListItem: {
+    paddingBottom: '0px'
+  },
+  verifiedShield: {
+    marginLeft: '5px'
   }
+
 }
 
 @Radium
@@ -46,8 +56,8 @@ export default class StaticListItem extends React.Component {
   render() {
     var props = this.props
     return (
-      <ListItem style={props.verified ? {paddingBottom: '5px'}
-      : {paddingBottom: '0px'}} disabled>
+      <ListItem style={props.verified ? STYLES.verifiedListItem
+      : STYLES.unverifiedListItem} disabled>
         <props.icon
           style={STYLES.icon}
           color={STYLES.icon.color} />
@@ -66,7 +76,7 @@ export default class StaticListItem extends React.Component {
         <div style={STYLES.secondaryTextField}>
         {props.secondaryTextValue}
         </div>
-        <VerifiedShield verified={props.verified} style={{marginLeft: '5px'}}
+        <VerifiedShield verified={props.verified} style={STYLES.verifiedShield}
           verify={props.onVerify} />
       </ListItem>
     )
