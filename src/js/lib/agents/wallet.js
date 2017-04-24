@@ -35,22 +35,31 @@ export default class WalletAgent {
         return identityAddress
       })
       .then(identityAddress => {
-        wallet
-          .addIdentityAddressToLookupContract(identityAddress)
-          .then(txhash => {
-            console.log(
-              'WalletAgent: identityAddress added to Lookup Contract successfull txhash -> ' +
-                txhash
-            )
-            return wallet.addProperty('webid', 'fakewebid', password)
-            // wallet.addProperty('username', userName, password)
-          })
-          .then(txhash => {
-            console.log(
-              'WalletAgent: property added to identity contract. waiting to be mined -> ' +
-                txhash
-            )
-          })
+        return wallet.addIdentityAddressToLookupContract(identityAddress)
+      })
+      .then(result => {
+        console.log(
+          'WalletAgent: identityAddress added to Lookup Contract successfull txhash -> ' +
+            result.txhash
+        )
+
+        return wallet.waitingForTransactionToBeMined(
+          result.lookupContractAddress,
+          result.txhash
+        )
+      })
+      .then(transactionMined => {
+        console.log(
+          'WalletAgent: Transaction add address to lookup contracted got mined -> ' +
+            transactionMined
+        )
+        return wallet.addProperty('webid1', 'fakewebid1', password)
+      })
+      .then(txhash => {
+        console.log(
+          'WalletAgent: addPropertyTransaction waiting to be mined txhash: ' +
+            txhash
+        )
       })
 
     return new Promise((resolve, reject) => {

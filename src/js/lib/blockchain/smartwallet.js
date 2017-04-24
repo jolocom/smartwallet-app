@@ -161,9 +161,8 @@ export default class SmartWallet {
 		0x1605970Cc47370750596A24fAF143AFfA6C406E9
 		*/
 
-    /*
-    only for testing
-    using a already deployed identity contract
+    // only for testing
+    // using a already deployed identity contract
 
     return new Promise((resolve, reject) => {
       setTimeout(
@@ -172,7 +171,7 @@ export default class SmartWallet {
         },
         2000
       )
-    }) */
+    })
     return new Promise((resolve, reject) => {
       console.log('SmartWallet: start creating identity contract')
       var identityContract = this.web3.eth.contract(IdentityContract.abi)
@@ -265,7 +264,28 @@ export default class SmartWallet {
       )
     })
   }
-  waitingForTransactionToBeMined(txhash) {}
+  waitingForTransactionToBeMined(contractAddress, transactionHash) {
+    let filter = web3.eth.filter({
+      fromBlock: 'latest',
+      toBlock: 'latest',
+      address: contractAddress
+      // topics: [web3.sha3('newtest(string,uint256,string,string,uint256)')]
+    })
+    return new Promise((resolve, reject) => {
+      filter.watch(function(error, result) {
+        console.log('filter watch')
+        console.log(result)
+        if (
+          result.transactionHash == result.transactionHash &&
+          result.type == 'mined'
+        ) {
+          console.log('SmartWallet: Transaction mined!')
+          resolve(result.transactionHash)
+          //  filter.stopWatching()
+        }
+      })
+    })
+  }
 
   _contractMethodTransaction(_contract, _methodName, _args, _callback) {
     // status: not fnished
@@ -309,9 +329,12 @@ export default class SmartWallet {
         args,
         function(err, txhash) {
           if (!err) {
-            resolve(txhash)
+            resolve({
+              txhash: txhash,
+              lookupContractAddress: this.lookupContractAddress
+            })
           }
-        }
+        }.bind(this)
       )
     })
   }
