@@ -87,7 +87,6 @@ export default class SmartWallet {
   init(seedPhrase, password) {
     console.log('SmartWallet: create LightWallet')
     console.log('SmartWallet: seedPhrase -> ' + seedPhrase)
-    console.log(password)
 
     return new Promise((resolve, reject) => {
       keystore.createVault(
@@ -104,7 +103,6 @@ export default class SmartWallet {
           // Allowing you to only decrypt private keys on an as-needed basis.
           // You can generate that value with this convenient method:
 
-          console.log(password)
           ks.keyFromPassword(
             password,
             function(err, pwDerivedKey) {
@@ -208,7 +206,7 @@ export default class SmartWallet {
     // only for testing
     // using a already deployed identity contract
 
-    return new Promise((resolve, reject) => {
+    /* return new Promise((resolve, reject) => {
       setTimeout(
         () => {
           let testIdentity = '0xe9372945a8acbb44388f068ea78ba0ab97d497ea'
@@ -217,7 +215,7 @@ export default class SmartWallet {
         },
         2000
       )
-    })
+    })*/
     return new Promise((resolve, reject) => {
       console.log('SmartWallet: start creating identity contract')
       var identityContract = this.web3.eth.contract(IdentityContract.abi)
