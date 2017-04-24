@@ -39,6 +39,9 @@ const STYLES = {
   dialog: {
     textAlign: 'center'
   },
+  textField: {
+    marginTop: '10%'
+  },
   backgroundColor: theme.jolocom.gray4
 }
 
@@ -66,7 +69,7 @@ const NameEntry = (props) => {
           end up on your buiseness card one day.
         </SideNote>
         <TextField
-          style={{'marginTop': '10%'}}
+          style={STYLES.textField}
           defaultValue={props.value}
           floatingLabelText="Unique Username"
           floatingLabelStyle={STYLES.floatingLabel}
