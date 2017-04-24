@@ -44,7 +44,7 @@ const EditAppBar = ({title, onSave, onClose, loading}) => {
       }
       iconElementRight={
         <HoverButton
-          backgroundColor={theme.palette.primary1Color}
+          backgroundColor={STYLES.bar.backgroundColor}
           style={STYLES.appBarButton} hoverColor={STYLES.appBarButton.color}
           onClick={() => { loading ? null : onSave() }}>
           {loading ? 'LOADING...' : 'SAVE'}

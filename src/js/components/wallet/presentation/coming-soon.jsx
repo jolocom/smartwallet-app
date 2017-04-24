@@ -3,14 +3,9 @@ import Radium from 'radium'
 import {
   Container,
   Block,
-  Footer,
   SideNote
 } from '../../structure'
 import {theme} from 'styles'
-
-import {
-  FlatButton
-} from 'material-ui'
 
 const STYLES = {
   topBlock: {
@@ -27,30 +22,24 @@ const STYLES = {
 }
 
 @Radium
-export default class WalletError extends React.Component {
+export default class WalletComingSoon extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    message: React.PropTypes.string,
-    buttonLabel: React.PropTypes.string.isRequired,
-    onClick: React.PropTypes.func.isRequired
+    message: React.PropTypes.string
   }
 
   render() {
     // TODO replace placeholder img
     return (
-      <Container>
+      <Container >
         <Block style={STYLES.topBlock}>
-          <h1 style={STYLES.issue}>!!?!?!</h1>
+          <h1 style={STYLES.issue}>Coming Soon!!!</h1>
         </Block>
         <Block>
           <SideNote>
             {this.props.message}
           </SideNote>
         </Block>
-        <Footer>
-          <FlatButton label={this.props.buttonLabel}
-            onClick={() => { this.props.onClick() }} />
-        </Footer>
       </Container>
     )
   }

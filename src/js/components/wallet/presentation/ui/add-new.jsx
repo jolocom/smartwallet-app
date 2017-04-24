@@ -19,7 +19,8 @@ const STYLES = {
     boxShadow: 'none',
     padding: '5px',
     display: 'inline-block',
-    margin: '10px'
+    margin: '10px',
+    color: theme.jolocom.gray2
 
   },
   infoHeader: {
@@ -42,10 +43,10 @@ const AddNew = ({value, onClick}) => {
   return (
     <div style={STYLES.list} >
       <IconButton
-        color={theme.jolocom.gray2}
+        color={STYLES.addBtn.color}
         style={STYLES.addBtn}
         onClick={() => { onClick() }}>
-        <ContentAddCircle style={STYLES.icon} color={theme.jolocom.gray2} />
+        <ContentAddCircle style={STYLES.icon} color={STYLES.addBtn.color} />
       </IconButton>
       <div style={STYLES.infoHeader}>
         {value}

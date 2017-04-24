@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-
+import WalletComingSoon from './coming-soon'
 @Radium
 export default class WalletMoney extends React.Component {
   static propTypes = {
@@ -8,8 +8,10 @@ export default class WalletMoney extends React.Component {
   }
 
   render() {
-    return (<div>
-      Money
-    </div>)
+    return (
+      <WalletComingSoon
+        message="We're working on bringing your $$$ identity
+        under your control" />
+    )
   }
 }
