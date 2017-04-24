@@ -8,10 +8,10 @@ export default class WalletMoney extends React.Component {
   }
 
   render() {
-    return (<div>
+    return (
       <WalletComingSoon
         message="We're working on bringing your $$$ identity
         under your control" />
-    </div>)
+    )
   }
 }

@@ -23,9 +23,6 @@ const STYLES = {
   issue: {
     fontSize: '40px',
     color: theme.palette.textColor
-  },
-  container: {
-    backgroundColor: '#fff'
   }
 }
 
@@ -41,7 +38,7 @@ export default class WalletError extends React.Component {
   render() {
     // TODO replace placeholder img
     return (
-      <Container style={STYLES.container}>
+      <Container>
         <Block style={STYLES.topBlock}>
           <h1 style={STYLES.issue}>!!?!?!</h1>
         </Block>
