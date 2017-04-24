@@ -31,12 +31,9 @@ const actions = module.exports = makeActions('registration', {
         const state = getState()
         if (state.getIn(['registration', 'complete'])) {
           dispatch(actions.registerWallet())
-          const nextUrl = helpers._getNextURLFromState(state)
-          dispatch(router.pushRoute(nextUrl))
-        } else {
-          const nextUrl = helpers._getNextURLFromState(state)
-          dispatch(router.pushRoute(nextUrl))
         }
+        const nextUrl = helpers._getNextURLFromState(state)
+        dispatch(router.pushRoute(nextUrl))
       }
     }
   },
