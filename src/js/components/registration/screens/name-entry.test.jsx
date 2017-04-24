@@ -29,6 +29,31 @@ describe('(Component) RegistrationNameEntryScreen', function() {
     expect(wrapper.find('NameEntry').prop('value')).to.be.empty
     expect(wrapper.find('NameEntry').prop('valid')).to.be.false
   })
+  it('should call config and show on handleDialog', function() {
+    const showSimpleDialog = stub()
+    const configSimpleDialog = stub()
+    const wrapper = shallow(
+      (<RegistrationNameEntryScreen.WrappedComponent {
+        ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
+          registration: {
+            username: {
+              value: '',
+              valid: false,
+              errorMsg: ''
+            }
+          }
+        }))
+      }
+        showSimpleDialog={showSimpleDialog}
+        configSimpleDialog={configSimpleDialog}
+    />), { context: { muiTheme: { } } }
+    )
+    wrapper.find('NameEntry').prop('handleDialog')('whoo')
+    expect(configSimpleDialog.calledWithArgs).to.deep.equal(
+      ['whoo', 'OK', {}]
+    )
+    expect(showSimpleDialog.called).to.be.true
+  })
   it('should call setUsername onChange', function() {
     const setUsername = stub()
     const wrapper = shallow(
