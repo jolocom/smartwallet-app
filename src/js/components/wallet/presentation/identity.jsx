@@ -227,7 +227,7 @@ export default class WalletIdentity extends React.Component {
               <ListItem key={1} disabled rightIcon={<InfoDetail
                 showDetails={(details) => this.props.verify(
                   details,
-                  'REQUEST VERIFICATION',
+                  'OK',
                   STYLES.simpleDialog
                 )}
                 webId={this.props.webId}
