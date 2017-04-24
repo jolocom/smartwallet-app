@@ -54,7 +54,9 @@ export default class WalletAgent {
           'WalletAgent: Transaction add address to lookup contracted got mined -> ' +
             transactionMined
         )
-        return wallet.addProperty('webid', 'fakewebid_', password)
+        let privateKeyWebID = wallet.generatePrivateKeyForWebID()
+        let encryptedWebID = wallet.encryptPrivateKeyForWebID(privateKeyWebID)
+        return wallet.addProperty('webidkey', encryptedWebID, password)
       })
       .then(txhash => {
         console.log(
@@ -68,11 +70,10 @@ export default class WalletAgent {
         console.log(
           'WalletAgent: addPropertyTransaction got minded txhash: ' + txhash
         )
-        wallet.getProperty('webid').then(webid => {
-          console.log(webid)
+        wallet.getProperty('webidkey').then(webid => {
+          console.log(wallet.decryptPrivateKeyForWebID(webid))
         })
       })
-
     return new Promise((resolve, reject) => {
       setTimeout(
         () => {

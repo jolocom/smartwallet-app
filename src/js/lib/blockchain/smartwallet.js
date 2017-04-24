@@ -7,6 +7,13 @@ import {sign} from 'ethjs-signer'
 // import Eth from 'ethjs-query'
 import SHA256 from 'crypto-js/sha256'
 
+import keypair from 'keypair'
+import bitcore from 'bitcore-lib'
+import ECIES from 'bitcore-ecies'
+var EC = require('elliptic').ec
+// import {EC} from 'elliptic'
+let ec = new EC('secp256k1')
+
 import IdentityContract from 'lib/blockchain/contracts/Identity.json'
 import IdentityContractLookup
   from 'lib/blockchain/contracts/IdentityLookup.json'
@@ -36,6 +43,7 @@ export default class SmartWallet {
     this.web3 = null
     this.password = ''
     this.mainAddress = '0x'
+    this.encryptionKeys = {}
 
     /*
 		Note: Lookup Contract has been deployed on the Ropsten Testnet on 2017-04-12
@@ -61,12 +69,20 @@ export default class SmartWallet {
       )
     })
   }
-
+  getEncryptionKeys() {
+    return this.encryptionKeys
+  }
   setIdentityAddress(identityAddress) {
     this.identityAddress = identityAddress
   }
   getIdentityAddress() {
     return this.identityAddress
+  }
+  generatePrivateKeyForWebID() {
+    let pair = new keypair({bits: 1024})
+    let privateKey = pair.private.substring(32)
+    privateKey = privateKey.substring(0, privateKey.length - 31)
+    return privateKey
   }
   init(seedPhrase, password) {
     console.log('SmartWallet: create LightWallet')
@@ -99,16 +115,30 @@ export default class SmartWallet {
               ks.generateNewAddress(pwDerivedKey, 2)
               let addresses = ks.getAddresses()
 
-              ks.passwordProvider = function(callback) {
+              /* ks.passwordProvider = function(callback) {
                 let pw = this.password
                 callback(null, pw)
-              }
+              }*/
 
               this._setMainAddress(addresses[0])
               let privateKey = ks.exportPrivateKey(
                 this.mainAddress,
                 pwDerivedKey
               )
+
+              // get encryption keys -> second addresses
+              let privateKeySecondAddress = ks.exportPrivateKey(
+                addresses[1],
+                pwDerivedKey
+              )
+              let publicKeySecondAddress = this._computeCompressedPublicKeyFromPrivateKey(
+                privateKeySecondAddress
+              )
+              this.encryptionKeys = {
+                privateKey: privateKeySecondAddress,
+                publicKey: publicKeySecondAddress
+              }
+
               this._setProvider(ks, '0x' + privateKey, this.mainAddress)
               console.log('SmartWallet: main addresses ' + this.mainAddress)
               this._getBalances(addresses)
@@ -178,14 +208,16 @@ export default class SmartWallet {
     // only for testing
     // using a already deployed identity contract
 
-    /* return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       setTimeout(
         () => {
-          resolve('0xe9372945a8acbb44388f068ea78ba0ab97d497ea')
+          let testIdentity = '0xe9372945a8acbb44388f068ea78ba0ab97d497ea'
+          this.setIdentityAddress(testIdentity)
+          resolve(testIdentity)
         },
         2000
       )
-    })*/
+    })
     return new Promise((resolve, reject) => {
       console.log('SmartWallet: start creating identity contract')
       var identityContract = this.web3.eth.contract(IdentityContract.abi)
@@ -320,6 +352,43 @@ export default class SmartWallet {
 
   _createAttributeID(attributeName) {
     return '0x' + SHA256(attributeName).toString()
+  }
+  _computeCompressedPublicKeyFromPrivateKey(privKey) {
+    let keyPair = ec.genKeyPair()
+    keyPair._importPrivate(privKey, 'hex')
+    var compact = true
+    var pubKey = keyPair.getPublic(compact, 'hex')
+    return pubKey
+  }
+
+  _encrypt(publicKey, message) {
+    // dummy privateKey needed to init ECIES
+    let privKey = new bitcore.PrivateKey(
+      '52435b1ff21b894da15d87399011841d5edec2de4552fdc29c8299574436925d'
+    )
+    let ecies = ECIES()
+      .privateKey(privKey)
+      .publicKey(new bitcore.PublicKey(publicKey))
+    let encrypted = ecies.encrypt(message)
+    return encrypted.toString('hex')
+  }
+
+  _decryptMessage(privateKey, encrypted) {
+    let privKey = new bitcore.PrivateKey(privateKey)
+    let ecies = ECIES().privateKey(privKey)
+    let decryptMe = new Buffer(encrypted, 'hex')
+    let decrypted = ecies.decrypt(decryptMe)
+    return decrypted.toString('ascii')
+  }
+
+  encryptPrivateKeyForWebID(privateKeyWebID) {
+    return this._encrypt(this.encryptionKeys.publicKey, privateKeyWebID)
+  }
+  decryptPrivateKeyForWebID(privateKeyWebIDEncrypted) {
+    return this._decryptMessage(
+      this.encryptionKeys.privateKey,
+      privateKeyWebIDEncrypted
+    )
   }
 
   addIdentityAddressToLookupContract(_identityAddress) {
