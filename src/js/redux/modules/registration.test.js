@@ -127,7 +127,7 @@ describe('Wallet registration Redux module', function() {
     it('should return null if we cannot continue', () => {
       expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
-          locationBeforeTransitions: {pathname: '/registration/user-type/'}
+          locationBeforeTransitions: {pathname: '/registration/user-type'}
         },
         registration: Immutable.fromJS({userType: {valid: false}})
       }))).to.equal(null)

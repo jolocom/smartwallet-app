@@ -12,6 +12,7 @@ const NEXT_ROUTES = {
   '/registration/phrase-info': '/registration/email',
   '/registration/email': '/registration/password',
   '/registration/password': '/registration/pin',
+  '/registration/write-phrase': '/registration/pin',
   '/registration/pin': '/wallet'
 }
 
