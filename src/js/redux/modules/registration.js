@@ -12,18 +12,17 @@ const NEXT_ROUTES = {
   '/registration/phrase-info': '/registration/email',
   '/registration/email': '/registration/password',
   '/registration/password': '/registration/pin',
-  '/registration/write-phrase': '/registration/pin'
+  '/registration/write-phrase': '/registration/pin',
+  '/registration/pin': '/wallet'
 }
 
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/': 'username',
-  '/registration/user-type/': 'userType',
-  '/registration/entropy/': 'entropy',
-  '/registration/write-phrase/': 'passphrase',
-  '/registration/phrase-info/': 'passphrase',
-  '/registration/email/': 'email',
-  '/registration/password/': 'password',
-  '/registration/pin/': 'pin'
+  '/registration': 'username',
+  '/registration/user-type': 'userType',
+  '/registration/write-phrase': 'passphrase',
+  '/registration/email': 'email',
+  '/registration/password': 'password',
+  '/registration/pin': 'pin'
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -34,10 +33,9 @@ const actions = module.exports = makeActions('registration', {
         const state = getState()
         if (state.getIn(['registration', 'complete'])) {
           dispatch(actions.registerWallet())
-        } else {
-          const nextUrl = helpers._getNextURLFromState(state)
-          dispatch(router.pushRoute(nextUrl))
         }
+        const nextUrl = helpers._getNextURLFromState(state)
+        dispatch(router.pushRoute(nextUrl))
       }
     }
   },
@@ -65,7 +63,7 @@ const actions = module.exports = makeActions('registration', {
         }
 
         dispatch(actions.setEntropyStatus.buildAction({
-          sufficientEntropy: entropy.isReady(),
+          sufficientEntropy: entropy.getProgress() >= 1,
           progress: entropy.getProgress()
         }))
 
@@ -110,7 +108,6 @@ const actions = module.exports = makeActions('registration', {
         if (!pinState.get('valid')) {
           return
         }
-
         if (pinState.get('confirm')) {
           dispatch(actions.goForward())
         } else {
@@ -156,8 +153,7 @@ const actions = module.exports = makeActions('registration', {
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.accounts
             .checkUsername(state.username.value)
-              .then(() => dispatch(actions.goForward()))
-        }))
+        })).then(() => dispatch(actions.goForward()))
       }
     }
   },
@@ -196,6 +192,7 @@ const initialState = Immutable.fromJS({
     valid: false,
     alphaNum: false
   },
+  Repuation: 0,
   email: {
     value: '',
     valid: false,
@@ -418,11 +415,15 @@ helpers._isComplete = (state) => {
 
 helpers._getNextURLFromState = (state) => {
   const currentPath = state.get('routing').locationBeforeTransitions.pathname
+  const userType = state.getIn(['registration', 'userType', 'value'])
   if (!helpers._canGoForward(state, currentPath)) {
+    if ((currentPath === '/registration/write-phrase') &&
+      (userType === 'layman')) {
+      return '/registration/phrase-info'
+    }
     return null
   }
 
-  const userType = state.getIn(['registration', 'userType', 'value'])
   return helpers._getNextURL(currentPath, userType)
 }
 
@@ -431,10 +432,8 @@ helpers._getNextURL = (currentPath, userType) => {
     return userType === 'expert'
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
-  } else if ((currentPath === '/registration/write-phrase') &&
-    (userType === 'layman')) {
-    return '/registration/phrase-info'
-  } else if ((currentPath === '/registration/phrase-info') &&
+  }
+  if ((currentPath === '/registration/phrase-info') &&
     (userType === 'expert')) {
     return '/registration/write-phrase'
   }
@@ -444,6 +443,5 @@ helpers._getNextURL = (currentPath, userType) => {
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  let result = !toCheck || state.getIn(['registration', toCheck, 'valid'])
-  return result || false
+  return !toCheck || state.getIn(['registration', toCheck, 'valid'])
 }

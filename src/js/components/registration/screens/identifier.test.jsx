@@ -23,8 +23,8 @@ describe('(Component) RegistrationIdentifierScreen', function() {
         }))
       }
         setEmail={() => {}}
-        checkEmail={() => {}}
-      />),
+        goForward={() => {}}
+    />),
       { context: { muiTheme: { } } }
     )
 
@@ -33,7 +33,6 @@ describe('(Component) RegistrationIdentifierScreen', function() {
   })
   it('should call setEmail onchange with proper params', function() {
     const setEmail = stub()
-    const checkEmail = () => {}
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
         ...RegistrationIdentifierScreen.mapStateToProps(Immutable.fromJS({
@@ -49,7 +48,7 @@ describe('(Component) RegistrationIdentifierScreen', function() {
         }))
       }
         setEmail={setEmail}
-        checkEmail={checkEmail}
+        checkEmail={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
@@ -61,7 +60,6 @@ describe('(Component) RegistrationIdentifierScreen', function() {
     }])
   })
   it('should call checkEmail onSubmit with proper params', function() {
-    const setEmail = () => {}
     const checkEmail = stub()
     const wrapper = shallow(
       (<RegistrationIdentifierScreen.WrappedComponent {
@@ -77,7 +75,7 @@ describe('(Component) RegistrationIdentifierScreen', function() {
           }
         }))
       }
-        setEmail={setEmail}
+        setEmail={() => {}}
         checkEmail={checkEmail}
        />),
       { context: { muiTheme: { } } }

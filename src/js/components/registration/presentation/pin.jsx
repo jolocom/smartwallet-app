@@ -5,7 +5,7 @@ import PinInput from './pin-input'
 
 import {theme} from 'styles'
 
-import {Container, Header, Content, Block, Footer} from './ui'
+import {Container, Header, Content, Block, Footer} from '../../structure'
 
 const STYLES = {
   input: {
@@ -85,7 +85,7 @@ const Pin = (props) => {
           disabled={!props.valid}
           secondary={props.valid}
           label={getButtonLabel(props)}
-          onClick={props.onSubmit}
+          onClick={() => { props.onSubmit() }}
         />
       </Footer>
     </Container>

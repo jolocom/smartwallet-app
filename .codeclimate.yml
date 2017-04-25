@@ -3,9 +3,10 @@ engines:
     enabled: true
     config:
       languages:
-        - javascript
+        javascript:
+          mass_threshold: 200
   eslint:
-    enabled: true
+    enabled: false
   fixme:
     enabled: false
 ratings:
