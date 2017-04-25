@@ -30,6 +30,7 @@ export default class RegistrationPinScreen extends React.Component {
       onChangeRequest={() => {
         this.props.setPin('')
         this.props.setPinConfirm(false)
+        this.props.setPinFocused(true)
       }}
       onFocusChange={this.props.setPinFocused}
       onSubmit={this.props.submitPin}
