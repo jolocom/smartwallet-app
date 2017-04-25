@@ -37,7 +37,7 @@ const Pin = (props) => {
             disabled={!props.canSubmit}
             onChange={props.onChange}
             onFocusChange={props.onFocusChange}
-            confirm={props.canSubmit} />
+            confirm={false} />
         </Block>
       </Content>
       <Footer>
