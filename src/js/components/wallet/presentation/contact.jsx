@@ -184,7 +184,6 @@ export default class WalletContact extends React.Component {
       }
     }
 
-    // console.log(emailFields)
     return (
       <TabContainer>
         <EditAppBar title="Edit Contact"

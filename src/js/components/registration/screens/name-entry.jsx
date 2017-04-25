@@ -32,6 +32,7 @@ export default class RegistrationNameEntryScreen extends React.Component {
   render() {
     return <Presentation
       value={this.props.registration.username.value}
+      valid={this.props.registration.username.valid}
       alphaNum={this.props.registration.username.alphaNum}
       errorMsg={this.props.registration.username.errorMsg}
       checking={this.props.registration.username.checking}
