@@ -30,6 +30,9 @@ const STYLES = {
   button: {
     display: 'inline-block',
     marginTop: '30px'
+  },
+  helpMsg: {
+    textAlign: 'left'
   }
 }
 
@@ -131,12 +134,12 @@ function Password(props) {
         <Block
           style={STYLES.explanation[props.repeatedValueState ? 0 : 1]}
         >
-          <dl>
-            <dt>For more security please use at least :</dt>
-            <dd>- one Number</dd>
-            <dd>- one Upper Case (e.g. A,B,C...)</dd>
-            <dd>- one Lower Case (e.g. a,b,c...)</dd>
-          </dl>
+          <table style={STYLES.helpMsg}>
+            <th>For more security please use at least :</th>
+            <tr>- one Number</tr>
+            <tr>- one Upper Case (e.g. A,B,C...)</tr>
+            <tr>- one Lower Case (e.g. a,b,c...)</tr>
+          </table>
         </Block>
       </Content>
       <Footer>
