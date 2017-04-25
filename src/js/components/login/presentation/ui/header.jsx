@@ -10,20 +10,25 @@ const STYLES = {
   title: {
     color: theme.jolocom.gray1,
     fontSize: '24px',
-    fontWeight: '300',
+    fontWeight: '100',
     margin: 0
   }
 }
 
 const Header = ({image, title, style, children, ...props}) => {
-  if (title) {
-    title = <h1 style={STYLES.title}>{title}</h1>
-  }
-
   return (
     <header style={Object.assign({}, STYLES.header, style)} {...props}>
       {image}
-      {title}
+      {
+        title && title.split('\\n').map(function(item, key) {
+          return (
+            <span key={key}>
+              <h1 style={STYLES.title}>{item}</h1>
+              <br />
+            </span>
+          )
+        })
+      }
       {children}
     </header>
   )

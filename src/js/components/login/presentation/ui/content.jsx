@@ -2,11 +2,12 @@ import React from 'react'
 import Radium from 'radium'
 
 const STYLE = {
-  width: '400px',
-  maxWidth: '80%'
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1
 }
 
-const ColumnContainer = ({style, children, ...props}) => {
+const Content = ({style, children, ...props}) => {
   return (
     <div style={Object.assign({}, STYLE, style)} {...props}>
       {children}
@@ -14,9 +15,9 @@ const ColumnContainer = ({style, children, ...props}) => {
   )
 }
 
-ColumnContainer.propTypes = {
+Content.propTypes = {
   children: React.PropTypes.node,
   style: React.PropTypes.object
 }
 
-export default Radium(ColumnContainer)
+export default Radium(Content)
