@@ -53,7 +53,7 @@ export default class WalletIdentityScreen extends React.Component {
           message="...oops something went wrong!
           We were not able to load your data."
           buttonLabel="RETRY"
-          onClick={this.props.getIdentityInformation} />
+          onClick={() => this.render()} />
 
       )
     }
