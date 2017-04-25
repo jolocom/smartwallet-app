@@ -5,7 +5,7 @@ engines:
       languages:
         - javascript
   eslint:
-    enabled: true
+    enabled: false
   fixme:
     enabled: false
 ratings:

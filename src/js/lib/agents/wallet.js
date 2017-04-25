@@ -93,7 +93,6 @@ export default class WalletAgent {
       }, 2000)
     })
   }
-
 }
 
 export class Wallet {
@@ -149,7 +148,7 @@ export class Wallet {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(identity)
-        /* reject()*/
+        /* reject() */
       }, 2000)
     })
   }

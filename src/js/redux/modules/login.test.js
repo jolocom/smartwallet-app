@@ -1,8 +1,8 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as login from './login'
-import * as router from './router'
-import {stub, withStubs} from '../../../../test/utils'
+// import * as router from './router'
+// import {stub, withStubs} from '../../../../test/utils'
 const reducer = require('./login').default
 
 describe('Wallet login Redux module', function() {
@@ -141,7 +141,8 @@ describe('Wallet login Redux module', function() {
           type: login.actions.goForward.id_fail,
           error: new Error('test')
         })
-        expect(newState.toJS().pin.errorMsg).to.equal('Your Pin is Not correct!')
+        expect(newState.toJS().pin.errorMsg)
+        .to.equal('Your Pin is Not correct!')
         expect(newState.toJS().pin.valid).to.be.false
         expect(newState.toJS().pin.failed).to.be.true
       })
@@ -156,6 +157,5 @@ describe('Wallet login Redux module', function() {
         expect(newState.toJS().passphrase.value).to.equal('')
       })
     })
-
   })
 })
