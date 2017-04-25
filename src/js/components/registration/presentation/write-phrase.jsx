@@ -30,6 +30,20 @@ const STYLES = {
   },
   uncheckedIcon: {
     fill: theme.jolocom.gray1
+  },
+  checkBox: {
+    width: '40%',
+    margin: 'auto'
+  },
+  labelStyle: {
+    color: theme.jolocom.gray1,
+    fontSize: '13px',
+    marginLeft: '5px',
+    display: 'inline-block',
+    position: 'relative'
+  },
+  nextStep: {
+    flex: 1
   }
 }
 
@@ -59,17 +73,16 @@ const WritePhrase = (props) => {
           By the way! Taking a screenshot is not secure!
         </SideNote>
       </Block>
-      <Block style={{width: '80%', margin: 'auto'}}>
+      <Block style={STYLES.checkBox}>
         <Checkbox
           label="Yes, I have securely written down my phrase."
-          labelStyle={{color: theme.jolocom.gray1, fontSize: '13px',
-            marginLeft: '5px', display: 'inline-block', position: 'relative'}}
+          labelStyle={STYLES.labelStyle}
           checkedIcon={<Checked />}
           uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
           onClick={(e) => props.onToggle(e.target.checked)}
         />
       </Block>
-      <Block style={{flex: 1}}>
+      <Block style={STYLES.nextStep}>
         <RaisedButton
           label="NEXT STEP"
           secondary

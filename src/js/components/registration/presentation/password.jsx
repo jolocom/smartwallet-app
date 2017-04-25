@@ -36,29 +36,36 @@ const STYLES = {
   }
 }
 
-const strengthBarColor = (strength) => {
-  switch (strength) {
-    case 'strong':
+const strengthBarColor = (value, strength, barIndex) => {
+  if (value) {
+    if (strength === 'strong') {
       return 'green'
-    case 'good':
-      return 'yellow'
-    default:
+    }
+    if (strength === 'weak' && barIndex === 'firstBar') {
       return 'red'
+    }
+    if (strength === 'good' && barIndex !== 'thirdBar') {
+      return 'yellow'
+    } else {
+      return 'lightgray'
+    }
+  } else {
+    return 'lightgray'
   }
 }
 
-const showBar = (value, strength, barIndex) => {
-  if (strength === 'strong') {
-    return 'visible'
-  }
-  if (value && barIndex === 'firstBar') {
-    return 'visible'
-  }
-  if (strength !== 'weak' && barIndex === 'secondBar') {
-    return 'visible'
-  }
-  return 'hidden'
-}
+// const showBar = (value, strength, barIndex) => {
+//   if (strength === 'strong') {
+//     return 'visible'
+//   }
+//   if (value && barIndex === 'firstBar') {
+//     return 'visible'
+//   }
+//   if (strength !== 'weak' && barIndex === 'secondBar') {
+//     return 'visible'
+//   }
+//   return 'hidden'
+// }
 
 function StrengthBar(props) {
   return <div style={STYLES.strengthBar}>
@@ -68,27 +75,24 @@ function StrengthBar(props) {
         y1="2"
         x2="30%"
         y2="2"
-        visibility={showBar(props.value, props.strength, 'firstBar')}
         strokeWidth="4"
-        stroke={strengthBarColor(props.strength)}
+        stroke={strengthBarColor(props.value, props.strength, 'firstBar')}
       />
       <line
         x1="33%"
         y1="2"
         x2="67%"
         y2="2"
-        visibility={showBar(props.value, props.strength, 'secondBar')}
         strokeWidth="4"
-        stroke={strengthBarColor(props.strength)}
+        stroke={strengthBarColor(props.value, props.strength, 'secondBar')}
       />
       <line
         x1="70%"
         y1="2"
         x2="100%"
         y2="2"
-        visibility={showBar(props.value, props.strength, 'thirdBar')}
         strokeWidth="4"
-        stroke={strengthBarColor(props.strength)}
+        stroke={strengthBarColor(props.value, props.strength, 'thirdBar')}
       />
     </svg>
   </div>
