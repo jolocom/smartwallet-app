@@ -415,11 +415,15 @@ helpers._isComplete = (state) => {
 
 helpers._getNextURLFromState = (state) => {
   const currentPath = state.get('routing').locationBeforeTransitions.pathname
+  const userType = state.getIn(['registration', 'userType', 'value'])
   if (!helpers._canGoForward(state, currentPath)) {
+    if ((currentPath === '/registration/write-phrase') &&
+      (userType === 'layman')) {
+      return '/registration/phrase-info'
+    }
     return null
   }
 
-  const userType = state.getIn(['registration', 'userType', 'value'])
   return helpers._getNextURL(currentPath, userType)
 }
 
@@ -428,10 +432,8 @@ helpers._getNextURL = (currentPath, userType) => {
     return userType === 'expert'
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
-  } else if ((currentPath === '/registration/write-phrase') &&
-    (userType === 'layman')) {
-    return '/registration/phrase-info'
-  } else if ((currentPath === '/registration/phrase-info') &&
+  }
+  if ((currentPath === '/registration/phrase-info') &&
     (userType === 'expert')) {
     return '/registration/write-phrase'
   }
