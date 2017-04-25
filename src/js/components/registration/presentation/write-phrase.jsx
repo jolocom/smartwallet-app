@@ -41,6 +41,9 @@ const STYLES = {
     marginLeft: '5px',
     display: 'inline-block',
     position: 'relative'
+  },
+  nextStep: {
+    flex: 1
   }
 }
 
@@ -79,7 +82,7 @@ const WritePhrase = (props) => {
           onClick={(e) => props.onToggle(e.target.checked)}
         />
       </Block>
-      <Block style={{flex: 1}}>
+      <Block style={STYLES.nextStep}>
         <RaisedButton
           label="NEXT STEP"
           secondary
