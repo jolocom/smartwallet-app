@@ -157,7 +157,33 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
-
+  it('should return the correct next page to switch from layman to expert',
+  () => {
+    expect(helpers._getNextURLFromState(new Immutable.Map({
+      routing: {
+        locationBeforeTransitions: {pathname: '/registration/phrase-info'}
+      },
+      registration: Immutable.fromJS({userType: {
+        valid: true, value: 'expert'
+      }})
+    }))).to.equal(
+      '/registration/write-phrase'
+    )
+  })
+  it('should return the correct next page to switch from expert to layment',
+    () => {
+      expect(helpers._getNextURLFromState(new Immutable.Map({
+        routing: {
+          locationBeforeTransitions: {pathname: '/registration/write-phrase'}
+        },
+        registration: Immutable.fromJS({userType: {
+          valid: true, value: 'layman'
+        }})
+      }))).to.equal(
+        '/registration/phrase-info'
+      )
+    }
+  )
   describe('_isComplete()', function() {
     const test = ({invalid, result, userType = null}) => {
       invalid = new Immutable.Set(invalid)
