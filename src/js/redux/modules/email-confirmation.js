@@ -7,38 +7,34 @@ export const actions = module.exports = makeActions('email-confirmation', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
-        if(params === undefined){
-          return confirmFail(getState())
+        if (params === undefined) {
+          let action = {
+            type: actions.confirm.id_fail
+          }
+          return dispatch(action)
         }
-        dispatch(actions.setCode.buildAction(params.code))
         dispatch(actions.confirm
         .buildAction(params, (backend) => {
           return backend.wallet.confirmEmail(params)
         }))
       }
     }
-  },
-  setCode: {
-    expectedParams: ['code']
   }
 })
 const confirmSuccess = (state) => Immutable.fromJS(state).merge({
-  success: true
+  success: true,
+  loading: false
 })
 const confirmFail = (state) => Immutable.fromJS(state).merge({
-  success: false
+  loading: false
 })
 const initialState = Immutable.fromJS({
   success: false,
-  code: ''
+  loading: true
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.setCode.id:
-      return state.merge({
-        code: action.code
-      })
     case actions.confirm.id_success:
       return confirmSuccess(state)
     case actions.confirm.id_fail:

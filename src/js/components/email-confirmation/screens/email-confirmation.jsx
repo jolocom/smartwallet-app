@@ -26,6 +26,7 @@ export default class EmailConfirmationScreen extends React.Component {
   render() {
     return (<Presentation
       onClick={this.props.goToLogin}
-      confirmation={this.props.emailConfirmation.success} />)
+      confirmation={this.props.emailConfirmation.success}
+      loading={this.props.emailConfirmation.loading} />)
   }
 }

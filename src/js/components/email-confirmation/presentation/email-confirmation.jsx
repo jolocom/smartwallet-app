@@ -8,7 +8,8 @@ import {
 import {theme} from 'styles'
 
 import {
-  FlatButton
+  FlatButton,
+  CircularProgress
 } from 'material-ui'
 
 const STYLES = {
@@ -19,7 +20,11 @@ const STYLES = {
   img: {
     height: '250px',
     width: '250px'
+  },
+  spinner: {
+    marginTop: '10px'
   }
+
 }
 
 @Radium
@@ -27,22 +32,29 @@ export default class EmailConfirmation extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     confirmation: React.PropTypes.bool.isRequired,
-    onClick: React.PropTypes.func.isRequired
+    onClick: React.PropTypes.func.isRequired,
+    loading: React.PropTypes.bool.isRequired
   }
 
   render() {
-    // TODO replace placeholder img
     return (
       <Container >
         <img style={STYLES.img} src="/img/logo.svg" />
-        <Block>
-          <h1 style={STYLES.greeting}>
+          {this.props.loading
+          ? <Block>
+            <h1 style={STYLES.greeting}>
+            ..verifying email
+            </h1>
+            <CircularProgress style={STYLES.spinner}/>
+          </Block>
+          : <h1 style={STYLES.greeting}>
             {this.props.confirmation
             ? 'Your email is verified!'
             : 'Whoops.. your email could not be verified.'
           }
           </h1>
-        </Block>
+        }
+
         <Footer>
           <FlatButton label="Login"
             onClick={() => { this.props.onClick() }} />
