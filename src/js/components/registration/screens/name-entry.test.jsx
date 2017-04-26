@@ -7,25 +7,60 @@ import RegistrationNameEntryScreen from './name-entry'
 
 describe('(Component) RegistrationNameEntryScreen', function() {
   it('should render properly the first time', function() {
+    const setUsername = stub()
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
           registration: {
             username: {
               value: '',
+              valid: false,
               errorMsg: ''
             }
           }
         }))
       }
-        setUsername={() => {}}
+        setUsername={setUsername}
         checkUsername={() => {}}
-      />),
+     />),
       { context: { muiTheme: { } } }
     )
 
     expect(wrapper.find('NameEntry').prop('value')).to.be.empty
     expect(wrapper.find('NameEntry').prop('errorMsg')).to.be.empty
+  })
+  it('should call config and show on handleDialog', function() {
+    const showSimpleDialog = stub()
+    const configSimpleDialog = stub()
+    const wrapper = shallow(
+      (<RegistrationNameEntryScreen.WrappedComponent {
+        ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
+          registration: {
+            username: {
+              value: '',
+              valid: false,
+              errorMsg: ''
+            }
+          }
+        }))
+      }
+        showSimpleDialog={showSimpleDialog}
+        configSimpleDialog={configSimpleDialog}
+    />), { context: { muiTheme: { } } }
+    )
+    wrapper.find('NameEntry').prop('handleDialog')('whoo')
+    expect(configSimpleDialog.calledWithArgs).to.deep.equal(
+      ['whoo', 'OK',
+        {
+          actionsContainerStyle: {
+            textAlign: 'center'
+          },
+          contentStyle: {
+            textAlign: 'center'
+          }
+        }]
+    )
+    expect(showSimpleDialog.called).to.be.true
   })
   it('should call setUsername onChange', function() {
     const setUsername = stub()
@@ -35,6 +70,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           registration: {
             username: {
               value: '',
+              valid: false,
               errorMsg: ''
             }
           }
@@ -57,6 +93,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           registration: {
             username: {
               value: '',
+              valid: false,
               errorMsg: ''
             }
           }

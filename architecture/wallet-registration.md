@@ -1,4 +1,4 @@
-The components and Redux module(s) can be found in the wallet-registration directories in the components/ and redux/modules/ directories. The component
+The components and Redux module(s) can be found in the registration/ directories in the components/ and redux/modules/ directories. The component
 
 The different screens and their respective container components of the registration process each have their own routes to enable the browser history button functionality and allow for easier testing. They're located in components/screens/ named after their component names. The walkthrough for the registration process can be found at:
 https://files.slack.com/files-pri/T03K1SCA9-F4FC09FNX/170308_jolocom_wallet_registrationprocess-07.png

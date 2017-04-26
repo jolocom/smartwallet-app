@@ -95,6 +95,12 @@ class PinInput extends React.Component {
     this.refs.input.focus()
   }
 
+  componentWillUpdate(props) {
+    if (props.focused) {
+      this.refs.input.focus()
+    }
+  }
+
   render() {
     const props = this.props
 

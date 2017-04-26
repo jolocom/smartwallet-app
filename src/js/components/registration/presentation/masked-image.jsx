@@ -1,6 +1,5 @@
 import React from 'react'
 import theme from '../../../styles/jolocom-theme'
-// import Radium from 'radium'
 
 class MaskedImage extends React.Component {
   static propTypes = {

@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import {RaisedButton, TextField} from 'material-ui'
 
-import {Container, Header, Content, Footer, Block} from './ui'
+import {Container, Header, Content, Footer, Block} from '../../structure'
 
 const STYLES = {
   usernameField: {

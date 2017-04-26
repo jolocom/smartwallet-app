@@ -4,7 +4,7 @@ import PasswordField from 'material-ui-password-field'
 import {theme} from 'styles'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Header, Content, Block, Footer} from './ui'
+import {Container, Header, Content, Block, Footer} from '../../structure'
 
 const STYLES = {
   password: {
@@ -15,7 +15,7 @@ const STYLES = {
     backgroundColor: '#ffffff',
     maxWidth: '360px'
   },
-  strengthBare: {
+  strengthBar: {
     marginRight: '30px',
     marginLeft: '30px'
   },
@@ -30,62 +30,69 @@ const STYLES = {
   button: {
     display: 'inline-block',
     marginTop: '30px'
+  },
+  helpMsg: {
+    textAlign: 'left'
   }
 }
 
-const strengthBarColor = (strength) => {
-  switch (strength) {
-    case 'strong':
+const strengthBarColor = (value, strength, barIndex) => {
+  if (value) {
+    if (strength === 'strong') {
       return 'green'
-    case 'good':
-      return 'yellow'
-    default:
+    }
+    if (strength === 'weak' && barIndex === 'firstBar') {
       return 'red'
+    }
+    if (strength === 'good' && barIndex !== 'thirdBar') {
+      return 'yellow'
+    } else {
+      return 'lightgray'
+    }
+  } else {
+    return 'lightgray'
   }
 }
 
-const showBar = (value, strength, barIndex) => {
-  if (strength === 'strong') {
-    return 'visible'
-  }
-  if (value && barIndex === 'firstBar') {
-    return 'visible'
-  }
-  if (strength !== 'weak' && barIndex === 'secondBar') {
-    return 'visible'
-  }
-  return 'hidden'
-}
+// const showBar = (value, strength, barIndex) => {
+//   if (strength === 'strong') {
+//     return 'visible'
+//   }
+//   if (value && barIndex === 'firstBar') {
+//     return 'visible'
+//   }
+//   if (strength !== 'weak' && barIndex === 'secondBar') {
+//     return 'visible'
+//   }
+//   return 'hidden'
+// }
 
 function StrengthBar(props) {
-  return <div style={STYLES.strengthBare}>
+  return <div style={STYLES.strengthBar}>
     <svg width="100%" height="4">
       <line
         x1="0%"
         y1="2"
         x2="30%"
         y2="2"
-        visibility={showBar(props.value, props.strength, 'firstBar')}
         strokeWidth="4"
-        stroke={strengthBarColor(props.strength)}
+        stroke={strengthBarColor(props.value, props.strength, 'firstBar')}
       />
       <line
         x1="33%"
         y1="2"
         x2="67%"
         y2="2"
-        visibility={showBar(props.value, props.strength, 'secondBar')}
         strokeWidth="4"
-        stroke={strengthBarColor(props.strength)}
+        stroke={strengthBarColor(props.value, props.strength, 'secondBar')}
       />
       <line
         x1="70%"
         y1="2"
         x2="100%"
         y2="2"
-        visibility={showBar(props.value, props.strength, 'thirdBar')}
         strokeWidth="4"
-        stroke={strengthBarColor(props.strength)}
+        stroke={strengthBarColor(props.value, props.strength, 'thirdBar')}
       />
     </svg>
   </div>
@@ -127,12 +134,12 @@ function Password(props) {
         <Block
           style={STYLES.explanation[props.repeatedValueState ? 0 : 1]}
         >
-          <dl>
-            <dt>For more security please use at least :</dt>
-            <dd>- one Number</dd>
-            <dd>- one Upper Case (e.g. A,B,C...)</dd>
-            <dd>- one Lower Case (e.g. a,b,c...)</dd>
-          </dl>
+          <table style={STYLES.helpMsg}>
+            <th>For more security please use at least :</th>
+            <tr>- one Number</tr>
+            <tr>- one Upper Case (e.g. A,B,C...)</tr>
+            <tr>- one Lower Case (e.g. a,b,c...)</tr>
+          </table>
         </Block>
       </Content>
       <Footer>

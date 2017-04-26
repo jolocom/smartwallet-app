@@ -20,6 +20,7 @@ const palette = {
   accent2Color: fade('#9a3460', 0.15),
   accent3Color: fade('#9a3460', 0.3),
   textColor: '#4b132b',
+  lighterTextColor: '#633c38',
   alternateTextColor: white,
   canvasColor: white,
   borderColor: grey300,

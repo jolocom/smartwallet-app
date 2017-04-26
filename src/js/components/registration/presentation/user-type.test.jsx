@@ -7,7 +7,7 @@ describe('(Component) UserType', function() {
     shallow((<UserType
       value=""
       valid
-      user={false}
+      user={'testUser'}
       onSelect={() => {}}
       onWhySelect={() => {}}
       />),

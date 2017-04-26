@@ -8,8 +8,10 @@ import createServices from '../services'
 export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
   const reduxRouterMiddleware = routerMiddleware(history)
+  const backend = new Backend()
+  const services = createServices()
   const middleware = [
-    backendMiddleware(new Backend(), createServices()),
+    backendMiddleware(backend, services),
     reduxRouterMiddleware
   ]
 
