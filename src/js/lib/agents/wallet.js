@@ -71,6 +71,7 @@ export default class WalletAgent {
   }
 
   deleteEmail(email) {
+    console.log(email)
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve()
@@ -79,6 +80,7 @@ export default class WalletAgent {
   }
 
   updateEmail(email) {
+    console.log(email)
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve()
@@ -87,7 +89,9 @@ export default class WalletAgent {
   }
 
   setEmail(email) {
+    console.log(email)
     return new Promise((resolve, reject) => {
+
       setTimeout(() => {
         resolve()
       }, 2000)
