@@ -12,7 +12,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import JolocomTheme from 'styles/jolocom-theme'
 
 import LeftNav from 'components/left-nav/nav.jsx'
-import Tour from 'components/tour'
+// import Tour from 'components/tour'
 
 import Loading from 'components/common/loading.jsx'
 
