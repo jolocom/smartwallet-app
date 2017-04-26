@@ -1,4 +1,11 @@
+import rdf from 'rdflib'
+import HTTPAgent from 'lib/agents/http'
+
 export default class WalletAgent {
+  WalletAgent() {
+    this.http = new HTTPAgent({proxied: true})
+  }
+
   generateSeedPhrase(randomString) {
     return 'blabla blabla blabla blabla blabla blabla blabla blabla'
   }
@@ -71,16 +78,12 @@ export default class WalletAgent {
   }
 
   deleteEmail(email) {
-    console.log(email)
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
+      resolve()
     })
   }
 
   updateEmail(email) {
-    console.log(email)
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve()
@@ -88,14 +91,8 @@ export default class WalletAgent {
     })
   }
 
-  setEmail(email) {
-    console.log(email)
-    return new Promise((resolve, reject) => {
-
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
+  setEmail(webId, email) {
+    return this.http.patch('one', 'two', 'three')
   }
 }
 

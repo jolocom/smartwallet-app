@@ -9,12 +9,15 @@ const actions = module.exports = makeActions('wallet/contact', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
+
         dispatch(actions.validate())
         const state = getState().getIn(['wallet', 'contact']).toJS()
+        const webId = getState().getIn(['wallet', 'identity', 'webId'])
+
         if (!state.showErrors) {
           dispatch(actions.saveChanges.buildAction(params, (backend) => {
             let promises = []
-            // console.log(state)
+            console.log(state)
             for (let i = 0;
               i < state.information.originalInformation.emails.length; i++) {
               if (state.information.originalInformation.emails[i].delete) {
@@ -33,6 +36,7 @@ const actions = module.exports = makeActions('wallet/contact', {
                   !state.information.newInformation.emails[i].blank) {
                 promises.push(
                 backend.wallet.setEmail(
+                  webId,
                   state.information.newInformation.emails[i].address))
               }
             }
