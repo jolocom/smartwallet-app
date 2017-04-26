@@ -82,6 +82,10 @@ let AddContact = React.createClass({
   getStyles() {
     const {muiTheme: {actionAppBar}} = this.context
     return {
+      container: {
+        overflowY: 'scroll',
+        overflowX: 'hidden'
+      },
       bar: {
         backgroundColor: actionAppBar.color,
         color: actionAppBar.textColor
@@ -150,74 +154,76 @@ let AddContact = React.createClass({
       <div>
         <Dialog id="add_contact" fullscreen>
           <Layout>
-            <AppBar
-              title="Add Contacts"
-              titleStyle={styles.title}
-              iconElementLeft={
-                <IconButton
-                  iconStyle={styles.icon}
-                  iconClassName="material-icons"
-                  onTouchTap={this._handleClose}>close
-                </IconButton>
-              }
-              iconElementRight={
-                <FlatButton
-                  style={styles.icon}
-                  label="Add"
-                  onTouchTap={this._handleSubmit}
-                />
-              }
-              style={styles.bar}
-            />
-            <Tabs>
-              <Tab label="Contacts">
-                <div>
-                  <div style={styles.selectedList}>
-                    {this.state.contacts.map((contact) => {
-                      if (contact.selected) {
-                        return (
-                          <div key={contact.webId}>
-                            {contact.imgUri
-                            ? <Avatar
-                              style={styles.selectedAvatar}
-                              src={Util.uriToProxied(contact.imgUri)}
-                              />
-                            : <Avatar
-                              style={styles.selectedAvatar}
-                              icon={<PersonIcon />} />
-                          }
-                          </div>
-                        )
-                      }
-                    })
-                    }
-                  </div>
-                </div>
-                <div>
-                  <TextField
-                    placeholder="Type in the WebID"
-                    fullWidth
-                    style={styles.webidField}
-                    onChange={this._handleChange}
+            <div style={styles.container}>
+              <AppBar
+                title="Add Contacts"
+                titleStyle={styles.title}
+                iconElementLeft={
+                  <IconButton
+                    iconStyle={styles.icon}
+                    iconClassName="material-icons"
+                    onTouchTap={this._handleClose}>close
+                  </IconButton>
+                }
+                iconElementRight={
+                  <FlatButton
+                    style={styles.icon}
+                    label="Add"
+                    onTouchTap={this._handleSubmit}
                   />
-                </div>
-                <List>
-                  <div style={styles.listItems}>
-                    {this.state.contacts.map((contact, i) => {
-                      return (
-                        <WrappedListItem
-                          key={contact.webId}
-                          contact={contact}
-                          onCheck={this._handleCheck}
-                        />)
-                    })}
+                }
+                style={styles.bar}
+              />
+              <Tabs>
+                <Tab label="Contacts">
+                  <div>
+                    <div style={styles.selectedList}>
+                      {this.state.contacts.map((contact) => {
+                        if (contact.selected) {
+                          return (
+                            <div key={contact.webId}>
+                              {contact.imgUri
+                              ? <Avatar
+                                style={styles.selectedAvatar}
+                                src={Util.uriToProxied(contact.imgUri)}
+                                />
+                              : <Avatar
+                                style={styles.selectedAvatar}
+                                icon={<PersonIcon />} />
+                            }
+                            </div>
+                          )
+                        }
+                      })
+                      }
+                    </div>
                   </div>
-                </List>
-              </Tab>
-              <Tab label="Groups">
-                <div>GROUPS</div>
-              </Tab>
-            </Tabs>
+                  <div>
+                    <TextField
+                      placeholder="Type in the WebID"
+                      fullWidth
+                      style={styles.webidField}
+                      onChange={this._handleChange}
+                    />
+                  </div>
+                  <List>
+                    <div style={styles.listItems}>
+                      {this.state.contacts.map((contact, i) => {
+                        return (
+                          <WrappedListItem
+                            key={contact.webId}
+                            contact={contact}
+                            onCheck={this._handleCheck}
+                          />)
+                      })}
+                    </div>
+                  </List>
+                </Tab>
+                <Tab label="Groups">
+                  <div>GROUPS</div>
+                </Tab>
+              </Tabs>
+            </div>
           </Layout>
         </Dialog>
       </div>
