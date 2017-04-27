@@ -52,7 +52,8 @@ const STYLES = {
     color: theme.palette.lighterTextColor
   },
   requestBtn: {
-    marginLeft: '50px'
+    marginLeft: '39px'
+    // padding: '0'
   },
   spinner: {
     position: 'absolute',
