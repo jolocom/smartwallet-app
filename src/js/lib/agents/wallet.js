@@ -1,9 +1,11 @@
 import rdf from 'rdflib'
+import util from 'lib/util'
 import HTTPAgent from 'lib/agents/http'
+import {PRED} from 'lib/namespaces'
 
 export default class WalletAgent {
-  WalletAgent() {
-    this.http = new HTTPAgent({proxied: true})
+  constructor() {
+    this.http = new HTTPAgent({proxy: true})
   }
 
   generateSeedPhrase(randomString) {
@@ -92,19 +94,33 @@ export default class WalletAgent {
   }
 
   setEmail(webId, email) {
-    return this.http.patch('one', 'two', 'three')
+    // TODO Abstract to rdf helper
+    const g = rdf.graph() 
+    const webIdUri = rdf.sym(webId)
+    const rndId = this._genAtrId()
+    const bNode = rdf.blankNode(rndId)
+    const seeAlsoFileUri = `${util.getProfileFolderUri(webId)}/email${rndId}`
+    // TODO METADATA TO LITERALS?
+    g.add(webIdUri, PRED.email, bNode)
+    g.add(bNode, PRED.identifier, rdf.lit(rndId))
+    g.add(bNode, PRED.seeAlso, rdf.sym(seeAlsoFileUri))
+    return this.http.patch(webId, [], g.statements)
+  }
+
+  _genAtrId() {
+    return util.randomString(3)
   }
 }
 
 export class Wallet {
   constructor() {
-    this.webID = 'https://demo.webid.jolocom.com/profile/card'
+    this.webID = 'https://live.webid.jolocom.de/profile/card'
     this.lightWaller = 'something'
   }
 
   getUserInformation({email}) {
     const identity = {
-      webId: 'https://demo.webid.jolocom.com/profile/card',
+      webId: 'https://live.webid.jolocom.de/profile/card',
       username: {
         value: 'AnnikaHamman',
         verified: ''
