@@ -89,9 +89,11 @@ const PhoneList = (props) => {
       onVerify={() => props.confirm(iconPhoneMessage, STYLES.dialog)}
       secondaryTextValue={props.phone[i].type} />)
   }
-  return <List disabled>
-   {display}
-  </List>
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 PhoneList.propTypes = {
@@ -126,9 +128,11 @@ const EmailList = (props) => {
           : null}
       </div>)
   }
-  return <List disabled>
-            {display}
-  </List>
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 EmailList.propTypes = {
