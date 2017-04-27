@@ -1,7 +1,13 @@
-// import * as _ from 'lodash'
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
+
+import {
+  verifyFields,
+  newField,
+  updateField,
+  saveFields
+} from '../../../lib/edit-contact-util'
 
 const actions = module.exports = makeActions('wallet/contact', {
   saveChanges: {
@@ -13,30 +19,21 @@ const actions = module.exports = makeActions('wallet/contact', {
         const state = getState().getIn(['wallet', 'contact']).toJS()
         if (!state.showErrors) {
           dispatch(actions.saveChanges.buildAction(params, (backend) => {
+            const emailOperations = {
+              set: backend.wallet.setEmail,
+              delete: backend.wallet.deleteEmail,
+              update: backend.wallet.updateEmail
+            }
+            const emailKey = {field: 'emails', attribute: ['address']}
+            const phoneOperations = {
+              set: backend.wallet.setPhone,
+              delete: backend.wallet.deletePhone,
+              update: backend.wallet.updatePhone
+            }
+            const phoneKey = {field: 'emails', attribute: ['address']}
             let promises = []
-            // console.log(state)
-            for (let i = 0;
-              i < state.information.originalInformation.emails.length; i++) {
-              if (state.information.originalInformation.emails[i].delete) {
-                promises.push(
-                  backend.wallet.deleteEmail(
-                    state.information.originalInformation.emails[i].address))
-              } else if (state.information.originalInformation.emails[i].update) { //eslint-disable-line
-                promises.push(
-                  backend.wallet.updateEmail(
-                    state.information.originalInformation.emails[i].address))
-              }
-            }
-            for (let i = 0;
-              i < state.information.newInformation.emails.length; i++) {
-              if (!state.information.newInformation.emails[i].delete &&
-                  !state.information.newInformation.emails[i].blank) {
-                promises.push(
-                backend.wallet.setEmail(
-                  state.information.newInformation.emails[i].address))
-              }
-            }
-            // console.log(promises)
+            saveFields(state.information, emailOperations, emailKey, promises)
+            saveFields(state.information, phoneOperations, phoneKey, promises)
             return Promise.all(promises)
           })).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }
@@ -83,6 +80,7 @@ const actions = module.exports = makeActions('wallet/contact', {
 const initialState = Immutable.fromJS({
   information: {
     newInformation: {
+      telNums: [],
       emails: []
     }
   },
@@ -102,85 +100,58 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.setIn(['loading'], true)
 
     case actions.getAccountInformation.id_success:
-      let initialState = {
-        newInformation: {
-          emails: []
-        },
-        originalInformation: action.result
-      }
-      // let prop
-      // console.log(action.result)
-      for (let prop in initialState.originalInformation) {
-        for (let i = 0; i < initialState.originalInformation[prop].length; i++) { // eslint-disable-line max-len
-          initialState.originalInformation[prop][i].delete = false
-          initialState.originalInformation[prop][i].update = false
-          initialState.originalInformation[prop][i].valid = true
+      return Immutable.fromJS({
+        loading: false,
+        showErrors: false,
+        information: {
+          newInformation: {
+            emails: [],
+            telNums: []
+          },
+          originalInformation: {
+            emails: action.result.emails.map((address) => {
+              return {...address, delete: false, update: false, valid: true}
+            }),
+            telNums: action.result.telNums.map((telNums) => {
+              return {...telNums, delete: false, update: false, valid: true}
+            })
+          }
         }
-      }
-      // console.log(Immutable.fromJS(action.result).toJS())
-      state = state.mergeIn(['information'], Immutable.fromJS(initialState))
-      return state.setIn(['loading'], false)
+      })
 
     case actions.setInformation.id:
       if (action.field === 'emails') {
-        let localState = state.toJS()
-        localState.information.newInformation
-        .emails[action.index].address = action.value
-        localState.information.newInformation
-        .emails[action.index].valid = /^([\w.]+)@([\w.]+)\.(\w+)/
-        .test(action.value)
-        localState.information.newInformation
-        .emails[action.index].blank = action.value === ''
-        // console.log(localState)
-        return Immutable.fromJS(localState)
+        return state.mergeIn(
+        ['information', 'newInformation', 'emails', action.index], {
+          address: action.value,
+          valid: /^([\w.]+)@([\w.]+)\.(\w+)/.test(action.value),
+          blank: action.value === ''
+        })
+      }
+      if (action.field === 'telNums') {
+        return state.mergeIn(
+        ['information', 'newInformation', 'telNums', action.index], {
+          num: action.value.num,
+          type: action.value.type,
+          valid: /^([\d.]+)$/.test(action.value.num),
+          blank: action.value.num === ''
+        })
       }
       return state
 
     case actions.deleteInformation.id:
-      return state.setIn(['information', action.age,
-        action.field, action.index, 'delete'], true)
+      return state.mergeIn(
+        ['information', action.age, action.field, action.index], {delete: true}
+      )
 
     case actions.updateInformation.id:
-      if (state.getIn(['information', 'originalInformation',
-        action.field, action.index, 'verified']) === false) {
-        state = state.setIn(['information', 'originalInformation',
-          action.field, action.index, 'update'], true)
-        if (action.field === 'emails') {
-          state = state.setIn(['information', 'originalInformation',
-            action.field, action.index, 'address'], action.value)
-          state = state.setIn(['information', 'originalInformation',
-            action.field, action.index, 'valid'], /^([\w.]+)@([\w.]+)\.(\w+)/
-            .test(action.value))
-          state = state.setIn(['information', 'originalInformation',
-            action.field, action.index, 'delete'], action.value === '')
-        }
-      }
-      return state
+      return updateField(state, action)
 
     case actions.addNewEntry.id:
-      let mutableState = state.toJS()
-      mutableState.information.newInformation.emails
-      .push({address: '', valid: false, delete: false, blank: true})
-      return Immutable.fromJS(mutableState)
+      return newField(state, action)
 
     case actions.validate.id:
-      // console.log(state)
-      let originalEmails = state.toJS().information.originalInformation.emails
-      let newEmails = state.toJS().information.newInformation.emails
-      // console.log(originalEmails)
-      for (let i = 0; i < originalEmails.length; i++) {
-        if (originalEmails[i].update && !originalEmails[i].valid &&
-            !originalEmails[i].delete) {
-          return state.setIn(['showErrors'], true)
-        }
-      }
-      for (let i = 0; i < newEmails.length; i++) {
-        if (!newEmails[i].valid && !newEmails[i].delete &&
-          !newEmails[i].blank) {
-          return state.setIn(['showErrors'], true)
-        }
-      }
-      return state.setIn(['showErrors'], false)
+      return verifyFields(state, action)
 
     default:
       return state

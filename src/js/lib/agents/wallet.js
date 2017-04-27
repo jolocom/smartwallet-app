@@ -93,6 +93,30 @@ export default class WalletAgent {
       }, 2000)
     })
   }
+
+  deletePhone(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  updatePhone(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  setPhone(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
 }
 
 export class Wallet {
@@ -130,7 +154,6 @@ export class Wallet {
           verified: true
         }]
       },
-      Repuation: 0,
       passport: {
         number: null,
         givenName: null,
