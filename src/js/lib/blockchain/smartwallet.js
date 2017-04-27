@@ -4,25 +4,18 @@ import BigNumber from 'big-number'
 
 import SignerProvider from 'ethjs-provider-signer'
 import {sign} from 'ethjs-signer'
-// import Eth from 'ethjs-query'
-import SHA256 from 'crypto-js/sha256'
-
-import keypair from 'keypair'
-import bitcore from 'bitcore-lib'
-import ECIES from 'bitcore-ecies'
-var EC = require('elliptic').ec
-// import {EC} from 'elliptic'
-let ec = new EC('secp256k1')
 
 import IdentityContract from 'lib/blockchain/contracts/Identity.json'
 import IdentityContractLookup
   from 'lib/blockchain/contracts/IdentityLookup.json'
 
+import CONFIG from 'lib/blockchain/config'
+import WalletCrypto from 'lib/blockchain/wallet-crypto'
+
 // WORKARROUND
 // TODO: migrate to webpack 2
 // https://github.com/ConsenSys/eth-lightwallet/issues/102
 // start
-
 import crypto from 'crypto'
 const sourceCreateHash = crypto.createHash
 crypto.createHash = function createHash(alg) {
@@ -36,24 +29,30 @@ crypto.createHash = function createHash(alg) {
 
 export default class SmartWallet {
   constructor() {
-    this.gethHost = 'http://193.175.133.233:8545'
-    // testing
-    // this.gethHost = 'http://localhost:8545'
+    this.gethHost = CONFIG.GETH_HOST
+    this.lookupContractAddress = CONFIG.LOOKUP_CONTRACT_ADDRESS
+
     this.globalKeystore = null
     this.web3 = null
     this.password = ''
     this.mainAddress = '0x'
+    this.webIDPrivateKey = undefined
     this.encryptionKeys = {}
-
-    /*
-		Note: Lookup Contract has been deployed on the Ropsten Testnet on 2017-04-12
-		*/
-    this.lookupContractAddress = '0x58ab8f7c72b4bec073db317d92aa0a15f09d9a6b'
+    this.walletCrypto = new WalletCrypto()
 
     // smart contract
     this.identityAddress = '0x'
     this.provider = null
+    this.filter = null
   }
+
+  setWebIDPrivateKey(webIDprivateKey) {
+    this.webIDPrivateKey = webIDprivateKey
+  }
+  getWebIDPrivateKey() {
+    return this.webIDPrivateKey
+  }
+
   createDigitalIdentity(userName, password) {
     return new Promise((resolve, reject) => {
       this.globalKeystore.keyFromPassword(
@@ -79,10 +78,7 @@ export default class SmartWallet {
     return this.identityAddress
   }
   generatePrivateKeyForWebID() {
-    let pair = new keypair({bits: 1024})
-    let privateKey = pair.private.substring(32)
-    privateKey = privateKey.substring(0, privateKey.length - 31)
-    return privateKey
+    return this.walletCrypto.generatePrivateRSAKey()
   }
   init(seedPhrase, password) {
     console.log('SmartWallet: create LightWallet')
@@ -124,12 +120,14 @@ export default class SmartWallet {
                 pwDerivedKey
               )
 
+              console.log('SmartWallet: private key -> ' + privateKey)
+
               // get encryption keys -> second addresses
               let privateKeySecondAddress = ks.exportPrivateKey(
                 addresses[1],
                 pwDerivedKey
               )
-              let publicKeySecondAddress = this._computeCompressedPublicKeyFromPrivateKey(
+              let publicKeySecondAddress = this.walletCrypto.computeCompressedEthereumPublicKey(
                 privateKeySecondAddress
               )
               this.encryptionKeys = {
@@ -149,6 +147,118 @@ export default class SmartWallet {
       )
     })
   }
+  getProperty(propertyId) {
+    let id = this._createAttributeID(propertyId)
+
+    let contract = this.web3.eth
+      .contract(IdentityContract.abi)
+      .at(this.identityAddress)
+
+    return new Promise((resolve, reject) => {
+      contract.getProperty(id, function(err, result) {
+        console.log('SmartWallet: getProperty Call')
+        resolve(result)
+      })
+    })
+  }
+
+  addProperty(id, value, password) {
+    console.log(
+      'SmartWallet start to add a property to identity contract ' +
+        this.identityAddress
+    )
+    return new Promise((resolve, reject) => {
+      this.globalKeystore.keyFromPassword(
+        password,
+        function(err, pwDerivedKey) {
+          if (err) throw err
+          // TODO: only interaction possible with correct password
+
+          let identityContract = this.web3.eth
+            .contract(IdentityContract.abi)
+            .at(this.identityAddress)
+
+          // let id = this._createAttributeID(name)
+
+          let methodName = 'addProperty'
+          let args = []
+
+          args.push(this._createAttributeID(id))
+          args.push(value)
+          this._contractMethodTransaction(
+            identityContract,
+            methodName,
+            args,
+            function(err, txhash) {
+              if (!err) {
+                resolve(txhash)
+              }
+            }
+          )
+        }.bind(this)
+      )
+    })
+  }
+
+  encryptPrivateKeyForWebID(privateKeyWebID) {
+    return this.walletCrypto.encryptMessage(
+      this.encryptionKeys.publicKey,
+      privateKeyWebID
+    )
+  }
+  decryptPrivateKeyForWebID(privateKeyWebIDEncrypted) {
+    return this.walletCrypto.decryptMessage(
+      this.encryptionKeys.privateKey,
+      privateKeyWebIDEncrypted
+    )
+  }
+
+  addIdentityAddressToLookupContract(_identityAddress) {
+    console.log(
+      'SmartWallet: add identity address to Lookup Contract -> ' +
+        this.lookupContractAddress
+    )
+    let identityContractLookup = this.web3.eth
+      .contract(IdentityContractLookup.abi)
+      .at(this.lookupContractAddress)
+
+    // let id = this._createAttributeID(name)
+
+    let methodName = 'addIdentityAddress'
+    let args = []
+
+    args.push(_identityAddress)
+    return new Promise((resolve, reject) => {
+      this._contractMethodTransaction(
+        identityContractLookup,
+        methodName,
+        args,
+        function(err, txhash) {
+          if (!err) {
+            resolve({
+              txhash: txhash,
+              lookupContractAddress: this.lookupContractAddress
+            })
+          }
+        }.bind(this)
+      )
+    })
+  }
+
+  waitingToBeMinedaAddProperty(contractAddress, transactionHash) {
+    let identityContract = this.web3.eth
+      .contract(IdentityContract.abi)
+      .at(contractAddress)
+    return this._waitingToBeMined(identityContract, transactionHash)
+  }
+
+  waitingToBeMinedaAddToLookup(contractAddress, transactionHash) {
+    let identityContractLookup = this.web3.eth
+      .contract(IdentityContractLookup.abi)
+      .at(this.lookupContractAddress)
+    return this._waitingToBeMined(identityContractLookup, transactionHash)
+  }
+
   _setProvider(ks, privateKey, mainAddress) {
     this.globalKeystore = ks
 
@@ -194,18 +304,7 @@ export default class SmartWallet {
   }
 
   _createIdentityContract() {
-    /*
-		already deployed idenities
-		0x864e0b01b7f29ad050fae057feee18f93f3d8aa7
-		0x1931685315fc3ef7b03955bc655e76c8d8199a63
-		0xe9372945a8acbb44388f068ea78ba0ab97d497ea
-		---
-		0x1605970Cc47370750596A24fAF143AFfA6C406E9
-		*/
-
-    // only for testing
-    // using a already deployed identity contract
-
+    /* only for testing
     /* return new Promise((resolve, reject) => {
       setTimeout(
         () => {
@@ -256,77 +355,14 @@ export default class SmartWallet {
     })
   }
 
-  getProperty(propertyId) {
-    console.log('get propertyId')
-    console.log(this.identityAddress)
-    let id = this._createAttributeID(propertyId)
-
-    let contract = this.web3.eth
-      .contract(IdentityContract.abi)
-      .at(this.identityAddress)
-
+  _waitingToBeMined(contract, transactionHash) {
     return new Promise((resolve, reject) => {
-      contract.getProperty(id, function(err, result) {
-        console.log('SmartWallet: getProperty call')
-        console.log(result)
-        resolve(result)
-      })
-    })
-  }
-
-  addProperty(id, value, password) {
-    console.log(
-      'SmartWallet start to add a property to identity contract ' +
-        this.identityAddress
-    )
-    return new Promise((resolve, reject) => {
-      this.globalKeystore.keyFromPassword(
-        password,
-        function(err, pwDerivedKey) {
-          if (err) throw err
-          // TODO: only interaction possible with correct password
-
-          let identityContract = this.web3.eth
-            .contract(IdentityContract.abi)
-            .at(this.identityAddress)
-
-          // let id = this._createAttributeID(name)
-
-          let methodName = 'addProperty'
-          let args = []
-
-          args.push(this._createAttributeID(id))
-          args.push(value)
-          this._contractMethodTransaction(
-            identityContract,
-            methodName,
-            args,
-            function(err, txhash) {
-              if (!err) {
-                resolve(txhash)
-              }
-            }
-          )
-        }.bind(this)
-      )
-    })
-  }
-  waitingForTransactionToBeMined(contractAddress, transactionHash) {
-    let filter = web3.eth.filter({
-      fromBlock: 'latest',
-      toBlock: 'latest',
-      address: contractAddress
-    })
-    return new Promise((resolve, reject) => {
-      filter.watch(function(error, result) {
-        // console.log(result)
-        if (
-          result.transactionHash == result.transactionHash &&
-          result.type == 'mined'
-        ) {
+      let myEvent = contract.EventNotification()
+      myEvent.watch((error, result) => {
+        if (result.transactionHash == transactionHash) {
+          myEvent.stopWatching()
           console.log('SmartWallet: Transaction mined!')
-          resolve(result.transactionHash)
-          filter.stopWatching()
+          resolve(result)
         }
       })
     })
@@ -349,75 +385,6 @@ export default class SmartWallet {
   }
 
   _createAttributeID(attributeName) {
-    return '0x' + SHA256(attributeName).toString()
-  }
-  _computeCompressedPublicKeyFromPrivateKey(privKey) {
-    let keyPair = ec.genKeyPair()
-    keyPair._importPrivate(privKey, 'hex')
-    var compact = true
-    var pubKey = keyPair.getPublic(compact, 'hex')
-    return pubKey
-  }
-
-  _encrypt(publicKey, message) {
-    // dummy privateKey needed to init ECIES
-    let privKey = new bitcore.PrivateKey(
-      '52435b1ff21b894da15d87399011841d5edec2de4552fdc29c8299574436925d'
-    )
-    let ecies = ECIES()
-      .privateKey(privKey)
-      .publicKey(new bitcore.PublicKey(publicKey))
-    let encrypted = ecies.encrypt(message)
-    return encrypted.toString('hex')
-  }
-
-  _decryptMessage(privateKey, encrypted) {
-    let privKey = new bitcore.PrivateKey(privateKey)
-    let ecies = ECIES().privateKey(privKey)
-    let decryptMe = new Buffer(encrypted, 'hex')
-    let decrypted = ecies.decrypt(decryptMe)
-    return decrypted.toString('ascii')
-  }
-
-  encryptPrivateKeyForWebID(privateKeyWebID) {
-    return this._encrypt(this.encryptionKeys.publicKey, privateKeyWebID)
-  }
-  decryptPrivateKeyForWebID(privateKeyWebIDEncrypted) {
-    return this._decryptMessage(
-      this.encryptionKeys.privateKey,
-      privateKeyWebIDEncrypted
-    )
-  }
-
-  addIdentityAddressToLookupContract(_identityAddress) {
-    console.log(
-      'SmartWallet: add identity address to Lookup Contract -> ' +
-        this.lookupContractAddress
-    )
-    let identityContractLookup = this.web3.eth
-      .contract(IdentityContractLookup.abi)
-      .at(this.lookupContractAddress)
-
-    // let id = this._createAttributeID(name)
-
-    let methodName = 'addIdentityAddress'
-    let args = []
-
-    args.push(_identityAddress)
-    return new Promise((resolve, reject) => {
-      this._contractMethodTransaction(
-        identityContractLookup,
-        methodName,
-        args,
-        function(err, txhash) {
-          if (!err) {
-            resolve({
-              txhash: txhash,
-              lookupContractAddress: this.lookupContractAddress
-            })
-          }
-        }.bind(this)
-      )
-    })
+    return '0x' + this.walletCrypto.sha256(attributeName).toString()
   }
 }

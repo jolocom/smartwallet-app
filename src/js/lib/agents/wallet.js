@@ -27,60 +27,60 @@ export default class WalletAgent {
     )
     let password = '1234'
     let wallet = new SmartWallet()
-    wallet
-      .init(seedPhrase, password)
-      .then(result => {
-        return wallet.createDigitalIdentity(userName, password)
-        console.log('wallet created')
-        console.log(result)
-      })
-      .then(identityAddress => {
-        wallet.setIdentityAddress(identityAddress)
-        return wallet.addIdentityAddressToLookupContract(identityAddress)
-      })
-      .then(result => {
-        console.log(
-          'WalletAgent: identityAddress addedtoLookupContract Transaction waiting to be mined txhash -> ' +
-            result.txhash
-        )
-
-        return wallet.waitingForTransactionToBeMined(
-          result.lookupContractAddress,
-          result.txhash
-        )
-      })
-      .then(transactionMined => {
-        console.log(
-          'WalletAgent: Transaction add address to lookup contracted got mined -> ' +
-            transactionMined
-        )
-        let privateKeyWebID = wallet.generatePrivateKeyForWebID()
-        let encryptedWebID = wallet.encryptPrivateKeyForWebID(privateKeyWebID)
-        return wallet.addProperty('webidkey', encryptedWebID, password)
-      })
-      .then(txhash => {
-        console.log(
-          'WalletAgent: addPropertyTransaction waiting to be mined txhash: ' +
-            txhash
-        )
-        let identityAddress = wallet.getIdentityAddress()
-        return wallet.waitingForTransactionToBeMined(identityAddress, txhash)
-      })
-      .then(txhash => {
-        console.log(
-          'WalletAgent: addPropertyTransaction got minded txhash: ' + txhash
-        )
-        wallet.getProperty('webidkey').then(webid => {
-          console.log(wallet.decryptPrivateKeyForWebID(webid))
-        })
-      })
     return new Promise((resolve, reject) => {
-      setTimeout(
-        () => {
-          resolve(new Wallet())
-        },
-        2000
-      )
+      wallet
+        .init(seedPhrase, password)
+        .then(result => {
+          return wallet.createDigitalIdentity(userName, password)
+          console.log('wallet created')
+          console.log(result)
+        })
+        .then(identityAddress => {
+          wallet.setIdentityAddress(identityAddress)
+          return wallet.addIdentityAddressToLookupContract(identityAddress)
+        })
+        .then(result => {
+          console.log(
+            'WalletAgent: identityAddress addedtoLookupContract Transaction waiting to be mined txhash -> ' +
+              result.txhash
+          )
+
+          return wallet.waitingToBeMinedaAddToLookup(
+            result.lookupContractAddress,
+            result.txhash
+          )
+        })
+        .then(transaction => {
+          console.log(
+            'WalletAgent: Transaction add address to lookup contracted got mined -> ' +
+              transaction.transactionHash
+          )
+          let privateKeyWebID = wallet.generatePrivateKeyForWebID()
+          wallet.setWebIDPrivateKey(privateKeyWebID)
+          console.log('WalletAgent: privatekey WebID')
+          console.log(privateKeyWebID)
+          let encryptedWebID = wallet.encryptPrivateKeyForWebID(
+            privateKeyWebID
+          )
+          console.log('WalletAgent: privatekey WebID encrypted')
+          console.log(encryptedWebID)
+          return wallet.addProperty('webidkey', encryptedWebID, password)
+        })
+        .then(txhash => {
+          console.log(
+            'WalletAgent: addPropertyTransaction waiting to be mined txhash: ' +
+              txhash
+          )
+          let identityAddress = wallet.getIdentityAddress()
+          return wallet.waitingToBeMinedaAddProperty(identityAddress, txhash)
+        })
+        .then(transaction => {
+          console.log(
+            'WalletAgent: addPropertyTransaction got minded txhash: ' +
+              transaction.transactionHash
+          )
+        })
+      resolve(wallet)
     })
   }
 
@@ -94,7 +94,7 @@ export default class WalletAgent {
     return new Promise((resolve, reject) => {
       setTimeout(
         () => {
-          resolve(new Wallet())
+          resolve(new SmartWallet())
         },
         2000
       )
@@ -112,7 +112,7 @@ export default class WalletAgent {
     return new Promise((resolve, reject) => {
       setTimeout(
         () => {
-          resolve(new Wallet())
+          resolve(new SmartWallet())
         },
         2000
       )
@@ -129,14 +129,10 @@ export default class WalletAgent {
     return new Promise((resolve, reject) => {
       setTimeout(
         () => {
-          resolve(new Wallet())
+          resolve(new SmartWallet())
         },
         2000
       )
     })
   }
-}
-
-export class Wallet {
-  constructor() {}
 }
