@@ -16,6 +16,9 @@ const STYLES = {
   greeting: {
     fontSize: '20px',
     color: theme.palette.textColor
+  },
+  walletContainer: {
+    backgroundColor: 'none'
   }
 }
 
@@ -30,7 +33,7 @@ export default class WalletHome extends React.Component {
   render() {
     // TODO replace placeholder img
     return (
-      <Container >
+      <Container style={STYLES.walletContainer}>
         <img src="/img/illu_wallet.svg" />
         <Block>
           <h1 style={STYLES.greeting}>Hi {this.props.username}</h1>

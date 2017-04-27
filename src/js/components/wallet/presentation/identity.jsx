@@ -174,10 +174,12 @@ const InfoDetail = (props) => {
     />
   </span>
 
-  return <span
-    onClick={() => props.showDetails(personalDetails)}>
-    <Info style={STYLES.iconName} />
-  </span>
+  return (
+    <span
+      onClick={() => props.showDetails(personalDetails)}>
+      <Info style={STYLES.iconName} />
+    </span>
+  )
 }
 
 InfoDetail.propTypes = {

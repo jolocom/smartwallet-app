@@ -31,7 +31,7 @@ export default class WalletComingSoon extends React.Component {
   render() {
     // TODO replace placeholder img
     return (
-      <Container >
+      <div>
         <Block style={STYLES.topBlock}>
           <h1 style={STYLES.issue}>Coming Soon!!!</h1>
         </Block>
@@ -40,7 +40,7 @@ export default class WalletComingSoon extends React.Component {
             {this.props.message}
           </SideNote>
         </Block>
-      </Container>
+      </div>
     )
   }
 }

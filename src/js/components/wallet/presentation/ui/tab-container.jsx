@@ -1,8 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {theme} from 'styles'
-
 const STYLE = {
   position: 'relative',
   display: 'flex',
@@ -10,7 +8,6 @@ const STYLE = {
   alignItems: 'left',
   textAlign: 'left',
   padding: '10px',
-  backgroundColor: theme.jolocom.gray4,
   boxSizing: 'border-box',
   overflowY: 'auto',
   minHeight: '100%'

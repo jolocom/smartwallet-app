@@ -1,6 +1,16 @@
 import React from 'react'
 import Radium from 'radium'
 import WalletComingSoon from './coming-soon'
+import {
+  Container
+} from '../../structure'
+
+const STYLES = {
+  walletContainer: {
+    backgroundColor: 'none'
+  }
+}
+
 @Radium
 export default class WalletMoney extends React.Component {
   static propTypes = {
@@ -9,9 +19,11 @@ export default class WalletMoney extends React.Component {
 
   render() {
     return (
-      <WalletComingSoon
-        message="We're working on bringing your $$$ identity
-        under your control" />
+      <Container style={STYLES.walletContainer}>
+        <WalletComingSoon
+          message="We're working on bringing your $$$ identity
+          under your control" />
+      </Container>
     )
   }
 }
