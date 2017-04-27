@@ -1,4 +1,5 @@
 import React from 'react'
+import Radium from 'radium'
 import { connect } from 'redux/utils'
 
 import { FlatButton, Dialog } from 'material-ui'
@@ -7,6 +8,8 @@ import { FlatButton, Dialog } from 'material-ui'
   props: ['simpleDialog'],
   actions: ['simple-dialog:hideSimpleDialog']
 })
+
+@Radium
 export default class SimpleDialog extends React.Component {
   static propTypes = {
     hideSimpleDialog: React.PropTypes.func,
@@ -15,6 +18,21 @@ export default class SimpleDialog extends React.Component {
 
   _handleOK() {
     this.props.hideSimpleDialog()
+  }
+
+  parseStyle(style) {
+    let localStyle = {...style}
+    if (localStyle === undefined) {
+      return {contentStyle: {}, actionsContainerStyle: {}}
+    }
+    if (localStyle.contentStyle === undefined) {
+      localStyle.contentStyle = {}
+    }
+    if (localStyle.actionsContainerStyle === undefined) {
+      localStyle.actionsContainerStyle = {}
+      return {...localStyle}
+    }
+    return localStyle
   }
 
   render() {
@@ -28,12 +46,15 @@ export default class SimpleDialog extends React.Component {
         onTouchTap={OKHandler}
       />
     ]
-
+    const style = this.parseStyle(this.props.simpleDialog.style)
     return <Dialog
       actions={simpleActions}
       modal={false}
       open={this.props.simpleDialog.visible}
       onRequestClose={this.handleClose}
+      contentStyle={style.contentStyle}
+      actionsContainerStyle={style.actionsContainerStyle}
+      autoScrollBodyContent
     >
       {this.props.simpleDialog.message}
     </Dialog>

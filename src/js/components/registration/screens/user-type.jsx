@@ -1,6 +1,16 @@
 import React from 'react'
 import { connect } from 'redux/utils'
 import Presentation from '../presentation/user-type'
+const STYLES = {
+  dialog: {
+    contentStyle: {
+      textAlign: 'center'
+    },
+    actionsContainerStyle: {
+      textAlign: 'center'
+    }
+  }
+}
 
 @connect({
   props: ['registration'],
@@ -32,7 +42,7 @@ export default class RegistrationUserTypeScreen extends React.Component {
     this.props.goForward()
   }
   _handleWhy = (message) => {
-    this.props.configSimpleDialog(message)
+    this.props.configSimpleDialog(message, 'OK', STYLES.dialog)
     this.props.showSimpleDialog()
   }
 
