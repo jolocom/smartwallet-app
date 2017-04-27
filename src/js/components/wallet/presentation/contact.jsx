@@ -4,19 +4,20 @@ import {
   EditAppBar,
   EditHeader,
   EditListItem,
-  AddNew,
-  TabContainer
+  AddNew
 } from './ui'
 import {
+  Container,
   Content,
   Block
 } from '../../structure'
 import {theme} from 'styles'
 import ContentMail from 'material-ui/svg-icons/content/mail'
 import {
-  List,
-  CircularProgress
+  List
 } from 'material-ui'
+
+import Loading from 'components/common/loading'
 
 const STYLES = {
   title: {
@@ -57,135 +58,170 @@ export default class WalletContact extends React.Component {
     close: React.PropTypes.func.isRequired
   }
 
-  render() {
-    if (this.props.loading === true) {
-      return (
-        <TabContainer>
-          <EditAppBar title="Edit Contact"
-            loading={this.props.loading}
-            onSave={this.props.saveChanges}
-            onClose={this.props.exitWithoutSaving} />
-          <Content>
-            <EditHeader title="Contact" />
-            <List>
-              <CircularProgress style={STYLES.spinner} />
-            </List>
-          </Content>
-        </TabContainer>
-      )
-    }
-    let emailFields = []
+  renderContent() {
+    return (
+      <div>
+        {this.renderFields({
+          key: 'phonenumbers',
+          label: 'Phone Number',
+          errorText: 'Invalid phone number',
+          addText: 'Add phone number',
+          icon: ContentMail
+
+        })}
+        {this.renderFields({
+          key: 'emails',
+          label: 'Email Address',
+          errorText: 'Invalid email address',
+          addText: 'Add another email',
+          icon: ContentMail
+        })}
+      </div>
+    )
+  }
+
+  renderField(i, field) {
+    let {
+      key,
+      label,
+      value,
+      verified,
+      icon,
+      isNew
+    } = field
+
+    const prefix = isNew ? 'newInformation' : 'originalInformation'
+    const id = `${prefix}_${key}_${i}`
+    const name = `${key}[${i}]`
+
+    return (
+      <EditListItem
+        key={id}
+        id={id}
+        icon={i === 0 && icon || null}
+        iconStyle={STYLES.icon}
+        label={label}
+        name={name}
+        value={value}
+        verified={verified}
+        focused={this.props.focused === key}
+        onFocusChange={() => {
+          if (isNew) {
+            this.props.addNewEntry(key)
+          }
+          this.props.onFocusChange(key)
+        }}
+        onChange={(e) => {
+          if (isNew) {
+            this.props.setInformation(key, i, e.target.value)
+          } else {
+            this.props.updateInformation(key, i, e.target.value)
+          }
+        }}
+        onDelete={() => {
+          if (!isNew && verified) {
+            this.props.confirm(
+              'Are you sure you want to delete a verified email?',
+              'Delete', () => {
+                this.props.deleteInformation(prefix, key, i)
+                this.props.close()
+              }
+            )
+          } else {
+            this.props.deleteInformation(prefix, key, i)
+          }
+        }}
+        enableDelete={!isNew}
+        />
+    )
+  }
+
+  renderFields({key, label, icon, errorText, addText}) {
+    let fields = []
+
+    const {originalInformation, newInformation} = this.props.information
+
     // console.log(emailFields)
     if (this.props.loading === false) {
-      emailFields.push(this.props.information.originalInformation.emails
-      .map((email, i) => {
-        if (!email.delete) {
-          return (
-            <Block key={'originalInformation' + 'emails' + i}>
-              <EditListItem
-                id={'originalInformation' + 'emails' + i}
-                icon={ContentMail}
-                iconStyle={STYLES.icon}
-                textLabel="Email Address"
-                textName="email"
-                textValue={email.address}
-                verified={email.verified}
-                errorText={
-                  this.props.showErrors &&
-                  !email.valid ? 'Email not valid' : ''}
-                focused={
-                  this.props.focused === 'originalInformation' + 'emails' + i}
-                onFocusChange={this.props.onFocusChange}
-                onChange={
-                 (e) => this.props.updateInformation('emails', i, e.target.value)} //eslint-disable-line
-                onDelete={() => {
-                  email.verified
-                  ? this.props.confirm(
-                    'Are you sure you want to delete a verified email?',
-                    'Delete', () => {
-                      this.props.deleteInformation('originalInformation',
-                      'emails', i)
-                      this.props.close()
-                    })
-                  : this.props.deleteInformation('originalInformation',
-                  'emails', i)
-                }}
-                enableDelete
-                />
-            </Block>
-          )
-        }
-      }
-      ))
-      emailFields.push(this.props.information.newInformation.emails
-      .map((email, i) => {
-        if (!email.delete) {
-          return (
-            <Block key={'newInformation' + 'emails' + i}>
-              <EditListItem
-                id={'newInformation' + 'emails' + i}
-                icon={ContentMail}
-                iconStyle={STYLES.icon}
-                textLabel="Email Address"
-                textName="email"
-                textValue={email.address}
-                verified={false}
-                errorText={
-                  this.props.showErrors &&
-                  !email.valid &&
-                  !email.blank ? 'Email not valid' : ''}
-                focused={
-                  this.props.focused === 'newInformation' + 'emails' + i}
-                onFocusChange={this.props.onFocusChange}
-                onChange={
-                 (e) => this.props.setInformation(
-                   'emails', i, e.target.value)}
-                onDelete={() => {
-                  this.props.deleteInformation('newInformation', 'emails', i)
-                }}
-                enableDelete={!email.blank}
-                />
-            </Block>
-          )
-        }
-      }
-    ))
-      if (emailFields[0].length === 0 && emailFields[1].length === 0) {
-        emailFields.push(
-          <EditListItem
-            id={'newInformation' + 'emails' + 0}
-            icon={ContentMail}
-            iconStyle={STYLES.icon}
-            textLabel="Email Address"
-            textName="email"
-            textValue=""
-            verified={false}
-            focused={this.props.focused === 'newInformation' + 'emails' + 0}
-            onFocusChange={() => {
-              this.props.addNewEntry('emails')
-              this.props.onFocusChange('newInformation' + 'emails' + 0)
-            }}
-            onChange={
-             (e) => this.props.setInformation(
-               'emails', 0, e.target.value)}
-            onDelete={() => {
-              this.props.deleteInformation('newInformation', 'emails', 0)
-            }} />
+      fields.push(
+        originalInformation[key].map((field, i) => {
+          if (!field.delete) {
+            return this.renderField(i, {
+              key,
+              label,
+              icon,
+              value: field.value,
+              verified: field.verified,
+              errorText,
+              isNew: false
+            })
+          }
+        })
+      )
+
+      fields.push(
+        newInformation[key].map((field, i) => {
+          if (!field.delete) {
+            return this.renderField(i, {
+              key,
+              label,
+              icon,
+              value: field.value,
+              verified: field.verified,
+              errorText,
+              isNew: true
+            })
+          }
+        })
+      )
+
+      if (!fields.length) {
+        fields.push(
+          this.renderField(0, {
+            key,
+            label,
+            value: '',
+            verified: false,
+            errorText,
+            isNew: true
+          })
         )
       } else {
-        emailFields.push(
-          <Block key="addEmailField">
-            <AddNew onClick={() => {
-              this._handleAddNewClick()
-            }}
-              value="Additional Email" />
+        fields.push(
+          <Block key={`add_${key}`}>
+            <AddNew
+              onClick={() => {
+                var length = newInformation[key].length
+                if (length === 0 ||
+                  newInformation[key][length - 1].value !== '') {
+                  this.props.addNewEntry(key)
+                  this.props.onFocusChange(
+                    `newInformation_${key}`,
+                     newInformation[key].length
+                  )
+                }
+              }}
+              value={addText}
+            />
           </Block>
         )
       }
     }
 
+    return fields
+  }
+
+  render() {
+    let content
+
+    if (this.props.loading) {
+      content = <Loading />
+    } else {
+      content = this.renderContent()
+    }
+
     return (
-      <TabContainer>
+      <div>
         <EditAppBar title="Edit Contact"
           loading={this.props.loading}
           onSave={this.props.saveChanges}
@@ -193,21 +229,10 @@ export default class WalletContact extends React.Component {
         <Content>
           <EditHeader title="Contact" />
           <List>
-            {emailFields}
+            {content}
           </List>
         </Content>
-      </TabContainer>
+      </div>
     )
-  }
-  _handleAddNewClick = () => {
-    var length = this.props.information.newInformation.emails.length
-    if (length === 0 ||
-      this.props.information.newInformation.emails[length - 1].address !==
-         '') {
-      this.props.addNewEntry('emails')
-      this.props.onFocusChange(
-        'newInformation' + 'emails' +
-         this.props.information.newInformation.emails.length)
-    }
   }
 }
