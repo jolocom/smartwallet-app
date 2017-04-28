@@ -2,7 +2,7 @@ import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as login from './login'
 // import * as router from './router'
-// import {stub, withStubs} from '../../../../test/utils'
+import {stub} from '../../../../test/utils'
 const reducer = require('./login').default
 
 describe('Wallet login Redux module', function() {
@@ -145,6 +145,23 @@ describe('Wallet login Redux module', function() {
         .to.equal('Your Pin is Not correct!')
         expect(newState.toJS().pin.valid).to.be.false
         expect(newState.toJS().pin.failed).to.be.true
+      })
+    })
+    describe('goToLogin', () => {
+      it('should redirect the user to the login screen', function() {
+        const dispatch = stub()
+        const thunk = login.actions.goToLogin()
+        thunk(dispatch)
+        expect(dispatch.called).to.be.true
+        expect(dispatch.calls).to.deep.equal([{
+          args: [{
+            payload: {
+              args: ['/login/expert'],
+              method: 'push'
+            },
+            type: '@@router/CALL_HISTORY_METHOD'
+          }]
+        }])
       })
     })
     describe('#resetPassphrase', () => {

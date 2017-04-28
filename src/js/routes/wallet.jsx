@@ -33,6 +33,9 @@ import WalletMoneyScreen from 'components/wallet/screens/money'
 import WalletIdentityScreen from 'components/wallet/screens/identity'
 import WalletContactScreen from 'components/wallet/screens/contact'
 
+import EmailConfirmationScreen from
+'components/email-confirmation/screens/email-confirmation'
+
 import ExpertLoginPassphraseScreen from 'components/login/screens/phrase'
 import ExpertLoginPinScreen from 'components/login/screens/pin'
 
@@ -82,6 +85,7 @@ function getRoutes() {
         component={WalletIdentityScreen} />
       <Route path="money"
         component={WalletMoneyScreen} />
+
     </Route>
 
     <Route path="profile" component={Profile} />
@@ -92,6 +96,7 @@ function getRoutes() {
     <Route path="login" component={Login} />
     <Route path="/login/expert" component={ExpertLoginPassphraseScreen} />
     <Route path="/login/expert/pin-entry" component={ExpertLoginPinScreen} />
+    <Route path="verify-email" component={EmailConfirmationScreen} />
   </Route>)
 }
 

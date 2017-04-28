@@ -93,6 +93,13 @@ export default class WalletAgent {
       }, 2000)
     })
   }
+  confirmEmail(code) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
 }
 
 export class Wallet {
