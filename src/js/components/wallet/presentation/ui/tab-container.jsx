@@ -7,7 +7,7 @@ const STYLE = {
   flexDirection: 'column',
   alignItems: 'left',
   textAlign: 'left',
-  padding: '10px',
+  padding: '0px',
   boxSizing: 'border-box',
   overflowY: 'auto',
   minHeight: '100%'
