@@ -2,10 +2,11 @@ import React from 'react'
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
-import CircularProgress from 'material-ui/CircularProgress'
-import {RaisedButton} from 'material-ui'
+import {RaisedButton, FlatButton} from 'material-ui'
 
-import {Container, Header, Content, SideNote, Footer} from './ui'
+import {Container, Header, Content, Block, Footer, SideNote
+} from '../../structure'
+import {theme} from 'styles'
 
 const STYLES = {
   heading: {
@@ -30,18 +31,27 @@ const STYLES = {
     margin: '20px',
     textAlign: 'center'
   },
-  spinner: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%'
-  }
+  embeddedButton: {
+    color: '#942f51',
+    minWidth: '0px',
+    paddingLeft: '5px',
+    paddingRight: '5px'
+  },
+  textField: {
+    marginTop: '10%',
+    alignItems: 'center'
+  },
+  backgroundColor: theme.jolocom.gray4
 }
 
 const NameEntry = (props) => {
-  let spinner = null
-  if (props.checking) {
-    spinner = <CircularProgress style={STYLES.spinner} />
-  }
+  var webIdmessage = (
+    <div > Your WebID is your identity on the web.
+      <br />
+      <br />
+      It is the link to your secured personal data and the
+      verifications of it that are stored on the blockchain
+    </div>)
   return (
     <Container>
       <Header title="Let's get started! Please type in a username." />
@@ -50,26 +60,31 @@ const NameEntry = (props) => {
           It needs to be unique, but choose wisely,
           <br />
           It will be part of your
-          <span style={{color: '#942f51'}}> WebID</span> and it might<br />
-          end up on your business card one day.
+          <FlatButton style={STYLES.embeddedButton}
+            hoverColor={STYLES.backgroundColor}
+            onClick={() => {
+              props.handleDialog(webIdmessage)
+            }}> WebID </FlatButton>
+          and it might
+          end up on your buiseness card one day.
         </SideNote>
-        <TextField
-          style={{'marginTop': '10%'}}
-          defaultValue={props.value}
-          floatingLabelText="Unique Username"
-          floatingLabelStyle={STYLES.floatingLabel}
-          inputStyle={STYLES.inputStyle}
-          onChange={(e) => props.onChange(e.target.value)}
-          errorText={props.errorMsg}
-        />
-        {spinner}
+        <Block style={STYLES.textField}>
+          <TextField
+            defaultValue={props.value}
+            floatingLabelText="Unique Username"
+            floatingLabelStyle={STYLES.floatingLabel}
+            inputStyle={STYLES.inputStyle}
+            onChange={(e) => props.onChange(e.target.value)}
+            errorText={props.errorMsg}
+          />
+        </Block>
       </Content>
       <Footer>
         <RaisedButton
           label="NEXT STEP"
           secondary
           onClick={props.onSubmit}
-          disabled={!props.alphaNum}
+          disabled={false}
         />
       </Footer>
     </Container>
@@ -78,11 +93,11 @@ const NameEntry = (props) => {
 
 NameEntry.propTypes = {
   value: React.PropTypes.string.isRequired,
-  alphaNum: React.PropTypes.bool.isRequired,
+  valid: React.PropTypes.bool.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
-  checking: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired
+  onSubmit: React.PropTypes.func.isRequired,
+  handleDialog: React.PropTypes.func.isRequired
 }
 
 export default Radium(NameEntry)

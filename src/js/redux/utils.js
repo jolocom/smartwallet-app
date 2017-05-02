@@ -41,7 +41,7 @@ export function connect(params, wantedActions = []) {
           '" in Redux connect() wrapper')
       }
 
-      if (pair[1].toJS) {
+      if (pair[1] !== null && pair[1].toJS) {
         pair[1] = pair[1].toJS()
       }
 

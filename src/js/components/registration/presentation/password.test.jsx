@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Password from './name-entry'
+import Password from './password'
 
 describe('(Component) Password', function() {
   it('should render properly the first time', function() {

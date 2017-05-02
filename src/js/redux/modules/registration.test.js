@@ -19,11 +19,23 @@ describe('Wallet registration Redux module', function() {
         const thunk = registration.goForward()
 
         withStubs([
-          [registration.actions, 'registerWallet', {returns: 'register'}]],
+          [registration.actions, 'registerWallet', {returns: 'register'}],
+          [router, 'pushRoute', {returns: 'push'}],
+          [registration.helpers, '_getNextURLFromState', {returns: '/next/'}]],
           () => {
             thunk(dispatch, getState)
-            expect(dispatch.calledWithArgs)
-              .to.deep.equal(['register'])
+            expect(dispatch.calls)
+              .to.deep.equal([{
+                args: [
+                  'register'
+                ]
+              },
+              {
+                args: [
+                  'push'
+                ]
+              }
+              ])
           }
         )
       })
@@ -78,13 +90,12 @@ describe('Wallet registration Redux module', function() {
             registration: {[key]: {valid: false}}
           }), path)).to.equal(false)
         }
-        test('/registration/', 'username')
-        test('/registration/user-type/', 'userType')
-        test('/registration/entropy/', 'entropy')
-        test('/registration/write-phrase/', 'passphrase')
-        test('/registration/email/', 'email')
-        test('/registration/password/', 'password')
-        test('/registration/pin/', 'pin')
+        test('/registration', 'username')
+        test('/registration/user-type', 'userType')
+        test('/registration/write-phrase', 'passphrase')
+        test('/registration/email', 'email')
+        test('/registration/password', 'password')
+        test('/registration/pin', 'pin')
       })
     })
   })
@@ -116,7 +127,7 @@ describe('Wallet registration Redux module', function() {
     it('should return null if we cannot continue', () => {
       expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
-          locationBeforeTransitions: {pathname: '/registration/user-type/'}
+          locationBeforeTransitions: {pathname: '/registration/user-type'}
         },
         registration: Immutable.fromJS({userType: {valid: false}})
       }))).to.equal(null)
@@ -146,7 +157,33 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
-
+  it('should return the correct next page to switch from layman to expert',
+  () => {
+    expect(helpers._getNextURLFromState(new Immutable.Map({
+      routing: {
+        locationBeforeTransitions: {pathname: '/registration/phrase-info'}
+      },
+      registration: Immutable.fromJS({userType: {
+        valid: true, value: 'expert'
+      }})
+    }))).to.equal(
+      '/registration/write-phrase'
+    )
+  })
+  it('should return the correct next page to switch from expert to layment',
+    () => {
+      expect(helpers._getNextURLFromState(new Immutable.Map({
+        routing: {
+          locationBeforeTransitions: {pathname: '/registration/write-phrase'}
+        },
+        registration: Immutable.fromJS({userType: {
+          valid: true, value: 'layman'
+        }})
+      }))).to.equal(
+        '/registration/phrase-info'
+      )
+    }
+  )
   describe('_isComplete()', function() {
     const test = ({invalid, result, userType = null}) => {
       invalid = new Immutable.Set(invalid)

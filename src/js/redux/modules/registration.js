@@ -1,12 +1,9 @@
 import * as _ from 'lodash'
 import Immutable from 'immutable'
-import {makeActions} from './'
+import { makeActions } from './'
 import * as router from './router'
-import {
-  isPasswordValid,
-  checkPassStrength,
-  passwordCharacters
-} from '../../lib/password-util'
+import { isPasswordValid, checkPassStrength,
+  passwordCharacters } from '../../lib/password-util'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',
@@ -29,7 +26,7 @@ const CHECK_BEFORE_SWITCHING = {
   '/registration/pin/': 'pin'
 }
 
-const actions = (module.exports = makeActions('registration', {
+const actions = module.exports = makeActions('registration', {
   goForward: {
     expectedParams: [],
     creator: () => {
@@ -52,9 +49,11 @@ const actions = (module.exports = makeActions('registration', {
   },
   addEntropyFromDeltas: {
     expectedParams: ['x', 'y'],
-    creator: params => {
+    creator: (params) => {
       return (dispatch, getState, {backend, services}) => {
-        if (getState().getIn(['registration', 'passphrase', 'phrase'])) {
+        if (getState().getIn(
+          ['registration', 'passphrase', 'phrase']
+        )) {
           return
         }
 
@@ -65,20 +64,16 @@ const actions = (module.exports = makeActions('registration', {
           entropy.addFromDelta(params.z)
         }
 
-        dispatch(
-          actions.setEntropyStatus.buildAction({
-            sufficientEntropy: entropy.isReady(),
-            progress: entropy.getProgress()
-          })
-        )
+        dispatch(actions.setEntropyStatus.buildAction({
+          sufficientEntropy: entropy.getProgress() >= 1,
+          progress: entropy.getProgress()
+        }))
 
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
-          dispatch(
-            actions.setPassphrase(
-              backend.wallet.generateSeedPhrase(randomString)
-            )
-          )
+          dispatch(actions.setPassphrase(
+            backend.wallet.generateSeedPhrase(randomString)
+          ))
         }
       }
     }
@@ -155,46 +150,42 @@ const actions = (module.exports = makeActions('registration', {
   checkUsername: {
     expectedParams: ['username'],
     async: true,
-    creator: params => {
+    creator: (params) => {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
-        dispatch(
-          actions.checkUsername.buildAction(params, backend => {
-            return backend.accounts
-              .checkUsername(state.username.value)
+        dispatch(actions.checkUsername.buildAction(params, (backend) => {
+          return backend.accounts
+            .checkUsername(state.username.value)
               .then(() => dispatch(actions.goForward()))
-          })
-        )
+        }))
       }
     }
   },
   registerWallet: {
     expectedParams: [],
     async: true,
-    creator: params => {
+    creator: (params) => {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
-        dispatch(
-          actions.registerWallet.buildAction(params, backend => {
-            const userType = state.userType.value
-            if (userType === 'expert') {
-              return backend.wallet.registerWithSeedPhrase({
-                userName: state.username.value,
-                seedPhrase: state.passphrase.phrase
-              })
-            } else {
-              return backend.wallet.registerWithCredentials({
-                userName: state.username.value,
-                email: state.email.value,
-                password: state.password.value
-              })
-            }
-          })
-        )
+        dispatch(actions.registerWallet.buildAction(params, (backend) => {
+          const userType = state.userType.value
+          if (userType === 'expert') {
+            return backend.wallet.registerWithSeedPhrase({
+              userName: state.username.value,
+              seedPhrase: state.passphrase.phrase
+            })
+          } else {
+            return backend.wallet.registerWithCredentials({
+              userName: state.username.value,
+              email: state.email.value,
+              password: state.password.value
+            })
+          }
+        }))
       }
     }
   }
-}))
+})
 
 const initialState = Immutable.fromJS({
   username: {
@@ -205,6 +196,7 @@ const initialState = Immutable.fromJS({
     valid: false,
     alphaNum: false
   },
+  Repuation: 0,
   email: {
     value: '',
     valid: false,
@@ -271,15 +263,18 @@ module.exports.default = (state = initialState, action = {}) => {
       const characters = passwordCharacters(action.value)
       const passwordStrength = checkPassStrength(action.value)
 
-      return state.mergeIn(['password'], {
-        value: action.value,
-        repeated: '',
-        valid: validPassword,
-        hasLowerCase: characters.lowerCase,
-        hasUpperCase: characters.upperCase,
-        hasDigit: characters.digit,
-        strength: passwordStrength
-      })
+      return state.mergeIn(
+        ['password'],
+        {
+          value: action.value,
+          repeated: '',
+          valid: validPassword,
+          hasLowerCase: characters.lowerCase,
+          hasUpperCase: characters.upperCase,
+          hasDigit: characters.digit,
+          strength: passwordStrength
+        }
+      )
     case actions.setRepeatedPassword.id:
       const passwordValue = state.get('password').get('value')
       const validRepeatedValue = isPasswordValid(action.value, passwordValue)
@@ -376,7 +371,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         username: {
           value: action.value,
-          alphaNum: /^[a-z0-9]+$/i.test(action.value),
+          alphaNum: (/^[a-z0-9]+$/i.test(action.value)),
           errorMsg: ''
         }
       })
@@ -407,10 +402,10 @@ module.exports.default = (state = initialState, action = {}) => {
   }
 }
 
-const helpers = (module.exports.helpers = {})
-helpers._isComplete = state => {
-  const isFieldValid = fieldName => state.getIn([fieldName, 'valid'])
-  const areFieldsValid = fields => _.every(fields, isFieldValid)
+const helpers = module.exports.helpers = {}
+helpers._isComplete = (state) => {
+  const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
+  const areFieldsValid = (fields) => _.every(fields, isFieldValid)
 
   let complete = areFieldsValid(['username', 'userType', 'pin'])
   if (state.getIn(['userType', 'value']) === 'layman') {
@@ -422,9 +417,14 @@ helpers._isComplete = state => {
   return complete
 }
 
-helpers._getNextURLFromState = state => {
+helpers._getNextURLFromState = (state) => {
   const currentPath = state.get('routing').locationBeforeTransitions.pathname
+  const userType = state.getIn(['registration', 'userType', 'value'])
   if (!helpers._canGoForward(state, currentPath)) {
+    if ((currentPath === '/registration/write-phrase') &&
+      (userType === 'layman')) {
+      return '/registration/phrase-info'
+    }
     return null
   }
 
@@ -435,15 +435,11 @@ helpers._getNextURLFromState = state => {
 helpers._getNextURL = (currentPath, userType) => {
   if (currentPath === '/registration/user-type') {
     return userType === 'expert'
-      ? '/registration/write-phrase'
-      : '/registration/phrase-info'
-  } else if (
-    currentPath === '/registration/write-phrase' && userType === 'layman'
-  ) {
-    return '/registration/phrase-info'
-  } else if (
-    currentPath === '/registration/phrase-info' && userType === 'expert'
-  ) {
+              ? '/registration/write-phrase'
+              : '/registration/phrase-info'
+  }
+  if ((currentPath === '/registration/phrase-info') &&
+    (userType === 'expert')) {
     return '/registration/write-phrase'
   }
 
