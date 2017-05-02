@@ -3,10 +3,12 @@ import { makeActions } from '../'
 import * as router from '../router'
 
 import {
-  verifyFields,
-  newField,
-  updateField,
-  saveFields
+initiate,
+verify,
+add,
+update,
+submitChanges,
+set
 } from '../../../lib/edit-contact-util'
 
 const actions = module.exports = makeActions('wallet/contact', {
@@ -16,26 +18,11 @@ const actions = module.exports = makeActions('wallet/contact', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.validate())
-        const state = getState().getIn(['wallet', 'contact']).toJS()
-        if (!state.showErrors) {
-          dispatch(actions.saveChanges.buildAction(params, (backend) => {
-            const emailOperations = {
-              set: backend.wallet.setEmail,
-              delete: backend.wallet.deleteEmail,
-              update: backend.wallet.updateEmail
-            }
-            const emailKey = {field: 'emails', attribute: ['address']}
-            const phoneOperations = {
-              set: backend.wallet.setPhone,
-              delete: backend.wallet.deletePhone,
-              update: backend.wallet.updatePhone
-            }
-            const phoneKey = {field: 'emails', attribute: ['address']}
-            let promises = []
-            saveFields(state.information, emailOperations, emailKey, promises)
-            saveFields(state.information, phoneOperations, phoneKey, promises)
-            return Promise.all(promises)
-          })).then(() => dispatch(router.pushRoute('/wallet/identity')))
+        const {information, showErrors} = getState().toJS().wallet.contact
+        if (!showErrors) {
+          dispatch(actions.saveChanges.buildAction(params,
+            backend => submitChanges(backend, information)
+          )).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }
       }
     }
@@ -80,9 +67,13 @@ const actions = module.exports = makeActions('wallet/contact', {
 const initialState = Immutable.fromJS({
   information: {
     newInformation: {
-      telNums: [],
+      phoneNumbers: [],
       emails: []
     }
+  },
+  originalInformation: {
+    phoneNumbers: [],
+    emails: []
   },
   loading: true,
   showErrors: false
@@ -100,58 +91,23 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.setIn(['loading'], true)
 
     case actions.getAccountInformation.id_success:
-      return Immutable.fromJS({
-        loading: false,
-        showErrors: false,
-        information: {
-          newInformation: {
-            emails: [],
-            telNums: []
-          },
-          originalInformation: {
-            emails: action.result.emails.map((address) => {
-              return {...address, delete: false, update: false, valid: true}
-            }),
-            telNums: action.result.telNums.map((telNums) => {
-              return {...telNums, delete: false, update: false, valid: true}
-            })
-          }
-        }
-      })
+      return initiate(action.result)
 
     case actions.setInformation.id:
-      if (action.field === 'emails') {
-        return state.mergeIn(
-        ['information', 'newInformation', 'emails', action.index], {
-          address: action.value,
-          valid: /^([\w.]+)@([\w.]+)\.(\w+)/.test(action.value),
-          blank: action.value === ''
-        })
-      }
-      if (action.field === 'telNums') {
-        return state.mergeIn(
-        ['information', 'newInformation', 'telNums', action.index], {
-          num: action.value.num,
-          type: action.value.type,
-          valid: /^([\d.]+)$/.test(action.value.num),
-          blank: action.value.num === ''
-        })
-      }
-      return state
+      return set(state, action)
 
     case actions.deleteInformation.id:
       return state.mergeIn(
-        ['information', action.age, action.field, action.index], {delete: true}
-      )
+        ['information', action.age, action.field, action.index], {delete: true})
 
     case actions.updateInformation.id:
-      return updateField(state, action)
+      return update(state, action)
 
     case actions.addNewEntry.id:
-      return newField(state, action)
+      return add(state, action)
 
     case actions.validate.id:
-      return verifyFields(state, action)
+      return verify(state)
 
     default:
       return state

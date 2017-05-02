@@ -1,11 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {PlusMenu, StaticListItem, TabContainer, HalfScreenContainer} from './ui'
-import {Content, Block} from '../../structure'
-import Info from 'material-ui/svg-icons/action/info'
-import {theme} from 'styles'
-import CommunicationCall from 'material-ui/svg-icons/communication/call'
-import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+
 import {
   TextField,
   Divider,
@@ -13,6 +8,19 @@ import {
   FlatButton,
   CircularProgress
 } from 'material-ui'
+
+import CommunicationCall from 'material-ui/svg-icons/communication/call'
+import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import Info from 'material-ui/svg-icons/action/info'
+
+import {theme} from 'styles'
+import {Content, Block} from '../../structure'
+import {
+  PlusMenu,
+  StaticListItem,
+  TabContainer,
+  HalfScreenContainer
+} from './ui'
 
 const STYLES = {
   listItem: {
@@ -74,112 +82,6 @@ const STYLES = {
   }
 }
 
-const PhoneList = (props) => {
-  let display = []
-  if (!props.phone[0].number) {
-    return null
-  }
-  for (let i = 0; i < props.phone.length; i++) {
-    display.push(<StaticListItem
-      key={i}
-      verified={props.phone[i].verified}
-      textValue={props.phone[i].number}
-      textLabel="Phone Number"
-      icon={CommunicationCall}
-      onVerify={() => props.confirm(iconPhoneMessage, STYLES.dialog)}
-      secondaryTextValue={props.phone[i].type} />)
-  }
-  return <List disabled>
-   {display}
-  </List>
-}
-
-PhoneList.propTypes = {
-  phone: React.PropTypes.array.isRequired,
-  confirm: React.PropTypes.func.isRequired
-}
-
-const EmailList = (props) => {
-  let display = []
-  if (!props.email[0].address) {
-    return null
-  }
-  for (let i = 0; i < props.email.length; i++) {
-    display.push(
-      <div key={i}>
-        <StaticListItem
-          verified={props.email[i].verified}
-          textValue={props.email[i].address}
-          textLabel="Email"
-          onVerify={() => props.confirm(iconEmailMessage, STYLES.dialog)}
-          icon={CommunicationEmail}
-        />
-        {!props.email[i].verified
-          ? <FlatButton
-            label="Request Verification"
-            secondary
-            style={STYLES.requestBtn}
-            onClick={() => props.verify(buttonEmailMessage,
-              'OK',
-              STYLES.simpleDialog
-            )} />
-          : null}
-      </div>)
-  }
-  return <List disabled>
-            {display}
-  </List>
-}
-
-EmailList.propTypes = {
-  email: React.PropTypes.array.isRequired,
-  verify: React.PropTypes.func.isRequired,
-  confirm: React.PropTypes.func.isRequired
-}
-
-const iconPhoneMessage = (
-  <div>
-    <b>Verification</b> <br />
-    <br />
-    <span>
-      Your number hasn't been verified yet. For verification we will
-      send you a sms with an authentication code to this number. You will need
-      enter that code here.
-    </span>
-  </div>
-)
-
-const InfoDetail = (props) => {
-  const personalDetails = <span>
-    <TextField
-      id="usernameField"
-      value={props.username}
-      errorText="is your username"
-      errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center'}}
-      fullWidth
-    />
-    <br />
-    <TextField
-      id="webIdField"
-      value={props.webId}
-      errorText="is your WebID"
-      errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center'}}
-      fullWidth
-    />
-  </span>
-
-  return <span
-    onClick={() => props.showDetails(personalDetails)}>
-    <Info style={STYLES.iconName} />
-  </span>
-}
-
-InfoDetail.propTypes = {
-  showDetails: React.PropTypes.func.isRequired
-}
-
 const iconEmailMessage = (
   <div>
     <b>Verification</b> <br />
@@ -201,6 +103,111 @@ const buttonEmailMessage = (
   </div>
 )
 
+const iconPhoneMessage = (
+  <div>
+    <b>Verification</b> <br />
+    <br />
+    <span>
+      Your number hasn't been verified yet. For verification we will
+      send you a sms with an authentication code to this number. You will need
+      enter that code here.
+    </span>
+  </div>
+)
+
+const PhoneList = (props) => {
+  let display = []
+  let {phone, confirm} = props
+  if (!phone[0].number) {
+    return null
+  }
+  display.push(phone.map((field, index) => <StaticListItem
+    key={index}
+    verified={field.verified}
+    textValue={field.number}
+    textLabel="Phone Number"
+    icon={CommunicationCall}
+    onVerify={() => confirm(iconPhoneMessage, STYLES.dialog)}
+    secondaryTextValue={field.type} />
+  ))
+  return <List disabled>
+    {display}
+  </List>
+}
+
+PhoneList.propTypes = {
+  phone: React.PropTypes.array.isRequired,
+  confirm: React.PropTypes.func.isRequired
+}
+
+const EmailList = (props) => {
+  let display = []
+  let {email, verify, confirm} = props
+  if (!props.email[0].address) {
+    return null
+  }
+  display.push(email.map((field, index) => <div key={index}>
+    <StaticListItem
+      verified={field.verified}
+      textValue={field.address}
+      textLabel="Email"
+      onVerify={() => confirm(iconEmailMessage, STYLES.dialog)}
+      icon={CommunicationEmail}
+    />
+    {!field.verified
+      ? <FlatButton
+        label="Request Verification"
+        secondary
+        style={STYLES.requestBtn}
+        onClick={() => verify(buttonEmailMessage, 'OK', STYLES.simpleDialog)} />
+    : null}
+  </div>
+  ))
+  return <List disabled>
+            {display}
+  </List>
+}
+
+EmailList.propTypes = {
+  email: React.PropTypes.array.isRequired,
+  verify: React.PropTypes.func.isRequired,
+  confirm: React.PropTypes.func.isRequired
+}
+
+const InfoDetail = (props) => {
+  let {username, webId, showDetails} = props
+  const personalDetails = <span>
+    <TextField
+      id="usernameField"
+      value={username}
+      errorText="is your username"
+      errorStyle={STYLES.floatingLabel}
+      inputStyle={{textAlign: 'center'}}
+      fullWidth
+    />
+    <br />
+    <TextField
+      id="webIdField"
+      value={webId}
+      errorText="is your WebID"
+      errorStyle={STYLES.floatingLabel}
+      inputStyle={{textAlign: 'center'}}
+      fullWidth
+    />
+  </span>
+
+  return <span
+    onClick={() => showDetails(personalDetails)}>
+    <Info style={STYLES.iconName} />
+  </span>
+}
+
+InfoDetail.propTypes = {
+  showDetails: React.PropTypes.func.isRequired,
+  username: React.PropTypes.string.isRequired,
+  webId: React.PropTypes.string.isRequired
+}
+
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
@@ -219,7 +226,19 @@ export default class WalletIdentity extends React.Component {
   }
 
   render() {
-    if (!this.props.isLoaded) {
+    let {
+      username,
+      passport,
+      isLoaded,
+      webId,
+      contact,
+      goToContactManagement,
+      goToPassportManagement,
+      goToDrivingLicenceManagement,
+      confirm,
+      verify
+    } = this.props
+    if (!isLoaded) {
       return <CircularProgress style={STYLES.spinner} />
     }
     return (
@@ -229,13 +248,13 @@ export default class WalletIdentity extends React.Component {
             <Block>
               <List>
                 <ListItem key={1} disabled rightIcon={<InfoDetail
-                  showDetails={(details) => this.props.verify(
+                  showDetails={(details) => verify(
                     details,
                     'OK',
                     STYLES.simpleDialog
                   )}
-                  webId={this.props.webId}
-                  username={this.props.username.value} />}
+                  webId={webId}
+                  username={username.value} />}
                   style={STYLES.listItem}>
                   <TextField
                     floatingLabelText="Name"
@@ -243,7 +262,7 @@ export default class WalletIdentity extends React.Component {
                     floatingLabelStyle={STYLES.labelName}
                     underlineShow={false}
                     floatingLabelFixed
-                    value={this.props.username.value} />
+                    value={username.value} />
                 </ListItem>
                 <Divider style={STYLES.divider} />
               </List>
@@ -252,34 +271,34 @@ export default class WalletIdentity extends React.Component {
               <PlusMenu
                 name="Contact"
                 choice={
-                  !(this.props.contact.email[0].address === '' &&
-                  this.props.contact.phone[0].number === '')
+                  !(contact.email[0].address === '' &&
+                  contact.phone[0].number === '')
                 }
-                goToManagement={this.props.goToContactManagement}
+                goToManagement={goToContactManagement}
               />
             </Block>
             <Block>
               <PhoneList
-                phone={this.props.contact.phone}
-                confirm={this.props.confirm}
-                verify={this.props.verify} />
+                phone={contact.phone}
+                confirm={confirm}
+                verify={verify} />
               <EmailList
-                email={this.props.contact.email}
-                confirm={this.props.confirm}
-                verify={this.props.verify} />
+                email={contact.email}
+                confirm={confirm}
+                verify={verify} />
             </Block>
             <Block>
               <PlusMenu
                 name="Passport"
-                choice={this.props.passport.number}
-                goToManagement={this.props.goToPassportManagement}
+                choice={passport.number}
+                goToManagement={goToPassportManagement}
               />
             </Block>
             <Block>
               <PlusMenu
                 name="Driving License"
                 choice={false}
-                goToManagement={this.props.goToDrivingLicenceManagement}
+                goToManagement={goToDrivingLicenceManagement}
               />
             </Block>
           </Content>

@@ -62,7 +62,7 @@ export default class WalletAgent {
           emails: [{address: 'address1@example.com', verified: true},
             {address: 'address2@example.com', verified: false}],
 
-          telNums: [{num: '+4917912345678', type: 'work', verified: true},
+          phoneNumbers: [{num: '+4917912345678', type: 'work', verified: true},
             {num: '+4917923456789', type: 'personal', verified: false}]
         }
         resolve(information)
@@ -94,7 +94,7 @@ export default class WalletAgent {
     })
   }
 
-  deletePhone(email) {
+  deletePhone(phone) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve()
@@ -102,7 +102,7 @@ export default class WalletAgent {
     })
   }
 
-  updatePhone(email) {
+  updatePhone(phone) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve()
@@ -110,7 +110,7 @@ export default class WalletAgent {
     })
   }
 
-  setPhone(email) {
+  setPhone(phone) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve()
