@@ -1,11 +1,10 @@
-import rdf from 'rdflib'
-import util from 'lib/util'
-import HTTPAgent from 'lib/agents/http'
-import {PRED} from 'lib/namespaces'
+import SolidWalletAgent from 'lib/agents/solid-wallet'
+import WebIDAgent from 'lib/agents/webid'
 
 export default class WalletAgent {
   constructor() {
-    this.http = new HTTPAgent({proxy: true})
+    this.webid = new WebIDAgent()
+    this.solid = new SolidWalletAgent(this.webid.getWebId())
   }
 
   generateSeedPhrase(randomString) {
@@ -79,37 +78,16 @@ export default class WalletAgent {
     })
   }
 
-  deleteEmail(email) {
-    return new Promise((resolve, reject) => {
-      resolve()
-    })
+  deleteEntry(type, email) {
+    return this.solid.deleteEntry(type, email)
+  }
+  updateEntry(type, email) {
+    return this.solid.updateEntry(type, email)
+  }
+  setEntry(type, email) {
+    return this.solid.setEntry(type, email)
   }
 
-  updateEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  setEmail(webId, email) {
-    // TODO Abstract to rdf helper
-    const g = rdf.graph() 
-    const webIdUri = rdf.sym(webId)
-    const rndId = this._genAtrId()
-    const bNode = rdf.blankNode(rndId)
-    const seeAlsoFileUri = `${util.getProfileFolderUri(webId)}/email${rndId}`
-    // TODO METADATA TO LITERALS?
-    g.add(webIdUri, PRED.email, bNode)
-    g.add(bNode, PRED.identifier, rdf.lit(rndId))
-    g.add(bNode, PRED.seeAlso, rdf.sym(seeAlsoFileUri))
-    return this.http.patch(webId, [], g.statements)
-  }
-
-  _genAtrId() {
-    return util.randomString(3)
-  }
 }
 
 export class Wallet {
