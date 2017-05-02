@@ -17,7 +17,7 @@ const actions = module.exports = makeActions('wallet/identity', {
         const state = getState().get('login').toJS()
         dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
           return backend.wallet
-            .checkPassphrase({passphrase: state.passphrase.value})
+            .loginWithSeedPhrase('random', state.passphrase.value)
             .then(() => dispatch(router.pushRoute('/login/expert/pin-entry')))
         }))
       }
