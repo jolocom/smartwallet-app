@@ -12,8 +12,9 @@ import IdentityContractLookup
 import CONFIG from 'lib/blockchain/config'
 import WalletCrypto from 'lib/blockchain/wallet-crypto'
 
+// -----------------------------------------------------------------------------
 // WORKARROUND
-// TODO: migrate to webpack 2
+// TODO: migrate to webpack 2 to remove workarround
 // https://github.com/ConsenSys/eth-lightwallet/issues/102
 // start
 import crypto from 'crypto'
@@ -25,25 +26,43 @@ crypto.createHash = function createHash(alg) {
   return sourceCreateHash(alg)
 }
 // end
-// -----------------------------------------------
+// ----------------------------------------------------------------------------
 
 export default class SmartWallet {
   constructor() {
     this.gethHost = CONFIG.GETH_HOST
     this.lookupContractAddress = CONFIG.LOOKUP_CONTRACT_ADDRESS
 
-    this.globalKeystore = null
     this.web3 = null
     this.password = ''
-    this.mainAddress = '0x'
+
+    // KEYS
+    this.globalKeystore = null
     this.webIDPrivateKey = undefined
     this.encryptionKeys = {}
-    this.walletCrypto = new WalletCrypto()
 
-    // smart contract
+    // ADDRESSES
     this.identityAddress = '0x'
+    this.mainAddress = '0x'
+
+    // SMART CONTRACTS
+    this.identityContract = undefined
+    this.lookupContract = undefined
+
+    this.walletCrypto = new WalletCrypto()
     this.provider = null
     this.filter = null
+  }
+
+  createInstanceLookupContract(address) {
+    this.lookupContract = this.web3.eth
+      .contract(IdentityContractLookup.abi)
+      .at(address)
+  }
+  createInstanceIdentityContract(address) {
+    this.identityContract = this.web3.eth
+      .contract(IdentityContract.abi)
+      .at(address)
   }
 
   setWebIDPrivateKey(webIDprivateKey) {
@@ -51,6 +70,10 @@ export default class SmartWallet {
   }
   getWebIDPrivateKey() {
     return this.webIDPrivateKey
+  }
+
+  addAttributeHashToIdentity(attribute) {
+    let hash = this.walletCrypto.sha256(attribute)
   }
 
   createDigitalIdentity(userName, password) {
@@ -68,6 +91,23 @@ export default class SmartWallet {
       )
     })
   }
+
+  getIdentityAddressFromLookupContract() {
+    let contract = this.web3.eth
+      .contract(IdentityContractLookup.abi)
+      .at(this.lookupContractAddress)
+
+    return new Promise((resolve, reject) => {
+      contract.getIdentityAddress(
+        '0x' + this.mainAddress,
+        function(err, result) {
+          console.log('SmartWallet: getIdentityAddress Call')
+          resolve(result)
+        }
+      )
+    })
+  }
+
   getEncryptionKeys() {
     return this.encryptionKeys
   }
@@ -89,23 +129,13 @@ export default class SmartWallet {
         {
           password: password,
           seedPhrase: seedPhrase
-          // seedPhrase: seedPhrase, // Optionally provide a 12-word seed phrase
-          // salt: fixture.salt,     // Optionally provide a salt.
-          // A unique salt will be generated otherwise.
-          // hdPathString: hdPath    // Optional custom HD Path String
         },
         function(err, ks) {
-          // Some methods will require providing the `pwDerivedKey`,
-          // Allowing you to only decrypt private keys on an as-needed basis.
-          // You can generate that value with this convenient method:
-
           ks.keyFromPassword(
             password,
             function(err, pwDerivedKey) {
               if (err) throw err
 
-              // generate two new address/private key pairs
-              // the corresponding private keys are also encrypted
               ks.generateNewAddress(pwDerivedKey, 2)
               let addresses = ks.getAddresses()
 
@@ -139,8 +169,10 @@ export default class SmartWallet {
               console.log('SmartWallet: main addresses ' + this.mainAddress)
               this._getBalances(addresses)
 
+              // create lookup contract instance
+              this.createInstanceLookupContract(this.lookupContractAddress)
+
               resolve(this.mainAddress)
-              // this.identityAddress = '0xe9372945a8acbb44388f068ea78ba0ab97d497ea'
             }.bind(this)
           )
         }.bind(this)
@@ -304,17 +336,6 @@ export default class SmartWallet {
   }
 
   _createIdentityContract() {
-    /* only for testing
-    /* return new Promise((resolve, reject) => {
-      setTimeout(
-        () => {
-          let testIdentity = '0xe9372945a8acbb44388f068ea78ba0ab97d497ea'
-          this.setIdentityAddress(testIdentity)
-          resolve(testIdentity)
-        },
-        2000
-      )
-    })*/
     return new Promise((resolve, reject) => {
       console.log('SmartWallet: start creating identity contract')
       var identityContract = this.web3.eth.contract(IdentityContract.abi)
