@@ -1,6 +1,5 @@
-import {keystore, txutils, signing} from 'eth-lightwallet'
+import {keystore} from 'eth-lightwallet'
 import Web3 from 'web3'
-import BigNumber from 'big-number'
 
 import SignerProvider from 'ethjs-provider-signer'
 import {sign} from 'ethjs-signer'
@@ -127,6 +126,9 @@ export default class SmartWallet {
     let idHash = this._createAttributeID(attributeId)
     return new Promise((resolve, reject) => {
       identityContract.getAttributeHash(idHash, function(err, result) {
+        if (err) {
+          throw err
+        }
         console.log('SmartWallet: getProperty Call')
         resolve(result)
       })
@@ -154,6 +156,9 @@ export default class SmartWallet {
       this.lookupContract.getIdentityAddress(
         '0x' + this.mainAddress,
         function(err, result) {
+          if (err) {
+            throw err
+          }
           console.log('SmartWallet: getIdentityAddress Call')
           resolve(result)
         }
@@ -186,6 +191,9 @@ export default class SmartWallet {
           seedPhrase: seedPhrase
         },
         function(err, ks) {
+          if (err) {
+            throw err
+          }
           ks.keyFromPassword(
             password,
             function(err, pwDerivedKey) {
@@ -212,7 +220,8 @@ export default class SmartWallet {
                 addresses[1],
                 pwDerivedKey
               )
-              let publicKeySecondAddress = this.walletCrypto.computeCompressedEthereumPublicKey(
+              let publicKeySecondAddress = this.walletCrypto
+              .computeCompressedEthereumPublicKey(
                 privateKeySecondAddress
               )
               this.encryptionKeys = {
@@ -239,6 +248,9 @@ export default class SmartWallet {
 
     return new Promise((resolve, reject) => {
       this.identityContract.getProperty(id, function(err, result) {
+        if (err) {
+          throw err
+        }
         console.log('SmartWallet: getProperty Call')
         resolve(result)
       })
@@ -342,7 +354,10 @@ export default class SmartWallet {
   _getBalances(addresses) {
     let address = 0
     for (address of addresses) {
-      let balance = this.web3.eth.getBalance('0x' + address, (err, result) => {
+      this.web3.eth.getBalance('0x' + address, (err, result) => {
+        if (err) {
+          throw err
+        }
         console.log(
           'SmartWallet: Balance Address:' +
             address +
@@ -381,7 +396,7 @@ export default class SmartWallet {
             'SmartWallet: estimated gas for Idenitiy contract deployment ' +
               _estimatedGas
           )
-          let identity = identityContract.new(
+          identityContract.new(
             {
               from: address,
               data: IdentityContract.unlinked_binary,
@@ -392,7 +407,7 @@ export default class SmartWallet {
               if (!e) {
                 if (!contract.address) {
                   console.log(
-                    'SmartWallet: Contract transaction send: TransactionHash: ' +
+                    'SmartWallet: Contract transaction send: TransactionHash:' +
                       contract.transactionHash +
                       ' waiting to be mined...'
                   )
@@ -415,7 +430,10 @@ export default class SmartWallet {
     return new Promise((resolve, reject) => {
       let myEvent = contract.EventNotification()
       myEvent.watch((error, result) => {
-        if (result.transactionHash == transactionHash) {
+        if (error) {
+          throw error
+        }
+        if (result.transactionHash === transactionHash) {
           myEvent.stopWatching()
           console.log('SmartWallet: Transaction mined!')
           resolve(result)
