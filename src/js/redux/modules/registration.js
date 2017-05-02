@@ -428,7 +428,7 @@ helpers._getNextURLFromState = (state) => {
     return null
   }
 
-  const userType = state.getIn(['registration', 'userType', 'value'])
+  // const userType = state.getIn(['registration', 'userType', 'value'])
   return helpers._getNextURL(currentPath, userType)
 }
 
