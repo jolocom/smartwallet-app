@@ -15,6 +15,8 @@ import Header from './header.jsx'
 
 import UserAvatar from 'components/common/user-avatar.jsx'
 
+import accountActions from 'actions/account'
+
 import ProfileStore from 'stores/profile'
 
 import {navItems} from 'routes'
@@ -29,8 +31,7 @@ let Nav = React.createClass({
 
   contextTypes: {
     router: React.PropTypes.object,
-    profile: React.PropTypes.any,
-    account: React.PropTypes.any
+    profile: React.PropTypes.any
   },
 
   propTypes: {
@@ -39,8 +40,7 @@ let Nav = React.createClass({
     doLogout: React.PropTypes.func.isRequired,
     showLeftNav: React.PropTypes.func.isRequired,
     hideLeftNav: React.PropTypes.func.isRequired,
-    selectItem: React.PropTypes.func.isRequired,
-    account: React.PropTypes.any
+    selectItem: React.PropTypes.func.isRequired
   },
 
   getStyles() {
@@ -99,15 +99,6 @@ let Nav = React.createClass({
     event.preventDefault()
   },
 
-  viewProfile(event) {
-    this.props.hideLeftNav()
-
-    const uri = encodeURIComponent(this.props.account.webId)
-
-    this.context.router.push(`graph/${uri}/view`)
-    event.preventDefault()
-  },
-
   goto(url) {
     this.context.router.push(url)
     this.props.hideLeftNav()
@@ -115,6 +106,9 @@ let Nav = React.createClass({
 
   logout() {
     this.props.doLogout()
+    // Reflux signal, so reflux components can update.
+    accountActions.logout()
+    this.goto('/')
   },
 
   drawerRequestChange(open, reason) {
@@ -183,7 +177,7 @@ let Nav = React.createClass({
             onChange={this._handleNavChange}
             >
             <ListItem primaryText="Profile"
-              onTouchTap={this.viewProfile}
+              onTouchTap={this.editProfile}
               style={styles.menuItem}
               leftAvatar={
                 <Avatar

@@ -385,7 +385,8 @@ export default class SmartWallet {
             {
               from: address,
               data: IdentityContract.unlinked_binary,
-              gas: _estimatedGas
+              // gas: _estimatedGas + 10000
+              gas: 3141592 // maximum gas
             },
             function(e, contract) {
               if (!e) {

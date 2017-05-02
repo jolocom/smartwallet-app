@@ -5,7 +5,7 @@ import {theme} from 'styles'
 
 import HoverButton from '../../common/hover-button'
 
-import {Container, Header, Content, Footer} from './ui'
+import {Container, Header, Content, Footer} from '../../structure'
 
 const STYLES = {
   tile: {

@@ -1,4 +1,5 @@
 import React from 'react'
+import Radium from 'radium'
 import { connect } from 'redux/utils'
 
 import { FlatButton, Dialog } from 'material-ui'
@@ -7,10 +8,12 @@ import { FlatButton, Dialog } from 'material-ui'
   props: ['confirm'],
   actions: ['confirmation-dialog:close']
 })
+@Radium
 export default class ConfirmationDialog extends React.Component {
   static propTypes = {
     close: React.PropTypes.func,
-    confirm: React.PropTypes.object
+    confirm: React.PropTypes.object,
+    cancelActionText: React.PropTypes.string
   }
 
   _handleConfirmAction() {
@@ -28,7 +31,7 @@ export default class ConfirmationDialog extends React.Component {
 
     const confirmActions = [
       <FlatButton
-        label="Cancel"
+        label={this.props.confirm.cancelActionText || 'Cancel'}
         primary
         onTouchTap={cancelHandler}
       />,
@@ -44,6 +47,7 @@ export default class ConfirmationDialog extends React.Component {
       modal={false}
       open={this.props.confirm.open}
       onRequestClose={this.handleClose}
+      contentStyle={this.props.confirm.style}
     >
       {this.props.confirm.message}
     </Dialog>
