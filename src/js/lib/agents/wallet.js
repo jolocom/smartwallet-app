@@ -26,8 +26,6 @@ export default class WalletAgent {
       'WalletAgent: See Transactions and Smartcontracts on: https://ropsten.etherscan.io/'
     )
     console.log(seedPhrase)
-    return this.loginWithSeedPhrase(userName, seedPhrase)
-    /*
     let password = '1234'
     let wallet = new SmartWallet()
     return new Promise((resolve, reject) => {
@@ -85,7 +83,6 @@ export default class WalletAgent {
         })
       resolve(wallet)
     })
-    */
   }
 
   registerWithCredentials(

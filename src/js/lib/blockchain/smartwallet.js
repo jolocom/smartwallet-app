@@ -72,8 +72,65 @@ export default class SmartWallet {
     return this.webIDPrivateKey
   }
 
-  addAttributeHashToIdentity(attribute) {
-    let hash = this.walletCrypto.sha256(attribute)
+  addAttributeHashToIdentity(
+    attributeId,
+    attribute,
+    definitionUrl,
+    password,
+    identityAddress
+  ) {
+    let attributeHash = '0x' + this.walletCrypto.sha256(attribute)
+    let idHash = this._createAttributeID(attributeId)
+
+    let identityContract = this.web3.eth
+      .contract(IdentityContract.abi)
+      .at(identityAddress)
+
+    console.log('IdentityAddress: ' + identityAddress)
+
+    console.log('SmartWallet: AttributeHash->' + attributeHash)
+    return new Promise((resolve, reject) => {
+      this.globalKeystore.keyFromPassword(
+        password,
+        function(err, pwDerivedKey) {
+          if (err) throw err
+          // TODO: only interaction possible with correct password
+
+          let methodName = 'addAttribute'
+          let args = []
+
+          args.push(idHash)
+          args.push(attributeHash)
+          args.push(definitionUrl)
+          this._contractMethodTransaction(
+            identityContract,
+            methodName,
+            args,
+            function(err, txhash) {
+              if (!err) {
+                resolve(txhash)
+              } else {
+                console.log(err)
+              }
+            }
+          )
+        }.bind(this)
+      )
+    })
+  }
+
+  getAttributeHash(attributeId, identityAddress) {
+    let identityContract = this.web3.eth
+      .contract(IdentityContract.abi)
+      .at(identityAddress)
+
+    let idHash = this._createAttributeID(attributeId)
+    return new Promise((resolve, reject) => {
+      identityContract.getAttributeHash(idHash, function(err, result) {
+        console.log('SmartWallet: getProperty Call')
+        resolve(result)
+      })
+    })
   }
 
   createDigitalIdentity(userName, password) {
@@ -93,12 +150,8 @@ export default class SmartWallet {
   }
 
   getIdentityAddressFromLookupContract() {
-    let contract = this.web3.eth
-      .contract(IdentityContractLookup.abi)
-      .at(this.lookupContractAddress)
-
     return new Promise((resolve, reject) => {
-      contract.getIdentityAddress(
+      this.lookupContract.getIdentityAddress(
         '0x' + this.mainAddress,
         function(err, result) {
           console.log('SmartWallet: getIdentityAddress Call')
@@ -113,6 +166,8 @@ export default class SmartWallet {
   }
   setIdentityAddress(identityAddress) {
     this.identityAddress = identityAddress
+    // create instance of the identity smart contract
+    this.createInstanceIdentityContract(this.identityAddress)
   }
   getIdentityAddress() {
     return this.identityAddress
@@ -182,12 +237,8 @@ export default class SmartWallet {
   getProperty(propertyId) {
     let id = this._createAttributeID(propertyId)
 
-    let contract = this.web3.eth
-      .contract(IdentityContract.abi)
-      .at(this.identityAddress)
-
     return new Promise((resolve, reject) => {
-      contract.getProperty(id, function(err, result) {
+      this.identityContract.getProperty(id, function(err, result) {
         console.log('SmartWallet: getProperty Call')
         resolve(result)
       })
@@ -206,19 +257,13 @@ export default class SmartWallet {
           if (err) throw err
           // TODO: only interaction possible with correct password
 
-          let identityContract = this.web3.eth
-            .contract(IdentityContract.abi)
-            .at(this.identityAddress)
-
-          // let id = this._createAttributeID(name)
-
           let methodName = 'addProperty'
           let args = []
 
           args.push(this._createAttributeID(id))
           args.push(value)
           this._contractMethodTransaction(
-            identityContract,
+            this.identityContract,
             methodName,
             args,
             function(err, txhash) {
@@ -250,11 +295,6 @@ export default class SmartWallet {
       'SmartWallet: add identity address to Lookup Contract -> ' +
         this.lookupContractAddress
     )
-    let identityContractLookup = this.web3.eth
-      .contract(IdentityContractLookup.abi)
-      .at(this.lookupContractAddress)
-
-    // let id = this._createAttributeID(name)
 
     let methodName = 'addIdentityAddress'
     let args = []
@@ -262,7 +302,7 @@ export default class SmartWallet {
     args.push(_identityAddress)
     return new Promise((resolve, reject) => {
       this._contractMethodTransaction(
-        identityContractLookup,
+        this.lookupContract,
         methodName,
         args,
         function(err, txhash) {
@@ -278,17 +318,11 @@ export default class SmartWallet {
   }
 
   waitingToBeMinedaAddProperty(contractAddress, transactionHash) {
-    let identityContract = this.web3.eth
-      .contract(IdentityContract.abi)
-      .at(contractAddress)
-    return this._waitingToBeMined(identityContract, transactionHash)
+    return this._waitingToBeMined(this.identityContract, transactionHash)
   }
 
   waitingToBeMinedaAddToLookup(contractAddress, transactionHash) {
-    let identityContractLookup = this.web3.eth
-      .contract(IdentityContractLookup.abi)
-      .at(this.lookupContractAddress)
-    return this._waitingToBeMined(identityContractLookup, transactionHash)
+    return this._waitingToBeMined(this.lookupContract, transactionHash)
   }
 
   _setProvider(ks, privateKey, mainAddress) {
