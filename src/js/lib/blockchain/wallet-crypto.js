@@ -1,6 +1,6 @@
 import SHA256 from 'crypto-js/sha256'
 
-import keypair from 'keypair'
+import Keypair from 'keypair'
 import bitcore from 'bitcore-lib'
 import ECIES from 'bitcore-ecies'
 var EC = require('elliptic').ec
@@ -8,15 +8,13 @@ var EC = require('elliptic').ec
 // import {EC} from 'elliptic'
 let ec = new EC('secp256k1')
 
-import crypto from 'crypto'
-
 export default class WalletCrypto {
   sha256(message) {
     return SHA256(message)
   }
 
   generatePrivateRSAKey() {
-    let pair = new keypair({bits: 1024})
+    let pair = new Keypair({bits: 1024})
     let privateKey = pair.private.substring(32)
     privateKey = privateKey.substring(0, privateKey.length - 31)
     return privateKey
