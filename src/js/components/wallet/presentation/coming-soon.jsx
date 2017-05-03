@@ -33,7 +33,7 @@ export default class WalletComingSoon extends React.Component {
     return (
       <div>
         <Block style={STYLES.topBlock}>
-          <h1 style={STYLES.issue}>Coming Soon!!!</h1>
+          <h1 style={STYLES.greeting}>Coming Soon!!!</h1>
         </Block>
         <Block>
           <SideNote>
