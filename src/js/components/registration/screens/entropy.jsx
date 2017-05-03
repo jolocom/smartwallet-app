@@ -15,7 +15,6 @@ import Presentation from '../presentation/entropy'
 export default class RegistrationEntropyScreen extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,
-
     goForward: React.PropTypes.func.isRequired,
     addEntropyFromDeltas: React.PropTypes.func.isRequired,
     setMaskedImageUncovering: React.PropTypes.func.isRequired
@@ -37,7 +36,7 @@ export default class RegistrationEntropyScreen extends React.Component {
   }
   handleUncoveringChange(uncovering) {
     this.props.setMaskedImageUncovering(uncovering)
-
+    console.log('uncoveringChange')
     if (uncovering) {
       this.state.imageMask.startNewPath()
     } else {
