@@ -18,7 +18,8 @@ const STYLES = {
     color: theme.palette.textColor
   },
   walletContainer: {
-    backgroundColor: 'none'
+    backgroundColor: 'none',
+    padding: '24px'
   }
 }
 

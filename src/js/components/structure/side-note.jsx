@@ -6,6 +6,7 @@ import {theme} from 'styles'
 const STYLE = {
   fontSize: '13px',
   fontWeight: '300',
+  lineHeight: '17px',
   color: theme.jolocom.gray1
 }
 

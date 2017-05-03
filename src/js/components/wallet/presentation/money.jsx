@@ -7,7 +7,8 @@ import {
 
 const STYLES = {
   walletContainer: {
-    backgroundColor: 'none'
+    backgroundColor: 'none',
+    padding: '24px'
   }
 }
 
