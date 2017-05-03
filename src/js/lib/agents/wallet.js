@@ -1,3 +1,6 @@
+import VerificationAgent from './verification'
+
+
 export default class WalletAgent {
   generateSeedPhrase(randomString) {
     return 'blabla blabla blabla blabla blabla blabla blabla blabla'
@@ -69,43 +72,13 @@ export default class WalletAgent {
       }, 2000)
     })
   }
-
-  deleteEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  updateEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  setEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-  confirmEmail(code) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
 }
 
 export class Wallet {
   constructor() {
     this.webID = 'https://demo.webid.jolocom.com/profile/card'
     this.lightWaller = 'something'
+    this._verification = new VerificationAgent()
   }
 
   getUserInformation({email}) {
@@ -158,5 +131,37 @@ export class Wallet {
         /* reject() */
       }, 2000)
     })
+  }
+
+  deleteEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  updateEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  setEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  startConfirmEmail({email}) {
+    return this._verification.startVerifyingEmail({webID: this.webID, email})
+  }
+
+  finishConfirmEmail({email, code}) {
+    return this._verification.verifyEmail({webID: this.webID, email, code})
   }
 }
