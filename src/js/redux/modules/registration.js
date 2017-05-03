@@ -16,14 +16,13 @@ const NEXT_ROUTES = {
 }
 
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/': 'username',
-  '/registration/user-type/': 'userType',
-  '/registration/entropy/': 'entropy',
-  '/registration/write-phrase/': 'passphrase',
-  '/registration/phrase-info/': 'passphrase',
-  '/registration/email/': 'email',
-  '/registration/password/': 'password',
-  '/registration/pin/': 'pin'
+  '/registration': 'username',
+  '/registration/user-type': 'userType',
+  '/registration/write-phrase': 'passphrase',
+  '/registration/phrase-info': 'passphrase',
+  '/registration/email': 'email',
+  '/registration/password': 'password',
+  '/registration/pin': 'pin'
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -156,8 +155,7 @@ const actions = module.exports = makeActions('registration', {
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.accounts
             .checkUsername(state.username.value)
-              .then(() => dispatch(actions.goForward()))
-        }))
+        })).then(() => dispatch(actions.goForward()))
       }
     }
   },
@@ -428,7 +426,6 @@ helpers._getNextURLFromState = (state) => {
     return null
   }
 
-  // const userType = state.getIn(['registration', 'userType', 'value'])
   return helpers._getNextURL(currentPath, userType)
 }
 
