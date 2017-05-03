@@ -179,7 +179,7 @@ const actions = module.exports = makeActions('registration', {
               password: state.password.value
             })
           }
-        }))
+        })).then(() => dispatch(router.pushRoute('/wallet')))
       }
     }
   }
