@@ -13,13 +13,22 @@ import {
 } from 'material-ui'
 
 const STYLES = {
+  sideNote: {
+    padding: '10px',
+    lineHeight: '150%'
+  },
+  flatButton: {
+    color: '#953052'
+  },
   greeting: {
     fontSize: '20px',
-    color: theme.palette.textColor
+    color: theme.palette.textColor,
+    fontWeight: 'normal'
   },
   walletContainer: {
     backgroundColor: 'none',
-    padding: '24px'
+    padding: '24px',
+    paddingBottom: '0px'
   }
 }
 
@@ -40,14 +49,14 @@ export default class WalletHome extends React.Component {
           <h1 style={STYLES.greeting}>Hi {this.props.username}</h1>
         </Block>
         <Block>
-          <SideNote>
+          <SideNote style={STYLES.sideNote}>
             Get started with adding your data and request verification. You
             only only need to do this once and then you can use it for further
             services
           </SideNote>
         </Block>
         <Footer>
-          <FlatButton label="GET STARTED"
+          <FlatButton style={STYLES.flatButton} label="GET STARTED"
             onClick={() => { this.props.onClick() }} />
         </Footer>
       </Container>
