@@ -156,8 +156,7 @@ const actions = module.exports = makeActions('registration', {
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.accounts
             .checkUsername(state.username.value)
-              .then(() => dispatch(actions.goForward()))
-        }))
+        })).then(() => dispatch(actions.goForward()))
       }
     }
   },
@@ -181,7 +180,7 @@ const actions = module.exports = makeActions('registration', {
               password: state.password.value
             })
           }
-        }))
+        })).then(() => dispatch(router.pushRoute('/wallet')))
       }
     }
   }
