@@ -16,13 +16,14 @@ const NEXT_ROUTES = {
 }
 
 const CHECK_BEFORE_SWITCHING = {
-  '/registration': 'username',
-  '/registration/user-type': 'userType',
-  '/registration/write-phrase': 'passphrase',
-  '/registration/phrase-info': 'passphrase',
-  '/registration/email': 'email',
-  '/registration/password': 'password',
-  '/registration/pin': 'pin'
+  '/registration': ['username', 'valid'],
+  '/registration/entropy': ['passphrase', 'sufficientEntropy'],
+  '/registration/user-type': ['userType', 'valid'],
+  '/registration/write-phrase': ['passphrase', 'writtenDown'],
+  '/registration/phrase-info': ['passphrase', 'writtenDown'],
+  '/registration/email': ['email', 'valid'],
+  '/registration/password': ['password', 'valid'],
+  '/registration/pin': ['pin', 'valid']
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -445,6 +446,6 @@ helpers._getNextURL = (currentPath, userType) => {
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  let result = !toCheck || state.getIn(['registration', toCheck, 'valid'])
+  let result = !toCheck || state.getIn(['registration', toCheck[0], toCheck[1]])
   return result || false
 }
