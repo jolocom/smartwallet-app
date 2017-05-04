@@ -85,6 +85,7 @@ export default class WalletContact extends React.Component {
       label,
       value,
       verified,
+      errorText,
       icon,
       isNew,
       type
@@ -104,6 +105,10 @@ export default class WalletContact extends React.Component {
       focused,
       onFocusChange
     } = this.props
+    const typeOptions = (key) => key === 'emails' ? []
+    : [{value: 'personal', label: 'personal'},
+      {value: 'work', label: 'work'}]
+
     return (
       <EditListItem
         key={id}
@@ -115,8 +120,11 @@ export default class WalletContact extends React.Component {
         enableEdit={!verified}
         value={value}
         type={type}
+        category={type}
+        categories={typeOptions(key)}
         verified={verified}
         focused={focused === key}
+        errorText={errorText}
         onFocusChange={() => onFocusChange(key)}
         onChange={(e) => isNew
           ? setInformation(key, i, actionValue(key, e))
@@ -131,6 +139,10 @@ export default class WalletContact extends React.Component {
               close()
             })
         }
+        onCategoryChange={(event, type, index) => {
+          isNew ? setInformation(key, i, {value, type})
+            : updateInformation(key, i, {value, type})
+        }}
         enableDelete
         />
     )
@@ -196,12 +208,8 @@ export default class WalletContact extends React.Component {
         fields.push(
           <Block key={`add_${key}`}>
             <AddNew onClick={() => {
-              const length = newInformation[key].length
-              if (length === 0 ||
-                newInformation[key][length - 1].value !== '') {
-                addNewEntry(key, length)
-                onFocusChange(`newInformation_${key}`, length)
-              }
+              addNewEntry(key, newInformation[key].length)
+              onFocusChange(`newInformation_${key}`)
             }}
               value={addText}
             />

@@ -81,7 +81,7 @@ describe('# Edit contact Util', () => {
         information: {
           newInformation: {
             emails: [],
-            phoneNumbers: [{value: '', type: 'home', verified: false,
+            phoneNumbers: [{value: '', type: 'personal', verified: false,
               valid: false, delete: false, blank: true
             }]
           }
@@ -165,8 +165,8 @@ describe('# Edit contact Util', () => {
           originalInformation: {
             emails: [],
             phoneNumbers: [{
-              value: '123456789', type: 'home', verified: true, delete: false,
-              update: true, valid: false, blank: false
+              value: '123456789', type: 'personal', verified: true,
+              delete: false, update: true, valid: false, blank: false
             }]
           },
           newInformation: {
@@ -189,8 +189,8 @@ describe('# Edit contact Util', () => {
           originalInformation: {
             emails: [],
             phoneNumbers: [{
-              value: '123456789', type: 'home', verified: false, delete: false,
-              update: true, valid: false, blank: false
+              value: '123456789', type: 'personal', verified: false,
+              delete: false, update: true, valid: false, blank: false
             }]
           },
           newInformation: {
@@ -268,10 +268,10 @@ describe('# Edit contact Util', () => {
           originalInformation: {
             emails: [],
             phoneNumbers: [{
-              verified: true, delete: false, update: false, valid: false,
+              verified: true, delete: false, update: true, valid: false,
               blank: false
             }, {
-              verified: true, delete: true, update: false, valid: false,
+              verified: true, delete: false, update: true, valid: false,
               blank: false
             }]
           },
@@ -365,24 +365,16 @@ describe('# Edit contact Util', () => {
         information: {
           originalInformation: {
             emails: [
-              {verified: false, delete: false, update: true, valid: false,
-                blank: false
-              }, {verified: false, delete: true, update: true, valid: false,
-                blank: false
-              }, {verified: false, delete: false, update: true, valid: true,
-                blank: false
-              }],
-            phoneNumbers: [{
-              verified: false, delete: true, update: true, valid: false,
-              blank: false
-            }, {verified: false, delete: false, update: true, valid: true,
-              blank: false
-            }]
+              {verified: false, delete: false, update: true, valid: true},
+              {verified: false, delete: true, update: true, valid: false},
+              {verified: false, delete: false, update: true, valid: true}],
+            phoneNumbers: [
+              {verified: false, delete: true, update: true, valid: false},
+              {verified: false, delete: false, update: true, valid: true}]
           },
           newInformation: {
             emails: [{
-              value: 'test3@test.com', blank: false, valid: true,
-              delete: false
+              value: 'test3@test.com', blank: false, valid: true, delete: false
             }],
             phoneNumbers: []
           },
@@ -675,7 +667,7 @@ describe('# Edit contact Util', () => {
           originalInformation: {
             emails: [],
             phoneNumbers: [{
-              value: '123456', type: 'home', verified: false, delete: false,
+              value: '123456', type: 'personal', verified: false, delete: false,
               update: true, valid: true, blank: false
             }]
           },
@@ -709,7 +701,7 @@ describe('# Edit contact Util', () => {
           originalInformation: {
             emails: [],
             phoneNumbers: [{
-              value: '123456', type: 'home', verified: true, delete: false,
+              value: '123456', type: 'personal', verified: true, delete: false,
               update: true, valid: false, blank: false
             }]
           },
@@ -742,7 +734,7 @@ describe('# Edit contact Util', () => {
           originalInformation: {
             emails: [],
             phoneNumbers: [{
-              value: '123456', type: 'home', verified: true, delete: false,
+              value: '123456', type: 'personal', verified: true, delete: false,
               update: true, valid: true, blank: false
             }]
           },

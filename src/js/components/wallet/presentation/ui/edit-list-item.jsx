@@ -19,6 +19,16 @@ let STYLES = {
     width: '48px',
     cursor: 'pointer'
   },
+  category: {
+    display: 'inline-block',
+    marginTop: '24px',
+    marginLeft: '10px',
+    maxHeight: '48px',
+    hight: '100%',
+    maxWidth: '120px',
+    width: '100%',
+    cursor: 'pointer'
+  },
   deleteIcon: {
     userSelect: 'none',
     marginTop: '14px',
@@ -118,20 +128,22 @@ export default class EditListItem extends React.Component {
   }
 
   renderCategory() {
-    if (this.props.categories) {
+    if (this.props.categories.length > 0) {
       return (
         <FormsySelect
           name={`${this.props.name}_category`}
           onChange={this.props.onCategoryChange}
+          value={this.props.category}
+          style={STYLES.category}
         >
-        {this.props.categories.map((c, i) => {
-          return (
-            <MenuItem key={i} value={c.value} primaryText={c.label} />
-          )
-        })}
+        {this.props.categories.map((c, i) => <MenuItem key={i}
+          value={c.value}
+          primaryText={c.label} />
+        )}
         </FormsySelect>
       )
     }
+    return null
   }
 
   renderDelete() {

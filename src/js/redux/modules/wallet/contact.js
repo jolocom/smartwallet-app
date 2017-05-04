@@ -97,8 +97,10 @@ module.exports.default = (state = initialState, action = {}) => {
       return setNewFieldValue(state, action)
 
     case actions.deleteInformation.id:
-      return state.mergeIn(
-        ['information', action.age, action.field, action.index], {delete: true})
+      return state.mergeIn(['information', action.age, action.field,
+        action.index], {
+          delete: true
+        })
 
     case actions.updateInformation.id:
       return updateOriginalValue(state, action)

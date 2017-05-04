@@ -169,7 +169,7 @@ describe('# Wallet contact redux module', () => {
               emails: [],
               phoneNumbers: [{
                 value: '',
-                type: 'home',
+                type: 'personal',
                 verified: false,
                 valid: false,
                 delete: false,
@@ -225,7 +225,7 @@ describe('# Wallet contact redux module', () => {
         })
         const action = {
           type: contact.actions.setInformation.id,
-          value: {value: '123', type: 'home'},
+          value: {value: '123', type: 'personal'},
           field: 'phoneNumbers',
           index: 0
         }
@@ -233,7 +233,7 @@ describe('# Wallet contact redux module', () => {
         expect(state.toJS().information.newInformation.phoneNumbers[0])
           .to.deep.equal({
             value: '123',
-            type: 'home',
+            type: 'personal',
             valid: true,
             delete: false,
             blank: false
