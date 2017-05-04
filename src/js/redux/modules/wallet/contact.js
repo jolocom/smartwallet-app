@@ -36,7 +36,6 @@ const actions = module.exports = makeActions('wallet/contact', {
                   !state.information.newInformation.emails[i].blank) {
                 promises.push(
                 backend.wallet.setEmail(
-                  webId,
                   state.information.newInformation.emails[i].address))
               }
             }

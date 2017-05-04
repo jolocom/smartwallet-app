@@ -7,6 +7,10 @@ export default class WalletAgent {
     this.solid = new SolidWalletAgent(this.webid.getWebId())
   }
 
+  setEmail(value) {
+    return this.solid.setEntry(value, 'email')
+  }
+
   generateSeedPhrase(randomString) {
     return 'blabla blabla blabla blabla blabla blabla blabla blabla'
   }
