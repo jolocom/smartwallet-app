@@ -3,19 +3,18 @@ import { makeActions } from './'
 
 export const actions = module.exports = makeActions('email-confirmation', {
   confirm: {
-    expectedParams: ['code'],
+    expectedParams: ['email', 'code'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {backend}) => {
-        if (params === undefined) {
+      return (dispatch, getState, {services}) => {
+        if (!params || !params.email || !params.code) {
           let action = {
             type: actions.confirm.id_fail
           }
           return dispatch(action)
         }
-        dispatch(actions.confirm
-        .buildAction(params, (backend) => {
-          return backend.wallet.confirmEmail(params)
+        dispatch(actions.confirm.buildAction(params, (backend) => {
+          return services.auth.currentUser.wallet.finishConfirmEmail(params)
         }))
       }
     }

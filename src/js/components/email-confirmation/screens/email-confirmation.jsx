@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'redux/utils'
 import Presentation from '../presentation/email-confirmation'
-import queryString from 'query-string'
 
 @connect({
   props: ['emailConfirmation'],
@@ -13,14 +12,17 @@ import queryString from 'query-string'
 export default class EmailConfirmationScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
+    location: React.PropTypes.object.isRequired,
     emailConfirmation: React.PropTypes.object.isRequired,
     goToLogin: React.PropTypes.func.isRequired,
     confirm: React.PropTypes.func.isRequired
   }
-  componentWillMount() {
-    let url = window.location.toString()
-    let urlparams = queryString.parse(url.slice(url.search('\\?')))
-    this.props.confirm(urlparams.a)
+
+  componentDidMount() {
+    this.props.confirm({
+      email: this.props.location.query.email,
+      code: this.props.location.query.code
+    })
   }
 
   render() {
