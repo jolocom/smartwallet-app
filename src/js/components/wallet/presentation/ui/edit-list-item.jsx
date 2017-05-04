@@ -107,7 +107,7 @@ export default class EditListItem extends React.Component {
           underlineDisabledStyle={styles.disabledUnderline}
           floatingLabelText={label}
           name={name}
-          value={value}
+          defaultValue={value}
           onChange={onChange}
           errorText={errorText}
         />

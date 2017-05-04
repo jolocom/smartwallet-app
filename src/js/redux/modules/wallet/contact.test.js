@@ -66,8 +66,7 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.addNewEntry.id,
           field: 'emails',
-          result: {
-          }
+          index: 0
         }
         state = reducer(state, action)
         expect(state.toJS().information.newInformation.emails.length)
@@ -171,6 +170,7 @@ describe('# Wallet contact redux module', () => {
               phoneNumbers: [{
                 value: '',
                 type: 'home',
+                verified: false,
                 valid: false,
                 delete: false,
                 blank: true
@@ -181,8 +181,7 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.addNewEntry.id,
           field: 'phoneNumbers',
-          result: {
-          }
+          index: 0
         }
         const newState = reducer(state, action)
         expect(newState.toJS()).to.deep.equal(expectedState)
@@ -226,7 +225,7 @@ describe('# Wallet contact redux module', () => {
         })
         const action = {
           type: contact.actions.setInformation.id,
-          value: {number: '123', type: 'home'},
+          value: {value: '123', type: 'home'},
           field: 'phoneNumbers',
           index: 0
         }
@@ -259,7 +258,7 @@ describe('# Wallet contact redux module', () => {
         })
         const action = {
           type: contact.actions.updateInformation.id,
-          value: {number: '+4917912345678', type: 'test'},
+          value: {value: '+4917912345678', type: 'test'},
           field: 'phoneNumbers',
           index: 0
         }
@@ -297,7 +296,7 @@ describe('# Wallet contact redux module', () => {
         })
         const action = {
           type: contact.actions.updateInformation.id,
-          value: {number: '+4917912345678', type: 'test'},
+          value: {value: '+4917912345678', type: 'test'},
           field: 'phoneNumbers',
           index: 0
         }

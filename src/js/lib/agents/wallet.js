@@ -54,69 +54,6 @@ export default class WalletAgent {
       }, 2000)
     })
   }
-
-  getAccountInformation() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        let information = {
-          emails: [{address: 'address1@example.com', verified: true},
-            {address: 'address2@example.com', verified: false}],
-
-          phoneNumbers: [{num: '+4917912345678', type: 'work', verified: true},
-            {num: '+4917923456789', type: 'personal', verified: false}]
-        }
-        resolve(information)
-      }, 2000)
-    })
-  }
-
-  deleteEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  updateEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  setEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  deletePhone(phone) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  updatePhone(phone) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  setPhone(phone) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
 }
 
 export class Wallet {
@@ -172,6 +109,71 @@ export class Wallet {
       setTimeout(() => {
         resolve(identity)
         /* reject() */
+      }, 2000)
+    })
+  }
+  getAccountInformation() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const information = {
+          emails: [
+            {value: 'address1@example.com', verified: false},
+            {value: 'address2@example.com', verified: false}
+          ],
+          phoneNumbers: [
+            {value: '+491000222678', type: 'work', verified: true},
+            {value: '+4917923456789', type: 'personal', verified: false}
+          ]
+        }
+        resolve(information)
+      }, 2000)
+    })
+  }
+
+  deleteEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  updateEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  setEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  deletePhone(phone) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  updatePhone(phone) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  setPhone(phone) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
       }, 2000)
     })
   }

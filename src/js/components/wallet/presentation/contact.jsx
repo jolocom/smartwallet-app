@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import {Form} from 'formsy-react'
 import {
   EditAppBar,
   EditHeader,
@@ -7,7 +8,6 @@ import {
   AddNew
 } from './ui'
 import {
-  Container,
   Content,
   Block
 } from '../../structure'
@@ -62,12 +62,11 @@ export default class WalletContact extends React.Component {
     return (
       <div>
         {this.renderFields({
-          key: 'phonenumbers',
+          key: 'phoneNumbers',
           label: 'Phone Number',
           errorText: 'Invalid phone number',
           addText: 'Add phone number',
           icon: ContentMail
-
         })}
         {this.renderFields({
           key: 'emails',
@@ -87,13 +86,24 @@ export default class WalletContact extends React.Component {
       value,
       verified,
       icon,
-      isNew
+      isNew,
+      type
     } = field
-
+    type = type === undefined ? '' : type
     const prefix = isNew ? 'newInformation' : 'originalInformation'
     const id = `${prefix}_${key}_${i}`
     const name = `${key}[${i}]`
-
+    const actionValue = (key, e) => key === 'emails' ? e.target.value
+    : {value: e.target.value, type: type}
+    let {
+      setInformation,
+      updateInformation,
+      deleteInformation,
+      close,
+      confirm,
+      focused,
+      onFocusChange
+    } = this.props
     return (
       <EditListItem
         key={id}
@@ -102,36 +112,26 @@ export default class WalletContact extends React.Component {
         iconStyle={STYLES.icon}
         label={label}
         name={name}
+        enableEdit={!verified}
         value={value}
+        type={type}
         verified={verified}
-        focused={this.props.focused === key}
-        onFocusChange={() => {
-          if (isNew) {
-            this.props.addNewEntry(key)
-          }
-          this.props.onFocusChange(key)
-        }}
-        onChange={(e) => {
-          if (isNew) {
-            this.props.setInformation(key, i, e.target.value)
-          } else {
-            this.props.updateInformation(key, i, e.target.value)
-          }
-        }}
-        onDelete={() => {
-          if (!isNew && verified) {
-            this.props.confirm(
-              'Are you sure you want to delete a verified email?',
-              'Delete', () => {
-                this.props.deleteInformation(prefix, key, i)
-                this.props.close()
-              }
-            )
-          } else {
-            this.props.deleteInformation(prefix, key, i)
-          }
-        }}
-        enableDelete={!isNew}
+        focused={focused === key}
+        onFocusChange={() => onFocusChange(key)}
+        onChange={(e) => isNew
+          ? setInformation(key, i, actionValue(key, e))
+          : updateInformation(key, i, actionValue(key, e))
+        }
+        onDelete={() => (isNew || !verified) ? deleteInformation(prefix, key, i)
+          : confirm(
+            'Are you sure you want to delete a verified email?',
+            'Delete',
+            () => {
+              deleteInformation(prefix, key, i)
+              close()
+            })
+        }
+        enableDelete
         />
     )
   }
@@ -140,9 +140,12 @@ export default class WalletContact extends React.Component {
     let fields = []
 
     const {originalInformation, newInformation} = this.props.information
-
-    // console.log(emailFields)
-    if (this.props.loading === false) {
+    const {
+      loading,
+      addNewEntry,
+      onFocusChange
+    } = this.props
+    if (!loading) {
       fields.push(
         originalInformation[key].map((field, i) => {
           if (!field.delete) {
@@ -153,7 +156,8 @@ export default class WalletContact extends React.Component {
               value: field.value,
               verified: field.verified,
               errorText,
-              isNew: false
+              isNew: false,
+              type: field.type
             })
           }
         })
@@ -169,13 +173,14 @@ export default class WalletContact extends React.Component {
               value: field.value,
               verified: field.verified,
               errorText,
-              isNew: true
+              isNew: true,
+              type: field.type
             })
           }
         })
       )
 
-      if (!fields.length) {
+      if (fields.length === 0) {
         fields.push(
           this.renderField(0, {
             key,
@@ -183,24 +188,21 @@ export default class WalletContact extends React.Component {
             value: '',
             verified: false,
             errorText,
-            isNew: true
+            isNew: true,
+            type: ''
           })
         )
       } else {
         fields.push(
           <Block key={`add_${key}`}>
-            <AddNew
-              onClick={() => {
-                var length = newInformation[key].length
-                if (length === 0 ||
-                  newInformation[key][length - 1].value !== '') {
-                  this.props.addNewEntry(key)
-                  this.props.onFocusChange(
-                    `newInformation_${key}`,
-                     newInformation[key].length
-                  )
-                }
-              }}
+            <AddNew onClick={() => {
+              const length = newInformation[key].length
+              if (length === 0 ||
+                newInformation[key][length - 1].value !== '') {
+                addNewEntry(key, length)
+                onFocusChange(`newInformation_${key}`, length)
+              }
+            }}
               value={addText}
             />
           </Block>
@@ -208,7 +210,9 @@ export default class WalletContact extends React.Component {
       }
     }
 
-    return fields
+    return <Form>
+      {fields}
+    </Form>
   }
 
   render() {
