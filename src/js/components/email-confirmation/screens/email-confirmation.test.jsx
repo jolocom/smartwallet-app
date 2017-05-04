@@ -5,10 +5,10 @@ import Immutable from 'immutable'
 import EmailConfirmationScreen from './email-confirmation'
 import {stub} from '../../../../../test/utils'
 
-describe('(Component) EmailConfirmationScreen', function() {
+describe.only('(Component) EmailConfirmationScreen', function() {
   it('should call confirm upon load', function() {
     const confirm = stub()
-    shallow(
+    const wrapper = shallow(
       (<EmailConfirmationScreen.WrappedComponent id="test" visible
         {...EmailConfirmationScreen.mapStateToProps(Immutable.fromJS({
           emailConfirmation: {
@@ -16,12 +16,21 @@ describe('(Component) EmailConfirmationScreen', function() {
             success: false
           }
         }))}
+        location={{query: {
+          email: 'test@test.com',
+          code: '1e3t5'
+        }}}
         confirm={confirm}
-        onClick={() => {}}
+        goToLogin={() => {}}
         />)
     )
+    wrapper.instance().componentDidMount()
 
     expect(confirm.calls).to.deep.equal([
-      {args: [undefined]}])
+      {args: [{
+        email: 'test@test.com',
+        code: '1e3t5'
+      }]}
+    ])
   })
 })
