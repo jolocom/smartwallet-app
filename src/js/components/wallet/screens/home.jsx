@@ -13,7 +13,6 @@ export default class WalletHomeScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     wallet: React.PropTypes.any,
-    registration: React.PropTypes.any,
     goToIdentity: React.PropTypes.func.isRequired,
     getIdentityInformation: React.PropTypes.func.isRequired
   }

@@ -46,6 +46,14 @@ const actions = module.exports = makeActions('wallet/identity', {
         }))
       }
     }
+  },
+  goToLogin: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch) => {
+        dispatch(router.pushRoute('/login/expert'))
+      }
+    }
   }
 })
 
