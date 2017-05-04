@@ -35,6 +35,10 @@ export default class SmartWallet {
     this.web3 = null
     this.password = ''
 
+    this.walletCrypto = new WalletCrypto()
+    this.provider = null
+    this.filter = null
+
     // KEYS
     this.globalKeystore = null
     this.webIDPrivateKey = undefined
@@ -48,9 +52,21 @@ export default class SmartWallet {
     this.identityContract = undefined
     this.lookupContract = undefined
 
-    this.walletCrypto = new WalletCrypto()
-    this.provider = null
-    this.filter = null
+    // TRANSACTIONS
+    this.transactionHistory = []
+  }
+  addToTransactionHistory(transactionHash, contract, status) {
+    console.log(
+      'SmartWallet: Transaction-> ' + transactionHash + ' added to history'
+    )
+    this.transactionHistory[transactionHash] = {contract: contract}
+  }
+
+  waitingToBeMined(transactionHash) {
+    return this._waitingToBeMined(
+      this.transactionHistory[transactionHash].contract,
+      transactionHash
+    )
   }
 
   createInstanceLookupContract(address) {
@@ -192,6 +208,7 @@ export default class SmartWallet {
         },
         function(err, ks) {
           if (err) {
+            console.log('SmartWallet Error: invalid Seedphrase')
             throw err
           }
           ks.keyFromPassword(
@@ -267,7 +284,7 @@ export default class SmartWallet {
         password,
         function(err, pwDerivedKey) {
           if (err) throw err
-          // TODO: only interaction possible with correct password
+          // TODO:  interaction should only be possible with correct password
 
           let methodName = 'addProperty'
           let args = []
@@ -327,14 +344,6 @@ export default class SmartWallet {
         }.bind(this)
       )
     })
-  }
-
-  waitingToBeMinedaAddProperty(contractAddress, transactionHash) {
-    return this._waitingToBeMined(this.identityContract, transactionHash)
-  }
-
-  waitingToBeMinedaAddToLookup(contractAddress, transactionHash) {
-    return this._waitingToBeMined(this.lookupContract, transactionHash)
   }
 
   _setProvider(ks, privateKey, mainAddress) {
@@ -427,6 +436,11 @@ export default class SmartWallet {
   }
 
   _waitingToBeMined(contract, transactionHash) {
+    /* every transaction in the identity contract uses events
+     a event notification means the transaction has been executed/mined
+     instead of events eth.filters could be used as well
+     but eth.filters sometimes didn't work properly
+    */
     return new Promise((resolve, reject) => {
       let myEvent = contract.EventNotification()
       myEvent.watch((error, result) => {
@@ -454,7 +468,14 @@ export default class SmartWallet {
       gasPrice: gasPrice,
       gas: gas
     })
-    _args.push(_callback)
+    _args.push(
+      function(err, txhash) {
+        if (!err) {
+          this.addToTransactionHistory(txhash, _contract)
+        }
+        _callback(err, txhash)
+      }.bind(this)
+    )
     _contract[_methodName].apply(this, _args)
   }
 
