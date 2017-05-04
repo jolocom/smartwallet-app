@@ -37,6 +37,11 @@ module.exports = {
       exclude: 'node_modules'
     },
     {
+      test: /\.js$/,
+      loader: 'babel',
+      include: path.join(__dirname, 'node_modules', 'ethereumjs-tx')
+    },
+    {
       test: /\.json$/,
       loader: 'json-loader'
     }],

@@ -16,14 +16,14 @@ const NEXT_ROUTES = {
 }
 
 const CHECK_BEFORE_SWITCHING = {
-  '/registration/': 'username',
-  '/registration/user-type/': 'userType',
-  '/registration/entropy/': 'entropy',
-  '/registration/write-phrase/': 'passphrase',
-  '/registration/phrase-info/': 'passphrase',
-  '/registration/email/': 'email',
-  '/registration/password/': 'password',
-  '/registration/pin/': 'pin'
+  '/registration': ['username', 'valid'],
+  '/registration/entropy': ['passphrase', 'sufficientEntropy'],
+  '/registration/user-type': ['userType', 'valid'],
+  '/registration/write-phrase': ['passphrase', 'writtenDown'],
+  '/registration/phrase-info': ['passphrase', 'writtenDown'],
+  '/registration/email': ['email', 'valid'],
+  '/registration/password': ['password', 'valid'],
+  '/registration/pin': ['pin', 'valid']
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -156,8 +156,7 @@ const actions = module.exports = makeActions('registration', {
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.accounts
             .checkUsername(state.username.value)
-              .then(() => dispatch(actions.goForward()))
-        }))
+        })).then(() => dispatch(actions.goForward()))
       }
     }
   },
@@ -181,7 +180,7 @@ const actions = module.exports = makeActions('registration', {
               password: state.password.value
             })
           }
-        }))
+        })).then(() => dispatch(router.pushRoute('/wallet')))
       }
     }
   }
@@ -425,10 +424,13 @@ helpers._getNextURLFromState = (state) => {
       (userType === 'layman')) {
       return '/registration/phrase-info'
     }
+    if ((currentPath === '/registration/phrase-info') &&
+      (userType === 'expert')) {
+      return '/registration/write-phrase'
+    }
     return null
   }
 
-  const userType = state.getIn(['registration', 'userType', 'value'])
   return helpers._getNextURL(currentPath, userType)
 }
 
@@ -438,16 +440,11 @@ helpers._getNextURL = (currentPath, userType) => {
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
   }
-  if ((currentPath === '/registration/phrase-info') &&
-    (userType === 'expert')) {
-    return '/registration/write-phrase'
-  }
-
   return NEXT_ROUTES[currentPath]
 }
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  let result = !toCheck || state.getIn(['registration', toCheck, 'valid'])
+  let result = !toCheck || state.getIn(['registration', toCheck[0], toCheck[1]])
   return result || false
 }

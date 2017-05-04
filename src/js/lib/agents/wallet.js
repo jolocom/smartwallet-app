@@ -2,12 +2,11 @@ import {keystore} from 'eth-lightwallet'
 import SmartWallet from 'lib/blockchain/smartwallet'
 
 export default class WalletAgent {
-  constructor() {}
-
   generateSeedPhrase(entropy) {
     let seed = keystore.generateRandomSeed(entropy)
     // only for testing testSeed has some ether on ropsten testnet
-    let testSeed = 'mandate print cereal style toilet hole cave mom heavy fork network indoor'
+    let testSeed = 'mandate print cereal style toilet hole' +
+      ' cave mom heavy fork network indoor'
     seed = testSeed
     return seed
   }
@@ -23,7 +22,7 @@ export default class WalletAgent {
     }
   ) {
     console.log(
-      'WalletAgent: See Transactions and Smartcontracts on: https://ropsten.etherscan.io/'
+      'WalletAgent: See Transactions at: https://ropsten.etherscan.io/'
     )
     console.log(seedPhrase)
     let password = '1234'
@@ -33,8 +32,6 @@ export default class WalletAgent {
         .init(seedPhrase, password)
         .then(result => {
           return wallet.createDigitalIdentity(userName, password)
-          console.log('wallet created')
-          console.log(result)
         })
         .then(identityAddress => {
           wallet.setIdentityAddress(identityAddress)
@@ -42,18 +39,17 @@ export default class WalletAgent {
         })
         .then(result => {
           console.log(
-            'WalletAgent: identityAddress addedtoLookupContract Transaction waiting to be mined txhash -> ' +
+            'WalletAgent: identityAddress addedtoLookupContract Transaction ' +
+              'waiting to be mined txhash -> ' +
               result.txhash
           )
 
-          return wallet.waitingToBeMinedaAddToLookup(
-            result.lookupContractAddress,
-            result.txhash
-          )
+          return wallet.waitingToBeMined(result.txhash)
         })
         .then(transaction => {
           console.log(
-            'WalletAgent: Transaction add address to lookup contracted got mined -> ' +
+            'WalletAgent: Transaction add address to lookup contracted got' +
+              ' mined -> ' +
               transaction.transactionHash
           )
           let privateKeyWebID = wallet.generatePrivateKeyForWebID()
@@ -72,16 +68,15 @@ export default class WalletAgent {
             'WalletAgent: addPropertyTransaction waiting to be mined txhash: ' +
               txhash
           )
-          let identityAddress = wallet.getIdentityAddress()
-          return wallet.waitingToBeMinedaAddProperty(identityAddress, txhash)
+          return wallet.waitingToBeMined(txhash)
         })
         .then(transaction => {
           console.log(
             'WalletAgent: addPropertyTransaction got minded txhash: ' +
               transaction.transactionHash
           )
+          resolve(wallet)
         })
-      resolve(wallet)
     })
   }
 
@@ -102,6 +97,26 @@ export default class WalletAgent {
     })
   }
 
+  // only for demonstration
+  // wallet.addAttributeHash should not be called in the wallet agent
+  addAttributeHash(wallet, attributeId, attribute, definitionUrl, password) {
+    return wallet
+      .addAttributeHashToIdentity(
+        attributeId,
+        attribute,
+        definitionUrl,
+        password,
+        wallet.getIdentityAddress()
+      )
+      .then(transactionHash => {
+        console.log(
+          'WalletAgent: addAttributeHash waiting to be minded ->' +
+            transactionHash
+        )
+        return wallet.waitingToBeMined(transactionHash)
+      })
+  }
+
   loginWithSeedPhrase(userName, seedPhrase) {
     let password = '1234'
     console.log('WalletAgent: Login with Seedphrase')
@@ -116,8 +131,6 @@ export default class WalletAgent {
             userName,
             password
           )
-          console.log('wallet created')
-          console.log(result)
         })
         .then(identityAddress => {
           console.log('WalletAgent: got identity Address from Lookup Table')
@@ -138,56 +151,78 @@ export default class WalletAgent {
 
   loginWithCredentials({userName, email, password}) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
+      setTimeout(
+        () => {
+          resolve(new Wallet())
+        },
+        2000
+      )
     })
   }
 
   expertLogin({passphrase, pin}) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
+      setTimeout(
+        () => {
+          resolve(new Wallet())
+        },
+        2000
+      )
     })
   }
 
   getAccountInformation() {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        let information = {
-          emails: [{address: 'address1@example.com', verified: true},
-            {address: 'address2@example.com', verified: false}],
+      setTimeout(
+        () => {
+          let information = {
+            emails: [
+              {address: 'address1@example.com', verified: true},
+              {address: 'address2@example.com', verified: false}
+            ],
 
-          telNums: [{num: '+4917912345678', type: 'work', verified: true},
-            {num: '+4917923456789', type: 'personal', verified: false}]
-        }
-        resolve(information)
-      }, 2000)
+            telNums: [
+              {num: '+4917912345678', type: 'work', verified: true},
+              {num: '+4917923456789', type: 'personal', verified: false}
+            ]
+          }
+          resolve(information)
+        },
+        2000
+      )
     })
   }
 
   deleteEmail(email) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
+      setTimeout(
+        () => {
+          resolve()
+        },
+        2000
+      )
     })
   }
 
   updateEmail(email) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
+      setTimeout(
+        () => {
+          resolve()
+        },
+        2000
+      )
     })
   }
 
   setEmail(email) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
+      setTimeout(
+        () => {
+          resolve()
+        },
+        2000
+      )
     })
   }
 }
@@ -206,26 +241,30 @@ export class Wallet {
         verified: ''
       },
       contact: {
-        phone: [{
-          number: '+49 176 12345678',
-          type: 'mobile',
-          verified: true
-        }],
-        email: [{
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: true
-        },
-        {
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: false
-        },
-        {
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: true
-        }]
+        phone: [
+          {
+            number: '+49 176 12345678',
+            type: 'mobile',
+            verified: true
+          }
+        ],
+        email: [
+          {
+            address: 'info@jolocom.com',
+            type: 'mobile',
+            verified: true
+          },
+          {
+            address: 'info@jolocom.com',
+            type: 'mobile',
+            verified: false
+          },
+          {
+            address: 'info@jolocom.com',
+            type: 'mobile',
+            verified: true
+          }
+        ]
       },
       Repuation: 0,
       passport: {
@@ -243,10 +282,13 @@ export class Wallet {
       }
     }
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(identity)
-        /* reject() */
-      }, 2000)
+      setTimeout(
+        () => {
+          resolve(identity)
+          /* reject() */
+        },
+        2000
+      )
     })
   }
 }
