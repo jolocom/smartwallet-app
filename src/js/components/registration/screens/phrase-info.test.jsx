@@ -30,14 +30,34 @@ describe('(Component) RegistrationPhraseInfoScreen', function() {
         ))
       }
         setUserType={setUserType}
+        setPassphraseWrittenDown={() => {}}
         goForward={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('PhraseInfo').props().onChange('test')
+    wrapper.find('PhraseInfo').props().onChange()
     expect(setUserType.called).to.be.true
-    expect(setUserType.calls).to.deep.equal([{'args': ['test']}])
+    expect(setUserType.calls).to.deep.equal([{'args': ['expert']}])
+  })
+  it('should call setPassphraseWrittenDown onChange with proper params',
+  function() {
+    const setPassphraseWrittenDown = stub()
+    const wrapper = shallow(
+      (<RegistrationPhraseInfoScreen.WrappedComponent {
+        ...RegistrationPhraseInfoScreen.mapStateToProps(Immutable.fromJS({
+          registration: { }
+        }
+        ))
+      }
+        setUserType={() => {}}
+        setPassphraseWrittenDown={setPassphraseWrittenDown}
+        goForward={() => {}}
+       />),
+      { context: { muiTheme: { } } }
+    )
+    wrapper.find('PhraseInfo').props().onChange()
+    expect(setPassphraseWrittenDown.calls).to.deep.equal([{'args': [false]}])
   })
   it('should call goForward onChange with proper params', function() {
     const goForward = stub()
@@ -49,6 +69,7 @@ describe('(Component) RegistrationPhraseInfoScreen', function() {
         ))
       }
         setUserType={() => {}}
+        setPassphraseWrittenDown={() => {}}
         goForward={goForward}
        />),
       { context: { muiTheme: { } } }

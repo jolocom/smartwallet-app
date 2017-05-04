@@ -424,6 +424,10 @@ helpers._getNextURLFromState = (state) => {
       (userType === 'layman')) {
       return '/registration/phrase-info'
     }
+    if ((currentPath === '/registration/phrase-info') &&
+      (userType === 'expert')) {
+      return '/registration/write-phrase'
+    }
     return null
   }
 
@@ -436,11 +440,6 @@ helpers._getNextURL = (currentPath, userType) => {
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
   }
-  if ((currentPath === '/registration/phrase-info') &&
-    (userType === 'expert')) {
-    return '/registration/write-phrase'
-  }
-
   return NEXT_ROUTES[currentPath]
 }
 
