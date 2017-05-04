@@ -106,7 +106,7 @@ em:owner
       [phoneEntryAclUrl]: phoneEntryAclBody
     }
 
-    const SolidWallet = new SolidWalletAgent(WEBID)
+    const SolidWallet = new SolidWalletAgent()
     SolidWallet._genRandomAttrId = () => { return '123' }
     const mockHttpAgent = {
       patch: async (url, toDelete, toInsert) => {
@@ -157,6 +157,6 @@ em:owner
     }
 
     SolidWallet.http = mockHttpAgent
-    return SolidWallet.setEntry(EMAIL, 'email')
+    return SolidWallet.setEmail(WEBID, EMAIL)
   })
 })

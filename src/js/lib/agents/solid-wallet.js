@@ -9,7 +9,7 @@ const rdfHelper = {
     const bNode = rdf.blankNode(entryId)
 
     const typeToPred = {
-      phone: PRED.phone,
+      phone: PRED.mobile,
       email: PRED.email
     }
 
@@ -26,7 +26,7 @@ const rdfHelper = {
     const triples = rdf.graph()
 
     const typeToPred = {
-      phone: PRED.phone,
+      phone: PRED.mobile,
       email: PRED.email
     }
 
@@ -49,8 +49,7 @@ const rdfHelper = {
 }
 
 export default class SolidAgent {
-  constructor(webId) {
-    this.webId = webId
+  constructor() {
     this.http = new HTTPAgent({proxy: true})
   }
 
@@ -68,28 +67,38 @@ export default class SolidAgent {
     })
   }
 
-  setEntry(entryValue, entryType) {
-    const rndId = this._genRandomAttrId()
-    const userProfileFolder = util.getProfileFolderUri(this.webId)
-    const entryFileUrl = `${userProfileFolder}/${entryType}${rndId}`
-    const body = rdfHelper
-    .addEntryPatch(entryFileUrl, this.webId, entryType, rndId)
-    return this.http.patch(this.webId, [], body)
-    .then(this.createEntryFile(entryFileUrl, entryValue, entryType))
+  setEmail(webId, entryValue) {
+    this._setEntry(webId, entryValue, 'email')
   }
 
-  createEntryFile(entryFileUrl, entryValue, entryType) {
-    return this._createEntryFileAcl(entryFileUrl).then(() => {
+  setPhone(webId, entryValue) {
+    this._setEntry(webId, entryValue, 'phone')
+  }
+
+  _setEntry(webId, entryValue, entryType) {
+    const rndId = this._genRandomAttrId()
+    const userProfileFolder = util.getProfileFolderUri(webId)
+    const entryFileUrl = `${userProfileFolder}/${entryType}${rndId}`
+    const body = rdfHelper
+    .addEntryPatch(entryFileUrl, webId, entryType, rndId)
+
+    return this.http.patch(webId, [], body)
+    .then(this.createEntryFile(webId, entryFileUrl, entryValue, entryType))
+  }
+
+  createEntryFile(webId, entryFileUrl, entryValue, entryType) {
+    return this._createEntryFileAcl(webId, entryFileUrl).then(() => {
       const entryFileBody = rdfHelper
-      .entryFileBody(entryFileUrl, this.webId, entryValue, entryType)
+      .entryFileBody(entryFileUrl, webId, entryValue, entryType)
       return this.http.put(entryFileUrl, entryFileBody)
     })
   }
 
-  _createEntryFileAcl(entryFileUrl) {
+  // Move out of class?
+  _createEntryFileAcl(webId, entryFileUrl) {
     const entryFileAclUrl = `${entryFileUrl}.acl`
     const entryFileAclBody = rdfHelper
-    .entryAclFileBody(entryFileAclUrl, entryFileUrl, this.webId)
+    .entryAclFileBody(entryFileAclUrl, entryFileUrl, webId)
     return this.http.put(entryFileAclUrl, entryFileAclBody)
   }
 

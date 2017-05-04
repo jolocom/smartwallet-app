@@ -34,7 +34,7 @@ let Util = {
   },
 
   webidRoot(webid) {
-    let matches = 
+    let matches =
       // WTF :D
       webid.match(/^(.*)\/profile\/card#me$/) ||
       webid.match(/^(.*)\/profile\/card#i$/) ||

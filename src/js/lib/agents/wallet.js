@@ -1,15 +1,4 @@
-import SolidWalletAgent from 'lib/agents/solid-wallet'
-import WebIDAgent from 'lib/agents/webid'
-
 export default class WalletAgent {
-  constructor() {
-    this.webid = new WebIDAgent()
-    this.solid = new SolidWalletAgent(this.webid.getWebId())
-  }
-
-  setEmail(value) {
-    return this.solid.setEntry(value, 'email')
-  }
 
   generateSeedPhrase(randomString) {
     return 'blabla blabla blabla blabla blabla blabla blabla blabla'
@@ -81,28 +70,17 @@ export default class WalletAgent {
       }, 2000)
     })
   }
-
-  deleteEntry(type, email) {
-    return this.solid.deleteEntry(type, email)
-  }
-  updateEntry(type, email) {
-    return this.solid.updateEntry(type, email)
-  }
-  setEntry(type, email) {
-    return this.solid.setEntry(type, email)
-  }
-
 }
 
 export class Wallet {
   constructor() {
-    this.webID = 'https://live.webid.jolocom.de/profile/card'
+    this.webID = 'https://recordeddemo.webid.jolocom.de/profile/card#me'
     this.lightWaller = 'something'
   }
 
   getUserInformation({email}) {
     const identity = {
-      webId: 'https://live.webid.jolocom.de/profile/card',
+      webId: 'https://recordeddemo.webid.jolocom.de/profile/card#me',
       username: {
         value: 'AnnikaHamman',
         verified: ''
