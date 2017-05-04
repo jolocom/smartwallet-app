@@ -44,10 +44,7 @@ export default class WalletAgent {
               result.txhash
           )
 
-          return wallet.waitingToBeMinedaAddToLookup(
-            result.lookupContractAddress,
-            result.txhash
-          )
+          return wallet.waitingToBeMined(result.txhash)
         })
         .then(transaction => {
           console.log(
@@ -71,16 +68,15 @@ export default class WalletAgent {
             'WalletAgent: addPropertyTransaction waiting to be mined txhash: ' +
               txhash
           )
-          let identityAddress = wallet.getIdentityAddress()
-          return wallet.waitingToBeMinedaAddProperty(identityAddress, txhash)
+          return wallet.waitingToBeMined(txhash)
         })
         .then(transaction => {
           console.log(
             'WalletAgent: addPropertyTransaction got minded txhash: ' +
               transaction.transactionHash
           )
+          resolve(wallet)
         })
-      resolve(wallet)
     })
   }
 
@@ -99,6 +95,26 @@ export default class WalletAgent {
         2000
       )
     })
+  }
+
+  // only for demonstration
+  // wallet.addAttributeHash should not be called in the wallet agent
+  addAttributeHash(wallet, attributeId, attribute, definitionUrl, password) {
+    return wallet
+      .addAttributeHashToIdentity(
+        attributeId,
+        attribute,
+        definitionUrl,
+        password,
+        wallet.getIdentityAddress()
+      )
+      .then(transactionHash => {
+        console.log(
+          'WalletAgent: addAttributeHash waiting to be minded ->' +
+            transactionHash
+        )
+        return wallet.waitingToBeMined(transactionHash)
+      })
   }
 
   loginWithSeedPhrase(userName, seedPhrase) {
