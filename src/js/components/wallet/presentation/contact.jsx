@@ -108,11 +108,8 @@ export default class WalletContact extends React.Component {
       switch (key) {
         case 'phoneNumbers':
           return [
-            'mobile',
-            'private',
-            'work',
-            'fax',
-            'other'
+            'personal',
+            'work'
           ]
         default:
           return
