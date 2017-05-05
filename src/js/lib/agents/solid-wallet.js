@@ -2,6 +2,7 @@ import rdf from 'rdflib'
 import {PRED} from 'lib/namespaces'
 import util from 'lib/util'
 import HTTPAgent from 'lib/agents/http'
+import LDPAgent from 'lib/agents/ldp'
 
 const rdfHelper = {
   addEntryPatch(entryFileUrl, webId, entryId, entryType) {
@@ -53,6 +54,24 @@ const rdfHelper = {
 export default class SolidAgent {
   constructor() {
     this.http = new HTTPAgent({proxy: true})
+    this.ldp = new LDPAgent()
+  }
+
+  getUserInformation(webId) {
+    if (!webId) {
+      throw new Error('Invalid arguments')
+    }
+
+    return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
+      return this._formatAccountInfo(rdfData.triples)
+    })
+  }
+
+  // TODO Reconsider abstracting this
+  _formatAccountInfo(userTriples) {
+    const g = rdf.graph()
+    g.addAll(userTriples)
+    return g.statements
   }
 
   deleteEntry(entryType, value) {
@@ -70,11 +89,17 @@ export default class SolidAgent {
   }
 
   setEmail(webId, entryValue) {
-    this._setEntry(webId, entryValue, 'email')
+    if (!webId || !entryValue) {
+      throw new Error('Invalid arguments')
+    }
+    return this._setEntry(webId, entryValue, 'email')
   }
 
   setPhone(webId, entryValue) {
-    this._setEntry(webId, entryValue, 'phone')
+    if (!webId || !entryValue) {
+      throw new Error('Invalid arguments')
+    }
+    return this._setEntry(webId, entryValue, 'phone')
   }
 
   _setEntry(webId, entryValue, entryType) {

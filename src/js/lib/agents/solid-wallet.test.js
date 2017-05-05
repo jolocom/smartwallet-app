@@ -1,11 +1,87 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
+import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
-import SolidWalletAgent from 'lib/agents/solid-wallet'
+import SolidAgent from 'lib/agents/solid-wallet'
 
-describe.only('SolidWalletAgent', () => {
+describe('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
+
+  describe.only('#getUserInformation', () => {
+    it('Should correctly throw if no arguments are passed', () => {
+      const solidAgent = new SolidAgent()
+      const msg = 'Invalid arguments'
+      expect(() => solidAgent.getUserInformation()).to.throw(msg)
+    })
+
+    it('Should correctly fetch and parse user info', async () => {
+      const mockResponse = `\
+        @prefix pro: <./>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+        @prefix rd: <http://www.w3.org/2000/01/rdf-schema#>.
+        @prefix schem: <https://schema.org/>.
+        
+        pro:card
+          a n0:PersonalProfileDocument;
+          n0:primaryTopic <#me>.
+        <#me>
+          a n0:Person;
+          n0:mbox [ rd:seeAlso pro:email123; schem:identifier "123" ];
+          n0:name "Test".`
+
+      const expectedUserInfo = {
+        webId: 'https://test.webid.jolocom.de/profile/card#me',
+        username: {
+          value: 'Test',
+          verified: ''
+        },
+        contact: {
+          phone: [{
+            number: '+49 176 12345678',
+            type: 'mobile',
+            verified: true
+          }],
+          email: [{
+            address: 'test@jolocom.com',
+            type: 'mobile',
+            verified: true
+          },
+          {
+            address: 'test@jolocom.com',
+            type: 'mobile',
+            verified: false
+          },
+          {
+            address: 'test@jolocom.com',
+            type: 'mobile',
+            verified: true
+          }]
+        },
+        Repuation: 0,
+        passport: {
+          number: null,
+          givenName: null,
+          familyName: null,
+          birthDate: null,
+          gender: null,
+          street: null,
+          streetAndNumber: null,
+          city: null,
+          zip: null,
+          state: null,
+          country: null
+        }
+      }
+
+      const solidAgent = new SolidAgent()
+      solidAgent.ldp.fetchTriplesAtUri = async (uri) =>
+        (new Parser()).parse(mockResponse, uri)
+
+      const userInfo = await solidAgent.getUserInformation(WEBID)
+      expect(userInfo).to.deep.equal(expectedUserInfo)
+    })
+  })
 
   describe('#setPhone', () => {
     const phoneEntryBody = `\
@@ -43,8 +119,8 @@ pho:owner
       }
     }
 
-    const SolidWallet = new SolidWalletAgent()
-    SolidWallet._genRandomAttrId = () => { return '123' }
+    const solidAgent = new SolidAgent()
+    solidAgent._genRandomAttrId = () => { return '123' }
 
     const mockHttpAgent = {
       patch: async (url, toDelete, toInsert) => {
@@ -104,14 +180,21 @@ pho:owner
       }
     }
 
-    SolidWallet.http = mockHttpAgent
-    SolidWallet.setPhone(WEBID, EMAIL)
+    solidAgent.http = mockHttpAgent
+    solidAgent.setPhone(WEBID, EMAIL)
 
     const entryPut = putArgumentsMap[phoneEntryUrl].wasPut
     const entryAclPut = putArgumentsMap[phoneEntryAclUrl].wasPut
 
     it('Should put both the phone entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
+    })
+
+    it('Should throw if no arguments are passed', () => {
+      const msg = 'Invalid arguments'
+      expect(() => solidAgent.setPhone()).to.throw(msg)
+      expect(() => solidAgent.setPhone(WEBID)).to.throw(msg)
+      expect(() => solidAgent.setPhone(undefined, WEBID)).to.throw(msg)
     })
   })
 
@@ -152,8 +235,8 @@ em:owner
       }
     }
 
-    const SolidWallet = new SolidWalletAgent()
-    SolidWallet._genRandomAttrId = () => { return '123' }
+    const solidAgent = new SolidAgent()
+    solidAgent._genRandomAttrId = () => { return '123' }
     const mockHttpAgent = {
       patch: async (url, toDelete, toInsert) => {
         it('Should patch the profile file correctly', (done) => {
@@ -211,14 +294,21 @@ em:owner
       }
     }
 
-    SolidWallet.http = mockHttpAgent
-    SolidWallet.setEmail(WEBID, EMAIL)
+    solidAgent.http = mockHttpAgent
+    solidAgent.setEmail(WEBID, EMAIL)
 
     const entryPut = putArgumentsMap[emailEntryUrl].wasPut
     const entryAclPut = putArgumentsMap[emailEntryAclUrl].wasPut
 
     it('Should put both the email entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
+    })
+
+    it('Should throw if no arguments are passed', () => {
+      const msg = 'Invalid arguments'
+      expect(() => solidAgent.setPhone()).to.throw(msg)
+      expect(() => solidAgent.setPhone(WEBID)).to.throw(msg)
+      expect(() => solidAgent.setPhone(undefined, WEBID)).to.throw(msg)
     })
   })
 })
