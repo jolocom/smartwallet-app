@@ -111,7 +111,7 @@ export class Wallet {
           verified: true
         }]
       },
-      Repuation: 0,
+      Reputation: 0,
       passport: {
         number: null,
         givenName: null,

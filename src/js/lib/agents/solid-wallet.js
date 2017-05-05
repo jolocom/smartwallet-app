@@ -68,10 +68,135 @@ export default class SolidAgent {
   }
 
   // TODO Reconsider abstracting this
-  _formatAccountInfo(userTriples) {
+  async _formatAccountInfo(userTriples) {
     const g = rdf.graph()
+    const profileData = {
+      webId: '',
+      username: {
+        value: '',
+        verified: false
+      },
+      contact: {
+        phone: [],
+        email: []
+      },
+      Reputation: 0,
+      passport: {
+        number: null,
+        givenName: null,
+        familyName: null,
+        birthDate: null,
+        gender: null,
+        street: null,
+        streetAndNumber: null,
+        city: null,
+        zip: null,
+        state: null,
+        country: null
+      }
+    }
     g.addAll(userTriples)
-    return g.statements
+    profileData.username.value = g
+      .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
+
+    profileData.email = await this.getExtendedProprietyValue(g, 'email')
+
+    //
+    // this.extractEmailInfo(g)
+
+    /*
+    this.expandBlankNodes(g
+    .statementsMatching(undefined, PRED.email, undefined))
+    g.statementsMatching(undefined, PRED.email, undefined).forEach(t => {
+      g.statementsMatching(t.object, undefined, undefined).forEach(record => {
+        tmp[tmpMap[record.predicate.value]] = record.object.value
+      })
+    })
+    profileData.email = tmp
+    */
+    return profileData
+  }
+
+  async getExtendedProprietyValue(g, property) {
+    const propertyData = []
+    const propertyToPredMap = {
+      email: PRED.email,
+      phone: PRED.mobile
+    }
+
+    const pred = propertyToPredMap[property]
+
+    if (!pred) {
+      throw new Error('Invalid property')
+    }
+
+    const objects = g.statementsMatching(undefined, pred, undefined).map(st =>
+      st.object
+    )
+
+    for (let obj in objects) {
+      if (obj.termType !== 'BlankNode') {
+        propertyData.push({
+          id: null,
+          address: obj.value
+        })
+      } else {
+        propertyData.push(await this._expandBnode(obj, g, pred))
+      }
+    }
+
+    return propertyData
+  }
+
+  // Aimed at our bNode / extended node structure.
+  // Error Handling on statements matching and fetch.
+
+  async _expandBNode(obj, g, pred) {
+    const extUri = g.statementsMatching(obj, pred, undefined)[0].object.value
+    return this.ldp.fetchTriplesAtUri(extUri).then(rdfData => {
+      const extGraph = rdf.graph()
+      extGraph.addAll(rdfData.triples)
+
+      return {
+        id: g.statementsMatching(obj, PRED.identifier, undefined)[0]
+          .object.value,
+        address: extGraph.statementsMatching(undefined, pred, undefined)[0]
+          .object.value
+      }
+    })
+  }
+
+  /*
+    const emailInfo = []
+
+    // TODO Not always bnode
+    const bNodes =
+    g.statementsMatching(undefined, PRED.email, undefined).map(st => {
+      return st.object
+    })
+
+    const links = bNodes.map(node => {
+      return graph
+      .statementsMatching(node, PRED.seeAlso, undefined)[0].object.value
+    })
+
+    links.forEach(l => {
+      return this.ldp.fetchTriplesAtUrl(l).then(rdfData => {
+        const gr = rdf.graph()
+        gr.addAll(rdfData)
+
+        this.extractEmailInfo(gr)
+      })
+    })
+  }
+
+  */
+  extractPhoneInfo() {
+  }
+
+  _fetchExtendedFiles(uri) {
+    return this.ldp.fetchTriplesAtUri(uri)
+    .then(res => res.triples)
   }
 
   deleteEntry(entryType, value) {

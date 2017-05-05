@@ -34,7 +34,7 @@ describe('solidAgentAgent', () => {
         webId: 'https://test.webid.jolocom.de/profile/card#me',
         username: {
           value: 'Test',
-          verified: ''
+          verified: true
         },
         contact: {
           phone: [{
@@ -44,21 +44,21 @@ describe('solidAgentAgent', () => {
           }],
           email: [{
             address: 'test@jolocom.com',
-            type: 'mobile',
+            type: 'email',
             verified: true
           },
           {
-            address: 'test@jolocom.com',
-            type: 'mobile',
+            address: 'test2@jolocom.com',
+            type: 'email',
             verified: false
           },
           {
-            address: 'test@jolocom.com',
-            type: 'mobile',
+            address: 'test3@jolocom.com',
+            type: 'email',
             verified: true
           }]
         },
-        Repuation: 0,
+        Reputation: 0,
         passport: {
           number: null,
           givenName: null,
