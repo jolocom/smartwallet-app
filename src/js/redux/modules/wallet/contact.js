@@ -13,17 +13,18 @@ const actions = module.exports = makeActions('wallet/contact', {
         const state = getState().getIn(['wallet', 'contact']).toJS()
         if (!state.showErrors) {
           dispatch(actions.saveChanges.buildAction(params, (backend) => {
+            // Anti pattern?
+            const webId = getState().getIn(['wallet', 'identity', 'webId'])
             let promises = []
-            // console.log(state)
             for (let i = 0;
               i < state.information.originalInformation.emails.length; i++) {
               if (state.information.originalInformation.emails[i].delete) {
                 promises.push(
-                  backend.wallet.deleteEmail(
+                  backend.solid.deleteEmail(
                     state.information.originalInformation.emails[i].address))
               } else if (state.information.originalInformation.emails[i].update) { //eslint-disable-line
                 promises.push(
-                  backend.wallet.updateEmail(
+                  backend.solid.updateEmail(
                     state.information.originalInformation.emails[i].address))
               }
             }
@@ -32,8 +33,8 @@ const actions = module.exports = makeActions('wallet/contact', {
               if (!state.information.newInformation.emails[i].delete &&
                   !state.information.newInformation.emails[i].blank) {
                 promises.push(
-                backend.wallet.setEmail(
-                  state.information.newInformation.emails[i].address))
+                backend.solid.setEmail(
+                  webId, state.information.newInformation.emails[i].address))
               }
             }
             // console.log(promises)

@@ -2,6 +2,7 @@ import VerificationAgent from './verification'
 
 
 export default class WalletAgent {
+
   generateSeedPhrase(randomString) {
     return 'blabla blabla blabla blabla blabla blabla blabla blabla'
   }
@@ -76,14 +77,14 @@ export default class WalletAgent {
 
 export class Wallet {
   constructor() {
-    this.webID = 'https://demo.webid.jolocom.com/profile/card'
+    this.webID = 'https://recordeddemo.webid.jolocom.de/profile/card#me'
     this.lightWaller = 'something'
     this._verification = new VerificationAgent()
   }
 
   getUserInformation({email}) {
     const identity = {
-      webId: 'https://demo.webid.jolocom.com/profile/card',
+      webId: 'https://recordeddemo.webid.jolocom.de/profile/card#me',
       username: {
         value: 'AnnikaHamman',
         verified: ''
