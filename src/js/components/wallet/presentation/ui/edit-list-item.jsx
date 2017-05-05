@@ -2,15 +2,14 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
+  SelectField,
+  TextField,
   IconButton,
   ListItem,
   MenuItem
 } from 'material-ui'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
-
-import FormsyText from 'formsy-material-ui/lib/FormsyText'
-import FormsySelect from 'formsy-material-ui/lib/FormsySelect'
 
 import {theme} from 'styles'
 
@@ -25,7 +24,8 @@ let STYLES = {
     cursor: 'inherit'
   },
   type: {
-    width: '50%'
+    maxWidth: '120px',
+    width: '30%'
   },
   disabledUnderline: {
     borderBottom: 'solid',
@@ -33,6 +33,10 @@ let STYLES = {
   },
   icon: {
     top: '16px'
+  },
+  textField: {
+    maxWidth: '220px',
+    width: '70%'
   },
   item: {
     padding: '0 16px 0 72px'
@@ -58,6 +62,8 @@ export default class EditListItem extends React.Component {
     onChange: React.PropTypes.func.isRequired,
     onTypeChange: React.PropTypes.func,
     onDelete: React.PropTypes.func,
+    showErrors: React.PropTypes.bool,
+    valid: React.PropTypes.bool,
     enableEdit: React.PropTypes.bool,
     enableDelete: React.PropTypes.bool
   }
@@ -77,6 +83,8 @@ export default class EditListItem extends React.Component {
       value,
       enableEdit,
       onChange,
+      valid,
+      showErrors,
       errorText
     } = this.props
 
@@ -102,7 +110,8 @@ export default class EditListItem extends React.Component {
         disabled
       >
         <div style={styles.fields}>
-          <FormsyText
+          <TextField
+            style={STYLES.textField}
             autoFocus={focused}
             disabled={!enableEdit}
             inputStyle={styles.input}
@@ -111,7 +120,7 @@ export default class EditListItem extends React.Component {
             name={name}
             value={value}
             onChange={onChange}
-            errorText={errorText}
+            errorText={showErrors && !valid && !!value ? errorText : null}
           />
           {this.renderType()}
         </div>
@@ -122,18 +131,17 @@ export default class EditListItem extends React.Component {
   renderType() {
     if (this.props.types) {
       return (
-        <FormsySelect
+        <SelectField
           style={STYLES.type}
           name={`${this.props.name}_type`}
           value={this.props.type}
-          onChange={this.props.onTypeChange}
+          disabled={this.props.verified}
+          onChange={(event, key, payload) => this.props.onTypeChange(payload)}
         >
         {this.props.types.map((type, i) => {
-          return (
-            <MenuItem key={i} value={type} primaryText={type} />
-          )
+          return <MenuItem key={i} value={type} primaryText={type} />
         })}
-        </FormsySelect>
+        </SelectField>
       )
     }
     return null

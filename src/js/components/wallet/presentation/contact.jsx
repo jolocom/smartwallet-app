@@ -82,6 +82,7 @@ export default class WalletContact extends React.Component {
       value,
       type,
       verified,
+      valid,
       errorText,
       icon,
       isNew
@@ -92,7 +93,7 @@ export default class WalletContact extends React.Component {
     const name = `${key}[${i}]`
 
     const actionValue = (key, e) => key === 'emails' ? e.target.value
-    : {value: e.target.value, type: type}
+      : {value: e.target.value, type}
 
     let {
       setInformation,
@@ -101,6 +102,7 @@ export default class WalletContact extends React.Component {
       close,
       confirm,
       focused,
+      showErrors,
       onFocusChange
     } = this.props
 
@@ -128,6 +130,8 @@ export default class WalletContact extends React.Component {
         value={value}
         types={types}
         type={type}
+        showErrors={showErrors}
+        valid={valid}
         verified={verified}
         focused={focused === key}
         enableDelete
@@ -146,7 +150,7 @@ export default class WalletContact extends React.Component {
               close()
             })
         }
-        onTypeChange={(event, type, index) => {
+        onTypeChange={(type) => {
           isNew ? setInformation(key, i, {value, type})
             : updateInformation(key, i, {value, type})
         }}
@@ -176,6 +180,7 @@ export default class WalletContact extends React.Component {
               value: field.value,
               type: field.type,
               verified: !!field.verified,
+              valid: field.valid,
               errorText,
               isNew: false
             })
@@ -193,6 +198,7 @@ export default class WalletContact extends React.Component {
               value: field.value,
               type: field.type,
               verified: !!field.verified,
+              valid: field.valid,
               errorText,
               isNew: true
             })
@@ -209,6 +215,7 @@ export default class WalletContact extends React.Component {
             value: '',
             type: '',
             verified: false,
+            valid: false,
             errorText,
             isNew: true
           })
