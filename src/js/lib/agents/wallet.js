@@ -54,19 +54,73 @@ export default class WalletAgent {
       }, 2000)
     })
   }
+}
 
+export class Wallet {
+  constructor() {
+    this.webID = 'https://demo.webid.jolocom.com/profile/card'
+    this.lightWaller = 'something'
+  }
+
+  getUserInformation({email}) {
+    const identity = {
+      webId: 'https://demo.webid.jolocom.com/profile/card',
+      username: {
+        value: 'AnnikaHamman',
+        verified: ''
+      },
+      contact: {
+        phone: [{
+          number: '+49 176 12345678',
+          type: 'mobile',
+          verified: true
+        }],
+        email: [{
+          address: 'info@jolocom.com',
+          type: 'personal',
+          verified: true
+        }, {
+          address: 'info@jolocom.com',
+          type: 'personal',
+          verified: false
+        }, {
+          address: 'info@jolocom.com',
+          type: 'personal',
+          verified: true
+        }]
+      },
+      passport: {
+        number: null,
+        givenName: null,
+        familyName: null,
+        birthDate: null,
+        gender: null,
+        street: null,
+        streetAndNumber: null,
+        city: null,
+        zip: null,
+        state: null,
+        country: null
+      }
+    }
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(identity)
+        /* reject() */
+      }, 2000)
+    })
+  }
   getAccountInformation() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        let information = {
+        const information = {
           emails: [
-            {address: 'address1@example.com', verified: true},
-            {address: 'address2@example.com', verified: false}
+            {value: 'address1@example.com', verified: false},
+            {value: 'address2@example.com', verified: false}
           ],
-
           phoneNumbers: [
-            {number: '+4917912345678', type: 'work', verified: true},
-            {number: '+4917923456789', type: 'personal', verified: false}
+            {value: '+491000222678', type: 'work', verified: true},
+            {value: '+4917923456789', type: 'personal', verified: false}
           ]
         }
         resolve(information)
@@ -118,64 +172,6 @@ export default class WalletAgent {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve()
-      }, 2000)
-    })
-  }
-}
-
-export class Wallet {
-  constructor() {
-    this.webID = 'https://demo.webid.jolocom.com/profile/card'
-    this.lightWaller = 'something'
-  }
-
-  getUserInformation({email}) {
-    const identity = {
-      webId: 'https://demo.webid.jolocom.com/profile/card',
-      username: {
-        value: 'AnnikaHamman',
-        verified: ''
-      },
-      contact: {
-        phone: [{
-          number: '+49 176 12345678',
-          type: 'mobile',
-          verified: true
-        }],
-        email: [{
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: true
-        },
-        {
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: false
-        },
-        {
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: true
-        }]
-      },
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
-    }
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(identity)
-        /* reject() */
       }, 2000)
     })
   }

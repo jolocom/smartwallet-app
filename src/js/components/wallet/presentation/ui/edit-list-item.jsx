@@ -136,6 +136,7 @@ export default class EditListItem extends React.Component {
         </FormsySelect>
       )
     }
+    return null
   }
 
   get deleteButton() {

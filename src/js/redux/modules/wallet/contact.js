@@ -3,12 +3,12 @@ import { makeActions } from '../'
 import * as router from '../router'
 
 import {
-initiate,
-verify,
-add,
-update,
+mapAccountInformationToState,
+validateChanges,
+addNewField,
+updateOriginalValue,
 submitChanges,
-set
+setNewFieldValue
 } from '../../../lib/edit-contact-util'
 
 const actions = module.exports = makeActions('wallet/contact', {
@@ -16,12 +16,12 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState) => {
+      return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
         const {information, showErrors} = getState().toJS().wallet.contact
         if (!showErrors) {
           dispatch(actions.saveChanges.buildAction(params,
-            backend => submitChanges(backend, information)
+          () => submitChanges(backend, services, information)
           )).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }
       }
@@ -42,10 +42,10 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState) => {
+      return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getAccountInformation
-        .buildAction(params, (backend) => {
-          return backend.wallet.getAccountInformation()
+        .buildAction(params, () => {
+          return services.auth.currentUser.wallet.getAccountInformation()
         }))
       }
     }
@@ -60,7 +60,7 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: ['field', 'index', 'value']
   },
   addNewEntry: {
-    expectedParams: ['field']
+    expectedParams: ['field', 'index']
   }
 })
 
@@ -91,23 +91,25 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.setIn(['loading'], true)
 
     case actions.getAccountInformation.id_success:
-      return initiate(action.result)
+      return mapAccountInformationToState(action.result)
 
     case actions.setInformation.id:
-      return set(state, action)
+      return setNewFieldValue(state, action)
 
     case actions.deleteInformation.id:
-      return state.mergeIn(
-        ['information', action.age, action.field, action.index], {delete: true})
+      return state.mergeIn(['information', action.age, action.field,
+        action.index], {
+          delete: true
+        })
 
     case actions.updateInformation.id:
-      return update(state, action)
+      return updateOriginalValue(state, action)
 
     case actions.addNewEntry.id:
-      return add(state, action)
+      return addNewField(state, action)
 
     case actions.validate.id:
-      return verify(state)
+      return validateChanges(state)
 
     default:
       return state

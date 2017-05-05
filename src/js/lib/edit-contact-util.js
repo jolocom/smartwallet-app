@@ -1,143 +1,126 @@
 import Immutable from 'immutable'
 
-export const verify = (state) => {
+export const validateChanges = (state) => {
   const {newInformation, originalInformation} = state.get('information').toJS()
   const newFields = newInformation.emails.concat(newInformation.phoneNumbers)
-  const oldValues = originalInformation.emails.concat(
+  const oldFields = originalInformation.emails.concat(
     originalInformation.phoneNumbers)
-  const isValid = (
-    oldValues.every(
-      e => (e.valid || e.delete || e.update) && !(e.verified && e.update))) &&
-    (newFields.every(
-      e => (e.blank || e.valid || e.delete)))
+
+  const isValid = newFields.every(e => (e.blank || e.valid || e.delete)) &&
+    oldFields.every(e => e.delete || !e.update || (e.valid && !e.verified))
+
   return state.setIn(['showErrors'], !isValid)
 }
 
 const isBlank = (value, field) => {
-  switch (field) {
-    case 'phoneNumbers':
-      return !value.number.trim()
-    case 'emails':
-      return !value.address.trim()
-    default:
-      return !value.trim()
+  if (typeof value === 'object') {
+    return !value.value || !value.value.trim()
   }
+  return !value.trim()
 }
 
 const isValidValue = (value, field) => {
   switch (field) {
     case 'phoneNumbers':
-      return (/^([\d.]+)/.test(value.number) ||
-        /^\+([\d]+)$/.test(value.number))
+      return (/^([\d.]+)/.test(value.value) ||
+        /^\+([\d]+)$/.test(value.value))
     case 'emails':
-      return /^([\w.]+)@([\w.]+)\.(\w+)/.test(value.address)
+      return /^([\w.]+)@([\w.]+)\.(\w+)/.test(value)
     default:
       return true
   }
 }
 
-const parseValue = (value, field) => {
-  switch (field) {
-    case 'phoneNumbers':
-      return {value: value.number, type: value.type}
-    case 'emails':
-      return {value: value.address}
-    default:
-      return {value}
-  }
-}
+const parseActionValueToObject = (value, field) => field === 'phoneNumbers'
+  ? value : {value}
 
-const addNew = (field) => {
-  switch (field) {
-    case 'phoneNumbers':
-      return {number: '', type: 'mobile'}
-    case 'emails':
-      return {address: ''}
-    default:
-      return {value: ''}
-  }
-}
+const addTypeAttribute = (field) => field === 'phoneNumbers'
+  ? {type: 'personal'} : {}
 
-export const set = (state, {field, index, value}) => state.mergeIn(
+export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
   ['information', 'newInformation', field, index], {
-    ...parseValue(value, field),
+    ...parseActionValueToObject(value, field),
     valid: isValidValue(value, field),
     blank: isBlank(value, field)
   })
 
-export const initiate = ({emails, phoneNumbers}) => Immutable.fromJS({
-  loading: false,
-  showErrors: false,
-  information: {
-    newInformation: {
-      emails: [],
-      phoneNumbers: []
-    },
-    originalInformation: {
-      emails: emails.map(email => {
-        return {
-          ...email,
-          delete: false,
-          update: false,
-          valid: true
-        }
-      }),
-      phoneNumbers: phoneNumbers.map(phone => {
-        return {
-          ...phone,
-          delete: false,
-          update: false,
-          valid: true
-        }
-      })
+export const mapAccountInformationToState = ({emails, phoneNumbers}) =>
+  Immutable.fromJS({
+    loading: false,
+    showErrors: false,
+    information: {
+      newInformation: {
+        emails: [],
+        phoneNumbers: []
+      },
+      originalInformation: {
+        emails: emails.map(email => {
+          return {...email, delete: false, update: false, valid: true}
+        }),
+        phoneNumbers: phoneNumbers.map(phone => {
+          return {...phone, delete: false, update: false, valid: true}
+        })
+      }
     }
-  }
-})
-
-export const add = (state, {field}) => state.updateIn(
-  ['information', 'newInformation', field],
-  arr => arr.push({
-    ...addNew(field),
-    valid: false,
-    delete: false,
-    blank: true
-  }))
-
-const canUpdate = (state, field, index) => state.getIn(
-  ['information', 'originalInformation', field, index, 'verified']) ||
-  state.getIn(['information', 'originalInformation', field]).toJS().length === 0
-
-export const update = (state, {field, value, index}) => canUpdate(state, field, index) // eslint-disable-line max-len
-  ? state
-  : state.mergeIn(['information', 'originalInformation', field, index], {
-    ...parseValue(value, field),
-    valid: isValidValue(value, field),
-    delete: value === '',
-    update: true
   })
 
-const save = (state, {remove, update, set}, key) => [].push(
-  state.originalInformation[key].map(e => e.delete ? remove(e.value)
-    : (e.update && e.valid && !e.verified) ? update(e.value) : null
-  ),
-  state.newInformation[key].map(e => (e.delete || e.blank || !e.valid)
-    ? null : set(e.value)
+const canAddNewField = (state, field, index) => {
+  if (index === 0) { return true }
+  if (!state.getIn(
+    ['information', 'newInformation', field, index - 1, 'delete'])) {
+    return !state.getIn(
+      ['information', 'newInformation', field, index - 1, 'blank'])
+  }
+  return canAddNewField(state, field, index - 1)
+}
+
+export const addNewField = (state, {field, index}) => {
+  if (canAddNewField(state, field, index)) {
+    return state.mergeIn(['information', 'newInformation', field, index], {
+      ...addTypeAttribute(field), value: '', verified: false, valid: false,
+      delete: false, blank: true
+    })
+  }
+  return state
+}
+
+const canUpdate = (state, field, index) => !state.getIn(
+  ['information', 'originalInformation', field, index, 'verified']) &&
+  state.getIn(['information', 'originalInformation', field]).toJS().length > 0
+
+export const updateOriginalValue = (state, {field, value, index}) => {
+  if (canUpdate(state, field, index)) {
+    return state.mergeIn(['information', 'originalInformation', field, index], {
+      ...parseActionValueToObject(value, field),
+      valid: isValidValue(value, field),
+      delete: value === '',
+      update: true
+    })
+  }
+  return state
+}
+const collectChages = (state, {remove, update, set}, key) => [].concat(
+    state.originalInformation[key].map(
+      e => e.delete ? remove(e.value)
+      : (e.update && e.valid && !e.verified) ? update(e.value)
+      : null
+    ), state.newInformation[key].map(
+      e => (e.delete || e.blank || !e.valid) ? null : set(e.value)
   ))
 
-export const submitChanges = ({wallet}, state) => {
+export const submitChanges = (backend, services, state) => {
   const emailOperations = {
-    set: wallet.setEmail,
-    remove: wallet.deleteEmail,
-    update: wallet.updateEmail
+    set: services.auth.currentUser.wallet.setEmail,
+    remove: services.auth.currentUser.wallet.deleteEmail,
+    update: services.auth.currentUser.wallet.updateEmail
   }
   const phoneOperations = {
-    set: wallet.setPhone,
-    remove: wallet.deletePhone,
-    update: wallet.updatePhone
+    set: services.auth.currentUser.wallet.setPhone,
+    remove: services.auth.currentUser.wallet.deletePhone,
+    update: services.auth.currentUser.wallet.updatePhone
   }
 
-  return Promise.all([].push(
-    save(state, emailOperations, 'emails'),
-    save(state, phoneOperations, 'phoneNumbers')
-  ))
+  let promises = [].concat(collectChages(state, emailOperations, 'emails'),
+    collectChages(state, phoneOperations, 'phoneNumbers'))
+  return Promise.all(promises)
 }

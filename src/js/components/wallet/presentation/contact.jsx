@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import {Form} from 'formsy-react'
 import {
   EditAppBar,
   EditHeader,
@@ -7,8 +8,7 @@ import {
   AddNew
 } from './ui'
 import {
-  Content,
-  Block
+  Content
 } from '../../structure'
 import {theme} from 'styles'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
@@ -16,7 +16,6 @@ import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import {
   List
 } from 'material-ui'
-import Formsy from 'formsy-react'
 
 import Loading from 'components/common/loading'
 
@@ -64,7 +63,6 @@ export default class WalletContact extends React.Component {
           errorText: 'Invalid phone number',
           addText: 'Add phone number',
           icon: CommunicationCall
-
         })}
         {this.renderFields({
           key: 'emails',
@@ -82,9 +80,9 @@ export default class WalletContact extends React.Component {
       key,
       label,
       value,
-      types,
       type,
       verified,
+      errorText,
       icon,
       isNew
     } = field
@@ -92,6 +90,34 @@ export default class WalletContact extends React.Component {
     const prefix = isNew ? 'newInformation' : 'originalInformation'
     const id = `${prefix}_${key}_${i}`
     const name = `${key}[${i}]`
+
+    const actionValue = (key, e) => key === 'emails' ? e.target.value
+    : {value: e.target.value, type: type}
+
+    let {
+      setInformation,
+      updateInformation,
+      deleteInformation,
+      close,
+      confirm,
+      focused,
+      onFocusChange
+    } = this.props
+
+    const types = ((field) => {
+      switch (key) {
+        case 'phoneNumbers':
+          return [
+            'mobile',
+            'private',
+            'work',
+            'fax',
+            'other'
+          ]
+        default:
+          return
+      }
+    })()
 
     return (
       <EditListItem
@@ -101,38 +127,31 @@ export default class WalletContact extends React.Component {
         iconStyle={STYLES.icon}
         label={label}
         name={name}
+        enableEdit={!verified}
         value={value}
         types={types}
         type={type}
         verified={verified}
-        focused={this.props.focused === key}
-        enableEdit={isNew}
+        focused={focused === key}
         enableDelete
-        onFocusChange={() => {
-          if (isNew) {
-            this.props.addNewEntry(key)
-          }
-          this.props.onFocusChange(key)
-        }}
-        onChange={(e) => {
-          if (isNew) {
-            this.props.setInformation(key, i, e.target.value)
-          } else {
-            this.props.updateInformation(key, i, e.target.value)
-          }
-        }}
-        onDelete={() => {
-          if (!isNew && verified) {
-            this.props.confirm(
-              'Are you sure you want to delete a verified email?',
-              'Delete', () => {
-                this.props.deleteInformation(prefix, key, i)
-                this.props.close()
-              }
-            )
-          } else {
-            this.props.deleteInformation(prefix, key, i)
-          }
+        errorText={errorText}
+        onFocusChange={() => onFocusChange(key)}
+        onChange={(e) => isNew
+          ? setInformation(key, i, actionValue(key, e))
+          : updateInformation(key, i, actionValue(key, e))
+        }
+        onDelete={() => (isNew || !verified) ? deleteInformation(prefix, key, i)
+          : confirm(
+            'Are you sure you want to delete a verified email?',
+            'Delete',
+            () => {
+              deleteInformation(prefix, key, i)
+              close()
+            })
+        }
+        onTypeChange={(event, type, index) => {
+          isNew ? setInformation(key, i, {value, type})
+            : updateInformation(key, i, {value, type})
         }}
         />
     )
@@ -143,39 +162,13 @@ export default class WalletContact extends React.Component {
 
     const {originalInformation, newInformation} = this.props.information
 
-    const getValue = (field) => {
-      switch (key) {
-        case 'phoneNumbers':
-          return field.number
-        case 'emails':
-          return field.address
-        default:
-          return field.value
-      }
-    }
+    const {
+      loading,
+      addNewEntry,
+      onFocusChange
+    } = this.props
 
-    const getTypes = (field) => {
-      switch (key) {
-        case 'phoneNumbers':
-          return [
-            'mobile',
-            'private',
-            'work',
-            'fax',
-            'other'
-          ]
-        case 'emails':
-          return [
-            'private',
-            'work',
-            'other'
-          ]
-        default:
-          return
-      }
-    }
-
-    if (this.props.loading === false) {
+    if (!loading) {
       fields.push(
         originalInformation[key].map((field, i) => {
           if (!field.delete) {
@@ -183,9 +176,8 @@ export default class WalletContact extends React.Component {
               key,
               label,
               icon: i === 0 && icon,
-              value: getValue(field),
+              value: field.value,
               type: field.type,
-              types: getTypes(field),
               verified: !!field.verified,
               errorText,
               isNew: false
@@ -201,7 +193,8 @@ export default class WalletContact extends React.Component {
               key,
               label,
               icon: !fields.length && i === 0 && icon,
-              value: getValue(field),
+              value: field.value,
+              type: field.type,
               verified: !!field.verified,
               errorText,
               isNew: true
@@ -210,13 +203,14 @@ export default class WalletContact extends React.Component {
         })
       )
 
-      if (!fields.length) {
+      if (fields.length === 0) {
         fields.push(
           this.renderField(0, {
             key,
             label,
             icon: !fields.length && icon,
             value: '',
+            type: '',
             verified: false,
             errorText,
             isNew: true
@@ -224,27 +218,19 @@ export default class WalletContact extends React.Component {
         )
       } else {
         fields.push(
-          <Block key={`add_${key}`}>
-            <AddNew
-              onClick={() => {
-                var length = newInformation[key].length
-                if (length === 0 ||
-                  newInformation[key][length - 1].value !== '') {
-                  this.props.addNewEntry(key)
-                  this.props.onFocusChange(
-                    `newInformation_${key}`,
-                     newInformation[key].length
-                  )
-                }
-              }}
-              value={addText}
-            />
-          </Block>
+          <AddNew key={`add_${key}`} onClick={() => {
+            addNewEntry(key, newInformation[key].length)
+            onFocusChange(`newInformation_${key}`)
+          }}
+            value={addText}
+          />
         )
       }
     }
 
-    return fields
+    return <Form>
+      {fields}
+    </Form>
   }
 
   render() {
@@ -258,17 +244,16 @@ export default class WalletContact extends React.Component {
 
     return (
       <div>
-        <EditAppBar title="Edit Contact"
+        <EditAppBar
+          title="Edit Contact"
           loading={this.props.loading}
           onSave={this.props.saveChanges}
           onClose={this.props.exitWithoutSaving} />
         <Content>
           <EditHeader title="Contact" />
-          <Formsy.Form>
-            <List>
-              {content}
-            </List>
-          </Formsy.Form>
+          <List>
+            {content}
+          </List>
         </Content>
       </div>
     )

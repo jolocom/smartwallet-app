@@ -36,7 +36,7 @@ export default class WalletContactScreen extends React.Component {
       focused: ''
     }
   }
-  componentDidMount() {
+  componentWillMount() {
     this.props.getAccountInformation()
   }
   render() {
