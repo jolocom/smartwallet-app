@@ -34,8 +34,11 @@ let Util = {
   },
 
   webidRoot(webid) {
-    let matches = webid.match(/^(.*)\/profile\/card#me$/) ||
-      webid.match(/^(.*)\/card#i$/)
+    let matches =
+      // WTF :D
+      webid.match(/^(.*)\/profile\/card#me$/) ||
+      webid.match(/^(.*)\/profile\/card#i$/) ||
+      webid.match(/^(.*)\/profile\/card$/)
     return matches && matches[1]
   },
 
@@ -61,6 +64,17 @@ let Util = {
   isSafari() {
     return /Safari/.test(navigator.userAgent) &&
       /Apple Computer/.test(navigator.vendor)
+  },
+
+  /*
+   * @summary Returns the user's profile folder uri.
+   *   assuming they are using one.
+   * @param {string} webId - webId of the user.
+   * @return {string} uri - Uri to the profile folder.
+   */
+
+  getProfFolderUrl(webId) {
+    return `${this.webidRoot(webId)}/profile`
   },
 
   /*

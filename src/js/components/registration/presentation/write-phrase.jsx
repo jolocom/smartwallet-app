@@ -32,7 +32,7 @@ const STYLES = {
     fill: theme.jolocom.gray1
   },
   checkBox: {
-    width: '40%',
+    width: '80%',
     margin: 'auto'
   },
   labelStyle: {
@@ -60,7 +60,7 @@ const WritePhrase = (props) => {
       <Block style={STYLES.phraseWrapper}>
         <span style={STYLES.phrase}>{
           props.value || 'The flying red fox is jumping enthusiastically' +
-            'over the little brown dog.'
+            ' over the little brown dog.'
         }</span>
       </Block>
       <Block>

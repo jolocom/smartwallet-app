@@ -61,7 +61,7 @@ let Index = React.createClass({
       img: {
         flex: 1,
         maxWidth: '100%',
-        width: '360px',
+        width: '100px',
         userSelect: 'none',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

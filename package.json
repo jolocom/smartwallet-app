@@ -118,7 +118,7 @@
     "n3": "^0.4.3",
     "querystring": "^0.2.0",
     "radium": "^0.18.1",
-    "rdflib": "^0.12.1",
+    "rdflib": "^0.15.0",
     "react": "^15.4.2",
     "react-addons-create-fragment": "^15.4.0",
     "react-addons-transition-group": "^15.4.0",

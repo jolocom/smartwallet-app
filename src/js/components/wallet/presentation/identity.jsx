@@ -60,7 +60,8 @@ const STYLES = {
     color: theme.palette.lighterTextColor
   },
   requestBtn: {
-    marginLeft: '50px'
+    marginLeft: '39px'
+    // padding: '0'
   },
   spinner: {
     position: 'absolute',
@@ -130,6 +131,7 @@ const PhoneList = (props) => {
     onVerify={() => confirm(iconPhoneMessage, STYLES.dialog)}
     secondaryTextValue={field.type} />
   ))
+
   return <List disabled>
     {display}
   </List>
@@ -196,8 +198,7 @@ const InfoDetail = (props) => {
     />
   </span>
 
-  return <span
-    onClick={() => showDetails(personalDetails)}>
+  return <span onClick={() => showDetails(personalDetails)}>
     <Info style={STYLES.iconName} />
   </span>
 }

@@ -141,7 +141,8 @@ export default class WalletContact extends React.Component {
           ? setInformation(key, i, actionValue(key, e))
           : updateInformation(key, i, actionValue(key, e))
         }
-        onDelete={() => (isNew || !verified) ? deleteInformation(prefix, key, i)
+        onDelete={() => (isNew || !verified)
+          ? deleteInformation(prefix, key, i)
           : confirm(
             'Are you sure you want to delete a verified email?',
             'Delete',
