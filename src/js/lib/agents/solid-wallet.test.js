@@ -89,7 +89,7 @@ pho:owner
 
       put: async (url, body) => {
         const {name, expectedBody} = putArgumentsMap[url]
-        it(`Should put the entry ${name} to correct url`, (done) => {
+        it(`Should put the ${name} to correct url`, (done) => {
           expect(expectedBody).to.not.be.undefined
           done()
         })
@@ -196,7 +196,7 @@ em:owner
       },
 
       put: async (url, body) => {
-        const {expectedBody} = putArgumentsMap[url]
+        const {expectedBody, name} = putArgumentsMap[url]
         it(`Should put the ${name} to correct url`, (done) => {
           expect(putArgumentsMap[url]).to.not.be.undefined
           done()
