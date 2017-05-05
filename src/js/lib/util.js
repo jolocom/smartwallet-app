@@ -73,7 +73,7 @@ let Util = {
    * @return {string} uri - Uri to the profile folder.
    */
 
-  getProfileFolderUri(webId) {
+  getProfFolderUrl(webId) {
     return `${this.webidRoot(webId)}/profile`
   },
 
