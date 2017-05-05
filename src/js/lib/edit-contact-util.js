@@ -13,18 +13,50 @@ export const verify = (state) => {
   return state.setIn(['showErrors'], !isValid)
 }
 
-const isBlank = (value, field) => field === 'phoneNumbers'
-  ? value.number === '' : value === ''
+const isBlank = (value, field) => {
+  switch (field) {
+    case 'phoneNumbers':
+      return !value.number.trim()
+    case 'emails':
+      return !value.address.trim()
+    default:
+      return !value.trim()
+  }
+}
 
-const isValidValue = (value, field) => field === 'phoneNumbers'
-  ? (/^([\d.]+)/.test(value.number) || /^\+([\d]+)$/.test(value.number))
-  : /^([\w.]+)@([\w.]+)\.(\w+)/.test(value)
+const isValidValue = (value, field) => {
+  switch (field) {
+    case 'phoneNumbers':
+      return (/^([\d.]+)/.test(value.number) ||
+        /^\+([\d]+)$/.test(value.number))
+    case 'emails':
+      return /^([\w.]+)@([\w.]+)\.(\w+)/.test(value.address)
+    default:
+      return true
+  }
+}
 
-const parseValue = (value, field) => field === 'phoneNumbers'
-  ? {value: value.number, type: value.type} : {value}
+const parseValue = (value, field) => {
+  switch (field) {
+    case 'phoneNumbers':
+      return {value: value.number, type: value.type}
+    case 'emails':
+      return {value: value.address}
+    default:
+      return {value}
+  }
+}
 
-const addNew = (field) => field === 'phoneNumbers'
-  ? {value: '', type: 'home'} : {value: ''}
+const addNew = (field) => {
+  switch (field) {
+    case 'phoneNumbers':
+      return {number: '', type: 'mobile'}
+    case 'emails':
+      return {address: ''}
+    default:
+      return {value: ''}
+  }
+}
 
 export const set = (state, {field, index, value}) => state.mergeIn(
   ['information', 'newInformation', field, index], {
@@ -43,10 +75,20 @@ export const initiate = ({emails, phoneNumbers}) => Immutable.fromJS({
     },
     originalInformation: {
       emails: emails.map(email => {
-        return {...email, delete: false, update: false, valid: true}
+        return {
+          ...email,
+          delete: false,
+          update: false,
+          valid: true
+        }
       }),
       phoneNumbers: phoneNumbers.map(phone => {
-        return {...phone, delete: false, update: false, valid: true}
+        return {
+          ...phone,
+          delete: false,
+          update: false,
+          valid: true
+        }
       })
     }
   }

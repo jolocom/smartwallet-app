@@ -59,11 +59,15 @@ export default class WalletAgent {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         let information = {
-          emails: [{address: 'address1@example.com', verified: true},
-            {address: 'address2@example.com', verified: false}],
+          emails: [
+            {address: 'address1@example.com', verified: true},
+            {address: 'address2@example.com', verified: false}
+          ],
 
-          phoneNumbers: [{num: '+4917912345678', type: 'work', verified: true},
-            {num: '+4917923456789', type: 'personal', verified: false}]
+          phoneNumbers: [
+            {number: '+4917912345678', type: 'work', verified: true},
+            {number: '+4917923456789', type: 'personal', verified: false}
+          ]
         }
         resolve(information)
       }, 2000)

@@ -7,15 +7,16 @@ import {
   AddNew
 } from './ui'
 import {
-  Container,
   Content,
   Block
 } from '../../structure'
 import {theme} from 'styles'
-import ContentMail from 'material-ui/svg-icons/content/mail'
+import CommunicationCall from 'material-ui/svg-icons/communication/call'
+import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import {
   List
 } from 'material-ui'
+import Formsy from 'formsy-react'
 
 import Loading from 'components/common/loading'
 
@@ -27,10 +28,6 @@ const STYLES = {
   },
   titleDivider: {
     marginTop: '10px'
-  },
-  icon: {
-    marginTop: '35px',
-    marginRight: '40px'
   },
   spinner: {
     position: 'absolute',
@@ -62,11 +59,11 @@ export default class WalletContact extends React.Component {
     return (
       <div>
         {this.renderFields({
-          key: 'phonenumbers',
+          key: 'phoneNumbers',
           label: 'Phone Number',
           errorText: 'Invalid phone number',
           addText: 'Add phone number',
-          icon: ContentMail
+          icon: CommunicationCall
 
         })}
         {this.renderFields({
@@ -74,7 +71,7 @@ export default class WalletContact extends React.Component {
           label: 'Email Address',
           errorText: 'Invalid email address',
           addText: 'Add another email',
-          icon: ContentMail
+          icon: CommunicationEmail
         })}
       </div>
     )
@@ -85,6 +82,8 @@ export default class WalletContact extends React.Component {
       key,
       label,
       value,
+      types,
+      type,
       verified,
       icon,
       isNew
@@ -98,13 +97,17 @@ export default class WalletContact extends React.Component {
       <EditListItem
         key={id}
         id={id}
-        icon={i === 0 && icon || null}
+        icon={icon}
         iconStyle={STYLES.icon}
         label={label}
         name={name}
         value={value}
+        types={types}
+        type={type}
         verified={verified}
         focused={this.props.focused === key}
+        enableEdit={isNew}
+        enableDelete
         onFocusChange={() => {
           if (isNew) {
             this.props.addNewEntry(key)
@@ -131,7 +134,6 @@ export default class WalletContact extends React.Component {
             this.props.deleteInformation(prefix, key, i)
           }
         }}
-        enableDelete={!isNew}
         />
     )
   }
@@ -141,7 +143,38 @@ export default class WalletContact extends React.Component {
 
     const {originalInformation, newInformation} = this.props.information
 
-    // console.log(emailFields)
+    const getValue = (field) => {
+      switch (key) {
+        case 'phoneNumbers':
+          return field.number
+        case 'emails':
+          return field.address
+        default:
+          return field.value
+      }
+    }
+
+    const getTypes = (field) => {
+      switch (key) {
+        case 'phoneNumbers':
+          return [
+            'mobile',
+            'private',
+            'work',
+            'fax',
+            'other'
+          ]
+        case 'emails':
+          return [
+            'private',
+            'work',
+            'other'
+          ]
+        default:
+          return
+      }
+    }
+
     if (this.props.loading === false) {
       fields.push(
         originalInformation[key].map((field, i) => {
@@ -149,9 +182,11 @@ export default class WalletContact extends React.Component {
             return this.renderField(i, {
               key,
               label,
-              icon,
-              value: field.value,
-              verified: field.verified,
+              icon: i === 0 && icon,
+              value: getValue(field),
+              type: field.type,
+              types: getTypes(field),
+              verified: !!field.verified,
               errorText,
               isNew: false
             })
@@ -165,9 +200,9 @@ export default class WalletContact extends React.Component {
             return this.renderField(i, {
               key,
               label,
-              icon,
-              value: field.value,
-              verified: field.verified,
+              icon: !fields.length && i === 0 && icon,
+              value: getValue(field),
+              verified: !!field.verified,
               errorText,
               isNew: true
             })
@@ -180,6 +215,7 @@ export default class WalletContact extends React.Component {
           this.renderField(0, {
             key,
             label,
+            icon: !fields.length && icon,
             value: '',
             verified: false,
             errorText,
@@ -228,9 +264,11 @@ export default class WalletContact extends React.Component {
           onClose={this.props.exitWithoutSaving} />
         <Content>
           <EditHeader title="Contact" />
-          <List>
-            {content}
-          </List>
+          <Formsy.Form>
+            <List>
+              {content}
+            </List>
+          </Formsy.Form>
         </Content>
       </div>
     )

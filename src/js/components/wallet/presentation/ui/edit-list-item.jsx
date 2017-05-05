@@ -2,8 +2,12 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
+  IconButton,
+  ListItem,
   MenuItem
 } from 'material-ui'
+
+import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import FormsySelect from 'formsy-material-ui/lib/FormsySelect'
@@ -11,34 +15,27 @@ import FormsySelect from 'formsy-material-ui/lib/FormsySelect'
 import {theme} from 'styles'
 
 let STYLES = {
-  delete: {
-    display: 'inline-block',
-    marginTop: '20px',
-    marginLeft: '10px',
-    height: '48px',
-    width: '48px',
-    cursor: 'pointer'
+  deleteButton: {
+    marginTop: '16px'
   },
-  deleteIcon: {
-    userSelect: 'none',
-    marginTop: '14px',
-    marginLeft: '8px',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain',
-    width: '24px',
-    height: '24px',
-    backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
+  fields: {},
+  input: {
+    width: '100%',
+    color: theme.palette.textColor,
+    cursor: 'inherit'
   },
-  disabled: {
-    color: theme.palette.textColor
+  type: {
+    width: '50%'
   },
   disabledUnderline: {
     borderBottom: 'solid',
     borderWidth: 'medium medium 1px'
   },
+  icon: {
+    top: '16px'
+  },
   item: {
-    display: 'flex'
+    padding: '0 16px 0 72px'
   }
 }
 
@@ -51,15 +48,15 @@ export default class EditListItem extends React.Component {
     label: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
-    category: React.PropTypes.string,
-    categories: React.PropTypes.array,
+    type: React.PropTypes.string,
+    types: React.PropTypes.array,
     errorText: React.PropTypes.string,
     verified: React.PropTypes.bool.isRequired,
     children: React.PropTypes.node,
     focused: React.PropTypes.bool.isRequired,
     onFocusChange: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    onCategoryChange: React.PropTypes.func,
+    onTypeChange: React.PropTypes.func,
     onDelete: React.PropTypes.func,
     enableEdit: React.PropTypes.bool,
     enableDelete: React.PropTypes.bool
@@ -67,10 +64,7 @@ export default class EditListItem extends React.Component {
 
   getStyles() {
     return Object.assign({}, STYLES, {
-      icon: Object.assign({
-        color: this.props.focused
-          ? theme.palette.primary1Color : theme.jolocom.gray1
-      }, this.props.iconStyle)
+
     })
   }
 
@@ -78,7 +72,6 @@ export default class EditListItem extends React.Component {
     let {
       focused,
       verified,
-      icon,
       label,
       name,
       value,
@@ -93,40 +86,51 @@ export default class EditListItem extends React.Component {
       label = `Verified ${label}`
     }
 
+    const iconColor = this.props.focused
+      ? theme.palette.primary1Color : theme.jolocom.gray1
+
+    const icon = this.props.icon
+      ? <this.props.icon color={iconColor} style={styles.icon} /> : <div />
+
     return (
-      <div
+      <ListItem
         style={styles.item}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
+        leftIcon={icon}
+        rightIconButton={this.deleteButton}
+        disabled
       >
-        <icon style={styles.icon} />
-        <FormsyText
-          autoFocus={focused}
-          disabled={!enableEdit}
-          inputStyle={styles.input}
-          underlineDisabledStyle={styles.disabledUnderline}
-          floatingLabelText={label}
-          name={name}
-          value={value}
-          onChange={onChange}
-          errorText={errorText}
-        />
-        {this.renderCategory()}
-        {this.renderDelete()}
-      </div>
+        <div style={styles.fields}>
+          <FormsyText
+            autoFocus={focused}
+            disabled={!enableEdit}
+            inputStyle={styles.input}
+            underlineDisabledStyle={styles.disabledUnderline}
+            floatingLabelText={label}
+            name={name}
+            value={value}
+            onChange={onChange}
+            errorText={errorText}
+          />
+          {this.renderType()}
+        </div>
+      </ListItem>
     )
   }
 
-  renderCategory() {
-    if (this.props.categories) {
+  renderType() {
+    if (this.props.types) {
       return (
         <FormsySelect
-          name={`${this.props.name}_category`}
-          onChange={this.props.onCategoryChange}
+          style={STYLES.type}
+          name={`${this.props.name}_type`}
+          value={this.props.type}
+          onChange={this.props.onTypeChange}
         >
-        {this.props.categories.map((c, i) => {
+        {this.props.types.map((type, i) => {
           return (
-            <MenuItem key={i} value={c.value} primaryText={c.label} />
+            <MenuItem key={i} value={type} primaryText={type} />
           )
         })}
         </FormsySelect>
@@ -134,15 +138,15 @@ export default class EditListItem extends React.Component {
     }
   }
 
-  renderDelete() {
+  get deleteButton() {
     if (this.props.enableDelete) {
       return (
-        <div style={STYLES.delete}>
-          <div
-            onClick={this.handleDelete}
-            style={STYLES.deleteIcon}
-          />
-        </div>
+        <IconButton
+          style={STYLES.deleteButton}
+          onTouchTap={this.handleDelete}
+        >
+          <NavigationCancel />
+        </IconButton>
       )
     }
   }

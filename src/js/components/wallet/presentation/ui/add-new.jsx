@@ -4,7 +4,7 @@ import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
 import {theme} from 'styles'
 
 import {
-  IconButton,
+  FlatButton,
   Divider
 } from 'material-ui'
 
@@ -13,13 +13,9 @@ const STYLES = {
     marginLeft: '16px'
   },
   addBtn: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '10px',
-    boxShadow: 'none',
-    padding: '5px',
-    display: 'inline-block',
     margin: '10px',
+    textAlign: 'left',
+    width: '100%',
     color: theme.jolocom.gray2
 
   },
@@ -32,8 +28,6 @@ const STYLES = {
     verticalAlign: 'middle'
   },
   icon: {
-    width: '10px',
-    height: '10px'
   },
   list: {
     paddingLeft: '50px'
@@ -42,15 +36,18 @@ const STYLES = {
 const AddNew = ({value, onClick}) => {
   return (
     <div style={STYLES.list} >
-      <IconButton
+      <FlatButton
         color={STYLES.addBtn.color}
         style={STYLES.addBtn}
-        onClick={() => { onClick() }}>
-        <ContentAddCircle style={STYLES.icon} color={STYLES.addBtn.color} />
-      </IconButton>
-      <div style={STYLES.infoHeader}>
-        {value}
-      </div>
+        onClick={() => { onClick() }}
+        label={value}
+        icon={
+          <ContentAddCircle
+            style={STYLES.icon}
+            color={STYLES.addBtn.color}
+          />
+        }
+      />
       <Divider style={STYLES.divider} />
     </div>
   )
