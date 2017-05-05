@@ -92,7 +92,7 @@ describe('# Edit contact Util', () => {
     })
   })
   describe('# setNewFieldValue', () => {
-    it('should addNewField a new email field', () => {
+    it('should set a new phone field value and update its attributes', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
@@ -114,13 +114,13 @@ describe('# Edit contact Util', () => {
       const action = {field: 'emails', value: 'A', index: 0}
       expect(setNewFieldValue(oldState, action).toJS()).to.deep.equal(newState)
     })
-    it('should addNewField a new phone field', () => {
+    it('should set a new phone field value and update its attributes', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
             emails: [],
-            phoneNumbers: [{value: '', type: 'old', verified: false,
-              valid: false, delete: false, test: 5, blank: false}]
+            phoneNumbers: [{value: '555', type: 'old', verified: false,
+              valid: true, delete: false, blank: false}]
           }
         }
       })
@@ -129,7 +129,7 @@ describe('# Edit contact Util', () => {
           newInformation: {
             emails: [],
             phoneNumbers: [{value: '1', type: 'new', verified: false,
-              valid: false, delete: false, test: 5, blank: false}]
+              valid: true, delete: false, blank: false}]
           }
         }
       }

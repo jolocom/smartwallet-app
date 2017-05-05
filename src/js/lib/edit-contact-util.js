@@ -22,12 +22,12 @@ const isBlank = (value, field) => {
 const isValidValue = (value, field) => {
   switch (field) {
     case 'phoneNumbers':
-      return (/^([\d.]+)/.test(value.value) ||
+      return (/^([\d.]+)$/.test(value.value) ||
         /^\+([\d]+)$/.test(value.value))
     case 'emails':
       return /^([\w.]+)@([\w.]+)\.(\w+)/.test(value)
     default:
-      return true
+      return false
   }
 }
 
