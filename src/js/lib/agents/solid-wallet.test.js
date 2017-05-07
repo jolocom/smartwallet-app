@@ -16,19 +16,45 @@ describe('solidAgentAgent', () => {
     })
 
     it('Should correctly fetch and parse user info', async () => {
-      const mockResponse = `\
+      const firstEmailFileResp = `\
+        @prefix pro: <./>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+        pro:email123 
+          n0:mbox "test@jolocom.com";
+          n0:primaryTopic pro:card.
+        `
+
+      const secondEmailFileResp = `\
+        @prefix pro: <./>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+        pro:email456 
+          n0:mbox "test2@jolocom.com";
+          n0:primaryTopic pro:card.
+        `
+
+      const userCardResp = `\
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
         @prefix rd: <http://www.w3.org/2000/01/rdf-schema#>.
         @prefix schem: <https://schema.org/>.
-        
+     
         pro:card
           a n0:PersonalProfileDocument;
           n0:primaryTopic <#me>.
         <#me>
           a n0:Person;
           n0:mbox [ rd:seeAlso pro:email123; schem:identifier "123" ];
+          n0:mbox [ rd:seeAlso pro:email456; schem:identifier "456" ];
+          n0:mbox "test3@jolocom.com";
           n0:name "Test".`
+
+      const respMap = {
+        [WEBID]: userCardResp,
+        'https://test.com/profile/email123': firstEmailFileResp,
+        'https://test.com/profile/email456': secondEmailFileResp
+      }
 
       const expectedUserInfo = {
         webId: 'https://test.webid.jolocom.de/profile/card#me',
@@ -44,18 +70,15 @@ describe('solidAgentAgent', () => {
           }],
           email: [{
             address: 'test@jolocom.com',
-            type: 'email',
-            verified: true
+            id: '123'
           },
           {
             address: 'test2@jolocom.com',
-            type: 'email',
-            verified: false
+            id: '456'
           },
           {
             address: 'test3@jolocom.com',
-            type: 'email',
-            verified: true
+            id: null
           }]
         },
         Reputation: 0,
@@ -75,8 +98,9 @@ describe('solidAgentAgent', () => {
       }
 
       const solidAgent = new SolidAgent()
-      solidAgent.ldp.fetchTriplesAtUri = async (uri) =>
-        (new Parser()).parse(mockResponse, uri)
+      solidAgent.ldp.fetchTriplesAtUri = async (uri) => {
+        return (new Parser()).parse(respMap[uri], uri)
+      }
 
       const userInfo = await solidAgent.getUserInformation(WEBID)
       expect(userInfo).to.deep.equal(expectedUserInfo)
