@@ -99,7 +99,7 @@ export default class SolidAgent {
     profileData.username.value = g
       .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
 
-    profileData.email = await this.getExtendedProprietyValue(g, 'email')
+    profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
 
     //
     // this.extractEmailInfo(g)
@@ -135,13 +135,13 @@ export default class SolidAgent {
     )
 
     for (let obj in objects) {
-      if (obj.termType !== 'BlankNode') {
+      if (objects[obj].termType !== 'BlankNode') {
         propertyData.push({
           id: null,
-          address: obj.value
+          address: objects[obj].value
         })
       } else {
-        propertyData.push(await this._expandBnode(obj, g, pred))
+        propertyData.push(await this._expandBNode(objects[obj], g, pred))
       }
     }
 
@@ -152,8 +152,9 @@ export default class SolidAgent {
   // Error Handling on statements matching and fetch.
 
   async _expandBNode(obj, g, pred) {
-    const extUri = g.statementsMatching(obj, pred, undefined)[0].object.value
-    return this.ldp.fetchTriplesAtUri(extUri).then(rdfData => {
+    const extUrl =
+      g.statementsMatching(obj, PRED.seeAlso, undefined)[0].object.value
+    return this.ldp.fetchTriplesAtUri(extUrl).then(rdfData => {
       const extGraph = rdf.graph()
       extGraph.addAll(rdfData.triples)
 
@@ -166,31 +167,6 @@ export default class SolidAgent {
     })
   }
 
-  /*
-    const emailInfo = []
-
-    // TODO Not always bnode
-    const bNodes =
-    g.statementsMatching(undefined, PRED.email, undefined).map(st => {
-      return st.object
-    })
-
-    const links = bNodes.map(node => {
-      return graph
-      .statementsMatching(node, PRED.seeAlso, undefined)[0].object.value
-    })
-
-    links.forEach(l => {
-      return this.ldp.fetchTriplesAtUrl(l).then(rdfData => {
-        const gr = rdf.graph()
-        gr.addAll(rdfData)
-
-        this.extractEmailInfo(gr)
-      })
-    })
-  }
-
-  */
   extractPhoneInfo() {
   }
 
