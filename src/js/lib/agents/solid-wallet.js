@@ -74,10 +74,13 @@ export default class SolidAgent {
     return g.statements
   }
 
-  deleteEntry(entryType, value) {
-    return new Promise((resolve, reject) => {
-      resolve()
-    })
+  deleteEntry(webId, entryType, entryId) {
+    this.http.delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}`)
+    this.http
+    .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}.acl`)
+    // Todo use removeEntryPatch ?
+    let statements // Todo fill in real statements for deletion
+    this.http.patch(webId, statements)
   }
 
   updateEntry(type, value) {
@@ -108,16 +111,16 @@ export default class SolidAgent {
     const body = rdfHelper
     .addEntryPatch(entryFileUrl, webId, rndId, entryType)
 
-    return this.http.patch(webId, [], body)
-    .then(this.createEntryFile(webId, entryFileUrl, entryValue, entryType))
+    return Promise.all([this.http.patch(webId, [], body),
+      this.createEntryFile(webId, entryFileUrl, entryValue, entryType)])
   }
 
   createEntryFile(webId, entryFileUrl, entryValue, entryType) {
     const entryFileBody = rdfHelper
     .entryFileBody(entryFileUrl, webId, entryValue, entryType)
 
-    return this._createEntryFileAcl(webId, entryFileUrl)
-    .then(this.http.put(entryFileUrl, entryFileBody))
+    return Promise.all([this._createEntryFileAcl(webId, entryFileUrl),
+      this.http.put(entryFileUrl, entryFileBody)])
   }
 
   // Move out of class?
