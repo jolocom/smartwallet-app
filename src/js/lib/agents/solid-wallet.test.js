@@ -16,6 +16,14 @@ describe('solidAgentAgent', () => {
     })
 
     it('Should correctly fetch and parse user info', async () => {
+      const firstPhoneFileResp = `\
+        @prefix pro: <./>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+        pro:phone123 
+          n0:phone "+49 176 12345678";
+          n0:primaryTopic pro:card.
+      `
       const firstEmailFileResp = `\
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
@@ -47,26 +55,27 @@ describe('solidAgentAgent', () => {
           a n0:Person;
           n0:mbox [ rd:seeAlso pro:email123; schem:identifier "123" ];
           n0:mbox [ rd:seeAlso pro:email456; schem:identifier "456" ];
+          n0:phone [ rd:seeAlso pro:phone123; schem:identifier "123" ];
           n0:mbox "test3@jolocom.com";
           n0:name "Test".`
 
       const respMap = {
         [WEBID]: userCardResp,
         'https://test.com/profile/email123': firstEmailFileResp,
-        'https://test.com/profile/email456': secondEmailFileResp
+        'https://test.com/profile/email456': secondEmailFileResp,
+        'https://test.com/profile/phone123': firstPhoneFileResp
       }
 
       const expectedUserInfo = {
-        webId: 'https://test.webid.jolocom.de/profile/card#me',
+        webId: WEBID,
         username: {
           value: 'Test',
-          verified: true
+          verified: false
         },
         contact: {
           phone: [{
             number: '+49 176 12345678',
-            type: 'mobile',
-            verified: true
+            id: '123'
           }],
           email: [{
             address: 'test@jolocom.com',

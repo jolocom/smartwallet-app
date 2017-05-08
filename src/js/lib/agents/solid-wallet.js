@@ -63,15 +63,15 @@ export default class SolidAgent {
     }
 
     return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
-      return this._formatAccountInfo(rdfData.triples)
+      return this._formatAccountInfo(webId, rdfData.triples)
     })
   }
 
   // TODO Reconsider abstracting this
-  async _formatAccountInfo(userTriples) {
+  async _formatAccountInfo(webId, userTriples) {
     const g = rdf.graph()
     const profileData = {
-      webId: '',
+      webId: webId,
       username: {
         value: '',
         verified: false
@@ -100,20 +100,8 @@ export default class SolidAgent {
       .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
 
     profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
+    profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
 
-    //
-    // this.extractEmailInfo(g)
-
-    /*
-    this.expandBlankNodes(g
-    .statementsMatching(undefined, PRED.email, undefined))
-    g.statementsMatching(undefined, PRED.email, undefined).forEach(t => {
-      g.statementsMatching(t.object, undefined, undefined).forEach(record => {
-        tmp[tmpMap[record.predicate.value]] = record.object.value
-      })
-    })
-    profileData.email = tmp
-    */
     return profileData
   }
 
@@ -152,16 +140,21 @@ export default class SolidAgent {
   // Error Handling on statements matching and fetch.
 
   async _expandBNode(obj, g, pred) {
+    const keyMap = {
+      [PRED.mobile.value]: 'number',
+      [PRED.email.value]: 'address'
+    }
     const extUrl =
       g.statementsMatching(obj, PRED.seeAlso, undefined)[0].object.value
     return this.ldp.fetchTriplesAtUri(extUrl).then(rdfData => {
       const extGraph = rdf.graph()
+      const key = keyMap[pred.value]
       extGraph.addAll(rdfData.triples)
 
       return {
         id: g.statementsMatching(obj, PRED.identifier, undefined)[0]
           .object.value,
-        address: extGraph.statementsMatching(undefined, pred, undefined)[0]
+        [key]: extGraph.statementsMatching(undefined, pred, undefined)[0]
           .object.value
       }
     })
