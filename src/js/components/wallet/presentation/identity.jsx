@@ -77,7 +77,7 @@ const STYLES = {
 
 const PhoneList = (props) => {
   let display = []
-  if (!props.phone[0].number) {
+  if (!props.phone && !props.phone[0].number) {
     return null
   }
   for (let i = 0; i < props.phone.length; i++) {
@@ -104,10 +104,13 @@ PhoneList.propTypes = {
 
 const EmailList = (props) => {
   let display = []
-  if (!props.email[0].address) {
+  if (!props.email && !props.email[0].address) {
     return null
   }
   for (let i = 0; i < props.email.length; i++) {
+    if (!props.email[i].address) {
+      return 
+    }
     display.push(
       <div key={i}>
         <StaticListItem
@@ -258,10 +261,8 @@ export default class WalletIdentity extends React.Component {
             <Block>
               <PlusMenu
                 name="Contact"
-                choice={
-                  !(this.props.contact.email[0].address === '' &&
-                  this.props.contact.phone[0].number === '')
-                }
+                choice={this.props.contact.email.length > 0 && 
+                  this.props.contact.phone.length > 0}
                 goToManagement={this.props.goToContactManagement}
               />
             </Block>

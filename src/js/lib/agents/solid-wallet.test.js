@@ -109,22 +109,27 @@ describe.only('solidAgentAgent', () => {
         contact: {
           phone: [{
             number: '+49 176 12345678',
+            verified: false,
             id: '123'
           },
           {
             id: null,
+            verified: false,
             number: '+49 157 11111111'
           }],
           email: [{
             address: 'test@jolocom.com',
+            verified: false,
             id: '123'
           },
           {
             address: 'test2@jolocom.com',
+            verified: false,
             id: '456'
           },
           {
             address: 'test3@jolocom.com',
+            verified: false,
             id: null
           }]
         },

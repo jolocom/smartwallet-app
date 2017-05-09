@@ -151,6 +151,7 @@ export default class SolidAgent {
       if (objects[obj].termType !== 'BlankNode') {
         propertyData.push({
           id: null,
+          verified: false,
           [keyMap[pred.value]]: objects[obj].value
         })
       } else {
@@ -179,7 +180,7 @@ export default class SolidAgent {
       // TODO
       if (rdfData.unav) {
         console.warn('BNode unreachable')
-        return {id: null, [key]: null}
+        return {id: null,verified: false, [key]: null}
       }
 
       extGraph.addAll(rdfData.triples)
@@ -188,7 +189,7 @@ export default class SolidAgent {
       const value = extGraph.statementsMatching(undefined, pred, undefined)[0]
           .object.value
 
-      return { id, [key]: value }
+      return { id, verified: false, [key]: value }
     })
   }
 

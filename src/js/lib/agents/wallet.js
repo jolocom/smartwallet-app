@@ -1,6 +1,5 @@
 import VerificationAgent from './verification'
 
-
 export default class WalletAgent {
 
   generateSeedPhrase(randomString) {
