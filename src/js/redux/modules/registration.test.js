@@ -3,7 +3,7 @@ import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as registration from './registration'
 import * as router from './router'
-import {stub, withStubs} from '../../../../test/utils'
+import {stub, withStubs, asyncStub} from '../../../../test/utils'
 const reducer = require('./registration').default
 const helpers = registration.helpers
 
@@ -65,7 +65,6 @@ describe('Wallet registration Redux module', function() {
 
       it('should return true if the validation for a page succeeds', () => {
         const test = (path, key) => {
-          console.error(key)
           expect(helpers._canGoForward(Immutable.fromJS({
             registration: {[key[0]]: {[key[1]]: true}}
           }), path)).to.equal(true)
@@ -361,8 +360,8 @@ describe('Wallet registration Redux module', function() {
         password: {value: 'abdcd'}
       }})
       const backend = {wallet: {
-        registerWithSeedPhrase: stub().returns('regSeed'),
-        registerWithCredentials: stub().returns('regCreds')
+        registerWithSeedPhrase: stub().returnsAsync('regSeed'),
+        registerWithCredentials: stub().returnsAsync('regCreds')
       }}
 
       withStubs([
@@ -373,11 +372,11 @@ describe('Wallet registration Redux module', function() {
           const thunk = registration.registerWallet()
           thunk(dispatch, getState)
           expect(dispatch.calledWithArgs[0]).to.equal('action')
-
           const registerAction = registration.actions.registerWallet
           const promise = registerAction.buildAction.calledWithArgs[1]
           expect(promise(backend))
-            .to.equal(backend.wallet.registerWithSeedPhrase.returns())
+            .to.eventually
+            .equal('regSeed')
           expect(backend.wallet.registerWithSeedPhrase.calls)
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
@@ -387,7 +386,7 @@ describe('Wallet registration Redux module', function() {
       )
     })
 
-    it('should register with credentials if expert', () => {
+    it('should register with credentials if layman', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
         userType: {value: 'layman'},
@@ -398,8 +397,8 @@ describe('Wallet registration Redux module', function() {
         password: {value: 'abdcd'}
       }})
       const backend = {wallet: {
-        registerWithSeedPhrase: stub().returns('regSeed'),
-        registerWithCredentials: stub().returns('regCreds')
+        registerWithSeedPhrase: stub().returnsAsync('regSeed'),
+        registerWithCredentials: stub().returnsAsync('regCreds')
       }}
 
       withStubs([
@@ -410,11 +409,9 @@ describe('Wallet registration Redux module', function() {
           const thunk = registration.registerWallet()
           thunk(dispatch, getState)
           expect(dispatch.calledWithArgs[0]).to.equal('action')
-
           const registerAction = registration.actions.registerWallet
           const promise = registerAction.buildAction.calledWithArgs[1]
-          expect(promise(backend))
-            .to.equal(backend.wallet.registerWithCredentials.returns())
+          expect(promise(backend)).to.eventually.equal('regCreds')
           expect(backend.wallet.registerWithCredentials.calls)
             .to.deep.equal([{args: [{
               userName: 'usr',

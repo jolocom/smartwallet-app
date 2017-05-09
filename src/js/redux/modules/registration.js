@@ -172,15 +172,22 @@ const actions = module.exports = makeActions('registration', {
             return backend.wallet.registerWithSeedPhrase({
               userName: state.username.value,
               seedPhrase: state.passphrase.phrase
+            }).then((params) => {
+              dispatch(router.pushRoute('/wallet'))
+              return params
             })
           } else {
             return backend.wallet.registerWithCredentials({
               userName: state.username.value,
               email: state.email.value,
               password: state.password.value
+            }).then((params) => {
+              dispatch(router.pushRoute('/wallet'))
+              return params
             })
           }
-        })).then(() => dispatch(router.pushRoute('/wallet')))
+        })
+      )
       }
     }
   }
