@@ -16,5 +16,6 @@ export default combineReducers({
     tabs: require('./modules/wallet/tabs').default,
     contact: require('./modules/wallet/contact').default,
     identity: require('./modules/wallet/identity').default
-  })
+  }),
+  emailConfirmation: require('./modules/email-confirmation').default
 })

@@ -21,7 +21,6 @@ const PhraseInfo = (props) => {
           your wallet again."
       />
       <Content>
-
         <Block>
           <SideNote>
             Since you decided for the no hassle mode,
@@ -40,8 +39,6 @@ const PhraseInfo = (props) => {
         <Avatar
           src="/img/img_techguy.svg"
           size={60} />
-      </Block>
-      <Block>
         <SideNote>
           Actually, I do want to store it manually myself.
         </SideNote>

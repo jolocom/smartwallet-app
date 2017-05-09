@@ -12,6 +12,7 @@ let SCHEMA_HTTP = rdf.Namespace('http://schema.org/')
 let RDF = rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 let SIOC = rdf.Namespace('http://rdfs.org/sioc/ns#')
 let TERMS = rdf.Namespace('http://www.w3.org/ns/solid/terms#')
+let RD = rdf.Namespace('http://www.w3.org/2000/01/rdf-schema#')
 
 export const XSD = rdf.Namespace('http://www.w3.org/2001/XMLSchema#')
 export const PRED = {
@@ -31,9 +32,10 @@ export const PRED = {
   storage: NIC('storage'),
   knows: FOAF('knows'),
   isRelatedTo: SCHEMA('isRelatedTo'),
+  seeAlso: RD('seeAlso'),
   profileDoc: FOAF('PersonalProfileDocument'),
   isRelatedTo_HTTP: SCHEMA_HTTP('isRelatedTo'),
-
+  identifier: SCHEMA('identifier'),
   // --
   title: DC('title'),
   title_DC: DC('title'),

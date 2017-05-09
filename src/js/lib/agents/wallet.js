@@ -1,6 +1,7 @@
 import {keystore} from 'eth-lightwallet'
 import SmartWallet from 'lib/blockchain/smartwallet'
-
+import VerificationAgent from './verification'
+import SolidAgent from './solid-wallet'
 export default class WalletAgent {
   generateSeedPhrase(entropy) {
     let seed = keystore.generateRandomSeed(entropy)
@@ -10,7 +11,6 @@ export default class WalletAgent {
     seed = testSeed
     return seed
   }
-
   getSeedPhrase(email, password) {
     return 'blabla blabla blabla blabla blabla blabla blabla blabla'
   }
@@ -229,13 +229,15 @@ export default class WalletAgent {
 
 export class Wallet {
   constructor() {
-    this.webID = 'https://demo.webid.jolocom.com/profile/card'
+    this.webID = 'https://recordeddemo.webid.jolocom.de/profile/card#me'
     this.lightWaller = 'something'
+    this._verification = new VerificationAgent()
+    this.solid = new SolidAgent()
   }
 
   getUserInformation({email}) {
     const identity = {
-      webId: 'https://demo.webid.jolocom.com/profile/card',
+      webId: 'https://recordeddemo.webid.jolocom.de/profile/card#me',
       username: {
         value: 'AnnikaHamman',
         verified: ''
@@ -266,7 +268,6 @@ export class Wallet {
           }
         ]
       },
-      Repuation: 0,
       passport: {
         number: null,
         givenName: null,
@@ -290,5 +291,79 @@ export class Wallet {
         2000
       )
     })
+  }
+
+  getAccountInformation() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const information = {
+          emails: [
+            {value: 'address1@example.com', verified: false},
+            {value: 'address2@example.com', verified: false}
+          ],
+          phoneNumbers: [
+            {value: '+491000222678', type: 'work', verified: true},
+            {value: '+4917923456789', type: 'personal', verified: false}
+          ]
+        }
+        resolve(information)
+      }, 2000)
+    })
+  }
+
+  deleteEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  updateEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  setEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  deletePhone(phone) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  updatePhone(phone) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  setPhone(phone) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  startConfirmEmail({email}) {
+    return this._verification.startVerifyingEmail({webID: this.webID, email})
+  }
+
+  finishConfirmEmail({email, code}) {
+    return this._verification.verifyEmail({webID: this.webID, email, code})
   }
 }
