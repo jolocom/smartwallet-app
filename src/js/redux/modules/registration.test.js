@@ -3,7 +3,7 @@ import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as registration from './registration'
 import * as router from './router'
-import {stub, withStubs, asyncStub} from '../../../../test/utils'
+import {stub, withStubs} from '../../../../test/utils'
 const reducer = require('./registration').default
 const helpers = registration.helpers
 
