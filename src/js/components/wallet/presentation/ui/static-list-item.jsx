@@ -27,8 +27,7 @@ var STYLES = {
   secondaryTextField: {
     width: '60px',
     display: 'inline-block',
-    color: theme.jolocom.gray1,
-    marginRight: '10px'
+    color: theme.jolocom.gray1
   },
   verifiedListItem: {
     paddingBottom: '5px'

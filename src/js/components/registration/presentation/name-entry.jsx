@@ -57,16 +57,13 @@ const NameEntry = (props) => {
       <Header title="Let's get started! Please type in a username." />
       <Content>
         <SideNote>
-          It needs to be unique, but choose wisely,
-          <br />
-          It will be part of your
+          It needs to be unique, but choose wisely. It will be part of your
           <FlatButton style={STYLES.embeddedButton}
             hoverColor={STYLES.backgroundColor}
             onClick={() => {
               props.handleDialog(webIdmessage)
             }}> WebID </FlatButton>
-          and it might
-          end up on your buiseness card one day.
+          and it might end up on your business card one day.
         </SideNote>
         <Block style={STYLES.textField}>
           <TextField

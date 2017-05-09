@@ -1,3 +1,6 @@
+import VerificationAgent from './verification'
+
+
 export default class WalletAgent {
 
   generateSeedPhrase(randomString) {
@@ -76,6 +79,7 @@ export class Wallet {
   constructor() {
     this.webID = 'https://recordeddemo.webid.jolocom.de/profile/card#me'
     this.lightWaller = 'something'
+    this._verification = new VerificationAgent()
   }
 
   getUserInformation({email}) {
@@ -107,7 +111,7 @@ export class Wallet {
           verified: true
         }]
       },
-      Repuation: 0,
+      Reputation: 0,
       passport: {
         number: null,
         givenName: null,
@@ -128,5 +132,37 @@ export class Wallet {
         /* reject() */
       }, 2000)
     })
+  }
+
+  deleteEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  updateEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  setEmail(email) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  startConfirmEmail({email}) {
+    return this._verification.startVerifyingEmail({webID: this.webID, email})
+  }
+
+  finishConfirmEmail({email, code}) {
+    return this._verification.verifyEmail({webID: this.webID, email, code})
   }
 }

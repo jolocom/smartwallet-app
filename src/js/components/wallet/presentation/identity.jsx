@@ -52,7 +52,8 @@ const STYLES = {
     color: theme.palette.lighterTextColor
   },
   requestBtn: {
-    marginLeft: '50px'
+    marginLeft: '39px'
+    // padding: '0'
   },
   spinner: {
     position: 'absolute',
@@ -89,9 +90,11 @@ const PhoneList = (props) => {
       onVerify={() => props.confirm(iconPhoneMessage, STYLES.dialog)}
       secondaryTextValue={props.phone[i].type} />)
   }
-  return <List disabled>
-   {display}
-  </List>
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 PhoneList.propTypes = {
@@ -126,9 +129,11 @@ const EmailList = (props) => {
           : null}
       </div>)
   }
-  return <List disabled>
-            {display}
-  </List>
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 EmailList.propTypes = {
@@ -170,10 +175,12 @@ const InfoDetail = (props) => {
     />
   </span>
 
-  return <span
-    onClick={() => props.showDetails(personalDetails)}>
-    <Info style={STYLES.iconName} />
-  </span>
+  return (
+    <span
+      onClick={() => props.showDetails(personalDetails)}>
+      <Info style={STYLES.iconName} />
+    </span>
+  )
 }
 
 InfoDetail.propTypes = {
