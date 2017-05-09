@@ -85,12 +85,13 @@ export default class SolidAgent {
   }
 
   deleteEntry(webId, entryType, entryId) {
-    this.http.delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}`)
-    this.http
-    .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}.acl`)
     // Todo use removeEntryPatch ?
     let statements // Todo fill in real statements for deletion
-    this.http.patch(webId, statements)
+    return this.http.patch(`${util.getProfFolderUrl(webId)}/card`, statements)
+    .then(this.http
+      .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}`))
+    .then(this.http
+      .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}.acl`))
   }
 
   async getUserInformation(webId) {
