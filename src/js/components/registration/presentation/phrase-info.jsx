@@ -46,7 +46,7 @@ const PhraseInfo = (props) => {
       <Footer>
         <FlatButton
           label="SHOW SECURE PHRASE"
-          onClick={() => { props.onChange('expert'); props.onSubmit() }} />
+          onClick={() => { props.onChange() }} />
       </Footer>
     </Container>
   )

@@ -1,11 +1,11 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
-import WalletAgent from 'lib/agents/wallet'
-import SolidWalletAgent from 'lib/agents/solid-wallet'
+import {Wallet} from 'lib/agents/wallet'
+import SolidAgent from 'lib/agents/solid-wallet'
 
-describe('WalletAgent', () => {
+describe('Wallet', () => {
   it('should have a SolidAgent', () => {
-    const Wallet = new WalletAgent()
-    expect(Wallet.solid).to.be.an.instanceof(SolidWalletAgent)
+    const WalletInstance = new Wallet()
+    expect(WalletInstance.solid).to.be.an.instanceof(SolidAgent)
   })
 })

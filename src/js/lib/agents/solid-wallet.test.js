@@ -8,7 +8,7 @@ describe('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
 
-  describe.only('#getUserInformation', () => {
+  describe('#getUserInformation', () => {
     it('Should correctly throw if no arguments are passed', () => {
       const solidAgent = new SolidAgent()
       const msg = 'Invalid arguments'
@@ -21,7 +21,7 @@ describe('solidAgentAgent', () => {
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
         @prefix rd: <http://www.w3.org/2000/01/rdf-schema#>.
         @prefix schem: <https://schema.org/>.
-        
+
         pro:card
           a n0:PersonalProfileDocument;
           n0:primaryTopic <#me>.

@@ -97,7 +97,7 @@ const WritePhrase = (props) => {
       <Footer>
         <FlatButton
           label="STORE IT FOR ME"
-          onClick={() => { props.onChange('layman'); props.onSubmit() }} />
+          onClick={() => { props.onChange(); props.onSubmit() }} />
       </Footer>
     </Container>
   )
