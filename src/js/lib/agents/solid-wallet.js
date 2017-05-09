@@ -63,6 +63,9 @@ export default class SolidAgent {
     }
 
     return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
+      if (rdfData.unav) {
+        throw new Error('User file unavailable')
+      }
       return this._formatAccountInfo(webId, rdfData.triples)
     })
   }
@@ -144,28 +147,30 @@ export default class SolidAgent {
       [PRED.mobile.value]: 'number',
       [PRED.email.value]: 'address'
     }
-    const extUrl =
-      g.statementsMatching(obj, PRED.seeAlso, undefined)[0].object.value
-    return this.ldp.fetchTriplesAtUri(extUrl).then(rdfData => {
-      const extGraph = rdf.graph()
-      const key = keyMap[pred.value]
-      extGraph.addAll(rdfData.triples)
 
-      return {
-        id: g.statementsMatching(obj, PRED.identifier, undefined)[0]
-          .object.value,
-        [key]: extGraph.statementsMatching(undefined, pred, undefined)[0]
-          .object.value
+    const extGraph = rdf.graph()
+    const key = keyMap[pred.value]
+    const extUrl = g.statementsMatching(obj, PRED.seeAlso, undefined)[0]
+      .object.value
+
+    return this.ldp.fetchTriplesAtUri(extUrl).then(rdfData => {
+      // TODO
+      if (rdfData.unav) {
+        console.warn('BNode unreachable')
+        return {id: null, [key]: null}
       }
+
+      extGraph.addAll(rdfData.triples)
+      const id = g.statementsMatching(obj, PRED.identifier, undefined)[0]
+          .object.value
+      const value = extGraph.statementsMatching(undefined, pred, undefined)[0]
+          .object.value
+
+      return { id, [key]: value }
     })
   }
 
   extractPhoneInfo() {
-  }
-
-  _fetchExtendedFiles(uri) {
-    return this.ldp.fetchTriplesAtUri(uri)
-    .then(res => res.triples)
   }
 
   deleteEntry(entryType, value) {
