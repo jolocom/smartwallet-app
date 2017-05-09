@@ -4,15 +4,48 @@ import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import SolidAgent from 'lib/agents/solid-wallet'
 
-describe('solidAgentAgent', () => {
+describe.only('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
 
-  describe.only('#getUserInformation', () => {
-    it('Should correctly throw if no arguments are passed', () => {
+  describe('#getUserInformation', () => {
+    const emptyUserProfile = {
+      webId: '',
+      username: {
+        value: '',
+        verified: false
+      },
+      contact: {
+        phone: [],
+        email: []
+      },
+      Reputation: 0,
+      passport: {
+        number: null,
+        givenName: null,
+        familyName: null,
+        birthDate: null,
+        gender: null,
+        street: null,
+        streetAndNumber: null,
+        city: null,
+        zip: null,
+        state: null,
+        country: null
+      }
+    }
+    it('Should correctly handle network errors', async() => {
       const solidAgent = new SolidAgent()
-      const msg = 'Invalid arguments'
-      expect(() => solidAgent.getUserInformation()).to.throw(msg)
+      return solidAgent.getUserInformation().then(res => {
+        expect(res).to.deep.equal(emptyUserProfile)
+      })
+    })
+
+    it('Should correctly invalid argument', async() => {
+      const solidAgent = new SolidAgent()
+      return solidAgent.getUserInformation().then(res => {
+        expect(res).to.deep.equal(emptyUserProfile)
+      })
     })
 
     it('Should correctly fetch and parse user info', async () => {
@@ -57,6 +90,7 @@ describe('solidAgentAgent', () => {
           n0:mbox [ rd:seeAlso pro:email456; schem:identifier "456" ];
           n0:phone [ rd:seeAlso pro:phone123; schem:identifier "123" ];
           n0:mbox "test3@jolocom.com";
+          n0:phone "+49 157 11111111";
           n0:name "Test".`
 
       const respMap = {
@@ -76,6 +110,10 @@ describe('solidAgentAgent', () => {
           phone: [{
             number: '+49 176 12345678',
             id: '123'
+          },
+          {
+            id: null,
+            number: '+49 157 11111111'
           }],
           email: [{
             address: 'test@jolocom.com',
@@ -222,13 +260,6 @@ pho:owner
     it('Should put both the phone entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
     })
-
-    it('Should throw if no arguments are passed', () => {
-      const msg = 'Invalid arguments'
-      expect(() => solidAgent.setPhone()).to.throw(msg)
-      expect(() => solidAgent.setPhone(WEBID)).to.throw(msg)
-      expect(() => solidAgent.setPhone(undefined, WEBID)).to.throw(msg)
-    })
   })
 
   describe('#setEmail', () => {
@@ -335,13 +366,6 @@ em:owner
 
     it('Should put both the email entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
-    })
-
-    it('Should throw if no arguments are passed', () => {
-      const msg = 'Invalid arguments'
-      expect(() => solidAgent.setPhone()).to.throw(msg)
-      expect(() => solidAgent.setPhone(WEBID)).to.throw(msg)
-      expect(() => solidAgent.setPhone(undefined, WEBID)).to.throw(msg)
     })
   })
 })

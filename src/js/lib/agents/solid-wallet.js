@@ -4,6 +4,7 @@ import util from 'lib/util'
 import HTTPAgent from 'lib/agents/http'
 import LDPAgent from 'lib/agents/ldp'
 
+// Rdf related helper, should probably be abstracted.
 const rdfHelper = {
   addEntryPatch(entryFileUrl, webId, entryId, entryType) {
     const g = rdf.graph()
@@ -55,26 +56,9 @@ export default class SolidAgent {
   constructor() {
     this.http = new HTTPAgent({proxy: true})
     this.ldp = new LDPAgent()
-  }
 
-  getUserInformation(webId) {
-    if (!webId) {
-      throw new Error('Invalid arguments')
-    }
-
-    return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
-      if (rdfData.unav) {
-        throw new Error('User file unavailable')
-      }
-      return this._formatAccountInfo(webId, rdfData.triples)
-    })
-  }
-
-  // TODO Reconsider abstracting this
-  async _formatAccountInfo(webId, userTriples) {
-    const g = rdf.graph()
-    const profileData = {
-      webId: webId,
+    this.defaultProfile = {
+      webId: '',
       username: {
         value: '',
         verified: false
@@ -98,12 +82,35 @@ export default class SolidAgent {
         country: null
       }
     }
+  }
+
+  async getUserInformation(webId) {
+    if (!webId) {
+      console.error('No webId found')
+      return Object.assign(this.defaultProfile)
+    }
+
+    return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
+      if (rdfData.unav) {
+        // TODO snackbar
+        console.error('User profile card could not be reached')
+        return Object.assign(this.defaultProfile)
+      }
+      return this._formatAccountInfo(webId, rdfData.triples)
+    })
+  }
+
+  async _formatAccountInfo(webId, userTriples) {
+    const g = rdf.graph()
+    const profileData = Object.assign({}, this.defaultProfile)
+
     g.addAll(userTriples)
-    profileData.username.value = g
-      .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
 
     profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
     profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
+    profileData.webId = webId
+    profileData.username.value = g
+      .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
 
     return profileData
   }
@@ -115,10 +122,16 @@ export default class SolidAgent {
       phone: PRED.mobile
     }
 
+    const keyMap = {
+      [PRED.mobile.value]: 'number',
+      [PRED.email.value]: 'address'
+    }
+
     const pred = propertyToPredMap[property]
 
-    if (!pred) {
-      throw new Error('Invalid property')
+    if (!pred || !g) {
+      // TODO warn?
+      return
     }
 
     const objects = g.statementsMatching(undefined, pred, undefined).map(st =>
@@ -129,7 +142,7 @@ export default class SolidAgent {
       if (objects[obj].termType !== 'BlankNode') {
         propertyData.push({
           id: null,
-          address: objects[obj].value
+          [keyMap[pred.value]]: objects[obj].value
         })
       } else {
         propertyData.push(await this._expandBNode(objects[obj], g, pred))
@@ -170,33 +183,18 @@ export default class SolidAgent {
     })
   }
 
-  extractPhoneInfo() {
-  }
-
-  deleteEntry(entryType, value) {
-    return new Promise((resolve, reject) => {
-      resolve()
-    })
-  }
-
-  updateEntry(type, value) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
   setEmail(webId, entryValue) {
     if (!webId || !entryValue) {
-      throw new Error('Invalid arguments')
+      console.error('Invalid arguments')
+      return
     }
     return this._setEntry(webId, entryValue, 'email')
   }
 
   setPhone(webId, entryValue) {
     if (!webId || !entryValue) {
-      throw new Error('Invalid arguments')
+      console.error('Invalid arguments')
+      return
     }
     return this._setEntry(webId, entryValue, 'phone')
   }
@@ -209,6 +207,7 @@ export default class SolidAgent {
 
     return this.http.patch(webId, [], body)
     .then(this.createEntryFile(webId, entryFileUrl, entryValue, entryType))
+    .catch(e => console.error('Could not patch user file'))
   }
 
   createEntryFile(webId, entryFileUrl, entryValue, entryType) {
@@ -217,6 +216,7 @@ export default class SolidAgent {
 
     return this._createEntryFileAcl(webId, entryFileUrl)
     .then(this.http.put(entryFileUrl, entryFileBody))
+    .catch(e => console.error('Could not create entry acl file'))
   }
 
   // Move out of class?
@@ -225,6 +225,7 @@ export default class SolidAgent {
     const entryFileAclBody = rdfHelper
     .entryAclFileBody(entryFileAclUrl, entryFileUrl, webId)
     return this.http.put(entryFileAclUrl, entryFileAclBody)
+    .catch(e => console.error('Could not create entry file'))
   }
 
   _genRandomAttrId() {
