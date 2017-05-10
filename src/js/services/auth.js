@@ -1,10 +1,22 @@
-export default class AuthService {
+import EventEmitter from 'event-emitter'
+
+export default class AuthService extends EventEmitter {
   constructor(backend) {
     this.backend = backend
-    this.currentUser = null
-    this.currentUser = {
+    this._currentUser = null
+    this._currentUser = {
       wallet: new (require('../lib/agents/wallet').Wallet)()
     }
+    this.on('changed', (user) => this.storeWebId())
+  }
+
+  set currentUser(user) {
+    this._currentUser = user
+    this.emit('changed', this.currentUser)
+  }
+
+  get currentUser() {
+    return this._currentUser
   }
 
   async registerWithSeedPhrase({userName, seedPhrase}) {
@@ -21,6 +33,10 @@ export default class AuthService {
       })
     }
     return this.currentUser
+  }
+
+  storeWebId () {
+    localStorage.setItem('jolocom.webId', this.currentUser.wallet.webId || '')
   }
 
   async loginWithSeedPhrase({userName, seedPhrase}) {
