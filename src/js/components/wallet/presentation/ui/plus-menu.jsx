@@ -30,9 +30,6 @@ const STYLES = {
     backgroundColor: theme.jolocom.gray4,
     borderRadius: '20px',
     boxShadow: '3px 3px 3px #c3c6cc',
-    borderColor: theme.jolocom.gray2,
-    borderWidth: '1px',
-    borderStyle: 'solid',
     color: theme.palette.accent1Color,
     padding: '5px',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
