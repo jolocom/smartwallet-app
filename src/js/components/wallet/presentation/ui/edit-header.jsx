@@ -6,8 +6,7 @@ import {Divider} from 'material-ui'
 
 const STYLES = {
   header: {
-    margin: '42px 0 16px 0',
-    width: '100%'
+    margin: '42px 16px 16px 16px'
   },
   title: {
     color: theme.palette.textColor,

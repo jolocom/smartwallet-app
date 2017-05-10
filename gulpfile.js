@@ -19,7 +19,7 @@ function startDevServer(config, callback) {
 
 	// Start a webpack-dev-server
 	new WebpackDevServer(webpack(myConfig), {
-		https: true,
+		https: false,
 		publicPath: '/' + myConfig.output.publicPath,
 		hot: true,
 		inline: true,
@@ -29,7 +29,7 @@ function startDevServer(config, callback) {
 		}
 	}).listen(8080, '0.0.0.0', function (err) {
 		if (err) throw new gutil.PluginError('webpack-dev-server', err);
-		gutil.log('[webpack-dev-server]', 'https://localhost:8080');
+		gutil.log('[webpack-dev-server]', 'http://localhost:8080');
 	});
 }
 

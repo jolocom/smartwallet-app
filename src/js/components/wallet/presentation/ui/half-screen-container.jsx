@@ -10,7 +10,7 @@ const STYLE = {
   boxSizing: 'border-box',
   minHeight: '100%',
   minWidth: '300px',
-  width: '50%'
+  width: '100%'
 }
 
 const TabContainer = ({style, children, ...props} = {}) => {

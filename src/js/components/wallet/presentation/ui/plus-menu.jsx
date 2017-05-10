@@ -12,7 +12,6 @@ import {
 
 const STYLES = {
   divider: {
-    width: '150%'
   },
   addBtn: {
     width: '40px',
@@ -22,7 +21,9 @@ const STYLES = {
     verticalAlign: 'center',
     color: theme.jolocom.gray4,
     marginLeft: '20px',
-    transition: 'none'
+    transition: 'none',
+    position: 'absolute',
+    right: '20px'
   },
   iconCreate: {
     height: '30px',
@@ -30,9 +31,6 @@ const STYLES = {
     backgroundColor: theme.jolocom.gray4,
     borderRadius: '20px',
     boxShadow: '3px 3px 3px #c3c6cc',
-    borderColor: theme.jolocom.gray2,
-    borderWidth: '1px',
-    borderStyle: 'solid',
     color: theme.palette.accent1Color,
     padding: '5px',
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
@@ -41,7 +39,6 @@ const STYLES = {
     height: '40px',
     width: '40px',
     color: theme.palette.accent1Color,
-    backgroundColor: theme.jolocom.gray4,
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   infoHeader: {
@@ -55,11 +52,10 @@ const STYLES = {
     marginLeft: '16px',
     display: 'inline-block',
     verticalAlign: 'top',
-    width: '70%'
+    width: '100%'
   },
   root: {
     width: '100%',
-    maxWidth: '800px',
     whiteSpace: 'nowrap'
   }
 

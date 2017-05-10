@@ -36,7 +36,10 @@ var STYLES = {
     paddingBottom: '0px'
   },
   verifiedShield: {
-    marginLeft: '0px'
+    marginLeft: '0px',
+    position: 'absolute',
+    right: '20px',
+    marginTop: '40px'
   },
   listItem: {
     whiteSpace: 'nowrap'

@@ -139,6 +139,9 @@ const Login = connect({
         <div style={styles.logo}>
           <img src="/img/logo.svg" style={styles.logoImg} />
         </div>
+        <div style={{paddingBottom: '8px', color: 'red'}}>
+          {this.props.login.failureMsg}
+        </div>
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
             <div>
@@ -168,9 +171,6 @@ const Login = connect({
             style={styles.button}
             label="Login" />
         </form>
-        <div style={{paddingBottom: '8px', color: 'red'}}>
-          {this.props.login.failureMsg}
-        </div>
         {
         Utils.isSafari()
           ? <p style={styles.safariCookieWarning}>In order for the
