@@ -15,7 +15,9 @@
     "test:firefox": "npm run test -- --browsers Firefox",
     "test:safari": "npm run test -- --browsers Safari",
     "test:ie": "npm run test -- --browsers IE",
-    "lint": "eslint src/js/**"
+    "lint": "eslint src/js/**",
+    "ios": "cd app && cordova run ios",
+    "android": "cd app && cordova run android"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,7 @@
     "chai-as-promised": "^6.0.0",
     "chai-enzyme": "^0.5.0",
     "cheerio": "^0.20.0",
+    "cordova-lib": "^6.5.0",
     "cross-env": "^2.0.0",
     "del": "^1.2.0",
     "enzyme": "^2.6.0",
@@ -59,6 +62,7 @@
     "github": "^9.2.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^3.0.1",
     "gulp-rename": "^1.2.2",

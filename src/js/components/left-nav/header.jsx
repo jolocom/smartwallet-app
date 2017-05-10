@@ -87,7 +87,7 @@ let Header = React.createClass({
       **/}
         <div>
           <img
-            src="/img/jolocom_logo_white.svg"
+            src="img/jolocom_logo_white.svg"
             style={styles.logoImg}
             onTouchTap={this._handleNavigateHome}
           />

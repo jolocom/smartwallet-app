@@ -53,3 +53,10 @@ chrome-user-data
 *.iml
 .vscode
 nbproject
+
+# Cordova
+app/plugins
+app/platforms
+app/config.xml
+app/wallet.json
+app/graph.json
