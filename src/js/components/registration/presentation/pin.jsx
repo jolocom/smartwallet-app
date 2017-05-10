@@ -17,7 +17,7 @@ const STYLES = {
     textTransform: 'uppercase'
   },
   explanation: {
-    marginTop: '140px',
+    marginTop: '20px',
     color: theme.jolocom.gray1
   },
   content: {
