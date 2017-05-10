@@ -38,7 +38,6 @@ const STYLES = {
     height: '40px',
     width: '40px',
     color: theme.palette.accent1Color,
-    backgroundColor: theme.jolocom.gray4,
     transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
   },
   infoHeader: {
