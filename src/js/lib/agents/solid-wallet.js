@@ -85,13 +85,22 @@ export default class SolidAgent {
   }
 
   deleteEntry(webId, entryType, entryId) {
-    // Todo use removeEntryPatch ?
-    let statements // Todo fill in real statements for deletion
+    // TODO use removeEntryPatch ?
+    let statements // TODO fill in real statements for deletion
     return this.http.patch(`${util.getProfFolderUrl(webId)}/card`, statements)
     .then(this.http
       .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}`))
     .then(this.http
       .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}.acl`))
+  }
+
+  updateEntry(webId, entryType, entryId, newValue) {
+    // TODO fill in real statements
+    let oldStatements
+    let newStatements
+    const entryFileUrl =
+    `${util.getProfFolderUrl(webId)}/${entryType}${entryId}`
+    return this.http.patch(entryFileUrl, oldStatements, newStatements)
   }
 
   async getUserInformation(webId) {
@@ -181,7 +190,7 @@ export default class SolidAgent {
       // TODO
       if (rdfData.unav) {
         console.warn('BNode unreachable')
-        return {id: null,verified: false, [key]: null}
+        return {id: null, verified: false, [key]: null}
       }
 
       extGraph.addAll(rdfData.triples)
