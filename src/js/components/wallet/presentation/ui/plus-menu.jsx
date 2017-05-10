@@ -12,7 +12,6 @@ import {
 
 const STYLES = {
   divider: {
-    width: '150%'
   },
   addBtn: {
     width: '40px',
@@ -22,7 +21,9 @@ const STYLES = {
     verticalAlign: 'center',
     color: theme.jolocom.gray4,
     marginLeft: '20px',
-    transition: 'none'
+    transition: 'none',
+    position: 'absolute',
+    right: '20px'
   },
   iconCreate: {
     height: '30px',
@@ -51,11 +52,10 @@ const STYLES = {
     marginLeft: '16px',
     display: 'inline-block',
     verticalAlign: 'top',
-    width: '70%'
+    width: '100%'
   },
   root: {
     width: '100%',
-    maxWidth: '800px',
     whiteSpace: 'nowrap'
   }
 

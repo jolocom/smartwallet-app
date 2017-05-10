@@ -34,12 +34,14 @@ const STYLES = {
     color: theme.palette.lighterTextColor
   },
   iconName: {
-    top: '20px',
-    fill: theme.palette.accent1Color
+    fill: theme.palette.accent1Color,
+    position: 'absolute',
+    right: '20px',
+    marginTop: '40px'
   },
   divider: {
     marginLeft: '16px',
-    width: '105%'
+    width: '100%'
   },
   addBtn: {
     width: '40px',
