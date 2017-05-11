@@ -4,6 +4,7 @@ import { routerMiddleware } from 'react-router-redux'
 import backendMiddleware from './middleware/backend'
 import Backend from '../backend'
 import createServices from '../services'
+import setupObservers from './observers'
 
 export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
@@ -29,6 +30,7 @@ export default function createStore(history, client, data) {
 
   const reducer = require('./reducer').default
   const store = finalCreateStore(reducer, data)
+  setupObservers({store, services})
 
   if (window.__DEVELOPMENT__ && module.hot) {
     module.hot.accept('./reducer', () => {

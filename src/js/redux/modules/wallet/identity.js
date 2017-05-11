@@ -42,6 +42,7 @@ const actions = module.exports = makeActions('wallet/identity', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params,
         () => {
+          console.log(' ================= \n \n ', services)
           return services.auth.currentUser.wallet.getUserInformation({
             email: 'test@test.com'
           })
