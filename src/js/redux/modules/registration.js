@@ -63,7 +63,7 @@ const actions = module.exports = makeActions('registration', {
         if (params.dz) {
           entropy.addFromDelta(params.z)
         }
-        console.log(entropy.getProgress())
+
         dispatch(actions.setEntropyStatus.buildAction({
           sufficientEntropy: entropy.getProgress() >= 1,
           progress: entropy.getProgress()
