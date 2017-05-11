@@ -1,16 +1,13 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {theme} from 'styles'
-
 const STYLE = {
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'left',
   textAlign: 'left',
-  padding: '10px',
-  backgroundColor: theme.jolocom.gray4,
+  padding: '0px',
   boxSizing: 'border-box',
   overflowY: 'auto',
   minHeight: '100%'

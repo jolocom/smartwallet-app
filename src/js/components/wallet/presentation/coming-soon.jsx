@@ -31,16 +31,16 @@ export default class WalletComingSoon extends React.Component {
   render() {
     // TODO replace placeholder img
     return (
-      <Container >
+      <div>
         <Block style={STYLES.topBlock}>
-          <h1 style={STYLES.issue}>Coming Soon!!!</h1>
+          <h1 style={STYLES.greeting}>Coming Soon!!!</h1>
         </Block>
         <Block>
           <SideNote>
             {this.props.message}
           </SideNote>
         </Block>
-      </Container>
+      </div>
     )
   }
 }

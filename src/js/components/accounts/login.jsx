@@ -82,7 +82,7 @@ const Login = connect({
       },
       logoImg: {
         maxWidth: '80%',
-        width: '256px'
+        width: '100px'
       },
       title: {
         fontWeight: 'normal',

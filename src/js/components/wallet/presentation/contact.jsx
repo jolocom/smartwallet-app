@@ -5,7 +5,7 @@ import {
   EditHeader,
   EditListItem,
   AddNew,
-  TabContainer
+    TabContainer
 } from './ui'
 import {
   Content,
@@ -174,11 +174,10 @@ export default class WalletContact extends React.Component {
         )
       } else {
         emailFields.push(
-          <Block key="addEmailField">
-            <AddNew onClick={() => {
-              this._handleAddNewClick()
-            }}
-              value="Additional Email" />
+          <Block key="addEmailField" onClick={() => {
+            this._handleAddNewClick()
+          }}>
+            <AddNew value="Additional Email" />
           </Block>
         )
       }

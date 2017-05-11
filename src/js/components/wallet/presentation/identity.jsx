@@ -52,7 +52,8 @@ const STYLES = {
     color: theme.palette.lighterTextColor
   },
   requestBtn: {
-    marginLeft: '50px'
+    marginLeft: '39px'
+    // padding: '0'
   },
   spinner: {
     position: 'absolute',
@@ -76,7 +77,7 @@ const STYLES = {
 
 const PhoneList = (props) => {
   let display = []
-  if (!props.phone[0].number) {
+  if (!props.phone && !props.phone[0].number) {
     return null
   }
   for (let i = 0; i < props.phone.length; i++) {
@@ -89,9 +90,11 @@ const PhoneList = (props) => {
       onVerify={() => props.confirm(iconPhoneMessage, STYLES.dialog)}
       secondaryTextValue={props.phone[i].type} />)
   }
-  return <List disabled>
-   {display}
-  </List>
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 PhoneList.propTypes = {
@@ -101,10 +104,13 @@ PhoneList.propTypes = {
 
 const EmailList = (props) => {
   let display = []
-  if (!props.email[0].address) {
+  if (!props.email && !props.email[0].address) {
     return null
   }
   for (let i = 0; i < props.email.length; i++) {
+    if (!props.email[i].address) {
+      return 
+    }
     display.push(
       <div key={i}>
         <StaticListItem
@@ -126,9 +132,11 @@ const EmailList = (props) => {
           : null}
       </div>)
   }
-  return <List disabled>
-            {display}
-  </List>
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 EmailList.propTypes = {
@@ -170,10 +178,12 @@ const InfoDetail = (props) => {
     />
   </span>
 
-  return <span
-    onClick={() => props.showDetails(personalDetails)}>
-    <Info style={STYLES.iconName} />
-  </span>
+  return (
+    <span
+      onClick={() => props.showDetails(personalDetails)}>
+      <Info style={STYLES.iconName} />
+    </span>
+  )
 }
 
 InfoDetail.propTypes = {
@@ -251,10 +261,8 @@ export default class WalletIdentity extends React.Component {
             <Block>
               <PlusMenu
                 name="Contact"
-                choice={
-                  !(this.props.contact.email[0].address === '' &&
-                  this.props.contact.phone[0].number === '')
-                }
+                choice={this.props.contact.email.length > 0 && 
+                  this.props.contact.phone.length > 0}
                 goToManagement={this.props.goToContactManagement}
               />
             </Block>
