@@ -1,7 +1,7 @@
 import {keystore} from 'eth-lightwallet'
 import SmartWallet from 'lib/blockchain/smartwallet'
 import VerificationAgent from './verification'
-import SolidAgent from './solid-wallet'
+// import SolidAgent from './solid-wallet'
 
 export default class WalletAgent {
   generateSeedPhrase(entropy) {
@@ -233,7 +233,7 @@ export class Wallet {
     this.webId = 'https://recordeddemo.webid.jolocom.de/profile/card#me'
     this.lightWallet = 'something'
     this._verification = new VerificationAgent()
-    this.solid = new SolidAgent()
+    // this.solid = new SolidAgent()
   }
 
   getUserInformation({email}) {
@@ -369,5 +369,3 @@ export class Wallet {
     return this._verification.verifyEmail({webID: this.webID, email, code})
   }
 }
-
-      Reputation: 0,
