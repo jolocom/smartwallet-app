@@ -230,7 +230,7 @@ export default class WalletAgent {
 
 export class Wallet {
   constructor() {
-    this.webId = 'https://recordeddemo.webid.jolocom.de/profile/card#me'
+    this.webId = localStorage.getItem('jolocom.webId')
     this.lightWallet = 'something'
     this._verification = new VerificationAgent()
     // this.solid = new SolidAgent()

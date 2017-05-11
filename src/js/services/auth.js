@@ -12,7 +12,7 @@ export default class AuthService extends EventEmitter {
   }
 
   _storeWebId() {
-    localStorage.setItem('jolocom.webId', this._setCurrentUser)
+    localStorage.setItem('jolocom.webId', this.currentUser.wallet.webId)
   }
 
   _setCurrentUser(user) {
