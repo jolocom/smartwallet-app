@@ -11,9 +11,10 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
 
       // The user is already logged in.
       if (webId) {
-        const accounts = backend.accounts
+        const {accounts} = backend
         const loggedIn = await accounts.checkLogin(webId)
           .then(() => true).catch(() => false)
+          // TODO : test wheather the user is logged in or not to the wallet app
 
         if (loggedIn) {
           dispatch(doLogin.buildAction(params, async () => {
