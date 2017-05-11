@@ -20,8 +20,11 @@ let STYLES = {
   fields: {
     display: 'flex',
     flexDirection: 'row',
-    '@media (min-width: 480px)': {
-      flexDirection: 'column'
+    alignItems: 'flex-end',
+    marginRight: '32px',
+    '@media (max-width: 320px)': {
+      flexDirection: 'column',
+      alignItems: 'flex-start'
     }
   },
   input: {
@@ -31,7 +34,9 @@ let STYLES = {
   },
   type: {
     maxWidth: '120px',
-    width: '30%'
+    '@media (min-width: 321px)': {
+      margin: '0 16px'
+    }
   },
   disabledUnderline: {
     borderBottom: 'solid',
@@ -41,8 +46,8 @@ let STYLES = {
     top: '16px'
   },
   textField: {
-    maxWidth: '220px',
-    width: '70%'
+    maxWidth: 'none',
+    flex: 1
   },
   item: {
     padding: '0 16px 0 72px'
