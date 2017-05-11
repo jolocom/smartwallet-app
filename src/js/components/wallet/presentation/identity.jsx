@@ -6,11 +6,14 @@ import {
   Divider,
   List, ListItem,
   FlatButton,
-  CircularProgress
+  Avatar
 } from 'material-ui'
+
+import Loading from 'components/common/loading'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import PersonIcon from 'material-ui/svg-icons/social/person'
 import Info from 'material-ui/svg-icons/action/info'
 
 import {theme} from 'styles'
@@ -24,7 +27,8 @@ import {
 
 const STYLES = {
   listItem: {
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    padding: '0 16px 0 72px'
   },
   inputName: {
     color: theme.palette.textColor,
@@ -81,6 +85,9 @@ const STYLES = {
     actionsContainerStyle: {
       textAlign: 'center'
     }
+  },
+  avatar: {
+    top: '16px'
   }
 }
 
@@ -271,23 +278,36 @@ export default class WalletIdentity extends React.Component {
       confirm,
       verify
     } = this.props
+
     if (!isLoaded) {
-      return <CircularProgress style={STYLES.spinner} />
+      return <Loading />
     }
+
+    const avatar = (
+      <Avatar icon={<PersonIcon />} style={STYLES.avatar} />
+    )
+
     return (
       <TabContainer>
         <HalfScreenContainer>
           <Content>
             <Block>
               <List>
-                <ListItem key={1} disabled rightIcon={<InfoDetail
-                  showDetails={(details) => verify(
-                    details,
-                    'OK',
-                    STYLES.simpleDialog
-                  )}
-                  webId={webId}
-                  username={username.value} />}
+                <ListItem
+                  key={1}
+                  disabled
+                  rightIcon={
+                    <InfoDetail
+                      showDetails={(details) => verify(
+                        details,
+                        'OK',
+                        STYLES.simpleDialog
+                      )}
+                      webId={webId}
+                      username={username.value}
+                    />
+                  }
+                  leftAvatar={avatar}
                   style={STYLES.listItem}>
                   <TextField
                     floatingLabelText="Name"

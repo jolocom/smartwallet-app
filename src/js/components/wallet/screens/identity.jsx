@@ -57,6 +57,7 @@ export default class WalletIdentityScreen extends React.Component {
 
       )
     }
+
     return (
       <Presentation
         username={identity.username}
