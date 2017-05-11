@@ -24,13 +24,6 @@ const STYLES = {
   inputStyle: {
     textAlign: 'center'
   },
-  sidenote: {
-    fontSize: '11pt',
-    fontWeight: '300',
-    color: '#939393',
-    margin: '20px',
-    textAlign: 'center'
-  },
   embeddedButton: {
     color: '#942f51',
     minWidth: '0px',
