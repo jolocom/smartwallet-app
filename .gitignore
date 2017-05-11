@@ -5,9 +5,6 @@ public/
 build/
 ldpc-*
 data/
-config.json
-localhost.cert
-localhost.key
 
 autodeploy.js
 pull_and_deploy.sh
@@ -53,3 +50,9 @@ chrome-user-data
 *.iml
 .vscode
 nbproject
+
+#local solid test server
+utils/localSolidServer/
+config.json
+localhost.cert
+localhost.key
