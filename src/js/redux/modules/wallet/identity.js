@@ -41,6 +41,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () => {
+          // eslint-disable-next-line max-len
           return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
         }))
       }
