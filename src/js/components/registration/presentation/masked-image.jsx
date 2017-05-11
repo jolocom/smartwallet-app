@@ -30,6 +30,9 @@ class MaskedImage extends React.Component {
       return
     }
 
+    e.preventDefault()
+    e.stopPropagation()
+
     if (e.touches && e.touches.length > 1) return
     const { pageX, pageY } = e.touches && e.touches[0] || e
     const { left, top } = e.target.getBoundingClientRect()

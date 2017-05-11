@@ -20,9 +20,11 @@ const STYLES = {
   header: {
     position: 'absolute',
     top: '60px',
-    width: '80%',
+    width: '100%',
     maxWidth: '320px',
-    pointerEvents: 'none'
+    padding: '0 16px',
+    pointerEvents: 'none',
+    boxSizing: 'border-box'
   },
   title: {
     color: '#fff',
@@ -38,7 +40,9 @@ const STYLES = {
   footer: {
     position: 'absolute',
     bottom: 0,
-    padding: '32px'
+    width: '100%',
+    padding: '32px',
+    boxSizing: 'border-box'
   }
 }
 
