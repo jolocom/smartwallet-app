@@ -9,7 +9,7 @@ const STYLES = {
   },
   title: {
     color: theme.jolocom.gray1,
-    fontSize: '24px',
+    fontSize: '21px',
     fontWeight: '300',
     margin: 0
   }
