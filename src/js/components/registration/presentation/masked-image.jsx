@@ -1,10 +1,10 @@
 import React from 'react'
-import theme from '../../../styles/jolocom-theme'
 
 class MaskedImage extends React.Component {
   static propTypes = {
     image: React.PropTypes.string.isRequired,
     style: React.PropTypes.object.isRequired,
+    maskColor: React.PropTypes.string.isRequired,
     // Type checking too slow for paths
     uncoveredPaths: React.PropTypes.any.isRequired,
     uncovering: React.PropTypes.bool.isRequired,
@@ -12,33 +12,20 @@ class MaskedImage extends React.Component {
     onUncoveringChange: React.PropTypes.func.isRequired
   }
 
-  constructor(props) {
-    super(props)
-    this.onRevealStart = this.onRevealStart.bind(this)
-    this.onReveal = this.onReveal.bind(this)
-    this.onRevealEnd = this.onRevealEnd.bind(this)
-  }
-
-  // componentDidMount() {
-  //   this.refs.input.focus()
-  // }
-
   componentWillUnmount() {
     this.onRevealEnd()
   }
 
-  onRevealStart(e) {
-    console.log('start')
+  onRevealStart = (e) => {
     e.preventDefault()
     this.props.onUncoveringChange(true)
   }
 
-  onRevealEnd() {
-    console.log('end')
+  onRevealEnd = () => {
     this.props.onUncoveringChange(false)
   }
 
-  onReveal(e) {
+  onReveal = (e) => {
     if (!this.props.uncovering) {
       return
     }
@@ -48,57 +35,39 @@ class MaskedImage extends React.Component {
     const { left, top } = e.target.getBoundingClientRect()
 
     this.props.onPointUncovered(pageX - left, pageY - top)
-    // console.log('move', pageX, pageY)
   }
 
   render() {
     const props = this.props
-    // console.log(props.uncoveredPaths.length)
 
     return (<svg
       style={this.props.style}
-      onTouchStart={(e) => this.onRevealStart(e)}
-      onTouchMove={(e) => this.onReveal(e)}
-      onTouchEnd={() => this.onRevealEnd()}
-      onMouseDown={(e) => this.onRevealStart(e)}
-      onMouseMove={(e) => this.onReveal(e)}
-      onMouseUp={() => this.onRevealEnd()}
+      onTouchStart={this.onRevealStart}
+      onTouchMove={this.onReveal}
+      onTouchEnd={this.onRevealEnd}
+      onMouseDown={this.onRevealStart}
+      onMouseMove={this.onReveal}
+      onMouseUp={this.onRevealEnd}
     >
       <defs>
-        <mask id="mask">
+        <mask id="entropy-mask">
+          <rect height="100%" width="100%" fill="#fff" />
           {props && props.uncoveredPaths.map((path, pathIdx) =>
             <polyline key={pathIdx} points={
               path.map(point => `${point[0]},${point[1]}`).join(' ')
             } style={{
-              strokeWidth: '20px', stroke: '#FFF',
+              strokeWidth: '20px', stroke: '#000',
               strokeLinecap: 'round', strokeLinejoin: 'round',
               fill: 'rgba(0, 0, 0, 0)',
               textAlign: 'center'
             }} />
           )}
-
         </mask>
       </defs>
 
-      <image
-        x="0" y="0" width="700" height="639"
-        href={props.image}
-        mask="url(#mask)"
-        draggable={false}
-      />
-
-      {props.uncoveredPaths.length === 0 && <g>
-        <text x="350" y="150" fontSize="21" dy="0"
-          font-weight="lighter" textAnchor="middle" fill={theme.jolocom.gray1}
-        >
-          <tspan x="350" dy="0.6em">{props.message1}</tspan>
-          <tspan x="350" dy="1.6em">{props.message2}</tspan>
-          <tspan x="350" dy="1.2em">{props.message3}</tspan>
-          <tspan x="350" dy="1.6em">{props.message4}</tspan>
-          <tspan x="350" dy="1.2em">{props.message5}</tspan>
-          <tspan x="350" dy="1.2em">{props.message6}</tspan>
-        </text>
-      </g>}
+      <rect height="100%" width="100%" mask="url(#entropy-mask)"
+        fill={props.maskColor} />
+      }
     </svg>)
   }
 }
