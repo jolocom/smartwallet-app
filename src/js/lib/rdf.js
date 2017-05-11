@@ -35,7 +35,9 @@ export class Graph {
   }
 
   addAll(triples) {
-    this.g.addAll(triples)
+    for (var x in triples) {
+      this.add(triples[x])
+    }
   }
 
   addTriple(...args) {
@@ -46,12 +48,11 @@ export class Graph {
     } else {
       ([subject, predicate, object] = args)
     }
-
     this.g.add(subject, predicate, object)
   }
 
-  serialize() {
-    return $rdf.serialize(undefined, this.g, undefined, 'text/turtle')
+  serialize(uri) {
+    return $rdf.serialize(undefined, this.g, uri, 'text/turtle')
   }
 }
 
@@ -71,7 +72,7 @@ export class Parser extends Graph {
 }
 
 export class Writer extends Graph {
-  end() {
-    return this.serialize()
+  end(uri) {
+    return this.serialize(uri)
   }
 }

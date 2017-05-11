@@ -9,14 +9,73 @@ describe('solidAgentAgent', () => {
   const EMAIL = 'test@mock.com'
 
   describe('#getUserInformation', () => {
-    it('Should correctly throw if no arguments are passed', () => {
+    const emptyUserProfile = {
+      webId: '',
+      username: {
+        value: '',
+        verified: false
+      },
+      contact: {
+        phone: [],
+        email: []
+      },
+      Reputation: 0,
+      passport: {
+        number: null,
+        givenName: null,
+        familyName: null,
+        birthDate: null,
+        gender: null,
+        street: null,
+        streetAndNumber: null,
+        city: null,
+        zip: null,
+        state: null,
+        country: null
+      }
+    }
+    it('Should correctly handle network errors', async() => {
       const solidAgent = new SolidAgent()
-      const msg = 'Invalid arguments'
-      expect(() => solidAgent.getUserInformation()).to.throw(msg)
+      return solidAgent.getUserInformation().then(res => {
+        expect(res).to.deep.equal(emptyUserProfile)
+      })
+    })
+
+    it('Should correctly invalid argument', async() => {
+      const solidAgent = new SolidAgent()
+      return solidAgent.getUserInformation().then(res => {
+        expect(res).to.deep.equal(emptyUserProfile)
+      })
     })
 
     it('Should correctly fetch and parse user info', async () => {
-      const mockResponse = `\
+      const firstPhoneFileResp = `\
+        @prefix pro: <./>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+        pro:phone123
+          n0:phone "+49 176 12345678";
+          n0:primaryTopic pro:card.
+      `
+      const firstEmailFileResp = `\
+        @prefix pro: <./>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+        pro:email123
+          n0:mbox "test@jolocom.com";
+          n0:primaryTopic pro:card.
+        `
+
+      const secondEmailFileResp = `\
+        @prefix pro: <./>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+
+        pro:email456
+          n0:mbox "test2@jolocom.com";
+          n0:primaryTopic pro:card.
+        `
+
+      const userCardResp = `\
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
         @prefix rd: <http://www.w3.org/2000/01/rdf-schema#>.
@@ -28,37 +87,53 @@ describe('solidAgentAgent', () => {
         <#me>
           a n0:Person;
           n0:mbox [ rd:seeAlso pro:email123; schem:identifier "123" ];
+          n0:mbox [ rd:seeAlso pro:email456; schem:identifier "456" ];
+          n0:phone [ rd:seeAlso pro:phone123; schem:identifier "123" ];
+          n0:mbox "test3@jolocom.com";
+          n0:phone "+49 157 11111111";
           n0:name "Test".`
 
+      const respMap = {
+        [WEBID]: userCardResp,
+        'https://test.com/profile/email123': firstEmailFileResp,
+        'https://test.com/profile/email456': secondEmailFileResp,
+        'https://test.com/profile/phone123': firstPhoneFileResp
+      }
+
       const expectedUserInfo = {
-        webId: 'https://test.webid.jolocom.de/profile/card#me',
+        webId: WEBID,
         username: {
           value: 'Test',
-          verified: ''
+          verified: false
         },
         contact: {
           phone: [{
             number: '+49 176 12345678',
-            type: 'mobile',
-            verified: true
+            verified: false,
+            id: '123'
+          },
+          {
+            id: null,
+            verified: false,
+            number: '+49 157 11111111'
           }],
           email: [{
             address: 'test@jolocom.com',
-            type: 'mobile',
-            verified: true
+            verified: false,
+            id: '123'
           },
           {
-            address: 'test@jolocom.com',
-            type: 'mobile',
-            verified: false
+            address: 'test2@jolocom.com',
+            verified: false,
+            id: '456'
           },
           {
-            address: 'test@jolocom.com',
-            type: 'mobile',
-            verified: true
+            address: 'test3@jolocom.com',
+            verified: false,
+            id: null
           }]
         },
-        Repuation: 0,
+        Reputation: 0,
         passport: {
           number: null,
           givenName: null,
@@ -75,8 +150,9 @@ describe('solidAgentAgent', () => {
       }
 
       const solidAgent = new SolidAgent()
-      solidAgent.ldp.fetchTriplesAtUri = async (uri) =>
-        (new Parser()).parse(mockResponse, uri)
+      solidAgent.ldp.fetchTriplesAtUri = async (uri) => {
+        return (new Parser()).parse(respMap[uri], uri)
+      }
 
       const userInfo = await solidAgent.getUserInformation(WEBID)
       expect(userInfo).to.deep.equal(expectedUserInfo)
@@ -189,13 +265,6 @@ pho:owner
     it('Should put both the phone entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
     })
-
-    it('Should throw if no arguments are passed', () => {
-      const msg = 'Invalid arguments'
-      expect(() => solidAgent.setPhone()).to.throw(msg)
-      expect(() => solidAgent.setPhone(WEBID)).to.throw(msg)
-      expect(() => solidAgent.setPhone(undefined, WEBID)).to.throw(msg)
-    })
   })
 
   describe('#setEmail', () => {
@@ -302,13 +371,6 @@ em:owner
 
     it('Should put both the email entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
-    })
-
-    it('Should throw if no arguments are passed', () => {
-      const msg = 'Invalid arguments'
-      expect(() => solidAgent.setPhone()).to.throw(msg)
-      expect(() => solidAgent.setPhone(WEBID)).to.throw(msg)
-      expect(() => solidAgent.setPhone(undefined, WEBID)).to.throw(msg)
     })
   })
 })

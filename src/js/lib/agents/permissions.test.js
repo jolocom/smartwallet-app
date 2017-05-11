@@ -82,7 +82,8 @@ describe('PermissionsAgent', function() {
       pAgent._getIndexUri = (uri) => 'https://mockuri.com/index'
       pAgent.findTriples = async() => -1
 
-      expect(await pAgent.getSharedNodes('mockuri.com')).to.deep.equal({})
+      expect(await pAgent.getSharedNodes('https://mockuri.com'))
+      .to.deep.equal({})
     })
 
     it('Should correctly return shared nodes', async function() {

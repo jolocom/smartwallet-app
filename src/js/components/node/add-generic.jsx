@@ -289,7 +289,6 @@ let NodeAddGeneric = React.createClass({
     const webId = localStorage.getItem('jolocom.webId')
     const centerNode = this.state.graphState.center
     const type = this.state.uploadedFileType
-
     if (!this.state.uploadedFile) {
       // No file staged for upload
       gAgent.createNode(
@@ -311,14 +310,14 @@ let NodeAddGeneric = React.createClass({
         this.state.profile.storage,
         this.state.uploadedFile
       ).then((res) => {
+        let confidential = true
+        let image = null
+        const node = {title: nodeTitle, description: nodeDesc,
+          image: image, nodeType: type, confidential: confidential}
         gAgent.createNode(
           webId,
           centerNode,
-          nodeTitle,
-          nodeDesc,
-          res,
-          type,
-          true
+          node
         ).then((uri) => {
           graphActions.drawNewNode(uri, PRED.isRelatedTo.uri)
         }).catch((e) => {
