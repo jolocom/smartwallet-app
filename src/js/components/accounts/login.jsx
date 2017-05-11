@@ -139,7 +139,7 @@ const Login = connect({
         <div style={styles.logo}>
           <img src="/img/logo.svg" style={styles.logoImg} />
         </div>
-        <div style={{paddingBottom: '8px', color: 'red'}}>
+        <div style={{paddingBottom: '8px', color: '#e8540c'}}>
           {this.props.login.failureMsg}
         </div>
         {
