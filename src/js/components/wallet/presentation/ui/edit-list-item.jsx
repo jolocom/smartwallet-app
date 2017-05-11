@@ -17,7 +17,13 @@ let STYLES = {
   deleteButton: {
     marginTop: '16px'
   },
-  fields: {},
+  fields: {
+    display: 'flex',
+    flexDirection: 'row',
+    '@media (min-width: 480px)': {
+      flexDirection: 'column'
+    }
+  },
   input: {
     width: '100%',
     color: theme.palette.textColor,

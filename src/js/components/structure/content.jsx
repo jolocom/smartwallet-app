@@ -4,7 +4,6 @@ import Radium from 'radium'
 const STYLE = {
   display: 'flex',
   flexDirection: 'column',
-  padding: '24px',
   flex: 1
 }
 

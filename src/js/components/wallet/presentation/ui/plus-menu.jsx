@@ -16,7 +16,7 @@ const STYLES = {
   addBtn: {
     position: 'absolute',
     top: '11px',
-    right: '4px'
+    right: '8px'
   },
   iconCreate: {
     fill: theme.palette.accent1Color
@@ -32,10 +32,11 @@ const STYLES = {
   },
   item: {
     alignItems: 'center',
-    marginLeft: '16px',
+    paddingLeft: '16px',
     display: 'inline-block',
     verticalAlign: 'top',
-    width: '100%'
+    width: '100%',
+    boxSizing: 'border-box'
   },
   root: {
     position: 'relative',

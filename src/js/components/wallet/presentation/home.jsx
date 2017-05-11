@@ -27,8 +27,7 @@ const STYLES = {
   },
   walletContainer: {
     backgroundColor: 'none',
-    padding: '24px',
-    paddingBottom: '0px'
+    padding: '24px 24px 0 24px'
   },
   homeImg: {
     maxWidth: '60vw'

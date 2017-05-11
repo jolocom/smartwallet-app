@@ -62,8 +62,7 @@ const STYLES = {
     color: theme.palette.lighterTextColor
   },
   requestBtn: {
-    marginLeft: '39px'
-    // padding: '0'
+    marginLeft: '-16px'
   },
   spinner: {
     position: 'absolute',
@@ -124,15 +123,24 @@ const PhoneList = (props) => {
   if (!phone[0].number) {
     return null
   }
-  display.push(phone.map((field, index) => <StaticListItem
-    key={index}
-    verified={field.verified}
-    textValue={field.number}
-    textLabel="Phone Number"
-    icon={CommunicationCall}
-    onVerify={() => confirm(iconPhoneMessage, STYLES.dialog)}
-    secondaryTextValue={field.type} />
-  ))
+  display.push(phone.map((field, index) => {
+    let icon
+
+    if (index === 0) {
+      icon = CommunicationCall
+    }
+
+    return (
+      <StaticListItem
+        key={index}
+        verified={field.verified}
+        textValue={field.number}
+        textLabel="Phone Number"
+        icon={icon}
+        onVerify={() => confirm(iconPhoneMessage, STYLES.dialog)}
+        secondaryTextValue={field.type} />
+    )
+  }))
 
   return <List disabled>
     {display}
@@ -150,26 +158,48 @@ const EmailList = (props) => {
   if (!props.email[0].address) {
     return null
   }
-  display.push(email.map((field, index) => <div key={index}>
-    <StaticListItem
-      verified={field.verified}
-      textValue={field.address}
-      textLabel="Email"
-      onVerify={() => confirm(iconEmailMessage, STYLES.dialog)}
-      icon={CommunicationEmail}
-    />
-    {!field.verified
-      ? <FlatButton
-        label="Request Verification"
-        secondary
-        style={STYLES.requestBtn}
-        onClick={() => verify(buttonEmailMessage, 'OK', STYLES.simpleDialog)} />
-    : null}
-  </div>
-  ))
-  return <List disabled>
-            {display}
-  </List>
+  display.push(email.map((field, index) => {
+    let icon
+
+    if (index === 0) {
+      icon = CommunicationEmail
+    }
+
+    let verify
+
+    if (!field.verified) {
+      verify = (
+        <ListItem disabled leftIcon={<div />} style={STYLES.list}>
+          <FlatButton
+            label="Request Verification"
+            secondary
+            style={STYLES.requestBtn}
+            onClick={() => {
+              verify(buttonEmailMessage, 'OK', STYLES.simpleDialog)
+            }} />
+        </ListItem>
+      )
+    }
+
+    return (
+      <div key={index}>
+        <StaticListItem
+          verified={field.verified}
+          textValue={field.address}
+          textLabel="Email"
+          onVerify={() => confirm(iconEmailMessage, STYLES.dialog)}
+          icon={icon}
+        />
+        {verify}
+      </div>
+    )
+  }))
+
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 EmailList.propTypes = {
