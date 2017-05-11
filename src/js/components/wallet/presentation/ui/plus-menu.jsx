@@ -1,12 +1,12 @@
 import React from 'react'
 import Radium from 'radium'
 import ContentCreate from 'material-ui/svg-icons/content/create'
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 import {theme} from 'styles'
 
 import {
   List,
-  IconButton,
+  FloatingActionButton,
   Divider
 } from 'material-ui'
 
@@ -14,32 +14,15 @@ const STYLES = {
   divider: {
   },
   addBtn: {
-    width: '40px',
-    boxShadow: 'none',
-    padding: '6px',
-    display: 'inline-block',
-    verticalAlign: 'center',
-    color: theme.jolocom.gray4,
-    marginLeft: '20px',
-    transition: 'none',
     position: 'absolute',
-    right: '20px'
+    top: '11px',
+    right: '4px'
   },
   iconCreate: {
-    height: '30px',
-    width: '30px',
-    backgroundColor: theme.jolocom.gray4,
-    borderRadius: '20px',
-    boxShadow: '3px 3px 3px #c3c6cc',
-    color: theme.palette.accent1Color,
-    padding: '5px',
-    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
+    fill: theme.palette.accent1Color
   },
   iconAdd: {
-    height: '40px',
-    width: '40px',
-    color: theme.palette.accent1Color,
-    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
+
   },
   infoHeader: {
     textAlign: 'left',
@@ -55,6 +38,7 @@ const STYLES = {
     width: '100%'
   },
   root: {
+    position: 'relative',
     width: '100%',
     whiteSpace: 'nowrap'
   }
@@ -71,15 +55,18 @@ const PlusMenu = (props) => {
           <Divider style={STYLES.divider} />
         </div>
         <div style={STYLES.addBtn}>
-          <IconButton
+          <FloatingActionButton
+            mini
+            secondary={!props.choice}
             onClick={props.goToManagement}
             containerElement="label"
             style={STYLES.addBtn}
+            backgroundColor={props.choice ? '#FFF' : ''}
             iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
             {props.choice
-            ? <ContentCreate color={STYLES.iconCreate.color} />
-            : <ContentAddCircle color={STYLES.iconAdd.color} />}
-          </IconButton>
+            ? <ContentCreate color={theme.palette.accent1Color} />
+            : <ContentAdd />}
+          </FloatingActionButton>
         </div>
       </List>
       {props.children}
