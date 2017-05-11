@@ -269,6 +269,7 @@ export class Wallet {
           }
         ]
       },
+      Repuation: 0,
       passport: {
         number: null,
         givenName: null,
@@ -368,3 +369,5 @@ export class Wallet {
     return this._verification.verifyEmail({webID: this.webID, email, code})
   }
 }
+
+      Reputation: 0,
