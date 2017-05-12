@@ -73,7 +73,7 @@ const Pin = (props) => {
 
   return (
     <Container>
-      <Form onValidSubmit={() => { console.log('submit'); props.onSubmit() }} style={STYLES.form}>
+      <Form onValidSubmit={() => { props.onSubmit() }} style={STYLES.form}>
         <Header title={headerTitle} />
         <Content style={STYLES.content}>
           <PinInput
