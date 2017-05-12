@@ -71,7 +71,7 @@ export default class WalletIdentityScreen extends React.Component {
         goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
         confirm={(message, style) => this.confirm(message, style)}
         verify={(message, buttonText, style) => {
-          this.props.configSimpleDialog(message, buttonText, style)
+          this.props.configSimpleDialog(null, message, buttonText, style)
           this.props.showSimpleDialog()
         }}
       />

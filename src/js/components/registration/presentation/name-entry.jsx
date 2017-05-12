@@ -39,9 +39,7 @@ const STYLES = {
 
 const NameEntry = (props) => {
   var webIdmessage = (
-    <div > Your WebID is your identity on the web.
-      <br />
-      <br />
+    <div>
       It is the link to your secured personal data and the
       verifications of it that are stored on the blockchain
     </div>)
@@ -54,7 +52,10 @@ const NameEntry = (props) => {
           <FlatButton style={STYLES.embeddedButton}
             hoverColor={STYLES.backgroundColor}
             onClick={() => {
-              props.handleDialog(webIdmessage)
+              props.handleDialog(
+                'Your WebID is your identity on the web.',
+                webIdmessage
+              )
             }}> WebID </FlatButton>
           and it might end up on your business card one day.
         </SideNote>

@@ -14,7 +14,8 @@ describe('(Component) SimpleDialog', function() {
         ...SimpleDialog.mapStateToProps(Immutable.fromJS({
           simpleDialog: {
             visible: false,
-            message: 'test msg'
+            title: 'Test',
+            message: 'Message'
           }
         })
       )} hideSimpleDialog={hideSimpleDialog} />),
