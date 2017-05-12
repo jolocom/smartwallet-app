@@ -146,7 +146,7 @@ PhoneList.propTypes = {
 
 const EmailList = (props) => {
   let display = []
-  let {email, verify} = props
+  let {email, verify, confirm} = props
   if (!props.email && !props.email[0].address) {
     return null
   }
