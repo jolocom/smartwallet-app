@@ -4,7 +4,7 @@ import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import SolidAgent from 'lib/agents/solid-wallet'
 
-describe.only('solidAgentAgent', () => {
+describe('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
 
@@ -53,7 +53,7 @@ describe.only('solidAgentAgent', () => {
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
 
-        pro:phone123 
+        pro:phone123
           n0:phone "+49 176 12345678";
           n0:primaryTopic pro:card.
       `
@@ -61,7 +61,7 @@ describe.only('solidAgentAgent', () => {
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
 
-        pro:email123 
+        pro:email123
           n0:mbox "test@jolocom.com";
           n0:primaryTopic pro:card.
         `
@@ -70,7 +70,7 @@ describe.only('solidAgentAgent', () => {
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
 
-        pro:email456 
+        pro:email456
           n0:mbox "test2@jolocom.com";
           n0:primaryTopic pro:card.
         `
@@ -80,7 +80,7 @@ describe.only('solidAgentAgent', () => {
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
         @prefix rd: <http://www.w3.org/2000/01/rdf-schema#>.
         @prefix schem: <https://schema.org/>.
-     
+
         pro:card
           a n0:PersonalProfileDocument;
           n0:primaryTopic <#me>.
