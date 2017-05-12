@@ -1,0 +1,10 @@
+{
+  "root": "./utils/localSolidServer/root",
+  "port": "8443",
+  "serverUri": "https://localhost:8443",
+  "webid": false,
+  "mount": "/",
+  "sslKey": "./utils/localSolidServer/localhost.key",
+  "sslCert": "./utils/localSolidServer/localhost.cert",
+  "idp": false
+}

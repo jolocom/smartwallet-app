@@ -1,7 +1,8 @@
 import {keystore} from 'eth-lightwallet'
 import SmartWallet from 'lib/blockchain/smartwallet'
 import VerificationAgent from './verification'
-import SolidAgent from './solid-wallet'
+// import SolidAgent from './solid-wallet'
+
 export default class WalletAgent {
   generateSeedPhrase(entropy) {
     let seed = keystore.generateRandomSeed(entropy)
@@ -229,10 +230,10 @@ export default class WalletAgent {
 
 export class Wallet {
   constructor() {
-    this.webID = 'https://recordeddemo.webid.jolocom.de/profile/card#me'
-    this.lightWaller = 'something'
+    this.webId = localStorage.getItem('jolocom.webId')
+    this.lightWallet = 'something'
     this._verification = new VerificationAgent()
-    this.solid = new SolidAgent()
+    // this.solid = new SolidAgent()
   }
 
   getUserInformation({email}) {
@@ -268,6 +269,7 @@ export class Wallet {
           }
         ]
       },
+      Repuation: 0,
       passport: {
         number: null,
         givenName: null,
