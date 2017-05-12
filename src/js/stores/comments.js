@@ -199,7 +199,8 @@ export default Reflux.createStore({
           subjectWriter.addTriple(t)
         }
 
-        return Promise.all([msgWriter.end(), subjectWriter.end()])
+        return Promise.all([msgWriter.end(newMsgDocUrl),
+          subjectWriter.end(newMsgDocUrl)])
       })
       .then((results) => {
         let messageDoc = results[0]

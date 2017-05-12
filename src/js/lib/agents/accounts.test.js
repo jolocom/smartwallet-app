@@ -184,11 +184,13 @@ describe('AccountsAgent', function () {
       const inboxFetch = async (url, options) => {
         expect(options.method).to.equal('PUT')
         expect(options.body).to.equal(
+          '@prefix : <#>.\n' +
           '@prefix n0: <http://xmlns.com/foaf/0.1/>.\n' +
-          '@prefix n: <http://rdfs.org/sioc/ns#>.\n\n   ' +
+          '@prefix n1: <inbox/#>.\n' +
+          '@prefix n: <http://rdfs.org/sioc/ns#>.\n\n' +
           '"" n0:maker "http://myid/profile/card#me"; ' +
-          'n0:primaryTopic <#inbox> .\n' +
-          '   "#inbox" a n:space .\n')
+          'n0:primaryTopic n1:inbox.\n\n' +
+          '"http://myid/little-sister/inbox/#inbox" a n:space.\n\n')
         expect(options.headers['Content-Type']).to.equal('text/turtle')
         return {
           status: 200,
@@ -223,11 +225,14 @@ describe('AccountsAgent', function () {
         expect(options.method).to.equal('PUT')
         expect(options.headers['Content-Type']).to.equal('text/turtle')
         expect(options.body).to.equal(
+          '@prefix : <#>.\n' +
           '@prefix n0: <http://xmlns.com/foaf/0.1/>.\n' +
+          '@prefix n1: <unread-messages/#>.\n' +
           '@prefix n: <http://rdfs.org/sioc/ns#>.\n\n' +
-          '   "" n0:maker "http://myid/profile/card#me"; ' +
-          'n0:primaryTopic <#unread-messages> .\n' +
-          '   "#unread-messages" a n:space .\n')
+          '"" n0:maker "http://myid/profile/card#me";' +
+            ' n0:primaryTopic n1:unread-messages.\n\n' +
+          '"http://myid/little-sister/unread-messages/#unread-messages" ' +
+          'a n:space.\n\n')
         return {
           status: 200,
           json: () => ({ foo: 5 }),

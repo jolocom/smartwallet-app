@@ -19,14 +19,13 @@ export default class ChatAgent {
   createConversation(conversation) {
     conversation = Object.assign({
       id: Util.randomString(5),
-      created: new Date(),
-      subject: ''
+      created: new Date()
     }, conversation)
 
     let {id, initiator, participants} = conversation
 
     conversation.url = `${Util.webidRoot(initiator)}/little-sister/chats/${id}`
-
+    conversation.subject ? null : conversation.subject = 'No Subject'
     let content = this._conversationTriples(conversation)
 
     let headers = {'Content-Type': 'text/turtle'}
@@ -57,7 +56,6 @@ export default class ChatAgent {
 
   _conversationTriples({url, initiator, participants, subject, created}) {
     let writer = new Writer()
-
     let thread = $rdf.sym(`${url}#thread`)
 
     let triples = [{
@@ -103,7 +101,7 @@ export default class ChatAgent {
       })
     }
 
-    return writer.end()
+    return writer.end(url)
   }
 
   _writeConversationAcl({url, initiator, participants = []}) {
@@ -133,7 +131,7 @@ export default class ChatAgent {
       writer.addTriple(participant, ACL('agent'), $rdf.sym(webId))
     })
 
-    return this.http.put(aclUri, writer.end(), headers)
+    return this.http.put(aclUri, writer.end(aclUri), headers)
       .then(() => {
         return aclUri
       }).catch((e) => {
