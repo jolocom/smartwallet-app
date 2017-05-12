@@ -68,7 +68,9 @@ const Login = connect({
       container: {
         textAlign: 'center',
         background: '#f8f9fb',
-        paddingBottom: '40px'
+        paddingBottom: '40px',
+        boxSizing: 'border-box',
+        minHeight: '100%'
       },
       header: {
         padding: '40px'
