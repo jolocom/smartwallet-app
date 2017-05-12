@@ -61,7 +61,7 @@ let Index = React.createClass({
       img: {
         flex: 1,
         maxWidth: '100%',
-        width: '100px',
+        width: '200px',
         userSelect: 'none',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -157,7 +157,8 @@ let Index = React.createClass({
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/logo_start.svg)'
+              backgroundImage: 'url(/img/logo_start.svg)',
+              width: '100px'
             })} />
           </div>
           <div style={styles.slide}>
