@@ -54,19 +54,6 @@ const strengthBarColor = (value, strength, barIndex) => {
   }
 }
 
-// const showBar = (value, strength, barIndex) => {
-//   if (strength === 'strong') {
-//     return 'visible'
-//   }
-//   if (value && barIndex === 'firstBar') {
-//     return 'visible'
-//   }
-//   if (strength !== 'weak' && barIndex === 'secondBar') {
-//     return 'visible'
-//   }
-//   return 'hidden'
-// }
-
 function StrengthBar(props) {
   return <div style={STYLES.strengthBar}>
     <svg width="100%" height="4">
@@ -135,10 +122,12 @@ function Password(props) {
           style={STYLES.explanation[props.repeatedValueState ? 0 : 1]}
         >
           <table style={STYLES.helpMsg}>
-            <th>For more security please use at least :</th>
-            <tr>- one Number</tr>
-            <tr>- one Upper Case (e.g. A,B,C...)</tr>
-            <tr>- one Lower Case (e.g. a,b,c...)</tr>
+            <tbody>
+              <tr><th>For more security please use at least :</th></tr>
+              <tr><td>- one Number</td></tr>
+              <tr><td>- one Upper Case (e.g. A,B,C...)</td></tr>
+              <tr><td>- one Lower Case (e.g. a,b,c...)</td></tr>
+            </tbody>
           </table>
         </Block>
       </Content>
