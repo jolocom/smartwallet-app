@@ -71,7 +71,7 @@ const Entropy = (props) => {
       <MaskedImage
         image={IMAGE_DATA_URL}
         style={STYLES.img}
-        maskColor={theme.palette.accent1Color}
+        maskColor={theme.palette.textColor}
         uncoveredPaths={props.imageUncoveredPaths}
         uncovering={props.imageUncovering}
         onPointUncovered={props.onImagePointUncoverd}

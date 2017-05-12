@@ -38,7 +38,8 @@ const STYLES = {
     color: theme.jolocom.gray1,
     fontSize: '13px',
     display: 'inline-block',
-    position: 'relative'
+    position: 'relative',
+    lineHeight: '1.2em'
   },
   nextStep: {
     flex: 1

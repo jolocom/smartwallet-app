@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
-import {RaisedButton, FlatButton} from 'material-ui'
+import {RaisedButton} from 'material-ui'
 
 import {Container, Header, Content, Block, Footer, SideNote
 } from '../../structure'
@@ -24,8 +24,8 @@ const STYLES = {
   inputStyle: {
     textAlign: 'center'
   },
-  embeddedButton: {
-    color: '#942f51',
+  embeddedLink: {
+    color: theme.palette.accent1Color,
     minWidth: '0px',
     paddingLeft: '5px',
     paddingRight: '5px'
@@ -49,14 +49,12 @@ const NameEntry = (props) => {
       <Content>
         <SideNote>
           It needs to be unique, but choose wisely. It will be part of your
-          <FlatButton style={STYLES.embeddedButton}
-            hoverColor={STYLES.backgroundColor}
+          <span style={STYLES.embeddedLink}
             onClick={() => {
               props.handleDialog(
                 'Your WebID is your identity on the web.',
-                webIdmessage
-              )
-            }}> WebID </FlatButton>
+                webIdmessage)
+            }}>WebID</span>
           and it might end up on your business card one day.
         </SideNote>
         <Block style={STYLES.textField}>
