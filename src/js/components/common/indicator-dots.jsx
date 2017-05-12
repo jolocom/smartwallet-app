@@ -6,8 +6,8 @@ function IndicatorDots (props, context) {
   for (let i = 0; i < props.total; i++) {
     const dotStyle = {
       display: 'inline-block',
-      height: '8px',
-      width: '8px',
+      height: '6px',
+      width: '6px',
       borderRadius: '4px',
       margin: '7px 5px',
       transitionDuration: '300ms'
