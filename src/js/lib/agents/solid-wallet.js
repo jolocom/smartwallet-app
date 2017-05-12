@@ -108,7 +108,6 @@ export default class SolidAgent {
       console.error('No webId found')
       return Object.assign(this.defaultProfile)
     }
-
     return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
       if (rdfData.unav) {
         // TODO snackbar
@@ -130,7 +129,6 @@ export default class SolidAgent {
     profileData.webId = webId
     profileData.username.value = g
       .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
-
     return profileData
   }
 
@@ -147,7 +145,6 @@ export default class SolidAgent {
     }
 
     const pred = propertyToPredMap[property]
-
     if (!pred || !g) {
       // TODO warn?
       return
@@ -168,7 +165,6 @@ export default class SolidAgent {
         propertyData.push(await this._expandBNode(objects[obj], g, pred))
       }
     }
-
     return propertyData
   }
 
