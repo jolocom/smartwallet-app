@@ -45,7 +45,7 @@ const actions = module.exports = makeActions('wallet/contact', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getAccountInformation
         .buildAction(params, () => {
-          return services.auth.currentUser.wallet.getAccountInformation()
+          return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
         }))
       }
     }
@@ -67,13 +67,13 @@ const actions = module.exports = makeActions('wallet/contact', {
 const initialState = Immutable.fromJS({
   information: {
     newInformation: {
-      phoneNumbers: [],
-      emails: []
+      phone: [],
+      email: []
     }
   },
   originalInformation: {
-    phoneNumbers: [],
-    emails: []
+    phone: [],
+    email: []
   },
   loading: true,
   showErrors: false
@@ -91,7 +91,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.setIn(['loading'], true)
 
     case actions.getAccountInformation.id_success:
-      return mapAccountInformationToState(action.result)
+      return mapAccountInformationToState(action.result.contact)
 
     case actions.setInformation.id:
       return setNewFieldValue(state, action)
