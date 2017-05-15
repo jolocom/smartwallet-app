@@ -2,9 +2,9 @@ import Immutable from 'immutable'
 
 export const validateChanges = (state) => {
   const {newInformation, originalInformation} = state.get('information').toJS()
-  const newFields = newInformation.emails.concat(newInformation.phoneNumbers)
-  const oldFields = originalInformation.emails.concat(
-    originalInformation.phoneNumbers)
+  const newFields = newInformation.email.concat(newInformation.phone)
+  const oldFields = originalInformation.email.concat(
+    originalInformation.phone)
 
   const isValid = newFields.every(e => (e.blank || e.valid || e.delete)) &&
     oldFields.every(e => e.delete || !e.update || (e.valid && !e.verified))
@@ -21,20 +21,20 @@ const isBlank = (value, field) => {
 
 const isValidValue = (value, field) => {
   switch (field) {
-    case 'phoneNumbers':
+    case 'phone':
       return (/^([\d.]+)$/.test(value.value) ||
         /^\+([\d]+)$/.test(value.value))
-    case 'emails':
+    case 'email':
       return /^([\w.]+)@([\w.]+)\.(\w+)/.test(value)
     default:
       return false
   }
 }
 
-const parseActionValueToObject = (value, field) => field === 'phoneNumbers'
+const parseActionValueToObject = (value, field) => field === 'phone'
   ? value : {value}
 
-const addTypeAttribute = (field) => field === 'phoneNumbers'
+const addTypeAttribute = (field) => field === 'phone'
   ? {type: 'personal'} : {}
 
 export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
@@ -44,21 +44,25 @@ export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
     blank: isBlank(value, field)
   })
 
-export const mapAccountInformationToState = ({emails, phoneNumbers}) =>
+export const mapAccountInformationToState = (obj) =>
   Immutable.fromJS({
     loading: false,
     showErrors: false,
     information: {
       newInformation: {
-        emails: [],
-        phoneNumbers: []
+        email: [],
+        phone: []
       },
       originalInformation: {
-        emails: emails.map(email => {
-          return {...email, delete: false, update: false, valid: true}
+        email: obj.email.map(element => {
+          return {value: element.address,
+            verified: element.verified,
+            id: element.id, delete: false,
+            update: false,
+            valid: true}
         }),
-        phoneNumbers: phoneNumbers.map(phone => {
-          return {...phone, delete: false, update: false, valid: true}
+        phone: obj.phone.map(element => {
+          return {...element, delete: false, update: false, valid: true}
         })
       }
     }
@@ -105,12 +109,14 @@ const collectChages = (state, {remove, update, set}, key) => [].concat(
       : (e.update && e.valid && !e.verified) ? update(e.value)
       : null
     ), state.newInformation[key].map(
-      e => (e.delete || e.blank || !e.valid) ? null : set(e.value)
+      e => (e.delete || e.blank || !e.valid)
+      ? null : set(localStorage.getItem('jolocom.webId'), e.value)
   ))
 
 export const submitChanges = (backend, services, state) => {
+  let solidAgent = backend.solid
   const emailOperations = {
-    set: services.auth.currentUser.wallet.setEmail,
+    set: solidAgent.setEmail.bind(solidAgent),
     remove: services.auth.currentUser.wallet.deleteEmail,
     update: services.auth.currentUser.wallet.updateEmail
   }
@@ -120,7 +126,7 @@ export const submitChanges = (backend, services, state) => {
     update: services.auth.currentUser.wallet.updatePhone
   }
 
-  let promises = [].concat(collectChages(state, emailOperations, 'emails'),
-    collectChages(state, phoneOperations, 'phoneNumbers'))
+  let promises = [].concat(collectChages(state, emailOperations, 'email'),
+    collectChages(state, phoneOperations, 'phone'))
   return Promise.all(promises)
 }
