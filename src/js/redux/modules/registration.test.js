@@ -380,7 +380,8 @@ describe('Wallet registration Redux module', function() {
           expect(backend.wallet.registerWithSeedPhrase.calls)
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
-              userName: 'usr'
+              userName: 'usr',
+              pin: '1234'
             }]}])
         }
       )
