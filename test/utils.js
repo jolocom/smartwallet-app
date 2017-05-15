@@ -14,6 +14,14 @@ export function stub(options = {}) {
       return options.returns
     }
   }
+  func.returnsAsync = (...args) => {
+    if (args.length) {
+      options.returns = Promise.resolve(args[0])
+      return func
+    } else {
+      return options.returns
+    }
+  }
   func.reset = () => {
     func.called = false
     func.calledWithArgs = null

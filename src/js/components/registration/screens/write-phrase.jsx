@@ -23,9 +23,12 @@ export default class RegistrationWritePhraseScreen extends React.Component {
     return <Presentation
       value={this.props.registration.passphrase.phrase}
       onToggle={this.props.setPassphraseWrittenDown}
-      onChange={this.props.setUserType}
+      onChange={this._handleChange}
       onSubmit={this.props.goForward}
-      isChecked={this.props.registration.passphrase.writtenDown}
-    />
+      isChecked={this.props.registration.passphrase.writtenDown} />
+  }
+  _handleChange = () => {
+    this.props.setUserType('layman')
+    this.props.setPassphraseWrittenDown(false)
   }
 }
