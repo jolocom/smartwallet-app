@@ -28,13 +28,13 @@ class MaskedImage extends React.Component {
   }
 
   onRevealStart(e) {
-    console.log('start')
+    // console.log('start')
     e.preventDefault()
     this.props.onUncoveringChange(true)
   }
 
   onRevealEnd() {
-    console.log('end')
+    // console.log('end')
     this.props.onUncoveringChange(false)
   }
 
