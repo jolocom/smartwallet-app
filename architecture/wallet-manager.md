@@ -50,18 +50,23 @@ Redux state: Identity screen
       * verified: bool or null
 * passport
   * loaded: bool
+  * verified: bool
+  * images
+    * frontPage: img
+    * backPage: img
   * number: string
-  * givenName: string
-  * familyName: string
-  * birthDate: Date
-  * age: number
+  * expirationDate: Date
+  * firstName: string
+  * lastName: string
   * gender: 'male' | 'female'
-  * showAddress: bool
-  * streetAndNumber: string
+  * birthDate: Date
+  * birthPlace: string
+  * bithCountry: value
+  * street: string
   * city: string
   * zip: string
   * state: string
-  * country: string, the two-letter country code
+  * country: string
 
 Redux state: Contact edit screen
 ================================
@@ -83,20 +88,56 @@ Redux state: Contact edit screen
       * value: string or null
       * changed
       * verified: bool or null
+
+
+Redux state: Passport edit screen
+================================
+* loaded: bool
+* showErrors: bool
 * passport
-  * loaded: bool
-  * number: string
-  * givenName: string
-  * familyName: string
-  * birthDate: Date
-  * age: number
+  * images
+    * frontPage: img
+    * backPage: img
+  * number:
+    * value: string
+    * valid: bool
+  * expirationDate:
+    * value: string
+    * valid: bool
+  * firstName:
+    * value: string
+    * valid: bool
+  * lastName:
+    * value: string
+    * valid: bool
   * gender: 'male' | 'female'
+  * birthDate:
+    * value: string
+    * valid: bool
+  * birthPlace:
+    * value: string
+    * valid: bool
+  * bithCountry:
+    * value: string
+    * valid: bool
   * showAddress: bool
-  * streetAndNumber: string
-  * city: string
-  * zip: string
-  * state: string
-  * country: string, the two-letter country code
+  * physicalAddres
+    * street:
+      * value: string
+      * valid: bool
+    * city:
+      * value: string
+      * valid: bool
+    * zip:
+      * value: string
+      * valid: bool
+    * state:
+      * value: string
+      * valid: bool
+    * country:
+      * value: string
+      * valid: bool
+
 
 ======================================
 
