@@ -44,7 +44,7 @@ export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
     blank: isBlank(value, field)
   })
 
-export const mapAccountInformationToState = (obj) =>
+export const mapAccountInformationToState = ({email, phone}) =>
   Immutable.fromJS({
     loading: false,
     showErrors: false,
@@ -54,14 +54,14 @@ export const mapAccountInformationToState = (obj) =>
         phone: []
       },
       originalInformation: {
-        email: obj.email.map(element => {
+        email: email.map(element => {
           return {value: element.address,
             verified: element.verified,
             id: element.id, delete: false,
             update: false,
             valid: true}
         }),
-        phone: obj.phone.map(element => {
+        phone: phone.map(element => {
           return {...element, delete: false, update: false, valid: true}
         })
       }

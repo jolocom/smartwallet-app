@@ -14,32 +14,32 @@ describe('# Edit contact Util', () => {
   describe('# mapAccountInformationToState', () => {
     it('should mapAccountInformationToState properly', () => {
       const result = {
-        emails: [
-          {value: 'test1@test.com', verified: false},
-          {value: 'test2@test.com', verified: true}],
-        phoneNumbers: [
-          {value: '+123456789', type: 'test'}]
+        email: [
+          {address: 'test1@test.com', id: 1, verified: false},
+          {address: 'test2@test.com', id: 2, verified: true}],
+        phone: [
+          {value: '+123456789', id: 3, type: 'test'}]
       }
       const state = {
         loading: false,
         showErrors: false,
         information: {
           originalInformation: {
-            emails: [{
-              value: 'test1@test.com', verified: false, delete: false,
-              update: false, valid: true
+            email: [{
+              value: 'test1@test.com', id: 1, verified: false,
+              delete: false, update: false, valid: true
             }, {
-              value: 'test2@test.com', verified: true, delete: false,
+              value: 'test2@test.com', id: 2, verified: true, delete: false,
               update: false, valid: true
             }],
-            phoneNumbers: [{
+            phone: [{
               value: '+123456789', type: 'test', delete: false, update: false,
-              valid: true
+              valid: true, id: 3
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
       }
@@ -51,43 +51,43 @@ describe('# Edit contact Util', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
       })
       const newState = {
         information: {
           newInformation: {
-            emails: [{value: '', verified: false, valid: false, delete: false,
+            email: [{value: '', verified: false, valid: false, delete: false,
               blank: true}],
-            phoneNumbers: []
+            phone: []
           }
         }
       }
-      const action = {field: 'emails', index: 0}
+      const action = {field: 'email', index: 0}
       expect(addNewField(oldState, action).toJS()).to.deep.equal(newState)
     })
     it('should addNewField a new phone value field', () => {
       const state = Immutable.fromJS({
         information: {
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
       })
       const newState = {
         information: {
           newInformation: {
-            emails: [],
-            phoneNumbers: [{value: '', type: 'personal', verified: false,
+            email: [],
+            phone: [{value: '', type: 'personal', verified: false,
               valid: false, delete: false, blank: true
             }]
           }
         }
       }
-      const action = {field: 'phoneNumbers', index: 0}
+      const action = {field: 'phone', index: 0}
       expect(addNewField(state, action).toJS()).to.deep.equal(newState)
     })
   })
@@ -96,30 +96,30 @@ describe('# Edit contact Util', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
-            emails: [{value: '', verified: false, valid: false, delete: false,
+            email: [{value: '', verified: false, valid: false, delete: false,
               blank: true}],
-            phoneNumbers: []
+            phone: []
           }
         }
       })
       const newState = {
         information: {
           newInformation: {
-            emails: [{value: 'A', verified: false, valid: false, delete: false,
+            email: [{value: 'A', verified: false, valid: false, delete: false,
               blank: false}],
-            phoneNumbers: []
+            phone: []
           }
         }
       }
-      const action = {field: 'emails', value: 'A', index: 0}
+      const action = {field: 'email', value: 'A', index: 0}
       expect(setNewFieldValue(oldState, action).toJS()).to.deep.equal(newState)
     })
     it('should set a new phone field value and update its attributes', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
-            emails: [],
-            phoneNumbers: [{value: '555', type: 'old', verified: false,
+            email: [],
+            phone: [{value: '555', type: 'old', verified: false,
               valid: true, delete: false, blank: false}]
           }
         }
@@ -127,13 +127,13 @@ describe('# Edit contact Util', () => {
       const newState = {
         information: {
           newInformation: {
-            emails: [],
-            phoneNumbers: [{value: '1', type: 'new', verified: false,
+            email: [],
+            phone: [{value: '1', type: 'new', verified: false,
               valid: true, delete: false, blank: false}]
           }
         }
       }
-      const action = {field: 'phoneNumbers', index: 0, value: {
+      const action = {field: 'phone', index: 0, value: {
         value: '1', type: 'new'}}
       expect(setNewFieldValue(oldState, action).toJS()).to.deep.equal(newState)
     })
@@ -143,40 +143,40 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [{
+            email: [{
               value: 'test@test.com', verified: true, delete: false,
               update: true, valid: false, blank: false
             }],
-            phoneNumbers: []
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'emails', value: 'test2@test.com', index: 0}
+      const action = {field: 'email', value: 'test2@test.com', index: 0}
       expect(updateOriginalValue(state, action)).to.deep.equal(state)
     })
     it('should do nothing if the phone value is verified', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '123456789', type: 'personal', verified: true,
               delete: false, update: true, valid: false, blank: false
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'phoneNumbers', index: 0, value: {
+      const action = {field: 'phone', index: 0, value: {
         value: '+123456789',
         type: 'test'
       }}
@@ -187,35 +187,35 @@ describe('# Edit contact Util', () => {
       const oldState = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '123456789', type: 'personal', verified: false,
               delete: false, update: true, valid: false, blank: false
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'phoneNumbers', index: 0, value: {
+      const action = {field: 'phone', index: 0, value: {
         value: '+123456789',
         type: 'test'
       }}
       const newState = {
         information: {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '+123456789', type: 'test', verified: false, delete: false,
               update: true, valid: true, blank: false
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
@@ -227,32 +227,32 @@ describe('# Edit contact Util', () => {
       const oldState = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [{
+            email: [{
               value: 'test1@test.com', verified: false, delete: false,
               update: true, valid: true, blank: false
             }],
-            phoneNumbers: []
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'emails', index: 0, value: 'test2@test.com'}
+      const action = {field: 'email', index: 0, value: 'test2@test.com'}
       const newState = {
         information: {
           originalInformation: {
-            emails: [{
+            email: [{
               value: 'test2@test.com', verified: false, delete: false,
               update: true, valid: true, blank: false
             }],
-            phoneNumbers: []
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
@@ -266,8 +266,8 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               verified: true, delete: false, update: true, valid: false,
               blank: false
             }, {
@@ -276,8 +276,8 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
@@ -288,16 +288,16 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [
+            email: [
               {verified: false, delete: true, update: true, valid: false},
               {verified: false, delete: false, update: true, valid: true}],
-            phoneNumbers: [
+            phone: [
               {verified: false, delete: false, update: true, valid: true},
               {verified: false, delete: false, update: true, valid: true}]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
@@ -308,7 +308,7 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [
+            email: [
               {verified: true, delete: false, update: true, valid: false,
                 blank: false
               }, {verified: false, delete: true, update: true, valid: false,
@@ -316,7 +316,7 @@ describe('# Edit contact Util', () => {
               }, {verified: false, delete: false, update: true, valid: true,
                 blank: false
               }],
-            phoneNumbers: [{
+            phone: [{
               verified: false, delete: true, update: true, valid: false,
               blank: false
             }, {verified: false, delete: false, update: true, valid: true,
@@ -324,8 +324,8 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           showErrors: false
         }
@@ -336,7 +336,7 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [
+            email: [
               {verified: false, delete: false, update: true, valid: false,
                 blank: false
               }, {verified: false, delete: true, update: true, valid: false,
@@ -344,7 +344,7 @@ describe('# Edit contact Util', () => {
               }, {verified: false, delete: false, update: true, valid: true,
                 blank: false
               }],
-            phoneNumbers: [{
+            phone: [{
               verified: false, delete: true, update: true, valid: false,
               blank: false
             }, {verified: false, delete: false, update: true, valid: true,
@@ -352,8 +352,8 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            emails: [{blank: false, valid: false, delete: false}],
-            phoneNumbers: []
+            email: [{blank: false, valid: false, delete: false}],
+            phone: []
           },
           showErrors: false
         }
@@ -364,19 +364,19 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            emails: [
+            email: [
               {verified: false, delete: false, update: true, valid: true},
               {verified: false, delete: true, update: true, valid: false},
               {verified: false, delete: false, update: true, valid: true}],
-            phoneNumbers: [
+            phone: [
               {verified: false, delete: true, update: true, valid: false},
               {verified: false, delete: false, update: true, valid: true}]
           },
           newInformation: {
-            emails: [{
+            email: [{
               value: 'test3@test.com', blank: false, valid: true, delete: false
             }],
-            phoneNumbers: []
+            phone: []
           },
           showErrors: false
         }
@@ -396,22 +396,22 @@ describe('# Edit contact Util', () => {
         const wallet = {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           newInformation: {
-            emails: [{
+            email: [{
               value: 'test3@test.com', blank: false, valid: true, delete: false
             }],
-            phoneNumbers: []
+            phone: []
           }
         }
         submitChanges(backend, services, state)
-        expect(setEmail.called).to.be.true
+        expect(backend.solid.setEmail.called).to.be.true
         expect(updateEmail.called).to.be.false
         expect(deleteEmail.called).to.be.false
         expect(setPhone.called).to.be.false
@@ -429,17 +429,17 @@ describe('# Edit contact Util', () => {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
         const services = {auth: {currentUser: {wallet}}}
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           newInformation: {
-            emails: [{
+            email: [{
               value: 'test3@test.com', blank: false, valid: false, delete: false
             }],
-            phoneNumbers: []
+            phone: []
           }
         }
         submitChanges(backend, services, state)
@@ -460,19 +460,19 @@ describe('# Edit contact Util', () => {
         const wallet = {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
-            emails: [{
+            email: [{
               value: 'test@test.com', verified: false, delete: false,
               update: true, valid: true, blank: false
             }],
-            phoneNumbers: []
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
         submitChanges(backend, services, state)
@@ -495,18 +495,18 @@ describe('# Edit contact Util', () => {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
         const services = {auth: {currentUser: {wallet}}}
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const state = {
           originalInformation: {
-            emails: [{
+            email: [{
               value: 'test@testcom', verified: false, delete: false,
               update: true, valid: false, blank: false
             }],
-            phoneNumbers: []
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
         submitChanges(backend, services, state)
@@ -527,21 +527,22 @@ describe('# Edit contact Util', () => {
         const wallet = {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
+        const backend = {solid: {setEmail: stub()}}
         const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
-            emails: [{
+            email: [{
               value: 'test@testcom', verified: true, delete: false,
               update: true, valid: true, blank: false
             }],
-            phoneNumbers: []
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
-        submitChanges({wallet}, services, state)
+        submitChanges(backend, services, state)
         expect(setEmail.called).to.be.false
         expect(updateEmail.called).to.be.false
         expect(deleteEmail.called).to.be.false
@@ -561,18 +562,18 @@ describe('# Edit contact Util', () => {
         }
 
         const services = {auth: {currentUser: {wallet}}}
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const state = {
           originalInformation: {
-            emails: [{
+            email: [{
               value: 'test1@test.com', verified: false, delete: true,
               update: false, valid: true
             }],
-            phoneNumbers: []
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
         submitChanges(backend, services, state)
@@ -585,7 +586,7 @@ describe('# Edit contact Util', () => {
       })
     })
     describe('# Phone value', () => {
-      it('should set a new valid phone value value', () => {
+      it('should set a new valid phone value', () => {
         const setEmail = stub()
         const deleteEmail = stub()
         const updateEmail = stub()
@@ -596,15 +597,15 @@ describe('# Edit contact Util', () => {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
         const services = {auth: {currentUser: {wallet}}}
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '0123456', type: 'test', blank: false, valid: true,
               delete: false
             }]
@@ -629,15 +630,15 @@ describe('# Edit contact Util', () => {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
         const services = {auth: {currentUser: {wallet}}}
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '012x3456', type: 'test', blank: false, valid: false,
               delete: false
             }]
@@ -662,18 +663,18 @@ describe('# Edit contact Util', () => {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
         const services = {auth: {currentUser: {wallet}}}
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '123456', type: 'personal', verified: false, delete: false,
               update: true, valid: true, blank: false
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
         submitChanges(backend, services, state)
@@ -695,19 +696,19 @@ describe('# Edit contact Util', () => {
         const wallet = {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '123456', type: 'personal', verified: true, delete: false,
               update: true, valid: false, blank: false
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
         submitChanges(backend, services, state)
@@ -728,19 +729,19 @@ describe('# Edit contact Util', () => {
         const wallet = {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '123456', type: 'personal', verified: true, delete: false,
               update: true, valid: true, blank: false
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
         submitChanges(backend, services, state)
@@ -761,19 +762,19 @@ describe('# Edit contact Util', () => {
         const wallet = {
           setEmail, deleteEmail, updateEmail, setPhone, deletePhone, updatePhone
         }
-        const backend = {wallet}
+        const backend = {wallet, solid: {setEmail: stub()}}
         const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '123456789', verified: false, delete: true,
               update: false, valid: true
             }]
           },
           newInformation: {
-            emails: [],
-            phoneNumbers: []
+            email: [],
+            phone: []
           }
         }
         submitChanges(backend, services, state)
