@@ -12,7 +12,7 @@ import {
 
 describe('# Edit contact Util', () => {
   describe('# mapAccountInformationToState', () => {
-    it('should mapAccountInformationToState properly', () => {
+    it('should map account information to state properly', () => {
       const result = {
         email: [
           {address: 'test1@test.com', id: 1, verified: false},
@@ -47,7 +47,7 @@ describe('# Edit contact Util', () => {
     })
   })
   describe('# addNewField', () => {
-    it('should addNewField a new email field', () => {
+    it('should add a new email field', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
@@ -68,7 +68,7 @@ describe('# Edit contact Util', () => {
       const action = {field: 'email', index: 0}
       expect(addNewField(oldState, action).toJS()).to.deep.equal(newState)
     })
-    it('should addNewField a new phone value field', () => {
+    it('should add a new phone value field', () => {
       const state = Immutable.fromJS({
         information: {
           newInformation: {
@@ -92,7 +92,7 @@ describe('# Edit contact Util', () => {
     })
   })
   describe('# setNewFieldValue', () => {
-    it('should set a new phone field value and update its attributes', () => {
+    it('should set a new email field value and update its attributes', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
@@ -223,7 +223,7 @@ describe('# Edit contact Util', () => {
       expect(updateOriginalValue(oldState, action).toJS())
         .to.deep.equal(newState)
     })
-    it('should update correctly a non verified phone value', () => {
+    it('should update correctly a non verified email value', () => {
       const oldState = Immutable.fromJS({
         information: {
           originalInformation: {
@@ -262,7 +262,7 @@ describe('# Edit contact Util', () => {
     })
   })
   describe('# validateChanges', () => {
-    it('should return an error for a non valid', () => {
+    it('should return an error for a non valid field', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
@@ -386,7 +386,7 @@ describe('# Edit contact Util', () => {
   })
   describe('# submitChanges', () => {
     describe('# Email', () => {
-      it('should setNewFieldValue a new valid email value', () => {
+      it('should set a new valid email value', () => {
         const setEmail = stub()
         const deleteEmail = stub()
         const updateEmail = stub()
@@ -418,7 +418,7 @@ describe('# Edit contact Util', () => {
         expect(updatePhone.called).to.be.false
         expect(deletePhone.called).to.be.false
       })
-      it('should not setNewFieldValue a new non valid email value', () => {
+      it('should not set a new non valid email value', () => {
         const setEmail = stub()
         const deleteEmail = stub()
         const updateEmail = stub()
@@ -585,7 +585,7 @@ describe('# Edit contact Util', () => {
         expect(deletePhone.called).to.be.false
       })
     })
-    describe('# Phone value', () => {
+    describe('# Phone', () => {
       it('should set a new valid phone value', () => {
         const setEmail = stub()
         const deleteEmail = stub()
@@ -619,7 +619,7 @@ describe('# Edit contact Util', () => {
         expect(updatePhone.called).to.be.false
         expect(deletePhone.called).to.be.false
       })
-      it('should not set a new non valid phone value value', () => {
+      it('should not set a new non valid phone value', () => {
         const setEmail = stub()
         const deleteEmail = stub()
         const updateEmail = stub()
@@ -652,7 +652,7 @@ describe('# Edit contact Util', () => {
         expect(updatePhone.called).to.be.false
         expect(deletePhone.called).to.be.false
       })
-      it('should update a non verified valid phone value value', () => {
+      it('should update a non verified phone value with a valid value', () => {
         const setEmail = stub()
         const deleteEmail = stub()
         const updateEmail = stub()
@@ -719,7 +719,7 @@ describe('# Edit contact Util', () => {
         expect(updatePhone.called).to.be.false
         expect(deletePhone.called).to.be.false
       })
-      it('should not update a verified valid phone value value', () => {
+      it('should not update a verified valid phone value', () => {
         const setEmail = stub()
         const deleteEmail = stub()
         const updateEmail = stub()
