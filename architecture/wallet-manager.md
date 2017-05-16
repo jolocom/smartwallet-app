@@ -139,7 +139,17 @@ Redux state: Passport edit screen
       * valid: bool
 
 
-======================================
+Actions: Passport edit screen
+=============================
+
+change(field, value): change the value of the given field
+addPassportPhotos(): redirects to photos management page and load the passport images
+submit(): submit the passport fields to the backend
+getPassportInformation(): get the passport information from the backend
+cancel(): go back to Identity screen without changing any detail
+possibleOPtions(field): provide the given field the possible values that it may takes
+
+==================
 
 Parts:
 - Menu
