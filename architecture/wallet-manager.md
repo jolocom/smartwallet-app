@@ -1,6 +1,6 @@
-The components and Redux module(s) can be found in the wallet/ directories in the components/ and redux/modules/ directories. The component
+The components and Redux module(s) can be found in the wallet/ directories in the components/ and redux/modules/ directories.
 
-The different screens and their respective container components of the registration process each have their own routes to enable the browser history button functionality and allow for easier testing. They're located in components/screens/ named after their component names.
+The different screens and their respective container components of the wallet each have their own routes to enable the browser history button functionality and allow for easier testing. They're located in components/screens/ named after their component names.
 
 Relevant walkthroughs:
 https://files.slack.com/files-pri/T03K1SCA9-F4FDEGVM1/170308_jolocom_wallet_verification-05.jpg
@@ -94,10 +94,14 @@ Redux state: Passport edit screen
 ================================
 * loaded: bool
 * showErrors: bool
+* focussedGroup: 'person' | 'address' | birthdate' | 'number'
+* foccusedField: field
 * passport
-  * images
-    * frontPage: img
-    * backPage: img
+  * locations
+    * title
+    * streetWithNumber
+    * zip
+    * city
   * number:
     * value: string
     * valid: bool
@@ -114,6 +118,7 @@ Redux state: Passport edit screen
   * birthDate:
     * value: string
     * valid: bool
+  * age: number
   * birthPlace:
     * value: string
     * valid: bool
@@ -137,17 +142,19 @@ Redux state: Passport edit screen
     * country:
       * value: string
       * valid: bool
+      // TODO investigate the possible implementations
 
 
 Actions: Passport edit screen
 =============================
 
 * change(field, value): change the value of the given field
-* addPassportPhotos(): redirects to photos management page and load the passport images
-* submit(): submit the passport fields to the backend
-* getPassportInformation(): get the passport information from the backend
+* showVerifierLocations()
+* chooseCountry()
+* chooseGender()
+* save(): save the passport fields to the backend
+* retrievePassportInformation(): get the passport information from the backend
 * cancel(): go back to Identity screen without changing any detail
-* possibleOPtions(field): provide the given field the possible values that it may takes
 
 
 Parts:
