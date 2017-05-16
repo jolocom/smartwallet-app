@@ -128,7 +128,7 @@ export const submitChanges = (backend, services, state) => {
   }
   const phoneOperations = {
     set: solidAgent.setPhone.bind(solidAgent),
-    remove: services.auth.currentUser.wallet.deletePhone,
+    remove: solidAgent.deleteEntry.bind(solidAgent),
     update: services.auth.currentUser.wallet.updatePhone
   }
 
