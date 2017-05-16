@@ -105,7 +105,7 @@ export const updateOriginalValue = (state, {field, value, index}) => {
 }
 const collectChages = (state, {remove, update, set}, key) => [].concat(
     state.originalInformation[key].map(
-      e => e.delete ? remove(e.value)
+      e => e.delete ? remove(localStorage.getItem('jolocom.webId'), key, e.id)
       : (e.update && e.valid && !e.verified) ? update(e.value)
       : null
     ), state.newInformation[key].map(
@@ -117,7 +117,7 @@ export const submitChanges = (backend, services, state) => {
   let solidAgent = backend.solid
   const emailOperations = {
     set: solidAgent.setEmail.bind(solidAgent),
-    remove: services.auth.currentUser.wallet.deleteEmail,
+    remove: solidAgent.deleteEntry.bind(solidAgent),
     update: services.auth.currentUser.wallet.updateEmail
   }
   const phoneOperations = {
