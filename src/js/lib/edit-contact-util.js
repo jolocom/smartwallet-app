@@ -62,7 +62,13 @@ export const mapAccountInformationToState = ({email, phone}) =>
             valid: true}
         }),
         phone: phone.map(element => {
-          return {...element, delete: false, update: false, valid: true}
+          return {value: element.number,
+            type: 'personal',
+            verified: element.verified,
+            id: element.id,
+            delete: false,
+            update: false,
+            valid: true}
         })
       }
     }
