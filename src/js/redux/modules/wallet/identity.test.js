@@ -4,7 +4,7 @@ import * as identity from './identity'
 import {stub} from '../../../../../test/utils'
 const reducer = require('./identity').default
 
-describe('# Wallet identity redux module', () => {
+describe.only('# Wallet identity redux module', () => {
   describe('# Reducer', () => {
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')
@@ -30,7 +30,10 @@ describe('# Wallet identity redux module', () => {
       const action = {
         type: identity.actions.getIdentityInformation.id_success,
         result: {
-          status: 'succeeded'
+          webId: 'test',
+          username: 'test',
+          contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
+          passport: 'test'
         }
       }
       state = reducer(state, action)
@@ -38,7 +41,10 @@ describe('# Wallet identity redux module', () => {
         .to.deep.equal({
           error: false,
           loaded: true,
-          status: 'succeeded'
+          webId: 'test',
+          username: 'test',
+          contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
+          passport: 'test'
         })
     })
   })
