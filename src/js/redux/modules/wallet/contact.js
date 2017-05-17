@@ -19,9 +19,10 @@ const actions = module.exports = makeActions('wallet/contact', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
         const {information, showErrors} = getState().toJS().wallet.contact
+        const webId = getState().toJS().wallet.identity.webId
         if (!showErrors) {
           dispatch(actions.saveChanges.buildAction(params,
-          () => submitChanges(backend, services, information)
+          () => submitChanges(backend, services, information, webId)
           )).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }
       }

@@ -11,7 +11,7 @@ import {
 } from './edit-contact-util'
 
 describe('# Edit contact Util', () => {
-  localStorage.setItem('jolocom.webId', 'testuser')
+  const webId = 'testuser'
   describe('# mapAccountInformationToState', () => {
     it('should map account information to state properly', () => {
       const result = {
@@ -409,7 +409,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(backend.solid.setEmail.called).to.be.true
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
@@ -433,7 +433,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
@@ -458,7 +458,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(updateEntry.calls).to.be.deep
         .equal([{args: ['testuser', 'email', 1, 'test@test.com']}])
@@ -485,7 +485,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
@@ -510,7 +510,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
@@ -535,7 +535,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.true
@@ -564,7 +564,7 @@ describe('# Edit contact Util', () => {
             }]
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(setPhone.called).to.be.true
         expect(updateEntry.called).to.be.false
@@ -590,7 +590,7 @@ describe('# Edit contact Util', () => {
             }]
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(setPhone.called).to.be.false
         expect(updateEntry.called).to.be.false
@@ -616,7 +616,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(setPhone.called).to.be.false
         expect(deleteEntry.called).to.be.false
@@ -645,7 +645,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(setPhone.called).to.be.false
         expect(updateEntry.called).to.be.false
@@ -671,7 +671,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(setPhone.called).to.be.false
         expect(updateEntry.called).to.be.false
@@ -697,7 +697,7 @@ describe('# Edit contact Util', () => {
             phone: []
           }
         }
-        submitChanges(backend, {}, state)
+        submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(setPhone.called).to.be.false
         expect(updateEntry.called).to.be.false

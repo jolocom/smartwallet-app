@@ -119,7 +119,7 @@ const collectChages = (state, {remove, update, set}, key, webId) => [].concat(
       ? null : set(webId, e.value)
   ))
 
-export const submitChanges = (backend, services, state) => {
+export const submitChanges = (backend, services, state, webId) => {
   let solidAgent = backend.solid
   const emailOperations = {
     set: solidAgent.setEmail.bind(solidAgent),
@@ -131,7 +131,6 @@ export const submitChanges = (backend, services, state) => {
     remove: solidAgent.deleteEntry.bind(solidAgent),
     update: solidAgent.updateEntry.bind(solidAgent)
   }
-  let webId = localStorage.getItem('jolocom.webId')
   let promises = [].concat(
     collectChages(state, emailOperations, 'email', webId),
     collectChages(state, phoneOperations, 'phone', webId))
