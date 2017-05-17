@@ -283,11 +283,11 @@ describe('(Component) WalletIdentityScreen', function() {
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('WalletIdentity').props().verify('message', 'OK', {})
+    wrapper.find('WalletIdentity').props().verify(null, 'message', 'OK', {})
     expect(configSimpleDialog.called).to.be.true
     expect(showSimpleDialog.called).to.be.true
     expect(configSimpleDialog.calls).to.deep.equal([{args: [
-      'message', 'OK', {}
+      null, 'message', 'OK', {}
     ]}])
     expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
   })
