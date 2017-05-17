@@ -23,10 +23,10 @@ describe('# Wallet contact redux module', () => {
         }]
       }])
     })
-    it('getAccountInformation should get the user\'s information', () => {
+    it('getUserInformation should get the user\'s information', () => {
       let state = reducer(undefined, '@@INIT')
       const action = {
-        type: contact.actions.getAccountInformation.id_success,
+        type: contact.actions.getUserInformation.id_success,
         result: {
           contact: {
             email: [],
