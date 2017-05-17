@@ -128,14 +128,14 @@ export default class Tour extends React.Component {
             <Carousel style={styles.tour} indicator={IndicatorDots}>
               <div style={styles.slide}>
                 <div style={Object.assign({}, styles.img, {
-                  backgroundImage: 'url(/img/logo.png)'
+                  backgroundImage: 'url(img/logo.png)'
                 })} />
                 <h2 style={styles.welcome}>Welcome!</h2>
                 <h3 style={styles.title}>Swipe through to see how it works</h3>
               </div>
               <div style={styles.slide}>
                 <div style={Object.assign({}, styles.img, {
-                  backgroundImage: 'url(/img/tour_2.png)'
+                  backgroundImage: 'url(img/tour_2.png)'
                 })} />
                 <h3 style={styles.title}>
                   This is your <strong style={styles.em}>center node</strong>,
@@ -144,7 +144,7 @@ export default class Tour extends React.Component {
               </div>
               <div style={styles.slide}>
                 <div style={Object.assign({}, styles.img, {
-                  backgroundImage: 'url(/img/tour_3.gif)'
+                  backgroundImage: 'url(img/tour_3.gif)'
                 })} />
                 <h3 style={styles.title}>
                   Build your graph by <strong style={styles.em}>adding nodes
@@ -153,7 +153,7 @@ export default class Tour extends React.Component {
               </div>
               <div style={styles.slide}>
                 <div style={Object.assign({}, styles.img, {
-                  backgroundImage: 'url(/img/tour_4.gif)'
+                  backgroundImage: 'url(img/tour_4.gif)'
                 })} />
                 <h3 style={styles.title}>
                   <strong style={styles.em}>Move around
@@ -162,7 +162,7 @@ export default class Tour extends React.Component {
               </div>
               <div style={styles.slide}>
                 <div style={Object.assign({}, styles.img, {
-                  backgroundImage: 'url(/img/tour_5.gif)'
+                  backgroundImage: 'url(img/tour_5.gif)'
                 })} />
                 <h3 style={styles.title}>
                   <strong style={styles.em}>Create links

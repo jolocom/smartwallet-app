@@ -284,7 +284,10 @@ describe('Wallet registration Redux module', function() {
         generateSeedPhrase: stub().returns('seedphrase')
       }}
 
-      const thunk = registration.addEntropyFromDeltas({dx: 5, dy: 3})
+      const thunk = registration.addEntropyFromDeltas({
+        dx: 5,
+        dy: 3
+      })
       thunk(dispatch, getState, {services, backend})
 
       expect(services.entropy.addFromDelta.called).to.equal(true)
@@ -347,7 +350,33 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
-
+  describe('checkUser', function() {
+    it('should checkUsername on backend', () => {
+      const getState = () => Immutable.fromJS({registration: {
+        username: {value: 'ggdg'}
+      }})
+      const dispatch = stub()
+      const backend = {accounts: {
+        checkUsername: stub().returnsAsync('checks')
+      }}
+      withStubs([
+      [registration.actions, 'goForward', {returns: 'forward'}],
+        [registration.actions.checkUsername, 'buildAction',
+        {returns: 'action'}]],
+      () => {
+        const thunk = registration.checkUsername('test')
+        thunk(dispatch, getState)
+        expect(dispatch.calledWithArgs[0]).to.equal('action')
+        const checkAction = registration.actions.checkUsername
+        const promise = checkAction.buildAction.calledWithArgs[1]
+        expect(promise(backend)).to.eventually
+        .equal('checks')
+        expect(backend.accounts.checkUsername.calls).to.deep.equal(
+          [{args: ['ggdg']}
+          ])
+      })
+    })
+  })
   describe('registerWallet', function() {
     it('should register with seedphrase if expert', () => {
       const dispatch = stub()
