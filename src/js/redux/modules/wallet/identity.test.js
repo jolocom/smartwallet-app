@@ -14,8 +14,8 @@ describe('# Wallet identity redux module', () => {
         webId: '',
         username: {verified: false, value: ''},
         contact: {
-          phone: [{type: '', number: '', verified: false}],
-          email: [{type: '', address: '', verified: false}]
+          phones: [{type: '', number: '', verified: false}],
+          emails: [{type: '', address: '', verified: false}]
         },
         passport: {
           number: '', givenName: '', familyName: '', birthDate: '',
