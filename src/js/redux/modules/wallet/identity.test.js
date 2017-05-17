@@ -4,7 +4,7 @@ import * as identity from './identity'
 import {stub} from '../../../../../test/utils'
 const reducer = require('./identity').default
 
-describe.only('# Wallet identity redux module', () => {
+describe('# Wallet identity redux module', () => {
   describe('# Reducer', () => {
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')

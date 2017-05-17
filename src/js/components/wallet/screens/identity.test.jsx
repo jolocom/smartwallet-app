@@ -43,7 +43,8 @@ describe('(Component) WalletIdentityScreen', function() {
                 state: '',
                 country: '',
                 verified: false
-              }
+              },
+              error: false
             }
           }
         }))
@@ -56,7 +57,6 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
-        isError
       />),
       { context: { muiTheme: { } } }
     )
@@ -89,7 +89,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -102,7 +103,6 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
-        isError
        />),
       { context: { muiTheme: { } } }
       )
@@ -126,7 +126,8 @@ describe('(Component) WalletIdentityScreen', function() {
                 phones: [],
                 emails: []
               },
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -139,7 +140,6 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
-        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -163,7 +163,8 @@ describe('(Component) WalletIdentityScreen', function() {
                 phones: [],
                 emails: []
               },
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -176,7 +177,6 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
-        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -197,7 +197,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -210,7 +211,6 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
-        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -230,7 +230,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -243,7 +244,6 @@ describe('(Component) WalletIdentityScreen', function() {
         closeConfirmDialog={closeConfirmDialog}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
-        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -271,7 +271,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -284,8 +285,6 @@ describe('(Component) WalletIdentityScreen', function() {
         closeConfirmDialog={() => {}}
         configSimpleDialog={configSimpleDialog}
         showSimpleDialog={showSimpleDialog}
-        isError
-
        />),
       { context: { muiTheme: { } } }
     )
