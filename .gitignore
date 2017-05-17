@@ -56,3 +56,10 @@ utils/localSolidServer/
 config.json
 localhost.cert
 localhost.key
+
+# Cordova
+app/plugins
+app/platforms
+app/config.xml
+app/wallet.json
+app/graph.json

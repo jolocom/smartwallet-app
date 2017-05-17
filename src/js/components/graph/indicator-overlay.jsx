@@ -21,7 +21,7 @@ let IndicatorOverlay = React.createClass({
         width: '100vw',
         height: '100vh',
         backgroundColor: 'rgba(0,0,0,0.7)',
-        backgroundImage: 'url(/img/indicator-overlay.png)',
+        backgroundImage: 'url(img/indicator-overlay.png)',
         backgroundPosition: 'center bottom',
         backgroundRepeat: 'no-repeat',
         textAlign: 'center',
