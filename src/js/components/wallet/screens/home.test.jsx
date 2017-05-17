@@ -15,7 +15,9 @@ describe('(Component) WalletHomeScreen', function() {
       (<WalletHomeScreen.WrappedComponent id="test" visible
         {...WalletHomeScreen.mapStateToProps(Immutable.fromJS({wallet: {
           identity: {
-            username: 'test'
+            username: {
+              value: 'test'
+            }
           }
         }}))}
         goToIdentity={goToIdentity}

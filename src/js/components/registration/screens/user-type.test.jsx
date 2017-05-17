@@ -97,14 +97,8 @@ describe('(Component) RegistrationUserTypeScreen', function() {
       null,
       'message',
       'OK',
-      {
-        actionsContainerStyle: {
-          textAlign: 'center'
-        },
-        contentStyle: {
-          textAlign: 'center'
-        }
-      }
+      {},
+      true
     ]}])
     expect(showSimpleDialog.called).to.be.true
     expect(showSimpleDialog.calls).to.deep.equal([{'args': []}])
