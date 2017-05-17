@@ -248,7 +248,11 @@ describe('(Component) WalletIdentityScreen', function() {
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('WalletIdentity').props().onConfirm('message', {})
+    wrapper.find('WalletIdentity').props().onConfirm({
+      message: 'message',
+      attrValue: '',
+      style: {}
+    })
     expect(openConfirmDialog.called).to.be.true
     expect(openConfirmDialog.calls[0].args[0]).to.equal('message')
     expect(openConfirmDialog.calls[0].args[1]).to.equal('REQUEST VERIFICATION')
@@ -289,11 +293,16 @@ describe('(Component) WalletIdentityScreen', function() {
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('WalletIdentity').props().onVerify(null, 'message', 'OK', {})
+    wrapper.find('WalletIdentity').props().onVerify({
+      message: 'message',
+      buttonText: 'OK',
+      style: {},
+      attrValue: ''
+    })
     expect(configSimpleDialog.called).to.be.true
     expect(showSimpleDialog.called).to.be.true
     expect(configSimpleDialog.calls).to.deep.equal([{args: [
-      null, null, 'message', 'OK'
+      null, 'message', 'OK', {}
     ]}])
     expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
   })
