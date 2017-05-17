@@ -96,8 +96,8 @@ const iconEmailMessage = (
     <b>Verification</b> <br />
     <br />
     <span>
-      Your email hasn't been verified yet. Click "Request Verification" to get
-      an email with a verification link.
+      Your emails hasn't been verified yet. Click "Request Verification" to get
+      an emails with a verification link.
     </span>
   </div>
 )
@@ -126,11 +126,11 @@ const iconPhoneMessage = (
 
 const PhoneList = (props) => {
   let display = []
-  let {phone, confirm} = props
-  if (!props.phone && !props.phone[0].number) {
+  let {phones, onConfirm} = props
+  if (!props.phones && !props.phones[0].number) {
     return null
   }
-  display.push(phone.map((field, index) => {
+  display.push(phones.map((field, index) => {
     let icon
 
     if (index === 0) {
@@ -144,7 +144,10 @@ const PhoneList = (props) => {
         textValue={field.number}
         textLabel="Phone Number"
         icon={icon}
-        onVerify={() => confirm(iconPhoneMessage, STYLES.dialog)}
+        onVerify={() => onConfirm({
+          message: iconPhoneMessage,
+          style: STYLES.dialog
+        })}
         secondaryTextValue={field.type} />
     )
   }))
@@ -155,35 +158,37 @@ const PhoneList = (props) => {
 }
 
 PhoneList.propTypes = {
-  phone: React.PropTypes.array.isRequired,
-  confirm: React.PropTypes.func.isRequired
+  phones: React.PropTypes.array.isRequired,
+  onConfirm: React.PropTypes.func.isRequired
 }
 
 const EmailList = (props) => {
   let display = []
-  let {email, verify, confirm} = props
-  if (!props.email && !props.email[0].address) {
+  let {emails, onVerify, onConfirm} = props
+  if (!props.emails && !props.emails[0].address) {
     return null
   }
-  display.push(email.map((field, index) => {
+  display.push(emails.map((field, index) => {
     let icon
 
     if (index === 0) {
       icon = CommunicationEmail
     }
 
-    let verify
+    let verifyButton
 
     if (!field.verified) {
-      verify = (
+      verifyButton = (
         <ListItem disabled leftIcon={<div />} style={STYLES.list}>
           <FlatButton
             label="Request Verification"
             secondary
             style={STYLES.requestBtn}
-            onClick={() => {
-              verify(buttonEmailMessage, 'OK', STYLES.simpleDialog)
-            }} />
+            onClick={() => onVerify({
+              message: buttonEmailMessage,
+              buttonText: 'OK',
+              style: STYLES.simpleDialog
+            })} />
         </ListItem>
       )
     }
@@ -194,10 +199,13 @@ const EmailList = (props) => {
           verified={field.verified}
           textValue={field.address}
           textLabel="Email"
-          onVerify={() => confirm(iconEmailMessage, STYLES.dialog)}
+          onVerify={() => onConfirm({
+            message: iconEmailMessage,
+            style: STYLES.dialog
+          })}
           icon={icon}
         />
-        {verify}
+        {verifyButton}
       </div>
     )
   }))
@@ -210,9 +218,9 @@ const EmailList = (props) => {
 }
 
 EmailList.propTypes = {
-  email: React.PropTypes.array.isRequired,
-  verify: React.PropTypes.func.isRequired,
-  confirm: React.PropTypes.func.isRequired
+  emails: React.PropTypes.array.isRequired,
+  onVerify: React.PropTypes.func.isRequired,
+  onConfirm: React.PropTypes.func.isRequired
 }
 
 const InfoDetail = (props) => {
@@ -261,8 +269,8 @@ export default class WalletIdentity extends React.Component {
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
-    confirm: React.PropTypes.func.isRequired,
-    verify: React.PropTypes.func.isRequired
+    onConfirm: React.PropTypes.func.isRequired,
+    onVerify: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -275,8 +283,8 @@ export default class WalletIdentity extends React.Component {
       goToContactManagement,
       goToPassportManagement,
       goToDrivingLicenceManagement,
-      confirm,
-      verify
+      onConfirm,
+      onVerify
     } = this.props
 
     if (!isLoaded) {
@@ -298,7 +306,7 @@ export default class WalletIdentity extends React.Component {
                   disabled
                   rightIcon={
                     <InfoDetail
-                      showDetails={(details) => verify(
+                      showDetails={(details) => onVerify(
                         details,
                         'OK',
                         STYLES.simpleDialog
@@ -323,19 +331,19 @@ export default class WalletIdentity extends React.Component {
             <Block>
               <PlusMenu
                 name="Contact"
-                choice={contact.email.length > 0 || contact.phone.length > 0}
+                choice={contact.emails.length > 0 || contact.phones.length > 0}
                 goToManagement={goToContactManagement}
               />
             </Block>
             <Block>
               <PhoneList
-                phone={contact.phone}
-                confirm={confirm}
-                verify={verify} />
+                phones={contact.phones}
+                onConfirm={onConfirm}
+                onVerify={onVerify} />
               <EmailList
-                email={contact.email}
-                confirm={confirm}
-                verify={verify} />
+                emails={contact.emails}
+                onConfirm={onConfirm}
+                onVerify={onVerify} />
             </Block>
             <Block>
               <PlusMenu

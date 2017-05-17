@@ -11,12 +11,12 @@ describe('(Component) Wallet Identity', function() {
         isLoaded
         webId={''}
         contact={{
-          email: [{
+          emails: [{
             type: '',
             address: '',
             verified: false
           }],
-          phone: [{
+          phones: [{
             type: '',
             number: '',
             verified: false
@@ -24,8 +24,8 @@ describe('(Component) Wallet Identity', function() {
         goToContactManagement={() => {}}
         goToPassportManagement={() => {}}
         goToDrivingLicenceManagement={() => {}}
-        confirm={() => {}}
-        verify={() => {}}
+        onConfirm={() => {}}
+        onVerify={() => {}}
         isError
       />),
       { context: { muiTheme: { } } }
