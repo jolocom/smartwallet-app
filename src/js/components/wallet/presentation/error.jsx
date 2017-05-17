@@ -49,7 +49,9 @@ export default class WalletError extends React.Component {
         </Block>
         <Footer>
           <FlatButton label={this.props.buttonLabel}
-            onClick={() => { this.props.onClick() }} children />
+            onClick={() => { this.props.onClick() }}>
+              this.props.children
+          </FlatButton>
         </Footer>
       </Container>
     )
