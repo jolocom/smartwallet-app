@@ -10,6 +10,8 @@ describe('(Component) MaskedImage', function() {
       uncovering
       onPointUncovered={() => {}}
       onUncoveringChange={() => {}}
+      style={{}}
+      maskColor=""
       />),
       { context: { muiTheme: { } } }
     )

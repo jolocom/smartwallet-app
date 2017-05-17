@@ -22,6 +22,8 @@ describe('(Component) RegistrationNameEntryScreen', function() {
       }
         setUsername={setUsername}
         checkUsername={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
      />),
       { context: { muiTheme: { } } }
     )
@@ -32,6 +34,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
   it('should call config and show on handleDialog', function() {
     const showSimpleDialog = stub()
     const configSimpleDialog = stub()
+    const setUsername = stub()
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
@@ -44,21 +47,15 @@ describe('(Component) RegistrationNameEntryScreen', function() {
           }
         }))
       }
+        setUsername={setUsername}
+        checkUsername={() => {}}
         showSimpleDialog={showSimpleDialog}
         configSimpleDialog={configSimpleDialog}
     />), { context: { muiTheme: { } } }
     )
     wrapper.find('NameEntry').prop('handleDialog')(null, 'whoo')
     expect(configSimpleDialog.calledWithArgs).to.deep.equal(
-      [null, 'whoo', 'OK',
-        {
-          actionsContainerStyle: {
-            textAlign: 'center'
-          },
-          contentStyle: {
-            textAlign: 'center'
-          }
-        }]
+      [null, 'whoo', 'OK']
     )
     expect(showSimpleDialog.called).to.be.true
   })
@@ -78,6 +75,8 @@ describe('(Component) RegistrationNameEntryScreen', function() {
       }
         setUsername={setUsername}
         checkUsername={() => {}}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
      />),
       { context: { muiTheme: { } } }
     )
@@ -101,6 +100,8 @@ describe('(Component) RegistrationNameEntryScreen', function() {
       }
         setUsername={() => {}}
         checkUsername={checkUsername}
+        configSimpleDialog={() => {}}
+        showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )

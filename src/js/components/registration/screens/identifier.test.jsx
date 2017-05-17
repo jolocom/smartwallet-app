@@ -24,6 +24,8 @@ describe('(Component) RegistrationIdentifierScreen', function() {
       }
         setEmail={() => {}}
         goForward={() => {}}
+        checkEmail={() => {}}
+        onSubmit={() => {}}
     />),
       { context: { muiTheme: { } } }
     )
