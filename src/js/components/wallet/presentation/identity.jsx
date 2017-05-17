@@ -130,7 +130,7 @@ const PhoneList = (props) => {
   if (!props.phones && !props.phones[0].number) {
     return null
   }
-  display.push(phones.map((field, index) => {
+  display.push(phones.map(({verified, number, type}, index) => {
     let icon
 
     if (index === 0) {
@@ -140,15 +140,16 @@ const PhoneList = (props) => {
     return (
       <StaticListItem
         key={index}
-        verified={field.verified}
-        textValue={field.number}
+        verified={verified}
+        textValue={number}
         textLabel="Phone Number"
         icon={icon}
         onVerify={() => onConfirm({
           message: iconPhoneMessage,
-          style: STYLES.dialog
+          style: STYLES.dialog,
+          attrValue: number
         })}
-        secondaryTextValue={field.type} />
+        secondaryTextValue={type} />
     )
   }))
 
@@ -165,10 +166,10 @@ PhoneList.propTypes = {
 const EmailList = (props) => {
   let display = []
   let {emails, onVerify, onConfirm} = props
-  if (!props.emails && !props.emails[0].address) {
+  if (!emails && !emails[0].address) {
     return null
   }
-  display.push(emails.map((field, index) => {
+  display.push(emails.map(({verified, address}, index) => {
     let icon
 
     if (index === 0) {
@@ -177,7 +178,7 @@ const EmailList = (props) => {
 
     let verifyButton
 
-    if (!field.verified) {
+    if (!verified) {
       verifyButton = (
         <ListItem disabled leftIcon={<div />} style={STYLES.list}>
           <FlatButton
@@ -187,7 +188,8 @@ const EmailList = (props) => {
             onClick={() => onVerify({
               message: buttonEmailMessage,
               buttonText: 'OK',
-              style: STYLES.simpleDialog
+              style: STYLES.simpleDialog,
+              attrValue: address
             })} />
         </ListItem>
       )
@@ -196,10 +198,11 @@ const EmailList = (props) => {
     return (
       <div key={index}>
         <StaticListItem
-          verified={field.verified}
-          textValue={field.address}
+          verified={verified}
+          textValue={address}
           textLabel="Email"
           onVerify={() => onConfirm({
+            attrValue: address,
             message: iconEmailMessage,
             style: STYLES.dialog
           })}
@@ -306,11 +309,12 @@ export default class WalletIdentity extends React.Component {
                   disabled
                   rightIcon={
                     <InfoDetail
-                      showDetails={(details) => onVerify(
-                        details,
-                        'OK',
-                        STYLES.simpleDialog
-                      )}
+                      showDetails={details => onVerify({
+                        message: details,
+                        buttonText: 'OK',
+                        style: STYLES.simpleDialog,
+                        attrValue: ''
+                      })}
                       webId={webId}
                       username={username.value}
                     />
