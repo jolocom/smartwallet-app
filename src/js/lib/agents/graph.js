@@ -63,7 +63,7 @@ class GraphAgent extends LDPAgent {
       throw new Error('addImage: not enough arguments')
     }
     if (image instanceof File) {
-      let imgUri = `${dstContainer}files/${this.randomString(5)}`
+      let imgUri = `${dstContainer}files/${this._randomString()}`
       writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(imgUri))
       return this.storeFile(imgUri, '', image, confidential)
     }
@@ -108,9 +108,8 @@ class GraphAgent extends LDPAgent {
 
   createNode(currentUser, centerNode, nodeInfo) {
     const writer = new Writer()
-    const {confidential, title, description, nodeType, image} = nodeInfo
-    const newNodeUri = centerNode.storage + this.randomString(5)
-
+    const {title, description, image, nodeType, confidential} = nodeInfo
+    const newNodeUri = centerNode.storage + this._randomString()
     return this.createAcl(newNodeUri, currentUser, confidential)
     .then((uri) => {
       const des = description
@@ -121,7 +120,7 @@ class GraphAgent extends LDPAgent {
         return this.addImage(newNodeUri, storage, writer, image, confidential)
       }
     }).then(() => {
-      return this.put(Util.uriToProxied(newNodeUri), writer.end(), {
+      return this.put(Util.uriToProxied(newNodeUri), writer.end(newNodeUri), {
         'Content-Type': 'text/turtle'
       })
     }).then(() => {
@@ -131,7 +130,7 @@ class GraphAgent extends LDPAgent {
 
       return this.linkNodes(centerNode.uri, type, newNodeUri)
     }).then(() => {
-      return newNodeUri.uri
+      return newNodeUri
     })
   }
 
@@ -149,7 +148,7 @@ class GraphAgent extends LDPAgent {
   }
 
   storeFile(finUri, dstContainer, file, confidential = false) {
-    const uri = finUri || `${dstContainer}files/${this.randomString(5)}`
+    const uri = finUri || `${dstContainer}files/${this._randomString()}`
     const webId = this._getWebId() || (() => {
       throw new Error('No webId detected.')
     })()
@@ -172,6 +171,7 @@ class GraphAgent extends LDPAgent {
   createAcl(uri, webId, confidential = false) {
     const writer = new Writer()
     const aclUri = `${uri}.acl`
+    const entryURL = Util.getProfFolderUrl(webId)
     const owner = $rdf.sym(`${aclUri}#owner`)
 
     const tripleMap = [
@@ -183,7 +183,7 @@ class GraphAgent extends LDPAgent {
 
     tripleMap.forEach(st => {
       st.obj.forEach(obj => {
-        writer.addTriple(owner, st.pred, obj)
+        writer.addTriple(entryURL + '/' + owner, st.pred, obj)
       })
     })
 
@@ -194,8 +194,7 @@ class GraphAgent extends LDPAgent {
       writer.addTriple(all, PRED.agentClass, PRED.Agent)
       writer.addTriple(all, PRED.mode, PRED.read)
     }
-
-    return this.put(Util.uriToProxied(aclUri), writer.end(), {
+    return this.put(Util.uriToProxied(aclUri), writer.end(aclUri), {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri
@@ -214,7 +213,7 @@ class GraphAgent extends LDPAgent {
     const toAdd = $rdf.graph()
     return this.fetchTriplesAtUri(uri).then(fetchedTrips => {
       const writer = new Writer()
-      writer.addAll(fetchedTrips)
+      writer.addAll(fetchedTrips.triples)
       tripsToWrite.forEach(t => {
         if (writer.find(t.subject, t.predicate, t.object).length === 0) {
           toAdd.add(t.subject, t.predicate, t.object)
@@ -344,6 +343,7 @@ class GraphAgent extends LDPAgent {
       }
       return this.writeTriples(start, [payload])
     }).catch(e => {
+      console.log(e)
       return
     })
   }

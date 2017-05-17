@@ -171,7 +171,8 @@ const actions = module.exports = makeActions('registration', {
           if (userType === 'expert') {
             return backend.wallet.registerWithSeedPhrase({
               userName: state.username.value,
-              seedPhrase: state.passphrase.phrase
+              seedPhrase: state.passphrase.phrase,
+              pin: state.pin.value
             }).then((params) => {
               dispatch(router.pushRoute('/wallet'))
               return params

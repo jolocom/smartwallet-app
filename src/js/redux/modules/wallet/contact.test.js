@@ -28,13 +28,14 @@ describe('# Wallet contact redux module', () => {
       const action = {
         type: contact.actions.getAccountInformation.id_success,
         result: {
-          emails: [],
-          phoneNumbers: []
+          contact: {
+            email: [],
+            phone: []
+          }
         }
       }
       state = reducer(state, action)
-      expect(state.toJS().loading)
-      .to.be.false
+      expect(state.toJS().loading).to.be.false
     })
     it('saveChanges should display a spinner while saving Information',
     () => {
@@ -55,21 +56,21 @@ describe('# Wallet contact redux module', () => {
       expect(state.toJS().loading).to.be.false
     })
     describe('# Email', () => {
-      it('addNewEntry should add a new field to the emails array', () => {
+      it('addNewEntry should add a new field to the email array', () => {
         let state = Immutable.fromJS({
           information: {
             newInformation: {
-              emails: []
+              email: []
             }
           }
         })
         const action = {
           type: contact.actions.addNewEntry.id,
-          field: 'emails',
+          field: 'email',
           index: 0
         }
         state = reducer(state, action)
-        expect(state.toJS().information.newInformation.emails.length)
+        expect(state.toJS().information.newInformation.email.length)
         .to.equal(1)
       })
       it('deleteInformation should mark the requested field for deletion',
@@ -77,7 +78,7 @@ describe('# Wallet contact redux module', () => {
         let state = Immutable.fromJS({
           information: {
             newInformation: {
-              emails: [
+              email: [
                 {value: '', valid: false, delete: false, blank: true}]
             }
           }
@@ -85,18 +86,18 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.deleteInformation.id,
           age: 'newInformation',
-          field: 'emails',
+          field: 'email',
           index: 0
         }
         state = reducer(state, action)
-        expect(state.toJS().information.newInformation.emails[0].delete)
+        expect(state.toJS().information.newInformation.email[0].delete)
         .to.be.true
       })
       it('setInformation should change a new field value', () => {
         let state = Immutable.fromJS({
           information: {
             newInformation: {
-              emails: [
+              email: [
                 {value: 'a', valid: false, delete: false, blank: true}]
             }
           }
@@ -104,11 +105,11 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.setInformation.id,
           value: 'ab',
-          field: 'emails',
+          field: 'email',
           index: 0
         }
         state = reducer(state, action)
-        expect(state.toJS().information.newInformation.emails[0].value)
+        expect(state.toJS().information.newInformation.email[0].value)
         .to.equal('ab')
       })
       it('updateInformation should change an original email field value',
@@ -116,7 +117,7 @@ describe('# Wallet contact redux module', () => {
         let state = Immutable.fromJS({
           information: {
             originalInformation: {
-              emails: [{value: 'a@example.com', valid: true, delete: false,
+              email: [{value: 'a@example.com', valid: true, delete: false,
                 update: false, verified: false}]
             }
           }
@@ -124,13 +125,13 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.updateInformation.id,
           value: 'test',
-          field: 'emails',
+          field: 'email',
           index: 0
         }
         state = reducer(state, action)
-        expect(state.toJS().information.originalInformation.emails[0].value)
+        expect(state.toJS().information.originalInformation.email[0].value)
         .to.equal('test')
-        expect(state.toJS().information.originalInformation.emails[0].update)
+        expect(state.toJS().information.originalInformation.email[0].update)
         .to.be.true
       })
       it('updateInformation should not change a verified original email ' +
@@ -138,7 +139,7 @@ describe('# Wallet contact redux module', () => {
         let oldState = Immutable.fromJS({
           information: {
             originalInformation: {
-              emails: [{value: 'a@example.com', valid: true, delete: false,
+              email: [{value: 'a@example.com', valid: true, delete: false,
                 update: false, verified: true}]
             }
           }
@@ -146,7 +147,7 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.updateInformation.id,
           value: 'test',
-          field: 'emails',
+          field: 'email',
           index: 0
         }
         const newState = reducer(oldState, action)
@@ -154,20 +155,20 @@ describe('# Wallet contact redux module', () => {
       })
     })
     describe('# Phone', () => {
-      it('addNewEntry should add a new field to the phoneNumbers array', () => {
+      it('addNewEntry should add a new field to the phone array', () => {
         const state = Immutable.fromJS({
           information: {
             newInformation: {
-              emails: [],
-              phoneNumbers: []
+              email: [],
+              phone: []
             }
           }
         })
         const expectedState = {
           information: {
             newInformation: {
-              emails: [],
-              phoneNumbers: [{
+              email: [],
+              phone: [{
                 value: '',
                 type: 'personal',
                 verified: false,
@@ -180,7 +181,7 @@ describe('# Wallet contact redux module', () => {
         }
         const action = {
           type: contact.actions.addNewEntry.id,
-          field: 'phoneNumbers',
+          field: 'phone',
           index: 0
         }
         const newState = reducer(state, action)
@@ -191,7 +192,7 @@ describe('# Wallet contact redux module', () => {
         let state = Immutable.fromJS({
           information: {
             newInformation: {
-              phoneNumbers: [
+              phone: [
                 {value: '', valid: false, delete: false, blank: true}]
             }
           }
@@ -199,11 +200,11 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.deleteInformation.id,
           age: 'newInformation',
-          field: 'phoneNumbers',
+          field: 'phone',
           index: 0
         }
         state = reducer(state, action)
-        expect(state.toJS().information.newInformation.phoneNumbers[0].delete)
+        expect(state.toJS().information.newInformation.phone[0].delete)
         .to.be.true
       })
       it('setInformation should change a new field value',
@@ -211,8 +212,8 @@ describe('# Wallet contact redux module', () => {
         let state = Immutable.fromJS({
           information: {
             newInformation: {
-              emails: [],
-              phoneNumbers: [
+              email: [],
+              phone: [
                 {
                   value: '12',
                   type: 'work',
@@ -226,11 +227,11 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.setInformation.id,
           value: {value: '123', type: 'personal'},
-          field: 'phoneNumbers',
+          field: 'phone',
           index: 0
         }
         state = reducer(state, action)
-        expect(state.toJS().information.newInformation.phoneNumbers[0])
+        expect(state.toJS().information.newInformation.phone[0])
           .to.deep.equal({
             value: '123',
             type: 'personal',
@@ -244,8 +245,8 @@ describe('# Wallet contact redux module', () => {
         let state = Immutable.fromJS({
           information: {
             originalInformation: {
-              emails: [],
-              phoneNumbers: [{
+              email: [],
+              phone: [{
                 value: '4917912345678',
                 type: 'work',
                 verified: false,
@@ -259,14 +260,14 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.updateInformation.id,
           value: {value: '+4917912345678', type: 'test'},
-          field: 'phoneNumbers',
+          field: 'phone',
           index: 0
         }
         const newState = reducer(state, action)
         expect(newState.toJS()).to.deep.equal({information: {
           originalInformation: {
-            emails: [],
-            phoneNumbers: [{
+            email: [],
+            phone: [{
               value: '+4917912345678',
               type: 'test',
               verified: false,
@@ -282,8 +283,8 @@ describe('# Wallet contact redux module', () => {
         const oldState = Immutable.fromJS({
           information: {
             originalInformation: {
-              emails: [],
-              phoneNumbers: [{
+              email: [],
+              phone: [{
                 value: '4917912345678',
                 type: 'work',
                 verified: true,
@@ -297,7 +298,7 @@ describe('# Wallet contact redux module', () => {
         const action = {
           type: contact.actions.updateInformation.id,
           value: {value: '+4917912345678', type: 'test'},
-          field: 'phoneNumbers',
+          field: 'phone',
           index: 0
         }
         const newState = reducer(oldState, action)

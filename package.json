@@ -4,7 +4,7 @@
   "description": "Social app / linked data explorer built for SoLiD infrastracture",
   "main": "index.js",
   "scripts": {
-    "solid": "solid start --port 8443 --ssl-cert ./etc/localhost.cert --ssl-key ./etc/localhost.key --root ./dist -v",
+    "solid": "solid start",
     "start": "gulp",
     "start:wallet": "gulp wallet",
     "build:prod": "npm i --production && gulp build",
@@ -145,6 +145,7 @@
     "reflux": "^6.0.0",
     "sjcl": "^1.0.6",
     "solid-client": "^0.19.0",
+    "smartwallet-contracts": "jolocom/smartwallet-contracts",
     "web3": "^0.15.3"
   },
   "engines": {

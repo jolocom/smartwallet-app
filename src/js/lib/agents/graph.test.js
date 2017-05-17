@@ -218,7 +218,7 @@ describe('GraphAgent', function() {
   describe('#createNode', function() {
     beforeEach(function() {
       this.gAgent = new GraphAgent()
-      this.gAgent.randomString = () => 'abcde'
+      this.gAgent._randomString = () => 'abcde'
       this.gAgent.createAcl = async(uri, user, confidential) => {
         expect(uri).to.equal(newNodeUri)
         expect(user).to.equal(WEBID)
@@ -283,7 +283,7 @@ describe('GraphAgent', function() {
         })
       }
 
-      return expectedWriter.end()
+      return expectedWriter.end(uri)
     }
     // A lot of references passed around at the moment.
     it('Should create public basic node with no image', async function() {
@@ -344,7 +344,6 @@ describe('GraphAgent', function() {
       const mockDestination = 'https://mockwebid.com/files/x'
       const mockConfidential = false
       const gAgent = new GraphAgent()
-
       gAgent._getWebId = () => WEBID
       gAgent.createAcl = async(finalUri, webId, confidential) => {
         expect(finalUri).to.equal(mockDestination)
@@ -374,7 +373,7 @@ describe('GraphAgent', function() {
 
       gAgent._getWebId = () => WEBID
 
-      gAgent.randomString = () => 'abcde'
+      gAgent._randomString = () => 'abcde'
 
       gAgent.createAcl = async(finalUri, webId, confidential) => {
         expect(finalUri).to.equal(expectedDestination)
@@ -420,7 +419,7 @@ describe('GraphAgent', function() {
         expect(headers).to.deep.equal({
           'Content-Type': 'text/turtle'
         })
-        expect(body).to.equal(writer.end())
+        expect(body).to.equal(writer.end(finUri))
       }
 
       await gAgent.createAcl(WEBID, WEBID, false)
@@ -436,7 +435,7 @@ describe('GraphAgent', function() {
         expect(headers).to.deep.equal({
           'Content-Type': 'text/turtle'
         })
-        expect(body).to.equal(writer.end())
+        expect(body).to.equal(writer.end(finUri))
       }
 
       tripleMap.forEach(st => {
@@ -486,7 +485,7 @@ describe('GraphAgent', function() {
 
       gAgent.fetchTriplesAtUri = async(uri) => {
         expect(uri).to.equal(WEBID)
-        return triples
+        return {triples: triples}
       }
 
       gAgent.patch = async(uri, toDel, toAdd) => {
@@ -503,9 +502,9 @@ describe('GraphAgent', function() {
     it('Should correctly attempt to delete a triple', async function() {
       const gAgent = new GraphAgent()
       const expected = [{
-        subject: rdf.sym('subjectUri'),
+        subject: rdf.sym('https://subjectUri'),
         predicate: PRED.knows,
-        object: rdf.sym('objectUri'),
+        object: rdf.sym('https://objectUri'),
         why: rdf.sym('chrome:theSession')
       }]
 

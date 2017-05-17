@@ -114,13 +114,13 @@ describe('# Wallet identity redux module', () => {
     it('getIdentityInformation should get the identity information from ' +
       'the backend', () => {
       const getState = stub()
-      const services = {auth: {currentUser: {wallet: {
+      const backend = {solid: {
         getUserInformation: stub().returns('information')
-      }}}}
+      }}
       const dispatch = stub()
       const thunk = identity.actions.getIdentityInformation()
 
-      thunk(dispatch, getState, {services})
+      thunk(dispatch, getState, {stub, backend})
 
       expect(dispatch.called).to.be.true
       expect(dispatch.calls[0].args[0].promise()).to.equal('information')
@@ -129,11 +129,8 @@ describe('# Wallet identity redux module', () => {
         'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_SUCCESS',
         'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_FAIL'
       ])
-      const backendCall = services.auth.currentUser.wallet.getUserInformation
+      const backendCall = backend.solid.getUserInformation
       expect(backendCall.called).to.be.true
-      expect(backendCall.calls).to.deep.equal([{args: [{
-        email: 'test@test.com'
-      }]}])
     })
   })
 })

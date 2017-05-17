@@ -127,7 +127,7 @@ const iconPhoneMessage = (
 const PhoneList = (props) => {
   let display = []
   let {phone, confirm} = props
-  if (!phone[0].number) {
+  if (!props.phone && !props.phone[0].number) {
     return null
   }
   display.push(phone.map((field, index) => {
@@ -162,7 +162,7 @@ PhoneList.propTypes = {
 const EmailList = (props) => {
   let display = []
   let {email, verify, confirm} = props
-  if (!props.email[0].address) {
+  if (!props.email && !props.email[0].address) {
     return null
   }
   display.push(email.map((field, index) => {
@@ -323,10 +323,7 @@ export default class WalletIdentity extends React.Component {
             <Block>
               <PlusMenu
                 name="Contact"
-                choice={
-                  !(contact.email[0].address === '' &&
-                  contact.phone[0].number === '')
-                }
+                choice={contact.email.length > 0 || contact.phone.length > 0}
                 goToManagement={goToContactManagement}
               />
             </Block>

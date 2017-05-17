@@ -11,9 +11,10 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
 
       // The user is already logged in.
       if (webId) {
-        const accounts = backend.accounts
+        const {accounts} = backend
         const loggedIn = await accounts.checkLogin(webId)
           .then(() => true).catch(() => false)
+          // TODO : test wheather the user is logged in or not to the wallet app
 
         if (loggedIn) {
           dispatch(doLogin.buildAction(params, async () => {
@@ -192,6 +193,9 @@ export const setUsername = action('account/login', 'setUsername', {
 export const setPassword = action('account/login', 'setPassword', {
   expectedParams: ['password']
 })
+export const setWebId = action('account/login', 'setWebId',
+  {expectedParams: ['value']}
+)
 
 const initialState = Immutable.fromJS({
   username: '',
@@ -210,6 +214,10 @@ export default function reducer(state = initialState, action = {}) {
   // state = state.set('login', true)
 
   switch (action.type) {
+    case setWebId.id:
+      return state.merge({
+        webId: action.value
+      })
     case doLogin.id:
       return state.merge({loggingIn: true})
     case doLogin.id_success:
