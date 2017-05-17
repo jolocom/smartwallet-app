@@ -7,8 +7,8 @@ describe('(Component) EditListItem', function() {
     shallow((<EditListItem
       id=""
       icon=""
-      textLabel=""
-      textName=""
+      label=""
+      name=""
       focused
       verified
       onFocusChange={() => {}}

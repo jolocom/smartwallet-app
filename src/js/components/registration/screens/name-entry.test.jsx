@@ -48,9 +48,9 @@ describe('(Component) RegistrationNameEntryScreen', function() {
         configSimpleDialog={configSimpleDialog}
     />), { context: { muiTheme: { } } }
     )
-    wrapper.find('NameEntry').prop('handleDialog')('whoo')
+    wrapper.find('NameEntry').prop('handleDialog')(null, 'whoo')
     expect(configSimpleDialog.calledWithArgs).to.deep.equal(
-      ['whoo', 'OK',
+      [null, 'whoo', 'OK',
         {
           actionsContainerStyle: {
             textAlign: 'center'

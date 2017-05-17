@@ -93,7 +93,10 @@ describe('(Component) RegistrationUserTypeScreen', function() {
 
     wrapper.find('UserType').props().onWhySelect('message')
     expect(configSimpleDialog.called).to.be.true
-    expect(configSimpleDialog.calls).to.deep.equal([{'args': ['message', 'OK',
+    expect(configSimpleDialog.calls).to.deep.equal([{'args': [
+      null,
+      'message',
+      'OK',
       {
         actionsContainerStyle: {
           textAlign: 'center'

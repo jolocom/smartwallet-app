@@ -63,39 +63,6 @@ describe('(Component) RegistrationEntropyScreen', function() {
     expect(goForward.called).to.be.true
     expect(goForward.calls).to.deep.equal([{'args': []}])
   })
-  it('should call addEntropyFromDeltas onMouseMovement with proper params',
-    function() {
-      const addEntropyFromDeltas = stub()
-      const wrapper = shallow(
-        (<RegistrationEntropyScreen.WrappedComponent {
-          ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
-            registration: {
-              username: {
-                value: 'xyz'
-              },
-              maskedImage: {
-                uncovering: false
-              },
-              passphrase: {
-                sufficientEntropy: false
-              }
-            }
-          }))
-        }
-          goForward={() => {}}
-          setMaskedImageUncovering={() => {}}
-          addEntropyFromDeltas={addEntropyFromDeltas}
-        />),
-        { context: { muiTheme: { } } }
-      )
-
-      wrapper.find('Entropy').props().onMouseMovement(2, 2)
-      expect(addEntropyFromDeltas.called).to.be.true
-      expect(addEntropyFromDeltas.calls).to.deep.equal([{
-        'args': [{x: 2, y: 2}]
-      }])
-    }
-  )
   it('should call setMaskedImageUncovering onImageUncoveringChange ' +
     'with the right params', function() {
     const setMaskedImageUncovering = stub()

@@ -22,6 +22,5 @@ describe('(Component) SimpleDialog', function() {
       { context: { muiTheme: { } } }
     )
     expect(wrapper.find('Dialog').prop('open')).to.equal(false)
-    expect(wrapper.prop('children')).to.equal('test msg')
   })
 })
