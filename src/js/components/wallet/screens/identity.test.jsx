@@ -56,6 +56,7 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
+        isError
       />),
       { context: { muiTheme: { } } }
     )
@@ -101,6 +102,7 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
+        isError
        />),
       { context: { muiTheme: { } } }
       )
@@ -137,6 +139,7 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
+        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -173,6 +176,7 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
+        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -206,6 +210,7 @@ describe('(Component) WalletIdentityScreen', function() {
         openConfirmDialog={() => {}}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
+        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -238,6 +243,7 @@ describe('(Component) WalletIdentityScreen', function() {
         closeConfirmDialog={closeConfirmDialog}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
+        isError
        />),
       { context: { muiTheme: { } } }
     )
@@ -278,6 +284,7 @@ describe('(Component) WalletIdentityScreen', function() {
         closeConfirmDialog={() => {}}
         configSimpleDialog={configSimpleDialog}
         showSimpleDialog={showSimpleDialog}
+        isError
 
        />),
       { context: { muiTheme: { } } }
@@ -287,7 +294,7 @@ describe('(Component) WalletIdentityScreen', function() {
     expect(configSimpleDialog.called).to.be.true
     expect(showSimpleDialog.called).to.be.true
     expect(configSimpleDialog.calls).to.deep.equal([{args: [
-      null, 'message', 'OK', {}
+      null, null, 'message', 'OK'
     ]}])
     expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
   })
