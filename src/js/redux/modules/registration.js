@@ -155,8 +155,11 @@ const actions = module.exports = makeActions('registration', {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.accounts
-            .checkUsername(state.username.value)
-        })).then(() => dispatch(actions.goForward()))
+            .checkUsername(state.username.value).then((params) => {
+              dispatch(actions.goForward())
+              return params
+            })
+        }))
       }
     }
   },
