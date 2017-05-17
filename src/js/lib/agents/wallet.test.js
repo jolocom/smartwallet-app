@@ -17,7 +17,7 @@ describe('#WalletAgentClass', () => {
         .split(' ').length).to.be.above(10)
     })
   })
-  // Integration does not work yet
+  // Integration does not work yet - uncomment when functional
   /* describe('registerWithSeedPhrase', () => {
      it('should be return a Wallet Manager', () => {
        const registration = {
