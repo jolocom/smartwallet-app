@@ -3,7 +3,7 @@ import AuthService from './auth'
 import {Wallet} from '../lib/agents/wallet'
 import {stub} from '../../../test/utils'
 
-describe.only('#AuthService', () => {
+describe('#AuthService', () => {
   describe('General Instance Properties', () => {
     it('should set currentUser.wallet to a Wallet Instance', () => {
       const auth = new AuthService()
