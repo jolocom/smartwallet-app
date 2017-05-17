@@ -68,8 +68,9 @@ const Login = connect({
       container: {
         textAlign: 'center',
         background: '#f8f9fb',
-        height: '100%',
-        overflowY: 'auto'
+        paddingBottom: '40px',
+        boxSizing: 'border-box',
+        minHeight: '100%'
       },
       header: {
         padding: '40px'
@@ -99,9 +100,9 @@ const Login = connect({
         backgroundColor: '#ffffff'
       },
       safariCookieWarning: {
-        fontWeight: 'bold',
         padding: '0 20px',
-        marginBottom: '1em'
+        marginBottom: '1em',
+        color: theme.jolocom.gray1
       },
       button: {
         width: '100%'
@@ -139,9 +140,18 @@ const Login = connect({
         <div style={styles.logo}>
           <img src="/img/logo.svg" style={styles.logoImg} />
         </div>
-        <div style={{paddingBottom: '8px', color: 'red'}}>
+        <div style={{paddingBottom: '8px', color: '#e8540c'}}>
           {this.props.login.failureMsg}
         </div>
+        {
+        Utils.isSafari()
+          ? <p style={styles.safariCookieWarning}>In order for the
+          application to work with Safari,
+          please go to the privacy settings of your browser
+          and choose "Allow cookies for all websites".
+          </p>
+        : ''
+        }
         <form style={styles.content} onSubmit={this.login}>
           <div style={{marginBottom: '20px'}}>
             <div>
@@ -171,15 +181,6 @@ const Login = connect({
             style={styles.button}
             label="Login" />
         </form>
-        {
-        Utils.isSafari()
-          ? <p style={styles.safariCookieWarning}>In order for the
-          application to work with Safari,
-          please go to the privacy settings of your browser
-          and choose "Allow cookies for all websites".
-          </p>
-        : ''
-        }
         <p style={styles.help}>Don't have an account yet?&nbsp;
           <Link to={routes.signup} style={styles.link}>Sign up</Link>.
         </p>

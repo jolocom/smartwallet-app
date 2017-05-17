@@ -6,11 +6,14 @@ import {
   Divider,
   List, ListItem,
   FlatButton,
-  CircularProgress
+  Avatar
 } from 'material-ui'
+
+import Loading from 'components/common/loading'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import PersonIcon from 'material-ui/svg-icons/social/person'
 import Info from 'material-ui/svg-icons/action/info'
 
 import {theme} from 'styles'
@@ -24,7 +27,8 @@ import {
 
 const STYLES = {
   listItem: {
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    padding: '0 16px 0 72px'
   },
   inputName: {
     color: theme.palette.textColor,
@@ -62,8 +66,7 @@ const STYLES = {
     color: theme.palette.lighterTextColor
   },
   requestBtn: {
-    marginLeft: '39px'
-    // padding: '0'
+    marginLeft: '-16px'
   },
   spinner: {
     position: 'absolute',
@@ -82,6 +85,9 @@ const STYLES = {
     actionsContainerStyle: {
       textAlign: 'center'
     }
+  },
+  avatar: {
+    top: '16px'
   }
 }
 
@@ -124,15 +130,24 @@ const PhoneList = (props) => {
   if (!props.phone && !props.phone[0].number) {
     return null
   }
-  display.push(phone.map((field, index) => <StaticListItem
-    key={index}
-    verified={field.verified}
-    textValue={field.number}
-    textLabel="Phone Number"
-    icon={CommunicationCall}
-    onVerify={() => confirm(iconPhoneMessage, STYLES.dialog)}
-    secondaryTextValue={field.type} />
-  ))
+  display.push(phone.map((field, index) => {
+    let icon
+
+    if (index === 0) {
+      icon = CommunicationCall
+    }
+
+    return (
+      <StaticListItem
+        key={index}
+        verified={field.verified}
+        textValue={field.number}
+        textLabel="Phone Number"
+        icon={icon}
+        onVerify={() => confirm(iconPhoneMessage, STYLES.dialog)}
+        secondaryTextValue={field.type} />
+    )
+  }))
 
   return <List disabled>
     {display}
@@ -150,26 +165,48 @@ const EmailList = (props) => {
   if (!props.email && !props.email[0].address) {
     return null
   }
-  display.push(email.map((field, index) => <div key={index}>
-    <StaticListItem
-      verified={field.verified}
-      textValue={field.address}
-      textLabel="Email"
-      onVerify={() => confirm(iconEmailMessage, STYLES.dialog)}
-      icon={CommunicationEmail}
-    />
-    {!field.verified
-      ? <FlatButton
-        label="Request Verification"
-        secondary
-        style={STYLES.requestBtn}
-        onClick={() => verify(buttonEmailMessage, 'OK', STYLES.simpleDialog)} />
-    : null}
-  </div>
-  ))
-  return <List disabled>
-            {display}
-  </List>
+  display.push(email.map((field, index) => {
+    let icon
+
+    if (index === 0) {
+      icon = CommunicationEmail
+    }
+
+    let verify
+
+    if (!field.verified) {
+      verify = (
+        <ListItem disabled leftIcon={<div />} style={STYLES.list}>
+          <FlatButton
+            label="Request Verification"
+            secondary
+            style={STYLES.requestBtn}
+            onClick={() => {
+              verify(buttonEmailMessage, 'OK', STYLES.simpleDialog)
+            }} />
+        </ListItem>
+      )
+    }
+
+    return (
+      <div key={index}>
+        <StaticListItem
+          verified={field.verified}
+          textValue={field.address}
+          textLabel="Email"
+          onVerify={() => confirm(iconEmailMessage, STYLES.dialog)}
+          icon={icon}
+        />
+        {verify}
+      </div>
+    )
+  }))
+
+  return (
+    <List disabled>
+      {display}
+    </List>
+  )
 }
 
 EmailList.propTypes = {
@@ -241,23 +278,36 @@ export default class WalletIdentity extends React.Component {
       confirm,
       verify
     } = this.props
+
     if (!isLoaded) {
-      return <CircularProgress style={STYLES.spinner} />
+      return <Loading />
     }
+
+    const avatar = (
+      <Avatar icon={<PersonIcon />} style={STYLES.avatar} />
+    )
+
     return (
       <TabContainer>
         <HalfScreenContainer>
           <Content>
             <Block>
               <List>
-                <ListItem key={1} disabled rightIcon={<InfoDetail
-                  showDetails={(details) => verify(
-                    details,
-                    'OK',
-                    STYLES.simpleDialog
-                  )}
-                  webId={webId}
-                  username={username.value} />}
+                <ListItem
+                  key={1}
+                  disabled
+                  rightIcon={
+                    <InfoDetail
+                      showDetails={(details) => verify(
+                        details,
+                        'OK',
+                        STYLES.simpleDialog
+                      )}
+                      webId={webId}
+                      username={username.value}
+                    />
+                  }
+                  leftAvatar={avatar}
                   style={STYLES.listItem}>
                   <TextField
                     floatingLabelText="Name"

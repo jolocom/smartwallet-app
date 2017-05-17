@@ -20,7 +20,7 @@ const PhraseInfo = (props) => {
         title="We created a secure phrase for you with which you can access
           your wallet again."
       />
-      <Content>
+      <Content style={{paddingTop: '0'}}>
         <Block>
           <SideNote>
             Since you decided for the no hassle mode,

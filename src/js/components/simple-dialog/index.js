@@ -48,13 +48,14 @@ export default class SimpleDialog extends React.Component {
     ]
     const style = this.parseStyle(this.props.simpleDialog.style)
     return <Dialog
+      title={this.props.simpleDialog.title}
       actions={simpleActions}
       modal={false}
       open={this.props.simpleDialog.visible}
       onRequestClose={this.handleClose}
       contentStyle={style.contentStyle}
       actionsContainerStyle={style.actionsContainerStyle}
-      autoScrollBodyContent
+      autoScrollBodyContent={this.props.simpleDialog.scrollContent}
     >
       {this.props.simpleDialog.message}
     </Dialog>

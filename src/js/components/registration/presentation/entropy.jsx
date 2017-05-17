@@ -3,47 +3,82 @@ import Radium from 'radium'
 import MaskedImage from './masked-image'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Content, Footer} from '../../structure'
+import {Container, Footer} from '../../structure'
+
+import {theme} from 'styles'
+
+const IMAGE_DATA_URL = '/img/entropy.jpg'
 
 const STYLES = {
+  container: {
+    backgroundImage: 'url(/img/entropy.jpg)',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    position: 'relative',
+    padding: 0
+  },
+  header: {
+    position: 'absolute',
+    top: '60px',
+    width: '100%',
+    maxWidth: '320px',
+    padding: '0 16px',
+    pointerEvents: 'none',
+    boxSizing: 'border-box'
+  },
+  title: {
+    color: '#fff',
+    fontSize: '21px',
+    fontWeight: '300',
+    margin: 0
+  },
   img: {
-    position: 'fixed',
-    left: 'calc(50% + 370px)',
-    top: '50%',
-    transform: 'translate(-50%, -28%)',
-    width: '1429px',
-    height: '1305px',
-    margin: 'auto',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100%',
+    height: '100%'
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    padding: '32px',
+    boxSizing: 'border-box'
   }
 }
 
 const Entropy = (props) => {
+  let header
+
+  if (props.imageUncoveredPaths.length === 0) {
+    header = (
+      <header style={STYLES.header}>
+        <h1 style={STYLES.title}>
+          Hi {props.user}, for... <br /><br />
+          ...more security we need some random data.<br /><br />
+          Please put your finger anywhere on the screen and draw on it randomly.
+        </h1>
+      </header>
+    )
+  }
+
   return (
     <Container
-      onMouseMove={(e) => {
-        if (props.imageUncovering) {
-          props.onMouseMovement(e.clientX, e.clientY)
-        }
-      }}
+      style={STYLES.container}
     >
-      <Content>
-        <MaskedImage
-          image={IMAGE_DATA_URL}
-          style={STYLES.img}
-          uncoveredPaths={props.imageUncoveredPaths}
-          uncovering={props.imageUncovering}
-          onPointUncovered={props.onImagePointUncoverd}
-          onUncoveringChange={props.onImageUncoveringChange}
-          message1={'Hi ' + props.user + ', for...'}
-          message2={'...more security we need'}
-          message3={'some random data.'}
-          message4={'Please put your finger'} // eslint-disable-line max-len
-          message5={'anywhere on the screen'} // eslint-disable-line max-len
-          message6={'and draw on it randomly.'} // eslint-disable-line max-len
-        />
-      </Content>
-      <Footer>
+
+      {header}
+
+      <MaskedImage
+        image={IMAGE_DATA_URL}
+        style={STYLES.img}
+        maskColor={theme.palette.textColor}
+        uncoveredPaths={props.imageUncoveredPaths}
+        uncovering={props.imageUncovering}
+        onPointUncovered={props.onImagePointUncoverd}
+        onUncoveringChange={props.onImageUncoveringChange}
+      />
+
+      <Footer style={STYLES.footer}>
         <RaisedButton
           label="NEXT STEP"
           disabled={!props.valid}
@@ -60,12 +95,8 @@ Entropy.propTypes = {
   user: React.PropTypes.string,
   onImagePointUncoverd: React.PropTypes.func.isRequired,
   onImageUncoveringChange: React.PropTypes.func.isRequired,
-  onMouseMovement: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
   valid: React.PropTypes.bool
 }
 
 export default Radium(Entropy)
-
-// eslint-disable-next-line max-len
-const IMAGE_DATA_URL = '/img/entropy.jpg'

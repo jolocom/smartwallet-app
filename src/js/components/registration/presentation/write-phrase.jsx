@@ -32,15 +32,14 @@ const STYLES = {
     fill: theme.jolocom.gray1
   },
   checkBox: {
-    width: '80%',
     margin: 'auto'
   },
   labelStyle: {
     color: theme.jolocom.gray1,
     fontSize: '13px',
-    marginLeft: '5px',
     display: 'inline-block',
-    position: 'relative'
+    position: 'relative',
+    lineHeight: '1.2em'
   },
   nextStep: {
     flex: 1

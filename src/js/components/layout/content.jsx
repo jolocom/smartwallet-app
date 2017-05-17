@@ -10,6 +10,9 @@ let Content = React.createClass({
 
   getStyles() {
     return {
+      width: '100%',
+      maxWidth: '1200px',
+      margin: 'auto',
       flex: 1,
       display: 'flex',
       flexDirection: 'column',
