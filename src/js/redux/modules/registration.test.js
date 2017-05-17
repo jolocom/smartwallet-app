@@ -284,7 +284,10 @@ describe('Wallet registration Redux module', function() {
         generateSeedPhrase: stub().returns('seedphrase')
       }}
 
-      const thunk = registration.addEntropyFromDeltas({dx: 5, dy: 3})
+      const thunk = registration.addEntropyFromDeltas({
+        dx: 5,
+        dy: 3
+      })
       thunk(dispatch, getState, {services, backend})
 
       expect(services.entropy.addFromDelta.called).to.equal(true)
