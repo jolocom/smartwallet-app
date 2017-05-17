@@ -1,7 +1,5 @@
 import * as settings from 'settings'
 import {WalletManager} from 'smartwallet-contracts'
-import VerificationAgent from './verification'
-// import SolidAgent from './solid-wallet'
 
 export default class WalletAgent {
   constructor() {
