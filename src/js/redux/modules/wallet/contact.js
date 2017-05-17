@@ -69,13 +69,13 @@ const actions = module.exports = makeActions('wallet/contact', {
 const initialState = Immutable.fromJS({
   information: {
     newInformation: {
-      phone: [],
-      email: []
+      phones: [],
+      emails: []
     }
   },
   originalInformation: {
-    phone: [],
-    email: []
+    phones: [],
+    emails: []
   },
   loading: true,
   showErrors: false

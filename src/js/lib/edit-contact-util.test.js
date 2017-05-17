@@ -26,14 +26,14 @@ describe('# Edit contact Util', () => {
         showErrors: false,
         information: {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test1@test.com', id: 1, verified: false,
               delete: false, update: false, valid: true
             }, {
               value: 'test2@test.com', id: 2, verified: true, delete: false,
               update: false, valid: true
             }],
-            phone: [{
+            phones: [{
               value: '+123456789',
               type: 'personal', delete: false,
               update: false, verified: true,
@@ -41,8 +41,8 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
       }
@@ -50,79 +50,79 @@ describe('# Edit contact Util', () => {
     })
   })
   describe('# addNewField', () => {
-    it('should add a new email field', () => {
+    it('should add a new emails field', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
       })
       const newState = {
         information: {
           newInformation: {
-            email: [{value: '', verified: false, valid: false, delete: false,
+            emails: [{value: '', verified: false, valid: false, delete: false,
               blank: true}],
-            phone: []
+            phones: []
           }
         }
       }
-      const action = {field: 'email', index: 0}
+      const action = {field: 'emails', index: 0}
       expect(addNewField(oldState, action).toJS()).to.deep.equal(newState)
     })
-    it('should add a new phone value field', () => {
+    it('should add a new phones value field', () => {
       const state = Immutable.fromJS({
         information: {
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
       })
       const newState = {
         information: {
           newInformation: {
-            email: [],
-            phone: [{value: '', type: 'personal', verified: false,
+            emails: [],
+            phones: [{value: '', type: 'personal', verified: false,
               valid: false, delete: false, blank: true
             }]
           }
         }
       }
-      const action = {field: 'phone', index: 0}
+      const action = {field: 'phones', index: 0}
       expect(addNewField(state, action).toJS()).to.deep.equal(newState)
     })
   })
   describe('# setNewFieldValue', () => {
-    it('should set a new email field value and update its attributes', () => {
+    it('should set a new emails field value and update its attributes', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
-            email: [{value: '', verified: false, valid: false, delete: false,
+            emails: [{value: '', verified: false, valid: false, delete: false,
               blank: true}],
-            phone: []
+            phones: []
           }
         }
       })
       const newState = {
         information: {
           newInformation: {
-            email: [{value: 'A', verified: false, valid: false, delete: false,
+            emails: [{value: 'A', verified: false, valid: false, delete: false,
               blank: false}],
-            phone: []
+            phones: []
           }
         }
       }
-      const action = {field: 'email', value: 'A', index: 0}
+      const action = {field: 'emails', value: 'A', index: 0}
       expect(setNewFieldValue(oldState, action).toJS()).to.deep.equal(newState)
     })
-    it('should set a new phone field value and update its attributes', () => {
+    it('should set a new phones field value and update its attributes', () => {
       const oldState = Immutable.fromJS({
         information: {
           newInformation: {
-            email: [],
-            phone: [{value: '555', type: 'old', verified: false,
+            emails: [],
+            phones: [{value: '555', type: 'old', verified: false,
               valid: true, delete: false, blank: false}]
           }
         }
@@ -130,95 +130,95 @@ describe('# Edit contact Util', () => {
       const newState = {
         information: {
           newInformation: {
-            email: [],
-            phone: [{value: '1', type: 'new', verified: false,
+            emails: [],
+            phones: [{value: '1', type: 'new', verified: false,
               valid: true, delete: false, blank: false}]
           }
         }
       }
-      const action = {field: 'phone', index: 0, value: {
+      const action = {field: 'phones', index: 0, value: {
         value: '1', type: 'new'}}
       expect(setNewFieldValue(oldState, action).toJS()).to.deep.equal(newState)
     })
   })
   describe('# Update', () => {
-    it('should do nothing if the email is verified', () => {
+    it('should do nothing if the emails is verified', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test@test.com', verified: true, delete: false,
               update: true, valid: false, blank: false
             }],
-            phone: []
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'email', value: 'test2@test.com', index: 0}
+      const action = {field: 'emails', value: 'test2@test.com', index: 0}
       expect(updateOriginalValue(state, action)).to.deep.equal(state)
     })
-    it('should do nothing if the phone value is verified', () => {
+    it('should do nothing if the phones value is verified', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '123456789', type: 'personal', verified: true,
               delete: false, update: true, valid: false, blank: false
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'phone', index: 0, value: {
+      const action = {field: 'phones', index: 0, value: {
         value: '+123456789',
         type: 'test'
       }}
       expect(updateOriginalValue(state, action).toJS())
         .to.deep.equal(state.toJS())
     })
-    it('should update correctly a non verified phone value', () => {
+    it('should update correctly a non verified phones value', () => {
       const oldState = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '123456789', type: 'personal', verified: false,
               delete: false, update: true, valid: false, blank: false
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'phone', index: 0, value: {
+      const action = {field: 'phones', index: 0, value: {
         value: '+123456789',
         type: 'test'
       }}
       const newState = {
         information: {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '+123456789', type: 'test', verified: false, delete: false,
               update: true, valid: true, blank: false
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
@@ -226,36 +226,36 @@ describe('# Edit contact Util', () => {
       expect(updateOriginalValue(oldState, action).toJS())
         .to.deep.equal(newState)
     })
-    it('should update correctly a non verified email value', () => {
+    it('should update correctly a non verified emails value', () => {
       const oldState = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test1@test.com', verified: false, delete: false,
               update: true, valid: true, blank: false
             }],
-            phone: []
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
       })
-      const action = {field: 'email', index: 0, value: 'test2@test.com'}
+      const action = {field: 'emails', index: 0, value: 'test2@test.com'}
       const newState = {
         information: {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test2@test.com', verified: false, delete: false,
               update: true, valid: true, blank: false
             }],
-            phone: []
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
@@ -269,8 +269,8 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               verified: true, delete: false, update: true, valid: false,
               blank: false
             }, {
@@ -279,8 +279,8 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
@@ -291,16 +291,16 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [
+            emails: [
               {verified: false, delete: true, update: true, valid: false},
               {verified: false, delete: false, update: true, valid: true}],
-            phone: [
+            phones: [
               {verified: false, delete: false, update: true, valid: true},
               {verified: false, delete: false, update: true, valid: true}]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
@@ -311,7 +311,7 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [
+            emails: [
               {verified: true, delete: false, update: true, valid: false,
                 blank: false
               }, {verified: false, delete: true, update: true, valid: false,
@@ -319,7 +319,7 @@ describe('# Edit contact Util', () => {
               }, {verified: false, delete: false, update: true, valid: true,
                 blank: false
               }],
-            phone: [{
+            phones: [{
               verified: false, delete: true, update: true, valid: false,
               blank: false
             }, {verified: false, delete: false, update: true, valid: true,
@@ -327,8 +327,8 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           showErrors: false
         }
@@ -339,7 +339,7 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [
+            emails: [
               {verified: false, delete: false, update: true, valid: false,
                 blank: false
               }, {verified: false, delete: true, update: true, valid: false,
@@ -347,7 +347,7 @@ describe('# Edit contact Util', () => {
               }, {verified: false, delete: false, update: true, valid: true,
                 blank: false
               }],
-            phone: [{
+            phones: [{
               verified: false, delete: true, update: true, valid: false,
               blank: false
             }, {verified: false, delete: false, update: true, valid: true,
@@ -355,8 +355,8 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            email: [{blank: false, valid: false, delete: false}],
-            phone: []
+            emails: [{blank: false, valid: false, delete: false}],
+            phones: []
           },
           showErrors: false
         }
@@ -367,19 +367,19 @@ describe('# Edit contact Util', () => {
       const state = Immutable.fromJS({
         information: {
           originalInformation: {
-            email: [
+            emails: [
               {verified: false, delete: false, update: true, valid: true},
               {verified: false, delete: true, update: true, valid: false},
               {verified: false, delete: false, update: true, valid: true}],
-            phone: [
+            phones: [
               {verified: false, delete: true, update: true, valid: false},
               {verified: false, delete: false, update: true, valid: true}]
           },
           newInformation: {
-            email: [{
+            emails: [{
               value: 'test3@test.com', blank: false, valid: true, delete: false
             }],
-            phone: []
+            phones: []
           },
           showErrors: false
         }
@@ -389,7 +389,7 @@ describe('# Edit contact Util', () => {
   })
   describe('# submitChanges', () => {
     describe('# Email', () => {
-      it('should set a new valid email value', () => {
+      it('should set a new valid emails value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -399,14 +399,14 @@ describe('# Edit contact Util', () => {
         // const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           newInformation: {
-            email: [{
+            emails: [{
               value: 'test3@test.com', blank: false, valid: true, delete: false
             }],
-            phone: []
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -414,7 +414,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should not set a new non valid email value', () => {
+      it('should not set a new non valid emails value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -423,14 +423,14 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           newInformation: {
-            email: [{
+            emails: [{
               value: 'test3@test.com', blank: false, valid: false, delete: false
             }],
-            phone: []
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -438,7 +438,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should update a non verified valid email value', () => {
+      it('should update a non verified valid emails value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -447,24 +447,24 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test@test.com', verified: false, delete: false,
               update: true, valid: true, blank: false, id: 1
             }],
-            phone: []
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(updateEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'email', 1, 'test@test.com']}])
+        .equal([{args: ['testuser', 'emails', 1, 'test@test.com']}])
         expect(deleteEntry.called).to.be.false
       })
-      it('should not update a non verified email with a non valid value',
+      it('should not update a non verified emails with a non valid value',
       () => {
         const setEmail = stub()
         const deleteEntry = stub()
@@ -474,15 +474,15 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test@testcom', verified: false, delete: false,
               update: true, valid: false, blank: false
             }],
-            phone: []
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -490,7 +490,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should not update a verified email', () => {
+      it('should not update a verified emails', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -499,15 +499,15 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test@testcom', verified: true, delete: false,
               update: true, valid: true, blank: false
             }],
-            phone: []
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -515,7 +515,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should delete a deleted email value', () => {
+      it('should delete a deleted emails value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -524,15 +524,15 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [{
+            emails: [{
               value: 'test1@test.com', verified: false, delete: true,
               update: false, valid: true, id: 1
             }],
-            phone: []
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -540,11 +540,11 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.true
         expect(deleteEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'email', 1]}])
+        .equal([{args: ['testuser', 'emails', 1]}])
       })
     })
     describe('# Phone', () => {
-      it('should set a new valid phone value', () => {
+      it('should set a new valid phones value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -553,12 +553,12 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '0123456', type: 'test', blank: false, valid: true,
               delete: false
             }]
@@ -570,7 +570,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should not set a new non valid phone value', () => {
+      it('should not set a new non valid phones value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -579,12 +579,12 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           },
           newInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '012x3456', type: 'test', blank: false, valid: false,
               delete: false
             }]
@@ -596,7 +596,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should update a non verified phone value with a valid value', () => {
+      it('should update a non verified phones value with a valid value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -605,15 +605,15 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '123456', type: 'personal', verified: false, delete: false,
               update: true, valid: true, blank: false, id: 1
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -622,9 +622,9 @@ describe('# Edit contact Util', () => {
         expect(deleteEntry.called).to.be.false
         expect(updateEntry.called).to.be.true
         expect(updateEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'phone', 1, '123456']}])
+        .equal([{args: ['testuser', 'phones', 1, '123456']}])
       })
-      it('should not update a non verified phone value with a non valid value',
+      it('should not update a non verified phones value with a non valid value',
       () => {
         const setEmail = stub()
         const deleteEntry = stub()
@@ -634,15 +634,15 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '123456', type: 'personal', verified: true, delete: false,
               update: true, valid: false, blank: false
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -651,7 +651,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should not update a verified valid phone value', () => {
+      it('should not update a verified valid phones value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -660,15 +660,15 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '123456', type: 'personal', verified: true, delete: false,
               update: true, valid: true, blank: false
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -677,7 +677,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.false
       })
-      it('should delete a deleted phone value', () => {
+      it('should delete a deleted phones value', () => {
         const setEmail = stub()
         const deleteEntry = stub()
         const updateEntry = stub()
@@ -686,15 +686,15 @@ describe('# Edit contact Util', () => {
         const backend = {solid}
         const state = {
           originalInformation: {
-            email: [],
-            phone: [{
+            emails: [],
+            phones: [{
               value: '123456789', verified: false, delete: true,
               update: false, valid: true, id: 1
             }]
           },
           newInformation: {
-            email: [],
-            phone: []
+            emails: [],
+            phones: []
           }
         }
         submitChanges(backend, {}, state, webId)
@@ -703,7 +703,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.true
         expect(deleteEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'phone', 1]}])
+        .equal([{args: ['testuser', 'phones', 1]}])
       })
     })
   })

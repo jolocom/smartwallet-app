@@ -2,9 +2,9 @@ import Immutable from 'immutable'
 
 export const validateChanges = (state) => {
   const {newInformation, originalInformation} = state.get('information').toJS()
-  const newFields = newInformation.email.concat(newInformation.phone)
-  const oldFields = originalInformation.email.concat(
-    originalInformation.phone)
+  const newFields = newInformation.emails.concat(newInformation.phones)
+  const oldFields = originalInformation.emails.concat(
+    originalInformation.phones)
 
   const isValid = newFields.every(e => (e.blank || e.valid || e.delete)) &&
     oldFields.every(e => e.delete || !e.update || (e.valid && !e.verified))
@@ -21,20 +21,20 @@ const isBlank = (value, field) => {
 
 const isValidValue = (value, field) => {
   switch (field) {
-    case 'phone':
+    case 'phones':
       return (/^([\d.]+)$/.test(value.value) ||
         /^\+([\d]+)$/.test(value.value))
-    case 'email':
+    case 'emails':
       return /^([\w.]+)@([\w.]+)\.(\w+)/.test(value)
     default:
       return false
   }
 }
 
-const parseActionValueToObject = (value, field) => field === 'phone'
+const parseActionValueToObject = (value, field) => field === 'phones'
   ? value : {value}
 
-const addTypeAttribute = (field) => field === 'phone'
+const addTypeAttribute = (field) => field === 'phones'
   ? {type: 'personal'} : {}
 
 export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
@@ -50,25 +50,31 @@ export const mapAccountInformationToState = ({email, phone}) =>
     showErrors: false,
     information: {
       newInformation: {
-        email: [],
-        phone: []
+        emails: [],
+        phones: []
       },
       originalInformation: {
-        email: email.map(element => {
-          return {value: element.address,
-            verified: element.verified,
-            id: element.id, delete: false,
-            update: false,
-            valid: true}
-        }),
-        phone: phone.map(element => {
-          return {value: element.number,
-            type: 'personal',
-            verified: element.verified,
-            id: element.id,
+        emails: email.map(({address, verified, id}) => {
+          return {
+            value: address,
+            verified,
+            id,
             delete: false,
             update: false,
-            valid: true}
+            valid: true
+          }
+        }),
+        phones: phone.map(({number, verified, id}) => {
+          return {
+            value: number,
+            // TODO: phone type needs to be delivered from the backend
+            type: 'personal',
+            verified,
+            id,
+            delete: false,
+            update: false,
+            valid: true
+          }
         })
       }
     }
@@ -132,7 +138,7 @@ export const submitChanges = (backend, services, state, webId) => {
     update: solidAgent.updateEntry.bind(solidAgent)
   }
   let promises = [].concat(
-    collectChages(state, emailOperations, 'email', webId),
-    collectChages(state, phoneOperations, 'phone', webId))
+    collectChages(state, emailOperations, 'emails', webId),
+    collectChages(state, phoneOperations, 'phones', webId))
   return Promise.all(promises)
 }

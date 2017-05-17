@@ -58,14 +58,14 @@ export default class WalletContact extends React.Component {
     return (
       <div>
         {this.renderFields({
-          key: 'phone',
+          key: 'phones',
           label: 'Phone Number',
           errorText: 'Invalid phone number',
           addText: 'Add phone number',
           icon: CommunicationCall
         })}
         {this.renderFields({
-          key: 'email',
+          key: 'emails',
           label: 'Email Address',
           errorText: 'Invalid email address',
           addText: 'Add another email',
@@ -92,7 +92,7 @@ export default class WalletContact extends React.Component {
     const id = `${prefix}_${key}_${i}`
     const name = `${key}[${i}]`
 
-    const actionValue = (key, e) => key === 'email' ? e.target.value
+    const actionValue = (key, e) => key === 'emails' ? e.target.value
       : {value: e.target.value, type}
 
     let {
@@ -108,7 +108,7 @@ export default class WalletContact extends React.Component {
 
     const types = ((field) => {
       switch (key) {
-        case 'phone':
+        case 'phones':
           return [
             'personal',
             'work'
