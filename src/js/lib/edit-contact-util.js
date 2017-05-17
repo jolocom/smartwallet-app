@@ -109,30 +109,30 @@ export const updateOriginalValue = (state, {field, value, index}) => {
   }
   return state
 }
-const collectChages = (state, {remove, update, set}, key) => [].concat(
+const collectChages = (state, {remove, update, set}, key, webId) => [].concat(
     state.originalInformation[key].map(
-      e => e.delete ? remove(localStorage.getItem('jolocom.webId'), key, e.id)
-      : (e.update && e.valid && !e.verified) ? update(e.value)
+      e => e.delete ? remove(webId, key, e.id)
+      : (e.update && e.valid && !e.verified) ? update(webId, key, e.id, e.value)
       : null
     ), state.newInformation[key].map(
       e => (e.delete || e.blank || !e.valid)
-      ? null : set(localStorage.getItem('jolocom.webId'), e.value)
+      ? null : set(webId, e.value)
   ))
 
-export const submitChanges = (backend, services, state) => {
+export const submitChanges = (backend, services, state, webId) => {
   let solidAgent = backend.solid
   const emailOperations = {
     set: solidAgent.setEmail.bind(solidAgent),
     remove: solidAgent.deleteEntry.bind(solidAgent),
-    update: services.auth.currentUser.wallet.updateEmail
+    update: solidAgent.updateEntry.bind(solidAgent)
   }
   const phoneOperations = {
     set: solidAgent.setPhone.bind(solidAgent),
     remove: solidAgent.deleteEntry.bind(solidAgent),
-    update: services.auth.currentUser.wallet.updatePhone
+    update: solidAgent.updateEntry.bind(solidAgent)
   }
-
-  let promises = [].concat(collectChages(state, emailOperations, 'email'),
-    collectChages(state, phoneOperations, 'phone'))
+  let promises = [].concat(
+    collectChages(state, emailOperations, 'email', webId),
+    collectChages(state, phoneOperations, 'phone', webId))
   return Promise.all(promises)
 }

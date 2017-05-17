@@ -8,8 +8,8 @@ import {stub} from '../../../../../test/utils'
 
 describe('(Component) WalletContactScreen', () => {
   const fake = () => null
-  it('should call getAccountInformation to start', () => {
-    const getAccountInformation = stub()
+  it('should call getUserInformation to start', () => {
+    const getUserInformation = stub()
     shallow(
       (<WalletContactScreen.WrappedComponent id="test" visible
         {...WalletContactScreen.mapStateToProps(Immutable.fromJS({wallet: {
@@ -18,7 +18,7 @@ describe('(Component) WalletContactScreen', () => {
             information: {}
           }
         }}))}
-        getAccountInformation={getAccountInformation}
+        getUserInformation={getUserInformation}
         updateInformation={fake}
         setInformation={fake}
         deleteInformation={fake}
@@ -29,7 +29,7 @@ describe('(Component) WalletContactScreen', () => {
         close={fake}
       />)
     )
-    expect(getAccountInformation.calls).to.deep.equal([{args: []}])
+    expect(getUserInformation.calls).to.deep.equal([{args: []}])
   })
   it('should set focused to value', () => {
     const wrapper = shallow(
@@ -40,7 +40,7 @@ describe('(Component) WalletContactScreen', () => {
            information: {}
          }
        }}))}
-       getAccountInformation={fake}
+       getUserInformation={fake}
        updateInformation={fake}
        setInformation={fake}
        deleteInformation={fake}

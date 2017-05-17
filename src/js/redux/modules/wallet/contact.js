@@ -19,9 +19,10 @@ const actions = module.exports = makeActions('wallet/contact', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
         const {information, showErrors} = getState().toJS().wallet.contact
+        const webId = getState().toJS().wallet.identity.webId
         if (!showErrors) {
           dispatch(actions.saveChanges.buildAction(params,
-          () => submitChanges(backend, services, information)
+          () => submitChanges(backend, services, information, webId)
           )).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }
       }
@@ -38,14 +39,15 @@ const actions = module.exports = makeActions('wallet/contact', {
       }
     }
   },
-  getAccountInformation: {
+  getUserInformation: {
     expectedParams: [],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getAccountInformation
+        dispatch(actions.getUserInformation
         .buildAction(params, () => {
-          return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
+          return backend.solid
+          .getUserInformation(localStorage.getItem('jolocom.webId'))
         }))
       }
     }
@@ -87,10 +89,10 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.saveChanges.id_success:
       return state.setIn(['loading'], false)
 
-    case actions.getAccountInformation.id:
+    case actions.getUserInformation.id:
       return state.setIn(['loading'], true)
 
-    case actions.getAccountInformation.id_success:
+    case actions.getUserInformation.id_success:
       return mapAccountInformationToState(action.result.contact)
 
     case actions.setInformation.id:
