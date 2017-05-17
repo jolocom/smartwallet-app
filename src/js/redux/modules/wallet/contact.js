@@ -45,7 +45,8 @@ const actions = module.exports = makeActions('wallet/contact', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getAccountInformation
         .buildAction(params, () => {
-          return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
+          return backend.solid
+          .getUserInformation(localStorage.getItem('jolocom.webId'))
         }))
       }
     }
