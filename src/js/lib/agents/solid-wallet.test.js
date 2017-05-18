@@ -4,7 +4,7 @@ import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import SolidAgent from 'lib/agents/solid-wallet'
 
-describe('solidAgentAgent', () => {
+describe.only('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
 
@@ -57,6 +57,7 @@ describe('solidAgentAgent', () => {
           n0:phone "+49 176 12345678";
           n0:primaryTopic pro:card.
       `
+
       const firstEmailFileResp = `\
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
@@ -84,14 +85,25 @@ describe('solidAgentAgent', () => {
         pro:card
           a n0:PersonalProfileDocument;
           n0:primaryTopic <#me>.
+
         <#me>
           a n0:Person;
-          n0:mbox [ rd:seeAlso pro:email123; schem:identifier "123" ];
-          n0:mbox [ rd:seeAlso pro:email456; schem:identifier "456" ];
-          n0:phone [ rd:seeAlso pro:phone123; schem:identifier "123" ];
+          n0:mbox <#email123>;
+          n0:mbox <#email345>;
+          n0:phone <#phone123>;
           n0:mbox "test3@jolocom.com";
           n0:phone "+49 157 11111111";
-          n0:name "Test".`
+          n0:name "Test".
+
+        <#email123> 
+          schem:identifier "123";
+          rd:seeAlso <https://test.com/profile/email123>.
+        <#email456> 
+          schem:identifier "456";
+          rd:seeAlso <https://test.com/profile/email456>.
+        <#phone123> 
+          schem:identifier "123";
+          rd:seeAlso <https://test.com/profile/phone123>.`
 
       const respMap = {
         [WEBID]: userCardResp,
