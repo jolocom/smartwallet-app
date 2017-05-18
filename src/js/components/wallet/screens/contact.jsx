@@ -5,7 +5,7 @@ import Presentation from '../presentation/contact'
 @connect({
   props: ['wallet.contact'],
   actions: ['wallet/contact:saveChanges',
-    'wallet/contact:getAccountInformation',
+    'wallet/contact:getUserInformation',
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
     'wallet/contact:updateInformation',
@@ -19,7 +19,7 @@ export default class WalletContactScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     contact: React.PropTypes.object.isRequired,
-    getAccountInformation: React.PropTypes.func.isRequired,
+    getUserInformation: React.PropTypes.func.isRequired,
     updateInformation: React.PropTypes.func.isRequired,
     setInformation: React.PropTypes.func.isRequired,
     deleteInformation: React.PropTypes.func.isRequired,
@@ -36,8 +36,8 @@ export default class WalletContactScreen extends React.Component {
       focused: ''
     }
   }
-  componentDidMount() {
-    this.props.getAccountInformation()
+  componentWillMount() {
+    this.props.getUserInformation()
   }
   render() {
     return (

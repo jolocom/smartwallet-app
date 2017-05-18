@@ -12,17 +12,18 @@ const NEXT_ROUTES = {
   '/registration/phrase-info': '/registration/email',
   '/registration/email': '/registration/password',
   '/registration/password': '/registration/pin',
-  '/registration/write-phrase': '/registration/pin',
-  '/registration/pin': '/wallet'
+  '/registration/write-phrase': '/registration/pin'
 }
 
 const CHECK_BEFORE_SWITCHING = {
-  '/registration': 'username',
-  '/registration/user-type': 'userType',
-  '/registration/write-phrase': 'passphrase',
-  '/registration/email': 'email',
-  '/registration/password': 'password',
-  '/registration/pin': 'pin'
+  '/registration': ['username', 'valid'],
+  '/registration/entropy': ['passphrase', 'sufficientEntropy'],
+  '/registration/user-type': ['userType', 'valid'],
+  '/registration/write-phrase': ['passphrase', 'writtenDown'],
+  '/registration/phrase-info': ['passphrase', 'writtenDown'],
+  '/registration/email': ['email', 'valid'],
+  '/registration/password': ['password', 'valid'],
+  '/registration/pin': ['pin', 'valid']
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -33,9 +34,10 @@ const actions = module.exports = makeActions('registration', {
         const state = getState()
         if (state.getIn(['registration', 'complete'])) {
           dispatch(actions.registerWallet())
+        } else {
+          const nextUrl = helpers._getNextURLFromState(state)
+          dispatch(router.pushRoute(nextUrl))
         }
-        const nextUrl = helpers._getNextURLFromState(state)
-        dispatch(router.pushRoute(nextUrl))
       }
     }
   },
@@ -108,6 +110,7 @@ const actions = module.exports = makeActions('registration', {
         if (!pinState.get('valid')) {
           return
         }
+
         if (pinState.get('confirm')) {
           dispatch(actions.goForward())
         } else {
@@ -152,8 +155,11 @@ const actions = module.exports = makeActions('registration', {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.accounts
-            .checkUsername(state.username.value)
-        })).then(() => dispatch(actions.goForward()))
+            .checkUsername(state.username.value).then((params) => {
+              dispatch(actions.goForward())
+              return params
+            })
+        }))
       }
     }
   },
@@ -168,16 +174,24 @@ const actions = module.exports = makeActions('registration', {
           if (userType === 'expert') {
             return backend.wallet.registerWithSeedPhrase({
               userName: state.username.value,
-              seedPhrase: state.passphrase.phrase
+              seedPhrase: state.passphrase.phrase,
+              pin: state.pin.value
+            }).then((params) => {
+              dispatch(router.pushRoute('/wallet'))
+              return params
             })
           } else {
             return backend.wallet.registerWithCredentials({
               userName: state.username.value,
               email: state.email.value,
               password: state.password.value
+            }).then((params) => {
+              dispatch(router.pushRoute('/wallet'))
+              return params
             })
           }
-        }))
+        })
+      )
       }
     }
   }
@@ -421,6 +435,10 @@ helpers._getNextURLFromState = (state) => {
       (userType === 'layman')) {
       return '/registration/phrase-info'
     }
+    if ((currentPath === '/registration/phrase-info') &&
+      (userType === 'expert')) {
+      return '/registration/write-phrase'
+    }
     return null
   }
 
@@ -433,15 +451,11 @@ helpers._getNextURL = (currentPath, userType) => {
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
   }
-  if ((currentPath === '/registration/phrase-info') &&
-    (userType === 'expert')) {
-    return '/registration/write-phrase'
-  }
-
   return NEXT_ROUTES[currentPath]
 }
 
 helpers._canGoForward = (state, currentPath) => {
   const toCheck = CHECK_BEFORE_SWITCHING[currentPath]
-  return !toCheck || state.getIn(['registration', toCheck, 'valid'])
+  let result = !toCheck || state.getIn(['registration', toCheck[0], toCheck[1]])
+  return result || false
 }

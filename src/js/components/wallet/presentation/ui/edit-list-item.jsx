@@ -2,42 +2,55 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
-  TextField
+  SelectField,
+  TextField,
+  IconButton,
+  ListItem,
+  MenuItem
 } from 'material-ui'
 
+import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
+
 import {theme} from 'styles'
-var STYLES = {
-  icon: {
-    color: theme.jolocom.gray1,
-    focuscolor: theme.palette.primary1Color
+
+let STYLES = {
+  deleteButton: {
+    marginTop: '16px'
   },
-  clear: {
-    display: 'inline-block',
-    marginTop: '20px',
-    marginLeft: '10px',
-    height: '48px',
-    width: '48px',
-    cursor: 'pointer'
+  fields: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginRight: '32px',
+    '@media (max-width: 320px)': {
+      flexDirection: 'column',
+      alignItems: 'flex-start'
+    }
   },
-  img: {
-    userSelect: 'none',
-    marginTop: '14px',
-    marginLeft: '8px',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain',
-    width: '24px',
-    height: '24px'
+  input: {
+    width: '100%',
+    color: theme.palette.textColor,
+    cursor: 'inherit'
   },
-  disabled: {
-    color: theme.palette.textColor
+  type: {
+    maxWidth: '120px',
+    '@media (min-width: 321px)': {
+      margin: '0 16px'
+    }
   },
   disabledUnderline: {
     borderBottom: 'solid',
     borderWidth: 'medium medium 1px'
   },
+  icon: {
+    top: '16px'
+  },
+  textField: {
+    maxWidth: 'none',
+    flex: 1
+  },
   item: {
-    display: 'flex'
+    padding: '0 16px 0 72px'
   }
 }
 
@@ -47,58 +60,127 @@ export default class EditListItem extends React.Component {
     id: React.PropTypes.string.isRequired,
     icon: React.PropTypes.any,
     iconStyle: React.PropTypes.object,
-    textLabel: React.PropTypes.string.isRequired,
-    textName: React.PropTypes.string.isRequired,
-    textValue: React.PropTypes.string,
+    label: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string.isRequired,
+    value: React.PropTypes.string,
+    type: React.PropTypes.string,
+    types: React.PropTypes.array,
     errorText: React.PropTypes.string,
     verified: React.PropTypes.bool.isRequired,
     children: React.PropTypes.node,
     focused: React.PropTypes.bool.isRequired,
     onFocusChange: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
+    onTypeChange: React.PropTypes.func,
     onDelete: React.PropTypes.func,
-    enableDelete: React.PropTypes.bool.isRequired
+    showErrors: React.PropTypes.bool,
+    valid: React.PropTypes.bool,
+    enableEdit: React.PropTypes.bool,
+    enableDelete: React.PropTypes.bool
   }
+
+  getStyles() {
+    return Object.assign({}, STYLES, {
+
+    })
+  }
+
   render() {
-    var props = this.props
+    let {
+      focused,
+      verified,
+      label,
+      name,
+      value,
+      enableEdit,
+      onChange,
+      valid,
+      showErrors,
+      errorText
+    } = this.props
+
+    let styles = this.getStyles()
+
+    if (verified) {
+      label = `Verified ${label}`
+    }
+
+    const iconColor = this.props.focused
+      ? theme.palette.primary1Color : theme.jolocom.gray1
+
+    const icon = this.props.icon
+      ? <this.props.icon color={iconColor} style={styles.icon} /> : <div />
+
     return (
-      <div style={STYLES.item} onFocus={() => { props.onFocusChange(props.id) }}
-        onBlur={() => { props.onFocusChange('') }}>
-        <props.icon style={props.iconStyle}
-          color={props.focused
-              ? STYLES.icon.focuscolor
-              : STYLES.icon.color} />
-            {props.verified
-            ? <TextField
-              disabled
-              inputStyle={STYLES.disabled}
-              underlineDisabledStyle={STYLES.disabledUnderline}
-              floatingLabelText={'Verified ' + props.textLabel}
-              name={props.textName}
-              value={props.textValue} />
-            : props.focused
-            ? <TextField autoFocus
-              floatingLabelText={props.textLabel}
-              name={props.textName}
-              onChange={props.onChange}
-              value={props.textValue}
-              errorText={this.props.errorText} />
-            : <TextField
-              floatingLabelText={props.textLabel}
-              name={props.textName}
-              onChange={props.onChange}
-              value={props.textValue}
-              errorText={this.props.errorText} />
-            }
-        {this.props.enableDelete
-        ? (<div style={{...STYLES.clear}}>
-          <div onClick={() => this.props.onDelete()}
-            style={{...STYLES.img, ...{
-              backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'
-            }}} />
-        </div>)
-        : ''}
-      </div>
+      <ListItem
+        style={styles.item}
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
+        leftIcon={icon}
+        rightIconButton={this.deleteButton}
+        disabled
+      >
+        <div style={styles.fields}>
+          <TextField
+            style={STYLES.textField}
+            autoFocus={focused}
+            disabled={!enableEdit}
+            inputStyle={styles.input}
+            underlineDisabledStyle={styles.disabledUnderline}
+            floatingLabelText={label}
+            name={name}
+            value={value}
+            onChange={onChange}
+            errorText={showErrors && !valid && !!value ? errorText : null}
+          />
+          {this.renderType()}
+        </div>
+      </ListItem>
     )
   }
+
+  renderType() {
+    if (this.props.types) {
+      return (
+        <SelectField
+          style={STYLES.type}
+          name={`${this.props.name}_type`}
+          value={this.props.type}
+          disabled={this.props.verified}
+          onChange={(event, key, payload) => this.props.onTypeChange(payload)}
+        >
+        {this.props.types.map((type, i) => {
+          return <MenuItem key={i} value={type} primaryText={type} />
+        })}
+        </SelectField>
+      )
+    }
+    return null
+  }
+
+  get deleteButton() {
+    if (this.props.enableDelete) {
+      return (
+        <IconButton
+          style={STYLES.deleteButton}
+          onTouchTap={this.handleDelete}
+        >
+          <NavigationCancel />
+        </IconButton>
+      )
+    }
+  }
+
+  handleFocus = () => {
+    this.props.onFocusChange(this.props.id)
+  }
+
+  handleBlur = () => {
+    this.props.onFocusChange('')
+  }
+
+  handleDelete = () => {
+    this.props.onDelete()
+  }
+
 }

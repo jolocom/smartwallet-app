@@ -1,16 +1,6 @@
 import React from 'react'
 import { connect } from 'redux/utils'
 import Presentation from '../presentation/name-entry'
-const STYLES = {
-  dialog: {
-    contentStyle: {
-      textAlign: 'center'
-    },
-    actionsContainerStyle: {
-      textAlign: 'center'
-    }
-  }
-}
 
 @connect({
   props: ['registration'],
@@ -40,8 +30,8 @@ export default class RegistrationNameEntryScreen extends React.Component {
       onSubmit={this.props.checkUsername}
       handleDialog={this._handleDialog} />
   }
-  _handleDialog = (message) => {
-    this.props.configSimpleDialog(message, 'OK', STYLES.dialog)
+  _handleDialog = (title, message) => {
+    this.props.configSimpleDialog(title, message, 'OK')
     this.props.showSimpleDialog()
   }
 }

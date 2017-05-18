@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
-import {RaisedButton, FlatButton} from 'material-ui'
+import {RaisedButton} from 'material-ui'
 
 import {Container, Header, Content, Block, Footer, SideNote
 } from '../../structure'
@@ -24,15 +24,8 @@ const STYLES = {
   inputStyle: {
     textAlign: 'center'
   },
-  sidenote: {
-    fontSize: '11pt',
-    fontWeight: '300',
-    color: '#939393',
-    margin: '20px',
-    textAlign: 'center'
-  },
-  embeddedButton: {
-    color: '#942f51',
+  embeddedLink: {
+    color: theme.palette.accent1Color,
     minWidth: '0px',
     paddingLeft: '5px',
     paddingRight: '5px'
@@ -46,9 +39,7 @@ const STYLES = {
 
 const NameEntry = (props) => {
   var webIdmessage = (
-    <div > Your WebID is your identity on the web.
-      <br />
-      <br />
+    <div>
       It is the link to your secured personal data and the
       verifications of it that are stored on the blockchain
     </div>)
@@ -57,16 +48,14 @@ const NameEntry = (props) => {
       <Header title="Let's get started! Please type in a username." />
       <Content>
         <SideNote>
-          It needs to be unique, but choose wisely,
-          <br />
-          It will be part of your
-          <FlatButton style={STYLES.embeddedButton}
-            hoverColor={STYLES.backgroundColor}
+          It needs to be unique, but choose wisely. It will be part of your
+          <span style={STYLES.embeddedLink}
             onClick={() => {
-              props.handleDialog(webIdmessage)
-            }}> WebID </FlatButton>
-          and it might
-          end up on your buiseness card one day.
+              props.handleDialog(
+                'Your WebID is your identity on the web.',
+                webIdmessage)
+            }}>WebID</span>
+          and it might end up on your business card one day.
         </SideNote>
         <Block style={STYLES.textField}>
           <TextField

@@ -8,6 +8,8 @@ describe('Simple dialog reducer', function() {
     it('should correctly initialize', function() {
       expect(reducer(undefined, '@INIT').toJS()).to.deep.equal({
         visible: false,
+        scrollContent: false,
+        title: '',
         message: '',
         primaryActionText: 'OK',
         style: {}
@@ -19,9 +21,11 @@ describe('Simple dialog reducer', function() {
     it('should correctly handle the configSimpleDialog action', function() {
       expect(reducer(reducer(undefined, '@INIT'),
         simpleDialog.configSimpleDialog(
-        'test msg', 'Primary Action Text', {}
+        'title', 'test msg', 'Primary Action Text', {}, true
       )).toJS()).to.deep.equal({
         visible: false,
+        scrollContent: true,
+        title: 'title',
         message: 'test msg',
         primaryActionText: 'Primary Action Text',
         style: {}
@@ -33,6 +37,8 @@ describe('Simple dialog reducer', function() {
       expect(reducer(reducer(undefined, '@INIT'),
         simpleDialog.showSimpleDialog()).toJS()).to.deep.equal({
           visible: true,
+          scrollContent: false,
+          title: '',
           message: '',
           primaryActionText: 'OK',
           style: {}
@@ -44,6 +50,8 @@ describe('Simple dialog reducer', function() {
       expect(reducer(reducer(undefined, '@INIT'),
         simpleDialog.hideSimpleDialog()).toJS()).to.deep.equal({
           visible: false,
+          scrollContent: false,
+          title: '',
           message: '',
           primaryActionText: 'OK',
           style: {}

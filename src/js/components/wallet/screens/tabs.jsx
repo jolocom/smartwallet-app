@@ -12,7 +12,13 @@ import {Layout, Content} from 'components/layout'
 import LeftNavToggle from 'components/left-nav/toggle'
 
 const STYLES = {
+  colorBar: {
+    backgroundColor: '#f8f9fb'
+  },
   bar: {
+    width: '100%',
+    maxWidth: '1200px',
+    margin: 'auto',
     boxShadow: 'none'
   }
 }
@@ -43,13 +49,13 @@ export default class WalletTabScreen extends React.Component {
   render() {
     return (
       <Layout>
-        <Paper>
+        <Paper style={STYLES.colorBar}>
           <AppBar
             title="SmartWallet"
             style={STYLES.bar}
             iconElementLeft={<LeftNavToggle />}
           />
-          <Tabs value={this.props.activeTab}
+          <Tabs style={STYLES.bar} value={this.props.activeTab}
             onChange={(tab) => this.props.switchTab({tab})}>
             <Tab label="Identity" value="identity" />
             <Tab label="Money" value="money" />

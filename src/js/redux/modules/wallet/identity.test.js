@@ -14,8 +14,8 @@ describe('# Wallet identity redux module', () => {
         webId: '',
         username: {verified: false, value: ''},
         contact: {
-          phone: [{type: '', number: '', verified: false}],
-          email: [{type: '', address: '', verified: false}]
+          phones: [{type: '', number: '', verified: false}],
+          emails: [{type: '', address: '', verified: false}]
         },
         passport: {
           number: '', givenName: '', familyName: '', birthDate: '',
@@ -30,7 +30,10 @@ describe('# Wallet identity redux module', () => {
       const action = {
         type: identity.actions.getIdentityInformation.id_success,
         result: {
-          status: 'succeeded'
+          webId: 'test',
+          username: 'test',
+          contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
+          passport: 'test'
         }
       }
       state = reducer(state, action)
@@ -38,7 +41,10 @@ describe('# Wallet identity redux module', () => {
         .to.deep.equal({
           error: false,
           loaded: true,
-          status: 'succeeded'
+          webId: 'test',
+          username: 'test',
+          contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
+          passport: 'test'
         })
     })
   })
@@ -114,13 +120,13 @@ describe('# Wallet identity redux module', () => {
     it('getIdentityInformation should get the identity information from ' +
       'the backend', () => {
       const getState = stub()
-      const services = {auth: {currentUser: {wallet: {
+      const backend = {solid: {
         getUserInformation: stub().returns('information')
-      }}}}
+      }}
       const dispatch = stub()
       const thunk = identity.actions.getIdentityInformation()
 
-      thunk(dispatch, getState, {services})
+      thunk(dispatch, getState, {stub, backend})
 
       expect(dispatch.called).to.be.true
       expect(dispatch.calls[0].args[0].promise()).to.equal('information')
@@ -129,11 +135,8 @@ describe('# Wallet identity redux module', () => {
         'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_SUCCESS',
         'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_FAIL'
       ])
-      const backendCall = services.auth.currentUser.wallet.getUserInformation
+      const backendCall = backend.solid.getUserInformation
       expect(backendCall.called).to.be.true
-      expect(backendCall.calls).to.deep.equal([{args: [{
-        email: 'test@test.com'
-      }]}])
     })
   })
 })

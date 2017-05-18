@@ -1,17 +1,36 @@
+import * as settings from 'settings'
+import HTTPAgent from './http'
+
 export default class VerificationAgent {
-  startVerifyingEmail({webID, email}) {
-    return new Promise((resolve, reject) => { resolve() })
+  constructor() {
+    this.httpAgent = new HTTPAgent({proxy: false})
   }
 
-  startVerifyingPhone({webID, email}) {
-    return new Promise((resolve, reject) => { resolve() })
+  startVerifyingEmail({webID, email}) {
+    return this.httpAgent.post(
+      settings.verificationProvider + '/email/start-verification',
+      {webID, email}
+    )
+  }
+
+  startVerifyingPhone({webID, phone}) {
+    return this.httpAgent.post(
+      settings.verificationProvider + '/phone/start-verification',
+      {webID, phone}
+    )
   }
 
   verifyEmail({webID, email, code}) {
-    return new Promise((resolve, reject) => { resolve() })
+    return this.httpAgent.post(
+      settings.verificationProvider + '/email/verify',
+      {webID, email, code}
+    )
   }
 
-  verifyPhone({webID, email, code}) {
-    return new Promise((resolve, reject) => { resolve() })
+  verifyPhone({webID, phone, code}) {
+    return this.httpAgent.post(
+      settings.verificationProvider + '/phone/verify',
+      {webID, phone, code}
+    )
   }
 }

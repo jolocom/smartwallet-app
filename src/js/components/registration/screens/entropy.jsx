@@ -15,7 +15,6 @@ import Presentation from '../presentation/entropy'
 export default class RegistrationEntropyScreen extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,
-
     goForward: React.PropTypes.func.isRequired,
     addEntropyFromDeltas: React.PropTypes.func.isRequired,
     setMaskedImageUncovering: React.PropTypes.func.isRequired
@@ -28,14 +27,9 @@ export default class RegistrationEntropyScreen extends React.Component {
       count: 0,
       imageMask: new ImageMaskBuilder()
     }
-    this.handleUncoveringChange = this.handleUncoveringChange.bind(this)
-    this.handleMouseMovement = this.handleMouseMovement.bind(this)
   }
 
-  handleMouseMovement(x, y) {
-    this.props.addEntropyFromDeltas({x, y})
-  }
-  handleUncoveringChange(uncovering) {
+  handleUncoveringChange = (uncovering) => {
     this.props.setMaskedImageUncovering(uncovering)
 
     if (uncovering) {
@@ -45,8 +39,9 @@ export default class RegistrationEntropyScreen extends React.Component {
     }
   }
 
-  handleUncoveredPoint(x, y) {
+  handleUncoveredPoint = (x, y) => {
     this.state.imageMask.addPoint(x, y)
+    this.props.addEntropyFromDeltas({x, y})
     this.setState({count: this.state.count + 1})
   }
 
@@ -56,7 +51,7 @@ export default class RegistrationEntropyScreen extends React.Component {
       imageUncovering={this.props.registration.maskedImage.uncovering}
       valid={this.props.registration.passphrase.sufficientEntropy}
       user={this.props.registration.username.value}
-      onImagePointUncoverd={(...args) => this.handleUncoveredPoint(...args)}
+      onImagePointUncoverd={this.handleUncoveredPoint}
       onImageUncoveringChange={this.handleUncoveringChange}
       onMouseMovement={this.handleMouseMovement}
       onSubmit={this.props.goForward}

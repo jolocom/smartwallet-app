@@ -10,12 +10,16 @@ hide: hideSimpleDialog } = simpleDialogVisibility.actions
 
 export const configSimpleDialogMessage = action(
   'simple-dialog', 'configSimpleDialogMessage', {
-    expectedParams: ['message', 'primaryActionText', 'style']
+    expectedParams: [
+      'title', 'message', 'primaryActionText', 'style', 'scrollContent'
+    ]
   })
 
 export const configSimpleDialog = configSimpleDialogMessage
 const initialState = new Map({
   visible: false,
+  scrollContent: false,
+  title: '',
   message: '',
   primaryActionText: 'OK',
   style: {}

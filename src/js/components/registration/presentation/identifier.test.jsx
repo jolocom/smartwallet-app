@@ -8,6 +8,7 @@ describe('(Component) Identifier', function() {
       value=""
       valid
       username=""
+      errorMsg=""
       onSubmit={() => {}}
       onChange={() => {}}
       />),

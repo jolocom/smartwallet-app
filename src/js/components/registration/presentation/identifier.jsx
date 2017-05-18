@@ -6,23 +6,27 @@ import {Container, Header, Content, Footer, Block} from '../../structure'
 
 const STYLES = {
   usernameField: {
-    margin: '0px 30px 0px 30px',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    width: '100%'
   },
   emailField: {
-    margin: '0px 30px 40px 30px',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    width: '100%'
+  },
+  content: {
+    padding: '16px'
   },
   fieldContainer: {
     marginTop: '15%',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    padding: '0 16px'
   }
 }
 const Identifier = (props) => {
   return (
     <Container>
       <Header title="For the creation of your account we need your e-mail" />
-      <Content>
+      <Content style={STYLES.content}>
         <Block style={STYLES.fieldContainer}>
           <TextField
             style={STYLES.usernameField}

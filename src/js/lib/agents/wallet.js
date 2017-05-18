@@ -1,155 +1,78 @@
+import * as settings from 'settings'
+import {WalletManager} from 'smartwallet-contracts'
+
 export default class WalletAgent {
-  generateSeedPhrase(randomString) {
-    return 'blabla blabla blabla blabla blabla blabla blabla blabla'
+  constructor() {
+    this._manager = new WalletManager(settings.blockchain)
   }
 
-  getSeedPhrase(email, password) {
-    return 'blabla blabla blabla blabla blabla blabla blabla blabla'
+  generateSeedPhrase(entropy) {
+    let seed = this._manager.generateSeedPhrase(entropy)
+    // only for testing testSeed has some ether on ropsten testnet
+    let testSeed = 'mandate print cereal style toilet hole' +
+      ' cave mom heavy fork network indoor'
+    seed = testSeed
+    return seed
   }
 
-  registerWithSeedPhrase({userName, seedPhrase}) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
+  registerWithSeedPhrase({userName, seedPhrase, pin}) {
+    return this._manager.registerWithSeedPhrase({
+      userName, seedPhrase, pin
     })
   }
 
   registerWithCredentials({userName, email, password}) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
-    })
-  }
-
-  checkPassphrase({passphrase}) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
-    })
+    return this._manager.registerWithCredentials({userName, email, password})
   }
 
   loginWithSeedPhrase({userName, seedPhrase}) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
-    })
+    return this._manager.loginWithSeedPhrase({userName, seedPhrase})
   }
 
   loginWithCredentials({userName, email, password}) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
-    })
+    return this._manager.loginWithCredentials({userName, email, password})
   }
 
   expertLogin({passphrase, pin}) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(new Wallet())
-      }, 2000)
-    })
-  }
-
-  getAccountInformation() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        let information = {
-          emails: [{address: 'address1@example.com', verified: true},
-            {address: 'address2@example.com', verified: false}],
-
-          telNums: [{num: '+4917912345678', type: 'work', verified: true},
-            {num: '+4917923456789', type: 'personal', verified: false}]
-        }
-        resolve(information)
-      }, 2000)
-    })
-  }
-
-  deleteEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  updateEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  setEmail(email) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
+      setTimeout(
+        () => {
+          resolve(new Wallet())
+        },
+        2000
+      )
     })
   }
 }
-
+// TODO: DELETE THIS CLASS WHEN EDIT-CONTACT-UTIL and
+// Login-webId exchange is updated
 export class Wallet {
   constructor() {
-    this.webID = 'https://demo.webid.jolocom.com/profile/card'
-    this.lightWaller = 'something'
+    this.webId = localStorage.getItem('jolocom.webId')
+    this.lightWallet = 'something'
   }
 
-  getUserInformation({email}) {
-    const identity = {
-      webId: 'https://demo.webid.jolocom.com/profile/card',
-      username: {
-        value: 'AnnikaHamman',
-        verified: ''
-      },
-      contact: {
-        phone: [{
-          number: '+49 176 12345678',
-          type: 'mobile',
-          verified: true
-        }],
-        email: [{
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: true
-        },
-        {
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: false
-        },
-        {
-          address: 'info@jolocom.com',
-          type: 'mobile',
-          verified: true
-        }]
-      },
-      Repuation: 0,
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
-    }
+  updatePhone(phone) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve(identity)
-        /* reject() */
+        resolve()
       }, 2000)
     })
+  }
+
+  setPhone(phone) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve()
+      }, 2000)
+    })
+  }
+
+  startConfirmEmail({email}) {
+    return this._verification.startVerifyingEmail({webID: this.webID, email})
+  }
+
+  finishConfirmEmail({email, code}) {
+    return this._verification.verifyEmail({webID: this.webID, email, code})
   }
 }

@@ -2,12 +2,18 @@ import React from 'react'
 import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
 import PinInput from './pin-input'
+import {Form} from 'formsy-react'
 
 import {theme} from 'styles'
 
 import {Container, Header, Content, Block, Footer} from '../../structure'
 
 const STYLES = {
+  form: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column'
+  },
   input: {
     display: 'inline-block'
   },
@@ -17,7 +23,7 @@ const STYLES = {
     textTransform: 'uppercase'
   },
   explanation: {
-    marginTop: '140px',
+    marginTop: '20px',
     color: theme.jolocom.gray1
   },
   content: {
@@ -67,27 +73,29 @@ const Pin = (props) => {
 
   return (
     <Container>
-      <Header title={headerTitle} />
-      <Content style={STYLES.content}>
-        <PinInput
-          value={props.value}
-          focused={props.focused}
-          disabled={props.confirm}
-          onChange={props.onChange}
-          onFocusChange={props.onFocusChange}
-          confirm={props.confirm} />
+      <Form onValidSubmit={() => { props.onSubmit() }} style={STYLES.form}>
+        <Header title={headerTitle} />
+        <Content style={STYLES.content}>
+          <PinInput
+            value={props.value}
+            focused={props.focused}
+            disabled={props.confirm}
+            onChange={props.onChange}
+            onFocusChange={props.onFocusChange}
+            confirm={props.confirm} />
 
-        {confirm}
-      </Content>
+          {confirm}
+        </Content>
 
-      <Footer>
-        <RaisedButton
-          disabled={!props.valid}
-          secondary={props.valid}
-          label={getButtonLabel(props)}
-          onClick={() => { props.onSubmit() }}
-        />
-      </Footer>
+        <Footer>
+          <RaisedButton
+            type="submit"
+            disabled={!props.valid}
+            secondary={props.valid}
+            label={getButtonLabel(props)}
+          />
+        </Footer>
+      </Form>
     </Container>
   )
 }

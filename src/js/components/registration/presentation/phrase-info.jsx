@@ -20,8 +20,7 @@ const PhraseInfo = (props) => {
         title="We created a secure phrase for you with which you can access
           your wallet again."
       />
-      <Content>
-
+      <Content style={{paddingTop: '0'}}>
         <Block>
           <SideNote>
             Since you decided for the no hassle mode,
@@ -40,8 +39,6 @@ const PhraseInfo = (props) => {
         <Avatar
           src="/img/img_techguy.svg"
           size={60} />
-      </Block>
-      <Block>
         <SideNote>
           Actually, I do want to store it manually myself.
         </SideNote>
@@ -49,7 +46,7 @@ const PhraseInfo = (props) => {
       <Footer>
         <FlatButton
           label="SHOW SECURE PHRASE"
-          onClick={() => { props.onChange('expert'); props.onSubmit() }} />
+          onClick={() => { props.onChange() }} />
       </Footer>
     </Container>
   )

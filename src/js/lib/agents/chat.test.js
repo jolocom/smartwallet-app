@@ -20,23 +20,21 @@ const DUMMY_TURTLE_HEADERS = {
 }
 
 const CONVERSATION = ({id, created, owner, participant}) => {
-  return `@prefix terms: <http://purl.org/dc/terms/>.
+  return `@prefix : <#>.
+@prefix terms: <http://purl.org/dc/terms/>.
 @prefix n0: <http://xmlns.com/foaf/0.1/>.
-@prefix c: <${owner}/profile/card#>.
-@prefix ${id}: <${owner}/little-sister/chats/${id}#>.
-@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+@prefix c: </profile/card#>.
 @prefix n: <http://rdfs.org/sioc/ns#>.
-@prefix c0: <${participant}/profile/card#>.
+@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+@prefix c0: <https://p2.webid.jolocom.de/profile/card#>.
 
-   "" terms:title ""; n0:maker c:me; n0:primaryTopic ${id}:thread .
-${id}:thread
-    terms:created
-       "${created}"^^XML:int;
-    n:hasOwner
-       c:me;
-    n:hasSubscriber
-       c:me, c0:me;
-    a    n:Thread.
+"" terms:title "No Subject"; n0:maker c:me; n0:primaryTopic :thread.
+
+:thread
+    a n:Thread;
+    terms:created "${created}"^^XML:int;
+    n:hasOwner c:me;
+    n:hasSubscriber c:me, c0:me.
 `
 }
 
@@ -74,77 +72,65 @@ const CONVERSATION_WITH_MESSAGE = (
 }
 
 const CONVERSATION_ACL = ({id, owner, participant}) => {
-  return `@prefix ${id}: <${owner}/little-sister/chats/${id}#>.
+  return `@prefix : <#>.
+@prefix qpj7f: <qpj7f#>.
 @prefix n0: <http://www.w3.org/ns/auth/acl#>.
-@prefix ch: <${owner}/little-sister/chats/>.
-@prefix c: <${owner}/profile/card#>.
-@prefix c0: <${participant}/profile/card#>.
+@prefix ch: <./>.
+@prefix c: </profile/card#>.
+@prefix c0: <https://p2.webid.jolocom.de/profile/card#>.
 
-${id}:owner
-    a    n0:Authorization;
-    n0:accessTo
-       <${owner}/little-sister/chats/${id}.acl>, ch:${id};
-    n0:agent
-       c:me;
-    n0:mode
-       n0:Control, n0:Read, n0:Write.
+qpj7f:owner
+    a n0:Authorization;
+    n0:accessTo ch:qpj7f, <>;
+    n0:agent c:me;
+    n0:mode n0:Control, n0:Read, n0:Write.
 qpj7f:participant
-    a    n0:Authorization;
-    n0:accessTo
-       ch:${id};
-    n0:agent
-       c0:me;
-    n0:mode
-       n0:Read, n0:Write.
+    a n0:Authorization;
+    n0:accessTo ch:qpj7f;
+    n0:agent c0:me;
+    n0:mode n0:Read, n0:Write.
 `
 }
 
 const GROUP_CONVERSATION = ({id, created, subject, owner, participants}) => {
-  return `@prefix terms: <http://purl.org/dc/terms/>.
+  return `@prefix : <#>.
+@prefix terms: <http://purl.org/dc/terms/>.
 @prefix n0: <http://xmlns.com/foaf/0.1/>.
-@prefix c: <${owner}/profile/card#>.
-@prefix ${id}: <${owner}/little-sister/chats/${id}#>.
-@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+@prefix c: </profile/card#>.
 @prefix n: <http://rdfs.org/sioc/ns#>.
-@prefix c0: <${participants[0]}/profile/card#>.
-@prefix c1: <${participants[1]}/profile/card#>.
+@prefix XML: <http://www.w3.org/2001/XMLSchema#>.
+@prefix c0: <https://p2.webid.jolocom.de/profile/card#>.
+@prefix c1: <https://p3.webid.jolocom.de/profile/card#>.
 
-   "" terms:title "${subject}"; n0:maker c:me; n0:primaryTopic ${id}:thread .
-${id}:thread
-    terms:created
-       "${created}"^^XML:int;
-    n:hasOwner
-       c:me;
-    n:hasSubscriber
-       c:me, c0:me, c1:me;
-    a    n:Thread.
+"" terms:title "1337 cr3w"; n0:maker c:me; n0:primaryTopic :thread.
+
+:thread
+    a n:Thread;
+    terms:created "${created}"^^XML:int;
+    n:hasOwner c:me;
+    n:hasSubscriber c:me, c0:me, c1:me.
 `
 }
 
 const GROUP_CONVERSATION_ACL = ({id, owner, participants}) => {
-  return `@prefix ${id}: <${owner}/little-sister/chats/${id}#>.
+  return `@prefix : <#>.
+@prefix hbm7i: <hbm7i#>.
 @prefix n0: <http://www.w3.org/ns/auth/acl#>.
-@prefix ch: <${owner}/little-sister/chats/>.
-@prefix c: <${owner}/profile/card#>.
-@prefix c0: <${participants[0]}/profile/card#>.
-@prefix c1: <${participants[1]}/profile/card#>.
+@prefix ch: <./>.
+@prefix c: </profile/card#>.
+@prefix c0: <https://p2.webid.jolocom.de/profile/card#>.
+@prefix c1: <https://p3.webid.jolocom.de/profile/card#>.
 
-${id}:owner
-    a    n0:Authorization;
-    n0:accessTo
-       <${owner}/little-sister/chats/${id}.acl>, ch:${id};
-    n0:agent
-       c:me;
-    n0:mode
-       n0:Control, n0:Read, n0:Write.
-${id}:participant
-    a    n0:Authorization;
-    n0:accessTo
-       ch:${id};
-    n0:agent
-       c0:me, c1:me;
-    n0:mode
-       n0:Read, n0:Write.
+hbm7i:owner
+    a n0:Authorization;
+    n0:accessTo ch:hbm7i, <>;
+    n0:agent c:me;
+    n0:mode n0:Control, n0:Read, n0:Write.
+hbm7i:participant
+    a n0:Authorization;
+    n0:accessTo ch:hbm7i;
+    n0:agent c0:me, c1:me;
+    n0:mode n0:Read, n0:Write.
 `
 }
 

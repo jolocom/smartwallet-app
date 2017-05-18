@@ -40,21 +40,39 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getIdentityInformation.buildAction(params,
-        () => {
-          return services.auth.currentUser.wallet.getUserInformation({
-            email: 'test@test.com'
-          })
+        dispatch(actions.getIdentityInformation.buildAction(params, () => {
+          // eslint-disable-next-line max-len
+          return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
         }))
       }
     }
   }
 })
 
-const mapBackendToState = (data) => Immutable.fromJS(data).merge({loaded: true,
-  error: false})
-const mapBackendToStateError = (data) =>
-  Immutable.fromJS(data).merge({loaded: true, error: true})
+const mapBackendToState = ({webId, username, contact, passport}) =>
+  Immutable.fromJS({
+    loaded: true,
+    error: false,
+    webId,
+    username,
+    contact: {
+      emails: contact.email,
+      phones: contact.phone
+    },
+    passport
+  })
+const mapBackendToStateError = ({webId, username, contact, passport}) =>
+  Immutable.fromJS({
+    loaded: true,
+    error: true,
+    webId,
+    username,
+    contact: {
+      emails: contact.email,
+      phones: contact.phone
+    },
+    passport
+  })
 const initialState = Immutable.fromJS({
   loaded: false,
   error: false,
@@ -64,12 +82,12 @@ const initialState = Immutable.fromJS({
     value: ''
   },
   contact: {
-    phone: [{
+    phones: [{
       type: '',
       number: '',
       verified: false
     }],
-    email: [{
+    emails: [{
       type: '',
       address: '',
       verified: false

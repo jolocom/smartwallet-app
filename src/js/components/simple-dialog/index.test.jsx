@@ -14,13 +14,13 @@ describe('(Component) SimpleDialog', function() {
         ...SimpleDialog.mapStateToProps(Immutable.fromJS({
           simpleDialog: {
             visible: false,
-            message: 'test msg'
+            title: 'Test',
+            message: 'Message'
           }
         })
       )} hideSimpleDialog={hideSimpleDialog} />),
       { context: { muiTheme: { } } }
     )
     expect(wrapper.find('Dialog').prop('open')).to.equal(false)
-    expect(wrapper.prop('children')).to.equal('test msg')
   })
 })

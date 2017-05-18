@@ -32,15 +32,14 @@ const STYLES = {
     fill: theme.jolocom.gray1
   },
   checkBox: {
-    width: '40%',
     margin: 'auto'
   },
   labelStyle: {
     color: theme.jolocom.gray1,
     fontSize: '13px',
-    marginLeft: '5px',
     display: 'inline-block',
-    position: 'relative'
+    position: 'relative',
+    lineHeight: '1.2em'
   },
   nextStep: {
     flex: 1
@@ -60,7 +59,7 @@ const WritePhrase = (props) => {
       <Block style={STYLES.phraseWrapper}>
         <span style={STYLES.phrase}>{
           props.value || 'The flying red fox is jumping enthusiastically' +
-            'over the little brown dog.'
+            ' over the little brown dog.'
         }</span>
       </Block>
       <Block>
@@ -97,7 +96,7 @@ const WritePhrase = (props) => {
       <Footer>
         <FlatButton
           label="STORE IT FOR ME"
-          onClick={() => { props.onChange('layman'); props.onSubmit() }} />
+          onClick={() => { props.onChange(); props.onSubmit() }} />
       </Footer>
     </Container>
   )

@@ -68,9 +68,9 @@ const Login = connect({
       container: {
         textAlign: 'center',
         background: '#f8f9fb',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
+        paddingBottom: '40px',
+        boxSizing: 'border-box',
+        minHeight: '100%'
       },
       header: {
         padding: '40px'
@@ -79,11 +79,11 @@ const Login = connect({
         fontSize: '18px',
         fontWeight: '400',
         textAlign: 'center',
-        textTransform: 'uppercase',
-        padding: '8px 0'
+        textTransform: 'uppercase'
       },
       logoImg: {
-        height: '80%'
+        maxWidth: '80%',
+        width: '100px'
       },
       title: {
         fontWeight: 'normal',
@@ -92,9 +92,6 @@ const Login = connect({
         textAlign: 'left'
       },
       content: {
-        flex: 1
-      },
-      form: {
         width: '300px',
         maxWidth: '90%',
         padding: '0px 20px 20px',
@@ -103,9 +100,9 @@ const Login = connect({
         backgroundColor: '#ffffff'
       },
       safariCookieWarning: {
-        fontWeight: 'bold',
         padding: '0 20px',
-        marginBottom: '1em'
+        marginBottom: '1em',
+        color: theme.jolocom.gray1
       },
       button: {
         width: '100%'
@@ -141,54 +138,52 @@ const Login = connect({
           </IconButton>}
           />
         <div style={styles.logo}>
-          <img src="img/logo.svg" style={styles.logoImg} />
+          <img src="/img/logo.svg" style={styles.logoImg} />
         </div>
-        <div style={styles.content}>
-          <form style={styles.form} onSubmit={this.login}>
-            <div style={{marginBottom: '20px'}}>
-              <div>
-                {/** TODO Give user feedback when user already exists **/}
-                <TextField
-                  floatingLabelText="Username"
-                  value={this.props.login.username}
-                  type="text"
-                  autoCorrect="off"
-                  autoCapitalize="none"
-                  autoComplete="none"
-                  errorText={this.props.login.userErrorMsg}
-                  onChange={this._handleUsernameChange} />
-                <TextField
-                  floatingLabelText="Password"
-                  type="password"
-                  errorText={this.props.login.pwErrorMsg}
-                  onChange={this._handlePasswordChange} />
-                <Link
-                  to="/forgot-password"
-                  style={styles.forgotPassword}>Forgot password?</Link>
-              </div>
-            </div>
-            <RaisedButton
-              type="submit"
-              secondary
-              style={styles.button}
-              label="Login" />
-          </form>
-          <div style={{paddingBottom: '8px', color: 'red'}}>
-            {this.props.login.failureMsg}
-          </div>
-          {
-          Utils.isSafari()
-            ? <p style={styles.safariCookieWarning}>In order for the
-            application to work with Safari,
-            please go to the privacy settings of your browser
-            and choose "Allow cookies for all websites".
-            </p>
-          : ''
-          }
-          <p style={styles.help}>Don't have an account yet?&nbsp;
-            <Link to={routes.signup} style={styles.link}>Sign up</Link>.
+        <div style={{paddingBottom: '8px', color: '#e8540c'}}>
+          {this.props.login.failureMsg}
+        </div>
+        {
+        Utils.isSafari()
+          ? <p style={styles.safariCookieWarning}>In order for the
+          application to work with Safari,
+          please go to the privacy settings of your browser
+          and choose "Allow cookies for all websites".
           </p>
-        </div>
+        : ''
+        }
+        <form style={styles.content} onSubmit={this.login}>
+          <div style={{marginBottom: '20px'}}>
+            <div>
+              {/** TODO Give user feedback when user already exists **/}
+              <TextField
+                floatingLabelText="Username"
+                value={this.props.login.username}
+                type="text"
+                autoCorrect="off"
+                autoCapitalize="none"
+                autoComplete="none"
+                errorText={this.props.login.userErrorMsg}
+                onChange={this._handleUsernameChange} />
+              <TextField
+                floatingLabelText="Password"
+                type="password"
+                errorText={this.props.login.pwErrorMsg}
+                onChange={this._handlePasswordChange} />
+              <Link
+                to="/forgot-password"
+                style={styles.forgotPassword}>Forgot password?</Link>
+            </div>
+          </div>
+          <RaisedButton
+            type="submit"
+            secondary
+            style={styles.button}
+            label="Login" />
+        </form>
+        <p style={styles.help}>Don't have an account yet?&nbsp;
+          <Link to={routes.signup} style={styles.link}>Sign up</Link>.
+        </p>
       </div>
     )
   }

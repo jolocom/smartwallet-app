@@ -148,11 +148,11 @@ class AccountsAgent {
     let writer = new Writer()
 
     writer.add('', PRED.maker, webId)
-    writer.add('', PRED.primaryTopic, $rdf.sym('#inbox'))
-    writer.add('#inbox', PRED.type, PRED.space)
+    writer.add('', PRED.primaryTopic, $rdf.sym(uri + '/#inbox'))
+    writer.add(uri + '/#inbox', PRED.type, PRED.space)
     return this.httpProxied.put(
       uri,
-      writer.end(),
+      writer.end(uri),
       {'Content-Type': 'text/turtle'}
     ).then(() => {
       return this._writeAcl(uri, webId)
@@ -166,11 +166,11 @@ class AccountsAgent {
     let writer = new Writer()
 
     writer.add('', PRED.maker, webId)
-    writer.add('', PRED.primaryTopic, $rdf.sym('#unread-messages'))
-    writer.add('#unread-messages', PRED.type, PRED.space)
+    writer.add('', PRED.primaryTopic, $rdf.sym(uri + '/#unread-messages'))
+    writer.add(uri + '/#unread-messages', PRED.type, PRED.space)
     return this.httpProxied.put(
       uri,
-      writer.end(),
+      writer.end(uri),
       {'Content-Type': 'text/turtle'}
     ).then(() => {
       return this._writeAcl(uri, webId)
@@ -181,21 +181,23 @@ class AccountsAgent {
     let writer = new Writer()
     let ACL = $rdf.Namespace('http://www.w3.org/ns/auth/acl#')
     let aclUri = `${uri}.acl`
+    let owner = aclUri + '/#owner'
+    let append = aclUri + '/#append'
 
-    writer.addTriple($rdf.sym('#owner'), PRED.type, ACL('Authorization'))
-    writer.addTriple($rdf.sym('#owner'), ACL('accessTo'), $rdf.sym(uri))
-    writer.addTriple($rdf.sym('#owner'), ACL('accessTo'), $rdf.sym(aclUri))
-    writer.addTriple($rdf.sym('#owner'), ACL('agent'), $rdf.sym(webId))
-    writer.addTriple($rdf.sym('#owner'), ACL('mode'), ACL('Control'))
-    writer.addTriple($rdf.sym('#owner'), ACL('mode'), ACL('Read'))
-    writer.addTriple($rdf.sym('#owner'), ACL('mode'), ACL('Write'))
+    writer.addTriple($rdf.sym(owner), PRED.type, ACL('Authorization'))
+    writer.addTriple($rdf.sym(owner), ACL('accessTo'), $rdf.sym(uri))
+    writer.addTriple($rdf.sym(owner), ACL('accessTo'), $rdf.sym(aclUri))
+    writer.addTriple($rdf.sym(owner), ACL('agent'), $rdf.sym(webId))
+    writer.addTriple($rdf.sym(owner), ACL('mode'), ACL('Control'))
+    writer.addTriple($rdf.sym(owner), ACL('mode'), ACL('Read'))
+    writer.addTriple($rdf.sym(owner), ACL('mode'), ACL('Write'))
 
-    writer.addTriple($rdf.sym('#append'), PRED.type, ACL('Authorization'))
-    writer.addTriple($rdf.sym('#append'), ACL('accessTo'), $rdf.sym(uri))
-    writer.addTriple($rdf.sym('#append'), ACL('agentClass'), PRED.Agent)
-    writer.addTriple($rdf.sym('#append'), ACL('mode'), ACL('Append'))
+    writer.addTriple($rdf.sym(append), PRED.type, ACL('Authorization'))
+    writer.addTriple($rdf.sym(append), ACL('accessTo'), $rdf.sym(uri))
+    writer.addTriple($rdf.sym(append), ACL('agentClass'), PRED.Agent)
+    writer.addTriple($rdf.sym(append), ACL('mode'), ACL('Append'))
 
-    return this.httpProxied.put(aclUri, writer.end(), {
+    return this.httpProxied.put(aclUri, writer.end(aclUri), {
       'Content-Type': 'text/turtle'
     }).then(() => {
       return aclUri

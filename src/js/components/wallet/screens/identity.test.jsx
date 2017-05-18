@@ -19,12 +19,12 @@ describe('(Component) WalletIdentityScreen', function() {
                 value: 'AnnikaHamman'
               },
               contact: {
-                phone: [{
+                phones: [{
                   number: '+49 176 12345678',
                   type: 'mobile',
                   verified: true
                 }],
-                email: [{
+                emails: [{
                   address: 'info@jolocom.com',
                   type: 'mobile',
                   verified: true
@@ -43,7 +43,8 @@ describe('(Component) WalletIdentityScreen', function() {
                 state: '',
                 country: '',
                 verified: false
-              }
+              },
+              error: false
             }
           }
         }))
@@ -68,8 +69,8 @@ describe('(Component) WalletIdentityScreen', function() {
       value: 'AnnikaHamman'
     })
     expect(wrapper.find('WalletIdentity').prop('contact')).to.deep.equal({
-      phone: [{number: '+49 176 12345678', type: 'mobile', verified: true}],
-      email: [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
+      phones: [{number: '+49 176 12345678', type: 'mobile', verified: true}],
+      emails: [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
     })
     expect(wrapper.find('WalletIdentity').prop('passport')).to.deep.equal({
       number: '', givenName: '', familyName: '', birthDate: '', gender: '',
@@ -88,7 +89,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -121,10 +123,11 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {
-                phone: [],
-                email: []
+                phones: [],
+                emails: []
               },
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -157,10 +160,11 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {
-                phone: [],
-                email: []
+                phones: [],
+                emails: []
               },
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -193,7 +197,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -213,7 +218,7 @@ describe('(Component) WalletIdentityScreen', function() {
     expect(getIdentityInformation.called).to.be.true
     expect(getIdentityInformation.calls).to.deep.equal([{args: []}])
   })
-  it('should call openConfirmDialog on confirm with proper params', () => {
+  it('should call openConfirmDialog on onConfirm with proper params', () => {
     const openConfirmDialog = stub()
     const closeConfirmDialog = stub()
     const wrapper = shallow(
@@ -225,7 +230,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -242,7 +248,11 @@ describe('(Component) WalletIdentityScreen', function() {
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('WalletIdentity').props().confirm('message', {})
+    wrapper.find('WalletIdentity').props().onConfirm({
+      message: 'message',
+      attrValue: '',
+      style: {}
+    })
     expect(openConfirmDialog.called).to.be.true
     expect(openConfirmDialog.calls[0].args[0]).to.equal('message')
     expect(openConfirmDialog.calls[0].args[1]).to.equal('REQUEST VERIFICATION')
@@ -265,7 +275,8 @@ describe('(Component) WalletIdentityScreen', function() {
               webId: '',
               username: {},
               contact: {},
-              passport: {}
+              passport: {},
+              error: false
             }
           }
         }))
@@ -278,16 +289,20 @@ describe('(Component) WalletIdentityScreen', function() {
         closeConfirmDialog={() => {}}
         configSimpleDialog={configSimpleDialog}
         showSimpleDialog={showSimpleDialog}
-
        />),
       { context: { muiTheme: { } } }
     )
 
-    wrapper.find('WalletIdentity').props().verify('message', 'OK', {})
+    wrapper.find('WalletIdentity').props().onVerify({
+      message: 'message',
+      buttonText: 'OK',
+      style: {},
+      attrValue: ''
+    })
     expect(configSimpleDialog.called).to.be.true
     expect(showSimpleDialog.called).to.be.true
     expect(configSimpleDialog.calls).to.deep.equal([{args: [
-      'message', 'OK', {}
+      null, 'message', 'OK', {}
     ]}])
     expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
   })
