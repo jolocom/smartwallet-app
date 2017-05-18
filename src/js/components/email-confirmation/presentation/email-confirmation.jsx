@@ -45,7 +45,7 @@ export default class EmailConfirmation extends React.Component {
             <h1 style={STYLES.greeting}>
             ..verifying email
             </h1>
-            <CircularProgress style={STYLES.spinner}/>
+            <CircularProgress style={STYLES.spinner} />
           </Block>
           : <h1 style={STYLES.greeting}>
             {this.props.confirmation
