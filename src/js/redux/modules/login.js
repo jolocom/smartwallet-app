@@ -14,12 +14,14 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        const state = getState().get('login').toJS()
-        dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
-          return backend.wallet
-            .loginWithSeedPhrase('random', state.passphrase.value)
-            .then(() => dispatch(router.pushRoute('/login/expert/pin-entry')))
-        }))
+        dispatch(router.pushRoute('/login/expert/pin-entry'))
+
+        // const state = getState().get('login').toJS()
+        // dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
+        //   return backend.wallet
+        //     .loginWithSeedPhrase('random', state.passphrase.value)
+        //     .then(() => dispatch(router.pushRoute('/login/expert/pin-entry')))
+        // }))
       }
     }
   },
@@ -40,8 +42,10 @@ const actions = module.exports = makeActions('wallet/identity', {
         const state = getState().get('login').toJS()
         dispatch(actions.goForward.buildAction(params, (backend) => {
           return backend.wallet
-            .expertLogin({passphrase: state.passphrase.value,
-              pin: state.pin.value})
+            .loginWithSeedPhrase({
+              seedPhrase: state.passphrase.value,
+              pin: state.pin.value
+            })
             .then(() => dispatch(router.pushRoute('/wallet/identity')))
         }))
       }
