@@ -79,8 +79,7 @@ const Login = connect({
         fontSize: '18px',
         fontWeight: '400',
         textAlign: 'center',
-        textTransform: 'uppercase',
-        padding: '8px 0'
+        textTransform: 'uppercase'
       },
       logoImg: {
         maxWidth: '80%',
@@ -93,9 +92,6 @@ const Login = connect({
         textAlign: 'left'
       },
       content: {
-        flex: 1
-      },
-      form: {
         width: '300px',
         maxWidth: '90%',
         padding: '0px 20px 20px',
@@ -142,9 +138,8 @@ const Login = connect({
           </IconButton>}
           />
         <div style={styles.logo}>
-          <img src="img/logo.svg" style={styles.logoImg} />
+          <img src="/img/logo.svg" style={styles.logoImg} />
         </div>
-
         <div style={{paddingBottom: '8px', color: '#e8540c'}}>
           {this.props.login.failureMsg}
         </div>
@@ -179,17 +174,7 @@ const Login = connect({
                 to="/forgot-password"
                 style={styles.forgotPassword}>Forgot password?</Link>
             </div>
-            <RaisedButton
-              type="submit"
-              secondary
-              style={styles.button}
-              label="Login" />
-
           </div>
-          <div style={{paddingBottom: '8px', color: 'red'}}>
-            {this.props.login.failureMsg}
-          </div>
-
           <RaisedButton
             type="submit"
             secondary

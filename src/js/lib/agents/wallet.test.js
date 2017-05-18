@@ -30,7 +30,20 @@ describe('#WalletAgentClass', () => {
       expect(wallet.registerWithSeedPhrase(registration)).to.be
         .instanceof(WalletManager)
     })
-  }) */
+  })
+  describe('loginWithSeedPhrase', () => {
+    it('should call manager loginWithSeedPhrase', () => {
+      const login = {
+        userName: 'hello',
+        seedPhrase: 'mandate print cereal style toilet hole' +
+          ' cave mom heavy fork network indoor'
+      }
+      const wallet = new WalletAgent()
+      expect(wallet.loginWithSeedPhrase(login)).to.eventually.be
+        .instanceof(WalletManager)
+    })
+  })
+  */
   describe('registerWithCredentials', () => {
     it('should return a smart wallet', () => {
       const registration = {
@@ -41,19 +54,6 @@ describe('#WalletAgentClass', () => {
       const wallet = new WalletAgent()
       expect(wallet.registerWithCredentials(registration)).to.eventually
         .be.instanceof(WalletManager)
-    })
-  })
-  describe('loginWithSeedPhrase', () => {
-    it('should call manager loginWithSeedPhrase', () => {
-      const login = {
-        userName: 'hello',
-        /*eslint-disable max-len*/
-        seedPhrase: 'mandate print cereal style toilet hole' +
-          ' cave mom heavy fork network indoor'
-      }
-      const wallet = new WalletAgent()
-      expect(wallet.loginWithSeedPhrase(login)).to.eventually.be
-        .instanceof(WalletManager)
     })
   })
   describe('loginWithCredentials', () => {
