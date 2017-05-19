@@ -6,31 +6,31 @@ export default class VerificationAgent {
     this.httpAgent = new HTTPAgent({proxy: false})
   }
 
-  startVerifyingEmail({webID, email}) {
+  startVerifyingEmail({contractID, email}) {
     return this.httpAgent.post(
       settings.verificationProvider + '/email/start-verification',
-      {webID, email}
+      {contractID, email}
     )
   }
 
-  startVerifyingPhone({webID, phone}) {
+  startVerifyingPhone({contractID, phone}) {
     return this.httpAgent.post(
       settings.verificationProvider + '/phone/start-verification',
-      {webID, phone}
+      {contractID, phone}
     )
   }
 
-  verifyEmail({webID, email, code}) {
+  verifyEmail({contractID, email, code}) {
     return this.httpAgent.post(
       settings.verificationProvider + '/email/verify',
-      {webID, email, code}
+      {contractID, email, code}
     )
   }
 
-  verifyPhone({webID, phone, code}) {
+  verifyPhone({contractID, phone, code}) {
     return this.httpAgent.post(
       settings.verificationProvider + '/phone/verify',
-      {webID, phone, code}
+      {contractID, phone, code}
     )
   }
 }
