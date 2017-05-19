@@ -8,16 +8,17 @@ import LDPAgent from 'lib/agents/ldp'
 const rdfHelper = {
   addEntryPatch(entryFileUrl, webId, entryId, entryType) {
     const g = rdf.graph()
-    const bNode = rdf.blankNode(entryId)
+    const entryNode =
+    `${util.getProfFolderUrl(webId)}/card#${entryType}${entryId}`
 
     const typeToPred = {
       phone: PRED.mobile,
       email: PRED.email
     }
 
-    g.add(rdf.sym(webId), typeToPred[entryType], bNode)
-    g.add(bNode, PRED.identifier, rdf.lit(entryId))
-    g.add(bNode, PRED.seeAlso, rdf.sym(entryFileUrl))
+    g.add(rdf.sym(webId), typeToPred[entryType], rdf.sym(entryNode))
+    g.add(rdf.sym(entryNode), PRED.identifier, rdf.lit(entryId))
+    g.add(rdf.sym(entryNode), PRED.seeAlso, rdf.sym(entryFileUrl))
     return g.statements
   },
 
