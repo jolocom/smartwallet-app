@@ -118,7 +118,7 @@ Choosing a SoLiD server
 Little Sister lets you explore linked data, based on WebID. Here are the solutions we suggest to get your own WebID and make linked data.
 
 ## Using the Jolocom WebID proxy.
-Simply sign up on Little Sister application. 
+Simply sign up on Little Sister application.
 
 You can switch to another WebID proxy in the `config/` folder.
 
