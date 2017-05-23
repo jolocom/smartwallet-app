@@ -307,7 +307,7 @@ em:owner
     solidAgent._genRandomAttrId = () => { return '123' }
     const mockHttpAgent = {
       patch: async (url, toDelete, toInsert) => {
-        it('Should patch the profile file correctly', (done) => {
+        it('Should patch the correct file', (done) => {
           expect(url).to.equal(WEBID)
           done()
         })
@@ -322,25 +322,23 @@ em:owner
           done()
         })
 
-        it('should add a bNode as an email to the card', (done) => {
-          expect(toInsert[0].object.termType).to.equal('BlankNode')
-          expect(toInsert[0].predicate).to.deep.equal(PRED.email)
+        it('Should patch with the correct email triples', (done) => {
           expect(toInsert[0].subject.value).to.equal(WEBID)
-          done()
-        })
+          expect(toInsert[0].predicate).to.deep.equal(PRED.email)
+          expect(toInsert[0].object.value)
+            .to.equal('https://test.com/profile/card#email123')
 
-        it('should assign correct bNode identifier', (done) => {
-          expect(toInsert[1].object.value).to.equal('123')
+          expect(toInsert[1].subject.value)
+            .to.equal('https://test.com/profile/card#email123')
           expect(toInsert[1].predicate).to.deep.equal(PRED.identifier)
-          expect(toInsert[1].subject.id).to.equal(1)
-          done()
-        })
+          expect(toInsert[1].object.value)
+            .to.equal('123')
 
-        it('should identify the seeAlso URI for the Blank Node', (done) => {
-          expect(toInsert[2].object.value)
-          .to.equal(emailEntryUrl)
+          expect(toInsert[2].subject.value)
+            .to.equal('https://test.com/profile/card#email123')
           expect(toInsert[2].predicate).to.deep.equal(PRED.seeAlso)
-          expect(toInsert[2].subject.id).to.equal(1)
+          expect(toInsert[2].object.value)
+            .to.equal('https://test.com/profile/email123')
           done()
         })
         return
