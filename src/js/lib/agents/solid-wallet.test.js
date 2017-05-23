@@ -34,12 +34,6 @@ describe.only('solidAgentAgent', () => {
         country: null
       }
     }
-    it('Should correctly handle network errors', async() => {
-      const solidAgent = new SolidAgent()
-      return solidAgent.getUserInformation().then(res => {
-        expect(res).to.deep.equal(emptyUserProfile)
-      })
-    })
 
     it('Should correctly invalid argument', async() => {
       const solidAgent = new SolidAgent()
@@ -85,22 +79,22 @@ describe.only('solidAgentAgent', () => {
         pro:card
           a n0:PersonalProfileDocument;
           n0:primaryTopic <#me>.
-
         <#me>
           a n0:Person;
+          n0:name "Test";
+
           n0:mbox <#email123>;
-          n0:mbox <#email345>;
-          n0:phone <#phone123>;
-          n0:mbox "test3@jolocom.com";
-          n0:phone "+49 157 11111111";
-          n0:name "Test".
+          n0:mbox <#email456>;
+          n0:phone <#phone123>.
 
         <#email123> 
           schem:identifier "123";
           rd:seeAlso <https://test.com/profile/email123>.
+
         <#email456> 
           schem:identifier "456";
           rd:seeAlso <https://test.com/profile/email456>.
+
         <#phone123> 
           schem:identifier "123";
           rd:seeAlso <https://test.com/profile/phone123>.`
@@ -123,11 +117,6 @@ describe.only('solidAgentAgent', () => {
             number: '+49 176 12345678',
             verified: false,
             id: '123'
-          },
-          {
-            id: null,
-            verified: false,
-            number: '+49 157 11111111'
           }],
           email: [{
             address: 'test@jolocom.com',
@@ -138,11 +127,6 @@ describe.only('solidAgentAgent', () => {
             address: 'test2@jolocom.com',
             verified: false,
             id: '456'
-          },
-          {
-            address: 'test3@jolocom.com',
-            verified: false,
-            id: null
           }]
         },
         Reputation: 0,
