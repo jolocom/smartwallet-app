@@ -8,16 +8,17 @@ import LDPAgent from 'lib/agents/ldp'
 const rdfHelper = {
   addEntryPatch(entryFileUrl, webId, entryId, entryType) {
     const g = rdf.graph()
-    const bNode = rdf.blankNode(entryId)
+    const entryNode =
+    `${util.getProfFolderUrl(webId)}/card#${entryType}${entryId}`
 
     const typeToPred = {
       phone: PRED.mobile,
       email: PRED.email
     }
 
-    g.add(rdf.sym(webId), typeToPred[entryType], bNode)
-    g.add(bNode, PRED.identifier, rdf.lit(entryId))
-    g.add(bNode, PRED.seeAlso, rdf.sym(entryFileUrl))
+    g.add(rdf.sym(webId), typeToPred[entryType], rdf.sym(entryNode))
+    g.add(rdf.sym(entryNode), PRED.identifier, rdf.lit(entryId))
+    g.add(rdf.sym(entryNode), PRED.seeAlso, rdf.sym(entryFileUrl))
     return g.statements
   },
 
@@ -86,8 +87,14 @@ export default class SolidAgent {
 
   deleteEntry(webId, entryType, entryId) {
     // TODO use removeEntryPatch ?
-    let statements // TODO fill in real statements for deletion
-    return this.http.patch(`${util.getProfFolderUrl(webId)}/card`, statements)
+    const entryFileUrl =
+    `${util.getProfFolderUrl(webId)}/${entryType}${entryId}`
+    // console.log(entryFileUrl)
+    let toDel = rdfHelper
+    .addEntryPatch(entryFileUrl, webId, entryId, entryType)
+    // console.log(toDel)
+     // TODO fill in real statements for deletion
+    return this.http.patch(`${util.getProfFolderUrl(webId)}/card`, toDel)
     .then(this.http
       .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}`))
     .then(this.http
