@@ -131,10 +131,9 @@ export default class SolidAgent {
     const g = rdf.graph()
     g.addAll(userTriples)
 
-    profileData.contact.email = this.getExtendedProprietyValue(g, 'email')
-    profileData.contact.phone = this.getExtendedProprietyValue(g, 'phone')
     profileData.webId = webId
-
+    // profileData.contact.email = this.getExtendedProprietyValue(g, 'email')
+    // profileData.contact.phone = this.getExtendedProprietyValue(g, 'phone')
     try {
       profileData.username.value = g
         .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
