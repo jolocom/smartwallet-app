@@ -46,11 +46,11 @@ export default class WalletPassport extends React.Component {
 
   renderTextField({value, label, valid, key}) {
     return <EditListItem
-       key={i}
-       id={'id'}
+       key={key + '_' + value}
+       id={'value'}
        iconStyle={{maxWidth: '400px'}}
        label={label}
-       name={'name'}
+       name={key}
        enableEdit
        value={value}
        showErrors={!valid}
@@ -64,7 +64,9 @@ export default class WalletPassport extends React.Component {
   }
 
   renderDateField({value, label, valid, key}) {
-
+    return <DatePicker
+      hintText={label}
+       />
   }
 
   renderOptionsField({value, label, valid, key, options}) {
