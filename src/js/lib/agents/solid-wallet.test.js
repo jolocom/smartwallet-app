@@ -35,7 +35,7 @@ describe.only('solidAgentAgent', () => {
       }
     }
 
-    it('Should correctly invalid argument', async() => {
+    it('Should correctly process invalid argument', async() => {
       const solidAgent = new SolidAgent()
       return solidAgent.getUserInformation().then(res => {
         expect(res).to.deep.equal(emptyUserProfile)
@@ -196,7 +196,7 @@ pho:owner
 
     const mockHttpAgent = {
       patch: async (url, toDelete, toInsert) => {
-        it('Should patch the profile file correctly', (done) => {
+        it('Should attempt to patch the correct file', (done) => {
           expect(url).to.equal(WEBID)
           done()
         })
@@ -206,32 +206,35 @@ pho:owner
           done()
         })
 
-        it('Should patch the card with three phone triples', (done) => {
-          expect(toInsert.length).to.deep.equal(3)
+        it('Should append three tripples', done => {
+          expect(toInsert.length).to.equal(3)
           done()
         })
 
-        it('should add a bNode as an phone to the card', (done) => {
-          expect(toInsert[0].object.termType).to.equal('BlankNode')
-          expect(toInsert[0].predicate).to.deep.equal(PRED.mobile)
-          expect(toInsert[0].subject.value).to.equal(WEBID)
-          done()
-        })
+        it('Should contain the correct add query', (done) => {
+          expect(toInsert[0].subject.value)
+            .to.equal('https://test.com/profile/card')
+          expect(toInsert[0].predicate)
+            .to.deep.equal(PRED.mobile)
+          expect(toInsert[0].object.value)
+            .to.equal('https://test.com/profile/card#phone123')
 
-        it('should assign correct bNode identifier', (done) => {
-          expect(toInsert[1].object.value).to.equal('123')
-          expect(toInsert[1].predicate).to.deep.equal(PRED.identifier)
-          expect(toInsert[1].subject.id).to.equal(0)
-          done()
-        })
+          expect(toInsert[1].subject.value)
+            .to.equal('https://test.com/profile/card#phone123')
+          expect(toInsert[1].predicate)
+            .to.deep.equal(PRED.identifier)
+          expect(toInsert[1].object.value)
+            .to.equal('123')
 
-        it('should identify the seeAlso URI for the Blank Node', (done) => {
+          expect(toInsert[2].subject.value)
+            .to.equal('https://test.com/profile/card#phone123')
+          expect(toInsert[2].predicate)
+            .to.deep.equal(PRED.seeAlso)
           expect(toInsert[2].object.value)
-          .to.equal(phoneEntryUrl)
-          expect(toInsert[2].predicate).to.deep.equal(PRED.seeAlso)
-          expect(toInsert[2].subject.id).to.deep.equal(0)
+            .to.equal('https://test.com/profile/phone123')
           done()
         })
+
         return
       },
 
