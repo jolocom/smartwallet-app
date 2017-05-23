@@ -86,14 +86,10 @@ export default class SolidAgent {
   }
 
   deleteEntry(webId, entryType, entryId) {
-    // TODO use removeEntryPatch ?
     const entryFileUrl =
     `${util.getProfFolderUrl(webId)}/${entryType}${entryId}`
-    // console.log(entryFileUrl)
     let toDel = rdfHelper
     .addEntryPatch(entryFileUrl, webId, entryId, entryType)
-    // console.log(toDel)
-     // TODO fill in real statements for deletion
     return this.http.patch(`${util.getProfFolderUrl(webId)}/card`, toDel)
     .then(this.http
       .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}`))
@@ -102,12 +98,11 @@ export default class SolidAgent {
   }
 
   updateEntry(webId, entryType, entryId, newValue) {
-    // TODO fill in real statements
-    let oldStatements
-    let newStatements
     const entryFileUrl =
     `${util.getProfFolderUrl(webId)}/${entryType}${entryId}`
-    return this.http.patch(entryFileUrl, oldStatements, newStatements)
+    let newEntryFileBody =
+    rdfHelper.entryFileBody(entryFileUrl, webId, newValue, entryType)
+    return this.http.put(entryFileUrl, newEntryFileBody)
   }
 
   async getUserInformation(webId) {
