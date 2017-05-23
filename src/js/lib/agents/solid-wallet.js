@@ -132,8 +132,8 @@ export default class SolidAgent {
     g.addAll(userTriples)
 
     profileData.webId = webId
-    // profileData.contact.email = this.getExtendedProprietyValue(g, 'email')
-    // profileData.contact.phone = this.getExtendedProprietyValue(g, 'phone')
+    profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
+    profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
     try {
       profileData.username.value = g
         .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
@@ -144,7 +144,7 @@ export default class SolidAgent {
     return profileData
   }
 
-  getExtendedProprietyValue(g, property) {
+  async getExtendedProprietyValue(g, property) {
     const propertyData = []
     const propertyToPredMap = {
       email: PRED.email,
@@ -160,17 +160,17 @@ export default class SolidAgent {
       st.object
     )
 
-    objects.forEach(obj => {
-      propertyData.push(this._expandData(obj, g, pred))
-    })
+    for (let obj in objects) {
+      const tmp = await this._expandData(objects[obj], g, pred)
+      if (tmp) {
+        propertyData.push(tmp)
+      }
+    }
 
     return propertyData
   }
 
-  // Aimed at our bNode / extended node structure.
-  // Error Handling on statements matching and fetch.
-
-  expandData(obj, g, pred) {
+  async _expandData(obj, g, pred) {
     const keyMap = {
       [PRED.mobile.value]: 'number',
       [PRED.email.value]: 'address'
@@ -185,29 +185,27 @@ export default class SolidAgent {
     }
 
     const relevant = g.statementsMatching(obj, undefined, undefined)
-
-    if (relevant.length) {
-      return defaultResponse
+    if (!relevant.length) {
+      return
+      // Object.assign({}, defaultResponse, {[key]: obj.value})
     }
 
-    if (relevant.length > 1) {
-
-    } else {
-      return Object.assign({}, defaultResponse, {key: obj.value})
-    }
-
-    if (rdfData.unav) {
-      console.warn('BNode unreachable')
-      return {id: null, verified: false, [key]: null}
-    }
-
-    extGraph.addAll(rdfData.triples)
+    const seeAlso = g.statementsMatching(obj, PRED.seeAlso, undefined)[0]
+      .object.value
     const id = g.statementsMatching(obj, PRED.identifier, undefined)[0]
-        .object.value
-    const value = extGraph.statementsMatching(undefined, pred, undefined)[0]
-        .object.value
+      .object.value
 
-    return { id, verified: false, [key]: value }
+    return this.ldp.fetchTriplesAtUri(seeAlso).then(rdfData => {
+      if (rdfData.unav) {
+        return defaultResponse
+      }
+
+      const extG = rdf.graph()
+      extG.addAll(rdfData.triples)
+      const value = extG.statementsMatching(undefined, pred, undefined)[0]
+        .object.value
+      return {id, verified: false, [key]: value}
+    })
   }
 
   setEmail(webId, entryValue) {
