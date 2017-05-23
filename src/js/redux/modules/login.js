@@ -20,7 +20,9 @@ const actions = module.exports = makeActions('wallet/identity', {
         // dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
         //   return backend.wallet
         //     .loginWithSeedPhrase('random', state.passphrase.value)
-        //     .then(() => dispatch(router.pushRoute('/login/expert/pin-entry')))
+        //     .then(() => dispatch(
+        //       router.pushRoute('/login/expert/pin-entry')
+        //     ))
         // }))
       }
     }
