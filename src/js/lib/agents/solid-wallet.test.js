@@ -87,15 +87,15 @@ describe.only('solidAgentAgent', () => {
           n0:mbox <#email456>;
           n0:phone <#phone123>.
 
-        <#email123> 
+        <#email123>
           schem:identifier "123";
           rd:seeAlso <https://test.com/profile/email123>.
 
-        <#email456> 
+        <#email456>
           schem:identifier "456";
           rd:seeAlso <https://test.com/profile/email456>.
 
-        <#phone123> 
+        <#phone123>
           schem:identifier "123";
           rd:seeAlso <https://test.com/profile/phone123>.`
 
@@ -369,5 +369,72 @@ em:owner
     it('Should put both the email entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
     })
+  })
+
+  describe('#deleteEntry', () => {
+    const entryUrl = 'https://test.com/profile/email123'
+    const entryAclUrl = 'https://test.com/profile/email123.acl'
+    const deleteArgumentsMap = {
+      [entryUrl]: {
+        name: 'entry file',
+        wasDeleted: false
+      },
+      [entryAclUrl]: {
+        name: 'acl file',
+        wasDeleted: false
+      }
+    }
+    const mockHttpAgent = {
+      delete: async (url) => {
+        const {name} = deleteArgumentsMap[url]
+        it(`Should put the ${name} to correct url`, (done) => {
+          expect(deleteArgumentsMap[url]).to.not.be.undefined
+          done()
+        })
+        deleteArgumentsMap[url].wasDeleted = true
+        return
+      },
+      patch: async (url, toDelete, toInsert) => {
+        it('Should patch the correct file', (done) => {
+          expect(url).to.equal(WEBID)
+          done()
+        })
+        it('Should not attempt to insert anything', (done) => {
+          expect(toInsert).to.deep.equal(undefined)
+          done()
+        })
+      }
+    }
+    const solidAgent = new SolidAgent()
+    solidAgent.http = mockHttpAgent
+    solidAgent.deleteEntry(WEBID, 'email', '123')
+
+    const entryDelete = deleteArgumentsMap[entryUrl].wasDeleted
+    const entryAclDelete = deleteArgumentsMap[entryAclUrl].wasDeleted
+
+    it('Should delete both the entry file, and it\'s acl ', () => {
+      expect(entryDelete && entryAclDelete).to.be.true
+    })
+  })
+  describe('#updateEntry', () => {
+    const entryUrl = 'https://test.com/profile/email123'
+    const putArgumentsMap = {
+      [entryUrl]: {
+        name: 'entry file',
+        wasPut: false
+      }
+    }
+    const mockHttpAgent = {
+      put: async (url) => {
+        const {name} = putArgumentsMap[url]
+        it(`Should put the ${name} to correct url`, (done) => {
+          expect(putArgumentsMap[url]).to.not.be.undefined
+          done()
+        })
+      }
+    }
+    const solidAgent = new SolidAgent()
+    solidAgent.http = mockHttpAgent
+    solidAgent.updateEntry(WEBID, 'email', '123', EMAIL)
   })
 })
