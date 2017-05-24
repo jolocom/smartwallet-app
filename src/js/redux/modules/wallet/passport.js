@@ -1,7 +1,7 @@
 const setPhysicalAddressField = (state, {field, value}) => state.mergeIn(
-  ['passport', 'physicalAddres', field], {
+  ['passport', 'physicalAddress', field], {
     value,
-    verified: isValidField({field, value})
+    valid: isValidField({field, value})
   })
 
 const listOfCountries = [
@@ -297,7 +297,10 @@ const actions = module.exports = makeActions('wallet/passport', {
   showVerifierLocations: {
     expectedParams: []
   },
-  change: {
+  changePassportField: {
+    expectedParams: ['field', 'value']
+  },
+  changePhysicalAddressField: {
     expectedParams: ['field', 'value']
   },
   setPhysicalAddress: {
@@ -337,7 +340,7 @@ const initialState = Immutable.fromJS({
   }
 })
 
-const isValidCountry = value => options.includes(value)
+const isValidCountry = value => true // options.indexOf(value) !== -1
 const isValidDate = value => {}
 const isValidGender = value => ['male', 'female'].includes(value)
 const isValidField = ({field, value}) => {
@@ -351,7 +354,7 @@ const isValidField = ({field, value}) => {
     case 'birthCountry':
       return isValidCountry(value)
     default:
-      return value.trim().length > 0
+      return value.length > 0
   }
 }
 const changeFieldValue = (state, {field, value}) => state.mergeIn(
@@ -365,7 +368,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.cancel.id:
       return initialState
 
-    case actions.change.id:
+    case actions.changePassportField.id:
       return changeFieldValue(state, action)
 
     case actions.save.id:
@@ -386,7 +389,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.showPhysicalAddress.id:
       return state.mergeIn({showAddress: !state.get('showAddress')})
 
-    case actions.setPhysicalAddress.id:
+    case actions.changePhysicalAddressField.id:
       return setPhysicalAddressField(state, action)
 
     case actions.chooseGender.id:

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import {connect} from 'redux/utils'
+
 import Presentation from '../presentation/passport'
 
 @connect({
@@ -8,7 +9,8 @@ import Presentation from '../presentation/passport'
   actions: [
     'wallet/passport:save',
     'wallet/passport:retrievePassportInformation',
-    'wallet/passport:change',
+    'wallet/passport:changePassportField',
+    'wallet/passport:changePhysicalAddressField',
     'wallet/passport:showVerifierLocations',
     'wallet/passport:chooseCountry',
     'wallet/passport:chooseGender',
@@ -20,7 +22,8 @@ export default class WalletPaasportScreen extends React.Component {
     passport: React.PropTypes.object.isRequired,
     save: React.PropTypes.func.isRequired,
     retrievePassportInformation: React.PropTypes.func.isRequired,
-    change: React.PropTypes.func.isRequired,
+    changePassportField: React.PropTypes.func.isRequired,
+    changePhysicalAddressField: React.PropTypes.func.isRequired,
     showVerifierLocations: React.PropTypes.func.isRequired,
     chooseCountry: React.PropTypes.func.isRequired,
     chooseGender: React.PropTypes.func.isRequired,
@@ -32,8 +35,8 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   render() {
-    const {save, retrievePassportInformation, showVerifierLocations, change,
-      chooseCountry, chooseGender, cancel} = this.props
+    const {save, retrievePassportInformation, showVerifierLocations,
+            chooseCountry, chooseGender, cancel} = this.props
     let {loaded, showErrors, focussedGroup, passport, showAddress, focussedField} = this.props.passport
 
     return <Presentation
@@ -43,7 +46,7 @@ export default class WalletPaasportScreen extends React.Component {
       showErrors={showErrors}
       save={save}
       retrievePassportInformation={retrievePassportInformation}
-      change={change}
+      change={(...args) => this.change(...args)}
       showVerifierLocations={showVerifierLocations}
       chooseCountry={chooseCountry}
       chooseGender={chooseGender}
@@ -51,6 +54,23 @@ export default class WalletPaasportScreen extends React.Component {
       showAddress={showAddress}
       physicalAddres={this.parseAddressDetailsToArray()}
       passport={this.parsePassportDetailsToArray()} />
+  }
+
+  change(field, ...args) {
+    let passportFields = [
+      'number',
+      'expirationDate',
+      'firstName',
+      'lastName',
+      'gender',
+      'birthDate',
+      'birthPlace',
+      'birthCountry'
+    ]
+    if (passportFields.includes(field)) {
+      return this.props.changePassportField(...args)
+    }
+    return this.props.changePhysicalAddressField(...args)
   }
 
   parsePassportDetailsToArray() {
@@ -69,14 +89,9 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   parseAddressDetailsToArray() {
-    let {
-      streetWithNumber,
-      zip,
-      city,
-      state,
-      country
+    let {streetWithNumber, zip, city, state, country
     } = this.props.passport.passport.physicalAddress
-    console.log('hhhhhhhhhhhhhhhhhh ',this.props.passport.passport);
+    console.log('======= value ============', streetWithNumber)
     return [
       {...streetWithNumber, key: 'streetWithNumber', label: 'Street'},
       {...zip, key: 'zip', label: 'Zip Code'},
