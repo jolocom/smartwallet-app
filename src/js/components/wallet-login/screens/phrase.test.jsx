@@ -10,7 +10,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
     const wrapper = shallow(
       (<ExpertLoginPassphraseScreen.WrappedComponent {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             passphrase: {
               value: '',
               failed: false
@@ -33,7 +33,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
     const wrapper = shallow(
       (<ExpertLoginPassphraseScreen.WrappedComponent {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             passphrase: {
               value: 'test',
               failed: false
@@ -56,7 +56,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
     const wrapper = shallow(
       (<ExpertLoginPassphraseScreen.WrappedComponent {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             passphrase: {
               value: 'test',
               failed: false

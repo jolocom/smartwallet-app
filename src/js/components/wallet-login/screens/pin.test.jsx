@@ -10,7 +10,7 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             pin: {
               value: '',
               focused: false,
@@ -38,7 +38,7 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             pin: {
               value: '',
               focused: false,
@@ -65,7 +65,7 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             pin: {
               value: '',
               focused: false,
@@ -92,7 +92,7 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             pin: {
               value: '',
               focused: false,
@@ -119,7 +119,7 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             pin: {
               value: '',
               focused: false,

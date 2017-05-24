@@ -18,6 +18,7 @@ export default class HoverButton extends React.Component {
     const STYLES = {
       hoverbutton: {
         ':hover': {
+          cursor: 'pointer',
           transition: transition,
           backgroundColor: this.props.hoverColor,
           color: this.props.backgroundColor

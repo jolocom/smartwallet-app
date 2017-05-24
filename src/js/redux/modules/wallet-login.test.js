@@ -1,9 +1,9 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
-import * as login from './login'
+import * as login from './wallet-login'
 // import * as router from './router'
 import {stub} from '../../../../test/utils'
-const reducer = require('./login').default
+const reducer = require('./wallet-login').default
 
 describe('Wallet login Redux module', function() {
   describe('setPassphrase', () => {

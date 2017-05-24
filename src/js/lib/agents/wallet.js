@@ -1,6 +1,10 @@
 import * as settings from 'settings'
 import {WalletManager} from 'smartwallet-contracts'
 
+// only for testing testSeed has some ether on ropsten testnet
+const TEST_SEED = 'mandate print cereal style toilet hole' +
+  ' cave mom heavy fork network indoor'
+
 export default class WalletAgent {
   constructor() {
     this._manager = new WalletManager(settings.blockchain)
@@ -8,10 +12,8 @@ export default class WalletAgent {
 
   generateSeedPhrase(entropy) {
     let seed = this._manager.generateSeedPhrase(entropy)
-    // only for testing testSeed has some ether on ropsten testnet
-    let testSeed = 'mandate print cereal style toilet hole' +
-      ' cave mom heavy fork network indoor'
-    seed = testSeed
+    // @TODO remove this
+    seed = TEST_SEED
     return seed
   }
 
@@ -30,7 +32,11 @@ export default class WalletAgent {
   }
 
   loginWithCredentials({userName, email, password}) {
-    return this._manager.loginWithCredentials({userName, email, password})
+    // return this._manager.loginWithCredentials({userName, email, password})
+    return Promise.resolve({
+      email: 'demo@jolocom.de',
+      seed: TEST_SEED
+    })
   }
 
   expertLogin({passphrase, pin}) {

@@ -2,7 +2,20 @@ import Immutable from 'immutable'
 import { makeActions } from './'
 import * as router from './router'
 
-const actions = module.exports = makeActions('wallet/identity', {
+const actions = module.exports = makeActions('wallet-login', {
+  setUserType: {
+    expectedParams: ['value'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        let route = '/login/layman'
+        if (params === 'expert') {
+          route = '/login/expert'
+        }
+
+        dispatch(router.pushRoute(route))
+      }
+    }
+  },
   setPassphrase: {
     expectedParams: ['value']
   },
@@ -14,11 +27,11 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        const state = getState().get('login').toJS()
+        const state = getState().get('walletLogin').toJS()
         dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
           return backend.wallet
             .loginWithSeedPhrase('random', state.passphrase.value)
-            .then(() => dispatch(router.pushRoute('/login/expert/pin-entry')))
+            .then(() => dispatch(router.pushRoute('/login/pin-entry')))
         }))
       }
     }
@@ -37,7 +50,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        const state = getState().get('login').toJS()
+        const state = getState().get('walletLogin').toJS()
         dispatch(actions.goForward.buildAction(params, (backend) => {
           return backend.wallet
             .expertLogin({passphrase: state.passphrase.value,
@@ -51,13 +64,44 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: [],
     creator: () => {
       return (dispatch) => {
-        dispatch(router.pushRoute('/login/expert'))
+        dispatch(router.pushRoute('/login'))
+      }
+    }
+  },
+  setUsername: {
+    expectedParams: ['value']
+  },
+  setPassword: {
+    expectedParams: ['value']
+  },
+  submitLogin: {
+    expectedParams: ['username, password'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState) => {
+        const state = getState().get('walletLogin').toJS()
+        dispatch(actions.submitLogin.buildAction(params, (backend) => {
+          return backend.wallet
+            .loginWithCredentials(state.login)
+            .then((response) => {
+              return backend.wallet
+                .loginWithSeedPhrase({
+                  userName: response.email,
+                  seedPhrase: response.seed
+                })
+            })
+            .then(() => dispatch(router.pushRoute('/login/pin-entry')))
+        }))
       }
     }
   }
 })
 
 const initialState = Immutable.fromJS({
+  userType: {
+    value: '',
+    valid: false
+  },
   passphrase: {
     value: '',
     failed: false,
@@ -70,11 +114,26 @@ const initialState = Immutable.fromJS({
     failed: false,
     valid: false,
     errorMsg: ''
+  },
+  login: {
+    username: '',
+    password: '',
+    failed: false,
+    valid: false,
+    errorMsg: ''
   }
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.setUserType.id:
+      return state.mergeDeep({
+        userType: {
+          value: action.value,
+          valid: action.value.length > 0
+        }
+      })
+
     case actions.setPassphrase.id:
       return state.mergeDeep({
         passphrase: {
@@ -152,6 +211,36 @@ module.exports.default = (state = initialState, action = {}) => {
           valid: true
         },
         passphrase: {
+          errorMsg: '',
+          failed: false,
+          valid: true
+        }
+      })
+    case actions.setUsername.id:
+      return state.mergeDeep({
+        login: {
+          username: action.value
+        }
+      })
+    case actions.setPassword.id:
+      return state.mergeDeep({
+        login: {
+          password: action.value
+        }
+      })
+    case actions.submitLogin.id_fail:
+      return state.mergeDeep({
+        login: {
+          errorMsg: 'Incorrect username or password',
+          failed: true,
+          valid: false
+        }
+      })
+    case actions.submitLogin.id_success:
+      return state.mergeDeep({
+        login: {
+          username: '',
+          password: '',
           errorMsg: '',
           failed: false,
           valid: true
