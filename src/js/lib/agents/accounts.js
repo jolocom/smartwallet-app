@@ -20,7 +20,7 @@ class AccountsAgent {
       })
       .catch((e) => {
         // console.log(e.typeError)
-        if (e.response && e.response.status === 401) {
+        if (!!e.response && e.response.status === 401) {
           resolve()
         } else {
           // eslint-disable-next-line max-len
