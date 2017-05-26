@@ -1,7 +1,5 @@
-/* eslint-disable */
 import {expect} from 'chai'
 import Immutable from 'immutable'
-import {stub} from '../../../test/utils'
 import {listOfCountries} from './list-of-countries'
 import {
   isValidCountry,
@@ -55,7 +53,7 @@ describe('# Passport util', () => {
       expect(isValidField({field: 'birthCountry', value: 'France'})).to.be.true
     })
   })
-  describe.only('# checkForNonValidFields', () => {
+  describe('# checkForNonValidFields', () => {
     it('should set showErrors to true if a field is not valid or empty', () => {
       const validField = {valid: true, value: 'test'}
       const nonValidField = {valid: false, value: 'test'}
@@ -82,7 +80,7 @@ describe('# Passport util', () => {
       })
       expect(checkForNonValidFields(state).toJS().showErrors).to.be.true
     })
-    it('should set showErrors to false if all the field are either alid or empty', () => {
+    it('should set showErrors to false if all the field are either alid or empty', () => { // eslint-disable-line max-len
       const validField = {valid: true, value: 'test'}
       const state = Immutable.fromJS({
         showErrors: false,
@@ -106,6 +104,58 @@ describe('# Passport util', () => {
         }
       })
       expect(checkForNonValidFields(state).toJS().showErrors).to.be.false
+    })
+  })
+  describe('# setPhysicalAddressField ', () => {
+    it('should set physical address field to the given value', () => {
+      const state = Immutable.fromJS({
+        passport: {
+          physicalAddress: {
+            streetWithNumber: {
+              value: '',
+              valid: false
+            }
+          }
+        }
+      })
+      const newState = {
+        passport: {
+          physicalAddress: {
+            streetWithNumber: {
+              value: 'test',
+              valid: true
+            }
+          }
+        }
+      }
+      expect(setPhysicalAddressField(state, {
+        field: 'streetWithNumber',
+        value: 'test'
+      }).toJS()).to.deep.equal(newState)
+    })
+  })
+  describe('# changeFieldValue ', () => {
+    it('should set passport field to the given value', () => {
+      const state = Immutable.fromJS({
+        passport: {
+          gender: {
+            value: '',
+            valid: false
+          }
+        }
+      })
+      const newState = {
+        passport: {
+          gender: {
+            value: 'male',
+            valid: true
+          }
+        }
+      }
+      expect(changeFieldValue(state, {
+        field: 'gender',
+        value: 'male'
+      }).toJS()).to.deep.equal(newState)
     })
   })
 })
