@@ -96,4 +96,37 @@ describe('# Passport redux module', () => {
       })
     })
   })
+  describe('# Actions', () => {
+    describe('# showPhysicalAddress', () => {
+      it('should return the expected params when called properly', () => {
+        const showPhysicalAddress = actions.showPhysicalAddress(true)
+        expect(showPhysicalAddress).to.deep.equal({
+          type: actions.showPhysicalAddress.id,
+          value: true
+        })
+      })
+    })
+    describe('# changePassportField', () => {
+      it('should return the expected params when called properly', () => {
+        const changePassportField = actions.changePassportField('number',
+        'test')
+        expect(changePassportField).to.deep.equal({
+          type: actions.changePassportField.id,
+          value: 'test',
+          field: 'number'
+        })
+      })
+    })
+    describe('# changePhysicalAddressField', () => {
+      it('should return the expected params when called properly', () => {
+        const changePhysicalAddressField = actions
+        .changePhysicalAddressField('number', 'test')
+        expect(changePhysicalAddressField).to.deep.equal({
+          type: actions.changePhysicalAddressField.id,
+          value: 'test',
+          field: 'streetWithNumber'
+        })
+      })
+    })
+  })
 })
