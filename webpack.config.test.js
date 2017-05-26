@@ -39,7 +39,7 @@ module.exports = {
     {
       test: /\.js$/,
       loader: 'babel',
-      include: path.join(__dirname, 'node_modules', 'smartwallet-contracts', 'node_modules', 'ethereumjs-tx')
+      include: path.join(__dirname, 'node_modules', 'ethereumjs-tx')
     },
     {
       test: /\.json$/,
