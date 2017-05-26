@@ -448,6 +448,7 @@ helpers._getNextURL = (currentPath, userType) => {
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
   }
+
   return NEXT_ROUTES[currentPath]
 }
 
