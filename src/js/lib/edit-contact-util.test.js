@@ -461,7 +461,7 @@ describe('# Edit contact Util', () => {
         submitChanges(backend, {}, state, webId)
         expect(setEmail.called).to.be.false
         expect(updateEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'emails', 1, 'test@test.com']}])
+        .equal([{args: ['testuser', 'email', 1, 'test@test.com']}])
         expect(deleteEntry.called).to.be.false
       })
       it('should not update a non verified emails with a non valid value',
@@ -540,7 +540,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.true
         expect(deleteEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'emails', 1]}])
+        .equal([{args: ['testuser', 'email', 1]}])
       })
     })
     describe('# Phone', () => {
@@ -622,7 +622,7 @@ describe('# Edit contact Util', () => {
         expect(deleteEntry.called).to.be.false
         expect(updateEntry.called).to.be.true
         expect(updateEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'phones', 1, '123456']}])
+        .equal([{args: ['testuser', 'phone', 1, '123456']}])
       })
       it('should not update a non verified phones value with a non valid value',
       () => {
@@ -703,7 +703,7 @@ describe('# Edit contact Util', () => {
         expect(updateEntry.called).to.be.false
         expect(deleteEntry.called).to.be.true
         expect(deleteEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'phones', 1]}])
+        .equal([{args: ['testuser', 'phone', 1]}])
       })
     })
   })

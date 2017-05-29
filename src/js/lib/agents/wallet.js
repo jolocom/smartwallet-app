@@ -25,23 +25,12 @@ export default class WalletAgent {
     return this._manager.registerWithCredentials({userName, email, password})
   }
 
-  loginWithSeedPhrase({userName, seedPhrase}) {
-    return this._manager.loginWithSeedPhrase({userName, seedPhrase})
+  loginWithSeedPhrase({seedPhrase, pin}) {
+    return this._manager.loginWithSeedPhrase({seedPhrase, pin})
   }
 
   loginWithCredentials({userName, email, password}) {
     return this._manager.loginWithCredentials({userName, email, password})
-  }
-
-  expertLogin({passphrase, pin}) {
-    return new Promise((resolve, reject) => {
-      setTimeout(
-        () => {
-          resolve(new Wallet())
-        },
-        2000
-      )
-    })
   }
 }
 // TODO: DELETE THIS CLASS WHEN EDIT-CONTACT-UTIL and

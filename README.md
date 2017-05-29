@@ -14,11 +14,14 @@ https://nodejs.org/en/download/
 
 ## Installation
 
+Prerequisites:
+- [yarn](https://yarnpkg.com)
+
 After cloning the little-sister repository to a directory on your computer. Enter the directory and run the following command:
 
 ```bash
-npm install -g gulp
-npm install
+yarn global add gulp
+yarn install
 ```
 
 ## Building
@@ -56,13 +59,13 @@ gulp build:cordova
 #### iOS
 
 ```bash
-npm run ios
+yarn run ios
 ```
 
 #### Android
 
 ```bash
-npm run android
+yarn run android
 ```
 
 ### Notes
@@ -76,8 +79,8 @@ Setup for production
 
 ## Installation
 ```bash
-npm install -g gulp
-npm install --production
+yarn global add gulp
+yarn install --production
 ```
 
 ## Building
@@ -116,7 +119,7 @@ Choosing a SoLiD server
 -----------------------
 
 Little Sister lets you explore linked data, based on WebID. Here are the solutions we suggest to get your own WebID and make linked data.
-  
+
 ## Using the Jolocom WebID proxy.
 Simply sign up on Little Sister application.
 
@@ -126,14 +129,14 @@ You can switch to another WebID proxy in the `config/` folder.
 Create an account on [Databox](https://databox.me/) for example and save the certificates on your browser.
 
 Log in to Little Sister using those client certificates.
-    
+
 ## Running a Solid server locally (self-hosting) (soon supported)
 You can run a Solid server locally, for instance [node-solid-server](https://github.com/solid/node-solid-server), to host data on your computer/server. We have prepared tools to get you started with some example base data. Do note that Solid can also be used as a a webserver and serve the Little-Sister application.
 
 ## Install solid-server
 
 ```bash
-npm install -g solid-server
+yarn global add solid-server
 ```
 
 Try to run `solid`. If it fails make sure that your `node` package version is >= v6.0.0
@@ -176,7 +179,7 @@ You can start the solid-server in the followings ways:
 - With default configuration
 
 ```bash
-npm run solid
+yarn run solid
 ```
 
 - With explicit parameters from command line
@@ -211,7 +214,7 @@ Tests
 ## Running tests locally
 
 ```bash
-npm test
+yarn test
 ```
 
 ## Writing tests
@@ -222,7 +225,7 @@ Frameworks used for testing: `Mocha`, `Chai`, `Sinon` and `Enzyme`. Tests are ru
 
 2. Write your unit and component tests in this file.
 
-3. Run `$ npm test`
+3. Run `$ yarn test`
 
 
 Documentation

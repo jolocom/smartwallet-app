@@ -2,6 +2,20 @@ import Immutable from 'immutable'
 import { makeActions } from './'
 
 export const actions = module.exports = makeActions('email-confirmation', {
+  startEmailConfirmation: {
+    expectedParams: ['email'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        dispatch(actions.startConfirmation.buildAction(params, (backend) => {
+          return backend.verification.startVerifyingEmail({
+            contractID: services.auth.currentUser.wallet.getIdentityAddress(),
+            email: params.email
+          })
+        }))
+      }
+    }
+  },
   confirm: {
     expectedParams: ['email', 'code'],
     async: true,
@@ -14,7 +28,11 @@ export const actions = module.exports = makeActions('email-confirmation', {
           return dispatch(action)
         }
         dispatch(actions.confirm.buildAction(params, (backend) => {
-          return services.auth.currentUser.wallet.finishConfirmEmail(params)
+          return backend.verification.verifyingEmail({
+            contractID: services.auth.currentUser.wallet.getIdentityAddress(),
+            email: params.email,
+            code: params.code
+          })
         }))
       }
     }

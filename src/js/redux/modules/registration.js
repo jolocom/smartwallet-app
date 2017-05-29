@@ -148,7 +148,7 @@ const actions = module.exports = makeActions('registration', {
     expectedParams: ['value']
   },
   checkUsername: {
-    expectedParams: ['username'],
+    expectedParams: [],
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
@@ -157,7 +157,6 @@ const actions = module.exports = makeActions('registration', {
           return backend.accounts
             .checkUsername(state.username.value).then((params) => {
               dispatch(actions.goForward())
-              return params
             })
         }))
       }
@@ -203,7 +202,6 @@ const initialState = Immutable.fromJS({
     value: '',
     checking: false,
     errorMsg: '',
-    blank: true,
     valid: false,
     alphaNum: false
   },
@@ -383,6 +381,7 @@ module.exports.default = (state = initialState, action = {}) => {
         username: {
           value: action.value,
           alphaNum: (/^[a-z0-9]+$/i.test(action.value)),
+          valid: action.value.trim() !== '',
           errorMsg: ''
         }
       })
@@ -397,8 +396,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         username: {
           checking: false,
-          errorMsg: '',
-          valid: true
+          errorMsg: ''
         }
       })
     case actions.checkUsername.id_fail:
@@ -442,7 +440,6 @@ helpers._getNextURLFromState = (state) => {
     }
     return null
   }
-
   return helpers._getNextURL(currentPath, userType)
 }
 
@@ -452,6 +449,7 @@ helpers._getNextURL = (currentPath, userType) => {
               ? '/registration/write-phrase'
               : '/registration/phrase-info'
   }
+
   return NEXT_ROUTES[currentPath]
 }
 
