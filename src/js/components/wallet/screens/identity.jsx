@@ -14,7 +14,7 @@ import WalletError from '../presentation/error'
     'confirmation-dialog:closeConfirmDialog',
     'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
-    'email-verification:startEmailConfirmation'
+    'email-confirmation:startEmailConfirmation'
   ]
 })
 
