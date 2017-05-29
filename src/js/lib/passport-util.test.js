@@ -8,6 +8,7 @@ import {
   genderList,
   isValidField,
   setPhysicalAddressField,
+  mapBackendToState,
   changeFieldValue,
   checkForNonValidFields
 } from './passport-util'
@@ -152,10 +153,100 @@ describe('# Passport util', () => {
           }
         }
       }
+
       expect(changeFieldValue(state, {
         field: 'gender',
         value: 'male'
       }).toJS()).to.deep.equal(newState)
+    })
+  })
+  describe.only('# mapBackendToState', () => {
+    it('should map the passport information from backend to state', () => {
+      const result = {
+        locations: [{
+          title: 'location',
+          streetWithNumber: 'streetName 123',
+          zip: '0000',
+          city: 'Berlin'
+        }],
+        number: '123456',
+        expirationDate: '02-02-2020',
+        firstName: 'Test',
+        lastName: 'Test',
+        gender: 'male',
+        birthDate: '02-02-2000',
+        birthPlace: 'Berlin',
+        birthCountry: 'Germany',
+        physicalAddress: {
+          streetWithNumber: 'streetName 1234',
+          zip: '0000',
+          city: 'Berlin',
+          state: 'Berlin',
+          country: 'Germany'
+        }
+      }
+      const state = Immutable.fromJS({
+        loaded: false,
+        showErrors: false,
+        focusedGroup: null,
+        focusedField: null,
+        passport: {
+          locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
+          number: {value: '', valid: false},
+          expirationDate: {value: '', valid: false},
+          firstName: {value: '', valid: false},
+          lastName: {value: '', valid: false},
+          gender: {value: '', valid: false, options: genderList},
+          birthDate: {value: '', valid: false},
+          birthPlace: {value: '', valid: false},
+          birthCountry: {value: '', valid: false, options: listOfCountries},
+          showAddress: false,
+          physicalAddress: {
+            streetWithNumber: {value: '', valid: false},
+            zip: {value: '', valid: false},
+            city: {value: '', valid: false},
+            state: {value: '', valid: false},
+            country: {value: '', valid: false, options: listOfCountries}
+          }
+        }
+      })
+      const expectedState = {
+        loaded: true,
+        showErrors: false,
+        focusedGroup: null,
+        focusedField: null,
+        passport: {
+          locations: [{
+            title: 'location',
+            streetWithNumber: 'streetName 123',
+            zip: '0000',
+            city: 'Berlin'
+          }],
+          number: {value: '123456', valid: true},
+          expirationDate: {value: '02-02-2020', valid: true},
+          firstName: {value: 'Test', valid: true},
+          lastName: {value: 'Test', valid: true},
+          gender: {value: 'male', valid: true, options: genderList},
+          birthDate: {value: '02-02-2000', valid: true},
+          birthPlace: {value: 'Berlin', valid: true},
+          birthCountry: {
+            value: 'Germany',
+            valid: true,
+            options: listOfCountries
+          },
+          showAddress: false,
+          physicalAddress: {
+            streetWithNumber: {value: 'streetName 1234', valid: true},
+            zip: {value: '0000', valid: true},
+            city: {value: 'Berlin', valid: true},
+            state: {value: 'Berlin', valid: true},
+            country: {value: 'Germany', valid: true, options: listOfCountries}
+          }
+        }
+      }
+
+      expect(mapBackendToState(state, {result}).toJS())
+        .to.deep.equal(expectedState)
     })
   })
 })

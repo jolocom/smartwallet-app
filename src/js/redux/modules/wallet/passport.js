@@ -7,6 +7,7 @@ import {
   checkForNonValidFields,
   submitChanges,
   genderList,
+  mapBackendToState,
   changeFieldValue
 } from '../../../lib/passport-util'
 
@@ -47,7 +48,7 @@ const actions = module.exports = makeActions('wallet/passport', {
     creator: (params) => {
       return (dispatch, {services, backend}) => {
         dispatch(actions.retrievePassportInformation.buildAction(params,
-          () => backend.solid.getUserInformation()
+          () => backend.solid.getPassportInformation()
         ))
       }
     }
@@ -71,6 +72,9 @@ const actions = module.exports = makeActions('wallet/passport', {
   changePassportField: {
     expectedParams: ['field', 'value']
   },
+  setFoccusedGroup: {
+    expectedParams: ['value']
+  },
   changePhysicalAddressField: {
     expectedParams: ['field', 'value']
   }
@@ -79,10 +83,10 @@ const actions = module.exports = makeActions('wallet/passport', {
 const initialState = module.exports.initialState = Immutable.fromJS({
   loaded: false,
   showErrors: false,
-  focussedGroup: null,
-  foccusedField: null,
+  focusedGroup: null,
+  focusedField: null,
   passport: {
-    locations: {title: '', streetWithNumber: '', zip: '', city: ''},
+    locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},
     firstName: {value: '', valid: false},
@@ -129,9 +133,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.retrievePassportInformation.id:
-      return state.merge({
-        loaded: false
-      })
+      return mapBackendToState(state, action)
 
     case actions.retrievePassportInformation.id_fail:
       return state.merge({
@@ -152,6 +154,9 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.changePhysicalAddressField.id:
       return setPhysicalAddressField(state, action)
+
+    case actions.setFoccusedGroup.id:
+      return state.merge({focusedGroup: action.value})
 
     case actions.validate.id:
       return checkForNonValidFields(state)
