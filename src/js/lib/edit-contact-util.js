@@ -115,10 +115,12 @@ export const updateOriginalValue = (state, {field, value, index}) => {
   }
   return state
 }
-const collectChages = (state, {remove, update, set}, key, webId) => [].concat(
+const collectChages =
+  (state, {remove, update, set}, key, webId, attributeType) => [].concat(
     state.originalInformation[key].map(
-      e => e.delete ? remove(webId, key, e.id)
-      : (e.update && e.valid && !e.verified) ? update(webId, key, e.id, e.value)
+      e => e.delete ? remove(webId, attributeType, e.id)
+      : (e.update && e.valid && !e.verified)
+      ? update(webId, attributeType, e.id, e.value)
       : null
     ), state.newInformation[key].map(
       e => (e.delete || e.blank || !e.valid)
@@ -138,7 +140,7 @@ export const submitChanges = (backend, services, state, webId) => {
     update: solidAgent.updateEntry.bind(solidAgent)
   }
   let promises = [].concat(
-    collectChages(state, emailOperations, 'emails', webId),
-    collectChages(state, phoneOperations, 'phones', webId))
+    collectChages(state, emailOperations, 'emails', webId, 'email'),
+    collectChages(state, phoneOperations, 'phones', webId, 'phone'))
   return Promise.all(promises)
 }
