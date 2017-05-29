@@ -183,7 +183,8 @@ const actions = module.exports = makeActions('registration', {
             return backend.wallet.registerWithCredentials({
               userName: state.username.value,
               email: state.email.value,
-              password: state.password.value
+              password: state.password.value,
+              pin: state.pin.value
             }).then((params) => {
               dispatch(router.pushRoute('/wallet'))
               return params
