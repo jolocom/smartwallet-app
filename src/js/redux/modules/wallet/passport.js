@@ -28,6 +28,15 @@ const actions = module.exports = makeActions('wallet/passport', {
       }
     }
   },
+  setShowAddress: {
+    expectedParams: ['value']
+  },
+  setFocusedField: {
+    expectedParams: ['value']
+  },
+  setFocusedGroup: {
+    expectedParams: ['value']
+  },
   validate: {
     expectedParams: []
   },
@@ -83,8 +92,8 @@ const actions = module.exports = makeActions('wallet/passport', {
 const initialState = module.exports.initialState = Immutable.fromJS({
   loaded: false,
   showErrors: false,
-  focusedGroup: null,
-  focusedField: null,
+  focusedGroup: '',
+  focusedField: '',
   passport: {
     locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
     number: {value: '', valid: false},
@@ -126,6 +135,11 @@ module.exports.default = (state = initialState, action = {}) => {
         loaded: true
       })
 
+    case actions.setShowAddress.id:
+      return state.mergeIn(['passport'], {
+        showAddress: action.value
+      })
+
     case actions.save.id_success:
       return state.merge({
         loaded: true,
@@ -147,6 +161,16 @@ module.exports.default = (state = initialState, action = {}) => {
         showErrors: false
       })
 
+    case actions.setFocusedGroup.id:
+      return state.merge({
+        focusedGroup: action.value
+      })
+
+    case actions.setFocusedField.id:
+      return state.merge({
+        focusedField: action.value
+      })
+
     case actions.showPhysicalAddress.id:
       return state.mergeIn(['passport'], {
         showAddress: !state.getIn(['passport', 'showAddress'])
@@ -154,9 +178,6 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.changePhysicalAddressField.id:
       return setPhysicalAddressField(state, action)
-
-    case actions.setFoccusedGroup.id:
-      return state.merge({focusedGroup: action.value})
 
     case actions.validate.id:
       return checkForNonValidFields(state)

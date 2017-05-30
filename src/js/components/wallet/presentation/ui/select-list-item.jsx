@@ -92,7 +92,7 @@ export default class SelectListItem extends React.Component {
       name,
       value,
       enableEdit,
-      // onChange,
+      onChange,
       valid,
       showErrors,
       errorText
@@ -128,7 +128,7 @@ export default class SelectListItem extends React.Component {
             floatingLabelText={label}
             name={name}
             value={value}
-            onChange={this.props.onChange}
+            onChange={onChange}
             errorText={showErrors && !valid && !!value ? errorText : null}
           >
           {this.props.types.map((type, i) => <MenuItem
