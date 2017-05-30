@@ -13,7 +13,8 @@ const rdfHelper = {
 
     const typeToPred = {
       phone: PRED.mobile,
-      email: PRED.email
+      email: PRED.email,
+      passport: 'http://dbpedia.org/page/Passport'
     }
 
     g.add(rdf.sym(webId), typeToPred[entryType], rdf.sym(entryNode))
@@ -219,6 +220,20 @@ export default class SolidAgent {
     return this._setEntry(webId, entryValue, 'phone')
   }
 
+  setPassport(webId, passport) {
+    if (!webId || !passport) {
+      console.error('Invalid arguments')
+      return
+    }
+    const rndId = this._genRandomAttrId()
+    const entryFileUrl = `${util.getProfFolderUrl(webId)}/passport${rndId}`
+    const body = rdfHelper
+    .addEntryPatch(entryFileUrl, webId, rndId, 'passport')
+
+    return Promise.all([this.http.patch(webId, [], body),
+      this.createPassportFile(webId, entryFileUrl, passport)])
+  }
+
   _setEntry(webId, entryValue, entryType) {
     const rndId = this._genRandomAttrId()
     const entryFileUrl = `${util.getProfFolderUrl(webId)}/${entryType}${rndId}`
@@ -237,6 +252,8 @@ export default class SolidAgent {
       this.http.put(entryFileUrl, entryFileBody)])
   }
 
+  createPassportFile(webId, entryFileUrl, passport) {}
+
   // Move out of class?
   _createEntryFileAcl(webId, entryFileUrl) {
     const entryFileAclUrl = `${entryFileUrl}.acl`
@@ -247,6 +264,6 @@ export default class SolidAgent {
   }
 
   _genRandomAttrId() {
-    return util.randomString(3)
+    return util.randomString(5)
   }
 }
