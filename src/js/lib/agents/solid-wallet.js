@@ -69,19 +69,20 @@ export default class SolidAgent {
         email: []
       },
       Reputation: 0,
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
+      // passport: {
+      //   number: null,
+      //   givenName: null,
+      //   surname: null,
+      //   birthDate: null,
+      //   gender: null,
+      //   street: null,
+      //   streetAndNumber: null,
+      //   city: null,
+      //   zip: null,
+      //   state: null,
+      //   country: null
+      // }
+      passports: []
     }
   }
 
