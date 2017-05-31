@@ -7,11 +7,17 @@ const actions = module.exports = makeActions('wallet-login', {
     expectedParams: ['value'],
     creator: (params) => {
       return (dispatch, getState) => {
-        let route = '/login/layman'
-        if (params === 'expert') {
-          route = '/login/expert'
+        dispatch(actions.setUserType.buildAction(params))
+        const {userType} = getState().get('walletLogin').toJS()
+
+        if (!userType.valid) {
+          return false
         }
 
+        let route = '/login/layman'
+        if (userType.value === 'expert') {
+          route = '/login/expert'
+        }
         dispatch(router.pushRoute(route))
       }
     }
@@ -127,10 +133,15 @@ const initialState = Immutable.fromJS({
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.setUserType.id:
-      return state.mergeDeep({
+      const valid = ['expert', 'layman'].indexOf(action.value) !== -1
+      if (action.value && !valid) {
+        throw Error('Invalid user type: ' + action.value)
+      }
+
+      return state.merge({
         userType: {
           value: action.value,
-          valid: action.value.length > 0
+          valid
         }
       })
 

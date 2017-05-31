@@ -5,7 +5,26 @@ import * as login from './wallet-login'
 import {stub} from '../../../../test/utils'
 const reducer = require('./wallet-login').default
 
-describe('Wallet login Redux module', function() {
+describe.only('Wallet login Redux module', function() {
+  describe('setUserType', function() {
+    it('should throw an error when supplying invalid value', () => {
+      expect(() => reducer(Immutable.fromJS({
+      }), login.actions.setUserType('bla')))
+        .to.throw('Invalid user type: bla')
+    })
+
+    it('should be able to set the user type to a valid value', () => {
+      let state = reducer(undefined, '@@INIT')
+
+      state = reducer(state, login.actions.setUserType('expert'))
+      expect(state.get('userType').toJS())
+        .to.deep.equal({value: 'expert', valid: true})
+
+      state = reducer(state, login.actions.setUserType('layman'))
+      expect(state.get('userType').toJS())
+        .to.deep.equal({value: 'layman', valid: true})
+    })
+  })
   describe('setPassphrase', () => {
     it('should return the correct value', () => {
       const action = login.actions.setPassphrase('test')
@@ -36,13 +55,42 @@ describe('Wallet login Redux module', function() {
       expect(action.value).to.be.true
     })
   })
+  describe('setUsername', () => {
+    it('should return the correct value', () => {
+      const action = login.actions.setUsername('test')
+      expect(action.value).to.equal('test')
+    })
+  })
+  describe('setPassword', () => {
+    it('should return the correct value', () => {
+      const action = login.actions.setPassword('test')
+      expect(action.value).to.equal('test')
+    })
+  })
+  describe('submitLogin', () => {
+    it('should return the correct value', () => {
+      const action = login.actions.submitLogin({
+        username: 'test',
+        password: 'test'
+      })
+      expect(action.value).to.equal('test')
+    })
+  })
   describe('#Reducer', () => {
     it('should initialize properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal({
+        userType: {value: '', valid: false},
         passphrase: {value: '', failed: false, valid: false, errorMsg: ''},
         pin: {value: '', failed: false, valid: false, focused: false,
           errorMsg: ''
+        },
+        login: {
+          username: '',
+          password: '',
+          errorMsg: '',
+          failed: false,
+          valid: true
         }
       })
     })
