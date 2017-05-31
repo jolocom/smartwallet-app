@@ -9,7 +9,10 @@ module.exports = {
   blockchain: {
     // Test RPC node
     gethHost: 'http://verification.jolocom.com:9050',
-    lookupContractAddress: '0x1f18b8d96f0a26eea82ce0d4bc202cc429df955f'
+    lookupContractAddress: '0x1f18b8d96f0a26eea82ce0d4bc202cc429df955f',
+    seedStorage: {
+      url: 'https://seed-service.jolocom.net/'
+    }
 
     // Ropsten Testnet on 2017-04-12
     // gethHost: 'http://verification.jolocom.com:8545',

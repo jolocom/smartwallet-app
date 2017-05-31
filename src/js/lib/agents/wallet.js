@@ -27,8 +27,8 @@ export default class WalletAgent {
     return this._manager.registerWithCredentials({userName, email, password})
   }
 
-  loginWithSeedPhrase({userName, seedPhrase}) {
-    return this._manager.loginWithSeedPhrase({userName, seedPhrase})
+  loginWithSeedPhrase({seedPhrase, pin}) {
+    return this._manager.loginWithSeedPhrase({seedPhrase, pin})
   }
 
   loginWithCredentials({userName, email, password}) {
@@ -36,17 +36,6 @@ export default class WalletAgent {
     return Promise.resolve({
       email: 'demo@jolocom.de',
       seed: TEST_SEED
-    })
-  }
-
-  expertLogin({passphrase, pin}) {
-    return new Promise((resolve, reject) => {
-      setTimeout(
-        () => {
-          resolve(new Wallet())
-        },
-        2000
-      )
     })
   }
 }
