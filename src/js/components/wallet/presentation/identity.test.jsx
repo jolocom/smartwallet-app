@@ -7,7 +7,7 @@ describe('(Component) Wallet Identity', function() {
     shallow(
       (<WalletIdentity
         username={{ value: '' }}
-        passport={{}}
+        passports={[]}
         isLoaded
         webId={''}
         contact={{
