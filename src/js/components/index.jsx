@@ -157,8 +157,7 @@ let Index = React.createClass({
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/logo_start.svg)',
-              width: '100px'
+              backgroundImage: 'url(/img/logo_start.svg)'
             })} />
           </div>
           <div style={styles.slide}>

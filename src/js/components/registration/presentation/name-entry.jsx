@@ -45,7 +45,7 @@ const NameEntry = (props) => {
     </div>)
   return (
     <Container>
-      <Header title="Let's get started! Please type in a username." />
+      <Header title="Let's get started! Please type in a username." style={STYLES.heading} />
       <Content>
         <SideNote>
           It needs to be unique, but choose wisely. It will be part of your
