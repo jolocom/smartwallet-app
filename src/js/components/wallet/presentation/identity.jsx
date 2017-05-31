@@ -163,6 +163,53 @@ PhoneList.propTypes = {
   onConfirm: React.PropTypes.func.isRequired
 }
 
+const PassportList = (props) => {
+  let display = []
+  let {passports} = props
+  if (!props.passports) {
+    return null
+  }
+  display.push(passports.map((passport, index) => {
+    return (
+      <List>
+        <StaticListItem
+          key={'passportnumber' + index}
+          textLabel="passport number"
+          textValue={passport.number}
+        />
+        <StaticListItem
+          key={'surname' + index}
+          icon={PersonIcon}
+          textLabel="Surname"
+          textValue={passport.surname}
+        />
+        <StaticListItem
+          key={'givenName' + index}
+          textLabel="Given Name"
+          textValue={passport.givenName}
+        />
+        <StaticListItem
+          key={'dateofbirth' + index}
+          textLabel="Date of Birth"
+          textValue={passport.birthDate}
+        />
+        <StaticListItem
+          key={'gender' + index}
+          textLabel="Gender"
+          textValue={passport.gender}
+        />
+      </List>
+    )
+  }))
+  return <List disabled>
+    {display}
+  </List>
+}
+
+PassportList.propTypes = {
+  passports: React.PropTypes.array.isRequired
+}
+
 const EmailList = (props) => {
   let display = []
   let {emails, onVerify, onConfirm} = props
@@ -264,7 +311,7 @@ export default class WalletIdentity extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     username: React.PropTypes.object.isRequired,
-    passport: React.PropTypes.object.isRequired,
+    passports: React.PropTypes.array.isRequired,
     isLoaded: React.PropTypes.bool.isRequired,
     isError: React.PropTypes.bool.isRequired,
     webId: React.PropTypes.string.isRequired,
@@ -279,7 +326,7 @@ export default class WalletIdentity extends React.Component {
   render() {
     let {
       username,
-      passport,
+      passports,
       isLoaded,
       webId,
       contact,
@@ -352,8 +399,13 @@ export default class WalletIdentity extends React.Component {
             <Block>
               <PlusMenu
                 name="Passport"
-                choice={passport.number}
+                choice={passports.length > 0}
                 goToManagement={goToPassportManagement}
+              />
+            </Block>
+            <Block>
+              <PassportList
+                passports={passports}
               />
             </Block>
             <Block>

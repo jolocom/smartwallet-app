@@ -30,20 +30,7 @@ describe('(Component) WalletIdentityScreen', function() {
                   verified: true
                 }]
               },
-              passport: {
-                number: '',
-                givenName: '',
-                familyName: '',
-                birthDate: '',
-                gender: '',
-                showAddress: '',
-                streetAndNumber: '',
-                city: '',
-                zip: '',
-                state: '',
-                country: '',
-                verified: false
-              },
+              passports: [],
               error: false
             }
           }
@@ -72,11 +59,7 @@ describe('(Component) WalletIdentityScreen', function() {
       phones: [{number: '+49 176 12345678', type: 'mobile', verified: true}],
       emails: [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
     })
-    expect(wrapper.find('WalletIdentity').prop('passport')).to.deep.equal({
-      number: '', givenName: '', familyName: '', birthDate: '', gender: '',
-      showAddress: '', streetAndNumber: '', city: '', zip: '', state: '',
-      country: '', verified: false
-    })
+    expect(wrapper.find('WalletIdentity').prop('passports')).to.deep.equal([])
   })
   it('should call goToDrivingLicenceManagement with proper params', () => {
     const goToDrivingLicenceManagement = stub()

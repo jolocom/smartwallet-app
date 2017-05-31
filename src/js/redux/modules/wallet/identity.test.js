@@ -17,11 +17,11 @@ describe('# Wallet identity redux module', () => {
           phones: [{type: '', number: '', verified: false}],
           emails: [{type: '', address: '', verified: false}]
         },
-        passport: {
+        passports: [{
           number: '', givenName: '', familyName: '', birthDate: '',
           gender: '', showAddress: '', streetAndNumber: '', city: '',
           zip: '', state: '', country: '', verified: false
-        }
+        }]
       })
     })
 
@@ -33,7 +33,7 @@ describe('# Wallet identity redux module', () => {
           webId: 'test',
           username: 'test',
           contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
-          passport: 'test'
+          passports: ['test']
         }
       }
       state = reducer(state, action)
@@ -44,7 +44,7 @@ describe('# Wallet identity redux module', () => {
           webId: 'test',
           username: 'test',
           contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
-          passport: 'test'
+          passports: ['test']
         })
     })
   })
