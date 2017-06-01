@@ -83,7 +83,7 @@ const Login = connect({
       },
       logoImg: {
         maxWidth: '80%',
-        width: '100px'
+        width: '200px'
       },
       title: {
         fontWeight: 'normal',
@@ -138,7 +138,7 @@ const Login = connect({
           </IconButton>}
           />
         <div style={styles.logo}>
-          <img src="/img/logo.svg" style={styles.logoImg} />
+          <img src="/img/JOLOCOM_logo-01.svg" style={styles.logoImg} />
         </div>
         <div style={{paddingBottom: '8px', color: '#e8540c'}}>
           {this.props.login.failureMsg}
