@@ -17,9 +17,12 @@ const STYLES = {
     padding: '16px'
   },
   fieldContainer: {
-    marginTop: '15%',
-    backgroundColor: '#ffffff',
-    padding: '0 16px'
+    width: '300px',
+    maxWidth: '90%',
+    padding: '0px 20px 20px',
+    margin: '10px auto 20px auto',
+    boxSizing: 'border-box',
+    backgroundColor: '#ffffff'
   }
 }
 const Identifier = (props) => {
