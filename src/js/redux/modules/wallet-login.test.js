@@ -10,7 +10,7 @@ describe.only('Wallet login Redux module', function() {
     it('should throw an error when supplying invalid value', () => {
       const thunk = login.actions.setUserType('bla')
       expect(() => thunk(stub(), stub().returns({
-        get: () => ({toJS: () => ({valid: false, value: 'bla'})})
+        get: () => ({toJS: () => ({userType: {valid: false, value: 'bla'}})})
       }))).to.throw('Invalid user type: bla')
     })
 
@@ -18,6 +18,7 @@ describe.only('Wallet login Redux module', function() {
       let state = reducer(undefined, '@@INIT')
 
       state = reducer(state, login.actions.setUserType('expert'))
+
       expect(state.get('userType').toJS())
         .to.deep.equal({value: 'expert', valid: true})
 

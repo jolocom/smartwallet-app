@@ -7,18 +7,20 @@ const actions = module.exports = makeActions('wallet-login', {
     expectedParams: ['value'],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.setUserType.buildAction(params))
         const {userType} = getState().get('walletLogin').toJS()
 
         if (!userType.valid) {
           throw new Error('Invalid user type: ' + userType.value)
         }
 
-        let route = '/login/layman'
-        if (userType.value === 'expert') {
-          route = '/login/expert'
-        }
-        dispatch(router.pushRoute(route))
+        dispatch(actions.setUserType.buildAction(params, (backend) => {
+          let route = '/login/layman'
+          if (userType.value === 'expert') {
+            route = '/login/expert'
+          }
+
+          return dispatch(router.pushRoute(route))
+        }))
       }
     }
   },
@@ -33,16 +35,14 @@ const actions = module.exports = makeActions('wallet-login', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/login/expert/pin-entry'))
-
-        // const state = getState().get('walletLogin').toJS()
-        // dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
-        //   return backend.wallet
-        //     .loginWithSeedPhrase('random', state.passphrase.value)
-        //     .then(() => dispatch(
-        //       router.pushRoute('/login/expert/pin-entry')
-        //     ))
-        // }))
+        const state = getState().get('walletLogin').toJS()
+        dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
+          return backend.wallet
+            .loginWithSeedPhrase('random', state.passphrase.value)
+            .then(() => dispatch(
+              router.pushRoute('/login/expert/pin-entry')
+            ))
+        }))
       }
     }
   },
@@ -95,13 +95,7 @@ const actions = module.exports = makeActions('wallet-login', {
         dispatch(actions.submitLogin.buildAction(params, (backend) => {
           return backend.wallet
             .loginWithCredentials(state.login)
-            .then((response) => {
-              return backend.wallet
-                .loginWithSeedPhrase({
-                  userName: response.email,
-                  seedPhrase: response.seed
-                })
-            })
+            .then((data) => console.log(data)) // set the seed?
             .then(() => dispatch(router.pushRoute('/login/pin-entry')))
         }))
       }
