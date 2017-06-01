@@ -5,6 +5,7 @@ import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 
 import {routes} from 'routes'
+import {theme} from 'styles'
 
 let Index = React.createClass({
   contextTypes: {
@@ -79,8 +80,10 @@ let Index = React.createClass({
         maxWidth: '100%'
       },
       subtitle: {
-        color: '#a5a5a4',
-        fontSize: '3vmin'
+        color: theme.jolocom.gray1,
+        // fontSize: '5.5vmin',
+        fontSize: '3vmin',
+        fontWeight: '300'
       },
       actions: {
         display: 'flex',
