@@ -7,20 +7,28 @@ import {theme} from 'styles'
 
 const STYLES = {
   container: {
-    textColor: theme.palette.textColor
+    textColor: theme.palette.textColor,
+    backgroundColor: theme.jolocom.gray3,
+    width: '100%'
+  },
+  floatingLabelSearchField: {
+    color: theme.palette.textColor,
+    fontWeight: 'bold'
   },
   leftIcon: {
     width: '5%'
   },
   searchField: {
-    width: '90%',
-    textColor: theme.palette.textColor
+    width: '90%'
   },
   rightIcon: {
     width: '5%'
   },
   firstLetter: {
     width: '5%'
+  },
+  firstLetterText: {
+    textAlign: 'center'
   },
   countryName: {
     width: '95%'
@@ -42,15 +50,16 @@ export default class CountrySelectPresentation extends React.Component {
   }
 
   render() {
-    const {countries, submit, cancel, change, value} = this.props
     const showFirstLetter = (e, i, countries) =>
-      (i === 0 || (e[0] !== countries[i - 1][0])) ? e[0] : ''
+    (i === 0 || (e[0] !== countries[i - 1][0])) ? e[0] : ''
+    const {countries, submit, cancel, change, value} = this.props
     return (<div>
       <div style={STYLES.container}>
         <NavigationArrowBack style={STYLES.leftIcon} onClick={cancel} />
         <TextField
           style={STYLES.searchField}
           floatingLabelText="Country"
+          floatingLabelStyle={STYLES.floatingLabelSearchField}
           onChange={e => change(e.target.value)}
           value={value} />
         <ActionSearch style={STYLES.rightIcon} />
@@ -59,10 +68,13 @@ export default class CountrySelectPresentation extends React.Component {
           style={STYLES.countryField}
           onClick={() => submit(e)} >
           <TextField
+            underlineShow={false}
+            inputStyle={STYLES.firstLetterText}
             value={showFirstLetter(e, i, countries)}
             style={STYLES.firstLetter} />
           <TextField
             onClick={() => submit(e)}
+            underlineShow={false}
             style={STYLES.countryName} value={e} />
         </div>))}
 
