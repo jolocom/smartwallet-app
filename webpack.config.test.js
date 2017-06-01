@@ -32,14 +32,10 @@ module.exports = {
       test: /\.jsx?/,
       loader: 'babel',
       include: [
-        path.join(__dirname, 'src', 'js'), path.join(__dirname, 'test')
-      ],
-      exclude: 'node_modules'
-    },
-    {
-      test: /\.js$/,
-      loader: 'babel',
-      include: path.join(__dirname, 'node_modules', '**', 'ethereumjs-tx')
+        path.join(__dirname, 'src', 'js'),
+        path.join(__dirname, 'test'),
+        path.join(__dirname, 'node_modules', 'ethereumjs-tx')
+      ]
     },
     {
       test: /\.json$/,
