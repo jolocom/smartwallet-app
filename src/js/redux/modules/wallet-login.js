@@ -35,13 +35,10 @@ const actions = module.exports = makeActions('wallet-login', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        const state = getState().get('walletLogin').toJS()
         dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
-          return backend.wallet
-            .loginWithSeedPhrase('random', state.passphrase.value)
-            .then(() => dispatch(
-              router.pushRoute('/login/expert/pin-entry')
-            ))
+          dispatch(
+            router.pushRoute('/login/expert/pin-entry')
+          )
         }))
       }
     }
@@ -94,9 +91,14 @@ const actions = module.exports = makeActions('wallet-login', {
         const state = getState().get('walletLogin').toJS()
         dispatch(actions.submitLogin.buildAction(params, (backend) => {
           return backend.wallet
-            .loginWithCredentials(state.login)
-            .then((data) => console.log(data)) // set the seed?
-            .then(() => dispatch(router.pushRoute('/login/pin-entry')))
+            .loginWithCredentials({
+              email: state.login.username,
+              password: state.login.password
+            })
+            .then(({seed}) => {
+              dispatch(actions.setPassphrase(seed))
+              dispatch(router.pushRoute('/login/pin-entry'))
+            })
         }))
       }
     }

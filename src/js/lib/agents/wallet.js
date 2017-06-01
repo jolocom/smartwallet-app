@@ -31,12 +31,8 @@ export default class WalletAgent {
     return this._manager.loginWithSeedPhrase({seedPhrase, pin})
   }
 
-  loginWithCredentials({userName, email, password}) {
-    // return this._manager.loginWithCredentials({userName, email, password})
-    return Promise.resolve({
-      email: 'demo@jolocom.de',
-      seed: TEST_SEED
-    })
+  loginWithCredentials({email, password}) {
+    return this._manager.loginWithCredentials({email, password})
   }
 }
 // TODO: DELETE THIS CLASS WHEN EDIT-CONTACT-UTIL and
