@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
 import * as router from './router'
+import * as snackBar from './snack-bar'
 
 const actions = module.exports = makeActions('wallet-login', {
   setUserType: {
@@ -98,6 +99,11 @@ const actions = module.exports = makeActions('wallet-login', {
             .then(({seed}) => {
               dispatch(actions.setPassphrase(seed))
               dispatch(router.pushRoute('/login/pin-entry'))
+            })
+            .catch((e) => {
+              dispatch(snackBar.showMessage({
+                message: 'Invalid username or password'
+              }))
             })
         }))
       }
