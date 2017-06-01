@@ -14,7 +14,8 @@ const rdfHelper = {
     const typeToPred = {
       phone: PRED.mobile,
       email: PRED.email,
-      passport: PRED.passport
+      passport: PRED.passport,
+      idCard: PRED.idCard
     }
 
     g.add(rdf.sym(webId), typeToPred[entryType], rdf.sym(entryNode))
@@ -38,6 +39,8 @@ const rdfHelper = {
       g.add(rdf.sym(entryFileUrl), PRED.primaryTopic, rdf.sym(webId))
     } else if (entryType === 'passport') {
       // TODO add all passport file triples
+    } else if (entryType === 'idCard') {
+      // TODO add all id card file triples
     }
     return rdf.serialize(undefined, g, entryFileUrl, 'text/turtle')
   },
@@ -229,6 +232,14 @@ export default class SolidAgent {
       return
     }
     return this._setEntry(webId, passport, 'passport')
+  }
+
+  setIdCard(webId, idCard) {
+    if (!webId || !idCard) {
+      console.error('Invalid arguments')
+      return
+    }
+    return this._setEntry(webId, idCard, 'idCard')
   }
 
   _setEntry(webId, entryValue, entryType) {

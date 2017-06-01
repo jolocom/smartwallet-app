@@ -66,6 +66,7 @@ export const PRED = {
   Thread: SIOC('Thread'),
   // --
   passport: DBPEDIA('Passport'),
+  idCard: DBPEDIA('Identity_document'),
   // ACL RELATED
   auth: ACL('Authorization'),
   access: ACL('accessTo'),
