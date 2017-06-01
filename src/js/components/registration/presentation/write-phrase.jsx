@@ -39,7 +39,8 @@ const STYLES = {
     fontSize: '13px',
     display: 'inline-block',
     position: 'relative',
-    lineHeight: '1.2em'
+    lineHeight: '1.2em',
+    textAlign: 'left'
   },
   nextStep: {
     flex: 1
