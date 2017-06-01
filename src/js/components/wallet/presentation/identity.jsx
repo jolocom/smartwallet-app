@@ -344,7 +344,7 @@ export default class WalletIdentity extends React.Component {
     const avatar = (
       <Avatar icon={<PersonIcon />} style={STYLES.avatar} />
     )
-
+    console.log('contact: ', contact.phones, contact.emails)
     return (
       <TabContainer>
         <HalfScreenContainer>
@@ -386,16 +386,20 @@ export default class WalletIdentity extends React.Component {
                 goToManagement={goToContactManagement}
               />
             </Block>
-            <Block>
-              <PhoneList
-                phones={contact.phones}
-                onConfirm={onConfirm}
-                onVerify={onVerify} />
-              <EmailList
-                emails={contact.emails}
-                onConfirm={onConfirm}
-                onVerify={onVerify} />
-            </Block>
+            {
+              (contact.phones.length || contact.emails.length)
+              ? <Block>
+                <PhoneList
+                  phones={contact.phones}
+                  onConfirm={onConfirm}
+                  onVerify={onVerify} />
+                <EmailList
+                  emails={contact.emails}
+                  onConfirm={onConfirm}
+                  onVerify={onVerify} />
+              </Block>
+              : null
+            }
             <Block>
               <PlusMenu
                 name="Passport"
@@ -403,11 +407,15 @@ export default class WalletIdentity extends React.Component {
                 goToManagement={goToPassportManagement}
               />
             </Block>
-            <Block>
-              <PassportList
-                passports={passports}
-              />
-            </Block>
+            {
+              passports.length
+              ? <Block>
+                <PassportList
+                  passports={passports}
+                />
+              </Block>
+              : null
+            }
             <Block>
               <PlusMenu
                 name="Driving License"
