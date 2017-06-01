@@ -7,20 +7,20 @@ const actions = module.exports = makeActions('wallet-login', {
     expectedParams: ['value'],
     creator: (params) => {
       return (dispatch, getState) => {
+        dispatch(actions.setUserType.buildAction(params))
+
         const {userType} = getState().get('walletLogin').toJS()
 
         if (!userType.valid) {
           throw new Error('Invalid user type: ' + userType.value)
         }
 
-        dispatch(actions.setUserType.buildAction(params, (backend) => {
-          let route = '/login/layman'
-          if (userType.value === 'expert') {
-            route = '/login/expert'
-          }
+        let route = '/login/layman'
+        if (userType.value === 'expert') {
+          route = '/login/expert'
+        }
 
-          return dispatch(router.pushRoute(route))
-        }))
+        return dispatch(router.pushRoute(route))
       }
     }
   },
@@ -134,11 +134,12 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.setUserType.id:
       const valid = ['expert', 'layman'].indexOf(action.value) !== -1
+
       if (action.value && !valid) {
         throw Error('Invalid user type: ' + action.value)
       }
 
-      return state.merge({
+      return state.mergeDeep({
         userType: {
           value: action.value,
           valid

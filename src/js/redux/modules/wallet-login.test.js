@@ -7,24 +7,16 @@ const reducer = require('./wallet-login').default
 
 describe.only('Wallet login Redux module', function() {
   describe('setUserType', function() {
+    const setUserType = (type, state) => {
+      const thunk = login.actions.setUserType(type)
+      return () => thunk(stub(), stub().returns({
+        get: () => ({toJS: () => (state)})
+      }))
+    }
     it('should throw an error when supplying invalid value', () => {
-      const thunk = login.actions.setUserType('bla')
-      expect(() => thunk(stub(), stub().returns({
-        get: () => ({toJS: () => ({userType: {valid: false, value: 'bla'}})})
-      }))).to.throw('Invalid user type: bla')
-    })
-
-    it('should be able to set the user type to a valid value', () => {
-      let state = reducer(undefined, '@@INIT')
-
-      state = reducer(state, login.actions.setUserType('expert'))
-
-      expect(state.get('userType').toJS())
-        .to.deep.equal({value: 'expert', valid: true})
-
-      state = reducer(state, login.actions.setUserType('layman'))
-      expect(state.get('userType').toJS())
-        .to.deep.equal({value: 'layman', valid: true})
+      expect(setUserType('bla', {
+        userType: {valid: false, value: 'bla'}
+      })).to.throw('Invalid user type: bla')
     })
   })
   describe('setPassphrase', () => {
