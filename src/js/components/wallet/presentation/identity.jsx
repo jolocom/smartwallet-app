@@ -44,8 +44,7 @@ const STYLES = {
     marginTop: '40px'
   },
   divider: {
-    marginLeft: '16px',
-    width: '100%'
+    marginLeft: '16px'
   },
   addBtn: {
     width: '40px',
