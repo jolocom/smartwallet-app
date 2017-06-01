@@ -10,13 +10,13 @@ const actions = module.exports = makeActions('wallet/passport/country', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        const {value, type} = getState().toJS().wallet.country
         dispatch(actions.submit.buildAction(params, () => {
+          const {value, type} = getState().toJS().wallet.country
           if (type === 'birthCountry') {
             dispatch(passportActions.changePassportField(type, value))
           } else {
             dispatch(
-              passportActions.changePhysicalAddressField('country', value))
+              passportActions.changePhysicalAddressField(type, value))
           }
           dispatch(actions.clearState())
           dispatch(router.pushRoute('/wallet/identity/passport/add'))
@@ -27,21 +27,32 @@ const actions = module.exports = makeActions('wallet/passport/country', {
   clearState: {
     expectedParams: []
   },
-  initiate: {
+  setType: {
     expectedParams: ['value']
+  },
+  initiate: {
+    expectedParams: ['value'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.submit.buildAction(params, () => {
+          dispatch(actions.setType(params))
+          dispatch(router.pushRoute('/wallet/identity/country-select'))
+          return params
+        }))
+      }
+    }
   },
   setValue: {
     expectedParams: ['value']
   },
   cancel: {
     expectedParams: [],
-    async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.submit.buildAction(params, () => {
-          dispatch(actions.clearState())
-          dispatch(router.pushRoute('/wallet/identity/passport/add'))
-        }))
+        dispatch(actions.clearState())
+        dispatch(router.pushRoute('/wallet/identity/passport/add'))
+        return params
       }
     }
   }
@@ -55,7 +66,7 @@ const initialState = module.exports.initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.initiate.id:
+    case actions.setType.id:
       return initialState.merge({
         type: action.value
       })

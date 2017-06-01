@@ -4,7 +4,7 @@ import * as actions from './country-select'
 
 describe('# Country Select redux module', () => {
   it('should initiate properly', () => {
-    const state = reducer(undefined, actions.initiate('country'))
+    const state = reducer(undefined, actions.setType('country'))
     expect(state.get('type')).to.equal('country')
   })
   it('should set country value properly', () => {

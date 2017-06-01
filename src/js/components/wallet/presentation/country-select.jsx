@@ -21,6 +21,9 @@ const STYLES = {
   searchField: {
     width: '90%'
   },
+  searchFieldUnderline: {
+    color: theme.palette.textColor
+  },
   rightIcon: {
     width: '5%'
   },
@@ -59,6 +62,7 @@ export default class CountrySelectPresentation extends React.Component {
         <TextField
           style={STYLES.searchField}
           floatingLabelText="Country"
+          underlineStyle={STYLES.searchFieldUnderline}
           floatingLabelStyle={STYLES.floatingLabelSearchField}
           onChange={e => change(e.target.value)}
           value={value} />
