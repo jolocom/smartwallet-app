@@ -33,7 +33,7 @@ import WalletMoneyScreen from 'components/wallet/screens/money'
 import WalletIdentityScreen from 'components/wallet/screens/identity'
 import WalletContactScreen from 'components/wallet/screens/contact'
 import WalletPaasportScreen from 'components/wallet/screens/passport'
-
+import CountrySelectScreen from 'components/wallet/screens/country-select'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
 
@@ -82,6 +82,8 @@ function getRoutes() {
       component={WalletContactScreen} />
     <Route path="wallet/identity/passport/add"
       component={WalletPaasportScreen} />
+    <Route path="wallet/identity/country-select"
+      component={CountrySelectScreen} />
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
       <Route path="identity"

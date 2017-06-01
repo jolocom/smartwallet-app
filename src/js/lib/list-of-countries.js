@@ -1,6 +1,6 @@
 export const listOfCountries = [
   'Afghanistan',
-  'Åland Islands',
+  'Aland Islands',
   'Albania',
   'Algeria',
   'American Samoa',
@@ -139,8 +139,7 @@ export const listOfCountries = [
   'Mauritius',
   'Mayotte',
   'Mexico',
-  'Micronesia',
-  'Federated States of',
+  'Micronesia, Federated States of',
   'Moldova, Republic of',
   'Monaco',
   'Mongolia',

@@ -5,22 +5,25 @@ import {actions as passportActions} from './passport'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
 import {isValidCountry} from '../../../lib/passport-util'
 
-const actions = module.exports = makeActions('wallet/passport', {
+const actions = module.exports = makeActions('wallet/passport/country', {
   submit: {
     expectedParams: [],
-    creator: params => {
+    async: true,
+    creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.validate())
-        const {value, type, showErrors} = getState().toJS() // eslint-disable-line
-        if (!showErrors) {
-          if (type === 'birthCountry') {
-            dispatch(passportActions.setPassportField(type, value))
-          } else {
-            dispatch(passportActions.setPhysicalAddressField(type, value))
+        const {value, type, showErrors} = getState().toJS().wallet.country
+        dispatch(actions.submit.buildAction(params, () => {
+          if (!showErrors) {
+            if (type === 'birthCountry') {
+              dispatch(passportActions.changePassportField(type, value))
+            } else {
+              dispatch(
+                passportActions.changePhysicalAddressField('country', value))
+            }
+            dispatch(router.pushRoute('/wallet/identity/passport/add'))
           }
-          dispatch(router.pushRoute('/wallet/identity/passport/add'))
-          dispatch(actions.submit.buildAction(params))
-        }
+        }))
       }
     }
   },
@@ -28,7 +31,20 @@ const actions = module.exports = makeActions('wallet/passport', {
     expectedParams: ['type']
   },
   setValue: {
-    expectedParams: ['field', 'value']
+    expectedParams: ['value']
+  },
+  cancel: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.initiate(''))
+        let a = getState().toJS().wallet.country
+        console.log('\n \n \n \n ===> ', a, ' <==== \n\n\n\n\n');
+        dispatch(router.pushRoute('/wallet/identity/passport/add'))
+        a = getState().toJS().wallet.country
+        console.log('\n \n \n \n ===> ', a, ' <==== \n\n\n\n\n');
+      }
+    }
   },
   validate: {
     expectedParams: []
@@ -56,7 +72,10 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.setValue.id:
       return state.merge({
-        value: action.value
+        value: action.value,
+        options: options.map((e) =>
+          e.toLowerCase().startsWith(action.value.toLowerCase()) ? e : null)
+          .filter(n => n !== null)
       })
 
     case actions.submit.id:

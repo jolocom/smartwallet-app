@@ -4,8 +4,7 @@ import Radium from 'radium'
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
 import Location from 'material-ui/svg-icons/maps/place'
-import {List, SelectField, MenuItem} from 'material-ui'
-// import DatePicker from 'material-ui/DatePicker'
+import {List, SelectField, MenuItem, FlatButton} from 'material-ui'
 
 import {
   EditAppBar,
@@ -14,8 +13,7 @@ import {
   SelectListItem,
   DateListItem
 } from './ui'
-import {Content} from '../../structure'
-// import {theme} from 'styles'
+import {Content, Block} from '../../structure'
 
 @Radium
 export default class WalletPassport extends React.Component {
@@ -53,17 +51,16 @@ export default class WalletPassport extends React.Component {
     }
   }
 
-  renderCountryField({value, label, valid, key, options, index, icon}) {
+  renderCountryField({value, label, valid, key, options, index, icon, group}) {
     return <SelectListItem
       floatingLabelText={label}
       key={key}
       id={key}
       icon={icon}
-      iconStyle={{maxWidth: '400px'}}
       value={value}
       label={label}
       name={key}
-      onFocus={() => this.props.setFocused(key)}
+      onFocusChange={(field) => this.props.setFocused(field, group)}
       fullWidth
       types={options}
       enableEdit
@@ -73,76 +70,73 @@ export default class WalletPassport extends React.Component {
       autoWidth />
   }
 
-  renderTextField({value, label, valid, key, index, icon}) {
+  renderTextField({value, label, valid, key, index, icon, group}) {
     return <EditListItem
       icon={icon}
       key={key}
-      iconStyle={{maxWidth: '400px'}}
+      id={key}
       label={label}
       name={key}
       enableEdit
       value={value}
-      onFocus={() => this.setFocused(key)}
-      onFocusChange={() => this.setFocused(key)}
+      onFocusChange={(field) => this.props.setFocused(field, group)}
       showErrors={!valid && this.props.showErrors}
       valid={valid}
       verified={false}
       onChange={(e) => this.props.change(key, e.target.value)}
-      focused={this.props.focusedField === key}
+      focused={this.props.focusedGroup === group}
       onDelete={() => this.props.change(key, '')}
       enableDelete={value.length > 0}
       errorText={'errorText'} />
   }
 
-  renderDateField({value, label, valid, key, index, icon}) {
+  renderDateField({value, label, valid, key, index, icon, group}) {
     return <DateListItem
       key={key}
       icon={icon}
-      iconStyle={{maxWidth: '400px'}}
       label={label}
       name={key}
       enableEdit
       value={value}
-      onFocus={() => this.setFocused(key)}
-      onFocusChange={() => this.setFocused(key)}
+      onFocusChange={(field) => this.props.setFocused(field, group)}
       showErrors={!valid && this.props.showErrors}
       valid={valid}
       verified={false}
-      focused={this.props.focusedField === key}
-      onDelete={() => this.props.change(key, '')}
-      enableDelete={value.length > 0}
+      focused={this.props.focusedGroup === group}
+      onDelete={() => { this.props.change(key, '') }}
+      enableDelete={value.toString().length > 0}
       errorText={'errorText'}
       onChange={(e, date) => this.props.change(key, date)} />
   }
 
-  renderOptionsField({value, label, valid, key, options, index, icon}) {
-    return <SelectField
+  renderOptionsField({value, label, valid, key, options, group, index, icon}) {
+    return (<SelectField
       floatingLabelText={label}
       id={key}
       key={key}
       value={value}
       fullWidth
-      onFocus={() => this.setFocused(key)}
-      onFocusChange={() => this.setFocused(key)}
+      focused={this.props.focusedGroup === group}
+      onFocusChange={(field) => this.props.setFocused(field, group)}
       onChange={(e, i, v) => this.props.change(key, v)}
+      onDelete={() => this.props.change(key, '')}
       autoWidth >
       {options.map((e, i) => <MenuItem key={i} value={e} primaryText={e} />)}
-    </ SelectField>
-  } // person location cake
+    </SelectField>)
+  }
 
   createIcons() {
+    const passportGroups = this.props.passport.map(({group}) => group)
     let listOfOcons = [Cake]
-    const passportKeys = this.props.passport.map(({key}) => key)
-
-    listOfOcons[passportKeys.indexOf('firstName')] = Person
-    listOfOcons[passportKeys.indexOf('birthDate')] = Cake
-    listOfOcons[passportKeys.length] = Location
+    listOfOcons[passportGroups.indexOf('person')] = Person
+    listOfOcons[passportGroups.indexOf('cake')] = Cake
+    listOfOcons[passportGroups.length] = Location
     return listOfOcons.map(e => e || null)
   }
 
   render() {
     const icons = this.createIcons()
-    let {
+    const {
       passport,
       physicalAddres,
       showAddress,
@@ -150,37 +144,46 @@ export default class WalletPassport extends React.Component {
       save,
       cancel
     } = this.props
-    let icon = null
-    let fields = passport.map(({value, label, valid, key, options}, index) => {
-      icon = icons[index]
-      return this.renderField({value, label, valid, key, options, index, icon})
+    let fields = passport.map((field, index) => this.renderField({
+      ...field,
+      index,
+      icon: icons[index]
+    }))
+    const streetWithNumber = Object.assign({}, physicalAddres[0], {
+      icon: icons[passport.length],
+      index: passport.length
     })
-    let streetWithNumber = physicalAddres[0]
-    icon = icons[passport.length]
-    streetWithNumber.value = physicalAddres[0].value
-    fields.push(this.renderField({...streetWithNumber, icon, index: 8}))
+    fields.push(this.renderField(streetWithNumber))
     if (showAddress) {
       physicalAddres.shift()
-      fields = fields.concat(
-        physicalAddres.map((field, i) => {
-          let index = i + passport.length + 1// the 1 is for the shifted element
-          icon = icons[index]
-          return this.renderField({...field, index, icon})
-        }))
+      fields = fields.concat(physicalAddres.map((field, i) => this.renderField({
+        ...field,
+        index: i + passport.length + 1,
+        icon: icons[i + passport.length + 1]
+      })))
     }
+
     return (<div>
       <EditAppBar
         title="Add ID Card"
         loading={loaded}
-        onSave={cancel}
+        onSave={save}
         onClose={cancel} />
+      <Block>
+        <div>
+          Request personal verification of your Passport/ID Card by an
+          instutioon Close to your location
+        </div>
+        <FlatButton
+          label="List Of Locations"
+          onSubmit={this.props.showVerifiers} />
+      </Block>
       <Content>
         <EditHeader title="ID Card" />
         <List>
           {fields}
         </List>
       </Content>
-    </div>
-    )
+    </div>)
   }
 }

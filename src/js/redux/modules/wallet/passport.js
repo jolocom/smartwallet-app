@@ -32,10 +32,7 @@ const actions = module.exports = makeActions('wallet/passport', {
     expectedParams: ['value']
   },
   setFocusedField: {
-    expectedParams: ['value']
-  },
-  setFocusedGroup: {
-    expectedParams: ['value']
+    expectedParams: ['field', 'group']
   },
   validate: {
     expectedParams: []
@@ -47,9 +44,6 @@ const actions = module.exports = makeActions('wallet/passport', {
         dispatch(router.pushRoute('/wallet/identity'))
       }
     }
-  },
-  showPhysicalAddress: {
-    expectedParams: ['value']
   },
   retrievePassportInformation: {
     expectedParams: [],
@@ -161,19 +155,10 @@ module.exports.default = (state = initialState, action = {}) => {
         showErrors: false
       })
 
-    case actions.setFocusedGroup.id:
-      return state.merge({
-        focusedGroup: action.value
-      })
-
     case actions.setFocusedField.id:
       return state.merge({
-        focusedField: action.value
-      })
-
-    case actions.showPhysicalAddress.id:
-      return state.mergeIn(['passport'], {
-        showAddress: !state.getIn(['passport', 'showAddress'])
+        focusedField: action.field,
+        focusedGroup: action.group
       })
 
     case actions.changePhysicalAddressField.id:
