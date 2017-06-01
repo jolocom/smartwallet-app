@@ -9,7 +9,7 @@
     "start:wallet": "gulp wallet",
     "build:prod": "yarn install --production && gulp build",
     "test": "cross-env NODE_ENV=test karma start karma.conf.js --single-run",
-    "test:watch": "yarn run test -- --auto-watch --no-single-run",
+    "test:watch": "yarn run test -- --auto-watch --no-single-run --browsers PhantomJS",
     "test:phantomjs": "yarn run test -- --browsers PhantomJS",
     "test:chrome": "yarn run test -- --browsers Chrome",
     "test:firefox": "yarn run test -- --browsers Firefox",
@@ -149,8 +149,8 @@
     "redux-immutable": "^3.0.11",
     "reflux": "^6.0.0",
     "sjcl": "^1.0.6",
-    "solid-client": "^0.19.0",
     "smartwallet-contracts": "jolocom/smartwallet-contracts",
+    "solid-client": "^0.19.0",
     "web3": "^0.15.3"
   },
   "engines": {

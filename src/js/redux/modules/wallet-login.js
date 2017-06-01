@@ -11,7 +11,7 @@ const actions = module.exports = makeActions('wallet-login', {
         const {userType} = getState().get('walletLogin').toJS()
 
         if (!userType.valid) {
-          return false
+          throw new Error('Invalid user type: ' + userType.value)
         }
 
         let route = '/login/layman'

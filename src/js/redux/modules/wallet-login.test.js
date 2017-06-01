@@ -8,9 +8,10 @@ const reducer = require('./wallet-login').default
 describe.only('Wallet login Redux module', function() {
   describe('setUserType', function() {
     it('should throw an error when supplying invalid value', () => {
-      expect(() => reducer(Immutable.fromJS({
-      }), login.actions.setUserType('bla')))
-        .to.throw('Invalid user type: bla')
+      const thunk = login.actions.setUserType('bla')
+      expect(() => thunk(stub(), stub().returns({
+        get: () => ({toJS: () => ({valid: false, value: 'bla'})})
+      }))).to.throw('Invalid user type: bla')
     })
 
     it('should be able to set the user type to a valid value', () => {
@@ -90,7 +91,7 @@ describe.only('Wallet login Redux module', function() {
           password: '',
           errorMsg: '',
           failed: false,
-          valid: true
+          valid: false
         }
       })
     })
@@ -204,7 +205,7 @@ describe.only('Wallet login Redux module', function() {
         expect(dispatch.calls).to.deep.equal([{
           args: [{
             payload: {
-              args: ['/login/expert'],
+              args: ['/login'],
               method: 'push'
             },
             type: '@@router/CALL_HISTORY_METHOD'
