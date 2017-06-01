@@ -172,26 +172,6 @@ let Nav = React.createClass({
             {this.renderNavItems()}
           </SelectableList>
           <Divider style={styles.menuDivider} />
-          <SelectableList
-            value={this.props.selected}
-            onChange={this._handleNavChange}
-            >
-            <ListItem primaryText="Profile"
-              onTouchTap={this.editProfile}
-              style={styles.menuItem}
-              leftAvatar={
-                <Avatar
-                  style={{marginLeft: '-10px'}}>
-                  <UserAvatar
-                    name={this.state.profile.givenName
-                      ? this.state.profile.givenName
-                      : this.state.profile.fullName
-                    }
-                    imgUrl={this.state.profile.imgUri} />
-                </Avatar>}
-            />
-          </SelectableList>
-          <Divider style={styles.menuDivider} />
           <List>
             <ListItem primaryText="Sign out"
               onTouchTap={this.logout}
