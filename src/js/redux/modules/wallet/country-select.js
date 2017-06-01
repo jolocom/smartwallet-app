@@ -3,7 +3,6 @@ import { makeActions } from '../'
 import * as router from '../router'
 import {actions as passportActions} from './passport'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
-import {isValidCountry} from '../../../lib/passport-util'
 
 const actions = module.exports = makeActions('wallet/passport/country', {
   submit: {
@@ -11,21 +10,22 @@ const actions = module.exports = makeActions('wallet/passport/country', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.validate())
-        const {value, type, showErrors} = getState().toJS().wallet.country
+        const {value, type} = getState().toJS().wallet.country
         dispatch(actions.submit.buildAction(params, () => {
-          if (!showErrors) {
-            if (type === 'birthCountry') {
-              dispatch(passportActions.changePassportField(type, value))
-            } else {
-              dispatch(
-                passportActions.changePhysicalAddressField('country', value))
-            }
-            dispatch(router.pushRoute('/wallet/identity/passport/add'))
+          if (type === 'birthCountry') {
+            dispatch(passportActions.changePassportField(type, value))
+          } else {
+            dispatch(
+              passportActions.changePhysicalAddressField('country', value))
           }
+          dispatch(actions.clearState())
+          dispatch(router.pushRoute('/wallet/identity/passport/add'))
         }))
       }
     }
+  },
+  clearState: {
+    expectedParams: []
   },
   initiate: {
     expectedParams: ['type']
@@ -35,24 +35,19 @@ const actions = module.exports = makeActions('wallet/passport/country', {
   },
   cancel: {
     expectedParams: [],
+    async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.initiate(''))
-        let a = getState().toJS().wallet.country
-        console.log('\n \n \n \n ===> ', a, ' <==== \n\n\n\n\n');
-        dispatch(router.pushRoute('/wallet/identity/passport/add'))
-        a = getState().toJS().wallet.country
-        console.log('\n \n \n \n ===> ', a, ' <==== \n\n\n\n\n');
+        dispatch(actions.submit.buildAction(params, () => {
+          dispatch(actions.clearState())
+          dispatch(router.pushRoute('/wallet/identity/passport/add'))
+        }))
       }
     }
-  },
-  validate: {
-    expectedParams: []
   }
 })
 
 const initialState = Immutable.fromJS({
-  showErrors: false,
   type: '',
   value: '',
   options
@@ -61,13 +56,8 @@ const initialState = Immutable.fromJS({
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.initiate.id:
-      return state.merge({
+      return initialState.merge({
         type: action.type
-      })
-
-    case actions.validate.id:
-      return state.merge({
-        showErrors: !isValidCountry(state.get('value'))
       })
 
     case actions.setValue.id:
@@ -78,7 +68,7 @@ module.exports.default = (state = initialState, action = {}) => {
           .filter(n => n !== null)
       })
 
-    case actions.submit.id:
+    case actions.clearState.id:
       return initialState
 
     default:

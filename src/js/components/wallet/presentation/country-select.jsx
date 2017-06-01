@@ -1,16 +1,39 @@
 import React from 'react'
 import Radium from 'radium'
-import {ListItem, List, TextField} from 'material-ui'
+import {TextField} from 'material-ui'
 import {ActionSearch, NavigationArrowBack} from 'material-ui/svg-icons'
 
-import {EditListItem} from './ui'
 import {theme} from 'styles'
+
+const STYLES = {
+  container: {
+    textColor: theme.palette.textColor
+  },
+  leftIcon: {
+    width: '5%'
+  },
+  searchField: {
+    width: '90%',
+    textColor: theme.palette.textColor
+  },
+  rightIcon: {
+    width: '5%'
+  },
+  firstLetter: {
+    width: '5%'
+  },
+  countryName: {
+    width: '95%'
+  },
+  countryField: {
+    width: '100%'
+  }
+}
 
 @Radium
 export default class CountrySelectPresentation extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    showErrors: React.PropTypes.bool,
     countries: React.PropTypes.Object,
     submit: React.PropTypes.func,
     change: React.PropTypes.func,
@@ -20,28 +43,27 @@ export default class CountrySelectPresentation extends React.Component {
 
   render() {
     const {countries, submit, cancel, change, value} = this.props
-    const firstLetter = countries.map((e, i) =>
+    const showFirstLetter = (e, i, countries) =>
       (i === 0 || (e[0] !== countries[i - 1][0])) ? e[0] : ''
-    )
     return (<div>
-      <div style={{textColor: theme.palette.textColor}}>
-        <NavigationArrowBack style={{width: '5%'}} onClick={cancel} />
+      <div style={STYLES.container}>
+        <NavigationArrowBack style={STYLES.leftIcon} onClick={cancel} />
         <TextField
-          style={{width: '90%', textColor: theme.palette.textColor}}
+          style={STYLES.searchField}
           floatingLabelText="Country"
           onChange={e => change(e.target.value)}
           value={value} />
-        <ActionSearch style={{width: '5%'}} />
+        <ActionSearch style={STYLES.rightIcon} />
       </div>
         {countries.map((e, i) => (<div
-          style={{width: '100%'}}
+          style={STYLES.countryField}
           onClick={() => submit(e)} >
           <TextField
-            value={firstLetter[i]}
-            style={{width: '5%', textAlign: 'center'}} />
+            value={showFirstLetter(e, i, countries)}
+            style={STYLES.firstLetter} />
           <TextField
             onClick={() => submit(e)}
-            style={{width: '95%'}} value={e} />
+            style={STYLES.countryName} value={e} />
         </div>))}
 
     </div>)

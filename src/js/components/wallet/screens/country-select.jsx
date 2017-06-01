@@ -5,8 +5,6 @@ import Presentation from '../presentation/country-select'
 @connect({
   props: ['wallet.country'],
   actions: [
-    'wallet/passport:changePassportField',
-    'wallet/passport:changePhysicalAddressField',
     'wallet/country-select:setValue',
     'wallet/country-select:cancel',
     'wallet/country-select:submit'
@@ -23,18 +21,15 @@ export default class CountrySelectScreen extends React.Component {
 
   render() {
     const {setValue, submit, cancel} = this.props
-    const {options, value, showErrors} = this.props.country
+    const {options, value} = this.props.country
     return (<Presentation
       value={value}
-      showErrors={showErrors}
       countries={options}
       change={setValue}
       submit={(value) => {
         setValue(value)
         submit()
       }}
-      cancel={() => {
-        cancel()
-      }} />)
+      cancel={cancel} />)
   }
 }
