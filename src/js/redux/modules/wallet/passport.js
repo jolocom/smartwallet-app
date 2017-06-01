@@ -1,4 +1,7 @@
 import Immutable from 'immutable'
+import moment from 'moment'
+import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
+
 import { makeActions } from '../'
 import * as router from '../router'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
@@ -12,6 +15,35 @@ import {
 } from '../../../lib/passport-util'
 
 const actions = module.exports = makeActions('wallet/passport', {
+  storePassportDetailsInBlockchain: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        const buildAction = actions.storePassportDetailsInBlockchain.buildAction
+        dispatch(buildAction(params, () => {
+          const state = getState()
+          const {passport} = state.getIn(['wallet', 'passport']).toJS()
+          const hash = (new WalletCrypto()).calculateDataHash({
+            number: passport.number.value,
+            expirationDate: moment(passport.expirationDate.value).format(),
+            givenName: passport.firstName.value,
+            familyName: passport.lastName.value,
+            birthDate: moment(passport.birthDate.value).format(),
+            birthPlace: passport.birthPlace.value,
+            birthCountry: passport.birthCountry.value
+          })
+          const {wallet} = services.auth.currentUser
+          return wallet.addAttributeHashAndWait({
+            attributeId: 'passport',
+            attribute: hash,
+            definitionUrl: '',
+            password: '1234'
+          })
+        }))
+      }
+    }
+  },
   save: {
     expectedParams: [],
     async: true,
@@ -141,7 +173,10 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.retrievePassportInformation.id:
-      return mapBackendToState(state, action)
+      return state.merge({
+        loaded: false,
+        showErrors: false
+      })
 
     case actions.retrievePassportInformation.id_fail:
       return state.merge({
@@ -150,10 +185,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.retrievePassportInformation.id_success:
-      return state.merge({
-        loaded: true,
-        showErrors: false
-      })
+      return mapBackendToState(state, action)
 
     case actions.setFocusedField.id:
       return state.merge({

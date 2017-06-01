@@ -55,8 +55,7 @@ describe('# Passport redux module', () => {
       }
       expect(reducer(initialState, action).toJS().loaded).to.be.false
     })
-    it('should set loaded and showErrors to true on ' +
-    'retrievePassportInformation fails', () => {
+    it('should set loaded and showErrors to true on retrievePassportInformation fails', () => { // eslint-disable-line max-len
       const action = {
         type: actions.retrievePassportInformation.id_fail
       }
@@ -67,19 +66,27 @@ describe('# Passport redux module', () => {
     it('should set loaded to true and showErrors to false on ' +
     'retrievePassportInformation success', () => {
       const action = {
-        type: actions.retrievePassportInformation.id_success
+        type: actions.retrievePassportInformation.id_success,
+        result: {
+          locations: '', number: '', expirationDate: '', firstName: '',
+          lastName: '', gender: '', birthDate: '', birthPlace: '',
+          birthCountry: '',
+          physicalAddress: {
+            streetWithNumber: '', zip: '', city: '', state: '', country: ''
+          }
+        }
       }
       const state = reducer(initialState, action).toJS()
       expect(state.loaded).to.be.true
       expect(state.showErrors).to.be.false
     })
-    it('should set showAddress to !showAddress on showPhysicalAddress', () => {
+    it('should set showAddress on showPhysicalAddress', () => {
       const action = {
-        type: actions.showPhysicalAddress.id
+        type: actions.setShowAddress.id,
+        value: true
       }
       const {showAddress} = reducer(initialState, action).toJS().passport
-      expect(showAddress)
-        .to.equal(!initialState.toJS().passport.showAddress)
+      expect(showAddress).to.be.true
     })
     it('should set physicalAddress attribute on changePhysicalAddressField',
     () => {
@@ -99,9 +106,9 @@ describe('# Passport redux module', () => {
   describe('# Actions', () => {
     describe('# showPhysicalAddress', () => {
       it('should return the expected params when called properly', () => {
-        const showPhysicalAddress = actions.showPhysicalAddress(true)
-        expect(showPhysicalAddress).to.deep.equal({
-          type: actions.showPhysicalAddress.id,
+        const setShowAddress = actions.setShowAddress(true)
+        expect(setShowAddress).to.deep.equal({
+          type: actions.setShowAddress.id,
           value: true
         })
       })
@@ -120,7 +127,7 @@ describe('# Passport redux module', () => {
     describe('# changePhysicalAddressField', () => {
       it('should return the expected params when called properly', () => {
         const changePhysicalAddressField = actions
-        .changePhysicalAddressField('number', 'test')
+        .changePhysicalAddressField('streetWithNumber', 'test')
         expect(changePhysicalAddressField).to.deep.equal({
           type: actions.changePhysicalAddressField.id,
           value: 'test',

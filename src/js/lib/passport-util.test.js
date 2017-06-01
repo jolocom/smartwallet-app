@@ -40,7 +40,7 @@ describe('# Passport util', () => {
       expect(isValidGender('non valid value')).to.be.false
     })
   })
-  describe.only('# isValidField', () => {
+  describe('# isValidField', () => {
     it('should return true if last name is non empty string', () => {
       expect(isValidField({field: 'lastName', value: 'test'})).to.be.true
     })
@@ -160,7 +160,7 @@ describe('# Passport util', () => {
       }).toJS()).to.deep.equal(newState)
     })
   })
-  describe.only('# mapBackendToState', () => {
+  describe('# mapBackendToState', () => {
     it('should map the passport information from backend to state', () => {
       const result = {
         locations: [{

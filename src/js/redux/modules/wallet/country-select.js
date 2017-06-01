@@ -28,7 +28,7 @@ const actions = module.exports = makeActions('wallet/passport/country', {
     expectedParams: []
   },
   initiate: {
-    expectedParams: ['type']
+    expectedParams: ['value']
   },
   setValue: {
     expectedParams: ['value']
@@ -47,7 +47,7 @@ const actions = module.exports = makeActions('wallet/passport/country', {
   }
 })
 
-const initialState = Immutable.fromJS({
+const initialState = module.exports.initialState = Immutable.fromJS({
   type: '',
   value: '',
   options
@@ -57,7 +57,7 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.initiate.id:
       return initialState.merge({
-        type: action.type
+        type: action.value
       })
 
     case actions.setValue.id:
