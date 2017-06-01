@@ -39,11 +39,6 @@ let Index = React.createClass({
         marginTop: '24px',
         textTransform: 'uppercase'
       },
-      logoImg: {
-        width: '32px',
-        height: '32px',
-        verticalAlign: 'middle'
-      },
       intro: {
         flex: 1,
         textAlign: 'center'
@@ -67,11 +62,14 @@ let Index = React.createClass({
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain'
       },
-      startImg: {
-        marginTop: '15vh',
+      onboardImg: {
+        flex: 1,
         maxWidth: '100%',
-        width: '360px',
-        userSelect: 'none'
+        width: '300px',
+        userSelect: 'none',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain'
       },
       title: {
         color: '#a5a5a4',
@@ -83,13 +81,6 @@ let Index = React.createClass({
       subtitle: {
         color: '#a5a5a4',
         fontSize: '3vmin'
-      },
-      logoStartImg: {
-        padding: '24px',
-        maxWidth: '80%',
-        width: '320px',
-        margin: 'auto',
-        marginTop: '20vh'
       },
       actions: {
         display: 'flex',
@@ -161,7 +152,7 @@ let Index = React.createClass({
             })} />
           </div>
           <div style={styles.slide}>
-            <div style={Object.assign({}, styles.img, {
+            <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
             <h3 style={styles.title}>Create an independant and<br />
@@ -170,7 +161,7 @@ let Index = React.createClass({
               <br /> It’s yours, so only you own it!</p>
           </div>
           <div style={styles.slide}>
-            <div style={Object.assign({}, styles.img, {
+            <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-02.svg)'
             })} />
             <h3 style={styles.title}>Have all your data<br />
@@ -179,7 +170,7 @@ let Index = React.createClass({
               <br /> Pull the plug and your data is only yours.</p>
           </div>
           <div style={styles.slide}>
-            <div style={Object.assign({}, styles.img, {
+            <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-03.svg)'
             })} />
             <h3 style={styles.title}>Be aware of the<br />
