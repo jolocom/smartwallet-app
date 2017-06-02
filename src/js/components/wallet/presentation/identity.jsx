@@ -15,6 +15,8 @@ import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import PersonIcon from 'material-ui/svg-icons/social/person'
 import Info from 'material-ui/svg-icons/action/info'
+import Cake from 'material-ui/svg-icons/social/cake'
+import Location from 'material-ui/svg-icons/maps/place'
 
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
@@ -195,6 +197,7 @@ const PassportList = (props) => {
         />
         <StaticListItem
           key={'dateofbirth' + index}
+          icon={Cake}
           textLabel="Date of Birth"
           textValue={passport.birthDate}
         />
@@ -213,6 +216,96 @@ const PassportList = (props) => {
 
 PassportList.propTypes = {
   passports: React.PropTypes.array.isRequired
+}
+
+const IdCardList = (props) => {
+  let display = []
+  let {idCards} = props
+  if (!props.idCards) {
+    return null
+  }
+
+  display.push(idCards.map((idCard, index) => {
+    return (
+      <List>
+        <StaticListItem
+          key={'idCardnumber' + index}
+          textLabel="ID Card number"
+          textValue={idCard.number}
+        />
+        <StaticListItem
+          key={'expirationDate' + index}
+          textLabel="Expiration Date"
+          textValue={idCard.expirationDate}
+        />
+        <StaticListItem
+          key={'firstName' + index}
+          icon={PersonIcon}
+          textLabel="First Name"
+          textValue={idCard.firstName}
+        />
+        <StaticListItem
+          key={'lastName' + index}
+          textLabel="Last Name"
+          textValue={idCard.lastName}
+        />
+        <StaticListItem
+          key={'gender' + index}
+          textLabel="Gender"
+          textValue={idCard.gender}
+        />
+        <StaticListItem
+          key={'dateofbirth' + index}
+          icon={Cake}
+          textLabel="Date of Birth"
+          textValue={idCard.birthDate}
+        />
+        <StaticListItem
+          key={'placeofbirth' + index}
+          textLabel="Place of Birth"
+          textValue={idCard.birthPlace}
+        />
+        <StaticListItem
+          key={'countryofbirth' + index}
+          textLabel="Country of Birth"
+          textValue={idCard.birthCountry}
+        />
+        <StaticListItem
+          key={'street' + index}
+          icon={Location}
+          textLabel="Street"
+          textValue={idCard.physicalAddress.streetWithNumber}
+        />
+        <StaticListItem
+          key={'city' + index}
+          textLabel="City"
+          textValue={idCard.physicalAddress.city}
+        />
+        <StaticListItem
+          key={'zipCode' + index}
+          textLabel="Zip Code"
+          textValue={idCard.physicalAddress.zip}
+        />
+        <StaticListItem
+          key={'state' + index}
+          textLabel="State"
+          textValue={idCard.physicalAddress.state}
+        />
+        <StaticListItem
+          key={'country' + index}
+          textLabel="Country"
+          textValue={idCard.physicalAddress.country}
+        />
+      </List>
+    )
+  }))
+  return <List disabled>
+    {display}
+  </List>
+}
+
+IdCardList.propTypes = {
+  idCards: React.PropTypes.array.isRequired
 }
 
 const EmailList = (props) => {
@@ -318,7 +411,8 @@ export default class WalletIdentity extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     username: React.PropTypes.object.isRequired,
-    passports: React.PropTypes.array.isRequired,
+    passports: React.PropTypes.array,
+    idCards: React.PropTypes.array,
     isLoaded: React.PropTypes.bool.isRequired,
     isError: React.PropTypes.bool.isRequired,
     webId: React.PropTypes.string.isRequired,
@@ -334,6 +428,7 @@ export default class WalletIdentity extends React.Component {
     let {
       username,
       passports,
+      idCards,
       isLoaded,
       webId,
       contact,
@@ -437,6 +532,18 @@ export default class WalletIdentity extends React.Component {
               </Block>
               : null
             }
+            <Block>
+              <PlusMenu
+                name="ID Card"
+                choice={idCards.length > 0}
+                goToManagement={goToPassportManagement}
+              />
+            </Block>
+            <Block>
+              <IdCardList
+                idCards={idCards}
+              />
+            </Block>
             <Block>
               <PlusMenu
                 name="Driving License"
