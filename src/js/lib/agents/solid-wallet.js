@@ -69,7 +69,7 @@ export default class SolidAgent {
         email: []
       },
       Reputation: 0,
-      // passport: {
+      // passports: [{
       //   number: null,
       //   givenName: null,
       //   surname: null,
@@ -81,8 +81,29 @@ export default class SolidAgent {
       //   zip: null,
       //   state: null,
       //   country: null
-      // }
-      passports: []
+      // }]
+      passports: [],
+      // idCards: [
+      //   {
+      //     number: '12312421',
+      //     expirationDate: '1.1.18',
+      //     firstName: 'Annika',
+      //     lastName: 'Hamman',
+      //     gender: 'female',
+      //     birthDate: '1.1.88',
+      //     birthPlace: 'Wien',
+      //     birthCountry: 'Austria',
+      //     physicalAddress: {
+      //       streetWithNumber: 'Waldemarstr. 97a',
+      //       zip: '1234',
+      //       city: 'Berlin',
+      //       state: 'Berlin',
+      //       country: 'Germany'
+      //     }
+      //   }
+      // ]
+      idCards: []
+
     }
   }
 

@@ -8,6 +8,7 @@ describe('(Component) Wallet Identity', function() {
       (<WalletIdentity
         username={{ value: '' }}
         passports={[]}
+        idCards={[]}
         isLoaded
         webId={''}
         contact={{

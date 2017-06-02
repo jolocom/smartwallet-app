@@ -70,6 +70,7 @@ export default class WalletIdentityScreen extends React.Component {
         contact={identity.contact}
         webId={identity.webId}
         passports={identity.passports}
+        idCards={identity.idCards}
         isLoaded={identity.loaded}
         isError={identity.error}
         goToContactManagement={this.props.goToContactManagement}
