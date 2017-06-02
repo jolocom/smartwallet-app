@@ -6,14 +6,14 @@ import {
   ListItem,
   makeSelectable,
   Divider,
-  FontIcon,
-  Avatar
+  FontIcon
+  // Avatar
 } from 'material-ui'
 import { connect } from 'redux/utils'
 
 import Header from './header.jsx'
 
-import UserAvatar from 'components/common/user-avatar.jsx'
+// import UserAvatar from 'components/common/user-avatar.jsx'
 
 import accountActions from 'actions/account'
 
