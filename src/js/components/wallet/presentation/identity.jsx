@@ -368,6 +368,7 @@ export default class WalletIdentity extends React.Component {
                   leftAvatar={avatar}
                   style={STYLES.listItem}>
                   <TextField
+                    fullWidth
                     floatingLabelText="Name"
                     inputStyle={STYLES.inputName}
                     floatingLabelStyle={STYLES.labelName}
