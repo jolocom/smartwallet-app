@@ -81,13 +81,12 @@ export const checkForNonValidFields = (reduxState) => {
 }
 
 export const submitChanges = ({backend, services, passport, webId}) => {
+  let solidAgent = backend.solid
   const operations = {
-    set: () => {},
-    update: () => {},
-    remove: () => {}
+    set: solidAgent.setIdCard.bind(solidAgent),
+    update: solidAgent.deleteEntry.bind(solidAgent),
+    remove: solidAgent.updateEntry.bind(solidAgent)
   }
-  operations.set()
-  return Promise((resolve, reject) => {
-    resolve(true)
-  })
+
+  return operations.set()
 }
