@@ -5,7 +5,7 @@ import * as login from './wallet-login'
 import {stub} from '../../../../test/utils'
 const reducer = require('./wallet-login').default
 
-describe.only('Wallet login Redux module', function() {
+describe('Wallet login Redux module', function() {
   describe('setUserType', function() {
     const setUserType = (type, state) => {
       const thunk = login.actions.setUserType(type)

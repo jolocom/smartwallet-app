@@ -92,10 +92,9 @@ const actions = module.exports = makeActions('wallet-login', {
         const state = getState().get('walletLogin').toJS()
         dispatch(actions.submitLogin.buildAction(params, (backend) => {
           return backend.wallet
-            .loginWithCredentials({
+            .retrieveSeedPhrase({
               email: state.login.username,
-              password: state.login.password,
-              pin: state.pin.value
+              password: state.login.password
             })
             .then(({seed}) => {
               dispatch(actions.setPassphrase(seed))
