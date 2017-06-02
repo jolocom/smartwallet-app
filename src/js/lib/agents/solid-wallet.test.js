@@ -20,19 +20,7 @@ describe('solidAgentAgent', () => {
         email: []
       },
       Reputation: 0,
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
+      passports: []
     }
 
     it('Should correctly process invalid argument', async() => {
@@ -130,19 +118,7 @@ describe('solidAgentAgent', () => {
           }]
         },
         Reputation: 0,
-        passport: {
-          number: null,
-          givenName: null,
-          familyName: null,
-          birthDate: null,
-          gender: null,
-          street: null,
-          streetAndNumber: null,
-          city: null,
-          zip: null,
-          state: null,
-          country: null
-        }
+        passports: []
       }
 
       const solidAgent = new SolidAgent()
