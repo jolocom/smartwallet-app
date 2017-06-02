@@ -11,7 +11,6 @@ import {
   Header,
   Content,
   Footer,
-  FailureMessage,
   InfoLink
 } from '../../structure'
 
