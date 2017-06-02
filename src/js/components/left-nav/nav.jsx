@@ -63,6 +63,9 @@ let Nav = React.createClass({
         marginLeft: '10px',
         color: '#ffffff'
       },
+      menuItemIconActive: {
+        color: '#b3c90f'
+      },
       menuItemActive: {
         color: '#b3c90f',
         marginLeft: '10px'
@@ -127,7 +130,7 @@ let Nav = React.createClass({
       if (typeof item.icon === 'string') {
         icon = (
           <FontIcon
-            style={styles.menuItemIcon}
+            style={styles.menuItemIconActive}
             className="material-icons">{item.icon}
           </FontIcon>
         )
