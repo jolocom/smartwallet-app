@@ -23,16 +23,18 @@ export default class WalletAgent {
     })
   }
 
-  registerWithCredentials({userName, email, password}) {
-    return this._manager.registerWithCredentials({userName, email, password})
+  registerWithCredentials({userName, email, password, pin}) {
+    return this._manager.registerWithCredentials({
+      userName, email, password, pin
+    })
   }
 
   loginWithSeedPhrase({seedPhrase, pin}) {
     return this._manager.loginWithSeedPhrase({seedPhrase, pin})
   }
 
-  loginWithCredentials({email, password}) {
-    return this._manager.loginWithCredentials({email, password})
+  loginWithCredentials({email, password, pin}) {
+    return this._manager.loginWithCredentials({email, password, pin})
   }
 }
 // TODO: DELETE THIS CLASS WHEN EDIT-CONTACT-UTIL and
