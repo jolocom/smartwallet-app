@@ -526,11 +526,15 @@ export default class WalletIdentity extends React.Component {
                 goToManagement={goToPassportManagement}
               />
             </Block>
-            <Block>
-              <IdCardList
-                idCards={idCards}
-              />
-            </Block>
+            {
+              idCards.length
+              ? <Block>
+                <IdCardList
+                  idCards={idCards}
+                />
+              </Block>
+              : null
+            }
             <Block>
               <PlusMenu
                 name="Driving License"
