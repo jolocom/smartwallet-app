@@ -7,6 +7,7 @@ import Presentation from '../presentation/passport'
   props: ['wallet.passport'],
   actions: [
     'simple-dialog:showSimpleDialog',
+    'simple-dialog:configSimpleDialog',
     'wallet/country-select:initiate',
     'wallet/passport:save',
     'wallet/passport:retrievePassportInformation',
@@ -37,15 +38,18 @@ export default class WalletPaasportScreen extends React.Component {
     focusedGroup: React.PropTypes.string.isRequired,
     setShowAddress: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
+    configSimpleDialog: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    // this.props.retrievePassportInformation()
+    // if (!this.props.passport.loaded) {
+    //   this.props.retrievePassportInformation()
+    // }
   }
 
   render() {
-    const {save, retrievePassportInformation, cancel} = this.props
+    const {save, cancel, initiate} = this.props
     const {loaded, focusedField, focusedGroup} = this.props.passport
 
     return <Presentation
@@ -53,44 +57,35 @@ export default class WalletPaasportScreen extends React.Component {
       focusedGroup={focusedGroup}
       focusedField={focusedField}
       save={save}
-      showVerifierLocations={this.props.showSimpleDialog}
+      showVerifierLocations={(...args) => this.showVerifiers(...args)}
       setFocused={(...args) => { this.setFocusedElements(...args) }}
-      retrievePassportInformation={retrievePassportInformation}
       change={(...args) => { this.change(...args) }}
       cancel={cancel}
+      selectCountry={initiate}
       showAddress={this.props.passport.passport.showAddress}
       physicalAddres={this.parseAddressDetailsToArray()}
       passport={this.parsePassportDetailsToArray()} />
   }
 
   showVerifiers(...args) {
-    this.props.showSimpleDialog(...args)
+    this.props.configSimpleDialog(null, 'message', 'buttonText', {})
+    this.props.showSimpleDialog()
   }
 
   change(field, value) {
     const passportFields = this.parsePassportDetailsToArray()
       .map(({key}) => key)
-    if (['country', 'birthCountry'].includes(field)) {
-      return this.props.initiate(field)
-    } else if (passportFields.includes(field)) {
+    if (passportFields.includes(field)) {
       return this.props.changePassportField(field, value)
     } else if (field === 'streetWithNumber') {
       this.props.setShowAddress(value.trim().length > 0)
-      return this.props.changePhysicalAddressField(field, value)
     }
+    return this.props.changePhysicalAddressField(field, value)
   }
 
   parsePassportDetailsToArray() {
-    const {
-      number,
-      expirationDate,
-      firstName,
-      lastName,
-      gender,
-      birthDate,
-      birthPlace,
-      birthCountry
-    } = this.props.passport.passport
+    const {number, expirationDate, firstName, lastName, gender, birthDate,
+      birthPlace, birthCountry} = this.props.passport.passport
     return [
       {label: 'Id Card Number', key: 'number', group: 'numbers', ...number},
       {label: 'Expiration Date', key: 'expirationDate', group: 'numbers', ...expirationDate}, // eslint-disable-line max-len
@@ -111,13 +106,8 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   parseAddressDetailsToArray() {
-    const {
-      streetWithNumber,
-      zip,
-      city,
-      state,
-      country
-    } = this.props.passport.passport.physicalAddress
+    const {streetWithNumber, zip, city, state, country} = this.props
+      .passport.passport.physicalAddress
     const group = 'address'
     return [
       {...streetWithNumber, key: 'streetWithNumber', label: 'Street', group},

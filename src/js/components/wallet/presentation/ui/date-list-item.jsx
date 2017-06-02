@@ -1,12 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {
-  SelectField,
-  IconButton,
-  ListItem,
-  MenuItem
-} from 'material-ui'
+import {IconButton, ListItem} from 'material-ui'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import DatePicker from 'material-ui/DatePicker'
@@ -133,7 +128,7 @@ export default class DateListItem extends React.Component {
             onChange={onChange}
             errorText={showErrors && !valid && !!value ? errorText : null}
             okLabel="OK"
-            cancelLabel="Cancel"  />
+            cancelLabel="Cancel" />
         </ div>
       </ ListItem>
     )

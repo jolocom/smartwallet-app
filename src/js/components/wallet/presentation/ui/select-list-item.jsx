@@ -2,13 +2,16 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
-  SelectField,
+  TextField,
   IconButton,
-  ListItem,
-  MenuItem
+  FlatButton,
+  ListItem
 } from 'material-ui'
 
-import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
+import {
+  NavigationCancel,
+  HardwareKeyboardArrowRight as ArrowRight
+} from 'material-ui/svg-icons'
 
 import {theme} from 'styles'
 
@@ -70,6 +73,7 @@ export default class SelectListItem extends React.Component {
     focused: React.PropTypes.bool.isRequired,
     onFocusChange: React.PropTypes.func.isRequired,
     onChange: React.PropTypes.func.isRequired,
+    deleteValue: React.PropTypes.func.isRequired,
     onTypeChange: React.PropTypes.func,
     onDelete: React.PropTypes.func,
     showErrors: React.PropTypes.bool,
@@ -92,7 +96,6 @@ export default class SelectListItem extends React.Component {
       name,
       value,
       enableEdit,
-      onChange,
       valid,
       showErrors,
       errorText
@@ -113,14 +116,14 @@ export default class SelectListItem extends React.Component {
     return (
       <ListItem
         style={styles.item}
-        onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         leftIcon={icon}
         rightIconButton={this.deleteButton}
         disabled >
         <div style={styles.fields}>
-          <SelectField
+          <TextField
             style={STYLES.textField}
+            onFocus={this.handleFocus}
             autoFocus={focused}
             disabled={!enableEdit}
             inputStyle={styles.input}
@@ -128,17 +131,15 @@ export default class SelectListItem extends React.Component {
             floatingLabelText={label}
             name={name}
             value={value}
-            onChange={onChange}
-            errorText={showErrors && !valid && !!value ? errorText : null}
-          >
-          {this.props.types.map((type, i) => <MenuItem
-            key={i}
-            value={type}
-            primaryText={type} />
-          )}
-          </ SelectField>
-        </ div>
-      </ ListItem>
+            errorText={showErrors && !valid ? errorText : null} />
+          <FlatButton
+            label=""
+            labelPosition="before"
+            primary
+            onClick={this.handleFocus}
+            icon={<ArrowRight />} />
+        </div>
+      </ListItem>
     )
   }
 
@@ -147,7 +148,7 @@ export default class SelectListItem extends React.Component {
       return (
         <IconButton
           style={STYLES.deleteButton}
-          onTouchTap={this.handleDelete}
+          onTouchTap={() => this.props.onDelete()}
         >
           <NavigationCancel />
         </IconButton>
@@ -162,7 +163,6 @@ export default class SelectListItem extends React.Component {
   handleBlur = () => {
     this.props.onFocusChange('')
   }
-
   handleDelete = () => {
     this.props.onDelete()
   }
