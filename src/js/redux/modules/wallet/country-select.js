@@ -38,7 +38,6 @@ const actions = module.exports = makeActions('wallet/passport/country', {
         dispatch(actions.submit.buildAction(params, () => {
           dispatch(actions.setType(params))
           dispatch(router.pushRoute('/wallet/identity/country-select'))
-          return params
         }))
       }
     }

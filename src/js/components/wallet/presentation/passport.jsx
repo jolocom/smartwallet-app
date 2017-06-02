@@ -11,7 +11,9 @@ import {
   EditAppBar,
   EditHeader,
   EditListItem,
+  SelectCountryItem,
   SelectListItem,
+  IconNumber,
   DateListItem
 } from './ui'
 import {Content, Block} from '../../structure'
@@ -19,27 +21,30 @@ import {Content, Block} from '../../structure'
 const STYLES = {
   verificationBlock: {
     color: theme.palette.textColor,
-    fontSize: '24',
-    textAlign: 'center'
+    fontSize: '24px'
+  },
+  verificationMsgHeader: {
+    color: theme.palette.textColor
   }
 }
 @Radium
 export default class WalletPassport extends React.Component {
   static propTypes = {
-    save: React.PropTypes.func.isRequired,
-    showVerifierLocations: React.PropTypes.func.isRequired,
-    change: React.PropTypes.func.isRequired,
-    selectCountry: React.PropTypes.func.isRequired,
-    cancel: React.PropTypes.func.isRequired,
-    showVerifiers: React.PropTypes.func.isRequired,
-    loaded: React.PropTypes.bool.isRequired,
-    focusedGroup: React.PropTypes.string.isRequired,
-    focusedField: React.PropTypes.string.isRequired,
-    setFocused: React.PropTypes.func.isRequired,
-    showErrors: React.PropTypes.bool.isRequired,
-    showAddress: React.PropTypes.bool.isRequired,
-    physicalAddres: React.PropTypes.array.isRequired,
-    passport: React.PropTypes.array.isRequired
+    save: React.PropTypes.func,
+    showVerifierLocations: React.PropTypes.func,
+    change: React.PropTypes.func,
+    selectCountry: React.PropTypes.func,
+    cancel: React.PropTypes.func,
+    showVerifiers: React.PropTypes.func,
+    loaded: React.PropTypes.bool,
+    focusedGroup: React.PropTypes.string,
+    focusedField: React.PropTypes.string,
+    setFocused: React.PropTypes.func,
+    verifierLocations: React.PropTypes.array,
+    showErrors: React.PropTypes.bool,
+    showAddress: React.PropTypes.bool,
+    physicalAddress: React.PropTypes.array,
+    passport: React.PropTypes.array
   }
 
   renderField(field) {
@@ -48,12 +53,14 @@ export default class WalletPassport extends React.Component {
       case 'country':
         return this.renderCountryField(field)
       case 'gender':
-        return this.renderCountryField(field)
+        return this.renderGenderField(field)
       case 'zip':
       case 'birthPlace':
-        return null // handled birthDate and city
+        return null // handled with birthDate or streetWithNumber fields
       case 'birthDate':
         return this.renderBirthDate(field)
+      case 'streetWithNumber':
+        return this.renderCityZipField(field)
       case 'expirationDate':
         return this.renderDateField(field)
       default:
@@ -61,26 +68,40 @@ export default class WalletPassport extends React.Component {
     }
   }
 
-  renderCountryField({value, label, valid, key, options, index, icon, group}) {
+  renderGenderField({value, label, valid, key, options, index, icon, group}) {
     return <SelectListItem
-      floatingLabelText={label}
-      key={key}
       id={key}
+      key={key}
+      value={value}
+      label={label}
+      focused={false}
+      onFocusChange={() => this.props.setFocused(key, group)}
+      types={options}
+      onDelete={() => this.props.change(key, '')}
+      fullWidth
+      enableEdit
+      enableDelete={value.length > 0}
+      onChange={(e, i, v) => this.props.change(key, v)} />
+  }
+
+  renderCountryField({value, label, valid, key, options, index, icon, group}) {
+    return <SelectCountryItem
+      id={key}
+      key={key}
       icon={icon}
       value={value}
       label={label}
-      name={key}
       onFocusChange={() => {
         this.props.setFocused(key, group)
         this.props.selectCountry(key)
       }}
-      fullWidth
       types={options}
-      enableEdit
       onDelete={() => this.props.change(key, '')}
+      fullWidth
+      enableEdit
+      focused={false}
       enableDelete={value.length > 0}
-      onChange={() => this.props.change(key, '')}
-      autoWidth />
+      onChange={() => this.props.change(key, '')} />
   }
 
   renderTextField({value, label, valid, key, index, icon, group}) {
@@ -89,6 +110,7 @@ export default class WalletPassport extends React.Component {
       key={key}
       id={key}
       label={label}
+      underlineHide={!!value}
       name={key}
       enableEdit
       value={value}
@@ -97,41 +119,73 @@ export default class WalletPassport extends React.Component {
       valid={valid}
       verified={false}
       onChange={(e) => this.props.change(key, e.target.value)}
-      focused={this.props.focusedGroup === group}
+      focused={this.props.focusedGroup === group && !!icon}
       onDelete={() => this.props.change(key, '')}
-      enableDelete={value.length > 0}
-      errorText={'errorText'} />
+      enableDelete={value.length > 0} />
+  }
+
+  renderCityZipField({value, label, valid, key, index, icon, group}) {
+    const zip = this.props.physicalAddress[1]
+    return (<table key={key}> <tr>
+      <td style={{width: '70%'}} key="0" >
+        <EditListItem
+          id={key}
+          icon={icon}
+          label={label}
+          enableEdit
+          value={value}
+          underlineHide={!!value}
+          onFocusChange={(field) => this.props.setFocused(field, group)}
+          onChange={(e) => this.props.change(key, e.target.value)}
+          focused={this.props.focusedGroup === group} />
+      </td>
+      <td style={{width: '30%'}} key="1">
+        <EditListItem
+          id={zip.key}
+          label={zip.label}
+          underlineHide={!!zip.value}
+          enableEdit
+          value={zip.value}
+          onFocusChange={field => this.props.setFocused(field, zip.group)}
+          onChange={(e) => this.props.change(zip.key, e.target.value)}
+          onDelete={() => {
+            this.props.change(zip.key, '')
+            this.props.change(key, '')
+          }}
+          enableDelete={!!zip.value || !!value} />
+      </td> </tr>
+    </table>)
   }
 
   renderBirthDate({value, label, valid, key, index, icon, group}) {
-    let field = this.renderTextField({...this.props.passport[index + 1],
-      index: index + 1,
-      icon: null
-    })
-    return (<table style={{width: '100%'}}>
-      <td style={{width: '70%'}}>
+    const birthPlace = this.props.passport[index + 1]
+
+    return (<table key={key} style={{width: '100%'}}>
+      <th key="0" style={{width: '70%'}}>
         <DateListItem
-          birthDate
-          key={key}
           icon={icon}
           label={label}
-          name={key}
           enableEdit
-          value={value}
+          value={value || null}
           onFocusChange={(field) => this.props.setFocused(field, group)}
-          showErrors={!valid && this.props.showErrors}
-          valid={valid}
-          verified={false}
           focused={this.props.focusedGroup === group}
-          onDelete={() => { this.props.change(key, '') }}
-          errorText={'errorText'}
           onChange={(e, date) => this.props.change(key, date)} />
-      </td>
-      <td style={{width: '30%', position: 'fix'}}>
-        {field
-      }
-      {console.log('===============')}
-      </td>
+      </th>
+      <th key="1" style={{width: '30%', position: 'fix'}}>
+        <EditListItem
+          id={birthPlace.key}
+          label={birthPlace.label}
+          enableEdit
+          value={birthPlace.value}
+          underlineHide={!!value}
+          onFocusChange={(field) => this.props.setFocused(field, birthPlace.group)} // eslint-disable-line
+          onChange={(e) => this.props.change(birthPlace.key, e.target.value)}
+          onDelete={() => {
+            this.props.change(birthPlace.key, '')
+            this.props.change(key, '')
+          }}
+          enableDelete={!!birthPlace.value || !!value} />
+      </th>
     </table>)
   }
 
@@ -150,7 +204,6 @@ export default class WalletPassport extends React.Component {
       focused={this.props.focusedGroup === group}
       onDelete={() => { this.props.change(key, '') }}
       enableDelete={value.toString().length > 0}
-      errorText={'errorText'}
       onChange={(e, date) => this.props.change(key, date)} />
   }
 
@@ -172,38 +225,24 @@ export default class WalletPassport extends React.Component {
 
   createIcons() {
     const passportGroups = this.props.passport.map(({group}) => group)
-    let listOfOcons = [Cake]
-    listOfOcons[passportGroups.indexOf('person')] = Person
-    listOfOcons[passportGroups.indexOf('cake')] = Cake
-    listOfOcons[passportGroups.length] = Location
-    return listOfOcons.map(e => e || null)
+    let icons = [IconNumber]
+    icons[passportGroups.indexOf('person')] = Person
+    icons[passportGroups.indexOf('cake')] = Cake
+    icons[passportGroups.length] = Location
+    return icons
   }
 
   render() {
     const icons = this.createIcons()
-    const {passport, physicalAddres, showAddress, loaded, save, cancel
-    } = this.props
+    const {passport, physicalAddress, showAddress, loaded, save, cancel,
+      showVerifierLocations} = this.props
 
-    let fields = passport.map((field, index) => this.renderField({
-      ...field,
-      index,
-      icon: icons[index]
-    }))
+    let address = physicalAddress[0]
+    if (showAddress) { address = physicalAddress }
 
-    const streetWithNumber = Object.assign({}, physicalAddres[0], {
-      icon: icons[passport.length],
-      index: passport.length
-    })
-
-    fields.push(this.renderField(streetWithNumber))
-    if (showAddress) {
-      physicalAddres.shift()
-      fields = fields.concat(physicalAddres.map((field, i) => this.renderField({
-        ...field,
-        index: i + passport.length + 1,
-        icon: icons[i + passport.length + 1]
-      })))
-    }
+    const fields = passport.concat(address).map(
+      (field, index) => this.renderField({...field, index, icon: icons[index]})
+    )
 
     return (<div>
       <EditAppBar
@@ -220,7 +259,7 @@ export default class WalletPassport extends React.Component {
         <FlatButton
           label="List Of Locations"
           onClick={e => {
-            this.props.showVerifierLocations()
+            showVerifierLocations(this.verifierLocationsMsg())
           }} />
       </Block>
       <Content>
@@ -231,4 +270,16 @@ export default class WalletPassport extends React.Component {
       </Content>
     </div>)
   }
+
+  verifierLocationsMsg = () => (
+    <div>
+      <div key="0" style={{width: '100%', textAlign: 'center'}}>
+        verification Locations
+      </div>
+      <div key="1"> Title </div>
+      <div key="2"> Street With Number </div>
+      <div key="3"> Zip </div>
+      <div key="4"> City </div>
+    </div>
+  )
 }

@@ -52,25 +52,17 @@ let STYLES = {
 @Radium
 export default class DateListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string.isRequired,
+    id: React.PropTypes.string,
     icon: React.PropTypes.any,
     iconStyle: React.PropTypes.object,
-    label: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string,
     value: React.PropTypes.string,
-    type: React.PropTypes.string,
     types: React.PropTypes.array,
-    errorText: React.PropTypes.string,
-    verified: React.PropTypes.bool.isRequired,
     children: React.PropTypes.node,
-    focused: React.PropTypes.bool.isRequired,
-    onFocusChange: React.PropTypes.func.isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    onTypeChange: React.PropTypes.func,
+    focused: React.PropTypes.bool,
+    onFocusChange: React.PropTypes.func,
+    onChange: React.PropTypes.func,
     onDelete: React.PropTypes.func,
-    showErrors: React.PropTypes.bool,
-    valid: React.PropTypes.bool,
-    enableEdit: React.PropTypes.bool,
     enableDelete: React.PropTypes.bool
   }
 
@@ -83,22 +75,13 @@ export default class DateListItem extends React.Component {
   render() {
     let {
       focused,
-      verified,
       label,
       name,
       value,
-      enableEdit,
-      onChange,
-      valid,
-      showErrors,
-      errorText
+      onChange
     } = this.props
 
     let styles = this.getStyles()
-
-    if (verified) {
-      label = `Verified ${label}`
-    }
 
     const iconColor = this.props.focused
       ? theme.palette.primary1Color : theme.jolocom.gray1
@@ -119,18 +102,17 @@ export default class DateListItem extends React.Component {
             style={STYLES.textField}
             fullWidth
             autoFocus={focused}
-            disabled={!enableEdit}
             inputStyle={styles.input}
+            underlineShow={!value}
             underlineDisabledStyle={styles.disabledUnderline}
             floatingLabelText={label}
-            name={name}
-            value={value}
+            value={value || null}
             onChange={onChange}
-            errorText={showErrors && !valid && !!value ? errorText : null}
+            errorText=""
             okLabel="OK"
             cancelLabel="Cancel" />
-        </ div>
-      </ ListItem>
+        </div>
+      </ListItem>
     )
   }
 

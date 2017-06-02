@@ -57,25 +57,26 @@ let STYLES = {
 @Radium
 export default class EditListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string.isRequired,
+    id: React.PropTypes.string,
     icon: React.PropTypes.any,
     iconStyle: React.PropTypes.object,
-    label: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired,
+    label: React.PropTypes.string,
+    name: React.PropTypes.string,
     value: React.PropTypes.string,
     type: React.PropTypes.string,
     types: React.PropTypes.array,
     errorText: React.PropTypes.string,
-    verified: React.PropTypes.bool.isRequired,
+    verified: React.PropTypes.bool,
     children: React.PropTypes.node,
-    focused: React.PropTypes.bool.isRequired,
-    onFocusChange: React.PropTypes.func.isRequired,
-    onChange: React.PropTypes.func.isRequired,
+    focused: React.PropTypes.bool,
+    onFocusChange: React.PropTypes.func,
+    onChange: React.PropTypes.func,
     onTypeChange: React.PropTypes.func,
     onDelete: React.PropTypes.func,
     showErrors: React.PropTypes.bool,
     valid: React.PropTypes.bool,
     enableEdit: React.PropTypes.bool,
+    underlineHide: React.PropTypes.bool,
     enableDelete: React.PropTypes.bool
   }
 
@@ -96,6 +97,7 @@ export default class EditListItem extends React.Component {
       onChange,
       valid,
       showErrors,
+      underlineHide,
       errorText
     } = this.props
 
@@ -130,6 +132,7 @@ export default class EditListItem extends React.Component {
             floatingLabelText={label}
             name={name}
             value={value}
+            underlineShow={!underlineHide}
             onChange={onChange}
             errorText={showErrors && !valid && !!value ? errorText : null}
           />

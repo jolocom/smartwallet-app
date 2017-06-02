@@ -13,10 +13,6 @@ import Presentation from '../presentation/passport'
     'wallet/passport:retrievePassportInformation',
     'wallet/passport:changePassportField',
     'wallet/passport:changePhysicalAddressField',
-    'wallet/passport:showVerifierLocations',
-    'wallet/passport:chooseCountry',
-    'wallet/passport:chooseGender',
-    'wallet/passport:setFocusedGroup',
     'wallet/passport:setFocusedField',
     'wallet/passport:setShowAddress',
     'wallet/passport:cancel'
@@ -32,43 +28,35 @@ export default class WalletPaasportScreen extends React.Component {
     initiate: React.PropTypes.func.isRequired,
     changePhysicalAddressField: React.PropTypes.func.isRequired,
     setFocusedField: React.PropTypes.func.isRequired,
-    setFocusedGroup: React.PropTypes.func.isRequired,
-    showVerifierLocations: React.PropTypes.func.isRequired,
-    focusedField: React.PropTypes.string.isRequired,
-    focusedGroup: React.PropTypes.string.isRequired,
     setShowAddress: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired
   }
 
-  componentWillMount() {
-    // if (!this.props.passport.loaded) {
-    //   this.props.retrievePassportInformation()
-    // }
-  }
-
   render() {
     const {save, cancel, initiate} = this.props
-    const {loaded, focusedField, focusedGroup} = this.props.passport
+    const {loaded, focusedField, focusedGroup, verifierLocations
+    } = this.props.passport
 
     return <Presentation
       loaded={loaded}
       focusedGroup={focusedGroup}
       focusedField={focusedField}
       save={save}
+      verifierLocations={verifierLocations}
       showVerifierLocations={(...args) => this.showVerifiers(...args)}
       setFocused={(...args) => { this.setFocusedElements(...args) }}
       change={(...args) => { this.change(...args) }}
       cancel={cancel}
       selectCountry={initiate}
       showAddress={this.props.passport.passport.showAddress}
-      physicalAddres={this.parseAddressDetailsToArray()}
+      physicalAddress={this.parseAddressDetailsToArray()}
       passport={this.parsePassportDetailsToArray()} />
   }
 
   showVerifiers(...args) {
-    this.props.configSimpleDialog(null, 'message', 'buttonText', {})
+    this.props.configSimpleDialog(null, 'OK', 'OK', {})
     this.props.showSimpleDialog()
   }
 
@@ -77,10 +65,17 @@ export default class WalletPaasportScreen extends React.Component {
       .map(({key}) => key)
     if (passportFields.includes(field)) {
       return this.props.changePassportField(field, value)
-    } else if (field === 'streetWithNumber') {
+    } else if (['streetWithNumber', 'zip'].includes(field)) {
       this.props.setShowAddress(value.trim().length > 0)
     }
     return this.props.changePhysicalAddressField(field, value)
+  }
+
+  setFocusedElements(key, group) {
+    if (key === '') {
+      return this.props.setFocusedField('', '')
+    }
+    return this.props.setFocusedField(key, group)
   }
 
   parsePassportDetailsToArray() {
@@ -96,13 +91,6 @@ export default class WalletPaasportScreen extends React.Component {
       {label: 'Place of Birth', key: 'birthPlace', group: 'cake', ...birthPlace}, // eslint-disable-line max-len
       {label: 'Country of Birth', key: 'birthCountry', group: 'cake', ...birthCountry} // eslint-disable-line max-len
     ]
-  }
-
-  setFocusedElements(key, group) {
-    if (key === '') {
-      return this.props.setFocusedField('', '')
-    }
-    return this.props.setFocusedField(key, group)
   }
 
   parseAddressDetailsToArray() {

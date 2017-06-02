@@ -45,7 +45,7 @@ const STYLES = {
 export default class CountrySelectPresentation extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    countries: React.PropTypes.Object,
+    countries: React.PropTypes.array,
     submit: React.PropTypes.func,
     change: React.PropTypes.func,
     value: React.PropTypes.string,
@@ -73,11 +73,13 @@ export default class CountrySelectPresentation extends React.Component {
           onClick={() => submit(e)} >
           <TextField
             underlineShow={false}
+            id={e + '_first_letter'}
             inputStyle={STYLES.firstLetterText}
             value={showFirstLetter(e, i, countries)}
             style={STYLES.firstLetter} />
           <TextField
             onClick={() => submit(e)}
+            id={e + '_country'}
             underlineShow={false}
             style={STYLES.countryName} value={e} />
         </div>))}

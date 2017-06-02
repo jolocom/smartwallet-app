@@ -2,13 +2,16 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
-  SelectField,
+  TextField,
   IconButton,
-  ListItem,
-  MenuItem
+  FlatButton,
+  ListItem
 } from 'material-ui'
 
-import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
+import {
+  NavigationCancel,
+  HardwareKeyboardArrowRight as ArrowRight
+} from 'material-ui/svg-icons'
 
 import {theme} from 'styles'
 
@@ -56,15 +59,14 @@ let STYLES = {
 @Radium
 export default class SelectListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string,
-    label: React.PropTypes.string,
+    id: React.PropTypes.string.isRequired,
+    icon: React.PropTypes.any,
+    label: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
-    type: React.PropTypes.string,
-    types: React.PropTypes.array,
     children: React.PropTypes.node,
-    focused: React.PropTypes.bool,
-    onFocusChange: React.PropTypes.func,
-    onChange: React.PropTypes.func,
+    focused: React.PropTypes.bool.isRequired,
+    onFocusChange: React.PropTypes.func.isRequired,
+    onChange: React.PropTypes.func.isRequired,
     onDelete: React.PropTypes.func,
     enableDelete: React.PropTypes.bool
   }
@@ -77,42 +79,39 @@ export default class SelectListItem extends React.Component {
 
   render() {
     let {
-      id,
       focused,
       label,
-      value,
-      onChange,
-      types
+      value
     } = this.props
 
     let styles = this.getStyles()
 
+    const iconColor = this.props.focused
+      ? theme.palette.primary1Color : theme.jolocom.gray1
+
+    const icon = this.props.icon
+      ? <this.props.icon color={iconColor} style={styles.icon} /> : <div />
+
     return (
       <ListItem
         style={styles.item}
-        key={id}
-        onFocus={this.handleFocus}
         onBlur={this.handleBlur}
+        leftIcon={icon}
         rightIconButton={this.deleteButton}
         disabled >
         <div style={styles.fields}>
-          <SelectField
+          <TextField
             style={STYLES.textField}
+            onFocus={this.handleFocus}
             autoFocus={focused}
             inputStyle={styles.input}
-            underlineShow={!value}
             underlineDisabledStyle={styles.disabledUnderline}
             floatingLabelText={label}
-            key={id}
-            value={value}
-            onChange={onChange}
-          >
-          {types.map((type, i) => <MenuItem
-            key={i}
-            value={type}
-            primaryText={type} />
-          )}
-          </SelectField>
+            underlineShow={!value}
+            value={value} />
+          <FlatButton
+            onClick={this.handleFocus}
+            icon={<ArrowRight />} />
         </div>
       </ListItem>
     )
@@ -123,7 +122,7 @@ export default class SelectListItem extends React.Component {
       return (
         <IconButton
           style={STYLES.deleteButton}
-          onTouchTap={this.handleDelete}
+          onTouchTap={() => this.props.onDelete()}
         >
           <NavigationCancel />
         </IconButton>
@@ -138,7 +137,6 @@ export default class SelectListItem extends React.Component {
   handleBlur = () => {
     this.props.onFocusChange('')
   }
-
   handleDelete = () => {
     this.props.onDelete()
   }
