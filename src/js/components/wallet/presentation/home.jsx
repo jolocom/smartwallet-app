@@ -25,7 +25,7 @@ const STYLES = {
     fontWeight: 'normal'
   },
   walletContainer: {
-    backgroundColor: 'none',
+    backgroundColor: '#fff',
     padding: '24px 24px 0 24px'
   },
   homeImg: {
