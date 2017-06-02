@@ -6,11 +6,11 @@ import {
   Divider,
   List, ListItem,
   FlatButton,
-  Avatar
+  Avatar, Badge, IconButton
 } from 'material-ui'
 
 import Loading from 'components/common/loading'
-
+import UploadIcon from 'material-ui/svg-icons/content/add-circle'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import PersonIcon from 'material-ui/svg-icons/social/person'
@@ -86,7 +86,14 @@ const STYLES = {
     }
   },
   avatar: {
-    top: '16px'
+    marginTop: '10px'
+  },
+  addAvatar: {
+    padding: 'none'
+  },
+  uploadIconButton: {
+  },
+  uploadAvatarIcon: {
   }
 }
 
@@ -341,7 +348,20 @@ export default class WalletIdentity extends React.Component {
     }
 
     const avatar = (
-      <Avatar icon={<PersonIcon />} style={STYLES.avatar} />
+      <Badge
+        style={STYLES.addAvatar}
+        badgeContent={
+          <IconButton
+            tooltip="Upload avatar"
+            style={STYLES.uploadIconButton}
+          >
+            <UploadIcon style={STYLES.uploadAvatarIcon} />
+          </IconButton>
+        }
+      >
+        <Avatar icon={<PersonIcon />} style={STYLES.avatar} />
+      </Badge>
+
     )
     console.log('contact: ', contact.phones, contact.emails)
     return (
