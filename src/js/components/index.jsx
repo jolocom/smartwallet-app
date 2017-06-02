@@ -27,12 +27,16 @@ let Index = React.createClass({
     let {muiTheme} = this.context
 
     let styles = {
-      logo: {
-        fontSize: '18px',
-        fontWeight: '400',
-        textAlign: 'center',
-        marginTop: '24px',
-        textTransform: 'uppercase'
+      logoImg: {
+        flex: 1,
+        width: '150px',
+        userSelect: 'none',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        '@media screen and (min-width: 1200px)': {
+          width: '250px'
+        }
       },
       intro: {
         flex: 1,
@@ -48,14 +52,15 @@ let Index = React.createClass({
         userSelect: 'none',
         alignItems: 'center'
       },
-      img: {
+      onboardImg: {
         flex: 1,
-        maxWidth: '100%',
         width: '300px',
         userSelect: 'none',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'contain'
+        backgroundSize: 'contain',
+        '@media screen and (min-width: 1200px)': {
+          width: '600px'
       },
       onboardImg: {
         flex: 1,
@@ -71,12 +76,17 @@ let Index = React.createClass({
         fontSize: '18pt',
         fontWeight: '100',
         marginBottom: '10px',
-        maxWidth: '100%'
+        maxWidth: '100%',
+        '@media screen and (min-width: 1200px)': {
+          fontSize: '24pt'
+        }
       },
       subtitle: {
         color: theme.jolocom.gray1,
         fontSize: '10pt',
-        fontWeight: '300'
+        '@media screen and (min-width: 1200px)': {
+          fontSize: '14pt'
+        }
       },
       actions: {
         display: 'flex',
