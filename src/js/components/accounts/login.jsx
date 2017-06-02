@@ -70,12 +70,6 @@ const Login = connect({
       header: {
         padding: '40px'
       },
-      logo: {
-        fontSize: '18px',
-        fontWeight: '400',
-        textAlign: 'center',
-        textTransform: 'uppercase'
-      },
       logoImg: {
         maxWidth: '80%',
         width: '200px'
@@ -88,7 +82,7 @@ const Login = connect({
       },
       content: {
         width: '300px',
-        maxWidth: '90%',
+        maxWidth: '100%',
         padding: '0px 20px 20px',
         margin: '10px auto 20px auto',
         boxSizing: 'border-box',
@@ -132,7 +126,7 @@ const Login = connect({
               arrow_back
           </IconButton>}
           />
-        <div style={styles.logo}>
+        <div>
           <img src="/img/JOLOCOM_logo-01.svg" style={styles.logoImg} />
         </div>
         <div style={{paddingBottom: '8px', color: '#e8540c'}}>
