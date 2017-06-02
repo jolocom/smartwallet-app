@@ -15,7 +15,7 @@ import {theme} from 'styles'
 const STYLES = {
   colorBar: {
     backgroundColor: theme.jolocom.gray1,
-    zIndex: '2000',
+    zIndex: '10',
     maxWidth: '1200px',
     width: '100%',
     margin: 'auto'
