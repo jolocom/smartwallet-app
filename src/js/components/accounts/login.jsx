@@ -10,6 +10,8 @@ import {theme} from 'styles'
 
 import {routes} from 'routes'
 
+import {Container} from '../structure'
+
 // login for development
 const Login = connect({
   props: ['account', 'account.login', 'account.emailUpdateQueued'],
@@ -65,13 +67,6 @@ const Login = connect({
 
   getStyles() {
     let styles = {
-      container: {
-        textAlign: 'center',
-        background: '#f8f9fb',
-        paddingBottom: '40px',
-        boxSizing: 'border-box',
-        minHeight: '100%'
-      },
       header: {
         padding: '40px'
       },
@@ -127,7 +122,7 @@ const Login = connect({
   render() {
     let styles = this.getStyles()
     return (
-      <div style={styles.container}>
+      <Container>
         <AppBar
           title="Log in"
           style={{boxShadow: 'none'}}
@@ -184,7 +179,7 @@ const Login = connect({
         <p style={styles.help}>Don't have an account yet?&nbsp;
           <Link to={routes.signup} style={styles.link}>Sign up</Link>.
         </p>
-      </div>
+      </Container>
     )
   }
 })))

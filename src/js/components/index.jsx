@@ -7,6 +7,8 @@ import IndicatorDots from 'components/common/indicator-dots.jsx'
 import {routes} from 'routes'
 import {theme} from 'styles'
 
+import { Container } from './structure'
+
 let Index = React.createClass({
   contextTypes: {
     router: React.PropTypes.object,
@@ -25,14 +27,6 @@ let Index = React.createClass({
     let {muiTheme} = this.context
 
     let styles = {
-      container: {
-        width: '100%',
-        height: '100%',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: muiTheme.jolocom.gray4
-      },
       logo: {
         fontSize: '18px',
         fontWeight: '400',
@@ -131,7 +125,7 @@ let Index = React.createClass({
     let styles = this.getStyles()
 
     return (
-      <div style={styles.container}>
+      <Container>
         <div style={styles.previous}>
           <IconButton
             iconClassName="material-icons"
@@ -203,7 +197,7 @@ let Index = React.createClass({
             onClick={this._handleLogin}
           />
         </div>
-      </div>
+      </Container>
     )
   },
 
