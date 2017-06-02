@@ -10,10 +10,10 @@ import {
 } from 'material-ui'
 
 import Loading from 'components/common/loading'
-
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import PersonIcon from 'material-ui/svg-icons/social/person'
+import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
 import Info from 'material-ui/svg-icons/action/info'
 import Cake from 'material-ui/svg-icons/social/cake'
 import Location from 'material-ui/svg-icons/maps/place'
@@ -46,8 +46,7 @@ const STYLES = {
     marginTop: '40px'
   },
   divider: {
-    marginLeft: '16px',
-    width: '100%'
+    marginLeft: '16px'
   },
   addBtn: {
     width: '40px',
@@ -65,7 +64,10 @@ const STYLES = {
     textAlign: 'center',
     width: '100%',
     transformOrigin: 'center top 0px',
-    color: theme.palette.lighterTextColor
+    color: theme.palette.lighterTextColor,
+    paddingTop: '5px',
+    borderTop: '1px solid',
+    borderColor: theme.palette.lighterTextColor
   },
   requestBtn: {
     marginLeft: '-16px'
@@ -76,20 +78,16 @@ const STYLES = {
     left: '50%'
   },
   dialog: {
-    maxWidth: '460px',
-    width: '100%'
   },
   simpleDialog: {
     contentStyle: {
-      maxWidth: '460px',
-      width: '100%'
     },
     actionsContainerStyle: {
       textAlign: 'center'
     }
   },
   avatar: {
-    top: '16px'
+    marginTop: '10px'
   }
 }
 
@@ -374,7 +372,8 @@ const InfoDetail = (props) => {
       value={username}
       errorText="is your username"
       errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center'}}
+      inputStyle={{textAlign: 'center', marginBottom: '-5px'}}
+      underlineShow={false}
       fullWidth
     />
     <br />
@@ -383,7 +382,8 @@ const InfoDetail = (props) => {
       value={webId}
       errorText="is your WebID"
       errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center'}}
+      inputStyle={{textAlign: 'center', marginBottom: '-5px'}}
+      underlineShow={false}
       fullWidth
     />
   </span>
@@ -437,9 +437,16 @@ export default class WalletIdentity extends React.Component {
     }
 
     const avatar = (
-      <Avatar icon={<PersonIcon />} style={STYLES.avatar} />
+      <Avatar
+        icon={
+          <CameraIcon
+            viewBox="-3 -3 30 30" />
+          }
+        color={theme.jolocom.gray1}
+        backgroundColor={theme.jolocom.gray3}
+        style={STYLES.avatar} />
     )
-
+    console.log('contact: ', contact.phones, contact.emails)
     return (
       <TabContainer>
         <HalfScreenContainer>
@@ -464,6 +471,7 @@ export default class WalletIdentity extends React.Component {
                   leftAvatar={avatar}
                   style={STYLES.listItem}>
                   <TextField
+                    fullWidth
                     floatingLabelText="Name"
                     inputStyle={STYLES.inputName}
                     floatingLabelStyle={STYLES.labelName}
@@ -481,16 +489,20 @@ export default class WalletIdentity extends React.Component {
                 goToManagement={goToContactManagement}
               />
             </Block>
-            <Block>
-              <PhoneList
-                phones={contact.phones}
-                onConfirm={onConfirm}
-                onVerify={onVerify} />
-              <EmailList
-                emails={contact.emails}
-                onConfirm={onConfirm}
-                onVerify={onVerify} />
-            </Block>
+            {
+              (contact.phones.length || contact.emails.length)
+              ? <Block>
+                <PhoneList
+                  phones={contact.phones}
+                  onConfirm={onConfirm}
+                  onVerify={onVerify} />
+                <EmailList
+                  emails={contact.emails}
+                  onConfirm={onConfirm}
+                  onVerify={onVerify} />
+              </Block>
+              : null
+            }
             <Block>
               <PlusMenu
                 name="Passport"
@@ -498,11 +510,15 @@ export default class WalletIdentity extends React.Component {
                 goToManagement={goToPassportManagement}
               />
             </Block>
-            <Block>
-              <PassportList
-                passports={passports}
-              />
-            </Block>
+            {
+              passports.length
+              ? <Block>
+                <PassportList
+                  passports={passports}
+                />
+              </Block>
+              : null
+            }
             <Block>
               <PlusMenu
                 name="ID Card"
@@ -510,11 +526,15 @@ export default class WalletIdentity extends React.Component {
                 goToManagement={goToPassportManagement}
               />
             </Block>
-            <Block>
-              <IdCardList
-                idCards={idCards}
-              />
-            </Block>
+            {
+              idCards.length
+              ? <Block>
+                <IdCardList
+                  idCards={idCards}
+                />
+              </Block>
+              : null
+            }
             <Block>
               <PlusMenu
                 name="Driving License"
