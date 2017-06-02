@@ -94,7 +94,8 @@ const actions = module.exports = makeActions('wallet-login', {
           return backend.wallet
             .loginWithCredentials({
               email: state.login.username,
-              password: state.login.password
+              password: state.login.password,
+              pin: state.pin.value
             })
             .then(({seed}) => {
               dispatch(actions.setPassphrase(seed))
