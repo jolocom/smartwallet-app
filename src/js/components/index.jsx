@@ -51,7 +51,7 @@ let Index = React.createClass({
       img: {
         flex: 1,
         maxWidth: '100%',
-        width: '200px',
+        width: '300px',
         userSelect: 'none',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -68,14 +68,14 @@ let Index = React.createClass({
       },
       title: {
         color: '#a5a5a4',
-        fontSize: '5.5vmin',
+        fontSize: '18pt',
         fontWeight: '100',
         marginBottom: '10px',
         maxWidth: '100%'
       },
       subtitle: {
         color: theme.jolocom.gray1,
-        fontSize: '21px',
+        fontSize: '10pt',
         fontWeight: '300'
       },
       actions: {
@@ -153,7 +153,7 @@ let Index = React.createClass({
             <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
-            <h3 style={styles.title}>Create an independant and<br />
+            <h3 style={styles.title}>Create an independent and
             secure digital identity.</h3>
             <p style={styles.subtitle}>Collect your data at a secure place.
               <br /> It’s yours, so only you own it!</p>
