@@ -73,7 +73,7 @@ const NameEntry = (props) => {
           label="NEXT STEP"
           secondary
           onClick={props.onSubmit}
-          disabled={false}
+          disabled={!props.value}
         />
       </Footer>
     </Container>
