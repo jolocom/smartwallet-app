@@ -62,7 +62,10 @@ const STYLES = {
     textAlign: 'center',
     width: '100%',
     transformOrigin: 'center top 0px',
-    color: theme.palette.lighterTextColor
+    color: theme.palette.lighterTextColor,
+    paddingTop: '5px',
+    borderTop: '1px solid',
+    borderColor: theme.palette.lighterTextColor
   },
   requestBtn: {
     marginLeft: '-16px'
@@ -73,13 +76,9 @@ const STYLES = {
     left: '50%'
   },
   dialog: {
-    maxWidth: '460px',
-    width: '100%'
   },
   simpleDialog: {
     contentStyle: {
-      maxWidth: '460px',
-      width: '100%'
     },
     actionsContainerStyle: {
       textAlign: 'center'
@@ -287,7 +286,8 @@ const InfoDetail = (props) => {
       value={username}
       errorText="is your username"
       errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center'}}
+      inputStyle={{textAlign: 'center', marginBottom: '-5px'}}
+      underlineShow={false}
       fullWidth
     />
     <br />
@@ -296,7 +296,8 @@ const InfoDetail = (props) => {
       value={webId}
       errorText="is your WebID"
       errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center'}}
+      inputStyle={{textAlign: 'center', marginBottom: '-5px'}}
+      underlineShow={false}
       fullWidth
     />
   </span>
