@@ -75,8 +75,7 @@ let Index = React.createClass({
       },
       subtitle: {
         color: theme.jolocom.gray1,
-        // fontSize: '5.5vmin',
-        fontSize: '3vmin',
+        fontSize: '21px',
         fontWeight: '300'
       },
       actions: {
@@ -146,7 +145,8 @@ let Index = React.createClass({
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/logo_start.svg)'
+              backgroundImage: 'url(/img/logo_start.svg)',
+              width: '150px'
             })} />
           </div>
           <div style={styles.slide}>
