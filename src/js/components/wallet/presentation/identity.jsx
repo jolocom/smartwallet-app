@@ -6,14 +6,14 @@ import {
   Divider,
   List, ListItem,
   FlatButton,
-  Avatar, Badge, IconButton
+  Avatar
 } from 'material-ui'
 
 import Loading from 'components/common/loading'
-import UploadIcon from 'material-ui/svg-icons/content/add-circle'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import PersonIcon from 'material-ui/svg-icons/social/person'
+import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
 import Info from 'material-ui/svg-icons/action/info'
 import Cake from 'material-ui/svg-icons/social/cake'
 import Location from 'material-ui/svg-icons/maps/place'
@@ -88,13 +88,6 @@ const STYLES = {
   },
   avatar: {
     marginTop: '10px'
-  },
-  addAvatar: {
-    padding: 'none'
-  },
-  uploadIconButton: {
-  },
-  uploadAvatarIcon: {
   }
 }
 
@@ -444,20 +437,14 @@ export default class WalletIdentity extends React.Component {
     }
 
     const avatar = (
-      <Badge
-        style={STYLES.addAvatar}
-        badgeContent={
-          <IconButton
-            tooltip="Upload avatar"
-            style={STYLES.uploadIconButton}
-          >
-            <UploadIcon style={STYLES.uploadAvatarIcon} />
-          </IconButton>
-        }
-      >
-        <Avatar icon={<PersonIcon />} style={STYLES.avatar} />
-      </Badge>
-
+      <Avatar
+        icon={
+          <CameraIcon
+            viewBox="-3 -3 30 30" />
+          }
+        color={theme.jolocom.gray1}
+        backgroundColor={theme.jolocom.gray3}
+        style={STYLES.avatar} />
     )
     console.log('contact: ', contact.phones, contact.emails)
     return (
