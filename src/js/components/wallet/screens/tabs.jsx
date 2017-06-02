@@ -10,10 +10,15 @@ import {
 
 import {Layout, Content} from 'components/layout'
 import LeftNavToggle from 'components/left-nav/toggle'
+import {theme} from 'styles'
 
 const STYLES = {
   colorBar: {
-    backgroundColor: '#f8f9fb'
+    backgroundColor: theme.jolocom.gray1,
+    zIndex: '2000',
+    maxWidth: '1200px',
+    width: '100%',
+    margin: 'auto'
   },
   bar: {
     width: '100%',
