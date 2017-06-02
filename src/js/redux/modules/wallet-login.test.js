@@ -61,15 +61,6 @@ describe.only('Wallet login Redux module', function() {
       expect(action.value).to.equal('test')
     })
   })
-  describe('submitLogin', () => {
-    it('should return the correct value', () => {
-      const action = login.actions.submitLogin({
-        username: 'test',
-        password: 'test'
-      })
-      expect(action.value).to.equal('test')
-    })
-  })
   describe('#Reducer', () => {
     it('should initialize properly', () => {
       const state = reducer(undefined, '@@INIT')
