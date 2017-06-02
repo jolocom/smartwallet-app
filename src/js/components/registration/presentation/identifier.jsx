@@ -14,7 +14,9 @@ const STYLES = {
     width: '100%'
   },
   content: {
-    padding: '16px'
+    padding: '16px',
+    width: '300px',
+    maxWidth: '100%'
   },
   fieldContainer: {
     width: '300px',
