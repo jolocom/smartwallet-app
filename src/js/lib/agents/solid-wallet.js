@@ -38,10 +38,39 @@ const rdfHelper = {
       g.add(rdf.sym(entryFileUrl), typeToPred[entryType], entryValue)
       g.add(rdf.sym(entryFileUrl), PRED.primaryTopic, rdf.sym(webId))
     } else if (entryType === 'passport') {
-      // TODO add all passport file triples
+      // TODO
     } else if (entryType === 'idCard') {
-      // TODO add all id card file triples
+      const subj = rdf.sym(entryFileUrl)
+      const ownerUrl = rdf.sym(`${entryFileUrl}#owner`)
+      const addrBNode = rdf.blankNode('address')
+      const gender = entryValue.gender === 'male'
+        ? PRED.male
+        : PRED.female
+
+      // Id card info
+      g.add(subj, PRED.type, PRED.idCard)
+      g.add(subj, PRED.identifier, entryValue.number)
+      g.add(subj, PRED.expiresBy, entryValue.expirationDate)
+      g.add(subj, PRED.ownedBy, ownerUrl)
+
+      // Owner info
+      g.add(ownerUrl, PRED.givenName, entryValue.firstName)
+      g.add(ownerUrl, PRED.familyName, entryValue.lastName)
+      g.add(ownerUrl, PRED.gender, gender)
+      g.add(ownerUrl, PRED.birthDate, entryValue.birthDate)
+      g.add(ownerUrl, PRED.birthPlace, entryValue.birthPlace)
+      g.add(ownerUrl, PRED.countryOfBirth, entryValue.birthCountry)
+      g.add(ownerUrl, PRED.address, addrBNode)
+
+      // Owner address info
+      g.add(addrBNode, PRED.street, entryValue.physicalAddress.streetWithNumber)
+      g.add(addrBNode, PRED.zip, entryValue.physicalAddress.zip)
+      g.add(addrBNode, PRED.city, entryValue.physicalAddress.city)
+      g.add(addrBNode, PRED.state, entryValue.physicalAddress.state)
+      g.add(addrBNode, PRED.country, entryValue.physicalAddress.country)
     }
+
+    console.log(rdf.serialize(undefined, g, entryFileUrl, 'text/turtle'))
     return rdf.serialize(undefined, g, entryFileUrl, 'text/turtle')
   },
 
