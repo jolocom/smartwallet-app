@@ -415,16 +415,61 @@ em:owner
   describe('#setIdCard', () => {
     const idCardEntryUrl = 'https://test.com/profile/idCard123'
     const idCardEntryAclUrl = 'https://test.com/profile/idCard123.acl'
+    const idCardEntryBody = `\
+@prefix : <#>.
+@prefix pro: <./>.
+@prefix p: <http://dbpedia.org/page/>.
+@prefix SCH: <http://voag.linkedmodel.org/2.0/doc/2015/SCHEMA_voag-v2.0#>.
+@prefix schem: <https://schema.org/>.
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+@prefix n: <https://www.w3.org/2006/vcard/ns#>.
+@prefix ont: <http://dbpedia.org/ontology/>.
+@prefix per: <https://www.w3.org/ns/person#>.
+
+pro:idCard123
+    a p:Identity_document;
+    SCH:voag_ownedBy :owner;
+    schem:expires "1.1.18";
+    schem:identifier "12312421".
+:owner
+    n0:familyName "Hamman";
+    n0:gender n:Female;
+    n0:givenName "Annika";
+    schem:address
+            [
+                ont:city "Berlin";
+                ont:country "Germany";
+                ont:state "Berlin";
+                n:postal-code "1234";
+                n:street-address "Waldemarstr. 97a"
+            ];
+    schem:birthDate "1.1.88";
+    schem:birthPlace "Wien";
+    per:countryOfBirth "Austria".
+`
+
+    const idCardEntryAclBody = `\
+@prefix : <#>.
+@prefix idC: <idCard123.acl#>.
+@prefix n0: <http://www.w3.org/ns/auth/acl#>.
+@prefix pro: <./>.
+
+idC:owner
+    a n0:Authorization;
+    n0:accessTo pro:idCard123;
+    n0:agent pro:card;
+    n0:mode n0:Control, n0:Read, n0:Write.
+`
 
     const putArgumentsMap = {
       [idCardEntryUrl]: {
         name: 'entry file',
-        // expectedBody: idCardEntryBody,
+        expectedBody: idCardEntryBody,
         wasPut: false
       },
       [idCardEntryAclUrl]: {
         name: 'acl file',
-        // expectedBody: idCardEntryAclBody,
+        expectedBody: idCardEntryAclBody,
         wasPut: false
       }
     }
@@ -488,7 +533,23 @@ em:owner
     }
 
     solidAgent.http = mockHttpAgent
-    solidAgent.setIdCard(WEBID, {})
+    solidAgent.setIdCard(WEBID, {
+      number: '12312421',
+      expirationDate: '1.1.18',
+      firstName: 'Annika',
+      lastName: 'Hamman',
+      gender: 'female',
+      birthDate: '1.1.88',
+      birthPlace: 'Wien',
+      birthCountry: 'Austria',
+      physicalAddress: {
+        streetWithNumber: 'Waldemarstr. 97a',
+        zip: '1234',
+        city: 'Berlin',
+        state: 'Berlin',
+        country: 'Germany'
+      }
+    })
 
     const entryPut = putArgumentsMap[idCardEntryUrl].wasPut
     const entryAclPut = putArgumentsMap[idCardEntryAclUrl].wasPut
