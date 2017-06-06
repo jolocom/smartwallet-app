@@ -4,7 +4,7 @@ import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import SolidAgent from 'lib/agents/solid-wallet'
 
-describe.only('solidAgentAgent', () => {
+describe('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
 

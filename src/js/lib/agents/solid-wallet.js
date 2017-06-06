@@ -153,6 +153,9 @@ export default class SolidAgent {
     profileData.webId = webId
     profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
     profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
+    profileData.contact.idCards = await this
+      .getExtendedProprietyValue(g, 'idCards')
+
     try {
       profileData.username.value = g
         .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
