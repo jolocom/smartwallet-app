@@ -10,7 +10,11 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -38,7 +42,11 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -65,7 +73,11 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -92,7 +104,11 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -119,7 +135,11 @@ describe('(Component) ExpertLoginPinScreen', () => {
     const wrapper = shallow(
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,

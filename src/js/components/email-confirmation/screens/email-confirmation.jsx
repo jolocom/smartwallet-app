@@ -5,7 +5,7 @@ import Presentation from '../presentation/email-confirmation'
 @connect({
   props: ['emailConfirmation'],
   actions: [
-    'login:goToLogin',
+    'wallet-login:goToLogin',
     'email-confirmation:confirm'
   ]
 })
