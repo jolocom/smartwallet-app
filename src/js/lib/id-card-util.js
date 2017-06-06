@@ -26,7 +26,7 @@ export const isValidField = ({field, value}) => {
 export const mapBackendToState = (state, {result}) => state.mergeDeep({
   showErrors: false,
   loaded: true,
-  passport: {
+  idCard: {
     locations: result.locations,
     number: {value: result.number, valid: true},
     expirationDate: {value: result.expirationDate, valid: true},
@@ -47,13 +47,13 @@ export const mapBackendToState = (state, {result}) => state.mergeDeep({
 })
 
 export const setPhysicalAddressField = (state, {field, value}) => state.mergeIn(
-  ['passport', 'physicalAddress', field], {
+  ['idCard', 'physicalAddress', field], {
     value,
     valid: isValidField({field, value})
   })
 
 export const changeFieldValue = (state, {field, value}) => state.mergeIn(
-  ['passport', field], {
+  ['idCard', field], {
     value,
     valid: isValidField({field, value})
   })
@@ -69,9 +69,9 @@ export const checkForNonValidFields = (reduxState) => {
     birthDate,
     birthPlace,
     birthCountry
-  } = reduxState.toJS().passport
+  } = reduxState.toJS().idCard
   const {streetWithNumber, zip, city, state, country} = reduxState
-    .toJS().passport.physicalAddress
+    .toJS().idCard.physicalAddress
   const fields = [
     locations, number, expirationDate, firstName, lastName, gender, birthDate,
     birthPlace, birthCountry, streetWithNumber, zip, city, state, country
@@ -80,7 +80,7 @@ export const checkForNonValidFields = (reduxState) => {
   return reduxState.merge({showErrors})
 }
 
-export const storePassportDetailsInSolid = ({backend, services, passport, webId}) => { // eslint-disable-line max-len
+export const storeIdCardDetailsInSolid = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
   let solidAgent = backend.solid
   const operations = {
     set: solidAgent.setIdCard.bind(solidAgent),

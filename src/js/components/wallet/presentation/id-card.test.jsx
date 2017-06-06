@@ -1,13 +1,13 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import WalletPassport from './passport'
+import WalletPassport from './id-card'
 
-describe.only('(Component) Wallet Identity', function() {
+describe('(Component) Wallet Id Card', function() {
   it('should render properly the first time', function() {
     shallow(
       (<WalletPassport
         username={{ value: '' }}
-        passport={{}}
+        idCard={{}}
         isLoaded
         webId={''}
         contact={{

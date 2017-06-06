@@ -11,9 +11,9 @@ import {
   mapBackendToState,
   changeFieldValue,
   checkForNonValidFields
-} from './passport-util'
+} from './id-card-util'
 
-describe('# Passport util', () => {
+describe('# IdCard util', () => {
   describe('# isValidCountry', () => {
     it('should return true if the country is valid', () => {
       listOfCountries.map(country => {
@@ -60,7 +60,7 @@ describe('# Passport util', () => {
       const nonValidField = {valid: false, value: 'test'}
       const state = Immutable.fromJS({
         showErrors: false,
-        passport: {
+        idCard: {
           locations: validField,
           number: validField,
           expirationDate: validField,
@@ -85,7 +85,7 @@ describe('# Passport util', () => {
       const validField = {valid: true, value: 'test'}
       const state = Immutable.fromJS({
         showErrors: false,
-        passport: {
+        idCard: {
           locations: validField,
           number: validField,
           expirationDate: validField,
@@ -110,7 +110,7 @@ describe('# Passport util', () => {
   describe('# setPhysicalAddressField ', () => {
     it('should set physical address field to the given value', () => {
       const state = Immutable.fromJS({
-        passport: {
+        idCard: {
           physicalAddress: {
             streetWithNumber: {
               value: '',
@@ -120,7 +120,7 @@ describe('# Passport util', () => {
         }
       })
       const newState = {
-        passport: {
+        idCard: {
           physicalAddress: {
             streetWithNumber: {
               value: 'test',
@@ -136,9 +136,9 @@ describe('# Passport util', () => {
     })
   })
   describe('# changeFieldValue ', () => {
-    it('should set passport field to the given value', () => {
+    it('should set idCard field to the given value', () => {
       const state = Immutable.fromJS({
-        passport: {
+        idCard: {
           gender: {
             value: '',
             valid: false
@@ -146,7 +146,7 @@ describe('# Passport util', () => {
         }
       })
       const newState = {
-        passport: {
+        idCard: {
           gender: {
             value: 'male',
             valid: true
@@ -161,7 +161,7 @@ describe('# Passport util', () => {
     })
   })
   describe('# mapBackendToState', () => {
-    it('should map the passport information from backend to state', () => {
+    it('should map the idCard information from backend to state', () => {
       const result = {
         locations: [{
           title: 'location',
@@ -190,7 +190,7 @@ describe('# Passport util', () => {
         showErrors: false,
         focusedGroup: null,
         focusedField: null,
-        passport: {
+        idCard: {
           locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
           number: {value: '', valid: false},
           expirationDate: {value: '', valid: false},
@@ -215,7 +215,7 @@ describe('# Passport util', () => {
         showErrors: false,
         focusedGroup: null,
         focusedField: null,
-        passport: {
+        idCard: {
           locations: [{
             title: 'location',
             streetWithNumber: 'streetName 123',

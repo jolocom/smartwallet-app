@@ -1,22 +1,22 @@
 import {expect} from 'chai'
-const reducer = require('./passport').default
-import * as actions from './passport'
+const reducer = require('./id-card').default
+import * as actions from './id-card'
 
-describe('# Passport redux module', () => {
+describe('# IdCard redux module', () => {
   describe('# Reducer', () => {
     let {initialState} = actions
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal(initialState.toJS())
     })
-    it('should set the passport field value on changePassportField', () => {
+    it('should set the idCard field value on changeIdCardField', () => {
       const action = {
-        type: actions.changePassportField.id,
+        type: actions.changeIdCardField.id,
         value: '123',
         field: 'number'
       }
       const state = reducer(initialState, action)
-      expect(state.toJS().passport.number).to.deep.equal({
+      expect(state.toJS().idCard.number).to.deep.equal({
         value: '123',
         valid: true
       })
@@ -49,24 +49,24 @@ describe('# Passport redux module', () => {
       expect(reducer(initialState, action).toJS().loaded).to.be.true
       expect(reducer(initialState, action).toJS().showErrors).to.be.false
     })
-    it('should set loaded to false on retrievePassportInformation', () => {
+    it('should set loaded to false on retrieveIdCardInformation', () => {
       const action = {
-        type: actions.retrievePassportInformation.id
+        type: actions.retrieveIdCardInformation.id
       }
       expect(reducer(initialState, action).toJS().loaded).to.be.false
     })
-    it('should set loaded and showErrors to true on retrievePassportInformation fails', () => { // eslint-disable-line max-len
+    it('should set loaded and showErrors to true on retrieveIdCardInformation fails', () => { // eslint-disable-line max-len
       const action = {
-        type: actions.retrievePassportInformation.id_fail
+        type: actions.retrieveIdCardInformation.id_fail
       }
       const state = reducer(initialState, action).toJS()
       expect(state.loaded).to.be.true
       expect(state.showErrors).to.be.true
     })
     it('should set loaded to true and showErrors to false on ' +
-    'retrievePassportInformation success', () => {
+    'retrieveIdCardInformation success', () => {
       const action = {
-        type: actions.retrievePassportInformation.id_success,
+        type: actions.retrieveIdCardInformation.id_success,
         result: {
           locations: '', number: '', expirationDate: '', firstName: '',
           lastName: '', gender: '', birthDate: '', birthPlace: '',
@@ -85,7 +85,7 @@ describe('# Passport redux module', () => {
         type: actions.setShowAddress.id,
         value: true
       }
-      const {showAddress} = reducer(initialState, action).toJS().passport
+      const {showAddress} = reducer(initialState, action).toJS().idCard
       expect(showAddress).to.be.true
     })
     it('should set physicalAddress attribute on changePhysicalAddressField',
@@ -96,7 +96,7 @@ describe('# Passport redux module', () => {
         value: 'test'
       }
       const {streetWithNumber} = reducer(initialState, action)
-        .toJS().passport.physicalAddress
+        .toJS().idCard.physicalAddress
       expect(streetWithNumber).to.deep.equal({
         value: 'test',
         valid: true
@@ -113,12 +113,12 @@ describe('# Passport redux module', () => {
         })
       })
     })
-    describe('# changePassportField', () => {
+    describe('# changeIdCardField', () => {
       it('should return the expected params when called properly', () => {
-        const changePassportField = actions.changePassportField('number',
+        const changeIdCardField = actions.changeIdCardField('number',
         'test')
-        expect(changePassportField).to.deep.equal({
-          type: actions.changePassportField.id,
+        expect(changeIdCardField).to.deep.equal({
+          type: actions.changeIdCardField.id,
           value: 'test',
           field: 'number'
         })

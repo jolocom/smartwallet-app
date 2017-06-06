@@ -3,8 +3,8 @@ import Immutable from 'immutable'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
-import WalletPaasportScreen from './passport'
-import Presentation from '../presentation/passport'
+import WalletPaasportScreen from './id-card'
+import Presentation from '../presentation/id-card'
 
 describe.only('(Component) WalletPaasportScreen', () => {
   it('should render properly the first time', () => {
@@ -12,12 +12,12 @@ describe.only('(Component) WalletPaasportScreen', () => {
       (<WalletPaasportScreen.WrappedComponent {
         ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            passport: {
+            idCard: {
               loaded: false,
               showErrors: false,
               focusedGroup: '',
               focusedField: '',
-              passport: {
+              idCard: {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
@@ -43,8 +43,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
         }))
       }
         save={() => {}}
-        retrievePassportInformation={() => {}}
-        changePassportField={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
         initiate={() => {}}
         changePhysicalAddressField={() => {}}
         setFocusedField={() => {}}
@@ -64,12 +64,12 @@ describe.only('(Component) WalletPaasportScreen', () => {
       (<WalletPaasportScreen.WrappedComponent {
         ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            passport: {
+            idCard: {
               loaded: false,
               showErrors: false,
               focusedGroup: '',
               focusedField: '',
-              passport: {
+              idCard: {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
@@ -95,8 +95,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
         }))
       }
         save={save}
-        retrievePassportInformation={() => {}}
-        changePassportField={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
         initiate={() => {}}
         changePhysicalAddressField={() => {}}
         setFocusedField={() => {}}
@@ -117,12 +117,12 @@ describe.only('(Component) WalletPaasportScreen', () => {
       (<WalletPaasportScreen.WrappedComponent {
         ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            passport: {
+            idCard: {
               loaded: false,
               showErrors: false,
               focusedGroup: '',
               focusedField: '',
-              passport: {
+              idCard: {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
@@ -148,8 +148,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
         }))
       }
         save={() => {}}
-        retrievePassportInformation={() => {}}
-        changePassportField={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
         initiate={() => {}}
         changePhysicalAddressField={() => {}}
         setFocusedField={() => {}}
@@ -170,12 +170,12 @@ describe.only('(Component) WalletPaasportScreen', () => {
       (<WalletPaasportScreen.WrappedComponent {
         ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            passport: {
+            idCard: {
               loaded: false,
               showErrors: false,
               focusedGroup: '',
               focusedField: '',
-              passport: {
+              idCard: {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
@@ -201,8 +201,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
         }))
       }
         save={() => {}}
-        retrievePassportInformation={() => {}}
-        changePassportField={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
         initiate={() => {}}
         changePhysicalAddressField={() => {}}
         setFocusedField={setFocusedField}
@@ -223,12 +223,12 @@ describe.only('(Component) WalletPaasportScreen', () => {
       (<WalletPaasportScreen.WrappedComponent {
         ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            passport: {
+            idCard: {
               loaded: false,
               showErrors: false,
               focusedGroup: '',
               focusedField: '',
-              passport: {
+              idCard: {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
@@ -254,8 +254,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
         }))
       }
         save={() => {}}
-        retrievePassportInformation={() => {}}
-        changePassportField={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
         initiate={initiate}
         changePhysicalAddressField={() => {}}
         setFocusedField={() => {}}
@@ -266,22 +266,22 @@ describe.only('(Component) WalletPaasportScreen', () => {
       />),
       { context: { muiTheme: { } } }
     )
-    wrapper.find(Presentation).props().selectCountry('passport')
+    wrapper.find(Presentation).props().selectCountry('idCard')
     expect(initiate.called).to.be.true
-    expect(initiate.calls).to.deep.equal([{args: ['passport']}])
+    expect(initiate.calls).to.deep.equal([{args: ['idCard']}])
   })
-  it('should call changePassportField with proper params when the field is in passpoer', () => { // eslint-disable-line max-len
-    const changePassportField = stub()
+  it('should call changeIdCardField with proper params when the field is in passpoer', () => { // eslint-disable-line max-len
+    const changeIdCardField = stub()
     const wrapper = shallow(
       (<WalletPaasportScreen.WrappedComponent {
         ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            passport: {
+            idCard: {
               loaded: false,
               showErrors: false,
               focusedGroup: '',
               focusedField: '',
-              passport: {
+              idCard: {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
@@ -307,8 +307,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
         }))
       }
         save={() => {}}
-        retrievePassportInformation={() => {}}
-        changePassportField={changePassportField}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={changeIdCardField}
         initiate={() => {}}
         changePhysicalAddressField={() => {}}
         setFocusedField={() => {}}
@@ -320,8 +320,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
       { context: { muiTheme: { } } }
     )
     wrapper.find(Presentation).props().change('firstName', '')
-    expect(changePassportField.called).to.be.true
-    expect(changePassportField.calls).to.deep.equal([{args: ['firstName', '']}])
+    expect(changeIdCardField.called).to.be.true
+    expect(changeIdCardField.calls).to.deep.equal([{args: ['firstName', '']}])
   })
   it('should call changePhysicalAddressField with proper params when the field is in physicalAddress', () => { // eslint-disable-line max-len
     const changePhysicalAddressField = stub()
@@ -330,12 +330,12 @@ describe.only('(Component) WalletPaasportScreen', () => {
       (<WalletPaasportScreen.WrappedComponent {
         ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            passport: {
+            idCard: {
               loaded: false,
               showErrors: false,
               focusedGroup: '',
               focusedField: '',
-              passport: {
+              idCard: {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
@@ -361,8 +361,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
         }))
       }
         save={() => {}}
-        retrievePassportInformation={() => {}}
-        changePassportField={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
         initiate={() => {}}
         changePhysicalAddressField={changePhysicalAddressField}
         setFocusedField={() => {}}

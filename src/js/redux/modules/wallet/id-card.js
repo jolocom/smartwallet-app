@@ -8,34 +8,34 @@ import {listOfCountries as options} from '../../../lib/list-of-countries'
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
-  storePassportDetailsInSolid,
+  storeIdCardDetailsInSolid,
   genderList,
   mapBackendToState,
   changeFieldValue
-} from '../../../lib/passport-util'
+} from '../../../lib/id-card-util'
 
-const actions = module.exports = makeActions('wallet/passport', {
-  storePassportDetailsInBlockchain: {
+const actions = module.exports = makeActions('wallet/id-card', {
+  storeIdCardDetailsInBlockchain: {
     expectedParams: [],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        const buildAction = actions.storePassportDetailsInBlockchain.buildAction
+        const buildAction = actions.storeIdCardDetailsInBlockchain.buildAction
         dispatch(buildAction(params, () => {
           const state = getState()
-          const {passport} = state.getIn(['wallet', 'passport']).toJS()
+          const {idCard} = state.getIn(['wallet', 'idCard']).toJS()
           const hash = (new WalletCrypto()).calculateDataHash({
-            number: passport.number.value,
-            expirationDate: moment(passport.expirationDate.value).format(),
-            givenName: passport.firstName.value,
-            familyName: passport.lastName.value,
-            birthDate: moment(passport.birthDate.value).format(),
-            birthPlace: passport.birthPlace.value,
-            birthCountry: passport.birthCountry.value
+            number: idCard.number.value,
+            expirationDate: moment(idCard.expirationDate.value).format(),
+            givenName: idCard.firstName.value,
+            familyName: idCard.lastName.value,
+            birthDate: moment(idCard.birthDate.value).format(),
+            birthPlace: idCard.birthPlace.value,
+            birthCountry: idCard.birthCountry.value
           })
           const {wallet} = services.auth.currentUser
           return wallet.addAttributeHashAndWait({
-            attributeId: 'passport',
+            attributeId: 'idCard',
             attribute: hash,
             definitionUrl: '',
             password: '1234'
@@ -50,12 +50,12 @@ const actions = module.exports = makeActions('wallet/passport', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
-        const {passport, showErrors} = getState().toJS().wallet.passport
+        const {idCard, showErrors} = getState().toJS().wallet.idCard
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
           dispatch(actions.save.buildAction(params,
-          () => storePassportDetailsInSolid({backend, services, passport, webId})
-          )).then(() => dispatch(actions.storePassportDetailsInBlockchain()))
+          () => storeIdCardDetailsInSolid({backend, services, idCard, webId}) // eslint-disable-line max-len
+          )).then(() => dispatch(actions.storeIdCardDetailsInBlockchain()))
           .then(() => dispatch(router.pushRoute('/wallet/identity')))
         }
       }
@@ -78,13 +78,13 @@ const actions = module.exports = makeActions('wallet/passport', {
       }
     }
   },
-  retrievePassportInformation: {
+  retrieveIdCardInformation: {
     expectedParams: [],
     async: true,
     creator: (params) => {
       return (dispatch, {services, backend}) => {
-        dispatch(actions.retrievePassportInformation.buildAction(params,
-          () => backend.solid.getPassportInformation()
+        dispatch(actions.retrieveIdCardInformation.buildAction(params,
+          () => backend.solid.getIdCardInformation()
         ))
       }
     }
@@ -93,7 +93,7 @@ const actions = module.exports = makeActions('wallet/passport', {
     expectedParams: ['field'],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/passport/select-birth-country'))
+        dispatch(router.pushRoute('/wallet/idCard/select-birth-country'))
       }
     }
   },
@@ -101,11 +101,11 @@ const actions = module.exports = makeActions('wallet/passport', {
     expectedParams: ['field'],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/passport/select-country'))
+        dispatch(router.pushRoute('/wallet/idCard/select-country'))
       }
     }
   },
-  changePassportField: {
+  changeIdCardField: {
     expectedParams: ['field', 'value']
   },
   setFoccusedGroup: {
@@ -121,7 +121,7 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   showErrors: false,
   focusedGroup: '',
   focusedField: '',
-  passport: {
+  idCard: {
     locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},
@@ -147,7 +147,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.cancel.id:
       return initialState
 
-    case actions.changePassportField.id:
+    case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
 
     case actions.save.id:
@@ -163,7 +163,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.setShowAddress.id:
-      return state.mergeIn(['passport'], {
+      return state.mergeIn(['idCard'], {
         showAddress: action.value
       })
 
@@ -173,19 +173,19 @@ module.exports.default = (state = initialState, action = {}) => {
         showErrors: false
       })
 
-    case actions.retrievePassportInformation.id:
+    case actions.retrieveIdCardInformation.id:
       return state.merge({
         loaded: false,
         showErrors: false
       })
 
-    case actions.retrievePassportInformation.id_fail:
+    case actions.retrieveIdCardInformation.id_fail:
       return state.merge({
         loaded: true,
         showErrors: true
       })
 
-    case actions.retrievePassportInformation.id_success:
+    case actions.retrieveIdCardInformation.id_success:
       return mapBackendToState(state, action)
 
     case actions.setFocusedField.id:

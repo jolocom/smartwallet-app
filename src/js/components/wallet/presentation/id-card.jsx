@@ -28,7 +28,7 @@ const STYLES = {
   }
 }
 @Radium
-export default class WalletPassport extends React.Component {
+export default class WalletIdCard extends React.Component {
   static propTypes = {
     save: React.PropTypes.func,
     showVerifierLocations: React.PropTypes.func,
@@ -44,7 +44,7 @@ export default class WalletPassport extends React.Component {
     showErrors: React.PropTypes.bool,
     showAddress: React.PropTypes.bool,
     physicalAddress: React.PropTypes.array,
-    passport: React.PropTypes.array
+    idCard: React.PropTypes.array
   }
 
   renderField(field) {
@@ -158,7 +158,7 @@ export default class WalletPassport extends React.Component {
   }
 
   renderBirthDate({value, label, valid, key, index, icon, group}) {
-    const birthPlace = this.props.passport[index + 1]
+    const birthPlace = this.props.idCard[index + 1]
 
     return (<table key={key} style={{width: '100%'}}>
       <th key="0" style={{width: '70%'}}>
@@ -224,23 +224,23 @@ export default class WalletPassport extends React.Component {
   }
 
   createIcons() {
-    const passportGroups = this.props.passport.map(({group}) => group)
+    const idCardGroups = this.props.idCard.map(({group}) => group)
     let icons = [IconNumber]
-    icons[passportGroups.indexOf('person')] = Person
-    icons[passportGroups.indexOf('cake')] = Cake
-    icons[passportGroups.length] = Location
+    icons[idCardGroups.indexOf('person')] = Person
+    icons[idCardGroups.indexOf('cake')] = Cake
+    icons[idCardGroups.length] = Location
     return icons
   }
 
   render() {
     const icons = this.createIcons()
-    const {passport, physicalAddress, showAddress, loaded, save, cancel,
+    const {idCard, physicalAddress, showAddress, loaded, save, cancel,
       showVerifierLocations} = this.props
 
     let address = physicalAddress[0]
     if (showAddress) { address = physicalAddress }
 
-    const fields = passport.concat(address).map(
+    const fields = idCard.concat(address).map(
       (field, index) => this.renderField({...field, index, icon: icons[index]})
     )
 
@@ -253,7 +253,7 @@ export default class WalletPassport extends React.Component {
       <Block style={STYLES.verificationBlock}>
         <Block>
           Request personal verification of <br />
-          your Passport/ID Card by an <br />
+          your IdCard/ID Card by an <br />
           instutioon Close to your location
         </Block>
         <FlatButton

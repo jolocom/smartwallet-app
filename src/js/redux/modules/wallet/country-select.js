@@ -1,10 +1,10 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
-import {actions as passportActions} from './passport'
+import {actions as idCardActions} from './id-card'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
 
-const actions = module.exports = makeActions('wallet/passport/country', {
+const actions = module.exports = makeActions('wallet/id-card/country', {
   submit: {
     expectedParams: [],
     async: true,
@@ -13,13 +13,13 @@ const actions = module.exports = makeActions('wallet/passport/country', {
         dispatch(actions.submit.buildAction(params, () => {
           const {value, type} = getState().toJS().wallet.country
           if (type === 'birthCountry') {
-            dispatch(passportActions.changePassportField(type, value))
+            dispatch(idCardActions.changeIdCardField(type, value))
           } else {
             dispatch(
-              passportActions.changePhysicalAddressField(type, value))
+              idCardActions.changePhysicalAddressField(type, value))
           }
           dispatch(actions.clearState())
-          dispatch(router.pushRoute('/wallet/identity/passport/add'))
+          dispatch(router.pushRoute('/wallet/identity/id-card/add'))
         }))
       }
     }
@@ -50,7 +50,7 @@ const actions = module.exports = makeActions('wallet/passport/country', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.clearState())
-        dispatch(router.pushRoute('/wallet/identity/passport/add'))
+        dispatch(router.pushRoute('/wallet/identity/idCard/add'))
         return params
       }
     }
