@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
 import LaymanLoginScreen from './layman'
 
-describe('(Component) LaymanLogin', function() {
+describe('(Component) LaymanLoginScreen', function() {
   it('should render properly the first time', function() {
     const wrapper = shallow(
       (<LaymanLoginScreen.WrappedComponent {
@@ -77,7 +77,7 @@ describe('(Component) LaymanLogin', function() {
           }
         }))
       }
-        onUsernameChange={setUsername}
+        setUsername={setUsername}
         setPassword={setPassword}
         submitLogin={() => {}}
         goToLogin={() => {}}
@@ -89,10 +89,8 @@ describe('(Component) LaymanLogin', function() {
 
     wrapper.find('LaymanLogin').props().onUsernameChange(e)
     expect(setUsername.called).to.be.true
-    expect(setUsername.calls).to.deep.equal([{args: [e]}])
 
     wrapper.find('LaymanLogin').props().onPasswordChange(e)
     expect(setPassword.called).to.be.true
-    expect(setPassword.calls).to.deep.equal([{args: [e]}])
   })
 })

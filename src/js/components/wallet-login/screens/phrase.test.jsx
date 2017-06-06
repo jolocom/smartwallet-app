@@ -20,6 +20,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
       }
         submitPassphrase={() => {}}
         setPassphrase={() => {}}
+        goToLogin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -43,6 +44,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
       }
         submitPassphrase={submitPassphrase}
         setPassphrase={() => {}}
+        goToLogin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -66,6 +68,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
       }
         submitPassphrase={() => {}}
         setPassphrase={setPassphrase}
+        goToLogin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

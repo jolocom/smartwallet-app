@@ -11,6 +11,10 @@ describe('(Component) ExpertLoginPinScreen', () => {
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
           walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -39,6 +43,10 @@ describe('(Component) ExpertLoginPinScreen', () => {
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
           walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -66,6 +74,10 @@ describe('(Component) ExpertLoginPinScreen', () => {
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
           walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -93,6 +105,10 @@ describe('(Component) ExpertLoginPinScreen', () => {
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
           walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
@@ -120,6 +136,10 @@ describe('(Component) ExpertLoginPinScreen', () => {
       (<ExpertLoginPinScreen.WrappedComponent {
         ...ExpertLoginPinScreen.mapStateToProps(Immutable.fromJS({
           walletLogin: {
+            userType: {
+              value: '',
+              valid: false
+            },
             pin: {
               value: '',
               focused: false,
