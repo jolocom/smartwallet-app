@@ -60,7 +60,7 @@ export default class WalletIdCard extends React.Component {
       case 'birthDate':
         return this.renderBirthDate(field)
       case 'streetWithNumber':
-        return this.renderCityZipField(field)
+        return this.renderStreetWithNumberAndZipFields(field)
       case 'expirationDate':
         return this.renderDateField(field)
       default:
@@ -124,7 +124,7 @@ export default class WalletIdCard extends React.Component {
       enableDelete={value.length > 0} />
   }
 
-  renderCityZipField({value, label, valid, key, index, icon, group}) {
+  renderStreetWithNumberAndZipFields({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
     const zip = this.props.physicalAddress[1]
     return (<table key={key}> <tr>
       <td style={{width: '70%'}} key="0" >
