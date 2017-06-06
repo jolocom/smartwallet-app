@@ -4,22 +4,31 @@ import Radium from 'radium'
 import {theme} from 'styles'
 
 const STYLE = {
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
-  height: '100%',
-  padding: '16px',
-  backgroundColor: theme.jolocom.gray4,
-  boxSizing: 'border-box',
-  overflowY: 'auto'
+  wideLayout: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    height: '100%',
+    backgroundColor: theme.jolocom.gray1
+  },
+  container: {
+    padding: '16px',
+    backgroundColor: theme.jolocom.gray4,
+    boxSizing: 'border-box',
+    maxWidth: '1200px',
+    width: '100%'
+  }
 }
 
 const Container = ({style, children, ...props} = {}) => {
   return (
-    <div style={Object.assign({}, STYLE, style)} {...props}>
-      {children}
+    <div style={STYLE.wideLayout}>
+      <div style={Object.assign({},
+        STYLE.wideLayout, STYLE.container, style)} {...props}>
+        {children}
+      </div>
     </div>
   )
 }

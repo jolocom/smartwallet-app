@@ -13,7 +13,8 @@ import WalletError from '../presentation/error'
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog',
     'simple-dialog:showSimpleDialog',
-    'simple-dialog:configSimpleDialog'
+    'simple-dialog:configSimpleDialog',
+    'email-confirmation:startEmailConfirmation'
   ]
 })
 
@@ -28,11 +29,13 @@ export default class WalletIdentityScreen extends React.Component {
     openConfirmDialog: React.PropTypes.func.isRequired,
     getIdentityInformation: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired
+    showSimpleDialog: React.PropTypes.func.isRequired,
+    startEmailConfirmation: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
     this.props.getIdentityInformation()
+    // console.log(this.props.getIdentityInformation())
   }
 
   onConfirm(message, style) {
@@ -47,11 +50,14 @@ export default class WalletIdentityScreen extends React.Component {
 
   render() {
     const identity = this.props.wallet.identity
+
     if (identity.error) {
       return (
         <WalletError
-          message="...oops something went wrong!
-          We were not able to load your data."
+          message={
+            '...oops something went wrong!' +
+            'We were not able to load your data.'
+          }
           buttonLabel="RETRY"
           onClick={() => this.render()} />
 
@@ -63,7 +69,8 @@ export default class WalletIdentityScreen extends React.Component {
         username={identity.username}
         contact={identity.contact}
         webId={identity.webId}
-        passport={identity.passport}
+        passports={identity.passports}
+        idCards={identity.idCards}
         isLoaded={identity.loaded}
         isError={identity.error}
         goToContactManagement={this.props.goToContactManagement}
@@ -72,7 +79,9 @@ export default class WalletIdentityScreen extends React.Component {
         onConfirm={
           ({message, style, attrValue}) => this.onConfirm(message, style)}
         onVerify={({message, buttonText, style, attrValue}) => {
-          this.props.configSimpleDialog(null, message, buttonText, style)
+          this.props.configSimpleDialog(() => {
+            this.props.startEmailConfirmation({email: attrValue})
+          }, message, buttonText, style)
           this.props.showSimpleDialog()
         }}
       />

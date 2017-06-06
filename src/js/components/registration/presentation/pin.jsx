@@ -6,7 +6,8 @@ import {Form} from 'formsy-react'
 
 import {theme} from 'styles'
 
-import {Container, Header, Content, Block, Footer} from '../../structure'
+import {Container, Header, Content, Block, Footer, SideNote}
+  from '../../structure'
 
 const STYLES = {
   form: {
@@ -21,10 +22,6 @@ const STYLES = {
     margin: '20px 0',
     color: theme.palette.accent1Color,
     textTransform: 'uppercase'
-  },
-  explanation: {
-    marginTop: '20px',
-    color: theme.jolocom.gray1
   },
   content: {
     padding: '16px',
@@ -55,10 +52,6 @@ const Pin = (props) => {
         >
           Change secure PIN
         </div>
-        <div style={STYLES.explanation}>
-          This secure PIN will be needed for transactions and
-          saving information on the Blockchain.
-        </div>
       </Block>
     )
   }
@@ -88,6 +81,16 @@ const Pin = (props) => {
         </Content>
 
         <Footer>
+          {
+            props.confirm
+            ? <Block>
+              <SideNote>
+                This secure PIN will be needed for transactions and
+                saving information on the Blockchain.
+              </SideNote>
+            </Block>
+            : null
+          }
           <RaisedButton
             type="submit"
             disabled={!props.valid}

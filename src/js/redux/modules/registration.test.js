@@ -446,7 +446,8 @@ describe('Wallet registration Redux module', function() {
             .to.deep.equal([{args: [{
               userName: 'usr',
               email: 'test@test.com',
-              password: 'abdcd'
+              password: 'abdcd',
+              pin: '1234'
             }]}])
         }
       )

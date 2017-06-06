@@ -9,7 +9,6 @@ const STYLE = {
   textAlign: 'left',
   padding: '0px',
   boxSizing: 'border-box',
-  overflowY: 'auto',
   minHeight: '100%'
 }
 

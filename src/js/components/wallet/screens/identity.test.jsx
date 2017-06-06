@@ -30,20 +30,7 @@ describe('(Component) WalletIdentityScreen', function() {
                   verified: true
                 }]
               },
-              passport: {
-                number: '',
-                givenName: '',
-                familyName: '',
-                birthDate: '',
-                gender: '',
-                showAddress: '',
-                streetAndNumber: '',
-                city: '',
-                zip: '',
-                state: '',
-                country: '',
-                verified: false
-              },
+              passports: [],
               error: false
             }
           }
@@ -72,11 +59,7 @@ describe('(Component) WalletIdentityScreen', function() {
       phones: [{number: '+49 176 12345678', type: 'mobile', verified: true}],
       emails: [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
     })
-    expect(wrapper.find('WalletIdentity').prop('passport')).to.deep.equal({
-      number: '', givenName: '', familyName: '', birthDate: '', gender: '',
-      showAddress: '', streetAndNumber: '', city: '', zip: '', state: '',
-      country: '', verified: false
-    })
+    expect(wrapper.find('WalletIdentity').prop('passports')).to.deep.equal([])
   })
   it('should call goToDrivingLicenceManagement with proper params', () => {
     const goToDrivingLicenceManagement = stub()
@@ -266,6 +249,7 @@ describe('(Component) WalletIdentityScreen', function() {
   it('should call openConfirmDialog on verify with proper params', () => {
     const configSimpleDialog = stub()
     const showSimpleDialog = stub()
+    const startEmailConfirmation = stub()
     const wrapper = shallow(
       (<WalletIdentityScreen.WrappedComponent {
         ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
@@ -287,8 +271,9 @@ describe('(Component) WalletIdentityScreen', function() {
         getIdentityInformation={() => {}}
         openConfirmDialog={() => {}}
         closeConfirmDialog={() => {}}
-        configSimpleDialog={configSimpleDialog}
         showSimpleDialog={showSimpleDialog}
+        configSimpleDialog={configSimpleDialog}
+        startEmailConfirmation={startEmailConfirmation}
        />),
       { context: { muiTheme: { } } }
     )
@@ -297,13 +282,19 @@ describe('(Component) WalletIdentityScreen', function() {
       message: 'message',
       buttonText: 'OK',
       style: {},
-      attrValue: ''
+      attrValue: 'test@test.com'
     })
     expect(configSimpleDialog.called).to.be.true
     expect(showSimpleDialog.called).to.be.true
-    expect(configSimpleDialog.calls).to.deep.equal([{args: [
-      null, 'message', 'OK', {}
-    ]}])
+    expect(configSimpleDialog.calls).to.have.lengthOf(1)
+    const [callback, msg, text, ...rest] = configSimpleDialog.calls[0].args
+    expect({msg, text}).to.deep.equal({msg: 'message', 'text': 'OK'})
+    expect(rest).to.have.lengthOf(1)
     expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
+
+    callback()
+    expect(startEmailConfirmation.calls).to.deep.equal([{args: [{
+      email: 'test@test.com'
+    }]}])
   })
 })
