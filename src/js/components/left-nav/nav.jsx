@@ -6,14 +6,14 @@ import {
   ListItem,
   makeSelectable,
   Divider,
-  FontIcon,
-  Avatar
+  FontIcon
+  // Avatar
 } from 'material-ui'
 import { connect } from 'redux/utils'
 
 import Header from './header.jsx'
 
-import UserAvatar from 'components/common/user-avatar.jsx'
+// import UserAvatar from 'components/common/user-avatar.jsx'
 
 import accountActions from 'actions/account'
 
@@ -62,6 +62,9 @@ let Nav = React.createClass({
       menuItemIcon: {
         marginLeft: '10px',
         color: '#ffffff'
+      },
+      menuItemIconActive: {
+        color: '#b3c90f'
       },
       menuItemActive: {
         color: '#b3c90f',
@@ -127,7 +130,7 @@ let Nav = React.createClass({
       if (typeof item.icon === 'string') {
         icon = (
           <FontIcon
-            style={styles.menuItemIcon}
+            style={styles.menuItemIconActive}
             className="material-icons">{item.icon}
           </FontIcon>
         )
@@ -170,26 +173,6 @@ let Nav = React.createClass({
             onChange={this._handleNavChange}
           >
             {this.renderNavItems()}
-          </SelectableList>
-          <Divider style={styles.menuDivider} />
-          <SelectableList
-            value={this.props.selected}
-            onChange={this._handleNavChange}
-            >
-            <ListItem primaryText="Profile"
-              onTouchTap={this.editProfile}
-              style={styles.menuItem}
-              leftAvatar={
-                <Avatar
-                  style={{marginLeft: '-10px'}}>
-                  <UserAvatar
-                    name={this.state.profile.givenName
-                      ? this.state.profile.givenName
-                      : this.state.profile.fullName
-                    }
-                    imgUrl={this.state.profile.imgUri} />
-                </Avatar>}
-            />
           </SelectableList>
           <Divider style={styles.menuDivider} />
           <List>

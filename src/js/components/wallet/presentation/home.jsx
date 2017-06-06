@@ -14,7 +14,6 @@ import {
 
 const STYLES = {
   sideNote: {
-    padding: '10px',
     lineHeight: '150%'
   },
   flatButton: {
@@ -26,11 +25,11 @@ const STYLES = {
     fontWeight: 'normal'
   },
   walletContainer: {
-    backgroundColor: 'none',
+    backgroundColor: '#fff',
     padding: '24px 24px 0 24px'
   },
   homeImg: {
-    maxWidth: '60vw'
+    maxWidth: '50vw'
   }
 }
 

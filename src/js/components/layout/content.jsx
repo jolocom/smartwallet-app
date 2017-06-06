@@ -16,7 +16,8 @@ let Content = React.createClass({
       flex: 1,
       display: 'flex',
       flexDirection: 'column',
-      overflowY: 'auto'
+      overflowY: 'auto',
+      backgroundColor: '#fff'
     }
   },
 

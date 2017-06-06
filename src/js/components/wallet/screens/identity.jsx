@@ -35,6 +35,7 @@ export default class WalletIdentityScreen extends React.Component {
 
   componentWillMount() {
     this.props.getIdentityInformation()
+    // console.log(this.props.getIdentityInformation())
   }
 
   onConfirm(message, style) {
@@ -49,6 +50,7 @@ export default class WalletIdentityScreen extends React.Component {
 
   render() {
     const identity = this.props.wallet.identity
+
     if (identity.error) {
       return (
         <WalletError
@@ -67,7 +69,8 @@ export default class WalletIdentityScreen extends React.Component {
         username={identity.username}
         contact={identity.contact}
         webId={identity.webId}
-        passport={identity.passport}
+        passports={identity.passports}
+        idCards={identity.idCards}
         isLoaded={identity.loaded}
         isError={identity.error}
         goToContactManagement={this.props.goToContactManagement}
