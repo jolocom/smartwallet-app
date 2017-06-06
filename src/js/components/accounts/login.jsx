@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import { connect } from 'redux/utils'
-import { RaisedButton, TextField, IconButton, AppBar } from 'material-ui'
+import { IconButton, AppBar } from 'material-ui'
 import { Link } from 'react-router'
 
 import Utils from 'lib/util'
@@ -10,6 +10,7 @@ import {theme} from 'styles'
 
 import {routes} from 'routes'
 
+import LoginForm from 'components/common/login-form'
 import {Container} from '../structure'
 
 // login for development
@@ -93,21 +94,12 @@ const Login = connect({
         marginBottom: '1em',
         color: theme.jolocom.gray1
       },
-      button: {
-        width: '100%'
-      },
       help: {
         color: theme.jolocom.gray1
       },
       link: {
         color: theme.palette.accent1Color,
         fontWeight: 'bold'
-      },
-      forgotPassword: {
-        float: 'right',
-        padding: '10px',
-        color: '#7B8288',
-        fontSize: '0.75em'
       }
     }
 
@@ -141,35 +133,15 @@ const Login = connect({
           </p>
         : ''
         }
-        <form style={styles.content} onSubmit={this.login}>
-          <div style={{marginBottom: '20px'}}>
-            <div>
-              {/** TODO Give user feedback when user already exists **/}
-              <TextField
-                floatingLabelText="Username"
-                value={this.props.login.username}
-                type="text"
-                autoCorrect="off"
-                autoCapitalize="none"
-                autoComplete="none"
-                errorText={this.props.login.userErrorMsg}
-                onChange={this._handleUsernameChange} />
-              <TextField
-                floatingLabelText="Password"
-                type="password"
-                errorText={this.props.login.pwErrorMsg}
-                onChange={this._handlePasswordChange} />
-              <Link
-                to="/forgot-password"
-                style={styles.forgotPassword}>Forgot password?</Link>
-            </div>
-          </div>
-          <RaisedButton
-            type="submit"
-            secondary
-            style={styles.button}
-            label="Login" />
-        </form>
+        <LoginForm
+          onSubmit={this.login}
+          username={this.props.login.username}
+          usernameError={this.props.login.userErrorMsg}
+          onUsernameChange={this._handleUsernameChange}
+          passwordError={this.props.login.pwErrorMsg}
+          onPasswordChange={this._handlePasswordChange}
+        />
+
         <p style={styles.help}>Don't have an account yet?&nbsp;
           <Link to={routes.signup} style={styles.link}>Sign up</Link>.
         </p>
