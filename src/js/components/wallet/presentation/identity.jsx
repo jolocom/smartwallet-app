@@ -222,72 +222,72 @@ const IdCardList = (props) => {
     return (
       <List>
         <StaticListItem
-          key={'idCardnumber' + index}
+          key={'idCardnumber' + idCard.id}
           textLabel="ID Card number"
-          textValue={idCard.number}
+          textValue={idCard.idCardFields.number}
         />
         <StaticListItem
-          key={'expirationDate' + index}
+          key={'expirationDate' + idCard.id}
           textLabel="Expiration Date"
-          textValue={idCard.expirationDate}
+          textValue={idCard.idCardFields.expirationDate}
         />
         <StaticListItem
-          key={'firstName' + index}
+          key={'firstName' + idCard.id}
           icon={PersonIcon}
           textLabel="First Name"
-          textValue={idCard.firstName}
+          textValue={idCard.idCardFields.firstName}
         />
         <StaticListItem
-          key={'lastName' + index}
+          key={'lastName' + idCard.id}
           textLabel="Last Name"
-          textValue={idCard.lastName}
+          textValue={idCard.idCardFields.lastName}
         />
         <StaticListItem
-          key={'gender' + index}
+          key={'gender' + idCard.id}
           textLabel="Gender"
-          textValue={idCard.gender}
+          textValue={idCard.idCardFields.gender}
         />
         <StaticListItem
-          key={'dateofbirth' + index}
+          key={'dateofbirth' + idCard.id}
           icon={Cake}
           textLabel="Date of Birth"
-          textValue={idCard.birthDate}
+          textValue={idCard.idCardFields.birthDate}
         />
         <StaticListItem
-          key={'placeofbirth' + index}
+          key={'placeofbirth' + idCard.id}
           textLabel="Place of Birth"
-          textValue={idCard.birthPlace}
+          textValue={idCard.idCardFields.birthPlace}
         />
         <StaticListItem
-          key={'countryofbirth' + index}
+          key={'countryofbirth' + idCard.id}
           textLabel="Country of Birth"
-          textValue={idCard.birthCountry}
+          textValue={idCard.idCardFields.birthCountry}
         />
         <StaticListItem
-          key={'street' + index}
+          key={'street' + idCard.id}
           icon={Location}
           textLabel="Street"
-          textValue={idCard.physicalAddress.streetWithNumber}
+          textValue={idCard.idCardFields.physicalAddress.streetWithNumber}
         />
         <StaticListItem
-          key={'city' + index}
+          key={'city' + idCard.id}
           textLabel="City"
-          textValue={idCard.physicalAddress.city}
+          textValue={idCard.idCardFields.physicalAddress.city}
         />
         <StaticListItem
-          key={'zipCode' + index}
+          key={'zipCode' + idCard.id}
           textLabel="Zip Code"
-          textValue={idCard.physicalAddress.zip}
+          textValue={idCard.idCardFields.physicalAddress.zip}
         />
         <StaticListItem
-          key={'state' + index}
+          key={'state' + idCard.id}
           textLabel="State"
-          textValue={idCard.physicalAddress.state}
+          textValue={idCard.idCardFields.physicalAddress.state}
         />
         <StaticListItem
-          key={'country' + index}
+          key={'country' + idCard.id}
           textLabel="Country"
-          textValue={idCard.physicalAddress.country}
+          textValue={idCard.idCardFields.physicalAddress.country}
         />
       </List>
     )
