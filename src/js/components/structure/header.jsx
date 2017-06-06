@@ -9,9 +9,12 @@ const STYLES = {
   },
   title: {
     color: theme.jolocom.gray1,
-    fontSize: '21px',
-    fontWeight: '300',
-    margin: 0
+    fontSize: '18pt',
+    fontWeight: '100',
+    margin: 0,
+    '@media screen and (min-width: 1200px)': {
+      fontSize: '24pt'
+    }
   }
 }
 

@@ -11,6 +11,7 @@ import {theme} from 'styles'
 import {routes} from 'routes'
 
 import LoginForm from 'components/common/login-form'
+import {Container} from '../structure'
 
 // login for development
 const Login = connect({
@@ -67,31 +68,26 @@ const Login = connect({
 
   getStyles() {
     let styles = {
-      container: {
-        textAlign: 'center',
-        background: '#f8f9fb',
-        paddingBottom: '40px',
-        boxSizing: 'border-box',
-        minHeight: '100%'
-      },
       header: {
         padding: '40px'
       },
-      logo: {
-        fontSize: '18px',
-        fontWeight: '400',
-        textAlign: 'center',
-        textTransform: 'uppercase'
-      },
       logoImg: {
         maxWidth: '80%',
-        width: '100px'
+        width: '200px'
       },
       title: {
         fontWeight: 'normal',
         fontSize: '20px',
         color: '#4B142B',
         textAlign: 'left'
+      },
+      content: {
+        width: '300px',
+        maxWidth: '100%',
+        padding: '0px 20px 20px',
+        margin: '10px auto 20px auto',
+        boxSizing: 'border-box',
+        backgroundColor: '#ffffff'
       },
       safariCookieWarning: {
         padding: '0 20px',
@@ -112,7 +108,7 @@ const Login = connect({
   render() {
     let styles = this.getStyles()
     return (
-      <div style={styles.container}>
+      <Container>
         <AppBar
           title="Log in"
           style={{boxShadow: 'none'}}
@@ -122,8 +118,8 @@ const Login = connect({
               arrow_back
           </IconButton>}
           />
-        <div style={styles.logo}>
-          <img src="/img/logo.svg" style={styles.logoImg} />
+        <div>
+          <img src="/img/JOLOCOM_logo-01.svg" style={styles.logoImg} />
         </div>
         <div style={{paddingBottom: '8px', color: '#e8540c'}}>
           {this.props.login.failureMsg}
@@ -149,7 +145,7 @@ const Login = connect({
         <p style={styles.help}>Don't have an account yet?&nbsp;
           <Link to={routes.signup} style={styles.link}>Sign up</Link>.
         </p>
-      </div>
+      </Container>
     )
   }
 })))

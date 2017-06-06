@@ -1,6 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 
+import {theme} from 'styles'
+
 let Layout = React.createClass({
 
   propTypes: {
@@ -16,7 +18,7 @@ let Layout = React.createClass({
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
-      background: '#fff'
+      background: theme.jolocom.gray1
     }
   },
 

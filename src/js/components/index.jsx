@@ -5,6 +5,9 @@ import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 
 import {routes} from 'routes'
+import {theme} from 'styles'
+
+import { Container } from './structure'
 
 let Index = React.createClass({
   contextTypes: {
@@ -24,25 +27,16 @@ let Index = React.createClass({
     let {muiTheme} = this.context
 
     let styles = {
-      container: {
-        width: '100%',
-        height: '100%',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: muiTheme.jolocom.gray4
-      },
-      logo: {
-        fontSize: '18px',
-        fontWeight: '400',
-        textAlign: 'center',
-        marginTop: '24px',
-        textTransform: 'uppercase'
-      },
       logoImg: {
-        width: '32px',
-        height: '32px',
-        verticalAlign: 'middle'
+        flex: 1,
+        width: '150px',
+        userSelect: 'none',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        '@media screen and (min-width: 1200px)': {
+          width: '250px'
+        }
       },
       intro: {
         flex: 1,
@@ -58,44 +52,40 @@ let Index = React.createClass({
         userSelect: 'none',
         alignItems: 'center'
       },
-      img: {
+      onboardImg: {
         flex: 1,
-        maxWidth: '100%',
-        width: '200px',
+        width: '300px',
         userSelect: 'none',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'contain'
-      },
-      startImg: {
-        marginTop: '15vh',
-        maxWidth: '100%',
-        width: '360px',
-        userSelect: 'none'
+        backgroundSize: 'contain',
+        '@media screen and (min-width: 1200px)': {
+          width: '600px'
+        }
       },
       title: {
         color: '#a5a5a4',
-        fontSize: '5.5vmin',
+        fontSize: '18pt',
         fontWeight: '100',
         marginBottom: '10px',
-        maxWidth: '100%'
+        maxWidth: '100%',
+        '@media screen and (min-width: 1200px)': {
+          fontSize: '24pt'
+        }
       },
       subtitle: {
-        color: '#a5a5a4',
-        fontSize: '3vmin'
-      },
-      logoStartImg: {
-        padding: '24px',
-        maxWidth: '80%',
-        width: '320px',
-        margin: 'auto',
-        marginTop: '20vh'
+        color: theme.jolocom.gray1,
+        fontSize: '10pt',
+        '@media screen and (min-width: 1200px)': {
+          fontSize: '14pt'
+        }
       },
       actions: {
         display: 'flex',
         alignItems: 'stretch',
         padding: '16px',
         maxWidth: '80%',
+        width: '440px',
         margin: '0 auto 0px'
       },
       signup: {
@@ -136,7 +126,7 @@ let Index = React.createClass({
     let styles = this.getStyles()
 
     return (
-      <div style={styles.container}>
+      <Container>
         <div style={styles.previous}>
           <IconButton
             iconClassName="material-icons"
@@ -156,22 +146,21 @@ let Index = React.createClass({
           auto={false}
           style={styles.intro} indicator={IndicatorDots}>
           <div style={styles.slide}>
-            <div style={Object.assign({}, styles.img, {
-              backgroundImage: 'url(/img/logo_start.svg)',
-              width: '100px'
+            <div style={Object.assign({}, styles.logoImg, {
+              backgroundImage: 'url(/img/logo_start.svg)'
             })} />
           </div>
           <div style={styles.slide}>
-            <div style={Object.assign({}, styles.img, {
+            <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
-            <h3 style={styles.title}>Create an independant and<br />
+            <h3 style={styles.title}>Create an independent and
             secure digital identity.</h3>
             <p style={styles.subtitle}>Collect your data at a secure place.
               <br /> It’s yours, so only you own it!</p>
           </div>
           <div style={styles.slide}>
-            <div style={Object.assign({}, styles.img, {
+            <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-02.svg)'
             })} />
             <h3 style={styles.title}>Have all your data<br />
@@ -180,7 +169,7 @@ let Index = React.createClass({
               <br /> Pull the plug and your data is only yours.</p>
           </div>
           <div style={styles.slide}>
-            <div style={Object.assign({}, styles.img, {
+            <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-03.svg)'
             })} />
             <h3 style={styles.title}>Be aware of the<br />
@@ -209,7 +198,7 @@ let Index = React.createClass({
             onClick={this._handleLogin}
           />
         </div>
-      </div>
+      </Container>
     )
   },
 

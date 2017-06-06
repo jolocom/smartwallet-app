@@ -7,6 +7,8 @@ import {RaisedButton, IconButton} from 'material-ui'
 import AppBar from 'material-ui/AppBar'
 import {Link} from 'react-router'
 
+import {Container} from '../structure'
+
 let ForgotPassword = React.createClass({
 
   contextTypes: {
@@ -37,12 +39,6 @@ let ForgotPassword = React.createClass({
   getStyles() {
     let {muiTheme} = this.context
     let styles = {
-      container: {
-        textAlign: 'center',
-        background: '#f8f9fb',
-        height: '100%',
-        overflowY: 'auto'
-      },
       content: {
         width: '300px',
         maxWidth: '90%',
@@ -79,7 +75,7 @@ let ForgotPassword = React.createClass({
     let styles = this.getStyles()
 
     return (
-      <div style={styles.container}>
+      <Container>
         <AppBar
           title="Forgot password"
           style={{boxShadow: 'none'}}
@@ -119,7 +115,7 @@ let ForgotPassword = React.createClass({
         <p style={styles.help}>Don't have an account yet?&nbsp;
           <Link to="/signup" style={styles.link}>Sign up</Link>.
         </p>
-      </div>
+      </Container>
     )
   }
 })
