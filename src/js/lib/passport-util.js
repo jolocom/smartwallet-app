@@ -80,7 +80,7 @@ export const checkForNonValidFields = (reduxState) => {
   return reduxState.merge({showErrors})
 }
 
-export const submitChanges = ({backend, services, passport, webId}) => {
+export const storePassportDetailsInSolid = ({backend, services, passport, webId}) => { // eslint-disable-line max-len
   let solidAgent = backend.solid
   const operations = {
     set: solidAgent.setIdCard.bind(solidAgent),

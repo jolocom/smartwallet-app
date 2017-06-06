@@ -8,7 +8,7 @@ import {listOfCountries as options} from '../../../lib/list-of-countries'
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
-  submitChanges,
+  storePassportDetailsInSolid,
   genderList,
   mapBackendToState,
   changeFieldValue
@@ -54,8 +54,9 @@ const actions = module.exports = makeActions('wallet/passport', {
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
           dispatch(actions.save.buildAction(params,
-          () => submitChanges({backend, services, passport, webId})
-          )).then(() => dispatch(router.pushRoute('/wallet/identity')))
+          () => storePassportDetailsInSolid({backend, services, passport, webId})
+          )).then(() => dispatch(actions.storePassportDetailsInBlockchain()))
+          .then(() => dispatch(router.pushRoute('/wallet/identity')))
         }
       }
     }
