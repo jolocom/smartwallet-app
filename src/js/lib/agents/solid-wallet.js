@@ -151,10 +151,12 @@ export default class SolidAgent {
     g.addAll(userTriples)
 
     profileData.webId = webId
-    profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
-    profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
+    profileData.contact.email = await this
+      .getExtendedProprietyValue(g, PRED.email)
+    profileData.contact.phone = await this
+      .getExtendedProprietyValue(g, PRED.mobile)
     profileData.idCards = await this
-      .getExtendedProprietyValue(g, 'idCards')
+      .getExtendedProprietyValue(g, PRED.idCard)
 
     try {
       profileData.username.value = g
@@ -166,17 +168,8 @@ export default class SolidAgent {
     return profileData
   }
 
-  async getExtendedProprietyValue(g, property) {
+  async getExtendedProprietyValue(g, pred) {
     const propertyData = []
-    const propertyToPredMap = {
-      email: PRED.email,
-      phone: PRED.mobile,
-      idCards: PRED.idCard
-    }
-    const pred = propertyToPredMap[property]
-    if (!pred || !g) {
-      return propertyData
-    }
 
     const objects = g.statementsMatching(undefined, pred, undefined).map(st =>
       st.object
@@ -193,16 +186,12 @@ export default class SolidAgent {
   }
 
   async _expandData(obj, g, pred) {
-    const defaultResponse = {
-      id: null,
-      verified: false,
-      [key]: null
-    }
     const keyMap = {
       [PRED.mobile.value]: 'number',
       [PRED.email.value]: 'address',
-      [PRED.idCard.value]: 'idCard'
+      [PRED.idCard.value]: 'idCardFields'
     }
+
     const key = keyMap[pred.value]
 
     if (!g.statementsMatching(obj).length) {
@@ -217,14 +206,14 @@ export default class SolidAgent {
 
     return this.ldp.fetchTriplesAtUri(seeAlso).then(rdfData => {
       if (rdfData.unav) {
-        return defaultResponse
+        return
       }
 
       const extG = rdf.graph()
       extG.addAll(rdfData.triples)
 
       let value
-      if (key === 'idCard' || key === 'passport') {
+      if (key === 'idCardFields' || key === 'passportFields') {
         value = this._formatIdCardInfo(extG)
       } else {
         value = extG.statementsMatching(undefined, pred, undefined)[0]
@@ -267,8 +256,30 @@ export default class SolidAgent {
   }
 
   _formatIdCardInfo(g) {
-    const res = {}
-    const map = {
+    const res = {
+      number: undefined,
+      expirationDate: undefined,
+      firstName: undefined,
+      lastName: undefined,
+      gender: undefined,
+      birthDate: undefined,
+      birthPlace: undefined,
+      birthCountry: undefined,
+      physicalAddress: {
+        streetWithNumber: undefined,
+        zip: undefined,
+        city: undefined,
+        state: undefined,
+        country: undefined
+      }
+    }
+
+    const genderMap = {
+      [PRED.female.value]: 'female',
+      [PRED.male.value]: 'male'
+    }
+
+    const fieldsMap = {
       [PRED.identifier.value]: 'number',
       [PRED.expiresBy.value]: 'expirationDate',
       [PRED.givenName.value]: 'firstName',
@@ -279,13 +290,30 @@ export default class SolidAgent {
       [PRED.countryOfBirth.value]: 'birthCountry'
     }
 
+    const physAddrMap = {
+      [PRED.street.value]: 'streetWithNumber',
+      [PRED.zip.value]: 'zip',
+      [PRED.city.value]: 'city',
+      [PRED.state.value]: 'state',
+      [PRED.country.value]: 'country'
+    }
+
     g.statements.forEach(st => {
-      const field = map[st.predicate.value]
+      const field = fieldsMap[st.predicate.value]
+      const physAddrField = physAddrMap[st.predicate.value]
+
       if (field) {
-        res[field] = st.object.value
+        if (genderMap[st.object.value]) {
+          res[field] = genderMap[st.object.value]
+        } else {
+          res[field] = st.object.value
+        }
+      }
+
+      if (physAddrField) {
+        res.physicalAddress[physAddrField] = st.object.value
       }
     })
-    
     return res
   }
 
