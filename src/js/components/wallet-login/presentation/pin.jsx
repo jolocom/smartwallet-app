@@ -15,16 +15,17 @@ import {
   Block,
   FailureMessage,
   Footer
-} from './ui'
+} from '../../structure'
 
 const Pin = (props) => {
+  const avatar = props.userType === 'expert' ? 'img_techguy' : 'img_nohustle'
   return (
     <Container>
       <Header
         image={<Avatar
-          src="/img/img_techguy.svg"
+          src={`/img/${avatar}.svg`}
           size={60} />}
-        title="Welcome back!\nPlease enter your Pin."
+        title="Please enter your Pin."
       />
       <Content>
       {props.failed ? <FailureMessage>
@@ -52,6 +53,7 @@ const Pin = (props) => {
 }
 
 Pin.propTypes = {
+  userType: React.PropTypes.string.isRequired,
   value: React.PropTypes.string.isRequired,
   valid: React.PropTypes.bool.isRequired,
   focused: React.PropTypes.bool.isRequired,

@@ -2,6 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
+  IconButton,
   RaisedButton,
   Avatar,
   TextField
@@ -14,9 +15,13 @@ import {
   Block,
   Footer,
   FailureMessage
-} from './ui'
+} from '../../structure'
 
 const STYLES = {
+  backButton: {
+    alignSelf: 'flex-start',
+    position: 'absolute'
+  },
   phraseInput: {
     backgroundColor: '#fff',
     padding: '10px'
@@ -33,11 +38,19 @@ const STYLES = {
 const Passphrase = (props) => {
   return (
     <Container>
+      <IconButton
+        style={STYLES.backButton}
+        onClick={props.back}
+        iconClassName="material-icons">
+          arrow_back
+      </IconButton>
       <Header
         image={<Avatar
           src="/img/img_techguy.svg"
           size={60} />}
-        title="Welcome back!\nPlease enter your secure passphrase."
+        title={
+          <div>Welcome back! <br /> Please enter your secure passphrase.</div>
+        }
       />
       <Content>
         <Block>
@@ -69,6 +82,7 @@ const Passphrase = (props) => {
 }
 
 Passphrase.propTypes = {
+  back: React.PropTypes.func.isRequired,
   value: React.PropTypes.string.isRequired,
   canSubmit: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,

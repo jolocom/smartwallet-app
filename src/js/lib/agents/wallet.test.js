@@ -49,7 +49,8 @@ describe('#WalletAgentClass', () => {
       const registration = {
         userName: 'To the left',
         email: 'g.g@g.c',
-        password: 'canyouseeme?'
+        password: 'canyouseeme?',
+        pin: '1122'
       }
       const wallet = new WalletAgent()
       expect(wallet.registerWithCredentials(registration)).to.eventually
@@ -61,7 +62,8 @@ describe('#WalletAgentClass', () => {
       const login = {
         userName: 'hello',
         email: 'g.g@g.c',
-        password: 'canyouseeme?'
+        password: 'canyouseeme?',
+        pin: '1122'
       }
       const wallet = new WalletAgent()
       expect(wallet.loginWithCredentials(login)).to.eventually.be

@@ -13,7 +13,9 @@ const rdfHelper = {
 
     const typeToPred = {
       phone: PRED.mobile,
-      email: PRED.email
+      email: PRED.email,
+      passport: PRED.passport,
+      idCard: PRED.idCard
     }
 
     g.add(rdf.sym(webId), typeToPred[entryType], rdf.sym(entryNode))
@@ -32,8 +34,41 @@ const rdfHelper = {
       email: PRED.email
     }
 
-    g.add(rdf.sym(entryFileUrl), typeToPred[entryType], entryValue)
-    g.add(rdf.sym(entryFileUrl), PRED.primaryTopic, rdf.sym(webId))
+    if (entryType === 'phone' || entryType === 'email') {
+      g.add(rdf.sym(entryFileUrl), typeToPred[entryType], entryValue)
+      g.add(rdf.sym(entryFileUrl), PRED.primaryTopic, rdf.sym(webId))
+    } else if (entryType === 'passport') {
+      // TODO
+    } else if (entryType === 'idCard') {
+      const subj = rdf.sym(entryFileUrl)
+      const ownerUrl = rdf.sym(`${entryFileUrl}#owner`)
+      const addrBNode = rdf.blankNode('address')
+      const gender = entryValue.gender === 'male'
+        ? PRED.male
+        : PRED.female
+
+      // Id card info
+      g.add(subj, PRED.type, PRED.idCard)
+      g.add(subj, PRED.identifier, entryValue.number)
+      g.add(subj, PRED.expiresBy, entryValue.expirationDate)
+      g.add(subj, PRED.ownedBy, ownerUrl)
+
+      // Owner info
+      g.add(ownerUrl, PRED.givenName, entryValue.firstName)
+      g.add(ownerUrl, PRED.familyName, entryValue.lastName)
+      g.add(ownerUrl, PRED.gender, gender)
+      g.add(ownerUrl, PRED.birthDate, entryValue.birthDate)
+      g.add(ownerUrl, PRED.birthPlace, entryValue.birthPlace)
+      g.add(ownerUrl, PRED.countryOfBirth, entryValue.birthCountry)
+      g.add(ownerUrl, PRED.address, addrBNode)
+
+      // Owner address info
+      g.add(addrBNode, PRED.street, entryValue.physicalAddress.streetWithNumber)
+      g.add(addrBNode, PRED.zip, entryValue.physicalAddress.zip)
+      g.add(addrBNode, PRED.city, entryValue.physicalAddress.city)
+      g.add(addrBNode, PRED.state, entryValue.physicalAddress.state)
+      g.add(addrBNode, PRED.country, entryValue.physicalAddress.country)
+    }
 
     return rdf.serialize(undefined, g, entryFileUrl, 'text/turtle')
   },
@@ -103,7 +138,6 @@ export default class SolidAgent {
       //   }
       // ]
       idCards: []
-
     }
   }
 
@@ -130,13 +164,13 @@ export default class SolidAgent {
   async getUserInformation(webId) {
     if (!webId) {
       console.error('No webId found')
-      return Object.assign(this.defaultProfile)
+      return Object.assign({}, this.defaultProfile)
     }
     return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
       if (rdfData.unav) {
         // TODO snackbar
         console.error('User profile card could not be reached')
-        return Object.assign(this.defaultProfile)
+        return Object.assign({}, this.defaultProfile)
       }
       return this._formatAccountInfo(webId, rdfData.triples)
     })
@@ -149,8 +183,13 @@ export default class SolidAgent {
     g.addAll(userTriples)
 
     profileData.webId = webId
-    profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
-    profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
+    profileData.contact.email = await this
+      .getExtendedProprietyValue(g, PRED.email)
+    profileData.contact.phone = await this
+      .getExtendedProprietyValue(g, PRED.mobile)
+    profileData.idCards = await this
+      .getExtendedProprietyValue(g, PRED.idCard)
+
     try {
       profileData.username.value = g
         .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
@@ -161,17 +200,8 @@ export default class SolidAgent {
     return profileData
   }
 
-  async getExtendedProprietyValue(g, property) {
+  async getExtendedProprietyValue(g, pred) {
     const propertyData = []
-    const propertyToPredMap = {
-      email: PRED.email,
-      phone: PRED.mobile
-    }
-
-    const pred = propertyToPredMap[property]
-    if (!pred || !g) {
-      return propertyData
-    }
 
     const objects = g.statementsMatching(undefined, pred, undefined).map(st =>
       st.object
@@ -190,37 +220,37 @@ export default class SolidAgent {
   async _expandData(obj, g, pred) {
     const keyMap = {
       [PRED.mobile.value]: 'number',
-      [PRED.email.value]: 'address'
+      [PRED.email.value]: 'address',
+      [PRED.idCard.value]: 'idCardFields'
     }
 
     const key = keyMap[pred.value]
 
-    const defaultResponse = {
-      id: null,
-      verified: false,
-      [key]: null
-    }
-
-    const relevant = g.statementsMatching(obj, undefined, undefined)
-    if (!relevant.length) {
+    if (!g.statementsMatching(obj).length) {
       return
-      // Object.assign({}, defaultResponse, {[key]: obj.value})
     }
 
     const seeAlso = g.statementsMatching(obj, PRED.seeAlso, undefined)[0]
       .object.value
+
     const id = g.statementsMatching(obj, PRED.identifier, undefined)[0]
       .object.value
 
     return this.ldp.fetchTriplesAtUri(seeAlso).then(rdfData => {
       if (rdfData.unav) {
-        return defaultResponse
+        return
       }
 
       const extG = rdf.graph()
       extG.addAll(rdfData.triples)
-      const value = extG.statementsMatching(undefined, pred, undefined)[0]
-        .object.value
+
+      let value
+      if (key === 'idCardFields' || key === 'passportFields') {
+        value = this._formatIdCardInfo(extG)
+      } else {
+        value = extG.statementsMatching(undefined, pred, undefined)[0]
+          .object.value
+      }
       return {id, verified: false, [key]: value}
     })
   }
@@ -239,6 +269,84 @@ export default class SolidAgent {
       return
     }
     return this._setEntry(webId, entryValue, 'phone')
+  }
+
+  setPassport(webId, passport) {
+    if (!webId || !passport) {
+      console.error('Invalid arguments')
+      return
+    }
+    return this._setEntry(webId, passport, 'passport')
+  }
+
+  setIdCard(webId, idCard) {
+    if (!webId || !idCard) {
+      console.error('Invalid arguments')
+      return
+    }
+    return this._setEntry(webId, idCard, 'idCard')
+  }
+
+  _formatIdCardInfo(g) {
+    const res = {
+      number: undefined,
+      expirationDate: undefined,
+      firstName: undefined,
+      lastName: undefined,
+      gender: undefined,
+      birthDate: undefined,
+      birthPlace: undefined,
+      birthCountry: undefined,
+      physicalAddress: {
+        streetWithNumber: undefined,
+        zip: undefined,
+        city: undefined,
+        state: undefined,
+        country: undefined
+      }
+    }
+
+    const genderMap = {
+      [PRED.female.value]: 'female',
+      [PRED.male.value]: 'male'
+    }
+
+    const fieldsMap = {
+      [PRED.identifier.value]: 'number',
+      [PRED.expiresBy.value]: 'expirationDate',
+      [PRED.givenName.value]: 'firstName',
+      [PRED.familyName.value]: 'lastName',
+      [PRED.gender.value]: 'gender',
+      [PRED.birthDate.value]: 'birthDate',
+      [PRED.birthPlace.value]: 'birthPlace',
+      [PRED.countryOfBirth.value]: 'birthCountry'
+    }
+
+    const physAddrMap = {
+      [PRED.street.value]: 'streetWithNumber',
+      [PRED.zip.value]: 'zip',
+      [PRED.city.value]: 'city',
+      [PRED.state.value]: 'state',
+      [PRED.country.value]: 'country'
+    }
+
+    g.statements.forEach(st => {
+      const field = fieldsMap[st.predicate.value]
+      const physAddrField = physAddrMap[st.predicate.value]
+
+      if (field) {
+        if (genderMap[st.object.value]) {
+          res[field] = genderMap[st.object.value]
+        } else {
+          res[field] = st.object.value
+        }
+      }
+
+      if (physAddrField) {
+        res.physicalAddress[physAddrField] = st.object.value
+      }
+    })
+    return res
   }
 
   _setEntry(webId, entryValue, entryType) {
@@ -269,6 +377,6 @@ export default class SolidAgent {
   }
 
   _genRandomAttrId() {
-    return util.randomString(3)
+    return util.randomString(5)
   }
 }

@@ -1,8 +1,30 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
 import * as router from './router'
+import * as snackBar from './snack-bar'
 
-const actions = module.exports = makeActions('wallet/identity', {
+const actions = module.exports = makeActions('wallet-login', {
+  setUserType: {
+    expectedParams: ['value'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.setUserType.buildAction(params))
+
+        const {userType} = getState().get('walletLogin').toJS()
+
+        if (!userType.valid) {
+          throw new Error('Invalid user type: ' + userType.value)
+        }
+
+        let route = '/login/layman'
+        if (userType.value === 'expert') {
+          route = '/login/expert'
+        }
+
+        return dispatch(router.pushRoute(route))
+      }
+    }
+  },
   setPassphrase: {
     expectedParams: ['value']
   },
@@ -14,16 +36,11 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/login/expert/pin-entry'))
-
-        // const state = getState().get('login').toJS()
-        // dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
-        //   return backend.wallet
-        //     .loginWithSeedPhrase('random', state.passphrase.value)
-        //     .then(() => dispatch(
-        //       router.pushRoute('/login/expert/pin-entry')
-        //     ))
-        // }))
+        dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
+          dispatch(
+            router.pushRoute('/login/expert/pin-entry')
+          )
+        }))
       }
     }
   },
@@ -41,7 +58,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        const state = getState().get('login').toJS()
+        const state = getState().get('walletLogin').toJS()
         dispatch(actions.goForward.buildAction(params, (backend) => {
           return backend.wallet
             .loginWithSeedPhrase({
@@ -57,13 +74,48 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: [],
     creator: () => {
       return (dispatch) => {
-        dispatch(router.pushRoute('/login/expert'))
+        dispatch(router.pushRoute('/login'))
+      }
+    }
+  },
+  setUsername: {
+    expectedParams: ['value']
+  },
+  setPassword: {
+    expectedParams: ['value']
+  },
+  submitLogin: {
+    expectedParams: ['username, password'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState) => {
+        const state = getState().get('walletLogin').toJS()
+        dispatch(actions.submitLogin.buildAction(params, (backend) => {
+          return backend.wallet
+            .retrieveSeedPhrase({
+              email: state.login.username,
+              password: state.login.password
+            })
+            .then(({seed}) => {
+              dispatch(actions.setPassphrase(seed))
+              dispatch(router.pushRoute('/login/pin-entry'))
+            })
+            .catch((e) => {
+              dispatch(snackBar.showMessage({
+                message: 'Invalid username or password'
+              }))
+            })
+        }))
       }
     }
   }
 })
 
 const initialState = Immutable.fromJS({
+  userType: {
+    value: '',
+    valid: false
+  },
   passphrase: {
     value: '',
     failed: false,
@@ -76,11 +128,32 @@ const initialState = Immutable.fromJS({
     failed: false,
     valid: false,
     errorMsg: ''
+  },
+  login: {
+    username: '',
+    password: '',
+    failed: false,
+    valid: false,
+    errorMsg: ''
   }
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.setUserType.id:
+      const valid = ['expert', 'layman'].indexOf(action.value) !== -1
+
+      if (action.value && !valid) {
+        throw Error('Invalid user type: ' + action.value)
+      }
+
+      return state.mergeDeep({
+        userType: {
+          value: action.value,
+          valid
+        }
+      })
+
     case actions.setPassphrase.id:
       return state.mergeDeep({
         passphrase: {
@@ -158,6 +231,36 @@ module.exports.default = (state = initialState, action = {}) => {
           valid: true
         },
         passphrase: {
+          errorMsg: '',
+          failed: false,
+          valid: true
+        }
+      })
+    case actions.setUsername.id:
+      return state.mergeDeep({
+        login: {
+          username: action.value
+        }
+      })
+    case actions.setPassword.id:
+      return state.mergeDeep({
+        login: {
+          password: action.value
+        }
+      })
+    case actions.submitLogin.id_fail:
+      return state.mergeDeep({
+        login: {
+          errorMsg: 'Incorrect username or password',
+          failed: true,
+          valid: false
+        }
+      })
+    case actions.submitLogin.id_success:
+      return state.mergeDeep({
+        login: {
+          username: '',
+          password: '',
           errorMsg: '',
           failed: false,
           valid: true

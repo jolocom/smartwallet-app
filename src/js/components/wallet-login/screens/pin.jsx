@@ -3,18 +3,17 @@ import { connect } from 'redux/utils'
 import Presentation from '../presentation/pin'
 
 @connect({
-  props: ['login'],
+  props: ['walletLogin'],
   actions: [
-    'login:setPin',
-    'login:resetPin',
-    'login:setPinFocused',
-    'login:goForward'
+    'wallet-login:setPin',
+    'wallet-login:resetPin',
+    'wallet-login:setPinFocused',
+    'wallet-login:goForward'
   ]
 })
 export default class ExpertLoginPinScreen extends React.Component {
   static propTypes = {
-    login: React.PropTypes.object.isRequired,
-
+    walletLogin: React.PropTypes.object.isRequired,
     setPin: React.PropTypes.func.isRequired,
     resetPin: React.PropTypes.func.isRequired,
     setPinFocused: React.PropTypes.func.isRequired,
@@ -22,8 +21,9 @@ export default class ExpertLoginPinScreen extends React.Component {
   }
 
   render() {
-    const pin = this.props.login.pin
+    const pin = this.props.walletLogin.pin
     return <Presentation
+      userType={this.props.walletLogin.userType.value}
       value={pin.value}
       valid={pin.valid}
       focused={pin.focused}

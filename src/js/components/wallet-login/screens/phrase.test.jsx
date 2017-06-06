@@ -10,7 +10,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
     const wrapper = shallow(
       (<ExpertLoginPassphraseScreen.WrappedComponent {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             passphrase: {
               value: '',
               failed: false
@@ -20,6 +20,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
       }
         submitPassphrase={() => {}}
         setPassphrase={() => {}}
+        goToLogin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -33,7 +34,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
     const wrapper = shallow(
       (<ExpertLoginPassphraseScreen.WrappedComponent {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             passphrase: {
               value: 'test',
               failed: false
@@ -43,6 +44,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
       }
         submitPassphrase={submitPassphrase}
         setPassphrase={() => {}}
+        goToLogin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -56,7 +58,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
     const wrapper = shallow(
       (<ExpertLoginPassphraseScreen.WrappedComponent {
         ...ExpertLoginPassphraseScreen.mapStateToProps(Immutable.fromJS({
-          login: {
+          walletLogin: {
             passphrase: {
               value: 'test',
               failed: false
@@ -66,6 +68,7 @@ describe('(Component) ExpertLoginPassphraseScreen', function() {
       }
         submitPassphrase={() => {}}
         setPassphrase={setPassphrase}
+        goToLogin={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

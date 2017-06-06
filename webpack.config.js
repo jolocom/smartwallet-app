@@ -42,9 +42,9 @@ module.exports = {
         loader: 'babel',
         include: [
           path.join(__dirname, 'src', 'js'),
-          path.join(__dirname, 'test')
-        ],
-        exclude: 'node_modules'
+          path.join(__dirname, 'test'),
+          path.join(__dirname, 'node_modules', 'ethereumjs-tx')
+        ]
       },
       {
         test: /\.html$/,
