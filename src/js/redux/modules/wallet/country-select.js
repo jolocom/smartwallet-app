@@ -50,7 +50,7 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.clearState())
-        dispatch(router.pushRoute('/wallet/identity/idCard'))
+        dispatch(router.pushRoute('/wallet/identity/id-card'))
         return params
       }
     }
