@@ -5,7 +5,7 @@ import LoginUserType from './layman'
 describe('(Login Component) LoginUserType', function() {
   it('should render properly the first time', function() {
     shallow((<LoginUserType
-      value=''
+      value=""
       valid
       onSelect={() => {}}
       onWhySelect={() => {}}

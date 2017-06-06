@@ -6,8 +6,8 @@ describe('(Login Component) Layman', function() {
   it('should render properly the first time', function() {
     shallow((<LaymanLogin
       back={() => {}}
-      username=''
-      password=''
+      username=""
+      password=""
       onUsernameChange={() => {}}
       onPasswordChange={() => {}}
       onSubmit={() => {}}
