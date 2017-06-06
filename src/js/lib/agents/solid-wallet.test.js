@@ -4,7 +4,7 @@ import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import SolidAgent from 'lib/agents/solid-wallet'
 
-describe('solidAgentAgent', () => {
+describe.only('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
 
@@ -20,19 +20,8 @@ describe('solidAgentAgent', () => {
         email: []
       },
       Reputation: 0,
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
+      passports: [],
+      idCards: []
     }
 
     it('Should correctly process invalid argument', async() => {
@@ -130,19 +119,24 @@ describe('solidAgentAgent', () => {
           }]
         },
         Reputation: 0,
-        passport: {
-          number: null,
-          givenName: null,
-          familyName: null,
-          birthDate: null,
-          gender: null,
-          street: null,
-          streetAndNumber: null,
-          city: null,
-          zip: null,
-          state: null,
-          country: null
-        }
+        passports: [],
+        idCards: [{
+          number: '12312421',
+          expirationDate: '1.1.18',
+          firstName: 'Annika',
+          lastName: 'Hamman',
+          gender: 'female',
+          birthDate: '1.1.88',
+          birthPlace: 'Wien',
+          birthCountry: 'Austria',
+          physicalAddress: {
+            streetWithNumber: 'Waldemarstr. 97a',
+            zip: '1234',
+            city: 'Berlin',
+            state: 'Berlin',
+            country: 'Germany'
+          }
+        }]
       }
 
       const solidAgent = new SolidAgent()

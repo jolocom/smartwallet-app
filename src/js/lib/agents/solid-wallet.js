@@ -70,7 +70,6 @@ const rdfHelper = {
       g.add(addrBNode, PRED.country, entryValue.physicalAddress.country)
     }
 
-    console.log(rdf.serialize(undefined, g, entryFileUrl, 'text/turtle'))
     return rdf.serialize(undefined, g, entryFileUrl, 'text/turtle')
   },
 
@@ -105,19 +104,8 @@ export default class SolidAgent {
         email: []
       },
       Reputation: 0,
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
+      passports: [],
+      idCards: []
     }
   }
 
@@ -144,13 +132,13 @@ export default class SolidAgent {
   async getUserInformation(webId) {
     if (!webId) {
       console.error('No webId found')
-      return Object.assign(this.defaultProfile)
+      return Object.assign({}, this.defaultProfile)
     }
     return this.ldp.fetchTriplesAtUri(webId).then((rdfData) => {
       if (rdfData.unav) {
         // TODO snackbar
         console.error('User profile card could not be reached')
-        return Object.assign(this.defaultProfile)
+        return Object.assign({}, this.defaultProfile)
       }
       return this._formatAccountInfo(webId, rdfData.triples)
     })
