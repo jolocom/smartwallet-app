@@ -65,8 +65,9 @@ const actions = module.exports = makeActions('wallet/id-card', {
   },
   cancel: {
     expectedParams: [],
-    creator: params => {
-      return dispatch => {
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(actions.cancel.buildAction(params))
         dispatch(router.pushRoute('/wallet/identity'))
       }
     }
