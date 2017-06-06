@@ -153,7 +153,7 @@ export default class SolidAgent {
     profileData.webId = webId
     profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
     profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
-    profileData.contact.idCards = await this
+    profileData.idCards = await this
       .getExtendedProprietyValue(g, 'idCards')
 
     try {
@@ -173,7 +173,6 @@ export default class SolidAgent {
       phone: PRED.mobile,
       idCards: PRED.idCard
     }
-
     const pred = propertyToPredMap[property]
     if (!pred || !g) {
       return propertyData
@@ -194,27 +193,25 @@ export default class SolidAgent {
   }
 
   async _expandData(obj, g, pred) {
-    const keyMap = {
-      [PRED.mobile.value]: 'number',
-      [PRED.email.value]: 'address'
-    }
-
-    const key = keyMap[pred.value]
-
     const defaultResponse = {
       id: null,
       verified: false,
       [key]: null
     }
+    const keyMap = {
+      [PRED.mobile.value]: 'number',
+      [PRED.email.value]: 'address',
+      [PRED.idCard.value]: 'idCard'
+    }
+    const key = keyMap[pred.value]
 
-    const relevant = g.statementsMatching(obj, undefined, undefined)
-    if (!relevant.length) {
+    if (!g.statementsMatching(obj).length) {
       return
-      // Object.assign({}, defaultResponse, {[key]: obj.value})
     }
 
     const seeAlso = g.statementsMatching(obj, PRED.seeAlso, undefined)[0]
       .object.value
+
     const id = g.statementsMatching(obj, PRED.identifier, undefined)[0]
       .object.value
 
@@ -225,8 +222,14 @@ export default class SolidAgent {
 
       const extG = rdf.graph()
       extG.addAll(rdfData.triples)
-      const value = extG.statementsMatching(undefined, pred, undefined)[0]
-        .object.value
+
+      let value
+      if (key === 'idCard' || key === 'passport') {
+        // TODO
+      } else {
+        value = extG.statementsMatching(undefined, pred, undefined)[0]
+          .object.value
+      }
       return {id, verified: false, [key]: value}
     })
   }

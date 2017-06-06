@@ -47,23 +47,24 @@ describe.only('solidAgentAgent', () => {
         pro:idCard123
             a p:Identity_document;
             SCH:voag_ownedBy :owner;
-            schem:expires '1.1.18';
-            schem:identifier '12312421'.
+            schem:expires "1.1.18";
+            schem:identifier "12312421".
+
         :owner
-            n0:familyName 'Hamman';
+            n0:familyName "Hamman";
             n0:gender n:Female;
-            n0:givenName 'Annika';
+            n0:givenName "Annika";
             schem:address
               [
-                ont:city 'Berlin';
-                ont:country 'Germany';
-                ont:state 'Berlin';
-                n:postal-code '1234';
-                n:street-address 'Waldemarstr. 97a'
+                ont:city "Berlin";
+                ont:country "Germany";
+                ont:state "Berlin";
+                n:postal-code "1234";
+                n:street-address "Waldemarstr. 97a"
               ];
-            schem:birthDate '1.1.88';
-            schem:birthPlace 'Wien';
-            per:countryOfBirth 'Austria'.
+            schem:birthDate "1.1.88";
+            schem:birthPlace "Wien";
+            per:countryOfBirth "Austria".
       `
 
       const firstPhoneFileResp = `\
@@ -103,14 +104,14 @@ describe.only('solidAgentAgent', () => {
         pro:card
           a n0:PersonalProfileDocument;
           n0:primaryTopic <#me>.
+
         <#me>
           a n0:Person;
           n0:name "Test";
-
           n0:mbox <#email123>;
           n0:mbox <#email456>;
-          n0:phone <#phone123>.
-          dbp:Identity_document: <#idCard123>.
+          n0:phone <#phone123>;
+          dbp:Identity_document <#idCard123>.
 
         <#email123>
           schem:identifier "123";
@@ -126,7 +127,8 @@ describe.only('solidAgentAgent', () => {
 
         <#phone123>
           schem:identifier "123";
-          rd:seeAlso <https://test.com/profile/phone123>.`
+          rd:seeAlso <https://test.com/profile/phone123>.
+      `
 
       const respMap = {
         [WEBID]: userCardResp,
