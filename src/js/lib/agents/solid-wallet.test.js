@@ -20,28 +20,11 @@ describe('solidAgentAgent', () => {
         email: []
       },
       Reputation: 0,
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
+      passports: [],
+      idCards: []
     }
-    it('Should correctly handle network errors', async() => {
-      const solidAgent = new SolidAgent()
-      return solidAgent.getUserInformation().then(res => {
-        expect(res).to.deep.equal(emptyUserProfile)
-      })
-    })
 
-    it('Should correctly invalid argument', async() => {
+    it('Should correctly process invalid argument', async() => {
       const solidAgent = new SolidAgent()
       return solidAgent.getUserInformation().then(res => {
         expect(res).to.deep.equal(emptyUserProfile)
@@ -57,6 +40,7 @@ describe('solidAgentAgent', () => {
           n0:phone "+49 176 12345678";
           n0:primaryTopic pro:card.
       `
+
       const firstEmailFileResp = `\
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
@@ -86,12 +70,23 @@ describe('solidAgentAgent', () => {
           n0:primaryTopic <#me>.
         <#me>
           a n0:Person;
-          n0:mbox [ rd:seeAlso pro:email123; schem:identifier "123" ];
-          n0:mbox [ rd:seeAlso pro:email456; schem:identifier "456" ];
-          n0:phone [ rd:seeAlso pro:phone123; schem:identifier "123" ];
-          n0:mbox "test3@jolocom.com";
-          n0:phone "+49 157 11111111";
-          n0:name "Test".`
+          n0:name "Test";
+
+          n0:mbox <#email123>;
+          n0:mbox <#email456>;
+          n0:phone <#phone123>.
+
+        <#email123>
+          schem:identifier "123";
+          rd:seeAlso <https://test.com/profile/email123>.
+
+        <#email456>
+          schem:identifier "456";
+          rd:seeAlso <https://test.com/profile/email456>.
+
+        <#phone123>
+          schem:identifier "123";
+          rd:seeAlso <https://test.com/profile/phone123>.`
 
       const respMap = {
         [WEBID]: userCardResp,
@@ -111,11 +106,6 @@ describe('solidAgentAgent', () => {
             number: '+49 176 12345678',
             verified: false,
             id: '123'
-          },
-          {
-            id: null,
-            verified: false,
-            number: '+49 157 11111111'
           }],
           email: [{
             address: 'test@jolocom.com',
@@ -126,27 +116,11 @@ describe('solidAgentAgent', () => {
             address: 'test2@jolocom.com',
             verified: false,
             id: '456'
-          },
-          {
-            address: 'test3@jolocom.com',
-            verified: false,
-            id: null
           }]
         },
         Reputation: 0,
-        passport: {
-          number: null,
-          givenName: null,
-          familyName: null,
-          birthDate: null,
-          gender: null,
-          street: null,
-          streetAndNumber: null,
-          city: null,
-          zip: null,
-          state: null,
-          country: null
-        }
+        passports: [],
+        idCards: []
       }
 
       const solidAgent = new SolidAgent()
@@ -200,7 +174,7 @@ pho:owner
 
     const mockHttpAgent = {
       patch: async (url, toDelete, toInsert) => {
-        it('Should patch the profile file correctly', (done) => {
+        it('Should attempt to patch the correct file', (done) => {
           expect(url).to.equal(WEBID)
           done()
         })
@@ -210,32 +184,35 @@ pho:owner
           done()
         })
 
-        it('Should patch the card with three phone triples', (done) => {
-          expect(toInsert.length).to.deep.equal(3)
+        it('Should append three tripples', done => {
+          expect(toInsert.length).to.equal(3)
           done()
         })
 
-        it('should add a bNode as an phone to the card', (done) => {
-          expect(toInsert[0].object.termType).to.equal('BlankNode')
-          expect(toInsert[0].predicate).to.deep.equal(PRED.mobile)
-          expect(toInsert[0].subject.value).to.equal(WEBID)
-          done()
-        })
+        it('Should contain the correct add query', (done) => {
+          expect(toInsert[0].subject.value)
+            .to.equal('https://test.com/profile/card')
+          expect(toInsert[0].predicate)
+            .to.deep.equal(PRED.mobile)
+          expect(toInsert[0].object.value)
+            .to.equal('https://test.com/profile/card#phone123')
 
-        it('should assign correct bNode identifier', (done) => {
-          expect(toInsert[1].object.value).to.equal('123')
-          expect(toInsert[1].predicate).to.deep.equal(PRED.identifier)
-          expect(toInsert[1].subject.id).to.equal(0)
-          done()
-        })
+          expect(toInsert[1].subject.value)
+            .to.equal('https://test.com/profile/card#phone123')
+          expect(toInsert[1].predicate)
+            .to.deep.equal(PRED.identifier)
+          expect(toInsert[1].object.value)
+            .to.equal('123')
 
-        it('should identify the seeAlso URI for the Blank Node', (done) => {
+          expect(toInsert[2].subject.value)
+            .to.equal('https://test.com/profile/card#phone123')
+          expect(toInsert[2].predicate)
+            .to.deep.equal(PRED.seeAlso)
           expect(toInsert[2].object.value)
-          .to.equal(phoneEntryUrl)
-          expect(toInsert[2].predicate).to.deep.equal(PRED.seeAlso)
-          expect(toInsert[2].subject.id).to.deep.equal(0)
+            .to.equal('https://test.com/profile/phone123')
           done()
         })
+
         return
       },
 
@@ -308,7 +285,7 @@ em:owner
     solidAgent._genRandomAttrId = () => { return '123' }
     const mockHttpAgent = {
       patch: async (url, toDelete, toInsert) => {
-        it('Should patch the profile file correctly', (done) => {
+        it('Should patch the correct file', (done) => {
           expect(url).to.equal(WEBID)
           done()
         })
@@ -323,25 +300,23 @@ em:owner
           done()
         })
 
-        it('should add a bNode as an email to the card', (done) => {
-          expect(toInsert[0].object.termType).to.equal('BlankNode')
-          expect(toInsert[0].predicate).to.deep.equal(PRED.email)
+        it('Should patch with the correct email triples', (done) => {
           expect(toInsert[0].subject.value).to.equal(WEBID)
-          done()
-        })
+          expect(toInsert[0].predicate).to.deep.equal(PRED.email)
+          expect(toInsert[0].object.value)
+            .to.equal('https://test.com/profile/card#email123')
 
-        it('should assign correct bNode identifier', (done) => {
-          expect(toInsert[1].object.value).to.equal('123')
+          expect(toInsert[1].subject.value)
+            .to.equal('https://test.com/profile/card#email123')
           expect(toInsert[1].predicate).to.deep.equal(PRED.identifier)
-          expect(toInsert[1].subject.id).to.equal(1)
-          done()
-        })
+          expect(toInsert[1].object.value)
+            .to.equal('123')
 
-        it('should identify the seeAlso URI for the Blank Node', (done) => {
-          expect(toInsert[2].object.value)
-          .to.equal(emailEntryUrl)
+          expect(toInsert[2].subject.value)
+            .to.equal('https://test.com/profile/card#email123')
           expect(toInsert[2].predicate).to.deep.equal(PRED.seeAlso)
-          expect(toInsert[2].subject.id).to.equal(1)
+          expect(toInsert[2].object.value)
+            .to.equal('https://test.com/profile/email123')
           done()
         })
         return
@@ -372,5 +347,72 @@ em:owner
     it('Should put both the email entry file, and it\'s acl ', () => {
       expect(entryPut && entryAclPut).to.be.true
     })
+  })
+
+  describe('#deleteEntry', () => {
+    const entryUrl = 'https://test.com/profile/email123'
+    const entryAclUrl = 'https://test.com/profile/email123.acl'
+    const deleteArgumentsMap = {
+      [entryUrl]: {
+        name: 'entry file',
+        wasDeleted: false
+      },
+      [entryAclUrl]: {
+        name: 'acl file',
+        wasDeleted: false
+      }
+    }
+    const mockHttpAgent = {
+      delete: async (url) => {
+        const {name} = deleteArgumentsMap[url]
+        it(`Should put the ${name} to correct url`, (done) => {
+          expect(deleteArgumentsMap[url]).to.not.be.undefined
+          done()
+        })
+        deleteArgumentsMap[url].wasDeleted = true
+        return
+      },
+      patch: async (url, toDelete, toInsert) => {
+        it('Should patch the correct file', (done) => {
+          expect(url).to.equal(WEBID)
+          done()
+        })
+        it('Should not attempt to insert anything', (done) => {
+          expect(toInsert).to.deep.equal(undefined)
+          done()
+        })
+      }
+    }
+    const solidAgent = new SolidAgent()
+    solidAgent.http = mockHttpAgent
+    solidAgent.deleteEntry(WEBID, 'email', '123')
+
+    const entryDelete = deleteArgumentsMap[entryUrl].wasDeleted
+    const entryAclDelete = deleteArgumentsMap[entryAclUrl].wasDeleted
+
+    it('Should delete both the entry file, and it\'s acl ', () => {
+      expect(entryDelete && entryAclDelete).to.be.true
+    })
+  })
+  describe('#updateEntry', () => {
+    const entryUrl = 'https://test.com/profile/email123'
+    const putArgumentsMap = {
+      [entryUrl]: {
+        name: 'entry file',
+        wasPut: false
+      }
+    }
+    const mockHttpAgent = {
+      put: async (url) => {
+        const {name} = putArgumentsMap[url]
+        it(`Should put the ${name} to correct url`, (done) => {
+          expect(putArgumentsMap[url]).to.not.be.undefined
+          done()
+        })
+      }
+    }
+    const solidAgent = new SolidAgent()
+    solidAgent.http = mockHttpAgent
+    solidAgent.updateEntry(WEBID, 'email', '123', EMAIL)
   })
 })

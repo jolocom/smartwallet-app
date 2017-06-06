@@ -8,16 +8,17 @@ import LDPAgent from 'lib/agents/ldp'
 const rdfHelper = {
   addEntryPatch(entryFileUrl, webId, entryId, entryType) {
     const g = rdf.graph()
-    const bNode = rdf.blankNode(entryId)
+    const entryNode =
+    `${util.getProfFolderUrl(webId)}/card#${entryType}${entryId}`
 
     const typeToPred = {
       phone: PRED.mobile,
       email: PRED.email
     }
 
-    g.add(rdf.sym(webId), typeToPred[entryType], bNode)
-    g.add(bNode, PRED.identifier, rdf.lit(entryId))
-    g.add(bNode, PRED.seeAlso, rdf.sym(entryFileUrl))
+    g.add(rdf.sym(webId), typeToPred[entryType], rdf.sym(entryNode))
+    g.add(rdf.sym(entryNode), PRED.identifier, rdf.lit(entryId))
+    g.add(rdf.sym(entryNode), PRED.seeAlso, rdf.sym(entryFileUrl))
     return g.statements
   },
 
@@ -68,26 +69,50 @@ export default class SolidAgent {
         email: []
       },
       Reputation: 0,
-      passport: {
-        number: null,
-        givenName: null,
-        familyName: null,
-        birthDate: null,
-        gender: null,
-        street: null,
-        streetAndNumber: null,
-        city: null,
-        zip: null,
-        state: null,
-        country: null
-      }
+      // passports: [{
+      //   number: null,
+      //   givenName: null,
+      //   surname: null,
+      //   birthDate: null,
+      //   gender: null,
+      //   street: null,
+      //   streetAndNumber: null,
+      //   city: null,
+      //   zip: null,
+      //   state: null,
+      //   country: null
+      // }]
+      passports: [],
+      // idCards: [
+      //   {
+      //     number: '12312421',
+      //     expirationDate: '1.1.18',
+      //     firstName: 'Annika',
+      //     lastName: 'Hamman',
+      //     gender: 'female',
+      //     birthDate: '1.1.88',
+      //     birthPlace: 'Wien',
+      //     birthCountry: 'Austria',
+      //     physicalAddress: {
+      //       streetWithNumber: 'Waldemarstr. 97a',
+      //       zip: '1234',
+      //       city: 'Berlin',
+      //       state: 'Berlin',
+      //       country: 'Germany'
+      //     }
+      //   }
+      // ]
+      idCards: []
+
     }
   }
 
   deleteEntry(webId, entryType, entryId) {
-    // TODO use removeEntryPatch ?
-    let statements // TODO fill in real statements for deletion
-    return this.http.patch(`${util.getProfFolderUrl(webId)}/card`, statements)
+    const entryFileUrl =
+    `${util.getProfFolderUrl(webId)}/${entryType}${entryId}`
+    let toDel = rdfHelper
+    .addEntryPatch(entryFileUrl, webId, entryId, entryType)
+    return this.http.patch(`${util.getProfFolderUrl(webId)}/card`, toDel)
     .then(this.http
       .delete(`${util.getProfFolderUrl(webId)}/${entryType}${entryId}`))
     .then(this.http
@@ -95,12 +120,11 @@ export default class SolidAgent {
   }
 
   updateEntry(webId, entryType, entryId, newValue) {
-    // TODO fill in real statements
-    let oldStatements
-    let newStatements
     const entryFileUrl =
     `${util.getProfFolderUrl(webId)}/${entryType}${entryId}`
-    return this.http.patch(entryFileUrl, oldStatements, newStatements)
+    let newEntryFileBody =
+    rdfHelper.entryFileBody(entryFileUrl, webId, newValue, entryType)
+    return this.http.put(entryFileUrl, newEntryFileBody)
   }
 
   async getUserInformation(webId) {
@@ -119,16 +143,21 @@ export default class SolidAgent {
   }
 
   async _formatAccountInfo(webId, userTriples) {
-    const g = rdf.graph()
     const profileData = Object.assign({}, this.defaultProfile)
 
+    const g = rdf.graph()
     g.addAll(userTriples)
 
+    profileData.webId = webId
     profileData.contact.email = await this.getExtendedProprietyValue(g, 'email')
     profileData.contact.phone = await this.getExtendedProprietyValue(g, 'phone')
-    profileData.webId = webId
-    profileData.username.value = g
-      .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
+    try {
+      profileData.username.value = g
+        .statementsMatching(undefined, PRED.fullName, undefined)[0].object.value
+    } catch (e) {
+      console.warn('No name found')
+    }
+
     return profileData
   }
 
@@ -139,15 +168,9 @@ export default class SolidAgent {
       phone: PRED.mobile
     }
 
-    const keyMap = {
-      [PRED.mobile.value]: 'number',
-      [PRED.email.value]: 'address'
-    }
-
     const pred = propertyToPredMap[property]
     if (!pred || !g) {
-      // TODO warn?
-      return
+      return propertyData
     }
 
     const objects = g.statementsMatching(undefined, pred, undefined).map(st =>
@@ -155,47 +178,50 @@ export default class SolidAgent {
     )
 
     for (let obj in objects) {
-      if (objects[obj].termType !== 'BlankNode') {
-        propertyData.push({
-          id: null,
-          verified: false,
-          [keyMap[pred.value]]: objects[obj].value
-        })
-      } else {
-        propertyData.push(await this._expandBNode(objects[obj], g, pred))
+      const tmp = await this._expandData(objects[obj], g, pred)
+      if (tmp) {
+        propertyData.push(tmp)
       }
     }
+
     return propertyData
   }
 
-  // Aimed at our bNode / extended node structure.
-  // Error Handling on statements matching and fetch.
-
-  async _expandBNode(obj, g, pred) {
+  async _expandData(obj, g, pred) {
     const keyMap = {
       [PRED.mobile.value]: 'number',
       [PRED.email.value]: 'address'
     }
 
-    const extGraph = rdf.graph()
     const key = keyMap[pred.value]
-    const extUrl = g.statementsMatching(obj, PRED.seeAlso, undefined)[0]
+
+    const defaultResponse = {
+      id: null,
+      verified: false,
+      [key]: null
+    }
+
+    const relevant = g.statementsMatching(obj, undefined, undefined)
+    if (!relevant.length) {
+      return
+      // Object.assign({}, defaultResponse, {[key]: obj.value})
+    }
+
+    const seeAlso = g.statementsMatching(obj, PRED.seeAlso, undefined)[0]
+      .object.value
+    const id = g.statementsMatching(obj, PRED.identifier, undefined)[0]
       .object.value
 
-    return this.ldp.fetchTriplesAtUri(extUrl).then(rdfData => {
-      // TODO
+    return this.ldp.fetchTriplesAtUri(seeAlso).then(rdfData => {
       if (rdfData.unav) {
-        console.warn('BNode unreachable')
-        return {id: null, verified: false, [key]: null}
+        return defaultResponse
       }
 
-      extGraph.addAll(rdfData.triples)
-      const id = g.statementsMatching(obj, PRED.identifier, undefined)[0]
-          .object.value
-      const value = extGraph.statementsMatching(undefined, pred, undefined)[0]
-          .object.value
-
-      return { id, verified: false, [key]: value }
+      const extG = rdf.graph()
+      extG.addAll(rdfData.triples)
+      const value = extG.statementsMatching(undefined, pred, undefined)[0]
+        .object.value
+      return {id, verified: false, [key]: value}
     })
   }
 

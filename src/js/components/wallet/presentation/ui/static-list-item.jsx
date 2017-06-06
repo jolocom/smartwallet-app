@@ -63,7 +63,7 @@ var STYLES = {
 export default class StaticListItem extends React.Component {
   static propTypes = {
     icon: React.PropTypes.any,
-    verified: React.PropTypes.bool.isRequired,
+    verified: React.PropTypes.bool,
     textLabel: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string.isRequired,
     onVerify: React.PropTypes.func,
@@ -82,13 +82,14 @@ export default class StaticListItem extends React.Component {
         props.verified ? STYLES.verifiedListItem
       : STYLES.unverifiedListItem)}
         leftIcon={icon}
-        rightIconButton={this.verifiedShield}
+        rightIconButton={props.verified !== undefined
+        ? this.verifiedShield : null}
         disabled
       >
         <div style={STYLES.values}>
           <TextField
-            floatingLabelText={
-              (props.verified ? 'V' : 'Unv') + 'erified ' + props.textLabel
+            floatingLabelText={props.verified === undefined ? props.textLabel
+              : (props.verified ? 'V' : 'Unv') + 'erified ' + props.textLabel
             }
             key="1"
             inputStyle={STYLES.inputName}
