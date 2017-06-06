@@ -19,7 +19,7 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
               idCardActions.changePhysicalAddressField(type, value))
           }
           dispatch(actions.clearState())
-          dispatch(router.pushRoute('/wallet/identity/id-card/add'))
+          dispatch(router.pushRoute('/wallet/identity/id-card'))
         }))
       }
     }
@@ -36,7 +36,7 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.submit.buildAction(params, () => {
-          dispatch(actions.setType(params))
+          dispatch(actions.setCountryType(params))
           dispatch(router.pushRoute('/wallet/identity/country-select'))
         }))
       }
@@ -50,7 +50,7 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.clearState())
-        dispatch(router.pushRoute('/wallet/identity/idCard/add'))
+        dispatch(router.pushRoute('/wallet/identity/idCard'))
         return params
       }
     }

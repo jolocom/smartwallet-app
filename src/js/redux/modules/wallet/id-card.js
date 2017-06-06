@@ -86,7 +86,7 @@ const actions = module.exports = makeActions('wallet/id-card', {
     expectedParams: ['field'],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/idCard/select-birth-country'))
+        dispatch(router.pushRoute('/wallet/id-card/select-birth-country'))
       }
     }
   },
@@ -94,7 +94,7 @@ const actions = module.exports = makeActions('wallet/id-card', {
     expectedParams: ['field'],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/idCard/select-country'))
+        dispatch(router.pushRoute('/wallet/id-card/select-country'))
       }
     }
   },
