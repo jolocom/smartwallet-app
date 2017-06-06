@@ -256,7 +256,7 @@ describe('(Component) WalletIdCardScreen', () => {
         save={() => {}}
         retrieveIdCardInformation={() => {}}
         changeIdCardField={() => {}}
-        initiate={initiate}
+        initiateCountrySelectScreen={initiate}
         changePhysicalAddressField={() => {}}
         setFocusedField={() => {}}
         setShowAddress={() => {}}
