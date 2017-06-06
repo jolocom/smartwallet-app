@@ -8,7 +8,7 @@ import Presentation from '../presentation/id-card'
   actions: [
     'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
-    'wallet/country-select:initiate',
+    'wallet/country-select:initiateCountrySelectScreen',
     'wallet/id-card:save',
     'wallet/id-card:retrieveIdCardInformation',
     'wallet/id-card:changeIdCardField',
@@ -25,7 +25,7 @@ export default class WalletPaasportScreen extends React.Component {
     save: React.PropTypes.func.isRequired,
     retrieveIdCardInformation: React.PropTypes.func.isRequired,
     changeIdCardField: React.PropTypes.func.isRequired,
-    initiate: React.PropTypes.func.isRequired,
+    initiateCountrySelectScreen: React.PropTypes.func.isRequired,
     changePhysicalAddressField: React.PropTypes.func.isRequired,
     setFocusedField: React.PropTypes.func.isRequired,
     setShowAddress: React.PropTypes.func.isRequired,
@@ -35,7 +35,7 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   render() {
-    const {save, cancel, initiate} = this.props
+    const {save, cancel, initiateCountrySelectScreen} = this.props
     const {loaded, focusedField, focusedGroup, verifierLocations
     } = this.props.idCard
 
@@ -49,7 +49,7 @@ export default class WalletPaasportScreen extends React.Component {
       setFocused={(...args) => { this.setFocusedElements(...args) }}
       change={(...args) => { this.change(...args) }}
       cancel={cancel}
-      selectCountry={initiate}
+      selectCountry={initiateCountrySelectScreen}
       showAddress={this.props.idCard.idCard.showAddress}
       physicalAddress={this.parseAddressDetailsToArray()}
       idCard={this.parseIdCardDetailsToArray()} />

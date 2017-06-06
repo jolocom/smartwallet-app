@@ -27,10 +27,10 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
   clearState: {
     expectedParams: []
   },
-  setType: {
+  setCountryType: {
     expectedParams: ['value']
   },
-  initiate: {
+  initiateCountrySelectScreen: {
     expectedParams: ['value'],
     async: true,
     creator: (params) => {
@@ -42,7 +42,7 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
       }
     }
   },
-  setValue: {
+  setCountryValue: {
     expectedParams: ['value']
   },
   cancel: {
@@ -65,12 +65,12 @@ const initialState = module.exports.initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.setType.id:
+    case actions.setCountryType.id:
       return initialState.merge({
         type: action.value
       })
 
-    case actions.setValue.id:
+    case actions.setCountryValue.id:
       return state.merge({
         value: action.value,
         options: options.map((e) =>
