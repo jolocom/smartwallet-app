@@ -22,6 +22,7 @@ export default class ExpertLoginPinScreen extends React.Component {
 
   render() {
     const pin = this.props.walletLogin.pin
+    console.log('blaat', this.props.walletLogin)
     return <Presentation
       userType={this.props.walletLogin.userType.value}
       value={pin.value}
