@@ -14,36 +14,26 @@ import {
   changeFieldValue
 } from '../../../lib/id-card-util'
 
+const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
+  const hash = (new WalletCrypto()).calculateDataHash({
+    number: idCard.number.value,
+    expirationDate: moment(idCard.expirationDate.value).format(),
+    givenName: idCard.firstName.value,
+    familyName: idCard.lastName.value,
+    birthDate: moment(idCard.birthDate.value).format(),
+    birthPlace: idCard.birthPlace.value,
+    birthCountry: idCard.birthCountry.value
+  })
+  const {wallet} = services.auth.currentUser
+  return wallet.addAttributeHashAndWait({
+    attributeId: 'idCard',
+    attribute: hash,
+    definitionUrl: '',
+    password: '1234'
+  })
+}
+
 const actions = module.exports = makeActions('wallet/id-card', {
-  storeIdCardDetailsInBlockchain: {
-    expectedParams: [],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const buildAction = actions.storeIdCardDetailsInBlockchain.buildAction
-        dispatch(buildAction(params, () => {
-          const state = getState()
-          const {idCard} = state.getIn(['wallet', 'idCard']).toJS()
-          const hash = (new WalletCrypto()).calculateDataHash({
-            number: idCard.number.value,
-            expirationDate: moment(idCard.expirationDate.value).format(),
-            givenName: idCard.firstName.value,
-            familyName: idCard.lastName.value,
-            birthDate: moment(idCard.birthDate.value).format(),
-            birthPlace: idCard.birthPlace.value,
-            birthCountry: idCard.birthCountry.value
-          })
-          const {wallet} = services.auth.currentUser
-          return wallet.addAttributeHashAndWait({
-            attributeId: 'idCard',
-            attribute: hash,
-            definitionUrl: '',
-            password: '1234'
-          })
-        }))
-      }
-    }
-  },
   save: {
     expectedParams: [],
     async: true,
@@ -53,10 +43,13 @@ const actions = module.exports = makeActions('wallet/id-card', {
         const {idCard, showErrors} = getState().toJS().wallet.idCard
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
-          dispatch(actions.save.buildAction(params,
-          () => storeIdCardDetailsInSolid({backend, services, idCard, webId}) // eslint-disable-line max-len
-          )).then(() => dispatch(actions.storeIdCardDetailsInBlockchain()))
-          .then(() => dispatch(router.pushRoute('/wallet/identity')))
+          dispatch(actions.save.buildAction(params, () =>
+            storeIdCardDetailsInSolid({backend, services, idCard, webId})
+              .then(() => {
+                storeIdCardDetailsInBlockchain({idCard, services}).then(
+                  dispatch(router.pushRoute('/wallet/identity')))
+              }))
+          )
         }
       }
     }
