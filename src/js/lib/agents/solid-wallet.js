@@ -285,7 +285,6 @@ export default class SolidAgent {
         res[field] = st.object.value
       }
     })
-    
     return res
   }
 

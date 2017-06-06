@@ -408,6 +408,92 @@ em:owner
     })
   })
 
+  describe('#setIdCard', () => {
+    const idCardEntryUrl = 'https://test.com/profile/idCard123'
+    const idCardEntryAclUrl = 'https://test.com/profile/idCard123.acl'
+
+    const putArgumentsMap = {
+      [idCardEntryUrl]: {
+        name: 'entry file',
+        // expectedBody: idCardEntryBody,
+        wasPut: false
+      },
+      [idCardEntryAclUrl]: {
+        name: 'acl file',
+        // expectedBody: idCardEntryAclBody,
+        wasPut: false
+      }
+    }
+
+    const solidAgent = new SolidAgent()
+    solidAgent._genRandomAttrId = () => { return '123' }
+
+    const mockHttpAgent = {
+      patch: async (url, toDelete, toInsert) => {
+        it('Should patch the correct file', (done) => {
+          expect(url).to.equal(WEBID)
+          done()
+        })
+
+        it('Should not attempt to delete anything', (done) => {
+          expect(toDelete).to.deep.equal([])
+          done()
+        })
+
+        it('Should patch the card with three email triples', (done) => {
+          expect(toInsert.length).to.deep.equal(3)
+          done()
+        })
+
+        it('Should patch with the correct email triples', (done) => {
+          expect(toInsert[0].subject.value).to.equal(WEBID)
+          expect(toInsert[0].predicate).to.deep.equal(PRED.idCard)
+          expect(toInsert[0].object.value)
+            .to.equal('https://test.com/profile/card#idCard123')
+
+          expect(toInsert[1].subject.value)
+            .to.equal('https://test.com/profile/card#idCard123')
+          expect(toInsert[1].predicate).to.deep.equal(PRED.identifier)
+          expect(toInsert[1].object.value)
+            .to.equal('123')
+
+          expect(toInsert[2].subject.value)
+            .to.equal('https://test.com/profile/card#idCard123')
+          expect(toInsert[2].predicate).to.deep.equal(PRED.seeAlso)
+          expect(toInsert[2].object.value)
+            .to.equal('https://test.com/profile/idCard123')
+          done()
+        })
+        return
+      },
+
+      put: async (url, body) => {
+        const {expectedBody, name} = putArgumentsMap[url]
+        it(`Should put the ${name} to correct url`, (done) => {
+          expect(putArgumentsMap[url]).to.not.be.undefined
+          done()
+        })
+
+        it(`Should put the correct ${name}`, (done) => {
+          expect(body).to.equal(expectedBody)
+          done()
+        })
+        putArgumentsMap[url].wasPut = true
+        return
+      }
+    }
+
+    solidAgent.http = mockHttpAgent
+    solidAgent.setIdCard(WEBID, {})
+
+    const entryPut = putArgumentsMap[idCardEntryUrl].wasPut
+    const entryAclPut = putArgumentsMap[idCardEntryAclUrl].wasPut
+
+    it('Should put both the email entry file, and it\'s acl ', () => {
+      expect(entryPut && entryAclPut).to.be.true
+    })
+  })
+
   describe('#deleteEntry', () => {
     const entryUrl = 'https://test.com/profile/email123'
     const entryAclUrl = 'https://test.com/profile/email123.acl'
