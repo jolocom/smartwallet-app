@@ -76,7 +76,6 @@ export default class DateListItem extends React.Component {
     let {
       focused,
       label,
-      name,
       value,
       onChange
     } = this.props

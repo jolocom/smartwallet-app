@@ -5,7 +5,7 @@ import CountrySelectPresentation from './country-select'
 describe('(Component) CountrySelectPresentation', function() {
   it('should render properly the first time', function() {
     shallow((<CountrySelectPresentation
-      countries={() => {}}
+      countries={[]}
       submit={() => {}}
       change={() => {}}
       value={() => {}}

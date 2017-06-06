@@ -3,14 +3,14 @@ import Immutable from 'immutable'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
-import WalletPaasportScreen from './id-card'
+import WalletIdCardScreen from './id-card'
 import Presentation from '../presentation/id-card'
 
-describe.only('(Component) WalletPaasportScreen', () => {
+describe('(Component) WalletIdCardScreen', () => {
   it('should render properly the first time', () => {
     const wrapper = shallow(
-      (<WalletPaasportScreen.WrappedComponent {
-        ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
             idCard: {
               loaded: false,
@@ -61,8 +61,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
   it('should call save with proper params', () => {
     const save = stub()
     const wrapper = shallow(
-      (<WalletPaasportScreen.WrappedComponent {
-        ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
             idCard: {
               loaded: false,
@@ -114,8 +114,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
   it('should call cancel with proper params', () => {
     const cancel = stub()
     const wrapper = shallow(
-      (<WalletPaasportScreen.WrappedComponent {
-        ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
             idCard: {
               loaded: false,
@@ -167,8 +167,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
   it('should call setFocusedField with proper params', () => {
     const setFocusedField = stub()
     const wrapper = shallow(
-      (<WalletPaasportScreen.WrappedComponent {
-        ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
             idCard: {
               loaded: false,
@@ -220,8 +220,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
   it('should call initiate with proper params', () => {
     const initiate = stub()
     const wrapper = shallow(
-      (<WalletPaasportScreen.WrappedComponent {
-        ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
             idCard: {
               loaded: false,
@@ -273,8 +273,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
   it('should call changeIdCardField with proper params when the field is in passpoer', () => { // eslint-disable-line max-len
     const changeIdCardField = stub()
     const wrapper = shallow(
-      (<WalletPaasportScreen.WrappedComponent {
-        ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
             idCard: {
               loaded: false,
@@ -327,8 +327,8 @@ describe.only('(Component) WalletPaasportScreen', () => {
     const changePhysicalAddressField = stub()
     const setShowAddress = stub()
     const wrapper = shallow(
-      (<WalletPaasportScreen.WrappedComponent {
-        ...WalletPaasportScreen.mapStateToProps(Immutable.fromJS({
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
             idCard: {
               loaded: false,
