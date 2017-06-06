@@ -225,7 +225,7 @@ export default class SolidAgent {
 
       let value
       if (key === 'idCard' || key === 'passport') {
-        // TODO
+        value = this._formatIdCardInfo(extG)
       } else {
         value = extG.statementsMatching(undefined, pred, undefined)[0]
           .object.value
@@ -264,6 +264,29 @@ export default class SolidAgent {
       return
     }
     return this._setEntry(webId, idCard, 'idCard')
+  }
+
+  _formatIdCardInfo(g) {
+    const res = {}
+    const map = {
+      [PRED.identifier.value]: 'number',
+      [PRED.expiresBy.value]: 'expirationDate',
+      [PRED.givenName.value]: 'firstName',
+      [PRED.familyName.value]: 'lastName',
+      [PRED.gender.value]: 'gender',
+      [PRED.birthDate.value]: 'birthDate',
+      [PRED.birthPlace.value]: 'birthPlace',
+      [PRED.countryOfBirth.value]: 'birthCountry'
+    }
+
+    g.statements.forEach(st => {
+      const field = map[st.predicate.value]
+      if (field) {
+        res[field] = st.object.value
+      }
+    })
+    
+    return res
   }
 
   _setEntry(webId, entryValue, entryType) {
