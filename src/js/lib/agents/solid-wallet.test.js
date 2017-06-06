@@ -4,7 +4,7 @@ import {Parser} from 'lib/rdf'
 import {PRED} from 'lib/namespaces'
 import SolidAgent from 'lib/agents/solid-wallet'
 
-describe('solidAgentAgent', () => {
+describe.only('solidAgentAgent', () => {
   const WEBID = 'https://test.com/profile/card'
   const EMAIL = 'test@mock.com'
 
@@ -32,6 +32,40 @@ describe('solidAgentAgent', () => {
     })
 
     it('Should correctly fetch and parse user info', async () => {
+      const firstIdCardFileResp = `\
+        @prefix : <#>.
+        @prefix pro: <./>.
+        @prefix p: <http://dbpedia.org/page/>.
+        @prefix SCH: \
+        <http://voag.linkedmodel.org/2.0/doc/2015/SCHEMA_voag-v2.0#>.
+        @prefix schem: <https://schema.org/>.
+        @prefix n0: <http://xmlns.com/foaf/0.1/>.
+        @prefix ont: <http://dbpedia.org/ontology/>.
+        @prefix n: <https://www.w3.org/2006/vcard/ns#>.
+        @prefix per: <https://www.w3.org/ns/person#>.
+
+        pro:idCard123
+            a p:Identity_document;
+            SCH:voag_ownedBy :owner;
+            schem:expires '1.1.18';
+            schem:identifier '12312421'.
+        :owner
+            n0:familyName 'Hamman';
+            n0:gender n:Female;
+            n0:givenName 'Annika';
+            schem:address
+              [
+                ont:city 'Berlin';
+                ont:country 'Germany';
+                ont:state 'Berlin';
+                n:postal-code '1234';
+                n:street-address 'Waldemarstr. 97a'
+              ];
+            schem:birthDate '1.1.88';
+            schem:birthPlace 'Wien';
+            per:countryOfBirth 'Austria'.
+      `
+
       const firstPhoneFileResp = `\
         @prefix pro: <./>.
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
@@ -64,6 +98,7 @@ describe('solidAgentAgent', () => {
         @prefix n0: <http://xmlns.com/foaf/0.1/>.
         @prefix rd: <http://www.w3.org/2000/01/rdf-schema#>.
         @prefix schem: <https://schema.org/>.
+        @prefix dbp: <http://dbpedia.org/page/>.
 
         pro:card
           a n0:PersonalProfileDocument;
@@ -75,6 +110,7 @@ describe('solidAgentAgent', () => {
           n0:mbox <#email123>;
           n0:mbox <#email456>;
           n0:phone <#phone123>.
+          dbp:Identity_document: <#idCard123>.
 
         <#email123>
           schem:identifier "123";
@@ -84,6 +120,10 @@ describe('solidAgentAgent', () => {
           schem:identifier "456";
           rd:seeAlso <https://test.com/profile/email456>.
 
+        <#idCard123>
+          schem:identifier "123";
+          rd:seeAlso <https://test.com/profile/idCard123>.
+
         <#phone123>
           schem:identifier "123";
           rd:seeAlso <https://test.com/profile/phone123>.`
@@ -92,7 +132,8 @@ describe('solidAgentAgent', () => {
         [WEBID]: userCardResp,
         'https://test.com/profile/email123': firstEmailFileResp,
         'https://test.com/profile/email456': secondEmailFileResp,
-        'https://test.com/profile/phone123': firstPhoneFileResp
+        'https://test.com/profile/phone123': firstPhoneFileResp,
+        'https://test.com/profile/idCard123': firstIdCardFileResp
       }
 
       const expectedUserInfo = {

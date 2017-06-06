@@ -170,7 +170,8 @@ export default class SolidAgent {
     const propertyData = []
     const propertyToPredMap = {
       email: PRED.email,
-      phone: PRED.mobile
+      phone: PRED.mobile,
+      idCards: PRED.idCard
     }
 
     const pred = propertyToPredMap[property]
