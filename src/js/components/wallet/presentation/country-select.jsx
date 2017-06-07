@@ -53,9 +53,13 @@ export default class CountrySelectPresentation extends React.Component {
   }
 
   render() {
-    const showFirstLetter = (e, i, countries) =>
-    (i === 0 || (e[0] !== countries[i - 1][0])) ? e[0] : ''
     const {countries, submit, cancel, change, value} = this.props
+
+    const getFirstCountryLetter = (countryLabel, countryIndex) =>
+      (countryIndex === 0 ||
+       (countryLabel[0] !== countries[countryIndex - 1][0]))
+        ? countryLabel[0] : ''
+
     return (<div>
       <div style={STYLES.container}>
         <NavigationArrowBack style={STYLES.leftIcon} onClick={cancel} />
@@ -68,20 +72,20 @@ export default class CountrySelectPresentation extends React.Component {
           value={value} />
         <ActionSearch style={STYLES.rightIcon} />
       </div>
-        {countries.map((e, i) => (<div
+        {countries.map((countryLabel, idx) => (<div
           style={STYLES.countryField}
-          onClick={() => submit(e)} >
+          onClick={() => submit(countryLabel)} >
           <TextField
             underlineShow={false}
-            id={e + '_first_letter'}
+            id={countryLabel + '_first_letter'}
             inputStyle={STYLES.firstLetterText}
-            value={showFirstLetter(e, i, countries)}
+            value={getFirstCountryLetter(countryLabel, idx)}
             style={STYLES.firstLetter} />
           <TextField
-            onClick={() => submit(e)}
-            id={e + '_country'}
+            onClick={() => submit(countryLabel)}
+            id={countryLabel + '_country'}
             underlineShow={false}
-            style={STYLES.countryName} value={e} />
+            style={STYLES.countryName} value={countryLabel} />
         </div>))}
 
     </div>)
