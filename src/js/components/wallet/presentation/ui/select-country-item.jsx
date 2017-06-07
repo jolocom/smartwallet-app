@@ -2,14 +2,16 @@ import React from 'react'
 import Radium from 'radium'
 
 import {
-  SelectField,
   TextField,
   IconButton,
-  ListItem,
-  MenuItem
+  FlatButton,
+  ListItem
 } from 'material-ui'
 
-import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
+import {
+  NavigationCancel,
+  HardwareKeyboardArrowRight as ArrowRight
+} from 'material-ui/svg-icons'
 
 import {theme} from 'styles'
 
@@ -55,28 +57,17 @@ let STYLES = {
 }
 
 @Radium
-export default class EditListItem extends React.Component {
+export default class SelectListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string,
+    id: React.PropTypes.string.isRequired,
     icon: React.PropTypes.any,
-    iconStyle: React.PropTypes.object,
-    label: React.PropTypes.string,
-    name: React.PropTypes.string,
+    label: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
-    type: React.PropTypes.string,
-    types: React.PropTypes.array,
-    errorText: React.PropTypes.string,
-    verified: React.PropTypes.bool,
     children: React.PropTypes.node,
-    focused: React.PropTypes.bool,
-    onFocusChange: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onTypeChange: React.PropTypes.func,
+    focused: React.PropTypes.bool.isRequired,
+    onFocusChange: React.PropTypes.func.isRequired,
+    onChange: React.PropTypes.func.isRequired,
     onDelete: React.PropTypes.func,
-    showErrors: React.PropTypes.bool,
-    valid: React.PropTypes.bool,
-    enableEdit: React.PropTypes.bool,
-    underlineHide: React.PropTypes.bool,
     enableDelete: React.PropTypes.bool
   }
 
@@ -89,23 +80,11 @@ export default class EditListItem extends React.Component {
   render() {
     let {
       focused,
-      verified,
       label,
-      name,
-      value,
-      enableEdit,
-      onChange,
-      valid,
-      showErrors,
-      underlineHide,
-      errorText
+      value
     } = this.props
 
     let styles = this.getStyles()
-
-    if (verified) {
-      label = `Verified ${label}`
-    }
 
     const iconColor = this.props.focused
       ? theme.palette.primary1Color : theme.jolocom.gray1
@@ -116,49 +95,26 @@ export default class EditListItem extends React.Component {
     return (
       <ListItem
         style={styles.item}
-        onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         leftIcon={icon}
         rightIconButton={this.deleteButton}
-        disabled
-      >
+        disabled >
         <div style={styles.fields}>
           <TextField
             style={STYLES.textField}
+            onFocus={this.handleFocus}
             autoFocus={focused}
-            disabled={!enableEdit}
             inputStyle={styles.input}
             underlineDisabledStyle={styles.disabledUnderline}
             floatingLabelText={label}
-            name={name}
-            value={value}
-            underlineShow={!underlineHide}
-            onChange={onChange}
-            errorText={showErrors && !valid && !!value ? errorText : null}
-          />
-          {this.renderType()}
+            underlineShow={!value}
+            value={value} />
+          <FlatButton
+            onClick={this.handleFocus}
+            icon={<ArrowRight />} />
         </div>
       </ListItem>
     )
-  }
-
-  renderType() {
-    if (this.props.types) {
-      return (
-        <SelectField
-          style={STYLES.type}
-          name={`${this.props.name}_type`}
-          value={this.props.type}
-          disabled={this.props.verified}
-          onChange={(event, key, payload) => this.props.onTypeChange(payload)}
-        >
-        {this.props.types.map((type, i) => {
-          return <MenuItem key={i} value={type} primaryText={type} />
-        })}
-        </SelectField>
-      )
-    }
-    return null
   }
 
   get deleteButton() {
@@ -166,7 +122,7 @@ export default class EditListItem extends React.Component {
       return (
         <IconButton
           style={STYLES.deleteButton}
-          onTouchTap={this.handleDelete}
+          onTouchTap={() => this.props.onDelete()}
         >
           <NavigationCancel />
         </IconButton>
@@ -181,7 +137,6 @@ export default class EditListItem extends React.Component {
   handleBlur = () => {
     this.props.onFocusChange('')
   }
-
   handleDelete = () => {
     this.props.onDelete()
   }

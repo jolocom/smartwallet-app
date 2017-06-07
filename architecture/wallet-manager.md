@@ -94,8 +94,8 @@ Redux state: Passport edit screen
 ================================
 * loaded: bool
 * showErrors: bool
-* focussedGroup: 'person' | 'address' | birthdate' | 'number'
-* foccusedField: field
+* focusedGroup: 'person' | 'address' | birthdate' | 'number'
+* focusedField: field
 * passport
   * locations
     * title
