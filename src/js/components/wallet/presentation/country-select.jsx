@@ -73,6 +73,7 @@ export default class CountrySelectPresentation extends React.Component {
         <ActionSearch style={STYLES.rightIcon} />
       </div>
         {countries.map((countryLabel, idx) => (<div
+          key={countryLabel}
           style={STYLES.countryField}
           onClick={() => submit(countryLabel)} >
           <TextField
