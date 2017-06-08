@@ -45,13 +45,12 @@ const Login = connect({
     this.props.pushRoute('/')
   },
 
-  login(e) {
+  login() {
     this.props.doLogin({
       username: this.props.login.username,
       password: this.props.login.password,
       updateUserEmail: this.props.emailUpdateQueued
     })
-    e.preventDefault()
   },
 
   _handleUsernameChange(e) {
@@ -136,6 +135,7 @@ const Login = connect({
         <LoginForm
           onSubmit={this.login}
           username={this.props.login.username}
+          password={this.props.login.password}
           usernameError={this.props.login.userErrorMsg}
           onUsernameChange={this._handleUsernameChange}
           passwordError={this.props.login.pwErrorMsg}
