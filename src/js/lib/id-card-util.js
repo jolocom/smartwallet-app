@@ -60,7 +60,6 @@ export const changeFieldValue = (state, {field, value}) => state.mergeIn(
 
 export const checkForNonValidFields = (reduxState) => {
   const {
-    locations,
     number,
     expirationDate,
     firstName,
@@ -73,10 +72,10 @@ export const checkForNonValidFields = (reduxState) => {
   const {streetWithNumber, zip, city, state, country} = reduxState
     .toJS().idCard.physicalAddress
   const fields = [
-    locations, number, expirationDate, firstName, lastName, gender, birthDate,
+    number, expirationDate, firstName, lastName, gender, birthDate,
     birthPlace, birthCountry, streetWithNumber, zip, city, state, country
   ]
-  const showErrors = !fields.every(({value, valid}) => valid || value === '')
+  const showErrors = !fields.every(({value, valid}) => valid || !value)
   return reduxState.merge({showErrors})
 }
 
@@ -88,5 +87,5 @@ export const storeIdCardDetailsInSolid = ({backend, services, idCard, webId}) =>
     remove: solidAgent.updateEntry.bind(solidAgent)
   }
 
-  return operations.set()
+  return operations.set(webId, idCard)
 }
