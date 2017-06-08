@@ -41,6 +41,13 @@ import LaymanLoginScreen from 'components/wallet-login/screens/layman'
 import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
 import LoginPinScreen from 'components/wallet-login/screens/pin'
 
+import {
+  VerificationDataScreen,
+  VerificationFaceScreen,
+  VerificationTransitionScreen,
+  VerificationResultScreen
+} from 'components/verification'
+
 export const routes = {
   login: '/login',
   signup: '/registration',
@@ -61,7 +68,14 @@ export const navItems = [{
 function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
-
+    <Route path="verification"
+      component={VerificationTransitionScreen} />
+    <Route path="verification/face"
+      component={VerificationFaceScreen} />
+    <Route path="verification/data"
+      component={VerificationDataScreen} />
+    <Route path="verification/result"
+      component={VerificationResultScreen} />
     <Route path="registration"
       component={RegistrationNameEntryScreen} />
     <Route path="registration/entropy"

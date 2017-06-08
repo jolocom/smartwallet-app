@@ -19,5 +19,11 @@ export default combineReducers({
     country: require('./modules/wallet/country-select').default,
     idCard: require('./modules/wallet/id-card').default
   }),
+  verification: combineReducers({
+    result: require('./modules/verification/result').default,
+    face: require('./modules/verification/face').default,
+    data: require('./modules/verification/data').default,
+    transition: require('./modules/verification/transition').default
+  }),
   emailConfirmation: require('./modules/email-confirmation').default
 })
