@@ -2,14 +2,19 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 
+import * as transition from './transition'
 const transitionUrl = '/verification'
 
 const actions = module.exports = makeActions('wallet/contact', {
   verifyFace: {
     expectedParams: [],
     creator: (params) => {
-      return (dispatch) => {
-        dispatch(actions.cancelFaceVerification.buildAction(params))
+      return (dispatch, getState) => {
+        const {isFaceMatchingId} = getState().toJS().verification.face
+        if (isFaceMatchingId) {
+          dispatch(transition.setCurrentStep('data'))
+        }
+        dispatch(actions.verifyFace.buildAction(params))
         dispatch(router.pushRoute(transitionUrl))
       }
     }
