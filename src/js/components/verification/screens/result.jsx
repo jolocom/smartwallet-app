@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'redux/utils'
-import Presentation from '../presentation/transition'
+import Presentation from '../presentation/result'
 
 @connect({
   props: ['verification'],
