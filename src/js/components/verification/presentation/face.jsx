@@ -54,6 +54,7 @@ export default class VerificationFacePresentation extends React.Component {
     return (<Block>
       <EditAppBar
         title="Face Check"
+        rightTitle="VERIFY"
         onSave={verify}
         onClose={cancel} />
       <Header style={STYLES.title}> STEP 1</ Header>
