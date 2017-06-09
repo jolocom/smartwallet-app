@@ -34,6 +34,9 @@ const STYLES = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundImage: 'url(img/img_onboarding-03.svg)'
+  },
+  checkedIcon: {
+    fill: '#ffb049'
   }
 }
 
@@ -42,11 +45,12 @@ export default class VerificationFacePresentation extends React.Component {
   static propTypes = {
     verify: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired,
-    confirmMatch: React.PropTypes.func.isRequired
+    confirmMatch: React.PropTypes.func.isRequired,
+    isFaceMatchingId: React.PropTypes.bool.isRequired
   }
 
   render() {
-    const {verify, cancel, confirmMatch} = this.props
+    const {verify, cancel, confirmMatch, isFaceMatchingId} = this.props
     return (<Block>
       <EditAppBar
         title="Face Check"
@@ -62,9 +66,10 @@ export default class VerificationFacePresentation extends React.Component {
       <Checkbox
         label="Yes, This person in front of me is the one of the ID Card"
         style={STYLES.text}
-        checkedIcon={<Checked />}
-        uncheckedIcon={<Unchecked style={STYLES.uncheckedIcon} />}
-        onClick={confirmMatch} />
+        checkedIcon={<Checked style={STYLES.checkedIcon} />}
+        uncheckedIcon={<Unchecked />}
+        onClick={(e) => { confirmMatch() }}
+        checked={isFaceMatchingId} />
     </ Block>)
   }
 }

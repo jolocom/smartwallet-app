@@ -18,7 +18,7 @@ Redux state
     * numberOfFailngAttempts
     * message
   * face :
-    * verified
+    * isFaceMatchingId
   * transition :
     * currentStep
   * data :
