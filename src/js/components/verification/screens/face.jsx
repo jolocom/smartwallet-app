@@ -4,7 +4,11 @@ import Presentation from '../presentation/face'
 
 @connect({
   props: ['verification'],
-  actions: []
+  actions: [
+    'verification/face:verifyFace',
+    'verification/face:cancelFaceVerification',
+    'verification/face:confirmFaceIdCardMatch'
+  ]
 })
 export default class VerificationFaceScreen extends React.Component {
   static propTypes = {
@@ -12,7 +16,10 @@ export default class VerificationFaceScreen extends React.Component {
 
   render() {
     return (
-      <Presentation />
+      <Presentation
+        verify={() => {}}
+        cancel={() => {}}
+        confirmMatch={() => {}} />
     )
   }
 }
