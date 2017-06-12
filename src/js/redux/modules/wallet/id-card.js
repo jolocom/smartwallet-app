@@ -44,11 +44,12 @@ const actions = module.exports = makeActions('wallet/id-card', {
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
           dispatch(actions.save.buildAction(params, () =>
-            storeIdCardDetailsInSolid({backend, services, idCard, webId})
-              .then(() => {
+            // storeIdCardDetailsInSolid({backend, services, idCard, webId})
+              // .then(() => {
                 storeIdCardDetailsInBlockchain({idCard, services}).then(
                   dispatch(router.pushRoute('/wallet/identity')))
-              }))
+              // })
+            )
           )
         }
       }
