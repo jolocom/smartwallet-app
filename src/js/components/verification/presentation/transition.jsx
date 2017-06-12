@@ -16,6 +16,25 @@ const STYLES = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundImage: 'url(img/img_onboarding-03.svg)'
+  },
+  faceCheckImage: {
+    flex: 1,
+    width: '80px',
+    height: '80px',
+    margin: 'auto',
+    userSelect: 'none',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
+  },
+  dataCheckImage: {
+    flex: 1,
+    width: '80px',
+    height: '80px',
+    margin: 'auto',
+    userSelect: 'none',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundImage: 'url(img/img_datacheck_02.svg)'
   }
 }
 
@@ -67,18 +86,21 @@ export default class VerificationTransitionPresentation extends React.Component 
             } />
       }
     })(currentStep)
+    const backgroundImage = (currentStep === 'face')
+      ? 'url(img/img_datacheck_01.svg)' : 'url(img/img_datacheck_03.svg)'
+
     return (<div style={{textAlign: 'center'}} >
       <AppBar
         iconElementLeft={<div />}
         title="verification"
         style={{textAlign: 'left'}} />
       <Header title="Please verify the data of the ID Card" />
-      <div style={STYLES.imageField} />
+      <div style={{...STYLES.faceCheckImage, backgroundImage}} />
       <header style={{color: 'black', margin: '10px'}}>
         STEP 1: FACE CHECK
       </ header>
       {faceCheck}
-      <div style={STYLES.imageField} />
+      <div style={STYLES.dataCheckImage} />
       <header style={{color: 'black', margin: '10px'}}>
         STEP 2: DATA CHECK
       </ header>
@@ -92,7 +114,7 @@ export default class VerificationTransitionPresentation extends React.Component 
         onClick={requestVerification}
         disabled={currentStep !== 'compare'}
         labelStyle={{color: 'white', margin: '10px'}}
-        style={currentStep === 'compare'
+        style={(currentStep === 'compare')
           ? {backgroundColor: '#ffb049'}
           : {backgroundColor: theme.jolocom.gray2}
         } />

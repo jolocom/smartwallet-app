@@ -75,7 +75,6 @@ export default class EditListItem extends React.Component {
     onDelete: React.PropTypes.func,
     showErrors: React.PropTypes.bool,
     valid: React.PropTypes.bool,
-    enableEdit: React.PropTypes.bool,
     underlineHide: React.PropTypes.bool,
     enableDelete: React.PropTypes.bool
   }
@@ -93,7 +92,6 @@ export default class EditListItem extends React.Component {
       label,
       name,
       value,
-      enableEdit,
       onChange,
       valid,
       showErrors,
@@ -126,7 +124,6 @@ export default class EditListItem extends React.Component {
           <TextField
             style={STYLES.textField}
             autoFocus={focused}
-            disabled={!enableEdit}
             inputStyle={styles.input}
             underlineDisabledStyle={styles.disabledUnderline}
             floatingLabelText={label}

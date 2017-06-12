@@ -13,9 +13,9 @@ const actions = module.exports = makeActions('wallet/contact', {
         const {isFaceMatchingId} = getState().toJS().verification.face
         if (isFaceMatchingId) {
           dispatch(transition.setCurrentStep('data'))
+          dispatch(router.pushRoute(transitionUrl))
         }
         dispatch(actions.verifyFace.buildAction(params))
-        dispatch(router.pushRoute(transitionUrl))
       }
     }
   },

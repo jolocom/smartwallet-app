@@ -1,0 +1,85 @@
+import Immutable from 'immutable'
+import { makeActions } from '../'
+import * as router from '../router'
+import {actions as data} from './data'
+import {
+  listOfCountries as __LIST_OF_COUNTRIES__
+} from '../../../lib/list-of-countries'
+
+const dataPageUrl = '/verification/data'
+const selectCountryUrl = '/verification/country'
+
+const actions = module.exports = makeActions('verification/country', {
+  submit: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        const {value, type} = getState().toJS().verification.country
+        if (type === 'birthCountry') {
+          dispatch(data.changeIdCardField(type, value))
+        } else {
+          dispatch(data.changePhysicalAddressField(type, value))
+        }
+        dispatch(actions.clearState())
+        dispatch(router.pushRoute(dataPageUrl))
+        dispatch(actions.submit.buildAction())
+      }
+    }
+  },
+  clearState: {
+    expectedParams: []
+  },
+  setCountryType: {
+    expectedParams: ['value']
+  },
+  initiateCountrySelectScreen: {
+    expectedParams: ['value'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.setCountryType(params))
+        dispatch(router.pushRoute(selectCountryUrl))
+      }
+    }
+  },
+  setCountryValue: {
+    expectedParams: ['value']
+  },
+  cancel: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.clearState())
+        dispatch(router.pushRoute(dataPageUrl))
+        return params
+      }
+    }
+  }
+})
+
+const initialState = module.exports.initialState = Immutable.fromJS({
+  type: '',
+  value: '',
+  options: __LIST_OF_COUNTRIES__
+})
+
+module.exports.default = (state = initialState, action = {}) => {
+  switch (action.type) {
+    case actions.setCountryType.id:
+      return initialState.merge({
+        type: action.value
+      })
+
+    case actions.setCountryValue.id:
+      return state.merge({
+        value: action.value,
+        options: __LIST_OF_COUNTRIES__.filter((countryName) =>
+          countryName.toLowerCase().startsWith(action.value.toLowerCase()))
+      })
+
+    case actions.clearState.id:
+      return initialState
+
+    default:
+      return state
+  }
+}
