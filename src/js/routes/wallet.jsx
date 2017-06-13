@@ -46,6 +46,7 @@ import {
   VerificationFaceScreen,
   VerificationTransitionScreen,
   VerificationCountryScreen,
+  VerificationDocumentScreen,
   VerificationResultScreen
 } from 'components/verification'
 
@@ -77,6 +78,8 @@ function getRoutes() {
       component={VerificationDataScreen} />
     <Route path="verification/result"
       component={VerificationResultScreen} />
+    <Route path="verification/document"
+      component={VerificationDocumentScreen} />
     <Route path="verification/country"
       component={VerificationCountryScreen} />
     <Route path="registration"

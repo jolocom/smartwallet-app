@@ -3,6 +3,7 @@ import Radium from 'radium'
 
 import {AppBar, FlatButton} from 'material-ui'
 import {theme} from 'styles'
+import {NavigationArrowBack} from 'material-ui/svg-icons'
 
 import {Header} from '../../structure'
 
@@ -36,6 +37,16 @@ const STYLES = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundImage: 'url(img/img_datacheck_02.svg)'
+  },
+  icon: {
+    color: 'white',
+    margin: '12px'
+  },
+  yellow: {
+    backgroundColor: '#fed546'
+  },
+  grey: {
+    backgroundColor: '#d7d6d6'
   }
 }
 
@@ -46,6 +57,7 @@ export default class VerificationTransitionPresentation extends React.Component 
     startDataCheck: React.PropTypes.func.isRequired,
     startFaceCheck: React.PropTypes.func.isRequired,
     requestVerification: React.PropTypes.func.isRequired,
+    goBack: React.PropTypes.func.isRequired,
     currentStep: React.PropTypes.string.isRequired
   }
 
@@ -54,14 +66,15 @@ export default class VerificationTransitionPresentation extends React.Component 
       currentStep,
       startDataCheck,
       startFaceCheck,
-      requestVerification
+      requestVerification,
+      goBack
     } = this.props
     const faceCheck = currentStep === 'face'
       ? <FlatButton
         label="START FACE CHECK"
         onClick={startFaceCheck}
         labelStyle={{color: 'white', margin: '10px'}}
-        style={{backgroundColor: '#fed546'}} />
+        style={STYLES.yellow} />
       : <header
         style={{margin: '10px', color: theme.jolocom.gray1}}>
         DONE
@@ -72,7 +85,7 @@ export default class VerificationTransitionPresentation extends React.Component 
         case 'compare':
           return <header
             onClick={startDataCheck}
-            style={{color: '#fed546', margin: '10px'}}>
+            style={{color: STYLES.yellow.backgroundColor, margin: '10px'}}>
             EDIT DATA
           </ header>
         default:
@@ -81,10 +94,7 @@ export default class VerificationTransitionPresentation extends React.Component 
             onClick={startDataCheck}
             disabled={currentStep !== 'data'}
             labelStyle={{color: 'white', margin: '10px'}}
-            style={currentStep === 'face'
-              ? {backgroundColor: '#d7d6d6' }
-              : {backgroundColor: '#fed546'}
-            } />
+            style={currentStep === 'face' ? STYLES.grey : STYLES.yellow} />
       }
     })(currentStep)
     const backgroundImage = (currentStep === 'face')
@@ -92,9 +102,11 @@ export default class VerificationTransitionPresentation extends React.Component 
 
     return (<div style={{textAlign: 'center'}} >
       <AppBar
-        iconElementLeft={<div />}
+        iconElementLeft={<NavigationArrowBack
+          onClick={() => { goBack(currentStep) }}
+          style={STYLES.icon} />}
         title="verification"
-        style={{textAlign: 'left', backgroundColor: '#fed546'}}
+        style={{textAlign: 'left', ...STYLES.yellow}}
         titleStyle={{color: 'white'}} />
       <Header title="Please verify the data of the ID Card" />
       <div style={{...STYLES.faceCheckImage, backgroundImage}} />
@@ -116,10 +128,7 @@ export default class VerificationTransitionPresentation extends React.Component 
         onClick={requestVerification}
         disabled={currentStep !== 'compare'}
         labelStyle={{color: 'white', margin: '10px'}}
-        style={(currentStep === 'compare')
-          ? {backgroundColor: '#fed546'}
-          : {backgroundColor: '#d7d6d6'}
-        } />
+        style={currentStep === 'compare' ? STYLES.yellow : STYLES.grey} />
     </ div>)
   }
 }

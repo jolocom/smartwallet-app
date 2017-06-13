@@ -35,7 +35,6 @@ const actions = module.exports = makeActions('verification/data', {
     creator: (params) => {
       return (dispatch) => {
         dispatch(actions.cancel.buildAction(params))
-        dispatch(transition.setCurrentStep('face'))
         dispatch(router.pushRoute(transitionUrl))
       }
     }

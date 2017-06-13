@@ -44,13 +44,10 @@ export default class VerificationDataPresentation extends React.Component {
         return this.renderCountryField(field)
       case 'gender':
         return this.renderGenderField(field)
-      case 'zip':
       case 'birthPlace':
         return null // handled with birthDate or streetWithNumber
       case 'birthDate':
         return this.renderBirthDate(field)
-      case 'streetWithNumber':
-        return this.renderStreetAndZipFields(field)
       default:
         return this.renderTextField(field)
     }

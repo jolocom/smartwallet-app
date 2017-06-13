@@ -17,7 +17,6 @@ const STYLE = {
     padding: '16px',
     backgroundColor: theme.jolocom.gray4,
     boxSizing: 'border-box',
-    maxWidth: '1200px',
     width: '100%'
   }
 }

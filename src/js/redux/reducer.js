@@ -24,7 +24,8 @@ export default combineReducers({
     face: require('./modules/verification/face').default,
     data: require('./modules/verification/data').default,
     transition: require('./modules/verification/transition').default,
-    country: require('./modules/verification/country').default
+    country: require('./modules/verification/country').default,
+    document: require('./modules/verification/document').default
   }),
   emailConfirmation: require('./modules/email-confirmation').default
 })
