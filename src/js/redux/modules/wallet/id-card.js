@@ -29,7 +29,7 @@ const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
     attributeId: 'idCard',
     attribute: hash,
     definitionUrl: '',
-    password: '1234'
+    pin: '1234'
   })
 }
 
