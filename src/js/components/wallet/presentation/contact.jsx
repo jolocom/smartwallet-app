@@ -13,6 +13,8 @@ import {
 import {theme} from 'styles'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import CommunicationLocation from
+  'material-ui/svg-icons/communication/location-on'
 import {
   List
 } from 'material-ui'
@@ -70,6 +72,13 @@ export default class WalletContact extends React.Component {
           errorText: 'Invalid email address',
           addText: 'Add email address',
           icon: CommunicationEmail
+        })}
+        {this.renderFields({
+          key: 'addresses',
+          label: 'Home Address',
+          errorText: 'Invalid address',
+          addText: 'Add home address',
+          icon: CommunicationLocation
         })}
       </div>
     )
