@@ -6,13 +6,13 @@ import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
 
 import {EditAppBar} from './ui'
-import {Block, Header} from '../../structure'
+import {Header} from '../../structure'
 
 const STYLES = {
   title: {
     fontSize: '24px',
     fontWeight: '400',
-    margin: 0,
+    margin: '12px',
     textAlign: 'center'
   },
   checkBox: {
@@ -36,7 +36,7 @@ const STYLES = {
     backgroundImage: 'url(img/img_onboarding-03.svg)'
   },
   checkedIcon: {
-    fill: '#ffb049'
+    fill: '#fda72c'
   }
 }
 
@@ -51,7 +51,7 @@ export default class VerificationFacePresentation extends React.Component {
 
   render() {
     const {verify, cancel, confirmMatch, isFaceMatchingId} = this.props
-    return (<Block>
+    return (<div>
       <EditAppBar
         title="Face Check"
         rightTitle="VERIFY"
@@ -71,6 +71,6 @@ export default class VerificationFacePresentation extends React.Component {
         uncheckedIcon={<Unchecked />}
         onClick={(e) => { confirmMatch() }}
         checked={isFaceMatchingId} />
-    </ Block>)
+    </ div>)
   }
 }

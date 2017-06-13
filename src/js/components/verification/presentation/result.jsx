@@ -59,7 +59,7 @@ const STYLES = {
     margin: 'auto'
   },
   button: {
-    backgroundColor: '#ffb049',
+    backgroundColor: '#fda72c',
     marginTop: '40px',
     margin: '12px',
     textAlign: 'center'

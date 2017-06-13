@@ -1,13 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {
-  SelectField,
-  TextField,
-  IconButton,
-  ListItem,
-  MenuItem
-} from 'material-ui'
+import {TextField, IconButton, ListItem} from 'material-ui'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 
@@ -15,7 +9,8 @@ import {theme} from 'styles'
 
 let STYLES = {
   deleteButton: {
-    marginTop: '16px'
+    marginTop: '16px',
+    color: '#fda72c'
   },
   fields: {
     display: 'flex',
@@ -42,6 +37,12 @@ let STYLES = {
     borderBottom: 'solid',
     borderWidth: 'medium medium 1px'
   },
+  underlineStyle: {
+    borderColor: '#fda72c'
+  },
+  floatingLabelStyle: {
+    color: '#fda72c'
+  },
   icon: {
     top: '16px'
   },
@@ -66,7 +67,6 @@ export default class EditListItem extends React.Component {
     type: React.PropTypes.string,
     types: React.PropTypes.array,
     errorText: React.PropTypes.string,
-    verified: React.PropTypes.bool,
     children: React.PropTypes.node,
     focused: React.PropTypes.bool,
     onFocusChange: React.PropTypes.func,
@@ -88,7 +88,6 @@ export default class EditListItem extends React.Component {
   render() {
     let {
       focused,
-      verified,
       label,
       name,
       value,
@@ -101,12 +100,8 @@ export default class EditListItem extends React.Component {
 
     let styles = this.getStyles()
 
-    if (verified) {
-      label = `Verified ${label}`
-    }
-
     const iconColor = this.props.focused
-      ? theme.palette.primary1Color : theme.jolocom.gray1
+      ? '#fda72c' : theme.jolocom.gray1
 
     const icon = this.props.icon
       ? <this.props.icon color={iconColor} style={styles.icon} /> : <div />
@@ -126,6 +121,8 @@ export default class EditListItem extends React.Component {
             autoFocus={focused}
             inputStyle={styles.input}
             underlineDisabledStyle={styles.disabledUnderline}
+            underlineFocusStyle={STYLES.underlineStyle}
+            floatingLabelFocusStyle={STYLES.floatingLabelStyle}
             floatingLabelText={label}
             name={name}
             value={value}
@@ -133,29 +130,9 @@ export default class EditListItem extends React.Component {
             onChange={onChange}
             errorText={showErrors && !valid && !!value ? errorText : null}
           />
-          {this.renderType()}
         </div>
       </ListItem>
     )
-  }
-
-  renderType() {
-    if (this.props.types) {
-      return (
-        <SelectField
-          style={STYLES.type}
-          name={`${this.props.name}_type`}
-          value={this.props.type}
-          disabled={this.props.verified}
-          onChange={(event, key, payload) => this.props.onTypeChange(payload)}
-        >
-        {this.props.types.map((type, i) => {
-          return <MenuItem key={i} value={type} primaryText={type} />
-        })}
-        </SelectField>
-      )
-    }
-    return null
   }
 
   get deleteButton() {
@@ -165,7 +142,7 @@ export default class EditListItem extends React.Component {
           style={STYLES.deleteButton}
           onTouchTap={this.handleDelete}
         >
-          <NavigationCancel />
+          <NavigationCancel color="#fda72c" />
         </IconButton>
       )
     }

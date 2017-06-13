@@ -4,7 +4,7 @@ import Radium from 'radium'
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
 import Location from 'material-ui/svg-icons/maps/place'
-import {List, SelectField, MenuItem} from 'material-ui'
+import {List} from 'material-ui'
 
 import {
   EditAppBar,
@@ -27,7 +27,6 @@ export default class VerificationDataPresentation extends React.Component {
     selectCountry: React.PropTypes.func,
     cancel: React.PropTypes.func,
     showVerifiers: React.PropTypes.func,
-    loaded: React.PropTypes.bool,
     focusedGroup: React.PropTypes.string,
     focusedField: React.PropTypes.string,
     setFocused: React.PropTypes.func,
@@ -52,8 +51,6 @@ export default class VerificationDataPresentation extends React.Component {
         return this.renderBirthDate(field)
       case 'streetWithNumber':
         return this.renderStreetAndZipFields(field)
-      case 'expirationDate':
-        return this.renderDateField(field)
       default:
         return this.renderTextField(field)
     }
@@ -112,71 +109,23 @@ export default class VerificationDataPresentation extends React.Component {
   }
 
   renderStreetAndZipFields({value, label, valid, key, index, icon, group}) {
-    const zip = this.props.physicalAddress[1]
-    return (<table key={key}><tbody> <tr>
-      <td style={{width: '70%'}} key="0" >
-        <div>
-          <EditListItem
-            id={key}
-            icon={icon}
-            label={label}
-            value={value}
-            underlineHide={!!value}
-            onFocusChange={(field) => this.props.setFocused(field, group)}
-            onChange={(e) => this.props.change(key, e.target.value)}
-            focused={this.props.focusedGroup === group} />
-        </div>
+    return (<table key={key} style={{width: '100%'}} ><tbody> <tr>
+      <td style={{width: '70%', position: 'fix'}} key="0" >
+        {this.renderTextField({value, label, valid, key, index, icon, group})}
       </td>
-      <td style={{width: '30%'}} key="1">
-        <div>
-          <EditListItem
-            id={zip.key}
-            label={zip.label}
-            underlineHide={!!zip.value}
-            value={zip.value}
-            onFocusChange={field => this.props.setFocused(field, zip.group)}
-            onChange={(e) => this.props.change(zip.key, e.target.value)}
-            onDelete={() => {
-              this.props.change(zip.key, '')
-              this.props.change(key, '')
-            }}
-            enableDelete={!!zip.value || !!value} />
-        </div>
+      <td style={{width: '30%', position: 'fix'}} key="1">
+        {this.renderTextField(this.props.physicalAddress[1])}
       </td>
     </tr> </tbody> </table>)
   }
 
   renderBirthDate({value, label, valid, key, index, icon, group}) {
-    const birthPlace = this.props.idCard[index + 1]
-
     return (<table key={key} style={{width: '100%'}}> <tbody><tr>
-      <td key="0" style={{width: '70%'}}>
-        <div>
-          <DateListItem
-            icon={icon}
-            label={label}
-            value={value || null}
-            onFocusChange={(field) => this.props.setFocused(field, group)}
-            focused={this.props.focusedGroup === group}
-            onChange={(e, date) => this.props.change(key, date)} />
-        </div>
+      <td key="0" style={{width: '70%', position: 'fix'}}>
+        {this.renderTextField({value, label, valid, key, index, icon, group})}
       </td>
       <td key="1" style={{width: '30%', position: 'fix'}}>
-        <div>
-          <EditListItem
-            id={birthPlace.key}
-            label={birthPlace.label}
-            value={birthPlace.value}
-            underlineHide={!!value}
-            onFocusChange={
-              (field) => this.props.setFocused(field, birthPlace.group)}
-            onChange={(e) => this.props.change(birthPlace.key, e.target.value)}
-            onDelete={() => {
-              this.props.change(birthPlace.key, '')
-              this.props.change(key, '')
-            }}
-            enableDelete={!!birthPlace.value || !!value} />
-        </div>
+        {this.renderTextField(this.props.idCard[index + 1])}
       </td>
     </tr></tbody> </table>)
   }
@@ -197,25 +146,6 @@ export default class VerificationDataPresentation extends React.Component {
       onChange={(event, date) => this.props.change(key, date)} />
   }
 
-  renderOptionsField({value, label, valid, key, options, group, index, icon}) {
-    return (<SelectField
-      floatingLabelText={label}
-      id={key}
-      key={key}
-      value={value}
-      fullWidth
-      focused={this.props.focusedGroup === group}
-      onFocusChange={(field) => this.props.setFocused(field, group)}
-      onChange={(e, i, v) => this.props.change(key, v)}
-      onDelete={() => this.props.change(key, '')}
-      autoWidth >
-      {options.map((gender, index) => <MenuItem
-        key={index}
-        value={gender}
-        primaryText={gender} />)}
-    </SelectField>)
-  }
-
   createIcons() {
     const idCardGroups = this.props.idCard.map(({group}) => group)
     let icons = [IconNumber]
@@ -229,8 +159,7 @@ export default class VerificationDataPresentation extends React.Component {
     const icons = this.createIcons()
     const {idCard, physicalAddress, showAddress, verify, cancel} = this.props
 
-    let addressFields = physicalAddress[0]
-    if (showAddress) { addressFields = physicalAddress }
+    const addressFields = showAddress ? physicalAddress : physicalAddress[0]
 
     const fields = idCard.concat(addressFields).map(
       (field, index) => this.renderField({...field, index, icon: icons[index]}))
@@ -241,8 +170,8 @@ export default class VerificationDataPresentation extends React.Component {
         rightTitle="VERIFFY"
         onSave={verify}
         onClose={cancel} />
-      <Header>STEP 2</Header>
-      <Content>
+      <Header style={{textAlign: 'center'}}>STEP 2</Header>
+      <Content style={{textAlign: 'center'}}>
         Please fill in the following ID Card details for further verfication.
       </Content>
       <Content>

@@ -109,9 +109,6 @@ export default class SelectListItem extends React.Component {
             floatingLabelText={label}
             underlineShow={!value}
             value={value} />
-          <FlatButton
-            onClick={this.handleFocus}
-            icon={<ArrowRight />} />
         </div>
       </ListItem>
     )
@@ -124,10 +121,16 @@ export default class SelectListItem extends React.Component {
           style={STYLES.deleteButton}
           onTouchTap={() => this.props.onDelete()}
         >
-          <NavigationCancel />
+          <NavigationCancel color="#fda72c" />
         </IconButton>
       )
     }
+    return (<IconButton
+      style={STYLES.deleteButton}
+      onTouchTap={() => this.props.onFocusChange()}
+    >
+      <ArrowRight color="#d7d6d6" />
+    </IconButton>)
   }
 
   handleFocus = () => {

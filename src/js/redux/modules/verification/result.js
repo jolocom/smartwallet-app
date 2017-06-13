@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
+import * as transition from './transition'
 
 const verificationStartUrl = '/verification'
 const dataCheckUrl = 'verification/data'
@@ -10,6 +11,7 @@ const actions = module.exports = makeActions('wallet/contact', {
     creator: (params) => {
       return (dispatch) => {
         dispatch(actions.finishVerification.buildAction(params))
+        dispatch(transition.setCurrentStep('face'))
         dispatch(router.pushRoute(verificationStartUrl))
       }
     }
@@ -22,16 +24,19 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
+        console.log('=========== data check ========  ')
+        dispatch(transition.setCurrentStep('data'))
         dispatch(router.pushRoute(dataCheckUrl))
+        dispatch(actions.startDataCheck.buildAction(params))
       }
     }
   }
 })
 
 const initialState = Immutable.fromJS({
-  loading: true,
-  success: false,
-  numberOfFails: 0
+  loading: false,
+  success: true,
+  numberOfFails: 1
 })
 
 module.exports.default = (state = initialState, action = {}) => {

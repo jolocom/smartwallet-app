@@ -125,7 +125,7 @@ export default class SelectListItem extends React.Component {
           style={STYLES.deleteButton}
           onTouchTap={this.handleDelete}
         >
-          <NavigationCancel />
+          <NavigationCancel color="#fda72c" />
         </IconButton>
       )
     }

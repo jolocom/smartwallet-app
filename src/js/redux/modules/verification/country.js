@@ -20,7 +20,7 @@ const actions = module.exports = makeActions('verification/country', {
         } else {
           dispatch(data.changePhysicalAddressField(type, value))
         }
-        dispatch(actions.clearState())
+        dispatch(actions.setCountryType(''))
         dispatch(router.pushRoute(dataPageUrl))
         dispatch(actions.chooseCountry.buildAction(params))
       }

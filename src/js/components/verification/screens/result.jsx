@@ -6,7 +6,7 @@ import Presentation from '../presentation/result'
   props: ['verification.result'],
   actions: [
     'verification/result:finishVerification',
-    'verification/result:startDataCheck '
+    'verification/result:startDataCheck'
   ]
 })
 export default class VerificationResultScreen extends React.Component {

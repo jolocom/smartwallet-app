@@ -9,13 +9,14 @@ import {Header} from '../../structure'
 const STYLES = {
   imageField: {
     flex: 1,
-    width: '80px',
-    height: '80px',
+    width: '50px',
+    height: '50px',
+    paddingTop: '20px',
     margin: 'auto',
     userSelect: 'none',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundImage: 'url(img/img_onboarding-03.svg)'
+    backgroundImage: 'url(img/ic_checkmark_grey.svg)'
   },
   faceCheckImage: {
     flex: 1,
@@ -60,7 +61,7 @@ export default class VerificationTransitionPresentation extends React.Component 
         label="START FACE CHECK"
         onClick={startFaceCheck}
         labelStyle={{color: 'white', margin: '10px'}}
-        style={{backgroundColor: '#ffb049'}} />
+        style={{backgroundColor: '#fed546'}} />
       : <header
         style={{margin: '10px', color: theme.jolocom.gray1}}>
         DONE
@@ -71,7 +72,7 @@ export default class VerificationTransitionPresentation extends React.Component 
         case 'compare':
           return <header
             onClick={startDataCheck}
-            style={{color: '#ffb049', margin: '10px'}}>
+            style={{color: '#fed546', margin: '10px'}}>
             EDIT DATA
           </ header>
         default:
@@ -81,8 +82,8 @@ export default class VerificationTransitionPresentation extends React.Component 
             disabled={currentStep !== 'data'}
             labelStyle={{color: 'white', margin: '10px'}}
             style={currentStep === 'face'
-              ? {backgroundColor: theme.jolocom.gray2}
-              : {backgroundColor: '#ffb049'}
+              ? {backgroundColor: '#d7d6d6' }
+              : {backgroundColor: '#fed546'}
             } />
       }
     })(currentStep)
@@ -93,7 +94,8 @@ export default class VerificationTransitionPresentation extends React.Component 
       <AppBar
         iconElementLeft={<div />}
         title="verification"
-        style={{textAlign: 'left'}} />
+        style={{textAlign: 'left', backgroundColor: '#fed546'}}
+        titleStyle={{color: 'white'}} />
       <Header title="Please verify the data of the ID Card" />
       <div style={{...STYLES.faceCheckImage, backgroundImage}} />
       <header style={{color: 'black', margin: '10px'}}>
@@ -115,8 +117,8 @@ export default class VerificationTransitionPresentation extends React.Component 
         disabled={currentStep !== 'compare'}
         labelStyle={{color: 'white', margin: '10px'}}
         style={(currentStep === 'compare')
-          ? {backgroundColor: '#ffb049'}
-          : {backgroundColor: theme.jolocom.gray2}
+          ? {backgroundColor: '#fed546'}
+          : {backgroundColor: '#d7d6d6'}
         } />
     </ div>)
   }
