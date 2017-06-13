@@ -55,10 +55,8 @@ export default class CountrySelectPresentation extends React.Component {
   render() {
     const {countries, submit, cancel, change, value} = this.props
 
-    const getFirstCountryLetter = (countryLabel, countryIndex) =>
-      (countryIndex === 0 ||
-       (countryLabel[0] !== countries[countryIndex - 1][0]))
-        ? countryLabel[0] : ''
+    const getFirstLetter = (label, index) =>
+      (index === 0 || (label[0] !== countries[index - 1][0])) ? label[0] : ''
 
     return (<div>
       <div style={STYLES.container}>
@@ -72,21 +70,22 @@ export default class CountrySelectPresentation extends React.Component {
           value={value} />
         <ActionSearch style={STYLES.rightIcon} />
       </div>
-        {countries.map((countryLabel, idx) => (<div
+        {countries.map((countryLabel, countryIndex) => (<div
           key={countryLabel}
           style={STYLES.countryField}
           onClick={() => submit(countryLabel)} >
           <TextField
             underlineShow={false}
-            id={countryLabel + '_first_letter'}
+            id={`${countryLabel}_first_letter`}
             inputStyle={STYLES.firstLetterText}
-            value={getFirstCountryLetter(countryLabel, idx)}
+            value={getFirstLetter(countryLabel, countryIndex)}
             style={STYLES.firstLetter} />
           <TextField
             onClick={() => submit(countryLabel)}
-            id={countryLabel + '_country'}
+            id={`${countryLabel}_country`}
             underlineShow={false}
-            style={STYLES.countryName} value={countryLabel} />
+            style={STYLES.countryName}
+            value={countryLabel} />
         </div>))}
 
     </div>)

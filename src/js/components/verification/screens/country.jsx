@@ -6,21 +6,21 @@ import Presentation from '../presentation/country'
   props: ['verification.country'],
   actions: [
     'verification/country:setCountryValue',
-    'verification/country:cancel',
-    'verification/country:submit'
+    'verification/country:cancelCountrySelection',
+    'verification/country:chooseCountry'
   ]
 })
 export default class CountryVerificationScreen extends React.Component {
   static propTypes = {
     setCountryValue: React.PropTypes.func.isRequired,
-    submit: React.PropTypes.func.isRequired,
-    cancel: React.PropTypes.func.isRequired,
+    chooseCountry: React.PropTypes.func.isRequired,
+    cancelCountrySelection: React.PropTypes.func.isRequired,
     children: React.PropTypes.node,
     country: React.PropTypes.object.isRequired
   }
 
   render() {
-    const {setCountryValue, submit, cancel} = this.props
+    const {setCountryValue, chooseCountry, cancelCountrySelection} = this.props
     const {options, value} = this.props.country
     return (<Presentation
       value={value}
@@ -28,8 +28,8 @@ export default class CountryVerificationScreen extends React.Component {
       change={setCountryValue}
       submit={(value) => {
         setCountryValue(value)
-        submit()
+        chooseCountry()
       }}
-      cancel={cancel} />)
+      cancel={cancelCountrySelection} />)
   }
 }

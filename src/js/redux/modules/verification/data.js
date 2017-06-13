@@ -1,29 +1,26 @@
 import Immutable from 'immutable'
 
-import { makeActions } from '../'
-import * as router from '../router'
-import {
-  listOfCountries as __LIST_OF_COUNTRIES__
-} from '../../../lib/list-of-countries'
-
+import {listOfCountries as __LIST_OF_COUNTRIES__} from '../../../lib/list-of-countries' // eslint-disable-line max-len
 import {
   setPhysicalAddressField,
-  checkForNonValidFields,
   genderList,
   changeFieldValue
 } from '../../../lib/id-card-util'
+
+import { makeActions } from '../'
+import * as router from '../router'
 import * as transition from './transition'
 
 const transitionUrl = '/verification'
 
 const actions = module.exports = makeActions('verification/data', {
-  compareData: {
+  verifyData: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(transition.setCurrentStep('compare'))
         dispatch(router.pushRoute(transitionUrl))
-        dispatch(actions.compareData.buildAction(params))
+        dispatch(actions.verifyData.buildAction(params))
       }
     }
   },
@@ -33,14 +30,12 @@ const actions = module.exports = makeActions('verification/data', {
   setFocusedField: {
     expectedParams: ['field', 'group']
   },
-  validate: {
-    expectedParams: []
-  },
   cancel: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
         dispatch(actions.cancel.buildAction(params))
+        dispatch(transition.setCurrentStep('face'))
         dispatch(router.pushRoute(transitionUrl))
       }
     }
@@ -57,12 +52,9 @@ const actions = module.exports = makeActions('verification/data', {
 })
 
 const initialState = module.exports.initialState = Immutable.fromJS({
-  loaded: false,
-  showErrors: false,
   focusedGroup: '',
   focusedField: '',
   idCard: {
-    locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},
     firstName: {value: '', valid: false},
@@ -90,6 +82,9 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
 
+    case actions.changePhysicalAddressField.id:
+      return setPhysicalAddressField(state, action)
+
     case actions.setShowAddress.id:
       return state.mergeIn(['idCard'], {
         showAddress: action.value
@@ -100,12 +95,6 @@ module.exports.default = (state = initialState, action = {}) => {
         focusedField: action.field,
         focusedGroup: action.group
       })
-
-    case actions.changePhysicalAddressField.id:
-      return setPhysicalAddressField(state, action)
-
-    case actions.validate.id:
-      return checkForNonValidFields(state)
 
     default:
       return state

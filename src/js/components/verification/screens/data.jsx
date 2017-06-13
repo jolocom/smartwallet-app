@@ -12,7 +12,7 @@ import Presentation from '../presentation/data'
     'verification/data:changePhysicalAddressField',
     'verification/data:setFocusedField',
     'verification/data:setShowAddress',
-    'verification/data:compareData',
+    'verification/data:verifyData',
     'verification/data:cancel'
   ]
 })
@@ -26,12 +26,12 @@ export default class VerificationDataScreen extends React.Component {
     setShowAddress: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
-    compareData: React.PropTypes.func.isRequired,
+    verifyData: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired
   }
 
   render() {
-    const {cancel, compareData, initiateCountrySelectScreen} = this.props
+    const {cancel, verifyData, initiateCountrySelectScreen} = this.props
     const {focusedField, focusedGroup, verifierLocations
     } = this.props.data
 
@@ -39,7 +39,7 @@ export default class VerificationDataScreen extends React.Component {
       loaded
       focusedGroup={focusedGroup}
       focusedField={focusedField}
-      verify={compareData}
+      verify={verifyData}
       verifierLocations={verifierLocations}
       showVerifierLocations={(...args) => this.showVerifiers(...args)}
       setFocused={(...args) => { this.setFocusedElements(...args) }}

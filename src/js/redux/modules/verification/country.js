@@ -10,7 +10,7 @@ const dataPageUrl = '/verification/data'
 const selectCountryUrl = '/verification/country'
 
 const actions = module.exports = makeActions('verification/country', {
-  submit: {
+  chooseCountry: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
@@ -22,12 +22,9 @@ const actions = module.exports = makeActions('verification/country', {
         }
         dispatch(actions.clearState())
         dispatch(router.pushRoute(dataPageUrl))
-        dispatch(actions.submit.buildAction())
+        dispatch(actions.chooseCountry.buildAction(params))
       }
     }
-  },
-  clearState: {
-    expectedParams: []
   },
   setCountryType: {
     expectedParams: ['value']
@@ -44,13 +41,12 @@ const actions = module.exports = makeActions('verification/country', {
   setCountryValue: {
     expectedParams: ['value']
   },
-  cancel: {
+  cancelCountrySelection: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.clearState())
         dispatch(router.pushRoute(dataPageUrl))
-        return params
+        dispatch(actions.cancelCountrySelection.buildAction(params))
       }
     }
   }
@@ -76,7 +72,7 @@ module.exports.default = (state = initialState, action = {}) => {
           countryName.toLowerCase().startsWith(action.value.toLowerCase()))
       })
 
-    case actions.clearState.id:
+    case actions.cancelCountrySelection.id:
       return initialState
 
     default:
