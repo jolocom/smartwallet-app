@@ -68,7 +68,7 @@ export default class WalletContact extends React.Component {
           key: 'emails',
           label: 'Email Address',
           errorText: 'Invalid email address',
-          addText: 'Add another email',
+          addText: 'Add email address',
           icon: CommunicationEmail
         })}
       </div>
@@ -117,7 +117,6 @@ export default class WalletContact extends React.Component {
           return
       }
     })()
-
     return (
       <EditListItem
         key={id}
@@ -171,7 +170,7 @@ export default class WalletContact extends React.Component {
     } = this.props
 
     if (!loading) {
-      fields.push(
+      originalInformation.length && fields.push(
         originalInformation[key].map((field, i) => {
           if (!field.delete) {
             return this.renderField(i, {
@@ -189,7 +188,7 @@ export default class WalletContact extends React.Component {
         })
       )
 
-      fields.push(
+      newInformation.length && fields.push(
         newInformation[key].map((field, i) => {
           if (!field.delete) {
             return this.renderField(i, {
