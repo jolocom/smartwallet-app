@@ -162,7 +162,7 @@ export default class EditListItem extends React.Component {
   }
 
   get deleteButton() {
-    if (this.props.enableDelete) {
+    if (this.props.enableDelete && this.props.value) {
       return (
         <IconButton
           style={STYLES.deleteButton}
