@@ -53,6 +53,7 @@ const DocumentType = (props) => (<Container>
     <HoverButton
       hoverColor={STYLES.tile.selectedColor}
       style={STYLES.tile}
+      backgroundColor="white"
       onClick={() => { props.chooseDocument('idCard') }}>
       <div style={STYLES.tileinside}>
         <div style={{...STYLES.img, ...{
@@ -63,6 +64,7 @@ const DocumentType = (props) => (<Container>
     <HoverButton
       hoverColor={STYLES.tile.selectedColor}
       style={STYLES.tile}
+      backgroundColor="white"
       onClick={() => { props.chooseDocument('passport') }}>
       <div style={STYLES.tileinside}>
         <div style={{...STYLES.img, ...{

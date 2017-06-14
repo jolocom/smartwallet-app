@@ -5,10 +5,30 @@ import * as router from '../router'
 const dataCheckUrl = '/verification/data'
 const faceCheckUrl = '/verification/face'
 const resultUrl = 'verification/result'
+const documentTypeUrl = 'verification/document'
 
 const actions = module.exports = makeActions('wallet/contact', {
   setCurrentStep: {
     expectedParams: ['value']
+  },
+  goBack: {
+    expectedParams: ['value'],
+    creator: (params) => {
+      return (dispatch) => {
+        const [previousUrl, previousStep] = ((params) => {
+          switch (params) {
+            case 'compare':
+              return [dataCheckUrl, 'data']
+            case 'data':
+              return [faceCheckUrl, 'face']
+            default:
+              return [documentTypeUrl, 'face']
+          }
+        })(params)
+        dispatch(actions.setCurrentStep(previousStep))
+        dispatch(router.pushRoute(previousUrl))
+      }
+    }
   },
   startDataCheck: {
     expectedParams: [],

@@ -78,9 +78,9 @@ const actions = module.exports = makeActions('wallet/contact', {
 })
 
 const initialState = Immutable.fromJS({
-  loading: false,
-  success: true,
-  numberOfFails: 1
+  loading: true,
+  success: false,
+  numberOfFails: 0
 })
 
 module.exports.default = (state = initialState, action = {}) => {

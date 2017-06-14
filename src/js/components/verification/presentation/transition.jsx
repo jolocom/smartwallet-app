@@ -53,7 +53,6 @@ const STYLES = {
 @Radium
 export default class VerificationTransitionPresentation extends React.Component { // eslint-disable-line max-len
   static propTypes = {
-    setCurrentStep: React.PropTypes.func.isRequired,
     startDataCheck: React.PropTypes.func.isRequired,
     startFaceCheck: React.PropTypes.func.isRequired,
     requestVerification: React.PropTypes.func.isRequired,

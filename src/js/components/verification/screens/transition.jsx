@@ -8,12 +8,13 @@ import Presentation from '../presentation/transition'
     'verification/transition:setCurrentStep',
     'verification/transition:startDataCheck',
     'verification/transition:startFaceCheck',
+    'verification/transition:goBack',
     'verification/transition:requestVerification'
   ]
 })
 export default class VerificationTransitionScreen extends React.Component {
   static propTypes = {
-    setCurrentStep: React.PropTypes.func.isRequired,
+    goBack: React.PropTypes.func.isRequired,
     startDataCheck: React.PropTypes.func.isRequired,
     startFaceCheck: React.PropTypes.func.isRequired,
     requestVerification: React.PropTypes.func.isRequired,
@@ -22,19 +23,19 @@ export default class VerificationTransitionScreen extends React.Component {
 
   render() {
     const {
-      setCurrentStep,
       startDataCheck,
       startFaceCheck,
       requestVerification,
-      transition
+      goBack
     } = this.props
+    const {currentStep} = this.props.transition
     return (
       <Presentation
-        setCurrentStep={setCurrentStep}
+        goBack={() => goBack(currentStep)}
         startDataCheck={startDataCheck}
         startFaceCheck={startFaceCheck}
         requestVerification={requestVerification}
-        currentStep={transition.currentStep} />
+        currentStep={currentStep} />
     )
   }
 }
