@@ -33,7 +33,7 @@ const STYLES = {
     userSelect: 'none',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundImage: 'url(img/img_onboarding-03.svg)'
+    backgroundImage: 'url(img/img_datacheck_01.svg)'
   },
   checkedIcon: {
     fill: '#fda72c'
@@ -69,7 +69,7 @@ export default class VerificationFacePresentation extends React.Component {
         style={STYLES.text}
         checkedIcon={<Checked style={STYLES.checkedIcon} />}
         uncheckedIcon={<Unchecked />}
-        onClick={(e) => { confirmMatch() }}
+        onClick={(e) => confirmMatch()}
         checked={isFaceMatchingId} />
     </ div>)
   }

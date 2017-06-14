@@ -3,7 +3,7 @@ import * as result from './result'
 
 const reducer = require('./result').default
 
-describe.only('# verification result redux module', () => {
+describe('# verification result redux module', () => {
   describe('# Reducer ', () => {
     it('should initiate properly', () => {
       const state = reducer()

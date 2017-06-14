@@ -10,6 +10,7 @@ import {
 import { makeActions } from '../'
 import * as router from '../router'
 import * as transition from './transition'
+import * as result from './result'
 
 const transitionUrl = '/verification'
 
@@ -17,9 +18,10 @@ const actions = module.exports = makeActions('verification/data', {
   verifyData: {
     expectedParams: [],
     creator: (params) => {
-      return (dispatch, getState) => {
+      return (dispatch) => {
         dispatch(transition.setCurrentStep('compare'))
         dispatch(router.pushRoute(transitionUrl))
+        dispatch(result.startComparingData())
         dispatch(actions.verifyData.buildAction(params))
       }
     }
@@ -54,6 +56,24 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   focusedGroup: '',
   focusedField: '',
   idCard: {
+    number: {value: '', valid: false},
+    expirationDate: {value: '', valid: false},
+    firstName: {value: '', valid: false},
+    lastName: {value: '', valid: false},
+    gender: {value: '', valid: false, options: genderList},
+    birthDate: {value: '', valid: false},
+    birthPlace: {value: '', valid: false},
+    birthCountry: {value: '', valid: false, options: __LIST_OF_COUNTRIES__},
+    showAddress: false,
+    physicalAddress: {
+      streetWithNumber: {value: '', valid: false},
+      zip: {value: '', valid: false},
+      city: {value: '', valid: false},
+      state: {value: '', valid: false},
+      country: {value: '', valid: false, options: __LIST_OF_COUNTRIES__}
+    }
+  },
+  passport: {
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},
     firstName: {value: '', valid: false},

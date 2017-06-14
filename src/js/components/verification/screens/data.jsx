@@ -95,8 +95,8 @@ export default class VerificationDataScreen extends React.Component {
     const group = 'address'
     return [
       {...streetWithNumber, key: 'streetWithNumber', label: 'Street', group},
-      {...zip, key: 'zip', label: 'Zip Code', group},
       {...city, key: 'city', label: 'City', group},
+      {...zip, key: 'zip', label: 'Zip Code', group},
       {...state, key: 'state', label: 'State', group},
       {...country, key: 'country', label: 'Country', group}
     ]

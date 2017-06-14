@@ -45,9 +45,12 @@ export default class VerificationDataPresentation extends React.Component {
       case 'gender':
         return this.renderGenderField(field)
       case 'birthPlace':
+      case 'zip':
         return null // handled with birthDate or streetWithNumber
       case 'birthDate':
         return this.renderBirthDate(field)
+      case 'city':
+        return this.renderCityAndZip(field)
       default:
         return this.renderTextField(field)
     }
@@ -105,13 +108,13 @@ export default class VerificationDataPresentation extends React.Component {
       enableDelete={value.length > 0} />
   }
 
-  renderStreetAndZipFields({value, label, valid, key, index, icon, group}) {
+  renderCityAndZip({value, label, valid, key, index, icon, group}) {
     return (<table key={key} style={{width: '100%'}} ><tbody> <tr>
       <td style={{width: '70%', position: 'fix'}} key="0" >
         {this.renderTextField({value, label, valid, key, index, icon, group})}
       </td>
       <td style={{width: '30%', position: 'fix'}} key="1">
-        {this.renderTextField(this.props.physicalAddress[1])}
+        {this.renderTextField(this.props.physicalAddress[2])}
       </td>
     </tr> </tbody> </table>)
   }

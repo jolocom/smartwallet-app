@@ -3,7 +3,7 @@ import * as face from './face'
 
 const reducer = require('./face').default
 
-describe.only('# verification face redux module', () => {
+describe('# verification face redux module', () => {
   describe('# Reducer ', () => {
     it('should initiate properly', () => {
       const state = reducer()

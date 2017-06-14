@@ -8,7 +8,7 @@ const dataCheckUrl = 'verification/data'
 
 import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 
-const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => {
+const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => { // eslint-disable-line max-len
   const storedHash = await wallet.getAttributeHash({
     identityAddress: contractId,
     attributeId: documentType
