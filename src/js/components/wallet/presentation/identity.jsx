@@ -446,7 +446,6 @@ export default class WalletIdentity extends React.Component {
         backgroundColor={theme.jolocom.gray3}
         style={STYLES.avatar} />
     )
-    console.log('contact: ', contact.phones, contact.emails)
     return (
       <TabContainer>
         <HalfScreenContainer>
