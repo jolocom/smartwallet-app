@@ -1,14 +1,18 @@
 import React from 'react'
 import Radium from 'radium'
-import WalletComingSoon from './coming-soon'
+
+import {Content, Block} from '../../structure'
+
 import {
-  Container
-} from '../../structure'
+  PlusMenu,
+  PlusSubMenu,
+  TabContainer,
+  HalfScreenContainer
+} from './ui'
 
 const STYLES = {
   walletContainer: {
-    backgroundColor: '#fff',
-    padding: '24px'
+    paddingTop: '24px'
   }
 }
 
@@ -18,13 +22,31 @@ export default class WalletMoney extends React.Component {
     children: React.PropTypes.node
   }
 
+  goToEtherManagement() {
+    console.log('ether mgmt')
+  }
+
   render() {
     return (
-      <Container style={STYLES.walletContainer}>
-        <WalletComingSoon
-          message="We're working on bringing your $$$ identity
-          under your control" />
-      </Container>
+      <TabContainer>
+        <HalfScreenContainer>
+          <Content style={STYLES.walletContainer}>
+            <Block>
+              <PlusMenu
+                name="Digital Currency"
+                goToManagement={this.goToEtherManagement}
+              />
+            </Block>
+            <Block>
+              <PlusSubMenu
+                amount="3,00"
+                currency="eth"
+                goToManagement={this.goToEtherManagement}
+              />
+            </Block>
+          </Content>
+        </HalfScreenContainer>
+      </TabContainer>
     )
   }
 }
