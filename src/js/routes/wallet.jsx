@@ -4,6 +4,7 @@ import { Router, Route, IndexRoute } from 'react-router'
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
 
+import Login from 'components/accounts/login'
 import Signup from 'components/accounts/signup'
 import ForgotPassword from 'components/accounts/forgot-password'
 import ChangePassword from 'components/accounts/change-password'
@@ -100,6 +101,7 @@ function getRoutes() {
     <Route path="forgot-password" component={ForgotPassword} />
     <Route path="change-password/:username/:token" component={ChangePassword} />
     <Route path="signup" component={Signup} />
+    <Route path="oldlogin" component={Login} />
     <Route path="login" component={WalletLogin} />
     <Route path="login/expert" component={ExpertLoginPassphraseScreen} />
     <Route path="login/layman" component={LaymanLoginScreen} />
