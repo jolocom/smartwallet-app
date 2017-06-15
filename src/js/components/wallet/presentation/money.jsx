@@ -19,7 +19,8 @@ const STYLES = {
 @Radium
 export default class WalletMoney extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    goToEtherManagement: React.PropTypes.func.isRequired
   }
 
   goToEtherManagement() {
@@ -27,6 +28,7 @@ export default class WalletMoney extends React.Component {
   }
 
   render() {
+    let {goToEtherManagement} = this.props
     return (
       <TabContainer>
         <HalfScreenContainer>
@@ -34,14 +36,14 @@ export default class WalletMoney extends React.Component {
             <Block>
               <PlusMenu
                 name="Digital Currency"
-                goToManagement={this.goToEtherManagement}
+                goToManagement={goToEtherManagement}
               />
             </Block>
             <Block>
               <PlusSubMenu
                 amount="3,00"
                 currency="eth"
-                goToManagement={this.goToEtherManagement}
+                goToManagement={goToEtherManagement}
               />
             </Block>
           </Content>
