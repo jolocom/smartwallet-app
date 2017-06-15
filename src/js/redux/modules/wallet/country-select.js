@@ -7,20 +7,17 @@ import {listOfCountries as options} from '../../../lib/list-of-countries'
 const actions = module.exports = makeActions('wallet/id-card/country', {
   submit: {
     expectedParams: [],
-    async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.submit.buildAction(params, () => {
-          const {value, type} = getState().toJS().wallet.country
-          if (type === 'birthCountry') {
-            dispatch(idCardActions.changeIdCardField(type, value))
-          } else {
-            dispatch(
-              idCardActions.changePhysicalAddressField(type, value))
-          }
-          dispatch(actions.clearState())
-          dispatch(router.pushRoute('/wallet/identity/id-card'))
-        }))
+        const {value, type} = getState().toJS().wallet.country
+        if (type === 'birthCountry') {
+          dispatch(idCardActions.changeIdCardField(type, value))
+        } else {
+          dispatch(idCardActions.changePhysicalAddressField(type, value))
+        }
+        dispatch(actions.clearState())
+        dispatch(router.pushRoute('/wallet/identity/id-card'))
+        dispatch(actions.submit.buildAction())
       }
     }
   },
@@ -32,13 +29,10 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
   },
   initiateCountrySelectScreen: {
     expectedParams: ['value'],
-    async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.submit.buildAction(params, () => {
-          dispatch(actions.setCountryType(params))
-          dispatch(router.pushRoute('/wallet/identity/country-select'))
-        }))
+        dispatch(actions.setCountryType(params))
+        dispatch(router.pushRoute('/wallet/identity/country-select'))
       }
     }
   },

@@ -18,35 +18,39 @@ export default class AuthService extends EventEmitter {
   _setCurrentUser(user) {
     this.currentUser = user
     this.emit('changed', this.currentUser.wallet.webId || null)
+    console.log('setCurrentUser called')
+    console.log('user:', user)
   }
 
-  async registerWithSeedPhrase({userName, seedPhrase}) {
+  async registerWithSeedPhrase({userName, seedPhrase, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.registerWithSeedPhrase({userName, seedPhrase})
+      wallet: await this.backend.wallet
+      .registerWithSeedPhrase({userName, seedPhrase, pin})
     })
     return this.currentUser
   }
 
-  async registerWithCredentials({userName, email, password}) {
+  async registerWithCredentials({userName, email, password, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.registerWithCredentials({
-        userName, email, password
+      wallet: await this.backend.wallet.registerWithCredentials({
+        userName, email, password, pin
       })
     })
     return this.currentUser
   }
 
-  async loginWithSeedPhrase({userName, seedPhrase}) {
+  async loginWithSeedPhrase({seedPhrase, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.loginWithSeedPhrase({userName, seedPhrase})
+      wallet: await this.backend.wallet
+      .loginWithSeedPhrase({seedPhrase, pin})
     })
     return this.currentUser
   }
 
-  async loginWithCredentials({userName, email, password}) {
+  async loginWithCredentials({email, password, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.loginWithCredentials({
-        userName, email, password
+      wallet: await this.backend.wallet.loginWithCredentials({
+        email, password, pin
       })
     })
     return this.currentUser

@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import moment from 'moment'
-import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
+// import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 
 import { makeActions } from '../'
 import * as router from '../router'
@@ -15,21 +15,20 @@ import {
 } from '../../../lib/id-card-util'
 
 const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
-  const hash = (new WalletCrypto()).calculateDataHash({
-    number: idCard.number.value,
-    expirationDate: moment(idCard.expirationDate.value).format(),
-    givenName: idCard.firstName.value,
-    familyName: idCard.lastName.value,
-    birthDate: moment(idCard.birthDate.value).format(),
-    birthPlace: idCard.birthPlace.value,
-    birthCountry: idCard.birthCountry.value
-  })
   const {wallet} = services.auth.currentUser
   return wallet.addAttributeHashAndWait({
     attributeId: 'idCard',
-    attribute: hash,
+    attribute: {
+      number: idCard.number.value,
+      expirationDate: moment(idCard.expirationDate.value).format(),
+      givenName: idCard.firstName.value,
+      familyName: idCard.lastName.value,
+      birthDate: moment(idCard.birthDate.value).format(),
+      birthPlace: idCard.birthPlace.value,
+      birthCountry: idCard.birthCountry.value
+    },
     definitionUrl: '',
-    password: '1234'
+    pin: '1234'
   })
 }
 
@@ -48,7 +47,8 @@ const actions = module.exports = makeActions('wallet/id-card', {
               .then(() => {
                 storeIdCardDetailsInBlockchain({idCard, services}).then(
                   dispatch(router.pushRoute('/wallet/identity')))
-              }))
+              })
+            )
           )
         }
       }
