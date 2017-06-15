@@ -23,17 +23,18 @@ const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => 
     birthCountry: data.birthCountry
   })
   if (storedHash !== calculatedHash) {
-    console.error('The supplied details do not match stored ID Card details')  // eslint-disable-line
     return false
   }
-  await wallet.addVerificationToTargetIdentity({
+  return true
+}
+
+const storeVerificationToTargetIdentity = ({contractId, wallet}) => {
+  return wallet.addVerificationToTargetIdentity({ // eslint-disable-line max-len
     targetIdentityAddress: contractId,
     attributeId: 'passport',
     password: '1234'
   })
-  return true
 }
-
 const actions = module.exports = makeActions('wallet/contact', {
   finishVerification: {
     expectedParams: [],
@@ -60,6 +61,11 @@ const actions = module.exports = makeActions('wallet/contact', {
             wallet,
             data: verification.data[type],
             documentType: type
+          }).then(result => {
+            if (result) {
+              storeVerificationToTargetIdentity({wallet, contractId})
+            }
+            return result
           })
         }))
       }
@@ -92,15 +98,12 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.startComparingData.id_success:
       return state.merge({
         loading: false,
-        success: true,
-        numberOfFails: 0
+        success: action.result,
+        numberOfFails: state.get('numberOfFails') + !action.result
       })
     case actions.startComparingData.id_fail:
-      return state.merge({
-        loading: false,
-        success: false,
-        numberOfFails: state.get('numberOfFails') + 1
-      })
+      console.error('Error : ', action.result) // eslint-disable-line
+      return state
     default:
       return state
   }
