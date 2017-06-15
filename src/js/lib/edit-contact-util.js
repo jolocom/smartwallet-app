@@ -51,7 +51,8 @@ export const mapAccountInformationToState = ({email, phone}) =>
     information: {
       newInformation: {
         emails: [],
-        phones: []
+        phones: [],
+        addresses: []
       },
       originalInformation: {
         emails: email.map(({address, verified, id}) => {
@@ -75,7 +76,8 @@ export const mapAccountInformationToState = ({email, phone}) =>
             update: false,
             valid: true
           }
-        })
+        }),
+        addresses: []
       }
     }
   })

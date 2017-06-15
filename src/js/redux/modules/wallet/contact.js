@@ -70,12 +70,14 @@ const initialState = Immutable.fromJS({
   information: {
     newInformation: {
       phones: [],
-      emails: []
+      emails: [],
+      addresses: []
     }
   },
   originalInformation: {
     phones: [],
-    emails: []
+    emails: [],
+    addresses: []
   },
   loading: true,
   showErrors: false

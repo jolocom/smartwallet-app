@@ -1,25 +1,17 @@
 import React from 'react'
 import Radium from 'radium'
-import {Form} from 'formsy-react'
-import {
-  EditAppBar,
-  EditHeader,
-  EditListItem,
-  AddNew
-} from './ui'
-import {
-  Content
-} from '../../structure'
+
 import {theme} from 'styles'
+import {List} from 'material-ui'
+
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import CommunicationLocation from
   'material-ui/svg-icons/communication/location-on'
-import {
-  List
-} from 'material-ui'
 
 import Loading from 'components/common/loading'
+import { Content } from '../../structure'
+import {EditAppBar, EditHeader, EditListItem, AddNew} from './ui'
 
 const STYLES = {
   title: {
@@ -83,7 +75,6 @@ export default class WalletContact extends React.Component {
       </div>
     )
   }
-
   renderField(i, field) {
     let {
       key,
@@ -96,13 +87,12 @@ export default class WalletContact extends React.Component {
       icon,
       isNew
     } = field
-
     const prefix = isNew ? 'newInformation' : 'originalInformation'
     const id = `${prefix}_${key}_${i}`
     const name = `${key}[${i}]`
 
-    const actionValue = (key, e) => key === 'emails' ? e.target.value
-      : {value: e.target.value, type}
+    const actionValue = (key, e) => key === 'phones'
+      ? ({value: e.target.value, type}) : e.target.value
 
     let {
       setInformation,
@@ -179,7 +169,7 @@ export default class WalletContact extends React.Component {
     } = this.props
 
     if (!loading) {
-      originalInformation.length && fields.push(
+      originalInformation[key].length && fields.push(
         originalInformation[key].map((field, i) => {
           if (!field.delete) {
             return this.renderField(i, {
@@ -197,7 +187,7 @@ export default class WalletContact extends React.Component {
         })
       )
 
-      newInformation.length && fields.push(
+      newInformation[key].length && fields.push(
         newInformation[key].map((field, i) => {
           if (!field.delete) {
             return this.renderField(i, {
@@ -241,9 +231,9 @@ export default class WalletContact extends React.Component {
       }
     }
 
-    return <Form>
+    return (<div>
       {fields}
-    </Form>
+    </div>)
   }
 
   render() {
