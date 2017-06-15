@@ -10,6 +10,10 @@ module.exports = {
     // Test RPC node
     gethHost: 'http://verification.jolocom.com:9050',
     lookupContractAddress: '0x1f18b8d96f0a26eea82ce0d4bc202cc429df955f',
+    jolocomEtherAddress: 'https://verification.jolocom.com/ether',
+    seedStorage: {
+      url: 'https://seed-service.jolocom.net/'
+    }
 
     // infura geth node
     // gethHost: 'https://rinkeby.infura.io',
@@ -22,10 +26,6 @@ module.exports = {
     // Ropsten Testnet on 2017-04-12
     // gethHost: 'http://verification.jolocom.com:8545',
     // lookupContractAddress: '0x58ab8f7c72b4bec073db317d92aa0a15f09d9a6b',
-
-    seedStorage: {
-      url: 'https://seed-service.jolocom.net/'
-    }
   },
   dev: true
 }
