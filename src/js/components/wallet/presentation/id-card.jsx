@@ -3,8 +3,11 @@ import Radium from 'radium'
 
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
+import Camera from 'material-ui/svg-icons/image/camera-alt'
+import IDCard from 'material-ui/svg-icons/av/featured-video'
 import Location from 'material-ui/svg-icons/maps/place'
-import {List, SelectField, MenuItem, FlatButton} from 'material-ui'
+import {List, ListItem, SelectField, MenuItem,
+  FloatingActionButton, FlatButton} from 'material-ui'
 import {theme} from 'styles'
 
 import {
@@ -25,6 +28,24 @@ const STYLES = {
   },
   verificationMsgHeader: {
     color: theme.palette.textColor
+  },
+  explanText: {
+    fontSize: '14pt',
+    lineHeight: '16pt',
+    fontWeight: '300',
+    color: theme.jolocom.gray2
+  },
+  flatBtn: {
+    color: theme.palette.accent1Color,
+    marginLeft: '-16px'
+  },
+  uploadContainer: {
+    backgroundColor: theme.jolocom.gray5,
+    textAlign: 'center',
+    padding: '30px'
+  },
+  uploadBtn: {
+    margin: '10px'
   }
 }
 @Radium
@@ -250,20 +271,31 @@ export default class WalletIdCard extends React.Component {
         loading={loaded}
         onSave={save}
         onClose={cancel} />
-      <Block style={STYLES.verificationBlock}>
-        <Block>
-          Request personal verification of <br />
-          your IdCard/ID Card by an <br />
-          instutioon Close to your location
-        </Block>
-        <FlatButton
-          label="List Of Locations"
-          onClick={e => {
-            showVerifierLocations(this.verifierLocationsMsg())
-          }} />
-      </Block>
       <Content>
         <EditHeader title="ID Card" />
+        <List>
+          <ListItem leftIcon={<IDCard color={theme.jolocom.gray2} />}>
+            <div style={STYLES.uploadContainer}>
+              <FloatingActionButton secondary style={STYLES.uploadBtn}>
+                <Camera />
+              </FloatingActionButton>
+              <div style={STYLES.explanText}>
+                Take a picture or upload one of your ID Cards
+              </div>
+            </div>
+            <Block style={STYLES.explanText}>
+              Request personal verification of
+              your ID Card by an
+              institution close to your location.
+            </Block>
+            <FlatButton
+              label="List Of Locations"
+              style={STYLES.flatBtn}
+              onClick={e => {
+                showVerifierLocations(this.verifierLocationsMsg())
+              }} />
+          </ListItem>
+        </List>
         <List>
           {fields}
         </List>
