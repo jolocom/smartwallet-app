@@ -1,7 +1,11 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {Content, Block} from '../../structure'
+import {Content, Block, Header, SideNote} from '../../structure'
+
+import {
+  RaisedButton
+} from 'material-ui'
 
 import {
   TabContainer,
@@ -10,7 +14,8 @@ import {
 
 const STYLES = {
   walletContainer: {
-    paddingTop: '24px'
+    padding: '24px',
+    textAlign: 'center'
   }
 }
 
@@ -26,7 +31,22 @@ export default class WalletEther extends React.Component {
         <HalfScreenContainer>
           <Content style={STYLES.walletContainer}>
             <Block>
-              ETHER MGMT
+              <Header
+                style={{'marginTop': '16px'}}
+                title="You don't have any Ether yet."
+              />
+              <SideNote>
+                'To store your information securely, it costs Ether. One
+                 transaction (saving data) is at 30 cents. To use this app
+                 correctly we suggest you to either buy some Ether here...'
+              </SideNote>
+            </Block>
+            <Block>
+              <RaisedButton
+                secondary
+                fullWidth
+                label="BUY ETHER"
+                onClick={() => { console.log('buy ether') }} />
             </Block>
           </Content>
         </HalfScreenContainer>
