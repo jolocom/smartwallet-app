@@ -16,6 +16,9 @@ const STYLES = {
   walletContainer: {
     padding: '24px',
     textAlign: 'center'
+  },
+  header: {
+    margin: '16px 0'
   }
 }
 
@@ -32,7 +35,7 @@ export default class WalletEther extends React.Component {
           <Content style={STYLES.walletContainer}>
             <Block>
               <Header
-                style={{'marginTop': '16px'}}
+                style={STYLES.header}
                 title="You don't have any Ether yet."
               />
               <SideNote>

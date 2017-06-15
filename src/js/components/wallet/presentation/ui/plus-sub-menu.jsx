@@ -41,6 +41,10 @@ const STYLES = {
     display: 'inline',
     marginLeft: '-24px'
   },
+  ethIcon: {
+    width: '24px',
+    color: theme.palette.textColor
+  },
   currRate: {
     paddingLeft: '72px',
     paddingTop: '16px',
@@ -68,7 +72,7 @@ const PlusSubMenu = (props) => {
       <List>
         <div style={STYLES.item}>
           <div style={STYLES.currIcon}>
-            <Euro />
+            <img src="/img/ic_ether.svg" style={STYLES.ethIcon} />
           </div>
           <div style={STYLES.infoHeader}>
           {props.amount}
