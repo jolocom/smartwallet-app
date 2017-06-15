@@ -21,7 +21,6 @@ let STYLES = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: '32px',
     '@media (max-width: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
@@ -47,7 +46,8 @@ let STYLES = {
   },
   textField: {
     maxWidth: 'none',
-    flex: 1
+    flex: 1,
+    width: '100%'
   },
   item: {
     padding: '0 16px 0 72px'

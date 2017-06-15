@@ -148,7 +148,7 @@ export default class WalletIdCard extends React.Component {
   renderStreetWithNumberAndZipFields({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
     const zip = this.props.physicalAddress[1]
     return (<table key={key}> <tr>
-      <td style={{width: '70%'}} key="0" >
+      <td style={{width: '50%'}} key="0" >
         <EditListItem
           id={key}
           icon={icon}
@@ -160,7 +160,7 @@ export default class WalletIdCard extends React.Component {
           onChange={(e) => this.props.change(key, e.target.value)}
           focused={this.props.focusedGroup === group} />
       </td>
-      <td style={{width: '30%'}} key="1">
+      <td style={{width: '50%'}} key="1">
         <EditListItem
           id={zip.key}
           label={zip.label}
@@ -182,31 +182,33 @@ export default class WalletIdCard extends React.Component {
     const birthPlace = this.props.idCard[index + 1]
 
     return (<table key={key} style={{width: '100%'}}>
-      <th key="0" style={{width: '70%'}}>
-        <DateListItem
-          icon={icon}
-          label={label}
-          enableEdit
-          value={value || null}
-          onFocusChange={(field) => this.props.setFocused(field, group)}
-          focused={this.props.focusedGroup === group}
-          onChange={(e, date) => this.props.change(key, date)} />
-      </th>
-      <th key="1" style={{width: '30%', position: 'fix'}}>
-        <EditListItem
-          id={birthPlace.key}
-          label={birthPlace.label}
-          enableEdit
-          value={birthPlace.value}
-          underlineHide={!!value}
-          onFocusChange={(field) => this.props.setFocused(field, birthPlace.group)} // eslint-disable-line
-          onChange={(e) => this.props.change(birthPlace.key, e.target.value)}
-          onDelete={() => {
-            this.props.change(birthPlace.key, '')
-            this.props.change(key, '')
-          }}
-          enableDelete={!!birthPlace.value || !!value} />
-      </th>
+      <tr>
+        <td key="0">
+          <DateListItem
+            icon={icon}
+            label={label}
+            enableEdit
+            value={value || null}
+            onFocusChange={(field) => this.props.setFocused(field, group)}
+            focused={this.props.focusedGroup === group}
+            onChange={(e, date) => this.props.change(key, date)} />
+        </td>
+        <td key="1">
+          <EditListItem
+            id={birthPlace.key}
+            label={birthPlace.label}
+            enableEdit
+            value={birthPlace.value}
+            underlineHide={!!value}
+            onFocusChange={(field) => this.props.setFocused(field, birthPlace.group)} // eslint-disable-line
+            onChange={(e) => this.props.change(birthPlace.key, e.target.value)}
+            onDelete={() => {
+              this.props.change(birthPlace.key, '')
+              this.props.change(key, '')
+            }}
+            enableDelete={!!birthPlace.value || !!value} />
+        </td>
+      </tr>
     </table>)
   }
 
