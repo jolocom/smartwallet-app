@@ -24,8 +24,6 @@ export default class VerificationDataScreen extends React.Component {
     changePhysicalAddressField: React.PropTypes.func.isRequired,
     setFocusedField: React.PropTypes.func.isRequired,
     setShowAddress: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired,
-    configSimpleDialog: React.PropTypes.func.isRequired,
     verifyData: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired
   }
@@ -41,7 +39,6 @@ export default class VerificationDataScreen extends React.Component {
       focusedField={focusedField}
       verify={verifyData}
       verifierLocations={verifierLocations}
-      showVerifierLocations={(...args) => this.showVerifiers(...args)}
       setFocused={(...args) => { this.setFocusedElements(...args) }}
       change={(...args) => { this.change(...args) }}
       cancel={cancel}
@@ -49,11 +46,6 @@ export default class VerificationDataScreen extends React.Component {
       showAddress={this.props.data.idCard.showAddress}
       physicalAddress={this.parseAddressDetailsToArray()}
       idCard={this.parseIdCardDetailsToArray()} />
-  }
-
-  showVerifiers(...args) {
-    this.props.configSimpleDialog(null, 'OK', 'OK', {})
-    this.props.showSimpleDialog()
   }
 
   change(field, value) {
