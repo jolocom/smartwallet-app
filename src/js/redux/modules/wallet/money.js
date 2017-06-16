@@ -30,9 +30,26 @@ const actions = module.exports = makeActions('wallet/money', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        dispatch(actions.getBalance.buildAction(params, () =>
-          services.auth.currentUser.wallet.getBalance()
-        ))
+        dispatch(actions.getBalance.buildAction(params, () => {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => resolve(3), 2500)
+          })
+          // services.auth.currentUser.wallet.getBalance()
+        }))
+      }
+    }
+  },
+  getPrice: {
+    async: true,
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        dispatch(actions.getPrice.buildAction(params, () => {
+          console.log(' Get Ether Price ====== >') // eslint-disable-line
+          return new Promise((resolve, reject) => {
+            setTimeout(() => resolve(250), 2000)
+          })
+        }))
       }
     }
   }
@@ -40,11 +57,45 @@ const actions = module.exports = makeActions('wallet/money', {
 
 const initialState = Immutable.fromJS({
   ether: {
-    price: 0,
+    price: 20,
     amount: 0
   }
 })
 
 module.exports.default = (state = initialState, action = {}) => {
-  return state
+  switch (action.type) {
+    case actions.buyEther.id:
+      return state
+
+    case actions.buyEther.id_success:
+      return state
+
+    case actions.buyEther.id_fail:
+      return state
+
+    case actions.getBalance.id:
+      return state
+
+    case actions.getBalance.id_fail:
+      return state
+
+    case actions.getBalance.id_success:
+      return state.mergeIn(['ether'], {
+        amount: action.result
+      })
+
+    case actions.getPrice.id:
+      return state
+
+    case actions.getPrice.id_success:
+      return state.mergeIn(['ether'], {
+        price: action.result
+      })
+
+    case actions.getPrice.id_fail:
+      return state
+
+    default:
+      return state
+  }
 }

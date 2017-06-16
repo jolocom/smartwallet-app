@@ -20,6 +20,7 @@ const STYLES = {
 export default class WalletMoney extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
+    ether: React.PropTypes.object.isRequired,
     goToEtherManagement: React.PropTypes.func.isRequired
   }
 
@@ -28,7 +29,7 @@ export default class WalletMoney extends React.Component {
   }
 
   render() {
-    let {goToEtherManagement} = this.props
+    let {goToEtherManagement, ether} = this.props
     return (
       <TabContainer>
         <HalfScreenContainer>
@@ -41,10 +42,10 @@ export default class WalletMoney extends React.Component {
             </Block>
             <Block>
               <PlusSubMenu
-                amount={3.00}
+                amount={ether.amount}
                 currency="eth"
                 goToManagement={goToEtherManagement}
-                currencyPrice={250}
+                currencyPrice={ether.price}
               />
             </Block>
           </Content>
