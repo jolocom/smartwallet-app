@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Wallet from 'material-ui/svg-icons/action/account-balance-wallet'
-import Euro from 'material-ui/svg-icons/action/euro-symbol'
+// import Euro from 'material-ui/svg-icons/action/euro-symbol'
 import {theme} from 'styles'
 
 import {
@@ -66,45 +66,50 @@ const STYLES = {
   }
 
 }
-const PlusSubMenu = (props) => {
-  return (
-    <div style={Object.assign(STYLES.root, props.style)}>
-      <List>
-        <div style={STYLES.item}>
-          <div style={STYLES.currIcon}>
-            <img src="/img/ic_ether.svg" style={STYLES.ethIcon} />
-          </div>
-          <div style={STYLES.infoHeader}>
-          {props.amount}
-          </div>
-          <div style={STYLES.currency}>
-          {props.currency}
-          </div>
-          <Divider style={STYLES.divider} />
-        </div>
-        <div style={STYLES.addBtn}>
-          <FloatingActionButton
-            mini
-            onClick={props.goToManagement}
-            containerElement="label"
-            style={STYLES.addBtn}
-            backgroundColor={'#fff'}
-            iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
-            <Wallet style={STYLES.iconWallet} />
-          </FloatingActionButton>
-        </div>
-        <div style={STYLES.currRate}>
-          <p>= 750 EUR</p>
-          <p>1 ETH = 250,000 (EUR)</p>
-        </div>
-      </List>
-      {props.children}
+const PlusSubMenu = (props) => (<div style={{...STYLES.root, ...props.style}}>
+  <List>
+    <div style={STYLES.item}>
+      <div style={STYLES.currIcon}>
+        <img src="/img/ic_ether.svg" style={STYLES.ethIcon} />
+      </div>
+      <div style={STYLES.infoHeader}>
+      {props.amount.toLocaleString('de-DE', {minimumFractionDigits: 2})}
+      </div>
+      <div style={STYLES.currency}>
+      {props.currency}
+      </div>
+      <Divider style={STYLES.divider} />
     </div>
-  )
-}
+    <div style={STYLES.addBtn}>
+      <FloatingActionButton
+        mini
+        onClick={props.goToManagement}
+        containerElement="label"
+        style={STYLES.addBtn}
+        backgroundColor={'#fff'}
+        iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
+        <Wallet style={STYLES.iconWallet} />
+      </FloatingActionButton>
+    </div>
+    <div style={STYLES.currRate}>
+      <p>= {(props.currencyPrice * props.amount).toLocaleString('de-DE', {
+        style: 'currency',
+        currency: 'EUR'
+      })}
+      </p>
+      <p>1 ETH = {props.currencyPrice.toLocaleString('de-DE', {
+        style: 'currency',
+        currency: 'EUR'
+      })}
+      </p>
+    </div>
+  </List>
+  {props.children}
+</div>)
 
 PlusSubMenu.propTypes = {
-  amount: React.PropTypes.any,
+  amount: React.PropTypes.number,
+  currencyPrice: React.PropTypes.number,
   currency: React.PropTypes.any,
   children: React.PropTypes.node,
   style: React.PropTypes.object,

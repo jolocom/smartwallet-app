@@ -5,20 +5,24 @@ import Presentation from '../presentation/money'
 @connect({
   props: ['wallet'],
   actions: [
-    'wallet/money:goToEtherManagement'
+    'wallet/money:goToEtherManagement',
+    'wallet/money:buyEther',
+    'wallet/money:getBalance'
   ]
 })
 export default class WalletMoneyScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    goToEtherManagement: React.PropTypes.func.isRequired
+    goToEtherManagement: React.PropTypes.func.isRequired,
+    buyEther: React.PropTypes.func.isRequired,
+    getBalance: React.PropTypes.func.isRequired
   }
 
   render() {
-    return (
-      <Presentation
-        goToEtherManagement={this.props.goToEtherManagement}
-      />
-    )
+    const {goToEtherManagement, buyEther, getBalance} = this.props
+    return (<Presentation
+      goToEtherManagement={goToEtherManagement}
+      buyEther={buyEther}
+      getBalance={getBalance} />)
   }
 }

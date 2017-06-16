@@ -25,7 +25,8 @@ const STYLES = {
 @Radium
 export default class WalletEther extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: React.PropTypes.node,
+    buyEther: React.PropTypes.func
   }
 
   render() {
@@ -49,7 +50,7 @@ export default class WalletEther extends React.Component {
                 secondary
                 fullWidth
                 label="BUY ETHER"
-                onClick={() => { console.log('buy ether') }} />
+                onClick={() => { this.props.buyEther() }} />
             </Block>
           </Content>
         </HalfScreenContainer>

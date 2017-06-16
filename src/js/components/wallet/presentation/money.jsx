@@ -41,9 +41,10 @@ export default class WalletMoney extends React.Component {
             </Block>
             <Block>
               <PlusSubMenu
-                amount="3,00"
+                amount={3.00}
                 currency="eth"
                 goToManagement={goToEtherManagement}
+                currencyPrice={250}
               />
             </Block>
           </Content>
