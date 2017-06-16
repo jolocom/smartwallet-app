@@ -5,9 +5,10 @@ import * as router from '../router'
 const actions = module.exports = makeActions('wallet/money', {
   goToEtherManagement: {
     expectedParams: [],
-    creator: () => {
+    creator: (params) => {
       return (dispatch) => {
         dispatch(router.pushRoute('/wallet/ether'))
+        dispatch(actions.goToEtherManagement.buildAction(params))
       }
     }
   },
@@ -17,7 +18,7 @@ const actions = module.exports = makeActions('wallet/money', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, () => {
-          console.log('buy Ether ======>')
+          console.log('buy Ether ') // eslint-disable-line no-console
           return new Promise((resolve, reject) => {
             resolve(true)
           })
@@ -45,7 +46,7 @@ const actions = module.exports = makeActions('wallet/money', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.getPrice.buildAction(params, () => {
-          console.log(' Get Ether Price ====== >') // eslint-disable-line
+          console.log('Get Ether Price ') // eslint-disable-line no-console
           return new Promise((resolve, reject) => {
             setTimeout(() => resolve(250), 2000)
           })
@@ -57,7 +58,8 @@ const actions = module.exports = makeActions('wallet/money', {
 
 const initialState = Immutable.fromJS({
   ether: {
-    price: 20,
+    loaded: false,
+    price: 0,
     amount: 0
   }
 })
