@@ -16,6 +16,7 @@ export default class WalletEtherScreen extends React.Component {
 
   render() {
     return (<Presentation
-      buyEther={this.props.buyEther} />)
+      buyEther={this.props.buyEther}
+      ether={this.props.money} />)
   }
 }
