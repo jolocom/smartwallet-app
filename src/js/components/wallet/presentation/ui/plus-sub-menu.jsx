@@ -31,6 +31,9 @@ const STYLES = {
     display: 'inline',
     fontSize: '48pt'
   },
+  overviewText: {
+    color: '#fff'
+  },
   currency: {
     display: 'inline',
     textTransform: 'uppercase',
@@ -72,26 +75,36 @@ const PlusSubMenu = (props) => (<div style={{...STYLES.root, ...props.style}}>
       <div style={STYLES.currIcon}>
         <img src="/img/ic_ether.svg" style={STYLES.ethIcon} />
       </div>
-      <div style={STYLES.infoHeader}>
+      <div style={
+        props.overview ? {...STYLES.infoHeader, ...STYLES.overviewText}
+        : STYLES.infoHeader}>
       {props.amount.toLocaleString('de-DE', {minimumFractionDigits: 2})}
       </div>
-      <div style={STYLES.currency}>
+      <div style={
+        props.overview ? {...STYLES.currency, ...STYLES.overviewText}
+        : STYLES.currency}>
       {props.currency}
       </div>
       <Divider style={STYLES.divider} />
     </div>
-    <div style={STYLES.addBtn}>
-      <FloatingActionButton
-        mini
-        onClick={props.goToManagement}
-        containerElement="label"
-        style={STYLES.addBtn}
-        backgroundColor={'#fff'}
-        iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
-        <Wallet style={STYLES.iconWallet} />
-      </FloatingActionButton>
-    </div>
-    <div style={STYLES.currRate}>
+    {
+      props.overview
+      ? null
+      : <div style={STYLES.addBtn}>
+        <FloatingActionButton
+          mini
+          onClick={props.goToManagement}
+          containerElement="label"
+          style={STYLES.addBtn}
+          backgroundColor={'#fff'}
+          iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
+          <Wallet style={STYLES.iconWallet} />
+        </FloatingActionButton>
+      </div>
+    }
+    <div style={
+      props.overview ? {...STYLES.currRate, ...STYLES.overviewText}
+      : STYLES.currRate}>
       <p>= {(props.currencyPrice * props.amount).toLocaleString('de-DE', {
         style: 'currency',
         currency: 'EUR'
