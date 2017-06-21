@@ -32,10 +32,7 @@ const actions = module.exports = makeActions('wallet/money', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.getBalance.buildAction(params, () => {
-          return new Promise((resolve, reject) => {
-            setTimeout(() => resolve(3), 2500)
-          })
-          // services.auth.currentUser.wallet.getBalance()
+          return services.auth.currentUser.wallet.getBalance()
         }))
       }
     }
@@ -44,12 +41,9 @@ const actions = module.exports = makeActions('wallet/money', {
     async: true,
     expectedParams: [],
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.getPrice.buildAction(params, () => {
-          console.log('Get Ether Price ') // eslint-disable-line no-console
-          return new Promise((resolve, reject) => {
-            setTimeout(() => resolve(250), 2000)
-          })
+      return (dispatch, getState) => {
+        dispatch(actions.getPrice.buildAction(params, (backend) => {
+          return backend.wallet.retrieveEtherPrice()
         }))
       }
     }
@@ -60,7 +54,9 @@ const initialState = Immutable.fromJS({
   ether: {
     loaded: false,
     price: 0,
-    amount: 0
+    amount: 0,
+    checkingOut: false,
+    buying: false
   }
 })
 
@@ -91,7 +87,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getPrice.id_success:
       return state.mergeIn(['ether'], {
-        price: action.result
+        price: action.result.ethForEur
       })
 
     case actions.getPrice.id_fail:

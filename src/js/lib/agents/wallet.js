@@ -1,5 +1,6 @@
 import * as settings from 'settings'
 import {WalletManager} from 'smartwallet-contracts'
+import HTTPAgent from 'lib/agents/http'
 
 // only for testing testSeed has some ether on ropsten testnet
 const TEST_SEED = 'mandate print cereal style toilet hole' +
@@ -8,6 +9,7 @@ const TEST_SEED = 'mandate print cereal style toilet hole' +
 export default class WalletAgent {
   constructor() {
     this._manager = new WalletManager(settings.blockchain)
+    this._httpAgent = new HTTPAgent({proxy: false})
   }
 
   generateSeedPhrase(entropy) {
@@ -15,6 +17,13 @@ export default class WalletAgent {
     // @TODO remove this
     seed = TEST_SEED
     return seed
+  }
+
+  retrieveEtherPrice() { // returns {ethForEur: <number>}
+    return this._httpAgent.get(
+      settings.blockchain.jolocomEtherAddress +
+      '/ether/exchange-rate/ether'
+    )
   }
 
   retrieveSeedPhrase({email, password}) {
