@@ -88,14 +88,14 @@ function getRoutes() {
       component={WalletIdCardScreen} />
     <Route path="wallet/identity/country-select"
       component={CountrySelectScreen} />
+    <Route path="wallet/ether"
+      component={WalletEtherScreen} />
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
       <Route path="identity"
         component={WalletIdentityScreen} />
       <Route path="money"
         component={WalletMoneyScreen} />
-      <Route path="ether"
-        component={WalletEtherScreen} />
     </Route>
 
     <Route path="profile" component={Profile} />
