@@ -32,7 +32,10 @@ const STYLES = {
     fill: theme.jolocom.gray1
   },
   checkBox: {
-    margin: 'auto'
+    margin: 'auto',
+    '@media screen and (min-width: 768px)': {
+      width: '317px'
+    }
   },
   labelStyle: {
     color: theme.jolocom.gray1,
