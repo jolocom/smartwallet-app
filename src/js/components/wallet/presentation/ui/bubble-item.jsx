@@ -6,7 +6,7 @@ class BubbleItem extends React.Component {
     const {style} = this.props || {}
 
     return (
-      <svg height="150" width="150" viewBox="0 0 24 24">
+      <svg height="145" width="145" viewBox="0 0 24 24">
         <g>
           <defs>
             <clipPath id="cut-off-left">

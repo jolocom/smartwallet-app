@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {Content, Block, Header, SideNote} from '../../structure'
-
+import StripeCheckout from './stripe-checkout'
 import {
   RaisedButton
 } from 'material-ui'
@@ -73,7 +73,9 @@ export default class WalletEther extends React.Component {
             secondary
             fullWidth
             label="BUY ETHER"
-            onClick={() => { this.props.buyEther() }} />
+            onClick={this.props.buyEther()}>
+            <StripeCheckout />
+          </RaisedButton>
         </Block>
       </div>
     )
