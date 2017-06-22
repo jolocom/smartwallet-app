@@ -43,6 +43,9 @@ const STYLES = {
     backgroundSize: 'contain',
     width: '24px',
     height: '24px'
+  },
+  container: {
+    marginBottom: '16px'
   }
 }
 

@@ -76,21 +76,20 @@ const Pin = (props) => {
             onChange={props.onChange}
             onFocusChange={props.onFocusChange}
             confirm={props.confirm} />
-
+            {
+              props.confirm
+              ? null
+              : <Block>
+                <SideNote>
+                  This secure PIN will be needed for transactions and
+                  saving information on the Blockchain.
+                </SideNote>
+              </Block>
+            }
           {confirm}
         </Content>
 
         <Footer>
-          {
-            props.confirm
-            ? <Block>
-              <SideNote>
-                This secure PIN will be needed for transactions and
-                saving information on the Blockchain.
-              </SideNote>
-            </Block>
-            : null
-          }
           <RaisedButton
             type="submit"
             disabled={!props.valid}
