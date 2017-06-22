@@ -11,7 +11,7 @@ const IMAGE_DATA_URL = '/img/entropy.jpg'
 
 const STYLES = {
   container: {
-    backgroundImage: 'url(/img/entropy.jpg)',
+    backgroundImage: 'url(/img/img_seedcreation.svg)',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     position: 'relative',
