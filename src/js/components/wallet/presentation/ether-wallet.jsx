@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {Content, Block, Header, SideNote} from '../../structure'
-
+import StripeCheckout from './stripe-checkout'
 import {
   RaisedButton
 } from 'material-ui'
@@ -12,7 +12,8 @@ import {theme} from 'styles'
 import {
   TabContainer,
   HalfScreenContainer,
-  PlusSubMenu
+  PlusSubMenu,
+  Bubbles
 } from './ui'
 
 const STYLES = {
@@ -63,13 +64,18 @@ export default class WalletEther extends React.Component {
              transaction (saving data) is at 30 cents. To use this app
              correctly we suggest you to either buy some Ether here...'
           </SideNote>
+          <Block>
+            <Bubbles ethBalance={"0.0215180852"}/>
+          </Block>
         </Block>
         <Block>
           <RaisedButton
             secondary
             fullWidth
             label="BUY ETHER"
-            onClick={() => { this.props.buyEther() }} />
+            onClick={this.props.buyEther()}>
+            <StripeCheckout />
+          </RaisedButton>
         </Block>
       </div>
     )
