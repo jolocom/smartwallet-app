@@ -19,5 +19,9 @@ module.exports = {
     // gethHost: 'http://verification.jolocom.com:8545',
     // lookupContractAddress: '0x58ab8f7c72b4bec073db317d92aa0a15f09d9a6b'
   },
+  stripe: {
+    publishableKey: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh',
+    livePublishableKey: 'pk_live_siTErHNiReyziQNzOreqZigX'
+  },
   dev: false
 }
