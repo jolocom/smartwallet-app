@@ -16,8 +16,6 @@ export default class StripeCheckout extends Component {
     return (
       <ReactStripeCheckout
         token={this.buyEther.bind(this)}
-        stripeKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
-        token={this.onToken}
         stripeKey={settings.stripe.publishableKey}
         name="JOLOCOM SMARTWALLET"
         description="Add Ether to your Smart Wallet."
