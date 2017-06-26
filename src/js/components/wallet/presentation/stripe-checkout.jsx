@@ -7,6 +7,9 @@ import {
 } from 'material-ui'
 
 export default class StripeCheckout extends Component {
+  static propTypes = {
+    buyEther: React.PropTypes.func.isRequired
+  }
 
   buyEther = (token) => {
     this.props.buyEther(token)
