@@ -2,7 +2,7 @@ import {expect} from 'chai'
 import * as actions from './money'
 const reducer = require('./money').default
 
-describe.only('# Wallet money redux module', () => {
+describe('# Wallet money redux module', () => {
   describe('# Reducer', () => {
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')
