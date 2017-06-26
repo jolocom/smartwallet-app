@@ -72,9 +72,8 @@ export default class WalletEther extends React.Component {
           <RaisedButton
             secondary
             fullWidth
-            label="BUY ETHER"
-            onClick={this.props.buyEther()}>
-            <StripeCheckout />
+            label="BUY ETHER">
+            <StripeCheckout buyEther={this.props.buyEther.bind(this)} />
           </RaisedButton>
         </Block>
       </div>

@@ -13,14 +13,18 @@ const actions = module.exports = makeActions('wallet/money', {
     }
   },
   buyEther: {
-    expectedParams: ['value'],
+    expectedParams: ['stripeToken'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        dispatch(actions.buyEther.buildAction(params, () => {
-          console.log('buy Ether ') // eslint-disable-line no-console
-          return new Promise((resolve, reject) => {
-            resolve(true)
+        dispatch(actions.buyEther.buildAction(params, (backend) => {
+          return backend.wallet.buyEther({
+            stripeToken: params,
+            walletAddress: services.auth.currentUser.wallet.mainAddress
+          }).then((response) => {
+            console.log("buyEther action: ", response)
+            dispatch(actions.getBalance())
+            return response
           })
         }))
       }
