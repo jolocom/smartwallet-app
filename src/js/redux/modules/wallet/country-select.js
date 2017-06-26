@@ -67,9 +67,8 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setCountryValue.id:
       return state.merge({
         value: action.value,
-        options: options.map((e) =>
-          e.toLowerCase().startsWith(action.value.toLowerCase()) ? e : null)
-          .filter(n => n !== null)
+        options: options.filter((countryLabel) => countryLabel.toLowerCase()
+          .startsWith(action.value.toLowerCase()))
       })
 
     case actions.clearState.id:
