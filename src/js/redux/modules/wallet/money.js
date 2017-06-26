@@ -69,23 +69,43 @@ const initialState = Immutable.fromJS({
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.buyEther.id:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: false,
+        errorMsg: '',
+        buying: true
+      })
 
     case actions.buyEther.id_success:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: '',
+        buying: false
+      })
 
     case actions.buyEther.id_fail:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: 'Could not buy ether',
+        buying: false
+      })
 
     case actions.getBalance.id:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: false,
+        errorMsg: ''
+      })
 
     case actions.getBalance.id_fail:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: 'Could not get the user\'s ether balance'
+      })
 
     case actions.getBalance.id_success:
       return state.mergeIn(['ether'], {
-        amount: action.result
+        amount: action.result,
+        loaded: true,
+        errorMsg: ''
       })
 
     case actions.getPrice.id:
@@ -93,11 +113,16 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getPrice.id_success:
       return state.mergeIn(['ether'], {
-        price: action.result.ethForEur
+        price: action.result.ethForEur,
+        loaded: true,
+        errorMsg: ''
       })
 
     case actions.getPrice.id_fail:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: 'Could not get the ether price'
+      })
 
     default:
       return state
