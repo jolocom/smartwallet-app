@@ -3,11 +3,12 @@ import { shallow } from 'enzyme'
 import VerificationDataPresentation from './data'
 
 describe('(Component) VerificationDataPresentation', function() {
-  it('should render properly the first time', function() {
+  it('should render properly the first time', () => {
     shallow((<VerificationDataPresentation
       verify={() => {}}
       showVerifierLocations
       change={() => {}}
+      username={{value: ''}}
       selectCountry={() => {}}
       cancel={() => {}}
       showVerifiers={() => {}}

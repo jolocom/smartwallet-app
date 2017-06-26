@@ -13,6 +13,7 @@ describe('(Component) VerificationDataScreen', () => {
         ...VerificationDataScreen.mapStateToProps(Immutable.fromJS({
           verification: {
             data: {
+              username: '',
               focusedGroup: '',
               focusedField: '',
               idCard: {

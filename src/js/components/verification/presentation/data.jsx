@@ -33,6 +33,7 @@ export default class VerificationDataPresentation extends React.Component {
     verifierLocations: React.PropTypes.array,
     showErrors: React.PropTypes.bool,
     showAddress: React.PropTypes.bool,
+    username: React.PropTypes.object,
     physicalAddress: React.PropTypes.array,
     idCard: React.PropTypes.array
   }
@@ -157,13 +158,14 @@ export default class VerificationDataPresentation extends React.Component {
 
   render() {
     const icons = this.createIcons()
-    const {idCard, physicalAddress, showAddress, verify, cancel} = this.props
+    const {idCard, physicalAddress, showAddress, verify, cancel, username} = this.props // eslint-disable-line max-len
 
     const addressFields = showAddress ? physicalAddress : physicalAddress[0]
 
     const fields = idCard.concat(addressFields).map(
       (field, index) => this.renderField({...field, index, icon: icons[index]}))
-
+    const usernameField = this.renderTextField({
+      ...username, icon: Person, index: -1})
     return (<div>
       <EditAppBar
         title="DATA CHECK"
@@ -175,6 +177,8 @@ export default class VerificationDataPresentation extends React.Component {
         Please fill in the following ID Card details for further verfication.
       </Content>
       <Content>
+        <EditHeader title="User Name" />
+          {usernameField}
         <EditHeader title="ID Card" />
         <List>
           {fields}

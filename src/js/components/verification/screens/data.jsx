@@ -13,6 +13,7 @@ import Presentation from '../presentation/data'
     'verification/data:setFocusedField',
     'verification/data:setShowAddress',
     'verification/data:verifyData',
+    'verification/data:setUsername',
     'verification/data:cancel'
   ]
 })
@@ -25,12 +26,13 @@ export default class VerificationDataScreen extends React.Component {
     setFocusedField: React.PropTypes.func.isRequired,
     setShowAddress: React.PropTypes.func.isRequired,
     verifyData: React.PropTypes.func.isRequired,
+    setUsername: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired
   }
 
   render() {
     const {cancel, verifyData, initiateCountrySelectScreen} = this.props
-    const {focusedField, focusedGroup, verifierLocations
+    const {focusedField, focusedGroup, verifierLocations, username
     } = this.props.data
 
     return <Presentation
@@ -38,6 +40,7 @@ export default class VerificationDataScreen extends React.Component {
       focusedGroup={focusedGroup}
       focusedField={focusedField}
       verify={verifyData}
+      username={{label: 'User Name', key: 'username', group: 'username', value: username}} // eslint-disable-line max-len
       verifierLocations={verifierLocations}
       setFocused={(...args) => { this.setFocusedElements(...args) }}
       change={(...args) => { this.change(...args) }}
@@ -49,8 +52,10 @@ export default class VerificationDataScreen extends React.Component {
   }
 
   change(field, value) {
-    const idCardFields = this.parseIdCardDetailsToArray()
-      .map(({key}) => key)
+    if (field === 'username') {
+      return this.props.setUsername(value)
+    }
+    const idCardFields = this.parseIdCardDetailsToArray().map(({key}) => key)
     if (idCardFields.includes(field)) {
       return this.props.changeIdCardField(field, value)
     } else if (field === 'streetWithNumber') {

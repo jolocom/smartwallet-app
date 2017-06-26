@@ -49,12 +49,16 @@ const actions = module.exports = makeActions('verification/data', {
   },
   changePhysicalAddressField: {
     expectedParams: ['field', 'value']
+  },
+  setUsername: {
+    expectedParams: ['value']
   }
 })
 
 const initialState = module.exports.initialState = Immutable.fromJS({
   focusedGroup: '',
   focusedField: '',
+  username: '',
   idCard: {
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},
@@ -97,6 +101,11 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.cancel.id:
       return initialState
+
+    case actions.setUsername.id:
+      return state.merge({
+        username: action.value
+      })
 
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
