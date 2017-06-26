@@ -6,7 +6,7 @@ import * as actions from './country'
 
 const reducer = require('./country').default
 
-describe.only('# verification country redux module', () => {
+describe('# verification country redux module', () => {
   describe('# Reducer', () => {
     let {initialState} = actions
     it('should initialise properly', () => {
