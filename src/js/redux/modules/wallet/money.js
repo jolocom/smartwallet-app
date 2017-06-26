@@ -22,7 +22,8 @@ const actions = module.exports = makeActions('wallet/money', {
             stripeToken: params,
             walletAddress: services.auth.currentUser.wallet.mainAddress
           }).then((response) => {
-            console.log("buyEther action: ", response)
+            // eslint-disable-next-line no-console
+            console.log('buyEther action: ', response)
             dispatch(actions.getBalance())
             return response
           })
@@ -57,6 +58,7 @@ const actions = module.exports = makeActions('wallet/money', {
 const initialState = Immutable.fromJS({
   ether: {
     loaded: false,
+    errorMsg: '',
     price: 0,
     amount: 0,
     checkingOut: false,
