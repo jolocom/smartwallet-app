@@ -69,12 +69,7 @@ export default class WalletEther extends React.Component {
           </Block>
         </Block>
         <Block>
-          <RaisedButton
-            secondary
-            fullWidth
-            label="BUY ETHER">
-            <StripeCheckout buyEther={this.props.buyEther.bind(this)} />
-          </RaisedButton>
+          <StripeCheckout buyEther={this.props.buyEther.bind(this)} />
         </Block>
       </div>
     )
