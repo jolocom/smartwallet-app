@@ -14,7 +14,7 @@ import Presentation from '../presentation/money'
 export default class WalletMoneyScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    money: React.PropTypes.number.isRequired,
+    money: React.PropTypes.object.isRequired,
     goToEtherManagement: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
     getPrice: React.PropTypes.func.isRequired,
