@@ -13,10 +13,8 @@ import Presentation from '../presentation/money'
 })
 export default class WalletMoneyScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
     money: React.PropTypes.object.isRequired,
     goToEtherManagement: React.PropTypes.func.isRequired,
-    buyEther: React.PropTypes.func.isRequired,
     getPrice: React.PropTypes.func.isRequired,
     getBalance: React.PropTypes.func.isRequired
   }
@@ -25,12 +23,9 @@ export default class WalletMoneyScreen extends React.Component {
     this.props.getBalance()
   }
   render() {
-    const {goToEtherManagement, buyEther, getBalance} = this.props
-    const {ether} = this.props.money
+    const {goToEtherManagement, money} = this.props
     return (<Presentation
-      ether={ether}
-      goToEtherManagement={goToEtherManagement}
-      buyEther={buyEther}
-      getBalance={getBalance} />)
+      ether={money.ether}
+      goToEtherManagement={goToEtherManagement} />)
   }
 }
