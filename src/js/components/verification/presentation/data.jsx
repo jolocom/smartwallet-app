@@ -18,6 +18,23 @@ import {
 
 import {Content, Header} from '../../structure'
 
+const STYLES = {
+  container: {
+    width: '100%'
+  },
+  firstField: {
+    width: '70%',
+    position: 'fix'
+  },
+  secondField: {
+    width: '30%',
+    position: 'fix'
+  },
+  textAlign: {
+    textAlign: 'center'
+  }
+}
+
 @Radium
 export default class VerificationDataPresentation extends React.Component {
   static propTypes = {
@@ -47,11 +64,10 @@ export default class VerificationDataPresentation extends React.Component {
         return this.renderGenderField(field)
       case 'birthPlace':
       case 'zip':
-        return null // handled with birthDate or streetWithNumber
+        return null // handled with birthDate or city
       case 'birthDate':
-        return this.renderBirthDate(field)
       case 'city':
-        return this.renderCityAndZip(field)
+        return this.renderTwoFields(field)
       default:
         return this.renderTextField(field)
     }
@@ -109,26 +125,18 @@ export default class VerificationDataPresentation extends React.Component {
       enableDelete={value.length > 0} />
   }
 
-  renderCityAndZip({value, label, valid, key, index, icon, group}) {
-    return (<table key={key} style={{width: '100%'}} ><tbody> <tr>
-      <td style={{width: '70%', position: 'fix'}} key="0" >
+  renderTwoFields({value, label, valid, key, index, icon, group}) {
+    const secondField = this.props.physicalAddress.map(({key}) => key).includes(key) // eslint-disable-line max-len
+      ? this.props.physicalAddress[index - this.props.idCard.length + 1]
+      : this.props.idCard[index + 1]
+    return (<table key={key} style={STYLES.container} ><tbody><tr>
+      <td style={STYLES.firstField} key="0" >
         {this.renderTextField({value, label, valid, key, index, icon, group})}
       </td>
-      <td style={{width: '30%', position: 'fix'}} key="1">
-        {this.renderTextField(this.props.physicalAddress[2])}
+      <td style={STYLES.secondField} key="1">
+        {this.renderTextField(secondField)}
       </td>
-    </tr> </tbody> </table>)
-  }
-
-  renderBirthDate({value, label, valid, key, index, icon, group}) {
-    return (<table key={key} style={{width: '100%'}}> <tbody><tr>
-      <td key="0" style={{width: '70%', position: 'fix'}}>
-        {this.renderTextField({value, label, valid, key, index, icon, group})}
-      </td>
-      <td key="1" style={{width: '30%', position: 'fix'}}>
-        {this.renderTextField(this.props.idCard[index + 1])}
-      </td>
-    </tr></tbody> </table>)
+    </tr></tbody></table>)
   }
 
   renderDateField({value, label, valid, key, index, icon, group}) {
@@ -172,8 +180,8 @@ export default class VerificationDataPresentation extends React.Component {
         rightTitle="VERIFFY"
         onSave={verify}
         onClose={cancel} />
-      <Header style={{textAlign: 'center'}}>STEP 2</Header>
-      <Content style={{textAlign: 'center'}}>
+      <Header style={STYLES.textAlign}>STEP 2</Header>
+      <Content style={STYLES.textAlign}>
         Please fill in the following ID Card details for further verfication.
       </Content>
       <Content>
