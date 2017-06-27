@@ -43,7 +43,7 @@ describe('# Wallet money redux module', () => {
         errorMsg: '',
         price: 0,
         amount: 0,
-        checkingOut: false,
+        checkingOut: true,
         buying: false
       })
     })
