@@ -109,7 +109,10 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getPrice.id:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: false,
+        errorMsg: ''
+      })
 
     case actions.getPrice.id_success:
       return state.mergeIn(['ether'], {
