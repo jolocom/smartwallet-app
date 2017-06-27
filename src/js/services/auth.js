@@ -5,7 +5,7 @@ export default class AuthService extends EventEmitter {
     super()
     this.backend = backend
     this.currentUser = null
-    this.on('changed', user => { this._storeWebId() })
+    this.on('changed', (user = null) => { this._storeWebId() })
     this._setCurrentUser({
       wallet: new (require('../lib/agents/wallet').Wallet)()
     })
@@ -17,7 +17,7 @@ export default class AuthService extends EventEmitter {
 
   _setCurrentUser(user) {
     this.currentUser = user
-    this.emit('changed', this.currentUser.wallet.webId || null)
+    this.emit('changed', this.currentUser.wallet.webId)
   }
 
   async registerWithSeedPhrase({userName, seedPhrase}) {
@@ -38,7 +38,11 @@ export default class AuthService extends EventEmitter {
 
   async loginWithSeedPhrase({userName, seedPhrase, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.loginWithSeedPhrase({userName, seedPhrase, pin})
+      wallet: await this.backend.loginWithSeedPhrase({
+        userName,
+        seedPhrase,
+        pin
+      })
     })
     return this.currentUser
   }
