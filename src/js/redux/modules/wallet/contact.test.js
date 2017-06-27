@@ -278,8 +278,7 @@ describe('# Wallet contact redux module', () => {
           }
         }})
       })
-      it('updateInformation should not change a valid original telNum field ' +
-      'value', () => {
+      it('updateInformation should not change a valid original telNum field value', () => { // eslint-disable-line max-len
         const oldState = Immutable.fromJS({
           information: {
             originalInformation: {
@@ -302,8 +301,7 @@ describe('# Wallet contact redux module', () => {
           index: 0
         }
         const newState = reducer(oldState, action)
-        expect(newState.toJS())
-        .to.deep.equal(oldState.toJS())
+        expect(newState.toJS()).to.deep.equal(oldState.toJS())
       })
     })
   })
