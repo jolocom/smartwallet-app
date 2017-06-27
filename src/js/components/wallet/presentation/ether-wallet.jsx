@@ -33,7 +33,18 @@ const STYLES = {
 export default class WalletEther extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    buyEther: React.PropTypes.func
+    buyEther: React.PropTypes.func,
+    ether: React.PropTypes.object
+  }
+
+  renderLoading() {
+    return (
+      <div style={STYLES.noEtherContainer}>
+        <Block>
+           LOADING....
+        </Block>
+      </div>
+    )
   }
 
   renderHasEther() {
@@ -65,7 +76,7 @@ export default class WalletEther extends React.Component {
              correctly we suggest you to either buy some Ether here...'
           </SideNote>
           <Block>
-            <Bubbles ethBalance={"0.0215180852"}/>
+            <Bubbles ethBalance={'0.0215180852'} />
           </Block>
         </Block>
         <Block>
@@ -76,15 +87,19 @@ export default class WalletEther extends React.Component {
   }
 
   render() {
+    let content = null
+    if (!this.props.ether.ether.loaded) {
+      content = this.renderLoading()
+    } else if (this.props.ether.ether.amount) {
+      content = this.renderNoEther()
+    } else if (!this.props.ether.ether.amount) {
+      content = this.renderNoEther()
+    }
     return (
       <TabContainer>
         <HalfScreenContainer>
           <Content>
-          {
-            this.props.ether.ether.amount
-            ? this.renderHasEther()
-            : this.renderNoEther()
-          }
+            {content}
           </Content>
         </HalfScreenContainer>
       </TabContainer>

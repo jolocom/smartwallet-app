@@ -22,8 +22,6 @@ const actions = module.exports = makeActions('wallet/money', {
             stripeToken: params,
             walletAddress: services.auth.currentUser.wallet.mainAddress
           }).then((response) => {
-            // eslint-disable-next-line no-console
-            console.log('buyEther action: ', response)
             dispatch(actions.getBalance())
             return response
           })
@@ -79,7 +77,8 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['ether'], {
         loaded: true,
         errorMsg: '',
-        buying: false
+        buying: false,
+        checkingOut: true
       })
 
     case actions.buyEther.id_fail:
