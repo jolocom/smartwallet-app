@@ -1,12 +1,20 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import EtherWallet from './ether-wallet'
+import WalletEther from './ether-wallet'
 
-describe('(Component) EtherWallet', function() {
-  it('should render properly the first time', function() {
-    shallow((<EtherWallet
-      />),
-      { context: { muiTheme: { } } }
-    )
+describe('(Component) WalletEther', function() {
+  it('should render properly the first time', () => {
+    shallow((<WalletEther
+      buyEther={() => {}}
+      ether={{
+        ether: {
+          amount: 0,
+          buying: false,
+          checkingOut: false,
+          loaded: false,
+          price: 0
+        }
+      }}
+    />))
   })
 })

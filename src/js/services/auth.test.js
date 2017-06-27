@@ -66,7 +66,8 @@ describe('#AuthService', () => {
       }
       const login = {
         userName: 'bigly',
-        seedPhrase: 'whoop'
+        seedPhrase: 'whoop',
+        pin: '1111'
       }
       const auth = new AuthService(backend)
       expect(auth.loginWithSeedPhrase(login)).to.eventually
@@ -77,7 +78,8 @@ describe('#AuthService', () => {
       expect(backend.loginWithSeedPhrase.calls).to.deep.equal([{
         args: [{
           userName: 'bigly',
-          seedPhrase: 'whoop'
+          seedPhrase: 'whoop',
+          pin: '1111'
         }]
       }])
     })
@@ -90,6 +92,7 @@ describe('#AuthService', () => {
       const login = {
         userName: 'bigly',
         email: 'j.j@j.c',
+        pin: '1111',
         password: 'canyouseeme?'
       }
       const auth = new AuthService(backend)
@@ -102,6 +105,7 @@ describe('#AuthService', () => {
         args: [{
           userName: 'bigly',
           email: 'j.j@j.c',
+          pin: '1111',
           password: 'canyouseeme?'
         }]
       }])
