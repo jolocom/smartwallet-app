@@ -19,19 +19,12 @@ export default class VerificationFaceScreen extends React.Component {
   }
 
   render() {
-    this
-    const {
-      verifyFace,
-      cancelFaceVerification,
-      confirmFaceIdCardMatch
-    } = this.props
+    const {verifyFace, cancelFaceVerification, confirmFaceIdCardMatch} = this.props // eslint-disable-line max-len
     const {isFaceMatchingId} = this.props.face
-    return (
-      <Presentation
-        verify={verifyFace}
-        cancel={cancelFaceVerification}
-        confirmMatch={confirmFaceIdCardMatch}
-        isFaceMatchingId={isFaceMatchingId} />
-    )
+    return (<Presentation
+      verify={verifyFace}
+      cancel={cancelFaceVerification}
+      confirmMatch={confirmFaceIdCardMatch}
+      isFaceMatchingId={isFaceMatchingId} />)
   }
 }
