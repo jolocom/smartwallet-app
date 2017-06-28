@@ -3,6 +3,8 @@ import Radium from 'radium'
 
 import {Content, Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
+import Spinner from './spinner'
+
 import {
   RaisedButton
 } from 'material-ui'
@@ -38,10 +40,12 @@ export default class WalletEther extends React.Component {
   }
 
   renderLoading() {
+    const messageWait = ['This might take a while...',
+      'Please have some patience...', 'Almost there...']
     return (
       <div style={STYLES.noEtherContainer}>
         <Block>
-           LOADING....
+          <Spinner style={STYLES.header} message={messageWait} />
         </Block>
       </div>
     )
@@ -88,7 +92,7 @@ export default class WalletEther extends React.Component {
 
   render() {
     let content = null
-    if (!this.props.ether.ether.loaded) {
+    if (this.props.ether.ether.buying) {
       content = this.renderLoading()
     } else if (this.props.ether.ether.amount) {
       content = this.renderNoEther()
