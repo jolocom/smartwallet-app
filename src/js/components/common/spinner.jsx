@@ -1,12 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
+import CircularProgress from 'material-ui/CircularProgress'
 
-import {Content, Block, Header, SideNote} from '../../structure'
-import {
-  TabContainer,
-  HalfScreenContainer,
-  SpinnerCircular
-} from './ui'
+import {Content, Block, Header} from '../structure'
 
 export default class Spinner extends React.Component {
 
@@ -41,7 +37,10 @@ export default class Spinner extends React.Component {
           title="Thank you. We are transferring some Ether to your Account."
           />
         <Block>
-          <SpinnerCircular />
+          <div>
+            <CircularProgress size={150} thickness={8}
+              style={{backgroundImage: this.props.avatar}} />
+          </div>
         </Block>
         <Header style={this.props.style}
           ref="spinner"

@@ -3,7 +3,7 @@ import Radium from 'radium'
 
 import {Content, Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
-import Spinner from './spinner'
+import Spinner from '../../common/spinner'
 
 import {
   RaisedButton
@@ -45,7 +45,8 @@ export default class WalletEther extends React.Component {
     return (
       <div style={STYLES.noEtherContainer}>
         <Block>
-          <Spinner style={STYLES.header} message={messageWait} />
+          <Spinner style={STYLES.header} message={messageWait}
+          avatar={'url(/img/img_techguy.svg)'} />
         </Block>
       </div>
     )
