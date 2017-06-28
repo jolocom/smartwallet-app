@@ -166,28 +166,37 @@ const actions = module.exports = makeActions('registration', {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState) => {
+      return (dispatch, getState, {services, backend}) => {
         const state = getState().get('registration').toJS()
-        dispatch(actions.registerWallet.buildAction(params, (backend) => {
+        dispatch(actions.registerWallet.buildAction(params, () => {
           const userType = state.userType.value
           if (userType === 'expert') {
-            return backend.wallet.registerWithSeedPhrase({
+            return services.auth.registerWithSeedPhrase({
               userName: state.username.value,
               seedPhrase: state.passphrase.phrase,
               pin: state.pin.value
             }).then((params) => {
+              console.log('====params====', params)
+              backend.accounts.solidRegister(state.username.value,
+                state.passphrase.phrase, params.wallet.webIDPrivateKey)
+            }).then(() => {
               dispatch(router.pushRoute('/wallet'))
-              return params
+              return
             })
           } else {
-            return backend.wallet.registerWithCredentials({
+            console.log('====layman====')
+            return services.auth.registerWithCredentials({
               userName: state.username.value,
               email: state.email.value,
               password: state.password.value,
               pin: state.pin.value
             }).then((params) => {
+              console.log('====params====', params)
+              backend.accounts.solidRegister(state.username.value,
+                state.passphrase.phrase, params.wallet.webIDPrivateKey)
+            }).then(() => {
               dispatch(router.pushRoute('/wallet'))
-              return params
+              return
             })
           }
         })

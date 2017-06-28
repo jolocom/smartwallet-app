@@ -38,6 +38,14 @@ class AccountsAgent {
     })
   }
 
+  solidRegister(username, password, privatekey) {
+    return this.http.post(`${settings.proxynew}/register`,
+       querystring.stringify({username, password, privatekey}), {
+         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+       }
+     )
+  }
+
   updateEmail(webId, email) {
     const writer = new Writer()
 
