@@ -10,6 +10,7 @@ module.exports = {
     // Test RPC node
     gethHost: 'http://verification.jolocom.com:9050',
     lookupContractAddress: '0x1f18b8d96f0a26eea82ce0d4bc202cc429df955f',
+    jolocomIdentityWalletAddress: '0x2f5c557fc95fd376408c9acd8e2238044ff4ec2d',
     jolocomEtherAddress: 'https://verification.jolocom.com/ether',
     seedStorage: {
       url: 'https://seed-service.jolocom.net/'

@@ -147,6 +147,7 @@ const PhoneList = (props) => {
         onVerify={() => onConfirm({
           message: iconPhoneMessage,
           style: STYLES.dialog,
+          attrType: 'phone',
           attrValue: number
         })}
         secondaryTextValue={type} />
@@ -327,6 +328,7 @@ const EmailList = (props) => {
               message: buttonEmailMessage,
               buttonText: 'OK',
               style: STYLES.simpleDialog,
+              attrType: 'email',
               attrValue: address
             })} />
         </ListItem>

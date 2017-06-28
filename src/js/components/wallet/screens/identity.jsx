@@ -14,7 +14,8 @@ import WalletError from '../presentation/error'
     'confirmation-dialog:closeConfirmDialog',
     'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
-    'email-confirmation:startEmailConfirmation'
+    'email-confirmation:startEmailVerification',
+    'email-confirmation:startPhoneVerification'
   ]
 })
 
@@ -30,7 +31,8 @@ export default class WalletIdentityScreen extends React.Component {
     getIdentityInformation: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
-    startEmailConfirmation: React.PropTypes.func.isRequired
+    startEmailVerification: React.PropTypes.func.isRequired,
+    startPhoneVerification: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -78,9 +80,13 @@ export default class WalletIdentityScreen extends React.Component {
         goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
         onConfirm={
           ({message, style, attrValue}) => this.onConfirm(message, style)}
-        onVerify={({message, buttonText, style, attrValue}) => {
+        onVerify={({message, buttonText, style, attrType, attrValue}) => {
           this.props.configSimpleDialog(() => {
-            this.props.startEmailConfirmation({email: attrValue})
+            if (attrType === 'email') {
+              this.props.startEmailVerification({email: attrValue})
+            } else if (attrType === 'phone') {
+              this.props.startPhoneVerification({email: attrValue})
+            }
           }, message, buttonText, style)
           this.props.showSimpleDialog()
         }}

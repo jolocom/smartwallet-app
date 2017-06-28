@@ -6,17 +6,17 @@ export default class VerificationAgent {
     this.httpAgent = new HTTPAgent({proxy: false})
   }
 
-  startVerifyingEmail({contractID, email}) {
-    return this.httpAgent.post(
+  async startVerifyingEmail({wallet, email}) {
+    return await this.httpAgent.post(
       settings.verificationProvider + '/email/start-verification',
-      {contractID, email}
+      {contractID: wallet.getIdentityAddress(), email}
     )
   }
 
-  startVerifyingPhone({contractID, phone}) {
-    return this.httpAgent.post(
+  async startVerifyingPhone({wallet, phone}) {
+    return await this.httpAgent.post(
       settings.verificationProvider + '/phone/start-verification',
-      {contractID, phone}
+      {contractID: wallet.getIdentityAddress(), phone}
     )
   }
 
