@@ -175,10 +175,10 @@ const actions = module.exports = makeActions('registration', {
               userName: state.username.value,
               seedPhrase: state.passphrase.phrase,
               pin: state.pin.value
-            }).then((params) => {
-              console.log('====params====', params)
+            }).then(({wallet}) => {
+              console.log('====params====', wallet)
               backend.accounts.solidRegister(state.username.value,
-                state.passphrase.phrase, params.wallet.webIDPrivateKey)
+                state.passphrase.phrase, wallet.webIDPrivateKey)
             }).then(() => {
               dispatch(router.pushRoute('/wallet'))
               return

@@ -13,7 +13,7 @@ export default class WalletAgent {
   generateSeedPhrase(entropy) {
     let seed = this._manager.generateSeedPhrase(entropy)
     // @TODO remove this
-    seed = TEST_SEED
+    // seed = TEST_SEED
     return seed
   }
 
