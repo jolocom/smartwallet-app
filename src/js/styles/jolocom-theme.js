@@ -16,15 +16,15 @@ const palette = {
   primary1Color: '#b3c90f',
   primary2Color: fade('#b3c90f', 0.15),
   primary3Color: fade('#b3c90f', 0.3),
-  accent1Color: '#9a3460',
-  accent2Color: fade('#9a3460', 0.15),
-  accent3Color: fade('#9a3460', 0.3),
+  accent1Color: '#942f51',
+  accent2Color: fade('#942f51', 0.15),
+  accent3Color: fade('#942f51', 0.3),
   textColor: '#4b132b',
   lighterTextColor: fade('#4b132b', 0.6),
   alternateTextColor: white,
   canvasColor: white,
   borderColor: grey300,
-  disabledColor: fade('#54635c', 0.3)
+  disabledColor: '#942f51'
 }
 
 let JolocomTheme = {
