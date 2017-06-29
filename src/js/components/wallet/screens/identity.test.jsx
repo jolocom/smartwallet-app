@@ -55,10 +55,12 @@ describe('(Component) WalletIdentityScreen', function() {
       verified: true,
       value: 'AnnikaHamman'
     })
-    expect(wrapper.find('WalletIdentity').prop('contact')).to.deep.equal({
-      phones: [{number: '+49 176 12345678', type: 'mobile', verified: true}],
-      emails: [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
-    })
+    expect(wrapper.find('WalletIdentity').prop('phones')).to.deep.equal(
+      [{number: '+49 176 12345678', type: 'mobile', verified: true}]
+    )
+    expect(wrapper.find('WalletIdentity').prop('emails')).to.deep.equal(
+      [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
+    )
     expect(wrapper.find('WalletIdentity').prop('passports')).to.deep.equal([])
   })
   it('should call goToDrivingLicenceManagement with proper params', () => {
@@ -71,7 +73,10 @@ describe('(Component) WalletIdentityScreen', function() {
               loaded: false,
               webId: '',
               username: {},
-              contact: {},
+              contact: {
+                emails: [],
+                phones: []
+              },
               passport: {},
               error: false
             }
@@ -179,7 +184,10 @@ describe('(Component) WalletIdentityScreen', function() {
               loaded: false,
               webId: '',
               username: {},
-              contact: {},
+              contact: {
+                phones: [],
+                emails: []
+              },
               passport: {},
               error: false
             }
@@ -212,7 +220,10 @@ describe('(Component) WalletIdentityScreen', function() {
               loaded: false,
               webId: '',
               username: {},
-              contact: {},
+              contact: {
+                phones: [],
+                emails: []
+              },
               passport: {},
               error: false
             }
@@ -233,16 +244,16 @@ describe('(Component) WalletIdentityScreen', function() {
 
     wrapper.find('WalletIdentity').props().onConfirm({
       message: 'message',
-      attrValue: '',
-      style: {}
+      attrValue: 'test value',
+      style: {},
+      rightButtonText: 'rightButtonText test',
+      leftButtonText: 'leftButtonText test'
     })
     expect(openConfirmDialog.called).to.be.true
     expect(openConfirmDialog.calls[0].args[0]).to.equal('message')
-    expect(openConfirmDialog.calls[0].args[1]).to.equal('REQUEST VERIFICATION')
-    expect(openConfirmDialog.calls[0].args[3]).to.equal('OK')
+    expect(openConfirmDialog.calls[0].args[1]).to.equal('rightButtonText test')
+    expect(openConfirmDialog.calls[0].args[3]).to.equal('leftButtonText test')
     expect(openConfirmDialog.calls[0].args[4]).to.deep.equal({})
-
-    openConfirmDialog.calls[0].args[2]()
     expect(closeConfirmDialog.called).to.be.true
     expect(closeConfirmDialog.calls).to.deep.equal([{args: []}])
   })
@@ -258,7 +269,10 @@ describe('(Component) WalletIdentityScreen', function() {
               loaded: false,
               webId: '',
               username: {},
-              contact: {},
+              contact: {
+                phones: [],
+                emails: []
+              },
               passport: {},
               error: false
             }
