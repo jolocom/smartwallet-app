@@ -20,6 +20,9 @@ const palette = {
   accent2Color: fade('#942f51', 0.15),
   accent3Color: fade('#942f51', 0.3),
   textColor: '#4b132b',
+  textColor_grey: '#a4a4a3',
+  textColor_silverGrey: '#9ba0aa',
+  textColor_darkBrown75: '#633c38',
   lighterTextColor: fade('#4b132b', 0.6),
   alternateTextColor: white,
   canvasColor: white,
@@ -27,10 +30,74 @@ const palette = {
   disabledColor: '#942f51'
 }
 
+const textStyles = {
+  headline: {
+    fontSize: '24px',
+    fontStyle: 'normal',
+    fontWeight: '300',
+    color: palette.textColor_grey
+  },
+  subheadline: {
+    fontSize: '20px',
+    fontStyle: 'normal',
+    fontWeight: '300',
+    color: palette.textColor_grey
+  },
+  sectionheader: {
+    fontSize: '20px',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    color: palette.textColor
+  },
+  labelInputFields: {
+    fontSize: '13px',
+    fontStyle: 'normal',
+    fontWeight: '300',
+    color: palette.textColor_darkBrown75
+  },
+  inputFields: {
+    fontSize: '16px',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    color: palette.textColor_silverGrey
+  },
+  contentInputFields: {
+    fontSize: '16px',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    color: palette.textColor
+  },
+  textCopy: {
+    fontSize: '13px',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    color: palette.textColor_grey
+  },
+  labelButton: {
+    fontSize: '14px',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    color: palette.accent1Color,
+    textTransform: 'uppercase'
+  },
+  screenHeader: {
+    fontSize: '20px',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    color: palette.textColor
+  },
+  userName: {
+    fontSize: '28px',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    color: palette.textColor
+  }
+}
 let JolocomTheme = {
   spacing: Spacing,
   contentFontFamily: 'Roboto, sans-serif',
   palette: palette,
+  textStyles: textStyles,
   appBar: {
     color: '#f8f9fb',
     textColor: '#4b132b'

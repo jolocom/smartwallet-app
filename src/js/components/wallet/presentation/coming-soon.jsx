@@ -12,8 +12,9 @@ const STYLES = {
     marginTop: '100px'
   },
   greeting: {
-    fontSize: '20px',
-    color: theme.palette.textColor
+    fontSize: theme.textStyles.screenHeader.fontSize,
+    fontWeight: theme.textStyles.screenHeader.fontWeight,
+    color: theme.textStyles.screenHeader.color
   },
   issue: {
     fontSize: '40px',

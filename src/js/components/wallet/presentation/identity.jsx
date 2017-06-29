@@ -37,7 +37,7 @@ const STYLES = {
     fontSize: '1em'
   },
   labelName: {
-    color: theme.palette.lighterTextColor
+    color: theme.textStyles.labelInputFields.color
   },
   iconName: {
     fill: theme.palette.accent1Color,

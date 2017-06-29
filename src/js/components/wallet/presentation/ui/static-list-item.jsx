@@ -13,13 +13,8 @@ var STYLES = {
     color: theme.jolocom.gray1,
     top: '16px'
   },
-  inputName: {
-    color: theme.palette.textColor,
-    fontSize: '1em'
-  },
-  labelName: {
-    color: theme.palette.lighterTextColor
-  },
+  inputName: theme.textStyles.contentInputFields,
+  labelName: theme.textStyles.labelInputFields,
   mainTextField: {
     padding: '0',
     flex: 1
