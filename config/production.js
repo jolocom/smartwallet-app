@@ -7,8 +7,8 @@ module.exports = {
     'url=https:webid.jolocom.de,system/accountStatus',
   verificationProvider: 'https://verification.jolocom.com',
   blockchain: {
-    // Test RPC node
-    gethHost: 'http://verification.jolocom.com:9050',
+    // Jolocom Rinkeby
+    gethHost: 'http://verification.jolocom.com:8545',
     lookupContractAddress: '0x1f18b8d96f0a26eea82ce0d4bc202cc429df955f',
     jolocomEtherAddress: 'https://verification.jolocom.com/ether',
     seedStorage: {
