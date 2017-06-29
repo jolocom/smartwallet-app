@@ -32,45 +32,8 @@ const STYLES = {
   labelName: {
     color: theme.palette.lighterTextColor
   },
-  iconName: {
-    fill: theme.palette.accent1Color,
-    position: 'absolute',
-    right: '20px',
-    marginTop: '40px'
-  },
   divider: {
     marginLeft: '16px'
-  },
-  addBtn: {
-    width: '40px',
-    boxShadow: 'none',
-    marginTop: '27px'
-  },
-  infoHeader: {
-    textAlign: 'left'
-  },
-  refresh: {
-    display: 'inline-block',
-    position: 'relative'
-  },
-  floatingLabel: {
-    textAlign: 'center',
-    width: '100%',
-    transformOrigin: 'center top 0px',
-    color: theme.palette.lighterTextColor,
-    paddingTop: '5px',
-    borderTop: '1px solid',
-    borderColor: theme.palette.lighterTextColor
-  },
-  requestBtn: {
-    marginLeft: '-16px'
-  },
-  spinner: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%'
-  },
-  dialog: {
   },
   simpleDialog: {
     contentStyle: {
