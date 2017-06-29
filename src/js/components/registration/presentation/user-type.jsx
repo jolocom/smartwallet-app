@@ -27,8 +27,8 @@ const STYLES = {
     flexDirection: 'column',
     flex: 1,
     alignItems: 'stretch',
-    fontWeight: 200,
-    fontSize: '18px'
+    fontWeight: theme.textStyles.subheadline.fontWeight,
+    fontSize: theme.textStyles.subheadline.fontSize
   },
   img: {
     flex: 1,

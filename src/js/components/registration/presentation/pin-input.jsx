@@ -12,7 +12,7 @@ const STYLES = {
     width: '48px',
     height: '48px',
     borderRadius: '24px',
-    backgroundColor: theme.palette.disabledColor,
+    backgroundColor: theme.palette.accent1Color,
     lineHeight: '48px',
     textAlign: 'center'
   },

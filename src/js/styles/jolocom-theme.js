@@ -27,7 +27,7 @@ const palette = {
   alternateTextColor: white,
   canvasColor: white,
   borderColor: grey300,
-  disabledColor: '#942f51'
+  disabledColor: '#9ba0aa'
 }
 
 const textStyles = {
