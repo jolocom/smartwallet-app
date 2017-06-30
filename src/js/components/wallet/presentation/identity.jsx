@@ -30,7 +30,7 @@ const STYLES = {
     fontSize: '1em'
   },
   labelName: {
-    color: theme.palette.lighterTextColor
+    color: theme.textStyles.labelInputFields.color
   },
   divider: {
     marginLeft: '16px'
