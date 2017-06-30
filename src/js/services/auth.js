@@ -12,7 +12,7 @@ export default class AuthService extends EventEmitter {
       if (savedSession) {
         this._setCurrentUser({
           wallet: this.backend.wallet.loginFromSerialized(savedSession)
-        })
+        }, {dontSaveSession: true})
       }
     }
   }
@@ -23,10 +23,10 @@ export default class AuthService extends EventEmitter {
 
   _setCurrentUser(user, {dontSaveSession} = {}) {
     this.currentUser = user
-    localStorage.setItem('jolocom.smartWallet', user.wallet.serialize())
+    if (!dontSaveSession) {
+      localStorage.setItem('jolocom.smartWallet', user.wallet.serialize())
+    }
     this.emit('changed', this.currentUser.wallet.webId || null)
-    console.log('setCurrentUser called')
-    console.log('user:', user)
   }
 
   async registerWithSeedPhrase({userName, seedPhrase, pin}) {
