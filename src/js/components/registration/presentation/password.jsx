@@ -13,11 +13,18 @@ const STYLES = {
   },
   passwordsContainer: {
     backgroundColor: '#ffffff',
-    maxWidth: '360px'
+    maxWidth: '360px',
+    position: 'relative'
+  },
+  strengthBarBlock: {
+    position: 'relative'
   },
   strengthBar: {
     marginRight: '30px',
-    marginLeft: '30px'
+    marginLeft: '30px',
+    position: 'absolute',
+    top: 62,
+    left: 0
   },
   explanation: [{
     marginTop: '20px',
@@ -33,19 +40,26 @@ const STYLES = {
   },
   helpMsg: {
     textAlign: 'left'
+  },
+  errorStyle: {
+    paddingTop: '10px',
+    textAlign: 'left'
+  },
+  underlineDisabled: {
+    borderBottom: '0.2px solid'
   }
 }
 
 const strengthBarColor = (value, strength, barIndex) => {
   if (value) {
     if (strength === 'strong') {
-      return 'green'
+      return theme.palette.primary1Color
     }
     if (strength === 'weak' && barIndex === 'firstBar') {
-      return 'red'
+      return '#e8540c'
     }
     if (strength === 'good' && barIndex !== 'thirdBar') {
-      return 'yellow'
+      return '#fdbc38'
     } else {
       return 'lightgray'
     }
@@ -55,7 +69,7 @@ const strengthBarColor = (value, strength, barIndex) => {
 }
 
 function StrengthBar(props) {
-  return <div style={STYLES.strengthBar}>
+  return (<div style={STYLES.strengthBar}>
     <svg width="100%" height="4">
       <line
         x1="0%"
@@ -82,7 +96,7 @@ function StrengthBar(props) {
         stroke={strengthBarColor(props.value, props.strength, 'thirdBar')}
       />
     </svg>
-  </div>
+  </div>)
 }
 
 StrengthBar.propTypes = {
@@ -96,19 +110,24 @@ function Password(props) {
       <Header title="... and a password" />
       <Content>
         <Block style={STYLES.passwordsContainer}>
+          <Block style={STYLES.strengthBarBlock}>
+            <PasswordField
+              style={STYLES.password}
+              floatingLabelText="Password"
+              hintText={props.strength + ' password'}
+              value={props.value}
+              onChange={
+                e => props.onChangePassword(e.target.value)
+              }
+              errorText={props.passwordStrengthErrorMessage}
+              errorStyle={STYLES.errorStyle}
+            />
+            <StrengthBar
+              strength={props.strength} value={props.value} />
+          </Block>
           <PasswordField
             style={STYLES.password}
-            floatingLabelText="Password"
-            hintText={props.strength + ' password'}
-            value={props.value}
-            onChange={
-              e => props.onChangePassword(e.target.value)
-            }
-            errorText={props.passwordStrengthErrorMessage}
-          />
-          <StrengthBar strength={props.strength} value={props.value} />
-          <PasswordField
-            style={STYLES.password}
+            underlineDisabledStyle={STYLES.underlineDisabled}
             floatingLabelText="Repeat Password"
             disabled={props.repeatedValueState}
             value={props.repeatedValue}
