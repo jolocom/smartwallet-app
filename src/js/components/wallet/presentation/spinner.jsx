@@ -1,5 +1,4 @@
 import React from 'react'
-import Radium from 'radium'
 
 import {Content, Block, Header} from '../../structure'
 import {
@@ -7,6 +6,10 @@ import {
 } from './ui'
 
 export default class Spinner extends React.Component {
+  static propTypes = {
+    message: React.PropTypes.array,
+    style: React.PropTypes.object
+  }
 
   constructor() {
     super()

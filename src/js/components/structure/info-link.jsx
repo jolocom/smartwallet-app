@@ -7,8 +7,9 @@ import {theme} from 'styles'
 
 const STYLES = {
   container: {
-    fontSize: '13px',
-    color: theme.jolocom.gray1,
+    fontSize: theme.textStyles.textCopy.fontSize,
+    fontWeight: theme.textStyles.textCopy.fontWeight,
+    color: theme.textStyles.textCopy.color,
     marginBottom: '10px'
   },
   link: {

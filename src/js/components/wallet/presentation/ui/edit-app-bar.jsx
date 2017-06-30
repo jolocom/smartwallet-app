@@ -10,9 +10,9 @@ const STYLES = {
     margin: '42px 0 16px 0'
   },
   title: {
-    color: '#fff',
-    fontSize: '24px',
-    fontWeight: '300',
+    color: theme.palette.alternateTextColor,
+    fontSize: theme.textStyles.headline.fontSize,
+    fontWeight: theme.textStyles.headline.fontWeight,
     margin: 0
   },
   bar: {
