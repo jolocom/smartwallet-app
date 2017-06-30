@@ -1,30 +1,23 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {
-  TextField,
-  Divider,
-  List, ListItem,
-  FlatButton,
-  Avatar
-} from 'material-ui'
+import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
 
 import Loading from 'components/common/loading'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-import PersonIcon from 'material-ui/svg-icons/social/person'
 import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
-import Info from 'material-ui/svg-icons/action/info'
-import Cake from 'material-ui/svg-icons/social/cake'
-import Location from 'material-ui/svg-icons/maps/place'
 
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
 import {
   PlusMenu,
-  StaticListItem,
   TabContainer,
-  HalfScreenContainer
+  HalfScreenContainer,
+  ContactList,
+  IdCardsList,
+  PassportsList,
+  InfoDetails
 } from './ui'
 
 const STYLES = {
@@ -39,45 +32,8 @@ const STYLES = {
   labelName: {
     color: theme.textStyles.labelInputFields.color
   },
-  iconName: {
-    fill: theme.palette.accent1Color,
-    position: 'absolute',
-    right: '20px',
-    marginTop: '40px'
-  },
   divider: {
     marginLeft: '16px'
-  },
-  addBtn: {
-    width: '40px',
-    boxShadow: 'none',
-    marginTop: '27px'
-  },
-  infoHeader: {
-    textAlign: 'left'
-  },
-  refresh: {
-    display: 'inline-block',
-    position: 'relative'
-  },
-  floatingLabel: {
-    textAlign: 'center',
-    width: '100%',
-    transformOrigin: 'center top 0px',
-    color: theme.palette.lighterTextColor,
-    paddingTop: '5px',
-    borderTop: '1px solid',
-    borderColor: theme.palette.lighterTextColor
-  },
-  requestBtn: {
-    marginLeft: '-16px'
-  },
-  spinner: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%'
-  },
-  dialog: {
   },
   simpleDialog: {
     contentStyle: {
@@ -91,7 +47,7 @@ const STYLES = {
   }
 }
 
-const iconEmailMessage = (
+const iconEmailMsg = (
   <div>
     <b>Verification</b> <br />
     <br />
@@ -102,302 +58,32 @@ const iconEmailMessage = (
   </div>
 )
 
-const buttonEmailMessage = (
-  <div>
-    <b>Verification</b> <br />
-    <br />
-    <span>
-      We've sent a verification link to this address.
-    </span>
-  </div>
-)
-
-const iconPhoneMessage = (
-  <div>
-    <b>Verification</b> <br />
-    <br />
-    <span>
-      Your number hasn't been verified yet. For verification we will
-      send you a sms with an authentication code to this number. You will need
-      enter that code here.
-    </span>
-  </div>
-)
-
-const PhoneList = (props) => {
-  let display = []
-  let {phones, onConfirm} = props
-  if (!props.phones && !props.phones[0].number) {
-    return null
-  }
-  display.push(phones.map(({verified, number, type}, index) => {
-    let icon
-
-    if (index === 0) {
-      icon = CommunicationCall
-    }
-
-    return (
-      <StaticListItem
-        key={index}
-        verified={verified}
-        textValue={number}
-        textLabel="Phone Number"
-        icon={icon}
-        onVerify={() => onConfirm({
-          message: iconPhoneMessage,
-          style: STYLES.dialog,
-          attrValue: number
-        })}
-        secondaryTextValue={type} />
-    )
-  }))
-
-  return <List disabled>
-    {display}
-  </List>
-}
-
-PhoneList.propTypes = {
-  phones: React.PropTypes.array.isRequired,
-  onConfirm: React.PropTypes.func.isRequired
-}
-
-const PassportList = (props) => {
-  let display = []
-  let {passports} = props
-  if (!props.passports) {
-    return null
-  }
-  display.push(passports.map((passport, index) => {
-    return (
-      <List>
-        <StaticListItem
-          key={'passportnumber' + index}
-          textLabel="passport number"
-          textValue={passport.number}
-        />
-        <StaticListItem
-          key={'surname' + index}
-          icon={PersonIcon}
-          textLabel="Surname"
-          textValue={passport.surname}
-        />
-        <StaticListItem
-          key={'givenName' + index}
-          textLabel="Given Name"
-          textValue={passport.givenName}
-        />
-        <StaticListItem
-          key={'dateofbirth' + index}
-          icon={Cake}
-          textLabel="Date of Birth"
-          textValue={passport.birthDate}
-        />
-        <StaticListItem
-          key={'gender' + index}
-          textLabel="Gender"
-          textValue={passport.gender}
-        />
-      </List>
-    )
-  }))
-  return <List disabled>
-    {display}
-  </List>
-}
-
-PassportList.propTypes = {
-  passports: React.PropTypes.array.isRequired
-}
-
-const IdCardList = (props) => {
-  let display = []
-  let {idCards} = props
-  if (!props.idCards) {
-    return null
-  }
-
-  display.push(idCards.map((idCard, index) => {
-    return (
-      <List>
-        <StaticListItem
-          key={'idCardnumber' + idCard.id}
-          textLabel="ID Card number"
-          textValue={idCard.idCardFields.number}
-        />
-        <StaticListItem
-          key={'expirationDate' + idCard.id}
-          textLabel="Expiration Date"
-          textValue={idCard.idCardFields.expirationDate}
-        />
-        <StaticListItem
-          key={'firstName' + idCard.id}
-          icon={PersonIcon}
-          textLabel="First Name"
-          textValue={idCard.idCardFields.firstName}
-        />
-        <StaticListItem
-          key={'lastName' + idCard.id}
-          textLabel="Last Name"
-          textValue={idCard.idCardFields.lastName}
-        />
-        <StaticListItem
-          key={'gender' + idCard.id}
-          textLabel="Gender"
-          textValue={idCard.idCardFields.gender}
-        />
-        <StaticListItem
-          key={'dateofbirth' + idCard.id}
-          icon={Cake}
-          textLabel="Date of Birth"
-          textValue={idCard.idCardFields.birthDate}
-        />
-        <StaticListItem
-          key={'placeofbirth' + idCard.id}
-          textLabel="Place of Birth"
-          textValue={idCard.idCardFields.birthPlace}
-        />
-        <StaticListItem
-          key={'countryofbirth' + idCard.id}
-          textLabel="Country of Birth"
-          textValue={idCard.idCardFields.birthCountry}
-        />
-        <StaticListItem
-          key={'street' + idCard.id}
-          icon={Location}
-          textLabel="Street"
-          textValue={idCard.idCardFields.physicalAddress.streetWithNumber}
-        />
-        <StaticListItem
-          key={'city' + idCard.id}
-          textLabel="City"
-          textValue={idCard.idCardFields.physicalAddress.city}
-        />
-        <StaticListItem
-          key={'zipCode' + idCard.id}
-          textLabel="Zip Code"
-          textValue={idCard.idCardFields.physicalAddress.zip}
-        />
-        <StaticListItem
-          key={'state' + idCard.id}
-          textLabel="State"
-          textValue={idCard.idCardFields.physicalAddress.state}
-        />
-        <StaticListItem
-          key={'country' + idCard.id}
-          textLabel="Country"
-          textValue={idCard.idCardFields.physicalAddress.country}
-        />
-      </List>
-    )
-  }))
-  return <List disabled>
-    {display}
-  </List>
-}
-
-IdCardList.propTypes = {
-  idCards: React.PropTypes.array.isRequired
-}
-
-const EmailList = (props) => {
-  let display = []
-  let {emails, onVerify, onConfirm} = props
-  if (!emails && !emails[0].address) {
-    return null
-  }
-  display.push(emails.map(({verified, address}, index) => {
-    let icon
-
-    if (index === 0) {
-      icon = CommunicationEmail
-    }
-
-    let verifyButton
-
-    if (!verified) {
-      verifyButton = (
-        <ListItem disabled leftIcon={<div />} style={STYLES.list}>
-          <FlatButton
-            label="Request Verification"
-            secondary
-            style={STYLES.requestBtn}
-            onClick={() => onVerify({
-              message: buttonEmailMessage,
-              buttonText: 'OK',
-              style: STYLES.simpleDialog,
-              attrValue: address
-            })} />
-        </ListItem>
-      )
-    }
-
-    return (
-      <div key={index}>
-        <StaticListItem
-          verified={verified}
-          textValue={address}
-          textLabel="Email"
-          onVerify={() => onConfirm({
-            attrValue: address,
-            message: iconEmailMessage,
-            style: STYLES.dialog
-          })}
-          icon={icon}
-        />
-        {verifyButton}
-      </div>
-    )
-  }))
-
-  return (
-    <List disabled>
-      {display}
-    </List>
-  )
-}
-
-EmailList.propTypes = {
-  emails: React.PropTypes.array.isRequired,
-  onVerify: React.PropTypes.func.isRequired,
-  onConfirm: React.PropTypes.func.isRequired
-}
-
-const InfoDetail = (props) => {
-  let {username, webId, showDetails} = props
-  const personalDetails = <span>
-    <TextField
-      id="usernameField"
-      value={username}
-      errorText="is your username"
-      errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center', marginBottom: '-5px'}}
-      underlineShow={false}
-      fullWidth
-    />
-    <br />
-    <TextField
-      id="webIdField"
-      value={webId}
-      errorText="is your WebID"
-      errorStyle={STYLES.floatingLabel}
-      inputStyle={{textAlign: 'center', marginBottom: '-5px'}}
-      underlineShow={false}
-      fullWidth
-    />
+const buttonEmailMsg = (<div> <br />
+  <b>Verification</b> <br />
+  <br />
+  <span>
+    We've sent a verification link to this address.
   </span>
+</div>)
 
-  return <span onClick={() => showDetails(personalDetails)}>
-    <Info style={STYLES.iconName} />
+const buttonPhoneMsg = (<div>
+  <b>Verification Request</b> <br />
+  <br />
+  Our verification service uses the latest encrypting technology which costs.
+  <span>
+    XXX for each verification
   </span>
-}
+</div>)
 
-InfoDetail.propTypes = {
-  showDetails: React.PropTypes.func.isRequired,
-  username: React.PropTypes.string.isRequired,
-  webId: React.PropTypes.string.isRequired
-}
+const iconPhoneMsg = (<div>
+  <b>Verification</b> <br />
+  <br />
+  <span>
+    Your number hasn't been verified yet. For verification we will
+    send you a sms with an authentication code to this number. You will need
+    enter that code here.
+  </span>
+</div>)
 
 @Radium
 export default class WalletIdentity extends React.Component {
@@ -405,11 +91,13 @@ export default class WalletIdentity extends React.Component {
     children: React.PropTypes.node,
     username: React.PropTypes.object.isRequired,
     passports: React.PropTypes.array,
+    showUserInfo: React.PropTypes.func.isRequired,
     idCards: React.PropTypes.array,
     isLoaded: React.PropTypes.bool.isRequired,
     isError: React.PropTypes.bool.isRequired,
     webId: React.PropTypes.string.isRequired,
-    contact: React.PropTypes.object.isRequired,
+    phones: React.PropTypes.array.isRequired,
+    emails: React.PropTypes.array.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
@@ -424,7 +112,9 @@ export default class WalletIdentity extends React.Component {
       idCards,
       isLoaded,
       webId,
-      contact,
+      showUserInfo,
+      phones,
+      emails,
       goToContactManagement,
       goToPassportManagement,
       goToDrivingLicenceManagement,
@@ -438,112 +128,95 @@ export default class WalletIdentity extends React.Component {
 
     const avatar = (
       <Avatar
-        icon={
-          <CameraIcon
-            viewBox="-3 -3 30 30" />
-          }
+        icon={<CameraIcon viewBox="-3 -3 30 30" />}
         color={theme.jolocom.gray1}
         backgroundColor={theme.jolocom.gray3}
         style={STYLES.avatar} />
     )
-    return (
-      <TabContainer>
-        <HalfScreenContainer>
-          <Content>
-            <Block>
-              <List>
-                <ListItem
-                  key={1}
-                  disabled
-                  rightIcon={
-                    <InfoDetail
-                      showDetails={details => onVerify({
-                        message: details,
-                        buttonText: 'OK',
-                        style: STYLES.simpleDialog,
-                        attrValue: ''
-                      })}
-                      webId={webId}
-                      username={username.value}
-                    />
-                  }
-                  leftAvatar={avatar}
-                  style={STYLES.listItem}>
-                  <TextField
-                    fullWidth
-                    floatingLabelText="Name"
-                    inputStyle={STYLES.inputName}
-                    floatingLabelStyle={STYLES.labelName}
-                    underlineShow={false}
-                    floatingLabelFixed
-                    value={username.value} />
-                </ListItem>
-                <Divider style={STYLES.divider} />
-              </List>
-            </Block>
-            <Block>
-              <PlusMenu
-                name="Contact"
-                choice={contact.emails.length > 0 || contact.phones.length > 0}
-                goToManagement={goToContactManagement}
-              />
-            </Block>
-            {
-              (contact.phones.length || contact.emails.length)
-              ? <Block>
-                <PhoneList
-                  phones={contact.phones}
-                  onConfirm={onConfirm}
-                  onVerify={onVerify} />
-                <EmailList
-                  emails={contact.emails}
-                  onConfirm={onConfirm}
-                  onVerify={onVerify} />
-              </Block>
-              : null
-            }
-            <Block>
-              <PlusMenu
-                name="Passport"
-                choice={passports.length > 0}
-                goToManagement={goToPassportManagement}
-              />
-            </Block>
-            {
-              passports.length
-              ? <Block>
-                <PassportList
-                  passports={passports}
-                />
-              </Block>
-              : null
-            }
-            <Block>
-              <PlusMenu
-                name="ID Card"
-                choice={idCards.length > 0}
-                goToManagement={goToPassportManagement}
-              />
-            </Block>
-            {
-              idCards.length
-              ? <Block>
-                <IdCardList
-                  idCards={idCards}
-                />
-              </Block>
-              : null
-            }
-            <Block>
-              <PlusMenu
-                name="Driving License"
-                choice={false}
-                goToManagement={goToDrivingLicenceManagement}
-              />
-            </Block>
-          </Content>
-        </HalfScreenContainer>
-      </TabContainer>
-    )
+    return (<TabContainer>
+      <HalfScreenContainer>
+        <Content>
+          <Block>
+            <List>
+              <ListItem
+                key={1}
+                disabled
+                rightIcon={<InfoDetails
+                  showDetails={details => showUserInfo(
+                    null,
+                    details,
+                    'OK',
+                    STYLES.simpleDialog
+                  )}
+                  webId={webId}
+                  username={username.value} />
+                }
+                leftAvatar={avatar}
+                style={STYLES.listItem}>
+                <TextField
+                  fullWidth
+                  floatingLabelText="Name"
+                  inputStyle={STYLES.inputName}
+                  floatingLabelStyle={STYLES.labelName}
+                  underlineShow={false}
+                  floatingLabelFixed
+                  value={username.value} />
+              </ListItem>
+              <Divider style={STYLES.divider} />
+            </List>
+          </Block>
+          <Block>
+            <PlusMenu
+              name="Contact"
+              choice={emails.length + phones.length > 0}
+              goToManagement={goToContactManagement} />
+          </Block>
+          <Block>
+            <ContactList
+              fields={phones}
+              onConfirm={onConfirm}
+              onVerify={onVerify}
+              icon={CommunicationCall}
+              labelText="Phone Number"
+              attrType="phone"
+              iconMsg={iconPhoneMsg}
+              buttonMsg={buttonPhoneMsg} />
+            <ContactList
+              fields={emails}
+              onConfirm={onConfirm}
+              onVerify={onVerify}
+              icon={CommunicationEmail}
+              labelText="Email"
+              attrType="email"
+              iconMsg={iconEmailMsg}
+              buttonMsg={buttonEmailMsg} />
+          </Block>
+          <Block>
+            <PlusMenu
+              name="Passport"
+              choice={passports.length > 0}
+              goToManagement={goToPassportManagement} />
+          </Block>
+          <Block>
+            <PassportsList passports={passports} />
+          </Block>
+          <Block>
+            <PlusMenu
+              name="ID Card"
+              choice={idCards.length > 0}
+              goToManagement={goToPassportManagement} />
+          </Block>
+          <Block>
+            <IdCardsList idCards={idCards} />
+          </Block>
+          <Block>
+            <PlusMenu
+              name="Driving License"
+              choice={false}
+              goToManagement={goToDrivingLicenceManagement} />
+          </Block>
+        </Content>
+      </HalfScreenContainer>
+    </TabContainer>)
   }
 }

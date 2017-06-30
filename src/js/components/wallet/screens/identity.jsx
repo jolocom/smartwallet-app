@@ -35,56 +35,69 @@ export default class WalletIdentityScreen extends React.Component {
 
   componentWillMount() {
     this.props.getIdentityInformation()
-    // console.log(this.props.getIdentityInformation())
   }
 
-  onConfirm(message, style) {
+  onConfirm({message, style, attrValue, rightButtonText, leftButtonText}) {
     this.props.openConfirmDialog(
       message,
-      'REQUEST VERIFICATION',
-      this.props.closeConfirmDialog,
-      'OK',
+      rightButtonText,
+      this.props.closeConfirmDialog(),
+      leftButtonText,
       style
     )
   }
 
   render() {
-    const identity = this.props.wallet.identity
-
-    if (identity.error) {
-      return (
-        <WalletError
-          message={
-            '...oops something went wrong!' +
-            'We were not able to load your data.'
-          }
-          buttonLabel="RETRY"
-          onClick={() => this.render()} />
-
-      )
+    const {
+      username,
+      contact,
+      webId,
+      passports,
+      idCards,
+      loaded,
+      error
+    } = this.props.wallet.identity
+    const {emails, phones} = contact
+    if (error) {
+      return (<WalletError
+        message={
+          '...oops something went wrong! We were not able to load your data.'
+        }
+        buttonLabel="RETRY"
+        onClick={() => this.render()} />)
     }
 
-    return (
-      <Presentation
-        username={identity.username}
-        contact={identity.contact}
-        webId={identity.webId}
-        passports={identity.passports}
-        idCards={identity.idCards}
-        isLoaded={identity.loaded}
-        isError={identity.error}
-        goToContactManagement={this.props.goToContactManagement}
-        goToPassportManagement={this.props.goToPassportManagement}
-        goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
-        onConfirm={
-          ({message, style, attrValue}) => this.onConfirm(message, style)}
-        onVerify={({message, buttonText, style, attrValue}) => {
-          this.props.configSimpleDialog(() => {
-            this.props.startEmailConfirmation({email: attrValue})
-          }, message, buttonText, style)
-          this.props.showSimpleDialog()
-        }}
-      />
-    )
+    return (<Presentation
+      username={username}
+      emails={emails}
+      phones={phones}
+      webId={webId}
+      passports={passports}
+      idCards={idCards}
+      isLoaded={loaded}
+      isError={error}
+      goToContactManagement={this.props.goToContactManagement}
+      goToPassportManagement={this.props.goToPassportManagement}
+      goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
+      onConfirm={
+        ({message, style, attrValue, rightButtonText, leftButtonText}) =>
+        this.onConfirm({
+          message,
+          style,
+          attrValue,
+          rightButtonText,
+          leftButtonText
+        })
+      }
+      onVerify={({message, buttonText, style, attrValue}) => {
+        this.props.configSimpleDialog(() => {
+          this.props.startEmailConfirmation({email: attrValue})
+        }, message, buttonText, style)
+        this.props.showSimpleDialog()
+      }}
+      showUserInfo={(...args) => {
+        this.props.configSimpleDialog(...args)
+        this.props.showSimpleDialog()
+      }} />)
   }
 }
