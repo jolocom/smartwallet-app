@@ -5,6 +5,7 @@ export default function setup({store, services}) {
     store.dispatch(setWebId(webId))
   })
   if (services.auth.currentUser) {
-    services.auth.emit('changed', services.auth.currentUser.wallet.webId || null)
+    const webId = services.auth.currentUser.wallet.webId || null
+    services.auth.emit('changed', webId)
   }
 }
