@@ -36,7 +36,9 @@ export default class WalletEther extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     buyEther: React.PropTypes.func,
-    ether: React.PropTypes.object
+    ether: React.PropTypes.object,
+    avatar: React.PropTypes.string,
+    title: React.PropTypes.string
   }
 
   renderLoading() {
@@ -46,7 +48,8 @@ export default class WalletEther extends React.Component {
       <div style={STYLES.noEtherContainer}>
         <Block>
           <Spinner style={STYLES.header} message={messageWait}
-          avatar={'url(/img/img_techguy.svg)'} />
+            title={'Thank you. We are transferring some Ether to your Account.'}
+            avatar={'url(/img/img_techguy.svg)'} />
         </Block>
       </div>
     )

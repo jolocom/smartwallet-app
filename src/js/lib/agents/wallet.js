@@ -27,7 +27,6 @@ export default class WalletAgent {
   }
 
   buyEther({stripeToken, walletAddress}) {
-    console.log('in WALLET agent buyEther', {stripeToken, walletAddress})
     return this._httpAgent.post(
       'https://verification.jolocom.com/ether/buy/ether',
       {stripeToken, walletAddress}

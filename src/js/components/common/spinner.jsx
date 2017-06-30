@@ -1,10 +1,15 @@
 import React from 'react'
-import Radium from 'radium'
 import CircularProgress from 'material-ui/CircularProgress'
 
 import {Content, Block, Header} from '../structure'
 
 export default class Spinner extends React.Component {
+  static propTypes = {
+    message: React.PropTypes.array,
+    style: React.PropTypes.object,
+    avatar: React.PropTypes.string,
+    title: React.PropTypes.string
+  }
 
   constructor() {
     super()
@@ -34,7 +39,7 @@ export default class Spinner extends React.Component {
       <Content>
         <Header
           style={this.props.style}
-          title="Thank you. We are transferring some Ether to your Account."
+          title={this.props.title}
           />
         <Block>
           <div>

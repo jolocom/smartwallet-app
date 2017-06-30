@@ -62,7 +62,7 @@ const Pin = (props) => {
   } else {
     headerTitle = 'Create a PIN for secure login.'
   }
-
+console.log(props.registering)
   if (props.registering) {
     const messageWait = ['Please have some patience...',
       '...we are creating...', '...your jolocom wallet...',
@@ -70,10 +70,10 @@ const Pin = (props) => {
       '...your WebID to your identity']
 
     contents = (
-        <Block>
-          <Spinner style={STYLES.header} message={messageWait}
+      <Block>
+        <Spinner style={STYLES.header} message={messageWait}
           avatar={'url(/img/img_techguy.svg)'} />
-        </Block>
+      </Block>
     )
   } else {
     contents = (
