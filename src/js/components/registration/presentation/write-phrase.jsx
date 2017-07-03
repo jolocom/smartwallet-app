@@ -20,9 +20,9 @@ const STYLES = {
     padding: '8px'
   },
   phrase: {
-    fontSize: '22px',
-    fontWeight: '300',
-    color: '#942f51',
+    color: theme.textStyles.sectionheader.color,
+    fontWeight: theme.textStyles.sectionheader.fontWeight,
+    fontSize: theme.textStyles.sectionheader.fontSize,
     backgroundColor: '#fff'
   },
   sideNoteGreen: {
@@ -35,8 +35,9 @@ const STYLES = {
     margin: 'auto'
   },
   labelStyle: {
-    color: theme.jolocom.gray1,
-    fontSize: '13px',
+    color: theme.textStyles.textCopy.color,
+    fontSize: theme.textStyles.textCopy.fontSize,
+    fontWeight: theme.textStyles.textCopy.fontWeight,
     display: 'inline-block',
     position: 'relative',
     lineHeight: '1.2em',

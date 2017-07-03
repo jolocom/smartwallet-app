@@ -6,20 +6,27 @@ export default class AuthService extends EventEmitter {
     this.backend = backend
     this.currentUser = null
     this.on('changed', user => { this._storeWebId() })
-    this._setCurrentUser({
-      wallet: new (require('../lib/agents/wallet').Wallet)()
-    })
+
+    if (typeof localStorage !== 'undefined') {
+      const savedSession = localStorage.getItem('jolocom.smartWallet')
+      if (savedSession) {
+        this._setCurrentUser({
+          wallet: this.backend.wallet.loginFromSerialized(savedSession)
+        }, {dontSaveSession: true})
+      }
+    }
   }
 
   _storeWebId() {
     localStorage.setItem('jolocom.webId', this.currentUser.wallet.webId)
   }
 
-  _setCurrentUser(user) {
+  _setCurrentUser(user, {dontSaveSession} = {}) {
     this.currentUser = user
+    if (!dontSaveSession) {
+      localStorage.setItem('jolocom.smartWallet', user.wallet.serialize())
+    }
     this.emit('changed', this.currentUser.wallet.webId || null)
-    console.log('setCurrentUser called')
-    console.log('user:', user)
   }
 
   async registerWithSeedPhrase({userName, seedPhrase, pin}) {
