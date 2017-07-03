@@ -58,23 +58,6 @@ const iconEmailMsg = (
   </div>
 )
 
-const buttonEmailMsg = (<div> <br />
-  <b>Verification</b> <br />
-  <br />
-  <span>
-    We've sent a verification link to this address.
-  </span>
-</div>)
-
-const buttonPhoneMsg = (<div>
-  <b>Verification Request</b> <br />
-  <br />
-  Our verification service uses the latest encrypting technology which costs.
-  <span>
-    XXX for each verification
-  </span>
-</div>)
-
 const iconPhoneMsg = (<div>
   <b>Verification</b> <br />
   <br />
@@ -102,11 +85,13 @@ export default class WalletIdentity extends React.Component {
     goToPassportManagement: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
     onConfirm: React.PropTypes.func.isRequired,
+    setFocusedPin: React.PropTypes.func.isRequired,
+    changePinValue: React.PropTypes.func.isRequired,
     onVerify: React.PropTypes.func.isRequired
   }
 
   render() {
-    let {
+    const {
       username,
       passports,
       idCards,
@@ -119,6 +104,8 @@ export default class WalletIdentity extends React.Component {
       goToPassportManagement,
       goToDrivingLicenceManagement,
       onConfirm,
+      changePinValue,
+      setFocusedPin,
       onVerify
     } = this.props
 
@@ -126,13 +113,12 @@ export default class WalletIdentity extends React.Component {
       return <Loading />
     }
 
-    const avatar = (
-      <Avatar
-        icon={<CameraIcon viewBox="-3 -3 30 30" />}
-        color={theme.jolocom.gray1}
-        backgroundColor={theme.jolocom.gray3}
-        style={STYLES.avatar} />
-    )
+    const avatar = (<Avatar
+      icon={<CameraIcon viewBox="-3 -3 30 30" />}
+      color={theme.jolocom.gray1}
+      backgroundColor={theme.jolocom.gray3}
+      style={STYLES.avatar} />)
+
     return (<TabContainer>
       <HalfScreenContainer>
         <Content>
@@ -174,13 +160,14 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <ContactList
               fields={phones}
+              changePinValue={changePinValue}
               onConfirm={onConfirm}
               onVerify={onVerify}
               icon={CommunicationCall}
+              setFocusedPin={setFocusedPin}
               labelText="Phone Number"
               attrType="phone"
-              iconMsg={iconPhoneMsg}
-              buttonMsg={buttonPhoneMsg} />
+              iconMsg={iconPhoneMsg} />
             <ContactList
               fields={emails}
               onConfirm={onConfirm}
@@ -188,8 +175,7 @@ export default class WalletIdentity extends React.Component {
               icon={CommunicationEmail}
               labelText="Email"
               attrType="email"
-              iconMsg={iconEmailMsg}
-              buttonMsg={buttonEmailMsg} />
+              iconMsg={iconEmailMsg} />
           </Block>
           <Block>
             <PlusMenu

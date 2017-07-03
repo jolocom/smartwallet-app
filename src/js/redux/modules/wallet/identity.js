@@ -11,6 +11,12 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  changePinValue: {
+    expectedParams: ['value', 'index']
+  },
+  setFocusedPin: {
+    expectedParams: ['value', 'index']
+  },
   goToPassportManagement: {
     expectedParams: [],
     creator: () => {
@@ -88,7 +94,9 @@ const initialState = Immutable.fromJS({
     phones: [{
       type: '',
       number: '',
-      verified: false
+      verified: false,
+      smsCode: '',
+      pinFocused: false
     }],
     emails: [{
       type: '',
@@ -114,12 +122,30 @@ const initialState = Immutable.fromJS({
   ]
 })
 
+const changePinCodeValue = (state, {index, value}) => {
+  if (/^[0-9]{0,6}$/.test(value)) {
+    return state.mergeIn(['contact', 'phones', index], {
+      smsCode: value
+    })
+  }
+  return state
+}
+
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.getIdentityInformation.id_success:
       return mapBackendToState(action.result)
+
     case actions.getIdentityInformation.id_fail:
       return mapBackendToStateError(state)
+
+    case actions.changePinValue.id:
+      return changePinCodeValue(state, action)
+
+    case actions.setFocusedPin.id:
+      return state.mergeIn(['contact', 'phones', action.index], {
+        pinFocused: action.value
+      })
     default:
       return state
   }
