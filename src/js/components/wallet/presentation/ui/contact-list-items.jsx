@@ -40,7 +40,7 @@ const ContactList = ({
     type = ''
   }, index) => (<div key={address || number}>
     <StaticListItem
-      key={number || address}
+      key={address || number}
       verified={verified}
       textValue={address || number}
       textLabel={labelText}
@@ -61,7 +61,7 @@ const ContactList = ({
       changePinValue={(value) => { changePinValue(value, index) }}
       focused={pinFocused}
       value={number || address}
-      codeIsSent={codeIsSent}
+      codeIsSent={true}
       verified={verified}
       enterCode={onConfirm}
       missingCodeCallBack={onConfirm}
@@ -72,6 +72,7 @@ const ContactList = ({
 
 ContactList.propTypes = {
   iconMsg: React.PropTypes.node,
+  buttonMsg: React.PropTypes.node,
   icon: React.PropTypes.any,
   attrType: React.PropTypes.string.isRequired,
   labelText: React.PropTypes.string.isRequired,
