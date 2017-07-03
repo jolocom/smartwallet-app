@@ -91,7 +91,7 @@ export default class WalletIdentity extends React.Component {
   }
 
   render() {
-    let {
+    const {
       username,
       passports,
       idCards,
@@ -113,13 +113,12 @@ export default class WalletIdentity extends React.Component {
       return <Loading />
     }
 
-    const avatar = (
-      <Avatar
-        icon={<CameraIcon viewBox="-3 -3 30 30" />}
-        color={theme.jolocom.gray1}
-        backgroundColor={theme.jolocom.gray3}
-        style={STYLES.avatar} />
-    )
+    const avatar = (<Avatar
+      icon={<CameraIcon viewBox="-3 -3 30 30" />}
+      color={theme.jolocom.gray1}
+      backgroundColor={theme.jolocom.gray3}
+      style={STYLES.avatar} />)
+
     return (<TabContainer>
       <HalfScreenContainer>
         <Content>
