@@ -176,10 +176,11 @@ const actions = module.exports = makeActions('registration', {
               seedPhrase: state.passphrase.phrase,
               pin: state.pin.value
             }).then(({wallet}) => {
-              console.log('====params====', wallet)
-              backend.accounts.solidRegister(state.username.value,
+              console.log('====wallet====', wallet)
+              return backend.accounts.solidRegister(state.username.value,
                 state.passphrase.phrase, wallet.webIDPrivateKey)
-            }).then(() => {
+            }).then(({webid}) => {
+              console.log(webid)
               dispatch(router.pushRoute('/wallet'))
               return
             })
@@ -190,11 +191,11 @@ const actions = module.exports = makeActions('registration', {
               email: state.email.value,
               password: state.password.value,
               pin: state.pin.value
-            }).then((params) => {
-              console.log('====params====', params)
-              backend.accounts.solidRegister(state.username.value,
-                state.passphrase.phrase, params.wallet.webIDPrivateKey)
-            }).then(() => {
+            }).then(({wallet}) => {
+              console.log('====wallet====', wallet)
+              return backend.accounts.solidRegister(state.username.value,
+                state.passphrase.phrase, wallet.webIDPrivateKey)
+            }).then(({webid}) => {
               dispatch(router.pushRoute('/wallet'))
               return
             })

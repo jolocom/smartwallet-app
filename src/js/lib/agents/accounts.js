@@ -40,9 +40,10 @@ class AccountsAgent {
 
   solidRegister(username, password, privatekey) {
     return this.http.post(`${settings.proxynew}/register`,
-       querystring.stringify({username, password, privatekey}), {
-         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-       }
+       querystring.stringify(
+         {username, password, privatekey, email: 'test@test.com'}), {
+           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+         }
      )
   }
 
@@ -69,6 +70,14 @@ class AccountsAgent {
       }), {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       })
+  }
+
+  solidLogin(username, password, privatekey) {
+    return this.http.post(`${settings.proxynew}/login`,
+       querystring.stringify({username, password, privatekey}), {
+         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+       }
+     )
   }
 
   async loginAndSetup(username, password, email) {
