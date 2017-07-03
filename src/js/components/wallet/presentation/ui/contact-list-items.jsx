@@ -61,7 +61,7 @@ const ContactList = ({
       changePinValue={(value) => { changePinValue(value, index) }}
       focused={pinFocused}
       value={number || address}
-      codeIsSent={true}
+      codeIsSent={codeIsSent}
       verified={verified}
       enterCode={onConfirm}
       missingCodeCallBack={onConfirm}
