@@ -57,7 +57,6 @@ function getCharAt(s, pos) {
 class SmsCodeInput extends React.Component {
   static propTypes = {
     value: React.PropTypes.string.isRequired,
-    disabled: React.PropTypes.bool,
     focused: React.PropTypes.bool.isRequired,
     onChange: React.PropTypes.func,
     onFocusChange: React.PropTypes.func
@@ -133,7 +132,6 @@ class SmsCodeInput extends React.Component {
         }} />
       }
       </div>
-
       <div>
         <input style={STYLES.numberInput}
           type="number"
