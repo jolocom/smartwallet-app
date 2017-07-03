@@ -1,13 +1,13 @@
 import {expect} from 'chai'
 import AuthService from './auth'
-import {Wallet} from '../lib/agents/wallet'
+// import {Wallet} from '../lib/agents/wallet'
 import {stub} from '../../../test/utils'
 
 describe('#AuthService', () => {
   describe('General Instance Properties', () => {
-    it('should set currentUser.wallet to a Wallet Instance', () => {
+    it('should set currentUser null on init', () => {
       const auth = new AuthService()
-      expect(auth.currentUser.wallet).to.be.instanceof(Wallet)
+      expect(auth.currentUser).to.be.null
     })
   })
   describe('registerWithSeedPhrase', () => {
