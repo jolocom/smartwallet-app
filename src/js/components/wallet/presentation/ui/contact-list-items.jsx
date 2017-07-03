@@ -60,7 +60,7 @@ const ContactList = ({
       setFocusedPin={(value) => { setFocusedPin(value, index) }}
       changePinValue={(value) => { changePinValue(value, index) }}
       focused={pinFocused}
-      value={number || address}
+      value={address || number}
       codeIsSent={codeIsSent}
       verified={verified}
       enterCode={onConfirm}

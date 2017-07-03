@@ -3,36 +3,28 @@ import Radium from 'radium'
 import { theme } from 'styles'
 
 const STYLES = {
-  inputBall: {
-    position: 'relative',
-    display: 'inline-block',
-    verticalAlign: 'center',
-    color: theme.palette.alternateTextColor,
-    margin: '0 3px',
-    width: '48px',
-    height: '48px',
-    borderRadius: '24px',
-    backgroundColor: theme.palette.disabledColor,
-    lineHeight: '48px',
-    textAlign: 'center'
-  },
   focusedBall: {
     backgroundColor: theme.palette.primary1Color
   },
   filledBall: {
     backgroundColor: theme.palette.textColor
   },
+  inputBall: {
+    color: theme.palette.alternateTextColor,
+    margin: '0 3px',
+    display: 'inline-block',
+    width: '48px',
+    height: '48px',
+    verticalAlign: 'center',
+    backgroundColor: theme.palette.disabledColor,
+    position: 'relative',
+    lineHeight: '48px',
+    borderRadius: '24px',
+    textAlign: 'center'
+  },
   numberInput: {
     position: 'absolute',
     left: '-50000px'
-  },
-  clear: {
-    display: 'inline-block',
-    verticalAlign: 'center',
-    position: 'absolute',
-    height: '48px',
-    width: '48px',
-    cursor: 'pointer'
   },
   img: {
     userSelect: 'none',
@@ -43,16 +35,19 @@ const STYLES = {
     backgroundSize: 'contain',
     width: '24px',
     height: '24px'
+  },
+  clear: {
+    display: 'inline-block',
+    verticalAlign: 'center',
+    position: 'absolute',
+    height: '48px',
+    width: '48px',
+    cursor: 'pointer'
   }
 }
 
-function getCharAt(s, pos) {
-  if (!s || pos >= s.length) {
-    return (<span>&nbsp;</span>)
-  }
-
-  return s.charAt(pos)
-}
+const getCharAt = (str, pos) => (!str || pos >= str.length)
+  ? (<span>&nbsp;</span>) : str.charAt(pos)
 
 class SmsCodeInput extends React.Component {
   static propTypes = {
@@ -103,6 +98,7 @@ class SmsCodeInput extends React.Component {
     this.props.onFocusChange(focused)
     this.setState({focused})
   }
+
   componentWillUpdate({focused}) {
     if (focused) {
       this.refs.input.focus()
