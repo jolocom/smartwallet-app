@@ -63,7 +63,11 @@ const rdfHelper = {
       g.add(ownerUrl, PRED.address, addrBNode)
 
       // Owner address info
-      g.add(addrBNode, PRED.street, entryValue.physicalAddress.streetWithNumber.value)
+      g.add(
+        addrBNode,
+        PRED.street,
+        entryValue.physicalAddress.streetWithNumber.value
+      )
       g.add(addrBNode, PRED.zip, entryValue.physicalAddress.zip.value)
       g.add(addrBNode, PRED.city, entryValue.physicalAddress.city.value)
       g.add(addrBNode, PRED.state, entryValue.physicalAddress.state.value)
