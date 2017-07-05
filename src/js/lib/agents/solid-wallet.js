@@ -49,25 +49,25 @@ const rdfHelper = {
 
       // Id card info
       g.add(subj, PRED.type, PRED.idCard)
-      g.add(subj, PRED.identifier, entryValue.number)
-      g.add(subj, PRED.expiresBy, entryValue.expirationDate)
+      g.add(subj, PRED.identifier, entryValue.number.value)
+      g.add(subj, PRED.expiresBy, entryValue.expirationDate.value)
       g.add(subj, PRED.ownedBy, ownerUrl)
 
       // Owner info
-      g.add(ownerUrl, PRED.givenName, entryValue.firstName)
-      g.add(ownerUrl, PRED.familyName, entryValue.lastName)
+      g.add(ownerUrl, PRED.givenName, entryValue.firstName.value)
+      g.add(ownerUrl, PRED.familyName, entryValue.lastName.value)
       g.add(ownerUrl, PRED.gender, gender)
-      g.add(ownerUrl, PRED.birthDate, entryValue.birthDate)
-      g.add(ownerUrl, PRED.birthPlace, entryValue.birthPlace)
-      g.add(ownerUrl, PRED.countryOfBirth, entryValue.birthCountry)
+      g.add(ownerUrl, PRED.birthDate, entryValue.birthDate.value)
+      g.add(ownerUrl, PRED.birthPlace, entryValue.birthPlace.value)
+      g.add(ownerUrl, PRED.countryOfBirth, entryValue.birthCountry.value)
       g.add(ownerUrl, PRED.address, addrBNode)
 
       // Owner address info
-      g.add(addrBNode, PRED.street, entryValue.physicalAddress.streetWithNumber)
-      g.add(addrBNode, PRED.zip, entryValue.physicalAddress.zip)
-      g.add(addrBNode, PRED.city, entryValue.physicalAddress.city)
-      g.add(addrBNode, PRED.state, entryValue.physicalAddress.state)
-      g.add(addrBNode, PRED.country, entryValue.physicalAddress.country)
+      g.add(addrBNode, PRED.street, entryValue.physicalAddress.streetWithNumber.value)
+      g.add(addrBNode, PRED.zip, entryValue.physicalAddress.zip.value)
+      g.add(addrBNode, PRED.city, entryValue.physicalAddress.city.value)
+      g.add(addrBNode, PRED.state, entryValue.physicalAddress.state.value)
+      g.add(addrBNode, PRED.country, entryValue.physicalAddress.country.value)
     }
 
     return rdf.serialize(undefined, g, entryFileUrl, 'text/turtle')
@@ -213,7 +213,6 @@ export default class SolidAgent {
         propertyData.push(tmp)
       }
     }
-
     return propertyData
   }
 
