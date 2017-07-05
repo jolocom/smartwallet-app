@@ -412,7 +412,7 @@ em:owner
     })
   })
 
-  describe('#setIdCard', () => { 
+  describe('#setIdCard', () => {
     const idCardEntryUrl = 'https://test.com/profile/idCard123'
     const idCardEntryAclUrl = 'https://test.com/profile/idCard123.acl'
     const idCardEntryBody = `\
@@ -539,7 +539,7 @@ idC:owner
       firstName: { value: 'Annika' },
       lastName: { value: 'Hamman' },
       gender: { value: 'female' },
-      birthDate:{ value: '1.1.88' },
+      birthDate: { value: '1.1.88' },
       birthPlace: { value: 'Wien' },
       birthCountry: { value: 'Austria' },
       physicalAddress: {
