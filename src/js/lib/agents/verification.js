@@ -41,9 +41,14 @@ export default class VerificationAgent {
   }
 
   async _verify({contractID, dataType, data, code}) {
+    const dataKey = getDataKey({dataType, data})
+    const stored = localStorage.getItem(dataKey)
+    const storedData = JSON.parse(stored)
+    const {salt, txHash} = storedData
+
     await this.httpAgent.post(
       settings.verificationProvider + `/${dataType}/verify`,
-      {contractID, [dataType]: data, code}
+      {contractID, txHash, salt, [dataType]: data, code}
     )
 
     localStorage.deleteItem(getDataKey({dataType, data}))

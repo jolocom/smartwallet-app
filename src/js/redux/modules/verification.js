@@ -92,9 +92,9 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.confirmPhone.id_success:
+    case actions.confirmEmail.id_success:
       return confirmSuccess(state)
-    case actions.confirmPhone.id_fail:
+    case actions.confirmEmail.id_fail:
       return confirmFail(state)
     default:
       return state
