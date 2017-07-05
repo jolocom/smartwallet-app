@@ -3,28 +3,30 @@ import { makeActions } from './'
 
 export const actions = module.exports = makeActions('verification', {
   startEmailVerification: {
-    expectedParams: ['email'],
+    expectedParams: ['email', 'pin'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startEmailVerification.buildAction(params, (backend) => {
           return backend.verification.startVerifyingEmail({
             wallet: services.auth.currentUser.wallet,
-            email: params.email
+            email: params.email,
+            pin: params.pin
           })
         }))
       }
     }
   },
   startPhoneVerification: {
-    expectedParams: ['phone'],
+    expectedParams: ['phone', 'pin'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params, (backend) => {
           return backend.verification.startVerifyingPhone({
             wallet: services.auth.currentUser.wallet,
-            phone: params.phone
+            phone: params.phone,
+            pin: params.pin
           })
         }))
       }
