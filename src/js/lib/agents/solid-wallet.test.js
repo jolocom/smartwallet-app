@@ -412,7 +412,7 @@ em:owner
     })
   })
 
-  describe('#setIdCard', () => {
+  describe('#setIdCard', () => { 
     const idCardEntryUrl = 'https://test.com/profile/idCard123'
     const idCardEntryAclUrl = 'https://test.com/profile/idCard123.acl'
     const idCardEntryBody = `\
@@ -534,20 +534,20 @@ idC:owner
 
     solidAgent.http = mockHttpAgent
     solidAgent.setIdCard(WEBID, {
-      number: '12312421',
-      expirationDate: '1.1.18',
-      firstName: 'Annika',
-      lastName: 'Hamman',
-      gender: 'female',
-      birthDate: '1.1.88',
-      birthPlace: 'Wien',
-      birthCountry: 'Austria',
+      number: { value: '12312421' },
+      expirationDate: { value: '1.1.18' },
+      firstName: { value: 'Annika' },
+      lastName: { value: 'Hamman' },
+      gender: { value: 'female' },
+      birthDate:{ value: '1.1.88' },
+      birthPlace: { value: 'Wien' },
+      birthCountry: { value: 'Austria' },
       physicalAddress: {
-        streetWithNumber: 'Waldemarstr. 97a',
-        zip: '1234',
-        city: 'Berlin',
-        state: 'Berlin',
-        country: 'Germany'
+        streetWithNumber: { value: 'Waldemarstr. 97a' },
+        zip: { value: '1234' },
+        city: { value: 'Berlin' },
+        state: { value: 'Berlin' },
+        country: { value: 'Germany' }
       }
     })
 
