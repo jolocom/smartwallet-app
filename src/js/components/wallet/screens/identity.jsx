@@ -7,6 +7,8 @@ import WalletError from '../presentation/error'
   props: ['wallet'],
   actions: [
     'wallet/identity:getIdentityInformation',
+    'wallet/identity:changePinValue',
+    'wallet/identity:setFocusedPin',
     'wallet/identity:goToPassportManagement',
     'wallet/identity:goToDrivingLicenceManagement',
     'wallet/identity:goToContactManagement',
@@ -14,8 +16,10 @@ import WalletError from '../presentation/error'
     'confirmation-dialog:closeConfirmDialog',
     'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
-    'email-confirmation:startEmailVerification',
-    'email-confirmation:startPhoneVerification'
+    'verification:confirmEmail',
+    'verification:confirmPhone',
+    'verification:startEmailVerification',
+    'verification:startPhoneVerification'
   ]
 })
 
@@ -24,6 +28,7 @@ export default class WalletIdentityScreen extends React.Component {
     children: React.PropTypes.node,
     wallet: React.PropTypes.object,
     goToPassportManagement: React.PropTypes.func.isRequired,
+    setFocusedPin: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     closeConfirmDialog: React.PropTypes.func.isRequired,
@@ -31,66 +36,129 @@ export default class WalletIdentityScreen extends React.Component {
     getIdentityInformation: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
+    startPhoneVerification: React.PropTypes.func.isRequired,
     startEmailVerification: React.PropTypes.func.isRequired,
-    startPhoneVerification: React.PropTypes.func.isRequired
+    confirmEmail: React.PropTypes.func.isRequired,
+    confirmPhone: React.PropTypes.func.isRequired,
+    resendVerificationLink: React.PropTypes.func,
+    resendVerificationSms: React.PropTypes.func,
+    changePinValue: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
     this.props.getIdentityInformation()
-    // console.log(this.props.getIdentityInformation())
   }
 
-  onConfirm(message, style) {
+  onConfirm({message, style, attrValue, rightButtonText, leftButtonText}) {
     this.props.openConfirmDialog(
       message,
-      'REQUEST VERIFICATION',
-      this.props.closeConfirmDialog,
-      'OK',
+      rightButtonText,
+      this.props.closeConfirmDialog(),
+      leftButtonText,
       style
     )
   }
 
   render() {
-    const identity = this.props.wallet.identity
-
-    if (identity.error) {
-      return (
-        <WalletError
-          message={
-            '...oops something went wrong!' +
-            'We were not able to load your data.'
-          }
-          buttonLabel="RETRY"
-          onClick={() => this.render()} />
-
-      )
+    const requestVerificationCode = {
+      phone: ({attrValue, index}) => {
+        this.props.startPhoneVerification({phone: attrValue, index})
+      },
+      email: ({attrValue, index}) => {
+        this.props.startEmailVerification({email: attrValue, index})
+      }
     }
 
-    return (
-      <Presentation
-        username={identity.username}
-        contact={identity.contact}
-        webId={identity.webId}
-        passports={identity.passports}
-        idCards={identity.idCards}
-        isLoaded={identity.loaded}
-        isError={identity.error}
-        goToContactManagement={this.props.goToContactManagement}
-        goToPassportManagement={this.props.goToPassportManagement}
-        goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
-        onConfirm={
-          ({message, style, attrValue}) => this.onConfirm(message, style)}
-        onVerify={({message, buttonText, style, attrType, attrValue}) => {
-          this.props.configSimpleDialog(() => {
-            if (attrType === 'email') {
-              this.props.startEmailVerification({email: attrValue})
-            } else if (attrType === 'phone') {
-              this.props.startPhoneVerification({email: attrValue})
-            }
-          }, message, buttonText, style)
-          this.props.showSimpleDialog()
-        }}
-      />
-    )
+    const resendVerificationCode = {
+      email: ({attrValue, attrType, index}) => {
+        this.props.resendVerificationLink({attrValue, attrType, index})
+      },
+      phone: ({attrValue, attrType, index}) => {
+        this.props.resendVerificationSms({attrValue, attrType, index})
+      }
+    }
+
+    const enterVerificationCode = {
+      phone: ({attrValue, attrType, index}) => {
+        this.props.resendVerificationSms({attrValue, attrType, index})
+      },
+      email: ({attrValue, attrType, index}) => {
+        this.props.resendVerificationSms({attrValue, attrType, index})
+      }
+    }
+    const {username, contact, webId, passports, idCards, loaded, error
+    } = this.props.wallet.identity
+    if (error) {
+      return (<WalletError
+        message="...oops something went wrong! We were not able to load your data." // eslint-disable-line max-len
+        buttonLabel="RETRY"
+        onClick={() => this.render()} />)
+    }
+    const {emails, phones} = contact
+
+    return (<Presentation
+      username={username}
+      emails={emails}
+      phones={phones}
+      webId={webId}
+      passports={passports}
+      idCards={idCards}
+      isLoaded={loaded}
+      isError={error}
+      setFocusedPin={this.props.setFocusedPin}
+      changePinValue={this.props.changePinValue}
+      goToContactManagement={this.props.goToContactManagement}
+      goToPassportManagement={this.props.goToPassportManagement}
+      goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
+      requestVerificationCode={({message, style, attrValue, attrType, index, rightButtonText, leftButtonText}) => this.props.openConfirmDialog(// eslint-disable-line max-len
+        message,
+        rightButtonText,
+        () => requestVerificationCode[attrType]({attrValue, index}),
+        leftButtonText,
+        style
+      )}
+      resendVerificationCode={
+        ({message, style, attrValue, attrType, index, rightButtonText, leftButtonText}) => // eslint-disable-line max-len
+          this.props.openConfirmDialog(
+            message,
+            style,
+            () => resendVerificationCode[attrType]({attrValue, index}),
+            rightButtonText,
+            leftButtonText
+          )}
+      enterVerificationCode={
+        ({message, style, attrValue, attrType, index, rightButtonText, leftButtonText}) => // eslint-disable-line max-len
+        this.props.openConfirmDialog(
+          message,
+          style,
+          () => enterVerificationCode[attrType]({attrValue, attrType, index}),
+          rightButtonText,
+          leftButtonText
+        )}
+      onConfirm={({message, style, rightButtonText, leftButtonText}) => {
+        this.props.openConfirmDialog(
+          message,
+          style,
+          this.props.closeConfirmDialog,
+          rightButtonText,
+          leftButtonText
+        )
+      }}
+      showUserInfo={(...args) => {
+        this.props.configSimpleDialog(...args)
+        this.props.showSimpleDialog()
+      }} />)
   }
+
+  // showVerificationWindow({message, style, attrValue,
+  //  attrType, index, rightButtonText, leftButtonText}, callback) {
+  // eslint-disable-line max-len
+  //   this.props.openConfirmDialog(
+  //     message,
+  //     style,
+  //     () => callback[attrType]({attrValue, attrType, index}),
+  //     rightButtonText,
+  //     leftButtonText
+  //   )}
+  // }
 }

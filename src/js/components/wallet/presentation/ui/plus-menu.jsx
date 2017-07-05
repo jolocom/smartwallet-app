@@ -26,7 +26,9 @@ const STYLES = {
   },
   infoHeader: {
     textAlign: 'left',
-    color: theme.palette.textColor,
+    color: theme.textStyles.sectionheader.color,
+    fontSize: theme.textStyles.sectionheader.fontSize,
+    fontWeight: theme.textStyles.sectionheader.fontWeight,
     marginBottom: '15px',
     display: 'inline-block'
   },

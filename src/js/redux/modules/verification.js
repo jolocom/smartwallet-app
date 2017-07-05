@@ -7,7 +7,8 @@ export const actions = module.exports = makeActions('verification', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        dispatch(actions.startEmailVerification.buildAction(params, (backend) => {
+        dispatch(actions.startEmailVerification.buildAction(params,
+        (backend) => {
           return backend.verification.startVerifyingEmail({
             wallet: services.auth.currentUser.wallet,
             email: params.email,
@@ -22,7 +23,8 @@ export const actions = module.exports = makeActions('verification', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        dispatch(actions.startPhoneVerification.buildAction(params, (backend) => {
+        dispatch(actions.startPhoneVerification.buildAction(params,
+        (backend) => {
           return backend.verification.startVerifyingPhone({
             wallet: services.auth.currentUser.wallet,
             phone: params.phone,
@@ -90,9 +92,9 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.confirm.id_success:
+    case actions.confirmPhone.id_success:
       return confirmSuccess(state)
-    case actions.confirm.id_fail:
+    case actions.confirmPhone.id_fail:
       return confirmFail(state)
     default:
       return state

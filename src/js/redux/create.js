@@ -12,6 +12,11 @@ export default function createStore(history, client, data) {
   const backend = new Backend()
   const services = createServices(backend)
   window.services = services
+
+  if (window) {
+    window.dev = {backend, services}
+  }
+
   const middleware = [
     backendMiddleware(backend, services),
     reduxRouterMiddleware
