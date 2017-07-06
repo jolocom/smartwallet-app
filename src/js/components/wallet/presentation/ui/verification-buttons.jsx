@@ -22,7 +22,7 @@ const STYLES = {
 
 const VerificationButtons = ({
     buttonMsg,
-    value,
+    value = 'value',
     codeIsSent = false,
     verified,
     requestVerificationCode,
@@ -50,8 +50,8 @@ const VerificationButtons = ({
             setFocusedPin={(value) => { setFocusedPin(value, index) }}
             changePinValue={(value) => { changePinValue(value, index) }}
             focused={pinFocused} />),
-          rightButtonText: 'OK',
-          leftButtonText: 'CANCEL',
+          rightButtonLabel: 'OK',
+          leftButtonLabel: 'CANCEL',
           attrType,
           index,
           style: STYLES.simpleDialog,
@@ -74,8 +74,8 @@ const VerificationButtons = ({
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
               changePinValue={(value) => { changePinValue(value, index) }}
               focused={pinFocused} />),
-            rightButtonText: 'OK',
-            leftButtonText: 'CANCEL',
+            rightButtonLabel: 'OK',
+            leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
             attrType,
             index,
@@ -95,8 +95,8 @@ const VerificationButtons = ({
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
               changePinValue={(value) => { changePinValue(value, index) }}
               focused={pinFocused} />),
-            rightButtonText: 'OK',
-            leftButtonText: 'CANCEL',
+            rightButtonLabel: 'OK',
+            leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
             index,
             attrType,
@@ -115,15 +115,15 @@ const VerificationButtons = ({
           msgType="codeRequest"
           value={smsCode}
           phoneNumber={value}
-          setFocusedPin={(value) => { setFocusedPin(value, index) }}
-          changePinValue={(value) => { changePinValue(value, index) }}
+          setFocusedPin={() => {}}
+          changePinValue={() => {}}
           focused={pinFocused} />),
-        rightButtonText: 'OK',
-        leftButtonText: 'CANCEL',
+        rightButtonLabel: 'OK',
+        leftButtonLabel: 'CANCEL',
         style: STYLES.simpleDialog,
         attrType,
         index,
-        attrValue: value
+        attrValue: 'value'
       })} />
   </ListItem>)
 }

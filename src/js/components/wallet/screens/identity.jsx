@@ -49,43 +49,7 @@ export default class WalletIdentityScreen extends React.Component {
     this.props.getIdentityInformation()
   }
 
-  onConfirm({message, style, attrValue, rightButtonText, leftButtonText}) {
-    this.props.openConfirmDialog(
-      message,
-      rightButtonText,
-      this.props.closeConfirmDialog(),
-      leftButtonText,
-      style
-    )
-  }
-
   render() {
-    const requestVerificationCode = {
-      phone: ({attrValue, index}) => {
-        this.props.startPhoneVerification({phone: attrValue, index})
-      },
-      email: ({attrValue, index}) => {
-        this.props.startEmailVerification({email: attrValue, index})
-      }
-    }
-
-    const resendVerificationCode = {
-      email: ({attrValue, attrType, index}) => {
-        this.props.resendVerificationLink({attrValue, attrType, index})
-      },
-      phone: ({attrValue, attrType, index}) => {
-        this.props.resendVerificationSms({attrValue, attrType, index})
-      }
-    }
-
-    const enterVerificationCode = {
-      phone: ({attrValue, attrType, index}) => {
-        this.props.resendVerificationSms({attrValue, attrType, index})
-      },
-      email: ({attrValue, attrType, index}) => {
-        this.props.resendVerificationSms({attrValue, attrType, index})
-      }
-    }
     const {username, contact, webId, passports, idCards, loaded, error
     } = this.props.wallet.identity
     if (error) {
@@ -110,55 +74,54 @@ export default class WalletIdentityScreen extends React.Component {
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
-      requestVerificationCode={({message, style, attrValue, attrType, index, rightButtonText, leftButtonText}) => this.props.openConfirmDialog(// eslint-disable-line max-len
-        message,
-        rightButtonText,
-        () => requestVerificationCode[attrType]({attrValue, index}),
-        leftButtonText,
-        style
+      requestVerificationCode={(...args) => this.showVerificationWindow(...args,
+        (...params) => this.requestVerificationCode(...params)
       )}
-      resendVerificationCode={
-        ({message, style, attrValue, attrType, index, rightButtonText, leftButtonText}) => // eslint-disable-line max-len
-          this.props.openConfirmDialog(
-            message,
-            style,
-            () => resendVerificationCode[attrType]({attrValue, index}),
-            rightButtonText,
-            leftButtonText
-          )}
-      enterVerificationCode={
-        ({message, style, attrValue, attrType, index, rightButtonText, leftButtonText}) => // eslint-disable-line max-len
-        this.props.openConfirmDialog(
-          message,
-          style,
-          () => enterVerificationCode[attrType]({attrValue, attrType, index}),
-          rightButtonText,
-          leftButtonText
-        )}
-      onConfirm={({message, style, rightButtonText, leftButtonText}) => {
-        this.props.openConfirmDialog(
-          message,
-          style,
-          this.props.closeConfirmDialog,
-          rightButtonText,
-          leftButtonText
-        )
-      }}
+      resendVerificationCode={(...args) => this.showVerificationWindow(...args,
+        (...params) => this.resendVerificationCode(...params)
+      )}
+      enterVerificationCode={(...args) => this.showVerificationWindow(...args,
+        (...params) => this.enterVerificationCode(...params)
+      )}
+      onConfirm={(...args) => this.showVerificationWindow(...args,
+        (...params) => this.requestVerificationCode(...params)
+      )}
       showUserInfo={(...args) => {
         this.props.configSimpleDialog(...args)
         this.props.showSimpleDialog()
       }} />)
   }
 
-  // showVerificationWindow({message, style, attrValue,
-  //  attrType, index, rightButtonText, leftButtonText}, callback) {
-  // eslint-disable-line max-len
-  //   this.props.openConfirmDialog(
-  //     message,
-  //     style,
-  //     () => callback[attrType]({attrValue, attrType, index}),
-  //     rightButtonText,
-  //     leftButtonText
-  //   )}
-  // }
+  requestVerificationCode({attrType, attrValue, index}) {
+    if (attrType === 'phone') {
+      return () => this.props.startPhoneVerification({phone: attrValue, index})
+    } else if (attrType === 'email') {
+      return () => this.props.startEmailVerification({email: attrValue, index})
+    }
+  }
+
+  resendVerificationCode({attrType, attrValue, index}) {
+    if (attrType === 'phone') {
+      return () => this.props.resendVerificationLink({phone: attrValue, index})
+    } else if (attrType === 'email') {
+      return () => this.props.resendVerificationSms({email: attrValue, index})
+    }
+  }
+
+  enterVerificationCode({attrType, attrValue = 'attrValue'}) {
+    if (attrType === 'phone') {
+      return () => this.props.confirmPhone({phone: attrValue})
+    } else if (attrType === 'email') {
+      return () => this.props.confirmEmail({email: attrValue})
+    }
+  }
+
+  showVerificationWindow({message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
+    return this.props.openConfirmDialog(
+      message,
+      rightButtonLabel,
+      callback({attrValue, attrType, index}),
+      leftButtonLabel
+    )
+  }
 }

@@ -51,10 +51,13 @@ const ContactList = ({
         textLabel={labelText}
         icon={index === 0 ? icon : null}
         onVerify={() => onConfirm({
-          rightButtonText: 'REQUEST VERIFICATION',
-          leftButtonText: 'CANCEL',
+          rightButtonLabel: 'REQUEST VERIFICATION',
+          leftButtonLabel: 'CANCEL',
           message: iconMsg,
-          style: {}
+          style: STYLES.simpleDialog,
+          attrValue,
+          attrType,
+          index
         })}
         secondaryTextValue={type} />
       <VerificationButtons
@@ -67,7 +70,7 @@ const ContactList = ({
         setFocusedPin={(value) => { setFocusedPin(value, index) }}
         changePinValue={(value) => { changePinValue(value, index) }}
         focused={pinFocused}
-        value={attrValue}
+        value={'attrValue'}
         codeIsSent={codeIsSent}
         verified={verified} />
     </div>)

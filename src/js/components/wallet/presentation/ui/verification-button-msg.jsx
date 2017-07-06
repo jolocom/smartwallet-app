@@ -5,22 +5,22 @@ import { SmsInputMsg } from './'
 
 const VerificationButtonMsg = ({
     msgType,
-    smsCode,
+    smsCode = '',
     phoneNumber,
     index,
-    pinFocused,
+    pinFocused = false,
     setFocusedPin,
     changePinValue
   }) => {
   switch (msgType) {
     case 'codeInput':
       return <SmsInputMsg
-        value={smsCode || ''}
+        value={smsCode}
         disabled={false}
         phoneNumber={phoneNumber}
         setFocusedPin={setFocusedPin}
         changePinValue={changePinValue}
-        focused={pinFocused || false} />
+        focused={pinFocused} />
 
     case 'codeResent':
       return <SmsInputMsg />
