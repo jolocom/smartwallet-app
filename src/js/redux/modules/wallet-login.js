@@ -33,14 +33,11 @@ const actions = module.exports = makeActions('wallet-login', {
   },
   submitPassphrase: {
     expectedParams: ['value'],
-    async: true,
     creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
-          dispatch(
-            router.pushRoute('/login/pin-entry')
-          )
-        }))
+      return (dispatch, getState) => {    
+        dispatch(
+          router.pushRoute('/login/pin-entry')
+        )
       }
     }
   },
