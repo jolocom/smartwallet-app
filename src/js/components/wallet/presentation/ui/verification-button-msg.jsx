@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import { SmsInputMsg } from './'
+import { InputMsg } from './'
 
 const VerificationButtonMsg = ({
     msgType,
@@ -14,16 +14,27 @@ const VerificationButtonMsg = ({
   }) => {
   switch (msgType) {
     case 'codeInput':
-      return <SmsInputMsg
+      return <InputMsg
         value={smsCode}
         disabled={false}
+        pinLength={6}
+        phoneNumber={phoneNumber}
+        setFocusedPin={setFocusedPin}
+        changePinValue={changePinValue}
+        focused={pinFocused} />
+
+    case 'pinInput':
+      return <InputMsg
+        value={smsCode}
+        disabled={false}
+        pinLength={4}
         phoneNumber={phoneNumber}
         setFocusedPin={setFocusedPin}
         changePinValue={changePinValue}
         focused={pinFocused} />
 
     case 'codeResent':
-      return <SmsInputMsg />
+      return <InputMsg />
 
     case 'codeRequest':
       return (<div>

@@ -7,6 +7,7 @@ import WalletError from '../presentation/error'
   props: ['wallet'],
   actions: [
     'wallet/identity:getIdentityInformation',
+    'wallet/identity:changeSmsCodeValue',
     'wallet/identity:changePinValue',
     'wallet/identity:setFocusedPin',
     'wallet/identity:goToPassportManagement',
@@ -42,7 +43,8 @@ export default class WalletIdentityScreen extends React.Component {
     confirmPhone: React.PropTypes.func.isRequired,
     resendVerificationLink: React.PropTypes.func,
     resendVerificationSms: React.PropTypes.func,
-    changePinValue: React.PropTypes.func.isRequired
+    changePinValue: React.PropTypes.func.isRequired,
+    changeSmsCodeValue: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -74,22 +76,28 @@ export default class WalletIdentityScreen extends React.Component {
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
-      requestVerificationCode={(...args) => this.showVerificationWindow(...args,
-        (...params) => this.requestVerificationCode(...params)
-      )}
+      requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
+        return () => this.showVerificationWindow(params,
+          (callbackArgs) => this.requestVerificationCode(callbackArgs))
+      })}
       resendVerificationCode={(...args) => this.showVerificationWindow(...args,
         (...params) => this.resendVerificationCode(...params)
       )}
       enterVerificationCode={(...args) => this.showVerificationWindow(...args,
         (...params) => this.enterVerificationCode(...params)
       )}
-      onConfirm={(...args) => this.showVerificationWindow(...args,
-        (...params) => this.requestVerificationCode(...params)
-      )}
+      onConfirm={(...args) => { this.onConfirm(...args) }}
       showUserInfo={(...args) => {
         this.props.configSimpleDialog(...args)
         this.props.showSimpleDialog()
       }} />)
+  }
+
+  onConfirm(args, params) {
+    return this.showVerificationWindow(args, () => {
+      return () => this.showVerificationWindow(params,
+      (callbackArgs) => this.requestVerificationCode(callbackArgs))
+    })
   }
 
   requestVerificationCode({attrType, attrValue, index}) {

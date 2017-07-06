@@ -19,16 +19,17 @@ export const actions = module.exports = makeActions('verification', {
     }
   },
   startPhoneVerification: {
-    expectedParams: ['phone', 'pin'],
+    expectedParams: ['phone', 'index'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params,
         (backend) => {
+          const { pin } = getState().toJS().wallet.identity.contact.phones[params.index]
           return backend.verification.startVerifyingPhone({
             wallet: services.auth.currentUser.wallet,
             phone: params.phone,
-            pin: params.pin
+            pin
           })
         }))
       }
