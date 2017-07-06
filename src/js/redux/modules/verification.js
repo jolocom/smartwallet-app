@@ -34,7 +34,6 @@ export const actions = module.exports = makeActions('verification', {
       }
     }
   },
-
   confirmEmail: {
     expectedParams: ['email', 'code'],
     async: true,
@@ -75,6 +74,20 @@ export const actions = module.exports = makeActions('verification', {
           })
         }))
       }
+    }
+  },
+  resendVerificationLink: {
+    expectedParams: ['email', 'code'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {}
+    }
+  },
+  resendVerificationCode: {
+    expectedParams: ['phone', 'code'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {}
     }
   }
 })
