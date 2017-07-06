@@ -47,27 +47,6 @@ const STYLES = {
   }
 }
 
-const iconEmailMsg = (
-  <div>
-    <b>Verification</b> <br />
-    <br />
-    <span>
-      Your emails hasn't been verified yet. Click "Request Verification" to get
-      an emails with a verification link.
-    </span>
-  </div>
-)
-
-const iconPhoneMsg = (<div>
-  <b>Verification</b> <br />
-  <br />
-  <span>
-    Your number hasn't been verified yet. For verification we will
-    send you a sms with an authentication code to this number. You will need
-    enter that code here.
-  </span>
-</div>)
-
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
@@ -172,8 +151,7 @@ export default class WalletIdentity extends React.Component {
               resendVerificationCode={resendVerificationCode}
               enterVerificationCode={enterVerificationCode}
               labelText="Phone Number"
-              attrType="phone"
-              iconMsg={iconPhoneMsg} />
+              attrType="phone" />
             <ContactList
               fields={emails}
               onConfirm={onConfirm}
@@ -182,8 +160,7 @@ export default class WalletIdentity extends React.Component {
               enterVerificationCode={enterVerificationCode}
               icon={CommunicationEmail}
               labelText="Email"
-              attrType="email"
-              iconMsg={iconEmailMsg} />
+              attrType="email" />
           </Block>
           <Block>
             <PlusMenu

@@ -19,6 +19,26 @@ const STYLES = {
   }
 }
 
+const iconMsg = {
+  phone: (<div>
+    <b>Verification</b> <br />
+    <br />
+    <span>
+      Your emails hasn't been verified yet. Click "Request Verification" to get
+      an emails with a verification link.
+    </span>
+  </div>),
+  email: (<div>
+    <b>Verification</b> <br />
+    <br />
+    <span>
+      Your number hasn't been verified yet. For verification we will
+      send you a sms with an authentication code to this number. You will need
+      enter that code here.
+    </span>
+  </div>)
+}
+
 const ContactList = ({
   fields,
   requestVerificationCode,
@@ -29,8 +49,7 @@ const ContactList = ({
   attrType,
   icon,
   setFocusedPin,
-  changePinValue,
-  iconMsg
+  changePinValue
 }) => (<List disabled>
 {
   fields.map(({
@@ -53,7 +72,7 @@ const ContactList = ({
         onVerify={() => onConfirm({
           rightButtonLabel: 'REQUEST VERIFICATION',
           leftButtonLabel: 'CANCEL',
-          message: iconMsg,
+          message: iconMsg[attrType],
           style: STYLES.simpleDialog,
           attrValue,
           attrType,
@@ -79,7 +98,6 @@ const ContactList = ({
 </List>)
 
 ContactList.propTypes = {
-  iconMsg: React.PropTypes.node,
   buttonMsg: React.PropTypes.node,
   icon: React.PropTypes.any,
   attrType: React.PropTypes.string.isRequired,
