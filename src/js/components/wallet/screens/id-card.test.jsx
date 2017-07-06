@@ -111,6 +111,123 @@ describe('(Component) WalletIdCardScreen', () => {
     expect(save.called).to.be.true
     expect(save.calls).to.deep.equal([{args: []}])
   })
+  it('should parse physicalAddress object to array', () => {
+    const wrapper = shallow(
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            idCard: {
+              loaded: false,
+              showErrors: false,
+              focusedGroup: '',
+              focusedField: '',
+              idCard: {
+                locations: [
+                  {title: '', streetWithNumber: '', zip: '', city: ''}
+                ],
+                number: {value: '', valid: false},
+                expirationDate: {value: '', valid: false},
+                firstName: {value: '', valid: false},
+                lastName: {value: '', valid: false},
+                gender: {value: '', valid: false, options: []},
+                birthDate: {value: '', valid: false},
+                birthPlace: {value: '', valid: false},
+                birthCountry: {value: '', valid: false, options: []},
+                showAddress: false,
+                physicalAddress: {
+                  streetWithNumber: {value: '', valid: false},
+                  zip: {value: '', valid: false},
+                  city: {value: '', valid: false},
+                  state: {value: '', valid: false},
+                  country: {value: '', valid: false, options: []}
+                }
+              }
+            }
+          }
+        }))
+      }
+        save={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
+        initiate={() => {}}
+        changePhysicalAddressField={() => {}}
+        setFocusedField={() => {}}
+        setShowAddress={() => {}}
+        showSimpleDialog={() => {}}
+        configSimpleDialog={() => {}}
+        cancel={() => {}}
+      />),
+      { context: { muiTheme: { } } }
+    )
+    const field = {value: '', valid: false, group: 'address'}
+    expect(wrapper.find(Presentation).prop('physicalAddress')).to.deep.equal([
+      {...field, key: 'streetWithNumber', label: 'Street'},
+      {...field, key: 'zip', label: 'Zip Code'},
+      {...field, key: 'city', label: 'City'},
+      {...field, key: 'state', label: 'State'},
+      {...field, options: [], key: 'country', label: 'Country'}
+    ])
+  })
+  it('should parse idCard object to array', () => {
+    const wrapper = shallow(
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            idCard: {
+              loaded: false,
+              showErrors: false,
+              focusedGroup: '',
+              focusedField: '',
+              idCard: {
+                locations: [
+                  {title: '', streetWithNumber: '', zip: '', city: ''}
+                ],
+                number: {value: '', valid: false},
+                expirationDate: {value: '', valid: false},
+                firstName: {value: '', valid: false},
+                lastName: {value: '', valid: false},
+                gender: {value: '', valid: false, options: []},
+                birthDate: {value: '', valid: false},
+                birthPlace: {value: '', valid: false},
+                birthCountry: {value: '', valid: false, options: []},
+                showAddress: false,
+                physicalAddress: {
+                  streetWithNumber: {value: '', valid: false},
+                  zip: {value: '', valid: false},
+                  city: {value: '', valid: false},
+                  state: {value: '', valid: false},
+                  country: {value: '', valid: false, options: []}
+                }
+              }
+            }
+          }
+        }))
+      }
+        save={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={() => {}}
+        initiate={() => {}}
+        changePhysicalAddressField={() => {}}
+        setFocusedField={() => {}}
+        setShowAddress={() => {}}
+        showSimpleDialog={() => {}}
+        configSimpleDialog={() => {}}
+        cancel={() => {}}
+      />),
+      { context: { muiTheme: { } } }
+    )
+    const field = {value: '', valid: false}
+    expect(wrapper.find(Presentation).prop('idCard')).to.deep.equal([
+      {...field, label: 'Id Card Number', key: 'number', group: 'numbers'},
+      {...field, label: 'Expiration Date', key: 'expirationDate', group: 'numbers'}, // eslint-disable-line max-len
+      {...field, label: 'First Name', key: 'firstName', group: 'person'},
+      {...field, label: 'Last Name', key: 'lastName', group: 'person'},
+      {...field, options: [], label: 'Gender', key: 'gender', group: 'person'},
+      {...field, label: 'Date of Birth', key: 'birthDate', group: 'cake'},
+      {...field, label: 'Place of Birth', key: 'birthPlace', group: 'cake'},
+      {...field, options: [], label: 'Country of Birth', key: 'birthCountry', group: 'cake'} // eslint-disable-line max-len
+    ])
+  })
   it('should call cancel with proper params', () => {
     const cancel = stub()
     const wrapper = shallow(
@@ -379,5 +496,171 @@ describe('(Component) WalletIdCardScreen', () => {
     expect(setShowAddress.calls).to.deep.equal([{args: [true]}])
     expect(changePhysicalAddressField.calls)
       .to.deep.equal([{args: ['zip', 'test']}])
+  })
+  it('should call changeIdCardField for idCard fields', () => {
+    const changeIdCardField = stub()
+    const setShowAddress = stub()
+    const wrapper = shallow(
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            idCard: {
+              loaded: false,
+              showErrors: false,
+              focusedGroup: '',
+              focusedField: '',
+              idCard: {
+                locations: [
+                  {title: '', streetWithNumber: '', zip: '', city: ''}
+                ],
+                number: {value: '', valid: false},
+                expirationDate: {value: '', valid: false},
+                firstName: {value: '', valid: false},
+                lastName: {value: '', valid: false},
+                gender: {value: '', valid: false, options: []},
+                birthDate: {value: '', valid: false},
+                birthPlace: {value: '', valid: false},
+                birthCountry: {value: '', valid: false, options: []},
+                showAddress: false,
+                physicalAddress: {
+                  streetWithNumber: {value: '', valid: false},
+                  zip: {value: '', valid: false},
+                  city: {value: '', valid: false},
+                  state: {value: '', valid: false},
+                  country: {value: '', valid: false, options: []}
+                }
+              }
+            }
+          }
+        }))
+      }
+        save={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changeIdCardField={changeIdCardField}
+        initiate={() => {}}
+        changePhysicalAddressField={() => {}}
+        setFocusedField={() => {}}
+        setShowAddress={setShowAddress}
+        showSimpleDialog={() => {}}
+        configSimpleDialog={() => {}}
+        cancel={() => {}}
+      />),
+      { context: { muiTheme: { } } }
+    )
+    wrapper.instance().change('firstName', 'test')
+    expect(changeIdCardField.called).to.be.true
+    expect(changeIdCardField.calls).to
+      .deep.equal([{args: ['firstName', 'test']}])
+    expect(setShowAddress.called).to.be.false
+  })
+  it('should call changePhysicalAddressField for physicalAddress field', () => {
+    const changePhysicalAddressField = stub()
+    const setShowAddress = stub()
+    const wrapper = shallow(
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            idCard: {
+              loaded: false,
+              showErrors: false,
+              focusedGroup: '',
+              focusedField: '',
+              idCard: {
+                locations: [
+                  {title: '', streetWithNumber: '', zip: '', city: ''}
+                ],
+                number: {value: '', valid: false},
+                expirationDate: {value: '', valid: false},
+                firstName: {value: '', valid: false},
+                lastName: {value: '', valid: false},
+                gender: {value: '', valid: false, options: []},
+                birthDate: {value: '', valid: false},
+                birthPlace: {value: '', valid: false},
+                birthCountry: {value: '', valid: false, options: []},
+                showAddress: false,
+                physicalAddress: {
+                  streetWithNumber: {value: '', valid: false},
+                  zip: {value: '', valid: false},
+                  city: {value: '', valid: false},
+                  state: {value: '', valid: false},
+                  country: {value: '', valid: false, options: []}
+                }
+              }
+            }
+          }
+        }))
+      }
+        save={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changePhysicalAddressField={changePhysicalAddressField}
+        initiate={() => {}}
+        changeIdCardField={() => {}}
+        setShowAddress={setShowAddress}
+        setFocusedField={() => {}}
+        showSimpleDialog={() => {}}
+        configSimpleDialog={() => {}}
+        cancel={() => {}} />),
+      {context: {muiTheme: {}}}
+    )
+    wrapper.instance().change('city', 'test')
+    expect(changePhysicalAddressField.called).to.be.true
+    expect(changePhysicalAddressField.calls).to
+    .deep.equal([{args: ['city', 'test']}])
+    expect(setShowAddress.called).to.be.false
+  })
+  it('should call setShowAddress for change streetWithNumber', () => {
+    const changePhysicalAddressField = stub()
+    const setShowAddress = stub()
+    const wrapper = shallow(
+      (<WalletIdCardScreen.WrappedComponent {
+        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
+          wallet: {
+            idCard: {
+              loaded: false,
+              showErrors: false,
+              focusedGroup: '',
+              focusedField: '',
+              idCard: {
+                locations: [
+                  {title: '', streetWithNumber: '', zip: '', city: ''}
+                ],
+                number: {value: '', valid: false},
+                expirationDate: {value: '', valid: false},
+                firstName: {value: '', valid: false},
+                lastName: {value: '', valid: false},
+                gender: {value: '', valid: false, options: []},
+                birthDate: {value: '', valid: false},
+                birthPlace: {value: '', valid: false},
+                birthCountry: {value: '', valid: false, options: []},
+                showAddress: false,
+                physicalAddress: {
+                  streetWithNumber: {value: '', valid: false},
+                  zip: {value: '', valid: false},
+                  city: {value: '', valid: false},
+                  state: {value: '', valid: false},
+                  country: {value: '', valid: false, options: []}
+                }
+              }
+            }
+          }
+        }))
+      }
+        save={() => {}}
+        retrieveIdCardInformation={() => {}}
+        changePhysicalAddressField={changePhysicalAddressField}
+        initiate={() => {}}
+        changeIdCardField={() => {}}
+        setShowAddress={setShowAddress}
+        setFocusedField={() => {}}
+        showSimpleDialog={() => {}}
+        configSimpleDialog={() => {}}
+        cancel={() => {}} />),
+      {context: {muiTheme: {}}}
+    )
+    wrapper.instance().change('streetWithNumber', 'test')
+    expect(changePhysicalAddressField.called).to.be.true
+    expect(changePhysicalAddressField.calls).to
+    .deep.equal([{args: ['streetWithNumber', 'test']}])
+    expect(setShowAddress.called).to.be.true
   })
 })

@@ -25,6 +25,21 @@ const STYLES = {
   },
   verificationMsgHeader: {
     color: theme.palette.textColor
+  },
+  container: {
+    width: '100%'
+  },
+  firstField: {
+    width: '70%',
+    position: 'fix'
+  },
+  secondField: {
+    width: '30%',
+    position: 'fix'
+  },
+  verifierLocationsMsg: {
+    width: '100%',
+    textAlign: 'center'
   }
 }
 @Radium
@@ -58,9 +73,8 @@ export default class WalletIdCard extends React.Component {
       case 'birthPlace':
         return null // handled with birthDate or streetWithNumber fields
       case 'birthDate':
-        return this.renderBirthDate(field)
       case 'streetWithNumber':
-        return this.renderStreetWithNumberAndZipFields(field)
+        return this.renderTwoFields(field)
       case 'expirationDate':
         return this.renderDateField(field)
       default:
@@ -124,69 +138,18 @@ export default class WalletIdCard extends React.Component {
       enableDelete={value.length > 0} />
   }
 
-  renderStreetWithNumberAndZipFields({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
-    const zip = this.props.physicalAddress[1]
-    return (<table key={key}> <tr>
-      <td style={{width: '70%'}} key="0" >
-        <EditListItem
-          id={key}
-          icon={icon}
-          label={label}
-          enableEdit
-          value={value}
-          underlineHide={!!value}
-          onFocusChange={(field) => this.props.setFocused(field, group)}
-          onChange={(e) => this.props.change(key, e.target.value)}
-          focused={this.props.focusedGroup === group} />
+  renderTwoFields({value, label, valid, key, index, icon, group}) {
+    const secondField = this.props.physicalAddress.map(({key}) => key).includes(key) // eslint-disable-line max-len
+      ? this.props.physicalAddress[index - this.props.idCard.length + 1]
+      : this.props.idCard[index + 1]
+    return (<table key={key} style={STYLES.container} ><tbody><tr>
+      <td style={STYLES.firstField} key="0" >
+        {this.renderTextField({value, label, valid, key, index, icon, group})}
       </td>
-      <td style={{width: '30%'}} key="1">
-        <EditListItem
-          id={zip.key}
-          label={zip.label}
-          underlineHide={!!zip.value}
-          enableEdit
-          value={zip.value}
-          onFocusChange={field => this.props.setFocused(field, zip.group)}
-          onChange={(e) => this.props.change(zip.key, e.target.value)}
-          onDelete={() => {
-            this.props.change(zip.key, '')
-            this.props.change(key, '')
-          }}
-          enableDelete={!!zip.value || !!value} />
-      </td> </tr>
-    </table>)
-  }
-
-  renderBirthDate({value, label, valid, key, index, icon, group}) {
-    const birthPlace = this.props.idCard[index + 1]
-
-    return (<table key={key} style={{width: '100%'}}>
-      <th key="0" style={{width: '70%'}}>
-        <DateListItem
-          icon={icon}
-          label={label}
-          enableEdit
-          value={value || null}
-          onFocusChange={(field) => this.props.setFocused(field, group)}
-          focused={this.props.focusedGroup === group}
-          onChange={(e, date) => this.props.change(key, date)} />
-      </th>
-      <th key="1" style={{width: '30%', position: 'fix'}}>
-        <EditListItem
-          id={birthPlace.key}
-          label={birthPlace.label}
-          enableEdit
-          value={birthPlace.value}
-          underlineHide={!!value}
-          onFocusChange={(field) => this.props.setFocused(field, birthPlace.group)} // eslint-disable-line
-          onChange={(e) => this.props.change(birthPlace.key, e.target.value)}
-          onDelete={() => {
-            this.props.change(birthPlace.key, '')
-            this.props.change(key, '')
-          }}
-          enableDelete={!!birthPlace.value || !!value} />
-      </th>
-    </table>)
+      <td style={STYLES.secondField} key="1">
+        {this.renderTextField(secondField)}
+      </td>
+    </tr></tbody></table>)
   }
 
   renderDateField({value, label, valid, key, index, icon, group}) {
@@ -273,7 +236,7 @@ export default class WalletIdCard extends React.Component {
 
   verifierLocationsMsg = () => (
     <div>
-      <div key="0" style={{width: '100%', textAlign: 'center'}}>
+      <div key="0" style={STYLES.verifierLocationsMsg}>
         verification Locations
       </div>
       <div key="1"> Title </div>

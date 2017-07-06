@@ -59,7 +59,7 @@ const actions = module.exports = makeActions('wallet-login', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         const state = getState().get('walletLogin').toJS()
-        dispatch(actions.goForward.buildAction(params, (backend) => {
+        dispatch(actions.goForward.buildAction(params, () => {
           const promise = services.auth
             .loginWithSeedPhrase({
               seedPhrase: state.passphrase.value,

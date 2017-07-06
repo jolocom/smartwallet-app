@@ -64,9 +64,9 @@ let Index = React.createClass({
         }
       },
       title: {
-        color: '#a5a5a4',
-        fontSize: '18pt',
-        fontWeight: '100',
+        color: theme.textStyles.headline.color,
+        fontSize: theme.textStyles.headline.fontSize,
+        fontWeight: theme.textStyles.headline.fontWeight,
         marginBottom: '10px',
         maxWidth: '100%',
         '@media screen and (min-width: 1200px)': {
@@ -74,8 +74,9 @@ let Index = React.createClass({
         }
       },
       subtitle: {
-        color: theme.jolocom.gray1,
-        fontSize: '10pt',
+        color: theme.textStyles.textCopy.color,
+        fontSize: theme.textStyles.textCopy.fontSize,
+        fontWeight: theme.textStyles.textCopy.fontWeight,
         '@media screen and (min-width: 1200px)': {
           fontSize: '14pt'
         }
