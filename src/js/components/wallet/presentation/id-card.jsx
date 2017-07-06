@@ -76,12 +76,15 @@ export default class WalletIdCard extends React.Component {
       case 'gender':
         return this.renderGenderField(field)
       case 'zip':
+        return this.renderCityAndZip(field)
+      case 'city':
+        return null // handled with zip
       case 'birthPlace':
-        return null // handled with birthDate or streetWithNumber fields
+        return null // handled with birthDate
       case 'birthDate':
         return this.renderBirthDate(field)
       case 'streetWithNumber':
-        return this.renderStreetWithNumberAndZipFields(field)
+        return this.renderStreetWithNumber(field)
       case 'expirationDate':
         return this.renderDateField(field)
       default:
@@ -145,36 +148,54 @@ export default class WalletIdCard extends React.Component {
       enableDelete={value.length > 0} />
   }
 
-  renderStreetWithNumberAndZipFields({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
+  renderStreetWithNumber({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
+    return (<div>
+      <EditListItem
+        id={key}
+        icon={icon}
+        label={this.props.showAddress ? label : 'Physical Address'}
+        enableEdit
+        value={value}
+        underlineHide={!!value}
+        onFocusChange={(field) => this.props.setFocused(field, group)}
+        onChange={(e) => this.props.change(key, e.target.value)}
+        focused={this.props.focusedGroup === group} />
+    </div>)
+  }
+
+  renderCityAndZip({value, label, valid, key, index, icon, group}) {
     const zip = this.props.physicalAddress[1]
-    return (<table key={key}> <tr>
-      <td style={{width: '50%'}} key="0" >
-        <EditListItem
-          id={key}
-          icon={icon}
-          label={label}
-          enableEdit
-          value={value}
-          underlineHide={!!value}
-          onFocusChange={(field) => this.props.setFocused(field, group)}
-          onChange={(e) => this.props.change(key, e.target.value)}
-          focused={this.props.focusedGroup === group} />
-      </td>
-      <td style={{width: '50%'}} key="1">
-        <EditListItem
-          id={zip.key}
-          label={zip.label}
-          underlineHide={!!zip.value}
-          enableEdit
-          value={zip.value}
-          onFocusChange={field => this.props.setFocused(field, zip.group)}
-          onChange={(e) => this.props.change(zip.key, e.target.value)}
-          onDelete={() => {
-            this.props.change(zip.key, '')
-            this.props.change(key, '')
-          }}
-          enableDelete={!!zip.value || !!value} />
-      </td> </tr>
+    const city = this.props.physicalAddress[2]
+    return (<table key={key} style={{width: '100%'}}>
+      <tr>
+        <td key="0" >
+          <EditListItem
+            id={key}
+            label={city.label}
+            enableEdit
+            value={city.value}
+            underlineHide={!!value}
+            onFocusChange={(field) => this.props.setFocused(field, group)}
+            onChange={(e) => this.props.change(city.key, e.target.value)}
+            focused={this.props.focusedGroup === group} />
+        </td>
+        <td key="1">
+          <EditListItem
+            widthTextField={{padding: '0 16px 0 4px'}}
+            id={zip.key}
+            label={zip.label}
+            underlineHide={!!zip.value}
+            enableEdit
+            value={zip.value}
+            onFocusChange={field => this.props.setFocused(field, zip.group)}
+            onChange={(e) => this.props.change(zip.key, e.target.value)}
+            onDelete={() => {
+              this.props.change(zip.key, '')
+              this.props.change(key, '')
+            }}
+            enableDelete={!!zip.value || !!value} />
+        </td>
+      </tr>
     </table>)
   }
 
@@ -195,6 +216,7 @@ export default class WalletIdCard extends React.Component {
         </td>
         <td key="1">
           <EditListItem
+            widthTextField={{padding: '0 16px 0 4px'}}
             id={birthPlace.key}
             label={birthPlace.label}
             enableEdit

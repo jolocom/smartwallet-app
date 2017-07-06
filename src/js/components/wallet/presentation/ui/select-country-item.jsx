@@ -10,7 +10,8 @@ import {
 
 import {
   NavigationCancel,
-  ActionSearch as Search
+  ActionSearch as Search,
+  HardwareKeyboardArrowRight as ArrowRight
 } from 'material-ui/svg-icons'
 
 import {theme} from 'styles'
@@ -111,7 +112,7 @@ export default class SelectListItem extends React.Component {
             value={value} />
           <FlatButton
             onClick={this.handleFocus}
-            icon={<Search />} />
+            icon={<ArrowRight />} />
         </div>
       </ListItem>
     )
