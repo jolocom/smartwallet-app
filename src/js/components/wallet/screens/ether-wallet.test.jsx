@@ -2,7 +2,6 @@ import React from 'react'
 import Immutable from 'immutable'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
-import { stub } from '../../../../../test/utils'
 import EtherWalletScreen from './ether-wallet'
 
 describe('(Component) EtherWalletScreen', () => {

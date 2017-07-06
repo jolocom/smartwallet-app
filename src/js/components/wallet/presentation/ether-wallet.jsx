@@ -5,10 +5,6 @@ import {Content, Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
 import Spinner from '../../common/spinner'
 
-import {
-  RaisedButton
-} from 'material-ui'
-
 import {theme} from 'styles'
 
 import {

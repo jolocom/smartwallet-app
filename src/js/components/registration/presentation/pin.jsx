@@ -62,7 +62,7 @@ const Pin = (props) => {
   } else {
     headerTitle = 'Create a PIN for secure login.'
   }
-console.log(props.registering)
+
   if (props.registering) {
     const messageWait = ['Please have some patience...',
       '...we are creating...', '...your jolocom wallet...',
