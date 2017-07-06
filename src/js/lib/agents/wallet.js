@@ -56,36 +56,8 @@ export default class WalletAgent {
   loginWithCredentials({email, password, pin}) {
     return this._manager.loginWithCredentials({email, password, pin})
   }
-}
-// TODO: DELETE THIS CLASS WHEN EDIT-CONTACT-UTIL and
-// Login-webId exchange is updated
-export class Wallet {
-  constructor() {
-    this.webId = localStorage.getItem('jolocom.webId')
-    this.lightWallet = 'something'
-  }
 
-  updatePhone(phone) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  setPhone(phone) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve()
-      }, 2000)
-    })
-  }
-
-  startConfirmEmail({email}) {
-    return this._verification.startVerifyingEmail({webID: this.webID, email})
-  }
-
-  finishConfirmEmail({email, code}) {
-    return this._verification.verifyEmail({webID: this.webID, email, code})
+  loginFromSerialized(serialized) {
+    return this._manager.loginFromSerialized(serialized)
   }
 }

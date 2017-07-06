@@ -15,7 +15,6 @@ export default class CountrySelectScreen extends React.Component {
     setCountryValue: React.PropTypes.func.isRequired,
     submit: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired,
-    children: React.PropTypes.node,
     country: React.PropTypes.object.isRequired
   }
 
