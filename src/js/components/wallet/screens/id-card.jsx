@@ -56,7 +56,10 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   showVerifiers(...args) {
-    this.props.configSimpleDialog(null, 'OK', 'OK', {})
+    const verLoc = [
+      'Postoffice', 'Kochstrasse 90', '10999', 'Berlin'
+    ]
+    this.props.configSimpleDialog(null, verLoc, 'OK', {})
     this.props.showSimpleDialog()
   }
 
