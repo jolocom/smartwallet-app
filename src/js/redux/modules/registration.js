@@ -179,8 +179,8 @@ const actions = module.exports = makeActions('registration', {
               console.log('====wallet====', wallet)
               return backend.accounts.solidRegister(state.username.value,
                 state.passphrase.phrase, wallet.webIDPrivateKey)
-              // return backend.accounts.register(state.username.value,
-              // state.passphrase.phrase, 'test@test.com', 'test')
+                .then(() => backend.accounts.solidLogin(state.username.value,
+                  state.passphrase.phrase, wallet.webIDPrivateKey))
             }).then(({webid}) => {
               console.log(webid)
               dispatch(router.pushRoute('/wallet'))
