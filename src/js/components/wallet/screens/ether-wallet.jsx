@@ -11,6 +11,7 @@ import Presentation from '../presentation/ether-wallet'
 export default class WalletEtherScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
+    money: React.PropTypes.object,
     buyEther: React.PropTypes.func
   }
 

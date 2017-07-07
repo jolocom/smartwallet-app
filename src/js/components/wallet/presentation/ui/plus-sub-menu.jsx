@@ -126,6 +126,7 @@ PlusSubMenu.propTypes = {
   currency: React.PropTypes.any,
   children: React.PropTypes.node,
   style: React.PropTypes.object,
+  overview: React.PropTypes.func,
   goToManagement: React.PropTypes.func.isRequired,
   choice: React.PropTypes.bool
 }
