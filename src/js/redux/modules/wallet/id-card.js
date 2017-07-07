@@ -40,6 +40,10 @@ const actions = module.exports = makeActions('wallet/id-card', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
         const {idCard, showErrors} = getState().toJS().wallet.idCard
+        idCard.birthDate.value = moment(
+          idCard.birthDate.value, 'XXX MMM DD YYYY').format()
+        idCard.expirationDate.value = moment(
+          idCard.birthDate.value, 'XXX MMM DD YYYY').format()
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
           dispatch(actions.save.buildAction(params, () =>

@@ -144,7 +144,10 @@ export default class WalletIdCard extends React.Component {
       : this.props.idCard[index + 1]
     return (<table key={key} style={STYLES.container} ><tbody><tr>
       <td style={STYLES.firstField} key="0" >
-        {this.renderTextField({value, label, valid, key, index, icon, group})}
+        {
+          key === 'birthDate' ? this.renderDateField(secondField)
+          : this.renderTextField({value, label, valid, key, index, icon, group})
+        }
       </td>
       <td style={STYLES.secondField} key="1">
         {this.renderTextField(secondField)}
