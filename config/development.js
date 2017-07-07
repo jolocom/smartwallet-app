@@ -8,7 +8,7 @@ module.exports = {
   verificationProvider: 'https://verification.jolocom.com',
   blockchain: {
     // Jolocom Rinkeby
-    gethHost: 'http://verification.jolocom.com:8545',
+    gethHost: 'https://verification.jolocom.com/geth/',
     lookupContractAddress: '0x281b41068de3901174dcae26815e3dbadffd9581',
     jolocomEtherAddress: 'https://verification.jolocom.com/ether',
     seedStorage: {
