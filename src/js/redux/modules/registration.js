@@ -181,6 +181,8 @@ const actions = module.exports = makeActions('registration', {
                 state.passphrase.phrase, wallet.webIDPrivateKey)
                 .then(() => backend.accounts.solidLogin(state.username.value,
                   state.passphrase.phrase, wallet.webIDPrivateKey))
+                  .then(() => backend.solid.setIdentityContractAddress(
+                    wallet.webId, wallet.identityAddress))
             }).then(({webid}) => {
               console.log(webid)
               dispatch(router.pushRoute('/wallet'))
