@@ -1,7 +1,6 @@
 // @TODO replace values by env settings using gulp
 module.exports = {
-  proxy: 'https://proxy.jolocom.net',
-  proxynew: 'https://proxy.jolocom.com',
+  proxy: 'https://proxy.jolocom.com',
   endpoint: 'https://proxy.jolocom.net/proxy?url=https://webid.jolocom.de',
   accountStatusEndpoint:
     'https://proxy.jolocom.net/proxy?' +

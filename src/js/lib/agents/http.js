@@ -44,7 +44,7 @@ function composePatchQuery (toDel, toIns) {
 class HTTPAgent {
   constructor({proxy} = {}) {
     this._fetch = window && window.fetch ? window.fetch.bind(window) : null
-    this._proxyURL = proxy === true ? settings.proxynew : null
+    this._proxyURL = proxy === true ? settings.proxy : null
   }
 
   // GET a resource represented by url
