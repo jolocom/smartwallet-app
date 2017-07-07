@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
+import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
@@ -47,8 +48,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () => {
-          // eslint-disable-next-line max-len
-          return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
+          return backend.solid.getUserInformation(new WebIdAgent().getWebId())
         }))
       }
     }

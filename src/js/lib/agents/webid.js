@@ -13,11 +13,15 @@ class WebIDAgent {
 
   // Gets the webId of the currently loged in user from local storage,
   getWebId() {
-    const webId = localStorage.getItem('jolocom.webId')
-    if (webId) {
-      return webId
+    const wallet = localStorage.getItem('jolocom.smartWallet')
+    let webId
+    try {
+      webId = JSON.parse(wallet).webId
+    } catch (e) {
+      // TODO Handle
+      console.error('No webId found')
     }
-    return ''
+    return webId
   }
 
   getProfile() { // NOTE This Function assumes a proxied WEBID
