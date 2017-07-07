@@ -1,5 +1,3 @@
-import moment from 'moment'
-
 import {listOfCountries} from './list-of-countries'
 
 export const genderList = ['male', 'female']
@@ -53,15 +51,6 @@ export const setPhysicalAddressField = (state, {field, value}) => state.mergeIn(
     value,
     valid: isValidField({field, value})
   })
-
-const parseValue = ({field, value}) => {
-  if (['birthDate', 'expirationDate'].includes(field)) {
-    const a = moment(value, 'XXX MMM DD YYYY').format('DD MM YYYY').toString()
-    alert(a)
-    return a
-  }
-  return value
-}
 
 export const changeFieldValue = (state, {field, value}) => state.mergeIn(
   ['idCard', field], {
