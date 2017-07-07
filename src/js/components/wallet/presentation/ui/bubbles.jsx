@@ -30,7 +30,6 @@ export default class Bubbles extends React.Component {
       </svg>
       <Bubble style={STYLES.bubbleCRYPT} unit="ETH"
         amount={this.props.ethBalance} x="4" y="13" />
-    </div>
-    )
+    </div>)
   }
 }

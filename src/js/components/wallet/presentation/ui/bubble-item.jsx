@@ -1,6 +1,12 @@
 import React from 'react'
 
 class BubbleItem extends React.Component {
+  static propTypes = {
+    unit: React.PropTypes.string,
+    amount: React.PropTypes.string,
+    x: React.PropTypes.any,
+    y: React.PropTypes.any
+  }
 
   render() {
     const {style} = this.props || {}
