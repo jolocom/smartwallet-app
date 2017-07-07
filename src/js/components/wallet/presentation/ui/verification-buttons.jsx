@@ -22,7 +22,7 @@ const STYLES = {
 
 const VerificationButtons = ({
     buttonMsg,
-    value = 'value',
+    value,
     codeIsSent = false,
     verified,
     requestVerificationCode,
@@ -124,6 +124,20 @@ const VerificationButtons = ({
         attrType,
         index,
         attrValue: 'value'
+      }, {
+        message: (<VerificationButtonMsg
+          msgType="pinInput"
+          value={smsCode}
+          phoneNumber={value}
+          setFocusedPin={(value) => { setFocusedPin(value, index) }}
+          changePinValue={(value) => { changePinValue(value, index) }}
+          focused={pinFocused} />),
+        rightButtonLabel: 'OK',
+        leftButtonLabel: 'CANCEL',
+        style: STYLES.simpleDialog,
+        attrType,
+        index,
+        attrValue: value
       })} />
   </ListItem>)
 }
@@ -132,6 +146,7 @@ VerificationButtons.propTypes = {
   buttonMsg: React.PropTypes.any,
   value: React.PropTypes.string,
   codeIsSent: React.PropTypes.bool,
+  pinLength: React.PropTypes.number,
   verified: React.PropTypes.bool,
   setFocusedPin: React.PropTypes.func,
   changePinValue: React.PropTypes.func,

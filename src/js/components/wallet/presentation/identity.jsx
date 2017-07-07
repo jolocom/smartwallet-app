@@ -137,7 +137,7 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <PlusMenu
               name="Contact"
-              choice={emails.length + phones.length > 0}
+              choice={[...emails, ...phones].length > 0}
               goToManagement={goToContactManagement} />
           </Block>
           <Block>

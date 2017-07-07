@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import { List } from 'material-ui'
-import { StaticListItem, VerificationButtons } from './'
+import { StaticListItem, VerificationButtons, VerificationButtonMsg } from './'
 
 const STYLES = {
   dialog: {
@@ -77,6 +77,21 @@ const ContactList = ({
           attrValue,
           attrType,
           index
+        }, {
+          message: (<VerificationButtonMsg
+            msgType="pinInput"
+            value={smsCode}
+            pinLength={4}
+            phoneNumber={attrValue}
+            setFocusedPin={(value) => { setFocusedPin(value, index) }}
+            changePinValue={(value) => { changePinValue(value, index) }}
+            focused={pinFocused} />),
+          rightButtonLabel: 'OK',
+          leftButtonLabel: 'CANCEL',
+          attrType,
+          index,
+          style: STYLES.simpleDialog,
+          attrValue
         })}
         secondaryTextValue={type} />
       <VerificationButtons
@@ -89,7 +104,7 @@ const ContactList = ({
         setFocusedPin={(value) => { setFocusedPin(value, index) }}
         changePinValue={(value) => { changePinValue(value, index) }}
         focused={pinFocused}
-        value={'attrValue'}
+        value={attrValue}
         codeIsSent={codeIsSent}
         verified={verified} />
     </div>)
