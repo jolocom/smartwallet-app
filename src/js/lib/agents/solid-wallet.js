@@ -274,6 +274,22 @@ export default class SolidAgent {
     return this._setEntry(webId, entryValue, 'phone')
   }
 
+  setIdentityContractAddress(webId, entryValue) {
+    if (!webId || !entryValue) {
+      console.error('Invalid arguments')
+      return
+    }
+
+    const g = rdf.graph()
+    g.add(
+      rdf.sym(webId),
+      PRED.identityContractAddress,
+      rdf.lit(entryValue)
+    )
+
+    return this.http.patch(webId, [], g)
+  }
+
   setPassport(webId, passport) {
     if (!webId || !passport) {
       console.error('Invalid arguments')
