@@ -33,7 +33,8 @@ const STYLES = {
 export default class WalletEther extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    buyEther: React.PropTypes.func
+    buyEther: React.PropTypes.func,
+    ether: React.PropTypes.object
   }
 
   renderHasEther() {
@@ -65,7 +66,7 @@ export default class WalletEther extends React.Component {
              correctly we suggest you to either buy some Ether here...'
           </SideNote>
           <Block>
-            <Bubbles ethBalance={"0.0215180852"}/>
+            <Bubbles ethBalance={'0.0215180852'} />
           </Block>
         </Block>
         <Block>
