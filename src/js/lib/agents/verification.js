@@ -1,4 +1,4 @@
-import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto';
+import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 import {randomUint8Array} from 'secure-random'
 import * as settings from 'settings'
 import HTTPAgent from './http'
