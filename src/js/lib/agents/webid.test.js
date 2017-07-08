@@ -102,112 +102,16 @@ describe('WebIDAgent', function() {
 
   describe('#getWebId', function() {
     it('should return locally stored webID', async () => {
-      localStorage.setItem('jolocom.webId',
-        'https://newuser.webid.jolocom.de/profile/card#me')
+
+      localStorage.clear()
+      localStorage.setItem(
+        'jolocom.smartWallet',
+        `{"webId": ${webId}}`
+      )
+
       const agent = new WebIDAgent()
       webId = agent.getWebId()
-      expect(webId).to.deep.equal(localStorage.getItem('jolocom.webId'))
-    })
-  })
-  describe('#getProfile', function() {
-    it('should return a response profile document', async () => {
-      const agent = new WebIDAgent()
-      const fakeResponse = {
-        status: 200, responseText: DUMMY_TEXT,
-        headers: DUMMY_HTML_HEADERS,
-        text: function() {
-          return this.responseText
-        }}
-      agent.http._fetch = async (url, options) => fakeResponse
-      var profile = await agent.getProfile()
-      expect(profile).to.deep.equal({
-        givenName: 'newuser',
-        familyName: 'whoopie',
-        fullName: 'newuser whoopie',
-        imgUri: 'https://newuser.webid.jolocom.de/files/66553399-pj.jpg',
-        socialMedia: 'http://twitter.com/tweeter',
-        mobilePhone: '049 9374829438',
-        profession: 'dreamer',
-        company: 'Jolocom',
-        url: 'http://jolocom.com',
-        email: 'newuser@yopmail.com',
-        storage: 'https://newuser.webid.jolocom.de/',
-        webId: 'https://newuser.webid.jolocom.de/profile/card#me'
-      })
-    })
-    it('should return null imgUri if imgUri is unresolvable', async () => {
-      const agent = new WebIDAgent()
-      const fakeResponse = {
-        status: 200, responseText: IMG_URI_TEXT,
-        headers: DUMMY_HTML_HEADERS,
-        text: function() {
-          return this.responseText
-        }
-      }
-      agent.http._fetch = async (url, options) => {
-        if (options.method === 'HEAD') {
-          window.fetch.bind(window)
-          return window.fetch(url, options)
-        } else {
-          return fakeResponse
-        }
-      }
-      var profile = await agent.getProfile()
-      expect(profile).to.deep.equal({
-        givenName: 'newuser',
-        imgUri: null,
-        webId: 'https://newuser.webid.jolocom.de/profile/card#me'
-      })
-    })
-  })
-  // @TODO Have not tested function if passportNodeUri exists
-  describe('#_parseProfile', function() {
-    it('should map only information relevant to the user', async () => {
-      webId = 'https://newuser.webid.jolocom.de/profile/card#me'
-      const agent = new WebIDAgent()
-      const parser = new Parser()
-      var answer = parser.parse(DUMMY_TEXT, webId)
-    // set webId to a different user than the one the rdf document is for
-      webId = 'https://test.webid.jolocom.de/profile/card#me'
-      const profile = agent._parseProfile(webId, answer.triples)
-      expect(profile.email).to.deep.equal(undefined)
-    })
-
-    it('should return an object with all profile fields provided', async () => {
-      webId = 'https://newuser.webid.jolocom.de/profile/card#me'
-      const agent = new WebIDAgent()
-      const parser = new Parser()
-      const answer = parser.parse(DUMMY_TEXT, webId)
-      const profile = agent._parseProfile(webId, answer.triples)
-      expect(profile).to.deep.equal({
-        givenName: 'newuser',
-        familyName: 'whoopie',
-        fullName: 'newuser whoopie',
-        imgUri: 'https://newuser.webid.jolocom.de/files/66553399-pj.jpg',
-        socialMedia: 'http://twitter.com/tweeter',
-        mobilePhone: '049 9374829438',
-        profession: 'dreamer',
-        company: 'Jolocom',
-        url: 'http://jolocom.com',
-        email: 'newuser@yopmail.com',
-        storage: 'https://newuser.webid.jolocom.de/',
-        webId: 'https://newuser.webid.jolocom.de/profile/card#me'
-      })
-    })
-
-    it('should parse name if no givenName supplied', async () => {
-      webId = 'https://newuser.webid.jolocom.de/profile/card#me'
-
-      const agent = new WebIDAgent()
-      const parser = new Parser()
-      const answer = parser.parse(NAME_TEXT, webId)
-      const profile = agent._parseProfile(webId, answer.triples)
-      expect(profile).to.deep.equal({
-        givenName: 'newuser',
-        familyName: 'whoopie',
-        fullName: 'newuser whoopie',
-        webId: 'https://newuser.webid.jolocom.de/profile/card#me'
-      })
+      expect(webId).to.deep.equal(webId)
     })
   })
 
