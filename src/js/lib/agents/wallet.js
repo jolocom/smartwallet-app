@@ -2,7 +2,7 @@ import * as settings from 'settings'
 import {WalletManager} from 'smartwallet-contracts'
 
 // only for testing testSeed has some ether on ropsten testnet
-const TEST_SEED = 'mandate print cereal style toilet hole' +
+export const TEST_SEED = 'mandate print cereal style toilet hole' +
   ' cave mom heavy fork network indoor'
 
 export default class WalletAgent {
@@ -12,8 +12,6 @@ export default class WalletAgent {
 
   generateSeedPhrase(entropy) {
     let seed = this._manager.generateSeedPhrase(entropy)
-    // @TODO remove this
-    // seed = TEST_SEED
     return seed
   }
 
