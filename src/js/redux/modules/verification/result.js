@@ -15,14 +15,22 @@ const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => 
     attributeId: documentType
   })
 
+  const { city, country, state, streetWithNumber, zip } = data.physicalAddress
+
   const calculatedHash = (new WalletCrypto()).calculateDataHash({
-    number: data.number.value,
-    expirationDate: data.expirationDate.value,
-    givenName: data.firstName.value,
-    familyName: data.lastName.value,
+    birthCountry: data.birthCountry.value,
     birthDate: data.birthDate.value,
     birthPlace: data.birthPlace.value,
-    birthCountry: data.birthCountry.value
+    expirationDate: data.expirationDate.value,
+    firstName: data.firstName.value,
+    gender: data.gender.value,
+    lastName: data.lastName.value,
+    number: data.number.value,
+    city: city.value,
+    country: country.value,
+    state: state.value,
+    streetWithNumber: streetWithNumber.value,
+    zip: zip.value
   })
 
   if (storedHash !== calculatedHash) {
