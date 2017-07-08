@@ -1,6 +1,5 @@
 import LDPAgent from './ldp.js'
 import HTTPAgent from './http.js'
-import {Parser} from '../rdf'
 import {PRED} from '../namespaces.js'
 import $rdf from 'rdflib'
 
