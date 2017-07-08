@@ -38,6 +38,15 @@ class AccountsAgent {
     })
   }
 
+  solidRegister(username, password, privatekey) {
+    return this.http.post(`${settings.proxy}/register`,
+       querystring.stringify(
+         {username, password, privatekey, email: 'test@test.com'}), {
+           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+         }
+     )
+  }
+
   updateEmail(webId, email) {
     const writer = new Writer()
 
@@ -61,6 +70,14 @@ class AccountsAgent {
       }), {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       })
+  }
+
+  solidLogin(username, password, privatekey) {
+    return this.http.post(`${settings.proxy}/login`,
+       querystring.stringify({username, password, privatekey}), {
+         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+       }
+     )
   }
 
   async loginAndSetup(username, password, email) {
