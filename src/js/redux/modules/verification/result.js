@@ -2,7 +2,6 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 import * as transition from './transition'
-import backend from 'backend'
 import util from 'lib/util'
 
 const verificationStartUrl = '/verification/document'
@@ -17,14 +16,15 @@ const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => 
   })
 
   const calculatedHash = (new WalletCrypto()).calculateDataHash({
-    number: data.number,
-    expirationDate: data.expirationDate,
-    givenName: data.givenName,
-    familyName: data.familyName,
-    birthDate: data.birthDate,
-    birthPlace: data.birthPlace,
-    birthCountry: data.birthCountry
+    number: data.number.value,
+    expirationDate: data.expirationDate.value,
+    givenName: data.firstName.value,
+    familyName: data.lastName.value,
+    birthDate: data.birthDate.value,
+    birthPlace: data.birthPlace.value,
+    birthCountry: data.birthCountry.value
   })
+
   if (storedHash !== calculatedHash) {
     return false
   }
@@ -59,7 +59,8 @@ const actions = module.exports = makeActions('wallet/contact', {
           const {type} = verification.document
 
           const webId = util.usernameToWebId(verification.data.username)
-          const contractId = await backend.solid.getIdentityContractAddress(webId)
+          const contractId = await backend
+            .solid.getIdentityContractAddress(webId)
 
           const {wallet} = services.auth.currentUser
           compareDataToIdCard({
