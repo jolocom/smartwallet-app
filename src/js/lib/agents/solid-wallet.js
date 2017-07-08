@@ -287,7 +287,7 @@ export default class SolidAgent {
       rdf.lit(entryValue)
     )
 
-    return this.http.patch(webId, [], g)
+    return this.http.patch(webId, [], g.statements)
   }
 
   setPassport(webId, passport) {

@@ -168,35 +168,41 @@ const actions = module.exports = makeActions('registration', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         const state = getState().get('registration').toJS()
-        dispatch(actions.registerWallet.buildAction(params, () => {
+        dispatch(actions.registerWallet.buildAction(params, async () => {
           const userType = state.userType.value
           if (userType === 'expert') {
-            return services.auth.registerWithSeedPhrase({
+            const { wallet } = await services.auth.registerWithSeedPhrase({
               userName: state.username.value,
               seedPhrase: state.passphrase.phrase,
               pin: state.pin.value
-            }).then(({wallet}) => {
-              console.log('====wallet====', wallet)
-              return backend.accounts.solidRegister(state.username.value,
-                state.passphrase.phrase, wallet.webIDPrivateKey)
-                .then(() => backend.accounts.solidLogin(state.username.value,
-                  state.passphrase.phrase, wallet.webIDPrivateKey))
-                  .then(() => backend.solid.setIdentityContractAddress(
-                    wallet.webId, wallet.identityAddress))
-            }).then(({webid}) => {
-              console.log(webid)
-              dispatch(router.pushRoute('/wallet'))
-              return
             })
+
+            await backend.accounts.solidRegister(
+              state.username.value,
+              state.passphrase.phrase,
+              wallet.webIDPrivateKey
+            )
+
+            await backend.accounts.solidLogin(
+              state.username.value,
+              state.passphrase.phrase,
+              wallet.webIDPrivateKey
+            )
+
+            await backend.solid.setIdentityContractAddress(
+              wallet.webId,
+              wallet.identityAddress
+            )
+
+            dispatch(router.pushRoute('/wallet'))
+            return
           } else {
-            console.log('====layman====')
             return services.auth.registerWithCredentials({
               userName: state.username.value,
               email: state.email.value,
               password: state.password.value,
               pin: state.pin.value
             }).then(({wallet}) => {
-              console.log('====wallet====', wallet)
               return backend.accounts.solidRegister(state.username.value,
                 state.passphrase.phrase, wallet.webIDPrivateKey)
             }).then(({webid}) => {
