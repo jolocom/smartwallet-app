@@ -94,8 +94,8 @@ export default class VerificationResultPresentation extends React.Component {
           onClose={finishVerification} />
         <Header style={STYLES.title}> STEP 3</ Header>
         <div style={STYLES.text}>
-          We compare the data with the one saved by the client. This may take a
-           few while
+          We compare the data with the one saved by the client.
+        This may take a while
         </div>
         <div style={STYLES.loadingImage}></div>
       </ div>)
