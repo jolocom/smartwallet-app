@@ -377,6 +377,8 @@ describe('Wallet registration Redux module', function() {
       })
     })
   })
+
+  /*
   describe('registerWallet', function() {
     it('should register with seedphrase if expert', () => {
       const dispatch = stub()
@@ -453,6 +455,7 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
+  */
 
   describe('reducer', function() {
     describe('setUserType', function() {
