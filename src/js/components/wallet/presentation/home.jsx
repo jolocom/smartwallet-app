@@ -20,9 +20,9 @@ const STYLES = {
     color: '#953052'
   },
   greeting: {
-    fontSize: '20px',
-    color: theme.palette.textColor,
-    fontWeight: 'normal'
+    fontSize: theme.textStyles.screenHeader.fontSize,
+    fontWeight: theme.textStyles.screenHeader.fontWeight,
+    color: theme.textStyles.screenHeader.color
   },
   walletContainer: {
     backgroundColor: '#fff',
