@@ -17,6 +17,7 @@ const PERSON_CORE = rdf.Namespace('https://www.w3.org/ns/person#')
 const VCARD = rdf.Namespace('https://www.w3.org/2006/vcard/ns#')
 const VOAG = rdf
   .Namespace('http://voag.linkedmodel.org/2.0/doc/2015/SCHEMA_voag-v2.0#voag_')
+const ETHON = rdf.Namespace('http://ethon.consensys.net/')
 
 export const XSD = rdf.Namespace('http://www.w3.org/2001/XMLSchema#')
 export const PRED = {
@@ -96,7 +97,9 @@ export const PRED = {
   // INDEX FILE RELATED
   readPermission: SCHEMA('ReadPermission'),
   writePermission: SCHEMA('WritePermission'),
-  owns: SCHEMA('owns')
+  owns: SCHEMA('owns'),
+  // ETHEREUM
+  identityContractAddress: ETHON('controlsAccount')
 }
 
 const ldp = 'http://www.w3.org/ns/ldp#'
