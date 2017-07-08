@@ -115,6 +115,10 @@ let Util = {
     return `${proxy}/proxy?url=${uri}`
   },
 
+  usernameToWebId(username) {
+    return `https://${username}.webid.jolocom.de/profile/card#me` 
+  },
+
   /*
    * @summary Returns the firstname initial of a user.
    * E.g: Useful for the Avatar, when a user does not have an image.

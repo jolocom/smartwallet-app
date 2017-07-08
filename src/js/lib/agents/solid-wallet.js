@@ -274,6 +274,20 @@ export default class SolidAgent {
     return this._setEntry(webId, entryValue, 'phone')
   }
 
+  async getIdentityContractAddress(webId) {
+    if (!webId) {
+      console.error('Invalid arguments')
+      return
+    }
+    const matches = await this.ldp.findObjectsByTerm(
+      webId,
+      PRED.identityContractAddress
+    )
+
+    console.log(matches)
+    return matches[0].value
+  }
+
   setIdentityContractAddress(webId, entryValue) {
     if (!webId || !entryValue) {
       console.error('Invalid arguments')

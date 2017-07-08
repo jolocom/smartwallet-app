@@ -2,6 +2,8 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 import * as transition from './transition'
+import backend from 'backend'
+import util from 'lib/util'
 
 const verificationStartUrl = '/verification/document'
 const dataCheckUrl = 'verification/data'
@@ -13,6 +15,7 @@ const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => 
     identityAddress: contractId,
     attributeId: documentType
   })
+
   const calculatedHash = (new WalletCrypto()).calculateDataHash({
     number: data.number,
     expirationDate: data.expirationDate,
@@ -51,10 +54,13 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: ['data'],
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.startComparingData.buildAction(params, () => {
+        dispatch(actions.startComparingData.buildAction(params, async () => {
           const {verification} = getState().toJS()
           const {type} = verification.document
-          const contractId = ''
+
+          const webId = util.usernameToWebId(verification.data.username)
+          const contractId = await backend.solid.getIdentityContractAddress(webId)
+
           const {wallet} = services.auth.currentUser
           compareDataToIdCard({
             contractId,
