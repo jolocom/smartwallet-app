@@ -327,15 +327,19 @@ export default class WalletIdCard extends React.Component {
     </div>)
   }
 
-  verifierLocationsMsg = () => (
-    <div>
-      <div key="0" style={{width: '100%', textAlign: 'center'}}>
-        verification Locations
+  verifierLocationsMsg() {
+    return (
+      <div>
+        <div key="0" style={{width: '100%', textAlign: 'center'}}>
+          Verification Locations
+        </div><br />
+        <div key="1"> Deutsche Post </div>
+        <div key="2"> Französische Strasse 17 </div>
+        <div key="3"> <span>10295</span> Berlin </div><br />
+        <div key="4"> Deutsche Bank </div>
+        <div key="5"> Gendarmenmarkt 12 </div>
+        <div key="6"> <span>10486</span> Berlin </div><br />
       </div>
-      <div key="1"> Title </div>
-      <div key="2"> Street With Number </div>
-      <div key="3"> Zip </div>
-      <div key="4"> City </div>
-    </div>
-  )
+    )
+  }
 }
