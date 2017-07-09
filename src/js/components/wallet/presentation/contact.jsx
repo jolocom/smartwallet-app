@@ -167,70 +167,62 @@ export default class WalletContact extends React.Component {
       addNewEntry,
       onFocusChange
     } = this.props
-
+    let firstElementToAppear
+    let indexIcon
     if (!loading) {
-      originalInformation[key].length && fields.push(
-        originalInformation[key].map((field, i) => {
-          if (!field.delete) {
-            return this.renderField(i, {
-              key,
-              label,
-              icon: i === 0 && icon,
-              value: field.value,
-              type: field.type,
-              verified: !!field.verified,
-              valid: field.valid,
-              errorText,
-              isNew: false
-            })
-          }
-        })
-      )
-
-      newInformation[key].length && fields.push(
-        newInformation[key].map((field, i) => {
-          if (!field.delete) {
-            return this.renderField(i, {
-              key,
-              label,
-              icon: !fields.length && i === 0 && icon,
-              value: field.value,
-              type: field.type,
-              verified: !!field.verified,
-              valid: field.valid,
-              errorText,
-              isNew: true
-            })
-          }
-        })
-      )
-
-      if (fields.length === 0) {
+      if (originalInformation[key].length > 0) {
+        firstElementToAppear = originalInformation[key]
+          .find(element => !element.delete)
+        indexIcon = originalInformation[key].indexOf(firstElementToAppear)
         fields.push(
-          this.renderField(0, {
-            key,
-            label,
-            icon: !fields.length && icon,
-            value: '',
-            type: '',
-            verified: false,
-            valid: false,
-            errorText,
-            isNew: true
+          originalInformation[key].map((field, i) => {
+            if (!field.delete) {
+              return this.renderField(i, {
+                key,
+                label,
+                icon: i === indexIcon && icon,
+                value: field.value,
+                type: field.type,
+                verified: !!field.verified,
+                valid: field.valid,
+                errorText,
+                isNew: false
+              })
+            }
           })
         )
-      } else {
+      }
+      if (newInformation[key].length > 0) {
+        if (!firstElementToAppear) {
+          firstElementToAppear = newInformation[key]
+            .find(element => !element.delete)
+          indexIcon = newInformation[key].indexOf(firstElementToAppear)
+        }
         fields.push(
-          <AddNew key={`add_${key}`} onClick={() => {
-            addNewEntry(key, newInformation[key].length)
-            onFocusChange(`newInformation_${key}`)
-          }}
-            value={addText}
-          />
+          newInformation[key].map((field, i) => {
+            if (!field.delete) {
+              return this.renderField(i, {
+                key,
+                label,
+                icon: i === indexIcon && icon,
+                value: field.value,
+                type: field.type,
+                verified: !!field.verified,
+                valid: field.valid,
+                errorText,
+                isNew: true
+              })
+            }
+          })
         )
       }
     }
-
+    fields.push(
+      <AddNew key={`add_${key}`} onClick={() => {
+        addNewEntry(key, newInformation[key].length)
+        onFocusChange(`newInformation_${key}`)
+      }}
+        value={addText} />)
     return (<div>
       {fields}
     </div>)

@@ -56,7 +56,21 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: ['field', 'index', 'value']
   },
   deleteInformation: {
-    expectedParams: ['age', 'field', 'index']
+    expectedParams: ['age', 'field', 'index'],
+    creator: (...params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.deleteInformation.buildAction(...params))
+        const {originalInformation, newInformation} = getState()
+          .toJS().wallet.contact.information
+        if ([...originalInformation.phones, ...newInformation.phones]
+          .every(phone => phone.delete)) {
+          dispatch(actions.addNewEntry('phones', newInformation.phones.length))
+        } else if ([...originalInformation.emails, ...newInformation.emails]
+          .every(email => email.delete)) {
+          dispatch(actions.addNewEntry('emails', newInformation.phones.length))
+        }
+      }
+    }
   },
   updateInformation: {
     expectedParams: ['field', 'index', 'value']

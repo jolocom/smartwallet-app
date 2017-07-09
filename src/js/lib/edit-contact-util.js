@@ -50,8 +50,19 @@ export const mapAccountInformationToState = ({email, phone}) =>
     showErrors: false,
     information: {
       newInformation: {
-        emails: [],
-        phones: [],
+        emails: [email.length > 0 ? {delete: true} : {
+          value: '',
+          delete: false,
+          bkank: true,
+          valid: true
+        }],
+        phones: [phone.length > 0 ? {delete: true} : {
+          value: '',
+          type: 'personal',
+          bkank: true,
+          delete: false,
+          valid: true
+        }],
         addresses: []
       },
       originalInformation: {

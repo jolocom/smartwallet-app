@@ -6,6 +6,7 @@ import Presentation from '../presentation/contact'
   props: ['wallet.contact'],
   actions: ['wallet/contact:saveChanges',
     'wallet/contact:getUserInformation',
+    'wallet/country-select:initiateCountrySelectScreen',
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
     'wallet/contact:updateInformation',
@@ -39,27 +40,78 @@ export default class WalletContactScreen extends React.Component {
   componentWillMount() {
     this.props.getUserInformation()
   }
+
   render() {
-    return (
-      <Presentation
-        focused={this.state.focused}
-        onFocusChange={this._onFocusChange}
-        information={this.props.contact.information}
-        loading={this.props.contact.loading}
-        showErrors={this.props.contact.showErrors}
-        deleteInformation={this.props.deleteInformation}
-        updateInformation={this.props.updateInformation}
-        setInformation={this.props.setInformation}
-        exitWithoutSaving={this.props.exitWithoutSaving}
-        saveChanges={this.props.saveChanges}
-        addNewEntry={this.props.addNewEntry}
-        confirm={this.props.confirm}
-        close={this.props.close}
-      />
-    )
+    const [{
+      initiateCountrySelectScreen,
+      deleteInformation,
+      updateInformation,
+      setInformation,
+      exitWithoutSaving,
+      saveChanges,
+      addNewEntry,
+      confirm,
+      close
+    }, {
+      information,
+      loading,
+      showErrors
+    }] = [this.props, this.props.contact]
+    return (<Presentation
+      information={information}
+      focused={this.state.focused}
+      onFocusChange={this._onFocusChange}
+      loading={loading}
+      showErrors={showErrors}
+      deleteInformation={deleteInformation}
+      updateInformation={updateInformation}
+      setInformation={setInformation}
+      exitWithoutSaving={exitWithoutSaving}
+      saveChanges={saveChanges}
+      addNewEntry={addNewEntry}
+      confirm={confirm}
+      close={close}
+      selectCountry={initiateCountrySelectScreen} />)
   }
 
   _onFocusChange = (value) => {
     this.setState({focused: value})
+  }
+
+  parseInformation() {
+    const {originalInformation, newInformation} = this.props.contact.information
+    if ([...originalInformation.phones, ...newInformation.phones].some(phone => !phone.delete)) { // eslint-disable-line max-len
+      this.props.addNewEntry('phone', newInformation.phones.length)
+    }
+  }
+
+  parseAddressDetailsToArray() {
+    const {originalInformation, newInformation} = this.props.contact.information
+
+    const addresses = [
+      ...originalInformation.addresses
+      .map(({streetWithNumber, zip, city, state, country}) => ([
+        {...streetWithNumber, key: 'streetWithNumber', label: 'Street'},
+        {...zip, key: 'zip', label: 'Zip Code'},
+        {...city, key: 'city', label: 'City'},
+        {...state, key: 'state', label: 'State'},
+        {...country, key: 'country', label: 'Country'}
+      ])),
+      ...newInformation.addresses
+      .map(({streetWithNumber, zip, city, state, country}) => ([
+        {...streetWithNumber, key: 'streetWithNumber', label: 'Street'},
+        {...zip, key: 'zip', label: 'Zip Code'},
+        {...city, key: 'city', label: 'City'},
+        {...state, key: 'state', label: 'State'},
+        {...country, key: 'country', label: 'Country'}
+      ]))
+    ]
+    return addresses.some(address => !address.delete) ? addresses : [
+      {value: '', key: 'streetWithNumber', label: 'Street'},
+      {value: '', key: 'zip', label: 'Zip Code'},
+      {value: '', key: 'city', label: 'City'},
+      {value: '', key: 'state', label: 'State'},
+      {value: '', key: 'country', label: 'Country'}
+    ]
   }
 }
