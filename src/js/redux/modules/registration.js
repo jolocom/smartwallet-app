@@ -363,7 +363,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.registerWallet.id_success:
       return state.mergeDeep({
         wallet: {
-          registering: false,
+          registering: true,
           registered: true
         }
       })
