@@ -151,7 +151,6 @@ export default class WalletIdCard extends React.Component {
       enableDelete={value.length > 0} />
   }
 
-
   renderStreetWithNumber({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
     return (<div>
       <EditListItem
