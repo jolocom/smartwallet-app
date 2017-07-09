@@ -95,8 +95,8 @@ describe('#AuthService', () => {
       }
       const login = {
         email: 'j.j@j.c',
-        password: 'canyouseeme?',
-        pin: '1234'
+        pin: '1111',
+        password: 'canyouseeme?'
       }
       const auth = new AuthService(backend)
       expect(auth.loginWithCredentials(login)).to.eventually
@@ -107,8 +107,8 @@ describe('#AuthService', () => {
       expect(backend.wallet.loginWithCredentials.calls).to.deep.equal([{
         args: [{
           email: 'j.j@j.c',
-          password: 'canyouseeme?',
-          pin: '1234'
+          pin: '1111',
+          password: 'canyouseeme?'
         }]
       }])
     })
