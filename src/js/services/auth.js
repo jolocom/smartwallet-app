@@ -6,47 +6,58 @@ export default class AuthService extends EventEmitter {
     this.backend = backend
     this.currentUser = null
     this.on('changed', user => { this._storeWebId() })
-    this._setCurrentUser({
-      wallet: new (require('../lib/agents/wallet').Wallet)()
-    })
+
+    if (typeof localStorage !== 'undefined') {
+      const savedSession = localStorage.getItem('jolocom.smartWallet')
+      if (savedSession) {
+        this._setCurrentUser({
+          wallet: this.backend.wallet.loginFromSerialized(savedSession)
+        }, {dontSaveSession: true})
+      }
+    }
   }
 
   _storeWebId() {
     localStorage.setItem('jolocom.webId', this.currentUser.wallet.webId)
   }
 
-  _setCurrentUser(user) {
+  _setCurrentUser(user, {dontSaveSession} = {}) {
     this.currentUser = user
+    if (!dontSaveSession) {
+      localStorage.setItem('jolocom.smartWallet', user.wallet.serialize())
+    }
     this.emit('changed', this.currentUser.wallet.webId || null)
   }
 
-  async registerWithSeedPhrase({userName, seedPhrase}) {
+  async registerWithSeedPhrase({userName, seedPhrase, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.registerWithSeedPhrase({userName, seedPhrase})
+      wallet: await this.backend.wallet
+      .registerWithSeedPhrase({userName, seedPhrase, pin})
     })
     return this.currentUser
   }
 
-  async registerWithCredentials({userName, email, password}) {
+  async registerWithCredentials({userName, email, password, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.registerWithCredentials({
-        userName, email, password
+      wallet: await this.backend.wallet.registerWithCredentials({
+        userName, email, password, pin
       })
     })
     return this.currentUser
   }
 
-  async loginWithSeedPhrase({userName, seedPhrase}) {
+  async loginWithSeedPhrase({seedPhrase, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.loginWithSeedPhrase({userName, seedPhrase})
+      wallet: await this.backend.wallet
+      .loginWithSeedPhrase({seedPhrase, pin})
     })
     return this.currentUser
   }
 
-  async loginWithCredentials({userName, email, password}) {
+  async loginWithCredentials({email, password, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.loginWithCredentials({
-        userName, email, password
+      wallet: await this.backend.wallet.loginWithCredentials({
+        email, password, pin
       })
     })
     return this.currentUser

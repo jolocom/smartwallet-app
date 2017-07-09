@@ -46,6 +46,10 @@ const STYLES = {
   },
   uploadBtn: {
     margin: '10px'
+  },
+  verifierLocationsMsg: {
+    width: '100%',
+    textAlign: 'center'
   }
 }
 @Radium
@@ -82,7 +86,6 @@ export default class WalletIdCard extends React.Component {
       case 'birthPlace':
         return null // handled with birthDate
       case 'birthDate':
-        return this.renderBirthDate(field)
       case 'streetWithNumber':
         return this.renderStreetWithNumber(field)
       case 'expirationDate':
@@ -147,6 +150,7 @@ export default class WalletIdCard extends React.Component {
       onDelete={() => this.props.change(key, '')}
       enableDelete={value.length > 0} />
   }
+
 
   renderStreetWithNumber({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
     return (<div>
@@ -330,7 +334,7 @@ export default class WalletIdCard extends React.Component {
   verifierLocationsMsg() {
     return (
       <div>
-        <div key="0" style={{width: '100%', textAlign: 'center'}}>
+        <div key="0" style={STYLES.verifierLocationsMsg}>
           Verification Locations
         </div><br />
         <div key="1"> Deutsche Post </div>
