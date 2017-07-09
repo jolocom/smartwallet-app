@@ -17,8 +17,9 @@ const STYLES = {
     marginTop: '100px'
   },
   greeting: {
-    fontSize: '20px',
-    color: theme.palette.textColor
+    fontSize: theme.textStyles.sectionheader.fontSize,
+    fontWeight: theme.textStyles.sectionheader.fontWeight,
+    color: theme.textStyles.sectionheader.color
   },
   issue: {
     fontSize: '40px',

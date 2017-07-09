@@ -1,6 +1,6 @@
 {
   "name": "little-sister",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Social app / linked data explorer built for SoLiD infrastracture",
   "main": "index.js",
   "scripts": {

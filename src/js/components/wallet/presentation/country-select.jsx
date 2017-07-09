@@ -82,13 +82,13 @@ export default class CountrySelectPresentation extends React.Component {
           onClick={() => submit(countryLabel)} >
           <TextField
             underlineShow={false}
-            id={countryLabel + '_first_letter'}
+            id={`${countryLabel}_first_letter`}
             inputStyle={STYLES.firstLetterText}
             value={getFirstCountryLetter(countryLabel, idx)}
             style={STYLES.firstLetter} />
           <TextField
             onClick={() => submit(countryLabel)}
-            id={countryLabel + '_country'}
+            id={`${countryLabel}_country`}
             underlineShow={false}
             style={STYLES.countryName} value={countryLabel} />
         </div>))}

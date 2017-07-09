@@ -28,7 +28,9 @@ let STYLES = {
   },
   input: {
     width: '100%',
-    color: theme.palette.textColor,
+    color: theme.textStyles.contentInputFields.color,
+    fontSize: theme.textStyles.contentInputFields.fontSize,
+    fontWeight: theme.textStyles.contentInputFields.fontWeight,
     cursor: 'inherit'
   },
   type: {
