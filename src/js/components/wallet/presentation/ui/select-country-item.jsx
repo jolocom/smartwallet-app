@@ -10,7 +10,6 @@ import {
 
 import {
   NavigationCancel,
-  ActionSearch as Search,
   HardwareKeyboardArrowRight as ArrowRight
 } from 'material-ui/svg-icons'
 
