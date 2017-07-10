@@ -1,8 +1,9 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
-import {actions as idCardActions} from './id-card'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
+import {actions as idCardActions} from './id-card'
+import * as contact from './contact'
 
 const actions = module.exports = makeActions('wallet/id-card/country', {
   submit: {
@@ -38,6 +39,17 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
   },
   setCountryValue: {
     expectedParams: ['value']
+  },
+  saveCountryToContact: {
+    expectedParams: ['value'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        const {value, type: index} = getState().toJS().wallet.country
+        dispatch(contact.changeIdCardField(value, index))
+        dispatch(actions.clearState())
+        dispatch(actions.saveCountryToContact.buildAction(params))
+      }
+    }
   },
   cancel: {
     expectedParams: [],
