@@ -35,7 +35,7 @@ const STYLES = {
     userSelect: 'none',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundSize: 'contain',
+    backgroundSize: '35%',
     marginBottom: '8px'
   }
 }
@@ -82,7 +82,8 @@ const UserType = (props) => {
         </HoverButton>
       </Content>
       <Footer>
-        <FlatButton onClick={() => props.onWhySelect(messageWhy)}>
+        <FlatButton style={{color: theme.palette.accent1Color}}
+          onClick={() => props.onWhySelect(messageWhy)}>
         WHY?
         </FlatButton>
       </Footer>

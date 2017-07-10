@@ -28,8 +28,8 @@ const STYLES = {
   },
   title: {
     color: '#fff',
-    fontSize: '21px',
-    fontWeight: '300',
+    fontSize: theme.textStyles.headline.fontSize,
+    fontWeight: theme.textStyles.headline.fontWeight,
     margin: 0
   },
   img: {
