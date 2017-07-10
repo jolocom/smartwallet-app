@@ -67,7 +67,7 @@ const actions = module.exports = makeActions('wallet/contact', {
           dispatch(actions.addNewEntry('phones', newInformation.phones.length))
         } else if ([...originalInformation.emails, ...newInformation.emails]
           .every(email => email.delete)) {
-          dispatch(actions.addNewEntry('emails', newInformation.phones.length))
+          dispatch(actions.addNewEntry('emails', newInformation.emails.length))
         }
       }
     }
