@@ -56,7 +56,7 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   showVerifiers(...args) {
-    this.props.configSimpleDialog(null, 'OK', 'OK', {})
+    this.props.configSimpleDialog(null, args, 'OK', {})
     this.props.showSimpleDialog()
   }
 

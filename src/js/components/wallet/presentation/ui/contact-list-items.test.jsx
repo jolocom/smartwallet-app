@@ -16,9 +16,6 @@ const STYLES = {
     actionsContainerStyle: {
       textAlign: 'center'
     }
-  },
-  list: {
-    padding: '0'
   }
 }
 
@@ -63,7 +60,7 @@ const ContactList = ({
       setFocusedPin={(value) => { setFocusedPin(value, index) }}
       changePinValue={(value) => { changePinValue(value, index) }}
       focused={pinFocused}
-      value={address || number}
+      value={number || address}
       codeIsSent={codeIsSent}
       verified={verified}
       enterCode={onConfirm}

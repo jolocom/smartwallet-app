@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
+import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
@@ -10,6 +11,12 @@ const actions = module.exports = makeActions('wallet/identity', {
         dispatch(router.pushRoute('/wallet/identity/contact'))
       }
     }
+  },
+  changePinValue: {
+    expectedParams: ['value', 'index']
+  },
+  setFocusedPin: {
+    expectedParams: ['value', 'index']
   },
   goToPassportManagement: {
     expectedParams: [],
@@ -41,8 +48,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () => {
-          // eslint-disable-next-line max-len
-          return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
+          return backend.solid.getUserInformation(new WebIdAgent().getWebId())
         }))
       }
     }
@@ -88,7 +94,9 @@ const initialState = Immutable.fromJS({
     phones: [{
       type: '',
       number: '',
-      verified: false
+      verified: false,
+      smsCode: '',
+      pinFocused: false
     }],
     emails: [{
       type: '',
@@ -114,12 +122,30 @@ const initialState = Immutable.fromJS({
   ]
 })
 
+const changePinCodeValue = (state, {index, value}) => {
+  if (/^[0-9]{0,6}$/.test(value)) {
+    return state.mergeIn(['contact', 'phones', index], {
+      smsCode: value
+    })
+  }
+  return state
+}
+
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.getIdentityInformation.id_success:
       return mapBackendToState(action.result)
+
     case actions.getIdentityInformation.id_fail:
       return mapBackendToStateError(state)
+
+    case actions.changePinValue.id:
+      return changePinCodeValue(state, action)
+
+    case actions.setFocusedPin.id:
+      return state.mergeIn(['contact', 'phones', action.index], {
+        pinFocused: action.value
+      })
     default:
       return state
   }

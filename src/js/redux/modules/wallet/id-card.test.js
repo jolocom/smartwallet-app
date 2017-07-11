@@ -63,8 +63,7 @@ describe('# IdCard redux module', () => {
       expect(state.loaded).to.be.true
       expect(state.showErrors).to.be.true
     })
-    it('should set loaded to true and showErrors to false on ' +
-    'retrieveIdCardInformation success', () => {
+    it('should set loaded to true and showErrors to false on retrieveIdCardInformation success', () => { // eslint-disable-line max-len
       const action = {
         type: actions.retrieveIdCardInformation.id_success,
         result: {

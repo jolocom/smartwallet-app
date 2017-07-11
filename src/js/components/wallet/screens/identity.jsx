@@ -7,6 +7,8 @@ import WalletError from '../presentation/error'
   props: ['wallet'],
   actions: [
     'wallet/identity:getIdentityInformation',
+    'wallet/identity:changePinValue',
+    'wallet/identity:setFocusedPin',
     'wallet/identity:goToPassportManagement',
     'wallet/identity:goToDrivingLicenceManagement',
     'wallet/identity:goToContactManagement',
@@ -23,6 +25,7 @@ export default class WalletIdentityScreen extends React.Component {
     children: React.PropTypes.node,
     wallet: React.PropTypes.object,
     goToPassportManagement: React.PropTypes.func.isRequired,
+    setFocusedPin: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     closeConfirmDialog: React.PropTypes.func.isRequired,
@@ -30,7 +33,8 @@ export default class WalletIdentityScreen extends React.Component {
     getIdentityInformation: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
-    startEmailConfirmation: React.PropTypes.func.isRequired
+    startEmailConfirmation: React.PropTypes.func.isRequired,
+    changePinValue: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -76,6 +80,8 @@ export default class WalletIdentityScreen extends React.Component {
       idCards={idCards}
       isLoaded={loaded}
       isError={error}
+      setFocusedPin={this.props.setFocusedPin}
+      changePinValue={this.props.changePinValue}
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
