@@ -42,15 +42,28 @@ const actions = module.exports = makeActions('wallet/id-card', {
         const {idCard, showErrors} = getState().toJS().wallet.idCard
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
-          dispatch(actions.save.buildAction(params, () =>
-            storeIdCardDetailsInSolid({backend, services, idCard, webId})
-              .then(() => {
-                storeIdCardDetailsInBlockchain({idCard, services}).then(
-                  dispatch(router.pushRoute('/wallet/identity')))
-              })
-            )
-          )
+          dispatch(actions.save.buildAction(params, () => {
+            return storeIdCardDetailsInSolid({backend, services, idCard, webId})
+          })
+        ).then(() => {
+          dispatch(actions.clearState())
+          dispatch(router.pushRoute('/wallet/identity'))
+        })
         }
+      }
+    }
+  },
+  saveToBlockchain: {
+    expectedParams: ['index'],
+    async: true,
+    creator: (index) => {
+      return (dispatch, getState, {services, backend}) => {
+        const idCard = getState().toJS().wallet.identity.idCards[index]
+        console.log('saveToBlockchain action params: ', index)
+        console.log(idCard)
+        dispatch(actions.saveToBlockchain.buildAction(index, () => {
+          return storeIdCardDetailsInBlockchain({idCard, services})
+        }))
       }
     }
   },
@@ -107,6 +120,9 @@ const actions = module.exports = makeActions('wallet/id-card', {
   },
   changePhysicalAddressField: {
     expectedParams: ['field', 'value']
+  },
+  clearState: {
+    expectedParams: []
   }
 })
 
@@ -143,6 +159,9 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
+
+    case actions.clearState.id:
+      return initialState
 
     case actions.save.id:
       return state.merge({
