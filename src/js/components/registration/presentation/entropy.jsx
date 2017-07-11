@@ -32,6 +32,12 @@ const STYLES = {
     fontWeight: theme.textStyles.headline.fontWeight,
     margin: 0
   },
+  subtitle: {
+    color: '#fff',
+    fontSize: theme.textStyles.screenHeader.fontSize,
+    fontWeight: theme.textStyles.screenHeader.fontWeight,
+    margin: 0
+  },
   img: {
     alignItems: 'center',
     width: '100%',
@@ -54,8 +60,10 @@ const Entropy = (props) => {
       <header style={STYLES.header}>
         <h1 style={STYLES.title}>
           Hi {props.user}, for... <br /><br />
-          ...more security we need some random data.<br /><br />
+          <span style={STYLES.subtitle}>
+            ...more security we need some random data.<br /><br />
           Please put your finger anywhere on the screen and draw on it randomly.
+          </span>
         </h1>
       </header>
     )

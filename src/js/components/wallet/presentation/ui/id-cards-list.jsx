@@ -81,7 +81,7 @@ const IdCardsList = (props) => {
     />
   </List>))
 
-  return (<List disabled>
+  return (<List style={{padding: '0'}} disabled>
     {fields}
   </List>)
 }

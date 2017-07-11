@@ -15,12 +15,14 @@ const STYLES = {
     margin: '8px 0 8px',
     borderRadius: '2px',
     primary: false,
-    width: '100%',
     backgroundColor: theme.jolocom.gray1,
     selectedColor: theme.palette.primary1Color,
     textAlign: 'center',
     padding: '16px',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    '@media screen and (min-width: 400px)': {
+      width: '450px'
+    }
   },
   tileinside: {
     color: theme.jolocom.gray5,
@@ -36,8 +38,8 @@ const STYLES = {
     userSelect: 'none',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundSize: '50%',
-    marginBottom: '8px'
+    backgroundSize: 'contain',
+    margin: '8px'
   }
 }
 

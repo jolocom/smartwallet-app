@@ -35,8 +35,11 @@ const STYLES = {
     userSelect: 'none',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundSize: '35%',
-    marginBottom: '8px'
+    backgroundSize: 'contain',
+    margin: '8px'
+  },
+  embeddedLink: {
+    color: theme.palette.accent1Color
   }
 }
 
@@ -82,7 +85,7 @@ const UserType = (props) => {
         </HoverButton>
       </Content>
       <Footer>
-        <FlatButton style={{color: theme.palette.accent1Color}}
+        <FlatButton style={STYLES.embeddedLink}
           onClick={() => props.onWhySelect(messageWhy)}>
         WHY?
         </FlatButton>

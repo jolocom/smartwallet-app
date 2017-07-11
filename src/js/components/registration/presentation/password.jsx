@@ -39,11 +39,15 @@ const STYLES = {
     marginTop: '30px'
   },
   helpMsg: {
-    textAlign: 'left'
+    textAlign: 'left',
+    fontSize: '13px',
+    marginLeft: '18px'
   },
   errorStyle: {
     paddingTop: '10px',
-    textAlign: 'left'
+    textAlign: 'left',
+    paddingRigth: '0',
+    marginRigth: '0'
   },
   underlineDisabled: {
     borderBottom: '0.2px solid'
@@ -142,7 +146,7 @@ function Password(props) {
         >
           <table style={STYLES.helpMsg}>
             <tbody>
-              <tr><th>For more security please use at least :</th></tr>
+              <tr><td>For more security please use at least :</td></tr>
               <tr><td>- one Number</td></tr>
               <tr><td>- one Upper Case (e.g. A,B,C...)</td></tr>
               <tr><td>- one Lower Case (e.g. a,b,c...)</td></tr>

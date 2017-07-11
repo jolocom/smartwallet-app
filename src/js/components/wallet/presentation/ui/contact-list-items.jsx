@@ -16,6 +16,9 @@ const STYLES = {
     actionsContainerStyle: {
       textAlign: 'center'
     }
+  },
+  list: {
+    padding: '0'
   }
 }
 
@@ -57,7 +60,7 @@ const ContactList = (props) => {
       }
     </div>))
 
-  return (<List disabled>
+  return (<List style={STYLES.list} disabled>
     {list}
   </List>)
 }

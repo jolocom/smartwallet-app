@@ -10,7 +10,7 @@ const PassportsList = (props) => {
   const {passports} = props
   if (!props.passports) return null
 
-  return (<List disabled>
+  return (<List style={{padding: '0'}} disabled>
     {
       passports.map(({number, surname, givenName, birthDate, gender}) => (<List
         key={`passport_${number}`}>

@@ -5,7 +5,7 @@ import {theme} from 'styles'
 
 const STYLES = {
   header: {
-    margin: '42px 0 16px 0'
+    margin: '62px 16px 16px 16px'
   },
   title: {
     color: theme.textStyles.headline.color,

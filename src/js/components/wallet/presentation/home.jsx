@@ -20,7 +20,7 @@ const STYLES = {
     color: '#953052'
   },
   greeting: {
-    fontSize: theme.textStyles.screenHeader.fontSize,
+    fontSize: theme.textStyles.headline.fontSize,
     fontWeight: theme.textStyles.screenHeader.fontWeight,
     color: theme.textStyles.screenHeader.color
   },
@@ -42,7 +42,6 @@ export default class WalletHome extends React.Component {
   }
 
   render() {
-    // TODO replace placeholder img
     return (
       <Container style={STYLES.walletContainer}>
         <Block>

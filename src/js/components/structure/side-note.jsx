@@ -6,6 +6,7 @@ import {theme} from 'styles'
 const STYLE = {
   fontSize: theme.textStyles.textCopy.fontSize,
   fontWeight: theme.textStyles.textCopy.fontWeight,
+  margin: '0 8px 0 8px',
   color: theme.textStyles.textCopy.color,
   '@media screen and (min-width: 1200px)': {
     fontSize: '13pt'

@@ -13,7 +13,8 @@ const STYLES = {
   form: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    margin: '30px 0'
   },
   input: {
     display: 'inline-block'
@@ -26,6 +27,9 @@ const STYLES = {
   content: {
     padding: '16px',
     flex: 1
+  },
+  sidenote: {
+    margin: '10px'
   }
 }
 
@@ -80,7 +84,7 @@ const Pin = (props) => {
               props.confirm
               ? null
               : <Block>
-                <SideNote>
+                <SideNote style={STYLES.sidenote}>
                   This secure PIN will be needed for transactions and
                   saving information on the Blockchain.
                 </SideNote>

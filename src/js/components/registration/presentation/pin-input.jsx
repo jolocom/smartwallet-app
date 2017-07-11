@@ -12,15 +12,15 @@ const STYLES = {
     width: '48px',
     height: '48px',
     borderRadius: '24px',
-    backgroundColor: theme.palette.accent1Color,
+    backgroundColor: '#f0f0f0',
     lineHeight: '48px',
     textAlign: 'center'
   },
   focusedBall: {
-    backgroundColor: theme.palette.primary1Color
+    backgroundColor: theme.palette.textColor
   },
   filledBall: {
-    backgroundColor: theme.palette.textColor
+    backgroundColor: theme.palette.primary1Color
   },
   numberInput: {
     position: 'absolute',

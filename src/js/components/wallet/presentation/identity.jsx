@@ -39,11 +39,15 @@ const STYLES = {
     contentStyle: {
     },
     actionsContainerStyle: {
-      textAlign: 'center'
+      textAlign: 'right'
     }
   },
   avatar: {
     marginTop: '10px'
+  },
+  container: {
+    marginLeft: '10px',
+    marginRight: '10px'
   }
 }
 
@@ -135,7 +139,7 @@ export default class WalletIdentity extends React.Component {
     )
     return (<TabContainer>
       <HalfScreenContainer>
-        <Content>
+        <Content style={STYLES.container}>
           <Block>
             <List>
               <ListItem

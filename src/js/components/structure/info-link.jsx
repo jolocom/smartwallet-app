@@ -14,6 +14,7 @@ const STYLES = {
   },
   link: {
     color: theme.palette.accent1Color,
+    textDecoration: 'none',
     fontWeight: 'bold'
   }
 }
