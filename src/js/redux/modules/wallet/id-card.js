@@ -1,5 +1,6 @@
 import Immutable from 'immutable'
 import moment from 'moment'
+import util from 'lib/util'
 // import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 
 import { makeActions } from '../'
@@ -16,20 +17,25 @@ import {
 
 const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
   const {wallet} = services.auth.currentUser
-  return wallet.addAttributeHashAndWait({
-    attributeId: 'idCard',
-    attribute: {
-      number: idCard.number.value,
-      expirationDate: moment(idCard.expirationDate.value).format(),
-      givenName: idCard.firstName.value,
-      familyName: idCard.lastName.value,
-      birthDate: moment(idCard.birthDate.value).format(),
-      birthPlace: idCard.birthPlace.value,
-      birthCountry: idCard.birthCountry.value
-    },
-    definitionUrl: '',
-    pin: '1234'
-  })
+  // console.log(`${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`)
+  return wallet.addAttributeHashToIdentity(
+    {
+      attributeId: 'idCard',
+      attribute: 'blah',
+        // number: idCard.idCardFields.number
+      // expirationDate: moment(idCard.expirationDate.value).format(),
+      // givenName: idCard.firstName.value,
+      // familyName: idCard.lastName.value,
+      // birthDate: moment(idCard.birthDate.value).format(),
+      // birthPlace: idCard.birthPlace.value,
+      // birthCountry: idCard.birthCountry.value
+
+      definitionUrl:
+      `${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`,
+      pin: '1234',
+      targetIdentityAddress: wallet.identityAddress
+    }
+  )
 }
 
 const actions = module.exports = makeActions('wallet/id-card', {
