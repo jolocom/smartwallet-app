@@ -91,11 +91,10 @@ export default class WalletIdentityScreen extends React.Component {
       )}
       onVerify={({message, buttonText, style, attrValue}) => {
         this.props.configSimpleDialog(() => {
-          this.props.startEmailConfirmation({email: attrValue})
+          this.props.startEmailVerification({email: attrValue})
         }, message, buttonText, style)
         this.props.showSimpleDialog()
       }}
-              
       onConfirm={(...args) => { this.onConfirm(...args) }}
       showUserInfo={(...args) => {
         this.props.configSimpleDialog(...args)
