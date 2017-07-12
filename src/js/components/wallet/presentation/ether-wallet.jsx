@@ -3,6 +3,9 @@ import Radium from 'radium'
 
 import {Content, Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
+import {
+  RaisedButton
+} from 'material-ui'
 import Spinner from '../../common/spinner'
 
 import {theme} from 'styles'
@@ -101,6 +104,7 @@ export default class WalletEther extends React.Component {
     } else if (!this.props.ether.ether.amount) {
       content = this.renderNoEther()
     }
+
     return (
       <TabContainer>
         <HalfScreenContainer>

@@ -783,7 +783,7 @@ describe('Wallet registration Redux module', function() {
 
         expect(state.get('wallet').toJS())
           .to.deep.equal({
-            registering: false,
+            registering: true,
             registered: true,
             errorMsg: null
           })

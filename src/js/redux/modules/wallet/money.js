@@ -125,7 +125,6 @@ module.exports.default = (state = initialState, action = {}) => {
         loaded: true,
         errorMsg: 'Could not get the ether price'
       })
-
     default:
       return state
   }

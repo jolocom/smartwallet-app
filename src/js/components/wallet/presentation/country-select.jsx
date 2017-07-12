@@ -13,28 +13,32 @@ const STYLES = {
   },
   floatingLabelSearchField: {
     color: theme.palette.textColor,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingLeft: '5%'
   },
   leftIcon: {
-    width: '5%'
+    width: '5%',
+    paddingLeft: '2%'
   },
   searchField: {
-    width: '90%'
+    width: '86%'
   },
   searchFieldUnderline: {
     color: theme.palette.textColor
   },
   rightIcon: {
-    width: '5%'
+    width: '5%',
+    paddingRight: '2%'
   },
   firstLetter: {
-    width: '5%'
+    width: '10%'
   },
   firstLetterText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: theme.palette.primary1Color
   },
   countryName: {
-    width: '95%'
+    width: '90%'
   },
   countryField: {
     width: '100%'

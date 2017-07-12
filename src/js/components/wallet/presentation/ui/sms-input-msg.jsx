@@ -8,6 +8,7 @@ const SmsInputMsg = ({
   phoneNumber,
   pinFocused = false,
   setFocusedPin,
+  pinLength,
   changePinValue
 }) => (<div>
   <b>Verification Request</b> <br />
@@ -18,6 +19,7 @@ const SmsInputMsg = ({
   </div>
   <SmsCodeInput
     value={smsCode}
+    pinLength={pinLength}
     onFocusChange={setFocusedPin}
     onChange={changePinValue}
     focused={pinFocused} />
@@ -26,6 +28,7 @@ const SmsInputMsg = ({
 SmsInputMsg.propTypes = {
   smsCode: React.PropTypes.string,
   phoneNumber: React.PropTypes.string,
+  pinLength: React.PropTypes.number,
   pinFocused: React.PropTypes.bool,
   setFocusedPin: React.PropTypes.func,
   changePinValue: React.PropTypes.func
