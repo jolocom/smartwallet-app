@@ -100,7 +100,7 @@ export default class WalletEther extends React.Component {
     if (this.props.ether.ether.buying) {
       content = this.renderLoading()
     } else if (this.props.ether.ether.amount) {
-      content = this.renderNoEther()
+      content = this.renderHasEther()
     } else if (!this.props.ether.ether.amount) {
       content = this.renderNoEther()
     }

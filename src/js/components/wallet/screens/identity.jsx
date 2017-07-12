@@ -20,8 +20,8 @@ import WalletError from '../presentation/error'
     'verification:confirmEmail',
     'verification:confirmPhone',
     'verification:startEmailVerification',
-    'verification:startPhoneVerification'
-    'wallet/id-card:saveToBlockchain',
+    'verification:startPhoneVerification',
+    'wallet/id-card:saveToBlockchain'
   ]
 })
 
@@ -45,9 +45,8 @@ export default class WalletIdentityScreen extends React.Component {
     resendVerificationLink: React.PropTypes.func,
     resendVerificationSms: React.PropTypes.func,
     changePinValue: React.PropTypes.func.isRequired,
-    changeSmsCodeValue: React.PropTypes.func.isRequired
-    saveToBlockchain: React.PropTypes.func.isRequired,
-    changePinValue: React.PropTypes.func.isRequired
+    changeSmsCodeValue: React.PropTypes.func.isRequired,
+    saveToBlockchain: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
