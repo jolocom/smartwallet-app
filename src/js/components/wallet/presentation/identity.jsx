@@ -69,6 +69,8 @@ export default class WalletIdentity extends React.Component {
     requestVerificationCode: React.PropTypes.func.isRequired,
     resendVerificationCode: React.PropTypes.func.isRequired,
     enterVerificationCode: React.PropTypes.func.isRequired
+    onVerify: React.PropTypes.func.isRequired,
+    saveToBlockchain: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -90,6 +92,8 @@ export default class WalletIdentity extends React.Component {
       requestVerificationCode,
       resendVerificationCode,
       enterVerificationCode
+      onVerify,
+      saveToBlockchain
     } = this.props
 
     if (!isLoaded) {
@@ -178,7 +182,9 @@ export default class WalletIdentity extends React.Component {
               goToManagement={goToPassportManagement} />
           </Block>
           <Block>
-            <IdCardsList idCards={idCards} />
+            <IdCardsList
+              idCards={idCards}
+              saveToBlockchain={saveToBlockchain} />
           </Block>
           <Block>
             <PlusMenu

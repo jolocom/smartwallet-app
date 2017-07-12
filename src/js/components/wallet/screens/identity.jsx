@@ -21,6 +21,7 @@ import WalletError from '../presentation/error'
     'verification:confirmPhone',
     'verification:startEmailVerification',
     'verification:startPhoneVerification'
+    'wallet/id-card:saveToBlockchain',
   ]
 })
 
@@ -45,6 +46,8 @@ export default class WalletIdentityScreen extends React.Component {
     resendVerificationSms: React.PropTypes.func,
     changePinValue: React.PropTypes.func.isRequired,
     changeSmsCodeValue: React.PropTypes.func.isRequired
+    saveToBlockchain: React.PropTypes.func.isRequired,
+    changePinValue: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -76,6 +79,7 @@ export default class WalletIdentityScreen extends React.Component {
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
+      saveToBlockchain={this.props.saveToBlockchain}
       requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
         return () => this.showVerificationWindow(params,
           (callbackArgs) => this.requestVerificationCode(callbackArgs))
@@ -86,6 +90,13 @@ export default class WalletIdentityScreen extends React.Component {
       enterVerificationCode={(...args) => this.showVerificationWindow(...args,
         (...params) => this.enterVerificationCode(...params)
       )}
+      onVerify={({message, buttonText, style, attrValue}) => {
+        this.props.configSimpleDialog(() => {
+          this.props.startEmailConfirmation({email: attrValue})
+        }, message, buttonText, style)
+        this.props.showSimpleDialog()
+      }}
+              
       onConfirm={(...args) => { this.onConfirm(...args) }}
       showUserInfo={(...args) => {
         this.props.configSimpleDialog(...args)
