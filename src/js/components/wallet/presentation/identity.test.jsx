@@ -11,17 +11,16 @@ describe('(Component) Wallet Identity', function() {
         idCards={[]}
         isLoaded
         webId={''}
-        contact={{
-          emails: [{
-            type: '',
-            address: '',
-            verified: false
-          }],
-          phones: [{
-            type: '',
-            number: '',
-            verified: false
-          }]}}
+        emails={[{
+          type: '',
+          address: '',
+          verified: false
+        }]}
+        phones={[{
+          type: '',
+          number: '',
+          verified: false
+        }]}
         goToContactManagement={() => {}}
         goToPassportManagement={() => {}}
         goToDrivingLicenceManagement={() => {}}

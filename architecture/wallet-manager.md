@@ -26,6 +26,7 @@ Redux state: Money screen
 * currency
   * ether
     * loaded: bool
+    * price: number
     * amount: number or null
 
 Redux state: Identity screen

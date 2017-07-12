@@ -14,7 +14,13 @@ describe('# Wallet identity redux module', () => {
         webId: '',
         username: {verified: false, value: ''},
         contact: {
-          phones: [{type: '', number: '', verified: false}],
+          phones: [{
+            type: '',
+            number: '',
+            verified: false,
+            smsCode: '',
+            pinFocused: false
+          }],
           emails: [{type: '', address: '', verified: false}]
         },
         passports: [{
@@ -52,8 +58,7 @@ describe('# Wallet identity redux module', () => {
   })
 
   describe('# actions ', () => {
-    it('goToDrivingLicenceManagement should redirect the user to drivering ' +
-    'licence management', () => {
+    it('goToDrivingLicenceManagement should redirect to drivering licence management', () => { // eslint-disable-line max-len
       const dispatch = stub()
       const action = identity.actions.goToDrivingLicenceManagement()
       action(dispatch)
@@ -119,8 +124,7 @@ describe('# Wallet identity redux module', () => {
         }])
       }
     )
-    it('getIdentityInformation should get the identity information from ' +
-      'the backend', () => {
+    it('getIdentityInformation should retrieve identity information', () => {
       const getState = stub()
       const backend = {solid: {
         getUserInformation: stub().returns('information')

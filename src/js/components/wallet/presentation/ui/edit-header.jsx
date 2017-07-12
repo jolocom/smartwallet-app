@@ -8,12 +8,7 @@ const STYLES = {
   header: {
     margin: '42px 0px 16px 16px'
   },
-  title: {
-    color: theme.palette.textColor,
-    fontSize: '24px',
-    fontWeight: '300',
-    margin: 0
-  },
+  title: theme.textStyles.sectionheader,
   titleDivider: {
     marginTop: '20px',
     width: '100%'

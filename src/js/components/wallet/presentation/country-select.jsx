@@ -13,25 +13,29 @@ const STYLES = {
   },
   floatingLabelSearchField: {
     color: theme.palette.textColor,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingLeft: '5%'
   },
   leftIcon: {
-    width: '5%'
+    width: '5%',
+    paddingLeft: '2%'
   },
   searchField: {
-    width: '90%'
+    width: '86%'
   },
   searchFieldUnderline: {
     color: theme.palette.textColor
   },
   rightIcon: {
-    width: '5%'
+    width: '5%',
+    paddingRight: '2%'
   },
   firstLetter: {
-    width: '5%'
+    width: '10%'
   },
   firstLetterText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: theme.palette.primary1Color
   },
   countryName: {
     maxWidth: '95%'
@@ -78,12 +82,12 @@ export default class CountrySelectPresentation extends React.Component {
           onClick={() => submit(countryLabel)} >
           <TextField
             underlineShow={false}
-            id={countryLabel + '_first_letter'}
+            id={`${countryLabel}_first_letter`}
             inputStyle={STYLES.firstLetterText}
             value={getFirstCountryLetter(countryLabel, idx)}
             style={STYLES.firstLetter} />
           <TextField
-            id={countryLabel + '_country'}
+            id={`${countryLabel}_country`}
             underlineShow={false}
             style={STYLES.countryName} value={countryLabel} />
         </div>))}

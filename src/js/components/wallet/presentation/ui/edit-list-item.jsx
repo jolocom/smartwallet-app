@@ -29,7 +29,9 @@ let STYLES = {
   },
   input: {
     width: '100%',
-    color: theme.palette.textColor,
+    color: theme.textStyles.contentInputFields.color,
+    fontSize: theme.textStyles.contentInputFields.fontSize,
+    fontWeight: theme.textStyles.contentInputFields.fontWeight,
     cursor: 'inherit'
   },
   type: {
@@ -47,7 +49,8 @@ let STYLES = {
   },
   textField: {
     maxWidth: 'none',
-    flex: 1
+    flex: 1,
+    width: '100%'
   },
   item: {
     padding: '0 16px 0 72px'
@@ -77,7 +80,8 @@ export default class EditListItem extends React.Component {
     valid: React.PropTypes.bool,
     enableEdit: React.PropTypes.bool,
     underlineHide: React.PropTypes.bool,
-    enableDelete: React.PropTypes.bool
+    enableDelete: React.PropTypes.bool,
+    widthTextField: React.PropTypes.object
   }
 
   getStyles() {
@@ -98,7 +102,8 @@ export default class EditListItem extends React.Component {
       valid,
       showErrors,
       underlineHide,
-      errorText
+      errorText,
+      widthTextField
     } = this.props
 
     let styles = this.getStyles()
@@ -111,11 +116,13 @@ export default class EditListItem extends React.Component {
       ? theme.palette.primary1Color : theme.jolocom.gray1
 
     const icon = this.props.icon
-      ? <this.props.icon color={iconColor} style={styles.icon} /> : <div />
+      ? <this.props.icon color={iconColor} style={styles.icon} /> : null
+
+    const widthField = widthTextField || styles.item
 
     return (
       <ListItem
-        style={styles.item}
+        style={widthField}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         leftIcon={icon}

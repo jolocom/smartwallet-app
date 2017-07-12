@@ -16,6 +16,9 @@ describe('(Component) RegistrationPinScreen', function() {
               focused: false,
               confirm: false,
               valid: false
+            },
+            wallet: {
+              registering: false
             }
           }
         }))
@@ -44,6 +47,9 @@ describe('(Component) RegistrationPinScreen', function() {
               focused: false,
               confirm: false,
               valid: false
+            },
+            wallet: {
+              registering: false
             }
           }
         }))
@@ -73,6 +79,9 @@ describe('(Component) RegistrationPinScreen', function() {
                 focused: false,
                 confirm: false,
                 valid: false
+              },
+              wallet: {
+                registering: false
               }
             }
           }))
@@ -103,6 +112,9 @@ describe('(Component) RegistrationPinScreen', function() {
               focused: false,
               confirm: false,
               valid: false
+            },
+            wallet: {
+              registering: false
             }
           }
         }))
@@ -130,6 +142,9 @@ describe('(Component) RegistrationPinScreen', function() {
               focused: false,
               confirm: false,
               valid: false
+            },
+            wallet: {
+              registering: false
             }
           }
         }))

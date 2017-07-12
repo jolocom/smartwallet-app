@@ -3,7 +3,7 @@ import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
 import PinInput from './pin-input'
 import {Form} from 'formsy-react'
-
+import Spinner from '../../common/spinner'
 import {theme} from 'styles'
 
 import {Container, Header, Content, Block, Footer, SideNote}
@@ -42,7 +42,6 @@ function getButtonLabel(props) {
 
 const Pin = (props) => {
   let confirm
-
   if (props.confirm) {
     confirm = (
       <Block>
@@ -57,15 +56,27 @@ const Pin = (props) => {
   }
 
   let headerTitle
-
+  let contents
   if (props.confirm) {
     headerTitle = 'Your Secure PIN.'
   } else {
     headerTitle = 'Create a PIN for secure login.'
   }
 
-  return (
-    <Container>
+  if (props.registering) {
+    const messageWait = ['Please have some patience...',
+      '...we are creating...', '...your jolocom wallet...',
+      '...your digital identity', '...we are linking...',
+      '...your WebID to your identity']
+
+    contents = (
+      <Block>
+        <Spinner style={STYLES.header} message={messageWait}
+          avatar={'url(/img/img_techguy.svg)'} />
+      </Block>
+    )
+  } else {
+    contents = (
       <Form onValidSubmit={() => { props.onSubmit() }} style={STYLES.form}>
         <Header title={headerTitle} />
         <Content style={STYLES.content}>
@@ -99,6 +110,11 @@ const Pin = (props) => {
           />
         </Footer>
       </Form>
+    )
+  }
+  return (
+    <Container>
+      {contents}
     </Container>
   )
 }

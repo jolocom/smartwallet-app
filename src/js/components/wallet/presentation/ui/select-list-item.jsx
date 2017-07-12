@@ -49,7 +49,8 @@ let STYLES = {
     flex: 1
   },
   item: {
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 72px',
+    color: 'red'
   }
 }
 

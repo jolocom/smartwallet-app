@@ -1,9 +1,12 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
-import {listOfCountries as options} from '../../../lib/list-of-countries'
 import {actions as idCardActions} from './id-card'
 import * as contact from './contact'
+import {
+  listOfCountries as __LIST_OF_COUNTRIES__
+} from '../../../lib/list-of-countries'
+
 
 const actions = module.exports = makeActions('wallet/id-card/country', {
   submit: {
@@ -93,7 +96,8 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   age: '',
   returnUrl: '',
   index: '',
-  options
+  options: __LIST_OF_COUNTRIES__
+
 })
 
 module.exports.default = (state = initialState, action = {}) => {
@@ -106,9 +110,8 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setCountryValue.id:
       return state.merge({
         value: action.value,
-        options: options.map((e) =>
-          e.toLowerCase().startsWith(action.value.toLowerCase()) ? e : null)
-          .filter(n => n !== null)
+        options: __LIST_OF_COUNTRIES__.filter((countryLabel) =>
+          countryLabel.toLowerCase().startsWith(action.value.toLowerCase()))
       })
 
     case actions.initiateCountryScreenFromContactScreen.id:

@@ -34,6 +34,7 @@ export default class RegistrationPinScreen extends React.Component {
       }}
       onFocusChange={this.props.setPinFocused}
       onSubmit={this.props.submitPin}
-    />
+      registering={this.props.registration.wallet.registering}
+      />
   }
 }
