@@ -48,7 +48,7 @@ export default class AuthService extends EventEmitter {
 
   async loginWithSeedPhrase({seedPhrase, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.wallet
+      wallet: await this.backend
         .loginWithSeedPhrase({seedPhrase, pin})
     })
     return this.currentUser

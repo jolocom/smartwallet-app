@@ -30,7 +30,11 @@ export default class WalletAgent {
   buyEther({stripeToken, walletAddress}) {
     return this._httpAgent.post(
       'https://verification.jolocom.com/ether/buy/ether',
-      {stripeToken, walletAddress}
+      JSON.stringify({stripeToken: JSON.stringify(stripeToken), walletAddress}),
+      {
+        'Content-type': 'application/json'
+      },
+      {credentials: 'omit'}
     )
   }
 
