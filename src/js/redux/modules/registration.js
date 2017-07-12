@@ -111,7 +111,7 @@ const actions = module.exports = makeActions('registration', {
           return
         }
 
-        if (pinState.get('valid')) {
+        if (pinState.get('confirm')) {
           dispatch(actions.goForward())
         } else {
           dispatch(actions.setPinConfirm(true))

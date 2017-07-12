@@ -64,8 +64,10 @@ const Pin = (props) => {
           <PinInput
             value={props.value}
             focused={props.focused}
+            disabled={props.confirm}
             onChange={props.onChange}
-            onFocusChange={props.onFocusChange} />
+            onFocusChange={props.onFocusChange}
+            confirm={props.confirm} />
         </Content>
 
         <Footer>
@@ -96,6 +98,7 @@ Pin.propTypes = {
   value: React.PropTypes.string.isRequired,
   valid: React.PropTypes.bool.isRequired,
   focused: React.PropTypes.bool.isRequired,
+  confirm: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
   onChangeRequest: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,

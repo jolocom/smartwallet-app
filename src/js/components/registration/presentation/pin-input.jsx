@@ -60,9 +60,10 @@ function getCharAt(s, pos) {
 class PinInput extends React.Component {
   static propTypes = {
     value: React.PropTypes.string.isRequired,
-    // disabled: React.PropTypes.bool,
+    disabled: React.PropTypes.bool,
     focused: React.PropTypes.bool.isRequired,
     onChange: React.PropTypes.func.isRequired,
+    confirm: React.PropTypes.bool.isRequired,
     onFocusChange: React.PropTypes.func.isRequired
   }
 
@@ -76,11 +77,11 @@ class PinInput extends React.Component {
     this.refs.input.focus()
   }
 
-  // componentWillReceiveProps(props) {
-  //   if (props.disabled) {
-  //     this.refs.input.blur()
-  //   }
-  // }
+  componentWillReceiveProps(props) {
+    if (props.disabled) {
+      this.refs.input.blur()
+    }
+  }
 
   handleKeyDown(e) {
     if (e.which === 8) {
