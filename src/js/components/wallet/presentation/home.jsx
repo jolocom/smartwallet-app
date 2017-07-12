@@ -29,7 +29,8 @@ const STYLES = {
     padding: '24px 24px 0 24px'
   },
   homeImg: {
-    width: '50vw'
+    width: '50vw',
+    maxHeight: '400px'
   }
 }
 

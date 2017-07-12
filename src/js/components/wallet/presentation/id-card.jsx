@@ -304,7 +304,7 @@ export default class WalletIdCard extends React.Component {
         <List>
           <ListItem
             innerDivStyle={{padding: '0 16px 0 54px'}}
-            leftIcon={<IDCard color={theme.jolocom.gray2} />}>
+            leftIcon={<img src="/img/ic_idcard.svg" />}>
             <div style={STYLES.uploadContainer}>
               <FloatingActionButton secondary style={STYLES.uploadBtn}>
                 <Camera />

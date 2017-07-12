@@ -36,36 +36,13 @@ const STYLES = {
 function getButtonLabel(props) {
   if (!props.valid) {
     return 'Almost done'
-  }
-  if (props.confirm) {
-    return 'All right'
   } else {
     return 'Done'
   }
 }
 
 const Pin = (props) => {
-  let confirm
-  if (props.confirm) {
-    confirm = (
-      <Block>
-        <div
-          style={STYLES.changeLink}
-          onClick={props.onChangeRequest}
-        >
-          Change secure PIN
-        </div>
-      </Block>
-    )
-  }
-
-  let headerTitle
   let contents
-  if (props.confirm) {
-    headerTitle = 'Your Secure PIN.'
-  } else {
-    headerTitle = 'Create a PIN for secure login.'
-  }
 
   if (props.registering) {
     const messageWait = ['Please have some patience...',
@@ -82,29 +59,22 @@ const Pin = (props) => {
   } else {
     contents = (
       <Form onValidSubmit={() => { props.onSubmit() }} style={STYLES.form}>
-        <Header title={headerTitle} />
+        <Header title={'Create a PIN for secure login.'} />
         <Content style={STYLES.content}>
           <PinInput
             value={props.value}
             focused={props.focused}
-            disabled={props.confirm}
             onChange={props.onChange}
-            onFocusChange={props.onFocusChange}
-            confirm={props.confirm} />
-            {
-              props.confirm
-              ? null
-              : <Block>
-                <SideNote style={STYLES.sidenote}>
-                  This secure PIN will be needed for transactions and
-                  saving information on the Blockchain.
-                </SideNote>
-              </Block>
-            }
-          {confirm}
+            onFocusChange={props.onFocusChange} />
         </Content>
 
         <Footer>
+          <Block>
+            <SideNote style={STYLES.sidenote}>
+              This secure PIN will be needed for transactions and
+              saving information on the Blockchain.
+            </SideNote>
+          </Block>
           <RaisedButton
             type="submit"
             disabled={!props.valid}
@@ -126,7 +96,6 @@ Pin.propTypes = {
   value: React.PropTypes.string.isRequired,
   valid: React.PropTypes.bool.isRequired,
   focused: React.PropTypes.bool.isRequired,
-  confirm: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
   onChangeRequest: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,

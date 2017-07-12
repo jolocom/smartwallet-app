@@ -25,7 +25,6 @@ export default class RegistrationPinScreen extends React.Component {
       value={this.props.registration.pin.value}
       valid={this.props.registration.pin.valid}
       focused={this.props.registration.pin.focused}
-      confirm={this.props.registration.pin.confirm}
       onChange={this.props.setPin}
       onChangeRequest={() => {
         this.props.setPin('')
