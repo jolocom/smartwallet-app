@@ -33,7 +33,7 @@ const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
       definitionUrl:
       `${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`,
       pin: '1234',
-      targetIdentityAddress: wallet.identityAddress
+      identityAddress: wallet.identityAddress
     }
   )
 }
