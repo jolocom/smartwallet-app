@@ -21,7 +21,7 @@ let STYLES = {
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginRight: '32px',
-    '@media (max-width: 320px)': {
+    '@media (maxWidth: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
     }
@@ -33,7 +33,7 @@ let STYLES = {
   },
   type: {
     maxWidth: '120px',
-    '@media (min-width: 321px)': {
+    '@media (minWidth: 321px)': {
       margin: '0 16px'
     }
   },

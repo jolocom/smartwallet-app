@@ -29,7 +29,7 @@ let STYLES = {
   },
   type: {
     maxWidth: '120px',
-    '@media (min-width: 321px)': {
+    '@media (minWidth: 321px)': {
       margin: '0 16px'
     }
   },
