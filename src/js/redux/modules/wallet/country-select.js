@@ -7,7 +7,6 @@ import {
   listOfCountries as __LIST_OF_COUNTRIES__
 } from '../../../lib/list-of-countries'
 
-
 const actions = module.exports = makeActions('wallet/id-card/country', {
   submit: {
     expectedParams: [],

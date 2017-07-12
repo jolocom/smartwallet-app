@@ -1,7 +1,7 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as contact from './contact'
-import {stub} from '../../../../../test/utils'
+// import {stub} from '../../../../../test/utils'
 
 const reducer = require('./contact').default
 
