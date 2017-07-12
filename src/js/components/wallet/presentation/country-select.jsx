@@ -34,7 +34,7 @@ const STYLES = {
     textAlign: 'center'
   },
   countryName: {
-    width: '95%'
+    maxWidth: '95%'
   },
   countryField: {
     width: '100%'
@@ -64,6 +64,7 @@ export default class CountrySelectPresentation extends React.Component {
       <div style={STYLES.container}>
         <NavigationArrowBack style={STYLES.leftIcon} onClick={cancel} />
         <TextField
+          focused
           style={STYLES.searchField}
           floatingLabelText="Country"
           underlineStyle={STYLES.searchFieldUnderline}
@@ -83,7 +84,6 @@ export default class CountrySelectPresentation extends React.Component {
             value={getFirstCountryLetter(countryLabel, idx)}
             style={STYLES.firstLetter} />
           <TextField
-            onClick={() => submit(countryLabel)}
             id={countryLabel + '_country'}
             underlineShow={false}
             style={STYLES.countryName} value={countryLabel} />

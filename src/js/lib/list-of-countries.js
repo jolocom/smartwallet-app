@@ -4,7 +4,7 @@ export const listOfCountries = [
   'Albania',
   'Algeria',
   'American Samoa',
-  'AndorrA',
+  'Andorre',
   'Angola',
   'Anguilla',
   'Antarctica',

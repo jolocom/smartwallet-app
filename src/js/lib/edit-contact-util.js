@@ -1,10 +1,10 @@
 import Immutable from 'immutable'
 
 export const validateChanges = (state) => {
-  const {newInformation, originalInformation} = state.get('information').toJS()
-  const newFields = newInformation.emails.concat(newInformation.phones)
-  const oldFields = originalInformation.emails.concat(
-    originalInformation.phones)
+  const {newInformation, originalInformation: original} = state
+    .get('information').toJS()
+  const newFields = [...newInformation.emails, ...newInformation.phones]
+  const oldFields = [...original.emails, ...original.phones]
 
   const isValid = newFields.every(e => (e.blank || e.valid || e.delete)) &&
     oldFields.every(e => e.delete || !e.update || (e.valid && !e.verified))
@@ -44,7 +44,7 @@ export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
     blank: isBlank(value, field)
   })
 
-export const mapAccountInformationToState = ({email, phone}) =>
+export const mapAccountInformationToState = ({email, phone, addresses = []}) =>
   Immutable.fromJS({
     loading: false,
     showErrors: false,
@@ -53,52 +53,66 @@ export const mapAccountInformationToState = ({email, phone}) =>
         emails: [email.length > 0 ? {delete: true} : {
           value: '',
           delete: false,
-          bkank: true,
+          blank: true,
           valid: true
         }],
         phones: [phone.length > 0 ? {delete: true} : {
           value: '',
           type: 'personal',
-          bkank: true,
+          blank: true,
           delete: false,
           valid: true
         }],
-        addresses: []
+        addresses: [addresses.length > 0 ? {delete: true} : {
+          streetWithNumber: {value: '', valid: true},
+          zip: {value: '', valid: true},
+          city: {value: '', valid: true},
+          state: {value: '', valid: true},
+          country: {value: '', valid: true},
+          delete: false,
+          blank: true,
+          valid: true
+        }]
       },
       originalInformation: {
-        emails: email.map(({address, verified, id}) => {
-          return {
-            value: address,
-            verified,
-            id,
-            delete: false,
-            update: false,
-            valid: true
-          }
-        }),
-        phones: phone.map(({number, verified, id}) => {
-          return {
-            value: number,
-            // TODO: phone type needs to be delivered from the backend
-            type: 'personal',
-            verified,
-            id,
-            delete: false,
-            update: false,
-            valid: true
-          }
-        }),
-        addresses: []
+        emails: email.map(({address, verified, id}) => ({
+          value: address,
+          verified,
+          id,
+          delete: false,
+          update: false,
+          valid: true
+        })),
+        phones: phone.map(({number, verified, id}) => ({
+          value: number,
+          // TODO: phone type needs to be delivered from the backend
+          type: 'personal',
+          verified,
+          id,
+          delete: false,
+          update: false,
+          valid: true
+        })),
+        addresses: addresses.map(({streetWithNumber, zip, city, state, country}) => ({ // eslint-disable-line max-len
+          streetWithNumber: {...streetWithNumber, valid: true},
+          zip: {...zip, valid: true},
+          city: {...city, valid: true},
+          state: {...state, valid: true},
+          country: {...country, valid: true},
+          delete: false,
+          blank: true,
+          valid: true
+        }))
       }
     }
   })
 
 const canAddNewField = (state, field, index) => {
   if (index === 0) { return true }
-  if (!state.getIn(
-    ['information', 'newInformation', field, index - 1, 'delete'])) {
-    return !state.getIn(
-      ['information', 'newInformation', field, index - 1, 'blank'])
+  if (!state
+    .getIn(['information', 'newInformation', field, index - 1, 'delete'])) {
+    return !state
+      .getIn(['information', 'newInformation', field, index - 1, 'blank'])
   }
   return canAddNewField(state, field, index - 1)
 }

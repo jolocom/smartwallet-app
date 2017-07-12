@@ -4,17 +4,20 @@ import Presentation from '../presentation/contact'
 
 @connect({
   props: ['wallet.contact'],
-  actions: ['wallet/contact:saveChanges',
+  actions: [
+    'wallet/contact:saveChanges',
     'wallet/contact:getUserInformation',
-    'wallet/country-select:initiateCountrySelectScreen',
+    'wallet/country-select:initiateCountryScreenFromContactScreen',
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
     'wallet/contact:updateInformation',
     'wallet/contact:exitWithoutSaving',
     'wallet/contact:saveChanges',
     'wallet/contact:addNewEntry',
+    'wallet/contact:setAddressField',
     'confirmation-dialog:confirm',
-    'confirmation-dialog:close']
+    'confirmation-dialog:close'
+  ]
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
@@ -28,6 +31,8 @@ export default class WalletContactScreen extends React.Component {
     saveChanges: React.PropTypes.func.isRequired,
     addNewEntry: React.PropTypes.func.isRequired,
     confirm: React.PropTypes.func.isRequired,
+    setAddressField: React.PropTypes.func.isRequired,
+    initiateCountryScreenFromContactScreen: React.PropTypes.func.isRequired,
     close: React.PropTypes.func.isRequired
   }
   constructor() {
@@ -38,30 +43,25 @@ export default class WalletContactScreen extends React.Component {
     }
   }
   componentWillMount() {
-    this.props.getUserInformation()
+    if (this.props.contact.getDataFromBackend) {
+      this.props.getUserInformation()
+    }
   }
 
   render() {
     const [{
-      initiateCountrySelectScreen,
-      deleteInformation,
-      updateInformation,
-      setInformation,
-      exitWithoutSaving,
-      saveChanges,
-      addNewEntry,
-      confirm,
-      close
+      deleteInformation, addNewEntry, confirm, setAddressField, saveChanges,
+      updateInformation, setInformation, exitWithoutSaving, close,
+      initiateCountryScreenFromContactScreen
     }, {
-      information,
-      loading,
-      showErrors
+      information, loading, showErrors
     }] = [this.props, this.props.contact]
     return (<Presentation
       information={information}
       focused={this.state.focused}
       onFocusChange={this._onFocusChange}
       loading={loading}
+      setAddressField={setAddressField}
       showErrors={showErrors}
       deleteInformation={deleteInformation}
       updateInformation={updateInformation}
@@ -71,47 +71,10 @@ export default class WalletContactScreen extends React.Component {
       addNewEntry={addNewEntry}
       confirm={confirm}
       close={close}
-      selectCountry={initiateCountrySelectScreen} />)
+      selectCountry={initiateCountryScreenFromContactScreen} />)
   }
 
   _onFocusChange = (value) => {
     this.setState({focused: value})
-  }
-
-  parseInformation() {
-    const {originalInformation, newInformation} = this.props.contact.information
-    if ([...originalInformation.phones, ...newInformation.phones].some(phone => !phone.delete)) { // eslint-disable-line max-len
-      this.props.addNewEntry('phone', newInformation.phones.length)
-    }
-  }
-
-  parseAddressDetailsToArray() {
-    const {originalInformation, newInformation} = this.props.contact.information
-
-    const addresses = [
-      ...originalInformation.addresses
-      .map(({streetWithNumber, zip, city, state, country}) => ([
-        {...streetWithNumber, key: 'streetWithNumber', label: 'Street'},
-        {...zip, key: 'zip', label: 'Zip Code'},
-        {...city, key: 'city', label: 'City'},
-        {...state, key: 'state', label: 'State'},
-        {...country, key: 'country', label: 'Country'}
-      ])),
-      ...newInformation.addresses
-      .map(({streetWithNumber, zip, city, state, country}) => ([
-        {...streetWithNumber, key: 'streetWithNumber', label: 'Street'},
-        {...zip, key: 'zip', label: 'Zip Code'},
-        {...city, key: 'city', label: 'City'},
-        {...state, key: 'state', label: 'State'},
-        {...country, key: 'country', label: 'Country'}
-      ]))
-    ]
-    return addresses.some(address => !address.delete) ? addresses : [
-      {value: '', key: 'streetWithNumber', label: 'Street'},
-      {value: '', key: 'zip', label: 'Zip Code'},
-      {value: '', key: 'city', label: 'City'},
-      {value: '', key: 'state', label: 'State'},
-      {value: '', key: 'country', label: 'Country'}
-    ]
   }
 }

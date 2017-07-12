@@ -162,16 +162,14 @@ export default class EditListItem extends React.Component {
   }
 
   get deleteButton() {
-    if (this.props.enableDelete && this.props.value) {
-      return (
-        <IconButton
-          style={STYLES.deleteButton}
-          onTouchTap={this.handleDelete}
-        >
-          <NavigationCancel />
-        </IconButton>
-      )
-    }
+    const visibility = this.props.enableDelete && this.props.value ? 'visible'
+      : 'hidden'
+    return (<IconButton
+      style={{...STYLES.deleteButton, visibility}}
+      onTouchTap={this.handleDelete}
+    >
+      <NavigationCancel />
+    </IconButton>)
   }
 
   handleFocus = () => {

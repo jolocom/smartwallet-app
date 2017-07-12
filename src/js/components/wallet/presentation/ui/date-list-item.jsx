@@ -101,6 +101,7 @@ export default class DateListItem extends React.Component {
             style={STYLES.textField}
             fullWidth
             autoFocus={focused}
+            formatDate={date => new Intl.DateTimeFormat('YYYY MM DD').format(date).toString()}
             inputStyle={styles.input}
             underlineShow={!value}
             underlineDisabledStyle={styles.disabledUnderline}
