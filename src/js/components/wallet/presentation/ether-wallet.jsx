@@ -31,7 +31,7 @@ const STYLES = {
 export default class WalletEther extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    buyEther: React.PropTypes.func,
+    onToken: React.PropTypes.func,
     ether: React.PropTypes.object,
     avatar: React.PropTypes.string,
     title: React.PropTypes.string
@@ -84,7 +84,9 @@ export default class WalletEther extends React.Component {
           </Block>
         </Block>
         <Block>
-          <StripeCheckout buyEther={this.props.buyEther.bind(this)} />
+          <StripeCheckout onToken={token => {
+            this.props.onToken(token)
+          }} />
         </Block>
       </div>
     )

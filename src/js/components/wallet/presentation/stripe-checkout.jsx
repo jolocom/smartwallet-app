@@ -8,17 +8,13 @@ import {
 
 export default class StripeCheckout extends Component {
   static propTypes = {
-    buyEther: React.PropTypes.func.isRequired
-  }
-
-  buyEther = (token) => {
-    this.props.buyEther(token)
+    onToken: React.PropTypes.func.isRequired
   }
 
   render() {
     return (
       <ReactStripeCheckout
-        token={this.buyEther.bind(this)}
+        token={(token) => this.props.onToken(token)}
         stripeKey={settings.stripe.publishableKey}
         name="JOLOCOM SMARTWALLET"
         description="Add Ether to your Smart Wallet."
