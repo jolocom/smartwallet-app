@@ -1,5 +1,4 @@
 import Immutable from 'immutable'
-import moment from 'moment'
 import util from 'lib/util'
 // import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 
@@ -21,15 +20,21 @@ const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
   return wallet.addAttributeHashToIdentity(
     {
       attributeId: 'idCard',
-      attribute: 'blah',
-        // number: idCard.idCardFields.number
-      // expirationDate: moment(idCard.expirationDate.value).format(),
-      // givenName: idCard.firstName.value,
-      // familyName: idCard.lastName.value,
-      // birthDate: moment(idCard.birthDate.value).format(),
-      // birthPlace: idCard.birthPlace.value,
-      // birthCountry: idCard.birthCountry.value
-
+      attribute: {
+        birthCountry: idCard.idCardFields.birthCountry,
+        birthDate: idCard.idCardFields.birthDate,
+        birthPlace: idCard.idCardFields.birthPlace,
+        expirationDate: idCard.idCardFields.expirationDate,
+        firstName: idCard.idCardFields.firstName,
+        gender: idCard.idCardFields.gender,
+        lastName: idCard.idCardFields.lastName,
+        number: idCard.idCardFields.number,
+        city: idCard.idCardFields.physicalAddress.city,
+        country: idCard.idCardFields.physicalAddress.country,
+        state: idCard.idCardFields.physicalAddress.state,
+        streetWithNumber: idCard.idCardFields.physicalAddress.streetWithNumber,
+        zip: idCard.idCardFields.physicalAddress.zip
+      },
       definitionUrl:
       `${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`,
       pin: '1234',
