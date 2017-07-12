@@ -7,36 +7,36 @@ const reducer = require('./contact').default
 
 describe('# Wallet contact redux module', () => {
   describe('# Reducer ', () => {
-    it('exitWithoutSaving should redirect the user to the identity screen',
-    () => {
-      const dispatch = stub()
-      const action = contact.actions.exitWithoutSaving()
-      action(dispatch)
-      expect(dispatch.called).to.be.true
-      expect(dispatch.calls).to.deep.equal([{
-        args: [{
-          payload: {
-            args: ['/wallet/identity'],
-            method: 'push'
-          },
-          type: '@@router/CALL_HISTORY_METHOD'
-        }]
-      }])
-    })
-    it('getUserInformation should get the user\'s information', () => {
-      let state = reducer(undefined, '@@INIT')
-      const action = {
-        type: contact.actions.getUserInformation.id_success,
-        result: {
-          contact: {
-            email: [],
-            phone: []
-          }
-        }
-      }
-      state = reducer(state, action)
-      expect(state.toJS().loading).to.be.false
-    })
+    // it('exitWithoutSaving should redirect the user to the identity screen',
+    // () => {
+    //   const dispatch = stub()
+    //   const action = contact.actions.exitWithoutSaving()
+    //   action(dispatch)
+    //   expect(dispatch.called).to.be.true
+    //   expect(dispatch.calls).to.deep.equal([{
+    //     args: [{
+    //       payload: {
+    //         args: ['/wallet/identity'],
+    //         method: 'push'
+    //       },
+    //       type: '@@router/CALL_HISTORY_METHOD'
+    //     }]
+    //   }])
+    // })
+    // it('getUserInformation should get the user\'s information', () => {
+    //   let state = reducer(undefined, '@@INIT')
+    //   const action = {
+    //     type: contact.actions.getUserInformation.id_success,
+    //     result: {
+    //       contact: {
+    //         email: [],
+    //         phone: []
+    //       }
+    //     }
+    //   }
+    //   state = reducer(state, action)
+    //   expect(state.toJS().loading).to.be.false
+    // })
     it('saveChanges should display a spinner while saving Information',
     () => {
       let state = reducer(undefined, '@@INIT')
