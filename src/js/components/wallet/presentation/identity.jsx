@@ -91,8 +91,7 @@ export default class WalletIdentity extends React.Component {
       setFocusedPin,
       requestVerificationCode,
       resendVerificationCode,
-      enterVerificationCode
-      onVerify,
+      enterVerificationCode,
       saveToBlockchain
     } = this.props
 
