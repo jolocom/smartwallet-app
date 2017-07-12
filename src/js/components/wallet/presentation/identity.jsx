@@ -68,7 +68,7 @@ export default class WalletIdentity extends React.Component {
     changePinValue: React.PropTypes.func.isRequired,
     requestVerificationCode: React.PropTypes.func.isRequired,
     resendVerificationCode: React.PropTypes.func.isRequired,
-    enterVerificationCode: React.PropTypes.func.isRequired
+    enterVerificationCode: React.PropTypes.func.isRequired,
     onVerify: React.PropTypes.func.isRequired,
     saveToBlockchain: React.PropTypes.func.isRequired
   }
