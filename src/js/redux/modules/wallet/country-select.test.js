@@ -11,6 +11,9 @@ describe('# Country Select redux module', () => {
     const state = reducer(undefined, actions.setCountryValue('test'))
     expect(state.toJS()).to.deep.equal({
       value: 'test',
+      age: '',
+      returnUrl: '',
+      index: '',
       options: [],
       type: ''
     })

@@ -64,7 +64,6 @@ export default class CountrySelectPresentation extends React.Component {
       <div style={STYLES.container}>
         <NavigationArrowBack style={STYLES.leftIcon} onClick={cancel} />
         <TextField
-          focused
           style={STYLES.searchField}
           floatingLabelText="Country"
           underlineStyle={STYLES.searchFieldUnderline}

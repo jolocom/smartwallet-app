@@ -127,9 +127,10 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.setAddressField.id:
       return state.mergeIn(
-        ['information', action.age, 'addresses', action.index, action.field], {
-          value: action.value
-        })
+      ['information', action.age, 'addresses', action.index, action.field], {
+        value: action.value
+      })
+
     case actions.deleteInformation.id:
       return state.mergeIn(['information', action.age, action.field,
         action.index], {

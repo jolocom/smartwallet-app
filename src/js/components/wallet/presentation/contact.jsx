@@ -205,16 +205,14 @@ export default class WalletContact extends React.Component {
     </div>)
   }
 
-  renderAddressField({age, index}) {
-    const {
-      streetWithNumber, zip, country, city, state
-    } = this.props.information[age].addresses[0]
-    const id = `address_${age}_${index}`
-    const value = streetWithNumber.value.trim() + city.value.trim() +
-      country.value.trim() + zip.value.trim() + state.value.trim()
-    const addressFieldsVisibility = this.props.focused === id || !!value.length
+  renderAddressField({streetWithNumber, zip, country, city, state, id, age, index}) { // eslint-disable-line max-len
+    id = id || `address_${age}_${index}`
+    const blank = [streetWithNumber, city, country, zip, state]
+      .every(({value}) => value.trim().length === 0)
+    const addressFieldsVisibility = this.props.focused === id || !blank
+    const {onFocusChange, setAddressField, focused, selectCountry} = this.props
 
-    return (<div>
+    return (<div key={id}>
       <EditListItem
         key="streetWithNumber"
         id={id}
@@ -224,65 +222,70 @@ export default class WalletContact extends React.Component {
         label="street"
         enableEdit
         showErrors
-        onFocusChange={(field) => this.props.onFocusChange(field)}
-        onDelete={(evt) => this.props.setAddressField(
-          'newInformation', 'streetWithNumber', 0, '')}
+        onFocusChange={() => onFocusChange(id)}
+        onDelete={(evt) => setAddressField(
+          'newInformation', 'streetWithNumber', index, '')}
         onChange={(e) =>
-          this.props.setAddressField(
-            'newInformation', 'streetWithNumber', 0, e.target.value)}
-        focused={this.props.focused === id}
+          setAddressField(
+            'newInformation', 'streetWithNumber', index, e.target.value)}
+        focused={focused === id}
         enableDelete={streetWithNumber.value.length > 0} />
         {
           addressFieldsVisibility ? <div>
-            <table><tbody><tr><td style={{width: '70%'}} key="0">
+            <table><tbody><tr><td style={{width: '70%'}} key="city">
               <EditListItem
                 id={id}
+                focused={false}
                 label="city"
                 enableEdit
                 value={city.value}
-                onFocusChange={(field) => this.props.onFocusChange(field)}
+                onFocusChange={() => onFocusChange(id)}
                 onDelete={() => this.props
-                  .setAddressField('newInformation', 'city', 0, '')}
-                onChange={(evt) => this.props.setAddressField(
-                  'newInformation', 'city', 0, evt.target.value)}
+                  .setAddressField('newInformation', 'city', index, '')}
+                onChange={(evt) => setAddressField(
+                  'newInformation', 'city', index, evt.target.value)}
                 enableDelete={city.value.length > 0} />
-            </td><td style={{width: '30%'}} key="1">
+            </td><td style={{width: '30%'}} key="zip">
               <EditListItem
                 id={id}
                 label="Zip"
                 enableEdit
                 value={zip.value}
-                onFocusChange={(field) => this.props.onFocusChange(id)}
+                focused={false}
+                onFocusChange={(field) => onFocusChange(id)}
                 onChange={(e) =>
-                this.props.setAddressField(
-                'newInformation', 'zip', 0, e.target.value)}
-                onDelete={() => this.props.setAddressField(
-                  'newInformation', 'zip', 0, '')}
+                setAddressField(
+                'newInformation', 'zip', index, e.target.value)}
+                onDelete={() => setAddressField(
+                  'newInformation', 'zip', index, '')}
                 enableDelete={zip.value.length > 0} />
             </td></tr></tbody></table>
             <EditListItem
               id={id}
               label="State"
               enableEdit
+              focused={false}
               enableDelete={state.value.length > 0}
               value={state.value}
-              onFocusChange={(field) => this.props.onFocusChange(field)}
+              onFocusChange={() => onFocusChange(id)}
               onChange={(e) =>
-              this.props.setAddressField(
-                'newInformation', 'state', 0, e.target.value)}
-              onDelete={() => this.props.setAddressField(
-                'newInformation', 'state', 0, '')} />
+              setAddressField(
+                'newInformation', 'state', index, e.target.value)}
+              onDelete={() => setAddressField(
+                'newInformation', 'state', index, '')} />
             <SelectCountryItem
               id={id}
               value={country.value}
+              focused={false}
               label="Country"
+              onChange={() => {}}
               onFocusChange={() => {
-                this.props.onFocusChange(id)
-                this.props.selectCountry('newInformation', 0, '')
+                onFocusChange(id)
+                selectCountry('newInformation', index, '')
               }}
               onDelete={() => {
-                this.props.setAddressField('newInformation', 'country', 0, '')
-                this.props.onFocusChange(id)
+                setAddressField('newInformation', 'country', index, '')
+                onFocusChange(id)
               }}
               enableEdit
               enableDelete={country.value.length > 0} />
@@ -300,12 +303,12 @@ export default class WalletContact extends React.Component {
     } else {
       content = this.renderContent()
       addressFields = [
-        ...originalInformation.addresses.map(index =>
-        this.renderAddressField({age: 'originalInformation', index})),
-        ...newInformation.addresses.map(index =>
-        this.renderAddressField({age: 'newInformation', index})),
+        ...originalInformation.addresses.map((address, index) =>
+        this.renderAddressField({...address, age: 'originalInformation', index})), // eslint-disable-line max-len
+        ...newInformation.addresses.map((address, index) =>
+        this.renderAddressField({...address, age: 'newInformation', index})),
         <AddNew key="add_address" onClick={() => {
-          this.props.addNewEntry('address', newInformation.addresses.length)
+          this.props.addNewEntry('addresses', newInformation.addresses.length)
           this.props.onFocusChange(`address_newInformation_${newInformation.addresses.length}`) // eslint-disable-line max-len
         }}
           value="ADD NEW ADDRESS" />

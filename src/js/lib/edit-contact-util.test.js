@@ -41,8 +41,29 @@ describe('# Edit contact Util', () => {
             }]
           },
           newInformation: {
-            emails: [],
-            phones: []
+            emails: [{
+              value: '',
+              delete: false,
+              blank: true,
+              valid: true
+            }],
+            phones: [{
+              value: '',
+              type: 'personal',
+              blank: true,
+              delete: false,
+              valid: true
+            }],
+            addresses: [{
+              streetWithNumber: {value: '', valid: true},
+              zip: {value: '', valid: true},
+              city: {value: '', valid: true},
+              state: {value: '', valid: true},
+              country: {value: '', valid: true},
+              delete: false,
+              blank: true,
+              valid: true
+            }]
           }
         }
       }

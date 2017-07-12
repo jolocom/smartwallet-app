@@ -118,6 +118,18 @@ const canAddNewField = (state, field, index) => {
 }
 
 export const addNewField = (state, {field, index}) => {
+  if (field === 'addresses') {
+    return state.mergeIn(['information', 'newInformation', field, index], {
+      streetWithNumber: {value: '', valid: true},
+      zip: {value: '', valid: true},
+      city: {value: '', valid: true},
+      state: {value: '', valid: true},
+      country: {value: '', valid: true},
+      delete: false,
+      blank: true,
+      valid: true
+    })
+  }
   if (canAddNewField(state, field, index)) {
     return state.mergeIn(['information', 'newInformation', field, index], {
       ...addTypeAttribute(field), value: '', verified: false, valid: false,
