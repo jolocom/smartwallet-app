@@ -49,8 +49,8 @@ let STYLES = {
     flex: 1
   },
   item: {
-    padding: '0 16px 0 72px',
-    color: 'red'
+    padding: '0 16px 0 54px',
+    textColor: 'red'
   }
 }
 
@@ -101,6 +101,7 @@ export default class SelectListItem extends React.Component {
             style={STYLES.textField}
             autoFocus={focused}
             inputStyle={styles.input}
+
             underlineShow={!value}
             underlineDisabledStyle={styles.disabledUnderline}
             floatingLabelText={label}
@@ -109,6 +110,7 @@ export default class SelectListItem extends React.Component {
             onChange={onChange}
           >
           {types.map((type, i) => <MenuItem
+            innerDivStyle={{textColor: 'red'}}
             key={i}
             value={type}
             primaryText={type} />

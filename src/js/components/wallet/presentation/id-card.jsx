@@ -86,6 +86,7 @@ export default class WalletIdCard extends React.Component {
       case 'birthPlace':
         return null // handled with birthDate
       case 'birthDate':
+        return this.renderBirthDate(field)
       case 'streetWithNumber':
         return this.renderStreetWithNumber(field)
       case 'expirationDate':
@@ -301,7 +302,9 @@ export default class WalletIdCard extends React.Component {
       <Content>
         <EditHeader title="ID Card" />
         <List>
-          <ListItem leftIcon={<IDCard color={theme.jolocom.gray2} />}>
+          <ListItem
+            innerDivStyle={{padding: '0 16px 0 54px'}}
+            leftIcon={<IDCard color={theme.jolocom.gray2} />}>
             <div style={STYLES.uploadContainer}>
               <FloatingActionButton secondary style={STYLES.uploadBtn}>
                 <Camera />

@@ -31,7 +31,7 @@ const ContactList = ({
   setFocusedPin,
   changePinValue,
   iconMsg
-}) => (<List disabled>
+}) => (<List style={{padding: '0'}} disabled>
 {
   fields.map(({
     verified = false,

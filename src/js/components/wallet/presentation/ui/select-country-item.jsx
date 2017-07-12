@@ -4,7 +4,6 @@ import Radium from 'radium'
 import {
   TextField,
   IconButton,
-  FlatButton,
   ListItem
 } from 'material-ui'
 
@@ -52,7 +51,7 @@ let STYLES = {
     flex: 1
   },
   item: {
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 54px'
   }
 }
 
@@ -109,9 +108,10 @@ export default class SelectListItem extends React.Component {
             floatingLabelText={label}
             underlineShow={!value}
             value={value} />
-          <FlatButton
-            onClick={this.handleFocus}
-            icon={<ArrowRight />} />
+          <IconButton
+            onClick={this.handleFocus} style={{marginBottom: '8px'}} >
+            <ArrowRight />
+          </IconButton>
         </div>
       </ListItem>
     )

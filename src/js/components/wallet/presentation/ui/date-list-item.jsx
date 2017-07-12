@@ -6,6 +6,9 @@ import {IconButton, ListItem} from 'material-ui'
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import DatePicker from 'material-ui/DatePicker'
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
 import {theme} from 'styles'
 
 let STYLES = {
@@ -45,7 +48,7 @@ let STYLES = {
     flex: 1
   },
   item: {
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 54px'
   }
 }
 
@@ -73,6 +76,16 @@ export default class DateListItem extends React.Component {
   }
 
   render() {
+    const muiTheme = getMuiTheme({
+      datePicker: {
+        selectColor: theme.palette.primary1Color,
+        color: theme.palette.primary1Color
+      },
+      flatButton: {
+        primaryTextColor: theme.palette.accent1Color
+      }
+    })
+
     let {
       focused,
       label,
@@ -97,19 +110,21 @@ export default class DateListItem extends React.Component {
         rightIconButton={this.deleteButton}
         disabled >
         <div style={styles.fields}>
-          <DatePicker
-            style={STYLES.textField}
-            fullWidth
-            autoFocus={focused}
-            inputStyle={styles.input}
-            underlineShow={!value}
-            underlineDisabledStyle={styles.disabledUnderline}
-            floatingLabelText={label}
-            value={value || null}
-            onChange={onChange}
-            errorText=""
-            okLabel="OK"
-            cancelLabel="Cancel" />
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <DatePicker
+              style={STYLES.textField}
+              fullWidth
+              autoFocus={focused}
+              inputStyle={styles.input}
+              underlineShow={!value}
+              underlineDisabledStyle={styles.disabledUnderline}
+              floatingLabelText={label}
+              value={value || null}
+              onChange={onChange}
+              errorText=""
+              okLabel="OK"
+              cancelLabel="Cancel" />
+          </MuiThemeProvider>
         </div>
       </ListItem>
     )

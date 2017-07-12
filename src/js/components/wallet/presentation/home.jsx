@@ -29,7 +29,7 @@ const STYLES = {
     padding: '24px 24px 0 24px'
   },
   homeImg: {
-    maxWidth: '50vw'
+    width: '50vw'
   }
 }
 
@@ -45,7 +45,7 @@ export default class WalletHome extends React.Component {
     return (
       <Container style={STYLES.walletContainer}>
         <Block>
-          <img src="/img/illu_wallet.svg" style={STYLES.homeImg} />
+          <img src="/img/illustration_wallet.svg" style={STYLES.homeImg} />
         </Block>
         <Block>
           <h1 style={STYLES.greeting}>Hi {this.props.username}</h1>
