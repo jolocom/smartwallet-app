@@ -6,6 +6,7 @@ import StripeCheckout from './stripe-checkout'
 import {
   RaisedButton
 } from 'material-ui'
+import Spinner from '../../common/spinner'
 
 import {theme} from 'styles'
 
@@ -34,7 +35,23 @@ export default class WalletEther extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     buyEther: React.PropTypes.func,
-    ether: React.PropTypes.object
+    ether: React.PropTypes.object,
+    avatar: React.PropTypes.string,
+    title: React.PropTypes.string
+  }
+
+  renderLoading() {
+    const messageWait = ['This might take a while...',
+      'Please have some patience...', 'Almost there...']
+    return (
+      <div style={STYLES.noEtherContainer}>
+        <Block>
+          <Spinner style={STYLES.header} message={messageWait}
+            title={'Thank you. We are transferring some Ether to your Account.'}
+            avatar={'url(/img/img_techguy.svg)'} />
+        </Block>
+      </div>
+    )
   }
 
   renderHasEther() {
@@ -70,28 +87,27 @@ export default class WalletEther extends React.Component {
           </Block>
         </Block>
         <Block>
-          <RaisedButton
-            secondary
-            fullWidth
-            label="BUY ETHER"
-            onClick={this.props.buyEther()}>
-            <StripeCheckout />
-          </RaisedButton>
+          <StripeCheckout buyEther={this.props.buyEther.bind(this)} />
         </Block>
       </div>
     )
   }
 
   render() {
+    let content = null
+    if (this.props.ether.ether.buying) {
+      content = this.renderLoading()
+    } else if (this.props.ether.ether.amount) {
+      content = this.renderNoEther()
+    } else if (!this.props.ether.ether.amount) {
+      content = this.renderNoEther()
+    }
+
     return (
       <TabContainer>
         <HalfScreenContainer>
           <Content>
-          {
-            this.props.ether.ether.amount
-            ? this.renderHasEther()
-            : this.renderNoEther()
-          }
+            {content}
           </Content>
         </HalfScreenContainer>
       </TabContainer>

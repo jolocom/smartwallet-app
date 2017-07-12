@@ -7374,7 +7374,7 @@ slide@^1.1.3, slide@^1.1.5, slide@~1.1.3, slide@~1.1.6:
 
 "smartwallet-contracts@github:jolocom/smartwallet-contracts":
   version "1.0.0"
-  resolved "https://codeload.github.com/jolocom/smartwallet-contracts/tar.gz/1ae948d589d463c4a047dc2db3b8488d5ba6e894"
+  resolved "https://codeload.github.com/jolocom/smartwallet-contracts/tar.gz/25c98bc059a12196570d68fba41d5dc7abb4f993"
   dependencies:
     babel-polyfill "^6.23.0"
     bitcore-ecies "^1.0.3"

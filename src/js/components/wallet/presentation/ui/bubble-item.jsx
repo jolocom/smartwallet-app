@@ -4,8 +4,8 @@ class BubbleItem extends React.Component {
   static propTypes = {
     unit: React.PropTypes.string,
     amount: React.PropTypes.string,
-    x: React.PropTypes.any,
-    y: React.PropTypes.any
+    x: React.PropTypes.string,
+    y: React.PropTypes.string
   }
 
   render() {

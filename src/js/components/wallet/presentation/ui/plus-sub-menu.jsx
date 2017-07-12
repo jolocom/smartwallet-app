@@ -128,7 +128,7 @@ PlusSubMenu.propTypes = {
   style: React.PropTypes.object,
   goToManagement: React.PropTypes.func.isRequired,
   choice: React.PropTypes.bool,
-  overview: React.PropTypes.any
+  overview: React.PropTypes.object
 }
 
 export default Radium(PlusSubMenu)

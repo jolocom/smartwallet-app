@@ -13,14 +13,17 @@ const actions = module.exports = makeActions('wallet/money', {
     }
   },
   buyEther: {
-    expectedParams: ['value'],
+    expectedParams: ['stripeToken'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        dispatch(actions.buyEther.buildAction(params, () => {
-          console.log('buy Ether ') // eslint-disable-line no-console
-          return new Promise((resolve, reject) => {
-            resolve(true)
+        dispatch(actions.buyEther.buildAction(params, (backend) => {
+          return backend.wallet.buyEther({
+            stripeToken: params,
+            walletAddress: services.auth.currentUser.wallet.mainAddress
+          }).then((response) => {
+            dispatch(actions.getBalance())
+            return response
           })
         }))
       }
@@ -53,6 +56,7 @@ const actions = module.exports = makeActions('wallet/money', {
 const initialState = Immutable.fromJS({
   ether: {
     loaded: false,
+    errorMsg: '',
     price: 0,
     amount: 0,
     checkingOut: false,
@@ -63,36 +67,64 @@ const initialState = Immutable.fromJS({
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.buyEther.id:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: false,
+        errorMsg: '',
+        buying: true
+      })
 
     case actions.buyEther.id_success:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: '',
+        buying: false,
+        checkingOut: true
+      })
 
     case actions.buyEther.id_fail:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: 'Could not buy ether',
+        buying: false
+      })
 
     case actions.getBalance.id:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: false,
+        errorMsg: ''
+      })
 
     case actions.getBalance.id_fail:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: 'Could not get the user\'s ether balance'
+      })
 
     case actions.getBalance.id_success:
       return state.mergeIn(['ether'], {
-        amount: action.result
+        amount: action.result,
+        loaded: true,
+        errorMsg: ''
       })
 
     case actions.getPrice.id:
-      return state
+      return state.mergeIn(['ether'], {
+        loaded: false,
+        errorMsg: ''
+      })
 
     case actions.getPrice.id_success:
       return state.mergeIn(['ether'], {
-        price: action.result.ethForEur
+        price: action.result.ethForEur,
+        loaded: true,
+        errorMsg: ''
       })
 
     case actions.getPrice.id_fail:
-      return state
-
+      return state.mergeIn(['ether'], {
+        loaded: true,
+        errorMsg: 'Could not get the ether price'
+      })
     default:
       return state
   }

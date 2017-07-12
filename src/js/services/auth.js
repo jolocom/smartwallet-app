@@ -23,10 +23,10 @@ export default class AuthService extends EventEmitter {
 
   _setCurrentUser(user, {dontSaveSession} = {}) {
     this.currentUser = user
-    if (!dontSaveSession) {
+    if (user && !dontSaveSession) {
       localStorage.setItem('jolocom.smartWallet', user.wallet.serialize())
     }
-    this.emit('changed', this.currentUser.wallet.webId || null)
+    this.emit('changed', user && user.wallet.webId || null)
   }
 
   async registerWithSeedPhrase({userName, seedPhrase, pin}) {
@@ -46,19 +46,18 @@ export default class AuthService extends EventEmitter {
     return this.currentUser
   }
 
-  async loginWithSeedPhrase({userName, seedPhrase, pin}) {
+  async loginWithSeedPhrase({seedPhrase, pin}) {
     this._setCurrentUser({
-      wallet: await this.backend.loginWithSeedPhrase({
-        userName, seedPhrase, pin
-      })
+      wallet: await this.backend.wallet
+        .loginWithSeedPhrase({seedPhrase, pin})
     })
     return this.currentUser
   }
 
-  async loginWithCredentials({userName, email, password, pin}) {
+  async loginWithCredentials({email, password, pin}) {
     this._setCurrentUser({
       wallet: await this.backend.loginWithCredentials({
-        userName, email, password, pin
+        email, password, pin
       })
     })
     return this.currentUser

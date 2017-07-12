@@ -27,6 +27,13 @@ export default class WalletAgent {
     )
   }
 
+  buyEther({stripeToken, walletAddress}) {
+    return this._httpAgent.post(
+      'https://verification.jolocom.com/ether/buy/ether',
+      {stripeToken, walletAddress}
+    )
+  }
+
   retrieveSeedPhrase({email, password}) {
     return this._manager.retrieveSeedPhrase({email, password})
   }

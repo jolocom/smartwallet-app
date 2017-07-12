@@ -12,7 +12,7 @@ export default class WalletEtherScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     buyEther: React.PropTypes.func,
-    money: React.PropTypes.any
+    money: React.PropTypes.object
   }
 
   render() {
