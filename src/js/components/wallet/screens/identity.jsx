@@ -16,6 +16,7 @@ import WalletError from '../presentation/error'
     'confirmation-dialog:closeConfirmDialog',
     'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
+    'wallet/id-card:saveToBlockchain',
     'email-confirmation:startEmailConfirmation'
   ]
 })
@@ -34,6 +35,7 @@ export default class WalletIdentityScreen extends React.Component {
     configSimpleDialog: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
     startEmailConfirmation: React.PropTypes.func.isRequired,
+    saveToBlockchain: React.PropTypes.func.isRequired,
     changePinValue: React.PropTypes.func.isRequired
   }
 
@@ -85,6 +87,7 @@ export default class WalletIdentityScreen extends React.Component {
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
+      saveToBlockchain={this.props.saveToBlockchain}
       onConfirm={
         ({message, style, attrValue, rightButtonText, leftButtonText}) =>
         this.onConfirm({

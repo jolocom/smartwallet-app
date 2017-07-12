@@ -79,6 +79,8 @@ const IdCardsList = (props) => {
       textLabel="Country"
       textValue={idCardFields.physicalAddress.country}
     />
+    <div onClick={props.saveToBlockchain.bind(this, index)}>
+    Save to blockchain</div>
   </List>))
 
   return (<List disabled>
@@ -87,7 +89,8 @@ const IdCardsList = (props) => {
 }
 
 IdCardsList.propTypes = {
-  idCards: React.PropTypes.array.isRequired
+  idCards: React.PropTypes.array.isRequired,
+  saveToBlockchain: React.PropTypes.func.isRequired
 }
 
 export default Radium(IdCardsList)

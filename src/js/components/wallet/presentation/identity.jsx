@@ -87,7 +87,8 @@ export default class WalletIdentity extends React.Component {
     onConfirm: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
     changePinValue: React.PropTypes.func.isRequired,
-    onVerify: React.PropTypes.func.isRequired
+    onVerify: React.PropTypes.func.isRequired,
+    saveToBlockchain: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -106,7 +107,8 @@ export default class WalletIdentity extends React.Component {
       onConfirm,
       changePinValue,
       setFocusedPin,
-      onVerify
+      onVerify,
+      saveToBlockchain
     } = this.props
 
     if (!isLoaded) {
@@ -193,7 +195,9 @@ export default class WalletIdentity extends React.Component {
               goToManagement={goToPassportManagement} />
           </Block>
           <Block>
-            <IdCardsList idCards={idCards} />
+            <IdCardsList
+              idCards={idCards}
+              saveToBlockchain={saveToBlockchain} />
           </Block>
           <Block>
             <PlusMenu
