@@ -105,7 +105,7 @@ export default class DateListItem extends React.Component {
             underlineShow={!value}
             underlineDisabledStyle={styles.disabledUnderline}
             floatingLabelText={label}
-            value={value || null}
+            // value={null}
             onChange={onChange}
             errorText=""
             okLabel="OK"
