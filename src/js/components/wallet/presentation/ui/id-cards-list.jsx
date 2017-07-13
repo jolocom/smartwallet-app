@@ -79,7 +79,7 @@ const IdCardsList = (props) => {
       onClick={props.saveToBlockchain.bind(this, index)} />
   </List>))
 
-  return (<List disabled>
+  return (<List style={{padding: '0'}} disabled>
     {fields}
   </List>)
 }

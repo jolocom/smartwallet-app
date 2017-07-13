@@ -4,7 +4,6 @@ import Radium from 'radium'
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
-import IDCard from 'material-ui/svg-icons/av/featured-video'
 import Location from 'material-ui/svg-icons/maps/place'
 import moment from 'moment'
 import {List, ListItem, SelectField, MenuItem,
@@ -87,6 +86,7 @@ export default class WalletIdCard extends React.Component {
       case 'birthPlace':
         return null // handled with birthDate
       case 'birthDate':
+        return this.renderBirthDate(field)
       case 'streetWithNumber':
         return this.renderStreetWithNumber(field)
       case 'expirationDate':
@@ -304,7 +304,9 @@ export default class WalletIdCard extends React.Component {
       <Content>
         <EditHeader title="ID Card" />
         <List>
-          <ListItem leftIcon={<IDCard color={theme.jolocom.gray2} />}>
+          <ListItem
+            innerDivStyle={{padding: '0 16px 0 54px'}}
+            leftIcon={<img src="/img/ic_idcard.svg" />}>
             <div style={STYLES.uploadContainer}>
               <FloatingActionButton secondary style={STYLES.uploadBtn}>
                 <Camera />

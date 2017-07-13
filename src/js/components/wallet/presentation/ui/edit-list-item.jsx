@@ -53,7 +53,7 @@ let STYLES = {
     width: '100%'
   },
   item: {
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 54px'
   }
 }
 

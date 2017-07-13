@@ -218,7 +218,7 @@ describe('(Component) WalletIdCardScreen', () => {
     )
     const field = {value: '', valid: false}
     expect(wrapper.find(Presentation).prop('idCard')).to.deep.equal([
-      {...field, label: 'Id Card Number', key: 'number', group: 'numbers'},
+      {...field, label: 'ID Card Number', key: 'number', group: 'numbers'},
       {...field, label: 'Expiration Date', key: 'expirationDate', group: 'numbers'}, // eslint-disable-line max-len
       {...field, label: 'First Name', key: 'firstName', group: 'person'},
       {...field, label: 'Last Name', key: 'lastName', group: 'person'},

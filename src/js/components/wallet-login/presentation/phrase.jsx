@@ -24,7 +24,7 @@ const STYLES = {
   },
   phraseInput: {
     backgroundColor: '#fff',
-    padding: '10px'
+    padding: '2px'
   },
   phraseInputText: {
     textAlign: 'center',
@@ -46,6 +46,7 @@ const Passphrase = (props) => {
       </IconButton>
       <Header
         image={<Avatar
+          style={{marginBottom: '8px'}}
           src="/img/img_techguy.svg"
           size={60} />}
         title={
@@ -75,6 +76,7 @@ const Passphrase = (props) => {
         <RaisedButton
           label="LOGIN"
           secondary
+          disabled={!props.value}
           onClick={props.onSubmit} />
       </Footer>
     </Container>

@@ -13,7 +13,8 @@ const STYLES = {
   form: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    margin: '30px 0'
   },
   input: {
     display: 'inline-block'
@@ -26,42 +27,22 @@ const STYLES = {
   content: {
     padding: '16px',
     flex: 1
+  },
+  sidenote: {
+    margin: '10px'
   }
 }
 
 function getButtonLabel(props) {
   if (!props.valid) {
     return 'Almost done'
-  }
-  if (props.confirm) {
-    return 'All right'
   } else {
     return 'Done'
   }
 }
 
 const Pin = (props) => {
-  let confirm
-  if (props.confirm) {
-    confirm = (
-      <Block>
-        <div
-          style={STYLES.changeLink}
-          onClick={props.onChangeRequest}
-        >
-          Change secure PIN
-        </div>
-      </Block>
-    )
-  }
-
-  let headerTitle
   let contents
-  if (props.confirm) {
-    headerTitle = 'Your Secure PIN.'
-  } else {
-    headerTitle = 'Create a PIN for secure login.'
-  }
 
   if (props.registering) {
     const messageWait = ['Please have some patience...',
@@ -78,7 +59,7 @@ const Pin = (props) => {
   } else {
     contents = (
       <Form onValidSubmit={() => { props.onSubmit() }} style={STYLES.form}>
-        <Header title={headerTitle} />
+        <Header title={'Create a PIN for secure login.'} />
         <Content style={STYLES.content}>
           <PinInput
             value={props.value}
@@ -87,21 +68,15 @@ const Pin = (props) => {
             onChange={props.onChange}
             onFocusChange={props.onFocusChange}
             confirm={props.confirm} />
-
-          {confirm}
         </Content>
 
         <Footer>
-          {
-            props.confirm
-            ? <Block>
-              <SideNote>
-                This secure PIN will be needed for transactions and
-                saving information on the Blockchain.
-              </SideNote>
-            </Block>
-            : null
-          }
+          <Block>
+            <SideNote style={STYLES.sidenote}>
+              This secure PIN will be needed for transactions and
+              saving information on the Blockchain.
+            </SideNote>
+          </Block>
           <RaisedButton
             type="submit"
             disabled={!props.valid}

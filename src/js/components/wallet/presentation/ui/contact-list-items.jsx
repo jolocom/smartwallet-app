@@ -16,6 +16,9 @@ const STYLES = {
     actionsContainerStyle: {
       textAlign: 'center'
     }
+  },
+  list: {
+    padding: '0'
   }
 }
 
@@ -50,7 +53,7 @@ const ContactList = ({
   icon,
   setFocusedPin,
   changePinValue
-}) => (<List disabled>
+}) => (<List style={{padding: '0'}} disabled>
 {
   fields.map(({
     verified = false,

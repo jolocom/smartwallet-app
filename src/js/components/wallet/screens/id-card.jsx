@@ -81,7 +81,7 @@ export default class WalletPaasportScreen extends React.Component {
     const {number, expirationDate, firstName, lastName, gender, birthDate,
       birthPlace, birthCountry} = this.props.idCard.idCard
     return [
-      {label: 'Id Card Number', key: 'number', group: 'numbers', ...number},
+      {label: 'ID Card Number', key: 'number', group: 'numbers', ...number},
       {label: 'Expiration Date', key: 'expirationDate', group: 'numbers', ...expirationDate}, // eslint-disable-line max-len
       {label: 'First Name', key: 'firstName', group: 'person', ...firstName},
       {label: 'Last Name', key: 'lastName', group: 'person', ...lastName},
