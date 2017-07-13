@@ -14,6 +14,7 @@ describe('(Component) WalletContactScreen', () => {
         {...WalletContactScreen.mapStateToProps(Immutable.fromJS({wallet: {
           contact: {
             loading: false,
+            getDataFromBackend: true,
             information: {}
           }
         }}))}

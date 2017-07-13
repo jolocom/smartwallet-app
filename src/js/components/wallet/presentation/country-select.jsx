@@ -38,7 +38,7 @@ const STYLES = {
     color: theme.palette.primary1Color
   },
   countryName: {
-    width: '90%'
+    maxWidth: '95%'
   },
   countryField: {
     width: '100%'
@@ -87,7 +87,6 @@ export default class CountrySelectPresentation extends React.Component {
             value={getFirstCountryLetter(countryLabel, idx)}
             style={STYLES.firstLetter} />
           <TextField
-            onClick={() => submit(countryLabel)}
             id={`${countryLabel}_country`}
             underlineShow={false}
             style={STYLES.countryName} value={countryLabel} />
