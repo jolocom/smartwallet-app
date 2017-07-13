@@ -50,7 +50,6 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
-        // dispatch(requestVerification())
         dispatch(router.pushRoute(resultUrl))
         dispatch(actions.requestVerification.buildAction(params))
       }

@@ -63,7 +63,7 @@ const actions = module.exports = makeActions('wallet/contact', {
   },
   startComparingData: {
     async: true,
-    expectedParams: ['data'],
+    expectedParams: [],
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.startComparingData.buildAction(params, async () => {
@@ -75,13 +75,14 @@ const actions = module.exports = makeActions('wallet/contact', {
             .solid.getIdentityContractAddress(webId)
 
           const {wallet} = services.auth.currentUser
-          compareDataToIdCard({
+          return compareDataToIdCard({
             contractId,
             wallet,
             data: verification.data[type],
             documentType: type
           }).then(result => {
             if (result) {
+              console.log('=================')
               storeVerificationToTargetIdentity({wallet, contractId})
             }
             return result
@@ -115,6 +116,7 @@ module.exports.default = (state = initialState, action = {}) => {
         loading: true
       })
     case actions.startComparingData.id_success:
+      console.log('===success===', action.result)
       return state.merge({
         loading: false,
         success: action.result,
