@@ -102,7 +102,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getBalance.id_success:
       return state.mergeIn(['ether'], {
-        amount: action.result,
+        amount: parseFloat(action.result),
         loaded: true,
         errorMsg: ''
       })
