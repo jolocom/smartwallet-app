@@ -20,5 +20,5 @@ export default combineReducers({
     money: require('./modules/wallet/money').default,
     idCard: require('./modules/wallet/id-card').default
   }),
-  emailConfirmation: require('./modules/email-confirmation').default
+  verification: require('./modules/verification').default
 })

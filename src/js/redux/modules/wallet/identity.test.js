@@ -17,11 +17,12 @@ describe('# Wallet identity redux module', () => {
           phones: [{
             type: '',
             number: '',
+            pin: '',
             verified: false,
             smsCode: '',
             pinFocused: false
           }],
-          emails: [{type: '', address: '', verified: false}]
+          emails: [{type: '', address: '', pin: '', verified: false}]
         },
         passports: [{
           number: '', givenName: '', familyName: '', birthDate: '',
