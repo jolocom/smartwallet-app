@@ -217,7 +217,7 @@ export default class WalletIdCard extends React.Component {
             onFocusChange={(field) => this.props.setFocused(field, group)}
             focused={this.props.focusedGroup === group}
             onChange={(e, date) =>
-              this.props.change(key, moment(date).format('YYYY/MM/DD'))} />
+              this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
         </td>
         <td key="1">
           <EditListItem
@@ -255,7 +255,7 @@ export default class WalletIdCard extends React.Component {
       onDelete={() => { this.props.change(key, '') }}
       enableDelete={value.toString().length > 0}
       onChange={(e, date) =>
-        this.props.change(key, moment(date).format('YYYY/MM/DD'))} />
+        this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
   }
 
   renderOptionsField({value, label, valid, key, options, group, index, icon}) {

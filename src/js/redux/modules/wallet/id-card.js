@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import util from 'lib/util'
 // import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
-import moment from 'moment'
 import { makeActions } from '../'
 import * as router from '../router'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
@@ -50,10 +49,6 @@ const actions = module.exports = makeActions('wallet/id-card', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
         const {idCard, showErrors} = getState().toJS().wallet.idCard
-        idCard.birthDate.value = moment(
-          idCard.birthDate.value, 'XXX MMM DD YYYY').format()
-        idCard.expirationDate.value = moment(
-          idCard.birthDate.value, 'XXX MMM DD YYYY').format()
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
           dispatch(actions.save.buildAction(params, () => {
