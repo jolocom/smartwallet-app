@@ -38,7 +38,6 @@ export default class WalletPaasportScreen extends React.Component {
     const {save, cancel, initiateCountrySelectScreen} = this.props
     const {loaded, focusedField, focusedGroup, verifierLocations
     } = this.props.idCard
-
     return <Presentation
       loaded={loaded}
       focusedGroup={focusedGroup}
@@ -56,7 +55,7 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   showVerifiers(...args) {
-    this.props.configSimpleDialog(null, 'OK', 'OK', {})
+    this.props.configSimpleDialog(null, args, 'OK', {})
     this.props.showSimpleDialog()
   }
 
@@ -82,7 +81,7 @@ export default class WalletPaasportScreen extends React.Component {
     const {number, expirationDate, firstName, lastName, gender, birthDate,
       birthPlace, birthCountry} = this.props.idCard.idCard
     return [
-      {label: 'Id Card Number', key: 'number', group: 'numbers', ...number},
+      {label: 'ID Card Number', key: 'number', group: 'numbers', ...number},
       {label: 'Expiration Date', key: 'expirationDate', group: 'numbers', ...expirationDate}, // eslint-disable-line max-len
       {label: 'First Name', key: 'firstName', group: 'person', ...firstName},
       {label: 'Last Name', key: 'lastName', group: 'person', ...lastName},

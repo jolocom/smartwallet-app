@@ -22,7 +22,7 @@ let STYLES = {
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginRight: '32px',
-    '@media (max-width: 320px)': {
+    '@media (maxWidth: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
     }
@@ -36,7 +36,7 @@ let STYLES = {
   },
   type: {
     maxWidth: '120px',
-    '@media (min-width: 321px)': {
+    '@media (minWidth: 321px)': {
       margin: '0 16px'
     }
   },
@@ -49,10 +49,11 @@ let STYLES = {
   },
   textField: {
     maxWidth: 'none',
-    flex: 1
+    flex: 1,
+    width: '100%'
   },
   item: {
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 54px'
   }
 }
 
@@ -79,7 +80,8 @@ export default class EditListItem extends React.Component {
     valid: React.PropTypes.bool,
     enableEdit: React.PropTypes.bool,
     underlineHide: React.PropTypes.bool,
-    enableDelete: React.PropTypes.bool
+    enableDelete: React.PropTypes.bool,
+    widthTextField: React.PropTypes.object
   }
 
   getStyles() {
@@ -100,7 +102,8 @@ export default class EditListItem extends React.Component {
       valid,
       showErrors,
       underlineHide,
-      errorText
+      errorText,
+      widthTextField
     } = this.props
 
     let styles = this.getStyles()
@@ -113,11 +116,13 @@ export default class EditListItem extends React.Component {
       ? theme.palette.primary1Color : theme.jolocom.gray1
 
     const icon = this.props.icon
-      ? <this.props.icon color={iconColor} style={styles.icon} /> : <div />
+      ? <this.props.icon color={iconColor} style={styles.icon} /> : null
+
+    const widthField = widthTextField || styles.item
 
     return (
       <ListItem
-        style={styles.item}
+        style={widthField}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
         leftIcon={icon}
@@ -164,16 +169,14 @@ export default class EditListItem extends React.Component {
   }
 
   get deleteButton() {
-    if (this.props.enableDelete) {
-      return (
-        <IconButton
-          style={STYLES.deleteButton}
-          onTouchTap={this.handleDelete}
-        >
-          <NavigationCancel />
-        </IconButton>
-      )
-    }
+    const visibility = this.props.enableDelete && this.props.value ? 'visible'
+      : 'hidden'
+    return (<IconButton
+      style={{...STYLES.deleteButton, visibility}}
+      onTouchTap={this.handleDelete}
+    >
+      <NavigationCancel />
+    </IconButton>)
   }
 
   handleFocus = () => {

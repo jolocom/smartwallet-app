@@ -34,6 +34,7 @@ const LaymanLogin = (props) => {
       </IconButton>
       <Header
         image={<Avatar
+          style={{marginBottom: '8px'}}
           src="/img/img_nohustle.svg"
           size={60} />}
         title={

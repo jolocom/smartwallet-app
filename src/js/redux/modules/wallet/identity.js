@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
+import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
@@ -10,6 +11,9 @@ const actions = module.exports = makeActions('wallet/identity', {
         dispatch(router.pushRoute('/wallet/identity/contact'))
       }
     }
+  },
+  changeSmsCodeValue: {
+    expectedParams: ['value', 'index']
   },
   changePinValue: {
     expectedParams: ['value', 'index']
@@ -47,20 +51,19 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () => {
-          // eslint-disable-next-line max-len
-          return backend.solid.getUserInformation(localStorage.getItem('jolocom.webId'))
+          return backend.solid.getUserInformation(new WebIdAgent().getWebId())
         }))
       }
     }
   }
 })
 
-const mapBackendToState = ({webId, username, contact, passports, idCards}) =>
+const mapBackendToState = ({webId, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: false,
     webId,
-    username,
+    username: {value: webId.split('.')[0].split('://')[1]},
     contact: {
       emails: contact.email,
       phones: contact.phone
@@ -73,14 +76,14 @@ const mapBackendToStateError =
   Immutable.fromJS({
     loaded: true,
     error: true,
-    webId,
-    username,
+    webId: {value: ''},
+    username: {value: ''},
     contact: {
-      emails: contact.email,
-      phones: contact.phone
+      emails: [],
+      phones: []
     },
-    passports: passports,
-    idCards: idCards
+    passports: [],
+    idCards: []
   })
 const initialState = Immutable.fromJS({
   loaded: false,
@@ -96,11 +99,13 @@ const initialState = Immutable.fromJS({
       number: '',
       verified: false,
       smsCode: '',
+      pin: '',
       pinFocused: false
     }],
     emails: [{
       type: '',
       address: '',
+      pin: '',
       verified: false
     }]
   },
@@ -122,10 +127,19 @@ const initialState = Immutable.fromJS({
   ]
 })
 
-const changePinCodeValue = (state, {index, value}) => {
+const changeSmsCodeValue = (state, {index, value}) => {
   if (/^[0-9]{0,6}$/.test(value)) {
     return state.mergeIn(['contact', 'phones', index], {
       smsCode: value
+    })
+  }
+  return state
+}
+
+const changePinValue = (state, {index, value}) => {
+  if (/^[0-9]{0,6}$/.test(value)) {
+    return state.mergeIn(['contact', 'phones', index], {
+      pin: value
     })
   }
   return state
@@ -139,8 +153,11 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.getIdentityInformation.id_fail:
       return mapBackendToStateError(state)
 
+    case actions.changeSmsCodeValue.id:
+      return changeSmsCodeValue(state, action)
+
     case actions.changePinValue.id:
-      return changePinCodeValue(state, action)
+      return changePinValue(state, action)
 
     case actions.setFocusedPin.id:
       return state.mergeIn(['contact', 'phones', action.index], {

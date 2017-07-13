@@ -19,7 +19,10 @@ const STYLES = {
     selectedColor: theme.palette.primary1Color,
     textAlign: 'center',
     padding: '16px',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    '@media screen and (min-width: 400px)': {
+      width: '450px'
+    }
   },
   tileinside: {
     color: theme.jolocom.gray5,
@@ -36,7 +39,7 @@ const STYLES = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
-    marginBottom: '8px'
+    margin: '8px'
   }
 }
 
@@ -81,7 +84,8 @@ const UserType = (props) => {
           </div>
         </HoverButton>
 
-        <FlatButton onClick={() => props.onWhySelect(messageWhy)}>
+        <FlatButton style={{color: theme.palette.accent1Color}}
+          onClick={() => props.onWhySelect(messageWhy)}>
           WHY?
         </FlatButton>
       </Content>
@@ -89,6 +93,7 @@ const UserType = (props) => {
         <InfoLink
           info="Don't have a wallet yet?"
           link="Create one"
+          style={{textDecoration: 'none', textColor: 'blue'}}
           to="/registration"
         />
       </Footer>

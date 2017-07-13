@@ -209,106 +209,108 @@ describe('(Component) WalletIdentityScreen', function() {
     expect(getIdentityInformation.called).to.be.true
     expect(getIdentityInformation.calls).to.deep.equal([{args: []}])
   })
-  it('should call openConfirmDialog on onConfirm with proper params', () => {
-    const openConfirmDialog = stub()
-    const closeConfirmDialog = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
-          }
-        }))
-      }
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        openConfirmDialog={openConfirmDialog}
-        closeConfirmDialog={closeConfirmDialog}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-    )
-
-    wrapper.find('WalletIdentity').props().onConfirm({
-      message: 'message',
-      attrValue: 'test value',
-      style: {},
-      rightButtonText: 'rightButtonText test',
-      leftButtonText: 'leftButtonText test'
-    })
-    expect(openConfirmDialog.called).to.be.true
-    expect(openConfirmDialog.calls[0].args[0]).to.equal('message')
-    expect(openConfirmDialog.calls[0].args[1]).to.equal('rightButtonText test')
-    expect(openConfirmDialog.calls[0].args[3]).to.equal('leftButtonText test')
-    expect(openConfirmDialog.calls[0].args[4]).to.deep.equal({})
-    expect(closeConfirmDialog.called).to.be.true
-    expect(closeConfirmDialog.calls).to.deep.equal([{args: []}])
-  })
-  it('should call openConfirmDialog on verify with proper params', () => {
-    const configSimpleDialog = stub()
-    const showSimpleDialog = stub()
-    const startEmailConfirmation = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
-          }
-        }))
-      }
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        openConfirmDialog={() => {}}
-        closeConfirmDialog={() => {}}
-        showSimpleDialog={showSimpleDialog}
-        configSimpleDialog={configSimpleDialog}
-        startEmailConfirmation={startEmailConfirmation}
-       />),
-      { context: { muiTheme: { } } }
-    )
-
-    wrapper.find('WalletIdentity').props().onVerify({
-      message: 'message',
-      buttonText: 'OK',
-      style: {},
-      attrValue: 'test@test.com'
-    })
-    expect(configSimpleDialog.called).to.be.true
-    expect(showSimpleDialog.called).to.be.true
-    expect(configSimpleDialog.calls).to.have.lengthOf(1)
-    const [callback, msg, text, ...rest] = configSimpleDialog.calls[0].args
-    expect({msg, text}).to.deep.equal({msg: 'message', 'text': 'OK'})
-    expect(rest).to.have.lengthOf(1)
-    expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
-
-    callback()
-    expect(startEmailConfirmation.calls).to.deep.equal([{args: [{
-      email: 'test@test.com'
-    }]}])
-  })
+  // it('should call openConfirmDialog on onConfirm with proper params', () => {
+  //   const openConfirmDialog = stub()
+  //   const closeConfirmDialog = stub()
+  //   const wrapper = shallow(
+  //     (<WalletIdentityScreen.WrappedComponent {
+  //       ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+  //         wallet: {
+  //           identity: {
+  //             loaded: false,
+  //             webId: '',
+  //             username: {},
+  //             contact: {
+  //               phones: [],
+  //               emails: []
+  //             },
+  //             passport: {},
+  //             error: false
+  //           }
+  //         }
+  //       }))
+  //     }
+  //       goToPassportManagement={() => {}}
+  //       goToDrivingLicenceManagement={() => {}}
+  //       goToContactManagement={() => {}}
+  //       getIdentityInformation={() => {}}
+  //       openConfirmDialog={openConfirmDialog}
+  //       closeConfirmDialog={closeConfirmDialog}
+  //       configSimpleDialog={() => {}}
+  //       showSimpleDialog={() => {}}
+  //      />),
+  //     { context: { muiTheme: { } } }
+  //   )
+  //
+  //   wrapper.find('WalletIdentity').props().onConfirm({
+  //     message: 'message',
+  //     attrValue: 'test value',
+  //     style: {},
+  //     rightButtonText: 'rightButtonText test',
+  //     leftButtonText: 'leftButtonText test'
+  //   })
+  //   expect(openConfirmDialog.called).to.be.true
+  //   expect(openConfirmDialog.calls[0].args[0]).to.equal('message')
+  //   expect(openConfirmDialog.calls[0].args[1
+  //      .to.equal('rightButtonText test')
+  //   expect(openConfirmDialog.calls[0].args[3
+  //      .to.equal('leftButtonText test')
+  //   expect(openConfirmDialog.calls[0].args[4]).to.deep.equal({})
+  //   expect(closeConfirmDialog.called).to.be.true
+  //   expect(closeConfirmDialog.calls).to.deep.equal([{args: []}])
+  // })
+  // it('should call openConfirmDialog on verify with proper params', () => {
+  //   const configSimpleDialog = stub()
+  //   const showSimpleDialog = stub()
+  //   const startEmailConfirmation = stub()
+  //   const wrapper = shallow(
+  //     (<WalletIdentityScreen.WrappedComponent {
+  //       ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+  //         wallet: {
+  //           identity: {
+  //             loaded: false,
+  //             webId: '',
+  //             username: {},
+  //             contact: {
+  //               phones: [],
+  //               emails: []
+  //             },
+  //             passport: {},
+  //             error: false
+  //           }
+  //         }
+  //       }))
+  //     }
+  //       goToPassportManagement={() => {}}
+  //       goToDrivingLicenceManagement={() => {}}
+  //       goToContactManagement={() => {}}
+  //       getIdentityInformation={() => {}}
+  //       openConfirmDialog={() => {}}
+  //       closeConfirmDialog={() => {}}
+  //       showSimpleDialog={showSimpleDialog}
+  //       configSimpleDialog={configSimpleDialog}
+  //       startEmailConfirmation={startEmailConfirmation}
+  //      />),
+  //     { context: { muiTheme: { } } }
+  //   )
+  //
+  //   wrapper.find('WalletIdentity').props().onVerify({
+  //     message: 'message',
+  //     buttonText: 'OK',
+  //     style: {},
+  //     attrValue: 'test@test.com'
+  //   })
+  //   expect(configSimpleDialog.called).to.be.true
+  //   expect(showSimpleDialog.called).to.be.true
+  //   expect(configSimpleDialog.calls).to.have.lengthOf(1)
+  //   const [callback, msg, text, ...rest] = configSimpleDialog.calls[0].args
+  //   expect({msg, text}).to.deep.equal({msg: 'message', 'text': 'OK'})
+  //   expect(rest).to.have.lengthOf(1)
+  //   expect(showSimpleDialog.calls).to.deep.equal([{args: []}])
+  //
+  //   callback()
+  //   expect(startEmailConfirmation.calls).to.deep.equal([{args: [{
+  //     email: 'test@test.com'
+  //   }]}])
+  // })
 })

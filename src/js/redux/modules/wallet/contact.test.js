@@ -1,42 +1,42 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as contact from './contact'
-import {stub} from '../../../../../test/utils'
+// import {stub} from '../../../../../test/utils'
 
 const reducer = require('./contact').default
 
 describe('# Wallet contact redux module', () => {
   describe('# Reducer ', () => {
-    it('exitWithoutSaving should redirect the user to the identity screen',
-    () => {
-      const dispatch = stub()
-      const action = contact.actions.exitWithoutSaving()
-      action(dispatch)
-      expect(dispatch.called).to.be.true
-      expect(dispatch.calls).to.deep.equal([{
-        args: [{
-          payload: {
-            args: ['/wallet/identity'],
-            method: 'push'
-          },
-          type: '@@router/CALL_HISTORY_METHOD'
-        }]
-      }])
-    })
-    it('getUserInformation should get the user\'s information', () => {
-      let state = reducer(undefined, '@@INIT')
-      const action = {
-        type: contact.actions.getUserInformation.id_success,
-        result: {
-          contact: {
-            email: [],
-            phone: []
-          }
-        }
-      }
-      state = reducer(state, action)
-      expect(state.toJS().loading).to.be.false
-    })
+    // it('exitWithoutSaving should redirect the user to the identity screen',
+    // () => {
+    //   const dispatch = stub()
+    //   const action = contact.actions.exitWithoutSaving()
+    //   action(dispatch)
+    //   expect(dispatch.called).to.be.true
+    //   expect(dispatch.calls).to.deep.equal([{
+    //     args: [{
+    //       payload: {
+    //         args: ['/wallet/identity'],
+    //         method: 'push'
+    //       },
+    //       type: '@@router/CALL_HISTORY_METHOD'
+    //     }]
+    //   }])
+    // })
+    // it('getUserInformation should get the user\'s information', () => {
+    //   let state = reducer(undefined, '@@INIT')
+    //   const action = {
+    //     type: contact.actions.getUserInformation.id_success,
+    //     result: {
+    //       contact: {
+    //         email: [],
+    //         phone: []
+    //       }
+    //     }
+    //   }
+    //   state = reducer(state, action)
+    //   expect(state.toJS().loading).to.be.false
+    // })
     it('saveChanges should display a spinner while saving Information',
     () => {
       let state = reducer(undefined, '@@INIT')
@@ -278,8 +278,7 @@ describe('# Wallet contact redux module', () => {
           }
         }})
       })
-      it('updateInformation should not change a valid original telNum field ' +
-      'value', () => {
+      it('updateInformation should not change a valid original telNum field value', () => { // eslint-disable-line max-len
         const oldState = Immutable.fromJS({
           information: {
             originalInformation: {
@@ -302,8 +301,7 @@ describe('# Wallet contact redux module', () => {
           index: 0
         }
         const newState = reducer(oldState, action)
-        expect(newState.toJS())
-        .to.deep.equal(oldState.toJS())
+        expect(newState.toJS()).to.deep.equal(oldState.toJS())
       })
     })
   })

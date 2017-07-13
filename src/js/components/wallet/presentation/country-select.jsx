@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import {TextField} from 'material-ui'
+import {TextField, AppBar} from 'material-ui'
 import {ActionSearch, NavigationArrowBack} from 'material-ui/svg-icons'
 
 import {theme} from 'styles'
@@ -12,32 +12,42 @@ const STYLES = {
     width: '100%'
   },
   floatingLabelSearchField: {
-    color: theme.palette.textColor,
-    fontWeight: 'bold'
+    color: theme.palette.textColor
   },
   leftIcon: {
-    width: '5%'
+    width: '5%',
+    paddingLeft: '2%'
   },
   searchField: {
-    width: '90%'
+    width: '70%',
+    paddingLeft: '10%',
+    marginBottom: '16px'
   },
   searchFieldUnderline: {
     color: theme.palette.textColor
   },
   rightIcon: {
-    width: '5%'
+    width: '5%',
+    paddingRight: '2%'
   },
   firstLetter: {
-    width: '5%'
+    width: '10%'
   },
   firstLetterText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    color: theme.palette.primary1Color
   },
   countryName: {
-    width: '95%'
+    maxWidth: '95%'
   },
   countryField: {
     width: '100%'
+  },
+  headerAppbar: {
+    fontSize: theme.textStyles.headline.fontSize,
+    fontWeight: '400',
+    color: theme.textStyles.sectionheader.textColor,
+    padding: '25px 5px 15px 50px'
   }
 }
 
@@ -61,17 +71,18 @@ export default class CountrySelectPresentation extends React.Component {
         ? countryLabel[0] : ''
 
     return (<div>
-      <div style={STYLES.container}>
-        <NavigationArrowBack style={STYLES.leftIcon} onClick={cancel} />
-        <TextField
-          style={STYLES.searchField}
-          floatingLabelText="Country"
-          underlineStyle={STYLES.searchFieldUnderline}
-          floatingLabelStyle={STYLES.floatingLabelSearchField}
-          onChange={e => change(e.target.value)}
-          value={value} />
-        <ActionSearch style={STYLES.rightIcon} />
-      </div>
+      <AppBar
+        title="Country"
+        iconElementLeft={
+          <NavigationArrowBack style={{padding: '10px'}} onClick={cancel} />
+          } />
+      <TextField
+        style={STYLES.searchField}
+        floatingLabelText={<ActionSearch style={STYLES.rightIcon} />}
+        underlineStyle={STYLES.searchFieldUnderline}
+        floatingLabelStyle={STYLES.floatingLabelSearchField}
+        onChange={e => change(e.target.value)}
+        value={value} />
         {countries.map((countryLabel, idx) => (<div
           key={countryLabel}
           style={STYLES.countryField}
@@ -83,7 +94,6 @@ export default class CountrySelectPresentation extends React.Component {
             value={getFirstCountryLetter(countryLabel, idx)}
             style={STYLES.firstLetter} />
           <TextField
-            onClick={() => submit(countryLabel)}
             id={`${countryLabel}_country`}
             underlineShow={false}
             style={STYLES.countryName} value={countryLabel} />

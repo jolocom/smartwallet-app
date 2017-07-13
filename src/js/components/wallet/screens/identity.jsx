@@ -7,6 +7,7 @@ import WalletError from '../presentation/error'
   props: ['wallet'],
   actions: [
     'wallet/identity:getIdentityInformation',
+    'wallet/identity:changeSmsCodeValue',
     'wallet/identity:changePinValue',
     'wallet/identity:setFocusedPin',
     'wallet/identity:goToPassportManagement',
@@ -16,7 +17,11 @@ import WalletError from '../presentation/error'
     'confirmation-dialog:closeConfirmDialog',
     'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
-    'email-confirmation:startEmailConfirmation'
+    'verification:confirmEmail',
+    'verification:confirmPhone',
+    'verification:startEmailVerification',
+    'verification:startPhoneVerification',
+    'wallet/id-card:saveToBlockchain'
   ]
 })
 
@@ -33,43 +38,31 @@ export default class WalletIdentityScreen extends React.Component {
     getIdentityInformation: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
-    startEmailConfirmation: React.PropTypes.func.isRequired,
-    changePinValue: React.PropTypes.func.isRequired
+    startPhoneVerification: React.PropTypes.func.isRequired,
+    startEmailVerification: React.PropTypes.func.isRequired,
+    confirmEmail: React.PropTypes.func.isRequired,
+    confirmPhone: React.PropTypes.func.isRequired,
+    resendVerificationLink: React.PropTypes.func,
+    resendVerificationSms: React.PropTypes.func,
+    changePinValue: React.PropTypes.func.isRequired,
+    changeSmsCodeValue: React.PropTypes.func.isRequired,
+    saveToBlockchain: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
     this.props.getIdentityInformation()
   }
 
-  onConfirm({message, style, attrValue, rightButtonText, leftButtonText}) {
-    this.props.openConfirmDialog(
-      message,
-      rightButtonText,
-      this.props.closeConfirmDialog(),
-      leftButtonText,
-      style
-    )
-  }
-
   render() {
-    const {
-      username,
-      contact,
-      webId,
-      passports,
-      idCards,
-      loaded,
-      error
+    const {username, contact, webId, passports, idCards, loaded, error
     } = this.props.wallet.identity
-    const {emails, phones} = contact
     if (error) {
       return (<WalletError
-        message={
-          '...oops something went wrong! We were not able to load your data.'
-        }
+        message="...oops something went wrong! We were not able to load your data." // eslint-disable-line max-len
         buttonLabel="RETRY"
         onClick={() => this.render()} />)
     }
+    const {emails, phones} = contact
 
     return (<Presentation
       username={username}
@@ -85,25 +78,67 @@ export default class WalletIdentityScreen extends React.Component {
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
-      onConfirm={
-        ({message, style, attrValue, rightButtonText, leftButtonText}) =>
-        this.onConfirm({
-          message,
-          style,
-          attrValue,
-          rightButtonText,
-          leftButtonText
-        })
-      }
+      saveToBlockchain={this.props.saveToBlockchain}
+      requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
+        return () => this.showVerificationWindow(params,
+          (callbackArgs) => this.requestVerificationCode(callbackArgs))
+      })}
+      resendVerificationCode={(...args) => this.showVerificationWindow(...args,
+        (...params) => this.resendVerificationCode(...params)
+      )}
+      enterVerificationCode={(...args) => this.showVerificationWindow(...args,
+        (...params) => this.enterVerificationCode(...params)
+      )}
       onVerify={({message, buttonText, style, attrValue}) => {
         this.props.configSimpleDialog(() => {
-          this.props.startEmailConfirmation({email: attrValue})
+          this.props.startEmailVerification({email: attrValue})
         }, message, buttonText, style)
         this.props.showSimpleDialog()
       }}
+      onConfirm={(...args) => { this.onConfirm(...args) }}
       showUserInfo={(...args) => {
         this.props.configSimpleDialog(...args)
         this.props.showSimpleDialog()
       }} />)
+  }
+
+  onConfirm(args, params) {
+    return this.showVerificationWindow(args, () => {
+      return () => this.showVerificationWindow(params,
+      (callbackArgs) => this.requestVerificationCode(callbackArgs))
+    })
+  }
+
+  requestVerificationCode({attrType, attrValue, index}) {
+    if (attrType === 'phone') {
+      return () => this.props.startPhoneVerification({phone: attrValue, index})
+    } else if (attrType === 'email') {
+      return () => this.props.startEmailVerification({email: attrValue, index})
+    }
+  }
+
+  resendVerificationCode({attrType, attrValue, index}) {
+    if (attrType === 'phone') {
+      return () => this.props.resendVerificationLink({phone: attrValue, index})
+    } else if (attrType === 'email') {
+      return () => this.props.resendVerificationSms({email: attrValue, index})
+    }
+  }
+
+  enterVerificationCode({attrType, attrValue = 'attrValue'}) {
+    if (attrType === 'phone') {
+      return () => this.props.confirmPhone({phone: attrValue})
+    } else if (attrType === 'email') {
+      return () => this.props.confirmEmail({email: attrValue})
+    }
+  }
+
+  showVerificationWindow({message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
+    return this.props.openConfirmDialog(
+      message,
+      rightButtonLabel,
+      callback({attrValue, attrType, index}),
+      leftButtonLabel
+    )
   }
 }

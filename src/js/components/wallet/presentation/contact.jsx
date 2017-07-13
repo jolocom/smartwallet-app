@@ -1,23 +1,24 @@
 import React from 'react'
 import Radium from 'radium'
-import {Form} from 'formsy-react'
+
+import {theme} from 'styles'
+import {List} from 'material-ui'
+
+import {
+  CommunicationCall,
+  CommunicationEmail
+} from 'material-ui/svg-icons'
+import Location from 'material-ui/svg-icons/maps/place'
+
+import Loading from 'components/common/loading'
+import { Content } from '../../structure'
 import {
   EditAppBar,
   EditHeader,
   EditListItem,
-  AddNew
+  AddNew,
+  SelectCountryItem
 } from './ui'
-import {
-  Content
-} from '../../structure'
-import {theme} from 'styles'
-import CommunicationCall from 'material-ui/svg-icons/communication/call'
-import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-import {
-  List
-} from 'material-ui'
-
-import Loading from 'components/common/loading'
 
 const STYLES = {
   title: {
@@ -51,6 +52,8 @@ export default class WalletContact extends React.Component {
     showErrors: React.PropTypes.bool,
     addNewEntry: React.PropTypes.func.isRequired,
     confirm: React.PropTypes.func.isRequired,
+    selectCountry: React.PropTypes.func.isRequired,
+    setAddressField: React.PropTypes.func.isRequired,
     close: React.PropTypes.func.isRequired
   }
 
@@ -68,43 +71,24 @@ export default class WalletContact extends React.Component {
           key: 'emails',
           label: 'Email Address',
           errorText: 'Invalid email address',
-          addText: 'Add another email',
+          addText: 'Add email address',
           icon: CommunicationEmail
         })}
       </div>
     )
   }
-
   renderField(i, field) {
-    let {
-      key,
-      label,
-      value,
-      type,
-      verified,
-      valid,
-      errorText,
-      icon,
-      isNew
-    } = field
-
+    const [
+      {key, label, value, type, verified, valid, errorText, icon, isNew},
+      {setInformation, updateInformation, deleteInformation, close, confirm,
+      focused, showErrors, onFocusChange}
+    ] = [field, this.props]
     const prefix = isNew ? 'newInformation' : 'originalInformation'
     const id = `${prefix}_${key}_${i}`
     const name = `${key}[${i}]`
 
-    const actionValue = (key, e) => key === 'emails' ? e.target.value
-      : {value: e.target.value, type}
-
-    let {
-      setInformation,
-      updateInformation,
-      deleteInformation,
-      close,
-      confirm,
-      focused,
-      showErrors,
-      onFocusChange
-    } = this.props
+    const actionValue = (key, e) => key === 'phones'
+      ? ({value: e.target.value, type}) : e.target.value
 
     const types = ((field) => {
       switch (key) {
@@ -117,147 +101,234 @@ export default class WalletContact extends React.Component {
           return
       }
     })()
-
-    return (
-      <EditListItem
-        key={id}
-        id={id}
-        icon={icon}
-        iconStyle={STYLES.icon}
-        label={label}
-        name={name}
-        enableEdit={!verified}
-        value={value}
-        types={types}
-        type={type}
-        showErrors={showErrors}
-        valid={valid}
-        verified={verified}
-        focused={focused === key}
-        enableDelete
-        errorText={errorText}
-        onFocusChange={() => onFocusChange(key)}
-        onChange={(e) => isNew
-          ? setInformation(key, i, actionValue(key, e))
-          : updateInformation(key, i, actionValue(key, e))
-        }
-        onDelete={() => (isNew || !verified)
-          ? deleteInformation(prefix, key, i)
-          : confirm(
-            'Are you sure you want to delete a verified email?',
-            'Delete',
-            () => {
-              deleteInformation(prefix, key, i)
-              close()
-            })
-        }
-        onTypeChange={(type) => {
-          isNew ? setInformation(key, i, {value, type})
-            : updateInformation(key, i, {value, type})
-        }}
-        />
-    )
+    return (<EditListItem
+      key={id}
+      id={key}
+      icon={icon}
+      iconStyle={STYLES.icon}
+      label={label}
+      name={name}
+      enableEdit={!verified}
+      value={value}
+      types={types}
+      type={type}
+      showErrors={showErrors}
+      valid={valid}
+      verified={verified}
+      focused={focused === key}
+      enableDelete
+      errorText={errorText}
+      onFocusChange={(key) => onFocusChange(key)}
+      onChange={(e) => isNew
+        ? setInformation(key, i, actionValue(key, e))
+        : updateInformation(key, i, actionValue(key, e))
+      }
+      onDelete={() => (isNew || !verified)
+        ? deleteInformation(prefix, key, i)
+        : confirm(
+          'Are you sure you want to delete a verified email?',
+          'Delete',
+          () => {
+            deleteInformation(prefix, key, i)
+            close()
+          })
+      }
+      onTypeChange={(type) => {
+        isNew ? setInformation(key, i, {value, type})
+          : updateInformation(key, i, {value, type})
+      }} />)
   }
 
   renderFields({key, label, icon, errorText, addText}) {
     let fields = []
 
     const {originalInformation, newInformation} = this.props.information
+    const {loading, addNewEntry, onFocusChange} = this.props
 
-    const {
-      loading,
-      addNewEntry,
-      onFocusChange
-    } = this.props
-
+    let firstElementToAppear
+    let indexIcon
     if (!loading) {
-      fields.push(
-        originalInformation[key].map((field, i) => {
-          if (!field.delete) {
-            return this.renderField(i, {
-              key,
-              label,
-              icon: i === 0 && icon,
-              value: field.value,
-              type: field.type,
-              verified: !!field.verified,
-              valid: field.valid,
-              errorText,
-              isNew: false
-            })
-          }
-        })
-      )
-
-      fields.push(
-        newInformation[key].map((field, i) => {
-          if (!field.delete) {
-            return this.renderField(i, {
-              key,
-              label,
-              icon: !fields.length && i === 0 && icon,
-              value: field.value,
-              type: field.type,
-              verified: !!field.verified,
-              valid: field.valid,
-              errorText,
-              isNew: true
-            })
-          }
-        })
-      )
-
-      if (fields.length === 0) {
+      if (originalInformation[key].length > 0) {
+        firstElementToAppear = originalInformation[key]
+          .find(element => !element.delete)
+        indexIcon = originalInformation[key].indexOf(firstElementToAppear)
         fields.push(
-          this.renderField(0, {
-            key,
-            label,
-            icon: !fields.length && icon,
-            value: '',
-            type: '',
-            verified: false,
-            valid: false,
-            errorText,
-            isNew: true
+          originalInformation[key].map((field, i) => {
+            if (!field.delete) {
+              return this.renderField(i, {
+                key,
+                label,
+                icon: i === indexIcon && icon,
+                value: field.value,
+                type: field.type,
+                verified: !!field.verified,
+                valid: field.valid,
+                errorText,
+                isNew: false
+              })
+            }
           })
         )
-      } else {
+      }
+      if (newInformation[key].length > 0) {
+        if (!firstElementToAppear) {
+          firstElementToAppear = newInformation[key]
+            .find(element => !element.delete)
+          indexIcon = newInformation[key].indexOf(firstElementToAppear)
+        }
         fields.push(
-          <AddNew key={`add_${key}`} onClick={() => {
-            addNewEntry(key, newInformation[key].length)
-            onFocusChange(`newInformation_${key}`)
-          }}
-            value={addText}
-          />
+          newInformation[key].map((field, i) => {
+            if (!field.delete) {
+              return this.renderField(i, {
+                key,
+                label,
+                icon: i === indexIcon && icon,
+                value: field.value,
+                type: field.type,
+                verified: !!field.verified,
+                valid: field.valid,
+                errorText,
+                isNew: true
+              })
+            }
+          })
         )
       }
     }
-
-    return <Form>
+    fields.push(<AddNew key={`add_${key}`} onClick={() => {
+      addNewEntry(key, newInformation[key].length)
+      onFocusChange(`newInformation_${key}`)
+    }}
+      value={addText} />)
+    return (<div>
       {fields}
-    </Form>
+    </div>)
   }
 
+  renderAddressField({streetWithNumber, zip, country, city, state, id, age, index}) { // eslint-disable-line max-len
+    id = id || `address_${age}_${index}`
+    const blank = [streetWithNumber, city, country, zip, state]
+      .every(({value}) => value.trim().length === 0)
+    const addressFieldsVisibility = this.props.focused === id || !blank
+    const {onFocusChange, setAddressField, focused, selectCountry} = this.props
+
+    return (<div key={id}>
+      <EditListItem
+        key="streetWithNumber"
+        id={id}
+        icon={Location}
+        iconStyle={STYLES.icon}
+        value={streetWithNumber.value}
+        label="street"
+        enableEdit
+        showErrors
+        onFocusChange={() => onFocusChange(id)}
+        onDelete={(evt) => setAddressField(
+          'newInformation', 'streetWithNumber', index, '')}
+        onChange={(e) =>
+          setAddressField(
+            'newInformation', 'streetWithNumber', index, e.target.value)}
+        focused={focused === id}
+        enableDelete={streetWithNumber.value.length > 0} />
+        {
+          addressFieldsVisibility ? <div>
+            <table style={{width: '100%'}}><tbody>
+              <tr><td style={{width: '70%'}} key="city">
+                <EditListItem
+                  id={id}
+                  focused={false}
+                  label="city"
+                  enableEdit
+                  value={city.value}
+                  onFocusChange={() => onFocusChange(id)}
+                  onDelete={() => this.props
+                    .setAddressField('newInformation', 'city', index, '')}
+                  onChange={(evt) => setAddressField(
+                    'newInformation', 'city', index, evt.target.value)}
+                  enableDelete={city.value.length > 0} />
+              </td><td style={{width: '30%'}} key="zip">
+                <EditListItem
+                  id={id}
+                  label="Zip"
+                  enableEdit
+                  value={zip.value}
+                  focused={false}
+                  onFocusChange={(field) => onFocusChange(id)}
+                  onChange={(e) =>
+                  setAddressField(
+                  'newInformation', 'zip', index, e.target.value)}
+                  onDelete={() => setAddressField(
+                    'newInformation', 'zip', index, '')}
+                  enableDelete={zip.value.length > 0} />
+              </td></tr>
+            </tbody></table>
+            <EditListItem
+              id={id}
+              label="State"
+              enableEdit
+              focused={false}
+              enableDelete={state.value.length > 0}
+              value={state.value}
+              onFocusChange={() => onFocusChange(id)}
+              onChange={(e) =>
+              setAddressField(
+                'newInformation', 'state', index, e.target.value)}
+              onDelete={() => setAddressField(
+                'newInformation', 'state', index, '')} />
+            <SelectCountryItem
+              id={id}
+              value={country.value}
+              focused={false}
+              label="Country"
+              onChange={() => {}}
+              onFocusChange={() => {
+                onFocusChange(id)
+                selectCountry('newInformation', index, '')
+              }}
+              onDelete={() => {
+                setAddressField('newInformation', 'country', index, '')
+                onFocusChange(id)
+              }}
+              enableEdit
+              enableDelete={country.value.length > 0} />
+          </div> : null
+        }
+    </div>)
+  }
   render() {
     let content
-
+    const {loading, saveChanges, exitWithoutSaving} = this.props
+    const {originalInformation, newInformation} = this.props.information
+    let addressFields
     if (this.props.loading) {
       content = <Loading />
     } else {
       content = this.renderContent()
+      addressFields = [
+        ...originalInformation.addresses.map((address, index) =>
+        this.renderAddressField({...address, age: 'originalInformation', index})), // eslint-disable-line max-len
+        ...newInformation.addresses.map((address, index) =>
+        this.renderAddressField({...address, age: 'newInformation', index})),
+        <AddNew key="add_address" onClick={() => {
+          this.props.addNewEntry('addresses', newInformation.addresses.length)
+          this.props.onFocusChange(`address_newInformation_${newInformation.addresses.length}`) // eslint-disable-line max-len
+        }}
+          value="ADD NEW ADDRESS" />
+      ]
     }
 
     return (
       <div>
         <EditAppBar
           title="Edit Contact"
-          loading={this.props.loading}
-          onSave={this.props.saveChanges}
-          onClose={this.props.exitWithoutSaving} />
+          loading={loading}
+          onSave={saveChanges}
+          onClose={exitWithoutSaving} />
         <Content>
           <EditHeader title="Contact" />
           <List>
             {content}
+            {addressFields}
           </List>
         </Content>
       </div>

@@ -18,7 +18,10 @@ const STYLE = {
     backgroundColor: theme.jolocom.gray4,
     boxSizing: 'border-box',
     maxWidth: '1200px',
-    width: '100%'
+    width: '100%',
+    '@media screen and (min-width: 768px)': {
+      padding: '16px 50px'
+    }
   }
 }
 

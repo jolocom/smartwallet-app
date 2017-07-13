@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
-import moment from 'moment'
+import util from 'lib/util'
 // import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
-
 import { makeActions } from '../'
 import * as router from '../router'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
@@ -16,20 +15,30 @@ import {
 
 const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
   const {wallet} = services.auth.currentUser
-  return wallet.addAttributeHashAndWait({
-    attributeId: 'idCard',
-    attribute: {
-      number: idCard.number.value,
-      expirationDate: moment(idCard.expirationDate.value).format(),
-      givenName: idCard.firstName.value,
-      familyName: idCard.lastName.value,
-      birthDate: moment(idCard.birthDate.value).format(),
-      birthPlace: idCard.birthPlace.value,
-      birthCountry: idCard.birthCountry.value
-    },
-    definitionUrl: '',
-    pin: '1234'
-  })
+  return wallet.addAttributeHashToIdentity(
+    {
+      attributeId: 'idCard',
+      attribute: {
+        birthCountry: idCard.idCardFields.birthCountry,
+        birthDate: idCard.idCardFields.birthDate,
+        birthPlace: idCard.idCardFields.birthPlace,
+        expirationDate: idCard.idCardFields.expirationDate,
+        firstName: idCard.idCardFields.firstName,
+        gender: idCard.idCardFields.gender,
+        lastName: idCard.idCardFields.lastName,
+        number: idCard.idCardFields.number,
+        city: idCard.idCardFields.physicalAddress.city,
+        country: idCard.idCardFields.physicalAddress.country,
+        state: idCard.idCardFields.physicalAddress.state,
+        streetWithNumber: idCard.idCardFields.physicalAddress.streetWithNumber,
+        zip: idCard.idCardFields.physicalAddress.zip
+      },
+      definitionUrl:
+      `${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`,
+      pin: '1234',
+      identityAddress: wallet.identityAddress
+    }
+  )
 }
 
 const actions = module.exports = makeActions('wallet/id-card', {
@@ -42,15 +51,26 @@ const actions = module.exports = makeActions('wallet/id-card', {
         const {idCard, showErrors} = getState().toJS().wallet.idCard
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
-          dispatch(actions.save.buildAction(params, () =>
-            storeIdCardDetailsInSolid({backend, services, idCard, webId})
-              .then(() => {
-                storeIdCardDetailsInBlockchain({idCard, services}).then(
-                  dispatch(router.pushRoute('/wallet/identity')))
-              })
-            )
-          )
+          dispatch(actions.save.buildAction(params, () => {
+            return storeIdCardDetailsInSolid({backend, services, idCard, webId})
+          })
+        ).then(() => {
+          dispatch(actions.clearState())
+          dispatch(router.pushRoute('/wallet/identity'))
+        })
         }
+      }
+    }
+  },
+  saveToBlockchain: {
+    expectedParams: ['index'],
+    async: true,
+    creator: (index) => {
+      return (dispatch, getState, {services, backend}) => {
+        const idCard = getState().toJS().wallet.identity.idCards[index]
+        dispatch(actions.saveToBlockchain.buildAction(index, () => {
+          return storeIdCardDetailsInBlockchain({idCard, services})
+        }))
       }
     }
   },
@@ -107,6 +127,9 @@ const actions = module.exports = makeActions('wallet/id-card', {
   },
   changePhysicalAddressField: {
     expectedParams: ['field', 'value']
+  },
+  clearState: {
+    expectedParams: []
   }
 })
 
@@ -143,6 +166,9 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
+
+    case actions.clearState.id:
+      return initialState
 
     case actions.save.id:
       return state.merge({

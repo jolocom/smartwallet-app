@@ -39,34 +39,17 @@ const STYLES = {
     contentStyle: {
     },
     actionsContainerStyle: {
-      textAlign: 'center'
+      textAlign: 'right'
     }
   },
   avatar: {
     marginTop: '10px'
+  },
+  container: {
+    marginLeft: '10px',
+    marginRight: '10px'
   }
 }
-
-const iconEmailMsg = (
-  <div>
-    <b>Verification</b> <br />
-    <br />
-    <span>
-      Your emails hasn't been verified yet. Click "Request Verification" to get
-      an emails with a verification link.
-    </span>
-  </div>
-)
-
-const iconPhoneMsg = (<div>
-  <b>Verification</b> <br />
-  <br />
-  <span>
-    Your number hasn't been verified yet. For verification we will
-    send you a sms with an authentication code to this number. You will need
-    enter that code here.
-  </span>
-</div>)
 
 @Radium
 export default class WalletIdentity extends React.Component {
@@ -87,7 +70,11 @@ export default class WalletIdentity extends React.Component {
     onConfirm: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
     changePinValue: React.PropTypes.func.isRequired,
-    onVerify: React.PropTypes.func.isRequired
+    requestVerificationCode: React.PropTypes.func.isRequired,
+    resendVerificationCode: React.PropTypes.func.isRequired,
+    enterVerificationCode: React.PropTypes.func.isRequired,
+    onVerify: React.PropTypes.func.isRequired,
+    saveToBlockchain: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -106,7 +93,10 @@ export default class WalletIdentity extends React.Component {
       onConfirm,
       changePinValue,
       setFocusedPin,
-      onVerify
+      requestVerificationCode,
+      resendVerificationCode,
+      enterVerificationCode,
+      saveToBlockchain
     } = this.props
 
     if (!isLoaded) {
@@ -121,7 +111,7 @@ export default class WalletIdentity extends React.Component {
 
     return (<TabContainer>
       <HalfScreenContainer>
-        <Content>
+        <Content style={STYLES.container}>
           <Block>
             <List>
               <ListItem
@@ -154,7 +144,7 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <PlusMenu
               name="Contact"
-              choice={emails.length + phones.length > 0}
+              choice={[...emails, ...phones].length > 0}
               goToManagement={goToContactManagement} />
           </Block>
           <Block>
@@ -162,20 +152,22 @@ export default class WalletIdentity extends React.Component {
               fields={phones}
               changePinValue={changePinValue}
               onConfirm={onConfirm}
-              onVerify={onVerify}
               icon={CommunicationCall}
               setFocusedPin={setFocusedPin}
+              requestVerificationCode={requestVerificationCode}
+              resendVerificationCode={resendVerificationCode}
+              enterVerificationCode={enterVerificationCode}
               labelText="Phone Number"
-              attrType="phone"
-              iconMsg={iconPhoneMsg} />
+              attrType="phone" />
             <ContactList
               fields={emails}
               onConfirm={onConfirm}
-              onVerify={onVerify}
+              requestVerificationCode={requestVerificationCode}
+              resendVerificationCode={resendVerificationCode}
+              enterVerificationCode={enterVerificationCode}
               icon={CommunicationEmail}
               labelText="Email"
-              attrType="email"
-              iconMsg={iconEmailMsg} />
+              attrType="email" />
           </Block>
           <Block>
             <PlusMenu
@@ -193,7 +185,9 @@ export default class WalletIdentity extends React.Component {
               goToManagement={goToPassportManagement} />
           </Block>
           <Block>
-            <IdCardsList idCards={idCards} />
+            <IdCardsList
+              idCards={idCards}
+              saveToBlockchain={saveToBlockchain} />
           </Block>
           <Block>
             <PlusMenu

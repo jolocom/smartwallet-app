@@ -17,11 +17,12 @@ describe('# Wallet identity redux module', () => {
           phones: [{
             type: '',
             number: '',
+            pin: '',
             verified: false,
             smsCode: '',
             pinFocused: false
           }],
-          emails: [{type: '', address: '', verified: false}]
+          emails: [{type: '', address: '', pin: '', verified: false}]
         },
         passports: [{
           number: '', givenName: '', familyName: '', birthDate: '',
@@ -36,7 +37,7 @@ describe('# Wallet identity redux module', () => {
       const action = {
         type: identity.actions.getIdentityInformation.id_success,
         result: {
-          webId: 'test',
+          webId: 'https://test.webid.jolocom.com',
           username: 'test',
           contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
           passports: ['test'],
@@ -48,8 +49,8 @@ describe('# Wallet identity redux module', () => {
         .to.deep.equal({
           error: false,
           loaded: true,
-          webId: 'test',
-          username: 'test',
+          webId: 'https://test.webid.jolocom.com',
+          username: {value: 'test'},
           contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
           passports: ['test'],
           idCards: ['test']
@@ -58,8 +59,7 @@ describe('# Wallet identity redux module', () => {
   })
 
   describe('# actions ', () => {
-    it('goToDrivingLicenceManagement should redirect the user to drivering ' +
-    'licence management', () => {
+    it('goToDrivingLicenceManagement should redirect to drivering licence management', () => { // eslint-disable-line max-len
       const dispatch = stub()
       const action = identity.actions.goToDrivingLicenceManagement()
       action(dispatch)
@@ -125,8 +125,7 @@ describe('# Wallet identity redux module', () => {
         }])
       }
     )
-    it('getIdentityInformation should get the identity information from ' +
-      'the backend', () => {
+    it('getIdentityInformation should retrieve identity information', () => {
       const getState = stub()
       const backend = {solid: {
         getUserInformation: stub().returns('information')

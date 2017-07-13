@@ -12,15 +12,15 @@ const STYLES = {
     width: '48px',
     height: '48px',
     borderRadius: '24px',
-    backgroundColor: theme.palette.accent1Color,
+    backgroundColor: '#f0f0f0',
     lineHeight: '48px',
     textAlign: 'center'
   },
   focusedBall: {
-    backgroundColor: theme.palette.primary1Color
+    backgroundColor: theme.palette.textColor
   },
   filledBall: {
-    backgroundColor: theme.palette.textColor
+    backgroundColor: theme.palette.primary1Color
   },
   numberInput: {
     position: 'absolute',
@@ -43,6 +43,9 @@ const STYLES = {
     backgroundSize: 'contain',
     width: '24px',
     height: '24px'
+  },
+  container: {
+    marginBottom: '16px'
   }
 }
 
@@ -60,8 +63,8 @@ class PinInput extends React.Component {
     disabled: React.PropTypes.bool,
     focused: React.PropTypes.bool.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    onFocusChange: React.PropTypes.func.isRequired,
-    confirm: React.PropTypes.bool.isRequired
+    confirm: React.PropTypes.bool.isRequired,
+    onFocusChange: React.PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -119,7 +122,7 @@ class PinInput extends React.Component {
         </div>
       ))}
       <div style={{...STYLES.clear}}>
-      {(props.value.length > 0) && (!props.confirm) &&
+      {(props.value.length > 0) &&
         <div onClick={this.clearAndFocus}
           style={{...STYLES.img, ...{
             backgroundImage: 'url(/img/ic_cancel_brown_24px.svg)'

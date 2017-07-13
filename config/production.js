@@ -1,6 +1,6 @@
 // @TODO replace values by env settings using gulp
 module.exports = {
-  proxy: 'https://proxy.jolocom.net',
+  proxy: 'https://proxy.jolocom.com',
   endpoint: 'https://proxy.jolocom.net/proxy?url=https://webid.jolocom.de',
   accountStatusEndpoint:
     'https://proxy.jolocom.net/proxy?' +
@@ -18,6 +18,10 @@ module.exports = {
     // Ropsten Testnet on 2017-04-12
     // gethHost: 'http://verification.jolocom.com:8545',
     // lookupContractAddress: '0x58ab8f7c72b4bec073db317d92aa0a15f09d9a6b'
+  },
+  stripe: {
+    publishableKey: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh',
+    livePublishableKey: 'pk_live_siTErHNiReyziQNzOreqZigX'
   },
   dev: false
 }
