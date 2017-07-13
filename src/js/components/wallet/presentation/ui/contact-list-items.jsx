@@ -24,17 +24,17 @@ const iconMsg = {
     <b>Verification</b> <br />
     <br />
     <span>
-      Your emails hasn't been verified yet. Click "Request Verification" to get
-      an emails with a verification link.
+      Your number hasn't been verified yet. For verification we will
+      send you a sms with an authentication code to this number. You will need
+      enter that code here.
     </span>
   </div>),
   email: (<div>
     <b>Verification</b> <br />
     <br />
     <span>
-      Your number hasn't been verified yet. For verification we will
-      send you a sms with an authentication code to this number. You will need
-      enter that code here.
+      Your email hasn't been verified yet. Click "Request Verification" to get
+      an email with a verification link.
     </span>
   </div>)
 }
