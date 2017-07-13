@@ -53,6 +53,7 @@ class SmsCodeInput extends React.Component {
   static propTypes = {
     value: React.PropTypes.string.isRequired,
     focused: React.PropTypes.bool.isRequired,
+    pinLength: React.PropTypes.number.isRequired,
     onChange: React.PropTypes.func,
     onFocusChange: React.PropTypes.func
   }
@@ -60,7 +61,7 @@ class SmsCodeInput extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: props.value.length < 7 ? props.value : '',
+      value: props.value.length <= this.props.pinLength ? props.value : '',
       focused: false
     }
     this.handleKeyDown = this.handleKeyDown.bind(this)
@@ -78,7 +79,7 @@ class SmsCodeInput extends React.Component {
   }
 
   handleChange(e) {
-    if (e.target.value.length < 7) {
+    if (e.target.value.length <= this.props.pinLength) {
       this.props.onChange(e.target.value)
       this.setState({value: e.target.value})
     }
@@ -107,9 +108,9 @@ class SmsCodeInput extends React.Component {
 
   render() {
     const { value, focused } = this.state
-
+    const { pinLength = 6 } = this.props
     return (<div style={STYLES.container}>
-      {[0, 1, 2, 3, 4, 5].map((index) => (
+      {'A'.repeat(pinLength).split('').map((element, index) => (
         <div key={index} style={[
           STYLES.inputBall,
           value.charAt(index) !== '' && STYLES.filledBall,
