@@ -14,6 +14,8 @@ const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => 
     identityAddress: contractId,
     attributeId: documentType
   })
+  console.log('document type: ', documentType)
+  console.log('hash retrieved: ', storedHash)
 
   const { city, country, state, streetWithNumber, zip } = data.physicalAddress
 
@@ -33,6 +35,8 @@ const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => 
     zip: zip.value
   })
 
+  console.log('calculated Hash: ', calculatedHash)
+
   if (storedHash !== calculatedHash) {
     return false
   }
@@ -42,8 +46,8 @@ const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => 
 const storeVerificationToTargetIdentity = ({contractId, wallet}) => {
   return wallet.addVerificationToTargetIdentity({ // eslint-disable-line max-len
     targetIdentityAddress: contractId,
-    attributeId: 'passport',
-    password: '1234'
+    attributeId: 'idCard',
+    pin: '1234'
   })
 }
 const actions = module.exports = makeActions('wallet/contact', {
