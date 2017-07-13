@@ -6,7 +6,7 @@ import Presentation from '../presentation/email-confirmation'
   props: ['emailConfirmation'],
   actions: [
     'wallet-login:goToLogin',
-    'email-confirmation:confirm'
+    'verification:confirmEmail'
   ]
 })
 export default class EmailConfirmationScreen extends React.Component {
@@ -15,11 +15,11 @@ export default class EmailConfirmationScreen extends React.Component {
     location: React.PropTypes.object.isRequired,
     emailConfirmation: React.PropTypes.object.isRequired,
     goToLogin: React.PropTypes.func.isRequired,
-    confirm: React.PropTypes.func.isRequired
+    confirmEmail: React.PropTypes.func.isRequired
   }
 
   componentDidMount() {
-    this.props.confirm({
+    this.props.confirmEmail({
       email: this.props.location.query.email,
       code: this.props.location.query.code
     })
