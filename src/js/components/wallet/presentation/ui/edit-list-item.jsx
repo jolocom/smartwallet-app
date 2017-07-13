@@ -21,7 +21,8 @@ let STYLES = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    '@media (max-width: 320px)': {
+    marginRight: '32px',
+    '@media (maxWidth: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
     }
@@ -35,7 +36,7 @@ let STYLES = {
   },
   type: {
     maxWidth: '120px',
-    '@media (min-width: 321px)': {
+    '@media (minWidth: 321px)': {
       margin: '0 16px'
     }
   },
@@ -168,16 +169,14 @@ export default class EditListItem extends React.Component {
   }
 
   get deleteButton() {
-    if (this.props.enableDelete) {
-      return (
-        <IconButton
-          style={STYLES.deleteButton}
-          onTouchTap={this.handleDelete}
-        >
-          <NavigationCancel />
-        </IconButton>
-      )
-    }
+    const visibility = this.props.enableDelete && this.props.value ? 'visible'
+      : 'hidden'
+    return (<IconButton
+      style={{...STYLES.deleteButton, visibility}}
+      onTouchTap={this.handleDelete}
+    >
+      <NavigationCancel />
+    </IconButton>)
   }
 
   handleFocus = () => {

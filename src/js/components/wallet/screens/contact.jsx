@@ -4,16 +4,20 @@ import Presentation from '../presentation/contact'
 
 @connect({
   props: ['wallet.contact'],
-  actions: ['wallet/contact:saveChanges',
+  actions: [
+    'wallet/contact:saveChanges',
     'wallet/contact:getUserInformation',
+    'wallet/country-select:initiateCountryScreenFromContactScreen',
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
     'wallet/contact:updateInformation',
     'wallet/contact:exitWithoutSaving',
     'wallet/contact:saveChanges',
     'wallet/contact:addNewEntry',
+    'wallet/contact:setAddressField',
     'confirmation-dialog:confirm',
-    'confirmation-dialog:close']
+    'confirmation-dialog:close'
+  ]
 })
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
@@ -27,6 +31,8 @@ export default class WalletContactScreen extends React.Component {
     saveChanges: React.PropTypes.func.isRequired,
     addNewEntry: React.PropTypes.func.isRequired,
     confirm: React.PropTypes.func.isRequired,
+    setAddressField: React.PropTypes.func.isRequired,
+    initiateCountryScreenFromContactScreen: React.PropTypes.func.isRequired,
     close: React.PropTypes.func.isRequired
   }
   constructor() {
@@ -37,26 +43,35 @@ export default class WalletContactScreen extends React.Component {
     }
   }
   componentWillMount() {
-    this.props.getUserInformation()
+    if (this.props.contact.getDataFromBackend) {
+      this.props.getUserInformation()
+    }
   }
+
   render() {
-    return (
-      <Presentation
-        focused={this.state.focused}
-        onFocusChange={this._onFocusChange}
-        information={this.props.contact.information}
-        loading={this.props.contact.loading}
-        showErrors={this.props.contact.showErrors}
-        deleteInformation={this.props.deleteInformation}
-        updateInformation={this.props.updateInformation}
-        setInformation={this.props.setInformation}
-        exitWithoutSaving={this.props.exitWithoutSaving}
-        saveChanges={this.props.saveChanges}
-        addNewEntry={this.props.addNewEntry}
-        confirm={this.props.confirm}
-        close={this.props.close}
-      />
-    )
+    const [{
+      deleteInformation, addNewEntry, confirm, setAddressField, saveChanges,
+      updateInformation, setInformation, exitWithoutSaving, close,
+      initiateCountryScreenFromContactScreen
+    }, {
+      information, loading, showErrors
+    }] = [this.props, this.props.contact]
+    return (<Presentation
+      information={information}
+      focused={this.state.focused}
+      onFocusChange={this._onFocusChange}
+      loading={loading}
+      setAddressField={setAddressField}
+      showErrors={showErrors}
+      deleteInformation={deleteInformation}
+      updateInformation={updateInformation}
+      setInformation={setInformation}
+      exitWithoutSaving={exitWithoutSaving}
+      saveChanges={saveChanges}
+      addNewEntry={addNewEntry}
+      confirm={confirm}
+      close={close}
+      selectCountry={initiateCountryScreenFromContactScreen} />)
   }
 
   _onFocusChange = (value) => {

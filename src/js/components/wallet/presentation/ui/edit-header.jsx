@@ -6,14 +6,12 @@ import {Divider} from 'material-ui'
 
 const STYLES = {
   header: {
-    margin: '42px 16px 16px 16px'
+    margin: '42px 0px 16px 16px'
   },
   title: theme.textStyles.sectionheader,
   titleDivider: {
     marginTop: '20px',
-    margin: '20px 40px 20px 40px',
-    width: '100%',
-    minWidth: '350px'
+    width: '100%'
   }
 }
 

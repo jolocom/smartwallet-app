@@ -24,7 +24,10 @@ const actions = module.exports = makeActions('wallet/contact', {
         if (!showErrors) {
           dispatch(actions.saveChanges.buildAction(params,
           () => submitChanges(backend, services, information, webId)
-          )).then(() => dispatch(router.pushRoute('/wallet/identity')))
+          )).then(() => {
+            dispatch(router.pushRoute('/wallet/identity'))
+            dispatch(actions.setReloadFromBackend(true))
+          })
         }
       }
     }
@@ -36,9 +39,13 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
+        dispatch(actions.setReloadFromBackend(true))
         dispatch(router.pushRoute('/wallet/identity'))
       }
     }
+  },
+  setReloadFromBackend: {
+    expectedParams: ['value']
   },
   getUserInformation: {
     expectedParams: [],
@@ -55,8 +62,25 @@ const actions = module.exports = makeActions('wallet/contact', {
   setInformation: {
     expectedParams: ['field', 'index', 'value']
   },
+  setAddressField: {
+    expectedParams: ['age', 'field', 'index', 'value']
+  },
   deleteInformation: {
-    expectedParams: ['age', 'field', 'index']
+    expectedParams: ['age', 'field', 'index'],
+    creator: (...params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.deleteInformation.buildAction(...params))
+        const {originalInformation, newInformation} = getState()
+          .toJS().wallet.contact.information
+        if ([...originalInformation.phones, ...newInformation.phones]
+          .every(phone => phone.delete)) {
+          dispatch(actions.addNewEntry('phones', newInformation.phones.length))
+        } else if ([...originalInformation.emails, ...newInformation.emails]
+          .every(email => email.delete)) {
+          dispatch(actions.addNewEntry('emails', newInformation.emails.length))
+        }
+      }
+    }
   },
   updateInformation: {
     expectedParams: ['field', 'index', 'value']
@@ -70,13 +94,16 @@ const initialState = Immutable.fromJS({
   information: {
     newInformation: {
       phones: [],
-      emails: []
+      emails: [],
+      addresses: []
     }
   },
   originalInformation: {
     phones: [],
-    emails: []
+    emails: [],
+    addresses: []
   },
+  getDataFromBackend: true,
   loading: true,
   showErrors: false
 })
@@ -98,6 +125,12 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setInformation.id:
       return setNewFieldValue(state, action)
 
+    case actions.setAddressField.id:
+      return state.mergeIn(
+      ['information', action.age, 'addresses', action.index, action.field], {
+        value: action.value
+      })
+
     case actions.deleteInformation.id:
       return state.mergeIn(['information', action.age, action.field,
         action.index], {
@@ -112,6 +145,11 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.validate.id:
       return validateChanges(state)
+
+    case actions.setReloadFromBackend.id:
+      return state.mergeDeep({
+        getDataFromBackend: action.value
+      })
 
     default:
       return state
