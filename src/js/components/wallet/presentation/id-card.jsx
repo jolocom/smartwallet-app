@@ -4,7 +4,6 @@ import Radium from 'radium'
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
-import IDCard from 'material-ui/svg-icons/av/featured-video'
 import Location from 'material-ui/svg-icons/maps/place'
 import moment from 'moment'
 import {List, ListItem, SelectField, MenuItem,

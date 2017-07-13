@@ -52,8 +52,7 @@ const ContactList = ({
   attrType,
   icon,
   setFocusedPin,
-  changePinValue,
-  iconMsg
+  changePinValue
 }) => (<List style={{padding: '0'}} disabled>
 {
   fields.map(({
