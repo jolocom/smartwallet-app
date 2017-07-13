@@ -83,8 +83,8 @@ class HTTPAgent {
   // @param {Object} headers headers hash
   //
   // @return {Promise} promise with resulting xhr
-  post(url, body, headers) {
-    return this._req(url, 'POST', body, headers)
+  post(url, body, headers, options) {
+    return this._req(url, 'POST', body, headers, options)
   }
 
   // HEAD request (used for identifying WebID session)
@@ -122,16 +122,17 @@ class HTTPAgent {
   _req(url, method, body = null, headers = {
     'Accept': DEFAULT_ACCEPT,
     'Content-type': DEFAULT_CT
-  }) {
+  }, options = {}) {
     if (this._proxyURL) {
       url = this.__proxify(url)
     }
-    return this._fetch(url, {
+
+    return this._fetch(url, Object.assign({
       method,
       headers,
       body,
       credentials: 'include'
-    })
+    }, options))
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
         return response
