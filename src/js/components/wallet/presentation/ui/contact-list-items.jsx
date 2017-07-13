@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import { List } from 'material-ui'
-import { StaticListItem, VerificationButtons } from './'
+import { StaticListItem, VerificationButtons, VerificationButtonMsg } from './'
 
 const STYLES = {
   dialog: {
@@ -19,15 +19,37 @@ const STYLES = {
   }
 }
 
+const iconMsg = {
+  phone: (<div>
+    <b>Verification</b> <br />
+    <br />
+    <span>
+      Your number hasn't been verified yet. For verification we will
+      send you a sms with an authentication code to this number. You will need
+      enter that code here.
+    </span>
+  </div>),
+  email: (<div>
+    <b>Verification</b> <br />
+    <br />
+    <span>
+      Your email hasn't been verified yet. Click "Request Verification" to get
+      an email with a verification link.
+    </span>
+  </div>)
+}
+
 const ContactList = ({
   fields,
+  requestVerificationCode,
+  resendVerificationCode,
+  enterVerificationCode,
   onConfirm,
   labelText,
   attrType,
   icon,
   setFocusedPin,
-  changePinValue,
-  iconMsg
+  changePinValue
 }) => (<List disabled>
 {
   fields.map(({
@@ -38,49 +60,70 @@ const ContactList = ({
     codeIsSent = false,
     pinFocused = false,
     type = ''
-  }, index) => (<div key={address || number}>
-    <StaticListItem
-      key={address || number}
-      verified={verified}
-      textValue={address || number}
-      textLabel={labelText}
-      icon={index === 0 ? icon : null}
-      onVerify={() => onConfirm({
-        rightButtonText: 'REQUEST VERIFICATION',
-        leftButtonText: 'CANCEL',
-        message: iconMsg,
-        style: STYLES.dialog,
-        attrType: attrType,
-        attrValue: address || number
-      })}
-      secondaryTextValue={type} />
-    <VerificationButtons
-      attrType={attrType}
-      smsCode={smsCode}
-      setFocusedPin={(value) => { setFocusedPin(value, index) }}
-      changePinValue={(value) => { changePinValue(value, index) }}
-      focused={pinFocused}
-      value={address || number}
-      codeIsSent={codeIsSent}
-      verified={verified}
-      enterCode={onConfirm}
-      missingCodeCallBack={onConfirm}
-      verify={onConfirm} />
-  </div>))
+  }, index) => {
+    const attrValue = address || number
+    return (<div key={attrValue}>
+      <StaticListItem
+        key={attrValue}
+        verified={verified}
+        textValue={attrValue}
+        textLabel={labelText}
+        icon={index === 0 ? icon : null}
+        onVerify={() => onConfirm({
+          rightButtonLabel: 'REQUEST VERIFICATION',
+          leftButtonLabel: 'CANCEL',
+          message: iconMsg[attrType],
+          style: STYLES.simpleDialog,
+          attrValue,
+          attrType,
+          index
+        }, {
+          message: (<VerificationButtonMsg
+            msgType="pinInput"
+            value={smsCode}
+            pinLength={4}
+            phoneNumber={attrValue}
+            setFocusedPin={(value) => { setFocusedPin(value, index) }}
+            changePinValue={(value) => { changePinValue(value, index) }}
+            focused={pinFocused} />),
+          rightButtonLabel: 'OK',
+          leftButtonLabel: 'CANCEL',
+          attrType,
+          index,
+          style: STYLES.simpleDialog,
+          attrValue
+        })}
+        secondaryTextValue={type} />
+      <VerificationButtons
+        attrType={attrType}
+        index={index}
+        requestVerificationCode={requestVerificationCode}
+        resendVerificationCode={resendVerificationCode}
+        enterVerificationCode={enterVerificationCode}
+        smsCode={smsCode}
+        setFocusedPin={(value) => { setFocusedPin(value, index) }}
+        changePinValue={(value) => { changePinValue(value, index) }}
+        focused={pinFocused}
+        value={attrValue}
+        codeIsSent={codeIsSent}
+        verified={verified} />
+    </div>)
+  })
 }
 </List>)
 
 ContactList.propTypes = {
-  iconMsg: React.PropTypes.node,
   buttonMsg: React.PropTypes.node,
   icon: React.PropTypes.any,
   attrType: React.PropTypes.string.isRequired,
   labelText: React.PropTypes.string.isRequired,
   fields: React.PropTypes.array.isRequired,
-  onVerify: React.PropTypes.func.isRequired,
   changePinValue: React.PropTypes.func,
   setFocusedPin: React.PropTypes.func,
-  onConfirm: React.PropTypes.func.isRequired
+  onConfirm: React.PropTypes.func.isRequired,
+  requestVerificationCode: React.PropTypes.func,
+  resendVerificationCode: React.PropTypes.func,
+  enterVerificationCode: React.PropTypes.func.isRequired
 }
 
 export default Radium(ContactList)
