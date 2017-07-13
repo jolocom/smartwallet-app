@@ -58,7 +58,7 @@ const actions = module.exports = makeActions('wallet/identity', {
   }
 })
 
-const mapBackendToState = ({webId, username, contact, passports, idCards}) =>
+const mapBackendToState = ({webId, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: false,
@@ -76,14 +76,14 @@ const mapBackendToStateError =
   Immutable.fromJS({
     loaded: true,
     error: true,
-    webId,
-    username,
+    webId: {value: ''},
+    username: {value: ''},
     contact: {
-      emails: contact.email,
-      phones: contact.phone
+      emails: [],
+      phones: []
     },
-    passports: passports,
-    idCards: idCards
+    passports: [],
+    idCards: []
   })
 const initialState = Immutable.fromJS({
   loaded: false,
