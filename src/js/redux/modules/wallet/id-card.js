@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import util from 'lib/util'
 // import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
-
+import moment from 'moment'
 import { makeActions } from '../'
 import * as router from '../router'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
@@ -16,7 +16,6 @@ import {
 
 const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
   const {wallet} = services.auth.currentUser
-  // console.log(`${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`)
   return wallet.addAttributeHashToIdentity(
     {
       attributeId: 'idCard',
@@ -51,6 +50,10 @@ const actions = module.exports = makeActions('wallet/id-card', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
         const {idCard, showErrors} = getState().toJS().wallet.idCard
+        idCard.birthDate.value = moment(
+          idCard.birthDate.value, 'XXX MMM DD YYYY').format()
+        idCard.expirationDate.value = moment(
+          idCard.birthDate.value, 'XXX MMM DD YYYY').format()
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
           dispatch(actions.save.buildAction(params, () => {
@@ -70,8 +73,6 @@ const actions = module.exports = makeActions('wallet/id-card', {
     creator: (index) => {
       return (dispatch, getState, {services, backend}) => {
         const idCard = getState().toJS().wallet.identity.idCards[index]
-        console.log('saveToBlockchain action params: ', index)
-        console.log(idCard)
         dispatch(actions.saveToBlockchain.buildAction(index, () => {
           return storeIdCardDetailsInBlockchain({idCard, services})
         }))

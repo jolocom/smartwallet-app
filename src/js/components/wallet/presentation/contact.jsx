@@ -232,34 +232,36 @@ export default class WalletContact extends React.Component {
         enableDelete={streetWithNumber.value.length > 0} />
         {
           addressFieldsVisibility ? <div>
-            <table><tbody><tr><td style={{width: '70%'}} key="city">
-              <EditListItem
-                id={id}
-                focused={false}
-                label="city"
-                enableEdit
-                value={city.value}
-                onFocusChange={() => onFocusChange(id)}
-                onDelete={() => this.props
-                  .setAddressField('newInformation', 'city', index, '')}
-                onChange={(evt) => setAddressField(
-                  'newInformation', 'city', index, evt.target.value)}
-                enableDelete={city.value.length > 0} />
-            </td><td style={{width: '30%'}} key="zip">
-              <EditListItem
-                id={id}
-                label="Zip"
-                enableEdit
-                value={zip.value}
-                focused={false}
-                onFocusChange={(field) => onFocusChange(id)}
-                onChange={(e) =>
-                setAddressField(
-                'newInformation', 'zip', index, e.target.value)}
-                onDelete={() => setAddressField(
-                  'newInformation', 'zip', index, '')}
-                enableDelete={zip.value.length > 0} />
-            </td></tr></tbody></table>
+            <table style={{width: '100%'}}><tbody>
+              <tr><td style={{width: '70%'}} key="city">
+                <EditListItem
+                  id={id}
+                  focused={false}
+                  label="city"
+                  enableEdit
+                  value={city.value}
+                  onFocusChange={() => onFocusChange(id)}
+                  onDelete={() => this.props
+                    .setAddressField('newInformation', 'city', index, '')}
+                  onChange={(evt) => setAddressField(
+                    'newInformation', 'city', index, evt.target.value)}
+                  enableDelete={city.value.length > 0} />
+              </td><td style={{width: '30%'}} key="zip">
+                <EditListItem
+                  id={id}
+                  label="Zip"
+                  enableEdit
+                  value={zip.value}
+                  focused={false}
+                  onFocusChange={(field) => onFocusChange(id)}
+                  onChange={(e) =>
+                  setAddressField(
+                  'newInformation', 'zip', index, e.target.value)}
+                  onDelete={() => setAddressField(
+                    'newInformation', 'zip', index, '')}
+                  enableDelete={zip.value.length > 0} />
+              </td></tr>
+            </tbody></table>
             <EditListItem
               id={id}
               label="State"

@@ -19,7 +19,7 @@ const actions = module.exports = makeActions('wallet/money', {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, (backend) => {
           return backend.wallet.buyEther({
-            stripeToken: params,
+            stripeToken: params.stripeToken,
             walletAddress: services.auth.currentUser.wallet.mainAddress
           }).then((response) => {
             dispatch(actions.getBalance())
@@ -125,7 +125,6 @@ module.exports.default = (state = initialState, action = {}) => {
         loaded: true,
         errorMsg: 'Could not get the ether price'
       })
-
     default:
       return state
   }
