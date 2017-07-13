@@ -38,7 +38,6 @@ export default class WalletPaasportScreen extends React.Component {
     const {save, cancel, initiateCountrySelectScreen} = this.props
     const {loaded, focusedField, focusedGroup, verifierLocations
     } = this.props.idCard
-
     return <Presentation
       loaded={loaded}
       focusedGroup={focusedGroup}

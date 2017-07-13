@@ -6,6 +6,7 @@ import Person from 'material-ui/svg-icons/social/person'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
 import IDCard from 'material-ui/svg-icons/av/featured-video'
 import Location from 'material-ui/svg-icons/maps/place'
+import moment from 'moment'
 import {List, ListItem, SelectField, MenuItem,
   FloatingActionButton, FlatButton} from 'material-ui'
 import {theme} from 'styles'
@@ -216,7 +217,8 @@ export default class WalletIdCard extends React.Component {
             value={value || null}
             onFocusChange={(field) => this.props.setFocused(field, group)}
             focused={this.props.focusedGroup === group}
-            onChange={(e, date) => this.props.change(key, date)} />
+            onChange={(e, date) =>
+              this.props.change(key, moment(date).format('YYYY/MM/DD'))} />
         </td>
         <td key="1">
           <EditListItem
@@ -253,7 +255,8 @@ export default class WalletIdCard extends React.Component {
       focused={this.props.focusedGroup === group}
       onDelete={() => { this.props.change(key, '') }}
       enableDelete={value.toString().length > 0}
-      onChange={(e, date) => this.props.change(key, date)} />
+      onChange={(e, date) =>
+        this.props.change(key, moment(date).format('YYYY/MM/DD'))} />
   }
 
   renderOptionsField({value, label, valid, key, options, group, index, icon}) {
