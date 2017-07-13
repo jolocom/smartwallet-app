@@ -60,7 +60,7 @@ const mapBackendToState = ({webId, username, contact, passports, idCards}) =>
     loaded: true,
     error: false,
     webId,
-    username,
+    username: {value: webId.split('.')[0].split('://')[1]},
     contact: {
       emails: contact.email,
       phones: contact.phone
