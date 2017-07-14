@@ -21,7 +21,7 @@ const actions = module.exports = makeActions('verification/data', {
       return (dispatch) => {
         dispatch(transition.setCurrentStep('compare'))
         dispatch(router.pushRoute(transitionUrl))
-        dispatch(result.startComparingData())
+        // dispatch(result.startComparingData())
         dispatch(actions.verifyData.buildAction(params))
       }
     }
