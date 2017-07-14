@@ -18,7 +18,7 @@ const IdCardsList = (props) => {
   const {idCards} = props
   if (!idCards) return null
 
-  const fields = idCards.map(({id, idCardFields, verified, savedToBlockchain}, index) => (<List // eslint-disable-line max-len
+  const fields = idCards.map(({id, idCardFields, verified, savedToBlockchain = false}, index) => (<List // eslint-disable-line max-len
     key={id}>
     <StaticListItem
       key={`idCardnumber_${id}`}
@@ -89,26 +89,28 @@ const IdCardsList = (props) => {
       key={`country_${id}`}
       textLabel="Country"
       textValue={idCardFields.physicalAddress.country} />
-    <FlatButton
-      label="REQUEST VERICATION"
-      secondary
-      style={STYLES.requestBtn}
-      onClick={() => {
-        props.requestIdCardVerification({
-          index,
-          message: (<div>
-            <b>Verification Request</b> <br />
-            <br />
-              Our verification service uses the latest encrypting technology
-              which costs &nbsp;
-            <span style={STYLES.verificationMsg}>
-               xxx to save your ID Card on the Blockchain
-            </span>
-          </div>),
-          rightButtonLabel: 'SAVE TO BLOCACHAIN',
-          leftButtonLabel: 'CANCEL'
-        })
-      }} />
+    {
+      savedToBlockchain || verified ? null : <FlatButton
+        label="REQUEST VERICATION"
+        secondary
+        style={STYLES.requestBtn}
+        onClick={() => {
+          props.requestIdCardVerification({
+            index,
+            message: (<div>
+              <b>Verification Request</b> <br />
+              <br />
+                Our verification service uses the latest encrypting technology
+                which costs &nbsp;
+              <span style={STYLES.verificationMsg}>
+                 xxx to save your ID Card on the Blockchain
+              </span>
+            </div>),
+            rightButtonLabel: 'SAVE TO BLOCACHAIN',
+            leftButtonLabel: 'CANCEL'
+          })
+        }} />
+    }
   </List>))
 
   return (<List style={{padding: '0'}} disabled>
