@@ -23,7 +23,7 @@ export default class WalletAgent {
   retrieveEtherPrice() { // returns {ethForEur: <number>}
     return this._httpAgent.get(
       settings.blockchain.jolocomEtherAddress +
-      '/ether/exchange-rate/ether'
+      '/exchange-rate/ether'
     )
   }
 
