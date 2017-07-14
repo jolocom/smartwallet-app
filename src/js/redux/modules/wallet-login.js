@@ -75,7 +75,6 @@ const actions = module.exports = makeActions('wallet-login', {
               // console.log('username : ', username)
               let password = state.passphrase.value
               let privatekey = wallet.webIDPrivateKey
-              console.log('=======')
               return backend.accounts.solidLogin(username, password, privatekey)
             }).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }))

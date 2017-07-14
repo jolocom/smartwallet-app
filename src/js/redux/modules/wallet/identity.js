@@ -45,6 +45,23 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  getIdCardVerifications: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getIdCardVerifications.buildAction(params, async() => {
+          let numOfVerification = await services.auth.currentUser.wallet
+          .identityContract.getNumberOfVerifications({
+            attributeId: 'idCard',
+            identityAddress: services.auth.currentUser.wallet.identityAddress
+          })
+          console.log('number of Verifications: ', numOfVerification.toNumber())
+          return numOfVerification.toNumber()
+        }))
+      }
+    }
+  },
   getIdentityInformation: {
     expectedParams: [],
     async: true,
@@ -52,7 +69,9 @@ const actions = module.exports = makeActions('wallet/identity', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () => {
           return backend.solid.getUserInformation(new WebIdAgent().getWebId())
-        }))
+        })).then((result) => {
+          dispatch(actions.getIdCardVerifications())
+        })
       }
     }
   }
@@ -147,6 +166,9 @@ const changePinValue = (state, {index, value}) => {
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.getIdCardVerifications.id_success:
+      return state.mergeIn(['idCards', '0'], {verified: action.result > 0})
+
     case actions.getIdentityInformation.id_success:
       return mapBackendToState(action.result)
 
