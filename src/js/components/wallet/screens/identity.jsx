@@ -21,7 +21,7 @@ import WalletError from '../presentation/error'
     'verification:confirmPhone',
     'verification:startEmailVerification',
     'verification:startPhoneVerification',
-    'wallet/id-card:saveToBlockchain'
+    'wallet/identity:saveToBlockchain'
   ]
 })
 

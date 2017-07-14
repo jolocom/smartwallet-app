@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
+import util from 'lib/util'
 import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
@@ -56,8 +57,19 @@ const actions = module.exports = makeActions('wallet/identity', {
             attributeId: 'idCard',
             identityAddress: services.auth.currentUser.wallet.identityAddress
           })
-          console.log('number of Verifications: ', numOfVerification.toNumber())
           return numOfVerification.toNumber()
+        }))
+      }
+    }
+  },
+  saveToBlockchain: {
+    expectedParams: ['index'],
+    async: true,
+    creator: (index) => {
+      return (dispatch, getState, {services, backend}) => {
+        const idCard = getState().toJS().wallet.identity.idCards[index]
+        dispatch(actions.saveToBlockchain.buildAction(index, () => {
+          return storeIdCardDetailsInBlockchain({idCard, services})
         }))
       }
     }
@@ -70,7 +82,10 @@ const actions = module.exports = makeActions('wallet/identity', {
         dispatch(actions.getIdentityInformation.buildAction(params, () => {
           return backend.solid.getUserInformation(new WebIdAgent().getWebId())
         })).then((result) => {
-          dispatch(actions.getIdCardVerifications())
+          if (result.idCards.length) {
+            dispatch(actions.getIdCardVerifications())
+          }
+          return result
         })
       }
     }
@@ -172,6 +187,8 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.getIdentityInformation.id_success:
       return mapBackendToState(action.result)
 
+    case actions.saveToBlockchain.id_success:
+      return state.mergeIn(['idCards', '0'], {savedToBlockchain: true})
     case actions.getIdentityInformation.id_fail:
       return mapBackendToStateError(state)
 
@@ -188,4 +205,32 @@ module.exports.default = (state = initialState, action = {}) => {
     default:
       return state
   }
+}
+
+function storeIdCardDetailsInBlockchain({idCard, services}) {
+  const {wallet} = services.auth.currentUser
+  return wallet.addAttributeHashToIdentity(
+    {
+      attributeId: 'idCard',
+      attribute: {
+        birthCountry: idCard.idCardFields.birthCountry,
+        birthDate: idCard.idCardFields.birthDate,
+        birthPlace: idCard.idCardFields.birthPlace,
+        expirationDate: idCard.idCardFields.expirationDate,
+        firstName: idCard.idCardFields.firstName,
+        gender: idCard.idCardFields.gender,
+        lastName: idCard.idCardFields.lastName,
+        number: idCard.idCardFields.number,
+        city: idCard.idCardFields.physicalAddress.city,
+        country: idCard.idCardFields.physicalAddress.country,
+        state: idCard.idCardFields.physicalAddress.state,
+        streetWithNumber: idCard.idCardFields.physicalAddress.streetWithNumber,
+        zip: idCard.idCardFields.physicalAddress.zip
+      },
+      definitionUrl:
+      `${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`,
+      pin: '1234',
+      identityAddress: wallet.identityAddress
+    }
+  )
 }

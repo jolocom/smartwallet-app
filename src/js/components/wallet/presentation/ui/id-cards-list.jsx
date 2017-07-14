@@ -18,14 +18,26 @@ const IdCardsList = (props) => {
   const {idCards} = props
   if (!idCards) return null
 
-  const fields = idCards.map(({id, idCardFields, verified}, index) => (<List
+  const fields = idCards.map(({id, idCardFields, verified, savedToBlockchain}, index) => (<List // eslint-disable-line max-len
     key={id}>
     <StaticListItem
       key={`idCardnumber_${id}`}
       textLabel="ID Card number"
       icon={IconNumber}
       verified={verified}
+      savedToBlockchain={savedToBlockchain}
       textValue={idCardFields.number} />
+    {
+      savedToBlockchain
+        ? <div style={{textAlign: 'right'}}>
+          <FlatButton
+            label="CONTACT VERIFIER"
+            secondary
+            style={STYLES.requestBtn}
+            onClick={() => {}} />
+        </div>
+        : null
+    }
     <StaticListItem
       key={`expirationDate_${id}`}
       textLabel="Expiration Date"

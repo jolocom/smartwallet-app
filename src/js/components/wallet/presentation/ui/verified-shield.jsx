@@ -23,7 +23,10 @@ const VerifiedShield = (props) => {
         width="24"
         height="24"
         style={Object.assign(props.style,
-          {color: '#9ba0aa', fill: 'currentColor'})}
+          {
+            color: props.savedToBlockchain ? '#fda72c' : '#9ba0aa',
+            fill: 'currentColor'
+          })}
         viewBox="0 0 24 24"
         onClick={props.verify}>
         <path
@@ -49,6 +52,7 @@ const VerifiedShield = (props) => {
 
 VerifiedShield.propTypes = {
   verified: React.PropTypes.bool.isRequired,
+  savedToBlockchain: React.PropTypes.bool.isRequired,
   style: React.PropTypes.object,
   verify: React.PropTypes.func
 }

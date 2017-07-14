@@ -1,5 +1,4 @@
 import Immutable from 'immutable'
-import util from 'lib/util'
 // import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 import { makeActions } from '../'
 import * as router from '../router'
@@ -12,34 +11,6 @@ import {
   mapBackendToState,
   changeFieldValue
 } from '../../../lib/id-card-util'
-
-const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
-  const {wallet} = services.auth.currentUser
-  return wallet.addAttributeHashToIdentity(
-    {
-      attributeId: 'idCard',
-      attribute: {
-        birthCountry: idCard.idCardFields.birthCountry,
-        birthDate: idCard.idCardFields.birthDate,
-        birthPlace: idCard.idCardFields.birthPlace,
-        expirationDate: idCard.idCardFields.expirationDate,
-        firstName: idCard.idCardFields.firstName,
-        gender: idCard.idCardFields.gender,
-        lastName: idCard.idCardFields.lastName,
-        number: idCard.idCardFields.number,
-        city: idCard.idCardFields.physicalAddress.city,
-        country: idCard.idCardFields.physicalAddress.country,
-        state: idCard.idCardFields.physicalAddress.state,
-        streetWithNumber: idCard.idCardFields.physicalAddress.streetWithNumber,
-        zip: idCard.idCardFields.physicalAddress.zip
-      },
-      definitionUrl:
-      `${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`,
-      pin: '1234',
-      identityAddress: wallet.identityAddress
-    }
-  )
-}
 
 const actions = module.exports = makeActions('wallet/id-card', {
   save: {
@@ -54,24 +25,12 @@ const actions = module.exports = makeActions('wallet/id-card', {
           dispatch(actions.save.buildAction(params, () => {
             return storeIdCardDetailsInSolid({backend, services, idCard, webId})
           })
-        ).then(() => {
+        ).then((result) => {
           dispatch(actions.clearState())
           dispatch(router.pushRoute('/wallet/identity'))
+          return result
         })
         }
-      }
-    }
-  },
-  saveToBlockchain: {
-    expectedParams: ['index'],
-    async: true,
-    creator: (index) => {
-      return (dispatch, getState, {services, backend}) => {
-        const idCard = getState().toJS().wallet.identity.idCards[index]
-        console.log(idCard)
-        dispatch(actions.saveToBlockchain.buildAction(index, () => {
-          return storeIdCardDetailsInBlockchain({idCard, services})
-        }))
       }
     }
   },
