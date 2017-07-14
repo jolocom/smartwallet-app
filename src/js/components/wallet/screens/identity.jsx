@@ -142,7 +142,6 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   showVerificationWindow({message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
-    console.log(' inside ', callback);
     return this.props.openConfirmDialog(
       message,
       rightButtonLabel,
