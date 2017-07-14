@@ -68,6 +68,7 @@ const actions = module.exports = makeActions('wallet/id-card', {
     creator: (index) => {
       return (dispatch, getState, {services, backend}) => {
         const idCard = getState().toJS().wallet.identity.idCards[index]
+        console.log(idCard)
         dispatch(actions.saveToBlockchain.buildAction(index, () => {
           return storeIdCardDetailsInBlockchain({idCard, services})
         }))

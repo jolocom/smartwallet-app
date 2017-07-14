@@ -83,7 +83,7 @@ export default class WalletIdentityScreen extends React.Component {
           this.props.openConfirmDialog(
             message,
             rightButtonLabel,
-            () => { this.props.saveToBlockchain(index) },
+            () => { this.props.saveToBlockchain(0) },
             leftButtonLabel
           )
         }
