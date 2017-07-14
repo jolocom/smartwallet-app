@@ -48,7 +48,7 @@ const Pin = (props) => {
     const messageWait = ['Please have some patience...',
       '...we are creating...', '...your jolocom wallet...',
       '...your digital identity', '...we are linking...',
-      '...your WebID to your identity']
+      '...your WebID to your identity...']
 
     contents = (
       <Block>
@@ -68,15 +68,15 @@ const Pin = (props) => {
             onChange={props.onChange}
             onFocusChange={props.onFocusChange}
             confirm={props.confirm} />
-        </Content>
-
-        <Footer>
           <Block>
             <SideNote style={STYLES.sidenote}>
               This secure PIN will be needed for transactions and
               saving information on the Blockchain.
             </SideNote>
           </Block>
+        </Content>
+
+        <Footer>
           <RaisedButton
             type="submit"
             disabled={!props.valid}
