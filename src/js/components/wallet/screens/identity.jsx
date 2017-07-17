@@ -127,9 +127,9 @@ export default class WalletIdentityScreen extends React.Component {
 
   resendVerificationCode({attrType, attrValue, index}) {
     if (attrType === 'phone') {
-      return () => this.props.resendVerificationLink({phone: attrValue, index})
+      return () => this.props.resendVerificationSms({phone: attrValue, index})
     } else if (attrType === 'email') {
-      return () => this.props.resendVerificationSms({email: attrValue, index})
+      return () => this.props.resendVerificationLink({email: attrValue, index})
     }
   }
 
