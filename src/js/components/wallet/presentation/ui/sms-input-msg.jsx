@@ -9,14 +9,20 @@ const SmsInputMsg = ({
   pinFocused = false,
   setFocusedPin,
   pinLength,
+  type,
   changePinValue
 }) => (<div>
   <b>Verification Request</b> <br />
   <br />
-  <div>
-    Please enter the authentication code we just sent to the number
-    {` ${phoneNumber}`}.
-  </div>
+  {
+    type === 'smsCode' ? <div>
+      Please enter the authentication code we just sent to the number
+      {` ${phoneNumber}`}.
+    </div>
+    : <div>
+      Please enter your pin to start the verification process
+    </div>
+  }
   <SmsCodeInput
     value={smsCode}
     pinLength={pinLength}
@@ -28,6 +34,7 @@ const SmsInputMsg = ({
 SmsInputMsg.propTypes = {
   smsCode: React.PropTypes.string,
   phoneNumber: React.PropTypes.string,
+  type: React.PropTypes.string,
   pinLength: React.PropTypes.number,
   pinFocused: React.PropTypes.bool,
   setFocusedPin: React.PropTypes.func,
