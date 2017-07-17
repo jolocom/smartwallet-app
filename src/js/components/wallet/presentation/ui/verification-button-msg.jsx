@@ -15,6 +15,7 @@ const VerificationButtonMsg = ({
   switch (msgType) {
     case 'codeInput':
       return <InputMsg
+        type="smsCode"
         value={smsCode}
         disabled={false}
         pinLength={6}
@@ -25,6 +26,7 @@ const VerificationButtonMsg = ({
 
     case 'pinInput':
       return <InputMsg
+        type="pin"
         value={smsCode}
         disabled={false}
         pinLength={4}
