@@ -195,11 +195,13 @@ export default class WalletContact extends React.Component {
         )
       }
     }
-    fields.push(<AddNew key={`add_${key}`} onClick={() => {
-      addNewEntry(key, newInformation[key].length)
-      onFocusChange(`newInformation_${key}`)
-    }}
-      value={addText} />)
+    if (originalInformation[key].length > 0 || newInformation[key].length > 0 && newInformation[key][0].value !== '') { // eslint-disable-line max-len
+      fields.push(<AddNew key={`add_${key}`} onClick={() => {
+        addNewEntry(key, newInformation[key].length)
+        onFocusChange(`newInformation_${key}`)
+      }}
+        value={addText} />)
+    }
     return (<div>
       {fields}
     </div>)
@@ -219,7 +221,7 @@ export default class WalletContact extends React.Component {
         icon={Location}
         iconStyle={STYLES.icon}
         value={streetWithNumber.value}
-        label="street"
+        label={addressFieldsVisibility ? 'Street' : 'Physical Address'}
         enableEdit
         showErrors
         onFocusChange={() => onFocusChange(id)}
@@ -237,7 +239,7 @@ export default class WalletContact extends React.Component {
                 <EditListItem
                   id={id}
                   focused={false}
-                  label="city"
+                  label="City"
                   enableEdit
                   value={city.value}
                   onFocusChange={() => onFocusChange(id)}
@@ -300,6 +302,18 @@ export default class WalletContact extends React.Component {
     const {loading, saveChanges, exitWithoutSaving} = this.props
     const {originalInformation, newInformation} = this.props.information
     let addressFields
+    let addNewAddress
+    if (originalInformation) {
+      if (originalInformation.addresses.length > 0 || newInformation.addresses.length > 0 && newInformation.addresses[0].streetWithNumber.value !== '') { // eslint-disable-line max-len
+        addNewAddress = (<AddNew key="add_address" onClick={() => {
+          this.props.addNewEntry('addresses', newInformation.addresses.length)
+          this.props.onFocusChange(`address_newInformation_${newInformation.addresses.length}`) // eslint-disable-line max-len
+        }}
+          value="ADD NEW ADDRESS" />)
+      }
+    } else {
+      addNewAddress = null
+    }
     if (this.props.loading) {
       content = <Loading />
     } else {
@@ -309,11 +323,7 @@ export default class WalletContact extends React.Component {
         this.renderAddressField({...address, age: 'originalInformation', index})), // eslint-disable-line max-len
         ...newInformation.addresses.map((address, index) =>
         this.renderAddressField({...address, age: 'newInformation', index})),
-        <AddNew key="add_address" onClick={() => {
-          this.props.addNewEntry('addresses', newInformation.addresses.length)
-          this.props.onFocusChange(`address_newInformation_${newInformation.addresses.length}`) // eslint-disable-line max-len
-        }}
-          value="ADD NEW ADDRESS" />
+        addNewAddress
       ]
     }
 

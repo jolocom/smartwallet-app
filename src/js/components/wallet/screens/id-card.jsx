@@ -98,7 +98,7 @@ export default class WalletPaasportScreen extends React.Component {
     const group = 'address'
     return [
       {...streetWithNumber, key: 'streetWithNumber', label: 'Street', group},
-      {...zip, key: 'zip', label: 'Zip Code', group},
+      {...zip, key: 'zip', label: 'Zip', group},
       {...city, key: 'city', label: 'City', group},
       {...state, key: 'state', label: 'State', group},
       {...country, key: 'country', label: 'Country', group}

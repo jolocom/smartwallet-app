@@ -45,7 +45,7 @@ let STYLES = {
     borderWidth: 'medium medium 1px'
   },
   icon: {
-    top: '16px'
+    top: '24px'
   },
   textField: {
     maxWidth: 'none',
@@ -116,7 +116,8 @@ export default class EditListItem extends React.Component {
       ? theme.palette.primary1Color : theme.jolocom.gray1
 
     const icon = this.props.icon
-      ? <this.props.icon color={iconColor} style={styles.icon} /> : null
+      ? <this.props.icon color={iconColor}
+        style={this.props.iconStyle || styles.icon} /> : null
 
     const widthField = widthTextField || styles.item
 
