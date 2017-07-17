@@ -1,6 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 
+import {NavigationArrowBack} from 'material-ui/svg-icons'
+import {AppBar} from 'material-ui'
 import {Content, Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
 import Spinner from '../../common/spinner'
@@ -30,6 +32,7 @@ const STYLES = {
 @Radium
 export default class WalletEther extends React.Component {
   static propTypes = {
+    goToWalletScreen: React.PropTypes.func,
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
     ether: React.PropTypes.object,
@@ -96,20 +99,24 @@ export default class WalletEther extends React.Component {
     let content = null
     if (this.props.ether.ether.buying) {
       content = this.renderLoading()
-    } else if (this.props.ether.ether.amount) {
+    } else if (true) {
       content = this.renderHasEther()
     } else if (!this.props.ether.ether.amount) {
       content = this.renderNoEther()
     }
 
-    return (
-      <TabContainer>
-        <HalfScreenContainer>
-          <Content>
-            {content}
-          </Content>
-        </HalfScreenContainer>
-      </TabContainer>
-    )
+    return (<TabContainer>
+      <AppBar
+        title="Ethereum Wallet"
+        iconElementLeft={
+          <NavigationArrowBack style={{margin: '50%'}}
+            onClick={this.props.goToWalletScreen} />
+        } />
+      <HalfScreenContainer>
+        <Content>
+          {content}
+        </Content>
+      </HalfScreenContainer>
+    </TabContainer>)
   }
 }
