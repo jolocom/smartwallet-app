@@ -3,24 +3,41 @@ import Radium from 'radium'
 
 import {List, FlatButton} from 'material-ui'
 import {SocialPersonIcon, MapsLocation, SocialCake} from 'material-ui/svg-icons'
-
+import {theme} from 'styles'
 import {StaticListItem, IconNumber} from './'
 
 const STYLES = {
   requestBtn: {
     marginLeft: '16px'
+  },
+  verificationMsg: {
+    color: theme.palette.accent1Color
   }
 }
 const IdCardsList = (props) => {
   const {idCards} = props
   if (!idCards) return null
 
-  const fields = idCards.map(({id, idCardFields}, index) => (<List key={id}>
+  const fields = idCards.map(({id, idCardFields, verified, savedToBlockchain = false}, index) => (<List // eslint-disable-line max-len
+    key={id}>
     <StaticListItem
       key={`idCardnumber_${id}`}
       textLabel="ID Card number"
       icon={IconNumber}
+      verified={verified}
+      savedToBlockchain={savedToBlockchain}
       textValue={idCardFields.number} />
+    {
+      savedToBlockchain
+        ? <div style={{textAlign: 'right'}}>
+          <FlatButton
+            label="CONTACT VERIFIER"
+            secondary
+            style={STYLES.requestBtn}
+            onClick={() => {}} />
+        </div>
+        : null
+    }
     <StaticListItem
       key={`expirationDate_${id}`}
       textLabel="Expiration Date"
@@ -72,11 +89,28 @@ const IdCardsList = (props) => {
       key={`country_${id}`}
       textLabel="Country"
       textValue={idCardFields.physicalAddress.country} />
-    <FlatButton
-      label="Save to blockchain"
-      secondary
-      style={STYLES.requestBtn}
-      onClick={props.saveToBlockchain.bind(this, index)} />
+    {
+      savedToBlockchain || verified ? null : <FlatButton
+        label="REQUEST VERICATION"
+        secondary
+        style={STYLES.requestBtn}
+        onClick={() => {
+          props.requestIdCardVerification({
+            index,
+            message: (<div>
+              <b>Verification Request</b> <br />
+              <br />
+                Our verification service uses the latest encrypting technology
+                which costs &nbsp;
+              <span style={STYLES.verificationMsg}>
+                 xxx to save your ID Card on the Blockchain
+              </span>
+            </div>),
+            rightButtonLabel: 'SAVE TO BLOCACHAIN',
+            leftButtonLabel: 'CANCEL'
+          })
+        }} />
+    }
   </List>))
 
   return (<List style={{padding: '0'}} disabled>
@@ -86,7 +120,7 @@ const IdCardsList = (props) => {
 
 IdCardsList.propTypes = {
   idCards: React.PropTypes.array.isRequired,
-  saveToBlockchain: React.PropTypes.func.isRequired
+  requestIdCardVerification: React.PropTypes.func.isRequired
 }
 
 export default Radium(IdCardsList)

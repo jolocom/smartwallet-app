@@ -62,7 +62,6 @@ const actions = module.exports = makeActions('wallet-login', {
               seedPhrase: state.passphrase.value,
               pin: state.pin.value
             })
-            .then(() => dispatch(router.pushRoute('/wallet/identity')))
             .then(({wallet}) => {
               // console.log(wallet)
               let webid = wallet.webId
