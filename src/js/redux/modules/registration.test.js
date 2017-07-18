@@ -350,7 +350,7 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
-  describe('checkUser', function() {
+  describe.only('checkUser', function() {
     it('should checkUsername on backend', () => {
       const getState = () => Immutable.fromJS({registration: {
         username: {value: 'ggdg'}
@@ -378,8 +378,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  /*
-  describe('registerWallet', function() {
+  describe.only('registerWallet', () => {
     it('should register with seedphrase if expert', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -390,25 +389,35 @@ describe('Wallet registration Redux module', function() {
         email: {value: 'test@test.com'},
         password: {value: 'abdcd'}
       }})
-      const backend = {wallet: {
-        registerWithSeedPhrase: stub().returnsAsync('regSeed'),
-        registerWithCredentials: stub().returnsAsync('regCreds')
-      }}
-
+      const services = {
+        auth: {
+          registerWithSeedPhrase: stub().returnsAsync('regSeed'),
+          registerWithCredentials: stub().returnsAsync('regCreds')
+        }
+      }
+      const backend = {
+        accounts: {
+          solidRegister: stub(),
+          solidLogin: stub()
+        },
+        solid: {
+          setIdentityContractAddress: stub()
+        }
+      }
       withStubs([
         [registration.actions, 'goForward', {returns: 'forward'}],
         [registration.actions.registerWallet, 'buildAction',
           {returns: 'action'}]],
         () => {
           const thunk = registration.registerWallet()
-          thunk(dispatch, getState)
+          thunk(dispatch, getState, {services, backend})
           expect(dispatch.calledWithArgs[0]).to.equal('action')
           const registerAction = registration.actions.registerWallet
           const promise = registerAction.buildAction.calledWithArgs[1]
-          expect(promise(backend))
-            .to.eventually
-            .equal('regSeed')
-          expect(backend.wallet.registerWithSeedPhrase.calls)
+          expect(promise(services.auth.registerWithSeedPhrase))
+            .to.eventually.equal('regSeed')
+          expect(services.auth.registerWithSeedPhrase.called).to.be.true
+          expect(services.auth.registerWithSeedPhrase.calls)
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
               userName: 'usr',
@@ -417,7 +426,6 @@ describe('Wallet registration Redux module', function() {
         }
       )
     })
-
     it('should register with credentials if layman', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -428,7 +436,7 @@ describe('Wallet registration Redux module', function() {
         email: {value: 'test@test.com'},
         password: {value: 'abdcd'}
       }})
-      const backend = {wallet: {
+      const services = {auth: {
         registerWithSeedPhrase: stub().returnsAsync('regSeed'),
         registerWithCredentials: stub().returnsAsync('regCreds')
       }}
@@ -439,12 +447,14 @@ describe('Wallet registration Redux module', function() {
           {returns: 'action'}]],
         () => {
           const thunk = registration.registerWallet()
-          thunk(dispatch, getState)
+          thunk(dispatch, getState, {backend: {}, services})
           expect(dispatch.calledWithArgs[0]).to.equal('action')
           const registerAction = registration.actions.registerWallet
           const promise = registerAction.buildAction.calledWithArgs[1]
-          expect(promise(backend)).to.eventually.equal('regCreds')
-          expect(backend.wallet.registerWithCredentials.calls)
+          expect(promise(services.auth.registerWithCredentials))
+            .to.eventually.equal('regCreds')
+          expect(services.auth.registerWithCredentials.called).to.be.true
+          expect(services.auth.registerWithCredentials.calls)
             .to.deep.equal([{args: [{
               userName: 'usr',
               email: 'test@test.com',
@@ -455,7 +465,6 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
-  */
 
   describe('reducer', function() {
     describe('setUserType', function() {
