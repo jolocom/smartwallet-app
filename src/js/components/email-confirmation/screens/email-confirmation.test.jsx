@@ -5,7 +5,7 @@ import Immutable from 'immutable'
 import EmailConfirmationScreen from './email-confirmation'
 import {stub} from '../../../../../test/utils'
 
-describe.only('(Component) EmailConfirmationScreen', () => {
+describe('(Component) EmailConfirmationScreen', () => {
   it('should call confirmEmail upon load', () => {
     const confirm = stub()
     const wrapper = shallow(
