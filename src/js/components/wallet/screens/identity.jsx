@@ -133,7 +133,7 @@ export default class WalletIdentityScreen extends React.Component {
     }
   }
 
-  enterVerificationCode({attrType, attrValue = 'attrValue'}) {
+  enterVerificationCode({attrType, attrValue}) {
     if (attrType === 'phone') {
       return () => this.props.confirmPhone({phone: attrValue})
     } else if (attrType === 'email') {
