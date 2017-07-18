@@ -5,7 +5,7 @@ import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
 import WalletIdentityScreen from './identity'
 
-describe.only('(Component) WalletIdentityScreen', () => {
+describe('(Component) WalletIdentityScreen', () => {
   it('should render properly the first time', () => {
     const wrapper = shallow(
       (<WalletIdentityScreen.WrappedComponent {
