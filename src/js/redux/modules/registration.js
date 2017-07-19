@@ -204,7 +204,8 @@ const actions = module.exports = makeActions('registration', {
               userName: state.username.value,
               email: state.email.value,
               password: state.password.value,
-              pin: state.pin.value
+              pin: state.pin.value,
+              seedPhrase: state.passphrase.phrase
             })
 
             await backend.accounts.solidRegister(
