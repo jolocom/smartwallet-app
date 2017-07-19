@@ -120,7 +120,6 @@ export default class EditListItem extends React.Component {
         style={this.props.iconStyle || styles.icon} /> : null
 
     const widthField = widthTextField || styles.item
-
     return (
       <ListItem
         style={widthField}

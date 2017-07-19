@@ -44,10 +44,12 @@ export default class ConfirmationDialog extends React.Component {
 
     return <Dialog
       actions={confirmActions}
+      title={this.props.confirm.title}
       modal={false}
       open={this.props.confirm.open}
       onRequestClose={this.handleClose}
       contentStyle={this.props.confirm.style}
+      actionsContainerStyle={this.props.confirm.style.actionsContainerStyle}
     >
       {this.props.confirm.message}
     </Dialog>

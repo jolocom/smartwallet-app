@@ -5,7 +5,10 @@ import {theme} from 'styles'
 
 const STYLES = {
   header: {
-    margin: '62px 62px 16px 62px'
+    margin: '62px 62px 16px 62px',
+    '@media screen and (max-width: 500px)': {
+      margin: '42px 16px 16px 16px'
+    }
   },
   title: {
     color: theme.textStyles.headline.color,
