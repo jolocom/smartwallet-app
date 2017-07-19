@@ -39,7 +39,7 @@ export default class WalletAgent {
   }
 
   retrieveSeedPhrase({email, password}) {
-    return this._manager.retrieveSeedPhrase({email, password})
+    return this._manager._seedStorage.getSeed({email, password})
   }
 
   registerWithSeedPhrase({userName, seedPhrase, pin}) {
