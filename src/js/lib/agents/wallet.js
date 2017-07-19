@@ -48,9 +48,9 @@ export default class WalletAgent {
     })
   }
 
-  registerWithCredentials({userName, email, password, pin}) {
+  registerWithCredentials({userName, email, password, pin, seedPhrase}) {
     return this._manager.registerWithCredentials({
-      userName, email, password, pin
+      userName, email, password, pin, seedPhrase
     })
   }
 
