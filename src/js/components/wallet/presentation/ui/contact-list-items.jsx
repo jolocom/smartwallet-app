@@ -24,8 +24,6 @@ const STYLES = {
 
 const iconMsg = {
   phone: (<div>
-    <b>Verification</b> <br />
-    <br />
     <span>
       Your number hasn't been verified yet. For verification we will
       send you a sms with an authentication code to this number. You will need
@@ -33,8 +31,6 @@ const iconMsg = {
     </span>
   </div>),
   email: (<div>
-    <b>Verification</b> <br />
-    <br />
     <span>
       Your email hasn't been verified yet. Click "Request Verification" to get
       an email with a verification link.
@@ -76,11 +72,13 @@ const ContactList = ({
           rightButtonLabel: 'REQUEST VERIFICATION',
           leftButtonLabel: 'CANCEL',
           message: iconMsg[attrType],
-          style: STYLES.simpleDialog,
+          title: 'Verification',
+          style: {},
           attrValue,
           attrType,
           index
         }, {
+          title: 'Verfication',
           message: (<VerificationButtonMsg
             msgType="pinInput"
             value={smsCode}
@@ -93,7 +91,7 @@ const ContactList = ({
           leftButtonLabel: 'CANCEL',
           attrType,
           index,
-          style: STYLES.simpleDialog,
+          style: {},
           attrValue
         })}
         secondaryTextValue={type} />

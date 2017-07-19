@@ -7,7 +7,6 @@ import {connect} from 'redux/utils'
 
 import {routes} from 'routes'
 import {theme} from 'styles'
-
 import { Container, Header, SideNote, InfoLink } from './structure'
 
 const message = (<div>
@@ -20,15 +19,17 @@ const message = (<div>
   access to it.</div></div>)
 
 const dialogBlockchain = {
-  primaryActionText: 'ALL RIGHT',
-  cancelActionText: 'MORE INFO',
+  primaryActionText: 'MORE INFO',
+  cancelActionText: 'ALL RIGHT',
   message: message,
   style: {
     actionsContainerStyle: {
       textAlign: 'center'
     }
   },
-  callback: null,
+  callback: () => {
+    window.location = 'https://en.wikipedia.org/wiki/Blockchain'
+  },
   title: 'What is a blockchain?'
 }
 

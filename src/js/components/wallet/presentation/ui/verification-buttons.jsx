@@ -43,6 +43,7 @@ const VerificationButtons = ({
         secondary
         style={STYLES.requestBtn}
         onClick={() => requestVerificationCode({
+          title: 'Verification Request',
           message: (<VerificationButtonMsg
             msgType="codeRequest"
             value={smsCode}
@@ -88,6 +89,7 @@ const VerificationButtons = ({
           secondary
           style={STYLES.requestBtn}
           onClick={() => resendVerificationCode({
+            title: 'Verification Request',
             message: (<VerificationButtonMsg
               msgType="codeRequest"
               phoneNumber={value}
@@ -111,6 +113,7 @@ const VerificationButtons = ({
       secondary
       style={STYLES.requestBtn}
       onClick={() => requestVerificationCode({
+        title: 'Verification Request',
         message: (<VerificationButtonMsg
           msgType="codeRequest"
           value={smsCode}
@@ -125,6 +128,7 @@ const VerificationButtons = ({
         index,
         attrValue: 'value'
       }, {
+        title: 'Verification Request',
         message: (<VerificationButtonMsg
           msgType="pinInput"
           value={smsCode}

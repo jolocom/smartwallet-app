@@ -181,6 +181,10 @@ export default class WalletIdCard extends React.Component {
             underlineHide={!!value}
             onFocusChange={(field) => this.props.setFocused(field, group)}
             onChange={(e) => this.props.change(city.key, e.target.value)}
+            onDelete={() => {
+              this.props.change(city.key, '')
+            }}
+            enableDelete={city.value.length > 0}
             focused={this.props.focusedGroup === group} />
         </td>
         <td key="1">
@@ -191,13 +195,13 @@ export default class WalletIdCard extends React.Component {
             underlineHide={!!zip.value}
             enableEdit
             value={zip.value}
-            onFocusChange={field => this.props.setFocused(field, zip.group)}
+            onFocusChange={field => this.props.setFocused(field, group)}
             onChange={(e) => this.props.change(zip.key, e.target.value)}
+            enableDelete={!!zip.value || !!value}
             onDelete={() => {
               this.props.change(zip.key, '')
               this.props.change(key, '')
-            }}
-            enableDelete={!!zip.value || !!value} />
+            }} />
         </td>
       </tr>
     </table>)

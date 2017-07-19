@@ -89,10 +89,10 @@ export default class WalletIdentityScreen extends React.Component {
       enterVerificationCode={(...args) => this.showVerificationWindow(...args,
         (...params) => this.enterVerificationCode(...params)
       )}
-      onVerify={({message, buttonText, style, attrValue}) => {
+      onVerify={({title, message, buttonText, style, attrValue}) => {
         this.props.configSimpleDialog(() => {
           this.props.startEmailVerification({email: attrValue})
-        }, message, buttonText, style)
+        }, title, message, buttonText, style)
         this.props.showSimpleDialog()
       }}
       onConfirm={(...args) => { this.onConfirm(...args) }}
@@ -133,8 +133,9 @@ export default class WalletIdentityScreen extends React.Component {
     }
   }
 
-  showVerificationWindow({message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
+  showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
     return this.props.openConfirmDialog(
+      title,
       message,
       rightButtonLabel,
       callback({attrValue, attrType, index}),

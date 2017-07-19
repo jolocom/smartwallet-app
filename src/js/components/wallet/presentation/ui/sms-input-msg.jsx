@@ -12,8 +12,6 @@ const SmsInputMsg = ({
   type,
   changePinValue
 }) => (<div>
-  <b>Verification Request</b> <br />
-  <br />
   {
     type === 'smsCode' ? <div>
       Please enter the authentication code we just sent to the number

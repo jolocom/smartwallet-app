@@ -4,6 +4,18 @@ import { connect } from 'redux/utils'
 
 import { FlatButton, Dialog } from 'material-ui'
 
+const STYLES = {
+  buttonRigth: {
+    textAlign: 'left'
+  },
+  buttonLeft: {
+    textAlign: 'right'
+  },
+  dialogContainer: {
+    textAlign: 'center'
+  }
+}
+
 @connect({
   props: ['confirm'],
   actions: ['confirmation-dialog:close']
@@ -32,13 +44,15 @@ export default class ConfirmationDialog extends React.Component {
     const confirmActions = [
       <FlatButton
         label={this.props.confirm.cancelActionText || 'Cancel'}
-        primary
+        secondary
         onTouchTap={cancelHandler}
+        style={STYLES.buttonRigth}
       />,
       <FlatButton
         label={this.props.confirm.primaryActionText}
-        primary
+        secondary
         onTouchTap={confirmHandler}
+        style={STYLES.buttonLeft}
       />
     ]
 
@@ -49,7 +63,7 @@ export default class ConfirmationDialog extends React.Component {
       open={this.props.confirm.open}
       onRequestClose={this.handleClose}
       contentStyle={this.props.confirm.style}
-      actionsContainerStyle={this.props.confirm.style.actionsContainerStyle}
+      actionsContainerStyle={STYLES.dialogContainer}
     >
       {this.props.confirm.message}
     </Dialog>

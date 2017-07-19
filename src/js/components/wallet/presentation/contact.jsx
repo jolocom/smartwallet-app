@@ -235,7 +235,7 @@ export default class WalletContact extends React.Component {
         {
           addressFieldsVisibility ? <div>
             <table style={{width: '100%'}}><tbody>
-              <tr><td style={{width: '70%'}} key="city">
+              <tr><td style={{width: '60%'}} key="city">
                 <EditListItem
                   id={id}
                   focused={false}
@@ -248,12 +248,13 @@ export default class WalletContact extends React.Component {
                   onChange={(evt) => setAddressField(
                     'newInformation', 'city', index, evt.target.value)}
                   enableDelete={city.value.length > 0} />
-              </td><td style={{width: '30%'}} key="zip">
+              </td><td style={{width: '40%'}} key="zip">
                 <EditListItem
                   id={id}
                   label="Zip"
                   enableEdit
                   value={zip.value}
+                  widthTextField={{padding: '0 16px 0 4px'}}
                   focused={false}
                   onFocusChange={(field) => onFocusChange(id)}
                   onChange={(e) =>
