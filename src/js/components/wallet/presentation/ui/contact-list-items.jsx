@@ -4,24 +4,6 @@ import Radium from 'radium'
 import { List } from 'material-ui'
 import { StaticListItem, VerificationButtons, VerificationButtonMsg } from './'
 
-const STYLES = {
-  dialog: {
-  },
-  requestBtn: {
-    marginLeft: '-16px'
-  },
-  simpleDialog: {
-    contentStyle: {
-    },
-    actionsContainerStyle: {
-      textAlign: 'center'
-    }
-  },
-  list: {
-    padding: '0'
-  }
-}
-
 const iconMsg = {
   phone: (<div>
     <span>
