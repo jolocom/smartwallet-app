@@ -21,7 +21,7 @@ import WalletError from '../presentation/error'
     'verification:confirmPhone',
     'verification:startEmailVerification',
     'verification:startPhoneVerification',
-    'wallet/id-card:saveToBlockchain'
+    'wallet/identity:saveToBlockchain'
   ]
 })
 
@@ -78,7 +78,15 @@ export default class WalletIdentityScreen extends React.Component {
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
-      saveToBlockchain={this.props.saveToBlockchain}
+      requestIdCardVerification={
+        ({message, rightButtonLabel, leftButtonLabel, index}) =>
+          this.props.openConfirmDialog(
+            message,
+            rightButtonLabel,
+            () => { this.props.saveToBlockchain(0) },
+            leftButtonLabel
+          )
+        }
       requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
         return () => this.showVerificationWindow(params,
           (callbackArgs) => this.requestVerificationCode(callbackArgs))

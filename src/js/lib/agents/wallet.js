@@ -23,7 +23,7 @@ export default class WalletAgent {
   retrieveEtherPrice() { // returns {ethForEur: <number>}
     return this._httpAgent.get(
       settings.blockchain.jolocomEtherAddress +
-      '/ether/exchange-rate/ether'
+      '/exchange-rate/ether'
     )
   }
 
@@ -39,7 +39,7 @@ export default class WalletAgent {
   }
 
   retrieveSeedPhrase({email, password}) {
-    return this._manager.retrieveSeedPhrase({email, password})
+    return this._manager._seedStorage.getSeed({email, password})
   }
 
   registerWithSeedPhrase({userName, seedPhrase, pin}) {
@@ -48,9 +48,9 @@ export default class WalletAgent {
     })
   }
 
-  registerWithCredentials({userName, email, password, pin}) {
+  registerWithCredentials({userName, email, password, pin, seedPhrase}) {
     return this._manager.registerWithCredentials({
-      userName, email, password, pin
+      userName, email, password, pin, seedPhrase
     })
   }
 
