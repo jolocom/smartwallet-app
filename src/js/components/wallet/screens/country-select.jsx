@@ -21,6 +21,7 @@ export default class CountrySelectScreen extends React.Component {
   render() {
     const {setCountryValue, submit, cancel} = this.props
     const {options, value} = this.props.country
+
     return (<Presentation
       value={value}
       countries={options}

@@ -3,17 +3,45 @@ import Radium from 'radium'
 import {RaisedButton, IconButton} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
+import {connect} from 'redux/utils'
 
 import {routes} from 'routes'
 import {theme} from 'styles'
+import { Container, Header, SideNote, InfoLink } from './structure'
 
-import { Container, Header, SideNote } from './structure'
+const message = (<div>
+  <div>A Blockchain is a distributed database which
+  Integrity (security from manipulation) is given by a timestamp and
+  a link to the previous data set. These days it is used for cryptocurrency,
+  which means that it is as secure as your bank account
+  </div><br />
+  <div>We use this technology to lock your data. So only you can have
+  access to it.</div></div>)
+
+const dialogBlockchain = {
+  primaryActionText: 'MORE INFO',
+  cancelActionText: 'ALL RIGHT',
+  message: message,
+  style: {
+    actionsContainerStyle: {
+      textAlign: 'center'
+    }
+  },
+  callback: () => {
+    window.location = 'https://en.wikipedia.org/wiki/Blockchain'
+  },
+  title: 'What is a blockchain?'
+}
 
 let Index = React.createClass({
   contextTypes: {
     router: React.PropTypes.object,
     username: React.PropTypes.string,
     muiTheme: React.PropTypes.object
+  },
+
+  propTypes: {
+    openConfirmDialog: React.PropTypes.func
   },
 
   // componentWillMount() {
@@ -118,6 +146,12 @@ let Index = React.createClass({
         '@media screen and (max-width: 468px)': {
           display: 'none'
         }
+      },
+      embeddedLink: {
+        color: theme.palette.accent1Color,
+        minWidth: '0px',
+        paddingLeft: '5px',
+        paddingRight: '5px'
       }
     }
 
@@ -126,7 +160,6 @@ let Index = React.createClass({
 
   render() {
     let styles = this.getStyles()
-
     return (
       <Container>
         <div style={styles.previous}>
@@ -192,7 +225,12 @@ let Index = React.createClass({
               as your bank account." />
             <SideNote>
               We use the latest encryption technology and
-              blockchain to store your sensitive data.
+              <span style={styles.embeddedLink}
+                onClick={() => {
+                  this.props.openConfirmDialog(dialogBlockchain)
+                }}>
+              blockchain</span>
+              to store your sensitive data.
             </SideNote>
           </div>
           <div style={styles.slide}>
@@ -230,10 +268,13 @@ let Index = React.createClass({
             onClick={this._handleLogin}
           />
         </div>
+        <InfoLink
+          info="With signing up you agree with our"
+          link="AGB"
+          to="" />
       </Container>
     )
   },
-
   _setCarouselRef(c) {
     this.carousel = c
   },
@@ -253,7 +294,11 @@ let Index = React.createClass({
   _handleLogin() {
     this.context.router.push('/login')
   }
-
 })
 
-export default Radium(Index)
+export default connect({
+  actions: [
+    'confirmation-dialog:openConfirmDialog',
+    'confirmation-dialog:closeConfirmDialog'
+  ]
+})(Radium(Index))
