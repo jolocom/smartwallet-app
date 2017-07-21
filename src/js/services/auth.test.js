@@ -44,6 +44,7 @@ describe('#AuthService', () => {
       const registration = {
         userName: 'bigly',
         email: 'j.j@j.c',
+        seedPhrase: 'bla bla',
         password: 'canyouseeme?',
         pin: '1234'
       }
@@ -57,6 +58,7 @@ describe('#AuthService', () => {
         args: [{
           userName: 'bigly',
           email: 'j.j@j.c',
+          seedPhrase: 'bla bla',
           password: 'canyouseeme?',
           pin: '1234'
         }]

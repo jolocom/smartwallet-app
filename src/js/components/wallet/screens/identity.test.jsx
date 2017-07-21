@@ -618,7 +618,7 @@ describe('(Component) WalletIdentityScreen', () => {
     wrapper.instance().showVerificationWindow(window, () => {})
     expect(openConfirmDialog.called).to.be.true
     expect(openConfirmDialog.calls).to.deep.equal([{
-      args: ['', '', undefined, '']
+      args: [undefined, '', '', undefined, '']
     }])
   })
 })

@@ -459,6 +459,7 @@ describe('Wallet registration Redux module', () => {
               userName: 'usr',
               email: 'test@test.com',
               password: 'abdcd',
+              passphrase: 'bla bla bla',
               pin: '1234'
             }]}])
         }
