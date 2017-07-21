@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
+import Avatar from 'material-ui/Avatar'
 import {theme} from 'styles'
 import VerifiedShield from './verified-shield'
 import {
@@ -11,6 +12,11 @@ import {
 var STYLES = {
   icon: {
     color: theme.jolocom.gray1,
+    top: '16px'
+  },
+  iconAvatar: {
+    backgroundColor: 'none',
+    borderRadius: '0%',
     top: '16px'
   },
   inputName: theme.textStyles.contentInputFields,
@@ -36,7 +42,7 @@ var STYLES = {
     marginLeft: '0px',
     position: 'absolute',
     right: '20px',
-    marginTop: '40px'
+    marginTop: '30px'
   },
   listItem: {
     whiteSpace: 'nowrap',
@@ -68,9 +74,14 @@ export default class StaticListItem extends React.Component {
 
   render() {
     const props = this.props
-
-    const icon = props.icon
+    let icon
+    if (typeof props.icon === 'object') {
+      icon = <Avatar style={STYLES.iconAvatar}
+        src={props.icon.avatar} />
+    } else {
+      icon = props.icon
       ? <props.icon color={STYLES.icon.color} style={STYLES.icon} /> : <div />
+    }
 
     return (
       <ListItem
