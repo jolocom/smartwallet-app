@@ -1,7 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
 import Wallet from 'material-ui/svg-icons/action/account-balance-wallet'
-// import Euro from 'material-ui/svg-icons/action/euro-symbol'
 import {theme} from 'styles'
 
 import {
@@ -78,7 +77,10 @@ const PlusSubMenu = (props) => (<div style={{...STYLES.root, ...props.style}}>
       <div style={
         props.overview ? {...STYLES.infoHeader, ...STYLES.overviewText}
         : STYLES.infoHeader}>
-      {props.amount.toLocaleString('de-DE', {minimumFractionDigits: 2})}
+      {Number(props.amount).toLocaleString('de-DE', {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
+      })}
       </div>
       <div style={
         props.overview ? {...STYLES.currency, ...STYLES.overviewText}
@@ -107,12 +109,16 @@ const PlusSubMenu = (props) => (<div style={{...STYLES.root, ...props.style}}>
       : STYLES.currRate}>
       <p>= {(props.currencyPrice * props.amount).toLocaleString('de-DE', {
         style: 'currency',
-        currency: 'EUR'
+        currency: 'EUR',
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
       })}
       </p>
       <p>1 ETH = {props.currencyPrice.toLocaleString('de-DE', {
         style: 'currency',
-        currency: 'EUR'
+        currency: 'EUR',
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
       })}
       </p>
     </div>

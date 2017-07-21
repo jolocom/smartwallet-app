@@ -64,7 +64,7 @@ export default class WalletPaasportScreen extends React.Component {
       .map(({key}) => key)
     if (idCardFields.includes(field)) {
       return this.props.changeIdCardField(field, value)
-    } else if (['streetWithNumber', 'zip'].includes(field)) {
+    } else if (['streetWithNumber'].includes(field)) {
       this.props.setShowAddress(value.trim().length > 0)
     }
     return this.props.changePhysicalAddressField(field, value)
@@ -98,7 +98,7 @@ export default class WalletPaasportScreen extends React.Component {
     const group = 'address'
     return [
       {...streetWithNumber, key: 'streetWithNumber', label: 'Street', group},
-      {...zip, key: 'zip', label: 'Zip Code', group},
+      {...zip, key: 'zip', label: 'Zip', group},
       {...city, key: 'city', label: 'City', group},
       {...state, key: 'state', label: 'State', group},
       {...country, key: 'country', label: 'Country', group}

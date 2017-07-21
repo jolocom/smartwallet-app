@@ -99,7 +99,7 @@ const actions = module.exports = makeActions('wallet-login', {
     expectedParams: ['username, password'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState) => {
+      return (dispatch, getState, {services}) => {
         const state = getState().get('walletLogin').toJS()
         dispatch(actions.submitLogin.buildAction(params, (backend) => {
           return backend.wallet
@@ -107,7 +107,7 @@ const actions = module.exports = makeActions('wallet-login', {
               email: state.login.username,
               password: state.login.password
             })
-            .then(({seed}) => {
+            .then((seed) => {
               dispatch(actions.setPassphrase(seed))
               dispatch(router.pushRoute('/login/pin-entry'))
             })

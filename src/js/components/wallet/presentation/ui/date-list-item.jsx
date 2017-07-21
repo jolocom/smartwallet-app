@@ -41,7 +41,7 @@ let STYLES = {
     borderWidth: 'medium medium 1px'
   },
   icon: {
-    top: '16px'
+    top: '22px'
   },
   textField: {
     maxWidth: 'none',
@@ -49,6 +49,10 @@ let STYLES = {
   },
   item: {
     padding: '0 16px 0 54px'
+  },
+  floatingText: {
+    color: '#9BA0AA',
+    fontWeight: '500'
   }
 }
 
@@ -119,6 +123,7 @@ export default class DateListItem extends React.Component {
               underlineShow={!value}
               underlineDisabledStyle={styles.disabledUnderline}
               floatingLabelText={label}
+              floatingLabelStyle={STYLES.floatingText}
               onChange={onChange}
               errorText=""
               okLabel="OK"

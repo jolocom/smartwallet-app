@@ -50,6 +50,15 @@ const actions = module.exports = makeActions('wallet/money', {
         }))
       }
     }
+  },
+  goToWalletScreen: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(actions.goToWalletScreen.buildAction(params))
+        dispatch(router.pushRoute('/wallet/money'))
+      }
+    }
   }
 })
 
