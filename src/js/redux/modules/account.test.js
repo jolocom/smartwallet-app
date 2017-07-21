@@ -284,7 +284,7 @@ describe('Account module reducer', function() {
     })
   })
 
-  describe('doActivateEmail', function() {
+  describe('doActivateEmail', () => {
     it('should correctly handle e-mail activation', async () => {
       const thunk = account.doActivateEmail({
         username: 'user',
@@ -322,7 +322,7 @@ describe('Account module reducer', function() {
     })
 
     it('should handle errors correctly', async () => {
-      // const thunk = account.doSignup({
+      // const thunk = account.doActivateEmail({
       //   username: 'user',
       //   password: 'pass',
       //   name: 'the name',
@@ -331,22 +331,24 @@ describe('Account module reducer', function() {
       // const backend = {
       //   webId: {getWebId: () => 'http://person/profile/card'},
       //   accounts: {
-      //     register: stub().returns(
+      //     verifyEmail: stub().returns(
       //       Promise.reject({message: errorMessage})
       //     )
       //   }
       // }
       // const dispatch = stub()
       // await thunk(dispatch, null, {backend})
-      // const showMessageThunk = dispatch.calledWithArgs[0]
-
+      // const showMessageThunk = dispatch.calledWithArgs[0].promise
+      // console.warn('showMessageThunk == ', showMessageThunk())
+      //
       // const showMessageDispatch = stub()
       // showMessageThunk(showMessageDispatch)
       // const showMessageAction = showMessageDispatch.calledWithArgs[0]
+      // console.warn('showMessageAction === ', showMessageDispatch)
       // expect(showMessageAction)
-      //       .to.deep.equal(snackBar.showMessage.buildAction({
+      // .to.deep.equal(snackBar.showMessage.buildAction({
       //   id: showMessageAction.id,
-      //   message: expectedMessage
+      //   message: 'expectedMessage'
       // }))
     })
   })

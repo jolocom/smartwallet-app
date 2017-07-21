@@ -7,9 +7,9 @@ import {stub, withStubs} from '../../../../test/utils'
 const reducer = require('./registration').default
 const helpers = registration.helpers
 
-describe('Wallet registration Redux module', function() {
-  describe('goForward', function() {
-    describe('action', function() {
+describe('Wallet registration Redux module', () => {
+  describe('goForward', () => {
+    describe('action', () => {
       it('should dispatch the wallet registration action when complete', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
@@ -56,8 +56,8 @@ describe('Wallet registration Redux module', function() {
       })
     })
 
-    describe('_canGoForward()', function() {
-      it('should return true if there is nothing to check', function() {
+    describe('_canGoForward()', () => {
+      it('should return true if there is nothing to check', () => {
         expect(helpers._canGoForward(Immutable.fromJS({
           registration: {}
         }), '/registration/something')).to.equal(true)
@@ -97,7 +97,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('_getNextURL()', function() {
+  describe('_getNextURL()', () => {
     it('should return correct URL when choosing expert', () => {
       expect(helpers._getNextURL('/registration/user-type', 'expert'))
         .to.equal('/registration/write-phrase')
@@ -120,7 +120,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('_getNextURLFromState()', function() {
+  describe('_getNextURLFromState()', () => {
     it('should return null if we cannot continue', () => {
       expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
@@ -181,7 +181,7 @@ describe('Wallet registration Redux module', function() {
       )
     }
   )
-  describe('_isComplete()', function() {
+  describe('_isComplete()', () => {
     const test = ({invalid, result, userType = null}) => {
       invalid = new Immutable.Set(invalid)
       expect(helpers._isComplete(Immutable.fromJS({
@@ -230,7 +230,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('addEntropyFromDeltas', function() {
+  describe('addEntropyFromDeltas', () => {
     it('should not do anything when phrase is already generated', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -305,7 +305,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('submitPin', function() {
+  describe('submitPin', () => {
     it('should not do anything if the pin is not valid', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -350,7 +350,7 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
-  describe.only('checkUser', function() {
+  describe('checkUser', () => {
     it('should checkUsername on backend', () => {
       const getState = () => Immutable.fromJS({registration: {
         username: {value: 'ggdg'}
@@ -378,7 +378,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe.only('registerWallet', () => {
+  describe('registerWallet', () => {
     it('should register with seedphrase if expert', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -466,8 +466,8 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('reducer', function() {
-    describe('setUserType', function() {
+  describe('reducer', () => {
+    describe('setUserType', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -492,7 +492,7 @@ describe('Wallet registration Redux module', function() {
           .to.deep.equal({value: 'layman', valid: true})
       })
     })
-    describe('password', function() {
+    describe('password', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -642,7 +642,7 @@ describe('Wallet registration Redux module', function() {
           })
       })
     })
-    describe('setEntropyStatus', function() {
+    describe('setEntropyStatus', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -674,7 +674,7 @@ describe('Wallet registration Redux module', function() {
           })
       })
     })
-    describe('pin', function() {
+    describe('pin', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -726,7 +726,7 @@ describe('Wallet registration Redux module', function() {
           })
       })
     })
-    describe('setEmail', function() {
+    describe('setEmail', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -750,7 +750,7 @@ describe('Wallet registration Redux module', function() {
           .to.deep.equal({value: 'test@test.com', errorMsg: '', valid: true})
       })
     })
-    // describe('setPassphraseWrittenDown', function() {
+    // describe('setPassphraseWrittenDown', () => {
     //   it('should correctly initialize', () => {
     //     let state = reducer(undefined, '@@INIT')
 
@@ -758,7 +758,7 @@ describe('Wallet registration Redux module', function() {
     //       .to.deep.equal({value: '', valid: false})
     //   })
     // })
-    describe('registerWallet', function() {
+    describe('registerWallet', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
