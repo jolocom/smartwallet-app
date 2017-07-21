@@ -32,6 +32,9 @@ const STYLES = {
     fontWeight: '100',
     lineHeight: '30px',
     overflow: 'hidden'
+  },
+  avatar: {
+    marginBottom: '18px'
   }
 }
 
@@ -46,7 +49,7 @@ const Passphrase = (props) => {
       </IconButton>
       <Header
         image={<Avatar
-          style={{marginBottom: '8px'}}
+          style={STYLES.avatar}
           src="/img/img_techguy.svg"
           size={60} />}
         title={

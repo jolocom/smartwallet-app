@@ -9,11 +9,12 @@ import {Container, Header, Content, Block, Footer} from '../../structure'
 const STYLES = {
   password: {
     margin: '0px 30px 10px 30px',
-    backgroundColor: '#ffffff'
+    width: '250px'
   },
   passwordsContainer: {
     backgroundColor: '#ffffff',
-    maxWidth: '360px',
+    width: '100%',
+    height: '280px',
     position: 'relative'
   },
   strengthBarBlock: {
@@ -23,11 +24,12 @@ const STYLES = {
     marginRight: '30px',
     marginLeft: '30px',
     position: 'absolute',
-    top: 62,
+    top: 65,
     left: 0
   },
   explanation: [{
     marginTop: '20px',
+    marginLeft: '10px',
     color: theme.jolocom.gray1
   }, {
     marginTop: '20px',
@@ -51,6 +53,13 @@ const STYLES = {
   },
   underlineDisabled: {
     borderBottom: '0.2px solid'
+  },
+  passBlock: {
+    position: 'absolute',
+    top: '45%'
+  },
+  textHint: {
+    marginBottom: '10px'
   }
 }
 
@@ -119,6 +128,7 @@ function Password(props) {
               style={STYLES.password}
               floatingLabelText="Password"
               hintText={props.strength + ' password'}
+              textFieldStyle={STYLES.textHint}
               value={props.value}
               onChange={
                 e => props.onChangePassword(e.target.value)
@@ -129,17 +139,20 @@ function Password(props) {
             <StrengthBar
               strength={props.strength} value={props.value} />
           </Block>
-          <PasswordField
-            style={STYLES.password}
-            underlineDisabledStyle={STYLES.underlineDisabled}
-            floatingLabelText="Repeat Password"
-            disabled={props.repeatedValueState}
-            value={props.repeatedValue}
-            onChange={
-              e => props.onChangeRepeatedPassword(e.target.value)
-            }
-            errorText={props.passwordsMatchErrorMessage}
-          />
+          <Block style={STYLES.passBlock}>
+            <PasswordField
+              style={STYLES.password}
+              underlineDisabledStyle={STYLES.underlineDisabled}
+              floatingLabelText="Repeat Password"
+              disabled={props.repeatedValueState}
+              value={props.repeatedValue}
+              onChange={
+                e => props.onChangeRepeatedPassword(e.target.value)
+              }
+              errorText={props.passwordsMatchErrorMessage}
+              errorStyle={STYLES.errorStyle}
+            />
+          </Block>
         </Block>
         <Block
           style={STYLES.explanation[props.repeatedValueState ? 0 : 1]}

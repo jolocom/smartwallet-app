@@ -15,7 +15,10 @@ const STYLES = {
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     position: 'relative',
-    padding: 0
+    padding: 0,
+    '@media screen and (min-width: 768px)': {
+      padding: '0'
+    }
   },
   header: {
     position: 'absolute',
@@ -35,7 +38,7 @@ const STYLES = {
   subtitle: {
     color: '#fff',
     fontSize: theme.textStyles.screenHeader.fontSize,
-    fontWeight: theme.textStyles.screenHeader.fontWeight,
+    fontWeight: theme.textStyles.headline.fontWeight,
     margin: 0
   },
   img: {
