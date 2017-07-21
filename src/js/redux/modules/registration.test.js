@@ -317,23 +317,6 @@ describe('Wallet registration Redux module', () => {
 
       expect(dispatch.calls).to.deep.equal([])
     })
-
-    it('should confirm when the pin is valid', () => {
-      // const dispatch = stub()
-      // const getState = () => Immutable.fromJS({registration: {
-      //   pin: {valid: true, confirm: false}
-      // }})
-      //
-      // withStubs([
-      //     [registration.actions, 'setPinConfirm', {returns: 'confirm'}]],
-      //     () => {
-      //       const thunk = registration.submitPin()
-      //       thunk(dispatch, getState)
-      //       expect(dispatch.calls).to.deep.equal([{args: ['confirm']}])
-      //     }
-      // )
-    })
-
     it('should go forward if the pin is valid and confirmed', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -459,7 +442,7 @@ describe('Wallet registration Redux module', () => {
               userName: 'usr',
               email: 'test@test.com',
               password: 'abdcd',
-              passphrase: 'bla bla bla',
+              seedPhrase: 'bla bla bla',
               pin: '1234'
             }]}])
         }
