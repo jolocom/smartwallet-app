@@ -192,18 +192,41 @@ const actions = module.exports = makeActions('registration', {
             dispatch(router.pushRoute('/wallet'))
             return
           } else {
-            return services.auth.registerWithCredentials({
+            console.log('layman registration')
+            // return true
+            // return services.auth.registerWithCredentials({
+            //   userName: state.username.value,
+            //   email: state.email.value,
+            //   password: state.password.value,
+            //   pin: state.pin.value
+            // })
+            const { wallet } = await services.auth.registerWithCredentials({
               userName: state.username.value,
               email: state.email.value,
               password: state.password.value,
-              pin: state.pin.value
-            }).then(({wallet}) => {
-              return backend.accounts.solidRegister(state.username.value,
-                state.passphrase.phrase, wallet.webIDPrivateKey)
-            }).then(({webid}) => {
-              dispatch(router.pushRoute('/wallet'))
-              return
+              pin: state.pin.value,
+              seedPhrase: state.passphrase.phrase
             })
+
+            await backend.accounts.solidRegister(
+              state.username.value,
+              state.passphrase.phrase,
+              wallet.webIDPrivateKey
+            )
+
+            await backend.accounts.solidLogin(
+              state.username.value,
+              state.passphrase.phrase,
+              wallet.webIDPrivateKey
+            )
+
+            await backend.solid.setIdentityContractAddress(
+              wallet.webId,
+              wallet.identityAddress
+            )
+
+            dispatch(router.pushRoute('/wallet'))
+            return
           }
         })
       )

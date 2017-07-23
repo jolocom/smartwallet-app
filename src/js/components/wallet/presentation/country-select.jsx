@@ -1,53 +1,28 @@
 import React from 'react'
 import Radium from 'radium'
-import {TextField, AppBar} from 'material-ui'
+import {AppBar, ListItem} from 'material-ui'
+import Avatar from 'material-ui/Avatar'
+
 import {ActionSearch, NavigationArrowBack} from 'material-ui/svg-icons'
 
 import {theme} from 'styles'
+import {EditListItem} from './ui'
 
 const STYLES = {
-  container: {
-    textColor: theme.palette.textColor,
-    backgroundColor: theme.jolocom.gray3,
-    width: '100%'
-  },
-  floatingLabelSearchField: {
-    color: theme.palette.textColor
-  },
-  leftIcon: {
-    width: '5%',
-    paddingLeft: '2%'
-  },
-  searchField: {
-    width: '70%',
-    paddingLeft: '10%',
-    marginBottom: '16px'
-  },
-  searchFieldUnderline: {
-    color: theme.palette.textColor
-  },
-  rightIcon: {
-    width: '5%',
-    paddingRight: '2%'
-  },
-  firstLetter: {
-    width: '10%'
-  },
-  firstLetterText: {
-    textAlign: 'center',
-    color: theme.palette.primary1Color
-  },
   countryName: {
     maxWidth: '95%'
   },
   countryField: {
     width: '100%'
   },
-  headerAppbar: {
-    fontSize: theme.textStyles.headline.fontSize,
-    fontWeight: '400',
-    color: theme.textStyles.sectionheader.textColor,
-    padding: '25px 5px 15px 50px'
+  appbar: {
+    position: 'fixed'
+  },
+  navigation: {
+    padding: '10px'
+  },
+  listview: {
+    paddingTop: '60px'
   }
 }
 
@@ -69,36 +44,39 @@ export default class CountrySelectPresentation extends React.Component {
       (countryIndex === 0 ||
        (countryLabel[0] !== countries[countryIndex - 1][0]))
         ? countryLabel[0] : ''
-
     return (<div>
-      <AppBar
-        title="Country"
-        iconElementLeft={
-          <NavigationArrowBack style={{padding: '10px'}} onClick={cancel} />
-          } />
-      <TextField
-        style={STYLES.searchField}
-        floatingLabelText={<ActionSearch style={STYLES.rightIcon} />}
-        underlineStyle={STYLES.searchFieldUnderline}
-        floatingLabelStyle={STYLES.floatingLabelSearchField}
-        onChange={e => change(e.target.value)}
-        value={value} />
-        {countries.map((countryLabel, idx) => (<div
-          key={countryLabel}
-          style={STYLES.countryField}
-          onClick={() => submit(countryLabel)} >
-          <TextField
-            underlineShow={false}
-            id={`${countryLabel}_first_letter`}
-            inputStyle={STYLES.firstLetterText}
-            value={getFirstCountryLetter(countryLabel, idx)}
-            style={STYLES.firstLetter} />
-          <TextField
-            id={`${countryLabel}_country`}
-            underlineShow={false}
-            style={STYLES.countryName} value={countryLabel} />
-        </div>))}
-
+      <div>
+        <AppBar
+          style={STYLES.appbar}
+          title="Country"
+          iconElementLeft={
+            <NavigationArrowBack style={STYLES.navigation}
+              onClick={cancel} />} />
+      </div>
+      <div style={STYLES.listview}>
+        <EditListItem
+          icon={ActionSearch}
+          enableEdit
+          label={' search'}
+          onChange={e => change(e.target.value)}
+          value={value} />
+          {countries.map((countryLabel, idx) => (
+            <div
+              key={countryLabel}
+              style={STYLES.countryField}
+              onClick={() => submit(countryLabel)} >
+              <ListItem
+                leftAvatar={<Avatar
+                  color={theme.palette.primary1Color} backgroundColor={'none'}
+                  style={{left: 8}}
+                  >
+                  {getFirstCountryLetter(countryLabel, idx)}
+                </Avatar>}
+                id={`${countryLabel}_country`}
+                primaryText={countryLabel} />
+            </div>
+        ))}
+      </div>
     </div>)
   }
 }

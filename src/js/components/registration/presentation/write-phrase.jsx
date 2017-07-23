@@ -21,7 +21,7 @@ const STYLES = {
   },
   phrase: {
     color: theme.textStyles.sectionheader.color,
-    fontWeight: theme.textStyles.sectionheader.fontWeight,
+    fontWeight: '100',
     fontSize: theme.textStyles.sectionheader.fontSize,
     backgroundColor: '#fff'
   },
@@ -51,7 +51,6 @@ const STYLES = {
     fontWeight: theme.textStyles.textCopy.fontWeight,
     display: 'inline-block',
     position: 'relative',
-    lineHeight: '1.2em',
     textAlign: 'left'
   },
   nextStep: {
@@ -59,6 +58,9 @@ const STYLES = {
   },
   embeddedLink: {
     color: theme.palette.accent1Color
+  },
+  avatar: {
+    marginBottom: '18px'
   }
 }
 
@@ -68,7 +70,7 @@ const WritePhrase = (props) => {
       <Block>
         <Header image={
           <Avatar
-            style={{marginBottom: '8px'}}
+            style={STYLES.avatar}
             src="/img/img_techguy.svg"
             size={60} />}
           title="Your secure phrase" />
