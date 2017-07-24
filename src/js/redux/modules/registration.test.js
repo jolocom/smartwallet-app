@@ -7,9 +7,9 @@ import {stub, withStubs} from '../../../../test/utils'
 const reducer = require('./registration').default
 const helpers = registration.helpers
 
-describe('Wallet registration Redux module', function() {
-  describe('goForward', function() {
-    describe('action', function() {
+describe('Wallet registration Redux module', () => {
+  describe('goForward', () => {
+    describe('action', () => {
       it('should dispatch the wallet registration action when complete', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
@@ -56,8 +56,8 @@ describe('Wallet registration Redux module', function() {
       })
     })
 
-    describe('_canGoForward()', function() {
-      it('should return true if there is nothing to check', function() {
+    describe('_canGoForward()', () => {
+      it('should return true if there is nothing to check', () => {
         expect(helpers._canGoForward(Immutable.fromJS({
           registration: {}
         }), '/registration/something')).to.equal(true)
@@ -97,7 +97,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('_getNextURL()', function() {
+  describe('_getNextURL()', () => {
     it('should return correct URL when choosing expert', () => {
       expect(helpers._getNextURL('/registration/user-type', 'expert'))
         .to.equal('/registration/write-phrase')
@@ -120,7 +120,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('_getNextURLFromState()', function() {
+  describe('_getNextURLFromState()', () => {
     it('should return null if we cannot continue', () => {
       expect(helpers._getNextURLFromState(new Immutable.Map({
         routing: {
@@ -181,7 +181,7 @@ describe('Wallet registration Redux module', function() {
       )
     }
   )
-  describe('_isComplete()', function() {
+  describe('_isComplete()', () => {
     const test = ({invalid, result, userType = null}) => {
       invalid = new Immutable.Set(invalid)
       expect(helpers._isComplete(Immutable.fromJS({
@@ -230,7 +230,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('addEntropyFromDeltas', function() {
+  describe('addEntropyFromDeltas', () => {
     it('should not do anything when phrase is already generated', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -305,7 +305,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  describe('submitPin', function() {
+  describe('submitPin', () => {
     it('should not do anything if the pin is not valid', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -317,23 +317,6 @@ describe('Wallet registration Redux module', function() {
 
       expect(dispatch.calls).to.deep.equal([])
     })
-
-    it('should confirm when the pin is valid', () => {
-      // const dispatch = stub()
-      // const getState = () => Immutable.fromJS({registration: {
-      //   pin: {valid: true, confirm: false}
-      // }})
-      //
-      // withStubs([
-      //     [registration.actions, 'setPinConfirm', {returns: 'confirm'}]],
-      //     () => {
-      //       const thunk = registration.submitPin()
-      //       thunk(dispatch, getState)
-      //       expect(dispatch.calls).to.deep.equal([{args: ['confirm']}])
-      //     }
-      // )
-    })
-
     it('should go forward if the pin is valid and confirmed', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -350,7 +333,7 @@ describe('Wallet registration Redux module', function() {
       )
     })
   })
-  describe('checkUser', function() {
+  describe('checkUser', () => {
     it('should checkUsername on backend', () => {
       const getState = () => Immutable.fromJS({registration: {
         username: {value: 'ggdg'}
@@ -378,8 +361,7 @@ describe('Wallet registration Redux module', function() {
     })
   })
 
-  /*
-  describe('registerWallet', function() {
+  describe('registerWallet', () => {
     it('should register with seedphrase if expert', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -390,25 +372,35 @@ describe('Wallet registration Redux module', function() {
         email: {value: 'test@test.com'},
         password: {value: 'abdcd'}
       }})
-      const backend = {wallet: {
-        registerWithSeedPhrase: stub().returnsAsync('regSeed'),
-        registerWithCredentials: stub().returnsAsync('regCreds')
-      }}
-
+      const services = {
+        auth: {
+          registerWithSeedPhrase: stub().returnsAsync('regSeed'),
+          registerWithCredentials: stub().returnsAsync('regCreds')
+        }
+      }
+      const backend = {
+        accounts: {
+          solidRegister: stub(),
+          solidLogin: stub()
+        },
+        solid: {
+          setIdentityContractAddress: stub()
+        }
+      }
       withStubs([
         [registration.actions, 'goForward', {returns: 'forward'}],
         [registration.actions.registerWallet, 'buildAction',
           {returns: 'action'}]],
         () => {
           const thunk = registration.registerWallet()
-          thunk(dispatch, getState)
+          thunk(dispatch, getState, {services, backend})
           expect(dispatch.calledWithArgs[0]).to.equal('action')
           const registerAction = registration.actions.registerWallet
           const promise = registerAction.buildAction.calledWithArgs[1]
-          expect(promise(backend))
-            .to.eventually
-            .equal('regSeed')
-          expect(backend.wallet.registerWithSeedPhrase.calls)
+          expect(promise(services.auth.registerWithSeedPhrase))
+            .to.eventually.equal('regSeed')
+          expect(services.auth.registerWithSeedPhrase.called).to.be.true
+          expect(services.auth.registerWithSeedPhrase.calls)
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
               userName: 'usr',
@@ -417,7 +409,6 @@ describe('Wallet registration Redux module', function() {
         }
       )
     })
-
     it('should register with credentials if layman', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
@@ -428,7 +419,7 @@ describe('Wallet registration Redux module', function() {
         email: {value: 'test@test.com'},
         password: {value: 'abdcd'}
       }})
-      const backend = {wallet: {
+      const services = {auth: {
         registerWithSeedPhrase: stub().returnsAsync('regSeed'),
         registerWithCredentials: stub().returnsAsync('regCreds')
       }}
@@ -439,26 +430,28 @@ describe('Wallet registration Redux module', function() {
           {returns: 'action'}]],
         () => {
           const thunk = registration.registerWallet()
-          thunk(dispatch, getState)
+          thunk(dispatch, getState, {backend: {}, services})
           expect(dispatch.calledWithArgs[0]).to.equal('action')
           const registerAction = registration.actions.registerWallet
           const promise = registerAction.buildAction.calledWithArgs[1]
-          expect(promise(backend)).to.eventually.equal('regCreds')
-          expect(backend.wallet.registerWithCredentials.calls)
+          expect(promise(services.auth.registerWithCredentials))
+            .to.eventually.equal('regCreds')
+          expect(services.auth.registerWithCredentials.called).to.be.true
+          expect(services.auth.registerWithCredentials.calls)
             .to.deep.equal([{args: [{
               userName: 'usr',
               email: 'test@test.com',
               password: 'abdcd',
+              seedPhrase: 'bla bla bla',
               pin: '1234'
             }]}])
         }
       )
     })
   })
-  */
 
-  describe('reducer', function() {
-    describe('setUserType', function() {
+  describe('reducer', () => {
+    describe('setUserType', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -483,7 +476,7 @@ describe('Wallet registration Redux module', function() {
           .to.deep.equal({value: 'layman', valid: true})
       })
     })
-    describe('password', function() {
+    describe('password', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -633,7 +626,7 @@ describe('Wallet registration Redux module', function() {
           })
       })
     })
-    describe('setEntropyStatus', function() {
+    describe('setEntropyStatus', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -665,7 +658,7 @@ describe('Wallet registration Redux module', function() {
           })
       })
     })
-    describe('pin', function() {
+    describe('pin', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -717,7 +710,7 @@ describe('Wallet registration Redux module', function() {
           })
       })
     })
-    describe('setEmail', function() {
+    describe('setEmail', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 
@@ -741,7 +734,7 @@ describe('Wallet registration Redux module', function() {
           .to.deep.equal({value: 'test@test.com', errorMsg: '', valid: true})
       })
     })
-    // describe('setPassphraseWrittenDown', function() {
+    // describe('setPassphraseWrittenDown', () => {
     //   it('should correctly initialize', () => {
     //     let state = reducer(undefined, '@@INIT')
 
@@ -749,7 +742,7 @@ describe('Wallet registration Redux module', function() {
     //       .to.deep.equal({value: '', valid: false})
     //   })
     // })
-    describe('registerWallet', function() {
+    describe('registerWallet', () => {
       it('should correctly initialize', () => {
         let state = reducer(undefined, '@@INIT')
 

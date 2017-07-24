@@ -79,14 +79,10 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getIdentityInformation.buildAction(params, () => {
-          return backend.solid.getUserInformation(new WebIdAgent().getWebId())
-        })).then((result) => {
-          if (result.idCards.length) {
-            dispatch(actions.getIdCardVerifications())
-          }
-          return result
-        })
+        dispatch(actions.getIdentityInformation.buildAction(params, () =>
+          backend.solid.getUserInformation(new WebIdAgent().getWebId())
+        ))
+        dispatch(actions.getIdCardVerifications())
       }
     }
   }
