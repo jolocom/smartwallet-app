@@ -6,7 +6,6 @@ import {Divider, FlatButton, RaisedButton,
 import Avatar from 'material-ui/Avatar'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
-import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
 import Location from 'material-ui/svg-icons/maps/place'
 
 import {Content, Block} from '../../structure'
@@ -52,25 +51,22 @@ export default class AccessRequest extends React.Component {
   static propTypes = {
     entity: React.PropTypes.object,
     accessInfo: React.PropTypes.func.isRequired,
-    goToAccessConfirmation: React.PropTypes.func.isRequired
+    goToAccessConfirmation: React.PropTypes.func.isRequired,
+    identity: React.PropTypes.object
   }
 
   getIcon(field) {
-    if (field === 'phones') {
+    if (field === 'phone') {
       return CommunicationCall
-    } else if (field === 'emails') {
+    } else if (field === 'email') {
       return CommunicationEmail
-    } else if (field === 'passports') {
+    } else if (field === 'passport') {
       return ({avatar: 'img/ic_passport.svg'})
     } else if (field === 'address') {
       return Location
     } else if (field === 'idcard') {
       return ({avatar: 'img/ic_idcard.svg'})
     }
-  }
-
-  renderRequiredData = (fields) => {
-
   }
 
   render() {
@@ -80,25 +76,45 @@ export default class AccessRequest extends React.Component {
       title: 'Why do I have to grant access?',
       body: `You are about to connect to the service of ${name}. In order` +
         'to use this service they need some data of you, which is' +
-        'stored on the blockchain. You can revoke the data from' +
-        'this service anytime due to the general data protection regultation.'
+        'stored on the blockchain. You can always disconnect from' +
+        'the service through the jolocom app and this way delete your account.'
     }
     let headerMessage = `${name} wants to have access to your data?`
-    const accessMessage = (
-      <div>
-        <div style={STYLES.accessMsgHeader}>No worries</div><br />
-        <div style={STYLES.accessMsgBody}>Even if you grant access
-        to this data now, you can revoke it any time and the service
-        will forget everything they know about you.</div><br />
-      </div>
-    )
-    const fields = ['phones', 'emails', 'passports', 'idcard']
+    // const accessMessage = (
+    //   <div>
+    //     <div style={STYLES.accessMsgHeader}>No worries</div><br />
+    //     <div style={STYLES.accessMsgBody}>Even if you grant access
+    //     to this data now, you can revoke it any time and the service
+    //     will forget everything they know about you.</div><br />
+    //   </div>
+    // )
+    const fields = ['phone', 'email', 'passport']
     const content = fields.map((field) => {
+      let verified, textValue
+      if (identity.contact[field + 's'] && field === 'phone') {
+        verified = identity.contact[field + 's'][0].verified
+        textValue = identity.contact[field + 's'][0].number
+      } else if (identity.contact[field + 's'] && field === 'email') {
+        verified = identity.contact[field + 's'][0].verified
+        textValue = identity.contact[field + 's'][0].address
+      } else if (identity[field] && field === 'passport') {
+        verified = identity[field + 's'][0].verified
+        textValue = identity[field + 's'][0].number
+      } else {
+        // the error case
+        return (
+          <StaticListItem
+            key={field}
+            textValue={field + ' requested but not found in your profile'}
+            textLabel={'oopps'}
+            icon={this.getIcon(field)} />
+        )
+      }
       return (
         <StaticListItem
           key={field}
-          verified={true}
-          textValue={field}
+          verified={verified}
+          textValue={textValue}
           textLabel={field}
           icon={this.getIcon(field)}
           secondaryTextValue={''} />
@@ -135,11 +151,10 @@ export default class AccessRequest extends React.Component {
               </List>
             </Block>
             <Block style={STYLES.accessContainer}>
-              {accessMessage}
               <RaisedButton
                 label="GIVE ACCESS"
                 secondary
-                style={{width: '90%'}}
+                style={{width: '100%'}}
                 onClick={() => this.props.goToAccessConfirmation()} />
             </Block>
           </Content>
