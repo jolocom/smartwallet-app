@@ -44,8 +44,10 @@ const STYLES = {
     marginLeft: '-24px'
   },
   ethIcon: {
-    width: '24px',
-    color: theme.palette.textColor
+    display: 'inline'
+  },
+  ethSvg: {
+    width: '24px'
   },
   currRate: {
     paddingLeft: '72px',
@@ -68,63 +70,73 @@ const STYLES = {
   }
 
 }
-const PlusSubMenu = (props) => (<div style={{...STYLES.root, ...props.style}}>
-  <List>
-    <div style={STYLES.item}>
-      <div style={STYLES.currIcon}>
-        <img src="/img/ic_ether.svg" style={STYLES.ethIcon} />
+const PlusSubMenu = (props) => {
+  return (<div style={{...STYLES.root, ...props.style}}>
+    <List>
+      <div style={STYLES.item}>
+        <div style={STYLES.currIcon}>
+          <div style={STYLES.ethIcon}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+              style={STYLES.ethSvg}>
+              <path style={props.ethSvg || {fill: '#fff'}}
+                d="M12 13.975l-4.826-2.704L12 2.489l4.823 8.782z" />
+              <path style={props.ethSvg || {fill: '#fff'}}
+                d="M12 21.51l-4.949-9.005L12 15.332l4.949-2.827z" />
+            </svg>
+          </div>
+        </div>
+        <div style={
+          props.overview ? {...STYLES.infoHeader, ...STYLES.overviewText}
+          : STYLES.infoHeader}>
+        {Number(props.amount).toLocaleString('de-DE', {
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4
+        })}
+        </div>
+        <div style={
+          props.overview ? {...STYLES.currency, ...STYLES.overviewText}
+          : STYLES.currency}>
+        {props.currency}
+        </div>
+        <Divider style={STYLES.divider} />
       </div>
+      {
+        props.overview
+        ? null
+        : <div style={STYLES.addBtn}>
+          <FloatingActionButton
+            mini
+            onClick={props.goToManagement}
+            containerElement="label"
+            style={STYLES.addBtn}
+            backgroundColor={'#fff'}
+            iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
+            <Wallet style={STYLES.iconWallet} />
+          </FloatingActionButton>
+        </div>
+      }
       <div style={
-        props.overview ? {...STYLES.infoHeader, ...STYLES.overviewText}
-        : STYLES.infoHeader}>
-      {Number(props.amount).toLocaleString('de-DE', {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4
-      })}
+        props.overview ? {...STYLES.currRate, ...STYLES.overviewText}
+        : STYLES.currRate}>
+        <p>= {(props.currencyPrice * props.amount).toLocaleString('de-DE', {
+          style: 'currency',
+          currency: 'EUR',
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4
+        })}
+        </p>
+        <p>1 ETH = {props.currencyPrice.toLocaleString('de-DE', {
+          style: 'currency',
+          currency: 'EUR',
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4
+        })}
+        </p>
       </div>
-      <div style={
-        props.overview ? {...STYLES.currency, ...STYLES.overviewText}
-        : STYLES.currency}>
-      {props.currency}
-      </div>
-      <Divider style={STYLES.divider} />
-    </div>
-    {
-      props.overview
-      ? null
-      : <div style={STYLES.addBtn}>
-        <FloatingActionButton
-          mini
-          onClick={props.goToManagement}
-          containerElement="label"
-          style={STYLES.addBtn}
-          backgroundColor={'#fff'}
-          iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
-          <Wallet style={STYLES.iconWallet} />
-        </FloatingActionButton>
-      </div>
-    }
-    <div style={
-      props.overview ? {...STYLES.currRate, ...STYLES.overviewText}
-      : STYLES.currRate}>
-      <p>= {(props.currencyPrice * props.amount).toLocaleString('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4
-      })}
-      </p>
-      <p>1 ETH = {props.currencyPrice.toLocaleString('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4
-      })}
-      </p>
-    </div>
-  </List>
+    </List>
   {props.children}
-</div>)
+  </div>)
+}
 
 PlusSubMenu.propTypes = {
   amount: React.PropTypes.number,
@@ -134,7 +146,8 @@ PlusSubMenu.propTypes = {
   style: React.PropTypes.object,
   goToManagement: React.PropTypes.func.isRequired,
   choice: React.PropTypes.bool,
-  overview: React.PropTypes.object
+  overview: React.PropTypes.object,
+  ethSvg: React.PropTypes.object
 }
 
 export default Radium(PlusSubMenu)
