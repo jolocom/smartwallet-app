@@ -72,6 +72,10 @@ export default class WalletIdCard extends React.Component {
     idCard: React.PropTypes.array
   }
 
+  // componentDidMount() {
+  //   console.log('componentDidMount')
+  // }
+
   renderField(field) {
     switch (field.key) {
       case 'birthCountry':
@@ -79,6 +83,8 @@ export default class WalletIdCard extends React.Component {
         return this.renderCountryField(field)
       case 'gender':
         return this.renderGenderField(field)
+      case 'streetWithNumber':
+        return this.renderStreetWithNumber(field)
       case 'zip':
         return this.renderCityAndZip(field)
       case 'city':
@@ -87,8 +93,6 @@ export default class WalletIdCard extends React.Component {
         return null // handled with birthDate
       case 'birthDate':
         return this.renderBirthDate(field)
-      case 'streetWithNumber':
-        return this.renderStreetWithNumber(field)
       case 'expirationDate':
         return this.renderDateField(field)
       default:
@@ -189,7 +193,8 @@ export default class WalletIdCard extends React.Component {
               this.props.change(city.key, '')
             }}
             enableDelete={city.value.length > 0}
-            focused={this.props.focusedGroup === group} />
+            focused={this.props.focusedGroup === group &&
+              this.props.focusedField === key} />
         </td>
         <td key="1">
           <EditListItem
