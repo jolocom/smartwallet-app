@@ -155,7 +155,7 @@ export default class EditListItem extends React.Component {
     if (this.props.types) {
       return (
         <div>
-          <span style={{borderBottom: 'none', color: '#fff'}}>.</span>
+          <span style={{borderBottom: 'none', color: '#fff'}}>..</span>
           <SelectField
             style={STYLES.type}
             name={`${this.props.name}_type`}

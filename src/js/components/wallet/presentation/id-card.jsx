@@ -7,7 +7,7 @@ import Camera from 'material-ui/svg-icons/image/camera-alt'
 import Location from 'material-ui/svg-icons/maps/place'
 import moment from 'moment'
 import {List, ListItem, SelectField, MenuItem,
-  FloatingActionButton, FlatButton} from 'material-ui'
+  FloatingActionButton} from 'material-ui'
 import {theme} from 'styles'
 
 import {
@@ -19,7 +19,7 @@ import {
   IconNumber,
   DateListItem
 } from './ui'
-import {Content, Block} from '../../structure'
+import {Content} from '../../structure'
 
 const STYLES = {
   verificationBlock: {
@@ -291,12 +291,13 @@ export default class WalletIdCard extends React.Component {
 
   render() {
     const icons = this.createIcons()
-    const {idCard, physicalAddress, showAddress, loaded, save, cancel,
-      showVerifierLocations} = this.props
+    const {idCard, physicalAddress, showAddress, loaded, save,
+      cancel} = this.props
 
     let address = physicalAddress[0]
-    if (showAddress) { address = physicalAddress }
-
+    if (showAddress) {
+      address = physicalAddress
+    }
     const fields = idCard.concat(address).map(
       (field, index) => this.renderField({...field, index, icon: icons[index]})
     )
@@ -311,6 +312,7 @@ export default class WalletIdCard extends React.Component {
         <EditHeader title="ID Card" />
         <List>
           <ListItem
+            disabled
             innerDivStyle={{padding: '0 16px 0 54px'}}
             leftIcon={<img src="/img/ic_idcard.svg" />}>
             <div style={STYLES.uploadContainer}>
@@ -321,17 +323,6 @@ export default class WalletIdCard extends React.Component {
                 Take a picture or upload one of your ID Cards
               </div>
             </div>
-            <Block style={STYLES.explanText}>
-              Request personal verification of
-              your ID Card by an
-              institution close to your location.
-            </Block>
-            <FlatButton
-              label="List Of Locations"
-              style={STYLES.flatBtn}
-              onClick={e => {
-                showVerifierLocations(this.verifierLocationsMsg())
-              }} />
           </ListItem>
         </List>
         <List>
@@ -339,21 +330,5 @@ export default class WalletIdCard extends React.Component {
         </List>
       </Content>
     </div>)
-  }
-
-  verifierLocationsMsg() {
-    return (
-      <div>
-        <div key="0" style={STYLES.verifierLocationsMsg}>
-          Verification Locations
-        </div><br />
-        <div key="1"> Deutsche Post </div>
-        <div key="2"> Französische Strasse 17 </div>
-        <div key="3"> <span>10295</span> Berlin </div><br />
-        <div key="4"> Deutsche Bank </div>
-        <div key="5"> Gendarmenmarkt 12 </div>
-        <div key="6"> <span>10486</span> Berlin </div><br />
-      </div>
-    )
   }
 }

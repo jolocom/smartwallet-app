@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
 
@@ -108,10 +109,14 @@ export default class WalletIdentity extends React.Component {
                 key={1}
                 disabled
                 rightIcon={<InfoDetails
-                  showDetails={details => showUserInfo(
+                  showDetails={message => showUserInfo(
                     null,
-                    details,
-                    'OK',
+                    message,
+                    (<CopyToClipboard text={webId}>
+                      <span>COPY WEBID</span>
+                    </CopyToClipboard>),
+                    () => {},
+                    'ALL RIGHT',
                     STYLES.simpleDialog
                   )}
                   webId={webId}

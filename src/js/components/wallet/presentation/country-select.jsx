@@ -46,7 +46,13 @@ export default class CountrySelectPresentation extends React.Component {
     submit: React.PropTypes.func,
     change: React.PropTypes.func,
     value: React.PropTypes.string,
-    cancel: React.PropTypes.func
+    cancel: React.PropTypes.func,
+    setFocused: React.PropTypes.func,
+    focusedGroup: React.PropTypes.string
+  }
+
+  componentWillMount() {
+    window.scrollTo(0, 0)
   }
 
   render() {
@@ -66,14 +72,16 @@ export default class CountrySelectPresentation extends React.Component {
               onClick={cancel} />} />
       </div>
       <div style={STYLES.listview}>
-      <div style={STYLES.stickySearchfield}>
-        <EditListItem
-          icon={ActionSearch}
-          enableEdit
-          label={' search your country'}
-          onChange={e => change(e.target.value)}
-          value={value} /></div>
-          <div style={STYLES.countryListPosition}>
+        <div style={STYLES.stickySearchfield}>
+          <EditListItem
+            onFocusChange={(field) => this.props.setFocused(field, 'country')}
+            focused={this.props.focusedGroup === 'country' && !!ActionSearch}
+            icon={ActionSearch}
+            enableEdit
+            label={' search your country'}
+            onChange={e => change(e.target.value)}
+            value={value} /></div>
+        <div style={STYLES.countryListPosition}>
           {countries.map((countryLabel, idx) => (
             <div
               key={countryLabel}
