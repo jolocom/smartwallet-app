@@ -23,7 +23,8 @@ import {
 const STYLES = {
   listItem: {
     whiteSpace: 'nowrap',
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 72px',
+    marginRight: '10px'
   },
   inputName: {
     color: theme.palette.textColor,
@@ -46,7 +47,9 @@ const STYLES = {
     marginTop: '10px'
   },
   container: {
-    marginLeft: '10px',
+    marginLeft: '10px'
+  },
+  innerContainer: {
     marginRight: '10px'
   }
 }
@@ -134,7 +137,7 @@ export default class WalletIdentity extends React.Component {
               choice={[...emails, ...phones].length > 0}
               goToManagement={goToContactManagement} />
           </Block>
-          <Block>
+          <Block style={STYLES.innerContainer}>
             <ContactList
               fields={phones}
               changePinValue={changePinValue}
@@ -162,7 +165,7 @@ export default class WalletIdentity extends React.Component {
               choice={passports.length > 0}
               goToManagement={goToPassportManagement} />
           </Block>
-          <Block>
+          <Block style={STYLES.innerContainer}>
             <PassportsList passports={passports} />
           </Block>
           <Block>
@@ -171,7 +174,7 @@ export default class WalletIdentity extends React.Component {
               choice={idCards.length > 0}
               goToManagement={goToPassportManagement} />
           </Block>
-          <Block>
+          <Block style={STYLES.innerContainer}>
             <IdCardsList
               idCards={idCards}
               requestIdCardVerification={requestIdCardVerification} />

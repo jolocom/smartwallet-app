@@ -254,7 +254,7 @@ export default class WalletContact extends React.Component {
                   label="Zip"
                   enableEdit
                   value={zip.value}
-                  widthTextField={{padding: '0 16px 0 4px'}}
+                  widthTextField={{padding: '0 0px 0 4px'}}
                   focused={false}
                   onFocusChange={(field) => onFocusChange(id)}
                   onChange={(e) =>

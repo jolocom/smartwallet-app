@@ -163,7 +163,11 @@ export default class WalletIdCard extends React.Component {
         underlineHide={!!value}
         onFocusChange={(field) => this.props.setFocused(field, group)}
         onChange={(e) => this.props.change(key, e.target.value)}
-        focused={this.props.focusedGroup === group} />
+        focused={this.props.focusedGroup === group}
+        enableDelete={value.length > 0}
+        onDelete={() => {
+          this.props.change(key, '')
+        }} />
     </div>)
   }
 
@@ -178,7 +182,7 @@ export default class WalletIdCard extends React.Component {
             label={city.label}
             enableEdit
             value={city.value}
-            underlineHide={!!value}
+            underlineHide={!!city.value}
             onFocusChange={(field) => this.props.setFocused(field, group)}
             onChange={(e) => this.props.change(city.key, e.target.value)}
             onDelete={() => {
@@ -189,7 +193,7 @@ export default class WalletIdCard extends React.Component {
         </td>
         <td key="1">
           <EditListItem
-            widthTextField={{padding: '0 16px 0 4px'}}
+            widthTextField={{padding: '0 0px 0 4px'}}
             id={zip.key}
             label={zip.label}
             underlineHide={!!zip.value}
@@ -200,7 +204,6 @@ export default class WalletIdCard extends React.Component {
             enableDelete={!!zip.value || !!value}
             onDelete={() => {
               this.props.change(zip.key, '')
-              this.props.change(key, '')
             }} />
         </td>
       </tr>
@@ -225,17 +228,16 @@ export default class WalletIdCard extends React.Component {
         </td>
         <td key="1">
           <EditListItem
-            widthTextField={{padding: '0 16px 0 4px'}}
+            widthTextField={{padding: '0 0px 0 4px'}}
             id={birthPlace.key}
             label={birthPlace.label}
             enableEdit
             value={birthPlace.value}
-            underlineHide={!!value}
+            underlineHide={!!birthPlace.value}
             onFocusChange={(field) => this.props.setFocused(field, birthPlace.group)} // eslint-disable-line
             onChange={(e) => this.props.change(birthPlace.key, e.target.value)}
             onDelete={() => {
               this.props.change(birthPlace.key, '')
-              this.props.change(key, '')
             }}
             enableDelete={!!birthPlace.value || !!value} />
         </td>

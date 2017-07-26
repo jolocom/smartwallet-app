@@ -23,6 +23,18 @@ const STYLES = {
   },
   listview: {
     paddingTop: '60px'
+  },
+  countryListPosition: {
+    marginTop: '60px'
+  },
+  stickySearchfield: {
+    position: 'fixed',
+    zIndex: '100',
+    backgroundColor: 'white',
+    width: '100%'
+  },
+  countryInnerStyle: {
+    paddingLeft: '54px'
   }
 }
 
@@ -48,24 +60,27 @@ export default class CountrySelectPresentation extends React.Component {
       <div>
         <AppBar
           style={STYLES.appbar}
-          title="Country"
+          title="Country Selection"
           iconElementLeft={
             <NavigationArrowBack style={STYLES.navigation}
               onClick={cancel} />} />
       </div>
       <div style={STYLES.listview}>
+      <div style={STYLES.stickySearchfield}>
         <EditListItem
           icon={ActionSearch}
           enableEdit
-          label={' search'}
+          label={' search your country'}
           onChange={e => change(e.target.value)}
-          value={value} />
+          value={value} /></div>
+          <div style={STYLES.countryListPosition}>
           {countries.map((countryLabel, idx) => (
             <div
               key={countryLabel}
               style={STYLES.countryField}
               onClick={() => submit(countryLabel)} >
               <ListItem
+                innerDivStyle={STYLES.countryInnerStyle}
                 leftAvatar={<Avatar
                   color={theme.palette.primary1Color} backgroundColor={'none'}
                   style={{left: 8}}
@@ -75,7 +90,7 @@ export default class CountrySelectPresentation extends React.Component {
                 id={`${countryLabel}_country`}
                 primaryText={countryLabel} />
             </div>
-        ))}
+        ))}</div>
       </div>
     </div>)
   }

@@ -102,14 +102,14 @@ export default class WalletEther extends React.Component {
     } else if (true && this.props.ether.ether.amount > 0) {
       content = this.renderHasEther()
     } else if (!this.props.ether.ether.amount) {
-      content = this.renderNoEther()
+      content = this.renderHasEther()
     }
 
     return (<TabContainer>
       <AppBar
         title="Ethereum Wallet"
         iconElementLeft={
-          <NavigationArrowBack style={{margin: '50%'}}
+          <NavigationArrowBack style={{padding: '10px'}}
             onClick={this.props.goToWalletScreen} />
         } />
       <HalfScreenContainer>
