@@ -21,7 +21,7 @@ let STYLES = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: '32px',
+    marginRight: '0',
     '@media (maxWidth: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
@@ -35,10 +35,12 @@ let STYLES = {
     cursor: 'inherit'
   },
   type: {
+    height: '50.2px',
     maxWidth: '120px',
     '@media (minWidth: 321px)': {
       margin: '0 16px'
-    }
+    },
+    top: '8px'
   },
   disabledUnderline: {
     borderBottom: 'solid',
@@ -53,7 +55,7 @@ let STYLES = {
     width: '100%'
   },
   item: {
-    padding: '0 16px 0 54px'
+    padding: '0 0 0 54px'
   }
 }
 
@@ -152,17 +154,20 @@ export default class EditListItem extends React.Component {
   renderType() {
     if (this.props.types) {
       return (
-        <SelectField
-          style={STYLES.type}
-          name={`${this.props.name}_type`}
-          value={this.props.type}
-          disabled={this.props.verified}
-          onChange={(event, key, payload) => this.props.onTypeChange(payload)}
-        >
-        {this.props.types.map((type, i) => {
-          return <MenuItem key={i} value={type} primaryText={type} />
-        })}
-        </SelectField>
+        <div>
+          <span style={{borderBottom: 'none', color: '#fff'}}>..</span>
+          <SelectField
+            style={STYLES.type}
+            name={`${this.props.name}_type`}
+            value={this.props.type}
+            disabled={this.props.verified}
+            onChange={(event, key, payload) => this.props.onTypeChange(payload)}
+          >
+          {this.props.types.map((type, i) => {
+            return <MenuItem key={i} value={type} primaryText={type} />
+          })}
+          </SelectField>
+        </div>
       )
     }
     return null
