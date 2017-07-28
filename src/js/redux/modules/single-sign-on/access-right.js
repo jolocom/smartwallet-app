@@ -7,70 +7,86 @@ const actions = module.exports = makeActions('single-sign-on/access-right', {
     expectedParams: ['index'],
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(router.pushRoute('/service/detail'))
+        dispatch(actions.showSharedData.buildAction(params))
+        dispatch(router.pushRoute('/single-sign-on/shared-data'))
+      }
+    }
+  },
+  goToAccessRightScreen: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(router.pushRoute('single-sign-on/access-right'))
       }
     }
   },
   deleteService: {
-    expectedParams: ['index']
-  },
-  getServicesDetails: {
     async: true,
-    expectedParams: []
+    expectedParams: ['id'],
+    creator: (params) => {
+      return (dispatch, getState, {backend, services}) => {
+        dispatch(actions.deleteService.buildAction(params, () => {
+          return backend.solid.deleteService(params)
+        }))
+      }
+    }
+  },
+  retrieveConnectedServices: {
+    async: true,
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState, {backend, services}) => {
+        dispatch(actions.retrieveConnectedServices.buildAction(params, () =>
+          backend.solid.retrieveConnectedServices()
+        ))
+      }
+    }
   }
 })
 
 const initialState = Immutable.fromJS({
   loaded: false,
-  failed: false,
-  id: '',
-  showServiceDetails: '',
-  services: [
-    {
-      deleted: false,
-      label: 'label1',
-      id: '1',
-      iconUrl: '/img/img_nohustle.svg',
-      sharedData: [{
-        field: '',
-        value: '',
-        verified: false,
-        status: ''
-      }]
-    }, {
-      deleted: false,
-      label: 'label2',
-      id: '2',
-      iconUrl: '/img/img_nohustle.svg',
-      sharedData: [{
-        field: '',
-        value: '',
-        verified: false,
-        status: ''
-      }]
-    }, {
-      deleted: false,
-      id: '3',
-      label: 'label3',
-      iconUrl: '/img/img_nohustle.svg',
-      sharedData: [{
-        field: '',
-        value: '',
-        verified: false,
-        status: ''
-      }]
-    }
-  ]
+  failed: true,
+  serviceNumber: 0,
+  services: []
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.showSharedData.id:
-      return state
+      return state.mergeDeep({serviceNumber: action.index})
+
+    case actions.retrieveConnectedServices.id_success:
+      return state.mergeDeep(action.result).merge({
+        loaded: true,
+        failed: false
+      })
+
+    case actions.retrieveConnectedServices.id_fail:
+      return state.merge({
+        loaded: true,
+        failed: true
+      })
+
+    case actions.retrieveConnectedServices.id:
+      return state.merge({loaded: false, failed: false})
 
     case actions.deleteService.id:
-      return state.mergeIn(['services', action.index], {
-        deleted: true
+      return state.merge({
+        failed: false,
+        loaded: false
+      })
+
+    case actions.deleteService.id_success:
+      return state.merge({
+        failed: false,
+        loaded: true
+      })
+
+    case actions.deleteService.id_fail:
+      return state.merge({
+        loaded: true,
+        failed: true
       })
 
     default:
