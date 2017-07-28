@@ -18,11 +18,11 @@ export default combineReducers({
     identity: require('./modules/wallet/identity').default,
     country: require('./modules/wallet/country-select').default,
     money: require('./modules/wallet/money').default,
-    idCard: require('./modules/wallet/id-card').default,
-    accessRequest: require('./modules/wallet/access-request').default
+    idCard: require('./modules/wallet/id-card').default
   }),
   singleSignOn: combineReducers({
-    accessRight: require('./modules/single-sign-on/access-right').default
+    accessRight: require('./modules/single-sign-on/access-right').default,
+    accessRequest: require('./modules/single-sign-on/access-request').default
   }),
   verification: require('./modules/verification').default
 })

@@ -4,13 +4,13 @@ import Presentation from '../presentation/access-request'
 
 @connect({
   props: [
-    'wallet.accessRequest',
+    'singleSignOn.accessRequest',
     'wallet.identity'
   ],
   actions: [
     'simple-dialog:configSimpleDialog',
     'simple-dialog:showSimpleDialog',
-    'wallet/access-request:goToAccessConfirmation'
+    'single-sign-on/access-request:goToAccessConfirmation'
   ]
 })
 export default class AccessRequestScreen extends React.Component {
@@ -26,10 +26,14 @@ export default class AccessRequestScreen extends React.Component {
     this.props.showSimpleDialog()
   }
 
+  componentWillMount() {
+    console.log(this.props.location.query)
+  }
   render() {
-    // console.log(this.props)
+    // console.log(this.props.location.query)
     return (
       <Presentation
+        requestedFields={this.props.location.query['scope[]']}
         identity={this.props.identity}
         entity={this.props.accessRequest.entity}
         accessInfo={this.handleWhy}

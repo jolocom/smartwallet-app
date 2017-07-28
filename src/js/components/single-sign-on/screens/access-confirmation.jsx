@@ -3,7 +3,7 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/access-confirmation'
 
 @connect({
-  props: ['wallet.accessRequest']
+  props: ['singleSignOn.accessRequest']
 })
 export default class AccessConfirmationScreen extends React.Component {
   static propTypes = {

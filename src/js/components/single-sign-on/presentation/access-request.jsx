@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import queryString from 'query-string'
 
 import {Divider, FlatButton, RaisedButton,
   ListItem, AppBar, List} from 'material-ui'
@@ -9,7 +10,8 @@ import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Location from 'material-ui/svg-icons/maps/place'
 
 import {Content, Block} from '../../structure'
-import {TabContainer, HalfScreenContainer, StaticListItem} from './ui'
+import {TabContainer, HalfScreenContainer, StaticListItem}
+  from '../../wallet/presentation/ui'
 import {theme} from 'styles'
 
 const STYLES = {
@@ -88,7 +90,7 @@ export default class AccessRequest extends React.Component {
     //     will forget everything they know about you.</div><br />
     //   </div>
     // )
-    const fields = ['phone', 'email', 'passport']
+    const fields = this.props.requestedFields
     const content = fields.map((field) => {
       let verified, textValue
       if (identity.contact[field + 's'] && field === 'phone') {
@@ -101,7 +103,7 @@ export default class AccessRequest extends React.Component {
         verified = identity[field + 's'][0].verified
         textValue = identity[field + 's'][0].number
       } else {
-        // the error case
+        // the error case ??
         return (
           <StaticListItem
             key={field}
