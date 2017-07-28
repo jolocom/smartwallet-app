@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'redux/utils'
 import Presentation from '../presentation/identity'
-import WalletError from '../presentation/error'
+import WalletError from '../../common/error'
 
 @connect({
   props: ['wallet'],
