@@ -6,7 +6,7 @@ import SingleSignOnAccessRightScreen from './access-right'
 import Presentation from '../presentation/access-right'
 import {stub} from '../../../../../test/utils'
 
-describe.only('(Component) SingleSignOnAccessRightScreen', () => {
+describe('(Component) SingleSignOnAccessRightScreen', () => {
   it('should call retrieveConnectedServices to start', () => {
     const retrieveConnectedServices = stub()
     const wrapper = shallow((<SingleSignOnAccessRightScreen.WrappedComponent
