@@ -137,8 +137,7 @@ SharedDatePresentation.propTypes = {
   serviceName: React.PropTypes.string.isRequired,
   deleteService: React.PropTypes.string.isRequired,
   goToAccessRightScreen: React.PropTypes.func.isRequired,
-  showDeleteServiceWindow: React.PropTypes.func.isRequired,
-  showSharedData: React.PropTypes.func.isRequired
+  showDeleteServiceWindow: React.PropTypes.func.isRequired
 }
 
 export default Radium(SharedDatePresentation)

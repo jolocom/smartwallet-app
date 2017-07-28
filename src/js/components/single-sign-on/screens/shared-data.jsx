@@ -8,7 +8,6 @@ import ErrorScreen from '../../common/error'
   actions: [
     'single-sign-on/access-right:deleteService',
     'single-sign-on/access-right:goToAccessRightScreen',
-    'single-sign-on/access-right:showSharedData',
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog'
   ]
@@ -18,7 +17,6 @@ export default class SingleSignOnSharedDatatScreen extends React.Component {
     deleteService: React.PropTypes.func,
     goToAccessRightScreen: React.PropTypes.func,
     openConfirmDialog: React.PropTypes.func,
-    showSharedData: React.PropTypes.func,
     closeConfirmDialog: React.PropTypes.func,
     accessRight: React.PropTypes.object
   }
@@ -44,7 +42,6 @@ export default class SingleSignOnSharedDatatScreen extends React.Component {
             () => { this.props.deleteService(serviceNumber) }, leftButtonLabel,
             style)
         }}
-        showSharedData={this.props.showSharedData}
         goToAccessRightScreen={this.props.goToAccessRightScreen} />)
     }
     return <ErrorScreen
