@@ -8,7 +8,7 @@ describe('(Component) SubMenuIcon', () => {
       name=""
       style={{}}
       onClick={() => {}}
-      icon={<div/>} />),
+      icon={null} />),
       { context: { muiTheme: { } } }
     )
   })
