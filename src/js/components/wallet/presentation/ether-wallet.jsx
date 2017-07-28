@@ -1,8 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {NavigationArrowBack} from 'material-ui/svg-icons'
-import {AppBar} from 'material-ui'
+// import {NavigationArrowBack} from 'material-ui/svg-icons'
+// import {AppBar} from 'material-ui'
 import {Content, Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
 import Spinner from '../../common/spinner'
@@ -12,17 +12,14 @@ import {theme} from 'styles'
 import {
   TabContainer,
   HalfScreenContainer,
-  PlusSubMenu,
-  Bubbles
+  Bubbles,
+  EtherBalance
 } from './ui'
 
 const STYLES = {
   noEtherContainer: {
     padding: '24px',
     textAlign: 'center'
-  },
-  etherContainer: {
-    backgroundColor: theme.palette.textColor
   },
   header: {
     margin: '16px 0'
@@ -32,7 +29,7 @@ const STYLES = {
 @Radium
 export default class WalletEther extends React.Component {
   static propTypes = {
-    goToWalletScreen: React.PropTypes.func,
+    goToWalletScreen: React.PropTypes.func, // this can be deleted
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
     ether: React.PropTypes.object,
@@ -54,44 +51,46 @@ export default class WalletEther extends React.Component {
     )
   }
 
-  renderHasEther() {
-    return (
-      <div style={STYLES.etherContainer}>
-        <Block>
-          <PlusSubMenu
-            overview
-            amount={this.props.ether.ether.amount}
-            currency="eth"
-            currencyPrice={this.props.ether.ether.price}
-          />
-        </Block>
-      </div>
-    )
-  }
+  // renderHasEther() {
+  //   return (
+  //     <div style={STYLES.etherContainer}>
+  //       <Block>
+  //         <PlusSubMenu
+  //           overview
+  //           amount={this.props.ether.ether.amount}
+  //           currency="eth"
+  //           currencyPrice={this.props.ether.ether.price}
+  //         />
+  //       </Block>
+  //     </div>
+  //   )
+  // }
 
   renderNoEther() {
     return (
-      <div style={STYLES.noEtherContainer}>
-        <Block>
-          <Header
-            style={STYLES.header}
-            title="You don't have any Ether yet."
-          />
-          <SideNote>
-            'To store your information securely, it costs Ether. One
-             transaction (saving data) is at 30 cents. To use this app
-             correctly we suggest you to either buy some Ether here...'
-          </SideNote>
+      <HalfScreenContainer>
+        <div style={STYLES.noEtherContainer}>
           <Block>
-            <Bubbles ethBalance={'0.0215180852'} />
+            <Header
+              style={STYLES.header}
+              title="You don't have any Ether yet."
+            />
+            <SideNote>
+              'To store your information securely, it costs Ether. One
+               transaction (saving data) is at 30 cents. To use this app
+               correctly we suggest you to either buy some Ether here...'
+            </SideNote>
+            <Block>
+              <Bubbles ethBalance={'0.0215180852'} />
+            </Block>
           </Block>
-        </Block>
-        <Block>
-          <StripeCheckout onToken={token => {
-            this.props.onToken(token)
-          }} />
-        </Block>
-      </div>
+          <Block>
+            <StripeCheckout onToken={token => {
+              this.props.onToken(token)
+            }} />
+          </Block>
+        </div>
+      </HalfScreenContainer>
     )
   }
 
@@ -100,23 +99,19 @@ export default class WalletEther extends React.Component {
     if (this.props.ether.ether.buying) {
       content = this.renderLoading()
     } else if (true && this.props.ether.ether.amount > 0) {
-      content = this.renderHasEther()
+      content = (
+        <EtherBalance
+          amount={this.props.ether.ether.amount}
+          currency="eth"
+          currencyPrice={this.props.ether.ether.price} />
+      )
     } else if (!this.props.ether.ether.amount) {
       content = this.renderNoEther()
     }
 
-    return (<TabContainer>
-      <AppBar
-        title="Ethereum Wallet"
-        iconElementLeft={
-          <NavigationArrowBack style={{padding: '10px'}}
-            onClick={this.props.goToWalletScreen} />
-        } />
-      <HalfScreenContainer>
-        <Content>
-          {content}
-        </Content>
-      </HalfScreenContainer>
-    </TabContainer>)
+    return (
+      <TabContainer>
+        {content}
+      </TabContainer>)
   }
 }

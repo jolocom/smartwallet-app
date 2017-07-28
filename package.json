@@ -131,6 +131,7 @@
     "material-ui-password-field": "^1.1.1",
     "moment": "^2.10.6",
     "n3": "^0.4.3",
+    "qrcode.react": "^0.7.1",
     "querystring": "^0.2.0",
     "radium": "^0.18.1",
     "rdflib": "^0.15.0",

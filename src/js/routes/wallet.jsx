@@ -38,6 +38,10 @@ import CountrySelectScreen from 'components/wallet/screens/country-select'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
 
+import EtherSendScreen from 'components/wallet/screens/ether-send'
+import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
+import EtherTabScreen from 'components/wallet/screens/ether-tabs'
+
 import WalletLogin from 'components/wallet-login'
 import LaymanLoginScreen from 'components/wallet-login/screens/layman'
 import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
@@ -89,8 +93,13 @@ function getRoutes() {
       component={WalletIdCardScreen} />
     <Route path="wallet/identity/country-select"
       component={CountrySelectScreen} />
-    <Route path="wallet/ether"
-      component={WalletEtherScreen} />
+
+    <Route path="wallet/ether" component={EtherTabScreen}>
+      <Route path="send" component={EtherSendScreen} />
+      <IndexRoute component={WalletEtherScreen} />
+      <Route path="receive" component={EtherReceiveScreen} />
+    </Route>
+
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
       <Route path="identity"
@@ -117,3 +126,6 @@ function getRoutes() {
 export default (history) => {
   return (<Router history={history}>{getRoutes()}</Router>)
 }
+
+// <Route path="wallet/ether"
+//   component={WalletEtherScreen} />
