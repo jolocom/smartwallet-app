@@ -45,6 +45,8 @@ import LoginPinScreen from 'components/wallet-login/screens/pin'
 
 import SingleSignOnAccessRightScreen from
   'components/single-sign-on/screens/access-right'
+import SingleSignOnSharedDatatScreen from
+  'components/single-sign-on/screens/shared-data'
 
 export const routes = {
   login: '/login',
@@ -116,6 +118,8 @@ function getRoutes() {
     <Route path="verify-email" component={EmailConfirmationScreen} />
     <Route path="single-sign-on/access-right"
       component={SingleSignOnAccessRightScreen} />
+    <Route path="/single-sign-on/shared-data"
+      component={SingleSignOnSharedDatatScreen} />
   </Route>)
 }
 
