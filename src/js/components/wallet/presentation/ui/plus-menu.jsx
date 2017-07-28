@@ -15,7 +15,7 @@ const STYLES = {
   },
   addBtn: {
     position: 'absolute',
-    top: '11px',
+    top: '12.5px',
     right: '8px'
   },
   iconCreate: {
@@ -34,7 +34,7 @@ const STYLES = {
   },
   item: {
     alignItems: 'center',
-    paddingLeft: '16px',
+    padding: '0 0 0 54px',
     display: 'inline-block',
     verticalAlign: 'top',
     width: '100%',

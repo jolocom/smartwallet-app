@@ -12,6 +12,8 @@ describe('# Country Select redux module', () => {
     expect(state.toJS()).to.deep.equal({
       value: 'test',
       age: '',
+      focusedGroup: '',
+      focusedField: '',
       returnUrl: '',
       index: '',
       options: [],
