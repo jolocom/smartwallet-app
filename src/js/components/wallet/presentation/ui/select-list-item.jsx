@@ -20,7 +20,6 @@ let STYLES = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: '32px',
     '@media (maxWidth: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
@@ -49,7 +48,7 @@ let STYLES = {
     flex: 1
   },
   item: {
-    padding: '0 16px 0 54px',
+    padding: '0 0px 0 54px',
     textColor: 'red'
   }
 }

@@ -1,7 +1,6 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as login from './wallet-login'
-// import * as router from './router'
 import {stub} from '../../../../test/utils'
 const reducer = require('./wallet-login').default
 

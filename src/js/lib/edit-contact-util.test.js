@@ -1,8 +1,8 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
 import {stub} from '../../../test/utils'
-// mapAccountInformationToState,
 import {
+  mapAccountInformationToState,
   addNewField,
   updateOriginalValue,
   submitChanges,
@@ -13,63 +13,54 @@ import {
 describe('# Edit contact Util', () => {
   const webId = 'testuser'
   describe('# mapAccountInformationToState', () => {
-    // it('should map account information to state properly', () => {
-    //   const result = {
-    //     email: [
-    //       {address: 'test1@test.com', id: 1, verified: false},
-    //       {address: 'test2@test.com', id: 2, verified: true}],
-    //     phone: [
-    //       {number: '+123456789', id: 3, type: 'personal', verified: true}]
-    //   }
-    //   const state = {
-    //     loading: false,
-    //     showErrors: false,
-    //     information: {
-    //       originalInformation: {
-    //         emails: [{
-    //           value: 'test1@test.com', id: 1, verified: false,
-    //           delete: false, update: false, valid: true
-    //         }, {
-    //           value: 'test2@test.com', id: 2, verified: true, delete: false,
-    //           update: false, valid: true
-    //         }],
-    //         phones: [{
-    //           value: '+123456789',
-    //           type: 'personal', delete: false,
-    //           update: false, verified: true,
-    //           valid: true, id: 3
-    //         }]
-    //       },
-    //       newInformation: {
-    //         emails: [{
-    //           value: '',
-    //           delete: false,
-    //           blank: true,
-    //           valid: true
-    //         }],
-    //         phones: [{
-    //           value: '',
-    //           type: 'personal',
-    //           blank: true,
-    //           delete: false,
-    //           valid: true
-    //         }],
-    //         addresses: [{
-    //           streetWithNumber: {value: '', valid: true},
-    //           zip: {value: '', valid: true},
-    //           city: {value: '', valid: true},
-    //           state: {value: '', valid: true},
-    //           country: {value: '', valid: true},
-    //           delete: false,
-    //           blank: true,
-    //           valid: true
-    //         }]
-    //       }
-    //     }
-    //   }
-    //   expect(mapAccountInformationToState(result)
-    // .toJS()).to.deep.equal(state)
-    // })
+    it('should map account information to state properly', () => {
+      const result = {
+        email: [
+          {address: 'test1@test.com', id: 1, verified: false},
+          {address: 'test2@test.com', id: 2, verified: true}],
+        phone: [{
+          number: '+123456789', id: 3, type: 'personal', verified: true
+        }]
+      }
+      const state = {
+        loading: false,
+        showErrors: false,
+        information: {
+          originalInformation: {
+            emails: [{
+              value: 'test1@test.com', id: 1, verified: false,
+              delete: false, update: false, valid: true
+            }, {
+              value: 'test2@test.com', id: 2, verified: true, delete: false,
+              update: false, valid: true
+            }],
+            phones: [{
+              value: '+123456789',
+              type: 'personal', delete: false,
+              update: false, verified: true,
+              valid: true, id: 3
+            }],
+            addresses: []
+          },
+          newInformation: {
+            emails: [{delete: true}],
+            phones: [{delete: true}],
+            addresses: [ {
+              streetWithNumber: {value: '', valid: true},
+              zip: {value: '', valid: true},
+              city: {value: '', valid: true},
+              state: {value: '', valid: true},
+              country: {value: '', valid: true},
+              delete: false,
+              blank: true,
+              valid: true
+            }]
+          }
+        }
+      }
+      expect(mapAccountInformationToState(result)
+    .toJS()).to.deep.equal(state)
+    })
   })
   describe('# addNewField', () => {
     it('should add a new emails field', () => {

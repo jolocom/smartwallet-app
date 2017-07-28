@@ -105,8 +105,8 @@ export default class WalletIdentityScreen extends React.Component {
       }}
       onConfirm={(...args) => { this.onConfirm(...args) }}
       showUserInfo={(...args) => {
-        this.props.configSimpleDialog(...args)
-        this.props.showSimpleDialog()
+        this.props.openConfirmDialog(...args)
+        // this.props.showSimpleDialog()
       }} />)
   }
 
@@ -127,13 +127,13 @@ export default class WalletIdentityScreen extends React.Component {
 
   resendVerificationCode({attrType, attrValue, index}) {
     if (attrType === 'phone') {
-      return () => this.props.resendVerificationLink({phone: attrValue, index})
+      return () => this.props.resendVerificationSms({phone: attrValue, index})
     } else if (attrType === 'email') {
-      return () => this.props.resendVerificationSms({email: attrValue, index})
+      return () => this.props.resendVerificationLink({email: attrValue, index})
     }
   }
 
-  enterVerificationCode({attrType, attrValue = 'attrValue'}) {
+  enterVerificationCode({attrType, attrValue}) {
     if (attrType === 'phone') {
       return () => this.props.confirmPhone({phone: attrValue})
     } else if (attrType === 'email') {
