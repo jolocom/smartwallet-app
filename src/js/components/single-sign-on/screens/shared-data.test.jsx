@@ -7,7 +7,7 @@ import Presentation from '../presentation/shared-data'
 import ErrorScreen from '../../common/error'
 import {stub} from '../../../../../test/utils'
 
-describe.only('(Component) SingleSignOnSharedDatatScreen', () => {
+describe('(Component) SingleSignOnSharedDatatScreen', () => {
   it('should render properly when given the correct information', () => {
     const wrapper = shallow((<SingleSignOnSharedDatatScreen.WrappedComponent
       {...SingleSignOnSharedDatatScreen.mapStateToProps(Immutable.fromJS({
