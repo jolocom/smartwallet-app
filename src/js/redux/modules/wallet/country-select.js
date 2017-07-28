@@ -29,6 +29,9 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
       }
     }
   },
+  setFocusedField: {
+    expectedParams: ['field', 'group']
+  },
   clearState: {
     expectedParams: []
   },
@@ -92,6 +95,8 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
 const initialState = module.exports.initialState = Immutable.fromJS({
   type: '',
   value: '',
+  focusedGroup: '',
+  focusedField: '',
   age: '',
   returnUrl: '',
   index: '',
@@ -127,6 +132,12 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.clearState.id:
       return initialState
+
+    case actions.setFocusedField.id:
+      return state.merge({
+        focusedField: action.field,
+        focusedGroup: action.group
+      })
 
     default:
       return state

@@ -105,8 +105,8 @@ export default class WalletIdentityScreen extends React.Component {
       }}
       onConfirm={(...args) => { this.onConfirm(...args) }}
       showUserInfo={(...args) => {
-        this.props.configSimpleDialog(...args)
-        this.props.showSimpleDialog()
+        this.props.openConfirmDialog(...args)
+        // this.props.showSimpleDialog()
       }} />)
   }
 

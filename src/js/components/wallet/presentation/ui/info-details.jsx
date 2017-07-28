@@ -13,6 +13,11 @@ const STYLES = {
     right: '20px',
     marginTop: '40px'
   },
+  inputStyleName: {
+    textAlign: 'center',
+    color: theme.palette.textColor_silverGrey,
+    marginBottom: '-5px'
+  },
   inputStyle: {
     textAlign: 'center',
     marginBottom: '-5px'
@@ -21,10 +26,10 @@ const STYLES = {
     textAlign: 'center',
     width: '100%',
     transformOrigin: 'center top 0px',
-    color: theme.palette.lighterTextColor,
+    color: theme.palette.textColor_silverGrey,
     paddingTop: '5px',
     borderTop: '1px solid',
-    borderColor: theme.palette.lighterTextColor
+    borderColor: theme.palette.textColor_silverGrey
   }
 }
 
@@ -36,7 +41,7 @@ const InfoDetails = (props) => {
       value={username}
       errorText="is your username"
       errorStyle={STYLES.floatingLabel}
-      inputStyle={STYLES.inputStyle}
+      inputStyle={STYLES.inputStyleName}
       underlineShow={false}
       fullWidth
     />

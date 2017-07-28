@@ -109,7 +109,7 @@ export default class WalletEther extends React.Component {
       <AppBar
         title="Ethereum Wallet"
         iconElementLeft={
-          <NavigationArrowBack style={{margin: '50%'}}
+          <NavigationArrowBack style={{padding: '10px'}}
             onClick={this.props.goToWalletScreen} />
         } />
       <HalfScreenContainer>

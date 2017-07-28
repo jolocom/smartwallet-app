@@ -20,9 +20,9 @@ let STYLES = {
   },
   fields: {
     display: 'flex',
+    margin: '0',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: '32px',
     '@media (maxWidth: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
@@ -51,7 +51,12 @@ let STYLES = {
     flex: 1
   },
   item: {
-    padding: '0 16px 0 54px'
+    padding: '0 0px 0 54px'
+  },
+  iconSelect: {
+    position: 'absolute',
+    top: '22%',
+    right: '15%'
   }
 }
 
@@ -109,7 +114,7 @@ export default class SelectListItem extends React.Component {
             underlineShow={!value}
             value={value} />
           <IconButton
-            onClick={this.handleFocus} style={{marginBottom: '8px'}} >
+            onClick={this.handleFocus} style={STYLES.iconSelect} >
             <ArrowRight />
           </IconButton>
         </div>

@@ -49,7 +49,7 @@ const STYLES = {
   footer: {
     position: 'absolute',
     bottom: 0,
-    width: '100%',
+    width: 'auto',
     padding: '32px',
     boxSizing: 'border-box'
   }
