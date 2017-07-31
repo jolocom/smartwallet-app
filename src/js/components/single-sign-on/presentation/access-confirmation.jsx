@@ -8,9 +8,6 @@ const STYLES = {
     marginTop: '5%',
     width: '100%',
     height: '100px',
-    // backgroundImage: 'url("img/img_successful_connection.svg")',
-    // backgroundRepeat: 'no-repeat',
-    // backgroundPosition: 'center',
     position: 'relative'
   },
   name: {
@@ -92,9 +89,14 @@ const STYLES = {
 
 @Radium
 export default class AccessConfirmation extends React.Component {
-  // static propTypes = {
-  //   entity: React.propTypes.any
-  // }
+  static propTypes = {
+    entity: React.PropTypes.any
+  }
+
+  componentDidMount() {
+    setTimeout(() =>
+    (window.location.href = this.props.entity.returnURL), 4000)
+  }
 
   render() {
     return (

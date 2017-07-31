@@ -109,9 +109,9 @@ function getRoutes() {
     </Route>
 
     <Route path="profile" component={Profile} />
-    <Route path="single-sign-on/access-request"
+    <Route path="wallet/single-sign-on/access-request"
       component={AccessRequestScreen} />
-    <Route path="single-sign-on/access-confirmation"
+    <Route path="wallet/single-sign-on/access-confirmation"
       component={AccessConfirmationScreen} />
 
     <Route path="forgot-password" component={ForgotPassword} />

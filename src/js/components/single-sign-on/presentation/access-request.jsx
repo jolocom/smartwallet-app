@@ -1,6 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
-import queryString from 'query-string'
+
+import Loading from '../../common/loading'
 
 import {Divider, FlatButton, RaisedButton,
   ListItem, AppBar, List} from 'material-ui'
@@ -53,8 +54,9 @@ export default class AccessRequest extends React.Component {
   static propTypes = {
     entity: React.PropTypes.object,
     accessInfo: React.PropTypes.func.isRequired,
-    goToAccessConfirmation: React.PropTypes.func.isRequired,
-    identity: React.PropTypes.object
+    grantAccessToRequester: React.PropTypes.func.isRequired,
+    identity: React.PropTypes.object,
+    requestedFields: React.PropTypes.any
   }
 
   getIcon(field) {
@@ -90,8 +92,8 @@ export default class AccessRequest extends React.Component {
     //     will forget everything they know about you.</div><br />
     //   </div>
     // )
-    const fields = this.props.requestedFields
-    const content = fields.map((field) => {
+    const fields = this.props.requestedFields || ['No fields requested']
+    const renderFields = fields.map((field) => {
       let verified, textValue
       if (identity.contact[field + 's'] && field === 'phone') {
         verified = identity.contact[field + 's'][0].verified
@@ -103,7 +105,7 @@ export default class AccessRequest extends React.Component {
         verified = identity[field + 's'][0].verified
         textValue = identity[field + 's'][0].number
       } else {
-        // the error case ??
+        // the error case
         return (
           <StaticListItem
             key={field}
@@ -123,43 +125,59 @@ export default class AccessRequest extends React.Component {
       )
     })
 
+    let content
+    if (this.props.entity.loading) {
+      content = (
+        <Content>
+          <Loading style={{marginTop: '100px'}} />
+        </Content>
+      )
+    } else {
+      content = (
+        <Content style={STYLES.container}>
+          <Block style={{padding: '12px'}}>
+            <ListItem
+              leftAvatar={<Avatar src={image}
+                style={STYLES.avatar} />}
+              primaryText={headerMessage}
+              disabled
+              innerDivStyle={STYLES.accessHeadline} />
+          </Block>
+          <Block style={STYLES.infoContainer}>
+            <div style={STYLES.info}>Requested Information</div>
+            <FlatButton
+              onClick={() =>
+                this.props.accessInfo(popupMessage.title, popupMessage.body)}
+              style={STYLES.flatButton}>
+              WHY?
+            </FlatButton>
+          </Block>
+          <Divider style={STYLES.container} />
+          <Block style={{marginBottom: '20px'}}>
+            <List>
+            {renderFields}
+            </List>
+          </Block>
+          <Block style={STYLES.accessContainer}>
+            <RaisedButton
+              label="GIVE ACCESS"
+              secondary
+              style={{width: '100%'}}
+              onClick={() => this.props.grantAccessToRequester({
+                user: 'minimi',
+                query: this.props.location
+              })} />
+          </Block>
+        </Content>
+      )
+    }
+
     return (
       <TabContainer>
         <AppBar
           title="Access Request" />
         <HalfScreenContainer>
-          <Content style={STYLES.container}>
-            <Block style={{padding: '12px'}}>
-              <ListItem
-                leftAvatar={<Avatar src={image}
-                  style={STYLES.avatar} />}
-                primaryText={headerMessage}
-                disabled
-                innerDivStyle={STYLES.accessHeadline} />
-            </Block>
-            <Block style={STYLES.infoContainer}>
-              <div style={STYLES.info}>Requested Information</div>
-              <FlatButton
-                onClick={() =>
-                  this.props.accessInfo(popupMessage.title, popupMessage.body)}
-                style={STYLES.flatButton}>
-                WHY?
-              </FlatButton>
-            </Block>
-            <Divider style={STYLES.container} />
-            <Block style={{marginBottom: '20px'}}>
-              <List>
-              {content}
-              </List>
-            </Block>
-            <Block style={STYLES.accessContainer}>
-              <RaisedButton
-                label="GIVE ACCESS"
-                secondary
-                style={{width: '100%'}}
-                onClick={() => this.props.goToAccessConfirmation()} />
-            </Block>
-          </Content>
+          {content}
         </HalfScreenContainer>
       </TabContainer>
     )
