@@ -25,7 +25,7 @@ export default class gatewayAgent {
   }
 
   createUser({userName, seedPhrase, email, password}) {
-    return this._httpAgent.get(`${this._gatewayUrl}/${userName}`,
+    return this._httpAgent.put(`${this._gatewayUrl}/${userName}`,
     JSON.stringify({seedPhrase: seedPhrase, email: email, password: password}),
       {
         'Content-type': 'application/json'
