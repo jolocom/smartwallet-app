@@ -1,9 +1,10 @@
 import HTTPAgent from 'lib/agents/http'
+import * as settings from 'settings'
 
 export default class gatewayAgent {
   constructor() {
     this._httpAgent = new HTTPAgent({proxy: false})
-    // this._gatewayUrl =
+    this._gatewayUrl = settings.gateway
   }
 
   getApiVersion() {
