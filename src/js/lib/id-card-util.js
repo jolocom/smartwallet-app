@@ -27,6 +27,7 @@ export const mapBackendToState = (state, {result}) => state.mergeDeep({
   showErrors: false,
   loaded: true,
   idCard: {
+    img: null,
     locations: result.locations,
     number: {value: result.number, valid: true},
     expirationDate: {value: result.expirationDate, valid: true},
