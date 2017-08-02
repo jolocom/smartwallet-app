@@ -56,17 +56,14 @@ const SingleSignOnAccessRight = (props) => (<div>
     title={<div style={{textAlign: 'Left'}}>DApps & Services</div>} />
   <br />
   <table style={{textAlign: 'center', width: '95%'}}><tbody>
-    <tr><td><div style={{width: '24px'}}>
-      <div style={{position: 'relative', left: '100%'}}>
-        <ServiceIcon color={'grey'} />
-      </div>
-    </div>
+    <tr><td>
+      <ServiceIcon color={'grey'} />
     </td><td>
       <SubMenuIcon
         style={{textAlign: 'left'}}
         icon={<div style={{backgroundColor: theme.palette.accent1Color}}>
           <AddServiceIcon
-            color={'white'} />
+            color="white" />
         </div>
         }
         onClick={() => {}}
