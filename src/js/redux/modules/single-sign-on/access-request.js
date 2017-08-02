@@ -27,7 +27,7 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     expectedparams: ['user', 'query'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
+      return (dispatch, getState, {services, backend}) => {
         dispatch(actions.grantAccessToRequester.buildAction(params,
           (backend) => {
             return backend.wallet.grantAccessToRequester(params.user, {
@@ -72,9 +72,10 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getRequesterIdentity.id_success:
+    // TODO attach image
       return state.mergeIn(['entity'], {
         loading: false,
-        name: action.result // image TODO
+        name: action.result
       })
 
     case actions.getRequesterIdentity.id_fail:
@@ -104,7 +105,7 @@ module.exports.default = (state = initialState, action = {}) => {
 const getPattern = (fields) => {
   // pattern = ['/identity/phone/*']
   let pattern = []
-  for(var i = 0; i < fields.length; i++) {
+  for (var i = 0; i < fields.length; i++) {
     pattern.push(`/identity/${fields[i]}/*`)
   }
   return pattern

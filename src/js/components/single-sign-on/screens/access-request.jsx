@@ -22,7 +22,8 @@ export default class AccessRequestScreen extends React.Component {
     accessRequest: React.PropTypes.obj,
     location: React.PropTypes.obj,
     requestedDetails: React.PropTypes.func.isRequired,
-    grantAccessToRequester: React.PropTypes.func.isRequired
+    grantAccessToRequester: React.PropTypes.func.isRequired,
+    identity: React.PropTypes.obj
   }
 
   handleWhy = (title, message) => {
@@ -34,14 +35,13 @@ export default class AccessRequestScreen extends React.Component {
     this.props.requestedDetails(this.props.location.query)
   }
   render() {
-    console.log(this.props.accessRequest.entity)
     return (
       <Presentation
         requestedFields={this.props.accessRequest.entity.fields}
         location={this.props.location.query}
         identity={this.props.identity}
         entity={this.props.accessRequest.entity}
-        accessInfo={this.handleWhy}
+        accessInfo={(...args) => { this.handleWhy(...args) }}
         grantAccessToRequester={this.props.grantAccessToRequester} />
     )
   }

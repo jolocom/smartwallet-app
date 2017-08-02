@@ -90,7 +90,7 @@ const STYLES = {
 @Radium
 export default class AccessConfirmation extends React.Component {
   static propTypes = {
-    entity: React.PropTypes.any
+    entity: React.PropTypes.object
   }
 
   componentDidMount() {

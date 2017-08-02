@@ -56,7 +56,8 @@ export default class AccessRequest extends React.Component {
     accessInfo: React.PropTypes.func.isRequired,
     grantAccessToRequester: React.PropTypes.func.isRequired,
     identity: React.PropTypes.object,
-    requestedFields: React.PropTypes.any
+    requestedFields: React.PropTypes.array,
+    location: React.PropTypes.object
   }
 
   getIcon(field) {
@@ -110,7 +111,7 @@ export default class AccessRequest extends React.Component {
           <StaticListItem
             key={field}
             textValue={field + ' requested but not found in your profile'}
-            textLabel={'oopps'}
+            textLabel={'Oooopps'}
             icon={this.getIcon(field)} />
         )
       }
@@ -164,7 +165,7 @@ export default class AccessRequest extends React.Component {
               secondary
               style={{width: '100%'}}
               onClick={() => this.props.grantAccessToRequester({
-                user: 'minimi',
+                user: this.props.identity.username.value,
                 query: this.props.location
               })} />
           </Block>
