@@ -1,9 +1,10 @@
 import HTTPAgent from 'lib/agents/http'
 
-export default class gatewayAgent {
+export default class GatewayAgent {
   constructor() {
     this._httpAgent = new HTTPAgent({proxy: false})
     // this._gatewayUrl =
+    this._localStorage = localStorage
   }
 
   getApiVersion() {
@@ -23,7 +24,7 @@ export default class gatewayAgent {
     return this._httpAgent.get(`${this._gatewayUrl}/${userName}`)
   }
 
-  createUser({userName, seedPhrase, email, password}) {
+  register({userName, seedPhrase, email, password}) {
     return this._httpAgent.get(`${this._gatewayUrl}/${userName}`,
     JSON.stringify({seedPhrase: seedPhrase, email: email, password: password}),
       {
@@ -31,16 +32,17 @@ export default class gatewayAgent {
       })
   }
 
-  gatewayLogin({userName, seedPhrase}) {
+  login({seedPhrase}) {
     return this._httpAgent.post(
-      `${this._gatewayUrl}/${userName}/login`,
-      JSON.stringify({seedPhrase: seedPhrase}),
+      `${this._gatewayUrl}/login`,
+      JSON.stringify({seedPhrase}),
       {
         'Content-type': 'application/json'
-      })
+      }
+    )
   }
 
-  createSolidServer({userName, seedPhrase}) {
+  createSolidIdentity({userName, seedPhrase}) {
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/solid/create-identity`,
       JSON.stringify({seedPhrase: seedPhrase}),
