@@ -1,10 +1,15 @@
 import HTTPAgent from 'lib/agents/http'
+import * as settings from 'settings'
 
 export default class GatewayAgent {
   constructor() {
     this._httpAgent = new HTTPAgent({proxy: false})
+<<<<<<< HEAD
     // this._gatewayUrl =
     this._localStorage = localStorage
+=======
+    this._gatewayUrl = settings.gateway
+>>>>>>> db887e26acf97432efa859286fe00e60c21d87e4
   }
 
   getApiVersion() {
@@ -25,8 +30,8 @@ export default class GatewayAgent {
   }
 
   register({userName, seedPhrase, email, password}) {
-    return this._httpAgent.get(`${this._gatewayUrl}/${userName}`,
-    JSON.stringify({seedPhrase: seedPhrase, email: email, password: password}),
+    return this._httpAgent.put(`${this._gatewayUrl}/${userName}`,
+      JSON.stringify({seedPhrase: seedPhrase, email: email, password: password}),
       {
         'Content-type': 'application/json'
       })
