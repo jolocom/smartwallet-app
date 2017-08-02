@@ -37,6 +37,14 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
       }
     }
   },
+  updateField: {
+    expectedParams: ['value', 'field'],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(actions.updateField.buildAction(params))
+      }
+    }
+  },
   getWalletAddress: {
     expectedParams: ['value'],
     creator: (params) => {
@@ -75,10 +83,10 @@ const initialState = Immutable.fromJS({
   activeTab: 'overview',
   wallet: {
     mainAddress: '',
-    receiverAddress: '0xtesttest',
-    amountSend: '15',
+    receiverAddress: '',
+    amountSend: '',
     pin: '1234',
-    data: 'dataTest'
+    data: ''
   }
 })
 
@@ -94,16 +102,30 @@ module.exports.default = (state = initialState, action = {}) => {
         mainAddress: action.value
       })
 
+    case actions.updateField.id:
+    console.log('in update field ', action)
+      if(action.field === 'receiverAddress') {
+        console.log('reducer: ', action.value)
+        return state.mergeIn(['wallet'], {
+          receiverAddress: action.value
+        })
+      } else if (action.field === 'amountSend') {
+        return state.mergeIn(['wallet'], {
+          amountSend: action.value
+        })
+      }
+      return state
+
     case actions.sendEther.id:
-    console.log('sedn ether id progress')
-    return state
+      console.log('sedn ether id progress')
+      return state
 
     case actions.sendEther.id_success:
-    console.log('send ether id success')
-    return state
+      console.log('send ether id success')
+      return state
 
     case actions.sendEther.id_fail:
-    return state
+      return state
 
     default:
       return state

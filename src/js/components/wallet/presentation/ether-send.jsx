@@ -39,6 +39,7 @@ export default class EtherSend extends React.Component {
   }
 
   render() {
+    const {receiverAddress, amountSend} = this.props.wallet
     return (
       <TabContainer>
         <EtherBalance
@@ -61,18 +62,20 @@ export default class EtherSend extends React.Component {
                 style={{top: '32px', left: '16px'}} />}
               insetChildren>
               <TextField
+                onChange={(e) => this.props.updateField(e.target.value, 'receiverAddress')}
                 fullWidth
                 floatingLabelText="Add Wallet Address" />
             </ListItem>
             <Block style={STYLES.sendBlock}>
               <TextField
+                onChange={(e) => this.props.updateField(e.target.value, 'amountSend')}
                 fullWidth
                 floatingLabelText="Amount" />
               <TextField
                 fullWidth
                 floatingLabelText="Note" />
               <RaisedButton
-                // disabled
+                disabled={receiverAddress && amountSend ? false : true}
                 secondary
                 style={STYLES.btnSend}
                 label="SEND"

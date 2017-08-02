@@ -8,7 +8,8 @@ import Presentation from '../presentation/ether-send'
   actions: [
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
-    'wallet/ether-tabs:sendEther'
+    'wallet/ether-tabs:sendEther',
+    'wallet/ether-tabs:updateField'
   ]
 })
 export default class EtherSendScreen extends React.Component {
@@ -17,10 +18,16 @@ export default class EtherSendScreen extends React.Component {
     money: React.PropTypes.number.isRequired
   }
 
+  updateField = (value, field) => {
+    this.props.updateField({value, field})
+  }
+
   render() {
     return (
       <div>
         <Presentation
+          updateField={this.updateField}
+          wallet={this.props.etherTabs.wallet}
           ether={this.props.money}
           sendEther={this.props.sendEther} />
       </div>
