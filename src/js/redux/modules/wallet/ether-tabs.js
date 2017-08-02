@@ -45,13 +45,40 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
         dispatch(actions.getWalletAddress.buildAction(value))
       }
     }
+  },
+  sendEther: {
+    expectedParams: ['receiverAddress', 'amountSend', 'data', 'pin'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.sendEther.buildAction(params, () => {
+          const {receiverAddress, amountSend, data, pin} = getState().toJS().wallet.etherTabs.wallet
+          console.log('param in sendEther: ', receiverAddress)
+          return backend.wallet.sendEther({
+            receiver: receiverAddress,
+            amountEther: amountSend,
+            data: data,
+            pin: pin})
+          })).then((response) => {
+            return response
+            console.log('im in response', response)
+            // todo getBalance to update balance
+            // implement spinner ??
+            dispatch(router.pushRoute('/wallet/money'))
+          })
+      }
+    }
   }
 })
 
 const initialState = Immutable.fromJS({
   activeTab: 'overview',
   wallet: {
-    mainAddress: ''
+    mainAddress: '',
+    receiverAddress: '0xtesttest',
+    amountSend: '15',
+    pin: '1234',
+    data: 'dataTest'
   }
 })
 
@@ -66,6 +93,17 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['wallet'], {
         mainAddress: action.value
       })
+
+    case actions.sendEther.id:
+    console.log('sedn ether id progress')
+    return state
+
+    case actions.sendEther.id_success:
+    console.log('send ether id success')
+    return state
+
+    case actions.sendEther.id_fail:
+    return state
 
     default:
       return state

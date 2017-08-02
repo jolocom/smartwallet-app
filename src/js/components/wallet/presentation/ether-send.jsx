@@ -72,10 +72,11 @@ export default class EtherSend extends React.Component {
                 fullWidth
                 floatingLabelText="Note" />
               <RaisedButton
-                disabled
+                // disabled
                 secondary
                 style={STYLES.btnSend}
-                label="SEND" />
+                label="SEND"
+                onClick={this.props.sendEther} />
             </Block>
           </List>
         </HalfScreenContainer>

@@ -3,10 +3,12 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/ether-send'
 
 @connect({
-  props: ['wallet.money'],
+  props: ['wallet.money',
+          'wallet.etherTabs'],
   actions: [
     'wallet/money:buyEther',
-    'wallet/money:goToWalletScreen'
+    'wallet/money:goToWalletScreen',
+    'wallet/ether-tabs:sendEther'
   ]
 })
 export default class EtherSendScreen extends React.Component {
@@ -19,7 +21,8 @@ export default class EtherSendScreen extends React.Component {
     return (
       <div>
         <Presentation
-          ether={this.props.money} />
+          ether={this.props.money}
+          sendEther={this.props.sendEther} />
       </div>
     )
   }
