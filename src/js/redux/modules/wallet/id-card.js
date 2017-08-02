@@ -99,6 +99,8 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   focusedGroup: '',
   focusedField: '',
   idCard: {
+    frontSideImg: {value: '', valid: false},
+    backSideImg: {value: '', valid: false},
     locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},

@@ -43,6 +43,7 @@ export default class WalletPaasportScreen extends React.Component {
       focusedGroup={focusedGroup}
       focusedField={focusedField}
       save={save}
+      imgSrc={this.props.idCard.idCard.img}
       verifierLocations={verifierLocations}
       showVerifierLocations={(...args) => this.showVerifiers(...args)}
       setFocused={(...args) => { this.setFocusedElements(...args) }}
@@ -54,20 +55,21 @@ export default class WalletPaasportScreen extends React.Component {
       idCard={this.parseIdCardDetailsToArray()} />
   }
 
-  showVerifiers(...args) {
-    this.props.configSimpleDialog(null, args, 'OK', {})
+  showVerifiers({callBack, message, buttonLabel, style}) {
+    this.props.configSimpleDialog(callBack, message, buttonLabel, style)
     this.props.showSimpleDialog()
   }
 
   change(field, value) {
-    const {city} = this.props.idCard.idCard.physicalAddress
-    const idCardFields = this.parseIdCardDetailsToArray()
-      .map(({key}) => key)
+    const idCardFields = [
+      ...this.parseIdCardDetailsToArray().map(({key}) => key),
+      'img'
+    ]
     if (idCardFields.includes(field)) {
       return this.props.changeIdCardField(field, value)
-    } else if (['streetWithNumber'].includes(field)) {
+    } else if (field === 'streetWithNumber') {
+      const {city} = this.props.idCard.idCard.physicalAddress
       this.props.setShowAddress(value.trim().length > 0 || city.value.length > 0) // eslint-disable-line max-len
-      return this.props.changePhysicalAddressField(field, value)
     }
     return this.props.changePhysicalAddressField(field, value)
   }
@@ -77,15 +79,15 @@ export default class WalletPaasportScreen extends React.Component {
       return this.props.setFocusedField('', '')
     } else if (key === 'streetWithNumber') {
       this.props.setShowAddress(true)
-      return this.props.setFocusedField(key, group)
     }
     return this.props.setFocusedField(key, group)
   }
 
   parseIdCardDetailsToArray() {
     const {number, expirationDate, firstName, lastName, gender, birthDate,
-      birthPlace, birthCountry} = this.props.idCard.idCard
+      birthPlace, birthCountry, img} = this.props.idCard.idCard
     return [
+      {label: 'ID Card Image', key: 'img', group: 'img', ...img},
       {label: 'ID Card Number', key: 'number', group: 'numbers', ...number},
       {label: 'Expiration Date', key: 'expirationDate', group: 'numbers', ...expirationDate}, // eslint-disable-line max-len
       {label: 'First Name', key: 'firstName', group: 'person', ...firstName},

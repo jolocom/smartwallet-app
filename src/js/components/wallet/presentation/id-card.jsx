@@ -6,20 +6,23 @@ import Person from 'material-ui/svg-icons/social/person'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
 import Location from 'material-ui/svg-icons/maps/place'
 import moment from 'moment'
-import {List, ListItem, SelectField, MenuItem,
-  FloatingActionButton} from 'material-ui'
+import {
+  List, ListItem, SelectField, MenuItem, FloatingActionButton
+} from 'material-ui'
 import {theme} from 'styles'
 
 import {
   EditAppBar,
   EditHeader,
+  WebcamCapture,
   EditListItem,
   SelectCountryItem,
   SelectListItem,
   IconNumber,
+  ImageItem,
   DateListItem
 } from './ui'
-import {Content} from '../../structure'
+import { Content } from '../../structure'
 
 const STYLES = {
   verificationBlock: {
@@ -52,6 +55,7 @@ const STYLES = {
     textAlign: 'center'
   }
 }
+
 @Radium
 export default class WalletIdCard extends React.Component {
   static propTypes = {
@@ -68,19 +72,18 @@ export default class WalletIdCard extends React.Component {
     verifierLocations: React.PropTypes.array,
     showErrors: React.PropTypes.bool,
     showAddress: React.PropTypes.bool,
+    imgSrc: React.PropTypes.object,
     physicalAddress: React.PropTypes.array,
     idCard: React.PropTypes.array
   }
-
-  // componentDidMount() {
-  //   console.log('componentDidMount')
-  // }
 
   renderField(field) {
     switch (field.key) {
       case 'birthCountry':
       case 'country':
         return this.renderCountryField(field)
+      case 'img':
+        return this.renderImgField(field)
       case 'gender':
         return this.renderGenderField(field)
       case 'streetWithNumber':
@@ -98,6 +101,21 @@ export default class WalletIdCard extends React.Component {
       default:
         return this.renderTextField(field)
     }
+  }
+
+  renderImgField({value, label, valid, key, options, index, icon, group}) {
+    return <ImageItem
+      id={key}
+      key={key}
+      value={value}
+      label={label}
+      focused={false}
+      onFocusChange={() => this.props.setFocused(key, group)}
+      types={options}
+      onDelete={() => this.props.change(key, '')}
+      fullWidth
+      enableEdit
+      onChange={(e, i, v) => this.props.change(key, v)} />
   }
 
   renderGenderField({value, label, valid, key, options, index, icon, group}) {
@@ -288,6 +306,7 @@ export default class WalletIdCard extends React.Component {
   createIcons() {
     const idCardGroups = this.props.idCard.map(({group}) => group)
     let icons = [IconNumber]
+    icons[idCardGroups.indexOf('numbers')] = IconNumber
     icons[idCardGroups.indexOf('person')] = Person
     icons[idCardGroups.indexOf('cake')] = Cake
     icons[idCardGroups.length] = Location
@@ -299,11 +318,8 @@ export default class WalletIdCard extends React.Component {
     const {idCard, physicalAddress, showAddress, loaded, save,
       cancel} = this.props
 
-    let address = physicalAddress[0]
-    if (showAddress) {
-      address = physicalAddress
-    }
-    const fields = idCard.concat(address).map(
+    const address = showAddress ? physicalAddress : [physicalAddress[0]]
+    const fields = [...idCard, ...address].map(
       (field, index) => this.renderField({...field, index, icon: icons[index]})
     )
 
@@ -322,7 +338,14 @@ export default class WalletIdCard extends React.Component {
             leftIcon={<img src="/img/ic_idcard.svg" />}>
             <div style={STYLES.uploadContainer}>
               <FloatingActionButton secondary style={STYLES.uploadBtn}>
-                <Camera />
+                <Camera onClick={() => this.props.showVerifierLocations({
+                  callBack: () => {},
+                  message: <WebcamCapture
+                    storeImageSrcInTheState={
+                      (imageSrc) => this.props.change('img', imageSrc)} />,
+                  buttonLabel: 'DONE',
+                  style: {contentStyle: {maxWidth: '400px'}}
+                })} />
               </FloatingActionButton>
               <div style={STYLES.explanText}>
                 Take a picture or upload one of your ID Cards
