@@ -3,9 +3,8 @@ import Radium from 'radium'
 
 import { theme } from 'styles'
 import { Avatar, AppBar, TextField, IconButton, ListItem } from 'material-ui'
-import ContentCreate from 'material-ui/svg-icons/content/create'
 
-import {SubMenuIcon} from './ui'
+import { SubMenuIcon, AddServiceIcon, ServiceIcon } from './ui'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import LeftNavToggle from 'components/left-nav/toggle'
@@ -57,13 +56,19 @@ const SingleSignOnAccessRight = (props) => (<div>
     title={<div style={{textAlign: 'Left'}}>DApps & Services</div>} />
   <br />
   <table style={{textAlign: 'center', width: '95%'}}><tbody>
-    <tr><td>
-      <ContentCreate color={theme.palette.accent1Color} />
+    <tr><td><div style={{width: '24px'}}>
+      <div style={{position: 'relative', left: '100%'}}>
+        <ServiceIcon color={'grey'} />
+      </div>
+    </div>
     </td><td>
       <SubMenuIcon
         style={{textAlign: 'left'}}
-        icon={<NavigationCancel
-          style={{fill: theme.palette.accent1Color}} />}
+        icon={<div style={{backgroundColor: theme.palette.accent1Color}}>
+          <AddServiceIcon
+            color={'white'} />
+        </div>
+        }
         onClick={() => {}}
         name="Connected Services" />
     </td></tr>
