@@ -34,13 +34,13 @@ const textStyles = {
   headline: {
     fontSize: '24px',
     fontStyle: 'normal',
-    fontWeight: '300',
+    fontWeight: '200',
     color: palette.textColor_grey
   },
   subheadline: {
     fontSize: '20px',
     fontStyle: 'normal',
-    fontWeight: '300',
+    fontWeight: '200',
     color: palette.textColor_grey
   },
   sectionheader: {
@@ -70,7 +70,7 @@ const textStyles = {
   textCopy: {
     fontSize: '13px',
     fontStyle: 'normal',
-    fontWeight: '400',
+    fontWeight: '300',
     color: palette.textColor_grey
   },
   labelButton: {
