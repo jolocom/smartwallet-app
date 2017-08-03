@@ -80,7 +80,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () =>
-          backend.solid.getUserInformation(new WebIdAgent().getWebId())
+          services.auth.currentUser.wallet.getUserInformation()
         ))
         dispatch(actions.getIdCardVerifications())
       }
@@ -88,12 +88,12 @@ const actions = module.exports = makeActions('wallet/identity', {
   }
 })
 
-const mapBackendToState = ({webId, contact, passports, idCards}) =>
+const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: false,
-    webId,
-    username: {value: webId.split('.')[0].split('://')[1]},
+    webId: webId,
+    username: {value: userName},
     contact: {
       emails: contact.email,
       phones: contact.phone
@@ -102,7 +102,7 @@ const mapBackendToState = ({webId, contact, passports, idCards}) =>
     idCards: idCards
   })
 const mapBackendToStateError =
-({webId, username, contact, passports, idCards}) =>
+({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: true,
@@ -115,6 +115,7 @@ const mapBackendToStateError =
     passports: [],
     idCards: []
   })
+
 const initialState = Immutable.fromJS({
   loaded: false,
   error: false,

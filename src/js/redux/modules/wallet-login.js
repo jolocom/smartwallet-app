@@ -33,14 +33,11 @@ const actions = module.exports = makeActions('wallet-login', {
   },
   submitPassphrase: {
     expectedParams: ['value'],
-    async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
-          dispatch(
-            router.pushRoute('/login/pin-entry')
-          )
-        }))
+        dispatch(
+          router.pushRoute('/login/pin-entry')
+        )
       }
     }
   },
@@ -60,23 +57,10 @@ const actions = module.exports = makeActions('wallet-login', {
       return (dispatch, getState, {services}) => {
         const state = getState().get('walletLogin').toJS()
         dispatch(actions.goForward.buildAction(params, (backend) => {
-          return services.auth
-            .loginWithSeedPhrase({
-              seedPhrase: state.passphrase.value,
-              pin: state.pin.value
-            })
-            .then(({wallet}) => {
-              // console.log(wallet)
-              let webid = wallet.webId
-              // console.log('webid : ', webid)
-              let username = (
-                /^https:\/\/(([^.]*).)?([^.]*.[^.]*(.([^.]*))?)$/
-              ).exec(webid)[2]
-              // console.log('username : ', username)
-              let password = state.passphrase.value
-              let privatekey = wallet.webIDPrivateKey
-              return backend.accounts.solidLogin(username, password, privatekey)
-            }).then(() => dispatch(router.pushRoute('/wallet/identity')))
+          return services.auth.login({
+            seedPhrase: state.passphrase.value,
+            pin: state.pin.value
+          }).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }))
       }
     }

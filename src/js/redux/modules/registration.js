@@ -150,7 +150,7 @@ const actions = module.exports = makeActions('registration', {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
           return backend.gateway
-            .getUserInformation({userName: state.username.value})
+            .checkUserDoesNotExist({userName: state.username.value})
             .then((params) => {
               dispatch(actions.goForward())
             })
