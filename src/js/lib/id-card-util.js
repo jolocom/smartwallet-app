@@ -80,8 +80,23 @@ export const checkForNonValidFields = (reduxState) => {
 }
 
 export const storeIdCardDetails = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
+  let normalizedIdCard = {
+    number: idCard.number.value,
+    expirationDate: idCard.expirationDate.value,
+    firstName: idCard.firstName.value,
+    lastName: idCard.lastName.value,
+    gender: idCard.gender.value,
+    birthDate: idCard.birthDate.value,
+    birthPlace: idCard.birthPlace.value,
+    birthCountry: idCard.birthCountry.value,
+    streetWithNumber: idCard.physicalAddress.streetWithNumber.value,
+    zip: idCard.physicalAddress.zip.value,
+    city: idCard.physicalAddress.city.value,
+    state: idCard.physicalAddress.state.value,
+    country: idCard.physicalAddress.country.value
+  }
   return services.auth.currentUser.wallet.storeAttribute({
     attributeType: 'idcard',
-    attributeData: idCard
+    attributeData: normalizedIdCard
   })
 }
