@@ -85,11 +85,13 @@ export class Wallet {
         userName: this.userName,
         contact: {
           email: email.map(email => ({
+            id: email.id,
             address: email.contents.value,
             verified: email.verfied,
             savedToBlockchain: false
           })),
           phone: phone.map(phone => ({
+            id: email.id,
             type: phone.contents.type,
             number: phone.contents.value,
             verified: phone.verified,
