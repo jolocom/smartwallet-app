@@ -63,8 +63,8 @@ const actions = module.exports = makeActions('wallet/money', {
 })
 
 const initialState = Immutable.fromJS({
+  screenToDisplay: '',
   ether: {
-    screenToDisplay: '',
     loaded: false,
     errorMsg: '',
     price: 0,
