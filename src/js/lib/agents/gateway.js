@@ -1,3 +1,5 @@
+import * as _ from 'lodash'
+import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 import HTTPAgent from 'lib/agents/http'
 import * as settings from 'settings'
 
@@ -76,11 +78,27 @@ export default class GatewayAgent {
       url += `/${attributeId}`
     }
 
+    let serialized
+    if (_.isPlainObject(attributeData)) {
+      serialized = new WalletCrypto().serializeData(attributeData)
+    } else {
+      serialized = JSON.stringify(attributeData)
+    }
+
     return this._httpAgent.put(
       url,
-      JSON.stringify(attributeData),
+      serialized,
       {'Content-type': 'application/json'}
     )
+  }
+
+  deleteAttribute({userName, attributeType, attributeId}) {
+    let url = `${this._gatewayUrl}/${userName}/identity/${attributeType}`
+    if (attributeId) {
+      url += `/${attributeId}`
+    }
+
+    return this._httpAgent.delete(url)
   }
 
   async getOwnAttributes({userName, type, checkVerified}) {
@@ -94,9 +112,13 @@ export default class GatewayAgent {
       const [typeAttributes, typeVerifications] = await Promise.all([
         Promise.all(typeAttributesIds.map(
           async id => {
-            return await this._httpAgent.get(
+            let attrValue = await this._httpAgent.get(
               `${this._gatewayUrl}/${userName}/identity/${type}/${id}`
             )
+            if (_.isArray(attrValue)) {
+              attrValue = _.fromPairs(attrValue)
+            }
+            return attrValue
           }
         )),
         Promise.all(typeAttributesIds.map(

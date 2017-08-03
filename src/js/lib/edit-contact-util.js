@@ -155,31 +155,40 @@ export const updateOriginalValue = (state, {field, value, index}) => {
   return state
 }
 const collectChages =
-  (state, {remove, update, set}, key, webId, attributeType) => [].concat(
-    state.originalInformation[key].map(
-      e => e.delete ? remove(webId, attributeType, e.id)
-      : (e.update && e.valid && !e.verified)
-      ? update(webId, attributeType, e.id, e.value)
-      : null
-    ), state.newInformation[key].map(
-      e => (e.delete || e.blank || !e.valid)
-      ? null : set(webId, e.value)
-  ))
+  (state, {remove, update, set}, key, attributeType) => [].concat(
+    state.originalInformation[key].map(e => {
+      if (e.delete) {
+        return remove(attributeType, e.id)
+      } else if (e.update && e.valid && !e.verified) {
+        return update(attributeType, e.id, e.value)
+      }
+    }),
+    state.newInformation[key].map(e => {
+      if (!(e.delete || e.blank || !e.valid)) {
+        return set(attributeType, e.value)
+      }
+    })
+  )
 
-export const submitChanges = (backend, services, state, webId) => {
-  let solidAgent = backend.solid
-  const emailOperations = {
-    set: solidAgent.setEmail.bind(solidAgent),
-    remove: solidAgent.deleteEntry.bind(solidAgent),
-    update: solidAgent.updateEntry.bind(solidAgent)
+export const submitChanges = (backend, services, state) => {
+  const wallet = services.auth.currentUser.wallet
+
+  const operations = {
+    set: async (attributeType, attributeData) => {
+      await wallet.storeAttribute({attributeType, attributeData: {
+        value: attributeData
+      }})
+    },
+    remove: async (attributeType, attributeId) => {
+      await wallet.deleteAttribute({attributeType, attributeId})
+    },
+    update: async (attributeType, attributeId, attributeData) => {
+      await wallet.storeAttribute({attributeType, attributeId, attributeData})
+    }
   }
-  const phoneOperations = {
-    set: solidAgent.setPhone.bind(solidAgent),
-    remove: solidAgent.deleteEntry.bind(solidAgent),
-    update: solidAgent.updateEntry.bind(solidAgent)
-  }
+
   let promises = [].concat(
-    collectChages(state, emailOperations, 'emails', webId, 'email'),
-    collectChages(state, phoneOperations, 'phones', webId, 'phone'))
+    collectChages(state, operations, 'emails', 'email'),
+    collectChages(state, operations, 'phones', 'phone'))
   return Promise.all(promises)
 }

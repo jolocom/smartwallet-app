@@ -54,11 +54,20 @@ export class Wallet {
     this.seedPhrase = seedPhrase
   }
 
-  storeAttribute({attributeType, attributeData}) {
+  storeAttribute({attributeType, attributeData, attributeId}) {
     return this._gateway.storeAttribute({
       userName: this.userName,
       attributeType,
-      attributeData
+      attributeData,
+      attributeId
+    })
+  }
+
+  async deleteAttribute({attributeType, attributeId}) {
+    return this._gateway.deleteAttribute({
+      userName: this.userName,
+      attributeType,
+      attributeId
     })
   }
 
@@ -81,19 +90,19 @@ export class Wallet {
             savedToBlockchain: false
           })),
           phone: phone.map(phone => ({
-            type: phone.content.type,
+            type: phone.contents.type,
             number: phone.contents.value,
             verified: phone.verified,
             savedToBlockchain: false
           }))
         },
         passports: passport.map(passport => ({
-          ..._.fromPairs(passport.contents),
+          ...passport.contents,
           verified: passport.verified,
           savedToBlockchain: false
         })),
         idCards: idcard.map(idcard => ({
-          ..._.fromPairs(idcard.contents),
+          ...idcard.contents,
           verified: idcard.verified,
           savedToBlockchain: false
         }))
