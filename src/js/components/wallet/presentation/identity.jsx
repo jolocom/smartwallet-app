@@ -1,7 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-
+import ContentCreate from 'material-ui/svg-icons/content/create'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
 
 import Loading from 'components/common/loading'
@@ -60,6 +61,7 @@ export default class WalletIdentity extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     username: React.PropTypes.object.isRequired,
+    expandedFields: React.PropTypes.object,
     passports: React.PropTypes.array,
     showUserInfo: React.PropTypes.func.isRequired,
     idCards: React.PropTypes.array,
@@ -140,54 +142,94 @@ export default class WalletIdentity extends React.Component {
             <PlusMenu
               name="Contact"
               choice={[...emails, ...phones].length > 0}
+              show={this.props.expandedFields.contact}
+              expand={(value) => {
+                this.props.expandField('contact', value)
+              }}
+              icon={[...emails, ...phones].length > 0
+                ? <ContentCreate color={theme.palette.accent1Color} />
+                : <ContentAdd />}
               goToManagement={goToContactManagement} />
           </Block>
-          <Block style={STYLES.innerContainer}>
-            <ContactList
-              fields={phones}
-              changePinValue={changePinValue}
-              onConfirm={onConfirm}
-              icon={CommunicationCall}
-              setFocusedPin={setFocusedPin}
-              requestVerificationCode={requestVerificationCode}
-              resendVerificationCode={resendVerificationCode}
-              enterVerificationCode={enterVerificationCode}
-              labelText="Phone Number"
-              attrType="phone" />
-            <ContactList
-              fields={emails}
-              onConfirm={onConfirm}
-              requestVerificationCode={requestVerificationCode}
-              resendVerificationCode={resendVerificationCode}
-              enterVerificationCode={enterVerificationCode}
-              icon={CommunicationEmail}
-              labelText="Email"
-              attrType="email" />
-          </Block>
+          {
+            this.props.expandedFields.contact
+            ? <Block style={STYLES.innerContainer}>
+              <ContactList
+                fields={phones}
+                changePinValue={changePinValue}
+                onConfirm={onConfirm}
+                icon={CommunicationCall}
+                setFocusedPin={setFocusedPin}
+                requestVerificationCode={requestVerificationCode}
+                resendVerificationCode={resendVerificationCode}
+                enterVerificationCode={enterVerificationCode}
+                labelText="Phone Number"
+                attrType="phone" />
+              <ContactList
+                fields={emails}
+                onConfirm={onConfirm}
+                requestVerificationCode={requestVerificationCode}
+                resendVerificationCode={resendVerificationCode}
+                enterVerificationCode={enterVerificationCode}
+                icon={CommunicationEmail}
+                labelText="Email"
+                attrType="email" />
+              </Block>
+            : null
+          }
           <Block>
             <PlusMenu
               name="Passport"
+              show={this.props.expandedFields.passports}
+              expand={(value) => {
+                this.props.expandField('passports', value)
+              }}
               choice={passports.length > 0}
+              icon={passports.length > 0
+                ? <ContentCreate color={theme.palette.accent1Color} />
+                : <ContentAdd />}
               goToManagement={goToPassportManagement} />
           </Block>
           <Block style={STYLES.innerContainer}>
-            <PassportsList passports={passports} />
+            {
+              this.props.expandedFields.passports
+              ? <PassportsList passports={passports} />
+              : null
+            }
           </Block>
           <Block>
             <PlusMenu
               name="ID Card"
               choice={idCards.length > 0}
+              show={this.props.expandedFields.idCards}
+              expand={(value) => {
+                this.props.expandField('idCards', value)
+              }}
+              icon={idCards.length > 0
+                ? <ContentCreate color={theme.palette.accent1Color} />
+                : <ContentAdd />}
               goToManagement={goToPassportManagement} />
           </Block>
           <Block style={STYLES.innerContainer}>
-            <IdCardsList
+          {
+            this.props.expandedFields.idCards
+            ? <IdCardsList
               idCards={idCards}
               requestIdCardVerification={requestIdCardVerification} />
+              : null
+            }
           </Block>
           <Block>
             <PlusMenu
               name="Driving License"
+              expand={(value) => {
+                this.props.expandField('drivingLicence', value)
+              }}
               choice={false}
+              show={false}
+              icon={false
+                ? <ContentCreate color={theme.palette.accent1Color} />
+                : <ContentAdd />}
               goToManagement={goToDrivingLicenceManagement} />
           </Block>
           <br />
