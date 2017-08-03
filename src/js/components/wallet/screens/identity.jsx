@@ -79,8 +79,9 @@ export default class WalletIdentityScreen extends React.Component {
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
       requestIdCardVerification={
-        ({message, rightButtonLabel, leftButtonLabel, index}) =>
+        ({title, message, rightButtonLabel, leftButtonLabel, index}) =>
           this.props.openConfirmDialog(
+            title,
             message,
             rightButtonLabel,
             () => { this.props.saveToBlockchain(0) },

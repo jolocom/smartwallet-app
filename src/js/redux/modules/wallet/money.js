@@ -4,7 +4,7 @@ import * as router from '../router'
 
 const actions = module.exports = makeActions('wallet/money', {
   goToEtherManagement: {
-    expectedParams: [],
+    expectedParams: ['value'],
     creator: (params) => {
       return (dispatch) => {
         dispatch(router.pushRoute('/wallet/ether'))
@@ -55,8 +55,8 @@ const actions = module.exports = makeActions('wallet/money', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
-        dispatch(actions.goToWalletScreen.buildAction(params))
         dispatch(router.pushRoute('/wallet/money'))
+        dispatch(actions.goToWalletScreen.buildAction(params))
       }
     }
   }
@@ -64,6 +64,7 @@ const actions = module.exports = makeActions('wallet/money', {
 
 const initialState = Immutable.fromJS({
   ether: {
+    screenToDisplay: '',
     loaded: false,
     errorMsg: '',
     price: 0,
@@ -133,6 +134,11 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['ether'], {
         loaded: true,
         errorMsg: 'Could not get the ether price'
+      })
+
+    case actions.goToEtherManagement.id:
+      return state.merge({
+        screenToDisplay: action.value
       })
     default:
       return state
