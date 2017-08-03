@@ -27,7 +27,10 @@ export default class GatewayAgent {
 
   register({userName, seedPhrase, email, password}) {
     return this._httpAgent.put(`${this._gatewayUrl}/${userName}`,
-      JSON.stringify({seedPhrase: seedPhrase, email: email, password: password}),
+      JSON.stringify(
+        {seedPhrase: seedPhrase,
+          email: email,
+          password: password}),
       {
         'Content-type': 'application/json'
       })
@@ -47,6 +50,15 @@ export default class GatewayAgent {
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/solid/create-identity`,
       JSON.stringify({seedPhrase: seedPhrase}),
+      {
+        'Content-type': 'application/json'
+      })
+  }
+
+  storeAttribute({userName, attributeType, attributeData}) {
+    return this._httpAgent.put(
+      `${this._gatewayUrl}/${userName}/identity/${attributeType}`,
+      JSON.stringify(attributeData),
       {
         'Content-type': 'application/json'
       })
