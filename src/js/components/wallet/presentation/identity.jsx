@@ -190,6 +190,7 @@ export default class WalletIdentity extends React.Component {
               choice={false}
               goToManagement={goToDrivingLicenceManagement} />
           </Block>
+          <br />
         </Content>
       </HalfScreenContainer>
     </TabContainer>)

@@ -20,7 +20,7 @@ const SmsInputMsg = ({
     : <div>
       Please enter your pin to start the verification process
     </div>
-  }
+  }<br />
   <SmsCodeInput
     value={smsCode}
     pinLength={pinLength}
