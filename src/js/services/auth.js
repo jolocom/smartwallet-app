@@ -54,6 +54,14 @@ export class Wallet {
     this.seedPhrase = seedPhrase
   }
 
+  storeAttribute({attributeType, attributeData}) {
+    return this._gateway.storeAttribute({
+      userName: this.userName,
+      attributeType,
+      attributeData
+    })
+  }
+
   async getUserInformation() {
     try {
       const [email, phone, passport, idcard] =

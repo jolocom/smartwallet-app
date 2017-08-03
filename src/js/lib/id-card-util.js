@@ -79,13 +79,9 @@ export const checkForNonValidFields = (reduxState) => {
   return reduxState.merge({showErrors})
 }
 
-export const storeIdCardDetailsInSolid = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
-  let solidAgent = backend.solid
-  const operations = {
-    set: solidAgent.setIdCard.bind(solidAgent),
-    update: solidAgent.deleteEntry.bind(solidAgent),
-    remove: solidAgent.updateEntry.bind(solidAgent)
-  }
-
-  return operations.set(webId, idCard)
+export const storeIdCardDetails = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
+  return services.auth.currentUser.wallet.storeAttribute({
+    attributeType: 'idcard',
+    attributeData: idCard
+  })
 }
