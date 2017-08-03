@@ -4,12 +4,13 @@ import Radium from 'radium'
 import Loading from '../../common/loading'
 
 import {Divider, FlatButton, RaisedButton,
-  ListItem, AppBar, List} from 'material-ui'
+  ListItem, AppBar, List, TextField} from 'material-ui'
 import Avatar from 'material-ui/Avatar'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Location from 'material-ui/svg-icons/maps/place'
-
+import IconIdCard from '../../common/icon-idcard'
+import {MissingInfoItem} from './ui'
 import {Content, Block} from '../../structure'
 import {TabContainer, HalfScreenContainer, StaticListItem}
   from '../../wallet/presentation/ui'
@@ -45,7 +46,8 @@ const STYLES = {
   accessMsgHeader: theme.textStyles.sectionheader,
   accessMsgBody: theme.textStyles.subheadline,
   accessContainer: {
-    padding: '0 16px 0 54px'
+    padding: '0 16px 0 54px',
+    marginTop: '12px'
   }
 }
 
@@ -70,11 +72,12 @@ export default class AccessRequest extends React.Component {
     } else if (field === 'address') {
       return Location
     } else if (field === 'idcard') {
-      return ({avatar: 'img/ic_idcard.svg'})
+      return IconIdCard
     }
   }
 
   render() {
+    // console.log(IconIdCard)
     const {name, image} = this.props.entity
     const {identity} = this.props
     let popupMessage = {
@@ -84,15 +87,14 @@ export default class AccessRequest extends React.Component {
         'stored on the blockchain. You can always disconnect from' +
         'the service through the jolocom app and this way delete your account.'
     }
+
+    let popupMessageDeny = {
+      title: 'Access denied...',
+      body: `You denied ${name} the access to your data, therefore you cannot
+      use the services of this website or need to sign up a different way.`
+    }
     let headerMessage = `${name} wants to have access to your data?`
-    // const accessMessage = (
-    //   <div>
-    //     <div style={STYLES.accessMsgHeader}>No worries</div><br />
-    //     <div style={STYLES.accessMsgBody}>Even if you grant access
-    //     to this data now, you can revoke it any time and the service
-    //     will forget everything they know about you.</div><br />
-    //   </div>
-    // )
+
     const fields = this.props.requestedFields || ['No fields requested']
     const renderFields = fields.map((field) => {
       let verified, textValue
@@ -108,11 +110,9 @@ export default class AccessRequest extends React.Component {
       } else {
         // the error case
         return (
-          <StaticListItem
-            key={field}
-            textValue={field + ' requested but not found in your profile'}
-            textLabel={'Oooopps'}
-            icon={this.getIcon(field)} />
+          <MissingInfoItem
+            field={field}
+            textValue={'Data is missing'} />
         )
       }
       return (
@@ -168,6 +168,12 @@ export default class AccessRequest extends React.Component {
                 user: this.props.identity.username.value,
                 query: this.props.location
               })} />
+          </Block>
+          <Block style={STYLES.accessContainer}>
+              <RaisedButton
+                label="DENY ACCESS"
+                style={{width: '100%'}}
+                onClick={() =>this.props.denyAccess(popupMessageDeny.title, popupMessageDeny.body)} />
           </Block>
         </Content>
       )
