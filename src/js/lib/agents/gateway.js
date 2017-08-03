@@ -71,6 +71,15 @@ export default class GatewayAgent {
       })
   }
 
+  storeAttribute({userName, attributeType, attributeData}) {
+    return this._httpAgent.put(
+      `${this._gatewayUrl}/${userName}/identity/${attributeType}`,
+      JSON.stringify(attributeData),
+      {
+        'Content-type': 'application/json'
+      })
+  }
+
   async getOwnAttributes({userName, type, checkVerified}) {
     const multiple = typeof type !== 'string'
     const types = multiple ? type : [type]
