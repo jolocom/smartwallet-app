@@ -77,20 +77,20 @@ export default class GatewayAgent {
 
     const allAttributes = await Promise.all(types.map(async type => {
       const typeAttributesIds = await this._httpAgent.get(
-        `${this._gatewayUrl}/${userName}/${type}`
+        `${this._gatewayUrl}/${userName}/identity/${type}`
       )
       const [typeAttributes, typeVerifications] = await Promise.all([
         Promise.all(typeAttributesIds.map(
           async id => {
             return await this._httpAgent.get(
-              `${this._gatewayUrl}/${userName}/${type}/${id}`
+              `${this._gatewayUrl}/${userName}/identity/${type}/${id}`
             )
           }
         )),
         Promise.all(typeAttributesIds.map(
           async id => {
             return await this._httpAgent.get(
-              `${this._gatewayUrl}/${userName}/${type}/${id}/verifications`
+              `${this._gatewayUrl}/${userName}/identity/${type}/${id}/verifications`
             )
           }
         ))

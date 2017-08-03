@@ -14,7 +14,7 @@ export default class AuthService extends EventEmitter {
         this._setCurrentUser({
           wallet: new Wallet({
             ...JSON.parse(savedSession),
-            gateway: this._gateway
+            gateway: this.backend
           })
         })
       }
@@ -29,7 +29,10 @@ export default class AuthService extends EventEmitter {
 
     this._localStorage.setItem('jolocom.identity', JSON.stringify(walletConfig))
     this._setCurrentUser({
-      wallet: new Wallet({...walletConfig, gateway: this.backend})
+      wallet: new Wallet({
+        ...walletConfig,
+        gateway: this.backend
+      })
     })
   }
 
@@ -53,7 +56,7 @@ export class Wallet {
 
   async getUserInformation() {
     try {
-      const {email, phone, passport, idcard} =
+      const [email, phone, passport, idcard] =
         await this._gateway.getOwnAttributes({
           userName: this.userName,
           type: ['email', 'phone', 'passport', 'idcard'],

@@ -143,7 +143,7 @@ class HTTPAgent {
       }
     })
     .then((response) => {
-      if (response.headers.get('Content-Type') === 'application/json') {
+      if (response.headers.get('Content-Type').indexOf('application/json') === 0) {
         return response.json()
       } else {
         // @TODO parse turtle automatically?
