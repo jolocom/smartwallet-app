@@ -24,7 +24,7 @@ export default class AuthService extends EventEmitter {
   async login({seedPhrase, pin}) {
     const res = await this.backend.login({seedPhrase, pin})
     const walletConfig = {
-      seedPhrase, userName: (await res.json()).userName
+      seedPhrase, userName: res.userName
     }
 
     this._localStorage.setItem('jolocom.identity', JSON.stringify(walletConfig))
