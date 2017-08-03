@@ -7,17 +7,17 @@ export default class GatewayAgent {
     this._gatewayUrl = settings.gateway
   }
 
-  getApiVersion() {
-    return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
-  }
+  // getApiVersion() {
+  //   return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
+  // }
 
-  createEthereumIdentity({userName, seedPhrase}) {
-    return this._httpAgent.post(
-      `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
-      JSON.stringify({seedPhrase: seedPhrase}),
-      {'Content-type': 'application/json'}
-    )
-  }
+  // createEthereumIdentity({userName, seedPhrase}) {
+  //   return this._httpAgent.post(
+  //     `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
+  //     JSON.stringify({seedPhrase: seedPhrase}),
+  //     {'Content-type': 'application/json'}
+  //   )
+  // }
 
   checkUserDoesNotExist({userName}) {
     return new Promise((resolve, reject) => {
@@ -62,22 +62,25 @@ export default class GatewayAgent {
     )
   }
 
-  createSolidIdentity({userName, seedPhrase}) {
-    return this._httpAgent.post(
-      `${this._gatewayUrl}/${userName}/solid/create-identity`,
-      JSON.stringify({seedPhrase: seedPhrase}),
-      {
-        'Content-type': 'application/json'
-      })
-  }
+  // createSolidIdentity({userName, seedPhrase}) {
+  //   return this._httpAgent.post(
+  //     `${this._gatewayUrl}/${userName}/solid/create-identity`,
+  //     JSON.stringify({seedPhrase: seedPhrase}),
+  //     {'Content-type': 'application/json'}
+  //   )
+  // }
 
-  storeAttribute({userName, attributeType, attributeData}) {
+  storeAttribute({userName, attributeType, attributeId, attributeData}) {
+    let url = `${this._gatewayUrl}/${userName}/identity/${attributeType}`
+    if (attributeId) {
+      url += `/${attributeId}`
+    }
+
     return this._httpAgent.put(
-      `${this._gatewayUrl}/${userName}/identity/${attributeType}`,
+      url,
       JSON.stringify(attributeData),
-      {
-        'Content-type': 'application/json'
-      })
+      {'Content-type': 'application/json'}
+    )
   }
 
   async getOwnAttributes({userName, type, checkVerified}) {
@@ -99,7 +102,8 @@ export default class GatewayAgent {
         Promise.all(typeAttributesIds.map(
           async id => {
             return await this._httpAgent.get(
-              `${this._gatewayUrl}/${userName}/identity/${type}/${id}/verifications`
+              `${this._gatewayUrl}/${userName}` +
+              `/identity/${type}/${id}/verifications`
             )
           }
         ))
