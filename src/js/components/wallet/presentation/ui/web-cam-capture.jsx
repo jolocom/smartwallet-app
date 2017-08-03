@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Webcam from 'react-webcam'
-import { FlatButton } from 'material-ui'
+import { FloatingActionButton } from 'material-ui'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
 
 @Radium
@@ -22,11 +22,13 @@ export default class WebcamCapture extends React.Component {
     return (<div style={{textAlign: 'center'}}>
       <Webcam
         audio={false}
-        height={205}
+        height={'480'}
         ref={(ref) => this.setRef(ref)}
         screenshotFormat="image/jpeg"
-        width={340} /> <br />
-      <FlatButton onClick={() => this.capture()} icon={<Camera />} />
+        width={'100%'} /> <br />
+      <FloatingActionButton secondary onClick={() => { this.capture() }}>
+        <Camera />
+      </FloatingActionButton>
     </div>)
   }
 }

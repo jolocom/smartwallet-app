@@ -30,7 +30,7 @@ const STYLES = {
   hoverColor: fade('#a4a4a3', 0.55)
 }
 
-const EditAppBar = ({title, onSave, onClose, loading}) => {
+const EditAppBar = ({title, onSave, onClose, loading, rightTitle = 'SAVE'}) => {
   return (
     <AppBar
       title={title}
@@ -48,7 +48,7 @@ const EditAppBar = ({title, onSave, onClose, loading}) => {
           backgroundColor={'#fff'}
           style={STYLES.appBarButton} hoverColor={STYLES.hoverColor}
           onClick={() => { loading ? null : onSave() }}>
-          {loading ? 'LOADING...' : 'SAVE'}
+          {loading ? 'LOADING...' : rightTitle}
         </HoverButton>
       }
     />
@@ -57,6 +57,7 @@ const EditAppBar = ({title, onSave, onClose, loading}) => {
 
 EditAppBar.propTypes = {
   title: React.PropTypes.string,
+  rightTitle: React.PropTypes.string,
   children: React.PropTypes.node,
   onSave: React.PropTypes.func.isRequired,
   onClose: React.PropTypes.func.isRequired,

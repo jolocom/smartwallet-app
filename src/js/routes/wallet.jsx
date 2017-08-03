@@ -37,6 +37,7 @@ import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
 import CountrySelectScreen from 'components/wallet/screens/country-select'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
+import WalletIdCardPhotoScreen from 'components/wallet/screens/id-card-photo'
 
 import WalletLogin from 'components/wallet-login'
 import LaymanLoginScreen from 'components/wallet-login/screens/layman'
@@ -90,6 +91,8 @@ function getRoutes() {
       component={WalletContactScreen} />
     <Route path="wallet/identity/id-card"
       component={WalletIdCardScreen} />
+    <Route path="wallet/identity/id-card-photo"
+      component={WalletIdCardPhotoScreen} />
     <Route path="wallet/identity/passport/add"
       component={WalletIdCardScreen} />
     <Route path="wallet/identity/country-select"
