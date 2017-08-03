@@ -52,8 +52,8 @@ class HTTPAgent {
   // @param {string} url resource url
   //
   // @return {Promise} promise with resulting xhr
-  get(url, headers) {
-    return this._req(url, 'GET', null, headers)
+  get(url, headers, options) {
+    return this._req(url, 'GET', null, headers, options)
   }
 
   // DELETE a resource represented by url
@@ -72,8 +72,8 @@ class HTTPAgent {
   // @param {Object} headers headers hash
   //
   // @return {Promise} promise with resulting xhr
-  put(url, body, headers) {
-    return this._req(url, 'PUT', body, headers)
+  put(url, body, headers, options) {
+    return this._req(url, 'PUT', body, headers, options)
   }
 
   // POST a resource to a container
