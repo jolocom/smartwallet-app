@@ -60,12 +60,14 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   change(field, value) {
+    const {city} = this.props.idCard.idCard.physicalAddress
     const idCardFields = this.parseIdCardDetailsToArray()
       .map(({key}) => key)
     if (idCardFields.includes(field)) {
       return this.props.changeIdCardField(field, value)
     } else if (['streetWithNumber'].includes(field)) {
-      this.props.setShowAddress(value.trim().length > 0)
+      this.props.setShowAddress(value.trim().length > 0 || city.value.length > 0) // eslint-disable-line max-len
+      return this.props.changePhysicalAddressField(field, value)
     }
     return this.props.changePhysicalAddressField(field, value)
   }
@@ -73,6 +75,9 @@ export default class WalletPaasportScreen extends React.Component {
   setFocusedElements(key, group) {
     if (key === '') {
       return this.props.setFocusedField('', '')
+    } else if (key === 'streetWithNumber') {
+      this.props.setShowAddress(true)
+      return this.props.setFocusedField(key, group)
     }
     return this.props.setFocusedField(key, group)
   }

@@ -21,6 +21,7 @@ export default class WalletMoney extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     ether: React.PropTypes.object.isRequired,
+    buyEther: React.PropTypes.func.isRequired,
     goToEtherManagement: React.PropTypes.func.isRequired
   }
 
@@ -29,7 +30,7 @@ export default class WalletMoney extends React.Component {
   }
 
   render() {
-    let {goToEtherManagement, ether} = this.props
+    const {goToEtherManagement, ether} = this.props
     return (
       <TabContainer>
         <HalfScreenContainer>
@@ -37,14 +38,15 @@ export default class WalletMoney extends React.Component {
             <Block>
               <PlusMenu
                 name="Digital Currency"
-                goToManagement={goToEtherManagement}
+                goToManagement={() => goToEtherManagement('etherBuyingScreen')}
               />
             </Block>
             <Block>
               <PlusSubMenu
                 amount={ether.amount}
                 currency="eth"
-                goToManagement={goToEtherManagement}
+                ethSvg={{fill: '#4b132b'}}
+                goToManagement={() => goToEtherManagement('etherManagement')}
                 currencyPrice={ether.price}
               />
             </Block>

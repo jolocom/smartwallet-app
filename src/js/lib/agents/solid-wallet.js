@@ -180,6 +180,50 @@ export default class SolidAgent {
     })
   }
 
+  retrieveConnectedServices() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve(({
+        loaded: false, failed: false, serviceNumber: 0,
+        services: [
+          {
+            deleted: false, label: 'label1', url: 'http://www.youtube.com',
+            id: '1', iconUrl: '/img/img_nohustle.svg',
+            sharedData: [
+              {attrType: 'phone', value: '17524', type: 'work', verified: false,
+                status: ''},
+              {attrType: 'phone', value: '45678', type: 'work', verified: true,
+                status: ''},
+              {attrType: 'phone', value: '96574', type: 'work', verified: true,
+                status: ''},
+              {attrType: 'email', value: 'test@test.test', verified: false,
+                status: ''}
+            ]
+          }, {
+            deleted: false,
+            label: 'label2',
+            url: 'http://www.youtube.com',
+            id: '2',
+            iconUrl: '/img/img_nohustle.svg',
+            sharedData: [{
+              attrType: 'email', value: 'test@test.test', verified: false,
+              status: ''
+            }]
+          }, {
+            deleted: false, id: '3', url: 'http://www.google.com',
+            label: 'label3', conUrl: '/img/img_nohustle.svg',
+            sharedData: [{attrType: '', value: '', verified: false, status: ''}]
+          }
+        ]
+      })), 2000)
+    })
+  }
+
+  deleteService(serviceId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => { resolve(true) }, 2000)
+    })
+  }
+
   async _formatAccountInfo(webId, userTriples) {
     const profileData = Object.assign({}, this.defaultProfile)
 
