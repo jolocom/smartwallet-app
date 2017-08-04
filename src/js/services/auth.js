@@ -86,7 +86,7 @@ export class Wallet {
           email: email.map(email => ({
             id: email.id,
             address: email.contents.value,
-            verified: email.verfied,
+            verified: email.verified,
             savedToBlockchain: false
           })),
           phone: phone.map(phone => ({
