@@ -6,10 +6,10 @@ import { FlatButton, Dialog } from 'material-ui'
 
 const STYLES = {
   buttonRigth: {
-    textAlign: 'left'
+    textAlign: 'center'
   },
   buttonLeft: {
-    textAlign: 'right'
+    textAlign: 'center'
   },
   dialogContainer: {
     textAlign: 'center'
