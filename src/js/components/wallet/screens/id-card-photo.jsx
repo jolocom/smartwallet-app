@@ -6,7 +6,7 @@ import Presentation from '../presentation/id-card-photo'
 @connect({
   props: ['wallet.idCard'],
   actions: [
-    'wallet/id-card:changeIdCardField',
+    'wallet/id-card:storeIdCardPhoto',
     'wallet/id-card:setShowAddress',
     'wallet/id-card:cancel'
   ]
@@ -15,13 +15,13 @@ import Presentation from '../presentation/id-card-photo'
 export default class WalletIdCardPhotoScreen extends React.Component {
   static propTypes = {
     idCard: React.PropTypes.object.isRequired,
-    changeIdCardField: React.PropTypes.func.isRequired
+    storeIdCardPhoto: React.PropTypes.func.isRequired
   }
 
   render() {
     return <Presentation
-      changeIdCardField={this.props.changeIdCardField}
-      images={[{imgSrc: '/src/img/slide-data.png'}, {imgSrc: '/src/img/slide-data.png'}, {imgSrc: '/src/img/slide-data.png'}]}
+      changeIdCardField={this.props.storeIdCardPhoto}
+      images={this.props.idCard.idCard.images}
       idCard={this.props.idCard} />
   }
 }

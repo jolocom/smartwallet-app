@@ -63,6 +63,9 @@ const actions = module.exports = makeActions('wallet/id-card', {
       }
     }
   },
+  storeIdCardPhoto: {
+    expectedParams: ['value', 'index']
+  },
   goToSelectBirthCountry: {
     expectedParams: ['field'],
     creator: (params) => {
@@ -99,8 +102,7 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   focusedGroup: '',
   focusedField: '',
   idCard: {
-    frontSideImg: {value: '', valid: false},
-    backSideImg: {value: '', valid: false},
+    images: [],
     locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},
@@ -160,6 +162,14 @@ module.exports.default = (state = initialState, action = {}) => {
         loaded: false,
         showErrors: false
       })
+
+    case actions.storeIdCardPhoto.id:
+      if (action.value === '') {
+        const oldState = state.toJS()
+        oldState.idCard.images.splice(action.index, 1)
+        return Immutable.fromJS(oldState)
+      }
+      return state.setIn(['idCard', 'images', action.index], action.value)
 
     case actions.retrieveIdCardInformation.id_fail:
       return state.merge({

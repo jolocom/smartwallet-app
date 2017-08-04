@@ -22,10 +22,11 @@ export default class WebcamCapture extends React.Component {
     return (<div style={{textAlign: 'center'}}>
       <Webcam
         audio={false}
-        height={'480'}
         ref={(ref) => this.setRef(ref)}
         screenshotFormat="image/jpeg"
-        width={'100%'} /> <br />
+        width={'100%'}
+        height={'100%'}
+        style={{maxWidth: '647.1px'}} /> <br />
       <FloatingActionButton secondary onClick={() => { this.capture() }}>
         <Camera />
       </FloatingActionButton>
