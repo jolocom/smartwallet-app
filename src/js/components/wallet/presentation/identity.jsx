@@ -60,7 +60,7 @@ export default class WalletIdentity extends React.Component {
     children: React.PropTypes.node,
     emails: React.PropTypes.array.isRequired,
     expandedFields: React.PropTypes.object,
-    expandField:: React.PropTypes.func.isRequired,
+    expandField: React.PropTypes.func.isRequired,
     enterVerificationCode: React.PropTypes.func.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
