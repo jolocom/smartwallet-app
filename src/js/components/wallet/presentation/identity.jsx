@@ -1,13 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import ContentCreate from 'material-ui/svg-icons/content/create'
-import ContentAdd from 'material-ui/svg-icons/content/add'
 import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
 
 import Loading from 'components/common/loading'
-import CommunicationCall from 'material-ui/svg-icons/communication/call'
-import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import { CommunicationCall, CommunicationEmail } from 'material-ui/svg-icons'
 import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
 
 import {theme} from 'styles'
@@ -142,13 +139,10 @@ export default class WalletIdentity extends React.Component {
             <PlusMenu
               name="Contact"
               choice={[...emails, ...phones].length > 0}
-              show={this.props.expandedFields.contact}
+              expanded={this.props.expandedFields.contact}
               expand={(value) => {
                 this.props.expandField('contact', value)
               }}
-              icon={[...emails, ...phones].length > 0
-                ? <ContentCreate color={theme.palette.accent1Color} />
-                : <ContentAdd />}
               goToManagement={goToContactManagement} />
           </Block>
           {
@@ -180,14 +174,11 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <PlusMenu
               name="Passport"
-              show={this.props.expandedFields.passports}
+              expanded={this.props.expandedFields.passports}
               expand={(value) => {
                 this.props.expandField('passports', value)
               }}
               choice={passports.length > 0}
-              icon={passports.length > 0
-                ? <ContentCreate color={theme.palette.accent1Color} />
-                : <ContentAdd />}
               goToManagement={goToPassportManagement} />
           </Block>
           <Block style={STYLES.innerContainer}>
@@ -201,13 +192,10 @@ export default class WalletIdentity extends React.Component {
             <PlusMenu
               name="ID Card"
               choice={idCards.length > 0}
-              show={this.props.expandedFields.idCards}
+              expanded={this.props.expandedFields.idCards}
               expand={(value) => {
                 this.props.expandField('idCards', value)
               }}
-              icon={idCards.length > 0
-                ? <ContentCreate color={theme.palette.accent1Color} />
-                : <ContentAdd />}
               goToManagement={goToPassportManagement} />
           </Block>
           <Block style={STYLES.innerContainer}>
@@ -226,10 +214,7 @@ export default class WalletIdentity extends React.Component {
                 this.props.expandField('drivingLicence', value)
               }}
               choice={false}
-              show={false}
-              icon={false
-                ? <ContentCreate color={theme.palette.accent1Color} />
-                : <ContentAdd />}
+              expanded={false}
               goToManagement={goToDrivingLicenceManagement} />
           </Block>
           <br />

@@ -2,6 +2,8 @@ import React from 'react'
 import Radium from 'radium'
 import {theme} from 'styles'
 import {
+  ContentCreate,
+  ContentAdd,
   NavigationExpandMore,
   NavigationExpandLess
 } from 'material-ui/svg-icons'
@@ -54,7 +56,7 @@ const STYLES = {
 
 }
 const PlusMenu = (props) => {
-  const icon =  props.show ? <NavigationExpandLess />
+  const icon =  props.expanded ? <NavigationExpandLess />
     : <NavigationExpandMore />
   return (
     <div style={Object.assign(STYLES.root, props.style)}>
@@ -69,26 +71,29 @@ const PlusMenu = (props) => {
           <FloatingActionButton
             mini
             secondary={!props.choice}
-            onClick={props.goToManagement}
+            onClick={() => props.choice
+              ? props.expand(!props.expanded)
+              : props.goToManagement()
+            }
             containerElement="label"
             style={STYLES.addBtn}
             backgroundColor={props.choice ? '#FFF' : ''}
             iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
-            {props.icon}
+            {props.choice ? icon : <ContentAdd />}
           </FloatingActionButton>
         </div>
         {
-          props.choice
+          props.choice && props.expanded
           ? <div style={STYLES.accordionBtn}>
             <FloatingActionButton
               mini
               secondary={!props.choice}
-              onClick={() => props.expand(!props.show)}
+              onClick={props.goToManagement}
               containerElement="label"
               style={STYLES.addBtn}
               backgroundColor={props.choice ? '#FFF' : ''}
               iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
-            {icon}
+            <ContentCreate color={theme.palette.accent1Color} />
             </FloatingActionButton>
           </div>
           : null
@@ -101,12 +106,11 @@ const PlusMenu = (props) => {
 
 PlusMenu.propTypes = {
   name: React.PropTypes.any,
-  icon: React.PropTypes.node,
   children: React.PropTypes.node,
   style: React.PropTypes.object,
   goToManagement: React.PropTypes.func.isRequired,
   expand: React.PropTypes.func,
-  show: React.PropTypes.bool,
+  expanded: React.PropTypes.bool,
   choice: React.PropTypes.bool
 }
 
