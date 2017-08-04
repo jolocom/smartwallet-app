@@ -83,10 +83,10 @@ export const mapAccountInformationToState = ({email, phone, addresses = []}) =>
           update: false,
           valid: true
         })),
-        phones: phone.map(({number, verified, id}) => ({
+        phones: phone.map(({number, verified, id, type}) => ({
           value: number,
           // TODO: phone type needs to be delivered from the backend
-          type: 'personal',
+          type: type,
           verified,
           id,
           delete: false,
@@ -160,12 +160,12 @@ const collectChages =
       if (e.delete) {
         return remove(attributeType, e.id)
       } else if (e.update && e.valid && !e.verified) {
-        return update(attributeType, e.id, e.value)
+        return update(attributeType, e.id, e.value, e.type)
       }
     }),
     state.newInformation[key].map(e => {
       if (!(e.delete || e.blank || !e.valid)) {
-        return set(attributeType, e.value)
+        return set(attributeType, e.value, e.type)
       }
     })
   )
@@ -174,16 +174,24 @@ export const submitChanges = (backend, services, state) => {
   const wallet = services.auth.currentUser.wallet
 
   const operations = {
-    set: async (attributeType, attributeData) => {
-      await wallet.storeAttribute({attributeType, attributeData: {
-        value: attributeData
-      }})
+    set: async (attributeType, attributeData, subType) => {
+      const data = {value: attributeData}
+      if (subType) {
+        data.type = subType
+      }
+
+      await wallet.storeAttribute({attributeType, attributeData: data})
     },
     remove: async (attributeType, attributeId) => {
       await wallet.deleteAttribute({attributeType, attributeId})
     },
-    update: async (attributeType, attributeId, attributeData) => {
-      await wallet.storeAttribute({attributeType, attributeId, attributeData})
+    update: async (attributeType, attributeId, attributeData, subType) => {
+      const data = {value: attributeData}
+      if (subType) {
+        data.type = subType
+      }
+
+      await wallet.storeAttribute({attributeType, attributeId, attributeData: data})
     }
   }
 

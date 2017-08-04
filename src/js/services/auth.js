@@ -91,7 +91,7 @@ export class Wallet {
             savedToBlockchain: false
           })),
           phone: phone.map(phone => ({
-            id: email.id,
+            id: phone.id,
             type: phone.contents.type,
             number: phone.contents.value,
             verified: phone.verified,
