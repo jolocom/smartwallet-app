@@ -56,7 +56,7 @@ const STYLES = {
 
 }
 const PlusMenu = (props) => {
-  const icon =  props.expanded ? <NavigationExpandLess />
+  const icon = props.expanded ? <NavigationExpandLess />
     : <NavigationExpandMore />
   return (
     <div style={Object.assign(STYLES.root, props.style)}>
@@ -92,8 +92,10 @@ const PlusMenu = (props) => {
               containerElement="label"
               style={STYLES.addBtn}
               backgroundColor={props.choice ? '#FFF' : ''}
-              iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
-            <ContentCreate color={theme.palette.accent1Color} />
+              iconStyle={
+                props.choice ? STYLES.iconCreate : STYLES.iconAdd
+              }>
+              <ContentCreate color={theme.palette.accent1Color} />
             </FloatingActionButton>
           </div>
           : null

@@ -68,7 +68,7 @@ export default class WalletIdentityScreen extends React.Component {
 
     return (<Presentation
       username={username}
-      expandedFields={this.props.wallet.identity.expandedFields}
+      expandedFields={expandedFields}
       emails={emails}
       phones={phones}
       webId={webId}

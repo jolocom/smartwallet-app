@@ -56,28 +56,29 @@ const STYLES = {
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
+    changePinValue: React.PropTypes.func.isRequired,
     children: React.PropTypes.node,
-    username: React.PropTypes.object.isRequired,
-    expandedFields: React.PropTypes.object,
-    passports: React.PropTypes.array,
-    showUserInfo: React.PropTypes.func.isRequired,
-    idCards: React.PropTypes.array,
-    isLoaded: React.PropTypes.bool.isRequired,
-    isError: React.PropTypes.bool.isRequired,
-    webId: React.PropTypes.string.isRequired,
-    phones: React.PropTypes.array.isRequired,
     emails: React.PropTypes.array.isRequired,
+    expandedFields: React.PropTypes.object,
+    expandField:: React.PropTypes.func.isRequired,
+    enterVerificationCode: React.PropTypes.func.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
+    idCards: React.PropTypes.array,
+    isLoaded: React.PropTypes.bool.isRequired,
+    isError: React.PropTypes.bool.isRequired,
     onConfirm: React.PropTypes.func.isRequired,
-    setFocusedPin: React.PropTypes.func.isRequired,
-    changePinValue: React.PropTypes.func.isRequired,
+    onVerify: React.PropTypes.func.isRequired,
+    passports: React.PropTypes.array,
+    phones: React.PropTypes.array.isRequired,
     requestVerificationCode: React.PropTypes.func.isRequired,
     resendVerificationCode: React.PropTypes.func.isRequired,
-    enterVerificationCode: React.PropTypes.func.isRequired,
-    onVerify: React.PropTypes.func.isRequired,
-    requestIdCardVerification: React.PropTypes.func.isRequired
+    requestIdCardVerification: React.PropTypes.func.isRequired,
+    setFocusedPin: React.PropTypes.func.isRequired,
+    showUserInfo: React.PropTypes.func.isRequired,
+    username: React.PropTypes.object.isRequired,
+    webId: React.PropTypes.string.isRequired
   }
 
   render() {
@@ -168,7 +169,7 @@ export default class WalletIdentity extends React.Component {
                 icon={CommunicationEmail}
                 labelText="Email"
                 attrType="email" />
-              </Block>
+            </Block>
             : null
           }
           <Block>
