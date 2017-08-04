@@ -23,6 +23,15 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
       }
     }
   },
+  goToMissingInfo: {
+    expectedparams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        const route = getRoute(params)
+        dispatch(router.pushRoute(route))
+      }
+    }
+  },
   grantAccessToRequester: {
     expectedparams: ['user', 'query'],
     async: true,
@@ -47,12 +56,14 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
 
 const initialState = Immutable.fromJS({
   entity: {
+    processActive: false,
     loading: false,
     name: 'SOME COMPANY',
     image: 'img/logo.svg',
     requester: '',
     returnURL: '',
-    fields: []
+    fields: [],
+    infoComplete: false // for button to be activated
   }
 })
 
@@ -60,6 +71,7 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.requestedDetails.id:
       return state.mergeIn(['entity'], {
+        processActive: true,
         loading: true,
         requester: action.details.requester,
         returnURL: action.details.returnURL,
@@ -89,7 +101,8 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.grantAccessToRequester.id_success:
       return state.mergeIn(['entity'], {
-        loading: false
+        loading: false,
+        processActive: false
       })
 
     case actions.grantAccessToRequester.id_fail:
@@ -106,7 +119,15 @@ const getPattern = (fields) => {
   // pattern = ['/identity/phone/*']
   let pattern = []
   for (var i = 0; i < fields.length; i++) {
-    pattern.push(`/identity/${fields[i]}/*`)
+    pattern.push(`/identity/${fields[i]}\/\*`)
   }
   return pattern
+}
+
+const getRoute = (field) => {
+  if(field === 'phone' || field === 'email' || field === 'address') {
+    return 'wallet/identity/contact'
+  } else if (field === 'idcard' || field === 'passport') {
+    return 'wallet/identity/passport/add'
+  }
 }

@@ -9,8 +9,8 @@ import Avatar from 'material-ui/Avatar'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Location from 'material-ui/svg-icons/maps/place'
-import IconIdCard from '../../common/icon-idcard'
-import {MissingInfoItem} from './ui'
+import {IconIdCard, IconPassport} from '../../common'
+import {MissingInfoItem, NotVerifiedItem} from './ui'
 import {Content, Block} from '../../structure'
 import {TabContainer, HalfScreenContainer, StaticListItem}
   from '../../wallet/presentation/ui'
@@ -46,8 +46,7 @@ const STYLES = {
   accessMsgHeader: theme.textStyles.sectionheader,
   accessMsgBody: theme.textStyles.subheadline,
   accessContainer: {
-    padding: '0 16px 0 54px',
-    marginTop: '12px'
+    padding: '0 16px 0 54px'
   }
 }
 
@@ -68,7 +67,7 @@ export default class AccessRequest extends React.Component {
     } else if (field === 'email') {
       return CommunicationEmail
     } else if (field === 'passport') {
-      return ({avatar: 'img/ic_passport.svg'})
+      return IconPassport
     } else if (field === 'address') {
       return Location
     } else if (field === 'idcard') {
@@ -95,7 +94,8 @@ export default class AccessRequest extends React.Component {
     }
     let headerMessage = `${name} wants to have access to your data?`
 
-    const fields = this.props.requestedFields || ['No fields requested']
+    const fields = this.props.requestedFields || ['No fields requested. Please try again']
+
     const renderFields = fields.map((field) => {
       let verified, textValue
       if (identity.contact[field + 's'] && field === 'phone') {
@@ -108,11 +108,26 @@ export default class AccessRequest extends React.Component {
         verified = identity[field + 's'][0].verified
         textValue = identity[field + 's'][0].number
       } else {
-        // the error case
         return (
           <MissingInfoItem
             field={field}
+            goToMissingInfo={this.props.goToMissingInfo}
             textValue={'Data is missing'} />
+        )
+      }
+
+      if(!verified) {
+        return (
+          <NotVerifiedItem
+            requestVerificationCode={this.props.requestVerificationCode}
+            enterVerificationCode={this.props.enterVerificationCode}
+            resendVerificationCode={this.props.resendVerificationCode}
+            changePinValue={this.props.changePinValue}
+            setFocusedPin={this.props.setFocusedPin}
+            field={field}
+            textLabel={field}
+            textValue={textValue}
+            icon={this.getIcon(field)} />
         )
       }
       return (

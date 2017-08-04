@@ -3,7 +3,7 @@ import Radium from 'radium'
 
 import Avatar from 'material-ui/Avatar'
 import {theme} from 'styles'
-import IconIdCard from '../../../common/icon-idcard'
+import {IconIdCard, IconPassport} from '../../../common'
 import {TextField, ListItem, FloatingActionButton} from 'material-ui'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
@@ -70,7 +70,7 @@ export default class MissingInfoItem extends React.Component {
     } else if (field === 'email') {
       return CommunicationEmail
     } else if (field === 'passport') {
-      // return ({avatar: 'img/ic_passport.svg'})
+      return <IconPassport color={'orange'} />
     } else if (field === 'address') {
       return <Location color={'orange'}/>
     } else if (field === 'idcard') {
@@ -79,24 +79,25 @@ export default class MissingInfoItem extends React.Component {
   }
 
   render() {
+    const {field} = this.props
     return (
       <div style={STYLES.container}>
         <ListItem
-          style={STYLES.listItem}
           rightIconButton={<FloatingActionButton
-              mini
-              style={STYLES.iconRight}
-              secondary={true}
-              onClick={() => {}}>
-                <ContentAdd />
-            </FloatingActionButton>}
+            mini
+            style={STYLES.iconRight}
+            secondary={true}
+            onClick={() => {this.props.goToMissingInfo(field)}}>
+              <ContentAdd />
+          </FloatingActionButton>}
           leftIcon={<div style={STYLES.icon}>
-              {this.getIcon(this.props.field)}
+              {this.getIcon(field)}
             </div>}
-          disabled>
+          disabled
+          style={STYLES.listItem}>
           <div style={STYLES.values}>
             <TextField
-              floatingLabelText={this.props.field}
+              floatingLabelText={field}
               floatingLabelStyle={STYLES.labelName}
               floatingLabelFixed
               inputStyle={{color: 'orange'}}
@@ -108,7 +109,7 @@ export default class MissingInfoItem extends React.Component {
         </ListItem>
         <ListItem
           innerDivStyle={STYLES.missingHeadline}
-          primaryText={`To use this service your ${this.props.field} is neccessary.
+          primaryText={`To use this service your ${field} is neccessary.
           Add it to your wallet.`}
           disabled/>
       </div>

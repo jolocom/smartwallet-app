@@ -74,14 +74,9 @@ export default class StaticListItem extends React.Component {
 
   render() {
     const props = this.props
-    let icon
-    if (typeof props.icon === 'object') {
-      icon = <Avatar style={STYLES.iconAvatar}
-        src={props.icon.avatar} />
-    } else {
-      icon = props.icon
+
+    const  icon = props.icon
       ? <props.icon color={STYLES.icon.color} style={STYLES.icon} /> : <div />
-    }
 
     return (
       <ListItem
