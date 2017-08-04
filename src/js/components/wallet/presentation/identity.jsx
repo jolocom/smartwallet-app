@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
 
@@ -23,7 +24,8 @@ import {
 const STYLES = {
   listItem: {
     whiteSpace: 'nowrap',
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 72px',
+    marginRight: '10px'
   },
   inputName: {
     color: theme.palette.textColor,
@@ -46,7 +48,9 @@ const STYLES = {
     marginTop: '10px'
   },
   container: {
-    marginLeft: '10px',
+    marginLeft: '10px'
+  },
+  innerContainer: {
     marginRight: '10px'
   }
 }
@@ -105,10 +109,14 @@ export default class WalletIdentity extends React.Component {
                 key={1}
                 disabled
                 rightIcon={<InfoDetails
-                  showDetails={details => showUserInfo(
+                  showDetails={message => showUserInfo(
                     null,
-                    details,
-                    'OK',
+                    message,
+                    (<CopyToClipboard text={webId}>
+                      <span>COPY WEBID</span>
+                    </CopyToClipboard>),
+                    () => {},
+                    'ALL RIGHT',
                     STYLES.simpleDialog
                   )}
                   webId={webId}
@@ -134,7 +142,7 @@ export default class WalletIdentity extends React.Component {
               choice={[...emails, ...phones].length > 0}
               goToManagement={goToContactManagement} />
           </Block>
-          <Block>
+          <Block style={STYLES.innerContainer}>
             <ContactList
               fields={phones}
               changePinValue={changePinValue}
@@ -162,7 +170,7 @@ export default class WalletIdentity extends React.Component {
               choice={passports.length > 0}
               goToManagement={goToPassportManagement} />
           </Block>
-          <Block>
+          <Block style={STYLES.innerContainer}>
             <PassportsList passports={passports} />
           </Block>
           <Block>
@@ -171,7 +179,7 @@ export default class WalletIdentity extends React.Component {
               choice={idCards.length > 0}
               goToManagement={goToPassportManagement} />
           </Block>
-          <Block>
+          <Block style={STYLES.innerContainer}>
             <IdCardsList
               idCards={idCards}
               requestIdCardVerification={requestIdCardVerification} />
@@ -182,6 +190,7 @@ export default class WalletIdentity extends React.Component {
               choice={false}
               goToManagement={goToDrivingLicenceManagement} />
           </Block>
+          <br />
         </Content>
       </HalfScreenContainer>
     </TabContainer>)

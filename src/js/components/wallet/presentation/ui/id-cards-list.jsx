@@ -97,16 +97,17 @@ const IdCardsList = (props) => {
         onClick={() => {
           props.requestIdCardVerification({
             index,
+            title: <div style={{textAlign: 'center'}}>
+              Verification Request
+            </div>,
             message: (<div>
-              <b>Verification Request</b> <br />
-              <br />
-                Our verification service uses the latest encrypting technology
+              Our verification service uses the latest encrypting technology
                 which costs &nbsp;
               <span style={STYLES.verificationMsg}>
                  xxx to save your ID Card on the Blockchain
               </span>
             </div>),
-            rightButtonLabel: 'SAVE TO BLOCACHAIN',
+            rightButtonLabel: 'SAVE TO BLOCKCHAIN',
             leftButtonLabel: 'CANCEL'
           })
         }} />

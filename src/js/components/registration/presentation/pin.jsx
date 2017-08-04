@@ -47,7 +47,7 @@ const Pin = (props) => {
   if (props.registering) {
     const messageWait = ['Please have some patience...',
       '...we are creating...', '...your jolocom wallet...',
-      '...your digital identity', '...we are linking...',
+      '...your digital identity...', '...we are linking...',
       '...your WebID to your identity...']
 
     contents = (
