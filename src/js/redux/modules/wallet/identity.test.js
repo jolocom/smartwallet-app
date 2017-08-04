@@ -38,7 +38,7 @@ describe('# Wallet identity redux module', () => {
         type: identity.actions.getIdentityInformation.id_success,
         result: {
           webId: 'https://test.webid.jolocom.com',
-          username: 'test',
+          userName: 'test',
           contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
           passports: ['test'],
           idCards: ['test']
@@ -127,12 +127,16 @@ describe('# Wallet identity redux module', () => {
     )
     it('getIdentityInformation should retrieve identity information', () => {
       const getState = stub()
-      const backend = {solid: {
-        getUserInformation: stub().returns('information')
+      const services = {auth: {
+        currentUser: {
+          wallet: {
+            getUserInformation: stub().returns('information')
+          }
+        }
       }}
       const dispatch = stub()
       const thunk = identity.actions.getIdentityInformation()
-      thunk(dispatch, getState, {backend})
+      thunk(dispatch, getState, {services})
 
       expect(dispatch.called).to.be.true
       expect(dispatch.calls[0].args[0].promise()).to.equal('information')
