@@ -166,24 +166,6 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
 
-    case actions.submitPassphrase.id_success:
-      return state.mergeDeep({
-        passphrase: {
-          errorMsg: '',
-          valid: true,
-          failed: false
-        }
-      })
-
-    case actions.submitPassphrase.id_fail:
-      return state.mergeDeep({
-        passphrase: {
-          errorMsg: 'Your passphrase is not correct',
-          valid: false,
-          failed: true
-        }
-      })
-
     case actions.setPin.id:
       if (!(/^[0-9]{0,4}$/).test(action.value)) {
         return state

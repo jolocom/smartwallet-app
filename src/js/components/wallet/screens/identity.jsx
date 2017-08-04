@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'redux/utils'
 import Presentation from '../presentation/identity'
-import WalletError from '../presentation/error'
+import WalletError from '../../common/error'
 
 @connect({
   props: ['wallet'],
@@ -79,8 +79,9 @@ export default class WalletIdentityScreen extends React.Component {
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
       requestIdCardVerification={
-        ({message, rightButtonLabel, leftButtonLabel, index}) =>
+        ({title, message, rightButtonLabel, leftButtonLabel, index}) =>
           this.props.openConfirmDialog(
+            title,
             message,
             rightButtonLabel,
             () => { this.props.saveToBlockchain(0) },
@@ -105,8 +106,8 @@ export default class WalletIdentityScreen extends React.Component {
       }}
       onConfirm={(...args) => { this.onConfirm(...args) }}
       showUserInfo={(...args) => {
-        this.props.configSimpleDialog(...args)
-        this.props.showSimpleDialog()
+        this.props.openConfirmDialog(...args)
+        // this.props.showSimpleDialog()
       }} />)
   }
 

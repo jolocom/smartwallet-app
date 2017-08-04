@@ -1,4 +1,3 @@
-import * as _ from 'lodash'
 import EventEmitter from 'events'
 
 export default class AuthService extends EventEmitter {
@@ -104,9 +103,10 @@ export class Wallet {
           savedToBlockchain: false
         })),
         idCards: idcard.map(idcard => ({
-          ...idcard.contents,
+          idCardFields: idcard.contents,
           verified: idcard.verified,
-          savedToBlockchain: false
+          savedToBlockchain: false,
+          id: idcard.id
         }))
       }
     } catch (e) {
