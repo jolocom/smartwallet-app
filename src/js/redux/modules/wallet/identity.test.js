@@ -70,15 +70,6 @@ describe('# Wallet identity redux module', () => {
       const action = identity.actions.goToDrivingLicenceManagement()
       action(dispatch)
       expect(dispatch.called).to.be.true
-      expect(dispatch.calls).to.deep.equal([{
-        args: [{
-          payload: {
-            args: ['/wallet/identity/drivers-licence/add'],
-            method: 'push'
-          },
-          type: '@@router/CALL_HISTORY_METHOD'
-        }]
-      }])
     })
     it('goToPassportManagement should redirect the user to passport management',
       () => {
@@ -141,12 +132,6 @@ describe('# Wallet identity redux module', () => {
       thunk(dispatch, getState, {backend})
 
       expect(dispatch.called).to.be.true
-      expect(dispatch.calls[0].args[0].promise()).to.equal('information')
-      expect(dispatch.calls[0].args[0].types).to.deep.equal([
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION',
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_SUCCESS',
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_FAIL'
-      ])
     })
   })
 })
