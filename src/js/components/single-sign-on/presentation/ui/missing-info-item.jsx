@@ -66,9 +66,9 @@ export default class MissingInfoItem extends React.Component {
 
   getIcon(field) {
     if (field === 'phone') {
-      return CommunicationCall
+      return <CommunicationCall color={'orange'} />
     } else if (field === 'email') {
-      return CommunicationEmail
+      return <CommunicationEmail color={'orange'} />
     } else if (field === 'passport') {
       return <IconPassport color={'orange'} />
     } else if (field === 'address') {

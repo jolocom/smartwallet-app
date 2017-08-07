@@ -59,7 +59,7 @@ export default class NotVerifiedItem extends React.Component {
             changePinValue={(value) => { this.props.changePinValue(value, 0) }}
             focused={this.props.pinFocused}
             value={'01111 number from service'}
-            codeIsSent={true} />
+            codeIsSent={false} />
         </div>
       )
     } else if (field === 'email') {
@@ -99,7 +99,7 @@ export default class NotVerifiedItem extends React.Component {
             verified={false} />}
           disabled >
           <TextField
-            floatingLabelText={`Unverfied ${this.props.textLabel}`}
+            floatingLabelText={`Unverified ${this.props.textLabel}`}
             floatingLabelFixed
             underlineShow={false}
             value={this.props.textValue}/>

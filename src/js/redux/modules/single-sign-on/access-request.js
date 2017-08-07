@@ -23,12 +23,28 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
       }
     }
   },
+  setInfoComplete: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        // const bool = getState().toJS().singleSignOn.accessRequest.entity.infoComplete
+        // console.log('build action', bool)
+        dispatch(actions.setInfoComplete.buildAction())
+      }
+    }
+  },
   goToMissingInfo: {
     expectedparams: [],
     creator: (params) => {
-      return (dispatch) => {
+      return (dispatch, getState) => {
         const route = getRoute(params)
-        dispatch(router.pushRoute(route))
+        const path = getState().toJS().singleSignOn.accessRequest.entity.path
+        dispatch(router.pushRoute({
+          pathname: route,
+          query: {
+            callbackUrl: path
+          }
+        }))
       }
     }
   },
@@ -58,12 +74,13 @@ const initialState = Immutable.fromJS({
   entity: {
     processActive: false,
     loading: false,
+    path: '',
     name: 'SOME COMPANY',
     image: 'img/logo.svg',
     requester: '',
     returnURL: '',
     fields: [],
-    infoComplete: false // for button to be activated
+    infoComplete: false
   }
 })
 
@@ -73,9 +90,10 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['entity'], {
         processActive: true,
         loading: true,
-        requester: action.details.requester,
-        returnURL: action.details.returnURL,
-        fields: action.details['scope[]']
+        path: action.details.pathname + action.details.search,
+        requester: action.details.query.requester,
+        returnURL: action.details.query.returnURL,
+        fields: action.details.query['scope[]']
       })
 
     case actions.getRequesterIdentity.id:
@@ -108,6 +126,12 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.grantAccessToRequester.id_fail:
       return state.mergeIn(['entity'], {
         loading: false
+      })
+
+    case actions.setInfoComplete.id:
+    console.log('in set Info complete')
+      return state.mergeIn(['entity'], {
+        infoComplete: true
       })
 
     default:

@@ -46,7 +46,7 @@ const STYLES = {
   accessMsgHeader: theme.textStyles.sectionheader,
   accessMsgBody: theme.textStyles.subheadline,
   accessContainer: {
-    padding: '0 16px 0 54px'
+    padding: '8px 16px 0 54px'
   }
 }
 
@@ -75,9 +75,48 @@ export default class AccessRequest extends React.Component {
     }
   }
 
+  checkCompleteness() {
+    let counter = 0
+    console.log(this.props.requestedFields)
+    this.props.requestedFields.map((field) => {
+      let attributes = this.checkFields(field)
+      let verified = attributes.verified
+      if(verified == true) {
+        counter++
+      }
+    })
+    if(counter === this.props.requestedFields.length && counter > 0) {
+      this.props.setInfoComplete()
+    }
+
+  }
+
+  checkFields(field) {
+    const {identity} = this.props
+    let verified, textValue
+    let attribute = identity[field + 's'] || identity.contact[field + 's']
+
+    if (attribute && field === 'phone' && attribute[0] != undefined) {
+      verified = attribute[0].verified
+      textValue = attribute[0].number
+      return ({verified: verified, textValue: textValue})
+    } else if (attribute && field === 'email' && attribute[0] != undefined) {
+      verified = attribute[0].verified
+      textValue = attribute[0].address
+      return ({verified: verified, textValue: textValue})
+    } else if (attribute && attribute[0] != undefined) {
+      verified = attribute[0].verified
+      textValue = attribute[0].number
+      return ({verified: verified, textValue: textValue})
+    } else {
+      return ({verified: false, textValue: false})
+    }
+  }
+
   render() {
-    // console.log(IconIdCard)
-    const {name, image} = this.props.entity
+    console.log(this.props.entity)
+    this.checkCompleteness()
+    const {name, image, infoComplete} = this.props.entity
     const {identity} = this.props
     let popupMessage = {
       title: 'Why do I have to grant access?',
@@ -95,27 +134,19 @@ export default class AccessRequest extends React.Component {
     let headerMessage = `${name} wants to have access to your data?`
 
     const fields = this.props.requestedFields || ['No fields requested. Please try again']
-
     const renderFields = fields.map((field) => {
-      let verified, textValue
-      if (identity.contact[field + 's'] && field === 'phone') {
-        verified = identity.contact[field + 's'][0].verified
-        textValue = identity.contact[field + 's'][0].number
-      } else if (identity.contact[field + 's'] && field === 'email') {
-        verified = identity.contact[field + 's'][0].verified
-        textValue = identity.contact[field + 's'][0].address
-      } else if (identity[field] && field === 'passport') {
-        verified = identity[field + 's'][0].verified
-        textValue = identity[field + 's'][0].number
-      } else {
-        return (
-          <MissingInfoItem
-            field={field}
-            goToMissingInfo={this.props.goToMissingInfo}
-            textValue={'Data is missing'} />
-        )
-      }
+      let attributes = this.checkFields(field)
+      let verified = attributes.verified
+      let textValue = attributes.textValue
 
+      if(!textValue) {
+        return (
+            <MissingInfoItem
+              field={field}
+              goToMissingInfo={this.props.goToMissingInfo}
+              textValue={'Data is missing'} />
+          )
+      }
       if(!verified) {
         return (
           <NotVerifiedItem
@@ -129,16 +160,17 @@ export default class AccessRequest extends React.Component {
             textValue={textValue}
             icon={this.getIcon(field)} />
         )
+      } else {
+        return (
+          <StaticListItem
+            key={field}
+            verified={verified}
+            textValue={textValue}
+            textLabel={field}
+            icon={this.getIcon(field)}
+            secondaryTextValue={''} />
+        )
       }
-      return (
-        <StaticListItem
-          key={field}
-          verified={verified}
-          textValue={textValue}
-          textLabel={field}
-          icon={this.getIcon(field)}
-          secondaryTextValue={''} />
-      )
     })
 
     let content
@@ -178,6 +210,7 @@ export default class AccessRequest extends React.Component {
             <RaisedButton
               label="GIVE ACCESS"
               secondary
+              disabled={infoComplete ? false : true}
               style={{width: '100%'}}
               onClick={() => this.props.grantAccessToRequester({
                 user: this.props.identity.username.value,

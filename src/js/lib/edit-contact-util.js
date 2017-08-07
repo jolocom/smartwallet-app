@@ -44,10 +44,11 @@ export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
     blank: isBlank(value, field)
   })
 
-export const mapAccountInformationToState = ({email, phone, addresses = []}) =>
+export const mapAccountInformationToState = (callback, {email, phone, addresses = []}) =>
   Immutable.fromJS({
     loading: false,
     showErrors: false,
+    callback: callback,
     information: {
       newInformation: {
         emails: [email.length > 0 ? {delete: true} : {

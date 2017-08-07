@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'redux/utils'
 import Presentation from '../presentation/contact'
+import { push } from 'react-router-redux'
 
 @connect({
   props: ['wallet.contact'],
@@ -11,6 +12,7 @@ import Presentation from '../presentation/contact'
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
     'wallet/contact:updateInformation',
+    'wallet/contact:storeCallback',
     'wallet/contact:exitWithoutSaving',
     'wallet/contact:saveChanges',
     'wallet/contact:addNewEntry',
@@ -43,18 +45,20 @@ export default class WalletContactScreen extends React.Component {
     }
   }
   componentWillMount() {
+    const callback = this.props.location.query.callbackUrl || '/wallet/identity'
     if (this.props.contact.getDataFromBackend) {
-      this.props.getUserInformation()
+      this.props.getUserInformation(callback)
     }
   }
 
   render() {
+    console.log(this.props)
     const [{
       deleteInformation, addNewEntry, confirm, setAddressField, saveChanges,
       updateInformation, setInformation, exitWithoutSaving, close,
       initiateCountryScreenFromContactScreen
     }, {
-      information, loading, showErrors
+      information, loading, showErrors, callbackUrl
     }] = [this.props, this.props.contact]
     return (<Presentation
       information={information}

@@ -16,10 +16,12 @@ import Presentation from '../presentation/access-request'
     'single-sign-on/access-request:grantAccessToRequester',
     'single-sign-on/access-request:requestedDetails',
     'single-sign-on/access-request:goToMissingInfo',
+    'single-sign-on/access-request:setInfoComplete',
     'verification:confirmEmail',
     'verification:confirmPhone',
     'verification:startEmailVerification',
     'verification:startPhoneVerification',
+    'wallet/identity:getIdentityInformation',
     'wallet/identity:changePinValue',
     'wallet/identity:setFocusedPin'
   ]
@@ -57,8 +59,10 @@ export default class AccessRequestScreen extends React.Component {
     })
   }
 
-  componentWillMount() {
-    this.props.requestedDetails(this.props.location.query)
+  componentDidMount() {
+    this.props.getIdentityInformation()
+    this.props.requestedDetails(this.props.location)
+
   }
 
   // initiates process
@@ -108,7 +112,7 @@ export default class AccessRequestScreen extends React.Component {
     })
   }
 
-  // when is this called? when popup is displayed
+  // when popup is displayed
   showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
     console.log(title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel, callback)
     return this.props.openConfirmDialog(
@@ -131,6 +135,7 @@ export default class AccessRequestScreen extends React.Component {
         accessInfo={(...args) => { this.handleWhy(...args) }}
         denyAccess={(...args) => {this.handleDeny(...args) }}
         grantAccessToRequester={this.props.grantAccessToRequester}
+        setInfoComplete={this.props.setInfoComplete}
         changePinValue={this.props.changePinValue}
         setFocusedPin={this.props.setFocusedPin}
         requestVerificationCode={(args, params) => {
