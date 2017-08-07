@@ -12,14 +12,15 @@ describe('# Wallet identity redux module', () => {
         error: false,
         loaded: false,
         webId: '',
+        expandedFields: {
+          contact: false,
+          idCards: false,
+          passports: false
+        },
         username: {verified: false, value: ''},
         contact: {
           phones: [{
-            type: '',
-            number: '',
-            pin: '',
-            verified: false,
-            smsCode: '',
+            type: '', number: '', pin: '', verified: false, smsCode: '',
             pinFocused: false
           }],
           emails: [{type: '', address: '', pin: '', verified: false}]
@@ -50,6 +51,11 @@ describe('# Wallet identity redux module', () => {
           error: false,
           loaded: true,
           webId: 'https://test.webid.jolocom.com',
+          expandedFields: {
+            contact: false,
+            idCards: false,
+            passports: false
+          },
           username: {value: 'test'},
           contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
           passports: ['test'],

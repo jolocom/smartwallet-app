@@ -21,6 +21,11 @@ describe('(Component) Wallet Identity', function() {
           number: '',
           verified: false
         }]}
+        expandedFields={{
+          contact: false,
+          idCards: false,
+          passports: false
+        }}
         goToContactManagement={() => {}}
         goToPassportManagement={() => {}}
         goToDrivingLicenceManagement={() => {}}
