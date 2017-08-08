@@ -191,7 +191,8 @@ export const submitChanges = (backend, services, state) => {
         data.type = subType
       }
 
-      await wallet.storeAttribute({attributeType, attributeId, attributeData: data})
+      await wallet
+      .storeAttribute({attributeType, attributeId, attributeData: data})
     }
   }
 
