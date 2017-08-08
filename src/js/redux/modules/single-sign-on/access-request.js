@@ -17,6 +17,8 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
+        const user = services.auth.currentUser
+        console.log('this is the user: ', user)
         dispatch(actions.getRequesterIdentity.buildAction(params, (backend) => {
           return backend.wallet.getRequesterIdentity(params)
         }))
@@ -51,6 +53,8 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
+        const user = services.auth.currentUser.wallet.identityAddress
+        console.log('this is the user: ', user)
         dispatch(actions.grantAccessToRequester.buildAction(params,
           (backend) => {
             return backend.wallet.grantAccessToRequester(params.user, {

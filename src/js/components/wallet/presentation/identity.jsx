@@ -82,7 +82,6 @@ export default class WalletIdentity extends React.Component {
   }
 
   render() {
-    console.log('indentity screen: ', this.props)
     const {
       username, passports, idCards, isLoaded, webId, showUserInfo, phones,
       emails, goToContactManagement, goToPassportManagement, changePinValue,

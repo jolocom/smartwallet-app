@@ -21,7 +21,7 @@ export default class WalletAgent {
   }
 
   getRequesterIdentity(identity) {
-    // console.log('getRequesterIdentity: ', identity)
+    console.log('getRequesterIdentity: ', identity)
     return new Promise((resolve, reject) => {
       setTimeout(() => resolve('foo'), 2000)
     }) // just for testing
