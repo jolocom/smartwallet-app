@@ -38,6 +38,9 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  expandField: {
+    expectedParams: ['field', 'value']
+  },
   goToIdentity: {
     expectedParams: [],
     creator: () => {
@@ -81,8 +84,11 @@ const actions = module.exports = makeActions('wallet/identity', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () =>
           services.auth.currentUser.wallet.getUserInformation()
+            .then((result) => {
+              dispatch(actions.getIdCardVerifications())
+              return result
+            })
         ))
-        dispatch(actions.getIdCardVerifications())
       }
     }
   }
@@ -94,6 +100,11 @@ const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
     error: false,
     webId: webId,
     username: {value: userName},
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: false
+    },
     contact: {
       emails: contact.email,
       phones: contact.phone
@@ -106,6 +117,11 @@ const mapBackendToStateError =
   Immutable.fromJS({
     loaded: true,
     error: true,
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: true
+    },
     webId: {value: ''},
     username: {value: ''},
     contact: {
@@ -124,6 +140,11 @@ const initialState = Immutable.fromJS({
     verified: false,
     value: ''
   },
+  expandedFields: {
+    contact: false,
+    idCards: false,
+    passports: false
+  },
   contact: {
     phones: [{
       type: '',
@@ -140,22 +161,20 @@ const initialState = Immutable.fromJS({
       verified: false
     }]
   },
-  passports: [
-    {
-      number: '',
-      givenName: '',
-      familyName: '',
-      birthDate: '',
-      gender: '',
-      showAddress: '',
-      streetAndNumber: '',
-      city: '',
-      zip: '',
-      state: '',
-      country: '',
-      verified: false
-    }
-  ]
+  passports: [{
+    number: '',
+    givenName: '',
+    familyName: '',
+    birthDate: '',
+    gender: '',
+    showAddress: '',
+    streetAndNumber: '',
+    city: '',
+    zip: '',
+    state: '',
+    country: '',
+    verified: false
+  }]
 })
 
 const changeSmsCodeValue = (state, {index, value}) => {
@@ -199,6 +218,10 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['contact', 'phones', action.index], {
         pinFocused: action.value
       })
+
+    case actions.expandField.id:
+      return state.setIn(['expandedFields', action.field], action.value)
+
     default:
       return state
   }
