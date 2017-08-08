@@ -68,7 +68,7 @@ const VerificationButtons = ({
           secondary
           style={STYLES.requestBtn}
           onClick={() => enterVerificationCode({
-            title: 'Email Verification',
+            title: 'Phone Verification',
             message: (<VerificationButtonMsg
               msgType="codeInput"
               value={smsCode}
@@ -76,7 +76,7 @@ const VerificationButtons = ({
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
               changePinValue={(value) => { changePinValue(value, index) }}
               focused={pinFocused} />),
-            rightButtonLabel: <div style={{textAlign: 'center'}}>OK</div>,
+            rightButtonLabel: 'OK',
             leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
             attrType,
