@@ -16,7 +16,8 @@ const STYLES = {
     marginTop: '25px'
   },
   icon: {
-    top: '16px'
+    top: '16px',
+    left: '8px'
   },
   listItem: {
     whiteSpace: 'nowrap',
@@ -87,13 +88,13 @@ export default class NotVerifiedItem extends React.Component {
   }
 
   render() {
+    let leftIcon = <this.props.icon color={'grey'} />
+
     return (
       <div>
         <ListItem
           style={STYLES.listItem}
-          leftIcon={<this.props.icon
-            color={'grey'}
-            style={STYLES.icon} />}
+          leftIcon={<div style={STYLES.icon}>{leftIcon}</div>}
           rightIconButton={<VerifiedShield
             style={STYLES.verifiedShield}
             verified={false} />}

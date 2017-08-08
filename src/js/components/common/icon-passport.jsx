@@ -3,7 +3,7 @@ import Radium from 'radium'
 
 const IconPassport = (props) => {
   return (
-    <svg x="0px" y="0px" viewBox="0 0 24 24" style={{height: '24px', width: '24px'}}>
+    <svg x="0px" y="0px" viewBox="0 0 24 24" style={{height: '24px', width: '24px', position: 'absolute'}}>
       <g>
       	<path style={{fill: props.color}} d="M17.8535,21.7608H6.1465c-1.0798,0-1.9551-0.8753-1.9551-1.9551V4.1943c0-1.0798,0.8753-1.9551,1.9551-1.9551
       		h11.7071c1.0798,0,1.9551,0.8753,1.9551,1.9551v15.6114C19.8086,20.8855,18.9333,21.7608,17.8535,21.7608z"/>

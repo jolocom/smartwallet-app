@@ -3,7 +3,7 @@ import Radium from 'radium'
 
 const IconIdCard = (props) => {
   return (
-    <svg  x="0px" y="0px" viewBox="0 0 24 24" style={{height: '24px', width: '24px'}}>
+    <svg  x="0px" y="0px" viewBox="0 0 24 24" style={{height: '24px', width: '24px', position: 'absolute'}}>
       <path style={{fill: props.color}}
         d="M21.3057,4.1913H2.6943c-1.0797,0-1.9551,0.8753-1.9551,1.9551v11.7071c0,1.0798,0.8754,1.9551,1.9551,1.9551
       	h18.6115c1.0797,0,1.9551-0.8753,1.9551-1.9551V6.1464C23.2608,5.0667,22.3854,4.1913,21.3057,4.1913z M9.7728,11.8147

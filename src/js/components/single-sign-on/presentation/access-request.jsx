@@ -10,7 +10,7 @@ import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Location from 'material-ui/svg-icons/maps/place'
 import {IconIdCard, IconPassport} from '../../common'
-import {MissingInfoItem, NotVerifiedItem} from './ui'
+import {MissingInfoItem, NotVerifiedItem, VerifiedItem} from './ui'
 import {Content, Block} from '../../structure'
 import {TabContainer, HalfScreenContainer, StaticListItem}
   from '../../wallet/presentation/ui'
@@ -77,7 +77,6 @@ export default class AccessRequest extends React.Component {
 
   checkCompleteness() {
     let counter = 0
-    console.log(this.props.requestedFields)
     this.props.requestedFields.map((field) => {
       let attributes = this.checkFields(field)
       let verified = attributes.verified
@@ -147,7 +146,7 @@ export default class AccessRequest extends React.Component {
               textValue={'Data is missing'} />
           )
       }
-      if(!verified) {
+      if(verified) {
         return (
           <NotVerifiedItem
             requestVerificationCode={this.props.requestVerificationCode}
@@ -162,9 +161,9 @@ export default class AccessRequest extends React.Component {
         )
       } else {
         return (
-          <StaticListItem
+          <VerifiedItem
             key={field}
-            verified={verified}
+            verified={true}
             textValue={textValue}
             textLabel={field}
             icon={this.getIcon(field)}
