@@ -8,47 +8,46 @@ export default class VerificationAgent {
     this.httpAgent = new HTTPAgent({proxy: false})
   }
 
-  async startVerifyingEmail({wallet, email, pin}) {
+  async startVerifyingEmail({wallet, email, id, pin}) {
     return await this._startVerifying({
       wallet, pin, dataType: 'email', data: email
     })
   }
 
-  async startVerifyingPhone({wallet, phone, pin}) {
+  async startVerifyingPhone({wallet, phone, id, pin}) {
     return await this._startVerifying({
       wallet, pin, dataType: 'phone', data: phone
     })
   }
 
-  async _startVerifying({wallet, data, dataType, pin}) {
-    const {salt, txHash} = sendVerificationEtherIfNeeded({dataType, data})
-
+  async _startVerifying({wallet, data, id, dataType, pin}) {
     await this.httpAgent.post(
       settings.verificationProvider + `/${dataType}/start-verification`,
       {
-        // contractID: wallet.getIdentityAddress(),
-        txHash, [dataType]: data, salt
+        identity: wallet.identityURL,
+        id,
+        [dataType]: data
       }
     )
   }
 
-  async verifyEmail({contractID, email, code}) {
-    await this._verify({contractID, dataType: 'email', data: email, code})
+  async verifyEmail({contractID, email, id, code}) {
+    await this._verify({contractID, dataType: 'email', id, data: email, code})
   }
 
-  async verifyPhone({contractID, phone, code}) {
-    await this._verify({contractID, dataType: 'phone', data: phone, code})
+  async verifyPhone({contractID, phone, id, code}) {
+    await this._verify({contractID, dataType: 'phone', id, data: phone, code})
   }
 
-  async _verify({contractID, dataType, data, code}) {
-    const dataKey = getDataKey({dataType, data})
-    const stored = localStorage.getItem(dataKey)
-    const storedData = JSON.parse(stored)
-    const {salt, txHash} = storedData
-
+  async _verify({wallet, dataType, id, data, code}) {
     await this.httpAgent.post(
       settings.verificationProvider + `/${dataType}/verify`,
-      {contractID, txHash, salt, [dataType]: data, code}
+      {
+        identity: wallet.identityURL,
+        id,
+        [dataType]: data,
+        code
+      }
     )
 
     localStorage.deleteItem(getDataKey({dataType, data}))

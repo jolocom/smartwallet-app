@@ -3,14 +3,18 @@ import { makeActions } from './'
 
 export const actions = module.exports = makeActions('verification', {
   startEmailVerification: {
-    expectedParams: ['email', 'pin'],
+    expectedParams: ['email', 'index', 'pin'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
+        const { id } = getState().toJS().wallet.identity
+            .contact.emails[params.index]
+
         dispatch(actions.startEmailVerification.buildAction(params,
         (backend) => {
           return backend.verification.startVerifyingEmail({
             wallet: services.auth.currentUser.wallet,
+            id: id,
             email: params.email,
             pin: params.pin
           })
@@ -25,10 +29,11 @@ export const actions = module.exports = makeActions('verification', {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params,
         (backend) => {
-          const { pin } = getState().toJS().wallet.identity
+          const { pin, id } = getState().toJS().wallet.identity
             .contact.phones[params.index]
           return backend.verification.startVerifyingPhone({
             wallet: services.auth.currentUser.wallet,
+            id,
             phone: params.phone,
             pin
           })
@@ -37,7 +42,7 @@ export const actions = module.exports = makeActions('verification', {
     }
   },
   confirmEmail: {
-    expectedParams: ['email', 'code'],
+    expectedParams: ['email', 'id', 'code'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
@@ -49,7 +54,8 @@ export const actions = module.exports = makeActions('verification', {
         }
         dispatch(actions.confirmEmail.buildAction(params, (backend) => {
           return backend.verification.verifyEmail({
-            contractID: services.auth.currentUser.wallet.getIdentityAddress(),
+            wallet: services.auth.currentUser.wallet,
+            id: params.id,
             email: params.email,
             code: params.code
           })
@@ -58,7 +64,7 @@ export const actions = module.exports = makeActions('verification', {
     }
   },
   confirmPhone: {
-    expectedParams: ['phone', 'code'],
+    expectedParams: ['phone', 'id', 'code'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
@@ -70,7 +76,8 @@ export const actions = module.exports = makeActions('verification', {
         }
         dispatch(actions.confirmEmail.buildAction(params, (backend) => {
           return backend.verification.verifyEmail({
-            contractID: services.auth.currentUser.wallet.getIdentityAddress(),
+            wallet: services.auth.currentUser.wallet,
+            id: params.id,
             phone: params.phone,
             code: params.code
           })
