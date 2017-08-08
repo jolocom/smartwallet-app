@@ -52,7 +52,7 @@ const VerifiedShield = (props) => {
 
 VerifiedShield.propTypes = {
   verified: React.PropTypes.bool.isRequired,
-  savedToBlockchain: React.PropTypes.bool.isRequired,
+  savedToBlockchain: React.PropTypes.bool,
   style: React.PropTypes.object,
   verify: React.PropTypes.func
 }

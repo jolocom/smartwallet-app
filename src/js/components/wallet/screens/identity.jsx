@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'redux/utils'
 import Presentation from '../presentation/identity'
-import WalletError from '../presentation/error'
+import WalletError from '../../common/error'
 
 @connect({
   props: ['wallet'],
@@ -12,6 +12,7 @@ import WalletError from '../presentation/error'
     'wallet/identity:setFocusedPin',
     'wallet/identity:goToPassportManagement',
     'wallet/identity:goToDrivingLicenceManagement',
+    'wallet/identity:expandField',
     'wallet/identity:goToContactManagement',
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog',
@@ -43,6 +44,7 @@ export default class WalletIdentityScreen extends React.Component {
     confirmEmail: React.PropTypes.func.isRequired,
     confirmPhone: React.PropTypes.func.isRequired,
     resendVerificationLink: React.PropTypes.func,
+    expandField: React.PropTypes.func,
     resendVerificationSms: React.PropTypes.func,
     changePinValue: React.PropTypes.func.isRequired,
     changeSmsCodeValue: React.PropTypes.func.isRequired,
@@ -54,8 +56,8 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   render() {
-    const {username, contact, webId, passports, idCards, loaded, error
-    } = this.props.wallet.identity
+    const { username, contact, webId, passports, idCards, loaded, error,
+      expandedFields } = this.props.wallet.identity
     if (error) {
       return (<WalletError
         message="...oops something went wrong! We were not able to load your data." // eslint-disable-line max-len
@@ -66,12 +68,14 @@ export default class WalletIdentityScreen extends React.Component {
 
     return (<Presentation
       username={username}
+      expandedFields={expandedFields}
       emails={emails}
       phones={phones}
       webId={webId}
       passports={passports}
       idCards={idCards}
       isLoaded={loaded}
+      expandField={this.props.expandField}
       isError={error}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
@@ -79,8 +83,9 @@ export default class WalletIdentityScreen extends React.Component {
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
       requestIdCardVerification={
-        ({message, rightButtonLabel, leftButtonLabel, index}) =>
+        ({title, message, rightButtonLabel, leftButtonLabel, index}) =>
           this.props.openConfirmDialog(
+            title,
             message,
             rightButtonLabel,
             () => { this.props.saveToBlockchain(0) },

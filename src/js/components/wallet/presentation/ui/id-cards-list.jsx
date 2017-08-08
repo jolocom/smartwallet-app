@@ -72,23 +72,23 @@ const IdCardsList = (props) => {
       key={`street_${id}`}
       icon={MapsLocation}
       textLabel="Street"
-      textValue={idCardFields.physicalAddress.streetWithNumber} />
+      textValue={idCardFields.streetWithNumber} />
     <StaticListItem
       key={`city_${id}`}
       textLabel="City"
-      textValue={idCardFields.physicalAddress.city} />
+      textValue={idCardFields.city} />
     <StaticListItem
       key={`zipCode_${id}`}
       textLabel="Zip Code"
-      textValue={idCardFields.physicalAddress.zip} />
+      textValue={idCardFields.zip} />
     <StaticListItem
       key={`state_${id}`}
       textLabel="State"
-      textValue={idCardFields.physicalAddress.state} />
+      textValue={idCardFields.state} />
     <StaticListItem
       key={`country_${id}`}
       textLabel="Country"
-      textValue={idCardFields.physicalAddress.country} />
+      textValue={idCardFields.country} />
     {
       savedToBlockchain || verified ? null : <FlatButton
         label="REQUEST VERICATION"
@@ -97,16 +97,17 @@ const IdCardsList = (props) => {
         onClick={() => {
           props.requestIdCardVerification({
             index,
+            title: <div style={{textAlign: 'center'}}>
+              Verification Request
+            </div>,
             message: (<div>
-              <b>Verification Request</b> <br />
-              <br />
-                Our verification service uses the latest encrypting technology
+              Our verification service uses the latest encrypting technology
                 which costs &nbsp;
               <span style={STYLES.verificationMsg}>
                  xxx to save your ID Card on the Blockchain
               </span>
             </div>),
-            rightButtonLabel: 'SAVE TO BLOCACHAIN',
+            rightButtonLabel: 'SAVE TO BLOCKCHAIN',
             leftButtonLabel: 'CANCEL'
           })
         }} />

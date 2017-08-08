@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 import util from 'lib/util'
-import WebIdAgent from 'lib/agents/webid'
+// import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
@@ -37,6 +37,9 @@ const actions = module.exports = makeActions('wallet/identity', {
         dispatch(router.pushRoute('/wallet/identity/drivers-licence/add'))
       }
     }
+  },
+  expandField: {
+    expectedParams: ['field', 'value']
   },
   goToIdentity: {
     expectedParams: [],
@@ -80,20 +83,28 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () =>
-          backend.solid.getUserInformation(new WebIdAgent().getWebId())
+          services.auth.currentUser.wallet.getUserInformation()
+            .then((result) => {
+              dispatch(actions.getIdCardVerifications())
+              return result
+            })
         ))
-        dispatch(actions.getIdCardVerifications())
       }
     }
   }
 })
 
-const mapBackendToState = ({webId, contact, passports, idCards}) =>
+const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: false,
-    webId,
-    username: {value: webId.split('.')[0].split('://')[1]},
+    webId: webId,
+    username: {value: userName},
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: false
+    },
     contact: {
       emails: contact.email,
       phones: contact.phone
@@ -102,10 +113,15 @@ const mapBackendToState = ({webId, contact, passports, idCards}) =>
     idCards: idCards
   })
 const mapBackendToStateError =
-({webId, username, contact, passports, idCards}) =>
+({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: true,
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: true
+    },
     webId: {value: ''},
     username: {value: ''},
     contact: {
@@ -115,6 +131,7 @@ const mapBackendToStateError =
     passports: [],
     idCards: []
   })
+
 const initialState = Immutable.fromJS({
   loaded: false,
   error: false,
@@ -122,6 +139,11 @@ const initialState = Immutable.fromJS({
   username: {
     verified: false,
     value: ''
+  },
+  expandedFields: {
+    contact: false,
+    idCards: false,
+    passports: false
   },
   contact: {
     phones: [{
@@ -139,22 +161,20 @@ const initialState = Immutable.fromJS({
       verified: false
     }]
   },
-  passports: [
-    {
-      number: '',
-      givenName: '',
-      familyName: '',
-      birthDate: '',
-      gender: '',
-      showAddress: '',
-      streetAndNumber: '',
-      city: '',
-      zip: '',
-      state: '',
-      country: '',
-      verified: false
-    }
-  ]
+  passports: [{
+    number: '',
+    givenName: '',
+    familyName: '',
+    birthDate: '',
+    gender: '',
+    showAddress: '',
+    streetAndNumber: '',
+    city: '',
+    zip: '',
+    state: '',
+    country: '',
+    verified: false
+  }]
 })
 
 const changeSmsCodeValue = (state, {index, value}) => {
@@ -198,6 +218,10 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['contact', 'phones', action.index], {
         pinFocused: action.value
       })
+
+    case actions.expandField.id:
+      return state.setIn(['expandedFields', action.field], action.value)
+
     default:
       return state
   }

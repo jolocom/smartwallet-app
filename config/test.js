@@ -4,6 +4,7 @@
 module.exports = {
   proxy: 'https://proxy.jolocom.de',
   endpoint: 'https://localhost:8443',
+  gateway: 'https://identity.jolocom.com',
   blockchain: {
     // Test RPC node
     gethHost: 'http://verification.jolocom.com:9050',

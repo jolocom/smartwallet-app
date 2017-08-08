@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
-import WebIdAgent from 'lib/agents/webid'
 
 import {
 mapAccountInformationToState,
@@ -55,7 +54,7 @@ const actions = module.exports = makeActions('wallet/contact', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getUserInformation
         .buildAction(params, () => {
-          return backend.solid.getUserInformation(new WebIdAgent().getWebId())
+          return services.auth.currentUser.wallet.getUserInformation()
           .then((result) => {
             dispatch(actions.storeCallback(params, {dispatch}))
             return (
