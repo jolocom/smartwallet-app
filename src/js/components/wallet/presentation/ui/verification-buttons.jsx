@@ -36,30 +36,6 @@ const VerificationButtons = ({
     changePinValue
   }) => {
   if (verified) { return null }
-  if (attrType === 'email') {
-    return (<ListItem disabled leftIcon={<div />} >
-      <FlatButton
-        label="REQUEST VERIFICATION"
-        secondary
-        style={STYLES.requestBtn}
-        onClick={() => requestVerificationCode({
-          title: 'Verification Request',
-          message: (<VerificationButtonMsg
-            msgType="codeRequest"
-            value={smsCode}
-            phoneNumber={value}
-            setFocusedPin={(value) => { setFocusedPin(value, index) }}
-            changePinValue={(value) => { changePinValue(value, index) }}
-            focused={pinFocused} />),
-          rightButtonLabel: 'OK',
-          leftButtonLabel: 'CANCEL',
-          attrType,
-          index,
-          style: STYLES.simpleDialog,
-          attrValue: value
-        })} />
-    </ListItem>)
-  }
   if (codeIsSent) {
     return (<div>
       <ListItem disabled leftIcon={<div />} >

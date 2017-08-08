@@ -163,6 +163,8 @@ export default class WalletIdentity extends React.Component {
               <ContactList
                 fields={emails}
                 onConfirm={onConfirm}
+                changePinValue={changePinValue}
+                setFocusedPin={setFocusedPin}
                 requestVerificationCode={requestVerificationCode}
                 resendVerificationCode={resendVerificationCode}
                 enterVerificationCode={enterVerificationCode}

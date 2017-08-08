@@ -20,6 +20,8 @@ const iconMsg = {
   </div>)
 }
 
+const attrTypeToKey = (attrType) => (attrType + 's')
+
 const ContactList = ({
   fields,
   requestVerificationCode,
@@ -65,9 +67,12 @@ const ContactList = ({
             msgType="pinInput"
             value={smsCode}
             pinLength={4}
-            phoneNumber={attrValue}
+            phoneNumber={number}
+            address={address}
             setFocusedPin={(value) => { setFocusedPin(value, index) }}
-            changePinValue={(value) => { changePinValue(value, index) }}
+            changePinValue={(value) => {
+              changePinValue(attrTypeToKey(attrType), value, index)
+            }}
             focused={pinFocused} />),
           rightButtonLabel: 'OK',
           leftButtonLabel: 'CANCEL',
@@ -85,7 +90,9 @@ const ContactList = ({
         enterVerificationCode={enterVerificationCode}
         smsCode={smsCode}
         setFocusedPin={(value) => { setFocusedPin(value, index) }}
-        changePinValue={(value) => { changePinValue(value, index) }}
+        changePinValue={(value) => {
+          changePinValue(attrTypeToKey(attrType), value, index)
+        }}
         focused={pinFocused}
         value={attrValue}
         codeIsSent={codeIsSent}

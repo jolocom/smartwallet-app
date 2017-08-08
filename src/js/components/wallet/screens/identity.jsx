@@ -93,9 +93,6 @@ export default class WalletIdentityScreen extends React.Component {
           )
         }
       requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
-        if (args.attrType === 'email') {
-          return this.requestVerificationCode(args)
-        }
         return () => this.showVerificationWindow(params,
           (callbackArgs) => this.requestVerificationCode(callbackArgs))
       })}
