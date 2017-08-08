@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 import util from 'lib/util'
-import WebIdAgent from 'lib/agents/webid'
+// import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
@@ -83,7 +83,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () =>
-          backend.solid.getUserInformation(new WebIdAgent().getWebId())
+          services.auth.currentUser.wallet.getUserInformation()
             .then((result) => {
               dispatch(actions.getIdCardVerifications())
               return result
@@ -94,17 +94,17 @@ const actions = module.exports = makeActions('wallet/identity', {
   }
 })
 
-const mapBackendToState = ({webId, contact, passports, idCards}) =>
+const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: false,
+    webId: webId,
+    username: {value: userName},
     expandedFields: {
       contact: false,
       idCards: false,
       passports: false
     },
-    webId,
-    username: {value: webId.split('.')[0].split('://')[1]},
     contact: {
       emails: contact.email,
       phones: contact.phone
@@ -113,7 +113,7 @@ const mapBackendToState = ({webId, contact, passports, idCards}) =>
     idCards: idCards
   })
 const mapBackendToStateError =
-({webId, username, contact, passports, idCards}) =>
+({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: true,
@@ -131,6 +131,7 @@ const mapBackendToStateError =
     passports: [],
     idCards: []
   })
+
 const initialState = Immutable.fromJS({
   loaded: false,
   error: false,

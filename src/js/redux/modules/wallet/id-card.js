@@ -6,7 +6,7 @@ import {listOfCountries as options} from '../../../lib/list-of-countries'
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
-  storeIdCardDetailsInSolid,
+  storeIdCardDetails,
   genderList,
   mapBackendToState,
   changeFieldValue
@@ -23,7 +23,7 @@ const actions = module.exports = makeActions('wallet/id-card', {
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
           dispatch(actions.save.buildAction(params, () => {
-            return storeIdCardDetailsInSolid({backend, services, idCard, webId})
+            return storeIdCardDetails({backend, services, idCard, webId})
           })
         ).then((result) => {
           dispatch(actions.clearState())
