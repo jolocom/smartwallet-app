@@ -7,8 +7,9 @@ import AccessRequestScreen from './access-request'
 import {stub} from '../../../../../test/utils'
 
 describe('(Component) AccessRequestScreen', () => {
-  it('should call requestedDetails to start on componentWillMount', () => {
+  it('should call requestedDetails and getIdentityInformation to start on componentWillMount', () => {
     const requestedDetails = stub()
+    const getIdentityInformation = stub()
     const wrapper = shallow((<AccessRequestScreen.WrappedComponent
       {...AccessRequestScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
@@ -69,6 +70,7 @@ describe('(Component) AccessRequestScreen', () => {
       }))
     }
       requestedDetails={requestedDetails}
+      getIdentityInformation={getIdentityInformation}
       requestedFields={[]}
       location={{}}
       identity={{}}
@@ -144,6 +146,7 @@ describe('(Component) AccessRequestScreen', () => {
       configSimpleDialog={configSimpleDialog}
       showSimpleDialog={() => {}}
       requestedDetails={() => {}}
+      getIdentityInformation={() => {}}
       requestedFields={[]}
       location={{}}
       identity={{}}

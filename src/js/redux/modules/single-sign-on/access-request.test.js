@@ -10,11 +10,13 @@ describe('# SingleSignOn AccessRequest redux module', () => {
       expect(state.toJS()).to.deep.equal({
         entity: {
           loading: false,
+          path: '',
           name: 'SOME COMPANY',
           image: 'img/logo.svg',
           requester: '',
           returnURL: '',
-          fields: []
+          fields: [],
+          infoComplete: false
         }
       })
     })
@@ -25,18 +27,23 @@ describe('# SingleSignOn AccessRequest redux module', () => {
         type: actions.requestedDetails.id,
         details: {
           loading: true,
-          requester: 'www.test.com',
-          returnURL: 'www.return.com',
-          'scope[]': ['phone', 'email']
+          pathname: '/single-sign-on/test',
+          query: {
+            requester: 'www.test.com',
+            returnURL: 'www.return.com',
+            'scope[]': ['phone', 'email']
+          }
         }
       }
       const expectedState = {
         loading: true,
+        path: '/single-sign-on/testundefined',
         name: 'SOME COMPANY',
         image: 'img/logo.svg',
         requester: 'www.test.com',
         returnURL: 'www.return.com',
-        fields: ['phone', 'email']
+        fields: ['phone', 'email'],
+        infoComplete: false
       }
       expect(reducer(state, action).getIn(['entity']).toJS()).to.deep.equal(expectedState) // eslint-disable-line max-len
     })
@@ -51,12 +58,13 @@ describe('# SingleSignOn AccessRequest redux module', () => {
       state = reducer(state, action)
       expect(state.getIn(['entity']).toJS()).to.deep.equal({
         loading: false,
+        path: '',
         name: 'test company',
         image: 'img/logo.svg',
         requester: '',
         returnURL: '',
-        fields: []
-
+        fields: [],
+        infoComplete: false
       })
     })
 
@@ -70,11 +78,13 @@ describe('# SingleSignOn AccessRequest redux module', () => {
       state = reducer(state, action)
       expect(state.getIn(['entity']).toJS()).to.deep.equal({
         loading: false,
+        path: '',
         name: 'SOME COMPANY',
         image: 'img/logo.svg',
         requester: '',
         returnURL: '',
-        fields: []
+        fields: [],
+        infoComplete: false
       })
     })
   })

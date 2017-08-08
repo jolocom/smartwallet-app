@@ -44,7 +44,7 @@ export const setNewFieldValue = (state, {field, index, value}) => state.mergeIn(
     blank: isBlank(value, field)
   })
 
-export const mapAccountInformationToState = (callback, {email, phone, addresses = []}) =>
+export const mapAccountInformationToState = (callback, {email, phone, addresses = []}) => // eslint-disable-line max-len
   Immutable.fromJS({
     loading: false,
     showErrors: false,

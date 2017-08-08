@@ -47,6 +47,18 @@ const STYLES = {
   accessMsgBody: theme.textStyles.subheadline,
   accessContainer: {
     padding: '8px 16px 0 54px'
+  },
+  buttons: {
+    width: '100%'
+  },
+  loading: {
+    marginTop: '100px'
+  },
+  header: {
+    padding: '12px'
+  },
+  list: {
+    marginBottom: '20px'
   }
 }
 
@@ -80,11 +92,11 @@ export default class AccessRequest extends React.Component {
     this.props.requestedFields.map((field) => {
       let attributes = this.checkFields(field)
       let verified = attributes.verified
-      if(verified == true) {
+      if (verified === true) {
         counter++
       }
     })
-    if(counter === this.props.requestedFields.length && counter > 0) {
+    if (counter === this.props.requestedFields.length && counter > 0) {
       this.props.setInfoComplete()
     }
 
@@ -95,11 +107,11 @@ export default class AccessRequest extends React.Component {
     let verified, textValue
     let attribute = identity[field + 's'] || identity.contact[field + 's']
 
-    if (attribute && field === 'phone' && attribute[0] != undefined) {
+    if (attribute && field === 'phone' && attribute[0] !== undefined) {
       verified = attribute[0].verified
       textValue = attribute[0].number
       return ({verified: verified, textValue: textValue})
-    } else if (attribute && field === 'email' && attribute[0] != undefined) {
+    } else if (attribute && field === 'email' && attribute[0] !== undefined) {
       verified = attribute[0].verified
       textValue = attribute[0].address
       return ({verified: verified, textValue: textValue})
@@ -113,7 +125,6 @@ export default class AccessRequest extends React.Component {
   }
 
   render() {
-    console.log(this.props.entity)
     this.checkCompleteness()
     const {name, image, infoComplete} = this.props.entity
     const {identity} = this.props
@@ -140,13 +151,13 @@ export default class AccessRequest extends React.Component {
 
       if(!textValue) {
         return (
-            <MissingInfoItem
-              field={field}
-              goToMissingInfo={this.props.goToMissingInfo}
-              textValue={'Data is missing'} />
-          )
+          <MissingInfoItem
+            field={field}
+            goToMissingInfo={this.props.goToMissingInfo}
+            textValue={'Data is missing'} />
+        )
       }
-      if(verified) {
+      if(!verified) {
         return (
           <NotVerifiedItem
             requestVerificationCode={this.props.requestVerificationCode}
@@ -176,13 +187,13 @@ export default class AccessRequest extends React.Component {
     if (this.props.entity.loading) {
       content = (
         <Content>
-          <Loading style={{marginTop: '100px'}} />
+          <Loading style={STYLES.loading} />
         </Content>
       )
     } else {
       content = (
         <Content style={STYLES.container}>
-          <Block style={{padding: '12px'}}>
+          <Block style={STYLES.header}>
             <ListItem
               leftAvatar={<Avatar src={image}
                 style={STYLES.avatar} />}
@@ -200,7 +211,7 @@ export default class AccessRequest extends React.Component {
             </FlatButton>
           </Block>
           <Divider style={STYLES.container} />
-          <Block style={{marginBottom: '20px'}}>
+          <Block style={STYLES.list}>
             <List>
             {renderFields}
             </List>
@@ -210,7 +221,7 @@ export default class AccessRequest extends React.Component {
               label="GIVE ACCESS"
               secondary
               disabled={infoComplete ? false : true}
-              style={{width: '100%'}}
+              style={STYLES.buttons}
               onClick={() => this.props.grantAccessToRequester({
                 user: this.props.identity.username.value,
                 query: this.props.location
@@ -219,7 +230,7 @@ export default class AccessRequest extends React.Component {
           <Block style={STYLES.accessContainer}>
               <RaisedButton
                 label="DENY ACCESS"
-                style={{width: '100%'}}
+                style={STYLES.buttons}
                 onClick={() =>this.props.denyAccess(popupMessageDeny.title, popupMessageDeny.body)} />
           </Block>
         </Content>

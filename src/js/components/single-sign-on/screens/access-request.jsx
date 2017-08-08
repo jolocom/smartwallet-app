@@ -59,7 +59,7 @@ export default class AccessRequestScreen extends React.Component {
     })
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.getIdentityInformation()
     this.props.requestedDetails(this.props.location)
 

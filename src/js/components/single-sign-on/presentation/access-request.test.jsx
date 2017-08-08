@@ -9,8 +9,7 @@ describe('(Component) AccessRequestPresentation', () => {
       entity={{}}
       accessInfo={() => {}}
       grantAccessToRequester={() => {}}
-      requestedFields={[]}
-    />),
+      requestedFields={[]} />),
     { context: { muiTheme: { } } }
   )
   })

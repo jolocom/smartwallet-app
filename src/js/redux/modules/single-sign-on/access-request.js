@@ -27,8 +27,6 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
-        // const bool = getState().toJS().singleSignOn.accessRequest.entity.infoComplete
-        // console.log('build action', bool)
         dispatch(actions.setInfoComplete.buildAction())
       }
     }
@@ -72,7 +70,6 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
 
 const initialState = Immutable.fromJS({
   entity: {
-    processActive: false,
     loading: false,
     path: '',
     name: 'SOME COMPANY',
@@ -88,7 +85,6 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.requestedDetails.id:
       return state.mergeIn(['entity'], {
-        processActive: true,
         loading: true,
         path: action.details.pathname + action.details.search,
         requester: action.details.query.requester,
@@ -119,8 +115,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.grantAccessToRequester.id_success:
       return state.mergeIn(['entity'], {
-        loading: false,
-        processActive: false
+        loading: false
       })
 
     case actions.grantAccessToRequester.id_fail:
@@ -129,7 +124,6 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.setInfoComplete.id:
-    console.log('in set Info complete')
       return state.mergeIn(['entity'], {
         infoComplete: true
       })
@@ -143,13 +137,13 @@ const getPattern = (fields) => {
   // pattern = ['/identity/phone/*']
   let pattern = []
   for (var i = 0; i < fields.length; i++) {
-    pattern.push(`/identity/${fields[i]}\/\*`)
+    pattern.push(`/identity/${fields[i]}/*`)
   }
   return pattern
 }
 
 const getRoute = (field) => {
-  if(field === 'phone' || field === 'email' || field === 'address') {
+  if (field === 'phone' || field === 'email' || field === 'address') {
     return 'wallet/identity/contact'
   } else if (field === 'idcard' || field === 'passport') {
     return 'wallet/identity/passport/add'
