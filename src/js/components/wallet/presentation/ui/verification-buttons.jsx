@@ -68,7 +68,7 @@ const VerificationButtons = ({
           secondary
           style={STYLES.requestBtn}
           onClick={() => enterVerificationCode({
-            title: 'Sms Verification',
+            title: 'Email Verification',
             message: (<VerificationButtonMsg
               msgType="codeInput"
               value={smsCode}
