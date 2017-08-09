@@ -38,6 +38,9 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  setSmsVerificationCodeStatus: {
+    expectedParams: ['field', 'index', 'value']
+  },
   expandField: {
     expectedParams: ['field', 'value']
   },
@@ -219,6 +222,11 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.expandField.id:
       return state.setIn(['expandedFields', action.field], action.value)
+
+    case actions.setSmsVerificationCodeStatus.id:
+      return state.mergeIn(['contact', action.field, action.index], {
+        codeIsSent: action.value
+      })
 
     default:
       return state
