@@ -17,7 +17,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: ['value', 'index']
   },
   changePinValue: {
-    expectedParams: ['value', 'index']
+    expectedParams: ['attrType', 'value', 'index']
   },
   setFocusedPin: {
     expectedParams: ['value', 'index']
@@ -186,9 +186,9 @@ const changeSmsCodeValue = (state, {index, value}) => {
   return state
 }
 
-const changePinValue = (state, {index, value}) => {
+const changePinValue = (state, {attrType = 'phones', index, value}) => {
   if (/^[0-9]{0,6}$/.test(value)) {
-    return state.mergeIn(['contact', 'phones', index], {
+    return state.mergeIn(['contact', attrType, index], {
       pin: value
     })
   }
@@ -215,9 +215,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return changePinValue(state, action)
 
     case actions.setFocusedPin.id:
-      return state.mergeIn(['contact', 'phones', action.index], {
-        pinFocused: action.value
-      })
+      return state.setIn(['contact', 'isCodeInputFieldFocused'], action.value)
 
     case actions.expandField.id:
       return state.setIn(['expandedFields', action.field], action.value)

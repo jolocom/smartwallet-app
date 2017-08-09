@@ -7,7 +7,7 @@ export const actions = module.exports = makeActions('verification', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        const { id } = getState().toJS().wallet.identity
+        const { id, pin } = getState().toJS().wallet.identity
             .contact.emails[params.index]
 
         dispatch(actions.startEmailVerification.buildAction(params,
@@ -16,7 +16,7 @@ export const actions = module.exports = makeActions('verification', {
             wallet: services.auth.currentUser.wallet,
             id: id,
             email: params.email,
-            pin: params.pin
+            pin
           })
         }))
       }
