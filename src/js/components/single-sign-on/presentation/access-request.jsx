@@ -133,7 +133,7 @@ export default class AccessRequest extends React.Component {
 
   render() {
     this.checkCompleteness()
-    const {name, image} = this.props.entity
+    const {name, image, infoComplete} = this.props.entity
     let popupMessage = {
       title: 'Why do I have to grant access?',
       body: `You are about to connect to the service of ${name}. In order` +
@@ -158,6 +158,7 @@ export default class AccessRequest extends React.Component {
       if (!textValue) {
         return (
           <MissingInfoItem
+            key={field}
             field={field}
             goToMissingInfo={this.props.goToMissingInfo}
             textValue={'Data is missing'} />
@@ -166,6 +167,7 @@ export default class AccessRequest extends React.Component {
       if (!verified) {
         return (
           <NotVerifiedItem
+            key={field}
             requestVerificationCode={this.props.requestVerificationCode}
             enterVerificationCode={this.props.enterVerificationCode}
             resendVerificationCode={this.props.resendVerificationCode}
@@ -180,7 +182,7 @@ export default class AccessRequest extends React.Component {
         return (
           <VerifiedItem
             key={field}
-            verified={true}
+            verified
             textValue={textValue}
             textLabel={field}
             icon={this.getIcon(field)}
@@ -226,7 +228,7 @@ export default class AccessRequest extends React.Component {
             <RaisedButton
               label="GIVE ACCESS"
               secondary
-
+              disabled={!infoComplete}
               style={STYLES.buttons}
               onClick={() => this.props.grantAccessToRequester({
                 user: this.props.identity.username.value,
@@ -257,5 +259,3 @@ export default class AccessRequest extends React.Component {
     )
   }
 }
-
-// disabled={infoComplete ? false : true}

@@ -15,10 +15,15 @@ describe('# Edit contact Util', () => {
   describe('# mapAccountInformationToState', () => {
     it('should map account information to state properly', () => {
       const result = {
-        callback: 'test',
         email: [
-          {address: 'test1@test.com', id: 1, verified: false},
-          {address: 'test2@test.com', id: 2, verified: true}
+          {address: 'test1@test.com',
+            id: 1,
+            verified: false
+          },
+          {address: 'test2@test.com',
+            id: 2,
+            verified: true
+          }
         ],
         phone: [{
           number: '+123456789', id: 3, type: 'personal', verified: true
@@ -64,8 +69,8 @@ describe('# Edit contact Util', () => {
           }
         }
       }
-      expect(mapAccountInformationToState(result)
-    .toJS()).to.deep.equal(state)
+      expect(mapAccountInformationToState('/test/test', result).toJS())
+      .to.deep.equal(state)
     })
   })
   describe('# addNewField', () => {

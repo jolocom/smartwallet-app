@@ -168,10 +168,3 @@ export default class AccessRequestScreen extends React.Component {
     )
   }
 }
-
-// onVerify={({title, message, buttonText, style, attrValue}) => {
-//   this.props.configSimpleDialog(() => {
-//     this.props.startEmailVerification({email: attrValue})
-//   }, title, message, buttonText, style)
-//   this.props.showSimpleDialog()
-// }}

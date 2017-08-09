@@ -10,7 +10,7 @@ import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Location from 'material-ui/svg-icons/maps/place'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 
-var STYLES = {
+const STYLES = {
   icon: {
     top: '16px'
   },
@@ -54,12 +54,8 @@ var STYLES = {
 export default class MissingInfoItem extends React.Component {
   static propTypes = {
     icon: React.PropTypes.any,
-    verified: React.PropTypes.bool,
-    savedToBlockchain: React.PropTypes.bool,
     textLabel: React.PropTypes.string,
     textValue: React.PropTypes.string,
-    onVerify: React.PropTypes.func,
-    secondaryTextValue: React.PropTypes.string,
     field: React.PropTypes.string,
     goToMissingInfo: React.PropTypes.func
   }

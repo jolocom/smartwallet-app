@@ -4,7 +4,7 @@ import Radium from 'radium'
 import {theme} from 'styles'
 
 import VerifiedShield from '../../../wallet/presentation/ui/verified-shield'
-import VerificationButtons from '../../../wallet/presentation/ui/verification-buttons'
+import VerificationButtons from '../../../wallet/presentation/ui/verification-buttons' // eslint-disable-line max-len
 import {TextField, ListItem} from 'material-ui'
 import {Block} from '../../../structure'
 
@@ -37,9 +37,20 @@ const STYLES = {
 
 @Radium
 export default class NotVerifiedItem extends React.Component {
-
+  static propTypes = {
+    icon: React.PropTypes.any,
+    field: React.PropTypes.string,
+    textLabel: React.PropTypes.string.isRequired,
+    textValue: React.PropTypes.string.isRequired,
+    requestVerificationCode: React.PropTypes.func,
+    resendVerificationCode: React.PropTypes.func,
+    enterVerificationCode: React.PropTypes.func,
+    setFocusedPin: React.PropTypes.func,
+    changePinValue: React.PropTypes.func,
+    pinFocused: React.PropTypes.string
+  }
   renderVerificationInfo = (field) => {
-    if(field === 'phone') {
+    if (field === 'phone') {
       return (
         <div>
           <div style={STYLES.verificationBlock}>
@@ -47,7 +58,7 @@ export default class NotVerifiedItem extends React.Component {
               innerDivStyle={STYLES.innerDivStyle}
               primaryText={`We sent you an authentification code via sms
                 for verification.`}
-              disabled/>
+              disabled />
           </div>
           <VerificationButtons
             attrType="phone"
@@ -67,11 +78,11 @@ export default class NotVerifiedItem extends React.Component {
       return (
         <div>
           <div style={STYLES.verificationBlock}>
-          <ListItem
-            innerDivStyle={STYLES.innerDivStyle}
-            primaryText={`We sent you an email
+            <ListItem
+              innerDivStyle={STYLES.innerDivStyle}
+              primaryText={`We sent you an email
               for verification. Please confirm.`}
-            disabled/>
+              disabled />
           </div>
           <VerificationButtons
             attrType="email"
@@ -81,7 +92,7 @@ export default class NotVerifiedItem extends React.Component {
             index={1}
             smsCode={'1111'}
             value={'01111 number from service'}
-            codeIsSent={true}/>
+            codeIsSent={false} />
         </div>
       )
     }
@@ -103,7 +114,7 @@ export default class NotVerifiedItem extends React.Component {
             floatingLabelText={`Unverified ${this.props.textLabel}`}
             floatingLabelFixed
             underlineShow={false}
-            value={this.props.textValue}/>
+            value={this.props.textValue} />
         </ListItem>
         <Block>
           {this.renderVerificationInfo(this.props.field)}

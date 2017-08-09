@@ -1,7 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
 
-import Avatar from 'material-ui/Avatar'
 import {theme} from 'styles'
 import VerifiedShield from '../../../wallet/presentation/ui/verified-shield'
 import {
