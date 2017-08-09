@@ -2,9 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {theme} from 'styles'
-import Camera from 'material-ui/svg-icons/image/camera-alt'
-import { Badge, IconButton, FloatingActionButton } from 'material-ui'
-import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
+import { NavigationCancel, ImageLandscape } from 'material-ui/svg-icons'
 
 import {
   EditAppBar, WebcamCapture
@@ -30,6 +28,7 @@ const STYLES = {
     marginLeft: '-16px'
   },
   uploadContainer: {
+    height: '64px',
     backgroundColor: theme.jolocom.gray2,
     textAlign: 'left'
   },
@@ -37,7 +36,6 @@ const STYLES = {
     margin: '10px'
   },
   imageField: {
-    height: '24px',
     height: '60px',
     margin: 'auto',
     userSelect: 'none',
@@ -47,14 +45,59 @@ const STYLES = {
   verifierLocationsMsg: {
     width: '100%',
     textAlign: 'center'
+  },
+  deleteButton: {
+    position: 'relative',
+    top: '-32px',
+    right: '8px'
+  },
+  imagesContainer: {
+    position: 'relative',
+    marginLeft: '4px',
+    top: '12px',
+    width: '80px',
+    height: '46px'
+  },
+  uploadButton: {
+    position: 'relative',
+    top: '-46px',
+    left: '35%',
+    width: '32px',
+    height: '34px',
+    backgroundColor: theme.palette.textColor,
+    borderRadius: '3'
+  },
+  inputField: {
+    opacity: '0',
+    width: '32px',
+    height: '34px',
+    position: 'relative',
+    top: '-30px'
+  },
+  image: {
+    width: '76px',
+    height: '42'
   }
 }
 
 @Radium
 export default class WalletIdCardPhoto extends React.Component {
   static propTypes = {
-    changeIdCardField:  React.PropTypes.func,
+    changeIdCardField: React.PropTypes.func,
     images: React.PropTypes.array
+  }
+
+  loadImage(event) {
+    let file = event.target.files[0]
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      this.props.changeIdCardField(
+        reader.result,
+        this.props.images.length
+      )
+    }
+    file = null
   }
 
   render() {
@@ -69,19 +112,29 @@ export default class WalletIdCardPhoto extends React.Component {
         <div style={STYLES.uploadContainer}>
         {
           this.props.images.map((value, index) =>
-            <span style={{width: '60px', height: '46px'}}>
-              <img style={{width: '60px'}} src={value} />
-              <NavigationCancel style={{position: 'relative', top: '-32px', right: '8px'}}
-              onClick={(value) => this.props.changeIdCardField('', index)} />
+            <span style={STYLES.imagesContainer}>
+              <img style={STYLES.image} src={value} />
+              <NavigationCancel
+                style={STYLES.deleteButton}
+                onClick={(value) => this.props.changeIdCardField('', index)} />
             </span>)
         }
         </div>
         <WebcamCapture storeImageSrcInTheState={(value) =>
           this.props.changeIdCardField(value, this.props.images.length)
-        } />,
+        } />
+        <div style={STYLES.uploadButton}>
+          <ImageLandscape style={{
+            color: 'white',
+            position: 'relative',
+            bottom: '-8px'
+          }} />
+          <input type="file"
+            style={STYLES.inputField}
+            onChange={(event) => { this.loadImage(event) }}
+            onClick={(event) => { event.target.value = null }} />
+        </div>
       </Content>
     </div>)
   }
 }
-
-// <img style={{height: '48px'}} src={imgSrc} />
