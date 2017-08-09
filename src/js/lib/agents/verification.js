@@ -24,13 +24,13 @@ export default class VerificationAgent {
         identity: 'https://identity.jolocom.com/verification',
         pattern: `/identity/${dataType}/${id}`,
         read: true
-      }),
+      }).withCredentials(),
       this.request.post(wallet.identityURL + '/access/grant').send({
         identity: 'https://identity.jolocom.com/verification',
         pattern: `/identity/${dataType}/${id}/verifications`,
         read: true,
         write: true
-      })
+      }).withCredentials()
     ])
 
     await this.request.post(
@@ -41,12 +41,12 @@ export default class VerificationAgent {
     })
   }
 
-  async verifyEmail({contractID, email, id, code}) {
-    await this._verify({contractID, dataType: 'email', id, data: email, code})
+  async verifyEmail({wallet, email, id, code}) {
+    await this._verify({wallet, dataType: 'email', id, data: email, code})
   }
 
-  async verifyPhone({contractID, phone, id, code}) {
-    await this._verify({contractID, dataType: 'phone', id, data: phone, code})
+  async verifyPhone({wallet, phone, id, code}) {
+    await this._verify({wallet, dataType: 'phone', id, data: phone, code})
   }
 
   async _verify({wallet, dataType, id, data, code}) {

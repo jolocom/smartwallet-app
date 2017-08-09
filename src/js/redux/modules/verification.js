@@ -46,7 +46,7 @@ export const actions = module.exports = makeActions('verification', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        if (!params || !params.email || !params.code) {
+        if (!params || !params.email || !params.id || !params.code) {
           let action = {
             type: actions.confirmEmail.id_fail
           }
