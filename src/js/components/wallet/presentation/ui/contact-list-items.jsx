@@ -41,6 +41,7 @@ const ContactList = ({
     number = '',
     address = '',
     smsCode = '',
+    pin = '',
     codeIsSent = false,
     type = ''
   }, index) => {
@@ -89,9 +90,10 @@ const ContactList = ({
         resendVerificationCode={resendVerificationCode}
         enterVerificationCode={enterVerificationCode}
         smsCode={smsCode}
+        pinValue={pin}
         setFocusedPin={(value) => { setFocusedPin(value, index) }}
-        changePinValue={(value) => {
-          changePinValue(attrTypeToKey(attrType), value, index)
+        changePinValue={(value, codeType) => {
+          changePinValue(attrTypeToKey(attrType), value, index, codeType)
         }}
         focused={pinFocused}
         value={attrValue}

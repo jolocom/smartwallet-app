@@ -17,7 +17,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: ['value', 'index']
   },
   changePinValue: {
-    expectedParams: ['attrType', 'value', 'index']
+    expectedParams: ['attrType', 'value', 'index', 'codeType']
   },
   setFocusedPin: {
     expectedParams: ['value', 'index']
@@ -189,11 +189,9 @@ const changeSmsCodeValue = (state, {index, value}) => {
   return state
 }
 
-const changePinValue = (state, {attrType = 'phones', index, value}) => {
+const changePinValue = (state, {attrType, index, value, codeType = 'pin'}) => {
   if (/^[0-9]{0,6}$/.test(value)) {
-    return state.mergeIn(['contact', attrType, index], {
-      pin: value
-    })
+    return state.setIn(['contact', attrType, index, codeType], value)
   }
   return state
 }

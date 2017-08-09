@@ -32,6 +32,7 @@ const VerificationButtons = ({
     index,
     attrType,
     smsCode,
+    pinValue,
     pinFocused,
     changePinValue
   }) => {
@@ -50,7 +51,7 @@ const VerificationButtons = ({
               value={smsCode}
               phoneNumber={value}
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
-              changePinValue={(value) => { changePinValue(value, index) }}
+              changePinValue={(value) => { changePinValue(value, 'smsCode') }}
               focused={pinFocused} />),
             rightButtonLabel: 'OK',
             leftButtonLabel: 'CANCEL',
@@ -108,7 +109,7 @@ const VerificationButtons = ({
         title: 'Verification Request',
         message: (<VerificationButtonMsg
           msgType="pinInput"
-          value={smsCode}
+          value={pinValue}
           phoneNumber={value}
           setFocusedPin={(value) => { setFocusedPin(value, index) }}
           changePinValue={(value) => { changePinValue(value, index) }}
@@ -126,6 +127,7 @@ const VerificationButtons = ({
 VerificationButtons.propTypes = {
   buttonMsg: React.PropTypes.any,
   value: React.PropTypes.string,
+  pinValue: React.PropTypes.string,
   codeIsSent: React.PropTypes.bool,
   pinLength: React.PropTypes.number,
   verified: React.PropTypes.bool,
