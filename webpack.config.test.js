@@ -1,14 +1,14 @@
 var fs = require('fs')
 var path = require('path')
 
-var node_modules = {}
+var nodeModules = {}
 fs.readdirSync('node_modules').forEach(function(module) {
-  node_modules[module] = "require('"+module+"')"
+  nodeModules[module] = `require('${module}')`
 })
 
 module.exports = {
   target: 'node',
-  externals: node_modules,
+  externals: nodeModules,
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
     root: path.join(__dirname, 'src', 'js'),
