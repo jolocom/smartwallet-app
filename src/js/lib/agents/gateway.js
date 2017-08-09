@@ -78,12 +78,12 @@ export default class GatewayAgent {
       setTimeout(() => resolve('foo'), 2000)
     })
     // return this._httpAgent.get(
-    //   'https://identity.jolocom.com/' + identity + '/identity/name/display'
+    //   identity + '/identity/name/display'
     // )
   }
 
   grantAccessToRequester(user, body) {
-    console.log('HTTPAgent user: ', user, ' body: ', body)
+    console.log('HTTPAgent body: ', body)
     // return new Promise((resolve, reject) => {
     //   setTimeout(() => resolve('put action OK'), 2000)
     // }) // just for testing
@@ -93,8 +93,7 @@ export default class GatewayAgent {
       JSON.stringify(body),
       {
         'Content-type': 'application/json'
-      },
-      null
+      }
     )
   }
 

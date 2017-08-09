@@ -57,7 +57,7 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
             const userURL = services.auth.currentUser.wallet.identityURL
             return backend.gateway.grantAccessToRequester(userURL, {
               identity: requester,
-              patern: getPattern(params.query['scope[]']),
+              pattern: getPattern(params.query['scope[]']),
               read: true,
               write: false
             }).then((response) => {
@@ -140,6 +140,7 @@ const getPattern = (fields) => {
   let pattern = []
   for (var i = 0; i < fields.length; i++) {
     pattern.push(`/identity/${fields[i]}/*`)
+    pattern.push(`/identity/${fields[i]}`)
   }
   return pattern
 }
