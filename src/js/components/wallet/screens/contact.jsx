@@ -11,6 +11,7 @@ import Presentation from '../presentation/contact'
     'wallet/contact:setInformation',
     'wallet/contact:deleteInformation',
     'wallet/contact:updateInformation',
+    'wallet/contact:storeCallback',
     'wallet/contact:exitWithoutSaving',
     'wallet/contact:saveChanges',
     'wallet/contact:addNewEntry',
@@ -22,6 +23,7 @@ import Presentation from '../presentation/contact'
 export default class WalletContactScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
+    location: React.PropTypes.object,
     contact: React.PropTypes.object.isRequired,
     getUserInformation: React.PropTypes.func.isRequired,
     updateInformation: React.PropTypes.func.isRequired,
@@ -43,8 +45,15 @@ export default class WalletContactScreen extends React.Component {
     }
   }
   componentWillMount() {
+    let callback
+    if (this.props.location.query !== undefined &&
+        this.props.location.query.callbackUrl !== undefined) {
+      callback = this.props.location.query.callbackUrl
+    } else {
+      callback = '/wallet/identity'
+    }
     if (this.props.contact.getDataFromBackend) {
-      this.props.getUserInformation()
+      this.props.getUserInformation(callback)
     }
   }
 

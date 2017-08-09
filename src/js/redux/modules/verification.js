@@ -29,11 +29,12 @@ export const actions = module.exports = makeActions('verification', {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params,
         (backend) => {
-          const { pin, id } = getState().toJS().wallet.identity
+          const { pin, type, id } = getState().toJS().wallet.identity
             .contact.phones[params.index]
           return backend.verification.startVerifyingPhone({
             wallet: services.auth.currentUser.wallet,
             id,
+            type,
             phone: params.phone,
             pin
           }).then((result) => {
@@ -75,7 +76,7 @@ export const actions = module.exports = makeActions('verification', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        const { id, smsCode: code, number: phone } = getState()
+        const { id, smsCode: code, number: phone, type } = getState()
           .toJS().wallet.identity.contact.phones[params]
         if (params === undefined || phone === undefined || code === undefined) {
           let action = {
@@ -83,10 +84,11 @@ export const actions = module.exports = makeActions('verification', {
           }
           return dispatch(action)
         }
-        dispatch(actions.confirmEmail.buildAction(params, (backend) => {
-          return backend.verification.verifyEmail({
+        dispatch(actions.confirmPhone.buildAction(params, (backend) => {
+          return backend.verification.verifyPhone({
             wallet: services.auth.currentUser.wallet,
             id,
+            type,
             phone,
             code
           })

@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {theme} from 'styles'
-import VerifiedShield from './verified-shield'
+import VerifiedShield from '../../../wallet/presentation/ui/verified-shield'
 import {
   TextField,
   ListItem
@@ -11,7 +11,8 @@ import {
 var STYLES = {
   icon: {
     color: theme.jolocom.gray1,
-    top: '16px'
+    top: '16px',
+    left: '8px'
   },
   iconAvatar: {
     backgroundColor: 'none',
@@ -33,9 +34,6 @@ var STYLES = {
   },
   verifiedListItem: {
     paddingBottom: '5px'
-  },
-  unverifiedListItem: {
-    paddingBottom: '0px'
   },
   verifiedShield: {
     marginLeft: '0px',
@@ -64,45 +62,29 @@ export default class StaticListItem extends React.Component {
   static propTypes = {
     icon: React.PropTypes.any,
     verified: React.PropTypes.bool,
-    savedToBlockchain: React.PropTypes.bool,
     textLabel: React.PropTypes.string.isRequired,
-    textValue: React.PropTypes.string.isRequired,
-    onVerify: React.PropTypes.func,
-    secondaryTextValue: React.PropTypes.string
+    textValue: React.PropTypes.string.isRequired
   }
 
   render() {
-    const props = this.props
-
-    const icon = props.icon
-      ? <props.icon color={STYLES.icon.color} style={STYLES.icon} /> : <div />
+    const leftIcon = <this.props.icon color={'grey'} />
 
     return (
       <ListItem
-        style={Object.assign(STYLES.listItem,
-        props.verified ? STYLES.verifiedListItem
-      : STYLES.unverifiedListItem)}
-        leftIcon={icon}
-        rightIconButton={props.verified !== undefined
-        ? this.verifiedShield : null}
-        disabled
-      >
+        style={Object.assign(STYLES.listItem, STYLES.verifiedListItem)}
+        leftIcon={<div style={STYLES.icon}>{leftIcon}</div>}
+        rightIconButton={this.verifiedShield}
+        disabled>
         <div style={STYLES.values}>
           <TextField
-            floatingLabelText={props.verified === undefined ? props.textLabel
-              : (props.verified ? 'V' : 'Unv') + 'erified ' + props.textLabel
-            }
+            floatingLabelText={'Verified ' + this.props.textLabel}
             key="1"
             inputStyle={STYLES.inputName}
             floatingLabelStyle={STYLES.labelName}
             floatingLabelFixed
             underlineShow={false}
             style={STYLES.mainTextField}
-            value={props.textValue}
-            name={'number' + props.textValue} />
-          <div style={STYLES.secondaryTextField}>
-          {props.secondaryTextValue}
-          </div>
+            value={this.props.textValue} />
         </div>
       </ListItem>
     )
@@ -112,10 +94,7 @@ export default class StaticListItem extends React.Component {
     return (
       <VerifiedShield
         verified={this.props.verified}
-        savedToBlockchain={this.props.savedToBlockchain}
-        style={STYLES.verifiedShield}
-        verify={this.props.onVerify}
-      />
+        style={STYLES.verifiedShield} />
     )
   }
 }
