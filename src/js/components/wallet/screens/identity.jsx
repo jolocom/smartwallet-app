@@ -77,6 +77,7 @@ export default class WalletIdentityScreen extends React.Component {
       isLoaded={loaded}
       expandField={this.props.expandField}
       isError={error}
+      pinFocused={contact.isCodeInputFieldFocused}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
       goToContactManagement={this.props.goToContactManagement}
@@ -138,9 +139,9 @@ export default class WalletIdentityScreen extends React.Component {
     }
   }
 
-  enterVerificationCode({attrType, attrValue}) {
+  enterVerificationCode({attrType, attrValue, index}) {
     if (attrType === 'phone') {
-      return () => this.props.confirmPhone({phone: attrValue})
+      return () => this.props.confirmPhone(index)
     } else if (attrType === 'email') {
       return () => this.props.confirmEmail({email: attrValue})
     }

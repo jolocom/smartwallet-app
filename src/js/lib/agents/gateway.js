@@ -92,6 +92,22 @@ export default class GatewayAgent {
     )
   }
 
+  verify({userName, seedPhrase, identity, attributeType,
+     attributeId, attributeValue}) {
+    let url = `${this._gatewayUrl}/${userName}/verify`
+    let body = {
+      seedPhrase,
+      identity,
+      attributeType,
+      attributeId,
+      attributeValue
+    }
+    return this._httpAgent.post(
+      url, JSON.stringify(body),
+      {'Content-type': 'application/json'}
+    )
+  }
+
   storeAttribute({userName, attributeType, attributeId, attributeData}) {
     let url = `${this._gatewayUrl}/${userName}/identity/${attributeType}`
     if (attributeId) {

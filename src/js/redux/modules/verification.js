@@ -1,18 +1,22 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
-
+import identityActions from './wallet/identity'
 export const actions = module.exports = makeActions('verification', {
   startEmailVerification: {
-    expectedParams: ['email', 'pin'],
+    expectedParams: ['email', 'index', 'pin'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
+        const { id, pin } = getState().toJS().wallet.identity
+            .contact.emails[params.index]
+
         dispatch(actions.startEmailVerification.buildAction(params,
         (backend) => {
           return backend.verification.startVerifyingEmail({
             wallet: services.auth.currentUser.wallet,
+            id: id,
             email: params.email,
-            pin: params.pin
+            pin
           })
         }))
       }
@@ -25,23 +29,32 @@ export const actions = module.exports = makeActions('verification', {
       return (dispatch, getState, {services}) => {
         dispatch(actions.startPhoneVerification.buildAction(params,
         (backend) => {
-          const { pin } = getState().toJS().wallet.identity
+          const { pin, type, id } = getState().toJS().wallet.identity
             .contact.phones[params.index]
           return backend.verification.startVerifyingPhone({
             wallet: services.auth.currentUser.wallet,
+            id,
+            type,
             phone: params.phone,
             pin
+          }).then((result) => {
+            dispatch(identityActions.setSmsVerificationCodeStatus(
+              'phones',
+              params.index,
+              true
+            ))
+            return result
           })
         }))
       }
     }
   },
   confirmEmail: {
-    expectedParams: ['email', 'code'],
+    expectedParams: ['email', 'id', 'code'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        if (!params || !params.email || !params.code) {
+        if (!params || !params.email || !params.id || !params.code) {
           let action = {
             type: actions.confirmEmail.id_fail
           }
@@ -49,7 +62,8 @@ export const actions = module.exports = makeActions('verification', {
         }
         dispatch(actions.confirmEmail.buildAction(params, (backend) => {
           return backend.verification.verifyEmail({
-            contractID: services.auth.currentUser.wallet.getIdentityAddress(),
+            wallet: services.auth.currentUser.wallet,
+            id: params.id,
             email: params.email,
             code: params.code
           })
@@ -58,21 +72,25 @@ export const actions = module.exports = makeActions('verification', {
     }
   },
   confirmPhone: {
-    expectedParams: ['phone', 'code'],
+    expectedParams: ['index'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        if (!params || !params.phone || !params.code) {
+        const { id, smsCode: code, number: phone, type } = getState()
+          .toJS().wallet.identity.contact.phones[params]
+        if (params === undefined || phone === undefined || code === undefined) {
           let action = {
             type: actions.confirmPhone.id_fail
           }
           return dispatch(action)
         }
-        dispatch(actions.confirmEmail.buildAction(params, (backend) => {
-          return backend.verification.verifyEmail({
-            contractID: services.auth.currentUser.wallet.getIdentityAddress(),
-            phone: params.phone,
-            code: params.code
+        dispatch(actions.confirmPhone.buildAction(params, (backend) => {
+          return backend.verification.verifyPhone({
+            wallet: services.auth.currentUser.wallet,
+            id,
+            type,
+            phone,
+            code
           })
         }))
       }
