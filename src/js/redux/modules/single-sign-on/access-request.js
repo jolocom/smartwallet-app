@@ -97,6 +97,9 @@ const initialState = Immutable.fromJS({
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.requestedDetails.id:
+      if (typeof action.details.query['scope[]'] === 'string') {
+        action.details.query['scope[]'] = [action.details.query['scope[]']]
+      }
       return state.mergeIn(['entity'], {
         loading: true,
         path: action.details.pathname + action.details.search,
