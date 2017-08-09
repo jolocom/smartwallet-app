@@ -32,6 +32,7 @@ const ContactList = ({
   attrType,
   icon,
   setFocusedPin,
+  pinFocused = false,
   changePinValue
 }) => (<List style={{padding: '0'}} disabled>
 {
@@ -41,7 +42,6 @@ const ContactList = ({
     address = '',
     smsCode = '',
     codeIsSent = false,
-    pinFocused = false,
     type = ''
   }, index) => {
     const attrValue = address || number
@@ -113,6 +113,7 @@ ContactList.propTypes = {
   onConfirm: React.PropTypes.func.isRequired,
   requestVerificationCode: React.PropTypes.func,
   resendVerificationCode: React.PropTypes.func,
+  pinFocused: React.PropTypes.bool,
   enterVerificationCode: React.PropTypes.func.isRequired
 }
 

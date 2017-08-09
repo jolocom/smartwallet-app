@@ -215,9 +215,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return changePinValue(state, action)
 
     case actions.setFocusedPin.id:
-      return state.mergeIn(['contact', 'phones', action.index], {
-        pinFocused: action.value
-      })
+      return state.setIn(['contact', 'isCodeInputFieldFocused'], action.value)
 
     case actions.expandField.id:
       return state.setIn(['expandedFields', action.field], action.value)

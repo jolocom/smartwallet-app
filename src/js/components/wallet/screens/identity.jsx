@@ -77,6 +77,7 @@ export default class WalletIdentityScreen extends React.Component {
       isLoaded={loaded}
       expandField={this.props.expandField}
       isError={error}
+      pinFocused={contact.isCodeInputFieldFocused}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
       goToContactManagement={this.props.goToContactManagement}

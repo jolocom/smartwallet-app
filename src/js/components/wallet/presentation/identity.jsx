@@ -71,6 +71,7 @@ export default class WalletIdentity extends React.Component {
     onConfirm: React.PropTypes.func.isRequired,
     onVerify: React.PropTypes.func.isRequired,
     passports: React.PropTypes.array,
+    pinFocused: React.PropTypes.bool,
     phones: React.PropTypes.array.isRequired,
     requestVerificationCode: React.PropTypes.func.isRequired,
     resendVerificationCode: React.PropTypes.func.isRequired,
@@ -87,7 +88,7 @@ export default class WalletIdentity extends React.Component {
       emails, goToContactManagement, goToPassportManagement, changePinValue,
       requestVerificationCode, resendVerificationCode, enterVerificationCode,
       setFocusedPin, goToDrivingLicenceManagement, requestIdCardVerification,
-      onConfirm
+      onConfirm, pinFocused
     } = this.props
 
     if (!isLoaded) {
@@ -152,6 +153,7 @@ export default class WalletIdentity extends React.Component {
               <ContactList
                 fields={phones}
                 changePinValue={changePinValue}
+                pinFocused={pinFocused}
                 onConfirm={onConfirm}
                 icon={CommunicationCall}
                 setFocusedPin={setFocusedPin}
@@ -165,6 +167,7 @@ export default class WalletIdentity extends React.Component {
                 onConfirm={onConfirm}
                 changePinValue={changePinValue}
                 setFocusedPin={setFocusedPin}
+                pinFocused={pinFocused}
                 requestVerificationCode={requestVerificationCode}
                 resendVerificationCode={resendVerificationCode}
                 enterVerificationCode={enterVerificationCode}
