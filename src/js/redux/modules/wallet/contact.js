@@ -18,7 +18,7 @@ const actions = module.exports = makeActions('wallet/contact', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
-        const {information, showErrors, callback} = getState().toJS().wallet.contact
+        const {information, showErrors, callback} = getState().toJS().wallet.contact // eslint-disable-line max-len
         const webId = getState().toJS().wallet.identity.webId
         if (!showErrors) {
           dispatch(actions.saveChanges.buildAction(params,
@@ -57,12 +57,10 @@ const actions = module.exports = makeActions('wallet/contact', {
           return services.auth.currentUser.wallet.getUserInformation()
           .then((result) => {
             dispatch(actions.storeCallback(params, {dispatch}))
-            return (
-              {
-                result: result,
-                callback: params
-              }
-            )
+            return ({
+              result: result,
+              callback: params
+            })
           })
         }))
       }

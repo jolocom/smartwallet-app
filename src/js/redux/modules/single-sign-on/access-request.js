@@ -53,7 +53,7 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.grantAccessToRequester.buildAction(params,
           (backend) => {
-            const {requester} = getState().toJS().singleSignOn.accessRequest.entity
+            const {requester} = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
             const userURL = services.auth.currentUser.wallet.identityURL
             return backend.gateway.grantAccessToRequester(userURL, {
               identity: requester,
@@ -61,10 +61,21 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
               read: true,
               write: false
             }).then((response) => {
-              console.log('REDUX grantAccessToRequester: ', response)
-              dispatch(router.pushRoute('wallet/single-sign-on/access-confirmation'))
+              dispatch(router.pushRoute('wallet/single-sign-on/access-confirmation')) // eslint-disable-line max-len
             })
           }))
+      }
+    }
+  },
+  redirectToReturnUrl: {
+    expectedparams: [],
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        const userURL = services.auth.currentUser.wallet.identityURL
+        const {returnURL} = getState().toJS().singleSignOn.accessRequest.entity // eslint-disable-line max-len
+        dispatch(() => {
+          window.location = returnURL + '?success=true&identity=' + encodeURIComponent(userURL) // eslint-disable-line max-len
+        })
       }
     }
   }

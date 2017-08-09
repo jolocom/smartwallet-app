@@ -90,12 +90,14 @@ const STYLES = {
 @Radium
 export default class AccessConfirmation extends React.Component {
   static propTypes = {
-    entity: React.PropTypes.object
+    entity: React.PropTypes.object,
+    redirectToReturnUrl: React.PropTypes.func
   }
 
   componentDidMount() {
-    // setTimeout(() =>
-    // (window.location.href = this.props.entity.returnURL), 4000)
+    setTimeout(() => {
+      this.props.redirectToReturnUrl()
+    }, 2000)
   }
 
   render() {

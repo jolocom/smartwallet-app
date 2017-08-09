@@ -75,7 +75,7 @@ export default class GatewayAgent {
   getRequesterIdentity(identity) {
     // console.log('getRequesterIdentity: ', identity)
     return new Promise((resolve, reject) => {
-      setTimeout(() => resolve('foo'), 2000)
+      setTimeout(() => resolve(identity), 2000)
     })
     // return this._httpAgent.get(
     //   identity + '/identity/name/display'
@@ -83,11 +83,6 @@ export default class GatewayAgent {
   }
 
   grantAccessToRequester(user, body) {
-    console.log('HTTPAgent body: ', body)
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => resolve('put action OK'), 2000)
-    // }) // just for testing
-
     return this._httpAgent.post(
       user + '/access/grant',
       JSON.stringify(body),
