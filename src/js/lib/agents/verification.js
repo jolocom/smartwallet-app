@@ -12,9 +12,9 @@ export default class VerificationAgent {
     })
   }
 
-  async startVerifyingPhone({wallet, phone, id, pin}) {
+  async startVerifyingPhone({wallet, phone, type, id, pin}) {
     return await this._startVerifying({
-      wallet, pin, dataType: 'phone', id, data: phone
+      wallet, pin, dataType: 'phone', id, data: `${type}.${phone}`
     })
   }
 
@@ -45,8 +45,11 @@ export default class VerificationAgent {
     await this._verify({wallet, dataType: 'email', id, data: email, code})
   }
 
-  async verifyPhone({wallet, phone, id, code}) {
-    await this._verify({wallet, dataType: 'phone', id, data: phone, code})
+  async verifyPhone({wallet, type, phone, id, code}) {
+    await this._verify({
+      wallet, dataType: 'phone',
+      id, data: `${type}.${phone}`, code
+    })
   }
 
   async _verify({wallet, dataType, id, data, code}) {
