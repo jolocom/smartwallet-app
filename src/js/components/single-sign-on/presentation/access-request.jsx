@@ -4,7 +4,7 @@ import Radium from 'radium'
 import Loading from '../../common/loading'
 
 import {Divider, FlatButton, RaisedButton,
-  ListItem, AppBar, List, TextField} from 'material-ui'
+  ListItem, AppBar, List} from 'material-ui'
 import Avatar from 'material-ui/Avatar'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
@@ -12,7 +12,7 @@ import Location from 'material-ui/svg-icons/maps/place'
 import {IconIdCard, IconPassport} from '../../common'
 import {MissingInfoItem, NotVerifiedItem, VerifiedItem} from './ui'
 import {Content, Block} from '../../structure'
-import {TabContainer, HalfScreenContainer, StaticListItem}
+import {TabContainer, HalfScreenContainer}
   from '../../wallet/presentation/ui'
 import {theme} from 'styles'
 
@@ -70,7 +70,15 @@ export default class AccessRequest extends React.Component {
     grantAccessToRequester: React.PropTypes.func.isRequired,
     identity: React.PropTypes.object,
     requestedFields: React.PropTypes.array,
-    location: React.PropTypes.object
+    location: React.PropTypes.object,
+    setInfoComplete: React.PropTypes.func,
+    goToMissingInfo: React.PropTypes.func,
+    requestVerificationCode: React.PropTypes.func,
+    enterVerificationCode: React.PropTypes.func,
+    resendVerificationCode: React.PropTypes.func,
+    changePinValue: React.PropTypes.func,
+    setFocusedPin: React.PropTypes.func,
+    denyAccess: React.PropTypes.func
   }
 
   getIcon(field) {
@@ -99,7 +107,6 @@ export default class AccessRequest extends React.Component {
     if (counter === this.props.requestedFields.length && counter > 0) {
       this.props.setInfoComplete()
     }
-
   }
 
   checkFields(field) {
@@ -115,7 +122,7 @@ export default class AccessRequest extends React.Component {
       verified = attribute[0].verified
       textValue = attribute[0].address
       return ({verified: verified, textValue: textValue})
-    } else if (attribute && attribute[0] != undefined) {
+    } else if (attribute && attribute[0] !== undefined) {
       verified = attribute[0].verified
       textValue = attribute[0].number
       return ({verified: verified, textValue: textValue})
@@ -126,8 +133,7 @@ export default class AccessRequest extends React.Component {
 
   render() {
     this.checkCompleteness()
-    const {name, image, infoComplete} = this.props.entity
-    const {identity} = this.props
+    const {name, image} = this.props.entity
     let popupMessage = {
       title: 'Why do I have to grant access?',
       body: `You are about to connect to the service of ${name}. In order` +
@@ -143,13 +149,13 @@ export default class AccessRequest extends React.Component {
     }
     let headerMessage = `${name} wants to have access to your data?`
 
-    const fields = this.props.requestedFields || ['No fields requested. Please try again']
+    const fields = this.props.requestedFields || ['No fields requested. Please try again'] // eslint-disable-line max-len
     const renderFields = fields.map((field) => {
       let attributes = this.checkFields(field)
       let verified = attributes.verified
       let textValue = attributes.textValue
 
-      if(!textValue) {
+      if (!textValue) {
         return (
           <MissingInfoItem
             field={field}
@@ -157,7 +163,7 @@ export default class AccessRequest extends React.Component {
             textValue={'Data is missing'} />
         )
       }
-      if(!verified) {
+      if (!verified) {
         return (
           <NotVerifiedItem
             requestVerificationCode={this.props.requestVerificationCode}
@@ -220,7 +226,7 @@ export default class AccessRequest extends React.Component {
             <RaisedButton
               label="GIVE ACCESS"
               secondary
-              disabled={infoComplete ? false : true}
+
               style={STYLES.buttons}
               onClick={() => this.props.grantAccessToRequester({
                 user: this.props.identity.username.value,
@@ -228,10 +234,13 @@ export default class AccessRequest extends React.Component {
               })} />
           </Block>
           <Block style={STYLES.accessContainer}>
-              <RaisedButton
-                label="DENY ACCESS"
-                style={STYLES.buttons}
-                onClick={() =>this.props.denyAccess(popupMessageDeny.title, popupMessageDeny.body)} />
+            <RaisedButton
+              label="DENY ACCESS"
+              style={STYLES.buttons}
+              onClick={() => {
+                this.props.denyAccess(popupMessageDeny.title,
+                  popupMessageDeny.body)
+              }} />
           </Block>
         </Content>
       )
@@ -248,3 +257,5 @@ export default class AccessRequest extends React.Component {
     )
   }
 }
+
+// disabled={infoComplete ? false : true}

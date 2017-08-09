@@ -20,29 +20,6 @@ export default class WalletAgent {
     return seed
   }
 
-  getRequesterIdentity(identity) {
-    console.log('getRequesterIdentity: ', identity)
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve('foo'), 2000)
-    }) // just for testing
-
-    // return this._httpAgent.get(
-    //   'https://' + identity + '/identity/name/display'
-    // )
-  }
-
-  grantAccessToRequester(user, body) {
-    // console.log('HTTPAgent user & body', user, body)
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve('put action OK'), 2000)
-    }) // just for testing
-
-    // return this._httpAgent.put(
-    //   'https://identity.' + user + '.com/access/grant',
-    //   body
-    // )
-  }
-
   retrieveEtherPrice() { // returns {ethForEur: <number>}
     return this._httpAgent.get(
       settings.blockchain.jolocomEtherAddress +

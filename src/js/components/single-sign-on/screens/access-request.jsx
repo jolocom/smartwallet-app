@@ -30,11 +30,23 @@ export default class AccessRequestScreen extends React.Component {
   static propTypes ={
     configSimpleDialog: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
+    openConfirmDialog: React.PropTypes.func.isRequired,
+    getIdentityInformation: React.PropTypes.func.isRequired,
     accessRequest: React.PropTypes.obj,
     location: React.PropTypes.obj,
     requestedDetails: React.PropTypes.func.isRequired,
     grantAccessToRequester: React.PropTypes.func.isRequired,
-    identity: React.PropTypes.obj
+    identity: React.PropTypes.obj,
+    startPhoneVerification: React.PropTypes.func.isRequired,
+    startEmailVerification: React.PropTypes.func.isRequired,
+    confirmPhone: React.PropTypes.func.isRequired,
+    confirmEmail: React.PropTypes.func.isRequired,
+    goToMissingInfo: React.PropTypes.func.isRequired,
+    resendVerificationSms: React.PropTypes.func.isRequired,
+    resendVerificationLink: React.PropTypes.func.isRequired,
+    setInfoComplete: React.PropTypes.func.isRequired,
+    changePinValue: React.PropTypes.func.isRequired,
+    setFocusedPin: React.PropTypes.func.isRequired
   }
 
   handleWhy = (title, message) => {
@@ -53,7 +65,7 @@ export default class AccessRequestScreen extends React.Component {
         }
       },
       callback: () => {
-        window.location.href = `${this.props.location.query.returnURL}?success=true&error=denied`
+        window.location.href = `${this.props.location.query.returnURL}?success=true&error=denied` // eslint-disable-line max-len
       },
       title: title
     })
@@ -62,7 +74,6 @@ export default class AccessRequestScreen extends React.Component {
   componentWillMount() {
     this.props.getIdentityInformation()
     this.props.requestedDetails(this.props.location)
-
   }
 
   // initiates process
@@ -114,7 +125,6 @@ export default class AccessRequestScreen extends React.Component {
 
   // when popup is displayed
   showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
-    console.log(title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel, callback)
     return this.props.openConfirmDialog(
       title,
       message,
@@ -130,14 +140,15 @@ export default class AccessRequestScreen extends React.Component {
         requestedFields={this.props.accessRequest.entity.fields}
         location={this.props.location.query}
         identity={this.props.identity}
-        goToMissingInfo={(...args) => {this.props.goToMissingInfo(...args)}}
+        goToMissingInfo={(...args) => { this.props.goToMissingInfo(...args) }}
         entity={this.props.accessRequest.entity}
         accessInfo={(...args) => { this.handleWhy(...args) }}
-        denyAccess={(...args) => {this.handleDeny(...args) }}
+        denyAccess={(...args) => { this.handleDeny(...args) }}
         grantAccessToRequester={this.props.grantAccessToRequester}
         setInfoComplete={this.props.setInfoComplete}
         changePinValue={this.props.changePinValue}
         setFocusedPin={this.props.setFocusedPin}
+
         requestVerificationCode={(args, params) => {
           this.showVerificationWindow(args, () => {
             return () => this.showVerificationWindow(params,
@@ -149,17 +160,14 @@ export default class AccessRequestScreen extends React.Component {
           (...params) => this.enterVerificationCode(...params)
         )}
 
-        resendVerificationCode={(...args) => this.showVerificationWindow(...args,
+        resendVerificationCode={(...args) => this.showVerificationWindow(...args, // eslint-disable-line max-len
           (...params) => this.resendVerificationCode(...params)
         )}
-
-
 
         onConfirm={(...args) => { this.onConfirm(...args) }} />
     )
   }
 }
-
 
 // onVerify={({title, message, buttonText, style, attrValue}) => {
 //   this.props.configSimpleDialog(() => {

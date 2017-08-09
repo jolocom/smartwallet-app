@@ -94,8 +94,8 @@ export default class AccessConfirmation extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() =>
-    (window.location.href = this.props.entity.returnURL), 4000)
+    // setTimeout(() =>
+    // (window.location.href = this.props.entity.returnURL), 4000)
   }
 
   render() {

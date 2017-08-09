@@ -72,6 +72,32 @@ export default class GatewayAgent {
   //   )
   // }
 
+  getRequesterIdentity(identity) {
+    // console.log('getRequesterIdentity: ', identity)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve('foo'), 2000)
+    })
+    // return this._httpAgent.get(
+    //   'https://identity.jolocom.com/' + identity + '/identity/name/display'
+    // )
+  }
+
+  grantAccessToRequester(user, body) {
+    console.log('HTTPAgent user: ', user, ' body: ', body)
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => resolve('put action OK'), 2000)
+    // }) // just for testing
+
+    return this._httpAgent.post(
+      user + '/access/grant',
+      JSON.stringify(body),
+      {
+        'Content-type': 'application/json'
+      },
+      null
+    )
+  }
+
   storeAttribute({userName, attributeType, attributeId, attributeData}) {
     let url = `${this._gatewayUrl}/${userName}/identity/${attributeType}`
     if (attributeId) {

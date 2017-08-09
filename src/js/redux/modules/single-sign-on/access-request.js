@@ -8,7 +8,7 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.requestedDetails.buildAction(params))
-        dispatch(actions.getRequesterIdentity(params.requester))
+        dispatch(actions.getRequesterIdentity(params.query.requester))
       }
     }
   },
@@ -17,10 +17,8 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        const user = services.auth.currentUser
-        console.log('this is the user: ', user)
         dispatch(actions.getRequesterIdentity.buildAction(params, (backend) => {
-          return backend.wallet.getRequesterIdentity(params)
+          return backend.gateway.getRequesterIdentity(params)
         }))
       }
     }
@@ -53,18 +51,18 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        const user = services.auth.currentUser.wallet.identityAddress
-        console.log('this is the user: ', user)
         dispatch(actions.grantAccessToRequester.buildAction(params,
           (backend) => {
-            return backend.wallet.grantAccessToRequester(params.user, {
-              identity: params.query.requester,
+            const {requester} = getState().toJS().singleSignOn.accessRequest.entity
+            const userURL = services.auth.currentUser.wallet.identityURL
+            return backend.gateway.grantAccessToRequester(userURL, {
+              identity: requester,
               patern: getPattern(params.query['scope[]']),
               read: true,
               write: false
             }).then((response) => {
-              dispatch(router
-                .pushRoute('wallet/single-sign-on/access-confirmation'))
+              console.log('REDUX grantAccessToRequester: ', response)
+              dispatch(router.pushRoute('wallet/single-sign-on/access-confirmation'))
             })
           }))
       }
