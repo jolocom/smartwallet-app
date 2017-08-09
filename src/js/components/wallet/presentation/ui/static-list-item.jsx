@@ -1,7 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
 
-import Avatar from 'material-ui/Avatar'
 import {theme} from 'styles'
 import VerifiedShield from './verified-shield'
 import {
@@ -75,7 +74,7 @@ export default class StaticListItem extends React.Component {
   render() {
     const props = this.props
 
-    const  icon = props.icon
+    const icon = props.icon
       ? <props.icon color={STYLES.icon.color} style={STYLES.icon} /> : <div />
 
     return (

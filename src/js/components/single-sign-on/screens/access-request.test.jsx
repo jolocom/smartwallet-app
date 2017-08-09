@@ -7,7 +7,7 @@ import AccessRequestScreen from './access-request'
 import {stub} from '../../../../../test/utils'
 
 describe('(Component) AccessRequestScreen', () => {
-  it('should call requestedDetails and getIdentityInformation to start on componentWillMount', () => {
+  it('should call requestedDetails and getIdentityInformation to start on componentWillMount', () => { // eslint-disable-line max-len
     const requestedDetails = stub()
     const getIdentityInformation = stub()
     const wrapper = shallow((<AccessRequestScreen.WrappedComponent
