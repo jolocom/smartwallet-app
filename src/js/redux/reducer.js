@@ -21,7 +21,8 @@ export default combineReducers({
     idCard: require('./modules/wallet/id-card').default
   }),
   singleSignOn: combineReducers({
-    accessRight: require('./modules/single-sign-on/access-right').default
+    accessRight: require('./modules/single-sign-on/access-right').default,
+    accessRequest: require('./modules/single-sign-on/access-request').default
   }),
   verification: require('./modules/verification').default
 })

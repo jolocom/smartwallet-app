@@ -51,7 +51,7 @@ const VerificationButtons = ({
             setFocusedPin={(value) => { setFocusedPin(value, index) }}
             changePinValue={(value) => { changePinValue(value, index) }}
             focused={pinFocused} />),
-          rightButtonLabel: 'OK',
+          rightButtonLabel: 'CONTINUE',
           leftButtonLabel: 'CANCEL',
           attrType,
           index,
@@ -121,7 +121,7 @@ const VerificationButtons = ({
           setFocusedPin={() => {}}
           changePinValue={() => {}}
           focused={pinFocused} />),
-        rightButtonLabel: 'OK',
+        rightButtonLabel: 'CONTINUE',
         leftButtonLabel: 'CANCEL',
         style: STYLES.simpleDialog,
         attrType,
