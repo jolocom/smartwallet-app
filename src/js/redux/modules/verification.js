@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
-
+import identityActions from './wallet/identity'
 export const actions = module.exports = makeActions('verification', {
   startEmailVerification: {
     expectedParams: ['email', 'index', 'pin'],
@@ -36,6 +36,13 @@ export const actions = module.exports = makeActions('verification', {
             id,
             phone: params.phone,
             pin
+          }).then((result) => {
+            dispatch(identityActions.setSmsVerificationCodeStatus(
+              'phones',
+              params.index,
+              true
+            ))
+            return result
           })
         }))
       }
