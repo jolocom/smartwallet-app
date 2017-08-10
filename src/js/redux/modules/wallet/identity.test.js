@@ -12,16 +12,18 @@ describe('# Wallet identity redux module', () => {
         error: false,
         loaded: false,
         webId: '',
+        expandedFields: {
+          contact: false,
+          idCards: false,
+          passports: false
+        },
         username: {verified: false, value: ''},
         contact: {
           phones: [{
-            type: '',
-            number: '',
-            verified: false,
-            smsCode: '',
+            type: '', number: '', pin: '', verified: false, smsCode: '',
             pinFocused: false
           }],
-          emails: [{type: '', address: '', verified: false}]
+          emails: [{type: '', address: '', pin: '', verified: false}]
         },
         passports: [{
           number: '', givenName: '', familyName: '', birthDate: '',
@@ -36,8 +38,8 @@ describe('# Wallet identity redux module', () => {
       const action = {
         type: identity.actions.getIdentityInformation.id_success,
         result: {
-          webId: 'test',
-          username: 'test',
+          webId: 'https://test.webid.jolocom.com',
+          userName: 'test',
           contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
           passports: ['test'],
           idCards: ['test']
@@ -48,8 +50,13 @@ describe('# Wallet identity redux module', () => {
         .to.deep.equal({
           error: false,
           loaded: true,
-          webId: 'test',
-          username: 'test',
+          webId: 'https://test.webid.jolocom.com',
+          expandedFields: {
+            contact: false,
+            idCards: false,
+            passports: false
+          },
+          username: {value: 'test'},
           contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
           passports: ['test'],
           idCards: ['test']
@@ -58,21 +65,11 @@ describe('# Wallet identity redux module', () => {
   })
 
   describe('# actions ', () => {
-    it('goToDrivingLicenceManagement should redirect the user to drivering ' +
-    'licence management', () => {
+    it('goToDrivingLicenceManagement should redirect to drivering licence management', () => { // eslint-disable-line max-len
       const dispatch = stub()
       const action = identity.actions.goToDrivingLicenceManagement()
       action(dispatch)
       expect(dispatch.called).to.be.true
-      expect(dispatch.calls).to.deep.equal([{
-        args: [{
-          payload: {
-            args: ['/wallet/identity/drivers-licence/add'],
-            method: 'push'
-          },
-          type: '@@router/CALL_HISTORY_METHOD'
-        }]
-      }])
     })
     it('goToPassportManagement should redirect the user to passport management',
       () => {
@@ -125,26 +122,20 @@ describe('# Wallet identity redux module', () => {
         }])
       }
     )
-    it('getIdentityInformation should get the identity information from ' +
-      'the backend', () => {
+    it('getIdentityInformation should retrieve identity information', () => {
       const getState = stub()
-      const backend = {solid: {
-        getUserInformation: stub().returns('information')
+      const services = {auth: {
+        currentUser: {
+          wallet: {
+            getUserInformation: stub().returns('information')
+          }
+        }
       }}
       const dispatch = stub()
       const thunk = identity.actions.getIdentityInformation()
-
-      thunk(dispatch, getState, {stub, backend})
+      thunk(dispatch, getState, {services})
 
       expect(dispatch.called).to.be.true
-      expect(dispatch.calls[0].args[0].promise()).to.equal('information')
-      expect(dispatch.calls[0].args[0].types).to.deep.equal([
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION',
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_SUCCESS',
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_FAIL'
-      ])
-      const backendCall = backend.solid.getUserInformation
-      expect(backendCall.called).to.be.true
     })
   })
 })

@@ -20,8 +20,7 @@ let STYLES = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: '32px',
-    '@media (max-width: 320px)': {
+    '@media (maxWidth: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
     }
@@ -33,7 +32,7 @@ let STYLES = {
   },
   type: {
     maxWidth: '120px',
-    '@media (min-width: 321px)': {
+    '@media (minWidth: 321px)': {
       margin: '0 16px'
     }
   },
@@ -49,8 +48,8 @@ let STYLES = {
     flex: 1
   },
   item: {
-    padding: '0 16px 0 72px',
-    color: 'red'
+    padding: '0 0px 0 54px',
+    textColor: 'red'
   }
 }
 
@@ -101,6 +100,7 @@ export default class SelectListItem extends React.Component {
             style={STYLES.textField}
             autoFocus={focused}
             inputStyle={styles.input}
+
             underlineShow={!value}
             underlineDisabledStyle={styles.disabledUnderline}
             floatingLabelText={label}
@@ -109,6 +109,7 @@ export default class SelectListItem extends React.Component {
             onChange={onChange}
           >
           {types.map((type, i) => <MenuItem
+            innerDivStyle={{textColor: 'red'}}
             key={i}
             value={type}
             primaryText={type} />

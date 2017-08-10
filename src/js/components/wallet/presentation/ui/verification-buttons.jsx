@@ -25,38 +25,18 @@ const VerificationButtons = ({
     value,
     codeIsSent = false,
     verified,
-    enterCode,
-    missingCodeCallBack,
-    verify,
+    requestVerificationCode,
+    resendVerificationCode,
+    enterVerificationCode,
     setFocusedPin,
     index,
     attrType,
     smsCode,
+    pinValue,
     pinFocused,
     changePinValue
   }) => {
   if (verified) { return null }
-  if (attrType === 'email') {
-    return (<ListItem disabled leftIcon={<div />} >
-      <FlatButton
-        label="REQUEST VERIFICATION"
-        secondary
-        style={STYLES.requestBtn}
-        onClick={() => verify({
-          message: (<VerificationButtonMsg
-            msgType="codeRequest"
-            value={smsCode}
-            phoneNumber={value}
-            setFocusedPin={(value) => { setFocusedPin(value, index) }}
-            changePinValue={(value) => { changePinValue(value, index) }}
-            focused={pinFocused} />),
-          rightButtonText: 'OK',
-          leftButtonText: 'CANCEL',
-          style: STYLES.simpleDialog,
-          attrValue: value
-        })} />
-    </ListItem>)
-  }
   if (codeIsSent) {
     return (<div>
       <ListItem disabled leftIcon={<div />} >
@@ -64,17 +44,20 @@ const VerificationButtons = ({
           label="FILL IN THE CODE"
           secondary
           style={STYLES.requestBtn}
-          onClick={() => enterCode({
+          onClick={() => enterVerificationCode({
+            title: 'Phone Verification',
             message: (<VerificationButtonMsg
               msgType="codeInput"
               value={smsCode}
               phoneNumber={value}
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
-              changePinValue={(value) => { changePinValue(value, index) }}
+              changePinValue={(value) => { changePinValue(value, 'smsCode') }}
               focused={pinFocused} />),
-            rightButtonText: 'OK',
-            leftButtonText: 'CANCEL',
+            rightButtonLabel: 'OK',
+            leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
+            attrType,
+            index,
             attrValue: value
           })} />
       </ListItem>
@@ -83,7 +66,8 @@ const VerificationButtons = ({
           label="CAN'T FIND THE CODE"
           secondary
           style={STYLES.requestBtn}
-          onClick={() => missingCodeCallBack({
+          onClick={() => resendVerificationCode({
+            title: 'Verification Request',
             message: (<VerificationButtonMsg
               msgType="codeRequest"
               phoneNumber={value}
@@ -91,9 +75,11 @@ const VerificationButtons = ({
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
               changePinValue={(value) => { changePinValue(value, index) }}
               focused={pinFocused} />),
-            rightButtonText: 'OK',
-            leftButtonText: 'CANCEL',
+            rightButtonLabel: 'OK',
+            leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
+            index,
+            attrType,
             attrValue: value
           })} />
       </ListItem>
@@ -104,17 +90,35 @@ const VerificationButtons = ({
       label="Request Verification"
       secondary
       style={STYLES.requestBtn}
-      onClick={() => verify({
+      onClick={() => requestVerificationCode({
+        title: 'Verification Request',
         message: (<VerificationButtonMsg
           msgType="codeRequest"
           value={smsCode}
           phoneNumber={value}
+          setFocusedPin={() => {}}
+          changePinValue={() => {}}
+          focused={pinFocused} />),
+        rightButtonLabel: 'CONTINUE',
+        leftButtonLabel: 'CANCEL',
+        style: STYLES.simpleDialog,
+        attrType,
+        index,
+        attrValue: 'value'
+      }, {
+        title: 'Verification Request',
+        message: (<VerificationButtonMsg
+          msgType="pinInput"
+          value={pinValue}
+          phoneNumber={value}
           setFocusedPin={(value) => { setFocusedPin(value, index) }}
           changePinValue={(value) => { changePinValue(value, index) }}
           focused={pinFocused} />),
-        rightButtonText: 'OK',
-        leftButtonText: 'CANCEL',
+        rightButtonLabel: 'OK',
+        leftButtonLabel: 'CANCEL',
         style: STYLES.simpleDialog,
+        attrType,
+        index,
         attrValue: value
       })} />
   </ListItem>)
@@ -123,17 +127,19 @@ const VerificationButtons = ({
 VerificationButtons.propTypes = {
   buttonMsg: React.PropTypes.any,
   value: React.PropTypes.string,
+  pinValue: React.PropTypes.string,
   codeIsSent: React.PropTypes.bool,
+  pinLength: React.PropTypes.number,
   verified: React.PropTypes.bool,
-  enterCode: React.PropTypes.func,
-  missingCodeCallBack: React.PropTypes.func,
   setFocusedPin: React.PropTypes.func,
   changePinValue: React.PropTypes.func,
   index: React.PropTypes.number,
   smsCode: React.PropTypes.string,
   pinFocused: React.PropTypes.bool,
   attrType: React.PropTypes.string,
-  verify: React.PropTypes.func
+  requestVerificationCode: React.PropTypes.func,
+  resendVerificationCode: React.PropTypes.func,
+  enterVerificationCode: React.PropTypes.func
 }
 
 export default Radium(VerificationButtons)

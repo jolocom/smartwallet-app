@@ -20,6 +20,9 @@ const STYLES = {
   backButton: {
     alignSelf: 'flex-start',
     position: 'absolute'
+  },
+  avatar: {
+    marginBottom: '18px'
   }
 }
 
@@ -34,6 +37,7 @@ const LaymanLogin = (props) => {
       </IconButton>
       <Header
         image={<Avatar
+          style={STYLES.avatar}
           src="/img/img_nohustle.svg"
           size={60} />}
         title={

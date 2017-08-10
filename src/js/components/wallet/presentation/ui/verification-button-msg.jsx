@@ -1,34 +1,45 @@
 import React from 'react'
 import Radium from 'radium'
 
-import { SmsInputMsg } from './'
+import { InputMsg } from './'
 
 const VerificationButtonMsg = ({
     msgType,
-    smsCode,
+    smsCode = '',
     phoneNumber,
     index,
-    pinFocused,
+    pinFocused = false,
     setFocusedPin,
     changePinValue
   }) => {
   switch (msgType) {
     case 'codeInput':
-      return <SmsInputMsg
-        value={smsCode || ''}
+      return <InputMsg
+        type="smsCode"
+        value={smsCode}
         disabled={false}
+        pinLength={6}
         phoneNumber={phoneNumber}
         setFocusedPin={setFocusedPin}
         changePinValue={changePinValue}
-        focused={pinFocused || false} />
+        focused={pinFocused} />
+
+    case 'pinInput':
+      return <InputMsg
+        type="pin"
+        value={smsCode}
+        disabled={false}
+        pinLength={4}
+        phoneNumber={phoneNumber}
+        setFocusedPin={setFocusedPin}
+        changePinValue={changePinValue}
+        focused={pinFocused} />
 
     case 'codeResent':
-      return <SmsInputMsg />
+      return <InputMsg />
 
     case 'codeRequest':
       return (<div>
-        <b>Verification Request</b> <br />
-        <br />
           Our verification service uses the latest encrypting technology which
           costs.
         <span> XXX for each verification</span>

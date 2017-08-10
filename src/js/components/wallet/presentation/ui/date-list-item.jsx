@@ -6,6 +6,9 @@ import {IconButton, ListItem} from 'material-ui'
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import DatePicker from 'material-ui/DatePicker'
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+
 import {theme} from 'styles'
 
 let STYLES = {
@@ -16,7 +19,6 @@ let STYLES = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: '32px',
     '@media (max-width: 320px)': {
       flexDirection: 'column',
       alignItems: 'flex-start'
@@ -29,7 +31,7 @@ let STYLES = {
   },
   type: {
     maxWidth: '120px',
-    '@media (min-width: 321px)': {
+    '@media (minWidth: 321px)': {
       margin: '0 16px'
     }
   },
@@ -38,14 +40,18 @@ let STYLES = {
     borderWidth: 'medium medium 1px'
   },
   icon: {
-    top: '16px'
+    top: '22px'
   },
   textField: {
     maxWidth: 'none',
     flex: 1
   },
   item: {
-    padding: '0 16px 0 72px'
+    padding: '0 0px 0 54px'
+  },
+  floatingText: {
+    color: '#9BA0AA',
+    fontWeight: '500'
   }
 }
 
@@ -73,6 +79,16 @@ export default class DateListItem extends React.Component {
   }
 
   render() {
+    const muiTheme = getMuiTheme({
+      datePicker: {
+        selectColor: theme.palette.primary1Color,
+        color: theme.palette.primary1Color
+      },
+      flatButton: {
+        primaryTextColor: theme.palette.accent1Color
+      }
+    })
+
     let {
       focused,
       label,
@@ -97,19 +113,21 @@ export default class DateListItem extends React.Component {
         rightIconButton={this.deleteButton}
         disabled >
         <div style={styles.fields}>
-          <DatePicker
-            style={STYLES.textField}
-            fullWidth
-            autoFocus={focused}
-            inputStyle={styles.input}
-            underlineShow={!value}
-            underlineDisabledStyle={styles.disabledUnderline}
-            floatingLabelText={label}
-            value={value || null}
-            onChange={onChange}
-            errorText=""
-            okLabel="OK"
-            cancelLabel="Cancel" />
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <DatePicker
+              style={STYLES.textField}
+              fullWidth
+              autoFocus={focused}
+              inputStyle={styles.input}
+              underlineShow={!value}
+              underlineDisabledStyle={styles.disabledUnderline}
+              floatingLabelText={label}
+              floatingLabelStyle={STYLES.floatingText}
+              onChange={onChange}
+              errorText=""
+              okLabel="OK"
+              cancelLabel="Cancel" />
+          </MuiThemeProvider>
         </div>
       </ListItem>
     )

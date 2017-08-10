@@ -10,13 +10,25 @@ describe('# Wallet contact redux module', () => {
     it('exitWithoutSaving should redirect the user to the identity screen',
     () => {
       const dispatch = stub()
+      const getState = () => Immutable.fromJS({
+        wallet: {
+          contact: {
+            callback: '/test/test'
+          }
+        }
+      })
       const action = contact.actions.exitWithoutSaving()
-      action(dispatch)
+      action(dispatch, getState)
       expect(dispatch.called).to.be.true
       expect(dispatch.calls).to.deep.equal([{
         args: [{
+          type: 'little-sister/wallet/contact/SET_RELOAD_FROM_BACKEND',
+          value: true
+        }]
+      }, {
+        args: [{
           payload: {
-            args: ['/wallet/identity'],
+            args: ['/test/test'],
             method: 'push'
           },
           type: '@@router/CALL_HISTORY_METHOD'
@@ -28,9 +40,12 @@ describe('# Wallet contact redux module', () => {
       const action = {
         type: contact.actions.getUserInformation.id_success,
         result: {
-          contact: {
-            email: [],
-            phone: []
+          callback: '/test/test',
+          result: {
+            contact: {
+              email: [],
+              phone: []
+            }
           }
         }
       }
@@ -278,8 +293,7 @@ describe('# Wallet contact redux module', () => {
           }
         }})
       })
-      it('updateInformation should not change a valid original telNum field ' +
-      'value', () => {
+      it('updateInformation should not change a valid original telNum field value', () => { // eslint-disable-line max-len
         const oldState = Immutable.fromJS({
           information: {
             originalInformation: {
@@ -302,8 +316,7 @@ describe('# Wallet contact redux module', () => {
           index: 0
         }
         const newState = reducer(oldState, action)
-        expect(newState.toJS())
-        .to.deep.equal(oldState.toJS())
+        expect(newState.toJS()).to.deep.equal(oldState.toJS())
       })
     })
   })

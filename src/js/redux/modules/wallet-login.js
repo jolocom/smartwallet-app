@@ -33,14 +33,11 @@ const actions = module.exports = makeActions('wallet-login', {
   },
   submitPassphrase: {
     expectedParams: ['value'],
-    async: true,
     creator: (params) => {
       return (dispatch, getState) => {
-        dispatch(actions.submitPassphrase.buildAction(params, (backend) => {
-          dispatch(
-            router.pushRoute('/login/pin-entry')
-          )
-        }))
+        dispatch(
+          router.pushRoute('/login/pin-entry')
+        )
       }
     }
   },
@@ -57,25 +54,13 @@ const actions = module.exports = makeActions('wallet-login', {
     expectedParams: ['value'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
+      return (dispatch, getState, {services}) => {
         const state = getState().get('walletLogin').toJS()
-        dispatch(actions.goForward.buildAction(params, () => {
-          return services.auth
-            .loginWithSeedPhrase({
-              seedPhrase: state.passphrase.value,
-              pin: state.pin.value
-            })
-            .then(({wallet}) => {
-              console.log(wallet)
-              let webid = wallet.webId
-              console.log('webid : ', webid)
-              let username =
-                /^https:\/\/(([^.]*).)?([^.]*.[^.]*(.([^.]*))?)$/.exec(webid)[2]
-              console.log('username : ', username)
-              let password = state.passphrase.value
-              let privatekey = wallet.webIDPrivateKey
-              return backend.accounts.solidLogin(username, password, privatekey)
-            }).then(() => dispatch(router.pushRoute('/verification/document')))
+        dispatch(actions.goForward.buildAction(params, (backend) => {
+          return services.auth.login({
+            seedPhrase: state.passphrase.value,
+            pin: state.pin.value
+          }).then(() => dispatch(router.pushRoute('/wallet/identity')))
         }))
       }
     }
@@ -98,7 +83,7 @@ const actions = module.exports = makeActions('wallet-login', {
     expectedParams: ['username, password'],
     async: true,
     creator: (params) => {
-      return (dispatch, getState) => {
+      return (dispatch, getState, {services}) => {
         const state = getState().get('walletLogin').toJS()
         dispatch(actions.submitLogin.buildAction(params, (backend) => {
           return backend.wallet
@@ -106,7 +91,7 @@ const actions = module.exports = makeActions('wallet-login', {
               email: state.login.username,
               password: state.login.password
             })
-            .then(({seed}) => {
+            .then((seed) => {
               dispatch(actions.setPassphrase(seed))
               dispatch(router.pushRoute('/login/pin-entry'))
             })
@@ -178,24 +163,6 @@ module.exports.default = (state = initialState, action = {}) => {
           value: '',
           valid: false,
           failed: false
-        }
-      })
-
-    case actions.submitPassphrase.id_success:
-      return state.mergeDeep({
-        passphrase: {
-          errorMsg: '',
-          valid: true,
-          failed: false
-        }
-      })
-
-    case actions.submitPassphrase.id_fail:
-      return state.mergeDeep({
-        passphrase: {
-          errorMsg: 'Your passphrase is not correct',
-          valid: false,
-          failed: true
         }
       })
 

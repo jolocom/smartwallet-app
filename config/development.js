@@ -6,6 +6,7 @@ module.exports = {
     'https://proxy.jolocom.net/proxy?' +
     'url=https:webid.jolocom.de,system/accountStatus',
   verificationProvider: 'https://verification.jolocom.com',
+  gateway: 'https://identity.jolocom.com',
   blockchain: {
     // Jolocom Rinkeby
     gethHost: 'https://verification.jolocom.com/geth/',
@@ -26,6 +27,9 @@ module.exports = {
     // Ropsten Testnet on 2017-04-12
     // gethHost: 'http://verification.jolocom.com:8545',
     // lookupContractAddress: '0x58ab8f7c72b4bec073db317d92aa0a15f09d9a6b',
+  },
+  stripe: {
+    publishableKey: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh'
   },
   dev: true
 }

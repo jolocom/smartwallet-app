@@ -23,6 +23,7 @@ const Pin = (props) => {
     <Container>
       <Header
         image={<Avatar
+          style={{marginBottom: '8px'}}
           src={`/img/${avatar}.svg`}
           size={60} />}
         title="Please enter your Pin."

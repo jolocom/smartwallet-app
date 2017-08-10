@@ -1,5 +1,6 @@
 import * as settings from 'settings'
 import {WalletManager} from 'smartwallet-contracts'
+import HTTPAgent from 'lib/agents/http'
 
 // only for testing testSeed has some ether on ropsten testnet
 export const TEST_SEED = 'mandate print cereal style toilet hole' +
@@ -8,15 +9,37 @@ export const TEST_SEED = 'mandate print cereal style toilet hole' +
 export default class WalletAgent {
   constructor() {
     this._manager = new WalletManager(settings.blockchain)
+    this._httpAgent = new HTTPAgent({proxy: false})
   }
 
   generateSeedPhrase(entropy) {
     let seed = this._manager.generateSeedPhrase(entropy)
+    // @TODO remove this
+    // seed = TEST_SEED
+
     return seed
   }
 
+  retrieveEtherPrice() { // returns {ethForEur: <number>}
+    return this._httpAgent.get(
+      settings.blockchain.jolocomEtherAddress +
+      '/exchange-rate/ether'
+    )
+  }
+
+  buyEther({stripeToken, walletAddress}) {
+    return this._httpAgent.post(
+      'https://verification.jolocom.com/ether/buy/ether',
+      JSON.stringify({stripeToken: JSON.stringify(stripeToken), walletAddress}),
+      {
+        'Content-type': 'application/json'
+      },
+      {credentials: 'omit'}
+    )
+  }
+
   retrieveSeedPhrase({email, password}) {
-    return this._manager.retrieveSeedPhrase({email, password})
+    return this._manager._seedStorage.getSeed({email, password})
   }
 
   registerWithSeedPhrase({userName, seedPhrase, pin}) {
@@ -25,9 +48,9 @@ export default class WalletAgent {
     })
   }
 
-  registerWithCredentials({userName, email, password, pin}) {
+  registerWithCredentials({userName, email, password, pin, seedPhrase}) {
     return this._manager.registerWithCredentials({
-      userName, email, password, pin
+      userName, email, password, pin, seedPhrase
     })
   }
 

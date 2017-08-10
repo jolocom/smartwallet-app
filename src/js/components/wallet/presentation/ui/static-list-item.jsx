@@ -13,6 +13,11 @@ var STYLES = {
     color: theme.jolocom.gray1,
     top: '16px'
   },
+  iconAvatar: {
+    backgroundColor: 'none',
+    borderRadius: '0%',
+    top: '16px'
+  },
   inputName: theme.textStyles.contentInputFields,
   labelName: theme.textStyles.labelInputFields,
   mainTextField: {
@@ -36,11 +41,11 @@ var STYLES = {
     marginLeft: '0px',
     position: 'absolute',
     right: '20px',
-    marginTop: '40px'
+    marginTop: '30px'
   },
   listItem: {
     whiteSpace: 'nowrap',
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 54px'
   },
   values: {
     display: 'flex',
@@ -59,6 +64,7 @@ export default class StaticListItem extends React.Component {
   static propTypes = {
     icon: React.PropTypes.any,
     verified: React.PropTypes.bool,
+    savedToBlockchain: React.PropTypes.bool,
     textLabel: React.PropTypes.string.isRequired,
     textValue: React.PropTypes.string.isRequired,
     onVerify: React.PropTypes.func,
@@ -93,8 +99,7 @@ export default class StaticListItem extends React.Component {
             underlineShow={false}
             style={STYLES.mainTextField}
             value={props.textValue}
-            name={'number' + props.textValue}
-          />
+            name={'number' + props.textValue} />
           <div style={STYLES.secondaryTextField}>
           {props.secondaryTextValue}
           </div>
@@ -107,6 +112,7 @@ export default class StaticListItem extends React.Component {
     return (
       <VerifiedShield
         verified={this.props.verified}
+        savedToBlockchain={this.props.savedToBlockchain}
         style={STYLES.verifiedShield}
         verify={this.props.onVerify}
       />

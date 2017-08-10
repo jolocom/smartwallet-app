@@ -1,11 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
-
+import CopyToClipboard from 'react-copy-to-clipboard'
 import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
 
 import Loading from 'components/common/loading'
-import CommunicationCall from 'material-ui/svg-icons/communication/call'
-import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import { CommunicationCall, CommunicationEmail } from 'material-ui/svg-icons'
 import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
 
 import {theme} from 'styles'
@@ -23,7 +22,8 @@ import {
 const STYLES = {
   listItem: {
     whiteSpace: 'nowrap',
-    padding: '0 16px 0 72px'
+    padding: '0 16px 0 72px',
+    marginRight: '10px'
   },
   inputName: {
     color: theme.palette.textColor,
@@ -39,74 +39,56 @@ const STYLES = {
     contentStyle: {
     },
     actionsContainerStyle: {
-      textAlign: 'center'
+      textAlign: 'right'
     }
   },
   avatar: {
     marginTop: '10px'
+  },
+  container: {
+    marginLeft: '10px'
+  },
+  innerContainer: {
+    marginRight: '10px'
   }
 }
-
-const iconEmailMsg = (
-  <div>
-    <b>Verification</b> <br />
-    <br />
-    <span>
-      Your emails hasn't been verified yet. Click "Request Verification" to get
-      an emails with a verification link.
-    </span>
-  </div>
-)
-
-const iconPhoneMsg = (<div>
-  <b>Verification</b> <br />
-  <br />
-  <span>
-    Your number hasn't been verified yet. For verification we will
-    send you a sms with an authentication code to this number. You will need
-    enter that code here.
-  </span>
-</div>)
 
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
+    changePinValue: React.PropTypes.func.isRequired,
     children: React.PropTypes.node,
-    username: React.PropTypes.object.isRequired,
-    passports: React.PropTypes.array,
-    showUserInfo: React.PropTypes.func.isRequired,
-    idCards: React.PropTypes.array,
-    isLoaded: React.PropTypes.bool.isRequired,
-    isError: React.PropTypes.bool.isRequired,
-    webId: React.PropTypes.string.isRequired,
-    phones: React.PropTypes.array.isRequired,
     emails: React.PropTypes.array.isRequired,
+    expandedFields: React.PropTypes.object,
+    expandField: React.PropTypes.func.isRequired,
+    enterVerificationCode: React.PropTypes.func.isRequired,
     goToContactManagement: React.PropTypes.func.isRequired,
     goToPassportManagement: React.PropTypes.func.isRequired,
     goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
+    idCards: React.PropTypes.array,
+    isLoaded: React.PropTypes.bool.isRequired,
+    isError: React.PropTypes.bool.isRequired,
     onConfirm: React.PropTypes.func.isRequired,
+    onVerify: React.PropTypes.func.isRequired,
+    passports: React.PropTypes.array,
+    pinFocused: React.PropTypes.bool,
+    phones: React.PropTypes.array.isRequired,
+    requestVerificationCode: React.PropTypes.func.isRequired,
+    resendVerificationCode: React.PropTypes.func.isRequired,
+    requestIdCardVerification: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    changePinValue: React.PropTypes.func.isRequired,
-    onVerify: React.PropTypes.func.isRequired
+    showUserInfo: React.PropTypes.func.isRequired,
+    username: React.PropTypes.object.isRequired,
+    webId: React.PropTypes.string.isRequired
   }
 
   render() {
     const {
-      username,
-      passports,
-      idCards,
-      isLoaded,
-      webId,
-      showUserInfo,
-      phones,
-      emails,
-      goToContactManagement,
-      goToPassportManagement,
-      goToDrivingLicenceManagement,
-      onConfirm,
-      changePinValue,
-      setFocusedPin,
-      onVerify
+      username, passports, idCards, isLoaded, webId, showUserInfo, phones,
+      emails, goToContactManagement, goToPassportManagement, changePinValue,
+      requestVerificationCode, resendVerificationCode, enterVerificationCode,
+      setFocusedPin, goToDrivingLicenceManagement, requestIdCardVerification,
+      onConfirm, pinFocused
     } = this.props
 
     if (!isLoaded) {
@@ -121,17 +103,21 @@ export default class WalletIdentity extends React.Component {
 
     return (<TabContainer>
       <HalfScreenContainer>
-        <Content>
+        <Content style={STYLES.container}>
           <Block>
             <List>
               <ListItem
                 key={1}
                 disabled
                 rightIcon={<InfoDetails
-                  showDetails={details => showUserInfo(
+                  showDetails={message => showUserInfo(
                     null,
-                    details,
-                    'OK',
+                    message,
+                    (<CopyToClipboard text={webId}>
+                      <span>COPY WEBID</span>
+                    </CopyToClipboard>),
+                    () => {},
+                    'ALL RIGHT',
                     STYLES.simpleDialog
                   )}
                   webId={webId}
@@ -154,53 +140,90 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <PlusMenu
               name="Contact"
-              choice={emails.length + phones.length > 0}
+              choice={[...emails, ...phones].length > 0}
+              expanded={this.props.expandedFields.contact}
+              expand={(value) => {
+                this.props.expandField('contact', value)
+              }}
               goToManagement={goToContactManagement} />
           </Block>
-          <Block>
-            <ContactList
-              fields={phones}
-              changePinValue={changePinValue}
-              onConfirm={onConfirm}
-              onVerify={onVerify}
-              icon={CommunicationCall}
-              setFocusedPin={setFocusedPin}
-              labelText="Phone Number"
-              attrType="phone"
-              iconMsg={iconPhoneMsg} />
-            <ContactList
-              fields={emails}
-              onConfirm={onConfirm}
-              onVerify={onVerify}
-              icon={CommunicationEmail}
-              labelText="Email"
-              attrType="email"
-              iconMsg={iconEmailMsg} />
-          </Block>
+          {
+            this.props.expandedFields.contact
+            ? <Block style={STYLES.innerContainer}>
+              <ContactList
+                fields={phones}
+                changePinValue={changePinValue}
+                pinFocused={pinFocused}
+                onConfirm={onConfirm}
+                icon={CommunicationCall}
+                setFocusedPin={setFocusedPin}
+                requestVerificationCode={requestVerificationCode}
+                resendVerificationCode={resendVerificationCode}
+                enterVerificationCode={enterVerificationCode}
+                labelText="Phone Number"
+                attrType="phone" />
+              <ContactList
+                fields={emails}
+                onConfirm={onConfirm}
+                changePinValue={changePinValue}
+                setFocusedPin={setFocusedPin}
+                pinFocused={pinFocused}
+                requestVerificationCode={requestVerificationCode}
+                resendVerificationCode={resendVerificationCode}
+                enterVerificationCode={enterVerificationCode}
+                icon={CommunicationEmail}
+                labelText="Email"
+                attrType="email" />
+            </Block>
+            : null
+          }
           <Block>
             <PlusMenu
               name="Passport"
+              expanded={this.props.expandedFields.passports}
+              expand={(value) => {
+                this.props.expandField('passports', value)
+              }}
               choice={passports.length > 0}
               goToManagement={goToPassportManagement} />
           </Block>
-          <Block>
-            <PassportsList passports={passports} />
+          <Block style={STYLES.innerContainer}>
+            {
+              this.props.expandedFields.passports
+              ? <PassportsList passports={passports} />
+              : null
+            }
           </Block>
           <Block>
             <PlusMenu
               name="ID Card"
               choice={idCards.length > 0}
+              expanded={this.props.expandedFields.idCards}
+              expand={(value) => {
+                this.props.expandField('idCards', value)
+              }}
               goToManagement={goToPassportManagement} />
           </Block>
-          <Block>
-            <IdCardsList idCards={idCards} />
+          <Block style={STYLES.innerContainer}>
+          {
+            this.props.expandedFields.idCards
+            ? <IdCardsList
+              idCards={idCards}
+              requestIdCardVerification={requestIdCardVerification} />
+              : null
+            }
           </Block>
           <Block>
             <PlusMenu
               name="Driving License"
+              expand={(value) => {
+                this.props.expandField('drivingLicence', value)
+              }}
               choice={false}
+              expanded={false}
               goToManagement={goToDrivingLicenceManagement} />
           </Block>
+          <br />
         </Content>
       </HalfScreenContainer>
     </TabContainer>)

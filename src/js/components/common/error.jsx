@@ -5,7 +5,7 @@ import {
   Block,
   Footer,
   SideNote
-} from '../../structure'
+} from '../structure'
 import {theme} from 'styles'
 
 import {
@@ -51,7 +51,7 @@ export default class WalletError extends React.Component {
         <Footer>
           <FlatButton label={this.props.buttonLabel}
             onClick={() => { this.props.onClick() }}>
-              this.props.children
+              {this.props.children}
           </FlatButton>
         </Footer>
       </Container>

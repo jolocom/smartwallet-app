@@ -1,36 +1,16 @@
 import Immutable from 'immutable'
-import moment from 'moment'
 // import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
-
 import { makeActions } from '../'
 import * as router from '../router'
 import {listOfCountries as options} from '../../../lib/list-of-countries'
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
-  storeIdCardDetailsInSolid,
+  storeIdCardDetails,
   genderList,
   mapBackendToState,
   changeFieldValue
 } from '../../../lib/id-card-util'
-
-const storeIdCardDetailsInBlockchain = ({idCard, services}) => {
-  const {wallet} = services.auth.currentUser
-  return wallet.addAttributeHashAndWait({
-    attributeId: 'idCard',
-    attribute: {
-      number: idCard.number.value,
-      expirationDate: moment(idCard.expirationDate.value).format(),
-      givenName: idCard.firstName.value,
-      familyName: idCard.lastName.value,
-      birthDate: moment(idCard.birthDate.value).format(),
-      birthPlace: idCard.birthPlace.value,
-      birthCountry: idCard.birthCountry.value
-    },
-    definitionUrl: '',
-    pin: '1234'
-  })
-}
 
 const actions = module.exports = makeActions('wallet/id-card', {
   save: {
@@ -42,14 +22,14 @@ const actions = module.exports = makeActions('wallet/id-card', {
         const {idCard, showErrors} = getState().toJS().wallet.idCard
         const {webId} = getState().toJS().wallet.identity
         if (!showErrors) {
-          dispatch(actions.save.buildAction(params, () =>
-            storeIdCardDetailsInSolid({backend, services, idCard, webId})
-              .then(() => {
-                storeIdCardDetailsInBlockchain({idCard, services}).then(
-                  dispatch(router.pushRoute('/wallet/identity')))
-              })
-            )
-          )
+          dispatch(actions.save.buildAction(params, () => {
+            return storeIdCardDetails({backend, services, idCard, webId})
+          })
+        ).then((result) => {
+          dispatch(actions.clearState())
+          dispatch(router.pushRoute('/wallet/identity'))
+          return result
+        })
         }
       }
     }
@@ -107,6 +87,9 @@ const actions = module.exports = makeActions('wallet/id-card', {
   },
   changePhysicalAddressField: {
     expectedParams: ['field', 'value']
+  },
+  clearState: {
+    expectedParams: []
   }
 })
 
@@ -143,6 +126,9 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
+
+    case actions.clearState.id:
+      return initialState
 
     case actions.save.id:
       return state.merge({

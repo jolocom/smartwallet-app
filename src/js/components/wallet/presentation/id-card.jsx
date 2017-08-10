@@ -3,8 +3,11 @@ import Radium from 'radium'
 
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
+import Camera from 'material-ui/svg-icons/image/camera-alt'
 import Location from 'material-ui/svg-icons/maps/place'
-import {List, SelectField, MenuItem, FlatButton} from 'material-ui'
+import moment from 'moment'
+import {List, ListItem, SelectField, MenuItem,
+  FloatingActionButton} from 'material-ui'
 import {theme} from 'styles'
 
 import {
@@ -16,7 +19,7 @@ import {
   IconNumber,
   DateListItem
 } from './ui'
-import {Content, Block} from '../../structure'
+import {Content} from '../../structure'
 
 const STYLES = {
   verificationBlock: {
@@ -26,16 +29,23 @@ const STYLES = {
   verificationMsgHeader: {
     color: theme.palette.textColor
   },
-  container: {
-    width: '100%'
+  explanText: {
+    fontSize: '14pt',
+    lineHeight: '16pt',
+    fontWeight: '300',
+    color: theme.jolocom.gray2
   },
-  firstField: {
-    width: '70%',
-    position: 'fix'
+  flatBtn: {
+    color: theme.palette.accent1Color,
+    marginLeft: '-16px'
   },
-  secondField: {
-    width: '30%',
-    position: 'fix'
+  uploadContainer: {
+    backgroundColor: theme.jolocom.gray5,
+    textAlign: 'center',
+    padding: '30px'
+  },
+  uploadBtn: {
+    margin: '10px'
   },
   verifierLocationsMsg: {
     width: '100%',
@@ -62,6 +72,10 @@ export default class WalletIdCard extends React.Component {
     idCard: React.PropTypes.array
   }
 
+  // componentDidMount() {
+  //   console.log('componentDidMount')
+  // }
+
   renderField(field) {
     switch (field.key) {
       case 'birthCountry':
@@ -69,12 +83,16 @@ export default class WalletIdCard extends React.Component {
         return this.renderCountryField(field)
       case 'gender':
         return this.renderGenderField(field)
-      case 'zip':
-      case 'birthPlace':
-        return null // handled with birthDate or streetWithNumber fields
-      case 'birthDate':
       case 'streetWithNumber':
-        return this.renderTwoFields(field)
+        return this.renderStreetWithNumber(field)
+      case 'zip':
+        return this.renderCityAndZip(field)
+      case 'city':
+        return null // handled with zip
+      case 'birthPlace':
+        return null // handled with birthDate
+      case 'birthDate':
+        return this.renderBirthDate(field)
       case 'expirationDate':
         return this.renderDateField(field)
       default:
@@ -138,18 +156,98 @@ export default class WalletIdCard extends React.Component {
       enableDelete={value.length > 0} />
   }
 
-  renderTwoFields({value, label, valid, key, index, icon, group}) {
-    const secondField = this.props.physicalAddress.map(({key}) => key).includes(key) // eslint-disable-line max-len
-      ? this.props.physicalAddress[index - this.props.idCard.length + 1]
-      : this.props.idCard[index + 1]
-    return (<table key={key} style={STYLES.container} ><tbody><tr>
-      <td style={STYLES.firstField} key="0" >
-        {this.renderTextField({value, label, valid, key, index, icon, group})}
-      </td>
-      <td style={STYLES.secondField} key="1">
-        {this.renderTextField(secondField)}
-      </td>
-    </tr></tbody></table>)
+  renderStreetWithNumber({value, label, valid, key, index, icon, group}) { // eslint-disable-line max-len
+    return (<div>
+      <EditListItem
+        id={key}
+        icon={icon}
+        label={this.props.showAddress ? label : 'Physical Address'}
+        enableEdit
+        value={value}
+        underlineHide={!!value}
+        onFocusChange={(field) => this.props.setFocused(field, group)}
+        onChange={(e) => this.props.change(key, e.target.value)}
+        focused={this.props.focusedGroup === group}
+        enableDelete={value.length > 0}
+        onDelete={() => {
+          this.props.change(key, '')
+        }} />
+    </div>)
+  }
+
+  renderCityAndZip({value, label, valid, key, index, icon, group}) {
+    const zip = this.props.physicalAddress[1]
+    const city = this.props.physicalAddress[2]
+    return (<table key={key} style={{width: '100%'}}>
+      <tr>
+        <td key="0" >
+          <EditListItem
+            id={key}
+            label={city.label}
+            enableEdit
+            value={city.value}
+            underlineHide={!!city.value}
+            onFocusChange={(field) => this.props.setFocused(field, group)}
+            onChange={(e) => this.props.change(city.key, e.target.value)}
+            onDelete={() => {
+              this.props.change(city.key, '')
+            }}
+            enableDelete={city.value.length > 0}
+            focused={this.props.focusedGroup === group &&
+              this.props.focusedField === key} />
+        </td>
+        <td key="1">
+          <EditListItem
+            widthTextField={{padding: '0 0px 0 4px'}}
+            id={zip.key}
+            label={zip.label}
+            underlineHide={!!zip.value}
+            enableEdit
+            value={zip.value}
+            onFocusChange={field => this.props.setFocused(field, group)}
+            onChange={(e) => this.props.change(zip.key, e.target.value)}
+            enableDelete={!!zip.value || !!value}
+            onDelete={() => {
+              this.props.change(zip.key, '')
+            }} />
+        </td>
+      </tr>
+    </table>)
+  }
+
+  renderBirthDate({value, label, valid, key, index, icon, group}) {
+    const birthPlace = this.props.idCard[index + 1]
+
+    return (<table key={key} style={{width: '100%'}}>
+      <tr>
+        <td key="0">
+          <DateListItem
+            icon={icon}
+            label={label}
+            enableEdit
+            value={value || null}
+            onFocusChange={(field) => this.props.setFocused(field, group)}
+            focused={this.props.focusedGroup === group}
+            onChange={(e, date) =>
+              this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
+        </td>
+        <td key="1">
+          <EditListItem
+            widthTextField={{padding: '0 0px 0 4px'}}
+            id={birthPlace.key}
+            label={birthPlace.label}
+            enableEdit
+            value={birthPlace.value}
+            underlineHide={!!birthPlace.value}
+            onFocusChange={(field) => this.props.setFocused(field, birthPlace.group)} // eslint-disable-line
+            onChange={(e) => this.props.change(birthPlace.key, e.target.value)}
+            onDelete={() => {
+              this.props.change(birthPlace.key, '')
+            }}
+            enableDelete={!!birthPlace.value || !!value} />
+        </td>
+      </tr>
+    </table>)
   }
 
   renderDateField({value, label, valid, key, index, icon, group}) {
@@ -167,7 +265,8 @@ export default class WalletIdCard extends React.Component {
       focused={this.props.focusedGroup === group}
       onDelete={() => { this.props.change(key, '') }}
       enableDelete={value.toString().length > 0}
-      onChange={(e, date) => this.props.change(key, date)} />
+      onChange={(e, date) =>
+        this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
   }
 
   renderOptionsField({value, label, valid, key, options, group, index, icon}) {
@@ -197,12 +296,13 @@ export default class WalletIdCard extends React.Component {
 
   render() {
     const icons = this.createIcons()
-    const {idCard, physicalAddress, showAddress, loaded, save, cancel,
-      showVerifierLocations} = this.props
+    const {idCard, physicalAddress, showAddress, loaded, save,
+      cancel} = this.props
 
     let address = physicalAddress[0]
-    if (showAddress) { address = physicalAddress }
-
+    if (showAddress) {
+      address = physicalAddress
+    }
     const fields = idCard.concat(address).map(
       (field, index) => this.renderField({...field, index, icon: icons[index]})
     )
@@ -213,36 +313,27 @@ export default class WalletIdCard extends React.Component {
         loading={loaded}
         onSave={save}
         onClose={cancel} />
-      <Block style={STYLES.verificationBlock}>
-        <Block>
-          Request personal verification of <br />
-          your IdCard/ID Card by an <br />
-          instutioon Close to your location
-        </Block>
-        <FlatButton
-          label="List Of Locations"
-          onClick={e => {
-            showVerifierLocations(this.verifierLocationsMsg())
-          }} />
-      </Block>
       <Content>
         <EditHeader title="ID Card" />
+        <List>
+          <ListItem
+            disabled
+            innerDivStyle={{padding: '0 16px 0 54px'}}
+            leftIcon={<img src="/img/ic_idcard.svg" />}>
+            <div style={STYLES.uploadContainer}>
+              <FloatingActionButton secondary style={STYLES.uploadBtn}>
+                <Camera />
+              </FloatingActionButton>
+              <div style={STYLES.explanText}>
+                Take a picture or upload one of your ID Cards
+              </div>
+            </div>
+          </ListItem>
+        </List>
         <List>
           {fields}
         </List>
       </Content>
     </div>)
   }
-
-  verifierLocationsMsg = () => (
-    <div>
-      <div key="0" style={STYLES.verifierLocationsMsg}>
-        verification Locations
-      </div>
-      <div key="1"> Title </div>
-      <div key="2"> Street With Number </div>
-      <div key="3"> Zip </div>
-      <div key="4"> City </div>
-    </div>
-  )
 }

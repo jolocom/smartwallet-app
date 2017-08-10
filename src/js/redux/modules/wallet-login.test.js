@@ -1,7 +1,6 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
 import * as login from './wallet-login'
-// import * as router from './router'
 import {stub} from '../../../../test/utils'
 const reducer = require('./wallet-login').default
 
@@ -84,6 +83,7 @@ describe('Wallet login Redux module', function() {
       const newState = reducer(oldState, {
         type: 'an unknown action'
       })
+
       expect(newState).to.deep.equal(oldState)
     })
     describe('#setPin', () => {
@@ -122,30 +122,6 @@ describe('Wallet login Redux module', function() {
         const newState = reducer(state, login.actions.setPassphrase('Test'))
         expect(newState.toJS().passphrase.value).to.equal('Test')
         expect(newState.toJS().passphrase.valid).to.be.true
-      })
-    })
-    describe('#submitPassphrase', () => {
-      it('should return an error message if the passphrase is not correct',
-        () => {
-          const state = reducer(undefined, '@@INIT')
-          const newState = reducer(state, {
-            type: login.actions.submitPassphrase.id_fail,
-            error: new Error('test')
-          })
-          expect(newState.toJS().passphrase.errorMsg)
-            .to.equal('Your passphrase is not correct')
-          expect(newState.toJS().passphrase.valid).to.be.false
-          expect(newState.toJS().passphrase.failed).to.be.true
-        }
-      )
-      it('should update passphrase attributes when submit succeed', () => {
-        const state = reducer(undefined, login.actions.setPassphrase('test'))
-        const newState = reducer(state, {
-          type: login.actions.submitPassphrase.success
-        })
-        expect(newState.toJS().passphrase.errorMsg).to.equal('')
-        expect(newState.toJS().passphrase.valid).to.be.true
-        expect(newState.toJS().passphrase.failed).to.be.false
       })
     })
     describe('#goForward', () => {

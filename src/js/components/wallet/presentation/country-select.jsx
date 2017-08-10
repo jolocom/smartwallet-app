@@ -1,43 +1,40 @@
 import React from 'react'
 import Radium from 'radium'
-import {TextField} from 'material-ui'
+import {AppBar, ListItem} from 'material-ui'
+import Avatar from 'material-ui/Avatar'
+
 import {ActionSearch, NavigationArrowBack} from 'material-ui/svg-icons'
 
 import {theme} from 'styles'
+import {EditListItem} from './ui'
 
 const STYLES = {
-  container: {
-    textColor: theme.palette.textColor,
-    backgroundColor: theme.jolocom.gray3,
-    width: '100%'
-  },
-  floatingLabelSearchField: {
-    color: theme.palette.textColor,
-    fontWeight: 'bold'
-  },
-  leftIcon: {
-    width: '5%'
-  },
-  searchField: {
-    width: '90%'
-  },
-  searchFieldUnderline: {
-    color: theme.palette.textColor
-  },
-  rightIcon: {
-    width: '5%'
-  },
-  firstLetter: {
-    width: '5%'
-  },
-  firstLetterText: {
-    textAlign: 'center'
-  },
   countryName: {
-    width: '95%'
+    maxWidth: '95%'
   },
   countryField: {
     width: '100%'
+  },
+  appbar: {
+    position: 'fixed'
+  },
+  navigation: {
+    padding: '10px'
+  },
+  listview: {
+    paddingTop: '60px'
+  },
+  countryListPosition: {
+    marginTop: '60px'
+  },
+  stickySearchfield: {
+    position: 'fixed',
+    zIndex: '100',
+    backgroundColor: 'white',
+    width: '100%'
+  },
+  countryInnerStyle: {
+    paddingLeft: '54px'
   }
 }
 
@@ -49,7 +46,13 @@ export default class CountrySelectPresentation extends React.Component {
     submit: React.PropTypes.func,
     change: React.PropTypes.func,
     value: React.PropTypes.string,
-    cancel: React.PropTypes.func
+    cancel: React.PropTypes.func,
+    setFocused: React.PropTypes.func,
+    focusedGroup: React.PropTypes.string
+  }
+
+  componentWillMount() {
+    window.scrollTo(0, 0)
   }
 
   render() {
@@ -59,36 +62,44 @@ export default class CountrySelectPresentation extends React.Component {
       (countryIndex === 0 ||
        (countryLabel[0] !== countries[countryIndex - 1][0]))
         ? countryLabel[0] : ''
-
     return (<div>
-      <div style={STYLES.container}>
-        <NavigationArrowBack style={STYLES.leftIcon} onClick={cancel} />
-        <TextField
-          style={STYLES.searchField}
-          floatingLabelText="Country"
-          underlineStyle={STYLES.searchFieldUnderline}
-          floatingLabelStyle={STYLES.floatingLabelSearchField}
-          onChange={e => change(e.target.value)}
-          value={value} />
-        <ActionSearch style={STYLES.rightIcon} />
+      <div>
+        <AppBar
+          style={STYLES.appbar}
+          title="Country Selection"
+          iconElementLeft={
+            <NavigationArrowBack style={STYLES.navigation}
+              onClick={cancel} />} />
       </div>
-        {countries.map((countryLabel, idx) => (<div
-          key={countryLabel}
-          style={STYLES.countryField}
-          onClick={() => submit(countryLabel)} >
-          <TextField
-            underlineShow={false}
-            id={`${countryLabel}_first_letter`}
-            inputStyle={STYLES.firstLetterText}
-            value={getFirstCountryLetter(countryLabel, idx)}
-            style={STYLES.firstLetter} />
-          <TextField
-            onClick={() => submit(countryLabel)}
-            id={`${countryLabel}_country`}
-            underlineShow={false}
-            style={STYLES.countryName} value={countryLabel} />
-        </div>))}
-
+      <div style={STYLES.listview}>
+        <div style={STYLES.stickySearchfield}>
+          <EditListItem
+            onFocusChange={(field) => this.props.setFocused(field, 'country')}
+            focused={this.props.focusedGroup === 'country' && !!ActionSearch}
+            icon={ActionSearch}
+            enableEdit
+            label={' search your country'}
+            onChange={e => change(e.target.value)}
+            value={value} /></div>
+        <div style={STYLES.countryListPosition}>
+          {countries.map((countryLabel, idx) => (
+            <div
+              key={countryLabel}
+              style={STYLES.countryField}
+              onClick={() => submit(countryLabel)} >
+              <ListItem
+                innerDivStyle={STYLES.countryInnerStyle}
+                leftAvatar={<Avatar
+                  color={theme.palette.primary1Color} backgroundColor={'none'}
+                  style={{left: 8}}
+                  >
+                  {getFirstCountryLetter(countryLabel, idx)}
+                </Avatar>}
+                id={`${countryLabel}_country`}
+                primaryText={countryLabel} />
+            </div>
+        ))}</div>
+      </div>
     </div>)
   }
 }

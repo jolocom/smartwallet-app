@@ -1,9 +1,12 @@
 import React from 'react'
 import Radium from 'radium'
-import ContentCreate from 'material-ui/svg-icons/content/create'
-import ContentAdd from 'material-ui/svg-icons/content/add'
 import {theme} from 'styles'
-
+import {
+  ContentCreate,
+  ContentAdd,
+  NavigationExpandMore,
+  NavigationExpandLess
+} from 'material-ui/svg-icons'
 import {
   List,
   FloatingActionButton,
@@ -15,8 +18,13 @@ const STYLES = {
   },
   addBtn: {
     position: 'absolute',
-    top: '11px',
+    top: '12.5px',
     right: '8px'
+  },
+  accordionBtn: {
+    position: 'absolute',
+    top: '12.5px',
+    right: '56px'
   },
   iconCreate: {
     fill: theme.palette.accent1Color
@@ -34,7 +42,7 @@ const STYLES = {
   },
   item: {
     alignItems: 'center',
-    paddingLeft: '16px',
+    padding: '0 0 0 54px',
     display: 'inline-block',
     verticalAlign: 'top',
     width: '100%',
@@ -48,6 +56,8 @@ const STYLES = {
 
 }
 const PlusMenu = (props) => {
+  const icon = props.expanded ? <NavigationExpandLess />
+    : <NavigationExpandMore />
   return (
     <div style={Object.assign(STYLES.root, props.style)}>
       <List>
@@ -61,16 +71,35 @@ const PlusMenu = (props) => {
           <FloatingActionButton
             mini
             secondary={!props.choice}
-            onClick={props.goToManagement}
+            onClick={() => props.choice
+              ? props.expand(!props.expanded)
+              : props.goToManagement()
+            }
             containerElement="label"
             style={STYLES.addBtn}
             backgroundColor={props.choice ? '#FFF' : ''}
             iconStyle={props.choice ? STYLES.iconCreate : STYLES.iconAdd}>
-            {props.choice
-            ? <ContentCreate color={theme.palette.accent1Color} />
-            : <ContentAdd />}
+            {props.choice ? icon : <ContentAdd />}
           </FloatingActionButton>
         </div>
+        {
+          props.choice && props.expanded
+          ? <div style={STYLES.accordionBtn}>
+            <FloatingActionButton
+              mini
+              secondary={!props.choice}
+              onClick={props.goToManagement}
+              containerElement="label"
+              style={STYLES.addBtn}
+              backgroundColor={props.choice ? '#FFF' : ''}
+              iconStyle={
+                props.choice ? STYLES.iconCreate : STYLES.iconAdd
+              }>
+              <ContentCreate color={theme.palette.accent1Color} />
+            </FloatingActionButton>
+          </div>
+          : null
+        }
       </List>
       {props.children}
     </div>
@@ -82,6 +111,8 @@ PlusMenu.propTypes = {
   children: React.PropTypes.node,
   style: React.PropTypes.object,
   goToManagement: React.PropTypes.func.isRequired,
+  expand: React.PropTypes.func,
+  expanded: React.PropTypes.bool,
   choice: React.PropTypes.bool
 }
 

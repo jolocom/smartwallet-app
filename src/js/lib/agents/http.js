@@ -52,8 +52,8 @@ class HTTPAgent {
   // @param {string} url resource url
   //
   // @return {Promise} promise with resulting xhr
-  get(url, headers) {
-    return this._req(url, 'GET', null, headers)
+  get(url, headers, options) {
+    return this._req(url, 'GET', null, headers, options)
   }
 
   // DELETE a resource represented by url
@@ -72,8 +72,8 @@ class HTTPAgent {
   // @param {Object} headers headers hash
   //
   // @return {Promise} promise with resulting xhr
-  put(url, body, headers) {
-    return this._req(url, 'PUT', body, headers)
+  put(url, body, headers, options) {
+    return this._req(url, 'PUT', body, headers, options)
   }
 
   // POST a resource to a container
@@ -83,8 +83,8 @@ class HTTPAgent {
   // @param {Object} headers headers hash
   //
   // @return {Promise} promise with resulting xhr
-  post(url, body, headers) {
-    return this._req(url, 'POST', body, headers)
+  post(url, body, headers, options) {
+    return this._req(url, 'POST', body, headers, options)
   }
 
   // HEAD request (used for identifying WebID session)
@@ -122,16 +122,17 @@ class HTTPAgent {
   _req(url, method, body = null, headers = {
     'Accept': DEFAULT_ACCEPT,
     'Content-type': DEFAULT_CT
-  }) {
+  }, options = {}) {
     if (this._proxyURL) {
       url = this.__proxify(url)
     }
-    return this._fetch(url, {
+
+    return this._fetch(url, Object.assign({
       method,
       headers,
       body,
       credentials: 'include'
-    })
+    }, options))
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
         return response
@@ -142,7 +143,8 @@ class HTTPAgent {
       }
     })
     .then((response) => {
-      if (response.headers.get('Content-Type') === 'application/json') {
+      if (response.headers.get('Content-Type')
+      .indexOf('application/json') === 0) {
         return response.json()
       } else {
         // @TODO parse turtle automatically?

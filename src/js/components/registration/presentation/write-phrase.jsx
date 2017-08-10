@@ -12,27 +12,38 @@ import Checked from 'material-ui/svg-icons/action/check-circle'
 
 import {theme} from 'styles'
 
-import {Container, Header, Block, SideNote, Footer} from '../../structure'
+import {Container, Header, Block, SideNote} from '../../structure'
 
 const STYLES = {
   phraseWrapper: {
-    lineHeight: '32px',
+    lineHeight: '28px',
     padding: '8px'
   },
   phrase: {
     color: theme.textStyles.sectionheader.color,
-    fontWeight: theme.textStyles.sectionheader.fontWeight,
+    fontWeight: '100',
     fontSize: theme.textStyles.sectionheader.fontSize,
     backgroundColor: '#fff'
   },
   sideNoteGreen: {
-    color: theme.palette.primary1Color
+    color: theme.palette.primary1Color,
+    textSize: theme.textStyles.textCopy.fontSize,
+    lineHeight: '1.5em',
+    marginLeft: '24px',
+    marginRight: '24px',
+    '@media screen and (min-width: 700px)': {
+      marginLeft: '100px',
+      marginRight: '100px'
+    }
   },
   uncheckedIcon: {
     fill: theme.jolocom.gray1
   },
   checkBox: {
-    margin: 'auto'
+    margin: 'auto',
+    '@media screen and (min-width: 350px)': {
+      width: '317px'
+    }
   },
   labelStyle: {
     color: theme.textStyles.textCopy.color,
@@ -40,11 +51,16 @@ const STYLES = {
     fontWeight: theme.textStyles.textCopy.fontWeight,
     display: 'inline-block',
     position: 'relative',
-    lineHeight: '1.2em',
     textAlign: 'left'
   },
   nextStep: {
     flex: 1
+  },
+  embeddedLink: {
+    color: theme.palette.accent1Color
+  },
+  avatar: {
+    marginBottom: '18px'
   }
 }
 
@@ -52,11 +68,13 @@ const WritePhrase = (props) => {
   return (
     <Container>
       <Block>
-        <Avatar
-          src="/img/img_techguy.svg"
-          size={60} />
+        <Header image={
+          <Avatar
+            style={STYLES.avatar}
+            src="/img/img_techguy.svg"
+            size={60} />}
+          title="Your secure phrase" />
       </Block>
-      <Header title="Your secure phrase" />
 
       <Block style={STYLES.phraseWrapper}>
         <span style={STYLES.phrase}>{
@@ -95,11 +113,14 @@ const WritePhrase = (props) => {
           Actually, I do not want to be responsible for the storage.
         </SideNote>
       </Block>
-      <Footer>
+      <Block>
+
         <FlatButton
           label="STORE IT FOR ME"
+          style={STYLES.embeddedLink}
           onClick={() => { props.onChange(); props.onSubmit() }} />
-      </Footer>
+
+      </Block>
     </Container>
   )
 }

@@ -34,26 +34,34 @@ const STYLES = {
     marginTop: '10%',
     alignItems: 'center'
   },
-  backgroundColor: theme.jolocom.gray4
+  backgroundColor: theme.jolocom.gray4,
+  popupText: theme.textStyles.textCopy,
+  popupAccent: {
+    color: theme.palette.accent1Color
+  }
 }
 
 const NameEntry = (props) => {
   var webIdmessage = (
-    <div>
-      It is the link to your secured personal data and the
-      verifications of it that are stored on the blockchain
+    <div style={STYLES.popupText}>
+      A webID is an open standart for digital identities. With
+      a WebID you no longer need to remember usernames or passwords for
+      all of the sites you use but simply login by selecting a WebID and
+      clicking "log in". You can publish your identity wherever you want
+      and choose what pieces of your personal information that you want to
+      share with websites. <span style={STYLES.popupAccent}>Your information
+      is securely stored in a certificate.</span>
     </div>)
   return (
     <Container>
-      <Header title="Let's get started! Please type in a username."
-        style={STYLES.heading} />
+      <Header title="Let's get started! Please type in a username." />
       <Content>
         <SideNote>
           It needs to be unique, but choose wisely. It will be part of your
           <span style={STYLES.embeddedLink}
             onClick={() => {
               props.handleDialog(
-                'Your WebID is your identity on the web.',
+                'What the heck is a WebID?',
                 webIdmessage)
             }}>WebID</span>
           and it might end up on your business card one day.

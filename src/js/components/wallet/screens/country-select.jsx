@@ -7,7 +7,8 @@ import Presentation from '../presentation/country-select'
   actions: [
     'wallet/country-select:setCountryValue',
     'wallet/country-select:cancel',
-    'wallet/country-select:submit'
+    'wallet/country-select:submit',
+    'wallet/country-select:setFocusedField'
   ]
 })
 export default class CountrySelectScreen extends React.Component {
@@ -15,12 +16,21 @@ export default class CountrySelectScreen extends React.Component {
     setCountryValue: React.PropTypes.func.isRequired,
     submit: React.PropTypes.func.isRequired,
     cancel: React.PropTypes.func.isRequired,
-    country: React.PropTypes.object.isRequired
+    country: React.PropTypes.object.isRequired,
+    setFocusedField: React.PropTypes.any
+  }
+
+  setFocusedElements = (key, group) => {
+    if (key === '') {
+      return this.props.setFocusedField('', '')
+    }
+    return this.props.setFocusedField(key, group)
   }
 
   render() {
     const {setCountryValue, submit, cancel} = this.props
-    const {options, value} = this.props.country
+    const {options, value, focusedField, focusedGroup} = this.props.country
+
     return (<Presentation
       value={value}
       countries={options}
@@ -29,6 +39,9 @@ export default class CountrySelectScreen extends React.Component {
         setCountryValue(value)
         submit()
       }}
-      cancel={cancel} />)
+      cancel={cancel}
+      focusedGroup={focusedGroup}
+      focusedField={focusedField}
+      setFocused={(...args) => { this.setFocusedElements(...args) }} />)
   }
 }

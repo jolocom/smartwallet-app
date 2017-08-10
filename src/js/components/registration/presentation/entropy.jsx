@@ -11,11 +11,14 @@ const IMAGE_DATA_URL = '/img/entropy.jpg'
 
 const STYLES = {
   container: {
-    backgroundImage: 'url(/img/entropy.jpg)',
+    backgroundImage: 'url(/img/img_seedcreation.svg)',
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     position: 'relative',
-    padding: 0
+    padding: 0,
+    '@media screen and (min-width: 768px)': {
+      padding: '0'
+    }
   },
   header: {
     position: 'absolute',
@@ -28,8 +31,14 @@ const STYLES = {
   },
   title: {
     color: '#fff',
-    fontSize: '21px',
-    fontWeight: '300',
+    fontSize: theme.textStyles.headline.fontSize,
+    fontWeight: theme.textStyles.headline.fontWeight,
+    margin: 0
+  },
+  subtitle: {
+    color: '#fff',
+    fontSize: theme.textStyles.screenHeader.fontSize,
+    fontWeight: theme.textStyles.headline.fontWeight,
     margin: 0
   },
   img: {
@@ -40,7 +49,7 @@ const STYLES = {
   footer: {
     position: 'absolute',
     bottom: 0,
-    width: '100%',
+    width: 'auto',
     padding: '32px',
     boxSizing: 'border-box'
   }
@@ -54,8 +63,10 @@ const Entropy = (props) => {
       <header style={STYLES.header}>
         <h1 style={STYLES.title}>
           Hi {props.user}, for... <br /><br />
-          ...more security we need some random data.<br /><br />
+          <span style={STYLES.subtitle}>
+            ...more security we need some random data.<br /><br />
           Please put your finger anywhere on the screen and draw on it randomly.
+          </span>
         </h1>
       </header>
     )

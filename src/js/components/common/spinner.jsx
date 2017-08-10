@@ -1,14 +1,14 @@
 import React from 'react'
+import CircularProgress from 'material-ui/CircularProgress'
 
-import {Content, Block, Header} from '../../structure'
-import {
-  SpinnerCircular
-} from './ui'
+import {Content, Block, Header} from '../structure'
 
 export default class Spinner extends React.Component {
   static propTypes = {
     message: React.PropTypes.array,
-    style: React.PropTypes.object
+    style: React.PropTypes.object,
+    avatar: React.PropTypes.string,
+    title: React.PropTypes.string
   }
 
   constructor() {
@@ -39,10 +39,13 @@ export default class Spinner extends React.Component {
       <Content>
         <Header
           style={this.props.style}
-          title="Thank you. We are transferring some Ether to your Account."
+          title={this.props.title}
           />
         <Block>
-          <SpinnerCircular />
+          <div>
+            <CircularProgress size={150} thickness={8}
+              style={{backgroundImage: this.props.avatar}} />
+          </div>
         </Block>
         <Header style={this.props.style}
           ref="spinner"

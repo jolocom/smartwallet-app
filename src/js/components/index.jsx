@@ -3,17 +3,45 @@ import Radium from 'radium'
 import {RaisedButton, IconButton} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
+import {connect} from 'redux/utils'
 
 import {routes} from 'routes'
 import {theme} from 'styles'
+import { Container, Header, SideNote, InfoLink } from './structure'
 
-import { Container } from './structure'
+const message = (<div>
+  <div>A Blockchain is a distributed database which
+  Integrity (security from manipulation) is given by a timestamp and
+  a link to the previous data set. These days it is used for cryptocurrency,
+  which means that it is as secure as your bank account
+  </div><br />
+  <div>We use this technology to lock your data. So only you can have
+  access to it.</div></div>)
+
+const dialogBlockchain = {
+  primaryActionText: 'MORE INFO',
+  cancelActionText: 'ALL RIGHT',
+  message: message,
+  style: {
+    actionsContainerStyle: {
+      textAlign: 'center'
+    }
+  },
+  callback: () => {
+    window.location = 'https://en.wikipedia.org/wiki/Blockchain'
+  },
+  title: 'What is a blockchain?'
+}
 
 let Index = React.createClass({
   contextTypes: {
     router: React.PropTypes.object,
     username: React.PropTypes.string,
     muiTheme: React.PropTypes.object
+  },
+
+  propTypes: {
+    openConfirmDialog: React.PropTypes.func
   },
 
   // componentWillMount() {
@@ -45,7 +73,7 @@ let Index = React.createClass({
       slide: {
         backgroundColor: muiTheme.jolocom.gray4,
         padding: '24px 24px 48px',
-        height: '100%',
+        height: '95%',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
@@ -55,8 +83,9 @@ let Index = React.createClass({
       onboardImg: {
         flex: 1,
         width: '300px',
+        marginBottom: '0',
         userSelect: 'none',
-        backgroundPosition: 'center',
+        backgroundPosition: 'center bottom',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
         '@media screen and (min-width: 1200px)': {
@@ -117,6 +146,12 @@ let Index = React.createClass({
         '@media screen and (max-width: 468px)': {
           display: 'none'
         }
+      },
+      embeddedLink: {
+        color: theme.palette.accent1Color,
+        minWidth: '0px',
+        paddingLeft: '5px',
+        paddingRight: '5px'
       }
     }
 
@@ -125,7 +160,6 @@ let Index = React.createClass({
 
   render() {
     let styles = this.getStyles()
-
     return (
       <Container>
         <div style={styles.previous}>
@@ -155,28 +189,63 @@ let Index = React.createClass({
             <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
-            <h3 style={styles.title}>Create an independent and
-            secure digital identity.</h3>
-            <p style={styles.subtitle}>Collect your data at a secure place.
-              <br /> It’s yours, so only you own it!</p>
+            <Header title="Create an independent and
+              secure digital identity." />
+            <SideNote>
+              Collect your data at a secure place.
+              It’s yours, so only you own it!
+            </SideNote>
           </div>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-02.svg)'
             })} />
-            <h3 style={styles.title}>Have all your data<br />
-            at your fingertips.</h3>
-            <p style={styles.subtitle}>See all your data in one safe place.
-              <br /> Pull the plug and your data is only yours.</p>
+            <Header title="Have all your data at your fingertips." />
+            <SideNote>
+              See all your data in one safe place. Pull the
+              plug and your data is only yours.
+            </SideNote>
           </div>
           <div style={styles.slide}>
             <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-03.svg)'
             })} />
-            <h3 style={styles.title}>Be aware of the<br />
-            information you share.</h3>
-            <p style={styles.subtitle}>See what you shared with whom.
-              <br />Have total control over your data.</p>
+            <Header title="Be aware of the information you share." />
+            <SideNote>
+              See what you shared with whom.
+              Have total control over your data.
+            </SideNote>
+          </div>
+          <div style={styles.slide}>
+            <div style={Object.assign({}, styles.onboardImg, {
+              backgroundImage: 'url(img/img_onboarding-04.svg)'
+            })} />
+            <Header
+              title="Our Wallet keeps your data as safe
+              as your bank account." />
+            <SideNote>
+              We use the latest encryption technology and
+              <span style={styles.embeddedLink}
+                onClick={() => {
+                  this.props.openConfirmDialog(dialogBlockchain)
+                }}>
+              blockchain</span>
+              to store your sensitive data.
+            </SideNote>
+          </div>
+          <div style={styles.slide}>
+            <div style={Object.assign({}, styles.onboardImg, {
+              backgroundImage: 'url(img/img_onboarding-05.svg)'
+            })} />
+            <Header
+              style={{marginTop: '0'}}
+              title="Security is hard to maintain, that's
+              why the storage costs." />
+            <SideNote>
+              The storage of your data is payed
+              in ether, a webbased currency. But only
+              change of data costs. Learn More
+            </SideNote>
           </div>
         </Carousel>
 
@@ -199,10 +268,13 @@ let Index = React.createClass({
             onClick={this._handleLogin}
           />
         </div>
+        <InfoLink
+          info="With signing up you agree with our"
+          link="AGB"
+          to="" />
       </Container>
     )
   },
-
   _setCarouselRef(c) {
     this.carousel = c
   },
@@ -222,7 +294,11 @@ let Index = React.createClass({
   _handleLogin() {
     this.context.router.push('/login')
   }
-
 })
 
-export default Radium(Index)
+export default connect({
+  actions: [
+    'confirmation-dialog:openConfirmDialog',
+    'confirmation-dialog:closeConfirmDialog'
+  ]
+})(Radium(Index))

@@ -1,7 +1,8 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
-import WebIdAgent from 'lib/agents/webid'
+import util from 'lib/util'
+// import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
@@ -12,8 +13,11 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
-  changePinValue: {
+  changeSmsCodeValue: {
     expectedParams: ['value', 'index']
+  },
+  changePinValue: {
+    expectedParams: ['attrType', 'value', 'index', 'codeType']
   },
   setFocusedPin: {
     expectedParams: ['value', 'index']
@@ -34,6 +38,12 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  setSmsVerificationCodeStatus: {
+    expectedParams: ['field', 'index', 'value']
+  },
+  expandField: {
+    expectedParams: ['field', 'value']
+  },
   goToIdentity: {
     expectedParams: [],
     creator: () => {
@@ -42,25 +52,62 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  getIdCardVerifications: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getIdCardVerifications.buildAction(params, async() => {
+          let numOfVerification = await services.auth.currentUser.wallet
+          .identityContract.getNumberOfVerifications({
+            attributeId: 'idCard',
+            identityAddress: services.auth.currentUser.wallet.identityAddress
+          })
+          return numOfVerification.toNumber()
+        }))
+      }
+    }
+  },
+  saveToBlockchain: {
+    expectedParams: ['index'],
+    async: true,
+    creator: (index) => {
+      return (dispatch, getState, {services, backend}) => {
+        const idCard = getState().toJS().wallet.identity.idCards[index]
+        dispatch(actions.saveToBlockchain.buildAction(index, () => {
+          return storeIdCardDetailsInBlockchain({idCard, services})
+        }))
+      }
+    }
+  },
   getIdentityInformation: {
     expectedParams: [],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getIdentityInformation.buildAction(params, () => {
-          return backend.solid.getUserInformation(new WebIdAgent().getWebId())
-        }))
+        dispatch(actions.getIdentityInformation.buildAction(params, () =>
+          services.auth.currentUser.wallet.getUserInformation()
+            .then((result) => {
+              dispatch(actions.getIdCardVerifications())
+              return result
+            })
+        ))
       }
     }
   }
 })
 
-const mapBackendToState = ({webId, username, contact, passports, idCards}) =>
+const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: false,
-    webId,
-    username,
+    webId: webId,
+    username: {value: userName},
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: false
+    },
     contact: {
       emails: contact.email,
       phones: contact.phone
@@ -69,19 +116,25 @@ const mapBackendToState = ({webId, username, contact, passports, idCards}) =>
     idCards: idCards
   })
 const mapBackendToStateError =
-({webId, username, contact, passports, idCards}) =>
+({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: true,
-    webId,
-    username,
-    contact: {
-      emails: contact.email,
-      phones: contact.phone
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: true
     },
-    passports: passports,
-    idCards: idCards
+    webId: {value: ''},
+    username: {value: ''},
+    contact: {
+      emails: [],
+      phones: []
+    },
+    passports: [],
+    idCards: []
   })
+
 const initialState = Immutable.fromJS({
   loaded: false,
   error: false,
@@ -90,39 +143,44 @@ const initialState = Immutable.fromJS({
     verified: false,
     value: ''
   },
+  expandedFields: {
+    contact: false,
+    idCards: false,
+    passports: false
+  },
   contact: {
     phones: [{
       type: '',
       number: '',
       verified: false,
       smsCode: '',
+      pin: '',
       pinFocused: false
     }],
     emails: [{
       type: '',
       address: '',
+      pin: '',
       verified: false
     }]
   },
-  passports: [
-    {
-      number: '',
-      givenName: '',
-      familyName: '',
-      birthDate: '',
-      gender: '',
-      showAddress: '',
-      streetAndNumber: '',
-      city: '',
-      zip: '',
-      state: '',
-      country: '',
-      verified: false
-    }
-  ]
+  passports: [{
+    number: '',
+    givenName: '',
+    familyName: '',
+    birthDate: '',
+    gender: '',
+    showAddress: '',
+    streetAndNumber: '',
+    city: '',
+    zip: '',
+    state: '',
+    country: '',
+    verified: false
+  }]
 })
 
-const changePinCodeValue = (state, {index, value}) => {
+const changeSmsCodeValue = (state, {index, value}) => {
   if (/^[0-9]{0,6}$/.test(value)) {
     return state.mergeIn(['contact', 'phones', index], {
       smsCode: value
@@ -131,22 +189,72 @@ const changePinCodeValue = (state, {index, value}) => {
   return state
 }
 
+const changePinValue = (state, {attrType, index, value, codeType = 'pin'}) => {
+  if (/^[0-9]{0,6}$/.test(value)) {
+    return state.setIn(['contact', attrType, index, codeType], value)
+  }
+  return state
+}
+
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.getIdCardVerifications.id_success:
+      return state.mergeIn(['idCards', '0'], {verified: action.result > 0})
+
     case actions.getIdentityInformation.id_success:
       return mapBackendToState(action.result)
 
+    case actions.saveToBlockchain.id_success:
+      return state.mergeIn(['idCards', '0'], {savedToBlockchain: true})
     case actions.getIdentityInformation.id_fail:
       return mapBackendToStateError(state)
 
+    case actions.changeSmsCodeValue.id:
+      return changeSmsCodeValue(state, action)
+
     case actions.changePinValue.id:
-      return changePinCodeValue(state, action)
+      return changePinValue(state, action)
 
     case actions.setFocusedPin.id:
-      return state.mergeIn(['contact', 'phones', action.index], {
-        pinFocused: action.value
+      return state.setIn(['contact', 'isCodeInputFieldFocused'], action.value)
+
+    case actions.expandField.id:
+      return state.setIn(['expandedFields', action.field], action.value)
+
+    case actions.setSmsVerificationCodeStatus.id:
+      return state.mergeIn(['contact', action.field, action.index], {
+        codeIsSent: action.value
       })
+
     default:
       return state
   }
+}
+
+function storeIdCardDetailsInBlockchain({idCard, services}) {
+  const {wallet} = services.auth.currentUser
+  return wallet.addAttributeHashToIdentity(
+    {
+      attributeId: 'idCard',
+      attribute: {
+        birthCountry: idCard.idCardFields.birthCountry,
+        birthDate: idCard.idCardFields.birthDate,
+        birthPlace: idCard.idCardFields.birthPlace,
+        expirationDate: idCard.idCardFields.expirationDate,
+        firstName: idCard.idCardFields.firstName,
+        gender: idCard.idCardFields.gender,
+        lastName: idCard.idCardFields.lastName,
+        number: idCard.idCardFields.number,
+        city: idCard.idCardFields.physicalAddress.city,
+        country: idCard.idCardFields.physicalAddress.country,
+        state: idCard.idCardFields.physicalAddress.state,
+        streetWithNumber: idCard.idCardFields.physicalAddress.streetWithNumber,
+        zip: idCard.idCardFields.physicalAddress.zip
+      },
+      definitionUrl:
+      `${util.webidRoot(wallet.webId)}/profile/idCard${idCard.id}`,
+      pin: '1234',
+      identityAddress: wallet.identityAddress
+    }
+  )
 }

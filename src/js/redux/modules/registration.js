@@ -110,12 +110,7 @@ const actions = module.exports = makeActions('registration', {
         if (!pinState.get('valid')) {
           return
         }
-
-        if (pinState.get('confirm')) {
-          dispatch(actions.goForward())
-        } else {
-          dispatch(actions.setPinConfirm(true))
-        }
+        dispatch(actions.goForward())
       }
     }
   },
@@ -154,8 +149,9 @@ const actions = module.exports = makeActions('registration', {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkUsername.buildAction(params, (backend) => {
-          return backend.accounts
-            .checkUsername(state.username.value).then((params) => {
+          return backend.gateway
+            .checkUserDoesNotExist({userName: state.username.value})
+            .then((params) => {
               dispatch(actions.goForward())
             })
         }))
@@ -171,44 +167,53 @@ const actions = module.exports = makeActions('registration', {
         dispatch(actions.registerWallet.buildAction(params, async () => {
           const userType = state.userType.value
           if (userType === 'expert') {
-            const { wallet } = await services.auth.registerWithSeedPhrase({
+            await services.auth.register({
               userName: state.username.value,
+              seedPhrase: state.passphrase.phrase
+            })
+
+            await services.auth.login({
               seedPhrase: state.passphrase.phrase,
               pin: state.pin.value
             })
 
-            await backend.accounts.solidRegister(
-              state.username.value,
-              state.passphrase.phrase,
-              wallet.webIDPrivateKey
-            )
-
-            await backend.accounts.solidLogin(
-              state.username.value,
-              state.passphrase.phrase,
-              wallet.webIDPrivateKey
-            )
-
-            await backend.solid.setIdentityContractAddress(
-              wallet.webId,
-              wallet.identityAddress
-            )
-
             dispatch(router.pushRoute('/wallet'))
-            return
           } else {
-            return services.auth.registerWithCredentials({
-              userName: state.username.value,
-              email: state.email.value,
-              password: state.password.value,
-              pin: state.pin.value
-            }).then(({wallet}) => {
-              return backend.accounts.solidRegister(state.username.value,
-                state.passphrase.phrase, wallet.webIDPrivateKey)
-            }).then(({webid}) => {
-              dispatch(router.pushRoute('/wallet'))
-              return
-            })
+            console.log('layman registration')
+
+            // return true
+            // return services.auth.registerWithCredentials({
+            //   userName: state.username.value,
+            //   email: state.email.value,
+            //   password: state.password.value,
+            //   pin: state.pin.value
+            // })
+            // const { wallet } = await services.auth.registerWithCredentials({
+            //   userName: state.username.value,
+            //   email: state.email.value,
+            //   password: state.password.value,
+            //   pin: state.pin.value,
+            //   seedPhrase: state.passphrase.phrase
+            // })
+
+            // await backend.accounts.solidRegister(
+            //   state.username.value,
+            //   state.passphrase.phrase,
+            //   wallet.webIDPrivateKey
+            // )
+
+            // await backend.accounts.solidLogin(
+            //   state.username.value,
+            //   state.passphrase.phrase,
+            //   wallet.webIDPrivateKey
+            // )
+
+            // await backend.solid.setIdentityContractAddress(
+            //   wallet.webId,
+            //   wallet.identityAddress
+            // )
+
+            // dispatch(router.pushRoute('/wallet'))
           }
         })
       )
@@ -383,7 +388,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.registerWallet.id_success:
       return state.mergeDeep({
         wallet: {
-          registering: false,
+          registering: true,
           registered: true
         }
       })

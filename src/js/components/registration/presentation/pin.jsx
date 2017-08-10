@@ -3,7 +3,7 @@ import Radium from 'radium'
 import {RaisedButton} from 'material-ui'
 import PinInput from './pin-input'
 import {Form} from 'formsy-react'
-
+import Spinner from '../../common/spinner'
 import {theme} from 'styles'
 
 import {Container, Header, Content, Block, Footer, SideNote}
@@ -13,7 +13,8 @@ const STYLES = {
   form: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    margin: '30px 0'
   },
   input: {
     display: 'inline-block'
@@ -26,48 +27,39 @@ const STYLES = {
   content: {
     padding: '16px',
     flex: 1
+  },
+  sidenote: {
+    margin: '10px'
   }
 }
 
 function getButtonLabel(props) {
   if (!props.valid) {
     return 'Almost done'
-  }
-  if (props.confirm) {
-    return 'All right'
   } else {
     return 'Done'
   }
 }
 
 const Pin = (props) => {
-  let confirm
+  let contents
 
-  if (props.confirm) {
-    confirm = (
+  if (props.registering) {
+    const messageWait = ['Please have some patience...',
+      '...we are creating...', '...your jolocom wallet...',
+      '...your digital identity...', '...we are linking...',
+      '...your WebID to your identity...']
+
+    contents = (
       <Block>
-        <div
-          style={STYLES.changeLink}
-          onClick={props.onChangeRequest}
-        >
-          Change secure PIN
-        </div>
+        <Spinner style={STYLES.header} message={messageWait}
+          avatar={'url(/img/img_techguy.svg)'} />
       </Block>
     )
-  }
-
-  let headerTitle
-
-  if (props.confirm) {
-    headerTitle = 'Your Secure PIN.'
   } else {
-    headerTitle = 'Create a PIN for secure login.'
-  }
-
-  return (
-    <Container>
+    contents = (
       <Form onValidSubmit={() => { props.onSubmit() }} style={STYLES.form}>
-        <Header title={headerTitle} />
+        <Header title={'Create a PIN for secure login.'} />
         <Content style={STYLES.content}>
           <PinInput
             value={props.value}
@@ -76,21 +68,15 @@ const Pin = (props) => {
             onChange={props.onChange}
             onFocusChange={props.onFocusChange}
             confirm={props.confirm} />
-
-          {confirm}
+          <Block>
+            <SideNote style={STYLES.sidenote}>
+              This secure PIN will be needed for transactions and
+              saving information on the Blockchain.
+            </SideNote>
+          </Block>
         </Content>
 
         <Footer>
-          {
-            props.confirm
-            ? <Block>
-              <SideNote>
-                This secure PIN will be needed for transactions and
-                saving information on the Blockchain.
-              </SideNote>
-            </Block>
-            : null
-          }
           <RaisedButton
             type="submit"
             disabled={!props.valid}
@@ -99,6 +85,11 @@ const Pin = (props) => {
           />
         </Footer>
       </Form>
+    )
+  }
+  return (
+    <Container>
+      {contents}
     </Container>
   )
 }

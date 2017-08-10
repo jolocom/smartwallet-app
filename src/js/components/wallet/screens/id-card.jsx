@@ -38,7 +38,6 @@ export default class WalletPaasportScreen extends React.Component {
     const {save, cancel, initiateCountrySelectScreen} = this.props
     const {loaded, focusedField, focusedGroup, verifierLocations
     } = this.props.idCard
-
     return <Presentation
       loaded={loaded}
       focusedGroup={focusedGroup}
@@ -56,17 +55,19 @@ export default class WalletPaasportScreen extends React.Component {
   }
 
   showVerifiers(...args) {
-    this.props.configSimpleDialog(null, 'OK', 'OK', {})
+    this.props.configSimpleDialog(null, args, 'OK', {})
     this.props.showSimpleDialog()
   }
 
   change(field, value) {
+    const {city} = this.props.idCard.idCard.physicalAddress
     const idCardFields = this.parseIdCardDetailsToArray()
       .map(({key}) => key)
     if (idCardFields.includes(field)) {
       return this.props.changeIdCardField(field, value)
-    } else if (['streetWithNumber', 'zip'].includes(field)) {
-      this.props.setShowAddress(value.trim().length > 0)
+    } else if (['streetWithNumber'].includes(field)) {
+      this.props.setShowAddress(value.trim().length > 0 || city.value.length > 0) // eslint-disable-line max-len
+      return this.props.changePhysicalAddressField(field, value)
     }
     return this.props.changePhysicalAddressField(field, value)
   }
@@ -74,6 +75,9 @@ export default class WalletPaasportScreen extends React.Component {
   setFocusedElements(key, group) {
     if (key === '') {
       return this.props.setFocusedField('', '')
+    } else if (key === 'streetWithNumber') {
+      this.props.setShowAddress(true)
+      return this.props.setFocusedField(key, group)
     }
     return this.props.setFocusedField(key, group)
   }
@@ -82,7 +86,7 @@ export default class WalletPaasportScreen extends React.Component {
     const {number, expirationDate, firstName, lastName, gender, birthDate,
       birthPlace, birthCountry} = this.props.idCard.idCard
     return [
-      {label: 'Id Card Number', key: 'number', group: 'numbers', ...number},
+      {label: 'ID Card Number', key: 'number', group: 'numbers', ...number},
       {label: 'Expiration Date', key: 'expirationDate', group: 'numbers', ...expirationDate}, // eslint-disable-line max-len
       {label: 'First Name', key: 'firstName', group: 'person', ...firstName},
       {label: 'Last Name', key: 'lastName', group: 'person', ...lastName},
@@ -99,7 +103,7 @@ export default class WalletPaasportScreen extends React.Component {
     const group = 'address'
     return [
       {...streetWithNumber, key: 'streetWithNumber', label: 'Street', group},
-      {...zip, key: 'zip', label: 'Zip Code', group},
+      {...zip, key: 'zip', label: 'Zip', group},
       {...city, key: 'city', label: 'City', group},
       {...state, key: 'state', label: 'State', group},
       {...country, key: 'country', label: 'Country', group}

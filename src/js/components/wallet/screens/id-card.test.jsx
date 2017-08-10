@@ -162,7 +162,7 @@ describe('(Component) WalletIdCardScreen', () => {
     const field = {value: '', valid: false, group: 'address'}
     expect(wrapper.find(Presentation).prop('physicalAddress')).to.deep.equal([
       {...field, key: 'streetWithNumber', label: 'Street'},
-      {...field, key: 'zip', label: 'Zip Code'},
+      {...field, key: 'zip', label: 'Zip'},
       {...field, key: 'city', label: 'City'},
       {...field, key: 'state', label: 'State'},
       {...field, options: [], key: 'country', label: 'Country'}
@@ -218,7 +218,7 @@ describe('(Component) WalletIdCardScreen', () => {
     )
     const field = {value: '', valid: false}
     expect(wrapper.find(Presentation).prop('idCard')).to.deep.equal([
-      {...field, label: 'Id Card Number', key: 'number', group: 'numbers'},
+      {...field, label: 'ID Card Number', key: 'number', group: 'numbers'},
       {...field, label: 'Expiration Date', key: 'expirationDate', group: 'numbers'}, // eslint-disable-line max-len
       {...field, label: 'First Name', key: 'firstName', group: 'person'},
       {...field, label: 'Last Name', key: 'lastName', group: 'person'},
@@ -492,8 +492,8 @@ describe('(Component) WalletIdCardScreen', () => {
     )
     wrapper.find(Presentation).props().change('zip', 'test')
     expect(changePhysicalAddressField.called).to.be.true
-    expect(setShowAddress.called).to.be.true
-    expect(setShowAddress.calls).to.deep.equal([{args: [true]}])
+    expect(setShowAddress.called).to.be.false
+    // expect(setShowAddress.calls).to.deep.equal([{args: [true]}])
     expect(changePhysicalAddressField.calls)
       .to.deep.equal([{args: ['zip', 'test']}])
   })
