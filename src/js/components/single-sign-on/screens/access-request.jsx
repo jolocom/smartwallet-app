@@ -76,7 +76,6 @@ export default class AccessRequestScreen extends React.Component {
     this.props.requestedDetails(this.props.location)
   }
 
-  // initiates process
   requestVerificationCode({attrType, attrValue, index}) {
     if (attrType === 'phone') {
       return () => {
@@ -89,7 +88,6 @@ export default class AccessRequestScreen extends React.Component {
     }
   }
 
-  // confirm process
   enterVerificationCode({attrType, attrValue}) {
     if (attrType === 'phone') {
       return () => {
@@ -102,7 +100,6 @@ export default class AccessRequestScreen extends React.Component {
     }
   }
 
-  // resend
   resendVerificationCode({attrType, attrValue, index}) {
     if (attrType === 'phone') {
       return () => {
@@ -115,7 +112,6 @@ export default class AccessRequestScreen extends React.Component {
     }
   }
 
-  // on confirm ()
   onConfirm(args, params) {
     return this.showVerificationWindow(args, () => {
       return () => this.showVerificationWindow(params,
@@ -123,7 +119,6 @@ export default class AccessRequestScreen extends React.Component {
     })
   }
 
-  // when popup is displayed
   showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
     return this.props.openConfirmDialog(
       title,

@@ -50,7 +50,14 @@ export default class NotVerifiedItem extends React.Component {
     pinFocused: React.PropTypes.string
   }
   renderVerificationInfo = (field) => {
+    let verified = false
+    let smsCode = ''
+    let pin = ''
+    let codeIsSent = false
+    // let type = ''
     if (field === 'phone') {
+      let index = '0'
+      let attrType = 'phone'
       return (
         <div>
           <div style={STYLES.verificationBlock}>
@@ -61,20 +68,26 @@ export default class NotVerifiedItem extends React.Component {
               disabled />
           </div>
           <VerificationButtons
-            attrType="phone"
+            attrType={attrType}
+            index={index}
             requestVerificationCode={this.props.requestVerificationCode}
             resendVerificationCode={this.props.resendVerificationCode}
             enterVerificationCode={this.props.enterVerificationCode}
-            index={0}
-            smsCode={'1111'}
-            setFocusedPin={(value) => { this.props.setFocusedPin(value, 0) }}
-            changePinValue={(value) => { this.props.changePinValue(value, 0) }}
+            smsCode={smsCode}
+            pinValue={pin}
+            setFocusedPin={(value) => { this.props.setFocusedPin(value, index) }} // eslint-disable-line max-len
+            changePinValue={(value, codeType) => {
+              this.props.changePinValue(attrType, value, index, codeType)
+            }}
             focused={this.props.pinFocused}
-            value={'01111 number from service'}
-            codeIsSent={false} />
+            value={this.props.textValue}
+            codeIsSent={codeIsSent}
+            verified={verified} />
         </div>
       )
     } else if (field === 'email') {
+      let index = '0'
+      let attrType = 'email'
       return (
         <div>
           <div style={STYLES.verificationBlock}>
@@ -85,14 +98,21 @@ export default class NotVerifiedItem extends React.Component {
               disabled />
           </div>
           <VerificationButtons
-            attrType="email"
+            attrType={attrType}
+            index={index}
             requestVerificationCode={this.props.requestVerificationCode}
             resendVerificationCode={this.props.resendVerificationCode}
             enterVerificationCode={this.props.enterVerificationCode}
-            index={1}
-            smsCode={'1111'}
-            value={'01111 number from service'}
-            codeIsSent={false} />
+            smsCode={smsCode}
+            pinValue={pin}
+            setFocusedPin={(value) => { this.props.setFocusedPin(value, index) }} // eslint-disable-line max-len
+            changePinValue={(value, codeType) => {
+              this.props.changePinValue(attrType, value, index, codeType)
+            }}
+            focused={this.props.pinFocused}
+            value={this.props.textValue}
+            codeIsSent={codeIsSent}
+            verified={verified} />
         </div>
       )
     }
