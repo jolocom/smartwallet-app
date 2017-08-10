@@ -77,7 +77,7 @@ export default class AccessRequestScreen extends React.Component {
   }
 
   requestVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phone') {
+    if (attrType === 'phones') {
       return () => {
         this.props.startPhoneVerification({phone: attrValue, index})
       }
@@ -88,10 +88,10 @@ export default class AccessRequestScreen extends React.Component {
     }
   }
 
-  enterVerificationCode({attrType, attrValue}) {
-    if (attrType === 'phone') {
+  enterVerificationCode({attrType, attrValue, index}) {
+    if (attrType === 'phones') {
       return () => {
-        this.props.confirmPhone({phone: attrValue})
+        this.props.confirmPhone(index)
       }
     } else if (attrType === 'email') {
       return () => {
@@ -144,12 +144,10 @@ export default class AccessRequestScreen extends React.Component {
         changePinValue={this.props.changePinValue}
         setFocusedPin={this.props.setFocusedPin}
 
-        requestVerificationCode={(args, params) => {
-          this.showVerificationWindow(args, () => {
-            return () => this.showVerificationWindow(params,
-              (args) => this.requestVerificationCode(args))
-          })
-        }}
+        requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
+          return () => this.showVerificationWindow(params,
+            (callbackArgs) => this.requestVerificationCode(callbackArgs))
+        })}
 
         enterVerificationCode={(...args) => this.showVerificationWindow(...args,
           (...params) => this.enterVerificationCode(...params)

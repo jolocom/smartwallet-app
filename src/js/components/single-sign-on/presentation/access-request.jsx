@@ -111,13 +111,16 @@ export default class AccessRequest extends React.Component {
 
   checkFields(field) {
     const {identity} = this.props
-    let verified, textValue
+    let verified, textValue, smsCode, codeIsSent, pin
     let attribute = identity[field + 's'] || identity.contact[field + 's']
 
     if (attribute && field === 'phone' && attribute[0] !== undefined) {
       verified = attribute[0].verified
       textValue = attribute[0].number
-      return ({verified: verified, textValue: textValue})
+      smsCode = attribute[0].smsCode
+      codeIsSent = attribute[0].codeIsSent
+      pin = attribute[0].pin
+      return ({verified: verified, textValue: textValue, smsCode: smsCode, codeIsSent: codeIsSent, pin: pin}) // eslint-disable-line max-len
     } else if (attribute && field === 'email' && attribute[0] !== undefined) {
       verified = attribute[0].verified
       textValue = attribute[0].address
@@ -174,6 +177,7 @@ export default class AccessRequest extends React.Component {
             changePinValue={this.props.changePinValue}
             setFocusedPin={this.props.setFocusedPin}
             field={field}
+            attributes={attributes}
             textLabel={field}
             textValue={textValue}
             icon={this.getIcon(field)} />

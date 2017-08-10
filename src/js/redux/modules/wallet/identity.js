@@ -155,6 +155,7 @@ const initialState = Immutable.fromJS({
       verified: false,
       smsCode: '',
       pin: '',
+      codeIsSent: false,
       pinFocused: false
     }],
     emails: [{

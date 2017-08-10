@@ -112,7 +112,7 @@ const VerificationButtons = ({
           value={pinValue}
           phoneNumber={value}
           setFocusedPin={(value) => { setFocusedPin(value, index) }}
-          changePinValue={(value) => { changePinValue(value, index) }}
+          changePinValue={(value) => { changePinValue(value, 'pin') }}
           focused={pinFocused} />),
         rightButtonLabel: 'OK',
         leftButtonLabel: 'CANCEL',

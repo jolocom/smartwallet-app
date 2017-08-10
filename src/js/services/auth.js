@@ -91,6 +91,8 @@ export class Wallet {
           })),
           phone: phone.map(phone => ({
             id: phone.id,
+            smsCode: '',
+            codeIsSent: false,
             type: phone.contents.type,
             number: phone.contents.value,
             verified: phone.verified,
