@@ -1,96 +1,65 @@
-import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
-import {randomUint8Array} from 'secure-random'
 import * as settings from 'settings'
-import HTTPAgent from './http'
+import * as request from 'superagent-es6-promise'
 
 export default class VerificationAgent {
   constructor() {
-    this.httpAgent = new HTTPAgent({proxy: false})
+    this.request = request
   }
 
-  async startVerifyingEmail({wallet, email, pin}) {
+  async startVerifyingEmail({wallet, email, id, pin}) {
     return await this._startVerifying({
-      wallet, pin, dataType: 'email', data: email
+      wallet, pin, dataType: 'email', id, data: email
     })
   }
 
-  async startVerifyingPhone({wallet, phone, pin}) {
+  async startVerifyingPhone({wallet, phone, type, id, pin}) {
     return await this._startVerifying({
-      wallet, pin, dataType: 'phone', data: phone
+      wallet, pin, dataType: 'phone', id, data: `${type}.${phone}`
     })
   }
 
-  async _startVerifying({wallet, data, dataType, pin}) {
-    const {salt, txHash} = sendVerificationEtherIfNeeded({dataType, data})
+  async _startVerifying({wallet, data, id, dataType, pin}) {
+    await Promise.all([
+      this.request.post(wallet.identityURL + '/access/grant').send({
+        identity: 'https://identity.jolocom.com/verification',
+        pattern: `/identity/${dataType}/${id}`,
+        read: true
+      }).withCredentials(),
+      this.request.post(wallet.identityURL + '/access/grant').send({
+        identity: 'https://identity.jolocom.com/verification',
+        pattern: `/identity/${dataType}/${id}/verifications`,
+        read: true,
+        write: true
+      }).withCredentials()
+    ])
 
-    await this.httpAgent.post(
-      settings.verificationProvider + `/${dataType}/start-verification`,
-      {
-        // contractID: wallet.getIdentityAddress(),
-        txHash, [dataType]: data, salt
-      }
-    )
+    await this.request.post(
+      `${settings.verificationProvider}/${dataType}/start-verification`
+    ).send({
+      identity: wallet.identityURL,
+      id, [dataType]: data
+    })
   }
 
-  async verifyEmail({contractID, email, code}) {
-    await this._verify({contractID, dataType: 'email', data: email, code})
+  async verifyEmail({wallet, email, id, code}) {
+    await this._verify({wallet, dataType: 'email', id, data: email, code})
   }
 
-  async verifyPhone({contractID, phone, code}) {
-    await this._verify({contractID, dataType: 'phone', data: phone, code})
+  async verifyPhone({wallet, type, phone, id, code}) {
+    await this._verify({
+      wallet, dataType: 'phone',
+      id, data: `${type}.${phone}`, code
+    })
   }
 
-  async _verify({contractID, dataType, data, code}) {
-    const dataKey = getDataKey({dataType, data})
-    const stored = localStorage.getItem(dataKey)
-    const storedData = JSON.parse(stored)
-    const {salt, txHash} = storedData
-
-    await this.httpAgent.post(
-      settings.verificationProvider + `/${dataType}/verify`,
-      {contractID, txHash, salt, [dataType]: data, code}
-    )
-
-    localStorage.deleteItem(getDataKey({dataType, data}))
+  async _verify({wallet, dataType, id, data, code}) {
+    await this.request.post(
+      `${settings.verificationProvider}/${dataType}/verify`
+    ).send({
+      identity: wallet.identityURL,
+      id,
+      [dataType]: data,
+      code
+    })
   }
-}
-
-function saltAndHash(data) {
-  const randomBuffer = randomUint8Array(10)
-  const decoder = new TextDecoder('utf8')
-  const salt = btoa(decoder.decode(randomBuffer))
-  const hash = (new WalletCrypto()).sha256(data + salt)
-
-  return {salt, hash}
-}
-
-async function sendVerificationEtherIfNeeded({wallet, dataType, data, pin}) {
-  const dataKey = getDataKey({dataType, data})
-  const stored = localStorage.getItem(dataKey)
-  if (stored) {
-    const storedData = JSON.parse(stored)
-    return {
-      salt: storedData.salt,
-      txHash: storedData.txHash
-    }
-  }
-
-  const {salt, hash} = saltAndHash(data)
-
-  const txHash = await wallet.sendEther({
-    receiver: settings.jolocomIdentityWalletAddress,
-    amountEther: 0.005,
-    data: hash,
-    pin
-  })
-
-  localStorage.setItem(dataKey, JSON.stringify({
-    txHash, salt, hash, data
-  }))
-
-  return {salt, txHash}
-}
-
-function getDataKey({dataType, data}) {
-  return `jolocom.verification.${dataType}.${data}`
 }

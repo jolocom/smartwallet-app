@@ -17,7 +17,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: ['value', 'index']
   },
   changePinValue: {
-    expectedParams: ['value', 'index']
+    expectedParams: ['attrType', 'value', 'index', 'codeType']
   },
   setFocusedPin: {
     expectedParams: ['value', 'index']
@@ -37,6 +37,9 @@ const actions = module.exports = makeActions('wallet/identity', {
         dispatch(router.pushRoute('/wallet/identity/drivers-licence/add'))
       }
     }
+  },
+  setSmsVerificationCodeStatus: {
+    expectedParams: ['field', 'index', 'value']
   },
   expandField: {
     expectedParams: ['field', 'value']
@@ -152,6 +155,7 @@ const initialState = Immutable.fromJS({
       verified: false,
       smsCode: '',
       pin: '',
+      codeIsSent: false,
       pinFocused: false
     }],
     emails: [{
@@ -186,11 +190,9 @@ const changeSmsCodeValue = (state, {index, value}) => {
   return state
 }
 
-const changePinValue = (state, {index, value}) => {
+const changePinValue = (state, {attrType, index, value, codeType = 'pin'}) => {
   if (/^[0-9]{0,6}$/.test(value)) {
-    return state.mergeIn(['contact', 'phones', index], {
-      pin: value
-    })
+    return state.setIn(['contact', attrType, index, codeType], value)
   }
   return state
 }
@@ -215,12 +217,15 @@ module.exports.default = (state = initialState, action = {}) => {
       return changePinValue(state, action)
 
     case actions.setFocusedPin.id:
-      return state.mergeIn(['contact', 'phones', action.index], {
-        pinFocused: action.value
-      })
+      return state.setIn(['contact', 'isCodeInputFieldFocused'], action.value)
 
     case actions.expandField.id:
       return state.setIn(['expandedFields', action.field], action.value)
+
+    case actions.setSmsVerificationCodeStatus.id:
+      return state.mergeIn(['contact', action.field, action.index], {
+        codeIsSent: action.value
+      })
 
     default:
       return state

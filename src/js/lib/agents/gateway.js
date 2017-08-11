@@ -72,6 +72,42 @@ export default class GatewayAgent {
   //   )
   // }
 
+  getRequesterIdentity(identity) {
+    // console.log('getRequesterIdentity: ', identity)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve(identity), 2000)
+    })
+    // return this._httpAgent.get(
+    //   identity + '/identity/name/display'
+    // )
+  }
+
+  grantAccessToRequester(user, body) {
+    return this._httpAgent.post(
+      user + '/access/grant',
+      JSON.stringify(body),
+      {
+        'Content-type': 'application/json'
+      }
+    )
+  }
+
+  verify({userName, seedPhrase, identity, attributeType,
+     attributeId, attributeValue}) {
+    let url = `${this._gatewayUrl}/${userName}/verify`
+    let body = {
+      seedPhrase,
+      identity,
+      attributeType,
+      attributeId,
+      attributeValue
+    }
+    return this._httpAgent.post(
+      url, JSON.stringify(body),
+      {'Content-type': 'application/json'}
+    )
+  }
+
   storeAttribute({userName, attributeType, attributeId, attributeData}) {
     let url = `${this._gatewayUrl}/${userName}/identity/${attributeType}`
     if (attributeId) {
