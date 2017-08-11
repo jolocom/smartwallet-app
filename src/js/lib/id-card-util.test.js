@@ -177,6 +177,10 @@ describe('# IdCard util', () => {
         birthDate: '02-02-2000',
         birthPlace: 'Berlin',
         birthCountry: 'Germany',
+        images: {
+          frontSideImg: {value: ''},
+          backSideImg: {value: ''}
+        },
         physicalAddress: {
           streetWithNumber: 'streetName 1234',
           zip: '0000',
@@ -192,6 +196,10 @@ describe('# IdCard util', () => {
         focusedField: null,
         idCard: {
           locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
+          images: {
+            frontSideImg: {value: ''},
+            backSideImg: {value: ''}
+          },
           number: {value: '', valid: false},
           expirationDate: {value: '', valid: false},
           firstName: {value: '', valid: false},
@@ -222,6 +230,10 @@ describe('# IdCard util', () => {
             zip: '0000',
             city: 'Berlin'
           }],
+          images: {
+            frontSideImg: {value: ''},
+            backSideImg: {value: ''}
+          },
           number: {value: '123456', valid: true},
           expirationDate: {value: '02-02-2020', valid: true},
           firstName: {value: 'Test', valid: true},
