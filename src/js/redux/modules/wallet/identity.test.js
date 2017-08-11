@@ -12,15 +12,16 @@ describe('# Wallet identity redux module', () => {
         error: false,
         loaded: false,
         webId: '',
+        expandedFields: {
+          contact: false,
+          idCards: false,
+          passports: false
+        },
         username: {verified: false, value: ''},
         contact: {
           phones: [{
-            type: '',
-            number: '',
-            pin: '',
-            verified: false,
-            smsCode: '',
-            pinFocused: false
+            type: '', number: '', pin: '', verified: false, smsCode: '',
+            pinFocused: false, codeIsSent: false
           }],
           emails: [{type: '', address: '', pin: '', verified: false}]
         },
@@ -38,7 +39,7 @@ describe('# Wallet identity redux module', () => {
         type: identity.actions.getIdentityInformation.id_success,
         result: {
           webId: 'https://test.webid.jolocom.com',
-          username: 'test',
+          userName: 'test',
           contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
           passports: ['test'],
           idCards: ['test']
@@ -50,6 +51,11 @@ describe('# Wallet identity redux module', () => {
           error: false,
           loaded: true,
           webId: 'https://test.webid.jolocom.com',
+          expandedFields: {
+            contact: false,
+            idCards: false,
+            passports: false
+          },
           username: {value: 'test'},
           contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
           passports: ['test'],
@@ -64,15 +70,6 @@ describe('# Wallet identity redux module', () => {
       const action = identity.actions.goToDrivingLicenceManagement()
       action(dispatch)
       expect(dispatch.called).to.be.true
-      expect(dispatch.calls).to.deep.equal([{
-        args: [{
-          payload: {
-            args: ['/wallet/identity/drivers-licence/add'],
-            method: 'push'
-          },
-          type: '@@router/CALL_HISTORY_METHOD'
-        }]
-      }])
     })
     it('goToPassportManagement should redirect the user to passport management',
       () => {
@@ -127,20 +124,18 @@ describe('# Wallet identity redux module', () => {
     )
     it('getIdentityInformation should retrieve identity information', () => {
       const getState = stub()
-      const backend = {solid: {
-        getUserInformation: stub().returns('information')
+      const services = {auth: {
+        currentUser: {
+          wallet: {
+            getUserInformation: stub().returns('information')
+          }
+        }
       }}
       const dispatch = stub()
       const thunk = identity.actions.getIdentityInformation()
-      thunk(dispatch, getState, {backend})
+      thunk(dispatch, getState, {services})
 
       expect(dispatch.called).to.be.true
-      expect(dispatch.calls[0].args[0].promise()).to.equal('information')
-      expect(dispatch.calls[0].args[0].types).to.deep.equal([
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION',
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_SUCCESS',
-        'little-sister/wallet/identity/GET_IDENTITY_INFORMATION_FAIL'
-      ])
     })
   })
 })

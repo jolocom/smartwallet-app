@@ -12,6 +12,7 @@ import WalletError from '../../common/error'
     'wallet/identity:setFocusedPin',
     'wallet/identity:goToPassportManagement',
     'wallet/identity:goToDrivingLicenceManagement',
+    'wallet/identity:expandField',
     'wallet/identity:goToContactManagement',
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog',
@@ -43,6 +44,7 @@ export default class WalletIdentityScreen extends React.Component {
     confirmEmail: React.PropTypes.func.isRequired,
     confirmPhone: React.PropTypes.func.isRequired,
     resendVerificationLink: React.PropTypes.func,
+    expandField: React.PropTypes.func,
     resendVerificationSms: React.PropTypes.func,
     changePinValue: React.PropTypes.func.isRequired,
     changeSmsCodeValue: React.PropTypes.func.isRequired,
@@ -54,8 +56,8 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   render() {
-    const {username, contact, webId, passports, idCards, loaded, error
-    } = this.props.wallet.identity
+    const { username, contact, webId, passports, idCards, loaded, error,
+      expandedFields } = this.props.wallet.identity
     if (error) {
       return (<WalletError
         message="...oops something went wrong! We were not able to load your data." // eslint-disable-line max-len
@@ -66,13 +68,16 @@ export default class WalletIdentityScreen extends React.Component {
 
     return (<Presentation
       username={username}
+      expandedFields={expandedFields}
       emails={emails}
       phones={phones}
       webId={webId}
       passports={passports}
       idCards={idCards}
       isLoaded={loaded}
+      expandField={this.props.expandField}
       isError={error}
+      pinFocused={contact.isCodeInputFieldFocused}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
       goToContactManagement={this.props.goToContactManagement}
@@ -134,9 +139,9 @@ export default class WalletIdentityScreen extends React.Component {
     }
   }
 
-  enterVerificationCode({attrType, attrValue}) {
+  enterVerificationCode({attrType, attrValue, index}) {
     if (attrType === 'phone') {
-      return () => this.props.confirmPhone({phone: attrValue})
+      return () => this.props.confirmPhone(index)
     } else if (attrType === 'email') {
       return () => this.props.confirmEmail({email: attrValue})
     }

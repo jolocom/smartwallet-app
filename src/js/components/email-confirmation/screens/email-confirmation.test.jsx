@@ -11,14 +11,15 @@ describe('(Component) EmailConfirmationScreen', () => {
     const wrapper = shallow(
       (<EmailConfirmationScreen.WrappedComponent id="test" visible
         {...EmailConfirmationScreen.mapStateToProps(Immutable.fromJS({
-          emailConfirmation: {
+          verification: {
             loading: true,
             success: false
           }
         }))}
         location={{query: {
           email: 'test@test.com',
-          code: '1e3t5'
+          code: '1e3t5',
+          id: 'test'
         }}}
         goToLogin={() => {}}
         confirmEmail={confirm} />)
@@ -29,7 +30,8 @@ describe('(Component) EmailConfirmationScreen', () => {
     expect(confirm.calls).to.deep.equal([{
       args: [{
         email: 'test@test.com',
-        code: '1e3t5'
+        code: '1e3t5',
+        id: 'test'
       }]
     }])
   })

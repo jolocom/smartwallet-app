@@ -35,6 +35,10 @@ import WalletContactScreen from 'components/wallet/screens/contact'
 import WalletIdCardScreen from 'components/wallet/screens/id-card'
 import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
 import CountrySelectScreen from 'components/wallet/screens/country-select'
+import AccessRequestScreen
+  from 'components/single-sign-on/screens/access-request'
+import AccessConfirmationScreen from
+  'components/single-sign-on/screens/access-confirmation'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
 import WalletIdCardPhotoScreen from 'components/wallet/screens/id-card-photo'
@@ -108,6 +112,10 @@ function getRoutes() {
     </Route>
 
     <Route path="profile" component={Profile} />
+    <Route path="wallet/single-sign-on/access-request"
+      component={AccessRequestScreen} />
+    <Route path="wallet/single-sign-on/access-confirmation"
+      component={AccessConfirmationScreen} />
 
     <Route path="forgot-password" component={ForgotPassword} />
     <Route path="change-password/:username/:token" component={ChangePassword} />

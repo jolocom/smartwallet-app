@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
-import WebIdAgent from 'lib/agents/webid'
 
 import {
 mapAccountInformationToState,
@@ -19,13 +18,13 @@ const actions = module.exports = makeActions('wallet/contact', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.validate())
-        const {information, showErrors} = getState().toJS().wallet.contact
+        const {information, showErrors, callback} = getState().toJS().wallet.contact // eslint-disable-line max-len
         const webId = getState().toJS().wallet.identity.webId
         if (!showErrors) {
           dispatch(actions.saveChanges.buildAction(params,
           () => submitChanges(backend, services, information, webId)
           )).then(() => {
-            dispatch(router.pushRoute('/wallet/identity'))
+            dispatch(router.pushRoute(callback))
             dispatch(actions.setReloadFromBackend(true))
           })
         }
@@ -39,8 +38,9 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
+        const {callback} = getState().toJS().wallet.contact
         dispatch(actions.setReloadFromBackend(true))
-        dispatch(router.pushRoute('/wallet/identity'))
+        dispatch(router.pushRoute(callback))
       }
     }
   },
@@ -48,13 +48,20 @@ const actions = module.exports = makeActions('wallet/contact', {
     expectedParams: ['value']
   },
   getUserInformation: {
-    expectedParams: [],
+    expectedParams: ['callback'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getUserInformation
         .buildAction(params, () => {
-          return backend.solid.getUserInformation(new WebIdAgent().getWebId())
+          return services.auth.currentUser.wallet.getUserInformation()
+          .then((result) => {
+            dispatch(actions.storeCallback(params, {dispatch}))
+            return ({
+              result: result,
+              callback: params
+            })
+          })
         }))
       }
     }
@@ -87,6 +94,14 @@ const actions = module.exports = makeActions('wallet/contact', {
   },
   addNewEntry: {
     expectedParams: ['field', 'index']
+  },
+  storeCallback: {
+    expectedParams: ['callback'],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(actions.storeCallback.buildAction(params))
+      }
+    }
   }
 })
 
@@ -105,6 +120,7 @@ const initialState = Immutable.fromJS({
   },
   getDataFromBackend: true,
   loading: true,
+  callback: '',
   showErrors: false
 })
 
@@ -120,10 +136,16 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.setIn(['loading'], true)
 
     case actions.getUserInformation.id_success:
-      return mapAccountInformationToState(action.result.contact)
+      return mapAccountInformationToState(
+        action.result.callback,
+        action.result.result.contact
+      )
 
     case actions.setInformation.id:
       return setNewFieldValue(state, action)
+
+    case actions.storeCallback.id:
+      return state.setIn(['callback'], action.callback)
 
     case actions.setAddressField.id:
       return state.mergeIn(

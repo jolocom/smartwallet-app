@@ -1,6 +1,6 @@
 {
   "name": "little-sister",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Social app / linked data explorer built for SoLiD infrastracture",
   "main": "index.js",
   "scripts": {
@@ -131,6 +131,7 @@
     "material-ui-password-field": "^1.1.1",
     "moment": "^2.10.6",
     "n3": "^0.4.3",
+    "query-string": "^5.0.0",
     "querystring": "^0.2.0",
     "radium": "^0.18.1",
     "rdflib": "^0.15.0",
@@ -153,6 +154,7 @@
     "sjcl": "^1.0.6",
     "smartwallet-contracts": "github:jolocom/smartwallet-contracts",
     "solid-client": "^0.19.0",
+    "superagent-es6-promise": "^1.0.0",
     "web3": "^0.15.3"
   },
   "engines": {

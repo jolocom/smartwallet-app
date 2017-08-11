@@ -20,6 +20,8 @@ const iconMsg = {
   </div>)
 }
 
+const attrTypeToKey = (attrType) => (attrType + 's')
+
 const ContactList = ({
   fields,
   requestVerificationCode,
@@ -30,6 +32,7 @@ const ContactList = ({
   attrType,
   icon,
   setFocusedPin,
+  pinFocused = false,
   changePinValue
 }) => (<List style={{padding: '0'}} disabled>
 {
@@ -38,8 +41,8 @@ const ContactList = ({
     number = '',
     address = '',
     smsCode = '',
+    pin = '',
     codeIsSent = false,
-    pinFocused = false,
     type = ''
   }, index) => {
     const attrValue = address || number
@@ -65,9 +68,12 @@ const ContactList = ({
             msgType="pinInput"
             value={smsCode}
             pinLength={4}
-            phoneNumber={attrValue}
+            phoneNumber={number}
+            address={address}
             setFocusedPin={(value) => { setFocusedPin(value, index) }}
-            changePinValue={(value) => { changePinValue(value, index) }}
+            changePinValue={(value) => {
+              changePinValue(attrTypeToKey(attrType), value, index)
+            }}
             focused={pinFocused} />),
           rightButtonLabel: 'OK',
           leftButtonLabel: 'CANCEL',
@@ -84,8 +90,11 @@ const ContactList = ({
         resendVerificationCode={resendVerificationCode}
         enterVerificationCode={enterVerificationCode}
         smsCode={smsCode}
+        pinValue={pin}
         setFocusedPin={(value) => { setFocusedPin(value, index) }}
-        changePinValue={(value) => { changePinValue(value, index) }}
+        changePinValue={(value, codeType) => {
+          changePinValue(attrTypeToKey(attrType), value, index, codeType)
+        }}
         focused={pinFocused}
         value={attrValue}
         codeIsSent={codeIsSent}
@@ -106,6 +115,7 @@ ContactList.propTypes = {
   onConfirm: React.PropTypes.func.isRequired,
   requestVerificationCode: React.PropTypes.func,
   resendVerificationCode: React.PropTypes.func,
+  pinFocused: React.PropTypes.bool,
   enterVerificationCode: React.PropTypes.func.isRequired
 }
 

@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 import util from 'lib/util'
-import WebIdAgent from 'lib/agents/webid'
+// import WebIdAgent from 'lib/agents/webid'
 
 const actions = module.exports = makeActions('wallet/identity', {
   goToContactManagement: {
@@ -17,7 +17,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     expectedParams: ['value', 'index']
   },
   changePinValue: {
-    expectedParams: ['value', 'index']
+    expectedParams: ['attrType', 'value', 'index', 'codeType']
   },
   setFocusedPin: {
     expectedParams: ['value', 'index']
@@ -37,6 +37,12 @@ const actions = module.exports = makeActions('wallet/identity', {
         dispatch(router.pushRoute('/wallet/identity/drivers-licence/add'))
       }
     }
+  },
+  setSmsVerificationCodeStatus: {
+    expectedParams: ['field', 'index', 'value']
+  },
+  expandField: {
+    expectedParams: ['field', 'value']
   },
   goToIdentity: {
     expectedParams: [],
@@ -80,20 +86,28 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getIdentityInformation.buildAction(params, () =>
-          backend.solid.getUserInformation(new WebIdAgent().getWebId())
+          services.auth.currentUser.wallet.getUserInformation()
+            .then((result) => {
+              dispatch(actions.getIdCardVerifications())
+              return result
+            })
         ))
-        dispatch(actions.getIdCardVerifications())
       }
     }
   }
 })
 
-const mapBackendToState = ({webId, contact, passports, idCards}) =>
+const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: false,
-    webId,
-    username: {value: webId.split('.')[0].split('://')[1]},
+    webId: webId,
+    username: {value: userName},
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: false
+    },
     contact: {
       emails: contact.email,
       phones: contact.phone
@@ -102,10 +116,15 @@ const mapBackendToState = ({webId, contact, passports, idCards}) =>
     idCards: idCards
   })
 const mapBackendToStateError =
-({webId, username, contact, passports, idCards}) =>
+({webId, userName, contact, passports, idCards}) =>
   Immutable.fromJS({
     loaded: true,
     error: true,
+    expandedFields: {
+      contact: false,
+      idCards: false,
+      passports: true
+    },
     webId: {value: ''},
     username: {value: ''},
     contact: {
@@ -115,6 +134,7 @@ const mapBackendToStateError =
     passports: [],
     idCards: []
   })
+
 const initialState = Immutable.fromJS({
   loaded: false,
   error: false,
@@ -123,6 +143,11 @@ const initialState = Immutable.fromJS({
     verified: false,
     value: ''
   },
+  expandedFields: {
+    contact: false,
+    idCards: false,
+    passports: false
+  },
   contact: {
     phones: [{
       type: '',
@@ -130,6 +155,7 @@ const initialState = Immutable.fromJS({
       verified: false,
       smsCode: '',
       pin: '',
+      codeIsSent: false,
       pinFocused: false
     }],
     emails: [{
@@ -139,22 +165,20 @@ const initialState = Immutable.fromJS({
       verified: false
     }]
   },
-  passports: [
-    {
-      number: '',
-      givenName: '',
-      familyName: '',
-      birthDate: '',
-      gender: '',
-      showAddress: '',
-      streetAndNumber: '',
-      city: '',
-      zip: '',
-      state: '',
-      country: '',
-      verified: false
-    }
-  ]
+  passports: [{
+    number: '',
+    givenName: '',
+    familyName: '',
+    birthDate: '',
+    gender: '',
+    showAddress: '',
+    streetAndNumber: '',
+    city: '',
+    zip: '',
+    state: '',
+    country: '',
+    verified: false
+  }]
 })
 
 const changeSmsCodeValue = (state, {index, value}) => {
@@ -166,11 +190,9 @@ const changeSmsCodeValue = (state, {index, value}) => {
   return state
 }
 
-const changePinValue = (state, {index, value}) => {
+const changePinValue = (state, {attrType, index, value, codeType = 'pin'}) => {
   if (/^[0-9]{0,6}$/.test(value)) {
-    return state.mergeIn(['contact', 'phones', index], {
-      pin: value
-    })
+    return state.setIn(['contact', attrType, index, codeType], value)
   }
   return state
 }
@@ -195,9 +217,16 @@ module.exports.default = (state = initialState, action = {}) => {
       return changePinValue(state, action)
 
     case actions.setFocusedPin.id:
-      return state.mergeIn(['contact', 'phones', action.index], {
-        pinFocused: action.value
+      return state.setIn(['contact', 'isCodeInputFieldFocused'], action.value)
+
+    case actions.expandField.id:
+      return state.setIn(['expandedFields', action.field], action.value)
+
+    case actions.setSmsVerificationCodeStatus.id:
+      return state.mergeIn(['contact', action.field, action.index], {
+        codeIsSent: action.value
       })
+
     default:
       return state
   }

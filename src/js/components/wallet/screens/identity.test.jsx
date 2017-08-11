@@ -512,12 +512,11 @@ describe('(Component) WalletIdentityScreen', () => {
 
     wrapper.instance().enterVerificationCode({
       attrType: 'phone',
-      attrValue: '1234'
+      attrValue: '1234',
+      index: '1'
     })()
     expect(confirmPhone.called).to.be.true
-    expect(confirmPhone.calls).to.deep.equal([{args: [{
-      phone: '1234'
-    }]}])
+    expect(confirmPhone.calls).to.deep.equal([{args: ['1']}])
   })
   it('enterVerificationCode should return confirmEmail when the attribute type is email', () => { // eslint-disable-line max-len
     const confirmEmail = stub()
