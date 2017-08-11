@@ -76,9 +76,8 @@ export default class AccessRequestScreen extends React.Component {
     this.props.requestedDetails(this.props.location)
   }
 
-  // initiates process
   requestVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phone') {
+    if (attrType === 'phones') {
       return () => {
         this.props.startPhoneVerification({phone: attrValue, index})
       }
@@ -89,11 +88,10 @@ export default class AccessRequestScreen extends React.Component {
     }
   }
 
-  // confirm process
-  enterVerificationCode({attrType, attrValue}) {
-    if (attrType === 'phone') {
+  enterVerificationCode({attrType, attrValue, index}) {
+    if (attrType === 'phones') {
       return () => {
-        this.props.confirmPhone({phone: attrValue})
+        this.props.confirmPhone(index)
       }
     } else if (attrType === 'email') {
       return () => {
@@ -102,7 +100,6 @@ export default class AccessRequestScreen extends React.Component {
     }
   }
 
-  // resend
   resendVerificationCode({attrType, attrValue, index}) {
     if (attrType === 'phone') {
       return () => {
@@ -115,7 +112,6 @@ export default class AccessRequestScreen extends React.Component {
     }
   }
 
-  // on confirm ()
   onConfirm(args, params) {
     return this.showVerificationWindow(args, () => {
       return () => this.showVerificationWindow(params,
@@ -123,7 +119,6 @@ export default class AccessRequestScreen extends React.Component {
     })
   }
 
-  // when popup is displayed
   showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
     return this.props.openConfirmDialog(
       title,
@@ -149,12 +144,10 @@ export default class AccessRequestScreen extends React.Component {
         changePinValue={this.props.changePinValue}
         setFocusedPin={this.props.setFocusedPin}
 
-        requestVerificationCode={(args, params) => {
-          this.showVerificationWindow(args, () => {
-            return () => this.showVerificationWindow(params,
-              (args) => this.requestVerificationCode(args))
-          })
-        }}
+        requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
+          return () => this.showVerificationWindow(params,
+            (callbackArgs) => this.requestVerificationCode(callbackArgs))
+        })}
 
         enterVerificationCode={(...args) => this.showVerificationWindow(...args,
           (...params) => this.enterVerificationCode(...params)
