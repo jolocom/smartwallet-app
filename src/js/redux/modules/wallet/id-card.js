@@ -6,7 +6,7 @@ import {listOfCountries as options} from '../../../lib/list-of-countries'
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
-  storeIdCardDetails,
+  storeIdCardDetailsInSolid,
   genderList,
   mapBackendToState,
   changeFieldValue

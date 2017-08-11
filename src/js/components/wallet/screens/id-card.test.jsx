@@ -21,6 +21,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -73,6 +77,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -125,6 +133,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -182,6 +194,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -218,6 +234,8 @@ describe('(Component) WalletIdCardScreen', () => {
     )
     const field = {value: '', valid: false}
     expect(wrapper.find(Presentation).prop('idCard')).to.deep.equal([
+      {label: 'ID Card Image', key: 'frontSideImg', group: 'img', value: ''},
+      {label: 'ID Card Image', key: 'backSideImg', group: 'img', value: ''},
       {...field, label: 'ID Card Number', key: 'number', group: 'numbers'},
       {...field, label: 'Expiration Date', key: 'expirationDate', group: 'numbers'}, // eslint-disable-line max-len
       {...field, label: 'First Name', key: 'firstName', group: 'person'},
@@ -243,6 +261,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -296,6 +318,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -349,6 +375,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -402,6 +432,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -456,6 +490,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -513,6 +551,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -569,6 +611,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
@@ -624,6 +670,10 @@ describe('(Component) WalletIdCardScreen', () => {
                 locations: [
                   {title: '', streetWithNumber: '', zip: '', city: ''}
                 ],
+                images: {
+                  frontSideImg: {value: ''},
+                  backSideImg: {value: ''}
+                },
                 number: {value: '', valid: false},
                 expirationDate: {value: '', valid: false},
                 firstName: {value: '', valid: false},
