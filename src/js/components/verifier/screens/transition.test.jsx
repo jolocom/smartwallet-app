@@ -111,6 +111,7 @@ describe('(Component) VerificationTransitionScreen', () => {
         goBack={() => {}}
         startDataCheck={() => {}}
         startFaceCheck={() => {}}
+        startComparingData={() => {}}
         requestVerification={requestVerification}
       />),
       { context: { muiTheme: { } } }
