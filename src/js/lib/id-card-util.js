@@ -83,7 +83,7 @@ export const checkForNonValidFields = (reduxState) => {
   return reduxState.merge({showErrors})
 }
 
-export const storeIdCardDetails = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
+export const storeIdCardDetailsInSolid = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
   let normalizedIdCard = {
     number: idCard.number.value,
     expirationDate: idCard.expirationDate.value,
