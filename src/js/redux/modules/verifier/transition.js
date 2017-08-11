@@ -2,10 +2,10 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 
-const dataCheckUrl = '/verification/data'
-const faceCheckUrl = '/verification/face'
-const resultUrl = 'verification/result'
-const documentTypeUrl = 'verification/document'
+const dataCheckUrl = '/verifier/data'
+const faceCheckUrl = '/verifier/face'
+const resultUrl = 'verifier/result'
+const documentTypeUrl = 'verifier/document'
 
 const actions = module.exports = makeActions('wallet/contact', {
   setCurrentStep: {

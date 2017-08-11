@@ -3,11 +3,11 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/country'
 
 @connect({
-  props: ['verification'],
+  props: ['verifier'],
   actions: [
-    'verification/country:setCountryValue',
-    'verification/country:cancelCountrySelection',
-    'verification/country:chooseCountry'
+    'verifier/country:setCountryValue',
+    'verifier/country:cancelCountrySelection',
+    'verifier/country:chooseCountry'
   ]
 })
 export default class CountryVerificationScreen extends React.Component {
@@ -15,12 +15,12 @@ export default class CountryVerificationScreen extends React.Component {
     setCountryValue: React.PropTypes.func.isRequired,
     chooseCountry: React.PropTypes.func.isRequired,
     cancelCountrySelection: React.PropTypes.func.isRequired,
-    verification: React.PropTypes.object.isRequired
+    verifier: React.PropTypes.object.isRequired
   }
 
   render() {
     const {setCountryValue, chooseCountry, cancelCountrySelection} = this.props
-    const {options, value} = this.props.verification.country
+    const {options, value} = this.props.verifier.country
     return (<Presentation
       value={value}
       countries={options}

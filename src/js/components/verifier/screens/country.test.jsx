@@ -12,7 +12,7 @@ describe('(Component) CountryVerificationScreen', () => {
     const chooseCountry = stub()
     const wrapper = shallow((<CountryVerificationScreen.WrappedComponent {
       ...CountryVerificationScreen.mapStateToProps(Immutable.fromJS({
-        verification: {
+        verifier: {
           country: {
             value: '',
             options: [],
@@ -33,7 +33,7 @@ describe('(Component) CountryVerificationScreen', () => {
     const chooseCountry = stub()
     const wrapper = shallow((<CountryVerificationScreen.WrappedComponent {
       ...CountryVerificationScreen.mapStateToProps(Immutable.fromJS({
-        verification: {
+        verifier: {
           country: {
             value: '',
             options: [],
@@ -56,7 +56,7 @@ describe('(Component) CountryVerificationScreen', () => {
     const setCountryValue = stub()
     const wrapper = shallow((<CountryVerificationScreen.WrappedComponent{
       ...CountryVerificationScreen.mapStateToProps(Immutable.fromJS({
-        verification: {
+        verifier: {
           country: {
             value: '',
             options: [],
@@ -77,7 +77,7 @@ describe('(Component) CountryVerificationScreen', () => {
     const cancelCountrySelection = stub()
     const wrapper = shallow((<CountryVerificationScreen.WrappedComponent{
       ...CountryVerificationScreen.mapStateToProps(Immutable.fromJS({
-        verification: {
+        verifier: {
           country: {
             value: '',
             options: [],

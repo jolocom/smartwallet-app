@@ -11,7 +11,7 @@ describe('(Component) VerificationFaceScreen', () => {
     const wrapper = shallow(
       (<VerificationFaceScreen.WrappedComponent {
         ...VerificationFaceScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             face: {
               isFaceMatchingId: true
             }
@@ -31,7 +31,7 @@ describe('(Component) VerificationFaceScreen', () => {
     const wrapper = shallow(
       (<VerificationFaceScreen.WrappedComponent {
         ...VerificationFaceScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             face: {
               isFaceMatchingId: true
             }
@@ -53,7 +53,7 @@ describe('(Component) VerificationFaceScreen', () => {
     const wrapper = shallow(
       (<VerificationFaceScreen.WrappedComponent {
         ...VerificationFaceScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             face: {
               isFaceMatchingId: true
             }
@@ -75,7 +75,7 @@ describe('(Component) VerificationFaceScreen', () => {
     const wrapper = shallow(
       (<VerificationFaceScreen.WrappedComponent {
         ...VerificationFaceScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             face: {
               isFaceMatchingId: true
             }

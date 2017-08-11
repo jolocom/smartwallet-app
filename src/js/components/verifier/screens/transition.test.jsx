@@ -11,7 +11,7 @@ describe('(Component) VerificationTransitionScreen', () => {
     const wrapper = shallow(
       (<VerificationTransitionScreen.WrappedComponent {
         ...VerificationTransitionScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             transition: {
               currentStep: 'face'
             }
@@ -32,7 +32,7 @@ describe('(Component) VerificationTransitionScreen', () => {
     const wrapper = shallow(
       (<VerificationTransitionScreen.WrappedComponent {
         ...VerificationTransitionScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             transition: {
               currentStep: 'face'
             }
@@ -55,7 +55,7 @@ describe('(Component) VerificationTransitionScreen', () => {
     const wrapper = shallow(
       (<VerificationTransitionScreen.WrappedComponent {
         ...VerificationTransitionScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             transition: {
               currentStep: 'face'
             }
@@ -78,7 +78,7 @@ describe('(Component) VerificationTransitionScreen', () => {
     const wrapper = shallow(
       (<VerificationTransitionScreen.WrappedComponent {
         ...VerificationTransitionScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             transition: {
               currentStep: 'face'
             }
@@ -101,7 +101,7 @@ describe('(Component) VerificationTransitionScreen', () => {
     const wrapper = shallow(
       (<VerificationTransitionScreen.WrappedComponent {
         ...VerificationTransitionScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             transition: {
               currentStep: 'face'
             }

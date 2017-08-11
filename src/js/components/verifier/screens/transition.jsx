@@ -3,14 +3,14 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/transition'
 
 @connect({
-  props: ['verification.transition'],
+  props: ['verifier.transition'],
   actions: [
-    'verification/transition:setCurrentStep',
-    'verification/transition:startDataCheck',
-    'verification/transition:startFaceCheck',
-    'verification/transition:goBack',
-    'verification/transition:requestVerification',
-    'verification/result:startComparingData'
+    'verifier/transition:setCurrentStep',
+    'verifier/transition:startDataCheck',
+    'verifier/transition:startFaceCheck',
+    'verifier/transition:goBack',
+    'verifier/transition:requestVerification',
+    'verifier/result:startComparingData'
   ]
 })
 export default class VerificationTransitionScreen extends React.Component {

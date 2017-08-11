@@ -146,7 +146,7 @@ export default class VerificationResultPresentation extends React.Component {
     return (<div>
       <AppBar
         iconElementLeft={<div />}
-        title="Verification"
+        title="verifier"
         style={STYLES.appBarTitle} />
         {result}
     </ div>)

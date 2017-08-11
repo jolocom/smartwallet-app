@@ -59,7 +59,7 @@ import {
   VerificationCountryScreen,
   VerificationDocumentScreen,
   VerificationResultScreen
-} from 'components/verification'
+} from 'components/verifier'
 
 export const routes = {
   login: '/login',
@@ -81,17 +81,17 @@ export const navItems = [{
 function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
-    <Route path="verification"
+    <Route path="verifier"
       component={VerificationTransitionScreen} />
-    <Route path="verification/face"
+    <Route path="verifier/face"
       component={VerificationFaceScreen} />
-    <Route path="verification/data"
+    <Route path="verifier/data"
       component={VerificationDataScreen} />
-    <Route path="verification/result"
+    <Route path="verifier/result"
       component={VerificationResultScreen} />
-    <Route path="verification/document"
+    <Route path="verifier/document"
       component={VerificationDocumentScreen} />
-    <Route path="verification/country"
+    <Route path="verifier/country"
       component={VerificationCountryScreen} />
     <Route path="registration"
       component={RegistrationNameEntryScreen} />

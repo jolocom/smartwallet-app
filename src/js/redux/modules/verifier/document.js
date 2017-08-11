@@ -3,7 +3,7 @@ import { makeActions } from '../'
 import * as router from '../router'
 import * as transition from './transition'
 
-const transitionUrl = '/verification'
+const transitionUrl = '/verifier'
 
 const actions = module.exports = makeActions('wallet/contact', {
   chooseDocument: {

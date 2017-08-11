@@ -20,15 +20,14 @@ export default combineReducers({
     money: require('./modules/wallet/money').default,
     idCard: require('./modules/wallet/id-card').default
   }),
-  verification: combineReducers({
-    result: require('./modules/verification/result').default,
-    face: require('./modules/verification/face').default,
-    data: require('./modules/verification/data').default,
-    transition: require('./modules/verification/transition').default,
-    country: require('./modules/verification/country').default,
-    document: require('./modules/verification/document').default
+  verifier: combineReducers({
+    result: require('./modules/verifier/result').default,
+    face: require('./modules/verifier/face').default,
+    data: require('./modules/verifier/data').default,
+    transition: require('./modules/verifier/transition').default,
+    country: require('./modules/verifier/country').default,
+    document: require('./modules/verifier/document').default
   }),
-  emailConfirmation: require('./modules/email-confirmation').default,
   singleSignOn: combineReducers({
     accessRight: require('./modules/single-sign-on/access-right').default,
     accessRequest: require('./modules/single-sign-on/access-request').default

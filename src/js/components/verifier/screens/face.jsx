@@ -3,11 +3,11 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/face'
 
 @connect({
-  props: ['verification.face'],
+  props: ['verifier.face'],
   actions: [
-    'verification/face:verifyFace',
-    'verification/face:cancelFaceVerification',
-    'verification/face:confirmFaceIdCardMatch'
+    'verifier/face:verifyFace',
+    'verifier/face:cancelFaceVerification',
+    'verifier/face:confirmFaceIdCardMatch'
   ]
 })
 export default class VerificationFaceScreen extends React.Component {

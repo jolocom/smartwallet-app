@@ -3,14 +3,14 @@ import { makeActions } from '../'
 import * as router from '../router'
 
 import * as transition from './transition'
-const transitionUrl = '/verification'
+const transitionUrl = '/verifier'
 
 const actions = module.exports = makeActions('wallet/contact', {
   verifyFace: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
-        const {isFaceMatchingId} = getState().toJS().verification.face
+        const {isFaceMatchingId} = getState().toJS().verifier.face
         if (isFaceMatchingId) {
           dispatch(transition.setCurrentStep('data'))
           dispatch(router.pushRoute(transitionUrl))

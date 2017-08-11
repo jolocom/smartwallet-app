@@ -3,7 +3,7 @@ import * as actions from './data'
 
 const reducer = require('./data').default
 
-describe('# verification data redux module', () => {
+describe('# verifier data redux module', () => {
   describe('# Reducer', () => {
     let {initialState} = actions
     it('should initialise properly', () => {

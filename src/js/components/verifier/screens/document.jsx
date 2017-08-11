@@ -3,9 +3,9 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/document'
 
 @connect({
-  props: ['verification.document'],
+  props: ['verifier.document'],
   actions: [
-    'verification/document:chooseDocument'
+    'verifier/document:chooseDocument'
   ]
 })
 export default class VerificationDocumentScreen extends React.Component {

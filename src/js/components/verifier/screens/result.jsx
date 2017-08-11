@@ -3,10 +3,10 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/result'
 
 @connect({
-  props: ['verification.result'],
+  props: ['verifier.result'],
   actions: [
-    'verification/result:finishVerification',
-    'verification/result:startDataCheck'
+    'verifier/result:finishVerification',
+    'verifier/result:startDataCheck'
   ]
 })
 export default class VerificationResultScreen extends React.Component {

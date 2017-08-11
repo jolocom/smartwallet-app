@@ -104,7 +104,7 @@ export default class VerificationTransitionPresentation extends React.Component 
         iconElementLeft={<NavigationArrowBack
           onClick={() => { goBack(currentStep) }}
           style={STYLES.icon} />}
-        title="verification"
+        title="verifier"
         style={{textAlign: 'left', ...STYLES.yellow}}
         titleStyle={{color: 'white'}} />
       <Header title="Please verify the data of the ID Card" />

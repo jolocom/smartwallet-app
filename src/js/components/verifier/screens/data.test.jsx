@@ -11,7 +11,7 @@ describe('(Component) VerificationDataScreen', () => {
     const wrapper = shallow(
       (<VerificationDataScreen.WrappedComponent {
         ...VerificationDataScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             data: {
               username: '',
               focusedGroup: '',
@@ -59,7 +59,7 @@ describe('(Component) VerificationDataScreen', () => {
     const wrapper = shallow(
       (<VerificationDataScreen.WrappedComponent {
         ...VerificationDataScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             data: {
               focusedGroup: '',
               focusedField: '',
@@ -106,7 +106,7 @@ describe('(Component) VerificationDataScreen', () => {
     const wrapper = shallow(
       (<VerificationDataScreen.WrappedComponent {
         ...VerificationDataScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             data: {
               focusedGroup: '',
               focusedField: '',
@@ -153,7 +153,7 @@ describe('(Component) VerificationDataScreen', () => {
     const wrapper = shallow(
       (<VerificationDataScreen.WrappedComponent {
         ...VerificationDataScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             data: {
               focusedGroup: '',
               focusedField: '',

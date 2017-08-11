@@ -3,7 +3,7 @@ import * as transition from './transition'
 
 const reducer = require('./transition').default
 
-describe('# verification transition redux module', () => {
+describe('# verifier transition redux module', () => {
   describe('# Reducer ', () => {
     it('should initiate properly', () => {
       const state = reducer()

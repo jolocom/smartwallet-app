@@ -11,7 +11,7 @@ describe('(Component) VerificationDocumentScreen', () => {
     const wrapper = shallow(
       (<VerificationDocumentScreen.WrappedComponent {
         ...VerificationDocumentScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             document: {
               type: 'idCard'
             }
@@ -29,7 +29,7 @@ describe('(Component) VerificationDocumentScreen', () => {
     const wrapper = shallow(
       (<VerificationDocumentScreen.WrappedComponent {
         ...VerificationDocumentScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             document: {
               type: 'idCard'
             }

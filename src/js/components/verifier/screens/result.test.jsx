@@ -11,7 +11,7 @@ describe('(Component) VerificationResultScreen', () => {
     const wrapper = shallow(
       (<VerificationResultScreen.WrappedComponent {
         ...VerificationResultScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             result: {
               loading: true,
               success: false,
@@ -32,7 +32,7 @@ describe('(Component) VerificationResultScreen', () => {
     const wrapper = shallow(
       (<VerificationResultScreen.WrappedComponent {
         ...VerificationResultScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             result: {
               loading: true,
               success: false,
@@ -55,7 +55,7 @@ describe('(Component) VerificationResultScreen', () => {
     const wrapper = shallow(
       (<VerificationResultScreen.WrappedComponent {
         ...VerificationResultScreen.mapStateToProps(Immutable.fromJS({
-          verification: {
+          verifier: {
             result: {
               loading: true,
               success: false,

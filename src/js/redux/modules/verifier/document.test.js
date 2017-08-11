@@ -3,7 +3,7 @@ import * as document from './document'
 
 const reducer = require('./document').default
 
-describe('# verification document redux module', () => {
+describe('# verifier document redux module', () => {
   describe('# Reducer ', () => {
     it('should initiate properly', () => {
       expect(reducer().toJS()).to.deep.equal({type: ''})

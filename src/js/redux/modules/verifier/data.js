@@ -10,11 +10,10 @@ import {
 import { makeActions } from '../'
 import * as router from '../router'
 import * as transition from './transition'
-import * as result from './result'
 
-const transitionUrl = '/verification'
+const transitionUrl = '/verifier'
 
-const actions = module.exports = makeActions('verification/data', {
+const actions = module.exports = makeActions('verifier/data', {
   verifyData: {
     expectedParams: [],
     creator: (params) => {

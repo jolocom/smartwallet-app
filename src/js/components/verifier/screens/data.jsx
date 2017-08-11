@@ -3,18 +3,18 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/data'
 
 @connect({
-  props: ['verification.data'],
+  props: ['verifier.data'],
   actions: [
     'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
-    'verification/country:initiateCountrySelectScreen',
-    'verification/data:changeIdCardField',
-    'verification/data:changePhysicalAddressField',
-    'verification/data:setFocusedField',
-    'verification/data:setShowAddress',
-    'verification/data:verifyData',
-    'verification/data:setUsername',
-    'verification/data:cancel'
+    'verifier/country:initiateCountrySelectScreen',
+    'verifier/data:changeIdCardField',
+    'verifier/data:changePhysicalAddressField',
+    'verifier/data:setFocusedField',
+    'verifier/data:setShowAddress',
+    'verifier/data:verifyData',
+    'verifier/data:setUsername',
+    'verifier/data:cancel'
   ]
 })
 export default class VerificationDataScreen extends React.Component {

@@ -6,15 +6,15 @@ import {
   listOfCountries as __LIST_OF_COUNTRIES__
 } from '../../../lib/list-of-countries'
 
-const dataPageUrl = '/verification/data'
-const selectCountryUrl = '/verification/country'
+const dataPageUrl = '/verifier/data'
+const selectCountryUrl = '/verifier/country'
 
-const actions = module.exports = makeActions('verification/country', {
+const actions = module.exports = makeActions('verifier/country', {
   chooseCountry: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
-        const {value, type} = getState().toJS().verification.country
+        const {value, type} = getState().toJS().verifier.country
         if (type === 'birthCountry') {
           dispatch(data.changeIdCardField(type, value))
         } else {

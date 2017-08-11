@@ -3,8 +3,8 @@ import { makeActions } from '../'
 import * as router from '../router'
 import * as transition from './transition'
 
-const verificationStartUrl = '/verification/document'
-const dataCheckUrl = 'verification/data'
+const verificationStartUrl = '/verifier/document'
+const dataCheckUrl = 'verifier/data'
 
 import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 
@@ -25,14 +25,14 @@ const actions = module.exports = makeActions('wallet/contact', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.startComparingData.buildAction(params, async () => {
-          const {verification} = getState().toJS()
-          const {type} = verification.document
+          const {verifier} = getState().toJS()
+          const {type} = verifier.document
           const verifieeIdentityURL = 'https://identity.jolocom.com/' +
-          verification.data.username
+          verifier.data.username
           let idcardIndex = await services.auth.currentUser.wallet.proxyGet(
             verifieeIdentityURL + '/identity/idcard'
           )
-          let data = verification.data[type]
+          let data = verifier.data[type]
           const { city, country, state, streetWithNumber, zip } =
             data.physicalAddress
           const serializedIdCard = (new WalletCrypto()).serializeData({
@@ -86,7 +86,6 @@ module.exports.default = (state = initialState, action = {}) => {
         loading: true
       })
     case actions.startComparingData.id_success:
-      console.log('===success===', action.result)
       return state.merge({
         loading: false,
         success: action.result,
