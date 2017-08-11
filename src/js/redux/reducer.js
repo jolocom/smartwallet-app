@@ -28,7 +28,7 @@ export default combineReducers({
     country: require('./modules/verification/country').default,
     document: require('./modules/verification/document').default
   }),
-  emailConfirmation: require('./modules/email-confirmation').default
+  emailConfirmation: require('./modules/email-confirmation').default,
   singleSignOn: combineReducers({
     accessRight: require('./modules/single-sign-on/access-right').default,
     accessRequest: require('./modules/single-sign-on/access-request').default

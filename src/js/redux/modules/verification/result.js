@@ -2,54 +2,12 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 import * as transition from './transition'
-import util from 'lib/util'
 
 const verificationStartUrl = '/verification/document'
 const dataCheckUrl = 'verification/data'
 
 import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 
-const compareDataToIdCard = async ({contractId, data, wallet, documentType}) => { // eslint-disable-line max-len
-  const storedHash = await wallet.getAttributeHash({
-    identityAddress: contractId,
-    attributeId: documentType
-  })
-  console.log('document type: ', documentType)
-  console.log('hash retrieved: ', storedHash)
-
-  const { city, country, state, streetWithNumber, zip } = data.physicalAddress
-
-  const calculatedHash = (new WalletCrypto()).calculateDataHash({
-    birthCountry: data.birthCountry.value,
-    birthDate: data.birthDate.value,
-    birthPlace: data.birthPlace.value,
-    expirationDate: data.expirationDate.value,
-    firstName: data.firstName.value,
-    gender: data.gender.value,
-    lastName: data.lastName.value,
-    number: data.number.value,
-    city: city.value,
-    country: country.value,
-    state: state.value,
-    streetWithNumber: streetWithNumber.value,
-    zip: zip.value
-  })
-
-  console.log('calculated Hash: ', calculatedHash)
-
-  if (storedHash !== calculatedHash) {
-    return false
-  }
-  return true
-}
-
-const storeVerificationToTargetIdentity = ({contractId, wallet}) => {
-  return wallet.addVerificationToTargetIdentity({ // eslint-disable-line max-len
-    targetIdentityAddress: contractId,
-    attributeId: 'idCard',
-    pin: '1234'
-  })
-}
 const actions = module.exports = makeActions('wallet/contact', {
   finishVerification: {
     expectedParams: [],
@@ -69,24 +27,36 @@ const actions = module.exports = makeActions('wallet/contact', {
         dispatch(actions.startComparingData.buildAction(params, async () => {
           const {verification} = getState().toJS()
           const {type} = verification.document
-
-          const webId = util.usernameToWebId(verification.data.username)
-          const contractId = await backend
-            .solid.getIdentityContractAddress(webId)
-
-          const {wallet} = services.auth.currentUser
-          return compareDataToIdCard({
-            contractId,
-            wallet,
-            data: verification.data[type],
-            documentType: type
-          }).then(result => {
-            if (result) {
-              console.log('=================')
-              storeVerificationToTargetIdentity({wallet, contractId})
-            }
-            return result
+          const verifieeIdentityURL = 'https://identity.jolocom.com/' +
+          verification.data.username
+          let idcardIndex = await services.auth.currentUser.wallet.proxyGet(
+            verifieeIdentityURL + '/identity/idcard'
+          )
+          let data = verification.data[type]
+          const { city, country, state, streetWithNumber, zip } =
+            data.physicalAddress
+          const serializedIdCard = (new WalletCrypto()).serializeData({
+            birthCountry: data.birthCountry.value,
+            birthDate: data.birthDate.value,
+            birthPlace: data.birthPlace.value,
+            expirationDate: data.expirationDate.value,
+            firstName: data.firstName.value,
+            gender: data.gender.value,
+            lastName: data.lastName.value,
+            number: data.number.value,
+            city: city.value,
+            country: country.value,
+            state: state.value,
+            streetWithNumber: streetWithNumber.value,
+            zip: zip.value
           })
+          const result = await services.auth.currentUser.wallet.verify({
+            identity: verifieeIdentityURL,
+            attributeType: type,
+            attributeId: idcardIndex[0],
+            attributeValue: serializedIdCard
+          })
+          return result.ok
         }))
       }
     }
