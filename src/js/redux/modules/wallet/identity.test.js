@@ -21,7 +21,7 @@ describe('# Wallet identity redux module', () => {
         contact: {
           phones: [{
             type: '', number: '', pin: '', verified: false, smsCode: '',
-            pinFocused: false
+            pinFocused: false, codeIsSent: false
           }],
           emails: [{type: '', address: '', pin: '', verified: false}]
         },
