@@ -8,6 +8,8 @@ import Presentation from '../presentation/id-card-photo'
   actions: [
     'wallet/id-card:storeIdCardPhoto',
     'wallet/id-card:setShowAddress',
+    'wallet/id-card:cancelIdCardPhoto',
+    'wallet/id-card:goToIdCardScreen',
     'wallet/id-card:cancel'
   ]
 })
@@ -15,13 +17,25 @@ import Presentation from '../presentation/id-card-photo'
 export default class WalletIdCardPhotoScreen extends React.Component {
   static propTypes = {
     idCard: React.PropTypes.object.isRequired,
+    cancelIdCardPhoto: React.PropTypes.func.isRequired,
+    goToIdCardScreen: React.PropTypes.func.isRequired,
     storeIdCardPhoto: React.PropTypes.func.isRequired
   }
 
   render() {
+    const { images } = this.props.idCard.idCard
+    const imagesWithDetails = [
+      {value: images.frontSideImg.value, field: 'frontSideImg'},
+      {value: images.backSideImg.value, field: 'backSideImg'}
+    ].filter(({value}) => value !== '')
+
     return <Presentation
       changeIdCardField={this.props.storeIdCardPhoto}
-      images={this.props.idCard.idCard.images}
-      idCard={this.props.idCard} />
+      save={this.props.goToIdCardScreen}
+      deletePhoto={(field) => {
+        this.props.storeIdCardPhoto('', field)
+      }}
+      cancel={this.props.cancelIdCardPhoto}
+      images={imagesWithDetails} />
   }
 }

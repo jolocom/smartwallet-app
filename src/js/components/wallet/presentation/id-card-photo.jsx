@@ -10,41 +10,10 @@ import {
 import { Content } from '../../structure'
 
 const STYLES = {
-  verificationBlock: {
-    backgroundColor: theme.palette.textColor,
-    fontSize: '24px'
-  },
-  verificationMsgHeader: {
-    backgroundColor: theme.palette.textColor
-  },
-  explanText: {
-    fontSize: '14pt',
-    lineHeight: '16pt',
-    fontWeight: '300',
-    backgroundColor: theme.jolocom.gray2
-  },
-  flatBtn: {
-    backgroundColor: theme.palette.accent1Color,
-    marginLeft: '-16px'
-  },
   uploadContainer: {
-    height: '64px',
     backgroundColor: theme.jolocom.gray2,
-    textAlign: 'left'
-  },
-  uploadBtn: {
-    margin: '10px'
-  },
-  imageField: {
-    height: '60px',
-    margin: 'auto',
-    userSelect: 'none',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat'
-  },
-  verifierLocationsMsg: {
-    width: '100%',
-    textAlign: 'center'
+    textAlign: 'left',
+    height: '64px'
   },
   deleteButton: {
     position: 'relative',
@@ -53,15 +22,14 @@ const STYLES = {
   },
   imagesContainer: {
     position: 'relative',
-    marginLeft: '4px',
     top: '12px',
-    width: '80px',
-    height: '46px'
+    marginLeft: '4px',
+    width: '80px'
   },
   uploadButton: {
     position: 'relative',
     top: '-46px',
-    left: '35%',
+    left: 'calc(45% - 58px)',
     width: '32px',
     height: '34px',
     backgroundColor: theme.palette.textColor,
@@ -69,21 +37,35 @@ const STYLES = {
   },
   inputField: {
     opacity: '0',
-    width: '32px',
-    height: '34px',
+    width: '100%',
+    height: '100%',
     position: 'relative',
     top: '-30px'
   },
   image: {
     width: '76px',
-    height: '42'
+    height: '42px'
+  },
+  loadButtonIcon: {
+    color: 'white',
+    position: 'relative',
+    bottom: '-8px'
   }
 }
 
+const imageKey = (keys) => {
+  if (keys === [] || keys.includes('frontSideImg')) {
+    return 'backSideImg'
+  }
+  return 'frontSideImg'
+}
 @Radium
 export default class WalletIdCardPhoto extends React.Component {
   static propTypes = {
     changeIdCardField: React.PropTypes.func,
+    cancel: React.PropTypes.func,
+    save: React.PropTypes.func,
+    deletePhoto: React.PropTypes.func,
     images: React.PropTypes.array
   }
 
@@ -94,10 +76,9 @@ export default class WalletIdCardPhoto extends React.Component {
     reader.onloadend = () => {
       this.props.changeIdCardField(
         reader.result,
-        this.props.images.length
+        imageKey(this.props.images.map(({field}) => field))
       )
     }
-    file = null
   }
 
   render() {
@@ -106,29 +87,30 @@ export default class WalletIdCardPhoto extends React.Component {
         title=""
         rightTitle="DONE"
         loading={false}
-        onSave={() => {}}
-        onClose={() => {}} />
+        onSave={() => { this.props.save() }}
+        onClose={() => { this.props.cancel() }} />
       <Content>
         <div style={STYLES.uploadContainer}>
         {
-          this.props.images.map((value, index) =>
+          this.props.images.map(({value, field}, index) =>
             <span style={STYLES.imagesContainer}>
               <img style={STYLES.image} src={value} />
               <NavigationCancel
                 style={STYLES.deleteButton}
-                onClick={(value) => this.props.changeIdCardField('', index)} />
+                onClick={() => {
+                  this.props.changeIdCardField('', field)
+                }} />
             </span>)
         }
         </div>
         <WebcamCapture storeImageSrcInTheState={(value) =>
-          this.props.changeIdCardField(value, this.props.images.length)
+          this.props.changeIdCardField(
+            value,
+            imageKey(this.props.images.map(({field}) => field))
+          )
         } />
         <div style={STYLES.uploadButton}>
-          <ImageLandscape style={{
-            color: 'white',
-            position: 'relative',
-            bottom: '-8px'
-          }} />
+          <ImageLandscape style={STYLES.loadButtonIcon} />
           <input type="file"
             style={STYLES.inputField}
             onChange={(event) => { this.loadImage(event) }}

@@ -13,6 +13,67 @@ import {
 } from '../../../lib/id-card-util'
 
 const actions = module.exports = makeActions('wallet/id-card', {
+  cancel: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(actions.cancel.buildAction(params))
+        dispatch(router.pushRoute('/wallet/identity'))
+      }
+    }
+  },
+  cancelIdCardPhoto: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.cancelIdCardPhoto.buildAction(params))
+        dispatch(actions.goToIdCardScreen())
+      }
+    }
+  },
+  changeIdCardField: {
+    expectedParams: ['field', 'value']
+  },
+  changePhysicalAddressField: {
+    expectedParams: ['field', 'value']
+  },
+  clearState: {
+    expectedParams: []
+  },
+  goToIdCardPhotoScreen: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.goToIdCardPhotoScreen.buildAction(params))
+        dispatch(router.pushRoute('/wallet/identity/id-card-photo'))
+      }
+    }
+  },
+  goToIdCardScreen: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.goToIdCardScreen.buildAction(params))
+        dispatch(router.pushRoute('/wallet/identity/id-card'))
+      }
+    }
+  },
+  goToSelectBirthCountry: {
+    expectedParams: ['field'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(router.pushRoute('/wallet/id-card/select-birth-country'))
+      }
+    }
+  },
+  goToSelectCountry: {
+    expectedParams: ['field'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(router.pushRoute('/wallet/id-card/select-country'))
+      }
+    }
+  },
   save: {
     expectedParams: [],
     async: true,
@@ -34,21 +95,20 @@ const actions = module.exports = makeActions('wallet/id-card', {
       }
     }
   },
-  setShowAddress: {
-    expectedParams: ['value']
-  },
   setFocusedField: {
     expectedParams: ['field', 'group']
   },
-  validate: {
-    expectedParams: []
+  setFoccusedGroup: {
+    expectedParams: ['value']
   },
-  cancel: {
-    expectedParams: [],
-    creator: (params) => {
-      return (dispatch) => {
-        dispatch(actions.cancel.buildAction(params))
-        dispatch(router.pushRoute('/wallet/identity'))
+  setShowAddress: {
+    expectedParams: ['value']
+  },
+  storeIdCardPhoto: {
+    expectedParams: ['value', 'field'],
+    creator: (...params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.storeIdCardPhoto.buildAction(...params))
       }
     }
   },
@@ -63,35 +123,7 @@ const actions = module.exports = makeActions('wallet/id-card', {
       }
     }
   },
-  storeIdCardPhoto: {
-    expectedParams: ['value', 'index']
-  },
-  goToSelectBirthCountry: {
-    expectedParams: ['field'],
-    creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/id-card/select-birth-country'))
-      }
-    }
-  },
-  goToSelectCountry: {
-    expectedParams: ['field'],
-    creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(router.pushRoute('/wallet/id-card/select-country'))
-      }
-    }
-  },
-  changeIdCardField: {
-    expectedParams: ['field', 'value']
-  },
-  setFoccusedGroup: {
-    expectedParams: ['value']
-  },
-  changePhysicalAddressField: {
-    expectedParams: ['field', 'value']
-  },
-  clearState: {
+  validate: {
     expectedParams: []
   }
 })
@@ -102,7 +134,10 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   focusedGroup: '',
   focusedField: '',
   idCard: {
-    images: [],
+    images: {
+      frontSideImg: {value: ''},
+      backSideImg: {value: ''}
+    },
     locations: [{title: '', streetWithNumber: '', zip: '', city: ''}],
     number: {value: '', valid: false},
     expirationDate: {value: '', valid: false},
@@ -128,8 +163,17 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.cancel.id:
       return initialState
 
+    case actions.cancelIdCardPhoto.id:
+      return state.mergeIn(['idCard', 'images'], {
+        frontSideImg: {value: ''},
+        backSideImg: {value: ''}
+      })
+
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
+
+    case actions.changePhysicalAddressField.id:
+      return setPhysicalAddressField(state, action)
 
     case actions.clearState.id:
       return initialState
@@ -146,30 +190,27 @@ module.exports.default = (state = initialState, action = {}) => {
         loaded: true
       })
 
-    case actions.setShowAddress.id:
-      return state.mergeIn(['idCard'], {
-        showAddress: action.value
-      })
-
     case actions.save.id_success:
       return state.merge({
         loaded: true,
         showErrors: false
       })
 
-    case actions.retrieveIdCardInformation.id:
-      return state.merge({
-        loaded: false,
-        showErrors: false
+    case actions.setShowAddress.id:
+      return state.mergeIn(['idCard'], {
+        showAddress: action.value
       })
 
     case actions.storeIdCardPhoto.id:
-      if (action.value === '') {
-        const oldState = state.toJS()
-        oldState.idCard.images.splice(action.index, 1)
-        return Immutable.fromJS(oldState)
-      }
-      return state.setIn(['idCard', 'images', action.index], action.value)
+      return state.mergeIn(['idCard', 'images', action.field], {
+        value: action.value
+      })
+
+    case actions.setFocusedField.id:
+      return state.merge({
+        focusedField: action.field,
+        focusedGroup: action.group
+      })
 
     case actions.retrieveIdCardInformation.id_fail:
       return state.merge({
@@ -180,14 +221,11 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.retrieveIdCardInformation.id_success:
       return mapBackendToState(state, action)
 
-    case actions.setFocusedField.id:
+    case actions.retrieveIdCardInformation.id:
       return state.merge({
-        focusedField: action.field,
-        focusedGroup: action.group
+        loaded: false,
+        showErrors: false
       })
-
-    case actions.changePhysicalAddressField.id:
-      return setPhysicalAddressField(state, action)
 
     case actions.validate.id:
       return checkForNonValidFields(state)

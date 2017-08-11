@@ -1,20 +1,20 @@
 import React from 'react'
 import Radium from 'radium'
 
-import Cake from 'material-ui/svg-icons/social/cake'
-import Person from 'material-ui/svg-icons/social/person'
-import Camera from 'material-ui/svg-icons/image/camera-alt'
-import Location from 'material-ui/svg-icons/maps/place'
-import moment from 'moment'
 import {
-  List, ListItem, SelectField, MenuItem, FloatingActionButton
-} from 'material-ui'
+  SocialPerson,
+  MapsLocation,
+  ImageCameraAlt,
+  ActionLanguage,
+  SocialCake
+} from 'material-ui/svg-icons'
+import moment from 'moment'
+import { List, ListItem, FloatingActionButton } from 'material-ui'
 import {theme} from 'styles'
 
 import {
   EditAppBar,
   EditHeader,
-  WebcamCapture,
   EditListItem,
   SelectCountryItem,
   SelectListItem,
@@ -59,22 +59,22 @@ const STYLES = {
 @Radium
 export default class WalletIdCard extends React.Component {
   static propTypes = {
-    save: React.PropTypes.func,
-    showVerifierLocations: React.PropTypes.func,
-    change: React.PropTypes.func,
-    selectCountry: React.PropTypes.func,
     cancel: React.PropTypes.func,
-    showVerifiers: React.PropTypes.func,
-    loaded: React.PropTypes.bool,
+    change: React.PropTypes.func,
     focusedGroup: React.PropTypes.string,
     focusedField: React.PropTypes.string,
+    goToIdCardPhotoScreen: React.PropTypes.func,
+    idCard: React.PropTypes.array,
+    loaded: React.PropTypes.bool,
+    physicalAddress: React.PropTypes.array,
+    save: React.PropTypes.func,
     setFocused: React.PropTypes.func,
-    verifierLocations: React.PropTypes.array,
+    showVerifierLocations: React.PropTypes.func,
+    selectCountry: React.PropTypes.func,
+    showVerifiers: React.PropTypes.func,
     showErrors: React.PropTypes.bool,
     showAddress: React.PropTypes.bool,
-    imgSrc: React.PropTypes.object,
-    physicalAddress: React.PropTypes.array,
-    idCard: React.PropTypes.array
+    verifierLocations: React.PropTypes.array
   }
 
   renderField(field) {
@@ -82,7 +82,8 @@ export default class WalletIdCard extends React.Component {
       case 'birthCountry':
       case 'country':
         return this.renderCountryField(field)
-      case 'img':
+      case 'backSideImg':
+      case 'frontSideImg':
         return this.renderImgField(field)
       case 'gender':
         return this.renderGenderField(field)
@@ -110,6 +111,7 @@ export default class WalletIdCard extends React.Component {
       value={value}
       label={label}
       focused={false}
+      icon={icon}
       onFocusChange={() => this.props.setFocused(key, group)}
       types={options}
       onDelete={() => this.props.change(key, '')}
@@ -287,29 +289,14 @@ export default class WalletIdCard extends React.Component {
         this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
   }
 
-  renderOptionsField({value, label, valid, key, options, group, index, icon}) {
-    return (<SelectField
-      floatingLabelText={label}
-      id={key}
-      key={key}
-      value={value}
-      fullWidth
-      focused={this.props.focusedGroup === group}
-      onFocusChange={(field) => this.props.setFocused(field, group)}
-      onChange={(e, i, v) => this.props.change(key, v)}
-      onDelete={() => this.props.change(key, '')}
-      autoWidth >
-      {options.map((e, i) => <MenuItem key={i} value={e} primaryText={e} />)}
-    </SelectField>)
-  }
-
   createIcons() {
     const idCardGroups = this.props.idCard.map(({group}) => group)
-    let icons = [IconNumber]
+    let icons = [ActionLanguage]
+    icons[idCardGroups.indexOf('img')] = ActionLanguage
     icons[idCardGroups.indexOf('numbers')] = IconNumber
-    icons[idCardGroups.indexOf('person')] = Person
-    icons[idCardGroups.indexOf('cake')] = Cake
-    icons[idCardGroups.length] = Location
+    icons[idCardGroups.indexOf('person')] = SocialPerson
+    icons[idCardGroups.indexOf('cake')] = SocialCake
+    icons[idCardGroups.length] = MapsLocation
     return icons
   }
 
@@ -317,6 +304,7 @@ export default class WalletIdCard extends React.Component {
     const icons = this.createIcons()
     const {idCard, physicalAddress, showAddress, loaded, save,
       cancel} = this.props
+    const [{value: frontSideImg}, {value: backSideImg}] = idCard
 
     const address = showAddress ? physicalAddress : [physicalAddress[0]]
     const fields = [...idCard, ...address].map(
@@ -332,26 +320,24 @@ export default class WalletIdCard extends React.Component {
       <Content>
         <EditHeader title="ID Card" />
         <List>
-          <ListItem
-            disabled
-            innerDivStyle={{padding: '0 16px 0 54px'}}
-            leftIcon={<img src="/img/ic_idcard.svg" />}>
-            <div style={STYLES.uploadContainer}>
-              <FloatingActionButton secondary style={STYLES.uploadBtn}>
-                <Camera onClick={() => this.props.showVerifierLocations({
-                  callBack: () => {},
-                  message: <WebcamCapture
-                    storeImageSrcInTheState={
-                      (imageSrc) => this.props.change('img', imageSrc)} />,
-                  buttonLabel: 'DONE',
-                  style: {contentStyle: {maxWidth: '400px'}}
-                })} />
-              </FloatingActionButton>
-              <div style={STYLES.explanText}>
-                Take a picture or upload one of your ID Cards
+          {
+            frontSideImg === '' || backSideImg === ''
+            ? <ListItem
+              disabled
+              innerDivStyle={{padding: '0 16px 0 54px'}}
+              leftIcon={<img src="/img/ic_idcard.svg" />}>
+              <div style={STYLES.uploadContainer}>
+                <FloatingActionButton secondary style={STYLES.uploadBtn}>
+                  <ImageCameraAlt
+                    onClick={() => this.props.goToIdCardPhotoScreen()} />
+                </FloatingActionButton>
+                <div style={STYLES.explanText}>
+                  Take a picture or upload one of your ID Cards
+                </div>
               </div>
-            </div>
-          </ListItem>
+            </ListItem>
+            : null
+          }
         </List>
         <List>
           {fields}

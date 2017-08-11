@@ -20,6 +20,7 @@ let STYLES = {
     marginRight: '0',
     '@media (maxWidth: 320px)': {
       flexDirection: 'column',
+      width: '180px',
       alignItems: 'flex-start'
     }
   },
@@ -43,13 +44,18 @@ let STYLES = {
     borderWidth: 'medium medium 1px'
   },
   icon: {
-    top: '24px'
+    position: 'relative',
+    top: '2px'
   },
   textField: {
+    borderRadius: '12px',
+    '@media (minWidth: 321px)': {
+      width: '24px'
+    },
     maxWidth: '300px',
     maxHeight: '280px',
-    flex: 1,
-    width: '100%'
+    width: '100%',
+    flex: 1
   },
   item: {
     padding: '0 0 0 54px'
@@ -85,16 +91,21 @@ export default class EditListItem extends React.Component {
   }
 
   render() {
-    let { value } = this.props
-
+    if (this.props.value === '') {
+      return null
+    }
     let styles = this.getStyles()
-
     const iconColor = this.props.focused
       ? theme.palette.primary1Color : theme.jolocom.gray1
 
     const icon = this.props.icon
-      ? <this.props.icon color={iconColor}
-        style={this.props.iconStyle || styles.icon} /> : null
+      ? <div style={{
+        backgroundColor: iconColor,
+        borderRadius: '2px',
+        height: '28px'
+      }}>
+        <this.props.icon color="white" style={styles.icon} />
+      </div> : null
 
     return (<ListItem
       style={styles.item}
@@ -103,8 +114,9 @@ export default class EditListItem extends React.Component {
       leftIcon={icon}
       rightIconButton={this.deleteButton}
       disabled >
+      <br />
       <div style={styles.fields}>
-        <Paper zDepth={1} >
+        <Paper zDepth={1} style={{borderRadius: '12px'}}>
           <img
             style={STYLES.textField}
             src={this.props.value} />
@@ -121,14 +133,6 @@ export default class EditListItem extends React.Component {
     >
       <NavigationCancel />
     </IconButton>)
-  }
-
-  handleFocus = () => {
-    this.props.onFocusChange(this.props.id)
-  }
-
-  handleBlur = () => {
-    this.props.onFocusChange('')
   }
 
   handleDelete = () => {
