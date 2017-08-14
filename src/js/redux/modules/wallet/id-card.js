@@ -11,6 +11,7 @@ import {
   mapBackendToState,
   changeFieldValue
 } from '../../../lib/id-card-util'
+import * as idCardPhotoActions from './webcam'
 
 const actions = module.exports = makeActions('wallet/id-card', {
   cancel: {
@@ -34,6 +35,14 @@ const actions = module.exports = makeActions('wallet/id-card', {
   changeIdCardField: {
     expectedParams: ['field', 'value']
   },
+  changeIdCardPhoto: {
+    expectedParams: ['field', 'value'],
+    creator: (...params) => {
+      return (dispatch) => {
+        dispatch(actions.changeIdCardPhoto.buildAction(...params))
+      }
+    }
+  },
   changePhysicalAddressField: {
     expectedParams: ['field', 'value']
   },
@@ -44,6 +53,33 @@ const actions = module.exports = makeActions('wallet/id-card', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
+        dispatch(idCardPhotoActions.initiatePhotoScreen({
+          initiate(dispatch, getState) {
+            dispatch(idCardPhotoActions.setNumberOfPhotos(2))
+            const { frontSideImg, backSideImg } = getState()
+              .toJS().wallet.idCard.idCard.images
+            let index = 0
+            if (frontSideImg.value !== '') {
+              dispatch(idCardPhotoActions.addPhoto(frontSideImg.value, index))
+              index++
+            }
+            if (backSideImg.value !== '') {
+              dispatch(idCardPhotoActions.addPhoto(backSideImg.value, index))
+            }
+          },
+          onSave(dispatch, getState) {
+            const [
+              frontSideImg = {value: ''},
+              backSideImg = {value: ''}
+            ] = getState().toJS().wallet.webCam.photos
+            dispatch(actions.changeIdCardPhoto('frontSideImg', frontSideImg.value))
+            dispatch(actions.changeIdCardPhoto('backSideImg', backSideImg.value))
+            dispatch(router.pushRoute('/wallet/identity/id-card'))
+          },
+          onCancel(dispatch) {
+            dispatch(router.pushRoute('/wallet/identity/id-card'))
+          }
+        }))
         dispatch(actions.goToIdCardPhotoScreen.buildAction(params))
         dispatch(router.pushRoute('/wallet/identity/id-card-photo'))
       }
@@ -95,6 +131,9 @@ const actions = module.exports = makeActions('wallet/id-card', {
       }
     }
   },
+  saveImagesChages: {
+    expectedParams: []
+  },
   setFocusedField: {
     expectedParams: ['field', 'group']
   },
@@ -104,19 +143,11 @@ const actions = module.exports = makeActions('wallet/id-card', {
   setShowAddress: {
     expectedParams: ['value']
   },
-  storeIdCardPhoto: {
-    expectedParams: ['value', 'field'],
-    creator: (...params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.storeIdCardPhoto.buildAction(...params))
-      }
-    }
-  },
   retrieveIdCardInformation: {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, {services, backend}) => {
+      return (dispatch, getState, {services, backend}) => {
         dispatch(actions.retrieveIdCardInformation.buildAction(params,
           () => backend.solid.getIdCardInformation()
         ))
@@ -196,20 +227,24 @@ module.exports.default = (state = initialState, action = {}) => {
         showErrors: false
       })
 
+    case actions.saveImagesChages.id:
+      return state.mergeIn(['idCard', 'images'], {
+        ...state.toJS().idCard.newImages
+      })
     case actions.setShowAddress.id:
       return state.mergeIn(['idCard'], {
         showAddress: action.value
-      })
-
-    case actions.storeIdCardPhoto.id:
-      return state.mergeIn(['idCard', 'images', action.field], {
-        value: action.value
       })
 
     case actions.setFocusedField.id:
       return state.merge({
         focusedField: action.field,
         focusedGroup: action.group
+      })
+
+    case actions.changeIdCardPhoto.id:
+      return state.mergeIn(['idCard', 'images', action.field], {
+        value: action.value
       })
 
     case actions.retrieveIdCardInformation.id_fail:

@@ -53,20 +53,14 @@ const STYLES = {
   }
 }
 
-const imageKey = (keys) => {
-  if (keys === [] || keys.includes('frontSideImg')) {
-    return 'backSideImg'
-  }
-  return 'frontSideImg'
-}
 @Radium
-export default class WalletIdCardPhoto extends React.Component {
+export default class WebCamPresentation extends React.Component {
   static propTypes = {
-    changeIdCardField: React.PropTypes.func,
+    addPhoto: React.PropTypes.func,
     cancel: React.PropTypes.func,
-    save: React.PropTypes.func,
     deletePhoto: React.PropTypes.func,
-    images: React.PropTypes.array
+    photos: React.PropTypes.array,
+    save: React.PropTypes.func
   }
 
   loadImage(event) {
@@ -74,10 +68,7 @@ export default class WalletIdCardPhoto extends React.Component {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = () => {
-      this.props.changeIdCardField(
-        reader.result,
-        imageKey(this.props.images.map(({field}) => field))
-      )
+      this.props.addPhoto(reader.result, this.props.photos.length)
     }
   }
 
@@ -92,23 +83,18 @@ export default class WalletIdCardPhoto extends React.Component {
       <Content>
         <div style={STYLES.uploadContainer}>
         {
-          this.props.images.map(({value, field}, index) =>
-            <span style={STYLES.imagesContainer}>
+          this.props.photos.map(({value}, index) => (<span
+            style={STYLES.imagesContainer}>
               <img style={STYLES.image} src={value} />
               <NavigationCancel
                 style={STYLES.deleteButton}
-                onClick={() => {
-                  this.props.changeIdCardField('', field)
-                }} />
-            </span>)
+                onClick={() => { this.props.deletePhoto(index) }} />
+            </span>))
         }
         </div>
-        <WebcamCapture storeImageSrcInTheState={(value) =>
-          this.props.changeIdCardField(
-            value,
-            imageKey(this.props.images.map(({field}) => field))
-          )
-        } />
+        <WebcamCapture storeImageSrcInTheState={(value) => {
+          this.props.addPhoto(value, this.props.photos.length)
+        }} />
         <div style={STYLES.uploadButton}>
           <ImageLandscape style={STYLES.loadButtonIcon} />
           <input type="file"
