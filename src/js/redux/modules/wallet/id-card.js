@@ -1,8 +1,8 @@
 import Immutable from 'immutable'
-// import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
-import { makeActions } from '../'
-import * as router from '../router'
-import {listOfCountries as options} from '../../../lib/list-of-countries'
+
+import {
+  listOfCountries as __LIST_OF_COUNTRIES__
+} from '../../../lib/list-of-countries'
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
@@ -11,6 +11,10 @@ import {
   mapBackendToState,
   changeFieldValue
 } from '../../../lib/id-card-util'
+
+import { makeActions } from '../'
+import * as router from '../router'
+
 import * as idCardPhotoActions from './webcam'
 
 const actions = module.exports = makeActions('wallet/id-card', {
@@ -18,17 +22,9 @@ const actions = module.exports = makeActions('wallet/id-card', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
-        dispatch(actions.cancel.buildAction(params))
         dispatch(router.pushRoute('/wallet/identity'))
-      }
-    }
-  },
-  cancelIdCardPhoto: {
-    expectedParams: [],
-    creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.cancelIdCardPhoto.buildAction(params))
-        dispatch(actions.goToIdCardScreen())
+        dispatch(actions.clearState())
+        dispatch(actions.cancel.buildAction(params))
       }
     }
   },
@@ -69,17 +65,19 @@ const actions = module.exports = makeActions('wallet/id-card', {
           },
           onSave(dispatch, getState) {
             const [
-              frontSideImg = {value: ''},
-              backSideImg = {value: ''}
+              frontSideImg = {value: ''}, backSideImg = {value: ''}
             ] = getState().toJS().wallet.webCam.photos
-            dispatch(actions.changeIdCardPhoto('frontSideImg', frontSideImg.value))
-            dispatch(actions.changeIdCardPhoto('backSideImg', backSideImg.value))
+            dispatch(
+              actions.changeIdCardPhoto('frontSideImg', frontSideImg.value))
+            dispatch(
+              actions.changeIdCardPhoto('backSideImg', backSideImg.value))
             dispatch(router.pushRoute('/wallet/identity/id-card'))
           },
           onCancel(dispatch) {
             dispatch(router.pushRoute('/wallet/identity/id-card'))
           }
         }))
+
         dispatch(actions.goToIdCardPhotoScreen.buildAction(params))
         dispatch(router.pushRoute('/wallet/identity/id-card-photo'))
       }
@@ -131,9 +129,6 @@ const actions = module.exports = makeActions('wallet/id-card', {
       }
     }
   },
-  saveImagesChages: {
-    expectedParams: []
-  },
   setFocusedField: {
     expectedParams: ['field', 'group']
   },
@@ -177,29 +172,20 @@ const initialState = module.exports.initialState = Immutable.fromJS({
     gender: {value: '', valid: false, options: genderList},
     birthDate: {value: '', valid: false},
     birthPlace: {value: '', valid: false},
-    birthCountry: {value: '', valid: false, options},
+    birthCountry: {value: '', valid: false, options: __LIST_OF_COUNTRIES__},
     showAddress: false,
     physicalAddress: {
       streetWithNumber: {value: '', valid: false},
       zip: {value: '', valid: false},
       city: {value: '', valid: false},
       state: {value: '', valid: false},
-      country: {value: '', valid: false, options}
+      country: {value: '', valid: false, options: __LIST_OF_COUNTRIES__}
     }
   }
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.cancel.id:
-      return initialState
-
-    case actions.cancelIdCardPhoto.id:
-      return state.mergeIn(['idCard', 'images'], {
-        frontSideImg: {value: ''},
-        backSideImg: {value: ''}
-      })
-
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
 
@@ -227,10 +213,6 @@ module.exports.default = (state = initialState, action = {}) => {
         showErrors: false
       })
 
-    case actions.saveImagesChages.id:
-      return state.mergeIn(['idCard', 'images'], {
-        ...state.toJS().idCard.newImages
-      })
     case actions.setShowAddress.id:
       return state.mergeIn(['idCard'], {
         showAddress: action.value
@@ -247,6 +229,12 @@ module.exports.default = (state = initialState, action = {}) => {
         value: action.value
       })
 
+    case actions.retrieveIdCardInformation.id:
+      return state.merge({
+        loaded: false,
+        showErrors: false
+      })
+
     case actions.retrieveIdCardInformation.id_fail:
       return state.merge({
         loaded: true,
@@ -255,12 +243,6 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.retrieveIdCardInformation.id_success:
       return mapBackendToState(state, action)
-
-    case actions.retrieveIdCardInformation.id:
-      return state.merge({
-        loaded: false,
-        showErrors: false
-      })
 
     case actions.validate.id:
       return checkForNonValidFields(state)

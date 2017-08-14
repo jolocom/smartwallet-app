@@ -85,11 +85,11 @@ export default class WebCamPresentation extends React.Component {
         {
           this.props.photos.map(({value}, index) => (<span
             style={STYLES.imagesContainer}>
-              <img style={STYLES.image} src={value} />
-              <NavigationCancel
-                style={STYLES.deleteButton}
-                onClick={() => { this.props.deletePhoto(index) }} />
-            </span>))
+            <img style={STYLES.image} src={value} />
+            <NavigationCancel
+              style={STYLES.deleteButton}
+              onClick={() => { this.props.deletePhoto(index) }} />
+          </span>))
         }
         </div>
         <WebcamCapture storeImageSrcInTheState={(value) => {
