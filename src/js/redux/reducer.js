@@ -19,7 +19,7 @@ export default combineReducers({
     country: require('./modules/wallet/country-select').default,
     money: require('./modules/wallet/money').default,
     idCard: require('./modules/wallet/id-card').default,
-    webCam:  require('./modules/wallet/webcam').default
+    webCam: require('./modules/wallet/webcam').default
   }),
   singleSignOn: combineReducers({
     accessRight: require('./modules/single-sign-on/access-right').default,
