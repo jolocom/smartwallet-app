@@ -33,7 +33,7 @@ const STYLES = {
     width: '32px',
     height: '34px',
     backgroundColor: theme.palette.textColor,
-    borderRadius: '3'
+    borderRadius: '3px'
   },
   inputField: {
     opacity: '0',
@@ -84,7 +84,7 @@ export default class WebCamPresentation extends React.Component {
         <div style={STYLES.uploadContainer}>
         {
           this.props.photos.map(({value}, index) => (<span
-            style={STYLES.imagesContainer}>
+            key={`image_${index}`} style={STYLES.imagesContainer}>
             <img style={STYLES.image} src={value} />
             <NavigationCancel
               style={STYLES.deleteButton}
