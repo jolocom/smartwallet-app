@@ -27,6 +27,10 @@ export const mapBackendToState = (state, {result}) => state.mergeDeep({
   showErrors: false,
   loaded: true,
   idCard: {
+    images: {
+      frontSideImg: {value: ''},
+      backSideImg: {value: ''}
+    },
     locations: result.locations,
     number: {value: result.number, valid: true},
     expirationDate: {value: result.expirationDate, valid: true},
@@ -79,7 +83,7 @@ export const checkForNonValidFields = (reduxState) => {
   return reduxState.merge({showErrors})
 }
 
-export const storeIdCardDetails = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
+export const storeIdCardDetailsInSolid = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
   let normalizedIdCard = {
     number: idCard.number.value,
     expirationDate: idCard.expirationDate.value,

@@ -131,6 +131,7 @@
     "react-stripe-checkout": "^2.4.0",
     "react-tap-event-plugin": "^2.0.1",
     "react-timer-mixin": "^0.13.3",
+    "react-webcam": "^0.2.0",
     "redux": "^3.6.0",
     "redux-immutable": "^3.0.11",
     "reflux": "^6.0.0",
