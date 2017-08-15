@@ -74,6 +74,22 @@ export default class MissingInfoItem extends React.Component {
     }
   }
 
+  getInfoText(field) {
+    if (field === 'idcard' || field === 'passport') {
+      return (
+        `To use this service your verified ${field} is neccessary. Please add
+        the information to your smartwallet and request a verification at an
+        institution. As soon as you have a verified your ${field}, sign into
+        this service again`
+      )
+    } else {
+      return (
+        `To use this service your ${field} is neccessary.
+        Add it to your wallet.`
+      )
+    }
+  }
+
   render() {
     const {field} = this.props
     return (
@@ -105,8 +121,7 @@ export default class MissingInfoItem extends React.Component {
         </ListItem>
         <ListItem
           innerDivStyle={STYLES.missingHeadline}
-          primaryText={`To use this service your ${field} is neccessary.
-          Add it to your wallet.`}
+          primaryText={this.getInfoText(field)}
           disabled />
       </div>
     )
