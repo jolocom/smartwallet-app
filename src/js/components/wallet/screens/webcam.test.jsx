@@ -6,7 +6,7 @@ import { stub } from '../../../../../test/utils'
 import WalletWebCamScreen from './webcam'
 import Presentation from '../presentation/webcam'
 
-describe.only('(Component) WalletWebCamScreen', () => {
+describe('(Component) WalletWebCamScreen', () => {
   it('should render properly the first time', () => {
     const wrapper = shallow((<WalletWebCamScreen.WrappedComponent {
       ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
