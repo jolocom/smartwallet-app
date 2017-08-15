@@ -1,8 +1,8 @@
 import Immutable from 'immutable'
-// import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
-import { makeActions } from '../'
-import * as router from '../router'
-import {listOfCountries as options} from '../../../lib/list-of-countries'
+
+import {
+  listOfCountries as __LIST_OF_COUNTRIES__
+} from '../../../lib/list-of-countries'
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
@@ -12,27 +12,32 @@ import {
   changeFieldValue
 } from '../../../lib/id-card-util'
 
+import { makeActions } from '../'
+import * as router from '../router'
+
+import * as idCardPhotoActions from './webcam'
+
 const actions = module.exports = makeActions('wallet/id-card', {
   cancel: {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
-        dispatch(actions.cancel.buildAction(params))
         dispatch(router.pushRoute('/wallet/identity'))
-      }
-    }
-  },
-  cancelIdCardPhoto: {
-    expectedParams: [],
-    creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.cancelIdCardPhoto.buildAction(params))
-        dispatch(actions.goToIdCardScreen())
+        dispatch(actions.clearState())
+        dispatch(actions.cancel.buildAction(params))
       }
     }
   },
   changeIdCardField: {
     expectedParams: ['field', 'value']
+  },
+  changeIdCardPhoto: {
+    expectedParams: ['field', 'value'],
+    creator: (...params) => {
+      return (dispatch) => {
+        dispatch(actions.changeIdCardPhoto.buildAction(...params))
+      }
+    }
   },
   changePhysicalAddressField: {
     expectedParams: ['field', 'value']
@@ -44,6 +49,35 @@ const actions = module.exports = makeActions('wallet/id-card', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch, getState) => {
+        dispatch(idCardPhotoActions.initiatePhotoScreen({
+          initiate(dispatch, getState) {
+            dispatch(idCardPhotoActions.setNumberOfPhotos(2))
+            const { frontSideImg, backSideImg } = getState()
+              .toJS().wallet.idCard.idCard.images
+            let index = 0
+            if (frontSideImg.value !== '') {
+              dispatch(idCardPhotoActions.addPhoto(frontSideImg.value, index))
+              index++
+            }
+            if (backSideImg.value !== '') {
+              dispatch(idCardPhotoActions.addPhoto(backSideImg.value, index))
+            }
+          },
+          onSave(dispatch, getState) {
+            const [
+              frontSideImg = {value: ''}, backSideImg = {value: ''}
+            ] = getState().toJS().wallet.webCam.photos
+            dispatch(
+              actions.changeIdCardPhoto('frontSideImg', frontSideImg.value))
+            dispatch(
+              actions.changeIdCardPhoto('backSideImg', backSideImg.value))
+            dispatch(router.pushRoute('/wallet/identity/id-card'))
+          },
+          onCancel(dispatch) {
+            dispatch(router.pushRoute('/wallet/identity/id-card'))
+          }
+        }))
+
         dispatch(actions.goToIdCardPhotoScreen.buildAction(params))
         dispatch(router.pushRoute('/wallet/identity/id-card-photo'))
       }
@@ -104,19 +138,11 @@ const actions = module.exports = makeActions('wallet/id-card', {
   setShowAddress: {
     expectedParams: ['value']
   },
-  storeIdCardPhoto: {
-    expectedParams: ['value', 'field'],
-    creator: (...params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.storeIdCardPhoto.buildAction(...params))
-      }
-    }
-  },
   retrieveIdCardInformation: {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, {services, backend}) => {
+      return (dispatch, getState, {services, backend}) => {
         dispatch(actions.retrieveIdCardInformation.buildAction(params,
           () => backend.solid.getIdCardInformation()
         ))
@@ -146,29 +172,20 @@ const initialState = module.exports.initialState = Immutable.fromJS({
     gender: {value: '', valid: false, options: genderList},
     birthDate: {value: '', valid: false},
     birthPlace: {value: '', valid: false},
-    birthCountry: {value: '', valid: false, options},
+    birthCountry: {value: '', valid: false, options: __LIST_OF_COUNTRIES__},
     showAddress: false,
     physicalAddress: {
       streetWithNumber: {value: '', valid: false},
       zip: {value: '', valid: false},
       city: {value: '', valid: false},
       state: {value: '', valid: false},
-      country: {value: '', valid: false, options}
+      country: {value: '', valid: false, options: __LIST_OF_COUNTRIES__}
     }
   }
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.cancel.id:
-      return initialState
-
-    case actions.cancelIdCardPhoto.id:
-      return state.mergeIn(['idCard', 'images'], {
-        frontSideImg: {value: ''},
-        backSideImg: {value: ''}
-      })
-
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)
 
@@ -201,15 +218,21 @@ module.exports.default = (state = initialState, action = {}) => {
         showAddress: action.value
       })
 
-    case actions.storeIdCardPhoto.id:
-      return state.mergeIn(['idCard', 'images', action.field], {
-        value: action.value
-      })
-
     case actions.setFocusedField.id:
       return state.merge({
         focusedField: action.field,
         focusedGroup: action.group
+      })
+
+    case actions.changeIdCardPhoto.id:
+      return state.mergeIn(['idCard', 'images', action.field], {
+        value: action.value
+      })
+
+    case actions.retrieveIdCardInformation.id:
+      return state.merge({
+        loaded: false,
+        showErrors: false
       })
 
     case actions.retrieveIdCardInformation.id_fail:
@@ -220,12 +243,6 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.retrieveIdCardInformation.id_success:
       return mapBackendToState(state, action)
-
-    case actions.retrieveIdCardInformation.id:
-      return state.merge({
-        loaded: false,
-        showErrors: false
-      })
 
     case actions.validate.id:
       return checkForNonValidFields(state)

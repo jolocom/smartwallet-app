@@ -11,12 +11,12 @@ import Presentation from '../presentation/id-card'
     'wallet/country-select:initiateCountrySelectScreen',
     'wallet/id-card:cancel',
     'wallet/id-card:changeIdCardField',
+    'wallet/id-card:changeIdCardPhoto',
     'wallet/id-card:changePhysicalAddressField',
     'wallet/id-card:goToIdCardPhotoScreen',
     'wallet/id-card:save',
     'wallet/id-card:setFocusedField',
     'wallet/id-card:setShowAddress',
-    'wallet/id-card:storeIdCardPhoto',
     'wallet/id-card:retrieveIdCardInformation'
   ]
 })
@@ -25,6 +25,7 @@ export default class WalletPaasportScreen extends React.Component {
   static propTypes = {
     cancel: React.PropTypes.func.isRequired,
     changeIdCardField: React.PropTypes.func.isRequired,
+    changeIdCardPhoto: React.PropTypes.func.isRequired,
     changePhysicalAddressField: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
     goToIdCardPhotoScreen: React.PropTypes.func.isRequired,
@@ -34,7 +35,6 @@ export default class WalletPaasportScreen extends React.Component {
     setFocusedField: React.PropTypes.func.isRequired,
     setShowAddress: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
-    storeIdCardPhoto: React.PropTypes.func.isRequired,
     retrieveIdCardInformation: React.PropTypes.func.isRequired
   }
 
@@ -67,7 +67,7 @@ export default class WalletPaasportScreen extends React.Component {
   change(field, value) {
     const imageKeys = ['frontSideImg', 'backSideImg']
     if (imageKeys.includes(field)) {
-      this.props.storeIdCardPhoto('', field)
+      this.props.changeIdCardPhoto(field, '')
     }
     const idCardFields = [
       ...this.parseIdCardDetailsToArray().map(({key}) => key)
@@ -76,7 +76,7 @@ export default class WalletPaasportScreen extends React.Component {
       return this.props.changeIdCardField(field, value)
     } else if (field === 'streetWithNumber') {
       const {city} = this.props.idCard.idCard.physicalAddress
-      this.props.setShowAddress(value.trim().length > 0 || city.value.length > 0) // eslint-disable-line max-len
+      this.props.setShowAddress(value.length > 0 || city.value.length > 0)
     }
     return this.props.changePhysicalAddressField(field, value)
   }
