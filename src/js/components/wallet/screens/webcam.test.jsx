@@ -12,10 +12,10 @@ describe.only('(Component) WalletWebCamScreen', () => {
       ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
           webCam: {
-          numberOfPhotos: 1,
-          photos: [],
-          onSave: () => {},
-          onCancel: () => {}
+            numberOfPhotos: 1,
+            photos: [],
+            onSave: () => {},
+            onCancel: () => {}
           }
         }
       }))
@@ -34,10 +34,10 @@ describe.only('(Component) WalletWebCamScreen', () => {
       ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
           webCam: {
-          numberOfPhotos: 1,
-          photos: [],
-          onSave: () => {},
-          onCancel: () => {}
+            numberOfPhotos: 1,
+            photos: [],
+            onSave: () => {},
+            onCancel: () => {}
           }
         }
       }))
@@ -58,10 +58,10 @@ describe.only('(Component) WalletWebCamScreen', () => {
       ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
           webCam: {
-          numberOfPhotos: 1,
-          photos: [],
-          onSave: () => {},
-          onCancel: () => {}
+            numberOfPhotos: 1,
+            photos: [],
+            onSave: () => {},
+            onCancel: () => {}
           }
         }
       }))
@@ -82,10 +82,10 @@ describe.only('(Component) WalletWebCamScreen', () => {
       ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
           webCam: {
-          numberOfPhotos: 1,
-          photos: [],
-          onSave: () => {},
-          onCancel: () => {}
+            numberOfPhotos: 1,
+            photos: [],
+            onSave: () => {},
+            onCancel: () => {}
           }
         }
       }))
@@ -106,10 +106,10 @@ describe.only('(Component) WalletWebCamScreen', () => {
       ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
           webCam: {
-          numberOfPhotos: 1,
-          photos: [],
-          onSave: () => {},
-          onCancel: () => {}
+            numberOfPhotos: 1,
+            photos: [],
+            onSave: () => {},
+            onCancel: () => {}
           }
         }
       }))
