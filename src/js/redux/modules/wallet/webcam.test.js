@@ -2,7 +2,7 @@ import {expect} from 'chai'
 import Immutable from 'immutable'
 const reducer = require('./webcam').default
 
-describe.only('# Wallet webcam redux module', () => {
+describe('# Wallet webcam redux module', () => {
   it('should initialize properly', () => {
     const state = reducer(undefined, '@INIT')
     expect(state.toJS()).to.deep.equal({
