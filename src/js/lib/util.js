@@ -116,7 +116,7 @@ let Util = {
   },
 
   usernameToWebId(username) {
-    return `https://${username}.webid.jolocom.de/profile/card#me` 
+    return `https://${username}.webid.jolocom.de/profile/card#me`
   },
 
   /*
