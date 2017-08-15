@@ -3,63 +3,125 @@ import Immutable from 'immutable'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
-import WalletIdCardScreen from './id-card'
-import Presentation from '../presentation/id-card'
+import WalletWebCamScreen from './webcam'
+import Presentation from '../presentation/webcam'
 
-describe('(Component) WalletIdCardScreen', () => {
+describe.only('(Component) WalletWebCamScreen', () => {
   it('should render properly the first time', () => {
-    const wrapper = shallow(
-      (<WalletIdCardScreen.WrappedComponent {
-        ...WalletIdCardScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            idCard: {
-              loaded: false,
-              showErrors: false,
-              focusedGroup: '',
-              focusedField: '',
-              idCard: {
-                locations: [
-                  {title: '', streetWithNumber: '', zip: '', city: ''}
-                ],
-                images: {
-                  frontSideImg: {value: ''},
-                  backSideImg: {value: ''}
-                },
-                number: {value: '', valid: false},
-                expirationDate: {value: '', valid: false},
-                firstName: {value: '', valid: false},
-                lastName: {value: '', valid: false},
-                gender: {value: '', valid: false, options: []},
-                birthDate: {value: '', valid: false},
-                birthPlace: {value: '', valid: false},
-                birthCountry: {value: '', valid: false, options: []},
-                showAddress: false,
-                physicalAddress: {
-                  streetWithNumber: {value: '', valid: false},
-                  zip: {value: '', valid: false},
-                  city: {value: '', valid: false},
-                  state: {value: '', valid: false},
-                  country: {value: '', valid: false, options: []}
-                }
-              }
-            }
+    const wrapper = shallow((<WalletWebCamScreen.WrappedComponent {
+      ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
+        wallet: {
+          webCam: {
+          numberOfPhotos: 1,
+          photos: [],
+          onSave: () => {},
+          onCancel: () => {}
           }
-        }))
-      }
-        save={() => {}}
-        retrieveIdCardInformation={() => {}}
-        changeIdCardField={() => {}}
-        initiate={() => {}}
-        changePhysicalAddressField={() => {}}
-        setFocusedField={() => {}}
-        setShowAddress={() => {}}
-        showSimpleDialog={() => {}}
-        configSimpleDialog={() => {}}
-        cancel={() => {}}
-      />),
-      { context: { muiTheme: { } } }
-    )
+        }
+      }))
+    }
+      addPhoto={() => {}}
+      cancel={() => {}}
+      deletePhoto={() => {}}
+      save={() => {}} />),
+    { context: { muiTheme: { } } })
 
-    expect(wrapper.find(Presentation).prop('loaded')).to.be.false
+    expect(wrapper.find(Presentation).props().photos).to.be.empty
+  })
+  it('should call addPhoto with proper params', () => {
+    const addPhoto = stub()
+    const wrapper = shallow((<WalletWebCamScreen.WrappedComponent {
+      ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
+        wallet: {
+          webCam: {
+          numberOfPhotos: 1,
+          photos: [],
+          onSave: () => {},
+          onCancel: () => {}
+          }
+        }
+      }))
+    }
+      addPhoto={addPhoto}
+      cancel={() => {}}
+      deletePhoto={() => {}}
+      save={() => {}} />),
+    { context: { muiTheme: { } } })
+
+    wrapper.find(Presentation).props().addPhoto('test')
+    expect(addPhoto.called).to.be.true
+    expect(addPhoto.calls).to.deep.equal([{args: ['test']}])
+  })
+  it('should call cancel with proper params', () => {
+    const cancel = stub()
+    const wrapper = shallow((<WalletWebCamScreen.WrappedComponent {
+      ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
+        wallet: {
+          webCam: {
+          numberOfPhotos: 1,
+          photos: [],
+          onSave: () => {},
+          onCancel: () => {}
+          }
+        }
+      }))
+    }
+      addPhoto={() => {}}
+      cancel={cancel}
+      deletePhoto={() => {}}
+      save={() => {}} />),
+    { context: { muiTheme: { } } })
+
+    wrapper.find(Presentation).props().cancel('test')
+    expect(cancel.called).to.be.true
+    expect(cancel.calls).to.deep.equal([{args: ['test']}])
+  })
+  it('should call save with proper params', () => {
+    const save = stub()
+    const wrapper = shallow((<WalletWebCamScreen.WrappedComponent {
+      ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
+        wallet: {
+          webCam: {
+          numberOfPhotos: 1,
+          photos: [],
+          onSave: () => {},
+          onCancel: () => {}
+          }
+        }
+      }))
+    }
+      addPhoto={() => {}}
+      cancel={() => {}}
+      deletePhoto={() => {}}
+      save={save} />),
+    { context: { muiTheme: { } } })
+
+    wrapper.find(Presentation).props().save('test')
+    expect(save.called).to.be.true
+    expect(save.calls).to.deep.equal([{args: ['test']}])
+  })
+  it('should call deletePhoto with proper params', () => {
+    const deletePhoto = stub()
+    const wrapper = shallow((<WalletWebCamScreen.WrappedComponent {
+      ...WalletWebCamScreen.mapStateToProps(Immutable.fromJS({
+        wallet: {
+          webCam: {
+          numberOfPhotos: 1,
+          photos: [],
+          onSave: () => {},
+          onCancel: () => {}
+          }
+        }
+      }))
+    }
+      addPhoto={() => {}}
+      cancel={() => {}}
+      save={() => {}}
+      deletePhoto={deletePhoto} />),
+    { context: { muiTheme: { } } })
+
+    wrapper.find(Presentation).props().deletePhoto('test')
+    expect(deletePhoto.called).to.be.true
+    expect(deletePhoto.calls).to.deep.equal([{args: ['test']}])
   })
 })
