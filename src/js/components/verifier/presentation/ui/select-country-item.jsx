@@ -4,7 +4,6 @@ import Radium from 'radium'
 import {
   TextField,
   IconButton,
-  FlatButton,
   ListItem
 } from 'material-ui'
 
