@@ -86,7 +86,7 @@ const initialState = Immutable.fromJS({
     loading: false,
     path: '',
     name: 'SOME COMPANY',
-    image: 'img/logo.svg',
+    image: 'img/img_t3n.png',
     requester: '',
     returnURL: '',
     fields: [],

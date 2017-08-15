@@ -81,7 +81,7 @@ export default class AccessRequestScreen extends React.Component {
       return () => {
         this.props.startPhoneVerification({phone: attrValue, index})
       }
-    } else if (attrType === 'email') {
+    } else if (attrType === 'emails') {
       return () => {
         this.props.startEmailVerification({email: attrValue, index})
       }
@@ -93,7 +93,7 @@ export default class AccessRequestScreen extends React.Component {
       return () => {
         this.props.confirmPhone(index)
       }
-    } else if (attrType === 'email') {
+    } else if (attrType === 'emails') {
       return () => {
         this.props.confirmEmail({email: attrValue})
       }
@@ -101,11 +101,11 @@ export default class AccessRequestScreen extends React.Component {
   }
 
   resendVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phone') {
+    if (attrType === 'phones') {
       return () => {
         this.props.resendVerificationSms({phone: attrValue, index})
       }
-    } else if (attrType === 'email') {
+    } else if (attrType === 'emails') {
       return () => {
         this.props.resendVerificationLink({email: attrValue, index})
       }

@@ -18,7 +18,8 @@ export default combineReducers({
     identity: require('./modules/wallet/identity').default,
     country: require('./modules/wallet/country-select').default,
     money: require('./modules/wallet/money').default,
-    idCard: require('./modules/wallet/id-card').default
+    idCard: require('./modules/wallet/id-card').default,
+    webCam: require('./modules/wallet/webcam').default
   }),
   verifier: combineReducers({
     result: require('./modules/verifier/result').default,
