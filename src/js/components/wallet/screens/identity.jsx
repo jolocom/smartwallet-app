@@ -8,6 +8,7 @@ import WalletError from '../../common/error'
   actions: [
     'wallet/identity:getIdentityInformation',
     'wallet/identity:changeSmsCodeValue',
+    'wallet/identity:buyEther',
     'wallet/identity:changePinValue',
     'wallet/identity:setFocusedPin',
     'wallet/identity:goToPassportManagement',
@@ -85,6 +86,7 @@ export default class WalletIdentityScreen extends React.Component {
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
       ethConnectInfo={(...args) => {this.ethConnectInfo(...args)} }
+      buyEther={(token) => {this.props.buyEther(token)} }
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}

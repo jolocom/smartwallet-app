@@ -94,6 +94,24 @@ const actions = module.exports = makeActions('wallet/identity', {
         ))
       }
     }
+  },
+  buyEther: {
+    expectedParams: ['stripeToken'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        dispatch(actions.buyEther.buildAction(params, (backend) => {
+          return backend.gateway.buyEtherAndCreateIdentity({
+            stripeToken: params,
+            seedPhrase: services.auth.currentUser.wallet.seedPhrase,
+            userName: services.auth.currentUser.wallet.userName
+          }).then((response) => {
+            // dispatch(actions.getBalance())
+            return response
+          })
+        }))
+      }
+    }
   }
 })
 
@@ -226,6 +244,15 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['contact', action.field, action.index], {
         codeIsSent: action.value
       })
+
+    case actions.buyEther.id:
+      return state
+
+    case actions.buyEther.id_success:
+      return state
+
+    case actions.buyEther.id_fail:
+      return state
 
     default:
       return state

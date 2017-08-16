@@ -23,6 +23,17 @@ export default class GatewayAgent {
   // }
 
 
+  buyEtherAndCreateIdentity({stripeToken, seedPhrase, userName}) {
+    console.log(stripeToken, seedPhrase, userName)
+    return this._httpAgent.post(
+      'https://verification.jolocom.com/ether/buy/ether',
+      JSON.stringify({stripeToken: JSON.stringify(stripeToken), seedPhrase}),
+      {
+        'Content-type': 'application/json'
+      },
+      {credentials: 'omit'}
+    )
+  }
 
   checkUserDoesNotExist({userName}) {
     return new Promise((resolve, reject) => {

@@ -4,6 +4,9 @@ import Radium from 'radium'
 import {theme} from 'styles'
 import { List, RaisedButton, FlatButton } from 'material-ui'
 import {Content, Block} from '../../../structure'
+// import { StripeCheckout } from '../stripe-checkout'
+import ReactStripeCheckout from 'react-stripe-checkout'
+import * as settings from 'settings'
 
 const STYLES = {
   container: {
@@ -35,7 +38,7 @@ const STYLES = {
   accessMsgHeader: theme.textStyles.sectionheader,
   accessMsgBody: theme.textStyles.subheadline,
   accessContainer: {
-    padding: '18px 0px 18px 0px'
+    padding: '18px 0px 18px 52px'
   },
   buttons: {
     width: '70%'
@@ -56,6 +59,30 @@ export default class EthConnectItem extends React.Component {
 
   }
 
+  renderNoEther() {
+    return (
+      <ReactStripeCheckout
+        token={(token) => this.props.onToken(token)}
+        stripeKey={settings.stripe.publishableKey}
+        name="JOLOCOM SMARTWALLET"
+        description="Add Ether to your Smart Wallet."
+        image="/img/logo.png"
+        panelLabel="Bezahlen">
+        <RaisedButton
+          secondary
+          style={STYLES.buttons}
+          label="CONNECT TO ETHEREUM" />
+      </ReactStripeCheckout>
+    )
+  }
+
+  renderHasEther() {
+    //? here pass the info to gateway to create identity contract and save
+    return (
+      <div></div>
+    )
+  }
+
   render() {
     console.log(this.props)
     const popupMessage = {
@@ -68,17 +95,15 @@ export default class EthConnectItem extends React.Component {
 
     return (
       <div>
-      <Block style={STYLES.accessContainer}>
-        <RaisedButton
-          label="CONNECT TO ETHEREUM"
-          style={STYLES.buttons} />
-        <FlatButton
-          onClick={() =>
-          this.props.ethConnectInfo({title: popupMessage.title,
-            message: popupMessage.body})}>
-          WHY?
-        </FlatButton>
-      </Block>
+        <Block style={STYLES.accessContainer}>
+          {this.renderNoEther()}
+          <FlatButton
+            onClick={() =>
+            this.props.ethConnectInfo({title: popupMessage.title,
+              message: popupMessage.body})}>
+            WHY?
+          </FlatButton>
+        </Block>
       </div>
     )
   }

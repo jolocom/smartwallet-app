@@ -16,7 +16,8 @@ import {
   ContactList,
   IdCardsList,
   PassportsList,
-  InfoDetails
+  InfoDetails,
+  EthConnectItem
 } from './ui'
 
 const STYLES = {
@@ -83,12 +84,13 @@ export default class WalletIdentity extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     const {
       username, passports, idCards, isLoaded, webId, showUserInfo, phones,
       emails, goToContactManagement, goToPassportManagement, changePinValue,
       requestVerificationCode, resendVerificationCode, enterVerificationCode,
       setFocusedPin, goToDrivingLicenceManagement, requestIdCardVerification,
-      onConfirm, pinFocused, ethConnectInfo
+      onConfirm, pinFocused, ethConnectInfo, buyEther
     } = this.props
 
     if (!isLoaded) {
@@ -136,6 +138,9 @@ export default class WalletIdentity extends React.Component {
               </ListItem>
               <Divider style={STYLES.divider} />
             </List>
+            <EthConnectItem
+              onToken={buyEther}
+              ethConnectInfo={ethConnectInfo}/>
           </Block>
           <Block>
             <PlusMenu
