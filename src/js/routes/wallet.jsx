@@ -41,7 +41,7 @@ import AccessConfirmationScreen from
   'components/single-sign-on/screens/access-confirmation'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
-import WalletIdCardPhotoScreen from 'components/wallet/screens/id-card-photo'
+import WalletIdCardPhotoScreen from 'components/wallet/screens/webcam'
 
 import WalletLogin from 'components/wallet-login'
 import LaymanLoginScreen from 'components/wallet-login/screens/layman'
