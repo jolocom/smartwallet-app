@@ -60,11 +60,59 @@ export default class WalletIdentity extends React.Component {
     showUserInfo: React.PropTypes.func.isRequired
   }
 
-  render() {
+  renderContact() {
     const {
       changePinValue, requestVerificationCode, resendVerificationCode,
-      setFocusedPin, requestIdCardVerification, goTo, enterVerificationCode,
-      showUserInfo, identity
+      setFocusedPin, goTo, enterVerificationCode
+    } = this.props
+    const { contact, expandedFields } = this.props.identity
+    return <div>
+      <Block>
+        <PlusMenu
+          name="Contact"
+          choice={contact.emails.length + contact.phones.length > 0} // eslint-disable-line max-len
+          expanded={expandedFields.contact}
+          expand={(value) => {
+            this.props.expandField('contact', value)
+          }}
+          goToManagement={() => { goTo('contact') }} />
+      </Block>
+      {
+        expandedFields.contact
+        ? <Block style={STYLES.innerContainer}>
+          <ContactList
+            fields={contact.phones}
+            changePinValue={changePinValue}
+            pinFocused={contact.isCodeInputFieldFocused}
+            onConfirm={requestVerificationCode}
+            icon={CommunicationCall}
+            setFocusedPin={setFocusedPin}
+            requestVerificationCode={requestVerificationCode}
+            resendVerificationCode={resendVerificationCode}
+            enterVerificationCode={enterVerificationCode}
+            labelText="Phone Number"
+            attrType="phone" />
+          <ContactList
+            fields={contact.emails}
+            onConfirm={requestVerificationCode}
+            changePinValue={changePinValue}
+            setFocusedPin={setFocusedPin}
+            pinFocused={contact.isCodeInputFieldFocused}
+            requestVerificationCode={requestVerificationCode}
+            resendVerificationCode={resendVerificationCode}
+            enterVerificationCode={enterVerificationCode}
+            icon={CommunicationEmail}
+            labelText="Email"
+            attrType="email" />
+        </Block>
+        : null
+      }
+    </div>
+  }
+
+  render() {
+    const {
+      requestIdCardVerification, goTo, showUserInfo, identity
     } = this.props
     if (!identity.loaded) {
       return <Loading />
@@ -106,46 +154,7 @@ export default class WalletIdentity extends React.Component {
               <Divider style={STYLES.divider} />
             </List>
           </Block>
-          <Block>
-            <PlusMenu
-              name="Contact"
-              choice={identity.contact.emails.length + identity.contact.phones.length > 0} // eslint-disable-line max-len
-              expanded={identity.expandedFields.contact}
-              expand={(value) => {
-                this.props.expandField('contact', value)
-              }}
-              goToManagement={() => { goTo('contact') }} />
-          </Block>
-          {
-            identity.expandedFields.contact
-            ? <Block style={STYLES.innerContainer}>
-              <ContactList
-                fields={identity.contact.phones}
-                changePinValue={changePinValue}
-                pinFocused={identity.contact.isCodeInputFieldFocused}
-                onConfirm={requestVerificationCode}
-                icon={CommunicationCall}
-                setFocusedPin={setFocusedPin}
-                requestVerificationCode={requestVerificationCode}
-                resendVerificationCode={resendVerificationCode}
-                enterVerificationCode={enterVerificationCode}
-                labelText="Phone Number"
-                attrType="phone" />
-              <ContactList
-                fields={identity.contact.emails}
-                onConfirm={requestVerificationCode}
-                changePinValue={changePinValue}
-                setFocusedPin={setFocusedPin}
-                pinFocused={identity.contact.isCodeInputFieldFocused}
-                requestVerificationCode={requestVerificationCode}
-                resendVerificationCode={resendVerificationCode}
-                enterVerificationCode={enterVerificationCode}
-                icon={CommunicationEmail}
-                labelText="Email"
-                attrType="email" />
-            </Block>
-            : null
-          }
+          {this.renderContact()}
           <Block>
             <PlusMenu
               name="Passport"
@@ -192,7 +201,8 @@ export default class WalletIdentity extends React.Component {
               expanded={false}
               goToManagement={() => { goTo('drivingLicence') }} />
           </Block>
-          <br /><br />
+          <br />
+          <br />
         </Content>
       </HalfScreenContainer>
     </TabContainer>)
