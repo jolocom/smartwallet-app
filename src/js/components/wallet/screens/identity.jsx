@@ -60,7 +60,7 @@ export default class WalletIdentityScreen extends React.Component {
       showUserInfo={this.props.openConfirmDialog}
       requestIdCardVerification={({title, message, rightButtonLabel, leftButtonLabel, index}) => // eslint-disable-line max-len
         this.props.openConfirmDialog(title, message, rightButtonLabel,
-        () => { this.props.saveToBlockchain(0) }, leftButtonLabel)
+        () => { this.props.saveToBlockchain(index) }, leftButtonLabel)
       }
       requestVerificationCode={(...args) => this.requestVerification(...args)}
       resendVerificationCode={(...args) => this.showVerificationWindow(...args,

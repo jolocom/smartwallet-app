@@ -197,7 +197,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return mapBackendToState(action.result)
 
     case actions.saveToBlockchain.id_success:
-      return state.mergeIn(['idCards', '0'], {savedToBlockchain: true})
+      return state.mergeIn(['idCards', action.index], {savedToBlockchain: true})
 
     case actions.setFocusedPin.id:
       return state.setIn(['contact', 'isCodeInputFieldFocused'], action.value)
