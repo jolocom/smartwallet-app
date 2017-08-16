@@ -88,7 +88,7 @@ export default class WalletIdentity extends React.Component {
       emails, goToContactManagement, goToPassportManagement, changePinValue,
       requestVerificationCode, resendVerificationCode, enterVerificationCode,
       setFocusedPin, goToDrivingLicenceManagement, requestIdCardVerification,
-      onConfirm, pinFocused
+      onConfirm, pinFocused, ethConnectInfo
     } = this.props
 
     if (!isLoaded) {
@@ -152,6 +152,7 @@ export default class WalletIdentity extends React.Component {
             ? <Block style={STYLES.innerContainer}>
               <ContactList
                 fields={phones}
+                ethConnectInfo={ethConnectInfo}
                 changePinValue={changePinValue}
                 pinFocused={pinFocused}
                 onConfirm={onConfirm}
@@ -164,6 +165,7 @@ export default class WalletIdentity extends React.Component {
                 attrType="phone" />
               <ContactList
                 fields={emails}
+                ethConnectInfo={ethConnectInfo}
                 onConfirm={onConfirm}
                 changePinValue={changePinValue}
                 setFocusedPin={setFocusedPin}

@@ -8,6 +8,8 @@ import {
   ListItem
 } from 'material-ui'
 
+import { EthConnectItem } from './'
+
 var STYLES = {
   icon: {
     color: theme.jolocom.gray1,
@@ -104,6 +106,8 @@ export default class StaticListItem extends React.Component {
           {props.secondaryTextValue}
           </div>
         </div>
+        {props.verified?<EthConnectItem
+          ethConnectInfo={props.ethConnectInfo}/>:null}
       </ListItem>
     )
   }

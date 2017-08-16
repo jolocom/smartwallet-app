@@ -13,6 +13,7 @@ export default class GatewayAgent {
   //   return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
   // }
 
+
   // createEthereumIdentity({userName, seedPhrase}) {
   //   return this._httpAgent.post(
   //     `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
@@ -20,6 +21,8 @@ export default class GatewayAgent {
   //     {'Content-type': 'application/json'}
   //   )
   // }
+
+
 
   checkUserDoesNotExist({userName}) {
     return new Promise((resolve, reject) => {

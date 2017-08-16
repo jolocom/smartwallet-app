@@ -24,6 +24,7 @@ const attrTypeToKey = (attrType) => (attrType + 's')
 
 const ContactList = ({
   fields,
+  ethConnectInfo,
   requestVerificationCode,
   resendVerificationCode,
   enterVerificationCode,
@@ -52,6 +53,7 @@ const ContactList = ({
         verified={verified}
         textValue={attrValue}
         textLabel={labelText}
+        ethConnectInfo={ethConnectInfo}
         icon={index === 0 ? icon : null}
         onVerify={() => onConfirm({
           rightButtonLabel: 'REQUEST VERIFICATION',

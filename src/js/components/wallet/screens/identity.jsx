@@ -55,6 +55,10 @@ export default class WalletIdentityScreen extends React.Component {
     this.props.getIdentityInformation()
   }
 
+  ethConnectInfo() {
+    console.log('wohoooooo')
+  }
+
   render() {
     const { username, contact, webId, passports, idCards, loaded, error,
       expandedFields } = this.props.wallet.identity
@@ -80,6 +84,7 @@ export default class WalletIdentityScreen extends React.Component {
       pinFocused={contact.isCodeInputFieldFocused}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
+      ethConnectInfo={(...args) => {this.ethConnectInfo(...args)} }
       goToContactManagement={this.props.goToContactManagement}
       goToPassportManagement={this.props.goToPassportManagement}
       goToDrivingLicenceManagement={this.props.goToDrivingLicenceManagement}
@@ -155,5 +160,11 @@ export default class WalletIdentityScreen extends React.Component {
       callback({attrValue, attrType, index}),
       leftButtonLabel
     )
+  }
+
+  ethConnectInfo = ({title, message}) => {
+    // console.log(title, message)
+    this.props.configSimpleDialog(title, message, 'OK', {}, false)
+    this.props.showSimpleDialog()
   }
 }
