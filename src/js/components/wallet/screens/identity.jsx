@@ -7,19 +7,15 @@ import WalletError from '../../common/error'
   props: ['wallet.identity'],
   actions: [
     'confirmation-dialog:openConfirmDialog',
-    'confirmation-dialog:closeConfirmDialog',
-    'simple-dialog:showSimpleDialog',
-    'simple-dialog:configSimpleDialog',
     'verification:confirmEmail',
     'verification:confirmPhone',
     'verification:startEmailVerification',
     'verification:startPhoneVerification',
     'wallet/identity:changePinValue',
-    'wallet/identity:changeSmsCodeValue',
+    'wallet/identity:expandField',
     'wallet/identity:getIdentityInformation',
     'wallet/identity:goTo',
     'wallet/identity:setFocusedPin',
-    'wallet/identity:expandField',
     'wallet/identity:saveToBlockchain'
   ]
 })
@@ -27,10 +23,6 @@ import WalletError from '../../common/error'
 export default class WalletIdentityScreen extends React.Component {
   static propTypes = {
     changePinValue: React.PropTypes.func.isRequired,
-    changeSmsCodeValue: React.PropTypes.func.isRequired,
-    children: React.PropTypes.node,
-    closeConfirmDialog: React.PropTypes.func.isRequired,
-    configSimpleDialog: React.PropTypes.func.isRequired,
     confirmEmail: React.PropTypes.func.isRequired,
     confirmPhone: React.PropTypes.func.isRequired,
     expandField: React.PropTypes.func,
@@ -42,7 +34,6 @@ export default class WalletIdentityScreen extends React.Component {
     resendVerificationSms: React.PropTypes.func,
     saveToBlockchain: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired,
     startEmailVerification: React.PropTypes.func.isRequired,
     startPhoneVerification: React.PropTypes.func.isRequired
   }
@@ -52,8 +43,7 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   render() {
-    const { identity } = this.props
-    if (identity.error) {
+    if (this.props.identity.error) {
       return (<WalletError
         message={'...oops something went wrong! We were not able to load ' +
         'your data.'}
@@ -62,16 +52,15 @@ export default class WalletIdentityScreen extends React.Component {
     }
 
     return (<Presentation
-      identity={identity}
+      identity={this.props.identity}
       expandField={this.props.expandField}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
       goTo={this.props.goTo}
       showUserInfo={this.props.openConfirmDialog}
-      requestIdCardVerification={
-        ({title, message, rightButtonLabel, leftButtonLabel, index}) =>
-          this.props.openConfirmDialog(title, message, rightButtonLabel,
-          () => { this.props.saveToBlockchain(index) }, leftButtonLabel)
+      requestIdCardVerification={({title, message, rightButtonLabel, leftButtonLabel, index}) => // eslint-disable-line max-len
+        this.props.openConfirmDialog(title, message, rightButtonLabel,
+        () => { this.props.saveToBlockchain(0) }, leftButtonLabel)
       }
       requestVerificationCode={(...args) => this.requestVerification(...args)}
       resendVerificationCode={(...args) => this.showVerificationWindow(...args,

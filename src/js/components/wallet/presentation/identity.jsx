@@ -1,17 +1,16 @@
 import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
+import { TextField, Divider, List, ListItem } from 'material-ui'
 
 import Loading from 'components/common/loading'
 import { CommunicationCall, CommunicationEmail } from 'material-ui/svg-icons'
-import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
 
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
 import {
   PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
-  PassportsList, InfoDetails
+  PassportsList, InfoDetails, IdentityAvatar
 } from './ui'
 
 const STYLES = {
@@ -37,9 +36,6 @@ const STYLES = {
       textAlign: 'right'
     }
   },
-  avatar: {
-    marginTop: '10px'
-  },
   container: {
     marginLeft: '10px'
   },
@@ -48,17 +44,10 @@ const STYLES = {
   }
 }
 
-const avatar = (<Avatar
-  icon={<CameraIcon viewBox="-3 -3 30 30" />}
-  color={theme.jolocom.gray1}
-  backgroundColor={theme.jolocom.gray3}
-  style={STYLES.avatar} />)
-
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
     changePinValue: React.PropTypes.func.isRequired,
-    children: React.PropTypes.node,
     expandField: React.PropTypes.func.isRequired,
     enterVerificationCode: React.PropTypes.func.isRequired,
     goTo: React.PropTypes.func.isRequired,
@@ -103,7 +92,7 @@ export default class WalletIdentity extends React.Component {
                   webId={identity.webId}
                   username={identity.username.value} />
                 }
-                leftAvatar={avatar}
+                leftAvatar={<IdentityAvatar />}
                 style={STYLES.listItem}>
                 <TextField
                   fullWidth
@@ -203,7 +192,7 @@ export default class WalletIdentity extends React.Component {
               expanded={false}
               goToManagement={() => { goTo('drivingLicence') }} />
           </Block>
-          <br />
+          <br /><br />
         </Content>
       </HalfScreenContainer>
     </TabContainer>)
