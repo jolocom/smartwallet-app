@@ -10,13 +10,8 @@ import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
 import {
-  PlusMenu,
-  TabContainer,
-  HalfScreenContainer,
-  ContactList,
-  IdCardsList,
-  PassportsList,
-  InfoDetails
+  PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
+  PassportsList, InfoDetails
 } from './ui'
 
 const STYLES = {
@@ -53,53 +48,38 @@ const STYLES = {
   }
 }
 
+const avatar = (<Avatar
+  icon={<CameraIcon viewBox="-3 -3 30 30" />}
+  color={theme.jolocom.gray1}
+  backgroundColor={theme.jolocom.gray3}
+  style={STYLES.avatar} />)
+
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
     changePinValue: React.PropTypes.func.isRequired,
     children: React.PropTypes.node,
-    emails: React.PropTypes.array.isRequired,
-    expandedFields: React.PropTypes.object,
     expandField: React.PropTypes.func.isRequired,
     enterVerificationCode: React.PropTypes.func.isRequired,
-    goToContactManagement: React.PropTypes.func.isRequired,
-    goToPassportManagement: React.PropTypes.func.isRequired,
-    goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
-    idCards: React.PropTypes.array,
-    isLoaded: React.PropTypes.bool.isRequired,
-    isError: React.PropTypes.bool.isRequired,
+    goTo: React.PropTypes.func.isRequired,
+    identity: React.PropTypes.object.isRequired,
     onConfirm: React.PropTypes.func.isRequired,
-    onVerify: React.PropTypes.func.isRequired,
-    passports: React.PropTypes.array,
-    pinFocused: React.PropTypes.bool,
-    phones: React.PropTypes.array.isRequired,
     requestVerificationCode: React.PropTypes.func.isRequired,
     resendVerificationCode: React.PropTypes.func.isRequired,
     requestIdCardVerification: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    showUserInfo: React.PropTypes.func.isRequired,
-    username: React.PropTypes.object.isRequired,
-    webId: React.PropTypes.string.isRequired
+    showUserInfo: React.PropTypes.func.isRequired
   }
 
   render() {
     const {
-      username, passports, idCards, isLoaded, webId, showUserInfo, phones,
-      emails, goToContactManagement, goToPassportManagement, changePinValue,
-      requestVerificationCode, resendVerificationCode, enterVerificationCode,
-      setFocusedPin, goToDrivingLicenceManagement, requestIdCardVerification,
-      onConfirm, pinFocused
+      changePinValue, requestVerificationCode, resendVerificationCode,
+      setFocusedPin, requestIdCardVerification, goTo, enterVerificationCode,
+      showUserInfo, identity
     } = this.props
-
-    if (!isLoaded) {
+    if (!identity.loaded) {
       return <Loading />
     }
-
-    const avatar = (<Avatar
-      icon={<CameraIcon viewBox="-3 -3 30 30" />}
-      color={theme.jolocom.gray1}
-      backgroundColor={theme.jolocom.gray3}
-      style={STYLES.avatar} />)
 
     return (<TabContainer>
       <HalfScreenContainer>
@@ -113,15 +93,15 @@ export default class WalletIdentity extends React.Component {
                   showDetails={message => showUserInfo(
                     null,
                     message,
-                    (<CopyToClipboard text={webId}>
+                    (<CopyToClipboard text={identity.webId}>
                       <span>COPY WEBID</span>
                     </CopyToClipboard>),
                     () => {},
                     'ALL RIGHT',
                     STYLES.simpleDialog
                   )}
-                  webId={webId}
-                  username={username.value} />
+                  webId={identity.webId}
+                  username={identity.username.value} />
                 }
                 leftAvatar={avatar}
                 style={STYLES.listItem}>
@@ -132,7 +112,7 @@ export default class WalletIdentity extends React.Component {
                   floatingLabelStyle={STYLES.labelName}
                   underlineShow={false}
                   floatingLabelFixed
-                  value={username.value} />
+                  value={identity.username.value} />
               </ListItem>
               <Divider style={STYLES.divider} />
             </List>
@@ -140,21 +120,21 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <PlusMenu
               name="Contact"
-              choice={[...emails, ...phones].length > 0}
-              expanded={this.props.expandedFields.contact}
+              choice={identity.contact.emails.length + identity.contact.phones.length > 0} // eslint-disable-line max-len
+              expanded={identity.expandedFields.contact}
               expand={(value) => {
                 this.props.expandField('contact', value)
               }}
-              goToManagement={goToContactManagement} />
+              goToManagement={() => { goTo('contact') }} />
           </Block>
           {
-            this.props.expandedFields.contact
+            identity.expandedFields.contact
             ? <Block style={STYLES.innerContainer}>
               <ContactList
-                fields={phones}
+                fields={identity.contact.phones}
                 changePinValue={changePinValue}
-                pinFocused={pinFocused}
-                onConfirm={onConfirm}
+                pinFocused={identity.contact.isCodeInputFieldFocused}
+                onConfirm={requestVerificationCode}
                 icon={CommunicationCall}
                 setFocusedPin={setFocusedPin}
                 requestVerificationCode={requestVerificationCode}
@@ -163,11 +143,11 @@ export default class WalletIdentity extends React.Component {
                 labelText="Phone Number"
                 attrType="phone" />
               <ContactList
-                fields={emails}
-                onConfirm={onConfirm}
+                fields={identity.contact.emails}
+                onConfirm={requestVerificationCode}
                 changePinValue={changePinValue}
                 setFocusedPin={setFocusedPin}
-                pinFocused={pinFocused}
+                pinFocused={identity.contact.isCodeInputFieldFocused}
                 requestVerificationCode={requestVerificationCode}
                 resendVerificationCode={resendVerificationCode}
                 enterVerificationCode={enterVerificationCode}
@@ -180,35 +160,35 @@ export default class WalletIdentity extends React.Component {
           <Block>
             <PlusMenu
               name="Passport"
-              expanded={this.props.expandedFields.passports}
+              expanded={identity.expandedFields.passports}
               expand={(value) => {
                 this.props.expandField('passports', value)
               }}
-              choice={passports.length > 0}
-              goToManagement={goToPassportManagement} />
+              choice={identity.passports.length > 0}
+              goToManagement={() => { goTo('passport') }} />
           </Block>
           <Block style={STYLES.innerContainer}>
             {
-              this.props.expandedFields.passports
-              ? <PassportsList passports={passports} />
+              identity.expandedFields.passports
+              ? <PassportsList passports={identity.passports} />
               : null
             }
           </Block>
           <Block>
             <PlusMenu
               name="ID Card"
-              choice={idCards.length > 0}
-              expanded={this.props.expandedFields.idCards}
+              choice={identity.idCards.length > 0}
+              expanded={identity.expandedFields.idCards}
               expand={(value) => {
                 this.props.expandField('idCards', value)
               }}
-              goToManagement={goToPassportManagement} />
+              goToManagement={() => { goTo('idCard') }} />
           </Block>
           <Block style={STYLES.innerContainer}>
           {
-            this.props.expandedFields.idCards
+            identity.expandedFields.idCards
             ? <IdCardsList
-              idCards={idCards}
+              idCards={identity.idCards}
               requestIdCardVerification={requestIdCardVerification} />
               : null
             }
@@ -221,7 +201,7 @@ export default class WalletIdentity extends React.Component {
               }}
               choice={false}
               expanded={false}
-              goToManagement={goToDrivingLicenceManagement} />
+              goToManagement={() => { goTo('drivingLicence') }} />
           </Block>
           <br />
         </Content>

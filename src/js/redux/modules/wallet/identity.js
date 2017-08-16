@@ -2,55 +2,23 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 import util from 'lib/util'
-// import WebIdAgent from 'lib/agents/webid'
 
+const __WINDOW_TO_URL__ = {
+  contact: '/wallet/identity/contact',
+  drivingLicence: '/wallet/identity/drivers-licence',
+  identity: '/wallet/identity/',
+  passport: '/wallet/identity/passport/add',
+  idCard: '/wallet/identity/id-card'
+}
 const actions = module.exports = makeActions('wallet/identity', {
-  goToContactManagement: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch) => {
-        dispatch(router.pushRoute('/wallet/identity/contact'))
-      }
-    }
-  },
   changeSmsCodeValue: {
     expectedParams: ['value', 'index']
   },
   changePinValue: {
     expectedParams: ['attrType', 'value', 'index', 'codeType']
   },
-  setFocusedPin: {
-    expectedParams: ['value', 'index']
-  },
-  goToPassportManagement: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch) => {
-        dispatch(router.pushRoute('/wallet/identity/passport/add'))
-      }
-    }
-  },
-  goToDrivingLicenceManagement: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch) => {
-        dispatch(router.pushRoute('/wallet/identity/drivers-licence/add'))
-      }
-    }
-  },
-  setSmsVerificationCodeStatus: {
-    expectedParams: ['field', 'index', 'value']
-  },
   expandField: {
     expectedParams: ['field', 'value']
-  },
-  goToIdentity: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch) => {
-        dispatch(router.pushRoute('/wallet/identity/'))
-      }
-    }
   },
   getIdCardVerifications: {
     expectedParams: [],
@@ -64,18 +32,6 @@ const actions = module.exports = makeActions('wallet/identity', {
             identityAddress: services.auth.currentUser.wallet.identityAddress
           })
           return numOfVerification.toNumber()
-        }))
-      }
-    }
-  },
-  saveToBlockchain: {
-    expectedParams: ['index'],
-    async: true,
-    creator: (index) => {
-      return (dispatch, getState, {services, backend}) => {
-        const idCard = getState().toJS().wallet.identity.idCards[index]
-        dispatch(actions.saveToBlockchain.buildAction(index, () => {
-          return storeIdCardDetailsInBlockchain({idCard, services})
         }))
       }
     }
@@ -94,6 +50,32 @@ const actions = module.exports = makeActions('wallet/identity', {
         ))
       }
     }
+  },
+  goTo: {
+    expectedParams: ['value'],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(router.pushRoute(__WINDOW_TO_URL__[params]))
+      }
+    }
+  },
+  saveToBlockchain: {
+    expectedParams: ['index'],
+    async: true,
+    creator: (index) => {
+      return (dispatch, getState, {services, backend}) => {
+        const idCard = getState().toJS().wallet.identity.idCards[index]
+        dispatch(actions.saveToBlockchain.buildAction(index, () => {
+          return storeIdCardDetailsInBlockchain({idCard, services})
+        }))
+      }
+    }
+  },
+  setFocusedPin: {
+    expectedParams: ['value', 'index']
+  },
+  setSmsVerificationCodeStatus: {
+    expectedParams: ['field', 'index', 'value']
   }
 })
 
@@ -207,6 +189,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.saveToBlockchain.id_success:
       return state.mergeIn(['idCards', '0'], {savedToBlockchain: true})
+
     case actions.getIdentityInformation.id_fail:
       return mapBackendToStateError(state)
 
