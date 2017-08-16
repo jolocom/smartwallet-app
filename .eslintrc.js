@@ -9,7 +9,8 @@ module.exports = {
         "before": false,
         "beforeEach": false,
         "after": false,
-        "afterEach": false
+        "afterEach": false,
+        "IDENTITY_GATEWAY_URL": false
     },
     "extends": ["standard", "standard-jsx", "standard-react"],
     "parser": "babel-eslint",
