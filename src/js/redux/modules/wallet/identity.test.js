@@ -65,56 +65,16 @@ describe('# Wallet identity redux module', () => {
   })
 
   describe('# actions ', () => {
-    it('goToDrivingLicenceManagement should redirect to drivering licence management', () => { // eslint-disable-line max-len
-      const dispatch = stub()
-      const action = identity.actions.goToDrivingLicenceManagement()
-      action(dispatch)
-      expect(dispatch.called).to.be.true
-    })
-    it('goToPassportManagement should redirect the user to passport management',
+    it('goTo should redirect the user to the correct screen',
       () => {
         const dispatch = stub()
-        const thunk = identity.actions.goToPassportManagement()
-        thunk(dispatch)
-        expect(dispatch.called).to.be.true
-        expect(dispatch.calls).to.deep.equal([{
-          args: [{
-            payload: {
-              args: ['/wallet/identity/passport/add'],
-              method: 'push'
-            },
-            type: '@@router/CALL_HISTORY_METHOD'
-          }]
-        }])
-      }
-    )
-    it('goToContactManagement should redirect the user to contact management',
-      () => {
-        const dispatch = stub()
-        const thunk = identity.actions.goToContactManagement()
+        const thunk = identity.actions.goTo('contact')
         thunk(dispatch)
         expect(dispatch.called).to.be.true
         expect(dispatch.calls).to.deep.equal([{
           args: [{
             payload: {
               args: ['/wallet/identity/contact'],
-              method: 'push'
-            },
-            type: '@@router/CALL_HISTORY_METHOD'
-          }]
-        }])
-      }
-    )
-    it('goToIdentity should redirect the user to the wallet Identity Tab',
-      () => {
-        const dispatch = stub()
-        const thunk = identity.actions.goToIdentity()
-        thunk(dispatch)
-        expect(dispatch.called).to.be.true
-        expect(dispatch.calls).to.deep.equal([{
-          args: [{
-            payload: {
-              args: ['/wallet/identity/'],
               method: 'push'
             },
             type: '@@router/CALL_HISTORY_METHOD'
@@ -134,7 +94,6 @@ describe('# Wallet identity redux module', () => {
       const dispatch = stub()
       const thunk = identity.actions.getIdentityInformation()
       thunk(dispatch, getState, {services})
-
       expect(dispatch.called).to.be.true
     })
   })
