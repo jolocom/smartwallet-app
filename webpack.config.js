@@ -1,6 +1,11 @@
 var webpack = require('webpack')
 var path = require('path')
 
+var defaultGatewayUrl = ''
+if (process.env.USE_LOCAL_GATEWAY === 'true') {
+  defaultGatewayUrl = 'http://localhost:5678'
+}
+
 module.exports = {
   entry: [
     'babel-polyfill',
@@ -11,6 +16,9 @@ module.exports = {
     './src/js/main.jsx',
     './src/index.html'
   ],
+  stats: {
+    errorDetails: true
+  },
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
     root: path.join(__dirname, 'src', 'js'),
@@ -33,7 +41,12 @@ module.exports = {
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'IDENTITY_GATEWAY_URL': process.env.IDENTITY_GATEWAY_URL
+      ? '"' + process.env.IDENTITY_GATEWAY_URL + '"'
+      : '"' + defaultGatewayUrl + '"'
+    })
   ],
   module: {
     loaders: [
