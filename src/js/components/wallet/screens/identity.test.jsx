@@ -4,8 +4,9 @@ import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
 import WalletIdentityScreen from './identity'
+import Presentation from '../presentation/identity'
 
-describe.only('(Component) WalletIdentityScreen', () => {
+describe('(Component) WalletIdentityScreen', () => {
   it('should render properly the first time', () => {
     const getIdentityInformation = stub()
     const wrapper = shallow(
@@ -63,7 +64,7 @@ describe.only('(Component) WalletIdentityScreen', () => {
       ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
         wallet: {
           identity: {
-            loaded: false,
+            loaded: true,
             webId: '',
             username: {},
             contact: {
@@ -91,7 +92,7 @@ describe.only('(Component) WalletIdentityScreen', () => {
       startEmailVerification={() => {}} />),
     { context: { muiTheme: { } } })
 
-    wrapper.find('WalletIdentity').props().goTo('test')
+    wrapper.find(Presentation).props().goTo('test')
     expect(goTo.called).to.be.true
     expect(goTo.calls).to.deep.equal([{args: ['test']}])
   })

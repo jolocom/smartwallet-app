@@ -10,7 +10,31 @@ describe('(Component) Wallet Identity', function() {
         expandField={() => {}}
         enterVerificationCode={() => {}}
         goTo={() => {}}
-        identity={{}}
+        identity={{
+          expandedFields: {
+            contact: true,
+            idCards: true,
+            passports: true
+          },
+          username: {
+            verified: true,
+            value: 'AnnikaHamman'
+          },
+          contact: {
+            phones: [{
+              number: '+49 176 12345678',
+              type: 'mobile',
+              verified: true
+            }],
+            emails: [{
+              address: 'info@jolocom.com',
+              type: 'mobile',
+              verified: true
+            }]
+          },
+          idCards: [],
+          passports: []
+        }}
         requestVerificationCode={() => {}}
         resendVerificationCode={() => {}}
         requestIdCardVerification={() => {}}
