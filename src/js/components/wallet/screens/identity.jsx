@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'redux/utils'
 import Presentation from '../presentation/identity'
 import WalletError from '../../common/error'
+import Loading from 'components/common/loading'
 
 @connect({
   props: ['wallet.identity'],
@@ -51,6 +52,10 @@ export default class WalletIdentityScreen extends React.Component {
         onClick={() => this.render()} />)
     }
 
+    if (!this.props.identity.loaded) {
+      return <Loading />
+    }
+
     return (<Presentation
       identity={this.props.identity}
       expandField={this.props.expandField}
@@ -77,7 +82,7 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   requestVerification(...args) {
-    this.showVerificationWindow(args[0], () => {
+    return this.showVerificationWindow(args[0], () => {
       return () => this.showVerificationWindow(args[1], ({attrType, attrValue, index}) => { // eslint-disable-line max-len
         if (attrType === 'phone') {
           return () => this.props.startPhoneVerification({phone: attrValue, index}) // eslint-disable-line max-len

@@ -2,12 +2,11 @@ import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { TextField, Divider, List, ListItem } from 'material-ui'
-
-import Loading from 'components/common/loading'
 import { CommunicationCall, CommunicationEmail } from 'material-ui/svg-icons'
-
 import {theme} from 'styles'
+
 import {Content, Block} from '../../structure'
+
 import {
   PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
   PassportsList, InfoDetails, IdentityAvatar
@@ -29,15 +28,11 @@ const STYLES = {
   divider: {
     marginLeft: '16px'
   },
-  simpleDialog: {
-    contentStyle: {
-    },
-    actionsContainerStyle: {
-      textAlign: 'right'
-    }
+  usernameWindow: {
   },
   container: {
-    marginLeft: '10px'
+    marginLeft: '10px',
+    marginBottom: '66px'
   },
   innerContainer: {
     marginRight: '10px'
@@ -52,7 +47,6 @@ export default class WalletIdentity extends React.Component {
     enterVerificationCode: React.PropTypes.func.isRequired,
     goTo: React.PropTypes.func.isRequired,
     identity: React.PropTypes.object.isRequired,
-    onConfirm: React.PropTypes.func.isRequired,
     requestVerificationCode: React.PropTypes.func.isRequired,
     resendVerificationCode: React.PropTypes.func.isRequired,
     requestIdCardVerification: React.PropTypes.func.isRequired,
@@ -60,12 +54,11 @@ export default class WalletIdentity extends React.Component {
     showUserInfo: React.PropTypes.func.isRequired
   }
 
-  renderContact() {
+  renderContact({ contact, expandedFields }) {
     const {
       changePinValue, requestVerificationCode, resendVerificationCode,
       setFocusedPin, goTo, enterVerificationCode
     } = this.props
-    const { contact, expandedFields } = this.props.identity
     return <div>
       <Block>
         <PlusMenu
@@ -110,99 +103,110 @@ export default class WalletIdentity extends React.Component {
     </div>
   }
 
-  render() {
-    const {
-      requestIdCardVerification, goTo, showUserInfo, identity
-    } = this.props
-    if (!identity.loaded) {
-      return <Loading />
-    }
+  renderIdCards({ idCards, expandedFields }) {
+    return (<span>
+      <Block>
+        <PlusMenu
+          name="ID Card"
+          choice={idCards.length > 0}
+          expanded={expandedFields.idCards}
+          expand={(value) => {
+            this.props.expandField('idCards', value)
+          }}
+          goToManagement={() => { this.props.goTo('idCard') }} />
+      </Block>
+      <Block style={STYLES.innerContainer}>
+      {
+        expandedFields.idCards
+        ? <IdCardsList
+          idCards={idCards}
+          requestIdCardVerification={this.props.requestIdCardVerification} />
+          : null
+        }
+      </Block>
+    </span>)
+  }
 
+  renderPassports({ expandedFields, passports }) {
+    return (<span>
+      <Block>
+        <PlusMenu
+          name="Passport"
+          expanded={expandedFields.passports}
+          expand={(value) => {
+            this.props.expandField('passports', value)
+          }}
+          choice={passports.length > 0}
+          goToManagement={() => { this.props.goTo('passport') }} />
+      </Block>
+      <Block style={STYLES.innerContainer}>
+        {
+          expandedFields.passports
+          ? <PassportsList passports={passports} />
+          : null
+        }
+      </Block>
+    </span>)
+  }
+
+  renderDrivingLicence() {
+    return (<Block>
+      <PlusMenu
+        name="Driving License"
+        expand={(value) => {
+          this.props.expandField('drivingLicence', value)
+        }}
+        choice={false}
+        expanded={false}
+        goToManagement={() => { this.props.goTo('drivingLicence') }} />
+    </Block>)
+  }
+
+  renderUsername({ webId, username }) {
+    return (<Block>
+      <List>
+        <ListItem
+          key={1}
+          disabled
+          rightIcon={<InfoDetails
+            showDetails={message => this.props.showUserInfo(
+              null,
+              message,
+              (<CopyToClipboard text={webId}>
+                <span>COPY WEBID</span>
+              </CopyToClipboard>),
+              () => {},
+              'ALL RIGHT',
+              STYLES.usernameWindow
+            )}
+            webId={webId}
+            username={username.value} />
+          }
+          leftAvatar={<IdentityAvatar />}
+          style={STYLES.listItem}>
+          <TextField
+            fullWidth
+            floatingLabelText="Name"
+            inputStyle={STYLES.inputName}
+            floatingLabelStyle={STYLES.labelName}
+            underlineShow={false}
+            floatingLabelFixed
+            value={username.value} />
+        </ListItem>
+        <Divider style={STYLES.divider} />
+      </List>
+    </Block>)
+  }
+
+  render() {
     return (<TabContainer>
       <HalfScreenContainer>
         <Content style={STYLES.container}>
-          <Block>
-            <List>
-              <ListItem
-                key={1}
-                disabled
-                rightIcon={<InfoDetails
-                  showDetails={message => showUserInfo(
-                    null,
-                    message,
-                    (<CopyToClipboard text={identity.webId}>
-                      <span>COPY WEBID</span>
-                    </CopyToClipboard>),
-                    () => {},
-                    'ALL RIGHT',
-                    STYLES.simpleDialog
-                  )}
-                  webId={identity.webId}
-                  username={identity.username.value} />
-                }
-                leftAvatar={<IdentityAvatar />}
-                style={STYLES.listItem}>
-                <TextField
-                  fullWidth
-                  floatingLabelText="Name"
-                  inputStyle={STYLES.inputName}
-                  floatingLabelStyle={STYLES.labelName}
-                  underlineShow={false}
-                  floatingLabelFixed
-                  value={identity.username.value} />
-              </ListItem>
-              <Divider style={STYLES.divider} />
-            </List>
-          </Block>
-          {this.renderContact()}
-          <Block>
-            <PlusMenu
-              name="Passport"
-              expanded={identity.expandedFields.passports}
-              expand={(value) => {
-                this.props.expandField('passports', value)
-              }}
-              choice={identity.passports.length > 0}
-              goToManagement={() => { goTo('passport') }} />
-          </Block>
-          <Block style={STYLES.innerContainer}>
-            {
-              identity.expandedFields.passports
-              ? <PassportsList passports={identity.passports} />
-              : null
-            }
-          </Block>
-          <Block>
-            <PlusMenu
-              name="ID Card"
-              choice={identity.idCards.length > 0}
-              expanded={identity.expandedFields.idCards}
-              expand={(value) => {
-                this.props.expandField('idCards', value)
-              }}
-              goToManagement={() => { goTo('idCard') }} />
-          </Block>
-          <Block style={STYLES.innerContainer}>
-          {
-            identity.expandedFields.idCards
-            ? <IdCardsList
-              idCards={identity.idCards}
-              requestIdCardVerification={requestIdCardVerification} />
-              : null
-            }
-          </Block>
-          <Block>
-            <PlusMenu
-              name="Driving License"
-              expand={(value) => {
-                this.props.expandField('drivingLicence', value)
-              }}
-              choice={false}
-              expanded={false}
-              goToManagement={() => { goTo('drivingLicence') }} />
-          </Block>
-          <br />
-          <br />
+          {this.renderUsername(this.props.identity)}
+          {this.renderContact(this.props.identity)}
+          {this.renderPassports(this.props.identity)}
+          {this.renderIdCards(this.props.identity)}
+          {this.renderDrivingLicence()}
         </Content>
       </HalfScreenContainer>
     </TabContainer>)
