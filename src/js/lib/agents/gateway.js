@@ -30,11 +30,20 @@ export default class GatewayAgent {
   }
 
   getBalanceEther({userName, mainAddress}) {
-    // placeholder
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/ethereum/get-balance`,
+      JSON.stringify({mainAddress}),
+      {'Content-type': 'application/json'}
+    )
   }
 
-  sendEther({userName, mainAddress, receiver}) {
-    // placeholder
+  sendEther({userName, mainAddress, receiverAddress, amountEth}) {
+    // console.log('SEND BalanceEther: ', mainAddress, receiverAddress, amountEth)
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/ethereum/send-ether`,
+      JSON.stringify({mainAddress, receiverAddress, amountEth}),
+      {'Content-type': 'application/json'}
+    )
   }
 
   createEthereumIdentityContract({userName, mainAddress, seedPhrase}) {
@@ -88,10 +97,10 @@ export default class GatewayAgent {
     )
   }
 
-  getMainAddress({seedPhrase}) {
+  getMainAddress({userName, seedPhrase}) {
     console.log('GET MAIN ADDRESS: ', seedPhrase)
     return this._httpAgent.post(
-      `${this._gatewayUrl}/ethereum/main-address`,
+      `${this._gatewayUrl}/${userName}/ethereum`,
       JSON.stringify({seedPhrase}),
       {'Content-type': 'application/json'}
     )

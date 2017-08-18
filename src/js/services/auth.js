@@ -39,8 +39,8 @@ export default class AuthService extends EventEmitter {
     return this.backend.register({userName, seedPhrase})
   }
 
-  getMainAddress({seedPhrase}) {
-    return this.backend.getMainAddress({seedPhrase})
+  getMainAddress({userName, seedPhrase}) {
+    return this.backend.getMainAddress({userName, seedPhrase})
   }
 
   _setCurrentUser(user) {
