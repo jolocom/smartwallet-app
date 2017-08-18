@@ -22,12 +22,32 @@ export default class GatewayAgent {
   //   )
   // }
 
+  retrieveEtherPrice() { // returns {ethForEur: <number>}
+    return this._httpAgent.get(
+      settings.blockchain.jolocomEtherAddress +
+      '/exchange-rate/ether'
+    )
+  }
 
-  buyEtherAndCreateIdentity({stripeToken, seedPhrase, userName}) {
-    console.log(stripeToken, seedPhrase, userName)
+  getBalanceEther({userName, mainAddress}) {
+    // placeholder
+  }
+
+  sendEther({userName, mainAddress, receiver}) {
+    // placeholder
+  }
+
+  createEthereumIdentityContract({userName, mainAddress, seedPhrase}) {
+    return this._httpAgent.post(
+      // placeholder
+    )
+  }
+
+  buyEther({stripeToken, mainAddress}) {
+    console.log(stripeToken, mainAddress)
     return this._httpAgent.post(
       'https://verification.jolocom.com/ether/buy/ether',
-      JSON.stringify({stripeToken: JSON.stringify(stripeToken), seedPhrase}),
+      JSON.stringify({stripeToken: JSON.stringify(stripeToken), mainAddress}),
       {
         'Content-type': 'application/json'
       },
@@ -63,8 +83,17 @@ export default class GatewayAgent {
     return this._httpAgent.put(
       `${this._gatewayUrl}/${userName}`,
       JSON.stringify({seedPhrase, email, password}),
-      {'Content-type': 'application/json'},
+      {'Content-type': 'application/json'}
       // {credentials: 'omit'}
+    )
+  }
+
+  getMainAddress({seedPhrase}) {
+    console.log('GET MAIN ADDRESS: ', seedPhrase)
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/ethereum/main-address`,
+      JSON.stringify({seedPhrase}),
+      {'Content-type': 'application/json'}
     )
   }
 

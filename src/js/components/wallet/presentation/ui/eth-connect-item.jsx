@@ -59,7 +59,7 @@ export default class EthConnectItem extends React.Component {
 
   }
 
-  renderNoEther() {
+  connectEthNoEther() {
     return (
       <ReactStripeCheckout
         token={(token) => this.props.onToken(token)}
@@ -76,10 +76,16 @@ export default class EthConnectItem extends React.Component {
     )
   }
 
-  renderHasEther() {
+  connectEthHasEther() {
     //? here pass the info to gateway to create identity contract and save
     return (
-      <div></div>
+      <div>
+        <RaisedButton
+          secondary
+          style={STYLES.buttons}
+          onClick={() => {this.props.createEthereumIdentity}}
+          label="CONNECT TO ETHEREUM" />
+      </div>
     )
   }
 
@@ -96,7 +102,7 @@ export default class EthConnectItem extends React.Component {
     return (
       <div>
         <Block style={STYLES.accessContainer}>
-          {this.renderNoEther()}
+          {this.connectEthNoEther()}
           <FlatButton
             onClick={() =>
             this.props.ethConnectInfo({title: popupMessage.title,
