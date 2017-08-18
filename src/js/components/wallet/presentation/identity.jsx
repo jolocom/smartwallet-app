@@ -1,23 +1,15 @@
 import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { TextField, Divider, List, ListItem, Avatar } from 'material-ui'
-
-import Loading from 'components/common/loading'
+import { TextField, Divider, List, ListItem } from 'material-ui'
 import { CommunicationCall, CommunicationEmail } from 'material-ui/svg-icons'
-import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
-
 import {theme} from 'styles'
+
 import {Content, Block} from '../../structure'
+
 import {
-  PlusMenu,
-  TabContainer,
-  HalfScreenContainer,
-  ContactList,
-  IdCardsList,
-  PassportsList,
-  InfoDetails,
-  EthConnectItem
+  PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
+  PassportsList, InfoDetails, IdentityAvatar, EthConnectItem
 } from './ui'
 
 const STYLES = {
@@ -36,18 +28,11 @@ const STYLES = {
   divider: {
     marginLeft: '16px'
   },
-  simpleDialog: {
-    contentStyle: {
-    },
-    actionsContainerStyle: {
-      textAlign: 'right'
-    }
-  },
-  avatar: {
-    marginTop: '10px'
+  usernameWindow: {
   },
   container: {
-    marginLeft: '10px'
+    marginLeft: '10px',
+    marginBottom: '66px'
   },
   innerContainer: {
     marginRight: '10px'
@@ -58,179 +43,175 @@ const STYLES = {
 export default class WalletIdentity extends React.Component {
   static propTypes = {
     changePinValue: React.PropTypes.func.isRequired,
-    children: React.PropTypes.node,
-    emails: React.PropTypes.array.isRequired,
-    expandedFields: React.PropTypes.object,
     expandField: React.PropTypes.func.isRequired,
     enterVerificationCode: React.PropTypes.func.isRequired,
-    goToContactManagement: React.PropTypes.func.isRequired,
-    goToPassportManagement: React.PropTypes.func.isRequired,
-    goToDrivingLicenceManagement: React.PropTypes.func.isRequired,
-    idCards: React.PropTypes.array,
-    isLoaded: React.PropTypes.bool.isRequired,
-    isError: React.PropTypes.bool.isRequired,
-    onConfirm: React.PropTypes.func.isRequired,
-    onVerify: React.PropTypes.func.isRequired,
-    passports: React.PropTypes.array,
-    pinFocused: React.PropTypes.bool,
-    phones: React.PropTypes.array.isRequired,
+    goTo: React.PropTypes.func.isRequired,
+    identity: React.PropTypes.object.isRequired,
     requestVerificationCode: React.PropTypes.func.isRequired,
     resendVerificationCode: React.PropTypes.func.isRequired,
     requestIdCardVerification: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    showUserInfo: React.PropTypes.func.isRequired,
-    username: React.PropTypes.object.isRequired,
-    webId: React.PropTypes.string.isRequired
+    showUserInfo: React.PropTypes.func.isRequired
+  }
+
+  renderContact({ contact, expandedFields }) {
+    const {
+      changePinValue, requestVerificationCode, resendVerificationCode,
+      setFocusedPin, goTo, enterVerificationCode
+    } = this.props
+    return <div>
+      <Block>
+        <PlusMenu
+          name="Contact"
+          choice={contact.emails.length + contact.phones.length > 0} // eslint-disable-line max-len
+          expanded={expandedFields.contact}
+          expand={(value) => {
+            this.props.expandField('contact', value)
+          }}
+          goToManagement={() => { goTo('contact') }} />
+      </Block>
+      {
+        expandedFields.contact
+        ? <Block style={STYLES.innerContainer}>
+          <ContactList
+            fields={contact.phones}
+            changePinValue={changePinValue}
+            pinFocused={contact.isCodeInputFieldFocused}
+            onConfirm={requestVerificationCode}
+            icon={CommunicationCall}
+            setFocusedPin={setFocusedPin}
+            requestVerificationCode={requestVerificationCode}
+            resendVerificationCode={resendVerificationCode}
+            enterVerificationCode={enterVerificationCode}
+            labelText="Phone Number"
+            attrType="phone" />
+          <ContactList
+            fields={contact.emails}
+            onConfirm={requestVerificationCode}
+            changePinValue={changePinValue}
+            setFocusedPin={setFocusedPin}
+            pinFocused={contact.isCodeInputFieldFocused}
+            requestVerificationCode={requestVerificationCode}
+            resendVerificationCode={resendVerificationCode}
+            enterVerificationCode={enterVerificationCode}
+            icon={CommunicationEmail}
+            labelText="Email"
+            attrType="email" />
+        </Block>
+        : null
+      }
+    </div>
+  }
+
+  renderIdCards({ idCards, expandedFields }) {
+    return (<span>
+      <Block>
+        <PlusMenu
+          name="ID Card"
+          choice={idCards.length > 0}
+          expanded={expandedFields.idCards}
+          expand={(value) => {
+            this.props.expandField('idCards', value)
+          }}
+          goToManagement={() => { this.props.goTo('idCard') }} />
+      </Block>
+      <Block style={STYLES.innerContainer}>
+      {
+        expandedFields.idCards
+        ? <IdCardsList
+          idCards={idCards}
+          requestIdCardVerification={this.props.requestIdCardVerification} />
+          : null
+        }
+      </Block>
+    </span>)
+  }
+
+  renderPassports({ expandedFields, passports }) {
+    return (<span>
+      <Block>
+        <PlusMenu
+          name="Passport"
+          expanded={expandedFields.passports}
+          expand={(value) => {
+            this.props.expandField('passports', value)
+          }}
+          choice={passports.length > 0}
+          goToManagement={() => { this.props.goTo('passport') }} />
+      </Block>
+      <Block style={STYLES.innerContainer}>
+        {
+          expandedFields.passports
+          ? <PassportsList passports={passports} />
+          : null
+        }
+      </Block>
+    </span>)
+  }
+
+  renderDrivingLicence() {
+    return (<Block>
+      <PlusMenu
+        name="Driving License"
+        expand={(value) => {
+          this.props.expandField('drivingLicence', value)
+        }}
+        choice={false}
+        expanded={false}
+        goToManagement={() => { this.props.goTo('drivingLicence') }} />
+    </Block>)
+  }
+
+  renderUsername({ webId, username }) {
+    return (<Block>
+      <List>
+        <ListItem
+          key={1}
+          disabled
+          rightIcon={<InfoDetails
+            showDetails={message => this.props.showUserInfo(
+              null,
+              message,
+              (<CopyToClipboard text={webId}>
+                <span>COPY WEBID</span>
+              </CopyToClipboard>),
+              () => {},
+              'ALL RIGHT',
+              STYLES.usernameWindow
+            )}
+            webId={webId}
+            username={username.value} />
+          }
+          leftAvatar={<IdentityAvatar />}
+          style={STYLES.listItem}>
+          <TextField
+            fullWidth
+            floatingLabelText="Name"
+            inputStyle={STYLES.inputName}
+            floatingLabelStyle={STYLES.labelName}
+            underlineShow={false}
+            floatingLabelFixed
+            value={username.value} />
+        </ListItem>
+        <Divider style={STYLES.divider} />
+      </List>
+    </Block>)
   }
 
   render() {
-    console.log(this.props)
-    const {
-      username, passports, idCards, isLoaded, webId, showUserInfo, phones,
-      emails, goToContactManagement, goToPassportManagement, changePinValue,
-      requestVerificationCode, resendVerificationCode, enterVerificationCode,
-      setFocusedPin, goToDrivingLicenceManagement, requestIdCardVerification,
-      onConfirm, pinFocused, ethConnectInfo, buyEther
-    } = this.props
-
-    if (!isLoaded) {
-      return <Loading />
-    }
-
-    const avatar = (<Avatar
-      icon={<CameraIcon viewBox="-3 -3 30 30" />}
-      color={theme.jolocom.gray1}
-      backgroundColor={theme.jolocom.gray3}
-      style={STYLES.avatar} />)
-
     return (<TabContainer>
       <HalfScreenContainer>
         <Content style={STYLES.container}>
+          {this.renderUsername(this.props.identity)}
           <Block>
-            <List>
-              <ListItem
-                key={1}
-                disabled
-                rightIcon={<InfoDetails
-                  showDetails={message => showUserInfo(
-                    null,
-                    message,
-                    (<CopyToClipboard text={webId}>
-                      <span>COPY WEBID</span>
-                    </CopyToClipboard>),
-                    () => {},
-                    'ALL RIGHT',
-                    STYLES.simpleDialog
-                  )}
-                  webId={webId}
-                  username={username.value} />
-                }
-                leftAvatar={avatar}
-                style={STYLES.listItem}>
-                <TextField
-                  fullWidth
-                  floatingLabelText="Name"
-                  inputStyle={STYLES.inputName}
-                  floatingLabelStyle={STYLES.labelName}
-                  underlineShow={false}
-                  floatingLabelFixed
-                  value={username.value} />
-              </ListItem>
-              <Divider style={STYLES.divider} />
-            </List>
             <EthConnectItem
-              onToken={buyEther}
-              ethConnectInfo={ethConnectInfo}/>
+              onToken={this.props.buyEther}
+              ethConnectInfo={this.props.ethConnectInfo}/>
           </Block>
-          <Block>
-            <PlusMenu
-              name="Contact"
-              choice={[...emails, ...phones].length > 0}
-              expanded={this.props.expandedFields.contact}
-              expand={(value) => {
-                this.props.expandField('contact', value)
-              }}
-              goToManagement={goToContactManagement} />
-          </Block>
-          {
-            this.props.expandedFields.contact
-            ? <Block style={STYLES.innerContainer}>
-              <ContactList
-                fields={phones}
-                ethConnectInfo={ethConnectInfo}
-                changePinValue={changePinValue}
-                pinFocused={pinFocused}
-                onConfirm={onConfirm}
-                icon={CommunicationCall}
-                setFocusedPin={setFocusedPin}
-                requestVerificationCode={requestVerificationCode}
-                resendVerificationCode={resendVerificationCode}
-                enterVerificationCode={enterVerificationCode}
-                labelText="Phone Number"
-                attrType="phone" />
-              <ContactList
-                fields={emails}
-                ethConnectInfo={ethConnectInfo}
-                onConfirm={onConfirm}
-                changePinValue={changePinValue}
-                setFocusedPin={setFocusedPin}
-                pinFocused={pinFocused}
-                requestVerificationCode={requestVerificationCode}
-                resendVerificationCode={resendVerificationCode}
-                enterVerificationCode={enterVerificationCode}
-                icon={CommunicationEmail}
-                labelText="Email"
-                attrType="email" />
-            </Block>
-            : null
-          }
-          <Block>
-            <PlusMenu
-              name="Passport"
-              expanded={this.props.expandedFields.passports}
-              expand={(value) => {
-                this.props.expandField('passports', value)
-              }}
-              choice={passports.length > 0}
-              goToManagement={goToPassportManagement} />
-          </Block>
-          <Block style={STYLES.innerContainer}>
-            {
-              this.props.expandedFields.passports
-              ? <PassportsList passports={passports} />
-              : null
-            }
-          </Block>
-          <Block>
-            <PlusMenu
-              name="ID Card"
-              choice={idCards.length > 0}
-              expanded={this.props.expandedFields.idCards}
-              expand={(value) => {
-                this.props.expandField('idCards', value)
-              }}
-              goToManagement={goToPassportManagement} />
-          </Block>
-          <Block style={STYLES.innerContainer}>
-          {
-            this.props.expandedFields.idCards
-            ? <IdCardsList
-              idCards={idCards}
-              requestIdCardVerification={requestIdCardVerification} />
-              : null
-            }
-          </Block>
-          <Block>
-            <PlusMenu
-              name="Driving License"
-              expand={(value) => {
-                this.props.expandField('drivingLicence', value)
-              }}
-              choice={false}
-              expanded={false}
-              goToManagement={goToDrivingLicenceManagement} />
-          </Block>
-          <br />
+          {this.renderContact(this.props.identity)}
+          {this.renderPassports(this.props.identity)}
+          {this.renderIdCards(this.props.identity)}
+          {this.renderDrivingLicence()}
         </Content>
       </HalfScreenContainer>
     </TabContainer>)

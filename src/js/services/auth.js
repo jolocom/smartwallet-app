@@ -74,6 +74,21 @@ export class Wallet {
     })
   }
 
+  proxyGet(requestUrl) {
+    return this._gateway.proxyGet(requestUrl)
+  }
+
+  verify({identity, attributeType, attributeId, attributeValue}) {
+    return this._gateway.verify({
+      userName: this.userName,
+      seedPhrase: this.seedPhrase,
+      identity,
+      attributeType,
+      attributeId,
+      attributeValue
+    })
+  }
+
   async getUserInformation() {
     try {
       const [email, phone, passport, idcard] =

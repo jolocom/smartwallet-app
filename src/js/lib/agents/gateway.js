@@ -151,6 +151,13 @@ export default class GatewayAgent {
     )
   }
 
+  proxyGet(requestUrl) {
+    // TODO put correct url
+    return this._httpAgent.get(
+      requestUrl
+    )
+  }
+
   storeAttribute({userName, attributeType, attributeId, attributeData}) {
     let url = `${this._gatewayUrl}/${userName}/identity/${attributeType}`
     if (attributeId) {

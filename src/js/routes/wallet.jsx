@@ -53,6 +53,15 @@ import SingleSignOnAccessRightScreen from
 import SingleSignOnSharedDatatScreen from
   'components/single-sign-on/screens/shared-data'
 
+import {
+  VerificationDataScreen,
+  VerificationFaceScreen,
+  VerificationTransitionScreen,
+  VerificationCountryScreen,
+  VerificationDocumentScreen,
+  VerificationResultScreen
+} from 'components/verifier'
+
 export const routes = {
   login: '/login',
   signup: '/registration',
@@ -73,7 +82,18 @@ export const navItems = [{
 function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
-
+    <Route path="verifier"
+      component={VerificationTransitionScreen} />
+    <Route path="verifier/face"
+      component={VerificationFaceScreen} />
+    <Route path="verifier/data"
+      component={VerificationDataScreen} />
+    <Route path="verifier/result"
+      component={VerificationResultScreen} />
+    <Route path="verifier/document"
+      component={VerificationDocumentScreen} />
+    <Route path="verifier/country"
+      component={VerificationCountryScreen} />
     <Route path="registration"
       component={RegistrationNameEntryScreen} />
     <Route path="registration/entropy"
