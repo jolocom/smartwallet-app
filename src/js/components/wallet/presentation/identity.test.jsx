@@ -6,32 +6,40 @@ describe('(Component) Wallet Identity', function() {
   it('should render properly the first time', function() {
     shallow(
       (<WalletIdentity
-        username={{ value: '' }}
-        passports={[]}
-        idCards={[]}
-        isLoaded
-        webId={''}
-        emails={[{
-          type: '',
-          address: '',
-          verified: false
-        }]}
-        phones={[{
-          type: '',
-          number: '',
-          verified: false
-        }]}
-        expandedFields={{
-          contact: false,
-          idCards: false,
-          passports: false
+        changePinValue={() => {}}
+        expandField={() => {}}
+        enterVerificationCode={() => {}}
+        goTo={() => {}}
+        identity={{
+          expandedFields: {
+            contact: true,
+            idCards: true,
+            passports: true
+          },
+          username: {
+            verified: true,
+            value: 'AnnikaHamman'
+          },
+          contact: {
+            phones: [{
+              number: '+49 176 12345678',
+              type: 'mobile',
+              verified: true
+            }],
+            emails: [{
+              address: 'info@jolocom.com',
+              type: 'mobile',
+              verified: true
+            }]
+          },
+          idCards: [],
+          passports: []
         }}
-        goToContactManagement={() => {}}
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        onConfirm={() => {}}
-        onVerify={() => {}}
-        isError
+        requestVerificationCode={() => {}}
+        resendVerificationCode={() => {}}
+        requestIdCardVerification={() => {}}
+        setFocusedPin={() => {}}
+        showUserInfo={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
