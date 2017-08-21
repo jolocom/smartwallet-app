@@ -172,9 +172,9 @@ const actions = module.exports = makeActions('registration', {
               seedPhrase: state.passphrase.phrase
             })
 
-            await services.auth.getMainAddress({
-              seedPhrase: state.passphrase.phrase
-            })
+            // await services.auth.getMainAddress({
+            //   seedPhrase: state.passphrase.phrase
+            // })
 
             await services.auth.login({
               seedPhrase: state.passphrase.phrase,

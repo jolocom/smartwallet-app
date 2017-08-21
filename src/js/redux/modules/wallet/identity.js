@@ -86,15 +86,11 @@ const actions = module.exports = makeActions('wallet/identity', {
           console.log('wallet: ', services.auth.currentUser.wallet )
           return backend.gateway.buyEther({
             stripeToken: params,
-            mainAddress: services.auth.currentUser.wallet.mainAddress
+            mainAddress: '0xtesttetstetstetstetstetst'
           }).then((response) => {
-            // dispatch(actions.getBalance())
-            return backend.gateway.createEthereumIdentityContract({
-              seedPhrase: services.auth.currentUser.wallet.seedPhrase,
-              userName: services.auth.currentUser.wallet.userName,
-              mainAddress: services.auth.currentUser.wallet.mainAddress
-            })
-            // return response
+            // console.log('BUY ETHER before create identity: ', response)
+            dispatch(actions.createEthereumIdentity())
+            return result
           })
         }))
       }
@@ -106,13 +102,14 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.createEthereumIdentity.buildAction(params, (backend) => {
+          console.log('in createEthereumIdentityContract')
           return backend.gateway.createEthereumIdentityContract({
             seedPhrase: services.auth.currentUser.wallet.seedPhrase,
             userName: services.auth.currentUser.wallet.userName,
-            mainAddress: services.auth.currentUser.wallet.mainAddress
+            mainAddress: '0xtesttetstetstetstetstetst'
           }).then((response) => {
-            // dispatch(actions.getBalance())
-            // return response
+            // console.log(response)
+            return response
           })
         }))
       }
@@ -249,13 +246,37 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.buyEther.id:
-      return state
+      return state.merge({
+        loaded: false
+      })
 
     case actions.buyEther.id_success:
-      return state
+      return state.merge({
+        loaded: false
+      })
 
     case actions.buyEther.id_fail:
-      return state
+      return state.merge({
+        loaded: true,
+        error: true
+      })
+
+    case actions.createEthereumIdentity.id:
+      return state.merge({
+        loaded: false
+      })
+
+    case actions.createEthereumIdentity.id_success:
+      return state.merge({
+        loaded: true,
+        error: false
+      })
+
+    case actions.createEthereumIdentity.id_fail:
+      return state.merge({
+        loaded: true,
+        error: true
+      })
 
     default:
       return state

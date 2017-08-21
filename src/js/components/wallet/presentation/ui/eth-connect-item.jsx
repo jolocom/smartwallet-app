@@ -4,7 +4,6 @@ import Radium from 'radium'
 import {theme} from 'styles'
 import { List, RaisedButton, FlatButton } from 'material-ui'
 import {Content, Block} from '../../../structure'
-// import { StripeCheckout } from '../stripe-checkout'
 import ReactStripeCheckout from 'react-stripe-checkout'
 import * as settings from 'settings'
 
@@ -29,16 +28,15 @@ const STYLES = {
     backgroundColor: '#f3f3f3',
     backgroundPosition: 'center'
   },
-  accessHeadline: {
+  infoHeadline: {
     fontSize: theme.textStyles.subheadline.fontSize,
     color: theme.textStyles.subheadline.color,
     fontWeight: theme.textStyles.subheadline.fontWeight,
-    lineHeight: '24px'
+    margin: '0px 18px 18px 0px'
   },
   accessMsgHeader: theme.textStyles.sectionheader,
-  accessMsgBody: theme.textStyles.subheadline,
   accessContainer: {
-    padding: '18px 0px 18px 52px'
+    padding: '0px 0px 18px 52px'
   },
   buttons: {
     width: '70%'
@@ -59,54 +57,107 @@ export default class EthConnectItem extends React.Component {
 
   }
 
-  connectEthNoEther() {
-    return (
-      <ReactStripeCheckout
-        token={(token) => this.props.onToken(token)}
-        stripeKey={settings.stripe.publishableKey}
-        name="JOLOCOM SMARTWALLET"
-        description="Add Ether to your Smart Wallet."
-        image="/img/logo.png"
-        panelLabel="Bezahlen">
-        <RaisedButton
-          secondary
-          style={STYLES.buttons}
-          label="CONNECT TO ETHEREUM" />
-      </ReactStripeCheckout>
-    )
-  }
-
-  connectEthHasEther() {
-    //? here pass the info to gateway to create identity contract and save
-    return (
-      <div>
-        <RaisedButton
-          secondary
-          style={STYLES.buttons}
-          onClick={() => {this.props.createEthereumIdentity}}
-          label="CONNECT TO ETHEREUM" />
-      </div>
-    )
+  connectEthereum() {
+    // TODO check if user has already ether
+    if(0) {
+      return (
+          <RaisedButton
+            secondary
+            style={STYLES.buttons}
+            onClick={() => {this.props.createEthereumIdentity()} }
+            label="CONNECT TO ETHEREUM" />
+      )
+    } else {
+      return (
+        <ReactStripeCheckout
+          token={(token) => this.props.onToken(token)}
+          stripeKey={settings.stripe.publishableKey}
+          name="JOLOCOM SMARTWALLET"
+          description="Add Ether to your Smart Wallet."
+          image="/img/logo.png"
+          panelLabel="Bezahlen">
+          <RaisedButton
+            secondary
+            style={STYLES.buttons}
+            label="CONNECT TO ETHEREUM" />
+        </ReactStripeCheckout>
+      )
+    }
   }
 
   render() {
-    console.log(this.props)
-    const popupMessage = {
-      title: 'Why should I connect my infromation to Ethereum?',
-      body: `You can connect your personal validated information to ethreum. Note that
-            during this process an identity smart contract will be created for you where
-            ....if you want to know more how this works, please go to XXXX. Please also
-            note that this step will cost XXX EUR`
+    const whyPopupBody = (
+      <div>
+        <div>
+          To fully use the services of your SmartWallet you need to get your
+          data verified which means that there is a double check from our sides
+          if it is correct and then the fact that it is correct is stated on the
+          <span style={{color: theme.palette.accent1Color}}
+            onClick={() => this.props.confirmDialog(infoPopup)}> blockchain</span>
+        </div><br />
+        <div>
+          With this technology your data is securely locked. We never store your
+          data anywhere. This way only you have access to it, but you can grant
+          or withdraw access to it any time.
+        </div><br />
+        <div>
+          The verification process needs ti be done only once and then you can
+          use the data at any other service.
+        </div><br />
+        <div style={STYLES.accessMsgHeader}>Costs</div><br />
+        <div>Securely locking the data creates transaction costs. Each
+        transaction costs XXX Ether. With signing up for Ethereum you also need
+        to buy some ether.</div>
+      </div>
+    )
+    const whyPopup = {
+      title: 'Why Ethereum?',
+      message: whyPopupBody,
+      rightButtonLabel: 'ALL RIGHT',
+      callback: () => {},
+      leftButtonLabel: 'MORE INFO'
     }
+    const infoPopupBody = (
+      <div>
+        <div>
+          A blockchain is a distributed database where integrity (security
+          from manipulation) is given by a timestamp and a link to the previous data
+          set. These days it is used for cryptocurrency, which means that it is as
+          secure as your bank account.
+        </div><br />
+        <div>
+          We use this technology to lock your data. So only you have access to it.
+        </div>
+      </div>
+    )
+    const infoPopup = {
+      title: 'What is a blockchain?',
+      message: infoPopupBody,
+      rightButtonLabel: 'ALL RIGHT',
+      callback: () => {},
+      leftButtonLabel: 'MORE INFO'
+    }
+    const infoHeadline = (
+      <div>
+        To verify your data, lock it and grant or withdraw
+        access to it, you need to connect your SmartWallet to
+        a <span style={{color: theme.palette.accent1Color,
+            fontWeight: '300'}}
+            onClick={() => this.props.confirmDialog(infoPopup)}>
+            blockchain</span> called Ethereum. The locking
+        of your data costs Ether which is the currency used
+        for transactions on the blockchain.
+      </div>
+    )
 
     return (
       <div>
         <Block style={STYLES.accessContainer}>
-          {this.connectEthNoEther()}
+          <div style={STYLES.infoHeadline}>{infoHeadline}</div>
+          {this.connectEthereum()}
           <FlatButton
             onClick={() =>
-            this.props.ethConnectInfo({title: popupMessage.title,
-              message: popupMessage.body})}>
+            this.props.confirmDialog(whyPopup)}>
             WHY?
           </FlatButton>
         </Block>

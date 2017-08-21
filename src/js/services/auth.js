@@ -40,6 +40,7 @@ export default class AuthService extends EventEmitter {
   }
 
   getMainAddress({userName, seedPhrase}) {
+    // TODO add mainAddress to wallet object
     return this.backend.getMainAddress({userName, seedPhrase})
   }
 

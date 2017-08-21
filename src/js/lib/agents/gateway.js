@@ -22,7 +22,7 @@ export default class GatewayAgent {
   //   )
   // }
 
-  retrieveEtherPrice() { // returns {ethForEur: <number>}
+  retrieveEtherPrice() {
     return this._httpAgent.get(
       settings.blockchain.jolocomEtherAddress +
       '/exchange-rate/ether'
@@ -38,7 +38,8 @@ export default class GatewayAgent {
   }
 
   sendEther({userName, mainAddress, receiverAddress, amountEth}) {
-    // console.log('SEND BalanceEther: ', mainAddress, receiverAddress, amountEth)
+    // console.log('SEND ether')
+    // TODO data and pin ?
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/send-ether`,
       JSON.stringify({mainAddress, receiverAddress, amountEth}),
@@ -47,19 +48,19 @@ export default class GatewayAgent {
   }
 
   createEthereumIdentityContract({userName, mainAddress, seedPhrase}) {
+    console.log('CREATE ETHEREUM IDENTITY')
     return this._httpAgent.post(
-      // placeholder
+      `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
+      JSON.stringify({mainAddress, seedPhrase}),
+      {'Content-type': 'application/json'}
     )
   }
 
   buyEther({stripeToken, mainAddress}) {
-    console.log(stripeToken, mainAddress)
     return this._httpAgent.post(
       'https://verification.jolocom.com/ether/buy/ether',
       JSON.stringify({stripeToken: JSON.stringify(stripeToken), mainAddress}),
-      {
-        'Content-type': 'application/json'
-      },
+      {'Content-type': 'application/json'},
       {credentials: 'omit'}
     )
   }
@@ -98,7 +99,6 @@ export default class GatewayAgent {
   }
 
   getMainAddress({userName, seedPhrase}) {
-    console.log('GET MAIN ADDRESS: ', seedPhrase)
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum`,
       JSON.stringify({seedPhrase}),

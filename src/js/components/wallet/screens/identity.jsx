@@ -8,6 +8,7 @@ import Loading from 'components/common/loading'
   props: ['wallet.identity'],
   actions: [
     'wallet/identity:buyEther',
+    'wallet/identity:createEthereumIdentity',
     'confirmation-dialog:openConfirmDialog',
     'verification:confirmEmail',
     'verification:confirmPhone',
@@ -66,8 +67,9 @@ export default class WalletIdentityScreen extends React.Component {
       expandField={this.props.expandField}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
-      ethConnectInfo={(...args) => {this.ethConnectInfo(...args)} }
+      confirmDialog={(...args) => {this.handleConfirmDialog(...args)} }
       buyEther={(token) => {this.props.buyEther(token)} }
+      createEthereumIdentity={this.props.createEthereumIdentity}
       goTo={this.props.goTo}
       showUserInfo={this.props.openConfirmDialog}
       requestIdCardVerification={({title, message, rightButtonLabel, leftButtonLabel, index}) => // eslint-disable-line max-len
@@ -116,9 +118,8 @@ export default class WalletIdentityScreen extends React.Component {
     }
   }
 
-  ethConnectInfo = ({title, message}) => {
-    // console.log(title, message)
-    this.props.configSimpleDialog(title, message, 'OK', {}, false)
-    this.props.showSimpleDialog()
+  handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len
+    this.props.openConfirmDialog(title, message, rightButtonLabel,
+    callback(), leftButtonLabel)
   }
 }
