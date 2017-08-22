@@ -183,7 +183,7 @@ const actions = module.exports = makeActions('registration', {
 
             dispatch(router.pushRoute('/wallet'))
           } else {
-            console.log('layman registration')
+            // console.log('layman registration')
 
             // return true
             // return services.auth.registerWithCredentials({

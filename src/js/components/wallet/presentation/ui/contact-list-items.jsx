@@ -24,7 +24,6 @@ const attrTypeToKey = (attrType) => (attrType + 's')
 
 const ContactList = ({
   fields,
-  ethConnectInfo,
   requestVerificationCode,
   resendVerificationCode,
   enterVerificationCode,

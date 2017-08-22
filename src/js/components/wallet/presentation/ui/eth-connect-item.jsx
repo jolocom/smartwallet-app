@@ -2,8 +2,8 @@ import React from 'react'
 import Radium from 'radium'
 
 import {theme} from 'styles'
-import { List, RaisedButton, FlatButton } from 'material-ui'
-import {Content, Block} from '../../../structure'
+import { RaisedButton, FlatButton } from 'material-ui'
+import {Block} from '../../../structure'
 import ReactStripeCheckout from 'react-stripe-checkout'
 import * as settings from 'settings'
 
@@ -61,13 +61,13 @@ export default class EthConnectItem extends React.Component {
 
   connectEthereum() {
     // TODO check if user has already ether
-    if(1) {
+    if (1) {
       return (
-          <RaisedButton
-            secondary
-            style={STYLES.buttons}
-            onClick={() => {this.props.createEthereumIdentity()} }
-            label="CONNECT TO ETHEREUM" />
+        <RaisedButton
+          secondary
+          style={STYLES.buttons}
+          onClick={() => { this.props.createEthereumIdentity() }}
+          label="CONNECT TO ETHEREUM" />
       )
     } else {
       return (
@@ -95,7 +95,8 @@ export default class EthConnectItem extends React.Component {
           data verified which means that there is a double check from our sides
           if it is correct and then the fact that it is correct is stated on the
           <span style={{color: theme.palette.accent1Color}}
-            onClick={() => this.props.confirmDialog(infoPopup)}> blockchain</span>
+            onClick={() => this.props.confirmDialog(infoPopup)}> blockchain
+            </span>
         </div><br />
         <div>
           With this technology your data is securely locked. We never store your
@@ -123,12 +124,13 @@ export default class EthConnectItem extends React.Component {
       <div>
         <div>
           A blockchain is a distributed database where integrity (security
-          from manipulation) is given by a timestamp and a link to the previous data
-          set. These days it is used for cryptocurrency, which means that it is as
-          secure as your bank account.
+          from manipulation) is given by a timestamp and a link to the previous
+          data set. These days it is used for cryptocurrency, which means
+          that it is as secure as your bank account.
         </div><br />
         <div>
-          We use this technology to lock your data. So only you have access to it.
+          We use this technology to lock your data. So only you have access
+          to it.
         </div>
       </div>
     )
@@ -141,14 +143,14 @@ export default class EthConnectItem extends React.Component {
     }
     const infoHeadline = (
       <div>
-        To verify your data, lock it and grant or withdraw
-        access to it, you need to connect your SmartWallet to
-        a <span style={{color: theme.palette.accent1Color,
-            fontWeight: '300'}}
-            onClick={() => this.props.confirmDialog(infoPopup)}>
-            blockchain</span> called Ethereum. The locking
-        of your data costs Ether which is the currency used
-        for transactions on the blockchain.
+      To verify your data, lock it and grant or withdraw
+      access to it, you need to connect your SmartWallet to
+      a <span style={{color: theme.palette.accent1Color,
+          fontWeight: '300'}}
+          onClick={() => this.props.confirmDialog(infoPopup)}>
+          blockchain</span> called Ethereum. The locking
+      of your data costs Ether which is the currency used
+      for transactions on the blockchain.
       </div>
     )
 

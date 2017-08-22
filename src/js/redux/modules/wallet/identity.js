@@ -51,7 +51,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getIdCardVerifications.buildAction(params, async() => {
+        dispatch(actions.getIdCardVerifications.buildAction(params, async() => { // eslint-disable-line max-len
           let numOfVerification = await services.auth.currentUser.wallet
           .identityContract.getNumberOfVerifications({
             attributeId: 'idCard',
@@ -92,7 +92,7 @@ const actions = module.exports = makeActions('wallet/identity', {
           })
           .then((response) => {
             dispatch(actions.createEthereumIdentity())
-            return result
+            return response
           })
         }))
       }
@@ -103,7 +103,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        dispatch(actions.createEthereumIdentity.buildAction(params, (backend) => {
+        dispatch(actions.createEthereumIdentity.buildAction(params, (backend) => { // eslint-disable-line max-len
           return services.auth.currentUser.wallet.getMainAddress()
           .then((mainAddress) => {
             return backend.gateway.createEthereumIdentityContract({

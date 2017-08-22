@@ -51,7 +51,10 @@ export default class WalletIdentity extends React.Component {
     resendVerificationCode: React.PropTypes.func.isRequired,
     requestIdCardVerification: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    showUserInfo: React.PropTypes.func.isRequired
+    showUserInfo: React.PropTypes.func.isRequired,
+    buyEther: React.PropTypes.func.isRequired,
+    createEthereumIdentity: React.PropTypes.func.isRequired,
+    confirmDialog: React.PropTypes.func.isRequired
   }
 
   renderContact({ contact, expandedFields }) {

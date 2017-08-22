@@ -47,10 +47,6 @@ export default class WalletIdentityScreen extends React.Component {
     this.props.getIdentityInformation()
   }
 
-  ethConnectInfo() {
-    console.log('wohoooooo')
-  }
-
   render() {
     if (this.props.identity.error) {
       return (<WalletError

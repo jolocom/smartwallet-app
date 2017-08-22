@@ -13,7 +13,6 @@ export default class GatewayAgent {
   //   return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
   // }
 
-
   // createEthereumIdentity({userName, seedPhrase}) {
   //   return this._httpAgent.post(
   //     `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
@@ -38,7 +37,6 @@ export default class GatewayAgent {
   }
 
   sendEther({userName, receiver, amountEther, data, pin, gasInWei}) {
-    // console.log('SEND ether')
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/send-ether`,
       JSON.stringify({receiver, amountEther, data, pin, gasInWei}),
@@ -47,7 +45,7 @@ export default class GatewayAgent {
   }
 
   createEthereumIdentityContract({userName, mainAddress, seedPhrase}) {
-    console.log('CREATE ETHEREUM IDENTITY', userName, mainAddress, seedPhrase)
+    // console.log('CREATE ETHEREUM IDENTITY', userName, mainAddress, seedPhrase)
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
       JSON.stringify({mainAddress, seedPhrase}),
@@ -98,7 +96,6 @@ export default class GatewayAgent {
   }
 
   getMainAddress({userName, seedPhrase}) {
-    console.log('IN GET MAIN ADDRESS gateway')
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum`,
       JSON.stringify({seedPhrase}),
