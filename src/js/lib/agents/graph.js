@@ -57,18 +57,19 @@ class GraphAgent extends LDPAgent {
    * @param {bool} confidential - If the img is to be confidential
    */
 
-  // Not used right now
   addImage(uri, dstContainer, writer, image, confidential) {
     if (!writer || !image) {
       throw new Error('addImage: not enough arguments')
     }
-    if (image instanceof File) {
-      let imgUri = `${dstContainer}files/${this._randomString()}`
-      writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(imgUri))
-      return this.storeFile(imgUri, '', image, confidential)
+
+    if (typeof image === 'string') {
+      writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(image))
+      return
     }
-    writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(image))
-    return
+
+    let imgUri = `${dstContainer}files/${this._randomString()}`
+    writer.addTriple($rdf.sym(uri), PRED.image, $rdf.literal(imgUri))
+    return this.storeFile(imgUri, '', image, confidential)
   }
 
   checkImages(nodes) {
