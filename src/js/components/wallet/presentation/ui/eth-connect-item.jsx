@@ -59,7 +59,7 @@ export default class EthConnectItem extends React.Component {
 
   connectEthereum() {
     // TODO check if user has already ether
-    if(0) {
+    if(1) {
       return (
           <RaisedButton
             secondary

@@ -83,12 +83,14 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, (backend) => {
-          console.log('wallet: ', services.auth.currentUser.wallet )
-          return backend.gateway.buyEther({
-            stripeToken: params,
-            mainAddress: '0xtesttetstetstetstetstetst'
-          }).then((response) => {
-            // console.log('BUY ETHER before create identity: ', response)
+          return services.auth.currentUser.wallet.getMainAddress()
+          .then((mainAddress) => {
+            return backend.gateway.buyEther({
+              stripeToken: params,
+              mainAddress: mainAddress
+            })
+          })
+          .then((response) => {
             dispatch(actions.createEthereumIdentity())
             return result
           })
@@ -102,12 +104,15 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.createEthereumIdentity.buildAction(params, (backend) => {
-          console.log('in createEthereumIdentityContract')
-          return backend.gateway.createEthereumIdentityContract({
-            seedPhrase: services.auth.currentUser.wallet.seedPhrase,
-            userName: services.auth.currentUser.wallet.userName,
-            mainAddress: '0xtesttetstetstetstetstetst'
-          }).then((response) => {
+          return services.auth.currentUser.wallet.getMainAddress()
+          .then((mainAddress) => {
+            return backend.gateway.createEthereumIdentityContract({
+              seedPhrase: services.auth.currentUser.wallet.seedPhrase,
+              userName: services.auth.currentUser.wallet.userName,
+              mainAddress: mainAddress
+            })
+          })
+          .then((response) => {
             // console.log(response)
             return response
           })

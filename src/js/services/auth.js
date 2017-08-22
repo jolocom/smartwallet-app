@@ -39,11 +39,6 @@ export default class AuthService extends EventEmitter {
     return this.backend.register({userName, seedPhrase})
   }
 
-  getMainAddress({userName, seedPhrase}) {
-    // TODO add mainAddress to wallet object
-    return this.backend.getMainAddress({userName, seedPhrase})
-  }
-
   _setCurrentUser(user) {
     this.currentUser = user
     this.emit('changed', user)
@@ -56,6 +51,13 @@ export class Wallet {
     this.userName = userName
     this.identityURL = `https://identity.jolocom.com/${userName}`
     this.seedPhrase = seedPhrase
+  }
+
+  getMainAddress() {
+    return this._gateway.getMainAddress({
+      userName: this.userName,
+      seedPhrase: this.seedPhrase
+    })
   }
 
   storeAttribute({attributeType, attributeData, attributeId}) {
