@@ -37,12 +37,11 @@ export default class GatewayAgent {
     )
   }
 
-  sendEther({userName, mainAddress, receiverAddress, amountEth}) {
+  sendEther({userName, receiver, amountEther, data, pin, gasInWei}) {
     // console.log('SEND ether')
-    // TODO data and pin ?
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/send-ether`,
-      JSON.stringify({mainAddress, receiverAddress, amountEth}),
+      JSON.stringify({receiver, amountEther, data, pin, gasInWei}),
       {'Content-type': 'application/json'}
     )
   }
