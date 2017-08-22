@@ -4,7 +4,7 @@ import * as snackBar from './snack-bar'
 import {stub} from '../../../../test/utils'
 const reducer = snackBar.default
 
-describe('Snack bar reducer', function() {
+describe.only('Snack bar reducer', function() {
   describe('INIT', function() {
     it('should correctly initialize', function() {
       expect(reducer(undefined, '@INIT').toJS()).to.deep.equal({
@@ -20,11 +20,11 @@ describe('Snack bar reducer', function() {
   describe('showMessage', function() {
     let timeout
     before(() => {
-      timeout = window.setTimeout
-      window.setTimeout = stub({returns: 2})
+      timeout = global.setTimeout
+      global.setTimeout = stub({returns: 2})
     })
     after(() => {
-      window.setTimeout = timeout
+      global.setTimeout = timeout
     })
 
     it('should correctly handle the showMessage action', function() {

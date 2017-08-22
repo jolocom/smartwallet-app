@@ -1,12 +1,14 @@
+var fs = require('fs')
 var path = require('path')
 
+var nodeModules = {}
+fs.readdirSync('node_modules').forEach(function(module) {
+  nodeModules[module] = `require('${module}')`
+})
+
 module.exports = {
-  devtool: 'inline-source-map',
-  debug: true,
-  test: true,
-  entry: [
-    './src/js/main.jsx'
-  ],
+  target: 'node',
+  externals: nodeModules,
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
     root: path.join(__dirname, 'src', 'js'),
@@ -19,18 +21,13 @@ module.exports = {
       settings: path.join(__dirname, 'config', 'test.js')
     }
   },
-  output: {
-    path: path.join(__dirname, 'dist', 'js'),
-    filename: 'bundle.js',
-    publicPath: 'js/'
-  },
   module: {
     noParse: [
       /node_modules\/sinon/
     ],
     loaders: [{
       test: /\.jsx?/,
-      loader: 'babel',
+      loader: 'babel-loader',
       include: [
         path.join(__dirname, 'src', 'js'),
         path.join(__dirname, 'test'),
@@ -40,22 +37,6 @@ module.exports = {
     {
       test: /\.json$/,
       loader: 'json-loader'
-    }],
-    postLoaders: [{
-      test: /\.jsx?$/,
-      loader: 'istanbul-instrumenter',
-      exclude: [
-        /\.test\.jsx?$/
-      ],
-      include: [
-        path.join(__dirname, 'src', 'js')
-      ]
     }]
-  },
-  externals: [{
-    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}',
-    'react/lib/ReactContext': 'window',
-    'react/lib/ExecutionEnvironment': true,
-    'react/addons': true
-  }]
+  }
 }
