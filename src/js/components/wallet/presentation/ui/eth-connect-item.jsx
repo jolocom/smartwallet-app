@@ -54,7 +54,9 @@ const STYLES = {
 
 export default class EthConnectItem extends React.Component {
   static PropTypes = {
-
+    createEthereumIdentity: React.PropTypes.func,
+    onToken: React.PropTypes.func,
+    confirmDialog: React.PropTypes.func
   }
 
   connectEthereum() {

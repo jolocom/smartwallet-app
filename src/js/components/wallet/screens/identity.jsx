@@ -38,7 +38,9 @@ export default class WalletIdentityScreen extends React.Component {
     saveToBlockchain: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
     startEmailVerification: React.PropTypes.func.isRequired,
-    startPhoneVerification: React.PropTypes.func.isRequired
+    startPhoneVerification: React.PropTypes.func.isRequired,
+    buyEther: React.PropTypes.func.isRequired,
+    createEthereumIdentity: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
