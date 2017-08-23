@@ -11,12 +11,12 @@ import {
 import {List, Divider, ListItem, FlatButton} from 'material-ui'
 import {Block} from '../../structure'
 // import {theme} from 'styles'
-import NavigationArrowDown from 'material-ui/svg-icons/navigation/arrow-downward'
+import NavigationArrowDown from 'material-ui/svg-icons/navigation/arrow-downward' // eslint-disable-line max-len
 
 const STYLES = {
   qr: {
     marginLeft: '72px',
-    marginTop: '8px',
+    marginTop: '8px'
   },
   headItem: {
     width: '100%',
@@ -31,12 +31,11 @@ const STYLES = {
 export default class EtherReceive extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    ether: React.PropTypes.object,
-    address: React.PropTypes.string
+    ether: React.PropTypes.object
   }
 
   render() {
-    console.log(this.props.address)
+    const mainAddress = this.props.ether.mainAddress
     return (
       <TabContainer>
         <EtherBalance
@@ -55,10 +54,10 @@ export default class EtherReceive extends React.Component {
               disabled
               leftIcon={<NavigationArrowDown color={'#b3c90f'} />}
               insetChildren
-              secondaryText={<p>{this.props.address}</p>}
+              secondaryText={<p>{mainAddress}</p>}
               primaryText={'Wallet Address'}
               rightIcon={
-                <CopyToClipboard text={this.props.address}>
+                <CopyToClipboard text={mainAddress}>
                   <FlatButton>COPY</FlatButton>
                 </CopyToClipboard>
               } />
@@ -67,7 +66,7 @@ export default class EtherReceive extends React.Component {
           </List>
           <Block style={STYLES.qr}>
             <QRCode
-              value={this.props.address}
+              value={mainAddress}
               size={200}
               fgColor="#4b132b" />
           </Block>

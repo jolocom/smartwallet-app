@@ -27,11 +27,12 @@ const STYLES = {
     boxShadow: 'none'
   }
 }
-// c
+
 @connect({
   props: ['wallet.etherTabs.activeTab'],
   actions: ['wallet/ether-tabs:detectActiveTab',
     'wallet/ether-tabs:switchTab',
+    'wallet/ether-tabs:getWalletAddress',
     'wallet/ether-tabs:goToWalletScreen']
 })
 @Radium
@@ -42,11 +43,13 @@ export default class EtherTabScreen extends React.Component {
     activeTab: React.PropTypes.string,
     detectActiveTab: React.PropTypes.func.isRequired,
     switchTab: React.PropTypes.func.isRequired,
-    goToWalletScreen: React.PropTypes.func.isRequired
+    goToWalletScreen: React.PropTypes.func.isRequired,
+    getWalletAddress: React.PropTypes.func.isRequired
   }
 
   componentDidMount() {
     this.props.detectActiveTab({path: this.props.location.pathname})
+    this.props.getWalletAddress()
   }
 
   componentDidUpdate() {

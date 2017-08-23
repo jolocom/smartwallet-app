@@ -3,11 +3,11 @@ import Radium from 'radium'
 
 // import {NavigationArrowBack} from 'material-ui/svg-icons'
 // import {AppBar} from 'material-ui'
-import {Content, Block, Header, SideNote} from '../../structure'
+import {Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
 import Spinner from '../../common/spinner'
 
-import {theme} from 'styles'
+// import {theme} from 'styles'
 
 import {
   TabContainer,
@@ -29,7 +29,6 @@ const STYLES = {
 @Radium
 export default class WalletEther extends React.Component {
   static propTypes = {
-    goToWalletScreen: React.PropTypes.func, // this can be deleted
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
     ether: React.PropTypes.object,
@@ -51,20 +50,13 @@ export default class WalletEther extends React.Component {
     )
   }
 
-  // renderHasEther() {
-  //   return (
-  //     <div style={STYLES.etherContainer}>
-  //       <Block>
-  //         <PlusSubMenu
-  //           overview
-  //           amount={this.props.ether.ether.amount}
-  //           currency="eth"
-  //           currencyPrice={this.props.ether.ether.price}
-  //         />
-  //       </Block>
-  //     </div>
-  //   )
-  // }
+  renderHasEther() {
+    return (
+      <EtherBalance
+        amount={this.props.ether.ether.amount}
+        currencyPrice={this.props.ether.ether.price} />
+    )
+  }
 
   renderNoEther() {
     return (

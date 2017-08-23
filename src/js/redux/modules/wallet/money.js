@@ -12,15 +12,30 @@ const actions = module.exports = makeActions('wallet/money', {
       }
     }
   },
+  getMainAddress: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        dispatch(actions.getMainAddress.buildAction(params, () => {
+          return services.auth.currentUser.wallet.getMainAddress()
+          .then((mainAddress) => {
+            return mainAddress
+          })
+        }))
+      }
+    }
+  },
   buyEther: {
     expectedParams: ['stripeToken'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, (backend) => {
+          const mainAddress = getState().toJS().wallet.money.mainAddress
           return backend.gateway.buyEther({
             stripeToken: params.stripeToken,
-            walletAddress: services.auth.currentUser.wallet.mainAddress
+            walletAddress: mainAddress
           }).then((response) => {
             dispatch(actions.getBalance())
             return response
@@ -33,9 +48,13 @@ const actions = module.exports = makeActions('wallet/money', {
     async: true,
     expectedParams: [],
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.getBalance.buildAction(params, () => {
-          return services.auth.currentUser.wallet.getBalance()
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getBalance.buildAction(params, (backend) => {
+          const mainAddress = getState().toJS().wallet.money.mainAddress
+          return backend.gateway.getBalanceEther({
+            userName: services.auth.currentUser.userName,
+            mainAddress: mainAddress
+          })
         }))
       }
     }
@@ -64,6 +83,7 @@ const actions = module.exports = makeActions('wallet/money', {
 
 const initialState = Immutable.fromJS({
   screenToDisplay: '',
+  mainAddress: '',
   ether: {
     loaded: false,
     errorMsg: '',
@@ -76,6 +96,19 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.getMainAddress.id:
+      // TODO loading
+      return state
+
+    case actions.getMainAddress.id_success:
+      return state.merge({
+        mainAddress: action.result
+      })
+
+    case actions.getMainAddress.id_fail:
+      // TODO error
+      return state
+
     case actions.buyEther.id:
       return state.mergeIn(['ether'], {
         loaded: false,

@@ -9,6 +9,7 @@ import {
 
 import {List, Divider, ListItem, TextField, RaisedButton} from 'material-ui'
 import {Block} from '../../structure'
+import {Loading} from '../../common'
 import NavigationArrowUp from 'material-ui/svg-icons/navigation/arrow-upward'
 
 const STYLES = {
@@ -35,11 +36,63 @@ const STYLES = {
 export default class EtherSend extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    ether: React.PropTypes.object
+    ether: React.PropTypes.object,
+    updateField: React.PropTypes.func,
+    wallet: React.PropTypes.object,
+    sendEther: React.PropTypes.func
   }
 
   render() {
     const {receiverAddress, amountSend} = this.props.wallet
+    let content
+    if (this.props.wallet.loading) {
+      content = (
+        <Block style={{marginTop: '20px'}}>
+          <Loading />
+        </Block>)
+    } else {
+      content = (
+        <List>
+          <ListItem
+            disabled
+            style={STYLES.headItem}
+            primaryText={'Send Ether'} />
+          <Divider
+            style={STYLES.divider} />
+          <ListItem
+            style={STYLES.listItem}
+            disabled
+            leftIcon={<NavigationArrowUp
+              color={'#b3c90f'}
+              style={{top: '32px', left: '16px'}} />}
+            insetChildren>
+            <TextField
+              onChange={(e) =>
+                this.props.updateField(e.target.value, 'receiverAddress')
+              }
+              fullWidth
+              floatingLabelText="Add Wallet Address" />
+          </ListItem>
+          <Block style={STYLES.sendBlock}>
+            <TextField
+              onChange={(e) =>
+                this.props.updateField(e.target.value, 'amountSend')
+              }
+              fullWidth
+              floatingLabelText="Amount" />
+            <TextField
+              fullWidth
+              floatingLabelText="Note" />
+            <RaisedButton
+              disabled={receiverAddress && amountSend ? false : true}
+              secondary
+              style={STYLES.btnSend}
+              label="SEND"
+              onClick={this.props.sendEther} />
+          </Block>
+        </List>
+      )
+    }
     return (
       <TabContainer>
         <EtherBalance
@@ -47,41 +100,7 @@ export default class EtherSend extends React.Component {
           currency="eth"
           currencyPrice={this.props.ether.ether.price} />
         <HalfScreenContainer>
-          <List>
-            <ListItem
-              disabled
-              style={STYLES.headItem}
-              primaryText={'Send Ether'} />
-            <Divider
-              style={STYLES.divider} />
-            <ListItem
-              style={STYLES.listItem}
-              disabled
-              leftIcon={<NavigationArrowUp
-                color={'#b3c90f'}
-                style={{top: '32px', left: '16px'}} />}
-              insetChildren>
-              <TextField
-                onChange={(e) => this.props.updateField(e.target.value, 'receiverAddress')}
-                fullWidth
-                floatingLabelText="Add Wallet Address" />
-            </ListItem>
-            <Block style={STYLES.sendBlock}>
-              <TextField
-                onChange={(e) => this.props.updateField(e.target.value, 'amountSend')}
-                fullWidth
-                floatingLabelText="Amount" />
-              <TextField
-                fullWidth
-                floatingLabelText="Note" />
-              <RaisedButton
-                disabled={receiverAddress && amountSend ? false : true}
-                secondary
-                style={STYLES.btnSend}
-                label="SEND"
-                onClick={this.props.sendEther} />
-            </Block>
-          </List>
+          {content}
         </HalfScreenContainer>
       </TabContainer>
     )

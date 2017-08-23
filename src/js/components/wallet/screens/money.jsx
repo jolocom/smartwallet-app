@@ -8,7 +8,8 @@ import Presentation from '../presentation/money'
     'wallet/money:goToEtherManagement',
     'wallet/money:buyEther',
     'wallet/money:getPrice',
-    'wallet/money:getBalance'
+    'wallet/money:getBalance',
+    'wallet/money:getMainAddress'
   ]
 })
 export default class WalletMoneyScreen extends React.Component {
@@ -18,9 +19,11 @@ export default class WalletMoneyScreen extends React.Component {
     goToEtherManagement: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
     getPrice: React.PropTypes.func.isRequired,
-    getBalance: React.PropTypes.func.isRequired
+    getBalance: React.PropTypes.func.isRequired,
+    getMainAddress: React.PropTypes.func.isRequired
   }
   componentWillMount() {
+    this.props.getMainAddress()
     this.props.getPrice()
     this.props.getBalance()
   }

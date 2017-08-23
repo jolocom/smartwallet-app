@@ -25,9 +25,9 @@ export default class WalletMoney extends React.Component {
     goToEtherManagement: React.PropTypes.func.isRequired
   }
 
-  goToEtherManagement() {
-    console.log('ether mgmt')
-  }
+  // goToEtherManagement() {
+  //   console.log('ether mgmt')
+  // }
 
   render() {
     const {goToEtherManagement, ether} = this.props

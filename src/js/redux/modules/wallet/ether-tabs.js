@@ -46,11 +46,16 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
     }
   },
   getWalletAddress: {
-    expectedParams: ['value'],
+    expectedParams: [],
+    async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        const value = services.auth.currentUser.wallet.getMainAddress()
-        dispatch(actions.getWalletAddress.buildAction(value))
+        dispatch(actions.getWalletAddress.buildAction(params, () => {
+          return services.auth.currentUser.wallet.getMainAddress()
+          .then((mainAddress) => {
+            return mainAddress
+          })
+        }))
       }
     }
   },
@@ -60,20 +65,33 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.sendEther.buildAction(params, () => {
-          const {receiverAddress, amountSend, data, pin} = getState().toJS().wallet.etherTabs.wallet
-          console.log('param in sendEther: ', receiverAddress)
-          return backend.wallet.sendEther({
+          const {receiverAddress, amountSend, data, pin, gasInWei} = getState().toJS().wallet.etherTabs.wallet // eslint-disable-line max-len
+          return backend.gateway.sendEther({
+            userName: services.auth.currentUser.wallet.userName,
             receiver: receiverAddress,
             amountEther: amountSend,
             data: data,
-            pin: pin})
-          })).then((response) => {
-            return response
-            console.log('im in response', response)
-            // todo getBalance to update balance
-            // implement spinner ??
-            dispatch(router.pushRoute('/wallet/money'))
+            pin: pin,
+            gasInWei: gasInWei})
+        })).then((response) => {
+          dispatch(actions.getBalance())
+          return response
+        })
+      }
+    }
+  },
+  getBalance: {
+    async: true,
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getBalance.buildAction(params, (backend) => {
+          const {mainAddress} = getState().toJS().wallet.etherTabs.wallet
+          return backend.gateway.getBalanceEther({
+            userName: services.auth.currentUser.userName,
+            mainAddress: mainAddress
           })
+        }))
       }
     }
   }
@@ -82,11 +100,13 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
 const initialState = Immutable.fromJS({
   activeTab: 'overview',
   wallet: {
+    loading: false,
     mainAddress: '',
     receiverAddress: '',
     amountSend: '',
     pin: '1234',
-    data: ''
+    data: '',
+    gasInWei: '200'
   }
 })
 
@@ -98,14 +118,18 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getWalletAddress.id:
+      return state
+
+    case actions.getWalletAddress.id_success:
       return state.mergeIn(['wallet'], {
         mainAddress: action.value
       })
 
+    case actions.getWalletAddress.id_fail:
+      return state
+
     case actions.updateField.id:
-    console.log('in update field ', action)
-      if(action.field === 'receiverAddress') {
-        console.log('reducer: ', action.value)
+      if (action.field === 'receiverAddress') {
         return state.mergeIn(['wallet'], {
           receiverAddress: action.value
         })
@@ -117,15 +141,34 @@ module.exports.default = (state = initialState, action = {}) => {
       return state
 
     case actions.sendEther.id:
-      console.log('sedn ether id progress')
-      return state
+      return state.mergeIn(['wallet'], {
+        loading: true
+      })
 
     case actions.sendEther.id_success:
-      console.log('send ether id success')
-      return state
+      return state.mergeIn(['wallet'], {
+        loading: false
+      })
 
     case actions.sendEther.id_fail:
-      return state
+      return state.mergeIn(['wallet'], {
+        loading: false
+      })
+
+    case actions.getBalance.id:
+      return state.mergeIn(['wallet'], {
+        loading: true
+      })
+
+    case actions.getBalance.id_success:
+      return state.mergeIn(['wallet'], {
+        loading: false
+      })
+
+    case actions.getBalance.id_fail:
+      return state.mergeIn(['wallet'], {
+        loading: false
+      })
 
     default:
       return state
