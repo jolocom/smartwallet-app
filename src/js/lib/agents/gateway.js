@@ -45,7 +45,7 @@ export default class GatewayAgent {
   }
 
   createEthereumIdentityContract({userName, mainAddress, seedPhrase}) {
-    // console.log('CREATE ETHEREUM IDENTITY', userName, mainAddress, seedPhrase)
+  // console.log('CREATE ETHEREUM IDENTITY', userName, mainAddress, seedPhrase)
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
       JSON.stringify({mainAddress, seedPhrase}),

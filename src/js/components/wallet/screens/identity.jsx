@@ -65,8 +65,8 @@ export default class WalletIdentityScreen extends React.Component {
       expandField={this.props.expandField}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
-      confirmDialog={(...args) => {this.handleConfirmDialog(...args)} }
-      buyEther={(token) => {this.props.buyEther(token)} }
+      confirmDialog={(...args) => { this.handleConfirmDialog(...args) }}
+      buyEther={(token) => { this.props.buyEther(token) }}
       createEthereumIdentity={this.props.createEthereumIdentity}
       goTo={this.props.goTo}
       showUserInfo={this.props.openConfirmDialog}

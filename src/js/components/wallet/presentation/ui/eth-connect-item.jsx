@@ -1,5 +1,5 @@
 import React from 'react'
-import Radium from 'radium'
+// import Radium from 'radium'
 
 import {theme} from 'styles'
 import { RaisedButton, FlatButton } from 'material-ui'
@@ -53,7 +53,7 @@ const STYLES = {
 }
 
 export default class EthConnectItem extends React.Component {
-  static PropTypes = {
+  static propTypes = {
     createEthereumIdentity: React.PropTypes.func,
     onToken: React.PropTypes.func,
     confirmDialog: React.PropTypes.func
@@ -96,7 +96,7 @@ export default class EthConnectItem extends React.Component {
           if it is correct and then the fact that it is correct is stated on the
           <span style={{color: theme.palette.accent1Color}}
             onClick={() => this.props.confirmDialog(infoPopup)}> blockchain
-            </span>
+          </span>
         </div><br />
         <div>
           With this technology your data is securely locked. We never store your
@@ -145,10 +145,10 @@ export default class EthConnectItem extends React.Component {
       <div>
       To verify your data, lock it and grant or withdraw
       access to it, you need to connect your SmartWallet to
-      a <span style={{color: theme.palette.accent1Color,
+        a <span style={{color: theme.palette.accent1Color,
           fontWeight: '300'}}
           onClick={() => this.props.confirmDialog(infoPopup)}>
-          blockchain</span> called Ethereum. The locking
+        blockchain</span> called Ethereum. The locking
       of your data costs Ether which is the currency used
       for transactions on the blockchain.
       </div>
