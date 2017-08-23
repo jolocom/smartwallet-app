@@ -44,6 +44,8 @@ describe('(Component) WalletIdentityScreen', () => {
         expandField={() => {}}
         getIdentityInformation={getIdentityInformation}
         goTo={() => {}}
+        buyEther={() => {}}
+        createEthereumIdentity={() => {}}
         openConfirmDialog={() => {}}
         resendVerificationLink={() => {}}
         resendVerificationSms={() => {}}

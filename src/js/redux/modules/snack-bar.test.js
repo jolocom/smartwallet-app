@@ -4,7 +4,7 @@ import * as snackBar from './snack-bar'
 import {stub} from '../../../../test/utils'
 const reducer = snackBar.default
 
-describe.only('Snack bar reducer', function() {
+describe('Snack bar reducer', function() {
   describe('INIT', function() {
     it('should correctly initialize', function() {
       expect(reducer(undefined, '@INIT').toJS()).to.deep.equal({
