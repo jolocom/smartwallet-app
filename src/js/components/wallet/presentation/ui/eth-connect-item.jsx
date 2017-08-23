@@ -143,9 +143,9 @@ export default class EthConnectItem extends React.Component {
       <div>
       To verify your data, lock it and grant or withdraw
       access to it, you need to connect your SmartWallet to
-      a <span style={{color: theme.palette.accent1Color,
-        fontWeight: '300'}}
-        onClick={() => this.props.confirmDialog(infoPopup)}>
+        a <span style={{color: theme.palette.accent1Color,
+          fontWeight: '300'}}
+          onClick={() => this.props.confirmDialog(infoPopup)}>
         blockchain</span> called Ethereum. The locking
       of your data costs Ether which is the currency used
       for transactions on the blockchain.
