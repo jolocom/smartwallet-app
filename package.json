@@ -8,8 +8,8 @@
     "start": "gulp",
     "start:wallet": "gulp wallet",
     "build:prod": "yarn install --production && gulp build",
-    "test": "$(npm bin)/mocha-webpack",
-    "test:watch": "$(npm bin)/mocha-webpack --watch",
+    "test": "node_modules/.bin/mocha-webpack",
+    "test:watch": "node_modules/.bin/mocha-webpack --watch",
     "lint": "eslint src/js/**",
     "ios": "cd app && cordova run ios",
     "android": "cd app && cordova run android"

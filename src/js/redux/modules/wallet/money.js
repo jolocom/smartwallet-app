@@ -18,7 +18,7 @@ const actions = module.exports = makeActions('wallet/money', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, (backend) => {
-          return backend.wallet.buyEther({
+          return backend.gateway.buyEther({
             stripeToken: params.stripeToken,
             walletAddress: services.auth.currentUser.wallet.mainAddress
           }).then((response) => {
@@ -46,7 +46,7 @@ const actions = module.exports = makeActions('wallet/money', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.getPrice.buildAction(params, (backend) => {
-          return backend.wallet.retrieveEtherPrice()
+          return backend.gateway.retrieveEtherPrice()
         }))
       }
     }

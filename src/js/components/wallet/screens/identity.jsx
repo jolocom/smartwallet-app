@@ -7,6 +7,8 @@ import Loading from 'components/common/loading'
 @connect({
   props: ['wallet.identity'],
   actions: [
+    'wallet/identity:buyEther',
+    'wallet/identity:createEthereumIdentity',
     'confirmation-dialog:openConfirmDialog',
     'verification:confirmEmail',
     'verification:confirmPhone',
@@ -36,7 +38,9 @@ export default class WalletIdentityScreen extends React.Component {
     saveToBlockchain: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
     startEmailVerification: React.PropTypes.func.isRequired,
-    startPhoneVerification: React.PropTypes.func.isRequired
+    startPhoneVerification: React.PropTypes.func.isRequired,
+    buyEther: React.PropTypes.func.isRequired,
+    createEthereumIdentity: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -61,6 +65,9 @@ export default class WalletIdentityScreen extends React.Component {
       expandField={this.props.expandField}
       setFocusedPin={this.props.setFocusedPin}
       changePinValue={this.props.changePinValue}
+      confirmDialog={(...args) => { this.handleConfirmDialog(...args) }}
+      buyEther={(token) => { this.props.buyEther(token) }}
+      createEthereumIdentity={this.props.createEthereumIdentity}
       goTo={this.props.goTo}
       showUserInfo={this.props.openConfirmDialog}
       requestIdCardVerification={({title, message, rightButtonLabel, leftButtonLabel, index}) => // eslint-disable-line max-len
@@ -107,5 +114,10 @@ export default class WalletIdentityScreen extends React.Component {
     } else if (attrType === 'email') {
       return () => this.props.confirmEmail({email: attrValue})
     }
+  }
+
+  handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len
+    this.props.openConfirmDialog(title, message, rightButtonLabel,
+    callback(), leftButtonLabel)
   }
 }

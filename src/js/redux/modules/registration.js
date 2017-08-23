@@ -172,6 +172,10 @@ const actions = module.exports = makeActions('registration', {
               seedPhrase: state.passphrase.phrase
             })
 
+            // await services.auth.getMainAddress({
+            //   seedPhrase: state.passphrase.phrase
+            // })
+
             await services.auth.login({
               seedPhrase: state.passphrase.phrase,
               pin: state.pin.value
@@ -179,7 +183,7 @@ const actions = module.exports = makeActions('registration', {
 
             dispatch(router.pushRoute('/wallet'))
           } else {
-            console.log('layman registration')
+            // console.log('layman registration')
 
             // return true
             // return services.auth.registerWithCredentials({

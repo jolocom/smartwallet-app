@@ -51,7 +51,7 @@ const actions = module.exports = makeActions('wallet/identity', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getIdCardVerifications.buildAction(params, async() => {
+        dispatch(actions.getIdCardVerifications.buildAction(params, async() => { // eslint-disable-line max-len
           let numOfVerification = await services.auth.currentUser.wallet
           .identityContract.getNumberOfVerifications({
             attributeId: 'idCard',
@@ -74,6 +74,49 @@ const actions = module.exports = makeActions('wallet/identity', {
               return result
             })
         ))
+      }
+    }
+  },
+  buyEther: {
+    expectedParams: ['stripeToken'],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        dispatch(actions.buyEther.buildAction(params, (backend) => {
+          return services.auth.currentUser.wallet.getMainAddress()
+          .then((mainAddress) => {
+            return backend.gateway.buyEther({
+              stripeToken: params,
+              mainAddress: mainAddress
+            })
+          })
+          .then((response) => {
+            dispatch(actions.createEthereumIdentity())
+            return response
+          })
+        }))
+      }
+    }
+  },
+  createEthereumIdentity: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        dispatch(actions.createEthereumIdentity.buildAction(params, (backend) => { // eslint-disable-line max-len
+          return services.auth.currentUser.wallet.getMainAddress()
+          .then((mainAddress) => {
+            return backend.gateway.createEthereumIdentityContract({
+              seedPhrase: services.auth.currentUser.wallet.seedPhrase,
+              userName: services.auth.currentUser.wallet.userName,
+              mainAddress: mainAddress
+            })
+          })
+          .then((response) => {
+            // console.log(response)
+            return response
+          })
+        }))
       }
     }
   },
@@ -205,6 +248,39 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setSmsVerificationCodeStatus.id:
       return state.mergeIn(['contact', action.field, action.index], {
         codeIsSent: action.value
+      })
+
+    case actions.buyEther.id:
+      return state.merge({
+        loaded: false
+      })
+
+    case actions.buyEther.id_success:
+      return state.merge({
+        loaded: false
+      })
+
+    case actions.buyEther.id_fail:
+      return state.merge({
+        loaded: true,
+        error: true
+      })
+
+    case actions.createEthereumIdentity.id:
+      return state.merge({
+        loaded: false
+      })
+
+    case actions.createEthereumIdentity.id_success:
+      return state.merge({
+        loaded: true,
+        error: false
+      })
+
+    case actions.createEthereumIdentity.id_fail:
+      return state.merge({
+        loaded: true,
+        error: true
       })
 
     default:

@@ -9,7 +9,7 @@ import {Content, Block} from '../../structure'
 
 import {
   PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
-  PassportsList, InfoDetails, IdentityAvatar
+  PassportsList, InfoDetails, IdentityAvatar, EthConnectItem
 } from './ui'
 
 const STYLES = {
@@ -51,7 +51,10 @@ export default class WalletIdentity extends React.Component {
     resendVerificationCode: React.PropTypes.func.isRequired,
     requestIdCardVerification: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    showUserInfo: React.PropTypes.func.isRequired
+    showUserInfo: React.PropTypes.func.isRequired,
+    buyEther: React.PropTypes.func.isRequired,
+    createEthereumIdentity: React.PropTypes.func.isRequired,
+    confirmDialog: React.PropTypes.func.isRequired
   }
 
   renderContact({ contact, expandedFields }) {
@@ -198,11 +201,24 @@ export default class WalletIdentity extends React.Component {
     </Block>)
   }
 
+  renderConnectEther() {
+    // TODO if already connected to ethereum
+    return (
+      <Block>
+        <EthConnectItem
+          onToken={this.props.buyEther}
+          createEthereumIdentity={this.props.createEthereumIdentity}
+          confirmDialog={this.props.confirmDialog} />
+      </Block>
+    )
+  }
+
   render() {
     return (<TabContainer>
       <HalfScreenContainer>
         <Content style={STYLES.container}>
           {this.renderUsername(this.props.identity)}
+          {this.renderConnectEther()}
           {this.renderContact(this.props.identity)}
           {this.renderPassports(this.props.identity)}
           {this.renderIdCards(this.props.identity)}

@@ -21,6 +21,47 @@ export default class GatewayAgent {
   //   )
   // }
 
+  retrieveEtherPrice() {
+    return this._httpAgent.get(
+      settings.blockchain.jolocomEtherAddress +
+      '/exchange-rate/ether'
+    )
+  }
+
+  getBalanceEther({userName, mainAddress}) {
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/ethereum/get-balance`,
+      JSON.stringify({mainAddress}),
+      {'Content-type': 'application/json'}
+    )
+  }
+
+  sendEther({userName, receiver, amountEther, data, pin, gasInWei}) {
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/ethereum/send-ether`,
+      JSON.stringify({receiver, amountEther, data, pin, gasInWei}),
+      {'Content-type': 'application/json'}
+    )
+  }
+
+  createEthereumIdentityContract({userName, mainAddress, seedPhrase}) {
+  // console.log('CREATE ETHEREUM IDENTITY', userName, mainAddress, seedPhrase)
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
+      JSON.stringify({mainAddress, seedPhrase}),
+      {'Content-type': 'application/json'}
+    )
+  }
+
+  buyEther({stripeToken, mainAddress}) {
+    return this._httpAgent.post(
+      'https://verification.jolocom.com/ether/buy/ether',
+      JSON.stringify({stripeToken: JSON.stringify(stripeToken), mainAddress}),
+      {'Content-type': 'application/json'},
+      {credentials: 'omit'}
+    )
+  }
+
   checkUserDoesNotExist({userName}) {
     return new Promise((resolve, reject) => {
       this.getUserInformation({userName})
@@ -49,8 +90,16 @@ export default class GatewayAgent {
     return this._httpAgent.put(
       `${this._gatewayUrl}/${userName}`,
       JSON.stringify({seedPhrase, email, password}),
-      {'Content-type': 'application/json'},
+      {'Content-type': 'application/json'}
       // {credentials: 'omit'}
+    )
+  }
+
+  getMainAddress({userName, seedPhrase}) {
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/ethereum`,
+      JSON.stringify({seedPhrase}),
+      {'Content-type': 'application/json'}
     )
   }
 
