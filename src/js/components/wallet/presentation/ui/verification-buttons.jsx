@@ -32,34 +32,11 @@ const VerificationButtons = ({
     index,
     attrType,
     smsCode,
+    pinValue,
     pinFocused,
     changePinValue
   }) => {
   if (verified) { return null }
-  if (attrType === 'email') {
-    return (<ListItem disabled leftIcon={<div />} >
-      <FlatButton
-        label="REQUEST VERIFICATION"
-        secondary
-        style={STYLES.requestBtn}
-        onClick={() => requestVerificationCode({
-          title: 'Verification Request',
-          message: (<VerificationButtonMsg
-            msgType="codeRequest"
-            value={smsCode}
-            phoneNumber={value}
-            setFocusedPin={(value) => { setFocusedPin(value, index) }}
-            changePinValue={(value) => { changePinValue(value, index) }}
-            focused={pinFocused} />),
-          rightButtonLabel: 'OK',
-          leftButtonLabel: 'CANCEL',
-          attrType,
-          index,
-          style: STYLES.simpleDialog,
-          attrValue: value
-        })} />
-    </ListItem>)
-  }
   if (codeIsSent) {
     return (<div>
       <ListItem disabled leftIcon={<div />} >
@@ -68,12 +45,13 @@ const VerificationButtons = ({
           secondary
           style={STYLES.requestBtn}
           onClick={() => enterVerificationCode({
+            title: 'Phone Verification',
             message: (<VerificationButtonMsg
               msgType="codeInput"
               value={smsCode}
               phoneNumber={value}
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
-              changePinValue={(value) => { changePinValue(value, index) }}
+              changePinValue={(value) => { changePinValue(value, 'smsCode') }}
               focused={pinFocused} />),
             rightButtonLabel: 'OK',
             leftButtonLabel: 'CANCEL',
@@ -121,7 +99,7 @@ const VerificationButtons = ({
           setFocusedPin={() => {}}
           changePinValue={() => {}}
           focused={pinFocused} />),
-        rightButtonLabel: 'OK',
+        rightButtonLabel: 'CONTINUE',
         leftButtonLabel: 'CANCEL',
         style: STYLES.simpleDialog,
         attrType,
@@ -131,10 +109,10 @@ const VerificationButtons = ({
         title: 'Verification Request',
         message: (<VerificationButtonMsg
           msgType="pinInput"
-          value={smsCode}
+          value={pinValue}
           phoneNumber={value}
           setFocusedPin={(value) => { setFocusedPin(value, index) }}
-          changePinValue={(value) => { changePinValue(value, index) }}
+          changePinValue={(value) => { changePinValue(value, 'pin') }}
           focused={pinFocused} />),
         rightButtonLabel: 'OK',
         leftButtonLabel: 'CANCEL',
@@ -149,6 +127,7 @@ const VerificationButtons = ({
 VerificationButtons.propTypes = {
   buttonMsg: React.PropTypes.any,
   value: React.PropTypes.string,
+  pinValue: React.PropTypes.string,
   codeIsSent: React.PropTypes.bool,
   pinLength: React.PropTypes.number,
   verified: React.PropTypes.bool,

@@ -13,6 +13,11 @@ var STYLES = {
     color: theme.jolocom.gray1,
     top: '16px'
   },
+  iconAvatar: {
+    backgroundColor: 'none',
+    borderRadius: '0%',
+    top: '16px'
+  },
   inputName: theme.textStyles.contentInputFields,
   labelName: theme.textStyles.labelInputFields,
   mainTextField: {
@@ -36,7 +41,7 @@ var STYLES = {
     marginLeft: '0px',
     position: 'absolute',
     right: '20px',
-    marginTop: '40px'
+    marginTop: '30px'
   },
   listItem: {
     whiteSpace: 'nowrap',

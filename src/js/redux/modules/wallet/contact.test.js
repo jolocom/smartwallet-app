@@ -10,8 +10,15 @@ describe('# Wallet contact redux module', () => {
     it('exitWithoutSaving should redirect the user to the identity screen',
     () => {
       const dispatch = stub()
+      const getState = () => Immutable.fromJS({
+        wallet: {
+          contact: {
+            callback: '/test/test'
+          }
+        }
+      })
       const action = contact.actions.exitWithoutSaving()
-      action(dispatch)
+      action(dispatch, getState)
       expect(dispatch.called).to.be.true
       expect(dispatch.calls).to.deep.equal([{
         args: [{
@@ -21,7 +28,7 @@ describe('# Wallet contact redux module', () => {
       }, {
         args: [{
           payload: {
-            args: ['/wallet/identity'],
+            args: ['/test/test'],
             method: 'push'
           },
           type: '@@router/CALL_HISTORY_METHOD'
@@ -33,9 +40,12 @@ describe('# Wallet contact redux module', () => {
       const action = {
         type: contact.actions.getUserInformation.id_success,
         result: {
-          contact: {
-            email: [],
-            phone: []
+          callback: '/test/test',
+          result: {
+            contact: {
+              email: [],
+              phone: []
+            }
           }
         }
       }

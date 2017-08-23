@@ -339,8 +339,8 @@ describe('Wallet registration Redux module', () => {
         username: {value: 'ggdg'}
       }})
       const dispatch = stub()
-      const backend = {accounts: {
-        checkUsername: stub().returnsAsync('checks')
+      const backend = {gateway: {
+        checkUserDoesNotExist: stub().returnsAsync('checks')
       }}
       withStubs([
       [registration.actions, 'goForward', {returns: 'forward'}],
@@ -354,8 +354,8 @@ describe('Wallet registration Redux module', () => {
         const promise = checkAction.buildAction.calledWithArgs[1]
         expect(promise(backend)).to.eventually
         .equal('checks')
-        expect(backend.accounts.checkUsername.calls).to.deep.equal(
-          [{args: ['ggdg']}
+        expect(backend.gateway.checkUserDoesNotExist.calls).to.deep.equal(
+          [{args: [{userName: 'ggdg'}]}
           ])
       })
     })
@@ -374,7 +374,7 @@ describe('Wallet registration Redux module', () => {
       }})
       const services = {
         auth: {
-          registerWithSeedPhrase: stub().returnsAsync('regSeed'),
+          register: stub().returnsAsync('regSeed'),
           registerWithCredentials: stub().returnsAsync('regCreds')
         }
       }
@@ -397,57 +397,56 @@ describe('Wallet registration Redux module', () => {
           expect(dispatch.calledWithArgs[0]).to.equal('action')
           const registerAction = registration.actions.registerWallet
           const promise = registerAction.buildAction.calledWithArgs[1]
-          expect(promise(services.auth.registerWithSeedPhrase))
+          expect(promise(services.auth.register))
             .to.eventually.equal('regSeed')
-          expect(services.auth.registerWithSeedPhrase.called).to.be.true
-          expect(services.auth.registerWithSeedPhrase.calls)
+          expect(services.auth.register.called).to.be.true
+          expect(services.auth.register.calls)
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
-              userName: 'usr',
-              pin: '1234'
+              userName: 'usr'
             }]}])
         }
       )
     })
-    it('should register with credentials if layman', () => {
-      const dispatch = stub()
-      const getState = () => Immutable.fromJS({registration: {
-        userType: {value: 'layman'},
-        username: {value: 'usr'},
-        pin: {value: '1234'},
-        passphrase: {phrase: 'bla bla bla'},
-        email: {value: 'test@test.com'},
-        password: {value: 'abdcd'}
-      }})
-      const services = {auth: {
-        registerWithSeedPhrase: stub().returnsAsync('regSeed'),
-        registerWithCredentials: stub().returnsAsync('regCreds')
-      }}
-
-      withStubs([
-        [registration.actions, 'goForward', {returns: 'forward'}],
-        [registration.actions.registerWallet, 'buildAction',
-          {returns: 'action'}]],
-        () => {
-          const thunk = registration.registerWallet()
-          thunk(dispatch, getState, {backend: {}, services})
-          expect(dispatch.calledWithArgs[0]).to.equal('action')
-          const registerAction = registration.actions.registerWallet
-          const promise = registerAction.buildAction.calledWithArgs[1]
-          expect(promise(services.auth.registerWithCredentials))
-            .to.eventually.equal('regCreds')
-          expect(services.auth.registerWithCredentials.called).to.be.true
-          expect(services.auth.registerWithCredentials.calls)
-            .to.deep.equal([{args: [{
-              userName: 'usr',
-              email: 'test@test.com',
-              password: 'abdcd',
-              seedPhrase: 'bla bla bla',
-              pin: '1234'
-            }]}])
-        }
-      )
-    })
+    // it('should register with credentials if layman', () => {
+    //   const dispatch = stub()
+    //   const getState = () => Immutable.fromJS({registration: {
+    //     userType: {value: 'layman'},
+    //     username: {value: 'usr'},
+    //     pin: {value: '1234'},
+    //     passphrase: {phrase: 'bla bla bla'},
+    //     email: {value: 'test@test.com'},
+    //     password: {value: 'abdcd'}
+    //   }})
+    //   const services = {auth: {
+    //     registerWithSeedPhrase: stub().returnsAsync('regSeed'),
+    //     registerWithCredentials: stub().returnsAsync('regCreds')
+    //   }}
+    //
+    //   withStubs([
+    //     [registration.actions, 'goForward', {returns: 'forward'}],
+    //     [registration.actions.registerWallet, 'buildAction',
+    //       {returns: 'action'}]],
+    //     () => {
+    //       const thunk = registration.registerWallet()
+    //       thunk(dispatch, getState, {backend: {}, services})
+    //       expect(dispatch.calledWithArgs[0]).to.equal('action')
+    //       const registerAction = registration.actions.registerWallet
+    //       const promise = registerAction.buildAction.calledWithArgs[1]
+    //       expect(promise(services.auth.registerWithCredentials))
+    //         .to.eventually.equal('regCreds')
+    //       expect(services.auth.registerWithCredentials.called).to.be.true
+    //       expect(services.auth.registerWithCredentials.calls)
+    //         .to.deep.equal([{args: [{
+    //           userName: 'usr',
+    //           email: 'test@test.com',
+    //           password: 'abdcd',
+    //           seedPhrase: 'bla bla bla',
+    //           pin: '1234'
+    //         }]}])
+    //     }
+    //   )
+    // })
   })
 
   describe('reducer', () => {

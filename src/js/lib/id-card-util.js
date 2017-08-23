@@ -27,6 +27,10 @@ export const mapBackendToState = (state, {result}) => state.mergeDeep({
   showErrors: false,
   loaded: true,
   idCard: {
+    images: {
+      frontSideImg: {value: ''},
+      backSideImg: {value: ''}
+    },
     locations: result.locations,
     number: {value: result.number, valid: true},
     expirationDate: {value: result.expirationDate, valid: true},
@@ -80,12 +84,23 @@ export const checkForNonValidFields = (reduxState) => {
 }
 
 export const storeIdCardDetailsInSolid = ({backend, services, idCard, webId}) => { // eslint-disable-line max-len
-  let solidAgent = backend.solid
-  const operations = {
-    set: solidAgent.setIdCard.bind(solidAgent),
-    update: solidAgent.deleteEntry.bind(solidAgent),
-    remove: solidAgent.updateEntry.bind(solidAgent)
+  let normalizedIdCard = {
+    number: idCard.number.value,
+    expirationDate: idCard.expirationDate.value,
+    firstName: idCard.firstName.value,
+    lastName: idCard.lastName.value,
+    gender: idCard.gender.value,
+    birthDate: idCard.birthDate.value,
+    birthPlace: idCard.birthPlace.value,
+    birthCountry: idCard.birthCountry.value,
+    streetWithNumber: idCard.physicalAddress.streetWithNumber.value,
+    zip: idCard.physicalAddress.zip.value,
+    city: idCard.physicalAddress.city.value,
+    state: idCard.physicalAddress.state.value,
+    country: idCard.physicalAddress.country.value
   }
-
-  return operations.set(webId, idCard)
+  return services.auth.currentUser.wallet.storeAttribute({
+    attributeType: 'idcard',
+    attributeData: normalizedIdCard
+  })
 }

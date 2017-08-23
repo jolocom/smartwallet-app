@@ -6,6 +6,10 @@ module.exports = {
     'https://proxy.jolocom.net/proxy?' +
     'url=https:webid.jolocom.de,system/accountStatus',
   verificationProvider: 'https://verification.jolocom.com',
+  gateway:
+    typeof IDENTITY_GATEWAY_URL !== 'undefined' && IDENTITY_GATEWAY_URL
+    ? IDENTITY_GATEWAY_URL
+    : 'https://identity.jolocom.com',
   blockchain: {
     // Jolocom Rinkeby
     gethHost: 'https://verification.jolocom.com/geth/',

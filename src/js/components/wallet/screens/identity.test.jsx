@@ -4,9 +4,11 @@ import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import { stub } from '../../../../../test/utils'
 import WalletIdentityScreen from './identity'
+import Presentation from '../presentation/identity'
 
 describe('(Component) WalletIdentityScreen', () => {
   it('should render properly the first time', () => {
+    const getIdentityInformation = stub()
     const wrapper = shallow(
       (<WalletIdentityScreen.WrappedComponent {
         ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
@@ -36,331 +38,63 @@ describe('(Component) WalletIdentityScreen', () => {
           }
         }))
       }
-        setFocusedPin={() => {}}
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
+        changePinValue={() => {}}
         confirmEmail={() => {}}
         confirmPhone={() => {}}
+        expandField={() => {}}
+        getIdentityInformation={getIdentityInformation}
+        goTo={() => {}}
+        openConfirmDialog={() => {}}
         resendVerificationLink={() => {}}
         resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
         saveToBlockchain={() => {}}
+        setFocusedPin={() => {}}
+        startPhoneVerification={() => {}}
+        startEmailVerification={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
-
-    expect(wrapper.find('WalletIdentity').prop('webId'))
-      .to.equal('https://demo.webid.jolocom.com/profile/card')
-    expect(wrapper.find('WalletIdentity').prop('isLoaded')).to.be.false
-    expect(wrapper.find('WalletIdentity').prop('username')).to.deep.equal({
-      verified: true,
-      value: 'AnnikaHamman'
-    })
-    expect(wrapper.find('WalletIdentity').prop('phones')).to.deep.equal(
-      [{number: '+49 176 12345678', type: 'mobile', verified: true}]
-    )
-    expect(wrapper.find('WalletIdentity').prop('emails')).to.deep.equal(
-      [{address: 'info@jolocom.com', type: 'mobile', verified: true}]
-    )
-    expect(wrapper.find('WalletIdentity').prop('passports')).to.deep.equal([])
-  })
-  it('should call goToDrivingLicenceManagement with proper params', () => {
-    const goToDrivingLicenceManagement = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                emails: [],
-                phones: []
-              },
-              passport: {},
-              error: false
-            }
-          }
-        }))
-      }
-        setFocusedPin={() => {}}
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={goToDrivingLicenceManagement}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
-        confirmEmail={() => {}}
-        confirmPhone={() => {}}
-        resendVerificationLink={() => {}}
-        resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
-        saveToBlockchain={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-      )
-
-    wrapper.find('WalletIdentity').props().goToDrivingLicenceManagement()
-    expect(goToDrivingLicenceManagement.called).to.be.true
-    expect(goToDrivingLicenceManagement.calls).to.deep.equal([{args: []}])
-  })
-  it('should call goToPassportManagement with proper params', () => {
-    const goToPassportManagement = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
-          }
-        }))
-      }
-        setFocusedPin={() => {}}
-        goToPassportManagement={goToPassportManagement}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
-        confirmEmail={() => {}}
-        confirmPhone={() => {}}
-        resendVerificationLink={() => {}}
-        resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
-        saveToBlockchain={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-    )
-
-    wrapper.find('WalletIdentity').props().goToPassportManagement()
-    expect(goToPassportManagement.called).to.be.true
-    expect(goToPassportManagement.calls).to.deep.equal([{args: []}])
-  })
-  it('should call goToContactManagement with proper params', () => {
-    const goToContactManagement = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
-          }
-        }))
-      }
-        setFocusedPin={() => {}}
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={goToContactManagement}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
-        confirmEmail={() => {}}
-        confirmPhone={() => {}}
-        resendVerificationLink={() => {}}
-        resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
-        saveToBlockchain={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-    )
-
-    wrapper.find('WalletIdentity').props().goToContactManagement()
-    expect(goToContactManagement.called).to.be.true
-    expect(goToContactManagement.calls).to.deep.equal([{args: []}])
-  })
-  it('should call getIdentityInformation on componentWillMount with proper params', () => { // eslint-disable-line max-len
-    const getIdentityInformation = stub()
-    shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
-          }
-        }))
-      }
-        setFocusedPin={() => {}}
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={getIdentityInformation}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
-        confirmEmail={() => {}}
-        confirmPhone={() => {}}
-        resendVerificationLink={() => {}}
-        resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
-        saveToBlockchain={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-    )
-
+    wrapper.instance()
     expect(getIdentityInformation.called).to.be.true
     expect(getIdentityInformation.calls).to.deep.equal([{args: []}])
   })
-  it('requestVerificationCode should call startPhoneVerification when the attribute type is phone', () => { // eslint-disable-line max-len
-    const startPhoneVerification = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
+  it('should call goTo with proper params', () => {
+    const goTo = stub()
+    const wrapper = shallow((<WalletIdentityScreen.WrappedComponent {
+      ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+        wallet: {
+          identity: {
+            loaded: true,
+            webId: '',
+            username: {},
+            contact: {
+              emails: [],
+              phones: []
+            },
+            passport: {},
+            error: false
           }
-        }))
-      }
-        setFocusedPin={() => {}}
-        goToPassportManagement={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={startPhoneVerification}
-        startEmailVerification={() => {}}
-        confirmEmail={() => {}}
-        confirmPhone={() => {}}
-        resendVerificationLink={() => {}}
-        resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
-        saveToBlockchain={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-    )
+        }
+      }))
+    }
+      changePinValue={() => {}}
+      confirmEmail={() => {}}
+      confirmPhone={() => {}}
+      expandField={() => {}}
+      getIdentityInformation={() => {}}
+      goTo={goTo}
+      openConfirmDialog={() => {}}
+      resendVerificationLink={() => {}}
+      resendVerificationSms={() => {}}
+      saveToBlockchain={() => {}}
+      setFocusedPin={() => {}}
+      startPhoneVerification={() => {}}
+      startEmailVerification={() => {}} />),
+    { context: { muiTheme: { } } })
 
-    wrapper.instance().requestVerificationCode({
-      attrType: 'phone',
-      attrValue: '1234',
-      index: '2'
-    })()
-    expect(startPhoneVerification.called).to.be.true
-    expect(startPhoneVerification.calls).to.deep.equal([{args: [{
-      phone: '1234',
-      index: '2'
-    }]}])
-  })
-  it('requestVerificationCode should call startEmailVerification when the attribute type is email', () => { // eslint-disable-line max-len
-    const startEmailVerification = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
-          }
-        }))
-      }
-        goToPassportManagement={() => {}}
-        setFocusedPin={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={startEmailVerification}
-        confirmEmail={() => {}}
-        confirmPhone={() => {}}
-        resendVerificationLink={() => {}}
-        resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
-        saveToBlockchain={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-    )
-
-    wrapper.instance().requestVerificationCode({
-      attrType: 'email',
-      attrValue: 'test@test.com',
-      index: '0'
-    })()
-    expect(startEmailVerification.called).to.be.true
-    expect(startEmailVerification.calls).to.deep.equal([{args: [{
-      email: 'test@test.com',
-      index: '0'
-    }]}])
+    wrapper.find(Presentation).props().goTo('test')
+    expect(goTo.called).to.be.true
+    expect(goTo.calls).to.deep.equal([{args: ['test']}])
   })
   it('resendVerificationCode should return resendVerificationSms when the attribute type is phone', () => { // eslint-disable-line max-len
     const resendVerificationSms = stub()
@@ -382,24 +116,19 @@ describe('(Component) WalletIdentityScreen', () => {
           }
         }))
       }
-        goToPassportManagement={() => {}}
-        setFocusedPin={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
+        changePinValue={() => {}}
         confirmEmail={() => {}}
         confirmPhone={() => {}}
+        expandField={() => {}}
+        getIdentityInformation={() => {}}
+        goTo={() => {}}
+        openConfirmDialog={() => {}}
         resendVerificationLink={() => {}}
         resendVerificationSms={resendVerificationSms}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
         saveToBlockchain={() => {}}
+        setFocusedPin={() => {}}
+        startEmailVerification={() => {}}
+        startPhoneVerification={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
@@ -417,45 +146,37 @@ describe('(Component) WalletIdentityScreen', () => {
   })
   it('resendVerificationCode should return resendVerificationLink when the attribute type is email', () => { // eslint-disable-line max-len
     const resendVerificationLink = stub()
-    const wrapper = shallow(
-      (<WalletIdentityScreen.WrappedComponent {
-        ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-          wallet: {
-            identity: {
-              loaded: false,
-              webId: '',
-              username: {},
-              contact: {
-                phones: [],
-                emails: []
-              },
-              passport: {},
-              error: false
-            }
+    const wrapper = shallow((<WalletIdentityScreen.WrappedComponent {
+      ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
+        wallet: {
+          identity: {
+            loaded: false,
+            webId: '',
+            username: {},
+            contact: {
+              phones: [],
+              emails: []
+            },
+            passport: {},
+            error: false
           }
-        }))
-      }
-        goToPassportManagement={() => {}}
-        setFocusedPin={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
-        confirmEmail={() => {}}
-        confirmPhone={() => {}}
-        resendVerificationLink={resendVerificationLink}
-        resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
-        saveToBlockchain={() => {}}
-       />),
-      { context: { muiTheme: { } } }
-    )
+        }
+      }))
+    }
+      changePinValue={() => {}}
+      confirmEmail={() => {}}
+      confirmPhone={() => {}}
+      expandField={() => {}}
+      getIdentityInformation={() => {}}
+      goTo={() => {}}
+      openConfirmDialog={() => {}}
+      resendVerificationLink={resendVerificationLink}
+      saveToBlockchain={() => {}}
+      setFocusedPin={() => {}}
+      startEmailVerification={() => {}}
+      startPhoneVerification={() => {}}
+     />),
+    { context: { muiTheme: { } } })
 
     wrapper.instance().resendVerificationCode({
       attrType: 'email',
@@ -488,36 +209,30 @@ describe('(Component) WalletIdentityScreen', () => {
           }
         }))
       }
-        goToPassportManagement={() => {}}
-        setFocusedPin={() => {}}
-        goToDrivingLicenceManagement={() => {}}
-        goToContactManagement={() => {}}
-        getIdentityInformation={() => {}}
-        closeConfirmDialog={() => {}}
-        openConfirmDialog={() => {}}
-        configSimpleDialog={() => {}}
-        showSimpleDialog={() => {}}
-        startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
+        changePinValue={() => {}}
         confirmEmail={() => {}}
         confirmPhone={confirmPhone}
+        expandField={() => {}}
+        getIdentityInformation={() => {}}
+        goTo={() => {}}
+        openConfirmDialog={() => {}}
         resendVerificationLink={() => {}}
         resendVerificationSms={() => {}}
-        changePinValue={() => {}}
-        changeSmsCodeValue={() => {}}
         saveToBlockchain={() => {}}
-       />),
+        setFocusedPin={() => {}}
+        startEmailVerification={() => {}}
+        startPhoneVerification={() => {}}
+        />),
       { context: { muiTheme: { } } }
     )
 
     wrapper.instance().enterVerificationCode({
       attrType: 'phone',
-      attrValue: '1234'
+      attrValue: '1234',
+      index: '1'
     })()
     expect(confirmPhone.called).to.be.true
-    expect(confirmPhone.calls).to.deep.equal([{args: [{
-      phone: '1234'
-    }]}])
+    expect(confirmPhone.calls).to.deep.equal([{args: ['1']}])
   })
   it('enterVerificationCode should return confirmEmail when the attribute type is email', () => { // eslint-disable-line max-len
     const confirmEmail = stub()
@@ -538,24 +253,19 @@ describe('(Component) WalletIdentityScreen', () => {
         }
       }))
     }
-      goToPassportManagement={() => {}}
-      setFocusedPin={() => {}}
-      goToDrivingLicenceManagement={() => {}}
-      goToContactManagement={() => {}}
-      getIdentityInformation={() => {}}
-      closeConfirmDialog={() => {}}
-      openConfirmDialog={() => {}}
-      configSimpleDialog={() => {}}
-      showSimpleDialog={() => {}}
-      startPhoneVerification={() => {}}
-      startEmailVerification={() => {}}
+      changePinValue={() => {}}
       confirmEmail={confirmEmail}
       confirmPhone={() => {}}
+      expandField={() => {}}
+      getIdentityInformation={() => {}}
+      goTo={() => {}}
+      openConfirmDialog={() => {}}
       resendVerificationLink={() => {}}
       resendVerificationSms={() => {}}
-      changePinValue={() => {}}
-      changeSmsCodeValue={() => {}}
-      saveToBlockchain={() => {}} />),
+      saveToBlockchain={() => {}}
+      setFocusedPin={() => {}}
+      startEmailVerification={() => {}}
+      startPhoneVerification={() => {}} />),
       { context: { muiTheme: { } } }
     )
 
@@ -587,24 +297,19 @@ describe('(Component) WalletIdentityScreen', () => {
         }
       }))
     }
-      goToPassportManagement={() => {}}
-      setFocusedPin={() => {}}
-      goToDrivingLicenceManagement={() => {}}
-      goToContactManagement={() => {}}
-      getIdentityInformation={() => {}}
-      closeConfirmDialog={() => {}}
-      openConfirmDialog={openConfirmDialog}
-      configSimpleDialog={() => {}}
-      showSimpleDialog={() => {}}
-      startPhoneVerification={() => {}}
-      startEmailVerification={() => {}}
+      changePinValue={() => {}}
       confirmEmail={() => {}}
       confirmPhone={() => {}}
+      expandField={() => {}}
+      getIdentityInformation={() => {}}
+      goTo={() => {}}
+      openConfirmDialog={openConfirmDialog}
       resendVerificationLink={() => {}}
       resendVerificationSms={() => {}}
-      changePinValue={() => {}}
-      changeSmsCodeValue={() => {}}
-      saveToBlockchain={() => {}} />),
+      saveToBlockchain={() => {}}
+      setFocusedPin={() => {}}
+      startEmailVerification={() => {}}
+      startPhoneVerification={() => {}} />),
       { context: { muiTheme: { } } }
     )
     const window = {

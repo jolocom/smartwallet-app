@@ -6,32 +6,36 @@ import Presentation from '../presentation/id-card'
 @connect({
   props: ['wallet.idCard'],
   actions: [
-    'simple-dialog:showSimpleDialog',
     'simple-dialog:configSimpleDialog',
+    'simple-dialog:showSimpleDialog',
     'wallet/country-select:initiateCountrySelectScreen',
-    'wallet/id-card:save',
-    'wallet/id-card:retrieveIdCardInformation',
+    'wallet/id-card:cancel',
     'wallet/id-card:changeIdCardField',
+    'wallet/id-card:changeIdCardPhoto',
     'wallet/id-card:changePhysicalAddressField',
+    'wallet/id-card:goToIdCardPhotoScreen',
+    'wallet/id-card:save',
     'wallet/id-card:setFocusedField',
     'wallet/id-card:setShowAddress',
-    'wallet/id-card:cancel'
+    'wallet/id-card:retrieveIdCardInformation'
   ]
 })
 
 export default class WalletPaasportScreen extends React.Component {
   static propTypes = {
-    idCard: React.PropTypes.object.isRequired,
-    save: React.PropTypes.func.isRequired,
-    retrieveIdCardInformation: React.PropTypes.func.isRequired,
+    cancel: React.PropTypes.func.isRequired,
     changeIdCardField: React.PropTypes.func.isRequired,
-    initiateCountrySelectScreen: React.PropTypes.func.isRequired,
+    changeIdCardPhoto: React.PropTypes.func.isRequired,
     changePhysicalAddressField: React.PropTypes.func.isRequired,
+    configSimpleDialog: React.PropTypes.func.isRequired,
+    goToIdCardPhotoScreen: React.PropTypes.func.isRequired,
+    idCard: React.PropTypes.object.isRequired,
+    initiateCountrySelectScreen: React.PropTypes.func.isRequired,
+    save: React.PropTypes.func.isRequired,
     setFocusedField: React.PropTypes.func.isRequired,
     setShowAddress: React.PropTypes.func.isRequired,
     showSimpleDialog: React.PropTypes.func.isRequired,
-    configSimpleDialog: React.PropTypes.func.isRequired,
-    cancel: React.PropTypes.func.isRequired
+    retrieveIdCardInformation: React.PropTypes.func.isRequired
   }
 
   render() {
@@ -47,6 +51,7 @@ export default class WalletPaasportScreen extends React.Component {
       showVerifierLocations={(...args) => this.showVerifiers(...args)}
       setFocused={(...args) => { this.setFocusedElements(...args) }}
       change={(...args) => { this.change(...args) }}
+      goToIdCardPhotoScreen={this.props.goToIdCardPhotoScreen}
       cancel={cancel}
       selectCountry={initiateCountrySelectScreen}
       showAddress={this.props.idCard.idCard.showAddress}
@@ -54,20 +59,24 @@ export default class WalletPaasportScreen extends React.Component {
       idCard={this.parseIdCardDetailsToArray()} />
   }
 
-  showVerifiers(...args) {
-    this.props.configSimpleDialog(null, args, 'OK', {})
+  showVerifiers({callBack, message, buttonLabel, style}) {
+    this.props.configSimpleDialog(callBack, message, buttonLabel, style)
     this.props.showSimpleDialog()
   }
 
   change(field, value) {
-    const {city} = this.props.idCard.idCard.physicalAddress
-    const idCardFields = this.parseIdCardDetailsToArray()
-      .map(({key}) => key)
+    const imageKeys = ['frontSideImg', 'backSideImg']
+    if (imageKeys.includes(field)) {
+      this.props.changeIdCardPhoto(field, '')
+    }
+    const idCardFields = [
+      ...this.parseIdCardDetailsToArray().map(({key}) => key)
+    ]
     if (idCardFields.includes(field)) {
       return this.props.changeIdCardField(field, value)
-    } else if (['streetWithNumber'].includes(field)) {
-      this.props.setShowAddress(value.trim().length > 0 || city.value.length > 0) // eslint-disable-line max-len
-      return this.props.changePhysicalAddressField(field, value)
+    } else if (field === 'streetWithNumber') {
+      const {city} = this.props.idCard.idCard.physicalAddress
+      this.props.setShowAddress(value.length > 0 || city.value.length > 0)
     }
     return this.props.changePhysicalAddressField(field, value)
   }
@@ -77,15 +86,17 @@ export default class WalletPaasportScreen extends React.Component {
       return this.props.setFocusedField('', '')
     } else if (key === 'streetWithNumber') {
       this.props.setShowAddress(true)
-      return this.props.setFocusedField(key, group)
     }
     return this.props.setFocusedField(key, group)
   }
 
   parseIdCardDetailsToArray() {
     const {number, expirationDate, firstName, lastName, gender, birthDate,
-      birthPlace, birthCountry} = this.props.idCard.idCard
+      birthPlace, birthCountry, images} = this.props.idCard.idCard
+    const { frontSideImg, backSideImg } = images
     return [
+      {label: 'ID Card Image', key: 'frontSideImg', group: 'img', ...frontSideImg}, // eslint-disable-line max-len
+      {label: 'ID Card Image', key: 'backSideImg', group: 'img', ...backSideImg}, // eslint-disable-line max-len
       {label: 'ID Card Number', key: 'number', group: 'numbers', ...number},
       {label: 'Expiration Date', key: 'expirationDate', group: 'numbers', ...expirationDate}, // eslint-disable-line max-len
       {label: 'First Name', key: 'firstName', group: 'person', ...firstName},

@@ -16,30 +16,41 @@ describe('# Edit contact Util', () => {
     it('should map account information to state properly', () => {
       const result = {
         email: [
-          {address: 'test1@test.com', id: 1, verified: false},
-          {address: 'test2@test.com', id: 2, verified: true}],
+          {address: 'test1@test.com',
+            id: 1,
+            verified: false
+          },
+          {address: 'test2@test.com',
+            id: 2,
+            verified: true
+          }
+        ],
         phone: [{
           number: '+123456789', id: 3, type: 'personal', verified: true
         }]
       }
+
       const state = {
         loading: false,
         showErrors: false,
+        callback: '/test/test',
         information: {
           originalInformation: {
-            emails: [{
-              value: 'test1@test.com', id: 1, verified: false,
-              delete: false, update: false, valid: true
-            }, {
-              value: 'test2@test.com', id: 2, verified: true, delete: false,
-              update: false, valid: true
-            }],
-            phones: [{
-              value: '+123456789',
-              type: 'personal', delete: false,
-              update: false, verified: true,
-              valid: true, id: 3
-            }],
+            emails: [
+              {value: 'test1@test.com', id: 1, verified: false,
+                delete: false, update: false, valid: true
+              },
+              {value: 'test2@test.com', id: 2, verified: true, delete: false,
+                update: false, valid: true
+              }
+            ],
+            phones: [
+              {value: '+123456789',
+                type: 'personal', delete: false,
+                update: false, verified: true,
+                valid: true, id: 3
+              }
+            ],
             addresses: []
           },
           newInformation: {
@@ -58,8 +69,8 @@ describe('# Edit contact Util', () => {
           }
         }
       }
-      expect(mapAccountInformationToState(result)
-    .toJS()).to.deep.equal(state)
+      expect(mapAccountInformationToState('/test/test', result).toJS())
+      .to.deep.equal(state)
     })
   })
   describe('# addNewField', () => {
@@ -403,13 +414,10 @@ describe('# Edit contact Util', () => {
   describe('# submitChanges', () => {
     describe('# Email', () => {
       it('should set a new valid emails value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
-        // const services = {auth: {currentUser: {wallet}}}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -422,18 +430,15 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(backend.solid.setEmail.called).to.be.true
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.true
+        expect(deleteAttribute.called).to.be.false
       })
       it('should not set a new non valid emails value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -446,18 +451,15 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.false
       })
       it('should update a non verified valid emails value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [{
@@ -471,20 +473,16 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(updateEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'email', 1, 'test@test.com']}])
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.true
+        expect(deleteAttribute.called).to.be.false
       })
-      it('should not update a non verified emails with a non valid value',
+      it('should not update a non verified email with a non valid value',
       () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [{
@@ -498,18 +496,15 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.false
       })
-      it('should not update a verified emails', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+      it('should not update a verified email', () => {
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [{
@@ -523,18 +518,15 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.false
       })
       it('should delete a deleted emails value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [{
@@ -548,22 +540,17 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.true
-        expect(deleteEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'email', 1]}])
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.true
       })
     })
     describe('# Phone', () => {
       it('should set a new valid phones value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -577,19 +564,15 @@ describe('# Edit contact Util', () => {
             }]
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(setPhone.called).to.be.true
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.true
+        expect(deleteAttribute.called).to.be.false
       })
       it('should not set a new non valid phones value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -603,19 +586,15 @@ describe('# Edit contact Util', () => {
             }]
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(setPhone.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.false
       })
       it('should update a non verified phones value with a valid value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -629,22 +608,16 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(setPhone.called).to.be.false
-        expect(deleteEntry.called).to.be.false
-        expect(updateEntry.called).to.be.true
-        expect(updateEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'phone', 1, '123456']}])
+        submitChanges({}, services, state, webId)
+        expect(deleteAttribute.called).to.be.false
+        expect(storeAttribute.called).to.be.true
       })
       it('should not update a non verified phones value with a non valid value',
       () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -658,19 +631,15 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(setPhone.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.false
       })
       it('should not update a verified valid phones value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -684,19 +653,15 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(setPhone.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.false
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.false
       })
       it('should delete a deleted phones value', () => {
-        const setEmail = stub()
-        const deleteEntry = stub()
-        const updateEntry = stub()
-        const setPhone = stub()
-        const solid = {setEmail, setPhone, deleteEntry, updateEntry}
-        const backend = {solid}
+        const storeAttribute = stub()
+        const deleteAttribute = stub()
+        const wallet = {storeAttribute, deleteAttribute}
+        const services = {auth: {currentUser: {wallet}}}
         const state = {
           originalInformation: {
             emails: [],
@@ -710,13 +675,9 @@ describe('# Edit contact Util', () => {
             phones: []
           }
         }
-        submitChanges(backend, {}, state, webId)
-        expect(setEmail.called).to.be.false
-        expect(setPhone.called).to.be.false
-        expect(updateEntry.called).to.be.false
-        expect(deleteEntry.called).to.be.true
-        expect(deleteEntry.calls).to.be.deep
-        .equal([{args: ['testuser', 'phone', 1]}])
+        submitChanges({}, services, state, webId)
+        expect(storeAttribute.called).to.be.false
+        expect(deleteAttribute.called).to.be.true
       })
     })
   })

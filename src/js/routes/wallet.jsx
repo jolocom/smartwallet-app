@@ -35,8 +35,13 @@ import WalletContactScreen from 'components/wallet/screens/contact'
 import WalletIdCardScreen from 'components/wallet/screens/id-card'
 import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
 import CountrySelectScreen from 'components/wallet/screens/country-select'
+import AccessRequestScreen
+  from 'components/single-sign-on/screens/access-request'
+import AccessConfirmationScreen from
+  'components/single-sign-on/screens/access-confirmation'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
+import WalletIdCardPhotoScreen from 'components/wallet/screens/webcam'
 
 import EtherSendScreen from 'components/wallet/screens/ether-send'
 import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
@@ -46,6 +51,20 @@ import WalletLogin from 'components/wallet-login'
 import LaymanLoginScreen from 'components/wallet-login/screens/layman'
 import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
 import LoginPinScreen from 'components/wallet-login/screens/pin'
+
+import SingleSignOnAccessRightScreen from
+  'components/single-sign-on/screens/access-right'
+import SingleSignOnSharedDatatScreen from
+  'components/single-sign-on/screens/shared-data'
+
+import {
+  VerificationDataScreen,
+  VerificationFaceScreen,
+  VerificationTransitionScreen,
+  VerificationCountryScreen,
+  VerificationDocumentScreen,
+  VerificationResultScreen
+} from 'components/verifier'
 
 export const routes = {
   login: '/login',
@@ -67,7 +86,18 @@ export const navItems = [{
 function getRoutes() {
   return (<Route path="/" component={App} >
     <IndexRoute component={Index} />
-
+    <Route path="verifier"
+      component={VerificationTransitionScreen} />
+    <Route path="verifier/face"
+      component={VerificationFaceScreen} />
+    <Route path="verifier/data"
+      component={VerificationDataScreen} />
+    <Route path="verifier/result"
+      component={VerificationResultScreen} />
+    <Route path="verifier/document"
+      component={VerificationDocumentScreen} />
+    <Route path="verifier/country"
+      component={VerificationCountryScreen} />
     <Route path="registration"
       component={RegistrationNameEntryScreen} />
     <Route path="registration/entropy"
@@ -89,6 +119,8 @@ function getRoutes() {
       component={WalletContactScreen} />
     <Route path="wallet/identity/id-card"
       component={WalletIdCardScreen} />
+    <Route path="wallet/identity/id-card-photo"
+      component={WalletIdCardPhotoScreen} />
     <Route path="wallet/identity/passport/add"
       component={WalletIdCardScreen} />
     <Route path="wallet/identity/country-select"
@@ -109,6 +141,10 @@ function getRoutes() {
     </Route>
 
     <Route path="profile" component={Profile} />
+    <Route path="wallet/single-sign-on/access-request"
+      component={AccessRequestScreen} />
+    <Route path="wallet/single-sign-on/access-confirmation"
+      component={AccessConfirmationScreen} />
 
     <Route path="forgot-password" component={ForgotPassword} />
     <Route path="change-password/:username/:token" component={ChangePassword} />
@@ -120,6 +156,10 @@ function getRoutes() {
     <Route path="login/pin-entry" component={LoginPinScreen} />
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
+    <Route path="single-sign-on/access-right"
+      component={SingleSignOnAccessRightScreen} />
+    <Route path="/single-sign-on/shared-data"
+      component={SingleSignOnSharedDatatScreen} />
   </Route>)
 }
 
