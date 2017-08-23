@@ -1,6 +1,4 @@
 import React from 'react'
-import Radium from 'radium'
-
 import {theme} from 'styles'
 import { RaisedButton, FlatButton } from 'material-ui'
 import {Block} from '../../../structure'
@@ -146,9 +144,9 @@ export default class EthConnectItem extends React.Component {
       To verify your data, lock it and grant or withdraw
       access to it, you need to connect your SmartWallet to
       a <span style={{color: theme.palette.accent1Color,
-          fontWeight: '300'}}
-          onClick={() => this.props.confirmDialog(infoPopup)}>
-          blockchain</span> called Ethereum. The locking
+        fontWeight: '300'}}
+        onClick={() => this.props.confirmDialog(infoPopup)}>
+        blockchain</span> called Ethereum. The locking
       of your data costs Ether which is the currency used
       for transactions on the blockchain.
       </div>
