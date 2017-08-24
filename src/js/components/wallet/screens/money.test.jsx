@@ -29,6 +29,7 @@ describe('(Component) WalletMoneyScreen', () => {
         buyEther={() => {}}
         getPrice={() => {}}
         getBalance={() => {}}
+        getMainAddress={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -64,6 +65,7 @@ describe('(Component) WalletMoneyScreen', () => {
         buyEther={() => {}}
         getPrice={() => {}}
         getBalance={() => {}}
+        getMainAddress={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -94,6 +96,7 @@ describe('(Component) WalletMoneyScreen', () => {
         goToEtherManagement={() => {}}
         getPrice={getPrice}
         getBalance={getBalance}
+        getMainAddress={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

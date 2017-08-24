@@ -8,6 +8,7 @@ describe('# Wallet money redux module', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal({
         screenToDisplay: '',
+        mainAddress: '',
         ether: {
           loaded: false,
           errorMsg: '',

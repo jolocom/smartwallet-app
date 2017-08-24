@@ -32,7 +32,6 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
-        dispatch(actions.goToWalletScreen.buildAction(params))
         dispatch(router.pushRoute('/wallet/money'))
       }
     }
@@ -110,6 +109,7 @@ const initialState = Immutable.fromJS({
   wallet: {
     loading: false,
     mainAddress: '',
+    amount: '',
     receiverAddress: '',
     amountSend: '',
     pin: '1234',
@@ -170,7 +170,8 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getBalance.id_success:
       return state.mergeIn(['wallet'], {
-        loading: false
+        loading: false,
+        amount: parseFloat(action.result)
       })
 
     case actions.getBalance.id_fail:

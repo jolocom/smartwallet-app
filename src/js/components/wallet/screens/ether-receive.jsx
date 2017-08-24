@@ -18,7 +18,7 @@ export default class EtherReceiveScreen extends React.Component {
     etherTabs: React.PropTypes.object
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.getWalletAddress()
   }
   render() {

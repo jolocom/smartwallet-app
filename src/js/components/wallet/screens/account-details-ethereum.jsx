@@ -14,7 +14,7 @@ export default class AccountDetailsEthereum extends React.Component {
     getWalletAddress: React.PropTypes.func
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.getWalletAddress()
   }
   render() {

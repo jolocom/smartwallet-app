@@ -83,7 +83,7 @@ const actions = module.exports = makeActions('wallet/money', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
-        console.log('go to account details')
+        // console.log('go to account details')
         dispatch(router.pushRoute('/wallet/account-details'))
       }
     }
