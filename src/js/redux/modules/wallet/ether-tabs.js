@@ -94,6 +94,14 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
         }))
       }
     }
+  },
+  closeAccountDetails: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(router.pushRoute('/wallet/ether'))
+      }
+    }
   }
 })
 
@@ -169,6 +177,9 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['wallet'], {
         loading: false
       })
+
+    case actions.closeAccountDetails.id:
+      return state
 
     default:
       return state

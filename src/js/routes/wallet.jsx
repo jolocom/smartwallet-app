@@ -56,6 +56,8 @@ import SingleSignOnAccessRightScreen from
   'components/single-sign-on/screens/access-right'
 import SingleSignOnSharedDatatScreen from
   'components/single-sign-on/screens/shared-data'
+import AccountDetailsEthereumScreen from
+  'components/wallet/screens/account-details-ethereum'
 
 import {
   VerificationDataScreen,
@@ -131,6 +133,8 @@ function getRoutes() {
       <IndexRoute component={WalletEtherScreen} />
       <Route path="receive" component={EtherReceiveScreen} />
     </Route>
+    <Route path="wallet/account-details"
+      component={AccountDetailsEthereumScreen} />
 
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
@@ -166,6 +170,3 @@ function getRoutes() {
 export default (history) => {
   return (<Router history={history}>{getRoutes()}</Router>)
 }
-
-// <Route path="wallet/ether"
-//   component={WalletEtherScreen} />

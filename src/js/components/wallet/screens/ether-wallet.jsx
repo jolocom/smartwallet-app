@@ -6,7 +6,8 @@ import Presentation from '../presentation/ether-wallet'
   props: ['wallet.money'],
   actions: [
     'wallet/money:buyEther',
-    'wallet/money:goToWalletScreen'
+    'wallet/money:goToWalletScreen',
+    'wallet/money:goToAccountDetailsEthereum'
   ]
 })
 export default class WalletEtherScreen extends React.Component {
@@ -14,6 +15,7 @@ export default class WalletEtherScreen extends React.Component {
     children: React.PropTypes.node,
     buyEther: React.PropTypes.func,
     goToWalletScreen: React.PropTypes.func,
+    goToAccountDetailsEthereum: React.PropTypes.func,
     money: React.PropTypes.object
   }
 
@@ -21,6 +23,7 @@ export default class WalletEtherScreen extends React.Component {
     return (<Presentation
       onToken={token => this.props.buyEther({stripeToken: token})}
       goToWalletScreen={this.props.goToWalletScreen}
+      goToAccountDetailsEthereum={this.props.goToAccountDetailsEthereum}
       ether={this.props.money} />)
   }
 }

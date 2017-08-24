@@ -2,12 +2,12 @@ import React from 'react'
 import Radium from 'radium'
 
 // import {NavigationArrowBack} from 'material-ui/svg-icons'
-// import {AppBar} from 'material-ui'
+import {Divider, List, ListItem, FlatButton} from 'material-ui'
 import {Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
 import Spinner from '../../common/spinner'
 
-// import {theme} from 'styles'
+import {theme} from 'styles'
 
 import {
   TabContainer,
@@ -21,8 +21,21 @@ const STYLES = {
     padding: '24px',
     textAlign: 'center'
   },
+  headItem: {
+    width: '100%',
+    fontSize: '24px'
+  },
   header: {
     margin: '16px 0'
+  },
+  divider: {
+    marginLeft: '16px'
+  },
+  listItem: {
+    padding: '16px 0px 0px 72px'
+  },
+  getAccountContainer: {
+    marginTop: '8px'
   }
 }
 
@@ -33,7 +46,8 @@ export default class WalletEther extends React.Component {
     onToken: React.PropTypes.func,
     ether: React.PropTypes.object,
     avatar: React.PropTypes.string,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    goToAccountDetailsEthereum: React.PropTypes.func
   }
 
   renderLoading() {
@@ -52,9 +66,19 @@ export default class WalletEther extends React.Component {
 
   renderHasEther() {
     return (
-      <EtherBalance
-        amount={this.props.ether.ether.amount}
-        currencyPrice={this.props.ether.ether.price} />
+      <HalfScreenContainer>
+        <EtherBalance
+          amount={this.props.ether.ether.amount}
+          currencyPrice={this.props.ether.ether.price} />
+        <List>
+          <ListItem
+            disabled
+            style={STYLES.headItem}
+            primaryText={'Current Transactions'} />
+          <Divider
+            style={STYLES.divider} />
+        </List>
+      </HalfScreenContainer>
     )
   }
 
@@ -80,6 +104,14 @@ export default class WalletEther extends React.Component {
             <StripeCheckout onToken={token => {
               this.props.onToken(token)
             }} />
+          </Block>
+          <Block style={STYLES.getAccountContainer}>
+            <SideNote>...or transfer some from a different account.</SideNote>
+            <FlatButton
+              style={{color: theme.palette.accent1Color}}
+              onClick={this.props.goToAccountDetailsEthereum}>
+              GET ACCOUNT DETAILS
+            </FlatButton>
           </Block>
         </div>
       </HalfScreenContainer>

@@ -4,7 +4,7 @@ import Presentation from '../presentation/ether-send'
 
 @connect({
   props: ['wallet.money',
-          'wallet.etherTabs'],
+    'wallet.etherTabs'],
   actions: [
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
@@ -15,7 +15,10 @@ import Presentation from '../presentation/ether-send'
 export default class EtherSendScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    money: React.PropTypes.number.isRequired
+    money: React.PropTypes.object.isRequired,
+    updateField: React.PropTypes.func,
+    etherTabs: React.PropTypes.object,
+    sendEther: React.PropTypes.func
   }
 
   updateField = (value, field) => {

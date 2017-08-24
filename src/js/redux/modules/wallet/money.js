@@ -78,6 +78,15 @@ const actions = module.exports = makeActions('wallet/money', {
         dispatch(actions.goToWalletScreen.buildAction(params))
       }
     }
+  },
+  goToAccountDetailsEthereum: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        console.log('go to account details')
+        dispatch(router.pushRoute('/wallet/account-details'))
+      }
+    }
   }
 })
 
@@ -173,6 +182,9 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.merge({
         screenToDisplay: action.value
       })
+    case actions.goToAccountDetailsEthereum.id:
+      return state
+
     default:
       return state
   }
