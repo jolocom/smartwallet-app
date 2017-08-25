@@ -35,7 +35,7 @@ export default class EtherReceive extends React.Component {
   }
 
   render() {
-    const mainAddress = this.props.ether.mainAddress
+    const mainAddress = this.props.ether.walletAddress
     return (
       <TabContainer>
         <EtherBalance

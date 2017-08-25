@@ -50,9 +50,9 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.getWalletAddress.buildAction(params, () => {
-          return services.auth.currentUser.wallet.getMainAddress()
-          .then((mainAddress) => {
-            return mainAddress
+          return services.auth.currentUser.wallet.getWalletAddress()
+          .then((result) => {
+            return result
           })
         }))
       }
@@ -64,13 +64,14 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.sendEther.buildAction(params, () => {
+          console.log('ACTIONS SEND ETHER', services.auth.getSeedPhrase)
           const {receiverAddress, amountSend, data, pin, gasInWei} = getState().toJS().wallet.etherTabs.wallet // eslint-disable-line max-len
           return backend.gateway.sendEther({
             userName: services.auth.currentUser.wallet.userName,
+            seedPhrase: services.auth.currentUser.encryptedSeedPhrase,
             receiver: receiverAddress,
             amountEther: amountSend,
             data: data,
-            pin: pin,
             gasInWei: gasInWei})
         })).then((response) => {
           dispatch(actions.getBalance())
@@ -85,10 +86,10 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getBalance.buildAction(params, (backend) => {
-          const {mainAddress} = getState().toJS().wallet.etherTabs.wallet
+          const {walletAddress} = getState().toJS().wallet.etherTabs.wallet
           return backend.gateway.getBalanceEther({
             userName: services.auth.currentUser.userName,
-            mainAddress: mainAddress
+            walletAddress: walletAddress
           })
         }))
       }
@@ -108,7 +109,8 @@ const initialState = Immutable.fromJS({
   activeTab: 'overview',
   wallet: {
     loading: false,
-    mainAddress: '',
+    error: '',
+    walletAddress: '',
     amount: '',
     receiverAddress: '',
     amountSend: '',
@@ -126,15 +128,21 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getWalletAddress.id:
-      return state
+      return state.mergeIn(['wallet'], {
+        loading: true
+      })
 
     case actions.getWalletAddress.id_success:
       return state.mergeIn(['wallet'], {
-        mainAddress: action.value
+        loading: false,
+        walletAddress: action.result.walletAddress
       })
 
     case actions.getWalletAddress.id_fail:
-      return state
+      return state.mergeIn(['wallet'], {
+        loading: false,
+        error: 'OOOOPPPS, something went wrong. Please try again.'
+      })
 
     case actions.updateField.id:
       if (action.field === 'receiverAddress') {
@@ -155,12 +163,14 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.sendEther.id_success:
       return state.mergeIn(['wallet'], {
-        loading: false
+        loading: false,
+        error: ''
       })
 
     case actions.sendEther.id_fail:
       return state.mergeIn(['wallet'], {
-        loading: false
+        loading: false,
+        error: 'OOOOPPPS, something went wrong. Please try again.'
       })
 
     case actions.getBalance.id:
@@ -171,12 +181,14 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.getBalance.id_success:
       return state.mergeIn(['wallet'], {
         loading: false,
+        error: '',
         amount: parseFloat(action.result)
       })
 
     case actions.getBalance.id_fail:
       return state.mergeIn(['wallet'], {
-        loading: false
+        loading: false,
+        error: 'OOOOPPPS, something went wrong. Please try again.'
       })
 
     case actions.closeAccountDetails.id:

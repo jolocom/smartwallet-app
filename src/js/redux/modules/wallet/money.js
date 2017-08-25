@@ -12,15 +12,15 @@ const actions = module.exports = makeActions('wallet/money', {
       }
     }
   },
-  getMainAddress: {
+  getWalletAddress: {
     expectedParams: [],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
-        dispatch(actions.getMainAddress.buildAction(params, () => {
-          return services.auth.currentUser.wallet.getMainAddress()
-          .then((mainAddress) => {
-            return mainAddress
+        dispatch(actions.getWalletAddress.buildAction(params, () => {
+          return services.auth.currentUser.wallet.getWalletAddress()
+          .then((result) => {
+            return result
           })
         }))
       }
@@ -32,10 +32,10 @@ const actions = module.exports = makeActions('wallet/money', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, (backend) => {
-          const mainAddress = getState().toJS().wallet.money.mainAddress
+          const walletAddress = getState().toJS().wallet.money.walletAddress
           return backend.gateway.buyEther({
             stripeToken: params.stripeToken,
-            walletAddress: mainAddress
+            walletAddress: walletAddress
           }).then((response) => {
             dispatch(actions.getBalance())
             return response
@@ -50,10 +50,10 @@ const actions = module.exports = makeActions('wallet/money', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.getBalance.buildAction(params, (backend) => {
-          const mainAddress = getState().toJS().wallet.money.mainAddress
+          const walletAddress = getState().toJS().wallet.money.walletAddress
           return backend.gateway.getBalanceEther({
-            userName: services.auth.currentUser.userName,
-            mainAddress: mainAddress
+            userName: services.auth.currentUser.wallet.userName,
+            walletAddress: walletAddress
           })
         }))
       }
@@ -83,7 +83,6 @@ const actions = module.exports = makeActions('wallet/money', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
-        // console.log('go to account details')
         dispatch(router.pushRoute('/wallet/account-details'))
       }
     }
@@ -92,7 +91,7 @@ const actions = module.exports = makeActions('wallet/money', {
 
 const initialState = Immutable.fromJS({
   screenToDisplay: '',
-  mainAddress: '',
+  walletAddress: '',
   ether: {
     loaded: false,
     errorMsg: '',
@@ -105,17 +104,19 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.getMainAddress.id:
-      // TODO loading
-      return state
-
-    case actions.getMainAddress.id_success:
-      return state.merge({
-        mainAddress: action.result
+    case actions.getWalletAddress.id:
+      return state.mergeIn(['ether'], {
+        loaded: false
       })
 
-    case actions.getMainAddress.id_fail:
+    case actions.getWalletAddress.id_success:
+      return state.merge({
+        walletAddress: action.result.walletAddress
+      })
+
+    case actions.getWalletAddress.id_fail:
       // TODO error
+      console.log('ERROR getMainAddress')
       return state
 
     case actions.buyEther.id:
@@ -147,6 +148,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getBalance.id_fail:
+      console.log('get balance error')
       return state.mergeIn(['ether'], {
         loaded: true,
         errorMsg: 'Could not get the user\'s ether balance'
@@ -154,7 +156,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getBalance.id_success:
       return state.mergeIn(['ether'], {
-        amount: parseFloat(action.result),
+        amount: parseFloat(action.result.ether),
         loaded: true,
         errorMsg: ''
       })

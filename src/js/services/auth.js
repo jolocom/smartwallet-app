@@ -60,11 +60,8 @@ export class Wallet {
     this.encryptedSeedPhrase = encryptedSeedPhrase
   }
 
-  getMainAddress() {
-    return this._gateway.getMainAddress({
-      userName: this.userName,
-      seedPhrase: this.seedPhrase
-    })
+  getWalletAddress() {
+    return this._gateway.getWalletAddress({userName: this.userName})
   }
 
   storeAttribute({attributeType, attributeData, attributeId}) {

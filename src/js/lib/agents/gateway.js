@@ -28,35 +28,34 @@ export default class GatewayAgent {
     )
   }
 
-  getBalanceEther({userName, mainAddress}) {
+  getBalanceEther({userName, walletAddress}) {
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/get-balance`,
-      JSON.stringify({mainAddress}),
+      JSON.stringify({walletAddress}),
       {'Content-type': 'application/json'}
     )
   }
 
-  sendEther({userName, receiver, amountEther, data, pin, gasInWei}) {
+  sendEther({userName, seedPhrase, receiver, amountEther, data, gasInWei}) {
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/send-ether`,
-      JSON.stringify({receiver, amountEther, data, pin, gasInWei}),
+      JSON.stringify({seedPhrase, receiver, amountEther, data, gasInWei}),
       {'Content-type': 'application/json'}
     )
   }
 
-  createEthereumIdentityContract({userName, mainAddress, seedPhrase}) {
-  // console.log('CREATE ETHEREUM IDENTITY', userName, mainAddress, seedPhrase)
+  createEthereumIdentityContract({userName, walletAddress, seedPhrase}) {
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
-      JSON.stringify({mainAddress, seedPhrase}),
+      JSON.stringify({walletAddress, seedPhrase}),
       {'Content-type': 'application/json'}
     )
   }
 
-  buyEther({stripeToken, mainAddress}) {
+  buyEther({stripeToken, walletAddress}) {
     return this._httpAgent.post(
       'https://verification.jolocom.com/ether/buy/ether',
-      JSON.stringify({stripeToken: JSON.stringify(stripeToken), mainAddress}),
+      JSON.stringify({stripeToken: JSON.stringify(stripeToken), walletAddress}),
       {'Content-type': 'application/json'},
       {credentials: 'omit'}
     )
@@ -95,11 +94,9 @@ export default class GatewayAgent {
     )
   }
 
-  getMainAddress({userName, seedPhrase}) {
-    return this._httpAgent.post(
-      `${this._gatewayUrl}/${userName}/ethereum`,
-      JSON.stringify({seedPhrase}),
-      {'Content-type': 'application/json'}
+  getWalletAddress({userName}) {
+    return this._httpAgent.get(
+      `${this._gatewayUrl}/${userName}/ethereum`
     )
   }
 

@@ -89,8 +89,7 @@ export default class WalletEther extends React.Component {
           <Block>
             <Header
               style={STYLES.header}
-              title="You don't have any Ether yet."
-            />
+              title="You don't have any Ether yet." />
             <SideNote>
               'To store your information securely, it costs Ether. One
                transaction (saving data) is at 30 cents. To use this app
