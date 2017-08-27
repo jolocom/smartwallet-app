@@ -67,7 +67,6 @@ export default class WalletAgent {
     return this._manager.loginFromSerialized(serialized)
   }
 
-
   sendEther({receiver, amountEther, data, pin}) {
     // console.log('wallet agent: ', receiver, amountEther, data, pin)
     // return  new Promise((resolve, reject) => {

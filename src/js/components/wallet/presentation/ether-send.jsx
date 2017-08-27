@@ -86,7 +86,7 @@ export default class EtherSend extends React.Component {
               fullWidth
               floatingLabelText="Note" />
             <RaisedButton
-              disabled={receiverAddress && amountSend ? false : true}
+              disabled={!receiverAddress || !amountSend}
               secondary
               style={STYLES.btnSend}
               label="SEND"
