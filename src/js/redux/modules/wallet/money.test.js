@@ -23,7 +23,7 @@ describe('# Wallet money redux module', () => {
       const state = reducer(undefined, '@@INIT')
       const action = {
         type: actions.getBalance.id_success,
-        result: 2
+        result: {ether: 2}
       }
       expect(reducer(state, action).getIn(['ether', 'amount'])).to.equal(2)
     })
@@ -31,7 +31,7 @@ describe('# Wallet money redux module', () => {
       const state = reducer(undefined, '@@INIT')
       const action = {
         type: actions.getPrice.id_success,
-        result: {ether: 2}
+        result: {ethForEur: 2}
       }
       expect(reducer(state, action).getIn(['ether', 'price'])).to.equal(2)
     })
@@ -53,7 +53,7 @@ describe('# Wallet money redux module', () => {
       const state = reducer(undefined, '@@INIT')
       const action = {type: actions.getPrice.id_fail}
       expect(reducer(state, action).getIn(['ether']).toJS()).to.deep.equal({
-        loaded: true,
+        loaded: false,
         errorMsg: 'Could not get the ether price',
         price: 0,
         amount: 0,

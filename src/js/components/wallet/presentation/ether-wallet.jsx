@@ -5,7 +5,7 @@ import Radium from 'radium'
 import {Divider, List, ListItem, FlatButton} from 'material-ui'
 import {Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
-import {Spinner, Error} from '../../common/spinner'
+import {Spinner, Error, Loading} from '../../common'
 
 import {theme} from 'styles'
 
@@ -120,6 +120,8 @@ export default class WalletEther extends React.Component {
     const { amount, errorMsg } = this.props.wallet
     if (this.props.ether.ether.buying) {
       content = this.renderLoading()
+    } else if (this.props.wallet.loading) {
+      content = (<Loading />)
     } else if (amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
       content = this.renderHasEther()
     } else if (!amount || screenToDisplay === 'etherBuyingScreen') {
@@ -129,7 +131,6 @@ export default class WalletEther extends React.Component {
         <Error message={errorMsg} />
       )
     }
-
     return (
       <TabContainer>
         {content}

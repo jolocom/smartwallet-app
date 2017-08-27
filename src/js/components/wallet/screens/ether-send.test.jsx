@@ -3,7 +3,6 @@ import React from 'react'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import EtherSendScreen from './ether-send'
-import Presentation from '../presentation/ether-send'
 import {stub} from '../../../../../test/utils'
 
 describe('(Component) EtherSendScreen', function() {
@@ -43,8 +42,8 @@ describe('(Component) EtherSendScreen', function() {
 
         updateField={updateField} />)
     )
-    wrapper.instance().updateField('amountSend', '66')
-    // expect(updateField.called).to.be.true
-    // expect(updateField.calls).to.deep.equal([{args: ['66', 'amountSend']}])
+    wrapper.instance().updateField('66', 'amountSend')
+    expect(updateField.called).to.be.true
+    expect(updateField.calls).to.deep.equal([{args: [{value: '66', field: 'amountSend'}]}]) // eslint-disable-line max-len
   })
 })

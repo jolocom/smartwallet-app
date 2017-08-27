@@ -135,7 +135,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getWalletAddress.id_success:
       return state.mergeIn(['wallet'], {
-        loading: false,
+        loading: true,
         walletAddress: action.result.walletAddress,
         errorMsg: ''
       })
@@ -143,7 +143,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.getWalletAddress.id_fail:
       return state.mergeIn(['wallet'], {
         loading: false,
-        errorMsg: 'OOOOPPPS. We could not get your Wallet Address.'
+        errorMsg: 'We could not get your Wallet Address.'
       })
 
     case actions.updateField.id:
@@ -167,13 +167,15 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.sendEther.id_success:
       return state.mergeIn(['wallet'], {
         loading: false,
-        errorMsg: ''
+        errorMsg: '',
+        receiverAddress: '',
+        amountSend: ''
       })
 
     case actions.sendEther.id_fail:
       return state.mergeIn(['wallet'], {
         loading: false,
-        errorMsg: 'OOOOPPPS, something went wrong. We could not send ether.'
+        errorMsg: 'We could not send ether.'
       })
 
     case actions.getBalance.id:
@@ -192,7 +194,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.getBalance.id_fail:
       return state.mergeIn(['wallet'], {
         loading: false,
-        errorMsg: 'OOOOPPPS, something went wrong. We could not get the balance.' // eslint-disable-line max-len
+        errorMsg: 'We could not get the balance.'
       })
 
     default:

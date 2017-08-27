@@ -7,7 +7,8 @@ import Presentation from '../presentation/ether-wallet'
   actions: [
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
-    'wallet/money:goToAccountDetailsEthereum'
+    'wallet/money:goToAccountDetailsEthereum',
+    'wallet/ether-tabs:getWalletAddress'
   ]
 })
 export default class WalletEtherScreen extends React.Component {
@@ -17,9 +18,13 @@ export default class WalletEtherScreen extends React.Component {
     goToWalletScreen: React.PropTypes.func,
     goToAccountDetailsEthereum: React.PropTypes.func,
     money: React.PropTypes.object,
-    etherTabs: React.PropTypes.object
+    etherTabs: React.PropTypes.object,
+    getWalletAddress: React.PropTypes.func
   }
 
+  componentDidMount() {
+    this.props.getWalletAddress()
+  }
   render() {
     return (<Presentation
       onToken={token => this.props.buyEther({stripeToken: token})}

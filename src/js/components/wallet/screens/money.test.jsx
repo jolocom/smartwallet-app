@@ -69,7 +69,7 @@ describe('(Component) WalletMoneyScreen', () => {
     expect(goToEtherManagement.called).to.be.true
     expect(goToEtherManagement.calls).to.deep.equal([{args: []}])
   })
-  it('should call getPrice and getBalance on componentWillMount', () => {
+  it('should call getPrice on componentWillMount', () => {
     const getPrice = stub()
 
     shallow(

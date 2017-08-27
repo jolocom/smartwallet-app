@@ -21,6 +21,7 @@ export default class EtherReceiveScreen extends React.Component {
   componentWillMount() {
     this.props.getWalletAddress()
   }
+
   render() {
     return (
       <div>

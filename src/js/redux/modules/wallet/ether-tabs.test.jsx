@@ -67,14 +67,14 @@ describe('Wallet Ether Tabs Redux Module', function() {
     let state = reducer(undefined, '@@INIT')
     const action = {
       type: etherTabs.actions.getWalletAddress.id_success,
-      result: {walletAddres: '0xTESTTEST111222'}
+      result: {walletAddress: '0xTESTTEST111222'}
     }
     state = reducer(state, action)
     expect(state.toJS()).to.deep.equal({
       activeTab: 'overview',
       wallet: {
-        loading: false,
-        error: '',
+        loading: true,
+        errorMsg: '',
         walletAddress: '0xTESTTEST111222',
         amount: '',
         receiverAddress: '',
@@ -89,14 +89,14 @@ describe('Wallet Ether Tabs Redux Module', function() {
     let state = reducer(undefined, '@@INIT')
     const action = {
       type: etherTabs.actions.getBalance.id_success,
-      result: '4321'
+      result: {ether: '4321'}
     }
     state = reducer(state, action)
     expect(state.toJS()).to.deep.equal({
       activeTab: 'overview',
       wallet: {
         loading: false,
-        error: '',
+        errorMsg: '',
         walletAddress: '',
         amount: 4321,
         receiverAddress: '',
@@ -119,7 +119,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
       activeTab: 'overview',
       wallet: {
         loading: false,
-        error: '',
+        errorMsg: '',
         walletAddress: '',
         amount: '',
         receiverAddress: '0xONENICETEST',
@@ -141,7 +141,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
       activeTab: 'overview',
       wallet: {
         loading: false,
-        error:'',
+        errorMsg: '',
         walletAddress: '',
         amount: '',
         receiverAddress: '',

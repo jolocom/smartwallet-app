@@ -115,7 +115,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeDeep({
         walletAddress: action.result.walletAddress,
         ether: {
-          loaded: true,
+          loaded: false,
           errorMsg: ''
         }
       })
