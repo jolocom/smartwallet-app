@@ -9,7 +9,7 @@ import {
 
 import {List, Divider, ListItem, TextField, RaisedButton} from 'material-ui'
 import {Block} from '../../structure'
-import {Loading} from '../../common'
+import {Loading, Error} from '../../common'
 import NavigationArrowUp from 'material-ui/svg-icons/navigation/arrow-upward'
 
 const STYLES = {
@@ -43,13 +43,15 @@ export default class EtherSend extends React.Component {
   }
 
   render() {
-    const {receiverAddress, amountSend} = this.props.wallet
+    const {receiverAddress, amountSend, loading, errorMsg} = this.props.wallet
     let content
-    if (this.props.wallet.loading) {
+    if (loading) {
       content = (
         <Block style={{marginTop: '20px'}}>
           <Loading />
         </Block>)
+    } else if (errorMsg) {
+      content = <Error message={errorMsg} />
     } else {
       content = (
         <List>
@@ -96,7 +98,7 @@ export default class EtherSend extends React.Component {
     return (
       <TabContainer>
         <EtherBalance
-          amount={this.props.ether.ether.amount}
+          amount={this.props.wallet.amount}
           currency="eth"
           currencyPrice={this.props.ether.ether.price} />
         <HalfScreenContainer>

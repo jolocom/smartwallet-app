@@ -26,7 +26,7 @@ export default class EtherReceiveScreen extends React.Component {
       <div>
         <Presentation
           ether={this.props.money}
-          address={this.props.etherTabs.wallet.mainAddress} />
+          wallet={this.props.etherTabs.wallet} />
       </div>
     )
   }

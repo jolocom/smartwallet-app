@@ -20,6 +20,7 @@ const actions = module.exports = makeActions('wallet/money', {
         dispatch(actions.getWalletAddress.buildAction(params, () => {
           return services.auth.currentUser.wallet.getWalletAddress()
           .then((result) => {
+            dispatch(actions.getBalance())
             return result
           })
         }))
@@ -106,18 +107,24 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.getWalletAddress.id:
       return state.mergeIn(['ether'], {
-        loaded: false
+        loaded: false,
+        errorMsg: ''
       })
 
     case actions.getWalletAddress.id_success:
-      return state.merge({
-        walletAddress: action.result.walletAddress
+      return state.mergeDeep({
+        walletAddress: action.result.walletAddress,
+        ether: {
+          loaded: true,
+          errorMsg: ''
+        }
       })
 
     case actions.getWalletAddress.id_fail:
-      // TODO error
-      console.log('ERROR getMainAddress')
-      return state
+      return state.mergeIn(['ether'], {
+        errorMsg: 'Could not get your Wallet Address.',
+        loaded: true
+      })
 
     case actions.buyEther.id:
       return state.mergeIn(['ether'], {
@@ -148,7 +155,6 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getBalance.id_fail:
-      console.log('get balance error')
       return state.mergeIn(['ether'], {
         loaded: true,
         errorMsg: 'Could not get the user\'s ether balance'
@@ -163,20 +169,17 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getPrice.id:
       return state.mergeIn(['ether'], {
-        loaded: false,
         errorMsg: ''
       })
 
     case actions.getPrice.id_success:
       return state.mergeIn(['ether'], {
         price: action.result.ethForEur,
-        loaded: true,
         errorMsg: ''
       })
 
     case actions.getPrice.id_fail:
       return state.mergeIn(['ether'], {
-        loaded: true,
         errorMsg: 'Could not get the ether price'
       })
 
@@ -184,8 +187,6 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.merge({
         screenToDisplay: action.value
       })
-    case actions.goToAccountDetailsEthereum.id:
-      return state
 
     default:
       return state

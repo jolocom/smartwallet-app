@@ -2,6 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {Content, Block} from '../../structure'
+import {Loading, Error} from '../../common'
 
 import {
   PlusMenu,
@@ -25,31 +26,40 @@ export default class WalletMoney extends React.Component {
     goToEtherManagement: React.PropTypes.func.isRequired
   }
 
-  // goToEtherManagement() {
-  //   console.log('ether mgmt')
-  // }
-
   render() {
     const {goToEtherManagement, ether} = this.props
+    let content
+    if (!ether.loaded) {
+      content = <Loading />
+    } else if (ether.errorMsg) {
+      content = (
+        <Error message={ether.errorMsg} />
+      )
+    } else {
+      content = (
+        <div>
+          <Block>
+            <PlusMenu
+              name="Digital Currency"
+              goToManagement={() => goToEtherManagement('etherBuyingScreen')}
+            />
+          </Block>
+          <Block>
+            <PlusSubMenu
+              amount={ether.amount}
+              currency="eth"
+              ethSvg={{fill: '#4b132b'}}
+              goToManagement={() => goToEtherManagement('etherManagement')}
+              currencyPrice={ether.price} />
+          </Block>
+        </div>
+      )
+    }
     return (
       <TabContainer>
         <HalfScreenContainer>
           <Content style={STYLES.walletContainer}>
-            <Block>
-              <PlusMenu
-                name="Digital Currency"
-                goToManagement={() => goToEtherManagement('etherBuyingScreen')}
-              />
-            </Block>
-            <Block>
-              <PlusSubMenu
-                amount={ether.amount}
-                currency="eth"
-                ethSvg={{fill: '#4b132b'}}
-                goToManagement={() => goToEtherManagement('etherManagement')}
-                currencyPrice={ether.price}
-              />
-            </Block>
+            {content}
           </Content>
         </HalfScreenContainer>
       </TabContainer>

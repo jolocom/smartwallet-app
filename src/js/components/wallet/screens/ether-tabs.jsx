@@ -47,9 +47,12 @@ export default class EtherTabScreen extends React.Component {
     getWalletAddress: React.PropTypes.func.isRequired
   }
 
+  componentWillMount() {
+    this.props.getWalletAddress()
+  }
+
   componentDidMount() {
     this.props.detectActiveTab({path: this.props.location.pathname})
-    this.props.getWalletAddress()
   }
 
   componentDidUpdate() {

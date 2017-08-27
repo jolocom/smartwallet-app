@@ -8,7 +8,7 @@ describe('# Wallet money redux module', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal({
         screenToDisplay: '',
-        mainAddress: '',
+        walletAddress: '',
         ether: {
           loaded: false,
           errorMsg: '',
@@ -31,7 +31,7 @@ describe('# Wallet money redux module', () => {
       const state = reducer(undefined, '@@INIT')
       const action = {
         type: actions.getPrice.id_success,
-        result: {ethForEur: 2}
+        result: {ether: 2}
       }
       expect(reducer(state, action).getIn(['ether', 'price'])).to.equal(2)
     })

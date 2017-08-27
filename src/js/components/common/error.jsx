@@ -32,8 +32,8 @@ export default class WalletError extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     message: React.PropTypes.string,
-    buttonLabel: React.PropTypes.string.isRequired,
-    onClick: React.PropTypes.func.isRequired
+    buttonLabel: React.PropTypes.string,
+    onClick: React.PropTypes.func
   }
 
   render() {

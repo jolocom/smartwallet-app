@@ -11,6 +11,7 @@ import {
 import {List, Divider, ListItem, FlatButton, IconButton,
   AppBar} from 'material-ui'
 import {Block, Header, SideNote} from '../../structure'
+import {Error} from '../../common'
 import {theme} from 'styles'
 import NavigationArrowDown from 'material-ui/svg-icons/navigation/arrow-downward' // eslint-disable-line max-len
 
@@ -57,13 +58,48 @@ const STYLES = {
 export default class EtherReceive extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    mainAddress: React.PropTypes.string,
+    wallet: React.PropTypes.object,
     onClose: React.PropTypes.func
   }
 
   render() {
-    const mainAddress = this.props.mainAddress
-    // console.log('PROPS ACCOUNT DETAILS: ', mainAddress)
+    const {walletAddress, errorMsg} = this.props.wallet
+    let content
+    if (errorMsg) {
+      content = <Error message={errorMsg} />
+    } else {
+      content = (
+        <div>
+          <List>
+            <Header
+              title="This is your Account ID" />
+            <ListItem
+              disabled
+              leftIcon={<NavigationArrowDown color={'#b3c90f'} />}
+              insetChildren
+              secondaryText={<p>{walletAddress}</p>}
+              primaryText={'Wallet Address'}
+              rightIcon={
+                <CopyToClipboard text={walletAddress}>
+                  <FlatButton>COPY</FlatButton>
+                </CopyToClipboard>
+              } />
+            <Divider
+              inset />
+          </List>
+          <Block style={STYLES.qr}>
+            <QRCode
+              value={walletAddress}
+              size={200}
+              fgColor="#4b132b" />
+            <SideNote style={STYLES.sidenote}>
+              You can scan this QRCode to send some ether from a different
+              wallet to this wallet.
+            </SideNote>
+          </Block>
+        </div>
+      )
+    }
     return (
       <div>
         <AppBar
@@ -79,33 +115,7 @@ export default class EtherReceive extends React.Component {
           } />
         <TabContainer>
           <HalfScreenContainer>
-            <List>
-              <Header
-                title="This is your Account ID" />
-              <ListItem
-                disabled
-                leftIcon={<NavigationArrowDown color={'#b3c90f'} />}
-                insetChildren
-                secondaryText={<p>{mainAddress}</p>}
-                primaryText={'Wallet Address'}
-                rightIcon={
-                  <CopyToClipboard text={mainAddress}>
-                    <FlatButton>COPY</FlatButton>
-                  </CopyToClipboard>
-                } />
-              <Divider
-                inset />
-            </List>
-            <Block style={STYLES.qr}>
-              <QRCode
-                value={mainAddress}
-                size={200}
-                fgColor="#4b132b" />
-              <SideNote style={STYLES.sidenote}>
-                You can scan this QRCode to send some ether from a different
-                wallet to this wallet.
-              </SideNote>
-            </Block>
+            {content}
           </HalfScreenContainer>
         </TabContainer>
       </div>

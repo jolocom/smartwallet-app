@@ -20,12 +20,11 @@ export default class WalletMoneyScreen extends React.Component {
     buyEther: React.PropTypes.func.isRequired,
     getPrice: React.PropTypes.func.isRequired,
     getBalance: React.PropTypes.func.isRequired,
-    getMainAddress: React.PropTypes.func.isRequired
+    getWalletAddress: React.PropTypes.func.isRequired
   }
   componentWillMount() {
     this.props.getWalletAddress()
     this.props.getPrice()
-    this.props.getBalance()
   }
   render() {
     const {goToEtherManagement, buyEther, getBalance} = this.props

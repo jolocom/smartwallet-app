@@ -5,7 +5,7 @@ import Radium from 'radium'
 import {Divider, List, ListItem, FlatButton} from 'material-ui'
 import {Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
-import Spinner from '../../common/spinner'
+import {Spinner, Error} from '../../common/spinner'
 
 import {theme} from 'styles'
 
@@ -45,19 +45,16 @@ export default class WalletEther extends React.Component {
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
     ether: React.PropTypes.object,
-    avatar: React.PropTypes.string,
-    title: React.PropTypes.string,
+    wallet: React.PropTypes.object,
     goToAccountDetailsEthereum: React.PropTypes.func
   }
 
   renderLoading() {
-    const messageWait = ['This might take a while...',
-      'Please have some patience...', 'Almost there...']
     return (
       <div style={STYLES.noEtherContainer}>
         <Block>
-          <Spinner style={STYLES.header} message={messageWait}
-            title={'Thank you. We are transferring some Ether to your Account.'}
+          <Spinner style={STYLES.header} message={''}
+            title={''}
             avatar={'url(/img/img_techguy.svg)'} />
         </Block>
       </div>
@@ -68,7 +65,7 @@ export default class WalletEther extends React.Component {
     return (
       <HalfScreenContainer>
         <EtherBalance
-          amount={this.props.ether.ether.amount}
+          amount={this.props.wallet.amount}
           currencyPrice={this.props.ether.ether.price} />
         <List>
           <ListItem
@@ -119,13 +116,18 @@ export default class WalletEther extends React.Component {
 
   render() {
     let content = null
-    const { ether, screenToDisplay } = this.props.ether
+    const { screenToDisplay } = this.props.ether
+    const { amount, errorMsg } = this.props.wallet
     if (this.props.ether.ether.buying) {
       content = this.renderLoading()
-    } else if (ether.amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
+    } else if (amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
       content = this.renderHasEther()
-    } else if (!ether.amount || screenToDisplay === 'etherBuyingScreen') {
+    } else if (!amount || screenToDisplay === 'etherBuyingScreen') {
       content = this.renderNoEther()
+    } else if (errorMsg) {
+      content = (
+        <Error message={errorMsg} />
+      )
     }
 
     return (

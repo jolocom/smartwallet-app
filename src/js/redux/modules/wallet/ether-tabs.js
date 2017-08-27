@@ -52,6 +52,7 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
         dispatch(actions.getWalletAddress.buildAction(params, () => {
           return services.auth.currentUser.wallet.getWalletAddress()
           .then((result) => {
+            dispatch(actions.getBalance())
             return result
           })
         }))
@@ -64,8 +65,7 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
     creator: (params) => {
       return (dispatch, getState, {services, backend}) => {
         dispatch(actions.sendEther.buildAction(params, () => {
-          console.log('ACTIONS SEND ETHER', services.auth.getSeedPhrase)
-          const {receiverAddress, amountSend, data, pin, gasInWei} = getState().toJS().wallet.etherTabs.wallet // eslint-disable-line max-len
+          const {receiverAddress, amountSend, data, gasInWei} = getState().toJS().wallet.etherTabs.wallet // eslint-disable-line max-len
           return backend.gateway.sendEther({
             userName: services.auth.currentUser.wallet.userName,
             seedPhrase: services.auth.currentUser.encryptedSeedPhrase,
@@ -88,7 +88,7 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
         dispatch(actions.getBalance.buildAction(params, (backend) => {
           const {walletAddress} = getState().toJS().wallet.etherTabs.wallet
           return backend.gateway.getBalanceEther({
-            userName: services.auth.currentUser.userName,
+            userName: services.auth.currentUser.wallet.userName,
             walletAddress: walletAddress
           })
         }))
@@ -109,7 +109,7 @@ const initialState = Immutable.fromJS({
   activeTab: 'overview',
   wallet: {
     loading: false,
-    error: '',
+    errorMsg: '',
     walletAddress: '',
     amount: '',
     receiverAddress: '',
@@ -129,19 +129,21 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getWalletAddress.id:
       return state.mergeIn(['wallet'], {
-        loading: true
+        loading: true,
+        errorMsg: ''
       })
 
     case actions.getWalletAddress.id_success:
       return state.mergeIn(['wallet'], {
         loading: false,
-        walletAddress: action.result.walletAddress
+        walletAddress: action.result.walletAddress,
+        errorMsg: ''
       })
 
     case actions.getWalletAddress.id_fail:
       return state.mergeIn(['wallet'], {
         loading: false,
-        error: 'OOOOPPPS, something went wrong. Please try again.'
+        errorMsg: 'OOOOPPPS. We could not get your Wallet Address.'
       })
 
     case actions.updateField.id:
@@ -158,41 +160,40 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.sendEther.id:
       return state.mergeIn(['wallet'], {
-        loading: true
+        loading: true,
+        errorMsg: ''
       })
 
     case actions.sendEther.id_success:
       return state.mergeIn(['wallet'], {
         loading: false,
-        error: ''
+        errorMsg: ''
       })
 
     case actions.sendEther.id_fail:
       return state.mergeIn(['wallet'], {
         loading: false,
-        error: 'OOOOPPPS, something went wrong. Please try again.'
+        errorMsg: 'OOOOPPPS, something went wrong. We could not send ether.'
       })
 
     case actions.getBalance.id:
       return state.mergeIn(['wallet'], {
-        loading: true
+        loading: true,
+        errorMsg: ''
       })
 
     case actions.getBalance.id_success:
       return state.mergeIn(['wallet'], {
         loading: false,
-        error: '',
-        amount: parseFloat(action.result)
+        errorMsg: '',
+        amount: parseFloat(action.result.ether)
       })
 
     case actions.getBalance.id_fail:
       return state.mergeIn(['wallet'], {
         loading: false,
-        error: 'OOOOPPPS, something went wrong. Please try again.'
+        errorMsg: 'OOOOPPPS, something went wrong. We could not get the balance.' // eslint-disable-line max-len
       })
-
-    case actions.closeAccountDetails.id:
-      return state
 
     default:
       return state

@@ -10,6 +10,7 @@ import {
 
 import {List, Divider, ListItem, FlatButton} from 'material-ui'
 import {Block} from '../../structure'
+import {Loading, Error} from '../../common'
 // import {theme} from 'styles'
 import NavigationArrowDown from 'material-ui/svg-icons/navigation/arrow-downward' // eslint-disable-line max-len
 
@@ -31,18 +32,20 @@ const STYLES = {
 export default class EtherReceive extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    ether: React.PropTypes.object
+    ether: React.PropTypes.object,
+    wallet: React.PropTypes.object
   }
 
   render() {
-    const mainAddress = this.props.ether.walletAddress
-    return (
-      <TabContainer>
-        <EtherBalance
-          amount={this.props.ether.ether.amount}
-          currency="eth"
-          currencyPrice={this.props.ether.ether.price} />
-        <HalfScreenContainer>
+    const {walletAddress, amount, loading, errorMsg} = this.props.wallet
+    let content
+    if (loading) {
+      content = <Loading />
+    } else if (errorMsg) {
+      content = <Error message={errorMsg} />
+    } else {
+      content = (
+        <div>
           <List>
             <ListItem
               disabled
@@ -54,10 +57,10 @@ export default class EtherReceive extends React.Component {
               disabled
               leftIcon={<NavigationArrowDown color={'#b3c90f'} />}
               insetChildren
-              secondaryText={<p>{mainAddress}</p>}
+              secondaryText={<p>{walletAddress}</p>}
               primaryText={'Wallet Address'}
               rightIcon={
-                <CopyToClipboard text={mainAddress}>
+                <CopyToClipboard text={walletAddress}>
                   <FlatButton>COPY</FlatButton>
                 </CopyToClipboard>
               } />
@@ -66,10 +69,21 @@ export default class EtherReceive extends React.Component {
           </List>
           <Block style={STYLES.qr}>
             <QRCode
-              value={mainAddress}
+              value={walletAddress}
               size={200}
               fgColor="#4b132b" />
           </Block>
+        </div>
+      )
+    }
+    return (
+      <TabContainer>
+        <EtherBalance
+          amount={amount}
+          currency="eth"
+          currencyPrice={this.props.ether.ether.price} />
+        <HalfScreenContainer>
+          {content}
         </HalfScreenContainer>
       </TabContainer>
     )

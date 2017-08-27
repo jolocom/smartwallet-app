@@ -12,26 +12,46 @@ describe('(Component) EtherWalletScreen', () => {
           wallet: {
             money: {
               ether: {
-                amount: 0,
-                buying: false,
-                checkingOut: false,
                 loaded: false,
-                price: 0
-              }}}
+                errorMsg: '',
+                price: 0,
+                amount: 0,
+                checkingOut: false,
+                buying: false
+              }
+            },
+            etherTabs: {
+              activeTab: 'overview',
+              wallet: {
+                loading: false,
+                errorMsg: '',
+                walletAddress: '',
+                amount: '',
+                receiverAddress: '',
+                amountSend: '',
+                pin: '1234',
+                data: '',
+                gasInWei: '200'
+              }
+            }
+          }
         })
       )}
-        getEther={() => {}}
+        buyEther={() => {}}
+        goToWalletScreen={() => {}}
+        goToAccountDetailsEthereum={() => {}}
     />),
     { context: { muiTheme: { } } }
   )
     expect(wrapper.find('WalletEther')).to.have.length(1)
     expect(wrapper.find('WalletEther')).prop('ether').to.deep.equal({
       ether: {
-        amount: 0,
-        buying: false,
-        checkingOut: false,
         loaded: false,
-        price: 0
+        errorMsg: '',
+        price: 0,
+        amount: 0,
+        checkingOut: false,
+        buying: false
       }
     })
   })

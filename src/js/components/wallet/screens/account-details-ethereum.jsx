@@ -18,11 +18,10 @@ export default class AccountDetailsEthereum extends React.Component {
     this.props.getWalletAddress()
   }
   render() {
-    const walletAddress = this.props.etherTabs.wallet.walletAddress
     return (
       <Presentation
         onClose={this.props.closeAccountDetails}
-        mainAddress={walletAddress} />
+        wallet={this.props.etherTabs.wallet} />
     )
   }
 }

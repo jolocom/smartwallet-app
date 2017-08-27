@@ -5,7 +5,7 @@ import AccountDetailsEthereum from './account-details-ethereum'
 describe('(Component) AccountDetailsEthereum', function() {
   it('should render properly the first time', function() {
     shallow((<AccountDetailsEthereum
-      mainAddress=""
+      wallet={{}}
       onClose={() => {}}
       />),
       { context: { muiTheme: { } } }

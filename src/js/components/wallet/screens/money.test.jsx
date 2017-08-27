@@ -28,9 +28,7 @@ describe('(Component) WalletMoneyScreen', () => {
         goToEtherManagement={() => {}}
         buyEther={() => {}}
         getPrice={() => {}}
-        getBalance={() => {}}
-        getMainAddress={() => {}}
-      />),
+        getWalletAddress={() => {}} />),
       { context: { muiTheme: { } } }
     )
     expect(wrapper.find(Presentation).prop('ether')).to.deep.equal({
@@ -64,9 +62,7 @@ describe('(Component) WalletMoneyScreen', () => {
         goToEtherManagement={goToEtherManagement}
         buyEther={() => {}}
         getPrice={() => {}}
-        getBalance={() => {}}
-        getMainAddress={() => {}}
-      />),
+        getWalletAddress={() => {}} />),
       { context: { muiTheme: { } } }
     )
     wrapper.find(Presentation).props().goToEtherManagement()
@@ -75,7 +71,7 @@ describe('(Component) WalletMoneyScreen', () => {
   })
   it('should call getPrice and getBalance on componentWillMount', () => {
     const getPrice = stub()
-    const getBalance = stub()
+
     shallow(
       (<WalletMoneyScreen.WrappedComponent {
         ...WalletMoneyScreen.mapStateToProps(Immutable.fromJS({
@@ -95,14 +91,10 @@ describe('(Component) WalletMoneyScreen', () => {
       }
         goToEtherManagement={() => {}}
         getPrice={getPrice}
-        getBalance={getBalance}
-        getMainAddress={() => {}}
-      />),
+        getWalletAddress={() => {}} />),
       { context: { muiTheme: { } } }
     )
     expect(getPrice.called).to.be.true
     expect(getPrice.calls).to.deep.equal([{args: []}])
-    expect(getBalance.called).to.be.true
-    expect(getBalance.calls).to.deep.equal([{args: []}])
   })
 })

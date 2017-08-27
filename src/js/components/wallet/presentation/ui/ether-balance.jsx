@@ -30,7 +30,7 @@ const EtherBalance = (props) => {
 }
 
 EtherBalance.propTypes = {
-  amount: React.PropTypes.number,
+  amount: React.PropTypes.any,
   currencyPrice: React.PropTypes.number,
   currency: React.PropTypes.any
 }
