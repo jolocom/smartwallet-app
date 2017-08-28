@@ -12,15 +12,31 @@ const actions = module.exports = makeActions('wallet/money', {
       }
     }
   },
+  getWalletAddress: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        dispatch(actions.getWalletAddress.buildAction(params, () => {
+          return services.auth.currentUser.wallet.getWalletAddress()
+          .then((result) => {
+            dispatch(actions.getBalance())
+            return result
+          })
+        }))
+      }
+    }
+  },
   buyEther: {
     expectedParams: ['stripeToken'],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, (backend) => {
+          const walletAddress = getState().toJS().wallet.money.walletAddress
           return backend.gateway.buyEther({
             stripeToken: params.stripeToken,
-            walletAddress: services.auth.currentUser.wallet.mainAddress
+            walletAddress: walletAddress
           }).then((response) => {
             dispatch(actions.getBalance())
             return response
@@ -33,9 +49,13 @@ const actions = module.exports = makeActions('wallet/money', {
     async: true,
     expectedParams: [],
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.getBalance.buildAction(params, () => {
-          return services.auth.currentUser.wallet.getBalance()
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getBalance.buildAction(params, (backend) => {
+          const walletAddress = getState().toJS().wallet.money.walletAddress
+          return backend.gateway.getBalanceEther({
+            userName: services.auth.currentUser.wallet.userName,
+            walletAddress: walletAddress
+          })
         }))
       }
     }
@@ -59,11 +79,20 @@ const actions = module.exports = makeActions('wallet/money', {
         dispatch(actions.goToWalletScreen.buildAction(params))
       }
     }
+  },
+  goToAccountDetailsEthereum: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(router.pushRoute('/wallet/account-details'))
+      }
+    }
   }
 })
 
 const initialState = Immutable.fromJS({
   screenToDisplay: '',
+  walletAddress: '',
   ether: {
     loaded: false,
     errorMsg: '',
@@ -76,6 +105,27 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.getWalletAddress.id:
+      return state.mergeIn(['ether'], {
+        loaded: false,
+        errorMsg: ''
+      })
+
+    case actions.getWalletAddress.id_success:
+      return state.mergeDeep({
+        walletAddress: action.result.walletAddress,
+        ether: {
+          loaded: false,
+          errorMsg: ''
+        }
+      })
+
+    case actions.getWalletAddress.id_fail:
+      return state.mergeIn(['ether'], {
+        errorMsg: 'Could not get your Wallet Address.',
+        loaded: true
+      })
+
     case actions.buyEther.id:
       return state.mergeIn(['ether'], {
         loaded: false,
@@ -112,27 +162,24 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getBalance.id_success:
       return state.mergeIn(['ether'], {
-        amount: parseFloat(action.result),
+        amount: parseFloat(action.result.ether),
         loaded: true,
         errorMsg: ''
       })
 
     case actions.getPrice.id:
       return state.mergeIn(['ether'], {
-        loaded: false,
         errorMsg: ''
       })
 
     case actions.getPrice.id_success:
       return state.mergeIn(['ether'], {
         price: action.result.ethForEur,
-        loaded: true,
         errorMsg: ''
       })
 
     case actions.getPrice.id_fail:
       return state.mergeIn(['ether'], {
-        loaded: true,
         errorMsg: 'Could not get the ether price'
       })
 
@@ -140,6 +187,7 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.merge({
         screenToDisplay: action.value
       })
+
     default:
       return state
   }

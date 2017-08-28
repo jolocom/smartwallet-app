@@ -1,5 +1,5 @@
 import * as settings from 'settings'
-import {WalletManager} from 'smartwallet-contracts'
+import {WalletManager, Wallet} from 'smartwallet-contracts'
 import HTTPAgent from 'lib/agents/http'
 
 // only for testing testSeed has some ether on ropsten testnet
@@ -9,6 +9,7 @@ export const TEST_SEED = 'mandate print cereal style toilet hole' +
 export default class WalletAgent {
   constructor() {
     this._manager = new WalletManager(settings.blockchain)
+    this._wallet = new Wallet(settings.blockchain)
     this._httpAgent = new HTTPAgent({proxy: false})
   }
 
@@ -65,4 +66,14 @@ export default class WalletAgent {
   loginFromSerialized(serialized) {
     return this._manager.loginFromSerialized(serialized)
   }
+
+  sendEther({receiver, amountEther, data, pin}) {
+    // console.log('wallet agent: ', receiver, amountEther, data, pin)
+    // return  new Promise((resolve, reject) => {
+    //   setTimeout(() => resolve('ether were send'), 2000)
+    // }) // just for testing
+    console.log(this._wallet)
+    return this._wallet.sendEther(receiver, amountEther, data, pin)
+  }
+
 }

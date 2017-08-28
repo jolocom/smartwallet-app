@@ -3,8 +3,8 @@ import Radium from 'radium'
 import {
   Container,
   Block,
-  Footer,
-  SideNote
+  Footer
+  // SideNote
 } from '../structure'
 import {theme} from 'styles'
 
@@ -22,9 +22,10 @@ const STYLES = {
     color: theme.textStyles.sectionheader.color
   },
   issue: {
-    fontSize: '40px',
+    fontSize: '20px',
     color: theme.palette.textColor
-  }
+  },
+  message: theme.textStyles.subheadline
 }
 
 @Radium
@@ -32,21 +33,20 @@ export default class WalletError extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     message: React.PropTypes.string,
-    buttonLabel: React.PropTypes.string.isRequired,
-    onClick: React.PropTypes.func.isRequired
+    buttonLabel: React.PropTypes.string,
+    onClick: React.PropTypes.func
   }
 
   render() {
-    // TODO replace placeholder img
     return (
       <Container>
         <Block style={STYLES.topBlock}>
-          <h1 style={STYLES.issue}>!!?!?!</h1>
+          <h1 style={STYLES.issue}>OOOOOOOPS...something went wrong.</h1>
         </Block>
         <Block>
-          <SideNote>
+          <div style={STYLES.message}>
             {this.props.message}
-          </SideNote>
+          </div>
         </Block>
         <Footer>
           <FlatButton label={this.props.buttonLabel}

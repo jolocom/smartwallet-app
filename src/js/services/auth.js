@@ -1,5 +1,4 @@
 import EventEmitter from 'events'
-import sjcl from 'sjcl'
 
 export default class AuthService extends EventEmitter {
   constructor(backend) {
@@ -25,7 +24,7 @@ export default class AuthService extends EventEmitter {
     const res = await this.backend.login({seedPhrase, pin})
 
     const walletConfig = {
-      encryptedSeedPhrase: sjcl.encrypt(pin, seedPhrase),
+      seedPhrase: seedPhrase,
       userName: res.userName
     }
 
@@ -46,25 +45,18 @@ export default class AuthService extends EventEmitter {
     this.currentUser = user
     this.emit('changed', user)
   }
-
-  getSeedPhrase(pin) {
-    return sjcl.decrypt(pin, this.currentUser.wallet.encryptedSeedPhrase)
-  }
 }
 
 export class Wallet {
-  constructor({gateway, userName, encryptedSeedPhrase}) {
+  constructor({gateway, userName, seedPhrase}) {
     this._gateway = gateway
     this.userName = userName
     this.identityURL = `https://identity.jolocom.com/${userName}`
-    this.encryptedSeedPhrase = encryptedSeedPhrase
+    this.seedPhrase = seedPhrase
   }
 
-  getMainAddress() {
-    return this._gateway.getMainAddress({
-      userName: this.userName,
-      seedPhrase: this.seedPhrase
-    })
+  getWalletAddress() {
+    return this._gateway.getWalletAddress({userName: this.userName})
   }
 
   storeAttribute({attributeType, attributeData, attributeId}) {

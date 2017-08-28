@@ -139,14 +139,14 @@ const PlusSubMenu = (props) => {
 }
 
 PlusSubMenu.propTypes = {
-  amount: React.PropTypes.number,
+  amount: React.PropTypes.any,
   currencyPrice: React.PropTypes.number,
   currency: React.PropTypes.any,
   children: React.PropTypes.node,
   style: React.PropTypes.object,
-  goToManagement: React.PropTypes.func.isRequired,
+  goToManagement: React.PropTypes.func,
   choice: React.PropTypes.bool,
-  overview: React.PropTypes.object,
+  overview: React.PropTypes.any,
   ethSvg: React.PropTypes.object
 }
 
