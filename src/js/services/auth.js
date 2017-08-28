@@ -1,5 +1,6 @@
 import EventEmitter from 'events'
 import sjcl from 'sjcl'
+import * as settings from 'settings'
 
 export default class AuthService extends EventEmitter {
   constructor(backend) {
@@ -56,7 +57,7 @@ export class Wallet {
   constructor({gateway, userName, encryptedSeedPhrase}) {
     this._gateway = gateway
     this.userName = userName
-    this.identityURL = `https://identity.jolocom.com/${userName}`
+    this.identityURL = `${settings.gateway}/${userName}`
     this.encryptedSeedPhrase = encryptedSeedPhrase
   }
 
