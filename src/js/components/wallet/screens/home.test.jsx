@@ -1,4 +1,3 @@
-/* global describe: true, it: true */
 import Immutable from 'immutable'
 import React from 'react'
 import { expect } from 'chai'
@@ -6,8 +5,8 @@ import { shallow } from 'enzyme'
 import WalletHomeScreen from './home'
 import {stub} from '../../../../../test/utils'
 
-describe('(Component) WalletHomeScreen', function() {
-  it('call goTo button on click', function() {
+describe('(Component) WalletHomeScreen', () => {
+  it('call goTo button on click', () => {
     const goTo = stub()
     const getIdentityInformation = stub()
     const wrapper = shallow((<WalletHomeScreen.WrappedComponent
@@ -23,7 +22,7 @@ describe('(Component) WalletHomeScreen', function() {
     )
     wrapper.find('WalletHome').props().onClick()
     expect(goTo.calls).to.deep.equal([
-      {args: []}
+      {args: ['identity']}
     ])
   })
 })
