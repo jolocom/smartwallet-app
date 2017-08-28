@@ -1,5 +1,4 @@
 import EventEmitter from 'events'
-import sjcl from 'sjcl'
 
 export default class AuthService extends EventEmitter {
   constructor(backend) {
