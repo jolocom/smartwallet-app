@@ -5,7 +5,7 @@ import Presentation from '../presentation/home'
 @connect({
   props: ['wallet'],
   actions: [
-    'wallet/identity:goToIdentity',
+    'wallet/identity:goTo',
     'wallet/identity:getIdentityInformation'
   ]
 })
@@ -13,7 +13,7 @@ export default class WalletHomeScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     wallet: React.PropTypes.any,
-    goToIdentity: React.PropTypes.func.isRequired,
+    goTo: React.PropTypes.func.isRequired,
     getIdentityInformation: React.PropTypes.func.isRequired
   }
   componentWillMount() {
@@ -22,7 +22,7 @@ export default class WalletHomeScreen extends React.Component {
 
   render() {
     return (<Presentation
-      onClick={this.props.goToIdentity}
+      onClick={() => { this.props.goTo('identity') }}
       username={this.props.wallet.identity.username.value} />)
   }
 }
