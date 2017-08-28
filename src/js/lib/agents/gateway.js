@@ -135,21 +135,29 @@ export default class GatewayAgent {
     return this._httpAgent.post(
       user + '/access/grant',
       JSON.stringify(body),
-      {
-        'Content-type': 'application/json'
-      }
+      {'Content-type': 'application/json'}
     )
   }
 
   getConnectedServicesOverview({userName}) {
-    console.log('GET SERVICES OVERVIEW')
-    return this._httpAgent.get(
-      `${this._gatewayUrl}/${userName}/access`
-    )
+    const test = [
+      {identity: 'the boring company',
+        pattern: '/phone/dc348b20-7df5-11e7-af97-1370921f4df1',
+        read: true,
+        write: false},
+      {identity: 'telekom',
+        pattern: '/email/*',
+        read: true,
+        write: false}]
+    return new Promise((resolve, reject) => {
+      setTimeout(() => resolve(test), 2000)
+    })
+    // return this._httpAgent.get(
+    //   `${this._gatewayUrl}/${userName}/access`
+    // )
   }
 
   revokeServiceAccess({userName, identity, pattern}) {
-    // identity => url of service? pattern like email blabla
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/access/revoke`,
       JSON.stringify({identity, pattern}),
