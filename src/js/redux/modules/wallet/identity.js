@@ -83,11 +83,11 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.buyEther.buildAction(params, (backend) => {
-          return services.auth.currentUser.wallet.getMainAddress()
-          .then((mainAddress) => {
+          return services.auth.currentUser.wallet.getWalletAddress()
+          .then((result) => {
             return backend.gateway.buyEther({
               stripeToken: params,
-              mainAddress: mainAddress
+              walletAddress: result.walletAddress
             })
           })
           .then((response) => {
@@ -104,12 +104,12 @@ const actions = module.exports = makeActions('wallet/identity', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.createEthereumIdentity.buildAction(params, (backend) => { // eslint-disable-line max-len
-          return services.auth.currentUser.wallet.getMainAddress()
-          .then((mainAddress) => {
+          return services.auth.currentUser.wallet.getWalletAddress()
+          .then((result) => {
             return backend.gateway.createEthereumIdentityContract({
               seedPhrase: services.auth.currentUser.wallet.seedPhrase,
               userName: services.auth.currentUser.wallet.userName,
-              mainAddress: mainAddress
+              walletAddress: result.walletAddress
             })
           })
           .then((response) => {
