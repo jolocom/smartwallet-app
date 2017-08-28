@@ -141,6 +141,22 @@ export default class GatewayAgent {
     )
   }
 
+  getConnectedServicesOverview({userName}) {
+    console.log('GET SERVICES OVERVIEW')
+    return this._httpAgent.get(
+      `${this._gatewayUrl}/${userName}/access`
+    )
+  }
+
+  revokeServiceAccess({userName, identity, pattern}) {
+    // identity => url of service? pattern like email blabla
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/access/revoke`,
+      JSON.stringify({identity, pattern}),
+      {'Content-type': 'application/json'}
+    )
+  }
+
   verify({userName, seedPhrase, identity, attributeType,
      attributeId, attributeValue}) {
     let url = `${this._gatewayUrl}/${userName}/verify`
