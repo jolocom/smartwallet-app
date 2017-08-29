@@ -57,6 +57,39 @@ export default class WalletIdentity extends React.Component {
     confirmDialog: React.PropTypes.func.isRequired
   }
 
+  renderConnectEther({ ethereum, expandedFields }) {
+    // TODO if already connected to ethereum
+    return (<Block>
+      <PlusMenu
+        name="Ethereum"
+        expand={(value) => {
+          this.props.expandField('ethereum', value)
+        }}
+        choice
+        disableEdit
+        expanded={expandedFields.ethereum}
+        goToManagement={(value) => {
+          this.props.expandField('ethereum', value)
+        }} />
+      {
+        (expandedFields.ethereum === false) ? null : ethereum.ethAddress ? <div>
+          <StaticListItem
+            key="Ethereum Address"
+            textLabel="Ethereum Address"
+            textValue={ethereum.ethAddress} />
+          <StaticListItem
+            key="Wallet Address"
+            textLabel="Wallet Address"
+            textValue={ethereum.walletAddress} />
+        </div>
+        : <EthConnectItem
+          onToken={this.props.buyEther}
+          createEthereumIdentity={this.props.createEthereumIdentity}
+          confirmDialog={this.props.confirmDialog} />
+      }
+    </Block>)
+  }
+
   renderContact({ contact, expandedFields }) {
     const {
       changePinValue, requestVerificationCode, resendVerificationCode,
@@ -198,40 +231,6 @@ export default class WalletIdentity extends React.Component {
         </ListItem>
         <Divider style={STYLES.divider} />
       </List>
-    </Block>)
-  }
-
-  renderConnectEther({ ethereum, expandedFields }) {
-    // TODO if already connected to ethereum
-    return (<Block>
-      <PlusMenu
-        name="Ethereum"
-        expand={(value) => {
-          this.props.expandField('ethereum', value)
-        }}
-        choice
-        disableEdit
-        expanded={expandedFields.ethereum}
-        goToManagement={(value) => {
-          this.props.expandField('ethereum', value)
-        }} />
-      {
-        expandedFields.ethereum ? <div>
-          <StaticListItem
-            key="Ethereum Address"
-            textLabel="Ethereum Address"
-            textValue="0x3f54d5ab7c8cb8521e1d" />
-          <StaticListItem
-            key="Wallet Address"
-            textLabel="Wallet Address"
-            textValue="0xdf54f5d4fd5f4f5d521e" />
-          <EthConnectItem
-            onToken={this.props.buyEther}
-            createEthereumIdentity={this.props.createEthereumIdentity}
-            confirmDialog={this.props.confirmDialog} />
-        </div>
-        : null
-      }
     </Block>)
   }
 
