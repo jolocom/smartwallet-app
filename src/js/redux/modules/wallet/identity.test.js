@@ -14,8 +14,13 @@ describe('# Wallet identity redux module', () => {
         webId: '',
         expandedFields: {
           contact: false,
+          ethereum: false,
           idCards: false,
           passports: false
+        },
+        ethereum: {
+          ethAddress: '',
+          walletAddress: ''
         },
         username: {verified: false, value: ''},
         contact: {
@@ -51,7 +56,12 @@ describe('# Wallet identity redux module', () => {
           error: false,
           loaded: true,
           webId: 'https://test.webid.jolocom.com',
+          ethereum: {
+            ethAddress: '0x3f54d5ab7c8cb8521e1d',
+            walletAddress: '0xdf54f5d4fd5f4f5d521e'
+          },
           expandedFields: {
+            ethereum: false,
             contact: false,
             idCards: false,
             passports: false
