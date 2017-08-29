@@ -13,8 +13,8 @@ describe('# Wallet identity redux module', () => {
         loaded: false,
         webId: '',
         expandedFields: {
-          ethereum: false,
           contact: false,
+          ethereum: false,
           idCards: false,
           passports: false
         },

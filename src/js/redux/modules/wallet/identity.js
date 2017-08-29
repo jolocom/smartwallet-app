@@ -179,6 +179,7 @@ const initialState = Immutable.fromJS({
     value: ''
   },
   expandedFields: {
+    ethereum: false,
     contact: false,
     idCards: false,
     passports: false
