@@ -4,15 +4,17 @@ import Radium from 'radium'
 import { Divider, AppBar, FlatButton } from 'material-ui'
 import {NavigationArrowBack} from 'material-ui/svg-icons'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
+import {IconIdCard, IconPassport} from '../../common'
+import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import Location from 'material-ui/svg-icons/maps/place'
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 
-import {SubMenuIcon} from './ui'
+import {SubMenuIcon, VerifiedItem} from './ui'
 import {
   TabContainer,
-  HalfScreenContainer,
-  StaticListItem
+  HalfScreenContainer
 } from '../../wallet/presentation/ui'
 
 const STYLES = {
@@ -49,7 +51,7 @@ const STYLES = {
     color: theme.textStyles.subheadline.color,
     fontSize: theme.textStyles.subheadline.fontSize,
     fontWeight: theme.textStyles.subheadline.fontWeight,
-    marginBottom: '15px',
+    padding: '0 16px 0 54px',
     display: 'inline-block'
   },
   item: {
@@ -59,85 +61,108 @@ const STYLES = {
     verticalAlign: 'top',
     width: '100%',
     boxSizing: 'border-box'
+  },
+  button: {
+    padding: '0 16px 0 44px',
+    marginTop: '16px'
   }
 }
+@Radium
+export default class SharedDatePresentation extends React.Component {
+  static propTypes = {
+    serviceUrl: React.PropTypes.func.isRequired,
+    sharedData: React.PropTypes.array.isRequired,
+    serviceName: React.PropTypes.string.isRequired,
+    deleteService: React.PropTypes.string.isRequired,
+    goToAccessRightScreen: React.PropTypes.func.isRequired,
+    showDeleteServiceWindow: React.PropTypes.func.isRequired
+  }
 
-const SharedDatePresentation = (props) => (<TabContainer>
-  <HalfScreenContainer>
-    <Content style={STYLES.container}>
-      <AppBar
-        iconElementLeft={<NavigationArrowBack
-          onClick={props.goToAccessRightScreen}
-          style={{margin: '12px'}} />}
-        title={props.serviceName} />
-      <Block>
-        <SubMenuIcon
-          name="Contact"
-          icon={<NavigationCancel
-            style={{fill: theme.textStyles.sectionheader.color}} />}
-          onClick={() => {
-            props.deleteService({
-              title: <div style={{textAlign: 'center'}}>
-              Delete Connection to {props.serviceName}
-              </div>,
-              message: <div style={{maxWidth: '360px'}}>
-                Are you sure you want to delete the connection to
-                {props.serviceName} ? <br />
-                This way you are deleting your account
-              </div>,
-              rightButtonLabel: 'OK',
-              leftButtonLabel: 'CANCEL',
-              style: {
-                dialogContainer: {maxWidth: '480px'},
-                maxWidth: '480px'
-              }
-            })
-          }} />
-      </Block>
-      <Block>
-      {
-        props.sharedData.map(
-          ({value, label, attrType, verified, type = ''}, index, fields) =>
-          (<StaticListItem
-            key={value}
-            verified={verified}
-            textValue={value}
-            textLabel={'labelText'}
-            icon={index === fields.map(({attrType}) => attrType)
-              .indexOf(attrType) ? CommunicationCall : null}
-            labelText={'label'}
-            secondaryTextValue={type} />))
-        }
-      </Block>
-      <Block>
-        <div style={{...STYLES.item, marginBottom: '15px',
-          display: 'inline-block'}}>
-          <div style={theme.textStyles.sectionheader}>
-            Status
-          </div>
-          <Divider style={{marginTop: '16px'}} />
-        </div>
-      </Block>
-      <Block style={STYLES.infoHeader}>
-        You are currently logged in to {props.serviceName} website. <br />
-        You can logout by going directly to the service.
-      </Block>
-      <Block>
-        <a href={props.serviceUrl} target="_blank">
-          <FlatButton label="GO TO SERVICE" />
-        </a>
-      </Block>
-    </Content>
-  </HalfScreenContainer>
-</TabContainer>)
+  getIcon(field) {
+    if (field === 'phone') {
+      return CommunicationCall
+    } else if (field === 'email') {
+      return CommunicationEmail
+    } else if (field === 'passport') {
+      return IconPassport
+    } else if (field === 'address') {
+      return Location
+    } else if (field === 'idcard') {
+      return IconIdCard
+    }
+  }
 
-SharedDatePresentation.propTypes = {
-  serviceUrl: React.PropTypes.func.isRequired,
-  sharedData: React.PropTypes.array.isRequired,
-  serviceName: React.PropTypes.string.isRequired,
-  deleteService: React.PropTypes.string.isRequired,
-  goToAccessRightScreen: React.PropTypes.func.isRequired,
-  showDeleteServiceWindow: React.PropTypes.func.isRequired
+  render() {
+    const renderFields = this.props.sharedData.map((field, index) => { // eslint-disable-line max-len
+      let icon = this.getIcon(field.attrType)
+      return (
+        <VerifiedItem
+          key={field.value}
+          verified={field.verified}
+          textValue={field.value}
+          textLabel={field.attrType}
+          icon={icon}
+          secondaryTextValue={''} />
+      )
+    })
+    return (
+      <TabContainer>
+        <HalfScreenContainer>
+          <Content>
+            <AppBar
+              iconElementLeft={<NavigationArrowBack
+                onClick={this.props.goToAccessRightScreen}
+                style={{margin: '12px'}} />}
+              title={this.props.serviceName} />
+            <Block>
+              <SubMenuIcon
+                name="Contact"
+                icon={<NavigationCancel
+                  style={{fill: theme.textStyles.sectionheader.color}} />}
+                onClick={() => {
+                  this.props.deleteService({
+                    title: <div style={{textAlign: 'center'}}>
+                    Delete Connection to {this.props.serviceName}
+                    </div>,
+                    message: <div style={{maxWidth: '360px'}}>
+                      Are you sure you want to delete the connection to
+                      {this.props.serviceName} ? <br />
+                      This way you are deleting your account
+                    </div>,
+                    rightButtonLabel: 'OK',
+                    leftButtonLabel: 'CANCEL',
+                    style: {
+                      dialogContainer: {maxWidth: '480px'},
+                      maxWidth: '480px'
+                    }
+                  })
+                }} />
+            </Block>
+            <Block>
+             {renderFields}
+            </Block>
+            <Block>
+              <div style={{...STYLES.item, marginBottom: '15px',
+                display: 'inline-block'}}>
+                <div style={theme.textStyles.sectionheader}>
+                  Status
+                </div>
+                <Divider style={{marginTop: '16px'}} />
+              </div>
+            </Block>
+            <Block style={STYLES.infoHeader}>
+              You are currently logged in to {this.props.serviceName} website.
+              <br />
+              You can logout by going directly to the service.
+            </Block>
+            <Block style={STYLES.button}>
+              <a href={this.props.serviceUrl} target="_blank">
+                <FlatButton secondary label="GO TO SERVICE" />
+              </a>
+            </Block>
+          </Content>
+        </HalfScreenContainer>
+      </TabContainer>
+    )
+  }
 }
-
-export default Radium(SharedDatePresentation)
