@@ -22,7 +22,6 @@ export default class SingleSignOnSharedDatatScreen extends React.Component {
   }
 
   render() {
-    console.log('SHARED DATA : ', this.props)
     let {serviceNumber, services} = this.props.accessRight
     if (services.length > 0) {
       return (<Presentation

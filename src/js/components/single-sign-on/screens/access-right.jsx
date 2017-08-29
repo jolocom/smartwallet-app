@@ -29,7 +29,6 @@ export default class SingleSignOnAccessRightScreen extends React.Component {
   }
 
   render() {
-    console.log('ACCESS RIGHT: ', this.props)
     const {failed, loaded, services} = this.props.accessRight
     if (failed) {
       return <ErrorScreen
