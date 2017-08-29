@@ -113,7 +113,6 @@ const actions = module.exports = makeActions('wallet/identity', {
             })
           })
           .then((response) => {
-            // console.log(response)
             return response
           })
         }))
@@ -253,6 +252,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.buyEther.id:
+    console.log('BUY ETHER PROGRESS')
       return state.merge({
         loaded: false
       })
@@ -263,6 +263,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.buyEther.id_fail:
+    console.log('BUY ETHER FAIL')
       return state.merge({
         loaded: true,
         error: true

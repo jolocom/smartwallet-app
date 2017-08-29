@@ -5,11 +5,12 @@ import WalletError from '../../common/error'
 import Loading from 'components/common/loading'
 
 @connect({
-  props: ['wallet.identity'],
+  props: ['wallet.identity', 'wallet.money'],
   actions: [
     'wallet/identity:buyEther',
     'wallet/identity:createEthereumIdentity',
     'confirmation-dialog:openConfirmDialog',
+    'wallet/money:getWalletAddressAndBalance',
     'verification:confirmEmail',
     'verification:confirmPhone',
     'verification:startEmailVerification',
@@ -45,6 +46,7 @@ export default class WalletIdentityScreen extends React.Component {
 
   componentWillMount() {
     this.props.getIdentityInformation()
+    this.props.getWalletAddressAndBalance()
   }
 
   render() {
@@ -68,6 +70,7 @@ export default class WalletIdentityScreen extends React.Component {
       confirmDialog={(...args) => { this.handleConfirmDialog(...args) }}
       buyEther={(token) => { this.props.buyEther(token) }}
       createEthereumIdentity={this.props.createEthereumIdentity}
+      ether={this.props.money.ether}
       goTo={this.props.goTo}
       showUserInfo={this.props.openConfirmDialog}
       requestIdCardVerification={({title, message, rightButtonLabel, leftButtonLabel, index}) => // eslint-disable-line max-len

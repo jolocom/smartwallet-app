@@ -53,6 +53,7 @@ export default class WalletIdentity extends React.Component {
     setFocusedPin: React.PropTypes.func.isRequired,
     showUserInfo: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
+    ether: React.PropTypes.object,
     createEthereumIdentity: React.PropTypes.func.isRequired,
     confirmDialog: React.PropTypes.func.isRequired
   }
@@ -227,6 +228,7 @@ export default class WalletIdentity extends React.Component {
             textValue="0xdf54f5d4fd5f4f5d521e" />
           <EthConnectItem
             onToken={this.props.buyEther}
+            ether={this.props.ether}
             createEthereumIdentity={this.props.createEthereumIdentity}
             confirmDialog={this.props.confirmDialog} />
         </div>
