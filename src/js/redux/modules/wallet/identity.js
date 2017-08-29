@@ -80,6 +80,30 @@ const actions = module.exports = makeActions('wallet/identity', {
   setAttributeVerified: {
     expectedParams: ['attrType', 'attrId', 'verified']
   },
+  getWalletAddressAndBalance: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getWalletAddressAndBalance.buildAction(params, () => {
+          return services.auth.currentUser.wallet.getWalletAddress()
+          .then((result) => {
+            dispatch(actions.setWalletAddress(result.walletAddress))
+            return backend.gateway.getBalanceEther({
+              userName: services.auth.currentUser.wallet.userName,
+              walletAddress: result.walletAddress
+            })
+          })
+          .then((result) => {
+            return result
+          })
+        }))
+      }
+    }
+  },
+  setWalletAddress: {
+    expectedParams: ['walletAddress']
+  },
   buyEther: {
     expectedParams: ['stripeToken'],
     async: true,
@@ -157,7 +181,7 @@ const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
     error: false,
     webId: webId,
     ethereum: {
-      identityAddress: '0x3f54d5ab7c8cb8521e1d',
+      identityAddress: '',
       walletAddress: '0xdf54f5d4fd5f4f5d521e'
     },
     username: {value: userName},
@@ -191,8 +215,9 @@ const initialState = Immutable.fromJS({
     passports: false
   },
   ethereum: {
-    identityAddress: '',
-    walletAddress: ''
+    walletAddress: '',
+    amount: '',
+    identityAddress: ''
   },
   contact: {
     phones: [{
@@ -262,8 +287,33 @@ module.exports.default = (state = initialState, action = {}) => {
         codeIsSent: action.value
       })
 
+    case actions.setWalletAddress.id:
+      return state.mergeDeep({
+        walletAddress: action.walletAddress
+      })
+
+    case actions.getWalletAddressAndBalance.id:
+      return state.mergeDeep({
+        loaded: false,
+        error: ''
+      })
+
+    case actions.getWalletAddressAndBalance.id_success:
+      return state.mergeDeep({
+        loaded: true,
+        error: '',
+        ethereum: {
+          amount: parseFloat(action.result.ether)
+        }
+      })
+
+    case actions.getWalletAddressAndBalance.id_fail:
+      return state.mergeDeep({
+        loaded: false,
+        error: 'Could not get your walletAddress and Balance'
+      })
+
     case actions.buyEther.id:
-    console.log('BUY ETHER PROGRESS')
       return state.merge({
         loaded: false
       })
@@ -274,7 +324,6 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.buyEther.id_fail:
-    console.log('BUY ETHER FAIL')
       return state.merge({
         loaded: true,
         error: true
