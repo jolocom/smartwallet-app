@@ -9,7 +9,7 @@ const actions = module.exports = makeActions('single-sign-on/access-right', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.showSharedData.buildAction(params))
-        dispatch(router.pushRoute('/single-sign-on/shared-data'))
+        dispatch(router.pushRoute('wallet/sso/shared-data'))
       }
     }
   },
@@ -17,7 +17,7 @@ const actions = module.exports = makeActions('single-sign-on/access-right', {
     expectedParams: [],
     creator: (params) => {
       return (dispatch) => {
-        dispatch(router.pushRoute('single-sign-on/access-right'))
+        dispatch(router.pushRoute('wallet/sso/access-rights'))
       }
     }
   },

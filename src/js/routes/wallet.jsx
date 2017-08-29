@@ -53,6 +53,8 @@ import SingleSignOnAccessRightScreen from
 import SingleSignOnSharedDatatScreen from
   'components/single-sign-on/screens/shared-data'
 
+import {IconServices} from '../components/common'
+
 import {
   VerificationDataScreen,
   VerificationFaceScreen,
@@ -68,16 +70,23 @@ export const routes = {
   home: '/wallet',
   forgotPassword: '/forgot-password',
   changePassword: '/change-password',
-  verifyEmail: '/verify-email'
+  verifyEmail: '/verify-email',
+  dapps: '/wallet/sso/access-rights'
 }
 
 export const publicRoutes = Object.values(routes)
 
-export const navItems = [{
-  title: 'Wallet',
-  route: routes.home,
-  icon: 'account_balance_wallet'
-}]
+export const navItems = [
+  {
+    title: 'Wallet',
+    route: routes.home,
+    icon: 'account_balance_wallet'
+  }, {
+    title: 'DApps & Services',
+    route: routes.dapps,
+    icon: IconServices
+  }
+]
 
 function getRoutes() {
   return (<Route path="/" component={App} >
@@ -147,9 +156,9 @@ function getRoutes() {
     <Route path="login/pin-entry" component={LoginPinScreen} />
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
-    <Route path="single-sign-on/access-right"
+    <Route path="wallet/sso/access-rights"
       component={SingleSignOnAccessRightScreen} />
-    <Route path="/single-sign-on/shared-data"
+    <Route path="wallet/sso/shared-data"
       component={SingleSignOnSharedDatatScreen} />
   </Route>)
 }

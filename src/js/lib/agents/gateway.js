@@ -146,7 +146,7 @@ export default class GatewayAgent {
         read: true,
         write: false},
       {identity: 'telekom',
-        pattern: '/email/*',
+        pattern: '/phone/*',
         read: true,
         write: false}]
     return new Promise((resolve, reject) => {
