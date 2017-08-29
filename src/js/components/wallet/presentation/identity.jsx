@@ -74,13 +74,13 @@ export default class WalletIdentity extends React.Component {
       {
         (expandedFields.ethereum === false) ? null : ethereum.ethAddress ? <div>
           <StaticListItem
-            key="Ethereum Address"
-            textLabel="Ethereum Address"
-            textValue={ethereum.ethAddress} />
-          <StaticListItem
             key="Wallet Address"
             textLabel="Wallet Address"
             textValue={ethereum.walletAddress} />
+          <StaticListItem
+            key="Identity Address"
+            textLabel="Identity Address"
+            textValue={ethereum.ethAddress} />
         </div>
         : <EthConnectItem
           onToken={this.props.buyEther}
