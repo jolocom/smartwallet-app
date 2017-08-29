@@ -83,13 +83,12 @@ const PlusMenu = (props) => {
           </FloatingActionButton>
         </div>
         {
-          props.choice && props.expanded
+          props.choice && props.expanded && !props.disableEdit
           ? <div style={STYLES.accordionBtn}>
             <FloatingActionButton
               mini
               secondary={!props.choice}
               onClick={props.goToManagement}
-              containerElement="label"
               style={STYLES.addBtn}
               backgroundColor={props.choice ? '#FFF' : ''}
               iconStyle={
@@ -113,6 +112,7 @@ PlusMenu.propTypes = {
   goToManagement: React.PropTypes.func.isRequired,
   expand: React.PropTypes.func,
   expanded: React.PropTypes.bool,
+  disableEdit: React.PropTypes.bool,
   choice: React.PropTypes.bool
 }
 

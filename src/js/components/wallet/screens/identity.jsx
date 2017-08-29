@@ -89,14 +89,12 @@ export default class WalletIdentityScreen extends React.Component {
   }
 
   requestVerification(...args) {
-    return this.showVerificationWindow(args[0], () => {
-      return () => this.showVerificationWindow(args[1], ({attrType, attrValue, index}) => { // eslint-disable-line max-len
-        if (attrType === 'phone') {
-          return () => this.props.startPhoneVerification({phone: attrValue, index}) // eslint-disable-line max-len
-        } else if (attrType === 'email') {
-          return () => this.props.startEmailVerification({email: attrValue, index}) // eslint-disable-line max-len
-        }
-      })
+    return this.showVerificationWindow(...args, ({attrType, attrValue, index}) => { // eslint-disable-line max-len
+      if (attrType === 'phone') {
+        return () => this.props.startPhoneVerification({phone: attrValue, index}) // eslint-disable-line max-len
+      } else if (attrType === 'email') {
+        return () => this.props.startEmailVerification({email: attrValue, index}) // eslint-disable-line max-len
+      }
     })
   }
 

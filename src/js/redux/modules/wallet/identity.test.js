@@ -14,6 +14,7 @@ describe('# Wallet identity redux module', () => {
         webId: '',
         expandedFields: {
           contact: false,
+          ethereum: false,
           idCards: false,
           passports: false
         },
@@ -52,6 +53,7 @@ describe('# Wallet identity redux module', () => {
           loaded: true,
           webId: 'https://test.webid.jolocom.com',
           expandedFields: {
+            ethereum: false,
             contact: false,
             idCards: false,
             passports: false

@@ -1,19 +1,19 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {NavigationArrowBack} from 'material-ui/svg-icons'
-import {AppBar} from 'material-ui'
-import {Content, Block, Header, SideNote} from '../../structure'
+// import {NavigationArrowBack} from 'material-ui/svg-icons'
+import {Divider, List, ListItem, FlatButton} from 'material-ui'
+import {Block, Header, SideNote} from '../../structure'
 import StripeCheckout from './stripe-checkout'
-import Spinner from '../../common/spinner'
+import {Spinner, Error, Loading} from '../../common'
 
 import {theme} from 'styles'
 
 import {
   TabContainer,
   HalfScreenContainer,
-  PlusSubMenu,
-  Bubbles
+  Bubbles,
+  EtherBalance
 } from './ui'
 
 const STYLES = {
@@ -21,33 +21,40 @@ const STYLES = {
     padding: '24px',
     textAlign: 'center'
   },
-  etherContainer: {
-    backgroundColor: theme.palette.textColor
+  headItem: {
+    width: '100%',
+    fontSize: '24px'
   },
   header: {
     margin: '16px 0'
+  },
+  divider: {
+    marginLeft: '16px'
+  },
+  listItem: {
+    padding: '16px 0px 0px 72px'
+  },
+  getAccountContainer: {
+    marginTop: '8px'
   }
 }
 
 @Radium
 export default class WalletEther extends React.Component {
   static propTypes = {
-    goToWalletScreen: React.PropTypes.func,
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
     ether: React.PropTypes.object,
-    avatar: React.PropTypes.string,
-    title: React.PropTypes.string
+    wallet: React.PropTypes.object,
+    goToAccountDetailsEthereum: React.PropTypes.func
   }
 
   renderLoading() {
-    const messageWait = ['This might take a while...',
-      'Please have some patience...', 'Almost there...']
     return (
       <div style={STYLES.noEtherContainer}>
         <Block>
-          <Spinner style={STYLES.header} message={messageWait}
-            title={'Thank you. We are transferring some Ether to your Account.'}
+          <Spinner style={STYLES.header} message={''}
+            title={''}
             avatar={'url(/img/img_techguy.svg)'} />
         </Block>
       </div>
@@ -56,68 +63,77 @@ export default class WalletEther extends React.Component {
 
   renderHasEther() {
     return (
-      <div style={STYLES.etherContainer}>
-        <Block>
-          <PlusSubMenu
-            overview
-            amount={this.props.ether.ether.amount}
-            currency="eth"
-            currencyPrice={this.props.ether.ether.price}
-          />
-        </Block>
-      </div>
+      <HalfScreenContainer>
+        <EtherBalance
+          amount={this.props.wallet.amount}
+          currencyPrice={this.props.ether.ether.price} />
+        <List>
+          <ListItem
+            disabled
+            style={STYLES.headItem}
+            primaryText={'Current Transactions'} />
+          <Divider
+            style={STYLES.divider} />
+        </List>
+      </HalfScreenContainer>
     )
   }
 
   renderNoEther() {
     return (
-      <div style={STYLES.noEtherContainer}>
-        <Block>
-          <Header
-            style={STYLES.header}
-            title="You don't have any Ether yet."
-          />
-          <SideNote>
-            'To store your information securely, it costs Ether. One
-             transaction (saving data) is at 30 cents. To use this app
-             correctly we suggest you to either buy some Ether here...'
-          </SideNote>
+      <HalfScreenContainer>
+        <div style={STYLES.noEtherContainer}>
           <Block>
-            <Bubbles ethBalance={'0.0215180852'} />
+            <Header
+              style={STYLES.header}
+              title="You don't have any Ether yet." />
+            <SideNote>
+              'To store your information securely, it costs Ether. One
+               transaction (saving data) is at 30 cents. To use this app
+               correctly we suggest you to either buy some Ether here...'
+            </SideNote>
+            <Block>
+              <Bubbles ethBalance={'0.0215180852'} />
+            </Block>
           </Block>
-        </Block>
-        <Block>
-          <StripeCheckout onToken={token => {
-            this.props.onToken(token)
-          }} />
-        </Block>
-      </div>
+          <Block>
+            <StripeCheckout onToken={token => {
+              this.props.onToken(token)
+            }} />
+          </Block>
+          <Block style={STYLES.getAccountContainer}>
+            <SideNote>...or transfer some from a different account.</SideNote>
+            <FlatButton
+              style={{color: theme.palette.accent1Color}}
+              onClick={this.props.goToAccountDetailsEthereum}>
+              GET ACCOUNT DETAILS
+            </FlatButton>
+          </Block>
+        </div>
+      </HalfScreenContainer>
     )
   }
 
   render() {
     let content = null
-    const { ether, screenToDisplay } = this.props.ether
+    const { screenToDisplay } = this.props.ether
+    const { amount, errorMsg } = this.props.wallet
     if (this.props.ether.ether.buying) {
       content = this.renderLoading()
-    } else if (ether.amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
+    } else if (this.props.wallet.loading) {
+      content = (<Loading />)
+    } else if (amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
       content = this.renderHasEther()
-    } else if (!ether.amount || screenToDisplay === 'etherBuyingScreen') {
+    } else if (!amount || screenToDisplay === 'etherBuyingScreen') {
       content = this.renderNoEther()
+    } else if (errorMsg) {
+      content = (
+        <Error message={errorMsg} />
+      )
     }
-
-    return (<TabContainer>
-      <AppBar
-        title="Ethereum Wallet"
-        iconElementLeft={
-          <NavigationArrowBack style={{padding: '10px'}}
-            onClick={this.props.goToWalletScreen} />
-        } />
-      <HalfScreenContainer>
-        <Content>
-          {content}
-        </Content>
-      </HalfScreenContainer>
-    </TabContainer>)
+    return (
+      <TabContainer>
+        {content}
+      </TabContainer>)
   }
 }
