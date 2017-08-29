@@ -21,7 +21,7 @@ describe('(Component) EmailConfirmationScreen', () => {
           code: '1e3t5',
           id: 'test'
         }}}
-        goToLogin={() => {}}
+        goToAfterConfirmEmail={() => {}}
         confirmEmail={confirm} />)
     )
     wrapper.instance().componentDidMount()
