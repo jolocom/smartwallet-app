@@ -1,4 +1,7 @@
+import io from 'socket.io-client'
 import EventEmitter from 'events'
+import * as settings from 'settings'
+
 
 export default class AuthService extends EventEmitter {
   constructor(backend) {
@@ -6,6 +9,7 @@ export default class AuthService extends EventEmitter {
     this.backend = backend
     this.currentUser = null
     this._localStorage = localStorage
+    this._socket = null
 
     if (typeof localStorage !== 'undefined') {
       const savedSession = localStorage.getItem('jolocom.identity')
@@ -22,6 +26,9 @@ export default class AuthService extends EventEmitter {
 
   async login({seedPhrase, pin}) {
     const res = await this.backend.login({seedPhrase, pin})
+    if (!res.success) {
+      throw new Error('Could not log in: invalid seed phrase')
+    }
 
     const walletConfig = {
       seedPhrase: seedPhrase,
@@ -44,6 +51,18 @@ export default class AuthService extends EventEmitter {
   _setCurrentUser(user) {
     this.currentUser = user
     this.emit('changed', user)
+    this._initSocket()
+  }
+
+  _initSocket() {
+    // console.log(settings, this.currentUser.wallet.identityURL)
+    this._socket = io(new URL(this.currentUser.wallet.identityURL).origin)
+    this._socket.on('verification.stored', (data) => {
+      this.emit('verification.stored', {
+        attrType: data.attrType,
+        attrId: data.attrId
+      })
+    })
   }
 }
 
@@ -51,7 +70,7 @@ export class Wallet {
   constructor({gateway, userName, seedPhrase}) {
     this._gateway = gateway
     this.userName = userName
-    this.identityURL = `https://identity.jolocom.com/${userName}`
+    this.identityURL = `${settings.gateway}/${userName}`
     this.seedPhrase = seedPhrase
   }
 

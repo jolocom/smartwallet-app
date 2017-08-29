@@ -136,6 +136,7 @@
     "redux": "^3.6.0",
     "redux-immutable": "^3.0.11",
     "reflux": "^6.0.0",
+    "safe-buffer": "^5.1.1",
     "secure-random": "^1.1.1",
     "sjcl": "^1.0.6",
     "smartwallet-contracts": "github:jolocom/smartwallet-contracts",
