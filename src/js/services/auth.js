@@ -2,7 +2,6 @@ import io from 'socket.io-client'
 import EventEmitter from 'events'
 import * as settings from 'settings'
 
-
 export default class AuthService extends EventEmitter {
   constructor(backend) {
     super()
