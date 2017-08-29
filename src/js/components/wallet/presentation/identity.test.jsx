@@ -20,6 +20,10 @@ describe('(Component) Wallet Identity', function() {
             verified: true,
             value: 'AnnikaHamman'
           },
+          ethereum: {
+            ethAddress: '',
+            walletAddress: ''
+          },
           contact: {
             phones: [{
               number: '+49 176 12345678',
