@@ -55,7 +55,16 @@ let Nav = React.createClass({
           ? 'translateX(0)'
           : 'translateX(-100vw)'
       },
+      listSelect: {
+        padding: '0px'
+      },
       menuItem: {
+        color: '#ffffff',
+        marginLeft: '10px',
+        marginTop: '7px',
+        marginBottom: '7px'
+      },
+      menuItemBottom: {
         color: '#ffffff',
         marginLeft: '10px'
       },
@@ -64,11 +73,14 @@ let Nav = React.createClass({
         color: '#ffffff'
       },
       menuItemIconActive: {
+        marginLeft: '10px',
         color: '#b3c90f'
       },
       menuItemActive: {
         color: '#b3c90f',
-        marginLeft: '10px'
+        marginLeft: '10px',
+        marginTop: '7px',
+        marginBottom: '7px'
       },
       menuDivider: {
         backgroundColor: '#633c38',
@@ -92,6 +104,11 @@ let Nav = React.createClass({
         position: 'absolute',
         top: '0',
         left: '0px'
+      },
+      ownIcon: {
+        top: '0px',
+        left: '4px',
+        margin: '12px 12px 12px 10px'
       }
     }
   },
@@ -124,30 +141,60 @@ let Nav = React.createClass({
 
   renderNavItems() {
     const styles = this.getStyles()
-
     return navItems.map((item) => {
       let icon
       if (typeof item.icon === 'string') {
+        let iconStyle
+        if (this.props.selected === item.route) {
+          iconStyle = styles.menuItemIconActive
+        } else {
+          iconStyle = styles.menuItemIcon
+        }
         icon = (
           <FontIcon
-            style={styles.menuItemIconActive}
+            style={iconStyle}
             className="material-icons">{item.icon}
           </FontIcon>
         )
       } else {
-        icon = <item.icon />
+        let iconStyle
+        if (this.props.selected === item.route) {
+          iconStyle = '#b3c90f'
+        } else {
+          iconStyle = '#fff'
+        }
+        icon = <div style={styles.ownIcon}>
+          <item.icon color={iconStyle} />
+        </div>
       }
 
-      return (
-        <ListItem
-          key={item.route}
-          primaryText={item.title}
-          onTouchTap={this.hide}
-          value={item.route}
-          style={styles.menuItemActive}
-          leftIcon={icon}
-        />
-      )
+      if (this.props.selected === item.route) {
+        return (
+          <div>
+            <ListItem
+              key={item.route}
+              primaryText={item.title}
+              value={item.route}
+              onClick={() => this._handleNavChange(item.route)}
+              style={styles.menuItemActive}
+              leftIcon={icon} />
+            <Divider style={styles.menuDivider} />
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            <ListItem
+              key={item.route}
+              primaryText={item.title}
+              value={item.route}
+              onClick={() => this._handleNavChange(item.route)}
+              style={styles.menuItem}
+              leftIcon={icon} />
+            <Divider style={styles.menuDivider} />
+          </div>
+        )
+      }
     })
   },
 
@@ -164,21 +211,17 @@ let Nav = React.createClass({
         docked={false}
         containerStyle={styles.drawerBody}
         open={this.props.open}
-        onRequestChange={this.drawerRequestChange}
-        >
+        onRequestChange={this.drawerRequestChange}>
         <Header onClose={this.props.hideLeftNav} />
+
         <div>
-          <SelectableList
-            value={this.props.selected}
-            onChange={this._handleNavChange}
-          >
+          <SelectableList style={styles.listSelect}>
             {this.renderNavItems()}
           </SelectableList>
-          <Divider style={styles.menuDivider} />
           <List>
             <ListItem primaryText="Sign out"
               onTouchTap={this.logout}
-              style={styles.menuItem}
+              style={styles.menuItemBottom}
               leftIcon={
                 <FontIcon style={styles.menuItemIcon}
                   className="material-icons">
@@ -190,10 +233,10 @@ let Nav = React.createClass({
     )
   },
 
-  _handleNavChange(event, selected) {
-    this.props.selectItem(selected || '')
-    if (selected) {
-      this.goto(selected)
+  _handleNavChange(route) {
+    this.props.selectItem(route)
+    if (route) {
+      this.goto(route)
     }
   }
 })

@@ -12,18 +12,21 @@ export const selectItem = action('left-nav', 'selectItem', {
 })
 
 const initialState = new Map({
-  selected: '',
+  selected: '/wallet',
   open: false
 })
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case showLeftNav.id:
-      return state.set('open', true)
+      return state.merge({open: true})
+
     case hideLeftNav.id:
-      return state.set('open', false)
+      return state.merge({open: false})
+
     case selectItem.id:
-      return state.set('selected', action.value)
+      return state.merge({selected: action.value})
+
     default:
       return state
   }
