@@ -9,7 +9,7 @@ import {Content, Block} from '../../structure'
 
 import {
   PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
-  PassportsList, InfoDetails, IdentityAvatar, EthConnectItem
+  PassportsList, InfoDetails, IdentityAvatar, EthConnectItem, StaticListItem
 } from './ui'
 
 const STYLES = {
@@ -201,16 +201,38 @@ export default class WalletIdentity extends React.Component {
     </Block>)
   }
 
-  renderConnectEther() {
+  renderConnectEther({ ethereum, expandedFields }) {
     // TODO if already connected to ethereum
-    return (
-      <Block>
-        <EthConnectItem
-          onToken={this.props.buyEther}
-          createEthereumIdentity={this.props.createEthereumIdentity}
-          confirmDialog={this.props.confirmDialog} />
-      </Block>
-    )
+    return (<Block>
+      <PlusMenu
+        name="Ethereum"
+        expand={(value) => {
+          this.props.expandField('ethereum', value)
+        }}
+        choice
+        disableEdit
+        expanded={expandedFields.ethereum}
+        goToManagement={(value) => {
+          this.props.expandField('ethereum', value)
+        }} />
+      {
+        expandedFields.ethereum ? <div>
+          <StaticListItem
+            key="Ethereum Address"
+            textLabel="Ethereum Address"
+            textValue="0x3f54d5ab7c8cb8521e1d" />
+          <StaticListItem
+            key="Wallet Address"
+            textLabel="Wallet Address"
+            textValue="0xdf54f5d4fd5f4f5d521e" />
+          <EthConnectItem
+            onToken={this.props.buyEther}
+            createEthereumIdentity={this.props.createEthereumIdentity}
+            confirmDialog={this.props.confirmDialog} />
+        </div>
+        : null
+      }
+    </Block>)
   }
 
   render() {
@@ -218,7 +240,7 @@ export default class WalletIdentity extends React.Component {
       <HalfScreenContainer>
         <Content style={STYLES.container}>
           {this.renderUsername(this.props.identity)}
-          {this.renderConnectEther()}
+          {this.renderConnectEther(this.props.identity)}
           {this.renderContact(this.props.identity)}
           {this.renderPassports(this.props.identity)}
           {this.renderIdCards(this.props.identity)}
