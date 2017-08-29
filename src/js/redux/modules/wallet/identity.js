@@ -77,6 +77,9 @@ const actions = module.exports = makeActions('wallet/identity', {
       }
     }
   },
+  setAttributeVerified: {
+    expectedParams: ['attrType', 'attrId', 'verified']
+  },
   buyEther: {
     expectedParams: ['stripeToken'],
     async: true,
@@ -153,6 +156,10 @@ const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
     loaded: true,
     error: false,
     webId: webId,
+    ethereum: {
+      identityAddress: '0x3f54d5ab7c8cb8521e1d',
+      walletAddress: '0xdf54f5d4fd5f4f5d521e'
+    },
     username: {value: userName},
     expandedFields: {
       ethereum: false,
@@ -182,6 +189,10 @@ const initialState = Immutable.fromJS({
     contact: false,
     idCards: false,
     passports: false
+  },
+  ethereum: {
+    identityAddress: '',
+    walletAddress: ''
   },
   contact: {
     phones: [{
@@ -285,6 +296,30 @@ module.exports.default = (state = initialState, action = {}) => {
         loaded: true,
         error: true
       })
+
+    case actions.setAttributeVerified.id:
+      if (!state.get('loaded')) {
+        return state
+      }
+
+      let path
+      if (['email', 'phone'].indexOf(action.attrType) >= 0) {
+        path = ['contact', action.attrType + 's']
+      } else if (['idcard', 'passport'].indexOf(action.attrType) >= 0) {
+        path = [action.attrType === 'idcard' ? 'idCards' : 'passports']
+      }
+
+      const index = state.getIn(path).findIndex(attr => {
+        return attr.get('id') === action.attrId
+      })
+      if (index >= 0) {
+        path.push(index)
+      } else {
+        return state
+      }
+      path.push('verified')
+
+      return state.setIn(path, action.verified)
 
     default:
       return state
