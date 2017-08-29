@@ -65,7 +65,7 @@ export default class EthConnectItem extends React.Component {
           secondary
           style={STYLES.buttons}
           onClick={() => { this.props.createEthereumIdentity() }}
-          label="CONNECT TO ETHEREUM" />
+          label="SMART CONTRACT" />
       )
     } else {
       return (

@@ -9,7 +9,7 @@ import {Content, Block} from '../../structure'
 
 import {
   PlusMenu, TabContainer, HalfScreenContainer, ContactList, IdCardsList,
-  PassportsList, InfoDetails, IdentityAvatar, EthConnectItem
+  PassportsList, InfoDetails, IdentityAvatar, EthConnectItem, StaticListItem
 } from './ui'
 
 const STYLES = {
@@ -55,6 +55,39 @@ export default class WalletIdentity extends React.Component {
     buyEther: React.PropTypes.func.isRequired,
     createEthereumIdentity: React.PropTypes.func.isRequired,
     confirmDialog: React.PropTypes.func.isRequired
+  }
+
+  renderConnectEther({ ethereum, expandedFields }) {
+    // TODO if already connected to ethereum
+    return (<Block>
+      <PlusMenu
+        name="Ethereum"
+        expand={(value) => {
+          this.props.expandField('ethereum', value)
+        }}
+        choice
+        disableEdit
+        expanded={expandedFields.ethereum}
+        goToManagement={(value) => {
+          this.props.expandField('ethereum', value)
+        }} />
+      {
+        (expandedFields.ethereum === false) ? null : ethereum.ethAddress ? <div>
+          <StaticListItem
+            key="Ethereum Address"
+            textLabel="Ethereum Address"
+            textValue={ethereum.ethAddress} />
+          <StaticListItem
+            key="Wallet Address"
+            textLabel="Wallet Address"
+            textValue={ethereum.walletAddress} />
+        </div>
+        : <EthConnectItem
+          onToken={this.props.buyEther}
+          createEthereumIdentity={this.props.createEthereumIdentity}
+          confirmDialog={this.props.confirmDialog} />
+      }
+    </Block>)
   }
 
   renderContact({ contact, expandedFields }) {
@@ -201,24 +234,12 @@ export default class WalletIdentity extends React.Component {
     </Block>)
   }
 
-  renderConnectEther() {
-    // TODO if already connected to ethereum
-    return (
-      <Block>
-        <EthConnectItem
-          onToken={this.props.buyEther}
-          createEthereumIdentity={this.props.createEthereumIdentity}
-          confirmDialog={this.props.confirmDialog} />
-      </Block>
-    )
-  }
-
   render() {
     return (<TabContainer>
       <HalfScreenContainer>
         <Content style={STYLES.container}>
           {this.renderUsername(this.props.identity)}
-          {this.renderConnectEther()}
+          {this.renderConnectEther(this.props.identity)}
           {this.renderContact(this.props.identity)}
           {this.renderPassports(this.props.identity)}
           {this.renderIdCards(this.props.identity)}

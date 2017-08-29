@@ -105,21 +105,6 @@ const VerificationButtons = ({
         attrType,
         index,
         attrValue: 'value'
-      }, {
-        title: 'Verification Request',
-        message: (<VerificationButtonMsg
-          msgType="pinInput"
-          value={pinValue}
-          phoneNumber={value}
-          setFocusedPin={(value) => { setFocusedPin(value, index) }}
-          changePinValue={(value) => { changePinValue(value, 'pin') }}
-          focused={pinFocused} />),
-        rightButtonLabel: 'OK',
-        leftButtonLabel: 'CANCEL',
-        style: STYLES.simpleDialog,
-        attrType,
-        index,
-        attrValue: value
       })} />
   </ListItem>)
 }

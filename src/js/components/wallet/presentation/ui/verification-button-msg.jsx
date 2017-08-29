@@ -40,11 +40,8 @@ const VerificationButtonMsg = ({
 
     case 'codeRequest':
       return (<div>
-          Our verification service uses the latest encrypting technology which
-          costs.
-        <span> XXX for each verification</span>
+          Please confirm to recieve the verification message.
       </div>)
-
     default:
       return <div></div>
   }
