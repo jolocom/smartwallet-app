@@ -21,8 +21,8 @@ describe('(Component) Wallet Identity', function() {
             value: 'AnnikaHamman'
           },
           ethereum: {
-            ethAddress: '',
-            walletAddress: ''
+            walletAddress: '',
+            identityAddress: ''
           },
           contact: {
             phones: [{
