@@ -77,7 +77,7 @@ export default class StaticListItem extends React.Component {
         disabled>
         <div style={STYLES.values}>
           <TextField
-            floatingLabelText={'Verified ' + this.props.textLabel}
+            floatingLabelText={this.props.verified ? 'Verified ' + this.props.textLabel : 'Unverified ' + this.props.textLabel} // eslint-disable-line max-len
             key="1"
             inputStyle={STYLES.inputName}
             floatingLabelStyle={STYLES.labelName}

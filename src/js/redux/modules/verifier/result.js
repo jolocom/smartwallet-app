@@ -52,7 +52,7 @@ const actions = module.exports = makeActions('wallet/contact', {
           })
           const result = await services.auth.currentUser.wallet.verify({
             identity: verifieeIdentityURL,
-            attributeType: type,
+            attributeType: 'idcard',
             attributeId: idcardIndex[0],
             attributeValue: serializedIdCard
           })
