@@ -156,6 +156,7 @@ const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
     webId: webId,
     username: {value: userName},
     expandedFields: {
+      ethereum: false,
       contact: false,
       idCards: false,
       passports: false
