@@ -154,6 +154,10 @@ const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
     loaded: true,
     error: false,
     webId: webId,
+    ethereum: {
+      ethAddress: '0x3f54d5ab7c8cb8521e1d',
+      walletAddress: '0xdf54f5d4fd5f4f5d521e'
+    },
     username: {value: userName},
     expandedFields: {
       ethereum: false,
@@ -183,6 +187,10 @@ const initialState = Immutable.fromJS({
     contact: false,
     idCards: false,
     passports: false
+  },
+  ethereum: {
+    ethAddress: '',
+    walletAddress: ''
   },
   contact: {
     phones: [{
