@@ -24,7 +24,8 @@ export default class GatewayAgent {
   retrieveEtherPrice() {
     return this._httpAgent.get(
       settings.blockchain.jolocomEtherAddress +
-      '/exchange-rate/ether'
+      '/exchange-rate/ether', null,
+      {credentials: 'omit'}
     )
   }
 

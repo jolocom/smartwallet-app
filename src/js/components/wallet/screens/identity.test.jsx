@@ -52,8 +52,7 @@ describe('(Component) WalletIdentityScreen', () => {
         saveToBlockchain={() => {}}
         setFocusedPin={() => {}}
         startPhoneVerification={() => {}}
-        startEmailVerification={() => {}}
-      />),
+        startEmailVerification={() => {}} />),
       { context: { muiTheme: { } } }
     )
     wrapper.instance()
@@ -130,8 +129,7 @@ describe('(Component) WalletIdentityScreen', () => {
         saveToBlockchain={() => {}}
         setFocusedPin={() => {}}
         startEmailVerification={() => {}}
-        startPhoneVerification={() => {}}
-       />),
+        startPhoneVerification={() => {}} />),
       { context: { muiTheme: { } } }
     )
 
@@ -176,8 +174,7 @@ describe('(Component) WalletIdentityScreen', () => {
       saveToBlockchain={() => {}}
       setFocusedPin={() => {}}
       startEmailVerification={() => {}}
-      startPhoneVerification={() => {}}
-     />),
+      startPhoneVerification={() => {}} />),
     { context: { muiTheme: { } } })
 
     wrapper.instance().resendVerificationCode({
@@ -223,63 +220,15 @@ describe('(Component) WalletIdentityScreen', () => {
         saveToBlockchain={() => {}}
         setFocusedPin={() => {}}
         startEmailVerification={() => {}}
-        startPhoneVerification={() => {}}
-        />),
+        startPhoneVerification={() => {}} />),
       { context: { muiTheme: { } } }
     )
 
     wrapper.instance().enterVerificationCode({
-      attrType: 'phone',
-      attrValue: '1234',
       index: '1'
     })()
     expect(confirmPhone.called).to.be.true
     expect(confirmPhone.calls).to.deep.equal([{args: ['1']}])
-  })
-  it('enterVerificationCode should return confirmEmail when the attribute type is email', () => { // eslint-disable-line max-len
-    const confirmEmail = stub()
-    const wrapper = shallow((<WalletIdentityScreen.WrappedComponent {
-      ...WalletIdentityScreen.mapStateToProps(Immutable.fromJS({
-        wallet: {
-          identity: {
-            loaded: false,
-            webId: '',
-            username: {},
-            contact: {
-              phones: [],
-              emails: []
-            },
-            passport: {},
-            error: false
-          }
-        }
-      }))
-    }
-      changePinValue={() => {}}
-      confirmEmail={confirmEmail}
-      confirmPhone={() => {}}
-      expandField={() => {}}
-      getIdentityInformation={() => {}}
-      getWalletAddressAndBalance={() => {}}
-      goTo={() => {}}
-      openConfirmDialog={() => {}}
-      resendVerificationLink={() => {}}
-      resendVerificationSms={() => {}}
-      saveToBlockchain={() => {}}
-      setFocusedPin={() => {}}
-      startEmailVerification={() => {}}
-      startPhoneVerification={() => {}} />),
-      { context: { muiTheme: { } } }
-    )
-
-    wrapper.instance().enterVerificationCode({
-      attrType: 'email',
-      attrValue: 'test@test.com'
-    })()
-    expect(confirmEmail.called).to.be.true
-    expect(confirmEmail.calls).to.deep.equal([{args: [{
-      email: 'test@test.com'
-    }]}])
   })
   it('should call openConfirmDialog on showVerificationWindow with proper params', () => { // eslint-disable-line max-len
     const openConfirmDialog = stub()

@@ -89,17 +89,17 @@ export const actions = module.exports = makeActions('verification', {
   confirmPhone: {
     expectedParams: ['index'],
     async: true,
-    creator: (params) => {
+    creator: (index) => {
       return (dispatch, getState, {services}) => {
         const { id, smsCode: code, number: phone, type } = getState()
-          .toJS().wallet.identity.contact.phones[params]
-        if (params === undefined || phone === undefined || code === undefined) {
+          .toJS().wallet.identity.contact.phones[index]
+        if ([index, phone, code].includes(undefined)) {
           let action = {
             type: actions.confirmPhone.id_fail
           }
           return dispatch(action)
         }
-        dispatch(actions.confirmPhone.buildAction(params, (backend) => {
+        dispatch(actions.confirmPhone.buildAction(index, (backend) => {
           return backend.verification.verifyPhone({
             wallet: services.auth.currentUser.wallet,
             id,
