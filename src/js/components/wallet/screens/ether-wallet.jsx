@@ -8,7 +8,7 @@ import Presentation from '../presentation/ether-wallet'
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
     'wallet/money:goToAccountDetailsEthereum',
-    'wallet/ether-tabs:getWalletAddress'
+    'wallet/ether-tabs:getWalletAddressAndBalance'
   ]
 })
 export default class WalletEtherScreen extends React.Component {
@@ -19,11 +19,11 @@ export default class WalletEtherScreen extends React.Component {
     goToAccountDetailsEthereum: React.PropTypes.func,
     money: React.PropTypes.object,
     etherTabs: React.PropTypes.object,
-    getWalletAddress: React.PropTypes.func
+    getWalletAddressAndBalance: React.PropTypes.func
   }
 
   componentDidMount() {
-    this.props.getWalletAddress()
+    this.props.getWalletAddressAndBalance()
   }
   render() {
     return (<Presentation
