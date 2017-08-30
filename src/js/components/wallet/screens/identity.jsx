@@ -26,7 +26,6 @@ import Loading from 'components/common/loading'
 export default class WalletIdentityScreen extends React.Component {
   static propTypes = {
     changePinValue: React.PropTypes.func.isRequired,
-    confirmEmail: React.PropTypes.func.isRequired,
     confirmPhone: React.PropTypes.func.isRequired,
     expandField: React.PropTypes.func,
     getIdentityInformation: React.PropTypes.func.isRequired,
@@ -79,7 +78,7 @@ export default class WalletIdentityScreen extends React.Component {
         (...params) => this.resendVerificationCode(...params)
       )}
       enterVerificationCode={(...args) => this.showVerificationWindow(...args,
-        (...params) => this.enterVerificationCode(...params)
+        ({index}) => this.props.confirmPhone(index)
       )} />)
   }
 
@@ -103,14 +102,6 @@ export default class WalletIdentityScreen extends React.Component {
       return () => this.props.resendVerificationSms({phone: attrValue, index})
     } else if (attrType === 'email') {
       return () => this.props.resendVerificationLink({email: attrValue, index})
-    }
-  }
-
-  enterVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phone') {
-      return () => this.props.confirmPhone(index)
-    } else if (attrType === 'email') {
-      return () => this.props.confirmEmail({email: attrValue})
     }
   }
 
