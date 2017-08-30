@@ -51,13 +51,15 @@ export default class WalletEther extends React.Component {
 
   renderLoading() {
     return (
-      <div style={STYLES.noEtherContainer}>
-        <Block>
-          <Spinner style={STYLES.header} message={''}
-            title={''}
-            avatar={'url(/img/img_techguy.svg)'} />
-        </Block>
-      </div>
+      <HalfScreenContainer>
+        <div style={STYLES.noEtherContainer}>
+          <Block>
+            <Spinner style={STYLES.header} message={''}
+              title={'Ether are transferred to your account.'}
+              avatar={'url(/img/img_techguy.svg)'} />
+          </Block>
+        </div>
+      </HalfScreenContainer>
     )
   }
 
@@ -115,6 +117,7 @@ export default class WalletEther extends React.Component {
   }
 
   render() {
+    console.log('ETHR WALLET PROPS: ', this.props)
     let content = null
     const { screenToDisplay } = this.props.ether
     const { amount, errorMsg } = this.props.wallet

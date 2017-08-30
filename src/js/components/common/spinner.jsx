@@ -19,19 +19,19 @@ export default class Spinner extends React.Component {
   }
 
   componentDidMount() {
-    const {message} = this.props
-    const loopMessage = (arr, index) => {
-      if (index === arr.length) {
-        return loopMessage(arr, 0)
-      }
-      if (this.refs.spinner) {
-        this.setState({
-          message: arr[index]
-        })
-      }
-      setTimeout(loopMessage, 4000, arr, index + 1)
-    }
-    loopMessage(message, 0)
+    // const {message} = this.props
+    // const loopMessage = (arr, index) => {
+    //   if (index === arr.length) {
+    //     return loopMessage(arr, 0)
+    //   }
+    //   if (this.refs.spinner) {
+    //     this.setState({
+    //       message: arr[index]
+    //     })
+    //   }
+    //   setTimeout(loopMessage, 4000, arr, index + 1)
+    // }
+    // loopMessage(message, 0)
   }
 
   render() {

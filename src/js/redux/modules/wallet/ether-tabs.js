@@ -44,20 +44,26 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
       }
     }
   },
-  getWalletAddress: {
+  getWalletAddressAndBalance: {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.getWalletAddress.buildAction(params, () => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getWalletAddressAndBalance.buildAction(params, () => {
           return services.auth.currentUser.wallet.getWalletAddress()
           .then((result) => {
-            dispatch(actions.getBalance())
-            return result
+            dispatch(actions.setWalletAddress(result.walletAddress))
+            return backend.gateway.getBalanceEther({
+              userName: services.auth.currentUser.wallet.userName,
+              walletAddress: result.walletAddress
+            })
           })
         }))
       }
     }
+  },
+  setWalletAddress: {
+    expectedParams: ['walletAddress']
   },
   sendEther: {
     expectedParams: ['receiverAddress', 'amountSend', 'data', 'pin'],
@@ -68,7 +74,7 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
           const {receiverAddress, amountSend, data, gasInWei} = getState().toJS().wallet.etherTabs.wallet // eslint-disable-line max-len
           return backend.gateway.sendEther({
             userName: services.auth.currentUser.wallet.userName,
-            seedPhrase: services.auth.currentUser.encryptedSeedPhrase,
+            seedPhrase: services.auth.currentUser.wallet.seedPhrase,
             receiver: receiverAddress,
             amountEther: amountSend,
             data: data,
@@ -116,7 +122,7 @@ const initialState = Immutable.fromJS({
     amountSend: '',
     pin: '1234',
     data: '',
-    gasInWei: '200'
+    gasInWei: '200000'
   }
 })
 
@@ -127,20 +133,25 @@ module.exports.default = (state = initialState, action = {}) => {
         activeTab: action.activeTab
       })
 
-    case actions.getWalletAddress.id:
+    case actions.setWalletAddress.id:
+      return state.mergeIn(['wallet'], {
+        walletAddress: action.walletAddress
+      })
+
+    case actions.getWalletAddressAndBalance.id:
       return state.mergeIn(['wallet'], {
         loading: true,
         errorMsg: ''
       })
 
-    case actions.getWalletAddress.id_success:
+    case actions.getWalletAddressAndBalance.id_success:
       return state.mergeIn(['wallet'], {
-        loading: true,
-        walletAddress: action.result.walletAddress,
+        loading: false,
+        amount: parseFloat(action.result.ether),
         errorMsg: ''
       })
 
-    case actions.getWalletAddress.id_fail:
+    case actions.getWalletAddressAndBalance.id_fail:
       return state.mergeIn(['wallet'], {
         loading: false,
         errorMsg: 'We could not get your Wallet Address.'

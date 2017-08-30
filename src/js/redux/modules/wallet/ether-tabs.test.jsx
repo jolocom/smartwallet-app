@@ -63,25 +63,25 @@ describe('Wallet Ether Tabs Redux Module', function() {
       expect(router.pushRoute.calledWithArgs).to.deep.equal(['/wallet/ether'])
     })
   })
-  it('should get wallet address on getWalletAddress', function() {
+  it('should get ether balance on getWalletAddressAndBalance', function() {
     let state = reducer(undefined, '@@INIT')
     const action = {
-      type: etherTabs.actions.getWalletAddress.id_success,
-      result: {walletAddress: '0xTESTTEST111222'}
+      type: etherTabs.actions.getWalletAddressAndBalance.id_success,
+      result: {ether: '101'}
     }
     state = reducer(state, action)
     expect(state.toJS()).to.deep.equal({
       activeTab: 'overview',
       wallet: {
-        loading: true,
+        loading: false,
         errorMsg: '',
-        walletAddress: '0xTESTTEST111222',
-        amount: '',
+        walletAddress: '',
+        amount: 101,
         receiverAddress: '',
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: '200000'
       }
     })
   })
@@ -103,7 +103,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: '200000'
       }
     })
   })
@@ -126,7 +126,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: '200000'
       }
     })
   })
@@ -148,7 +148,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: '200000'
       }
     })
   })
