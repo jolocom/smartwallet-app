@@ -80,6 +80,23 @@ const actions = module.exports = makeActions('wallet/identity', {
   setAttributeVerified: {
     expectedParams: ['attrType', 'attrId', 'verified']
   },
+  getWalletAddressAndBalance: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getWalletAddressAndBalance.buildAction(params, () => {
+          return services.auth.currentUser.wallet.getWalletAddress()
+          .then((result) => {
+            return backend.gateway.getBalanceEther({
+              userName: services.auth.currentUser.wallet.userName,
+              walletAddress: result.walletAddress
+            })
+          })
+        }))
+      }
+    }
+  },
   buyEther: {
     expectedParams: ['stripeToken'],
     async: true,
@@ -115,10 +132,6 @@ const actions = module.exports = makeActions('wallet/identity', {
               walletAddress: result.walletAddress
             })
           })
-          .then((response) => {
-            // console.log(response)
-            return response
-          })
         }))
       }
     }
@@ -152,14 +165,15 @@ const actions = module.exports = makeActions('wallet/identity', {
   }
 })
 
-const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
+const mapBackendToState = ({ethereum, webId, userName, contact, passports, idCards}) => // eslint-disable-line max-len
   Immutable.fromJS({
     loaded: true,
     error: false,
     webId: webId,
     ethereum: {
-      identityAddress: '0x3f54d5ab7c8cb8521e1d',
-      walletAddress: '0xdf54f5d4fd5f4f5d521e'
+      identityAddress: ethereum.identityAddress,
+      amount: ethereum.amount,
+      walletAddress: ethereum.walletAddress
     },
     username: {value: userName},
     expandedFields: {
@@ -192,8 +206,9 @@ const initialState = Immutable.fromJS({
     passports: false
   },
   ethereum: {
-    identityAddress: '',
-    walletAddress: ''
+    walletAddress: '',
+    amount: '',
+    identityAddress: ''
   },
   contact: {
     phones: [{
@@ -263,6 +278,27 @@ module.exports.default = (state = initialState, action = {}) => {
         codeIsSent: action.value
       })
 
+    case actions.getWalletAddressAndBalance.id:
+      return state.mergeDeep({
+        loaded: false,
+        error: ''
+      })
+
+    case actions.getWalletAddressAndBalance.id_success:
+      return state.mergeDeep({
+        loaded: true,
+        error: '',
+        ethereum: {
+          amount: parseFloat(action.result.ether)
+        }
+      })
+
+    case actions.getWalletAddressAndBalance.id_fail:
+      return state.mergeDeep({
+        loaded: true,
+        error: 'Could not get your walletAddress and Balance'
+      })
+
     case actions.buyEther.id:
       return state.merge({
         loaded: false
@@ -285,9 +321,12 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.createEthereumIdentity.id_success:
-      return state.merge({
+      return state.mergeDeep({
         loaded: true,
-        error: false
+        error: false,
+        ethereum: {
+          identityAddress: action.result.identityAddress
+        }
       })
 
     case actions.createEthereumIdentity.id_fail:

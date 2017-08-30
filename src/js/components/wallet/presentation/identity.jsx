@@ -53,12 +53,12 @@ export default class WalletIdentity extends React.Component {
     setFocusedPin: React.PropTypes.func.isRequired,
     showUserInfo: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
+    ether: React.PropTypes.object,
     createEthereumIdentity: React.PropTypes.func.isRequired,
     confirmDialog: React.PropTypes.func.isRequired
   }
 
   renderConnectEther({ ethereum, expandedFields }) {
-    // TODO if already connected to ethereum
     return (<Block>
       <PlusMenu
         name="Ethereum"
@@ -83,10 +83,21 @@ export default class WalletIdentity extends React.Component {
             textLabel="Identity Address"
             textValue={ethereum.identityAddress} />
         </div>
-        : <EthConnectItem
-          onToken={this.props.buyEther}
-          createEthereumIdentity={this.props.createEthereumIdentity}
-          confirmDialog={this.props.confirmDialog} />
+        : <div>
+          <StaticListItem
+            key="Wallet Address"
+            textLabel="Wallet Address"
+            textValue={ethereum.walletAddress} />
+          <StaticListItem
+            key="Identity Address"
+            textLabel="Identity Address"
+            textValue="Please activate below" />
+          <EthConnectItem
+            ethereum={ethereum}
+            onToken={this.props.buyEther}
+            createEthereumIdentity={this.props.createEthereumIdentity}
+            confirmDialog={this.props.confirmDialog} />
+        </div>
       }
     </Block>)
   }

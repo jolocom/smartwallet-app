@@ -138,21 +138,21 @@ export default class GatewayAgent {
   }
 
   getConnectedServicesOverview({userName}) {
-    const test = [
-      {identity: 'the boring company',
-        pattern: '/phone/dc348b20-7df5-11e7-af97-1370921f4df1',
-        read: true,
-        write: false},
-      {identity: 'telekom',
-        pattern: '/email/*',
-        read: true,
-        write: false}]
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(test), 2000)
-    })
-    // return this._httpAgent.get(
-    //   `${this._gatewayUrl}/${userName}/access`
-    // )
+    // const test = [
+    //   {identity: 'the boring company',
+    //     pattern: '/phone/*',
+    //     read: true,
+    //     write: false},
+    //   {identity: 'telekom',
+    //     pattern: '/email/*',
+    //     read: true,
+    //     write: false}]
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => resolve(test), 2000)
+    // })
+    return this._httpAgent.get(
+      `${this._gatewayUrl}/${userName}/access`
+    )
   }
 
   revokeServiceAccess({userName, identity, pattern}) {

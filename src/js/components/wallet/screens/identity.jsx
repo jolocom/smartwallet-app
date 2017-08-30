@@ -10,6 +10,7 @@ import Loading from 'components/common/loading'
     'wallet/identity:buyEther',
     'wallet/identity:createEthereumIdentity',
     'confirmation-dialog:openConfirmDialog',
+    'wallet/identity:getWalletAddressAndBalance',
     'verification:confirmEmail',
     'verification:confirmPhone',
     'verification:startEmailVerification',
@@ -39,7 +40,8 @@ export default class WalletIdentityScreen extends React.Component {
     startEmailVerification: React.PropTypes.func.isRequired,
     startPhoneVerification: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
-    createEthereumIdentity: React.PropTypes.func.isRequired
+    createEthereumIdentity: React.PropTypes.func.isRequired,
+    getWalletAddressAndBalance: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {

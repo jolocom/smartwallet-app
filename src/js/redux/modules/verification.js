@@ -1,6 +1,8 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
 import identityActions from './wallet/identity'
+import * as router from './router'
+
 export const actions = module.exports = makeActions('verification', {
   startEmailVerification: {
     expectedParams: ['email', 'index', 'pin'],
@@ -68,6 +70,19 @@ export const actions = module.exports = makeActions('verification', {
             code: params.code
           })
         }))
+      }
+    }
+  },
+  goToAfterConfirmEmail: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        const user = services.auth.currentUser
+        if (user == null || user.wallet.seedPhrase === undefined) {
+          dispatch(router.pushRoute('/'))
+        } else {
+          dispatch(router.pushRoute('/wallet'))
+        }
       }
     }
   },

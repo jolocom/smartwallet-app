@@ -254,6 +254,7 @@ describe('(Component) WalletIdentityScreen', () => {
       confirmPhone={() => {}}
       expandField={() => {}}
       getIdentityInformation={() => {}}
+      getWalletAddressAndBalance={() => {}}
       goTo={() => {}}
       openConfirmDialog={openConfirmDialog}
       resendVerificationLink={() => {}}

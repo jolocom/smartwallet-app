@@ -7,7 +7,7 @@ describe('(Component) EmailConfirmation', function () {
     shallow((<EmailConfirmation
       confirmation
       loading
-      onClick={() => {}}
+      goToAfterConfirmEmail={() => {}}
     />), { context: { muiTheme: { } } }
     )
   })

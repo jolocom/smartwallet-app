@@ -5,8 +5,8 @@ import Presentation from '../presentation/email-confirmation'
 @connect({
   props: ['verification'],
   actions: [
-    'wallet-login:goToLogin',
-    'verification:confirmEmail'
+    'verification:confirmEmail',
+    'verification:goToAfterConfirmEmail'
   ]
 })
 export default class EmailConfirmationScreen extends React.Component {
@@ -14,7 +14,7 @@ export default class EmailConfirmationScreen extends React.Component {
     children: React.PropTypes.node,
     location: React.PropTypes.object.isRequired,
     verification: React.PropTypes.object.isRequired,
-    goToLogin: React.PropTypes.func.isRequired,
+    goToAfterConfirmEmail: React.PropTypes.func.isRequired,
     confirmEmail: React.PropTypes.func.isRequired
   }
 
@@ -28,7 +28,7 @@ export default class EmailConfirmationScreen extends React.Component {
 
   render() {
     return (<Presentation
-      onClick={this.props.goToLogin}
+      goToAfterConfirmEmail={this.props.goToAfterConfirmEmail}
       confirmation={this.props.verification.success}
       loading={this.props.verification.loading} />)
   }

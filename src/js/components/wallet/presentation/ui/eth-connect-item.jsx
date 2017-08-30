@@ -54,12 +54,12 @@ export default class EthConnectItem extends React.Component {
   static propTypes = {
     createEthereumIdentity: React.PropTypes.func,
     onToken: React.PropTypes.func,
+    ethereum: React.PropTypes.object,
     confirmDialog: React.PropTypes.func
   }
 
   connectEthereum() {
-    // TODO check if user has already ether
-    if (1) {
+    if (this.props.ethereum.amount > 0) {
       return (
         <RaisedButton
           secondary

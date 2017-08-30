@@ -12,20 +12,29 @@ const actions = module.exports = makeActions('wallet/money', {
       }
     }
   },
-  getWalletAddress: {
+  getWalletAddressAndBalance: {
     expectedParams: [],
     async: true,
     creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        dispatch(actions.getWalletAddress.buildAction(params, () => {
+      return (dispatch, getState, {services, backend}) => {
+        dispatch(actions.getWalletAddressAndBalance.buildAction(params, () => {
           return services.auth.currentUser.wallet.getWalletAddress()
           .then((result) => {
-            dispatch(actions.getBalance())
+            dispatch(actions.setWalletAddress(result.walletAddress))
+            return backend.gateway.getBalanceEther({
+              userName: services.auth.currentUser.wallet.userName,
+              walletAddress: result.walletAddress
+            })
+          })
+          .then((result) => {
             return result
           })
         }))
       }
     }
+  },
+  setWalletAddress: {
+    expectedParams: ['walletAddress']
   },
   buyEther: {
     expectedParams: ['stripeToken'],
@@ -105,22 +114,22 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.getWalletAddress.id:
+    case actions.getWalletAddressAndBalance.id:
       return state.mergeIn(['ether'], {
         loaded: false,
         errorMsg: ''
       })
 
-    case actions.getWalletAddress.id_success:
+    case actions.getWalletAddressAndBalance.id_success:
       return state.mergeDeep({
-        walletAddress: action.result.walletAddress,
         ether: {
-          loaded: false,
+          amount: parseFloat(action.result.ether),
+          loaded: true,
           errorMsg: ''
         }
       })
 
-    case actions.getWalletAddress.id_fail:
+    case actions.getWalletAddressAndBalance.id_fail:
       return state.mergeIn(['ether'], {
         errorMsg: 'Could not get your Wallet Address.',
         loaded: true
@@ -186,6 +195,11 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.goToEtherManagement.id:
       return state.merge({
         screenToDisplay: action.value
+      })
+
+    case actions.setWalletAddress.id:
+      return state.mergeDeep({
+        walletAddress: action.walletAddress
       })
 
     default:
