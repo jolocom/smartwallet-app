@@ -89,7 +89,7 @@ const IdCardsList = (props) => {
       key={`country_${id}`}
       textLabel="Country"
       textValue={idCardFields.country} />
-    {
+    {/* {
       savedToBlockchain || verified ? null : <FlatButton
         label="REQUEST VERICATION"
         secondary
@@ -111,7 +111,7 @@ const IdCardsList = (props) => {
             leftButtonLabel: 'CANCEL'
           })
         }} />
-    }
+    } */}
   </List>))
 
   return (<List style={{padding: '0'}} disabled>
