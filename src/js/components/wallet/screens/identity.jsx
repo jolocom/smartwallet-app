@@ -78,7 +78,7 @@ export default class WalletIdentityScreen extends React.Component {
         (...params) => this.resendVerificationCode(...params)
       )}
       enterVerificationCode={(...args) => this.showVerificationWindow(...args,
-        ({ index }) => this.sendVerificationCode({index})
+        ({ index }) => this.enterVerificationCode({index})
       )} />)
   }
 
@@ -97,7 +97,7 @@ export default class WalletIdentityScreen extends React.Component {
     })
   }
 
-  sendVerificationCode({index}) {
+  enterVerificationCode({index}) {
     return () => this.props.confirmPhone(index)
   }
 
