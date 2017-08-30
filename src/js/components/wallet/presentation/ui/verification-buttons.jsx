@@ -104,7 +104,7 @@ const VerificationButtons = ({
         style: STYLES.simpleDialog,
         attrType,
         index,
-        attrValue: 'value'
+        attrValue: value
       })} />
   </ListItem>)
 }
