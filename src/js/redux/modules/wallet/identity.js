@@ -88,21 +88,14 @@ const actions = module.exports = makeActions('wallet/identity', {
         dispatch(actions.getWalletAddressAndBalance.buildAction(params, () => {
           return services.auth.currentUser.wallet.getWalletAddress()
           .then((result) => {
-            dispatch(actions.setWalletAddress(result.walletAddress))
             return backend.gateway.getBalanceEther({
               userName: services.auth.currentUser.wallet.userName,
               walletAddress: result.walletAddress
             })
           })
-          .then((result) => {
-            return result
-          })
         }))
       }
     }
-  },
-  setWalletAddress: {
-    expectedParams: ['walletAddress']
   },
   buyEther: {
     expectedParams: ['stripeToken'],
@@ -139,9 +132,6 @@ const actions = module.exports = makeActions('wallet/identity', {
               walletAddress: result.walletAddress
             })
           })
-          .then((response) => {
-            return response
-          })
         }))
       }
     }
@@ -175,14 +165,15 @@ const actions = module.exports = makeActions('wallet/identity', {
   }
 })
 
-const mapBackendToState = ({webId, userName, contact, passports, idCards}) =>
+const mapBackendToState = ({ethereum, webId, userName, contact, passports, idCards}) => // eslint-disable-line max-len
   Immutable.fromJS({
     loaded: true,
     error: false,
     webId: webId,
     ethereum: {
-      identityAddress: '',
-      walletAddress: '0xdf54f5d4fd5f4f5d521e'
+      identityAddress: ethereum.identityAddress,
+      amount: ethereum.amount,
+      walletAddress: ethereum.walletAddress
     },
     username: {value: userName},
     expandedFields: {
@@ -287,11 +278,6 @@ module.exports.default = (state = initialState, action = {}) => {
         codeIsSent: action.value
       })
 
-    case actions.setWalletAddress.id:
-      return state.mergeDeep({
-        walletAddress: action.walletAddress
-      })
-
     case actions.getWalletAddressAndBalance.id:
       return state.mergeDeep({
         loaded: false,
@@ -309,7 +295,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getWalletAddressAndBalance.id_fail:
       return state.mergeDeep({
-        loaded: false,
+        loaded: true,
         error: 'Could not get your walletAddress and Balance'
       })
 
@@ -335,9 +321,12 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.createEthereumIdentity.id_success:
-      return state.merge({
+      return state.mergeDeep({
         loaded: true,
-        error: false
+        error: false,
+        ethereum: {
+          identityAddress: action.result.identityAddress
+        }
       })
 
     case actions.createEthereumIdentity.id_fail:

@@ -59,7 +59,7 @@ export default class EthConnectItem extends React.Component {
   }
 
   connectEthereum() {
-    if (this.props.ethereum.amount !== 0) {
+    if (this.props.ethereum.amount > 0) {
       return (
         <RaisedButton
           secondary

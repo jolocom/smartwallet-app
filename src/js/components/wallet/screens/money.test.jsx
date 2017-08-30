@@ -28,7 +28,7 @@ describe('(Component) WalletMoneyScreen', () => {
         goToEtherManagement={() => {}}
         buyEther={() => {}}
         getPrice={() => {}}
-        getWalletAddress={() => {}} />),
+        getWalletAddressAndBalance={() => {}} />),
       { context: { muiTheme: { } } }
     )
     expect(wrapper.find(Presentation).prop('ether')).to.deep.equal({
@@ -62,7 +62,7 @@ describe('(Component) WalletMoneyScreen', () => {
         goToEtherManagement={goToEtherManagement}
         buyEther={() => {}}
         getPrice={() => {}}
-        getWalletAddress={() => {}} />),
+        getWalletAddressAndBalance={() => {}} />),
       { context: { muiTheme: { } } }
     )
     wrapper.find(Presentation).props().goToEtherManagement()
@@ -91,7 +91,7 @@ describe('(Component) WalletMoneyScreen', () => {
       }
         goToEtherManagement={() => {}}
         getPrice={getPrice}
-        getWalletAddress={() => {}} />),
+        getWalletAddressAndBalance={() => {}} />),
       { context: { muiTheme: { } } }
     )
     expect(getPrice.called).to.be.true

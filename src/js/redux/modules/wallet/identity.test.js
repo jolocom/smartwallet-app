@@ -20,6 +20,7 @@ describe('# Wallet identity redux module', () => {
         },
         ethereum: {
           walletAddress: '',
+          amount: '',
           identityAddress: ''
         },
         username: {verified: false, value: ''},
@@ -47,7 +48,9 @@ describe('# Wallet identity redux module', () => {
           userName: 'test',
           contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
           passports: ['test'],
-          idCards: ['test']
+          idCards: ['test'],
+          ethereum: {walletAddress: 'test',
+            identityAddress: 'test', amount: '0'}
         }
       }
       state = reducer(state, action)
@@ -57,8 +60,9 @@ describe('# Wallet identity redux module', () => {
           loaded: true,
           webId: 'https://test.webid.jolocom.com',
           ethereum: {
-            identityAddress: '0x3f54d5ab7c8cb8521e1d',
-            walletAddress: '0xdf54f5d4fd5f4f5d521e'
+            walletAddress: 'test',
+            amount: '0',
+            identityAddress: 'test'
           },
           expandedFields: {
             ethereum: false,

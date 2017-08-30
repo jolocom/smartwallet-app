@@ -260,6 +260,7 @@ describe('(Component) WalletIdentityScreen', () => {
       confirmPhone={() => {}}
       expandField={() => {}}
       getIdentityInformation={() => {}}
+      getWalletAddressAndBalance={() => {}}
       goTo={() => {}}
       openConfirmDialog={() => {}}
       resendVerificationLink={() => {}}
@@ -304,6 +305,7 @@ describe('(Component) WalletIdentityScreen', () => {
       confirmPhone={() => {}}
       expandField={() => {}}
       getIdentityInformation={() => {}}
+      getWalletAddressAndBalance={() => {}}
       goTo={() => {}}
       openConfirmDialog={openConfirmDialog}
       resendVerificationLink={() => {}}

@@ -118,6 +118,15 @@ export class Wallet {
           checkVerified: true
         })
 
+      const ethereum = await this._gateway.getWalletAddress({
+        userName: this.userName
+      })
+
+      const balanceEther = await this._gateway.getBalanceEther({
+        userName: this.userName,
+        walletAddress: ethereum.walletAddress
+      })
+
       return {
         webId: `https://${this.userName}.webid.jolocom.de/profile/card#me`,
         userName: this.userName,
@@ -148,7 +157,12 @@ export class Wallet {
           verified: idcard.verified,
           savedToBlockchain: false,
           id: idcard.id
-        }))
+        })),
+        ethereum: {
+          walletAddress: ethereum.walletAddress,
+          identityAddress: ethereum.identityAddress,
+          amount: balanceEther.ether
+        }
       }
     } catch (e) {
       console.error(e)

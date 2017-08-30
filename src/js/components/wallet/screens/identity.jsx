@@ -47,7 +47,6 @@ export default class WalletIdentityScreen extends React.Component {
 
   componentWillMount() {
     this.props.getIdentityInformation()
-    this.props.getWalletAddressAndBalance()
   }
 
   render() {
