@@ -18,7 +18,7 @@ const actions = module.exports = makeActions('single-sign-on/access-request', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         dispatch(actions.getRequesterIdentity.buildAction(params, (backend) => {
-          return backend.gateway.getRequesterIdentity(params)
+          return backend.gateway.proxyGet(params + '/identity/name/display')
         }))
       }
     }
@@ -114,15 +114,16 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getRequesterIdentity.id_success:
-    // TODO attach image
       return state.mergeIn(['entity'], {
         loading: false,
-        name: action.result
+        name: action.result.value
       })
 
     case actions.getRequesterIdentity.id_fail:
-      // console.log('fail')
-      return state
+      return state.mergeIn(['entity'], {
+        loading: false,
+        name: 'A service'
+      })
 
     case actions.grantAccessToRequester.id:
       return state.mergeIn(['entity'], {

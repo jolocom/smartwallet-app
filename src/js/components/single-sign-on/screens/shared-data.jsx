@@ -35,7 +35,7 @@ export default class SingleSignOnSharedDatatScreen extends React.Component {
         }}
         serviceUrl={services[serviceNumber].url}
         sharedData={services[serviceNumber].sharedData}
-        serviceName={services[serviceNumber].label}
+        serviceName={services[serviceNumber].displayName}
         showDeleteServiceWindow={(
         {title, message, style, rightButtonLabel, leftButtonLabel}) => {
           this.props.openConfirmDialog(title, message, rightButtonLabel,
