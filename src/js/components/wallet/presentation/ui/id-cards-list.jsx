@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {List, FlatButton} from 'material-ui'
-import {SocialPersonIcon, MapsLocation, SocialCake} from 'material-ui/svg-icons'
+import {SocialPerson, MapsPlace, SocialCake} from 'material-ui/svg-icons'
 import {theme} from 'styles'
 import {StaticListItem, IconNumber} from './'
 
@@ -44,7 +44,7 @@ const IdCardsList = (props) => {
       textValue={idCardFields.expirationDate} />
     <StaticListItem
       key={`firstName_${id}`}
-      icon={SocialPersonIcon}
+      icon={SocialPerson}
       textLabel="First Name"
       textValue={idCardFields.firstName} />
     <StaticListItem
@@ -70,7 +70,7 @@ const IdCardsList = (props) => {
       textValue={idCardFields.birthCountry} />
     <StaticListItem
       key={`street_${id}`}
-      icon={MapsLocation}
+      icon={MapsPlace}
       textLabel="Street"
       textValue={idCardFields.streetWithNumber} />
     <StaticListItem
