@@ -168,85 +168,92 @@ module.exports.default = (state = initialState, action = {}) => {
 }
 
 function mapConnectedServices(services, identity) {
-  const orderedServices = []
-  let count = 0
+  let arrayServices = []
   services.map((field, index) => {
-    let pattern = field.pattern.split(',')
-    let orderedPattern = []
-    let toBeAdded = true
-    pattern.map((field, index) => {
-      let singlePattern = field.split('/')
-      let attribute = singlePattern[2]
-      let patternType = singlePattern[3]
-      let identityAttribute
+    let display = field.identity.split('/')
+    let orderedPattern = field.pattern.split('/')
+    let attribute = orderedPattern[2]
+    let patternType = orderedPattern[3]
+    let identityAttribute
+    if (orderedPattern.length === 3 || orderedPattern.length === 5) {
+      return
+    }
+    if (attribute === 'email' || attribute === 'phone') {
+      identityAttribute = identity.contact
+    } else {
+      identityAttribute = identity
+    }
 
-      if (singlePattern[4] !== undefined) {
-        toBeAdded = false
-      } else {
-        toBeAdded = true
-      }
+    if (patternType === '*') {
+      let items = identityAttribute[attribute + 's']
+      let sharedData = []
 
-      if (attribute === 'email' || attribute === 'phone') {
-        identityAttribute = identity.contact
-      } else {
-        identityAttribute = identity
-      }
-
-      if (patternType === '*') {
-        let items = identityAttribute[attribute + 's']
-        items.map((item, index) => {
-          let value
-          if (item.hasOwnProperty('number')) {
-            value = item.number
-          } else {
-            value = item.address
-          }
-          let overviewPattern = {
-            attrType: attribute,
-            value: value,
-            type: item.type,
-            verified: item.verified
-            // status: ''
-          }
-          orderedPattern.push(overviewPattern)
-        })
-      } else {
-        let item = _.find(identityAttribute[attribute + 's'], {id: patternType}) // eslint-disable-line max-len
+      items.map((item, index) => {
         let value
         if (item.hasOwnProperty('number')) {
           value = item.number
         } else {
           value = item.address
         }
-        let overviewPattern = {
+        let sharedDetails = {
           attrType: attribute,
           value: value,
           type: item.type,
           verified: item.verified
           // status: ''
         }
-        orderedPattern.push(overviewPattern)
-      }
-    })
-    if (toBeAdded) {
-      let display = field.identity.split('/')
-      let cluster = _.find(orderedServices, {label: field.identity})
+        sharedData.push(sharedDetails)
+      })
+
+      let cluster = _.find(arrayServices, {label: field.identity})
       if (cluster !== undefined) {
-        cluster.sharedData.push(orderedPattern[0])
+        cluster.sharedData.push(sharedData)
       } else {
-        let overviewServices = {
+        let detailsService = {
           deleted: false,
           label: field.identity,
           displayName: display[3],
           url: 'dummy url',
-          id: count++,
+          id: index,
           pattern: field.pattern,
           iconUrl: '/img/img_nohustle.svg',
-          sharedData: orderedPattern
+          sharedData: sharedData
         }
-        orderedServices.push(overviewServices)
+        arrayServices.push(detailsService)
+      }
+    } else {
+      let item = _.find(identityAttribute[attribute + 's'], {id: patternType}) // eslint-disable-line max-len
+      let value
+      if (item.hasOwnProperty('number')) {
+        value = item.number
+      } else {
+        value = item.address
+      }
+      let sharedDetails = {
+        attrType: attribute,
+        value: value,
+        type: item.type,
+        verified: item.verified
+        // status: ''
+      }
+      let cluster = _.find(arrayServices, {label: field.identity})
+      if (cluster !== undefined) {
+        cluster.sharedData.push(sharedDetails)
+        arrayServices.push(cluster)
+      } else {
+        let detailsService = {
+          deleted: false,
+          label: field.identity,
+          displayName: display[3],
+          url: 'dummy url',
+          id: index,
+          pattern: field.pattern,
+          iconUrl: '/img/img_nohustle.svg',
+          sharedData: [sharedDetails]
+        }
+        arrayServices.push(detailsService)
       }
     }
   })
-  return orderedServices
+  return arrayServices
 }
