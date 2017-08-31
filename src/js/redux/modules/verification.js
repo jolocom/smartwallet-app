@@ -81,7 +81,7 @@ export const actions = module.exports = makeActions('verification', {
         if (user == null || user.wallet.seedPhrase === undefined) {
           dispatch(router.pushRoute('/'))
         } else {
-          dispatch(router.pushRoute('/wallet'))
+          dispatch(router.pushRoute('/wallet/identity'))
         }
       }
     }

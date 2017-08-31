@@ -9,7 +9,8 @@ import Presentation from '../presentation/ether-send'
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
     'wallet/ether-tabs:sendEther',
-    'wallet/ether-tabs:updateField'
+    'wallet/ether-tabs:updateField',
+    'wallet/ether-tabs:getWalletAddress'
   ]
 })
 export default class EtherSendScreen extends React.Component {
@@ -18,7 +19,12 @@ export default class EtherSendScreen extends React.Component {
     money: React.PropTypes.object.isRequired,
     updateField: React.PropTypes.func,
     etherTabs: React.PropTypes.object,
-    sendEther: React.PropTypes.func
+    sendEther: React.PropTypes.func,
+    getWalletAddress: React.PropTypes.func
+  }
+
+  componentWillMount() {
+    this.props.getWalletAddress()
   }
 
   updateField = (value, field) => {

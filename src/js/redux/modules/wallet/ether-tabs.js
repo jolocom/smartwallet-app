@@ -122,7 +122,7 @@ const initialState = Immutable.fromJS({
     amountSend: '',
     pin: '1234',
     data: '',
-    gasInWei: '200000'
+    gasInWei: 3000000
   }
 })
 
