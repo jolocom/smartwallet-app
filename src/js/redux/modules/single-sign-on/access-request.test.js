@@ -53,7 +53,7 @@ describe('# SingleSignOn AccessRequest redux module', () => {
 
       const action = {
         type: actions.getRequesterIdentity.id_success,
-        result: 'test company'
+        result: {value: 'test company'}
       }
       state = reducer(state, action)
       expect(state.getIn(['entity']).toJS()).to.deep.equal({

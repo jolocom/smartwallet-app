@@ -8,7 +8,7 @@ import {stub} from '../../../../../test/utils'
 
 describe('(Component) SingleSignOnAccessRightScreen', () => {
   it('should call retrieveConnectedServices to start', () => {
-    const retrieveConnectedServices = stub()
+    const getIdentityInformation = stub()
     const wrapper = shallow((<SingleSignOnAccessRightScreen.WrappedComponent
       {...SingleSignOnAccessRightScreen.mapStateToProps(Immutable.fromJS({
         singleSignOn: {
@@ -22,12 +22,12 @@ describe('(Component) SingleSignOnAccessRightScreen', () => {
       }))}
       deleteService={() => {}}
       showSharedData={() => {}}
-      retrieveConnectedServices={retrieveConnectedServices}
+      getIdentityInformation={getIdentityInformation}
       openConfirmDialog={() => {}}
       closeConfirmDialog={() => {}} />)
     )
     wrapper.instance()
-    expect(retrieveConnectedServices.called).to.be.true
+    expect(getIdentityInformation.called).to.be.true
   })
   it('should call showSharedData to with proper params', () => {
     const showSharedData = stub()
@@ -44,7 +44,7 @@ describe('(Component) SingleSignOnAccessRightScreen', () => {
       }))}
       deleteService={() => {}}
       showSharedData={showSharedData}
-      retrieveConnectedServices={() => {}}
+      getIdentityInformation={() => {}}
       openConfirmDialog={() => {}}
       closeConfirmDialog={() => {}} />)
     )
@@ -69,7 +69,7 @@ describe('(Component) SingleSignOnAccessRightScreen', () => {
       }))}
       deleteService={deleteService}
       showSharedData={() => {}}
-      retrieveConnectedServices={() => {}}
+      getIdentityInformation={() => {}}
       openConfirmDialog={openConfirmDialog}
       closeConfirmDialog={() => {}} />)
     )

@@ -8,7 +8,7 @@ import {stub} from '../../../../../test/utils'
 
 describe('(Component) AccountDetailsEthereumScreen', function() {
   it('getWalletAddress should be called on componentWillMount', function() {
-    const getWalletAddress = stub()
+    const getWalletAddressAndBalance = stub()
     const wrapper = shallow(
       (<AccountDetailsEthereumScreen.WrappedComponent
         {...AccountDetailsEthereumScreen.mapStateToProps(Immutable.fromJS({
@@ -28,9 +28,9 @@ describe('(Component) AccountDetailsEthereumScreen', function() {
           }
         }))}
         closeAccountDetails={() => {}}
-        getWalletAddress={getWalletAddress} />)
+        getWalletAddressAndBalance={getWalletAddressAndBalance} />)
       )
     wrapper.instance()
-    expect(getWalletAddress.called).to.be.true
+    expect(getWalletAddressAndBalance.called).to.be.true
   })
 })
