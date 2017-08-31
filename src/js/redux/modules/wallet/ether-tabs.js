@@ -68,7 +68,7 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
           const {receiverAddress, amountSend, data, gasInWei} = getState().toJS().wallet.etherTabs.wallet // eslint-disable-line max-len
           return backend.gateway.sendEther({
             userName: services.auth.currentUser.wallet.userName,
-            seedPhrase: services.auth.currentUser.encryptedSeedPhrase,
+            seedPhrase: services.auth.currentUser.wallet.seedPhrase,
             receiver: receiverAddress,
             amountEther: amountSend,
             data: data,
@@ -116,7 +116,7 @@ const initialState = Immutable.fromJS({
     amountSend: '',
     pin: '1234',
     data: '',
-    gasInWei: '200'
+    gasInWei: 3000000
   }
 })
 
