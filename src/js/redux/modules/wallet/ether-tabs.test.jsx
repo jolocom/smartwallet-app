@@ -81,7 +81,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: 3000000
       }
     })
   })
@@ -103,7 +103,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: 3000000
       }
     })
   })
@@ -126,7 +126,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: 3000000
       }
     })
   })
@@ -148,7 +148,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
         amountSend: '',
         pin: '1234',
         data: '',
-        gasInWei: '200'
+        gasInWei: 3000000
       }
     })
   })
