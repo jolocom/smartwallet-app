@@ -230,17 +230,22 @@ function mapConnectedServices(services, identity) {
     })
     if (toBeAdded) {
       let display = field.identity.split('/')
-      let overviewServices = {
-        deleted: false,
-        label: field.identity,
-        displayName: display[3],
-        url: 'dummy url',
-        id: count++,
-        pattern: field.pattern,
-        iconUrl: '/img/img_nohustle.svg',
-        sharedData: orderedPattern
+      let cluster = _.find(orderedServices, {label: field.identity})
+      if (cluster !== undefined) {
+        cluster.sharedData.push(orderedPattern[0])
+      } else {
+        let overviewServices = {
+          deleted: false,
+          label: field.identity,
+          displayName: display[3],
+          url: 'dummy url',
+          id: count++,
+          pattern: field.pattern,
+          iconUrl: '/img/img_nohustle.svg',
+          sharedData: orderedPattern
+        }
+        orderedServices.push(overviewServices)
       }
-      orderedServices.push(overviewServices)
     }
   })
   return orderedServices

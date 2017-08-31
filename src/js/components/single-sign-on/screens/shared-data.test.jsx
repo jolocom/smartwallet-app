@@ -15,7 +15,7 @@ describe('(Component) SingleSignOnSharedDatatScreen', () => {
           accessRight: {
             loaded: true, failed: false, serviceNumber: 0,
             services: [{
-              label: 'label1', url: 'test.com', id: '1', iconUrl: 'path.svg',
+              label: '', displayName: 'test', url: 'test.com', id: '1', iconUrl: 'path.svg', // eslint-disable-line max-len
               sharedData: [{
                 attrType: 'phone', value: '96574', type: 'work', verified: true,
                 status: ''
@@ -29,7 +29,7 @@ describe('(Component) SingleSignOnSharedDatatScreen', () => {
       openConfirmDialog={() => {}}
       closeConfirmDialog={() => {}} />)
     )
-    expect(wrapper.find(Presentation).props().serviceName).to.equal('label1')
+    expect(wrapper.find(Presentation).props().serviceName).to.equal('test')
   })
   it('should render error screen when given information', () => {
     const wrapper = shallow((<SingleSignOnSharedDatatScreen.WrappedComponent

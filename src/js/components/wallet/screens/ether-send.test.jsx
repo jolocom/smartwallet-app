@@ -39,7 +39,7 @@ describe('(Component) EtherSendScreen', function() {
             }
           }
         }))}
-        getWalletAddress={() => {}}
+        getWalletAddressAndBalance={() => {}}
         updateField={updateField} />)
     )
     wrapper.instance().updateField('66', 'amountSend')

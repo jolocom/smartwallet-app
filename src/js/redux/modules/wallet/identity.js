@@ -110,10 +110,6 @@ const actions = module.exports = makeActions('wallet/identity', {
               walletAddress: result.walletAddress
             })
           })
-          .then((response) => {
-            dispatch(actions.createEthereumIdentity())
-            return response
-          })
         }))
       }
     }
@@ -306,7 +302,7 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.buyEther.id_success:
       return state.merge({
-        loaded: false
+        loaded: true
       })
 
     case actions.buyEther.id_fail:

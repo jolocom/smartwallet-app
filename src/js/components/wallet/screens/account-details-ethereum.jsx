@@ -4,18 +4,18 @@ import Presentation from '../presentation/account-details-ethereum'
 
 @connect({
   props: ['wallet.etherTabs'],
-  actions: ['wallet/ether-tabs:getWalletAddress',
+  actions: ['wallet/ether-tabs:getWalletAddressAndBalance',
     'wallet/ether-tabs:closeAccountDetails']
 })
 export default class AccountDetailsEthereum extends React.Component {
   static propTypes = {
     closeAccountDetails: React.PropTypes.func,
     etherTabs: React.PropTypes.object,
-    getWalletAddress: React.PropTypes.func
+    getWalletAddressAndBalance: React.PropTypes.func
   }
 
   componentWillMount() {
-    this.props.getWalletAddress()
+    this.props.getWalletAddressAndBalance()
   }
   render() {
     return (
