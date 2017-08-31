@@ -45,6 +45,7 @@ export default class WalletEther extends React.Component {
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
     money: React.PropTypes.object,
+    etherBalance: React.PropTypes.number.isRequired,
     wallet: React.PropTypes.object,
     goToAccountDetailsEthereum: React.PropTypes.func
   }
@@ -67,8 +68,8 @@ export default class WalletEther extends React.Component {
     return (
       <HalfScreenContainer>
         <EtherBalance
-          amount={this.props.wallet.amount}
-          currencyPrice={this.props.ether.ether.price} />
+          amount={this.props.etherBalance}
+          currencyPrice={this.props.money.ether.price} />
         <List>
           <ListItem
             disabled
@@ -123,8 +124,9 @@ export default class WalletEther extends React.Component {
       screenToDisplay, buying: buyingEther,
       loading: moneyLoading
     } = this.props.money
-    const { amount, errorMsg, loading: walletLoading } = this.props.wallet
+    const { errorMsg, loading: walletLoading } = this.props.wallet
     const loading = moneyLoading || walletLoading
+    const amount = this.props.etherBalance
 
     if (buyingEther) {
       content = this.renderLoading()

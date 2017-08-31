@@ -23,7 +23,6 @@ export default async function setup({store, services, history}) {
     })
 
     services.auth.currentUser.socket.on('ether.balance.changed', (data) => {
-      console.log('ether balance changed')
       store.dispatch(setEtherBalance(data.newBalance))
     })
 
@@ -83,22 +82,24 @@ export async function manageEtherBalanceStreaming({
 
   const startStreaming = !isStreaming && shouldBeStreaming
   const stopStreaming = isStreaming && !shouldBeStreaming
-  
-  console.log({shouldBeStreaming, shouldBeStreamingBecausePath, startStreaming, stopStreaming})
 
   if (startStreaming) {
     const user = newUser || currentUser
     await startStreamingEtherBalance({user})
   } else if (stopStreaming) {
     const user = oldUser || currentUser
-    const walletAddress = await user.wallet.getWalletAddress()
-    user.socket.emit('ether.balance.unwatch', {walletAddress})
+    const ethereumInfo = await user.wallet.getWalletAddress()
+    user.socket.emit('ether.balance.unwatch', {
+      walletAddress: ethereumInfo.walletAddress
+    })
   }
 
   return shouldBeStreaming
 }
 
 async function startStreamingEtherBalance({user}) {
-  const walletAddress = await user.wallet.getWalletAddress()
-  user.socket.emit('ether.balance.watch', {walletAddress})
+  const ethereumInfo = await user.wallet.getWalletAddress()
+  user.socket.emit('ether.balance.watch', {
+    walletAddress: ethereumInfo.walletAddress
+  })
 }

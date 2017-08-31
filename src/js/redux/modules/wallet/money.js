@@ -193,7 +193,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.setEtherBalance.id:
-      return state.mergeDeep({
+      return state.mergeIn(['ether'], {
         amount: parseFloat(action.ether)
       })
 

@@ -27,10 +27,10 @@ export default class WalletMoneyScreen extends React.Component {
   }
   render() {
     const {goToEtherManagement, buyEther, retrieveEtherBalance} = this.props
-    const {ether, amount: etherBalance} = this.props.money
+    const {ether} = this.props.money
     return (<Presentation
       ether={ether}
-      etherBalance={etherBalance}
+      etherBalance={this.props.amount}
       goToEtherManagement={goToEtherManagement}
       buyEther={buyEther}
       getBalance={retrieveEtherBalance} />)
