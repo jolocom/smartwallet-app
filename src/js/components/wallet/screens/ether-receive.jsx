@@ -7,19 +7,19 @@ import Presentation from '../presentation/ether-receive'
   actions: [
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
-    'wallet/ether-tabs:getWalletAddress'
+    'wallet/ether-tabs:getWalletAddressAndBalance'
   ]
 })
 export default class EtherReceiveScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     money: React.PropTypes.object.isRequired,
-    getWalletAddress: React.PropTypes.func,
+    getWalletAddressAndBalance: React.PropTypes.func,
     etherTabs: React.PropTypes.object
   }
 
   componentWillMount() {
-    this.props.getWalletAddress()
+    this.props.getWalletAddressAndBalance()
   }
 
   render() {

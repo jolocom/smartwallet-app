@@ -15,7 +15,7 @@ describe('(Component) EtherTabScreen', function() {
         {...EtherTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
           etherTabs: {activeTab: 'overview'}
         }}))}
-        getWalletAddress={() => {}}
+        getWalletAddressAndBalance={() => {}}
         detectActiveTab={detectActiveTab}
         switchTab={switchTab}
         location={{pathname: 'testtest'}}
@@ -40,7 +40,7 @@ describe('(Component) EtherTabScreen', function() {
         {...EtherTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
           etherTabs: {activeTab: 'overview'}
         }}))}
-        getWalletAddress={() => {}}
+        getWalletAddressAndBalance={() => {}}
         detectActiveTab={detectActiveTab}
         switchTab={switchTab}
         location={{pathname: 'testtest'}}
@@ -60,7 +60,7 @@ describe('(Component) EtherTabScreen', function() {
         {...EtherTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
           etherTabs: {activeTab: 'overview'}
         }}))}
-        getWalletAddress={getWalletAddress}
+        getWalletAddressAndBalance={getWalletAddress}
         detectActiveTab={() => {}}
         switchTab={() => {}}
         location={{}}
