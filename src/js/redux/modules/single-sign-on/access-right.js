@@ -175,7 +175,8 @@ function mapConnectedServices(services, identity) {
     let attribute = orderedPattern[2]
     let patternType = orderedPattern[3]
     let identityAttribute
-    if (orderedPattern.length === 3 || orderedPattern.length === 5) {
+    const notUsedPattern = orderedPattern.length === 3 || orderedPattern.length === 5 // eslint-disable-line max-len
+    if (notUsedPattern) {
       return
     }
     if (attribute === 'email' || attribute === 'phone') {
