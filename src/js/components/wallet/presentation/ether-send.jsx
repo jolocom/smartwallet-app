@@ -36,14 +36,17 @@ const STYLES = {
 export default class EtherSend extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    ether: React.PropTypes.object,
+    money: React.PropTypes.object,
+    etherBalance: React.PropTypes.number.isRequired,
     updateField: React.PropTypes.func,
     wallet: React.PropTypes.object,
     sendEther: React.PropTypes.func
   }
 
   render() {
-    const {receiverAddress, amountSend, loading, errorMsg} = this.props.wallet
+    const {loading: moneyLoading} = this.props.money
+    const {receiverAddress, amountSend, loading: walletLoading, errorMsg} = this.props.wallet
+    const loading = walletLoading || moneyLoading
     let content
     if (loading) {
       content = (
@@ -98,9 +101,9 @@ export default class EtherSend extends React.Component {
     return (
       <TabContainer>
         <EtherBalance
-          amount={this.props.wallet.amount}
+          amount={this.props.etherBalance}
           currency="eth"
-          currencyPrice={this.props.ether.ether.price} />
+          currencyPrice={this.props.money.ether.price} />
         <HalfScreenContainer>
           {content}
         </HalfScreenContainer>

@@ -3,28 +3,28 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/ether-send'
 
 @connect({
-  props: ['wallet.money',
-    'wallet.etherTabs'],
+  props: ['wallet.money', 'wallet.money.ether.amount', 'wallet.etherTabs'],
   actions: [
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
     'wallet/ether-tabs:sendEther',
     'wallet/ether-tabs:updateField',
-    'wallet/ether-tabs:getWalletAddress'
+    'wallet/money:retrieveEtherBalance'
   ]
 })
 export default class EtherSendScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     money: React.PropTypes.object.isRequired,
+    amount: React.PropTypes.number.isRequired,
     updateField: React.PropTypes.func,
     etherTabs: React.PropTypes.object,
     sendEther: React.PropTypes.func,
-    getWalletAddress: React.PropTypes.func
+    retrieveEtherBalance: React.PropTypes.func
   }
 
   componentWillMount() {
-    this.props.getWalletAddress()
+    this.props.retrieveEtherBalance()
   }
 
   updateField = (value, field) => {
@@ -37,7 +37,8 @@ export default class EtherSendScreen extends React.Component {
         <Presentation
           updateField={this.updateField}
           wallet={this.props.etherTabs.wallet}
-          ether={this.props.money}
+          money={this.props.money}
+          etherBalance={this.props.amount}
           sendEther={this.props.sendEther} />
       </div>
     )

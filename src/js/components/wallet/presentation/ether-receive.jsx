@@ -32,12 +32,16 @@ const STYLES = {
 export default class EtherReceive extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
-    ether: React.PropTypes.object,
+    money: React.PropTypes.object,
+    etherBalance: React.PropTypes.number.isRequired,
     wallet: React.PropTypes.object
   }
 
   render() {
-    const {walletAddress, amount, loading, errorMsg} = this.props.wallet
+    const {walletAddress, amount, loading: moneyLoading} = this.props.money
+    const {loading: walletLoading, errorMsg} = this.props.wallet
+    const loading = moneyLoading || walletLoading
+
     let content
     if (loading) {
       content = <Loading />
@@ -79,9 +83,9 @@ export default class EtherReceive extends React.Component {
     return (
       <TabContainer>
         <EtherBalance
-          amount={amount}
+          amount={this.props.etherBalance}
           currency="eth"
-          currencyPrice={this.props.ether.ether.price} />
+          currencyPrice={this.props.money.ether.price} />
         <HalfScreenContainer>
           {content}
         </HalfScreenContainer>

@@ -44,7 +44,7 @@ export default class WalletEther extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
-    ether: React.PropTypes.object,
+    money: React.PropTypes.object,
     wallet: React.PropTypes.object,
     goToAccountDetailsEthereum: React.PropTypes.func
   }
@@ -119,11 +119,16 @@ export default class WalletEther extends React.Component {
   render() {
     console.log('ETHR WALLET PROPS: ', this.props)
     let content = null
-    const { screenToDisplay } = this.props.ether
-    const { amount, errorMsg } = this.props.wallet
-    if (this.props.ether.ether.buying) {
+    const {
+      screenToDisplay, buying: buyingEther,
+      loading: moneyLoading
+    } = this.props.money
+    const { amount, errorMsg, loading: walletLoading } = this.props.wallet
+    const loading = moneyLoading || walletLoading
+
+    if (buyingEther) {
       content = this.renderLoading()
-    } else if (this.props.wallet.loading) {
+    } else if (loading) {
       content = (<Loading />)
     } else if (amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
       content = this.renderHasEther()
