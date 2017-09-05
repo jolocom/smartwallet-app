@@ -26,7 +26,13 @@ module.exports = {
   externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
-  plugins: [],
+  plugins: [
+    new webpack.DefinePlugin({
+      'IDENTITY_GATEWAY_URL': process.env.TIER === "staging"
+      ? '"staging.identity.jolocom.com"'
+      : '"identity.jolocom.com"'
+    })
+  ],
   module: {
     loaders: [{
       test: /\.jsx?$/,
