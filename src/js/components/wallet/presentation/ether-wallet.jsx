@@ -118,7 +118,6 @@ export default class WalletEther extends React.Component {
   }
 
   render() {
-    console.log('ETHR WALLET PROPS: ', this.props)
     let content = null
     const {
       screenToDisplay, buying: buyingEther,

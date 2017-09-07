@@ -70,48 +70,50 @@ const SingleSignOnAccessRight = (props) => (<div>
         name="Connected Services" />
     </td></tr>
     {
-      props.services.map(({label, iconUrl, deleted, id}, index) => (<tr
-        key={`service_id_${id}`} ><td></td><td>
-          <div
-            color={theme.palette.primary1Color}
-            style={STYLES.icon} />
-          <ListItem
-            leftAvatar={<Avatar
-              onClick={() => { props.showSharedData(index) }}
-              style={{backgroundColor: 'grey', top: '24px'}}
-              src={iconUrl} />}
-            rightIconButton={<IconButton
-              style={STYLES.deleteButton}
-              onTouchTap={() => {
-                props.showDeleteServiceWindow({
-                  title: <div style={{textAlign: 'center'}}>
-                    {`Delete Connection to ${label}`}
-                  </div>,
-                  message: <div style={{maxWidth: '360px'}}>
-                  Are you sure you want to delete the connection to {label} ?
-                    <br />This way you are deleting your account</div>,
-                  rightButtonLabel: 'OK',
-                  leftButtonLabel: 'CANCEL',
-                  index,
-                  style: {
-                    dialogContainer: {maxWidth: '480px'},
-                    maxWidth: '480px'
-                  }
-                })
-              }} >
-              <NavigationCancel color={theme.palette.accent1Color} />
-            </IconButton>}
-            disabled >
-            <TextField
-              style={STYLES.textField}
-              onTouchTap={() => { props.showSharedData(index) }}
-              inputStyle={STYLES.input}
-              underlineDisabledStyle={STYLES.disabledUnderline}
-              value={label}
-              disabled
-              underlineShow={false} />
-          </ListItem>
-        </td></tr>))
+      props.services.map(({label, displayName, iconUrl, deleted, id},
+        index) => (<tr
+          key={`service_id_${id}`} ><td></td><td>
+            <div
+              color={theme.palette.primary1Color}
+              style={STYLES.icon} />
+            <ListItem
+              leftAvatar={<Avatar
+                onClick={() => { props.showSharedData(index) }}
+                style={{backgroundColor: 'grey', top: '24px'}}
+                src={iconUrl} />}
+              rightIconButton={<IconButton
+                style={STYLES.deleteButton}
+                onTouchTap={() => {
+                  props.showDeleteServiceWindow({
+                    title: <div style={{textAlign: 'center'}}>
+                      {`Delete Connection to ${displayName}`}
+                    </div>,
+                    message: <div style={{maxWidth: '360px'}}>
+                    Are you sure you want to delete the connection to
+                    {displayName} ?
+                      <br />This way you are deleting your account</div>,
+                    rightButtonLabel: 'OK',
+                    leftButtonLabel: 'CANCEL',
+                    index,
+                    style: {
+                      dialogContainer: {maxWidth: '480px'},
+                      maxWidth: '480px'
+                    }
+                  })
+                }} >
+                <NavigationCancel color={theme.palette.accent1Color} />
+              </IconButton>}
+              disabled >
+              <TextField
+                style={STYLES.textField}
+                onTouchTap={() => { props.showSharedData(index) }}
+                inputStyle={STYLES.input}
+                underlineDisabledStyle={STYLES.disabledUnderline}
+                value={displayName}
+                disabled
+                underlineShow={false} />
+            </ListItem>
+          </td></tr>))
     }
   </tbody></table>
 </div>)

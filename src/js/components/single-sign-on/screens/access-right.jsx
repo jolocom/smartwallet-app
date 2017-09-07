@@ -10,6 +10,7 @@ import LoadingScreen from '../../common/loading'
     'single-sign-on/access-right:deleteService',
     'single-sign-on/access-right:showSharedData',
     'single-sign-on/access-right:retrieveConnectedServices',
+    'single-sign-on/access-right:getIdentityInformation',
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog'
   ]
@@ -17,24 +18,22 @@ import LoadingScreen from '../../common/loading'
 export default class SingleSignOnAccessRightScreen extends React.Component {
   static propTypes = {
     deleteService: React.PropTypes.func,
-    retrieveConnectedServices: React.PropTypes.func,
     openConfirmDialog: React.PropTypes.func,
     showSharedData: React.PropTypes.func,
     closeConfirmDialog: React.PropTypes.func,
-    accessRight: React.PropTypes.object
+    accessRight: React.PropTypes.object,
+    getIdentityInformation: React.PropTypes.func
   }
 
   componentWillMount() {
-    this.props.retrieveConnectedServices()
+    this.props.getIdentityInformation()
   }
 
   render() {
-    const {failed, loaded, services} = this.props.accessRight
-    if (failed) {
+    const {loaded, services, errorMsg} = this.props.accessRight
+    if (errorMsg) {
       return <ErrorScreen
-        message="ooops we have a problem here.... try again maybe"
-        buttonLabel="try again"
-        onClick={this.render} />
+        message={errorMsg} />
     }
     if (!loaded) {
       return (<LoadingScreen />)

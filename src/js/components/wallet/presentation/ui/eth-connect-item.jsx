@@ -79,7 +79,7 @@ export default class EthConnectItem extends React.Component {
           <RaisedButton
             secondary
             style={STYLES.buttons}
-            label="CONNECT TO ETHEREUM" />
+            label="Buy Ether first" />
         </ReactStripeCheckout>
       )
     }

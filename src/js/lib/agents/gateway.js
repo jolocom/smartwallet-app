@@ -119,16 +119,6 @@ export default class GatewayAgent {
   //   )
   // }
 
-  getRequesterIdentity(identity) {
-    // console.log('getRequesterIdentity: ', identity)
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(identity), 2000)
-    })
-    // return this._httpAgent.get(
-    //   identity + '/identity/name/display'
-    // )
-  }
-
   grantAccessToRequester(user, body) {
     return this._httpAgent.post(
       user + '/access/grant',
@@ -138,27 +128,17 @@ export default class GatewayAgent {
   }
 
   getConnectedServicesOverview({userName}) {
-    // const test = [
-    //   {identity: 'the boring company',
-    //     pattern: '/phone/*',
-    //     read: true,
-    //     write: false},
-    //   {identity: 'telekom',
-    //     pattern: '/email/*',
-    //     read: true,
-    //     write: false}]
-    // return new Promise((resolve, reject) => {
-    //   setTimeout(() => resolve(test), 2000)
-    // })
     return this._httpAgent.get(
       `${this._gatewayUrl}/${userName}/access`
     )
   }
 
   revokeServiceAccess({userName, identity, pattern}) {
+    const read = 'false'
+    const write = 'false'
     return this._httpAgent.post(
       `${this._gatewayUrl}/${userName}/access/revoke`,
-      JSON.stringify({identity, pattern}),
+      JSON.stringify({identity, pattern, read, write}),
       {'Content-type': 'application/json'}
     )
   }

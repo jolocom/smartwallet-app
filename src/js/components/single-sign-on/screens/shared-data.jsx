@@ -23,24 +23,25 @@ export default class SingleSignOnSharedDatatScreen extends React.Component {
 
   render() {
     let {serviceNumber, services} = this.props.accessRight
+    const id = services[serviceNumber].id
     if (services.length > 0) {
       return (<Presentation
         deleteService={
         ({title, message, style, rightButtonLabel, leftButtonLabel}) => {
           this.props.openConfirmDialog(title, message, rightButtonLabel,
           () => {
-            this.props.deleteService(serviceNumber)
+            this.props.deleteService(id)
             this.props.goToAccessRightScreen()
           }, leftButtonLabel, style)
         }}
         serviceUrl={services[serviceNumber].url}
         sharedData={services[serviceNumber].sharedData}
-        serviceName={services[serviceNumber].label}
+        serviceName={services[serviceNumber].displayName}
         showDeleteServiceWindow={(
         {title, message, style, rightButtonLabel, leftButtonLabel}) => {
           this.props.openConfirmDialog(title, message, rightButtonLabel,
-            () => { this.props.deleteService(serviceNumber) }, leftButtonLabel,
-            style)
+            () => { this.props.deleteService(id) },
+            leftButtonLabel, style)
         }}
         goToAccessRightScreen={this.props.goToAccessRightScreen} />)
     }
