@@ -169,7 +169,8 @@ const actions = module.exports = makeActions('registration', {
           if (userType === 'expert') {
             await services.auth.register({
               userName: state.username.value,
-              seedPhrase: state.passphrase.phrase
+              seedPhrase: state.passphrase.phrase,
+              inviteCode: state.inviteCode
             })
 
             // await services.auth.getMainAddress({
@@ -223,6 +224,9 @@ const actions = module.exports = makeActions('registration', {
       )
       }
     }
+  },
+  setInviteCode: {
+    expectedParams: ['value']
   }
 })
 
@@ -275,6 +279,7 @@ const initialState = Immutable.fromJS({
     registered: false,
     errorMsg: null
   },
+  inviteCode: null,
   complete: false
 })
 
@@ -434,6 +439,10 @@ module.exports.default = (state = initialState, action = {}) => {
           checking: false,
           errorMsg: action.error.message
         }
+      })
+    case actions.setInviteCode.id:
+      return state.merge({
+        inviteCode: action.code
       })
     default:
       return state

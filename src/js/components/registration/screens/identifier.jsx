@@ -4,14 +4,23 @@ import Presentation from '../presentation/identifier'
 
 @connect({
   props: ['registration'],
-  actions: ['registration:checkEmail', 'registration:setEmail']
+  actions: ['registration:checkEmail', 'registration:setEmail', 'registration:setInviteCode']
 })
 export default class RegistrationIdentifierScreen extends React.Component {
   static propTypes = {
     registration: React.PropTypes.object.isRequired,
+    location: React.PropTypes.object.isRequired,
 
     checkEmail: React.PropTypes.func.isRequired,
-    setEmail: React.PropTypes.func.isRequired
+    setEmail: React.PropTypes.func.isRequired,
+    setInviteCode: React.PropTypes.func.isRequired
+  }
+
+  componentDidMount() {
+    const inviteCode = this.props.location.query.ic
+    if (inviteCode) {
+      this.props.setInviteCode(inviteCode)
+    }
   }
 
   render() {
