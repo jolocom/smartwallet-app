@@ -370,7 +370,8 @@ describe('Wallet registration Redux module', () => {
         pin: {value: '1234'},
         passphrase: {phrase: 'bla bla bla'},
         email: {value: 'test@test.com'},
-        password: {value: 'abdcd'}
+        password: {value: 'abdcd'},
+        inviteCode: null
       }})
       const services = {
         auth: {
@@ -403,7 +404,8 @@ describe('Wallet registration Redux module', () => {
           expect(services.auth.register.calls)
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
-              userName: 'usr'
+              userName: 'usr',
+              inviteCode: null
             }]}])
         }
       )
