@@ -1,8 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { TextField, Divider, List, ListItem } from 'material-ui'
-import { CommunicationCall, CommunicationEmail } from 'material-ui/svg-icons'
+import { TextField, Divider, List, ListItem, FloatingActionButton } from 'material-ui'
+import { CommunicationCall, CommunicationEmail,
+  ContentCreate, ActionDone } from 'material-ui/svg-icons'
 import {theme} from 'styles'
 
 import {Content, Block} from '../../structure'
@@ -36,6 +37,11 @@ const STYLES = {
   },
   innerContainer: {
     marginRight: '10px'
+  },
+  addBtn: {
+    position: 'absolute',
+    top: '12.5px',
+    right: '8px'
   }
 }
 
@@ -55,7 +61,10 @@ export default class WalletIdentity extends React.Component {
     buyEther: React.PropTypes.func.isRequired,
     ether: React.PropTypes.object,
     createEthereumIdentity: React.PropTypes.func.isRequired,
-    confirmDialog: React.PropTypes.func.isRequired
+    confirmDialog: React.PropTypes.func.isRequired,
+    editDisplayName: React.PropTypes.func.isRequired,
+    setDisplayName: React.PropTypes.func.isRequired,
+    saveDisplayName: React.PropTypes.func.isRequired
   }
 
   renderConnectEther({ ethereum, expandedFields }) {
@@ -210,7 +219,31 @@ export default class WalletIdentity extends React.Component {
     </Block>)
   }
 
-  renderUsername({ webId, username }) {
+  renderUsername({ webId, username, displayName }) {
+    let actionButton
+    if (displayName !== undefined && displayName.edit) {
+      actionButton = (
+        <FloatingActionButton
+          mini
+          onClick={() => this.props.saveDisplayName()}
+          style={STYLES.addBtn}
+          iconStyle={{fill: '#fff'}}
+          backgroundColor={'green'}>
+          <ActionDone />
+        </FloatingActionButton>
+      )
+    } else {
+      actionButton = (
+        <FloatingActionButton
+          mini
+          onClick={() => this.props.editDisplayName()}
+          style={STYLES.addBtn}
+          iconStyle={{fill: theme.palette.accent1Color}}
+          backgroundColor={'#fff'}>
+          <ContentCreate />
+        </FloatingActionButton>
+      )
+    }
     return (<Block>
       <List>
         <ListItem
@@ -239,7 +272,11 @@ export default class WalletIdentity extends React.Component {
             floatingLabelStyle={STYLES.labelName}
             underlineShow={false}
             floatingLabelFixed
-            value={username.value} />
+            disabled={!displayName.edit}
+            hintText={displayName.edit || displayName.value ? '' : 'Bob is that you?'}
+            onChange={(e) => this.props.setDisplayName(e.target.value)}
+            value={displayName.value} />
+          {actionButton}
         </ListItem>
         <Divider style={STYLES.divider} />
       </List>
@@ -247,6 +284,7 @@ export default class WalletIdentity extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (<TabContainer>
       <HalfScreenContainer>
         <Content style={STYLES.container}>

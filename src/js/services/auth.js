@@ -118,6 +118,9 @@ export class Wallet {
           checkVerified: true
         })
 
+      const displayName = await this._gateway.proxyGet(
+        'https://identity.jolocom.com/' + this.userName + '/identity/name/display')
+      console.log('SERVICE AUTH: ', displayName)
       const ethereum = await this._gateway.getWalletAddress({
         userName: this.userName
       })

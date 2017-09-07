@@ -158,7 +158,30 @@ const actions = module.exports = makeActions('wallet/identity', {
   },
   setSmsVerificationCodeStatus: {
     expectedParams: ['field', 'index', 'value']
+  },
+  editDisplayName: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.editDisplayName.buildAction(params))
+      }
+    }
+  },
+  setDisplayName: {
+    expectedParams: ['value']
   }
+  // saveDisplayName: {
+  //   expectedParams: [],
+  //   async: true,
+  //   creator: () => {
+  //     return (dispatch, getState, {services, backend}) => {
+  //       const { displayName } = getState().toJS().wallet.identity.displayName.value
+  //       dispatch(actions.saveDisplayName.buildAction(() => {
+  //         return backend.gateway.proxyGet(params + '/identity/name/display')
+  //       }))
+  //     }
+  //   }
+  // }
 })
 
 const mapBackendToState = ({ethereum, webId, userName, contact, passports, idCards}) => // eslint-disable-line max-len
@@ -172,6 +195,10 @@ const mapBackendToState = ({ethereum, webId, userName, contact, passports, idCar
       walletAddress: ethereum.walletAddress
     },
     username: {value: userName},
+    displayName: {
+      edit: false,
+      value: ''
+    },
     expandedFields: {
       ethereum: false,
       contact: false,
@@ -193,6 +220,10 @@ const initialState = Immutable.fromJS({
   webId: '',
   username: {
     verified: false,
+    value: ''
+  },
+  displayName: {
+    edit: false,
     value: ''
   },
   expandedFields: {
@@ -354,6 +385,16 @@ module.exports.default = (state = initialState, action = {}) => {
       path.push('verified')
 
       return state.setIn(path, action.verified)
+
+    case actions.editDisplayName.id:
+      return state.mergeIn(['displayName'], {
+        edit: true
+      })
+
+    case actions.setDisplayName.id:
+      return state.mergeIn(['displayName'], {
+        value: action.value
+      })
 
     default:
       return state
