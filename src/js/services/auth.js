@@ -111,6 +111,15 @@ export class Wallet {
 
   async getUserInformation() {
     try {
+      let displayName
+      try {
+        displayName = await this._gateway.getDisplayName({
+          userName: this.userName
+        })
+      } catch (e) {
+        console.log(e)
+        displayName = [['value', '']]
+      }
       const [email, phone, passport, idcard] =
         await this._gateway.getOwnAttributes({
           userName: this.userName,
@@ -118,9 +127,6 @@ export class Wallet {
           checkVerified: true
         })
 
-      const displayName = await this._gateway.proxyGet(
-        'https://identity.jolocom.com/' + this.userName + '/identity/name/display')
-      console.log('SERVICE AUTH: ', displayName)
       const ethereum = await this._gateway.getWalletAddress({
         userName: this.userName
       })
@@ -129,10 +135,13 @@ export class Wallet {
         userName: this.userName,
         walletAddress: ethereum.walletAddress
       })
-
       return {
         webId: `https://${this.userName}.webid.jolocom.de/profile/card#me`,
         userName: this.userName,
+        displayName: {
+          edit: false,
+          value: displayName[0][1]
+        },
         contact: {
           email: email.map(email => ({
             id: email.id,

@@ -1,7 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { TextField, Divider, List, ListItem, FloatingActionButton } from 'material-ui'
+import { TextField, Divider, List, ListItem,
+  FloatingActionButton } from 'material-ui'
 import { CommunicationCall, CommunicationEmail,
   ContentCreate, ActionDone } from 'material-ui/svg-icons'
 import {theme} from 'styles'
@@ -40,7 +41,7 @@ const STYLES = {
   },
   addBtn: {
     position: 'absolute',
-    top: '12.5px',
+    top: '15px',
     right: '8px'
   }
 }
@@ -228,7 +229,7 @@ export default class WalletIdentity extends React.Component {
           onClick={() => this.props.saveDisplayName()}
           style={STYLES.addBtn}
           iconStyle={{fill: '#fff'}}
-          backgroundColor={'green'}>
+          backgroundColor={theme.palette.primary1Color}>
           <ActionDone />
         </FloatingActionButton>
       )
@@ -236,7 +237,9 @@ export default class WalletIdentity extends React.Component {
       actionButton = (
         <FloatingActionButton
           mini
-          onClick={() => this.props.editDisplayName()}
+          onClick={() => {
+            this.props.editDisplayName()
+          }}
           style={STYLES.addBtn}
           iconStyle={{fill: theme.palette.accent1Color}}
           backgroundColor={'#fff'}>
@@ -249,6 +252,7 @@ export default class WalletIdentity extends React.Component {
         <ListItem
           key={1}
           disabled
+          disableAutoFocus
           rightIcon={<InfoDetails
             showDetails={message => this.props.showUserInfo(
               null,
@@ -267,13 +271,16 @@ export default class WalletIdentity extends React.Component {
           style={STYLES.listItem}>
           <TextField
             fullWidth
+            refs="display"
+            autoFocus={!displayName.edit}
             floatingLabelText="Name"
             inputStyle={STYLES.inputName}
             floatingLabelStyle={STYLES.labelName}
             underlineShow={false}
             floatingLabelFixed
             disabled={!displayName.edit}
-            hintText={displayName.edit || displayName.value ? '' : 'Bob is that you?'}
+            hintText={displayName.edit || displayName.value
+              ? '' : 'Bob is that you?'}
             onChange={(e) => this.props.setDisplayName(e.target.value)}
             value={displayName.value} />
           {actionButton}
@@ -284,7 +291,6 @@ export default class WalletIdentity extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (<TabContainer>
       <HalfScreenContainer>
         <Content style={STYLES.container}>

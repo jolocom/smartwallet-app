@@ -86,6 +86,12 @@ export default class GatewayAgent {
     )
   }
 
+  getDisplayName({userName}) {
+    return this._httpAgent.get(
+      `${this._gatewayUrl}/${userName}/identity/name/display`
+    )
+  }
+
   register({userName, seedPhrase, email, password}) {
     return this._httpAgent.put(
       `${this._gatewayUrl}/${userName}`,
@@ -178,7 +184,6 @@ export default class GatewayAgent {
     } else {
       serialized = JSON.stringify(attributeData)
     }
-
     return this._httpAgent.put(
       url,
       serialized,
