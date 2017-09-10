@@ -252,7 +252,6 @@ export default class WalletIdentity extends React.Component {
         <ListItem
           key={1}
           disabled
-          disableAutoFocus
           rightIcon={<InfoDetails
             showDetails={message => this.props.showUserInfo(
               null,
@@ -271,8 +270,7 @@ export default class WalletIdentity extends React.Component {
           style={STYLES.listItem}>
           <TextField
             fullWidth
-            refs="display"
-            autoFocus={!displayName.edit}
+            ref="display"
             floatingLabelText="Name"
             inputStyle={STYLES.inputName}
             floatingLabelStyle={STYLES.labelName}
@@ -288,6 +286,12 @@ export default class WalletIdentity extends React.Component {
         <Divider style={STYLES.divider} />
       </List>
     </Block>)
+  }
+
+  componentDidUpdate() {
+    if(this.props.identity.displayName.edit) {
+        this.refs.display.focus()
+    }
   }
 
   render() {
