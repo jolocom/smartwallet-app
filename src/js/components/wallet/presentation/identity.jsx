@@ -289,8 +289,8 @@ export default class WalletIdentity extends React.Component {
   }
 
   componentDidUpdate() {
-    if(this.props.identity.displayName.edit) {
-        this.refs.display.focus()
+    if( this.props.identity.displayName.edit) {
+      this.refs.display.focus()
     }
   }
 
