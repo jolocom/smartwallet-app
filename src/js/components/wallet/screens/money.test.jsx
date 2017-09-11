@@ -69,10 +69,10 @@ describe('(Component) WalletMoneyScreen', () => {
     expect(goToEtherManagement.called).to.be.true
     expect(goToEtherManagement.calls).to.deep.equal([{args: []}])
   })
-  it('should call getPrice on componentWillMount', () => {
+  it('should call getPrice on componentDidMount', () => {
     const getPrice = stub()
 
-    shallow(
+    const wrapper = shallow(
       (<WalletMoneyScreen.WrappedComponent {
         ...WalletMoneyScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
@@ -94,6 +94,7 @@ describe('(Component) WalletMoneyScreen', () => {
         retrieveEtherBalance={() => {}} />),
       { context: { muiTheme: { } } }
     )
+    wrapper.instance().componentDidMount()
     expect(getPrice.called).to.be.true
     expect(getPrice.calls).to.deep.equal([{args: []}])
   })

@@ -26,7 +26,7 @@ const STYLES = {
     fontSize: '24px'
   },
   header: {
-    margin: '16px 0'
+    margin: '16px 0px 16px 0px'
   },
   divider: {
     marginLeft: '16px'

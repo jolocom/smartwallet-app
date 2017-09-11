@@ -8,6 +8,7 @@ import {stub} from '../../../../../test/utils'
 describe('(Component) EtherSendScreen', function() {
   it('call updateField with proper params', () => {
     const updateField = stub()
+    const retrieveEtherBalance = stub()
     const wrapper = shallow(
       (<EtherSendScreen.WrappedComponent
         {...EtherSendScreen.mapStateToProps(Immutable.fromJS({
@@ -39,11 +40,12 @@ describe('(Component) EtherSendScreen', function() {
             }
           }
         }))}
-        getWalletAddressAndBalance={() => {}}
+        retrieveEtherBalance={retrieveEtherBalance}
         updateField={updateField} />)
     )
     wrapper.instance().updateField('66', 'amountSend')
     expect(updateField.called).to.be.true
     expect(updateField.calls).to.deep.equal([{args: [{value: '66', field: 'amountSend'}]}]) // eslint-disable-line max-len
+    expect(retrieveEtherBalance.called).to.be.true
   })
 })
