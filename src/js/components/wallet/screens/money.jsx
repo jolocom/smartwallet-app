@@ -3,36 +3,36 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/money'
 
 @connect({
-  props: ['wallet.money'],
+  props: ['wallet.money', 'wallet.money.ether.amount'],
   actions: [
     'wallet/money:goToEtherManagement',
     'wallet/money:buyEther',
     'wallet/money:getPrice',
-    'wallet/money:getBalance',
-    'wallet/money:getWalletAddressAndBalance'
+    'wallet/money:retrieveEtherBalance'
   ]
 })
 export default class WalletMoneyScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     money: React.PropTypes.any,
+    amount: React.PropTypes.number.isRequired,
     goToEtherManagement: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
     getPrice: React.PropTypes.func.isRequired,
-    getBalance: React.PropTypes.func.isRequired,
-    getWalletAddressAndBalance: React.PropTypes.func.isRequired
+    retrieveEtherBalance: React.PropTypes.func.isRequired
   }
-  componentWillMount() {
-    this.props.getWalletAddressAndBalance()
+  componentDidMount() {
+    this.props.retrieveEtherBalance()
     this.props.getPrice()
   }
   render() {
-    const {goToEtherManagement, buyEther, getBalance} = this.props
+    const {goToEtherManagement, buyEther, retrieveEtherBalance} = this.props
     const {ether} = this.props.money
     return (<Presentation
       ether={ether}
+      etherBalance={this.props.amount}
       goToEtherManagement={goToEtherManagement}
       buyEther={buyEther}
-      getBalance={getBalance} />)
+      getBalance={retrieveEtherBalance} />)
   }
 }

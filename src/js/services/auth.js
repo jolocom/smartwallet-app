@@ -8,7 +8,6 @@ export default class AuthService extends EventEmitter {
     this.backend = backend
     this.currentUser = null
     this._localStorage = localStorage
-    this._socket = null
 
     if (typeof localStorage !== 'undefined') {
       const savedSession = localStorage.getItem('jolocom.identity')
@@ -48,20 +47,20 @@ export default class AuthService extends EventEmitter {
   }
 
   _setCurrentUser(user) {
+    const oldUser = this.currentUser
     this.currentUser = user
-    this.emit('changed', user)
     this._initSocket()
+    this.emit('changed', {oldUser, newUser: user})
+
+    if (oldUser && !this.currentUser) {
+      oldUser.socket.close()
+    }
   }
 
   _initSocket() {
-    // console.log(settings, this.currentUser.wallet.identityURL)
-    this._socket = io(new URL(this.currentUser.wallet.identityURL).origin)
-    this._socket.on('verification.stored', (data) => {
-      this.emit('verification.stored', {
-        attrType: data.attrType,
-        attrId: data.attrId
-      })
-    })
+    this.currentUser.socket = io(new URL(
+      this.currentUser.wallet.identityURL).origin
+    )
   }
 }
 

@@ -3,30 +3,32 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/ether-receive'
 
 @connect({
-  props: ['wallet.money', 'wallet.etherTabs'],
+  props: ['wallet.money', 'wallet.money.ether.amount', 'wallet.etherTabs'],
   actions: [
     'wallet/money:buyEther',
     'wallet/money:goToWalletScreen',
-    'wallet/ether-tabs:getWalletAddressAndBalance'
+    'wallet/money:retrieveEtherBalance'
   ]
 })
 export default class EtherReceiveScreen extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     money: React.PropTypes.object.isRequired,
-    getWalletAddressAndBalance: React.PropTypes.func,
+    amount: React.PropTypes.number.isRequired,
+    retrieveEtherBalance: React.PropTypes.func,
     etherTabs: React.PropTypes.object
   }
 
   componentWillMount() {
-    this.props.getWalletAddressAndBalance()
+    this.props.retrieveEtherBalance()
   }
 
   render() {
     return (
       <div>
         <Presentation
-          ether={this.props.money}
+          money={this.props.money}
+          etherBalance={this.props.amount}
           wallet={this.props.etherTabs.wallet} />
       </div>
     )
