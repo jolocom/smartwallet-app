@@ -3,7 +3,7 @@ import Immutable from 'immutable'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import EtherWalletScreen from './ether-wallet'
-import {StyleRoot} from 'radium'
+// import {StyleRoot} from 'radium'
 // import Presentation from '../presentation/ether-wallet'
 import {stub} from '../../../../../test/utils'
 
