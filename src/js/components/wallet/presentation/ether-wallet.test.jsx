@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import WalletEther from './ether-wallet'
-import {StyleRoot} from 'radium'
+// import {StyleRoot} from 'radium'
 
 describe('(Component) WalletEther', function() {
   it('should render properly the first time', () => {

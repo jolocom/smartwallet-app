@@ -45,7 +45,7 @@ export default class EtherSend extends React.Component {
 
   render() {
     const {loading: moneyLoading} = this.props.money
-    const {receiverAddress, amountSend, loading: walletLoading, errorMsg} = this.props.wallet
+    const {receiverAddress, amountSend, loading: walletLoading, errorMsg} = this.props.wallet // eslint-disable-line max-len
     const loading = walletLoading || moneyLoading
     let content
     if (loading) {

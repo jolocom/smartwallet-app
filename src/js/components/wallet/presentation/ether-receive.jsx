@@ -38,7 +38,7 @@ export default class EtherReceive extends React.Component {
   }
 
   render() {
-    const {walletAddress, amount, loading: moneyLoading} = this.props.money
+    const {walletAddress, loading: moneyLoading} = this.props.money
     const {loading: walletLoading, errorMsg} = this.props.wallet
     const loading = moneyLoading || walletLoading
 
