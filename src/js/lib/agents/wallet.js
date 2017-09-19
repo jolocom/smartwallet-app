@@ -15,65 +15,31 @@ export default class WalletAgent {
 
   generateSeedPhrase(entropy) {
     let seed = this._manager.generateSeedPhrase(entropy)
-    // @TODO remove this
     // seed = TEST_SEED
-
     return seed
-  }
-
-  retrieveEtherPrice() { // returns {ethForEur: <number>}
-    return this._httpAgent.get(
-      settings.blockchain.jolocomEtherAddress +
-      '/exchange-rate/ether'
-    )
-  }
-
-  buyEther({stripeToken, walletAddress}) {
-    return this._httpAgent.post(
-      'https://verification.jolocom.com/ether/buy/ether',
-      JSON.stringify({stripeToken: JSON.stringify(stripeToken), walletAddress}),
-      {
-        'Content-type': 'application/json'
-      },
-      {credentials: 'omit'}
-    )
   }
 
   retrieveSeedPhrase({email, password}) {
     return this._manager._seedStorage.getSeed({email, password})
   }
 
-  registerWithSeedPhrase({userName, seedPhrase, pin}) {
-    return this._manager.registerWithSeedPhrase({
-      userName, seedPhrase, pin
-    })
-  }
-
-  registerWithCredentials({userName, email, password, pin, seedPhrase}) {
-    return this._manager.registerWithCredentials({
-      userName, email, password, pin, seedPhrase
-    })
-  }
-
-  loginWithSeedPhrase({seedPhrase, pin}) {
-    return this._manager.loginWithSeedPhrase({seedPhrase, pin})
-  }
-
-  loginWithCredentials({email, password, pin}) {
-    return this._manager.loginWithCredentials({email, password, pin})
-  }
-
-  loginFromSerialized(serialized) {
-    return this._manager.loginFromSerialized(serialized)
-  }
-
-  sendEther({receiver, amountEther, data, pin}) {
-    // console.log('wallet agent: ', receiver, amountEther, data, pin)
-    // return  new Promise((resolve, reject) => {
-    //   setTimeout(() => resolve('ether were send'), 2000)
-    // }) // just for testing
-    console.log(this._wallet)
-    return this._wallet.sendEther(receiver, amountEther, data, pin)
-  }
-
+  // registerWithSeedPhrase({userName, seedPhrase, pin}) {
+  //   return this._manager.registerWithSeedPhrase({
+  //     userName, seedPhrase, pin
+  //   })
+  // }
+  //
+  // registerWithCredentials({userName, email, password, pin, seedPhrase}) {
+  //   return this._manager.registerWithCredentials({
+  //     userName, email, password, pin, seedPhrase
+  //   })
+  // }
+  //
+  // loginWithCredentials({email, password, pin}) {
+  //   return this._manager.loginWithCredentials({email, password, pin})
+  // }
+  //
+  // loginFromSerialized(serialized) {
+  //   return this._manager.loginFromSerialized(serialized)
+  // }
 }

@@ -6,6 +6,8 @@ import Presentation from '../presentation/name-entry'
   props: ['registration'],
   actions: ['registration:setUsername',
     'registration:checkUsername',
+    'registration:toggleHasOwnURL',
+    'registration:setValueOwnURL',
     'simple-dialog:configSimpleDialog',
     'simple-dialog:showSimpleDialog'
   ]
@@ -16,11 +18,16 @@ export default class RegistrationNameEntryScreen extends React.Component {
     checkUsername: React.PropTypes.func.isRequired,
     setUsername: React.PropTypes.func.isRequired,
     configSimpleDialog: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired
+    showSimpleDialog: React.PropTypes.func.isRequired,
+    toggleHasOwnURL: React.PropTypes.func.isRequired,
+    setValueOwnURL: React.PropTypes.func.isRequired
   }
 
   render() {
     return <Presentation
+      ownURL={this.props.registration.ownURL}
+      toggleHasOwnURL={(value) => this.props.toggleHasOwnURL(value)}
+      setValueOwnURL={(value) => this.props.setValueOwnURL(value)}
       value={this.props.registration.username.value}
       valid={this.props.registration.username.valid}
       alphaNum={this.props.registration.username.alphaNum}

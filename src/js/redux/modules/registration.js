@@ -142,6 +142,12 @@ const actions = module.exports = makeActions('registration', {
   setRepeatedPassword: {
     expectedParams: ['value']
   },
+  setValueOwnURL: {
+    expectedParams: ['value']
+  },
+  toggleHasOwnURL: {
+    expectedParams: ['value']
+  },
   checkUsername: {
     expectedParams: [],
     async: true,
@@ -169,16 +175,14 @@ const actions = module.exports = makeActions('registration', {
           if (userType === 'expert') {
             await services.auth.register({
               userName: state.username.value,
-              seedPhrase: state.passphrase.phrase
+              seedPhrase: state.passphrase.phrase,
+              gatewayUrl: state.ownURL.valueOwnURL
             })
-
-            // await services.auth.getMainAddress({
-            //   seedPhrase: state.passphrase.phrase
-            // })
 
             await services.auth.login({
               seedPhrase: state.passphrase.phrase,
-              pin: state.pin.value
+              pin: state.pin.value,
+              gatewayUrl: state.ownURL.valueOwnURL
             })
 
             dispatch(router.pushRoute('/wallet'))
@@ -248,6 +252,10 @@ const initialState = Immutable.fromJS({
     hasUpperCase: false,
     hasDigit: false,
     valid: false
+  },
+  ownURL: {
+    hasOwnURL: false,
+    valueOwnURL: ''
   },
   pin: {
     value: '',
@@ -435,6 +443,17 @@ module.exports.default = (state = initialState, action = {}) => {
           errorMsg: action.error.message
         }
       })
+
+    case actions.toggleHasOwnURL.id:
+      return state.mergeIn(['ownURL'], {
+        hasOwnURL: action.value
+      })
+
+    case actions.setValueOwnURL.id:
+      return state.mergeIn(['ownURL'], {
+        valueOwnURL: action.value
+      })
+
     default:
       return state
   }

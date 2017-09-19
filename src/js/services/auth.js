@@ -23,7 +23,7 @@ export default class AuthService extends EventEmitter {
   }
 
   async login({seedPhrase, pin, gatewayUrl}) {
-    if (gatewayUrl !== undefined && gatewayUrl.length > 6) {
+    if (gatewayUrl !== undefined && gatewayUrl.length > 14) {
       this.backend.gateway = gatewayUrl
     }
     const res = await this.backend.gateway.login({seedPhrase, pin})
@@ -45,7 +45,10 @@ export default class AuthService extends EventEmitter {
     })
   }
 
-  register({userName, seedPhrase}) {
+  register({userName, seedPhrase, gatewayUrl}) {
+    if (gatewayUrl !== undefined && gatewayUrl.length > 14) {
+      this.backend.gateway = gatewayUrl
+    }
     return this.backend.gateway.register({userName, seedPhrase})
   }
 

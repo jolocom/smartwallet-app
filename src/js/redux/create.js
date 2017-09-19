@@ -10,6 +10,7 @@ export default function createStore(history, client, data) {
   // Sync dispatched route actions to the history
   const reduxRouterMiddleware = routerMiddleware(history)
   const backend = new Backend()
+  console.log('BACKEND: ', backend)
   const services = createServices(backend)
 
   if (window) {
