@@ -4,7 +4,7 @@ import Radium from 'radium'
 import TextField from 'material-ui/TextField'
 import {RaisedButton} from 'material-ui'
 
-import {Container, Header, Content, Block, Footer, SideNote
+import {Container, Header, Content, Block, Footer
 } from '../../structure'
 import {theme} from 'styles'
 
@@ -42,30 +42,10 @@ const STYLES = {
 }
 
 const NameEntry = (props) => {
-  var webIdmessage = (
-    <div style={STYLES.popupText}>
-      A webID is an open standart for digital identities. With
-      a WebID you no longer need to remember usernames or passwords for
-      all of the sites you use but simply login by selecting a WebID and
-      clicking "log in". You can publish your identity wherever you want
-      and choose what pieces of your personal information that you want to
-      share with websites. <span style={STYLES.popupAccent}>Your information
-      is securely stored in a certificate.</span>
-    </div>)
   return (
     <Container>
       <Header title="Let's get started! Please type in a username." />
       <Content>
-        <SideNote>
-          It needs to be unique, but choose wisely. It will be part of your
-          <span style={STYLES.embeddedLink}
-            onClick={() => {
-              props.handleDialog(
-                'What the heck is a WebID?',
-                webIdmessage)
-            }}>WebID</span>
-          and it might end up on your business card one day.
-        </SideNote>
         <Block style={STYLES.textField}>
           <TextField
             defaultValue={props.value}
