@@ -4,22 +4,10 @@ import HTTPAgent from 'lib/agents/http'
 import * as settings from 'settings'
 
 export default class GatewayAgent {
-  constructor() {
+  constructor(gatewayUrl) {
     this._httpAgent = new HTTPAgent({proxy: false})
-    this._gatewayUrl = settings.gateway
+    this._gatewayUrl = gatewayUrl
   }
-
-  // getApiVersion() {
-  //   return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
-  // }
-
-  // createEthereumIdentity({userName, seedPhrase}) {
-  //   return this._httpAgent.post(
-  //     `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
-  //     JSON.stringify({seedPhrase: seedPhrase}),
-  //     {'Content-type': 'application/json'}
-  //   )
-  // }
 
   retrieveEtherPrice() {
     return this._httpAgent.get(
@@ -236,4 +224,17 @@ export default class GatewayAgent {
 
     return allAttributes
   }
+
+  // getApiVersion() {
+  //   return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
+  // }
+
+  // createEthereumIdentity({userName, seedPhrase}) {
+  //   return this._httpAgent.post(
+  //     `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
+  //     JSON.stringify({seedPhrase: seedPhrase}),
+  //     {'Content-type': 'application/json'}
+  //   )
+  // }
+
 }

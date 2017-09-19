@@ -60,7 +60,8 @@ const actions = module.exports = makeActions('wallet-login', {
         dispatch(actions.goForward.buildAction(params, (backend) => {
           return services.auth.login({
             seedPhrase: state.passphrase.value,
-            pin: state.pin.value
+            pin: state.pin.value,
+            gatewayUrl: state.passphrase.valueOwnURL
           }).then(() => {
             if (settings.verifier) {
               dispatch(router.pushRoute('verifier/document'))
@@ -85,6 +86,17 @@ const actions = module.exports = makeActions('wallet-login', {
   },
   setPassword: {
     expectedParams: ['value']
+  },
+  setValueOwnURL: {
+    expectedParams: ['value']
+  },
+  toggleHasOwnURL: {
+    expectedParams: ['value'],
+    creator: (params) => {
+      return (dispatch) => {
+        dispatch(actions.toggleHasOwnURL.buildAction(params))
+      }
+    }
   },
   submitLogin: {
     expectedParams: ['username, password'],
@@ -122,7 +134,9 @@ const initialState = Immutable.fromJS({
     value: '',
     failed: false,
     valid: false,
-    errorMsg: ''
+    errorMsg: '',
+    hasOwnURL: false,
+    valueOwnURL: ''
   },
   pin: {
     value: '',
@@ -200,13 +214,24 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
     case actions.goForward.id_fail:
-      return state.mergeDeep({
-        pin: {
-          errorMsg: 'Your Pin is Not correct!',
-          failed: true,
-          valid: false
-        }
-      })
+      if (action.error.message.indexOf('invalid seed phrase') !== -1) {
+        return state.mergeDeep({
+          pin: {
+            errorMsg: 'Please check your seedphrase. It is not correct.',
+            failed: true,
+            valid: false
+          }
+        })
+      } else {
+        return state.mergeDeep({
+          pin: {
+            errorMsg: 'Address for your private space cannot be reached. Please double check.', // eslint-disable-line max-len
+            failed: true,
+            valid: false
+          }
+        })
+      }
+
     case actions.goForward.id_success:
       return state.mergeDeep({
         pin: {
@@ -238,6 +263,9 @@ module.exports.default = (state = initialState, action = {}) => {
           errorMsg: 'Incorrect username or password',
           failed: true,
           valid: false
+        },
+        pin: {
+          errorMsg: 'ERROR ggg'
         }
       })
     case actions.submitLogin.id_success:
@@ -249,6 +277,16 @@ module.exports.default = (state = initialState, action = {}) => {
           failed: false,
           valid: true
         }
+      })
+
+    case actions.toggleHasOwnURL.id:
+      return state.mergeIn(['passphrase'], {
+        hasOwnURL: action.value
+      })
+
+    case actions.setValueOwnURL.id:
+      return state.mergeIn(['passphrase'], {
+        valueOwnURL: action.value
       })
 
     default:
