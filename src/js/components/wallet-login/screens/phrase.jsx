@@ -7,7 +7,9 @@ import Presentation from '../presentation/phrase'
   actions: [
     'wallet-login:goToLogin',
     'wallet-login:submitPassphrase',
-    'wallet-login:setPassphrase'
+    'wallet-login:setPassphrase',
+    'wallet-login:toggleHasOwnURL',
+    'wallet-login:setValueOwnURL'
   ]
 })
 export default class ExpertLoginPassphraseScreen extends React.Component {
@@ -15,17 +17,20 @@ export default class ExpertLoginPassphraseScreen extends React.Component {
     walletLogin: React.PropTypes.object.isRequired,
     submitPassphrase: React.PropTypes.func.isRequired,
     setPassphrase: React.PropTypes.func.isRequired,
-    goToLogin: React.PropTypes.func.isRequired
+    goToLogin: React.PropTypes.func.isRequired,
+    toggleHasOwnURL: React.PropTypes.func.isRequired,
+    setValueOwnURL: React.PropTypes.func.isRequired
   }
 
   render() {
     return <Presentation
       back={this.props.goToLogin}
-      value={this.props.walletLogin.passphrase.value}
+      passphrase={this.props.walletLogin.passphrase}
       canSubmit={this.props.walletLogin.passphrase.value.length > 0}
       onChange={this.props.setPassphrase}
       onSubmit={this.props.submitPassphrase}
-      failed={this.props.walletLogin.passphrase.failed}
+      toggleHasOwnURL={(value) => this.props.toggleHasOwnURL(value)}
+      setValueOwnURL={(value) => this.props.setValueOwnURL(value)}
     />
   }
 }

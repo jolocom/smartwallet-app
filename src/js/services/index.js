@@ -3,7 +3,7 @@ import EntropyService from './entropy'
 
 export default function create(backend) {
   return {
-    auth: new AuthService(backend.gateway),
+    auth: new AuthService(backend),
     entropy: new EntropyService()
   }
 }

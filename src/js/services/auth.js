@@ -15,15 +15,18 @@ export default class AuthService extends EventEmitter {
         this._setCurrentUser({
           wallet: new Wallet({
             ...JSON.parse(savedSession),
-            gateway: this.backend
+            gateway: this.backend.gateway
           })
         })
       }
     }
   }
 
-  async login({seedPhrase, pin}) {
-    const res = await this.backend.login({seedPhrase, pin})
+  async login({seedPhrase, pin, gatewayUrl}) {
+    if (gatewayUrl !== undefined && gatewayUrl.length > 6) {
+      this.backend.gateway = gatewayUrl
+    }
+    const res = await this.backend.gateway.login({seedPhrase, pin})
     if (!res.success) {
       throw new Error('Could not log in: invalid seed phrase')
     }
@@ -37,13 +40,13 @@ export default class AuthService extends EventEmitter {
     this._setCurrentUser({
       wallet: new Wallet({
         ...walletConfig,
-        gateway: this.backend
+        gateway: this.backend.gateway
       })
     })
   }
 
   register({userName, seedPhrase}) {
-    return this.backend.register({userName, seedPhrase})
+    return this.backend.gateway.register({userName, seedPhrase})
   }
 
   _setCurrentUser(user) {
