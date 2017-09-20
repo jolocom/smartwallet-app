@@ -10,8 +10,8 @@ const STYLES = {
   iconName: {
     fill: theme.palette.accent1Color,
     position: 'absolute',
-    right: '20px',
-    marginTop: '40px'
+    right: '55px',
+    marginTop: '30px'
   },
   inputStyleName: {
     textAlign: 'center',
