@@ -47,9 +47,9 @@ const STYLES = {
 const Passphrase = (props) => {
   const {passphrase} = props
   let errorText = null
-  if (passphrase.valueOwnURL.length > 1 && passphrase.valueOwnURL.length < 14) {
+  if (passphrase.valueOwnURL.length > 1 && passphrase.valueOwnURL.length < 11) {
     errorText = 'Address is too short. Please check.'
-  } else if (passphrase.valueOwnURL.length > 14 && passphrase.valueOwnURL.indexOf('https://') === -1) { // eslint-disable-line max-len
+  } else if (passphrase.valueOwnURL.length > 11 && passphrase.valueOwnURL.indexOf('https://') === -1) { // eslint-disable-line max-len
     errorText = 'Please fill in whole address (like: https://www.me.io)'
   }
   return (

@@ -47,9 +47,9 @@ const STYLES = {
 
 const NameEntry = (props) => {
   let errorText = null
-  if (props.ownURL.valueOwnURL.length > 1 && props.ownURL.valueOwnURL.length < 14) { // eslint-disable-line max-len
+  if (props.ownURL.valueOwnURL.length > 1 && props.ownURL.valueOwnURL.length < 11) { // eslint-disable-line max-len
     errorText = 'Address is too short. Please check.'
-  } else if (props.ownURL.valueOwnURL.length > 14 && props.ownURL.valueOwnURL.indexOf('https://') === -1) { // eslint-disable-line max-len
+  } else if (props.ownURL.valueOwnURL.length > 11 && props.ownURL.valueOwnURL.indexOf('https://') === -1) { // eslint-disable-line max-len
     errorText = 'Please fill in whole address (like: https://www.me.io)'
   }
   return (
