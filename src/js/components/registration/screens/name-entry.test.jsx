@@ -85,7 +85,7 @@ describe('(Component) RegistrationNameEntryScreen', function() {
     expect(setUsername.called).to.be.true
   })
   it('should call checkUsername onSubmit with proper params', function() {
-    const checkUsername = stub()
+    const checkCredentials = stub()
     const wrapper = shallow(
       (<RegistrationNameEntryScreen.WrappedComponent {
         ...RegistrationNameEntryScreen.mapStateToProps(Immutable.fromJS({
@@ -99,14 +99,14 @@ describe('(Component) RegistrationNameEntryScreen', function() {
         }))
       }
         setUsername={() => {}}
-        checkUsername={checkUsername}
+        checkCredentials={checkCredentials}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
        />),
       { context: { muiTheme: { } } }
     )
     wrapper.find('NameEntry').prop('onSubmit')()
-    expect(checkUsername.called).to.be.true
-    expect(checkUsername.calls).to.deep.equal([{'args': []}])
+    expect(checkCredentials.called).to.be.true
+    expect(checkCredentials.calls).to.deep.equal([{'args': []}])
   })
 })

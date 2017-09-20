@@ -13,7 +13,7 @@ describe('(Login Component) Pin', function() {
       onReset={() => {}}
       onSubmit={() => {}}
       onFocusChange={() => {}}
-      failed
+      pin
       />),
       { context: { muiTheme: { } } }
     )

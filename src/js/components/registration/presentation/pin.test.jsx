@@ -9,6 +9,7 @@ describe('(Component) Pin', function() {
       valid
       focused
       confirm
+      wallet={{}}
       registering={{}}
       onChangeRequest={() => {}}
       onFocusChange={() => {}}

@@ -154,7 +154,7 @@ const actions = module.exports = makeActions('registration', {
     creator: (params) => {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
-        dispatch(actions.checkUsername.buildAction(params, (backend) => {
+        dispatch(actions.checkCredentials.buildAction(params, (backend) => {
           return backend.gateway
             .checkUserDoesNotExist({userName: state.username.value})
             .then((params) => {
@@ -318,7 +318,6 @@ module.exports.default = (state = initialState, action = {}) => {
       if (action.value && !valid) {
         throw Error('Invalid user type: ' + action.value)
       }
-
       return state.merge({
         userType: {
           value: action.value,
@@ -457,14 +456,14 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
 
-    case actions.checkUsername.id:
+    case actions.checkCredentials.id:
       return state.mergeDeep({
         username: {
           checking: true
         }
       })
 
-    case actions.checkUsername.id_success:
+    case actions.checkCredentials.id_success:
       return state.mergeDeep({
         username: {
           checking: false,
@@ -472,7 +471,7 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
 
-    case actions.checkUsername.id_fail:
+    case actions.checkCredentials.id_fail:
       return state.mergeDeep({
         username: {
           checking: false,
