@@ -5,8 +5,14 @@ import {
   IconButton,
   RaisedButton,
   Avatar,
-  TextField
+  TextField,
+  FlatButton
 } from 'material-ui'
+
+import {
+  NavigationExpandMore,
+  NavigationExpandLess
+} from 'material-ui/svg-icons'
 
 import {
   Container,
@@ -39,6 +45,13 @@ const STYLES = {
 }
 
 const Passphrase = (props) => {
+  const {passphrase} = props
+  let errorText = null
+  if (passphrase.valueOwnURL.length > 1 && passphrase.valueOwnURL.length < 11) {
+    errorText = 'Address is too short. Please check.'
+  } else if (passphrase.valueOwnURL.length > 11 && passphrase.valueOwnURL.indexOf('https://') === -1) { // eslint-disable-line max-len
+    errorText = 'Please fill in whole address (like: https://www.me.io)'
+  }
   return (
     <Container>
       <IconButton
@@ -58,7 +71,7 @@ const Passphrase = (props) => {
       />
       <Content>
         <Block>
-        {props.failed ? <FailureMessage>
+        {passphrase.failed ? <FailureMessage>
         That passphrase doesn't match our records
         </FailureMessage> : ''}
         </Block>
@@ -67,19 +80,36 @@ const Passphrase = (props) => {
             id="phraseInput"
             style={STYLES.phraseInput}
             textareaStyle={STYLES.phraseInputText}
-            value={props.value}
+            value={passphrase.value}
             type="text"
             underlineShow={false}
             multiLine
             onChange={(e) => { props.onChange(e.target.value) }}
             />
         </Block>
+        <Block>
+          <FlatButton
+            label="Login with personal space"
+            labelPosition="before"
+            secondary
+            onClick={() => props.toggleHasOwnURL(!passphrase.hasOwnURL)}
+            icon={passphrase.hasOwnURL ? <NavigationExpandLess />
+              : <NavigationExpandMore />} />
+        </Block>
+        {passphrase.hasOwnURL ? <Block>
+          <TextField
+            id="valueOwnURL"
+            hintText="Your personal space address"
+            value={passphrase.valueOwnURL}
+            errorText={errorText}
+            onChange={(e) => props.setValueOwnURL(e.target.value)} />
+        </Block> : null}
       </Content>
       <Footer>
         <RaisedButton
           label="LOGIN"
           secondary
-          disabled={!props.value}
+          disabled={!passphrase.value}
           onClick={props.onSubmit} />
       </Footer>
     </Container>
@@ -88,11 +118,11 @@ const Passphrase = (props) => {
 
 Passphrase.propTypes = {
   back: React.PropTypes.func.isRequired,
-  value: React.PropTypes.string.isRequired,
   canSubmit: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
-  failed: React.PropTypes.bool.isRequired
+  toggleHasOwnURL: React.PropTypes.func.isRequired,
+  setValueOwnURL: React.PropTypes.func.isRequired
 }
 
 export default Radium(Passphrase)

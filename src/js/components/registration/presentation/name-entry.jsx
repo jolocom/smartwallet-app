@@ -2,9 +2,13 @@ import React from 'react'
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
-import {RaisedButton} from 'material-ui'
+import {RaisedButton, FlatButton} from 'material-ui'
+import {
+  NavigationExpandMore,
+  NavigationExpandLess
+} from 'material-ui/svg-icons'
 
-import {Container, Header, Content, Block, Footer, SideNote
+import {Container, Header, Content, Block, Footer
 } from '../../structure'
 import {theme} from 'styles'
 
@@ -42,30 +46,16 @@ const STYLES = {
 }
 
 const NameEntry = (props) => {
-  var webIdmessage = (
-    <div style={STYLES.popupText}>
-      A webID is an open standart for digital identities. With
-      a WebID you no longer need to remember usernames or passwords for
-      all of the sites you use but simply login by selecting a WebID and
-      clicking "log in". You can publish your identity wherever you want
-      and choose what pieces of your personal information that you want to
-      share with websites. <span style={STYLES.popupAccent}>Your information
-      is securely stored in a certificate.</span>
-    </div>)
+  let errorText = null
+  if (props.ownURL.valueOwnURL.length > 1 && props.ownURL.valueOwnURL.length < 11) { // eslint-disable-line max-len
+    errorText = 'Address is too short. Please check.'
+  } else if (props.ownURL.valueOwnURL.length > 11 && props.ownURL.valueOwnURL.indexOf('https://') === -1) { // eslint-disable-line max-len
+    errorText = 'Please fill in whole address (like: https://www.me.io)'
+  }
   return (
     <Container>
       <Header title="Let's get started! Please type in a username." />
       <Content>
-        <SideNote>
-          It needs to be unique, but choose wisely. It will be part of your
-          <span style={STYLES.embeddedLink}
-            onClick={() => {
-              props.handleDialog(
-                'What the heck is a WebID?',
-                webIdmessage)
-            }}>WebID</span>
-          and it might end up on your business card one day.
-        </SideNote>
         <Block style={STYLES.textField}>
           <TextField
             defaultValue={props.value}
@@ -73,9 +63,26 @@ const NameEntry = (props) => {
             floatingLabelStyle={STYLES.floatingLabel}
             inputStyle={STYLES.inputStyle}
             onChange={(e) => props.onChange(e.target.value)}
-            errorText={props.errorMsg}
-          />
+            errorText={props.errorMsg} />
         </Block>
+        <Block>
+          <FlatButton
+            label="Register with personal space"
+            labelPosition="before"
+            secondary
+            onClick={() => props.toggleHasOwnURL(!props.ownURL.hasOwnURL)}
+            icon={props.ownURL.hasOwnURL ? <NavigationExpandLess />
+              : <NavigationExpandMore />} />
+        </Block>
+        {props.ownURL.hasOwnURL ? <Block>
+          <TextField
+            id="valueOwnURL"
+            hintText="Your personal space address"
+            value={props.ownURL.valueOwnURL}
+            errorText={errorText || props.ownURL.errorMsg}
+            onChange={(e) => props.setValueOwnURL(e.target.value)}
+            />
+        </Block> : null}
       </Content>
       <Footer>
         <RaisedButton
@@ -91,11 +98,14 @@ const NameEntry = (props) => {
 
 NameEntry.propTypes = {
   value: React.PropTypes.string.isRequired,
+  ownURL: React.PropTypes.object,
   valid: React.PropTypes.bool.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
   onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
-  handleDialog: React.PropTypes.func.isRequired
+  handleDialog: React.PropTypes.func.isRequired,
+  setValueOwnURL: React.PropTypes.func.isRequired,
+  toggleHasOwnURL: React.PropTypes.func.isRequired
 }
 
 export default Radium(NameEntry)

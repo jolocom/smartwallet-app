@@ -29,8 +29,8 @@ const Pin = (props) => {
         title="Please enter your Pin."
       />
       <Content>
-      {props.failed ? <FailureMessage>
-      That pin doesn't match our records
+      {props.pin.failed ? <FailureMessage>
+      {props.pin.errorMsg}
       </FailureMessage> : ''}
         <Block>
           <PinInput
@@ -63,7 +63,7 @@ Pin.propTypes = {
   onReset: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
   onFocusChange: React.PropTypes.func.isRequired,
-  failed: React.PropTypes.bool
+  pin: React.PropTypes.obj
 }
 
 export default Radium(Pin)

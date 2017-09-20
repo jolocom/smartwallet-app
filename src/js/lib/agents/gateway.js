@@ -4,22 +4,10 @@ import HTTPAgent from 'lib/agents/http'
 import * as settings from 'settings'
 
 export default class GatewayAgent {
-  constructor() {
+  constructor(gatewayUrl) {
     this._httpAgent = new HTTPAgent({proxy: false})
-    this._gatewayUrl = settings.gateway
+    this._gatewayUrl = gatewayUrl
   }
-
-  // getApiVersion() {
-  //   return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
-  // }
-
-  // createEthereumIdentity({userName, seedPhrase}) {
-  //   return this._httpAgent.post(
-  //     `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
-  //     JSON.stringify({seedPhrase: seedPhrase}),
-  //     {'Content-type': 'application/json'}
-  //   )
-  // }
 
   retrieveEtherPrice() {
     return this._httpAgent.get(
@@ -60,6 +48,26 @@ export default class GatewayAgent {
       {'Content-type': 'application/json'},
       {credentials: 'omit'}
     )
+  }
+
+  checkOwnUrlDoesExist({userName, gatewayUrl}) {
+    return new Promise((resolve, reject) => {
+      this._httpAgent.get(
+        `${gatewayUrl}/${userName}`
+      )
+      .then((response) => {
+        resolve() // eslint-disable-line max-len
+      })
+      .catch((e) => {
+        if (!!e.response && e.response.status === 404) { // eslint-disable-line max-len
+          resolve()
+        } else if (e instanceof TypeError && e.message === 'Failed to fetch') {
+          reject(new Error('This Domain URL is not correct. Please double check.')) // eslint-disable-line max-len
+        } else {
+          reject(new Error('network error, please make sure you have an internet connection')) // eslint-disable-line max-len
+        }
+      })
+    })
   }
 
   checkUserDoesNotExist({userName}) {
@@ -241,4 +249,17 @@ export default class GatewayAgent {
 
     return allAttributes
   }
+
+  // getApiVersion() {
+  //   return this._httpAgent.get(`${this._gatewayUrl}/system/info`)
+  // }
+
+  // createEthereumIdentity({userName, seedPhrase}) {
+  //   return this._httpAgent.post(
+  //     `${this._gatewayUrl}/${userName}/ethereum/create-identity`,
+  //     JSON.stringify({seedPhrase: seedPhrase}),
+  //     {'Content-type': 'application/json'}
+  //   )
+  // }
+
 }

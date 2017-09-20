@@ -8,9 +8,12 @@ describe('(Component) NameEntry', function() {
       value=""
       valid
       errorMsg=""
+      ownURL={{valueOwnURL: 'test'}}
       onSubmit={() => {}}
       onChange={() => {}}
       handleDialog={() => {}}
+      setValueOwnURL={() => {}}
+      toggleHasOwnURL={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

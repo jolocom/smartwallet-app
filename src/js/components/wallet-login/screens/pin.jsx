@@ -32,7 +32,7 @@ export default class ExpertLoginPinScreen extends React.Component {
       onReset={this.props.resetPin}
       onFocusChange={this.props.setPinFocused}
       onSubmit={this.props.goForward}
-      failed={pin.failed}
+      pin={pin}
     />
   }
 }

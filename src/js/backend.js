@@ -4,8 +4,17 @@ import WalletAgent from 'lib/agents/wallet'
 import GatewayAgent from 'lib/agents/gateway'
 import SolidAgent from 'lib/agents/solid-wallet'
 import WebIDAgent from 'lib/agents/webid'
+import * as settings from 'settings'
 
 export default class Backend {
+  constructor(gatewayUrl) {
+    if (gatewayUrl === undefined) {
+      this._gatewayUrl = settings.gateway
+    } else {
+      this._gatewayUrl = gatewayUrl
+    }
+  }
+
   get accounts() {
     return new AccountsAgent()
   }
@@ -14,8 +23,12 @@ export default class Backend {
     return new SolidAgent()
   }
 
+  set gateway(gatewayUrl) {
+    this._gatewayUrl = gatewayUrl
+  }
+
   get gateway() {
-    return new GatewayAgent()
+    return new GatewayAgent(this._gatewayUrl)
   }
 
   get wallet() {
