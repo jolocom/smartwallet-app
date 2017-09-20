@@ -98,7 +98,7 @@ const NameEntry = (props) => {
 
 NameEntry.propTypes = {
   value: React.PropTypes.string.isRequired,
-  ownURL: React.PropTypes.obj,
+  ownURL: React.PropTypes.object,
   valid: React.PropTypes.bool.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
   onChange: React.PropTypes.func.isRequired,
