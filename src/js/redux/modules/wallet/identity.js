@@ -158,10 +158,37 @@ const actions = module.exports = makeActions('wallet/identity', {
   },
   setSmsVerificationCodeStatus: {
     expectedParams: ['field', 'index', 'value']
+  },
+  editDisplayName: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.editDisplayName.buildAction(params))
+      }
+    }
+  },
+  setDisplayName: {
+    expectedParams: ['value']
+  },
+  saveDisplayName: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {services, backend}) => {
+        const value = getState().toJS().wallet.identity.displayName.value // eslint-disable-line max-len
+        dispatch(actions.saveDisplayName.buildAction(params, (backend) => {
+          return services.auth.currentUser.wallet.storeAttribute({
+            attributeType: 'name',
+            attributeId: 'display',
+            attributeData: {value}
+          })
+        }))
+      }
+    }
   }
 })
 
-const mapBackendToState = ({ethereum, webId, userName, contact, passports, idCards}) => // eslint-disable-line max-len
+const mapBackendToState = ({ethereum, webId, userName, contact, passports, idCards, displayName}) => // eslint-disable-line max-len
   Immutable.fromJS({
     loaded: true,
     error: false,
@@ -172,6 +199,10 @@ const mapBackendToState = ({ethereum, webId, userName, contact, passports, idCar
       walletAddress: ethereum.walletAddress
     },
     username: {value: userName},
+    displayName: {
+      edit: false,
+      value: displayName.value
+    },
     expandedFields: {
       ethereum: false,
       contact: false,
@@ -193,6 +224,10 @@ const initialState = Immutable.fromJS({
   webId: '',
   username: {
     verified: false,
+    value: ''
+  },
+  displayName: {
+    edit: false,
     value: ''
   },
   expandedFields: {
@@ -354,6 +389,37 @@ module.exports.default = (state = initialState, action = {}) => {
       path.push('verified')
 
       return state.setIn(path, action.verified)
+
+    case actions.editDisplayName.id:
+      return state.mergeIn(['displayName'], {
+        edit: true
+      })
+
+    case actions.setDisplayName.id:
+      return state.mergeIn(['displayName'], {
+        value: action.value
+      })
+
+    case actions.saveDisplayName.id:
+      return state
+
+    case actions.saveDisplayName.id_success:
+      return state.mergeDeep({
+        error: '',
+        loaded: true,
+        displayName: {
+          edit: false
+        }
+      })
+
+    case actions.saveDisplayName.id_fail:
+      return state.mergeDeep({
+        error: '',
+        loaded: true,
+        displayName: {
+          edit: false
+        }
+      })
 
     default:
       return state

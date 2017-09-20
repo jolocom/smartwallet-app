@@ -18,6 +18,10 @@ describe('# Wallet identity redux module', () => {
           idCards: false,
           passports: false
         },
+        displayName: {
+          edit: false,
+          value: ''
+        },
         ethereum: {
           walletAddress: '',
           amount: '',
@@ -46,6 +50,7 @@ describe('# Wallet identity redux module', () => {
         result: {
           webId: 'https://test.webid.jolocom.com',
           userName: 'test',
+          displayName: {edit: false, value: 'testMe'},
           contact: {email: [{address: 'test'}], phone: [{number: 'test'}]},
           passports: ['test'],
           idCards: ['test'],
@@ -71,6 +76,10 @@ describe('# Wallet identity redux module', () => {
             passports: false
           },
           username: {value: 'test'},
+          displayName: {
+            edit: false,
+            value: 'testMe'
+          },
           contact: {emails: [{address: 'test'}], phones: [{number: 'test'}]},
           passports: ['test'],
           idCards: ['test']
