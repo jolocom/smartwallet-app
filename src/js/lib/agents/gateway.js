@@ -50,6 +50,26 @@ export default class GatewayAgent {
     )
   }
 
+  checkOwnUrlDoesExist({userName, gatewayUrl}) {
+    return new Promise((resolve, reject) => {
+      this._httpAgent.get(
+        `${gatewayUrl}/${userName}`
+      )
+      .then((response) => {
+        resolve() // eslint-disable-line max-len
+      })
+      .catch((e) => {
+        if (!!e.response && e.response.status === 404) { // eslint-disable-line max-len
+          resolve()
+        } else if (e instanceof TypeError && e.message === 'Failed to fetch') {
+          reject(new Error('This Domain URL is not correct. Please double check.')) // eslint-disable-line max-len
+        } else {
+          reject(new Error('network error, please make sure you have an internet connection')) // eslint-disable-line max-len
+        }
+      })
+    })
+  }
+
   checkUserDoesNotExist({userName}) {
     return new Promise((resolve, reject) => {
       this.getUserInformation({userName})

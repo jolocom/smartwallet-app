@@ -79,7 +79,7 @@ const NameEntry = (props) => {
             id="valueOwnURL"
             hintText="Your personal space address"
             value={props.ownURL.valueOwnURL}
-            errorText={errorText}
+            errorText={errorText || props.ownURL.errorMsg}
             onChange={(e) => props.setValueOwnURL(e.target.value)}
             />
         </Block> : null}
