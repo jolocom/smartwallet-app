@@ -4,7 +4,9 @@ import Presentation from '../presentation/identifier'
 
 @connect({
   props: ['registration'],
-  actions: ['registration:checkEmail', 'registration:setEmail', 'registration:setInviteCode']
+  actions: ['registration:checkEmail',
+    'registration:setEmail',
+    'registration:setInviteCode']
 })
 export default class RegistrationIdentifierScreen extends React.Component {
   static propTypes = {
