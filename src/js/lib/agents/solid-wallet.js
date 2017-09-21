@@ -187,7 +187,7 @@ export default class SolidAgent {
         services: [
           {
             deleted: false, label: 'label1', url: 'http://www.youtube.com',
-            id: '1', iconUrl: '/img/img_nohustle.svg',
+            id: '1', iconUrl: 'img/img_nohustle.svg',
             sharedData: [
               {attrType: 'phone', value: '17524', type: 'work', verified: false,
                 status: ''},
@@ -203,14 +203,14 @@ export default class SolidAgent {
             label: 'label2',
             url: 'http://www.youtube.com',
             id: '2',
-            iconUrl: '/img/img_nohustle.svg',
+            iconUrl: 'img/img_nohustle.svg',
             sharedData: [{
               attrType: 'email', value: 'test@test.test', verified: false,
               status: ''
             }]
           }, {
             deleted: false, id: '3', url: 'http://www.google.com',
-            label: 'label3', conUrl: '/img/img_nohustle.svg',
+            label: 'label3', conUrl: 'img/img_nohustle.svg',
             sharedData: [{attrType: '', value: '', verified: false, status: ''}]
           }
         ]
