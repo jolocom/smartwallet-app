@@ -198,6 +198,7 @@ const actions = module.exports = makeActions('registration', {
             await services.auth.register({
               userName: state.username.value,
               seedPhrase: state.passphrase.phrase,
+              inviteCode: state.inviteCode,
               gatewayUrl: state.ownURL.valueOwnURL
             })
 
@@ -249,6 +250,9 @@ const actions = module.exports = makeActions('registration', {
       )
       }
     }
+  },
+  setInviteCode: {
+    expectedParams: ['value']
   }
 })
 
@@ -306,6 +310,7 @@ const initialState = Immutable.fromJS({
     registered: false,
     errorMsg: null
   },
+  inviteCode: null,
   complete: false
 })
 
@@ -477,6 +482,11 @@ module.exports.default = (state = initialState, action = {}) => {
           checking: false,
           errorMsg: action.error.message
         }
+      })
+
+    case actions.setInviteCode.id:
+      return state.merge({
+        inviteCode: action.code
       })
 
     case actions.toggleHasOwnURL.id:

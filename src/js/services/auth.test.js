@@ -17,7 +17,8 @@ describe('#AuthService', () => {
       }
       const registration = {
         userName: 'bigly',
-        seedPhrase: 'whoop'
+        seedPhrase: 'whoop',
+        inviteCode: null
       }
       const auth = new AuthService(backend)
       expect(auth.register(registration)).to.eventually
@@ -28,7 +29,8 @@ describe('#AuthService', () => {
       expect(backend.gateway.register.calls).to.deep.equal([{
         args: [{
           userName: 'bigly',
-          seedPhrase: 'whoop'
+          seedPhrase: 'whoop',
+          inviteCode: null
         }]
       }])
     })
