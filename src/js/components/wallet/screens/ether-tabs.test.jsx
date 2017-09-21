@@ -15,7 +15,7 @@ describe('(Component) EtherTabScreen', function() {
         {...EtherTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
           etherTabs: {activeTab: 'overview'}
         }}))}
-        getWalletAddressAndBalance={() => {}}
+        retrieveEtherBalance={() => {}}
         detectActiveTab={detectActiveTab}
         switchTab={switchTab}
         location={{pathname: 'testtest'}}
@@ -40,7 +40,7 @@ describe('(Component) EtherTabScreen', function() {
         {...EtherTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
           etherTabs: {activeTab: 'overview'}
         }}))}
-        getWalletAddressAndBalance={() => {}}
+        retrieveEtherBalance={() => {}}
         detectActiveTab={detectActiveTab}
         switchTab={switchTab}
         location={{pathname: 'testtest'}}
@@ -52,15 +52,15 @@ describe('(Component) EtherTabScreen', function() {
       {args: [{tab: 'MYTAB'}]}
     ])
   })
-  it('should call getWalletAddress on componentWillMount', function() {
-    const getWalletAddress = stub()
+  it('should call retrieveEtherBalance on componentWillMount', function() {
+    const retrieveEtherBalance = stub()
 
     const wrapper = shallow(
       (<EtherTabScreen.WrappedComponent
         {...EtherTabScreen.mapStateToProps(Immutable.fromJS({wallet: {
           etherTabs: {activeTab: 'overview'}
         }}))}
-        getWalletAddressAndBalance={getWalletAddress}
+        retrieveEtherBalance={retrieveEtherBalance}
         detectActiveTab={() => {}}
         switchTab={() => {}}
         location={{}}
@@ -68,6 +68,6 @@ describe('(Component) EtherTabScreen', function() {
     )
 
     wrapper.instance()
-    expect(getWalletAddress.called).to.be.true
+    expect(retrieveEtherBalance.called).to.be.true
   })
 })

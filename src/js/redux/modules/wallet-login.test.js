@@ -65,7 +65,8 @@ describe('Wallet login Redux module', function() {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal({
         userType: {value: '', valid: false},
-        passphrase: {value: '', failed: false, valid: false, errorMsg: ''},
+        passphrase: {value: '', failed: false, valid: false, errorMsg: '',
+          hasOwnURL: false, valueOwnURL: ''},
         pin: {value: '', failed: false, valid: false, focused: false,
           errorMsg: ''
         },
@@ -151,7 +152,7 @@ describe('Wallet login Redux module', function() {
           error: new Error('test')
         })
         expect(newState.toJS().pin.errorMsg)
-        .to.equal('Your Pin is Not correct!')
+        .to.equal('Address for your private space cannot be reached. Please double check.') // eslint-disable-line max-len
         expect(newState.toJS().pin.valid).to.be.false
         expect(newState.toJS().pin.failed).to.be.true
       })

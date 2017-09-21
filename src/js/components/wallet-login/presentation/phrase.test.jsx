@@ -9,7 +9,9 @@ describe('(Login Component) Passphrase', function() {
       canSubmit
       onChange={() => {}}
       onSubmit={() => {}}
-      failed
+      passphrase={{valueOwnURL: ''}}
+      toggleHasOwnURL={() => {}}
+      setValueOwnURL={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

@@ -43,8 +43,11 @@ function getButtonLabel(props) {
 
 const Pin = (props) => {
   let contents
-
-  if (props.registering) {
+  let errorMsg = null
+  if (props.wallet.errorMsg) {
+    errorMsg = props.wallet.errorMsg
+  }
+  if (props.wallet.registering) {
     const messageWait = ['Please have some patience...',
       '...we are creating...', '...your jolocom wallet...',
       '...your digital identity...', '...we are linking...',
@@ -61,6 +64,7 @@ const Pin = (props) => {
       <Form onValidSubmit={() => { props.onSubmit() }} style={STYLES.form}>
         <Header title={'Create a PIN for secure login.'} />
         <Content style={STYLES.content}>
+          <div style={{color: 'red'}}>{errorMsg}</div>
           <PinInput
             value={props.value}
             focused={props.focused}

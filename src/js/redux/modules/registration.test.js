@@ -333,7 +333,7 @@ describe('Wallet registration Redux module', () => {
       )
     })
   })
-  describe('checkUser', () => {
+  describe('checkCredentials', () => {
     it('should checkUsername on backend', () => {
       const getState = () => Immutable.fromJS({registration: {
         username: {value: 'ggdg'}
@@ -344,14 +344,14 @@ describe('Wallet registration Redux module', () => {
       }}
       withStubs([
       [registration.actions, 'goForward', {returns: 'forward'}],
-        [registration.actions.checkUsername, 'buildAction',
+        [registration.actions.checkCredentials, 'buildAction',
         {returns: 'action'}]],
       () => {
-        const thunk = registration.checkUsername('test')
+        const thunk = registration.checkCredentials('test')
         thunk(dispatch, getState)
         expect(dispatch.calledWithArgs[0]).to.equal('action')
-        const checkAction = registration.actions.checkUsername
-        const promise = checkAction.buildAction.calledWithArgs[1]
+        const checkCredentials = registration.actions.checkCredentials
+        const promise = checkCredentials.buildAction.calledWithArgs[1]
         expect(promise(backend)).to.eventually
         .equal('checks')
         expect(backend.gateway.checkUserDoesNotExist.calls).to.deep.equal(
@@ -369,6 +369,7 @@ describe('Wallet registration Redux module', () => {
         username: {value: 'usr'},
         pin: {value: '1234'},
         passphrase: {phrase: 'bla bla bla'},
+        ownURL: {valueOwnURL: 'test'},
         email: {value: 'test@test.com'},
         password: {value: 'abdcd'},
         inviteCode: null
@@ -405,7 +406,8 @@ describe('Wallet registration Redux module', () => {
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
               userName: 'usr',
-              inviteCode: null
+              inviteCode: null,
+              gatewayUrl: 'test'
             }]}])
         }
       )
@@ -454,7 +456,7 @@ describe('Wallet registration Redux module', () => {
   describe('reducer', () => {
     describe('setUserType', () => {
       it('should correctly initialize', () => {
-        let state = reducer(undefined, '@@INIT')
+        const state = reducer(undefined, '@@INIT')
 
         expect(state.get('userType').toJS())
           .to.deep.equal({value: '', valid: false})

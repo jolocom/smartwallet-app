@@ -20,7 +20,10 @@ import Loading from 'components/common/loading'
     'wallet/identity:getIdentityInformation',
     'wallet/identity:goTo',
     'wallet/identity:setFocusedPin',
-    'wallet/identity:saveToBlockchain'
+    'wallet/identity:saveToBlockchain',
+    'wallet/identity:editDisplayName',
+    'wallet/identity:setDisplayName',
+    'wallet/identity:saveDisplayName'
   ]
 })
 
@@ -41,7 +44,10 @@ export default class WalletIdentityScreen extends React.Component {
     startPhoneVerification: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
     createEthereumIdentity: React.PropTypes.func.isRequired,
-    getWalletAddressAndBalance: React.PropTypes.func.isRequired
+    getWalletAddressAndBalance: React.PropTypes.func.isRequired,
+    editDisplayName: React.PropTypes.func.isRequired,
+    setDisplayName: React.PropTypes.func.isRequired,
+    saveDisplayName: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -65,6 +71,9 @@ export default class WalletIdentityScreen extends React.Component {
       identity={this.props.identity}
       expandField={this.props.expandField}
       setFocusedPin={this.props.setFocusedPin}
+      editDisplayName={this.props.editDisplayName}
+      setDisplayName={this.props.setDisplayName}
+      saveDisplayName={this.props.saveDisplayName}
       changePinValue={this.props.changePinValue}
       confirmDialog={(...args) => { this.handleConfirmDialog(...args) }}
       buyEther={(token) => { this.props.buyEther(token) }}

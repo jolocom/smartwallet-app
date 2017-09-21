@@ -13,7 +13,7 @@ describe('#AuthService', () => {
     it('should call backend register with the proper params',
     () => {
       const backend = {
-        register: stub().returnsAsync({wallet: 'RegSeed'})
+        gateway: {register: stub().returnsAsync({wallet: 'RegSeed'})}
       }
       const registration = {
         userName: 'bigly',
@@ -25,8 +25,8 @@ describe('#AuthService', () => {
         .deep.equal({
           wallet: 'RegSeed'
         })
-      expect(backend.register.called).to.be.true
-      expect(backend.register.calls).to.deep.equal([{
+      expect(backend.gateway.register.called).to.be.true
+      expect(backend.gateway.register.calls).to.deep.equal([{
         args: [{
           userName: 'bigly',
           seedPhrase: 'whoop',
@@ -68,7 +68,7 @@ describe('#AuthService', () => {
   describe('loginWithSeedPhrase', () => {
     it('should call backend login with proper params', () => {
       const backend = {
-        login: stub().returnsAsync({wallet: 'LogSeed'})
+        gateway: {login: stub().returnsAsync({wallet: 'LogSeed'})}
       }
       const login = {
         seedPhrase: 'bigly',
@@ -79,8 +79,8 @@ describe('#AuthService', () => {
         .deep.equal({
           wallet: 'LogSeed'
         })
-      expect(backend.login.called).to.be.true
-      expect(backend.login.calls).to.deep.equal([{
+      expect(backend.gateway.login.called).to.be.true
+      expect(backend.gateway.login.calls).to.deep.equal([{
         args: [{
           seedPhrase: 'bigly',
           pin: '1234'

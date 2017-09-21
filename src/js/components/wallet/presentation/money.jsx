@@ -22,12 +22,13 @@ export default class WalletMoney extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     ether: React.PropTypes.object.isRequired,
+    etherBalance: React.PropTypes.number.isRequired,
     buyEther: React.PropTypes.func.isRequired,
     goToEtherManagement: React.PropTypes.func.isRequired
   }
 
   render() {
-    const {goToEtherManagement, ether} = this.props
+    const {goToEtherManagement, ether, etherBalance} = this.props
     let content
     if (!ether.loaded) {
       content = <Loading />
@@ -46,7 +47,7 @@ export default class WalletMoney extends React.Component {
           </Block>
           <Block>
             <PlusSubMenu
-              amount={ether.amount}
+              amount={etherBalance}
               currency="eth"
               ethSvg={{fill: '#4b132b'}}
               goToManagement={() => goToEtherManagement('etherManagement')}

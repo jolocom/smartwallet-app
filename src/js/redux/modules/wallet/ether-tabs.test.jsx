@@ -63,50 +63,6 @@ describe('Wallet Ether Tabs Redux Module', function() {
       expect(router.pushRoute.calledWithArgs).to.deep.equal(['/wallet/ether'])
     })
   })
-  it('should get ether balance on getWalletAddressAndBalance', function() {
-    let state = reducer(undefined, '@@INIT')
-    const action = {
-      type: etherTabs.actions.getWalletAddressAndBalance.id_success,
-      result: {ether: '101'}
-    }
-    state = reducer(state, action)
-    expect(state.toJS()).to.deep.equal({
-      activeTab: 'overview',
-      wallet: {
-        loading: false,
-        errorMsg: '',
-        walletAddress: '',
-        amount: 101,
-        receiverAddress: '',
-        amountSend: '',
-        pin: '1234',
-        data: '',
-        gasInWei: 3000000
-      }
-    })
-  })
-  it('should get the ether balance on getBalance', function() {
-    let state = reducer(undefined, '@@INIT')
-    const action = {
-      type: etherTabs.actions.getBalance.id_success,
-      result: {ether: '4321'}
-    }
-    state = reducer(state, action)
-    expect(state.toJS()).to.deep.equal({
-      activeTab: 'overview',
-      wallet: {
-        loading: false,
-        errorMsg: '',
-        walletAddress: '',
-        amount: 4321,
-        receiverAddress: '',
-        amountSend: '',
-        pin: '1234',
-        data: '',
-        gasInWei: 3000000
-      }
-    })
-  })
   it('should update correct field in state on updateField', function() {
     let state = reducer(undefined, '@@INIT')
     const action = {
@@ -120,8 +76,6 @@ describe('Wallet Ether Tabs Redux Module', function() {
       wallet: {
         loading: false,
         errorMsg: '',
-        walletAddress: '',
-        amount: '',
         receiverAddress: '0xONENICETEST',
         amountSend: '',
         pin: '1234',
@@ -142,8 +96,6 @@ describe('Wallet Ether Tabs Redux Module', function() {
       wallet: {
         loading: false,
         errorMsg: '',
-        walletAddress: '',
-        amount: '',
         receiverAddress: '',
         amountSend: '',
         pin: '1234',

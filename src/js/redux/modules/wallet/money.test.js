@@ -19,14 +19,6 @@ describe('# Wallet money redux module', () => {
         }
       })
     })
-    it('should update the user\'s amount of ether on getBalance success', () => { // eslint-disable-line max-len
-      const state = reducer(undefined, '@@INIT')
-      const action = {
-        type: actions.getBalance.id_success,
-        result: {ether: 2}
-      }
-      expect(reducer(state, action).getIn(['ether', 'amount'])).to.equal(2)
-    })
     it('should update the ether\'s price of ether on getPrice success', () => {
       const state = reducer(undefined, '@@INIT')
       const action = {
@@ -55,18 +47,6 @@ describe('# Wallet money redux module', () => {
       expect(reducer(state, action).getIn(['ether']).toJS()).to.deep.equal({
         loaded: false,
         errorMsg: 'Could not get the ether price',
-        price: 0,
-        amount: 0,
-        checkingOut: false,
-        buying: false
-      })
-    })
-    it('should set the error msg when getBalance fails', () => {
-      const state = reducer(undefined, '@@INIT')
-      const action = {type: actions.getBalance.id_fail}
-      expect(reducer(state, action).getIn(['ether']).toJS()).to.deep.equal({
-        loaded: true,
-        errorMsg: 'Could not get the user\'s ether balance',
         price: 0,
         amount: 0,
         checkingOut: false,

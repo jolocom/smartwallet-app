@@ -32,7 +32,6 @@ describe('(Component) ExpertLoginPinScreen', () => {
       { context: { muiTheme: { } } }
     )
     expect(wrapper.find('Pin').prop('canSubmit')).to.be.false
-    expect(wrapper.find('Pin').prop('failed')).to.be.false
     expect(wrapper.find('Pin').prop('focused')).to.be.false
     expect(wrapper.find('Pin').prop('valid')).to.be.false
     expect(wrapper.find('Pin').prop('value')).to.be.empty

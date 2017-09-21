@@ -3,9 +3,13 @@ import Immutable from 'immutable'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import EtherWalletScreen from './ether-wallet'
+// import {StyleRoot} from 'radium'
+// import Presentation from '../presentation/ether-wallet'
+import {stub} from '../../../../../test/utils'
 
 describe('(Component) EtherWalletScreen', () => {
   it('should render properly the first time', () => {
+    const retrieveEtherBalance = stub()
     const wrapper = shallow(
       (<EtherWalletScreen.WrappedComponent
         {...EtherWalletScreen.mapStateToProps(Immutable.fromJS({
@@ -39,20 +43,13 @@ describe('(Component) EtherWalletScreen', () => {
       )}
         buyEther={() => {}}
         goToWalletScreen={() => {}}
+        retrieveEtherBalance={retrieveEtherBalance}
         goToAccountDetailsEthereum={() => {}}
-    />),
+    />)
+    ,
     { context: { muiTheme: { } } }
   )
-    expect(wrapper.find('WalletEther')).to.have.length(1)
-    expect(wrapper.find('WalletEther')).prop('ether').to.deep.equal({
-      ether: {
-        loaded: false,
-        errorMsg: '',
-        price: 0,
-        amount: 0,
-        checkingOut: false,
-        buying: false
-      }
-    })
+    wrapper.instance().componentDidMount()
+    expect(retrieveEtherBalance.called).to.be.true
   })
 })

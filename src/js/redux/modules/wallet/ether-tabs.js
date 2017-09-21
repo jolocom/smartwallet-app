@@ -2,6 +2,7 @@ import * as _ from 'lodash'
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
+import { actions as moneyActions } from './money'
 
 const PATHNAME_TO_TAB = {
   '/wallet/ether': 'overview',
@@ -44,27 +45,6 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
       }
     }
   },
-  getWalletAddressAndBalance: {
-    expectedParams: [],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getWalletAddressAndBalance.buildAction(params, () => {
-          return services.auth.currentUser.wallet.getWalletAddress()
-          .then((result) => {
-            dispatch(actions.setWalletAddress(result.walletAddress))
-            return backend.gateway.getBalanceEther({
-              userName: services.auth.currentUser.wallet.userName,
-              walletAddress: result.walletAddress
-            })
-          })
-        }))
-      }
-    }
-  },
-  setWalletAddress: {
-    expectedParams: ['walletAddress']
-  },
   sendEther: {
     expectedParams: ['receiverAddress', 'amountSend', 'data', 'pin'],
     async: true,
@@ -80,24 +60,9 @@ const actions = module.exports = makeActions('wallet/ether-tabs', {
             data: data,
             gasInWei: gasInWei})
         })).then((response) => {
-          dispatch(actions.getBalance())
+          dispatch(moneyActions.retrieveEtherBalance())
           return response
         })
-      }
-    }
-  },
-  getBalance: {
-    async: true,
-    expectedParams: [],
-    creator: (params) => {
-      return (dispatch, getState, {services, backend}) => {
-        dispatch(actions.getBalance.buildAction(params, (backend) => {
-          const {walletAddress} = getState().toJS().wallet.etherTabs.wallet
-          return backend.gateway.getBalanceEther({
-            userName: services.auth.currentUser.wallet.userName,
-            walletAddress: walletAddress
-          })
-        }))
       }
     }
   },
@@ -116,8 +81,6 @@ const initialState = Immutable.fromJS({
   wallet: {
     loading: false,
     errorMsg: '',
-    walletAddress: '',
-    amount: '',
     receiverAddress: '',
     amountSend: '',
     pin: '1234',
@@ -131,30 +94,6 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.detectActiveTab.id:
       return state.merge({
         activeTab: action.activeTab
-      })
-
-    case actions.setWalletAddress.id:
-      return state.mergeIn(['wallet'], {
-        walletAddress: action.walletAddress
-      })
-
-    case actions.getWalletAddressAndBalance.id:
-      return state.mergeIn(['wallet'], {
-        loading: true,
-        errorMsg: ''
-      })
-
-    case actions.getWalletAddressAndBalance.id_success:
-      return state.mergeIn(['wallet'], {
-        loading: false,
-        amount: parseFloat(action.result.ether),
-        errorMsg: ''
-      })
-
-    case actions.getWalletAddressAndBalance.id_fail:
-      return state.mergeIn(['wallet'], {
-        loading: false,
-        errorMsg: 'We could not get your Wallet Address.'
       })
 
     case actions.updateField.id:
@@ -187,25 +126,6 @@ module.exports.default = (state = initialState, action = {}) => {
       return state.mergeIn(['wallet'], {
         loading: false,
         errorMsg: 'We could not send ether.'
-      })
-
-    case actions.getBalance.id:
-      return state.mergeIn(['wallet'], {
-        loading: true,
-        errorMsg: ''
-      })
-
-    case actions.getBalance.id_success:
-      return state.mergeIn(['wallet'], {
-        loading: false,
-        errorMsg: '',
-        amount: parseFloat(action.result.ether)
-      })
-
-    case actions.getBalance.id_fail:
-      return state.mergeIn(['wallet'], {
-        loading: false,
-        errorMsg: 'We could not get the balance.'
       })
 
     default:

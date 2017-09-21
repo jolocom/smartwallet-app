@@ -26,7 +26,7 @@ const STYLES = {
     fontSize: '24px'
   },
   header: {
-    margin: '16px 0'
+    margin: '16px 0px 16px 0px'
   },
   divider: {
     marginLeft: '16px'
@@ -44,7 +44,8 @@ export default class WalletEther extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
     onToken: React.PropTypes.func,
-    ether: React.PropTypes.object,
+    money: React.PropTypes.object,
+    etherBalance: React.PropTypes.number.isRequired,
     wallet: React.PropTypes.object,
     goToAccountDetailsEthereum: React.PropTypes.func
   }
@@ -67,8 +68,8 @@ export default class WalletEther extends React.Component {
     return (
       <HalfScreenContainer>
         <EtherBalance
-          amount={this.props.wallet.amount}
-          currencyPrice={this.props.ether.ether.price} />
+          amount={this.props.etherBalance}
+          currencyPrice={this.props.money.ether.price} />
         <List>
           <ListItem
             disabled
@@ -118,11 +119,17 @@ export default class WalletEther extends React.Component {
 
   render() {
     let content = null
-    const { screenToDisplay } = this.props.ether
-    const { amount, errorMsg } = this.props.wallet
-    if (this.props.ether.ether.buying) {
+    const {
+      screenToDisplay, buying: buyingEther,
+      loading: moneyLoading
+    } = this.props.money
+    const { errorMsg, loading: walletLoading } = this.props.wallet
+    const loading = moneyLoading || walletLoading
+    const amount = this.props.etherBalance
+
+    if (buyingEther) {
       content = this.renderLoading()
-    } else if (this.props.wallet.loading) {
+    } else if (loading) {
       content = (<Loading />)
     } else if (amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
       content = this.renderHasEther()
