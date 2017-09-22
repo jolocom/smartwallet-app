@@ -1,4 +1,5 @@
 var path = require('path')
+var webpack = require('webpack')
 
 module.exports = {
   entry: [
@@ -28,7 +29,7 @@ module.exports = {
   }],
   plugins: [
     new webpack.DefinePlugin({
-      'IDENTITY_GATEWAY_URL': process.env.TIER === "staging"
+      'IDENTITY_GATEWAY_URL': process.env.TIER === '"staging"'
       ? '"staging.identity.jolocom.com"'
       : '"identity.jolocom.com"'
     })
