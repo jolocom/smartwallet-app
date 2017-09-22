@@ -46,6 +46,8 @@ import WalletIdCardPhotoScreen from 'components/wallet/screens/webcam'
 import EtherSendScreen from 'components/wallet/screens/ether-send'
 import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
 import EtherTabScreen from 'components/wallet/screens/ether-tabs'
+import EthereumExecuteTransactionScreen from
+  'components/ethereum/screens/exec-transaction'
 
 import WalletLogin from 'components/wallet-login'
 import LaymanLoginScreen from 'components/wallet-login/screens/layman'
@@ -109,6 +111,7 @@ function getRoutes() {
       component={VerificationDocumentScreen} />
     <Route path="verifier/country"
       component={VerificationCountryScreen} />
+
     <Route path="registration"
       component={RegistrationNameEntryScreen} />
     <Route path="registration/entropy"
@@ -144,6 +147,8 @@ function getRoutes() {
     </Route>
     <Route path="wallet/account-details"
       component={AccountDetailsEthereumScreen} />
+    <Route path="wallet/ethereum/execute-transaction"
+      component={EthereumExecuteTransactionScreen} />
 
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />

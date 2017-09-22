@@ -145,7 +145,7 @@ export default class GatewayAgent {
 
   verify({userName, seedPhrase, identity, attributeType,
      attributeId, attributeValue}) {
-    let url = `${this._gatewayUrl}/${userName}/verify`
+    const url = `${this._gatewayUrl}/${userName}/verify`
     let body = {
       seedPhrase,
       identity,
@@ -157,6 +157,18 @@ export default class GatewayAgent {
       url, JSON.stringify(body),
       {'Content-type': 'application/json'}
     )
+  }
+
+  executeEthereumTransaction({
+    userName, seedPhrase, requester,
+    contractID, method, params, value
+  }) {
+    const url = `${this._gatewayUrl}/${userName}/ethereum/execute/transaction`
+
+    return this._httpAgent.post(url, JSON.stringify({
+      contractOwnerIdentity: requester,
+      seedPhrase, contractID, method, params, value
+    }), {'Content-type': 'application/json'})
   }
 
   proxyGet(requestUrl) {
