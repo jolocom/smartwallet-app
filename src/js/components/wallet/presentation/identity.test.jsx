@@ -16,6 +16,10 @@ describe('(Component) Wallet Identity', function() {
             idCards: true,
             passports: true
           },
+          displayName: {
+            edit: false,
+            value: ''
+          },
           username: {
             verified: true,
             value: 'AnnikaHamman'
