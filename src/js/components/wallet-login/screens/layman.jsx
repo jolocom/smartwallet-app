@@ -19,7 +19,6 @@ export default class LaymanLoginScreen extends React.Component {
     submitLogin: React.PropTypes.func.isRequired,
     goToLogin: React.PropTypes.func.isRequired
   }
-
   render() {
     return <Presentation
       back={this.props.goToLogin}
