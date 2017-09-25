@@ -45,11 +45,11 @@ export default class AuthService extends EventEmitter {
     })
   }
 
-  register({userName, seedPhrase, gatewayUrl}) {
+  register({userName, seedPhrase, gatewayUrl, inviteCode}) {
     if (gatewayUrl !== undefined && gatewayUrl.length > 11) {
       this.backend.gateway = gatewayUrl
     }
-    return this.backend.gateway.register({userName, seedPhrase})
+    return this.backend.gateway.register({userName, seedPhrase, inviteCode})
   }
 
   _setCurrentUser(user) {

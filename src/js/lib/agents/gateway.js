@@ -100,10 +100,10 @@ export default class GatewayAgent {
     )
   }
 
-  register({userName, seedPhrase, email, password}) {
+  register({userName, seedPhrase, email, password, inviteCode}) {
     return this._httpAgent.put(
       `${this._gatewayUrl}/${userName}`,
-      JSON.stringify({seedPhrase, email, password}),
+      JSON.stringify({seedPhrase, email, password, inviteCode}),
       {'Content-type': 'application/json'}
       // {credentials: 'omit'}
     )

@@ -371,7 +371,8 @@ describe('Wallet registration Redux module', () => {
         passphrase: {phrase: 'bla bla bla'},
         ownURL: {valueOwnURL: 'test'},
         email: {value: 'test@test.com'},
-        password: {value: 'abdcd'}
+        password: {value: 'abdcd'},
+        inviteCode: null
       }})
       const services = {
         auth: {
@@ -405,6 +406,7 @@ describe('Wallet registration Redux module', () => {
             .to.deep.equal([{args: [{
               seedPhrase: 'bla bla bla',
               userName: 'usr',
+              inviteCode: null,
               gatewayUrl: 'test'
             }]}])
         }
