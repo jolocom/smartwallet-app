@@ -34,7 +34,6 @@ export default class LaymanLoginScreen extends React.Component {
   onUsernameChange = (e) => {
     return this.props.setUsername(e.target.value)
   }
-
   onPasswordChange = (e) => {
     return this.props.setPassword(e.target.value)
   }
