@@ -5,14 +5,14 @@ import {theme} from 'styles'
 
 import HoverButton from '../../common/hover-button'
 
-import {Container, Header, Content, Footer} from '../../structure'
+import {Container, Header, Content, Footer, Block} from '../../structure'
 
 const STYLES = {
   tile: {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    margin: '8px 0 8px',
+    margin: '8px 0 200px',
     borderRadius: '2px',
     primary: false,
     backgroundColor: theme.jolocom.gray1,
@@ -52,26 +52,22 @@ const UserType = (props) => {
   const messageWhy = (
     <div style={STYLES.popupText}>
       <div style={STYLES.popupHeader}>
-        Why Do I need to make this choice?
+        Why?
       </div><br />
       <div>For more security we create a "secure seed", which is a row of
       words that are created based on a complex algorithm.</div><br />
-      <div><div style={STYLES.popupTitle}>TechGig Mode</div>
+      <div><div style={STYLES.popupTitle}>Tech Geek Mode</div>
       the safest way to store this "password sentence" would be to store
       it analogly in an analog place. But if you loose it, it cannot be
       restored and you cannot get access ever again.</div><br />
-
-      <div><div style={STYLES.popupTitle}>NoHustle Mode</div>
-      The more convenient for you but also less secure would be if we safe
-      the "password sentence" for you and you create a password which can be
-      recovered to access it again.</div>
     </div>
   )
 
   return (
     <Container>
-      <Header title={`Hi ${props.user}! are you...`} />
+      <Header title={`Hi ${props.user}! sign up as a...`} />
       <Content>
+
         <HoverButton
           backgroundColor={STYLES.tile.backgroundColor}
           hoverColor={STYLES.tile.selectedColor}
@@ -80,20 +76,10 @@ const UserType = (props) => {
           <div style={STYLES.tileinside}>
             <div style={{...STYLES.img, ...{
               backgroundImage: 'url(/img/img_techguy.svg)'
-            }}} />...a total tech Geek and want to be in absolute control?
+            }}} />...total Tech Geek who wants to be in absolute control!
           </div>
         </HoverButton>
-        <HoverButton
-          backgroundColor={STYLES.tile.backgroundColor}
-          hoverColor={STYLES.tile.selectedColor}
-          style={STYLES.tile}
-          onClick={() => props.onSelect('layman')}>
-          <div style={STYLES.tileinside}>
-            <div style={{...STYLES.img, ...{
-              backgroundImage: 'url(/img/img_nohustle.svg)'
-            }}} />...the laid-back type, who doesn't want any hassle.
-          </div>
-        </HoverButton>
+
       </Content>
       <Footer>
         <FlatButton style={STYLES.embeddedLink}
@@ -114,3 +100,20 @@ UserType.propTypes = {
 }
 
 export default Radium(UserType)
+
+// <HoverButton
+//   backgroundColor={STYLES.tile.backgroundColor}
+//   hoverColor={STYLES.tile.selectedColor}
+//   style={STYLES.tile}
+//   onClick={() => props.onSelect('layman')}>
+//   <div style={STYLES.tileinside}>
+//     <div style={{...STYLES.img, ...{
+//       backgroundImage: 'url(/img/img_nohustle.svg)'
+//     }}} />...the laid-back type, who doesnt want any hass<le.
+//   </div>
+// </HoverButton>
+
+// <div><div style={STYLES.popupTitle}>NoHustle Mode</div>
+// The more convenient for you but also less secure would be if we safe
+// the "password sentence" for you and you create a password which can be
+// recovered to access it again.</div>
