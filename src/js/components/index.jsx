@@ -28,7 +28,7 @@ const dialogBlockchain = {
     }
   },
   callback: () => {
-    window.location = 'https://en.wikipedia.org/wiki/Blockchain'
+    window.open('https://en.wikipedia.org/wiki/Blockchain', '_blank')
   },
   title: 'What is a blockchain?'
 }
@@ -243,8 +243,8 @@ let Index = React.createClass({
               why the storage costs." />
             <SideNote>
               The storage of your data is payed
-              in ether, a webbased currency. But only
-              change of data costs. Learn More
+              in ether, a webbased currency. But only the
+              change of data costs.
             </SideNote>
           </div>
         </Carousel>
