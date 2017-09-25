@@ -94,7 +94,8 @@ export default class EthConnectItem extends React.Component {
             onClick={() => this.props.confirmDialog(infoPopup)}> blockchain
           </span>, you
           can create an Identity Address. This is a smart contract which allows
-          you to interact with other smart contracts on Ethereum. Initially, only
+          you to interact with other smart contracts on Ethereum. Initially,
+          only
           your public key is stored here. This enables other identities to check
           your statements which you sign with your private key.
         </div><br />
@@ -142,8 +143,8 @@ export default class EthConnectItem extends React.Component {
     }
     const infoHeadline = (
       <div>
-      To fully use the services of your SmartWallet on 
-      the <span style={{color: theme.palette.accent1Color,
+        To fully use the services of your SmartWallet on
+        the <span style={{color: theme.palette.accent1Color,
           fontWeight: '300'}}
           onClick={() => this.props.confirmDialog(infoPopup)}>
         blockchain</span>, you
