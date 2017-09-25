@@ -151,7 +151,6 @@ export default class EthConnectItem extends React.Component {
       for transactions on the blockchain.
       </div>
     )
-
     return (
       <div>
         <Block style={STYLES.accessContainer}>
