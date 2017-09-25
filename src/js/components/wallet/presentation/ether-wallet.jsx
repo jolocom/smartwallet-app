@@ -91,9 +91,9 @@ export default class WalletEther extends React.Component {
               style={STYLES.header}
               title="You don't have any Ether yet." />
             <SideNote>
-              'To store your information securely, it costs Ether. One
-               transaction (saving data) is at 30 cents. To use this app
-               correctly we suggest you to either buy some Ether here...'
+              To store your information securely, it costs Ether. One
+               transaction (saving data) is at PLACEHOLDERs cents. To use this
+               app correctly we suggest you to either buy some Ether here...
             </SideNote>
             <Block>
               <Bubbles ethBalance={'0.0215180852'} />

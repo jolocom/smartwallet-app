@@ -40,7 +40,7 @@ var STYLES = {
   verifiedShield: {
     marginLeft: '0px',
     position: 'absolute',
-    right: '20px',
+    right: '14px',
     marginTop: '30px'
   },
   listItem: {

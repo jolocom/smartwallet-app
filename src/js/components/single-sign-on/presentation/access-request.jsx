@@ -49,7 +49,7 @@ const STYLES = {
     padding: '8px 16px 0 54px'
   },
   buttons: {
-    width: '100%'
+    width: '70%'
   },
   loading: {
     marginTop: '100px'
