@@ -139,9 +139,9 @@ export default class AccessRequest extends React.Component {
     const {name, image, infoComplete} = this.props.entity
     let popupMessage = {
       title: 'Why do I have to grant access?',
-      body: `You are about to connect to the service of ${name}. In order` +
-        'to use this service they need some data of you, which is' +
-        'stored on the blockchain. You can always disconnect from' +
+      body: `You are about to connect to the service of ${name}. In order ` +
+        'to use this service they need some data of you. ' +
+        'You can always disconnect from ' +
         'the service through the jolocom app and this way delete your account.'
     }
 
@@ -150,7 +150,7 @@ export default class AccessRequest extends React.Component {
       body: `You denied ${name} the access to your data, therefore you cannot
       use the services of this website or need to sign up a different way.`
     }
-    let headerMessage = `${name} wants to have access to your data?`
+    let headerMessage = `${name} wants to have access to your data.`
 
     const fields = this.props.requestedFields || ['No fields requested. Please try again'] // eslint-disable-line max-len
     const renderFields = fields.map((field) => {

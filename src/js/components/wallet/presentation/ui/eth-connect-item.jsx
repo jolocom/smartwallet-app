@@ -153,7 +153,6 @@ export default class EthConnectItem extends React.Component {
         some ether for this.
       </div>
     )
-
     return (
       <div>
         <Block style={STYLES.accessContainer}>
