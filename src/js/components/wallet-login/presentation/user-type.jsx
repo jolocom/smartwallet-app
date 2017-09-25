@@ -79,7 +79,7 @@ const UserType = (props) => {
           onClick={() => props.onSelect('expert')}>
           <div style={STYLES.tileinside}>
             <div style={{...STYLES.img, ...{
-              backgroundImage: 'url(/img/img_techguy.svg)'
+              backgroundImage: 'url(img/img_techguy.svg)'
             }}} />...with my secure phrase
           </div>
         </HoverButton>
@@ -90,7 +90,7 @@ const UserType = (props) => {
           onClick={() => props.onSelect('layman')}>
           <div style={STYLES.tileinside}>
             <div style={{...STYLES.img, ...{
-              backgroundImage: 'url(/img/img_nohustle.svg)'
+              backgroundImage: 'url(img/img_nohustle.svg)'
             }}} />...with my username and password
           </div>
         </HoverButton>

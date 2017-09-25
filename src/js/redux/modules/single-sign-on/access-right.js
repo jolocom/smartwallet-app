@@ -216,7 +216,7 @@ function mapConnectedServices(services, identity) {
           url: 'dummy url',
           id: index,
           pattern: field.pattern,
-          iconUrl: '/img/img_nohustle.svg',
+          iconUrl: 'img/img_nohustle.svg',
           sharedData: sharedData
         }
         arrayServices.push(detailsService)
@@ -248,7 +248,7 @@ function mapConnectedServices(services, identity) {
           url: 'dummy url',
           id: index,
           pattern: field.pattern,
-          iconUrl: '/img/img_nohustle.svg',
+          iconUrl: 'img/img_nohustle.svg',
           sharedData: [sharedDetails]
         }
         arrayServices.push(detailsService)

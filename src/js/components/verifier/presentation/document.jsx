@@ -57,7 +57,7 @@ const DocumentType = (props) => (<Container>
       onClick={() => { props.chooseDocument('idCard') }}>
       <div style={STYLES.tileinside}>
         <div style={{...STYLES.img, ...{
-          backgroundImage: 'url(/img/img_verification_IDCard.svg)'
+          backgroundImage: 'url(img/img_verification_IDCard.svg)'
         }}} />ID Card
       </div>
     </HoverButton>
@@ -68,7 +68,7 @@ const DocumentType = (props) => (<Container>
       onClick={() => { props.chooseDocument('passport') }}>
       <div style={STYLES.tileinside}>
         <div style={{...STYLES.img, ...{
-          backgroundImage: 'url(/img/img_verification_Passport.svg)'
+          backgroundImage: 'url(img/img_verification_Passport.svg)'
         }}} /> Passport
       </div>
     </HoverButton>

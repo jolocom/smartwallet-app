@@ -56,7 +56,7 @@ const Pin = (props) => {
     contents = (
       <Block>
         <Spinner style={STYLES.header} message={messageWait}
-          avatar={'url(/img/img_techguy.svg)'} />
+          avatar={'url(img/img_techguy.svg)'} />
       </Block>
     )
   } else {

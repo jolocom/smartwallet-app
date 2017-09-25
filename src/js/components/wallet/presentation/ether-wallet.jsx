@@ -57,7 +57,7 @@ export default class WalletEther extends React.Component {
           <Block>
             <Spinner style={STYLES.header} message={''}
               title={'Ether are transferred to your account.'}
-              avatar={'url(/img/img_techguy.svg)'} />
+              avatar={'url(img/img_techguy.svg)'} />
           </Block>
         </div>
       </HalfScreenContainer>
