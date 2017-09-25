@@ -86,7 +86,7 @@ const initialState = Immutable.fromJS({
     loading: false,
     path: '',
     name: 'SOME COMPANY',
-    image: 'img/img_t3n.png',
+    image: 'img/hover_board.jpg',
     requester: '',
     returnURL: '',
     fields: [],
@@ -122,7 +122,7 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.getRequesterIdentity.id_fail:
       return state.mergeIn(['entity'], {
         loading: false,
-        name: 'A service'
+        name: 'Highspeed Hover Board'
       })
 
     case actions.grantAccessToRequester.id:
