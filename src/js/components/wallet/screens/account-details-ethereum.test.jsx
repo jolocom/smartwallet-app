@@ -5,7 +5,6 @@ import { shallow } from 'enzyme'
 import AccountDetailsEthereumScreen from './account-details-ethereum'
 import Presentation from '../presentation/account-details-ethereum'
 
-
 describe('(Component) AccountDetailsEthereumScreen', function() {
   it('getWalletAddress should be called on componentWillMount', function() {
     const wrapper = shallow(
