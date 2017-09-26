@@ -29,9 +29,9 @@ module.exports = {
   }],
   plugins: [
     new webpack.DefinePlugin({
-      'IDENTITY_GATEWAY_URL': process.env.TIER === '"staging"'
-      ? '"staging.identity.jolocom.com"'
-      : '"identity.jolocom.com"'
+      'IDENTITY_GATEWAY_URL': process.env.TIER === 'staging'
+      ? '"https://staging.identity.jolocom.com"'
+      : '"https://identity.jolocom.com"'
     })
   ],
   module: {
