@@ -3,26 +3,20 @@ import {connect} from 'redux/utils'
 import Presentation from '../presentation/account-details-ethereum'
 
 @connect({
-  props: ['wallet.etherTabs'],
-  actions: ['wallet/ether-tabs:getWalletAddressAndBalance',
-    'wallet/ether-tabs:closeAccountDetails']
+  props: ['wallet.money'],
+  actions: ['wallet/ether-tabs:closeAccountDetails']
 })
 export default class AccountDetailsEthereum extends React.Component {
   static propTypes = {
     closeAccountDetails: React.PropTypes.func,
-    etherTabs: React.PropTypes.object,
-    getWalletAddressAndBalance: React.PropTypes.func
-  }
-
-  componentWillMount() {
-    this.props.getWalletAddressAndBalance()
+    money: React.PropTypes.object
   }
 
   render() {
     return (
       <Presentation
         onClose={this.props.closeAccountDetails}
-        wallet={this.props.etherTabs.wallet} />
+        wallet={this.props.money} />
     )
   }
 }

@@ -24,7 +24,7 @@ const STYLES = {
     marginLeft: '72px'
   },
   btnSend: {
-    width: '90%',
+    width: '70%',
     marginTop: '16px'
   },
   listItem: {

@@ -89,34 +89,36 @@ export default class EthConnectItem extends React.Component {
     const whyPopupBody = (
       <div>
         <div>
-          To fully use the services of your SmartWallet you need to get your
-          data verified which means that there is a double check from our sides
-          if it is correct and then the fact that it is correct is stated on the
+          To fully use the services of your SmartWallet on the
           <span style={{color: theme.palette.accent1Color}}
             onClick={() => this.props.confirmDialog(infoPopup)}> blockchain
-          </span>
+          </span>, you
+          can create an Identity Address. This is a smart contract which allows
+          you to interact with other smart contracts on Ethereum. Initially,
+          only
+          your public key is stored here. This enables other identities to check
+          your statements which you sign with your private key.
         </div><br />
         <div>
-          With this technology your data is securely locked. We never store your
-          data anywhere. This way only you have access to it, but you can grant
-          or withdraw access to it any time.
-        </div><br />
-        <div>
-          The verification process needs ti be done only once and then you can
-          use the data at any other service.
+          With this technology your data is securely stored in your private
+          space but can be checked
+          by other people or companies without trusting each other.
+          Please note that we never store your original data on the blockchain.
+          This way, only you have access to your data, but you can grant
+          or withdraw access to it anytime to other parties so that they can
+          check the data they need.
         </div><br />
         <div style={STYLES.accessMsgHeader}>Costs</div><br />
-        <div>Securely locking the data creates transaction costs. Each
-        transaction costs XXX Ether. With signing up for Ethereum you also need
-        to buy some ether.</div>
+        <div>Please note that you need to have some ether to create this
+        Identity Address. It will cost you approx. 14 EUR</div>
       </div>
     )
     const whyPopup = {
       title: 'Why Ethereum?',
       message: whyPopupBody,
-      rightButtonLabel: 'ALL RIGHT',
+      rightButtonLabel: 'MORE INFO',
       callback: () => {},
-      leftButtonLabel: 'MORE INFO'
+      leftButtonLabel: 'ALL RIGHT'
     }
     const infoPopupBody = (
       <div>
@@ -135,23 +137,22 @@ export default class EthConnectItem extends React.Component {
     const infoPopup = {
       title: 'What is a blockchain?',
       message: infoPopupBody,
-      rightButtonLabel: 'ALL RIGHT',
+      rightButtonLabel: 'MORE INFO',
       callback: () => {},
-      leftButtonLabel: 'MORE INFO'
+      leftButtonLabel: 'ALL RIGHT'
     }
     const infoHeadline = (
       <div>
-      To verify your data, lock it and grant or withdraw
-      access to it, you need to connect your SmartWallet to
-        a <span style={{color: theme.palette.accent1Color,
+        To fully use the services of your SmartWallet on
+        the <span style={{color: theme.palette.accent1Color,
           fontWeight: '300'}}
           onClick={() => this.props.confirmDialog(infoPopup)}>
-        blockchain</span> called Ethereum. The locking
-      of your data costs Ether which is the currency used
-      for transactions on the blockchain.
+        blockchain</span>, you
+        can create an Identity Address. This is a smart contract which allows
+        you to interact with other smart contracts on Ethereum. You will need
+        some ether for this.
       </div>
     )
-
     return (
       <div>
         <Block style={STYLES.accessContainer}>
