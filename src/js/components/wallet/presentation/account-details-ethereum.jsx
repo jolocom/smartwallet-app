@@ -63,7 +63,12 @@ export default class EtherReceive extends React.Component {
   }
 
   render() {
-    const {walletAddress, errorMsg} = this.props.wallet
+    let {walletAddress} = this.props.wallet
+    if (walletAddress.length === 0) {
+      walletAddress = 'OOOPS...Your address could not be loaded.'
+    }
+    const {errorMsg} = this.props.wallet.ether
+
     let content
     if (errorMsg) {
       content = <Error message={errorMsg} />

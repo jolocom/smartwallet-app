@@ -3,34 +3,42 @@ import React from 'react'
 import { expect } from 'chai'
 import { shallow } from 'enzyme'
 import AccountDetailsEthereumScreen from './account-details-ethereum'
-// import Presentation from '../presentation/account-details-ethereum'
-import {stub} from '../../../../../test/utils'
+import Presentation from '../presentation/account-details-ethereum'
 
 describe('(Component) AccountDetailsEthereumScreen', function() {
   it('getWalletAddress should be called on componentWillMount', function() {
-    const getWalletAddressAndBalance = stub()
     const wrapper = shallow(
       (<AccountDetailsEthereumScreen.WrappedComponent
         {...AccountDetailsEthereumScreen.mapStateToProps(Immutable.fromJS({
           wallet: {
-            etherTabs: {
-              activeTab: 'overview',
-              wallet: {
-                loading: false,
-                mainAddress: '',
-                receiverAddress: '',
-                amountSend: '',
-                pin: '',
-                data: '',
-                gasInWei: ''
+            money: {
+              screenToDisplay: '',
+              walletAddress: '',
+              ether: {
+                loaded: false,
+                errorMsg: '',
+                price: 0,
+                amount: 0,
+                checkingOut: false,
+                buying: false
               }
             }
           }
         }))}
-        closeAccountDetails={() => {}}
-        getWalletAddressAndBalance={getWalletAddressAndBalance} />)
+        closeAccountDetails={() => {}} />)
       )
     wrapper.instance()
-    expect(getWalletAddressAndBalance.called).to.be.true
+    expect(wrapper.find(Presentation).prop('wallet')).to.deep.equal({
+      screenToDisplay: '',
+      walletAddress: '',
+      ether: {
+        loaded: false,
+        errorMsg: '',
+        price: 0,
+        amount: 0,
+        checkingOut: false,
+        buying: false
+      }
+    })
   })
 })
