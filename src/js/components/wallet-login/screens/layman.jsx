@@ -19,7 +19,6 @@ export default class LaymanLoginScreen extends React.Component {
     submitLogin: React.PropTypes.func.isRequired,
     goToLogin: React.PropTypes.func.isRequired
   }
-
   render() {
     return <Presentation
       back={this.props.goToLogin}
@@ -35,7 +34,6 @@ export default class LaymanLoginScreen extends React.Component {
   onUsernameChange = (e) => {
     return this.props.setUsername(e.target.value)
   }
-
   onPasswordChange = (e) => {
     return this.props.setPassword(e.target.value)
   }

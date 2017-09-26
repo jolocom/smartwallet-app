@@ -6,6 +6,11 @@ import {
   RaisedButton
 } from 'material-ui'
 
+const STYLES = {
+  buyEtherButton: {
+    width: '40%'
+  }
+}
 export default class StripeCheckout extends Component {
   static propTypes = {
     onToken: React.PropTypes.func.isRequired
@@ -22,8 +27,8 @@ export default class StripeCheckout extends Component {
         panelLabel="Bezahlen"
       >
         <RaisedButton
+          style={STYLES.buyEtherButton}
           secondary
-          fullWidth
           label="BUY ETHER" />
       </ReactStripeCheckout>
     )

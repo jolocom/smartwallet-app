@@ -9,7 +9,7 @@ const STYLES = {
   dialog: {
   },
   requestBtn: {
-    marginLeft: '-16px'
+    marginLeft: '-30px'
   },
   simpleDialog: {
     contentStyle: {
@@ -85,28 +85,55 @@ const VerificationButtons = ({
       </ListItem>
     </div>)
   }
-  return (<ListItem disabled leftIcon={<div />} >
-    <FlatButton
-      label="Request Verification"
-      secondary
-      style={STYLES.requestBtn}
-      onClick={() => requestVerificationCode({
-        title: 'Verification Request',
-        message: (<VerificationButtonMsg
-          msgType="codeRequest"
-          value={smsCode}
-          phoneNumber={value}
-          setFocusedPin={() => {}}
-          changePinValue={() => {}}
-          focused={pinFocused} />),
-        rightButtonLabel: 'CONTINUE',
-        leftButtonLabel: 'CANCEL',
-        style: STYLES.simpleDialog,
-        attrType,
-        index,
-        attrValue: value
-      })} />
-  </ListItem>)
+  if (attrType === 'phone') {
+    return (<ListItem disabled leftIcon={<div />} >
+      <FlatButton
+        label="Request Verification"
+        secondary
+        style={STYLES.requestBtn}
+        onClick={() => requestVerificationCode({
+          title: 'Verification Request',
+          message: (<VerificationButtonMsg
+            attrType={attrType}
+            msgType="codeRequest"
+            value={smsCode}
+            phoneNumber={value}
+            setFocusedPin={() => {}}
+            changePinValue={() => {}}
+            focused={pinFocused} />),
+          rightButtonLabel: 'Send verification code',
+          leftButtonLabel: 'CANCEL',
+          style: STYLES.simpleDialog,
+          attrType,
+          index,
+          attrValue: value
+        })} />
+    </ListItem>)
+  } else {
+    return (<ListItem disabled leftIcon={<div />} >
+      <FlatButton
+        label="Request Verification"
+        secondary
+        style={STYLES.requestBtn}
+        onClick={() => requestVerificationCode({
+          title: 'Verification Request',
+          message: (<VerificationButtonMsg
+            msgType="codeRequest"
+            attrType={attrType}
+            value={smsCode}
+            phoneNumber={value}
+            setFocusedPin={() => {}}
+            changePinValue={() => {}}
+            focused={pinFocused} />),
+          rightButtonLabel: 'Send verification Link',
+          leftButtonLabel: 'CANCEL',
+          style: STYLES.simpleDialog,
+          attrType,
+          index,
+          attrValue: value
+        })} />
+    </ListItem>)
+  }
 }
 
 VerificationButtons.propTypes = {
