@@ -76,7 +76,8 @@ describe('Wallet login Redux module', function() {
           errorMsg: '',
           failed: false,
           valid: false
-        }
+        },
+        callbackURL: ''
       })
     })
     it('should not modify the state if an unknown action is dispatched', () => {

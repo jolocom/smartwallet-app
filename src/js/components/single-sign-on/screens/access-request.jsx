@@ -17,6 +17,7 @@ import Presentation from '../presentation/access-request'
     'single-sign-on/access-request:requestedDetails',
     'single-sign-on/access-request:goToMissingInfo',
     'single-sign-on/access-request:setInfoComplete',
+    'single-sign-on/access-request:checkUserLoggedIn',
     'verification:confirmEmail',
     'verification:confirmPhone',
     'verification:startEmailVerification',
@@ -46,7 +47,8 @@ export default class AccessRequestScreen extends React.Component {
     resendVerificationLink: React.PropTypes.func,
     setInfoComplete: React.PropTypes.func.isRequired,
     changePinValue: React.PropTypes.func.isRequired,
-    setFocusedPin: React.PropTypes.func.isRequired
+    setFocusedPin: React.PropTypes.func.isRequired,
+    checkUserLoggedIn: React.PropTypes.func.isRequired
   }
 
   handleWhy = (title, message) => {
@@ -72,8 +74,12 @@ export default class AccessRequestScreen extends React.Component {
   }
 
   componentWillMount() {
-    this.props.getIdentityInformation()
     this.props.requestedDetails(this.props.location)
+    // this.props.getIdentityInformation()
+  }
+
+  componentDidMount() {
+    this.props.getIdentityInformation()
   }
 
   requestVerificationCode({attrType, attrValue, index}) {

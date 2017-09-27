@@ -63,7 +63,7 @@ Pin.propTypes = {
   onReset: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
   onFocusChange: React.PropTypes.func.isRequired,
-  pin: React.PropTypes.obj
+  pin: React.PropTypes.object.isRequired
 }
 
 export default Radium(Pin)
