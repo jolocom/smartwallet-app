@@ -16,8 +16,6 @@ describe('(Component) Contact', function() {
       saveChanges={() => {}}
       addNewEntry={() => {}}
       confirm={() => {}}
-      close={() => {}}
-
       />),
       { context: { muiTheme: { } } }
     )
