@@ -67,15 +67,16 @@ const VerificationButtons = ({
           secondary
           style={STYLES.requestBtn}
           onClick={() => resendVerificationCode({
-            title: 'Verification Request',
+            title: 'Verification Request Phone',
             message: (<VerificationButtonMsg
+              attrType={attrType}
               msgType="codeRequest"
               phoneNumber={value}
               value={smsCode}
               setFocusedPin={(value) => { setFocusedPin(value, index) }}
               changePinValue={(value) => { changePinValue(value, index) }}
               focused={pinFocused} />),
-            rightButtonLabel: 'OK',
+            rightButtonLabel: 'RESEND CODE',
             leftButtonLabel: 'CANCEL',
             style: STYLES.simpleDialog,
             index,
@@ -145,7 +146,7 @@ VerificationButtons.propTypes = {
   verified: React.PropTypes.bool,
   setFocusedPin: React.PropTypes.func,
   changePinValue: React.PropTypes.func,
-  index: React.PropTypes.number,
+  index: React.PropTypes.any,
   smsCode: React.PropTypes.string,
   pinFocused: React.PropTypes.bool,
   attrType: React.PropTypes.string,

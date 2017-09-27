@@ -43,8 +43,6 @@ export default class AccessRequestScreen extends React.Component {
     confirmPhone: React.PropTypes.func.isRequired,
     confirmEmail: React.PropTypes.func.isRequired,
     goToMissingInfo: React.PropTypes.func.isRequired,
-    resendVerificationSms: React.PropTypes.func,
-    resendVerificationLink: React.PropTypes.func,
     setInfoComplete: React.PropTypes.func.isRequired,
     changePinValue: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
@@ -82,47 +80,23 @@ export default class AccessRequestScreen extends React.Component {
     this.props.getIdentityInformation()
   }
 
-  requestVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phones') {
-      return () => {
-        this.props.startPhoneVerification({phone: attrValue, index})
+  requestVerification(...args) {
+    return this.showVerificationWindow(...args, ({attrType, attrValue, index}) => { // eslint-disable-line max-len
+      if (attrType === 'phone') {
+        return () => this.props.startPhoneVerification({phone: attrValue, index}) // eslint-disable-line max-len
+      } else if (attrType === 'email') {
+        return () => this.props.startEmailVerification({email: attrValue, index}) // eslint-disable-line max-len
       }
-    } else if (attrType === 'emails') {
-      return () => {
-        this.props.startEmailVerification({email: attrValue, index})
-      }
-    }
-  }
-
-  enterVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phones') {
-      return () => {
-        this.props.confirmPhone(index)
-      }
-    } else if (attrType === 'emails') {
-      return () => {
-        this.props.confirmEmail({email: attrValue})
-      }
-    }
-  }
-
-  resendVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phones') {
-      return () => {
-        this.props.resendVerificationSms({phone: attrValue, index})
-      }
-    } else if (attrType === 'emails') {
-      return () => {
-        this.props.resendVerificationLink({email: attrValue, index})
-      }
-    }
-  }
-
-  onConfirm(args, params) {
-    return this.showVerificationWindow(args, () => {
-      return () => this.showVerificationWindow(params,
-      (callbackArgs) => this.requestVerificationCode(callbackArgs))
     })
+  }
+
+  enterVerificationCode({index}) {
+    return () => this.props.confirmPhone(index)
+  }
+
+  handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len
+    this.props.openConfirmDialog(title, message, rightButtonLabel,
+    callback(), leftButtonLabel)
   }
 
   showVerificationWindow({title, message, attrValue, attrType, index, rightButtonLabel, leftButtonLabel}, callback) { // eslint-disable-line max-len
@@ -149,21 +123,13 @@ export default class AccessRequestScreen extends React.Component {
         setInfoComplete={this.props.setInfoComplete}
         changePinValue={this.props.changePinValue}
         setFocusedPin={this.props.setFocusedPin}
-
-        requestVerificationCode={(args, params) => this.showVerificationWindow(args, () => { // eslint-disable-line max-len
-          return () => this.showVerificationWindow(params,
-            (callbackArgs) => this.requestVerificationCode(callbackArgs))
-        })}
-
+        onConfirm={(...args) => { this.handleConfirmDialog(...args) }}
+        requestVerificationCode={(...args) => this.requestVerification(...args)}
         enterVerificationCode={(...args) => this.showVerificationWindow(...args,
-          (...params) => this.enterVerificationCode(...params)
+          ({ index }) => this.enterVerificationCode({index})
         )}
-
-        resendVerificationCode={(...args) => this.showVerificationWindow(...args, // eslint-disable-line max-len
-          (...params) => this.resendVerificationCode(...params)
-        )}
-
-        onConfirm={(...args) => { this.onConfirm(...args) }} />
+        resendVerificationCode={(...args) => this.requestVerification(...args)}
+        />
     )
   }
 }
