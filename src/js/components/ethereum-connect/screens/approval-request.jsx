@@ -8,7 +8,8 @@ import LoadingScreen from '../../common/loading'
   props: ['ethereumConnect', 'wallet.money'],
   actions: ['ethereum-connect:toggleSecuritySection',
     'ethereum-connect:setFundsNotSufficient',
-    'ethereum-connect:getRequestedDetails']
+    'ethereum-connect:getRequestedDetails',
+    'ethereum-connect:executeTransaction']
 })
 export default class EthApprovalRequestScreen extends React.Component {
   static propTypes = {
@@ -16,7 +17,8 @@ export default class EthApprovalRequestScreen extends React.Component {
     money: React.PropTypes.object,
     ethereumConnect: React.PropTypes.object,
     toggleSecuritySection: React.PropTypes.func.isRequired,
-    getRequestedDetails: React.PropTypes.func.isRequired
+    getRequestedDetails: React.PropTypes.func.isRequired,
+    executeTransaction: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -25,6 +27,22 @@ export default class EthApprovalRequestScreen extends React.Component {
     if (this.props.money.ether.amount < costs) {
       // this.props.setFundsNotSufficient()
     }
+  }
+
+  componentDidMount() {
+    let params = this.props.location.query['params[]']
+    if (typeof params === 'string') {
+      params = [params]
+    }
+
+    this.props.executeTransaction({
+      requester: this.props.location.query.requester,
+      contractID: this.props.location.query.contractID,
+      method: this.props.location.query.method,
+      params: params,
+      value: this.props.location.query.value,
+      returnURL: this.props.location.query.returnURL
+    })
   }
 
   render() {

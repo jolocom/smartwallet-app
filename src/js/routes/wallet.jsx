@@ -46,8 +46,6 @@ import WalletIdCardPhotoScreen from 'components/wallet/screens/webcam'
 import EtherSendScreen from 'components/wallet/screens/ether-send'
 import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
 import EtherTabScreen from 'components/wallet/screens/ether-tabs'
-import EthereumExecuteTransactionScreen from
-  'components/ethereum/screens/exec-transaction'
 
 import WalletLogin from 'components/wallet-login'
 import LaymanLoginScreen from 'components/wallet-login/screens/layman'
@@ -150,8 +148,6 @@ function getRoutes() {
     </Route>
     <Route path="wallet/account-details"
       component={AccountDetailsEthereumScreen} />
-    <Route path="wallet/ethereum/execute-transaction"
-      component={EthereumExecuteTransactionScreen} />
 
     <Route path="wallet" component={WalletTabsScreen}>
       <IndexRoute component={WalletHomeScreen} />
@@ -167,7 +163,7 @@ function getRoutes() {
     <Route path="wallet/single-sign-on/access-confirmation"
       component={AccessConfirmationScreen} />
 
-    <Route path="wallet/ethereum-connect/approval-request"
+    <Route path="wallet/ethereum/execute-transaction"
       component={EthApprovalRequestScreen} />
 
     <Route path="forgot-password" component={ForgotPassword} />
@@ -190,3 +186,6 @@ function getRoutes() {
 export default (history) => {
   return (<Router history={history}>{getRoutes()}</Router>)
 }
+
+// <Route path="wallet/ethereum/execute-transaction"
+//   component={EthereumExecuteTransactionScreen} />
