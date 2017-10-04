@@ -5,7 +5,7 @@ const IconBlockchain = (props) => {
   return (
     <svg x="0px" y="0px" viewBox="0 0 24 24"
       style={{height: '24px', width: '24px', position: 'absolute',
-        left: '16px', top: '8px'}}>
+        left: '16px', top: '12px'}}>
       <path style={{fill: props.color}}
         d="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,
       14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,

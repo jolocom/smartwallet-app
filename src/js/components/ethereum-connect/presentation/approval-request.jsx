@@ -5,11 +5,13 @@ import {TabContainer, HalfScreenContainer}
   from '../../wallet/presentation/ui'
 import LeftNavToggle from 'components/left-nav/toggle'
 import Avatar from 'material-ui/Avatar'
-import {Divider, FlatButton, RaisedButton,
+import {Divider, RaisedButton,
   ListItem, AppBar, List} from 'material-ui'
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
 import {IconEther, IconBlockchain} from '../../common'
+import ErrorScreen from '../../common/error'
+import Loading from '../../common/loading'
 
 import PlusMenu from './ui/plus-menu'
 import StaticListItem from './ui/static-list-item'
@@ -82,7 +84,7 @@ const STYLES = {
   },
   etherIcon: {
     top: '3px',
-    left: '0px'
+    left: '-10px'
   },
   buttonsContainer: {
     display: 'flex',
@@ -99,33 +101,23 @@ const STYLES = {
 export default class EthApprovalRequest extends React.Component {
   static propTypes = {
     ethereumConnect: React.PropTypes.object,
-    toggleSecuritySection: React.PropTypes.func.isRequired
+    toggleSecuritySection: React.PropTypes.func.isRequired,
+    executeTransaction: React.PropTypes.func.isRequired,
+    amount: React.PropTypes.string,
+    handleDialog: React.PropTypes.func.isRequired
   }
 
   render() {
-    const headerMessage = (<div>
-      <div>T3N Magazine</div>
-      <div>Subscription contract</div></div>
-    )
     const {ethereumConnect, toggleSecuritySection} = this.props
+    const headerMessage = (<div>
+      <div>{ethereumConnect.requesterName}</div>
+      <div>{ethereumConnect.contractShortName}</div></div>
+    )
 
-    let securityObj = [{
-      type: 'Contract Ownerhsip',
-      text: 'XX is verified contract owner',
-      verified: true
-    }, {
-      type: 'Security Audit',
-      text: 'This contract is secure',
-      verified: true
-    }, {
-      type: 'Method Audit',
-      text: 'The functionality of contract is confirmed',
-      verified: false
-    }]
-
-    const renderSecurityFields = securityObj.map((item) => {
+    const renderSecurityFields = ethereumConnect.securityDetails.map((item) => {
       return (
         <StaticListItem
+          key={item.type}
           icon={Done}
           text={item.text}
           type={item.type}
@@ -144,20 +136,25 @@ export default class EthApprovalRequest extends React.Component {
       </Block>
     )
 
-    const renderMethodDescription = (<div>
-      <List>
-        <div style={STYLES.item}>
-          <div style={STYLES.infoHeader}>
-          What does it actually do?
+    const renderMethodDescription = (
+      <div>
+        <List>
+          <div style={STYLES.item}>
+            <div style={STYLES.infoHeader}>
+            What does it actually do?
+            </div>
+            <Divider />
           </div>
-          <Divider />
-        </div>
-      </List>
-      <ListItem
-        leftIcon={<IconBlockchain color={theme.palette.textColor} />}
-        primaryText={'method describe'}
-        innerDivStyle={STYLES.methodDescriptionInner}
-        disabled /></div>
+        </List>
+          {ethereumConnect.methods.length > 0 ? ethereumConnect.methods.map((item) => { // eslint-disable-line max-len
+            return (<ListItem
+              key={item}
+              leftIcon={<IconBlockchain color={theme.palette.textColor} />}
+              primaryText={<p>{item.description}</p>}
+              innerDivStyle={STYLES.methodDescriptionInner}
+              disabled />)
+          }) : null}
+      </div>
     )
 
     const renderCosts = (<div>
@@ -166,7 +163,7 @@ export default class EthApprovalRequest extends React.Component {
           leftIcon={<div style={STYLES.etherIcon}>
             <IconEther color={theme.palette.textColor} /></div>}
           primaryText={<p>
-            <span style={STYLES.ethAmount}>0.555</span> Amount due</p>}
+            <span style={STYLES.ethAmount}>{this.props.amount}</span> Amount</p>} // eslint-disable-line max-len
           secondaryText={<p><span>0.0030</span> Transaction fee</p>}
           disabled />
         <br />
@@ -190,7 +187,7 @@ export default class EthApprovalRequest extends React.Component {
 
     const renderSecurityLevel = (<div>
       <PlusMenu
-        securityDetails={securityObj}
+        securityDetails={ethereumConnect.securityDetails}
         toggle={toggleSecuritySection}
         name="Security Level"
         choice
@@ -207,7 +204,14 @@ export default class EthApprovalRequest extends React.Component {
           disabled={ethereumConnect.fundsNotSufficient}
           secondary
           style={STYLES.buttons}
-          onClick={() => this.props.executeTransaction} />
+          onClick={ethereumConnect.noSecurityVerfication ?
+            () => this.props.handleDialog({
+              title: 'Confirmation',
+              message: 'Please be aware that you continue on your own risk. None of the security steps are verified.',  // eslint-disable-line max-len
+              leftButtonLabel: 'CANCEL',
+              rightButtonLabel: 'No risk no fun'
+            }) :
+            () => this.props.executeTransaction} />
         <br />
         <RaisedButton
           label="DENY"
@@ -216,12 +220,14 @@ export default class EthApprovalRequest extends React.Component {
       </Block>
     )
 
-    return (
-      <TabContainer>
-        <AppBar
-          iconElementLeft={<LeftNavToggle />}
-          title="Contract Confirmation" />
-        <HalfScreenContainer>
+    let content
+    if (ethereumConnect.loading) {
+      content = <Block><Loading style={STYLES.loading} /></Block>
+    } else if (ethereumConnect.errorMsg) {
+      content = <ErrorScreen message={ethereumConnect.errorMsg} />
+    } else {
+      content = (
+        <div>
           <Content style={STYLES.container}>
             {renderHeader}
             {renderCosts}
@@ -230,6 +236,16 @@ export default class EthApprovalRequest extends React.Component {
           <br />
           {renderSecurityLevel}
           {renderButtons}
+        </div>
+      )
+    }
+    return (
+      <TabContainer>
+        <AppBar
+          iconElementLeft={<LeftNavToggle />}
+          title="Contract Confirmation" />
+        <HalfScreenContainer>
+          {content}
         </HalfScreenContainer>
       </TabContainer>
     )

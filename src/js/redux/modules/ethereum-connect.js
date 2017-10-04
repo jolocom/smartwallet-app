@@ -33,16 +33,14 @@ const actions = module.exports = makeActions('ethereum-connect', {
         dispatch(actions.getRequestedDetails.buildAction(params, () => {
           const path = params.pathname + params.search
           dispatch(actions.checkUserLoggedIn(path))
-          return backend.gateway
-            .proxyGet(`${params.query.requester}/identity/name/display`)
+          return backend.gateway.proxyGet(`${params.query.requester}/ethereum/contracts/${params.query.contractID}`) // eslint-disable-line max-len
             .then((response) => {
-              dispatch(actions.setDisplayNameRequester(response))
-              return backend.gateway
-                .proxyGet(`${params.query.requester}/ethereum/contracts/${params.query.contractID}`) // eslint-disable-line max-len
+              dispatch(actions.setContractDetails(response))
+              return backend.gateway.proxyGet(`${params.query.requester}/identity/name/display`) // eslint-disable-line max-len
             })
             .then((response) => {
-              console.log('RESPONSE GET CONTRACTID DETAILS: ', response)
-              dispatch(actions.getSecurityDetails(params))
+              dispatch(actions.setDisplayNameRequester(response))
+              // dispatch(actions.getSecurityDetails(params))
             })
         }))
       }
@@ -50,6 +48,9 @@ const actions = module.exports = makeActions('ethereum-connect', {
   },
   setDisplayNameRequester: {
     expectedParams: ['displayName']
+  },
+  setContractDetails: {
+    expectedParams: ['contract']
   },
   getSecurityDetails: {
     expectedParams: [],
@@ -78,21 +79,16 @@ const actions = module.exports = makeActions('ethereum-connect', {
     }
   },
   executeTransaction: {
-    expectedParams: [
-      'requester', 'contractID', 'method', 'params', 'value', 'returnURL'
-    ],
+    expectedParams: ['requester', 'contractID', 'method', 'params', 'value', 'returnURL'],  // eslint-disable-line max-len
     async: true,
     creator: (params) => {
       return (dispatch, getState, {backend, services}) => {
-        // const { id, pin } = getState().toJS().wallet.identity
-        //     .contact.emails[params.index]
-
         dispatch(actions.executeTransaction.buildAction(params, () => {
           return backend.gateway.executeEthereumTransaction({
             userName: services.auth.currentUser.wallet.userName,
             seedPhrase: services.auth.currentUser.wallet.seedPhrase,
             ...params
-          }).then(() => { window.location.href = params.returnURL })
+          }).then((result) => { window.location.href = params.returnURL + '?success=true&txhash=' + encodeURIComponent(result.txHash) }) // eslint-disable-line max-len
         }))
       }
     }
@@ -104,8 +100,25 @@ const initialState = Immutable.fromJS({
   errorMsg: '',
   expanded: false,
   fundsNotSufficient: false,
-  requesterName: '',
-  securityDetails: []
+  requesterName: 'Example',
+  contractShortName: 'example',
+  methods: '',
+  noSecurityVerfication: true,
+  securityDetails: [{
+    type: 'Contract Ownerhsip',
+    text: 'No verified contract owner',
+    verified: false
+  },
+  {
+    type: 'Security Audit',
+    text: 'This contract is not audited for security',
+    verified: false
+  },
+  {
+    type: 'Method Audit',
+    text: 'The functionality of this contract is not confirmed',
+    verified: false
+  }]
 })
 
 module.exports.default = (state = initialState, action = {}) => {
@@ -132,17 +145,22 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getRequestedDetails.id_success:
-      console.log('SUCCESS getRequestedDetails')
       return state.merge({
         loading: false,
         errorMsg: ''
       })
 
     case actions.getRequestedDetails.id_fail:
-      console.log('FAIL getRequestedDetails')
       return state.merge({
         loading: false,
-        errorMsg: 'Could not load the contract details. Please try again.'
+        errorMsg: ''
+      })
+
+    case actions.setContractDetails.id:
+      const methods = getMethodsDetails(action.contract.methods)
+      return state.merge({
+        contractShortName: action.contract.short_name,
+        methods: methods
       })
 
     case actions.getSecurityDetails.id:
@@ -152,7 +170,6 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getSecurityDetails.id_success:
-      console.log('SUCCESS getSecurityDetails: ', action)
       return state.merge({
         loading: false,
         errorMsg: '',
@@ -160,13 +177,41 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.getSecurityDetails.id_fail:
-      console.log('FAIL getSecurityDetails')
       return state.merge({
         loading: false,
         errorMsg: 'Could not load the contract security details. Please try again.' // eslint-disable-line max-len
       })
 
+    case actions.executeTransaction.id:
+      console.log('executeTransaction id')
+      return state.merge({
+        loading: true,
+        errorMsg: ''
+      })
+
+    case actions.executeTransaction.id_success:
+      console.log('executeTransaction success')
+      return state.merge({
+        loading: false,
+        errorMsg: ''
+      })
+
+    case actions.executeTransaction.id_fail:
+      console.log('executeTransaction fail')
+      return state.merge({
+        loading: false,
+        errorMsg: 'The transaction could not be executed. Please try again.'
+      })
+
     default:
       return state
   }
+}
+
+const getMethodsDetails = (methods) => {
+  let orderedMethods = []
+  for (var key in methods) {
+    orderedMethods.push({name: key, description: methods[key].description})
+  }
+  return orderedMethods
 }

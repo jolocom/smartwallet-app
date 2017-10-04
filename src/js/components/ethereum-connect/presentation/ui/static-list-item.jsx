@@ -24,14 +24,13 @@ const STYLES = {
     paddingBottom: '0px'
   },
   listItem: {
-    whiteSpace: 'nowrap',
     padding: '0 16px 0 36px'
   },
   text: {
     marginRight: '8px'
   },
   textSecurity: {
-    color: theme.palette.textColor
+    fontSize: '14px'
   }
 }
 
@@ -53,9 +52,10 @@ export default class StaticListItem extends React.Component {
       <div style={STYLES.listItem}>
         <ListItem
           innerDivStyle={STYLES.text}
+          primaryText={<p style={STYLES.textSecurity}>{props.type}</p>}
           secondaryTextLines={2}
-          secondaryText={<div><p style={STYLES.textSecurity}>{props.text}</p>
-            <p style={{width: '80%'}}>{props.type}</p></div>}
+          secondaryText={<div>
+            <p>{props.text}</p></div>}
           leftIcon={icon}
           disabled />
       </div>
