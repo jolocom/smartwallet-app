@@ -175,17 +175,15 @@ export default class GatewayAgent {
 
   executeEthereumTransaction({userName, seedPhrase, requester,
     contractID, method, params, value}) {
-    console.log('execute transaction')
     const url = `${this._gatewayUrl}/${userName}/ethereum/execute/transaction`
-    // 
-    // return this._httpAgent.post(
-    //   url,
-    //   JSON.stringify({
-    //     contractOwnerIdentity: requester,
-    //     seedPhrase, contractID, method, params, value
-    //   }),
-    //   {'Content-type': 'application/json'}
-    // )
+    return this._httpAgent.post(
+      url,
+      JSON.stringify({
+        contractOwnerIdentity: requester,
+        seedPhrase, contractID, method, params, value
+      }),
+      {'Content-type': 'application/json'}
+    )
   }
 
   proxyGet(requestUrl) {

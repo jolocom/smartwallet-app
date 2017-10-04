@@ -207,7 +207,7 @@ export default class EthApprovalRequest extends React.Component {
           disabled={ethereumConnect.fundsNotSufficient}
           secondary
           style={STYLES.buttons}
-          onClick={() => {}} />
+          onClick={() => this.props.executeTransaction} />
         <br />
         <RaisedButton
           label="DENY"

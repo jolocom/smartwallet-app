@@ -10,17 +10,15 @@ const actions = module.exports = makeActions('ethereum-connect', {
     expectedParams: []
   },
   checkUserLoggedIn: {
-    expectedParams: [],
+    expectedParams: ['path'],
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         const user = services.auth.currentUser
-        console.log(user)
-        const path = getState().toJS().ethereumConnect.path
         if (user == null) {
           dispatch(router.pushRoute({
             pathname: '/login',
             query: {
-              callbackUrl: path
+              callbackUrl: params
             }
           }))
         }
@@ -29,11 +27,53 @@ const actions = module.exports = makeActions('ethereum-connect', {
   },
   getRequestedDetails: {
     expectedParams: [],
+    async: true,
     creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.getRequestedDetails.buildAction(params))
-        dispatch(actions.checkUserLoggedIn())
-        // dispatch(actions.getRequesterIdentity(params.query.requester))
+      return (dispatch, getState, {backend, services}) => {
+        dispatch(actions.getRequestedDetails.buildAction(params, () => {
+          const path = params.pathname + params.search
+          dispatch(actions.checkUserLoggedIn(path))
+          return backend.gateway
+            .proxyGet(`${params.query.requester}/identity/name/display`)
+            .then((response) => {
+              dispatch(actions.setDisplayNameRequester(response))
+              return backend.gateway
+                .proxyGet(`${params.query.requester}/ethereum/contracts/${params.query.contractID}`) // eslint-disable-line max-len
+            })
+            .then((response) => {
+              console.log('RESPONSE GET CONTRACTID DETAILS: ', response)
+              dispatch(actions.getSecurityDetails(params))
+            })
+        }))
+      }
+    }
+  },
+  setDisplayNameRequester: {
+    expectedParams: ['displayName']
+  },
+  getSecurityDetails: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {backend, services}) => {
+        dispatch(actions.getSecurityDetails.buildAction(params, () => {
+          return backend.gateway
+            .proxyGet(`${params.query.requester}/ethereum/${params.query.contractID}/verifications`) // eslint-disable-line max-len
+        }))
+      }
+    }
+  },
+  getSecurityVerifications: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {backend, services}) => {
+        // implement all ids to be called
+        const verificationIDs = getState().toJS().ethereumConnect.securityDetails // eslint-disable-line max-len
+        dispatch(actions.getSecurityVerifications.buildAction(params, () => {
+          return backend.gateway
+            .proxyGet(`${params.query.requester}/ethereum/${params.query.contractID}/verifications/${verificationIDs[0]}`) // eslint-disable-line max-len
+        }))
       }
     }
   },
@@ -64,7 +104,8 @@ const initialState = Immutable.fromJS({
   errorMsg: '',
   expanded: false,
   fundsNotSufficient: false,
-  path: ''
+  requesterName: '',
+  securityDetails: []
 })
 
 module.exports.default = (state = initialState, action = {}) => {
@@ -79,15 +120,50 @@ module.exports.default = (state = initialState, action = {}) => {
         fundsNotSufficient: true
       })
 
-    case actions.getRequestedDetails.id:
-      // if (typeof action.details.query['scope[]'] === 'string') {
-      //   action.details.query['scope[]'] = [action.details.query['scope[]']]
-      // }
+    case actions.setDisplayNameRequester.id:
       return state.merge({
-        path: action.pathname + action.search
-        // requester: action.details.query.requester,
-        // returnURL: action.details.query.returnURL,
-        // fields: action.details.query['scope[]']
+        requesterName: action.displayName[0][1]
+      })
+
+    case actions.getRequestedDetails.id:
+      return state.merge({
+        loading: true,
+        errorMsg: ''
+      })
+
+    case actions.getRequestedDetails.id_success:
+      console.log('SUCCESS getRequestedDetails')
+      return state.merge({
+        loading: false,
+        errorMsg: ''
+      })
+
+    case actions.getRequestedDetails.id_fail:
+      console.log('FAIL getRequestedDetails')
+      return state.merge({
+        loading: false,
+        errorMsg: 'Could not load the contract details. Please try again.'
+      })
+
+    case actions.getSecurityDetails.id:
+      return state.merge({
+        loading: true,
+        errorMsg: ''
+      })
+
+    case actions.getSecurityDetails.id_success:
+      console.log('SUCCESS getSecurityDetails: ', action)
+      return state.merge({
+        loading: false,
+        errorMsg: '',
+        securityDetails: action.response
+      })
+
+    case actions.getSecurityDetails.id_fail:
+      console.log('FAIL getSecurityDetails')
+      return state.merge({
+        loading: false,
+        errorMsg: 'Could not load the contract security details. Please try again.' // eslint-disable-line max-len
       })
 
     default:

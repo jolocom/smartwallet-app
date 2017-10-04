@@ -18,18 +18,18 @@ export default class EthApprovalRequestScreen extends React.Component {
     ethereumConnect: React.PropTypes.object,
     toggleSecuritySection: React.PropTypes.func.isRequired,
     getRequestedDetails: React.PropTypes.func.isRequired,
-    executeTransaction: React.PropTypes.func.isRequired
+    executeTransaction: React.PropTypes.func.isRequired,
+    setFundsNotSufficient: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    let costs = '0.4'
     this.props.getRequestedDetails(this.props.location)
-    if (this.props.money.ether.amount < costs) {
-      // this.props.setFundsNotSufficient()
+    if (this.props.money.ether.amount < this.props.location.query.value) {
+      this.props.setFundsNotSufficient()
     }
   }
 
-  componentDidMount() {
+  executeTransaction() {
     let params = this.props.location.query['params[]']
     if (typeof params === 'string') {
       params = [params]
@@ -50,6 +50,7 @@ export default class EthApprovalRequestScreen extends React.Component {
     return (
       <Presentation
         toggleSecuritySection={this.props.toggleSecuritySection}
+        executeTransaction={() => this.executeTransaction()}
         ethereumConnect={this.props.ethereumConnect} />
     )
   }
