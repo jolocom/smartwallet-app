@@ -204,14 +204,14 @@ export default class EthApprovalRequest extends React.Component {
           disabled={ethereumConnect.fundsNotSufficient}
           secondary
           style={STYLES.buttons}
-          onClick={ethereumConnect.noSecurityVerfication ?
-            () => this.props.handleDialog({
+          onClick={ethereumConnect.noSecurityVerfication
+            ? () => this.props.handleDialog({
               title: 'Confirmation',
               message: 'Please be aware that you continue on your own risk. None of the security steps are verified.',  // eslint-disable-line max-len
               leftButtonLabel: 'CANCEL',
               rightButtonLabel: 'No risk no fun'
-            }) :
-            () => this.props.executeTransaction} />
+            })
+            : () => this.props.executeTransaction} />
         <br />
         <RaisedButton
           label="DENY"
