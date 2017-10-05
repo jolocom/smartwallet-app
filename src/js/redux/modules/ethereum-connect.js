@@ -183,21 +183,18 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.executeTransaction.id:
-      console.log('executeTransaction id')
       return state.merge({
         loading: true,
         errorMsg: ''
       })
 
     case actions.executeTransaction.id_success:
-      console.log('executeTransaction success')
       return state.merge({
         loading: false,
         errorMsg: ''
       })
 
     case actions.executeTransaction.id_fail:
-      console.log('executeTransaction fail')
       return state.merge({
         loading: false,
         errorMsg: 'The transaction could not be executed. Please try again.'

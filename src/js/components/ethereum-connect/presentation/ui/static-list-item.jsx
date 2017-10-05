@@ -45,8 +45,8 @@ export default class StaticListItem extends React.Component {
   render() {
     const props = this.props
     const icon = props.icon
-      ? <props.icon color={props.verified ? STYLES.iconVerified.color :
-      STYLES.icon.color} style={{top: '10px'}} /> : <div />
+      ? <props.icon color={props.verified ? STYLES.iconVerified.color
+      : STYLES.icon.color} style={{top: '10px'}} /> : <div />
 
     return (
       <div style={STYLES.listItem}>
