@@ -55,10 +55,11 @@ export default class NotVerifiedItem extends React.Component {
     let pin = this.props.attributes.pin
     const smsCode = this.props.attributes.smsCode
     const codeIsSent = this.props.attributes.codeIsSent
+    const attrTypeToKey = (attrType) => (attrType + 's')
     // let type = ''
     if (field === 'phone') {
       let index = '0'
-      let attrType = 'phones'
+      let attrType = 'phone'
       return (
         <div>
           <div style={STYLES.verificationBlock}>
@@ -78,7 +79,7 @@ export default class NotVerifiedItem extends React.Component {
             pinValue={pin}
             setFocusedPin={(value) => { this.props.setFocusedPin(value, index) }} // eslint-disable-line max-len
             changePinValue={(value, codeType) => {
-              this.props.changePinValue(attrType, value, index, codeType)
+              this.props.changePinValue(attrTypeToKey(attrType), value, index, codeType) // eslint-disable-line max-len
             }}
             focused={this.props.pinFocused}
             value={this.props.textValue}
@@ -88,7 +89,7 @@ export default class NotVerifiedItem extends React.Component {
       )
     } else if (field === 'email') {
       let index = '0'
-      let attrType = 'emails'
+      let attrType = 'email'
       return (
         <div>
           <div style={STYLES.verificationBlock}>

@@ -28,8 +28,7 @@ describe('(Component) WalletContactScreen', () => {
         exitWithoutSaving={fake}
         saveChanges={fake}
         addNewEntry={fake}
-        confirm={fake}
-        close={fake} />)
+        confirm={fake} />)
     )
     expect(getUserInformation.calls).to.deep.equal([{args: [callback]}])
   })
@@ -53,7 +52,6 @@ describe('(Component) WalletContactScreen', () => {
        saveChanges={fake}
        addNewEntry={fake}
        confirm={fake}
-       close={fake}
      />)
     )
     wrapper.instance()._onFocusChange('boo')

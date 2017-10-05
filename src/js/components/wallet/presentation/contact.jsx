@@ -53,8 +53,7 @@ export default class WalletContact extends React.Component {
     addNewEntry: React.PropTypes.func.isRequired,
     confirm: React.PropTypes.func.isRequired,
     selectCountry: React.PropTypes.func.isRequired,
-    setAddressField: React.PropTypes.func.isRequired,
-    close: React.PropTypes.func.isRequired
+    setAddressField: React.PropTypes.func.isRequired
   }
 
   renderContent() {
@@ -80,7 +79,7 @@ export default class WalletContact extends React.Component {
   renderField(i, field) {
     const [
       {key, label, value, type, verified, valid, errorText, icon, isNew},
-      {setInformation, updateInformation, deleteInformation, close, confirm,
+      {setInformation, updateInformation, deleteInformation, confirm,
       focused, showErrors, onFocusChange}
     ] = [field, this.props]
     const prefix = isNew ? 'newInformation' : 'originalInformation'
@@ -90,6 +89,13 @@ export default class WalletContact extends React.Component {
     const actionValue = (key, e) => key === 'phones'
       ? ({value: e.target.value, type}) : e.target.value
 
+    const confirmDelete = {
+      title: 'Are you sure you want to delete a verified attribute?',
+      message: 'Please confirm.',
+      rightButtonLabel: 'DELETE',
+      callback: () => deleteInformation(prefix, key, i),
+      leftButtonLabel: 'CANCEL'
+    }
     const types = ((field) => {
       switch (key) {
         case 'phones':
@@ -125,13 +131,7 @@ export default class WalletContact extends React.Component {
       }
       onDelete={() => (isNew || !verified)
         ? deleteInformation(prefix, key, i)
-        : confirm(
-          'Are you sure you want to delete a verified email?',
-          'Delete',
-          () => {
-            deleteInformation(prefix, key, i)
-            close()
-          })
+        : confirm(confirmDelete)
       }
       onTypeChange={(type) => {
         isNew ? setInformation(key, i, {value, type})

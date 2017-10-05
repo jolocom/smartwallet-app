@@ -3,11 +3,29 @@ import {makeActions} from '../'
 import * as router from '../router'
 
 const actions = module.exports = makeActions('single-sign-on/access-request', {
+  checkUserLoggedIn: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch, getState, {services}) => {
+        const user = services.auth.currentUser
+        const path = getState().toJS().singleSignOn.accessRequest.entity.path
+        if (user == null) {
+          dispatch(router.pushRoute({
+            pathname: '/login',
+            query: {
+              callbackUrl: path
+            }
+          }))
+        }
+      }
+    }
+  },
   requestedDetails: {
     expectedParams: ['details'],
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.requestedDetails.buildAction(params))
+        dispatch(actions.checkUserLoggedIn())
         dispatch(actions.getRequesterIdentity(params.query.requester))
       }
     }

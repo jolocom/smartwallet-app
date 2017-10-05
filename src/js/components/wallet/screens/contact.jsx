@@ -17,6 +17,7 @@ import Presentation from '../presentation/contact'
     'wallet/contact:addNewEntry',
     'wallet/contact:setAddressField',
     'confirmation-dialog:confirm',
+    'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:close'
   ]
 })
@@ -32,10 +33,9 @@ export default class WalletContactScreen extends React.Component {
     exitWithoutSaving: React.PropTypes.func.isRequired,
     saveChanges: React.PropTypes.func.isRequired,
     addNewEntry: React.PropTypes.func.isRequired,
-    confirm: React.PropTypes.func.isRequired,
+    openConfirmDialog: React.PropTypes.func.isRequired,
     setAddressField: React.PropTypes.func.isRequired,
-    initiateCountryScreenFromContactScreen: React.PropTypes.func.isRequired,
-    close: React.PropTypes.func.isRequired
+    initiateCountryScreenFromContactScreen: React.PropTypes.func.isRequired
   }
   constructor() {
     super()
@@ -59,8 +59,8 @@ export default class WalletContactScreen extends React.Component {
 
   render() {
     const [{
-      deleteInformation, addNewEntry, confirm, setAddressField, saveChanges,
-      updateInformation, setInformation, exitWithoutSaving, close,
+      deleteInformation, addNewEntry, setAddressField, saveChanges,
+      updateInformation, setInformation, exitWithoutSaving,
       initiateCountryScreenFromContactScreen
     }, {
       information, loading, showErrors
@@ -78,11 +78,14 @@ export default class WalletContactScreen extends React.Component {
       exitWithoutSaving={exitWithoutSaving}
       saveChanges={saveChanges}
       addNewEntry={addNewEntry}
-      confirm={confirm}
-      close={close}
+      confirm={this.handleConfirmDialog}
       selectCountry={initiateCountryScreenFromContactScreen} />)
   }
 
+  handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len
+    this.props.openConfirmDialog(title, message, rightButtonLabel,
+    callback, leftButtonLabel)
+  }
   _onFocusChange = (value) => {
     this.setState({focused: value})
   }
