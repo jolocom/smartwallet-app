@@ -20,8 +20,10 @@ module.exports = {
     errorDetails: true
   },
   resolve: {
+    modules: [
+      path.join(__dirname, 'src', 'js')
+    ]
     extensions: ['', '.js', '.jsx', '.json'],
-    root: path.join(__dirname, 'src', 'js'),
     alias: {
       actions: 'actions',
       components: 'components',
@@ -49,24 +51,18 @@ module.exports = {
     })
   ],
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        loader: 'babel',
+    rules: [
+      { 
+        test: /\.jsx?$/, 
         include: [
           path.join(__dirname, 'src', 'js'),
           path.join(__dirname, 'test'),
           path.join(__dirname, 'node_modules', 'ethereumjs-tx')
-        ]
+        ],
+        use: ['babel-loader'] 
       },
-      {
-        test: /\.html$/,
-        loader: 'file?name=[name].[ext]'
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      }
+      { test: /\.html$/, use: ['file-loader'] }
     ]
   }
 }
+
