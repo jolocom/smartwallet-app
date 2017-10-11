@@ -1,25 +1,24 @@
 /*eslint-disable */
 
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var webpack = require('webpack-stream');
-var WebpackDevServer = require('webpack-dev-server');
-var webpackConfig = require('./webpack.config.js');
-var webpackConfigProduction = require('./webpack.config.production.js');
-var eslint = require('gulp-eslint');
-var fs = require('fs');
-var path = require('path');
-var concat = require('gulp-concat');
-var clean = require('gulp-clean');
-var rename = require('gulp-rename');
+const gulp = require('gulp'),
+  gutil = require('gulp-util'),
+  webpack = require('webpack-stream'),
+  WebpackDevServer = require('webpack-dev-server'),
+  webpackConfig = require('./webpack.config.js'),
+  webpackConfigProduction = require('./webpack.config.production.js'),
+  eslint = require('gulp-eslint'),
+  fs = require('fs'),
+  path = require('path'),
+  concat = require('gulp-concat'),
+  clean = require('gulp-clean'),
+  rename = require('gulp-rename'),
 
-var cordova = require('cordova-lib').cordova
+  cordova = require('cordova-lib').cordova
 
 function startDevServer(config, callback) {
 	// modify some webpack config options
-	var myConfig = Object.create(config);
+	let myConfig = Object.create(config);
 	myConfig.devtool = 'eval';
-	myConfig.debug = true;
 
 	// Start a webpack-dev-server
 	new WebpackDevServer(webpack(myConfig), {
@@ -37,14 +36,15 @@ function startDevServer(config, callback) {
 	});
 }
 
-function setRoutesEntry(config, entry) {
-	var myConfig = Object.create(config);
-	var entry = entry || process.env.ENTRY || 'default';
-	myConfig.resolve.alias.routes = path.join(
-		__dirname, 'src', 'js', 'routes', entry + '.jsx'
-	);
-	return myConfig;
-}
+// function setRoutesEntry(config, entry) {
+//   var myConfig = Object.create(config);
+//   console.log('this is prod config', webpackConfigProduction)
+// 	var entry = entry || process.env.ENTRY || 'default';
+// 	myConfig.resolve.alias.routes = path.join(
+// 		__dirname, 'src', 'js', 'routes', entry + '.jsx'
+// 	);
+// 	return myConfig;
+// }
 
 gulp.task('lint', function() {
     return gulp.src([
@@ -60,7 +60,7 @@ gulp.task('lint', function() {
 // The development server (the recommended option for development)
 gulp.task('default', ['webpack-dev-server']);
 
-gulp.task('wallet', function(callback) {
+gulp.task('walvar', function(callback) {
 	var myConfig = setRoutesEntry(webpackConfig, 'wallet');
 	startDevServer(myConfig, callback);
 });
@@ -99,17 +99,15 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
-	var myConfig = setRoutesEntry(webpackConfigProduction);
-	myConfig.plugins = myConfig.plugins.concat(
-		new webpack.DefinePlugin({
-			'process.env': {
-				// This has effect on the react lib size
-				'NODE_ENV': JSON.stringify('production')
-			}
-		}),
-		new webpack.optimize.DedupePlugin(),
-		new webpack.optimize.UglifyJsPlugin()
-	);
+  var myConfig = webpackConfigProduction;
+  // var myConfig = setRoutesEntry(webpackConfigProduction);
+	// myConfig.resolve.plugins = myConfig.resolve.plugins.concat(
+	// 	new webpack.DefinePlugin({
+	// 		'process.env.NODE_ENV': JSON.stringify('production')
+	// 	}),
+	// 	new webpack.optimize.DedupePlugin(),
+	// 	new webpack.optimize.UglifyJsPlugin()
+	// );
 
 	// run webpack
 	webpack(myConfig, function(err, stats) {
@@ -124,7 +122,6 @@ gulp.task('webpack:build', function(callback) {
 // modify some webpack config options
 var myDevConfig = Object.create(webpackConfig);
 myDevConfig.devtool = 'sourcemap';
-myDevConfig.debug = true;
 
 // create a single instance of the compiler to allow caching
 var devCompiler = webpack(myDevConfig);

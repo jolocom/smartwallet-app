@@ -1,29 +1,29 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path'),
+      webpack = require('webpack')
 
-var defaultGatewayUrl = ''
+let defaultGatewayUrl = ''
 if (process.env.USE_LOCAL_GATEWAY === 'true') {
   defaultGatewayUrl = 'http://localhost:5678'
 }
 
 module.exports = {
-  entry: [
-    'babel-polyfill',
-    'whatwg-fetch',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './src/js/main.jsx',
-    './src/index.html'
-  ],
-  stats: {
-    errorDetails: true
+  entry: {
+    main: './src/js/main.jsx',
+    index: './src/index.html',
+    vendor: [
+      'babel-polyfill',
+      'whatwg-fetch',
+      'react-hot-loader/patch',
+      'webpack-dev-server/client?http://localhost:8080',
+      'webpack/hot/only-dev-server'
+    ]
+  },
+  devServer: {
+    stats: {
+      errorDetails: true
+    }
   },
   resolve: {
-    modules: [
-      path.resolve(__dirname) + '/src/js'
-    ]
-    extensions: ['', '.js', '.jsx', '.json'],
     alias: {
       actions: 'actions',
       components: 'components',
@@ -31,8 +31,20 @@ module.exports = {
       lib: 'lib',
       styles: 'styles',
       routes: path.resolve(__dirname, '/src/js/routes/default.jsx'),
-      settings: path.resolve(__dirname) + '/config/development.js')
-    }
+      settings: path.resolve(__dirname) + '/config/development.js'
+    },
+    extensions: ['*','.js', '.jsx', '.json'],
+    modules: [
+      path.resolve(__dirname) + '/src/js'
+    ],
+    plugins: [
+      // new webpack.HotModuleReplacementPlugin(),
+      new webpack.DefinePlugin({
+        'IDENTITY_GATEWAY_URL': process.env.IDENTITY_GATEWAY_URL
+        ? '"' + process.env.IDENTITY_GATEWAY_URL + '"'
+        : '"' + defaultGatewayUrl + '"'
+      })
+    ]
   },
   output: {
     path: path.join(__dirname, 'dist', 'js'),
@@ -42,14 +54,6 @@ module.exports = {
   externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({
-      'IDENTITY_GATEWAY_URL': process.env.IDENTITY_GATEWAY_URL
-      ? '"' + process.env.IDENTITY_GATEWAY_URL + '"'
-      : '"' + defaultGatewayUrl + '"'
-    })
-  ],
   module: {
     rules: [
       { 

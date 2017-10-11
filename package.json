@@ -79,6 +79,7 @@
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "vinyl-paths": "^1.0.0",
+    "webpack": "^3.6.0",
     "webpack-dev-server": "^1.14.1",
     "webpack-stream": "^4.0.0",
     "yargs": "^3.32.0"

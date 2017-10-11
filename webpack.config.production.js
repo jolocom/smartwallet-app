@@ -1,18 +1,15 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path'),
+      webpack = require('webpack')
 
 module.exports = {
-  entry: [
-    'babel-polyfill',
-    'whatwg-fetch',
-    './src/js/main.jsx'
-  ],
-  resolve: {
-    modules: [
-      path.resolve(__dirname) + '/src/js'
+  entry: {
+    main: './src/js/main.jsx',
+    vendor: [
+      'babel-polyfill',
+      'whatwg-fetch'
     ]
-    extensions: ['', '.js', '.jsx', '.json'],
-    root: path.resolve(__dirname) + '/src/js',
+  },
+  resolve: {
     alias: {
       actions: 'actions',
       components: 'components',
@@ -20,7 +17,18 @@ module.exports = {
       lib: 'lib',
       styles: 'styles',
       settings: path.resolve(__dirname) + '/config/production.js'
-    }
+    },
+    extensions: ['*', '.js', '.jsx', '.json'],
+    modules: [
+      path.resolve(__dirname) + '/src/js'
+    ],
+    plugins: [
+      new webpack.DefinePlugin({
+        'IDENTITY_GATEWAY_URL': process.env.TIER === 'staging'
+        ? '"https://staging.identity.jolocom.com"'
+        : '"https://identity.jolocom.com"'
+      })
+    ]
   },
   output: {
     path: path.resolve(__dirname) + '/dist/js',
@@ -30,13 +38,6 @@ module.exports = {
   externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
-  plugins: [
-    new webpack.DefinePlugin({
-      'IDENTITY_GATEWAY_URL': process.env.TIER === 'staging'
-      ? '"https://staging.identity.jolocom.com"'
-      : '"https://identity.jolocom.com"'
-    })
-  ],
   module: {
     rules: [
       {
