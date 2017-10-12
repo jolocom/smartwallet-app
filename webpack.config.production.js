@@ -1,7 +1,10 @@
 const path = require('path'),
-      webpack = require('webpack')
+      webpack = require('webpack'),
+      HtmlWebpackPlugin = require('html-webpack-plugin'),
+      CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
+
   entry: {
     main: './src/js/main.jsx',
     vendor: [
@@ -9,35 +12,10 @@ module.exports = {
       'whatwg-fetch'
     ]
   },
-  resolve: {
-    alias: {
-      actions: 'actions',
-      components: 'components',
-      stores: 'stores',
-      lib: 'lib',
-      styles: 'styles',
-      settings: path.resolve(__dirname) + '/config/production.js'
-    },
-    extensions: ['*', '.js', '.jsx', '.json'],
-    modules: [
-      path.resolve(__dirname) + '/src/js'
-    ],
-    plugins: [
-      new webpack.DefinePlugin({
-        'IDENTITY_GATEWAY_URL': process.env.TIER === 'staging'
-        ? '"https://staging.identity.jolocom.com"'
-        : '"https://identity.jolocom.com"'
-      })
-    ]
-  },
   output: {
-    path: path.resolve(__dirname) + '/dist/js',
-    filename: 'bundle.js',
-    publicPath: 'js/'
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
   },
-  externals: [{
-    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
-  }],
   module: {
     rules: [
       {
@@ -47,8 +25,35 @@ module.exports = {
           path.join(__dirname, 'test'),
           path.join(__dirname, 'node_modules', 'ethereumjs-tx')
         ],
-        use: ['babel-loader']
+        loader: 'babel-loader'
       }
     ]  
-  }
+  },
+  resolve: {
+    modules: [
+      path.resolve(__dirname) + '/src/js'
+    ],
+    extensions: ['*', '.js', '.jsx', '.json'],
+    alias: {
+      'actions': 'actions',
+      'components': 'components',
+      'stores': 'stores',
+      'lib': 'lib',
+      'styles': 'styles',
+      'settings': path.resolve(__dirname) + '/config/production.js'
+    },
+  },
+  externals: [{
+    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
+  }],
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Output Management'
+    }),
+    new webpack.DefinePlugin({
+      'IDENTITY_GATEWAY_URL': process.env.TIER === 'staging'
+      ? '"https://staging.identity.jolocom.com"'
+      : '"https://identity.jolocom.com"'
+    })
+  ]
 }

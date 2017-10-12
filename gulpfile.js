@@ -2,7 +2,7 @@
 
 const gulp = require('gulp'),
   gutil = require('gulp-util'),
-  webpack = require('webpack-stream'),
+  webpack = require('webpack'),
   WebpackDevServer = require('webpack-dev-server'),
   webpackConfig = require('./webpack.config.js'),
   webpackConfigProduction = require('./webpack.config.production.js'),
@@ -34,7 +34,7 @@ function startDevServer(config, callback) {
 		if (err) throw new gutil.PluginError('webpack-dev-server', err);
 		gutil.log('[webpack-dev-server]', 'http://localhost:8080');
 	});
-}
+};
 
 // function setRoutesEntry(config, entry) {
 //   var myConfig = Object.create(config);
@@ -60,7 +60,7 @@ gulp.task('lint', function() {
 // The development server (the recommended option for development)
 gulp.task('default', ['webpack-dev-server']);
 
-gulp.task('walvar', function(callback) {
+gulp.task('wallet', function(callback) {
 	var myConfig = setRoutesEntry(webpackConfig, 'wallet');
 	startDevServer(myConfig, callback);
 });
@@ -99,7 +99,7 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
-  var myConfig = webpackConfigProduction;
+  // var myConfig = webpackConfigProduction;
   // var myConfig = setRoutesEntry(webpackConfigProduction);
 	// myConfig.resolve.plugins = myConfig.resolve.plugins.concat(
 	// 	new webpack.DefinePlugin({
@@ -110,13 +110,14 @@ gulp.task('webpack:build', function(callback) {
 	// );
 
 	// run webpack
-	webpack(myConfig, function(err, stats) {
-		if(err) throw new gutil.PluginError('webpack:build', err);
-		gutil.log('[webpack:build]', stats.toString({
-			colors: true
-		}));
-		callback();
-	});
+	// webpack(myConfig, function(err, stats) {
+	// 	if(err) throw new gutil.PluginError('webpack:build', err);
+	// 	gutil.log('[webpack:build]', stats.toString({
+	// 		colors: true
+	// 	}));
+	// 	callback();
+  // });
+  webpack(webpackConfigProduction)
 });
 
 // modify some webpack config options

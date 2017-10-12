@@ -42,6 +42,7 @@
     "chai-as-promised": "^6.0.0",
     "chai-enzyme": "^0.5.0",
     "cheerio": "^0.20.0",
+    "clean-webpack-plugin": "^0.1.17",
     "cordova-lib": "^6.5.0",
     "cross-env": "^2.0.0",
     "del": "^1.2.0",
@@ -65,6 +66,7 @@
     "gulp-sync": "^0.1.4",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
+    "html-webpack-plugin": "^2.30.1",
     "istanbul-instrumenter-loader": "^0.2.0",
     "js-yaml": "^3.8.2",
     "mocha": "^3.5.0",
@@ -145,7 +147,8 @@
     "socket.io-client": "^2.0.3",
     "solid-client": "^0.19.0",
     "superagent-es6-promise": "^1.0.0",
-    "web3": "^0.15.3"
+    "web3": "^0.15.3",
+    "whatwg-fetch": "^2.0.3"
   },
   "engines": {
     "node": "^0.12"
