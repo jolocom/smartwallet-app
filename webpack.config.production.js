@@ -6,7 +6,7 @@ const path = require('path'),
 module.exports = {
 
   entry: {
-    main: './src/js/main.jsx',
+    main: '/src/js/main.jsx',
     vendor: [
       'babel-polyfill',
       'whatwg-fetch'
@@ -14,7 +14,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -47,6 +47,10 @@ module.exports = {
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor'
+      }),
     new HtmlWebpackPlugin({
       title: 'Output Management'
     }),

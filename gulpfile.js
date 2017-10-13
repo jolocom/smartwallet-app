@@ -36,15 +36,14 @@ function startDevServer(config, callback) {
 	});
 };
 
-// function setRoutesEntry(config, entry) {
-//   var myConfig = Object.create(config);
-//   console.log('this is prod config', webpackConfigProduction)
-// 	var entry = entry || process.env.ENTRY || 'default';
-// 	myConfig.resolve.alias.routes = path.join(
-// 		__dirname, 'src', 'js', 'routes', entry + '.jsx'
-// 	);
-// 	return myConfig;
-// }
+function setRoutesEntry(config, entry) {
+  var myConfig = config
+	var entry = entry || process.env.ENTRY || 'default';
+	myConfig.resolve.alias.routes = path.join(
+		__dirname, 'src', 'js', 'routes', entry + '.jsx'
+  );
+	return myConfig;
+}
 
 gulp.task('lint', function() {
     return gulp.src([
@@ -99,24 +98,25 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
-  // var myConfig = webpackConfigProduction;
-  // var myConfig = setRoutesEntry(webpackConfigProduction);
-	// myConfig.resolve.plugins = myConfig.resolve.plugins.concat(
-	// 	new webpack.DefinePlugin({
-	// 		'process.env.NODE_ENV': JSON.stringify('production')
-	// 	}),
-	// 	new webpack.optimize.DedupePlugin(),
-	// 	new webpack.optimize.UglifyJsPlugin()
-	// );
+  var myConfig = webpackConfigProduction;
+  console.log('myconfig', myConfig)
+  var myConfig = setRoutesEntry(webpackConfigProduction);
+  console.log('again', myConfig)
+	myConfig.plugins = myConfig.plugins.concat(
+		new webpack.DefinePlugin({
+			'process.env.NODE_ENV': JSON.stringify('production')
+		}),
+		new webpack.optimize.UglifyJsPlugin()
+	);
 
 	// run webpack
-	// webpack(myConfig, function(err, stats) {
-	// 	if(err) throw new gutil.PluginError('webpack:build', err);
-	// 	gutil.log('[webpack:build]', stats.toString({
-	// 		colors: true
-	// 	}));
-	// 	callback();
-  // });
+	webpack(myConfig, function(err, stats) {
+		if(err) throw new gutil.PluginError('webpack:build', err);
+		gutil.log('[webpack:build]', stats.toString({
+			colors: true
+		}));
+		callback();
+  });
   webpack(webpackConfigProduction)
 });
 
