@@ -11,27 +11,28 @@ if (process.env.USE_LOCAL_GATEWAY === 'true') {
 module.exports = {
 
   entry: {
-    main: './src/js/main.jsx',
+    main: '/src/js/main.jsx',
     vendor: [
       'babel-polyfill',
       'whatwg-fetch',
-      // 'react-hot-loader',
-      // 'webpack-dev-server/client?http://localhost:8080',
-      // 'webpack/hot/only-dev-server'
+      'react-hot-loader',
+      'webpack-dev-server/client?http://localhost:8080',
+      'webpack/hot/only-dev-server'
     ]
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [
       { 
         test: /\.jsx?$/, 
         include: [
-          path.join(__dirname, 'src', 'js'),
-          path.join(__dirname, 'test'),
-          path.join(__dirname, 'node_modules', 'ethereumjs-tx')
+          path.resolve(__dirname, '/src/js'),
+          path.resolve(__dirname, 'test'),
+          path.resolve(__dirname, '/node_modules/ethereumjs.-tx'),
+          path.resolve(__dirname, 'node_modules')
         ],
         loader: 'babel-loader' 
       }
@@ -64,7 +65,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Output Management'
     }),
-    // new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'IDENTITY_GATEWAY_URL': process.env.IDENTITY_GATEWAY_URL
       ? '"' + process.env.IDENTITY_GATEWAY_URL + '"'

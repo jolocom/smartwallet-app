@@ -99,9 +99,7 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
   var myConfig = webpackConfigProduction;
-  console.log('myconfig', myConfig)
   var myConfig = setRoutesEntry(webpackConfigProduction);
-  console.log('again', myConfig)
 	myConfig.plugins = myConfig.plugins.concat(
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify('production')

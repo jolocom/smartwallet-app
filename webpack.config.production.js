@@ -6,7 +6,7 @@ const path = require('path'),
 module.exports = {
 
   entry: {
-    main: '/src/js/main.jsx',
+    main: './src/js/main.jsx',
     vendor: [
       'babel-polyfill',
       'whatwg-fetch'
@@ -21,25 +21,28 @@ module.exports = {
       {
         test: /\.jsx?$/,
         include: [
-          path.join(__dirname, 'src', 'js'),
-          path.join(__dirname, 'test'),
-          path.join(__dirname, 'node_modules', 'ethereumjs-tx')
+          path.resolve(__dirname, '/src/js'),
+          path.resolve(__dirname, 'test'),
         ],
+        exclude: [/node_modules/],
         loader: 'babel-loader'
       }
     ]  
   },
   resolve: {
     modules: [
-      path.resolve(__dirname) + '/src/js'
+      path.resolve(__dirname) + '/src/js',
+      // path.resolve('./'),
+      path.resolve('./node_modules')
     ],
-    extensions: ['*', '.js', '.jsx', '.json'],
+    extensions: ['.*', '.js', '.jsx', '.json'],
     alias: {
       'actions': 'actions',
       'components': 'components',
       'stores': 'stores',
       'lib': 'lib',
       'styles': 'styles',
+      'routes': path.resolve(__dirname, '/src/js/routes/default.jsx'),
       'settings': path.resolve(__dirname) + '/config/production.js'
     },
   },
