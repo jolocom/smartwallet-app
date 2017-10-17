@@ -33,6 +33,7 @@ const actions = module.exports = makeActions('ethereum-connect', {
         dispatch(actions.getRequestedDetails.buildAction(params, () => {
           const path = params.pathname + params.search
           dispatch(actions.checkUserLoggedIn(path))
+          dispatch(actions.checkRequestedParams(params.query))
           return backend.gateway.proxyGet(`${params.query.requester}/ethereum/contracts/${params.query.contractID}`) // eslint-disable-line max-len
             .then((response) => {
               dispatch(actions.setContractDetails(response))
@@ -45,6 +46,9 @@ const actions = module.exports = makeActions('ethereum-connect', {
         }))
       }
     }
+  },
+  checkRequestedParams: {
+    expectedParams: []
   },
   setDisplayNameRequester: {
     expectedParams: ['displayName']
@@ -123,6 +127,18 @@ const initialState = Immutable.fromJS({
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
+    case actions.checkRequestedParams.id:
+      const paramsCheck = action.value === undefined || action.method === undefined || action.requester === undefined || action.returnURL === undefined || action.contractID === undefined // eslint-disable-line max-len
+      if (paramsCheck) {
+        return state.merge({
+          errorMsg: 'Critical infromation is missing. Please contact the service provider!' // eslint-disable-line max-len
+        })
+      } else {
+        return state.merge({
+          errorMsg: ''
+        })
+      }
+
     case actions.toggleSecuritySection.id:
       return state.merge({
         expanded: action.value
@@ -140,20 +156,17 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.getRequestedDetails.id:
       return state.merge({
-        loading: true,
-        errorMsg: ''
+        loading: true
       })
 
     case actions.getRequestedDetails.id_success:
       return state.merge({
-        loading: false,
-        errorMsg: ''
+        loading: false
       })
 
     case actions.getRequestedDetails.id_fail:
       return state.merge({
-        loading: false,
-        errorMsg: ''
+        loading: false
       })
 
     case actions.setContractDetails.id:

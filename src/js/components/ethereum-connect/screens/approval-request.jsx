@@ -8,7 +8,8 @@ import Presentation from '../presentation/approval-request'
     'ethereum-connect:setFundsNotSufficient',
     'ethereum-connect:getRequestedDetails',
     'ethereum-connect:executeTransaction',
-    'confirmation-dialog:openConfirmDialog']
+    'confirmation-dialog:openConfirmDialog',
+    'wallet/money:retrieveEtherBalance']
 })
 export default class EthApprovalRequestScreen extends React.Component {
   static propTypes = {
@@ -19,14 +20,13 @@ export default class EthApprovalRequestScreen extends React.Component {
     getRequestedDetails: React.PropTypes.func.isRequired,
     executeTransaction: React.PropTypes.func.isRequired,
     setFundsNotSufficient: React.PropTypes.func.isRequired,
-    openConfirmDialog: React.PropTypes.func.isRequired
+    openConfirmDialog: React.PropTypes.func.isRequired,
+    retrieveEtherBalance: React.PropTypes.func.isRequired
   }
 
   componentWillMount() {
+    this.props.retrieveEtherBalance()
     this.props.getRequestedDetails(this.props.location)
-    if (this.props.money.ether.amount < this.props.location.query.value) {
-      this.props.setFundsNotSufficient()
-    }
   }
 
   handleDialog({title, message, rightButtonLabel, leftButtonLabel}) {
@@ -51,6 +51,9 @@ export default class EthApprovalRequestScreen extends React.Component {
   }
 
   render() {
+    if (this.props.money.ether.loaded && this.props.money.ether.amount < parseFloat(this.props.location.query.value)) { // eslint-disable-line max-len
+      this.props.setFundsNotSufficient()
+    }
     return (
       <Presentation
         toggleSecuritySection={this.props.toggleSecuritySection}

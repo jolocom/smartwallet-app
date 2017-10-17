@@ -18,6 +18,7 @@ describe('(Component) ApprovalRequest', () => {
   }
   it('should call getRequestedDetails on componentWillMount', () => {
     const getRequestedDetails = stub()
+    const retrieveEtherBalance = stub()
     const wrapper = shallow((<ApprovalRequest.WrappedComponent
       {...ApprovalRequest.mapStateToProps(Immutable.fromJS({
         wallet: {
@@ -62,6 +63,7 @@ describe('(Component) ApprovalRequest', () => {
       }))
     }
       getRequestedDetails={getRequestedDetails}
+      retrieveEtherBalance={retrieveEtherBalance}
       location={location}
       money={{ether: {amount: 0}}}
       amount={{}}
@@ -73,6 +75,7 @@ describe('(Component) ApprovalRequest', () => {
     ))
     wrapper.instance()
     expect(getRequestedDetails.called).to.be.true
+    expect(retrieveEtherBalance.called).to.be.true
   })
 
   it('should call executeTransaction with proper params', () => {
@@ -120,6 +123,7 @@ describe('(Component) ApprovalRequest', () => {
         }
       }))}
       getRequestedDetails={() => {}}
+      retrieveEtherBalance={() => {}}
       location={location}
       amount={{}}
       ethereumConnect={{}}
