@@ -196,7 +196,7 @@ export default class AccessRequest extends React.Component {
     })
 
     let content
-    if (this.props.entity.loading) {
+    if (this.props.entity.loading || !this.props.identity.loaded) {
       content = (
         <Content>
           <Loading style={STYLES.loading} />

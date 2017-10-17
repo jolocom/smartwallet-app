@@ -52,6 +52,14 @@ const NameEntry = (props) => {
   } else if (props.ownURL.valueOwnURL.length > 11 && props.ownURL.valueOwnURL.indexOf('https://') === -1) { // eslint-disable-line max-len
     errorText = 'Please fill in whole address (like: https://www.me.io)'
   }
+
+  const usernameCheck = (string) => {
+    if (string.indexOf(' ') !== -1) {
+      return (<p>No spaces allowed</p>)
+    } else if (string.match((/[A-Z]/))) {
+      return (<p>No uppercase letters allowed</p>)
+    }
+  }
   return (
     <Container>
       <Header title="Let's get started! Please type in a username." />
@@ -63,7 +71,7 @@ const NameEntry = (props) => {
             floatingLabelStyle={STYLES.floatingLabel}
             inputStyle={STYLES.inputStyle}
             onChange={(e) => props.onChange(e.target.value)}
-            errorText={props.errorMsg} />
+            errorText={usernameCheck(props.value) || props.errorMsg} />
         </Block>
         <Block>
           <FlatButton

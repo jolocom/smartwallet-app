@@ -170,9 +170,9 @@ let Nav = React.createClass({
 
       if (this.props.selected === item.route) {
         return (
-          <div>
+          <div key={item.route.toString()}>
             <ListItem
-              key={item.route}
+              key={item.route.toString()}
               primaryText={item.title}
               value={item.route}
               onClick={() => this._handleNavChange(item.route)}
@@ -183,9 +183,9 @@ let Nav = React.createClass({
         )
       } else {
         return (
-          <div>
+          <div key={item.route.toString()}>
             <ListItem
-              key={item.route}
+              key={item.route.toString()}
               primaryText={item.title}
               value={item.route}
               onClick={() => this._handleNavChange(item.route)}
@@ -212,14 +212,16 @@ let Nav = React.createClass({
         containerStyle={styles.drawerBody}
         open={this.props.open}
         onRequestChange={this.drawerRequestChange}>
-        <Header onClose={this.props.hideLeftNav} />
 
+        <Header onClose={this.props.hideLeftNav} />
         <div>
           <SelectableList style={styles.listSelect}>
             {this.renderNavItems()}
           </SelectableList>
           <List>
-            <ListItem primaryText="Sign out"
+            <ListItem
+              key={'signOut'}
+              primaryText="Sign out"
               onTouchTap={this.logout}
               style={styles.menuItemBottom}
               leftIcon={

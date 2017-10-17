@@ -142,8 +142,10 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.confirmEmail.id_success:
       return confirmSuccess(state)
+
     case actions.confirmEmail.id_fail:
       return confirmFail(state)
+
     default:
       return state
   }

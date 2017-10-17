@@ -65,6 +65,9 @@ const actions = module.exports = makeActions('wallet-login', {
           }).then(() => {
             if (settings.verifier) {
               dispatch(router.pushRoute('verifier/document'))
+            } else if (state.callbackURL.length > 1) {
+              dispatch(router.pushRoute(state.callbackURL))
+              dispatch(actions.clearCallbackUrl())
             } else {
               dispatch(router.pushRoute('/wallet/identity'))
             }
@@ -122,6 +125,17 @@ const actions = module.exports = makeActions('wallet-login', {
         }))
       }
     }
+  },
+  storeCallbackUrl: {
+    expectedParams: ['callbackURL'],
+    creator: (params) => {
+      return (dispatch, getState) => {
+        dispatch(actions.storeCallbackUrl.buildAction(params))
+      }
+    }
+  },
+  clearCallbackUrl: {
+    expectedParams: []
   }
 })
 
@@ -151,7 +165,8 @@ const initialState = Immutable.fromJS({
     failed: false,
     valid: false,
     errorMsg: ''
-  }
+  },
+  callbackURL: ''
 })
 
 module.exports.default = (state = initialState, action = {}) => {
@@ -287,6 +302,16 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setValueOwnURL.id:
       return state.mergeIn(['passphrase'], {
         valueOwnURL: action.value
+      })
+
+    case actions.storeCallbackUrl.id:
+      return state.merge({
+        callbackURL: action.callbackURL
+      })
+
+    case actions.clearCallbackUrl.id:
+      return state.merge({
+        callbackURL: ''
       })
 
     default:

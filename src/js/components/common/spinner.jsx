@@ -5,7 +5,7 @@ import {Content, Block, Header} from '../structure'
 
 export default class Spinner extends React.Component {
   static propTypes = {
-    message: React.PropTypes.array,
+    message: React.PropTypes.any,
     style: React.PropTypes.object,
     avatar: React.PropTypes.string,
     title: React.PropTypes.string

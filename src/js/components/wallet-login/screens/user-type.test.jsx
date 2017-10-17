@@ -38,13 +38,15 @@ describe('(Component) LoginUserTypeScreen', function() {
             userType: {
               value: '',
               valid: false
-            }
+            },
+            callbackURL: ''
           }
         }))
       }
         setUserType={setUserType}
         configSimpleDialog={() => {}}
         showSimpleDialog={() => {}}
+        storeCallbackUrl={() => {}}
       />),
       { context: { muiTheme: { } } }
     )
@@ -64,7 +66,8 @@ describe('(Component) LoginUserTypeScreen', function() {
             userType: {
               value: '',
               valid: false
-            }
+            },
+            callbackURL: ''
           }
         }))
       }
@@ -72,6 +75,7 @@ describe('(Component) LoginUserTypeScreen', function() {
         setUserType={() => {}}
         configSimpleDialog={configSimpleDialog}
         showSimpleDialog={showSimpleDialog}
+        storeCallbackUrl={() => {}}
       />),
       { context: { muiTheme: { } } }
     )

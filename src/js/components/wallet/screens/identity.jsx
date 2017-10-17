@@ -36,8 +36,6 @@ export default class WalletIdentityScreen extends React.Component {
     goTo: React.PropTypes.func.isRequired,
     identity: React.PropTypes.object,
     openConfirmDialog: React.PropTypes.func.isRequired,
-    resendVerificationLink: React.PropTypes.func,
-    resendVerificationSms: React.PropTypes.func,
     saveToBlockchain: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
     startEmailVerification: React.PropTypes.func.isRequired,
@@ -85,9 +83,7 @@ export default class WalletIdentityScreen extends React.Component {
         () => { this.props.saveToBlockchain(index) }, leftButtonLabel)
       }
       requestVerificationCode={(...args) => this.requestVerification(...args)}
-      resendVerificationCode={(...args) => this.showVerificationWindow(...args,
-        (...params) => this.resendVerificationCode(...params)
-      )}
+      resendVerificationCode={(...args) => this.requestVerification(...args)}
       enterVerificationCode={(...args) => this.showVerificationWindow(...args,
         ({ index }) => this.enterVerificationCode({index})
       )} />)
@@ -110,14 +106,6 @@ export default class WalletIdentityScreen extends React.Component {
 
   enterVerificationCode({index}) {
     return () => this.props.confirmPhone(index)
-  }
-
-  resendVerificationCode({attrType, attrValue, index}) {
-    if (attrType === 'phone') {
-      return () => this.props.resendVerificationSms({phone: attrValue, index})
-    } else if (attrType === 'email') {
-      return () => this.props.resendVerificationLink({email: attrValue, index})
-    }
   }
 
   handleConfirmDialog = ({title, message, rightButtonLabel, leftButtonLabel, callback}) => { // eslint-disable-line max-len

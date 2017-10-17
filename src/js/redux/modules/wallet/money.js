@@ -128,8 +128,7 @@ module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.retrieveEtherBalance.id:
       return state.mergeIn(['ether'], {
-        loaded: false,
-        errorMsg: ''
+        loaded: false
       })
 
     case actions.retrieveEtherBalance.id_success:
@@ -195,9 +194,16 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.setEtherBalance.id:
-      return state.mergeIn(['ether'], {
-        amount: parseFloat(action.ether)
-      })
+      if (parseFloat(action.ether) === 0) {
+        return state.mergeIn(['ether'], {
+          amount: parseFloat(action.ether)
+        })
+      } else {
+        return state.mergeIn(['ether'], {
+          amount: parseFloat(action.ether),
+          checkingOut: false
+        })
+      }
 
     default:
       return state
