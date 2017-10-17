@@ -15,7 +15,7 @@ const STYLE = {
   },
   container: {
     padding: '16px',
-    backgroundColor: theme.jolocom.gray4,
+    backgroundColor: '#fff',
     boxSizing: 'border-box',
     maxWidth: '1200px',
     width: '100%',

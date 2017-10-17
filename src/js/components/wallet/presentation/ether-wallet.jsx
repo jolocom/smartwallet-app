@@ -63,7 +63,21 @@ export default class WalletEther extends React.Component {
       </HalfScreenContainer>
     )
   }
-
+  renderWaitingForEther() {
+    return (
+      <HalfScreenContainer>
+        <div style={STYLES.noEtherContainer}>
+          <Block>
+            <Header
+              style={STYLES.header}
+              title="Transferring ether will take some time. Please wait here or
+              come back later." />
+            <Loading />
+          </Block>
+        </div>
+      </HalfScreenContainer>
+    )
+  }
   renderHasEther() {
     return (
       <HalfScreenContainer>
@@ -120,26 +134,30 @@ export default class WalletEther extends React.Component {
 
   render() {
     let content = null
+    const {screenToDisplay} = this.props.money
     const {
-      screenToDisplay, buying: buyingEther,
-      loading: moneyLoading
-    } = this.props.money
+      buying: buyingEther, loading: moneyLoading, errorMsg: errorMsgMoney, checkingOut // eslint-disable-line max-len
+    } = this.props.money.ether
     const { errorMsg, loading: walletLoading } = this.props.wallet
     const loading = moneyLoading || walletLoading
+    const errorMessage = errorMsg || errorMsgMoney
     const amount = this.props.etherBalance
 
-    if (buyingEther) {
+    if (loading) {
+      content = (<Block><Loading /></Block>)
+    } else if (buyingEther) {
       content = this.renderLoading()
-    } else if (loading) {
-      content = (<Loading />)
+    } else if (errorMessage) {
+      content = (
+        <HalfScreenContainer>
+          <Error message={errorMessage} />
+        </HalfScreenContainer>)
+    } else if (checkingOut) {
+      content = this.renderWaitingForEther()
     } else if (amount > 0 && screenToDisplay !== 'etherBuyingScreen') {
       content = this.renderHasEther()
     } else if (!amount || screenToDisplay === 'etherBuyingScreen') {
       content = this.renderNoEther()
-    } else if (errorMsg) {
-      content = (
-        <Error message={errorMsg} />
-      )
     }
     return (
       <TabContainer>
