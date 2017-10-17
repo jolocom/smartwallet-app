@@ -194,10 +194,16 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.setEtherBalance.id:
-      return state.mergeIn(['ether'], {
-        amount: parseFloat(action.ether),
-        checkingOut: false
-      })
+      if (parseFloat(action.ether) === 0) {
+        return state.mergeIn(['ether'], {
+          amount: parseFloat(action.ether)
+        })
+      } else {
+        return state.mergeIn(['ether'], {
+          amount: parseFloat(action.ether),
+          checkingOut: false
+        })
+      }
 
     default:
       return state
