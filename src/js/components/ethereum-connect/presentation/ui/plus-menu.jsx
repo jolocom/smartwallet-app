@@ -67,8 +67,8 @@ const PlusMenu = (props) => {
       <IconCheckmark
         key={index}
         style={STYLES.itemSecurity}
-        color={item.verified ? theme.palette.primary1Color :
-          theme.jolocom.gray1} />
+        color={item.verified ? theme.palette.primary1Color
+          : theme.jolocom.gray1} />
     )
   })
   return (
