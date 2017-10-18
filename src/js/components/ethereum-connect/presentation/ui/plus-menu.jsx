@@ -5,11 +5,7 @@ import {
   NavigationExpandMore,
   NavigationExpandLess
 } from 'material-ui/svg-icons'
-import {
-  List,
-  FloatingActionButton,
-  Divider
-} from 'material-ui'
+import { List, FloatingActionButton, Divider } from 'material-ui'
 import {IconCheckmark} from '../../../common'
 
 const STYLES = {
