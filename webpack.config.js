@@ -1,41 +1,68 @@
-var webpack = require('webpack')
-var path = require('path')
+const path = require('path'),
+      webpack = require('webpack')
 
-var defaultGatewayUrl = ''
+let defaultGatewayUrl = ''
 if (process.env.USE_LOCAL_GATEWAY === 'true') {
   defaultGatewayUrl = 'http://localhost:5678'
 }
 
 module.exports = {
+
   entry: [
-    'babel-polyfill',
-    'whatwg-fetch',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './src/js/main.jsx',
-    './src/index.html'
+      'babel-polyfill',
+      'whatwg-fetch',
+      'react-hot-loader/patch',
+      'webpack-dev-server/client?http://localhost:8080',
+      'webpack/hot/only-dev-server',
+      './src/js/main.jsx',
+      './src/index.html'
   ],
-  stats: {
-    errorDetails: true
+  output: {
+    path: path.resolve(__dirname, 'dist/js'),
+    filename: '[name].js',
+    publicPath: 'js'
   },
-  resolve: {
-    extensions: ['', '.js', '.jsx', '.json'],
-    root: path.join(__dirname, 'src', 'js'),
-    alias: {
-      actions: 'actions',
-      components: 'components',
-      stores: 'stores',
-      lib: 'lib',
-      styles: 'styles',
-      routes: path.join(__dirname, 'src', 'js', 'routes', 'default.jsx'),
-      settings: path.join(__dirname, 'config', 'development.js')
+  module: {
+    rules: [
+      { 
+        test: /\.jsx?$/, 
+        include: [
+          path.resolve(__dirname, 'src/js'),
+          path.resolve(__dirname, 'test'),
+          path.resolve(__dirname, 'node_modules/ethereumjs.-tx')
+        ],
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      },
+      {
+        test: /\.html$/,
+         use: ['file-loader?name=[name].[ext]']
+      }
+    ]
+  },
+  devServer: {
+    stats: {
+      errorDetails: true
     }
   },
-  output: {
-    path: path.join(__dirname, 'dist', 'js'),
-    filename: 'bundle.js',
-    publicPath: 'js'
+  resolve: {
+    modules: [
+      path.resolve(__dirname, 'src/js'),
+      path.resolve(__dirname, 'node_modules'),
+      path.resolve(__dirname, 'node_modules/ethereumjs.-tx')
+    ],
+    extensions: ['*','.js', '.jsx', '.json'],
+    alias: {
+      'actions': 'actions',
+      'components': 'components',
+      'stores': 'stores',
+      'lib': 'lib',
+      'styles': 'styles',
+      'routes': path.resolve(__dirname, 'src/js/routes/default.jsx'),
+      'settings': path.resolve(__dirname, 'config/development.js')
+    }
   },
   externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
@@ -47,26 +74,6 @@ module.exports = {
       ? '"' + process.env.IDENTITY_GATEWAY_URL + '"'
       : '"' + defaultGatewayUrl + '"'
     })
-  ],
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        loader: 'babel',
-        include: [
-          path.join(__dirname, 'src', 'js'),
-          path.join(__dirname, 'test'),
-          path.join(__dirname, 'node_modules', 'ethereumjs-tx')
-        ]
-      },
-      {
-        test: /\.html$/,
-        loader: 'file?name=[name].[ext]'
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      }
-    ]
-  }
+  ]
 }
+
