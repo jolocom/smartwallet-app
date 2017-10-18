@@ -41,7 +41,6 @@ module.exports = {
       'stores': 'stores',
       'lib': 'lib',
       'styles': 'styles',
-      'routes': path.resolve(__dirname, 'src/js/routes/default.jsx'),
       'settings': path.resolve(__dirname, 'config/production.js')
     },
   },

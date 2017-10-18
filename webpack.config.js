@@ -65,11 +65,7 @@ module.exports = {
     }
   },
   externals: [{
-    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}',
-    'cheerio': 'window',
-    'react/lib/ExecutionEnvironment': true,
-    'react/lib/ReactContext': true,
-    'react/addons': true
+    xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
   }],
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
