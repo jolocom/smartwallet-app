@@ -170,14 +170,17 @@ module.exports.default = (state = initialState, action = {}) => {
 function mapConnectedServices(services, identity) {
   let arrayServices = []
   services.map((field, index) => {
-    let display = field.identity.split('/')
-    let orderedPattern = field.pattern.split('/')
-    let attribute = orderedPattern[2]
-    let patternType = orderedPattern[3]
+    const display = field.identity.split('/')
+    const orderedPattern = field.pattern.split('/')
+    const attribute = orderedPattern[2]
+    const patternType = orderedPattern[3]
     let identityAttribute
-    if (orderedPattern.length === 3 || orderedPattern.length === 5) {
+
+    const patternNotRelevant = orderedPattern.length === 3 || orderedPattern.length === 5 // eslint-disable-line max-len
+    if (patternNotRelevant) {
       return
     }
+
     if (attribute === 'email' || attribute === 'phone') {
       identityAttribute = identity.contact
     } else {
@@ -185,8 +188,8 @@ function mapConnectedServices(services, identity) {
     }
 
     if (patternType === '*') {
-      let items = identityAttribute[attribute + 's']
-      let sharedData = []
+      const items = identityAttribute[attribute + 's']
+      const sharedData = []
 
       items.map((item, index) => {
         let value
@@ -195,7 +198,7 @@ function mapConnectedServices(services, identity) {
         } else {
           value = item.address
         }
-        let sharedDetails = {
+        const sharedDetails = {
           attrType: attribute,
           value: value,
           type: item.type,
@@ -204,12 +207,12 @@ function mapConnectedServices(services, identity) {
         }
         sharedData.push(sharedDetails)
       })
+      const toCluster = _.find(arrayServices, {label: field.identity})
 
-      let cluster = _.find(arrayServices, {label: field.identity})
-      if (cluster !== undefined) {
-        cluster.sharedData.push(sharedData)
+      if (toCluster !== undefined) {
+        toCluster.sharedData.push(sharedData[0])
       } else {
-        let detailsService = {
+        const detailsService = {
           deleted: false,
           label: field.identity,
           displayName: display[3],
@@ -222,26 +225,26 @@ function mapConnectedServices(services, identity) {
         arrayServices.push(detailsService)
       }
     } else {
-      let item = _.find(identityAttribute[attribute + 's'], {id: patternType}) // eslint-disable-line max-len
+      const item = _.find(identityAttribute[attribute + 's'], {id: patternType}) // eslint-disable-line max-len
       let value
       if (item.hasOwnProperty('number')) {
         value = item.number
       } else {
         value = item.address
       }
-      let sharedDetails = {
+      const sharedDetails = {
         attrType: attribute,
         value: value,
         type: item.type,
         verified: item.verified
         // status: ''
       }
-      let cluster = _.find(arrayServices, {label: field.identity})
-      if (cluster !== undefined) {
-        cluster.sharedData.push(sharedDetails)
-        arrayServices.push(cluster)
+      const toCluster = _.find(arrayServices, {label: field.identity})
+      if (toCluster !== undefined) {
+        toCluster.sharedData.push(sharedDetails)
+        arrayServices.push(toCluster)
       } else {
-        let detailsService = {
+        const detailsService = {
           deleted: false,
           label: field.identity,
           displayName: display[3],
