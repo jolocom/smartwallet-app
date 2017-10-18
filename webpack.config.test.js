@@ -13,7 +13,7 @@ module.exports = {
     modules: [
       path.resolve(__dirname, 'src/js')
     ],
-    extensions: ['', '.js', '.jsx', '.json'],
+    extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
       actions: 'actions',
       components: 'components',
