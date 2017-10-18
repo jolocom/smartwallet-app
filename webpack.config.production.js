@@ -31,7 +31,7 @@ module.exports = {
   },
   resolve: {
     modules: [
-      path.resolve(__dirname) + 'src/js',
+      path.resolve(__dirname, 'src/js'),
       path.resolve(__dirname, 'node_modules')
     ],
     extensions: ['.*', '.js', '.jsx', '.json'],
@@ -41,6 +41,7 @@ module.exports = {
       'stores': 'stores',
       'lib': 'lib',
       'styles': 'styles',
+      'routes': path.resolve(__dirname, 'src/js/routes/default.jsx'),
       'settings': path.resolve(__dirname, 'config/production.js')
     },
   },

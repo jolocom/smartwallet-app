@@ -102,7 +102,10 @@ gulp.task('webpack:build', function(callback) {
   var myConfig = setRoutesEntry(webpackConfigProduction);
 	myConfig.plugins = myConfig.plugins.concat(
 		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify('production')
+			'process.env': {
+				// This has effect on the react lib size
+				'NODE_ENV': JSON.stringify('production')
+			}
 		}),
 		new webpack.optimize.UglifyJsPlugin()
 	);
