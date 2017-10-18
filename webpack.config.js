@@ -8,15 +8,15 @@ if (process.env.USE_LOCAL_GATEWAY === 'true') {
 
 module.exports = {
 
-entry: [
-    'babel-polyfill',
-    'whatwg-fetch',
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './src/js/main.jsx',
-    './src/index.html'
-  ],
+  entry: [
+  'babel-polyfill',
+  'whatwg-fetch',
+  'react-hot-loader/patch',
+  'webpack-dev-server/client?http://localhost:8080',
+  'webpack/hot/only-dev-server',
+  './src/js/main.jsx',
+  './src/index.html'
+],
   output: {
     path: path.resolve(__dirname, 'dist/js'),
     filename: '[name].js',
