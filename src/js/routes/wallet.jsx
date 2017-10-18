@@ -59,6 +59,9 @@ import SingleSignOnSharedDatatScreen from
 import AccountDetailsEthereumScreen from
   'components/wallet/screens/account-details-ethereum'
 
+import EthApprovalRequestScreen from
+  'components/ethereum-connect/screens/approval-request'
+
 import {IconServices} from '../components/common'
 
 import {
@@ -109,6 +112,7 @@ function getRoutes() {
       component={VerificationDocumentScreen} />
     <Route path="verifier/country"
       component={VerificationCountryScreen} />
+
     <Route path="registration"
       component={RegistrationNameEntryScreen} />
     <Route path="registration/entropy"
@@ -159,6 +163,9 @@ function getRoutes() {
     <Route path="wallet/single-sign-on/access-confirmation"
       component={AccessConfirmationScreen} />
 
+    <Route path="wallet/ethereum/execute-transaction"
+      component={EthApprovalRequestScreen} />
+
     <Route path="forgot-password" component={ForgotPassword} />
     <Route path="change-password/:username/:token" component={ChangePassword} />
     <Route path="signup" component={Signup} />
@@ -179,3 +186,6 @@ function getRoutes() {
 export default (history) => {
   return (<Router history={history}>{getRoutes()}</Router>)
 }
+
+// <Route path="wallet/ethereum/execute-transaction"
+//   component={EthereumExecuteTransactionScreen} />
