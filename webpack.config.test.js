@@ -11,7 +11,8 @@ module.exports = {
   externals: nodeModules,
   resolve: {
     modules: [
-      path.resolve(__dirname, 'src/js')
+      path.resolve(__dirname, 'src/js'),
+      path.resolve(__dirname, 'node_modules')
     ],
     extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
@@ -20,7 +21,7 @@ module.exports = {
       stores: 'stores',
       lib: 'lib',
       styles: 'styles',
-      settings: path.join(__dirname, 'config', 'test.js')
+      settings: path.resolve(__dirname, 'config/test.js')
     }
   },
   module: {
@@ -29,7 +30,6 @@ module.exports = {
     ],
     rules: [{
       test: /\.jsx?/,
-      loader: 'babel-loader',
       include: [
         path.resolve(__dirname, 'src/js'),
         path.resolve(__dirname, 'test'),
