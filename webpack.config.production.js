@@ -4,10 +4,10 @@ const webpack = require('webpack')
 module.exports = {
 
   entry: [
-  'babel-polyfill',
-  'whatwg-fetch',
-  './src/js/main.jsx'
-],
+    'babel-polyfill',
+    'whatwg-fetch',
+    './src/js/main.jsx'
+  ],
   output: {
     path: path.resolve(__dirname, 'dist/js'),
     filename: '[name].js',

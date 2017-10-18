@@ -39,3 +39,4 @@ module.exports = {
       loader: 'json-loader'
     }]
   }
+}
