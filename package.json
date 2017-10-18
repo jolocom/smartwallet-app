@@ -112,7 +112,7 @@
     "events": "^1.1.0",
     "formsy-material-ui": "^0.5.3",
     "formsy-react": "^0.18.1",
-    "history": "^1.17.0",
+    "history": "v3.x",
     "immutable": "^3.8.1",
     "jquery": "^2.1.4",
     "json-loader": "^0.5.4",
