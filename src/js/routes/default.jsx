@@ -83,3 +83,5 @@ function getRoutes() {
 export default (history) => {
   return (<Router history={history}>{getRoutes()}</Router>)
 }
+
+console.log(history, 'here is your history')

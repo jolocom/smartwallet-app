@@ -10,33 +10,34 @@ module.exports = {
   target: 'node',
   externals: nodeModules,
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json'],
-    root: path.join(__dirname, 'src', 'js'),
+    modules: [
+      path.resolve(__dirname, 'src/js'),
+      path.resolve(__dirname, 'node_modules')
+    ],
+    extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
       actions: 'actions',
       components: 'components',
       stores: 'stores',
       lib: 'lib',
       styles: 'styles',
-      settings: path.join(__dirname, 'config', 'test.js')
+      settings: path.resolve(__dirname, 'config/test.js')
     }
   },
   module: {
     noParse: [
       /node_modules\/sinon/
     ],
-    loaders: [{
+    rules: [{
       test: /\.jsx?/,
-      loader: 'babel-loader',
       include: [
-        path.join(__dirname, 'src', 'js'),
-        path.join(__dirname, 'test'),
-        path.join(__dirname, 'node_modules', 'ethereumjs-tx')
-      ]
-    },
-    {
-      test: /\.json$/,
-      loader: 'json-loader'
+        path.resolve(__dirname, 'src/js'),
+        path.resolve(__dirname, 'test'),
+        path.resolve(__dirname, 'node_modules/ethereumjs.-tx')
+      ],
+      use: {
+        loader: 'babel-loader'
+      }
     }]
   }
 }
