@@ -8,8 +8,8 @@ export const TEST_SEED = 'mandate print cereal style toilet hole' +
 
 export default class WalletAgent {
   constructor() {
-    this._manager = new WalletManager(settings.blockchain)
-    this._wallet = new Wallet(settings.blockchain)
+    this._manager = new WalletManager(settings.blockchain);
+    this._wallet = new Wallet(settings.blockchain);
     this._httpAgent = new HTTPAgent({proxy: false})
   }
 
