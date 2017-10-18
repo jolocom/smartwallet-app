@@ -1,5 +1,5 @@
-const path = require('path'),
-      webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack')
 
 let defaultGatewayUrl = ''
 if (process.env.USE_LOCAL_GATEWAY === 'true') {
@@ -8,14 +8,14 @@ if (process.env.USE_LOCAL_GATEWAY === 'true') {
 
 module.exports = {
 
-  entry: [
-      'babel-polyfill',
-      'whatwg-fetch',
-      'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:8080',
-      'webpack/hot/only-dev-server',
-      './src/js/main.jsx',
-      './src/index.html'
+entry: [
+    'babel-polyfill',
+    'whatwg-fetch',
+    'react-hot-loader/patch',
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    './src/js/main.jsx',
+    './src/index.html'
   ],
   output: {
     path: path.resolve(__dirname, 'dist/js'),
@@ -24,8 +24,8 @@ module.exports = {
   },
   module: {
     rules: [
-      { 
-        test: /\.jsx?$/, 
+      {
+        test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, 'src/js'),
           path.resolve(__dirname, 'test'),
@@ -38,7 +38,7 @@ module.exports = {
       },
       {
         test: /\.html$/,
-         use: ['file-loader?name=[name].[ext]']
+        use: ['file-loader?name=[name].[ext]']
       }
     ]
   },
@@ -53,7 +53,7 @@ module.exports = {
       path.resolve(__dirname, 'node_modules'),
       path.resolve(__dirname, 'node_modules/ethereumjs.-tx')
     ],
-    extensions: ['*','.js', '.jsx', '.json'],
+    extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
       'actions': 'actions',
       'components': 'components',

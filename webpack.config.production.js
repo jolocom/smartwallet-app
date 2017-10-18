@@ -1,13 +1,13 @@
-const path = require('path'),
-      webpack = require('webpack')
-      
+const path = require('path');
+const webpack = require('webpack')
+
 module.exports = {
 
-  entry: [
-      'babel-polyfill',
-      'whatwg-fetch',
-      './src/js/main.jsx'
-    ],
+entry: [
+    'babel-polyfill',
+    'whatwg-fetch',
+    './src/js/main.jsx'
+  ],
   output: {
     path: path.resolve(__dirname, 'dist/js'),
     filename: '[name].js',
@@ -27,7 +27,7 @@ module.exports = {
           loader: 'babel-loader'
         }
       }
-    ]  
+    ]
   },
   resolve: {
     modules: [
@@ -42,7 +42,7 @@ module.exports = {
       'lib': 'lib',
       'styles': 'styles',
       'settings': path.resolve(__dirname, 'config/production.js')
-    },
+    }
   },
   externals: [{
     xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'
