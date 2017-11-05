@@ -31,9 +31,9 @@ export default class Backend {
     return new GatewayAgent(this._gatewayUrl)
   }
 
-  get wallet() {
-    return new WalletAgent()
-  }
+  // get wallet() {
+  //   return new WalletAgent()
+  // }
 
   get webId() {
     return new WebIDAgent()

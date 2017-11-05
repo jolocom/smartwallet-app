@@ -13,10 +13,10 @@ export default class WalletAgent {
     this._httpAgent = new HTTPAgent({proxy: false})
   }
 
-  generateSeedPhrase(entropy) {
-    let seed = this._manager.generateSeedPhrase(entropy)
-    return seed
-  }
+  // generateSeedPhrase(entropy) {
+  //   let seed = this._manager.generateSeedPhrase(entropy)
+  //   return seed
+  // }
 
   // retrieveSeedPhrase({email, password}) {
   //   return this._manager._seedStorage.getSeed({email, password})

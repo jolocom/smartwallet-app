@@ -109,6 +109,15 @@ export default class GatewayAgent {
     )
   }
 
+  // generates seed phrase
+  generateSeedPhrase(randomString) {
+    return new Promise(resolve => {
+      setTimeout(() => resolve('dummy seed phrase'), 2000)
+    })
+  }
+  
+  // return this.http.get this.gatewayurl/generateSeedPhrase
+
   getWalletAddress({userName}) {
     return this._httpAgent.get(
       `${this._gatewayUrl}/${userName}/ethereum`

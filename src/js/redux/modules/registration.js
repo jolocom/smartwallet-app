@@ -71,10 +71,31 @@ const actions = module.exports = makeActions('registration', {
 
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
-          dispatch(actions.setPassphrase(
-            backend.wallet.generateSeedPhrase(randomString)
+          dispatch(actions.generateSeedPhrase(
+            backend.gateway.generateSeedPhrase(randomString)
           ))
         }
+      }
+    }
+  },
+  generateSeedPhrase: {
+    expectedParams: [],
+    // I want to await the async resolution of the generateSeedPhrase Promise
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {backend}) => {
+        // set state to registration state tree
+        const state = getState().get('registration').toJS()
+        // action creator, which will then be dispatched on 74
+        dispatch(actions.generateSeedPhrase.buildAction(params, async () => {
+          await backend.gateway.generateSeedPhrase({
+            randomString: state.passphrase.randomString
+          })
+          .then((params) => {
+            dispatch(actions.setPassphrase(params))
+            dispatch(actions.setPassphraseWrittenDown(true))
+          })
+        }))
       }
     }
   },
@@ -302,6 +323,8 @@ const initialState = Immutable.fromJS({
     progress: 0,
     randomString: '',
     phrase: '',
+    generating: false,
+    generated: false,
     writtenDown: false,
     valid: false
   },
@@ -372,6 +395,33 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setPassphrase.id:
       return state.mergeIn(['passphrase'], {
         phrase: action.phrase
+      })
+
+    case actions.generateSeedPhrase.id:
+     return state.mergeDeep({
+        passphrase: {
+          generating: true,
+          generated: false,
+          errorMsg: null
+        }
+      })
+
+    case actions.generateSeedPhrase.id_fail:
+      return state.mergeDeep({
+        passphrase: {
+          generating: false,
+          generated: false,
+          errorMsg: 'generating passphrase has failed'
+        }
+      })
+
+    case actions.generateSeedPhrase.id_success:
+      return state.mergeDeep({
+        passphrase: {
+          generating: false,
+          generated: true,
+          errorMsg: null
+        }
       })
 
     case actions.setPin.id:
