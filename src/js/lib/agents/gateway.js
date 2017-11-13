@@ -138,7 +138,9 @@ export default class GatewayAgent {
   // }
 
     return new Promise(resolve => {
-      setTimeout(() => resolve('wrong detect grant dash cheese illegal urban power become equal comic test'), 2000)
+      // eslint-disable-next-line max-len
+      setTimeout(() => resolve('wrong detect grant dash cheese illegal urban power become equal comic test'
+      ), 2000)
     })
   }
 

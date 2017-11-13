@@ -71,6 +71,7 @@ const actions = module.exports = makeActions('registration', {
 
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
+          dispatch(actions.setRandomString(randomString))
           dispatch(actions.generateSeedPhrase(
             backend.gateway.generateSeedPhrase(randomString)
           ))
