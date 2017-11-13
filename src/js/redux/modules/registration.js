@@ -216,6 +216,7 @@ const actions = module.exports = makeActions('registration', {
         dispatch(actions.registerWallet.buildAction(params, async () => {
           const userType = state.userType.value
           if (userType === 'expert') {
+            console.log(state.ownURL, "here is your url in registerWallet")
             await services.auth.register({
               userName: state.username.value,
               seedPhrase: state.passphrase.phrase,

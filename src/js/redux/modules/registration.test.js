@@ -280,7 +280,7 @@ describe('Wallet registration Redux module', () => {
         getProgress: stub().returns(1),
         getRandomString: stub().returns('bla bla bla bla bla bla bla')
       }}
-      const backend = {wallet: {
+      const backend = {gateway: {
         generateSeedPhrase: stub().returns('seedphrase')
       }}
 
@@ -292,7 +292,7 @@ describe('Wallet registration Redux module', () => {
 
       expect(services.entropy.addFromDelta.called).to.equal(true)
       expect(services.entropy.getRandomString.called).to.equal(true)
-      expect(backend.wallet.generateSeedPhrase.called).to.equal(true)
+      expect(backend.gateway.generateSeedPhrase.called).to.equal(true)
       expect(dispatch.calls).to.deep.equal([
         {args: [registration.setEntropyStatus({
           sufficientEntropy: true,
@@ -639,6 +639,8 @@ describe('Wallet registration Redux module', () => {
             progress: 0,
             randomString: '',
             phrase: '',
+            generating: false,
+            generated: false,
             writtenDown: false,
             valid: false
           })
@@ -656,6 +658,8 @@ describe('Wallet registration Redux module', () => {
             progress: 0.4,
             randomString: '',
             phrase: '',
+            generating: false,
+            generated: false,
             writtenDown: false,
             valid: false
           })
