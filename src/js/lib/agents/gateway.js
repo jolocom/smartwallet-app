@@ -101,7 +101,6 @@ export default class GatewayAgent {
   }
 
   register({userName, seedPhrase, email, password, inviteCode}) {
-    console.log(this, 'here is register in gateway')
     return this._httpAgent.put(
       `${this._gatewayUrl}/${userName}`,
       JSON.stringify({seedPhrase, email, password, inviteCode}),
@@ -139,7 +138,7 @@ export default class GatewayAgent {
   // }
 
     return new Promise(resolve => {
-      setTimeout(() => resolve('dummy seed phrase'), 2000)
+      setTimeout(() => resolve('wrong detect grant dash cheese illegal urban power become equal comic test'), 2000)
     })
   }
 
