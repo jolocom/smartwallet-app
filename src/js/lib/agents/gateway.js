@@ -112,37 +112,35 @@ export default class GatewayAgent {
   }
 
   // generates seed phrase
-  generateSeedPhrase(randomString) {
-  //   console.log(JSON.stringify(randomString), 'here is your random string')
-  //   const url = `${this._gatewayUrl}/generateSeed`
-  //   return new Promise((resolve, reject) =>
-  //   // sends string generated from entropy to gateway
-  //   this._httpAgent.post(
-  //     url,
-  //     JSON.stringify(randomString),
-  //     {
-  //       'Content-type': 'application/json'
-  //     }
-  //   // gets the generated seedphrase from the Identity Gateway
-  //   )
-  //  .then((response) => {
-  //    console.log(response, 'here is your response')
-  //    resolve()
-  //   // the seedphrase will be set from response
-  //  })
-  //  .catch((e) => {
-  //    console.log(e, 'error in generate seed phrase')
-  //    reject()
-  //  })
-  // )
-  // }
-
-    return new Promise(resolve => {
-      // eslint-disable-next-line max-len
-      setTimeout(() => resolve('wrong detect grant dash cheese illegal urban power become equal comic test'
-      ), 2000)
-    })
+  generateSeedPhrase({randomString}) {
+    const url = `${this._gatewayUrl}/generateSeed`
+    return new Promise((resolve, reject) =>
+    // sends string generated from entropy to gateway
+    this._httpAgent.post(
+      url,
+      JSON.stringify({randomString}),
+      {
+        'Content-type': 'application/json'
+      }
+    // gets the generated seedphrase from the Identity Gateway
+    )
+   .then((response) => {
+     resolve(response.seedPhrase)
+    // the seedphrase will be set from response
+   })
+   .catch((e) => {
+     console.log(e, 'error in generate seed phrase')
+     reject()
+   })
+  )
   }
+
+  //   return new Promise(resolve => {
+  //     // eslint-disable-next-line max-len
+  //     setTimeout(() => resolve('wrong detect grant dash cheese illegal urban power become equal comic test'
+  //     ), 2000)
+  //   })
+  // }
 
   getWalletAddress({userName}) {
     return this._httpAgent.get(
