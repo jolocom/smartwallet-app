@@ -34,8 +34,8 @@ describe('(Component) RegistrationEntropyScreen', function() {
     expect(wrapper.find('Entropy').prop('imageUncovering')).to.be.false
     expect(wrapper.find('Entropy').prop('user')).to.equal('xyz')
   })
-  it('should call goForward onSubmit with the right params', function() {
-    const goForward = stub()
+  it('should call submitEntropy onSubmit with the right params', function() {
+    const submitEntropy = stub()
     const wrapper = shallow(
       (<RegistrationEntropyScreen.WrappedComponent {
         ...RegistrationEntropyScreen.mapStateToProps(Immutable.fromJS({
@@ -52,7 +52,7 @@ describe('(Component) RegistrationEntropyScreen', function() {
           }
         }))
       }
-        goForward={goForward}
+        submitEntropy={submitEntropy}
         setMaskedImageUncovering={() => {}}
         addEntropyFromDeltas={() => {}}
       />),
@@ -60,8 +60,8 @@ describe('(Component) RegistrationEntropyScreen', function() {
     )
 
     wrapper.find('Entropy').props().onSubmit()
-    expect(goForward.called).to.be.true
-    expect(goForward.calls).to.deep.equal([{'args': []}])
+    expect(submitEntropy.called).to.be.true
+    expect(submitEntropy.calls).to.deep.equal([{'args': []}])
   })
   it('should call setMaskedImageUncovering onImageUncoveringChange ' +
     'with the right params', function() {

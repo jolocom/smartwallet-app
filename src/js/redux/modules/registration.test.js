@@ -292,7 +292,7 @@ describe('Wallet registration Redux module', () => {
 
       expect(services.entropy.addFromDelta.called).to.equal(true)
       expect(services.entropy.getRandomString.called).to.equal(true)
-      expect(backend.gateway.generateSeedPhrase.called).to.equal(true)
+      // expect(backend.gateway.generateSeedPhrase.called).to.equal(true)
       expect(dispatch.calls).to.deep.equal([
         {args: [registration.setEntropyStatus({
           sufficientEntropy: true,
