@@ -6,7 +6,6 @@ import Presentation from '../presentation/entropy'
 @connect({
   props: ['registration'],
   actions: [
-    // 'registration:goForward',
     'registration:setMaskedImageUncovering',
     'registration:addEntropyFromDeltas',
     'registration:submitEntropy'

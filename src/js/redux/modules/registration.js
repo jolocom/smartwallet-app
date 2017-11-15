@@ -72,9 +72,6 @@ const actions = module.exports = makeActions('registration', {
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
           dispatch(actions.setRandomString(randomString))
-          // dispatch(actions.generateSeedPhrase(
-          //   backend.gateway.generateSeedPhrase(randomString)
-          // ))
         }
       }
     }
@@ -90,13 +87,10 @@ const actions = module.exports = makeActions('registration', {
   },
   generateSeedPhrase: {
     expectedParams: [],
-    // I want to await the async resolution of the generateSeedPhrase Promise
     async: true,
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
-        // set state to registration state tree
         const randomStringState = getState().getIn(['registration', 'passphrase', 'randomString'])
-        // action creator, which will then be dispatched on 74
         dispatch(actions.generateSeedPhrase.buildAction(params, async () => {
           await backend.gateway.generateSeedPhrase({randomStringState})
           .then((params) => {
