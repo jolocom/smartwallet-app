@@ -1,5 +1,5 @@
-var path = require('path')
-var webpack = require('webpack')
+const webpack = require('webpack')
+const path = require('path')
 
 module.exports = {
   entry: [
@@ -8,19 +8,21 @@ module.exports = {
     './src/js/main.jsx'
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json'],
-    root: path.resolve(__dirname) + '/src/js',
+    extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
-      actions: 'actions',
-      components: 'components',
-      stores: 'stores',
-      lib: 'lib',
-      styles: 'styles',
-      settings: path.resolve(__dirname) + '/config/production.js'
+      actions: path.resolve(__dirname, 'src/js/actions'),
+      components: path.resolve(__dirname, 'src/js/components'),
+      lib: path.resolve(__dirname, 'src/js/lib'),
+      redux_state: path.resolve(__dirname, 'src/js/redux_state'),
+      services: path.resolve(__dirname, 'src/js/services'),
+      stores: path.resolve(__dirname, 'src/js/stores'),
+      styles: path.resolve(__dirname, 'src/js/styles'),
+      routes: path.resolve(__dirname, 'src/js/routes'),
+      settings: path.resolve(__dirname, 'config/production.js')
     }
   },
   output: {
-    path: path.resolve(__dirname) + '/dist/js',
+    path: path.resolve(__dirname, 'dist/js'),
     filename: 'bundle.js',
     publicPath: 'js/'
   },
@@ -32,22 +34,18 @@ module.exports = {
       'IDENTITY_GATEWAY_URL': process.env.TIER === 'staging'
       ? '"https://staging.identity.jolocom.com"'
       : '"https://identity.jolocom.com"'
-    })
-  ],
+    })],
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loader: 'babel',
-      include: [
-        path.join(__dirname, 'src', 'js'),
-        path.join(__dirname, 'test'),
-        path.join(__dirname, 'node_modules', 'ethereumjs-tx')
-      ]
-    },
-    {
-      test: /\.json$/,
-      loader: 'json-loader'
-    }]
-  },
-  debug: true
+    rules: [
+      {
+        test: /\.jsx?$/,
+        include: [
+          path.resolve(__dirname, 'test'),
+          path.resolve(__dirname, 'node_modules/ethereumjs-tx'),
+          path.resolve(__dirname, 'src/js')
+        ],
+        loader: 'babel-loader'
+      }
+    ]
+  }
 }

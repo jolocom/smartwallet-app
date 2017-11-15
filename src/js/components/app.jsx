@@ -1,6 +1,6 @@
 import React from 'react'
 import Reflux from 'reflux'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import Radium, {StyleRoot} from 'radium'
 
 import SnackbarContainer from 'components/snack-bar'

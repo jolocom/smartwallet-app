@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import { IconButton, AppBar } from 'material-ui'
 import { Link } from 'react-router'
 

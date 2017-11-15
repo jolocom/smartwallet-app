@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton} from 'material-ui'

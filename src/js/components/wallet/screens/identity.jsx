@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'redux/utils'
+import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/identity'
 import WalletError from '../../common/error'
 import Loading from 'components/common/loading'

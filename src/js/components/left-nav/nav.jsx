@@ -9,7 +9,7 @@ import {
   FontIcon
   // Avatar
 } from 'material-ui'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 
 import Header from './header.jsx'
 

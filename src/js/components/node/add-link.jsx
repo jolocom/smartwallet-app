@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import {FontIcon, Paper, SelectField, TextField, MenuItem} from 'material-ui'
 import nodeActions from 'actions/node'
 import GraphPreview from './graph-preview.jsx'

@@ -9,7 +9,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import { AppContainer } from 'react-hot-loader'
 
-import createStore from './redux/create'
+import createStore from 'redux_state/create'
 
 injectTapEventPlugin()
 
