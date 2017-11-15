@@ -1,5 +1,4 @@
 import * as _ from 'lodash'
-// import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 import HTTPAgent from 'lib/agents/http'
 import * as settings from 'settings'
 
