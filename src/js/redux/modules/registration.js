@@ -91,6 +91,9 @@ const actions = module.exports = makeActions('registration', {
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
         const randomStringState = getState().getIn(['registration', 'passphrase', 'randomString'])
+        if (randomStringState = '') {
+          return
+        }
         dispatch(actions.generateSeedPhrase.buildAction(params, async () => {
           await backend.gateway.generateSeedPhrase({randomStringState})
           .then((params) => {
