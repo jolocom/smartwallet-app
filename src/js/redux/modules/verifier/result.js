@@ -6,7 +6,6 @@ import * as transition from './transition'
 const verificationStartUrl = '/verifier/document'
 const dataCheckUrl = 'verifier/data'
 
-// import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 
 const actions = module.exports = makeActions('wallet/contact', {
   finishVerification: {

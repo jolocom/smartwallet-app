@@ -72,10 +72,19 @@ const actions = module.exports = makeActions('registration', {
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
           dispatch(actions.setRandomString(randomString))
-          dispatch(actions.generateSeedPhrase(
-            backend.gateway.generateSeedPhrase(randomString)
-          ))
+          // dispatch(actions.generateSeedPhrase(
+          //   backend.gateway.generateSeedPhrase(randomString)
+          // ))
         }
+      }
+    }
+  },
+  submitEntropy: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        const entropyState = getState().getIn(['registration', 'passphrase', 'sufficientEntropy']);
+        entropyState ? dispatch(actions.generateSeedPhrase()) : console.log('not enough entropy')
       }
     }
   },
@@ -86,15 +95,16 @@ const actions = module.exports = makeActions('registration', {
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
         // set state to registration state tree
-        const state = getState().get('registration').toJS()
+        const randomStringState = getState().getIn(['registration', 'passphrase', 'randomString'])
         // action creator, which will then be dispatched on 74
         dispatch(actions.generateSeedPhrase.buildAction(params, async () => {
-          await backend.gateway.generateSeedPhrase({
-            randomString: state.passphrase.randomString
-          })
+          await backend.gateway.generateSeedPhrase({randomStringState})
           .then((params) => {
             dispatch(actions.setPassphrase(params))
             dispatch(actions.setPassphraseWrittenDown(true))
+            dispatch(actions.goForward())
+          }).catch(e => {
+            console.log(e, 'error in generate seed phrase')
           })
         }))
       }

@@ -109,28 +109,11 @@ export default class GatewayAgent {
     )
   }
 
-  // generates seed phrase
   generateSeedPhrase({randomString}) {
     const url = `${this._gatewayUrl}/generateSeed`
-    return new Promise((resolve, reject) =>
-    // sends string generated from entropy to gateway
-    this._httpAgent.post(
-      url,
-      JSON.stringify({randomString}),
-      {
-        'Content-type': 'application/json'
-      }
-    // gets the generated seedphrase from the Identity Gateway
-    )
-   .then((response) => {
-     resolve(response.seedPhrase)
-    // the seedphrase will be set from response
-   })
-   .catch((e) => {
-     console.log(e, 'error in generate seed phrase')
-     reject()
-   })
-  )
+    return this._httpAgent.post(url, JSON.stringify({randomString}), {
+      'Content-type': 'application/json'
+    }).then(response => response.seedPhrase)
   }
 
   getWalletAddress({userName}) {
