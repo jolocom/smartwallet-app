@@ -9,7 +9,7 @@ const actions = module.exports = makeActions('single-sign-on/access-right', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(actions.showSharedData.buildAction(params))
-        dispatch(router.pushRoute('wallet/sso/shared-data'))
+        dispatch(router('wallet/sso/shared-data'))
       }
     }
   },

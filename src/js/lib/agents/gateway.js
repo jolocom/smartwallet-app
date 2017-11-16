@@ -1,5 +1,4 @@
 import * as _ from 'lodash'
-import WalletCrypto from 'smartwallet-contracts/lib/wallet-crypto'
 import HTTPAgent from 'lib/agents/http'
 import * as settings from 'settings'
 
@@ -104,9 +103,17 @@ export default class GatewayAgent {
     return this._httpAgent.put(
       `${this._gatewayUrl}/${userName}`,
       JSON.stringify({seedPhrase, email, password, inviteCode}),
-      {'Content-type': 'application/json'}
-      // {credentials: 'omit'}
+      {
+        'Content-type': 'application/json'
+      }
     )
+  }
+
+  generateSeedPhrase({randomString}) {
+    const url = `${this._gatewayUrl}/generateSeed`
+    return this._httpAgent.post(url, JSON.stringify({randomString}), {
+      'Content-type': 'application/json'
+    }).then(response => response.seedPhrase)
   }
 
   getWalletAddress({userName}) {
@@ -193,6 +200,37 @@ export default class GatewayAgent {
     )
   }
 
+  serializeStringMap(obj) {
+    const keys = Object.keys(obj).sort()
+    const pairs = []
+    keys.forEach(key => {
+      const val = obj[key]
+      if (typeof val !== 'string') {
+        throw new Error('Key "' + key + '" is not a string value')
+      }
+
+      pairs.push([key, val])
+    })
+    return JSON.stringify(pairs)
+  }
+
+  serializeData(stringOrMap) {
+    let serialized
+    // console.log('Serialize Data:' + stringOrMap)
+    if (typeof stringOrMap === 'object') {
+      serialized = this.serializeStringMap(stringOrMap)
+    } else if (typeof stringOrMap === 'string') {
+      serialized = stringOrMap
+    } else {
+      throw Error(
+         // eslint-disable-next-line max-len
+        'Expected stringOrMap to either string or object containing only strings',
+      )
+    }
+
+    return serialized
+  }
+
   storeAttribute({userName, attributeType, attributeId, attributeData}) {
     let url = `${this._gatewayUrl}/${userName}/identity/${attributeType}`
     if (attributeId) {
@@ -201,7 +239,7 @@ export default class GatewayAgent {
 
     let serialized
     if (_.isPlainObject(attributeData)) {
-      serialized = new WalletCrypto().serializeData(attributeData)
+      serialized = this.serializeData(attributeData)
     } else {
       serialized = JSON.stringify(attributeData)
     }

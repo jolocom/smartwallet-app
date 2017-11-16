@@ -71,10 +71,42 @@ const actions = module.exports = makeActions('registration', {
 
         if (entropy.isReady()) {
           const randomString = entropy.getRandomString(12)
-          dispatch(actions.setPassphrase(
-            backend.wallet.generateSeedPhrase(randomString)
-          ))
+          dispatch(actions.setRandomString(randomString))
         }
+      }
+    }
+  },
+  submitEntropy: {
+    expectedParams: [],
+    creator: () => {
+      return (dispatch, getState) => {
+        // eslint-disable-next-line max-len
+        const entropyState = getState().getIn(['registration', 'passphrase', 'sufficientEntropy'])
+        // eslint-disable-next-line max-len
+        entropyState ? dispatch(actions.generateSeedPhrase()) : console.log('not enough entropy')
+      }
+    }
+  },
+  generateSeedPhrase: {
+    expectedParams: [],
+    async: true,
+    creator: (params) => {
+      return (dispatch, getState, {backend}) => {
+        // eslint-disable-next-line max-len
+        const randomStringState = getState().getIn(['registration', 'passphrase', 'randomString'])
+        if (randomStringState === '') {
+          return
+        } // eslint-disable-next-line max-len
+        dispatch(actions.generateSeedPhrase.buildAction(params, async (backend) => {
+          await backend.gateway.generateSeedPhrase({randomStringState})
+          .then((params) => {
+            dispatch(actions.setPassphrase(params))
+            dispatch(actions.setPassphraseWrittenDown(true))
+            dispatch(actions.goForward())
+          }).catch(e => {
+            console.log(e, 'error in generate seed phrase')
+          })
+        }))
       }
     }
   },
@@ -302,6 +334,8 @@ const initialState = Immutable.fromJS({
     progress: 0,
     randomString: '',
     phrase: '',
+    generating: false,
+    generated: false,
     writtenDown: false,
     valid: false
   },
@@ -372,6 +406,33 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.setPassphrase.id:
       return state.mergeIn(['passphrase'], {
         phrase: action.phrase
+      })
+
+    case actions.generateSeedPhrase.id:
+      return state.mergeDeep({
+        passphrase: {
+          generating: true,
+          generated: false,
+          errorMsg: null
+        }
+      })
+
+    case actions.generateSeedPhrase.id_fail:
+      return state.mergeDeep({
+        passphrase: {
+          generating: false,
+          generated: false,
+          errorMsg: 'generating passphrase has failed'
+        }
+      })
+
+    case actions.generateSeedPhrase.id_success:
+      return state.mergeDeep({
+        passphrase: {
+          generating: false,
+          generated: true,
+          errorMsg: null
+        }
       })
 
     case actions.setPin.id:
