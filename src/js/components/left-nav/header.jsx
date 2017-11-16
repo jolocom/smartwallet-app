@@ -1,11 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
 
-// import {IconButton, Avatar} from 'material-ui'
-
-import ProfileActions from 'actions/profile'
-// import graphActions from 'actions/graph-actions'
-
 let Header = React.createClass({
   contextTypes: {
     profile: React.PropTypes.any,
@@ -14,9 +9,6 @@ let Header = React.createClass({
   },
   propTypes: {
     onClose: React.PropTypes.any
-  },
-  editProfile() {
-    ProfileActions.show()
   },
   _handleNavigateHome() {
     this.context.router.push('graph')

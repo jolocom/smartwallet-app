@@ -4,12 +4,6 @@ import { Router, Route, IndexRoute } from 'react-router'
 import App from 'components/app.jsx'
 import Index from 'components/index.jsx'
 
-import Login from 'components/accounts/login'
-import Signup from 'components/accounts/signup'
-import ForgotPassword from 'components/accounts/forgot-password'
-import ChangePassword from 'components/accounts/change-password'
-import Profile from 'components/accounts/profile'
-
 import RegistrationNameEntryScreen from
   'components/registration/screens/name-entry'
 import RegistrationEntropyScreen from
@@ -48,7 +42,6 @@ import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
 import EtherTabScreen from 'components/wallet/screens/ether-tabs'
 
 import WalletLogin from 'components/wallet-login'
-import LaymanLoginScreen from 'components/wallet-login/screens/layman'
 import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
 import LoginPinScreen from 'components/wallet-login/screens/pin'
 
@@ -157,7 +150,6 @@ function getRoutes() {
         component={WalletMoneyScreen} />
     </Route>
 
-    <Route path="profile" component={Profile} />
     <Route path="wallet/single-sign-on/access-request"
       component={AccessRequestScreen} />
     <Route path="wallet/single-sign-on/access-confirmation"
@@ -166,13 +158,8 @@ function getRoutes() {
     <Route path="wallet/ethereum/execute-transaction"
       component={EthApprovalRequestScreen} />
 
-    <Route path="forgot-password" component={ForgotPassword} />
-    <Route path="change-password/:username/:token" component={ChangePassword} />
-    <Route path="signup" component={Signup} />
-    <Route path="oldlogin" component={Login} />
     <Route path="login" component={WalletLogin} />
     <Route path="login/expert" component={ExpertLoginPassphraseScreen} />
-    <Route path="login/layman" component={LaymanLoginScreen} />
     <Route path="login/pin-entry" component={LoginPinScreen} />
 
     <Route path="verify-email" component={EmailConfirmationScreen} />

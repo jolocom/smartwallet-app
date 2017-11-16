@@ -33,29 +33,6 @@ let Util = {
     return Math.random().toString(36).substr(2, 5)
   },
 
-  webidRoot(webid) {
-    let matches =
-      // WTF :D
-      webid.match(/^(.*)\/profile\/card#me$/) ||
-      webid.match(/^(.*)\/profile\/card#i$/) ||
-      webid.match(/^(.*)\/profile\/card$/)
-    return matches && matches[1]
-  },
-
-  urlWithoutHash(target) {
-    let obj = url.parse(target)
-    obj.hash = null
-    return url.format(obj)
-  },
-
-  linkToState(target, property) {
-    return (e) => {
-      target.setState({
-        [property]: e.target.value
-      })
-    }
-  },
-
   isChrome() {
     return /Chrome/.test(navigator.userAgent) &&
            /Google Inc/.test(navigator.vendor)
@@ -64,38 +41,6 @@ let Util = {
   isSafari() {
     return /Safari/.test(navigator.userAgent) &&
       /Apple Computer/.test(navigator.vendor)
-  },
-
-  /*
-   * @summary Returns the user's profile folder uri.
-   *   assuming they are using one.
-   * @param {string} webId - webId of the user.
-   * @return {string} uri - Uri to the profile folder.
-   */
-
-  getProfFolderUrl(webId) {
-    return `${this.webidRoot(webId)}/profile`
-  },
-
-  /*
-   * @summary Returns the uri of the index file belonging to an user.
-   * @param {string} uri - WebID of the user.
-   *   if empty, no the current webid is used.
-   * @return {string} uri - Uri to the index file.
-   */
-  // TODO introduce discovery mechanism / protocol.
-  // This is too hardcoded.
-  getIndexUri(uri) {
-    const WebIdAgent = require('lib/agents/webid').default
-    const webId = (new WebIdAgent()).getWebId()
-    let indexUri = this.webidRoot(webId)
-    indexUri += `/little-sister/index/${this.formatWebId(uri)}`
-    return indexUri
-  },
-
-  // TODO Rethink
-  formatWebId(webId) {
-    return this.webidRoot(webId).replace(/[: ./]/g, '')
   },
 
   /*
@@ -113,10 +58,6 @@ let Util = {
       return uri
     }
     return `${proxy}/proxy?url=${uri}`
-  },
-
-  usernameToWebId(username) {
-    return `https://${username}.webid.jolocom.de/profile/card#me`
   },
 
   /*

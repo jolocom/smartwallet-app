@@ -2,16 +2,17 @@
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var concat = require('gulp-concat');
+var clean = require('gulp-clean');
+var rename = require('gulp-rename');
+var eslint = require('gulp-eslint');
+
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config.js');
 var webpackConfigProduction = require('./webpack.config.production.js');
-var eslint = require('gulp-eslint');
 var fs = require('fs');
 var path = require('path');
-var concat = require('gulp-concat');
-var clean = require('gulp-clean');
-var rename = require('gulp-rename');
 
 var cordova = require('cordova-lib').cordova
 
