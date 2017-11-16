@@ -80,7 +80,9 @@ const actions = module.exports = makeActions('registration', {
     expectedParams: [],
     creator: () => {
       return (dispatch, getState) => {
-        const entropyState = getState().getIn(['registration', 'passphrase', 'sufficientEntropy']);
+        // eslint-disable-next-line max-len
+        const entropyState = getState().getIn(['registration', 'passphrase', 'sufficientEntropy'])
+        // eslint-disable-next-line max-len
         entropyState ? dispatch(actions.generateSeedPhrase()) : console.log('not enough entropy')
       }
     }
@@ -90,11 +92,12 @@ const actions = module.exports = makeActions('registration', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
+        // eslint-disable-next-line max-len
         const randomStringState = getState().getIn(['registration', 'passphrase', 'randomString'])
-        if (randomStringState = '') {
+        if (randomStringState === '') {
           return
-        }
-        dispatch(actions.generateSeedPhrase.buildAction(params, async () => {
+        } // eslint-disable-next-line max-len
+        dispatch(actions.generateSeedPhrase.buildAction(params, async (backend) => {
           await backend.gateway.generateSeedPhrase({randomStringState})
           .then((params) => {
             dispatch(actions.setPassphrase(params))
@@ -406,7 +409,7 @@ module.exports.default = (state = initialState, action = {}) => {
       })
 
     case actions.generateSeedPhrase.id:
-     return state.mergeDeep({
+      return state.mergeDeep({
         passphrase: {
           generating: true,
           generated: false,
