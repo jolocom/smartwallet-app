@@ -1,7 +1,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Radium from 'radium'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 
 import {AppBar, IconButton} from 'material-ui'
 

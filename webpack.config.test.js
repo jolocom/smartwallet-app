@@ -1,7 +1,7 @@
-var fs = require('fs')
-var path = require('path')
+const fs = require('fs')
+const path = require('path')
 
-var nodeModules = {}
+const nodeModules = {}
 fs.readdirSync('node_modules').forEach(function(module) {
   nodeModules[module] = `require('${module}')`
 })
@@ -10,15 +10,17 @@ module.exports = {
   target: 'node',
   externals: nodeModules,
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json'],
-    root: path.join(__dirname, 'src', 'js'),
+    extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
-      actions: 'actions',
-      components: 'components',
-      stores: 'stores',
-      lib: 'lib',
-      styles: 'styles',
-      settings: path.join(__dirname, 'config', 'test.js')
+      actions: path.resolve(__dirname, 'src/js/actions'),
+      components: path.resolve(__dirname, 'src/js/components'),
+      lib: path.resolve(__dirname, 'src/js/lib'),
+      redux_state: path.resolve(__dirname, 'src/js/redux_state'),
+      services: path.resolve(__dirname, 'src/js/services'),
+      stores: path.resolve(__dirname, 'src/js/stores'),
+      styles: path.resolve(__dirname, 'src/js/styles'),
+      routes: path.resolve(__dirname, 'src/js/routes'),
+      settings: path.resolve(__dirname, 'config/test.js')
     }
   },
   module: {
@@ -29,14 +31,10 @@ module.exports = {
       test: /\.jsx?/,
       loader: 'babel-loader',
       include: [
-        path.join(__dirname, 'src', 'js'),
-        path.join(__dirname, 'test'),
-        path.join(__dirname, 'node_modules', 'ethereumjs-tx')
+        path.resolve(__dirname, 'test'),
+        path.resolve(__dirname, 'node_modules/ethereumjs-tx'),
+        path.resolve(__dirname, 'src/js')
       ]
-    },
-    {
-      test: /\.json$/,
-      loader: 'json-loader'
     }]
   }
 }

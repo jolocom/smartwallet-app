@@ -1,6 +1,6 @@
 import rdf from 'rdflib'
 import React from 'react'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import Dialog from 'components/common/dialog'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import nodeActions from 'actions/node'

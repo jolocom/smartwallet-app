@@ -4,7 +4,7 @@ import Radium from 'radium'
 import accepts from 'attr-accept'
 import {proxy} from 'settings'
 
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 
 import Dialog from 'components/common/dialog.jsx'
 import {Layout, Content} from 'components/layout'

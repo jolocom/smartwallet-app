@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 
 import ContactsList from 'components/contacts/list.jsx'
 import ChatActions from 'actions/chat'

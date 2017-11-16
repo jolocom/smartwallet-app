@@ -49,7 +49,7 @@ describe('Redux abstraction', function() {
     const store = mockStore({})
     const openDialog = shallow(<Connected store={store} />).prop('openDialog')
     expect(openDialog).to.equal(
-      require('redux/modules/common/dialog').openDialog
+      require('redux_state/modules/common/dialog').openDialog
     )
   })
 })

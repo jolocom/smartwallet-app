@@ -19,7 +19,6 @@ function startDevServer(config, callback) {
 	// modify some webpack config options
 	var myConfig = Object.create(config);
 	myConfig.devtool = 'eval';
-	myConfig.debug = true;
 
 	// Start a webpack-dev-server
 	new WebpackDevServer(webpack(myConfig), {
@@ -107,7 +106,6 @@ gulp.task('webpack:build', function(callback) {
 				'NODE_ENV': JSON.stringify('production')
 			}
 		}),
-		new webpack.optimize.DedupePlugin(),
 		new webpack.optimize.UglifyJsPlugin()
 	);
 
@@ -124,7 +122,6 @@ gulp.task('webpack:build', function(callback) {
 // modify some webpack config options
 var myDevConfig = Object.create(webpackConfig);
 myDevConfig.devtool = 'sourcemap';
-myDevConfig.debug = true;
 
 // create a single instance of the compiler to allow caching
 var devCompiler = webpack(myDevConfig);

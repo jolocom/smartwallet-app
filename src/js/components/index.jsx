@@ -3,7 +3,7 @@ import Radium from 'radium'
 import {RaisedButton, IconButton} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
-import {connect} from 'redux/utils'
+import {connect} from 'redux_state/utils'
 
 import {routes} from 'routes'
 import {theme} from 'styles'

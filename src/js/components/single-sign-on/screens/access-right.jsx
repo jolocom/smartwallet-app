@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'redux/utils'
+import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/access-right'
 import ErrorScreen from '../../common/error'
 import LoadingScreen from '../../common/loading'

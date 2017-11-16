@@ -60,7 +60,7 @@ export function connect(params, wantedActions = []) {
   const mapDispatchToProps = (dispatch, props) => {
     const getModuleAndActionNameFromID = (id) => {
       const [moduleName, actionName] = id.split(':')
-      const module = require('redux/modules/' + moduleName)
+      const module = require('redux_state/modules/' + moduleName)
       return [module, actionName]
     }
 

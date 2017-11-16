@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
 import FormsyText from 'formsy-material-ui/lib/FormsyText'
