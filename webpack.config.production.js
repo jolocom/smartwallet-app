@@ -10,7 +10,6 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
-      actions: path.resolve(__dirname, 'src/js/actions'),
       components: path.resolve(__dirname, 'src/js/components'),
       lib: path.resolve(__dirname, 'src/js/lib'),
       redux_state: path.resolve(__dirname, 'src/js/redux_state'),

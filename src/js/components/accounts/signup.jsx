@@ -1,5 +1,4 @@
 import React from 'react'
-import Reflux from 'reflux'
 import { connect } from 'redux_state/utils'
 import Radium from 'radium'
 import Formsy from 'formsy-react'
@@ -7,14 +6,9 @@ import FormsyText from 'formsy-material-ui/lib/FormsyText'
 import {RaisedButton, IconButton, AppBar} from 'material-ui'
 import {Link} from 'react-router'
 
-import AvailabilityStore from 'stores/availability'
-
 import Utils from 'lib/util'
 
 let Signup = React.createClass({
-  mixins: [
-    Reflux.connect(AvailabilityStore, 'available')
-  ],
 
   propTypes: {
     showSnackBarMessage: React.PropTypes.func.isRequired,
