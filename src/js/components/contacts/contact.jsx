@@ -2,7 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 
 import Dialog from 'components/common/dialog.jsx'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import {Layout} from 'components/layout'
 
 import ContactActions from 'actions/contact'

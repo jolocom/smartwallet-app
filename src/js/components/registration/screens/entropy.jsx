@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import ImageMaskBuilder from 'lib/image-mask-builder'
 import Presentation from '../presentation/entropy'
 

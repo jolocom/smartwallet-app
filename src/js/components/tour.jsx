@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import Radium from 'radium'
 import {FlatButton, AppBar} from 'material-ui'
 import Carousel from 'components/common/carousel.jsx'

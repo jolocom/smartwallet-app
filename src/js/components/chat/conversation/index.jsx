@@ -4,7 +4,7 @@ import Reflux from 'reflux'
 import Radium from 'radium'
 import moment from 'moment'
 
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 
 import {AppBar, IconButton, FlatButton} from 'material-ui'
 

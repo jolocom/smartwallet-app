@@ -79,8 +79,8 @@
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "vinyl-paths": "^1.0.0",
-    "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.14.1",
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.8.0",
     "yargs": "^3.32.0"
   },
   "dependencies": {

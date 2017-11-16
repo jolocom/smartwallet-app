@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import { connect } from 'redux/utils'
+import { connect } from 'redux_state/utils'
 import {Badge, IconButton} from 'material-ui'
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
 
