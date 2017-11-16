@@ -1,4 +1,4 @@
-import * as settings from 'settings'
+// import * as settings from 'settings'
 // import {WalletManager, Wallet} from 'smartwallet-contracts'
 // import HTTPAgent from 'lib/agents/http'
 

@@ -6,7 +6,6 @@ import * as transition from './transition'
 const verificationStartUrl = '/verifier/document'
 const dataCheckUrl = 'verifier/data'
 
-
 const actions = module.exports = makeActions('wallet/contact', {
   finishVerification: {
     expectedParams: [],
