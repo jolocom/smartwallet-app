@@ -269,7 +269,7 @@ describe('Wallet registration Redux module', () => {
       expect(services.entropy.getRandomString.called).to.equal(false)
     })
 
-    it('should generate the seedphrase when ready', () => {
+    it('should set the randomString when entropy is ready', () => {
       const dispatch = stub()
       const getState = () => Immutable.fromJS({registration: {
         passphrase: {phrase: ''}
@@ -280,29 +280,96 @@ describe('Wallet registration Redux module', () => {
         getProgress: stub().returns(1),
         getRandomString: stub().returns('bla bla bla bla bla bla bla')
       }}
-      const backend = {wallet: {
-        generateSeedPhrase: stub().returns('seedphrase')
-      }}
 
       const thunk = registration.addEntropyFromDeltas({
         dx: 5,
         dy: 3
       })
-      thunk(dispatch, getState, {services, backend})
+      thunk(dispatch, getState, {services})
 
       expect(services.entropy.addFromDelta.called).to.equal(true)
       expect(services.entropy.getRandomString.called).to.equal(true)
-      expect(backend.wallet.generateSeedPhrase.called).to.equal(true)
       expect(dispatch.calls).to.deep.equal([
         {args: [registration.setEntropyStatus({
           sufficientEntropy: true,
           progress: 1
         })]},
-        {args: [registration.setPassphrase({
-          phrase: 'seedphrase'
+        {args: [registration.setRandomString({
+          randomString: 'bla bla bla bla bla bla bla'
         })]}
       ])
     })
+  })
+
+  describe('submitEntropy', () => {
+    it('should send an error message if there is not enough entropy', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        passphrase: {sufficientEntropy: false}
+      }})
+      const readyE = registration.submitEntropy()
+      readyE(dispatch, getState)
+
+      expect(dispatch.calls).to.deep.equal([])
+    })
+    it('should trigger generateseedphrase when there is enough entropy', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        passphrase: {sufficientEntropy: true}
+      }})
+      withStubs([
+        [registration.actions, 'generateSeedPhrase', {returns: 'generated'}]],
+        () => {
+          const readyE = registration.submitEntropy()
+          readyE(dispatch, getState)
+          expect(dispatch.calls).to.deep.equal([{args: ['generated']}])
+        }
+    )
+    })
+  })
+
+  describe('generateSeedPhrase', () => {
+    it('should not do anything is there is no randomString', () => {
+      const dispatch = stub()
+      const getState = () => Immutable.fromJS({registration: {
+        passphrase: {randomString: ''}
+      }})
+      const backend = {gateway: {
+        generateSeedPhrase: stub().returnsAsync('seedphrase')
+      }}
+      const generate = registration.actions.generateSeedPhrase
+      generate(dispatch, getState, {backend})
+
+      expect(backend.gateway.generateSeedPhrase.called).to.equal(false)
+    })
+
+    // eslint-disable-next-line max-len
+    // it('should call generateSeedPhrase if there is a randomString present', () => {
+    //   const dispatch = stub()
+    //   const getState = () => Immutable.fromJS({registration: {
+    //     passphrase: {randomString: '0123091023981029381098'}
+    //   }})
+    //   const backend = {gateway: {
+    //     generateSeedPhrase: stub().returnsAsync('seedphrase')
+    //   }}
+
+    //   withStubs([
+    //     [registration.actions.generateSeedPhrase, 'buildAction',
+    //     {returns: 'action'}]],
+    //     () => {
+    //       const thunk = registration.generateSeedPhrase('test')
+    //       thunk(dispatch, getState)
+    //       expect(dispatch.calledWithArgs[0]).to.equal('action')
+          // const generate = registration.actions.generateSeedPhrase
+          // const promise = generate.buildAction.calledWithArgs[1]
+          // expect(backend.gateway.generateSeedPhrase.called).to.be.true
+          // expect(promise(backend)).to.eventually.equal('seedphrase')
+          // expect(backend.gateway.generateSeedPhrase.calls)
+          // .to.deep.equal([{args: [{
+          //   seedPhrase: 'seedphrase'
+          // }]}])
+    //     })
+    // })
   })
 
   describe('submitPin', () => {
@@ -639,6 +706,8 @@ describe('Wallet registration Redux module', () => {
             progress: 0,
             randomString: '',
             phrase: '',
+            generating: false,
+            generated: false,
             writtenDown: false,
             valid: false
           })
@@ -656,6 +725,8 @@ describe('Wallet registration Redux module', () => {
             progress: 0.4,
             randomString: '',
             phrase: '',
+            generating: false,
+            generated: false,
             writtenDown: false,
             valid: false
           })
