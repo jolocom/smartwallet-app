@@ -1,5 +1,5 @@
 import React from 'react'
-import Reflux from 'reflux'
+
 import { connect } from 'redux_state/utils'
 import Radium, {StyleRoot} from 'radium'
 
@@ -16,15 +16,9 @@ import LeftNav from 'components/left-nav/nav.jsx'
 
 import Loading from 'components/common/loading.jsx'
 
-import ProfileActions from 'actions/profile'
-import ProfileStore from 'stores/profile'
-
 import {routes, publicRoutes} from 'routes'
 
 let App = React.createClass({
-  mixins: [
-    Reflux.connect(ProfileStore, 'profile')
-  ],
 
   propTypes: {
     location: React.PropTypes.object,
@@ -97,10 +91,6 @@ let App = React.createClass({
       this.context.router.push(routes.login)
     } else if (username && this.isPublicRoute()) {
       this.context.router.push(routes.home)
-    }
-
-    if (username) {
-      ProfileActions.load()
     }
   },
 

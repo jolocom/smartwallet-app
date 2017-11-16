@@ -1,5 +1,4 @@
 import React from 'react'
-import Reflux from 'reflux'
 import Radium from 'radium'
 import accepts from 'attr-accept'
 import {proxy} from 'settings'
@@ -31,8 +30,6 @@ import ActionStar from 'material-ui/svg-icons/toggle/star'
 import CommunicationLocation
   from 'material-ui/svg-icons/communication/location-on'
 
-import ProfileActions from 'actions/profile'
-import ProfileStore from 'stores/profile'
 import JolocomTheme from 'styles/jolocom-theme'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 
@@ -42,9 +39,6 @@ import GraphAgent from '../../lib/agents/graph.js'
 const theme = getMuiTheme(JolocomTheme)
 
 let Profile = React.createClass({
-  mixins: [
-    Reflux.listenTo(ProfileStore, 'onProfileChange', 'setInitialState')
-  ],
 
   contextTypes: {
     router: React.PropTypes.object,
@@ -73,10 +67,6 @@ let Profile = React.createClass({
 
   downloadPK() {
     window.location.href = `${proxy}/exportkey`
-  },
-
-  show() {
-    ProfileActions.show()
   },
 
   hide() {
@@ -528,14 +518,14 @@ let Profile = React.createClass({
     this.passportInputEl = el
   },
 
-  _handleUpdate() {
-    if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
-      ProfileActions.update(Object.assign({},
-        this.state
-      ))
-      this.hide()
-    }
-  },
+  // _handleUpdate() {
+  //   if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
+  //     ProfileActions.update(Object.assign({},
+  //       this.state
+  //     ))
+  //     this.hide()
+  //   }
+  // },
 
   _handleSelect() {
     this.fileInputEl.value = null

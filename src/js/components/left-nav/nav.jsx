@@ -1,4 +1,3 @@
-import Reflux from 'reflux'
 import React from 'react'
 import {
   Drawer,
@@ -7,27 +6,16 @@ import {
   makeSelectable,
   Divider,
   FontIcon
-  // Avatar
 } from 'material-ui'
 import { connect } from 'redux_state/utils'
 
 import Header from './header.jsx'
-
-// import UserAvatar from 'components/common/user-avatar.jsx'
-
-import accountActions from 'actions/account'
-
-import ProfileStore from 'stores/profile'
 
 import {navItems} from 'routes'
 
 let SelectableList = makeSelectable(List)
 
 let Nav = React.createClass({
-
-  mixins: [
-    Reflux.connect(ProfileStore, 'profile')
-  ],
 
   contextTypes: {
     router: React.PropTypes.object,
@@ -122,13 +110,6 @@ let Nav = React.createClass({
   goto(url) {
     this.context.router.push(url)
     this.props.hideLeftNav()
-  },
-
-  logout() {
-    this.props.doLogout()
-    // Reflux signal, so reflux components can update.
-    accountActions.logout()
-    this.goto('/')
   },
 
   drawerRequestChange(open, reason) {
