@@ -9,7 +9,7 @@ module.exports = {
   gateway:
     typeof IDENTITY_GATEWAY_URL !== 'undefined' && IDENTITY_GATEWAY_URL
     ? IDENTITY_GATEWAY_URL
-    : 'https://identity.jolocom.com',
+    : 'https://staging.identity.jolocom.com',
   blockchain: {
     // Jolocom Rinkeby
     gethHost: 'https://verification.jolocom.com/geth/',
