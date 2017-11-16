@@ -174,6 +174,7 @@ const getPattern = (fields) => {
   for (var i = 0; i < fields.length; i++) {
     pattern.push(`/identity/${fields[i]}/*`)
     pattern.push(`/identity/${fields[i]}`)
+    pattern.push(`/identity/${fields[i]}/*/verifications`)
   }
   return pattern
 }
