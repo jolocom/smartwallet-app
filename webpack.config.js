@@ -4,14 +4,13 @@ const path = require('path')
 const base = path.resolve(__dirname, 'src', 'js')
 
 module.exports = {
-  context: path.resolve(__dirname, 'src', 'js'),
   entry: [
     'babel-polyfill',
     'whatwg-fetch',
     'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/only-dev-server',
-    './main.jsx'
+    path.resolve(__dirname, 'src', 'js', 'main.jsx')
   ],
   resolve: {
     extensions: ['*', '.ts.', '.js', '.jsx', '.json'],
