@@ -1,7 +1,7 @@
 {
-  "name": "little-sister",
+  "name": "Jolocom-SmartWallet",
   "version": "0.9.0",
-  "description": "Social app / linked data explorer built for SoLiD infrastracture",
+  "description": "Application that allows you to manage your digital identity and interact with your identity gateway.",
   "main": "index.js",
   "scripts": {
     "start": "gulp wallet",
@@ -14,18 +14,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jolocom/little-sister.git"
+    "url": "git+https://github.com/jolocom/smartwallet-app.git"
   },
-  "keywords": [
-    "SoLiD",
-    "RDF",
-    "WebID"
-  ],
   "author": "Justas Azna",
+  "maintainers": [
+    "Eugeniu Rusu <eugeniu@jolocom.com>"
+  ],
+  "contributors": [
+    "Eugeniu Rusu <eugeniu@jolocom.com>",
+    "Natascha Wittenberg <natascha@jolocom.com>",
+    "Charleen Fei <charleen@jolocom.com>"
+  ],
   "bugs": {
-    "url": "https://github.com/jolocom/little-sister/issues"
+    "url": "https://github.com/jolocom/smartwallet-app/issues"
   },
-  "homepage": "https://github.com/jolocom/little-sister#readme",
+  "homepage": "https://jolocom.com/",
   "devDependencies": {
     "babel-core": "^6.9.1",
     "babel-eslint": "^6.0.4",
