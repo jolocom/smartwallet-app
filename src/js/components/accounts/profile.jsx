@@ -34,7 +34,6 @@ import JolocomTheme from 'styles/jolocom-theme'
 import PassportIcon from 'components/icons/passport-icon.jsx'
 
 import Util from 'lib/util'
-import GraphAgent from '../../lib/agents/graph.js'
 
 const theme = getMuiTheme(JolocomTheme)
 
@@ -518,15 +517,6 @@ let Profile = React.createClass({
     this.passportInputEl = el
   },
 
-  // _handleUpdate() {
-  //   if (!this.loadingPassportPhoto || !this.loadingDisplayPhoto) {
-  //     ProfileActions.update(Object.assign({},
-  //       this.state
-  //     ))
-  //     this.hide()
-  //   }
-  // },
-
   _handleSelect() {
     this.fileInputEl.value = null
     this.fileInputEl.click()
@@ -559,7 +549,6 @@ let Profile = React.createClass({
   },
 
   _handleSelectFile({target}) {
-    let gAgent = new GraphAgent()
     let file = target.files[0]
     if (!accepts(file, 'image/*')) {
       this.setState({
@@ -573,24 +562,10 @@ let Profile = React.createClass({
         error: null,
         file: file
       })
-
-      gAgent.storeFile(null, this.state.storage, file).then((res) => {
-        this.setState({
-          loadingDisplayPhoto: false,
-          imgUri: res
-        })
-      }).catch((e) => {
-        this.props.showSnackBarMessage('Could not upload the photo.')
-        this.setState({
-          loadingDisplayPhoto: false,
-          imgUri: ''
-        })
-      })
     }
   },
 
   _handleSelectPassportFile({target}) {
-    let gAgent = new GraphAgent()
     let file = target.files[0]
     if (!accepts(file, 'image/*')) {
       this.setState({
@@ -601,18 +576,6 @@ let Profile = React.createClass({
         loadingPassportPhoto: true,
         error: null,
         passportFile: file
-      })
-      gAgent.storeFile(null, this.state.storage, file, true).then((res) => {
-        this.setState({
-          loadingPassportPhoto: false,
-          passportImgUri: res
-        })
-      }).catch((e) => {
-        this.props.showSnackBarMessage('Could not upload the passport.')
-        this.setState({
-          loadingPassportPhoto: false,
-          passportImgUri: ''
-        })
       })
     }
   }

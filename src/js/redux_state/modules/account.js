@@ -7,6 +7,45 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
   expectedParams: ['username', 'password', 'updateUserEmail'],
   creator: (params) => {
     return async (dispatch, _, {backend}) => {
+      const webId = backend.webId.getWebId()
+
+      // The user is already logged in.
+      if (webId) {
+        const {accounts} = backend
+        const loggedIn = await accounts.checkLogin(webId)
+          .then(() => true).catch(() => false)
+          // TODO : test wheather the user is logged in or not to the wallet app
+
+        if (loggedIn) {
+          dispatch(doLogin.buildAction(params, async () => {
+            return {
+              username: localStorage.getItem('jolocom.username'),
+              webId
+            }
+          }))
+        } else {
+          dispatch(doLogout())
+        }
+      } else if (params.username && params.password) {
+        dispatch(doLogin.buildAction(params, async (backend) => {
+          const accounts = backend.accounts
+          let promise
+          if (params.updateUserEmail) {
+            // init after activation only
+            promise = accounts.loginAndSetup(
+              params.username, params.password,
+              params.updateUserEmail
+            )
+          } else {
+            promise = accounts.login(params.username, params.password)
+          }
+          const account = await promise
+
+          _saveAuthInfo(_saveToLocalStorage, params.username, account.webid)
+
+          return {username: params.username, webId: account.webid}
+        }))
+      }
     }
   }
 })
@@ -14,12 +53,43 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
 export const doSignup = action('account', 'doSignup', {
   expectedParams: ['username', 'password', 'email', 'name'],
   creator: ({username, password, email, name}) => {
+    return async (dispatch, _, {backend}) => {
+      localStorage.setItem('jolocom.auth-mode', 'proxy')
+
+      const accounts = backend.accounts
+      try {
+        await accounts.register(username, password, email, name)
+        dispatch(showEmailVerifyScreen())
+      } catch (e) {
+        if (e.message) {
+          dispatch(snackBar.showMessage({message: e.message}))
+        } else {
+          dispatch(snackBar.showMessage({
+            message: 'An account error has occured.'
+          }))
+        }
+      }
+    }
   }
 })
 
 export const doLogout = action('account', 'doLogout', {
   expectedParams: [],
   creator: params => {
+    return (dispatch, _, {backend}) => {
+      const authMode = localStorage.getItem('jolocom.auth-mode')
+
+      const accounts = backend.accounts
+      if (authMode === 'proxy') {
+        accounts.logout()
+      }
+
+      localStorage.removeItem('jolocom.username')
+      localStorage.removeItem('jolocom.webId')
+      localStorage.removeItem('jolocom.auth-mode')
+
+      dispatch(doLogout.buildAction(params))
+    }
   }
 })
 

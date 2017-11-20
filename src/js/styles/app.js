@@ -10,7 +10,6 @@ const STYLES = {
   nodeTransitionDuration: 400,
   smallNodeSize: window.innerWidth / 4.7,
   largeNodeSize: window.innerWidth / 3.5,
-  graphCanvasHeight: window.innerHeight - 118,
   fullScreenButton: null,
   fullScreenButtonPosition: 2.8,
   tempCold: '#5E35B1',

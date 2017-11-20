@@ -11,7 +11,6 @@ let Header = React.createClass({
     onClose: React.PropTypes.any
   },
   _handleNavigateHome() {
-    this.context.router.push('graph')
     this.props.onClose()
   },
   getStyles() {

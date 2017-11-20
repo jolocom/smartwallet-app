@@ -44,13 +44,6 @@ let Index = React.createClass({
     openConfirmDialog: React.PropTypes.func
   },
 
-  // componentWillMount() {
-  //   const {account} = this.context
-  //   if (account && account.webId) {
-  //     this.context.router.push('/graph')
-  //   }
-  // },
-
   getStyles() {
     let {muiTheme} = this.context
 
@@ -189,8 +182,7 @@ let Index = React.createClass({
             <div style={Object.assign({}, styles.onboardImg, {
               backgroundImage: 'url(img/img_onboarding-01.svg)'
             })} />
-            <Header title="Create an independent and
-              secure digital identity." />
+            <Header title="Create an independent and secure digital identity." />
             <SideNote>
               Collect your data at a secure place.
               It’s yours, so only you own it!
@@ -221,8 +213,7 @@ let Index = React.createClass({
               backgroundImage: 'url(img/img_onboarding-04.svg)'
             })} />
             <Header
-              title="Our Wallet keeps your data as safe
-              as your bank account." />
+              title="Our Wallet keeps your data as safe as your bank account." />
             <SideNote>
               We use the latest encryption technology and
               <span style={styles.embeddedLink}
@@ -239,8 +230,7 @@ let Index = React.createClass({
             })} />
             <Header
               style={{marginTop: '0'}}
-              title="Security is hard to maintain, that's
-              why the storage costs." />
+              title="Security is hard to maintain, that's why the storage costs." />
             <SideNote>
               The storage of your data is payed
               in ether, a webbased currency. But only the
@@ -248,12 +238,6 @@ let Index = React.createClass({
             </SideNote>
           </div>
         </Carousel>
-
-        {/** <div style={styles.intro}>
-          <img
-            src="/img/logo_start.svg"
-            style={styles.logoStartImg} />
-        </div> **/}
 
         <div style={styles.actions}>
           <RaisedButton

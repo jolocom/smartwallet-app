@@ -154,7 +154,7 @@ gulp.task('build:cordova', [
 ]);
 
 gulp.task('cordova:configure', function() {
-  var config = process.env.ENTRY || 'graph'
+  var config = process.env.ENTRY || 'wallet'
 
   return gulp.src('./app/' + config + '.xml')
     .pipe(rename('config.xml'))
@@ -214,7 +214,7 @@ gulp.task('cordova:add-android', ['cordova:configure'], function (callback) {
 gulp.task('release:ios', ['build:cordova', 'cordova:add-ios'], function (callback) {
   process.chdir(path.join(__dirname, 'app'));
 
-  var config = process.env.ENTRY || 'graph'
+  var config = process.env.ENTRY || 'wallet'
 
   Promise.resolve()
     .then(function() {
