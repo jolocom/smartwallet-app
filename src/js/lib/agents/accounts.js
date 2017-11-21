@@ -1,5 +1,4 @@
 import HTTPAgent from './http'
-import $rdf from 'rdflib'
 import {PRED} from '../namespaces'
 import {Writer} from '../rdf'
 import querystring from 'querystring'
@@ -42,7 +41,6 @@ class AccountsAgent {
 
     if (email) {
       writer.add(
-        $rdf.sym(webId), PRED.email, $rdf.sym(`mailto:${email}`)
       )
     }
 
