@@ -1,4 +1,5 @@
-// require('babel-polyfill')
+require('babel-polyfill')
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -36,19 +37,16 @@ moment.locale('en', {
 })
 
 let rootEl = document.getElementById('app')
-// import {submission} from './reducers';
 
 const store = createStore(hashHistory)
 const createSelectLocationState = () => {
   let prevRoutingState, prevRoutingStateJS
   return (state) => {
     const routingState = state.get('routing')
-    // console.log(routingState)
     if (typeof prevRoutingState === 'undefined' ||
         prevRoutingState !== routingState) {
       prevRoutingState = routingState
       prevRoutingStateJS = routingState
-      // prevRoutingStateJS = routingState.toJS()
     }
     return prevRoutingStateJS
   }

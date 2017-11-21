@@ -60,7 +60,7 @@ const actions = module.exports = makeActions('wallet-login', {
         dispatch(actions.goForward.buildAction(params, (backend) => {
           return services.auth.login({
             seedPhrase: state.passphrase.value,
-            pin: state.pin.value,
+            // pin: state.pin.value,
             gatewayUrl: state.passphrase.valueOwnURL
           }).then(() => {
             if (settings.verifier) {

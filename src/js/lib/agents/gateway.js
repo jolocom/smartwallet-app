@@ -123,6 +123,7 @@ export default class GatewayAgent {
   }
 
   login({seedPhrase}) {
+    console.log(`${this._gatewayUrl}`, 'this is the gatewayurl')
     return this._httpAgent.post(
       `${this._gatewayUrl}/login`,
       JSON.stringify({seedPhrase}),

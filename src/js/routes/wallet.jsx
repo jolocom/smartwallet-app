@@ -116,8 +116,8 @@ function getRoutes() {
       component={RegistrationWritePhraseScreen} />
     <Route path="registration/phrase-info"
       component={RegistrationPhraseInfoScreen} />
-    <Route path="registration/pin"
-      component={RegistrationPinScreen} />
+    {/* <Route path="registration/pin"
+      component={RegistrationPinScreen} /> */}
     <Route path="registration/email"
       component={RegistrationIdentifierScreen} />
     <Route path="registration/password"

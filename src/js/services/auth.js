@@ -22,11 +22,11 @@ export default class AuthService extends EventEmitter {
     }
   }
 
-  async login({seedPhrase, pin, gatewayUrl}) {
+  async login({seedPhrase, gatewayUrl}) {
     if (gatewayUrl !== undefined && gatewayUrl.length > 11) {
       this.backend.gateway = gatewayUrl
     }
-    const res = await this.backend.gateway.login({seedPhrase, pin})
+    const res = await this.backend.gateway.login({seedPhrase})
     if (!res.success) {
       throw new Error('Could not log in: invalid seed phrase')
     }

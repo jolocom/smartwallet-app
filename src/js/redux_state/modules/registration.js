@@ -11,8 +11,7 @@ const NEXT_ROUTES = {
   '/registration/user-type': '/registration/phrase-info',
   '/registration/phrase-info': '/registration/email',
   '/registration/email': '/registration/password',
-  '/registration/password': '/registration/pin',
-  '/registration/write-phrase': '/registration/pin'
+  // '/registration/password': '/registration/pin'
 }
 
 const CHECK_BEFORE_SWITCHING = {
@@ -22,8 +21,8 @@ const CHECK_BEFORE_SWITCHING = {
   '/registration/write-phrase': ['passphrase', 'writtenDown'],
   '/registration/phrase-info': ['passphrase', 'writtenDown'],
   '/registration/email': ['email', 'valid'],
-  '/registration/password': ['password', 'valid'],
-  '/registration/pin': ['pin', 'valid']
+  '/registration/password': ['password', 'valid']
+  // '/registration/pin': ['pin', 'valid']
 }
 
 const actions = module.exports = makeActions('registration', {
@@ -32,6 +31,7 @@ const actions = module.exports = makeActions('registration', {
     creator: () => {
       return (dispatch, getState) => {
         const state = getState()
+        console.log('goforward', state.getIn(['registration']))
         if (state.getIn(['registration', 'complete'])) {
           dispatch(actions.registerWallet())
         } else {
@@ -125,27 +125,27 @@ const actions = module.exports = makeActions('registration', {
   switchToExpertMode: {
     expectedParams: []
   },
-  setPin: {
-    expectedParams: ['value']
-  },
-  setPinConfirm: {
-    expectedParams: ['value']
-  },
-  setPinFocused: {
-    expectedParams: ['value']
-  },
-  submitPin: {
-    expectedParams: [],
-    creator: () => {
-      return (dispatch, getState) => {
-        const pinState = getState().getIn(['registration', 'pin'])
-        if (!pinState.get('valid')) {
-          return
-        }
-        dispatch(actions.goForward())
-      }
-    }
-  },
+  // setPin: {
+  //   expectedParams: ['value']
+  // },
+  // setPinConfirm: {
+  //   expectedParams: ['value']
+  // },
+  // setPinFocused: {
+  //   expectedParams: ['value']
+  // },
+  // submitPin: {
+  //   expectedParams: [],
+  //   creator: () => {
+  //     return (dispatch, getState) => {
+  //       const pinState = getState().getIn(['registration', 'pin'])
+  //       if (!pinState.get('valid')) {
+  //         return
+  //       }
+  //       dispatch(actions.goForward())
+  //     }
+  //   }
+  // },
   setUsername: {
     expectedParams: ['value']
   },
@@ -236,7 +236,7 @@ const actions = module.exports = makeActions('registration', {
 
             await services.auth.login({
               seedPhrase: state.passphrase.phrase,
-              pin: state.pin.value,
+              // pin: state.pin.value,
               gatewayUrl: state.ownURL.valueOwnURL
             })
 
@@ -316,12 +316,12 @@ const initialState = Immutable.fromJS({
     errorMsg: '',
     valueOwnURL: ''
   },
-  pin: {
-    value: '',
-    focused: false,
-    confirm: false,
-    valid: false
-  },
+  // pin: {
+  //   value: '',
+  //   focused: false,
+  //   confirm: false,
+  //   valid: false
+  // },
   userType: {
     value: '',
     valid: false
@@ -435,29 +435,29 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
 
-    case actions.setPin.id:
-      if (!/^[0-9]{0,4}$/.test(action.value)) {
-        return state
-      }
+    // case actions.setPin.id:
+    //   if (!/^[0-9]{0,4}$/.test(action.value)) {
+    //     return state
+    //   }
 
-      return state.mergeIn(['pin'], {
-        value: action.value,
-        valid: action.value.length === 4
-      })
+    //   return state.mergeIn(['pin'], {
+    //     value: action.value,
+    //     valid: action.value.length === 4
+    //   })
 
-    case actions.setPinConfirm.id:
-      return state.mergeDeep({
-        pin: {
-          confirm: action.value
-        }
-      })
+    // case actions.setPinConfirm.id:
+    //   return state.mergeDeep({
+    //     pin: {
+    //       confirm: action.value
+    //     }
+    //   })
 
-    case actions.setPinFocused.id:
-      return state.mergeDeep({
-        pin: {
-          focused: action.value
-        }
-      })
+    // case actions.setPinFocused.id:
+    //   return state.mergeDeep({
+    //     pin: {
+    //       focused: action.value
+    //     }
+    //   })
 
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)

@@ -1,6 +1,8 @@
 const webpack = require('webpack')
 const path = require('path')
 
+const base = path.resolve(__dirname, 'src', 'js')
+
 module.exports = {
   entry: [
     'babel-polyfill',
@@ -10,14 +12,13 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json'],
     alias: {
-      components: path.resolve(__dirname, 'src/js/components'),
-      lib: path.resolve(__dirname, 'src/js/lib'),
-      redux_state: path.resolve(__dirname, 'src/js/redux_state'),
-      services: path.resolve(__dirname, 'src/js/services'),
-      stores: path.resolve(__dirname, 'src/js/stores'),
-      styles: path.resolve(__dirname, 'src/js/styles'),
-      routes: path.resolve(__dirname, 'src/js/routes'),
-      settings: path.resolve(__dirname, 'config/production.js')
+      components: `${base}/components`,
+      lib: `${base}/lib`,
+      redux_state: `${base}/redux_state`,
+      services: `${base}/services`,
+      styles: `${base}/styles`,
+      routes: `${base}/routes/wallet`,
+      settings: path.resolve(__dirname, 'config', 'production.js')
     }
   },
   output: {
