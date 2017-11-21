@@ -3,9 +3,6 @@ import Radium from 'radium'
 import { Link } from 'react-router'
 import { RaisedButton } from 'material-ui'
 
-import { Form } from 'formsy-react'
-import FormsyText from 'formsy-material-ui/lib/FormsyText'
-
 const LoginForm = (props) => {
   const {
     style,
@@ -20,40 +17,7 @@ const LoginForm = (props) => {
   } = props
 
   return (
-    <Form
-      style={Object.assign({}, styles.container, style)}
-      onSubmit={onSubmit}
-      {...otherProps}
-    >
-      <div style={{marginBottom: '20px'}}>
-        <FormsyText
-          name="username"
-          floatingLabelText="Username"
-          value={username}
-          type="text"
-          autoCorrect="off"
-          autoCapitalize="none"
-          autoComplete="none"
-          errorText={usernameError}
-          onChange={onUsernameChange} />
-        <FormsyText
-          name="password"
-          floatingLabelText="Password"
-          type="password"
-          errorText={passwordError}
-          onChange={onPasswordChange} />
-        <Link
-          to="/forgot-password"
-          style={styles.forgotPassword}>Forgot password?</Link>
-      </div>
-
-      <RaisedButton
-        type="submit"
-        disabled={!username || !password}
-        secondary
-        style={styles.submit}
-        label="Login" />
-    </Form>
+    <div />
   )
 }
 

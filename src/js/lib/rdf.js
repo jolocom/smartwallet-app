@@ -7,11 +7,8 @@
 // The writer takes triples and writes them to a turtle file.
 // Serializes it basically.
 
-import $rdf from 'rdflib'
-
 export class Graph {
   constructor() {
-    this.g = $rdf.graph()
   }
 
   get(...args) {
@@ -52,7 +49,6 @@ export class Graph {
   }
 
   serialize(uri) {
-    return $rdf.serialize(undefined, this.g, uri, 'text/turtle')
   }
 }
 
@@ -66,8 +62,6 @@ export class Parser extends Graph {
   }
   // @TODO We never use prefixes, return only statements.
   parse(text, url) {
-    $rdf.parse(text, this.g, url, 'text/turtle')
-    return ({prefixes: {}, triples: this.g.statements})
   }
 }
 
