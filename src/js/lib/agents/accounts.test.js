@@ -38,7 +38,7 @@ describe('AccountsAgent', function () {
   describe('#updateEmail', function () {
     it('should be able to update email', async function () {
       const agent = new AccountsAgent()
-      agent.httpProxied._fetch = async (url, options) => {
+      agent.http._fetch = async (url, options) => {
         expect(url).to.equal(`${settings.proxy}/proxy?url=http://my-test-id`)
         expect(options.method).to.equal('PATCH')
         expect(options.body).to.equal(
@@ -62,7 +62,7 @@ describe('AccountsAgent', function () {
     it('should be able to check if the user is (still) logged in',
       async function () {
         const agent = new AccountsAgent()
-        agent.httpProxied._fetch = async (url, options) => {
+        agent.http._fetch = async (url, options) => {
           expect(url).to.equal(`${settings.proxy}/proxy?url=http://my-test-id`)
           expect(options.method).to.equal('PATCH')
           expect(options.body).to.equal('')

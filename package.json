@@ -76,6 +76,7 @@
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-regenerator": "^6.22.0",
     "cheerio": "^1.0.0-rc.2",
+    "create-react-class": "^15.6.2",
     "debug": "^2.2.0",
     "events": "^1.1.0",
     "formsy-material-ui": "^0.6.3",

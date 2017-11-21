@@ -8,7 +8,6 @@ import * as settings from 'settings'
 class AccountsAgent {
   constructor() {
     this.http = new HTTPAgent({proxy: false})
-    this.httpProxied = new HTTPAgent({proxy: true})
   }
 
   checkUsername(username) {
@@ -46,11 +45,13 @@ class AccountsAgent {
       )
     }
 
-    return this.httpProxied.patch(webId, null, writer.all())
+    console.log('email updated')
+
+    return this.http.patch(webId, null, writer.all())
   }
 
-  checkLogin(webId) { // Resolves if logged in, rejects if not
-    return this.httpProxied.patch(webId)
+  checkLogin(url, webId) { // Resolves if logged in, rejects if not
+    return this.http.patch(webId)
   }
 
   login(username, password) { // TODO: Document expected return value

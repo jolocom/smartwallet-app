@@ -13,7 +13,7 @@ from '../../structure'
 
 const STYLES = {
   avatar: {
-    marginBottom: '18px'
+    margin: 'auto auto 18px auto'
   },
   sidenote: {
     margin: '0 24px 16px 24px'

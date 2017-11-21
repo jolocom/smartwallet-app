@@ -2,17 +2,17 @@ import _ from 'lodash'
 import Immutable from 'immutable'
 import { action, asyncAction } from './'
 import * as snackBar from './snack-bar'
+// import createReactClass from 'create-react-class'
 
 export const doLogin = asyncAction('account/login', 'doLogin', {
   expectedParams: ['username', 'password', 'updateUserEmail'],
   creator: (params) => {
     return async (dispatch, _, {backend}) => {
       const webId = backend.webId.getWebId()
-
       // The user is already logged in.
       if (webId) {
         const {accounts} = backend
-        const loggedIn = await accounts.checkLogin(webId)
+        const loggedIn = await accounts.checkLogin(backend, webId)
           .then(() => true).catch(() => false)
           // TODO : test wheather the user is logged in or not to the wallet app
 
