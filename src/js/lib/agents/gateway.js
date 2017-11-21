@@ -132,14 +132,6 @@ export default class GatewayAgent {
     )
   }
 
-  // createSolidIdentity({userName, seedPhrase}) {
-  //   return this._httpAgent.post(
-  //     `${this._gatewayUrl}/${userName}/solid/create-identity`,
-  //     JSON.stringify({seedPhrase: seedPhrase}),
-  //     {'Content-type': 'application/json'}
-  //   )
-  // }
-
   grantAccessToRequester(user, body) {
     return this._httpAgent.post(
       user + '/access/grant',

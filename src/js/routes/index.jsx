@@ -14,8 +14,8 @@ import RegistrationWritePhraseScreen from
   'components/registration/screens/write-phrase'
 import RegistrationPhraseInfoScreen from
   'components/registration/screens/phrase-info'
-import RegistrationPinScreen from
-  'components/registration/screens/pin'
+// import RegistrationPinScreen from
+//   'components/registration/screens/pin'
 import RegistrationIdentifierScreen from
   'components/registration/screens/identifier'
 import RegistrationPasswordScreen from
@@ -43,7 +43,7 @@ import EtherTabScreen from 'components/wallet/screens/ether-tabs'
 
 import WalletLogin from 'components/wallet-login'
 import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
-import LoginPinScreen from 'components/wallet-login/screens/pin'
+// import LoginPinScreen from 'components/wallet-login/screens/pin'
 
 import SingleSignOnAccessRightScreen from
   'components/single-sign-on/screens/access-right'
@@ -116,8 +116,8 @@ function getRoutes() {
       component={RegistrationWritePhraseScreen} />
     <Route path="registration/phrase-info"
       component={RegistrationPhraseInfoScreen} />
-    <Route path="registration/pin"
-      component={RegistrationPinScreen} />
+    {/* <Route path="registration/pin"
+      component={RegistrationPinScreen} /> */}
     <Route path="registration/email"
       component={RegistrationIdentifierScreen} />
     <Route path="registration/password"
@@ -160,7 +160,7 @@ function getRoutes() {
 
     <Route path="login" component={WalletLogin} />
     <Route path="login/expert" component={ExpertLoginPassphraseScreen} />
-    <Route path="login/pin-entry" component={LoginPinScreen} />
+    {/* <Route path="login/pin-entry" component={LoginPinScreen} /> */}
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
     <Route path="wallet/sso/access-rights"

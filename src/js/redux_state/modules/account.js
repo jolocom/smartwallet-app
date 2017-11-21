@@ -167,24 +167,24 @@ export const doActivateEmail = asyncAction(
     }
   }
 )
-export const doUpdateUserEmail = action(
-  'account', 'doUpdateUserEmail',
-  {
-    expectedParams: ['email', 'webId', 'username'],
-    creator: params => {
-      return async (dispatch, _, {backend}) => {
-        const accounts = backend.accounts
-        await accounts.updateEmail(params.webId, params.email)
+// export const doUpdateUserEmail = action(
+//   'account', 'doUpdateUserEmail',
+//   {
+//     expectedParams: ['email', 'webId', 'username'],
+//     creator: params => {
+//       return async (dispatch, _, {backend}) => {
+//         const accounts = backend.accounts
+//         await accounts.updateEmail(params.webId, params.email)
 
-        _saveAuthInfo(_saveToLocalStorage, params.username, params.webId)
-        dispatch({type: doLogin.id_success, result: {
-          username: params.username,
-          webId: params.webId
-        }})
-      }
-    }
-  }
-)
+//         _saveAuthInfo(_saveToLocalStorage, params.username, params.webId)
+//         dispatch({type: doLogin.id_success, result: {
+//           username: params.username,
+//           webId: params.webId
+//         }})
+//       }
+//     }
+//   }
+// )
 
 export const showEmailVerifyScreen = action(
   'account/login', 'showEmailVerifyScreen',

@@ -99,7 +99,7 @@ gulp.task('build', ['webpack:build', 'html', 'img']);
 
 gulp.task('webpack:build', function(callback) {
 	// modify some webpack config options
-	var myConfig = setRoutesEntry(webpackConfigProduction);
+	var myConfig = setRoutesEntry(webpackConfigProduction, 'build');
 	myConfig.plugins = myConfig.plugins.concat(
 		new webpack.DefinePlugin({
 			'process.env': {

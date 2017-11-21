@@ -72,7 +72,6 @@ describe('#AuthService', () => {
       }
       const login = {
         seedPhrase: 'bigly',
-        pin: '1234'
       }
       const auth = new AuthService(backend)
       expect(auth.login(login)).to.eventually
@@ -83,7 +82,7 @@ describe('#AuthService', () => {
       expect(backend.gateway.login.calls).to.deep.equal([{
         args: [{
           seedPhrase: 'bigly',
-          pin: '1234'
+
         }]
       }])
     })

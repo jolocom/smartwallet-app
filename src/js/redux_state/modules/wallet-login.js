@@ -37,35 +37,25 @@ const actions = module.exports = makeActions('wallet-login', {
     creator: (params) => {
       return (dispatch, getState) => {
         dispatch(
-          router.pushRoute('/login/pin-entry')
+          actions.goForward()
         )
       }
     }
   },
-  setPin: {
-    expectedParams: ['value']
-  },
-  setPinFocused: {
-    expectedParams: ['value']
-  },
-  resetPin: {
-    expectedParams: []
-  },
   goForward: {
-    expectedParams: ['value'],
+    expectedParams: [],
     async: true,
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         const state = getState().get('walletLogin').toJS()
-        dispatch(actions.goForward.buildAction(params, (backend) => {
+        dispatch(actions.goForward.buildAction(params, (backend) => {       
           return services.auth.login({
             seedPhrase: state.passphrase.value,
-            pin: state.pin.value,
             gatewayUrl: state.passphrase.valueOwnURL
           }).then(() => {
-            if (settings.verifier) {
+            if (settings.verifier) {          
               dispatch(router.pushRoute('verifier/document'))
-            } else if (state.callbackURL.length > 1) {
+            } else if (state.callbackURL.length > 1) {       
               dispatch(router.pushRoute(state.callbackURL))
               dispatch(actions.clearCallbackUrl())
             } else {
@@ -115,7 +105,7 @@ const actions = module.exports = makeActions('wallet-login', {
             })
             .then((seed) => {
               dispatch(actions.setPassphrase(seed))
-              dispatch(router.pushRoute('/login/pin-entry'))
+              dispatch(actions.goForward())
             })
             .catch((e) => {
               dispatch(snackBar.showMessage({
@@ -152,13 +142,7 @@ const initialState = Immutable.fromJS({
     hasOwnURL: false,
     valueOwnURL: ''
   },
-  pin: {
-    value: '',
-    focused: false,
-    failed: false,
-    valid: false,
-    errorMsg: ''
-  },
+
   login: {
     username: '',
     password: '',
@@ -202,36 +186,10 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
 
-    case actions.setPin.id:
-      if (!(/^[0-9]{0,4}$/).test(action.value)) {
-        return state
-      }
-      return state.mergeDeep({
-        pin: {
-          value: action.value,
-          valid: action.value.length === 4
-        }
-      })
-
-    case actions.setPinFocused.id:
-      return state.mergeDeep({
-        pin: {
-          focused: action.value
-        }
-      })
-
-    case actions.resetPin.id:
-      return state.mergeDeep({
-        pin: {
-          value: '',
-          valid: false,
-          failed: false
-        }
-      })
     case actions.goForward.id_fail:
       if (action.error.message.indexOf('invalid seed phrase') !== -1) {
         return state.mergeDeep({
-          pin: {
+          login: {
             errorMsg: 'Please check your seedphrase. It is not correct.',
             failed: true,
             valid: false
@@ -239,7 +197,7 @@ module.exports.default = (state = initialState, action = {}) => {
         })
       } else {
         return state.mergeDeep({
-          pin: {
+          login : {
             errorMsg: 'Address for your private space cannot be reached. Please double check.', // eslint-disable-line max-len
             failed: true,
             valid: false
@@ -249,12 +207,12 @@ module.exports.default = (state = initialState, action = {}) => {
 
     case actions.goForward.id_success:
       return state.mergeDeep({
-        pin: {
+        login: {
           errorMsg: '',
           failed: false,
           valid: true
         },
-        passphrase: {
+        login: {
           errorMsg: '',
           failed: false,
           valid: true
