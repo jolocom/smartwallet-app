@@ -249,12 +249,6 @@ let Index = React.createClass({
           </div>
         </Carousel>
 
-        {/** <div style={styles.intro}>
-          <img
-            src="/img/logo_start.svg"
-            style={styles.logoStartImg} />
-        </div> **/}
-
         <div style={styles.actions}>
           <RaisedButton
             secondary
