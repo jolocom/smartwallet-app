@@ -21,6 +21,7 @@ let App = React.createClass({
     location: React.PropTypes.object,
     children: React.PropTypes.node,
     route: React.PropTypes.object,
+    account: React.PropTypes.object.isRequired,
     doLogin: React.PropTypes.func.isRequired
   },
 
@@ -114,7 +115,6 @@ let App = React.createClass({
         {this.props.children}
 
         <LeftNav />
-        {/** <Tour /> **/}
         <SnackbarContainer />
         <ConfirmationDialog />
         <SimpleDialog />

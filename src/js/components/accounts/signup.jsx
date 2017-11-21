@@ -44,13 +44,6 @@ let Signup = React.createClass({
     }
   },
 
-  componentWillMount() {
-    const {account} = this.context
-    if (account && account.webId) {
-      this.context.router.push('/graph')
-    }
-  },
-
   signup(model) {
     if (model.email !== model.repeatEmail) {
       this.props.showSnackBarMessage('The two emails do not match.')
@@ -65,12 +58,6 @@ let Signup = React.createClass({
       password: model.password
     }
     this.props.doSignup(signupData)
-  },
-
-  componentDidUpdate() {
-    if (this.props.account && this.props.account.username) {
-      this.context.router.push('/graph')
-    }
   },
 
   enableSubmit() {

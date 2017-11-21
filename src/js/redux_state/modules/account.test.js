@@ -292,7 +292,8 @@ describe('Account module reducer', function() {
       })
       const backend = {
         accounts: {
-          verifyEmail: stub().returns(Promise.resolve({email: 'test@test.com'}))
+          verifyEmail: stub().returns(
+  Promise.resolve({email: 'test@test.com'}))
         }
       }
       const dispatch = stub()
@@ -321,35 +322,34 @@ describe('Account module reducer', function() {
       )
     })
 
-    it('should handle errors correctly', async () => {
-      // const thunk = account.doActivateEmail({
-      //   username: 'user',
-      //   password: 'pass',
-      //   name: 'the name',
-      //   email: 'test@test.com'
-      // })
-      // const backend = {
-      //   webId: {getWebId: () => 'http://person/profile/card'},
-      //   accounts: {
-      //     verifyEmail: stub().returns(
-      //       Promise.reject({message: errorMessage})
-      //     )
-      //   }
-      // }
-      // const dispatch = stub()
-      // await thunk(dispatch, null, {backend})
-      // const showMessageThunk = dispatch.calledWithArgs[0].promise
-      // console.warn('showMessageThunk == ', showMessageThunk())
-      //
-      // const showMessageDispatch = stub()
-      // showMessageThunk(showMessageDispatch)
-      // const showMessageAction = showMessageDispatch.calledWithArgs[0]
-      // console.warn('showMessageAction === ', showMessageDispatch)
-      // expect(showMessageAction)
-      // .to.deep.equal(snackBar.showMessage.buildAction({
-      //   id: showMessageAction.id,
-      //   message: 'expectedMessage'
-      // }))
-    })
+    // it('should handle errors correctly', async () => {
+    //   const thunk = account.doActivateEmail({
+    //     username: 'user',
+    //     password: 'pass',
+    //     name: 'the name',
+    //     email: 'test@test.com'
+    //   })
+    //   const backend = {
+    //     webId: {getWebId: () => 'http://person/profile/card'},
+    //     accounts: {
+    //       verifyEmail: stub().returns(
+    //         Promise.reject({message: 'error!'})
+    //       )
+    //     }
+    //   }
+    //   const dispatch = stub()
+    //   await thunk(dispatch, null, {backend})
+    //   const showMessageThunk = dispatch.calledWithArgs[0].promise
+    //   console.warn('showMessageThunk == ', showMessageThunk())
+    //   const showMessageDispatch = stub()
+    //   showMessageThunk(showMessageDispatch)
+    //   const showMessageAction = showMessageDispatch.calledWithArgs[0]
+    //   console.warn('showMessageAction === ', showMessageDispatch)
+    //   expect(showMessageAction)
+    //   .to.deep.equal(snackBar.showMessage.buildAction({
+    //     id: showMessageAction.id,
+    //     message: 'expectedMessage'
+    //   }))
+    // })
   })
 })
