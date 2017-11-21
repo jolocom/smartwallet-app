@@ -38,7 +38,7 @@ describe('(Component) RegistrationPhraseInfoScreen', function() {
 
     wrapper.find('PhraseInfo').props().onChange()
     expect(setUserType.called).to.be.true
-    expect(setUserType.calls).to.deep.equal([{'args': ['expert']}])
+    expect(setUserType.calls).to.deep.equal([{'args': ['layman']}])
   })
   it('should call setPassphraseWrittenDown onChange with proper params',
   function() {

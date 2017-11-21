@@ -76,7 +76,6 @@ describe('Wallet registration Redux module', () => {
         test('/registration/phrase-info', ['passphrase', 'writtenDown'])
         test('/registration/email', ['email', 'valid'])
         test('/registration/password', ['password', 'valid'])
-        test('/registration/pin', ['pin', 'valid'])
       })
 
       it('should return false if the validation for a page fails', () => {
@@ -92,7 +91,6 @@ describe('Wallet registration Redux module', () => {
         test('/registration/phrase-info', ['passphrase', 'writtenDown'])
         test('/registration/email', ['email', 'valid'])
         test('/registration/password', ['password', 'valid'])
-        test('/registration/pin', ['pin', 'valid'])
       })
     })
   })
@@ -113,10 +111,8 @@ describe('Wallet registration Redux module', () => {
       test('/registration/user-type', '/registration/phrase-info')
       test('/registration', '/registration/entropy')
       test('/registration/entropy', '/registration/user-type')
-      test('/registration/write-phrase', '/registration/pin')
       test('/registration/phrase-info', '/registration/email')
       test('/registration/email', '/registration/password')
-      test('/registration/password', '/registration/pin')
     })
   })
 
@@ -190,7 +186,6 @@ describe('Wallet registration Redux module', () => {
           valid: !invalid.has('userType'),
           value: userType
         },
-        pin: {valid: !invalid.has('pin')},
         email: {valid: !invalid.has('email')},
         password: {valid: !invalid.has('password')},
         passphrase: {valid: !invalid.has('passphrase')}
@@ -200,7 +195,7 @@ describe('Wallet registration Redux module', () => {
     it('should return false if nothing is filled in', () => {
       test({
         invalid: [
-          'username', 'userType', 'pin', 'emai',
+          'username', 'userType', 'email',
           'password', 'passphrase'
         ],
         result: false
@@ -210,7 +205,6 @@ describe('Wallet registration Redux module', () => {
     it('should return false if one of the base fields is missing', () => {
       test({invalid: ['username'], result: false})
       test({invalid: ['userType'], result: false})
-      test({invalid: ['pin'], result: false})
     })
 
     it('should return false if required expert fields are missing', () => {
@@ -372,34 +366,6 @@ describe('Wallet registration Redux module', () => {
     // })
   })
 
-  describe('submitPin', () => {
-    it('should not do anything if the pin is not valid', () => {
-      const dispatch = stub()
-      const getState = () => Immutable.fromJS({registration: {
-        pin: {valid: false}
-      }})
-
-      const thunk = registration.submitPin()
-      thunk(dispatch, getState)
-
-      expect(dispatch.calls).to.deep.equal([])
-    })
-    it('should go forward if the pin is valid and confirmed', () => {
-      const dispatch = stub()
-      const getState = () => Immutable.fromJS({registration: {
-        pin: {valid: true, confirm: true}
-      }})
-
-      withStubs([
-          [registration.actions, 'goForward', {returns: 'forward'}]],
-          () => {
-            const thunk = registration.submitPin()
-            thunk(dispatch, getState)
-            expect(dispatch.calls).to.deep.equal([{args: ['forward']}])
-          }
-      )
-    })
-  })
   describe('checkCredentials', () => {
     it('should checkUsername on backend', () => {
       const getState = () => Immutable.fromJS({registration: {
@@ -434,7 +400,6 @@ describe('Wallet registration Redux module', () => {
       const getState = () => Immutable.fromJS({registration: {
         userType: {value: 'expert'},
         username: {value: 'usr'},
-        pin: {value: '1234'},
         passphrase: {phrase: 'bla bla bla'},
         ownURL: {valueOwnURL: 'test'},
         email: {value: 'test@test.com'},
@@ -728,58 +693,6 @@ describe('Wallet registration Redux module', () => {
             generating: false,
             generated: false,
             writtenDown: false,
-            valid: false
-          })
-      })
-    })
-    describe('pin', () => {
-      it('should correctly initialize', () => {
-        let state = reducer(undefined, '@@INIT')
-
-        expect(state.get('pin').toJS())
-          .to.deep.equal({
-            value: '',
-            focused: false,
-            confirm: false,
-            valid: false
-          })
-      })
-
-      it('should correctly update its value', () => {
-        let state = reducer(undefined, '@@INIT')
-        state = reducer(state, registration.setPin('12'))
-
-        expect(state.get('pin').toJS())
-          .to.deep.equal({
-            value: '12',
-            focused: false,
-            confirm: false,
-            valid: false
-          })
-      })
-
-      it('should correctly update focused', () => {
-        let state = reducer(undefined, '@@INIT')
-        state = reducer(state, registration.setPinFocused(true))
-
-        expect(state.get('pin').toJS())
-          .to.deep.equal({
-            value: '',
-            focused: true,
-            confirm: false,
-            valid: false
-          })
-      })
-
-      it('should correctly update confirm', () => {
-        let state = reducer(undefined, '@@INIT')
-        state = reducer(state, registration.setPinConfirm(true))
-
-        expect(state.get('pin').toJS())
-          .to.deep.equal({
-            value: '',
-            focused: false,
-            confirm: true,
             valid: false
           })
       })

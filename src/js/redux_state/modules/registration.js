@@ -10,7 +10,7 @@ const NEXT_ROUTES = {
   '/registration/entropy': '/registration/user-type',
   '/registration/user-type': '/registration/phrase-info',
   '/registration/phrase-info': '/registration/email',
-  '/registration/email': '/registration/password',
+  '/registration/email': '/registration/password'
   // '/registration/password': '/registration/pin'
 }
 
@@ -31,7 +31,7 @@ const actions = module.exports = makeActions('registration', {
     creator: () => {
       return (dispatch, getState) => {
         const state = getState()
-        console.log('goforward', state.getIn(['registration']))
+        console.log('goforward', getState().get('registration').toJS())
         if (state.getIn(['registration', 'complete'])) {
           dispatch(actions.registerWallet())
         } else {
@@ -125,27 +125,6 @@ const actions = module.exports = makeActions('registration', {
   switchToExpertMode: {
     expectedParams: []
   },
-  // setPin: {
-  //   expectedParams: ['value']
-  // },
-  // setPinConfirm: {
-  //   expectedParams: ['value']
-  // },
-  // setPinFocused: {
-  //   expectedParams: ['value']
-  // },
-  // submitPin: {
-  //   expectedParams: [],
-  //   creator: () => {
-  //     return (dispatch, getState) => {
-  //       const pinState = getState().getIn(['registration', 'pin'])
-  //       if (!pinState.get('valid')) {
-  //         return
-  //       }
-  //       dispatch(actions.goForward())
-  //     }
-  //   }
-  // },
   setUsername: {
     expectedParams: ['value']
   },
@@ -236,7 +215,6 @@ const actions = module.exports = makeActions('registration', {
 
             await services.auth.login({
               seedPhrase: state.passphrase.phrase,
-              // pin: state.pin.value,
               gatewayUrl: state.ownURL.valueOwnURL
             })
 
@@ -296,7 +274,7 @@ const initialState = Immutable.fromJS({
     valid: false,
     alphaNum: false
   },
-  Repuation: 0,
+  Reputation: 0,
   email: {
     value: '',
     valid: false,
@@ -316,12 +294,6 @@ const initialState = Immutable.fromJS({
     errorMsg: '',
     valueOwnURL: ''
   },
-  // pin: {
-  //   value: '',
-  //   focused: false,
-  //   confirm: false,
-  //   valid: false
-  // },
   userType: {
     value: '',
     valid: false
@@ -434,31 +406,6 @@ module.exports.default = (state = initialState, action = {}) => {
           errorMsg: null
         }
       })
-
-    // case actions.setPin.id:
-    //   if (!/^[0-9]{0,4}$/.test(action.value)) {
-    //     return state
-    //   }
-
-    //   return state.mergeIn(['pin'], {
-    //     value: action.value,
-    //     valid: action.value.length === 4
-    //   })
-
-    // case actions.setPinConfirm.id:
-    //   return state.mergeDeep({
-    //     pin: {
-    //       confirm: action.value
-    //     }
-    //   })
-
-    // case actions.setPinFocused.id:
-    //   return state.mergeDeep({
-    //     pin: {
-    //       focused: action.value
-    //     }
-    //   })
-
     case actions.setMaskedImageUncovering.id:
       return state.setIn(['maskedImage', 'uncovering'], action.value)
 
@@ -545,10 +492,10 @@ module.exports.default = (state = initialState, action = {}) => {
         }
       })
 
-    case actions.setInviteCode.id:
-      return state.merge({
-        inviteCode: action.code
-      })
+    // case actions.setInviteCode.id:
+    //   return state.merge({
+    //     inviteCode: action.code
+    //   })
 
     case actions.toggleHasOwnURL.id:
       return state.mergeIn(['ownURL'], {
@@ -585,11 +532,11 @@ helpers._isComplete = (state) => {
   const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
   const areFieldsValid = (fields) => _.every(fields, isFieldValid)
 
-  let complete = areFieldsValid(['username', 'userType', 'pin'])
-  if (state.getIn(['userType', 'value']) === 'layman') {
-    complete = complete && areFieldsValid(['email', 'password'])
-  } else {
+  let complete = areFieldsValid(['username', 'userType'])
+  if (state.getIn(['userType', 'value']) === 'expert') {
     complete = complete && areFieldsValid(['passphrase'])
+  } else {
+    complete = complete && areFieldsValid(['password', 'email'])
   }
 
   return complete

@@ -123,7 +123,6 @@ export default class GatewayAgent {
   }
 
   login({seedPhrase}) {
-    console.log(`${this._gatewayUrl}`, 'this is the gatewayurl')
     return this._httpAgent.post(
       `${this._gatewayUrl}/login`,
       JSON.stringify({seedPhrase}),
@@ -132,14 +131,6 @@ export default class GatewayAgent {
       }
     )
   }
-
-  // createSolidIdentity({userName, seedPhrase}) {
-  //   return this._httpAgent.post(
-  //     `${this._gatewayUrl}/${userName}/solid/create-identity`,
-  //     JSON.stringify({seedPhrase: seedPhrase}),
-  //     {'Content-type': 'application/json'}
-  //   )
-  // }
 
   grantAccessToRequester(user, body) {
     return this._httpAgent.post(

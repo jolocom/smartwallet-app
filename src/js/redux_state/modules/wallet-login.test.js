@@ -30,24 +30,6 @@ describe('Wallet login Redux module', function() {
       expect(action.value).to.be.empty
     })
   })
-  describe('setPin', () => {
-    it('should return the correct value', () => {
-      const action = login.actions.setPin('0000')
-      expect(action.value).to.equal('0000')
-    })
-  })
-  describe('resetPin', () => {
-    it('should return the correct value', () => {
-      const action = login.actions.resetPin()
-      expect(action.value).to.be.empty
-    })
-  })
-  describe('setPinFocused', () => {
-    it('should update the pin value in the state', () => {
-      const action = login.actions.setPinFocused(true)
-      expect(action.value).to.be.true
-    })
-  })
   describe('setUsername', () => {
     it('should return the correct value', () => {
       const action = login.actions.setUsername('test')
@@ -67,9 +49,6 @@ describe('Wallet login Redux module', function() {
         userType: {value: '', valid: false},
         passphrase: {value: '', failed: false, valid: false, errorMsg: '',
           hasOwnURL: false, valueOwnURL: ''},
-        pin: {value: '', failed: false, valid: false, focused: false,
-          errorMsg: ''
-        },
         login: {
           username: '',
           password: '',
@@ -88,36 +67,6 @@ describe('Wallet login Redux module', function() {
 
       expect(newState).to.deep.equal(oldState)
     })
-    describe('#setPin', () => {
-      it('should be able to set the pin value to a valid value', () => {
-        const state = reducer(undefined, '@@INIT')
-        const newState = reducer(state, login.actions.setPin('0000'))
-        expect(newState.toJS().pin.value).to.equal('0000')
-        expect(newState.toJS().pin.valid).to.be.true
-      })
-      it('should not set the pin value to a non valid value', () => {
-        const state = reducer(undefined, login.actions.setPin('00'))
-        const newState = reducer(state, login.actions.setPin('00e'))
-        expect(newState.toJS().pin.value).to.equal('00')
-        expect(newState.toJS().pin.valid).to.be.false
-      })
-    })
-    describe('#resetPin', () => {
-      it('should set the passphrase attributes to their initial values', () => {
-        const state = reducer(undefined, '@@INIT')
-        const newState = reducer(state, login.actions.resetPin())
-        expect(newState.toJS().pin).to.deep.equal({
-          value: '', focused: false, failed: false, valid: false, errorMsg: ''
-        })
-      })
-    })
-    describe('#setPinFocused', () => {
-      it('should set the passphrase attributes to their initial values', () => {
-        const state = reducer(undefined, '@@INIT')
-        const newState = reducer(state, login.actions.setPinFocused(true))
-        expect(newState.toJS().pin.focused).to.be.true
-      })
-    })
     describe('#setPassphrase', () => {
       it('should be able to set the passphrase value to a valid value', () => {
         const state = reducer(undefined, '@@INIT')
@@ -127,35 +76,31 @@ describe('Wallet login Redux module', function() {
       })
     })
     describe('#goForward', () => {
-      it('should update passphrase and pin attributes when goForward succeed',
+      it('should update passphrase attributes when goForward succeed',
         () => {
           const phraseState = reducer(
             undefined,
             login.actions.setPassphrase('test')
           )
-          const state = reducer(phraseState, login.actions.setPin('0000'))
-          const newState = reducer(state, {
+          const newState = reducer(phraseState, {
             type: login.actions.goForward.success
           })
           expect(newState.toJS().passphrase.errorMsg).to.equal('')
           expect(newState.toJS().passphrase.valid).to.be.true
           expect(newState.toJS().passphrase.failed).to.be.false
-          expect(newState.toJS().pin.errorMsg).to.equal('')
-          expect(newState.toJS().pin.valid).to.be.true
-          expect(newState.toJS().pin.failed).to.be.false
         }
       )
-      it('should update passphrase and pin attributes when goForward fails',
+      it('should update passphrase attributes when goForward fails',
       () => {
         const state = reducer(undefined, '@@INIT')
         const newState = reducer(state, {
           type: login.actions.goForward.id_fail,
           error: new Error('test')
         })
-        expect(newState.toJS().pin.errorMsg)
+        expect(newState.toJS().login.errorMsg)
         .to.equal('Address for your private space cannot be reached. Please double check.') // eslint-disable-line max-len
-        expect(newState.toJS().pin.valid).to.be.false
-        expect(newState.toJS().pin.failed).to.be.true
+        expect(newState.toJS().login.valid).to.be.false
+        expect(newState.toJS().login.failed).to.be.true
       })
     })
     describe('goToLogin', () => {

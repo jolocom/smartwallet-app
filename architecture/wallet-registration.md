@@ -68,10 +68,6 @@ Redux actions
 * setPassphrase(value)
 * setRandomString(value)
 * switchToExpertMode()
-* setPin(value)
-* setPinConfirm(value : bool)
-* setPinFocused(value : bool)
-* submitPin() - ask for confirmation or go forward if confirmed
 * setUsername(value)
 * checkUsername(username) - async action, resolves if available
 * setEmail(value)

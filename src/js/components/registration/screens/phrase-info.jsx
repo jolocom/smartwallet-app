@@ -22,9 +22,8 @@ export default class RegistrationPhraseInfoScreen extends React.Component {
       onSubmit={this._handleSubmit} />
   }
   _handleChange = () => {
-    this.props.setUserType('expert')
+    this.props.setUserType('layman')
     this.props.setPassphraseWrittenDown(false)
-    this.props.goForward()
   }
   _handleSubmit = () => {
     this.props.setPassphraseWrittenDown(true)

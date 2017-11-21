@@ -17,7 +17,7 @@ module.exports = {
       redux_state: `${base}/redux_state`,
       services: `${base}/services`,
       styles: `${base}/styles`,
-      routes: `${base}/routes/wallet`,
+      routes: `${base}/routes`,
       settings: path.resolve(__dirname, 'config', 'production.js')
     }
   },
