@@ -6,6 +6,8 @@ build/
 ldpc-*
 data/
 
+yarn.lock
+
 autodeploy.js
 pull_and_deploy.sh
 
