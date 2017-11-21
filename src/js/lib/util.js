@@ -1,5 +1,4 @@
 import url from 'url'
-import {proxy} from 'settings'
 
 // Misc utility functions
 let Util = {
@@ -50,14 +49,6 @@ let Util = {
    */
 
   uriToProxied(uri) {
-    if (!uri) {
-      return
-    }
-    let mode = localStorage.getItem('jolocom.auth-mode')
-    if (mode === 'cert') {
-      return uri
-    }
-    return `${proxy}/proxy?url=${uri}`
   },
 
   /*

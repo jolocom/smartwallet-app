@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
-import util from 'lib/util'
 
 const storeIdCardDetailsInBlockchain = ({idCard, webId, services}) => {
   const {wallet} = services.auth.currentUser
@@ -23,8 +22,8 @@ const storeIdCardDetailsInBlockchain = ({idCard, webId, services}) => {
         streetWithNumber: idCard.idCardFields.streetWithNumber,
         zip: idCard.idCardFields.zip
       },
-      definitionUrl:
-        `${util.webidRoot(webId)}/profile/idCard${idCard.id}`,
+      definitionUrl: '',
+      // `${util.webidRoot(webId)}/profile/idCard${idCard.id}`,
       pin: '1234',
       identityAddress: wallet.identityAddress
     }

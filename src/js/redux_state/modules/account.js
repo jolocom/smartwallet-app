@@ -7,45 +7,7 @@ export const doLogin = asyncAction('account/login', 'doLogin', {
   expectedParams: ['username', 'password', 'updateUserEmail'],
   creator: (params) => {
     return async (dispatch, _, {backend}) => {
-      const webId = backend.webId.getWebId()
-
-      // The user is already logged in.
-      if (webId) {
-        const {accounts} = backend
-        const loggedIn = await accounts.checkLogin(webId)
-          .then(() => true).catch(() => false)
-          // TODO : test wheather the user is logged in or not to the wallet app
-
-        if (loggedIn) {
-          dispatch(doLogin.buildAction(params, async () => {
-            return {
-              username: localStorage.getItem('jolocom.username'),
-              webId
-            }
-          }))
-        } else {
-          dispatch(doLogout())
-        }
-      } else if (params.username && params.password) {
-        dispatch(doLogin.buildAction(params, async (backend) => {
-          const accounts = backend.accounts
-          let promise
-          if (params.updateUserEmail) {
-            // init after activation only
-            promise = accounts.loginAndSetup(
-              params.username, params.password,
-              params.updateUserEmail
-            )
-          } else {
-            promise = accounts.login(params.username, params.password)
-          }
-          const account = await promise
-
-          _saveAuthInfo(_saveToLocalStorage, params.username, account.webid)
-
-          return {username: params.username, webId: account.webid}
-        }))
-      }
+      return
     }
   }
 })

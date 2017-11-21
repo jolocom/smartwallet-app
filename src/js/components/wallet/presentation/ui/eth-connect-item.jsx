@@ -3,7 +3,6 @@ import {theme} from 'styles'
 import { RaisedButton, FlatButton } from 'material-ui'
 import {Block} from '../../../structure'
 import ReactStripeCheckout from 'react-stripe-checkout'
-import * as settings from 'settings'
 
 const STYLES = {
   container: {
@@ -71,7 +70,7 @@ export default class EthConnectItem extends React.Component {
       return (
         <ReactStripeCheckout
           token={(token) => this.props.onToken(token)}
-          stripeKey={settings.stripe.publishableKey}
+          stripeKey={STRIPE_PUB_KEY}
           name="JOLOCOM SMARTWALLET"
           description="Add Ether to your Smart Wallet."
           image="/img/logo.png"
