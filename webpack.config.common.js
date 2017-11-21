@@ -6,6 +6,7 @@ const base = path.resolve(__dirname, 'src', 'js')
 
 module.exports = {
   entry: [
+    'react-hot-loader/patch',
     'babel-polyfill',
     'whatwg-fetch',
     path.resolve(__dirname, 'src', 'js', 'main.jsx')

@@ -1,5 +1,3 @@
-require('babel-polyfill')
-
 // import sinon from 'sinon'
 import chai from 'chai'
 import chaiEnzyme from 'chai-enzyme'
