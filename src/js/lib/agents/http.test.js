@@ -1,6 +1,5 @@
 /* global describe: true, it: true */
 var expect = require('chai').expect
-import {Writer} from '../rdf'
 import HTTPAgent from './http'
 
 const DUMMY_JSON_HEADERS = {
@@ -14,24 +13,27 @@ const DUMMY_HTML_HEADERS = {
   })[field]
 }
 
-describe('HTTPAgent', function() {
-  describe('#_req()', function() {
-    it('should be able to do a normal GET request', async function() {
+describe('HTTPAgent', () => {
+  describe('#_req()', () => {
+    it('should be able to do a normal GET request', async () => {
       const fakeResponse = {
         status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
+        headers: DUMMY_HTML_HEADERS
+      }
 
       const agent = new HTTPAgent()
       agent._fetch = async (url, options) => fakeResponse
-      const response = await agent._req('/test/', 'GET', null,
-                                        {'X-Header1': 'Test'})
+      const response = await agent._req('/test/', 'GET', null, {
+        'X-Header1': 'Test'
+      })
       expect(response).to.deep.equal(fakeResponse)
     })
 
-    it('should be able parse a JSON request', async function() {
+    it('should be able parse a JSON request', async () => {
       const fakeResponse = {
         status: 200, json: () => ({foo: 5}),
-        headers: DUMMY_JSON_HEADERS}
+        headers: DUMMY_JSON_HEADERS
+      }
 
       const agent = new HTTPAgent()
       agent._fetch = async (url, options) => fakeResponse
@@ -60,61 +62,23 @@ describe('HTTPAgent', function() {
         await expect(request()).to.be.rejectedWith(Error, 'Not found')
       }
     )
-
-    it('should not proxy by default', async () => {
-      const fakeResponse = {
-        status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
-
-      const agent = new HTTPAgent()
-      expect(agent._proxyURL).to.be.null
-      agent._fetch = async (url, options) => {
-        expect(url).to.equal('/test/')
-        return fakeResponse
-      }
-      await agent._req('/test/', 'GET', null)
-    })
-
-    it('should correctly detect proxy URL and proxy requests if requested',
-      async () => {
-        const fakeResponse = {
-          status: 200, responseText: 'TEST',
-          headers: DUMMY_HTML_HEADERS}
-
-        // TODO: monkey patching settings doesn't work
-
-        // const oldProxy = settings.proxy;
-        // settings.proxy = 'http://test-proxy';
-        let agent
-        try {
-          agent = new HTTPAgent({proxy: true})
-        } finally {
-        //   settings.proxy = oldProxy
-        }
-        // // expect(agent._proxyURL).to.equal('http://test-proxy')
-
-        agent._proxyURL = 'http://test-proxy'
-        agent._fetch = async (url, options) => {
-          expect(url).to.equal('http://test-proxy/proxy?url=/test/')
-          return fakeResponse
-        }
-        await agent._req('/test/', 'GET', null)
-      }
-    )
   })
 
   describe('#get', () => {
     it('should be able to perform a GET request', async () => {
       const fakeResponse = {
         status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
+        headers: DUMMY_HTML_HEADERS
+      }
 
       const agent = new HTTPAgent()
+
       agent._fetch = async (url, options) => {
         expect(url).to.equal('/test/')
         expect(options.method).to.equal('GET')
         return fakeResponse
       }
+
       const response = await agent.get('/test/')
       expect(response).to.deep.equal(fakeResponse)
     })
@@ -124,7 +88,8 @@ describe('HTTPAgent', function() {
     it('should be able to perform a DELETE request', async () => {
       const fakeResponse = {
         status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
+        headers: DUMMY_HTML_HEADERS
+      }
 
       const agent = new HTTPAgent()
       agent._fetch = async (url, options) => {
@@ -141,7 +106,8 @@ describe('HTTPAgent', function() {
     it('should be able to perform a PUT request', async () => {
       const fakeResponse = {
         status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
+        headers: DUMMY_HTML_HEADERS
+      }
 
       const agent = new HTTPAgent()
       agent._fetch = async (url, options) => {
@@ -158,7 +124,8 @@ describe('HTTPAgent', function() {
     it('should be able to perform a POST request', async () => {
       const fakeResponse = {
         status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
+        headers: DUMMY_HTML_HEADERS
+      }
 
       const agent = new HTTPAgent()
       agent._fetch = async (url, options) => {
@@ -175,7 +142,8 @@ describe('HTTPAgent', function() {
     it('should be able to perform a HEAD request', async () => {
       const fakeResponse = {
         status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
+        headers: DUMMY_HTML_HEADERS
+      }
 
       const agent = new HTTPAgent()
       agent._fetch = async (url, options) => {
@@ -184,35 +152,6 @@ describe('HTTPAgent', function() {
         return fakeResponse
       }
       const response = await agent.head('/test/')
-      expect(response).to.deep.equal(fakeResponse)
-    })
-  })
-
-  describe('#patch', () => {
-    it('should be able to perform a PATCH request', async () => {
-      const fakeResponse = {
-        status: 200, responseText: 'TEST',
-        headers: DUMMY_HTML_HEADERS}
-
-      const agent = new HTTPAgent()
-      agent._fetch = async (url, options) => {
-        expect(url).to.equal('/test/')
-        expect(options.method).to.equal('PATCH')
-        expect(options.body).to.equal(
-          'DELETE DATA { "remSubject" "remPredicate" "remObject"  };\n' +
-          'INSERT DATA { "insSubject" "insPredicate" "insObject"  };\n')
-        expect(options.headers['Content-Type'])
-              .to.equal('application/sparql-update')
-        return fakeResponse
-      }
-
-      const toRemove = new Writer()
-      toRemove.add('remSubject', 'remPredicate', 'remObject')
-      const toInsert = new Writer()
-      toInsert.add('insSubject', 'insPredicate', 'insObject')
-
-      const response = await agent.patch('/test/', toRemove.all(),
-                                         toInsert.all())
       expect(response).to.deep.equal(fakeResponse)
     })
   })

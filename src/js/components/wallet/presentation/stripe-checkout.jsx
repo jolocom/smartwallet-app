@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ReactStripeCheckout from 'react-stripe-checkout'
-import * as settings from 'settings'
 
 import {
   RaisedButton
@@ -20,7 +19,7 @@ export default class StripeCheckout extends Component {
     return (
       <ReactStripeCheckout
         token={(token) => this.props.onToken(token)}
-        stripeKey={settings.stripe.publishableKey}
+        stripeKey={STRIPE_PUB_KEY}
         name="JOLOCOM SMARTWALLET"
         description="Add Ether to your Smart Wallet."
         image="/img/logo.png"

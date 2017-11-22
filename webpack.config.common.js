@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
@@ -36,6 +37,11 @@ module.exports = {
     }]),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src', 'index.html')
+    }),
+    new webpack.DefinePlugin({
+      'IDENTITY_GATEWAY_URL': JSON.stringify(getGatewayUri()),
+      'VERIFICATION_PROV': JSON.stringify('https://verification.jolocom.com'),
+      'STRIPE_PUB_KEY': JSON.stringify('pk_test_6pRNASCoBOKtIshFeQd4XMUh')
     })
   ],
   module: {
@@ -48,5 +54,19 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
+  }
+}
+
+function getGatewayUri() {
+  const { GW } = process.env
+  switch (GW) {
+    case 'LOCAL':
+      return 'http://localhost:5678'
+    case 'STAGING':
+      return 'https://staging.identity.jolocom.com'
+    case 'PRODUCTION':
+      return 'https://identity.jolocom.com'
+    default:
+      return 'https://identity.jolocom.com'
   }
 }

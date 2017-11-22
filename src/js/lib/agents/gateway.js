@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 import HTTPAgent from 'lib/agents/http'
-import * as settings from 'settings'
+// import * as settings from 'settings'
 
 export default class GatewayAgent {
   constructor(gatewayUrl) {
@@ -10,7 +10,7 @@ export default class GatewayAgent {
 
   retrieveEtherPrice() {
     return this._httpAgent.get(
-      settings.blockchain.jolocomEtherAddress +
+      // settings.blockchain.jolocomEtherAddress +
       '/exchange-rate/ether', null,
       {credentials: 'omit'}
     )

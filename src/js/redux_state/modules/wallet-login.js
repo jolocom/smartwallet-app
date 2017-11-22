@@ -2,7 +2,6 @@ import Immutable from 'immutable'
 import { makeActions } from './'
 import * as router from './router'
 import * as snackBar from './snack-bar'
-import * as settings from 'settings'
 
 const actions = module.exports = makeActions('wallet-login', {
   setUserType: {
@@ -53,7 +52,7 @@ const actions = module.exports = makeActions('wallet-login', {
             seedPhrase: state.passphrase.value,
             gatewayUrl: state.passphrase.valueOwnURL
           }).then(() => {
-            if (settings.verifier) {          
+            if (IS_VERIFIER) {          
               dispatch(router.pushRoute('verifier/document'))
             } else if (state.callbackURL.length > 1) {       
               dispatch(router.pushRoute(state.callbackURL))

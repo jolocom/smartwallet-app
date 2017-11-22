@@ -1,4 +1,3 @@
-import * as settings from 'settings'
 import * as request from 'superagent-es6-promise'
 
 export default class VerificationAgent {
@@ -34,7 +33,7 @@ export default class VerificationAgent {
     ])
 
     await this.request.post(
-      `${settings.verificationProvider}/${dataType}/start-verification`
+      `${VERIFICATION_PROV}/${dataType}/start-verification`
     ).send({
       identity: wallet.identityURL,
       id, [dataType]: data
@@ -54,7 +53,7 @@ export default class VerificationAgent {
 
   async _verify({wallet, dataType, id, data, code}) {
     await this.request.post(
-      `${settings.verificationProvider}/${dataType}/verify`
+      `${VERIFICATION_PROV}/${dataType}/verify`
     ).send({
       identity: wallet.identityURL,
       id,

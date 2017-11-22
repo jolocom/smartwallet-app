@@ -14,8 +14,6 @@ import RegistrationWritePhraseScreen from
   'components/registration/screens/write-phrase'
 import RegistrationPhraseInfoScreen from
   'components/registration/screens/phrase-info'
-// import RegistrationPinScreen from
-//   'components/registration/screens/pin'
 import RegistrationIdentifierScreen from
   'components/registration/screens/identifier'
 import RegistrationPasswordScreen from
@@ -160,7 +158,6 @@ function getRoutes() {
 
     <Route path="login" component={WalletLogin} />
     <Route path="login/expert" component={ExpertLoginPassphraseScreen} />
-    {/* <Route path="login/pin-entry" component={LoginPinScreen} /> */}
 
     <Route path="verify-email" component={EmailConfirmationScreen} />
     <Route path="wallet/sso/access-rights"
@@ -173,6 +170,3 @@ function getRoutes() {
 export default (history) => {
   return (<Router history={history}>{getRoutes()}</Router>)
 }
-
-// <Route path="wallet/ethereum/execute-transaction"
-//   component={EthereumExecuteTransactionScreen} />

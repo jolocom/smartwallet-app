@@ -1,6 +1,5 @@
 import io from 'socket.io-client'
 import EventEmitter from 'events'
-import * as settings from 'settings'
 
 export default class AuthService extends EventEmitter {
   constructor(backend) {
@@ -74,7 +73,7 @@ export class Wallet {
   constructor({gateway, userName, seedPhrase}) {
     this._gateway = gateway
     this.userName = userName
-    this.identityURL = `${settings.gateway}/${userName}`
+    this.identityURL = `${IDENTITY_GATEWAY_URL}/${userName}`
     this.seedPhrase = seedPhrase
   }
 
