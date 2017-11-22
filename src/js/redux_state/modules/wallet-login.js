@@ -1,30 +1,8 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
 import * as router from './router'
-import * as snackBar from './snack-bar'
 
 const actions = module.exports = makeActions('wallet-login', {
-  setUserType: {
-    expectedParams: ['value'],
-    creator: (params) => {
-      return (dispatch, getState) => {
-        dispatch(actions.setUserType.buildAction(params))
-
-        const {userType} = getState().get('walletLogin').toJS()
-
-        if (!userType.valid) {
-          throw new Error('Invalid user type: ' + userType.value)
-        }
-
-        let route = '/login/layman'
-        if (userType.value === 'expert') {
-          route = '/login/expert'
-        }
-
-        return dispatch(router.pushRoute(route))
-      }
-    }
-  },
   setPassphrase: {
     expectedParams: ['value']
   },
@@ -47,14 +25,15 @@ const actions = module.exports = makeActions('wallet-login', {
     creator: (params) => {
       return (dispatch, getState, {services}) => {
         const state = getState().get('walletLogin').toJS()
-        dispatch(actions.goForward.buildAction(params, (backend) => {       
+        dispatch(actions.goForward.buildAction(params, (backend) => {
           return services.auth.login({
             seedPhrase: state.passphrase.value,
             gatewayUrl: state.passphrase.valueOwnURL
           }).then(() => {
-            if (IS_VERIFIER) {          
-              dispatch(router.pushRoute('verifier/document'))
-            } else if (state.callbackURL.length > 1) {       
+            // if (IS_VERIFIER) {
+            //   dispatch(router.pushRoute('verifier/document'))
+            // }
+            if (state.callbackURL.length > 1) {
               dispatch(router.pushRoute(state.callbackURL))
               dispatch(actions.clearCallbackUrl())
             } else {
@@ -69,15 +48,9 @@ const actions = module.exports = makeActions('wallet-login', {
     expectedParams: [],
     creator: () => {
       return (dispatch) => {
-        dispatch(router.pushRoute('/login'))
+        dispatch(router.pushRoute('/'))
       }
     }
-  },
-  setUsername: {
-    expectedParams: ['value']
-  },
-  setPassword: {
-    expectedParams: ['value']
   },
   setValueOwnURL: {
     expectedParams: ['value']
@@ -87,31 +60,6 @@ const actions = module.exports = makeActions('wallet-login', {
     creator: (params) => {
       return (dispatch) => {
         dispatch(actions.toggleHasOwnURL.buildAction(params))
-      }
-    }
-  },
-  submitLogin: {
-    expectedParams: ['username, password'],
-    async: true,
-    creator: (params) => {
-      return (dispatch, getState, {services}) => {
-        const state = getState().get('walletLogin').toJS()
-        dispatch(actions.submitLogin.buildAction(params, (backend) => {
-          return backend.wallet
-            .retrieveSeedPhrase({
-              email: state.login.username,
-              password: state.login.password
-            })
-            .then((seed) => {
-              dispatch(actions.setPassphrase(seed))
-              dispatch(actions.goForward())
-            })
-            .catch((e) => {
-              dispatch(snackBar.showMessage({
-                message: 'Invalid username or password'
-              }))
-            })
-        }))
       }
     }
   },
@@ -129,10 +77,6 @@ const actions = module.exports = makeActions('wallet-login', {
 })
 
 const initialState = Immutable.fromJS({
-  userType: {
-    value: '',
-    valid: false
-  },
   passphrase: {
     value: '',
     failed: false,
@@ -141,32 +85,16 @@ const initialState = Immutable.fromJS({
     hasOwnURL: false,
     valueOwnURL: ''
   },
-
   login: {
-    username: '',
-    password: '',
+    errorMsg: null,
     failed: false,
-    valid: false,
-    errorMsg: ''
+    valid: false
   },
   callbackURL: ''
 })
 
 module.exports.default = (state = initialState, action = {}) => {
   switch (action.type) {
-    case actions.setUserType.id:
-      const valid = ['expert', 'layman'].indexOf(action.value) !== -1
-
-      if (action.value && !valid) {
-        throw Error('Invalid user type: ' + action.value)
-      }
-
-      return state.mergeDeep({
-        userType: {
-          value: action.value,
-          valid
-        }
-      })
 
     case actions.setPassphrase.id:
       return state.mergeDeep({
@@ -196,7 +124,7 @@ module.exports.default = (state = initialState, action = {}) => {
         })
       } else {
         return state.mergeDeep({
-          login : {
+          login: {
             errorMsg: 'Address for your private space cannot be reached. Please double check.', // eslint-disable-line max-len
             failed: true,
             valid: false
@@ -207,44 +135,6 @@ module.exports.default = (state = initialState, action = {}) => {
     case actions.goForward.id_success:
       return state.mergeDeep({
         login: {
-          errorMsg: '',
-          failed: false,
-          valid: true
-        },
-        login: {
-          errorMsg: '',
-          failed: false,
-          valid: true
-        }
-      })
-    case actions.setUsername.id:
-      return state.mergeDeep({
-        login: {
-          username: action.value
-        }
-      })
-    case actions.setPassword.id:
-      return state.mergeDeep({
-        login: {
-          password: action.value
-        }
-      })
-    case actions.submitLogin.id_fail:
-      return state.mergeDeep({
-        login: {
-          errorMsg: 'Incorrect username or password',
-          failed: true,
-          valid: false
-        },
-        pin: {
-          errorMsg: 'ERROR ggg'
-        }
-      })
-    case actions.submitLogin.id_success:
-      return state.mergeDeep({
-        login: {
-          username: '',
-          password: '',
           errorMsg: '',
           failed: false,
           valid: true

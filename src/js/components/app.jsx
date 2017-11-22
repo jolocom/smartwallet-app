@@ -21,8 +21,7 @@ let App = React.createClass({
     location: React.PropTypes.object,
     children: React.PropTypes.node,
     route: React.PropTypes.object,
-    account: React.PropTypes.object.isRequired,
-    doLogin: React.PropTypes.func.isRequired
+    account: React.PropTypes.object.isRequired
   },
 
   contextTypes: {
@@ -59,7 +58,6 @@ let App = React.createClass({
   },
 
   componentWillMount() {
-    this.props.doLogin({})
   },
 
   componentDidUpdate(prevProps, prevState) {

@@ -5,19 +5,6 @@ import {stub} from '../../../../test/utils'
 const reducer = require('./wallet-login').default
 
 describe('Wallet login Redux module', function() {
-  describe('setUserType', function() {
-    const setUserType = (type, state) => {
-      const thunk = login.actions.setUserType(type)
-      return () => thunk(stub(), stub().returns({
-        get: () => ({toJS: () => (state)})
-      }))
-    }
-    it('should throw an error when supplying invalid value', () => {
-      expect(setUserType('bla', {
-        userType: {valid: false, value: 'bla'}
-      })).to.throw('Invalid user type: bla')
-    })
-  })
   describe('setPassphrase', () => {
     it('should return the correct value', () => {
       const action = login.actions.setPassphrase('test')
@@ -30,29 +17,14 @@ describe('Wallet login Redux module', function() {
       expect(action.value).to.be.empty
     })
   })
-  describe('setUsername', () => {
-    it('should return the correct value', () => {
-      const action = login.actions.setUsername('test')
-      expect(action.value).to.equal('test')
-    })
-  })
-  describe('setPassword', () => {
-    it('should return the correct value', () => {
-      const action = login.actions.setPassword('test')
-      expect(action.value).to.equal('test')
-    })
-  })
   describe('#Reducer', () => {
     it('should initialize properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal({
-        userType: {value: '', valid: false},
         passphrase: {value: '', failed: false, valid: false, errorMsg: '',
           hasOwnURL: false, valueOwnURL: ''},
         login: {
-          username: '',
-          password: '',
-          errorMsg: '',
+          errorMsg: null,
           failed: false,
           valid: false
         },
@@ -112,7 +84,7 @@ describe('Wallet login Redux module', function() {
         expect(dispatch.calls).to.deep.equal([{
           args: [{
             payload: {
-              args: ['/login'],
+              args: ['/'],
               method: 'push'
             },
             type: '@@router/CALL_HISTORY_METHOD'

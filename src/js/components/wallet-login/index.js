@@ -1,4 +1,4 @@
 // export the main login screen
-import UserTypeScreen from './screens/user-type'
+import ExpertLoginPassphraseScreen from './screens/phrase'
 
-export default UserTypeScreen
+export default ExpertLoginPassphraseScreen

@@ -24,6 +24,7 @@ export default class AuthService extends EventEmitter {
   async login({seedPhrase, gatewayUrl}) {
     if (gatewayUrl !== undefined && gatewayUrl.length > 11) {
       this.backend.gateway = gatewayUrl
+      console.log(gatewayUrl)
     }
     const res = await this.backend.gateway.login({seedPhrase})
     if (!res.success) {

@@ -23,7 +23,7 @@ let Nav = React.createClass({
   propTypes: {
     open: React.PropTypes.bool.isRequired,
     selected: React.PropTypes.string.isRequired,
-    doLogout: React.PropTypes.func.isRequired,
+    // doLogout: React.PropTypes.func.isRequired,
     showLeftNav: React.PropTypes.func.isRequired,
     hideLeftNav: React.PropTypes.func.isRequired,
     selectItem: React.PropTypes.func.isRequired
@@ -110,7 +110,7 @@ let Nav = React.createClass({
   },
 
   logout() {
-    this.props.doLogout()
+    // this.props.doLogout()
     this.goto('/')
   },
 
@@ -224,7 +224,7 @@ let Nav = React.createClass({
 export default connect({
   props: ['leftNav.open', 'leftNav.selected'],
   actions: [
-    'account:doLogout',
+    // 'account:doLogout',
     'left-nav:showLeftNav',
     'left-nav:hideLeftNav',
     'left-nav:selectItem'

@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { Router, Route, IndexRoute } from 'react-router'
 
@@ -8,16 +9,8 @@ import RegistrationNameEntryScreen from
   'components/registration/screens/name-entry'
 import RegistrationEntropyScreen from
   'components/registration/screens/entropy'
-import RegistrationUserTypeScreen from
-  'components/registration/screens/user-type'
 import RegistrationWritePhraseScreen from
   'components/registration/screens/write-phrase'
-import RegistrationPhraseInfoScreen from
-  'components/registration/screens/phrase-info'
-import RegistrationIdentifierScreen from
-  'components/registration/screens/identifier'
-import RegistrationPasswordScreen from
-  'components/registration/screens/password'
 
 import WalletTabsScreen from 'components/wallet/screens/tabs'
 import WalletHomeScreen from 'components/wallet/screens/home'
@@ -41,7 +34,6 @@ import EtherTabScreen from 'components/wallet/screens/ether-tabs'
 
 import WalletLogin from 'components/wallet-login'
 import ExpertLoginPassphraseScreen from 'components/wallet-login/screens/phrase'
-// import LoginPinScreen from 'components/wallet-login/screens/pin'
 
 import SingleSignOnAccessRightScreen from
   'components/single-sign-on/screens/access-right'
@@ -108,18 +100,8 @@ function getRoutes() {
       component={RegistrationNameEntryScreen} />
     <Route path="registration/entropy"
       component={RegistrationEntropyScreen} />
-    <Route path="registration/user-type"
-      component={RegistrationUserTypeScreen} />
     <Route path="registration/write-phrase"
       component={RegistrationWritePhraseScreen} />
-    <Route path="registration/phrase-info"
-      component={RegistrationPhraseInfoScreen} />
-    {/* <Route path="registration/pin"
-      component={RegistrationPinScreen} /> */}
-    <Route path="registration/email"
-      component={RegistrationIdentifierScreen} />
-    <Route path="registration/password"
-      component={RegistrationPasswordScreen} />
 
     <Route path="wallet/identity/contact"
       component={WalletContactScreen} />
