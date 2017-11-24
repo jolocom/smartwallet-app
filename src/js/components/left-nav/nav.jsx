@@ -1,12 +1,12 @@
 import React from 'react'
-import {
-  Drawer,
-  List,
-  ListItem,
-  makeSelectable,
-  Divider,
-  FontIcon
-} from 'material-ui'
+
+import Drawer from 'material-ui/Drawer'
+import List from 'material-ui/List'
+import ListItem from 'material-ui/List'
+import makeSelectable from 'material-ui/List'
+import Divider from 'material-ui/Divider'
+import FontIcon from 'material-ui/FontIcon'
+
 import { connect } from 'redux_state/utils'
 
 import Header from './header.jsx'

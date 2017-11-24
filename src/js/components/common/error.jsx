@@ -8,9 +8,7 @@ import {
 } from '../structure'
 import {theme} from 'styles'
 
-import {
-  FlatButton
-} from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
 
 const STYLES = {
   topBlock: {

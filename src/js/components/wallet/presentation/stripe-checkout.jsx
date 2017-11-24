@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import ReactStripeCheckout from 'react-stripe-checkout'
 
-import {
-  RaisedButton
-} from 'material-ui'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const STYLES = {
   buyEtherButton: {

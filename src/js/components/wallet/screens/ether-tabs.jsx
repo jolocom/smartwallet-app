@@ -1,16 +1,14 @@
 import React from 'react'
-import {connect} from 'redux_state/utils'
 import Radium from 'radium'
-import {
-  AppBar,
-  Paper,
-  Tabs,
-  Tab
-} from 'material-ui'
+import AppBar from 'material-ui/AppBar'
+import Paper from 'material-ui/Paper'
+import Tabs from 'material-ui/Tabs'
+import Tab from 'material-ui/Tabs'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 
-import {Layout, Content} from 'components/layout'
-import {NavigationArrowBack} from 'material-ui/svg-icons'
-import {theme} from 'styles'
+import { Layout, Content } from 'components/layout'
+import { connect } from 'redux_state/utils'
+import { theme } from 'styles'
 
 const STYLES = {
   colorBar: {

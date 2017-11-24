@@ -1,7 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {TextField, IconButton, ListItem} from 'material-ui'
+import TextField from 'material-ui/TextField'
+import IconButton from 'material-ui/IconButton'
+import ListItem from 'material-ui/List'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 

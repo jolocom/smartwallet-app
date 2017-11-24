@@ -1,17 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
-
-import {theme} from 'styles'
-import {List} from 'material-ui'
-
-import {
-  CommunicationCall,
-  CommunicationEmail
-} from 'material-ui/svg-icons'
+import List from 'material-ui/List'
+import CommunicationCall from 'material-ui/svg-icons/communication/call.js'
+import CommunicationEmail from 'material-ui/svg-icons/communication/email.js'
 import Location from 'material-ui/svg-icons/maps/place'
-
 import Loading from 'components/common/loading'
-import { Content } from '../../structure'
 import {
   EditAppBar,
   EditHeader,
@@ -19,6 +12,9 @@ import {
   AddNew,
   SelectCountryItem
 } from './ui'
+
+import { Content } from '../../structure'
+import { theme } from 'styles'
 
 const STYLES = {
   title: {

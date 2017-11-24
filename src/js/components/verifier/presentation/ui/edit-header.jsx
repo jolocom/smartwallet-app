@@ -1,8 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
+import Divider from 'material-ui/Divider'
 
 import {theme} from 'styles'
-import {Divider} from 'material-ui'
 
 const STYLES = {
   header: {

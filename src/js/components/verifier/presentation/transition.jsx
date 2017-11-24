@@ -1,10 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
+import FlatButton from 'material-ui/FlatButton'
+import AppBar from 'material-ui/AppBar'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 
-import {AppBar, FlatButton} from 'material-ui'
 import {theme} from 'styles'
-import {NavigationArrowBack} from 'material-ui/svg-icons'
-
 import {Header} from '../../structure'
 
 const STYLES = {

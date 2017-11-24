@@ -2,17 +2,15 @@ import React from 'react'
 import Radium from 'radium'
 import QRCode from 'qrcode.react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import {
-  EtherBalance,
-  TabContainer,
-  HalfScreenContainer
-} from './ui'
-
-import {List, Divider, ListItem, FlatButton} from 'material-ui'
-import {Block} from '../../structure'
-import {Loading, Error} from '../../common'
-// import {theme} from 'styles'
+import List from 'material-ui/List'
+import Divider from 'material-ui/Divider'
+import ListItem from 'material-ui/List'
+import FlatButton from 'material-ui/FlatButton'
 import NavigationArrowDown from 'material-ui/svg-icons/navigation/arrow-downward' // eslint-disable-line max-len
+
+import { EtherBalance, TabContainer, HalfScreenContainer } from './ui'
+import { Block } from '../../structure'
+import { Loading, Error } from '../../common'
 
 const STYLES = {
   qr: {

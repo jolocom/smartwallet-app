@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {Checkbox} from 'material-ui'
+import Checkbox from 'material-ui/Checkbox'
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
 

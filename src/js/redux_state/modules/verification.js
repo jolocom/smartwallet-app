@@ -3,7 +3,7 @@ import { makeActions } from './'
 import identityActions from './wallet/identity'
 import * as router from './router'
 
-export const actions = module.exports = makeActions('verification', {
+export const actions = makeActions('verification', {
   startEmailVerification: {
     expectedParams: ['email', 'index', 'pin'],
     async: true,
@@ -138,7 +138,7 @@ const initialState = Immutable.fromJS({
   loading: true
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.confirmEmail.id_success:
       return confirmSuccess(state)

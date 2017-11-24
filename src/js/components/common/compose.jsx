@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Radium from 'radium'
 
-import {IconButton} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
 
 let Compose = React.createClass({
 

@@ -2,7 +2,8 @@ import React from 'react'
 import Radium from 'radium'
 import { connect } from 'redux_state/utils'
 
-import { FlatButton, Dialog } from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
+import Dialog from 'material-ui/Dialog'
 
 const STYLES = {
   buttonRigth: {

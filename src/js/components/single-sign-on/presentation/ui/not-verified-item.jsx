@@ -5,7 +5,10 @@ import {theme} from 'styles'
 
 import VerifiedShield from '../../../wallet/presentation/ui/verified-shield'
 import VerificationButtons from '../../../wallet/presentation/ui/verification-buttons' // eslint-disable-line max-len
-import {TextField, ListItem} from 'material-ui'
+
+import TextField from 'material-ui/TextField'
+import ListItem from 'material-ui/List'
+
 import {Block} from '../../../structure'
 
 const STYLES = {

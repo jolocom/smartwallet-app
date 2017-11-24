@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Radium from 'radium'
-
-import {AppBar, IconButton, FontIcon} from 'material-ui'
+import AppBar from 'material-ui/AppBar'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
 
 let SearchBar = React.createClass({
 

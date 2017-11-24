@@ -5,7 +5,14 @@ const merge = require('webpack-merge')
 const common = require('./webpack.config.common.js')
 module.exports = merge(common, {
   plugins: [
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false
+    }),
     new UglifyJSPlugin(),
-    new webpack.DefinePlugin({ 'NODE_ENV': '"production"' })
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"'
+    })
   ]
 })

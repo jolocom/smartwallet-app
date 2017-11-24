@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {TextField} from 'material-ui'
+import TextField from 'material-ui/TextField'
 import Info from 'material-ui/svg-icons/action/info'
 
 import {theme} from 'styles'

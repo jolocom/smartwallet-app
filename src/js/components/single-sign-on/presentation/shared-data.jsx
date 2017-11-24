@@ -1,21 +1,19 @@
 import React from 'react'
 import Radium from 'radium'
-
-import { Divider, AppBar, FlatButton } from 'material-ui'
-import {NavigationArrowBack} from 'material-ui/svg-icons'
+import Divider from 'material-ui/Divider'
+import AppBar from 'material-ui/AppBar'
+import FlatButton from 'material-ui/FlatButton'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
-import {IconIdCard, IconPassport} from '../../common'
+import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'
 import Location from 'material-ui/svg-icons/maps/place'
-import {theme} from 'styles'
-import {Content, Block} from '../../structure'
-import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 
-import {SubMenuIcon, VerifiedItem} from './ui'
-import {
-  TabContainer,
-  HalfScreenContainer
-} from '../../wallet/presentation/ui'
+import { theme } from 'styles'
+import { IconIdCard, IconPassport } from '../../common'
+import { Content, Block } from '../../structure'
+import { SubMenuIcon, VerifiedItem } from './ui'
+import { TabContainer, HalfScreenContainer } from '../../wallet/presentation/ui'
 
 const STYLES = {
   listItem: {

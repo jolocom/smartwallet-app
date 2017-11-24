@@ -1,7 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {IconButton, AppBar} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
+import AppBar from 'material-ui/AppBar'
+
 import HoverButton from 'components/common/hover-button.jsx'
 
 const STYLES = {

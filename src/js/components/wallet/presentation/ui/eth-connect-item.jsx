@@ -1,8 +1,10 @@
 import React from 'react'
-import {theme} from 'styles'
-import { RaisedButton, FlatButton } from 'material-ui'
-import {Block} from '../../../structure'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 import ReactStripeCheckout from 'react-stripe-checkout'
+
+import {Block} from '../../../structure'
+import {theme} from 'styles'
 
 const STYLES = {
   container: {

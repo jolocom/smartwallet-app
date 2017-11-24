@@ -1,7 +1,7 @@
 import React from 'react'
 
-import {FontIcon} from 'material-ui'
-import {green500} from 'material-ui/styles/colors'
+import FontIcon from 'material-ui/FontIcon'
+import green500 from 'material-ui/styles/colors/green500'
 
 let Verified = React.createClass({
   render() {

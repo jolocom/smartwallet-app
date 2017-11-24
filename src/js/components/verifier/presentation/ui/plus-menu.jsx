@@ -4,11 +4,9 @@ import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import {theme} from 'styles'
 
-import {
-  List,
-  FloatingActionButton,
-  Divider
-} from 'material-ui'
+import List from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {

@@ -4,7 +4,7 @@ import Radium from 'radium'
 import Cake from 'material-ui/svg-icons/social/cake'
 import Person from 'material-ui/svg-icons/social/person'
 import Location from 'material-ui/svg-icons/maps/place'
-import {List} from 'material-ui'
+import List from 'material-ui/List'
 
 import {
   EditAppBar,

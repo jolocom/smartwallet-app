@@ -1,6 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
-import {RaisedButton, IconButton} from 'material-ui'
+
+import RaisedButton from 'material-ui/RaisedButton'
+import IconButton from 'material-ui/IconButton'
+
 import Carousel from 'components/common/carousel.jsx'
 import IndicatorDots from 'components/common/indicator-dots.jsx'
 import {connect} from 'redux_state/utils'

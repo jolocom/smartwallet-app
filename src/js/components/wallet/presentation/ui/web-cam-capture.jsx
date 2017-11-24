@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import Webcam from 'react-webcam'
-import { FloatingActionButton } from 'material-ui'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 import Camera from 'material-ui/svg-icons/image/camera-alt'
 
 @Radium

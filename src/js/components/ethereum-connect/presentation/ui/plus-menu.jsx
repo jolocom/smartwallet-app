@@ -1,11 +1,14 @@
 import React from 'react'
 import Radium from 'radium'
 import {theme} from 'styles'
-import {
-  NavigationExpandMore,
-  NavigationExpandLess
-} from 'material-ui/svg-icons'
-import { List, FloatingActionButton, Divider } from 'material-ui'
+
+import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
+import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
+
+import List from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import Divider from 'material-ui/Divider'
+
 import {IconCheckmark} from '../../../common'
 
 const STYLES = {

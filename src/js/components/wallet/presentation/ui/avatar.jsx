@@ -1,6 +1,6 @@
 import React from 'react'
 import CameraIcon from 'material-ui/svg-icons/image/photo-camera'
-import { Avatar } from 'material-ui'
+import Avatar from 'material-ui/Avatar'
 import {theme} from 'styles'
 
 const STYLES = {

@@ -11,7 +11,7 @@ submitChanges,
 setNewFieldValue
 } from '../../../lib/edit-contact-util'
 
-const actions = module.exports = makeActions('wallet/contact', {
+export const actions = makeActions('wallet/contact', {
   saveChanges: {
     expectedParams: [],
     async: true,
@@ -124,7 +124,7 @@ const initialState = Immutable.fromJS({
   showErrors: false
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.saveChanges.id:
       return state.setIn(['loading'], true)

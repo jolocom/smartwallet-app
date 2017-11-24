@@ -1,7 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
-import {TextField} from 'material-ui'
-import {ActionSearch, NavigationArrowBack} from 'material-ui/svg-icons'
+import TextField from 'material-ui/TextField'
+import ActionSearch from 'material-ui/svg-icons/action/search'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back'
 
 import {theme} from 'styles'
 

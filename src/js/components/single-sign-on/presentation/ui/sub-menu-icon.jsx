@@ -2,11 +2,9 @@ import React from 'react'
 import Radium from 'radium'
 import {theme} from 'styles'
 
-import {
-  List,
-  FloatingActionButton,
-  Divider
-} from 'material-ui'
+import List from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {

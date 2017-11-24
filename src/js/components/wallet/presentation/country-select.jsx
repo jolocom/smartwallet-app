@@ -1,12 +1,13 @@
 import React from 'react'
 import Radium from 'radium'
-import {AppBar, ListItem} from 'material-ui'
+import AppBar from 'material-ui/AppBar'
+import ListItem from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
+import ActionSearch from 'material-ui/svg-icons/action/search.js'
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back.js'
 
-import {ActionSearch, NavigationArrowBack} from 'material-ui/svg-icons'
-
-import {theme} from 'styles'
-import {EditListItem} from './ui'
+import { theme } from 'styles'
+import { EditListItem } from './ui'
 
 const STYLES = {
   countryName: {

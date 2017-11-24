@@ -1,12 +1,16 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {TabContainer, HalfScreenContainer}
-  from '../../wallet/presentation/ui'
+import {TabContainer, HalfScreenContainer} from '../../wallet/presentation/ui'
 import LeftNavToggle from 'components/left-nav/toggle'
+
 import Avatar from 'material-ui/Avatar'
-import {Divider, RaisedButton,
-  ListItem, AppBar, List} from 'material-ui'
+import Divider from 'material-ui/Divider'
+import RaisedButton from 'material-ui/RaisedButton'
+import ListItem from 'material-ui/List'
+import AppBar from 'material-ui/AppBar'
+import List from 'material-ui/List'
+
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
 import {IconEther, IconBlockchain} from '../../common'

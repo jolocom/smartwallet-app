@@ -2,10 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import {theme} from 'styles'
-import {
-  ListItem
-} from 'material-ui'
-
+import ListItem from 'material-ui/List'
 const STYLES = {
   iconVerified: {
     color: theme.palette.primary1Color,

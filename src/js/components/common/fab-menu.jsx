@@ -1,7 +1,8 @@
 import React, {Children} from 'react'
 import Radium from 'radium'
 
-import {FloatingActionButton, FontIcon} from 'material-ui'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import FontIcon from 'material-ui/FontIcon'
 
 class FabMenu extends React.Component {
   static propTypes = {

@@ -1,10 +1,18 @@
 import React from 'react'
 import Radium from 'radium'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { TextField, Divider, List, ListItem,
-  FloatingActionButton } from 'material-ui'
-import { CommunicationCall, CommunicationEmail,
-  ContentCreate, ActionDone } from 'material-ui/svg-icons'
+
+import TextField from 'material-ui/TextField'
+import Divider from 'material-ui/Divider'
+import List from 'material-ui/List'
+import ListItem from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+
+import CommunicationCall from 'material-ui/svg-icons/communication/call'
+import CommunicationEmail from 'material-ui/svg-icons/communication/email'
+import ContentCreate from 'material-ui/svg-icons/content/create'
+import ActionDone from 'material-ui/svg-icons/action/done'
+
 import {theme} from 'styles'
 
 import {Content, Block} from '../../structure'

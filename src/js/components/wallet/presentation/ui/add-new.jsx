@@ -3,11 +3,9 @@ import Radium from 'radium'
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
 import {theme} from 'styles'
 
-import {
-  ListItem,
-  FlatButton,
-  Divider
-} from 'material-ui'
+import ListItem from 'material-ui/List'
+import FlatButton from 'material-ui/FlatButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {

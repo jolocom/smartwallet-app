@@ -1,20 +1,16 @@
 import React from 'react'
 import Radium from 'radium'
 
-// import {NavigationArrowBack} from 'material-ui/svg-icons'
-import {Divider, List, ListItem, FlatButton} from 'material-ui'
-import {Block, Header, SideNote} from '../../structure'
+import Divider from 'material-ui/Divider'
+import List from 'material-ui/List'
+import ListItem from 'material-ui/List'
+import FlatButton from 'material-ui/FlatButton'
+
+import { Block, Header, SideNote } from '../../structure'
 import StripeCheckout from './stripe-checkout'
-import {Spinner, Error, Loading} from '../../common'
-
-import {theme} from 'styles'
-
-import {
-  TabContainer,
-  HalfScreenContainer,
-  Bubbles,
-  EtherBalance
-} from './ui'
+import { Spinner, Error, Loading } from '../../common'
+import { theme } from 'styles'
+import { TabContainer, HalfScreenContainer, Bubbles, EtherBalance } from './ui'
 
 const STYLES = {
   noEtherContainer: {

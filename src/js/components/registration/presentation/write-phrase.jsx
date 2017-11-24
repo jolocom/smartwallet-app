@@ -1,12 +1,11 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {
-  Checkbox,
-  RaisedButton,
-  FlatButton,
-  Avatar
-} from 'material-ui'
+import Checkbox from 'material-ui/Checkbox'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import Avatar from 'material-ui/Avatar'
+
 import Unchecked from 'material-ui/svg-icons/toggle/radio-button-unchecked'
 import Checked from 'material-ui/svg-icons/action/check-circle'
 

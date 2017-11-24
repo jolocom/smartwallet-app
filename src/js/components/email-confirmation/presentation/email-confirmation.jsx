@@ -6,9 +6,7 @@ import {
 } from '../../structure'
 import {theme} from 'styles'
 
-import {
-  CircularProgress
-} from 'material-ui'
+import CircularProgress from 'material-ui/CircularProgress'
 
 const STYLES = {
   greeting: {

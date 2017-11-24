@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import accepts from 'attr-accept'
 
-import {IconButton} from 'material-ui'
+import IconButton from 'material-ui/IconButton'
 
 let ImageSelect = React.createClass({
   propTypes: {

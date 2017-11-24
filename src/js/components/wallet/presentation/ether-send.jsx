@@ -1,16 +1,15 @@
 import React from 'react'
 import Radium from 'radium'
-
-import {
-  EtherBalance,
-  TabContainer,
-  HalfScreenContainer
-} from './ui'
-
-import {List, Divider, ListItem, TextField, RaisedButton} from 'material-ui'
-import {Block} from '../../structure'
-import {Loading, Error} from '../../common'
+import List from 'material-ui/List'
+import Divider from 'material-ui/Divider'
+import ListItem from 'material-ui/List'
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton'
 import NavigationArrowUp from 'material-ui/svg-icons/navigation/arrow-upward'
+
+import { EtherBalance, TabContainer, HalfScreenContainer } from './ui'
+import { Block } from '../../structure'
+import { Loading, Error } from '../../common'
 
 const STYLES = {
   headItem: {

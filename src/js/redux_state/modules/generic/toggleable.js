@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import camelCase from 'lodash/camelCase'
 import { action } from '../'
 
 export function genericReducer(actions, {initialState}) {
@@ -17,7 +17,7 @@ export function genericReducer(actions, {initialState}) {
 }
 
 export default function creator(prefix, type, {initialValue = false}) {
-  const camelCaseType = _.camelCase(type)
+  const camelCaseType = camelCase(type)
   const actions = {
     show: action(prefix, 'show' + camelCaseType, {
       expectedParams: []

@@ -2,14 +2,14 @@ import React from 'react'
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
-import {RaisedButton, FlatButton} from 'material-ui'
-import {
-  NavigationExpandMore,
-  NavigationExpandLess
-} from 'material-ui/svg-icons'
 
-import {Container, Header, Content, Block, Footer
-} from '../../structure'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
+
+import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
+import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
+
+import {Container, Header, Content, Block, Footer } from '../../structure'
 import {theme} from 'styles'
 
 const STYLES = {

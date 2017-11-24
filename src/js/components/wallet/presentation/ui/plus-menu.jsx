@@ -1,17 +1,15 @@
 import React from 'react'
 import Radium from 'radium'
 import {theme} from 'styles'
-import {
-  ContentCreate,
-  ContentAdd,
-  NavigationExpandMore,
-  NavigationExpandLess
-} from 'material-ui/svg-icons'
-import {
-  List,
-  FloatingActionButton,
-  Divider
-} from 'material-ui'
+
+import ContentCreate from 'material-ui/svg-icons/content/create'
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more'
+import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less'
+
+import List from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import Divider from 'material-ui/Divider'
 
 const STYLES = {
   divider: {

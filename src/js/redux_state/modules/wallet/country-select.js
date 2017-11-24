@@ -7,7 +7,7 @@ import {
   listOfCountries as __LIST_OF_COUNTRIES__
 } from '../../../lib/list-of-countries'
 
-const actions = module.exports = makeActions('wallet/id-card/country', {
+export const actions = makeActions('wallet/id-card/country', {
   submit: {
     expectedParams: [],
     creator: (params) => {
@@ -92,7 +92,7 @@ const actions = module.exports = makeActions('wallet/id-card/country', {
   }
 })
 
-const initialState = module.exports.initialState = Immutable.fromJS({
+export const initialState = Immutable.fromJS({
   type: '',
   value: '',
   focusedGroup: '',
@@ -104,7 +104,7 @@ const initialState = module.exports.initialState = Immutable.fromJS({
 
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.setCountryType.id:
       return initialState.merge({

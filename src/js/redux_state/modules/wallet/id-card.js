@@ -17,7 +17,7 @@ import * as router from '../router'
 
 import * as idCardPhotoActions from './webcam'
 
-const actions = module.exports = makeActions('wallet/id-card', {
+export const actions = makeActions('wallet/id-card', {
   cancel: {
     expectedParams: [],
     creator: (params) => {
@@ -154,7 +154,7 @@ const actions = module.exports = makeActions('wallet/id-card', {
   }
 })
 
-const initialState = module.exports.initialState = Immutable.fromJS({
+export const initialState = Immutable.fromJS({
   loaded: false,
   showErrors: false,
   focusedGroup: '',
@@ -184,7 +184,7 @@ const initialState = module.exports.initialState = Immutable.fromJS({
   }
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.changeIdCardField.id:
       return changeFieldValue(state, action)

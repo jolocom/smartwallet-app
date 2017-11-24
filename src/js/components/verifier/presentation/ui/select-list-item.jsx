@@ -1,12 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {
-  SelectField,
-  IconButton,
-  ListItem,
-  MenuItem
-} from 'material-ui'
+import SelectField from 'material-ui/SelectField'
+import IconButton from 'material-ui/IconButton'
+import MenuItem from 'material-ui/MenuItem'
+import ListItem from 'material-ui/List'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 

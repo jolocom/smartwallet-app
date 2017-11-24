@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 
-const actions = module.exports = makeActions('wallet/money', {
+export const actions = makeActions('wallet/money', {
   goToEtherManagement: {
     expectedParams: ['value'],
     creator: (params) => {
@@ -124,7 +124,7 @@ const initialState = Immutable.fromJS({
   }
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.retrieveEtherBalance.id:
       return state.mergeIn(['ether'], {

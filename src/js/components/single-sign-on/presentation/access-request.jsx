@@ -3,8 +3,13 @@ import Radium from 'radium'
 
 import Loading from '../../common/loading'
 
-import {Divider, FlatButton, RaisedButton,
-  ListItem, AppBar, List} from 'material-ui'
+import Divider from 'material-ui/Divider'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
+import ListItem from 'material-ui/List'
+import AppBar from 'material-ui/AppBar'
+import List from 'material-ui/List'
+
 import Avatar from 'material-ui/Avatar'
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'

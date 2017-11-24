@@ -1,4 +1,6 @@
-import _ from 'lodash'
+import fromPairs from 'lodash/fromPairs'
+import map from 'lodash/map'
+import isString from 'lodash/isString'
 import { bindActionCreators } from 'redux'
 import { connect as reduxConnect } from 'react-redux'
 
@@ -29,7 +31,7 @@ export function connect(params, wantedActions = []) {
 
   const mapStateToProps = (state, props) => {
     const getPropPair = (state, prop) => {
-      if (_.isString(prop)) {
+      if (isString(prop)) {
         prop = prop.split('.')
       }
 
@@ -49,7 +51,7 @@ export function connect(params, wantedActions = []) {
     }
 
     if (typeof wantedProps !== 'function') {
-      return _.fromPairs(wantedProps.map(prop => {
+      return fromPairs(wantedProps.map(prop => {
         return getPropPair(state, prop)
       }))
     } else {
@@ -65,7 +67,7 @@ export function connect(params, wantedActions = []) {
     }
 
     if (typeof wantedActions !== 'function') {
-      return bindActionCreators(_.fromPairs(wantedActions.map(id => {
+      return bindActionCreators(fromPairs(wantedActions.map(id => {
         const [module, actionName] = getModuleAndActionNameFromID(id)
         return [actionName, module[actionName]]
       })), dispatch)
@@ -96,5 +98,5 @@ export function connect(params, wantedActions = []) {
 }
 
 export function actionsFrom(module, actions) {
-  return _.map(actions, action => module + ':' + action)
+  return map(actions, action => module + ':' + action)
 }

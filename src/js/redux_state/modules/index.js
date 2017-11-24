@@ -1,18 +1,24 @@
-import _ from 'lodash'
+import map from 'lodash/map'
+import snakeCase from 'lodash/snakeCase'
+import isObject from 'lodash/isObject'
+import every from 'lodash/every'
+import has from 'lodash/has'
+import pick from 'lodash/pick'
+import fromPairs from 'lodash/fromPairs'
 
 export function action(module, name, options) {
-  const id = 'little-sister/' + module + '/' + _.snakeCase(name).toUpperCase()
+  const id = 'little-sister/' + module + '/' + snakeCase(name).toUpperCase()
   const creator = options.creator || ((...args) => {
     return creator.buildAction(...args)
   })
 
   creator.buildAction = (...args) => {
     let hasParamsObject = false
-    if (_.isObject(args[0])) {
+    if (isObject(args[0])) {
       const params = args[0]
-      const paramsConform = _.every(
+      const paramsConform = every(
         options.expectedParams,
-        key => _.has(params, key)
+        key => has(params, key)
       )
       if (paramsConform) {
         hasParamsObject = true
@@ -21,10 +27,9 @@ export function action(module, name, options) {
 
     let params
     if (!hasParamsObject) {
-      params = _(options.expectedParams)
-                .map((key, idx) => [key, args[idx]])
-                .fromPairs()
-                .valueOf()
+      params = fromPairs(options.expectedParams.map((key, idx) => 
+        [key, args[idx]]
+      ))
     } else {
       params = args[0]
     }
@@ -39,7 +44,7 @@ export function action(module, name, options) {
 }
 
 export function asyncAction(module, prefix, options) {
-  const id = 'little-sister/' + module + '/' + _.snakeCase(prefix).toUpperCase()
+  const id = 'little-sister/' + module + '/' + snakeCase(prefix).toUpperCase()
   const creator = options.creator || ((params) => {
     return creator.buildAction(params, options.promise)
   })
@@ -58,17 +63,20 @@ export function asyncAction(module, prefix, options) {
 }
 
 export function makeActions(module, defs) {
-  const actions = _(defs).map((def, name) => {
-    const actionType = def.async ? asyncAction : action
+  const actions = fromPairs(map(defs, (def, name) => {
+    const actionType = def.async 
+      ? asyncAction
+      : action
     return [name, actionType(module, name, def)]
-  }).fromPairs().valueOf()
+  }))
+
   actions.actions = actions
   return actions
 }
 
 function _enchanceCreator(creator, id, options) {
   creator.getParams = (action) => {
-    return _.pick(action, options.expectedParams)
+    return pick(action, options.expectedParams)
   }
 
   creator.id = id

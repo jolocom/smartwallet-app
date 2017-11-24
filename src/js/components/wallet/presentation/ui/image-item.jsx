@@ -1,9 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {IconButton, ListItem, Paper} from 'material-ui'
-
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
+import IconButton from 'material-ui/IconButton'
+import ListItem from 'material-ui/List'
+import Paper from 'material-ui/Paper'
 
 import {theme} from 'styles'
 

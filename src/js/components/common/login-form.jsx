@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import { Link } from 'react-router'
-import { RaisedButton } from 'material-ui'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const LoginForm = (props) => {
   const {

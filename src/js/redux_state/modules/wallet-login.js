@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import { makeActions } from './'
 import * as router from './router'
 
-const actions = module.exports = makeActions('wallet-login', {
+export const actions = makeActions('wallet-login', {
   setPassphrase: {
     expectedParams: ['value']
   },
@@ -93,7 +93,7 @@ const initialState = Immutable.fromJS({
   callbackURL: ''
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
 
     case actions.setPassphrase.id:

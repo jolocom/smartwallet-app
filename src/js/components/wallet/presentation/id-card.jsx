@@ -1,17 +1,17 @@
 import React from 'react'
 import Radium from 'radium'
-
-import {
-  SocialPerson,
-  MapsLocation,
-  ImageCameraAlt,
-  ActionLanguage,
-  SocialCake
-} from 'material-ui/svg-icons'
+import SocialPerson from 'material-ui/svg-icons/social/person'
+import MapsLocation from 'material-ui/svg-icons/maps/place'
+import ImageCameraAlt from 'material-ui/svg-icons/image/camera'
+import ActionLanguage from 'material-ui/svg-icons/action/language'
+import SocialCake from 'material-ui/svg-icons/social/cake'
+import List from 'material-ui/List'
+import ListItem from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 import moment from 'moment'
-import { List, ListItem, FloatingActionButton } from 'material-ui'
-import {theme} from 'styles'
 
+import { theme } from 'styles'
+import { Content } from '../../structure'
 import {
   EditAppBar,
   EditHeader,
@@ -22,7 +22,6 @@ import {
   ImageItem,
   DateListItem
 } from './ui'
-import { Content } from '../../structure'
 
 const STYLES = {
   verificationBlock: {

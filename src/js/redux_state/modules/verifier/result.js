@@ -6,7 +6,7 @@ import * as transition from './transition'
 const verificationStartUrl = '/verifier/document'
 const dataCheckUrl = 'verifier/data'
 
-const actions = module.exports = makeActions('wallet/contact', {
+export const actions = makeActions('wallet/contact', {
   finishVerification: {
     expectedParams: [],
     creator: (params) => {
@@ -77,7 +77,7 @@ const initialState = Immutable.fromJS({
   numberOfFails: 0
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.startComparingData.id:
       return state.merge({

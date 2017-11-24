@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import * as router from '../router'
 
-const actions = module.exports = makeActions('wallet/webCam', {
+export const actions = makeActions('wallet/webCam', {
   cancel: {
     expectedParams: [],
     creator: (params) => {
@@ -52,14 +52,14 @@ const actions = module.exports = makeActions('wallet/webCam', {
   }
 })
 
-const initialState = module.exports.initialState = Immutable.fromJS({
+export const initialState = Immutable.fromJS({
   numberOfPhotos: 1,
   photos: [],
   onSave: () => {},
   onCancel: () => {}
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.addPhoto.id:
       return state.mergeIn(['photos', action.index], {

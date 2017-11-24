@@ -1,4 +1,6 @@
-import * as _ from 'lodash'
+import isPlainObject from 'lodash/isPlainObject'
+import isArray from 'lodash/isArray'
+import fromPairs from 'lodash/fromPairs'
 import HTTPAgent from 'lib/agents/http'
 // import * as settings from 'settings'
 
@@ -230,7 +232,7 @@ export default class GatewayAgent {
     }
 
     let serialized
-    if (_.isPlainObject(attributeData)) {
+    if (isPlainObject(attributeData)) {
       serialized = this.serializeData(attributeData)
     } else {
       serialized = JSON.stringify(attributeData)
@@ -265,8 +267,8 @@ export default class GatewayAgent {
             let attrValue = await this._httpAgent.get(
               `${this._gatewayUrl}/${userName}/identity/${type}/${id}`
             )
-            if (_.isArray(attrValue)) {
-              attrValue = _.fromPairs(attrValue)
+            if (isArray(attrValue)) {
+              attrValue = fromPairs(attrValue)
             }
             return attrValue
           }

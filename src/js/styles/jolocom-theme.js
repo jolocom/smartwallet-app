@@ -8,9 +8,10 @@
  * http://bit.ly/2n5ohrH
  */
 
-import {fade} from 'material-ui/utils/colorManipulator'
-import {lime700, white, grey300} from 'material-ui/styles/colors'
+import { lime700, white, grey300 } from 'material-ui/styles/colors'
+
 import Spacing from 'material-ui/styles/spacing'
+import {fade} from 'material-ui/utils/colorManipulator'
 
 const palette = {
   primary1Color: '#b3c90f',

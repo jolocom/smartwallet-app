@@ -3,7 +3,10 @@ import Radium from 'radium'
 
 import {theme} from 'styles'
 import {IconIdCard, IconPassport} from '../../../common'
-import {TextField, ListItem, FloatingActionButton} from 'material-ui'
+
+import TextField from 'material-ui/TextField'
+import ListItem from 'material-ui/List'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
 import CommunicationEmail from 'material-ui/svg-icons/communication/email'

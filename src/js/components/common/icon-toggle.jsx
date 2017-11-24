@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {Checkbox} from 'material-ui'
+import Checkbox from 'material-ui/Checkbox'
 
 export default Radium(React.createClass({
   contextTypes: {

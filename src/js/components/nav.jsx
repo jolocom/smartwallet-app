@@ -1,6 +1,7 @@
 import React from 'react'
 
-import {Tabs, Tab} from 'material-ui'
+import Tab from 'material-ui/Tab'
+import Tabs from 'material-ui/Tab'
 
 export default React.createClass({
 

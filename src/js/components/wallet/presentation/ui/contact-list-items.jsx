@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import { List } from 'material-ui'
+import List from 'material-ui/List'
 import { StaticListItem, VerificationButtons } from './'
 
 const iconMsg = {

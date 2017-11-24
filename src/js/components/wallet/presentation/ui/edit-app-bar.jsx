@@ -1,8 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
-import {fade} from 'material-ui/utils/colorManipulator'
-import {theme} from 'styles'
-import {IconButton, AppBar} from 'material-ui'
+import { fade } from 'material-ui/utils/colorManipulator'
+import IconButton from 'material-ui/IconButton'
+import AppBar from 'material-ui/AppBar'
+
+import { theme } from 'styles'
 import HoverButton from 'components/common/hover-button.jsx'
 
 const STYLES = {

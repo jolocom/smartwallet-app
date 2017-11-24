@@ -5,7 +5,7 @@ import * as router from '../router'
 import * as transition from './transition'
 const transitionUrl = '/verifier'
 
-const actions = module.exports = makeActions('wallet/contact', {
+export const actions = makeActions('wallet/contact', {
   verifyFace: {
     expectedParams: [],
     creator: (params) => {
@@ -37,7 +37,7 @@ const initialState = Immutable.fromJS({
   isFaceMatchingId: false
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.cancelFaceVerification.id:
       return initialState

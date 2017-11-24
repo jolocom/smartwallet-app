@@ -12,9 +12,9 @@ import createStore from 'redux_state/create'
 
 injectTapEventPlugin()
 
-import moment from 'moment'
+import {locale} from 'moment'
 
-moment.locale('en', {
+locale('en', {
   relativeTime: {
     future: 'in %s',
     past: function (number/*, withoutSuffix, key, isFuture*/) {

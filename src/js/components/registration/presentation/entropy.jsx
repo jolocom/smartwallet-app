@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 import MaskedImage from './masked-image'
-import {RaisedButton} from 'material-ui'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import {Container, Footer} from '../../structure'
 

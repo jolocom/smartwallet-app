@@ -38,7 +38,7 @@ const __WINDOW_TO_URL__ = {
   idCard: '/wallet/identity/id-card'
 }
 
-const actions = module.exports = makeActions('wallet/identity', {
+export const actions = makeActions('wallet/identity', {
   changePinValue: {
     expectedParams: ['attrType', 'value', 'index', 'codeType']
   },
@@ -280,7 +280,7 @@ const changePinValue = (state, {attrType, index, value, codeType = 'pin'}) => {
   return state
 }
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   switch (action.type) {
     case actions.changePinValue.id:
       return changePinValue(state, action)

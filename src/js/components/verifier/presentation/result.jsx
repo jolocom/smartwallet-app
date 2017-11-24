@@ -1,7 +1,9 @@
 import React from 'react'
 import Radium from 'radium'
 
-import {AppBar, FlatButton} from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
+import AppBar from 'material-ui/AppBar'
+
 import {theme} from 'styles'
 
 import {EditAppBar} from './ui'

@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import _ from 'lodash'
+import extend from 'lodash/extend'
 
 let Content = React.createClass({
   propTypes: {
@@ -27,7 +27,7 @@ let Content = React.createClass({
     let {style} = this.props
 
     if (style) {
-      _.extend(styles, style)
+      extend(styles, style)
     }
 
     return (

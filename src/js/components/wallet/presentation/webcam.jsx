@@ -1,12 +1,10 @@
 import React from 'react'
 import Radium from 'radium'
+import NavigationCancel from 'material-ui/svg-icons/navigation/close'
+import ImageLandscape from 'material-ui/svg-icons/image/landscape'
 
 import {theme} from 'styles'
-import { NavigationCancel, ImageLandscape } from 'material-ui/svg-icons'
-
-import {
-  EditAppBar, WebcamCapture
-} from './ui'
+import { EditAppBar, WebcamCapture } from './ui'
 import { Content } from '../../structure'
 
 const STYLES = {

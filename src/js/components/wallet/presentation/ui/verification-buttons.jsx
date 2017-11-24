@@ -1,7 +1,8 @@
 import React from 'react'
 import Radium from 'radium'
 
-import { ListItem, FlatButton } from 'material-ui'
+import FlatButton from 'material-ui/FlatButton'
+import ListItem from 'material-ui/List'
 
 import { VerificationButtonMsg } from './'
 

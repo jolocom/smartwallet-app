@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
 import * as router from './router'
@@ -8,7 +8,7 @@ const NEXT_ROUTES = {
   '/registration/entropy': '/registration/write-phrase'
 }
 
-const actions = module.exports = makeActions('registration', {
+export const actions = makeActions('registration', {
   goForward: {
     expectedParams: [],
     creator: () => {
@@ -211,7 +211,7 @@ const initialState = Immutable.fromJS({
   complete: false
 })
 
-module.exports.default = (state = initialState, action = {}) => {
+export default (state = initialState, action = {}) => {
   state = state.set('complete', helpers._isComplete(state))
 
   switch (action.type) {
@@ -365,10 +365,10 @@ module.exports.default = (state = initialState, action = {}) => {
   }
 }
 
-const helpers = module.exports.helpers = {}
+export const helpers = {}
 helpers._isComplete = (state) => {
   const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
-  const areFieldsValid = (fields) => _.every(fields, isFieldValid)
+  const areFieldsValid = (fields) => every(fields, isFieldValid)
 
   let complete = areFieldsValid(['username', 'passphrase'])
 

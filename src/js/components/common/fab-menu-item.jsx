@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {FloatingActionButton} from 'material-ui'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 const FabMenuItem = props => {
   let {icon, label, style, buttonStyle, ...otherProps} = props
