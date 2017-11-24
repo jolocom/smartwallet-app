@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'redux_state/utils'
-import PropTypes from 'prop-types';
 import Radium, {StyleRoot} from 'radium'
 
 import SnackbarContainer from 'components/snack-bar'
@@ -19,27 +18,27 @@ import {routes, publicRoutes} from 'routes'
 
 let App = React.createClass({
   propTypes: {
-    location: PropTypes.object,
-    children: PropTypes.node,
-    route: PropTypes.object,
-    account: PropTypes.object.isRequired
+    location: React.PropTypes.object,
+    children: React.PropTypes.node,
+    route: React.PropTypes.object,
+    account: React.PropTypes.object.isRequired
   },
 
   contextTypes: {
-    router: PropTypes.object.isRequired,
-    store: PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    store: React.PropTypes.object.isRequired
   },
 
   childContextTypes: {
-    muiTheme: PropTypes.object,
-    profile: PropTypes.any,
-    account: PropTypes.object,
-    username: PropTypes.string,
-    searchActive: PropTypes.bool,
-    location: PropTypes.object,
-    route: PropTypes.object,
-    router: PropTypes.object,
-    store: PropTypes.object
+    muiTheme: React.PropTypes.object,
+    profile: React.PropTypes.any,
+    account: React.PropTypes.object,
+    username: React.PropTypes.string,
+    searchActive: React.PropTypes.bool,
+    location: React.PropTypes.object,
+    route: React.PropTypes.object,
+    router: React.PropTypes.object,
+    store: React.PropTypes.object
   },
 
   getChildContext: function () {

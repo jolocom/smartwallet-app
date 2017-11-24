@@ -1,5 +1,5 @@
 import React from 'react'
-import { findDOMNode } from 'react-dom'
+import ReactDOM from 'react-dom'
 import Radium from 'radium'
 import AppBar from 'material-ui/AppBar'
 import IconButton from 'material-ui/IconButton'
@@ -59,7 +59,7 @@ let SearchBar = React.createClass({
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.show && !prevState.show) {
-      let input = findDOMNode(this.refs.input)
+      let input = ReactDOM.findDOMNode(this.refs.input)
       input.focus()
     }
   },
@@ -70,7 +70,7 @@ let SearchBar = React.createClass({
 
   hide() {
     this.setState({show: false, query: null})
-    let input = findDOMNode(this.refs.input)
+    let input = ReactDOM.findDOMNode(this.refs.input)
     input.value = ''
 
     if (typeof this.props.onHide === 'function') {

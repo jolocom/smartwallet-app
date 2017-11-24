@@ -8,7 +8,7 @@ import SocialCake from 'material-ui/svg-icons/social/cake'
 import List from 'material-ui/List'
 import ListItem from 'material-ui/List'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-// import moment from 'moment'
+import moment from 'moment'
 
 import { theme } from 'styles'
 import { Content } from '../../structure'
@@ -248,7 +248,7 @@ export default class WalletIdCard extends React.Component {
             onFocusChange={(field) => this.props.setFocused(field, group)}
             focused={this.props.focusedGroup === group}
             onChange={(e, date) =>
-              // this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
+              this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
         </td>
         <td key="1">
           <EditListItem
@@ -285,7 +285,7 @@ export default class WalletIdCard extends React.Component {
       onDelete={() => { this.props.change(key, '') }}
       enableDelete={value.toString().length > 0}
       onChange={(e, date) =>
-        // this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
+        this.props.change(key, moment(date).format('YYYY-MM-DD'))} />
   }
 
   createIcons() {

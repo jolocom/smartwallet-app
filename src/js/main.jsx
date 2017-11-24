@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'react-dom'
+import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
@@ -12,7 +12,7 @@ import createStore from 'redux_state/create'
 
 injectTapEventPlugin()
 
-import locale from 'moment/locale'
+import {locale} from 'moment'
 
 locale('en', {
   relativeTime: {
@@ -53,18 +53,18 @@ const history = syncHistoryWithStore(hashHistory, store, {
   selectLocationState: createSelectLocationState()
 })
 
-const renderApp = () => {
-  render(<AppContainer>
+const render = () => {
+  ReactDOM.render(<AppContainer>
     <Provider store={store}>
       {require('routes').default(history)}
     </Provider>
   </AppContainer>, rootEl)
 }
 
-renderApp()
+render()
 
 if (module.hot) {
   module.hot.accept('routes', () => {
-    renderApp()
+    render()
   })
 }

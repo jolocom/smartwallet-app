@@ -1,5 +1,5 @@
 import React from 'react'
-import { findDOMNode } from 'react-dom'
+import ReactDOM from 'react-dom'
 import Radium from 'radium'
 
 import IconButton from 'material-ui/IconButton'
@@ -48,7 +48,7 @@ let Compose = React.createClass({
   onSubmit() {
     if (this.props.onSubmit(this.state.content)) {
       this.setState({content: ''})
-      findDOMNode(this.refs.textarea).value = ''
+      ReactDOM.findDOMNode(this.refs.textarea).value = ''
     }
   },
 
