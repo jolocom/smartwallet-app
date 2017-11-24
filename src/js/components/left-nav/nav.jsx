@@ -3,7 +3,6 @@ import React from 'react'
 import Drawer from 'material-ui/Drawer'
 import List from 'material-ui/List'
 import ListItem from 'material-ui/List'
-import makeSelectable from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -12,8 +11,6 @@ import { connect } from 'redux_state/utils'
 import Header from './header.jsx'
 
 import {navItems} from 'routes'
-
-let SelectableList = makeSelectable(List)
 
 let Nav = React.createClass({
   contextTypes: {
@@ -190,12 +187,11 @@ let Nav = React.createClass({
         containerStyle={styles.drawerBody}
         open={this.props.open}
         onRequestChange={this.drawerRequestChange}>
-
         <Header onClose={this.props.hideLeftNav} />
         <div>
-          <SelectableList style={styles.listSelect}>
+          <List style={styles.listSelect}>
             {this.renderNavItems()}
-          </SelectableList>
+          </List>
           <List>
             <ListItem
               key={'signOut'}
