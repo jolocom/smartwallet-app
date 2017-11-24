@@ -1,9 +1,6 @@
-little-sister
-=============
-
 [![Dependency Status](https://david-dm.org/jolocom/smartwallet-app/develop.svg)](https://david-dm.org/jolocom/smartwallet-app/develop)[![Build Status](https://travis-ci.org/jolocom/smartwallet-app.svg?branch=develop)](https://travis-ci.org/jolocom/smartwallet-app)
 
-Jolocom SmartWallet - An application to manageg your digital identity.
+Jolocom SmartWallet - An application to manage your digital identity.
 
 Setup for development
 ---------------------
@@ -16,10 +13,9 @@ https://nodejs.org/en/download/
 Prerequisites:
 - [yarn](https://yarnpkg.com)
 
-After cloning the little-sister repository to a directory on your computer. Enter the directory and run the following command:
+After cloning the smartwallet-app repository to a directory on your computer, enter the directory and run the following command:
 
 ```bash
-yarn global add gulp
 yarn install
 ```
 
@@ -28,23 +24,30 @@ yarn install
 #### With hot module reloading support
 
 ```bash
-gulp
+yarn start
 ```
 This will make webpack-dev-server serve the application on https://localhost:8080 and will reload only the modules you've modified instead of rebuilding the entire bundle on every change. The changes will be applied live to your browser.
 
 #### Without hot module reloading
 
 ```bash
-gulp build-dev
+yarn build:dev
 ```
 Rebuilding will be much slower this way, because the entire bundle will be rebuilt on each change.
+
+#### Using a local Gateway
+
+```bash
+GW=LOCAL yarn start
+```
+Sets local gateway as backend.
 
 ### Mobile (Cordova)
 
 First make sure to build the Cordova distribution.
 
 ```bash
-gulp build:cordova
+yarn build:cordova
 ```
 
 #### iOS
@@ -68,14 +71,13 @@ Setup for production
 
 ## Installation
 ```bash
-yarn global add gulp
-yarn install --production
+yarn install
 ```
 
 ### Browser
 
 ```bash
-gulp build
+yarn build
 ```
 
 ### Mobile (Cordova)

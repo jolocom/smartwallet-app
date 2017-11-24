@@ -18,7 +18,7 @@ inspired by http://nvie.com/posts/a-successful-git-branching-model/
 - If the tester finds a bug he will reassign the issue to the original developer who will then fix it on the `testing` branch with a direct commit or as part of a feature branch
 
 ### Release
-- When the sprint ends and stakeholder/product owner decide for release an seperate `release` branch is created and deployed (environment: `staging.littlesister.jolocom.com`).
+<!-- - When the sprint ends and stakeholder/product owner decide for release an seperate `release` branch is created and deployed (environment: `staging.wallet.jolocom.com`). -->
 - This branch is still open for minor changes (i.e. updating the changelog)
 - For release the `release` branch is merged into the `master` branch (environment: `littlesister.jolocom.com)
 - The commit on the master branch should be tagged.
