@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import * as actions from './ethereum-connect'
+import { actions } from './ethereum-connect'
 import {stub} from '../../../../test/utils'
 const reducer = require('./ethereum-connect').default
 

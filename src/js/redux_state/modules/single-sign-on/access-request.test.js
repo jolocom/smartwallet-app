@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import * as actions from './access-request'
+import { actions } from './access-request'
 import {stub} from '../../../../../test/utils'
 const reducer = require('./access-request').default
 

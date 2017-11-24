@@ -1,11 +1,10 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
 import Immutable from 'immutable'
-import * as registration from './registration'
-import * as router from './router'
+import { actions, helpers } from './registration'
+import router from './router'
 import {stub, withStubs} from '../../../../test/utils'
-const reducer = require('./registration').default
-const helpers = registration.helpers
+import reducer from './registration'
 
 describe('Wallet registration Redux module', () => {
   describe('goForward', () => {
@@ -16,10 +15,10 @@ describe('Wallet registration Redux module', () => {
           complete: true
         }})
 
-        const thunk = registration.goForward()
+        const thunk = actions.goForward()
 
         withStubs([
-          [registration.actions, 'registerWallet', {returns: 'register'}],
+          [actions.actions, 'registerWallet', {returns: 'register'}],
           [router, 'pushRoute', {returns: 'push'}]],
           () => {
             thunk(dispatch, getState)
@@ -39,11 +38,10 @@ describe('Wallet registration Redux module', () => {
           complete: false
         }})
 
-        const thunk = registration.goForward()
-
+        const thunk = actions.goForward()
         withStubs([
           [router, 'pushRoute', {returns: 'push'}],
-          [registration.helpers, '_getNextURLfromState', {returns: '/next/'}]],
+          [helpers, '_getNextURLfromState', {returns: '/next/'}]],
           () => {
             thunk(dispatch, getState)
             expect(dispatch.calledWithArgs)
@@ -91,7 +89,7 @@ describe('Wallet registration Redux module', () => {
         }})
         const services = {entropy: {addFromDelta: stub()}}
 
-        const thunk = registration.addEntropyFromDeltas({dx: 5, dy: 3})
+        const thunk = actions.addEntropyFromDeltas({dx: 5, dy: 3})
         thunk(dispatch, getState, {services})
 
         expect(services.entropy.addFromDelta.called).to.equal(false)
@@ -109,12 +107,12 @@ describe('Wallet registration Redux module', () => {
           getRandomString: stub().returns('bla')
         }}
 
-        const thunk = registration.addEntropyFromDeltas({dx: 5, dy: 3})
+        const thunk = actions.addEntropyFromDeltas({dx: 5, dy: 3})
         thunk(dispatch, getState, {services})
 
         expect(services.entropy.addFromDelta.called).to.equal(true)
         expect(dispatch.calls).to.deep.equal([{args: [
-          registration.setEntropyStatus({
+          actions.setEntropyStatus({
             sufficientEntropy: false,
             progress: 0.5
           })
@@ -134,7 +132,7 @@ describe('Wallet registration Redux module', () => {
           getRandomString: stub().returns('bla bla bla bla bla bla bla')
         }}
 
-        const thunk = registration.addEntropyFromDeltas({
+        const thunk = actions.addEntropyFromDeltas({
           dx: 5,
           dy: 3
         })
@@ -143,11 +141,11 @@ describe('Wallet registration Redux module', () => {
         expect(services.entropy.addFromDelta.called).to.equal(true)
         expect(services.entropy.getRandomString.called).to.equal(true)
         expect(dispatch.calls).to.deep.equal([
-          {args: [registration.setEntropyStatus({
+          {args: [actions.setEntropyStatus({
             sufficientEntropy: true,
             progress: 1
           })]},
-          {args: [registration.setRandomString({
+          {args: [actions.setRandomString({
             randomString: 'bla bla bla bla bla bla bla'
           })]}
         ])
@@ -160,7 +158,7 @@ describe('Wallet registration Redux module', () => {
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {sufficientEntropy: false}
         }})
-        const readyE = registration.submitEntropy()
+        const readyE = actions.submitEntropy()
         readyE(dispatch, getState)
 
         expect(dispatch.calls).to.deep.equal([])
@@ -171,9 +169,9 @@ describe('Wallet registration Redux module', () => {
           passphrase: {sufficientEntropy: true}
         }})
         withStubs([
-        [registration.actions, 'generateSeedPhrase', {returns: 'generated'}]],
+        [actions.actions, 'generateSeedPhrase', {returns: 'generated'}]],
         () => {
-          const readyE = registration.submitEntropy()
+          const readyE = actions.submitEntropy()
           readyE(dispatch, getState)
           expect(dispatch.calls).to.deep.equal([{args: ['generated']}])
         }
@@ -190,7 +188,7 @@ describe('Wallet registration Redux module', () => {
         const backend = {gateway: {
           generateSeedPhrase: stub().returnsAsync('seedphrase')
         }}
-        const generate = registration.actions.generateSeedPhrase
+        const generate = actions.actions.generateSeedPhrase
         generate(dispatch, getState, {backend})
 
         expect(backend.gateway.generateSeedPhrase.called).to.equal(false)
@@ -207,13 +205,13 @@ describe('Wallet registration Redux module', () => {
     //   }}
 
     //   withStubs([
-    //     [registration.actions.generateSeedPhrase, 'buildAction',
+    //     [actions.actions.generateSeedPhrase, 'buildAction',
     //     {returns: 'action'}]],
     //     () => {
-    //       const thunk = registration.generateSeedPhrase('test')
+    //       const thunk = actions.generateSeedPhrase('test')
     //       thunk(dispatch, getState)
     //       expect(dispatch.calledWithArgs[0]).to.equal('action')
-          // const generate = registration.actions.generateSeedPhrase
+          // const generate = actions.actions.generateSeedPhrase
           // const promise = generate.buildAction.calledWithArgs[1]
           // expect(backend.gateway.generateSeedPhrase.called).to.be.true
           // expect(promise(backend)).to.eventually.equal('seedphrase')
@@ -240,14 +238,14 @@ describe('Wallet registration Redux module', () => {
           }
         }
         withStubs([
-          [registration.actions, 'goForward', {returns: 'forward'}],
-          [registration.actions.registerWallet, 'buildAction',
+          [actions.actions, 'goForward', {returns: 'forward'}],
+          [actions.actions.registerWallet, 'buildAction',
           {returns: 'action'}]],
           () => {
-            const thunk = registration.registerWallet()
+            const thunk = actions.registerWallet()
             thunk(dispatch, getState, {services})
             expect(dispatch.calledWithArgs[0]).to.equal('action')
-            const registerAction = registration.actions.registerWallet
+            const registerAction = actions.actions.registerWallet
             const promise = registerAction.buildAction.calledWithArgs[1]
             expect(promise(services.auth.register))
             .to.eventually.equal('regSeed')
@@ -282,7 +280,7 @@ describe('Wallet registration Redux module', () => {
       })
       it('should correctly update', () => {
         let state = reducer(undefined, '@@INIT')
-        state = reducer(state, registration.setEntropyStatus({
+        state = reducer(state, actions.setEntropyStatus({
           sufficientEntropy: 'bla',
           progress: 0.4
         }))
@@ -316,7 +314,7 @@ describe('Wallet registration Redux module', () => {
       it('should correctly handle registration start', () => {
         let state = reducer(undefined, '@@INIT')
         state = reducer(state, {
-          type: registration.registerWallet.id
+          type: actions.registerWallet.id
         })
 
         expect(state.get('wallet').toJS())
@@ -330,7 +328,7 @@ describe('Wallet registration Redux module', () => {
       it('should correctly handle registration success', () => {
         let state = reducer(undefined, '@@INIT')
         state = reducer(state, {
-          type: registration.registerWallet.id_success
+          type: actions.registerWallet.id_success
         })
 
         expect(state.get('wallet').toJS())
@@ -344,7 +342,7 @@ describe('Wallet registration Redux module', () => {
       it('should correctly handle registration fail', () => {
         let state = reducer(undefined, '@@INIT')
         state = reducer(state, {
-          type: registration.registerWallet.id_fail,
+          type: actions.registerWallet.id_fail,
           error: new Error('test')
         })
 

@@ -1,30 +1,30 @@
 import {expect} from 'chai'
-import * as etherTabs from './ether-tabs'
+import { actions } from './ether-tabs'
 import * as router from '../router'
+import { pushRoute } from '../router'
 import {stub, withStubs} from '../../../../../test/utils'
-const reducer = require('./ether-tabs').default
+import reducer from './ether-tabs'
 
 describe('Wallet Ether Tabs Redux Module', function() {
   it('should switch ether tabs correctly', () => {
     const dispatch = stub()
-
     withStubs([
       [router, 'pushRoute', {returns: 'push'}]], () => {
-      const etherThunk = etherTabs.switchTab({tab: 'overview'})
+      const etherThunk = actions.switchTab({tab: 'overview'})
       etherThunk(dispatch, 'getState')
       expect(dispatch.calls).to.deep.equal([{args: ['push']}])
       expect(router.pushRoute.calledWithArgs).to.deep.equal(['/wallet/ether'])
 
       dispatch.reset()
 
-      const etherSendThunk = etherTabs.switchTab({tab: 'send'})
+      const etherSendThunk = actions.switchTab({tab: 'send'})
       etherSendThunk(dispatch, 'getState')
       expect(dispatch.calls).to.deep.equal([{args: ['push']}])
       expect(router.pushRoute.calledWithArgs).to.deep.equal(['/wallet/ether/send']) // eslint-disable-line max-len
 
       dispatch.reset()
 
-      const etherReceiveThunk = etherTabs.switchTab({tab: 'receive'})
+      const etherReceiveThunk = actions.switchTab({tab: 'receive'})
       etherReceiveThunk(dispatch, 'getState')
       expect(dispatch.calls).to.deep.equal([{args: ['push']}])
       expect(router.pushRoute.calledWithArgs).to.deep.equal(['/wallet/ether/receive']) // eslint-disable-line max-len
@@ -32,17 +32,16 @@ describe('Wallet Ether Tabs Redux Module', function() {
   })
   it('should correctly detect active tab', function() {
     let state = reducer(undefined, '@@INIT')
-
-    state = reducer(state, etherTabs.detectActiveTab({path: '/wallet/ether'}))
+    state = reducer(state, actions.detectActiveTab({path: '/wallet/ether'}))
     expect(state.get('activeTab')).to.equal('overview')
 
-    state = reducer(state, etherTabs.detectActiveTab({path: '/wallet/ether/receive'})) // eslint-disable-line max-len
+    state = reducer(state, actions.detectActiveTab({path: '/wallet/ether/receive'})) // eslint-disable-line max-len
     expect(state.get('activeTab')).to.equal('receive')
 
-    state = reducer(state, etherTabs.detectActiveTab({path: '/wallet/ether/send'})) // eslint-disable-line max-len
+    state = reducer(state, actions.detectActiveTab({path: '/wallet/ether/send'})) // eslint-disable-line max-len
     expect(state.get('activeTab')).to.equal('send')
 
-    state = reducer(state, etherTabs.detectActiveTab({path: '/wallet'}))
+    state = reducer(state, actions.detectActiveTab({path: '/wallet'}))
     expect(state.get('activeTab')).to.equal('overview')
   })
   it('should go to proper screen when navigating', function() {
@@ -50,14 +49,14 @@ describe('Wallet Ether Tabs Redux Module', function() {
 
     withStubs([
       [router, 'pushRoute', {returns: 'push'}]], () => {
-      const walletThunk = etherTabs.goToWalletScreen()
+      const walletThunk = actions.goToWalletScreen()
       walletThunk(dispatch, 'getState')
       expect(dispatch.calls).to.deep.equal([{args: ['push']}])
       expect(router.pushRoute.calledWithArgs).to.deep.equal(['/wallet/money'])
 
       dispatch.reset()
 
-      const closeAccountThunk = etherTabs.closeAccountDetails()
+      const closeAccountThunk = actions.closeAccountDetails()
       closeAccountThunk(dispatch, 'getState')
       expect(dispatch.calls).to.deep.equal([{args: ['push']}])
       expect(router.pushRoute.calledWithArgs).to.deep.equal(['/wallet/ether'])
@@ -66,7 +65,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
   it('should update correct field in state on updateField', function() {
     let state = reducer(undefined, '@@INIT')
     const action = {
-      type: etherTabs.actions.updateField.id,
+      type: actions.updateField.id,
       field: 'receiverAddress',
       value: '0xONENICETEST'
     }
@@ -87,7 +86,7 @@ describe('Wallet Ether Tabs Redux Module', function() {
   it('should get confirmation on sendEther and set loading to false', function() { // eslint-disable-line max-len
     let state = reducer(undefined, '@@INIT')
     const action = {
-      type: etherTabs.actions.sendEther.id_success,
+      type: actions.sendEther.id_success,
       result: 'send OK'
     }
     state = reducer(state, action)

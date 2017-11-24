@@ -1,9 +1,8 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
-import * as contact from './contact'
+import { actions }  from './contact'
 import {stub} from '../../../../../test/utils'
-
-const reducer = require('./contact').default
+import reducer from './contact'
 
 describe('# Wallet contact redux module', () => {
   describe('# Reducer ', () => {
@@ -17,7 +16,7 @@ describe('# Wallet contact redux module', () => {
           }
         }
       })
-      const action = contact.actions.exitWithoutSaving()
+      const action = actions.exitWithoutSaving()
       action(dispatch, getState)
       expect(dispatch.called).to.be.true
       expect(dispatch.calls).to.deep.equal([{
@@ -38,7 +37,7 @@ describe('# Wallet contact redux module', () => {
     it('getUserInformation should get the user\'s information', () => {
       let state = reducer(undefined, '@@INIT')
       const action = {
-        type: contact.actions.getUserInformation.id_success,
+        type: actions.getUserInformation.id_success,
         result: {
           callback: '/test/test',
           result: {
@@ -56,14 +55,14 @@ describe('# Wallet contact redux module', () => {
     () => {
       let state = reducer(undefined, '@@INIT')
       const action1 = {
-        type: contact.actions.saveChanges.id,
+        type: actions.saveChanges.id,
         result: {
         }
       }
       state = reducer(state, action1)
       expect(state.toJS().loading).to.be.true
       const action = {
-        type: contact.actions.saveChanges.id_success,
+        type: actions.saveChanges.id_success,
         result: {
         }
       }
@@ -80,7 +79,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.addNewEntry.id,
+          type: actions.addNewEntry.id,
           field: 'emails',
           index: 0
         }
@@ -99,7 +98,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.deleteInformation.id,
+          type: actions.deleteInformation.id,
           age: 'newInformation',
           field: 'emails',
           index: 0
@@ -118,7 +117,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.setInformation.id,
+          type: actions.setInformation.id,
           value: 'ab',
           field: 'emails',
           index: 0
@@ -138,7 +137,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.updateInformation.id,
+          type: actions.updateInformation.id,
           value: 'test',
           field: 'emails',
           index: 0
@@ -160,7 +159,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.updateInformation.id,
+          type: actions.updateInformation.id,
           value: 'test',
           field: 'emails',
           index: 0
@@ -195,7 +194,7 @@ describe('# Wallet contact redux module', () => {
           }
         }
         const action = {
-          type: contact.actions.addNewEntry.id,
+          type: actions.addNewEntry.id,
           field: 'phones',
           index: 0
         }
@@ -213,7 +212,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.deleteInformation.id,
+          type: actions.deleteInformation.id,
           age: 'newInformation',
           field: 'phones',
           index: 0
@@ -240,7 +239,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.setInformation.id,
+          type: actions.setInformation.id,
           value: {value: '123', type: 'personal'},
           field: 'phones',
           index: 0
@@ -273,7 +272,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.updateInformation.id,
+          type: actions.updateInformation.id,
           value: {value: '+4917912345678', type: 'test'},
           field: 'phones',
           index: 0
@@ -310,7 +309,7 @@ describe('# Wallet contact redux module', () => {
           }
         })
         const action = {
-          type: contact.actions.updateInformation.id,
+          type: actions.updateInformation.id,
           value: {value: '+4917912345678', type: 'test'},
           field: 'phones',
           index: 0

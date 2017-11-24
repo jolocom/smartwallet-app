@@ -1,3 +1,3 @@
 import { push } from 'react-router-redux'
 
-export const pushRoute = push
+export default { pushRoute: push }

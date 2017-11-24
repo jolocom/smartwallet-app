@@ -1,6 +1,6 @@
-import {expect} from 'chai'
+import { expect } from 'chai'
 import Immutable from 'immutable'
-const reducer = require('./webcam').default
+import reducer from './webcam'
 
 describe('# Wallet webcam redux module', () => {
   it('should initialize properly', () => {

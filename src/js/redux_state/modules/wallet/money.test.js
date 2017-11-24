@@ -1,5 +1,5 @@
-import {expect} from 'chai'
-import * as actions from './money'
+import { expect } from 'chai'
+import { actions } from './money'
 const reducer = require('./money').default
 
 describe('# Wallet money redux module', () => {

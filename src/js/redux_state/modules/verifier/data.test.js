@@ -1,11 +1,9 @@
-import {expect} from 'chai'
-import * as actions from './data'
-
-const reducer = require('./data').default
+import { expect } from 'chai'
+import { actions, initialState } from './data'
+import reducer from './data'
 
 describe('# verifier data redux module', () => {
   describe('# Reducer', () => {
-    let {initialState} = actions
     it('should initialise properly', () => {
       const state = reducer(undefined, '@@INIT')
       expect(state.toJS()).to.deep.equal(initialState.toJS())

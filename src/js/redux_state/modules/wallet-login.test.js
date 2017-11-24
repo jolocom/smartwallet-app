@@ -1,19 +1,19 @@
 import {expect} from 'chai'
 import Immutable from 'immutable'
-import * as login from './wallet-login'
+import { actions } from './wallet-login'
 import {stub} from '../../../../test/utils'
 const reducer = require('./wallet-login').default
 
 describe('Wallet login Redux module', function() {
   describe('setPassphrase', () => {
     it('should return the correct value', () => {
-      const action = login.actions.setPassphrase('test')
+      const action = actions.setPassphrase('test')
       expect(action.value).to.equal('test')
     })
   })
   describe('resetPassphrase', () => {
     it('should return the correct value', () => {
-      const action = login.actions.resetPassphrase()
+      const action = actions.resetPassphrase()
       expect(action.value).to.be.empty
     })
   })
@@ -42,7 +42,7 @@ describe('Wallet login Redux module', function() {
     describe('#setPassphrase', () => {
       it('should be able to set the passphrase value to a valid value', () => {
         const state = reducer(undefined, '@@INIT')
-        const newState = reducer(state, login.actions.setPassphrase('Test'))
+        const newState = reducer(state, actions.setPassphrase('Test'))
         expect(newState.toJS().passphrase.value).to.equal('Test')
         expect(newState.toJS().passphrase.valid).to.be.true
       })
@@ -52,10 +52,10 @@ describe('Wallet login Redux module', function() {
         () => {
           const phraseState = reducer(
             undefined,
-            login.actions.setPassphrase('test')
+            actions.setPassphrase('test')
           )
           const newState = reducer(phraseState, {
-            type: login.actions.goForward.success
+            type: actions.goForward.success
           })
           expect(newState.toJS().passphrase.errorMsg).to.equal('')
           expect(newState.toJS().passphrase.valid).to.be.true
@@ -66,7 +66,7 @@ describe('Wallet login Redux module', function() {
       () => {
         const state = reducer(undefined, '@@INIT')
         const newState = reducer(state, {
-          type: login.actions.goForward.id_fail,
+          type: actions.goForward.id_fail,
           error: new Error('test')
         })
         expect(newState.toJS().login.errorMsg)
@@ -78,7 +78,7 @@ describe('Wallet login Redux module', function() {
     describe('goToLogin', () => {
       it('should redirect the user to the login screen', function() {
         const dispatch = stub()
-        const thunk = login.actions.goToLogin()
+        const thunk = actions.goToLogin()
         thunk(dispatch)
         expect(dispatch.called).to.be.true
         expect(dispatch.calls).to.deep.equal([{
@@ -94,7 +94,7 @@ describe('Wallet login Redux module', function() {
     })
     describe('#resetPassphrase', () => {
       it('should set the passphrase value in the state to empty string', () => {
-        const resetPassphrase = login.actions.resetPassphrase
+        const resetPassphrase = actions.resetPassphrase
         const state = Immutable.fromJS({passphrase: {
           value: 'test'
         }})

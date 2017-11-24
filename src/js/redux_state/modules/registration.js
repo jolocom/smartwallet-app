@@ -1,7 +1,7 @@
 import every from 'lodash/every'
 import Immutable from 'immutable'
 import { makeActions } from './'
-import * as router from './router'
+import router from './router'
 
 const NEXT_ROUTES = {
   '/registration': '/registration/entropy',

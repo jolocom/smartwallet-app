@@ -13,7 +13,7 @@ import {
 } from '../../../lib/id-card-util'
 
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 
 import * as idCardPhotoActions from './webcam'
 
