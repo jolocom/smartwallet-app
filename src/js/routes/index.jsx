@@ -17,16 +17,13 @@ import WalletHomeScreen from 'components/wallet/screens/home'
 import WalletMoneyScreen from 'components/wallet/screens/money'
 import WalletIdentityScreen from 'components/wallet/screens/identity'
 import WalletContactScreen from 'components/wallet/screens/contact'
-import WalletIdCardScreen from 'components/wallet/screens/id-card'
 import WalletEtherScreen from 'components/wallet/screens/ether-wallet'
-import CountrySelectScreen from 'components/wallet/screens/country-select'
 import AccessRequestScreen
   from 'components/single-sign-on/screens/access-request'
 import AccessConfirmationScreen from
   'components/single-sign-on/screens/access-confirmation'
 import EmailConfirmationScreen from
 'components/email-confirmation/screens/email-confirmation'
-import WalletIdCardPhotoScreen from 'components/wallet/screens/webcam'
 
 import EtherSendScreen from 'components/wallet/screens/ether-send'
 import EtherReceiveScreen from 'components/wallet/screens/ether-receive'
@@ -105,14 +102,6 @@ function getRoutes() {
 
     <Route path="wallet/identity/contact"
       component={WalletContactScreen} />
-    <Route path="wallet/identity/id-card"
-      component={WalletIdCardScreen} />
-    <Route path="wallet/identity/id-card-photo"
-      component={WalletIdCardPhotoScreen} />
-    <Route path="wallet/identity/passport/add"
-      component={WalletIdCardScreen} />
-    <Route path="wallet/identity/country-select"
-      component={CountrySelectScreen} />
 
     <Route path="wallet/ether" component={EtherTabScreen}>
       <Route path="send" component={EtherSendScreen} />
