@@ -6,6 +6,7 @@ export function stub(options = {}) {
     func.calls.push({args: args})
     return options.returns
   }
+
   func.returns = (...args) => {
     if (args.length) {
       options.returns = args[0]
@@ -33,13 +34,15 @@ export function stub(options = {}) {
 }
 
 export function withStubs(stubs, func) {
-  const origs = stubs.map(([obj, key]) => obj[key])
+  const original = stubs.map(([obj, key]) => obj[key])
+
   stubs.forEach(([obj, key, options]) => {
     obj[key] = stub(options)
   })
+
   const cleanup = () => {
-    stubs.forEach(([obj, key, options], idx) => {
-      obj[key] = origs[idx]
+    stubs.forEach(([obj, key], idx) => {
+      obj[key] = original[idx]
     })
   }
 

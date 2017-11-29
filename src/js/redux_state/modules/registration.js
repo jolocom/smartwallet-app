@@ -59,10 +59,17 @@ export const actions = makeActions('registration', {
     expectedParams: [],
     creator: () => {
       return (dispatch, getState) => {
-        // eslint-disable-next-line max-len
-        const entropyState = getState().getIn(['registration', 'passphrase', 'sufficientEntropy'])
-        // eslint-disable-next-line max-len
-        entropyState ? dispatch(actions.generateSeedPhrase()) : console.log('not enough entropy')
+        const entropyState = getState().getIn([
+          'registration',
+          'passphrase',
+          'sufficientEntropy'
+        ])
+
+        if (entropyState) {
+          return dispatch(actions.generateSeedPhrase())
+        }
+
+        throw new Error('Not enough entropy!')
       }
     }
   },
@@ -71,11 +78,17 @@ export const actions = makeActions('registration', {
     async: true,
     creator: (params) => {
       return (dispatch, getState, {backend}) => {
-        // eslint-disable-next-line max-len
-        const randomStringState = getState().getIn(['registration', 'passphrase', 'randomString'])
+        const randomStringState = getState().getIn([
+          'registration',
+          'passphrase',
+          'randomString'
+        ])
+
         if (randomStringState === '') {
           return
-        } // eslint-disable-next-line max-len
+        } 
+       
+        // eslint-disable-next-line max-len
         dispatch(actions.generateSeedPhrase.buildAction(params, async (backend) => {
           await backend.gateway.generateSeedPhrase({randomStringState})
           .then((params) => {
@@ -83,7 +96,7 @@ export const actions = makeActions('registration', {
             dispatch(actions.setPassphraseWrittenDown(true))
             dispatch(actions.goForward())
           }).catch(e => {
-            console.log(e, 'error in generate seed phrase')
+            console.error(e, 'error in generate seed phrase')
           })
         }))
       }
@@ -113,13 +126,13 @@ export const actions = makeActions('registration', {
   checkCredentials: {
     expectedParams: [],
     async: true,
-    creator: (params) => {
+    creator: params => {
       return (dispatch, getState) => {
         const state = getState().get('registration').toJS()
         dispatch(actions.checkCredentials.buildAction(params, (backend) => {
           return backend.gateway
             .checkUserDoesNotExist({userName: state.username.value})
-            .then((params) => {
+            .then(params => {
               if (state.ownURL.valueOwnURL.length > 1) {
                 dispatch(actions.checkOwnUrl())
               } else {
@@ -365,18 +378,14 @@ export default (state = initialState, action = {}) => {
   }
 }
 
-export const helpers = {}
-helpers._isComplete = (state) => {
-  const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
-  const areFieldsValid = (fields) => every(fields, isFieldValid)
-
-  let complete = areFieldsValid(['username', 'passphrase'])
-
-  return complete
+export const helpers = {
+  _isComplete: (state) => {
+    const isFieldValid = (fieldName) => state.getIn([fieldName, 'valid'])
+    const areFieldsValid = (fields) => every(fields, isFieldValid)
+    return areFieldsValid(['username', 'passphrase'])
+  },
+  _getNextURLfromState: (state) => {
+    const currentPath = state.get('routing').locationBeforeTransitions.pathname
+    return NEXT_ROUTES[currentPath]
+  }
 }
-
-helpers._getNextURLfromState = (state) => {
-  const currentPath = state.get('routing').locationBeforeTransitions.pathname
-  return NEXT_ROUTES[currentPath]
-}
-

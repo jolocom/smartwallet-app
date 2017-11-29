@@ -1,53 +1,50 @@
 /* global describe: true, it: true */
-import {expect} from 'chai'
+import { expect } from 'chai'
 import Immutable from 'immutable'
 import { actions, helpers } from './registration'
 import router from './router'
 import {stub, withStubs} from '../../../../test/utils'
 import reducer from './registration'
 
-describe('Wallet registration Redux module', () => {
+describe.only('Wallet registration Redux module', () => {
   describe('goForward', () => {
     describe('action', () => {
       it('should dispatch the wallet registration action when complete', () => {
         const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          complete: true
-        }})
+        const getState = () => Immutable.fromJS({
+          registration: {
+            complete: true
+          }
+        })
 
         const thunk = actions.goForward()
 
-        withStubs([
-          [actions.actions, 'registerWallet', {returns: 'register'}],
-          [router, 'pushRoute', {returns: 'push'}]],
+        withStubs([[actions.actions, 'registerWallet', {returns: 'register'}]],
           () => {
             thunk(dispatch, getState)
-            expect(dispatch.calls)
-              .to.deep.equal([{
-                args: [
-                  'register'
-                ]
-              }])
+            expect(dispatch.calls).to.deep.equal([{
+              args: [ 'register' ]
+            }])
           }
         )
       })
 
       it('should go to the next page if requested', () => {
         const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          complete: false
-        }})
+        const getState = () => Immutable.fromJS({
+          registration: {
+            complete: false
+          }
+        })
 
         const thunk = actions.goForward()
+
         withStubs([
           [router, 'pushRoute', {returns: 'push'}],
-          [helpers, '_getNextURLfromState', {returns: '/next/'}]],
-          () => {
+          [helpers, '_getNextURLfromState', {returns: '/next/'}]], () => {
             thunk(dispatch, getState)
-            expect(dispatch.calledWithArgs)
-              .to.deep.equal(['push'])
-            expect(router.pushRoute.calledWithArgs)
-              .to.deep.equal(['/next/'])
+            expect(dispatch.calledWithArgs).to.deep.equal(['push'])
+            expect(router.pushRoute.calledWithArgs).to.deep.equal(['/next/'])
           }
         )
       })
@@ -58,7 +55,7 @@ describe('Wallet registration Redux module', () => {
     })
 
     describe('_isComplete()', () => {
-      const test = ({invalid, result, userType = null}) => {
+      const test = ({invalid, result}) => {
         invalid = new Immutable.Set(invalid)
         expect(helpers._isComplete(Immutable.fromJS({
           username: {valid: !invalid.has('username')},
@@ -68,10 +65,7 @@ describe('Wallet registration Redux module', () => {
 
       it('should return false if nothing is filled in', () => {
         test({
-          invalid: [
-            'username',
-            'passphrase'
-          ],
+          invalid: [ 'username', 'passphrase' ],
           result: false
         })
       })
@@ -79,17 +73,24 @@ describe('Wallet registration Redux module', () => {
       it('should return false if one of the base fields is missing', () => {
         test({invalid: ['username'], result: false})
       })
+
+      it('should return true if nothing is missing', () => {
+        test({invalid: [], result: true})
+      })
     })
 
     describe('addEntropyFromDeltas', () => {
       it('should not do anything when phrase is already generated', () => {
         const dispatch = stub()
-        const getState = () => Immutable.fromJS({registration: {
-          passphrase: {phrase: 'xyx'}
-        }})
-        const services = {entropy: {addFromDelta: stub()}}
+        const getState = () => Immutable.fromJS({
+          registration: {
+            passphrase: {phrase: 'xyx'}
+          }
+        })
 
+        const services = {entropy: {addFromDelta: stub()}}
         const thunk = actions.addEntropyFromDeltas({dx: 5, dy: 3})
+
         thunk(dispatch, getState, {services})
 
         expect(services.entropy.addFromDelta.called).to.equal(false)
@@ -100,12 +101,15 @@ describe('Wallet registration Redux module', () => {
         const getState = () => Immutable.fromJS({registration: {
           passphrase: {phrase: ''}
         }})
-        const services = {entropy: {
-          addFromDelta: stub(),
-          isReady: stub().returns(false),
-          getProgress: stub().returns(0.5),
-          getRandomString: stub().returns('bla')
-        }}
+
+        const services = {
+          entropy: {
+            addFromDelta: stub(),
+            isReady: stub().returns(false),
+            getProgress: stub().returns(0.5),
+            getRandomString: stub().returns('bla')
+          }
+        }
 
         const thunk = actions.addEntropyFromDeltas({dx: 5, dy: 3})
         thunk(dispatch, getState, {services})
@@ -132,10 +136,7 @@ describe('Wallet registration Redux module', () => {
           getRandomString: stub().returns('bla bla bla bla bla bla bla')
         }}
 
-        const thunk = actions.addEntropyFromDeltas({
-          dx: 5,
-          dy: 3
-        })
+        const thunk = actions.addEntropyFromDeltas({ dx: 5, dy: 3 })
         thunk(dispatch, getState, {services})
 
         expect(services.entropy.addFromDelta.called).to.equal(true)
@@ -159,10 +160,11 @@ describe('Wallet registration Redux module', () => {
           passphrase: {sufficientEntropy: false}
         }})
         const readyE = actions.submitEntropy()
-        readyE(dispatch, getState)
 
+        expect(() => { readyE(dispatch, getState) }).to.throw('Not enough entropy!')
         expect(dispatch.calls).to.deep.equal([])
       })
+
       it('should trigger generateseedphrase when there is enough entropy', () => {
         const dispatch = stub()
         const getState = () => Immutable.fromJS({registration: {
@@ -247,16 +249,19 @@ describe('Wallet registration Redux module', () => {
             expect(dispatch.calledWithArgs[0]).to.equal('action')
             const registerAction = actions.actions.registerWallet
             const promise = registerAction.buildAction.calledWithArgs[1]
-            expect(promise(services.auth.register))
-            .to.eventually.equal('regSeed')
+
+            expect(promise(services.auth.register)).to.eventually.equal('regSeed')
+
             expect(services.auth.register.called).to.be.true
             expect(services.auth.register.calls)
-            .to.deep.equal([{args: [{
-              seedPhrase: 'bla bla bla',
-              userName: 'usr',
-              inviteCode: null,
-              gatewayUrl: 'test'
-            }]}])
+              .to.deep.equal([{
+                args: [{
+                  seedPhrase: 'bla bla bla',
+                  userName: 'usr',
+                  inviteCode: null,
+                  gatewayUrl: 'test'
+                }]
+              }])
           }
         )
       })
