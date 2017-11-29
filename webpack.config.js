@@ -3,6 +3,6 @@ const webpack = require('webpack')
 
 const common = require('./webpack.config.common.js')
 module.exports = merge(common, {
-  devtool: 'eval',
+  devtool: '#source-map',
   plugins: [ new webpack.HotModuleReplacementPlugin() ]
 })

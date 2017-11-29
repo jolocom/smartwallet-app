@@ -1,14 +1,19 @@
 import { Map } from 'immutable'
+import { makeActions } from './'
 import { action } from './'
 
-export const showLeftNav = action('left-nav', 'showLeftNav', {
-  expectedParams: []
-})
-export const hideLeftNav = action('left-nav', 'hideLeftNav', {
-  expectedParams: []
-})
-export const selectItem = action('left-nav', 'selectItem', {
-  expectedParams: ['value']
+export const actions = makeActions('left-nav', {
+  showLeftNav: {
+    expectedParams: [] 
+  },
+
+  hideLeftNav: {
+    expectedParams: []
+  },
+
+  selectItem: {
+    expectedParams: ['value'] 
+  }
 })
 
 const initialState = new Map({
@@ -18,13 +23,13 @@ const initialState = new Map({
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case showLeftNav.id:
+    case actions.showLeftNav.id:
       return state.merge({open: true})
 
-    case hideLeftNav.id:
+    case actions.hideLeftNav.id:
       return state.merge({open: false})
 
-    case selectItem.id:
+    case actions.selectItem.id:
       return state.merge({selected: action.value})
 
     default:

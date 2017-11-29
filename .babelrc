@@ -2,7 +2,7 @@
   "presets":[
     ["es2015", {"modules": false}],
     "react",
-    "survivejs-kanban" 
+    "survivejs-kanban",
   ],
   "plugins": [
     "transform-decorators-legacy",

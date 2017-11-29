@@ -28,7 +28,6 @@ export function connect(params, wantedActions = []) {
     wantedProps = []
   }
   wantedActions = params.actions || wantedActions
-
   const mapStateToProps = (state, props) => {
     const getPropPair = (state, prop) => {
       if (isString(prop)) {
@@ -46,7 +45,6 @@ export function connect(params, wantedActions = []) {
       if (pair[1] !== null && pair[1].toJS) {
         pair[1] = pair[1].toJS()
       }
-
       return pair
     }
 
@@ -62,7 +60,11 @@ export function connect(params, wantedActions = []) {
   const mapDispatchToProps = (dispatch, props) => {
     const getModuleAndActionNameFromID = (id) => {
       const [moduleName, actionName] = id.split(':')
-      const module = require('redux_state/modules/' + moduleName)
+
+      const reducer = require('redux_state/modules/' + moduleName).default
+      const { actions } = require('redux_state/modules/' + moduleName)
+
+      const module = {...actions, 'default': reducer}
       return [module, actionName]
     }
 
@@ -77,21 +79,23 @@ export function connect(params, wantedActions = []) {
   }
 
   const connector = (component) => {
-    const connected = reduxConnect(
-      mapStateToProps,
-      mapDispatchToProps,
-      (stateProps, dispatchProps, ownProps) =>
-        Object.assign({}, ownProps, stateProps, dispatchProps),
-      {
+    const mergeProps = (stateProps, dispatchProps, ownProps) => {
+      const extra = {
         withRef: true,
         pure: typeof params.pure !== 'undefined' ? params.pure : true
       }
+      return Object.assign({}, ownProps, stateProps, dispatchProps, extra)
+    }
+
+    const connected = reduxConnect(
+      mapStateToProps,
+      mapDispatchToProps,
+      mergeProps
     )(component)
+
     connected.mapStateToProps = mapStateToProps
     connected.mapDispatchToProps = mapDispatchToProps
-    // connected.reconnect = (reconnector) => {
-    //   return reconnector(mapStateToProps, mapDispatchToProps)
-    // }
+
     return connected
   }
   return connector
