@@ -128,7 +128,7 @@ export class Wallet {
       const [email, phone, passport, idcard] =
         await this._gateway.getOwnAttributes({
           userName: this.userName,
-          type: ['email', 'phone', 'passport', 'idcard'],
+          type: ['email', 'phone'],
           checkVerified: true
         })
 
@@ -141,7 +141,6 @@ export class Wallet {
         walletAddress: ethereum.walletAddress
       })
       return {
-        webId: `https://${this.userName}.webid.jolocom.de/profile/card#me`,
         userName: this.userName,
         displayName: {
           edit: false,
@@ -164,17 +163,6 @@ export class Wallet {
             savedToBlockchain: false
           }))
         },
-        passports: passport.map(passport => ({
-          ...passport.contents,
-          verified: passport.verified,
-          savedToBlockchain: false
-        })),
-        idCards: idcard.map(idcard => ({
-          idCardFields: idcard.contents,
-          verified: idcard.verified,
-          savedToBlockchain: false,
-          id: idcard.id
-        })),
         ethereum: {
           walletAddress: ethereum.walletAddress,
           identityAddress: ethereum.identityAddress,
