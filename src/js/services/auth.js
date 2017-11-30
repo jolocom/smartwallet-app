@@ -125,7 +125,7 @@ export class Wallet {
         console.log(e)
         displayName = [['value', '']]
       }
-      const [email, phone, passport, idcard] =
+      const [email, phone] =
         await this._gateway.getOwnAttributes({
           userName: this.userName,
           type: ['email', 'phone'],

@@ -1,8 +1,7 @@
 import React from 'react'
 
 import Drawer from 'material-ui/Drawer'
-import List from 'material-ui/List'
-import ListItem from 'material-ui/List'
+import { List, ListItem } from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -18,9 +17,9 @@ let Nav = React.createClass({
   },
 
   propTypes: {
+    doLogout: React.PropTypes.func.isRequired,
     open: React.PropTypes.bool.isRequired,
     selected: React.PropTypes.string.isRequired,
-    // doLogout: React.PropTypes.func.isRequired,
     showLeftNav: React.PropTypes.func.isRequired,
     hideLeftNav: React.PropTypes.func.isRequired,
     selectItem: React.PropTypes.func.isRequired
@@ -107,7 +106,7 @@ let Nav = React.createClass({
   },
 
   logout() {
-    // this.props.doLogout()
+    this.props.doLogout()
     this.goto('/')
   },
 
@@ -220,9 +219,9 @@ let Nav = React.createClass({
 export default connect({
   props: ['leftNav.open', 'leftNav.selected'],
   actions: [
-    // 'account:doLogout',
     'left-nav:showLeftNav',
     'left-nav:hideLeftNav',
-    'left-nav:selectItem'
+    'left-nav:selectItem',
+    'left-nav:doLogout'
   ]
 })(Nav)

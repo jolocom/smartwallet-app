@@ -1,10 +1,19 @@
 import { Map } from 'immutable'
 import { makeActions } from './'
-import { action } from './'
 
 export const actions = makeActions('left-nav', {
+  doLogout: {
+    expectedParams: [],
+    creator: (params) => {
+      return (dispatch) => {
+        localStorage.removeItem('jolocom.identity')
+        dispatch(actions.doLogout.buildAction(params))
+      }
+    }
+  },
+
   showLeftNav: {
-    expectedParams: [] 
+    expectedParams: []
   },
 
   hideLeftNav: {
@@ -12,7 +21,7 @@ export const actions = makeActions('left-nav', {
   },
 
   selectItem: {
-    expectedParams: ['value'] 
+    expectedParams: ['value']
   }
 })
 
