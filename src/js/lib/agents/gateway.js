@@ -134,6 +134,21 @@ export default class GatewayAgent {
     )
   }
 
+  pingProxy({userName, seedPhrase}) {
+    return this._httpAgent.HEAD(
+      `${this._gatewayUrl}/proxy/`
+      //check syntax of passport logout
+    )
+  }
+
+  logout(userName) {
+    return this._httpAgent.post(
+      `${this._gatewayUrl}/${userName}/logout`
+      //check syntax of passport logout
+    )
+    console.log('logout triggered')
+  }
+
   grantAccessToRequester(user, body) {
     return this._httpAgent.post(
       user + '/access/grant',
