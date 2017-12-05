@@ -6,7 +6,7 @@ import router from './router'
 import {stub, withStubs} from '../../../../test/utils'
 import reducer from './registration'
 
-describe.only('Wallet registration Redux module', () => {
+describe('Wallet registration Redux module', () => {
   describe('goForward', () => {
     describe('action', () => {
       it('should dispatch the wallet registration action when complete', () => {
@@ -195,34 +195,6 @@ describe.only('Wallet registration Redux module', () => {
 
         expect(backend.gateway.generateSeedPhrase.called).to.equal(false)
       })
-
-    // eslint-disable-next-line max-len
-    // it('should call generateSeedPhrase if there is a randomString present', () => {
-    //   const dispatch = stub()
-    //   const getState = () => Immutable.fromJS({registration: {
-    //     passphrase: {randomString: '0123091023981029381098'}
-    //   }})
-    //   const backend = {gateway: {
-    //     generateSeedPhrase: stub().returnsAsync('seedphrase')
-    //   }}
-
-    //   withStubs([
-    //     [actions.actions.generateSeedPhrase, 'buildAction',
-    //     {returns: 'action'}]],
-    //     () => {
-    //       const thunk = actions.generateSeedPhrase('test')
-    //       thunk(dispatch, getState)
-    //       expect(dispatch.calledWithArgs[0]).to.equal('action')
-          // const generate = actions.actions.generateSeedPhrase
-          // const promise = generate.buildAction.calledWithArgs[1]
-          // expect(backend.gateway.generateSeedPhrase.called).to.be.true
-          // expect(promise(backend)).to.eventually.equal('seedphrase')
-          // expect(backend.gateway.generateSeedPhrase.calls)
-          // .to.deep.equal([{args: [{
-          //   seedPhrase: 'seedphrase'
-          // }]}])
-    //     })
-    // })
     })
 
     describe('registerWallet', () => {
