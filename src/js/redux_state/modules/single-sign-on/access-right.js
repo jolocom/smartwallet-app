@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 import find from 'lodash/find'
 
 export const actions = makeActions('single-sign-on/access-right', {

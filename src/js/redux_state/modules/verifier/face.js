@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 
 import * as transition from './transition'
 const transitionUrl = '/verifier'

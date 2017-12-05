@@ -1,7 +1,7 @@
 import invert from 'lodash/invert'
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 
 const PATHNAME_TO_TAB = {
   '/wallet/identity': 'identity',

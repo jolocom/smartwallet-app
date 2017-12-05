@@ -2,8 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import AppBar from 'material-ui/AppBar'
 import Paper from 'material-ui/Paper'
-import Tabs from 'material-ui/Tabs'
-import Tab from 'material-ui/Tabs'
+import {Tab, Tabs} from 'material-ui/Tabs'
 
 import { Layout, Content } from 'components/layout'
 import LeftNavToggle from 'components/left-nav/toggle'
@@ -50,6 +49,8 @@ export default class WalletTabScreen extends React.Component {
   }
 
   render() {
+    console.log(Tab, 'TAB')
+    console.log(Tabs, 'TABS')
     return (
       <Layout>
         <Paper style={STYLES.colorBar}>
@@ -62,8 +63,6 @@ export default class WalletTabScreen extends React.Component {
             onChange={(tab) => this.props.switchTab({tab})}>
             <Tab label="Identity" value="identity" />
             <Tab label="Money" value="money" />
-            {/* <Tab label="Health" value="health" /> */}
-            {/* <Tab label="Services" value="services" /> */}
           </Tabs>
         </Paper>
         <Content>

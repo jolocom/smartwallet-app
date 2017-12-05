@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import {makeActions} from './'
-import * as router from './router'
+import router from './router'
 
 export const actions = makeActions('ethereum-connect', {
   toggleSecuritySection: {
