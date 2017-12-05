@@ -41,6 +41,5 @@ export default function createStore(history, client, data) {
       store.replaceReducer(reducer)
     })
   }
-  console.log(backend, services, 'here you go')
   return store
 }

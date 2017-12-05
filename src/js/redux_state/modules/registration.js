@@ -86,7 +86,7 @@ export const actions = makeActions('registration', {
 
         if (randomStringState === '') {
           return
-        } 
+        }
        
         // eslint-disable-next-line max-len
         dispatch(actions.generateSeedPhrase.buildAction(params, async (backend) => {
