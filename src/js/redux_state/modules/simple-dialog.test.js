@@ -1,7 +1,7 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
-import * as simpleDialog from './simple-dialog'
-const reducer = simpleDialog.default
+import { actions } from './simple-dialog'
+import reducer from './simple-dialog'
 
 describe('Simple dialog reducer', function() {
   describe('INIT', function() {
@@ -20,7 +20,7 @@ describe('Simple dialog reducer', function() {
   describe('configSimpleDialog', function() {
     it('should correctly handle the configSimpleDialog action', function() {
       expect(reducer(reducer(undefined, '@INIT'),
-        simpleDialog.configSimpleDialog(
+        actions.configMsg(
         'title', 'test msg', 'Primary Action Text', {}, true
       )).toJS()).to.deep.equal({
         visible: false,
@@ -34,8 +34,9 @@ describe('Simple dialog reducer', function() {
   })
   describe('showSimpleDialog', function() {
     it('should correctly handle the showSimpleDialog action', function() {
-      expect(reducer(reducer(undefined, '@INIT'),
-        simpleDialog.showSimpleDialog()).toJS()).to.deep.equal({
+      const initialState = reducer(undefined, '@INIT')
+      expect(reducer(initialState, actions.showDialog())
+        .toJS()).to.deep.equal({
           visible: true,
           scrollContent: false,
           title: '',
@@ -48,7 +49,7 @@ describe('Simple dialog reducer', function() {
   describe('hideSimpleDialog', function() {
     it('should correctly handle the hideSimpleDialog action', function() {
       expect(reducer(reducer(undefined, '@INIT'),
-        simpleDialog.hideSimpleDialog()).toJS()).to.deep.equal({
+        actions.hideDialog()).toJS()).to.deep.equal({
           visible: false,
           scrollContent: false,
           title: '',

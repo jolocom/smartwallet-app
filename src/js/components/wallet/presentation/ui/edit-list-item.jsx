@@ -4,7 +4,7 @@ import Radium from 'radium'
 import SelectField from 'material-ui/SelectField'
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 import MenuItem from 'material-ui/MenuItem'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'

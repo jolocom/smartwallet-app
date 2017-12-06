@@ -8,8 +8,8 @@ import Presentation from '../presentation/name-entry'
     'registration:checkCredentials',
     'registration:toggleHasOwnURL',
     'registration:setValueOwnURL',
-    'simple-dialog:configSimpleDialog',
-    'simple-dialog:showSimpleDialog'
+    'simple-dialog:configMsg',
+    'simple-dialog:showDialog'
   ]
 })
 export default class RegistrationNameEntryScreen extends React.Component {
@@ -17,8 +17,8 @@ export default class RegistrationNameEntryScreen extends React.Component {
     registration: React.PropTypes.object.isRequired,
     checkCredentials: React.PropTypes.func.isRequired,
     setUsername: React.PropTypes.func.isRequired,
-    configSimpleDialog: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired,
+    configMsg: React.PropTypes.func.isRequired,
+    showDialog: React.PropTypes.func.isRequired,
     toggleHasOwnURL: React.PropTypes.func.isRequired,
     setValueOwnURL: React.PropTypes.func.isRequired
   }
@@ -38,7 +38,7 @@ export default class RegistrationNameEntryScreen extends React.Component {
       handleDialog={this._handleDialog} />
   }
   _handleDialog = (title, message) => {
-    this.props.configSimpleDialog(title, message, 'OK')
-    this.props.showSimpleDialog()
+    this.props.configMsg(title, message, 'OK')
+    this.props.showDialog()
   }
 }

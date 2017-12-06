@@ -2,7 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import IconButton from 'material-ui/IconButton'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 import DatePicker from 'material-ui/DatePicker'

@@ -16,9 +16,7 @@ import Presentation from '../presentation/contact'
     'wallet/contact:saveChanges',
     'wallet/contact:addNewEntry',
     'wallet/contact:setAddressField',
-    'confirmation-dialog:confirm',
-    'confirmation-dialog:openConfirmDialog',
-    'confirmation-dialog:close'
+    'confirmation-dialog:openConfirmDialog'
   ]
 })
 export default class WalletContactScreen extends React.Component {

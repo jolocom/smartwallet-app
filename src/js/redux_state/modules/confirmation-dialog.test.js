@@ -1,7 +1,7 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
-import * as confirmDialog from './confirmation-dialog'
-const reducer = confirmDialog.default
+import {actions} from './confirmation-dialog'
+import reducer from './confirmation-dialog'
 
 describe('Confirmation dialog reducer', function() {
   describe('INIT', function() {
@@ -20,8 +20,11 @@ describe('Confirmation dialog reducer', function() {
   describe('confirm', function() {
     it('should correctly handle the confirm action', function() {
       const callback = () => {}
-      expect(reducer(reducer(undefined, '@INIT'), confirmDialog.confirm(
-        'test title', 'test msg', 'Primary Action Text',
+      const initialState = reducer(undefined, '@INIT')
+      expect(reducer(initialState, actions.openConfirmDialog (
+        'test title',
+        'test msg',
+        'Primary Action Text',
         callback
       )).toJS()).to.deep.equal({
         open: true,

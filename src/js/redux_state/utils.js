@@ -31,6 +31,10 @@ const helpers = {
     const { actions } = require('redux_state/modules/' + moduleName)
 
     const module = {...actions, 'default': reducer}
+
+    if (!actions)
+      console.log(actionName)
+
     return [module, actionName]
   },
 

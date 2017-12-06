@@ -7,7 +7,7 @@ import Avatar from 'material-ui/Avatar'
 import AppBar from 'material-ui/AppBar'
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 
 import { SubMenuIcon, AddServiceIcon, ServiceIcon } from './ui'
 

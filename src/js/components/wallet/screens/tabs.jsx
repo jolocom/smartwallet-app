@@ -49,8 +49,6 @@ export default class WalletTabScreen extends React.Component {
   }
 
   render() {
-    console.log(Tab, 'TAB')
-    console.log(Tabs, 'TABS')
     return (
       <Layout>
         <Paper style={STYLES.colorBar}>

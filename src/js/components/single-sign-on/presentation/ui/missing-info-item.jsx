@@ -5,7 +5,7 @@ import {theme} from 'styles'
 import {IconIdCard, IconPassport} from '../../../common'
 
 import TextField from 'material-ui/TextField'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'

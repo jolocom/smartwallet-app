@@ -122,6 +122,5 @@ let App = React.createClass({
 })
 
 export default connect({
-  props: ['account'],
-  actions: ['account:doLogin']
+  props: ['account']
 })(Radium(App))

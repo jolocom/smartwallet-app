@@ -5,7 +5,7 @@ import {theme} from 'styles'
 import VerifiedShield from './verified-shield'
 
 import TextField from 'material-ui/TextField'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 
 var STYLES = {
   icon: {

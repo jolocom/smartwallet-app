@@ -2,8 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 
 import Divider from 'material-ui/Divider'
-import List from 'material-ui/List'
-import ListItem from 'material-ui/List'
+import {List, ListItem} from 'material-ui/List'
 import FlatButton from 'material-ui/FlatButton'
 
 import { Block, Header, SideNote } from '../../structure'

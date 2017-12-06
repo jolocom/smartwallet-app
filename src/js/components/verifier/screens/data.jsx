@@ -5,8 +5,6 @@ import Presentation from '../presentation/data'
 @connect({
   props: ['verifier.data'],
   actions: [
-    'simple-dialog:showSimpleDialog',
-    'simple-dialog:configSimpleDialog',
     'verifier/country:initiateCountrySelectScreen',
     'verifier/data:changeIdCardField',
     'verifier/data:changePhysicalAddressField',

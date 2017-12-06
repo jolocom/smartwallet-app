@@ -4,8 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
-import List from 'material-ui/List'
-import ListItem from 'material-ui/List'
+import { List, ListItem } from 'material-ui/List'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'

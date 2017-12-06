@@ -3,7 +3,7 @@ import Radium from 'radium'
 
 import {theme} from 'styles'
 import VerifiedShield from '../../../wallet/presentation/ui/verified-shield'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 import TextField from 'material-ui/TextField'
 
 var STYLES = {

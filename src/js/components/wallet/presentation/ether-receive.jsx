@@ -2,9 +2,8 @@ import React from 'react'
 import Radium from 'radium'
 import QRCode from 'qrcode.react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import List from 'material-ui/List'
 import Divider from 'material-ui/Divider'
-import ListItem from 'material-ui/List'
+import {List, ListItem} from 'material-ui/List'
 import FlatButton from 'material-ui/FlatButton'
 import NavigationArrowDown from 'material-ui/svg-icons/navigation/arrow-downward' // eslint-disable-line max-len
 

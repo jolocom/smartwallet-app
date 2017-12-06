@@ -8,8 +8,8 @@ import Presentation from '../presentation/access-request'
     'wallet.identity'
   ],
   actions: [
-    'simple-dialog:configSimpleDialog',
-    'simple-dialog:showSimpleDialog',
+    'simple-dialog:configMsg',
+    'simple-dialog:showDialog',
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog',
     'single-sign-on/access-request:getRequesterIdentity',
@@ -29,8 +29,8 @@ import Presentation from '../presentation/access-request'
 })
 export default class AccessRequestScreen extends React.Component {
   static propTypes ={
-    configSimpleDialog: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired,
+    configMsg: React.PropTypes.func.isRequired,
+    showDialog: React.PropTypes.func.isRequired,
     openConfirmDialog: React.PropTypes.func.isRequired,
     getIdentityInformation: React.PropTypes.func.isRequired,
     accessRequest: React.PropTypes.any,
@@ -50,8 +50,8 @@ export default class AccessRequestScreen extends React.Component {
   }
 
   handleWhy = (title, message) => {
-    this.props.configSimpleDialog(title, message, 'OK', {}, false)
-    this.props.showSimpleDialog()
+    this.props.configMsg(title, message, 'OK', {}, false)
+    this.props.showDialog()
   }
 
   handleDeny = (title, message) => {

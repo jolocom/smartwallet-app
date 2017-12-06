@@ -1,7 +1,7 @@
 import React from 'react'
 import Radium from 'radium'
 
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 import IconButton from 'material-ui/IconButton'
 import DatePicker from 'material-ui/DatePicker'
 

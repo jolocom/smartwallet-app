@@ -1,15 +1,19 @@
 import { Map } from 'immutable'
-import { action } from './'
+import { makeActions } from './'
 
-export const confirm = action('confirmation-dialog', 'confirm', {
-  expectedParams: ['title', 'message', 'primaryActionText', 'callback',
-    'cancelActionText', 'style']
+export const actions = makeActions('confirmation-dialog', {
+  openConfirmDialog: {
+    expectedParams: [
+      'title',
+      'message',
+      'primaryActionText',
+      'callback',
+      'cancelActionText',
+      'style'
+    ]
+  },
+  closeConfirmDialog: { expectedParams: [] }
 })
-export const openConfirmDialog = confirm
-export const close = action('confirmation-dialog', 'close', {
-  expectedParams: []
-})
-export const closeConfirmDialog = close
 
 const initialState = new Map({
   open: false,
@@ -22,9 +26,10 @@ const initialState = new Map({
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case confirm.id:
-      return state.merge({open: true, ...confirm.getParams(action)})
-    case close.id:
+    case actions.openConfirmDialog.id:
+      const params = actions.openConfirmDialog.getParams(action) 
+      return state.merge({open: true, ...params})
+    case actions.closeConfirmDialog.id:
       return state.set('open', false)
     default:
       return state
