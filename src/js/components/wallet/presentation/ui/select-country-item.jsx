@@ -111,7 +111,7 @@ export default class SelectListItem extends React.Component {
             value={value} />
           <IconButton
             onClick={this.handleFocus} style={STYLES.iconSelect} >
-            <ArrowRight />
+            <HardwareKeyboardArrowRight />
           </IconButton>
         </div>
       </ListItem>

@@ -2,7 +2,7 @@ import Immutable from 'immutable'
 import { makeActions } from '../'
 import router from '../router'
 import {actions as idCardActions} from './id-card'
-import * as contact from './contact'
+import {actions as contact} from './contact'
 import {
   listOfCountries as __LIST_OF_COUNTRIES__
 } from '../../../lib/list-of-countries'
