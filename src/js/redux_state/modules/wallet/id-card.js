@@ -3,6 +3,7 @@ import Immutable from 'immutable'
 import {
   listOfCountries as __LIST_OF_COUNTRIES__
 } from '../../../lib/list-of-countries'
+
 import {
   setPhysicalAddressField,
   checkForNonValidFields,
@@ -15,7 +16,7 @@ import {
 import { makeActions } from '../'
 import router from '../router'
 
-import * as idCardPhotoActions from './webcam'
+import { actions as idCardPhotoActions } from './webcam'
 
 export const actions = makeActions('wallet/id-card', {
   cancel: {
