@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentAdd from 'material-ui/svg-icons/content/add'
@@ -74,11 +75,11 @@ const PlusMenu = (props) => {
 }
 
 PlusMenu.propTypes = {
-  name: React.PropTypes.any,
-  children: React.PropTypes.node,
-  style: React.PropTypes.object,
-  goToManagement: React.PropTypes.func.isRequired,
-  choice: React.PropTypes.bool
+  name: PropTypes.any,
+  children: PropTypes.node,
+  style: PropTypes.object,
+  goToManagement: PropTypes.func.isRequired,
+  choice: PropTypes.bool
 }
 
 export default Radium(PlusMenu)

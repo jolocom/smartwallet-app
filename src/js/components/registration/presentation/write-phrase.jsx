@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import Checkbox from 'material-ui/Checkbox'
@@ -125,11 +126,11 @@ const WritePhrase = (props) => {
 }
 
 WritePhrase.propTypes = {
-  onToggle: React.PropTypes.func.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  value: React.PropTypes.string.isRequired,
-  isChecked: React.PropTypes.bool.isRequired
+  onToggle: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  isChecked: PropTypes.bool.isRequired
 }
 
 export default Radium(WritePhrase)

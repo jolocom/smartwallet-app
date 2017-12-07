@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import Divider from 'material-ui/Divider'
 import AppBar from 'material-ui/AppBar'
@@ -68,12 +69,12 @@ const STYLES = {
 @Radium
 export default class SharedDatePresentation extends React.Component {
   static propTypes = {
-    serviceUrl: React.PropTypes.func.isRequired,
-    sharedData: React.PropTypes.array.isRequired,
-    serviceName: React.PropTypes.string.isRequired,
-    deleteService: React.PropTypes.string.isRequired,
-    goToAccessRightScreen: React.PropTypes.func.isRequired,
-    showDeleteServiceWindow: React.PropTypes.func.isRequired
+    serviceUrl: PropTypes.func.isRequired,
+    sharedData: PropTypes.array.isRequired,
+    serviceName: PropTypes.string.isRequired,
+    deleteService: PropTypes.string.isRequired,
+    goToAccessRightScreen: PropTypes.func.isRequired,
+    showDeleteServiceWindow: PropTypes.func.isRequired
   }
 
   getIcon(field) {

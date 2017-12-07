@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/data'
@@ -17,15 +18,15 @@ import Presentation from '../presentation/data'
 })
 export default class VerificationDataScreen extends React.Component {
   static propTypes = {
-    data: React.PropTypes.object.isRequired,
-    changeIdCardField: React.PropTypes.func.isRequired,
-    initiateCountrySelectScreen: React.PropTypes.func.isRequired,
-    changePhysicalAddressField: React.PropTypes.func.isRequired,
-    setFocusedField: React.PropTypes.func.isRequired,
-    setShowAddress: React.PropTypes.func.isRequired,
-    verifyData: React.PropTypes.func.isRequired,
-    setUsername: React.PropTypes.func.isRequired,
-    cancel: React.PropTypes.func.isRequired
+    data: PropTypes.object.isRequired,
+    changeIdCardField: PropTypes.func.isRequired,
+    initiateCountrySelectScreen: PropTypes.func.isRequired,
+    changePhysicalAddressField: PropTypes.func.isRequired,
+    setFocusedField: PropTypes.func.isRequired,
+    setShowAddress: PropTypes.func.isRequired,
+    verifyData: PropTypes.func.isRequired,
+    setUsername: PropTypes.func.isRequired,
+    cancel: PropTypes.func.isRequired
   }
 
   render() {

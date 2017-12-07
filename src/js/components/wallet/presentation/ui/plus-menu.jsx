@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import {theme} from 'styles'
 
@@ -104,14 +105,14 @@ const PlusMenu = (props) => {
 }
 
 PlusMenu.propTypes = {
-  name: React.PropTypes.any,
-  children: React.PropTypes.node,
-  style: React.PropTypes.object,
-  goToManagement: React.PropTypes.func.isRequired,
-  expand: React.PropTypes.func,
-  expanded: React.PropTypes.bool,
-  disableEdit: React.PropTypes.bool,
-  choice: React.PropTypes.bool
+  name: PropTypes.any,
+  children: PropTypes.node,
+  style: PropTypes.object,
+  goToManagement: PropTypes.func.isRequired,
+  expand: PropTypes.func,
+  expanded: PropTypes.bool,
+  disableEdit: PropTypes.bool,
+  choice: PropTypes.bool
 }
 
 export default Radium(PlusMenu)

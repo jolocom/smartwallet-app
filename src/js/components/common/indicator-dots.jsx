@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 
 function IndicatorDots (props, context) {
@@ -21,12 +22,12 @@ function IndicatorDots (props, context) {
 }
 
 IndicatorDots.contextTypes = {
-  muiTheme: React.PropTypes.object
+  muiTheme: PropTypes.object
 }
 
 IndicatorDots.propTypes = {
-  index: React.PropTypes.number.isRequired,
-  total: React.PropTypes.number.isRequired
+  index: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired
 }
 
 const styles = {

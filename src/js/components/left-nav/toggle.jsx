@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import Badge from 'material-ui/Badge'
 import IconButton from 'material-ui/IconButton'
@@ -12,7 +13,7 @@ import { connect } from 'redux_state/utils'
 @Radium
 export default class LeftNavToggle extends React.Component {
   static propTypes = {
-    showLeftNav: React.PropTypes.func.isRequired
+    showLeftNav: PropTypes.func.isRequired
   }
   render() {
     const styles = {

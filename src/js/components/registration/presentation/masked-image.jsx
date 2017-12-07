@@ -1,15 +1,16 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 
 class MaskedImage extends React.Component {
   static propTypes = {
-    image: React.PropTypes.string.isRequired,
-    style: React.PropTypes.object.isRequired,
-    maskColor: React.PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    style: PropTypes.object.isRequired,
+    maskColor: PropTypes.string.isRequired,
     // Type checking too slow for paths
-    uncoveredPaths: React.PropTypes.any.isRequired,
-    uncovering: React.PropTypes.bool.isRequired,
-    onPointUncovered: React.PropTypes.func.isRequired,
-    onUncoveringChange: React.PropTypes.func.isRequired
+    uncoveredPaths: PropTypes.any.isRequired,
+    uncovering: PropTypes.bool.isRequired,
+    onPointUncovered: PropTypes.func.isRequired,
+    onUncoveringChange: PropTypes.func.isRequired
   }
 
   componentWillUnmount() {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import FlatButton from 'material-ui/FlatButton'
@@ -139,21 +140,21 @@ const VerificationButtons = ({
 }
 
 VerificationButtons.propTypes = {
-  buttonMsg: React.PropTypes.any,
-  value: React.PropTypes.string,
-  pinValue: React.PropTypes.string,
-  codeIsSent: React.PropTypes.bool,
-  pinLength: React.PropTypes.number,
-  verified: React.PropTypes.bool,
-  setFocusedPin: React.PropTypes.func,
-  changePinValue: React.PropTypes.func,
-  index: React.PropTypes.any,
-  smsCode: React.PropTypes.string,
-  pinFocused: React.PropTypes.bool,
-  attrType: React.PropTypes.string,
-  requestVerificationCode: React.PropTypes.func,
-  resendVerificationCode: React.PropTypes.func,
-  enterVerificationCode: React.PropTypes.func
+  buttonMsg: PropTypes.any,
+  value: PropTypes.string,
+  pinValue: PropTypes.string,
+  codeIsSent: PropTypes.bool,
+  pinLength: PropTypes.number,
+  verified: PropTypes.bool,
+  setFocusedPin: PropTypes.func,
+  changePinValue: PropTypes.func,
+  index: PropTypes.any,
+  smsCode: PropTypes.string,
+  pinFocused: PropTypes.bool,
+  attrType: PropTypes.string,
+  requestVerificationCode: PropTypes.func,
+  resendVerificationCode: PropTypes.func,
+  enterVerificationCode: PropTypes.func
 }
 
 export default Radium(VerificationButtons)

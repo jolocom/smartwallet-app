@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle'
 import {theme} from 'styles'
@@ -54,8 +55,8 @@ const AddNew = ({value, onClick}) => {
 }
 
 AddNew.propTypes = {
-  value: React.PropTypes.any,
-  onClick: React.PropTypes.func.isRequired
+  value: PropTypes.any,
+  onClick: PropTypes.func.isRequired
 }
 
 export default Radium(AddNew)

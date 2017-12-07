@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Divider from 'material-ui/Divider'
@@ -28,10 +29,10 @@ const STYLES = {
 @Radium
 export default class EtherReceive extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    money: React.PropTypes.object,
-    etherBalance: React.PropTypes.number.isRequired,
-    wallet: React.PropTypes.object
+    children: PropTypes.node,
+    money: PropTypes.object,
+    etherBalance: PropTypes.number.isRequired,
+    wallet: PropTypes.object
   }
 
   render() {

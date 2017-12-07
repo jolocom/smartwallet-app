@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {theme} from 'styles'
@@ -61,13 +62,13 @@ var STYLES = {
 @Radium
 export default class StaticListItem extends React.Component {
   static propTypes = {
-    icon: React.PropTypes.any,
-    verified: React.PropTypes.bool,
-    savedToBlockchain: React.PropTypes.bool,
-    textLabel: React.PropTypes.string.isRequired,
-    textValue: React.PropTypes.string.isRequired,
-    onVerify: React.PropTypes.func,
-    secondaryTextValue: React.PropTypes.string
+    icon: PropTypes.any,
+    verified: PropTypes.bool,
+    savedToBlockchain: PropTypes.bool,
+    textLabel: PropTypes.string.isRequired,
+    textValue: PropTypes.string.isRequired,
+    onVerify: PropTypes.func,
+    secondaryTextValue: PropTypes.string
   }
 
   render() {

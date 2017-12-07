@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/money'
@@ -13,13 +14,13 @@ import Presentation from '../presentation/money'
 })
 export default class WalletMoneyScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    money: React.PropTypes.any,
-    amount: React.PropTypes.number.isRequired,
-    goToEtherManagement: React.PropTypes.func.isRequired,
-    buyEther: React.PropTypes.func.isRequired,
-    getPrice: React.PropTypes.func.isRequired,
-    retrieveEtherBalance: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    money: PropTypes.any,
+    amount: PropTypes.number.isRequired,
+    goToEtherManagement: PropTypes.func.isRequired,
+    buyEther: PropTypes.func.isRequired,
+    getPrice: PropTypes.func.isRequired,
+    retrieveEtherBalance: PropTypes.func.isRequired
   }
   componentDidMount() {
     this.props.retrieveEtherBalance()

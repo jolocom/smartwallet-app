@@ -1,14 +1,15 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import extend from 'lodash/extend'
 
-let Content = React.createClass({
-  propTypes: {
-    style: React.PropTypes.string,
-    children: React.PropTypes.node
-  },
+class Content extends React.Component {
+  static propTypes = {
+    style: PropTypes.string,
+    children: PropTypes.node
+  };
 
-  getStyles() {
+  getStyles = () => {
     return {
       width: '100%',
       maxWidth: '1200px',
@@ -19,7 +20,7 @@ let Content = React.createClass({
       overflowY: 'auto',
       backgroundColor: '#fff'
     }
-  },
+  };
 
   render() {
     let styles = this.getStyles()
@@ -36,7 +37,6 @@ let Content = React.createClass({
       </div>
     )
   }
-
-})
+}
 
 export default Radium(Content)

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/face'
@@ -12,10 +13,10 @@ import Presentation from '../presentation/face'
 })
 export default class VerificationFaceScreen extends React.Component {
   static propTypes = {
-    verifyFace: React.PropTypes.func.isRequired,
-    cancelFaceVerification: React.PropTypes.func.isRequired,
-    confirmFaceIdCardMatch: React.PropTypes.func.isRequired,
-    face: React.PropTypes.object.isRequired
+    verifyFace: PropTypes.func.isRequired,
+    cancelFaceVerification: PropTypes.func.isRequired,
+    confirmFaceIdCardMatch: PropTypes.func.isRequired,
+    face: PropTypes.object.isRequired
   }
 
   render() {

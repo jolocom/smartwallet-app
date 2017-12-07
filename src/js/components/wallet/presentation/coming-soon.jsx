@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import {
   // Container,
@@ -25,8 +26,8 @@ const STYLES = {
 @Radium
 export default class WalletComingSoon extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    message: React.PropTypes.string
+    children: PropTypes.node,
+    message: PropTypes.string
   }
 
   render() {

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/approval-request'
@@ -13,15 +14,15 @@ import Presentation from '../presentation/approval-request'
 })
 export default class EthApprovalRequestScreen extends React.Component {
   static propTypes = {
-    location: React.PropTypes.object,
-    money: React.PropTypes.object,
-    ethereumConnect: React.PropTypes.object,
-    toggleSecuritySection: React.PropTypes.func.isRequired,
-    getRequestedDetails: React.PropTypes.func.isRequired,
-    executeTransaction: React.PropTypes.func.isRequired,
-    setFundsNotSufficient: React.PropTypes.func.isRequired,
-    openConfirmDialog: React.PropTypes.func.isRequired,
-    retrieveEtherBalance: React.PropTypes.func.isRequired
+    location: PropTypes.object,
+    money: PropTypes.object,
+    ethereumConnect: PropTypes.object,
+    toggleSecuritySection: PropTypes.func.isRequired,
+    getRequestedDetails: PropTypes.func.isRequired,
+    executeTransaction: PropTypes.func.isRequired,
+    setFundsNotSufficient: PropTypes.func.isRequired,
+    openConfirmDialog: PropTypes.func.isRequired,
+    retrieveEtherBalance: PropTypes.func.isRequired
   }
 
   componentWillMount() {

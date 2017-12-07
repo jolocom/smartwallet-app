@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {TabContainer, HalfScreenContainer} from '../../wallet/presentation/ui'
@@ -103,11 +104,11 @@ const STYLES = {
 @Radium
 export default class EthApprovalRequest extends React.Component {
   static propTypes = {
-    ethereumConnect: React.PropTypes.object,
-    toggleSecuritySection: React.PropTypes.func.isRequired,
-    executeTransaction: React.PropTypes.func.isRequired,
-    amount: React.PropTypes.string,
-    handleDialog: React.PropTypes.func.isRequired
+    ethereumConnect: PropTypes.object,
+    toggleSecuritySection: PropTypes.func.isRequired,
+    executeTransaction: PropTypes.func.isRequired,
+    amount: PropTypes.string,
+    handleDialog: PropTypes.func.isRequired
   }
 
   render() {

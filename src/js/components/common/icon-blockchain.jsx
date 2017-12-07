@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 const IconBlockchain = (props) => {
@@ -27,6 +28,6 @@ const IconBlockchain = (props) => {
   )
 }
 IconBlockchain.propTypes = {
-  color: React.PropTypes.string
+  color: PropTypes.string
 }
 export default Radium(IconBlockchain)

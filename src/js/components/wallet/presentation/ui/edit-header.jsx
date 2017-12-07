@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import Divider from 'material-ui/Divider'
 
@@ -31,10 +32,10 @@ const EditHeader = ({image, title, style, children, ...props}) => {
 }
 
 EditHeader.propTypes = {
-  image: React.PropTypes.any,
-  title: React.PropTypes.string,
-  children: React.PropTypes.node,
-  style: React.PropTypes.object
+  image: PropTypes.any,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  style: PropTypes.object
 }
 
 export default Radium(EditHeader)

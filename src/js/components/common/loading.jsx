@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import CircularProgress from 'material-ui/CircularProgress'
 
@@ -11,7 +12,7 @@ const Loading = ({style, ...props}) => {
 }
 
 Loading.propTypes = {
-  style: React.PropTypes.object
+  style: PropTypes.object
 }
 
 const styles = {

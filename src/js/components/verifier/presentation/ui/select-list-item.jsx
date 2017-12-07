@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import SelectField from 'material-ui/SelectField'
@@ -54,17 +55,17 @@ let STYLES = {
 @Radium
 export default class SelectListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string,
-    label: React.PropTypes.string,
-    value: React.PropTypes.string,
-    type: React.PropTypes.string,
-    types: React.PropTypes.array,
-    children: React.PropTypes.node,
-    focused: React.PropTypes.bool,
-    onFocusChange: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onDelete: React.PropTypes.func,
-    enableDelete: React.PropTypes.bool
+    id: PropTypes.string,
+    label: PropTypes.string,
+    value: PropTypes.string,
+    type: PropTypes.string,
+    types: PropTypes.array,
+    children: PropTypes.node,
+    focused: PropTypes.bool,
+    onFocusChange: PropTypes.func,
+    onChange: PropTypes.func,
+    onDelete: PropTypes.func,
+    enableDelete: PropTypes.bool
   }
 
   getStyles() {

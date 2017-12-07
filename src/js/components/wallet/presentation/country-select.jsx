@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import AppBar from 'material-ui/AppBar'
 import {ListItem} from 'material-ui/List'
@@ -42,14 +43,14 @@ const STYLES = {
 @Radium
 export default class CountrySelectPresentation extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    countries: React.PropTypes.array,
-    submit: React.PropTypes.func,
-    change: React.PropTypes.func,
-    value: React.PropTypes.string,
-    cancel: React.PropTypes.func,
-    setFocused: React.PropTypes.func,
-    focusedGroup: React.PropTypes.string
+    children: PropTypes.node,
+    countries: PropTypes.array,
+    submit: PropTypes.func,
+    change: PropTypes.func,
+    value: PropTypes.string,
+    cancel: PropTypes.func,
+    setFocused: PropTypes.func,
+    focusedGroup: PropTypes.string
   }
 
   componentWillMount() {

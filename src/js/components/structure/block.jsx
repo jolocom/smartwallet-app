@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 const STYLE = {
@@ -14,8 +15,8 @@ const Block = ({style, children, ...props}) => {
 }
 
 Block.propTypes = {
-  children: React.PropTypes.node,
-  style: React.PropTypes.object
+  children: PropTypes.node,
+  style: PropTypes.object
 }
 
 export default Radium(Block)

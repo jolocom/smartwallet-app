@@ -3,7 +3,7 @@ import React from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import green500 from 'material-ui/styles/colors/green500'
 
-let Verified = React.createClass({
+class Verified extends React.Component {
   render() {
     return (
       <FontIcon
@@ -14,6 +14,6 @@ let Verified = React.createClass({
       </FontIcon>
     )
   }
-})
+}
 
 export default Verified

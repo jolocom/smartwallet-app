@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import RaisedButton from 'material-ui/RaisedButton'
@@ -36,18 +37,18 @@ const dialogBlockchain = {
   title: 'What is a blockchain?'
 }
 
-let Index = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.object,
-    username: React.PropTypes.string,
-    muiTheme: React.PropTypes.object
-  },
+class Index extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object,
+    username: PropTypes.string,
+    muiTheme: PropTypes.object
+  };
 
-  propTypes: {
-    openConfirmDialog: React.PropTypes.func
-  },
+  static propTypes = {
+    openConfirmDialog: PropTypes.func
+  };
 
-  getStyles() {
+  getStyles = () => {
     let {muiTheme} = this.context
 
     let styles = {
@@ -152,7 +153,7 @@ let Index = React.createClass({
     }
 
     return styles
-  },
+  };
 
   render() {
     let styles = this.getStyles()
@@ -261,27 +262,28 @@ let Index = React.createClass({
           to="" />
       </Container>
     )
-  },
-  _setCarouselRef(c) {
-    this.carousel = c
-  },
-
-  _handlePrevious() {
-    this.carousel.slideTowards('right')
-  },
-
-  _handleNext() {
-    this.carousel.slideTowards('left')
-  },
-
-  _handleSignup() {
-    this.context.router.push(routes.signup)
-  },
-
-  _handleLogin() {
-    this.context.router.push('/login')
   }
-})
+
+  _setCarouselRef = (c) => {
+    this.carousel = c
+  };
+
+  _handlePrevious = () => {
+    this.carousel.slideTowards('right')
+  };
+
+  _handleNext = () => {
+    this.carousel.slideTowards('left')
+  };
+
+  _handleSignup = () => {
+    this.context.router.push(routes.signup)
+  };
+
+  _handleLogin = () => {
+    this.context.router.push('/login')
+  };
+}
 
 export default connect({
   actions: [

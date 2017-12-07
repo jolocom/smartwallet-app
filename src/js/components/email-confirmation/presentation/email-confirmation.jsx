@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import {
   Container,
@@ -29,10 +30,10 @@ const STYLES = {
 @Radium
 export default class EmailConfirmation extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    confirmation: React.PropTypes.bool.isRequired,
-    loading: React.PropTypes.bool.isRequired,
-    goToAfterConfirmEmail: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    confirmation: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    goToAfterConfirmEmail: PropTypes.func.isRequired
   }
 
   render() {

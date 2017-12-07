@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { connect } from 'redux_state/utils'
 import Presentation from '../presentation/write-phrase'
@@ -9,9 +10,9 @@ import Presentation from '../presentation/write-phrase'
 })
 export default class RegistrationWritePhraseScreen extends React.Component {
   static propTypes = {
-    registration: React.PropTypes.object.isRequired,
-    goForward: React.PropTypes.func.isRequired,
-    setPassphraseWrittenDown: React.PropTypes.func.isRequired
+    registration: PropTypes.object.isRequired,
+    goForward: PropTypes.func.isRequired,
+    setPassphraseWrittenDown: PropTypes.func.isRequired
   }
 
   componentDidMount() {

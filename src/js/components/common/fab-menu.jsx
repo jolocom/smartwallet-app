@@ -1,4 +1,5 @@
 import React, {Children} from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -6,13 +7,13 @@ import FontIcon from 'material-ui/FontIcon'
 
 class FabMenu extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    duration: React.PropTypes.number,
-    icon: React.PropTypes.string,
-    closeIcon: React.PropTypes.string,
-    overlay: React.PropTypes.number,
-    onClick: React.PropTypes.func,
-    onTouchTap: React.PropTypes.func
+    children: PropTypes.node,
+    duration: PropTypes.number,
+    icon: PropTypes.string,
+    closeIcon: PropTypes.string,
+    overlay: PropTypes.number,
+    onClick: PropTypes.func,
+    onTouchTap: PropTypes.func
   }
 
   static defaultProps = {

@@ -1,21 +1,21 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 
 import Tab from 'material-ui/Tab'
 import Tabs from 'material-ui/Tab'
 
-export default React.createClass({
+export default class extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
 
-  contextTypes: {
-    router: React.PropTypes.object
-  },
+  static propTypes = {
+    activeTab: PropTypes.any
+  };
 
-  propTypes: {
-    activeTab: React.PropTypes.any
-  },
-
-  _handleTabsChange(tab) {
+  _handleTabsChange = (tab) => {
     this.context.router.push(`/${tab}`)
-  },
+  };
 
   render() {
     return (
@@ -27,5 +27,4 @@ export default React.createClass({
       </Tabs>
     )
   }
-
-})
+}

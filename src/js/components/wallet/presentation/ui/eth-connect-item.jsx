@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -53,10 +54,10 @@ const STYLES = {
 
 export default class EthConnectItem extends React.Component {
   static propTypes = {
-    createEthereumIdentity: React.PropTypes.func,
-    onToken: React.PropTypes.func,
-    ethereum: React.PropTypes.object,
-    confirmDialog: React.PropTypes.func
+    createEthereumIdentity: PropTypes.func,
+    onToken: PropTypes.func,
+    ethereum: PropTypes.object,
+    confirmDialog: PropTypes.func
   }
 
   connectEthereum() {

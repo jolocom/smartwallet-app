@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { fade } from 'material-ui/utils/colorManipulator'
@@ -58,9 +59,9 @@ const STYLES = {
 @Radium
 export default class EtherReceive extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    wallet: React.PropTypes.object,
-    onClose: React.PropTypes.func
+    children: PropTypes.node,
+    wallet: PropTypes.object,
+    onClose: PropTypes.func
   }
 
   render() {

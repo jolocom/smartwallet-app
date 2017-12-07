@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import { theme } from 'styles'
 
@@ -51,11 +52,11 @@ const getCharAt = (str, pos) => (!str || pos >= str.length)
 
 class SmsCodeInput extends React.Component {
   static propTypes = {
-    value: React.PropTypes.string.isRequired,
-    focused: React.PropTypes.bool.isRequired,
-    pinLength: React.PropTypes.number.isRequired,
-    onChange: React.PropTypes.func,
-    onFocusChange: React.PropTypes.func
+    value: PropTypes.string.isRequired,
+    focused: PropTypes.bool.isRequired,
+    pinLength: PropTypes.number.isRequired,
+    onChange: PropTypes.func,
+    onFocusChange: PropTypes.func
   }
 
   constructor(props) {

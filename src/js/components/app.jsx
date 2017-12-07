@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'redux_state/utils'
+import PropTypes from 'prop-types';
 import Radium, {StyleRoot} from 'radium'
 
 import SnackbarContainer from 'components/snack-bar'
@@ -16,32 +17,32 @@ import Loading from 'components/common/loading.jsx'
 
 import {routes, publicRoutes} from 'routes'
 
-let App = React.createClass({
-  propTypes: {
-    location: React.PropTypes.object,
-    children: React.PropTypes.node,
-    route: React.PropTypes.object,
-    account: React.PropTypes.object.isRequired
-  },
+class App extends React.Component {
+  static propTypes = {
+    location: PropTypes.object,
+    children: PropTypes.node,
+    route: PropTypes.object,
+    account: PropTypes.object.isRequired
+  };
 
-  contextTypes: {
-    router: React.PropTypes.object.isRequired,
-    store: React.PropTypes.object.isRequired
-  },
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+    store: PropTypes.object.isRequired
+  };
 
-  childContextTypes: {
-    muiTheme: React.PropTypes.object,
-    profile: React.PropTypes.any,
-    account: React.PropTypes.object,
-    username: React.PropTypes.string,
-    searchActive: React.PropTypes.bool,
-    location: React.PropTypes.object,
-    route: React.PropTypes.object,
-    router: React.PropTypes.object,
-    store: React.PropTypes.object
-  },
+  static childContextTypes = {
+    muiTheme: PropTypes.object,
+    profile: PropTypes.any,
+    account: PropTypes.object,
+    username: PropTypes.string,
+    searchActive: PropTypes.bool,
+    location: PropTypes.object,
+    route: PropTypes.object,
+    router: PropTypes.object,
+    store: PropTypes.object
+  };
 
-  getChildContext: function () {
+  getChildContext() {
     let {profile, searchActive} = this.state
     let {account} = this.props
 
@@ -55,10 +56,10 @@ let App = React.createClass({
       router: this.context.router,
       store: this.context.store
     }
-  },
+  }
 
   componentWillMount() {
-  },
+  }
 
   componentDidUpdate(prevProps, prevState) {
     let {username} = this.props.account
@@ -67,14 +68,14 @@ let App = React.createClass({
       prevProps.account.username !== username) {
       this.checkLogin()
     }
-  },
+  }
 
-  isPublicRoute(path = this.props.location.pathname) {
+  isPublicRoute = (path = this.props.location.pathname) => {
     return path === '/' ||
       publicRoutes.some((publicRoute) => path.indexOf(publicRoute) === 0)
-  },
+  };
 
-  checkLogin() {
+  checkLogin = () => {
     let {username, loggingIn} = this.props.account
 
     // session is still loading, so return for now
@@ -87,9 +88,9 @@ let App = React.createClass({
     } else if (username && this.isPublicRoute()) {
       this.context.router.push(routes.home)
     }
-  },
+  };
 
-  getStyles() {
+  getStyles = () => {
     let styles = {
       container: {
         width: '100%',
@@ -98,7 +99,7 @@ let App = React.createClass({
       }
     }
     return styles
-  },
+  };
 
   render() {
     const styles = this.getStyles()
@@ -119,7 +120,7 @@ let App = React.createClass({
       </StyleRoot>
     )
   }
-})
+}
 
 export default connect({
   props: ['account']

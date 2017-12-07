@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react'
 import ReactStripeCheckout from 'react-stripe-checkout'
 
@@ -10,7 +11,7 @@ const STYLES = {
 }
 export default class StripeCheckout extends Component {
   static propTypes = {
-    onToken: React.PropTypes.func.isRequired
+    onToken: PropTypes.func.isRequired
   }
 
   render() {

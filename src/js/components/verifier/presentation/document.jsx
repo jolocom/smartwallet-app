@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import HoverButton from '../../common/hover-button'
@@ -77,8 +78,8 @@ const DocumentType = (props) => (<Container>
 )
 
 DocumentType.propTypes = {
-  type: React.PropTypes.string.isRequired,
-  chooseDocument: React.PropTypes.func.isRequired
+  type: PropTypes.string.isRequired,
+  chooseDocument: PropTypes.func.isRequired
 }
 
 export default Radium(DocumentType)

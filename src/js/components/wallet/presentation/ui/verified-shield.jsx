@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 const VerifiedShield = (props) => {
@@ -51,9 +52,9 @@ const VerifiedShield = (props) => {
 }
 
 VerifiedShield.propTypes = {
-  verified: React.PropTypes.bool.isRequired,
-  savedToBlockchain: React.PropTypes.bool,
-  style: React.PropTypes.object,
-  verify: React.PropTypes.func
+  verified: PropTypes.bool.isRequired,
+  savedToBlockchain: PropTypes.bool,
+  style: PropTypes.object,
+  verify: PropTypes.func
 }
 export default Radium(VerifiedShield)

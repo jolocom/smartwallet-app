@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { connect } from 'redux_state/utils'
 import Presentation from '../presentation/name-entry'
@@ -14,13 +15,13 @@ import Presentation from '../presentation/name-entry'
 })
 export default class RegistrationNameEntryScreen extends React.Component {
   static propTypes = {
-    registration: React.PropTypes.object.isRequired,
-    checkCredentials: React.PropTypes.func.isRequired,
-    setUsername: React.PropTypes.func.isRequired,
-    configMsg: React.PropTypes.func.isRequired,
-    showDialog: React.PropTypes.func.isRequired,
-    toggleHasOwnURL: React.PropTypes.func.isRequired,
-    setValueOwnURL: React.PropTypes.func.isRequired
+    registration: PropTypes.object.isRequired,
+    checkCredentials: PropTypes.func.isRequired,
+    setUsername: PropTypes.func.isRequired,
+    configMsg: PropTypes.func.isRequired,
+    showDialog: PropTypes.func.isRequired,
+    toggleHasOwnURL: PropTypes.func.isRequired,
+    setValueOwnURL: PropTypes.func.isRequired
   }
 
   render() {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
@@ -6,7 +7,7 @@ import IconButton from 'material-ui/IconButton'
 import {ListItem} from 'material-ui/List'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
-import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right' 
+import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
 
 import {theme} from 'styles'
 
@@ -59,16 +60,16 @@ let STYLES = {
 @Radium
 export default class SelectListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string.isRequired,
-    icon: React.PropTypes.any,
-    label: React.PropTypes.string.isRequired,
-    value: React.PropTypes.string,
-    children: React.PropTypes.node,
-    focused: React.PropTypes.bool.isRequired,
-    onFocusChange: React.PropTypes.func.isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    onDelete: React.PropTypes.func,
-    enableDelete: React.PropTypes.bool
+    id: PropTypes.string.isRequired,
+    icon: PropTypes.any,
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    children: PropTypes.node,
+    focused: PropTypes.bool.isRequired,
+    onFocusChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onDelete: PropTypes.func,
+    enableDelete: PropTypes.bool
   }
 
   getStyles() {

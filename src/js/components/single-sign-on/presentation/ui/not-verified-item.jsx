@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {theme} from 'styles'
@@ -41,17 +42,17 @@ const STYLES = {
 @Radium
 export default class NotVerifiedItem extends React.Component {
   static propTypes = {
-    icon: React.PropTypes.any,
-    field: React.PropTypes.string,
-    textLabel: React.PropTypes.string.isRequired,
-    textValue: React.PropTypes.string.isRequired,
-    requestVerificationCode: React.PropTypes.func,
-    resendVerificationCode: React.PropTypes.func,
-    enterVerificationCode: React.PropTypes.func,
-    setFocusedPin: React.PropTypes.func,
-    changePinValue: React.PropTypes.func,
-    pinFocused: React.PropTypes.string,
-    attributes: React.PropTypes.object
+    icon: PropTypes.any,
+    field: PropTypes.string,
+    textLabel: PropTypes.string.isRequired,
+    textValue: PropTypes.string.isRequired,
+    requestVerificationCode: PropTypes.func,
+    resendVerificationCode: PropTypes.func,
+    enterVerificationCode: PropTypes.func,
+    setFocusedPin: PropTypes.func,
+    changePinValue: PropTypes.func,
+    pinFocused: PropTypes.string,
+    attributes: PropTypes.object
   }
   renderVerificationInfo = (field) => {
     let verified = false

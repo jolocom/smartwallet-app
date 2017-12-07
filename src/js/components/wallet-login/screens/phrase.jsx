@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { connect } from 'redux_state/utils'
 import Presentation from '../presentation/phrase'
@@ -14,12 +15,12 @@ import Presentation from '../presentation/phrase'
 })
 export default class ExpertLoginPassphraseScreen extends React.Component {
   static propTypes = {
-    walletLogin: React.PropTypes.object.isRequired,
-    submitPassphrase: React.PropTypes.func.isRequired,
-    setPassphrase: React.PropTypes.func.isRequired,
-    goToLogin: React.PropTypes.func.isRequired,
-    toggleHasOwnURL: React.PropTypes.func.isRequired,
-    setValueOwnURL: React.PropTypes.func.isRequired
+    walletLogin: PropTypes.object.isRequired,
+    submitPassphrase: PropTypes.func.isRequired,
+    setPassphrase: PropTypes.func.isRequired,
+    goToLogin: PropTypes.func.isRequired,
+    toggleHasOwnURL: PropTypes.func.isRequired,
+    setValueOwnURL: PropTypes.func.isRequired
   }
 
   render() {

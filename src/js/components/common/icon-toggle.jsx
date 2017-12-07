@@ -1,17 +1,20 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import Checkbox from 'material-ui/Checkbox'
 
-export default Radium(React.createClass({
-  contextTypes: {
-    muiTheme: React.PropTypes.any
-  },
-  propTypes: {
-    style: React.PropTypes.object,
-    checkboxStyle: React.PropTypes.object,
-    icon: React.PropTypes.object
-  },
+export default Radium(class extends React.Component {
+  static contextTypes = {
+    muiTheme: PropTypes.any
+  };
+
+  static propTypes = {
+    style: PropTypes.object,
+    checkboxStyle: PropTypes.object,
+    icon: PropTypes.object
+  };
+
   render() {
     let {style, checkboxStyle, icon, ...checkboxProps} = this.props
 
@@ -26,4 +29,4 @@ export default Radium(React.createClass({
       </div>
     )
   }
-}))
+});

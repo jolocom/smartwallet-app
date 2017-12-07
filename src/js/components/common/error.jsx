@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import {
   Container,
@@ -29,10 +30,10 @@ const STYLES = {
 @Radium
 export default class WalletError extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    message: React.PropTypes.string,
-    buttonLabel: React.PropTypes.string,
-    onClick: React.PropTypes.func
+    children: PropTypes.node,
+    message: PropTypes.string,
+    buttonLabel: PropTypes.string,
+    onClick: PropTypes.func
   }
 
   render() {

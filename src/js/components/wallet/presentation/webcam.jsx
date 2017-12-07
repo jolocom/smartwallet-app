@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import NavigationCancel from 'material-ui/svg-icons/navigation/close'
 import ImageLandscape from 'material-ui/svg-icons/image/landscape'
@@ -54,11 +55,11 @@ const STYLES = {
 @Radium
 export default class WebCamPresentation extends React.Component {
   static propTypes = {
-    addPhoto: React.PropTypes.func,
-    cancel: React.PropTypes.func,
-    deletePhoto: React.PropTypes.func,
-    photos: React.PropTypes.array,
-    save: React.PropTypes.func
+    addPhoto: PropTypes.func,
+    cancel: PropTypes.func,
+    deletePhoto: PropTypes.func,
+    photos: PropTypes.array,
+    save: PropTypes.func
   }
 
   loadImage(event) {

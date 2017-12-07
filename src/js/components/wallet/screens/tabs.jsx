@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import AppBar from 'material-ui/AppBar'
 import Paper from 'material-ui/Paper'
@@ -32,12 +33,12 @@ const STYLES = {
 @Radium
 export default class WalletTabScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    location: React.PropTypes.object,
-    activeTab: React.PropTypes.string,
+    children: PropTypes.node,
+    location: PropTypes.object,
+    activeTab: PropTypes.string,
 
-    detectActiveTab: React.PropTypes.func.isRequired,
-    switchTab: React.PropTypes.func.isRequired
+    detectActiveTab: PropTypes.func.isRequired,
+    switchTab: PropTypes.func.isRequired
   }
 
   componentDidMount() {

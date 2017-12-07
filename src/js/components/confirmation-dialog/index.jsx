@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import { connect } from 'redux_state/utils'
 
@@ -24,9 +25,9 @@ const STYLES = {
 @Radium
 export default class ConfirmationDialog extends React.Component {
   static propTypes = {
-    closeConfirmDialog: React.PropTypes.func,
-    confirm: React.PropTypes.object,
-    cancelActionText: React.PropTypes.string
+    closeConfirmDialog: PropTypes.func,
+    confirm: PropTypes.object,
+    cancelActionText: PropTypes.string
   }
 
   _handleConfirmAction() {

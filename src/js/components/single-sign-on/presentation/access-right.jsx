@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import { theme } from 'styles'
@@ -124,9 +125,9 @@ const SingleSignOnAccessRight = (props) => (<div>
 </div>)
 
 SingleSignOnAccessRight.propTypes = {
-  services: React.PropTypes.array,
-  showSharedData: React.PropTypes.func,
-  showDeleteServiceWindow: React.PropTypes.func
+  services: PropTypes.array,
+  showSharedData: PropTypes.func,
+  showDeleteServiceWindow: PropTypes.func
 }
 
 export default Radium(SingleSignOnAccessRight)

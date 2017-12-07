@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import List from 'material-ui/List'
 import CommunicationCall from 'material-ui/svg-icons/communication/call.js'
@@ -35,21 +36,21 @@ const STYLES = {
 @Radium
 export default class WalletContact extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    focused: React.PropTypes.string.isRequired,
-    onFocusChange: React.PropTypes.func.isRequired,
-    information: React.PropTypes.object.isRequired,
-    updateInformation: React.PropTypes.func.isRequired,
-    deleteInformation: React.PropTypes.func.isRequired,
-    setInformation: React.PropTypes.func.isRequired,
-    exitWithoutSaving: React.PropTypes.func.isRequired,
-    saveChanges: React.PropTypes.func.isRequired,
-    loading: React.PropTypes.bool.isRequired,
-    showErrors: React.PropTypes.bool,
-    addNewEntry: React.PropTypes.func.isRequired,
-    confirm: React.PropTypes.func.isRequired,
-    selectCountry: React.PropTypes.func.isRequired,
-    setAddressField: React.PropTypes.func.isRequired
+    children: PropTypes.node,
+    focused: PropTypes.string.isRequired,
+    onFocusChange: PropTypes.func.isRequired,
+    information: PropTypes.object.isRequired,
+    updateInformation: PropTypes.func.isRequired,
+    deleteInformation: PropTypes.func.isRequired,
+    setInformation: PropTypes.func.isRequired,
+    exitWithoutSaving: PropTypes.func.isRequired,
+    saveChanges: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired,
+    showErrors: PropTypes.bool,
+    addNewEntry: PropTypes.func.isRequired,
+    confirm: PropTypes.func.isRequired,
+    selectCountry: PropTypes.func.isRequired,
+    setAddressField: PropTypes.func.isRequired
   }
 
   renderContent() {
