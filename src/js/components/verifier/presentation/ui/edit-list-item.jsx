@@ -1,9 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 
 import NavigationCancel from 'material-ui/svg-icons/navigation/cancel'
 
@@ -60,25 +61,25 @@ let STYLES = {
 @Radium
 export default class EditListItem extends React.Component {
   static propTypes = {
-    id: React.PropTypes.string,
-    icon: React.PropTypes.any,
-    iconStyle: React.PropTypes.object,
-    label: React.PropTypes.string,
-    name: React.PropTypes.string,
-    value: React.PropTypes.string,
-    type: React.PropTypes.string,
-    types: React.PropTypes.array,
-    errorText: React.PropTypes.string,
-    children: React.PropTypes.node,
-    focused: React.PropTypes.bool,
-    onFocusChange: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onTypeChange: React.PropTypes.func,
-    onDelete: React.PropTypes.func,
-    showErrors: React.PropTypes.bool,
-    valid: React.PropTypes.bool,
-    underlineHide: React.PropTypes.bool,
-    enableDelete: React.PropTypes.bool
+    id: PropTypes.string,
+    icon: PropTypes.any,
+    iconStyle: PropTypes.object,
+    label: PropTypes.string,
+    name: PropTypes.string,
+    value: PropTypes.string,
+    type: PropTypes.string,
+    types: PropTypes.array,
+    errorText: PropTypes.string,
+    children: PropTypes.node,
+    focused: PropTypes.bool,
+    onFocusChange: PropTypes.func,
+    onChange: PropTypes.func,
+    onTypeChange: PropTypes.func,
+    onDelete: PropTypes.func,
+    showErrors: PropTypes.bool,
+    valid: PropTypes.bool,
+    underlineHide: PropTypes.bool,
+    enableDelete: PropTypes.bool
   }
 
   getStyles() {

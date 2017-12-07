@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import { makeActions } from './'
 import identityActions from './wallet/identity'
-import * as router from './router'
+import router from './router'
 
 export const actions = makeActions('verification', {
   startEmailVerification: {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import {theme} from 'styles'
 
@@ -63,10 +64,10 @@ const SubMenuIcon = (props) => (<div style={{...STYLES.root, ...props.style}}>
 </div>)
 
 SubMenuIcon.propTypes = {
-  name: React.PropTypes.any,
-  style: React.PropTypes.object,
-  onClick: React.PropTypes.func.isRequired,
-  icon: React.PropTypes.bool
+  name: PropTypes.any,
+  style: PropTypes.object,
+  onClick: PropTypes.func.isRequired,
+  icon: PropTypes.bool
 }
 
 export default Radium(SubMenuIcon)

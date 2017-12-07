@@ -22,63 +22,61 @@ import { connect as reduxConnect } from 'react-redux'
  *  </div>
  * )
  */
-export function connect(params, wantedActions = []) {
-  let wantedProps = params.props || params
-  if (!wantedProps.map && typeof wantedProps !== 'function') {
-    wantedProps = []
+const helpers = {
+  getModuleAndActionNameFromID: (id) => {
+    const [moduleName, actionName] = id.split(':')
+
+    // This can be avoided if we improve the export structure
+    const reducer = require('redux_state/modules/' + moduleName).default
+    const { actions } = require('redux_state/modules/' + moduleName)
+
+    const module = {...actions, 'default': reducer}
+
+    if (!actions)
+      console.log(actionName)
+
+    return [module, actionName]
+  },
+
+  getPropPair: (state, prop) => {
+    if (isString(prop)) {
+      prop = prop.split('.')
+    }
+
+    const key = prop.slice(-1)[0]
+    let value = state.getIn(prop)
+
+    if (typeof value === 'undefined') {
+      const errMsg = `Trying to use non-existing state ${prop}, in wrapper`
+      throw new Error(errMsg) 
+    }
+
+    if (value !== null && value.toJS) {
+      value = value.toJS()
+    }
+
+    return [key, value]
   }
-  wantedActions = params.actions || wantedActions
-  const mapStateToProps = (state, props) => {
-    const getPropPair = (state, prop) => {
-      if (isString(prop)) {
-        prop = prop.split('.')
-      }
+}
 
-      const pair = [prop.slice(-1)[0], state.getIn(prop)]
+export function connect(params) {
+  const wantedProps = params.props || []
+  const wantedActions = params.actions || []
 
-      if (typeof pair[1] === 'undefined') {
-        throw new Error(
-          'Trying to get non-existing state "' + prop +
-          '" in Redux connect() wrapper')
-      }
+  const mapStateToProps = (state) =>
+    fromPairs(wantedProps.map(prop =>
+      helpers.getPropPair(state, prop)
+    ))
 
-      if (pair[1] !== null && pair[1].toJS) {
-        pair[1] = pair[1].toJS()
-      }
-      return pair
-    }
+  const namesMappedToFunctions = fromPairs(wantedActions.map(id => {
+    const [module, actionName] = helpers.getModuleAndActionNameFromID(id)
+    return [actionName, module[actionName]]
+  }))
 
-    if (typeof wantedProps !== 'function') {
-      return fromPairs(wantedProps.map(prop => {
-        return getPropPair(state, prop)
-      }))
-    } else {
-      return wantedProps(state, props)
-    }
-  }
+  const mapDispatchToProps = (dispatch, props) =>
+    bindActionCreators(namesMappedToFunctions, dispatch)
 
-  const mapDispatchToProps = (dispatch, props) => {
-    const getModuleAndActionNameFromID = (id) => {
-      const [moduleName, actionName] = id.split(':')
-
-      const reducer = require('redux_state/modules/' + moduleName).default
-      const { actions } = require('redux_state/modules/' + moduleName)
-
-      const module = {...actions, 'default': reducer}
-      return [module, actionName]
-    }
-
-    if (typeof wantedActions !== 'function') {
-      return bindActionCreators(fromPairs(wantedActions.map(id => {
-        const [module, actionName] = getModuleAndActionNameFromID(id)
-        return [actionName, module[actionName]]
-      })), dispatch)
-    } else {
-      return wantedActions(dispatch, props)
-    }
-  }
-
-  const connector = (component) => {
+  return (component) => {
     const mergeProps = (stateProps, dispatchProps, ownProps) => {
       const extra = {
         withRef: true,
@@ -98,9 +96,4 @@ export function connect(params, wantedActions = []) {
 
     return connected
   }
-  return connector
-}
-
-export function actionsFrom(module, actions) {
-  return map(actions, action => module + ':' + action)
 }

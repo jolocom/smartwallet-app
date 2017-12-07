@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import FlatButton from 'material-ui/FlatButton'
 import AppBar from 'material-ui/AppBar'
@@ -53,11 +54,11 @@ const STYLES = {
 @Radium
 export default class VerificationTransitionPresentation extends React.Component { // eslint-disable-line max-len
   static propTypes = {
-    startDataCheck: React.PropTypes.func.isRequired,
-    startFaceCheck: React.PropTypes.func.isRequired,
-    requestVerification: React.PropTypes.func.isRequired,
-    goBack: React.PropTypes.func.isRequired,
-    currentStep: React.PropTypes.string.isRequired
+    startDataCheck: PropTypes.func.isRequired,
+    startFaceCheck: PropTypes.func.isRequired,
+    requestVerification: PropTypes.func.isRequired,
+    goBack: PropTypes.func.isRequired,
+    currentStep: PropTypes.string.isRequired
   }
 
   render() {

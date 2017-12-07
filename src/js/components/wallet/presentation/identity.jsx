@@ -1,11 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 // import CopyToClipboard from 'react-copy-to-clipboard'
 
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
-import List from 'material-ui/List'
-import ListItem from 'material-ui/List'
+import { List, ListItem } from 'material-ui/List'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
@@ -58,6 +58,7 @@ const STYLES = {
 @Radium
 export default class WalletIdentity extends React.Component {
   static propTypes = {
+<<<<<<< HEAD
     changePinValue: React.PropTypes.func.isRequired,
     expandField: React.PropTypes.func.isRequired,
     enterVerificationCode: React.PropTypes.func.isRequired,
@@ -75,6 +76,25 @@ export default class WalletIdentity extends React.Component {
     editDisplayName: React.PropTypes.func.isRequired,
     setDisplayName: React.PropTypes.func.isRequired,
     saveDisplayName: React.PropTypes.func.isRequired
+=======
+    changePinValue: PropTypes.func.isRequired,
+    expandField: PropTypes.func.isRequired,
+    enterVerificationCode: PropTypes.func.isRequired,
+    goTo: PropTypes.func.isRequired,
+    identity: PropTypes.object.isRequired,
+    requestVerificationCode: PropTypes.func.isRequired,
+    resendVerificationCode: PropTypes.func.isRequired,
+    requestIdCardVerification: PropTypes.func.isRequired,
+    setFocusedPin: PropTypes.func.isRequired,
+    showUserInfo: PropTypes.func.isRequired,
+    buyEther: PropTypes.func.isRequired,
+    ether: PropTypes.object,
+    createEthereumIdentity: PropTypes.func.isRequired,
+    confirmDialog: PropTypes.func.isRequired,
+    editDisplayName: PropTypes.func.isRequired,
+    setDisplayName: PropTypes.func.isRequired,
+    saveDisplayName: PropTypes.func.isRequired
+>>>>>>> 33e132ccadffcdc21b9f8703569add626cf9f620
   }
 
   renderConnectEther({ ethereum, expandedFields }) {

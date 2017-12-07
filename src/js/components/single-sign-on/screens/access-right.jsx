@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/access-right'
@@ -17,12 +18,12 @@ import LoadingScreen from '../../common/loading'
 })
 export default class SingleSignOnAccessRightScreen extends React.Component {
   static propTypes = {
-    deleteService: React.PropTypes.func,
-    openConfirmDialog: React.PropTypes.func,
-    showSharedData: React.PropTypes.func,
-    closeConfirmDialog: React.PropTypes.func,
-    accessRight: React.PropTypes.object,
-    getIdentityInformation: React.PropTypes.func
+    deleteService: PropTypes.func,
+    openConfirmDialog: PropTypes.func,
+    showSharedData: PropTypes.func,
+    closeConfirmDialog: PropTypes.func,
+    accessRight: PropTypes.object,
+    getIdentityInformation: PropTypes.func
   }
 
   componentWillMount() {

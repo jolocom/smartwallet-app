@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import TextField from 'material-ui/TextField'
@@ -63,9 +64,9 @@ const InfoDetails = (props) => {
 }
 
 InfoDetails.propTypes = {
-  showDetails: React.PropTypes.func,
-  username: React.PropTypes.string,
-  webId: React.PropTypes.string
+  showDetails: PropTypes.func,
+  username: PropTypes.string,
+  webId: PropTypes.string
 }
 
 export default Radium(InfoDetails)

@@ -8,8 +8,8 @@ import {
 } from '../../../lib/id-card-util'
 
 import { makeActions } from '../'
-import * as router from '../router'
-import * as transition from './transition'
+import router from '../router'
+import { actions as transition } from './transition'
 
 const transitionUrl = '/verifier'
 

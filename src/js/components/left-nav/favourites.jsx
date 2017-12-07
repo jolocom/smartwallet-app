@@ -2,8 +2,7 @@ import React from 'react'
 import Radium from 'radium'
 import {Link} from 'react-router'
 
-let Favourites = React.createClass({
-
+class Favourites extends React.Component {
   render() {
     return (
       <div>
@@ -25,7 +24,6 @@ let Favourites = React.createClass({
       </div>
     )
   }
-
-})
+}
 
 export default Radium(Favourites)

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import { theme } from 'styles'
@@ -7,7 +8,7 @@ import Avatar from 'material-ui/Avatar'
 import AppBar from 'material-ui/AppBar'
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 
 import { SubMenuIcon, AddServiceIcon, ServiceIcon } from './ui'
 
@@ -124,9 +125,9 @@ const SingleSignOnAccessRight = (props) => (<div>
 </div>)
 
 SingleSignOnAccessRight.propTypes = {
-  services: React.PropTypes.array,
-  showSharedData: React.PropTypes.func,
-  showDeleteServiceWindow: React.PropTypes.func
+  services: PropTypes.array,
+  showSharedData: PropTypes.func,
+  showDeleteServiceWindow: PropTypes.func
 }
 
 export default Radium(SingleSignOnAccessRight)

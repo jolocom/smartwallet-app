@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/access-request'
@@ -8,8 +9,8 @@ import Presentation from '../presentation/access-request'
     'wallet.identity'
   ],
   actions: [
-    'simple-dialog:configSimpleDialog',
-    'simple-dialog:showSimpleDialog',
+    'simple-dialog:configMsg',
+    'simple-dialog:showDialog',
     'confirmation-dialog:openConfirmDialog',
     'confirmation-dialog:closeConfirmDialog',
     'single-sign-on/access-request:getRequesterIdentity',
@@ -29,29 +30,29 @@ import Presentation from '../presentation/access-request'
 })
 export default class AccessRequestScreen extends React.Component {
   static propTypes ={
-    configSimpleDialog: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired,
-    openConfirmDialog: React.PropTypes.func.isRequired,
-    getIdentityInformation: React.PropTypes.func.isRequired,
-    accessRequest: React.PropTypes.any,
-    location: React.PropTypes.any,
-    requestedDetails: React.PropTypes.func.isRequired,
-    grantAccessToRequester: React.PropTypes.func.isRequired,
-    identity: React.PropTypes.any,
-    startPhoneVerification: React.PropTypes.func.isRequired,
-    startEmailVerification: React.PropTypes.func.isRequired,
-    confirmPhone: React.PropTypes.func.isRequired,
-    confirmEmail: React.PropTypes.func.isRequired,
-    goToMissingInfo: React.PropTypes.func.isRequired,
-    setInfoComplete: React.PropTypes.func.isRequired,
-    changePinValue: React.PropTypes.func.isRequired,
-    setFocusedPin: React.PropTypes.func.isRequired,
-    checkUserLoggedIn: React.PropTypes.func.isRequired
+    configMsg: PropTypes.func.isRequired,
+    showDialog: PropTypes.func.isRequired,
+    openConfirmDialog: PropTypes.func.isRequired,
+    getIdentityInformation: PropTypes.func.isRequired,
+    accessRequest: PropTypes.any,
+    location: PropTypes.any,
+    requestedDetails: PropTypes.func.isRequired,
+    grantAccessToRequester: PropTypes.func.isRequired,
+    identity: PropTypes.any,
+    startPhoneVerification: PropTypes.func.isRequired,
+    startEmailVerification: PropTypes.func.isRequired,
+    confirmPhone: PropTypes.func.isRequired,
+    confirmEmail: PropTypes.func.isRequired,
+    goToMissingInfo: PropTypes.func.isRequired,
+    setInfoComplete: PropTypes.func.isRequired,
+    changePinValue: PropTypes.func.isRequired,
+    setFocusedPin: PropTypes.func.isRequired,
+    checkUserLoggedIn: PropTypes.func.isRequired
   }
 
   handleWhy = (title, message) => {
-    this.props.configSimpleDialog(title, message, 'OK', {}, false)
-    this.props.showSimpleDialog()
+    this.props.configMsg(title, message, 'OK', {}, false)
+    this.props.showDialog()
   }
 
   handleDeny = (title, message) => {

@@ -1,10 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 @Radium
 export default class Spacer extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node
+    children: PropTypes.node
   }
 
   getStyles() {

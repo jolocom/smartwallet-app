@@ -1,19 +1,23 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
-let Header = React.createClass({
-  contextTypes: {
-    profile: React.PropTypes.any,
-    muiTheme: React.PropTypes.object,
-    router: React.PropTypes.any
-  },
-  propTypes: {
-    onClose: React.PropTypes.any
-  },
-  _handleNavigateHome() {
+class Header extends React.Component {
+  static contextTypes = {
+    profile: PropTypes.any,
+    muiTheme: PropTypes.object,
+    router: PropTypes.any
+  };
+
+  static propTypes = {
+    onClose: PropTypes.any
+  };
+
+  _handleNavigateHome = () => {
     this.props.onClose()
-  },
-  getStyles() {
+  };
+
+  getStyles = () => {
     return {
       header: {
         display: 'flex',
@@ -52,7 +56,8 @@ let Header = React.createClass({
         maxHeight: '120px'
       }
     }
-  },
+  };
+
   render() {
     // let initials, {profile} = this.context
     // let {profile} = this.context
@@ -86,6 +91,6 @@ let Header = React.createClass({
       </header>
     )
   }
-})
+}
 
 export default Radium(Header)

@@ -1,7 +1,7 @@
 /* global describe: true, it: true */
 import {expect} from 'chai'
 import { actions } from './tabs'
-import * as router from '../router'
+import router from '../router'
 import {stub, withStubs} from '../../../../../test/utils'
 import reducer from './tabs'
 // const helpers = registration.helpers

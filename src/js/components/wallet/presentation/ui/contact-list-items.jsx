@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import List from 'material-ui/List'
@@ -86,18 +87,18 @@ const ContactList = ({
 </List>)
 
 ContactList.propTypes = {
-  buttonMsg: React.PropTypes.node,
-  icon: React.PropTypes.any,
-  attrType: React.PropTypes.string.isRequired,
-  labelText: React.PropTypes.string.isRequired,
-  fields: React.PropTypes.array.isRequired,
-  changePinValue: React.PropTypes.func,
-  setFocusedPin: React.PropTypes.func,
-  onConfirm: React.PropTypes.func.isRequired,
-  requestVerificationCode: React.PropTypes.func,
-  resendVerificationCode: React.PropTypes.func,
-  pinFocused: React.PropTypes.bool,
-  enterVerificationCode: React.PropTypes.func.isRequired
+  buttonMsg: PropTypes.node,
+  icon: PropTypes.any,
+  attrType: PropTypes.string.isRequired,
+  labelText: PropTypes.string.isRequired,
+  fields: PropTypes.array.isRequired,
+  changePinValue: PropTypes.func,
+  setFocusedPin: PropTypes.func,
+  onConfirm: PropTypes.func.isRequired,
+  requestVerificationCode: PropTypes.func,
+  resendVerificationCode: PropTypes.func,
+  pinFocused: PropTypes.bool,
+  enterVerificationCode: PropTypes.func.isRequired
 }
 
 export default Radium(ContactList)

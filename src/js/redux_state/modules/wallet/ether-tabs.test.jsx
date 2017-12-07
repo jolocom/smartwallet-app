@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 import { actions } from './ether-tabs'
-import * as router from '../router'
+import router from '../router'
 import { pushRoute } from '../router'
 import {stub, withStubs} from '../../../../../test/utils'
 import reducer from './ether-tabs'

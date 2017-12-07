@@ -7,18 +7,18 @@ import Dialog from 'material-ui/Dialog'
 
 @connect({
   props: ['simpleDialog'],
-  actions: ['simple-dialog:hideSimpleDialog']
+  actions: ['simple-dialog:hideDialog']
 })
 
 @Radium
 export default class SimpleDialog extends React.Component {
   static propTypes = {
-    hideSimpleDialog: React.PropTypes.func,
+    hideDialog: React.PropTypes.func,
     simpleDialog: React.PropTypes.object
   }
 
   _handleOK() {
-    this.props.hideSimpleDialog()
+    this.props.hideDialog()
   }
 
   parseStyle(style) {

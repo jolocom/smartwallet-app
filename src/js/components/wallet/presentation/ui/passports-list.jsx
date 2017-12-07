@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import List from 'material-ui/List'
 import SocialCake from 'material-ui/svg-icons/social/cake'
@@ -42,7 +43,7 @@ const PassportsList = (props) => {
 }
 
 PassportsList.propTypes = {
-  passports: React.PropTypes.array.isRequired
+  passports: PropTypes.array.isRequired
 }
 
 export default Radium(PassportsList)

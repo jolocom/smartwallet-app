@@ -1,9 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import AppBar from 'material-ui/AppBar'
 import Paper from 'material-ui/Paper'
-import Tabs from 'material-ui/Tabs'
-import Tab from 'material-ui/Tabs'
+import {Tab, Tabs} from 'material-ui/Tabs'
 
 import { Layout, Content } from 'components/layout'
 import LeftNavToggle from 'components/left-nav/toggle'
@@ -33,12 +33,12 @@ const STYLES = {
 @Radium
 export default class WalletTabScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    location: React.PropTypes.object,
-    activeTab: React.PropTypes.string,
+    children: PropTypes.node,
+    location: PropTypes.object,
+    activeTab: PropTypes.string,
 
-    detectActiveTab: React.PropTypes.func.isRequired,
-    switchTab: React.PropTypes.func.isRequired
+    detectActiveTab: PropTypes.func.isRequired,
+    switchTab: PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -62,8 +62,6 @@ export default class WalletTabScreen extends React.Component {
             onChange={(tab) => this.props.switchTab({tab})}>
             <Tab label="Identity" value="identity" />
             <Tab label="Money" value="money" />
-            {/* <Tab label="Health" value="health" /> */}
-            {/* <Tab label="Services" value="services" /> */}
           </Tabs>
         </Paper>
         <Content>

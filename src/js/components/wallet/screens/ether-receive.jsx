@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/ether-receive'
@@ -12,11 +13,11 @@ import Presentation from '../presentation/ether-receive'
 })
 export default class EtherReceiveScreen extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    money: React.PropTypes.object.isRequired,
-    amount: React.PropTypes.number.isRequired,
-    retrieveEtherBalance: React.PropTypes.func,
-    etherTabs: React.PropTypes.object
+    children: PropTypes.node,
+    money: PropTypes.object.isRequired,
+    amount: PropTypes.number.isRequired,
+    retrieveEtherBalance: PropTypes.func,
+    etherTabs: PropTypes.object
   }
 
   componentWillMount() {

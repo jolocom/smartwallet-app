@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {TabContainer, HalfScreenContainer} from '../../wallet/presentation/ui'
@@ -7,9 +8,8 @@ import LeftNavToggle from 'components/left-nav/toggle'
 import Avatar from 'material-ui/Avatar'
 import Divider from 'material-ui/Divider'
 import RaisedButton from 'material-ui/RaisedButton'
-import ListItem from 'material-ui/List'
 import AppBar from 'material-ui/AppBar'
-import List from 'material-ui/List'
+import {List, ListItem} from 'material-ui/List'
 
 import {theme} from 'styles'
 import {Content, Block} from '../../structure'
@@ -104,11 +104,11 @@ const STYLES = {
 @Radium
 export default class EthApprovalRequest extends React.Component {
   static propTypes = {
-    ethereumConnect: React.PropTypes.object,
-    toggleSecuritySection: React.PropTypes.func.isRequired,
-    executeTransaction: React.PropTypes.func.isRequired,
-    amount: React.PropTypes.string,
-    handleDialog: React.PropTypes.func.isRequired
+    ethereumConnect: PropTypes.object,
+    toggleSecuritySection: PropTypes.func.isRequired,
+    executeTransaction: PropTypes.func.isRequired,
+    amount: PropTypes.string,
+    handleDialog: PropTypes.func.isRequired
   }
 
   render() {

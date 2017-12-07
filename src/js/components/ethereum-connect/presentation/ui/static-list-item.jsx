@@ -1,8 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {theme} from 'styles'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
+
 const STYLES = {
   iconVerified: {
     color: theme.palette.primary1Color,
@@ -34,9 +36,9 @@ const STYLES = {
 @Radium
 export default class StaticListItem extends React.Component {
   static propTypes = {
-    icon: React.PropTypes.any,
-    verified: React.PropTypes.bool,
-    secondaryTextValue: React.PropTypes.string
+    icon: PropTypes.any,
+    verified: PropTypes.bool,
+    secondaryTextValue: PropTypes.string
   }
 
   render() {

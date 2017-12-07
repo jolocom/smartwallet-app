@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/transition'
@@ -15,12 +16,12 @@ import Presentation from '../presentation/transition'
 })
 export default class VerificationTransitionScreen extends React.Component {
   static propTypes = {
-    goBack: React.PropTypes.func.isRequired,
-    startDataCheck: React.PropTypes.func.isRequired,
-    startFaceCheck: React.PropTypes.func.isRequired,
-    requestVerification: React.PropTypes.func.isRequired,
-    transition: React.PropTypes.object.isRequired,
-    startComparingData: React.PropTypes.func.isRequired
+    goBack: PropTypes.func.isRequired,
+    startDataCheck: PropTypes.func.isRequired,
+    startFaceCheck: PropTypes.func.isRequired,
+    requestVerification: PropTypes.func.isRequired,
+    transition: PropTypes.object.isRequired,
+    startComparingData: PropTypes.func.isRequired
   }
 
   render() {

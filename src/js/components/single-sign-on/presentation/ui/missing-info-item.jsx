@@ -1,11 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {theme} from 'styles'
 import {IconIdCard, IconPassport} from '../../../common'
 
 import TextField from 'material-ui/TextField'
-import ListItem from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 import CommunicationCall from 'material-ui/svg-icons/communication/call'
@@ -56,11 +57,11 @@ const STYLES = {
 @Radium
 export default class MissingInfoItem extends React.Component {
   static propTypes = {
-    icon: React.PropTypes.any,
-    textLabel: React.PropTypes.string,
-    textValue: React.PropTypes.string,
-    field: React.PropTypes.string,
-    goToMissingInfo: React.PropTypes.func
+    icon: PropTypes.any,
+    textLabel: PropTypes.string,
+    textValue: PropTypes.string,
+    field: PropTypes.string,
+    goToMissingInfo: PropTypes.func
   }
 
   getIcon(field) {

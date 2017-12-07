@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import { Link } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -22,14 +23,14 @@ const LoginForm = (props) => {
 }
 
 LoginForm.propTypes = {
-  style: React.PropTypes.object,
-  onSubmit: React.PropTypes.func.isRequired,
-  onUsernameChange: React.PropTypes.func,
-  onPasswordChange: React.PropTypes.func,
-  username: React.PropTypes.string,
-  password: React.PropTypes.string,
-  usernameError: React.PropTypes.string,
-  passwordError: React.PropTypes.string
+  style: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  onUsernameChange: PropTypes.func,
+  onPasswordChange: PropTypes.func,
+  username: PropTypes.string,
+  password: PropTypes.string,
+  usernameError: PropTypes.string,
+  passwordError: PropTypes.string
 }
 
 const styles = {

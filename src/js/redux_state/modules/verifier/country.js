@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import { makeActions } from '../'
-import * as router from '../router'
+import router from '../router'
 import {actions as data} from './data'
 import {
   listOfCountries as __LIST_OF_COUNTRIES__

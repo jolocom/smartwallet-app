@@ -83,7 +83,7 @@ describe('(Component) AccessRequestScreen', () => {
   })
 
   it('should call handleWhy with proper params', () => {
-    const configSimpleDialog = stub()
+    const configMsg = stub()
     const accessInfo = stub()
     const wrapper = shallow((<AccessRequestScreen.WrappedComponent
       {...AccessRequestScreen.mapStateToProps(Immutable.fromJS({
@@ -143,8 +143,8 @@ describe('(Component) AccessRequestScreen', () => {
           }
         }
       }))}
-      configSimpleDialog={configSimpleDialog}
-      showSimpleDialog={() => {}}
+      configMsg={configMsg}
+      showDialog={() => {}}
       requestedDetails={() => {}}
       getIdentityInformation={() => {}}
       requestedFields={[]}
@@ -155,8 +155,8 @@ describe('(Component) AccessRequestScreen', () => {
       grantAccessToRequester={() => {}} />
     ))
     wrapper.instance().handleWhy('test title', 'test message')
-    expect(configSimpleDialog.called).to.be.true
-    expect(configSimpleDialog.calls).to.deep.equal([{args:
+    expect(configMsg.called).to.be.true
+    expect(configMsg.calls).to.deep.equal([{args:
       ['test title', 'test message', 'OK', {}, false]
     }])
   })

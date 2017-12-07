@@ -1,15 +1,16 @@
 import Transitions from 'material-ui/styles/transitions'
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 @Radium
 export default class HoverButton extends React.Component {
   static propTypes = {
-    backgroundColor: React.PropTypes.string.isRequired,
-    hoverColor: React.PropTypes.string.isRequired,
-    style: React.PropTypes.any,
-    onClick: React.PropTypes.func.isRequired,
-    children: React.PropTypes.node
+    backgroundColor: PropTypes.string.isRequired,
+    hoverColor: PropTypes.string.isRequired,
+    style: PropTypes.any,
+    onClick: PropTypes.func.isRequired,
+    children: PropTypes.node
   }
 
   render () {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import Bubble from './bubble-item'
 
@@ -14,7 +15,7 @@ const STYLES = {
 @Radium
 export default class Bubbles extends React.Component {
   static propTypes = {
-    ethBalance: React.PropTypes.string
+    ethBalance: PropTypes.string
   }
 
   render() {

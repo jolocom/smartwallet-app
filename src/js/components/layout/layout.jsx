@@ -1,26 +1,26 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {theme} from 'styles'
 
-let Layout = React.createClass({
+class Layout extends React.Component {
+  static propTypes = {
+    children: PropTypes.node
+  };
 
-  propTypes: {
-    children: React.PropTypes.node
-  },
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
+  };
 
-  contextTypes: {
-    muiTheme: React.PropTypes.object.isRequired
-  },
-
-  getStyles() {
+  getStyles = () => {
     return {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
       background: theme.jolocom.gray1
     }
-  },
+  };
 
   render() {
     return (
@@ -29,7 +29,6 @@ let Layout = React.createClass({
       </div>
     )
   }
-
-})
+}
 
 export default Radium(Layout)

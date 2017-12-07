@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -19,11 +20,11 @@ const FabMenuItem = props => {
 }
 
 FabMenuItem.propTypes = {
-  icon: React.PropTypes.any,
-  label: React.PropTypes.string,
-  style: React.PropTypes.object,
-  buttonStyle: React.PropTypes.object,
-  iconStyle: React.PropTypes.object
+  icon: PropTypes.any,
+  label: PropTypes.string,
+  style: PropTypes.object,
+  buttonStyle: PropTypes.object,
+  iconStyle: PropTypes.object
 }
 
 export default FabMenuItem

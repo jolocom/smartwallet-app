@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import {theme} from 'styles'
@@ -22,8 +23,8 @@ const SideNote = ({style, children, ...props}) => {
 }
 
 SideNote.propTypes = {
-  children: React.PropTypes.node,
-  style: React.PropTypes.object
+  children: PropTypes.node,
+  style: PropTypes.object
 }
 
 export default Radium(SideNote)

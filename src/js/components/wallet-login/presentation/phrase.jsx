@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import IconButton from 'material-ui/IconButton'
@@ -113,12 +114,12 @@ const Passphrase = (props) => {
 }
 
 Passphrase.propTypes = {
-  back: React.PropTypes.func.isRequired,
-  canSubmit: React.PropTypes.bool.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  toggleHasOwnURL: React.PropTypes.func.isRequired,
-  setValueOwnURL: React.PropTypes.func.isRequired
+  back: PropTypes.func.isRequired,
+  canSubmit: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  toggleHasOwnURL: PropTypes.func.isRequired,
+  setValueOwnURL: PropTypes.func.isRequired
 }
 
 export default Radium(Passphrase)

@@ -1,9 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import Divider from 'material-ui/Divider'
-import List from 'material-ui/List'
-import ListItem from 'material-ui/List'
+import {List, ListItem} from 'material-ui/List'
 import FlatButton from 'material-ui/FlatButton'
 
 import { Block, Header, SideNote } from '../../structure'
@@ -38,12 +38,12 @@ const STYLES = {
 @Radium
 export default class WalletEther extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    onToken: React.PropTypes.func,
-    money: React.PropTypes.object,
-    etherBalance: React.PropTypes.number.isRequired,
-    wallet: React.PropTypes.object,
-    goToAccountDetailsEthereum: React.PropTypes.func
+    children: PropTypes.node,
+    onToken: PropTypes.func,
+    money: PropTypes.object,
+    etherBalance: PropTypes.number.isRequired,
+    wallet: PropTypes.object,
+    goToAccountDetailsEthereum: PropTypes.func
   }
 
   renderLoading() {

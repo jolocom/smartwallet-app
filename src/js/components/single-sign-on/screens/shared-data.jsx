@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/shared-data'
@@ -14,11 +15,11 @@ import ErrorScreen from '../../common/error'
 })
 export default class SingleSignOnSharedDatatScreen extends React.Component {
   static propTypes = {
-    deleteService: React.PropTypes.func,
-    goToAccessRightScreen: React.PropTypes.func,
-    openConfirmDialog: React.PropTypes.func,
-    closeConfirmDialog: React.PropTypes.func,
-    accessRight: React.PropTypes.object
+    deleteService: PropTypes.func,
+    goToAccessRightScreen: PropTypes.func,
+    openConfirmDialog: PropTypes.func,
+    closeConfirmDialog: PropTypes.func,
+    accessRight: PropTypes.object
   }
 
   render() {

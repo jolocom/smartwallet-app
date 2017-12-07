@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/access-confirmation'
@@ -8,8 +9,8 @@ import Presentation from '../presentation/access-confirmation'
 })
 export default class AccessConfirmationScreen extends React.Component {
   static propTypes = {
-    accessRequest: React.PropTypes.obj,
-    redirectToReturnUrl: React.PropTypes.func
+    accessRequest: PropTypes.obj,
+    redirectToReturnUrl: PropTypes.func
   }
 
   render() {

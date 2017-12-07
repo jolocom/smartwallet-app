@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import MaskedImage from './masked-image'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -101,13 +102,13 @@ const Entropy = (props) => {
 }
 
 Entropy.propTypes = {
-  imageUncovering: React.PropTypes.bool.isRequired,
-  imageUncoveredPaths: React.PropTypes.any,
-  user: React.PropTypes.string,
-  onImagePointUncoverd: React.PropTypes.func.isRequired,
-  onImageUncoveringChange: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  valid: React.PropTypes.bool
+  imageUncovering: PropTypes.bool.isRequired,
+  imageUncoveredPaths: PropTypes.any,
+  user: PropTypes.string,
+  onImagePointUncoverd: PropTypes.func.isRequired,
+  onImageUncoveringChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  valid: PropTypes.bool
 }
 
 export default Radium(Entropy)

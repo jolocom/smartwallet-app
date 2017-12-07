@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import {connect} from 'redux_state/utils'
 import Presentation from '../presentation/result'
@@ -11,9 +12,9 @@ import Presentation from '../presentation/result'
 })
 export default class VerificationResultScreen extends React.Component {
   static propTypes = {
-    result: React.PropTypes.object.isRequired,
-    finishVerification: React.PropTypes.func.isRequired,
-    startDataCheck: React.PropTypes.func.isRequired
+    result: PropTypes.object.isRequired,
+    finishVerification: PropTypes.func.isRequired,
+    startDataCheck: PropTypes.func.isRequired
   }
 
   render() {

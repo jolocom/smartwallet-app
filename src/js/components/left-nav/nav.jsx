@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 
 import Drawer from 'material-ui/Drawer'
@@ -11,21 +12,21 @@ import Header from './header.jsx'
 
 import {navItems} from 'routes'
 
-let Nav = React.createClass({
-  contextTypes: {
-    router: React.PropTypes.object
-  },
+class Nav extends React.Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
 
-  propTypes: {
-    doLogout: React.PropTypes.func.isRequired,
-    open: React.PropTypes.bool.isRequired,
-    selected: React.PropTypes.string.isRequired,
-    showLeftNav: React.PropTypes.func.isRequired,
-    hideLeftNav: React.PropTypes.func.isRequired,
-    selectItem: React.PropTypes.func.isRequired
-  },
+  static propTypes = {
+    doLogout: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selected: PropTypes.string.isRequired,
+    showLeftNav: PropTypes.func.isRequired,
+    hideLeftNav: PropTypes.func.isRequired,
+    selectItem: PropTypes.func.isRequired
+  };
 
-  getStyles() {
+  getStyles = () => {
     return {
       drawerBody: {
         backgroundColor: '#4b132b',
@@ -93,32 +94,32 @@ let Nav = React.createClass({
         margin: '12px 12px 12px 10px'
       }
     }
-  },
+  };
 
-  editProfile(event) {
+  editProfile = (event) => {
     this.props.hideLeftNav()
     event.preventDefault()
-  },
+  };
 
-  goto(url) {
+  goto = (url) => {
     this.context.router.push(url)
     this.props.hideLeftNav()
-  },
+  };
 
-  logout() {
+  logout = () => {
     this.props.doLogout()
     this.goto('/')
-  },
+  };
 
-  drawerRequestChange(open, reason) {
+  drawerRequestChange = (open, reason) => {
     if (open) {
       this.props.showLeftNav()
     } else {
       this.props.hideLeftNav()
     }
-  },
+  };
 
-  renderNavItems() {
+  renderNavItems = () => {
     const styles = this.getStyles()
     return navItems.map((item) => {
       let icon
@@ -175,7 +176,7 @@ let Nav = React.createClass({
         )
       }
     })
-  },
+  };
 
   render() {
     const styles = this.getStyles()
@@ -206,15 +207,15 @@ let Nav = React.createClass({
         </div>
       </Drawer>
     )
-  },
+  }
 
-  _handleNavChange(route) {
+  _handleNavChange = (route) => {
     this.props.selectItem(route)
     if (route) {
       this.goto(route)
     }
-  }
-})
+  };
+}
 
 export default connect({
   props: ['leftNav.open', 'leftNav.selected'],

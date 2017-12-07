@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 const IconPassport = (props) => {
@@ -46,6 +47,6 @@ const IconPassport = (props) => {
   )
 }
 IconPassport.propTypes = {
-  color: React.PropTypes.string
+  color: PropTypes.string
 }
 export default Radium(IconPassport)

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 import { InputMsg } from './'
@@ -58,14 +59,14 @@ const VerificationButtonMsg = ({
 }
 
 VerificationButtonMsg.propTypes = {
-  msgType: React.PropTypes.string,
-  phoneNumber: React.PropTypes.string,
-  smsCode: React.PropTypes.string,
-  index: React.PropTypes.number,
-  pinFocused: React.PropTypes.bool,
-  setFocusedPin: React.PropTypes.func,
-  changePinValue: React.PropTypes.func,
-  attrType: React.PropTypes.string
+  msgType: PropTypes.string,
+  phoneNumber: PropTypes.string,
+  smsCode: PropTypes.string,
+  index: PropTypes.number,
+  pinFocused: PropTypes.bool,
+  setFocusedPin: PropTypes.func,
+  changePinValue: PropTypes.func,
+  attrType: PropTypes.string
 }
 
 export default Radium(VerificationButtonMsg)

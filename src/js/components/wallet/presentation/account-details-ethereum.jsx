@@ -1,13 +1,13 @@
 import React from 'react'
 import Radium from 'radium'
+import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { fade } from 'material-ui/utils/colorManipulator'
 
 import NavigationArrowDown from 'material-ui/svg-icons/navigation/arrow-downward' // eslint-disable-line max-len
-import List from 'material-ui/List'
 import Divider from 'material-ui/Divider'
-import ListItem from 'material-ui/List'
+import {List, ListItem} from 'material-ui/List'
 import FlatButton from 'material-ui/FlatButton'
 import IconButton from 'material-ui/IconButton'
 import AppBar from 'material-ui/AppBar'
@@ -59,9 +59,9 @@ const STYLES = {
 @Radium
 export default class EtherReceive extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
-    wallet: React.PropTypes.object,
-    onClose: React.PropTypes.func
+    children: PropTypes.node,
+    wallet: PropTypes.object,
+    onClose: PropTypes.func
   }
 
   render() {

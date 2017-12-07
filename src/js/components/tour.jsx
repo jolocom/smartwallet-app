@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'redux_state/utils'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
@@ -17,11 +18,11 @@ import {theme} from 'styles'
 @Radium
 export default class Tour extends React.Component {
   static propTypes = {
-    hideDialog: React.PropTypes.func
+    hideDialog: PropTypes.func
   }
 
   static contextTypes = {
-    store: React.PropTypes.object
+    store: PropTypes.object
   }
 
   constructor(props) {

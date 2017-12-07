@@ -1,6 +1,5 @@
 import {expect} from 'chai'
 import { actions } from './identity'
-// import * as router from '../router'
 import {stub} from '../../../../../test/utils'
 import reducer from './identity'
 

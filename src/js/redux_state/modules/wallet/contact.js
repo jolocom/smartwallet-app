@@ -12,6 +12,9 @@ setNewFieldValue
 } from '../../../lib/edit-contact-util'
 
 export const actions = makeActions('wallet/contact', {
+  setReloadFromBackend: {
+    expectedParams: ['value']
+  },
   saveChanges: {
     expectedParams: [],
     async: true,
@@ -43,9 +46,6 @@ export const actions = makeActions('wallet/contact', {
         dispatch(router.pushRoute(callback))
       }
     }
-  },
-  setReloadFromBackend: {
-    expectedParams: ['value']
   },
   getUserInformation: {
     expectedParams: ['callback'],

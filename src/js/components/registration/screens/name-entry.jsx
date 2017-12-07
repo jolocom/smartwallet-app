@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react'
 import { connect } from 'redux_state/utils'
 import Presentation from '../presentation/name-entry'
@@ -8,19 +9,19 @@ import Presentation from '../presentation/name-entry'
     'registration:checkCredentials',
     'registration:toggleHasOwnURL',
     'registration:setValueOwnURL',
-    'simple-dialog:configSimpleDialog',
-    'simple-dialog:showSimpleDialog'
+    'simple-dialog:configMsg',
+    'simple-dialog:showDialog'
   ]
 })
 export default class RegistrationNameEntryScreen extends React.Component {
   static propTypes = {
-    registration: React.PropTypes.object.isRequired,
-    checkCredentials: React.PropTypes.func.isRequired,
-    setUsername: React.PropTypes.func.isRequired,
-    configSimpleDialog: React.PropTypes.func.isRequired,
-    showSimpleDialog: React.PropTypes.func.isRequired,
-    toggleHasOwnURL: React.PropTypes.func.isRequired,
-    setValueOwnURL: React.PropTypes.func.isRequired
+    registration: PropTypes.object.isRequired,
+    checkCredentials: PropTypes.func.isRequired,
+    setUsername: PropTypes.func.isRequired,
+    configMsg: PropTypes.func.isRequired,
+    showDialog: PropTypes.func.isRequired,
+    toggleHasOwnURL: PropTypes.func.isRequired,
+    setValueOwnURL: PropTypes.func.isRequired
   }
 
   render() {
@@ -38,7 +39,7 @@ export default class RegistrationNameEntryScreen extends React.Component {
       handleDialog={this._handleDialog} />
   }
   _handleDialog = (title, message) => {
-    this.props.configSimpleDialog(title, message, 'OK')
-    this.props.showSimpleDialog()
+    this.props.configMsg(title, message, 'OK')
+    this.props.showDialog()
   }
 }

@@ -1,6 +1,8 @@
 // npm package not up to date, stealing this for now :)
 // https://github.com/amio/re-carousel
-import React from 'react'
+import PropTypes from 'prop-types';
+
+import React from 'react';
 
 class Carousel extends React.Component {
   constructor (props, context) {
@@ -239,14 +241,14 @@ class Carousel extends React.Component {
 }
 
 Carousel.propTypes = {
-  axis: React.PropTypes.oneOf(['x', 'y']),
-  auto: React.PropTypes.bool,
-  interval: React.PropTypes.number,
-  duration: React.PropTypes.number,
-  indicator: React.PropTypes.func,
-  frames: React.PropTypes.arrayOf(React.PropTypes.element),
-  style: React.PropTypes.object,
-  children: React.PropTypes.node
+  axis: PropTypes.oneOf(['x', 'y']),
+  auto: PropTypes.bool,
+  interval: PropTypes.number,
+  duration: PropTypes.number,
+  indicator: PropTypes.func,
+  frames: PropTypes.arrayOf(PropTypes.element),
+  style: PropTypes.object,
+  children: PropTypes.node
 }
 
 Carousel.defaultProps = {
