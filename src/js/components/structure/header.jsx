@@ -1,5 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
+import PropTypes from 'prop-types'
 
 import {theme} from 'styles'
 
@@ -36,10 +37,10 @@ const Header = ({image, title, style, children, ...props}) => {
 }
 
 Header.propTypes = {
-  image: React.PropTypes.any,
-  title: React.PropTypes.any,
-  children: React.PropTypes.any,
-  style: React.PropTypes.object
+  image: PropTypes.any,
+  title: PropTypes.any,
+  children: PropTypes.any,
+  style: PropTypes.object
 }
 
 export default Radium(Header)
