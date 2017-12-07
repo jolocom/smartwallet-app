@@ -77,7 +77,7 @@ export default class WalletIdentityScreen extends React.Component {
       buyEther={(token) => { this.props.buyEther(token) }}
       createEthereumIdentity={this.props.createEthereumIdentity}
       goTo={this.props.goTo}
-      showUserInfo={this.props.openConfirmDialog}
+      // showUserInfo={this.props.openConfirmDialog}
       requestIdCardVerification={({title, message, rightButtonLabel, leftButtonLabel, index}) => // eslint-disable-line max-len
         this.props.openConfirmDialog(title, message, rightButtonLabel,
         () => { this.props.saveToBlockchain(index) }, leftButtonLabel)

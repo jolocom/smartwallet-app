@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'radium'
-import CopyToClipboard from 'react-copy-to-clipboard'
+// import CopyToClipboard from 'react-copy-to-clipboard'
 
 import TextField from 'material-ui/TextField'
 import Divider from 'material-ui/Divider'
@@ -19,7 +19,8 @@ import {Content, Block} from '../../structure'
 
 import {
   PlusMenu, TabContainer, HalfScreenContainer, ContactList,
-  InfoDetails, EthConnectItem, StaticListItem
+  // InfoDetails,
+  EthConnectItem, StaticListItem
 } from './ui'
 
 const STYLES = {
@@ -66,7 +67,7 @@ export default class WalletIdentity extends React.Component {
     resendVerificationCode: React.PropTypes.func.isRequired,
     requestIdCardVerification: React.PropTypes.func.isRequired,
     setFocusedPin: React.PropTypes.func.isRequired,
-    showUserInfo: React.PropTypes.func.isRequired,
+    // showUserInfo: React.PropTypes.func.isRequired,
     buyEther: React.PropTypes.func.isRequired,
     ether: React.PropTypes.object,
     createEthereumIdentity: React.PropTypes.func.isRequired,
@@ -201,20 +202,20 @@ export default class WalletIdentity extends React.Component {
         <ListItem
           key={1}
           disabled
-          rightIcon={<InfoDetails
-            showDetails={message => this.props.showUserInfo(
-              null,
-              message,
-              (<CopyToClipboard text={webId}>
-                <span>COPY WEBID</span>
-              </CopyToClipboard>),
-              () => {},
-              'ALL RIGHT',
-              STYLES.usernameWindow
-            )}
-            webId={webId}
-            username={username.value} />
-          }
+          // rightIcon={<InfoDetails
+          //   showDetails={message => this.props.showUserInfo(
+          //     null,
+          //     message,
+          //     (<CopyToClipboard text={webId}>
+          //       <span>COPY WEBID</span>
+          //     </CopyToClipboard>),
+          //     () => {},
+          //     'ALL RIGHT',
+          //     STYLES.usernameWindow
+          //   )}
+          //   webId={webId}
+          //   username={username.value} />
+          // }
           style={STYLES.listItem}>
           <TextField
             fullWidth
