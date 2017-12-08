@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 import { connect } from 'redux_state/utils'
 
@@ -13,8 +14,8 @@ import Dialog from 'material-ui/Dialog'
 @Radium
 export default class SimpleDialog extends React.Component {
   static propTypes = {
-    hideDialog: React.PropTypes.func,
-    simpleDialog: React.PropTypes.object
+    hideDialog: PropTypes.func,
+    simpleDialog: PropTypes.object
   }
 
   _handleOK() {

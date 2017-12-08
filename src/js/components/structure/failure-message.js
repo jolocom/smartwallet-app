@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import Radium from 'radium'
 
 const STYLE = {
@@ -14,8 +15,8 @@ const FailureMessage = ({style, children, ...props}) => {
 }
 
 FailureMessage.propTypes = {
-  style: React.PropTypes.object,
-  children: React.PropTypes.node
+  style: PropTypes.object,
+  children: PropTypes.node
 }
 
 export default Radium(FailureMessage)
