@@ -39,7 +39,7 @@ let STYLES = {
     maxWidth: '120px',
     paddingLeft: '24px',
     '@media (minWidth: 321px)': {
-      margin: '0 16px'
+      margin: '0px 16px'
     }
   },
   disabledUnderline: {
